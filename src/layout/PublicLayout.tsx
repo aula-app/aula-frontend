@@ -10,8 +10,7 @@ import TopBar from './TopBar';
 import SideBar from './SideBar';
 import BottomBar from './BottomBar';
 
-// TODO: change to your app name or other word
-const TITLE_PUBLIC = '_TITLE_ app'; // Title for pages without/before authentication
+const TITLE_PUBLIC = 'aula app';
 
 /**
  * SideBar navigation items with links
