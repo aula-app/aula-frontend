@@ -33,6 +33,7 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "@mui/x-data-grid": "^6.7.0",
     "date-fns": "latest",
     "react": "latest",
     "react-dom": "latest",
