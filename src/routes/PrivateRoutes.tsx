@@ -4,6 +4,7 @@ import AboutView from '../views/About';
 import { WelcomeView } from '../views/Welcome';
 import { RoomsView } from '../views/Rooms';
 import { IdeasView } from '../views/Ideas';
+import { IdeaView } from '../views/Idea';
 import { UsersView } from '../views/Users';
 
 /**
@@ -20,6 +21,7 @@ const PrivateRoutes = () => {
       <Route path="rooms" element={<RoomsView />} />,
       <Route path="ideas" element={<IdeasView />} />,
       <Route path="users" element={<UsersView />} />,
+      <Route path="idea/:ideaId" element={<IdeaView />} />,
       <Route path="*" element={<NotFoundView />} />
     </Routes>
   );

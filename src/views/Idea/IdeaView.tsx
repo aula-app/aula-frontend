@@ -3,14 +3,16 @@ import { Stack } from '@mui/system';
 import { Card, CardActions, CardContent, CardHeader, Divider, Grid } from '@mui/material';
 import { AppButton } from '../../components';
 import { AppLink } from '../../components';
+import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 
 
 /**
- * Renders "Welcome" view
+ * Renders "Idea" view
  * url: /
  */
-const WelcomeView = () => {
+const IdeaView = () => {
+  const routeParams = useParams();
   const [data, setData] = useState([] as any[]);
 
   useEffect(() => {
@@ -18,9 +20,17 @@ const WelcomeView = () => {
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          "/api/rooms.php"
-        )
-      ).json();
+          "/api/idea.php",
+              {
+                method: 'POST', 
+                headers: {                   
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                  {
+                    'id': routeParams.idea_id
+                  })
+              })).json();
 
       // set state when the data received
       console.log(data)
@@ -53,4 +63,4 @@ const WelcomeView = () => {
   );
 };
 
-export default WelcomeView;
+export default IdeaView;

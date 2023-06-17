@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react';
 
 
 /**
- * Renders "Welcome" view
+ * Renders "Room" view
  * url: /
  */
-const WelcomeView = () => {
+const RoomView = () => {
   const [data, setData] = useState([] as any[]);
 
   useEffect(() => {
@@ -53,4 +53,4 @@ const WelcomeView = () => {
   );
 };
 
-export default WelcomeView;
+export default RoomView;

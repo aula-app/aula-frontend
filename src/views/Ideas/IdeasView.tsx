@@ -11,7 +11,11 @@ import { useEffect, useState } from 'react';
 const IdeasView = () => {
   const [data, setData] = useState([] as any[]);
   const columns:GridColDef[] = [
-    { field: 'content', headerName: 'Content', width: 600},
+    { field: 'content', 
+      headerName: 'Content',
+      width: 600,
+      renderCell: (params) => <AppLink to={'/idea/' +params.row.id}>{params.row.content}</AppLink>
+    },
     { field: 'sum_votes', headerName: 'Votes', width: 260},
     { field: 'sum_likes', headerName: 'Like', width: 260},
   ] 

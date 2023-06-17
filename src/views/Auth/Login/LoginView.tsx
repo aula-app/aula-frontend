@@ -2,6 +2,7 @@ import { SyntheticEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Grid, TextField, Card, CardHeader, CardContent, InputAdornment } from '@mui/material';
 import { useAppStore } from '../../../store';
+import { localStorageSet } from '../../../utils/localStorage'
 import { AppButton, AppLink, AppIconButton, AppAlert, AppForm } from '../../../components';
 import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../../utils/form';
 
@@ -64,18 +65,24 @@ const LoginView = () => {
                    'password': password})
               })).json();
 
+
+        const result = data.success; // await api.auth.loginWithEmail(values);
+        if (result) {
+          localStorageSet('token', data['JWT'])
+        }
+
+        if (!result) {
+           setError('Please check email and password');
+           return;
+        }
+
+        dispatch({ type: 'LOG_IN' });
+        navigate('/', { replace: true });
+
       } catch (e) {
         return e;
       }
 
-      const result = true; // await api.auth.loginWithEmail(values);
-      if (!result) {
-         setError('Please check email and password');
-         return;
-      }
-
-      dispatch({ type: 'LOG_IN' });
-      navigate('/', { replace: true });
     },
     [dispatch, values, navigate]
   );

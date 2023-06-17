@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 import { useAppStore } from '../store';
+import { localStorageGet, localStorageDelete } from '../utils/localStorage';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Hook to detect is current user authenticated or not
@@ -10,7 +12,7 @@ export function useIsAuthenticated() {
   let result = state.isAuthenticated;
 
   // TODO: AUTH: add access token verification or other authentication check here
-  // result = Boolean(sessionStorageGet('access_token', ''));
+  result = Boolean(localStorageGet('token', ''));
 
   return result;
 }
@@ -21,11 +23,12 @@ export function useIsAuthenticated() {
  */
 export function useEventLogout() {
   const [, dispatch] = useAppStore();
+  const navigate = useNavigate()
 
   return useCallback(() => {
-    // TODO: AUTH: add auth and tokens cleanup here
-    // sessionStorageDelete('access_token');
+    localStorageDelete('token');
 
     dispatch({ type: 'LOG_OUT' });
+    navigate('/')
   }, [dispatch]);
 }
