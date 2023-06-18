@@ -62,7 +62,7 @@ const UsersView = () => {
   const submitNewUser = async () => {
     const data = await (
         await fetch(
-          '/api/add_user.php',
+          '/api/controllers/add_user.php',
           {
             method: 'POST', 
             headers: {                   
@@ -86,12 +86,13 @@ const UsersView = () => {
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          "/api/users.php"
+          "/api/controllers/users.php"
         )
       ).json();
 
       // set state when the data received
-      setData(data)
+      if (data.success)
+        setData(data.data)
     };
 
     dataFetch();

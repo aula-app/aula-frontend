@@ -25,7 +25,7 @@ const IdeasView = () => {
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          "/api/ideas.php"
+          "/api/controllers/ideas.php"
         )
       ).json();
 
