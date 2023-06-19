@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: self-hosted
     env:
-      CI: true
+      CI: false
       LOCAL: test
     steps:
       - name: Checkout repository
