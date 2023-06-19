@@ -1,6 +1,8 @@
 import { Typography, TextField, InputAdornment } from '@mui/material';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
 import { Stack } from '@mui/system';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridValueGetterParams, GridToolbarContainer } from '@mui/x-data-grid';
 import { AppLink, AppIconButton, AppAlert, AppButton } from '../../components';
 import { CompositionDialog as AddUserDialog } from '../../components/dialogs'
 import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../utils/form';
@@ -27,7 +29,9 @@ interface FormStateValues {
   password: string;
 }
 
-/** * Renders "Welcome" view
+
+
+/** * Renders "Users" view
  * url: /
  */
 const UsersView = () => {
@@ -48,6 +52,16 @@ const UsersView = () => {
   }, []);
 
   const handleCloseError = useCallback(() => setError(undefined), []);
+
+  function Toolbar() {
+    return (
+      <GridToolbarContainer>
+        <Button color="primary" startIcon={<AddIcon />} onClick={() => setAddUserDialog(true)}>
+          Add User 
+        </Button>
+      </GridToolbarContainer>
+    );
+  }
 
   const columns:GridColDef[] = [
     { field: 'realname', headerName: 'Real Name', width: 260},
@@ -96,12 +110,11 @@ const UsersView = () => {
     };
 
     dataFetch();
-    },[]);
+    },[data]);
 
   return (
     <Stack direction="column" spacing={2}>
       <Typography variant="h4">Users</Typography>
-      <AppButton onClick={() => setAddUserDialog(true)}>Add User</AppButton>
       {openAddUserDialog && <AddUserDialog
         open
         title="Add User"
@@ -170,6 +183,9 @@ const UsersView = () => {
           }}
           pageSizeOptions={[10, 20]}
           checkboxSelection
+          slots={{
+            toolbar: Toolbar
+          }}
         />
       </div>
     </Stack>
