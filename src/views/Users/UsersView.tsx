@@ -110,7 +110,7 @@ const UsersView = () => {
     };
 
     dataFetch();
-    },[data]);
+    },[]);
 
   return (
     <Stack direction="column" spacing={2}>
