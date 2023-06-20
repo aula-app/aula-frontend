@@ -18,7 +18,7 @@ const WelcomeView = () => {
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          "/api/rooms.php"
+          "/api/controllers/rooms.php"
         )
       ).json();
 
