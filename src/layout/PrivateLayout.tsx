@@ -35,7 +35,11 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     path: '/users',
     icon: 'account',
   },
-
+  {
+    title: 'Groups',
+    path: '/groups',
+    icon: 'account',
+  },
   {
     title: 'Rooms',
     path: '/rooms',
