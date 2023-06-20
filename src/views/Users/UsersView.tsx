@@ -99,12 +99,10 @@ const UsersView = () => {
     { field: 'displayname', headerName: 'Displayname', width: 300},
     { field: 'email', headerName: 'email', width: 300},
     { field: 'about_me', headerName: 'About me', width: 300},
-
-
   ] 
 
   const onAddUserDialogClose = () => {
-    setFormState({values: { username: '', password: ''}, isValid: false, touched: {}, errors: {}})
+    setFormState({values: USER_INITIAL_VALUES, isValid: false, touched: {}, errors: {}})
     setAddUserDialog(false)
   }
 
@@ -120,7 +118,11 @@ const UsersView = () => {
             },
             body: JSON.stringify(
               {'username': values.username,
-               'password': values.password})
+               'password': values.password,
+               'realname': values.realname,
+               'displayname': values.displayname,
+               'email': values.email
+               })
           })).json();
 
         const result = data.success;
@@ -165,6 +167,37 @@ const UsersView = () => {
             onChange={onFieldChange}
             {...SHARED_CONTROL_PROPS}
           />
+          <TextField
+            required
+            label="Real name"
+            name="realname"
+            value={values.realname}
+            error={fieldHasError('realname')}
+            helperText={fieldGetError('realname') || ' '}
+            onChange={onFieldChange}
+            {...SHARED_CONTROL_PROPS}
+          />
+          <TextField
+            required
+            label="Display name"
+            name="displayname"
+            value={values.displayname}
+            error={fieldHasError('displayname')}
+            helperText={fieldGetError('displayname') || ' '}
+            onChange={onFieldChange}
+            {...SHARED_CONTROL_PROPS}
+          />
+          <TextField
+            required
+            label="email"
+            name="email"
+            value={values.email}
+            error={fieldHasError('email')}
+            helperText={fieldGetError('email') || ' '}
+            onChange={onFieldChange}
+            {...SHARED_CONTROL_PROPS}
+          />
+
           <TextField
             required
             type={showPassword ? 'text' : 'password'}
@@ -213,10 +246,10 @@ const UsersView = () => {
           columns={columns}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
+              paginationModel: { page: 0, pageSize: 50 },
             },
           }}
-          pageSizeOptions={[10, 20]}
+          pageSizeOptions={[10, 50, 100, 200]}
           checkboxSelection
           slots={{
             toolbar: Toolbar
