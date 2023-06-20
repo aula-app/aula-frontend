@@ -1,8 +1,10 @@
 import { Typography, TextField, InputAdornment } from '@mui/material';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Stack } from '@mui/system';
-import { DataGrid, GridColDef, GridValueGetterParams, GridToolbarContainer } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowParams, GridActionsCellItem, GridValueGetterParams, GridToolbarContainer } from '@mui/x-data-grid';
 import { AppLink, AppIconButton, AppAlert, AppButton } from '../../components';
 import { CompositionDialog as AddUserDialog } from '../../components/dialogs'
 import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../utils/form';
@@ -22,13 +24,34 @@ const VALIDATE_FORM_ADD_USER = {
       message: 'must be between 4 and 32 characters',
     },
   },
+  email: {
+    presence: true,
+  },
 };
+
+const USER_INITIAL_VALUES = {
+  username: '',
+  password: '',
+  email: '',
+  realname: '',
+  displayname: '',
+  position: '',
+  about_me: '',
+  userlevel: 0,
+  infinite_votes: 0
+} as FormStateValues;
 
 interface FormStateValues {
   username: string;
   password: string;
-}
-
+  email: string;
+  realname: string;
+  displayname: string;
+  position: string;
+  about_me: string;
+  userlevel: number;
+  infinite_votes: number;
+};
 
 
 /** * Renders "Users" view
@@ -38,9 +61,9 @@ const UsersView = () => {
   const [openAddUserDialog, setAddUserDialog] = useState(false);
   const [data, setData] = useState([] as any[]);
 
-   const [formState, setFormState, onFieldChange, fieldGetError, fieldHasError] = useAppForm({
+  const [formState, setFormState, onFieldChange, fieldGetError, fieldHasError] = useAppForm({
     validationSchema: VALIDATE_FORM_ADD_USER,
-    initialValues: { username: '', password: '' } as FormStateValues,
+    initialValues: USER_INITIAL_VALUES as FormStateValues,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string>();
@@ -64,8 +87,20 @@ const UsersView = () => {
   }
 
   const columns:GridColDef[] = [
+    { field: 'actions',
+      type: 'actions',
+      getActions: (params: GridRowParams) => [
+      <GridActionsCellItem icon={<EditIcon/>} onClick={()=>{console.log('edit')}} label="Edit" />,
+      <GridActionsCellItem icon={<DeleteIcon/>} onClick={()=>{console.log('delete')}} label="Delete" />,
+      ]
+    },
     { field: 'realname', headerName: 'Real Name', width: 260},
-    { field: 'username', headerName: 'username', width: 300},
+    { field: 'username', headerName: 'Username', width: 300},
+    { field: 'displayname', headerName: 'Displayname', width: 300},
+    { field: 'email', headerName: 'email', width: 300},
+    { field: 'about_me', headerName: 'About me', width: 300},
+
+
   ] 
 
   const onAddUserDialogClose = () => {

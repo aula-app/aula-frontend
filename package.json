@@ -29,9 +29,10 @@
     "test": "react-scripts test"
   },
   "dependencies": {
-    "@emotion/react": "latest",
-    "@emotion/styled": "latest",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "latest",
+    "@mui/joy": "^5.0.0-alpha.84",
     "@mui/material": "latest",
     "@mui/x-data-grid": "^6.7.0",
     "date-fns": "latest",

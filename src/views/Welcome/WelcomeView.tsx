@@ -24,7 +24,7 @@ const WelcomeView = () => {
 
       // set state when the data received
       console.log(data)
-      setData(data)
+      setData(data.data)
     };
 
     dataFetch();

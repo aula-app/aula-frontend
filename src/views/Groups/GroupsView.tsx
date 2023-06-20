@@ -1,4 +1,5 @@
 import { Typography, TextField, InputAdornment } from '@mui/material';
+import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { Stack } from '@mui/system';
@@ -24,7 +25,8 @@ const GROUP_INITIAL_FORM_VALUES = {
       internal_info: '',
       access_code: '',
       group_order: 0,
-      vote_bias: 1
+      vote_bias: 1,
+      votes_per_user: 1
       } as FormStateValues;
 
 interface FormStateValues {
@@ -36,6 +38,7 @@ interface FormStateValues {
   access_code: string;
   group_order: number;
   vote_bias: number;
+  votes_per_user: number;
 };
 
 /** * Renders "Groups" view
@@ -133,6 +136,34 @@ const GroupsView = () => {
             onChange={onFieldChange}
             {...SHARED_CONTROL_PROPS}
           />
+          <TextField
+            label="Public Description"
+            name="desc_public"
+            multiline
+            rows={2}
+            value={values.desc_public}
+            onChange={onFieldChange}
+            {...SHARED_CONTROL_PROPS}
+          />
+          <TextField
+            label="Internal Description"
+            name="desc_internal"
+            multiline
+            rows={2}
+            value={values.desc_internal}
+            onChange={onFieldChange}
+            {...SHARED_CONTROL_PROPS}
+          />
+           <TextField
+            label="Internal Information"
+            name="internal_info"
+            multiline
+            rows={2}
+            value={values.desc_public}
+            onChange={onFieldChange}
+            {...SHARED_CONTROL_PROPS}
+          />
+
           {error ? (
             <AppAlert severity="error" onClose={handleCloseError}>
               {error}
