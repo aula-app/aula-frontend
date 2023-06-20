@@ -33,22 +33,22 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
   {
     title: 'Users',
     path: '/users',
-    icon: 'account',
+    icon: 'users',
   },
   {
     title: 'Groups',
     path: '/groups',
-    icon: 'account',
+    icon: 'group',
   },
   {
     title: 'Rooms',
     path: '/rooms',
-    icon: 'door',
+    icon: 'room',
   },
   {
     title: 'Ideas',
     path: '/ideas',
-    icon: 'door',
+    icon: 'idea',
   },
 
   {

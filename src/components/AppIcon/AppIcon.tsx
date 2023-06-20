@@ -16,8 +16,12 @@ import SearchIcon from '@mui/icons-material/Search';
 import InfoIcon from '@mui/icons-material/Info';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import GroupIcon from '@mui/icons-material/Group';
+import LightbulbIcon from '@mui/icons-material/Lightbulb';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonIcon from '@mui/icons-material/Person';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import NotificationsIcon from '@mui/icons-material/NotificationsOutlined';
 
@@ -51,6 +55,10 @@ const ICONS: Record<string, React.ComponentType> = {
   signup: PersonAddIcon,
   login: PersonIcon,
   logout: ExitToAppIcon,
+  group: GroupIcon,
+  room: MeetingRoomIcon,
+  idea: LightbulbIcon,
+  users: ManageAccountsIcon,
   notifications: NotificationsIcon,
 };
 
