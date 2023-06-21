@@ -54,7 +54,7 @@ const LoginView = () => {
         const password = values['password']
         const data = await (
             await fetch(
-              '/api/login.php',
+              '/api/controllers/login.php',
               {
                 method: 'POST', 
                 headers: {                   

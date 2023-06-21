@@ -1,8 +1,10 @@
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Card, CardActions, CardContent, CardHeader, Divider, Grid } from '@mui/material';
 import { AppButton } from '../../components';
 import { AppLink } from '../../components';
+import { localStorageGet } from '../../utils/localStorage';
+import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 
 
@@ -11,20 +13,28 @@ import { useEffect, useState } from 'react';
  * url: /
  */
 const RoomView = () => {
+  const params = useParams();
   const [data, setData] = useState([] as any[]);
+  const jwt_token = localStorageGet('token');
+  const room_id = params["room_id"];
 
   useEffect(() => {
     // fetch data
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          "/api/rooms.php"
-        )
-      ).json();
+          "/api/controllers/room_ideas.php",
+          {
+            method: 'POST', 
+            headers: {                   
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + jwt_token
+            },
+            body: JSON.stringify(
+              {'room_id': room_id })
+          })).json();
 
-      // set state when the data received
-      console.log(data)
-      setData(data)
+      setData(data.data)
     };
 
     dataFetch();
@@ -32,16 +42,21 @@ const RoomView = () => {
 
 
   return (
+    <Box sx={{ p: { md: 4, xs: 2} }}>
     <Grid container spacing={4}>
-       {data.map((d,i) => 
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={12}>
+        <Typography variant="h3" gutterBottom>
+        { data.length } Ideas
+        </Typography>
+      </Grid>
 
-      <AppLink to={ `/room/${ d.id }`} >
+       {data.map((d,i) => 
+      <Grid item xs={12} md={12}>
+
+      <AppLink to={ `/room/${ room_id }/idea/${ d.id }`} >
         <Card>
-          <CardHeader title={d.room_name}/>
           <CardContent>
-          <img src={ ( i % 2 == 0)?'/img/aula.png':'img/aula-room.png' }/>
-          {d.description_public}
+          {d.content}
           </CardContent>
         </Card>
 
@@ -50,6 +65,7 @@ const RoomView = () => {
         )
         }
     </Grid>
+    </Box>
   );
 };
 
