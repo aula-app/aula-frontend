@@ -14,7 +14,7 @@ import {
 import TopBar from './TopBar';
 import SideBar from './SideBar';
 
-const TITLE_PRIVATE = 'aula app';
+const TITLE_PRIVATE = 'aula';
 
 /**
  * SideBar navigation items with links
@@ -73,8 +73,8 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const onMobile = useOnMobile();
 
   // Variant 1 - Sidebar is static on desktop and is a drawer on mobile
-  const sidebarOpen = onMobile ? sideBarVisible : true;
-  const sidebarVariant = onMobile ? 'temporary' : 'persistent';
+  const sidebarOpen = sideBarVisible;
+  const sidebarVariant = 'temporary';
 
   // Variant 2 - Sidebar is drawer on mobile and desktop
   // const sidebarOpen = sideBarVisible;
@@ -89,6 +89,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   }, [navigation]);
 
   const onSideBarOpen = () => {
+    console.log("OPEN", sideBarVisible)
     if (!sideBarVisible) setSideBarVisible(true); // Don't re-render Layout when SideBar is already open
   };
 
@@ -117,12 +118,12 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     >
       <Stack component="header">
         <TopBar
-          startNode={<AppIconButton icon="logo" onClick={sidebarOpen ? onLogoClick : onSideBarOpen} />}
+          startNode={<AppIconButton icon="logo" onClick={onSideBarOpen} />}
           title={title}
         />
 
         <SideBar
-          anchor={onMobile ? SIDEBAR_MOBILE_ANCHOR : SIDEBAR_DESKTOP_ANCHOR}
+          anchor={SIDEBAR_DESKTOP_ANCHOR}
           open={sidebarOpen}
           variant={sidebarVariant}
           items={SIDEBAR_ITEMS}

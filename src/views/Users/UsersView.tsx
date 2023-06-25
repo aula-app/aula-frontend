@@ -7,10 +7,11 @@ import { Stack } from '@mui/system';
 import { DataGrid, GridColDef, GridRowParams, GridActionsCellItem, GridValueGetterParams, GridToolbarContainer } from '@mui/x-data-grid';
 import { AppLink, AppIconButton, AppAlert, AppButton } from '../../components';
 import { CompositionDialog as AddUserDialog } from '../../components/dialogs'
+import { CompositionDialog as DeleteUserDialog } from '../../components/dialogs'
 import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../utils/form';
 import { localStorageGet } from '../../utils/localStorage';
 import { useEffect, useState, useCallback } from 'react';
-
+import * as React from 'react';
 
 const VALIDATE_FORM_ADD_USER = {
   username: {
@@ -59,6 +60,9 @@ interface FormStateValues {
  */
 const UsersView = () => {
   const [openAddUserDialog, setAddUserDialog] = useState(false);
+  const [openDeleteUserDialog, setDeleteUserDialog] = useState(false);
+
+  const [selectedUser, setSelectedUser] = useState(-1)
   const [data, setData] = useState([] as any[]);
 
   const [formState, setFormState, onFieldChange, fieldGetError, fieldHasError] = useAppForm({
@@ -68,7 +72,7 @@ const UsersView = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string>();
 
-  const values = formState.values as FormStateValues; 
+  const values = formState.values as FormStateValues;
   const jwt_token = localStorageGet('token');
   const handleShowPasswordClick = useCallback(() => {
     setShowPassword((oldValue) => !oldValue);
@@ -80,10 +84,50 @@ const UsersView = () => {
     return (
       <GridToolbarContainer>
         <Button color="primary" startIcon={<AddIcon />} onClick={() => setAddUserDialog(true)}>
-          Add User 
+          Add User
         </Button>
       </GridToolbarContainer>
     );
+  }
+
+
+  const deleteUserDialog = React.useCallback(
+    (row: GridRowParams) => async () => {
+      setSelectedUser(row.row.id)
+      setDeleteUserDialog(true)
+    },
+    [],
+  );
+
+  const deleteUser =  React.useCallback(async () => {
+    const deletedUser = selectedUser
+    await requestDeleteUser(selectedUser)
+    const newData = data.filter(user => user.id !== deletedUser)
+    setData(newData)
+    setSelectedUser(-1)
+    setDeleteUserDialog(false)
+  }, [])
+
+  const requestDeleteUser = async function (userId:number) {
+    const data = await (
+        await fetch(
+          '/api/controllers/delete_user.php',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + jwt_token
+            },
+            body: JSON.stringify(
+              {'user_id': userId,
+               })
+          })).json();
+
+        const result = data.success;
+
+        if (result) {
+          setDeleteUserDialog(false)
+        }
   }
 
   const columns:GridColDef[] = [
@@ -91,7 +135,7 @@ const UsersView = () => {
       type: 'actions',
       getActions: (params: GridRowParams) => [
       <GridActionsCellItem icon={<EditIcon/>} onClick={()=>{console.log('edit')}} label="Edit" />,
-      <GridActionsCellItem icon={<DeleteIcon/>} onClick={()=>{console.log('delete')}} label="Delete" />,
+      <GridActionsCellItem icon={<DeleteIcon/>} onClick={deleteUserDialog(params)} label="Delete" />,
       ]
     },
     { field: 'realname', headerName: 'Real Name', width: 260},
@@ -99,11 +143,16 @@ const UsersView = () => {
     { field: 'displayname', headerName: 'Displayname', width: 300},
     { field: 'email', headerName: 'email', width: 300},
     { field: 'about_me', headerName: 'About me', width: 300},
-  ] 
+  ]
 
   const onAddUserDialogClose = () => {
     setFormState({values: USER_INITIAL_VALUES, isValid: false, touched: {}, errors: {}})
     setAddUserDialog(false)
+  }
+
+  const onDeleteUserDialogClose = () => {
+    setDeleteUserDialog(false)
+    setSelectedUser(-1)
   }
 
   const submitNewUser = async () => {
@@ -111,8 +160,8 @@ const UsersView = () => {
         await fetch(
           '/api/controllers/add_user.php',
           {
-            method: 'POST', 
-            headers: {                   
+            method: 'POST',
+            headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer ' + jwt_token
             },
@@ -137,7 +186,19 @@ const UsersView = () => {
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          "/api/controllers/users.php"
+          "/api/controllers/users.php",
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + jwt_token
+            },
+            body: JSON.stringify(
+              {'limit': 20,
+               'offset': 0,
+               })
+            }
+
         )
       ).json();
 
@@ -152,6 +213,32 @@ const UsersView = () => {
   return (
     <Stack direction="column" spacing={2}>
       <Typography variant="h4">Users</Typography>
+      {openDeleteUserDialog && <DeleteUserDialog
+        open
+        title="Delete User"
+        content={
+          <>
+          Do you really wants to delete user X?
+
+          {error ? (
+            <AppAlert severity="error" onClose={handleCloseError}>
+              {error}
+            </AppAlert>
+          ) : null}
+          </>
+        }
+        actions={
+          <>
+            <AppButton onClick={onDeleteUserDialogClose}>Cancel</AppButton>
+            <AppButton onClick={deleteUser} sx={{ mr: 0 }} color="warning" >
+              Delete
+            </AppButton>
+          </>
+        }
+
+      />}
+
+
       {openAddUserDialog && <AddUserDialog
         open
         title="Add User"
@@ -237,7 +324,7 @@ const UsersView = () => {
             </AppButton>
           </>
         }
- 
+
       />}
 
       <div style={{ width: '100%' }}>
