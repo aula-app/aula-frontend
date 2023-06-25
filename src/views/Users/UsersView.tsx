@@ -263,7 +263,7 @@ const UsersView = () => {
         title="Delete User"
         content={
           <>
-          Do you really wants to delete user { selectedUserObj()['displayname']}?
+          Do you really want to delete the user <b>{ selectedUserObj()['displayname']}</b>?
 
           {error ? (
             <AppAlert severity="error" onClose={handleCloseError}>
