@@ -1,4 +1,5 @@
 import { Typography, TextField, InputAdornment } from '@mui/material';
+import { FormContainer, TextFieldElement, useForm } from 'react-hook-form-mui';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -61,6 +62,7 @@ interface FormStateValues {
 const UsersView = () => {
   const [openAddUserDialog, setAddUserDialog] = useState(false);
   const [openDeleteUserDialog, setDeleteUserDialog] = useState(false);
+  const [newUserData, setNewUserData] = useState(USER_INITIAL_VALUES);
 
   const [selectedUser, setSelectedUser] = useState(-1)
   const [data, setData] = useState([] as any[]);
@@ -90,6 +92,10 @@ const UsersView = () => {
     );
   }
 
+  const selectedUserObj = () => {
+    const userIdx = data.findIndex(user => user.id === selectedUser)
+    return data[userIdx]
+  }
 
   const deleteUserDialog = React.useCallback(
     (row: GridRowParams) => async () => {
@@ -106,7 +112,7 @@ const UsersView = () => {
     setData(newData)
     setSelectedUser(-1)
     setDeleteUserDialog(false)
-  }, [])
+  }, [selectedUser])
 
   const requestDeleteUser = async function (userId:number) {
     const data = await (
@@ -130,6 +136,11 @@ const UsersView = () => {
         }
   }
 
+  const [paginationModel, setPaginationModel] = React.useState({
+    pageSize: 50,
+    page: 0,
+  });
+
   const columns:GridColDef[] = [
     { field: 'actions',
       type: 'actions',
@@ -146,7 +157,7 @@ const UsersView = () => {
   ]
 
   const onAddUserDialogClose = () => {
-    setFormState({values: USER_INITIAL_VALUES, isValid: false, touched: {}, errors: {}})
+    formContext.reset()
     setAddUserDialog(false)
   }
 
@@ -155,7 +166,19 @@ const UsersView = () => {
     setSelectedUser(-1)
   }
 
+  const formContext = useForm<FormStateValues>({
+    defaultValues: USER_INITIAL_VALUES
+  });
+
   const submitNewUser = async () => {
+    const values = formContext.getValues();
+    const requestResult = await requestAddNewUser(values);
+    formContext.reset();
+    onAddUserDialogClose()
+    console.log(data[data.length - 1]);
+  }
+
+  const requestAddNewUser = async (formValues:FormStateValues) => {
     const data = await (
         await fetch(
           '/api/controllers/add_user.php',
@@ -166,19 +189,42 @@ const UsersView = () => {
               'Authorization': 'Bearer ' + jwt_token
             },
             body: JSON.stringify(
-              {'username': values.username,
-               'password': values.password,
-               'realname': values.realname,
-               'displayname': values.displayname,
-               'email': values.email
+              {'username': formValues.username,
+               'password': formValues.password,
+               'realname': formValues.realname,
+               'displayname': formValues.displayname,
+               'email': formValues.email
                })
           })).json();
 
-        const result = data.success;
+        return data;
+  }
 
-        if (result) {
-          onAddUserDialogClose()
-        }
+  const changePage = async (page:any) => {
+    setPaginationModel(page)
+    // fetch data
+    // const dataFetch = async () => {
+    //   const data = await (
+    //     await fetch(
+    //       "/api/controllers/users.php",
+    //       {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //           'Authorization': 'Bearer ' + jwt_token
+    //         },
+    //         body: JSON.stringify(
+    //           {'limit': 50,
+    //            'offset': 0,
+    //            })
+    //         }
+    //     )
+    //   ).json();
+
+    //   // set state when the data received
+    //   if (data.success)
+    //     setData(data.data)
+    // };
   }
 
   useEffect(() => {
@@ -194,11 +240,10 @@ const UsersView = () => {
               'Authorization': 'Bearer ' + jwt_token
             },
             body: JSON.stringify(
-              {'limit': 20,
+              {'limit': 0,
                'offset': 0,
                })
             }
-
         )
       ).json();
 
@@ -218,7 +263,7 @@ const UsersView = () => {
         title="Delete User"
         content={
           <>
-          Do you really wants to delete user X?
+          Do you really wants to delete user { selectedUserObj()['displayname']}?
 
           {error ? (
             <AppAlert severity="error" onClose={handleCloseError}>
@@ -244,48 +289,45 @@ const UsersView = () => {
         title="Add User"
         content={
           <>
-          <TextField
+          <FormContainer formContext={formContext} >
+          <TextFieldElement
             required
             label="Username"
             name="username"
             value={values.username}
             error={fieldHasError('username')}
             helperText={fieldGetError('username') || ' '}
-            onChange={onFieldChange}
             {...SHARED_CONTROL_PROPS}
           />
-          <TextField
+          <TextFieldElement
             required
             label="Real name"
             name="realname"
             value={values.realname}
             error={fieldHasError('realname')}
             helperText={fieldGetError('realname') || ' '}
-            onChange={onFieldChange}
             {...SHARED_CONTROL_PROPS}
           />
-          <TextField
+          <TextFieldElement
             required
             label="Display name"
             name="displayname"
             value={values.displayname}
             error={fieldHasError('displayname')}
             helperText={fieldGetError('displayname') || ' '}
-            onChange={onFieldChange}
             {...SHARED_CONTROL_PROPS}
           />
-          <TextField
+          <TextFieldElement
             required
             label="email"
             name="email"
             value={values.email}
             error={fieldHasError('email')}
             helperText={fieldGetError('email') || ' '}
-            onChange={onFieldChange}
             {...SHARED_CONTROL_PROPS}
           />
 
-          <TextField
+          <TextFieldElement
             required
             type={showPassword ? 'text' : 'password'}
             label="Password"
@@ -293,7 +335,6 @@ const UsersView = () => {
             value={values.password}
             error={fieldHasError('password')}
             helperText={fieldGetError('password') || ' '}
-            onChange={onFieldChange}
             {...SHARED_CONTROL_PROPS}
             InputProps={{
               endAdornment: (
@@ -309,6 +350,7 @@ const UsersView = () => {
               ),
             }}
           />
+          </FormContainer>
           {error ? (
             <AppAlert severity="error" onClose={handleCloseError}>
               {error}
@@ -329,13 +371,10 @@ const UsersView = () => {
 
       <div style={{ width: '100%' }}>
         <DataGrid
+          paginationModel={paginationModel}
+          onPaginationModelChange={changePage}
           rows={data}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 50 },
-            },
-          }}
           pageSizeOptions={[10, 50, 100, 200]}
           checkboxSelection
           slots={{

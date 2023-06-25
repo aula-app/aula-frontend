@@ -123,7 +123,7 @@ const WelcomeView = () => {
         <StyledTab value={0}>Wild Ideas</StyledTab>
         <StyledTab value={1}>Idea Boxes</StyledTab>
       </StyledTabsList>
-      <StyledTabPanel value={1}>Profile page</StyledTabPanel>
+      <StyledTabPanel value={1}>List of Ideas Boxes</StyledTabPanel>
     <StyledTabPanel value={0}>
     <Grid container spacing={4}>
        {data.map((d,i) => 
