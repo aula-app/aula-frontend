@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { NotFoundView, UserView } from '../views';
+import { NotFoundView } from '../views';
 import AboutView from '../views/About';
 import { WelcomeView } from '../views/Welcome';
 import { RoomsView } from '../views/Rooms';
@@ -7,6 +7,7 @@ import { RoomView } from '../views/Room';
 import { GroupsView } from '../views/Groups';
 import { IdeasView } from '../views/Ideas';
 import { IdeaView } from '../views/Idea';
+import { UserView } from '../views/User';
 import { UsersView } from '../views/Users';
 
 /**

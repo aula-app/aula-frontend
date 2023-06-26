@@ -63,9 +63,12 @@ const UsersView = () => {
   const [openAddUserDialog, setAddUserDialog] = useState(false);
   const [openDeleteUserDialog, setDeleteUserDialog] = useState(false);
   const [newUserData, setNewUserData] = useState(USER_INITIAL_VALUES);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [selectedUser, setSelectedUser] = useState(-1)
   const [data, setData] = useState([] as any[]);
+  const [numRows, setNumRows] = useState(0);
+
 
   const [formState, setFormState, onFieldChange, fieldGetError, fieldHasError] = useAppForm({
     validationSchema: VALIDATE_FORM_ADD_USER,
@@ -175,7 +178,6 @@ const UsersView = () => {
     const requestResult = await requestAddNewUser(values);
     formContext.reset();
     onAddUserDialogClose()
-    console.log(data[data.length - 1]);
   }
 
   const requestAddNewUser = async (formValues:FormStateValues) => {
@@ -202,33 +204,11 @@ const UsersView = () => {
 
   const changePage = async (page:any) => {
     setPaginationModel(page)
-    // fetch data
-    // const dataFetch = async () => {
-    //   const data = await (
-    //     await fetch(
-    //       "/api/controllers/users.php",
-    //       {
-    //         method: 'POST',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //           'Authorization': 'Bearer ' + jwt_token
-    //         },
-    //         body: JSON.stringify(
-    //           {'limit': 50,
-    //            'offset': 0,
-    //            })
-    //         }
-    //     )
-    //   ).json();
-
-    //   // set state when the data received
-    //   if (data.success)
-    //     setData(data.data)
-    // };
   }
 
   useEffect(() => {
     // fetch data
+    setIsLoading(true)
     const dataFetch = async () => {
       const data = await (
         await fetch(
@@ -240,20 +220,23 @@ const UsersView = () => {
               'Authorization': 'Bearer ' + jwt_token
             },
             body: JSON.stringify(
-              {'limit': 0,
-               'offset': 0,
+              {'limit': paginationModel.pageSize,
+               'offset': paginationModel.page*paginationModel.pageSize
                })
             }
         )
       ).json();
 
       // set state when the data received
-      if (data.success)
+      if (data.success) {
         setData(data.data)
+        setNumRows(data.count)
+        setIsLoading(false)
+      }
     };
 
     dataFetch();
-    },[]);
+    },[paginationModel]);
 
   return (
     <Stack direction="column" spacing={2}>
@@ -372,10 +355,13 @@ const UsersView = () => {
       <div style={{ width: '100%' }}>
         <DataGrid
           paginationModel={paginationModel}
+          paginationMode="server"
           onPaginationModelChange={changePage}
           rows={data}
+          rowCount={numRows}
           columns={columns}
-          pageSizeOptions={[10, 50, 100, 200]}
+          loading={isLoading}
+          pageSizeOptions={[10, 50, 100]}
           checkboxSelection
           slots={{
             toolbar: Toolbar
