@@ -276,7 +276,9 @@ const UsersView = () => {
                'realname': formValues.realname,
                'displayname': formValues.displayname,
                'email': formValues.email,
-               'userlevel': formValues.userlevel
+               'userlevel': formValues.userlevel,
+               'about_me': formValues.about_me,
+               'position': formValues.position,
                })
           })).json();
 
