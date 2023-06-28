@@ -1,6 +1,9 @@
 import PublicRoutes from './PublicRoutes';
 import PrivateRoutes from './PrivateRoutes';
+import { localStorageGet, localStorageSet, localStorageDelete } from '../utils/localStorage';
 import { useIsAuthenticated } from '../hooks/auth';
+import { parseJwt } from '../utils/jwt';
+import { useEffect } from 'react';
 // import { isUserStillLoggedIn } from '../api/auth/utils';
 // import { api } from '../api';
 
@@ -11,6 +14,35 @@ const Routes = () => {
   // const [state, dispatch] = useAppStore();
   // const isAuthenticated = state.isAuthenticated; // Variant 1
   const isAuthenticated = useIsAuthenticated(); // Variant 2
+
+  useEffect( () => {
+    const jwt_token = localStorageGet('token');
+    const jwt_payload = parseJwt(jwt_token)
+
+    const getConsent = async () => {
+      const data = await (
+          await fetch(
+            '/api/controllers/user_consent.php',
+            {
+              method: 'POST', 
+              headers: {                   
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwt_token
+              },
+              body: JSON.stringify(
+                {'user_id': jwt_payload?.user_id})
+            })).json();
+
+
+      const result = data.success; // await api.auth.loginWithEmail(values);
+      if (result) {
+        localStorageSet('user_consent', result.data['has_consent'])
+      }
+    }
+
+    getConsent()
+
+  }, [isAuthenticated])
 
   // Re-login or logout the user if needed
   // useEffect(() => {

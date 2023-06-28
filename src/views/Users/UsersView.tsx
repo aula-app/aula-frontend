@@ -1,5 +1,5 @@
 import { Typography, TextField, InputAdornment } from '@mui/material';
-import { FormContainer, TextFieldElement, useForm } from 'react-hook-form-mui';
+import { FormContainer, TextFieldElement, SelectElement, useForm } from 'react-hook-form-mui';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -9,6 +9,9 @@ import { DataGrid, GridColDef, GridRowParams, GridActionsCellItem, GridValueGett
 import { AppLink, AppIconButton, AppAlert, AppButton } from '../../components';
 import { CompositionDialog as AddUserDialog } from '../../components/dialogs'
 import { CompositionDialog as DeleteUserDialog } from '../../components/dialogs'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import { SelectChangeEvent } from '@mui/material/Select';
 import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../utils/form';
 import { localStorageGet } from '../../utils/localStorage';
 import { useEffect, useState, useCallback } from 'react';
@@ -32,26 +35,30 @@ const VALIDATE_FORM_ADD_USER = {
 };
 
 const USER_INITIAL_VALUES = {
+  user_id: -1,
   username: '',
   password: '',
   email: '',
   realname: '',
   displayname: '',
-  position: '',
   about_me: '',
-  userlevel: 0,
+  position: 0,
+  status: 0,
+  userlevel: '10',
   infinite_votes: 0
 } as FormStateValues;
 
 interface FormStateValues {
+  user_id: number;
   username: string;
   password: string;
   email: string;
   realname: string;
   displayname: string;
-  position: string;
   about_me: string;
-  userlevel: number;
+  userlevel: string;
+  position: number;
+  status: number;
   infinite_votes: number;
 };
 
@@ -66,6 +73,8 @@ const UsersView = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [selectedUser, setSelectedUser] = useState(-1)
+  const [selectedEditUser, setSelectedEditUser] = useState(-1)
+
   const [data, setData] = useState([] as any[]);
   const [numRows, setNumRows] = useState(0);
 
@@ -99,6 +108,25 @@ const UsersView = () => {
     const userIdx = data.findIndex(user => user.id === selectedUser)
     return data[userIdx]
   }
+
+  const editUserDialog = React.useCallback(
+    (row: GridRowParams) => async () => {
+      setSelectedEditUser(row.row.id)
+      setAddUserDialog(true)
+      const editUser = row.row
+      formContext.setValue('user_id',editUser.id)
+      formContext.setValue('username',editUser.username)
+      formContext.setValue('displayname',editUser.displayname)
+      formContext.setValue('realname',editUser.realname)
+      formContext.setValue('email',editUser.email)
+      formContext.setValue('about_me',editUser.about_me)
+      formContext.setValue('position',editUser.position)
+      formContext.setValue('status',editUser.status)
+      formContext.setValue('userlevel',(editUser.userlevel)?editUser.userlevel:10)
+    },
+    [],
+  );
+
 
   const deleteUserDialog = React.useCallback(
     (row: GridRowParams) => async () => {
@@ -148,7 +176,7 @@ const UsersView = () => {
     { field: 'actions',
       type: 'actions',
       getActions: (params: GridRowParams) => [
-      <GridActionsCellItem icon={<EditIcon/>} onClick={()=>{console.log('edit')}} label="Edit" />,
+      <GridActionsCellItem icon={<EditIcon/>} onClick={editUserDialog(params)} label="Edit" />,
       <GridActionsCellItem icon={<DeleteIcon/>} onClick={deleteUserDialog(params)} label="Delete" />,
       ]
     },
@@ -161,6 +189,7 @@ const UsersView = () => {
 
   const onAddUserDialogClose = () => {
     formContext.reset()
+    setSelectedEditUser(-1)
     setAddUserDialog(false)
   }
 
@@ -173,11 +202,52 @@ const UsersView = () => {
     defaultValues: USER_INITIAL_VALUES
   });
 
+  const submitUserForm = async () => {
+    if (selectedEditUser !== -1) {
+      await submitEditUser();
+    } else {
+      await submitNewUser();
+    }
+  }
+
+  const submitEditUser = async () => {
+    const values = formContext.getValues();
+    const requestResult = await requestEditUser(values);
+    formContext.reset();
+    onAddUserDialogClose()
+  }
+
   const submitNewUser = async () => {
     const values = formContext.getValues();
     const requestResult = await requestAddNewUser(values);
     formContext.reset();
     onAddUserDialogClose()
+  }
+
+  const requestEditUser = async (formValues:FormStateValues) => {
+    const data = await (
+        await fetch(
+          '/api/controllers/update_user.php',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + jwt_token
+            },
+            body: JSON.stringify(
+              {'user_id': formValues.user_id,
+               'username': formValues.username,
+               'realname': formValues.realname,
+               'displayname': formValues.displayname,
+               'email': formValues.email,
+               'about_me': formValues.about_me,
+               'userlevel': formValues.userlevel,
+               'position': formValues.position,
+               'status': formValues.status
+               })
+          })).json();
+
+        return data;
   }
 
   const requestAddNewUser = async (formValues:FormStateValues) => {
@@ -195,7 +265,8 @@ const UsersView = () => {
                'password': formValues.password,
                'realname': formValues.realname,
                'displayname': formValues.displayname,
-               'email': formValues.email
+               'email': formValues.email,
+               'userlevel': formValues.userlevel
                })
           })).json();
 
@@ -269,7 +340,7 @@ const UsersView = () => {
 
       {openAddUserDialog && <AddUserDialog
         open
-        title="Add User"
+        title={(selectedEditUser !== -1)? "Edit User":"Add User"}
         content={
           <>
           <FormContainer formContext={formContext} >
@@ -309,7 +380,48 @@ const UsersView = () => {
             helperText={fieldGetError('email') || ' '}
             {...SHARED_CONTROL_PROPS}
           />
+          <InputLabel id="userlevel">User Role</InputLabel>
+          <SelectElement
+            name="userlevel"
+            value={values.userlevel}
+            id="userlevel"
+            label="User Role"
+            options={[
+              {
+              id: 10,
+              label: 'Guest'
+              },
+              {
+              id: 20,
+              label: 'Standard'
+              },
+              {
+              id: 30,
+              label: 'Moderator'
+              },
+              {
+              id: 40,
+              label: 'Super Moderator'
+              },
+              {
+              id: 50,
+              label: 'Admin'
+              },
+              {
+              id: 60,
+              label: 'Tech Admin'
+              },
 
+            ]}
+          >
+            <MenuItem value={10}>Guest</MenuItem>
+            <MenuItem value={"20"}>Standard</MenuItem>
+            <MenuItem value={30}>Moderator</MenuItem>
+            <MenuItem value={40}>Super Moderator</MenuItem>
+            <MenuItem value={50}>Admin</MenuItem>
+            <MenuItem value={60}>Tech Admin</MenuItem>
+          </SelectElement>
+          { (selectedEditUser == -1)?
           <TextFieldElement
             required
             type={showPassword ? 'text' : 'password'}
@@ -332,7 +444,7 @@ const UsersView = () => {
                 </InputAdornment>
               ),
             }}
-          />
+          />:''}
           </FormContainer>
           {error ? (
             <AppAlert severity="error" onClose={handleCloseError}>
@@ -344,8 +456,8 @@ const UsersView = () => {
         actions={
           <>
             <AppButton onClick={onAddUserDialogClose}>Cancel</AppButton>
-            <AppButton onClick={submitNewUser} sx={{ mr: 0 }} color="success" >
-              Add
+            <AppButton onClick={submitUserForm} sx={{ mr: 0 }} color="success" >
+            {(selectedEditUser !== -1)?'Save':'Add'}
             </AppButton>
           </>
         }
