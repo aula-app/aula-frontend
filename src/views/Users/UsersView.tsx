@@ -35,6 +35,7 @@ const VALIDATE_FORM_ADD_USER = {
 };
 
 const USER_INITIAL_VALUES = {
+  id: -1,
   user_id: -1,
   username: '',
   password: '',
@@ -49,6 +50,7 @@ const USER_INITIAL_VALUES = {
 } as FormStateValues;
 
 interface FormStateValues {
+  id: number;
   user_id: number;
   username: string;
   password: string;
@@ -114,6 +116,7 @@ const UsersView = () => {
       setSelectedEditUser(row.row.id)
       setAddUserDialog(true)
       const editUser = row.row
+      formContext.setValue('id',editUser.id)
       formContext.setValue('user_id',editUser.id)
       formContext.setValue('username',editUser.username)
       formContext.setValue('displayname',editUser.displayname)
@@ -213,6 +216,13 @@ const UsersView = () => {
   const submitEditUser = async () => {
     const values = formContext.getValues();
     const requestResult = await requestEditUser(values);
+    console.log(requestResult)
+    if(requestResult['success'])  {
+      console.log('NO ERROR')
+      const userIdx = data.findIndex(user => user.id === values.user_id)
+      const newData = Object.assign([], data, {[userIdx]: values})
+      setData(newData)
+    }
     formContext.reset();
     onAddUserDialogClose()
   }
