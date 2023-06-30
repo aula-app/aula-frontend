@@ -17,7 +17,7 @@ const Routes = () => {
 
   useEffect( () => {
     const jwt_token = localStorageGet('token');
-    const jwt_payload = parseJwt(jwt_token)
+    const jwt_payload = jwt_token?parseJwt(jwt_token):null
 
     const getConsent = async () => {
       const data = await (
