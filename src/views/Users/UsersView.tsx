@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Stack } from '@mui/system';
-import { DataGrid, GridColDef, GridRowParams, GridActionsCellItem, GridValueGetterParams, GridToolbarContainer } from '@mui/x-data-grid';
+import { DataGrid, GridSortModel, GridColDef, GridRowParams, GridActionsCellItem, GridValueGetterParams, GridToolbarContainer } from '@mui/x-data-grid';
 import { AppLink, AppIconButton, AppAlert, AppButton } from '../../components';
 import { CompositionDialog as AddUserDialog } from '../../components/dialogs'
 import { CompositionDialog as DeleteUserDialog } from '../../components/dialogs'
@@ -80,6 +80,12 @@ const UsersView = () => {
   const [data, setData] = useState([] as any[]);
   const [numRows, setNumRows] = useState(0);
 
+  const [sortModel, setSortModel] = React.useState<GridSortModel>([
+    {
+      field: 'last_update',
+      sort: 'desc',
+    },
+  ]); 
 
   const [formState, setFormState, onFieldChange, fieldGetError, fieldHasError] = useAppForm({
     validationSchema: VALIDATE_FORM_ADD_USER,
@@ -183,11 +189,12 @@ const UsersView = () => {
       <GridActionsCellItem icon={<DeleteIcon/>} onClick={deleteUserDialog(params)} label="Delete" />,
       ]
     },
+    { field: 'last_update', headerName: 'Updated at', width: 260},
     { field: 'realname', headerName: 'Real Name', width: 260},
     { field: 'username', headerName: 'Username', width: 300},
-    { field: 'displayname', headerName: 'Displayname', width: 300},
-    { field: 'email', headerName: 'email', width: 300},
-    { field: 'about_me', headerName: 'About me', width: 300},
+    { field: 'displayname', headerName: 'Displayname', width: 300, sortable: false},
+    { field: 'email', headerName: 'email', width: 300, sortable: false},
+    { field: 'about_me', headerName: 'About me', width: 300, sortable: false},
   ]
 
   const onAddUserDialogClose = () => {
@@ -216,9 +223,7 @@ const UsersView = () => {
   const submitEditUser = async () => {
     const values = formContext.getValues();
     const requestResult = await requestEditUser(values);
-    console.log(requestResult)
     if(requestResult['success'])  {
-      console.log('NO ERROR')
       const userIdx = data.findIndex(user => user.id === values.user_id)
       const newData = Object.assign([], data, {[userIdx]: values})
       setData(newData)
@@ -289,6 +294,14 @@ const UsersView = () => {
     setPaginationModel(page)
   }
 
+  const changeSort = async (sort:any) => {
+    if (sort.length > 0) {
+      setSortModel(sort)
+    } else {
+      setSortModel([{ field: 'last_update', sort: 'desc' }])
+    }
+  }
+
   useEffect(() => {
     // fetch data
     setIsLoading(true)
@@ -304,7 +317,9 @@ const UsersView = () => {
             },
             body: JSON.stringify(
               {'limit': paginationModel.pageSize,
-               'offset': paginationModel.page*paginationModel.pageSize
+               'offset': paginationModel.page*paginationModel.pageSize,
+               'field': sortModel[0].field,
+               'order': sortModel[0].sort
                })
             }
         )
@@ -319,7 +334,7 @@ const UsersView = () => {
     };
 
     dataFetch();
-    },[paginationModel]);
+    },[paginationModel, sortModel]);
 
   return (
     <Stack direction="column" spacing={2}>
@@ -481,6 +496,7 @@ const UsersView = () => {
           paginationModel={paginationModel}
           paginationMode="server"
           onPaginationModelChange={changePage}
+          onSortModelChange={changeSort}
           rows={data}
           rowCount={numRows}
           columns={columns}
