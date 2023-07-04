@@ -51,9 +51,9 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     icon: 'idea',
   },
   {
-    title: 'Messages',
-    path: '/messages',
-    icon: 'messages',
+    title: 'Texts',
+    path: '/texts',
+    icon: 'texts',
   },
   {
     title: 'About',

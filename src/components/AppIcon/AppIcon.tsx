@@ -61,7 +61,7 @@ const ICONS: Record<string, React.ComponentType> = {
   idea: LightbulbIcon,
   users: ManageAccountsIcon,
   notifications: NotificationsIcon,
-  messages: VerifiedUserIcon
+  texts: VerifiedUserIcon
 };
 
 interface Props {
