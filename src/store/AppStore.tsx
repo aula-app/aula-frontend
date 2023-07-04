@@ -17,11 +17,13 @@ import { localStorageGet } from '../utils/localStorage';
 export interface AppStoreState {
   darkMode: boolean;
   isAuthenticated: boolean;
+  hasConsent: boolean;
   currentUser?: object | undefined;
 }
 const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
   isAuthenticated: false, // Overridden in AppStore by checking auth token
+  hasConsent: false
 };
 
 /**
@@ -45,7 +47,6 @@ const AppStoreProvider: FunctionComponent<PropsWithChildren> = ({ children }) =>
   const darkMode = (previousDarkMode != undefined)?previousDarkMode:prefersDarkMode
   const token = localStorageGet('token')
   const tokenExists = Boolean(token != undefined);
-  console.log('DARK', darkMode)
 
   const initialState: AppStoreState = {
     ...INITIAL_APP_STATE,

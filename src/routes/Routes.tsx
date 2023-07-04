@@ -2,7 +2,9 @@ import PublicRoutes from './PublicRoutes';
 import PrivateRoutes from './PrivateRoutes';
 import { localStorageGet, localStorageSet, localStorageDelete } from '../utils/localStorage';
 import { useIsAuthenticated } from '../hooks/auth';
+import { useHasConsent } from '../hooks/hasConsent';
 import { parseJwt } from '../utils/jwt';
+import { useAppStore } from '../store/AppStore';
 import { useEffect } from 'react';
 // import { isUserStillLoggedIn } from '../api/auth/utils';
 // import { api } from '../api';
@@ -14,6 +16,8 @@ const Routes = () => {
   // const [state, dispatch] = useAppStore();
   // const isAuthenticated = state.isAuthenticated; // Variant 1
   const isAuthenticated = useIsAuthenticated(); // Variant 2
+  const [state, dispatch] = useAppStore();
+  const hasConsent = state.hasConsent;
 
   useEffect( () => {
     const jwt_token = localStorageGet('token');
@@ -33,11 +37,12 @@ const Routes = () => {
                 {'user_id': jwt_payload?.user_id})
             })).json();
 
-
-      const result = data.success; // await api.auth.loginWithEmail(values);
-      if (result) {
-        localStorageSet('user_consent', result.data['has_consent'])
-      }
+        const result = data; // await api.auth.loginWithEmail(values);
+        if (result.data == 0) {
+          dispatch({ 'action': 'HAS_CONSENT', 'payload': false})
+        } else {
+          dispatch({ 'action': 'HAS_CONSENT', 'payload': true})
+        }
     }
 
     getConsent()
@@ -65,8 +70,6 @@ const Routes = () => {
   //     });
   //   }
   // }, [isAuthenticated, dispatch]); // Effect for every isAuthenticated change actually
-
-  console.log('Routes() - isAuthenticated:', isAuthenticated);
 
   return isAuthenticated ? <PrivateRoutes /> : <PublicRoutes />;
 };

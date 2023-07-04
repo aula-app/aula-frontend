@@ -27,6 +27,11 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
         isAuthenticated: false,
         currentUser: undefined, // Also reset previous user data
       };
+    case 'HAS_CONSENT':
+      return {
+        ...state,
+        hasConsent: action.payload
+      };
     case 'DARK_MODE': {
       const darkMode = action?.darkMode ?? action?.payload;
       localStorageSet('darkMode', darkMode);

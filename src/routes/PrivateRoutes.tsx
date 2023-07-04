@@ -9,25 +9,31 @@ import { IdeasView } from '../views/Ideas';
 import { IdeaView } from '../views/Idea';
 import { UserView } from '../views/User';
 import { UsersView } from '../views/Users';
+import { AskConsentView } from '../views/AskConsent';
+import { localStorageGet } from '../utils/localStorage';
+import { useAppStore } from '../store';
+
 
 /**
  * List of routes available only for authenticated users
  * Also renders the "Private Layout" composition
  */
 const PrivateRoutes = () => {
+  const [state, dispatch] = useAppStore();
+  const hasConsent = state.hasConsent;
   return (
     <Routes>
-      <Route path="/" element={<WelcomeView />} />
-      <Route path="welcome" element={<WelcomeView />} />
-      <Route path="user" element={<UserView />} />
-      <Route path="about" element={<AboutView />} />,
-      <Route path="rooms" element={<RoomsView />} />,
-      <Route path="room/:room_id" element={<RoomView />} />,
-      <Route path="groups" element={<GroupsView />} />,
-      <Route path="ideas" element={<IdeasView />} />,
-      <Route path="users" element={<UsersView />} />,
-      <Route path="idea/:ideaId" element={<IdeaView />} />,
-      <Route path="*" element={<NotFoundView />} />
+      <Route path="/" element={(!hasConsent)?<AskConsentView/>:<WelcomeView />} />
+      <Route path="welcome" element={(!hasConsent)?<AskConsentView/>:<WelcomeView />} />
+      <Route path="user" element={(!hasConsent)?<AskConsentView/>:<UserView />} />
+      <Route path="about" element={(!hasConsent)?<AskConsentView/>:<AboutView />} />,
+      <Route path="rooms" element={(!hasConsent)?<AskConsentView/>:<RoomsView />} />,
+      <Route path="room/:room_id" element={(!hasConsent)?<AskConsentView/>:<RoomView />} />,
+      <Route path="groups" element={(!hasConsent)?<AskConsentView/>:<GroupsView />} />,
+      <Route path="ideas" element={(!hasConsent)?<AskConsentView/>:<IdeasView />} />,
+      <Route path="users" element={(!hasConsent)?<AskConsentView/>:<UsersView />} />,
+      <Route path="idea/:ideaId" element={(!hasConsent)?<AskConsentView/>:<IdeaView />} />,
+      <Route path="*" element={(!hasConsent)?<AskConsentView/>:<NotFoundView />} />
     </Routes>
   );
 };
