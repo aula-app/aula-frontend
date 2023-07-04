@@ -23,6 +23,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonIcon from '@mui/icons-material/Person';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import NotificationsIcon from '@mui/icons-material/NotificationsOutlined';
 
 /**
@@ -60,6 +61,7 @@ const ICONS: Record<string, React.ComponentType> = {
   idea: LightbulbIcon,
   users: ManageAccountsIcon,
   notifications: NotificationsIcon,
+  messages: VerifiedUserIcon
 };
 
 interface Props {

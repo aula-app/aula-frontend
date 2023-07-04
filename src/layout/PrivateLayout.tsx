@@ -50,7 +50,11 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     path: '/ideas',
     icon: 'idea',
   },
-
+  {
+    title: 'Messages',
+    path: '/messages',
+    icon: 'messages',
+  },
   {
     title: 'About',
     path: '/about',
