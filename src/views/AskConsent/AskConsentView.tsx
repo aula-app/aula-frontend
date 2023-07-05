@@ -49,6 +49,37 @@ const AskConsent = () => {
     dataFetch();
     },[]);
 
+  const revokeConsent = useCallback(async (text_id:number, text_idx:number) => {
+    const revokeConsentReq = async () => {
+      const data = await (
+        await fetch(
+          "/api/controllers/revoke_consent.php",
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + jwt_token
+            },
+            body: JSON.stringify({'text_id': text_id })
+          },
+        )
+      ).json();
+
+      return data;
+    }
+
+    const revokeConsentResponse = await revokeConsentReq();
+    // if (revokeConsentResponse.success && revokeConsentResponse.data == 1) {
+    //   const newData = data.filter((e,i) =>  i !== text_idx)
+    //   setData(newData)
+    //   if (newData.length == 0) {
+    //     navigate(0)
+    //   }
+    // }
+    // await revokeConsentReq();
+  }, [data])
+
+
   const giveConsent = useCallback(async (text_id:number, text_idx:number) => {
     const giveConsentReq = async () => {
       const data = await (
@@ -88,6 +119,7 @@ const AskConsent = () => {
             {text.body}
             </CardContent>
             <CardActions>
+              <AppButton size="small" onClick={() => revokeConsent(text.id, i)}>No</AppButton>
               <AppButton size="small" onClick={() => giveConsent(text.id, i)}>{text.consent_text}</AppButton>
             </CardActions>
           </Card>
