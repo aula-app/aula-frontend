@@ -6,6 +6,7 @@ import { useHasConsent } from '../hooks/hasConsent';
 import { parseJwt } from '../utils/jwt';
 import { useAppStore } from '../store/AppStore';
 import { useEffect } from 'react';
+import { useLocation } from "react-router-dom";
 // import { isUserStillLoggedIn } from '../api/auth/utils';
 // import { api } from '../api';
 
@@ -13,6 +14,7 @@ import { useEffect } from 'react';
  * Renders routes depending on Authenticated or Anonymous users
  */
 const Routes = () => {
+  const location = useLocation();
   // const [state, dispatch] = useAppStore();
   // const isAuthenticated = state.isAuthenticated; // Variant 1
   const isAuthenticated = useIsAuthenticated(); // Variant 2
@@ -47,7 +49,7 @@ const Routes = () => {
 
     getConsent()
 
-  }, [isAuthenticated])
+  }, [isAuthenticated, location])
 
   // Re-login or logout the user if needed
   // useEffect(() => {
