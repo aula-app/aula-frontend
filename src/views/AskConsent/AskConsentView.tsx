@@ -25,7 +25,7 @@ const AskConsent = () => {
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          "/api/controllers/get_necessary_consents.php",
+          process.env.REACT_APP_API_URL + "/api/controllers/get_necessary_consents.php",
           {
             method: 'POST',
             headers: {
@@ -53,7 +53,7 @@ const AskConsent = () => {
     const revokeConsentReq = async () => {
       const data = await (
         await fetch(
-          "/api/controllers/revoke_consent.php",
+          process.env.REACT_APP_API_URL + "/api/controllers/revoke_consent.php",
           {
             method: 'POST',
             headers: {
@@ -84,7 +84,7 @@ const AskConsent = () => {
     const giveConsentReq = async () => {
       const data = await (
         await fetch(
-          "/api/controllers/give_consent.php",
+          process.env.REACT_APP_API_URL + "/api/controllers/give_consent.php",
           {
             method: 'POST',
             headers: {

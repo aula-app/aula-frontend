@@ -29,6 +29,8 @@
     "test": "react-scripts test"
   },
   "dependencies": {
+    "@capacitor/android": "^5.1.1",
+    "@capacitor/core": "^5.1.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/base": "^5.0.0-beta.4",
@@ -48,6 +50,9 @@
     "web-vitals": "latest"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@capacitor/assets": "^2.0.4",
+    "@capacitor/cli": "^5.1.1",
     "@testing-library/jest-dom": "latest",
     "@testing-library/react": "latest",
     "@testing-library/user-event": "latest",

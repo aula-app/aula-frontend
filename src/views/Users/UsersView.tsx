@@ -157,7 +157,7 @@ const UsersView = () => {
   const requestDeleteUser = async function (userId:number) {
     const data = await (
         await fetch(
-          '/api/controllers/delete_user.php',
+          process.env.REACT_APP_API_URL + '/api/controllers/delete_user.php',
           {
             method: 'POST',
             headers: {
@@ -242,7 +242,7 @@ const UsersView = () => {
   const requestEditUser = async (formValues:FormStateValues) => {
     const data = await (
         await fetch(
-          '/api/controllers/update_user.php',
+          process.env.REACT_APP_API_URL + '/api/controllers/update_user.php',
           {
             method: 'POST',
             headers: {
@@ -268,7 +268,7 @@ const UsersView = () => {
   const requestAddNewUser = async (formValues:FormStateValues) => {
     const data = await (
         await fetch(
-          '/api/controllers/add_user.php',
+          process.env.REACT_APP_API_URL + '/api/controllers/add_user.php',
           {
             method: 'POST',
             headers: {
@@ -308,7 +308,7 @@ const UsersView = () => {
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          "/api/controllers/users.php",
+          process.env.REACT_APP_API_URL + "/api/controllers/users.php",
           {
             method: 'POST',
             headers: {

@@ -111,7 +111,7 @@ const RoomView = () => {
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          "/api/controllers/room_ideas.php",
+          process.env.REACT_APP_API_URL + "/api/controllers/room_ideas.php",
           {
             method: 'POST', 
             headers: {                   

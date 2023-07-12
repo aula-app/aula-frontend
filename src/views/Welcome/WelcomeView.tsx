@@ -23,7 +23,7 @@ const WelcomeView = () => {
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          "/api/controllers/rooms.php"
+         process.env.REACT_APP_API_URL + "/api/controllers/rooms.php"
         )
       ).json();
 

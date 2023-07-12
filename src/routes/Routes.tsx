@@ -28,7 +28,7 @@ const Routes = () => {
     const getConsent = async () => {
       const data = await (
           await fetch(
-            '/api/controllers/user_consent.php',
+            process.env.REACT_APP_API_URL + '/api/controllers/user_consent.php',
             {
               method: 'POST', 
               headers: {                   

@@ -54,7 +54,7 @@ const LoginView = () => {
         const password = values['password']
         const data = await (
             await fetch(
-              '/api/controllers/login.php',
+              process.env.REACT_APP_API_URL + '/api/controllers/login.php',
               {
                 method: 'POST', 
                 headers: {                   
@@ -92,12 +92,13 @@ const LoginView = () => {
   return (
     <AppForm onSubmit={handleFormSubmit}>
       <Card>
-        <CardHeader title="aula login" />
+        <CardHeader title="Login" />
         <CardContent>
           <TextField
             required
             label="Username"
             name="username"
+            inputProps={{autocapitalize: "none"}}
             value={values.username}
             error={fieldHasError('username')}
             helperText={fieldGetError('username') || ' '}
