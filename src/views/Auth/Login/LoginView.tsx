@@ -56,8 +56,8 @@ const LoginView = () => {
             await fetch(
               process.env.REACT_APP_API_URL + '/api/controllers/login.php',
               {
-                method: 'POST', 
-                headers: {                   
+                method: 'POST',
+                headers: {
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(
@@ -92,7 +92,7 @@ const LoginView = () => {
   return (
     <AppForm onSubmit={handleFormSubmit}>
       <Card>
-        <CardHeader title="Login" />
+        <CardHeader title="Login" sx={{mt: 0.5}} />
         <CardContent>
           <TextField
             required
@@ -103,6 +103,7 @@ const LoginView = () => {
             error={fieldHasError('username')}
             helperText={fieldGetError('username') || ' '}
             onChange={onFieldChange}
+            sx={{ mt: 0 }}
             {...SHARED_CONTROL_PROPS}
           />
           <TextField
@@ -114,6 +115,7 @@ const LoginView = () => {
             error={fieldHasError('password')}
             helperText={fieldGetError('password') || ' '}
             onChange={onFieldChange}
+            sx={{ mt: 0 }}
             {...SHARED_CONTROL_PROPS}
             InputProps={{
               endAdornment: (
@@ -134,13 +136,13 @@ const LoginView = () => {
               {error}
             </AppAlert>
           ) : null}
-          <Grid container justifyContent="center" alignItems="center">
-            <AppButton type="submit" disabled={!formState.isValid}>
-              Login
-            </AppButton>
-            <Button variant="text" color="inherit" component={AppLink} to="/auth/recovery/password">
+          <Grid container justifyContent="space-between" alignItems="center">
+            <Button variant="text" color="secondary" component={AppLink} to="/auth/recovery/password">
               Forgot Password
             </Button>
+            <AppButton type="submit" color="primary" disabled={!formState.isValid}>
+              Login
+            </AppButton>
           </Grid>
         </CardContent>
       </Card>
