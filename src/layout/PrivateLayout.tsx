@@ -1,7 +1,7 @@
 import { useState, useCallback, FunctionComponent, PropsWithChildren } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Stack } from '@mui/material';
-import { AppIconButton, ErrorBoundary } from '../components';
+import { AppIcon, AppIconButton, ErrorBoundary } from '../components';
 import { LinkToPage } from '../utils/type';
 import { useOnMobile } from '../hooks/layout';
 import {
@@ -122,8 +122,9 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     >
       <Stack component="header">
         <TopBar
-          startNode={<AppIconButton icon="logo" onClick={onSideBarOpen} />}
+          startNode={<AppIcon icon="logo" />}
           title={title}
+          endNode={<AppIconButton icon="menu" onClick={onSideBarOpen} />}
         />
 
         <SideBar
