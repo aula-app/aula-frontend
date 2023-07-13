@@ -5,6 +5,7 @@ import { FunctionComponent, useMemo, PropsWithChildren } from 'react';
 import { useAppStore } from '../store';
 import DARK_THEME from './dark';
 import LIGHT_THEME from './light';
+import THEME_FONTS from './fonts';
 
 // Setting .prepend: true moves MUI styles to the top of the <head> so they're loaded first.
 // It allows developers to easily override MUI styles with other styling solutions, like CSS modules.
@@ -29,7 +30,10 @@ const AppThemeProvider: FunctionComponent<Props> = ({ children, emotionCache = C
   // TODO: Make theme changes after full app loading.
   // Maybe we need to use https://github.com/pacocoursey/next-themes npm
   // Also take a look on this tutorial https://medium.com/@luca_79189/how-to-get-a-flickerless-persistent-dark-mode-in-your-next-js-app-example-with-mui-9581ea898314
-  const theme = useMemo(() => (state.darkMode ? createTheme(DARK_THEME) : createTheme(LIGHT_THEME)), [state.darkMode]);
+  const theme = createTheme({
+    ...THEME_FONTS,
+    ...(useMemo(() => (state.darkMode ? DARK_THEME : LIGHT_THEME), [state.darkMode]))
+  })
 
   return (
     <CacheProvider value={emotionCache}>
