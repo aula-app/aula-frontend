@@ -3,28 +3,29 @@ import { SvgIcon } from '@mui/material';
 // SVG assets
 import { ReactComponent as LogoIcon } from './logo.svg';
 // Material Icons
-import DefaultIcon from '@mui/icons-material/MoreHoriz';
-import SettingsIcon from '@mui/icons-material/Settings';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
-import DayNightIcon from '@mui/icons-material/Brightness4';
-import NightIcon from '@mui/icons-material/Brightness3';
-import DayIcon from '@mui/icons-material/Brightness5';
-import SearchIcon from '@mui/icons-material/Search';
-import InfoIcon from '@mui/icons-material/Info';
-import HomeIcon from '@mui/icons-material/Home';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import CloseIcon from '@mui/icons-material/Close';
+import DayIcon from '@mui/icons-material/Brightness5';
+import DayNightIcon from '@mui/icons-material/Brightness4';
+import DefaultIcon from '@mui/icons-material/MoreHoriz';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import GroupIcon from '@mui/icons-material/Group';
+import HomeIcon from '@mui/icons-material/Home';
+import InfoIcon from '@mui/icons-material/Info';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import MenuIcon from '@mui/icons-material/Menu';
+import NightIcon from '@mui/icons-material/Brightness3';
+import NotificationsIcon from '@mui/icons-material/NotificationsOutlined';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonIcon from '@mui/icons-material/Person';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import SearchIcon from '@mui/icons-material/Search';
+import SettingsIcon from '@mui/icons-material/Settings';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import NotificationsIcon from '@mui/icons-material/NotificationsOutlined';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 /**
  * How to use:
@@ -36,32 +37,29 @@ import NotificationsIcon from '@mui/icons-material/NotificationsOutlined';
  */
 const ICONS: Record<string, React.ComponentType> = {
   default: DefaultIcon,
-  logo: () => (
-    <SvgIcon>
-      <LogoIcon />
-    </SvgIcon>
-  ),
-  close: CloseIcon,
-  menu: MenuIcon,
-  settings: SettingsIcon,
-  visibilityon: VisibilityIcon,
-  visibilityoff: VisibilityOffIcon,
-  daynight: DayNightIcon,
-  night: NightIcon,
-  day: DayIcon,
-  search: SearchIcon,
-  info: InfoIcon,
-  home: HomeIcon,
+  logo: () => (<LogoIcon width="2em" />),
   account: AccountCircle,
-  signup: PersonAddIcon,
+  back: ArrowBackIosNewIcon,
+  close: CloseIcon,
+  day: DayIcon,
+  daynight: DayNightIcon,
+  group: GroupIcon,
+  home: HomeIcon,
+  idea: LightbulbIcon,
+  info: InfoIcon,
   login: PersonIcon,
   logout: ExitToAppIcon,
-  group: GroupIcon,
-  room: MeetingRoomIcon,
-  idea: LightbulbIcon,
-  users: ManageAccountsIcon,
+  menu: MenuIcon,
+  night: NightIcon,
   notifications: NotificationsIcon,
-  texts: VerifiedUserIcon
+  room: MeetingRoomIcon,
+  search: SearchIcon,
+  settings: SettingsIcon,
+  signup: PersonAddIcon,
+  texts: VerifiedUserIcon,
+  users: ManageAccountsIcon,
+  visibilityoff: VisibilityOffIcon,
+  visibilityon: VisibilityIcon,
 };
 
 interface Props {

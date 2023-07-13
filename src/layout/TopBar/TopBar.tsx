@@ -22,7 +22,7 @@ const TopBar: FunctionComponent<Props> = ({ endNode, startNode, title = '', ...r
       }
       {...restOfProps}
     >
-      <Toolbar disableGutters sx={{ paddingX: 1 }}>
+      <Toolbar>
         {startNode}
 
         <Typography

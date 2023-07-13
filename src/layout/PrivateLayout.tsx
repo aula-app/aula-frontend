@@ -1,7 +1,7 @@
 import { useState, useCallback, FunctionComponent, PropsWithChildren } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Stack } from '@mui/material';
-import { AppIconButton, ErrorBoundary } from '../components';
+import { AppIcon, AppIconButton, ErrorBoundary } from '../components';
 import { LinkToPage } from '../utils/type';
 import { useOnMobile } from '../hooks/layout';
 import {
@@ -87,6 +87,8 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const title = TITLE_PRIVATE;
   document.title = title; // Also Update Tab Title
 
+  const location = useLocation().pathname.replaceAll("/", " ")
+
   const onLogoClick = useCallback(() => {
     // Navigate to first SideBar's item or to '/' when clicking on Logo/Menu icon when SideBar is already visible
     navigation(SIDEBAR_ITEMS?.[0]?.path || '/');
@@ -122,8 +124,13 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     >
       <Stack component="header">
         <TopBar
-          startNode={<AppIconButton icon="logo" onClick={onSideBarOpen} />}
-          title={title}
+          startNode={
+            location === " " ?
+              <AppIcon icon="logo" />
+            : <AppIconButton icon="back" onClick={() => navigation(-1)} />
+          }
+          title={location === " " ? title : location}
+          endNode={<AppIconButton icon="menu" onClick={onSideBarOpen} />}
         />
 
         <SideBar
