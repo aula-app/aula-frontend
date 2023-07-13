@@ -44,7 +44,7 @@ const WelcomeView = () => {
       <AppLink to={ `/room/${ d.id }`} >
         <Card sx={{ borderRadius: '10px'}}>
           <CardContent>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h5" sx={{ mb: 1.5 }} noWrap>
             {capitalize(d.room_name)}
           </Typography>
           <CardMedia
@@ -53,7 +53,7 @@ const WelcomeView = () => {
               image={ (i%2 === 0) ? '/img/aula-room1.png' : 'img/aula-room.png' }
               alt="bg image"
             />
-          <Typography sx={{ mt: 3 }} variant="body2" noWrap>
+          <Typography sx={{ mt: 1.5 }} variant="body2" noWrap>
             {d.description_public}
           </Typography>
           </CardContent>
