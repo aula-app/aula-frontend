@@ -26,11 +26,11 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     path: '/auth/signup',
     icon: 'signup',
   },
-  // {
-  //   title: 'About',
-  //   path: '/about',
-  //   icon: 'info',
-  // },
+  {
+    title: 'About',
+    path: '/about',
+    icon: 'info',
+  },
 ];
 
 /**
