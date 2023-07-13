@@ -56,8 +56,8 @@ const LoginView = () => {
             await fetch(
               process.env.REACT_APP_API_URL + '/api/controllers/login.php',
               {
-                method: 'POST', 
-                headers: {                   
+                method: 'POST',
+                headers: {
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(
@@ -134,13 +134,13 @@ const LoginView = () => {
               {error}
             </AppAlert>
           ) : null}
-          <Grid container justifyContent="center" alignItems="center">
+          <Grid container justifyContent="space-between" alignItems="center">
+            <Button variant="outlined" color="secondary" component={AppLink} to="/auth/recovery/password">
+              Forgot Password
+            </Button>
             <AppButton type="submit" disabled={!formState.isValid}>
               Login
             </AppButton>
-            <Button variant="text" color="inherit" component={AppLink} to="/auth/recovery/password">
-              Forgot Password
-            </Button>
           </Grid>
         </CardContent>
       </Card>
