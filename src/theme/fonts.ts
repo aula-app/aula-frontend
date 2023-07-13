@@ -16,6 +16,7 @@ export const THEME_FONTS: ThemeOptions = {
     },
     body2: {
       fontFamily: 'Open Sans Variable',
+      fontWeight: 300
     },
     h1: { fontWeight: 700 },
     h2: { fontWeight: 700 },
