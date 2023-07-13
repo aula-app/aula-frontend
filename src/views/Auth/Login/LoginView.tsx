@@ -92,7 +92,7 @@ const LoginView = () => {
   return (
     <AppForm onSubmit={handleFormSubmit}>
       <Card>
-        <CardHeader title="Login" />
+        <CardHeader title="Login" sx={{mt: 0.5}} />
         <CardContent>
           <TextField
             required
@@ -103,6 +103,7 @@ const LoginView = () => {
             error={fieldHasError('username')}
             helperText={fieldGetError('username') || ' '}
             onChange={onFieldChange}
+            sx={{ mt: 0 }}
             {...SHARED_CONTROL_PROPS}
           />
           <TextField
@@ -114,6 +115,7 @@ const LoginView = () => {
             error={fieldHasError('password')}
             helperText={fieldGetError('password') || ' '}
             onChange={onFieldChange}
+            sx={{ mt: 0 }}
             {...SHARED_CONTROL_PROPS}
             InputProps={{
               endAdornment: (
@@ -135,10 +137,10 @@ const LoginView = () => {
             </AppAlert>
           ) : null}
           <Grid container justifyContent="space-between" alignItems="center">
-            <Button variant="outlined" color="secondary" component={AppLink} to="/auth/recovery/password">
+            <Button variant="text" color="secondary" component={AppLink} to="/auth/recovery/password">
               Forgot Password
             </Button>
-            <AppButton type="submit" disabled={!formState.isValid}>
+            <AppButton type="submit" color="primary" disabled={!formState.isValid}>
               Login
             </AppButton>
           </Grid>
