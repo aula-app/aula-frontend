@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { CardMedia, Typography, capitalize } from '@mui/material';
 import { Stack } from '@mui/system';
 import { styled } from '@mui/system';
 import Tabs from '@mui/base/Tabs';
@@ -37,16 +37,25 @@ const WelcomeView = () => {
 
 
   return (
-    <Grid container spacing={4}>
-       {data.map((d,i) => 
+    <Grid container spacing={1}>
+      {data.map((d,i) =>
       <Grid key={d.id} item xs={12} md={4}>
 
       <AppLink to={ `/room/${ d.id }`} >
         <Card sx={{ borderRadius: '10px'}}>
-          <CardHeader title={d.room_name}/>
           <CardContent>
-          <img src={ ( i % 2 == 0)?'/img/aula.png':'img/aula-room.png' }/>
-          {d.description_public}
+          <Typography variant="h6" noWrap>
+            {capitalize(d.room_name)}
+          </Typography>
+          <CardMedia
+              component="img"
+              height="194"
+              image={ (i%2 === 0) ? '/img/aula-room1.png' : 'img/aula-room.png' }
+              alt="bg image"
+            />
+          <Typography sx={{ mt: 3 }} variant="body2" noWrap>
+            {d.description_public}
+          </Typography>
           </CardContent>
         </Card>
 
