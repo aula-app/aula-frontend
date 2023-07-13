@@ -36,32 +36,28 @@ import NotificationsIcon from '@mui/icons-material/NotificationsOutlined';
  */
 const ICONS: Record<string, React.ComponentType> = {
   default: DefaultIcon,
-  logo: () => (
-    <SvgIcon>
-      <LogoIcon />
-    </SvgIcon>
-  ),
-  close: CloseIcon,
-  menu: MenuIcon,
-  settings: SettingsIcon,
-  visibilityon: VisibilityIcon,
-  visibilityoff: VisibilityOffIcon,
-  daynight: DayNightIcon,
-  night: NightIcon,
-  day: DayIcon,
-  search: SearchIcon,
-  info: InfoIcon,
-  home: HomeIcon,
+  logo: () => (<LogoIcon width="2em" />),
   account: AccountCircle,
-  signup: PersonAddIcon,
+  close: CloseIcon,
+  day: DayIcon,
+  daynight: DayNightIcon,
+  group: GroupIcon,
+  home: HomeIcon,
+  idea: LightbulbIcon,
+  info: InfoIcon,
   login: PersonIcon,
   logout: ExitToAppIcon,
-  group: GroupIcon,
-  room: MeetingRoomIcon,
-  idea: LightbulbIcon,
-  users: ManageAccountsIcon,
+  menu: MenuIcon,
+  night: NightIcon,
   notifications: NotificationsIcon,
-  texts: VerifiedUserIcon
+  room: MeetingRoomIcon,
+  search: SearchIcon,
+  settings: SettingsIcon,
+  signup: PersonAddIcon,
+  texts: VerifiedUserIcon,
+  users: ManageAccountsIcon,
+  visibilityoff: VisibilityOffIcon,
+  visibilityon: VisibilityIcon,
 };
 
 interface Props {

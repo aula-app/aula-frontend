@@ -1,7 +1,7 @@
 import { FunctionComponent, PropsWithChildren, useCallback, useState } from 'react';
 import { Stack } from '@mui/material/';
 import { useAppStore } from '../store/AppStore';
-import { ErrorBoundary, AppIconButton } from '../components';
+import { ErrorBoundary, AppIconButton, AppIcon } from '../components';
 import { LinkToPage } from '../utils/type';
 import { useOnMobile } from '../hooks/layout';
 import { BOTTOMBAR_DESKTOP_VISIBLE, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
@@ -10,7 +10,7 @@ import TopBar from './TopBar';
 import SideBar from './SideBar';
 import BottomBar from './BottomBar';
 
-const TITLE_PUBLIC = 'aula app';
+const TITLE_PUBLIC = 'aula';
 
 /**
  * SideBar navigation items with links
@@ -26,11 +26,11 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     path: '/auth/signup',
     icon: 'signup',
   },
-  {
-    title: 'About',
-    path: '/about',
-    icon: 'info',
-  },
+  // {
+  //   title: 'About',
+  //   path: '/about',
+  //   icon: 'info',
+  // },
 ];
 
 /**
@@ -47,11 +47,11 @@ const BOTTOMBAR_ITEMS: Array<LinkToPage> = [
     path: '/auth/signup',
     icon: 'signup',
   },
-  {
-    title: 'About',
-    path: '/about',
-    icon: 'info',
-  },
+  // {
+  //   title: 'About',
+  //   path: '/about',
+  //   icon: 'info',
+  // },
 ];
 
 /**
@@ -101,16 +101,9 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     >
       <Stack component="header">
         <TopBar
-          startNode={<AppIconButton icon="logo" onClick={onSideBarOpen} />}
+          startNode={<AppIcon icon="logo" />}
           title={title}
-          endNode={
-            <AppIconButton
-              // icon={state.darkMode ? 'day' : 'night'} // Variant 1
-              icon="daynight" // Variant 2
-              title={state.darkMode ? 'Switch to Light mode' : 'Switch to Dark mode'}
-              onClick={onSwitchDarkMode}
-            />
-          }
+          endNode={<AppIconButton icon="menu" onClick={onSideBarOpen} />}
         />
 
         <SideBar
