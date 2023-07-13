@@ -87,7 +87,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const title = TITLE_PRIVATE;
   document.title = title; // Also Update Tab Title
 
-  const location = useLocation()
+  const location = useLocation().pathname.replaceAll("/", " ")
 
   const onLogoClick = useCallback(() => {
     // Navigate to first SideBar's item or to '/' when clicking on Logo/Menu icon when SideBar is already visible
@@ -125,11 +125,11 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       <Stack component="header">
         <TopBar
           startNode={
-            location.pathname === "/" ?
+            location === " " ?
               <AppIcon icon="logo" />
             : <AppIconButton icon="back" onClick={() => navigation(-1)} />
           }
-          title={location.pathname.replaceAll("/", " ")}
+          title={location === " " ? title : location}
           endNode={<AppIconButton icon="menu" onClick={onSideBarOpen} />}
         />
 
