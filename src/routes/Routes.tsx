@@ -30,8 +30,8 @@ const Routes = () => {
           await fetch(
             process.env.REACT_APP_API_URL + '/api/controllers/user_consent.php',
             {
-              method: 'POST', 
-              headers: {                   
+              method: 'POST',
+              headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + jwt_token
               },

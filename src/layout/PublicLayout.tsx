@@ -1,131 +1,39 @@
-import { FunctionComponent, PropsWithChildren, useCallback, useState } from 'react';
+import { FunctionComponent, PropsWithChildren } from 'react';
 import { Stack } from '@mui/material/';
-import { useAppStore } from '../store/AppStore';
-import { ErrorBoundary, AppIconButton, AppIcon } from '../components';
-import { LinkToPage } from '../utils/type';
+import { ErrorBoundary } from '../components';
 import { useOnMobile } from '../hooks/layout';
-import { BOTTOMBAR_DESKTOP_VISIBLE, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
-import { useEventSwitchDarkMode } from '../hooks/event';
-import TopBar from './TopBar';
-import SideBar from './SideBar';
-import BottomBar from './BottomBar';
+import { TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
+import { Box } from '@mui/joy';
 
 const TITLE_PUBLIC = 'aula';
-
-/**
- * SideBar navigation items with links
- */
-const SIDEBAR_ITEMS: Array<LinkToPage> = [
-  {
-    title: 'Log In',
-    path: '/auth/login',
-    icon: 'login',
-  },
-  {
-    title: 'Sign Up',
-    path: '/auth/signup',
-    icon: 'signup',
-  },
-  {
-    title: 'About',
-    path: '/about',
-    icon: 'info',
-  },
-];
-
-/**
- * BottomBar navigation items with links
- */
-const BOTTOMBAR_ITEMS: Array<LinkToPage> = [
-  {
-    title: 'Log In',
-    path: '/auth/login',
-    icon: 'login',
-  },
-  {
-    title: 'Sign Up',
-    path: '/auth/signup',
-    icon: 'signup',
-  },
-  // {
-  //   title: 'About',
-  //   path: '/about',
-  //   icon: 'info',
-  // },
-];
 
 /**
  * Renders "Public Layout" composition
  */
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const onMobile = useOnMobile();
-  const onSwitchDarkMode = useEventSwitchDarkMode();
-  const [sideBarVisible, setSideBarVisible] = useState(false);
-  const [state] = useAppStore();
-  const bottomBarVisible = onMobile || BOTTOMBAR_DESKTOP_VISIBLE;
-
-  // Variant 1 - Sidebar is static on desktop and is a drawer on mobile
-  // const sidebarOpen = onMobile ? sideBarVisible : true;
-  // const sidebarVariant = onMobile ? 'temporary' : 'persistent';
-
-  // Variant 2 - Sidebar is drawer on mobile and desktop
-  const sidebarOpen = sideBarVisible;
-  const sidebarVariant = 'temporary';
 
   const title = TITLE_PUBLIC;
   document.title = title; // Also Update Tab Title
 
-  const onSideBarOpen = useCallback(() => {
-    if (!sideBarVisible) setSideBarVisible(true); // Don't re-render Layout when SideBar is already open
-  }, [sideBarVisible]);
-
-  const onSideBarClose = useCallback(() => {
-    if (sideBarVisible) setSideBarVisible(false); // Don't re-render Layout when SideBar is already closed
-  }, [sideBarVisible]);
-
-  // console.log(
-  //   'Render using PublicLayout, onMobile:',
-  //   onMobile,
-  //   'sidebarOpen:',
-  //   sidebarOpen,
-  //   'sidebarVariant:',
-  //   sidebarVariant
-  // );
-
   return (
     <Stack
+      bgcolor="#fff"
       sx={{
         minHeight: '100vh', // Full screen height
+        padding: 1,
         paddingTop: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT,
+        alignItems: 'center'
       }}
     >
-      <Stack component="header">
-        <TopBar
-          startNode={<AppIcon icon="logo" />}
-          title={title}
-          endNode={<AppIconButton icon="menu" onClick={onSideBarOpen} />}
-        />
-
-        <SideBar
-          anchor="left"
-          open={sidebarOpen}
-          variant={sidebarVariant}
-          items={SIDEBAR_ITEMS}
-          onClose={onSideBarClose}
-        />
-      </Stack>
-
+      <Box sx={{width: '100%', maxWidth: '18rem', paddingX: 1, flexGrow: 1}}><img src="./logo-text.svg" alt="aula" /></Box>
       <Stack
         component="main"
-        sx={{
-          flexGrow: 1, // Takes all possible space
-          padding: 1,
-        }}
+        sx={{flexGrow: 1}}
       >
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
       </Stack>
-
-      <Stack component="footer">{bottomBarVisible && <BottomBar items={BOTTOMBAR_ITEMS} />}</Stack>
+      <Box sx={{flexGrow: 1}}></Box>
     </Stack>
   );
 };

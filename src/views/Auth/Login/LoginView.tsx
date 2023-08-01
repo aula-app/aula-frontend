@@ -1,8 +1,8 @@
 import { SyntheticEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Grid, TextField, Card, CardHeader, CardContent, InputAdornment } from '@mui/material';
+import { Button, Grid, TextField, Card, CardHeader, CardContent, InputAdornment, Stack, Typography } from '@mui/material';
 import { useAppStore } from '../../../store';
-import { localStorageSet } from '../../../utils/localStorage'
+import { localStorageSet } from '../../../utils/localStorage';
 import { AppButton, AppLink, AppIconButton, AppAlert, AppForm } from '../../../components';
 import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../../utils/form';
 
@@ -45,44 +45,36 @@ const LoginView = () => {
   }, []);
 
   const handleFormSubmit = useCallback(
-
     async (event: SyntheticEvent) => {
-
       event.preventDefault();
       try {
-        const username = values['username']
-        const password = values['password']
+        const username = values['username'];
+        const password = values['password'];
         const data = await (
-            await fetch(
-              process.env.REACT_APP_API_URL + '/api/controllers/login.php',
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(
-                  {'username': username,
-                   'password': password})
-              })).json();
-
+          await fetch(process.env.REACT_APP_API_URL + '/api/controllers/login.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username, password: password }),
+          })
+        ).json();
 
         const result = data.success; // await api.auth.loginWithEmail(values);
         if (result) {
-          localStorageSet('token', data['JWT'])
+          localStorageSet('token', data['JWT']);
         }
 
         if (!result) {
-           setError('Please check email and password');
-           return;
+          setError('Please check email and password');
+          return;
         }
 
         dispatch({ type: 'LOG_IN' });
         navigate('/', { replace: true });
-
       } catch (e) {
         return e;
       }
-
     },
     [dispatch, values, navigate]
   );
@@ -91,61 +83,62 @@ const LoginView = () => {
 
   return (
     <AppForm onSubmit={handleFormSubmit}>
-      <Card>
-        <CardHeader title="Login" sx={{mt: 0.5}} />
-        <CardContent>
-          <TextField
-            required
-            label="Username"
-            name="username"
-            inputProps={{autocapitalize: "none"}}
-            value={values.username}
-            error={fieldHasError('username')}
-            helperText={fieldGetError('username') || ' '}
-            onChange={onFieldChange}
-            sx={{ mt: 0 }}
-            {...SHARED_CONTROL_PROPS}
-          />
-          <TextField
-            required
-            type={showPassword ? 'text' : 'password'}
-            label="Password"
-            name="password"
-            value={values.password}
-            error={fieldHasError('password')}
-            helperText={fieldGetError('password') || ' '}
-            onChange={onFieldChange}
-            sx={{ mt: 0 }}
-            {...SHARED_CONTROL_PROPS}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <AppIconButton
-                    aria-label="toggle password visibility"
-                    icon={showPassword ? 'visibilityon' : 'visibilityoff'}
-                    title={showPassword ? 'Hide Password' : 'Show Password'}
-                    onClick={handleShowPasswordClick}
-                    onMouseDown={eventPreventDefault}
-                  />
-                </InputAdornment>
-              ),
-            }}
-          />
-          {error ? (
-            <AppAlert severity="error" onClose={handleCloseError}>
-              {error}
-            </AppAlert>
-          ) : null}
-          <Grid container justifyContent="space-between" alignItems="center">
-            <Button variant="text" color="secondary" component={AppLink} to="/auth/recovery/password">
-              Forgot Password
-            </Button>
-            <AppButton type="submit" color="primary" disabled={!formState.isValid}>
-              Login
-            </AppButton>
-          </Grid>
-        </CardContent>
-      </Card>
+      <Stack>
+        <Typography variant="h4" sx={{ mb: 3 }}>Sign in</Typography>
+        <TextField
+          required
+          label="Username"
+          name="username"
+          inputProps={{ autocapitalize: 'none' }}
+          value={values.username}
+          error={fieldHasError('username')}
+          helperText={fieldGetError('username') || ' '}
+          onChange={onFieldChange}
+          sx={{ mt: 0 }}
+          {...SHARED_CONTROL_PROPS}
+        />
+        <TextField
+          required
+          type={showPassword ? 'text' : 'password'}
+          label="Password"
+          name="password"
+          value={values.password}
+          error={fieldHasError('password')}
+          helperText={fieldGetError('password') || ' '}
+          onChange={onFieldChange}
+          sx={{ mt: 0 }}
+          {...SHARED_CONTROL_PROPS}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <AppIconButton
+                  aria-label="toggle password visibility"
+                  icon={showPassword ? 'visibilityon' : 'visibilityoff'}
+                  title={showPassword ? 'Hide Password' : 'Show Password'}
+                  onClick={handleShowPasswordClick}
+                  onMouseDown={eventPreventDefault}
+                />
+              </InputAdornment>
+            ),
+          }}
+        />
+        {error ? (
+          <AppAlert severity="error" onClose={handleCloseError}>
+            {error}
+          </AppAlert>
+        ) : null}
+        <AppButton type="submit" color="primary" disabled={!formState.isValid} sx={{mx: 0}}>
+          Sign In
+        </AppButton>
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Button variant="text" color="secondary" component={AppLink} to="/auth/recovery/password">
+            Forgot Password
+          </Button>
+          <Button variant="text" color="primary" component={AppLink} to="/auth/signup">
+            Sign Up
+          </Button>
+        </Grid>
+      </Stack>
     </AppForm>
   );
 };
