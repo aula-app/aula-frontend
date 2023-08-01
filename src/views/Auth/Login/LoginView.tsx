@@ -1,6 +1,13 @@
 import { SyntheticEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Grid, TextField, Card, CardHeader, CardContent, InputAdornment, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  Grid,
+  TextField,
+  InputAdornment,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { useAppStore } from '../../../store';
 import { localStorageSet } from '../../../utils/localStorage';
 import { AppButton, AppLink, AppIconButton, AppAlert, AppForm } from '../../../components';
@@ -84,7 +91,9 @@ const LoginView = () => {
   return (
     <AppForm onSubmit={handleFormSubmit}>
       <Stack>
-        <Typography variant="h4" sx={{ mb: 3 }}>Sign in</Typography>
+        <Typography variant="h5" sx={{ mb: 3 }}>
+          Sign in
+        </Typography>
         <TextField
           required
           label="Username"
@@ -127,7 +136,7 @@ const LoginView = () => {
             {error}
           </AppAlert>
         ) : null}
-        <AppButton type="submit" color="primary" disabled={!formState.isValid} sx={{mx: 0}}>
+        <AppButton type="submit" color="primary" disabled={!formState.isValid} sx={{ mx: 0 }}>
           Sign In
         </AppButton>
         <Grid container justifyContent="space-between" alignItems="center">

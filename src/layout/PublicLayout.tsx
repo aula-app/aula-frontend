@@ -17,24 +17,31 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   document.title = title; // Also Update Tab Title
 
   return (
-    <Stack
+    <Box
       bgcolor="#fff"
-      sx={{
-        minHeight: '100vh', // Full screen height
-        padding: 1,
-        paddingTop: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT,
-        alignItems: 'center'
-      }}
+      width="100%"
+      height="100vh"
+      overflow="auto"
+      sx={{ paddingTop: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT }}
     >
-      <Box sx={{width: '100%', maxWidth: '18rem', paddingX: 1, flexGrow: 1}}><img src="./logo-text.svg" alt="aula" /></Box>
       <Stack
-        component="main"
-        sx={{flexGrow: 1}}
+        height="100%"
+        mx="auto"
+        maxWidth="18rem"
+        sx={{
+          padding: 1,
+          alignItems: 'center',
+        }}
       >
-        <ErrorBoundary name="Content">{children}</ErrorBoundary>
+        <Box sx={{ width: '100%', flexGrow: 1, mb: 2 }}>
+          <img src="./logo-text.svg" alt="aula" />
+        </Box>
+        <Stack component="main" sx={{ flexGrow: 1 }} width="100%">
+          <ErrorBoundary name="Content">{children}</ErrorBoundary>
+        </Stack>
+        <Box sx={{ flexGrow: 1, minHeight: "5rem", width: "100%" }}></Box>
       </Stack>
-      <Box sx={{flexGrow: 1}}></Box>
-    </Stack>
+    </Box>
   );
 };
 

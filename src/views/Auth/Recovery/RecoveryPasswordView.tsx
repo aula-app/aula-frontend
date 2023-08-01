@@ -1,5 +1,5 @@
 import { SyntheticEvent, useCallback, useState } from 'react';
-import { Grid, TextField, Card, CardHeader, CardContent } from '@mui/material';
+import { TextField, Typography, Stack } from '@mui/material';
 import { AppButton, AppAlert, AppForm } from '../../../components';
 import { useAppForm, SHARED_CONTROL_PROPS } from '../../../utils/form';
 
@@ -44,33 +44,31 @@ const RecoveryPasswordView = ({ email = '' }: Props) => {
 
   return (
     <AppForm onSubmit={handleFormSubmit}>
-      <Card>
-        <CardHeader title="Recover Password" />
-        <CardContent>
-          <TextField
-            required
-            label="Email"
-            name="email"
-            value={values.email}
-            error={fieldHasError('email')}
-            helperText={fieldGetError('email') || ' '}
-            onChange={onFieldChange}
-            {...SHARED_CONTROL_PROPS}
-          />
+      <Stack>
+        <Typography variant="h5" sx={{ mb: 3 }}>
+          Password Recovery
+        </Typography>
+        <TextField
+          required
+          label="Email"
+          name="email"
+          value={values.email}
+          error={fieldHasError('email')}
+          helperText={fieldGetError('email') || ' '}
+          onChange={onFieldChange}
+          {...SHARED_CONTROL_PROPS}
+        />
 
-          {message ? (
-            <AppAlert severity="success" onClose={handleCloseError}>
-              {message}
-            </AppAlert>
-          ) : null}
+        {message ? (
+          <AppAlert severity="success" onClose={handleCloseError}>
+            {message}
+          </AppAlert>
+        ) : null}
 
-          <Grid container justifyContent="center" alignItems="center">
-            <AppButton type="submit" disabled={!formState.isValid}>
-              Send Password Recovery Email
-            </AppButton>
-          </Grid>
-        </CardContent>
-      </Card>
+        <AppButton type="submit" disabled={!formState.isValid} sx={{ mx: 0 }}>
+          Recover
+        </AppButton>
+      </Stack>
     </AppForm>
   );
 };

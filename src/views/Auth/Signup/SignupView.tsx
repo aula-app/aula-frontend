@@ -1,15 +1,13 @@
 import { SyntheticEvent, useCallback, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Grid,
   TextField,
-  Card,
-  CardHeader,
-  CardContent,
   Checkbox,
   FormControlLabel,
   InputAdornment,
   LinearProgress,
+  Stack,
+  Typography,
 } from '@mui/material';
 import { useAppStore } from '../../../store';
 import { AppButton, AppIconButton, AppAlert, AppForm } from '../../../components';
@@ -161,104 +159,102 @@ const SignupView = () => {
 
   return (
     <AppForm onSubmit={handleFormSubmit}>
-      <Card>
-        <CardHeader title="Sign Up" />
-        <CardContent>
+      <Stack>
+        <Typography variant="h5" sx={{ mb: 3 }}>
+          Sign Up
+        </Typography>
+        <TextField
+          required
+          label="User Name"
+          name="username"
+          value={values.userName}
+          error={fieldHasError('username')}
+          helperText={fieldGetError('username') || ' '}
+          onChange={onFieldChange}
+          {...SHARED_CONTROL_PROPS}
+        />
+        <TextField
+          required
+          label="Full Name"
+          name="fullName"
+          value={values.lastName}
+          error={fieldHasError('fullName')}
+          helperText={fieldGetError('fullName') || ' '}
+          onChange={onFieldChange}
+          {...SHARED_CONTROL_PROPS}
+        />
+        <TextField
+          required
+          label="Email"
+          name="email"
+          value={values.email}
+          error={fieldHasError('email')}
+          helperText={fieldGetError('email') || ' '}
+          onChange={onFieldChange}
+          {...SHARED_CONTROL_PROPS}
+        />
+        <TextField
+          required
+          label="Phone"
+          name="phone"
+          value={values.phone}
+          error={fieldHasError('phone')}
+          helperText={fieldGetError('phone') || ' '}
+          onChange={onFieldChange}
+          {...SHARED_CONTROL_PROPS}
+        />
+        <TextField
+          required
+          type={showPassword ? 'text' : 'password'}
+          label="Password"
+          name="password"
+          value={values.password}
+          error={fieldHasError('password')}
+          helperText={fieldGetError('password') || ' '}
+          onChange={onFieldChange}
+          {...SHARED_CONTROL_PROPS}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <AppIconButton
+                  aria-label="toggle password visibility"
+                  icon={showPassword ? 'visibilityon' : 'visibilityoff'}
+                  title={showPassword ? 'Hide Password' : 'Show Password'}
+                  onClick={handleShowPasswordClick}
+                  onMouseDown={eventPreventDefault}
+                />
+              </InputAdornment>
+            ),
+          }}
+        />
+        {!showPassword && (
           <TextField
             required
-            label="Email"
-            name="email"
-            value={values.email}
-            error={fieldHasError('email')}
-            helperText={fieldGetError('email') || ' '}
+            type="password"
+            label="Confirm Password"
+            name="confirmPassword"
+            value={values.confirmPassword}
+            error={fieldHasError('confirmPassword')}
+            helperText={fieldGetError('confirmPassword') || ' '}
             onChange={onFieldChange}
             {...SHARED_CONTROL_PROPS}
           />
-          <TextField
-            required
-            label="Phone"
-            name="phone"
-            value={values.phone}
-            error={fieldHasError('phone')}
-            helperText={fieldGetError('phone') || ' '}
-            onChange={onFieldChange}
-            {...SHARED_CONTROL_PROPS}
-          />
-          <TextField
-            required
-            label="First Name"
-            name="firstName"
-            value={values.firstName}
-            error={fieldHasError('firstName')}
-            helperText={fieldGetError('firstName') || ' '}
-            onChange={onFieldChange}
-            {...SHARED_CONTROL_PROPS}
-          />
-          <TextField
-            required
-            label="Last Name"
-            name="lastName"
-            value={values.lastName}
-            error={fieldHasError('lastName')}
-            helperText={fieldGetError('lastName') || ' '}
-            onChange={onFieldChange}
-            {...SHARED_CONTROL_PROPS}
-          />
-          <TextField
-            required
-            type={showPassword ? 'text' : 'password'}
-            label="Password"
-            name="password"
-            value={values.password}
-            error={fieldHasError('password')}
-            helperText={fieldGetError('password') || ' '}
-            onChange={onFieldChange}
-            {...SHARED_CONTROL_PROPS}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <AppIconButton
-                    aria-label="toggle password visibility"
-                    icon={showPassword ? 'visibilityon' : 'visibilityoff'}
-                    title={showPassword ? 'Hide Password' : 'Show Password'}
-                    onClick={handleShowPasswordClick}
-                    onMouseDown={eventPreventDefault}
-                  />
-                </InputAdornment>
-              ),
-            }}
-          />
-          {!showPassword && (
-            <TextField
-              required
-              type="password"
-              label="Confirm Password"
-              name="confirmPassword"
-              value={values.confirmPassword}
-              error={fieldHasError('confirmPassword')}
-              helperText={fieldGetError('confirmPassword') || ' '}
-              onChange={onFieldChange}
-              {...SHARED_CONTROL_PROPS}
-            />
-          )}
-          <FormControlLabel
-            control={<Checkbox required name="agree" checked={agree} onChange={handleAgreeClick} />}
-            label="You must agree with Terms of Use and Privacy Policy to use our service *"
-          />
+        )}
+        <FormControlLabel
+          control={<Checkbox required name="agree" checked={agree} onChange={handleAgreeClick} />}
+          label="You must agree with Terms of Use and Privacy Policy to use our service"
+        />
 
-          {error ? (
-            <AppAlert severity="error" onClose={handleCloseError}>
-              {error}
-            </AppAlert>
-          ) : null}
+        {error ? (
+          <AppAlert severity="error" onClose={handleCloseError}>
+            {error}
+          </AppAlert>
+        ) : null}
 
-          <Grid container justifyContent="center" alignItems="center">
-            <AppButton type="submit" disabled={!(formState.isValid && agree)}>
-              Confirm and Sign Up
-            </AppButton>
-          </Grid>
-        </CardContent>
-      </Card>
+          <AppButton type="submit" disabled={!(formState.isValid && agree)} sx={{mt: 3, mx: 0}}>
+            Confirm and Sign Up
+          </AppButton>
+      </Stack>
     </AppForm>
   );
 };
