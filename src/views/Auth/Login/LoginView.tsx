@@ -92,7 +92,7 @@ const LoginView = () => {
     <AppForm onSubmit={handleFormSubmit}>
       <Stack>
         <Typography variant="h5" sx={{ mb: 3 }}>
-          Sign in
+          Sign In
         </Typography>
         <TextField
           required
@@ -139,12 +139,9 @@ const LoginView = () => {
         <AppButton type="submit" color="primary" disabled={!formState.isValid} sx={{ mx: 0 }}>
           Sign In
         </AppButton>
-        <Grid container justifyContent="space-between" alignItems="center">
+        <Grid container justifyContent="end" alignItems="center">
           <Button variant="text" color="secondary" component={AppLink} to="/auth/recovery/password">
-            Forgot Password
-          </Button>
-          <Button variant="text" color="primary" component={AppLink} to="/auth/signup">
-            Sign Up
+            Forgot Password?
           </Button>
         </Grid>
       </Stack>
