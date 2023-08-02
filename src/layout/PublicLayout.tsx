@@ -34,7 +34,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         }}
       >
         <Box sx={{ width: '100%', flexGrow: 1, mb: 2 }}>
-          <img src="./logo-text.svg" alt="aula" />
+          <img src="/logo-text.svg" alt="aula" />
         </Box>
         <Stack component="main" sx={{ flexGrow: 1 }} width="100%">
           <ErrorBoundary name="Content">{children}</ErrorBoundary>
