@@ -76,6 +76,8 @@ const AskConsent = () => {
 
   const giveConsent = useCallback(
     async (text_id: number, text_idx: number) => {
+      if (text_idx === data.length - 1) setActiveStep(() => text_idx - 1);
+      
       const giveConsentReq = async () => {
         const data = await (
           await fetch(process.env.REACT_APP_API_URL + '/api/controllers/give_consent.php', {
@@ -91,7 +93,6 @@ const AskConsent = () => {
         return data;
       };
 
-      if(text_idx === data.length - 1) setActiveStep(() => text_idx - 1)
       const giveConsentResponse = await giveConsentReq();
       if (giveConsentResponse.success && giveConsentResponse.data == 1) {
         const newData = data.filter((e, i) => i !== text_idx);
@@ -125,25 +126,25 @@ const AskConsent = () => {
         <Stack flexGrow={1} p={2}>
           {data.map((text, i) => (
             <Fragment key={i}>
-            {i === activeStep &&
-            <Fragment>
-              <Typography variant="h5" p={1}>
-                {text.headline}
-              </Typography>
-              <Box overflow="auto" flexGrow={1} p={1}>
-                {text.body}
-              </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'end', pt: 2 }}>
-                <AppButton color='primary' onClick={() => giveConsent(text.id, i)}>
-                  {text.consent_text}
-                </AppButton>
-              </Box>
+              {i === activeStep && (
+                <Fragment>
+                  <Typography variant="h5" p={1}>
+                    {text.headline}
+                  </Typography>
+                  <Box overflow="auto" flexGrow={1} p={1}>
+                    {text.body}
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'end', pt: 2 }}>
+                    <AppButton color="primary" onClick={() => giveConsent(text.id, i)}>
+                      {text.consent_text}
+                    </AppButton>
+                  </Box>
+                </Fragment>
+              )}
             </Fragment>
-          }
-          </Fragment>
           ))}
         </Stack>
-        {data.length > 1 &&
+        {data.length > 1 && (
           <MobileStepper
             variant="text"
             steps={data.length}
@@ -163,7 +164,7 @@ const AskConsent = () => {
               </Button>
             }
           />
-        }
+        )}
       </Stack>
     </Backdrop>
   );
