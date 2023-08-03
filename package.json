@@ -48,6 +48,7 @@
     "react-hook-form-mui": "^6.3.0",
     "react-router-dom": "latest",
     "react-scripts": "latest",
+    "react-swipeable-views": "^0.14.0",
     "validate.js": "latest",
     "web-vitals": "latest"
   },

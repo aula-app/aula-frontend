@@ -1,10 +1,11 @@
 import { Backdrop, Box, Button, MobileStepper, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { localStorageGet } from '../../utils/localStorage';
-import { AppIcon } from '../../components';
+import { AppButton, AppIcon } from '../../components';
 import { useAppStore } from '../../store';
 import { useEffect, useState, useCallback, Fragment } from 'react';
 import { useNavigate } from 'react-router';
+import SwipeableViews from 'react-swipeable-views';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 
 /**
@@ -112,6 +113,10 @@ const AskConsent = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const handleStepChange = (step: number) => {
+    setActiveStep(step);
+  };
+
   return (
     <Backdrop open={true} sx={{ zIndex: 3000, bgcolor: '#fff' }}>
       <Stack width="100%" height="100%">
@@ -123,23 +128,34 @@ const AskConsent = () => {
             </Typography>
           </Stack>
         </Stack>
-        <Stack flexGrow={1} p={2}>
-          {data.length > 1 && (
-            <Fragment>
-              <Typography variant="h5" p={1}>
-                {data[activeStep].headline}
-              </Typography>
-              <Box overflow="auto" flexGrow={1} p={1}>
-                {data[activeStep].body}
-              </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'end', pt: 2 }}>
-                <Button onClick={() => giveConsent(data[activeStep].id, activeStep)}>
-                  {data[activeStep].consent_text}
-                </Button>
-              </Box>
+        <Box p={1} flexGrow={1}>
+          <SwipeableViews
+            index={activeStep}
+            onChangeIndex={handleStepChange}
+            style={{height: '100%'}}
+            containerStyle={{height: '100%'}}
+            slideStyle={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+            {data.map((text, i) => (
+              <Fragment key={i}>
+              {i === activeStep &&
+              <Fragment>
+                <Typography variant="h5" p={1}>
+                  {text.headline}
+                </Typography>
+                <Box overflow="auto" flexGrow={1} p={1}>
+                  {text.body}
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'end', pt: 2 }}>
+                  <AppButton color='primary' onClick={() => giveConsent(text.id, i)}>
+                    {text.consent_text}
+                  </AppButton>
+                </Box>
+              </Fragment>
+            }
             </Fragment>
-          )}
-        </Stack>
+            ))}
+          </SwipeableViews>
+        </Box>
         {data.length > 1 &&
           <MobileStepper
             variant="text"
