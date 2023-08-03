@@ -94,7 +94,7 @@ const AskConsent = () => {
       };
 
       const giveConsentResponse = await giveConsentReq();
-      if (giveConsentResponse.success && giveConsentResponse.data == 1) {
+      if (giveConsentResponse.success && giveConsentResponse.data === 1) {
         const newData = data.filter((e, i) => i !== text_idx);
         setData(newData);
         if (newData.length === 0) navigate(0);
