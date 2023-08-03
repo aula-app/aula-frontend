@@ -5,7 +5,6 @@ import { AppButton, AppIcon } from '../../components';
 import { useAppStore } from '../../store';
 import { useEffect, useState, useCallback, Fragment } from 'react';
 import { useNavigate } from 'react-router';
-import SwipeableViews from 'react-swipeable-views';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 
 /**
@@ -45,35 +44,35 @@ const AskConsent = () => {
     dataFetch();
   }, []);
 
-  const revokeConsent = useCallback(
-    async (text_id: number, text_idx: number) => {
-      const revokeConsentReq = async () => {
-        const data = await (
-          await fetch(process.env.REACT_APP_API_URL + '/api/controllers/revoke_consent.php', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + jwt_token,
-            },
-            body: JSON.stringify({ text_id: text_id }),
-          })
-        ).json();
+  // const revokeConsent = useCallback(
+  //   async (text_id: number, text_idx: number) => {
+  //     const revokeConsentReq = async () => {
+  //       const data = await (
+  //         await fetch(process.env.REACT_APP_API_URL + '/api/controllers/revoke_consent.php', {
+  //           method: 'POST',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             Authorization: 'Bearer ' + jwt_token,
+  //           },
+  //           body: JSON.stringify({ text_id: text_id }),
+  //         })
+  //       ).json();
 
-        return data;
-      };
+  //       return data;
+  //     };
 
-      const revokeConsentResponse = await revokeConsentReq();
-      // if (revokeConsentResponse.success && revokeConsentResponse.data == 1) {
-      //   const newData = data.filter((e,i) =>  i !== text_idx)
-      //   setData(newData)
-      //   if (newData.length == 0) {
-      //     navigate(0)
-      //   }
-      // }
-      // await revokeConsentReq();
-    },
-    [data]
-  );
+  //     const revokeConsentResponse = await revokeConsentReq();
+  //     // if (revokeConsentResponse.success && revokeConsentResponse.data == 1) {
+  //     //   const newData = data.filter((e,i) =>  i !== text_idx)
+  //     //   setData(newData)
+  //     //   if (newData.length == 0) {
+  //     //     navigate(0)
+  //     //   }
+  //     // }
+  //     // await revokeConsentReq();
+  //   },
+  //   [data]
+  // );
 
   const giveConsent = useCallback(
     async (text_id: number, text_idx: number) => {
@@ -92,13 +91,12 @@ const AskConsent = () => {
         return data;
       };
 
+      if(text_idx === data.length - 1) setActiveStep(() => text_idx - 1)
       const giveConsentResponse = await giveConsentReq();
       if (giveConsentResponse.success && giveConsentResponse.data == 1) {
         const newData = data.filter((e, i) => i !== text_idx);
         setData(newData);
-        if (newData.length == 0) {
-          navigate(0);
-        }
+        if (newData.length === 0) navigate(0);
       }
       // await giveConsentReq();
     },
@@ -113,10 +111,6 @@ const AskConsent = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleStepChange = (step: number) => {
-    setActiveStep(step);
-  };
-
   return (
     <Backdrop open={true} sx={{ zIndex: 3000, bgcolor: '#fff' }}>
       <Stack width="100%" height="100%">
@@ -128,34 +122,27 @@ const AskConsent = () => {
             </Typography>
           </Stack>
         </Stack>
-        <Box p={1} flexGrow={1}>
-          <SwipeableViews
-            index={activeStep}
-            onChangeIndex={handleStepChange}
-            style={{height: '100%'}}
-            containerStyle={{height: '100%'}}
-            slideStyle={{height: '100%', display: 'flex', flexDirection: 'column'}}>
-            {data.map((text, i) => (
-              <Fragment key={i}>
-              {i === activeStep &&
-              <Fragment>
-                <Typography variant="h5" p={1}>
-                  {text.headline}
-                </Typography>
-                <Box overflow="auto" flexGrow={1} p={1}>
-                  {text.body}
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'end', pt: 2 }}>
-                  <AppButton color='primary' onClick={() => giveConsent(text.id, i)}>
-                    {text.consent_text}
-                  </AppButton>
-                </Box>
-              </Fragment>
-            }
+        <Stack flexGrow={1} p={2}>
+          {data.map((text, i) => (
+            <Fragment key={i}>
+            {i === activeStep &&
+            <Fragment>
+              <Typography variant="h5" p={1}>
+                {text.headline}
+              </Typography>
+              <Box overflow="auto" flexGrow={1} p={1}>
+                {text.body}
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'end', pt: 2 }}>
+                <AppButton color='primary' onClick={() => giveConsent(text.id, i)}>
+                  {text.consent_text}
+                </AppButton>
+              </Box>
             </Fragment>
-            ))}
-          </SwipeableViews>
-        </Box>
+          }
+          </Fragment>
+          ))}
+        </Stack>
         {data.length > 1 &&
           <MobileStepper
             variant="text"
