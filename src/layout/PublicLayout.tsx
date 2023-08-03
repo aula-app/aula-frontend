@@ -8,13 +8,9 @@ import { useLocation } from 'react-router-dom';
 
 const TITLE_PUBLIC = 'aula';
 
-/**
- * Renders "Public Layout" composition
- */
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const onMobile = useOnMobile();
   const location = useLocation();
-
 
   const title = TITLE_PUBLIC;
   document.title = title; // Also Update Tab Title

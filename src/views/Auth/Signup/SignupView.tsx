@@ -1,4 +1,4 @@
-import { SyntheticEvent, useCallback, useState, useEffect } from 'react';
+import { SyntheticEvent, useCallback, useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   TextField,
@@ -8,6 +8,11 @@ import {
   LinearProgress,
   Stack,
   Typography,
+  Stepper,
+  Step,
+  StepLabel,
+  Box,
+  Button,
 } from '@mui/material';
 import { useAppStore } from '../../../store';
 import { AppButton, AppIconButton, AppAlert, AppForm } from '../../../components';
@@ -24,12 +29,8 @@ const VALIDATE_FORM_SIGNUP = {
       pattern: '^$|[- .+()0-9]+', // Note: We have to allow empty in the pattern
       message: 'should contain numbers',
     },
-    // length: {
-    // 	is: 10,
-    // 	message: 'must be exactly 10 digits',
-    // },
   },
-  firstName: {
+  userName: {
     type: 'string',
     presence: { allowEmpty: false },
     format: {
@@ -37,7 +38,7 @@ const VALIDATE_FORM_SIGNUP = {
       message: 'should contain only alphabets',
     },
   },
-  lastName: {
+  fullName: {
     type: 'string',
     presence: { allowEmpty: false },
     format: {
@@ -96,6 +97,20 @@ const SignupView = () => {
   const [agree, setAgree] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
   const values = formState.values as FormStateValues; // Typed alias to formState.values as the "Source of Truth"
 
   useEffect(() => {
@@ -157,103 +172,156 @@ const SignupView = () => {
 
   if (loading) return <LinearProgress />;
 
+  const steps = [
+    {
+      label: 'Login data',
+      content: () => {
+        return (
+          <Fragment>
+            <TextField
+              required
+              label="Email"
+              name="email"
+              value={values.email}
+              error={fieldHasError('email')}
+              helperText={fieldGetError('email') || ' '}
+              onChange={onFieldChange}
+              {...SHARED_CONTROL_PROPS}
+            />
+            <TextField
+              required
+              type={showPassword ? 'text' : 'password'}
+              label="Password"
+              name="password"
+              value={values.password}
+              error={fieldHasError('password')}
+              helperText={fieldGetError('password') || ' '}
+              onChange={onFieldChange}
+              {...SHARED_CONTROL_PROPS}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <AppIconButton
+                      aria-label="toggle password visibility"
+                      icon={showPassword ? 'visibilityon' : 'visibilityoff'}
+                      title={showPassword ? 'Hide Password' : 'Show Password'}
+                      onClick={handleShowPasswordClick}
+                      onMouseDown={eventPreventDefault}
+                    />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {!showPassword && (
+              <TextField
+                required
+                type="password"
+                label="Confirm Password"
+                name="confirmPassword"
+                value={values.confirmPassword}
+                error={fieldHasError('confirmPassword')}
+                helperText={fieldGetError('confirmPassword') || ' '}
+                onChange={onFieldChange}
+                {...SHARED_CONTROL_PROPS}
+              />
+            )}
+          </Fragment>
+        );
+      },
+    },
+    {
+      label: 'Personal data',
+      content: () => {
+        return (
+          <Fragment>
+            <TextField
+              required
+              label="User Name"
+              name="username"
+              value={values.userName}
+              error={fieldHasError('username')}
+              helperText={fieldGetError('username') || ' '}
+              onChange={onFieldChange}
+              {...SHARED_CONTROL_PROPS}
+            />
+            <TextField
+              required
+              label="Full Name"
+              name="fullName"
+              value={values.lastName}
+              error={fieldHasError('fullName')}
+              helperText={fieldGetError('fullName') || ' '}
+              onChange={onFieldChange}
+              {...SHARED_CONTROL_PROPS}
+            />
+            <TextField
+              required
+              label="Phone"
+              name="phone"
+              value={values.phone}
+              error={fieldHasError('phone')}
+              helperText={fieldGetError('phone') || ' '}
+              onChange={onFieldChange}
+              {...SHARED_CONTROL_PROPS}
+            />
+          </Fragment>
+        );
+      },
+    },
+    {
+      label: 'Terms of Use',
+      content: () => {
+        return (
+          <Fragment>
+            <Box height={228} my={2} padding={2} border="1px solid #999" borderRadius={1} overflow='auto'>
+              <Typography>Terms and Conditions</Typography>
+            </Box>
+            <FormControlLabel
+              control={<Checkbox name="agree" checked={agree} onChange={handleAgreeClick} />}
+              label="agree with Terms of Use and Privacy Policy"
+            />
+          </Fragment>
+        );
+      },
+    },
+  ];
+
   return (
     <AppForm onSubmit={handleFormSubmit}>
       <Stack>
         <Typography variant="h5" sx={{ mb: 3 }}>
           Sign Up
         </Typography>
-        <TextField
-          required
-          label="User Name"
-          name="username"
-          value={values.userName}
-          error={fieldHasError('username')}
-          helperText={fieldGetError('username') || ' '}
-          onChange={onFieldChange}
-          {...SHARED_CONTROL_PROPS}
-        />
-        <TextField
-          required
-          label="Full Name"
-          name="fullName"
-          value={values.lastName}
-          error={fieldHasError('fullName')}
-          helperText={fieldGetError('fullName') || ' '}
-          onChange={onFieldChange}
-          {...SHARED_CONTROL_PROPS}
-        />
-        <TextField
-          required
-          label="Email"
-          name="email"
-          value={values.email}
-          error={fieldHasError('email')}
-          helperText={fieldGetError('email') || ' '}
-          onChange={onFieldChange}
-          {...SHARED_CONTROL_PROPS}
-        />
-        <TextField
-          required
-          label="Phone"
-          name="phone"
-          value={values.phone}
-          error={fieldHasError('phone')}
-          helperText={fieldGetError('phone') || ' '}
-          onChange={onFieldChange}
-          {...SHARED_CONTROL_PROPS}
-        />
-        <TextField
-          required
-          type={showPassword ? 'text' : 'password'}
-          label="Password"
-          name="password"
-          value={values.password}
-          error={fieldHasError('password')}
-          helperText={fieldGetError('password') || ' '}
-          onChange={onFieldChange}
-          {...SHARED_CONTROL_PROPS}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <AppIconButton
-                  aria-label="toggle password visibility"
-                  icon={showPassword ? 'visibilityon' : 'visibilityoff'}
-                  title={showPassword ? 'Hide Password' : 'Show Password'}
-                  onClick={handleShowPasswordClick}
-                  onMouseDown={eventPreventDefault}
-                />
-              </InputAdornment>
-            ),
-          }}
-        />
-        {!showPassword && (
-          <TextField
-            required
-            type="password"
-            label="Confirm Password"
-            name="confirmPassword"
-            value={values.confirmPassword}
-            error={fieldHasError('confirmPassword')}
-            helperText={fieldGetError('confirmPassword') || ' '}
-            onChange={onFieldChange}
-            {...SHARED_CONTROL_PROPS}
-          />
-        )}
-        <FormControlLabel
-          control={<Checkbox required name="agree" checked={agree} onChange={handleAgreeClick} />}
-          label="You must agree with Terms of Use and Privacy Policy to use our service"
-        />
-
+        <Stepper activeStep={activeStep} sx={{ mb: 2 }}>
+          {steps.map((label) => {
+            const stepProps: { completed?: boolean } = {};
+            return (
+              <Step key={label.label} {...stepProps}>
+                <StepLabel />
+              </Step>
+            );
+          })}
+        </Stepper>
+        {steps[activeStep].content()}
         {error ? (
           <AppAlert severity="error" onClose={handleCloseError}>
             {error}
           </AppAlert>
         ) : null}
 
-          <AppButton type="submit" disabled={!(formState.isValid && agree)} sx={{mt: 3, mx: 0}}>
-            Confirm and Sign Up
-          </AppButton>
+        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+          <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
+            Back
+          </Button>
+          <Box sx={{ flex: '1 1 auto' }} />
+          {activeStep === steps.length - 1 ? (
+            <AppButton type="submit" disabled={!(formState.isValid && agree)} sx={{m: 0}}>
+              Sign Up
+            </AppButton>
+          ) : (
+            <Button onClick={handleNext}>Next</Button>
+          )}
+        </Box>
       </Stack>
     </AppForm>
   );
