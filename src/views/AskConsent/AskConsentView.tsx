@@ -77,7 +77,7 @@ const AskConsent = () => {
   const giveConsent = useCallback(
     async (text_id: number, text_idx: number) => {
       if (text_idx === data.length - 1) setActiveStep(() => text_idx - 1);
-      
+
       const giveConsentReq = async () => {
         const data = await (
           await fetch(process.env.REACT_APP_API_URL + '/api/controllers/give_consent.php', {
