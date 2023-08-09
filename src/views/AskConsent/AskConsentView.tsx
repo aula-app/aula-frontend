@@ -124,7 +124,20 @@ const AskConsent = () => {
   };
 
   return (
-    <Dialog open={true} fullWidth={true} maxWidth="sm" scroll='paper'>
+    <Dialog
+      open={true}
+      fullWidth={true}
+      maxWidth="sm"
+      scroll="paper"
+      sx={{
+        '& .MuiDialog-paper': {
+          width: {xs: '100%', md: ' calc(100% - 64px)'},
+          height: {xs: '100%', md: 'auto'},
+          maxHeight: {xs: '100%', md: 'calc(100% - 64px)'},
+          margin: {xs: 0, md: 2},
+        },
+      }}
+    >
       <Stack direction="row" p={2} pb={0}>
         <AppIcon icon="logo" />
         <Stack flexGrow={1} alignItems="center" justifyContent="center" mr={2}>
@@ -137,13 +150,9 @@ const AskConsent = () => {
         <Fragment key={i}>
           {i === activeStep && (
             <Fragment>
-              <DialogTitle>
-                {text.headline}
-              </DialogTitle>
+              <DialogTitle>{text.headline}</DialogTitle>
               <DialogContent>
-                <DialogContentText>
-                  {text.body}
-                </DialogContentText>
+                <DialogContentText>{text.body}</DialogContentText>
               </DialogContent>
               <DialogActions>
                 <Button color="secondary" sx={{ ml: 2 }}>
