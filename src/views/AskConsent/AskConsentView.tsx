@@ -1,4 +1,15 @@
-import { Backdrop, Box, Button, MobileStepper, Typography } from '@mui/material';
+import {
+  Backdrop,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  MobileStepper,
+  Typography,
+} from '@mui/material';
 import { Stack } from '@mui/system';
 import { localStorageGet } from '../../utils/localStorage';
 import { AppButton, AppIcon } from '../../components';
@@ -113,60 +124,61 @@ const AskConsent = () => {
   };
 
   return (
-    <Backdrop open={true} sx={{ zIndex: 3000, bgcolor: '#fff' }}>
-      <Stack width="100%" height="100%">
-        <Stack direction="row" p={2}>
-          <AppIcon icon="logo" />
-          <Stack flexGrow={1} alignItems="center" justifyContent="center" mr={2}>
-            <Typography fontWeight={700} textTransform="uppercase" color="secondary">
-              Acknowledgement
-            </Typography>
-          </Stack>
+    <Dialog open={true} fullWidth={true} maxWidth="sm" scroll='paper'>
+      <Stack direction="row" p={2} pb={0}>
+        <AppIcon icon="logo" />
+        <Stack flexGrow={1} alignItems="center" justifyContent="center" mr={2}>
+          <Typography fontWeight={700} textTransform="uppercase" color="secondary">
+            Acknowledgement
+          </Typography>
         </Stack>
-        <Stack flexGrow={1} p={2}>
-          {data.map((text, i) => (
-            <Fragment key={i}>
-              {i === activeStep && (
-                <Fragment>
-                  <Typography variant="h5" p={1}>
-                    {text.headline}
-                  </Typography>
-                  <Box overflow="auto" flexGrow={1} p={1}>
-                    {text.body}
-                  </Box>
-                  <Box sx={{ display: 'flex', justifyContent: 'end', pt: 2 }}>
-                    <AppButton color="primary" onClick={() => giveConsent(text.id, i)}>
-                      {text.consent_text}
-                    </AppButton>
-                  </Box>
-                </Fragment>
-              )}
-            </Fragment>
-          ))}
-        </Stack>
-        {data.length > 1 && (
-          <MobileStepper
-            variant="text"
-            steps={data.length}
-            position="static"
-            activeStep={activeStep}
-            sx={{ bgcolor: 'transparent', p: 1 }}
-            nextButton={
-              <Button size="small" onClick={handleNext} disabled={activeStep === data.length - 1}>
-                Next
-                <KeyboardArrowRight />
-              </Button>
-            }
-            backButton={
-              <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                <KeyboardArrowLeft />
-                Back
-              </Button>
-            }
-          />
-        )}
       </Stack>
-    </Backdrop>
+      {data.map((text, i) => (
+        <Fragment key={i}>
+          {i === activeStep && (
+            <Fragment>
+              <DialogTitle>
+                {text.headline}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  {text.body}
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button color="secondary" sx={{ ml: 2 }}>
+                  Cancel
+                </Button>
+                <AppButton color="primary" onClick={() => giveConsent(text.id, i)}>
+                  {text.consent_text}
+                </AppButton>
+              </DialogActions>
+            </Fragment>
+          )}
+        </Fragment>
+      ))}
+      {data.length > 1 && (
+        <MobileStepper
+          variant="text"
+          steps={data.length}
+          position="static"
+          activeStep={activeStep}
+          sx={{ bgcolor: 'transparent', p: 1 }}
+          nextButton={
+            <Button size="small" onClick={handleNext} disabled={activeStep === data.length - 1}>
+              Next
+              <KeyboardArrowRight />
+            </Button>
+          }
+          backButton={
+            <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+              <KeyboardArrowLeft />
+              Back
+            </Button>
+          }
+        />
+      )}
+    </Dialog>
   );
 };
 
