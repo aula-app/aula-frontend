@@ -89,11 +89,6 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
   const location = useLocation().pathname.replaceAll("/", " ")
 
-  const onLogoClick = useCallback(() => {
-    // Navigate to first SideBar's item or to '/' when clicking on Logo/Menu icon when SideBar is already visible
-    navigation(SIDEBAR_ITEMS?.[0]?.path || '/');
-  }, [navigation]);
-
   const onSideBarOpen = () => {
     console.log("OPEN", sideBarVisible)
     if (!sideBarVisible) setSideBarVisible(true); // Don't re-render Layout when SideBar is already open
