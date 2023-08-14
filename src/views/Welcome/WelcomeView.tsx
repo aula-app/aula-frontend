@@ -6,7 +6,7 @@ import { UserStats } from "../../components/UserStats";
 const WelcomeView = () => {
 
   return (
-    <Stack>
+    <Stack px={1}>
       <NotificationsBar />
       <Typography variant='h5' my={1}>Your Activity</Typography>
       <UserStats />

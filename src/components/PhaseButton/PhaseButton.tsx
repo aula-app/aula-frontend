@@ -12,6 +12,7 @@ const PhaseButton: FunctionComponent<Props> = ({variant, displayNumber, noText =
   const CurrentIcon = phases[variant].icon;
   return (
     <Button
+      disableElevation
       variant="contained"
       size="small"
       sx={{ borderRadius: 9999, width: '100%', textTransform: 'none', backgroundColor: phases[variant].color, color: '#000'}}
