@@ -5,9 +5,10 @@ import phases from '../../utils/phases';
 interface Props {
   variant: keyof typeof phases; // Phase's name
   displayNumber?: number; // Phase's dusplay number
+  noText?: boolean
 }
 
-const PhaseButton: FunctionComponent<Props> = ({variant, displayNumber}) => {
+const PhaseButton: FunctionComponent<Props> = ({variant, displayNumber, noText = false}) => {
   const CurrentIcon = phases[variant].icon;
   return (
     <Button
@@ -17,7 +18,9 @@ const PhaseButton: FunctionComponent<Props> = ({variant, displayNumber}) => {
     >
       <Stack direction="row" alignItems="center" width="100%">
         <CurrentIcon fontSize='small' />
-        <Box flexGrow={1} overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" textAlign="left" pl={1}>{phases[variant].name}</Box>
+        { !noText &&
+          <Box flexGrow={1} overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" textAlign="left" pl={1}>{phases[variant].name}</Box>
+        }
         { displayNumber &&  displayNumber > 0 &&
           <Box sx={{mr: -.5, ml: .5, px: 1, borderRadius: 999, background: 'rgba(255,255,255,0.5)', height: 'auto'}}>{displayNumber}</Box>
         }

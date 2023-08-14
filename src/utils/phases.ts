@@ -1,4 +1,4 @@
-import { red, green, amber, blueGrey, deepPurple, orange, brown } from '@mui/material/colors';
+import { red, green, amber, blueGrey, deepPurple, orange, teal } from '@mui/material/colors';
 import { CheckCircle, DoNotDisturbOn, Forum, HowToVote, Lightbulb, Poll, WorkspacePremium } from '@mui/icons-material';
 
 const phases = {
@@ -29,7 +29,7 @@ const phases = {
     result: {
       name: 'Results',
       description: 'Idea Results',
-      color: brown[100],
+      color: teal[100],
       icon: Poll
     },
     success: {
