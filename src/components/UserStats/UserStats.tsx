@@ -1,14 +1,19 @@
-import { Lightbulb } from "@mui/icons-material";
-import { Chip, Grid } from "@mui/material"
+import { Grid } from '@mui/material';
+import { PhaseButton } from '../PhaseButton';
+import phases from '../../utils/phases';
 
-export const UserStats = () => {
+const keys = Object.keys(Object.freeze(phases)) as Array<keyof typeof phases>;
+if(keys.includes('result')) keys.splice(keys.indexOf('result'), 1);
+const UserStats = () => {
   return (
-    <Grid container spacing={2} p={1}>
-      <Grid item xs={6}>
-        <Chip icon={<Lightbulb />} label="With Icon" />
-      </Grid>
+    <Grid container spacing={1} py={1}>
+      {keys.map(phase => (
+        <Grid item xs={6}>
+          <PhaseButton variant={phase} displayNumber={3} />
+        </Grid>
+      ))}
     </Grid>
   );
-}
+};
 
 export default UserStats;

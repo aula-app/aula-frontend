@@ -1,4 +1,4 @@
-import { CardMedia, Typography, capitalize } from '@mui/material';
+import { Button, CardMedia, Stack, Typography, capitalize } from '@mui/material';
 import { Card, CardContent, Grid } from '@mui/material';
 import { AppLink } from '../../components';
 import { useEffect, useState } from 'react';
@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
  * Renders "Welcome" view
  * url: /
  */
-export const RoomCards = () => {
+const RoomCards = () => {
   const [data, setData] = useState([] as any[]);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const RoomCards = () => {
       {data.map((d, i) => (
         <Grid key={d.id} item xs={12} md={4}>
           <AppLink to={`/room/${d.id}`}>
-            <Card sx={{ borderRadius: '10px' }}>
+            <Card sx={{ borderRadius: '25px' }} variant="outlined">
               <CardContent>
                 <CardMedia
                   component="img"
@@ -43,6 +43,11 @@ export const RoomCards = () => {
                 <Typography sx={{ mt: 0.5, mb: -1 }} variant="body2" noWrap>
                   {d.description_public}
                 </Typography>
+                <Stack mt={3}>
+                  <Button variant="contained" sx={{borderRadius: 9999}} color='secondary'>
+                    Wild ideas
+                  </Button>
+                </Stack>
               </CardContent>
             </Card>
           </AppLink>
