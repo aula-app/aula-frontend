@@ -1,4 +1,4 @@
-import { Button, CardMedia, Stack, Typography, capitalize } from '@mui/material';
+import { CardMedia, Stack, Typography, capitalize } from '@mui/material';
 import { Card, CardContent, Grid } from '@mui/material';
 import { AppLink } from '../../components';
 import { useEffect, useState } from 'react';

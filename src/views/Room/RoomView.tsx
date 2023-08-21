@@ -1,7 +1,10 @@
 import { Inbox, Lightbulb } from '@mui/icons-material';
 import { TabContext, TabPanel } from '@mui/lab';
-import { Box, Stack, Tab, Tabs } from '@mui/material';
-import { SyntheticEvent, useState } from 'react';
+import { Box, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { SyntheticEvent, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { localStorageGet } from '../../utils';
+import { IdeaBubble } from '../../components/IdeaBubble';
 
 function a11yProps(index: number) {
   return {
@@ -15,6 +18,34 @@ function a11yProps(index: number) {
  * url: /
  */
 const RoomView = () => {
+  const params = useParams();
+  const [data, setData] = useState([] as any[]);
+  const jwt_token = localStorageGet('token');
+  const room_id = params["room_id"];
+
+  useEffect(() => {
+    // fetch data
+    const dataFetch = async () => {
+      const data = await (
+        await fetch(
+          process.env.REACT_APP_API_URL + "/api/controllers/room_ideas.php",
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + jwt_token
+            },
+            body: JSON.stringify(
+              {'room_id': room_id })
+          })).json();
+
+      console.log(data.data)
+      setData(data.data)
+    };
+
+    dataFetch();
+    }, []);
+
   const [value, setValue] = useState('0');
 
   const handleChange = (event: SyntheticEvent, newValue: string) => {
@@ -23,7 +54,14 @@ const RoomView = () => {
 
   return (
     <TabContext value={value}>
-      <TabPanel value='0' sx={{flexGrow: 1}}>Wild Ideas</TabPanel>
+      <TabPanel value='0' sx={{flexGrow: 1}}>
+        <Typography variant="h5" gutterBottom>
+          {data.length} Ideas
+        </Typography>
+        {data.map((d,i) =>
+          <IdeaBubble title={d.displayname} text={d.content} />
+        )}
+      </TabPanel>
       <TabPanel value='1' sx={{flexGrow: 1}}>Idea Boxes</TabPanel>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
