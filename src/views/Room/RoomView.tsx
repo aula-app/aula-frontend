@@ -4,7 +4,7 @@ import { Box, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { localStorageGet } from '../../utils';
-import { IdeaBubble } from '../../components/IdeaBubble';
+import { WildIdea } from '../../components/WildIdea';
 
 function a11yProps(index: number) {
   return {
@@ -54,12 +54,12 @@ const RoomView = () => {
 
   return (
     <TabContext value={value}>
-      <TabPanel value='0' sx={{flexGrow: 1}}>
+      <TabPanel value='0' sx={{flexGrow: 1, p: 0}}>
         <Typography variant="h5" gutterBottom>
           {data.length} Ideas
         </Typography>
         {data.map((d,i) =>
-          <IdeaBubble title={d.displayname} text={d.content} />
+          <WildIdea title={d.displayname} text={d.content} />
         )}
       </TabPanel>
       <TabPanel value='1' sx={{flexGrow: 1}}>Idea Boxes</TabPanel>

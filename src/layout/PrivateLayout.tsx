@@ -141,9 +141,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         component="main"
         sx={{
           flexGrow: 1, // Takes all possible space
-          paddingLeft: 1,
-          paddingRight: 1,
-          paddingTop: 1,
+          p: 2
         }}
       >
         <ErrorBoundary name="Content">{children}</ErrorBoundary>

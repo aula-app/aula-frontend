@@ -7,8 +7,8 @@ interface IdeaBubbleProps {
 
 export const IdeaBubble = ({title, text}: IdeaBubbleProps) => {
   return (
-    <Stack>
-      <Box sx={{ background: '#ccc', p: 4, borderRadius: 15, position: 'relative', mb: 2 }}>
+    <Stack pl={2} mb={1}>
+      <Box sx={{ background: '#ccc', p: 4, borderRadius: 15, position: 'relative' }}>
         <Box
           sx={{
             position: 'absolute',
