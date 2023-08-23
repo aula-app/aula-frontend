@@ -1,4 +1,4 @@
-import { useState, useCallback, FunctionComponent, PropsWithChildren } from 'react';
+import { useState, FunctionComponent, PropsWithChildren } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Stack } from '@mui/material';
 import { AppIcon, AppIconButton, ErrorBoundary } from '../components';
@@ -6,7 +6,6 @@ import { LinkToPage } from '../utils/type';
 import { useOnMobile } from '../hooks/layout';
 import {
   SIDEBAR_DESKTOP_ANCHOR,
-  SIDEBAR_MOBILE_ANCHOR,
   SIDEBAR_WIDTH,
   TOPBAR_DESKTOP_HEIGHT,
   TOPBAR_MOBILE_HEIGHT,
