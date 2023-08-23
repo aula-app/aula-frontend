@@ -5,6 +5,7 @@ import { SyntheticEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { localStorageGet } from '../../utils';
 import { WildIdea } from '../../components/WildIdea';
+import { blueGrey } from '@mui/material/colors';
 
 function a11yProps(index: number) {
   return {
@@ -51,12 +52,9 @@ const RoomView = () => {
   };
 
   return (
-    <Stack width="100%" height="100%" overflow="hidden">
+    <Stack width="100%" height="100%" overflow="hidden" bgcolor={blueGrey[50]}>
       <TabContext value={value}>
-        <TabPanel value="0" sx={{ flexGrow: 1, p: 1, overflow: 'auto' }}>
-          <Typography variant="h5" p={1} gutterBottom>
-            {data.length} Ideas
-          </Typography>
+        <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
           {data.map((d, i) => (
             <WildIdea title={d.displayname} text={d.content} />
           ))}
@@ -64,7 +62,7 @@ const RoomView = () => {
         <TabPanel value="1" sx={{ flexGrow: 1 }}>
           Idea Boxes
         </TabPanel>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: "#fff" }}>
           <Tabs
             value={value}
             onChange={handleChange}
