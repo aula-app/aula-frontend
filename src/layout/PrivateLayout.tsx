@@ -1,4 +1,4 @@
-import { useState, useCallback, FunctionComponent, PropsWithChildren } from 'react';
+import { useState, FunctionComponent, PropsWithChildren } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Stack } from '@mui/material';
 import { AppIcon, AppIconButton, ErrorBoundary } from '../components';
@@ -6,7 +6,6 @@ import { LinkToPage } from '../utils/type';
 import { useOnMobile } from '../hooks/layout';
 import {
   SIDEBAR_DESKTOP_ANCHOR,
-  SIDEBAR_MOBILE_ANCHOR,
   SIDEBAR_WIDTH,
   TOPBAR_DESKTOP_HEIGHT,
   TOPBAR_MOBILE_HEIGHT,
@@ -109,9 +108,8 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
   return (
     <Stack
-      direction="column"
       sx={{
-        minHeight: '100vh', // Full screen height
+        height: '100vh',
         paddingTop: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT,
         paddingLeft: sidebarOpen && SIDEBAR_DESKTOP_ANCHOR.includes('left') ? SIDEBAR_WIDTH : 0,
         paddingRight: sidebarOpen && SIDEBAR_DESKTOP_ANCHOR.includes('right') ? SIDEBAR_WIDTH : 0,
@@ -139,12 +137,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
       <Stack
         component="main"
-        sx={{
-          flexGrow: 1, // Takes all possible space
-          paddingLeft: 1,
-          paddingRight: 1,
-          paddingTop: 1,
-        }}
+        sx={{ flexGrow: 1, overflow: 'hidden' }}
       >
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
       </Stack>
