@@ -39,7 +39,7 @@ const RoomCards = () => {
                 <CardMedia
                   component="img"
                   height="194"
-                  image={i % 2 === 0 ? '/img/aula-room1.png' : 'img/aula-room.png'}
+                  image={i % 2 === 0 ? '/img/aula-room1.png' : '/img/aula-room.png'}
                   alt="bg image"
                   sx={{ borderRadius: '10px' }}
                 />

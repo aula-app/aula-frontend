@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import { localStorageGet } from '../../utils';
 import { WildIdea } from '../../components/WildIdea';
 import { blueGrey } from '@mui/material/colors';
+import { RoomsView } from '../Rooms';
+import { IdeaBox } from '../../components/IdeaBox';
 
 function a11yProps(index: number) {
   return {
@@ -59,8 +61,8 @@ const RoomView = () => {
             <WildIdea title={d.displayname} text={d.content} />
           ))}
         </TabPanel>
-        <TabPanel value="1" sx={{ flexGrow: 1 }}>
-          Idea Boxes
+        <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
+          <IdeaBox />
         </TabPanel>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: "#fff" }}>
           <Tabs
