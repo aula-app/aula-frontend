@@ -14,7 +14,7 @@ const RoomsView = () => {
     { field: 'room_name', headerName: 'Name', width: 260},
     { field: 'description_internal', headerName: 'Internal Description', width: 300},
     { field: 'description_public', headerName: 'Public Description', width: 300},
-  ] 
+  ]
 
   useEffect(() => {
     // fetch data

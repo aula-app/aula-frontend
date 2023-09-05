@@ -12,6 +12,7 @@ import {
 } from './config';
 import TopBar from './TopBar';
 import SideBar from './SideBar';
+import { blueGrey } from '@mui/material/colors';
 
 const TITLE_PRIVATE = 'aula';
 
@@ -114,6 +115,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         paddingLeft: sidebarOpen && SIDEBAR_DESKTOP_ANCHOR.includes('left') ? SIDEBAR_WIDTH : 0,
         paddingRight: sidebarOpen && SIDEBAR_DESKTOP_ANCHOR.includes('right') ? SIDEBAR_WIDTH : 0,
       }}
+      bgcolor={blueGrey[50]}
     >
       <Stack component="header">
         <TopBar
