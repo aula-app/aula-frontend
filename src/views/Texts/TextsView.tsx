@@ -319,7 +319,7 @@ const TextsView = () => {
       {openDeleteUserDialog && <DeleteUserDialog
         open
         title="Delete Text"
-        content={
+        dialogContent={
           <>
           Do you really want to delete the text <b>{ selectedUserObj()['headline']}</b>?
 
@@ -345,7 +345,7 @@ const TextsView = () => {
       {openAddUserDialog && <AddUserDialog
         open
         title={(selectedEditUser !== -1)? "Edit Message":"Add Message"}
-        content={
+        dialogContent={
           <>
           <FormContainer formContext={formContext} >
           <TextFieldElement
