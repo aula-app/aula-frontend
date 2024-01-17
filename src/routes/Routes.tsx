@@ -37,7 +37,7 @@ const Routes = () => {
                 'Authorization': 'Bearer ' + jwt_token
               },
               body: JSON.stringify(
-                {'user_id': jwt_payload?.user_id})
+                {'user_id': jwt_payload.user_id})
             })).json();
 
         const result = data; // await api.auth.loginWithEmail(values);
