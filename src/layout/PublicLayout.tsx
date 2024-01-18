@@ -1,30 +1,33 @@
 import { Fragment, FunctionComponent, PropsWithChildren } from 'react';
 import { Button, Divider, Grid, Stack } from '@mui/material/';
 import { AppLink, ErrorBoundary } from '../components';
-import { useOnMobile } from '../hooks/layout';
-import { TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import { Box } from '@mui/joy';
 import { useLocation } from 'react-router-dom';
 
 const TITLE_PUBLIC = 'aula';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
-  const onMobile = useOnMobile();
   const location = useLocation();
 
   const title = TITLE_PUBLIC;
   document.title = title; // Also Update Tab Title
 
+  function toggleBackToSignIn() {
+    if (location.pathname !== '/') {
+      return (
+        <Button color="secondary" component={AppLink} to="/">
+          &lt; Sign In
+        </Button>
+      )
+    }
+    return (
+      <Box height="2.25rem"></Box>
+    )
+  }
+
   function toggleSignUp() {
     if (location.pathname === '/auth/signup') {
-      return (
-        <Fragment>
-          Already a user?
-          <Button variant="text" color="primary" component={AppLink} to="/">
-            Sign In
-          </Button>
-        </Fragment>
-      );
+      return;
     }
     return (
       <Fragment>
@@ -37,22 +40,24 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <Box
+    <Stack
       bgcolor="#fff"
       width="100%"
-      height="100vh"
-      overflow="auto"
-      sx={{ paddingTop: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT }}
+      minHeight="100vh"
     >
+      <Box sx={{flexGrow: 1}}></Box>
       <Stack
-        height="100%"
         mx="auto"
         maxWidth="18rem"
+        width="100%"
         sx={{
           padding: 1,
           alignItems: 'center',
         }}
       >
+        <Box sx={{my: 1, mr: "auto"}}>
+          {toggleBackToSignIn()}
+        </Box>
         <Box sx={{ width: '100%', mb: 2 }}>
           <img src="/logo-text.svg" alt="aula" />
         </Box>
@@ -68,14 +73,14 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
                 Facebook
               </Button>
             </Grid>
-            <Grid container justifyContent="end" alignItems="center" sx={{ mt: 1 }}>
+            <Grid container justifyContent="end" alignItems="center" sx={{ mt: 3, mb: 1 }}>
               {toggleSignUp()}
             </Grid>
           </Stack>
         </Stack>
-        <Box sx={{ flexGrow: 1, minHeight: '5rem', width: '100%' }}></Box>
       </Stack>
-    </Box>
+      <Box sx={{flexGrow: 1}}></Box>
+    </Stack>
   );
 };
 

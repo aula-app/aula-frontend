@@ -136,7 +136,7 @@ const LoginView = () => {
             {error}
           </AppAlert>
         ) : null}
-        <AppButton type="submit" color="primary" disabled={!formState.isValid} sx={{ mx: 0 }}>
+        <AppButton type="submit" color="primary" disabled={!formState.isValid} sx={{ mx: 0, mt: 0 }}>
           Sign In
         </AppButton>
         <Grid container justifyContent="end" alignItems="center">
