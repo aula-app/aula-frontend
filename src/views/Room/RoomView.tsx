@@ -55,8 +55,8 @@ const RoomView = () => {
     <Stack width="100%" height="100%" overflow="hidden">
       <TabContext value={value}>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
-          {data.map((d, i) => (
-            <WildIdea title={d.displayname} text={d.content} />
+          {data.map((d, key) => (
+            <WildIdea title={d.displayname} text={d.content} key={key}/>
           ))}
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
