@@ -147,16 +147,7 @@ const UsersView = () => {
     [],
   );
 
-  const deleteUser =  React.useCallback(async () => {
-    const deletedUser = selectedUser
-    await requestDeleteUser(selectedUser)
-    const newData = data.filter(user => user.id !== deletedUser)
-    setData(newData)
-    setSelectedUser(-1)
-    setDeleteUserDialog(false)
-  }, [data, selectedUser])
-
-  const requestDeleteUser = async function (userId:number) {
+  const requestDeleteUser = React.useCallback(async function (userId:number) {
     const data = await (
         await fetch(
           process.env.REACT_APP_API_URL + '/api/controllers/delete_user.php',
@@ -176,7 +167,16 @@ const UsersView = () => {
         if (result) {
           setDeleteUserDialog(false)
         }
-  }
+  }, [jwt_token])
+
+  const deleteUser =  React.useCallback(async () => {
+    const deletedUser = selectedUser
+    await requestDeleteUser(selectedUser)
+    const newData = data.filter(user => user.id !== deletedUser)
+    setData(newData)
+    setSelectedUser(-1)
+    setDeleteUserDialog(false)
+  }, [data, selectedUser, requestDeleteUser])
 
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 50,
@@ -230,7 +230,6 @@ const UsersView = () => {
   }
 
   const submitNewUser = async () => {
-    const values = formContext.getValues();
     formContext.reset();
     onAddUserDialogClose()
   }
@@ -261,30 +260,30 @@ const UsersView = () => {
         return data;
   }
 
-  const requestAddNewUser = async (formValues:FormStateValues) => {
-    const data = await (
-        await fetch(
-          process.env.REACT_APP_API_URL + '/api/controllers/add_user.php',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + jwt_token
-            },
-            body: JSON.stringify(
-              {'username': formValues.username,
-               'password': formValues.password,
-               'realname': formValues.realname,
-               'displayname': formValues.displayname,
-               'email': formValues.email,
-               'userlevel': formValues.userlevel,
-               'about_me': formValues.about_me,
-               'position': formValues.position,
-               })
-          })).json();
+  // const requestAddNewUser = async (formValues:FormStateValues) => {
+  //   const data = await (
+  //       await fetch(
+  //         process.env.REACT_APP_API_URL + '/api/controllers/add_user.php',
+  //         {
+  //           method: 'POST',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             'Authorization': 'Bearer ' + jwt_token
+  //           },
+  //           body: JSON.stringify(
+  //             {'username': formValues.username,
+  //              'password': formValues.password,
+  //              'realname': formValues.realname,
+  //              'displayname': formValues.displayname,
+  //              'email': formValues.email,
+  //              'userlevel': formValues.userlevel,
+  //              'about_me': formValues.about_me,
+  //              'position': formValues.position,
+  //              })
+  //         })).json();
 
-        return data;
-  }
+  //       return data;
+  // }
 
   const changePage = async (page:any) => {
     setPaginationModel(page)
