@@ -1,4 +1,4 @@
-import { Typography, TextField, InputAdornment } from '@mui/material';
+import { Typography, InputAdornment } from '@mui/material';
 import { FormContainer, TextFieldElement, SelectElement, useForm } from 'react-hook-form-mui';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -6,12 +6,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Stack } from '@mui/system';
 import { DataGrid, GridSortModel, GridColDef, GridRowParams, GridActionsCellItem, GridValueGetterParams, GridToolbarContainer } from '@mui/x-data-grid';
-import { AppLink, AppIconButton, AppAlert, AppButton } from '../../components';
+import { AppIconButton, AppAlert, AppButton } from '../../components';
 import { CompositionDialog as AddUserDialog } from '../../components/dialogs'
 import { CompositionDialog as DeleteUserDialog } from '../../components/dialogs'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import { SelectChangeEvent } from '@mui/material/Select';
 import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../utils/form';
 import { localStorageGet } from '../../utils/localStorage';
 import { useEffect, useState, useCallback } from 'react';
@@ -71,7 +70,6 @@ interface FormStateValues {
 const UsersView = () => {
   const [openAddUserDialog, setAddUserDialog] = useState(false);
   const [openDeleteUserDialog, setDeleteUserDialog] = useState(false);
-  const [newUserData, setNewUserData] = useState(USER_INITIAL_VALUES);
   const [isLoading, setIsLoading] = useState(true);
 
   const [selectedUser, setSelectedUser] = useState(-1)
@@ -85,7 +83,11 @@ const UsersView = () => {
       field: 'last_update',
       sort: 'desc',
     },
-  ]); 
+  ]);
+
+  const formContext = useForm<FormStateValues>({
+    defaultValues: USER_INITIAL_VALUES
+  });
 
   const [formState, setFormState, onFieldChange, fieldGetError, fieldHasError] = useAppForm({
     validationSchema: VALIDATE_FORM_ADD_USER,
@@ -133,7 +135,7 @@ const UsersView = () => {
       formContext.setValue('status',editUser.status)
       formContext.setValue('userlevel',(editUser.userlevel)?editUser.userlevel:10)
     },
-    [],
+    [formContext]
   );
 
 
@@ -152,7 +154,7 @@ const UsersView = () => {
     setData(newData)
     setSelectedUser(-1)
     setDeleteUserDialog(false)
-  }, [selectedUser])
+  }, [data, selectedUser])
 
   const requestDeleteUser = async function (userId:number) {
     const data = await (
@@ -207,11 +209,6 @@ const UsersView = () => {
     setDeleteUserDialog(false)
     setSelectedUser(-1)
   }
-
-  const formContext = useForm<FormStateValues>({
-    defaultValues: USER_INITIAL_VALUES
-  });
-
   const submitUserForm = async () => {
     if (selectedEditUser !== -1) {
       await submitEditUser();
@@ -334,7 +331,7 @@ const UsersView = () => {
     };
 
     dataFetch();
-    },[paginationModel, sortModel]);
+    },[paginationModel, sortModel, jwt_token, requestDeleteUser]);
 
   return (
     <Stack direction="column" spacing={2}>
@@ -448,7 +445,7 @@ const UsersView = () => {
             <MenuItem value={50}>Admin</MenuItem>
             <MenuItem value={60}>Tech Admin</MenuItem>
           </SelectElement>
-          { (selectedEditUser == -1)?
+          { (selectedEditUser === -1)?
           <TextFieldElement
             required
             type={showPassword ? 'text' : 'password'}

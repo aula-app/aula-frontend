@@ -15,6 +15,7 @@ import { useAppForm, SHARED_CONTROL_PROPS } from '../../utils/form';
 import { localStorageGet } from '../../utils/localStorage';
 import { useEffect, useState, useCallback } from 'react';
 import * as React from 'react';
+import { da } from 'date-fns/locale';
 
 const VALIDATE_FORM_ADD_USER = {
   username: {
@@ -82,6 +83,10 @@ const TextsView = () => {
 
   const handleCloseError = useCallback(() => setError(undefined), []);
 
+  const formContext = useForm<FormStateValues>({
+    defaultValues: MESSAGE_INITIAL_VALUES
+  });
+
   function Toolbar() {
     return (
       <GridToolbarContainer>
@@ -110,7 +115,7 @@ const TextsView = () => {
       formContext.setValue('consent_text',editUser.consent_text)
       formContext.setValue('user_needs_to_consent',editUser.user_needs_to_consent)
     },
-    [],
+    [formContext],
   );
 
 
@@ -129,7 +134,7 @@ const TextsView = () => {
     setData(newData)
     setSelectedUser(-1)
     setDeleteUserDialog(false)
-  }, [selectedUser])
+  }, [data, selectedUser])
 
   const requestDeleteUser = async function (userId:number) {
     const data = await (
@@ -183,10 +188,6 @@ const TextsView = () => {
     setDeleteUserDialog(false)
     setSelectedUser(-1)
   }
-
-  const formContext = useForm<FormStateValues>({
-    defaultValues: MESSAGE_INITIAL_VALUES
-  });
 
   const submitUserForm = async () => {
     if (selectedEditUser !== -1) {
