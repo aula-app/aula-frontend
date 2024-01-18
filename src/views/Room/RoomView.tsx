@@ -1,6 +1,6 @@
 import { Inbox, Lightbulb } from '@mui/icons-material';
 import { TabContext, TabPanel } from '@mui/lab';
-import { Box, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { localStorageGet } from '../../utils';
@@ -43,7 +43,7 @@ const RoomView = () => {
     };
 
     dataFetch();
-  }, []);
+  }, [jwt_token, room_id]);
 
   const [value, setValue] = useState('0');
 
@@ -55,8 +55,8 @@ const RoomView = () => {
     <Stack width="100%" height="100%" overflow="hidden">
       <TabContext value={value}>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
-          {data.map((d, i) => (
-            <WildIdea title={d.displayname} text={d.content} />
+          {data.map((d, key) => (
+            <WildIdea title={d.displayname} text={d.content} key={key}/>
           ))}
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
