@@ -8,8 +8,8 @@ if(displayPhases.includes('result')) displayPhases.splice(displayPhases.indexOf(
 const UserStats = () => {
   return (
     <Grid container spacing={1} py={1}>
-      {displayPhases.map(phase => (
-        <Grid item xs={6}>
+      {displayPhases.map((phase, i) => (
+        <Grid item xs={6} key={i}>
           <PhaseButton variant={phase} displayNumber={3} />
         </Grid>
       ))}
