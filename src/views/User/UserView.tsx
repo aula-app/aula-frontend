@@ -1,7 +1,5 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { AppLink } from '../../components';
 import { localStorageGet } from '../../utils/localStorage';
 import { useEffect, useState } from 'react';
 
@@ -34,7 +32,7 @@ const UserView = () => {
     };
 
     dataFetch();
-    },[]);
+    },[jwt_token]);
 
   return (
     <Stack direction="column" spacing={2}>

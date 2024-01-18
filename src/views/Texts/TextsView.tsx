@@ -1,18 +1,17 @@
-import { Typography, TextField, InputAdornment } from '@mui/material';
+import { Typography } from '@mui/material';
 import { FormContainer, TextFieldElement, SelectElement, useForm } from 'react-hook-form-mui';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Stack } from '@mui/system';
-import { DataGrid, GridSortModel, GridColDef, GridRowParams, GridActionsCellItem, GridValueGetterParams, GridToolbarContainer } from '@mui/x-data-grid';
-import { AppLink, AppIconButton, AppAlert, AppButton } from '../../components';
+import { DataGrid, GridSortModel, GridColDef, GridRowParams, GridActionsCellItem, GridToolbarContainer } from '@mui/x-data-grid';
+import { AppAlert, AppButton } from '../../components';
 import { CompositionDialog as AddUserDialog } from '../../components/dialogs'
 import { CompositionDialog as DeleteUserDialog } from '../../components/dialogs'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import { SelectChangeEvent } from '@mui/material/Select';
-import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../utils/form';
+import { useAppForm, SHARED_CONTROL_PROPS } from '../../utils/form';
 import { localStorageGet } from '../../utils/localStorage';
 import { useEffect, useState, useCallback } from 'react';
 import * as React from 'react';
@@ -57,7 +56,6 @@ interface FormStateValues {
 const TextsView = () => {
   const [openAddUserDialog, setAddUserDialog] = useState(false);
   const [openDeleteUserDialog, setDeleteUserDialog] = useState(false);
-  const [newUserData, setNewUserData] = useState(MESSAGE_INITIAL_VALUES);
   const [isLoading, setIsLoading] = useState(true);
 
   const [selectedUser, setSelectedUser] = useState(-1)
@@ -71,20 +69,16 @@ const TextsView = () => {
       field: 'last_update',
       sort: 'desc',
     },
-  ]); 
+  ]);
 
   const [formState, setFormState, onFieldChange, fieldGetError, fieldHasError] = useAppForm({
     validationSchema: VALIDATE_FORM_ADD_USER,
     initialValues: MESSAGE_INITIAL_VALUES as FormStateValues,
   });
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string>();
 
   const values = formState.values as FormStateValues;
   const jwt_token = localStorageGet('token');
-  const handleShowPasswordClick = useCallback(() => {
-    setShowPassword((oldValue) => !oldValue);
-  }, []);
 
   const handleCloseError = useCallback(() => setError(undefined), []);
 
