@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
  * url: /user
  */
 const UserView = () => {
-  const [data, setData] = useState([] as any[]);
+  const [, setData] = useState([] as any[]);
   const jwt_token = localStorageGet('token');
 
   useEffect(() => {
