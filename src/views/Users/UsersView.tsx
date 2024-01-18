@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Stack } from '@mui/system';
-import { DataGrid, GridSortModel, GridColDef, GridRowParams, GridActionsCellItem, GridValueGetterParams, GridToolbarContainer } from '@mui/x-data-grid';
+import { DataGrid, GridSortModel, GridColDef, GridRowParams, GridActionsCellItem, GridToolbarContainer } from '@mui/x-data-grid';
 import { AppIconButton, AppAlert, AppButton } from '../../components';
 import { CompositionDialog as AddUserDialog } from '../../components/dialogs'
 import { CompositionDialog as DeleteUserDialog } from '../../components/dialogs'
@@ -231,7 +231,6 @@ const UsersView = () => {
 
   const submitNewUser = async () => {
     const values = formContext.getValues();
-    const requestResult = await requestAddNewUser(values);
     formContext.reset();
     onAddUserDialogClose()
   }
@@ -331,7 +330,7 @@ const UsersView = () => {
     };
 
     dataFetch();
-    },[paginationModel, sortModel, jwt_token, requestDeleteUser]);
+    },[paginationModel, sortModel, jwt_token]);
 
   return (
     <Stack direction="column" spacing={2}>
