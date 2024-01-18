@@ -30,5 +30,5 @@ export function useEventLogout() {
 
     dispatch({ type: 'LOG_OUT' });
     navigate('/')
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 }
