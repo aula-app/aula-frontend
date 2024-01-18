@@ -15,7 +15,6 @@ import { useAppForm, SHARED_CONTROL_PROPS } from '../../utils/form';
 import { localStorageGet } from '../../utils/localStorage';
 import { useEffect, useState, useCallback } from 'react';
 import * as React from 'react';
-import { da } from 'date-fns/locale';
 
 const VALIDATE_FORM_ADD_USER = {
   username: {
