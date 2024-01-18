@@ -1,8 +1,8 @@
 import PublicRoutes from './PublicRoutes';
 import PrivateRoutes from './PrivateRoutes';
-import { localStorageGet, localStorageSet, localStorageDelete } from '../utils/localStorage';
+import { localStorageGet } from '../utils/localStorage';
 import { useIsAuthenticated } from '../hooks/auth';
-import { useHasConsent } from '../hooks/hasConsent';
+//import { useHasConsent } from '../hooks/hasConsent';
 import { parseJwt } from '../utils/jwt';
 import { useAppStore } from '../store/AppStore';
 import { useEffect } from 'react';
@@ -19,28 +19,29 @@ const Routes = () => {
   // const isAuthenticated = state.isAuthenticated; // Variant 1
   const isAuthenticated = useIsAuthenticated(); // Variant 2
   const [state, dispatch] = useAppStore();
-  const hasConsent = state.hasConsent;
+  // const hasConsent = state.hasConsent;
 
   useEffect( () => {
     const jwt_token = localStorageGet('token');
-    const jwt_payload = jwt_token?parseJwt(jwt_token):null
+    const jwt_payload = jwt_token ? parseJwt(jwt_token) : null;
 
     const getConsent = async () => {
+      if(!jwt_payload) return
       const data = await (
           await fetch(
             process.env.REACT_APP_API_URL + '/api/controllers/user_consent.php',
             {
-              method: 'POST', 
-              headers: {                   
+              method: 'POST',
+              headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + jwt_token
               },
               body: JSON.stringify(
-                {'user_id': jwt_payload?.user_id})
+                {'user_id': jwt_payload.user_id})
             })).json();
 
         const result = data; // await api.auth.loginWithEmail(values);
-        if (result.data == 0) {
+        if (result.data === 0) {
           dispatch({ 'action': 'HAS_CONSENT', 'payload': false})
         } else {
           dispatch({ 'action': 'HAS_CONSENT', 'payload': true})
@@ -49,7 +50,7 @@ const Routes = () => {
 
     getConsent()
 
-  }, [isAuthenticated, location])
+  }, [isAuthenticated, location, dispatch])
 
   // Re-login or logout the user if needed
   // useEffect(() => {

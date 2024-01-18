@@ -115,7 +115,7 @@ const DialogsSection = () => {
           open
           title="Edit Email"
           onClose={onEditEmailDialogClose}
-          content={
+          dialogContent={
             <div>
               <TextField variant="outlined" label="Email address" fullWidth value={email} onChange={onEmailChange} />
               <p>This is CompositionDialog with JSX in props.content and props.actions</p>
