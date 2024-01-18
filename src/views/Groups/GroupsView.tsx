@@ -124,7 +124,7 @@ const GroupsView = () => {
       {openAddGroupDialog && <AddGroupDialog
         open
         title="Add Group"
-        content={
+        dialogContent={
           <>
           <TextField
             required

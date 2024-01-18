@@ -5,13 +5,13 @@ import { WelcomeView } from '../views/Welcome';
 import { RoomsView } from '../views/Rooms';
 import { RoomView } from '../views/Room';
 import { GroupsView } from '../views/Groups';
-import { IdeasView } from '../views/Ideas';
 import { IdeaView } from '../views/Idea';
+import { IdeasView } from '../views/Ideas';
+import { IdeasBoxView } from '../views/IdeasBox';
 import { UserView } from '../views/User';
 import { UsersView } from '../views/Users';
 import { TextsView } from '../views/Texts';
 import { AskConsentView } from '../views/AskConsent';
-import { localStorageGet } from '../utils/localStorage';
 import { useAppStore } from '../store';
 
 
@@ -30,6 +30,7 @@ const PrivateRoutes = () => {
       <Route path="about" element={(!hasConsent)?<AskConsentView/>:<AboutView />} />,
       <Route path="rooms" element={(!hasConsent)?<AskConsentView/>:<RoomsView />} />,
       <Route path="room/:room_id" element={(!hasConsent)?<AskConsentView/>:<RoomView />} />,
+      <Route path="room/:room_id/idea-box/:boxId" element={(!hasConsent)?<AskConsentView/>:<IdeasBoxView />} />,
       <Route path="groups" element={(!hasConsent)?<AskConsentView/>:<GroupsView />} />,
       <Route path="ideas" element={(!hasConsent)?<AskConsentView/>:<IdeasView />} />,
       <Route path="texts" element={(!hasConsent)?<AskConsentView/>:<TextsView />} />,

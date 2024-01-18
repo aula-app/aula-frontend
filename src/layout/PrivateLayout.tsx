@@ -1,4 +1,4 @@
-import { useState, useCallback, FunctionComponent, PropsWithChildren } from 'react';
+import { useState, FunctionComponent, PropsWithChildren } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Stack } from '@mui/material';
 import { AppIcon, AppIconButton, ErrorBoundary } from '../components';
@@ -6,13 +6,13 @@ import { LinkToPage } from '../utils/type';
 import { useOnMobile } from '../hooks/layout';
 import {
   SIDEBAR_DESKTOP_ANCHOR,
-  SIDEBAR_MOBILE_ANCHOR,
   SIDEBAR_WIDTH,
   TOPBAR_DESKTOP_HEIGHT,
   TOPBAR_MOBILE_HEIGHT,
 } from './config';
 import TopBar from './TopBar';
 import SideBar from './SideBar';
+import { blueGrey } from '@mui/material/colors';
 
 const TITLE_PRIVATE = 'aula';
 
@@ -89,11 +89,6 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
   const location = useLocation().pathname.replaceAll("/", " ")
 
-  const onLogoClick = useCallback(() => {
-    // Navigate to first SideBar's item or to '/' when clicking on Logo/Menu icon when SideBar is already visible
-    navigation(SIDEBAR_ITEMS?.[0]?.path || '/');
-  }, [navigation]);
-
   const onSideBarOpen = () => {
     console.log("OPEN", sideBarVisible)
     if (!sideBarVisible) setSideBarVisible(true); // Don't re-render Layout when SideBar is already open
@@ -114,13 +109,13 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
   return (
     <Stack
-      direction="column"
       sx={{
-        minHeight: '100vh', // Full screen height
+        height: '100vh',
         paddingTop: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT,
         paddingLeft: sidebarOpen && SIDEBAR_DESKTOP_ANCHOR.includes('left') ? SIDEBAR_WIDTH : 0,
         paddingRight: sidebarOpen && SIDEBAR_DESKTOP_ANCHOR.includes('right') ? SIDEBAR_WIDTH : 0,
       }}
+      bgcolor={blueGrey[50]}
     >
       <Stack component="header">
         <TopBar
@@ -144,12 +139,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
       <Stack
         component="main"
-        sx={{
-          flexGrow: 1, // Takes all possible space
-          paddingLeft: 1,
-          paddingRight: 1,
-          paddingTop: 1,
-        }}
+        sx={{ flexGrow: 1, overflow: 'hidden' }}
       >
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
       </Stack>

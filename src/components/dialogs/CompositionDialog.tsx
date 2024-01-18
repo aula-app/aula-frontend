@@ -5,7 +5,7 @@ import { useDialogMinWidth } from './utils';
 
 interface Props extends DialogProps {
   title?: string;
-  content?: ReactNode;
+  dialogContent?: ReactNode;
   actions?: ReactNode;
   onClose?: (event: SyntheticEvent) => void;
 }

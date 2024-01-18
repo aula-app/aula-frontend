@@ -15,11 +15,6 @@ const TopBar: FunctionComponent<Props> = ({ endNode, startNode, title = '', ...r
   return (
     <AppBar
       component="div"
-      sx={
-        {
-          // boxShadow: 'none', // Uncomment to hide shadow
-        }
-      }
       {...restOfProps}
     >
       <Toolbar>
