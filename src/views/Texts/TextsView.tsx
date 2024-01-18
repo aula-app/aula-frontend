@@ -126,16 +126,7 @@ const TextsView = () => {
     [],
   );
 
-  const deleteUser =  React.useCallback(async () => {
-    const deletedUser = selectedUser
-    await requestDeleteUser(selectedUser)
-    const newData = data.filter(user => user.id !== deletedUser)
-    setData(newData)
-    setSelectedUser(-1)
-    setDeleteUserDialog(false)
-  }, [data, selectedUser])
-
-  const requestDeleteUser = async function (userId:number) {
+  const requestDeleteUser = React.useCallback(async function (userId:number) {
     const data = await (
         await fetch(
           '/api/controllers/delete_text.php',
@@ -155,7 +146,16 @@ const TextsView = () => {
         if (result) {
           setDeleteUserDialog(false)
         }
-  }
+  }, [jwt_token])
+
+  const deleteUser =  React.useCallback(async () => {
+    const deletedUser = selectedUser
+    await requestDeleteUser(selectedUser)
+    const newData = data.filter(user => user.id !== deletedUser)
+    setData(newData)
+    setSelectedUser(-1)
+    setDeleteUserDialog(false)
+  }, [data, selectedUser, requestDeleteUser])
 
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 50,
