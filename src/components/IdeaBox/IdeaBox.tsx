@@ -21,17 +21,18 @@ const IdeaBox = ({noCategories = false}: IdeaBoxProps) => {
     <Card sx={{ borderRadius: '25px' }} variant="outlined">
       <CardContent>
         <Stack direction="row" mb={2} alignItems="center" spacing={2}>
-          {displayPhases.map((phase, i) => (
+          {displayPhases.map((phase, key) => (
             <Stack
-              width={i === 0 ? 'auto' : '1.5em'}
-              flexGrow={i === 0 ? 1 : 0}
+              width={key === 0 ? 'auto' : '1.5em'}
+              flexGrow={key === 0 ? 1 : 0}
               height="1.5rem"
               borderRadius={999}
               bgcolor={phases[phase].color}
               alignItems="center"
               justifyContent="center"
+              key={key}
             >
-              <Typography variant="caption">{i === 0 ? phases[phase].name : ''}</Typography>
+              <Typography variant="caption">{key === 0 ? phases[phase].name : ''}</Typography>
             </Stack>
           ))}
         </Stack>
