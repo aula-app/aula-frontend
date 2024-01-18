@@ -98,7 +98,7 @@ const LoginView = () => {
           required
           label="Username"
           name="username"
-          inputProps={{ autocapitalize: 'none' }}
+          inputProps={{ autoCapitalize: 'none' }}
           value={values.username}
           error={fieldHasError('username')}
           helperText={fieldGetError('username') || ' '}
