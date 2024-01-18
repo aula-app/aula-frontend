@@ -22,7 +22,7 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
  * url: /
  */
 const AskConsent = () => {
-  const [state, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const jwt_token = localStorageGet('token');
   const [data, setData] = useState([] as any[]);
   const [activeStep, setActiveStep] = useState(0);
