@@ -306,7 +306,7 @@ const TextsView = () => {
     };
 
     dataFetch();
-    },[paginationModel, sortModel]);
+    },[paginationModel, sortModel, jwt_token]);
 
   return (
     <Stack direction="column" spacing={2}>
