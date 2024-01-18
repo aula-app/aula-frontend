@@ -71,7 +71,7 @@ const TextsView = () => {
     },
   ]);
 
-  const [formState, setFormState, onFieldChange, fieldGetError, fieldHasError] = useAppForm({
+  const [formState, , , fieldGetError, fieldHasError] = useAppForm({
     validationSchema: VALIDATE_FORM_ADD_USER,
     initialValues: MESSAGE_INITIAL_VALUES as FormStateValues,
   });
