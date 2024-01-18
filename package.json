@@ -42,31 +42,31 @@
     "@mui/material": "latest",
     "@mui/x-data-grid": "^6.7.0",
     "@mui/x-date-pickers": "^6.9.0",
-    "date-fns": "latest",
+    "date-fns": "^2.30.0",
     "react": "latest",
     "react-dom": "latest",
     "react-hook-form": "^7.45.0",
     "react-hook-form-mui": "^6.3.0",
-    "react-router-dom": "latest",
+    "react-router-dom": "^6.14.2",
     "react-scripts": "latest",
     "validate.js": "latest",
-    "web-vitals": "latest"
+    "web-vitals": "^3.4.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@capacitor/assets": "^2.0.4",
     "@capacitor/cli": "^5.1.1",
-    "@testing-library/jest-dom": "latest",
-    "@testing-library/react": "latest",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "latest",
-    "@tsconfig/create-react-app": "latest",
-    "@types/jest": "latest",
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
+    "@tsconfig/create-react-app": "^2.0.1",
+    "@types/jest": "^29.5.3",
+    "@types/node": "^20.4.5",
+    "@types/react": "^18.2.18",
+    "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "latest",
-    "prettier": "latest",
-    "typescript": "latest"
+    "prettier": "^3.0.0",
+    "typescript": "^5.1.6"
   },
   "browserslist": {
     "production": [
