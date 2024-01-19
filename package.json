@@ -1,11 +1,11 @@
 {
-  "name": "react-typescript-material",
-  "version": "2.0.15",
+  "name": "aula",
+  "version": "0.1",
   "description": "aula - Schule gemeinsam gestalten",
   "author": {
-    "name": "Anton Karpenko",
-    "email": "i@karpolan.com",
-    "url": "https://karpolan.com"
+    "name": "Aula App",
+    "email": "aula@aula.de",
+    "url": "https://aula.de"
   },
   "private": true,
   "keywords": [
@@ -26,11 +26,13 @@
     "format": "prettier ./src --write",
     "format:all": "prettier . --write",
     "lint": "eslint ./src --ext .js,.ts,.tsx",
+    "check": "tsc",
     "type": "tsc"
   },
   "dependencies": {
     "@capacitor/android": "^5.1.1",
     "@capacitor/core": "^5.1.1",
+    "@emotion/babel-plugin": "^11.11.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource-variable/nunito": "^5.0.6",
@@ -67,7 +69,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "prettier": "^3.0.0",
     "typescript": "^5.1.6",
-    "vite": "^5.0.11",
+    "vite": "^5.0.12",
     "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^4.3.1"
   },

@@ -81,7 +81,7 @@ const GroupsView = () => {
   const submitNewGroup = async () => {
     const data = await (
         await fetch(
-          process.env.REACT_APP_API_URL + '/api/controllers/add_group.php',
+          import.meta.env.VITE_APP_API_URL + '/api/controllers/add_group.php',
           {
             method: 'POST', 
             headers: {                   

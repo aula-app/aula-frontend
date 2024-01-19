@@ -58,7 +58,7 @@ const LoginView = () => {
         const username = values['username'];
         const password = values['password'];
         const data = await (
-          await fetch(process.env.REACT_APP_API_URL + '/api/controllers/login.php', {
+          await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/login.php', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

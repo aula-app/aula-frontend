@@ -28,7 +28,7 @@ const RoomView = () => {
     // fetch data
     const dataFetch = async () => {
       const data = await (
-        await fetch(process.env.REACT_APP_API_URL + '/api/controllers/room_ideas.php', {
+        await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/room_ideas.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
