@@ -53,8 +53,8 @@ const RoomCards = () => {
                   <PhaseButton variant='wild' />
                 </Stack>
                 <Grid container spacing={1} my={0}>
-                  {displayPhases.map(phase => (
-                    <Grid item xs={3}>
+                  {displayPhases.map((phase, key) => (
+                    <Grid item xs={3} key={key}>
                       <PhaseButton variant={phase} noText />
                     </Grid>
                   ))}

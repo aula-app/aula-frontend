@@ -1,6 +1,4 @@
 import {
-  Backdrop,
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -10,6 +8,7 @@ import {
   MobileStepper,
   Typography,
 } from '@mui/material';
+
 import { Stack } from '@mui/system';
 import { localStorageGet } from '../../utils/localStorage';
 import { AppButton, AppIcon } from '../../components';
@@ -23,7 +22,7 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
  * url: /
  */
 const AskConsent = () => {
-  const [state, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const jwt_token = localStorageGet('token');
   const [data, setData] = useState([] as any[]);
   const [activeStep, setActiveStep] = useState(0);
@@ -43,7 +42,7 @@ const AskConsent = () => {
       ).json();
 
       // set state when the data received
-      if (data.count == 0) {
+      if (data.count === 0) {
         dispatch({ type: 'HAS_CONSENT', payload: true });
         navigate('/');
       } else {
@@ -53,7 +52,7 @@ const AskConsent = () => {
     };
 
     dataFetch();
-  }, []);
+  }, [dispatch, jwt_token, navigate]);
 
   // const revokeConsent = useCallback(
   //   async (text_id: number, text_idx: number) => {
@@ -112,7 +111,7 @@ const AskConsent = () => {
       }
       // await giveConsentReq();
     },
-    [data]
+    [data, jwt_token, navigate]
   );
 
   const handleNext = () => {

@@ -1,7 +1,5 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { AppLink } from '../../components';
 import { localStorageGet } from '../../utils/localStorage';
 import { useEffect, useState } from 'react';
 
@@ -10,7 +8,7 @@ import { useEffect, useState } from 'react';
  * url: /user
  */
 const UserView = () => {
-  const [data, setData] = useState([] as any[]);
+  const [, setData] = useState([] as any[]);
   const jwt_token = localStorageGet('token');
 
   useEffect(() => {
@@ -34,7 +32,7 @@ const UserView = () => {
     };
 
     dataFetch();
-    },[]);
+    },[jwt_token]);
 
   return (
     <Stack direction="column" spacing={2}>

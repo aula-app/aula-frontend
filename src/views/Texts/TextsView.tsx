@@ -1,18 +1,17 @@
-import { Typography, TextField, InputAdornment } from '@mui/material';
+import { Typography } from '@mui/material';
 import { FormContainer, TextFieldElement, SelectElement, useForm } from 'react-hook-form-mui';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Stack } from '@mui/system';
-import { DataGrid, GridSortModel, GridColDef, GridRowParams, GridActionsCellItem, GridValueGetterParams, GridToolbarContainer } from '@mui/x-data-grid';
-import { AppLink, AppIconButton, AppAlert, AppButton } from '../../components';
+import { DataGrid, GridSortModel, GridColDef, GridRowParams, GridActionsCellItem, GridToolbarContainer } from '@mui/x-data-grid';
+import { AppAlert, AppButton } from '../../components';
 import { CompositionDialog as AddUserDialog } from '../../components/dialogs'
 import { CompositionDialog as DeleteUserDialog } from '../../components/dialogs'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import { SelectChangeEvent } from '@mui/material/Select';
-import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../utils/form';
+import { useAppForm, SHARED_CONTROL_PROPS } from '../../utils/form';
 import { localStorageGet } from '../../utils/localStorage';
 import { useEffect, useState, useCallback } from 'react';
 import * as React from 'react';
@@ -57,7 +56,6 @@ interface FormStateValues {
 const TextsView = () => {
   const [openAddUserDialog, setAddUserDialog] = useState(false);
   const [openDeleteUserDialog, setDeleteUserDialog] = useState(false);
-  const [newUserData, setNewUserData] = useState(MESSAGE_INITIAL_VALUES);
   const [isLoading, setIsLoading] = useState(true);
 
   const [selectedUser, setSelectedUser] = useState(-1)
@@ -71,22 +69,22 @@ const TextsView = () => {
       field: 'last_update',
       sort: 'desc',
     },
-  ]); 
+  ]);
 
-  const [formState, setFormState, onFieldChange, fieldGetError, fieldHasError] = useAppForm({
+  const [formState, , , fieldGetError, fieldHasError] = useAppForm({
     validationSchema: VALIDATE_FORM_ADD_USER,
     initialValues: MESSAGE_INITIAL_VALUES as FormStateValues,
   });
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string>();
 
   const values = formState.values as FormStateValues;
   const jwt_token = localStorageGet('token');
-  const handleShowPasswordClick = useCallback(() => {
-    setShowPassword((oldValue) => !oldValue);
-  }, []);
 
   const handleCloseError = useCallback(() => setError(undefined), []);
+
+  const formContext = useForm<FormStateValues>({
+    defaultValues: MESSAGE_INITIAL_VALUES
+  });
 
   function Toolbar() {
     return (
@@ -116,7 +114,7 @@ const TextsView = () => {
       formContext.setValue('consent_text',editUser.consent_text)
       formContext.setValue('user_needs_to_consent',editUser.user_needs_to_consent)
     },
-    [],
+    [formContext],
   );
 
 
@@ -128,16 +126,7 @@ const TextsView = () => {
     [],
   );
 
-  const deleteUser =  React.useCallback(async () => {
-    const deletedUser = selectedUser
-    await requestDeleteUser(selectedUser)
-    const newData = data.filter(user => user.id !== deletedUser)
-    setData(newData)
-    setSelectedUser(-1)
-    setDeleteUserDialog(false)
-  }, [selectedUser])
-
-  const requestDeleteUser = async function (userId:number) {
+  const requestDeleteUser = React.useCallback(async function (userId:number) {
     const data = await (
         await fetch(
           '/api/controllers/delete_text.php',
@@ -157,7 +146,16 @@ const TextsView = () => {
         if (result) {
           setDeleteUserDialog(false)
         }
-  }
+  }, [jwt_token])
+
+  const deleteUser =  React.useCallback(async () => {
+    const deletedUser = selectedUser
+    await requestDeleteUser(selectedUser)
+    const newData = data.filter(user => user.id !== deletedUser)
+    setData(newData)
+    setSelectedUser(-1)
+    setDeleteUserDialog(false)
+  }, [data, selectedUser, requestDeleteUser])
 
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 50,
@@ -189,10 +187,6 @@ const TextsView = () => {
     setDeleteUserDialog(false)
     setSelectedUser(-1)
   }
-
-  const formContext = useForm<FormStateValues>({
-    defaultValues: MESSAGE_INITIAL_VALUES
-  });
 
   const submitUserForm = async () => {
     if (selectedEditUser !== -1) {
@@ -311,7 +305,7 @@ const TextsView = () => {
     };
 
     dataFetch();
-    },[paginationModel, sortModel]);
+    },[paginationModel, sortModel, jwt_token]);
 
   return (
     <Stack direction="column" spacing={2}>

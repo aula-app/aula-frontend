@@ -20,7 +20,7 @@ import { useAppStore } from '../store';
  * Also renders the "Private Layout" composition
  */
 const PrivateRoutes = () => {
-  const [state, dispatch] = useAppStore();
+  const [state] = useAppStore();
   const hasConsent = state.hasConsent;
   return (
     <Routes>

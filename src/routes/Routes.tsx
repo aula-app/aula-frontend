@@ -18,7 +18,7 @@ const Routes = () => {
   // const [state, dispatch] = useAppStore();
   // const isAuthenticated = state.isAuthenticated; // Variant 1
   const isAuthenticated = useIsAuthenticated(); // Variant 2
-  const [state, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   // const hasConsent = state.hasConsent;
 
   useEffect( () => {

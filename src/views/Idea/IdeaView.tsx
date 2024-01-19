@@ -1,7 +1,4 @@
-import { Typography } from '@mui/material';
-import { Stack } from '@mui/system';
-import { Card, CardActions, CardContent, CardHeader, Divider, Grid } from '@mui/material';
-import { AppButton } from '../../components';
+import { Card, CardContent, CardHeader, Grid } from '@mui/material';
 import { AppLink } from '../../components';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
@@ -22,8 +19,8 @@ const IdeaView = () => {
         await fetch(
           "/api/idea.php",
               {
-                method: 'POST', 
-                headers: {                   
+                method: 'POST',
+                headers: {
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(
@@ -38,20 +35,23 @@ const IdeaView = () => {
     };
 
     dataFetch();
-    },[]);
+    },[routeParams.idea_id]);
 
 
   return (
     <Grid container spacing={4}>
-       {data.map((d,i) => 
+       {data.map((d,i) =>
       <Grid item xs={12} md={4}>
 
       <AppLink to={ `/room/${ d.id }`} >
         <Card>
           <CardHeader title={d.room_name}/>
           <CardContent>
-          <img src={ ( i % 2 == 0)?'/img/aula.png':'img/aula-room.png' }/>
-          {d.description_public}
+            <img 
+              alt={'image number ' + i}
+              src={ (i % 2 === 0) ? '/img/aula.png':'img/aula-room.png' }
+              />
+            {d.description_public}
           </CardContent>
         </Card>
 

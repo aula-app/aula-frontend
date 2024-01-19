@@ -1,7 +1,6 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { AppLink } from '../../components';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 
 

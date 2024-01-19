@@ -98,7 +98,7 @@ const LoginView = () => {
           required
           label="Username"
           name="username"
-          inputProps={{ autocapitalize: 'none' }}
+          inputProps={{ autoCapitalize: 'none' }}
           value={values.username}
           error={fieldHasError('username')}
           helperText={fieldGetError('username') || ' '}
@@ -136,7 +136,7 @@ const LoginView = () => {
             {error}
           </AppAlert>
         ) : null}
-        <AppButton type="submit" color="primary" disabled={!formState.isValid} sx={{ mx: 0 }}>
+        <AppButton type="submit" color="primary" disabled={!formState.isValid} sx={{ mx: 0, mt: 0 }}>
           Sign In
         </AppButton>
         <Grid container justifyContent="end" alignItems="center">

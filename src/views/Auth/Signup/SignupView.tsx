@@ -108,10 +108,6 @@ const SignupView = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
   const values = formState.values as FormStateValues; // Typed alias to formState.values as the "Source of Truth"
 
   useEffect(() => {

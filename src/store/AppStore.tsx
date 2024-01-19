@@ -44,9 +44,9 @@ const AppContext = createContext<AppContextReturningType>([INITIAL_APP_STATE, ()
 const AppStoreProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const previousDarkMode = Boolean(localStorageGet('darkMode'));
-  const darkMode = (previousDarkMode != undefined)?previousDarkMode:prefersDarkMode
+  const darkMode = (previousDarkMode !== undefined)?previousDarkMode:prefersDarkMode
   const token = localStorageGet('token')
-  const tokenExists = Boolean(token != undefined);
+  const tokenExists = Boolean(token !== undefined);
 
   const initialState: AppStoreState = {
     ...INITIAL_APP_STATE,

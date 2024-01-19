@@ -17,7 +17,7 @@ if (displayPhases.includes('wild')) displayPhases.splice(displayPhases.indexOf('
  * url: /
  */
 const IdeaBox = ({ noCategories = false }: IdeaBoxProps) => {
-  const CurrentIcon = phases.wild.icon;
+  //const CurrentIcon = phases.wild.icon;
   const params = useParams();
 
   return (

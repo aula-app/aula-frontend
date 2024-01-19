@@ -1,17 +1,16 @@
-import { Typography, TextField, InputAdornment } from '@mui/material';
+import { Typography, InputAdornment } from '@mui/material';
 import { FormContainer, TextFieldElement, SelectElement, useForm } from 'react-hook-form-mui';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Stack } from '@mui/system';
-import { DataGrid, GridSortModel, GridColDef, GridRowParams, GridActionsCellItem, GridValueGetterParams, GridToolbarContainer } from '@mui/x-data-grid';
-import { AppLink, AppIconButton, AppAlert, AppButton } from '../../components';
+import { DataGrid, GridSortModel, GridColDef, GridRowParams, GridActionsCellItem, GridToolbarContainer } from '@mui/x-data-grid';
+import { AppIconButton, AppAlert, AppButton } from '../../components';
 import { CompositionDialog as AddUserDialog } from '../../components/dialogs'
 import { CompositionDialog as DeleteUserDialog } from '../../components/dialogs'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import { SelectChangeEvent } from '@mui/material/Select';
 import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../utils/form';
 import { localStorageGet } from '../../utils/localStorage';
 import { useEffect, useState, useCallback } from 'react';
@@ -71,7 +70,6 @@ interface FormStateValues {
 const UsersView = () => {
   const [openAddUserDialog, setAddUserDialog] = useState(false);
   const [openDeleteUserDialog, setDeleteUserDialog] = useState(false);
-  const [newUserData, setNewUserData] = useState(USER_INITIAL_VALUES);
   const [isLoading, setIsLoading] = useState(true);
 
   const [selectedUser, setSelectedUser] = useState(-1)
@@ -85,9 +83,13 @@ const UsersView = () => {
       field: 'last_update',
       sort: 'desc',
     },
-  ]); 
+  ]);
 
-  const [formState, setFormState, onFieldChange, fieldGetError, fieldHasError] = useAppForm({
+  const formContext = useForm<FormStateValues>({
+    defaultValues: USER_INITIAL_VALUES
+  });
+
+  const [formState, , , fieldGetError, fieldHasError] = useAppForm({
     validationSchema: VALIDATE_FORM_ADD_USER,
     initialValues: USER_INITIAL_VALUES as FormStateValues,
   });
@@ -133,7 +135,7 @@ const UsersView = () => {
       formContext.setValue('status',editUser.status)
       formContext.setValue('userlevel',(editUser.userlevel)?editUser.userlevel:10)
     },
-    [],
+    [formContext]
   );
 
 
@@ -145,16 +147,7 @@ const UsersView = () => {
     [],
   );
 
-  const deleteUser =  React.useCallback(async () => {
-    const deletedUser = selectedUser
-    await requestDeleteUser(selectedUser)
-    const newData = data.filter(user => user.id !== deletedUser)
-    setData(newData)
-    setSelectedUser(-1)
-    setDeleteUserDialog(false)
-  }, [selectedUser])
-
-  const requestDeleteUser = async function (userId:number) {
+  const requestDeleteUser = React.useCallback(async function (userId:number) {
     const data = await (
         await fetch(
           process.env.REACT_APP_API_URL + '/api/controllers/delete_user.php',
@@ -174,7 +167,16 @@ const UsersView = () => {
         if (result) {
           setDeleteUserDialog(false)
         }
-  }
+  }, [jwt_token])
+
+  const deleteUser =  React.useCallback(async () => {
+    const deletedUser = selectedUser
+    await requestDeleteUser(selectedUser)
+    const newData = data.filter(user => user.id !== deletedUser)
+    setData(newData)
+    setSelectedUser(-1)
+    setDeleteUserDialog(false)
+  }, [data, selectedUser, requestDeleteUser])
 
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 50,
@@ -207,11 +209,6 @@ const UsersView = () => {
     setDeleteUserDialog(false)
     setSelectedUser(-1)
   }
-
-  const formContext = useForm<FormStateValues>({
-    defaultValues: USER_INITIAL_VALUES
-  });
-
   const submitUserForm = async () => {
     if (selectedEditUser !== -1) {
       await submitEditUser();
@@ -233,8 +230,6 @@ const UsersView = () => {
   }
 
   const submitNewUser = async () => {
-    const values = formContext.getValues();
-    const requestResult = await requestAddNewUser(values);
     formContext.reset();
     onAddUserDialogClose()
   }
@@ -265,30 +260,30 @@ const UsersView = () => {
         return data;
   }
 
-  const requestAddNewUser = async (formValues:FormStateValues) => {
-    const data = await (
-        await fetch(
-          process.env.REACT_APP_API_URL + '/api/controllers/add_user.php',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + jwt_token
-            },
-            body: JSON.stringify(
-              {'username': formValues.username,
-               'password': formValues.password,
-               'realname': formValues.realname,
-               'displayname': formValues.displayname,
-               'email': formValues.email,
-               'userlevel': formValues.userlevel,
-               'about_me': formValues.about_me,
-               'position': formValues.position,
-               })
-          })).json();
+  // const requestAddNewUser = async (formValues:FormStateValues) => {
+  //   const data = await (
+  //       await fetch(
+  //         process.env.REACT_APP_API_URL + '/api/controllers/add_user.php',
+  //         {
+  //           method: 'POST',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             'Authorization': 'Bearer ' + jwt_token
+  //           },
+  //           body: JSON.stringify(
+  //             {'username': formValues.username,
+  //              'password': formValues.password,
+  //              'realname': formValues.realname,
+  //              'displayname': formValues.displayname,
+  //              'email': formValues.email,
+  //              'userlevel': formValues.userlevel,
+  //              'about_me': formValues.about_me,
+  //              'position': formValues.position,
+  //              })
+  //         })).json();
 
-        return data;
-  }
+  //       return data;
+  // }
 
   const changePage = async (page:any) => {
     setPaginationModel(page)
@@ -334,7 +329,7 @@ const UsersView = () => {
     };
 
     dataFetch();
-    },[paginationModel, sortModel]);
+    },[paginationModel, sortModel, jwt_token]);
 
   return (
     <Stack direction="column" spacing={2}>
@@ -448,7 +443,7 @@ const UsersView = () => {
             <MenuItem value={50}>Admin</MenuItem>
             <MenuItem value={60}>Tech Admin</MenuItem>
           </SelectElement>
-          { (selectedEditUser == -1)?
+          { (selectedEditUser === -1)?
           <TextFieldElement
             required
             type={showPassword ? 'text' : 'password'}

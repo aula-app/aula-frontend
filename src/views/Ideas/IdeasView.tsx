@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { AppLink } from '../../components';
 import { useEffect, useState } from 'react';
 
@@ -11,14 +11,14 @@ import { useEffect, useState } from 'react';
 const IdeasView = () => {
   const [data, setData] = useState([] as any[]);
   const columns:GridColDef[] = [
-    { field: 'content', 
+    { field: 'content',
       headerName: 'Content',
       width: 600,
       renderCell: (params) => <AppLink to={'/idea/' +params.row.id}>{params.row.content}</AppLink>
     },
     { field: 'sum_votes', headerName: 'Votes', width: 260},
     { field: 'sum_likes', headerName: 'Like', width: 260},
-  ] 
+  ]
 
   useEffect(() => {
     // fetch data
