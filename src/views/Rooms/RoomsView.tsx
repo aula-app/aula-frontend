@@ -20,7 +20,7 @@ const RoomsView = () => {
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          process.env.REACT_APP_API_URL + "/api/controllers/rooms.php"
+          import.meta.env.VITE_APP_API_URL + "/api/controllers/rooms.php"
         )
       ).json();
 

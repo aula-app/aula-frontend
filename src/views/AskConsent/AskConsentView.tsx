@@ -32,7 +32,7 @@ const AskConsent = () => {
     // fetch data
     const dataFetch = async () => {
       const data = await (
-        await fetch(process.env.REACT_APP_API_URL + '/api/controllers/get_necessary_consents.php', {
+        await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/get_necessary_consents.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ const AskConsent = () => {
   //   async (text_id: number, text_idx: number) => {
   //     const revokeConsentReq = async () => {
   //       const data = await (
-  //         await fetch(process.env.REACT_APP_API_URL + '/api/controllers/revoke_consent.php', {
+  //         await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/revoke_consent.php', {
   //           method: 'POST',
   //           headers: {
   //             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const AskConsent = () => {
 
       const giveConsentReq = async () => {
         const data = await (
-          await fetch(process.env.REACT_APP_API_URL + '/api/controllers/give_consent.php', {
+          await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/give_consent.php', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

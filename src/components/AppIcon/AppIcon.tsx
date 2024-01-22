@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import { ReactComponent as LogoIcon } from './logo.svg';
+import LogoIcon from './logo.svg?react';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import CloseIcon from '@mui/icons-material/Close';

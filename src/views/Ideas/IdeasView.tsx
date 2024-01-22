@@ -25,7 +25,7 @@ const IdeasView = () => {
     const dataFetch = async () => {
       const data = await (
         await fetch(
-          process.env.REACT_APP_API_URL + "/api/controllers/ideas.php"
+          import.meta.env.VITE_APP_API_URL + "/api/controllers/ideas.php"
         )
       ).json();
 

@@ -6,9 +6,9 @@ export const IS_WEBWORKER =
 /* eslint-enable no-restricted-globals */
 
 export function getCurrentVersion(): string {
-  return process.env?.npm_package_version ?? process.env.REACT_APP_VERSION ?? 'unknown';
+  return import.meta.env?.npm_package_version ?? import.meta.env.VITE_APP_VERSION ?? 'unknown';
 }
 
 export function getCurrentEnvironment(): string {
-  return process.env?.NODE_ENV ?? 'development';
+  return import.meta.env?.NODE_ENV ?? 'development';
 }
