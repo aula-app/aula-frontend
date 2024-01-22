@@ -1,14 +1,14 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Card, CardHeader, CardContent, TextField } from '@mui/material';
-import { SHARED_CONTROL_PROPS } from '../../../utils/form';
-import { AppAlert, AppForm } from '../../../components';
+import { SHARED_CONTROL_PROPS } from '@/utils/form';
+import { AppAlert, AppForm } from '@/components';
 
 const TOKEN_QUERY_PARAM = 'token';
 
 /**
  * Renders "Confirm Email" view for Signup flow
- * url: /auth/signup/confirm-email
+ * url: /signup/confirm-email
  */
 const ConfirmEmailView = () => {
   const [email, setEmail] = useState<string>('');

@@ -1,7 +1,7 @@
 import { SyntheticEvent, useCallback, useState } from 'react';
 import { TextField, Typography, Stack } from '@mui/material';
-import { AppButton, AppAlert, AppForm } from '../../../components';
-import { useAppForm, SHARED_CONTROL_PROPS } from '../../../utils/form';
+import { AppButton, AppAlert, AppForm } from '@/components';
+import { useAppForm, SHARED_CONTROL_PROPS } from '@/utils/form';
 
 const VALIDATE_FORM_RECOVERY_PASSWORD = {
   email: {
@@ -20,7 +20,7 @@ interface Props {
 
 /**
  * Renders "Recover Password" view for Login flow
- * url: /uth/recovery/password
+ * url: /recovery/password
  * @param {string} [props.email] - pre-populated email in case the user already enters it
  */
 const RecoveryPasswordView = ({ email = '' }: Props) => {

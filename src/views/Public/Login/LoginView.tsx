@@ -8,10 +8,10 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { useAppStore } from '../../../store';
-import { localStorageSet } from '../../../utils/localStorage';
-import { AppButton, AppLink, AppIconButton, AppAlert, AppForm } from '../../../components';
-import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../../utils/form';
+import { useAppStore } from '@/store';
+import { localStorageSet } from '@/utils/localStorage';
+import { AppButton, AppLink, AppIconButton, AppAlert, AppForm } from '@/components';
+import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '@/utils/form';
 
 const VALIDATE_FORM_LOGIN = {
   username: {
@@ -34,12 +34,12 @@ interface FormStateValues {
 
 /**
  * Renders "Login" view for Login flow
- * url: /auth/login/email
+ * url: /login/email
  */
 const LoginView = () => {
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
-  const [formState, , /* setFormState */ onFieldChange, fieldGetError, fieldHasError] = useAppForm({
+  const [formState, , onFieldChange, fieldGetError, fieldHasError] = useAppForm({
     validationSchema: VALIDATE_FORM_LOGIN,
     initialValues: { username: '', password: '' } as FormStateValues,
   });
@@ -140,7 +140,7 @@ const LoginView = () => {
           Sign In
         </AppButton>
         <Grid container justifyContent="end" alignItems="center">
-          <Button variant="text" color="secondary" component={AppLink} to="/auth/recovery/password">
+          <Button variant="text" color="secondary" component={AppLink} to="/recovery/password">
             Forgot Password?
           </Button>
         </Grid>

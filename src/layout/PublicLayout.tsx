@@ -1,43 +1,14 @@
 import { Fragment, FunctionComponent, PropsWithChildren } from 'react';
-import { Button, Divider, Grid, Stack } from '@mui/material/';
-import { AppLink, ErrorBoundary } from '../components';
-import { Box } from '@mui/joy';
+import { Button, Divider, Grid, Box, Stack } from '@mui/material/';
+import { AppLink, ErrorBoundary } from '@/components';
 import { useLocation } from 'react-router-dom';
 
 const TITLE_PUBLIC = 'aula';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
+  document.title = TITLE_PUBLIC; // Also Update Tab Title
+
   const location = useLocation();
-
-  const title = TITLE_PUBLIC;
-  document.title = title; // Also Update Tab Title
-
-  function toggleBackToSignIn() {
-    if (location.pathname !== '/') {
-      return (
-        <Button color="secondary" component={AppLink} to="/">
-          &lt; Sign In
-        </Button>
-      )
-    }
-    return (
-      <Box height="2.25rem"></Box>
-    )
-  }
-
-  function toggleSignUp() {
-    if (location.pathname === '/auth/signup') {
-      return;
-    }
-    return (
-      <Fragment>
-        Need an account?
-        <Button variant="text" color="primary" component={AppLink} to="/auth/signup">
-          Sign Up
-        </Button>
-      </Fragment>
-    );
-  }
 
   return (
     <Stack
@@ -82,6 +53,33 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       <Box sx={{flexGrow: 1}}></Box>
     </Stack>
   );
+
+  function toggleBackToSignIn() {
+    if (location.pathname !== '/') {
+      return (
+        <Button color="secondary" component={AppLink} to="/">
+          &lt; Sign In
+        </Button>
+      )
+    }
+    return (
+      <Box height="2.25rem"></Box>
+    )
+  }
+
+  function toggleSignUp() {
+    if (location.pathname === '/signup') {
+      return;
+    }
+    return (
+      <Fragment>
+        Need an account?
+        <Button variant="text" color="primary" component={AppLink} to="/signup">
+          Sign Up
+        </Button>
+      </Fragment>
+    );
+  }
 };
 
 export default PublicLayout;

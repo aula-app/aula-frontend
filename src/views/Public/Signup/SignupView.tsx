@@ -14,9 +14,9 @@ import {
   Box,
   Button,
 } from '@mui/material';
-import { useAppStore } from '../../../store';
-import { AppButton, AppIconButton, AppAlert, AppForm } from '../../../components';
-import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '../../../utils/form';
+import { useAppStore } from '@/store';
+import { AppButton, AppIconButton, AppAlert, AppForm } from '@/components';
+import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '@/utils/form';
 
 const VALIDATE_FORM_SIGNUP = {
   email: {
@@ -74,7 +74,7 @@ interface FormStateValues {
 
 /**
  * Renders "Signup" view
- * url: /auth/signup
+ * url: /signup
  */
 const SignupView = () => {
   const navigate = useNavigate();

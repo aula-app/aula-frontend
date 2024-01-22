@@ -5,7 +5,7 @@ import ConfirmEmailView from './ConfirmEmailView';
 
 /**
  * Routes for "Signup" flow
- * url: /auth/signup/*
+ * url: /signup/*
  */
 const SignupRoutes = () => {
   return (
