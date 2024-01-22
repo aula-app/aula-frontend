@@ -1,6 +1,6 @@
 import { Fragment, FunctionComponent, PropsWithChildren } from 'react';
 import { Button, Divider, Grid, Box, Stack } from '@mui/material/';
-import { AppLink, ErrorBoundary } from '../components';
+import { AppLink, ErrorBoundary } from '@/components';
 import { useLocation } from 'react-router-dom';
 
 const TITLE_PUBLIC = 'aula';
