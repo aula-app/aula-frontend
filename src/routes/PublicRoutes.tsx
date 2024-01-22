@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
-import AuthRoutes from '../views/Auth';
+import AuthRoutes from '../views/Public';
 import { NotFoundView } from '../views';
-import LoginView from '../views/Auth/Login/LoginView';
+import LoginView from '../views/Public/Login/LoginView';
 import AboutView from '../views/About';
 
 /**
