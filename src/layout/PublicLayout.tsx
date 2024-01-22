@@ -1,16 +1,14 @@
 import { Fragment, FunctionComponent, PropsWithChildren } from 'react';
-import { Button, Divider, Grid, Stack } from '@mui/material/';
+import { Button, Divider, Grid, Box, Stack } from '@mui/material/';
 import { AppLink, ErrorBoundary } from '../components';
-import { Box } from '@mui/joy';
 import { useLocation } from 'react-router-dom';
 
 const TITLE_PUBLIC = 'aula';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
-  const location = useLocation();
+  document.title = TITLE_PUBLIC; // Also Update Tab Title
 
-  const title = TITLE_PUBLIC;
-  document.title = title; // Also Update Tab Title
+  const location = useLocation();
 
   function toggleBackToSignIn() {
     if (location.pathname !== '/') {
