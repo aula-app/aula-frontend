@@ -10,33 +10,6 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
   const location = useLocation();
 
-  function toggleBackToSignIn() {
-    if (location.pathname !== '/') {
-      return (
-        <Button color="secondary" component={AppLink} to="/">
-          &lt; Sign In
-        </Button>
-      )
-    }
-    return (
-      <Box height="2.25rem"></Box>
-    )
-  }
-
-  function toggleSignUp() {
-    if (location.pathname === '/auth/signup') {
-      return;
-    }
-    return (
-      <Fragment>
-        Need an account?
-        <Button variant="text" color="primary" component={AppLink} to="/auth/signup">
-          Sign Up
-        </Button>
-      </Fragment>
-    );
-  }
-
   return (
     <Stack
       bgcolor="#fff"
@@ -80,6 +53,33 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       <Box sx={{flexGrow: 1}}></Box>
     </Stack>
   );
+
+  function toggleBackToSignIn() {
+    if (location.pathname !== '/') {
+      return (
+        <Button color="secondary" component={AppLink} to="/">
+          &lt; Sign In
+        </Button>
+      )
+    }
+    return (
+      <Box height="2.25rem"></Box>
+    )
+  }
+
+  function toggleSignUp() {
+    if (location.pathname === '/auth/signup') {
+      return;
+    }
+    return (
+      <Fragment>
+        Need an account?
+        <Button variant="text" color="primary" component={AppLink} to="/auth/signup">
+          Sign Up
+        </Button>
+      </Fragment>
+    );
+  }
 };
 
 export default PublicLayout;
