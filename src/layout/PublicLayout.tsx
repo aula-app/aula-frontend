@@ -68,13 +68,13 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   }
 
   function toggleSignUp() {
-    if (location.pathname === '/auth/signup') {
+    if (location.pathname === '/signup') {
       return;
     }
     return (
       <Fragment>
         Need an account?
-        <Button variant="text" color="primary" component={AppLink} to="/auth/signup">
+        <Button variant="text" color="primary" component={AppLink} to="/signup">
           Sign Up
         </Button>
       </Fragment>

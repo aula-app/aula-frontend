@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
-import AuthRoutes from '../views/Public';
 import { NotFoundView } from '../views';
-import LoginView from '../views/Public/Login/LoginView';
-import AboutView from '../views/About';
+import LoginRoutes from '@/views/Public/Login';
+import SignupRoutes from '@/views/Public/Signup';
+import RecoveryRoutes from '@/views/Public/Recovery';
 
 /**
  * List of routes available only for anonymous users
@@ -10,9 +10,10 @@ import AboutView from '../views/About';
 const PublicRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<LoginView />} />
-      <Route path="auth/*" element={<AuthRoutes />} />
-      <Route path="about" element={<AboutView />} />,
+      <Route path="/" element={<LoginRoutes />} />
+      <Route path="signup/*" element={<SignupRoutes />} />
+      <Route path="login/*" element={<LoginRoutes />} />
+      <Route path="recovery/*" element={<RecoveryRoutes />} />
       <Route path="*" element={<NotFoundView />} />
     </Routes>
   );
