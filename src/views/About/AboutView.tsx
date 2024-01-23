@@ -1,5 +1,5 @@
 import { Card, CardActions, CardContent, CardHeader, Divider, Grid, Typography } from '@mui/material';
-import { AppButton, AppLink, AppIconButton } from '../../components';
+import { AppButton, AppLink, AppIconButton } from '@/components';
 import DialogsSection from './DialogsSection';
 
 /**

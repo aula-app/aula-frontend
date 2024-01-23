@@ -1,6 +1,6 @@
 import { Box, Button, Stack } from '@mui/material';
 import { FunctionComponent } from 'react';
-import phases from '../../utils/phases';
+import phases from '@/utils/phases';
 
 interface Props {
   variant: keyof typeof phases; // Phase's name

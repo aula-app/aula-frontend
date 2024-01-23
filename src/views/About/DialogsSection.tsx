@@ -1,11 +1,11 @@
 import { ChangeEvent, useState, ReactNode, useCallback } from 'react';
 import { Card, CardHeader, Grid, TextField } from '@mui/material';
-import { AppButton, AppIconButton } from '../../components';
+import { AppButton, AppIconButton } from '@/components';
 import {
   CommonDialog as MessageDialog,
   CommonDialog as ConfirmationDialog,
   CompositionDialog as EmailEditDialog,
-} from '../../components/dialogs';
+} from '@/components/dialogs';
 
 /**
  * Renders demo section for Dialogs

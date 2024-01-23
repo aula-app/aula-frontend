@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { localStorageGet } from '../../utils/localStorage';
+import { localStorageGet } from '@/utils/localStorage';
 import { useEffect, useState } from 'react';
 
 

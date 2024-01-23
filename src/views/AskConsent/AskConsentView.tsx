@@ -10,9 +10,9 @@ import {
 } from '@mui/material';
 
 import { Stack } from '@mui/system';
-import { localStorageGet } from '../../utils/localStorage';
-import { AppButton, AppIcon } from '../../components';
-import { useAppStore } from '../../store';
+import { localStorageGet } from '@/utils/localStorage';
+import { AppButton, AppIcon } from '@/components';
+import { useAppStore } from '@/store';
 import { useEffect, useState, useCallback, Fragment } from 'react';
 import { useNavigate } from 'react-router';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';

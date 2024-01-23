@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
-import { IdeaBox } from '../../components/IdeaBox';
-import { IdeaCards } from '../../components/IdeaCards';
+import { IdeaBox } from '@/components/IdeaBox';
+import { IdeaCards } from '@/components/IdeaCards';
 
 /** * Renders "IdeasBox" view
  * url: /room/:rommId/ideas-box/:boxId

@@ -3,10 +3,10 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { Stack } from '@mui/system';
 import { DataGrid, GridColDef, GridToolbarContainer } from '@mui/x-data-grid';
-import { AppAlert, AppButton } from '../../components';
-import { CompositionDialog as AddGroupDialog } from '../../components/dialogs'
-import { useAppForm, SHARED_CONTROL_PROPS } from '../../utils/form';
-import { localStorageGet } from '../../utils/localStorage';
+import { AppAlert, AppButton } from '@/components';
+import { CompositionDialog as AddGroupDialog } from '@/components/dialogs'
+import { useAppForm, SHARED_CONTROL_PROPS } from '@/utils/form';
+import { localStorageGet } from '@/utils/localStorage';
 import { useEffect, useState, useCallback } from 'react';
 
 const VALIDATE_FORM_ADD_GROUP = {

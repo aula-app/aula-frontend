@@ -3,9 +3,9 @@ import { TabContext, TabPanel } from '@mui/lab';
 import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { localStorageGet } from '../../utils';
-import { WildIdea } from '../../components/WildIdea';
-import { IdeaBox } from '../../components/IdeaBox';
+import { localStorageGet } from '@/utils';
+import { WildIdea } from '@/components/WildIdea';
+import { IdeaBox } from '@/components/IdeaBox';
 
 function a11yProps(index: number) {
   return {
