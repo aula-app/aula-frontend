@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, Grid } from '@mui/material';
-import { AppLink } from '../../components';
+import { AppLink } from '@/components';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 
