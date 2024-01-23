@@ -112,8 +112,8 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       sx={{
         height: '100vh',
         paddingTop: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT,
-        paddingLeft: sidebarOpen && SIDEBAR_DESKTOP_ANCHOR.includes('left') ? SIDEBAR_WIDTH : 0,
-        paddingRight: sidebarOpen && SIDEBAR_DESKTOP_ANCHOR.includes('right') ? SIDEBAR_WIDTH : 0,
+        paddingLeft: 0,
+        paddingRight: 0,
       }}
       bgcolor={blueGrey[50]}
     >
