@@ -1,12 +1,12 @@
 import { FunctionComponent, useCallback, MouseEvent } from 'react';
 import { Stack, Divider, Drawer, DrawerProps, FormControlLabel, Switch, Tooltip } from '@mui/material';
-import { AppIconButton } from '../../components';
-import { useAppStore } from '../../store/AppStore';
-import { LinkToPage } from '../../utils/type';
-import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '../../hooks';
+import { AppIconButton } from '@/components';
+import { useAppStore } from '@/store/AppStore';
+import { LinkToPage } from '@/utils/type';
+import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
 import SideBarNavList from './SideBarNavList';
 import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../config';
-import UserInfo from '../../components/UserInfo';
+import UserInfo from '@/components/UserInfo';
 
 interface Props extends Pick<DrawerProps, 'anchor' | 'className' | 'open' | 'variant' | 'onClose'> {
   items: Array<LinkToPage>;
