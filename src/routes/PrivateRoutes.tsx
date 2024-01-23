@@ -1,18 +1,18 @@
 import { Route, Routes } from 'react-router-dom';
-import { NotFoundView } from '../views';
-import AboutView from '../views/About';
-import { WelcomeView } from '../views/Welcome';
-import { RoomsView } from '../views/Rooms';
-import { RoomView } from '../views/Room';
-import { GroupsView } from '../views/Groups';
-import { IdeaView } from '../views/Idea';
-import { IdeasView } from '../views/Ideas';
-import { IdeasBoxView } from '../views/IdeasBox';
-import { UserView } from '../views/User';
-import { UsersView } from '../views/Users';
-import { TextsView } from '../views/Texts';
-import { AskConsentView } from '../views/AskConsent';
-import { useAppStore } from '../store';
+import { NotFoundView } from '@/views';
+import AboutView from '@/views/About';
+import { WelcomeView } from '@/views/Welcome';
+import { RoomsView } from '@/views/Rooms';
+import { RoomView } from '@/views/Room';
+import { GroupsView } from '@/views/Groups';
+import { IdeaView } from '@/views/Idea';
+import { IdeasView } from '@/views/Ideas';
+import { IdeasBoxView } from '@/views/IdeasBox';
+import { UserView } from '@/views/User';
+import { UsersView } from '@/views/Users';
+import { TextsView } from '@/views/Texts';
+import { AskConsentView } from '@/views/AskConsent';
+import { useAppStore } from '@/store';
 
 
 /**
