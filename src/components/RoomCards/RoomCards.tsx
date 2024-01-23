@@ -1,9 +1,9 @@
 import { CardMedia, Stack, Typography, capitalize } from '@mui/material';
 import { Card, CardContent, Grid } from '@mui/material';
-import { AppLink } from '../../components';
+import { AppLink } from '@/components';
 import { useEffect, useState } from 'react';
 import { PhaseButton } from '../PhaseButton';
-import phases from '../../utils/phases';
+import phases from '@/utils/phases';
 
 const displayPhases = Object.keys(Object.freeze(phases)) as Array<keyof typeof phases>;
 if(displayPhases.includes('success')) displayPhases.splice(displayPhases.indexOf('success'), 1);
