@@ -1,4 +1,4 @@
-import { localStorageSet } from '../utils/localStorage';
+import { localStorageSet } from '@/utils/localStorage';
 import { AppStoreState } from './AppStore';
 
 /**
