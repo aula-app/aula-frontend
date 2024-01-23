@@ -9,7 +9,7 @@ import {
 } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppReducer from './AppReducer';
-import { localStorageGet } from '../utils/localStorage';
+import { localStorageGet } from '@/utils/localStorage';
 
 /**
  * AppState structure and initial values
