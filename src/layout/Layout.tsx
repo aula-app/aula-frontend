@@ -1,5 +1,5 @@
 import { FunctionComponent, PropsWithChildren } from 'react';
-import { useIsAuthenticated } from '../hooks/auth';
+import { useIsAuthenticated } from '@/hooks/auth';
 import PrivateLayout from './PrivateLayout';
 import PublicLayout from './PublicLayout';
 
