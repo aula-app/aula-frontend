@@ -1,7 +1,7 @@
 import { CardMedia, Chip, Stack, Typography } from '@mui/material';
 import { Card, CardContent } from '@mui/material';
 import { AppLink } from '..';
-import phases from '../../utils/phases';
+import phases from '@/utils/phases';
 import { useParams } from 'react-router-dom';
 
 interface IdeaBoxProps {
