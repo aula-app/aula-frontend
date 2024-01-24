@@ -68,11 +68,10 @@ const LoginView = () => {
         ).json();
 
         const result = data.success; // await api.auth.loginWithEmail(values);
-        if (result) {
-          localStorageSet('token', data['JWT']);
-        }
 
-        if (!result) {
+        if (result && result === true) {
+          localStorageSet('token', data['JWT']);
+        } else {
           setError('Please check email and password');
           return;
         }
