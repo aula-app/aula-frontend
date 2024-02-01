@@ -13,7 +13,6 @@ import { UsersView } from '@/views/Users';
 import { TextsView } from '@/views/Texts';
 import { AskConsentView } from '@/views/AskConsent';
 import { useAppStore } from '@/store';
-import DevView from '@/views/Dev';
 
 
 /**
@@ -37,7 +36,6 @@ const PrivateRoutes = () => {
       <Route path="texts" element={(!hasConsent)?<AskConsentView/>:<TextsView />} />,
       <Route path="users" element={(!hasConsent)?<AskConsentView/>:<UsersView />} />,
       <Route path="idea/:ideaId" element={(!hasConsent)?<AskConsentView/>:<IdeaView />} />,
-      <Route path="dev/*" element={<DevView />} />,
       <Route path="*" element={(!hasConsent)?<AskConsentView/>:<NotFoundView />} />
     </Routes>
   );

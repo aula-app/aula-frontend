@@ -18,7 +18,7 @@ const CompositionDialog: FunctionComponent<Props> = ({
   actions,
   open = false, // Don't show dialog by default
   children = null,
-  content = null,
+  dialogContent = null,
   title = 'Missing title...',
   onClose,
   ...restOfProps
@@ -44,7 +44,7 @@ const CompositionDialog: FunctionComponent<Props> = ({
         {/* Box is temporary fix for https://github.com/mui-org/material-ui/issues/27851 */}
         {/* TODO: verify do we still need this fix */}
         <Box pt={1}>
-          {content}
+          {dialogContent}
           {children}
         </Box>
       </DialogContent>
