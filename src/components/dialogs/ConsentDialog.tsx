@@ -88,7 +88,7 @@ const ConsentDialog = (props: any) => {
           </Typography>
         </Stack>
       </Stack>
-      {data.map((text, i) => (
+      {props.data.map((text, i) => (
         <Fragment key={i}>
           {i === activeStep && (
             <Fragment>
@@ -108,10 +108,10 @@ const ConsentDialog = (props: any) => {
           )}
         </Fragment>
       ))}
-      {data.length > 1 && (
+      {props.data.length > 1 && (
         <MobileStepper
           variant="text"
-          steps={data.length}
+          steps={props.data.length}
           position="static"
           activeStep={activeStep}
           sx={{ bgcolor: 'transparent', p: 1 }}

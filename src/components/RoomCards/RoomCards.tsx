@@ -22,7 +22,6 @@ const RoomCards = () => {
       const data = await (await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/rooms.php')).json();
 
       // set state when the data received
-      console.log(data);
       setData(data.data);
     };
 
