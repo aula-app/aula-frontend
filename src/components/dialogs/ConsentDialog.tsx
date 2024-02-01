@@ -21,7 +21,7 @@ import { localStorageGet } from '@/utils';
  * @component ConsentDialog
  */
 
-const ConsentDialog = () => {
+const ConsentDialog = (props: any) => {
   const jwt_token = localStorageGet('token');
   const [activeStep, setActiveStep] = useState(0);
   const [data, setData] = useState([] as any[]);
@@ -32,7 +32,7 @@ const ConsentDialog = () => {
       if (text_idx === data.length - 1) setActiveStep(() => text_idx - 1);
 
       const giveConsentReq = async () => {
-        const data = await (
+        const getData = await (
           await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/give_consent.php', {
             method: 'POST',
             headers: {
@@ -43,7 +43,7 @@ const ConsentDialog = () => {
           })
         ).json();
 
-        return data;
+        return getData;
       };
 
       const giveConsentResponse = await giveConsentReq();
