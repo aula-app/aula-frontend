@@ -16,6 +16,13 @@ import { useNavigate } from 'react-router';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { localStorageGet } from '@/utils';
 
+interface ConsentText {
+  id: number;
+  headline: string;
+  body: string;
+  consent_text: string;
+}
+
 /**
  * Makes an Acknowledgement requiring consent inside the Dialog.
  * @component ConsentDialog
@@ -24,7 +31,7 @@ import { localStorageGet } from '@/utils';
 const ConsentDialog = (props: any) => {
   const jwt_token = localStorageGet('token');
   const [activeStep, setActiveStep] = useState(0);
-  const [data, setData] = useState([] as any[]);
+  const [data, setData] = useState([] as ConsentText[]);
   const navigate = useNavigate();
 
   const giveConsent = useCallback(
@@ -88,7 +95,7 @@ const ConsentDialog = (props: any) => {
           </Typography>
         </Stack>
       </Stack>
-      {props.data.map((text, i) => (
+      {props.data.map((text: ConsentText, i: number) => (
         <Fragment key={i}>
           {i === activeStep && (
             <Fragment>
