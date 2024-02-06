@@ -43,6 +43,7 @@ const WelcomeView = () => {
           position: "fixed",
           top: 56,
           left: 0,
+          width: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -54,7 +55,7 @@ const WelcomeView = () => {
         }}
       >
         <NotificationsBar />
-        <Stack p={2} pt={0}>
+        <Stack p={2} pt={0} width="100%">
           <Typography variant="h4" pt={2}>
             Your Activity
           </Typography>
