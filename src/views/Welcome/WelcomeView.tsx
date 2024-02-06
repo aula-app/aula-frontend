@@ -37,11 +37,14 @@ const WelcomeView = () => {
         scrollSnapType: 'y mandatory',
       }}
     >
-      <Stack
-        position="fixed"
-        top={56}
-        left={0}
+      <Paper
+        elevation={6}
         sx={{
+          position: "fixed",
+          top: 56,
+          left: 0,
+          display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           bgcolor: blueGrey[50],
           maxHeight: `${showNotificationsBar ? 250 : 25}px`,
@@ -62,7 +65,7 @@ const WelcomeView = () => {
             <Divider sx={{ width: '50%' }} variant="middle" />
           </Button>
         </Box>
-      </Stack>
+      </Paper>
       <Typography
         variant="h4"
         pt={scrollTop === 0 && showNotificationsBar ? 30 : 4}
