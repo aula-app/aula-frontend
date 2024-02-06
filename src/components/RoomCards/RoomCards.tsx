@@ -29,9 +29,8 @@ const RoomCards = () => {
   }, []);
 
   return (
-    <Grid container spacing={1}>
-      {data.map((d, i) => (
-        <Grid key={d.id} item xs={12} md={4}>
+      data.map((d, i) => (
+        <Grid key={d.id} item xs={12} md={4} my={2} sx={{scrollSnapAlign: 'center'}}>
           <AppLink to={`/room/${d.id}`}>
             <Card sx={{ borderRadius: '25px' }} variant="outlined">
               <CardContent>
@@ -62,8 +61,7 @@ const RoomCards = () => {
             </Card>
           </AppLink>
         </Grid>
-      ))}
-    </Grid>
+      ))
   );
 };
 

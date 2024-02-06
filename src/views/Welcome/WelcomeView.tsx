@@ -45,7 +45,7 @@ const WelcomeView = () => {
           </Typography>
           <UserStats />
         </Stack>
-        <Typography variant="h4" py={2} sx={{scrollSnapAlign: 'start'}}>
+        <Typography variant="h4" pt={2} sx={{scrollSnapAlign: 'start'}}>
           Rooms
         </Typography>
         <RoomCards />
