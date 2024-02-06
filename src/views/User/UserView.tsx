@@ -27,7 +27,6 @@ const UserView = () => {
         )
       ).json();
 
-      console.log(data)
       setData(data.data)
     };
 

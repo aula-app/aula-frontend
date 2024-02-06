@@ -38,7 +38,6 @@ const RoomView = () => {
         })
       ).json();
 
-      console.log(data.data);
       setData(data.data);
     };
 

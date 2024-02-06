@@ -241,6 +241,9 @@ const TextsView = () => {
   }
 
   const requestAddNewUser = async (formValues:FormStateValues) => {
+    const consentText = formValues.user_needs_to_consent === 2 ?
+                        'Agree' : formValues.user_needs_to_consent === 1 ?
+                        'Confirm' : 'Ok';
     const data = await (
         await fetch(
           '/api/controllers/add_text.php',
@@ -253,7 +256,7 @@ const TextsView = () => {
             body: JSON.stringify(
               {'headline': formValues.headline,
                'body': formValues.body,
-               'consent_text': formValues.consent_text,
+               'consent_text': consentText,
                'user_needs_to_consent': formValues.user_needs_to_consent,
                })
           })).json();
@@ -353,20 +356,12 @@ const TextsView = () => {
           />
           <TextFieldElement
             required
+            multiline
             label="Text body"
             name="body"
             value={values.body}
             error={fieldHasError('body')}
             helperText={fieldGetError('body') || ' '}
-            {...SHARED_CONTROL_PROPS}
-          />
-          <TextFieldElement
-            required
-            label="Consent Text"
-            name="consent_text"
-            value={values.consent_text}
-            error={fieldHasError('consent_text')}
-            helperText={fieldGetError('consent_text') || ' '}
             {...SHARED_CONTROL_PROPS}
           />
           <InputLabel id="user_needs_to_consent">User needs to consent?</InputLabel>

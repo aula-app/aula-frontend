@@ -16,15 +16,22 @@ import { useNavigate } from 'react-router';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { localStorageGet } from '@/utils';
 
+interface ConsentText {
+  id: number;
+  headline: string;
+  body: string;
+  consent_text: string;
+}
+
 /**
  * Makes an Acknowledgement requiring consent inside the Dialog.
  * @component ConsentDialog
  */
 
-const ConsentDialog = () => {
+const ConsentDialog = (props: any) => {
   const jwt_token = localStorageGet('token');
   const [activeStep, setActiveStep] = useState(0);
-  const [data, setData] = useState([] as any[]);
+  const [data, setData] = useState([] as ConsentText[]);
   const navigate = useNavigate();
 
   const giveConsent = useCallback(
@@ -32,7 +39,7 @@ const ConsentDialog = () => {
       if (text_idx === data.length - 1) setActiveStep(() => text_idx - 1);
 
       const giveConsentReq = async () => {
-        const data = await (
+        const getData = await (
           await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/give_consent.php', {
             method: 'POST',
             headers: {
@@ -43,7 +50,7 @@ const ConsentDialog = () => {
           })
         ).json();
 
-        return data;
+        return getData;
       };
 
       const giveConsentResponse = await giveConsentReq();
@@ -88,7 +95,7 @@ const ConsentDialog = () => {
           </Typography>
         </Stack>
       </Stack>
-      {data.map((text, i) => (
+      {props.data.map((text: ConsentText, i: number) => (
         <Fragment key={i}>
           {i === activeStep && (
             <Fragment>
@@ -108,10 +115,10 @@ const ConsentDialog = () => {
           )}
         </Fragment>
       ))}
-      {data.length > 1 && (
+      {props.data.length > 1 && (
         <MobileStepper
           variant="text"
-          steps={data.length}
+          steps={props.data.length}
           position="static"
           activeStep={activeStep}
           sx={{ bgcolor: 'transparent', p: 1 }}
