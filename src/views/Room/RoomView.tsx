@@ -55,7 +55,7 @@ const RoomView = () => {
       <TabContext value={value}>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
           {data.map((d, key) => (
-            <WildIdea username={d.displayname} text={d.content} key={key} />
+            <WildIdea username={d.displayname} text={d.content} date={d.created} key={key} />
           ))}
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
