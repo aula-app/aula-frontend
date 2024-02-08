@@ -1,15 +1,17 @@
 import { ChatBubble, Favorite } from '@mui/icons-material';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography, colors } from '@mui/material';
 
 interface IdeaBubbleProps {
   title?: string;
   text: string;
 }
 
+const bubbleColor = colors.lightGreen[100]
+
 export const IdeaBubble = ({title, text}: IdeaBubbleProps) => {
   return (
-    <Stack pl={2} mb={1}>
-      <Box sx={{ background: '#fff', px: 4, py: 2, borderRadius: 15, position: 'relative' }}>
+    <Stack mb={1}>
+      <Box sx={{ background: bubbleColor, px: 4, py: 2, borderRadius: 15, position: 'relative' }}>
         <Box
           sx={{
             position: 'absolute',
@@ -17,10 +19,11 @@ export const IdeaBubble = ({title, text}: IdeaBubbleProps) => {
             left: 0,
             width: 30,
             height: 30,
-            border: '15px solid #fff',
+            border: `15px solid ${bubbleColor}`,
             borderTopColor: 'transparent',
             borderLeftColor: 'transparent',
-            transform: 'rotate(-25deg)'
+            transformOrigin: 'bottom left',
+            transform: 'translate3d(25px, 7.5px, 0) rotate(-45deg)'
           }}
         />
         { title &&

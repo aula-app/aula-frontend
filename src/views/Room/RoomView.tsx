@@ -53,15 +53,15 @@ const RoomView = () => {
   return (
     <Stack width="100%" height="100%" overflow="hidden">
       <TabContext value={value}>
-        <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
+        <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
           {data.map((d, key) => (
-            <WildIdea title={d.displayname} text={d.content} key={key}/>
+            <WildIdea title={d.displayname} text={d.content} key={key} />
           ))}
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
           <IdeaBox />
         </TabPanel>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: "#fff" }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
           <Tabs
             value={value}
             onChange={handleChange}
@@ -80,7 +80,8 @@ const RoomView = () => {
               value="0"
               icon={
                 <Stack direction="row" alignItems="center">
-                  <Lightbulb sx={{ mr: 1 }} />{data.length}
+                  <Lightbulb sx={{ mr: 1 }} />
+                  {data.length}
                 </Stack>
               }
               label="Wild Ideas"
