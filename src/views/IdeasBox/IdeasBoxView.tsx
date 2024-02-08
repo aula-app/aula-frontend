@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import { IdeaBox } from '@/components/IdeaBox';
+import { IdeaBox } from '@/views/IdeaBoxes';
 import { IdeaCards } from '@/components/IdeaCards';
 
 /** * Renders "IdeasBox" view
