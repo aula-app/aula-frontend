@@ -5,9 +5,13 @@ import { IdeaBubble } from '../IdeaBubble';
 interface IdeaBubbleProps {
   username: string;
   text: string;
+  date: string;
 }
 
-export const WildIdea = ({ username, text }: IdeaBubbleProps) => {
+export const WildIdea = ({ username, text, date}: IdeaBubbleProps) => {
+
+  const displayDate = new Date(date);
+
   return (
     <Stack mb={2} mx={1} sx={{scrollSnapAlign: 'center'}}>
       <IdeaBubble text={text} />
@@ -15,7 +19,7 @@ export const WildIdea = ({ username, text }: IdeaBubbleProps) => {
         <AccountCircle sx={{ fontSize: '3em' }} />
         <Stack ml={1} maxWidth='50%' overflow='hidden'>
           <Typography variant="caption" lineHeight={1.5}>
-            date
+            {displayDate.getFullYear()}/{displayDate.getMonth()}/{displayDate.getDate()}
           </Typography>
           <Typography
             variant="overline"
