@@ -1,9 +1,9 @@
-import { Grid, IconButton } from '@mui/material';
+import { ButtonGroup, IconButton } from '@mui/material';
 import { Campaign, Favorite, Mail, Notifications } from '@mui/icons-material';
 
 export const NotificationsBar = () => {
   return (
-    <Grid display="flex" justifyContent="space-between">
+    <ButtonGroup size="large" aria-label="large button group">
       <IconButton size="large" sx={{color: '#000'}}>
         <Notifications />
       </IconButton>
@@ -16,7 +16,7 @@ export const NotificationsBar = () => {
       <IconButton size="large" sx={{color: '#000'}}>
         <Favorite />
       </IconButton>
-    </Grid>
+    </ButtonGroup>
   );
 };
 
