@@ -10,7 +10,7 @@ interface IdeaBubbleProps {
 
 export const WildIdea = ({ title, text }: IdeaBubbleProps) => {
   return (
-    <Stack>
+    <Stack mb={2} mx={1} sx={{scrollSnapAlign: 'center'}}>
       <IdeaBubble title={title} text={text} />
       <Stack direction="row" alignItems="center">
         <AccountCircle sx={{ fontSize: '3em' }} />
