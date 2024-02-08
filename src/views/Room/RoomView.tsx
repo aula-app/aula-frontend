@@ -4,8 +4,8 @@ import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { localStorageGet } from '@/utils';
-import { WildIdea } from '@/components/WildIdea';
-import { IdeaBox } from '@/components/IdeaBox';
+import { IdeaBoxesView } from '@/views/IdeaBoxes';
+import WildIdeasView from '@/views/WildIdeas';
 
 function a11yProps(index: number) {
   return {
@@ -54,12 +54,10 @@ const RoomView = () => {
     <Stack width="100%" height="100%" overflow="hidden">
       <TabContext value={value}>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
-          {data.map((d, key) => (
-            <WildIdea username={d.displayname} text={d.content} date={d.created} key={key} />
-          ))}
+          <WildIdeasView data={data} />
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
-          <IdeaBox />
+          <IdeaBoxesView />
         </TabPanel>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
