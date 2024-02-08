@@ -7,7 +7,7 @@ import { IdeaCards } from '@/components/IdeaCards';
  */
 const IdeasBoxView = () => {
   return (
-    <Stack px={1} py={2}>
+    <Stack px={1} py={2} sx={{scrollSnapAlign: 'center'}}>
       <IdeaBox noCategories />
       <Stack>
         <Typography variant='h6' p={2}>X ideas</Typography>

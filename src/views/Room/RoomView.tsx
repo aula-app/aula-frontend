@@ -58,7 +58,7 @@ const RoomView = () => {
             <WildIdea title={d.displayname} text={d.content} key={key} />
           ))}
         </TabPanel>
-        <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
+        <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
           <IdeaBox />
         </TabPanel>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
