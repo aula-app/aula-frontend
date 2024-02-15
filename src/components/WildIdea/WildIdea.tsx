@@ -14,7 +14,7 @@ export const WildIdea = ({ username, text, date}: IdeaBubbleProps) => {
   const displayDate = new Date(date);
 
   return (
-    <Stack mb={2} mx={1} sx={{scrollSnapAlign: 'center'}}>
+    <Stack width="100%" mb={2} sx={{scrollSnapAlign: 'center'}}>
       <IdeaBubble text={text} />
       <Stack direction="row" alignItems="center">
         <AccountCircle sx={{ fontSize: '3em' }} />
@@ -33,9 +33,9 @@ export const WildIdea = ({ username, text, date}: IdeaBubbleProps) => {
             {username}
           </Typography>
         </Stack>
-        <Stack flexGrow={1} pr={1} direction="row" alignItems="center" justifyContent="flex-end">
+        {/* <Stack flexGrow={1} pr={1} direction="row" alignItems="center" justifyContent="flex-end">
           <Chip label="category" color="warning" />
-        </Stack>
+        </Stack> */}
       </Stack>
     </Stack>
   );

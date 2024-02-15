@@ -4,8 +4,8 @@ import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { localStorageGet } from '@/utils';
-import { IdeaBoxesView } from '@/views/IdeaBoxes';
 import WildIdeasView from '@/views/WildIdeas';
+import IdeasBoxesView from '@/views/IdeasBoxes';
 
 function a11yProps(index: number) {
   return {
@@ -37,7 +37,7 @@ const RoomView = () => {
           body: JSON.stringify({ room_id: room_id }),
         })
       ).json();
-        console.log(data.data)
+
       setData(data.data);
     };
 
@@ -57,7 +57,7 @@ const RoomView = () => {
           <WildIdeasView data={data} />
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
-          <IdeaBoxesView />
+          <IdeasBoxesView />
         </TabPanel>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
