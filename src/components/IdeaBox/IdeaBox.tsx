@@ -1,6 +1,6 @@
 import { CardMedia, Chip, Stack, Typography } from '@mui/material';
 import { Card, CardContent } from '@mui/material';
-import { AppLink } from '../../components';
+import { AppLink } from '..';
 import phases from '@/utils/phases';
 import { useParams } from 'react-router-dom';
 
