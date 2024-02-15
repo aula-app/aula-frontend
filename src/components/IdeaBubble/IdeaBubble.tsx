@@ -6,37 +6,41 @@ interface IdeaBubbleProps {
   text: string;
 }
 
-const bubbleColor = colors.lightGreen[100]
+const bubbleColor = '#eee';
 
-export const IdeaBubble = ({title, text}: IdeaBubbleProps) => {
+export const IdeaBubble = ({ title, text }: IdeaBubbleProps) => {
   return (
     <Stack mb={1}>
-      <Box sx={{ background: bubbleColor, px: 4, py: 2, borderRadius: 15, position: 'relative' }}>
+      <Box sx={{ background: bubbleColor, p: 2, borderRadius: 2, position: 'relative' }}>
         <Box
           sx={{
             position: 'absolute',
             bottom: 0,
-            left: 0,
-            width: 30,
-            height: 30,
-            border: `15px solid ${bubbleColor}`,
-            borderTopColor: 'transparent',
-            borderLeftColor: 'transparent',
+            left: '25px',
+            border: `8px solid ${bubbleColor}`,
+            borderBottomColor: 'transparent',
+            borderRightColor: 'transparent',
             transformOrigin: 'bottom left',
-            transform: 'translate3d(25px, 7.5px, 0) rotate(-45deg)'
+            transform: 'translateY(100%)',
           }}
         />
-        { title &&
+        {title && (
           <Typography variant="h6" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap" mb={1}>
             {title}
           </Typography>
-        }
+        )}
         {text}
-        <Stack direction="row" justifyContent="flex-end" alignItems="center" mt={1}>
-          <ChatBubble fontSize="small" /><Typography variant="caption" pr={1} pl={0.3}>3</Typography>
-          <Favorite fontSize="small" /><Typography variant="caption" pr={1} pl={0.3}>3</Typography>
-        </Stack>
       </Box>
+      <Stack direction="row" justifyContent="flex-end" alignItems="center" mt={1}>
+        <ChatBubble fontSize="small" />
+        <Typography variant="caption" pr={1} pl={0.3}>
+          3
+        </Typography>
+        <Favorite fontSize="small" />
+        <Typography variant="caption" pr={1} pl={0.3}>
+          3
+        </Typography>
+      </Stack>
     </Stack>
   );
 };

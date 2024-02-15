@@ -15,9 +15,9 @@ export const WildIdea = ({ username, text, date}: IdeaBubbleProps) => {
   return (
     <Stack width="100%" mb={2} sx={{scrollSnapAlign: 'center'}}>
       <IdeaBubble text={text} />
-      <Stack direction="row" alignItems="center">
+      <Stack direction="row" alignItems="center" mt='-20px'>
         <AccountCircle sx={{ fontSize: '3em' }} />
-        <Stack ml={1} maxWidth='50%' overflow='hidden'>
+        <Stack ml={1} maxWidth='100%' overflow='hidden'>
           <Typography variant="caption" lineHeight={1.5}>
             {displayDate.getFullYear()}/{displayDate.getMonth()}/{displayDate.getDate()}
           </Typography>
