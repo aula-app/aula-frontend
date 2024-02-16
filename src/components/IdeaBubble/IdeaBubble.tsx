@@ -11,7 +11,7 @@ const bubbleColor = '#eee';
 export const IdeaBubble = ({ title, text }: IdeaBubbleProps) => {
   return (
     <Stack mb={1}>
-      <Box sx={{ background: bubbleColor, p: 2, borderRadius: 2, position: 'relative' }}>
+      <Box sx={{ background: bubbleColor, p: 2, borderRadius: 1, position: 'relative' }}>
         <Box
           sx={{
             position: 'absolute',
