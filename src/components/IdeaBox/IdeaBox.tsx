@@ -18,7 +18,7 @@ const IdeaBox = ({noCategories = false}: IdeaBoxProps) => {
   const params = useParams();
 
   return (
-    <Card sx={{ borderRadius: '25px' }} variant="outlined">
+    <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
       <CardContent>
         <Stack direction="row" mb={2} alignItems="center" spacing={2}>
           {displayPhases.map((phase, key) => (
