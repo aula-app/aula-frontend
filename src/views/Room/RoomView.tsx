@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { localStorageGet } from '@/utils';
 import { WildIdea } from '@/components/WildIdea';
 import { IdeaBox } from '@/components/IdeaBox';
+import { AppLink } from '@/components';
 
 function a11yProps(index: number) {
   return {
@@ -55,13 +56,15 @@ const RoomView = () => {
       <TabContext value={value}>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
           {data.map((d) => (
-            <WildIdea title={d.displayname} text={d.content} id={d.id} key={d.id} />
+            <AppLink to={`idea/${d.id}`}>
+              <WildIdea title={d.displayname} text={d.content} key={d.id} />
+            </AppLink>
           ))}
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
           <IdeaBox />
         </TabPanel>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: "#fff" }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
           <Tabs
             value={value}
             onChange={handleChange}
@@ -80,7 +83,8 @@ const RoomView = () => {
               value="0"
               icon={
                 <Stack direction="row" alignItems="center">
-                  <Lightbulb sx={{ mr: 1 }} />{data.length}
+                  <Lightbulb sx={{ mr: 1 }} />
+                  {data.length}
                 </Stack>
               }
               label="Wild Ideas"

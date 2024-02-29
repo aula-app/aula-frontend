@@ -1,8 +1,9 @@
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import { localStorageGet } from '@/utils';
 import WildIdea from '@/components/WildIdea';
+import IdeaComment from '@/components/IdeaComment';
 
 /**
  * Renders "Idea" view
@@ -38,8 +39,12 @@ const IdeaView = () => {
   }, [params.ideaId]);
 
   return (
-    <Stack width="100%" height="100%" overflow="auto" p={2}>
-      <WildIdea text={data.content} id={data.id} />
+    <Stack width="100%" height="100%" overflow="auto" p={2} bgcolor="#eee">
+      <WildIdea text={data.content} />
+      <Typography variant="h5" py={2}>
+        3 Comments
+      </Typography>
+      <IdeaComment text="lalala" id="X" />
     </Stack>
   );
 };
