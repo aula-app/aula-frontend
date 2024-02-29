@@ -6,12 +6,11 @@ import AppLink from '../AppLink';
 interface IdeaBubbleProps {
   title?: string;
   text: string;
-  id: string;
 }
 
-export const WildIdea = ({ title, text, id }: IdeaBubbleProps) => {
+export const WildIdea = ({ title, text }: IdeaBubbleProps) => {
   return (
-    <AppLink to={`idea/${id}`} mb={2}>
+    <Stack>
       <IdeaBubble title={title} text={text} />
       <Stack direction="row" alignItems="center">
         <AccountCircle sx={{ fontSize: '3em' }} />
@@ -27,7 +26,7 @@ export const WildIdea = ({ title, text, id }: IdeaBubbleProps) => {
           <Chip label="category" color="warning" />
         </Stack>
       </Stack>
-    </AppLink>
+    </Stack>
   );
 };
 
