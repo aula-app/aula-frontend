@@ -31,11 +31,12 @@ const PrivateRoutes = () => {
       <Route path="rooms" element={(!hasConsent)?<AskConsentView/>:<RoomsView />} />,
       <Route path="room/:room_id" element={(!hasConsent)?<AskConsentView/>:<RoomView />} />,
       <Route path="room/:room_id/idea-box/:boxId" element={(!hasConsent)?<AskConsentView/>:<IdeasBoxView />} />,
+      <Route path="room/:room_id/idea-box/:boxId/idea/:ideaId" element={(!hasConsent)?<AskConsentView/>:<IdeaView />} />,
       <Route path="groups" element={(!hasConsent)?<AskConsentView/>:<GroupsView />} />,
       <Route path="ideas" element={(!hasConsent)?<AskConsentView/>:<IdeasView />} />,
       <Route path="texts" element={(!hasConsent)?<AskConsentView/>:<TextsView />} />,
       <Route path="users" element={(!hasConsent)?<AskConsentView/>:<UsersView />} />,
-      <Route path="idea/:ideaId" element={(!hasConsent)?<AskConsentView/>:<IdeaView />} />,
+      <Route path="room/:room_id/idea/:ideaId" element={(!hasConsent)?<AskConsentView/>:<IdeaView />} />,
       <Route path="*" element={(!hasConsent)?<AskConsentView/>:<NotFoundView />} />
     </Routes>
   );

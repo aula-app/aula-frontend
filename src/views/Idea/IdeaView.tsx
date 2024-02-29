@@ -1,65 +1,46 @@
-import { Card, CardContent, CardHeader, Grid } from '@mui/material';
-import { AppLink } from '@/components';
+import { Stack } from '@mui/material';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-
+import { localStorageGet } from '@/utils';
+import WildIdea from '@/components/WildIdea';
 
 /**
  * Renders "Idea" view
  * url: /
  */
 const IdeaView = () => {
-  const routeParams = useParams();
-  const [data, setData] = useState([] as any[]);
+  const params = useParams();
+  const jwt_token = localStorageGet('token');
+  const [data, setData] = useState({} as { [key: string]: string });
 
   useEffect(() => {
     // fetch data
     const dataFetch = async () => {
       const data = await (
-        await fetch(
-          "/api/idea.php",
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(
-                  {
-                    'id': routeParams.idea_id
-                  })
-              })).json();
+        await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/idea.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + jwt_token,
+          },
+          body: JSON.stringify({
+            idea_id: params['ideaId'],
+          }),
+        })
+      ).json();
 
       // set state when the data received
-      console.log(data)
-      setData(data)
+      console.log(data);
+      setData(data);
     };
 
     dataFetch();
-    },[routeParams.idea_id]);
-
+  }, [params.ideaId]);
 
   return (
-    <Grid container spacing={4}>
-       {data.map((d,i) =>
-      <Grid item xs={12} md={4}>
-
-      <AppLink to={ `/room/${ d.id }`} >
-        <Card>
-          <CardHeader title={d.room_name}/>
-          <CardContent>
-            <img 
-              alt={'image number ' + i}
-              src={ (i % 2 === 0) ? '/img/aula.png':'img/aula-room.png' }
-              />
-            {d.description_public}
-          </CardContent>
-        </Card>
-
-        </AppLink>
-        </Grid>
-        )
-        }
-    </Grid>
+    <Stack width="100%" height="100%" overflow="auto" p={2}>
+      <WildIdea text={data.content} id={data.id} />
+    </Stack>
   );
 };
 

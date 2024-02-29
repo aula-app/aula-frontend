@@ -3,7 +3,7 @@ import { IdeaBox } from '@/components/IdeaBox';
 import { IdeaCards } from '@/components/IdeaCards';
 
 /** * Renders "IdeasBox" view
- * url: /room/:rommId/ideas-box/:boxId
+ * url: /room/:roomId/ideas-box/:boxId
  */
 const IdeasBoxView = () => {
   return (

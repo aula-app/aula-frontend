@@ -1,15 +1,17 @@
 import { AccountCircle } from '@mui/icons-material';
 import { Chip, Stack, Typography } from '@mui/material';
 import { IdeaBubble } from '../IdeaBubble';
+import AppLink from '../AppLink';
 
 interface IdeaBubbleProps {
   title?: string;
   text: string;
+  id: string;
 }
 
-export const WildIdea = ({ title, text }: IdeaBubbleProps) => {
+export const WildIdea = ({ title, text, id }: IdeaBubbleProps) => {
   return (
-    <Stack mb={2}>
+    <AppLink to={`idea/${id}`} mb={2}>
       <IdeaBubble title={title} text={text} />
       <Stack direction="row" alignItems="center">
         <AccountCircle sx={{ fontSize: '3em' }} />
@@ -25,7 +27,7 @@ export const WildIdea = ({ title, text }: IdeaBubbleProps) => {
           <Chip label="category" color="warning" />
         </Stack>
       </Stack>
-    </Stack>
+    </AppLink>
   );
 };
 
