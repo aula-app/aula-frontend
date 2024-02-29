@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { localStorageGet } from '@/utils';
 import WildIdea from '@/components/WildIdea';
 import IdeaComment from '@/components/IdeaComment';
+import ApprovalCard from '@/components/ApprovalCard';
 
 /**
  * Renders "Idea" view
@@ -41,6 +42,7 @@ const IdeaView = () => {
   return (
     <Stack width="100%" height="100%" overflow="auto" p={2} bgcolor="#eee">
       <WildIdea text={data.content} />
+      <ApprovalCard disabled />
       <Typography variant="h5" py={2}>
         3 Comments
       </Typography>
