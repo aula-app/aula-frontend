@@ -1,46 +1,10 @@
 import { Button, Card, Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { amber, green, grey, red } from '@mui/material/colors';
-import { CheckCircle, Circle, DoNotDisturbOn, GroupAdd } from '@mui/icons-material';
-import React, { useState } from 'react';
+import { grey } from '@mui/material/colors';
+import { GroupAdd } from '@mui/icons-material';
+import { useState } from 'react';
+import { Vote, votingOptions } from '@/utils/voting';
 
-type Vote = 'for' | 'neutral' | 'against';
-interface VoteOptions {
-    label: string;
-    bg: string;
-    color: string;
-    button: string;
-    icon: React.ReactNode;
-}
-interface VotingOptions {
-  for: VoteOptions;
-  neutral: VoteOptions;
-  against: VoteOptions;
-}
-
-const votingOptions: VotingOptions = {
-  for: {
-    label: 'for',
-    bg: green[200],
-    color: green[800],
-    button: green[300],
-    icon: <CheckCircle sx={{fontSize: 75}} />,
-  },
-  neutral: {
-    label: 'neutral',
-    bg: amber[200],
-    color: amber[800],
-    button: amber[300],
-    icon: <Circle sx={{fontSize: 75}} />,
-  },
-  against: {
-    label: 'against',
-    bg: red[200],
-    color: red[800],
-    button: red[300],
-    icon: <DoNotDisturbOn sx={{fontSize: 75}} />,
-  },
-};
 /**
  * Renders "VotingCards" component
  * url: /
@@ -84,7 +48,7 @@ const IdeaBox = () => {
             onClick={() => setVote(v as Vote)}
           >
             <Stack alignItems="center">
-              { votingOptions[v as Vote]['icon'] }
+              <Typography fontSize={75}>{ votingOptions[v as Vote]['icon']  }</Typography>
               { votingOptions[v as Vote]['label'] }
             </Stack>
           </Button>

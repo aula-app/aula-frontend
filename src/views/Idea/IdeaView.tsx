@@ -6,6 +6,7 @@ import WildIdea from '@/components/WildIdea';
 import IdeaComment from '@/components/IdeaComment';
 import ApprovalCard from '@/components/ApprovalCard';
 import VotingCard from '@/components/VotingCard';
+import VotingResults from '@/components/VotingResults';
 
 /**
  * Renders "Idea" view
@@ -44,6 +45,7 @@ const IdeaView = () => {
     <Stack width="100%" height="100%" overflow="auto">
       <VotingCard />
       <Stack p={2}>
+        <VotingResults yourVote='against' />
         <WildIdea text={data.content} />
         <ApprovalCard disabled />
         <Typography variant="h5" py={2}>
