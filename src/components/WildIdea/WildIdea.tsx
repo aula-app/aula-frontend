@@ -3,27 +3,38 @@ import { Chip, Stack, Typography } from '@mui/material';
 import { IdeaBubble } from '../IdeaBubble';
 
 interface IdeaBubbleProps {
-  title?: string;
+  username: string;
   text: string;
+  date: string;
 }
 
-export const WildIdea = ({ title, text }: IdeaBubbleProps) => {
+export const WildIdea = ({ username, text, date}: IdeaBubbleProps) => {
+
+  const displayDate = new Date(date);
+
   return (
-    <Stack mb={2}>
-      <IdeaBubble title={title} text={text} />
-      <Stack direction="row" alignItems="center">
+    <Stack width="100%" mb={2} sx={{scrollSnapAlign: 'center'}}>
+      <IdeaBubble text={text} />
+      <Stack direction="row" alignItems="center" mt='-20px'>
         <AccountCircle sx={{ fontSize: '3em' }} />
-        <Stack ml={1}>
+        <Stack ml={1} maxWidth='100%' overflow='hidden'>
           <Typography variant="caption" lineHeight={1.5}>
-            date
+            {displayDate.getFullYear()}/{displayDate.getMonth()}/{displayDate.getDate()}
           </Typography>
-          <Typography variant="overline" fontWeight={700} lineHeight={1.5}>
-            username
+          <Typography
+            variant="overline"
+            overflow='hidden'
+            textOverflow="ellipsis"
+            fontWeight={700}
+            lineHeight={1.5}
+            maxWidth='100%'
+            >
+            {username}
           </Typography>
         </Stack>
-        <Stack flexGrow={1} pr={1} direction="row" alignItems="center" justifyContent="flex-end">
+        {/* <Stack flexGrow={1} pr={1} direction="row" alignItems="center" justifyContent="flex-end">
           <Chip label="category" color="warning" />
-        </Stack>
+        </Stack> */}
       </Stack>
     </Stack>
   );

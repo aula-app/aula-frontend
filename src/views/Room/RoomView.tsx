@@ -4,8 +4,8 @@ import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { localStorageGet } from '@/utils';
-import { WildIdea } from '@/components/WildIdea';
-import { IdeaBox } from '@/components/IdeaBox';
+import WildIdeasView from '@/views/WildIdeas';
+import IdeasBoxesView from '@/views/IdeasBoxes';
 
 function a11yProps(index: number) {
   return {
@@ -24,25 +24,27 @@ const RoomView = () => {
   const jwt_token = localStorageGet('token');
   const room_id = params['room_id'];
 
+  const dataFetch = async () => {
+    const data = await (
+      await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/room_ideas.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwt_token,
+        },
+        body: JSON.stringify({ room_id: room_id }),
+      })
+    ).json();
+
+    return data;
+  };
+
   useEffect(() => {
     // fetch data
-    const dataFetch = async () => {
-      const data = await (
-        await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/room_ideas.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + jwt_token,
-          },
-          body: JSON.stringify({ room_id: room_id }),
-        })
-      ).json();
-
-      setData(data.data);
-    };
-
-    dataFetch();
-  }, [jwt_token, room_id]);
+    dataFetch().then(
+      data => setData(data.data)
+    )
+  }, []);
 
   const [value, setValue] = useState('0');
 
@@ -50,18 +52,20 @@ const RoomView = () => {
     setValue(newValue);
   };
 
+  const updateData = () => dataFetch().then(
+    data => setData(data.data)
+  )
+
   return (
     <Stack width="100%" height="100%" overflow="hidden">
       <TabContext value={value}>
-        <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
-          {data.map((d, key) => (
-            <WildIdea title={d.displayname} text={d.content} key={key}/>
-          ))}
+        <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
+          <WildIdeasView data={data} reload={updateData} />
         </TabPanel>
-        <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto' }}>
-          <IdeaBox />
+        <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
+          <IdeasBoxesView />
         </TabPanel>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: "#fff" }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
           <Tabs
             value={value}
             onChange={handleChange}
@@ -80,7 +84,8 @@ const RoomView = () => {
               value="0"
               icon={
                 <Stack direction="row" alignItems="center">
-                  <Lightbulb sx={{ mr: 1 }} />{data.length}
+                  <Lightbulb sx={{ mr: 1 }} />
+                  {data.length}
                 </Stack>
               }
               label="Wild Ideas"
