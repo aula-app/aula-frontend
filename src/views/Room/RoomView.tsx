@@ -24,25 +24,27 @@ const RoomView = () => {
   const jwt_token = localStorageGet('token');
   const room_id = params['room_id'];
 
+  const dataFetch = async () => {
+    const data = await (
+      await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/room_ideas.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwt_token,
+        },
+        body: JSON.stringify({ room_id: room_id }),
+      })
+    ).json();
+
+    return data;
+  };
+
   useEffect(() => {
     // fetch data
-    const dataFetch = async () => {
-      const data = await (
-        await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/room_ideas.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + jwt_token,
-          },
-          body: JSON.stringify({ room_id: room_id }),
-        })
-      ).json();
-
-      setData(data.data);
-    };
-
-    dataFetch();
-  }, [jwt_token, room_id]);
+    dataFetch().then(
+      data => setData(data.data)
+    )
+  }, []);
 
   const [value, setValue] = useState('0');
 
@@ -50,11 +52,15 @@ const RoomView = () => {
     setValue(newValue);
   };
 
+  const updateData = () => dataFetch().then(
+    data => setData(data.data)
+  )
+
   return (
     <Stack width="100%" height="100%" overflow="hidden">
       <TabContext value={value}>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
-          <WildIdeasView data={data} />
+          <WildIdeasView data={data} reload={updateData} />
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
           <IdeasBoxesView />

@@ -6,17 +6,21 @@ import NewWildIdea from '@/components/NewWildIdea';
 
 interface WildIdeasProps {
   data: any[];
+  reload: () => void;
 }
 
 /**
  * Renders "WildIdeas" view
  * url: /
  */
-const WildIdeas = ({ data }: WildIdeasProps) => {
+const WildIdeas = ({ data, reload }: WildIdeasProps) => {
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
-  const closeDrawer = () => setOpen(false);
+  const closeDrawer = () => {
+    setOpen(false);
+    reload();
+  };
 
   return (
     <Stack alignItems="center" width="100%" px={1}>
