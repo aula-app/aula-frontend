@@ -1,13 +1,12 @@
 import { AccountCircle } from '@mui/icons-material';
-import { localStorageGet } from '@/utils/localStorage';
 import { Box, Stack } from '@mui/material';
-import { parseJwt } from '@/utils/jwt';
 import { useCallback } from 'react';
-import { useParams } from 'react-router-dom';
 import { FormContainer, TextFieldElement, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import AppButton from '../AppButton';
+import { databaseRequest } from '@/utils/requests';
+import { useParams } from 'react-router-dom';
 
 interface NewIdeaProps {
   closeMethod: () => void;
@@ -29,9 +28,6 @@ interface FormStateValues {
 
 export const NewWildIdea = ({ closeMethod }: NewIdeaProps) => {
   const params = useParams();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = jwt_token ? parseJwt(jwt_token) : null;
-
   const {
     register,
     handleSubmit,
@@ -40,38 +36,16 @@ export const NewWildIdea = ({ closeMethod }: NewIdeaProps) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = useCallback(async (formData: Object) => {
-    console.log(formData);
-      if (!jwt_payload) return ``;
+  const onSubmit = async (formData: Object) => {
+    const request = await databaseRequest('add_idea', {...formData, ...params})
 
-      try {
-        const request = await (
-          await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/add_idea.php', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + jwt_token,
-            },
-            body: JSON.stringify({
-              room_id: params.room_id,
-              user_id: jwt_payload.user_id,
-              ...formData,
-            }),
-          })
-        ).json();
+    if(!request) {
+      console.log('erro');
+      return;
+    }
 
-        const result = request.success; // await api.auth.loginWithEmail(values);
-
-        if (result && result === true) {
-          closeMethod();
-        } else {
-          console.log('error');
-          return;
-        }
-      } catch (e) {
-        return e;
-      }
-    }, []);
+    closeMethod();
+  }
 
   return (
     <FormContainer>
