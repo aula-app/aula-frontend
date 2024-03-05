@@ -1,4 +1,4 @@
-import { SyntheticEvent, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -10,85 +10,55 @@ import {
 } from '@mui/material';
 import { useAppStore } from '@/store';
 import { localStorageSet } from '@/utils/localStorage';
-import { AppButton, AppLink, AppIconButton, AppAlert, AppForm } from '@/components';
-import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '@/utils/form';
+import { AppButton, AppLink, AppIconButton } from '@/components';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { FormContainer, useForm } from 'react-hook-form-mui';
+import { databaseRequest } from '@/utils/requests';
 
-const VALIDATE_FORM_LOGIN = {
-  username: {
-    presence: true,
-  },
-  password: {
-    presence: true,
-    length: {
-      minimum: 4,
-      maximum: 32,
-      message: 'must be between 4 and 32 characters',
-    },
-  },
-};
-
-interface FormStateValues {
-  username: string;
-  password: string;
-}
+const schema = yup
+  .object({
+    username: yup.string().required(),
+    password: yup.string().required().min(4).max(32)
+  })
+  .required();
 
 /**
  * Renders "Login" view for Login flow
  * url: /login/email
  */
 const LoginView = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
-  const [formState, , onFieldChange, fieldGetError, fieldHasError] = useAppForm({
-    validationSchema: VALIDATE_FORM_LOGIN,
-    initialValues: { username: '', password: '' } as FormStateValues,
-  });
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string>();
-  const values = formState.values as FormStateValues; // Typed alias to formState.values as the "Source of Truth"
 
   const handleShowPasswordClick = useCallback(() => {
     setShowPassword((oldValue) => !oldValue);
   }, []);
 
-  const handleFormSubmit = useCallback(
-    async (event: SyntheticEvent) => {
-      event.preventDefault();
-      try {
-        const username = values['username'];
-        const password = values['password'];
-        const data = await (
-          await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/login.php', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username: username, password: password }),
-          })
-        ).json();
 
-        const result = data.success; // await api.auth.loginWithEmail(values);
+  const onSubmit = async (formData: Object) => {
+    const request = await databaseRequest('login', formData)
 
-        if (result && result === true) {
-          localStorageSet('token', data['JWT']);
-        } else {
-          setError('Please check email and password');
-          return;
-        }
+    if(!request || request.success === "false") {
+      return;
+    }
 
-        dispatch({ type: 'LOG_IN' });
-        navigate('/', { replace: true });
-      } catch (e) {
-        return e;
-      }
-    },
-    [dispatch, values, navigate]
-  );
-
-  const handleCloseError = useCallback(() => setError(undefined), []);
+    localStorageSet('token', request['JWT']);
+    dispatch({ type: 'LOG_IN' });
+    navigate('/', { replace: true });
+  }
 
   return (
-    <AppForm onSubmit={handleFormSubmit}>
+    <FormContainer>
       <Stack>
         <Typography variant="h5" sx={{ mb: 3 }}>
           Sign In
@@ -96,26 +66,20 @@ const LoginView = () => {
         <TextField
           required
           label="Username"
-          name="username"
           inputProps={{ autoCapitalize: 'none' }}
-          value={values.username}
-          error={fieldHasError('username')}
-          helperText={fieldGetError('username') || ' '}
-          onChange={onFieldChange}
+          {...register('username')}
+          error={errors.username ? true : false}
+          helperText={errors.username?.message || ' '}
           sx={{ mt: 0 }}
-          {...SHARED_CONTROL_PROPS}
         />
         <TextField
           required
           type={showPassword ? 'text' : 'password'}
           label="Password"
-          name="password"
-          value={values.password}
-          error={fieldHasError('password')}
-          helperText={fieldGetError('password') || ' '}
-          onChange={onFieldChange}
+          {...register('password')}
+          error={errors.password ? true : false}
+          helperText={errors.password?.message || ' '}
           sx={{ mt: 0 }}
-          {...SHARED_CONTROL_PROPS}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -124,18 +88,13 @@ const LoginView = () => {
                   icon={showPassword ? 'visibilityon' : 'visibilityoff'}
                   title={showPassword ? 'Hide Password' : 'Show Password'}
                   onClick={handleShowPasswordClick}
-                  onMouseDown={eventPreventDefault}
+                  onMouseDown={(e => e.preventDefault())}
                 />
               </InputAdornment>
             ),
           }}
         />
-        {error ? (
-          <AppAlert severity="error" onClose={handleCloseError}>
-            {error}
-          </AppAlert>
-        ) : null}
-        <AppButton type="submit" color="primary" disabled={!formState.isValid} sx={{ mx: 0, mt: 0 }}>
+        <AppButton type="submit" color="primary" sx={{ mx: 0, mt: 0 }} onClick={handleSubmit(onSubmit)}>
           Sign In
         </AppButton>
         <Grid container justifyContent="end" alignItems="center">
@@ -144,7 +103,7 @@ const LoginView = () => {
           </Button>
         </Grid>
       </Stack>
-    </AppForm>
+    </FormContainer>
   );
 };
 

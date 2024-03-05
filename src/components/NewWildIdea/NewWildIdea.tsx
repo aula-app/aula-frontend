@@ -1,12 +1,12 @@
 import { AccountCircle } from '@mui/icons-material';
-import { Box, Stack } from '@mui/material';
-import { useCallback } from 'react';
-import { FormContainer, TextFieldElement, useForm } from 'react-hook-form-mui';
+import { Box, Stack, TextField } from '@mui/material';
+import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import AppButton from '../AppButton';
 import { databaseRequest } from '@/utils/requests';
 import { useParams } from 'react-router-dom';
+import { grey } from '@mui/material/colors';
 
 interface NewIdeaProps {
   closeMethod: () => void;
@@ -14,7 +14,7 @@ interface NewIdeaProps {
 
 const schema = yup
   .object({
-    content: yup.string().required().min(20),
+    content: yup.string().required(),
   })
   .required();
 
@@ -40,7 +40,6 @@ export const NewWildIdea = ({ closeMethod }: NewIdeaProps) => {
     const request = await databaseRequest('add_idea', {...formData, ...params})
 
     if(!request) {
-      console.log('erro');
       return;
     }
 
@@ -56,13 +55,14 @@ export const NewWildIdea = ({ closeMethod }: NewIdeaProps) => {
             Submit
           </AppButton>
         </Stack>
-        <Stack position="relative">
-          <TextFieldElement
+        <Stack position="relative" mt={1}>
+          <TextField
             required
             multiline
+            variant="filled"
             minRows={6}
             {...register('content')}
-            error={'content' in errors}
+            error={errors.content ? true : false}
             helperText={errors.content?.message || ' '}
           />
           <Box
@@ -70,10 +70,11 @@ export const NewWildIdea = ({ closeMethod }: NewIdeaProps) => {
               position: 'absolute',
               top: 0,
               left: '25px',
-              border: `8px solid rgba(0, 0, 0, 0.23)`,
+              border: `8px solid ${grey[200]}`,
               borderTopColor: 'transparent',
               borderRightColor: 'transparent',
               transformOrigin: 'bottom left',
+              transform: 'translateY(-100%)'
             }}
           />
         </Stack>
