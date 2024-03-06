@@ -25,8 +25,8 @@ const schema = yup
   .object({
     email: yup.string().email().required(),
     phone: yup.string().trim().matches(/^$|[- .+()0-9]+$/, 'should contain numbers'),
-    userName: yup.string().nonNullable().matches(/^[A-Za-z ]+$/, 'should contain only letters'),
-    fullName: yup.string().nonNullable().matches(/^[A-Za-z ]+$/, 'should contain only letters'),
+    username: yup.string().nonNullable().matches(/^[A-Za-z ]+$/, 'should contain only letters'),
+    fullname: yup.string().nonNullable().matches(/^[A-Za-z ]+$/, 'should contain only letters'),
     password: yup.string().min(8).max(32).required(),
     confirmPassword: yup.string().oneOf([yup.ref('password')], 'Passwords must match'),
     conditions: yup.boolean().oneOf([true],'You must agree to sign in.')
@@ -139,16 +139,16 @@ const SignupView = () => {
             <TextField
               required
               label="User Name"
-              {...register('userName')}
-              error={errors.userName ? true : false}
-              helperText={errors.userName?.message || ' '}
+              {...register('username')}
+              error={errors.username ? true : false}
+              helperText={errors.username?.message || ' '}
             />
             <TextField
               required
               label="Full Name"
-              {...register('fullName')}
-              error={errors.fullName ? true : false}
-              helperText={errors.fullName?.message || ' '}
+              {...register('fullname')}
+              error={errors.fullname ? true : false}
+              helperText={errors.fullname?.message || ' '}
             />
             <TextField
               required

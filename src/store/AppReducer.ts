@@ -30,7 +30,7 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
     case 'HAS_CONSENT':
       return {
         ...state,
-        hasConsent: action.payload
+        hasConsent: action.payload,
       };
     case 'DARK_MODE': {
       const darkMode = action?.darkMode ?? action?.payload;
@@ -40,6 +40,18 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
         darkMode,
       };
     }
+    case 'ADD_ERROR': {
+      let newErrors = state.errors;
+      newErrors.push(action?.message);
+      //state.errors.push(action?.message)
+      return { ...state, errors: newErrors };
+    };
+    case 'REMOVE_ERROR': {
+      let newErrors = state.errors;
+      newErrors.splice(action?.index, 1)
+      //state.errors.push(action?.message)
+      return { ...state, errors: newErrors };
+    };
     default:
       return state;
   }
