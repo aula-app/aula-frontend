@@ -1,7 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Card, CardHeader, CardContent, TextField } from '@mui/material';
-import { SHARED_CONTROL_PROPS } from '@/utils/form';
 import { AppAlert, AppForm } from '@/components';
 
 const TOKEN_QUERY_PARAM = 'token';
@@ -47,7 +46,7 @@ const ConfirmEmailView = () => {
       <Card>
         <CardHeader title="Email Confirmation" />
         <CardContent>
-          <TextField disabled label="Email" name="email" value={email} helperText=" " {...SHARED_CONTROL_PROPS} />
+          <TextField disabled label="Email" name="email" value={email} helperText=" " />
           {error ? (
             <AppAlert severity="error" onClose={handleCloseError}>
               {error}
