@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { localStorageGet } from '@/utils';
 import WildIdeasView from '@/views/WildIdeas';
 import IdeasBoxesView from '@/views/IdeasBoxes';
+import { useAppStore } from '@/store';
 
 function a11yProps(index: number) {
   return {

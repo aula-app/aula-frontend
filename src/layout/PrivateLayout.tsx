@@ -1,6 +1,6 @@
-import { useState, FunctionComponent, PropsWithChildren } from 'react';
+import { useState, FunctionComponent, PropsWithChildren, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import { AppIcon, AppIconButton, ErrorBoundary } from '@/components';
 import { LinkToPage } from '@/utils/type';
 import { useOnMobile } from '@/hooks/layout';
@@ -72,6 +72,7 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const navigation = useNavigate();
   const [sideBarVisible, setSideBarVisible] = useState(false);
+
   const onMobile = useOnMobile();
 
   // Variant 1 - Sidebar is static on desktop and is a drawer on mobile
