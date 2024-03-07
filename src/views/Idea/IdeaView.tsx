@@ -1,7 +1,10 @@
 import { Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-
+import { localStorageGet } from '@/utils';
+import WildIdea from '@/components/WildIdea';
+import IdeaComment from '@/components/IdeaComment';
+import ApprovalCard from '@/components/ApprovalCard';
 
 /**
  * Renders "Idea" view
@@ -37,27 +40,14 @@ const IdeaView = () => {
   }, [params.ideaId]);
 
   return (
-    <Grid container spacing={4}>
-       {data.map((d,i) =>
-      <Grid item xs={12} md={4}>
-
-      <AppLink to={ `/room/${ d.id }`} >
-        <Card>
-          <CardHeader title={d.room_name}/>
-          <CardContent>
-            <img 
-              alt={'image number ' + i}
-              src={ (i % 2 === 0) ? '/img/aula.png':'img/aula-room.png' }
-              />
-            {d.description_public}
-          </CardContent>
-        </Card>
-
-        </AppLink>
-        </Grid>
-        )
-        }
-    </Grid>
+    <Stack width="100%" height="100%" overflow="auto" p={2} bgcolor="#eee">
+      <WildIdea text={data.content} />
+      <ApprovalCard disabled />
+      <Typography variant="h5" py={2}>
+        3 Comments
+      </Typography>
+      <IdeaComment text="lalala" id="X" />
+    </Stack>
   );
 };
 
