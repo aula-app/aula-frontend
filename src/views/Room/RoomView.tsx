@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import { localStorageGet } from '@/utils';
 import WildIdeasView from '@/views/WildIdeas';
 import IdeasBoxesView from '@/views/IdeasBoxes';
-import { useAppStore } from '@/store';
 
 function a11yProps(index: number) {
   return {
@@ -66,7 +65,6 @@ const RoomView = () => {
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
           <IdeasBoxesView />
         </TabPanel>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
           <Tabs
             value={value}

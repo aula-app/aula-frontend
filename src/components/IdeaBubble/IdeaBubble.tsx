@@ -9,7 +9,7 @@ interface IdeaBubbleProps {
 
 const bubbleColor = '#eee';
 
-export const IdeaBubble = ({ title, text }: IdeaBubbleProps) => {
+export const IdeaBubble = ({ title, text, isComment = false }: IdeaBubbleProps) => {
   return (
     <Stack mb={1}>
       <Box sx={{ background: bubbleColor, p: 2, borderRadius: 1, position: 'relative' }}>
@@ -33,10 +33,14 @@ export const IdeaBubble = ({ title, text }: IdeaBubbleProps) => {
         {text}
       </Box>
       <Stack direction="row" justifyContent="flex-end" alignItems="center" mt={1}>
-        <ChatBubble fontSize="small" />
-        <Typography variant="caption" pr={1} pl={0.3}>
-          3
-        </Typography>
+        {!isComment && (
+          <>
+            <ChatBubble fontSize="small" />
+            <Typography variant="caption" pr={1} pl={0.3}>
+              3
+            </Typography>
+          </>
+        )}
         <Favorite fontSize="small" />
         <Typography variant="caption" pr={1} pl={0.3}>
           3

@@ -3,6 +3,7 @@ import { WildIdea } from '@/components/WildIdea';
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
 import NewWildIdea from '@/components/NewWildIdea';
+import { AppLink } from '@/components';
 
 interface WildIdeasProps {
   data: any[];
@@ -39,7 +40,9 @@ const WildIdeas = ({ data, reload }: WildIdeasProps) => {
         <NewWildIdea closeMethod={closeDrawer} />
       </Drawer>
       {data.map((d, key) => (
-        <WildIdea username={d.displayname} text={d.content} date={d.created} key={key} />
+        <AppLink to={`idea/${d.id}`}>
+          <WildIdea username={d.displayname} text={d.content} date={d.created} key={key} />
+        </AppLink>
       ))}
     </Stack>
   );

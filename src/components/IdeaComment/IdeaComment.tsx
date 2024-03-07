@@ -12,7 +12,7 @@ export const WildIdea = ({ title, text, id }: IdeaBubbleProps) => {
   return (
     <Stack>
       <IdeaBubble isComment title={title} text={text} />
-      <Stack direction="row" alignItems="center">
+      <Stack direction="row" alignItems="center" mt='-20px'>
         <AccountCircle sx={{ fontSize: '2em' }} />
         <Stack ml={1}>
           <Typography variant="caption" lineHeight={1.5}>

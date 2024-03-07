@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { IdeaBox } from '@/components/IdeaBox';
 import { IdeaCards } from '@/components/IdeaCards';
 
@@ -7,18 +7,28 @@ import { IdeaCards } from '@/components/IdeaCards';
  */
 const IdeasBoxView = () => {
   return (
-    <Stack px={1} py={2} sx={{scrollSnapAlign: 'center'}}>
+    <Box
+      height="100%"
+      flexGrow={1}
+      position="relative"
+      px={1}
+      py={2}
+      sx={{
+        overflowY: 'auto',
+        scrollSnapType: 'y mandatory',
+      }}
+    >
       <IdeaBox noCategories />
-      <Stack>
-        <Typography variant='h6' p={2}>X ideas</Typography>
-        <IdeaCards />
-        <IdeaCards variant="approved" />
-        <IdeaCards variant="dismissed" />
-        <IdeaCards variant="voting" />
-        <IdeaCards variant="voted" />
-        <IdeaCards variant="rejected" />
-      </Stack>
-    </Stack>
+      <Typography variant="h6" p={2}>
+        X ideas
+      </Typography>
+      <IdeaCards />
+      <IdeaCards variant="approved" />
+      <IdeaCards variant="dismissed" />
+      <IdeaCards variant="voting" />
+      <IdeaCards variant="voted" />
+      <IdeaCards variant="rejected" />
+    </Box>
   );
 };
 
