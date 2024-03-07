@@ -1,5 +1,4 @@
-import { SyntheticEvent, useCallback, useState, useEffect, Fragment } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useState, useEffect, Fragment } from 'react';
 import {
   TextField,
   Checkbox,
@@ -13,91 +12,42 @@ import {
   StepLabel,
   Box,
   Button,
+  FormControl,
+  FormHelperText,
 } from '@mui/material';
-import { useAppStore } from '@/store';
-import { AppButton, AppIconButton, AppAlert, AppForm } from '@/components';
-import { useAppForm, SHARED_CONTROL_PROPS, eventPreventDefault } from '@/utils/form';
+import { AppButton, AppIconButton } from '@/components';
+import { FormContainer, useForm } from 'react-hook-form-mui';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
-const VALIDATE_FORM_SIGNUP = {
-  email: {
-    email: true,
-    presence: true,
-  },
-  phone: {
-    type: 'string',
-    format: {
-      pattern: '^$|[- .+()0-9]+', // Note: We have to allow empty in the pattern
-      message: 'should contain numbers',
-    },
-  },
-  userName: {
-    type: 'string',
-    presence: { allowEmpty: false },
-    format: {
-      pattern: '^[A-Za-z ]+$', // Note: Allow only alphabets and space
-      message: 'should contain only alphabets',
-    },
-  },
-  fullName: {
-    type: 'string',
-    presence: { allowEmpty: false },
-    format: {
-      pattern: '^[A-Za-z ]+$', // Note: Allow only alphabets and space
-      message: 'should contain only alphabets',
-    },
-  },
-  password: {
-    presence: true,
-    length: {
-      minimum: 8,
-      maximum: 32,
-      message: 'must be between 8 and 32 characters',
-    },
-  },
-};
 
-const VALIDATE_EXTENSION = {
-  confirmPassword: {
-    equality: 'password',
-  },
-};
-
-interface FormStateValues {
-  firstName: string;
-  lastName: string;
-  userName: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword?: string;
-}
+const schema = yup
+  .object({
+    email: yup.string().email().required(),
+    phone: yup.string().trim().matches(/^$|[- .+()0-9]+$/, 'should contain numbers'),
+    username: yup.string().nonNullable().matches(/^[A-Za-z ]+$/, 'should contain only letters'),
+    fullname: yup.string().nonNullable().matches(/^[A-Za-z ]+$/, 'should contain only letters'),
+    password: yup.string().min(8).max(32).required(),
+    confirmPassword: yup.string().oneOf([yup.ref('password')], 'Passwords must match'),
+    conditions: yup.boolean().oneOf([true],'You must agree to sign in.')
+  })
+  .required();
 
 /**
  * Renders "Signup" view
  * url: /signup
  */
 const SignupView = () => {
-  const navigate = useNavigate();
-  const [, dispatch] = useAppStore();
-  const [validationSchema, setValidationSchema] = useState<any>({
-    ...VALIDATE_FORM_SIGNUP,
-    ...VALIDATE_EXTENSION,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
   });
-  const [formState, , /* setFormState */ onFieldChange, fieldGetError, fieldHasError] = useAppForm({
-    validationSchema: validationSchema, // the state value, so could be changed in time
-    initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      password: '',
-      confirmPassword: '',
-    } as FormStateValues,
-  });
+
   const [showPassword, setShowPassword] = useState(false);
-  const [agree, setAgree] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string>();
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -107,8 +57,6 @@ const SignupView = () => {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  const values = formState.values as FormStateValues; // Typed alias to formState.values as the "Source of Truth"
 
   useEffect(() => {
     // Component Mount
@@ -129,43 +77,9 @@ const SignupView = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // Update Validation Schema when Show/Hide password changed
-    let newSchema;
-    if (showPassword) {
-      newSchema = VALIDATE_FORM_SIGNUP; // Validation without .confirmPassword
-    } else {
-      newSchema = { ...VALIDATE_FORM_SIGNUP, ...VALIDATE_EXTENSION }; // Full validation
-    }
-    setValidationSchema(newSchema);
-  }, [showPassword]);
-
   const handleShowPasswordClick = useCallback(() => {
     setShowPassword((oldValue) => !oldValue);
   }, []);
-
-  const handleAgreeClick = useCallback(() => {
-    setAgree((oldValue) => !oldValue);
-  }, []);
-
-  const handleFormSubmit = useCallback(
-    async (event: SyntheticEvent) => {
-      event.preventDefault();
-
-      const apiResult = true; // await api.auth.signup(values);
-
-      if (!apiResult) {
-        setError('Can not create user for given email, if you already have account please sign in');
-        return; // Unsuccessful signup
-      }
-
-      dispatch({ type: 'SIGN_UP' });
-      return navigate('/', { replace: true });
-    },
-    [dispatch, /*values,*/ navigate]
-  );
-
-  const handleCloseError = useCallback(() => setError(undefined), []);
 
   if (loading) return <LinearProgress />;
 
@@ -178,23 +92,17 @@ const SignupView = () => {
             <TextField
               required
               label="Email"
-              name="email"
-              value={values.email}
-              error={fieldHasError('email')}
-              helperText={fieldGetError('email') || ' '}
-              onChange={onFieldChange}
-              {...SHARED_CONTROL_PROPS}
+              {...register('email')}
+              error={errors.email ? true : false}
+              helperText={errors.email?.message || ' '}
             />
             <TextField
               required
               type={showPassword ? 'text' : 'password'}
               label="Password"
-              name="password"
-              value={values.password}
-              error={fieldHasError('password')}
-              helperText={fieldGetError('password') || ' '}
-              onChange={onFieldChange}
-              {...SHARED_CONTROL_PROPS}
+              {...register('password')}
+              error={errors.password ? true : false}
+              helperText={errors.password?.message || ' '}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -203,7 +111,7 @@ const SignupView = () => {
                       icon={showPassword ? 'visibilityon' : 'visibilityoff'}
                       title={showPassword ? 'Hide Password' : 'Show Password'}
                       onClick={handleShowPasswordClick}
-                      onMouseDown={eventPreventDefault}
+                      onMouseDown={e => e.preventDefault()}
                     />
                   </InputAdornment>
                 ),
@@ -214,12 +122,9 @@ const SignupView = () => {
                 required
                 type="password"
                 label="Confirm Password"
-                name="confirmPassword"
-                value={values.confirmPassword}
-                error={fieldHasError('confirmPassword')}
-                helperText={fieldGetError('confirmPassword') || ' '}
-                onChange={onFieldChange}
-                {...SHARED_CONTROL_PROPS}
+                {...register('confirmPassword')}
+              error={errors.confirmPassword ? true : false}
+              helperText={errors.confirmPassword?.message || ' '}
               />
             )}
           </Fragment>
@@ -234,32 +139,23 @@ const SignupView = () => {
             <TextField
               required
               label="User Name"
-              name="username"
-              value={values.userName}
-              error={fieldHasError('username')}
-              helperText={fieldGetError('username') || ' '}
-              onChange={onFieldChange}
-              {...SHARED_CONTROL_PROPS}
+              {...register('username')}
+              error={errors.username ? true : false}
+              helperText={errors.username?.message || ' '}
             />
             <TextField
               required
               label="Full Name"
-              name="fullName"
-              value={values.lastName}
-              error={fieldHasError('fullName')}
-              helperText={fieldGetError('fullName') || ' '}
-              onChange={onFieldChange}
-              {...SHARED_CONTROL_PROPS}
+              {...register('fullname')}
+              error={errors.fullname ? true : false}
+              helperText={errors.fullname?.message || ' '}
             />
             <TextField
               required
               label="Phone"
-              name="phone"
-              value={values.phone}
-              error={fieldHasError('phone')}
-              helperText={fieldGetError('phone') || ' '}
-              onChange={onFieldChange}
-              {...SHARED_CONTROL_PROPS}
+              {...register('phone')}
+              error={errors.phone ? true : false}
+              helperText={errors.phone?.message || ' '}
             />
           </Fragment>
         );
@@ -269,22 +165,26 @@ const SignupView = () => {
       label: 'Terms of Use',
       content: () => {
         return (
-          <Fragment>
+          <FormControl required error={errors.password ? true : false}>
             <Box height={228} my={2} padding={2} border="1px solid #999" borderRadius={1} overflow='auto'>
               <Typography>Terms and Conditions</Typography>
             </Box>
             <FormControlLabel
-              control={<Checkbox name="agree" checked={agree} onChange={handleAgreeClick} />}
+              control={
+                <Checkbox
+                {...register('conditions')} />
+              }
               label="agree with Terms of Use and Privacy Policy"
             />
-          </Fragment>
+            <FormHelperText>{errors.password?.message || ' '}</FormHelperText>
+          </FormControl>
         );
       },
     },
   ];
 
   return (
-    <AppForm onSubmit={handleFormSubmit}>
+    <FormContainer>
       <Stack>
         <Typography variant="h5" sx={{ mb: 3 }}>
           Sign Up
@@ -300,11 +200,6 @@ const SignupView = () => {
           })}
         </Stepper>
         {steps[activeStep].content()}
-        {error ? (
-          <AppAlert severity="error" onClose={handleCloseError}>
-            {error}
-          </AppAlert>
-        ) : null}
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
         {activeStep > 0 ? (
@@ -315,7 +210,7 @@ const SignupView = () => {
         }
           <Box sx={{ flex: '1 1 auto' }} />
           {activeStep === steps.length - 1 ? (
-            <AppButton type="submit" disabled={!(formState.isValid && agree)} sx={{m: 0}}>
+            <AppButton type="submit" sx={{m: 0}}>
               Sign Up
             </AppButton>
           ) : (
@@ -323,7 +218,7 @@ const SignupView = () => {
           )}
         </Box>
       </Stack>
-    </AppForm>
+    </FormContainer>
   );
 };
 

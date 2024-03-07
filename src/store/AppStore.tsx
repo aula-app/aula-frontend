@@ -19,11 +19,13 @@ export interface AppStoreState {
   isAuthenticated: boolean;
   hasConsent: boolean;
   currentUser?: object | undefined;
+  errors: string[];
 }
 const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
   isAuthenticated: false, // Overridden in AppStore by checking auth token
-  hasConsent: false
+  hasConsent: false,
+  errors: []
 };
 
 /**
@@ -44,8 +46,8 @@ const AppContext = createContext<AppContextReturningType>([INITIAL_APP_STATE, ()
 const AppStoreProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const previousDarkMode = Boolean(localStorageGet('darkMode'));
-  const darkMode = (previousDarkMode !== undefined)?previousDarkMode:prefersDarkMode
-  const token = localStorageGet('token')
+  const darkMode = previousDarkMode !== undefined ? previousDarkMode : prefersDarkMode;
+  const token = localStorageGet('token');
   const tokenExists = Boolean(token !== undefined);
 
   const initialState: AppStoreState = {
@@ -67,7 +69,6 @@ const AppStoreProvider: FunctionComponent<PropsWithChildren> = ({ children }) =>
  * const [state, dispatch] = useAppStore();
  */
 const useAppStore = (): AppContextReturningType => useContext(AppContext);
-
 /**
  * HOC to inject the ApStore to class component, also works for functional components
  *

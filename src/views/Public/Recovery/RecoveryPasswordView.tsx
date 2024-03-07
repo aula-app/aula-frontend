@@ -1,18 +1,16 @@
 import { SyntheticEvent, useCallback, useState } from 'react';
 import { TextField, Typography, Stack } from '@mui/material';
 import { AppButton, AppAlert, AppForm } from '@/components';
-import { useAppForm, SHARED_CONTROL_PROPS } from '@/utils/form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { FormContainer, useForm } from 'react-hook-form-mui';
 
-const VALIDATE_FORM_RECOVERY_PASSWORD = {
-  email: {
-    presence: true,
-    email: true,
-  },
-};
 
-interface FormStateValues {
-  email: string;
-}
+const schema = yup
+  .object({
+    email: yup.string().email().required(),
+  })
+  .required();
 
 interface Props {
   email?: string;
@@ -24,26 +22,18 @@ interface Props {
  * @param {string} [props.email] - pre-populated email in case the user already enters it
  */
 const RecoveryPasswordView = ({ email = '' }: Props) => {
-  const [formState, , /* setFormState */ onFieldChange, fieldGetError, fieldHasError] = useAppForm({
-    validationSchema: VALIDATE_FORM_RECOVERY_PASSWORD,
-    initialValues: { email } as FormStateValues,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
   });
-  const [message, setMessage] = useState<string>();
-  const values = formState.values as FormStateValues; // Typed alias to formState.values as the "Source of Truth"
 
-  const handleFormSubmit = async (event: SyntheticEvent) => {
-    event.preventDefault();
-
-    // await api.auth.recoverPassword(values);
-
-    //Show message with instructions for the user
-    setMessage('Email with instructions has been sent to your address');
-  };
-
-  const handleCloseError = useCallback(() => setMessage(undefined), []);
+  const onSubmit = (formData: Object) => console.log(formData)
 
   return (
-    <AppForm onSubmit={handleFormSubmit}>
+    <FormContainer>
       <Stack>
         <Typography variant="h5" sx={{ mb: 3 }}>
           Password Recovery
@@ -51,25 +41,15 @@ const RecoveryPasswordView = ({ email = '' }: Props) => {
         <TextField
           required
           label="Email"
-          name="email"
-          value={values.email}
-          error={fieldHasError('email')}
-          helperText={fieldGetError('email') || ' '}
-          onChange={onFieldChange}
-          {...SHARED_CONTROL_PROPS}
+          {...register('email')}
+          error={errors.email ? true : false}
+          helperText={errors.email?.message || ' '}
         />
-
-        {message ? (
-          <AppAlert severity="success" onClose={handleCloseError}>
-            {message}
-          </AppAlert>
-        ) : null}
-
-        <AppButton type="submit" disabled={!formState.isValid} sx={{ mx: 0 }}>
+        <AppButton type="submit" onClick={handleSubmit(onSubmit)} sx={{ mx: 0 }}>
           Recover
         </AppButton>
       </Stack>
-    </AppForm>
+    </FormContainer>
   );
 };
 
