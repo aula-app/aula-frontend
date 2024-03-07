@@ -1,12 +1,14 @@
 import { Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { localStorageGet } from '@/utils';
 import WildIdea from '@/components/WildIdea';
 import IdeaComment from '@/components/IdeaComment';
 import ApprovalCard from '@/components/ApprovalCard';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
+import { databaseRequest } from '@/utils/requests';
+import { CommentResponse } from '@/types/CommentTypes';
+import { Idea, SingleIdeaRequest } from '@/types/IdeaType';
 
 /**
  * Renders "Idea" view
@@ -14,44 +16,45 @@ import VotingResults from '@/components/VotingResults';
  */
 const IdeaView = () => {
   const params = useParams();
-  const jwt_token = localStorageGet('token');
-  const [data, setData] = useState({} as { [key: string]: string });
+  const [data, setData] = useState({} as Idea);
+  const [comments, setComments] = useState({} as CommentResponse);
 
+  const dataFetch = async () =>
+    await databaseRequest('model', {
+      model: 'Idea',
+      method: 'getIdeaContent',
+      arguments: { idea_id: Number(params['ideaId']) },
+      decrypt: ['content', 'displayname'],
+    });
+
+  const commentsFetch = async () =>
+    await databaseRequest('model', {
+      model: 'Comment',
+      method: 'getCommentsByIdeaId',
+      arguments: { idea_id: Number(params['ideaId']) },
+      decrypt: ['content'],
+    });
+
+  const updateData = () => dataFetch().then((response: SingleIdeaRequest) => setData(response.data));
+  const updateComments = () => commentsFetch().then((response: CommentResponse) => setComments(response));
   useEffect(() => {
-    // fetch data
-    const dataFetch = async () => {
-      const data = await (
-        await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/idea.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + jwt_token,
-          },
-          body: JSON.stringify({
-            idea_id: params['ideaId'],
-          }),
-        })
-      ).json();
-
-      // set state when the data received
-      console.log(data);
-      setData(data);
-    };
-
-    dataFetch();
-  }, [params.ideaId]);
+    updateData();
+    updateComments();
+  }, []);
 
   return (
     <Stack width="100%" height="100%" overflow="auto">
       <VotingCard />
       <Stack p={2}>
-        <VotingResults yourVote='against' />
-        <WildIdea text={data.content} />
+        <VotingResults yourVote="against" />
+        <WildIdea idea={data} />
         <ApprovalCard disabled />
         <Typography variant="h5" py={2}>
-          3 Comments
+          { String(comments.count) } Comments
         </Typography>
-        <IdeaComment text="lalala" id="X" />
+        { comments.data && comments.data.map(comment => (
+          <IdeaComment comment={comment} />
+        ))}
       </Stack>
     </Stack>
   );

@@ -5,11 +5,11 @@ const jwt_token = localStorageGet('token');
 const jwt_payload = jwt_token ? parseJwt(jwt_token) : null;
 
 export const databaseRequest = async (controllerName: string, requestData: Object) => {
-  const headers = new Headers();
-  headers.set('Content-Type', 'application/json');
+  const headers = {} as {'Content-Type'?: string, 'Authorization'?: string};
+  headers['Content-Type'] = 'application/json';
 
   if(controllerName !== 'login')  {
-    headers.set('Authorization', `Bearer ${jwt_token}`);
+    headers['Authorization'] = `Bearer ${jwt_token}`;
     if (!jwt_payload) return null;
   }
 

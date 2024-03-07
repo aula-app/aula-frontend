@@ -1,21 +1,19 @@
 import { AccountCircle } from '@mui/icons-material';
-import { Chip, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { IdeaBubble } from '../IdeaBubble';
-import AppLink from '../AppLink';
+import { Idea } from '@/types/IdeaType';
 
-interface IdeaBubbleProps {
-  username: string;
-  text: string;
-  date: string;
+interface Props {
+  idea: Idea;
 }
 
-export const WildIdea = ({ username, text, date}: IdeaBubbleProps) => {
+export const WildIdea = ({ idea }: Props) => {
 
-  const displayDate = new Date(date);
+  const displayDate = new Date(idea.created);
 
   return (
     <Stack width="100%" mb={2} sx={{scrollSnapAlign: 'center'}}>
-      <IdeaBubble text={text} />
+      <IdeaBubble text={idea.content} likes={idea.sum_likes} comments={0} />
       <Stack direction="row" alignItems="center" mt='-20px'>
         <AccountCircle sx={{ fontSize: '3em' }} />
         <Stack ml={1} maxWidth='100%' overflow='hidden'>
@@ -30,7 +28,7 @@ export const WildIdea = ({ username, text, date}: IdeaBubbleProps) => {
             lineHeight={1.5}
             maxWidth='100%'
             >
-            {username}
+            {idea.displayname}
           </Typography>
         </Stack>
         {/* <Stack flexGrow={1} pr={1} direction="row" alignItems="center" justifyContent="flex-end">

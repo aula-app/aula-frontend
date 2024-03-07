@@ -4,12 +4,14 @@ import { Box, Stack, Typography, colors } from '@mui/material';
 interface IdeaBubbleProps {
   title?: string;
   text: string;
+  likes: number;
+  comments?: number;
   isComment?: boolean;
 }
 
 const bubbleColor = '#eee';
 
-export const IdeaBubble = ({ title, text, isComment = false }: IdeaBubbleProps) => {
+export const IdeaBubble = ({ title, text, likes, comments, isComment = false }: IdeaBubbleProps) => {
   return (
     <Stack mb={1}>
       <Box sx={{ background: bubbleColor, p: 2, borderRadius: 1, position: 'relative' }}>
@@ -37,13 +39,13 @@ export const IdeaBubble = ({ title, text, isComment = false }: IdeaBubbleProps) 
           <>
             <ChatBubble fontSize="small" />
             <Typography variant="caption" pr={1} pl={0.3}>
-              3
+              {comments}
             </Typography>
           </>
         )}
         <Favorite fontSize="small" />
         <Typography variant="caption" pr={1} pl={0.3}>
-          3
+          {likes}
         </Typography>
       </Stack>
     </Stack>

@@ -3,9 +3,9 @@ import { TabContext, TabPanel } from '@mui/lab';
 import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { localStorageGet } from '@/utils';
 import WildIdeasView from '@/views/WildIdeas';
 import IdeasBoxesView from '@/views/IdeasBoxes';
+import { databaseRequest } from '@/utils/requests';
 
 function a11yProps(index: number) {
   return {
@@ -21,30 +21,16 @@ function a11yProps(index: number) {
 const RoomView = () => {
   const params = useParams();
   const [data, setData] = useState([] as any[]);
-  const jwt_token = localStorageGet('token');
-  const room_id = params['room_id'];
 
-  const dataFetch = async () => {
-    const data = await (
-      await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/room_ideas.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwt_token,
-        },
-        body: JSON.stringify({ room_id: room_id }),
-      })
-    ).json();
+  const dataFetch = async () => await databaseRequest('model', {
+      model: 'Idea',
+      method: 'getIdeasByRoom',
+      arguments: { room_id: Number(params['room_id']) },
+      decrypt: ['displayname', 'content']
+    });
 
-    return data;
-  };
-
-  useEffect(() => {
-    // fetch data
-    dataFetch().then(
-      data => setData(data.data)
-    )
-  }, []);
+  const updateData = () => dataFetch().then((response) => setData(response.data));
+  useEffect(() => { updateData() }, []);
 
   const [value, setValue] = useState('0');
 
@@ -52,9 +38,6 @@ const RoomView = () => {
     setValue(newValue);
   };
 
-  const updateData = () => dataFetch().then(
-    data => setData(data.data)
-  )
 
   return (
     <Stack width="100%" height="100%" overflow="hidden">
@@ -84,8 +67,6 @@ const RoomView = () => {
               value="0"
               icon={
                 <Stack direction="row" alignItems="center">
-                  <Lightbulb sx={{ mr: 1 }} />
-                  {data.length}
                   <Lightbulb sx={{ mr: 1 }} />
                   {data.length}
                 </Stack>

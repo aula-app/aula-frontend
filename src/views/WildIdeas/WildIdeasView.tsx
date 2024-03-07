@@ -39,9 +39,9 @@ const WildIdeas = ({ data, reload }: WildIdeasProps) => {
       <Drawer anchor="bottom" open={open} onClose={toggleDrawer(false)}>
         <NewWildIdea closeMethod={closeDrawer} />
       </Drawer>
-      {data.map((d, key) => (
-        <AppLink to={`idea/${d.id}`}>
-          <WildIdea username={d.displayname} text={d.content} date={d.created} key={key} />
+      {data.map((d) => (
+        <AppLink to={`idea/${d.id}`} key={d.id}>
+          <WildIdea username={d.displayname} text={d.content} date={d.created} />
         </AppLink>
       ))}
     </Stack>

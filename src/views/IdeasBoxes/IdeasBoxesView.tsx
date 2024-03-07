@@ -7,7 +7,9 @@ import { IdeaBox } from '@/components/IdeaBox';
 const IdeasBoxView = () => {
   return (
     <Stack px={1} py={2} sx={{scrollSnapAlign: 'center'}}>
-      <IdeaBox noCategories />
+      { 
+        <IdeaBox noCategories />
+      }
     </Stack>
   );
 };
