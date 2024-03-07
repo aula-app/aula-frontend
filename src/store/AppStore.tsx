@@ -69,7 +69,6 @@ const AppStoreProvider: FunctionComponent<PropsWithChildren> = ({ children }) =>
  * const [state, dispatch] = useAppStore();
  */
 const useAppStore = (): AppContextReturningType => useContext(AppContext);
-
 /**
  * HOC to inject the ApStore to class component, also works for functional components
  *

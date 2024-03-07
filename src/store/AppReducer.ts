@@ -41,16 +41,13 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
       };
     }
     case 'ADD_ERROR': {
-      let newErrors = state.errors;
-      newErrors.push(action?.message);
-      //state.errors.push(action?.message)
-      return { ...state, errors: newErrors };
+      return { ...state, errors: [...state.errors, action?.message] };
     };
     case 'REMOVE_ERROR': {
-      let newErrors = state.errors;
-      newErrors.splice(action?.index, 1)
-      //state.errors.push(action?.message)
-      return { ...state, errors: newErrors };
+      return { ...state, errors: [...state.errors.filter((e,i)=> i !== action?.index)] };
+    };
+    case 'REMOVE_ALL_ERRORS': {
+      return { ...state, errors: [] };
     };
     default:
       return state;
