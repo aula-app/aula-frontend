@@ -4,12 +4,10 @@ import { NotificationsBar } from '@/components/NotificationsBar';
 import { UserStats } from '@/components/UserStats';
 import { blueGrey } from '@mui/material/colors';
 import React, { useState } from 'react';
-import { useAppStore } from '@/store';
 
 const WelcomeView = () => {
   const [scrollTop, setScrollTop] = useState(0);
   const [showNotificationsBar, setNotificationsBar] = useState(true);
-  const [store, dispatch] = useAppStore()
 
   const handleScroll = (event: React.UIEvent<HTMLElement>) => {
     let currentScroll = event.currentTarget.scrollTop;
@@ -58,7 +56,6 @@ const WelcomeView = () => {
       >
         <NotificationsBar />
         <Stack p={2} pt={0} width="100%">
-          <Button onClick={() => dispatch({type: 'ADD_ERROR', message: 'fuck'})}>ADD</Button>
           <Typography variant="h4" pt={2}>
             Your Activity
           </Typography>
