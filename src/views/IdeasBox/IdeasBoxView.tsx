@@ -3,8 +3,9 @@ import { IdeaBox } from '@/components/IdeaBox';
 import { IdeaCard } from '@/components/IdeaCard';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { BoxResponseType, BoxType } from '@/types/BoxTypes';
+import { BoxResponseType } from '@/types/BoxTypes';
 import { databaseRequest } from '@/utils/requests';
+import { IdeasResponseType } from '@/types/IdeaTypes';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/ideas-box/:box_id
@@ -12,6 +13,7 @@ import { databaseRequest } from '@/utils/requests';
 const IdeasBoxView = () => {
   const params = useParams();
   const [box, setBox] = useState({} as BoxResponseType);
+  const [boxIdeas, setBoxIdeas] = useState({} as IdeasResponseType);
 
   const boxFetch = async () =>
     await databaseRequest('model', {
@@ -19,10 +21,20 @@ const IdeasBoxView = () => {
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
       decrypt: ['name', 'description_public'],
-    })
-    .then((response) => setBox(response));
+    }).then((response) => setBox(response));
 
-    useEffect(() => { boxFetch() }, []);
+  const boxIdeasFetch = async () =>
+    await databaseRequest('model', {
+      model: 'Idea',
+      method: 'getIdeasByTopic',
+      arguments: { topic_id: Number(params['box_id']) },
+      decrypt: ['name', 'description_public'],
+    }).then((response) => setBoxIdeas(response));
+
+  useEffect(() => {
+    boxFetch();
+    boxIdeasFetch();
+  }, []);
 
   return (
     <Box
@@ -38,14 +50,15 @@ const IdeasBoxView = () => {
     >
       {box.data && <IdeaBox box={box.data || {}} />}
       <Typography variant="h6" p={2}>
-        X ideas
+        {String(boxIdeas.count)} ideas
       </Typography>
-      {/* <IdeaCard />
-      <IdeaCard variant="approved" />
-      <IdeaCard variant="dismissed" />
-      <IdeaCard variant="voting" />
-      <IdeaCard variant="voted" />
-      <IdeaCard variant="rejected" /> */}
+      {boxIdeas.data && (
+        <>
+          {boxIdeas.data.map((idea) => (
+            <IdeaCard idea={idea} />
+          ))}
+        </>
+      )}
     </Box>
   );
 };

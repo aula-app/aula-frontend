@@ -25,7 +25,6 @@ const ErrorMessages = () => {
     const newMessages = [...new Set(state.errors.filter(x => !currentStack.includes(x)))];
     newMessages.map((error, i) => enqueueSnackbar(error, { variant: 'error', onClose: () => handleClose(i) }));
     currentStack = [...currentStack, ...newMessages]
-    console.log(currentStack, newMessages)
   }, [JSON.stringify(state.errors)]);
 
   const AlertSnackbar = forwardRef((props: SnackbarProps, ref: ForwardedRef<HTMLDivElement>) => (

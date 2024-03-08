@@ -1,6 +1,6 @@
 import { Drawer, Fab, Stack } from '@mui/material';
 import { Idea } from '@/components/Idea';
-import AddIcon from '@mui/icons-material/Add';
+import { Add } from '@mui/icons-material';
 import { useState } from 'react';
 import NewWildIdea from '@/components/NewWildIdea';
 import { AppLink } from '@/components';
@@ -35,7 +35,7 @@ const WildIdeas = ({ ideas, reload }: WildIdeasProps) => {
         }}
         onClick={toggleDrawer(true)}
       >
-        <AddIcon />
+        <Add />
       </Fab>
       <Drawer anchor="bottom" open={open} onClose={toggleDrawer(false)}>
         <NewWildIdea closeMethod={closeDrawer} />

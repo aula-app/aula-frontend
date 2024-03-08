@@ -20,7 +20,7 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
       <CardContent>
         <Stack direction="row" mb={2} alignItems="center" spacing={2}>
           {displayPhases.map((phase, key) => {
-            const isCurrentPhase = key * 10 === box.phase_id;
+            const isCurrentPhase = key === box.phase_id;
             return (
               <Stack
                 width={isCurrentPhase ? 'auto' : '1.5em'}
