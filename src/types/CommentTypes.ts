@@ -1,4 +1,4 @@
-export interface Comment {
+export interface CommentType {
   id: number;
   content: string;
   sum_likes: number;
@@ -13,8 +13,8 @@ export interface Comment {
   parent_id: number;
 }
 
-export interface CommentResponse {
+export interface CommentResponseType {
   success: Boolean;
   count: Number;
-  data: Comment[];
+  data: CommentType[];
 }

@@ -1,20 +1,21 @@
 import { Drawer, Fab, Stack } from '@mui/material';
-import { WildIdea } from '@/components/WildIdea';
+import { Idea } from '@/components/Idea';
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
 import NewWildIdea from '@/components/NewWildIdea';
 import { AppLink } from '@/components';
+import { IdeaType } from '@/types/IdeaTypes';
 
 interface WildIdeasProps {
-  data: any[];
+  ideas: IdeaType[];
   reload: () => void;
 }
 
 /**
  * Renders "WildIdeas" view
- * url: /
+ * url: /room/:room_id
  */
-const WildIdeas = ({ data, reload }: WildIdeasProps) => {
+const WildIdeas = ({ ideas, reload }: WildIdeasProps) => {
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
@@ -39,9 +40,9 @@ const WildIdeas = ({ data, reload }: WildIdeasProps) => {
       <Drawer anchor="bottom" open={open} onClose={toggleDrawer(false)}>
         <NewWildIdea closeMethod={closeDrawer} />
       </Drawer>
-      {data.map((d) => (
-        <AppLink to={`idea/${d.id}`} key={d.id}>
-          <WildIdea username={d.displayname} text={d.content} date={d.created} />
+      {ideas.map((idea) => (
+        <AppLink to={`idea/${idea.id}`} key={idea.id} width="100%">
+          <Idea idea={idea} />
         </AppLink>
       ))}
     </Stack>

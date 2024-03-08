@@ -5,9 +5,10 @@ import phases from '@/utils/phases';
 import { useParams } from 'react-router-dom';
 import { CheckCircle, Cancel, WorkspacePremium } from '@mui/icons-material';
 import { amber, grey, lightGreen, red } from '@mui/material/colors';
+import { IdeaType } from '@/types/IdeaTypes';
 
-interface IdeaBoxProps {
-  noCategories?: boolean;
+interface IdeaCardProps {
+  idea: IdeaType;
   variant?: "discussion" | "approved" | "dismissed" | "voting" | "voted" | "rejected"
 }
 
@@ -16,10 +17,9 @@ if (displayPhases.includes('success')) displayPhases.splice(displayPhases.indexO
 if (displayPhases.includes('reject')) displayPhases.splice(displayPhases.indexOf('reject'), 1);
 if (displayPhases.includes('wild')) displayPhases.splice(displayPhases.indexOf('wild'), 1);
 /**
- * Renders "Welcome" view
- * url: /
+ * Renders "IdeaCard" component
  */
-const IdeaBox = ({ noCategories = false, variant = "discussion" }: IdeaBoxProps) => {
+const IdeaCard = ({ idea, variant = "discussion" }: IdeaCardProps) => {
   //const CurrentIcon = phases.wild.icon;
   const params = useParams();
 
@@ -36,7 +36,7 @@ const IdeaBox = ({ noCategories = false, variant = "discussion" }: IdeaBoxProps)
         variant === "dismissed" ? grey[100] :
         variant === "rejected" ? red[100] : 'transparent' }}
       variant="outlined">
-      <AppLink to={`/room/${params.room_id}/idea-box/x`}>
+      <AppLink to={`/room/${params.room_id}/idea-box/${params.box_id}/idea/${idea.id}`}>
         <Stack
           direction="row" height={68} alignItems="center">
           { variant !== "discussion" &&
@@ -60,9 +60,8 @@ const IdeaBox = ({ noCategories = false, variant = "discussion" }: IdeaBoxProps)
           </Stack>
           }
           <Stack flexGrow={1} px={2} overflow="hidden">
-            <Typography variant="h6">TITLE</Typography>
             <Typography variant="body2" noWrap textOverflow="ellipsis">
-              description lalalalalalalalalalalalallalaal
+              {idea.content}
             </Typography>
           </Stack>
         </Stack>
@@ -71,4 +70,4 @@ const IdeaBox = ({ noCategories = false, variant = "discussion" }: IdeaBoxProps)
   );
 };
 
-export default IdeaBox;
+export default IdeaCard;

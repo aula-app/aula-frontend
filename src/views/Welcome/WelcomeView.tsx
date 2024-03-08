@@ -1,13 +1,27 @@
-import { Box, Button, Divider, Paper, Stack, Typography } from '@mui/material';
-import { RoomCards } from '@/components/RoomCards';
+import { Box, Button, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
+import { RoomCards } from '@/components/RoomCard';
 import { NotificationsBar } from '@/components/NotificationsBar';
 import { UserStats } from '@/components/UserStats';
 import { blueGrey } from '@mui/material/colors';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { RoomsResponseType } from '@/types/RoomTypes';
+import { databaseRequest } from '@/utils/requests';
+import { useParams } from 'react-router-dom';
+import { AppLink } from '@/components';
 
 const WelcomeView = () => {
+  const params = useParams();
   const [scrollTop, setScrollTop] = useState(0);
+  const [rooms, setRooms] = useState({} as RoomsResponseType);
   const [showNotificationsBar, setNotificationsBar] = useState(true);
+
+  const roomsFetch = async () =>
+    await databaseRequest('model', {
+      model: 'Room',
+      method: 'getRoomBaseData',
+      arguments: { room_id: Number(params['room_id']) },
+      decrypt: ['content', 'displayname'],
+    });
 
   const handleScroll = (event: React.UIEvent<HTMLElement>) => {
     let currentScroll = event.currentTarget.scrollTop;
@@ -23,6 +37,11 @@ const WelcomeView = () => {
     const newValue = !showNotificationsBar;
     setNotificationsBar(newValue);
   };
+
+  const updateRooms = () => roomsFetch().then((response: RoomsResponseType) => setRooms(response));
+  useEffect(() => {
+    updateRooms();
+  }, []);
 
   return (
     <Stack
@@ -40,7 +59,7 @@ const WelcomeView = () => {
       <Paper
         elevation={6}
         sx={{
-          position: "fixed",
+          position: 'fixed',
           top: 56,
           left: 0,
           width: '100%',
@@ -72,12 +91,19 @@ const WelcomeView = () => {
         pt={scrollTop === 0 && showNotificationsBar ? 30 : 4}
         sx={{
           scrollSnapAlign: 'start',
-          transition: 'all .5s ease-in-out'
-
-        }}>
+          transition: 'all .5s ease-in-out',
+        }}
+      >
         Rooms
       </Typography>
-      <RoomCards />
+      {rooms.data &&
+        rooms.data.map((room) => (
+          <Grid key={room.id} item xs={12} md={4} my={2} sx={{ scrollSnapAlign: 'center' }}>
+            <AppLink to={`/room/${room.id}`}>
+              <RoomCards room={room} key={room.id} />
+            </AppLink>
+          </Grid>
+        ))}
     </Stack>
   );
 };

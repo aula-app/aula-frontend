@@ -1,11 +1,31 @@
 import { Box, Typography } from '@mui/material';
 import { IdeaBox } from '@/components/IdeaBox';
-import { IdeaCards } from '@/components/IdeaCards';
+import { IdeaCard } from '@/components/IdeaCard';
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { BoxResponseType } from '@/types/BoxTypes';
+import { databaseRequest } from '@/utils/requests';
 
 /** * Renders "IdeasBox" view
- * url: /room/:roomId/ideas-box/:boxId
+ * url: /room/:room_id/ideas-box/:box_id
  */
 const IdeasBoxView = () => {
+  const params = useParams();
+  const [box, setBox] = useState({} as BoxResponseType);
+
+  const boxFetch = async () =>
+    await databaseRequest('model', {
+      model: 'Topic',
+      method: 'getTopicBaseData',
+      arguments: { topic_id: Number(params['box_id']) },
+      decrypt: ['name', 'description_public'],
+    });
+
+  const updateBox = () => boxFetch().then((response) => setBox(response));
+  useEffect(() => {
+    updateBox();
+  }, []);
+
   return (
     <Box
       height="100%"
@@ -18,16 +38,16 @@ const IdeasBoxView = () => {
         scrollSnapType: 'y mandatory',
       }}
     >
-      <IdeaBox noCategories />
+      {box.data && <IdeaBox box={box.data || {}} />}
       <Typography variant="h6" p={2}>
         X ideas
       </Typography>
-      <IdeaCards />
-      <IdeaCards variant="approved" />
-      <IdeaCards variant="dismissed" />
-      <IdeaCards variant="voting" />
-      <IdeaCards variant="voted" />
-      <IdeaCards variant="rejected" />
+      {/* <IdeaCard />
+      <IdeaCard variant="approved" />
+      <IdeaCard variant="dismissed" />
+      <IdeaCard variant="voting" />
+      <IdeaCard variant="voted" />
+      <IdeaCard variant="rejected" /> */}
     </Box>
   );
 };

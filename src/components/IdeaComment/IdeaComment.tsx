@@ -1,17 +1,17 @@
 import { AccountCircle } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { IdeaBubble } from '../IdeaBubble';
-import { Comment } from '@/types/CommentTypes';
+import { CommentType } from '@/types/CommentTypes';
 
 interface Props {
-  comment: Comment
+  comment: CommentType;
 }
 
-export const WildIdea = ({ comment }: Props) => {
+export const Idea = ({ comment }: Props) => {
   return (
     <Stack>
       <IdeaBubble isComment text={comment.content} likes={0} />
-      <Stack direction="row" alignItems="center" mt='-20px'>
+      <Stack direction="row" alignItems="center" mt="-20px">
         <AccountCircle sx={{ fontSize: '2em' }} />
         <Stack ml={1}>
           <Typography variant="caption" lineHeight={1.5}>
@@ -26,4 +26,4 @@ export const WildIdea = ({ comment }: Props) => {
   );
 };
 
-export default WildIdea;
+export default Idea;

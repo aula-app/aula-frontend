@@ -1,13 +1,13 @@
 import { AccountCircle } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { IdeaBubble } from '../IdeaBubble';
-import { Idea } from '@/types/IdeaType';
+import { IdeaType } from '@/types/IdeaTypes';
 
 interface Props {
-  idea: Idea;
+  idea: IdeaType;
 }
 
-export const WildIdea = ({ idea }: Props) => {
+export const Idea = ({ idea }: Props) => {
 
   const displayDate = new Date(idea.created);
 
@@ -39,4 +39,4 @@ export const WildIdea = ({ idea }: Props) => {
   );
 };
 
-export default WildIdea;
+export default Idea;
