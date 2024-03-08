@@ -24,12 +24,12 @@ const RoomCard = ({ room }: RoomCardProps) => {
         <CardMedia
           component="img"
           height="194"
-          image={i % 2 === 0 ? '/img/aula-room1.png' : '/img/aula-room.png'}
+          image={room.id % 2 === 0 ? '/img/aula-room1.png' : '/img/aula-room.png'}
           alt="bg image"
           sx={{ borderRadius: '10px' }}
         />
         <Typography variant="h6" sx={{ mt: 1.5 }} noWrap>
-          {capitalize(room.name)}
+          {capitalize(room.room_name)}
         </Typography>
         <Typography sx={{ mt: 0.5, mb: -1 }} variant="body2" noWrap>
           {room.description_public}
@@ -38,8 +38,8 @@ const RoomCard = ({ room }: RoomCardProps) => {
           <PhaseButton variant="wild" />
         </Stack>
         <Grid container spacing={1} my={0}>
-          {displayPhases.map((phase, key) => (
-            <Grid item xs={3} key={key}>
+          {displayPhases.map(phase => (
+            <Grid item xs={3} key={phase}>
               <PhaseButton variant={phase} noText />
             </Grid>
           ))}

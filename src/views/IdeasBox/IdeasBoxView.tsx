@@ -3,7 +3,7 @@ import { IdeaBox } from '@/components/IdeaBox';
 import { IdeaCard } from '@/components/IdeaCard';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { BoxResponseType } from '@/types/BoxTypes';
+import { BoxResponseType, BoxType } from '@/types/BoxTypes';
 import { databaseRequest } from '@/utils/requests';
 
 /** * Renders "IdeasBox" view
@@ -19,12 +19,10 @@ const IdeasBoxView = () => {
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
       decrypt: ['name', 'description_public'],
-    });
+    })
+    .then((response) => setBox(response));
 
-  const updateBox = () => boxFetch().then((response) => setBox(response));
-  useEffect(() => {
-    updateBox();
-  }, []);
+    useEffect(() => { boxFetch() }, []);
 
   return (
     <Box

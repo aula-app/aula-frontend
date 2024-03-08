@@ -31,7 +31,8 @@ const RoomView = () => {
       method: 'getIdeasByRoom',
       arguments: { room_id: Number(params['room_id']) },
       decrypt: ['displayname', 'content'],
-    });
+    })
+    .then((response) => setIdeas(response));
 
   const boxesFetch = async () =>
     await databaseRequest('model', {
@@ -39,14 +40,12 @@ const RoomView = () => {
       method: 'getTopicsByRoom',
       arguments: { room_id: Number(params['room_id']) },
       decrypt: ['name', 'description_public'],
-    });
-
-  const updateIdeas = () => ideasFetch().then((response) => setIdeas(response));
-  const updateBoxes = () => boxesFetch().then((response) => setBoxes(response));
+    })
+    .then((response) => setBoxes(response));
 
   useEffect(() => {
-    updateIdeas();
-    updateBoxes();
+    ideasFetch();
+    boxesFetch();
   }, []);
 
   const [value, setValue] = useState('0');
@@ -59,7 +58,7 @@ const RoomView = () => {
     <Stack width="100%" height="100%" overflow="hidden">
       <TabContext value={value}>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
-          <WildIdeasView ideas={ideas.data || []} reload={updateIdeas} />
+          <WildIdeasView ideas={ideas.data || []} reload={ideasFetch} />
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
           <IdeasBoxesView boxes={boxes.data || []} />

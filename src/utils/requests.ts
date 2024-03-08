@@ -4,6 +4,12 @@ import { localStorageGet } from './localStorage';
 const jwt_token = localStorageGet('token');
 const jwt_payload = jwt_token ? parseJwt(jwt_token) : null;
 
+interface genericResponse {
+  success: Boolean;
+  count?: Number;
+  data: any;
+}
+
 export const databaseRequest = async (controllerName: string, requestData: Object) => {
   const headers = {} as {'Content-Type'?: string, 'Authorization'?: string};
   headers['Content-Type'] = 'application/json';

@@ -8,7 +8,7 @@ import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
 import { databaseRequest } from '@/utils/requests';
 import { CommentResponseType } from '@/types/CommentTypes';
-import { IdeaType, SingleIdeaResponseType } from '@/types/IdeaTypes';
+import { SingleIdeaResponseType } from '@/types/IdeaTypes';
 
 /**
  * Renders "Idea" view
@@ -16,7 +16,7 @@ import { IdeaType, SingleIdeaResponseType } from '@/types/IdeaTypes';
  */
 const IdeaView = () => {
   const params = useParams();
-  const [data, setData] = useState({} as IdeaType);
+  const [data, setData] = useState({} as SingleIdeaResponseType);
   const [comments, setComments] = useState({} as CommentResponseType);
 
   const dataFetch = async () =>
@@ -25,7 +25,8 @@ const IdeaView = () => {
       method: 'getIdeaContent',
       arguments: { idea_id: Number(params['idea_id']) },
       decrypt: ['content', 'displayname'],
-    });
+    })
+    .then((response: SingleIdeaResponseType) => setData(response));
 
   const commentsFetch = async () =>
     await databaseRequest('model', {
@@ -33,13 +34,12 @@ const IdeaView = () => {
       method: 'getCommentsByidea_id',
       arguments: { idea_id: Number(params['idea_id']) },
       decrypt: ['content'],
-    });
+    })
+    .then((response: CommentResponseType) => setComments(response));
 
-  const updateData = () => dataFetch().then((response: SingleIdeaResponseType) => setData(response.data));
-  const updateComments = () => commentsFetch().then((response: CommentResponseType) => setComments(response));
   useEffect(() => {
-    updateData();
-    updateComments();
+    dataFetch();
+    commentsFetch();
   }, []);
 
   return (
@@ -47,7 +47,7 @@ const IdeaView = () => {
       <VotingCard />
       <Stack p={2}>
         <VotingResults yourVote="against" />
-        <Idea idea={data} />
+        <Idea idea={data.data} />
         <ApprovalCard disabled />
         <Typography variant="h5" py={2}>
           { String(comments.count) } Comments

@@ -1,36 +1,34 @@
+import { RoomsResponseType } from '@/types/RoomTypes';
+import { databaseRequest } from '@/utils/requests';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 
 /** * Renders "Welcome" view
  * url: /
  */
 const RoomsView = () => {
-  const [data, setData] = useState([] as any[]);
+  const params = useParams();
+  const [rooms, setRooms] = useState({} as RoomsResponseType);
   const columns:GridColDef[] = [
     { field: 'room_name', headerName: 'Name', width: 260},
     { field: 'description_internal', headerName: 'Internal Description', width: 300},
     { field: 'description_public', headerName: 'Public Description', width: 300},
   ]
 
-  useEffect(() => {
-    // fetch data
-    const dataFetch = async () => {
-      const data = await (
-        await fetch(
-          import.meta.env.VITE_APP_API_URL + "/api/controllers/rooms.php"
-        )
-      ).json();
+  const roomsFetch = async () =>
+    await databaseRequest('model', {
+      model: 'Room',
+      method: 'getRoomBaseData',
+      arguments: { room_id: Number(params['room_id']) },
+      decrypt: ['content', 'displayname'],
+    })
+    .then((response: RoomsResponseType) => setRooms(response));
 
-      // set state when the data received
-      console.log(data)
-      setData(data.data)
-    };
-
-    dataFetch();
-    },[]);
+  useEffect(() => { roomsFetch() },[]);
 
   return (
     <Stack direction="column" spacing={2}>
@@ -38,7 +36,7 @@ const RoomsView = () => {
 
       <div style={{ width: '100%' }}>
         <DataGrid
-          rows={data}
+          rows={rooms.data}
           columns={columns}
           initialState={{
             pagination: {

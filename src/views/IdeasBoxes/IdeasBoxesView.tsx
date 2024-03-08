@@ -16,8 +16,8 @@ const IdeasBoxView = ({ boxes }: BoxesProps) => {
   return (
     <Stack px={1} py={2} sx={{ scrollSnapAlign: 'center' }}>
       {boxes.map((box) => (
-        <AppLink to={`/room/${params.room_id}/idea-box/${box.id}`} mb={2}>
-          <IdeaBox box={box} key={box.id} />
+        <AppLink to={`/room/${params.room_id}/idea-box/${box.id}`} mb={2} key={box.id}>
+          <IdeaBox box={box} />
         </AppLink>
       ))}
     </Stack>

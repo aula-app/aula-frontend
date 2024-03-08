@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
-import { RoomCards } from '@/components/RoomCard';
+import { RoomCard } from '@/components/RoomCard';
 import { NotificationsBar } from '@/components/NotificationsBar';
 import { UserStats } from '@/components/UserStats';
 import { blueGrey } from '@mui/material/colors';
@@ -16,12 +16,8 @@ const WelcomeView = () => {
   const [showNotificationsBar, setNotificationsBar] = useState(true);
 
   const roomsFetch = async () =>
-    await databaseRequest('model', {
-      model: 'Room',
-      method: 'getRoomBaseData',
-      arguments: { room_id: Number(params['room_id']) },
-      decrypt: ['content', 'displayname'],
-    });
+    await databaseRequest('rooms', {})
+    .then((response: RoomsResponseType) => setRooms(response));
 
   const handleScroll = (event: React.UIEvent<HTMLElement>) => {
     let currentScroll = event.currentTarget.scrollTop;
@@ -38,9 +34,8 @@ const WelcomeView = () => {
     setNotificationsBar(newValue);
   };
 
-  const updateRooms = () => roomsFetch().then((response: RoomsResponseType) => setRooms(response));
   useEffect(() => {
-    updateRooms();
+    roomsFetch();
   }, []);
 
   return (
@@ -100,7 +95,7 @@ const WelcomeView = () => {
         rooms.data.map((room) => (
           <Grid key={room.id} item xs={12} md={4} my={2} sx={{ scrollSnapAlign: 'center' }}>
             <AppLink to={`/room/${room.id}`}>
-              <RoomCards room={room} key={room.id} />
+              <RoomCard room={room} key={room.id} />
             </AppLink>
           </Grid>
         ))}
