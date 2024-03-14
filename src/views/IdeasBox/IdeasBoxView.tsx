@@ -28,7 +28,7 @@ const IdeasBoxView = () => {
       model: 'Idea',
       method: 'getIdeasByTopic',
       arguments: { topic_id: Number(params['box_id']) },
-      decrypt: ['name', 'description_public'],
+      decrypt: ['content'],
     }).then((response) => setBoxIdeas(response));
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const IdeasBoxView = () => {
       {boxIdeas.data && (
         <>
           {boxIdeas.data.map((idea) => (
-            <IdeaCard idea={idea} />
+            <IdeaCard idea={idea} /> // phase={box.data.phase_id}
           ))}
         </>
       )}
