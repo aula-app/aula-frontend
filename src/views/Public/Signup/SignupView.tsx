@@ -19,6 +19,7 @@ import { AppButton, AppIconButton } from '@/components';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import KnowMore from '@/components/KnowMore';
 
 
 const schema = yup
@@ -89,13 +90,16 @@ const SignupView = () => {
       content: () => {
         return (
           <Fragment>
-            <TextField
-              required
-              label="Email"
-              {...register('email')}
-              error={errors.email ? true : false}
-              helperText={errors.email?.message || ' '}
-            />
+            <KnowMore text="Some info text.">
+              <TextField
+                required
+                label="Email"
+                {...register('email')}
+                error={errors.email ? true : false}
+                helperText={errors.email?.message || ' '}
+                sx={{width: '100%'}}
+              />
+            </KnowMore>
             <TextField
               required
               type={showPassword ? 'text' : 'password'}
