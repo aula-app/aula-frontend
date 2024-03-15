@@ -1,12 +1,12 @@
 export interface IdeaType {
+  id: number;
+  content: string;
   displayname: string;
+  sum_likes: number;
+  sum_votes: number;
   room_id: number;
   created: string;
   last_update: string;
-  id: number;
-  content: string;
-  sum_likes: number;
-  sum_votes: number;
 }
 
 export interface IdeasResponseType {

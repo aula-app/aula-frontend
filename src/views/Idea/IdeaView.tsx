@@ -16,21 +16,21 @@ import { Add } from '@mui/icons-material';
  * Renders "Idea" view
  * url: room/:room_id/.../idea/:idea_id
  */
+
+type IdeaArgs = {idea_id: string, user_id?: string}
+
 const IdeaView = () => {
   const params = useParams();
   const [open, setOpen] = useState(false);
   const [idea, setIdea] = useState({} as SingleIdeaResponseType);
   const [comments, setComments] = useState({} as CommentResponseType);
 
-  const dataFetch = async () =>
-    await databaseRequest('model', {
+  const ideaFetch = async () => await databaseRequest('model', {
       model: 'Idea',
       method: 'getIdeaContent',
-      arguments: { idea_id: Number(params['idea_id']) },
+      arguments: { idea_id: params['idea_id'] },
       decrypt: ['content', 'displayname'],
-    }).then((response: SingleIdeaResponseType) => {
-      setIdea(response);
-    });
+    }).then((response: SingleIdeaResponseType) => setIdea(response));
 
   const commentsFetch = async () =>
     await databaseRequest('model', {
@@ -41,7 +41,7 @@ const IdeaView = () => {
     }).then((response: CommentResponseType) => setComments(response));
 
   useEffect(() => {
-    dataFetch();
+    ideaFetch();
     commentsFetch();
   }, []);
 
@@ -55,7 +55,7 @@ const IdeaView = () => {
       {params['box_id'] && <VotingCard />}
       <Stack p={2}>
         {params['box_id'] && <VotingResults yourVote="against" />}
-        {idea.data && <Idea idea={idea.data} />}
+        {idea.data && <Idea idea={idea.data} onReload={ideaFetch} />}
         {params['box_id'] && <ApprovalCard disabled />}
         {comments && (
           <>
@@ -73,7 +73,7 @@ const IdeaView = () => {
               }}>
               <Add />
             </Fab>
-            {comments.data && comments.data.map((comment) => <IdeaComment comment={comment} />)}
+            {comments.data && comments.data.map((comment) => <IdeaComment comment={comment} onReload={commentsFetch} />)}
           </>
         )}
         <Drawer anchor="bottom" open={open} onClose={toggleDrawer(false)}>

@@ -1,17 +1,55 @@
+import { CommentType } from '@/types/CommentTypes';
+import { IdeaType } from '@/types/IdeaTypes';
+import { localStorageGet } from '@/utils';
+import { parseJwt } from '@/utils/jwt';
+import { databaseRequest } from '@/utils/requests';
 import { ChatBubble, Favorite } from '@mui/icons-material';
-import { Box, Stack, Typography, colors } from '@mui/material';
+import { Box, Button, Stack, Typography, colors } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 interface IdeaBubbleProps {
-  title?: string;
-  text: string;
-  likes: number;
+  bubbleInfo: IdeaType | CommentType;
+  id: number;
   comments?: number;
-  isComment?: boolean;
+  liked?: boolean;
+  onReload: () => void;
 }
-
+type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike' | 'CommentAddLike' | 'CommentRemoveLike';
+type Args = {user_id: number, idea_id?: number, comment_id?: number}
 const bubbleColor = '#eee';
 
-export const IdeaBubble = ({ title, text, likes, comments, isComment = false }: IdeaBubbleProps) => {
+export const IdeaBubble = ({ bubbleInfo, id, comments = 0, onReload}: IdeaBubbleProps) => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
+  const [liked, setLiked] = useState(false);
+
+  const context = (bubbleInfo.hasOwnProperty('idea_id') ? 'Comment' : 'Idea') // check if it is a coimment
+  const lowerContext = context.toLowerCase() as  'comment' | 'idea';
+
+  const manageLike = (likeMethod: likeMethodType) => {
+    const args = { user_id: jwt_payload.user_id } as Args;
+    args[`${lowerContext}_id`] = id;
+    return databaseRequest('model', {
+      model: context,
+      method: likeMethod,
+      arguments: args,
+      decrypt: [],
+    });
+  };
+
+  const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
+  const addLike = async () => await manageLike(`${context}AddLike`).then(() => onReload());
+  const removeLike = async () => await manageLike(`${context}RemoveLike`).then(() => onReload());
+
+  const toggleLike = () => {
+    liked ? removeLike() : addLike();
+    setLiked(!liked);
+  };
+
+  useEffect(() => {
+    hasLiked();
+  }, []);
+
   return (
     <Stack mb={1}>
       <Box sx={{ background: bubbleColor, p: 2, borderRadius: 1, position: 'relative' }}>
@@ -27,26 +65,30 @@ export const IdeaBubble = ({ title, text, likes, comments, isComment = false }: 
             transform: 'translateY(100%)',
           }}
         />
-        {title && (
+        {/* {title && (
           <Typography variant="h6" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap" mb={1}>
             {title}
           </Typography>
-        )}
-        {text}
+        )} */}
+        {bubbleInfo.content}
       </Box>
-      <Stack direction="row" justifyContent="flex-end" alignItems="center" mt={1}>
-        {!isComment && (
+      <Stack direction="row" justifyContent="flex-end" alignItems="center">
+        {comments > 0 && (
           <>
-            <ChatBubble fontSize="small" />
-            <Typography variant="caption" pr={1} pl={0.3}>
-              {comments}
-            </Typography>
+            <Button color="secondary" sx={{ px: 0, minWidth: 40 }}>
+              <ChatBubble fontSize="small" />
+              <Typography variant="caption" pl={0.3}>
+                {comments}
+              </Typography>
+            </Button>
           </>
         )}
-        <Favorite fontSize="small" />
-        <Typography variant="caption" pr={1} pl={0.3}>
-          {likes}
-        </Typography>
+        <Button color={liked ? 'primary' : 'secondary'} sx={{ px: 0, minWidth: 40 }} onClick={toggleLike}>
+          <Favorite fontSize="small" />
+          <Typography variant="caption" pl={0.3}>
+            {bubbleInfo.sum_likes}
+          </Typography>
+        </Button>
       </Stack>
     </Stack>
   );
