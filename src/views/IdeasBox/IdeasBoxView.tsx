@@ -54,8 +54,8 @@ const IdeasBoxView = () => {
       </Typography>
       {boxIdeas.data && (
         <>
-          {boxIdeas.data.map((idea) => (
-            <IdeaCard idea={idea} /> // phase={box.data.phase_id}
+          {boxIdeas.data.map((idea, key) => (
+            <IdeaCard idea={idea} key={key} /> // phase={box.data.phase_id}
           ))}
         </>
       )}

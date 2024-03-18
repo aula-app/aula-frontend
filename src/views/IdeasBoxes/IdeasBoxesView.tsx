@@ -12,7 +12,6 @@ interface BoxesProps {
  * url: /room/:room_id/
  */
 const IdeasBoxView = ({ boxes }: BoxesProps) => {
-  console.log(boxes)
   const params = useParams();
   return (
     <Stack px={1} py={2} sx={{ scrollSnapAlign: 'center' }}>

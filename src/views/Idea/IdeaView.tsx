@@ -54,7 +54,7 @@ const IdeaView = () => {
     <Stack width="100%" height="100%" overflow="auto">
       {params['box_id'] && <VotingCard />}
       <Stack p={2}>
-        {params['box_id'] && <VotingResults yourVote="against" />}
+        {params['box_id'] && <VotingResults yourVote={0} />}
         {idea.data && <Idea idea={idea.data} onReload={ideaFetch} />}
         {params['box_id'] && <ApprovalCard disabled />}
         {comments && (
@@ -73,7 +73,7 @@ const IdeaView = () => {
               }}>
               <Add />
             </Fab>
-            {comments.data && comments.data.map((comment) => <IdeaComment comment={comment} onReload={commentsFetch} />)}
+            {comments.data && comments.data.map((comment, key) => <IdeaComment comment={comment} onReload={commentsFetch} key={key} />)}
           </>
         )}
         <Drawer anchor="bottom" open={open} onClose={toggleDrawer(false)}>

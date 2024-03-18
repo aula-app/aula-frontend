@@ -1,13 +1,12 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { DoNotDisturbOn, CheckCircle } from '@mui/icons-material';
 import { green, grey, red } from '@mui/material/colors';
 import { votingOptions, Vote } from '@/utils/voting';
 
 interface IdeaBoxProps {
   rejected?: boolean;
-  yourVote: Vote
+  yourVote: Vote;
 }
 
 /**
@@ -38,22 +37,22 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
               aspectRatio: 1,
             }}
           >
-            { votingOptions[!rejected ? 'for' : 'against']['icon']  }
+            {votingOptions[!rejected ? 2 : 0]['icon']}
           </Stack>
           <Stack flexGrow={1} pr={2}>
             <Typography variant="body2">description lalalalalalalalalalalalallalaal</Typography>
           </Stack>
           <Stack>
-            {Object.keys(votingOptions).map((v, i) => (
-              <Stack direction="row" alignItems="center" fontSize="small" key={i} mr={1} sx={{whiteSpace: 'nowrap'}}>
-                {votingOptions[v as Vote]['icon']}&nbsp; 3
+            {votingOptions.map((option, i) => (
+              <Stack direction="row" alignItems="center" fontSize="small" key={i} mr={1} sx={{ whiteSpace: 'nowrap' }}>
+                {option['icon']}&nbsp; 3
               </Stack>
             ))}
           </Stack>
         </Stack>
       </Card>
       <Stack direction="row" alignItems="center" color={grey[600]} mx={3} mt={1} fontSize="small">
-        { votingOptions[yourVote]['icon'] }&nbsp; You voted { votingOptions[yourVote]['label'] } this idea
+        {votingOptions[yourVote]['icon']}&nbsp; You voted {votingOptions[yourVote]['label']} this idea
       </Stack>
     </Stack>
   );
