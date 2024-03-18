@@ -3,10 +3,11 @@ import { TabContext, TabPanel } from '@mui/lab';
 import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { localStorageGet } from '@/utils';
 import WildIdeasView from '@/views/WildIdeas';
 import IdeasBoxesView from '@/views/IdeasBoxes';
-import { useAppStore } from '@/store';
+import { databaseRequest } from '@/utils/requests';
+import { IdeasResponseType } from '@/types/IdeaTypes';
+import { BoxesResponseType } from '@/types/BoxTypes';
 
 function a11yProps(index: number) {
   return {
@@ -17,34 +18,34 @@ function a11yProps(index: number) {
 
 /**
  * Renders "Room" view
- * url: /
+ * url: /room/:room_id
  */
 const RoomView = () => {
   const params = useParams();
-  const [data, setData] = useState([] as any[]);
-  const jwt_token = localStorageGet('token');
-  const room_id = params['room_id'];
+  const [ideas, setIdeas] = useState({} as IdeasResponseType);
+  const [boxes, setBoxes] = useState({} as BoxesResponseType);
 
-  const dataFetch = async () => {
-    const data = await (
-      await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/room_ideas.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwt_token,
-        },
-        body: JSON.stringify({ room_id: room_id }),
-      })
-    ).json();
+  const ideasFetch = async () =>
+    await databaseRequest('model', {
+      model: 'Idea',
+      method: 'getIdeasByRoom',
+      arguments: { room_id: Number(params['room_id']) },
+      decrypt: ['displayname', 'content'],
+    })
+    .then((response) => setIdeas(response));
 
-    return data;
-  };
+  const boxesFetch = async () =>
+    await databaseRequest('model', {
+      model: 'Topic',
+      method: 'getTopicsByRoom',
+      arguments: { room_id: Number(params['room_id']) },
+      decrypt: ['name', 'description_public'],
+    })
+    .then((response) => setBoxes(response));
 
   useEffect(() => {
-    // fetch data
-    dataFetch().then(
-      data => setData(data.data)
-    )
+    ideasFetch();
+    boxesFetch();
   }, []);
 
   const [value, setValue] = useState('0');
@@ -53,18 +54,14 @@ const RoomView = () => {
     setValue(newValue);
   };
 
-  const updateData = () => dataFetch().then(
-    data => setData(data.data)
-  )
-
   return (
     <Stack width="100%" height="100%" overflow="hidden">
       <TabContext value={value}>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
-          <WildIdeasView data={data} reload={updateData} />
+          <WildIdeasView ideas={ideas.data || []} reload={ideasFetch} />
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
-          <IdeasBoxesView />
+          <IdeasBoxesView boxes={boxes.data || []} />
         </TabPanel>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
           <Tabs
@@ -86,7 +83,7 @@ const RoomView = () => {
               icon={
                 <Stack direction="row" alignItems="center">
                   <Lightbulb sx={{ mr: 1 }} />
-                  {data.length}
+                  {String(ideas.count)}
                 </Stack>
               }
               label="Wild Ideas"
@@ -96,7 +93,8 @@ const RoomView = () => {
               value="1"
               icon={
                 <Stack direction="row" alignItems="center">
-                  <Inbox sx={{ mr: 1 }} />3
+                  <Inbox sx={{ mr: 1 }} />
+                  {String(boxes.count)}
                 </Stack>
               }
               label="Idea Boxes"
