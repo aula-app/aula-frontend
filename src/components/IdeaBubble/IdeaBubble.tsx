@@ -54,6 +54,7 @@ export const IdeaBubble = ({ bubbleInfo, id, comments = 0, onReload}: IdeaBubble
     <Stack mb={1}>
       <Box sx={{ background: bubbleColor, p: 2, borderRadius: 1, position: 'relative' }}>
         <Box
+          className="noPrint"
           sx={{
             position: 'absolute',
             bottom: 0,

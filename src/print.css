@@ -1,0 +1,22 @@
+@media print {
+  * {
+    background-color: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  .separateBottom,
+  .MuiToolbar-root{ border-bottom: 1px solid black !important; }
+
+  .noPrint,
+  .MuiFab-root,
+  .MuiTabs-root,
+  .MuiToolbar-root svg,
+  .MuiToolbar-root button,
+  .MuiCardContent-root img { display: none; }
+
+  .noVolume { width: auto !important; height: auto !important; }
+  .noRepeat { position: relative !important; }
+  .noSpace { margin: 0 !important; padding: 0 !important; top: 0; }
+}

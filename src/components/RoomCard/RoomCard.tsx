@@ -34,10 +34,10 @@ const RoomCard = ({ room }: RoomCardProps) => {
         <Typography sx={{ mt: 0.5, mb: -1 }} variant="body2" noWrap>
           {room.description_public}
         </Typography>
-        <Stack mt={3}>
+        <Stack mt={3} className="noPrint">
           <PhaseButton variant="wild" />
         </Stack>
-        <Grid container spacing={1} my={0}>
+        <Grid container spacing={1} my={0} className="noPrint">
           {displayPhases.map(phase => (
             <Grid item xs={3} key={phase}>
               <PhaseButton variant={phase} noText />

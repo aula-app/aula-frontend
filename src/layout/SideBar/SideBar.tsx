@@ -41,6 +41,7 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, items, onClo
 
   return (
     <Drawer
+      className="noPrint"
       anchor={anchor}
       open={open}
       variant={variant}

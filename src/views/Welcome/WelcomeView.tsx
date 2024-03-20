@@ -6,11 +6,9 @@ import { blueGrey } from '@mui/material/colors';
 import React, { useEffect, useState } from 'react';
 import { RoomsResponseType } from '@/types/RoomTypes';
 import { databaseRequest } from '@/utils/requests';
-import { useParams } from 'react-router-dom';
 import { AppLink } from '@/components';
 
 const WelcomeView = () => {
-  const params = useParams();
   const [scrollTop, setScrollTop] = useState(0);
   const [rooms, setRooms] = useState({} as RoomsResponseType);
   const [showNotificationsBar, setNotificationsBar] = useState(true);
@@ -53,6 +51,7 @@ const WelcomeView = () => {
     >
       <Paper
         elevation={6}
+        className='noRepeat'
         sx={{
           position: 'fixed',
           top: 56,
@@ -84,6 +83,7 @@ const WelcomeView = () => {
       <Typography
         variant="h4"
         pt={scrollTop === 0 && showNotificationsBar ? 30 : 4}
+        className="noSpace"
         sx={{
           scrollSnapAlign: 'start',
           transition: 'all .5s ease-in-out',

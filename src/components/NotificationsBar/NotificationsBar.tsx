@@ -3,7 +3,7 @@ import { Campaign, Favorite, Mail, Notifications } from '@mui/icons-material';
 
 export const NotificationsBar = () => {
   return (
-    <ButtonGroup size="large" aria-label="large button group">
+    <ButtonGroup size="large" aria-label="large button group" className='noPrint'>
       <IconButton size="large" sx={{color: '#000'}}>
         <Notifications />
       </IconButton>
