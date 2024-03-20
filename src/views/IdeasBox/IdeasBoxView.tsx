@@ -52,13 +52,10 @@ const IdeasBoxView = () => {
       <Typography variant="h6" p={2}>
         {String(boxIdeas.count)} ideas
       </Typography>
-      {boxIdeas.data && (
-        <>
-          {boxIdeas.data.map((idea, key) => (
-            <IdeaCard idea={idea} key={key} /> // phase={box.data.phase_id}
-          ))}
-        </>
-      )}
+      {boxIdeas.data &&
+        boxIdeas.data.map((idea, key) => (
+          <IdeaCard idea={idea} phase={box.data.phase_id} key={key} />
+        ))}
     </Box>
   );
 };

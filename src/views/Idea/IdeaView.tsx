@@ -9,7 +9,7 @@ import VotingResults from '@/components/VotingResults';
 import { databaseRequest } from '@/utils/requests';
 import { CommentResponseType } from '@/types/CommentTypes';
 import { SingleIdeaResponseType } from '@/types/IdeaTypes';
-import NewComment from '@/components/newComment';
+import NewComment from '@/components/NewComment';
 import { Add } from '@mui/icons-material';
 
 /**

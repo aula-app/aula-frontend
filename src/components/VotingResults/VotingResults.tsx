@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { green, grey, red } from '@mui/material/colors';
-import { votingOptions, Vote } from '@/utils/voting';
+import { votingOptions, Vote } from '@/utils/variants';
 
 interface IdeaBoxProps {
   rejected?: boolean;

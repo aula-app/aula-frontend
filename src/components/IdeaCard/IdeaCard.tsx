@@ -3,14 +3,20 @@ import { Card } from '@mui/material';
 import { AppLink } from '..';
 import phases from '@/utils/phases';
 import { useParams } from 'react-router-dom';
-import { CheckCircle, Cancel, WorkspacePremium } from '@mui/icons-material';
-import { amber, grey, lightGreen, red } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 import { IdeaType } from '@/types/IdeaTypes';
+import { databaseRequest } from '@/utils/requests';
+import { useEffect, useState } from 'react';
+import { localStorageGet } from '@/utils';
+import { parseJwt } from '@/utils/jwt';
+import { variantOptions } from '@/utils/variants';
 
 interface IdeaCardProps {
   idea: IdeaType;
-  variant?: "discussion" | "approved" | "dismissed" | "voting" | "voted" | "rejected"
+  phase: number;
 }
+
+type variant = 'discussion' | 'approved' | 'dismissed' | 'voting' | 'voted' | 'neutral' | 'rejected';
 
 const displayPhases = Object.keys(Object.freeze(phases)) as Array<keyof typeof phases>;
 if (displayPhases.includes('success')) displayPhases.splice(displayPhases.indexOf('success'), 1);
@@ -19,9 +25,44 @@ if (displayPhases.includes('wild')) displayPhases.splice(displayPhases.indexOf('
 /**
  * Renders "IdeaCard" component
  */
-const IdeaCard = ({ idea, variant = "discussion" }: IdeaCardProps) => {
+const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
   //const CurrentIcon = phases.wild.icon;
   const params = useParams();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
+  const [variant, setVariant] = useState<variant>(
+    phase === 1 && idea.approved === 1
+      ? 'approved'
+      : phase === 1 && idea.approved === -1
+        ? 'dismissed'
+        : phase === 2
+          ? 'voting'
+          : phase === 3
+            ? idea.is_winner
+              ? 'voted'
+              : 'rejected'
+            : 'discussion'
+  );
+
+  const getVote = async () =>
+    await databaseRequest('model', {
+      model: 'Idea',
+      method: 'getVoteValue',
+      arguments: {
+        user_id: jwt_payload.user_id,
+        idea_id: idea.idea_id,
+      },
+      decrypt: [],
+    }).then((response) => setVote(response.count, response.data));
+
+  const setVote = (hasVoted: number, vote: number) => {
+    console.log(hasVoted);
+    if (hasVoted > 0) setVariant(vote > 0 ? 'voted' : vote < 0 ? 'rejected' : 'neutral');
+  };
+
+  useEffect(() => {
+    if (phase === 2) getVote();
+  }, []);
 
   return (
     <Card
@@ -30,35 +71,26 @@ const IdeaCard = ({ idea, variant = "discussion" }: IdeaCardProps) => {
         overflow: 'hidden',
         mb: 2,
         scrollSnapAlign: 'center',
-        bgcolor:
-        variant === "approved" ? amber[100] :
-        variant === "voted" ? lightGreen[100] :
-        variant === "dismissed" ? grey[100] :
-        variant === "rejected" ? red[100] : 'transparent' }}
-      variant="outlined">
-      <AppLink to={`/room/${params.room_id}/idea-box/${params.box_id}/idea/${idea.id}`}>
-        <Stack
-          direction="row" height={68} alignItems="center">
-          { variant !== "discussion" &&
-          <Stack
-            height="100%"
-            alignItems="center"
-            justifyContent="center"
-            sx={{
-              aspectRatio: 1,
-              borderRight: '1px solid #ccc',
-              color:
-                variant === "approved" ? amber[400] :
-                variant === "voted" ? lightGreen[400] :
-                variant === "rejected" ? red[400] :
-                grey[400]
-            }}
-          >
-            { variant === "approved" && <WorkspacePremium fontSize="large" /> }
-            { variant === "voted" && <CheckCircle fontSize="large" /> }
-            { (variant === "dismissed" || variant === "rejected") && <Cancel fontSize="large" /> }
-          </Stack>
-          }
+        bgcolor: variantOptions[variant].bg,
+      }}
+      variant="outlined"
+    >
+      <AppLink to={`/room/${params.room_id}/idea-box/${params.box_id}/idea/${idea.idea_id}`}>
+        <Stack direction="row" height={68} alignItems="center" color={variantOptions[variant].color}>
+          {variant !== 'discussion' && (
+            <Stack
+              height="100%"
+              alignItems="center"
+              justifyContent="center"
+              sx={{
+                aspectRatio: 1,
+                borderRight: '1px solid currentColor'
+              }}
+              fontSize="40px"
+            >
+              {variantOptions[variant].icon}
+            </Stack>
+          )}
           <Stack flexGrow={1} px={2} overflow="hidden">
             <Typography variant="body2" noWrap textOverflow="ellipsis">
               {idea.content}
