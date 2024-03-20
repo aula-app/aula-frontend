@@ -23,6 +23,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { Print } from '@mui/icons-material';
 
 /**
  * How to use:
@@ -49,6 +50,7 @@ const ICONS: Record<string, React.ComponentType> = {
   menu: MenuIcon,
   night: NightIcon,
   notifications: NotificationsIcon,
+  print: Print,
   room: MeetingRoomIcon,
   search: SearchIcon,
   settings: SettingsIcon,
