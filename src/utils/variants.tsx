@@ -47,8 +47,8 @@ export const variantOptions = {
     icon: <WorkspacePremium sx={{fontSize: "inherit"}} />,
   },
   dismissed: {
-    color: votingOptions[0].color,
-    bg: votingOptions[0].bg,
+    color: grey[600],
+    bg: grey[200],
     icon: votingOptions[0].icon,
   },
   voting: {
