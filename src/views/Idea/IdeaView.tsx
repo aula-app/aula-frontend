@@ -9,23 +9,24 @@ import VotingResults from '@/components/VotingResults';
 import { databaseRequest } from '@/utils/requests';
 import { CommentResponseType } from '@/types/CommentTypes';
 import { SingleIdeaResponseType } from '@/types/IdeaTypes';
-import NewComment from '@/components/newComment';
+import NewComment from '@/components/NewComment';
 import { Add } from '@mui/icons-material';
+import { BoxResponseType } from '@/types/BoxTypes';
 
 /**
  * Renders "Idea" view
  * url: room/:room_id/.../idea/:idea_id
  */
 
-type IdeaArgs = {idea_id: string, user_id?: string}
-
 const IdeaView = () => {
   const params = useParams();
   const [open, setOpen] = useState(false);
   const [idea, setIdea] = useState({} as SingleIdeaResponseType);
+  const [phase, setPhase] = useState(0);
   const [comments, setComments] = useState({} as CommentResponseType);
 
-  const ideaFetch = async () => await databaseRequest('model', {
+  const ideaFetch = async () =>
+    await databaseRequest('model', {
       model: 'Idea',
       method: 'getIdeaContent',
       arguments: { idea_id: params['idea_id'] },
@@ -40,9 +41,18 @@ const IdeaView = () => {
       decrypt: ['content'],
     }).then((response: CommentResponseType) => setComments(response));
 
+  const getPhase = async () =>
+    databaseRequest('model', {
+      model: 'Topic',
+      method: 'getTopicBaseData',
+      arguments: { topic_id: Number(params['box_id']) },
+      decrypt: ['name', 'description_public'],
+    }).then((response: BoxResponseType) => setPhase(response.data.phase_id));
+
   useEffect(() => {
     ideaFetch();
     commentsFetch();
+    if (params['box_id']) getPhase();
   }, []);
 
   const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
@@ -52,11 +62,15 @@ const IdeaView = () => {
   };
   return (
     <Stack width="100%" height="100%" overflow="auto">
-      {params['box_id'] && <VotingCard />}
+      {phase === 2 && <VotingCard />}
       <Stack p={2}>
-        {params['box_id'] && <VotingResults yourVote={0} />}
+        {phase === 3 && <VotingResults yourVote={0} />}
         {idea.data && <Idea idea={idea.data} onReload={ideaFetch} />}
-        {params['box_id'] && <ApprovalCard disabled />}
+        {idea.data && idea.data.approved != 0 && phase > 0 &&
+          <ApprovalCard
+            comment={idea.data.approval_comment}
+            rejected={idea.data.approved < 0}
+            disabled={phase > 1} />}
         {comments && (
           <>
             <Typography variant="h5" py={2}>
@@ -69,11 +83,13 @@ const IdeaView = () => {
               sx={{
                 position: 'absolute',
                 bottom: 15,
-                right: 15
-              }}>
+                right: 15,
+              }}
+            >
               <Add />
             </Fab>
-            {comments.data && comments.data.map((comment, key) => <IdeaComment comment={comment} onReload={commentsFetch} key={key} />)}
+            {comments.data &&
+              comments.data.map((comment, key) => <IdeaComment comment={comment} onReload={commentsFetch} key={key} />)}
           </>
         )}
         <Drawer anchor="bottom" open={open} onClose={toggleDrawer(false)}>

@@ -1,20 +1,20 @@
 import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { Stars, DoNotDisturbOn } from '@mui/icons-material';
-import { grey, yellow } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
+import { variantOptions } from '@/utils/variants';
 
 interface IdeaBoxProps {
   disabled?: boolean;
   rejected?: boolean;
+  comment?: string | null;
 }
 
 /**
  * Renders "Welcome" view
  * url: /
  */
-const IdeaBox = ({ disabled = false, rejected = false }: IdeaBoxProps) => {
-  //const CurrentIcon = phases.wild.icon;
+const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment'}: IdeaBoxProps) => {
   const params = useParams();
 
   return (
@@ -24,7 +24,8 @@ const IdeaBox = ({ disabled = false, rejected = false }: IdeaBoxProps) => {
         overflow: 'hidden',
         my: 2,
         scrollSnapAlign: 'center',
-        bgcolor: disabled ? grey[200] : '#fff',
+        color: !disabled && !rejected ? variantOptions.approved.color : variantOptions.dismissed.color,
+        bgcolor: !disabled && !rejected ? variantOptions.approved.bg : variantOptions.dismissed.bg,
       }}
       variant="outlined"
     >
@@ -35,14 +36,14 @@ const IdeaBox = ({ disabled = false, rejected = false }: IdeaBoxProps) => {
           justifyContent="center"
           sx={{
             aspectRatio: 1,
-            color: disabled ? grey[500] : yellow[600],
           }}
+          fontSize={40}
         >
-          {!rejected ? <Stars fontSize="large" /> : <DoNotDisturbOn fontSize="large" />}
+          {!rejected ? variantOptions.approved.icon : variantOptions.dismissed.icon}
         </Stack>
         <Stack flexGrow={1} pr={2}>
           <Typography variant="body2" sx={{ color: disabled ? grey[500] : 'inherit' }}>
-            description lalalalalalalalalalalalallalaal
+            {comment}
           </Typography>
         </Stack>
       </Stack>
