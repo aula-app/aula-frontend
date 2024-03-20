@@ -1,5 +1,5 @@
 import { CheckCircle, Circle, DoNotDisturbOn, WorkspacePremium } from '@mui/icons-material';
-import { amber, green, grey, lightGreen, red } from "@mui/material/colors";
+import { amber, green, grey, red } from "@mui/material/colors";
 
 export type Vote = -1 | 0 | 1;
 

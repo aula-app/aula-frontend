@@ -1,8 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { Stars, DoNotDisturbOn } from '@mui/icons-material';
-import { grey, yellow } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 import { variantOptions } from '@/utils/variants';
 
 interface IdeaBoxProps {
