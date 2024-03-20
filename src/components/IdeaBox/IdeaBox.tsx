@@ -23,6 +23,7 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
             const isCurrentPhase = key === box.phase_id;
             return (
               <Stack
+                className={isCurrentPhase ? "noVolume" : "noPrint"}
                 width={isCurrentPhase ? 'auto' : '1.5em'}
                 flexGrow={isCurrentPhase ? 1 : 0}
                 height="1.5rem"
