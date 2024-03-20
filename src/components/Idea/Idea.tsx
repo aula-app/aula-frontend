@@ -14,7 +14,7 @@ export const Idea = ({ idea, onReload = () => {} }: Props) => {
   const displayDate = new Date(idea.created);
 
   return (
-    <Stack width="100%" mb={2} sx={{ scrollSnapAlign: 'center' }}>
+    <Stack width="100%" mb={2} sx={{ scrollSnapAlign: 'center' }} className="separateBottom">
       <IdeaBubble bubbleInfo={idea} id={Number(params['idea_id'])} onReload={onReload} />
       <Stack direction="row" alignItems="center" mt="-20px">
         <AccountCircle sx={{ fontSize: '3em' }} />
