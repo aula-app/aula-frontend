@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
 import { localStorageGet } from '@/utils';
 import { parseJwt } from '@/utils/jwt';
-import { useEffect } from 'react';
+import { useRef } from 'react';
 
 interface NewCommentProps {
   closeMethod: () => void;
@@ -26,6 +26,7 @@ export const NewComment = ({ closeMethod, isOpen }: NewCommentProps) => {
   const params = useParams();
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
+  const inputRef = useRef<HTMLInputElement>();
   const {
     register,
     handleSubmit,
@@ -45,12 +46,11 @@ export const NewComment = ({ closeMethod, isOpen }: NewCommentProps) => {
       },
     }).then(closeMethod);
 
-  useEffect(() => {
-    if (isOpen) document.getElementsByName('content')[0].focus();
-  }, [isOpen]);
+    const inputFocus = () => { if(isOpen) inputRef.current?.focus() }
+
 
   return (
-    <Drawer anchor="bottom" open={isOpen} onClose={closeMethod}>
+    <Drawer anchor="bottom" open={isOpen} onClose={closeMethod} onTransitionEnd={inputFocus}>
       <FormContainer>
         <Stack p={2} pb={0}>
           <Stack direction="row">
@@ -68,6 +68,7 @@ export const NewComment = ({ closeMethod, isOpen }: NewCommentProps) => {
               {...register('content')}
               error={errors.content ? true : false}
               helperText={errors.content?.message || ' '}
+              inputRef={inputRef}
             />
             <Box
               sx={{
