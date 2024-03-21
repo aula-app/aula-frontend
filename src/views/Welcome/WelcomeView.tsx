@@ -7,24 +7,28 @@ import React, { useEffect, useState } from 'react';
 import { RoomsResponseType } from '@/types/RoomTypes';
 import { databaseRequest } from '@/utils/requests';
 import { AppLink } from '@/components';
+import { useSwipeable } from 'react-swipeable';
 
 const WelcomeView = () => {
   const [scrollTop, setScrollTop] = useState(0);
   const [rooms, setRooms] = useState({} as RoomsResponseType);
   const [showNotificationsBar, setNotificationsBar] = useState(true);
+  const handlers = useSwipeable({
+    onSwipedDown: () => setNotificationsBar(true),
+    onSwipedUp: () => setNotificationsBar(false),
+  })
 
   const roomsFetch = async () =>
     await databaseRequest('rooms', {})
     .then((response: RoomsResponseType) => setRooms(response));
 
   const handleScroll = (event: React.UIEvent<HTMLElement>) => {
-    let currentScroll = event.currentTarget.scrollTop;
-    if (currentScroll === 0) {
+    setScrollTop(event.currentTarget.scrollTop);
+    if (scrollTop === 0 && showNotificationsBar) {
       setNotificationsBar(true);
-    } else if (currentScroll !== scrollTop) {
+    } else if (showNotificationsBar) {
       setNotificationsBar(false);
     }
-    setScrollTop(currentScroll);
   };
 
   const toggleNotifications = () => {
@@ -75,7 +79,10 @@ const WelcomeView = () => {
           <UserStats />
         </Stack>
         <Box position="absolute" bottom={0} width="100%" bgcolor={blueGrey[50]}>
-          <Button sx={{ width: '100%', py: 1 }} onClick={toggleNotifications}>
+          <Button
+            sx={{ width: '100%', py: 1 }}
+            onClick={toggleNotifications}
+            {...handlers}>
             <Divider sx={{ width: '50%' }} variant="middle" />
           </Button>
         </Box>

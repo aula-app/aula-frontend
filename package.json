@@ -51,6 +51,7 @@
     "react-hook-form": "^7.45.0",
     "react-hook-form-mui": "^6.3.0",
     "react-router-dom": "^6.14.2",
+    "react-swipeable": "^7.0.1",
     "validate.js": "latest",
     "web-vitals": "^3.4.0",
     "yup": "^1.3.3"
