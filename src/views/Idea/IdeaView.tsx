@@ -1,4 +1,4 @@
-import { Drawer, Fab, Stack, Typography } from '@mui/material';
+import { Fab, Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import Idea from '@/components/Idea';
@@ -92,9 +92,7 @@ const IdeaView = () => {
               comments.data.map((comment, key) => <IdeaComment comment={comment} onReload={commentsFetch} key={key} />)}
           </>
         )}
-        <Drawer anchor="bottom" open={open} onClose={toggleDrawer(false)}>
-          <NewComment closeMethod={closeDrawer} />
-        </Drawer>
+        <NewComment isOpen={open} closeMethod={closeDrawer} />
       </Stack>
     </Stack>
   );
