@@ -37,9 +37,7 @@ const WildIdeas = ({ ideas, reload }: WildIdeasProps) => {
       >
         <Add />
       </Fab>
-      <Drawer anchor="bottom" open={open} onClose={toggleDrawer(false)}>
-        <NewWildIdea closeMethod={closeDrawer} />
-      </Drawer>
+      <NewWildIdea isOpen={open} closeMethod={closeDrawer} />
       {ideas.map((idea) => (
         <AppLink to={`idea/${idea.id}`} key={idea.id} width="100%">
           <Idea idea={idea} />
