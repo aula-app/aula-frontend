@@ -63,7 +63,7 @@ const IdeaView = () => {
   return (
     <Stack width="100%" height="100%" overflow="auto">
       {phase === 2 && <VotingCard />}
-      <Stack p={2}>
+      <Stack p={2} alignItems="center">
         {phase === 3 && <VotingResults yourVote={0} />}
         {idea.data && <Idea idea={idea.data} onReload={ideaFetch} />}
         {idea.data && idea.data.approved != 0 && phase > 0 &&
@@ -83,7 +83,6 @@ const IdeaView = () => {
               sx={{
                 position: 'absolute',
                 bottom: 15,
-                right: 15,
               }}
             >
               <Add />
