@@ -19,7 +19,7 @@ export const Idea = ({ comment, onReload }: Props) => {
             {comment.created}
           </Typography>
           <Typography variant="overline" fontWeight={700} lineHeight={1.5}>
-            {comment.user_id}
+            {comment.username}
           </Typography>
         </Stack>
       </Stack>

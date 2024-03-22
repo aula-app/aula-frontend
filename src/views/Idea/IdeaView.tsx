@@ -38,7 +38,7 @@ const IdeaView = () => {
       model: 'Comment',
       method: 'getCommentsByIdeaId',
       arguments: { idea_id: Number(params['idea_id']) },
-      decrypt: ['content'],
+      decrypt: ['content', 'username'],
     }).then((response: CommentResponseType) => setComments(response));
 
   const getPhase = async () =>
@@ -63,19 +63,23 @@ const IdeaView = () => {
   return (
     <Stack width="100%" height="100%" overflow="auto">
       {phase === 2 && <VotingCard />}
-      <Stack p={2} alignItems="center">
+      <Stack p={2}>
         {phase === 3 && <VotingResults yourVote={0} />}
         {idea.data && <Idea idea={idea.data} onReload={ideaFetch} />}
-        {idea.data && idea.data.approved != 0 && phase > 0 &&
-          <ApprovalCard
-            comment={idea.data.approval_comment}
-            rejected={idea.data.approved < 0}
-            disabled={phase > 1} />}
+        {idea.data && idea.data.approved != 0 && phase > 0 && (
+          <ApprovalCard comment={idea.data.approval_comment} rejected={idea.data.approved < 0} disabled={phase > 1} />
+        )}
         {comments && (
           <>
             <Typography variant="h5" py={2}>
               {String(comments.count)} Comments
             </Typography>
+            {comments.data &&
+              comments.data.map((comment, key) => <IdeaComment comment={comment} onReload={commentsFetch} key={key} />)}
+          </>
+        )}
+        {phase === 0 && (
+          <Stack alignItems="center">
             <Fab
               aria-label="add"
               color="primary"
@@ -87,9 +91,7 @@ const IdeaView = () => {
             >
               <Add />
             </Fab>
-            {comments.data &&
-              comments.data.map((comment, key) => <IdeaComment comment={comment} onReload={commentsFetch} key={key} />)}
-          </>
+          </Stack>
         )}
         <NewComment isOpen={open} closeMethod={closeDrawer} />
       </Stack>

@@ -23,7 +23,7 @@ export const IdeaBubble = ({ bubbleInfo, id, comments = 0, onReload}: IdeaBubble
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
 
-  const context = (bubbleInfo.hasOwnProperty('idea_id') ? 'Comment' : 'Idea') // check if it is a coimment
+  const context = (bubbleInfo.hasOwnProperty('idea_id') ? 'Comment' : 'Idea') // check if it is a comment
   const lowerContext = context.toLowerCase() as  'comment' | 'idea';
 
   const manageLike = (likeMethod: likeMethodType) => {
