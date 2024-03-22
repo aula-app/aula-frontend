@@ -65,7 +65,7 @@ const IdeaView = () => {
       {phase === 2 && <VotingCard />}
       <Stack p={2}>
         {phase === 3 && <VotingResults yourVote={0} />}
-        {idea.data && <Idea idea={idea.data} onReload={ideaFetch} />}
+        {idea.data && <Idea idea={idea.data} onReload={ideaFetch} disabled={phase > 0} />}
         {idea.data && idea.data.approved != 0 && phase > 0 && (
           <ApprovalCard comment={idea.data.approval_comment} rejected={idea.data.approved < 0} disabled={phase > 1} />
         )}
@@ -74,8 +74,13 @@ const IdeaView = () => {
             <Typography variant="h5" py={2}>
               {String(comments.count)} Comments
             </Typography>
-            {comments.data &&
-              comments.data.map((comment, key) => <IdeaComment comment={comment} onReload={commentsFetch} key={key} />)}
+            {comments.data && comments.data.map((comment, key) => (
+              <IdeaComment
+                key={key}
+                comment={comment}
+                onReload={commentsFetch}
+                disabled={phase > 0} />
+            ))}
           </>
         )}
         {phase === 0 && (

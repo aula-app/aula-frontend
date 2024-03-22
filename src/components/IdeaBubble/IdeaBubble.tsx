@@ -8,17 +8,18 @@ import { Box, Button, Stack, Typography, colors } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 interface IdeaBubbleProps {
-  bubbleInfo: IdeaType | CommentType;
   id: number;
+  bubbleInfo: IdeaType | CommentType;
   comments?: number;
   liked?: boolean;
+  disabled?: boolean;
   onReload: () => void;
 }
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike' | 'CommentAddLike' | 'CommentRemoveLike';
 type Args = {user_id: number, idea_id?: number, comment_id?: number}
 const bubbleColor = '#eee';
 
-export const IdeaBubble = ({ bubbleInfo, id, comments = 0, onReload}: IdeaBubbleProps) => {
+export const IdeaBubble = ({ bubbleInfo, id, comments = 0, disabled = false, onReload}: IdeaBubbleProps) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
@@ -84,7 +85,11 @@ export const IdeaBubble = ({ bubbleInfo, id, comments = 0, onReload}: IdeaBubble
             </Button>
           </>
         )}
-        <Button color={liked ? 'primary' : 'secondary'} sx={{ px: 0, minWidth: 40 }} onClick={toggleLike}>
+        <Button
+          disabled={disabled}
+          color={liked ? 'primary' : 'secondary'}
+          sx={{ px: 0, minWidth: 40 }}
+          onClick={toggleLike}>
           <Favorite fontSize="small" />
           <Typography variant="caption" pl={0.3}>
             {bubbleInfo.sum_likes}

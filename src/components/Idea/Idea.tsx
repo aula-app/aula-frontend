@@ -6,16 +6,17 @@ import { useParams } from 'react-router-dom';
 
 interface Props {
   idea: IdeaType;
+  disabled?: boolean;
   onReload?: () => void;
 }
 
-export const Idea = ({ idea, onReload = () => {} }: Props) => {
+export const Idea = ({ idea, disabled = false, onReload = () => {} }: Props) => {
   const params = useParams();
   const displayDate = new Date(idea.created);
 
   return (
     <Stack width="100%" mb={2} sx={{ scrollSnapAlign: 'center' }} className="separateBottom">
-      <IdeaBubble bubbleInfo={idea} id={Number(params['idea_id'])} onReload={onReload} />
+      <IdeaBubble bubbleInfo={idea} id={Number(params['idea_id'])} onReload={onReload} disabled={disabled} />
       <Stack direction="row" alignItems="center" mt="-20px">
         <AccountCircle sx={{ fontSize: '3em' }} />
         <Stack ml={1} maxWidth="100%" overflow="hidden">
