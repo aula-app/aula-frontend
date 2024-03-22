@@ -35,7 +35,7 @@ import { Print } from '@mui/icons-material';
  */
 const ICONS: Record<string, React.ComponentType> = {
   default: DefaultIcon,
-  logo: () => (<LogoIcon width="2em" />),
+  logo: LogoIcon,
   account: AccountCircle,
   back: ArrowBackIosNewIcon,
   close: CloseIcon,
