@@ -4,11 +4,7 @@ import { Box, Button, Stack } from '@mui/material';
 import { AppIcon, AppIconButton, ErrorBoundary } from '@/components';
 import { LinkToPage } from '@/utils/type';
 import { useOnMobile } from '@/hooks/layout';
-import {
-  SIDEBAR_DESKTOP_ANCHOR,
-  TOPBAR_DESKTOP_HEIGHT,
-  TOPBAR_MOBILE_HEIGHT,
-} from './config';
+import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import TopBar from './TopBar';
 import SideBar from './SideBar';
 
@@ -86,10 +82,10 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const title = TITLE_PRIVATE;
   document.title = title; // Also Update Tab Title
 
-  const location = useLocation().pathname.replaceAll("/", " ")
+  const location = useLocation().pathname.split('/');
 
   const onSideBarOpen = () => {
-    console.log("OPEN", sideBarVisible)
+    console.log('OPEN', sideBarVisible);
     if (!sideBarVisible) setSideBarVisible(true); // Don't re-render Layout when SideBar is already open
   };
 
@@ -117,12 +113,9 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     >
       <Stack component="header">
         <TopBar
-          startNode={
-            location === " " ?
-              <AppIcon icon="logo" />
-            : <AppIconButton icon="back" onClick={() => navigation(-1)} />
-          }
-          title={location === " " ? title : location}
+          startNode={location.length <= 2 ? <Box sx={{width: '40px', height: '40px', padding: "2px"}}><AppIcon icon="logo" /></Box> : <AppIconButton icon="back" onClick={() => navigation(-1)} />}
+          home={title}
+          path={location}
           endNode={<AppIconButton icon="menu" onClick={onSideBarOpen} />}
         />
 
@@ -135,10 +128,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         />
       </Stack>
 
-      <Stack
-        component="main"
-        sx={{ flexGrow: 1, overflow: 'hidden' }}
-      >
+      <Stack component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
       </Stack>
     </Stack>
