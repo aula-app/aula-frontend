@@ -44,7 +44,7 @@ const Routes = () => {
 
     getConsent()
 
-  }, [isAuthenticated, location, dispatch])
+  }, [isAuthenticated, location])
 
   return isAuthenticated ? <PrivateRoutes /> : <PublicRoutes />;
 };

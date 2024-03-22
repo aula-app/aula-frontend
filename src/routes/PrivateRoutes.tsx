@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
 import { WelcomeView } from '@/views/Welcome';
+import { RoomsView } from '@/views/Rooms';
 import { RoomView } from '@/views/Room';
 import { GroupsView } from '@/views/Groups';
 import { IdeaView } from '@/views/Idea';
@@ -10,36 +11,28 @@ import { IdeasBoxView } from '@/views/IdeasBox';
 import { UserView } from '@/views/User';
 import { UsersView } from '@/views/Users';
 import { TextsView } from '@/views/Texts';
-import { AskConsentView } from '@/views/AskConsent';
-import { useAppStore } from '@/store';
-import RoomsSettingView from '@/views/RoomSetting';
-
 
 /**
  * List of routes available only for authenticated users
  * Also renders the "Private Layout" composition
  */
-const PrivateRoutes = () => {
-  const [state] = useAppStore();
-  const hasConsent = state.hasConsent;
-  return (
-    <Routes>
-      <Route path="/" element={(!hasConsent)?<AskConsentView/>:<WelcomeView />} />
-      <Route path="welcome" element={(!hasConsent)?<AskConsentView/>:<WelcomeView />} />
-      <Route path="user" element={(!hasConsent)?<AskConsentView/>:<UserView />} />
-      <Route path="about" element={(!hasConsent)?<AskConsentView/>:<AboutView />} />,
-      <Route path="rooms" element={(!hasConsent)?<AskConsentView/>:<RoomsSettingView />} />,
-      <Route path="room/:room_id" element={(!hasConsent)?<AskConsentView/>:<RoomView />} />,
-      <Route path="room/:room_id/idea-box/:box_id" element={(!hasConsent)?<AskConsentView/>:<IdeasBoxView />} />,
-      <Route path="room/:room_id/idea-box/:box_id/idea/:idea_id" element={(!hasConsent)?<AskConsentView/>:<IdeaView />} />,
-      <Route path="groups" element={(!hasConsent)?<AskConsentView/>:<GroupsView />} />,
-      <Route path="ideas" element={(!hasConsent)?<AskConsentView/>:<IdeasView />} />,
-      <Route path="texts" element={(!hasConsent)?<AskConsentView/>:<TextsView />} />,
-      <Route path="users" element={(!hasConsent)?<AskConsentView/>:<UsersView />} />,
-      <Route path="room/:room_id/idea/:idea_id" element={(!hasConsent)?<AskConsentView/>:<IdeaView />} />,
-      <Route path="*" element={(!hasConsent)?<AskConsentView/>:<NotFoundView />} />
-    </Routes>
-  );
-};
+const PrivateRoutes = () => (
+  <Routes>
+    <Route path="/" element={<WelcomeView />} />
+    <Route path="welcome" element={<WelcomeView />} />
+    <Route path="user" element={<UserView />} />
+    <Route path="about" element={<AboutView />} />,
+    <Route path="rooms" element={<RoomsView />} />,
+    <Route path="room/:room_id" element={<RoomView />} />,
+    <Route path="room/:room_id/idea-box/:box_id" element={<IdeasBoxView />} />,
+    <Route path="room/:room_id/idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />,
+    <Route path="groups" element={<GroupsView />} />,
+    <Route path="ideas" element={<IdeasView />} />,
+    <Route path="texts" element={<TextsView />} />,
+    <Route path="users" element={<UsersView />} />,
+    <Route path="room/:room_id/idea/:idea_id" element={<IdeaView />} />,
+    <Route path="*" element={<NotFoundView />} />
+  </Routes>
+);
 
 export default PrivateRoutes;
