@@ -2,7 +2,6 @@ import { Route, Routes } from 'react-router-dom';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
 import { WelcomeView } from '@/views/Welcome';
-import { RoomsView } from '@/views/Rooms';
 import { RoomView } from '@/views/Room';
 import { GroupsView } from '@/views/Groups';
 import { IdeaView } from '@/views/Idea';
@@ -13,6 +12,7 @@ import { UsersView } from '@/views/Users';
 import { TextsView } from '@/views/Texts';
 import { AskConsentView } from '@/views/AskConsent';
 import { useAppStore } from '@/store';
+import RoomsSettingView from '@/views/RoomSetting';
 
 
 /**
@@ -28,7 +28,7 @@ const PrivateRoutes = () => {
       <Route path="welcome" element={(!hasConsent)?<AskConsentView/>:<WelcomeView />} />
       <Route path="user" element={(!hasConsent)?<AskConsentView/>:<UserView />} />
       <Route path="about" element={(!hasConsent)?<AskConsentView/>:<AboutView />} />,
-      <Route path="rooms" element={(!hasConsent)?<AskConsentView/>:<RoomsView />} />,
+      <Route path="rooms" element={(!hasConsent)?<AskConsentView/>:<RoomsSettingView />} />,
       <Route path="room/:room_id" element={(!hasConsent)?<AskConsentView/>:<RoomView />} />,
       <Route path="room/:room_id/idea-box/:box_id" element={(!hasConsent)?<AskConsentView/>:<IdeasBoxView />} />,
       <Route path="room/:room_id/idea-box/:box_id/idea/:idea_id" element={(!hasConsent)?<AskConsentView/>:<IdeaView />} />,
