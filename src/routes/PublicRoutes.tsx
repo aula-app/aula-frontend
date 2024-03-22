@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { NotFoundView } from '@/views';
+import { NotFoundView } from '@/views/Public';
 import LoginRoutes from '@/views/Public/Login';
 import SignupRoutes from '@/views/Public/Signup';
 import RecoveryRoutes from '@/views/Public/Recovery';
