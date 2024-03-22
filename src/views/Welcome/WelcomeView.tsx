@@ -98,7 +98,7 @@ const WelcomeView = () => {
       >
         Rooms
       </Typography>
-      {rooms.data &&
+      {rooms && rooms.data &&
         rooms.data.map((room) => (
           <Grid key={room.id} item xs={12} md={4} my={2} sx={{ scrollSnapAlign: 'center' }}>
             <AppLink to={`/room/${room.id}`}>
