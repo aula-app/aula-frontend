@@ -1,6 +1,7 @@
 export interface CommentType {
   id: number;
   content: string;
+  username: string;
   sum_likes: number;
   idea_id: number;
   user_id: number;
