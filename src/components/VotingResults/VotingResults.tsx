@@ -40,7 +40,9 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
             {votingOptions[!rejected ? 2 : 0]['icon']}
           </Stack>
           <Stack flexGrow={1} pr={2}>
-            <Typography variant="body2">description lalalalalalalalalalalalallalaal</Typography>
+            <Typography variant="body2">
+              {rejected ? 'This idea was not approved.' : 'This idea was approved.'}
+            </Typography>
           </Stack>
           <Stack>
             {votingOptions.map((option, i) => (
