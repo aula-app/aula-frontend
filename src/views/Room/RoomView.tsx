@@ -2,7 +2,7 @@ import { Inbox, Lightbulb } from '@mui/icons-material';
 import { TabContext, TabPanel } from '@mui/lab';
 import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import WildIdeasView from '@/views/WildIdeas';
 import IdeasBoxesView from '@/views/IdeasBoxes';
 import { databaseRequest } from '@/utils/requests';
@@ -16,14 +16,21 @@ function a11yProps(index: number) {
   };
 }
 
+type TabOptions = 'ideas' | 'boxes';
+
 /**
  * Renders "Room" view
  * url: /room/:room_id
  */
 const RoomView = () => {
   const params = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [ideas, setIdeas] = useState({} as IdeasResponseType);
   const [boxes, setBoxes] = useState({} as BoxesResponseType);
+  const initialTab =
+    location.pathname.split('/')[location.pathname.split('/').length - 1] === 'boxes' ? 'boxes' : 'ideas';
+  const [value, setValue] = useState<TabOptions>(initialTab);
 
   const ideasFetch = async () =>
     await databaseRequest('model', {
@@ -31,8 +38,7 @@ const RoomView = () => {
       method: 'getIdeasByRoom',
       arguments: { room_id: Number(params['room_id']) },
       decrypt: ['displayname', 'content'],
-    })
-    .then((response) => setIdeas(response));
+    }).then((response) => setIdeas(response));
 
   const boxesFetch = async () =>
     await databaseRequest('model', {
@@ -40,27 +46,26 @@ const RoomView = () => {
       method: 'getTopicsByRoom',
       arguments: { room_id: Number(params['room_id']) },
       decrypt: ['name', 'description_public'],
-    })
-    .then((response) => setBoxes(response));
+    }).then((response) => setBoxes(response));
 
   useEffect(() => {
     ideasFetch();
     boxesFetch();
   }, []);
 
-  const [value, setValue] = useState('0');
-
-  const handleChange = (event: SyntheticEvent, newValue: string) => {
+  const handleChange = (event: SyntheticEvent, newValue: TabOptions) => {
+    console.log(location);
+    navigate(`/room/${params['room_id']}/${newValue}`);
     setValue(newValue);
   };
 
   return (
     <Stack width="100%" height="100%" overflow="hidden">
       <TabContext value={value}>
-        <TabPanel value="0" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
+        <TabPanel value="ideas" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
           <WildIdeasView ideas={ideas.data || []} reload={ideasFetch} />
         </TabPanel>
-        <TabPanel value="1" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
+        <TabPanel value="boxes" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
           <IdeasBoxesView boxes={boxes.data || []} />
         </TabPanel>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
@@ -79,7 +84,7 @@ const RoomView = () => {
             }}
           >
             <Tab
-              value="0"
+              value="ideas"
               icon={
                 <Stack direction="row" alignItems="center">
                   <Lightbulb sx={{ mr: 1 }} />
@@ -90,7 +95,7 @@ const RoomView = () => {
               {...a11yProps(0)}
             />
             <Tab
-              value="1"
+              value="boxes"
               icon={
                 <Stack direction="row" alignItems="center">
                   <Inbox sx={{ mr: 1 }} />

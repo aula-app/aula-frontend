@@ -5,10 +5,10 @@ import { AppLink } from '../../components';
 import { useEffect, useState } from 'react';
 
 
-/** * Renders "Welcome" view
+/** * Renders "RoomSetting" view
  * url: /
  */
-const RoomsView = () => {
+const RoomSettingView = () => {
   const [data, setData] = useState([] as any[]);
   const columns:GridColDef[] = [
     { field: 'room_name', headerName: 'Name', width: 260},
@@ -26,7 +26,6 @@ const RoomsView = () => {
       ).json();
 
       // set state when the data received
-      console.log(data)
       setData(data.data)
     };
 
@@ -54,4 +53,4 @@ const RoomsView = () => {
   );
 };
 
-export default RoomsView;
+export default RoomSettingView;
