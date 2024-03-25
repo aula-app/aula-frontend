@@ -28,9 +28,9 @@ const RoomView = () => {
   const navigate = useNavigate();
   const [ideas, setIdeas] = useState({} as IdeasResponseType);
   const [boxes, setBoxes] = useState({} as BoxesResponseType);
-  const initialTab =
-    location.pathname.split('/')[location.pathname.split('/').length - 1] === 'boxes' ? 'boxes' : 'ideas';
-  const [value, setValue] = useState<TabOptions>(initialTab);
+  const [tab, setTab] = useState<TabOptions>('ideas');
+  
+  const updateTab = () => setTab(location.pathname.split('/')[location.pathname.split('/').length - 1] === 'boxes' ? 'boxes' : 'ideas');
 
   const ideasFetch = async () =>
     await databaseRequest('model', {
@@ -55,12 +55,14 @@ const RoomView = () => {
 
   const handleChange = (event: SyntheticEvent, newValue: TabOptions) => {
     navigate(`/room/${params['room_id']}/${newValue}`);
-    setValue(newValue);
+    setTab(newValue);
   };
+
+  useEffect(() => updateTab(), [location])
 
   return (
     <Stack width="100%" height="100%" overflow="hidden">
-      <TabContext value={value}>
+      <TabContext value={tab}>
         <TabPanel value="ideas" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
           <WildIdeasView ideas={ideas.data || []} reload={ideasFetch} />
         </TabPanel>
@@ -69,7 +71,7 @@ const RoomView = () => {
         </TabPanel>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
           <Tabs
-            value={value}
+            value={tab}
             onChange={handleChange}
             indicatorColor="secondary"
             textColor="inherit"
