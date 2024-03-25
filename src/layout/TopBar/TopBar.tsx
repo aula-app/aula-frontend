@@ -24,7 +24,8 @@ const TopBar: FunctionComponent<Props> = ({ endNode, startNode, home, path = [],
             {home}
           </Link>
           {displayPath.map((currentPath, key) => {
-            const link = path.slice(0, 2 * (key + 1) + 1).join('/');
+            const addBoxesPath = path.includes('idea-box') && key === 0 ? '/boxes' : ''; //checks if rooms link must have /boxes to correct tab navigation
+            const link = path.slice(0, 2 * (key + 1) + 1).join('/') + addBoxesPath;
             return (
               <Link underline="hover" color="inherit" href={`${link}`} key={key}>
                 {currentPath}
