@@ -35,6 +35,12 @@ export const votingOptions: VoteOptions[] = [
   },
 ];
 
+export const noVoteOptions = {
+  bg: grey[200],
+  color: grey[600],
+  button: grey[400],
+}
+
 export const variantOptions = {
   discussion: {
     color: 'inherit',

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
 import { GroupAdd } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import { Vote, votingOptions } from '@/utils/variants';
+import { Vote, noVoteOptions, votingOptions } from '@/utils/variants';
 import { localStorageGet } from '@/utils';
 import { parseJwt } from '@/utils/jwt';
 import { databaseRequest } from '@/utils/requests';
@@ -18,8 +18,10 @@ const VotingCard = () => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [vote, setVote] = useState<Vote>(0);
+  const [hasVoted, setHasVoted] = useState<Boolean>(false);
 
-  const getVote = async () => await databaseRequest('model', {
+  const getVote = async () =>
+    await databaseRequest('model', {
       model: 'Idea',
       method: 'getVoteValue',
       arguments: {
@@ -27,10 +29,13 @@ const VotingCard = () => {
         idea_id: params['idea_id'],
       },
       decrypt: [],
-    })
-    .then(response => setVote(response.data));
+    }).then((response) => {
+      setVote(response.data);
+      setHasVoted(response.count > 0);
+    });
 
-    const registerVote = async (vote: number) => await databaseRequest('model', {
+  const registerVote = async (vote: number) =>
+    await databaseRequest('model', {
       model: 'Idea',
       method: 'voteForIdea',
       arguments: {
@@ -39,11 +44,11 @@ const VotingCard = () => {
         vote_value: vote - 1, //turn 0, 1, 2 to -1, 0 , 1
       },
       decrypt: [],
-    }).then(() => getVote())
+    }).then(() => getVote());
 
-    useEffect(() => {
-      getVote()
-    }, [])
+  useEffect(() => {
+    getVote();
+  }, []);
 
   return (
     <Card
@@ -52,9 +57,9 @@ const VotingCard = () => {
         p: 2,
         overflow: 'unset',
         scrollSnapAlign: 'center',
-        bgcolor: votingOptions[vote + 1]['bg'],
-        color: votingOptions[vote + 1]['color'],
-        borderRadius: 0
+        bgcolor: hasVoted ? votingOptions[vote + 1]['bg']: noVoteOptions['bg'],
+        color: hasVoted ? votingOptions[vote + 1]['color']: noVoteOptions['color'],
+        borderRadius: 0,
       }}
     >
       <Stack direction="row">
@@ -71,16 +76,16 @@ const VotingCard = () => {
         {votingOptions.map((option, i) => (
           <Button
             sx={{
-              color: 'inherit',
-              backgroundColor: votingOptions[vote + 1][`button`],
+              color: vote + 1 === i && hasVoted ? option['color'] : noVoteOptions['color'],
+              backgroundColor: vote + 1 === i && hasVoted ? option[`button`] : noVoteOptions['button'],
               borderRadius: 8,
             }}
             key={i}
             onClick={() => registerVote(i as Vote)}
           >
             <Stack alignItems="center">
-              <Typography fontSize={75}>{ option['icon']  }</Typography>
-              { option['label'] }
+              <Typography fontSize={75}>{option['icon']}</Typography>
+              {option['label']}
             </Stack>
           </Button>
         ))}
