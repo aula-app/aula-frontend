@@ -54,7 +54,6 @@ const RoomView = () => {
   }, []);
 
   const handleChange = (event: SyntheticEvent, newValue: TabOptions) => {
-    console.log(location);
     navigate(`/room/${params['room_id']}/${newValue}`);
     setValue(newValue);
   };
