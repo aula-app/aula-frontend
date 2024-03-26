@@ -23,8 +23,7 @@ interface Props extends Pick<DrawerProps, 'anchor' | 'className' | 'open' | 'var
  */
 const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, items, onClose, ...restOfProps }) => {
   const [state] = useAppStore();
-  // const isAuthenticated = state.isAuthenticated; // Variant 1
-  const isAuthenticated = useIsAuthenticated(); // Variant 2
+  const isAuthenticated = useIsAuthenticated();
   const onMobile = useOnMobile();
 
   const onSwitchDarkMode = useEventSwitchDarkMode();
@@ -64,7 +63,7 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, items, onClo
       >
         {isAuthenticated && (
           <>
-            <UserInfo showAvatar />
+            <UserInfo />
             <Divider />
           </>
         )}

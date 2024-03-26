@@ -1,43 +1,50 @@
-import { Avatar, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Stack, Typography } from '@mui/material';
 import AppLink from '../AppLink';
-
-interface UserInfoProps {
-  className?: string;
-  showAvatar?: boolean;
-  user?: any;
-}
+import { useEffect, useState } from 'react';
+import { localStorageGet } from '@/utils';
+import { parseJwt } from '@/utils/jwt';
+import { databaseRequest } from '@/utils/requests';
+import { UserResponseType, UserType } from '@/types/UserTypes';
 
 /**
  * Renders User info with Avatar
  * @component UserInfo
- * @param {string} [className] - optional className for <div> tag
- * @param {boolean} [showAvatar] - user's avatar picture is shown when true
- * @param {object} [user] - logged user data {name, email, avatar...}
  */
-const UserInfo = ({ className, showAvatar = false, user, ...restOfProps }: UserInfoProps) => {
-  const fullName = user?.name || [user?.nameFirst || '', user?.nameLast || ''].join(' ').trim();
-  const srcAvatar = user?.avatar ? user?.avatar : undefined;
-  const userPhoneOrEmail = user?.phone || (user?.email as string);
+const UserInfo = () => {
+  const [user, setUser] = useState<UserType | null>(null);
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
 
+  const getUserInfo = async () =>
+    databaseRequest('model', {
+      model: 'User',
+      method: 'getUserBaseData',
+      arguments: { user_id: jwt_payload.user_id },
+      decrypt: ['displayname', 'username', 'email', 'about_me'],
+    }).then((response: UserResponseType) => setUser(response.data));
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
   return (
-    <Stack alignItems="center" minHeight="fit-content" marginBottom={2} {...restOfProps}>
-      {showAvatar ? (
-        <AppLink to="/user" underline="none">
+    <Stack alignItems="center" minHeight="fit-content" marginBottom={2}>
+      {user && (
+        <>
           <Avatar
             sx={{
               width: 64,
               height: 64,
               fontSize: '3rem',
             }}
-            alt={fullName || 'User Avatar'}
-            src={srcAvatar}
+            alt={user.displayname || 'User Avatar'}
+            src={user.avatar || '/img/Aula_Logo_Kopf.svg'}
           />
-        </AppLink>
-      ) : null}
-      <Typography sx={{ mt: 1 }} variant="h6">
-        {fullName || 'Current User'}
-      </Typography>
-      <Typography variant="body2">{userPhoneOrEmail || 'Loading...'}</Typography>
+          <Typography sx={{ mt: 1 }} variant="h6">
+            {user.username}
+          </Typography>
+          <Typography variant="body2">{user.displayname}</Typography>
+        </>
+      )}
     </Stack>
   );
 };

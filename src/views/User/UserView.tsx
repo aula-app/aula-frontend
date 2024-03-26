@@ -27,10 +27,11 @@ const UserView = () => {
   }, []);
 
   return (
-    <Stack width="100%" height="100%" overflow="hidden">
+    <Stack width="100%" height="100%" overflow="hidden" p={2}>
       <Typography variant="h4">User</Typography>
       {user && (
-        <Stack p={2}>
+        <Stack alignItems="">
+          <p>{user.avatar ? user.avatar : <img src="/img/Aula_Logo_Kopf.svg" />}</p>
           <p>{user.username}</p>
           <p>{user.displayname}</p>
           <p>{user.email}</p>
