@@ -38,7 +38,7 @@ const UserView = () => {
     }).then((response: UserResponseType) => setUser(response.data));
 
   const onSubmit = (formData: Object) => console.log(formData);
-  const toggleDrawer = () => setEditingImage(!isEditingImage)
+  const toggleDrawer = () => setEditingImage(!isEditingImage);
 
   useEffect(() => {
     getUserInfo();
@@ -50,11 +50,9 @@ const UserView = () => {
       {user && (
         <FormContainer>
           <Stack alignItems="center" p={2}>
-            <IconButton
-              onClick={toggleDrawer}
-              sx={{position: "relative"}}>
+            <IconButton onClick={toggleDrawer} sx={{ position: 'relative' }}>
               <Stack
-                color='white'
+                color="white"
                 bgcolor={grey[400]}
                 p={1}
                 sx={{
@@ -68,7 +66,7 @@ const UserView = () => {
                   zIndex: 999,
                 }}
               >
-                <PhotoCamera fontSize='small' />
+                <PhotoCamera fontSize="small" />
               </Stack>
               <Avatar
                 sx={{
@@ -113,7 +111,13 @@ const UserView = () => {
           <ChangePassword />
         </AccordionDetails>
       </Accordion>
-      <ImageEditor isOpen={isEditingImage} closeMethod={toggleDrawer} />
+      {user && (
+        <ImageEditor
+          isOpen={isEditingImage}
+          closeMethod={toggleDrawer}
+          currentImage={user.avatar || '/img/aula-room.png'}
+        />
+      )}
     </Stack>
   );
 };
