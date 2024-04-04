@@ -115,7 +115,7 @@ const UserView = () => {
         <ImageEditor
           isOpen={isEditingImage}
           closeMethod={toggleDrawer}
-          currentImage={user.avatar || '/img/aula-room.png'}
+          currentImage={user.avatar || '/img/aula_kopf.png'}
         />
       )}
     </Stack>
