@@ -47,6 +47,7 @@
     "date-fns": "^2.30.0",
     "notistack": "^3.0.1",
     "react": "latest",
+    "react-avatar-editor": "^13.0.2",
     "react-dom": "latest",
     "react-hook-form": "^7.45.0",
     "react-hook-form-mui": "^6.3.0",
