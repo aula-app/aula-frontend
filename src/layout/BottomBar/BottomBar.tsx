@@ -2,7 +2,7 @@ import React, { ChangeEvent, FunctionComponent, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
 import AppIcon from '@/components/AppIcon';
-import { LinkToPage } from '@/utils/type';
+import { LinkToPage } from '@/types/PageLinks';
 
 interface Props {
   items: Array<LinkToPage>;
