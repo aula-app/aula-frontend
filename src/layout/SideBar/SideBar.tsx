@@ -1,16 +1,65 @@
 import { FunctionComponent, useCallback, MouseEvent } from 'react';
-import { Stack, Divider, Drawer, DrawerProps, FormControlLabel, Switch, Tooltip } from '@mui/material';
-import { AppIconButton } from '@/components';
+import { Stack, Divider, Drawer, DrawerProps, FormControlLabel, Switch, Tooltip, Button } from '@mui/material';
+import { AppButton, AppIcon, AppIconButton } from '@/components';
 import { useAppStore } from '@/store/AppStore';
-import { LinkToPage } from '@/utils/type';
+import { LinkToPage } from '@/types/PageLinks';
 import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
 import SideBarNavList from './SideBarNavList';
 import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../config';
 import UserInfo from '@/components/UserInfo';
 
-interface Props extends Pick<DrawerProps, 'anchor' | 'className' | 'open' | 'variant' | 'onClose'> {
-  items: Array<LinkToPage>;
-}
+type Props = Pick<DrawerProps, 'anchor' | 'className' | 'open' | 'variant' | 'onClose'>;
+
+/**
+ * SideBar navigation items with links
+ */
+const SIDEBAR_ITEMS: Array<LinkToPage> = [
+  {
+    title: 'Home',
+    path: '/',
+    icon: 'home',
+  },
+  {
+    title: 'Profile',
+    path: '/user',
+    icon: 'account',
+  },
+  {
+    title: 'Users',
+    path: '/users',
+    icon: 'users',
+  },
+  {
+    title: 'Groups',
+    path: '/groups',
+    icon: 'group',
+  },
+  {
+    title: 'Rooms',
+    path: '/rooms',
+    icon: 'room',
+  },
+  {
+    title: 'Ideas',
+    path: '/ideas',
+    icon: 'idea',
+  },
+  {
+    title: 'Texts',
+    path: '/texts',
+    icon: 'texts',
+  },
+  {
+    title: 'About',
+    path: '/about',
+    icon: 'info',
+  },
+  // {
+  //   title: 'Dev Tools',
+  //   path: '/dev',
+  //   icon: 'settings',
+  // },
+];
 
 /**
  * Renders SideBar with Menu and User details
@@ -21,10 +70,9 @@ interface Props extends Pick<DrawerProps, 'anchor' | 'className' | 'open' | 'var
  * @param {string} variant - variant of the Drawer, one of 'permanent', 'persistent', 'temporary'
  * @param {function} onClose - called when the Drawer is closing
  */
-const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, items, onClose, ...restOfProps }) => {
+const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...restOfProps }) => {
   const [state] = useAppStore();
-  // const isAuthenticated = state.isAuthenticated; // Variant 1
-  const isAuthenticated = useIsAuthenticated(); // Variant 2
+  const isAuthenticated = useIsAuthenticated();
   const onMobile = useOnMobile();
 
   const onSwitchDarkMode = useEventSwitchDarkMode();
@@ -62,6 +110,18 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, items, onClo
         {...restOfProps}
         onClick={handleAfterLinkClick}
       >
+        <Stack direction="row" pb={2}>
+          <Tooltip title="Print" sx={{ mr: 'auto' }}>
+            <Button color='secondary' onClick={window.print}>
+              <AppIcon icon="print" />
+            </Button>
+          </Tooltip>
+          <Tooltip title={state.darkMode ? 'Light mode' : 'Dark mode'}>
+            <Button color='secondary' onClick={onSwitchDarkMode}>
+              <AppIcon icon="daynight" />
+            </Button>
+          </Tooltip>
+        </Stack>
         {isAuthenticated && (
           <>
             <UserInfo showAvatar />
@@ -69,7 +129,7 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, items, onClo
           </>
         )}
 
-        <SideBarNavList items={items} showIcons />
+        <SideBarNavList items={SIDEBAR_ITEMS} showIcons />
 
         <Divider />
 
@@ -77,19 +137,18 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, items, onClo
           sx={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-evenly',
+            justifyContent: 'end',
             alignItems: 'center',
-            marginTop: 2,
           }}
         >
-          <Tooltip title={state.darkMode ? 'Switch to Light mode' : 'Switch to Dark mode'}>
-            <FormControlLabel
-              label={!state.darkMode ? 'Light mode' : 'Dark mode'}
-              control={<Switch checked={state.darkMode} onChange={onSwitchDarkMode} />}
-            />
-          </Tooltip>
-
-          {isAuthenticated && <AppIconButton icon="logout" title="Logout Current User" onClick={onLogout} />}
+          {isAuthenticated && (
+            <>
+              <AppButton variant="text" onClick={onLogout}>
+                LogOut&nbsp;
+                <AppIcon icon="logout" />
+              </AppButton>
+            </>
+          )}
         </Stack>
       </Stack>
     </Drawer>

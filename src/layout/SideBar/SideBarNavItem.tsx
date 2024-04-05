@@ -1,7 +1,7 @@
 import { FunctionComponent, MouseEventHandler } from 'react';
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { AppIcon, AppLink } from '@/components';
-import { LinkToPage } from '@/utils/type';
+import { LinkToPage } from '@/types/PageLinks';
 import { useLocation } from 'react-router';
 
 interface Props extends LinkToPage {

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, SyntheticEvent, ChangeEvent } from 'react';
 import validate from 'validate.js';
-import { ObjectPropByName } from './type';
+import { ObjectPropByName } from '@/types/Generics';
 
 // Same props to style Input, TextField, and so on across the Application
 export const SHARED_CONTROL_PROPS = {

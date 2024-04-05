@@ -1,65 +1,14 @@
 import { useState, FunctionComponent, PropsWithChildren, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { AppIcon, AppIconButton, ErrorBoundary } from '@/components';
-import { LinkToPage } from '@/utils/type';
+import { LinkToPage } from '@/types/PageLinks';
 import { useOnMobile } from '@/hooks/layout';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import TopBar from './TopBar';
 import SideBar from './SideBar';
 
 const TITLE_PRIVATE = 'aula';
-
-/**
- * SideBar navigation items with links
- */
-const SIDEBAR_ITEMS: Array<LinkToPage> = [
-  {
-    title: 'Home',
-    path: '/',
-    icon: 'home',
-  },
-  {
-    title: 'Profile',
-    path: '/user',
-    icon: 'account',
-  },
-  {
-    title: 'Users',
-    path: '/users',
-    icon: 'users',
-  },
-  {
-    title: 'Groups',
-    path: '/groups',
-    icon: 'group',
-  },
-  {
-    title: 'Rooms',
-    path: '/rooms',
-    icon: 'room',
-  },
-  {
-    title: 'Ideas',
-    path: '/ideas',
-    icon: 'idea',
-  },
-  {
-    title: 'Texts',
-    path: '/texts',
-    icon: 'texts',
-  },
-  {
-    title: 'About',
-    path: '/about',
-    icon: 'info',
-  },
-  // {
-  //   title: 'Dev Tools',
-  //   path: '/dev',
-  //   icon: 'settings',
-  // },
-];
 
 /**
  * Renders "Private Layout" composition
@@ -125,7 +74,6 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
           anchor={SIDEBAR_DESKTOP_ANCHOR}
           open={sidebarOpen}
           variant={sidebarVariant}
-          items={SIDEBAR_ITEMS}
           onClose={onSideBarClose}
         />
       </Stack>
