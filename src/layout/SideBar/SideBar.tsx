@@ -1,5 +1,5 @@
 import { FunctionComponent, useCallback, MouseEvent } from 'react';
-import { Stack, Divider, Drawer, DrawerProps, FormControlLabel, Switch, Tooltip } from '@mui/material';
+import { Stack, Divider, Drawer, DrawerProps, FormControlLabel, Switch, Tooltip, Button } from '@mui/material';
 import { AppButton, AppIcon, AppIconButton } from '@/components';
 import { useAppStore } from '@/store/AppStore';
 import { LinkToPage } from '@/types/PageLinks';
@@ -25,11 +25,6 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     icon: 'account',
   },
   {
-    title: 'Ideas',
-    path: '/ideas',
-    icon: 'idea',
-  },
-  {
     title: 'Users',
     path: '/users',
     icon: 'users',
@@ -43,6 +38,11 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     title: 'Rooms',
     path: '/rooms',
     icon: 'room',
+  },
+  {
+    title: 'Ideas',
+    path: '/ideas',
+    icon: 'idea',
   },
   {
     title: 'Texts',
@@ -112,10 +112,14 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
       >
         <Stack direction="row" pb={2}>
           <Tooltip title="Print" sx={{ mr: 'auto' }}>
-            <AppIconButton icon="print" />
+            <Button color='secondary' onClick={window.print}>
+              <AppIcon icon="print" />
+            </Button>
           </Tooltip>
-          <Tooltip title={state.darkMode ? 'Switch to Light mode' : 'Switch to Dark mode'}>
-            <AppIconButton icon="daynight" onClick={onSwitchDarkMode} />
+          <Tooltip title={state.darkMode ? 'Light mode' : 'Dark mode'}>
+            <Button color='secondary' onClick={onSwitchDarkMode}>
+              <AppIcon icon="daynight" />
+            </Button>
           </Tooltip>
         </Stack>
         {isAuthenticated && (
