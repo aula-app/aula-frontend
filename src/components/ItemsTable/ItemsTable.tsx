@@ -27,7 +27,7 @@ interface Props {
 
 export const ItemsTable = ({ items, displayRows, reloadMethod }: Props) => {
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(Math.floor((window.screen.height - 220) / 54) || 10);
 
   const changeLimit = (event: SelectChangeEvent) => {
     setLimit(Number(event.target.value));
@@ -59,10 +59,10 @@ export const ItemsTable = ({ items, displayRows, reloadMethod }: Props) => {
         </Typography>
         <FormControl variant="standard">
           <Select value={String(limit)} onChange={changeLimit}>
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={20}>20</MenuItem>
-            <MenuItem value={50}>50</MenuItem>
-            <MenuItem value={100}>100</MenuItem>
+            <MenuItem value={limit}>{limit}</MenuItem>
+            <MenuItem value={limit*2}>{limit*2}</MenuItem>
+            <MenuItem value={limit*5}>{limit*5}</MenuItem>
+            <MenuItem value={limit*10}>{limit*10}</MenuItem>
           </Select>
         </FormControl>
       </Stack>
