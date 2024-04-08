@@ -12,22 +12,49 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  TableSortLabel,
   TextField,
   Typography,
 } from '@mui/material';
-import { UserTypeKeys, UsersResponseType } from '@/types/UserTypes';
+import { UsersResponseType } from '@/types/UserTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Search } from '@mui/icons-material';
+import Tables from '@/utils/tables.json';
+import { TableOptions } from '@/types/Tables';
+import { databaseRequest } from '@/utils/requests';
 
 interface Props {
-  items: UsersResponseType;
-  displayRows: UserTypeKeys[];
-  reloadMethod: (page: number, limit: number) => Promise<void>;
+  table: 'users';
 }
 
-export const ItemsTable = ({ items, displayRows, reloadMethod }: Props) => {
+export const ItemsTable = ({ table }: Props) => {
+  const options = Tables[table] as TableOptions;
+  const columns = options.rows.map((value) => value.name);
+  const defaultLimit = Math.floor((window.screen.height - 220) / 34) || 10;
+
+  const [items, setItems] = useState({} as UsersResponseType);
+
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(Math.floor((window.screen.height - 220) / 54) || 10);
+  const [limit, setLimit] = useState(defaultLimit);
+  const [orderBy, setOrder] = useState(options.rows[0].id);
+  const [orderDesc, setOrderDesc] = useState(false);
+
+  const dataFetch = async () => {
+    console.log(Number(orderDesc));
+    await databaseRequest('model', {
+      model: options.model,
+      method: options.method,
+      arguments: {
+        limit: limit,
+        offset: page * limit,
+        orderby: options.orderBy,
+        asc: Number(orderDesc),
+      },
+      decrypt: columns,
+    }).then((response: UsersResponseType) => {
+      setItems(response);
+    });
+  };
 
   const changeLimit = (event: SelectChangeEvent) => {
     setLimit(Number(event.target.value));
@@ -37,9 +64,14 @@ export const ItemsTable = ({ items, displayRows, reloadMethod }: Props) => {
     setPage(newPage - 1);
   };
 
+  const handleOrder = (col: number) => {
+    if (orderBy === col) setOrderDesc(!orderDesc);
+    setOrder(col);
+  };
+
   useEffect(() => {
-    reloadMethod(page, limit);
-  }, [page, limit]);
+    dataFetch();
+  }, [page, limit, orderBy, orderDesc]);
 
   return (
     <Stack flexGrow={1} minHeight={0}>
@@ -50,10 +82,10 @@ export const ItemsTable = ({ items, displayRows, reloadMethod }: Props) => {
           </Typography>
           <FormControl variant="standard">
             <Select value={String(limit)} onChange={changeLimit}>
-              <MenuItem value={limit}>{limit}</MenuItem>
-              <MenuItem value={limit * 2}>{limit * 2}</MenuItem>
-              <MenuItem value={limit * 5}>{limit * 5}</MenuItem>
-              <MenuItem value={limit * 10}>{limit * 10}</MenuItem>
+              <MenuItem value={defaultLimit}>{defaultLimit}</MenuItem>
+              <MenuItem value={defaultLimit * 2}>{defaultLimit * 2}</MenuItem>
+              <MenuItem value={defaultLimit * 5}>{defaultLimit * 5}</MenuItem>
+              <MenuItem value={defaultLimit * 10}>{defaultLimit * 10}</MenuItem>
             </Select>
           </FormControl>
         </Stack>
@@ -66,28 +98,38 @@ export const ItemsTable = ({ items, displayRows, reloadMethod }: Props) => {
             ),
           }}
           variant="standard"
-          sx={{ml: 'auto', pl: 2}}
+          sx={{ ml: 'auto', pl: 2 }}
         />
       </Stack>
       <Divider />
       <Stack overflow="auto" flexGrow={1}>
-        <Table stickyHeader>
+        <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
-              {displayRows.map((row) => (
-                <TableCell key={row}>{row}</TableCell>
+              {columns.map((column, key) => (
+                <TableCell key={column}>
+                  <TableSortLabel
+                    active={orderBy === options.rows[key].id}
+                    direction={orderDesc ? 'asc' : 'desc'}
+                    onClick={() => handleOrder(options.rows[key].id)}
+                  >
+                    {column}
+                  </TableSortLabel>
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {items.data.map((item) => (
-              <TableRow key={item.id}>
-                {displayRows.map((row) => (
-                  <TableCell key={`${row}${item.id}`}>{item[row]}</TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
+          {items.data && (
+            <TableBody>
+              {items.data.map((row) => (
+                <TableRow key={row.id}>
+                  {columns.map((column) => (
+                    <TableCell key={`${column}-${row.id}`}>{row[column]}</TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
         </Table>
       </Stack>
       <Stack direction="row" justifyContent="center">

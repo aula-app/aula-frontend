@@ -1,0 +1,26 @@
+{
+  "users": {
+    "model": "User",
+    "method": "getUsers",
+    "rows": [
+      {
+        "id": 1,
+        "name": "realname",
+        "displayName": "Student Name",
+        "isRestricted": true
+      },
+      {
+        "id": 6,
+        "name": "displayname",
+        "displayName": "User Name",
+        "isRestricted": false
+      },
+      {
+        "id": 7,
+        "name": "email",
+        "displayName": "Email",
+        "isRestricted": false
+      }
+    ]
+  }
+}
