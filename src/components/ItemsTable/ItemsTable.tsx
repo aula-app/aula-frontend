@@ -113,7 +113,7 @@ export const ItemsTable = ({ table }: Props) => {
                     direction={orderDesc ? 'asc' : 'desc'}
                     onClick={() => handleOrder(options.rows[key].id)}
                   >
-                    {column}
+                    {options.rows[key].displayName}
                   </TableSortLabel>
                 </TableCell>
               ))}
