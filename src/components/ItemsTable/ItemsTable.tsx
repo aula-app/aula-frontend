@@ -44,6 +44,19 @@ export const ItemsTable = ({ items, displayRows, reloadMethod }: Props) => {
   return (
     <Stack flexGrow={1} minHeight={0}>
       <Stack direction="row" alignItems="center" px={2} pb={2}>
+        <Stack direction="row" alignItems="center">
+          <Typography fontSize="small" ml="auto" pr={1} noWrap>
+            Items per page:
+          </Typography>
+          <FormControl variant="standard">
+            <Select value={String(limit)} onChange={changeLimit}>
+              <MenuItem value={limit}>{limit}</MenuItem>
+              <MenuItem value={limit * 2}>{limit * 2}</MenuItem>
+              <MenuItem value={limit * 5}>{limit * 5}</MenuItem>
+              <MenuItem value={limit * 10}>{limit * 10}</MenuItem>
+            </Select>
+          </FormControl>
+        </Stack>
         <TextField
           InputProps={{
             startAdornment: (
@@ -53,18 +66,8 @@ export const ItemsTable = ({ items, displayRows, reloadMethod }: Props) => {
             ),
           }}
           variant="standard"
-          />
-        <Typography fontSize="small" ml="auto" px={1} noWrap>
-          Items per page:
-        </Typography>
-        <FormControl variant="standard">
-          <Select value={String(limit)} onChange={changeLimit}>
-            <MenuItem value={limit}>{limit}</MenuItem>
-            <MenuItem value={limit*2}>{limit*2}</MenuItem>
-            <MenuItem value={limit*5}>{limit*5}</MenuItem>
-            <MenuItem value={limit*10}>{limit*10}</MenuItem>
-          </Select>
-        </FormControl>
+          sx={{ml: 'auto', pl: 2}}
+        />
       </Stack>
       <Divider />
       <Stack overflow="auto" flexGrow={1}>
