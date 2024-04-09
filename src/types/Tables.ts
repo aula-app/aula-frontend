@@ -1,3 +1,4 @@
+import { ObjectPropByName } from './Generics';
 import { GroupType } from './GrpupTypes';
 import { UserType, UserTypeKeys } from './UserTypes';
 
@@ -21,5 +22,5 @@ export interface TableOptions {
 export interface TableResponseType {
   success: Boolean;
   count: Number;
-  data: UserType[] | GroupType[];
+  data: ObjectPropByName[];
 }
