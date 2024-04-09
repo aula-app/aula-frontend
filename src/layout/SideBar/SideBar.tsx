@@ -29,11 +29,11 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     path: '/users',
     icon: 'users',
   },
-  {
-    title: 'Groups',
-    path: '/groups',
-    icon: 'group',
-  },
+  // {
+  //   title: 'Groups',
+  //   path: '/groups',
+  //   icon: 'group',
+  // },
   {
     title: 'Rooms',
     path: '/rooms',
@@ -112,12 +112,12 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
       >
         <Stack direction="row" pb={2}>
           <Tooltip title="Print" sx={{ mr: 'auto' }}>
-            <Button color='secondary' onClick={window.print}>
+            <Button color="secondary" onClick={window.print}>
               <AppIcon icon="print" />
             </Button>
           </Tooltip>
           <Tooltip title={state.darkMode ? 'Light mode' : 'Dark mode'}>
-            <Button color='secondary' onClick={onSwitchDarkMode}>
+            <Button color="secondary" onClick={onSwitchDarkMode}>
               <AppIcon icon="daynight" />
             </Button>
           </Tooltip>
@@ -142,12 +142,10 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
           }}
         >
           {isAuthenticated && (
-            <>
-              <AppButton variant="text" onClick={onLogout}>
-                LogOut&nbsp;
-                <AppIcon icon="logout" />
-              </AppButton>
-            </>
+            <AppButton variant="text" onClick={onLogout}>
+              LogOut&nbsp;
+              <AppIcon icon="logout" />
+            </AppButton>
           )}
         </Stack>
       </Stack>
