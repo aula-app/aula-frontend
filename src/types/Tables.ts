@@ -1,4 +1,5 @@
-import { UserTypeKeys } from './UserTypes';
+import { GroupType } from './GrpupTypes';
+import { UserType, UserTypeKeys } from './UserTypes';
 
 export interface TableRow {
   id: number;
@@ -15,4 +16,10 @@ export interface TableOptions {
   orderBy: UserTypeKeys;
   orderAsc: boolean;
   rows: TableRow[];
+}
+
+export interface TableResponseType {
+  success: Boolean;
+  count: Number;
+  data: UserType[] | GroupType[];
 }

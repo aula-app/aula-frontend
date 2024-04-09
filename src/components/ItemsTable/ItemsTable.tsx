@@ -3,7 +3,6 @@ import {
   Fab,
   InputAdornment,
   Pagination,
-  SelectChangeEvent,
   Stack,
   Table,
   TableBody,
@@ -13,11 +12,10 @@ import {
   TableSortLabel,
   TextField,
 } from '@mui/material';
-import { UsersResponseType } from '@/types/UserTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Add, Search } from '@mui/icons-material';
 import Tables from '@/utils/tables.json';
-import { TableOptions } from '@/types/Tables';
+import { TableOptions, TableResponseType } from '@/types/Tables';
 import { databaseRequest } from '@/utils/requests';
 
 interface Props {
@@ -29,7 +27,7 @@ export const ItemsTable = ({ table }: Props) => {
   const columns = options.rows.map((value) => value.name);
   const defaultLimit = Math.floor((window.screen.height - 220) / 34) || 10;
 
-  const [items, setItems] = useState({} as UsersResponseType);
+  const [items, setItems] = useState({} as TableResponseType);
 
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(defaultLimit);
@@ -47,7 +45,7 @@ export const ItemsTable = ({ table }: Props) => {
         asc: Number(orderDesc),
       },
       decrypt: columns,
-    }).then((response: UsersResponseType) => {
+    }).then((response: TableResponseType) => {
       setItems(response);
     });
 
