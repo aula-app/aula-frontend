@@ -33,7 +33,7 @@ export const ItemsTable = ({ table }: Props) => {
 
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(defaultLimit);
-  const [orderBy, setOrder] = useState(options.rows[0].id);
+  const [orderBy, setOrder] = useState(options.rows[0]['id']);
   const [orderDesc, setOrderDesc] = useState(false);
 
   const dataFetch = async () =>
@@ -43,17 +43,13 @@ export const ItemsTable = ({ table }: Props) => {
       arguments: {
         limit: limit,
         offset: page * limit,
-        orderby: options.orderBy,
+        orderby: orderBy,
         asc: Number(orderDesc),
       },
       decrypt: columns,
     }).then((response: UsersResponseType) => {
       setItems(response);
     });
-
-  const changeLimit = (event: SelectChangeEvent) => {
-    setLimit(Number(event.target.value));
-  };
 
   const changePage = (event: ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage - 1);
@@ -82,19 +78,6 @@ export const ItemsTable = ({ table }: Props) => {
         >
           <Add />
         </Fab>
-        {/* <Stack direction="row" alignItems="center">
-          <Typography fontSize="small" ml="auto" pr={1} noWrap>
-            Items per page:
-          </Typography>
-          <FormControl variant="standard">
-            <Select value={String(limit)} onChange={changeLimit}>
-              <MenuItem value={defaultLimit}>{defaultLimit}</MenuItem>
-              <MenuItem value={defaultLimit * 2}>{defaultLimit * 2}</MenuItem>
-              <MenuItem value={defaultLimit * 5}>{defaultLimit * 5}</MenuItem>
-              <MenuItem value={defaultLimit * 10}>{defaultLimit * 10}</MenuItem>
-            </Select>
-          </FormControl>
-        </Stack> */}
         <TextField
           InputProps={{
             startAdornment: (
