@@ -24,7 +24,7 @@ const SideBarNavItem: FunctionComponent<Props> = ({
   onClick,
 }) => {
   const location = useLocation();
-  const selected = propSelected || (path && path.length > 1 && location.pathname.startsWith(path)) || false;
+  const selected = propSelected || (path && path.length > 1 && location.pathname === path) || false;
 
   return (
     <ListItemButton
