@@ -1,11 +1,8 @@
 import {
   Divider,
-  FormControl,
+  Fab,
   InputAdornment,
-  MenuItem,
   Pagination,
-  Select,
-  SelectChangeEvent,
   Stack,
   Table,
   TableBody,
@@ -14,17 +11,15 @@ import {
   TableRow,
   TableSortLabel,
   TextField,
-  Typography,
 } from '@mui/material';
-import { UsersResponseType } from '@/types/UserTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Search } from '@mui/icons-material';
+import { Add, Search } from '@mui/icons-material';
 import Tables from '@/utils/tables.json';
-import { TableOptions } from '@/types/Tables';
+import { TableOptions, TableResponseType } from '@/types/Tables';
 import { databaseRequest } from '@/utils/requests';
 
 interface Props {
-  table: 'users';
+  table: 'users' | 'groups';
 }
 
 export const ItemsTable = ({ table }: Props) => {
@@ -32,33 +27,27 @@ export const ItemsTable = ({ table }: Props) => {
   const columns = options.rows.map((value) => value.name);
   const defaultLimit = Math.floor((window.screen.height - 220) / 34) || 10;
 
-  const [items, setItems] = useState({} as UsersResponseType);
+  const [items, setItems] = useState({} as TableResponseType);
 
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(defaultLimit);
-  const [orderBy, setOrder] = useState(options.rows[0].id);
+  const [orderBy, setOrder] = useState(options.rows[0]['id']);
   const [orderDesc, setOrderDesc] = useState(false);
 
-  const dataFetch = async () => {
-    console.log(Number(orderDesc));
+  const dataFetch = async () =>
     await databaseRequest('model', {
       model: options.model,
       method: options.method,
       arguments: {
         limit: limit,
         offset: page * limit,
-        orderby: options.orderBy,
+        orderby: orderBy,
         asc: Number(orderDesc),
       },
       decrypt: columns,
-    }).then((response: UsersResponseType) => {
+    }).then((response: TableResponseType) => {
       setItems(response);
     });
-  };
-
-  const changeLimit = (event: SelectChangeEvent) => {
-    setLimit(Number(event.target.value));
-  };
 
   const changePage = (event: ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage - 1);
@@ -76,19 +65,17 @@ export const ItemsTable = ({ table }: Props) => {
   return (
     <Stack flexGrow={1} minHeight={0}>
       <Stack direction="row" alignItems="center" px={2} pb={2}>
-        <Stack direction="row" alignItems="center">
-          <Typography fontSize="small" ml="auto" pr={1} noWrap>
-            Items per page:
-          </Typography>
-          <FormControl variant="standard">
-            <Select value={String(limit)} onChange={changeLimit}>
-              <MenuItem value={defaultLimit}>{defaultLimit}</MenuItem>
-              <MenuItem value={defaultLimit * 2}>{defaultLimit * 2}</MenuItem>
-              <MenuItem value={defaultLimit * 5}>{defaultLimit * 5}</MenuItem>
-              <MenuItem value={defaultLimit * 10}>{defaultLimit * 10}</MenuItem>
-            </Select>
-          </FormControl>
-        </Stack>
+        <Fab
+          aria-label="add"
+          color="primary"
+          sx={{
+            position: 'absolute',
+            bottom: 60,
+            right: 20,
+          }}
+        >
+          <Add />
+        </Fab>
         <TextField
           InputProps={{
             startAdornment: (
@@ -133,7 +120,9 @@ export const ItemsTable = ({ table }: Props) => {
         </Table>
       </Stack>
       <Stack direction="row" justifyContent="center">
-        <Pagination count={Math.ceil(Number(items.count) / limit)} sx={{ py: 1 }} onChange={changePage} />
+        {items.count && (
+          <Pagination count={Math.ceil(Number(items.count) / limit)} sx={{ py: 1 }} onChange={changePage} />
+        )}
       </Stack>
     </Stack>
   );

@@ -1,4 +1,6 @@
-import { UserTypeKeys } from './UserTypes';
+import { ObjectPropByName } from './Generics';
+import { GroupType } from './GrpupTypes';
+import { UserType, UserTypeKeys } from './UserTypes';
 
 export interface TableRow {
   id: number;
@@ -8,11 +10,17 @@ export interface TableRow {
 }
 
 export interface TableOptions {
-  model: 'User';
-  method: 'getUsers';
+  model: 'User' | 'Groups';
+  method: 'getUsers' | 'getGroups';
   page: number;
   limit: number;
   orderBy: UserTypeKeys;
   orderAsc: boolean;
   rows: TableRow[];
+}
+
+export interface TableResponseType {
+  success: Boolean;
+  count: Number;
+  data: ObjectPropByName[];
 }
