@@ -1,5 +1,6 @@
 import {
   Divider,
+  Fab,
   FormControl,
   InputAdornment,
   MenuItem,
@@ -18,10 +19,11 @@ import {
 } from '@mui/material';
 import { UsersResponseType } from '@/types/UserTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Search } from '@mui/icons-material';
+import { Add, Search } from '@mui/icons-material';
 import Tables from '@/utils/tables.json';
 import { TableOptions } from '@/types/Tables';
 import { databaseRequest } from '@/utils/requests';
+import AppButton from '../AppButton';
 
 interface Props {
   table: 'users';
@@ -76,7 +78,18 @@ export const ItemsTable = ({ table }: Props) => {
   return (
     <Stack flexGrow={1} minHeight={0}>
       <Stack direction="row" alignItems="center" px={2} pb={2}>
-        <Stack direction="row" alignItems="center">
+        <Fab
+          aria-label="add"
+          color="primary"
+          sx={{
+            position: 'absolute',
+            bottom: 60,
+            right: 20
+          }}
+        >
+          <Add />
+        </Fab>
+        {/* <Stack direction="row" alignItems="center">
           <Typography fontSize="small" ml="auto" pr={1} noWrap>
             Items per page:
           </Typography>
@@ -88,7 +101,7 @@ export const ItemsTable = ({ table }: Props) => {
               <MenuItem value={defaultLimit * 10}>{defaultLimit * 10}</MenuItem>
             </Select>
           </FormControl>
-        </Stack>
+        </Stack> */}
         <TextField
           InputProps={{
             startAdornment: (
