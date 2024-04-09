@@ -6,20 +6,38 @@
       {
         "id": 1,
         "name": "realname",
-        "displayName": "Student Name",
-        "isRestricted": true
+        "displayName": "Student Name"
       },
       {
         "id": 6,
         "name": "displayname",
-        "displayName": "User Name",
-        "isRestricted": false
+        "displayName": "User Name"
       },
       {
         "id": 7,
         "name": "email",
-        "displayName": "Email",
-        "isRestricted": false
+        "displayName": "Email"
+      }
+    ]
+  },
+  "groups": {
+    "model": "Group",
+    "method": "getGroups",
+    "rows": [
+      {
+        "id": 0,
+        "name": "group_name",
+        "displayName": "Group Name"
+      },
+      {
+        "id": 5,
+        "name": "description_public",
+        "displayName": "Group public description"
+      },
+      {
+        "id": 6,
+        "name": "description_internal",
+        "displayName": "Group internal description"
       }
     ]
   }

@@ -8,8 +8,8 @@ export interface TableRow {
 }
 
 export interface TableOptions {
-  model: 'User';
-  method: 'getUsers';
+  model: 'User' | 'Groups';
+  method: 'getUsers' | 'getGroups';
   page: number;
   limit: number;
   orderBy: UserTypeKeys;

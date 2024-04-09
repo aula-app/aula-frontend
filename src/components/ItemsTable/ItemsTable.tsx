@@ -1,11 +1,8 @@
 import {
   Divider,
   Fab,
-  FormControl,
   InputAdornment,
-  MenuItem,
   Pagination,
-  Select,
   SelectChangeEvent,
   Stack,
   Table,
@@ -15,7 +12,6 @@ import {
   TableRow,
   TableSortLabel,
   TextField,
-  Typography,
 } from '@mui/material';
 import { UsersResponseType } from '@/types/UserTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -23,10 +19,9 @@ import { Add, Search } from '@mui/icons-material';
 import Tables from '@/utils/tables.json';
 import { TableOptions } from '@/types/Tables';
 import { databaseRequest } from '@/utils/requests';
-import AppButton from '../AppButton';
 
 interface Props {
-  table: 'users';
+  table: 'users' | 'groups';
 }
 
 export const ItemsTable = ({ table }: Props) => {
@@ -41,8 +36,7 @@ export const ItemsTable = ({ table }: Props) => {
   const [orderBy, setOrder] = useState(options.rows[0].id);
   const [orderDesc, setOrderDesc] = useState(false);
 
-  const dataFetch = async () => {
-    console.log(Number(orderDesc));
+  const dataFetch = async () =>
     await databaseRequest('model', {
       model: options.model,
       method: options.method,
@@ -56,7 +50,6 @@ export const ItemsTable = ({ table }: Props) => {
     }).then((response: UsersResponseType) => {
       setItems(response);
     });
-  };
 
   const changeLimit = (event: SelectChangeEvent) => {
     setLimit(Number(event.target.value));
@@ -84,7 +77,7 @@ export const ItemsTable = ({ table }: Props) => {
           sx={{
             position: 'absolute',
             bottom: 60,
-            right: 20
+            right: 20,
           }}
         >
           <Add />
@@ -146,7 +139,9 @@ export const ItemsTable = ({ table }: Props) => {
         </Table>
       </Stack>
       <Stack direction="row" justifyContent="center">
-        <Pagination count={Math.ceil(Number(items.count) / limit)} sx={{ py: 1 }} onChange={changePage} />
+        {items.count && (
+          <Pagination count={Math.ceil(Number(items.count) / limit)} sx={{ py: 1 }} onChange={changePage} />
+        )}
       </Stack>
     </Stack>
   );
