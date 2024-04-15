@@ -105,20 +105,25 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
       <Stack
         sx={{
           height: '100%',
-          padding: 2,
+          py: 2,
         }}
         {...restOfProps}
         onClick={handleAfterLinkClick}
       >
         <Stack direction="row" pb={2}>
-          <Tooltip title="Print" sx={{ mr: 'auto' }}>
+          <Tooltip title={state.darkMode ? 'Light mode' : 'Dark mode'}>
+            <Button color="secondary" onClick={onSwitchDarkMode}>
+              <AppIcon icon="daynight" />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Print" sx={{ mx: 'auto' }}>
             <Button color="secondary" onClick={window.print}>
               <AppIcon icon="print" />
             </Button>
           </Tooltip>
-          <Tooltip title={state.darkMode ? 'Light mode' : 'Dark mode'}>
-            <Button color="secondary" onClick={onSwitchDarkMode}>
-              <AppIcon icon="daynight" />
+          <Tooltip title="Close">
+            <Button color="secondary" onClick={() => {}}>
+              <AppIcon icon="Close" />
             </Button>
           </Tooltip>
         </Stack>
