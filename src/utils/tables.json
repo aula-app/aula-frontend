@@ -24,26 +24,32 @@
     ]
   },
   "ideas": {
-    "model": "ideas",
+    "model": "Idea",
     "method": "getIdeas",
     "rows": [
       {
-        "id": 0,
-        "name": "group_name",
-        "displayName": "Name",
+        "id": 8,
+        "name": "room_id",
+        "displayName": "Room ID",
+        "encryption": false
+      },
+      {
+        "id": 7,
+        "name": "content",
+        "displayName": "Idea",
         "encryption": true
       },
       {
-        "id": 5,
-        "name": "description_public",
-        "displayName": "Public description",
-        "encryption": true
+        "id": 2,
+        "name": "created",
+        "displayName": "Date Created",
+        "encryption": false
       },
       {
-        "id": 6,
-        "name": "description_internal",
-        "displayName": "Internal description",
-        "encryption": true
+        "id": 3,
+        "name": "last_update",
+        "displayName": "Date Last Updated",
+        "encryption": false
       }
     ]
   },

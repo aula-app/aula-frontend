@@ -34,7 +34,7 @@ export const ItemsTable = ({ table }: Props) => {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(defaultLimit);
   const [orderBy, setOrder] = useState(options.rows[0]['id']);
-  const [orderDesc, setOrderDesc] = useState(false);
+  const [orderAsc, setOrderAsc] = useState(true);
 
   const dataFetch = async () =>
     await databaseRequest('model', {
@@ -44,7 +44,7 @@ export const ItemsTable = ({ table }: Props) => {
         limit: limit,
         offset: page * limit,
         orderby: orderBy,
-        asc: Number(orderDesc),
+        asc: Number(orderAsc),
       },
       decrypt: decrypt,
     }).then((response: TableResponseType) => {
@@ -56,13 +56,13 @@ export const ItemsTable = ({ table }: Props) => {
   };
 
   const handleOrder = (col: number) => {
-    if (orderBy === col) setOrderDesc(!orderDesc);
+    if (orderBy === col) setOrderAsc(!orderAsc);
     setOrder(col);
   };
 
   useEffect(() => {
     dataFetch();
-  }, [page, limit, orderBy, orderDesc]);
+  }, [page, limit, orderBy, orderAsc]);
 
   return (
     <Stack flexGrow={1} minHeight={0}>
@@ -99,7 +99,7 @@ export const ItemsTable = ({ table }: Props) => {
                 <TableCell key={column} sx={{ whiteSpace: 'nowrap' }}>
                   <TableSortLabel
                     active={orderBy === options.rows[key].id}
-                    direction={orderDesc ? 'asc' : 'desc'}
+                    direction={orderAsc ? 'asc' : 'desc'}
                     onClick={() => handleOrder(options.rows[key].id)}
                   >
                     {options.rows[key].displayName}
