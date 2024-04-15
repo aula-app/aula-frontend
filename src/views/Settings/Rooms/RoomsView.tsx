@@ -3,16 +3,13 @@ import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 
 /** * Renders "Rooms" view
- * url: /
+ * url: /rooms
  */
 const RoomsView = () => {
   return (
-    <Stack direction="column" height="100%">
-      <Typography variant="h4" sx={{ p: 2, pb: 0 }}>
-        Groups
-      </Typography>
-      <ItemsTable table="groups" />
-    </Stack>
+    <Typography variant="h4" sx={{ p: 2, pb: 0 }}>
+      Rooms
+    </Typography>
   );
 };
 

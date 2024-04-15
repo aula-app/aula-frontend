@@ -21,12 +21,12 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
   },
   {
     title: 'Profile',
-    path: '/user',
+    path: '/settings/profile',
     icon: 'account',
   },
   {
     title: 'Users',
-    path: '/users',
+    path: '/settings/users',
     icon: 'users',
   },
   // {
@@ -36,17 +36,17 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
   // },
   {
     title: 'Rooms',
-    path: '/rooms',
+    path: '/settings/rooms',
     icon: 'room',
   },
   {
     title: 'Ideas',
-    path: '/ideas',
+    path: '/settings/ideas',
     icon: 'idea',
   },
   {
     title: 'Texts',
-    path: '/texts',
+    path: '/settings/texts',
     icon: 'texts',
   },
   {

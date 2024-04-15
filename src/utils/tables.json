@@ -1,25 +1,4 @@
 {
-  "users": {
-    "model": "User",
-    "method": "getUsers",
-    "rows": [
-      {
-        "id": 1,
-        "name": "realname",
-        "displayName": "Student Name"
-      },
-      {
-        "id": 6,
-        "name": "displayname",
-        "displayName": "User Name"
-      },
-      {
-        "id": 7,
-        "name": "email",
-        "displayName": "Email"
-      }
-    ]
-  },
   "groups": {
     "model": "Group",
     "method": "getGroups",
@@ -27,17 +6,92 @@
       {
         "id": 0,
         "name": "group_name",
-        "displayName": "Group Name"
+        "displayName": "Name",
+        "encryption": true
       },
       {
         "id": 5,
         "name": "description_public",
-        "displayName": "Group public description"
+        "displayName": "Public description",
+        "encryption": true
       },
       {
         "id": 6,
         "name": "description_internal",
-        "displayName": "Group internal description"
+        "displayName": "Internal description",
+        "encryption": true
+      }
+    ]
+  },
+  "ideas": {
+    "model": "ideas",
+    "method": "getIdeas",
+    "rows": [
+      {
+        "id": 0,
+        "name": "group_name",
+        "displayName": "Name",
+        "encryption": true
+      },
+      {
+        "id": 5,
+        "name": "description_public",
+        "displayName": "Public description",
+        "encryption": true
+      },
+      {
+        "id": 6,
+        "name": "description_internal",
+        "displayName": "Internal description",
+        "encryption": true
+      }
+    ]
+  },
+  "rooms": {
+    "model": "Room",
+    "method": "getRooms",
+    "rows": [
+      {
+        "id": 0,
+        "name": "room_name",
+        "displayName": "Name",
+        "encryption": false
+      },
+      {
+        "id": 5,
+        "name": "description_public",
+        "displayName": "Public description",
+        "encryption": false
+      },
+      {
+        "id": 6,
+        "name": "description_internal",
+        "displayName": "Internal description",
+        "encryption": false
+      }
+    ]
+  },
+  "users": {
+    "model": "User",
+    "method": "getUsers",
+    "rows": [
+      {
+        "id": 1,
+        "name": "realname",
+        "displayName": "Student Name",
+        "encryption": true
+      },
+      {
+        "id": 6,
+        "name": "displayname",
+        "displayName": "User Name",
+        "encryption": true
+      },
+      {
+        "id": 7,
+        "name": "email",
+        "displayName": "Email",
+        "encryption": true
       }
     ]
   }

@@ -7,12 +7,9 @@ import { Stack } from '@mui/system';
  */
 const RoomsView = () => {
   return (
-    <Stack direction="column" height="100%">
-      <Typography variant="h4" sx={{ p: 2, pb: 0 }}>
-        Users
-      </Typography>
-      <ItemsTable table="users" />
-    </Stack>
+    <Typography variant="h4" sx={{ p: 2, pb: 0 }}>
+      Groups
+    </Typography>
   );
 };
 
