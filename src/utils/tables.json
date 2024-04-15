@@ -53,6 +53,30 @@
       }
     ]
   },
+  "texts": {
+    "model": "Text",
+    "method": "getTexts",
+    "rows": [
+      {
+        "id": 2,
+        "name": "created",
+        "displayName": "Date Created",
+        "encryption": false
+      },
+      {
+        "id": 5,
+        "name": "headline",
+        "displayName": "Headline",
+        "encryption": false
+      },
+      {
+        "id": 6,
+        "name": "body",
+        "displayName": "Message",
+        "encryption": false
+      }
+    ]
+  },
   "rooms": {
     "model": "Room",
     "method": "getRooms",

@@ -1,1 +1,1 @@
-export type SettingsType = "groups" | "ideas" | "rooms" | "users";
+export type SettingsType = "groups" | "ideas" | "rooms" | "texts" | "users";
