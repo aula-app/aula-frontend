@@ -77,7 +77,6 @@ const SettingsView = () => {
     if (!Object.keys(pages).includes(setting_name)) {
       navigate('/error');
     } else {
-      console.log(Tables[setting_name].rows[0]['id'])
       setPage(0);
       setOrderAsc(true);
       setOrder(Tables[setting_name].rows[0]['id']);
