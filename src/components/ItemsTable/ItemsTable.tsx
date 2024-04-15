@@ -17,9 +17,10 @@ import { Add, Search } from '@mui/icons-material';
 import Tables from '@/utils/tables.json';
 import { TableOptions, TableResponseType } from '@/types/Tables';
 import { databaseRequest } from '@/utils/requests';
+import { SettingsType } from '@/types/SettingsTypes';
 
 interface Props {
-  table: 'users' | 'groups';
+  table: SettingsType
 }
 
 export const ItemsTable = ({ table }: Props) => {

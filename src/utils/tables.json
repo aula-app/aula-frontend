@@ -1,25 +1,4 @@
 {
-  "users": {
-    "model": "User",
-    "method": "getUsers",
-    "rows": [
-      {
-        "id": 1,
-        "name": "realname",
-        "displayName": "Student Name"
-      },
-      {
-        "id": 6,
-        "name": "displayname",
-        "displayName": "User Name"
-      },
-      {
-        "id": 7,
-        "name": "email",
-        "displayName": "Email"
-      }
-    ]
-  },
   "groups": {
     "model": "Group",
     "method": "getGroups",
@@ -38,6 +17,69 @@
         "id": 6,
         "name": "description_internal",
         "displayName": "Group internal description"
+      }
+    ]
+  },
+  "ideas": {
+    "model": "ideas",
+    "method": "getIdeas",
+    "rows": [
+      {
+        "id": 0,
+        "name": "group_name",
+        "displayName": "Group Name"
+      },
+      {
+        "id": 5,
+        "name": "description_public",
+        "displayName": "Group public description"
+      },
+      {
+        "id": 6,
+        "name": "description_internal",
+        "displayName": "Group internal description"
+      }
+    ]
+  },
+  "rooms": {
+    "model": "rooms",
+    "method": "getRooms",
+    "rows": [
+      {
+        "id": 0,
+        "name": "group_name",
+        "displayName": "Group Name"
+      },
+      {
+        "id": 5,
+        "name": "description_public",
+        "displayName": "Group public description"
+      },
+      {
+        "id": 6,
+        "name": "description_internal",
+        "displayName": "Group internal description"
+      }
+    ]
+  },
+  "users": {
+    "model": "User",
+    "method": "getUsers",
+    "rows": [
+      {
+        "id": 1,
+        "name": "realname",
+        "displayName": "Student Name"
+      },
+      {
+        "id": 6,
+        "name": "displayname",
+        "displayName": "User Name"
+      },
+      {
+        "id": 7,
+        "name": "email",
+        "displayName": "Email"
       }
     ]
   }
