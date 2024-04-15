@@ -8,15 +8,17 @@ import IdeasView from './Ideas';
 import RoomsView from './Rooms';
 import { SettingsType } from '@/types/SettingsTypes';
 import { NotFoundView } from '..';
+import TextsView from './Texts';
 
 /** * Renders default "Settings" view
- * urls: /settings/users, /settings/rooms, /settings/groups, /settings/ideas
+ * urls: /settings/groups, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
  */
 const SettingsView = () => {
   const pages = {
     groups: <GroupsView />,
     ideas: <IdeasView />,
     rooms: <RoomsView />,
+    texts: <TextsView />,
     users: <UsersView />,
   };
 
