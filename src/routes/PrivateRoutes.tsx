@@ -22,14 +22,14 @@ const PrivateRoutes = () => (
   <Routes>
     <Route path="/" element={<WelcomeView />} />
     <Route path="welcome" element={<WelcomeView />} />
-    <Route path="user" element={<UserView />} />
+    <Route path="settings/profile" element={<UserView />} />
+    <Route path="settings/:setting_name" element={<SettingsView />} />,
     <Route path="about" element={<AboutView />} />,
     <Route path="room/:room_id" element={<DefaultRoom />} />,
     <Route path="room/:room_id/ideas" element={<RoomView />} />,
     <Route path="room/:room_id/boxes" element={<RoomView />} />,
     <Route path="room/:room_id/idea-box/:box_id" element={<IdeasBoxView />} />,
     <Route path="room/:room_id/idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />,
-    <Route path="settings/:setting_name" element={<SettingsView />} />,
     <Route path="room/:room_id/idea/:idea_id" element={<IdeaView />} />,
     <Route path="*" element={<NotFoundView />} />
   </Routes>

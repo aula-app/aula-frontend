@@ -20,12 +20,13 @@ import { databaseRequest } from '@/utils/requests';
 import { SettingsType } from '@/types/SettingsTypes';
 
 interface Props {
-  table: SettingsType
+  table: SettingsType;
 }
 
 export const ItemsTable = ({ table }: Props) => {
   const options = Tables[table] as TableOptions;
   const columns = options.rows.map((value) => value.name);
+  const decrypt = columns.filter((column, key) => options.rows[key].encryption);
   const defaultLimit = Math.floor((window.screen.height - 220) / 34) || 10;
 
   const [items, setItems] = useState({} as TableResponseType);
@@ -45,7 +46,7 @@ export const ItemsTable = ({ table }: Props) => {
         orderby: orderBy,
         asc: Number(orderDesc),
       },
-      decrypt: columns,
+      decrypt: decrypt,
     }).then((response: TableResponseType) => {
       setItems(response);
     });
@@ -95,7 +96,7 @@ export const ItemsTable = ({ table }: Props) => {
           <TableHead>
             <TableRow>
               {columns.map((column, key) => (
-                <TableCell key={column}>
+                <TableCell key={column} sx={{ whiteSpace: 'nowrap' }}>
                   <TableSortLabel
                     active={orderBy === options.rows[key].id}
                     direction={orderDesc ? 'asc' : 'desc'}
@@ -112,7 +113,12 @@ export const ItemsTable = ({ table }: Props) => {
               {items.data.map((row) => (
                 <TableRow key={row.id}>
                   {columns.map((column) => (
-                    <TableCell key={`${column}-${row.id}`}>{row[column]}</TableCell>
+                    <TableCell
+                      key={`${column}-${row.id}`}
+                      sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                    >
+                      {row[column]}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))}

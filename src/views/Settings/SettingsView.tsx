@@ -13,8 +13,6 @@ import { NotFoundView } from '..';
  * urls: /settings/users, /settings/rooms, /settings/groups, /settings/ideas
  */
 const SettingsView = () => {
-  const { setting_name } = useParams();
-
   const pages = {
     groups: <GroupsView />,
     ideas: <IdeasView />,
@@ -22,6 +20,7 @@ const SettingsView = () => {
     users: <UsersView />,
   };
 
+  const { setting_name } = useParams();
   const isSettings = (param: any): param is SettingsType => Object.keys(pages).includes(param);
 
   return isSettings(setting_name) ? (

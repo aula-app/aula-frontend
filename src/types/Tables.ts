@@ -1,12 +1,11 @@
 import { ObjectPropByName } from './Generics';
-import { GroupType } from './GrpupTypes';
-import { UserType, UserTypeKeys } from './UserTypes';
+import { UserTypeKeys } from './UserTypes';
 
 export interface TableRow {
   id: number;
   name: UserTypeKeys;
   displayName: string;
-  isRestricted: boolean;
+  encryption: boolean;
 }
 
 export interface TableOptions {
