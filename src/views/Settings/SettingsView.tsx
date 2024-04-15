@@ -1,5 +1,6 @@
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
+  Drawer,
   Fab,
   InputAdornment,
   Pagination,
@@ -26,14 +27,14 @@ import { databaseRequest } from '@/utils/requests';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-const DEFAULT_LIMIT = Math.floor((window.screen.height - 220) / 34) || 10;
+const DEFAULT_LIMIT = Math.floor((window.innerWidth - 220) / 34) || 10;
 
 /** * Renders default "Settings" view
  * urls: /settings/groups, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
  */
 const SettingsView = () => {
   const navigate = useNavigate();
-  const { setting_name } = useParams() as { setting_name: SettingsType };
+  const { setting_name, setting_id } = useParams() as { setting_name: SettingsType };
   const pages = {
     groups: <GroupsView />,
     ideas: <IdeasView />,
@@ -43,7 +44,6 @@ const SettingsView = () => {
   };
 
   const [items, setItems] = useState({} as TableResponseType);
-
   // const [limit, setLimit] = useState(DEFAULT_LIMIT);
   const [page, setPage] = useState(0);
   const [orderBy, setOrder] = useState(0);
@@ -131,6 +131,7 @@ const SettingsView = () => {
                   <TableCell
                     key={`${column.name}-${row.id}`}
                     sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                    onClick={() => navigate(`/settings/${setting_name}/${row.id}`)}
                   >
                     {row[column.name]}
                   </TableCell>
@@ -145,6 +146,9 @@ const SettingsView = () => {
           <Pagination count={Math.ceil(Number(items.count) / DEFAULT_LIMIT)} sx={{ py: 1 }} onChange={changePage} />
         )}
       </Stack>
+      <Drawer anchor="bottom" open={Boolean(setting_id)} onClose={() => navigate(`/settings/${setting_name}`)}>
+        {pages[setting_name]}
+      </Drawer>
     </Stack>
   ) : (
     <NotFoundView />
