@@ -1,7 +1,8 @@
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import {
   Fab,
   InputAdornment,
+  Pagination,
   Stack,
   Table,
   TableBody,
@@ -22,8 +23,8 @@ import Tables from '@/utils/tables.json';
 import { SettingsType } from '@/types/SettingsTypes';
 import { Add, Search } from '@mui/icons-material';
 import { databaseRequest } from '@/utils/requests';
-import { TableOptions, TableResponseType } from '@/types/TableTypes';
-import { useEffect, useState } from 'react';
+import { TableResponseType } from '@/types/TableTypes';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 const DEFAULT_LIMIT = Math.floor((window.screen.height - 220) / 34) || 10;
 
@@ -31,6 +32,8 @@ const DEFAULT_LIMIT = Math.floor((window.screen.height - 220) / 34) || 10;
  * urls: /settings/groups, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
  */
 const SettingsView = () => {
+  const navigate = useNavigate();
+  const { setting_name } = useParams() as { setting_name: SettingsType };
   const pages = {
     groups: <GroupsView />,
     ideas: <IdeasView />,
@@ -39,43 +42,54 @@ const SettingsView = () => {
     users: <UsersView />,
   };
 
-  const { setting_name } = useParams() as { setting_name: SettingsType };
-  const isSettings = (param: SettingsType) => Object.keys(pages).includes(param);
-  const options = Tables[setting_name] as TableOptions;
-  const columns = options.rows.map((value) => value.name);
-  const decrypt = columns.filter((column, key) => options.rows[key].encryption);
-
   const [items, setItems] = useState({} as TableResponseType);
+
+  // const [limit, setLimit] = useState(DEFAULT_LIMIT);
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(DEFAULT_LIMIT);
-  const [orderBy, setOrder] = useState(options.rows[0]['id']);
+  const [orderBy, setOrder] = useState(0);
   const [orderAsc, setOrderAsc] = useState(true);
 
   const dataFetch = async () =>
     await databaseRequest('model', {
-      model: options.model,
-      method: options.method,
+      model: Tables[setting_name].model,
+      method: Tables[setting_name].method,
       arguments: {
-        limit: limit,
-        offset: page * limit,
-        orderby: orderBy,
-        asc: Number(orderAsc),
+        limit: DEFAULT_LIMIT,
+        offset: page * DEFAULT_LIMIT,
+        orderby: Tables[setting_name].rows[0]['id'],
+        asc: Number(true),
       },
-      decrypt: decrypt,
+      decrypt: Tables[setting_name].rows.filter((row) => row.encryption).map((value) => value.name),
     }).then((response: TableResponseType) => {
       setItems(response);
     });
-
-  useEffect(() => {
-    dataFetch();
-  }, [page, limit, orderBy, orderAsc]);
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
     setOrder(col);
   };
 
-  return isSettings(setting_name) ? (
+  const changePage = (event: ChangeEvent<unknown>, newPage: number) => {
+    setPage(newPage - 1);
+  };
+
+  const resetTable = () => {
+    if (!Object.keys(pages).includes(setting_name)) {
+      navigate('/error');
+    } else {
+      console.log(Tables[setting_name].rows[0]['id'])
+      setPage(0);
+      setOrderAsc(true);
+      setOrder(Tables[setting_name].rows[0]['id']);
+    }
+  };
+
+  useEffect(resetTable, [setting_name]);
+  useEffect(() => {
+    dataFetch();
+  }, [page, orderBy, orderAsc]);
+
+  return items ? (
     <Stack direction="column" height="100%">
       <Fab aria-label="add" color="primary" sx={{ position: 'absolute', bottom: 60, right: 20 }}>
         <Add />
@@ -94,40 +108,44 @@ const SettingsView = () => {
         variant="standard"
         sx={{ px: 2 }}
       />
-      {/* <ItemsTable items={items.data} /> */}
-      <Table stickyHeader size="small">
+      <Table stickyHeader size="small" sx={{ flexGrow: 1 }}>
         <TableHead>
           <TableRow>
-            {columns.map((column, key) => (
-              <TableCell key={column} sx={{ whiteSpace: 'nowrap' }}>
-                <TableSortLabel
-                  active={orderBy === options.rows[key].id}
-                  direction={orderAsc ? 'asc' : 'desc'}
-                  onClick={() => handleOrder(options.rows[key].id)}
-                >
-                  {options.rows[key].displayName}
-                </TableSortLabel>
-              </TableCell>
-            ))}
+            {Tables[setting_name].rows.map((column, key) => (
+                <TableCell key={key} sx={{ whiteSpace: 'nowrap' }}>
+                  <TableSortLabel
+                    active={orderBy === column.id}
+                    direction={orderAsc ? 'asc' : 'desc'}
+                    onClick={() => handleOrder(column.id)}
+                  >
+                    {column.displayName}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
           </TableRow>
         </TableHead>
-        {items.data && (
-            <TableBody>
-              {items.data.map((row) => (
-                <TableRow key={row.id}>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={`${column}-${row.id}`}
-                      sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                    >
-                      {row[column]}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          )}
+        {items && items.data && (
+          <TableBody>
+            {items.data.map((row) => (
+              <TableRow key={row.id}>
+                {Tables[setting_name].rows.map((column) => (
+                  <TableCell
+                    key={`${column}-${row.id}`}
+                    sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                  >
+                    {row[column.name]}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        )}
       </Table>
+      <Stack direction="row" justifyContent="center">
+        {items && items.count && (
+          <Pagination count={Math.ceil(Number(items.count) / DEFAULT_LIMIT)} sx={{ py: 1 }} onChange={changePage} />
+        )}
+      </Stack>
     </Stack>
   ) : (
     <NotFoundView />
