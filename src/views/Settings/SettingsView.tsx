@@ -111,7 +111,7 @@ const SettingsView = () => {
         <TableHead>
           <TableRow>
             {Tables[setting_name].rows.map((column, key) => (
-                <TableCell key={key} sx={{ whiteSpace: 'nowrap' }}>
+                <TableCell key={`${column.name}${key}`} sx={{ whiteSpace: 'nowrap' }}>
                   <TableSortLabel
                     active={orderBy === column.id}
                     direction={orderAsc ? 'asc' : 'desc'}
@@ -129,7 +129,7 @@ const SettingsView = () => {
               <TableRow key={row.id}>
                 {Tables[setting_name].rows.map((column) => (
                   <TableCell
-                    key={`${column}-${row.id}`}
+                    key={`${column.name}-${row.id}`}
                     sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                   >
                     {row[column.name]}
