@@ -2,10 +2,10 @@ import ItemsTable from '@/components/ItemsTable';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 
-/** * Renders "Rooms" view
- * url: /
+/** * Renders "Users" view
+ * url: /users
  */
-const RoomsView = () => {
+const UsersView = () => {
   return (
     <Stack direction="column" height="100%">
       <Typography variant="h4" sx={{ p: 2, pb: 0 }}>
@@ -16,4 +16,4 @@ const RoomsView = () => {
   );
 };
 
-export default RoomsView;
+export default UsersView;
