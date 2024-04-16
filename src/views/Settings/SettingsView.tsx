@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  Drawer,
   Fab,
   InputAdornment,
   Pagination,
@@ -14,11 +13,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import UsersView from './Users';
-import GroupsView from './Groups';
-import IdeasView from './Ideas';
-import RoomsView from './Rooms';
-import TextsView from './Texts';
 import { NotFoundView } from '..';
 import Tables from '@/utils/tables.json';
 import { SettingsType } from '@/types/SettingsTypes';
@@ -26,6 +20,7 @@ import { Add, Search } from '@mui/icons-material';
 import { databaseRequest } from '@/utils/requests';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
+import EditSettings from './EditSettings';
 
 const DEFAULT_LIMIT = Math.floor((window.innerHeight - 200) / 34) || 10;
 
@@ -35,13 +30,6 @@ const DEFAULT_LIMIT = Math.floor((window.innerHeight - 200) / 34) || 10;
 const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingsType; setting_id: number | 'new' };
-  const pages = {
-    groups: <GroupsView />,
-    ideas: <IdeasView />,
-    rooms: <RoomsView />,
-    texts: <TextsView />,
-    users: <UsersView />,
-  };
 
   const [items, setItems] = useState({} as TableResponseType);
   // const [limit, setLimit] = useState(DEFAULT_LIMIT);
@@ -74,7 +62,7 @@ const SettingsView = () => {
   };
 
   const resetTable = () => {
-    if (!Object.keys(pages).includes(setting_name)) {
+    if (!Tables[setting_name]) {
       navigate('/error');
     } else {
       setPage(0);
@@ -151,9 +139,7 @@ const SettingsView = () => {
           <Pagination count={Math.ceil(Number(items.count) / DEFAULT_LIMIT)} sx={{ py: 1 }} onChange={changePage} />
         )}
       </Stack>
-      <Drawer anchor="bottom" open={Boolean(setting_id)} onClose={() => navigate(`/settings/${setting_name}`)}>
-        {pages[setting_name]}
-      </Drawer>
+      <EditSettings />
     </Stack>
   ) : (
     <NotFoundView />
