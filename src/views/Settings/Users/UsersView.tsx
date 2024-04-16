@@ -7,16 +7,13 @@ import { useForm } from 'react-hook-form';
 import { FormContainer } from 'react-hook-form-mui';
 import { AccountCircle } from '@mui/icons-material';
 import { databaseRequest } from '@/utils/requests';
-import { SingleUserResponseType, UsersResponseType } from '@/types/UserTypes';
+import { SingleUserResponseType } from '@/types/UserTypes';
 import { useEffect, useState } from 'react';
+import { ObjectPropByName } from '@/types/Generics';
+import { userSettings, UserSettingsKeys } from '@/utils/settings';
 
-const schema = yup
-  .object({
-    realname: yup.string().required(),
-    displayname: yup.string().required(),
-    email: yup.string().email().required(),
-  })
-  .required();
+const { forms, options } = userSettings;
+const schema = yup.object(forms).required();
 
 /** * Renders "Users" view
  * url: /settings/users/:id
@@ -33,19 +30,27 @@ const UsersView = () => {
     resolver: yupResolver(schema),
   });
 
-  const dataFetch = async () =>
+  const request = async (method: string, args: ObjectPropByName) =>
     await databaseRequest('model', {
       model: 'User',
-      method: 'getUserBaseData',
-      arguments: {
-        user_id: params.setting_id,
-      },
-      decrypt: ['realname', 'diaplayname', 'email'],
-    }).then((response: SingleUserResponseType) => {
+      method: method,
+      arguments: args,
+      decrypt: ['about_me', 'displayname', 'email', 'realname', 'username'],
+    });
+
+  const dataFetch = async () =>
+    await request('getUserBaseData', { user_id: params.setting_id }).then((response: SingleUserResponseType) => {
       setItems(response);
     });
 
-  const onSubmit = (formData: Object) => console.log(formData);
+  const onSubmit = async (formData: Object) =>
+    await request(params.setting_id === 'new' ? 'addUser' : 'editUserData', {
+      ...formData,
+      user_id: params.setting_id === 'new' ? undefined : params.setting_id,
+    }).then((response: SingleUserResponseType) => {
+      if (!response.success) return;
+      navigate(`/settings/${params.setting_name}`);
+    });
 
   useEffect(() => {
     if (params.setting_id !== 'new') dataFetch();
@@ -61,34 +66,24 @@ const UsersView = () => {
           {params.setting_id === 'new' ? 'New' : 'Edit'} User
         </Typography>
       </Stack>
+      {(items.data || params.setting_id === 'new') &&
       <FormContainer>
-        <TextField
-          required
-          label="Student Name"
-          {...register('realname')}
-          error={errors.realname ? true : false}
-          helperText={errors.realname?.message || ' '}
-          value={items.data?.realname || ''}
-          sx={{ width: '100%' }}
-        />
-        <TextField
-          required
-          label="Display Name"
-          {...register('displayname')}
-          error={errors.displayname ? true : false}
-          helperText={errors.displayname?.message || ' '}
-          value={items.data?.displayname || ''}
-          sx={{ width: '100%' }}
-        />
-        <TextField
-          required
-          label="Email"
-          {...register('email')}
-          error={errors.email ? true : false}
-          helperText={errors.email?.message || ' '}
-          value={items.data?.email || ''}
-          sx={{ width: '100%' }}
-        />
+        {Object.entries(options).map(([key, option]) => {
+          const field = key as UserSettingsKeys;
+          return (
+            <TextField
+              required={option.required}
+              multiline={option.isText}
+              minRows={option.isText ? 4 : 1}
+              label={option.label}
+              {...register(field)}
+              error={errors[field] ? true : false}
+              helperText={errors[field]?.message || ' '}
+              defaultValue={items.data ? items.data[field] : option.defaultValue}
+              sx={option.hidden ? { display: 'none' } : { width: '100%' }}
+            />
+          );
+        })}
         <Stack direction="row">
           <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={() => navigate(`/settings/${params.setting_name}`)}>
             Cancel
@@ -98,6 +93,7 @@ const UsersView = () => {
           </Button>
         </Stack>
       </FormContainer>
+      }
     </Stack>
   );
 };
