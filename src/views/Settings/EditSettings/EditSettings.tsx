@@ -70,8 +70,11 @@ const EditSettings = () => {
           </Stack>
           {(items.data || setting_id === 'new') && (
             <FormContainer>
-              {Object.entries(SettingsConfig[setting_name].options).map(([field, option]) => (
-                <TextField
+              {Object.entries(SettingsConfig[setting_name].options).map(([key, option]) => {
+                const fieldKeys = SettingsConfig[setting_name].options;
+                const field = key as keyof typeof fieldKeys;
+                return (
+                  <TextField
                   key={field}
                   required={option.required}
                   multiline={option.isText}
@@ -83,12 +86,12 @@ const EditSettings = () => {
                   defaultValue={items.data ? items.data[field] : option.defaultValue}
                   sx={option.hidden ? { display: 'none' } : { width: '100%' }}
                 />
-              ))}
+              )})}
               <Stack direction="row">
                 <Button
                   color="error"
                   sx={{ ml: 'auto', mr: 2 }}
-                  onClick={() => navigate(`/settings/${params.setting_name}`)}
+                  onClick={() => navigate(`/settings/${setting_name}`)}
                 >
                   Cancel
                 </Button>
