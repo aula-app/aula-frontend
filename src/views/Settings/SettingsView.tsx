@@ -27,14 +27,14 @@ import { databaseRequest } from '@/utils/requests';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-const DEFAULT_LIMIT = Math.floor((window.innerWidth - 220) / 34) || 10;
+const DEFAULT_LIMIT = Math.floor((window.innerHeight - 200) / 34) || 10;
 
 /** * Renders default "Settings" view
  * urls: /settings/groups, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
  */
 const SettingsView = () => {
   const navigate = useNavigate();
-  const { setting_name, setting_id } = useParams() as { setting_name: SettingsType };
+  const { setting_name, setting_id } = useParams() as { setting_name: SettingsType; setting_id: number | 'new' };
   const pages = {
     groups: <GroupsView />,
     ideas: <IdeasView />,
@@ -90,7 +90,12 @@ const SettingsView = () => {
 
   return items ? (
     <Stack direction="column" height="100%">
-      <Fab aria-label="add" color="primary" sx={{ position: 'absolute', bottom: 60, right: 20 }}>
+      <Fab
+        aria-label="add"
+        color="primary"
+        sx={{ position: 'absolute', bottom: 60, right: 20 }}
+        onClick={() => navigate('new')}
+      >
         <Add />
       </Fab>
       <Typography variant="h4" sx={{ p: 2, pb: 0, textTransform: 'capitalize' }}>
@@ -111,16 +116,16 @@ const SettingsView = () => {
         <TableHead>
           <TableRow>
             {Tables[setting_name].rows.map((column, key) => (
-                <TableCell key={`${column.name}${key}`} sx={{ whiteSpace: 'nowrap' }}>
-                  <TableSortLabel
-                    active={orderBy === column.id}
-                    direction={orderAsc ? 'asc' : 'desc'}
-                    onClick={() => handleOrder(column.id)}
-                  >
-                    {column.displayName}
-                  </TableSortLabel>
-                </TableCell>
-              ))}
+              <TableCell key={`${column.name}${key}`} sx={{ whiteSpace: 'nowrap' }}>
+                <TableSortLabel
+                  active={orderBy === column.id}
+                  direction={orderAsc ? 'asc' : 'desc'}
+                  onClick={() => handleOrder(column.id)}
+                >
+                  {column.displayName}
+                </TableSortLabel>
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         {items && items.data && (
