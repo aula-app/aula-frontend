@@ -37,7 +37,7 @@ const EditSettings = () => {
     });
 
   const dataFetch = async () =>
-    await request(SettingsConfig[setting_name].requests.get, { user_id: setting_id }).then((response) =>
+    await request(SettingsConfig[setting_name].requests.get, { [`${setting_name.slice(0, -1)}_id`]: setting_id }).then((response) =>
       setItems(response)
     );
 
@@ -46,7 +46,7 @@ const EditSettings = () => {
       setting_id === 'new' ? SettingsConfig[setting_name].requests.add : SettingsConfig[setting_name].requests.edit,
       {
         ...formData,
-        user_id: setting_id === 'new' ? undefined : setting_id,
+        [`${setting_name.slice(0, -1)}_id`]: setting_id === 'new' ? undefined : setting_id,
       }
     ).then((response) => {
       if (!response.success) return;
@@ -79,7 +79,7 @@ const EditSettings = () => {
               <AccountCircle sx={{ fontSize: '3em', mr: 'auto' }} />
             </Avatar>
             <Typography variant="h4" pb={2}>
-              {setting_id === 'new' ? 'New' : 'Edit'} User
+              {setting_id === 'new' ? 'New' : 'Edit'} {SettingsConfig[setting_name].requests.model}
             </Typography>
           </Stack>
           {(items.data || setting_id === 'new') && (

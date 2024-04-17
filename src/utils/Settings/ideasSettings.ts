@@ -2,11 +2,11 @@ import * as yup from 'yup';
 
 export const ideasSettings = {
   requests: {
-    model: 'User',
-    get: 'getUserBaseData',
-    add: 'addUser',
-    edit: 'editUserData',
-    decrypt: ['about_me', 'displayname', 'email', 'realname', 'username'],
+    model: 'Idea',
+    get: 'getIdeaBaseData',
+    add: 'addIdea',
+    edit: 'editIdeaData',
+    decrypt: ['content'],
   },
   forms: {
     realname: yup.string().required(),

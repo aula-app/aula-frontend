@@ -2,70 +2,41 @@ import * as yup from 'yup';
 
 export const roomsSettings = {
   requests: {
-    model: 'User',
-    get: 'getUserBaseData',
-    add: 'addUser',
-    edit: 'editUserData',
-    decrypt: ['about_me', 'displayname', 'email', 'realname', 'username'],
+    model: 'Room',
+    get: 'getRoomBaseData',
+    add: 'addRoom',
+    edit: 'editRoomData',
+    decrypt: [],
   },
   forms: {
-    realname: yup.string().required(),
-    displayname: yup.string().required(),
-    email: yup.string().email().required(),
-    about_me: yup.string(),
+    room_name: yup.string().required(),
+    description_public: yup.string().required(),
+    description_internal: yup.string(),
     username: yup.string().required(),
-    position: yup.string(),
+    position: yup.string().required(),
     userlevel: yup.number().required(),
   },
   options: {
-    realname: {
-      label: 'Student Name',
+    room_name: {
+      label: 'Room Name',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: false,
     },
-    displayname: {
-      label: 'Display Name',
-      defaultValue: '',
-      required: true,
-      hidden: false,
-      isText: false,
-    },
-    email: {
-      label: 'Email',
-      defaultValue: '',
-      required: true,
-      hidden: false,
-      isText: false,
-    },
-    about_me: {
-      label: 'Description',
+    description_public: {
+      label: 'Public Description',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: true,
     },
-    username: {
-      label: 'User Name',
+    description_internal: {
+      label: 'Internal Description',
       defaultValue: '',
       required: true,
-      hidden: true,
-      isText: false,
-    },
-    position: {
-      label: 'Position',
-      defaultValue: 0,
-      required: true,
-      hidden: true,
-      isText: false,
-    },
-    userlevel: {
-      label: 'user Level',
-      defaultValue: 10,
-      required: true,
-      hidden: true,
-      isText: false,
+      hidden: false,
+      isText: true,
     },
   },
 }

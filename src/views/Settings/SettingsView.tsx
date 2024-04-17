@@ -100,41 +100,43 @@ const SettingsView = () => {
         variant="standard"
         sx={{ px: 2 }}
       />
-      <Table stickyHeader size="small" sx={{ flexGrow: 1 }}>
-        <TableHead>
-          <TableRow>
-            {Tables[setting_name].rows.map((column, key) => (
-              <TableCell key={`${column.name}${key}`} sx={{ whiteSpace: 'nowrap' }}>
-                <TableSortLabel
-                  active={orderBy === column.id}
-                  direction={orderAsc ? 'asc' : 'desc'}
-                  onClick={() => handleOrder(column.id)}
-                >
-                  {column.displayName}
-                </TableSortLabel>
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        {items && items.data && (
-          <TableBody>
-            {items.data.map((row) => (
-              <TableRow key={row.id}>
-                {Tables[setting_name].rows.map((column) => (
-                  <TableCell
-                    key={`${column.name}-${row.id}`}
-                    sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                    onClick={() => navigate(`/settings/${setting_name}/${row.id}`)}
+      <Stack flexGrow={1} sx={{ overflowX: 'auto' }}>
+        <Table stickyHeader size="small" sx={{ height: '100%' }}>
+          <TableHead>
+            <TableRow>
+              {Tables[setting_name].rows.map((column, key) => (
+                <TableCell key={`${column.name}${key}`} sx={{ whiteSpace: 'nowrap' }}>
+                  <TableSortLabel
+                    active={orderBy === column.id}
+                    direction={orderAsc ? 'asc' : 'desc'}
+                    onClick={() => handleOrder(column.id)}
                   >
-                    {row[column.name]}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        )}
-      </Table>
-      <Stack direction="row" justifyContent="center">
+                    {column.displayName}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          {items && items.data && (
+            <TableBody>
+              {items.data.map((row) => (
+                <TableRow key={row.id}>
+                  {Tables[setting_name].rows.map((column) => (
+                    <TableCell
+                      key={`${column.name}-${row.id}`}
+                      sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                      onClick={() => navigate(`/settings/${setting_name}/${row.id}`)}
+                    >
+                      {row[column.name]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
+        </Table>
+      </Stack>
+      <Stack direction="row" justifyContent="center" bottom={0}>
         {items && items.count && (
           <Pagination count={Math.ceil(Number(items.count) / DEFAULT_LIMIT)} sx={{ py: 1 }} onChange={changePage} />
         )}
