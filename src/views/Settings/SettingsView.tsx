@@ -74,7 +74,7 @@ const SettingsView = () => {
   useEffect(resetTable, [setting_name]);
   useEffect(() => {
     dataFetch();
-  }, [page, orderBy, orderAsc]);
+  }, [page, orderBy, orderAsc, setting_id]);
 
   return items ? (
     <Stack direction="column" height="100%">

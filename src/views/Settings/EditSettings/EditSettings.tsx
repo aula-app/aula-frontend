@@ -19,6 +19,7 @@ const EditSettings = () => {
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -36,9 +37,9 @@ const EditSettings = () => {
     });
 
   const dataFetch = async () =>
-    await request(SettingsConfig[setting_name].requests.get, { user_id: setting_id }).then((response) => {
-      setItems(response);
-    });
+    await request(SettingsConfig[setting_name].requests.get, { user_id: setting_id }).then((response) =>
+      setItems(response)
+    );
 
   const onSubmit = async (formData: Object) =>
     await request(
@@ -51,6 +52,19 @@ const EditSettings = () => {
       if (!response.success) return;
       navigate(`/settings/${setting_name}`);
     });
+
+  const updateValues = () => {
+    if (!items.data) return;
+    Object.entries(SettingsConfig[setting_name].options).forEach(([key, option]) => {
+      const fieldKeys = SettingsConfig[setting_name].options;
+      const field = key as keyof typeof fieldKeys;
+      setValue(field, items.data[field] || option.defaultValue);
+    });
+  };
+
+  useEffect(() => {
+    updateValues();
+  }, [items.data]);
 
   useEffect(() => {
     if (setting_id && setting_id !== 'new') dataFetch();
@@ -75,24 +89,20 @@ const EditSettings = () => {
                 const field = key as keyof typeof fieldKeys;
                 return (
                   <TextField
-                  key={field}
-                  required={option.required}
-                  multiline={option.isText}
-                  minRows={option.isText ? 4 : 1}
-                  label={option.label}
-                  {...register(field)}
-                  error={errors[field] ? true : false}
-                  helperText={errors[field]?.message || ' '}
-                  defaultValue={items.data[field] || option.defaultValue}
-                  sx={option.hidden ? { display: 'none' } : { width: '100%' }}
-                />
-              )})}
+                    key={`${field}-${setting_id}`}
+                    required={option.required}
+                    multiline={option.isText}
+                    minRows={option.isText ? 4 : 1}
+                    label={option.label}
+                    {...register(field)}
+                    error={errors[field] ? true : false}
+                    helperText={errors[field]?.message || ' '}
+                    sx={option.hidden ? { display: 'none' } : { width: '100%' }}
+                  />
+                );
+              })}
               <Stack direction="row">
-                <Button
-                  color="error"
-                  sx={{ ml: 'auto', mr: 2 }}
-                  onClick={() => navigate(`/settings/${setting_name}`)}
-                >
+                <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={() => navigate(`/settings/${setting_name}`)}>
                   Cancel
                 </Button>
                 <Button type="submit" variant="contained" onClick={handleSubmit(onSubmit)}>
