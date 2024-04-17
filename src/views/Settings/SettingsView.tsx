@@ -34,7 +34,7 @@ const SettingsView = () => {
   const [items, setItems] = useState({} as TableResponseType);
   // const [limit, setLimit] = useState(DEFAULT_LIMIT);
   const [page, setPage] = useState(0);
-  const [orderBy, setOrder] = useState(0);
+  const [orderBy, setOrder] = useState(Tables[setting_name].rows[0]['id']);
   const [orderAsc, setOrderAsc] = useState(true);
 
   const dataFetch = async () =>
@@ -44,8 +44,8 @@ const SettingsView = () => {
       arguments: {
         limit: DEFAULT_LIMIT,
         offset: page * DEFAULT_LIMIT,
-        orderby: Tables[setting_name].rows[0]['id'],
-        asc: Number(true),
+        orderby: orderBy,
+        asc: orderAsc,
       },
       decrypt: Tables[setting_name].rows.filter((row) => row.encryption).map((value) => value.name),
     }).then((response: TableResponseType) => {

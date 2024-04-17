@@ -14,7 +14,7 @@ export const roomsSettings = {
     email: yup.string().email().required(),
     about_me: yup.string(),
     username: yup.string().required(),
-    position: yup.string().required(),
+    position: yup.string(),
     userlevel: yup.number().required(),
   },
   options: {

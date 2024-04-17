@@ -83,7 +83,7 @@ const EditSettings = () => {
                   {...register(field)}
                   error={errors[field] ? true : false}
                   helperText={errors[field]?.message || ' '}
-                  defaultValue={items.data ? items.data[field] : option.defaultValue}
+                  defaultValue={items.data[field] || option.defaultValue}
                   sx={option.hidden ? { display: 'none' } : { width: '100%' }}
                 />
               )})}
