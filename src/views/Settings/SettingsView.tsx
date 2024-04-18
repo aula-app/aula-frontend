@@ -1,7 +1,10 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import {
+  Checkbox,
+  Divider,
   Fab,
   InputAdornment,
+  IconButton,
   Pagination,
   Stack,
   Table,
@@ -16,13 +19,13 @@ import {
 import { NotFoundView } from '..';
 import Tables from '@/utils/tables.json';
 import { SettingsType } from '@/types/SettingsTypes';
-import { Add, Search } from '@mui/icons-material';
+import { Add, Delete, Edit, Search, SubdirectoryArrowLeft } from '@mui/icons-material';
 import { databaseRequest } from '@/utils/requests';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
 import EditSettings from './EditSettings';
 
-const DEFAULT_LIMIT = Math.floor((window.innerHeight - 200) / 34) || 10;
+const DEFAULT_LIMIT = Math.floor((window.innerHeight - 200) / 55) - 1 || 10;
 
 /** * Renders default "Settings" view
  * urls: /settings/groups, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
@@ -36,6 +39,8 @@ const SettingsView = () => {
   const [page, setPage] = useState(0);
   const [orderBy, setOrder] = useState(Tables[setting_name].rows[0]['id']);
   const [orderAsc, setOrderAsc] = useState(true);
+
+  const [selected, setSelected] = useState([] as number[]);
 
   const dataFetch = async () =>
     await databaseRequest('model', {
@@ -61,6 +66,16 @@ const SettingsView = () => {
     setPage(newPage - 1);
   };
 
+  const toggleRow = (id: number) => {
+    selected.includes(id) ? setSelected(selected.filter((value) => value !== id)) : setSelected([...selected, id]);
+  };
+
+  const toggleAllRows = () => {
+    if (!items.data) return;
+    const allIds = Object.entries(items.data).map(([, item]) => item.id)
+    selected.length > 0 ? setSelected([]) : setSelected(allIds);
+  };
+
   const resetTable = () => {
     if (!Tables[setting_name]) {
       navigate('/error');
@@ -81,7 +96,7 @@ const SettingsView = () => {
       <Fab
         aria-label="add"
         color="primary"
-        sx={{ position: 'absolute', bottom: 60, right: 20 }}
+        sx={{ position: 'absolute', top: 75, right: 10 }}
         onClick={() => navigate('new')}
       >
         <Add />
@@ -89,21 +104,20 @@ const SettingsView = () => {
       <Typography variant="h4" sx={{ p: 2, pb: 0, textTransform: 'capitalize' }}>
         {setting_name}
       </Typography>
-      <TextField
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Search />
-            </InputAdornment>
-          ),
-        }}
-        variant="standard"
-        sx={{ px: 2 }}
-      />
-      <Stack flexGrow={1} sx={{ overflowX: 'auto' }}>
-        <Table stickyHeader size="small" sx={{ height: '100%' }}>
+      <Stack flexGrow={1} sx={{ overflowX: 'auto', pt: 1 }}>
+        <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
+              {items.data && (
+                <TableCell>
+                  <Checkbox
+                    onChange={toggleAllRows}
+                    checked={selected.length === items.data.length}
+                    indeterminate={selected.length > 0 && selected.length < items.data.length}
+                    color="secondary"
+                  />
+                </TableCell>
+              )}
               {Tables[setting_name].rows.map((column, key) => (
                 <TableCell key={`${column.name}${key}`} sx={{ whiteSpace: 'nowrap' }}>
                   <TableSortLabel
@@ -117,10 +131,13 @@ const SettingsView = () => {
               ))}
             </TableRow>
           </TableHead>
-          {items && items.data && (
+          {items.data && (
             <TableBody>
               {items.data.map((row) => (
                 <TableRow key={row.id}>
+                  <TableCell>
+                    <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
+                  </TableCell>
                   {Tables[setting_name].rows.map((column) => (
                     <TableCell
                       key={`${column.name}-${row.id}`}
@@ -136,6 +153,29 @@ const SettingsView = () => {
           )}
         </Table>
       </Stack>
+      <Stack direction="row" alignItems="center" bottom={0}>
+        <SubdirectoryArrowLeft sx={{ transform: 'rotate(90deg)', ml: 4, fontSize: '1rem', mb: 1 }} />
+        <IconButton disabled={selected.length === 0}>
+          <Delete />
+        </IconButton>
+        <IconButton disabled={selected.length === 0}>
+          <Edit />
+        </IconButton>
+        <TextField
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search />
+              </InputAdornment>
+            ),
+          }}
+          variant="standard"
+          color="secondary"
+          size="small"
+          sx={{ px: 1 }}
+        />
+      </Stack>
+      <Divider />
       <Stack direction="row" justifyContent="center" bottom={0}>
         {items && items.count && (
           <Pagination count={Math.ceil(Number(items.count) / DEFAULT_LIMIT)} sx={{ py: 1 }} onChange={changePage} />

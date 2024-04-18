@@ -2,70 +2,78 @@ import * as yup from 'yup';
 
 export const textsSettings = {
   requests: {
-    model: 'User',
-    get: 'getUserBaseData',
-    add: 'addUser',
-    edit: 'editUserData',
-    decrypt: ['about_me', 'displayname', 'email', 'realname', 'username'],
+    model: 'Text',
+    get: 'getTextBaseData',
+    add: 'addText',
+    edit: 'editText',
+    decrypt: [],
   },
   forms: {
-    realname: yup.string().required(),
-    displayname: yup.string().required(),
-    email: yup.string().email().required(),
-    about_me: yup.string(),
-    username: yup.string().required(),
-    position: yup.string().required(),
-    userlevel: yup.number().required(),
+    headline: yup.string().required(),
+    body: yup.string().required(),
+    consent_text: yup.string().required(),
+    location: yup.string(),
+    creator_id: yup.number().required(),
+    user_needs_to_consent: yup.number().required(),
+    service_id_consent: yup.number().required(),
+    status: yup.number().required(),
   },
   options: {
-    realname: {
-      label: 'Student Name',
+    headline: {
+      label: 'Headline',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: false,
     },
-    displayname: {
-      label: 'Display Name',
-      defaultValue: '',
-      required: true,
-      hidden: false,
-      isText: false,
-    },
-    email: {
-      label: 'Email',
-      defaultValue: '',
-      required: true,
-      hidden: false,
-      isText: false,
-    },
-    about_me: {
-      label: 'Description',
+    body: {
+      label: 'Message',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: true,
     },
-    username: {
-      label: 'User Name',
+    consent_text: {
+      label: 'Consent text',
+      defaultValue: 'Agree',
+      required: true,
+      hidden: false,
+      isText: false,
+    },
+    location: {
+      label: 'Location',
       defaultValue: '',
       required: true,
       hidden: true,
       isText: false,
     },
-    position: {
-      label: 'Position',
+    creator_id: {
+      label: 'Creator ID',
+      defaultValue: 1,
+      required: true,
+      hidden: true,
+      isText: false,
+    },
+    user_needs_to_consent: {
+      label: 'Consent needed',
       defaultValue: 0,
       required: true,
       hidden: true,
       isText: false,
     },
-    userlevel: {
-      label: 'user Level',
-      defaultValue: 10,
+    service_id_consent: {
+      label: 'No documentation',
+      defaultValue: 0,
       required: true,
       hidden: true,
       isText: false,
     },
+    status: {
+      label: 'Status',
+      defaultValue: 1,
+      required: true,
+      hidden: true,
+      isText: false,
+    }
   },
 }

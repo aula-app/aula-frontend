@@ -1,11 +1,21 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { Avatar, Button, Drawer, Stack, TextField, Typography } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Avatar,
+  Button,
+  Drawer,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { SettingsType } from '@/types/SettingsTypes';
 import { useEffect, useState } from 'react';
 import { SettingsConfig } from '@/utils/Settings';
 import { databaseRequest } from '@/utils/requests';
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
-import { AccountCircle } from '@mui/icons-material';
+import { AccountCircle, ExpandMore } from '@mui/icons-material';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -37,8 +47,8 @@ const EditSettings = () => {
     });
 
   const dataFetch = async () =>
-    await request(SettingsConfig[setting_name].requests.get, { [`${setting_name.slice(0, -1)}_id`]: setting_id }).then((response) =>
-      setItems(response)
+    await request(SettingsConfig[setting_name].requests.get, { [`${setting_name.slice(0, -1)}_id`]: setting_id }).then(
+      (response) => setItems(response)
     );
 
   const onSubmit = async (formData: Object) =>
@@ -71,14 +81,21 @@ const EditSettings = () => {
   }, [setting_id]);
 
   return (
-    <Drawer anchor="bottom" open={Boolean(setting_id)} onClose={() => navigate(`/settings/${setting_name}`)}>
+    <Drawer
+      anchor="bottom"
+      open={Boolean(setting_id)}
+      onClose={() => navigate(`/settings/${setting_name}`)}
+      sx={{ overflowY: 'auto' }}
+    >
       {items && (
         <Stack p={2}>
           <Stack direction="row" justifyContent="space-between">
-            <Avatar>
-              <AccountCircle sx={{ fontSize: '3em', mr: 'auto' }} />
-            </Avatar>
-            <Typography variant="h4" pb={2}>
+            {setting_name === 'users' && (
+              <Avatar>
+                <AccountCircle sx={{ fontSize: '3em' }} />
+              </Avatar>
+            )}
+            <Typography variant="h4" pb={2} ml="auto">
               {setting_id === 'new' ? 'New' : 'Edit'} {SettingsConfig[setting_name].requests.model}
             </Typography>
           </Stack>

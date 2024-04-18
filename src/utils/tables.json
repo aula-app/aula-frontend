@@ -1,28 +1,4 @@
 {
-  "groups": {
-    "model": "Group",
-    "method": "getGroups",
-    "rows": [
-      {
-        "id": 0,
-        "name": "group_name",
-        "displayName": "Name",
-        "encryption": true
-      },
-      {
-        "id": 5,
-        "name": "description_public",
-        "displayName": "Public description",
-        "encryption": true
-      },
-      {
-        "id": 6,
-        "name": "description_internal",
-        "displayName": "Internal description",
-        "encryption": true
-      }
-    ]
-  },
   "ideas": {
     "model": "Idea",
     "method": "getIdeas",
