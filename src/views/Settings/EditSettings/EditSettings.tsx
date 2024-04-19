@@ -93,7 +93,7 @@ const EditSettings = () => {
               {SettingsConfig[setting_name].forms.map(field => {
                 return (
                   <TextField
-                    key={`${field}-${setting_id}`}
+                    key={`${field.name}-${setting_id}`}
                     required={field.required}
                     multiline={field.isText}
                     minRows={field.isText ? 4 : 1}
