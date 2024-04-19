@@ -6,6 +6,7 @@ export const ideasSettings = {
     get: 'getIdeaBaseData',
     add: 'addIdea',
     edit: 'editIdea',
+    delete: 'deleteIdea',
     decrypt: ['content'],
   },
   forms: {

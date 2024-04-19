@@ -15,6 +15,7 @@ import {
   TableSortLabel,
   TextField,
   Typography,
+  Box,
 } from '@mui/material';
 import { NotFoundView } from '..';
 import Tables from '@/utils/tables.json';
@@ -24,6 +25,8 @@ import { databaseRequest } from '@/utils/requests';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
 import EditSettings from './EditSettings';
+import DeleteSettings from './DeleteSettings';
+import { grey } from '@mui/material/colors';
 
 const DEFAULT_LIMIT = Math.floor((window.innerHeight - 200) / 55) - 1 || 10;
 
@@ -41,6 +44,7 @@ const SettingsView = () => {
   const [orderAsc, setOrderAsc] = useState(true);
 
   const [selected, setSelected] = useState([] as number[]);
+  const [openDelete, setOpenDelete] = useState(false);
 
   const dataFetch = async () =>
     await databaseRequest('model', {
@@ -72,7 +76,7 @@ const SettingsView = () => {
 
   const toggleAllRows = () => {
     if (!items.data) return;
-    const allIds = Object.entries(items.data).map(([, item]) => item.id)
+    const allIds = Object.entries(items.data).map(([, item]) => item.id);
     selected.length > 0 ? setSelected([]) : setSelected(allIds);
   };
 
@@ -134,7 +138,7 @@ const SettingsView = () => {
           {items.data && (
             <TableBody>
               {items.data.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} sx={{ background: selected.includes(row.id) ? grey[200] : '' }}>
                   <TableCell>
                     <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
                   </TableCell>
@@ -155,7 +159,7 @@ const SettingsView = () => {
       </Stack>
       <Stack direction="row" alignItems="center" bottom={0}>
         <SubdirectoryArrowLeft sx={{ transform: 'rotate(90deg)', ml: 4, fontSize: '1rem', mb: 1 }} />
-        <IconButton disabled={selected.length === 0}>
+        <IconButton disabled={selected.length === 0} onClick={() => setOpenDelete(true)}>
           <Delete />
         </IconButton>
         <IconButton disabled={selected.length === 0}>
@@ -177,11 +181,16 @@ const SettingsView = () => {
       </Stack>
       <Divider />
       <Stack direction="row" justifyContent="center" bottom={0}>
-        {items && items.count && (
+        {items.count && (
           <Pagination count={Math.ceil(Number(items.count) / DEFAULT_LIMIT)} sx={{ py: 1 }} onChange={changePage} />
         )}
       </Stack>
       <EditSettings />
+      <DeleteSettings
+        items={selected}
+        isOpen={openDelete}
+        onClose={() => setOpenDelete(false)}
+        onDelete={() => dataFetch()} />
     </Stack>
   ) : (
     <NotFoundView />

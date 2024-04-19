@@ -6,6 +6,7 @@ export const usersSettings = {
     get: 'getUserBaseData',
     add: 'addUser',
     edit: 'editUserData',
+    delete: 'deleteUser',
     decrypt: ['about_me', 'displayname', 'email', 'realname', 'username'],
   },
   forms: {

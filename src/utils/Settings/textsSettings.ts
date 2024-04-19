@@ -6,6 +6,7 @@ export const textsSettings = {
     get: 'getTextBaseData',
     add: 'addText',
     edit: 'editText',
+    delete: 'deleteText',
     decrypt: [],
   },
   forms: {

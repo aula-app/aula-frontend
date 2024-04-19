@@ -6,6 +6,7 @@ export const roomsSettings = {
     get: 'getRoomBaseData',
     add: 'addRoom',
     edit: 'editRoomData',
+    delete: 'deleteRoom',
     decrypt: [],
   },
   forms: {
