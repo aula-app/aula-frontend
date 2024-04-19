@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 
 type Params = {
   isOpen: boolean;
-  items: number[] | number | 'new';
+  items: number[];
   closeMethod: () => void;
   reloadMethod: () => void;
 };

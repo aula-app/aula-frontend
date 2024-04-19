@@ -9,64 +9,69 @@ export const usersSettings = {
     delete: 'deleteUser',
     decrypt: ['about_me', 'displayname', 'email', 'realname', 'username'],
   },
-  forms: {
-    realname: yup.string().required(),
-    displayname: yup.string().required(),
-    email: yup.string().email().required(),
-    about_me: yup.string(),
-    username: yup.string().required(),
-    position: yup.string().required(),
-    userlevel: yup.number().required(),
-  },
-  options: {
-    realname: {
+  forms: [
+    {
+      name: 'realname',
       label: 'Student Name',
+      schema: yup.string().required(),
       defaultValue: '',
       required: true,
       hidden: false,
       isText: false,
     },
-    displayname: {
+    {
+      name: 'displayname',
       label: 'Display Name',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: false,
+      schema: yup.string().required(),
     },
-    email: {
+    {
+      name: 'email',
       label: 'Email',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: false,
+      schema: yup.string().email().required(),
     },
-    about_me: {
+    {
+      name:' about_me',
       label: 'Description',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: true,
+      schema: yup.string(),
     },
-    username: {
+    {
+      name:' username',
       label: 'User Name',
       defaultValue: '',
       required: true,
       hidden: true,
       isText: false,
+      schema: yup.string().required(),
     },
-    position: {
+    {
+      name:' position',
       label: 'Position',
       defaultValue: 0,
       required: true,
       hidden: true,
       isText: false,
+      schema: yup.string().required(),
     },
-    userlevel: {
+    {
+      name: 'userlevel',
       label: 'user Level',
       defaultValue: 10,
       required: true,
       hidden: true,
       isText: false,
+      schema: yup.number().required(),
     },
-  },
+  ]
 }

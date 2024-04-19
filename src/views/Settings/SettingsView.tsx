@@ -18,8 +18,8 @@ import {
 } from '@mui/material';
 import { NotFoundView } from '..';
 import Tables from '@/utils/tables.json';
-import { SettingsType } from '@/types/SettingsTypes';
-import { Add, Delete, Edit, Search, SubdirectoryArrowLeft } from '@mui/icons-material';
+import { SettingNamesType } from '@/types/SettingsTypes';
+import { Add, Delete, Search, SubdirectoryArrowLeft } from '@mui/icons-material';
 import { databaseRequest } from '@/utils/requests';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -34,7 +34,7 @@ const DEFAULT_LIMIT = Math.floor((window.innerHeight - 200) / 55) - 1 || 10;
  */
 const SettingsView = () => {
   const navigate = useNavigate();
-  const { setting_name, setting_id } = useParams() as { setting_name: SettingsType; setting_id: number | 'new' };
+  const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
   const [items, setItems] = useState({} as TableResponseType);
   // const [limit, setLimit] = useState(DEFAULT_LIMIT);

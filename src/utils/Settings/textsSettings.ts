@@ -9,72 +9,78 @@ export const textsSettings = {
     delete: 'deleteText',
     decrypt: [],
   },
-  forms: {
-    headline: yup.string().required(),
-    body: yup.string().required(),
-    consent_text: yup.string().required(),
-    location: yup.string(),
-    creator_id: yup.number().required(),
-    user_needs_to_consent: yup.number().required(),
-    service_id_consent: yup.number().required(),
-    status: yup.number().required(),
-  },
-  options: {
-    headline: {
+  forms: [
+    {
+      name: 'headline',
       label: 'Headline',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: false,
+      schema: yup.string().required(),
     },
-    body: {
+    {
+      name: 'body',
       label: 'Message',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: true,
+      schema:  yup.string().required(),
     },
-    consent_text: {
+    {
+      name: 'consent_text',
       label: 'Consent text',
       defaultValue: 'Agree',
       required: true,
       hidden: false,
       isText: false,
+      schema: yup.string().required(),
     },
-    location: {
+    {
+      name: 'location',
       label: 'Location',
       defaultValue: '',
       required: true,
       hidden: true,
       isText: false,
+      schema: yup.string(),
     },
-    creator_id: {
+    {
+      name: 'creator_id',
       label: 'Creator ID',
       defaultValue: 1,
       required: true,
       hidden: true,
       isText: false,
+      schema: yup.number().required(),
     },
-    user_needs_to_consent: {
+    {
+      name: 'user_needs_to_consent',
       label: 'Consent needed',
       defaultValue: 0,
       required: true,
       hidden: true,
       isText: false,
+      schema: yup.number().required(),
     },
-    service_id_consent: {
+    {
+      name: 'service_id_consent',
       label: 'No documentation',
       defaultValue: 0,
       required: true,
       hidden: true,
       isText: false,
+      schema: yup.number().required(),
     },
-    status: {
+    {
+      name: 'status',
       label: 'Status',
       defaultValue: 1,
       required: true,
       hidden: true,
       isText: false,
+      schema: yup.number().required(),
     }
-  },
+  ]
 }

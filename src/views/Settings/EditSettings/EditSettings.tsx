@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Avatar, Button, Drawer, Stack, TextField, Typography } from '@mui/material';
-import { SettingsType } from '@/types/SettingsTypes';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { useEffect, useState } from 'react';
 import { SettingsConfig } from '@/utils/Settings';
 import { databaseRequest } from '@/utils/requests';
@@ -15,15 +15,16 @@ import * as yup from 'yup';
  */
 const EditSettings = () => {
   const navigate = useNavigate();
-  const { setting_name, setting_id } = useParams() as { setting_name: SettingsType; setting_id: number | 'new' };
+  const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
+  const schema = SettingsConfig[setting_name].forms.reduce((schema, form) => ({ ...schema, [form.name]: form.schema}), {})
   const {
     register,
     setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(yup.object(SettingsConfig[setting_name].forms).required()),
+    resolver: yupResolver(yup.object(schema).required()),
   });
 
   const [items, setItems] = useState({} as SingleResponseType);
@@ -55,8 +56,8 @@ const EditSettings = () => {
 
   const updateValues = () => {
     if (!items.data) return;
-    Object.entries(SettingsConfig[setting_name].options).forEach(([field, option]) => {
-      setValue(field, items.data[field] || option.defaultValue);
+    SettingsConfig[setting_name].forms.forEach(field => {
+      setValue(field.name, items.data[field.name] || field.defaultValue);
     });
   };
 
@@ -89,18 +90,18 @@ const EditSettings = () => {
           </Stack>
           {(items.data || setting_id === 'new') && (
             <FormContainer>
-              {Object.entries(SettingsConfig[setting_name].options).map(([field, option]) => {
+              {SettingsConfig[setting_name].forms.map(field => {
                 return (
                   <TextField
                     key={`${field}-${setting_id}`}
-                    required={option.required}
-                    multiline={option.isText}
-                    minRows={option.isText ? 4 : 1}
-                    label={option.label}
-                    {...register(field)}
-                    error={errors[field] ? true : false}
-                    helperText={errors[field]?.message || ' '}
-                    sx={option.hidden ? { display: 'none' } : { width: '100%' }}
+                    required={field.required}
+                    multiline={field.isText}
+                    minRows={field.isText ? 4 : 1}
+                    label={field.label}
+                    {...register(field.name)}
+                    error={errors[field.name] ? true : false}
+                    helperText={errors[field.name]?.message || ' '}
+                    sx={field.hidden ? { display: 'none' } : { width: '100%' }}
                   />
                 );
               })}

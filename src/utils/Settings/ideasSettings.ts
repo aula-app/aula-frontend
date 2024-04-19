@@ -9,32 +9,33 @@ export const ideasSettings = {
     delete: 'deleteIdea',
     decrypt: ['content'],
   },
-  forms: {
-    content: yup.string().required(),
-    user_id: yup.number().required(),
-    room_id: yup.number().required(),
-  },
-  options: {
-    content: {
+  forms: [
+    {
+      name: 'content',
       label: 'Content',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: true,
+      schema: yup.string().required(),
     },
-    user_id: {
+    {
+      name: 'user_id',
       label: 'User ID',
       defaultValue: '',
       required: true,
       hidden: true,
       isText: false,
+      schema: yup.number().required(),
     },
-    room_id: {
+    {
+      name: 'room_id',
       label: 'Room ID',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: false,
+      schema: yup.number().required(),
     },
-  },
+  ]
 }
