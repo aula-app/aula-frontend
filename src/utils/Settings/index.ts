@@ -8,6 +8,6 @@ const SettingsConfig = {
   rooms: roomsSettings,
   texts: textsSettings,
   users: usersSettings,
-};
+} as const;
 
 export { SettingsConfig as default, SettingsConfig };

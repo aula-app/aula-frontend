@@ -15,7 +15,6 @@ import {
   TableSortLabel,
   TextField,
   Typography,
-  Box,
 } from '@mui/material';
 import { NotFoundView } from '..';
 import Tables from '@/utils/tables.json';
@@ -162,9 +161,6 @@ const SettingsView = () => {
         <IconButton disabled={selected.length === 0} onClick={() => setOpenDelete(true)}>
           <Delete />
         </IconButton>
-        <IconButton disabled={selected.length === 0}>
-          <Edit />
-        </IconButton>
         <TextField
           InputProps={{
             startAdornment: (
@@ -189,8 +185,8 @@ const SettingsView = () => {
       <DeleteSettings
         items={selected}
         isOpen={openDelete}
-        onClose={() => setOpenDelete(false)}
-        onDelete={() => dataFetch()} />
+        closeMethod={() => setOpenDelete(false)}
+        reloadMethod={() => dataFetch()} />
     </Stack>
   ) : (
     <NotFoundView />

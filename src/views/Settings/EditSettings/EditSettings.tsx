@@ -1,27 +1,17 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Avatar,
-  Button,
-  Drawer,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Avatar, Button, Drawer, Stack, TextField, Typography } from '@mui/material';
 import { SettingsType } from '@/types/SettingsTypes';
 import { useEffect, useState } from 'react';
 import { SettingsConfig } from '@/utils/Settings';
 import { databaseRequest } from '@/utils/requests';
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
-import { AccountCircle, ExpandMore } from '@mui/icons-material';
+import { AccountCircle } from '@mui/icons-material';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 /** * Renders "Settings" drawer component view
- * url: /settings/:setting_name/:id
+ * url: /settings/:setting_name/:setting_id
  */
 const EditSettings = () => {
   const navigate = useNavigate();
@@ -65,9 +55,7 @@ const EditSettings = () => {
 
   const updateValues = () => {
     if (!items.data) return;
-    Object.entries(SettingsConfig[setting_name].options).forEach(([key, option]) => {
-      const fieldKeys = SettingsConfig[setting_name].options;
-      const field = key as keyof typeof fieldKeys;
+    Object.entries(SettingsConfig[setting_name].options).forEach(([field, option]) => {
       setValue(field, items.data[field] || option.defaultValue);
     });
   };
@@ -101,9 +89,7 @@ const EditSettings = () => {
           </Stack>
           {(items.data || setting_id === 'new') && (
             <FormContainer>
-              {Object.entries(SettingsConfig[setting_name].options).map(([key, option]) => {
-                const fieldKeys = SettingsConfig[setting_name].options;
-                const field = key as keyof typeof fieldKeys;
+              {Object.entries(SettingsConfig[setting_name].options).map(([field, option]) => {
                 return (
                   <TextField
                     key={`${field}-${setting_id}`}

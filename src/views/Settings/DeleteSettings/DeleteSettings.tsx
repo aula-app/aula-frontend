@@ -1,21 +1,19 @@
-import { ObjectPropByName } from '@/types/Generics';
 import SettingsConfig from '@/utils/Settings';
 import { databaseRequest } from '@/utils/requests';
 import { WarningAmber } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { number } from 'yup';
 
 type Params = {
   isOpen: boolean;
-  items: number[];
-  onClose: () => void;
-  onDelete: () => void;
+  items: number[] | number | 'new';
+  closeMethod: () => void;
+  reloadMethod: () => void;
 };
 /** * Renders "Settings" alert dialog component view
  * url: /settings/:setting_name/
  */
-const EditSettings = ({ isOpen, items, onClose, onDelete }: Params) => {
+const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
   const { setting_name } = useParams();
 
   const request = async (id: number) => {
@@ -29,14 +27,14 @@ const EditSettings = ({ isOpen, items, onClose, onDelete }: Params) => {
 
   const deleteRequest = () => {
     items.forEach(item => request(item));
-    onDelete();
-    onClose();
+    reloadMethod();
+    closeMethod();
   }
 
   return (
     <Dialog
       open={isOpen}
-      onClose={onClose}
+      onClose={closeMethod}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -51,7 +49,7 @@ const EditSettings = ({ isOpen, items, onClose, onDelete }: Params) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="error" autoFocus>
+        <Button onClick={closeMethod} color="error" autoFocus>
           Cancel
         </Button>
         <Button onClick={deleteRequest} color="error" variant="contained">
