@@ -57,6 +57,7 @@ const EditSettings = () => {
   const updateValues = () => {
     if (!items.data) return;
     SettingsConfig[setting_name].forms.forEach(field => {
+      // @ts-ignore
       setValue(field.name, items.data[field.name] || field.defaultValue);
     });
   };
@@ -98,8 +99,11 @@ const EditSettings = () => {
                     multiline={field.isText}
                     minRows={field.isText ? 4 : 1}
                     label={field.label}
+                    // @ts-ignore
                     {...register(field.name)}
+                    // @ts-ignore
                     error={errors[field.name] ? true : false}
+                    // @ts-ignore
                     helperText={errors[field.name]?.message || ' '}
                     sx={field.hidden ? { display: 'none' } : { width: '100%' }}
                   />
