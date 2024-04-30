@@ -109,7 +109,7 @@ const SettingsView = () => {
       <Fab
         aria-label="add"
         color="primary"
-        sx={{ position: 'absolute', top: 75, right: 10 }}
+        sx={{ position: 'absolute', bottom: 40, alignSelf: 'center' }}
         onClick={() => navigate('new')}
       >
         <Add />
@@ -191,9 +191,10 @@ const SettingsView = () => {
           )}
         </Table>
       </Stack>
+      <Divider />
       <Stack direction="row" justifyContent="center" bottom={0}>
         {items.count && (
-          <Pagination count={Math.ceil(Number(items.count) / limit)} sx={{ py: 1 }} onChange={changePage} />
+          <Pagination count={Math.ceil(Number(items.count) / limit)} onChange={changePage} sx={{ py: 1 }} />
         )}
       </Stack>
       <EditSettings />

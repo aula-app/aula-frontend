@@ -91,7 +91,7 @@ const IdeaView = () => {
               onClick={toggleDrawer(true)}
               sx={{
                 position: 'absolute',
-                bottom: 15,
+                bottom: 40,
               }}
             >
               <Add />
