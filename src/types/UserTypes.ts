@@ -4,11 +4,12 @@ export interface UserType {
   displayname: string;
   username: string;
   email: string;
+  about_me: string;
+  avatar?: string;
   pw: string;
   position: string;
   hash_id: string;
-  about_me: string;
-  registration_status: string;
+  registration_status: null;
   status: number;
   created: string;
   last_update: string;

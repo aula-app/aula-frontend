@@ -11,7 +11,7 @@ interface Props {
 
 export const Idea = ({ comment, onReload, disabled = false }: Props) => {
   return (
-    <Stack>
+    <Stack mb={2}>
       <IdeaBubble bubbleInfo={comment} id={comment.id} onReload={onReload} disabled={disabled} />
       <Stack direction="row" alignItems="center" mt="-20px">
         <AccountCircle sx={{ fontSize: '2em' }} />
