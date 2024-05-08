@@ -1,0 +1,77 @@
+import * as yup from 'yup';
+
+export const usersSettings = {
+  requests: {
+    model: 'User',
+    get: 'getUserBaseData',
+    add: 'addUser',
+    edit: 'editUserData',
+    delete: 'deleteUser',
+    decrypt: ['about_me', 'displayname', 'email', 'realname', 'username'],
+  },
+  forms: [
+    {
+      name: 'realname',
+      label: 'Student Name',
+      schema: yup.string().required(),
+      defaultValue: '',
+      required: true,
+      hidden: false,
+      isText: false,
+    },
+    {
+      name: 'displayname',
+      label: 'Display Name',
+      defaultValue: '',
+      required: true,
+      hidden: false,
+      isText: false,
+      schema: yup.string().required(),
+    },
+    {
+      name: 'email',
+      label: 'Email',
+      defaultValue: '',
+      required: true,
+      hidden: false,
+      isText: false,
+      schema: yup.string().email().required(),
+    },
+    {
+      name:' about_me',
+      label: 'Description',
+      defaultValue: '',
+      required: true,
+      hidden: false,
+      isText: true,
+      schema: yup.string(),
+    },
+    {
+      name:' username',
+      label: 'User Name',
+      defaultValue: '',
+      required: true,
+      hidden: true,
+      isText: false,
+      schema: yup.string().required(),
+    },
+    {
+      name:' position',
+      label: 'Position',
+      defaultValue: 0,
+      required: true,
+      hidden: true,
+      isText: false,
+      schema: yup.string().required(),
+    },
+    {
+      name: 'userlevel',
+      label: 'user Level',
+      defaultValue: 10,
+      required: true,
+      hidden: true,
+      isText: false,
+      schema: yup.number().required(),
+    },
+  ]
+}

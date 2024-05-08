@@ -1,0 +1,86 @@
+import * as yup from 'yup';
+
+export const textsSettings = {
+  requests: {
+    model: 'Text',
+    get: 'getTextBaseData',
+    add: 'addText',
+    edit: 'editText',
+    delete: 'deleteText',
+    decrypt: [],
+  },
+  forms: [
+    {
+      name: 'headline',
+      label: 'Headline',
+      defaultValue: '',
+      required: true,
+      hidden: false,
+      isText: false,
+      schema: yup.string().required(),
+    },
+    {
+      name: 'body',
+      label: 'Message',
+      defaultValue: '',
+      required: true,
+      hidden: false,
+      isText: true,
+      schema:  yup.string().required(),
+    },
+    {
+      name: 'consent_text',
+      label: 'Consent text',
+      defaultValue: 'Agree',
+      required: true,
+      hidden: false,
+      isText: false,
+      schema: yup.string().required(),
+    },
+    {
+      name: 'location',
+      label: 'Location',
+      defaultValue: '',
+      required: true,
+      hidden: true,
+      isText: false,
+      schema: yup.string(),
+    },
+    {
+      name: 'creator_id',
+      label: 'Creator ID',
+      defaultValue: 1,
+      required: true,
+      hidden: true,
+      isText: false,
+      schema: yup.number().required(),
+    },
+    {
+      name: 'user_needs_to_consent',
+      label: 'Consent needed',
+      defaultValue: 0,
+      required: true,
+      hidden: true,
+      isText: false,
+      schema: yup.number().required(),
+    },
+    {
+      name: 'service_id_consent',
+      label: 'No documentation',
+      defaultValue: 0,
+      required: true,
+      hidden: true,
+      isText: false,
+      schema: yup.number().required(),
+    },
+    {
+      name: 'status',
+      label: 'Status',
+      defaultValue: 1,
+      required: true,
+      hidden: true,
+      isText: false,
+      schema: yup.number().required(),
+    }
+  ]
+}

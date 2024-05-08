@@ -24,6 +24,7 @@ const PrivateRoutes = () => (
     <Route path="welcome" element={<WelcomeView />} />
     <Route path="settings/profile" element={<UserView />} />
     <Route path="settings/:setting_name" element={<SettingsView />} />,
+    <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />,
     <Route path="about" element={<AboutView />} />,
     <Route path="room/:room_id" element={<DefaultRoom />} />,
     <Route path="room/:room_id/ideas" element={<RoomView />} />,
