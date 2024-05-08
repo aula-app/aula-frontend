@@ -1,0 +1,128 @@
+{
+  "groups": {
+    "model": "Group",
+    "method": "getGroups",
+    "rows": [
+      {
+        "id": 0,
+        "name": "group_name",
+        "displayName": "Name",
+        "encryption": true
+      },
+      {
+        "id": 5,
+        "name": "description_public",
+        "displayName": "Public description",
+        "encryption": true
+      },
+      {
+        "id": 6,
+        "name": "description_internal",
+        "displayName": "Internal description",
+        "encryption": true
+      }
+    ]
+  },
+  "ideas": {
+    "model": "Idea",
+    "method": "getIdeas",
+    "rows": [
+      {
+        "id": 8,
+        "name": "room_id",
+        "displayName": "Room ID",
+        "encryption": false
+      },
+      {
+        "id": 7,
+        "name": "content",
+        "displayName": "Idea",
+        "encryption": true
+      },
+      {
+        "id": 2,
+        "name": "created",
+        "displayName": "Date Created",
+        "encryption": false
+      },
+      {
+        "id": 3,
+        "name": "last_update",
+        "displayName": "Date Last Updated",
+        "encryption": false
+      }
+    ]
+  },
+  "texts": {
+    "model": "Text",
+    "method": "getTexts",
+    "rows": [
+      {
+        "id": 2,
+        "name": "created",
+        "displayName": "Date Created",
+        "encryption": false
+      },
+      {
+        "id": 5,
+        "name": "headline",
+        "displayName": "Headline",
+        "encryption": false
+      },
+      {
+        "id": 6,
+        "name": "body",
+        "displayName": "Message",
+        "encryption": false
+      }
+    ]
+  },
+  "rooms": {
+    "model": "Room",
+    "method": "getRooms",
+    "rows": [
+      {
+        "id": 0,
+        "name": "room_name",
+        "displayName": "Name",
+        "encryption": false
+      },
+      {
+        "id": 5,
+        "name": "description_public",
+        "displayName": "Public description",
+        "encryption": false
+      },
+      {
+        "id": 6,
+        "name": "description_internal",
+        "displayName": "Internal description",
+        "encryption": false
+      }
+    ]
+  },
+  "users": {
+    "model": "User",
+    "method": "getUsers",
+    "rows": [
+      {
+        "id": 1,
+        "name": "realname",
+        "displayName": "Student Name",
+        "encryption": true
+      },
+      {
+        "id": 6,
+        "name": "displayname",
+        "displayName": "User Name",
+        "encryption": true
+      },
+      {
+        "id": 7,
+        "name": "email",
+        "displayName": "Email",
+        "encryption": true
+      }
+    ]
+  }
+}

@@ -1,8 +1,7 @@
 import { FunctionComponent, MouseEventHandler } from 'react';
 import List from '@mui/material/List';
 import SideBarNavItem from './SideBarNavItem';
-import { LinkToPage } from '@/utils/type';
-import { Print } from '@mui/icons-material';
+import { LinkToPage } from '@/types/PageLinks';
 
 interface Props {
   items: Array<LinkToPage>;
@@ -29,11 +28,6 @@ const SideBarNavList: FunctionComponent<Props> = ({ items, showIcons, onClick, .
           onClick={onClick}
         />
       ))}
-      <SideBarNavItem
-          icon="Print"
-          title="Print"
-          onClick={window.print}
-        />
     </List>
   );
 };

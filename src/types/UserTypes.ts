@@ -4,33 +4,42 @@ export interface UserType {
   displayname: string;
   username: string;
   email: string;
-  about_me: string;
-  avatar?: string;
   pw: string;
   position: string;
   hash_id: string;
-  registration_status: null;
+  about_me: string;
+  registration_status: string;
   status: number;
   created: string;
   last_update: string;
   updater_id: number;
   bi: string;
-  userlevel: number;
-  infinite_votes: null;
+  userlevel: string;
+  infinite_votes: string;
   last_login: string;
-  presence: null;
-  absent_until: null;
+  presence: string;
+  absent_until: string;
   auto_delegation: number;
-  trustee_id: null;
-  o1: null;
-  o2: null;
-  o3: null;
+  trustee_id: string;
+  o1: string;
+  o2: string;
+  o3: string;
   consents_given: number;
   consents_needed: number;
 }
 
-export interface UserResponseType {
+export interface UsersResponseType {
+  success: Boolean;
+  count: Number;
+  data: UserType[];
+}
+
+export interface SingleUserResponseType {
   success: Boolean;
   count: Number;
   data: UserType;
+}
+
+export type UserTypeKeys = keyof {
+  [P in keyof UserType as UserType[P] extends string ? P: never]: any
 }
