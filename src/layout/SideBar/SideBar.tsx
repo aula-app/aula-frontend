@@ -129,7 +129,7 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
         </Stack>
         {isAuthenticated && (
           <>
-            <UserInfo showAvatar />
+            <UserInfo />
             <Divider />
           </>
         )}
