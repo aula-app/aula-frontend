@@ -1,10 +1,9 @@
-import { Avatar, Box, Stack, Typography } from '@mui/material';
-import AppLink from '../AppLink';
+import { Avatar, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { localStorageGet } from '@/utils';
 import { parseJwt } from '@/utils/jwt';
 import { databaseRequest } from '@/utils/requests';
-import { UserResponseType, UserType } from '@/types/UserTypes';
+import { SingleUserResponseType, UserType } from '@/types/UserTypes';
 
 /**
  * Renders User info with Avatar
@@ -21,7 +20,7 @@ const UserInfo = () => {
       method: 'getUserBaseData',
       arguments: { user_id: jwt_payload.user_id },
       decrypt: ['displayname', 'username', 'email', 'about_me'],
-    }).then((response: UserResponseType) => setUser(response.data));
+    }).then((response: SingleUserResponseType) => setUser(response.data));
 
   useEffect(() => {
     getUserInfo();

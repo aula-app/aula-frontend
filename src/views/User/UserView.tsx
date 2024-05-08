@@ -12,7 +12,7 @@ import { localStorageGet } from '@/utils/localStorage';
 import { useEffect, useState } from 'react';
 import { databaseRequest } from '@/utils/requests';
 import { parseJwt } from '@/utils/jwt';
-import { UserResponseType, UserType } from '@/types/UserTypes';
+import { SingleUserResponseType, UserType } from '@/types/UserTypes';
 import { ArrowDropDown, PhotoCamera } from '@mui/icons-material';
 import ChangePassword from '@/components/ChangePassword';
 import { AppButton } from '@/components';
@@ -35,7 +35,7 @@ const UserView = () => {
       method: 'getUserBaseData',
       arguments: { user_id: jwt_payload.user_id },
       decrypt: ['displayname', 'username', 'email', 'about_me'],
-    }).then((response: UserResponseType) => setUser(response.data));
+    }).then((response: SingleUserResponseType) => setUser(response.data));
 
   const onSubmit = (formData: Object) => console.log(formData);
   const toggleDrawer = () => setEditingImage(!isEditingImage);
