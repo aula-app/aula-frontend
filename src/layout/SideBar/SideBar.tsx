@@ -29,11 +29,11 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     path: '/settings/users',
     icon: 'users',
   },
-  // {
-  //   title: 'Groups',
-  //   path: '/groups',
-  //   icon: 'group',
-  // },
+  {
+    title: 'Boxes',
+    path: '/settings/boxes',
+    icon: 'box',
+  },
   {
     title: 'Rooms',
     path: '/settings/rooms',
