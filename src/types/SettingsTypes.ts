@@ -1,4 +1,4 @@
-export type SettingNamesType = "ideas" | "rooms" | "texts" | "users";
+export type SettingNamesType = "boxes" | "ideas" | "rooms" | "texts" | "users";
 export interface SettingsType {
   requests: SettingRequests
   forms: SettingForm[]
