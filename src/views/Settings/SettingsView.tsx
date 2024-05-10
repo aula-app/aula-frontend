@@ -20,7 +20,7 @@ import {
 import { NotFoundView } from '..';
 import Tables from '@/utils/tables.json';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { Add, Delete, Search, SubdirectoryArrowLeft } from '@mui/icons-material';
+import { Add, Delete, Inbox, Search, SubdirectoryArrowLeft } from '@mui/icons-material';
 import { databaseRequest } from '@/utils/requests';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -85,6 +85,7 @@ const SettingsView = () => {
       navigate('/error');
     } else {
       setPage(0);
+      setSelected([]);
       setOrderAsc(true);
       setLimit(GET_LIMIT());
       setOrder(Tables[setting_name].rows[0]['id']);
@@ -120,9 +121,14 @@ const SettingsView = () => {
       {selected.length > 0 ? (
         <Stack direction="row" alignItems="center" bottom={0} height={37} bgcolor={grey[200]}>
           <SubdirectoryArrowLeft sx={{ transform: 'rotate(180deg)', ml: 4, fontSize: '1rem', mt: 1 }} />
-          <IconButton disabled={selected.length === 0} onClick={() => setOpenDelete(true)}>
-            <Delete />
-          </IconButton>
+          {setting_name === 'ideas' &&
+          <Button disabled={selected.length === 0} color='secondary' onClick={() => setOpenDelete(true)} sx={{mx: 2}}>
+            <Inbox />Create new Box
+          </Button>
+          }
+          <Button disabled={selected.length === 0} color='secondary' onClick={() => setOpenDelete(true)} sx={{mx: 2, ml: 'auto'}}>
+            <Delete /> Delete
+          </Button>
         </Stack>
       ) : (
         <Stack direction="row" alignItems="start" bottom={0} height={37} px={2}>
