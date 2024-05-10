@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { NotFoundView } from '..';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { Add, Delete, Inbox, Search, SubdirectoryArrowLeft, SubdirectoryArrowRight } from '@mui/icons-material';
+import { Add, Delete, Inbox, Search, SubdirectoryArrowRight } from '@mui/icons-material';
 import { databaseRequest } from '@/utils/requests';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
