@@ -30,11 +30,6 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     icon: 'users',
   },
   {
-    title: 'Boxes',
-    path: '/settings/boxes',
-    icon: 'box',
-  },
-  {
     title: 'Rooms',
     path: '/settings/rooms',
     icon: 'room',
@@ -43,6 +38,11 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     title: 'Ideas',
     path: '/settings/ideas',
     icon: 'idea',
+  },
+  {
+    title: 'Boxes',
+    path: '/settings/boxes',
+    icon: 'box',
   },
   {
     title: 'Texts',

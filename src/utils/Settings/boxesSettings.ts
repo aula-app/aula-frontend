@@ -1,25 +1,26 @@
 import * as yup from 'yup';
 
-export const roomsSettings = {
+export const boxesSettings = {
   requests: {
-    model: 'Room',
-    id: 'room_id',
-    get: 'getRoomBaseData',
-    add: 'addRoom',
-    edit: 'editRoomData',
-    delete: 'deleteRoom',
-    decrypt: [],
+    model: 'Topic',
+    id: 'topic_id',
+    get: 'getTopicBaseData',
+    add: 'addTopic',
+    edit: 'editTopic',
+    delete: 'deleteTopic',
+    decrypt: ['name','description_internal','description_public'],
   },
   forms: [
     {
-      name: 'room_name',
-      label: 'Room Name',
+      name: 'name',
+      label: 'Name',
       defaultValue: '',
       required: true,
       hidden: false,
       isText: false,
       schema: yup.string().required(),
     },
+    ,
     {
       name: 'description_public',
       label: 'Public Description',
@@ -37,6 +38,15 @@ export const roomsSettings = {
       hidden: false,
       isText: true,
       schema: yup.string(),
+    },
+    {
+      name: 'room_id',
+      label: 'Room ID',
+      defaultValue: '',
+      required: true,
+      hidden: false,
+      isText: false,
+      schema: yup.number().required(),
     },
   ]
 }

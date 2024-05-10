@@ -3,6 +3,7 @@ import * as yup from 'yup';
 export const textsSettings = {
   requests: {
     model: 'Text',
+    id: 'text_id',
     get: 'getTextBaseData',
     add: 'addText',
     edit: 'editText',

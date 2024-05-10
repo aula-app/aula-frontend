@@ -14,6 +14,7 @@ export interface SettingForm {
 }
 export interface SettingRequests {
     model: string,
+    id: string,
     get: string,
     add: string,
     edit: string,

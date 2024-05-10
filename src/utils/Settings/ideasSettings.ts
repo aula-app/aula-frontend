@@ -3,6 +3,7 @@ import * as yup from 'yup';
 export const ideasSettings = {
   requests: {
     model: 'Idea',
+    id: 'idea_id',
     get: 'getIdeaBaseData',
     add: 'addIdea',
     edit: 'editIdea',

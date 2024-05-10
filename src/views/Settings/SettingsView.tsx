@@ -30,7 +30,7 @@ import { grey } from '@mui/material/colors';
 const GET_LIMIT = () => Math.floor((window.innerHeight - 200) / 55) - 1 || 10
 
 /** * Renders default "Settings" view
- * urls: /settings/groups, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
+ * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
  */
 const SettingsView = () => {
   const navigate = useNavigate();

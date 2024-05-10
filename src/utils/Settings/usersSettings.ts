@@ -3,6 +3,7 @@ import * as yup from 'yup';
 export const usersSettings = {
   requests: {
     model: 'User',
+    id: 'user_id',
     get: 'getUserBaseData',
     add: 'addUser',
     edit: 'editUserData',
