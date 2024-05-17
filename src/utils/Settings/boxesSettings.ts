@@ -1,25 +1,25 @@
 import * as yup from 'yup';
 
 const definitions = {
-  name: 'Rooms',
-  itemName: 'Room',
+  name: 'Boxes',
+  itemName: 'Box',
 };
 
 const requests = {
-  model: 'Room',
-  method: 'getRooms',
-  id: 'room_id',
-  get: 'getRoomBaseData',
-  add: 'addRoom',
-  edit: 'editRoomData',
-  delete: 'deleteRoom',
-  decrypt: [],
+  model: 'Topic',
+  method: 'getTopics',
+  id: 'topic_id',
+  get: 'getTopicBaseData',
+  add: 'addTopic',
+  edit: 'editTopic',
+  delete: 'deleteTopic',
+  decrypt: ['name', 'description_internal', 'description_public'],
 };
 
 const forms = [
   {
-    name: 'room_name',
-    label: 'Room Name',
+    name: 'name',
+    label: 'Name',
     defaultValue: '',
     required: true,
     hidden: false,
@@ -44,30 +44,45 @@ const forms = [
     isText: true,
     schema: yup.string(),
   },
+  {
+    name: 'room_id',
+    label: 'Room ID',
+    defaultValue: '',
+    required: true,
+    hidden: false,
+    isText: false,
+    schema: yup.number().required(),
+  },
 ];
 
 const rows = [
   {
-    id: 0,
-    name: 'room_name',
+    id: 1,
+    name: 'name',
     displayName: 'Name',
-    encryption: false,
+    encryption: true,
   },
   {
     id: 5,
-    name: 'description_public',
+    name: 'description_internal',
     displayName: 'Public description',
+    encryption: true,
+  },
+  {
+    id: 2,
+    name: 'created',
+    displayName: 'Date Created',
     encryption: false,
   },
   {
-    id: 6,
-    name: 'description_internal',
-    displayName: 'Internal description',
+    id: 3,
+    name: 'last_update',
+    displayName: 'Date Last Updated',
     encryption: false,
   },
 ];
 
-export const roomsSettings = {
+export const boxesSettings = {
   definitions,
   requests,
   forms,

@@ -38,7 +38,7 @@ const EditSettings = () => {
     });
 
   const dataFetch = async () =>
-    await request(SettingsConfig[setting_name].requests.get, { [`${setting_name.slice(0, -1)}_id`]: setting_id }).then(
+    await request(SettingsConfig[setting_name].requests.get, { [SettingsConfig[setting_name].requests.id]: setting_id }).then(
       (response) => setItems(response)
     );
 
@@ -47,7 +47,7 @@ const EditSettings = () => {
       setting_id === 'new' ? SettingsConfig[setting_name].requests.add : SettingsConfig[setting_name].requests.edit,
       {
         ...formData,
-        [`${setting_name.slice(0, -1)}_id`]: setting_id === 'new' ? undefined : setting_id,
+        [SettingsConfig[setting_name].requests.id]: setting_id === 'new' ? undefined : setting_id,
       }
     ).then((response) => {
       if (!response.success) return;

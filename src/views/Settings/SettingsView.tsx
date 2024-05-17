@@ -4,7 +4,6 @@ import {
   Divider,
   Fab,
   InputAdornment,
-  IconButton,
   Pagination,
   Stack,
   Table,
@@ -12,26 +11,26 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TableSortLabel,
   TextField,
   Typography,
   Button,
+  TableSortLabel,
 } from '@mui/material';
 import { NotFoundView } from '..';
-import Tables from '@/utils/tables.json';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { Add, Delete, Search, SubdirectoryArrowLeft } from '@mui/icons-material';
+import { Add, Delete, Inbox, Search, SubdirectoryArrowRight } from '@mui/icons-material';
 import { databaseRequest } from '@/utils/requests';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
 import EditSettings from './EditSettings';
 import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
+import SettingsConfig from '@/utils/Settings';
 
-const GET_LIMIT = () => Math.floor((window.innerHeight - 200) / 55) - 1 || 10
+const GET_LIMIT = () => Math.floor((window.innerHeight - 200) / 55) - 1 || 10;
 
 /** * Renders default "Settings" view
- * urls: /settings/groups, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
+ * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
  */
 const SettingsView = () => {
   const navigate = useNavigate();
@@ -40,7 +39,7 @@ const SettingsView = () => {
   const [items, setItems] = useState({} as TableResponseType);
   const [limit, setLimit] = useState(GET_LIMIT());
   const [page, setPage] = useState(0);
-  const [orderBy, setOrder] = useState(Tables[setting_name].rows[0]['id']);
+  const [orderBy, setOrder] = useState(SettingsConfig[setting_name].rows[0]['id']);
   const [orderAsc, setOrderAsc] = useState(true);
 
   const [selected, setSelected] = useState([] as number[]);
@@ -48,15 +47,15 @@ const SettingsView = () => {
 
   const dataFetch = async () =>
     await databaseRequest('model', {
-      model: Tables[setting_name].model,
-      method: Tables[setting_name].method,
+      model: SettingsConfig[setting_name].requests.model,
+      method: SettingsConfig[setting_name].requests.method,
       arguments: {
         limit: limit,
         offset: page * limit,
         orderby: orderBy,
         asc: orderAsc,
       },
-      decrypt: Tables[setting_name].rows.filter((row) => row.encryption).map((value) => value.name),
+      decrypt: SettingsConfig[setting_name].rows.filter((row) => row.encryption).map((value) => value.name),
     }).then((response: TableResponseType) => {
       setItems(response);
     });
@@ -81,13 +80,14 @@ const SettingsView = () => {
   };
 
   const resetTable = () => {
-    if (!Tables[setting_name]) {
+    if (!SettingsConfig[setting_name]) {
       navigate('/error');
     } else {
       setPage(0);
+      setSelected([]);
       setOrderAsc(true);
       setLimit(GET_LIMIT());
-      setOrder(Tables[setting_name].rows[0]['id']);
+      setOrder(SettingsConfig[setting_name].rows[0]['id']);
     }
   };
 
@@ -96,9 +96,9 @@ const SettingsView = () => {
   useEffect(() => {
     window.addEventListener('resize', handleWindowSizeChange);
     return () => {
-        window.removeEventListener('resize', handleWindowSizeChange);
+      window.removeEventListener('resize', handleWindowSizeChange);
     };
-}, []);
+  }, []);
   useEffect(resetTable, [setting_name]);
   useEffect(() => {
     dataFetch();
@@ -106,26 +106,11 @@ const SettingsView = () => {
 
   return items ? (
     <Stack direction="column" height="100%">
-      <Fab
-        aria-label="add"
-        color="primary"
-        sx={{ position: 'absolute', bottom: 40, alignSelf: 'center' }}
-        onClick={() => navigate('new')}
-      >
-        <Add />
-      </Fab>
-      <Typography variant="h4" sx={{ p: 2, pb: 0, textTransform: 'capitalize' }}>
-        {setting_name}
-      </Typography>
-      {selected.length > 0 ? (
-        <Stack direction="row" alignItems="center" bottom={0} height={37} bgcolor={grey[200]}>
-          <SubdirectoryArrowLeft sx={{ transform: 'rotate(180deg)', ml: 4, fontSize: '1rem', mt: 1 }} />
-          <IconButton disabled={selected.length === 0} onClick={() => setOpenDelete(true)}>
-            <Delete />
-          </IconButton>
-        </Stack>
-      ) : (
-        <Stack direction="row" alignItems="start" bottom={0} height={37} px={2}>
+      <Stack direction="row" alignItems="center">
+        <Typography variant="h4" sx={{ p: 2, textTransform: 'capitalize', flex: 1 }}>
+          {setting_name}
+        </Typography>
+        <Stack direction="row" alignItems="start" bottom={0} height={37} px={2} flex={1}>
           <TextField
             InputProps={{
               startAdornment: (
@@ -140,7 +125,7 @@ const SettingsView = () => {
             sx={{ px: 1 }}
           />
         </Stack>
-      )}
+      </Stack>
       <Divider />
       <Stack flexGrow={1} sx={{ overflowX: 'auto' }}>
         <Table stickyHeader size="small">
@@ -156,7 +141,7 @@ const SettingsView = () => {
                   />
                 </TableCell>
               )}
-              {Tables[setting_name].rows.map((column, key) => (
+              {SettingsConfig[setting_name].rows.map((column, key) => (
                 <TableCell key={`${column.name}${key}`} sx={{ whiteSpace: 'nowrap' }}>
                   <TableSortLabel
                     active={orderBy === column.id}
@@ -176,7 +161,7 @@ const SettingsView = () => {
                   <TableCell>
                     <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
                   </TableCell>
-                  {Tables[setting_name].rows.map((column) => (
+                  {SettingsConfig[setting_name].rows.map((column) => (
                     <TableCell
                       key={`${column.name}-${row.id}`}
                       sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
@@ -191,7 +176,41 @@ const SettingsView = () => {
           )}
         </Table>
       </Stack>
+      <Stack direction="row" alignItems="center" bottom={0} height={37} bgcolor={grey[200]}>
+        {selected.length > 0 && (
+          <>
+            <SubdirectoryArrowRight sx={{ ml: 4, fontSize: '1rem' }} color='secondary' />
+            <Button
+              disabled={selected.length === 0}
+              color="secondary"
+              onClick={() => setOpenDelete(true)}
+            >
+              <Delete /> Delete
+            </Button>
+            {SettingsConfig[setting_name].definitions.generates && (
+              <Button
+                disabled={selected.length === 0}
+                color="secondary"
+                onClick={() => setOpenDelete(true)}
+                sx={{ml: 'auto', mr: 1}}
+              >
+                <Inbox />
+                New {SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName || ''}
+              </Button>
+            )}
+
+          </>
+        )}
+      </Stack>
       <Divider />
+      <Fab
+        aria-label="add"
+        color="primary"
+        sx={{ position: 'absolute', bottom: 40, alignSelf: 'center' }}
+        onClick={() => navigate('new')}
+      >
+        <Add />
+      </Fab>
       <Stack direction="row" justifyContent="center" bottom={0}>
         {items.count && (
           <Pagination count={Math.ceil(Number(items.count) / limit)} onChange={changePage} sx={{ py: 1 }} />

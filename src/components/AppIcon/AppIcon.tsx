@@ -1,29 +1,32 @@
 import { FunctionComponent } from 'react';
 import LogoIcon from './logo.svg?react';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import CloseIcon from '@mui/icons-material/Close';
-import DayIcon from '@mui/icons-material/Brightness5';
-import DayNightIcon from '@mui/icons-material/Brightness4';
-import DefaultIcon from '@mui/icons-material/MoreHoriz';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import GroupIcon from '@mui/icons-material/Group';
-import HomeIcon from '@mui/icons-material/Home';
-import InfoIcon from '@mui/icons-material/Info';
-import LightbulbIcon from '@mui/icons-material/Lightbulb';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
-import MenuIcon from '@mui/icons-material/Menu';
-import NightIcon from '@mui/icons-material/Brightness3';
-import NotificationsIcon from '@mui/icons-material/NotificationsOutlined';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PersonIcon from '@mui/icons-material/Person';
-import SearchIcon from '@mui/icons-material/Search';
-import SettingsIcon from '@mui/icons-material/Settings';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { Print } from '@mui/icons-material';
+import {
+  AccountCircleOutlined,
+  ArrowBackIosNew,
+  Brightness3,
+  Brightness4,
+  Brightness5,
+  Close,
+  ExitToApp,
+  Group,
+  Home,
+  Inbox,
+  Info,
+  Lightbulb,
+  ManageAccounts,
+  MeetingRoom,
+  Menu,
+  MoreHoriz,
+  Notifications,
+  Person,
+  PersonAdd,
+  Print,
+  Search,
+  Settings,
+  VerifiedUser,
+  Visibility,
+  VisibilityOff,
+} from '@mui/icons-material';
 
 /**
  * How to use:
@@ -34,31 +37,32 @@ import { Print } from '@mui/icons-material';
  * Note: You can use camelCase or UPPERCASE in the <AppIcon name="someIconByName" /> component
  */
 const ICONS: Record<string, React.ComponentType> = {
-  default: DefaultIcon,
+  default: MoreHoriz,
   logo: LogoIcon,
-  account: AccountCircle,
-  back: ArrowBackIosNewIcon,
-  close: CloseIcon,
-  day: DayIcon,
-  daynight: DayNightIcon,
-  group: GroupIcon,
-  home: HomeIcon,
-  idea: LightbulbIcon,
-  info: InfoIcon,
-  login: PersonIcon,
-  logout: ExitToAppIcon,
-  menu: MenuIcon,
-  night: NightIcon,
-  notifications: NotificationsIcon,
+  account: AccountCircleOutlined,
+  back: ArrowBackIosNew,
+  box: Inbox,
+  close: Close,
+  day: Brightness5,
+  daynight: Brightness4,
+  group: Group,
+  home: Home,
+  idea: Lightbulb,
+  info: Info,
+  login: Person,
+  logout: ExitToApp,
+  menu: Menu,
+  night: Brightness3,
+  notifications: Notifications,
   print: Print,
-  room: MeetingRoomIcon,
-  search: SearchIcon,
-  settings: SettingsIcon,
-  signup: PersonAddIcon,
-  texts: VerifiedUserIcon,
-  users: ManageAccountsIcon,
-  visibilityoff: VisibilityOffIcon,
-  visibilityon: VisibilityIcon,
+  room: MeetingRoom,
+  search: Search,
+  settings: Settings,
+  signup: PersonAdd,
+  texts: VerifiedUser,
+  users: ManageAccounts,
+  visibilityoff: VisibilityOff,
+  visibilityon: Visibility,
 };
 
 interface Props {
@@ -74,7 +78,7 @@ interface Props {
  */
 const AppIcon: FunctionComponent<Props> = ({ name, icon, ...restOfProps }) => {
   const iconName = (name || icon || 'default').trim().toLowerCase();
-  const ComponentToRender = ICONS[iconName] || DefaultIcon;
+  const ComponentToRender = ICONS[iconName] || ICONS.default;
   return <ComponentToRender {...restOfProps} />;
 };
 
