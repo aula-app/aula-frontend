@@ -11,7 +11,7 @@ export const allPhases = {
       name: 'Discussion',
       description: 'Ideas in Discussion',
       color: deepPurple[100],
-      icon: 'chat'
+      icon: 'discussion'
     },
     approval: {
       name: 'Approval',

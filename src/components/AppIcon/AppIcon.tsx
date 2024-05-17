@@ -1,35 +1,10 @@
 import { FunctionComponent } from 'react';
 import LogoIcon from './logo.svg?react';
-<<<<<<< Updated upstream
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import CloseIcon from '@mui/icons-material/Close';
-import DayIcon from '@mui/icons-material/Brightness5';
-import DayNightIcon from '@mui/icons-material/Brightness4';
-import DefaultIcon from '@mui/icons-material/MoreHoriz';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import GroupIcon from '@mui/icons-material/Group';
-import HomeIcon from '@mui/icons-material/Home';
-import InfoIcon from '@mui/icons-material/Info';
-import LightbulbIcon from '@mui/icons-material/Lightbulb';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
-import MenuIcon from '@mui/icons-material/Menu';
-import NightIcon from '@mui/icons-material/Brightness3';
-import NotificationsIcon from '@mui/icons-material/NotificationsOutlined';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PersonIcon from '@mui/icons-material/Person';
-import SearchIcon from '@mui/icons-material/Search';
-import SettingsIcon from '@mui/icons-material/Settings';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { Print } from '@mui/icons-material';
-=======
 import VotingIcon from './voting.svg?react';
 import {
   AcademicCapIcon,
-  AdjustmentsHorizontalIcon,
+  AdjustmentsVerticalIcon,
+  ArchiveBoxIcon,
   ArrowRightEndOnRectangleIcon,
   BellIcon,
   CameraIcon,
@@ -44,7 +19,6 @@ import {
   EyeSlashIcon,
   HeartIcon,
   HomeIcon,
-  InboxIcon,
   InformationCircleIcon,
   LightBulbIcon,
   MagnifyingGlassIcon,
@@ -57,15 +31,15 @@ import {
   SunIcon,
   TrashIcon,
   UserCircleIcon,
+  UserGroupIcon,
   UserIcon,
   UserPlusIcon,
   UsersIcon,
   XCircleIcon,
-  XMarkIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import { Box } from '@mui/material';
 import { ObjectPropByName } from '@/types/Generics';
->>>>>>> Stashed changes
 
 /**
  * How to use:
@@ -76,58 +50,32 @@ import { ObjectPropByName } from '@/types/Generics';
  * Note: You can use camelCase or UPPERCASE in the <AppIcon name="someIconByName" /> component
  */
 const ICONS: Record<string, React.ComponentType> = {
-<<<<<<< Updated upstream
-  default: DefaultIcon,
-  logo: LogoIcon,
-  account: AccountCircle,
-  back: ArrowBackIosNewIcon,
-  close: CloseIcon,
-  day: DayIcon,
-  daynight: DayNightIcon,
-  group: GroupIcon,
-  home: HomeIcon,
-  idea: LightbulbIcon,
-  info: InfoIcon,
-  login: PersonIcon,
-  logout: ExitToAppIcon,
-  menu: MenuIcon,
-  night: NightIcon,
-  notifications: NotificationsIcon,
-  print: Print,
-  room: MeetingRoomIcon,
-  search: SearchIcon,
-  settings: SettingsIcon,
-  signup: PersonAddIcon,
-  texts: VerifiedUserIcon,
-  users: ManageAccountsIcon,
-  visibilityoff: VisibilityOffIcon,
-  visibilityon: VisibilityIcon,
-=======
   logo: LogoIcon,
   add: PlusIcon,
   account: UserCircleIcon,
-  approval: StarIcon,
   arrowdown: ChevronDownIcon,
+  approval: StarIcon,
+  avatar: UserCircleIcon,
   back: ChevronLeftIcon,
-  box: InboxIcon,
+  box: ArchiveBoxIcon,
   camera: CameraIcon,
   cancel: XCircleIcon,
-  chat: ChatBubbleLeftRightIcon,
   chart: PresentationChartBarIcon,
   check: CheckCircleIcon,
   close: XMarkIcon,
   day: SunIcon,
   delete: TrashIcon,
+  discussion: ChatBubbleLeftRightIcon,
   envelope: EnvelopeIcon,
   forbid: MinusCircleIcon,
   group: UsersIcon,
-  home: HomeIcon,
   heart: HeartIcon,
+  home: HomeIcon,
   idea: LightBulbIcon,
   info: InformationCircleIcon,
   login: UserIcon,
   logout: ArrowRightEndOnRectangleIcon,
-  menu: AdjustmentsHorizontalIcon,
+  menu: AdjustmentsVerticalIcon,
   night: MoonIcon,
   notifications: BellIcon,
   print: PrinterIcon,
@@ -136,15 +84,15 @@ const ICONS: Record<string, React.ComponentType> = {
   settings: Cog6ToothIcon,
   signup: UserPlusIcon,
   text: DocumentTextIcon,
+  users: UserGroupIcon,
   visibilityoff: EyeIcon,
   visibilityon: EyeSlashIcon,
-  vote: VotingIcon,
->>>>>>> Stashed changes
+  vote: VotingIcon
 };
 
 interface Props {
-  name?: string; // Icon's name
-  icon?: string; // Icon's name alternate prop
+  name?: keyof typeof ICONS; // Icon's name
+  icon?: keyof typeof ICONS; // Icon's name alternate prop
   size?: 'sm' | 'md' | 'lg' | 'xl'; // Icon's name alternate prop,
   sx?: ObjectPropByName;
 }
@@ -157,10 +105,6 @@ interface Props {
  */
 const AppIcon: FunctionComponent<Props> = ({ name, icon, size = 'md', sx, ...restOfProps }) => {
   const iconName = (name || icon || 'default').trim().toLowerCase();
-<<<<<<< Updated upstream
-  const ComponentToRender = ICONS[iconName] || DefaultIcon;
-  return <ComponentToRender {...restOfProps} />;
-=======
   const ComponentToRender = ICONS[iconName] || ICONS.default;
   const currentSize =
     size === 'sm'
@@ -175,7 +119,6 @@ const AppIcon: FunctionComponent<Props> = ({ name, icon, size = 'md', sx, ...res
       <ComponentToRender {...restOfProps} />
     </Box>
   );
->>>>>>> Stashed changes
 };
 
 export default AppIcon;
