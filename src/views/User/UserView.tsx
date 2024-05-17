@@ -13,9 +13,8 @@ import { useEffect, useState } from 'react';
 import { databaseRequest } from '@/utils/requests';
 import { parseJwt } from '@/utils/jwt';
 import { SingleUserResponseType, UserType } from '@/types/UserTypes';
-import { ArrowDropDown, PhotoCamera } from '@mui/icons-material';
 import ChangePassword from '@/components/ChangePassword';
-import { AppButton } from '@/components';
+import { AppButton, AppIcon } from '@/components';
 import { FormContainer } from 'react-hook-form-mui';
 import { grey } from '@mui/material/colors';
 import ImageEditor from '@/components/ImageEditor';
@@ -66,7 +65,7 @@ const UserView = () => {
                   zIndex: 999,
                 }}
               >
-                <PhotoCamera fontSize="small" />
+                <AppIcon name="camera" />
               </Stack>
               <Avatar
                 sx={{
@@ -104,7 +103,7 @@ const UserView = () => {
         </FormContainer>
       )}
       <Accordion>
-        <AccordionSummary expandIcon={<ArrowDropDown />} aria-controls="panel2-content" id="panel2-header">
+        <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">Advanced Settings</Typography>
         </AccordionSummary>
         <AccordionDetails>

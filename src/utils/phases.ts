@@ -1,49 +1,55 @@
-import { red, green, amber, blueGrey, deepPurple, orange, teal } from '@mui/material/colors';
-import { CheckCircle, DoNotDisturbOn, Forum, HowToVote, Lightbulb, Poll, WorkspacePremium } from '@mui/icons-material';
+import { green, amber, deepPurple, deepOrange, blue, grey, red } from '@mui/material/colors';
 
-const phases = {
+export const allPhases = {
     wild: {
       name: 'Wild Ideas',
       description: 'Wild Ideas',
-      color: blueGrey[100],
-      icon: Lightbulb
+      color: blue[100],
+      icon: 'idea'
     },
-    idea: {
+    discussion: {
       name: 'Discussion',
       description: 'Ideas in Discussion',
       color: deepPurple[100],
-      icon: Forum
+      icon: 'chat'
     },
     approval: {
       name: 'Approval',
       description: 'Ideas Under Approval',
-      color: orange[100],
-      icon: WorkspacePremium
+      color: deepOrange[100],
+      icon: 'approval'
     },
     voting: {
       name: 'Voting',
       description: 'Ideas on Voting',
       color: amber[100],
-      icon: HowToVote
+      icon: 'vote'
     },
     result: {
       name: 'Results',
       description: 'Idea Results',
-      color: teal[100],
-      icon: Poll
+      color: green[100],
+      icon: 'chart'
     },
     success: {
       name: 'Successful',
       description: 'Successful Ideas',
       color: green[100],
-      icon: CheckCircle
+      icon: 'check'
     },
     reject: {
       name: 'Rejected',
       description: 'Rejected Ideas',
       color: red[100],
-      icon: DoNotDisturbOn
-    }
+      icon: 'cancel'
+    },
+    dismissal: {
+      name: 'Dismissed',
+      description: 'Ideas not feasible',
+      color: grey[100],
+      icon: 'forbid'
+    },
 }
 
-export default phases;
+export const phases = (({ dismissal, success, reject, ...o }) => o)(allPhases)
+export const dashboardPhases = (({ result, ...o }) => o)(allPhases)

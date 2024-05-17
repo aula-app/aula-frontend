@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react';
 import { SettingsConfig } from '@/utils/Settings';
 import { databaseRequest } from '@/utils/requests';
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
-import { AccountCircle } from '@mui/icons-material';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { AppIcon } from '@/components';
 
 /** * Renders "Settings" drawer component view
  * url: /settings/:setting_name/:setting_id
@@ -82,10 +82,10 @@ const EditSettings = () => {
           <Stack direction="row" justifyContent="space-between">
             {setting_name === 'users' && (
               <Avatar>
-                <AccountCircle sx={{ fontSize: '3em' }} />
+                <AppIcon name='avatar' />
               </Avatar>
             )}
-            <Typography variant="h4" pb={2} ml="auto">
+            <Typography variant="h4" pb={2}>
               {setting_id === 'new' ? 'New' : 'Edit'} {SettingsConfig[setting_name].requests.model}
             </Typography>
           </Stack>

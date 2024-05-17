@@ -20,13 +20,22 @@ import {
 import { NotFoundView } from '..';
 import Tables from '@/utils/tables.json';
 import { SettingNamesType } from '@/types/SettingsTypes';
+<<<<<<< Updated upstream
 import { Add, Delete, Search, SubdirectoryArrowLeft } from '@mui/icons-material';
+=======
+>>>>>>> Stashed changes
 import { databaseRequest } from '@/utils/requests';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
 import EditSettings from './EditSettings';
 import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
+<<<<<<< Updated upstream
+=======
+import SettingsConfig from '@/utils/Settings';
+import { AppIcon } from '@/components';
+import { SubdirectoryArrowRight } from '@mui/icons-material';
+>>>>>>> Stashed changes
 
 const GET_LIMIT = () => Math.floor((window.innerHeight - 200) / 55) - 1 || 10
 
@@ -130,7 +139,7 @@ const SettingsView = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search />
+                  <AppIcon name="search" />
                 </InputAdornment>
               ),
             }}
@@ -191,7 +200,45 @@ const SettingsView = () => {
           )}
         </Table>
       </Stack>
+<<<<<<< Updated upstream
       <Divider />
+=======
+      <Stack direction="row" alignItems="center" bottom={0} height={37} bgcolor={grey[200]}>
+        {selected.length > 0 && (
+          <>
+            <SubdirectoryArrowRight sx={{ ml: 4, fontSize: '1rem' }} color='secondary' />
+            <Button
+              disabled={selected.length === 0}
+              color="secondary"
+              onClick={() => setOpenDelete(true)}
+            >
+              <AppIcon name="delete" sx={{mr: 1}} /> Delete
+            </Button>
+            {SettingsConfig[setting_name].definitions.generates && (
+              <Button
+                disabled={selected.length === 0}
+                color="secondary"
+                onClick={() => setOpenDelete(true)}
+                sx={{ml: 'auto', mr: 1}}
+              >
+                <AppIcon name={SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName} sx={{mr: 1}} />
+                New {SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName || ''}
+              </Button>
+            )}
+
+          </>
+        )}
+      </Stack>
+      <Divider />
+      <Fab
+        aria-label="add"
+        color="primary"
+        sx={{ position: 'absolute', bottom: 40, alignSelf: 'center' }}
+        onClick={() => navigate('new')}
+      >
+        <AppIcon name="add" />
+      </Fab>
+>>>>>>> Stashed changes
       <Stack direction="row" justifyContent="center" bottom={0}>
         {items.count && (
           <Pagination count={Math.ceil(Number(items.count) / limit)} onChange={changePage} sx={{ py: 1 }} />
