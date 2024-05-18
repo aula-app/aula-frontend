@@ -5,6 +5,7 @@ import { parseJwt } from '@/utils/jwt';
 import { databaseRequest } from '@/utils/requests';
 import { ChatBubble, Favorite } from '@mui/icons-material';
 import { Box, Button, Stack, Typography, colors } from '@mui/material';
+import { blue, grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 
 interface IdeaBubbleProps {
@@ -13,16 +14,17 @@ interface IdeaBubbleProps {
   comments?: number;
   liked?: boolean;
   disabled?: boolean;
+  isComment?: boolean;
   onReload: () => void;
 }
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike' | 'CommentAddLike' | 'CommentRemoveLike';
 type Args = {user_id: number, idea_id?: number, comment_id?: number}
-const bubbleColor = '#eee';
 
-export const IdeaBubble = ({ bubbleInfo, id, comments = 0, disabled = false, onReload}: IdeaBubbleProps) => {
+export const IdeaBubble = ({ bubbleInfo, id, comments = 0, disabled = false, isComment = false, onReload}: IdeaBubbleProps) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
+  const bubbleColor = disabled ? grey[100] : isComment ? grey[200] : 'hsl(207.2,88.9%,92.5%)';
 
   const context = (bubbleInfo.hasOwnProperty('idea_id') ? 'Comment' : 'Idea') // check if it is a comment
   const lowerContext = context.toLowerCase() as  'comment' | 'idea';
@@ -53,7 +55,7 @@ export const IdeaBubble = ({ bubbleInfo, id, comments = 0, disabled = false, onR
 
   return (
     <Stack mb={1}>
-      <Box sx={{ background: bubbleColor, p: 2, borderRadius: 1, position: 'relative' }}>
+      <Box sx={{ background: bubbleColor, p: 2, borderRadius: 5, position: 'relative' }}>
         <Box
           className="noPrint"
           sx={{
@@ -67,11 +69,11 @@ export const IdeaBubble = ({ bubbleInfo, id, comments = 0, disabled = false, onR
             transform: 'translateY(100%)',
           }}
         />
-        {/* {title && (
+        {!isComment && (
           <Typography variant="h6" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap" mb={1}>
-            {title}
+            Title
           </Typography>
-        )} */}
+        )}
         {bubbleInfo.content}
       </Box>
       <Stack direction="row" justifyContent="flex-end" alignItems="center">

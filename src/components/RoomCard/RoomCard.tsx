@@ -43,7 +43,7 @@ const RoomCard = ({ room }: RoomCardProps) => {
               flex={1}
               alignItems="center"
               justifyContent="space-around"
-              py={1}
+              p={1}
               sx={{ bgcolor: phases[phase].color }}
             >
               <AppIcon name={phases[phase].icon} />
@@ -62,7 +62,7 @@ const RoomCard = ({ room }: RoomCardProps) => {
         <BottomNavigationAction
           label="Wild Ideas"
           icon={<AppIcon name="idea" />}
-          sx={{ borderRight: '1px solid #757575' }}
+          sx={{ borderRight: `1px solid ${grey[400]}` }}
         />
         <BottomNavigationAction label="Idea Boxes" icon={<AppIcon name="box" />} />
       </BottomNavigation>

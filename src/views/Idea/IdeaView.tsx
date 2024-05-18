@@ -79,7 +79,7 @@ const IdeaView = () => {
                 key={key}
                 comment={comment}
                 onReload={commentsFetch}
-                disabled={phase > 0} />
+                disabled={phase > 1} />
             ))}
           </>
         )}
