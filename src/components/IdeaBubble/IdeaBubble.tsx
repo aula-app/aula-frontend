@@ -24,7 +24,7 @@ export const IdeaBubble = ({ bubbleInfo, id, comments = 0, disabled = false, isC
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
-  const bubbleColor = disabled ? grey[100] : isComment ? grey[200] : 'hsl(207.2,88.9%,92.5%)';
+  const bubbleColor = disabled ? grey[100] : isComment ? grey[200] : blue[50];
 
   const context = (bubbleInfo.hasOwnProperty('idea_id') ? 'Comment' : 'Idea') // check if it is a comment
   const lowerContext = context.toLowerCase() as  'comment' | 'idea';

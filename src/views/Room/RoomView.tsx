@@ -9,7 +9,7 @@ import { databaseRequest } from '@/utils/requests';
 import { IdeasResponseType } from '@/types/IdeaTypes';
 import { BoxesResponseType } from '@/types/BoxTypes';
 import { AppIcon } from '@/components';
-import { grey } from '@mui/material/colors';
+import { green, grey, lightGreen, teal, yellow } from '@mui/material/colors';
 
 function a11yProps(index: number) {
   return {
@@ -80,7 +80,7 @@ const RoomView = () => {
             variant="fullWidth"
             aria-label="Tabbed Navigation"
             sx={{
-              bgcolor: grey[200],
+              bgcolor: yellow[100],
               '.MuiTabs-indicator': {
                 top: 0,
                 bottom: 'auto'

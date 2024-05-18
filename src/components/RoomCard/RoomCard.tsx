@@ -4,7 +4,7 @@ import { phases } from '@/utils/phases';
 import { RoomType } from '@/types/RoomTypes';
 import AppIcon from '../AppIcon';
 import { useNavigate } from 'react-router-dom';
-import { grey } from '@mui/material/colors';
+import { blue, grey, yellow } from '@mui/material/colors';
 
 interface RoomCardProps {
   room: RoomType;
@@ -57,7 +57,7 @@ const RoomCard = ({ room }: RoomCardProps) => {
           navigate(`/room/${room.id}/${newValue === 0 ? 'ideas' : 'boxes'}`);
         }}
         showLabels
-        sx={{ bgcolor: grey[200] }}
+        sx={{ bgcolor: yellow[100] }}
       >
         <BottomNavigationAction
           label="Wild Ideas"
