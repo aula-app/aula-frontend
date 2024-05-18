@@ -52,4 +52,4 @@ export const allPhases = {
 }
 
 export const phases = (({ dismissal, success, reject, ...o }) => o)(allPhases)
-export const dashboardPhases = (({ result, ...o }) => o)(allPhases)
+export const dashboardPhases = (({ result, dismissal, ...o }) => o)(allPhases)
