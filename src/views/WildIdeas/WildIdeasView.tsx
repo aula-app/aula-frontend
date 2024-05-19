@@ -5,7 +5,7 @@ import NewWildIdea from '@/components/NewWildIdea';
 import { AppLink } from '@/components';
 import { IdeaType } from '@/types/IdeaTypes';
 import { useParams } from 'react-router-dom';
-import Idea from '@/components/Idea';
+import Idea from '@/components/IdeaBubble';
 
 interface WildIdeasProps {
   ideas: IdeaType[];

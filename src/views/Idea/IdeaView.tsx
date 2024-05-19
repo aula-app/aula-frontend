@@ -10,8 +10,9 @@ import { SingleIdeaResponseType } from '@/types/IdeaTypes';
 import NewComment from '@/components/NewComment';
 import { Add } from '@mui/icons-material';
 import { BoxResponseType } from '@/types/BoxTypes';
-import Idea from '@/components/Idea';
+import IdeaBubble from '@/components/IdeaBubble';
 import Comment from '@/components/Comment';
+import IdeaDocument from '@/components/IdeaDocument';
 
 /**
  * Renders "Idea" view
@@ -35,7 +36,7 @@ const IdeaView = () => {
       decrypt: ['content', 'displayname'],
     }).then((response: SingleIdeaResponseType) => {
       setIdea(response);
-      console.log(response)
+      console.log(response);
       displayDate = new Date(response.data.created);
     });
 
@@ -70,42 +71,40 @@ const IdeaView = () => {
   return (
     <Stack width="100%" height="100%" overflow="auto">
       {phase === 2 && <VotingCard />}
-      <Stack p={2}>
-        {phase === 3 && <VotingResults yourVote={0} />}
-        {idea.data && (
-          <Idea idea={idea.data} onReload={ideaFetch} />
-        )}
-        {idea.data && idea.data.approved != 0 && phase > 0 && (
-          <ApprovalCard comment={idea.data.approval_comment} rejected={idea.data.approved < 0} disabled={phase > 1} />
-        )}
-        {comments && (
-          <>
-            <Typography variant="h5" py={2}>
-              {String(comments.count)} Comments
-            </Typography>
-            {comments.data &&
-              comments.data.map(comment => (
-                <Comment key={comment.id} comment={comment} onReload={commentsFetch} />
-              ))}
-          </>
-        )}
-        {phase < 2 && (
-          <Stack alignItems="center">
-            <Fab
-              aria-label="add"
-              color="primary"
-              onClick={toggleDrawer(true)}
-              sx={{
-                position: 'absolute',
-                bottom: 40,
-              }}
-            >
-              <Add />
-            </Fab>
-          </Stack>
-        )}
-        <NewComment isOpen={open} closeMethod={closeDrawer} />
-      </Stack>
+      {idea.data && (
+        <Stack p={2}>
+          {phase === 3 && <VotingResults yourVote={0} />}
+          {phase === 0 ? (
+            <IdeaBubble idea={idea.data} onReload={ideaFetch} />
+          ) : (
+            <IdeaDocument idea={idea.data} onReload={ideaFetch} />
+          )}
+          {idea.data && idea.data.approved != 0 && phase > 0 && (
+            <ApprovalCard comment={idea.data.approval_comment} rejected={idea.data.approved < 0} disabled={phase > 1} />
+          )}
+          <Typography variant="h5" py={2}>
+            {String(comments.count)} Comments
+          </Typography>
+          {comments.data &&
+            comments.data.map((comment) => <Comment key={comment.id} comment={comment} onReload={commentsFetch} />)}
+          {phase < 2 && (
+            <Stack alignItems="center">
+              <Fab
+                aria-label="add"
+                color="primary"
+                onClick={toggleDrawer(true)}
+                sx={{
+                  position: 'absolute',
+                  bottom: 40,
+                }}
+              >
+                <Add />
+              </Fab>
+            </Stack>
+          )}
+          <NewComment isOpen={open} closeMethod={closeDrawer} />
+        </Stack>
+      )}
     </Stack>
   );
 };

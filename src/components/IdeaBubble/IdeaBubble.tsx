@@ -1,48 +1,44 @@
-import { CommentType } from '@/types/CommentTypes';
+import { Button, IconButton, Stack, Typography } from '@mui/material';
 import { IdeaType } from '@/types/IdeaTypes';
+import AppIcon from '../AppIcon';
+import ChatBubble from '../ChatBubble';
+import { blue } from '@mui/material/colors';
 import { localStorageGet } from '@/utils';
 import { parseJwt } from '@/utils/jwt';
-import { databaseRequest } from '@/utils/requests';
-import { ChatBubble, Favorite } from '@mui/icons-material';
-import { Box, Button, Stack, Typography, colors } from '@mui/material';
-import { blue, grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
+import { databaseRequest } from '@/utils/requests';
 
-interface IdeaBubbleProps {
-  id: number;
-  bubbleInfo: IdeaType | CommentType;
-  comments?: number;
-  liked?: boolean;
-  disabled?: boolean;
-  isComment?: boolean;
+interface Props {
+  idea: IdeaType;
+  comments?: number | null;
   onReload: () => void;
 }
-type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike' | 'CommentAddLike' | 'CommentRemoveLike';
-type Args = {user_id: number, idea_id?: number, comment_id?: number}
 
-export const IdeaBubble = ({ bubbleInfo, id, comments = 0, disabled = false, isComment = false, onReload}: IdeaBubbleProps) => {
+type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
+
+
+
+export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
-  const bubbleColor = disabled ? grey[100] : isComment ? grey[200] : blue[50];
-
-  const context = (bubbleInfo.hasOwnProperty('idea_id') ? 'Comment' : 'Idea') // check if it is a comment
-  const lowerContext = context.toLowerCase() as  'comment' | 'idea';
+  const displayDate = new Date(idea.created);
 
   const manageLike = (likeMethod: likeMethodType) => {
-    const args = { user_id: jwt_payload.user_id } as Args;
-    args[`${lowerContext}_id`] = id;
     return databaseRequest('model', {
-      model: context,
+      model: 'Idea',
       method: likeMethod,
-      arguments: args,
+      arguments: {
+        user_id: jwt_payload.user_id,
+        idea_id: idea.id,
+      },
       decrypt: [],
     });
   };
 
   const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
-  const addLike = async () => await manageLike(`${context}AddLike`).then(() => onReload());
-  const removeLike = async () => await manageLike(`${context}RemoveLike`).then(() => onReload());
+  const addLike = async () => await manageLike(`IdeaAddLike`).then(() => onReload());
+  const removeLike = async () => await manageLike(`IdeaRemoveLike`).then(() => onReload());
 
   const toggleLike = () => {
     liked ? removeLike() : addLike();
@@ -54,48 +50,42 @@ export const IdeaBubble = ({ bubbleInfo, id, comments = 0, disabled = false, isC
   }, []);
 
   return (
-    <Stack mb={1}>
-      <Box sx={{ background: bubbleColor, p: 2, borderRadius: 5, position: 'relative' }}>
-        <Box
-          className="noPrint"
-          sx={{
-            position: 'absolute',
-            bottom: 0,
-            left: '25px',
-            border: `8px solid ${bubbleColor}`,
-            borderBottomColor: 'transparent',
-            borderRightColor: 'transparent',
-            transformOrigin: 'bottom left',
-            transform: 'translateY(100%)',
-          }}
-        />
-        {!isComment && (
-          <Typography variant="h6" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap" mb={1}>
-            Title
+    <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
+      <ChatBubble color={blue[50]}>
+        <Stack>
+          <Typography variant="h6">Title</Typography>
+          <Typography mb={2}>{idea.content}</Typography>
+        </Stack>
+      </ChatBubble>
+      <Stack direction="row" alignItems="center">
+        <AppIcon name="account" size="xl" />
+        <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
+          {displayDate && (
+            <Typography variant="caption" lineHeight={1.5}>
+              {displayDate.getFullYear()}/{displayDate.getMonth()}/{displayDate.getDate()}
+            </Typography>
+          )}
+          <Typography
+            variant="overline"
+            overflow="hidden"
+            textOverflow="ellipsis"
+            fontWeight={700}
+            lineHeight={1.5}
+            maxWidth="100%"
+          >
+            {idea.displayname}
           </Typography>
+        </Stack>
+        {/* <Chip icon={<AppIcon name="settings" />} label="category" color="warning" /> */}
+        {comments && (
+          <Stack direction="row" alignItems="center" mx={1}>
+            <AppIcon name="chat" sx={{ mr: 0.5 }} />
+            {comments}
+          </Stack>
         )}
-        {bubbleInfo.content}
-      </Box>
-      <Stack direction="row" justifyContent="flex-end" alignItems="center">
-        {comments > 0 && (
-          <>
-            <Button color="secondary" sx={{ px: 0, minWidth: 40 }}>
-              <ChatBubble fontSize="small" />
-              <Typography variant="caption" pl={0.3}>
-                {comments}
-              </Typography>
-            </Button>
-          </>
-        )}
-        <Button
-          disabled={disabled}
-          color={liked ? 'primary' : 'secondary'}
-          sx={{ px: 0, minWidth: 40 }}
-          onClick={toggleLike}>
-          <Favorite fontSize="small" />
-          <Typography variant="caption" pl={0.3}>
-            {bubbleInfo.sum_likes}
-          </Typography>
+        <Button color="error" size='small' onClick={toggleLike}>
+          <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
+          {idea.sum_likes}
         </Button>
       </Stack>
     </Stack>
