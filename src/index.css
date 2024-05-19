@@ -9,3 +9,7 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+.point {
+  clip-path: polygon(20% 0%, 0% 100%, 100% 0%)
+}

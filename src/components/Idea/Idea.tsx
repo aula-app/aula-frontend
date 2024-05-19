@@ -1,28 +1,68 @@
-import { Stack, Typography } from '@mui/material';
-import { IdeaBubble } from '../IdeaBubble';
+import { Button, IconButton, Stack, Typography } from '@mui/material';
 import { IdeaType } from '@/types/IdeaTypes';
-import { useParams } from 'react-router-dom';
 import AppIcon from '../AppIcon';
+import ChatBubble from '../ChatBubble';
+import { blue } from '@mui/material/colors';
+import { localStorageGet } from '@/utils';
+import { parseJwt } from '@/utils/jwt';
+import { useEffect, useState } from 'react';
+import { databaseRequest } from '@/utils/requests';
 
 interface Props {
   idea: IdeaType;
-  disabled?: boolean;
-  onReload?: () => void;
+  comments?: number | null;
+  onReload: () => void;
 }
 
-export const Idea = ({ idea, disabled = false, onReload = () => {} }: Props) => {
-  const params = useParams();
+type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
+
+export const Idea = ({ idea, comments = null, onReload }: Props) => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
+  const [liked, setLiked] = useState(false);
   const displayDate = new Date(idea.created);
 
+  const manageLike = (likeMethod: likeMethodType) => {
+    return databaseRequest('model', {
+      model: 'Idea',
+      method: likeMethod,
+      arguments: {
+        user_id: jwt_payload.user_id,
+        idea_id: idea.id,
+      },
+      decrypt: [],
+    });
+  };
+
+  const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
+  const addLike = async () => await manageLike(`IdeaAddLike`).then(() => onReload());
+  const removeLike = async () => await manageLike(`IdeaRemoveLike`).then(() => onReload());
+
+  const toggleLike = () => {
+    liked ? removeLike() : addLike();
+    setLiked(!liked);
+  };
+
+  useEffect(() => {
+    hasLiked();
+  }, []);
+
   return (
-    <Stack width="100%" mb={2} sx={{ scrollSnapAlign: 'center' }} className="separateBottom">
-      <IdeaBubble bubbleInfo={idea} id={Number(params['idea_id'])} onReload={onReload} disabled={disabled} />
-      <Stack direction="row" alignItems="center" mt="-20px">
-        <AppIcon name="account" size='xl' />
-        <Stack ml={1} maxWidth="100%" overflow="hidden">
-          <Typography variant="caption" lineHeight={1.5}>
-            {displayDate.getFullYear()}/{displayDate.getMonth()}/{displayDate.getDate()}
-          </Typography>
+    <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
+      <ChatBubble color={blue[50]}>
+        <Stack>
+          <Typography variant="h6">Title</Typography>
+          <Typography mb={2}>{idea.content}</Typography>
+        </Stack>
+      </ChatBubble>
+      <Stack direction="row" alignItems="center">
+        <AppIcon name="account" size="xl" />
+        <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
+          {displayDate && (
+            <Typography variant="caption" lineHeight={1.5}>
+              {displayDate.getFullYear()}/{displayDate.getMonth()}/{displayDate.getDate()}
+            </Typography>
+          )}
           <Typography
             variant="overline"
             overflow="hidden"
@@ -34,9 +74,17 @@ export const Idea = ({ idea, disabled = false, onReload = () => {} }: Props) => 
             {idea.displayname}
           </Typography>
         </Stack>
-        {/* <Stack flexGrow={1} pr={1} direction="row" alignItems="center" justifyContent="flex-end">
-          <Chip label="category" color="warning" />
-        </Stack> */}
+        {/* <Chip icon={<AppIcon name="settings" />} label="category" color="warning" /> */}
+        {comments && (
+          <Stack direction="row" alignItems="center" mx={1}>
+            <AppIcon name="chat" sx={{ mr: 0.5 }} />
+            {comments}
+          </Stack>
+        )}
+        <Button color="error" size='small' onClick={toggleLike}>
+          <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
+          {idea.sum_likes}
+        </Button>
       </Stack>
     </Stack>
   );

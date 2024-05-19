@@ -8,6 +8,7 @@ import {
   ArrowRightEndOnRectangleIcon,
   BellIcon,
   CameraIcon,
+  ChatBubbleLeftIcon,
   ChatBubbleLeftRightIcon,
   CheckCircleIcon,
   ChevronDownIcon,
@@ -38,6 +39,7 @@ import {
   XCircleIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartFullIcon } from '@heroicons/react/24/solid'
 import { Box } from '@mui/material';
 import { ObjectPropByName } from '@/types/Generics';
 
@@ -60,6 +62,7 @@ const ICONS: Record<string, React.ComponentType> = {
   box: ArchiveBoxIcon,
   camera: CameraIcon,
   cancel: XCircleIcon,
+  chat: ChatBubbleLeftIcon,
   chart: PresentationChartBarIcon,
   check: CheckCircleIcon,
   close: XMarkIcon,
@@ -70,6 +73,7 @@ const ICONS: Record<string, React.ComponentType> = {
   forbid: MinusCircleIcon,
   group: UsersIcon,
   heart: HeartIcon,
+  heartfull: HeartFullIcon,
   home: HomeIcon,
   idea: LightBulbIcon,
   info: InformationCircleIcon,
@@ -115,7 +119,7 @@ const AppIcon: FunctionComponent<Props> = ({ name, icon, size = 'md', sx, ...res
           ? '40px' // size === xl
           : '24px'; // no size === md
   return (
-    <Box sx={{ width: currentSize, height: currentSize, ...sx }}>
+    <Box sx={{ minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}>
       <ComponentToRender {...restOfProps} />
     </Box>
   );

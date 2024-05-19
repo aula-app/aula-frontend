@@ -20,7 +20,7 @@ const DashBoard = ({ show = false }) => {
           alignItems: 'center',
         }}
       >
-        <Stack direction="row" width="100%" sx={{ alignItems: 'end' }}>
+        <Stack direction="row" width="100%" sx={{ alignItems: 'center' }}>
           <Typography variant="h4" sx={{ mr: 'auto', flexWrap: 'wrap' }}>
             Your Activity
           </Typography>
