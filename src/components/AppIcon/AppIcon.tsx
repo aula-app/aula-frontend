@@ -6,6 +6,7 @@ import {
   AdjustmentsVerticalIcon,
   ArchiveBoxIcon,
   ArrowRightEndOnRectangleIcon,
+  BellAlertIcon,
   BellIcon,
   CameraIcon,
   ChatBubbleLeftIcon,
@@ -16,8 +17,10 @@ import {
   Cog6ToothIcon,
   DocumentTextIcon,
   EnvelopeIcon,
+  ExclamationTriangleIcon,
   EyeIcon,
   EyeSlashIcon,
+  FunnelIcon,
   HeartIcon,
   HomeIcon,
   InformationCircleIcon,
@@ -53,23 +56,26 @@ import { ObjectPropByName } from '@/types/Generics';
  */
 const ICONS: Record<string, React.ComponentType> = {
   logo: LogoIcon,
-  add: PlusIcon,
   account: UserCircleIcon,
-  arrowdown: ChevronDownIcon,
+  add: PlusIcon,
+  alert: ExclamationTriangleIcon,
   approval: StarIcon,
+  arrowdown: ChevronDownIcon,
   avatar: UserCircleIcon,
   back: ChevronLeftIcon,
+  bell: BellAlertIcon,
   box: ArchiveBoxIcon,
   camera: CameraIcon,
   cancel: XCircleIcon,
-  chat: ChatBubbleLeftIcon,
   chart: PresentationChartBarIcon,
+  chat: ChatBubbleLeftIcon,
   check: CheckCircleIcon,
   close: XMarkIcon,
   day: SunIcon,
   delete: TrashIcon,
   discussion: ChatBubbleLeftRightIcon,
   envelope: EnvelopeIcon,
+  filter: FunnelIcon,
   forbid: MinusCircleIcon,
   group: UsersIcon,
   heart: HeartIcon,
@@ -94,9 +100,11 @@ const ICONS: Record<string, React.ComponentType> = {
   vote: VotingIcon
 };
 
+export type IconType = keyof typeof ICONS;
+
 interface Props {
-  name?: keyof typeof ICONS; // Icon's name
-  icon?: keyof typeof ICONS; // Icon's name alternate prop
+  name?: IconType; // Icon's name
+  icon?: IconType; // Icon's name alternate prop
   size?: 'sm' | 'md' | 'lg' | 'xl'; // Icon's name alternate prop,
   sx?: ObjectPropByName;
 }
