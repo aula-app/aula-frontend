@@ -36,7 +36,6 @@ const IdeaView = () => {
       decrypt: ['content', 'displayname'],
     }).then((response: SingleIdeaResponseType) => {
       setIdea(response);
-      console.log(response);
       displayDate = new Date(response.data.created);
     });
 

@@ -53,7 +53,6 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
     }).then((response) => setVote(response.count, response.data));
 
   const setVote = (hasVoted: number, vote: number) => {
-    console.log(hasVoted);
     if (hasVoted > 0) setVariant(vote > 0 ? 'voted' : vote < 0 ? 'rejected' : 'neutral');
   };
 
