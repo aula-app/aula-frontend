@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 
 import { AppButton, AppIcon } from '@/components';
-import { useState, useCallback, Fragment, FunctionComponent } from 'react';
+import { useState, useCallback, Fragment } from 'react';
 import { useNavigate } from 'react-router';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { localStorageGet } from '@/utils';

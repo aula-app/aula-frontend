@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { NotFoundView } from '..';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { Add, Delete, Inbox, Search, SubdirectoryArrowRight } from '@mui/icons-material';
+import { SubdirectoryArrowRight } from '@mui/icons-material';
 import { databaseRequest } from '@/utils/requests';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -26,6 +26,7 @@ import EditSettings from './EditSettings';
 import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
 import SettingsConfig from '@/utils/Settings';
+import { AppIcon } from '@/components';
 
 const GET_LIMIT = () => Math.floor((window.innerHeight - 200) / 55) - 1 || 10;
 
@@ -108,14 +109,14 @@ const SettingsView = () => {
     <Stack direction="column" height="100%">
       <Stack direction="row" alignItems="center">
         <Typography variant="h4" sx={{ p: 2, textTransform: 'capitalize', flex: 1 }}>
-          {setting_name}
+          {SettingsConfig[setting_name].definitions.name}
         </Typography>
         <Stack direction="row" alignItems="start" bottom={0} height={37} px={2} flex={1}>
           <TextField
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search />
+                  <AppIcon name="search" />
                 </InputAdornment>
               ),
             }}
@@ -185,7 +186,7 @@ const SettingsView = () => {
               color="secondary"
               onClick={() => setOpenDelete(true)}
             >
-              <Delete /> Delete
+              <AppIcon sx={{mr: 1}} name="delete" /> Delete
             </Button>
             {SettingsConfig[setting_name].definitions.generates && (
               <Button
@@ -194,7 +195,7 @@ const SettingsView = () => {
                 onClick={() => setOpenDelete(true)}
                 sx={{ml: 'auto', mr: 1}}
               >
-                <Inbox />
+                <AppIcon sx={{mr: 1}} name={SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName} />
                 New {SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName || ''}
               </Button>
             )}
@@ -209,7 +210,7 @@ const SettingsView = () => {
         sx={{ position: 'absolute', bottom: 40, alignSelf: 'center' }}
         onClick={() => navigate('new')}
       >
-        <Add />
+        <AppIcon name="add" />
       </Fab>
       <Stack direction="row" justifyContent="center" bottom={0}>
         {items.count && (

@@ -1,4 +1,4 @@
-import { Button, IconButton, Stack, Typography } from '@mui/material';
+import { Button, Chip, IconButton, Stack, Typography } from '@mui/material';
 import { IdeaType } from '@/types/IdeaTypes';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
@@ -10,15 +10,12 @@ import { databaseRequest } from '@/utils/requests';
 
 interface Props {
   idea: IdeaType;
-  comments?: number | null;
   onReload: () => void;
 }
 
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
-
-
-export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
+export const IdeaDocument = ({ idea, onReload }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
@@ -51,12 +48,15 @@ export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
 
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <ChatBubble color={blue[50]}>
-        <Stack>
-          <Typography variant="h6">Title</Typography>
-          <Typography mb={2}>{idea.content}</Typography>
-        </Stack>
-      </ChatBubble>
+      <Typography variant="h6">Title</Typography>
+      <Typography mb={2}>{idea.content}</Typography>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" pb={2}>
+        <Chip icon={<AppIcon name="settings" />} label="category" color="warning" />
+        <Button color="error" size="small" onClick={toggleLike}>
+          <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
+          {idea.sum_likes}
+        </Button>
+      </Stack>
       <Stack direction="row" alignItems="center">
         <AppIcon name="account" size="xl" />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
@@ -76,20 +76,9 @@ export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
             {idea.displayname}
           </Typography>
         </Stack>
-        {/* <Chip icon={<AppIcon name="settings" />} label="category" color="warning" /> */}
-        {comments && (
-          <Stack direction="row" alignItems="center" mx={1}>
-            <AppIcon name="chat" sx={{ mr: 0.5 }} />
-            {comments}
-          </Stack>
-        )}
-        <Button color="error" size='small' onClick={toggleLike}>
-          <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
-          {idea.sum_likes}
-        </Button>
       </Stack>
     </Stack>
   );
 };
 
-export default IdeaBubble;
+export default IdeaDocument;

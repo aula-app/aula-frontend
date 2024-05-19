@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 const definitions = {
-  name: 'Texts',
+  name: 'Messages',
   itemName: 'Text',
 };
 

@@ -1,6 +1,7 @@
 export interface IdeaType {
   id: number;
   content: string;
+  title: string;
   sum_likes: number;
   sum_votes: number;
   number_of_votes: number;

@@ -8,6 +8,8 @@ import IdeasBoxesView from '@/views/IdeasBoxes';
 import { databaseRequest } from '@/utils/requests';
 import { IdeasResponseType } from '@/types/IdeaTypes';
 import { BoxesResponseType } from '@/types/BoxTypes';
+import { AppIcon } from '@/components';
+import { green, grey, lightGreen, teal, yellow } from '@mui/material/colors';
 
 function a11yProps(index: number) {
   return {
@@ -69,7 +71,7 @@ const RoomView = () => {
         <TabPanel value="boxes" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
           <IdeasBoxesView boxes={boxes.data || []} />
         </TabPanel>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
             value={tab}
             onChange={handleChange}
@@ -78,17 +80,21 @@ const RoomView = () => {
             variant="fullWidth"
             aria-label="Tabbed Navigation"
             sx={{
+              bgcolor: yellow[100],
               '.MuiTabs-indicator': {
                 top: 0,
-                bottom: 'auto',
+                bottom: 'auto'
               },
+              '.MuiTab-labelIcon': {
+                textTransform: 'none'
+              }
             }}
           >
             <Tab
               value="ideas"
               icon={
                 <Stack direction="row" alignItems="center">
-                  <Lightbulb sx={{ mr: 1 }} />
+                  <AppIcon name="idea" />
                   {String(ideas.count)}
                 </Stack>
               }
@@ -99,7 +105,7 @@ const RoomView = () => {
               value="boxes"
               icon={
                 <Stack direction="row" alignItems="center">
-                  <Inbox sx={{ mr: 1 }} />
+                  <AppIcon name="box" />
                   {String(boxes.count)}
                 </Stack>
               }

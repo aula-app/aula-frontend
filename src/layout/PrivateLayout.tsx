@@ -63,7 +63,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       <Stack component="header">
         <TopBar
           startNode={location.length <= 2
-            ? <Box sx={{width: '40px', height: '40px', padding: "2px"}}><AppIcon icon="logo" /></Box> 
+            ? <Box sx={{width: '40px', height: '40px', padding: "2px"}}><AppIcon icon="logo" size='lg' /></Box> 
               : <AppIconButton icon="back" onClick={() => navigation(-1)} />}
           home={title}
           path={location}

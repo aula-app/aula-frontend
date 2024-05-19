@@ -1,39 +1,19 @@
-import { Box, Button, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import { RoomCard } from '@/components/RoomCard';
-import { NotificationsBar } from '@/components/NotificationsBar';
-import { UserStats } from '@/components/UserStats';
-import { blueGrey } from '@mui/material/colors';
 import React, { useEffect, useState } from 'react';
 import { RoomsResponseType } from '@/types/RoomTypes';
 import { databaseRequest } from '@/utils/requests';
-import { AppLink } from '@/components';
-import { useSwipeable } from 'react-swipeable';
+import DashBoard from '@/components/DashBoard';
 
 const WelcomeView = () => {
-  const [scrollTop, setScrollTop] = useState(0);
   const [rooms, setRooms] = useState({} as RoomsResponseType);
   const [showNotificationsBar, setNotificationsBar] = useState(true);
-  const handlers = useSwipeable({
-    onSwipedDown: () => setNotificationsBar(true),
-    onSwipedUp: () => setNotificationsBar(false),
-  })
 
   const roomsFetch = async () =>
-    await databaseRequest('rooms', {})
-    .then((response: RoomsResponseType) => setRooms(response));
+    await databaseRequest('rooms', {}).then((response: RoomsResponseType) => setRooms(response));
 
   const handleScroll = (event: React.UIEvent<HTMLElement>) => {
-    setScrollTop(event.currentTarget.scrollTop);
-    if (scrollTop === 0 && showNotificationsBar) {
-      setNotificationsBar(true);
-    } else if (showNotificationsBar) {
-      setNotificationsBar(false);
-    }
-  };
-
-  const toggleNotifications = () => {
-    const newValue = !showNotificationsBar;
-    setNotificationsBar(newValue);
+    setNotificationsBar(event.currentTarget.scrollTop === 0);
   };
 
   useEffect(() => {
@@ -41,71 +21,38 @@ const WelcomeView = () => {
   }, []);
 
   return (
-    <Stack
-      height="100%"
-      flexGrow={1}
-      position="relative"
-      onScroll={handleScroll}
-      onMouseEnter={() => setNotificationsBar(true)}
-      sx={{
-        px: 2,
-        overflowY: 'auto',
-        scrollSnapType: 'y mandatory',
-      }}
-    >
-      <Paper
-        elevation={6}
-        className='noRepeat'
+    <Stack height="100%">
+      <DashBoard show={showNotificationsBar} />
+      <Stack
+        flexGrow={1}
+        position="relative"
+        onScroll={handleScroll}
+        onMouseEnter={() => setNotificationsBar(true)}
         sx={{
-          position: 'fixed',
-          top: 56,
-          left: 0,
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          bgcolor: blueGrey[50],
-          maxHeight: `${showNotificationsBar ? 250 : 25}px`,
-          overflow: 'clip',
-          transition: 'all .5s ease-in-out',
-          zIndex: 300,
+          px: 2,
+          overflowY: 'auto',
+          scrollSnapType: 'y mandatory',
         }}
       >
-        <NotificationsBar />
-        <Stack p={2} pt={0} width="100%">
-          <Typography variant="h4" pt={2}>
-            Your Activity
-          </Typography>
-          <UserStats />
-        </Stack>
-        <Box position="absolute" bottom={0} width="100%" bgcolor={blueGrey[50]}>
-          <Button
-            sx={{ width: '100%', py: 1 }}
-            onClick={toggleNotifications}
-            {...handlers}>
-            <Divider sx={{ width: '50%' }} variant="middle" />
-          </Button>
-        </Box>
-      </Paper>
-      <Typography
-        variant="h4"
-        pt={scrollTop === 0 && showNotificationsBar ? 30 : 4}
-        className="noSpace"
-        sx={{
-          scrollSnapAlign: 'start',
-          transition: 'all .5s ease-in-out',
-        }}
-      >
-        Rooms
-      </Typography>
-      {rooms && rooms.data &&
-        rooms.data.map((room) => (
-          <Grid key={room.id} item xs={12} md={4} my={2} sx={{ scrollSnapAlign: 'center' }}>
-            <AppLink to={`/room/${room.id}/ideas`}>
-              <RoomCard room={room} key={room.id} />
-            </AppLink>
-          </Grid>
-        ))}
+        <Typography
+          variant="h4"
+          className="noSpace"
+          sx={{
+            pt: 2,
+            scrollSnapAlign: 'start',
+            transition: 'all .5s ease-in-out',
+          }}
+        >
+          Rooms
+        </Typography>
+        {rooms &&
+          rooms.data &&
+          rooms.data.map(room => (
+            <Grid key={room.id} item xs={12} my={1} sx={{ scrollSnapAlign: 'center' }}>
+              <RoomCard room={room} />
+            </Grid>
+          ))}
+      </Stack>
     </Stack>
   );
 };

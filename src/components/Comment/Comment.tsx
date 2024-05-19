@@ -1,44 +1,41 @@
 import { Button, IconButton, Stack, Typography } from '@mui/material';
-import { IdeaType } from '@/types/IdeaTypes';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
-import { blue } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
+import { CommentType } from '@/types/CommentTypes';
 import { localStorageGet } from '@/utils';
 import { parseJwt } from '@/utils/jwt';
 import { useEffect, useState } from 'react';
 import { databaseRequest } from '@/utils/requests';
 
 interface Props {
-  idea: IdeaType;
-  comments?: number | null;
+  comment: CommentType;
   onReload: () => void;
 }
 
-type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
+type likeMethodType = 'getLikeStatus' | 'CommentAddLike' | 'CommentRemoveLike';
 
-
-
-export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
+export const Comment = ({ comment, onReload }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
-  const displayDate = new Date(idea.created);
+  const displayDate = new Date(comment.created);
 
   const manageLike = (likeMethod: likeMethodType) => {
     return databaseRequest('model', {
-      model: 'Idea',
+      model: 'Comment',
       method: likeMethod,
       arguments: {
         user_id: jwt_payload.user_id,
-        idea_id: idea.id,
+        comment_id: comment.id,
       },
       decrypt: [],
     });
   };
 
   const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
-  const addLike = async () => await manageLike(`IdeaAddLike`).then(() => onReload());
-  const removeLike = async () => await manageLike(`IdeaRemoveLike`).then(() => onReload());
+  const addLike = async () => await manageLike(`CommentAddLike`).then(() => onReload());
+  const removeLike = async () => await manageLike(`CommentRemoveLike`).then(() => onReload());
 
   const toggleLike = () => {
     liked ? removeLike() : addLike();
@@ -51,15 +48,14 @@ export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
 
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <ChatBubble color={blue[50]}>
+      <ChatBubble color={grey[200]}>
         <Stack>
-          <Typography variant="h6">Title</Typography>
-          <Typography mb={2}>{idea.content}</Typography>
+          <Typography mb={2}>{comment.content}</Typography>
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <AppIcon name="account" size="xl" />
-        <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
+        <AppIcon name="account" size="lg" />
+        <Stack maxWidth="100%" overflow="hidden" ml={2} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>
               {displayDate.getFullYear()}/{displayDate.getMonth()}/{displayDate.getDate()}
@@ -73,23 +69,16 @@ export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
             lineHeight={1.5}
             maxWidth="100%"
           >
-            {idea.displayname}
+            {comment.username}
           </Typography>
         </Stack>
-        {/* <Chip icon={<AppIcon name="settings" />} label="category" color="warning" /> */}
-        {comments && (
-          <Stack direction="row" alignItems="center" mx={1}>
-            <AppIcon name="chat" sx={{ mr: 0.5 }} />
-            {comments}
-          </Stack>
-        )}
         <Button color="error" size='small' onClick={toggleLike}>
           <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
-          {idea.sum_likes}
+          {comment.sum_likes}
         </Button>
       </Stack>
     </Stack>
   );
 };
 
-export default IdeaBubble;
+export default Comment;

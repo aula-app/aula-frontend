@@ -27,7 +27,7 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
   {
     title: 'Users',
     path: '/settings/users',
-    icon: 'users',
+    icon: 'group',
   },
   {
     title: 'Rooms',
@@ -45,9 +45,9 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     icon: 'box',
   },
   {
-    title: 'Texts',
+    title: 'Messages',
     path: '/settings/texts',
-    icon: 'texts',
+    icon: 'envelope',
   },
   {
     title: 'About',
@@ -113,7 +113,7 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
         <Stack direction="row" pb={2}>
           <Tooltip title={state.darkMode ? 'Light mode' : 'Dark mode'}>
             <Button color="secondary" onClick={onSwitchDarkMode}>
-              <AppIcon icon="daynight" />
+              <AppIcon icon={state.darkMode ? 'day' : 'night'} />
             </Button>
           </Tooltip>
           <Tooltip title="Print" sx={{ mx: 'auto' }}>

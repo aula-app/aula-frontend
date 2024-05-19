@@ -1,7 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { AppLink } from '..';
-import phases from '@/utils/phases';
+import {phases} from '@/utils/phases';
 import { useParams } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
 import { IdeaType } from '@/types/IdeaTypes';
@@ -19,9 +19,6 @@ interface IdeaCardProps {
 type variant = 'discussion' | 'approved' | 'dismissed' | 'voting' | 'voted' | 'neutral' | 'rejected';
 
 const displayPhases = Object.keys(Object.freeze(phases)) as Array<keyof typeof phases>;
-if (displayPhases.includes('success')) displayPhases.splice(displayPhases.indexOf('success'), 1);
-if (displayPhases.includes('reject')) displayPhases.splice(displayPhases.indexOf('reject'), 1);
-if (displayPhases.includes('wild')) displayPhases.splice(displayPhases.indexOf('wild'), 1);
 /**
  * Renders "IdeaCard" component
  */
@@ -56,7 +53,6 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
     }).then((response) => setVote(response.count, response.data));
 
   const setVote = (hasVoted: number, vote: number) => {
-    console.log(hasVoted);
     if (hasVoted > 0) setVariant(vote > 0 ? 'voted' : vote < 0 ? 'rejected' : 'neutral');
   };
 
