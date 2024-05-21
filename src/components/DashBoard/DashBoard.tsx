@@ -8,7 +8,7 @@ const DashBoard = ({ show = false }) => {
   return (
     <Box
       sx={{
-        maxHeight: `${show ? 250 : 0}px`,
+        maxHeight: `${show ? 15 : 3.75}rem`,
         overflow: 'clip',
         transition: 'all .5s ease-in-out',
       }}
@@ -21,7 +21,10 @@ const DashBoard = ({ show = false }) => {
         }}
       >
         <Stack direction="row" width="100%" sx={{ alignItems: 'center' }}>
-          <Typography variant="h4" sx={{ mr: 'auto', flexWrap: 'wrap' }}>
+          <Typography
+            variant="h4"
+            sx={{ mr: 'auto', flexWrap: 'wrap', opacity: `${show ? 100 : 0}%`, transition: 'opacity .5s ease-in-out' }}
+          >
             Your Activity
           </Typography>
           <Badge badgeContent={2} color="primary" sx={{ mx: 1 }}>
@@ -31,7 +34,7 @@ const DashBoard = ({ show = false }) => {
             <AppIcon name="heart" />
           </Badge>
         </Stack>
-        <Grid container spacing={1} py={1}>
+        <Grid container spacing={1} py={1} sx={{opacity: `${show ? 100 : 0}%`, transition: 'opacity .5s ease-in-out'}}>
           {displayPhases.map((phase, key) => (
             <Grid item xs={6} sm={4} md={2} key={key}>
               <Box
@@ -56,7 +59,7 @@ const DashBoard = ({ show = false }) => {
                   >
                     {dashboardPhases[phase].name}
                   </Box>
-                  {Math.floor(Math.random()*11)}
+                  {Math.floor(Math.random() * 11)}
                 </Stack>
               </Box>
             </Grid>

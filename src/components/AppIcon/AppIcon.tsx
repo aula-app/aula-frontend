@@ -3,9 +3,9 @@ import LogoIcon from './logo.svg?react';
 import VotingIcon from './voting.svg?react';
 import {
   AcademicCapIcon,
-  AdjustmentsVerticalIcon,
   ArchiveBoxIcon,
   ArrowRightEndOnRectangleIcon,
+  Bars3Icon,
   BellIcon,
   CameraIcon,
   ChatBubbleLeftIcon,
@@ -79,7 +79,7 @@ const ICONS: Record<string, React.ComponentType> = {
   info: InformationCircleIcon,
   login: UserIcon,
   logout: ArrowRightEndOnRectangleIcon,
-  menu: AdjustmentsVerticalIcon,
+  menu: Bars3Icon,
   night: MoonIcon,
   notifications: BellIcon,
   print: PrinterIcon,
