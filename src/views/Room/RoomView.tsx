@@ -80,7 +80,7 @@ const RoomView = () => {
             variant="fullWidth"
             aria-label="Tabbed Navigation"
             sx={{
-              bgcolor: yellow[100],
+              bgcolor: grey[200],
               '.MuiTabs-indicator': {
                 top: 0,
                 bottom: 'auto'
