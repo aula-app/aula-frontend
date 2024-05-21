@@ -33,7 +33,7 @@ const DashBoard = ({ show = false }) => {
         </Stack>
         <Grid container spacing={1} py={1}>
           {displayPhases.map((phase, key) => (
-            <Grid item xs={6} key={key}>
+            <Grid item xs={6} sm={4} md={2} key={key}>
               <Box
                 sx={{
                   py: 1,
