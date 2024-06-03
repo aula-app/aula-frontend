@@ -1,10 +1,12 @@
-import { Badge, Box, Grid, Stack, Typography } from '@mui/material';
+import { Badge, Box, Grid, IconButton, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
 import { dashboardPhases } from '@/utils/phases';
+import { useNavigate } from 'react-router-dom';
 
 const displayPhases = Object.keys(Object.freeze(dashboardPhases)) as Array<keyof typeof dashboardPhases>;
 
 const DashBoard = ({ show = false }) => {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -27,14 +29,23 @@ const DashBoard = ({ show = false }) => {
           >
             Your Activity
           </Typography>
-          <Badge badgeContent={2} color="primary" sx={{ mx: 1 }}>
-            <AppIcon name="envelope" />
+          <Badge badgeContent={2} color="primary">
+            <IconButton onClick={() => navigate('/messages')}>
+              <AppIcon name="envelope" />
+            </IconButton>
           </Badge>
           <Badge badgeContent={16} color="primary" sx={{ mx: 1 }}>
-            <AppIcon name="heart" />
+            <IconButton>
+              <AppIcon name="heart" />
+            </IconButton>
           </Badge>
         </Stack>
-        <Grid container spacing={1} py={1} sx={{opacity: `${show ? 100 : 0}%`, transition: 'opacity .5s ease-in-out'}}>
+        <Grid
+          container
+          spacing={1}
+          py={1}
+          sx={{ opacity: `${show ? 100 : 0}%`, transition: 'opacity .5s ease-in-out' }}
+        >
           {displayPhases.map((phase, key) => (
             <Grid item xs={6} sm={4} md={2} key={key}>
               <Box
