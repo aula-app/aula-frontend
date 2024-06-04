@@ -1,8 +1,8 @@
 import { PaletteOptions, SimplePaletteColorOptions } from '@mui/material';
 
 const COLOR_PRIMARY: SimplePaletteColorOptions = {
-  main: '#00c752',
-  contrastText: '#FFFFFF',
+  main: '#7DE293',
+  contrastText: '#000000',
 };
 
 const COLOR_SECONDARY: SimplePaletteColorOptions = {
