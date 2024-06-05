@@ -70,7 +70,7 @@ export const filledStylesByNames = (theme: Theme) => ({
   default: {
     // MUI 5.x removes 'default' color from Button, we need to fix this
     backgroundColor: theme.palette.grey[300],
-    color: 'rgba(0, 0, 0, 0.87)', // Value as theme.palette.text.primary in Light Mode
+    color: '#1C1D1F', // Value as theme.palette.text.primary in Light Mode
   },
   primary: {
     backgroundColor: theme.palette.primary.main,
