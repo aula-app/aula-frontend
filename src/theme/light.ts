@@ -7,8 +7,8 @@ import { PALETTE_COLORS } from './colors';
 export const LIGHT_THEME: ThemeOptions = {
   palette: {
     mode: 'light',
-     background: {
-      default: '#FFFFFF'
+    background: {
+      default: '#FFFFFF',
     },
     ...PALETTE_COLORS,
   },

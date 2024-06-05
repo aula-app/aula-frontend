@@ -44,7 +44,6 @@ const DashBoard = ({ show = false }) => {
                   backgroundColor: dashboardPhases[phase].color,
                   borderRadius: 9999,
                   textTransform: 'none',
-                  color: '#000',
                 }}
               >
                 <Stack direction="row" alignItems="center" width="100%">
