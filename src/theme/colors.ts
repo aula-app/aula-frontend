@@ -2,26 +2,32 @@ import { PaletteOptions, SimplePaletteColorOptions } from '@mui/material';
 
 const COLOR_PRIMARY: SimplePaletteColorOptions = {
   main: '#7DE293',
+  contrastText: 'inherit',
 };
 
 const COLOR_SECONDARY: SimplePaletteColorOptions = {
   main: '#a6a6a6',
+  contrastText: 'inherit',
 };
 
 const COLOR_ERROR: SimplePaletteColorOptions = {
   main: '#EF9A9A',
+  contrastText: 'inherit',
 };
 
 const COLOR_WARNING: SimplePaletteColorOptions = {
   main: '#ffdc82',
+  contrastText: 'inherit',
 };
 
 const COLOR_INFO: SimplePaletteColorOptions = {
   main: '#00c8ff',
+  contrastText: 'inherit',
 };
 
 const COLOR_SUCCESS: SimplePaletteColorOptions = {
   main: '#93cf4b',
+  contrastText: 'inherit',
 };
 
 /**

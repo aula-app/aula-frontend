@@ -7,10 +7,10 @@ import { PALETTE_COLORS } from './colors';
 export const DARK_THEME: ThemeOptions = {
   palette: {
     mode: 'dark',
-    // background: {
-    //   paper: '#424242', // Gray 800 - Background of "Paper" based component
-    //   default: '#121212',
-    // },
+    background: {
+      paper: '#535353', // Gray 800 - Background of "Paper" based component
+      default: '#424242',
+    },
     ...PALETTE_COLORS,
   },
 };
