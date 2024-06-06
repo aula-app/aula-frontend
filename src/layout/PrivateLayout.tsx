@@ -1,10 +1,14 @@
 import { useState, FunctionComponent, PropsWithChildren } from 'react';
 import { Stack } from '@mui/material';
 import { ErrorBoundary } from '@/components';
+import { useState, FunctionComponent, PropsWithChildren } from 'react';
+import { Stack } from '@mui/material';
+import { ErrorBoundary } from '@/components';
 import { useOnMobile } from '@/hooks/layout';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import TopBar from './TopBar';
 import SideBar from './SideBar';
+import PhaseBar from './PhaseBar';
 
 const TITLE_PRIVATE = 'aula';
 
@@ -12,6 +16,7 @@ const TITLE_PRIVATE = 'aula';
  * Renders "Private Layout" composition
  * @component PrivateLayout
  */
+
 
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [sideBarVisible, setSideBarVisible] = useState(false);
@@ -58,7 +63,8 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     >
       <TopBar home={title} menuToggle={onSideBarOpen} />
       <SideBar anchor={SIDEBAR_DESKTOP_ANCHOR} open={sidebarOpen} variant={sidebarVariant} onClose={onSideBarClose} />
-
+      <PhaseBar />
+      
       <Stack component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
       </Stack>
