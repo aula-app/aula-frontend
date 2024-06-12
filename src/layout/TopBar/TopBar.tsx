@@ -17,13 +17,15 @@ const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) 
   const displayPath = location.filter((curPath) => /.*[a-zA-Z].*/.test(curPath));
   const goto = useNavigate();
 
+  const returnLocation = () => Number(location[location.length - 1]) ? location.splice(0, location.length - 2) : location.splice(0, location.length - 3)
+
   return (
     <AppBar elevation={0}>
       <Toolbar>
         {location.length <= 2 ? (
           <AppIcon icon="logo" size="large" />
         ) : (
-          <AppIconButton icon="back" onClick={() => goto(location.join('/'))} />
+          <AppIconButton icon="back" onClick={() => goto(returnLocation().join('/'))} />
         )}
 
         <Breadcrumbs aria-label="breadcrumb" sx={{ flexGrow: 1, textAlign: 'center' }}>
