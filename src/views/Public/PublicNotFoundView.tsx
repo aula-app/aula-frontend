@@ -8,7 +8,7 @@ const NotFoundViewView = () => (
     <p>The page you are trying to access requires authentication</p>
     <p>
         Please consider&nbsp;
-        <AppLink color="primary" component={AppLink} to="/">
+        <AppLink color="success" component={AppLink} to="/">
           signing in
         </AppLink>
       </p>

@@ -1,10 +1,14 @@
-import { Badge, Box, Grid, Stack, Typography } from '@mui/material';
+import { Badge, Box, Button, Fade, Grid, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
 import { dashboardPhases } from '@/utils/phases';
 
+interface Props {
+  show: boolean
+}
+
 const displayPhases = Object.keys(Object.freeze(dashboardPhases)) as Array<keyof typeof dashboardPhases>;
 
-const DashBoard = ({ show = false }) => {
+const DashBoard = ({ show }: Props) => {
   return (
     <Box
       sx={{
@@ -21,12 +25,16 @@ const DashBoard = ({ show = false }) => {
         }}
       >
         <Stack direction="row" width="100%" sx={{ alignItems: 'center' }}>
-          <Typography
-            variant="h4"
-            sx={{ mr: 'auto', flexWrap: 'wrap', opacity: `${show ? 100 : 0}%`, transition: 'opacity .5s ease-in-out' }}
-          >
-            Your Activity
-          </Typography>
+          <Fade in={show}>
+            <Typography variant="h4" sx={{ mr: 'auto', flexWrap: 'wrap', transition: 'opacity .5s ease-in-out' }}>
+              Your Activity
+            </Typography>
+          </Fade>
+          <Fade in={!show}>
+            <Button color="secondary" sx={{ position: 'absolute', mt: -1, flex: 1 }}>
+              <AppIcon name="arrowdown" />
+            </Button>
+          </Fade>
           <Badge badgeContent={2} color="primary" sx={{ mx: 1 }}>
             <AppIcon name="envelope" />
           </Badge>
@@ -34,7 +42,12 @@ const DashBoard = ({ show = false }) => {
             <AppIcon name="heart" />
           </Badge>
         </Stack>
-        <Grid container spacing={1} py={1} sx={{opacity: `${show ? 100 : 0}%`, transition: 'opacity .5s ease-in-out'}}>
+        <Grid
+          container
+          spacing={1}
+          py={1}
+          sx={{ opacity: `${show ? 100 : 0}%`, transition: 'opacity .5s ease-in-out' }}
+        >
           {displayPhases.map((phase, key) => (
             <Grid item xs={6} sm={4} md={2} key={key}>
               <Box
@@ -64,11 +77,6 @@ const DashBoard = ({ show = false }) => {
             </Grid>
           ))}
         </Grid>
-        {/* <Box position="absolute" bottom={0} width="100%" bgcolor={blueGrey[50]}>
-        <Button sx={{ width: '100%', py: 1 }} onClick={toggleNotifications} {...handlers}>
-          <Divider sx={{ width: '50%' }} variant="middle" />
-        </Button>
-      </Box> */}
       </Stack>
     </Box>
   );

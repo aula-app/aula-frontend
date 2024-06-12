@@ -21,7 +21,7 @@ const COLOR_INFO: SimplePaletteColorOptions = {
 };
 
 const COLOR_SUCCESS: SimplePaletteColorOptions = {
-  main: 'hsl(110, 65%, 70%)',
+  main: 'hsl(113, 65%, 60%)',
 };
 
 /**
