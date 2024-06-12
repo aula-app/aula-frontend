@@ -59,8 +59,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     >
       <TopBar home={title} menuToggle={onSideBarOpen} />
       <SideBar anchor={SIDEBAR_DESKTOP_ANCHOR} open={sidebarOpen} variant={sidebarVariant} onClose={onSideBarClose} />
-      <PhaseBar />
-      
+
       <Stack component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
       </Stack>

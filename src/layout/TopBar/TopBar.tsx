@@ -1,4 +1,4 @@
-import { AppIconButton } from '@/components';
+import { AppIcon, AppIconButton } from '@/components';
 import { AppBar, Breadcrumbs, Link, Toolbar } from '@mui/material';
 import { FunctionComponent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -12,18 +12,20 @@ interface Props {
  * Renders TopBar composition
  * @component TopBar
  */
-const TopBar: FunctionComponent<Props> = ({home, menuToggle, ...restOfProps }) => {
+const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) => {
   const location = useLocation().pathname.split('/');
   const displayPath = location.filter((curPath) => /.*[a-zA-Z].*/.test(curPath));
-  const goto = useNavigate()
+  const goto = useNavigate();
+
+  const returnLocation = () => Number(location[location.length - 1]) ? location.splice(0, location.length - 2) : location.splice(0, location.length - 3)
 
   return (
     <AppBar elevation={0}>
       <Toolbar>
         {location.length <= 2 ? (
-            <AppIconButton icon="logo" size="large" />
+          <AppIcon icon="logo" size="large" />
         ) : (
-          <AppIconButton icon="back" onClick={() => goto(location.join('/'))} />
+          <AppIconButton icon="back" onClick={() => goto(returnLocation().join('/'))} />
         )}
 
         <Breadcrumbs aria-label="breadcrumb" sx={{ flexGrow: 1, textAlign: 'center' }}>

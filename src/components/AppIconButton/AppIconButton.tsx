@@ -35,6 +35,7 @@ const AppIconButton: FunctionComponent<Props> = ({
   children,
   disabled,
   icon,
+  size,
   sx,
   title,
   ...restOfProps
@@ -64,7 +65,7 @@ const AppIconButton: FunctionComponent<Props> = ({
         sx={sxToRender}
         {...restOfProps}
       >
-        <AppIcon icon={icon} />
+        <AppIcon icon={icon} size={size} />
         {children}
       </IconButton>
     );
