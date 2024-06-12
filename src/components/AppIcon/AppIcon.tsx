@@ -97,7 +97,7 @@ const ICONS: Record<string, React.ComponentType> = {
 interface Props {
   name?: keyof typeof ICONS; // Icon's name
   icon?: keyof typeof ICONS; // Icon's name alternate prop
-  size?: 'sm' | 'md' | 'lg' | 'xl'; // Icon's name alternate prop,
+  size?: 'small' | 'medium' | 'large' | 'xl'; // Icon's name alternate prop,
   sx?: ObjectPropByName;
 }
 
@@ -111,9 +111,9 @@ const AppIcon: FunctionComponent<Props> = ({ name, icon, size = 'md', sx, ...res
   const iconName = (name || icon || 'default').trim().toLowerCase();
   const ComponentToRender = ICONS[iconName] || ICONS.default;
   const currentSize =
-    size === 'sm'
+    size === 'small'
       ? '16px'
-      : size === 'lg'
+      : size === 'large'
         ? '32px'
         : size === 'xl'
           ? '40px' // size === xl
