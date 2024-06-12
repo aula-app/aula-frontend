@@ -27,6 +27,7 @@ const IdeasBoxView = () => {
     }).then((response) => setBoxes(response));
 
   useEffect(() => {
+    //@ts-ignore
     if(params.phase && Object.hasOwn(phases, params.phase)) boxesFetch(phases[params.phase].id)
     else goto('/error');
   }, []);
