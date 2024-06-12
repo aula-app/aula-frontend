@@ -27,3 +27,4 @@ const IdeasBoxView = ({ boxes }: BoxesProps) => {
 };
 
 export default IdeasBoxView;
+

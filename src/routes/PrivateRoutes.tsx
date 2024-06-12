@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
 import SettingsView from '@/views/Settings';
@@ -14,12 +14,6 @@ import AskConsentView from '@/views/AskConsent';
  * List of routes available only for authenticated users
  * Also renders the "Private Layout" composition
  */
-
-function DefaultRoom() {
-  // Get the userId param from the URL.
-  let { room_id } = useParams();
-  return (<Navigate to={`/room/${room_id}/ideas`} replace />)
-}
 
 const PrivateRoutes = () => (
   <Routes>

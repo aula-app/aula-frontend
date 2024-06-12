@@ -1,26 +1,35 @@
 import { AppIcon } from '@/components';
-import { allPhases, phases } from '@/utils/phases';
+import { phases } from '@/utils/phases';
 import { Link, Stack } from '@mui/material';
-import { FunctionComponent } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 
 /**
  * Renders TopBar composition
  * @component PhaseBar
  */
-const PhaseBar: FunctionComponent = ({}) => {
+
+
+const PhaseBar = () => {
+  const params = useParams();
   const displayPhases = Object.keys(Object.freeze(phases)) as Array<keyof typeof phases>;
   const location = useLocation().pathname.split('/');
-  console.log(location.includes(allPhases['wild'].path))
+  const [currentPhase, setPhase] = useState('ideas')
+
+  const getPhase = () => setPhase(params.phase && Object.keys(phases).includes(params.phase) ? params.phase : 'ideas')
+
+  useEffect(getPhase, [location.join('/')])
+
   return (
     <Stack direction="row" py={1}>
       {displayPhases.map((phase) => (
         <Link
-          href={`${location.slice(0, 3).join('/')}/${allPhases[phase].path}`}
+          key={phase}
+          href={`${location.slice(0, 3).join('/')}/${phase}`}
           sx={{
             color: 'inherit',
             textDecoration: 'none',
-            flex: location.includes(allPhases[phase].path) ? 1 : 0
+            flex: phase === currentPhase ? 1 : 0
           }}>
           <Stack
             key={phase}
@@ -34,7 +43,7 @@ const PhaseBar: FunctionComponent = ({}) => {
             }}
           >
             <AppIcon name={phases[phase].icon} />
-            {location.includes(allPhases[phase].path) ? allPhases[phase].name : ''}
+            {currentPhase === phase ? phases[phase].name : ''}
           </Stack>
         </Link>
       ))}
