@@ -5,7 +5,6 @@ import { useOnMobile } from '@/hooks/layout';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import TopBar from './TopBar';
 import SideBar from './SideBar';
-import PhaseBar from './PhaseBar';
 
 const TITLE_PRIVATE = 'aula';
 

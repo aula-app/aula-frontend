@@ -21,7 +21,7 @@ const RoomCard = ({ room }: RoomCardProps) => {
           color: 'inherit'
         }}
         component={Link}
-        href={`/room/${room.id}/ideas`}>
+        href={`/room/${room.id}`}>
         <CardContent>
           <Typography variant="h6" noWrap>
             {capitalize(room.room_name)}

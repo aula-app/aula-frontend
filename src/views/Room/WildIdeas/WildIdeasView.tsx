@@ -1,30 +1,40 @@
 import { Fab, Stack } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NewWildIdea from '@/components/NewWildIdea';
 import { AppLink } from '@/components';
-import { IdeaType } from '@/types/IdeaTypes';
+import { IdeasResponseType } from '@/types/IdeaTypes';
 import { useParams } from 'react-router-dom';
 import Idea from '@/components/IdeaBubble';
-
-interface WildIdeasProps {
-  ideas: IdeaType[];
-  reload: () => void;
-}
+import { databaseRequest } from '@/utils/requests';
 
 /**
  * Renders "WildIdeas" view
- * url: /room/:room_id
+ * url: /room/:room_id/ideas
  */
-const WildIdeas = ({ ideas, reload }: WildIdeasProps) => {
+
+const WildIdeas = () => {
   const params = useParams();
   const [open, setOpen] = useState(false);
+  const [ideas, setIdeas] = useState({} as IdeasResponseType);
+
+  const ideasFetch = async () =>
+    await databaseRequest('model', {
+      model: 'Idea',
+      method: 'getIdeasByRoom',
+      arguments: { room_id: Number(params['room_id']) },
+      decrypt: ['displayname', 'content'],
+  }).then((response) => setIdeas(response));
 
   const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
   const closeDrawer = () => {
     setOpen(false);
-    reload();
+    ideasFetch();
   };
+
+  useEffect(() => {
+    ideasFetch();
+  }, [])
 
   return (
     <Stack alignItems="center" width="100%" px={1}>
@@ -40,9 +50,9 @@ const WildIdeas = ({ ideas, reload }: WildIdeasProps) => {
         <Add />
       </Fab>
       <NewWildIdea isOpen={open} closeMethod={closeDrawer} />
-      {ideas.map((idea) => (
+      {ideas.data && ideas.data.map((idea) => (
         <AppLink to={`/room/${params['room_id']}/idea/${idea.id}`} width="100%" key={idea.id}>
-          <Idea idea={idea} onReload={reload} key={idea.id}  />
+          <Idea idea={idea} onReload={ideasFetch} key={idea.id}  />
         </AppLink>
       ))}
     </Stack>

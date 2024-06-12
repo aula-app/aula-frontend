@@ -1,7 +1,8 @@
 import { green, amber, deepPurple, deepOrange, blue, grey, red } from '@mui/material/colors';
 
 export const allPhases = {
-    wild: {
+    ideas: {
+      id: 0,
       name: 'Wild Ideas',
       path: 'ideas',
       description: 'Wild Ideas',
@@ -9,6 +10,7 @@ export const allPhases = {
       icon: 'idea'
     },
     discussion: {
+      id: 10,
       name: 'Discussion',
       path: 'discussion',
       description: 'Ideas in Discussion',
@@ -16,6 +18,7 @@ export const allPhases = {
       icon: 'discussion'
     },
     approval: {
+      id: 20,
       name: 'Approval',
       path: 'approval',
       description: 'Ideas Under Approval',
@@ -23,6 +26,7 @@ export const allPhases = {
       icon: 'approval'
     },
     voting: {
+      id: 30,
       name: 'Voting',
       path: 'voting',
       description: 'Ideas on Voting',
@@ -30,6 +34,7 @@ export const allPhases = {
       icon: 'vote'
     },
     result: {
+      id: 40,
       name: 'Results',
       path: 'result',
       description: 'Idea Results',
@@ -37,6 +42,7 @@ export const allPhases = {
       icon: 'chart'
     },
     success: {
+      id: 40,
       name: 'Successful',
       path: 'success',
       description: 'Successful Ideas',
@@ -44,6 +50,7 @@ export const allPhases = {
       icon: 'check'
     },
     reject: {
+      id: 40,
       name: 'Rejected',
       path: 'reject',
       description: 'Rejected Ideas',
@@ -51,6 +58,7 @@ export const allPhases = {
       icon: 'cancel'
     },
     dismissal: {
+      id: 40,
       name: 'Dismissed',
       path: 'dismissal',
       description: 'Ideas not feasible',
