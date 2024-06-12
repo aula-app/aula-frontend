@@ -1,31 +1,40 @@
+import { AppIcon, AppIconButton } from '@/components';
 import { AppBar, Breadcrumbs, Link, Toolbar } from '@mui/material';
-import { FunctionComponent, ReactNode } from 'react';
+import { FunctionComponent } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface Props {
   home: string;
-  path?: string[];
-  endNode?: ReactNode;
-  startNode?: ReactNode;
+  menuToggle: () => void;
 }
 
 /**
  * Renders TopBar composition
  * @component TopBar
  */
-const TopBar: FunctionComponent<Props> = ({ endNode, startNode, home, path = [], ...restOfProps }) => {
-  const displayPath = path.filter((path) => /.*[a-zA-Z].*/.test(path));
+const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) => {
+  const location = useLocation().pathname.split('/');
+  const displayPath = location.filter((curPath) => /.*[a-zA-Z].*/.test(curPath));
+  const goto = useNavigate();
+
+  const returnLocation = () => Number(location[location.length - 1]) ? location.splice(0, location.length - 2) : location.splice(0, location.length - 3)
+
   return (
-    <AppBar component="div" {...restOfProps}>
+    <AppBar elevation={0}>
       <Toolbar>
-        {startNode}
+        {location.length <= 2 ? (
+          <AppIcon icon="logo" size="large" />
+        ) : (
+          <AppIconButton icon="back" onClick={() => goto(returnLocation().join('/'))} />
+        )}
 
         <Breadcrumbs aria-label="breadcrumb" sx={{ flexGrow: 1, textAlign: 'center' }}>
           <Link underline="hover" color="inherit" href="/">
             {home}
           </Link>
           {displayPath.map((currentPath, key) => {
-            const addBoxesPath = path.includes('idea-box') && key === 0 ? '/boxes' : ''; //checks if rooms link must have /boxes to correct tab navigation
-            const link = path.slice(0, 2 * (key + 1) + 1).join('/') + addBoxesPath;
+            const addBoxesPath = location.includes('idea-box') && key === 0 ? '/boxes' : ''; //checks if rooms link must have /boxes to correct tab navigation
+            const link = location.slice(0, 2 * (key + 1) + 1).join('/') + addBoxesPath;
             return (
               <Link underline="hover" color="inherit" href={`${link}`} key={key}>
                 {currentPath}
@@ -34,7 +43,7 @@ const TopBar: FunctionComponent<Props> = ({ endNode, startNode, home, path = [],
           })}
         </Breadcrumbs>
 
-        {endNode}
+        <AppIconButton icon="menu" onClick={menuToggle} />
       </Toolbar>
     </AppBar>
   );
