@@ -180,26 +180,28 @@ const SettingsView = () => {
       <Stack direction="row" alignItems="center" bottom={0} height={37} bgcolor={grey[200]}>
         {selected.length > 0 && (
           <>
-            <SubdirectoryArrowRight sx={{ ml: 4, fontSize: '1rem' }} color='secondary' />
-            <Button
-              disabled={selected.length === 0}
-              color="secondary"
-              onClick={() => setOpenDelete(true)}
-            >
-              <AppIcon sx={{mr: 1}} name="delete" /> Delete
+            <SubdirectoryArrowRight sx={{ ml: 4, fontSize: '1rem' }} color="secondary" />
+            <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
+              <AppIcon sx={{ mr: 1 }} name="delete" /> Delete
             </Button>
             {SettingsConfig[setting_name].definitions.generates && (
               <Button
                 disabled={selected.length === 0}
                 color="secondary"
                 onClick={() => setOpenDelete(true)}
-                sx={{ml: 'auto', mr: 1}}
+                sx={{ ml: 'auto', mr: 1 }}
               >
-                <AppIcon sx={{mr: 1}} name={SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName} />
-                New {SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName || ''}
+                <AppIcon
+                  sx={{ mr: 1 }}
+                  name={
+                    SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName
+                  }
+                />
+                New{' '}
+                {SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName ||
+                  ''}
               </Button>
             )}
-
           </>
         )}
       </Stack>
@@ -207,7 +209,13 @@ const SettingsView = () => {
       <Fab
         aria-label="add"
         color="primary"
-        sx={{ position: 'absolute', bottom: 40, alignSelf: 'center' }}
+        sx={{
+          position: 'absolute',
+          right: 0,
+          bottom: 0,
+          boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
+          m: 2,
+        }}
         onClick={() => navigate('new')}
       >
         <AppIcon name="add" />

@@ -33,7 +33,10 @@ const WildIdeas = ({ ideas, reload }: WildIdeasProps) => {
         color="primary"
         sx={{
           position: 'absolute',
-          bottom: 40,
+          right: 0,
+          bottom: 0,
+          boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
+          m: 2,
         }}
         onClick={toggleDrawer(true)}
       >
@@ -42,7 +45,7 @@ const WildIdeas = ({ ideas, reload }: WildIdeasProps) => {
       <NewWildIdea isOpen={open} closeMethod={closeDrawer} />
       {ideas.map((idea) => (
         <AppLink to={`/room/${params['room_id']}/idea/${idea.id}`} width="100%">
-          <Idea idea={idea} onReload={reload} key={idea.id}  />
+          <Idea idea={idea} onReload={reload} key={idea.id} />
         </AppLink>
       ))}
     </Stack>

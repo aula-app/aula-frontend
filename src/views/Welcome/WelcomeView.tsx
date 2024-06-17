@@ -1,9 +1,10 @@
-import { Grid, Stack, Typography } from '@mui/material';
+import { Fab, Grid, Stack, Typography } from '@mui/material';
 import { RoomCard } from '@/components/RoomCard';
 import React, { useEffect, useState } from 'react';
 import { RoomsResponseType } from '@/types/RoomTypes';
 import { databaseRequest } from '@/utils/requests';
 import DashBoard from '@/components/DashBoard';
+import { Add } from '@mui/icons-material';
 
 const WelcomeView = () => {
   const [rooms, setRooms] = useState({} as RoomsResponseType);
@@ -55,6 +56,18 @@ const WelcomeView = () => {
             ))}
         </Grid>
       </Stack>
+      <Fab
+        color="primary"
+        sx={{
+          position: 'absolute',
+          right: 0,
+          bottom: 0,
+          boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
+          m: 2,
+        }}
+      >
+        <Add />
+      </Fab>
     </Stack>
   );
 };
