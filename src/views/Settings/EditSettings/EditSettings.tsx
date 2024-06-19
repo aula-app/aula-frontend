@@ -17,7 +17,7 @@ const EditSettings = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
-  const schema = SettingsConfig[setting_name].forms.reduce((schema, form) => ({ ...schema, [form.name]: form.schema}), {})
+  const schema = SettingsConfig[setting_name].forms.reduce((schema, form) => ({ ...schema, [form.column]: form.schema}), {})
   const {
     register,
     setValue,
@@ -31,10 +31,9 @@ const EditSettings = () => {
 
   const request = async (method: string, args: ObjectPropByName) =>
     await databaseRequest('model', {
-      model: SettingsConfig[setting_name].requests.model,
+      model: SettingsConfig[setting_name].model,
       method: method,
       arguments: args,
-      decrypt: SettingsConfig[setting_name].requests.decrypt,
     });
 
   const dataFetch = async () =>
@@ -86,7 +85,7 @@ const EditSettings = () => {
               </Avatar>
             )}
             <Typography variant="h4" pb={2}>
-              {setting_id === 'new' ? 'New' : 'Edit'} {SettingsConfig[setting_name].requests.model}
+              {setting_id === 'new' ? 'New' : 'Edit'} {SettingsConfig[setting_name].model}
             </Typography>
           </Stack>
           {(items.data || setting_id === 'new') && (
@@ -94,17 +93,17 @@ const EditSettings = () => {
               {SettingsConfig[setting_name].forms.map(field => {
                 return (
                   <TextField
-                    key={`${field.name}-${setting_id}`}
+                    key={`${field.column}-${setting_id}`}
                     required={field.required}
-                    multiline={field.isText}
-                    minRows={field.isText ? 4 : 1}
+                    multiline={field.type === 'text'}
+                    minRows={field.type === 'text' ? 4 : 1}
                     label={field.label}
                     // @ts-ignore
-                    {...register(field.name)}
+                    {...register(field.column)}
                     // @ts-ignore
-                    error={errors[field.name] ? true : false}
+                    error={errors[field.column] ? true : false}
                     // @ts-ignore
-                    helperText={errors[field.name]?.message || ' '}
+                    helperText={errors[field.column]?.message || ' '}
                     sx={field.hidden ? { display: 'none' } : { width: '100%' }}
                   />
                 );

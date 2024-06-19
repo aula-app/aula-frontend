@@ -48,15 +48,14 @@ const SettingsView = () => {
 
   const dataFetch = async () =>
     await databaseRequest('model', {
-      model: SettingsConfig[setting_name].requests.model,
-      method: SettingsConfig[setting_name].requests.method,
+      model: SettingsConfig[setting_name].model,
+      method: SettingsConfig[setting_name].requests.fetch,
       arguments: {
         limit: limit,
         offset: page * limit,
         orderby: orderBy,
         asc: orderAsc,
       },
-      decrypt: SettingsConfig[setting_name].rows.filter((row) => row.encryption).map((value) => value.name),
     }).then((response: TableResponseType) => {
       setItems(response);
     });
@@ -109,7 +108,7 @@ const SettingsView = () => {
     <Stack direction="column" height="100%">
       <Stack direction="row" alignItems="center">
         <Typography variant="h4" sx={{ p: 2, textTransform: 'capitalize', flex: 1 }}>
-          {SettingsConfig[setting_name].definitions.name}
+          {SettingsConfig[setting_name].name}
         </Typography>
         <Stack direction="row" alignItems="start" bottom={0} height={37} px={2} flex={1}>
           <TextField
@@ -184,24 +183,6 @@ const SettingsView = () => {
             <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
               <AppIcon sx={{ mr: 1 }} name="delete" /> Delete
             </Button>
-            {SettingsConfig[setting_name].definitions.generates && (
-              <Button
-                disabled={selected.length === 0}
-                color="secondary"
-                onClick={() => setOpenDelete(true)}
-                sx={{ ml: 'auto', mr: 1 }}
-              >
-                <AppIcon
-                  sx={{ mr: 1 }}
-                  name={
-                    SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName
-                  }
-                />
-                New{' '}
-                {SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName ||
-                  ''}
-              </Button>
-            )}
           </>
         )}
       </Stack>
@@ -211,10 +192,9 @@ const SettingsView = () => {
         color="primary"
         sx={{
           position: 'absolute',
-          right: 0,
-          bottom: 0,
+          alignSelf: 'center',
+          bottom: 40,
           boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
-          m: 2,
         }}
         onClick={() => navigate('new')}
       >

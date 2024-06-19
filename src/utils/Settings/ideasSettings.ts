@@ -1,82 +1,75 @@
+import { SettingsType } from '@/types/SettingsTypes';
 import * as yup from 'yup';
 
-const definitions = {
-  name: 'Ideas',
-  itemName: 'Idea',
-  generates: 'boxes',
-};
-
-const requests = {
-  model: 'Idea',
-  method: 'getIdeas',
-  id: 'idea_id',
-  get: 'getIdeaBaseData',
-  add: 'addIdea',
-  edit: 'editIdea',
-  delete: 'deleteIdea',
-  decrypt: ['content'],
-};
-
-const forms = [
-  {
-    name: 'content',
-    label: 'Content',
-    defaultValue: '',
-    required: true,
-    hidden: false,
-    isText: true,
-    schema: yup.string().required(),
-  },
-  {
-    name: 'user_id',
-    label: 'User ID',
-    defaultValue: '',
-    required: true,
-    hidden: true,
-    isText: false,
-    schema: yup.number().required(),
-  },
-  {
-    name: 'room_id',
-    label: 'Room ID',
-    defaultValue: '',
-    required: true,
-    hidden: false,
-    isText: false,
-    schema: yup.number().required(),
-  },
-];
+const name = 'Ideas';
+const item = 'Idea';
+const model = 'Idea';
 
 const rows = [
   {
     id: 8,
     name: 'room_id',
-    displayName: 'Room ID',
-    encryption: false,
+    displayName: 'Room',
   },
   {
     id: 7,
     name: 'content',
     displayName: 'Idea',
-    encryption: true,
   },
   {
     id: 2,
     name: 'created',
-    displayName: 'Date Created',
-    encryption: false,
+    displayName: 'Created',
   },
   {
     id: 3,
     name: 'last_update',
-    displayName: 'Date Last Updated',
-    encryption: false,
+    displayName: 'Last Updated',
   },
 ];
 
-export const ideasSettings = {
-  definitions,
-  requests,
-  forms,
-  rows,
+const forms = [
+  {
+    type: 'input',
+    label: 'Content',
+    column: 'content',
+    required: true,
+    hidden: false,
+    schema: yup.string().required(),
+  },
+  {
+    type: 'input',
+    label: 'User ID',
+    column: 'user_id',
+    required: true,
+    hidden: true,
+    schema: yup.number().required(),
+  },
+  {
+    type: 'select',
+    label: 'Room',
+    column: 'room_id',
+    options: 'Rooms',
+    required: true,
+    hidden: false,
+    schema: yup.number().required(),
+  },
+];
+
+const requests = {
+  id: `${model.toLowerCase}_id`,
+  fetch: `get${model}s`,
+  get: `get${model}BaseData`,
+  add: `add${model}`,
+  edit: `edit${model}`,
+  delete: `delete${model}`,
 };
+
+export const ideasSettings = {
+  name,
+  item,
+  model,
+  rows,
+  forms,
+  requests,
+} as SettingsType;

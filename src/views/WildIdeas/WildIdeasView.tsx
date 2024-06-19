@@ -33,10 +33,8 @@ const WildIdeas = ({ ideas, reload }: WildIdeasProps) => {
         color="primary"
         sx={{
           position: 'absolute',
-          right: 0,
-          bottom: 0,
+          bottom: 40,
           boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
-          m: 2,
         }}
         onClick={toggleDrawer(true)}
       >
