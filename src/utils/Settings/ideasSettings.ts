@@ -49,7 +49,7 @@ const forms = [
     type: 'select',
     label: 'Room',
     column: 'room_id',
-    options: 'Rooms',
+    fetchOptions: 'rooms',
     required: true,
     hidden: false,
     schema: yup.number().required(),

@@ -9,6 +9,7 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { AppIcon } from '@/components';
+import FormInput from '@/components/FormInput';
 
 /** * Renders "Settings" drawer component view
  * url: /settings/:setting_name/:setting_id
@@ -41,7 +42,7 @@ const EditSettings = () => {
       (response) => setItems(response)
     );
 
-  const onSubmit = async (formData: Object) =>
+  const onSubmit = async (formData: Object) => {
     await request(
       setting_id === 'new' ? SettingsConfig[setting_name].requests.add : SettingsConfig[setting_name].requests.edit,
       {
@@ -51,7 +52,7 @@ const EditSettings = () => {
     ).then((response) => {
       if (!response.success) return;
       navigate(`/settings/${setting_name}`);
-    });
+    })};
 
   const updateValues = () => {
     if (!items.data) return;
@@ -92,20 +93,11 @@ const EditSettings = () => {
             <FormContainer>
               {SettingsConfig[setting_name].forms.map(field => {
                 return (
-                  <TextField
-                    key={`${field.column}-${setting_id}`}
-                    required={field.required}
-                    multiline={field.type === 'text'}
-                    minRows={field.type === 'text' ? 4 : 1}
-                    label={field.label}
-                    // @ts-ignore
-                    {...register(field.column)}
-                    // @ts-ignore
-                    error={errors[field.column] ? true : false}
-                    // @ts-ignore
-                    helperText={errors[field.column]?.message || ' '}
-                    sx={field.hidden ? { display: 'none' } : { width: '100%' }}
-                  />
+                  <FormInput
+                      content={field}
+                      register={register}
+                      errors={errors}
+                    />
                 );
               })}
               <Stack direction="row">

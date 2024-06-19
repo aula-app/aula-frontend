@@ -20,7 +20,8 @@ export interface SettingForm {
   label: string;
   column: string;
   value?: string;
-  options?: any;
+  fetchOptions: SettingNamesType;
+  options?: {label: string, value: number}[];
   required: boolean;
   hidden: boolean;
   schema: any;
