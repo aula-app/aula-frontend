@@ -1,7 +1,7 @@
 import { SettingForm, SettingNamesType } from '@/types/SettingsTypes';
 import SettingsConfig from '@/utils/Settings';
 import { databaseRequest } from '@/utils/requests';
-import { FormHelperText, MenuItem, Select, TextField } from '@mui/material';
+import { FormHelperText, MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { FieldErrors, UseFormRegister } from 'react-hook-form-mui';
 
@@ -56,10 +56,11 @@ const FormInput = ({ content, register, errors, ...restOfProps }: Props) => {
         />
       ) : (
         <>
-          <Select
+          <TextField
             label={content.label}
             required={content.required}
             fullWidth
+            select
             // @ts-ignore
             {...register(content.column)}
             // @ts-ignore
@@ -67,13 +68,17 @@ const FormInput = ({ content, register, errors, ...restOfProps }: Props) => {
             {...restOfProps}
           >
             {currentOptions.map((option) => (
-              <MenuItem value={option.value}>{option.label}</MenuItem>
+              <MenuItem value={option.value} key={option.label  }>
+                {option.label}
+              </MenuItem>
             ))}
-          </Select>
-          <FormHelperText error={
-            // @ts-ignore
-            errors[content.column] ? true : false
-          }>
+          </TextField>
+          <FormHelperText
+            error={
+              // @ts-ignore
+              errors[content.column] ? true : false
+            }
+          >
             {
               // @ts-ignore
               errors[content.column]?.message || ' '

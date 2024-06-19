@@ -18,7 +18,10 @@ const EditSettings = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
-  const schema = SettingsConfig[setting_name].forms.reduce((schema, form) => ({ ...schema, [form.column]: form.schema}), {})
+  const schema = SettingsConfig[setting_name].forms.reduce(
+    (schema, form) => ({ ...schema, [form.column]: form.schema }),
+    {}
+  );
   const {
     register,
     setValue,
@@ -38,9 +41,9 @@ const EditSettings = () => {
     });
 
   const dataFetch = async () =>
-    await request(SettingsConfig[setting_name].requests.get, { [SettingsConfig[setting_name].requests.id]: setting_id }).then(
-      (response) => setItems(response)
-    );
+    await request(SettingsConfig[setting_name].requests.get, {
+      [SettingsConfig[setting_name].requests.id]: setting_id,
+    }).then((response) => setItems(response));
 
   const onSubmit = async (formData: Object) => {
     await request(
@@ -52,11 +55,12 @@ const EditSettings = () => {
     ).then((response) => {
       if (!response.success) return;
       navigate(`/settings/${setting_name}`);
-    })};
+    });
+  };
 
   const updateValues = () => {
     if (!items.data) return;
-    SettingsConfig[setting_name].forms.forEach(field => {
+    SettingsConfig[setting_name].forms.forEach((field) => {
       // @ts-ignore
       setValue(field.name, items.data[field.name] || field.defaultValue);
     });
@@ -82,7 +86,7 @@ const EditSettings = () => {
           <Stack direction="row" justifyContent="space-between">
             {setting_name === 'users' && (
               <Avatar>
-                <AppIcon name='avatar' />
+                <AppIcon name="avatar" />
               </Avatar>
             )}
             <Typography variant="h4" pb={2}>
@@ -91,14 +95,8 @@ const EditSettings = () => {
           </Stack>
           {(items.data || setting_id === 'new') && (
             <FormContainer>
-              {SettingsConfig[setting_name].forms.map(field => {
-                return (
-                  <FormInput
-                      content={field}
-                      register={register}
-                      errors={errors}
-                    />
-                );
+              {SettingsConfig[setting_name].forms.map((field) => {
+                return <FormInput key={field.column} content={field} register={register} errors={errors} />;
               })}
               <Stack direction="row">
                 <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={() => navigate(`/settings/${setting_name}`)}>
