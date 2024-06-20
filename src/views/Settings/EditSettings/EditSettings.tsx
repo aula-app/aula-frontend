@@ -90,7 +90,7 @@ const EditSettings = () => {
               </Avatar>
             )}
             <Typography variant="h4" pb={2}>
-              {setting_id === 'new' ? 'New' : 'Edit'} {SettingsConfig[setting_name].model}
+              {setting_id === 'new' ? 'New' : 'Edit'} {SettingsConfig[setting_name].item}
             </Typography>
           </Stack>
           {(items.data || setting_id === 'new') && (
