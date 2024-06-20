@@ -1,7 +1,7 @@
 import { SettingForm, SettingNamesType } from '@/types/SettingsTypes';
 import SettingsConfig from '@/utils/Settings';
 import { databaseRequest } from '@/utils/requests';
-import { FormHelperText, MenuItem, TextField } from '@mui/material';
+import { FormHelperText, MenuItem, Select, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { FieldErrors, UseFormRegister } from 'react-hook-form-mui';
 
@@ -28,7 +28,7 @@ const FormInput = ({ content, register, errors, ...restOfProps }: Props) => {
       },
     }).then((response) => {
       // @ts-ignore
-      setOptions(response.data.map(row => ({ label: row[`${SettingsConfig[setting].model.toLowerCase}_id`], value: row.id })));
+      setOptions(response.data.map(row => ({ label: row[SettingsConfig[setting].rows[0].name], value: row.id })));
     });
   }
 
@@ -38,7 +38,7 @@ const FormInput = ({ content, register, errors, ...restOfProps }: Props) => {
 
   return (
     <>
-      {content.type !== 'select' ? (
+      {content.type === 'input' || content.type === 'text' ? (
         <TextField
           label={content.label}
           required={content.required}
@@ -68,7 +68,7 @@ const FormInput = ({ content, register, errors, ...restOfProps }: Props) => {
             {...restOfProps}
           >
             {currentOptions.map((option) => (
-              <MenuItem value={option.value} key={option.label  }>
+              <MenuItem value={option.value} key={option.label}>
                 {option.label}
               </MenuItem>
             ))}

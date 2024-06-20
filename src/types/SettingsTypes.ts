@@ -16,11 +16,11 @@ export interface SettingsRows {
 }
 
 export interface SettingForm {
-  type: 'input' | 'text' | 'select';
+  type: 'input' | 'text' | 'select' | 'multiple';
   label: string;
   column: string;
   value?: string;
-  fetchOptions: SettingNamesType;
+  fetchOptions?: SettingNamesType;
   options?: {label: string, value: number}[];
   required: boolean;
   hidden: boolean;

@@ -31,16 +31,16 @@ const rows = [
 const forms = [
   {
     type: 'input',
-    label: 'Student Name',
-    column: 'realname',
+    label: 'Display Name',
+    column: 'displayname',
     required: true,
     hidden: false,
     schema: yup.string().required(),
   },
   {
     type: 'input',
-    label: 'Display Name',
-    column: 'displayname',
+    label: 'Student Name',
+    column: 'realname',
     required: true,
     hidden: false,
     schema: yup.string().required(),

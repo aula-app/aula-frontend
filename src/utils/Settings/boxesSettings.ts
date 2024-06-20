@@ -63,6 +63,15 @@ const forms = [
     hidden: false,
     schema: yup.number().required(),
   },
+  {
+    type: 'multiple',
+    label: 'User',
+    column: 'users',
+    fetchOptions: 'users',
+    required: false,
+    hidden: false,
+    schema: yup.array().of(yup.number()),
+  },
 ];
 
 const requests = {
