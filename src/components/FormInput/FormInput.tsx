@@ -28,7 +28,7 @@ const FormInput = ({ content, register, errors, ...restOfProps }: Props) => {
       },
     }).then((response) => {
       // @ts-ignore
-      setOptions(response.data.map(({ id, room_name }) => ({ label: room_name, value: id })));
+      setOptions(response.data.map(row => ({ label: row[`${SettingsConfig[setting].model.toLowerCase}_id`], value: row.id })));
     });
   }
 
