@@ -1,6 +1,6 @@
 import { CardMedia, Stack, Typography } from '@mui/material';
 import { Card, CardContent } from '@mui/material';
-import { phases } from '@/utils/phases';
+import { phases } from '@/utils';
 import { BoxType } from '@/types/BoxTypes';
 
 interface IdeaBoxProps {

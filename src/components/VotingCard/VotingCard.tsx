@@ -3,10 +3,8 @@ import { useParams } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
 import { GroupAdd } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import { Vote, noVoteOptions, votingOptions } from '@/utils/variants';
-import { localStorageGet } from '@/utils';
-import { parseJwt } from '@/utils/jwt';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest, localStorageGet, parseJwt, Vote, noVoteOptions, votingOptions } from '@/utils';
+
 
 /**
  * Renders "VotingCards" component

@@ -2,7 +2,7 @@ import { Fab, Grid, Stack, Typography } from '@mui/material';
 import { RoomCard } from '@/components/RoomCard';
 import React, { useEffect, useState } from 'react';
 import { RoomsResponseType } from '@/types/RoomTypes';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest } from '@/utils';
 import DashBoard from '@/components/DashBoard';
 import { Add } from '@mui/icons-material';
 

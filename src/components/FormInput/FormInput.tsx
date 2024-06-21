@@ -1,7 +1,6 @@
 import { SettingForm, SettingNamesType } from '@/types/SettingsTypes';
-import SettingsConfig from '@/utils/Settings';
-import { databaseRequest } from '@/utils/requests';
-import { FormHelperText, MenuItem, Select, TextField } from '@mui/material';
+import { databaseRequest, SettingsConfig } from '@/utils';
+import { FormHelperText, MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { FieldErrors, UseFormRegister } from 'react-hook-form-mui';
 

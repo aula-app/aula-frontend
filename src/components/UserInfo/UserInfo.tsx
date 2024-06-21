@@ -1,8 +1,6 @@
 import { Avatar, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { localStorageGet } from '@/utils';
-import { parseJwt } from '@/utils/jwt';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { SingleUserResponseType, UserType } from '@/types/UserTypes';
 
 /**

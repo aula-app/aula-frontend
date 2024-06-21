@@ -1,5 +1,4 @@
-import SettingsConfig from '@/utils/Settings';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest, SettingsConfig } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';

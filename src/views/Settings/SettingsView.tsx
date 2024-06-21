@@ -19,13 +19,12 @@ import {
 import { NotFoundView } from '..';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { SubdirectoryArrowRight } from '@mui/icons-material';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest, SettingsConfig } from '@/utils';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
 import EditSettings from './EditSettings';
 import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
-import SettingsConfig from '@/utils/Settings';
 import { AppIcon } from '@/components';
 
 const GET_LIMIT = () => Math.floor((window.innerHeight - 200) / 55) - 1 || 10;

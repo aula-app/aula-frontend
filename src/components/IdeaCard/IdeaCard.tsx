@@ -1,15 +1,11 @@
 import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { AppLink } from '..';
-import {phases} from '@/utils/phases';
+import { databaseRequest, parseJwt, phases, variantOptions} from '@/utils';
 import { useParams } from 'react-router-dom';
-import { grey } from '@mui/material/colors';
 import { IdeaType } from '@/types/IdeaTypes';
-import { databaseRequest } from '@/utils/requests';
 import { useEffect, useState } from 'react';
 import { localStorageGet } from '@/utils';
-import { parseJwt } from '@/utils/jwt';
-import { variantOptions } from '@/utils/variants';
 
 interface IdeaCardProps {
   idea: IdeaType;

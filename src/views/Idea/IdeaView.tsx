@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ApprovalCard from '@/components/ApprovalCard';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest } from '@/utils';
 import { CommentResponseType } from '@/types/CommentTypes';
 import { SingleIdeaResponseType } from '@/types/IdeaTypes';
 import NewComment from '@/components/NewComment';
