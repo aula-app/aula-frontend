@@ -29,7 +29,6 @@ export const Comment = ({ comment, onReload }: Props) => {
         user_id: jwt_payload.user_id,
         comment_id: comment.id,
       },
-      decrypt: [],
     });
   };
 

@@ -59,7 +59,7 @@ const EditSettings = () => {
   };
 
   const updateValues = () => {
-    if (!items.data) return;
+    if (!items || !items.data) return;
     SettingsConfig[setting_name].forms.forEach((field) => {
       // @ts-ignore
       setValue(field.column, items.data[field.column] || field.value);
@@ -68,7 +68,7 @@ const EditSettings = () => {
 
   useEffect(() => {
     updateValues();
-  }, [items.data]);
+  }, [items?.data]);
 
   useEffect(() => {
     if (setting_id && setting_id !== 'new') dataFetch();

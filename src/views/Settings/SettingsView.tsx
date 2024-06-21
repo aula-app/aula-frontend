@@ -37,7 +37,7 @@ const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
-  const [items, setItems] = useState({} as TableResponseType);
+  const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(GET_LIMIT());
   const [page, setPage] = useState(0);
   const [orderBy, setOrder] = useState(SettingsConfig[setting_name].rows[0]['id']);
@@ -74,7 +74,7 @@ const SettingsView = () => {
   };
 
   const toggleAllRows = () => {
-    if (!items.data) return;
+    if (!items || !items.data) return;
     const allIds = Object.entries(items.data).map(([, item]) => item.id);
     selected.length > 0 ? setSelected([]) : setSelected(allIds);
   };

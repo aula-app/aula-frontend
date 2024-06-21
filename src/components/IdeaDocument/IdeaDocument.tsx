@@ -29,7 +29,6 @@ export const IdeaDocument = ({ idea, onReload }: Props) => {
         user_id: jwt_payload.user_id,
         idea_id: idea.id,
       },
-      decrypt: [],
     });
   };
 

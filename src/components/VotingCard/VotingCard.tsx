@@ -28,7 +28,6 @@ const VotingCard = () => {
         user_id: jwt_payload.user_id,
         idea_id: params['idea_id'],
       },
-      decrypt: [],
     }).then((response) => {
       setVote(response.data);
       setHasVoted(response.count > 0);
@@ -43,7 +42,6 @@ const VotingCard = () => {
         idea_id: params['idea_id'],
         vote_value: vote - 1, //turn 0, 1, 2 to -1, 0 , 1
       },
-      decrypt: [],
     }).then(() => getVote());
 
   useEffect(() => {

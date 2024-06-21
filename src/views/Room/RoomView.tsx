@@ -39,7 +39,6 @@ const RoomView = () => {
       model: 'Idea',
       method: 'getIdeasByRoom',
       arguments: { room_id: Number(params['room_id']) },
-      decrypt: ['displayname', 'content'],
     }).then((response) => setIdeas(response));
 
   const boxesFetch = async () =>
@@ -47,7 +46,6 @@ const RoomView = () => {
       model: 'Topic',
       method: 'getTopicsByRoom',
       arguments: { room_id: Number(params['room_id']) },
-      decrypt: ['name', 'description_public'],
     }).then((response) => setBoxes(response));
 
   useEffect(() => {

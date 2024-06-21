@@ -49,7 +49,6 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
         user_id: jwt_payload.user_id,
         idea_id: idea.idea_id,
       },
-      decrypt: [],
     }).then((response) => setVote(response.count, response.data));
 
   const setVote = (hasVoted: number, vote: number) => {

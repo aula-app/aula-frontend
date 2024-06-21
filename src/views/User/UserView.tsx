@@ -33,7 +33,6 @@ const UserView = () => {
       model: 'User',
       method: 'getUserBaseData',
       arguments: { user_id: jwt_payload.user_id },
-      decrypt: ['displayname', 'username', 'email', 'about_me'],
     }).then((response: SingleUserResponseType) => setUser(response.data));
 
   const onSubmit = (formData: Object) => console.log(formData);

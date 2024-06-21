@@ -32,7 +32,6 @@ export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
         user_id: jwt_payload.user_id,
         idea_id: idea.id,
       },
-      decrypt: [],
     });
   };
 

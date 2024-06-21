@@ -33,7 +33,6 @@ const IdeaView = () => {
       model: 'Idea',
       method: 'getIdeaContent',
       arguments: { idea_id: params['idea_id'] },
-      decrypt: ['content', 'displayname'],
     }).then((response: SingleIdeaResponseType) => {
       setIdea(response);
       displayDate = new Date(response.data.created);
@@ -44,7 +43,6 @@ const IdeaView = () => {
       model: 'Comment',
       method: 'getCommentsByIdeaId',
       arguments: { idea_id: Number(params['idea_id']) },
-      decrypt: ['content', 'username'],
     }).then((response: CommentResponseType) => setComments(response));
 
   const getPhase = async () =>
@@ -52,7 +50,6 @@ const IdeaView = () => {
       model: 'Topic',
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
-      decrypt: ['name', 'description_public'],
     }).then((response: BoxResponseType) => setPhase(response.data.phase_id));
 
   useEffect(() => {
