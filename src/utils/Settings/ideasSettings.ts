@@ -57,12 +57,12 @@ const forms = [
 ];
 
 const requests = {
-  id: `${model.toLowerCase}_id`,
-  fetch: `get${model}s`,
-  get: `get${model}BaseData`,
-  add: `add${model}`,
-  edit: `edit${model}`,
-  delete: `delete${model}`,
+  id: `idea_id`,
+  fetch: `getIdeas`,
+  get: `getIdeaBaseData`,
+  add: `addIdea`,
+  edit: `editIdea`,
+  delete: `deleteIdea`,
 };
 
 export const ideasSettings = {

@@ -95,12 +95,12 @@ const forms = [
 ];
 
 const requests = {
-  id: `${model.toLowerCase}_id`,
-  fetch: `get${model}s`,
-  get: `get${model}BaseData`,
-  add: `add${model}`,
-  edit: `edit${model}`,
-  delete: `delete${model}`,
+  id: `text_id`,
+  fetch: `getTexts`,
+  get: `getTextBaseData`,
+  add: `addText`,
+  edit: `editText`,
+  delete: `deleteText`,
 };
 
 export const textsSettings = {
