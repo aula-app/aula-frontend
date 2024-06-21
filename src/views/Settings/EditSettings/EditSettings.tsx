@@ -31,7 +31,7 @@ const EditSettings = () => {
     resolver: yupResolver(yup.object(schema).required()),
   });
 
-  const [items, setItems] = useState<SingleResponseType>({});
+  const [items, setItems] = useState<SingleResponseType>();
 
   const request = async (method: string, args: ObjectPropByName) =>
     await databaseRequest('model', {
