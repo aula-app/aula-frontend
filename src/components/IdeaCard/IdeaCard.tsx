@@ -1,11 +1,10 @@
 import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { AppLink } from '..';
-import { databaseRequest, parseJwt, phases, variantOptions} from '@/utils';
+import { databaseRequest, localStorageGet, parseJwt, phases, variantOptions} from '@/utils';
 import { useParams } from 'react-router-dom';
 import { IdeaType } from '@/types/IdeaTypes';
 import { useEffect, useState } from 'react';
-import { localStorageGet } from '@/utils';
 
 interface IdeaCardProps {
   idea: IdeaType;

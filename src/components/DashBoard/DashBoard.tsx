@@ -1,10 +1,29 @@
 import { Badge, Box, Grid, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
-import { dashboardPhases } from '@/utils/phases';
+import { dashboardPhases, databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { useEffect, useState } from 'react';
 
 const displayPhases = Object.keys(Object.freeze(dashboardPhases)) as Array<keyof typeof dashboardPhases>;
 
 const DashBoard = ({ show = false }) => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
+
+  const [count, setCount] = useState<number[]>([]);
+
+  const dashboardFetch = async () =>
+    await databaseRequest('model', {
+      model: 'Idea',
+      method: 'getDashboardByUser',
+      arguments: {
+        user_id: jwt_payload.user_id,
+      },
+    });
+
+  useEffect(() => {
+    dashboardFetch().then((response) => setCount(response.data.phase_counts));
+  }, []);
+
   return (
     <Box
       sx={{
@@ -34,36 +53,43 @@ const DashBoard = ({ show = false }) => {
             <AppIcon name="heart" />
           </Badge>
         </Stack>
-        <Grid container spacing={1} py={1} sx={{opacity: `${show ? 100 : 0}%`, transition: 'opacity .5s ease-in-out'}}>
-          {displayPhases.map((phase, key) => (
-            <Grid item xs={6} sm={4} md={2} key={key}>
-              <Box
-                sx={{
-                  py: 1,
-                  px: 2,
-                  backgroundColor: dashboardPhases[phase].color,
-                  borderRadius: 9999,
-                  textTransform: 'none',
-                }}
-              >
-                <Stack direction="row" alignItems="center" width="100%">
-                  <AppIcon name={dashboardPhases[phase].icon} />
-                  <Box
-                    flexGrow={1}
-                    overflow="hidden"
-                    textOverflow="ellipsis"
-                    whiteSpace="nowrap"
-                    textAlign="left"
-                    pl={1}
-                  >
-                    {dashboardPhases[phase].name}
-                  </Box>
-                  {Math.floor(Math.random() * 11)}
-                </Stack>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
+        {count.length === 6 && (
+          <Grid
+            container
+            spacing={1}
+            py={1}
+            sx={{ opacity: `${show ? 100 : 0}%`, transition: 'opacity .5s ease-in-out' }}
+          >
+            {displayPhases.map((phase, key) => (
+              <Grid item xs={6} sm={4} md={2} key={key}>
+                <Box
+                  sx={{
+                    py: 1,
+                    px: 2,
+                    backgroundColor: dashboardPhases[phase].color,
+                    borderRadius: 9999,
+                    textTransform: 'none',
+                  }}
+                >
+                  <Stack direction="row" alignItems="center" width="100%">
+                    <AppIcon name={dashboardPhases[phase].icon} />
+                    <Box
+                      flexGrow={1}
+                      overflow="hidden"
+                      textOverflow="ellipsis"
+                      whiteSpace="nowrap"
+                      textAlign="left"
+                      pl={1}
+                    >
+                      {dashboardPhases[phase].name}
+                    </Box>
+                    {count[key]}
+                  </Stack>
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        )}
         {/* <Box position="absolute" bottom={0} width="100%" bgcolor={blueGrey[50]}>
         <Button sx={{ width: '100%', py: 1 }} onClick={toggleNotifications} {...handlers}>
           <Divider sx={{ width: '50%' }} variant="middle" />
