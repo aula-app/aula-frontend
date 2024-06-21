@@ -38,12 +38,12 @@ const forms = [
 ];
 
 const requests = {
-  id: `${model.toLowerCase}_id`,
-  fetch: `get${model}s`,
-  get: `get${model}BaseData`,
-  add: `add${model}`,
-  edit: `edit${model}`,
-  delete: `delete${model}`,
+  id: `room_id`,
+  fetch: `getRooms`,
+  get: `getRoomBaseData`,
+  add: `addRoom`,
+  edit: `editRoom`,
+  delete: `deleteRoom`,
 };
 
 export const roomsSettings = {

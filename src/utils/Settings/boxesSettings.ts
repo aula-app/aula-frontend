@@ -63,15 +63,29 @@ const forms = [
     hidden: false,
     schema: yup.number().required(),
   },
+  {
+    type: 'select',
+    label: 'Current Phase',
+    column: 'phase_id',
+    options: [
+      { label: 'Discussion', value: 10 },
+      { label: 'Approval', value: 20 },
+      { label: 'Voting', value: 30 },
+      { label: 'Results', value: 40 },
+    ],
+    required: true,
+    hidden: false,
+    schema: yup.number().required(),
+  }
 ];
 
 const requests = {
-  id: `${model.toLowerCase}_id`,
-  fetch: `get${model}s`,
-  get: `get${model}BaseData`,
-  add: `add${model}`,
-  edit: `edit${model}`,
-  delete: `delete${model}`,
+  id: `topic_id`,
+  fetch: `getTopics`,
+  get: `getTopicBaseData`,
+  add: `addTopic`,
+  edit: `editTopic`,
+  delete: `deleteTopic`,
 };
 
 export const boxesSettings = {

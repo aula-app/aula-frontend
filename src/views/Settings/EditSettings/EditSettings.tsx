@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { Avatar, Button, Drawer, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Button, Drawer, Stack, Typography } from '@mui/material';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { useEffect, useState } from 'react';
 import { SettingsConfig } from '@/utils/Settings';
@@ -31,7 +31,7 @@ const EditSettings = () => {
     resolver: yupResolver(yup.object(schema).required()),
   });
 
-  const [items, setItems] = useState({} as SingleResponseType);
+  const [items, setItems] = useState<SingleResponseType>({});
 
   const request = async (method: string, args: ObjectPropByName) =>
     await databaseRequest('model', {
@@ -43,14 +43,14 @@ const EditSettings = () => {
   const dataFetch = async () =>
     await request(SettingsConfig[setting_name].requests.get, {
       [SettingsConfig[setting_name].requests.id]: setting_id,
-    }).then((response) => setItems(response));
+    }).then((response: SingleResponseType) => setItems(response));
 
   const onSubmit = async (formData: Object) => {
     await request(
       setting_id === 'new' ? SettingsConfig[setting_name].requests.add : SettingsConfig[setting_name].requests.edit,
       {
         ...formData,
-        [SettingsConfig[setting_name].requests.id]: setting_id === 'new' ? undefined : setting_id,
+        [setting_id === 'new' ? SettingsConfig[setting_name].requests.id : 'updater_id']: setting_id === 'new' ? undefined : setting_id,
       }
     ).then((response) => {
       if (!response.success) return;
@@ -62,7 +62,7 @@ const EditSettings = () => {
     if (!items.data) return;
     SettingsConfig[setting_name].forms.forEach((field) => {
       // @ts-ignore
-      setValue(field.name, items.data[field.name] || field.defaultValue);
+      setValue(field.column, items.data[field.column] || field.value);
     });
   };
 
