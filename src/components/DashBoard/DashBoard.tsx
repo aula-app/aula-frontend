@@ -90,11 +90,6 @@ const DashBoard = ({ show = false }) => {
             ))}
           </Grid>
         )}
-        {/* <Box position="absolute" bottom={0} width="100%" bgcolor={blueGrey[50]}>
-        <Button sx={{ width: '100%', py: 1 }} onClick={toggleNotifications} {...handlers}>
-          <Divider sx={{ width: '50%' }} variant="middle" />
-        </Button>
-      </Box> */}
       </Stack>
     </Box>
   );

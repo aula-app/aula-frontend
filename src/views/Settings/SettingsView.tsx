@@ -103,7 +103,7 @@ const SettingsView = () => {
     dataFetch();
   }, [page, limit, orderBy, orderAsc, setting_id]);
 
-  return items ? (
+  return (
     <Stack direction="column" height="100%">
       <Stack direction="row" alignItems="center">
         <Typography variant="h4" sx={{ p: 2, textTransform: 'capitalize', flex: 1 }}>
@@ -130,7 +130,7 @@ const SettingsView = () => {
         <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
-              {items.data && (
+              {items && items.data && (
                 <TableCell>
                   <Checkbox
                     onChange={toggleAllRows}
@@ -153,7 +153,7 @@ const SettingsView = () => {
               ))}
             </TableRow>
           </TableHead>
-          {items.data && (
+          {items && items.data && (
             <TableBody>
               {items.data.map((row) => (
                 <TableRow key={row.id} sx={{ background: selected.includes(row.id) ? grey[200] : '' }}>
@@ -200,7 +200,7 @@ const SettingsView = () => {
         <AppIcon name="add" />
       </Fab>
       <Stack direction="row" justifyContent="center" bottom={0}>
-        {items.count && (
+        {items && items.count && (
           <Pagination count={Math.ceil(Number(items.count) / limit)} onChange={changePage} sx={{ py: 1 }} />
         )}
       </Stack>
@@ -212,9 +212,7 @@ const SettingsView = () => {
         reloadMethod={() => dataFetch()}
       />
     </Stack>
-  ) : (
-    <NotFoundView />
-  );
+  )
 };
 
 export default SettingsView;
