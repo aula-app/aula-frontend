@@ -4,6 +4,7 @@ export interface SettingsType {
   name: string;
   item: string;
   model: string;
+  isChild: SettingNamesType;
   rows: SettingsRows[];
   forms: SettingForm[];
   requests: SettingRequests;

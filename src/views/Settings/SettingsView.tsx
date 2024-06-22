@@ -27,7 +27,7 @@ import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
 import { AppIcon } from '@/components';
 
-const GET_LIMIT = () => Math.floor((window.innerHeight - 200) / 55) - 1 || 10;
+const GET_LIMIT = () => Math.max(Math.floor((window.innerHeight - 200) / 55) - 1 || 10, 1);
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
@@ -175,17 +175,28 @@ const SettingsView = () => {
           )}
         </Table>
       </Stack>
-      <Stack direction="row" alignItems="center" bottom={0} height={37} bgcolor={grey[200]}>
+      <Stack direction="row" justifyContent="space-between" bottom={0} height={37} bgcolor={grey[200]} px={1}>
         {selected.length > 0 && (
           <>
-            <SubdirectoryArrowRight sx={{ ml: 4, fontSize: '1rem' }} color="secondary" />
-            <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
-              <AppIcon sx={{ mr: 1 }} name="delete" /> Delete
-            </Button>
+            <Stack direction="row" alignItems="center" flex={1}>
+              <SubdirectoryArrowRight sx={{ ml: 3, fontSize: '1rem' }} color="secondary" />
+              <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
+                <AppIcon sx={{ mr: 1 }} name="delete" /> Delete
+              </Button>
+            </Stack>
+            <Stack direction="row" alignItems="center" justifyContent="end" flex={1}>
+              {SettingsConfig[setting_name].isChild && (
+                <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
+                  <AppIcon
+                    sx={{ mr: 1 }}
+                    name={SettingsConfig[SettingsConfig[setting_name].isChild].item}
+                    /> Add to {SettingsConfig[SettingsConfig[setting_name].isChild].item}
+                </Button>
+              )}
+            </Stack>
           </>
         )}
       </Stack>
-      <Divider />
       <Fab
         aria-label="add"
         color="primary"
@@ -199,20 +210,22 @@ const SettingsView = () => {
       >
         <AppIcon name="add" />
       </Fab>
+      <Divider />
       <Stack direction="row" justifyContent="center" bottom={0}>
         {items && items.count && (
           <Pagination count={Math.ceil(Number(items.count) / limit)} onChange={changePage} sx={{ py: 1 }} />
         )}
       </Stack>
-      <EditSettings />
+      <EditSettings key={`${setting_name}_${setting_id || 'new'}`} />
       <DeleteSettings
+        key={`${setting_name}`}
         items={selected}
         isOpen={openDelete}
         closeMethod={() => setOpenDelete(false)}
         reloadMethod={() => dataFetch()}
       />
     </Stack>
-  )
+  );
 };
 
 export default SettingsView;

@@ -4,6 +4,7 @@ import * as yup from 'yup';
 const name = 'Boxes';
 const item = 'Box';
 const model = 'Topic';
+const isChild = 'rooms';
 
 const rows = [
   {
@@ -95,4 +96,5 @@ export const boxesSettings = {
   rows,
   forms,
   requests,
+  isChild
 } as SettingsType;

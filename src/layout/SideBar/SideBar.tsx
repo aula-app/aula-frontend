@@ -47,7 +47,7 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
   {
     title: 'Messages',
     path: '/settings/texts',
-    icon: 'envelope',
+    icon: 'message',
   },
   {
     title: 'About',

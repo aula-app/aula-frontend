@@ -47,7 +47,7 @@ const DashBoard = ({ show = false }) => {
             Your Activity
           </Typography>
           <Badge badgeContent={2} color="primary" sx={{ mx: 1 }}>
-            <AppIcon name="envelope" />
+            <AppIcon name="message" />
           </Badge>
           <Badge badgeContent={16} color="primary" sx={{ mx: 1 }}>
             <AppIcon name="heart" />

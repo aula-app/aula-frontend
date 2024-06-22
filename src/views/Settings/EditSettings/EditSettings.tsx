@@ -49,7 +49,8 @@ const EditSettings = () => {
       setting_id === 'new' ? SettingsConfig[setting_name].requests.add : SettingsConfig[setting_name].requests.edit,
       {
         ...formData,
-        [setting_id === 'new' ? SettingsConfig[setting_name].requests.id : 'updater_id']: setting_id === 'new' ? undefined : setting_id,
+        [setting_id === 'new' ? SettingsConfig[setting_name].requests.id : 'updater_id']:
+          setting_id === 'new' ? undefined : setting_id,
       }
     ).then((response) => {
       if (!response.success) return;
@@ -70,7 +71,7 @@ const EditSettings = () => {
   }, [items?.data]);
 
   useEffect(() => {
-    if (setting_id && setting_id !== 'new') dataFetch();
+    if (setting_id) dataFetch();
   }, [setting_id]);
 
   return (

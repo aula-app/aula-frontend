@@ -4,6 +4,7 @@ import * as yup from 'yup';
 const name = 'Ideas';
 const item = 'Idea';
 const model = 'Idea';
+const isChild = 'boxes';
 
 const rows = [
   {
@@ -72,4 +73,5 @@ export const ideasSettings = {
   rows,
   forms,
   requests,
+  isChild,
 } as SettingsType;
