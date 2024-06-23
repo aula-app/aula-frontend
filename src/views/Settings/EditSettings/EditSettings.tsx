@@ -59,16 +59,15 @@ const EditSettings = () => {
   };
 
   const updateValues = () => {
-    if (!items || !items.data) return;
     SettingsConfig[setting_name].forms.forEach((field) => {
       // @ts-ignore
-      setValue(field.column, items.data[field.column] || field.value);
+      setValue(field.column, items && items.data && setting_id !== 'new' ? items.data[field.column] : field.value);
     });
   };
 
   useEffect(() => {
     updateValues();
-  }, [items?.data]);
+  }, [setting_id, items?.data]);
 
   useEffect(() => {
     if (setting_id) dataFetch();

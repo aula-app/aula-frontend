@@ -16,7 +16,6 @@ import {
   Button,
   TableSortLabel,
 } from '@mui/material';
-import { NotFoundView } from '..';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { SubdirectoryArrowRight } from '@mui/icons-material';
 import { databaseRequest, SettingsConfig } from '@/utils';
@@ -30,7 +29,7 @@ import { AppIcon } from '@/components';
 const GET_LIMIT = () => Math.max(Math.floor((window.innerHeight - 200) / 55) - 1 || 10, 1);
 
 /** * Renders default "Settings" view
- * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
+ * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
  */
 const SettingsView = () => {
   const navigate = useNavigate();
@@ -45,7 +44,8 @@ const SettingsView = () => {
   const [selected, setSelected] = useState([] as number[]);
   const [openDelete, setOpenDelete] = useState(false);
 
-  const dataFetch = async () =>
+  const dataFetch = async () => {
+    resetTable();
     await databaseRequest('model', {
       model: SettingsConfig[setting_name].model,
       method: SettingsConfig[setting_name].requests.fetch,
@@ -58,6 +58,7 @@ const SettingsView = () => {
     }).then((response: TableResponseType) => {
       setItems(response);
     });
+  };
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
@@ -98,10 +99,9 @@ const SettingsView = () => {
       window.removeEventListener('resize', handleWindowSizeChange);
     };
   }, []);
-  useEffect(resetTable, [setting_name]);
   useEffect(() => {
     dataFetch();
-  }, [page, limit, orderBy, orderAsc, setting_id]);
+  }, [page, limit, orderBy, orderAsc, setting_id, setting_name]);
 
   return (
     <Stack direction="column" height="100%">
@@ -187,10 +187,8 @@ const SettingsView = () => {
             <Stack direction="row" alignItems="center" justifyContent="end" flex={1}>
               {SettingsConfig[setting_name].isChild && (
                 <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
-                  <AppIcon
-                    sx={{ mr: 1 }}
-                    name={SettingsConfig[SettingsConfig[setting_name].isChild].item}
-                    /> Add to {SettingsConfig[SettingsConfig[setting_name].isChild].item}
+                  <AppIcon sx={{ mr: 1 }} name={SettingsConfig[SettingsConfig[setting_name].isChild].item} /> Add to{' '}
+                  {SettingsConfig[SettingsConfig[setting_name].isChild].item}
                 </Button>
               )}
             </Stack>
@@ -211,7 +209,7 @@ const SettingsView = () => {
         <AppIcon name="add" />
       </Fab>
       <Divider />
-      <Stack direction="row" justifyContent="center" bottom={0}>
+      <Stack direction="row" alignItems="center" justifyContent="center" bottom={0} height={48}>
         {items && items.count && (
           <Pagination count={Math.ceil(Number(items.count) / limit)} onChange={changePage} sx={{ py: 1 }} />
         )}

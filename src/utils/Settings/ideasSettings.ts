@@ -39,14 +39,6 @@ const forms = [
     schema: yup.string().required(),
   },
   {
-    type: 'input',
-    label: 'User ID',
-    column: 'user_id',
-    required: true,
-    hidden: true,
-    schema: yup.number().required(),
-  },
-  {
     type: 'select',
     label: 'Room',
     column: 'room_id',

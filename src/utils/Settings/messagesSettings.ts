@@ -2,7 +2,7 @@ import { SettingsType } from '@/types/SettingsTypes';
 import * as yup from 'yup';
 
 const name = 'Messages';
-const item = 'Text';
+const item = 'Message';
 const model = 'Text';
 
 const rows = [
@@ -41,33 +41,6 @@ const forms = [
     schema: yup.string().required(),
   },
   {
-    type: 'input',
-    label: 'Consent text',
-    column: 'consent_text',
-    defaultValue: 'Agree',
-    required: true,
-    hidden: false,
-    schema: yup.string().required(),
-  },
-  {
-    type: 'input',
-    label: 'Location',
-    column: 'location',
-    defaultValue: '',
-    required: true,
-    hidden: true,
-    schema: yup.string(),
-  },
-  {
-    type: 'input',
-    label: 'Creator ID',
-    column: 'creator_id',
-    defaultValue: 1,
-    required: true,
-    hidden: true,
-    schema: yup.number().required(),
-  },
-  {
     type: 'select',
     label: 'Consent',
     column: 'user_needs_to_consent',
@@ -85,25 +58,34 @@ const forms = [
     label: 'Status',
     column: 'status',
     options: [
-      { label: 'Inactive', value: 0 },
       { label: 'Active', value: 1 },
+      { label: 'Inactive', value: 0 },
     ],
     required: true,
     hidden: false,
     schema: yup.number().required(),
   },
+  {
+    type: 'input',
+    label: 'Consent text',
+    column: 'consent_text',
+    value: 'Agree',
+    required: true,
+    hidden: false,
+    schema: yup.string().required(),
+  },
 ];
 
 const requests = {
-  id: `text_id`,
-  fetch: `getTexts`,
-  get: `getTextBaseData`,
-  add: `addText`,
-  edit: `editText`,
-  delete: `deleteText`,
+  id: 'text_id',
+  fetch: 'getTexts',
+  get: 'getTextBaseData',
+  add: 'addText',
+  edit: 'editText',
+  delete: 'deleteText',
 };
 
-export const textsSettings = {
+export const messagesSettings = {
   name,
   item,
   model,

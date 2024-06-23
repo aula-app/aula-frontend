@@ -70,6 +70,15 @@ const forms = [
     hidden: false,
     schema: yup.string().required(),
   },
+  {
+    type: 'input',
+    label: 'Password',
+    column: 'password',
+    value: 'default_password',
+    required: true,
+    hidden: true,
+    schema: yup.string().required(),
+  },
 ];
 
 const requests = {
