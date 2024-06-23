@@ -43,7 +43,7 @@ const MessagesView = () => {
       {messages &&
         messages.length > 0 &&
         messages.map((message) => (
-          <AppLink to={`/messages/${message.id}`}>
+          <AppLink to={`/messages/message/${message.id}`}>
             <MessageCard type={messageConsentValues[message.user_needs_to_consent]} title={message.headline} />
           </AppLink>
         ))}

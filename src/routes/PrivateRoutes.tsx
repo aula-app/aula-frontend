@@ -27,7 +27,7 @@ const PrivateRoutes = () => (
     <Route path="about" element={<AboutView />} />,
     <Route path="welcome" element={<WelcomeView />} />
     <Route path="messages" element={<MessagesView />} />
-    <Route path="messages/:message_id" element={<MessageView />} />
+    <Route path="messages/message/:message_id" element={<MessageView />} />
     <Route path="settings/profile" element={<UserView />} />
     <Route path="settings/:setting_name" element={<SettingsView />} />,
     <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />,
