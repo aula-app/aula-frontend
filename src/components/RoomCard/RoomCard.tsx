@@ -21,10 +21,10 @@ const RoomCard = ({ room }: RoomCardProps) => {
       <CardContent>
         <CardMedia
           component="img"
-          height="194"
-          image={room.id % 2 === 0 ? '/img/aula-room1.png' : '/img/aula-room.png'}
+          height="200"
+          image={room.id % 2 === 0 ? '/img/aula-room3.jpg' : '/img/aula-room.jpg'}
           alt="bg image"
-          sx={{ borderRadius: '10px' }}
+          sx={{ borderRadius: '10px', objectFit: 'contain' }}
         />
         <Typography variant="h6" sx={{ mt: 1.5 }} noWrap>
           {capitalize(room.room_name)}
