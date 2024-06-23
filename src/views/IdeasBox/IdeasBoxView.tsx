@@ -4,7 +4,7 @@ import { IdeaCard } from '@/components/IdeaCard';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { BoxResponseType } from '@/types/BoxTypes';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest } from '@/utils';
 import { IdeasResponseType } from '@/types/IdeaTypes';
 
 /** * Renders "IdeasBox" view
@@ -20,7 +20,6 @@ const IdeasBoxView = () => {
       model: 'Topic',
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
-      decrypt: ['name', 'description_public'],
     }).then((response) => setBox(response));
 
   const boxIdeasFetch = async () =>
@@ -28,7 +27,6 @@ const IdeasBoxView = () => {
       model: 'Idea',
       method: 'getIdeasByTopic',
       arguments: { topic_id: Number(params['box_id']) },
-      decrypt: ['content'],
     }).then((response) => setBoxIdeas(response));
 
   useEffect(() => {

@@ -1,5 +1,4 @@
-import SettingsConfig from '@/utils/Settings';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest, SettingsConfig } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
@@ -19,9 +18,9 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
   const request = async (id: number) => {
     const currentSetting = setting_name as keyof typeof SettingsConfig;
     await databaseRequest('model', {
-      model: SettingsConfig[currentSetting].requests.model,
+      model: SettingsConfig[currentSetting].model,
       method: SettingsConfig[currentSetting].requests.delete,
-      arguments: {[`${SettingsConfig[currentSetting].requests.model.toLowerCase()}_id`]: id},
+      arguments: {[`${SettingsConfig[currentSetting].model.toLowerCase()}_id`]: id},
     });
   }
 

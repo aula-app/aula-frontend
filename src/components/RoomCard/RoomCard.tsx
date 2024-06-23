@@ -1,6 +1,6 @@
 import { BottomNavigation, BottomNavigationAction, CardMedia, Stack, Typography, capitalize } from '@mui/material';
 import { Card, CardContent } from '@mui/material';
-import { phases } from '@/utils/phases';
+import { phases } from '@/utils';
 import { RoomType } from '@/types/RoomTypes';
 import AppIcon from '../AppIcon';
 import { useNavigate } from 'react-router-dom';
@@ -30,27 +30,28 @@ const RoomCard = ({ room }: RoomCardProps) => {
           {capitalize(room.room_name)}
         </Typography>
         <Stack
-          direction="row"
-          justifyContent="space-between"
-          mt={1}
-          className="noPrint"
-          sx={{ borderRadius: 999, overflow: 'clip' }}
-        >
-          {displayPhases.map((phase) => (
-            <Stack
-              key={phase}
-              direction="row"
-              flex={1}
-              alignItems="center"
-              justifyContent="space-around"
-              p={1}
-              sx={{ bgcolor: phases[phase].color }}
-            >
-              <AppIcon name={phases[phase].icon} />
-              {Math.floor(Math.random() * 11)}
-            </Stack>
-          ))}
-        </Stack>
+            direction="row"
+            justifyContent="space-between"
+          >
+            {displayPhases.map((phase) => (
+              <Stack
+                key={phase}
+                direction="row"
+                flex={1}
+                alignItems="center"
+                justifyContent="space-around"
+                p={1}
+                mx={.25}
+                sx={{
+                  bgcolor: phases[phase].color,
+                  borderRadius: 999,
+                }}
+              >
+                <AppIcon name={phases[phase].icon} size='small' />
+                <Typography fontSize='small'>{Math.floor(Math.random() * 11)}</Typography>
+              </Stack>
+            ))}
+          </Stack>
       </CardContent>
       <BottomNavigation
         onChange={(event, newValue) => {

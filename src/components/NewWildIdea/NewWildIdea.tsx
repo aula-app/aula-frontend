@@ -4,7 +4,7 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import AppButton from '../AppButton';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest } from '@/utils';
 import { useParams } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
 import { useRef } from 'react';

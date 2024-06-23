@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
-import { variantOptions } from '@/utils/variants';
+import { variantOptions } from '@/utils';
 
 interface IdeaBoxProps {
   disabled?: boolean;

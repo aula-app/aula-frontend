@@ -16,28 +16,26 @@ import {
   Button,
   TableSortLabel,
 } from '@mui/material';
-import { NotFoundView } from '..';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { SubdirectoryArrowRight } from '@mui/icons-material';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest, SettingsConfig } from '@/utils';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
 import EditSettings from './EditSettings';
 import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
-import SettingsConfig from '@/utils/Settings';
 import { AppIcon } from '@/components';
 
-const GET_LIMIT = () => Math.floor((window.innerHeight - 200) / 55) - 1 || 10;
+const GET_LIMIT = () => Math.max(Math.floor((window.innerHeight - 200) / 55) - 1 || 10, 1);
 
 /** * Renders default "Settings" view
- * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/texts, /settings/users
+ * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
  */
 const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
-  const [items, setItems] = useState({} as TableResponseType);
+  const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(GET_LIMIT());
   const [page, setPage] = useState(0);
   const [orderBy, setOrder] = useState(SettingsConfig[setting_name].rows[0]['id']);
@@ -46,20 +44,21 @@ const SettingsView = () => {
   const [selected, setSelected] = useState([] as number[]);
   const [openDelete, setOpenDelete] = useState(false);
 
-  const dataFetch = async () =>
+  const dataFetch = async () => {
+    resetTable();
     await databaseRequest('model', {
-      model: SettingsConfig[setting_name].requests.model,
-      method: SettingsConfig[setting_name].requests.method,
+      model: SettingsConfig[setting_name].model,
+      method: SettingsConfig[setting_name].requests.fetch,
       arguments: {
         limit: limit,
         offset: page * limit,
         orderby: orderBy,
         asc: orderAsc,
       },
-      decrypt: SettingsConfig[setting_name].rows.filter((row) => row.encryption).map((value) => value.name),
     }).then((response: TableResponseType) => {
       setItems(response);
     });
+  };
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
@@ -75,7 +74,7 @@ const SettingsView = () => {
   };
 
   const toggleAllRows = () => {
-    if (!items.data) return;
+    if (!items || !items.data) return;
     const allIds = Object.entries(items.data).map(([, item]) => item.id);
     selected.length > 0 ? setSelected([]) : setSelected(allIds);
   };
@@ -100,16 +99,15 @@ const SettingsView = () => {
       window.removeEventListener('resize', handleWindowSizeChange);
     };
   }, []);
-  useEffect(resetTable, [setting_name]);
   useEffect(() => {
     dataFetch();
-  }, [page, limit, orderBy, orderAsc, setting_id]);
+  }, [page, limit, orderBy, orderAsc, setting_id, setting_name]);
 
-  return items ? (
+  return (
     <Stack direction="column" height="100%">
       <Stack direction="row" alignItems="center">
         <Typography variant="h4" sx={{ p: 2, textTransform: 'capitalize', flex: 1 }}>
-          {SettingsConfig[setting_name].definitions.name}
+          {SettingsConfig[setting_name].name}
         </Typography>
         <Stack direction="row" alignItems="start" bottom={0} height={37} px={2} flex={1}>
           <TextField
@@ -132,7 +130,7 @@ const SettingsView = () => {
         <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
-              {items.data && (
+              {items && items.data && (
                 <TableCell>
                   <Checkbox
                     onChange={toggleAllRows}
@@ -155,7 +153,7 @@ const SettingsView = () => {
               ))}
             </TableRow>
           </TableHead>
-          {items.data && (
+          {items && items.data && (
             <TableBody>
               {items.data.map((row) => (
                 <TableRow key={row.id} sx={{ background: selected.includes(row.id) ? grey[200] : '' }}>
@@ -177,56 +175,54 @@ const SettingsView = () => {
           )}
         </Table>
       </Stack>
-      <Stack direction="row" alignItems="center" bottom={0} height={37} bgcolor={grey[200]}>
+      <Stack direction="row" justifyContent="space-between" bottom={0} height={37} bgcolor={grey[200]} px={1}>
         {selected.length > 0 && (
           <>
-            <SubdirectoryArrowRight sx={{ ml: 4, fontSize: '1rem' }} color='secondary' />
-            <Button
-              disabled={selected.length === 0}
-              color="secondary"
-              onClick={() => setOpenDelete(true)}
-            >
-              <AppIcon sx={{mr: 1}} name="delete" /> Delete
-            </Button>
-            {SettingsConfig[setting_name].definitions.generates && (
-              <Button
-                disabled={selected.length === 0}
-                color="secondary"
-                onClick={() => setOpenDelete(true)}
-                sx={{ml: 'auto', mr: 1}}
-              >
-                <AppIcon sx={{mr: 1}} name={SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName} />
-                New {SettingsConfig[SettingsConfig[setting_name].definitions.generates || 'boxes'].definitions.itemName || ''}
+            <Stack direction="row" alignItems="center" flex={1}>
+              <SubdirectoryArrowRight sx={{ ml: 3, fontSize: '1rem' }} color="secondary" />
+              <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
+                <AppIcon sx={{ mr: 1 }} name="delete" /> Delete
               </Button>
-            )}
-
+            </Stack>
+            <Stack direction="row" alignItems="center" justifyContent="end" flex={1}>
+              {SettingsConfig[setting_name].isChild && (
+                <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
+                  <AppIcon sx={{ mr: 1 }} name={SettingsConfig[SettingsConfig[setting_name].isChild].item} /> Add to{' '}
+                  {SettingsConfig[SettingsConfig[setting_name].isChild].item}
+                </Button>
+              )}
+            </Stack>
           </>
         )}
       </Stack>
-      <Divider />
       <Fab
         aria-label="add"
         color="primary"
-        sx={{ position: 'absolute', bottom: 40, alignSelf: 'center' }}
+        sx={{
+          position: 'absolute',
+          alignSelf: 'center',
+          bottom: 40,
+          boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
+        }}
         onClick={() => navigate('new')}
       >
         <AppIcon name="add" />
       </Fab>
-      <Stack direction="row" justifyContent="center" bottom={0}>
-        {items.count && (
+      <Divider />
+      <Stack direction="row" alignItems="center" justifyContent="center" bottom={0} height={48}>
+        {items && items.count && (
           <Pagination count={Math.ceil(Number(items.count) / limit)} onChange={changePage} sx={{ py: 1 }} />
         )}
       </Stack>
-      <EditSettings />
+      <EditSettings key={`${setting_name}_${setting_id || 'new'}`} />
       <DeleteSettings
+        key={`${setting_name}`}
         items={selected}
         isOpen={openDelete}
         closeMethod={() => setOpenDelete(false)}
         reloadMethod={() => dataFetch()}
       />
     </Stack>
-  ) : (
-    <NotFoundView />
   );
 };
 

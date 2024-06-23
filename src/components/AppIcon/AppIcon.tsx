@@ -40,7 +40,7 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartFullIcon } from '@heroicons/react/24/solid'
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { ObjectPropByName } from '@/types/Generics';
 
 /**
@@ -69,7 +69,6 @@ const ICONS: Record<string, React.ComponentType> = {
   day: SunIcon,
   delete: TrashIcon,
   discussion: ChatBubbleLeftRightIcon,
-  envelope: EnvelopeIcon,
   forbid: MinusCircleIcon,
   group: UsersIcon,
   heart: HeartIcon,
@@ -80,6 +79,7 @@ const ICONS: Record<string, React.ComponentType> = {
   login: UserIcon,
   logout: ArrowRightEndOnRectangleIcon,
   menu: Bars3Icon,
+  message: EnvelopeIcon,
   night: MoonIcon,
   notifications: BellIcon,
   print: PrinterIcon,
@@ -119,9 +119,9 @@ const AppIcon: FunctionComponent<Props> = ({ name, icon, size = 'md', sx, ...res
           ? '40px' // size === xl
           : '24px'; // no size === md
   return (
-    <Box sx={{ minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}>
+    <Stack alignItems="center" justifyContent="center" sx={{ minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}>
       <ComponentToRender {...restOfProps} />
-    </Box>
+    </Stack>
   );
 };
 

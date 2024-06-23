@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useAppStore } from '@/store';
-import { localStorageGet, localStorageDelete } from '@/utils/localStorage';
+import { localStorageGet, localStorageDelete } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 
 /**

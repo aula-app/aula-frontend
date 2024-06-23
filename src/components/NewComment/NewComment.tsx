@@ -4,11 +4,9 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import AppButton from '../AppButton';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useParams } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
-import { localStorageGet } from '@/utils';
-import { parseJwt } from '@/utils/jwt';
 import { useRef } from 'react';
 
 interface NewCommentProps {

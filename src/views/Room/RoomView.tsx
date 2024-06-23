@@ -1,15 +1,14 @@
-import { Inbox, Lightbulb } from '@mui/icons-material';
 import { TabContext, TabPanel } from '@mui/lab';
 import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import WildIdeasView from '@/views/WildIdeas';
 import IdeasBoxesView from '@/views/IdeasBoxes';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest } from '@/utils';
 import { IdeasResponseType } from '@/types/IdeaTypes';
 import { BoxesResponseType } from '@/types/BoxTypes';
 import { AppIcon } from '@/components';
-import { green, grey, lightGreen, teal, yellow } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 
 function a11yProps(index: number) {
   return {
@@ -39,7 +38,6 @@ const RoomView = () => {
       model: 'Idea',
       method: 'getIdeasByRoom',
       arguments: { room_id: Number(params['room_id']) },
-      decrypt: ['displayname', 'content'],
     }).then((response) => setIdeas(response));
 
   const boxesFetch = async () =>
@@ -47,7 +45,6 @@ const RoomView = () => {
       model: 'Topic',
       method: 'getTopicsByRoom',
       arguments: { room_id: Number(params['room_id']) },
-      decrypt: ['name', 'description_public'],
     }).then((response) => setBoxes(response));
 
   useEffect(() => {

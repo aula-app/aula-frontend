@@ -1,6 +1,6 @@
 import { CardMedia, Stack, Typography } from '@mui/material';
 import { Card, CardContent } from '@mui/material';
-import { phases } from '@/utils/phases';
+import { phases } from '@/utils';
 import { BoxType } from '@/types/BoxTypes';
 
 interface IdeaBoxProps {
@@ -14,9 +14,9 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
     <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
       <CardContent>
         <Stack direction="row" mb={2} alignItems="center" spacing={2}>
-          {displayPhases.map((phase, key) => {
-            const isCurrentPhase = key === box.phase_id;
-            return (
+          {displayPhases.map((phase) => {
+            const isCurrentPhase = phases[phase].phase_id === box.phase_id;
+            return phase !== 'wild' && (
               <Stack
                 className={isCurrentPhase ? "noVolume noSpace" : "noPrint"}
                 width={isCurrentPhase ? 'auto' : '1.5em'}
@@ -26,7 +26,7 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
                 bgcolor={phases[phase].color}
                 alignItems="center"
                 justifyContent="center"
-                key={key}
+                key={phase}
               >
                 <Typography variant="caption">{isCurrentPhase ? phases[phase].name : ''}</Typography>
               </Stack>

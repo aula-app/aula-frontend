@@ -8,10 +8,8 @@ import {
   Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import { localStorageGet } from '@/utils/localStorage';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
-import { databaseRequest } from '@/utils/requests';
-import { parseJwt } from '@/utils/jwt';
 import { SingleUserResponseType, UserType } from '@/types/UserTypes';
 import ChangePassword from '@/components/ChangePassword';
 import { AppButton, AppIcon } from '@/components';
@@ -33,7 +31,6 @@ const UserView = () => {
       model: 'User',
       method: 'getUserBaseData',
       arguments: { user_id: jwt_payload.user_id },
-      decrypt: ['displayname', 'username', 'email', 'about_me'],
     }).then((response: SingleUserResponseType) => setUser(response.data));
 
   const onSubmit = (formData: Object) => console.log(formData);

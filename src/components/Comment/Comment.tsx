@@ -1,12 +1,10 @@
-import { Button, IconButton, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
 import { grey } from '@mui/material/colors';
 import { CommentType } from '@/types/CommentTypes';
-import { localStorageGet } from '@/utils';
-import { parseJwt } from '@/utils/jwt';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
-import { databaseRequest } from '@/utils/requests';
 
 interface Props {
   comment: CommentType;
@@ -29,7 +27,6 @@ export const Comment = ({ comment, onReload }: Props) => {
         user_id: jwt_payload.user_id,
         comment_id: comment.id,
       },
-      decrypt: [],
     });
   };
 

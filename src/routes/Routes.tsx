@@ -1,8 +1,7 @@
 import PublicRoutes from './PublicRoutes';
 import PrivateRoutes from './PrivateRoutes';
-import { localStorageGet } from '@/utils/localStorage';
+import { localStorageGet, parseJwt } from '@/utils';
 import { useIsAuthenticated } from '@/hooks/auth';
-import { parseJwt } from '@/utils/jwt';
 import { useAppStore } from '@/store/AppStore';
 import { useEffect } from 'react';
 import { useLocation } from "react-router-dom";

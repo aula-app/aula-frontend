@@ -9,12 +9,11 @@ import {
   Typography,
 } from '@mui/material';
 import { useAppStore } from '@/store';
-import { localStorageSet } from '@/utils/localStorage';
+import { databaseRequest, localStorageSet } from '@/utils';
 import { AppButton, AppLink, AppIconButton } from '@/components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { databaseRequest } from '@/utils/requests';
 
 const schema = yup
   .object({
