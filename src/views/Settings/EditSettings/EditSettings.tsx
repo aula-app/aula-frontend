@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Avatar, Button, Drawer, Stack, Typography } from '@mui/material';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { useEffect, useState } from 'react';
-import { databaseRequest, SettingsConfig } from '@/utils';
+import { databaseRequest, localStorageGet, parseJwt, SettingsConfig } from '@/utils';
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,6 +14,8 @@ import FormInput from '@/components/FormInput';
  * url: /settings/:setting_name/:setting_id
  */
 const EditSettings = () => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
@@ -45,12 +47,15 @@ const EditSettings = () => {
     }).then((response: SingleResponseType) => setItems(response));
 
   const onSubmit = async (formData: Object) => {
+    let otherData = {updater_id: jwt_payload.user_id} as ObjectPropByName;
+    if(setting_id !== 'new') otherData[SettingsConfig[setting_name].requests.id] = setting_id;
+    if(setting_name === 'ideas') otherData.user_id = jwt_payload.user_id;
+
     await request(
       setting_id === 'new' ? SettingsConfig[setting_name].requests.add : SettingsConfig[setting_name].requests.edit,
       {
         ...formData,
-        [setting_id === 'new' ? SettingsConfig[setting_name].requests.id : 'updater_id']:
-          setting_id === 'new' ? undefined : setting_id,
+        ...otherData
       }
     ).then((response) => {
       if (!response.success) return;
@@ -61,13 +66,11 @@ const EditSettings = () => {
   const updateValues = () => {
     SettingsConfig[setting_name].forms.forEach((field) => {
       // @ts-ignore
-      setValue(field.column, items && items.data && setting_id !== 'new' ? items.data[field.column] : field.value);
+      setValue(field.column, (items && items.data && setting_id !== 'new' ? items.data[field.column] : field.value));
     });
   };
 
-  useEffect(() => {
-    updateValues();
-  }, [setting_id, items?.data]);
+  useEffect(() => {updateValues()}, [setting_id, items?.data])
 
   useEffect(() => {
     if (setting_id) dataFetch();
