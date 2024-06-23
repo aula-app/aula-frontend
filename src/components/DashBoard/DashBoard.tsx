@@ -1,8 +1,9 @@
-import { Badge, Box, Grid, Stack, Typography } from '@mui/material';
+import { Badge, Box, Grid, IconButton, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
 import { dashboardPhases, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
 import { ObjectPropByName } from '@/types/Generics';
+import AppIconButton from '../AppIconButton';
 
 const displayPhases = Object.keys(Object.freeze(dashboardPhases)) as Array<keyof typeof dashboardPhases>;
 
@@ -50,10 +51,10 @@ const DashBoard = ({ show = false }) => {
             Your Activity
           </Typography>
           <Badge badgeContent={messages} color="primary" sx={{ mx: 1 }}>
-            <AppIcon name="message" />
+            <AppIconButton icon="message" to='/messages' sx={{p: 0}} />
           </Badge>
           <Badge badgeContent={likes} color="primary" sx={{ mx: 1 }}>
-            <AppIcon name="heart" />
+            <AppIconButton icon="heart" sx={{p: 0}} />
           </Badge>
         </Stack>
         {count.length === 6 && (

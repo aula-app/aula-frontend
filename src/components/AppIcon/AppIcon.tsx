@@ -16,8 +16,10 @@ import {
   Cog6ToothIcon,
   DocumentTextIcon,
   EnvelopeIcon,
+  ExclamationTriangleIcon,
   EyeIcon,
   EyeSlashIcon,
+  FunnelIcon,
   HeartIcon,
   HomeIcon,
   InformationCircleIcon,
@@ -53,22 +55,25 @@ import { ObjectPropByName } from '@/types/Generics';
  */
 const ICONS: Record<string, React.ComponentType> = {
   logo: LogoIcon,
-  add: PlusIcon,
   account: UserCircleIcon,
+  add: PlusIcon,
+  alert: ExclamationTriangleIcon,
   arrowdown: ChevronDownIcon,
   approval: QuestionMarkCircleIcon,
   avatar: UserCircleIcon,
   back: ChevronLeftIcon,
+  bell: BellIcon,
   box: ArchiveBoxIcon,
   camera: CameraIcon,
   cancel: XCircleIcon,
-  chat: ChatBubbleLeftIcon,
   chart: PresentationChartBarIcon,
+  chat: ChatBubbleLeftIcon,
   check: CheckCircleIcon,
   close: XMarkIcon,
   day: SunIcon,
   delete: TrashIcon,
   discussion: ChatBubbleLeftRightIcon,
+  filter: FunnelIcon,
   forbid: MinusCircleIcon,
   group: UsersIcon,
   heart: HeartIcon,
@@ -93,6 +98,8 @@ const ICONS: Record<string, React.ComponentType> = {
   visibilityon: EyeSlashIcon,
   vote: VotingIcon
 };
+
+export type IconType = keyof typeof ICONS;
 
 interface Props {
   name?: keyof typeof ICONS; // Icon's name

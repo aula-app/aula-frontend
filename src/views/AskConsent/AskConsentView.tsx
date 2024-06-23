@@ -31,7 +31,7 @@ const AskConsent = () => {
       // set state when the data received
       if (getData.count === 0) {
         dispatch({ type: 'HAS_CONSENT', payload: true });
-        navigate('/');
+        navigate('/welcome');
       } else {
         dispatch({ type: 'HAS_CONSENT', payload: false });
         setData(getData.data);
