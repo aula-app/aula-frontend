@@ -1,4 +1,4 @@
-import { Button, IconButton, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
 import { grey } from '@mui/material/colors';

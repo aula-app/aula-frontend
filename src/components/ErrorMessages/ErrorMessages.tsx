@@ -1,8 +1,7 @@
 import { useAppStore } from '@/store';
-import { Close } from '@mui/icons-material';
-import { Alert, IconButton } from '@mui/material';
+import { Alert } from '@mui/material';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
-import { ForwardedRef, forwardRef, useCallback, useEffect, useState } from 'react';
+import { ForwardedRef, forwardRef, useEffect } from 'react';
 
 interface SnackbarProps {
   message: string;
