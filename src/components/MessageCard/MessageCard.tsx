@@ -9,6 +9,7 @@ import { cyan, deepPurple, red } from '@mui/material/colors';
 
 interface Props {
   type: MessageTypes;
+  title: string;
 }
 
 const messageConfig = {
@@ -26,20 +27,21 @@ const messageConfig = {
   }
 } as MessageConfigsType
 
-const MessageCard = ({ type }: Props) => {
+const MessageCard = ({ type, title }: Props) => {
   return (
     <Stack
       direction="row"
       alignItems="center"
       borderRadius={5}
-      p={2}
+      p={1}
+      pl={2}
       mb={1}
       bgcolor={messageConfig[type].color[100]}
       color={messageConfig[type].color[800]}
     >
       <AppIcon name={messageConfig[type].icon} />
       <Typography flex={1} px={2}>
-        message
+        {title}
       </Typography>
       <IconButton size="small">
         <AppIcon name="close" />

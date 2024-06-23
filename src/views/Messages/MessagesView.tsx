@@ -1,5 +1,6 @@
 import { AppIcon } from '@/components';
 import MessageCard from '@/components/MessageCard';
+import { MessageType, messageConsentValues } from '@/types/MessageTypes';
 import { localStorageGet } from '@/utils';
 import { parseJwt } from '@/utils/jwt';
 import { databaseRequest } from '@/utils/requests';
@@ -14,16 +15,15 @@ import { useEffect, useState } from 'react';
 const MessagesView = () => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState<MessageType[]>()
 
   const messageFetch = async () =>
     await databaseRequest('model', {
-      model: 'Message',
-      method: 'getMessagesByUser',
-      arguments: { user_id: jwt_payload.user_id },
-      decrypt: ['content', 'displayname'],
+      model: 'Text',
+      method: 'getTexts',
+      arguments: { }
     }).then((response) => {
-      console.log(response);
+      setMessages(response.data);
     });
 
     useEffect(() => {
@@ -40,9 +40,12 @@ const MessagesView = () => {
           <AppIcon icon="filter" />
         </IconButton>
       </Stack>
-      <MessageCard type="message" />
-      <MessageCard type="announcement" />
-      <MessageCard type="alert" />
+      { messages && messages.length > 0 && messages.map(message => (
+        <MessageCard
+          type={messageConsentValues[message.user_needs_to_consent]}
+          title={message.headline}
+          />
+      ))}
     </Stack>
   );
 };
