@@ -16,7 +16,7 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
         <Stack direction="row" mb={2} alignItems="center" spacing={2}>
           {displayPhases.map((phase) => {
             const isCurrentPhase = phases[phase].phase_id === box.phase_id;
-            return (
+            return phase !== 'wild' && (
               <Stack
                 className={isCurrentPhase ? "noVolume noSpace" : "noPrint"}
                 width={isCurrentPhase ? 'auto' : '1.5em'}
