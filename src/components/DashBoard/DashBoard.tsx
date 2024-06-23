@@ -2,6 +2,7 @@ import { Badge, Box, Grid, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
 import { dashboardPhases, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
+import { ObjectPropByName } from '@/types/Generics';
 
 const displayPhases = Object.keys(Object.freeze(dashboardPhases)) as Array<keyof typeof dashboardPhases>;
 
@@ -10,18 +11,20 @@ const DashBoard = ({ show = false }) => {
   const jwt_payload = parseJwt(jwt_token);
 
   const [count, setCount] = useState<number[]>([]);
+  const [messages, setMessages] = useState(0);
+  const [likes, setLikes] = useState(0);
 
-  const dashboardFetch = async () =>
+  const dashboardFetch = async (model: string, method: string, args?: ObjectPropByName) =>
     await databaseRequest('model', {
-      model: 'Idea',
-      method: 'getDashboardByUser',
-      arguments: {
-        user_id: jwt_payload.user_id,
-      },
+      model: model,
+      method: method,
+      arguments: args,
     });
 
   useEffect(() => {
-    dashboardFetch().then((response) => setCount(response.data.phase_counts));
+    dashboardFetch('Idea', 'getDashboardByUser', {user_id: jwt_payload.user_id}).then((response) => setCount(response.data.phase_counts));
+    dashboardFetch('Text', 'getTexts').then((response) => setMessages(response.count));
+    dashboardFetch('Text', 'getTexts').then((response) => setLikes(response.count));
   }, []);
 
   return (
@@ -46,10 +49,10 @@ const DashBoard = ({ show = false }) => {
           >
             Your Activity
           </Typography>
-          <Badge badgeContent={2} color="primary" sx={{ mx: 1 }}>
+          <Badge badgeContent={messages} color="primary" sx={{ mx: 1 }}>
             <AppIcon name="message" />
           </Badge>
-          <Badge badgeContent={16} color="primary" sx={{ mx: 1 }}>
+          <Badge badgeContent={likes} color="primary" sx={{ mx: 1 }}>
             <AppIcon name="heart" />
           </Badge>
         </Stack>
