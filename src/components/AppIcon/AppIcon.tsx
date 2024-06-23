@@ -40,7 +40,7 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartFullIcon } from '@heroicons/react/24/solid'
-import { Box, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { ObjectPropByName } from '@/types/Generics';
 
 /**

@@ -1,4 +1,4 @@
-import { Grid, Stack } from '@mui/material';
+import { Grid } from '@mui/material';
 import { IdeaBox } from '@/components/IdeaBox';
 import { BoxType } from '@/types/BoxTypes';
 import { AppLink } from '@/components';
