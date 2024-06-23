@@ -29,7 +29,7 @@ const MessagesView = () => {
     useEffect(() => {
       messageFetch();
     }, []);
-    
+
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -37,7 +37,7 @@ const MessagesView = () => {
           Messages
         </Typography>
         <IconButton>
-          <AppIcon name="filter" />
+          <AppIcon icon="filter" />
         </IconButton>
       </Stack>
       <MessageCard type="message" />

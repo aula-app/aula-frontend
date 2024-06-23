@@ -13,7 +13,7 @@ interface Props {
 
 const messageConfig = {
   message: {
-    icon: 'envelope',
+    icon: 'message',
     color: cyan
   },
   announcement: {
