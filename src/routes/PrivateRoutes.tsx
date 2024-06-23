@@ -8,6 +8,7 @@ import RoomView from '@/views/Room';
 import IdeaView from '@/views/Idea';
 import IdeasBoxView from '@/views/IdeasBox';
 import MessagesView from '@/views/Messages';
+import MessageView from '@/views/Message';
 import AskConsentView from '@/views/AskConsent';
 /**
  * List of routes available only for authenticated users
@@ -26,6 +27,7 @@ const PrivateRoutes = () => (
     <Route path="about" element={<AboutView />} />,
     <Route path="welcome" element={<WelcomeView />} />
     <Route path="messages" element={<MessagesView />} />
+    <Route path="messages/:message_id" element={<MessageView />} />
     <Route path="settings/profile" element={<UserView />} />
     <Route path="settings/:setting_name" element={<SettingsView />} />,
     <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />,
