@@ -40,7 +40,7 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartFullIcon } from '@heroicons/react/24/solid'
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { ObjectPropByName } from '@/types/Generics';
 
 /**
@@ -119,9 +119,9 @@ const AppIcon: FunctionComponent<Props> = ({ name, icon, size = 'md', sx, ...res
           ? '40px' // size === xl
           : '24px'; // no size === md
   return (
-    <Box sx={{ minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}>
+    <Stack alignItems="center" justifyContent="center" sx={{ minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}>
       <ComponentToRender {...restOfProps} />
-    </Box>
+    </Stack>
   );
 };
 

@@ -44,11 +44,11 @@ const RoomCard = ({ room }: RoomCardProps) => {
                 mx={.25}
                 sx={{
                   bgcolor: phases[phase].color,
-                  borderRadius: 999
+                  borderRadius: 999,
                 }}
               >
-                <AppIcon name={phases[phase].icon} />
-                {Math.floor(Math.random() * 11)}
+                <AppIcon name={phases[phase].icon} size='small' />
+                <Typography fontSize='small'>{Math.floor(Math.random() * 11)}</Typography>
               </Stack>
             ))}
           </Stack>
