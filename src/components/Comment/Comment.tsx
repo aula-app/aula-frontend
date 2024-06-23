@@ -1,12 +1,10 @@
-import { Button, IconButton, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
 import { grey } from '@mui/material/colors';
 import { CommentType } from '@/types/CommentTypes';
-import { localStorageGet } from '@/utils';
-import { parseJwt } from '@/utils/jwt';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
-import { databaseRequest } from '@/utils/requests';
 
 interface Props {
   comment: CommentType;
@@ -29,7 +27,6 @@ export const Comment = ({ comment, onReload }: Props) => {
         user_id: jwt_payload.user_id,
         comment_id: comment.id,
       },
-      decrypt: [],
     });
   };
 
@@ -54,7 +51,7 @@ export const Comment = ({ comment, onReload }: Props) => {
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <AppIcon name="account" size="lg" />
+        <AppIcon name="account" size="large" />
         <Stack maxWidth="100%" overflow="hidden" ml={2} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>

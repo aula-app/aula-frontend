@@ -1,90 +1,98 @@
+import { SettingsType } from '@/types/SettingsTypes';
 import * as yup from 'yup';
 
-const definitions = {
-  name: 'Boxes',
-  itemName: 'Box',
-};
-
-const requests = {
-  model: 'Topic',
-  method: 'getTopics',
-  id: 'topic_id',
-  get: 'getTopicBaseData',
-  add: 'addTopic',
-  edit: 'editTopic',
-  delete: 'deleteTopic',
-  decrypt: ['name', 'description_internal', 'description_public'],
-};
-
-const forms = [
-  {
-    name: 'name',
-    label: 'Name',
-    defaultValue: '',
-    required: true,
-    hidden: false,
-    isText: false,
-    schema: yup.string().required(),
-  },
-  {
-    name: 'description_public',
-    label: 'Public Description',
-    defaultValue: '',
-    required: true,
-    hidden: false,
-    isText: true,
-    schema: yup.string().required(),
-  },
-  {
-    name: 'description_internal',
-    label: 'Internal Description',
-    defaultValue: '',
-    required: true,
-    hidden: false,
-    isText: true,
-    schema: yup.string(),
-  },
-  {
-    name: 'room_id',
-    label: 'Room ID',
-    defaultValue: '',
-    required: true,
-    hidden: false,
-    isText: false,
-    schema: yup.number().required(),
-  },
-];
+const name = 'Boxes';
+const item = 'Box';
+const model = 'Topic';
 
 const rows = [
   {
     id: 1,
     name: 'name',
     displayName: 'Name',
-    encryption: true,
   },
   {
     id: 5,
-    name: 'description_internal',
-    displayName: 'Public description',
-    encryption: true,
+    name: 'description_public',
+    displayName: 'Description',
   },
   {
     id: 2,
     name: 'created',
-    displayName: 'Date Created',
-    encryption: false,
+    displayName: 'Created',
   },
   {
     id: 3,
     name: 'last_update',
-    displayName: 'Date Last Updated',
-    encryption: false,
+    displayName: 'Last Updated',
   },
 ];
 
-export const boxesSettings = {
-  definitions,
-  requests,
-  forms,
-  rows,
+const forms = [
+  {
+    type: 'input',
+    label: 'Name',
+    column: 'name',
+    required: true,
+    hidden: false,
+    schema: yup.string().required(),
+  },
+  {
+    type: 'text',
+    label: 'Description',
+    column: 'description_public',
+    required: true,
+    hidden: false,
+    schema: yup.string().required(),
+  },
+  {
+    type: 'text',
+    label: 'Internal Description',
+    column: 'description_internal',
+    value: 'Internal description?',
+    required: false,
+    hidden: true,
+    schema: yup.string(),
+  },
+  {
+    type: 'select',
+    label: 'Room',
+    column: 'room_id',
+    fetchOptions: 'rooms',
+    required: true,
+    hidden: false,
+    schema: yup.number().required(),
+  },
+  {
+    type: 'select',
+    label: 'Current Phase',
+    column: 'phase_id',
+    options: [
+      { label: 'Discussion', value: 10 },
+      { label: 'Approval', value: 20 },
+      { label: 'Voting', value: 30 },
+      { label: 'Results', value: 40 },
+    ],
+    required: true,
+    hidden: false,
+    schema: yup.number().required(),
+  }
+];
+
+const requests = {
+  id: `topic_id`,
+  fetch: `getTopics`,
+  get: `getTopicBaseData`,
+  add: `addTopic`,
+  edit: `editTopic`,
+  delete: `deleteTopic`,
 };
+
+export const boxesSettings = {
+  name,
+  item,
+  model,
+  rows,
+  forms,
+  requests,
+} as SettingsType;

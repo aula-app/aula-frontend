@@ -1,12 +1,10 @@
-import { Button, IconButton, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { IdeaType } from '@/types/IdeaTypes';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
 import { blue } from '@mui/material/colors';
-import { localStorageGet } from '@/utils';
-import { parseJwt } from '@/utils/jwt';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
-import { databaseRequest } from '@/utils/requests';
 
 interface Props {
   idea: IdeaType;
@@ -32,7 +30,6 @@ export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
         user_id: jwt_payload.user_id,
         idea_id: idea.id,
       },
-      decrypt: [],
     });
   };
 

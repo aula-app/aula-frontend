@@ -30,7 +30,7 @@ import {
   PlusIcon,
   PresentationChartBarIcon,
   PrinterIcon,
-  StarIcon,
+  QuestionMarkCircleIcon,
   SunIcon,
   TrashIcon,
   UserCircleIcon,
@@ -42,7 +42,7 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartFullIcon } from '@heroicons/react/24/solid'
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { ObjectPropByName } from '@/types/Generics';
 
 /**
@@ -60,6 +60,7 @@ const ICONS: Record<string, React.ComponentType> = {
   alert: ExclamationTriangleIcon,
   approval: StarIcon,
   arrowdown: ChevronDownIcon,
+  approval: QuestionMarkCircleIcon,
   avatar: UserCircleIcon,
   back: ChevronLeftIcon,
   bell: BellIcon,
@@ -73,8 +74,6 @@ const ICONS: Record<string, React.ComponentType> = {
   day: SunIcon,
   delete: TrashIcon,
   discussion: ChatBubbleLeftRightIcon,
-  envelope: EnvelopeIcon,
-  filter: FunnelIcon,
   forbid: MinusCircleIcon,
   group: UsersIcon,
   heart: HeartIcon,
@@ -85,6 +84,7 @@ const ICONS: Record<string, React.ComponentType> = {
   login: UserIcon,
   logout: ArrowRightEndOnRectangleIcon,
   menu: Bars3Icon,
+  message: EnvelopeIcon,
   night: MoonIcon,
   notifications: BellIcon,
   print: PrinterIcon,
@@ -102,9 +102,9 @@ const ICONS: Record<string, React.ComponentType> = {
 export type IconType = keyof typeof ICONS;
 
 interface Props {
-  name?: IconType; // Icon's name
-  icon?: IconType; // Icon's name alternate prop
-  size?: 'sm' | 'md' | 'lg' | 'xl'; // Icon's name alternate prop,
+  name?: keyof typeof ICONS; // Icon's name
+  icon?: keyof typeof ICONS; // Icon's name alternate prop
+  size?: 'small' | 'medium' | 'large' | 'xl'; // Icon's name alternate prop,
   sx?: ObjectPropByName;
 }
 
@@ -118,17 +118,17 @@ const AppIcon: FunctionComponent<Props> = ({ name, icon, size = 'md', sx, ...res
   const iconName = (name || icon || 'default').trim().toLowerCase();
   const ComponentToRender = ICONS[iconName] || ICONS.default;
   const currentSize =
-    size === 'sm'
+    size === 'small'
       ? '16px'
-      : size === 'lg'
+      : size === 'large'
         ? '32px'
         : size === 'xl'
           ? '40px' // size === xl
           : '24px'; // no size === md
   return (
-    <Box sx={{ minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}>
+    <Stack alignItems="center" justifyContent="center" sx={{ minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}>
       <ComponentToRender {...restOfProps} />
-    </Box>
+    </Stack>
   );
 };
 

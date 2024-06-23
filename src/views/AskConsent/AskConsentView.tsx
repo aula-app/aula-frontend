@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material';
-import { localStorageGet } from '@/utils/localStorage';
+import { localStorageGet } from '@/utils';
 import { useAppStore } from '@/store';
-import { useEffect, useState, useCallback, Fragment } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import ConsentDialog from '@/components/dialogs/ConsentDialog';
 

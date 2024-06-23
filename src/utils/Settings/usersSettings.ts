@@ -1,112 +1,100 @@
+import { SettingsType } from '@/types/SettingsTypes';
 import * as yup from 'yup';
 
-const definitions = {
-  name: 'Users',
-  itemName: 'User',
-  generates: 'rooms',
-};
-
-const requests = {
-  model: 'User',
-  method: 'getUsers',
-  id: 'user_id',
-  get: 'getUserBaseData',
-  add: 'addUser',
-  edit: 'editUserData',
-  delete: 'deleteUser',
-  decrypt: ['about_me', 'displayname', 'email', 'realname', 'username'],
-};
-
-const forms = [
-  {
-    name: 'realname',
-    label: 'Student Name',
-    schema: yup.string().required(),
-    defaultValue: '',
-    required: true,
-    hidden: false,
-    isText: false,
-  },
-  {
-    name: 'displayname',
-    label: 'Display Name',
-    defaultValue: '',
-    required: true,
-    hidden: false,
-    isText: false,
-    schema: yup.string().required(),
-  },
-  {
-    name: 'email',
-    label: 'Email',
-    defaultValue: '',
-    required: true,
-    hidden: false,
-    isText: false,
-    schema: yup.string().email().required(),
-  },
-  {
-    name: ' about_me',
-    label: 'Description',
-    defaultValue: '',
-    required: true,
-    hidden: false,
-    isText: true,
-    schema: yup.string(),
-  },
-  {
-    name: ' username',
-    label: 'User Name',
-    defaultValue: '',
-    required: true,
-    hidden: true,
-    isText: false,
-    schema: yup.string().required(),
-  },
-  {
-    name: ' position',
-    label: 'Position',
-    defaultValue: 0,
-    required: true,
-    hidden: true,
-    isText: false,
-    schema: yup.string().required(),
-  },
-  {
-    name: 'userlevel',
-    label: 'user Level',
-    defaultValue: 10,
-    required: true,
-    hidden: true,
-    isText: false,
-    schema: yup.number().required(),
-  },
-];
+const name = 'Users';
+const item = 'User';
+const model = 'User';
 
 const rows = [
   {
     id: 1,
     name: 'realname',
-    displayName: 'Student Name',
-    encryption: true,
+    displayName: 'Full Name',
   },
   {
     id: 6,
     name: 'displayname',
     displayName: 'User Name',
-    encryption: true,
+  },
+  {
+    id: 5,
+    name: 'username',
+    displayName: 'login',
   },
   {
     id: 7,
     name: 'email',
     displayName: 'Email',
-    encryption: true,
   },
 ];
 
-export const usersSettings = {
-  definitions,
-  requests,
-  forms,
-  rows,
+const forms = [
+  {
+    type: 'input',
+    label: 'Display Name',
+    column: 'displayname',
+    required: true,
+    hidden: false,
+    schema: yup.string().required(),
+  },
+  {
+    type: 'input',
+    label: 'Student Name',
+    column: 'realname',
+    required: true,
+    hidden: false,
+    schema: yup.string().required(),
+  },
+  {
+    type: 'input',
+    label: 'Email',
+    column: 'email',
+    required: true,
+    hidden: false,
+    schema: yup.string().email().required(),
+  },
+  {
+    type: 'text',
+    label: 'Description',
+    column: 'about_me',
+    value: 'description?',
+    required: false,
+    hidden: true,
+    schema: yup.string(),
+  },
+  {
+    type: 'input',
+    label: 'User Name',
+    column: 'username',
+    required: true,
+    hidden: false,
+    schema: yup.string().required(),
+  },
+  {
+    type: 'input',
+    label: 'Password',
+    column: 'password',
+    value: 'default_password',
+    required: true,
+    hidden: true,
+    schema: yup.string().required(),
+  },
+];
+
+const requests = {
+  id: `user_id`,
+  fetch: `getUsers`,
+  get: `getUserBaseData`,
+  add: `addUser`,
+  edit: `editUser`,
+  delete: `deleteUser`,
 };
+
+export const usersSettings = {
+  name,
+  item,
+  model,
+  rows,
+  forms,
+  requests,
+} as SettingsType;

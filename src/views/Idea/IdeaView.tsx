@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ApprovalCard from '@/components/ApprovalCard';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest } from '@/utils';
 import { CommentResponseType } from '@/types/CommentTypes';
 import { SingleIdeaResponseType } from '@/types/IdeaTypes';
 import NewComment from '@/components/NewComment';
@@ -33,7 +33,6 @@ const IdeaView = () => {
       model: 'Idea',
       method: 'getIdeaContent',
       arguments: { idea_id: params['idea_id'] },
-      decrypt: ['content', 'displayname'],
     }).then((response: SingleIdeaResponseType) => {
       setIdea(response);
       displayDate = new Date(response.data.created);
@@ -44,7 +43,6 @@ const IdeaView = () => {
       model: 'Comment',
       method: 'getCommentsByIdeaId',
       arguments: { idea_id: Number(params['idea_id']) },
-      decrypt: ['content', 'username'],
     }).then((response: CommentResponseType) => setComments(response));
 
   const getPhase = async () =>
@@ -52,7 +50,6 @@ const IdeaView = () => {
       model: 'Topic',
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
-      decrypt: ['name', 'description_public'],
     }).then((response: BoxResponseType) => setPhase(response.data.phase_id));
 
   useEffect(() => {
@@ -94,7 +91,10 @@ const IdeaView = () => {
                 onClick={toggleDrawer(true)}
                 sx={{
                   position: 'absolute',
-                  bottom: 40,
+                  right: 0,
+                  bottom: 0,
+                  boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
+                  m: 2,
                 }}
               >
                 <Add />

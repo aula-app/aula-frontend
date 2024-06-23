@@ -3,10 +3,8 @@ import { useParams } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
 import { GroupAdd } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import { Vote, noVoteOptions, votingOptions } from '@/utils/variants';
-import { localStorageGet } from '@/utils';
-import { parseJwt } from '@/utils/jwt';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest, localStorageGet, parseJwt, Vote, noVoteOptions, votingOptions } from '@/utils';
+
 
 /**
  * Renders "VotingCards" component
@@ -28,7 +26,6 @@ const VotingCard = () => {
         user_id: jwt_payload.user_id,
         idea_id: params['idea_id'],
       },
-      decrypt: [],
     }).then((response) => {
       setVote(response.data);
       setHasVoted(response.count > 0);
@@ -43,7 +40,6 @@ const VotingCard = () => {
         idea_id: params['idea_id'],
         vote_value: vote - 1, //turn 0, 1, 2 to -1, 0 , 1
       },
-      decrypt: [],
     }).then(() => getVote());
 
   useEffect(() => {
