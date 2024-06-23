@@ -8,6 +8,7 @@ import RoomView from '@/views/Room';
 import IdeaView from '@/views/Idea';
 import IdeasBoxView from '@/views/IdeasBox';
 import MessagesView from '@/views/Messages';
+import AskConsentView from '@/views/AskConsent';
 /**
  * List of routes available only for authenticated users
  * Also renders the "Private Layout" composition
@@ -21,7 +22,7 @@ function DefaultRoom() {
 
 const PrivateRoutes = () => (
   <Routes>
-    <Route path="/" element={<WelcomeView />} />
+    <Route path="/" element={<AskConsentView />} />
     <Route path="about" element={<AboutView />} />,
     <Route path="welcome" element={<WelcomeView />} />
     <Route path="messages" element={<MessagesView />} />
