@@ -25,6 +25,8 @@ import EditSettings from './EditSettings';
 import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
 import { AppIcon } from '@/components';
+import { ObjectPropByName } from '@/types/Generics';
+import MoveSettings from './MoveSettings';
 
 const GET_LIMIT = () => Math.max(Math.floor((window.innerHeight - 200) / 55) - 1 || 10, 1);
 
@@ -41,11 +43,11 @@ const SettingsView = () => {
   const [orderBy, setOrder] = useState(SettingsConfig[setting_name].rows[0]['id']);
   const [orderAsc, setOrderAsc] = useState(true);
 
-  const [selected, setSelected] = useState([] as number[]);
+  const [selected, setSelected] = useState<number[]>([]);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openMove, setOpenMove] = useState(false);
 
-  const dataFetch = async () => {
-    resetTable();
+  const dataFetch = async () =>
     await databaseRequest('model', {
       model: SettingsConfig[setting_name].model,
       method: SettingsConfig[setting_name].requests.fetch,
@@ -55,10 +57,14 @@ const SettingsView = () => {
         orderby: orderBy,
         asc: orderAsc,
       },
-    }).then((response: TableResponseType) => {
-      setItems(response);
     });
+
+  const loadData = async () => {
+    resetTable();
+    await dataFetch().then((response) => setItems(response));
   };
+
+
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
@@ -100,7 +106,7 @@ const SettingsView = () => {
     };
   }, []);
   useEffect(() => {
-    dataFetch();
+    loadData();
   }, [page, limit, orderBy, orderAsc, setting_id, setting_name]);
 
   return (
@@ -186,7 +192,7 @@ const SettingsView = () => {
             </Stack>
             <Stack direction="row" alignItems="center" justifyContent="end" flex={1}>
               {SettingsConfig[setting_name].isChild && (
-                <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
+                <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenMove(true)}>
                   <AppIcon sx={{ mr: 1 }} name={SettingsConfig[SettingsConfig[setting_name].isChild].item} /> Add to{' '}
                   {SettingsConfig[SettingsConfig[setting_name].isChild].item}
                 </Button>
@@ -220,7 +226,14 @@ const SettingsView = () => {
         items={selected}
         isOpen={openDelete}
         closeMethod={() => setOpenDelete(false)}
-        reloadMethod={() => dataFetch()}
+        reloadMethod={() => loadData()}
+      />
+      <MoveSettings
+        key={`move_${setting_name}`}
+        items={selected}
+        isOpen={openMove}
+        closeMethod={() => setOpenMove(false)}
+        reloadMethod={() => loadData()}
       />
     </Stack>
   );

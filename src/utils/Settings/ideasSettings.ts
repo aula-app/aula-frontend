@@ -8,9 +8,9 @@ const isChild = 'boxes';
 
 const rows = [
   {
-    id: 8,
-    name: 'room_id',
-    displayName: 'Room',
+    id: 9,
+    name: 'title',
+    displayName: 'Title',
   },
   {
     id: 7,
@@ -27,11 +27,24 @@ const rows = [
     name: 'last_update',
     displayName: 'Last Updated',
   },
+  {
+    id: 8,
+    name: 'room_id',
+    displayName: 'Room',
+  },
 ];
 
 const forms = [
   {
     type: 'input',
+    label: 'Title',
+    column: 'title',
+    required: true,
+    hidden: false,
+    schema: yup.string().max(50, 'Must be smaller than 50 characters').required(),
+  },
+  {
+    type: 'text',
     label: 'Content',
     column: 'content',
     required: true,
@@ -50,12 +63,13 @@ const forms = [
 ];
 
 const requests = {
-  id: `idea_id`,
-  fetch: `getIdeas`,
-  get: `getIdeaBaseData`,
-  add: `addIdea`,
-  edit: `editIdea`,
-  delete: `deleteIdea`,
+  id: 'idea_id',
+  fetch: 'getIdeas',
+  get: 'getIdeaBaseData',
+  add: 'addIdea',
+  edit: 'editIdea',
+  delete: 'deleteIdea',
+  move: 'addIdeaToTopic'
 };
 
 export const ideasSettings = {
