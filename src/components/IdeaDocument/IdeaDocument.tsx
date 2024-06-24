@@ -43,7 +43,7 @@ export const IdeaDocument = ({ idea, onReload }: Props) => {
 
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <Typography variant="h6">Title</Typography>
+      <Typography variant="h6">{idea.title}</Typography>
       <Typography mb={2}>{idea.content}</Typography>
       <Stack direction="row" alignItems="center" justifyContent="space-between" pb={2}>
         <Chip icon={<AppIcon name="settings" />} label="category" color="warning" />

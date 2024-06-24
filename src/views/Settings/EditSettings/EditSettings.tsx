@@ -27,6 +27,7 @@ const EditSettings = () => {
     register,
     setValue,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(yup.object(schema).required()),
@@ -98,7 +99,7 @@ const EditSettings = () => {
           {(items.data || setting_id === 'new') && (
             <FormContainer>
               {SettingsConfig[setting_name].forms.map((field) => {
-                return <FormInput key={field.column} content={field} register={register} errors={errors} />;
+                return <FormInput key={field.column} content={field} control={control} register={register} errors={errors} />;
               })}
               <Stack direction="row">
                 <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={() => navigate(`/settings/${setting_name}`)}>
