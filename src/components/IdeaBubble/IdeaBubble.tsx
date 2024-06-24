@@ -5,18 +5,18 @@ import ChatBubble from '../ChatBubble';
 import { blue } from '@mui/material/colors';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
+import AppLink from '../AppLink';
 
 interface Props {
   idea: IdeaType;
-  comments?: number | null;
+  comments?: number;
+  to: string;
   onReload: () => void;
 }
 
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
-
-
-export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
+export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
@@ -48,12 +48,14 @@ export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
 
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <ChatBubble color={blue[50]}>
-        <Stack>
-          <Typography variant="h6">Title</Typography>
-          <Typography mb={2}>{idea.content}</Typography>
-        </Stack>
-      </ChatBubble>
+      <AppLink to={to} disabled={!to}>
+        <ChatBubble color={blue[50]}>
+          <Stack>
+            <Typography variant="h6">{idea.title}</Typography>
+            <Typography mb={2}>{idea.content}</Typography>
+          </Stack>
+        </ChatBubble>
+      </AppLink>
       <Stack direction="row" alignItems="center">
         <AppIcon name="account" size="xl" />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
@@ -74,13 +76,13 @@ export const IdeaBubble = ({ idea, comments = null, onReload }: Props) => {
           </Typography>
         </Stack>
         {/* <Chip icon={<AppIcon name="settings" />} label="category" color="warning" /> */}
-        {comments && (
+        {comments > 0 && (
           <Stack direction="row" alignItems="center" mx={1}>
             <AppIcon name="chat" sx={{ mr: 0.5 }} />
             {comments}
           </Stack>
         )}
-        <Button color="error" size='small' onClick={toggleLike}>
+        <Button color="error" size="small" onClick={toggleLike}>
           <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
           {idea.sum_likes}
         </Button>
