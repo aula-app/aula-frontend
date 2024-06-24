@@ -1,4 +1,4 @@
-import { Badge, Box, Grid, IconButton, Stack, Typography } from '@mui/material';
+import { Badge, Box, Grid, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
 import { dashboardPhases, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
@@ -11,7 +11,7 @@ const DashBoard = ({ show = false }) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
 
-  const [count, setCount] = useState<number[]>([]);
+  const [count, setCount] = useState<Record<number, number>>({});
   const [messages, setMessages] = useState(0);
   const [likes, setLikes] = useState(0);
 
@@ -57,7 +57,7 @@ const DashBoard = ({ show = false }) => {
             <AppIconButton icon="heart" sx={{p: 0}} />
           </Badge>
         </Stack>
-        {count.length === 6 && (
+        {Object.keys(count).length > 6 && (
           <Grid
             container
             spacing={1}
@@ -87,7 +87,7 @@ const DashBoard = ({ show = false }) => {
                     >
                       {dashboardPhases[phase].name}
                     </Box>
-                    {count[key]}
+                    {count[dashboardPhases[phase].phase_id]}
                   </Stack>
                 </Box>
               </Grid>
