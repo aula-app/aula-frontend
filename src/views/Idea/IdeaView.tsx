@@ -66,16 +66,16 @@ const IdeaView = () => {
 
   return (
     <Stack width="100%" height="100%" overflow="auto">
-      {phase === 2 && <VotingCard />}
+      {phase === 30 && <VotingCard />}
       {idea.data && (
         <Stack p={2}>
-          {phase === 3 && <VotingResults yourVote={0} />}
+          {phase === 40 && <VotingResults yourVote={0} />}
           {phase === 0 ? (
             <IdeaBubble idea={idea.data} onReload={ideaFetch} />
           ) : (
             <IdeaDocument idea={idea.data} onReload={ideaFetch} />
           )}
-          {idea.data && idea.data.approved != 0 && phase > 0 && (
+          {idea.data && idea.data.approved != 0 && phase > 20 && (
             <ApprovalCard comment={idea.data.approval_comment} rejected={idea.data.approved < 0} disabled={phase > 1} />
           )}
           <Typography variant="h5" py={2}>

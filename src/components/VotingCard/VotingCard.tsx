@@ -47,17 +47,7 @@ const VotingCard = () => {
   }, []);
 
   return (
-    <Card
-      sx={{
-        mb: 2,
-        p: 2,
-        overflow: 'unset',
-        scrollSnapAlign: 'center',
-        bgcolor: hasVoted ? votingOptions[vote + 1]['bg']: noVoteOptions['bg'],
-        color: hasVoted ? votingOptions[vote + 1]['color']: noVoteOptions['color'],
-        borderRadius: 0,
-      }}
-    >
+    <Stack p={2}>
       <Stack direction="row">
         <Typography variant="h6">Vote</Typography>
         <Button size="small" sx={{ ml: 'auto', px: 1, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}>
@@ -86,7 +76,7 @@ const VotingCard = () => {
           </Button>
         ))}
       </Stack>
-    </Card>
+    </Stack>
   );
 };
 

@@ -10,7 +10,7 @@ import AppLink from '../AppLink';
 interface Props {
   idea: IdeaType;
   comments?: number;
-  to: string;
+  to?: string;
   onReload: () => void;
 }
 
