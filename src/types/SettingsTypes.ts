@@ -35,4 +35,5 @@ export interface SettingRequests {
   add: string;
   edit: string;
   delete: string;
+  move?: string;
 }

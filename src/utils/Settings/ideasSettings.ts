@@ -63,12 +63,13 @@ const forms = [
 ];
 
 const requests = {
-  id: `idea_id`,
-  fetch: `getIdeas`,
-  get: `getIdeaBaseData`,
-  add: `addIdea`,
-  edit: `editIdea`,
-  delete: `deleteIdea`,
+  id: 'idea_id',
+  fetch: 'getIdeas',
+  get: 'getIdeaBaseData',
+  add: 'addIdea',
+  edit: 'editIdea',
+  delete: 'deleteIdea',
+  move: 'addIdeaToTopic'
 };
 
 export const ideasSettings = {
