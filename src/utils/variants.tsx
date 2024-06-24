@@ -8,73 +8,62 @@ export interface VoteOptions {
     bg: string;
     color: string;
     button: string;
-    icon: React.ReactNode;
 }
 
 export const votingOptions: VoteOptions[] = [
   {
     label: 'against',
     bg: red[200],
-    color: red[800],
+    color: "#000",
     button: red[300],
-    icon: <DoNotDisturbOn sx={{fontSize: "inherit"}} />,
   },
   {
     label: 'neutral',
     bg: amber[200],
-    color: amber[800],
+    color: "#000",
     button: amber[300],
-    icon: <Circle sx={{fontSize: "inherit"}} />,
   },
   {
     label: 'for',
     bg: green[200],
-    color: green[800],
+    color: "#000",
     button: green[300],
-    icon: <CheckCircle sx={{fontSize: "inherit"}} />,
   },
 ];
 
 export const noVoteOptions = {
   bg: grey[200],
   color: grey[600],
-  button: grey[400],
+  button: 'transparent',
 }
 
 export const variantOptions = {
   discussion: {
     color: 'inherit',
     bg: 'transparent',
-    icon: <></>,
   },
   approved: {
     color: amber[800],
     bg: amber[100],
-    icon: <WorkspacePremium sx={{fontSize: "inherit"}} />,
   },
   dismissed: {
     color: grey[600],
     bg: grey[200],
-    icon: votingOptions[0].icon,
   },
   voting: {
     color: 'inherit',
     bg: 'transparent',
-    icon: <></>,
   },
   voted: {
     color: votingOptions[2].color,
     bg: votingOptions[2].bg,
-    icon: votingOptions[2].icon,
   },
   neutral: {
     color: votingOptions[1].color,
     bg: votingOptions[1].bg,
-    icon: votingOptions[1].icon,
   },
   rejected: {
     color: votingOptions[0].color,
     bg: votingOptions[0].bg,
-    icon: votingOptions[0].icon,
   },
 };

@@ -1,8 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
-import { useParams } from 'react-router-dom';
-import { grey } from '@mui/material/colors';
-import { variantOptions } from '@/utils';
+import { green, grey } from '@mui/material/colors';
+import AppIcon from '../AppIcon';
 
 interface IdeaBoxProps {
   disabled?: boolean;
@@ -14,9 +13,7 @@ interface IdeaBoxProps {
  * Renders "Welcome" view
  * url: /
  */
-const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment'}: IdeaBoxProps) => {
-  const params = useParams();
-
+const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment' }: IdeaBoxProps) => {
   return (
     <Card
       sx={{
@@ -24,8 +21,8 @@ const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment'}: 
         overflow: 'hidden',
         my: 2,
         scrollSnapAlign: 'center',
-        color: !disabled && !rejected ? variantOptions.approved.color : variantOptions.dismissed.color,
-        bgcolor: !disabled && !rejected ? variantOptions.approved.bg : variantOptions.dismissed.bg,
+        color: disabled ? grey[600] : 'inherit',
+        bgcolor: !disabled && !rejected ? green[100] : grey[300],
       }}
       variant="outlined"
     >
@@ -39,11 +36,11 @@ const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment'}: 
           }}
           fontSize={40}
         >
-          {!rejected ? variantOptions.approved.icon : variantOptions.dismissed.icon}
+          {!rejected ? <AppIcon icon="approved" /> : <AppIcon icon="rejected" />}
         </Stack>
         <Stack flexGrow={1} pr={2}>
           <Typography variant="body2" sx={{ color: disabled ? grey[500] : 'inherit' }}>
-            {comment}
+            {comment || 'Approval text'}
           </Typography>
         </Stack>
       </Stack>
