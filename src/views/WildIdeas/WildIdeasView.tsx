@@ -2,7 +2,6 @@ import { Fab, Stack } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useState } from 'react';
 import NewWildIdea from '@/components/NewWildIdea';
-import { AppLink } from '@/components';
 import { IdeaType } from '@/types/IdeaTypes';
 import { useParams } from 'react-router-dom';
 import Idea from '@/components/IdeaBubble';
@@ -45,6 +44,7 @@ const WildIdeas = ({ ideas, reload }: WildIdeasProps) => {
         <Idea
           idea={idea} onReload={reload}
           key={idea.id}
+          comments={idea.sum_comments}
           to={`/room/${params['room_id']}/idea/${idea.id}`}
           />
       ))}

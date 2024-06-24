@@ -1,3 +1,4 @@
+import { RoomPhases } from '@/types/RoomTypes';
 import { green, amber, deepPurple, deepOrange, blue, grey, red } from '@mui/material/colors';
 
 export const allPhases = {
@@ -59,5 +60,5 @@ export const allPhases = {
   },
 };
 
-export const phases = (({ dismissal, success, reject, ...o }) => o)(allPhases);
+export const phases = (({ dismissal, success, reject, ...o }) => o)(allPhases) as Record<RoomPhases, any>;
 export const dashboardPhases = (({ result, dismissal, ...o }) => o)(allPhases);

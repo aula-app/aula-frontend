@@ -9,17 +9,17 @@ import AppLink from '../AppLink';
 
 interface Props {
   idea: IdeaType;
+  comments?: number;
   to: string;
   onReload: () => void;
 }
 
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
-export const IdeaBubble = ({ idea, to, onReload }: Props) => {
+export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
-  const [comments, setCOmments] = useState(0);
   const displayDate = new Date(idea.created);
 
   const manageLike = (likeMethod: likeMethodType) => {
@@ -36,13 +36,6 @@ export const IdeaBubble = ({ idea, to, onReload }: Props) => {
   const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
   const addLike = async () => await manageLike('IdeaAddLike').then(() => onReload());
   const removeLike = async () => await manageLike('IdeaRemoveLike').then(() => onReload());
-  const getSumComments = async () => await databaseRequest('model', {
-    model: 'Comment',
-    method: 'getCommentsByIdeaId',
-    arguments: {
-      idea_id: idea.id,
-    },
-  }).then((result) => console.log(result));
 
   const toggleLike = () => {
     liked ? removeLike() : addLike();
@@ -51,7 +44,6 @@ export const IdeaBubble = ({ idea, to, onReload }: Props) => {
 
   useEffect(() => {
     hasLiked();
-    getSumComments();
   }, []);
 
   return (
@@ -85,7 +77,7 @@ export const IdeaBubble = ({ idea, to, onReload }: Props) => {
         </Stack>
         {/* <Chip icon={<AppIcon name="settings" />} label="category" color="warning" /> */}
         {comments > 0 && (
-          <Stack direction="row" alignItems="center" mx={1}>
+          <Stack direction="row" alignItems="center">
             <AppIcon name="chat" sx={{ mr: 0.5 }} />
             {comments}
           </Stack>

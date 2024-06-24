@@ -4,6 +4,7 @@ export interface IdeaType {
   title: string;
   sum_likes: number;
   sum_votes: number;
+  sum_comments: number;
   number_of_votes: number;
   user_id: number;
   votes_available_per_user: number;
