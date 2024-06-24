@@ -66,24 +66,24 @@ const IdeaView = () => {
 
   return (
     <Stack width="100%" height="100%" overflow="auto">
-      {phase === 2 && <VotingCard />}
+      {phase === 30 && <VotingCard />}
       {idea.data && (
         <Stack p={2}>
-          {phase === 3 && <VotingResults yourVote={0} />}
+          {phase === 40 && <VotingResults yourVote={0} />}
           {phase === 0 ? (
             <IdeaBubble idea={idea.data} onReload={ideaFetch} />
           ) : (
             <IdeaDocument idea={idea.data} onReload={ideaFetch} />
           )}
-          {idea.data && idea.data.approved != 0 && phase > 0 && (
-            <ApprovalCard comment={idea.data.approval_comment} rejected={idea.data.approved < 0} disabled={phase > 1} />
+          {idea.data && phase >= 20 && (
+            <ApprovalCard comment={idea.data.approval_comment} rejected={idea.data.approved < 0} disabled={phase > 20} />
           )}
           <Typography variant="h5" py={2}>
             {String(comments.count)} Comments
           </Typography>
           {comments.data &&
             comments.data.map((comment) => <Comment key={comment.id} comment={comment} onReload={commentsFetch} />)}
-          {phase < 2 && (
+          {phase < 20 && (
             <Stack alignItems="center">
               <Fab
                 aria-label="add"
@@ -91,7 +91,6 @@ const IdeaView = () => {
                 onClick={toggleDrawer(true)}
                 sx={{
                   position: 'absolute',
-                  right: 0,
                   bottom: 0,
                   boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
                   m: 2,

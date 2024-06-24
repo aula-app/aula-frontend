@@ -3,6 +3,7 @@ import { Card } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { green, grey, red } from '@mui/material/colors';
 import { votingOptions, Vote } from '@/utils';
+import AppIcon from '../AppIcon';
 
 interface IdeaBoxProps {
   rejected?: boolean;
@@ -37,7 +38,9 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
               aspectRatio: 1,
             }}
           >
-            {votingOptions[!rejected ? 2 : 0]['icon']}
+            {!rejected
+              ? <AppIcon icon="for" size='xl' />
+              : <AppIcon icon="against" size='xl' />}
           </Stack>
           <Stack flexGrow={1} pr={2}>
             <Typography variant="body2">
@@ -46,15 +49,15 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
           </Stack>
           <Stack>
             {votingOptions.map((option, i) => (
-              <Stack direction="row" alignItems="center" fontSize="small" key={i} mr={1} sx={{ whiteSpace: 'nowrap' }}>
-                {option['icon']}&nbsp; 3
+              <Stack direction="row" alignItems="center" fontSize="small" key={i} mr={1.5} sx={{ whiteSpace: 'nowrap' }}>
+                <AppIcon icon={option.label} size='small' sx={{mr: .5}} /> 3
               </Stack>
             ))}
           </Stack>
         </Stack>
       </Card>
       <Stack direction="row" alignItems="center" color={grey[600]} mx={3} mt={1} fontSize="small">
-        {votingOptions[yourVote]['icon']}&nbsp; You voted {votingOptions[yourVote]['label']} this idea
+        <AppIcon icon={votingOptions[yourVote].label} />&nbsp; You voted {votingOptions[yourVote].label} this idea
       </Stack>
     </Stack>
   );

@@ -78,7 +78,7 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
               }}
               fontSize="40px"
             >
-              {variantOptions[variant].icon}
+              {/* {variantOptions[variant].icon} */}
             </Stack>
           )}
           <Stack flexGrow={1} px={2} overflow="hidden">

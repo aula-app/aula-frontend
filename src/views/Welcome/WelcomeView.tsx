@@ -8,13 +8,13 @@ import { Add } from '@mui/icons-material';
 
 const WelcomeView = () => {
   const [rooms, setRooms] = useState({} as RoomsResponseType);
-  const [showNotificationsBar, setNotificationsBar] = useState(true);
+  const [showDashboard, setDashboard] = useState(true);
 
   const roomsFetch = async () =>
     await databaseRequest('rooms', {}).then((response: RoomsResponseType) => setRooms(response));
 
   const handleScroll = (event: React.UIEvent<HTMLElement>) => {
-    setNotificationsBar(event.currentTarget.scrollTop === 0);
+    setDashboard(event.currentTarget.scrollTop === 0);
   };
 
   useEffect(() => {
@@ -23,12 +23,11 @@ const WelcomeView = () => {
 
   return (
     <Stack height="100%">
-      <DashBoard show={showNotificationsBar} />
+      <DashBoard show={showDashboard} />
       <Stack
         flexGrow={1}
         position="relative"
         onScroll={handleScroll}
-        onMouseEnter={() => setNotificationsBar(true)}
         sx={{
           px: 2,
           overflowY: 'auto',

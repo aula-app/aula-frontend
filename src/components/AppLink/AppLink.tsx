@@ -8,6 +8,7 @@ interface Props extends MuiLinkProps {
   to?: string;
   href?: string;
   openInNewTab?: boolean;
+  disabled?: boolean;
 }
 
 /**
@@ -26,7 +27,8 @@ const AppLink = forwardRef<any, Props>(
       underline = APP_LINK_UNDERLINE,
       to = '',
       href,
-      openInNewTab = Boolean(href), // Open external links in new Tab by default
+      openInNewTab = Boolean(href), // Open external links in new Tab by default,
+      disabled = false,
       ...restOfProps
     },
     ref
@@ -37,7 +39,9 @@ const AppLink = forwardRef<any, Props>(
       ...(openInNewTab ? { target: '_blank', rel: 'noreferrer noopener' } : {}),
       ...restOfProps,
     };
-    return href ? (
+    return disabled ? (
+      <>{children}</>
+    ) : href ? (
       <MuiLink ref={ref} href={href} {...propsToRender}>
         {children}
       </MuiLink>

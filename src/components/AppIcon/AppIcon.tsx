@@ -1,6 +1,7 @@
 import { FunctionComponent } from 'react';
 import LogoIcon from './logo.svg?react';
 import VotingIcon from './voting.svg?react';
+import CircleIcon from './circle.svg?react';
 import {
   AcademicCapIcon,
   ArchiveBoxIcon,
@@ -13,6 +14,7 @@ import {
   CheckCircleIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
+  ClockIcon,
   Cog6ToothIcon,
   DocumentTextIcon,
   EnvelopeIcon,
@@ -20,6 +22,8 @@ import {
   EyeIcon,
   EyeSlashIcon,
   FunnelIcon,
+  HandThumbDownIcon,
+  HandThumbUpIcon,
   HeartIcon,
   HomeIcon,
   InformationCircleIcon,
@@ -57,9 +61,11 @@ const ICONS: Record<string, React.ComponentType> = {
   logo: LogoIcon,
   account: UserCircleIcon,
   add: PlusIcon,
+  against: XCircleIcon,
   alert: ExclamationTriangleIcon,
   arrowdown: ChevronDownIcon,
   approval: QuestionMarkCircleIcon,
+  approved: HandThumbUpIcon,
   avatar: UserCircleIcon,
   back: ChevronLeftIcon,
   bell: BellIcon,
@@ -70,10 +76,13 @@ const ICONS: Record<string, React.ComponentType> = {
   chat: ChatBubbleLeftIcon,
   check: CheckCircleIcon,
   close: XMarkIcon,
+  clock: ClockIcon,
   day: SunIcon,
   delete: TrashIcon,
   discussion: ChatBubbleLeftRightIcon,
+  dismissed: HandThumbDownIcon,
   filter: FunnelIcon,
+  for: CheckCircleIcon,
   forbid: MinusCircleIcon,
   group: UsersIcon,
   heart: HeartIcon,
@@ -85,6 +94,7 @@ const ICONS: Record<string, React.ComponentType> = {
   logout: ArrowRightEndOnRectangleIcon,
   menu: Bars3Icon,
   message: EnvelopeIcon,
+  neutral: CircleIcon,
   night: MoonIcon,
   notifications: BellIcon,
   print: PrinterIcon,
@@ -104,7 +114,7 @@ export type IconType = keyof typeof ICONS;
 interface Props {
   name?: keyof typeof ICONS; // Icon's name
   icon?: keyof typeof ICONS; // Icon's name alternate prop
-  size?: 'small' | 'medium' | 'large' | 'xl'; // Icon's name alternate prop,
+  size?: 'small' | 'medium' | 'large' | 'xl' | 'full'; // Icon's name alternate prop,
   sx?: ObjectPropByName;
 }
 
@@ -120,11 +130,13 @@ const AppIcon: FunctionComponent<Props> = ({ name, icon, size = 'md', sx, ...res
   const currentSize =
     size === 'small'
       ? '16px'
-      : size === 'large'
-        ? '32px'
-        : size === 'xl'
-          ? '40px' // size === xl
-          : '24px'; // no size === md
+    : size === 'large'
+      ? '32px'
+    : size === 'xl'
+      ? '40px'
+    : size === 'full'
+      ? '100%'
+      : '24px'; // no size === md
   return (
     <Stack alignItems="center" justifyContent="center" sx={{ minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}>
       <ComponentToRender {...restOfProps} />

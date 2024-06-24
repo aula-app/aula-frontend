@@ -30,7 +30,7 @@ const RoomView = () => {
   const [ideas, setIdeas] = useState({} as IdeasResponseType);
   const [boxes, setBoxes] = useState({} as BoxesResponseType);
   const [tab, setTab] = useState<TabOptions>('ideas');
-  
+
   const updateTab = () => setTab(location.pathname.split('/')[location.pathname.split('/').length - 1] === 'boxes' ? 'boxes' : 'ideas');
 
   const ideasFetch = async () =>

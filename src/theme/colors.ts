@@ -1,27 +1,27 @@
 import { PaletteOptions, SimplePaletteColorOptions } from '@mui/material';
 
 const COLOR_PRIMARY: SimplePaletteColorOptions = {
-  main: '#7DE293',
+  main: 'hsl(133, 65%, 70%)',
 };
 
 const COLOR_SECONDARY: SimplePaletteColorOptions = {
-  main: '#a6a6a6',
+  main: 'hsl(180, 10%, 70%)',
 };
 
 const COLOR_ERROR: SimplePaletteColorOptions = {
-  main: '#EF9A9A',
+  main: 'hsl(355, 60%, 73%)'
 };
 
 const COLOR_WARNING: SimplePaletteColorOptions = {
-  main: '#ffdc82',
+  main: 'hsl(40, 65%, 70%)',
 };
 
 const COLOR_INFO: SimplePaletteColorOptions = {
-  main: '#00c8ff',
+  main: 'hsl(190, 65%, 70%)',
 };
 
 const COLOR_SUCCESS: SimplePaletteColorOptions = {
-  main: '#93cf4b',
+  main: 'hsl(113, 65%, 60%)',
 };
 
 /**

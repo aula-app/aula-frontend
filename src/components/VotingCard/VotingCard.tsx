@@ -4,6 +4,7 @@ import { grey } from '@mui/material/colors';
 import { GroupAdd } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { databaseRequest, localStorageGet, parseJwt, Vote, noVoteOptions, votingOptions } from '@/utils';
+import AppIcon from '../AppIcon';
 
 
 /**
@@ -47,17 +48,7 @@ const VotingCard = () => {
   }, []);
 
   return (
-    <Card
-      sx={{
-        mb: 2,
-        p: 2,
-        overflow: 'unset',
-        scrollSnapAlign: 'center',
-        bgcolor: hasVoted ? votingOptions[vote + 1]['bg']: noVoteOptions['bg'],
-        color: hasVoted ? votingOptions[vote + 1]['color']: noVoteOptions['color'],
-        borderRadius: 0,
-      }}
-    >
+    <Stack p={2}>
       <Stack direction="row">
         <Typography variant="h6">Vote</Typography>
         <Button size="small" sx={{ ml: 'auto', px: 1, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}>
@@ -79,14 +70,14 @@ const VotingCard = () => {
             key={i}
             onClick={() => registerVote(i as Vote)}
           >
-            <Stack alignItems="center">
-              <Typography fontSize={75}>{option['icon']}</Typography>
-              {option['label']}
+            <Stack alignItems="center" width={70}>
+              <AppIcon icon={option.label} size='full' />
+              {option.label}
             </Stack>
           </Button>
         ))}
       </Stack>
-    </Card>
+    </Stack>
   );
 };
 
