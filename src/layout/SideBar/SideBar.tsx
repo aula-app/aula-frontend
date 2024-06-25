@@ -35,14 +35,14 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     icon: 'room',
   },
   {
-    title: 'Ideas',
-    path: '/settings/ideas',
-    icon: 'idea',
-  },
-  {
     title: 'Boxes',
     path: '/settings/boxes',
     icon: 'box',
+  },
+  {
+    title: 'Ideas',
+    path: '/settings/ideas',
+    icon: 'idea',
   },
   {
     title: 'Messages',
