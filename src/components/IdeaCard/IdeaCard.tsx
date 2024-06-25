@@ -67,21 +67,10 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
     >
       <AppLink to={`/room/${params.room_id}/idea-box/${params.box_id}/idea/${idea.idea_id}`}>
         <Stack direction="row" height={68} alignItems="center" color={variantOptions[variant].color}>
-          {variant !== 'discussion' && (
-            <Stack
-              height="100%"
-              alignItems="center"
-              justifyContent="center"
-              sx={{
-                aspectRatio: 1,
-                borderRight: '1px solid currentColor'
-              }}
-              fontSize="40px"
-            >
-              {/* {variantOptions[variant].icon} */}
-            </Stack>
-          )}
           <Stack flexGrow={1} px={2} overflow="hidden">
+            <Typography variant='h6'>
+              {idea.title}
+            </Typography>
             <Typography variant="body2" noWrap textOverflow="ellipsis">
               {idea.content}
             </Typography>

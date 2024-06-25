@@ -26,7 +26,9 @@ const EditSettings = () => {
   const {
     register,
     setValue,
+    control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(yup.object(schema).required()),
@@ -70,7 +72,9 @@ const EditSettings = () => {
     });
   };
 
-  useEffect(() => {updateValues()}, [setting_id, items?.data])
+  useEffect(() => {
+    updateValues()
+  }, [setting_id, items?.data])
 
   useEffect(() => {
     if (setting_id) dataFetch();
@@ -97,9 +101,9 @@ const EditSettings = () => {
           </Stack>
           {(items.data || setting_id === 'new') && (
             <FormContainer>
-              {SettingsConfig[setting_name].forms.map((field) => {
-                return <FormInput key={field.column} content={field} register={register} errors={errors} />;
-              })}
+              {SettingsConfig[setting_name].forms.map((field) => (
+                <FormInput key={field.column} content={field} register={register} control={control} getValues={getValues} errors={errors} />
+              ))}
               <Stack direction="row">
                 <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={() => navigate(`/settings/${setting_name}`)}>
                   Cancel
