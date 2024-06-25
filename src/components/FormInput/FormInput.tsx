@@ -1,4 +1,3 @@
-import { ObjectPropByName } from '@/types/Generics';
 import { SettingForm, SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, SettingsConfig } from '@/utils';
 import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
@@ -19,7 +18,6 @@ type Props = {
 
 const FormInput = ({ content, register, getValues, control, errors, ...restOfProps }: Props) => {
   const [currentOptions, setOptions] = useState(content.options || []);
-  const [selectDefault, setSelectDefault] = useState<number>();
 
   async function fetchOptions(setting: SettingNamesType) {
     await databaseRequest('model', {
@@ -31,14 +29,12 @@ const FormInput = ({ content, register, getValues, control, errors, ...restOfPro
       },
     }).then((response) => {
       // @ts-ignore
-      setOptions(response.data.map((row) => ({ label: row[SettingsConfig[setting].rows[0].name], value: row.id })));
+      setOptions(response.data.map((row) => {
+
+        return({ label: row[SettingsConfig[setting].rows[0].name], value: row.id })
+    }));
     });
   }
-
-  useEffect(() => {
-    const def = getValues();
-    setSelectDefault(def[content.column]);
-  }, [currentOptions, content.column]);
 
   useEffect(() => {
     if (content.fetchOptions) fetchOptions(content.fetchOptions);

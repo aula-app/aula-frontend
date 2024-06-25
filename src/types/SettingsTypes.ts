@@ -25,6 +25,7 @@ export interface SettingForm {
   options?: {label: string, value: number}[];
   required: boolean;
   hidden: boolean;
+  phase?: number;
   schema: any;
 }
 

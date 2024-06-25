@@ -101,9 +101,9 @@ const EditSettings = () => {
           </Stack>
           {(items.data || setting_id === 'new') && (
             <FormContainer>
-              {SettingsConfig[setting_name].forms.map((field) => {
-                return <FormInput key={field.column} content={field} register={register} control={control} getValues={getValues} errors={errors} />;
-              })}
+              {SettingsConfig[setting_name].forms.map((field) => (
+                <FormInput key={field.column} content={field} register={register} control={control} getValues={getValues} errors={errors} />
+              ))}
               <Stack direction="row">
                 <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={() => navigate(`/settings/${setting_name}`)}>
                   Cancel
