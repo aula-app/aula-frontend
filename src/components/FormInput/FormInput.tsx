@@ -1,12 +1,15 @@
+import { ObjectPropByName } from '@/types/Generics';
 import { SettingForm, SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, SettingsConfig } from '@/utils';
-import { FormHelperText, MenuItem, TextField } from '@mui/material';
+import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { FieldErrors, UseFormRegister } from 'react-hook-form-mui';
+import { Control, Controller, FieldErrors, UseFormGetValues, UseFormRegister } from 'react-hook-form-mui';
 
 type Props = {
   content: SettingForm;
+  control: Control<{}, any>;
   register: UseFormRegister<{}>;
+  getValues: UseFormGetValues<{}>;
   errors: FieldErrors<{}>;
 };
 
@@ -14,8 +17,9 @@ type Props = {
  * Renders "FormInput" component
  */
 
-const FormInput = ({ content, register, errors, ...restOfProps }: Props) => {
+const FormInput = ({ content, register, getValues, control, errors, ...restOfProps }: Props) => {
   const [currentOptions, setOptions] = useState(content.options || []);
+  const [selectDefault, setSelectDefault] = useState<number>();
 
   async function fetchOptions(setting: SettingNamesType) {
     await databaseRequest('model', {
@@ -27,9 +31,14 @@ const FormInput = ({ content, register, errors, ...restOfProps }: Props) => {
       },
     }).then((response) => {
       // @ts-ignore
-      setOptions(response.data.map(row => ({ label: row[SettingsConfig[setting].rows[0].name], value: row.id })));
+      setOptions(response.data.map((row) => ({ label: row[SettingsConfig[setting].rows[0].name], value: row.id })));
     });
   }
+
+  useEffect(() => {
+    const def = getValues();
+    setSelectDefault(def[content.column]);
+  }, [currentOptions, content.column]);
 
   useEffect(() => {
     if (content.fetchOptions) fetchOptions(content.fetchOptions);
@@ -54,36 +63,45 @@ const FormInput = ({ content, register, errors, ...restOfProps }: Props) => {
           {...restOfProps}
         />
       ) : (
-        <>
-          <TextField
-            label={content.label}
-            required={content.required}
-            fullWidth
-            select
-            // @ts-ignore
-            {...register(content.column)}
-            // @ts-ignore
-            error={errors[content.column] ? true : false}
-            {...restOfProps}
-          >
-            {currentOptions.map((option) => (
-              <MenuItem value={option.value} key={option.label}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-          <FormHelperText
-            error={
-              // @ts-ignore
-              errors[content.column] ? true : false
-            }
-          >
-            {
-              // @ts-ignore
-              errors[content.column]?.message || ' '
-            }
-          </FormHelperText>
-        </>
+        <Controller
+          // @ts-ignore
+          name={content.column}
+          control={control}
+          // @ts-ignore
+          defaultValue={0}
+          render={({ field, fieldState }) => (
+            <FormControl fullWidth>
+              <TextField
+                label={content.label}
+                required={content.required}
+                fullWidth
+                select
+                // @ts-ignore
+                {...field}
+                // @ts-ignore
+                error={!!fieldState.error}
+                {...restOfProps}
+              >
+                {currentOptions.map((option) => (
+                  <MenuItem value={option.value} key={option.label}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <FormHelperText
+                error={
+                  // @ts-ignore
+                  fieldState.error ? true : false
+                }
+              >
+                {
+                  // @ts-ignore
+                  fieldState.error?.message || ' '
+                }
+              </FormHelperText>
+            </FormControl>
+          )}
+        />
       )}
     </>
   );

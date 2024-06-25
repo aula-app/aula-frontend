@@ -39,7 +39,8 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
     setDestination(event.target.value);
   };
 
-  const getDestination = async () =>
+  const getDestination = async () => {
+    if(!Object.hasOwn(SettingsConfig[currentSetting], 'isChild')) return;
     await databaseRequest('model', {
       model: SettingsConfig[SettingsConfig[currentSetting].isChild].model,
       method: SettingsConfig[SettingsConfig[currentSetting].isChild].requests.fetch,
@@ -49,7 +50,7 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
       },
     }).then((response: SingleResponseType) =>
       setDestinationList(response.data.map((r: BoxType) => ({ value: r.id, label: r.name })))
-    );
+    )};
 
   const request = async (id: number) => {
     if(!Object.hasOwn(SettingsConfig[currentSetting].requests, 'move')) return;
