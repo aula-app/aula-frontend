@@ -9,11 +9,12 @@ import { useEffect, useState } from 'react';
 interface Props {
   comment: CommentType;
   onReload: () => void;
+  disabled?: boolean;
 }
 
 type likeMethodType = 'getLikeStatus' | 'CommentAddLike' | 'CommentRemoveLike';
 
-export const Comment = ({ comment, onReload }: Props) => {
+export const Comment = ({ comment, disabled = false, onReload }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
@@ -69,7 +70,7 @@ export const Comment = ({ comment, onReload }: Props) => {
             {comment.username}
           </Typography>
         </Stack>
-        <Button color="error" size='small' onClick={toggleLike}>
+        <Button color="error" size='small' onClick={toggleLike} disabled={disabled}>
           <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
           {comment.sum_likes}
         </Button>

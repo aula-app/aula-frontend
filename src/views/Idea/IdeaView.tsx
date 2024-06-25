@@ -73,7 +73,7 @@ const IdeaView = () => {
           {phase === 0 ? (
             <IdeaBubble idea={idea.data} onReload={ideaFetch} />
           ) : (
-            <IdeaDocument idea={idea.data} onReload={ideaFetch} />
+            <IdeaDocument idea={idea.data} onReload={ideaFetch} disabled={phase > 10} />
           )}
           {idea.data && phase >= 20 && (
             <ApprovalCard comment={idea.data.approval_comment} rejected={idea.data.approved < 0} disabled={phase > 20} />
@@ -82,7 +82,7 @@ const IdeaView = () => {
             {String(comments.count)} Comments
           </Typography>
           {comments.data &&
-            comments.data.map((comment) => <Comment key={comment.id} comment={comment} onReload={commentsFetch} />)}
+            comments.data.map((comment) => <Comment key={comment.id} comment={comment} onReload={commentsFetch} disabled={phase > 10} />)}
           {phase < 20 && (
             <Stack alignItems="center">
               <Fab

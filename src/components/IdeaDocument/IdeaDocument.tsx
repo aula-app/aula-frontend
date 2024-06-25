@@ -6,12 +6,13 @@ import { useEffect, useState } from 'react';
 
 interface Props {
   idea: IdeaType;
+  disabled?: boolean;
   onReload: () => void;
 }
 
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
-export const IdeaDocument = ({ idea, onReload }: Props) => {
+export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
@@ -42,12 +43,12 @@ export const IdeaDocument = ({ idea, onReload }: Props) => {
   }, []);
 
   return (
-    <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
+    <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }} color="secondary">
       <Typography variant="h6">{idea.title}</Typography>
       <Typography mb={2}>{idea.content}</Typography>
       <Stack direction="row" alignItems="center" justifyContent="space-between" pb={2}>
         <Chip icon={<AppIcon name="settings" />} label="category" color="warning" />
-        <Button color="error" size="small" onClick={toggleLike}>
+        <Button color="error" size="small" onClick={toggleLike} disabled={disabled}>
           <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
           {idea.sum_likes}
         </Button>
