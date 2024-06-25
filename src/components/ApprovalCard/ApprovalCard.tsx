@@ -21,7 +21,7 @@ const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment' }:
         overflow: 'hidden',
         my: 2,
         scrollSnapAlign: 'center',
-        color: disabled ? grey[600] : 'inherit',
+        color: disabled ? grey[800] : 'inherit',
         bgcolor: !disabled && !rejected ? green[100] : grey[300],
       }}
       variant="outlined"
@@ -39,7 +39,7 @@ const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment' }:
           {!rejected ? <AppIcon icon="approved" /> : <AppIcon icon="rejected" />}
         </Stack>
         <Stack flexGrow={1} pr={2}>
-          <Typography variant="body2" sx={{ color: disabled ? grey[500] : 'inherit' }}>
+          <Typography variant="body2">
             {comment || 'Approval text'}
           </Typography>
         </Stack>
