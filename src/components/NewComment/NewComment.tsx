@@ -7,7 +7,7 @@ import AppButton from '../AppButton';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useParams } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface NewCommentProps {
   closeMethod: () => void;
@@ -28,6 +28,8 @@ export const NewComment = ({ closeMethod, isOpen }: NewCommentProps) => {
   const {
     register,
     handleSubmit,
+    getValues,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -42,13 +44,16 @@ export const NewComment = ({ closeMethod, isOpen }: NewCommentProps) => {
         idea_id: String(params['idea_id']),
         user_id: jwt_payload.user_id,
       },
-    }).then(closeMethod);
+    }).then(close);
 
-    const inputFocus = () => { if(isOpen) inputRef.current?.focus() }
-
+  const inputFocus = () => { if(isOpen) inputRef.current?.focus() }
+  const close = () => {
+    closeMethod();
+    setValue('content', '');
+  }
 
   return (
-    <Drawer anchor="bottom" open={isOpen} onClose={closeMethod} onTransitionEnd={inputFocus}>
+    <Drawer anchor="bottom" open={isOpen} onClose={close} onTransitionEnd={inputFocus}>
       <FormContainer>
         <Stack p={2} pb={0}>
           <Stack direction="row">
