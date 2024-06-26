@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ApprovalCard from '@/components/ApprovalCard';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
-import { databaseRequest } from '@/utils';
+import { Vote, databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
 import { CommentResponseType } from '@/types/CommentTypes';
 import { SingleIdeaResponseType } from '@/types/IdeaTypes';
 import NewComment from '@/components/NewComment';
@@ -13,6 +13,8 @@ import { BoxResponseType } from '@/types/BoxTypes';
 import IdeaBubble from '@/components/IdeaBubble';
 import Comment from '@/components/Comment';
 import IdeaDocument from '@/components/IdeaDocument';
+import { RoomPhases } from '@/types/RoomTypes';
+import { AppIcon } from '@/components';
 
 /**
  * Renders "Idea" view
@@ -21,10 +23,13 @@ import IdeaDocument from '@/components/IdeaDocument';
 
 const IdeaView = () => {
   const params = useParams();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [open, setOpen] = useState(false);
   const [idea, setIdea] = useState({} as SingleIdeaResponseType);
   const [phase, setPhase] = useState(0);
   const [comments, setComments] = useState({} as CommentResponseType);
+  const [vote, setVote] = useState<Vote>(0);
 
   let displayDate!: Date;
 
@@ -50,13 +55,17 @@ const IdeaView = () => {
       model: 'Topic',
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
-    }).then((response: BoxResponseType) => setPhase(response.data.phase_id));
+    }).then((response: BoxResponseType) => setPhase(Number(response.data.phase_id)));
 
-  useEffect(() => {
-    ideaFetch();
-    commentsFetch();
-    if (params['box_id']) getPhase();
-  }, []);
+  const getVote = async () =>
+    await databaseRequest('model', {
+      model: 'Idea',
+      method: 'getVoteValue',
+      arguments: {
+        user_id: jwt_payload.user_id,
+        idea_id: Number(params['idea_id']),
+      },
+    }).then((response) => setVote((Number(response.data) + 1) as Vote));
 
   const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
   const closeDrawer = () => {
@@ -64,25 +73,62 @@ const IdeaView = () => {
     commentsFetch();
   };
 
+  useEffect(() => {
+    ideaFetch();
+    commentsFetch();
+    getVote();
+    if (params['box_id']) getPhase();
+  }, []);
+
   return (
     <Stack width="100%" height="100%" overflow="auto">
+      <Stack direction="row" pt={2} px={1}>
+        {Object.keys(phases).map(p => {
+          const currentPhase = p as RoomPhases;
+          return (
+          <Stack
+            flex={phase === Number(currentPhase) ? 1 : 0}
+            direction="row"
+            sx={{
+              aspectRatio: phase === Number(currentPhase) ? '' : 1,
+              borderRadius: 999,
+            }}
+            bgcolor={phases[currentPhase].color}
+            key={currentPhase}
+            alignItems="center"
+            p={1}
+            mx={.5}
+          >
+            <AppIcon icon={phases[currentPhase].icon} />
+             {phase === Number(currentPhase) &&
+              <Typography ml={1}>{phases[currentPhase].name}</Typography>
+             }
+          </Stack>
+        )})}
+      </Stack>
       {phase === 30 && <VotingCard />}
       {idea.data && (
         <Stack p={2}>
-          {phase === 40 && <VotingResults yourVote={0} />}
+          {phase === 40 && <VotingResults yourVote={vote} />}
           {phase === 0 ? (
             <IdeaBubble idea={idea.data} onReload={ideaFetch} />
           ) : (
             <IdeaDocument idea={idea.data} onReload={ideaFetch} disabled={phase > 10} />
           )}
           {idea.data && phase >= 20 && (
-            <ApprovalCard comment={idea.data.approval_comment} rejected={idea.data.approved < 0} disabled={phase > 20} />
+            <ApprovalCard
+              comment={idea.data.approval_comment}
+              rejected={idea.data.approved < 0}
+              disabled={phase > 20}
+            />
           )}
           <Typography variant="h5" py={2}>
             {String(comments.count)} Comments
           </Typography>
           {comments.data &&
-            comments.data.map((comment) => <Comment key={comment.id} comment={comment} onReload={commentsFetch} disabled={phase > 10} />)}
+            comments.data.map((comment) => (
+              <Comment key={comment.id} comment={comment} onReload={commentsFetch} disabled={phase > 10} />
+            ))}
           {phase < 20 && (
             <Stack alignItems="center">
               <Fab
