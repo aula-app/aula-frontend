@@ -4,10 +4,10 @@ import { grey } from '@mui/material/colors';
 interface ChatBubbleProps {
   color: string;
   children: React.ReactElement | string | number;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
-export const ChatBubble = ({ color, children, disabled }: ChatBubbleProps) => (
+export const ChatBubble = ({ color, children, disabled = false }: ChatBubbleProps) => (
   <Stack>
     <Box sx={{
         color: disabled ? grey[700] : 'inherit',

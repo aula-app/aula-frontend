@@ -87,7 +87,7 @@ const DashBoard = ({ show = false }) => {
                     >
                       {dashboardPhases[phase].name}
                     </Box>
-                    {count[phase] || 0}
+                    {count[Number(phase)]}
                   </Stack>
                 </Box>
               </Grid>
