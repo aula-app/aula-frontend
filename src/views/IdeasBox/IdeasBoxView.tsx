@@ -50,7 +50,7 @@ const IdeasBoxView = () => {
       <Typography variant="h6" p={2}>
         {String(boxIdeas.count)} ideas
       </Typography>
-      <Grid container spacing={1} py={1}>
+      <Grid container spacing={1}>
         {boxIdeas.data &&
           boxIdeas.data.map((idea, key) => (
             <Grid key={key} item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ scrollSnapAlign: 'center' }}>
