@@ -62,7 +62,7 @@ const VotingCard = () => {
         {votingOptions.map((option, i) => (
           <Button
             sx={{
-              color: vote + 1 === i && hasVoted ? option['color'] : noVoteOptions['color'],
+              color: "inherit",
               backgroundColor: vote + 1 === i && hasVoted ? option[`button`] : noVoteOptions['button'],
               borderRadius: 8,
             }}

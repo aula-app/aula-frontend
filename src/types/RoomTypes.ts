@@ -25,3 +25,5 @@ export interface SingleRoomResponseType {
   count: Number;
   data: RoomType;
 }
+
+export type RoomPhases = '0' | '10' | '20' | '30' | '40';

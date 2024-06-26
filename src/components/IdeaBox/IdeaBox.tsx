@@ -38,7 +38,7 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
         <Typography variant="h6" noWrap>
           {box.name}
         </Typography>
-        <Typography variant="body2" noWrap>
+        <Typography variant="body2">
           {box.description_public}
         </Typography>
         <Box

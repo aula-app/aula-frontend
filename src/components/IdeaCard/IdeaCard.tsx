@@ -13,10 +13,11 @@ import {
 import { useParams } from 'react-router-dom';
 import { IdeaType } from '@/types/IdeaTypes';
 import { useEffect, useState } from 'react';
+import { RoomPhases } from '@/types/RoomTypes';
 
 interface IdeaCardProps {
   idea: IdeaType;
-  phase: '0' | '10' | '20' | '30' | '40';
+  phase: RoomPhases;
 }
 
 /**
@@ -35,7 +36,7 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
       method: 'getVoteValue',
       arguments: {
         user_id: jwt_payload.user_id,
-        idea_id: idea.idea_id,
+        idea_id: idea.id,
       },
     }).then((response) => setVote(response.data));
 
@@ -47,6 +48,8 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
         ? votingVariants.against.color
       : Number(phase) === 30 || idea.approved === 1
         ? approvalVariants.approved.color
+      : idea.approved === 0
+        ? 'transparent'
       : Number(phase) > 10
         ? approvalVariants.rejected.color
       : phases['0'].color
@@ -66,7 +69,7 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
       }}
       variant="outlined"
     >
-      <AppLink to={`/room/${params.room_id}/idea-box/${params.box_id}/idea/${idea.idea_id}`}>
+      <AppLink to={`/room/${params.room_id}/idea-box/${params.box_id}/idea/${idea.id}`}>
         <Stack direction="row" height={68} alignItems="center">
           <Stack pl={2}>
             {Number(phase) != 40
@@ -84,7 +87,7 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
           <Stack
             p={1}
             pl={2}
-            borderLeft="1px solid #fff"
+            borderLeft="1px solid currentColor"
             justifyContent="space-around"
             height="100%"
             sx={{ aspectRatio: 1 }}
