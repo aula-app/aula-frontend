@@ -2,6 +2,9 @@ export interface IdeaType {
   id: number;
   content: string;
   title: string;
+  displayname: string;
+  created: string;
+  last_updated: string;
   sum_likes: number;
   sum_votes: number;
   sum_comments: number;

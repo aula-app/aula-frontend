@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ApprovalCard from '@/components/ApprovalCard';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
-import { databaseRequest } from '@/utils';
+import { Vote, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { CommentResponseType } from '@/types/CommentTypes';
 import { SingleIdeaResponseType } from '@/types/IdeaTypes';
 import NewComment from '@/components/NewComment';
@@ -21,10 +21,13 @@ import IdeaDocument from '@/components/IdeaDocument';
 
 const IdeaView = () => {
   const params = useParams();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [open, setOpen] = useState(false);
   const [idea, setIdea] = useState({} as SingleIdeaResponseType);
   const [phase, setPhase] = useState(0);
   const [comments, setComments] = useState({} as CommentResponseType);
+  const [vote, setVote] = useState<Vote>(0);
 
   let displayDate!: Date;
 
@@ -50,26 +53,37 @@ const IdeaView = () => {
       model: 'Topic',
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
-    }).then((response: BoxResponseType) => setPhase(response.data.phase_id));
+    }).then((response: BoxResponseType) => setPhase(Number(response.data.phase_id)));
 
-  useEffect(() => {
-    ideaFetch();
-    commentsFetch();
-    if (params['box_id']) getPhase();
-  }, []);
+    const getVote = async () =>
+      await databaseRequest('model', {
+        model: 'Idea',
+        method: 'getVoteValue',
+        arguments: {
+          user_id: jwt_payload.user_id,
+          idea_id: Number(params['idea_id']),
+        },
+      }).then((response) => setVote((Number(response.data) + 1) as Vote));
 
-  const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
-  const closeDrawer = () => {
-    setOpen(false);
-    commentsFetch();
-  };
+      const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
+      const closeDrawer = () => {
+        setOpen(false);
+        commentsFetch();
+      };
+
+      useEffect(() => {
+        ideaFetch();
+        commentsFetch();
+        getVote();
+        if (params['box_id']) getPhase();
+      }, []);
 
   return (
     <Stack width="100%" height="100%" overflow="auto">
       {phase === 30 && <VotingCard />}
       {idea.data && (
         <Stack p={2}>
-          {phase === 40 && <VotingResults yourVote={0} />}
+          {phase === 40 && <VotingResults yourVote={vote} />}
           {phase === 0 ? (
             <IdeaBubble idea={idea.data} onReload={ideaFetch} />
           ) : (
