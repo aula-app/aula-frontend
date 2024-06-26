@@ -10,7 +10,7 @@ interface RoomCardProps {
   room: RoomType;
 }
 
-const displayPhases = Object.keys(Object.freeze(phases)) as Array<keyof typeof phases>;
+const displayPhases = Object.keys(phases) as Array<keyof typeof phases>;
 /**
  * Renders "RoomCard" component
  */

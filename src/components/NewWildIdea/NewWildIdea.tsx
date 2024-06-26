@@ -4,7 +4,7 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import AppButton from '../AppButton';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useParams } from 'react-router-dom';
 import { grey } from '@mui/material/colors';
 import { useRef } from 'react';
@@ -16,12 +16,15 @@ interface NewIdeaProps {
 
 const schema = yup
   .object({
+    title: yup.string().required(),
     content: yup.string().required(),
   })
   .required();
 
 export const NewWildIdea = ({ closeMethod, isOpen }: NewIdeaProps) => {
   const params = useParams();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const inputRef = useRef<HTMLInputElement>();
   const {
     register,
@@ -32,17 +35,23 @@ export const NewWildIdea = ({ closeMethod, isOpen }: NewIdeaProps) => {
   });
 
   const onSubmit = async (formData: Object) => {
-    const request = await databaseRequest('add_idea', { ...formData, ...params });
+    const request = await databaseRequest('model', {
+      model: 'Idea',
+      method: 'addIdea',
+      arguments: {
+        ...formData,
+        ...params,
+        user_id: jwt_payload.user_id
+      },
+    });
     if (!request) {
       return;
     }
     closeMethod();
   };
 
-  const inputFocus = () => { if(isOpen) inputRef.current?.focus() }
-
   return (
-    <Drawer anchor="bottom" open={isOpen} onClose={closeMethod} onTransitionEnd={inputFocus}>
+    <Drawer anchor="bottom" open={isOpen} onClose={closeMethod}>
       <FormContainer>
         <Stack p={2} pb={0}>
           <Stack direction="row">
@@ -54,13 +63,20 @@ export const NewWildIdea = ({ closeMethod, isOpen }: NewIdeaProps) => {
           <Stack position="relative" mt={1}>
             <TextField
               required
-              multiline
-              variant="filled"
-              minRows={6}
-              {...register('content')}
+              label="Title"
+              {...register('title')}
               error={errors.content ? true : false}
               helperText={errors.content?.message || ' '}
               inputRef={inputRef}
+            />
+            <TextField
+              required
+              multiline
+              minRows={6}
+              label="Description"
+              {...register('content')}
+              error={errors.content ? true : false}
+              helperText={errors.content?.message || ' '}
             />
             <Box
               sx={{

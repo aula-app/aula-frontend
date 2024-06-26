@@ -12,7 +12,6 @@ import AppIcon from '../AppIcon';
  * url: /
  */
 const VotingCard = () => {
-  //const CurrentIcon = phases.wild.icon;
   const params = useParams();
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);

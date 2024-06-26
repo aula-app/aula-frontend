@@ -8,5 +8,5 @@ export * from './requests';
 export * from './sessionStorage';
 export * from './style';
 export * from './utils';
-export * from './variants';
+export * from './votes';
 export * from './Settings';

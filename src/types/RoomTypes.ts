@@ -1,5 +1,3 @@
-export type RoomPhases = 'wild' | 'discussion' | 'approval' | 'voting' | 'result';
-
 export interface RoomType {
   access_code: string;
   created: string;

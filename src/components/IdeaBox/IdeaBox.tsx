@@ -1,8 +1,7 @@
-import { Box, CardMedia, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { Card, CardContent } from '@mui/material';
 import { phases } from '@/utils';
 import { BoxType } from '@/types/BoxTypes';
-import { RoomPhases } from '@/types/RoomTypes';
 import AppIcon from '../AppIcon';
 
 interface IdeaBoxProps {
@@ -10,8 +9,6 @@ interface IdeaBoxProps {
 }
 
 const IdeaBox = ({ box }: IdeaBoxProps) => {
-  const phaseNames = Object.keys(phases) as RoomPhases[];
-  const currentPhase = phaseNames.filter((key: RoomPhases) => phases[key].phase_id === box.phase_id)[0] as RoomPhases;
   return (
     <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
       <Stack
@@ -19,7 +16,7 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
         height="3rem"
         alignItems="center"
         direction="row"
-        bgcolor={phases[currentPhase].color}
+        bgcolor={phases[box.phase_id].color}
         p={1}
         pr={2}
       >
@@ -34,8 +31,8 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
         >
           <AppIcon icon="box" />
         </Stack>
-        <AppIcon icon={phases[currentPhase].icon} size="small" sx={{ mx: 1 }} />
-        <Typography variant="caption">{phases[currentPhase].name} phase</Typography>
+        <AppIcon icon={phases[box.phase_id].icon} size="small" sx={{ mx: 1 }} />
+        <Typography variant="caption">{phases[box.phase_id].name} phase</Typography>
       </Stack>
       <CardContent>
         <Typography variant="h6" noWrap>
@@ -50,10 +47,10 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
           borderRadius={999}
           width="100%"
           height="1.5rem"
-          bgcolor={phases[currentPhase].color}
+          bgcolor={phases[box.phase_id].color}
           overflow="clip"
         >
-          <Box bgcolor={phases[currentPhase].baseColor[300]} position="absolute" left={0} height="100%" width="50%" />
+          <Box bgcolor={phases[box.phase_id].baseColor[300]} position="absolute" left={0} height="100%" width="50%" />
           <Stack
             direction="row"
             position="absolute"
