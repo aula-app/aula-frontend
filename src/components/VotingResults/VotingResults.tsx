@@ -1,8 +1,8 @@
 import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { green, grey, red } from '@mui/material/colors';
-import { votingOptions, Vote } from '@/utils';
+import { grey } from '@mui/material/colors';
+import { votingOptions, Vote, resultVariants } from '@/utils';
 import AppIcon from '../AppIcon';
 
 interface IdeaBoxProps {
@@ -23,8 +23,7 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
           borderRadius: '25px',
           overflow: 'hidden',
           scrollSnapAlign: 'center',
-          bgcolor: rejected ? red[200] : green[200],
-          color: rejected ? red[600] : green[600],
+          bgcolor: resultVariants[rejected ? 'failure' : 'success'].color,
         }}
         variant="outlined"
       >

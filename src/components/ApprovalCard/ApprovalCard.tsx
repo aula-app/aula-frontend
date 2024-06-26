@@ -2,6 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { green, grey } from '@mui/material/colors';
 import AppIcon from '../AppIcon';
+import { approvalVariants } from '@/utils';
 
 interface IdeaBoxProps {
   disabled?: boolean;
@@ -20,9 +21,10 @@ const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment' }:
         borderRadius: '25px',
         overflow: 'hidden',
         my: 2,
+        py: 1,
         scrollSnapAlign: 'center',
-        color: disabled ? grey[600] : 'inherit',
-        bgcolor: !disabled && !rejected ? green[100] : grey[300],
+        color: disabled ? approvalVariants.rejected.baseColor[700] : 'inherit',
+        bgcolor: approvalVariants[rejected || disabled ? 'rejected' : 'approved'].color,
       }}
       variant="outlined"
     >
@@ -39,7 +41,7 @@ const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment' }:
           {!rejected ? <AppIcon icon="approved" /> : <AppIcon icon="rejected" />}
         </Stack>
         <Stack flexGrow={1} pr={2}>
-          <Typography variant="body2" sx={{ color: disabled ? grey[500] : 'inherit' }}>
+          <Typography variant="body2" sx={{ color: 'inherit' }}>
             {comment || 'Approval text'}
           </Typography>
         </Stack>

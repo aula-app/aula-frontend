@@ -1,40 +1,34 @@
 import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
-import { AppLink } from '..';
-import { databaseRequest, localStorageGet, parseJwt, phases, variantOptions} from '@/utils';
+import { AppIcon, AppLink } from '..';
+import {
+  approvalVariants,
+  databaseRequest,
+  localStorageGet,
+  parseJwt,
+  phases,
+  votingOptions,
+  votingVariants,
+} from '@/utils';
 import { useParams } from 'react-router-dom';
 import { IdeaType } from '@/types/IdeaTypes';
 import { useEffect, useState } from 'react';
+import { RoomPhases } from '@/types/RoomTypes';
 
 interface IdeaCardProps {
   idea: IdeaType;
-  phase: number;
+  phase: RoomPhases;
 }
 
-type variant = 'discussion' | 'approved' | 'dismissed' | 'voting' | 'voted' | 'neutral' | 'rejected';
-
-const displayPhases = Object.keys(Object.freeze(phases)) as Array<keyof typeof phases>;
 /**
  * Renders "IdeaCard" component
  */
 const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
-  //const CurrentIcon = phases.wild.icon;
   const params = useParams();
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
-  const [variant, setVariant] = useState<variant>(
-    phase === 1 && idea.approved === 1
-      ? 'approved'
-      : phase === 1 && idea.approved === -1
-        ? 'dismissed'
-        : phase === 2
-          ? 'voting'
-          : phase === 3
-            ? idea.is_winner
-              ? 'voted'
-              : 'rejected'
-            : 'discussion'
-  );
+  const [vote, setVote] = useState(0);
+  const [bg, setBg] = useState<string>(phases[phase].baseColor[300]);
 
   const getVote = async () =>
     await databaseRequest('model', {
@@ -42,16 +36,27 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
       method: 'getVoteValue',
       arguments: {
         user_id: jwt_payload.user_id,
-        idea_id: idea.idea_id,
+        idea_id: idea.id,
       },
-    }).then((response) => setVote(response.count, response.data));
-
-  const setVote = (hasVoted: number, vote: number) => {
-    if (hasVoted > 0) setVariant(vote > 0 ? 'voted' : vote < 0 ? 'rejected' : 'neutral');
-  };
+    }).then((response) => setVote(response.data));
 
   useEffect(() => {
-    if (phase === 2) getVote();
+    setBg(
+      Number(phase) === 30 && vote === 1 || idea.is_winner
+        ? votingVariants.for.color
+      : Number(phase) === 40 || vote === -1
+        ? votingVariants.against.color
+      : Number(phase) === 30 || idea.approved === 1
+        ? approvalVariants.approved.color
+      : idea.approved === 0
+        ? 'transparent'
+      : Number(phase) > 10
+        ? approvalVariants.rejected.color
+      : phases['0'].color
+  )}, [vote]);
+
+  useEffect(() => {
+    if (Number(phase) === 30) getVote();
   }, []);
 
   return (
@@ -59,21 +64,73 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
       sx={{
         borderRadius: '25px',
         overflow: 'hidden',
-        mb: 2,
         scrollSnapAlign: 'center',
-        bgcolor: variantOptions[variant].bg,
+        backgroundColor: bg
       }}
       variant="outlined"
     >
-      <AppLink to={`/room/${params.room_id}/idea-box/${params.box_id}/idea/${idea.idea_id}`}>
-        <Stack direction="row" height={68} alignItems="center" color={variantOptions[variant].color}>
+      <AppLink to={`/room/${params.room_id}/idea-box/${params.box_id}/idea/${idea.id}`}>
+        <Stack direction="row" height={68} alignItems="center">
+          <Stack pl={2}>
+            {Number(phase) != 40
+              ? <AppIcon icon="camera" />
+              : <AppIcon icon={votingOptions[idea.is_winner > 0 ? 2 : 0].label} size="xl" />}
+          </Stack>
           <Stack flexGrow={1} px={2} overflow="hidden">
-            <Typography variant='h6'>
+            <Typography variant="h6" noWrap textOverflow="ellipsis">
               {idea.title}
             </Typography>
             <Typography variant="body2" noWrap textOverflow="ellipsis">
               {idea.content}
             </Typography>
+          </Stack>
+          <Stack
+            p={1}
+            pl={2}
+            borderLeft="1px solid currentColor"
+            justifyContent="space-around"
+            height="100%"
+            sx={{ aspectRatio: 1 }}
+          >
+            {Number(phase) === 10 ? (
+              <>
+                <Stack direction="row" alignItems="center">
+                  <AppIcon icon="heart" size="small" />{' '}
+                  <Typography fontSize="small" ml={0.5}>
+                    {idea.sum_likes}
+                  </Typography>
+                </Stack>
+                <Stack direction="row" alignItems="center">
+                  <AppIcon icon="chat" size="small" />{' '}
+                  <Typography fontSize="small" ml={0.5}>
+                    {idea.sum_comments}
+                  </Typography>
+                </Stack>
+              </>
+            ) : Number(phase) === 20 ? (
+              <>
+                {idea.approved === 1 ? (
+                  <AppIcon icon={approvalVariants.approved.icon} />
+                ) : idea.approved === -1 ? (
+                  <AppIcon icon={approvalVariants.rejected.icon} />
+                ) : (
+                  <AppIcon icon={phases[phase].icon} />
+                )}
+              </>
+            ) : Number(phase) === 30 ? (
+              <AppIcon icon={votingOptions[vote + 1].label} />
+            ) : (
+              <>
+                {votingOptions.map((vote) => (
+                  <Stack direction="row" alignItems="center" key={vote.label}>
+                    <AppIcon icon={votingVariants[vote.label].icon} size="small" />{' '}
+                    <Typography fontSize="small" ml={0.5}>
+                      {0}
+                    </Typography>
+                  </Stack>
+                ))}
+              </>
+            )}
           </Stack>
         </Stack>
       </AppLink>

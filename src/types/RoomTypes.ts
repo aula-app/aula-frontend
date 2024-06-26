@@ -1,5 +1,3 @@
-export type RoomPhases = 'wild' | 'discussion' | 'approval' | 'voting' | 'result';
-
 export interface RoomType {
   access_code: string;
   created: string;
@@ -27,3 +25,5 @@ export interface SingleRoomResponseType {
   count: Number;
   data: RoomType;
 }
+
+export type RoomPhases = '0' | '10' | '20' | '30' | '40';
