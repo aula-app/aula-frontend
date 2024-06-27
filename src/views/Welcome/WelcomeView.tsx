@@ -5,6 +5,7 @@ import { RoomsResponseType } from '@/types/RoomTypes';
 import { databaseRequest } from '@/utils';
 import DashBoard from '@/components/DashBoard';
 import { Add } from '@mui/icons-material';
+import AskConsent from '../AskConsent/AskConsentView';
 
 const WelcomeView = () => {
   const [rooms, setRooms] = useState({} as RoomsResponseType);
@@ -55,6 +56,7 @@ const WelcomeView = () => {
             ))}
         </Grid>
       </Stack>
+      <AskConsent />
     </Stack>
   );
 };

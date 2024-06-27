@@ -1,54 +1,44 @@
 import { Box, Stack } from '@mui/material';
-import { localStorageGet } from '@/utils';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useAppStore } from '@/store';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import ConsentDialog from '@/components/dialogs/ConsentDialog';
+import { MessageConsentType, MessagesResponseType } from '@/types/MessageTypes';
 
 /**
  * Renders "Ask Consent" view
  * url: /
  */
 const AskConsent = () => {
-  const [, dispatch] = useAppStore();
   const jwt_token = localStorageGet('token');
-  const [data, setData] = useState([] as any[]);
+  const jwt_payload = parseJwt(jwt_token);
+
+  const [, dispatch] = useAppStore();
+  const [data, setData] = useState<MessageConsentType[]>([]);
   const navigate = useNavigate();
 
+  const getData = async () =>
+    await databaseRequest('model', {
+      model: 'User',
+      method: 'getMissingConsents',
+      arguments: {
+        user_id: jwt_payload.user_id
+      },
+    }).then((response) => {
+      dispatch({ type: 'HAS_CONSENT', payload: response.count === 0 });
+      if (response.count > 0) setData(response.data);
+    });
+
   useEffect(() => {
-    // fetch data
-    const dataFetch = async () => {
-      const getData = await (
-        await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/get_necessary_consents.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + jwt_token,
-          },
-        })
-      ).json();
-
-      // set state when the data received
-      if (getData.count === 0) {
-        dispatch({ type: 'HAS_CONSENT', payload: true });
-        navigate('/welcome');
-      } else {
-        dispatch({ type: 'HAS_CONSENT', payload: false });
-        setData(getData.data);
-      }
-    };
-    dataFetch();
-
-  }, [dispatch, jwt_token, navigate]);
-
+    getData();
+  }, [navigate]);
 
   return (
-    <Box>
-      <Stack alignItems="center">Loading</Stack>
-      {data.length > 0 && <ConsentDialog data={data} />}
-    </Box>
+    <>
+      {data && data.length > 0 && <ConsentDialog texts={data} />}
+    </>
   );
-
 };
 
 export default AskConsent;

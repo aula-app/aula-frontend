@@ -16,6 +16,21 @@ export interface MessageType {
   hash_id: string;
   status: number;
 }
+
+export interface MessageConsentType {
+  id: number;
+  headline: string;
+  body: string;
+  consent_text: string;
+  consent: null | number;
+}
+
+export interface MessagesResponseType {
+  success: Boolean;
+  count: Number;
+  data: MessageConsentType[];
+}
+
 export type MessageTypes = 'message' | 'announcement' | 'alert';
 export type MessageConfigsType = Record<MessageTypes, { icon: IconType; color: Record<string, string> }>;
 
