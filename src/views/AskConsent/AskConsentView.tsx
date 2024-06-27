@@ -1,10 +1,9 @@
-import { Box, Stack } from '@mui/material';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useAppStore } from '@/store';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import ConsentDialog from '@/components/dialogs/ConsentDialog';
-import { MessageConsentType, MessagesResponseType } from '@/types/MessageTypes';
+import { MessageConsentType } from '@/types/MessageTypes';
 
 /**
  * Renders "Ask Consent" view
@@ -27,7 +26,7 @@ const AskConsent = () => {
       },
     }).then((response) => {
       dispatch({ type: 'HAS_CONSENT', payload: response.count === 0 });
-      if (response.count > 0) setData(response.data);
+      if (response.count === 0) setData(response.data);
     });
 
   useEffect(() => {
