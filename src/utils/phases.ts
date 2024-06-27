@@ -1,13 +1,4 @@
-import { ObjectPropByName } from '@/types/Generics';
 import { green, amber, deepPurple, deepOrange, blue, grey, red } from '@mui/material/colors';
-
-interface phaseType {
-  name: string,
-  description: string,
-  color: string,
-  baseColor: ObjectPropByName,
-  icon: string,
-}
 
 export const phases = {
   '0': {

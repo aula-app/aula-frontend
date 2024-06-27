@@ -82,30 +82,6 @@ const IdeaView = () => {
 
   return (
     <Stack width="100%" height="100%" overflow="auto">
-      <Stack direction="row" pt={2} px={1}>
-        {Object.keys(phases).map(p => {
-          const currentPhase = p as RoomPhases;
-          return (
-          <Stack
-            flex={phase === Number(currentPhase) ? 1 : 0}
-            direction="row"
-            sx={{
-              aspectRatio: phase === Number(currentPhase) ? '' : 1,
-              borderRadius: 999,
-            }}
-            bgcolor={phases[currentPhase].color}
-            key={currentPhase}
-            alignItems="center"
-            p={1}
-            mx={.5}
-          >
-            <AppIcon icon={phases[currentPhase].icon} />
-             {phase === Number(currentPhase) &&
-              <Typography ml={1}>{phases[currentPhase].name}</Typography>
-             }
-          </Stack>
-        )})}
-      </Stack>
       {phase === 30 && <VotingCard />}
       {idea.data && (
         <Stack p={2}>

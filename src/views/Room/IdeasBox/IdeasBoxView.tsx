@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { BoxResponseType } from '@/types/BoxTypes';
 import { databaseRequest } from '@/utils';
 import { IdeasResponseType } from '@/types/IdeaTypes';
+import { AppLink } from '@/components';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/ideas-box/:box_id
@@ -53,8 +54,20 @@ const IdeasBoxView = () => {
       <Grid container spacing={1}>
         {boxIdeas.data &&
           boxIdeas.data.map((idea, key) => (
-            <Grid key={key} item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
-              <IdeaCard idea={idea} phase={box.data.phase_id} />
+            <Grid
+              key={key}
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              xl={2}
+              sx={{ scrollSnapAlign: 'center' }}
+              order={-idea.approved}
+            >
+              <AppLink to={`idea/${idea.id}`}>
+                <IdeaCard idea={idea} phase={box.data.phase_id} />
+              </AppLink>
             </Grid>
           ))}
       </Grid>

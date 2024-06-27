@@ -4,7 +4,7 @@ import PhaseBar from '@/layout/PhaseBar';
 
 /**
  * Renders "Room" view
- * url: /room/:room_id/*
+ * url: /room/:room_id/:phase
  */
 const RoomView = () => {
   return (

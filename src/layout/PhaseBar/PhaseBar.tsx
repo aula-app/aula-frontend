@@ -1,6 +1,6 @@
-import { AppIcon } from '@/components';
+import { AppIcon, AppLink } from '@/components';
 import { phases } from '@/utils/phases';
-import { Link, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
@@ -23,9 +23,9 @@ const PhaseBar = () => {
   return (
     <Stack direction="row" py={1}>
       {displayPhases.map((phase) => (
-        <Link
+        <AppLink
           key={phase}
-          href={`${location.slice(0, 3).join('/')}/${phase}`}
+          to={`${location.slice(0, 3).join('/')}/phase/${phase}`}
           sx={{
             color: 'inherit',
             textDecoration: 'none',
@@ -45,7 +45,7 @@ const PhaseBar = () => {
             <AppIcon name={phases[phase].icon} />
             {currentPhase === phase ? phases[phase].name : ''}
           </Stack>
-        </Link>
+        </AppLink>
       ))}
     </Stack>
   );
