@@ -14,15 +14,15 @@ interface Props {
  */
 const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) => {
   const location = useLocation().pathname.split('/');
-  const displayPath = location.filter(curPath => /.*[A-Za-z\s]+.*/.test(curPath)).filter(curPath => curPath !== 'welcome');
+  const displayPath = location.filter(curPath => /.*[A-Za-z\s]+.*/.test(curPath)).filter(curPath => !['welcome', 'phase'].includes(curPath));
   const goto = useNavigate();
 
-  const returnLocation = () => Number(location[location.length - 1]) ? location.splice(0, location.length - 2) : location.splice(0, location.length - 3)
+  const returnLocation = () => location.length !== 5 ? location.splice(0, location.length - 2) : location.splice(0, location.length - 4)
 
   return (
     <AppBar elevation={0}>
       <Toolbar>
-        {location.length <= 2 ? (
+        {location[1] === 'welcome' ? (
           <AppIcon icon="logo" size="large" sx={{mr: 1}} />
         ) : (
           <AppIconButton icon="back" onClick={() => goto(returnLocation().join('/'))} />
