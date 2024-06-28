@@ -1,4 +1,4 @@
-import { AppIcon, AppIconButton } from '@/components';
+import { AppIcon, AppIconButton, AppLink } from '@/components';
 import { AppBar, Breadcrumbs, Link, Toolbar } from '@mui/material';
 import { FunctionComponent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -29,16 +29,16 @@ const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) 
         )}
 
         <Breadcrumbs aria-label="breadcrumb" sx={{ flexGrow: 1, textAlign: 'center' }}>
-          <Link underline="hover" color="inherit" href="/">
+          <AppLink underline="hover" color="inherit" to="/">
             {home}
-          </Link>
+          </AppLink>
           {displayPath.map((currentPath, key) => {
             const addBoxesPath = location.includes('idea-box') && key === 0 ? '/boxes' : ''; //checks if rooms link must have /boxes to correct tab navigation
             const link = location.slice(0, 2 * (key + 1) + 1).join('/') + addBoxesPath;
             return (
-              <Link underline="hover" color="inherit" href={`${link}`} key={key}>
+              <AppLink underline="hover" color="inherit" to={`${link}`} key={key}>
                 {currentPath}
-              </Link>
+              </AppLink>
             );
           })}
         </Breadcrumbs>
