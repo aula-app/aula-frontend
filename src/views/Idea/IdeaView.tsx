@@ -31,8 +31,6 @@ const IdeaView = () => {
   const [comments, setComments] = useState({} as CommentResponseType);
   const [vote, setVote] = useState<Vote>(0);
 
-  let displayDate!: Date;
-
   const ideaFetch = async () =>
     await databaseRequest('model', {
       model: 'Idea',
@@ -40,7 +38,6 @@ const IdeaView = () => {
       arguments: { idea_id: params['idea_id'] },
     }).then((response: SingleIdeaResponseType) => {
       setIdea(response);
-      displayDate = new Date(response.data.created);
     });
 
   const commentsFetch = async () =>
