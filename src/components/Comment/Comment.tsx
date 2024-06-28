@@ -5,6 +5,7 @@ import { grey } from '@mui/material/colors';
 import { CommentType } from '@/types/CommentTypes';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
+import MoreOptions from '../MoreOptions';
 
 interface Props {
   comment: CommentType;
@@ -48,7 +49,10 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
       <ChatBubble color={grey[200]} disabled={disabled}>
         <Stack>
-          <Typography mb={2}>{comment.content}</Typography>
+          <Typography>{comment.content}</Typography>
+          <Stack direction="row" justifyContent="end">
+            <MoreOptions />
+          </Stack>
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
@@ -70,7 +74,7 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
             {comment.username}
           </Typography>
         </Stack>
-        <Button color="error" size='small' onClick={toggleLike} disabled={disabled}>
+        <Button color="error" size="small" onClick={toggleLike} disabled={disabled}>
           <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
           {comment.sum_likes}
         </Button>

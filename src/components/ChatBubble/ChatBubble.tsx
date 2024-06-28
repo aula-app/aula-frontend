@@ -1,6 +1,5 @@
 import { Box, Stack } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import MoreOptions from '../MoreOptions';
 
 interface ChatBubbleProps {
   color: string;
@@ -19,9 +18,6 @@ export const ChatBubble = ({ color, children, disabled = false }: ChatBubbleProp
     }}
   >
     <Box p={2} pb={0}>{children}</Box>
-    <Stack direction="row" justifyContent="end">
-      <MoreOptions />
-    </Stack>
     <Box
       className="noPrint point"
       sx={{

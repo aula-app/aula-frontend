@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Chip, Stack, Typography } from '@mui/material';
 import { IdeaType } from '@/types/IdeaTypes';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
@@ -6,6 +6,7 @@ import { blue } from '@mui/material/colors';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
 import AppLink from '../AppLink';
+import MoreOptions from '../MoreOptions';
 
 interface Props {
   idea: IdeaType;
@@ -49,12 +50,18 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
       <ChatBubble color={blue[50]}>
-        <AppLink to={to} disabled={!to}>
-          <Stack>
-            <Typography variant="h6">{idea.title}</Typography>
-            <Typography>{idea.content}</Typography>
+        <Stack>
+          <AppLink to={to} disabled={!to}>
+            <Stack px={.5}>
+              <Typography variant="h6">{idea.title}</Typography>
+              <Typography>{idea.content}</Typography>
+            </Stack>
+          </AppLink>
+          <Stack direction="row" justifyContent="space-between" my={1}>
+            <Chip icon={<AppIcon name="settings" />} label="category" variant='outlined' />
+            <MoreOptions />
           </Stack>
-        </AppLink>
+        </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
         <AppIcon name="account" size="xl" />
