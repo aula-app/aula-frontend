@@ -46,7 +46,7 @@ const MoreOptions = ({}) => {
             elevation={3}
           >
             {options.map((option, key) => (
-              <>
+              <Box key={key}>
                 <Button color={option.color} sx={{ width: '100%', justifyContent: 'start' }}>
                   <Stack direction="row">
                     <AppIcon icon={option.icon} sx={{ mr: 1 }} />
@@ -54,7 +54,7 @@ const MoreOptions = ({}) => {
                   </Stack>
                 </Button>
                 {key !== options.length - 1 && <Divider />}
-              </>
+              </Box>
             ))}
           </Paper>
         </Zoom>
