@@ -1,3 +1,4 @@
+import { ICONS } from '@/components/AppIcon/AppIcon';
 import { ObjectPropByName } from '@/types/Generics';
 import { green, amber, deepPurple, deepOrange, blue, grey, red } from '@mui/material/colors';
 
@@ -6,7 +7,7 @@ interface phaseType {
   description: string,
   color: string,
   baseColor: ObjectPropByName,
-  icon: string,
+  icon: keyof typeof ICONS,
 }
 
 export const phases = {
@@ -45,7 +46,7 @@ export const phases = {
     baseColor: green,
     icon: 'chart',
   },
-};
+} as Record<string, phaseType>;
 
 export const approvalVariants = {
   approved: {
@@ -54,7 +55,6 @@ export const approvalVariants = {
     color: amber[100],
     baseColor: amber,
     icon: 'approved',
-    phase_id: 40,
   },
   rejected: {
     name: 'Not Approved',
@@ -62,7 +62,6 @@ export const approvalVariants = {
     color: grey[200],
     baseColor: grey,
     icon: 'rejected',
-    phase_id: 40,
   },
 }
 
@@ -73,7 +72,6 @@ export const votingVariants = {
     color: green[100],
     baseColor: green,
     icon: 'for',
-    phase_id: 40,
   },
   neutral: {
     name: 'Neutral',
@@ -81,7 +79,6 @@ export const votingVariants = {
     color: green[100],
     baseColor: green,
     icon: 'neutral',
-    phase_id: 40,
   },
   against: {
     name: 'Against',
@@ -89,7 +86,6 @@ export const votingVariants = {
     color: red[100],
     baseColor: red,
     icon: 'against',
-    phase_id: 40,
   },
 };
 

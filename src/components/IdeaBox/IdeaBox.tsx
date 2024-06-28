@@ -3,6 +3,7 @@ import { Card, CardContent } from '@mui/material';
 import { phases } from '@/utils';
 import { BoxType } from '@/types/BoxTypes';
 import AppIcon from '../AppIcon';
+import MoreOptions from '../MoreOptions';
 
 interface IdeaBoxProps {
   box: BoxType;
@@ -27,12 +28,12 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
           sx={{ aspectRatio: 1 }}
           justifyContent="center"
           alignItems="center"
-          mr="auto"
         >
           <AppIcon icon="box" />
         </Stack>
-        <AppIcon icon={phases[box.phase_id].icon} size="small" sx={{ mx: 1 }} />
-        <Typography variant="caption">{phases[box.phase_id].name} phase</Typography>
+        <AppIcon icon={phases[box.phase_id].icon} size="small" sx={{ ml: 2, mr: 1 }} />
+        <Typography variant="caption" mr="auto">{phases[box.phase_id].name} phase</Typography>
+        <MoreOptions />
       </Stack>
       <CardContent>
         <Typography variant="h6" noWrap>

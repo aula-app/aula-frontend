@@ -48,14 +48,14 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
 
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <AppLink to={to} disabled={!to}>
-        <ChatBubble color={blue[50]}>
+      <ChatBubble color={blue[50]}>
+        <AppLink to={to} disabled={!to}>
           <Stack>
             <Typography variant="h6">{idea.title}</Typography>
-            <Typography mb={2}>{idea.content}</Typography>
+            <Typography>{idea.content}</Typography>
           </Stack>
-        </ChatBubble>
-      </AppLink>
+        </AppLink>
+      </ChatBubble>
       <Stack direction="row" alignItems="center">
         <AppIcon name="account" size="xl" />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
