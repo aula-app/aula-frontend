@@ -4,12 +4,17 @@ import { phases } from '@/utils';
 import { BoxType } from '@/types/BoxTypes';
 import AppIcon from '../AppIcon';
 import MoreOptions from '../MoreOptions';
+import AppLink from '../AppLink';
+import { useParams } from 'react-router-dom';
 
 interface IdeaBoxProps {
   box: BoxType;
+  noLink?: boolean;
 }
 
-const IdeaBox = ({ box }: IdeaBoxProps) => {
+const IdeaBox = ({ box, noLink = false }: IdeaBoxProps) => {
+  const params = useParams();
+
   return (
     <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
       <Stack
@@ -35,6 +40,7 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
         <Typography variant="caption" mr="auto">{phases[box.phase_id].name} phase</Typography>
         <MoreOptions />
       </Stack>
+      <AppLink to={`/room/${params.room_id}/idea-box/${box.id}`} mb={2} key={box.id} disabled={noLink}>
       <CardContent>
         <Typography variant="h6" noWrap>
           {box.name}
@@ -67,6 +73,7 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
           </Stack>
         </Box>
       </CardContent>
+      </AppLink>
     </Card>
   );
 };
