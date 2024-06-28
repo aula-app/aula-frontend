@@ -3,6 +3,8 @@ import { IdeaType } from '@/types/IdeaTypes';
 import AppIcon from '../AppIcon';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
+import MoreOptions from '../MoreOptions';
+import { grey } from '@mui/material/colors';
 
 interface Props {
   idea: IdeaType;
@@ -43,15 +45,14 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
   }, []);
 
   return (
-    <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }} color="secondary">
-      <Typography variant="h6">{idea.title}</Typography>
-      <Typography mb={2}>{idea.content}</Typography>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" pb={2}>
+    <Stack width="100%" sx={{ scrollSnapAlign: 'center'}} color="secondary" mb={2}>
+      <Stack direction="row" justifyContent="space-between">
         <Chip icon={<AppIcon name="settings" />} label="category" color="warning" />
-        <Button color="error" size="small" onClick={toggleLike} disabled={disabled}>
-          <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
-          {idea.sum_likes}
-        </Button>
+        <MoreOptions />
+      </Stack>
+      <Stack p={2} bgcolor={grey[200]} borderRadius={3} my={1}>
+        <Typography variant="h6">{idea.title}</Typography>
+        <Typography mb={2}>{idea.content}</Typography>
       </Stack>
       <Stack direction="row" alignItems="center">
         <AppIcon name="account" size="xl" />
@@ -72,6 +73,10 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
             {idea.displayname}
           </Typography>
         </Stack>
+        <Button color="error" size="small" onClick={toggleLike} disabled={disabled}>
+          <AppIcon name={liked ? 'heartfull' : 'heart'} />
+          {idea.sum_likes}
+        </Button>
       </Stack>
     </Stack>
   );
