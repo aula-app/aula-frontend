@@ -1,5 +1,4 @@
-import { SettingForm, SettingNamesType } from '@/types/SettingsTypes';
-import { databaseinfo, SettingsConfig } from '@/utils';
+import { SettingsConfig } from '@/utils';
 import * as yup from 'yup';
 import { Button, Stack } from '@mui/material';
 import { FormContainer, useForm } from 'react-hook-form-mui';

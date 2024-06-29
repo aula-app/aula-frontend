@@ -59,7 +59,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
           </AppLink>
           <Stack direction="row" justifyContent="space-between" my={1}>
             <Chip icon={<AppIcon name="settings" />} label="category" variant='outlined' />
-            <MoreOptions />
+            <MoreOptions element='ideas' id={idea.id} />
           </Stack>
         </Stack>
       </ChatBubble>

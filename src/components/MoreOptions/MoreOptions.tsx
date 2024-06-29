@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { ICONS } from '../AppIcon/AppIcon';
 import { AlterTypes, ColorTypes } from '@/types/Generics';
 import { useAppStore } from '@/store';
-import { SettingsType } from '@/types/SettingsTypes';
+import { SettingNamesType, SettingsType } from '@/types/SettingsTypes';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -21,11 +21,15 @@ const options = [
   { type: 'report', icon: 'report', color: 'error', label: 'Report Content' },
 ] as OptionsTypes[];
 
+interface Props {
+  element:  SettingNamesType;
+  id: number;
+}
 /**
  * Renders question mark badge that triggers a tooltip on hover
  * @component MoreOptions
  */
-const MoreOptions = ({}) => {
+const MoreOptions = ({element, id}: Props) => {
   const [state, dispatch] = useAppStore();
   const [open, setOpen] = useState(false);
 
@@ -35,9 +39,9 @@ const MoreOptions = ({}) => {
     setOpen(!open);
   };
 
-  const handleClick = (type: AlterTypes, element: SettingsType) => {
+  const handleClick = (type: AlterTypes, element: SettingNamesType) => {
     setOpen(false);
-    dispatch({ type: 'EDIT_DATA', payload: { type: type, element: element, id: 473 } })
+    dispatch({ type: 'EDIT_DATA', payload: { type: type, element: element, id: id } })
   }
   return (
     <Box position="relative">
@@ -60,7 +64,7 @@ const MoreOptions = ({}) => {
                 <Button
                   color={option.color}
                   sx={{ width: '100%', justifyContent: 'start' }}
-                  onClick={() => handleClick(option.type, 'boxes')}
+                  onClick={() => handleClick(option.type, element)}
                 >
                   <Stack direction="row">
                     <AppIcon icon={option.icon} sx={{ mr: 1 }} />

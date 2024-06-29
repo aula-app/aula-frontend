@@ -38,7 +38,7 @@ const IdeaBox = ({ box, noLink = false }: IdeaBoxProps) => {
         </Stack>
         <AppIcon icon={phases[box.phase_id].icon} size="small" sx={{ ml: 2, mr: 1 }} />
         <Typography variant="caption" mr="auto">{phases[box.phase_id].name} phase</Typography>
-        <MoreOptions />
+        <MoreOptions element='boxes' id={box.id} />
       </Stack>
       <AppLink to={`/room/${params.room_id}/idea-box/${box.id}`} mb={2} key={box.id} disabled={noLink}>
       <CardContent>
