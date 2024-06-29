@@ -14,7 +14,7 @@ export interface SettingsRows {
   id: number;
   name: string;
   displayName: string;
-}
+}Ŋ
 
 export interface SettingForm {
   type: 'input' | 'text' | 'select' | 'multiple';

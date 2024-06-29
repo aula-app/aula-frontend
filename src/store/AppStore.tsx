@@ -10,6 +10,7 @@ import {
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppReducer from './AppReducer';
 import { localStorageGet } from '@/utils';
+import { EditDataType } from '@/types/Generics';
 
 /**
  * AppState structure and initial values
@@ -20,12 +21,14 @@ export interface AppStoreState {
   hasConsent: boolean;
   currentUser?: object | undefined;
   errors: string[];
+  editData: EditDataType | null;
 }
 const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
   isAuthenticated: false, // Overridden in AppStore by checking auth token
   hasConsent: false,
-  errors: []
+  errors: [],
+  editData: null,
 };
 
 /**
@@ -54,7 +57,6 @@ const AppStoreProvider: FunctionComponent<PropsWithChildren> = ({ children }) =>
     ...INITIAL_APP_STATE,
     isAuthenticated: tokenExists,
     darkMode: darkMode,
-    // isAuthenticated: tokenExists,
   };
   const value: AppContextReturningType = useReducer(AppReducer, initialState);
 

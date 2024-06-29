@@ -2,7 +2,7 @@ import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useAppStore } from '@/store';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import ConsentDialog from '@/components/dialogs/ConsentDialog';
+import ConsentDialog from '@/dialogs/ConsentDialog';
 import { MessageConsentType } from '@/types/MessageTypes';
 
 /**
