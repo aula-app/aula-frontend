@@ -46,7 +46,7 @@ const IdeasBoxView = () => {
         scrollSnapType: 'y mandatory',
       }}
     >
-      {box.data && <IdeaBox box={box.data || {}} noLink />}
+      {box.data && <IdeaBox box={box.data || {}} noLink onReload={boxFetch} />}
       <Typography variant="h6" p={2}>
         {String(boxIdeas.count)} ideas
       </Typography>

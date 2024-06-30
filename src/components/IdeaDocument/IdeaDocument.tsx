@@ -4,7 +4,6 @@ import AppIcon from '../AppIcon';
 import { databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
 import { useEffect, useState } from 'react';
 import MoreOptions from '../MoreOptions';
-import { grey } from '@mui/material/colors';
 
 interface Props {
   idea: IdeaType;
@@ -48,7 +47,7 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
     <Stack width="100%" sx={{ scrollSnapAlign: 'center'}} color="secondary" mb={2}>
       <Stack direction="row" justifyContent="space-between">
         <Chip icon={<AppIcon name="settings" />} label="category" variant='outlined' />
-        <MoreOptions element='ideas' id={idea.id} />
+        <MoreOptions element='ideas' id={idea.id} onClose={onReload} />
       </Stack>
       <Stack p={2} bgcolor={phases['0'].baseColor[50]} borderRadius={3} mb={1}>
         <Typography variant="h6">{idea.title}</Typography>

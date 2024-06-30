@@ -10,9 +10,10 @@ import { useParams } from 'react-router-dom';
 interface IdeaBoxProps {
   box: BoxType;
   noLink?: boolean;
+  onReload: () => void;
 }
 
-const IdeaBox = ({ box, noLink = false }: IdeaBoxProps) => {
+const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
   const params = useParams();
 
   return (
@@ -38,7 +39,7 @@ const IdeaBox = ({ box, noLink = false }: IdeaBoxProps) => {
         </Stack>
         <AppIcon icon={phases[box.phase_id].icon} size="small" sx={{ ml: 2, mr: 1 }} />
         <Typography variant="caption" mr="auto">{phases[box.phase_id].name} phase</Typography>
-        <MoreOptions element='boxes' id={box.id} />
+        <MoreOptions element='boxes' id={box.id} onClose={onReload} />
       </Stack>
       <AppLink to={`/room/${params.room_id}/idea-box/${box.id}`} mb={2} key={box.id} disabled={noLink}>
       <CardContent>

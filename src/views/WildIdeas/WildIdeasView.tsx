@@ -8,21 +8,21 @@ import Idea from '@/components/IdeaBubble';
 
 interface WildIdeasProps {
   ideas: IdeaType[];
-  reload: () => void;
+  onReload: () => void;
 }
 
 /**
  * Renders "WildIdeas" view
  * url: /room/:room_id
  */
-const WildIdeas = ({ ideas, reload }: WildIdeasProps) => {
+const WildIdeas = ({ ideas, onReload }: WildIdeasProps) => {
   const params = useParams();
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
   const closeDrawer = () => {
     setOpen(false);
-    reload();
+    onReload();
   };
 
   return (
@@ -42,7 +42,7 @@ const WildIdeas = ({ ideas, reload }: WildIdeasProps) => {
       <NewWildIdea isOpen={open} closeMethod={closeDrawer} />
       {ideas.map((idea) => (
         <Idea
-          idea={idea} onReload={reload}
+          idea={idea} ononReload={onReload}
           key={idea.id}
           comments={idea.sum_comments}
           to={`/room/${params['room_id']}/idea/${idea.id}`}

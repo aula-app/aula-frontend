@@ -24,12 +24,13 @@ const options = [
 interface Props {
   element:  SettingNamesType;
   id: number;
+  onClose?: () => void;
 }
 /**
  * Renders question mark badge that triggers a tooltip on hover
  * @component MoreOptions
  */
-const MoreOptions = ({element, id}: Props) => {
+const MoreOptions = ({element, id, onClose}: Props) => {
   const [state, dispatch] = useAppStore();
   const [open, setOpen] = useState(false);
 
@@ -41,7 +42,7 @@ const MoreOptions = ({element, id}: Props) => {
 
   const handleClick = (type: AlterTypes, element: SettingNamesType) => {
     setOpen(false);
-    dispatch({ type: 'EDIT_DATA', payload: { type: type, element: element, id: id } })
+    dispatch({ type: 'EDIT_DATA', payload: { type: type, element: element, id: id, onClose: onClose } })
   }
   return (
     <Box position="relative">

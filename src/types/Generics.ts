@@ -15,5 +15,6 @@ export type AlterTypes = 'add' | 'edit' | 'report' | 'bug';
 export interface EditDataType {
   type: AlterTypes;
   element: SettingNamesType;
+  onClose: () => void;
   id?: number;
 }

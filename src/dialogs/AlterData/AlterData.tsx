@@ -43,6 +43,7 @@ const AlterData = () => {
       }
     }).then((response) => {
       if (!response.success) return;
+      if(state.editData?.onClose) state.editData.onClose();
       handleClose();
     });
   };
