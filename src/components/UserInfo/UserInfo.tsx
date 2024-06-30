@@ -1,7 +1,7 @@
 import { Avatar, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
-import { SingleUserResponseType, UserType } from '@/types/UserTypes';
+import { SingleUserResponseType, UserType } from '@/types/scopes/UserTypes';
 
 /**
  * Renders User info with Avatar

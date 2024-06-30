@@ -16,7 +16,7 @@ import {
   Button,
   TableSortLabel,
 } from '@mui/material';
-import { SettingNamesType } from '@/types/SettingsTypes';
+import { SettingNamesType } from '@/types/scopes/SettingsTypes';
 import { SubdirectoryArrowRight } from '@mui/icons-material';
 import { databaseRequest, SettingsConfig } from '@/utils';
 import { TableResponseType } from '@/types/TableTypes';

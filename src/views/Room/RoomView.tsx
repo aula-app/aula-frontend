@@ -5,8 +5,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import WildIdeasView from '@/views/WildIdeas';
 import IdeasBoxesView from '@/views/IdeasBoxes';
 import { databaseRequest } from '@/utils';
-import { IdeasResponseType } from '@/types/IdeaTypes';
-import { BoxesResponseType } from '@/types/BoxTypes';
+import { IdeasResponseType } from '@/types/scopes/IdeaTypes';
+import { BoxesResponseType } from '@/types/scopes/BoxTypes';
 import { AppIcon } from '@/components';
 import { grey } from '@mui/material/colors';
 

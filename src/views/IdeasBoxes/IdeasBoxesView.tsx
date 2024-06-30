@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { IdeaBox } from '@/components/IdeaBox';
-import { BoxType } from '@/types/BoxTypes';
+import { BoxType } from '@/types/scopes/BoxTypes';
 
 interface BoxesProps {
   boxes: BoxType[];

@@ -1,4 +1,4 @@
-import { SettingsType } from "@/types/SettingsTypes";
+import { SettingsType } from "@/types/scopes/SettingsTypes";
 import { usersSettings } from "./usersSettings";
 import { roomsSettings } from "./roomsSettings";
 import { boxesSettings } from "./boxesSettings";

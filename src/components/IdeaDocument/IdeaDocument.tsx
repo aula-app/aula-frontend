@@ -1,5 +1,5 @@
 import { Button, Chip, Stack, Typography } from '@mui/material';
-import { IdeaType } from '@/types/IdeaTypes';
+import { IdeaType } from '@/types/scopes/IdeaTypes';
 import AppIcon from '../AppIcon';
 import { databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
 import { useEffect, useState } from 'react';

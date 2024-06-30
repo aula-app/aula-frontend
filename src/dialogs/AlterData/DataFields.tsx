@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import FormInput from './FormInput';
 import { EditDataType, SingleResponseType } from '@/types/Generics';
 import { useEffect } from 'react';
+import { RepportConfig } from '@/utils/repport';
 
 type Props = {
   info: EditDataType;
@@ -18,7 +19,10 @@ type Props = {
  */
 
 const DataFields = ({ info, items, onClose }: Props) => {
-  const schema = SettingsConfig[info.element].forms.reduce((schema, form) => ({ ...schema, [form.column]: form.schema }), {});
+  const forms = ['edit', 'add'].includes(info.type)
+    ? SettingsConfig[info.element].forms
+    : RepportConfig.forms
+  const schema = forms.reduce((schema, form) => ({ ...schema, [form.column]: form.schema }), {})
   const {
     register,
     setValue,
@@ -33,17 +37,17 @@ const DataFields = ({ info, items, onClose }: Props) => {
   const updateValues = () => {
     SettingsConfig[info.element].forms.forEach((field) => {
       // @ts-ignore
-      setValue(field.column, (items && items.data && info.type !== 'add' ? items.data[field.column] : field.value));
+      setValue(field.column, items && items.data && info.type !== 'add' ? items.data[field.column] : field.value);
     });
   };
 
   useEffect(() => {
-    updateValues()
-  }, [info.id, items?.data])
+    if (info.type === 'edit') updateValues();
+  }, [info.id, items?.data]);
 
   return (
     <FormContainer>
-      {SettingsConfig[info.element].forms.map((field) => (
+      {forms.map((field) => (
         <FormInput
           key={field.column}
           content={field}

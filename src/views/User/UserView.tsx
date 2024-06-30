@@ -10,7 +10,7 @@ import {
 import { Stack } from '@mui/system';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useEffect, useState } from 'react';
-import { SingleUserResponseType, UserType } from '@/types/UserTypes';
+import { SingleUserResponseType, UserType } from '@/types/scopes/UserTypes';
 import ChangePassword from '@/components/ChangePassword';
 import { AppButton, AppIcon } from '@/components';
 import { FormContainer } from 'react-hook-form-mui';

@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { ICONS } from '../AppIcon/AppIcon';
 import { AlterTypes, ColorTypes } from '@/types/Generics';
 import { useAppStore } from '@/store';
-import { SettingNamesType, SettingsType } from '@/types/SettingsTypes';
+import { SettingNamesType, SettingsType } from '@/types/scopes/SettingsTypes';
 
 interface OptionsTypes {
   type: AlterTypes;

@@ -2,7 +2,7 @@ import { Fab, Stack } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useState } from 'react';
 import NewWildIdea from '@/components/NewWildIdea';
-import { IdeaType } from '@/types/IdeaTypes';
+import { IdeaType } from '@/types/scopes/IdeaTypes';
 import { useParams } from 'react-router-dom';
 import Idea from '@/components/IdeaBubble';
 

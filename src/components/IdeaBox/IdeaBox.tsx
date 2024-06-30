@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { Card, CardContent } from '@mui/material';
 import { phases } from '@/utils';
-import { BoxType } from '@/types/BoxTypes';
+import { BoxType } from '@/types/scopes/BoxTypes';
 import AppIcon from '../AppIcon';
 import MoreOptions from '../MoreOptions';
 import AppLink from '../AppLink';

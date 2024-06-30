@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Avatar, Button, Drawer, Stack, Typography } from '@mui/material';
-import { SettingNamesType } from '@/types/SettingsTypes';
+import { SettingNamesType } from '@/types/scopes/SettingsTypes';
 import { useEffect, useState } from 'react';
 import { databaseRequest, localStorageGet, parseJwt, SettingsConfig } from '@/utils';
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';

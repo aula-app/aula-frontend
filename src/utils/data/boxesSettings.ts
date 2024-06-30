@@ -1,4 +1,4 @@
-import { SettingsType } from '@/types/SettingsTypes';
+import { SettingsType } from '@/types/scopes/SettingsTypes';
 import * as yup from 'yup';
 
 const name = 'Boxes';

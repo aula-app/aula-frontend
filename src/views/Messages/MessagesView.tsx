@@ -1,6 +1,6 @@
 import { AppIcon, AppLink } from '@/components';
 import MessageCard from '@/components/MessageCard';
-import { MessageType, messageConsentValues } from '@/types/MessageTypes';
+import { MessageType, messageConsentValues } from '@/types/scopes/MessageTypes';
 import { localStorageGet } from '@/utils';
 import { parseJwt } from '@/utils/jwt';
 import { databaseRequest } from '@/utils/requests';

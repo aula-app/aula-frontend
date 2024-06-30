@@ -5,15 +5,15 @@ import ApprovalCard from '@/components/ApprovalCard';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
 import { Vote, databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
-import { CommentResponseType } from '@/types/CommentTypes';
-import { SingleIdeaResponseType } from '@/types/IdeaTypes';
+import { CommentResponseType } from '@/types/scopes/CommentTypes';
+import { SingleIdeaResponseType } from '@/types/scopes/IdeaTypes';
 import NewComment from '@/components/NewComment';
 import { Add } from '@mui/icons-material';
-import { BoxResponseType } from '@/types/BoxTypes';
+import { BoxResponseType } from '@/types/scopes/BoxTypes';
 import IdeaBubble from '@/components/IdeaBubble';
 import Comment from '@/components/Comment';
 import IdeaDocument from '@/components/IdeaDocument';
-import { RoomPhases } from '@/types/RoomTypes';
+import { RoomPhases } from '@/types/scopes/RoomTypes';
 import { AppIcon } from '@/components';
 
 /**

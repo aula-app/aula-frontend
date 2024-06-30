@@ -1,4 +1,4 @@
-import { SettingForm, SettingNamesType } from '@/types/SettingsTypes';
+import { SettingForm, SettingNamesType } from '@/types/scopes/SettingsTypes';
 import { databaseRequest, SettingsConfig } from '@/utils';
 import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
