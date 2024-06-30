@@ -51,7 +51,7 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
         <Stack>
           <Typography>{comment.content}</Typography>
           <Stack direction="row" justifyContent="end">
-            <MoreOptions />
+            {<MoreOptions element='comments' id={comment.id} />}
           </Stack>
         </Stack>
       </ChatBubble>

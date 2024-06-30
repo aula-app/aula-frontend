@@ -8,7 +8,7 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { AppIcon } from '@/components';
-import FormInput from '@/components/FormInput';
+import FormInput from '@/dialogs/AlterData/FormInput'
 
 /** * Renders "Settings" drawer component view
  * url: /settings/:setting_name/:setting_id

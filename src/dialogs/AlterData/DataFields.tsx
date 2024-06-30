@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { Button, Stack } from '@mui/material';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
-import FormInput from '@/components/FormInput';
+import FormInput from './FormInput';
 import { EditDataType, SingleResponseType } from '@/types/Generics';
 import { useEffect } from 'react';
 

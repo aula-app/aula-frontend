@@ -1,7 +1,7 @@
 import { Button, Chip, Stack, Typography } from '@mui/material';
 import { IdeaType } from '@/types/IdeaTypes';
 import AppIcon from '../AppIcon';
-import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
 import { useEffect, useState } from 'react';
 import MoreOptions from '../MoreOptions';
 import { grey } from '@mui/material/colors';
@@ -50,7 +50,7 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
         <Chip icon={<AppIcon name="settings" />} label="category" variant='outlined' />
         <MoreOptions element='ideas' id={idea.id} />
       </Stack>
-      <Stack p={2} bgcolor={grey[200]} borderRadius={3} mb={1}>
+      <Stack p={2} bgcolor={phases['0'].baseColor[50]} borderRadius={3} mb={1}>
         <Typography variant="h6">{idea.title}</Typography>
         <Typography mb={2}>{idea.content}</Typography>
       </Stack>
