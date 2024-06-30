@@ -1,9 +1,9 @@
 import { useAppStore } from '@/store';
-import { SingleResponseType } from '@/types/Generics';
+import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import { Avatar, Drawer, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '../../components/AppIcon';
-import { SettingsConfig, databaseRequest } from '@/utils';
+import { SettingsConfig, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import DataFields from './DataFields';
 
 /**
@@ -11,6 +11,8 @@ import DataFields from './DataFields';
  * url: /
  */
 const AlterData = () => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [state, dispatch] = useAppStore();
   const [items, setItems] = useState<SingleResponseType>();
 
@@ -23,6 +25,26 @@ const AlterData = () => {
         [SettingsConfig[state.editData.element].requests.id]: state.editData.id,
       },
     }).then((response: SingleResponseType) => setItems(response));
+  };
+
+  const handleSubmit = async (formData: Object) => {
+    if(!state.editData) return;
+    const config = SettingsConfig[state.editData.element]
+    const otherData = {updater_id: jwt_payload.user_id} as ObjectPropByName;
+    if(state.editData.type === 'edit') otherData[config.requests.id] = state.editData.id;
+    if(state.editData.element === 'ideas') otherData.user_id = jwt_payload.user_id;
+
+    await databaseRequest('model', {
+      model: config.model,
+      method: state.editData.type === 'edit' ? config.requests.edit : config.requests.add,
+      arguments: {
+        ...formData,
+        ...otherData
+      }
+    }).then((response) => {
+      if (!response.success) return;
+      handleClose();
+    });
   };
 
   const handleClose = () => {
@@ -45,7 +67,7 @@ const AlterData = () => {
             )}
             <Typography variant="h4" pb={2}>
               {state.editData.type === 'edit'
-                ? 'Edit' 
+                ? 'Edit'
               : state.editData.type === 'add'
                 ? 'New'
               : 'Report'}{' '}
@@ -55,7 +77,7 @@ const AlterData = () => {
               }
             </Typography>
           </Stack>
-          <DataFields info={state.editData} items={items} onClose={handleClose} />
+          <DataFields info={state.editData} items={items} onClose={handleClose} onSubmit={handleSubmit} />
         </Stack>
       )}
     </Drawer>

@@ -6,23 +6,23 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import FormInput from './FormInput';
 import { EditDataType, SingleResponseType } from '@/types/Generics';
 import { useEffect } from 'react';
-import { RepportConfig } from '@/utils/repport';
 
 type Props = {
   info: EditDataType;
   items: SingleResponseType;
   onClose: () => void;
+  onSubmit: (formData: Object) => Promise<void>;
 };
 
 /**
  * Renders "DataFeilds" component
  */
 
-const DataFields = ({ info, items, onClose }: Props) => {
+const DataFields = ({ info, items, onClose, onSubmit }: Props) => {
   const forms = ['edit', 'add'].includes(info.type)
     ? SettingsConfig[info.element].forms
-    : RepportConfig.forms
-  const schema = forms.reduce((schema, form) => ({ ...schema, [form.column]: form.schema }), {})
+    : SettingsConfig[info.type].forms;
+  const schema = forms.reduce((schema, form) => ({ ...schema, [form.column]: form.schema }), {});
   const {
     register,
     setValue,
@@ -46,7 +46,7 @@ const DataFields = ({ info, items, onClose }: Props) => {
   }, [info.id, items?.data]);
 
   return (
-    <FormContainer>
+    <FormContainer onSuccess={handleSubmit(onSubmit)}>
       {forms.map((field) => (
         <FormInput
           key={field.column}
@@ -61,7 +61,7 @@ const DataFields = ({ info, items, onClose }: Props) => {
         <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
           Cancel
         </Button>
-        <Button type="submit" variant="contained" onSubmit={handleSubmit(onClose)}>
+        <Button type="submit" variant="contained">
           Submit
         </Button>
       </Stack>
