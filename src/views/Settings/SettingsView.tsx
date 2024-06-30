@@ -21,12 +21,12 @@ import { SubdirectoryArrowRight } from '@mui/icons-material';
 import { databaseRequest, SettingsConfig } from '@/utils';
 import { TableResponseType } from '@/types/TableTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
-import EditSettings from './EditSettings';
 import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
 import { AppIcon } from '@/components';
 import { ObjectPropByName } from '@/types/Generics';
 import MoveSettings from './MoveSettings';
+import { useAppStore } from '@/store';
 
 const GET_LIMIT = () => Math.max(Math.floor((window.innerHeight - 200) / 55) - 1 || 10, 1);
 
@@ -37,6 +37,7 @@ const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
+  const [state, dispatch] = useAppStore();
   const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(GET_LIMIT());
   const [page, setPage] = useState(0);
@@ -60,11 +61,8 @@ const SettingsView = () => {
     });
 
   const loadData = async () => {
-    resetTable();
     await dataFetch().then((response) => setItems(response));
   };
-
-
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
@@ -105,9 +103,14 @@ const SettingsView = () => {
       window.removeEventListener('resize', handleWindowSizeChange);
     };
   }, []);
+
   useEffect(() => {
     loadData();
   }, [page, limit, orderBy, orderAsc, setting_id, setting_name]);
+
+  useEffect(() => {
+    resetTable();
+  }, [setting_id, setting_name]);
 
   return (
     <Stack direction="column" height="100%">
@@ -170,7 +173,12 @@ const SettingsView = () => {
                     <TableCell
                       key={`${column.name}-${row.id}`}
                       sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                      onClick={() => navigate(`/settings/${setting_name}/${row.id}`)}
+                      onClick={() =>
+                        dispatch({
+                          type: 'EDIT_DATA',
+                          payload: { type: 'edit', element: setting_name, id: row.id, onClose: loadData },
+                        })
+                      }
                     >
                       {row[column.name]}
                     </TableCell>
@@ -210,7 +218,9 @@ const SettingsView = () => {
           bottom: 40,
           boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
         }}
-        onClick={() => navigate('new')}
+        onClick={() =>
+          dispatch({ type: 'EDIT_DATA', payload: { type: 'edit', element: setting_name, id: 0, onClose: loadData } })
+        }
       >
         <AppIcon name="add" />
       </Fab>
@@ -220,7 +230,6 @@ const SettingsView = () => {
           <Pagination count={Math.ceil(Number(items.count) / limit)} onChange={changePage} sx={{ py: 1 }} />
         )}
       </Stack>
-      <EditSettings key={`${setting_name}_${setting_id || 'new'}`} />
       <DeleteSettings
         key={`${setting_name}`}
         items={selected}
