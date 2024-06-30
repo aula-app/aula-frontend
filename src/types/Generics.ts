@@ -12,6 +12,7 @@ export interface SingleResponseType {
 export type ColorTypes = "secondary" | "warning" | "error" | "inherit" | "primary" | "success" | "info";
 
 export type AlterTypes = 'add' | 'edit' | 'report' | 'bug';
+
 export interface EditDataType {
   type: AlterTypes;
   element: SettingNamesType;

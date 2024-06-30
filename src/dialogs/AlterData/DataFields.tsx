@@ -21,7 +21,7 @@ type Props = {
 const DataFields = ({ info, items, onClose, onSubmit }: Props) => {
   const forms = ['edit', 'add'].includes(info.type)
     ? SettingsConfig[info.element].forms
-    : SettingsConfig[info.type].forms;
+    : SettingsConfig[info.type === 'report' ? 'report' : 'bug'].forms;
   const schema = forms.reduce((schema, form) => ({ ...schema, [form.column]: form.schema }), {});
   const {
     register,
@@ -46,6 +46,7 @@ const DataFields = ({ info, items, onClose, onSubmit }: Props) => {
   }, [info.id, items?.data]);
 
   return (
+    // @ts-ignore
     <FormContainer onSuccess={handleSubmit(onSubmit)}>
       {forms.map((field) => (
         <FormInput

@@ -64,12 +64,6 @@ const IdeaView = () => {
       },
     }).then((response) => setVote((Number(response.data) + 1) as Vote));
 
-  const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
-  const closeDrawer = () => {
-    setOpen(false);
-    commentsFetch();
-  };
-
   useEffect(() => {
     ideaFetch();
     commentsFetch();
