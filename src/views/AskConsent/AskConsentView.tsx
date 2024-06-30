@@ -2,8 +2,8 @@ import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { useAppStore } from '@/store';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import ConsentDialog from '@/components/dialogs/ConsentDialog';
-import { MessageConsentType } from '@/types/MessageTypes';
+import ConsentDialog from '@/dialogs/ConsentDialog';
+import { MessageConsentType } from '@/types/scopes/MessageTypes';
 
 /**
  * Renders "Ask Consent" view

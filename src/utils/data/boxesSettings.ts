@@ -1,4 +1,4 @@
-import { SettingsType } from '@/types/SettingsTypes';
+import { SettingsType } from '@/types/scopes/SettingsTypes';
 import * as yup from 'yup';
 
 const name = 'Boxes';
@@ -44,15 +44,6 @@ const forms = [
     required: true,
     hidden: false,
     schema: yup.string().required(),
-  },
-  {
-    type: 'text',
-    label: 'Internal Description',
-    column: 'description_internal',
-    value: 'Internal description?',
-    required: false,
-    hidden: true,
-    schema: yup.string(),
   },
   {
     type: 'select',

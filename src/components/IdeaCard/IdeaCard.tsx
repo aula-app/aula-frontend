@@ -11,9 +11,9 @@ import {
   votingVariants,
 } from '@/utils';
 import { useParams } from 'react-router-dom';
-import { IdeaType } from '@/types/IdeaTypes';
+import { IdeaType } from '@/types/scopes/IdeaTypes';
 import { useEffect, useState } from 'react';
-import { RoomPhases } from '@/types/RoomTypes';
+import { RoomPhases } from '@/types/scopes/RoomTypes';
 
 interface IdeaCardProps {
   idea: IdeaType;

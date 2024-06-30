@@ -1,5 +1,5 @@
 import { ObjectPropByName } from './Generics';
-import { UserTypeKeys } from './UserTypes';
+import { UserTypeKeys } from './scopes/UserTypes';
 
 export interface TableRow {
   id: number;

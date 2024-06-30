@@ -3,9 +3,9 @@ import { IdeaBox } from '@/components/IdeaBox';
 import { IdeaCard } from '@/components/IdeaCard';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { BoxResponseType } from '@/types/BoxTypes';
+import { BoxResponseType } from '@/types/scopes/BoxTypes';
 import { databaseRequest } from '@/utils';
-import { IdeasResponseType } from '@/types/IdeaTypes';
+import { IdeasResponseType } from '@/types/scopes/IdeaTypes';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/ideas-box/:box_id
@@ -46,7 +46,7 @@ const IdeasBoxView = () => {
         scrollSnapType: 'y mandatory',
       }}
     >
-      {box.data && <IdeaBox box={box.data || {}} />}
+      {box.data && <IdeaBox box={box.data || {}} noLink onReload={boxFetch} />}
       <Typography variant="h6" p={2}>
         {String(boxIdeas.count)} ideas
       </Typography>

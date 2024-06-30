@@ -1,4 +1,4 @@
-import { BoxType } from '@/types/BoxTypes';
+import { BoxType } from '@/types/scopes/BoxTypes';
 import { SingleResponseType } from '@/types/Generics';
 import { databaseRequest, localStorageGet, parseJwt, SettingsConfig } from '@/utils';
 import {

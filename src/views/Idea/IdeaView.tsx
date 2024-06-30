@@ -5,16 +5,16 @@ import ApprovalCard from '@/components/ApprovalCard';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
 import { Vote, databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
-import { CommentResponseType } from '@/types/CommentTypes';
-import { SingleIdeaResponseType } from '@/types/IdeaTypes';
-import NewComment from '@/components/NewComment';
+import { CommentResponseType } from '@/types/scopes/CommentTypes';
+import { SingleIdeaResponseType } from '@/types/scopes/IdeaTypes';
 import { Add } from '@mui/icons-material';
-import { BoxResponseType } from '@/types/BoxTypes';
+import { BoxResponseType } from '@/types/scopes/BoxTypes';
 import IdeaBubble from '@/components/IdeaBubble';
 import Comment from '@/components/Comment';
 import IdeaDocument from '@/components/IdeaDocument';
-import { RoomPhases } from '@/types/RoomTypes';
+import { RoomPhases } from '@/types/scopes/RoomTypes';
 import { AppIcon } from '@/components';
+import { useAppStore } from '@/store';
 
 /**
  * Renders "Idea" view
@@ -25,13 +25,11 @@ const IdeaView = () => {
   const params = useParams();
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
-  const [open, setOpen] = useState(false);
+  const [state, dispatch] = useAppStore();
   const [idea, setIdea] = useState({} as SingleIdeaResponseType);
   const [phase, setPhase] = useState(0);
   const [comments, setComments] = useState({} as CommentResponseType);
   const [vote, setVote] = useState<Vote>(0);
-
-  let displayDate!: Date;
 
   const ideaFetch = async () =>
     await databaseRequest('model', {
@@ -40,7 +38,6 @@ const IdeaView = () => {
       arguments: { idea_id: params['idea_id'] },
     }).then((response: SingleIdeaResponseType) => {
       setIdea(response);
-      displayDate = new Date(response.data.created);
     });
 
   const commentsFetch = async () =>
@@ -66,12 +63,6 @@ const IdeaView = () => {
         idea_id: Number(params['idea_id']),
       },
     }).then((response) => setVote((Number(response.data) + 1) as Vote));
-
-  const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
-  const closeDrawer = () => {
-    setOpen(false);
-    commentsFetch();
-  };
 
   useEffect(() => {
     ideaFetch();
@@ -134,7 +125,9 @@ const IdeaView = () => {
               <Fab
                 aria-label="add"
                 color="primary"
-                onClick={toggleDrawer(true)}
+                onClick={() =>
+                  dispatch({ type: 'EDIT_DATA', payload: { type: 'add', element: 'comments', id: idea.data.id, onClose: commentsFetch } })
+                }
                 sx={{
                   position: 'absolute',
                   bottom: 0,
@@ -146,7 +139,6 @@ const IdeaView = () => {
               </Fab>
             </Stack>
           )}
-          <NewComment isOpen={open} closeMethod={closeDrawer} />
         </Stack>
       )}
     </Stack>

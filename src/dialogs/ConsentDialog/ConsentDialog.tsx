@@ -15,7 +15,7 @@ import { useState, useCallback, Fragment } from 'react';
 import { useNavigate } from 'react-router';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { localStorageGet } from '@/utils';
-import { MessageConsentType } from '@/types/MessageTypes';
+import { MessageConsentType } from '@/types/scopes/MessageTypes';
 
 /**
  * Makes an Acknowledgement requiring consent inside the Dialog.

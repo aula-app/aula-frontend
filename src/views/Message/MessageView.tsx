@@ -1,5 +1,5 @@
 import { AppButton, AppIcon } from '@/components';
-import { MessageType, messageConsentValues } from '@/types/MessageTypes';
+import { MessageType, messageConsentValues } from '@/types/scopes/MessageTypes';
 import { localStorageGet } from '@/utils';
 import { databaseRequest } from '@/utils/requests';
 import { IconButton, Stack, Typography } from '@mui/material';

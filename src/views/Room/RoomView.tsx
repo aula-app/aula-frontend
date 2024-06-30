@@ -5,8 +5,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import WildIdeasView from '@/views/WildIdeas';
 import IdeasBoxesView from '@/views/IdeasBoxes';
 import { databaseRequest } from '@/utils';
-import { IdeasResponseType } from '@/types/IdeaTypes';
-import { BoxesResponseType } from '@/types/BoxTypes';
+import { IdeasResponseType } from '@/types/scopes/IdeaTypes';
+import { BoxesResponseType } from '@/types/scopes/BoxTypes';
 import { AppIcon } from '@/components';
 import { grey } from '@mui/material/colors';
 
@@ -63,10 +63,10 @@ const RoomView = () => {
     <Stack width="100%" height="100%" overflow="hidden">
       <TabContext value={tab}>
         <TabPanel value="ideas" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
-          <WildIdeasView ideas={ideas.data || []} reload={ideasFetch} />
+          <WildIdeasView ideas={ideas.data || []} onReload={ideasFetch} />
         </TabPanel>
         <TabPanel value="boxes" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
-          <IdeasBoxesView boxes={boxes.data || []} />
+          <IdeasBoxesView boxes={boxes.data || []} onReload={boxesFetch} />
         </TabPanel>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
