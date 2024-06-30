@@ -97,6 +97,16 @@ const SettingsView = () => {
 
   const handleWindowSizeChange = () => setLimit(GET_LIMIT());
 
+  const onDelete = () => {
+    setOpenDelete(false);
+    setSelected([]);
+  }
+
+  const onMove = () => {
+    setOpenMove(false);
+    setSelected([]);
+  }
+
   useEffect(() => {
     window.addEventListener('resize', handleWindowSizeChange);
     return () => {
@@ -219,7 +229,7 @@ const SettingsView = () => {
           boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
         }}
         onClick={() =>
-          dispatch({ type: 'EDIT_DATA', payload: { type: 'edit', element: setting_name, id: 0, onClose: loadData } })
+          dispatch({ type: 'EDIT_DATA', payload: { type: 'add', element: setting_name, id: 0, onClose: loadData } })
         }
       >
         <AppIcon name="add" />
@@ -234,14 +244,14 @@ const SettingsView = () => {
         key={`${setting_name}`}
         items={selected}
         isOpen={openDelete}
-        closeMethod={() => setOpenDelete(false)}
+        closeMethod={onDelete}
         reloadMethod={() => loadData()}
       />
       <MoveSettings
         key={`move_${setting_name}`}
         items={selected}
         isOpen={openMove}
-        closeMethod={() => setOpenMove(false)}
+        closeMethod={onMove}
         reloadMethod={() => loadData()}
       />
     </Stack>

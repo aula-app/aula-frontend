@@ -60,29 +60,29 @@ const forms = [
     hidden: false,
     schema: yup.number().required(),
   },
-  {
-    type: 'select',
-    label: 'Status',
-    column: 'approved',
-    options: [
-      { label: '–', value: 0 },
-      { label: 'Approved', value: 1 },
-      { label: 'Rejected', value: -1 },
-    ],
-    required: true,
-    hidden: false,
-    phase: 20,
-    schema: yup.number().required(),
-  },
-  {
-    type: 'text',
-    label: 'Approval message',
-    column: 'approval_comment',
-    required: true,
-    hidden: false,
-    phase: 20,
-    schema: yup.string(),
-  },
+  // {
+  //   type: 'select',
+  //   label: 'Status',
+  //   column: 'approved',
+  //   options: [
+  //     { label: '–', value: 0 },
+  //     { label: 'Approved', value: 1 },
+  //     { label: 'Rejected', value: -1 },
+  //   ],
+  //   required: true,
+  //   hidden: false,
+  //   phase: 20,
+  //   schema: yup.number().required(),
+  // },
+  // {
+  //   type: 'text',
+  //   label: 'Approval message',
+  //   column: 'approval_comment',
+  //   required: true,
+  //   hidden: false,
+  //   phase: 20,
+  //   schema: yup.string(),
+  // },
 ];
 
 const requests = {

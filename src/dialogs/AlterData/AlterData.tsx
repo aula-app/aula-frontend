@@ -32,7 +32,8 @@ const AlterData = () => {
     const config = SettingsConfig[state.editData.element]
     const otherData = {updater_id: jwt_payload.user_id} as ObjectPropByName;
     if(state.editData.type === 'edit') otherData[config.requests.id] = state.editData.id;
-    if(state.editData.element === 'ideas') otherData.user_id = jwt_payload.user_id;
+    if(state.editData.element === 'comments') otherData.idea_id = state.editData.id;
+    if(['ideas', 'comments'].includes(state.editData.element)) otherData.user_id = jwt_payload.user_id;
 
     await databaseRequest('model', {
       model: config.model,

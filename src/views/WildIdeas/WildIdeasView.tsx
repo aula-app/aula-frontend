@@ -1,10 +1,9 @@
 import { Fab, Stack } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useState } from 'react';
-import NewWildIdea from '@/components/NewWildIdea';
 import { IdeaType } from '@/types/scopes/IdeaTypes';
 import { useParams } from 'react-router-dom';
 import Idea from '@/components/IdeaBubble';
+import { useAppStore } from '@/store';
 
 interface WildIdeasProps {
   ideas: IdeaType[];
@@ -17,13 +16,7 @@ interface WildIdeasProps {
  */
 const WildIdeas = ({ ideas, onReload }: WildIdeasProps) => {
   const params = useParams();
-  const [open, setOpen] = useState(false);
-
-  const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
-  const closeDrawer = () => {
-    setOpen(false);
-    onReload();
-  };
+  const [state, dispatch] = useAppStore();
 
   return (
     <Stack alignItems="center" width="100%" px={1}>
@@ -35,14 +28,15 @@ const WildIdeas = ({ ideas, onReload }: WildIdeasProps) => {
           bottom: 40,
           boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
         }}
-        onClick={toggleDrawer(true)}
+        onClick={() =>
+          dispatch({ type: 'EDIT_DATA', payload: { type: 'add', element: 'ideas', id: 0, onClose: onReload } })
+        }
       >
         <Add />
       </Fab>
-      <NewWildIdea isOpen={open} closeMethod={closeDrawer} />
       {ideas.map((idea) => (
         <Idea
-          idea={idea} ononReload={onReload}
+          idea={idea} onReload={onReload}
           key={idea.id}
           comments={idea.sum_comments}
           to={`/room/${params['room_id']}/idea/${idea.id}`}

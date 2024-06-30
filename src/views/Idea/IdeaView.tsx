@@ -7,7 +7,6 @@ import VotingResults from '@/components/VotingResults';
 import { Vote, databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
 import { CommentResponseType } from '@/types/scopes/CommentTypes';
 import { SingleIdeaResponseType } from '@/types/scopes/IdeaTypes';
-import NewComment from '@/components/NewComment';
 import { Add } from '@mui/icons-material';
 import { BoxResponseType } from '@/types/scopes/BoxTypes';
 import IdeaBubble from '@/components/IdeaBubble';
@@ -15,6 +14,7 @@ import Comment from '@/components/Comment';
 import IdeaDocument from '@/components/IdeaDocument';
 import { RoomPhases } from '@/types/scopes/RoomTypes';
 import { AppIcon } from '@/components';
+import { useAppStore } from '@/store';
 
 /**
  * Renders "Idea" view
@@ -25,7 +25,7 @@ const IdeaView = () => {
   const params = useParams();
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
-  const [open, setOpen] = useState(false);
+  const [state, dispatch] = useAppStore();
   const [idea, setIdea] = useState({} as SingleIdeaResponseType);
   const [phase, setPhase] = useState(0);
   const [comments, setComments] = useState({} as CommentResponseType);
@@ -131,7 +131,9 @@ const IdeaView = () => {
               <Fab
                 aria-label="add"
                 color="primary"
-                onClick={toggleDrawer(true)}
+                onClick={() =>
+                  dispatch({ type: 'EDIT_DATA', payload: { type: 'add', element: 'comments', id: idea.data.id, onClose: commentsFetch } })
+                }
                 sx={{
                   position: 'absolute',
                   bottom: 0,
@@ -143,7 +145,6 @@ const IdeaView = () => {
               </Fab>
             </Stack>
           )}
-          <NewComment isOpen={open} closeMethod={closeDrawer} />
         </Stack>
       )}
     </Stack>
