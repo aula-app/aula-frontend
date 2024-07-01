@@ -3,7 +3,6 @@ import { useIsAuthenticated } from '@/hooks/auth';
 import PrivateLayout from './PrivateLayout';
 import PublicLayout from './PublicLayout';
 import ErrorMessages from '@/dialogs/ErrorMessages';
-import AlterData from '@/dialogs/AlterData';
 
 /**
  * Returns the current Layout component depending on different circumstances.
@@ -13,7 +12,6 @@ const CurrentLayout: FunctionComponent<PropsWithChildren> = (props) => {
     <>
       { useIsAuthenticated() ? <PrivateLayout {...props} /> : <PublicLayout {...props} /> }
       <ErrorMessages />
-      <AlterData />
     </>
   )
 };

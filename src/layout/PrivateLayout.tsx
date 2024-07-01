@@ -5,6 +5,7 @@ import { useOnMobile } from '@/hooks/layout';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import TopBar from './TopBar';
 import SideBar from './SideBar';
+import AlterData from '@/dialogs/AlterData';
 
 const TITLE_PRIVATE = 'aula';
 
@@ -62,6 +63,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       <Stack component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
       </Stack>
+      <AlterData />
     </Stack>
   );
 };
