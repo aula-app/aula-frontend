@@ -3,6 +3,12 @@ import {
   AccordionDetails,
   AccordionSummary,
   Avatar,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   TextField,
   Typography,
@@ -16,12 +22,15 @@ import { AppButton, AppIcon } from '@/components';
 import { FormContainer } from 'react-hook-form-mui';
 import { grey } from '@mui/material/colors';
 import ImageEditor from '@/components/ImageEditor';
+import { useAppStore } from '@/store';
 
 /** * Renders "User" view
  * url: /user
  */
 const UserView = () => {
   const [user, setUser] = useState<UserType | null>(null);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [state, dispatch] = useAppStore();
   const [isEditingImage, setEditingImage] = useState<boolean>(false);
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
@@ -35,6 +44,11 @@ const UserView = () => {
 
   const onSubmit = (formData: Object) => console.log(formData);
   const toggleDrawer = () => setEditingImage(!isEditingImage);
+
+  const requestDelete = () => {
+    setOpenDelete(false);
+    dispatch({ type: 'ADD_ERROR', message: 'Data deletion requested' });
+  }
 
   useEffect(() => {
     getUserInfo();
@@ -101,10 +115,30 @@ const UserView = () => {
       )}
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
-          <Typography variant="h6">Advanced Settings</Typography>
+          <Typography variant="h6">Security Settings</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <ChangePassword />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
+          <Typography variant="h6">Privacy Settings</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Button variant="contained" color="info" onClick={() => dispatch({ type: 'ADD_ERROR', message: 'Data export requested' })} fullWidth>
+            Export account data
+          </Button>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
+          <Typography variant="h6">Advanced Settings</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} fullWidth>
+            Delete account
+          </Button>
         </AccordionDetails>
       </Accordion>
       {user && (
@@ -114,6 +148,34 @@ const UserView = () => {
           currentImage={user.avatar || '/img/aula_kopf.png'}
         />
       )}
+      <Dialog
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          <Typography color="error">
+            <Stack direction="row" alignItems="center">
+              <AppIcon icon="alert" sx={{ mr: 1 }} /> Delete your account
+            </Stack>
+          </Typography>
+        </DialogTitle>
+        <DialogContent sx={{ overflowY: 'auto' }}>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete request the deletion of your account? All your personal data will be lost.
+            This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDelete(false)} color="secondary" autoFocus>
+            Cancel
+          </Button>
+          <Button onClick={requestDelete} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Stack>
   );
 };

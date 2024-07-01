@@ -2,7 +2,7 @@ import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
 import SettingsView from '@/views/Settings';
-import UserView from '@/views/User';
+import UserView from '@/views/Settings/User';
 import WelcomeView from '@/views/Welcome';
 import RoomView from '@/views/Room';
 import IdeaView from '@/views/Idea';
