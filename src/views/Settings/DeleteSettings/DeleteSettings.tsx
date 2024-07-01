@@ -12,7 +12,7 @@ type Params = {
 /** * Renders "Settings" alert dialog component view
  * url: /settings/:setting_name/
  */
-const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
+const DeleteSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
   const { setting_name } = useParams();
 
   const request = async (id: number) => {
@@ -48,7 +48,7 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeMethod} color="error" autoFocus>
+        <Button onClick={closeMethod} color="secondary" autoFocus>
           Cancel
         </Button>
         <Button onClick={deleteRequest} color="error" variant="contained">
@@ -59,4 +59,4 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
   );
 };
 
-export default EditSettings;
+export default DeleteSettings;
