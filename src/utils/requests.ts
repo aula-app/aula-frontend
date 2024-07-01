@@ -24,7 +24,7 @@ export const databaseRequest = async (controllerName: string, requestData: Objec
     if (response && response.success) {
       return response;
     } else {
-      console.log('failed');
+      console.log(response.error);
       return null;
     }
   } catch (e) {
