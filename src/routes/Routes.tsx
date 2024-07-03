@@ -34,7 +34,7 @@ const Routes = () => {
             })).json();
 
         const result = data; // await api.auth.loginWithEmail(values);
-        if (result.data === 0) {
+        if (result.data && result.data === 0) {
           dispatch({ 'action': 'HAS_CONSENT', 'payload': false})
         } else {
           dispatch({ 'action': 'HAS_CONSENT', 'payload': true})

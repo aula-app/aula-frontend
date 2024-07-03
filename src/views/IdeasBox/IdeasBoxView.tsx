@@ -12,8 +12,8 @@ import { IdeasResponseType } from '@/types/scopes/IdeaTypes';
  */
 const IdeasBoxView = () => {
   const params = useParams();
-  const [box, setBox] = useState({} as BoxResponseType);
-  const [boxIdeas, setBoxIdeas] = useState({} as IdeasResponseType);
+  const [box, setBox] = useState<BoxResponseType>();
+  const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
 
   const boxFetch = async () =>
     await databaseRequest('model', {
@@ -46,18 +46,31 @@ const IdeasBoxView = () => {
         scrollSnapType: 'y mandatory',
       }}
     >
-      {box.data && <IdeaBox box={box.data || {}} noLink onReload={boxFetch} />}
-      <Typography variant="h6" p={2}>
-        {String(boxIdeas.count)} ideas
-      </Typography>
-      <Grid container spacing={1}>
-        {boxIdeas.data &&
-          boxIdeas.data.map((idea, key) => (
-            <Grid key={key} item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
-              <IdeaCard idea={idea} phase={box.data.phase_id} />
-            </Grid>
-          ))}
-      </Grid>
+      {box && box.data && boxIdeas && boxIdeas.data && (
+        <>
+          <IdeaBox box={box.data || {}} noLink onReload={boxFetch} />
+          <Typography variant="h6" p={2}>
+            {String(boxIdeas.count)} ideas
+          </Typography>
+          <Grid container spacing={1}>
+            {boxIdeas.data.map((idea, key) => (
+              <Grid
+                key={key}
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={2}
+                sx={{ scrollSnapAlign: 'center' }}
+                order={-idea.approved}
+              >
+                <IdeaCard idea={idea} phase={box.data.phase_id} />
+              </Grid>
+            ))}
+          </Grid>
+        </>
+      )}
     </Box>
   );
 };

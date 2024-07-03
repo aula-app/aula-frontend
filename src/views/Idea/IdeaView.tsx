@@ -26,9 +26,9 @@ const IdeaView = () => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [state, dispatch] = useAppStore();
-  const [idea, setIdea] = useState({} as SingleIdeaResponseType);
+  const [idea, setIdea] = useState<SingleIdeaResponseType>();
   const [phase, setPhase] = useState(0);
-  const [comments, setComments] = useState({} as CommentResponseType);
+  const [comments, setComments] = useState<CommentResponseType>();
   const [vote, setVote] = useState<Vote>(0);
 
   const ideaFetch = async () =>
@@ -74,31 +74,30 @@ const IdeaView = () => {
   return (
     <Stack width="100%" height="100%" overflow="auto">
       <Stack direction="row" pt={2} px={1}>
-        {Object.keys(phases).map(p => {
+        {Object.keys(phases).map((p) => {
           const currentPhase = p as RoomPhases;
           return (
-          <Stack
-            flex={phase === Number(currentPhase) ? 1 : 0}
-            direction="row"
-            sx={{
-              aspectRatio: phase === Number(currentPhase) ? '' : 1,
-              borderRadius: 999,
-            }}
-            bgcolor={phases[currentPhase].color}
-            key={currentPhase}
-            alignItems="center"
-            p={1}
-            mx={.5}
-          >
-            <AppIcon icon={phases[currentPhase].icon} />
-             {phase === Number(currentPhase) &&
-              <Typography ml={1}>{phases[currentPhase].name}</Typography>
-             }
-          </Stack>
-        )})}
+            <Stack
+              flex={phase === Number(currentPhase) ? 1 : 0}
+              direction="row"
+              sx={{
+                aspectRatio: phase === Number(currentPhase) ? '' : 1,
+                borderRadius: 999,
+              }}
+              bgcolor={phases[currentPhase].color}
+              key={currentPhase}
+              alignItems="center"
+              p={1}
+              mx={0.5}
+            >
+              <AppIcon icon={phases[currentPhase].icon} />
+              {phase === Number(currentPhase) && <Typography ml={1}>{phases[currentPhase].name}</Typography>}
+            </Stack>
+          );
+        })}
       </Stack>
       {phase === 30 && <VotingCard />}
-      {idea.data && (
+      {idea && idea.data && (
         <Stack p={2}>
           {phase === 40 && <VotingResults yourVote={vote} />}
           {phase === 0 ? (
@@ -106,27 +105,33 @@ const IdeaView = () => {
           ) : (
             <IdeaDocument idea={idea.data} onReload={ideaFetch} disabled={phase > 10} />
           )}
-          {idea.data && phase >= 20 && (
+          {phase >= 20 && (
             <ApprovalCard
               comment={idea.data.approval_comment}
               rejected={idea.data.approved < 0}
               disabled={phase > 20}
             />
           )}
-          <Typography variant="h5" py={2}>
-            {String(comments.count)} Comments
-          </Typography>
-          {comments.data &&
-            comments.data.map((comment) => (
-              <Comment key={comment.id} comment={comment} onReload={commentsFetch} disabled={phase > 10} />
-            ))}
+          {comments && comments.data && (
+            <>
+              <Typography variant="h5" py={2}>
+                {String(comments.count)} Comments
+              </Typography>
+              {comments.data.map((comment) => (
+                <Comment key={comment.id} comment={comment} onReload={commentsFetch} disabled={phase > 10} />
+              ))}
+            </>
+          )}
           {phase < 20 && (
             <Stack alignItems="center">
               <Fab
                 aria-label="add"
                 color="primary"
                 onClick={() =>
-                  dispatch({ type: 'EDIT_DATA', payload: { type: 'add', element: 'comments', id: idea.data.id, onClose: commentsFetch } })
+                  dispatch({
+                    type: 'EDIT_DATA',
+                    payload: { type: 'add', element: 'comments', id: idea.data.id, onClose: commentsFetch },
+                  })
                 }
                 sx={{
                   position: 'absolute',

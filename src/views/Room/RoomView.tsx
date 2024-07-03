@@ -27,8 +27,8 @@ const RoomView = () => {
   const params = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const [ideas, setIdeas] = useState({} as IdeasResponseType);
-  const [boxes, setBoxes] = useState({} as BoxesResponseType);
+  const [ideas, setIdeas] = useState<IdeasResponseType>();
+  const [boxes, setBoxes] = useState<BoxesResponseType>();
   const [tab, setTab] = useState<TabOptions>('ideas');
 
   const updateTab = () => setTab(location.pathname.split('/')[location.pathname.split('/').length - 1] === 'boxes' ? 'boxes' : 'ideas');
@@ -63,10 +63,10 @@ const RoomView = () => {
     <Stack width="100%" height="100%" overflow="hidden">
       <TabContext value={tab}>
         <TabPanel value="ideas" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
-          <WildIdeasView ideas={ideas.data || []} onReload={ideasFetch} />
+          <WildIdeasView ideas={ideas && ideas.data ? ideas.data : []} onReload={ideasFetch} />
         </TabPanel>
         <TabPanel value="boxes" sx={{ flexGrow: 1, p: 1, pt: 2, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
-          <IdeasBoxesView boxes={boxes.data || []} onReload={boxesFetch} />
+          <IdeasBoxesView boxes={boxes && boxes.data ? boxes.data : []} onReload={boxesFetch} />
         </TabPanel>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
@@ -92,7 +92,7 @@ const RoomView = () => {
               icon={
                 <Stack direction="row" alignItems="center">
                   <AppIcon name="idea" />
-                  {String(ideas.count)}
+                  {ideas && String(ideas.count)}
                 </Stack>
               }
               label="Wild Ideas"
@@ -103,7 +103,7 @@ const RoomView = () => {
               icon={
                 <Stack direction="row" alignItems="center">
                   <AppIcon name="box" />
-                  {String(boxes.count)}
+                  {boxes && String(boxes.count)}
                 </Stack>
               }
               label="Idea Boxes"
