@@ -14,7 +14,7 @@ const AskConsent = () => {
   const jwt_payload = parseJwt(jwt_token);
 
   const [, dispatch] = useAppStore();
-  const [data, setData] = useState<MessageConsentType[]>([]);
+  const [data, setData] = useState<MessageConsentType[]>();
   const navigate = useNavigate();
 
   const getData = async () =>
@@ -35,7 +35,7 @@ const AskConsent = () => {
 
   return (
     <>
-      {data && data.length > 0 && <ConsentDialog texts={data} />}
+      {!!data && data.length > 0 && <ConsentDialog texts={data} />}
     </>
   );
 };
