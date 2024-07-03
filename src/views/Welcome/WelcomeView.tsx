@@ -45,7 +45,7 @@ const WelcomeView = () => {
         >
           Rooms
         </Typography>
-        <Grid container spacing={2}>
+        <Grid container flex={1} spacing={2}>
           {rooms &&
             rooms.data &&
             rooms.data.map((room) => (
