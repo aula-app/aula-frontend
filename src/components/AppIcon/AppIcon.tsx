@@ -84,6 +84,7 @@ export const ICONS: Record<string, React.ComponentType> = {
   clock: ClockIcon,
   day: SunIcon,
   delete: TrashIcon,
+  delegate: UsersIcon,
   discussion: ChatBubbleLeftRightIcon,
   edit: PencilIcon,
   filter: FunnelIcon,

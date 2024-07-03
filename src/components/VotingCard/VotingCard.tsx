@@ -55,7 +55,7 @@ const VotingCard = () => {
           <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
             DELEGATE VOTE
           </Typography>
-          <GroupAdd fontSize="small" />
+          <AppIcon icon='delegate' size="small" />
         </Button>
       </Stack>
       <Stack direction="row-reverse" justifyContent="space-around" py={2}>

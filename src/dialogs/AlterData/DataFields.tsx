@@ -37,13 +37,14 @@ const DataFields = ({ info, items, onClose, onSubmit }: Props) => {
   const updateValues = () => {
     SettingsConfig[info.element].forms.forEach((field) => {
       // @ts-ignore
-      setValue(field.column, items && items.data && info.type !== 'add' ? items.data[field.column] : field.value);
+      setValue(field.column, !!items && items.data && info.type !== 'add' ? items.data[field.column] : field.value);
+      console.log(field.column, !!items && items.data && info.type !== 'add' ? items.data[field.column] : field.value);
     });
   };
 
   useEffect(() => {
-    if (info.type === 'edit') updateValues();
-  }, [info.id, items?.data]);
+    if (['edit', 'add'].includes(info.type)) updateValues();
+  }, [info.id, items.data]);
 
   return (
     // @ts-ignore

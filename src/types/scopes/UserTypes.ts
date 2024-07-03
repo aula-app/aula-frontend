@@ -44,3 +44,9 @@ export interface SingleUserResponseType {
 export type UserTypeKeys = keyof {
   [P in keyof UserType as UserType[P] extends string ? P: never]: any
 }
+
+export interface UsersResponseType {
+  success: Boolean;
+  count: Number;
+  data: UserType[];
+}
