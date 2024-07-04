@@ -67,6 +67,10 @@ const DelegateVote = ({ isOpen, onClose }: Props) => {
     dataFetch();
   }, [filter]);
 
+  /*
+  user --> delegateVoteRight
+  */
+
   return (
     <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
       <DialogTitle>Vote delegation</DialogTitle>
