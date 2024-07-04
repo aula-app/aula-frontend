@@ -4,6 +4,7 @@ import { green, amber, deepPurple, deepOrange, blue, grey, red } from '@mui/mate
 
 interface phaseType {
   name: string,
+  call?: string,
   description: string,
   color: string,
   baseColor: ObjectPropByName,
@@ -20,6 +21,7 @@ export const phases = {
   },
   '10': {
     name: 'Discussion',
+    call: 'to discuss',
     description: 'Ideas in Discussion',
     color: deepPurple[100],
     baseColor: deepPurple,
@@ -27,6 +29,7 @@ export const phases = {
   },
   '20': {
     name: 'Approval',
+    call: 'on approval',
     description: 'Ideas Under Approval',
     color: deepOrange[100],
     baseColor: deepOrange,
@@ -34,6 +37,7 @@ export const phases = {
   },
   '30': {
     name: 'Voting',
+    call: 'to vote',
     description: 'Ideas on Voting',
     color: amber[100],
     baseColor: amber,

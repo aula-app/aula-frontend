@@ -30,7 +30,6 @@ const FormInput = ({ content, register, getValues, control, errors, ...restOfPro
     }).then((response) => {
       // @ts-ignore
       setOptions(response.data.map((row) => {
-
         return({ label: row[SettingsConfig[setting].rows[0].name], value: row.id })
     }));
     });

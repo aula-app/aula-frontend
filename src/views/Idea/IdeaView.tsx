@@ -15,7 +15,6 @@ import IdeaDocument from '@/components/IdeaDocument';
 import { RoomPhases } from '@/types/scopes/RoomTypes';
 import { AppIcon } from '@/components';
 import { useAppStore } from '@/store';
-import DelegateVote from '@/dialogs/DelegateVote';
 
 /**
  * Renders "Idea" view
@@ -147,7 +146,6 @@ const IdeaView = () => {
           )}
         </Stack>
       )}
-    <DelegateVote />
     </Stack>
   );
 };

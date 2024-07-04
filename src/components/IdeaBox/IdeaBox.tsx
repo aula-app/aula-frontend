@@ -27,17 +27,7 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
         p={1}
         pr={2}
       >
-        <Stack
-          bgcolor="#fff"
-          borderRadius={999}
-          height="100%"
-          sx={{ aspectRatio: 1 }}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <AppIcon icon="box" />
-        </Stack>
-        <AppIcon icon={phases[box.phase_id].icon} size="small" sx={{ ml: 2, mr: 1 }} />
+        <AppIcon icon={phases[box.phase_id].icon} size='large' sx={{ mr: 1 }} />
         <Typography variant="caption" mr="auto">{phases[box.phase_id].name} phase</Typography>
         <MoreOptions element='boxes' id={box.id} onClose={onReload} />
       </Stack>

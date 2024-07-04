@@ -5,6 +5,7 @@ import { GroupAdd } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { databaseRequest, localStorageGet, parseJwt, Vote, noVoteOptions, votingOptions } from '@/utils';
 import AppIcon from '../AppIcon';
+import { useAppStore } from '@/store';
 
 
 /**
@@ -15,6 +16,7 @@ const VotingCard = () => {
   const params = useParams();
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
+  const [state, dispatch] = useAppStore();
   const [vote, setVote] = useState<Vote>(0);
   const [hasVoted, setHasVoted] = useState<Boolean>(false);
 
@@ -48,16 +50,6 @@ const VotingCard = () => {
 
   return (
     <Stack p={2}>
-      <Stack direction="row">
-        <Typography variant="h6">Vote</Typography>
-        <Button size="small" sx={{ ml: 'auto', px: 1, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}>
-          <Typography variant="caption">or</Typography>
-          <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
-            DELEGATE VOTE
-          </Typography>
-          <AppIcon icon='delegate' size="small" />
-        </Button>
-      </Stack>
       <Stack direction="row-reverse" justifyContent="space-around" py={2}>
         {votingOptions.map((option, i) => (
           <Button
