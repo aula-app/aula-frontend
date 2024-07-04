@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   FilledInput,
+  Slide,
   Stack,
   Typography,
 } from '@mui/material';
@@ -14,18 +15,22 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { UserType, UsersResponseType } from '@/types/scopes/UserTypes';
 import { databaseRequest } from '@/utils';
 import { grey } from '@mui/material/colors';
-import { useAppStore } from '@/store';
+
+interface Props {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
 /**
  * Makes an Acknowledgement requiring consent inside the Dialog.
  * @component ConsentDialog
  */
 
-const DelegateVote = () => {
-  const [state, dispatch] = useAppStore();
+const DelegateVote = ({ isOpen, onClose }: Props) => {
   const [users, setUsers] = useState<UserType[]>();
-  const [selected, setSelected] = useState<number | null>();
+  const [selected, setSelected] = useState<UserType | null>();
   const [filter, setFilter] = useState('');
+  const [confirm, setConfirm] = useState(false);
 
   const dataFetch = async () => {
     await databaseRequest('model', {
@@ -41,12 +46,21 @@ const DelegateVote = () => {
     }).then((response: UsersResponseType) => setUsers(response.data));
   };
 
-  const select = (id: number) => {
-    setSelected(selected === id ? null : id)
-  }
+  const select = (user: UserType) => {
+    setSelected(selected !== null ? user : null);
+  };
 
   const changeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setFilter(event.target.value);
+  };
+
+  const close = () => {
+    onClose();
+    setConfirm(false);
+  };
+
+  const delegate = () => {
+    confirm ? null : setConfirm(true);
   };
 
   useEffect(() => {
@@ -54,50 +68,77 @@ const DelegateVote = () => {
   }, [filter]);
 
   return (
-    <Dialog open={state.delegateVote !== null} onClose={() => null}>
+    <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
       <DialogTitle>Vote delegation</DialogTitle>
       <DialogContent>
-        <FilledInput
-          size="small"
-          onChange={changeSearch}
-          value={filter}
-          startAdornment={<AppIcon icon="search" size="small" sx={{ mr: 1 }} />}
-          endAdornment={<AppIconButton icon="close" size="small" onClick={() => setFilter('')} />}
-        />
-        <Stack my={1} height={325} overflow="auto">
-          {users &&
-            users.map((user) => (
-              <Stack
-                component={Button}
-                direction="row"
-                mt={1}
-                key={user.id}
-                bgcolor={selected === user.id ? grey[200] : 'transparent'}
-                borderRadius={30}
-                sx={{
-                  textTransform: 'none',
-                  textAlign: 'left',
-                  justifyContent: 'start',
-                  color: 'inherit'
-                }}
-                onClick={() => select(Number(user.id))}
-              >
-                <Avatar>
-                  <AppIcon icon="avatar" />
-                </Avatar>
-                <Stack ml={2}>
-                  <Typography>{user.realname}</Typography>
+        <Stack height={350} position="relative" overflow="hidden">
+          <Slide direction="right" in={!confirm} mountOnEnter unmountOnExit>
+            <Stack position="absolute" height="100%" width="100%">
+              <FilledInput
+                size="small"
+                onChange={changeSearch}
+                value={filter}
+                fullWidth
+                startAdornment={<AppIcon icon="search" size="small" sx={{ mr: 1 }} />}
+                endAdornment={<AppIconButton icon="close" size="small" onClick={() => setFilter('')} />}
+              />
+              <Stack my={1} overflow="auto">
+                {users &&
+                  users.map((user) => (
+                    <Stack
+                      component={Button}
+                      direction="row"
+                      mt={1}
+                      key={user.id}
+                      bgcolor={selected && selected.id === user.id ? grey[200] : 'transparent'}
+                      borderRadius={30}
+                      sx={{
+                        textTransform: 'none',
+                        textAlign: 'left',
+                        justifyContent: 'start',
+                        color: 'inherit',
+                      }}
+                      onClick={() => select(user)}
+                    >
+                      <Avatar>
+                        <AppIcon icon="avatar" />
+                      </Avatar>
+                      <Stack ml={2}>
+                        <Typography>{user.realname}</Typography>
+                        <Typography color="secondary" fontSize="small">
+                          {user.displayname}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                  ))}
+              </Stack>
+            </Stack>
+          </Slide>
+          <Slide direction="left" in={confirm} mountOnEnter unmountOnExit>
+            <Stack height="100%" width="100%">
+              <Typography>Are you sure you want to delegate your voting rights on this box?</Typography>
+              {selected && (
+                <Stack flex={1} alignItems="center" justifyContent="center">
+                  <Avatar sx={{ width: 56, height: 56, mb: 1 }}>
+                    <AppIcon icon="avatar" size="xl" />
+                  </Avatar>
+                  <Typography>{selected.realname}</Typography>
                   <Typography color="secondary" fontSize="small">
-                    {user.displayname}
+                    {selected.displayname}
                   </Typography>
                 </Stack>
-              </Stack>
-            ))}
+              )}
+            </Stack>
+          </Slide>
         </Stack>
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
-        <Button color="secondary" onClick={() => dispatch({type: 'DELEGATE', payload: null})}>Cancel</Button>
-        <Button variant="contained">Delegate</Button>
+        <Button color="secondary" onClick={close}>
+          Cancel
+        </Button>
+        <Button variant="contained" onClick={delegate} disabled={!selected}>
+          {confirm ? 'Delegate' : 'Select'}
+        </Button>
       </DialogActions>
     </Dialog>
   );

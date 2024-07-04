@@ -8,6 +8,7 @@ import { databaseRequest, phases } from '@/utils';
 import { IdeasResponseType } from '@/types/scopes/IdeaTypes';
 import { AppIcon } from '@/components';
 import { grey } from '@mui/material/colors';
+import DelegateVote from '@/components/DelegateVote';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/ideas-box/:box_id
@@ -16,6 +17,7 @@ const IdeasBoxView = () => {
   const params = useParams();
   const [box, setBox] = useState<BoxResponseType>();
   const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
+  const [delegation, setDelegation] = useState(false)
 
   const boxFetch = async () =>
     await databaseRequest('model', {
@@ -37,58 +39,61 @@ const IdeasBoxView = () => {
   }, []);
 
   return (
-    <Box
-      height="100%"
-      flexGrow={1}
-      position="relative"
-      px={1}
-      py={2}
-      sx={{
-        overflowY: 'auto',
-        scrollSnapType: 'y mandatory',
-      }}
-    >
-      {box && box.data && boxIdeas && boxIdeas.data && (
-        <>
-          <IdeaBox box={box.data || {}} noLink onReload={boxFetch} />
-          <Stack direction="row">
-            <Typography variant="h6" p={2}>
-              {String(boxIdeas.count)} ideas {phases[box.data.phase_id].call}
-            </Typography>
-            {Number(box.data.phase_id) === 30 && (
-              <Button
-                size="small"
-                sx={{ ml: 'auto', mt: .5, px: 1, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}
-                onClick={() => null}
-              >
-                <Typography variant="caption">or</Typography>
-                <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
-                  DELEGATE VOTE
-                </Typography>
-                <AppIcon icon="delegate" size="small" />
-              </Button>
-            )}
-          </Stack>
-          <Grid container spacing={1}>
-            {boxIdeas.data.map((idea, key) => (
-              <Grid
-                key={key}
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={2}
-                sx={{ scrollSnapAlign: 'center' }}
-                order={-idea.approved}
-              >
-                <IdeaCard idea={idea} phase={box.data.phase_id} />
-              </Grid>
-            ))}
-          </Grid>
-        </>
-      )}
-    </Box>
+    <>
+      <Box
+        height="100%"
+        flexGrow={1}
+        position="relative"
+        px={1}
+        py={2}
+        sx={{
+          overflowY: 'auto',
+          scrollSnapType: 'y mandatory',
+        }}
+      >
+        {box && box.data && boxIdeas && boxIdeas.data && (
+          <>
+            <IdeaBox box={box.data || {}} noLink onReload={boxFetch} />
+            <Stack direction="row">
+              <Typography variant="h6" p={2}>
+                {String(boxIdeas.count)} ideas {phases[box.data.phase_id].call}
+              </Typography>
+              {Number(box.data.phase_id) === 30 && (
+                <Button
+                  size="small"
+                  sx={{ ml: 'auto', mt: 0.5, px: 1, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}
+                  onClick={() => setDelegation(true)}
+                >
+                  <Typography variant="caption">or</Typography>
+                  <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
+                    DELEGATE VOTE
+                  </Typography>
+                  <AppIcon icon="delegate" size="small" />
+                </Button>
+              )}
+            </Stack>
+            <Grid container spacing={1}>
+              {boxIdeas.data.map((idea, key) => (
+                <Grid
+                  key={key}
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={2}
+                  sx={{ scrollSnapAlign: 'center' }}
+                  order={-idea.approved}
+                >
+                  <IdeaCard idea={idea} phase={box.data.phase_id} />
+                </Grid>
+              ))}
+            </Grid>
+          </>
+        )}
+      </Box>
+      <DelegateVote isOpen={delegation} onClose={() => setDelegation(false)} />
+    </>
   );
 };
 
