@@ -27,8 +27,8 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
         p={1}
         pr={2}
       >
-        <AppIcon icon={phases[box.phase_id].icon} size='large' sx={{ mr: 1 }} />
-        <Typography variant="caption" mr="auto">{phases[box.phase_id].name} phase</Typography>
+        <AppIcon icon={phases[box.phase_id].icon} sx={{ mx: 1 }} />
+        <Typography variant="caption" mr="auto">{box.ideas_num} Ideas on {phases[box.phase_id].name.toLowerCase()}</Typography>
         <MoreOptions element='boxes' id={box.id} onClose={onReload} />
       </Stack>
       <AppLink to={`idea-box/${box.id}`} mb={2} key={box.id} disabled={noLink}>
