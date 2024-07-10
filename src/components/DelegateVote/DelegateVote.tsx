@@ -15,6 +15,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { UserType, UsersResponseType } from '@/types/scopes/UserTypes';
 import { databaseRequest } from '@/utils';
 import { grey } from '@mui/material/colors';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   isOpen: boolean;
@@ -27,6 +28,7 @@ interface Props {
  */
 
 const DelegateVote = ({ isOpen, onClose }: Props) => {
+  const params = useParams();
   const [users, setUsers] = useState<UserType[]>();
   const [selected, setSelected] = useState<UserType | null>();
   const [filter, setFilter] = useState('');
@@ -46,18 +48,20 @@ const DelegateVote = ({ isOpen, onClose }: Props) => {
     }).then((response: UsersResponseType) => setUsers(response.data));
   };
 
-  // const setDelegate = async () => {
-  //   await databaseRequest({
-  //     model: 'User',
-  //     method: 'delegateVoteRight',
-  //     arguments: {
-  //       user_id
-  //       user_id_target
-  //       topic_id
-  //       updater_id
-  //     },
-  //   }).then((response: UsersResponseType) => setUsers(response.data));
-  // };
+  const setDelegate = async () => {
+    if (!selected || !params.box_id) return;
+    await databaseRequest(
+      {
+        model: 'User',
+        method: 'delegateVoteRight',
+        arguments: {
+          user_id_target: selected.id,
+          topic_id: params.box_id,
+        },
+      },
+      ['user_id', 'updater_id']
+    ).then(() => close());
+  };
 
   const select = (user: UserType) => {
     setSelected(selected !== null ? user : null);
@@ -73,7 +77,7 @@ const DelegateVote = ({ isOpen, onClose }: Props) => {
   };
 
   const delegate = () => {
-    confirm ? null : setConfirm(true);
+    confirm ? setDelegate() : setConfirm(true);
   };
 
   useEffect(() => {
