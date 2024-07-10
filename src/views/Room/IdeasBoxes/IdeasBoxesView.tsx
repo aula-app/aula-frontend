@@ -1,10 +1,9 @@
 import { Grid } from '@mui/material';
 import { IdeaBox } from '@/components/IdeaBox';
-import { BoxesResponseType } from '@/types/BoxTypes';
-import { AppLink } from '@/components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { databaseRequest } from '@/utils/requests';
+import { BoxesResponseType } from '@/types/scopes/BoxTypes';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/:phase
@@ -33,7 +32,7 @@ const IdeasBoxView = () => {
   }, [params['phase']]);
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} p={1}>
       {boxes.data && boxes.data.map((box) => (
         <Grid key={box.id} item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ scrollSnapAlign: 'center' }}>
           <IdeaBox box={box} onReload={boxesFetch} />

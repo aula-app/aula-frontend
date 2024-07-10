@@ -8,9 +8,9 @@ import PhaseBar from '@/layout/PhaseBar';
  */
 const RoomView = () => {
   return (
-    <Stack width="100%" height="100%" overflow="hidden" p={1}>
+    <Stack width="100%" height="100%" overflow="hidden">
       <PhaseBar />
-      <Stack sx={{ flexGrow: 1, pt: 1, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
+      <Stack p={1} sx={{ flexGrow: 1, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
         <Outlet />
       </Stack>
     </Stack>

@@ -14,7 +14,7 @@ interface Props {
  */
 const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) => {
   const location = useLocation().pathname.split('/');
-  const displayPath = location.filter(curPath => /.*[A-Za-z\s]+.*/.test(curPath)).filter(curPath => !['welcome', 'phase'].includes(curPath));
+  const displayPath = location.filter(curPath => /.*[A-Za-z\s]+.*/.test(curPath)).filter(curPath => !['welcome', 'phase', 'settings'].includes(curPath));
   const goto = useNavigate();
 
   const returnLocation = () => location.length !== 5 ? location.splice(0, location.length - 2) : location.splice(0, location.length - 4)
@@ -33,7 +33,7 @@ const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) 
             {home}
           </AppLink>
           {displayPath.map((currentPath, key) => {
-            const link = location.slice(0, 2 * (key + 1) + 3).join('/');
+            const link = location.slice(0, 2 * (key + 1) + (currentPath === 'messages' ? 0 : 3)).join('/');
             return (
               <AppLink underline="hover" color="inherit" to={`${link}`} key={key}>
                 {currentPath}

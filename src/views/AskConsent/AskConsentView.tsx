@@ -43,10 +43,9 @@ const AskConsent = () => {
 
 
   return (
-    <Box>
-      <Stack alignItems="center">Loading</Stack>
+    <>
       {data.length > 0 && <ConsentDialog texts={data} />}
-    </Box>
+    </>
   );
 
 };

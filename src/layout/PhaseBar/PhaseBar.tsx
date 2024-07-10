@@ -1,6 +1,6 @@
 import { AppIcon, AppLink } from '@/components';
 import { phases } from '@/utils/phases';
-import { Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
@@ -9,19 +9,18 @@ import { useLocation, useParams } from 'react-router-dom';
  * @component PhaseBar
  */
 
-
 const PhaseBar = () => {
   const params = useParams();
   const displayPhases = Object.keys(Object.freeze(phases)) as Array<keyof typeof phases>;
   const location = useLocation().pathname.split('/');
-  const [currentPhase, setPhase] = useState('ideas')
+  const [currentPhase, setPhase] = useState('ideas');
 
-  const getPhase = () => setPhase(params.phase && Object.keys(phases).includes(params.phase) ? params.phase : 'ideas')
+  const getPhase = () => setPhase(params.phase && Object.keys(phases).includes(params.phase) ? params.phase : '');
 
-  useEffect(getPhase, [location.join('/')])
+  useEffect(getPhase, [location.join('/')]);
 
   return (
-    <Stack direction="row" py={1}>
+    <Stack direction="row" overflow="clip" width="100%">
       {displayPhases.map((phase) => (
         <AppLink
           key={phase}
@@ -29,22 +28,52 @@ const PhaseBar = () => {
           sx={{
             color: 'inherit',
             textDecoration: 'none',
-            flex: phase === currentPhase ? 1 : 0
-          }}>
+            flex: 1,
+            position: 'relative',
+          }}
+        >
           <Stack
             key={phase}
             direction="row"
             alignItems="center"
+            justifyContent="center"
             p={1}
-            mx={0.5}
+            pl={phase === "0" ? 2 : 1}
+            pr={currentPhase === phase ? 3 : 1}
+            height="100%"
             sx={{
               bgcolor: phases[phase].color,
-              borderRadius: 999,
             }}
           >
-            <AppIcon name={phases[phase].icon} />
-            {currentPhase === phase ? phases[phase].name : ''}
+            <AppIcon name={phases[phase].icon} size="small" />
+            <Typography noWrap overflow="ellipsis" pl={1} fontSize="small">
+              {currentPhase === phase ? phases[phase].name : ''}
+            </Typography>
           </Stack>
+          <Box
+            sx={{
+              position: 'absolute',
+              height: '50%',
+              aspectRatio: 1,
+              top: 0,
+              transform: 'translateX(-100%)',
+              clipPath: 'polygon(0% 0%, 100% 100%, 100% 0%)',
+              bgcolor: phases[phase].color,
+              pointerEvents: 'none'
+            }}
+          ></Box>
+          <Box
+            sx={{
+              position: 'absolute',
+              height: '50%',
+              aspectRatio: 1,
+              bottom: 0,
+              transform: 'translateX(-100%)',
+              clipPath: 'polygon(0% 100%, 100% 100%, 100% 0%)',
+              bgcolor: phases[phase].color,
+              pointerEvents: 'none'
+            }}
+          ></Box>
         </AppLink>
       ))}
     </Stack>
