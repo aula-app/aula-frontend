@@ -17,7 +17,7 @@ const IdeasBoxView = () => {
   const params = useParams();
   const [box, setBox] = useState<BoxResponseType>();
   const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
-  const [delegation, setDelegation] = useState(false)
+  const [delegation, setDelegation] = useState(false);
 
   const boxFetch = async () =>
     await databaseRequest({
@@ -86,7 +86,7 @@ const IdeasBoxView = () => {
                   order={-idea.approved}
                 >
                   <AppLink to={`idea/${idea.id}`}>
-                  <IdeaCard idea={idea} phase={box.data.phase_id} />
+                    <IdeaCard idea={idea} phase={box.data.phase_id} />
                   </AppLink>
                 </Grid>
               ))}
