@@ -17,7 +17,7 @@ const IdeasBoxView = () => {
   const params = useParams();
   const [box, setBox] = useState<BoxResponseType>();
   const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
-  const [delegationStatus, setDelegationStatus] = useState<DelegtionType[]>();
+  const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>();
   const [delegationDialog, setDelegationDialog] = useState(false);
 
   const boxFetch = async () =>

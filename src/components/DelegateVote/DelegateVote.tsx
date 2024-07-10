@@ -20,7 +20,7 @@ import { useParams } from 'react-router-dom';
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  delegate: DelegtionType[];
+  delegate: DelegationType[];
 }
 
 /**
