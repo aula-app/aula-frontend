@@ -15,7 +15,7 @@ const IdeasBoxView = () => {
   const [boxes, setBoxes] = useState({} as BoxesResponseType);
 
   const boxesFetch = async () =>
-    await databaseRequest('model', {
+    await databaseRequest({
       model: 'Topic',
       method: 'getTopicsByPhase',
       arguments: {
@@ -24,7 +24,6 @@ const IdeasBoxView = () => {
         room_id: Number(params['room_id']),
         phase_id: Number(params['phase']),
       },
-      decrypt: ['name', 'description_public'],
     }).then((response) => setBoxes(response));
 
   useEffect(() => {
@@ -37,9 +36,7 @@ const IdeasBoxView = () => {
     <Grid container spacing={2}>
       {boxes.data && boxes.data.map((box) => (
         <Grid key={box.id} item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ scrollSnapAlign: 'center' }}>
-          <AppLink to={`idea-box/${box.id}`} mb={2} key={box.id}>
-            <IdeaBox box={box} />
-          </AppLink>
+          <IdeaBox box={box} onReload={boxesFetch} />
         </Grid>
       ))}
     </Grid>

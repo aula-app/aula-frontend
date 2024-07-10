@@ -33,8 +33,7 @@ const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) 
             {home}
           </AppLink>
           {displayPath.map((currentPath, key) => {
-            const addBoxesPath = location.includes('idea-box') && key === 0 ? '/boxes' : ''; //checks if rooms link must have /boxes to correct tab navigation
-            const link = location.slice(0, 2 * (key + 1) + 1).join('/') + addBoxesPath;
+            const link = location.slice(0, 2 * (key + 1) + 3).join('/');
             return (
               <AppLink underline="hover" color="inherit" to={`${link}`} key={key}>
                 {currentPath}

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { BoxResponseType } from '@/types/scopes/BoxTypes';
 import { databaseRequest, phases } from '@/utils';
 import { IdeasResponseType } from '@/types/scopes/IdeaTypes';
-import { AppIcon } from '@/components';
+import { AppIcon, AppLink } from '@/components';
 import { grey } from '@mui/material/colors';
 import DelegateVote from '@/components/DelegateVote';
 
@@ -85,7 +85,9 @@ const IdeasBoxView = () => {
                   sx={{ scrollSnapAlign: 'center' }}
                   order={-idea.approved}
                 >
+                  <AppLink to={`idea/${idea.id}`}>
                   <IdeaCard idea={idea} phase={box.data.phase_id} />
+                  </AppLink>
                 </Grid>
               ))}
             </Grid>
