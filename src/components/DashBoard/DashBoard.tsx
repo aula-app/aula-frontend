@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { ObjectPropByName } from '@/types/Generics';
 import AppIconButton from '../AppIconButton';
 
-const displayPhases = Object.keys(Object.freeze(dashboardPhases)) as Array<keyof typeof dashboardPhases>;
+const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboardPhases>;
 
 const DashBoard = ({ show = false }) => {
   const jwt_token = localStorageGet('token');
@@ -57,7 +57,7 @@ const DashBoard = ({ show = false }) => {
             <AppIconButton icon="heart" sx={{p: 0}} />
           </Badge>
         </Stack>
-        {Object.keys(count).length > 6 && (
+        {Object.keys(count).length > 4 && (
           <Grid
             container
             spacing={1}

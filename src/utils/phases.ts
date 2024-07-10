@@ -112,4 +112,4 @@ export const resultVariants = {
   },
 }
 
-export const dashboardPhases = {...(({ ['40']: _, ...o }) => o)(phases), ...resultVariants};
+export const dashboardPhases = {...(({ ['40']: _, ...o }) => o)(phases)};
