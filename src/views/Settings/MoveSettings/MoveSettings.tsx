@@ -1,6 +1,6 @@
 import { BoxType } from '@/types/scopes/BoxTypes';
 import { SingleResponseType } from '@/types/Generics';
-import { databaseRequest, localStorageGet, parseJwt, SettingsConfig } from '@/utils';
+import { databaseRequest, SettingsConfig } from '@/utils';
 import {
   Button,
   Dialog,
@@ -13,7 +13,6 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
-  TextField,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -28,8 +27,6 @@ type Params = {
  * url: /settings/:setting_name/
  */
 const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const { setting_name } = useParams();
   const [destination, setDestination] = useState<string>();
   const [destinationList, setDestinationList] = useState<{ value: number; label: string }[]>([]);
@@ -40,8 +37,8 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
   };
 
   const getDestination = async () => {
-    if(!Object.hasOwn(SettingsConfig[currentSetting], 'isChild')) return;
-    await databaseRequest('model', {
+    if (!Object.hasOwn(SettingsConfig[currentSetting], 'isChild')) return;
+    await databaseRequest({
       model: SettingsConfig[SettingsConfig[currentSetting].isChild].model,
       method: SettingsConfig[SettingsConfig[currentSetting].isChild].requests.fetch,
       arguments: {
@@ -50,19 +47,22 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
       },
     }).then((response: SingleResponseType) =>
       setDestinationList(response.data.map((r: BoxType) => ({ value: r.id, label: r.name })))
-    )};
+    );
+  };
 
   const request = async (id: number) => {
-    if(!Object.hasOwn(SettingsConfig[currentSetting].requests, 'move')) return;
-    await databaseRequest('model', {
-      model: SettingsConfig[currentSetting].model,
-      method: SettingsConfig[currentSetting].requests.move,
-      arguments: {
-        [`${SettingsConfig[currentSetting].model.toLowerCase()}_id`]: id,
-        [`${SettingsConfig[SettingsConfig[currentSetting].isChild].model.toLowerCase()}_id`]: destination,
-        updater_id: jwt_payload.user_id
+    if (!SettingsConfig[currentSetting].requests.move) return;
+    await databaseRequest(
+      {
+        model: SettingsConfig[currentSetting].model,
+        method: SettingsConfig[currentSetting].requests.move,
+        arguments: {
+          [`${SettingsConfig[currentSetting].model.toLowerCase()}_id`]: id,
+          [`${SettingsConfig[SettingsConfig[currentSetting].isChild].model.toLowerCase()}_id`]: destination,
+        },
       },
-    });
+      ['updater_id']
+    );
   };
 
   const moveRequest = () => {

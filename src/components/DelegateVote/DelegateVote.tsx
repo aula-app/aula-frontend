@@ -32,8 +32,8 @@ const DelegateVote = ({ isOpen, onClose }: Props) => {
   const [filter, setFilter] = useState('');
   const [confirm, setConfirm] = useState(false);
 
-  const dataFetch = async () => {
-    await databaseRequest('model', {
+  const userFetch = async () => {
+    await databaseRequest({
       model: 'User',
       method: 'getUsers',
       arguments: {
@@ -45,6 +45,19 @@ const DelegateVote = ({ isOpen, onClose }: Props) => {
       },
     }).then((response: UsersResponseType) => setUsers(response.data));
   };
+
+  // const setDelegate = async () => {
+  //   await databaseRequest({
+  //     model: 'User',
+  //     method: 'delegateVoteRight',
+  //     arguments: {
+  //       user_id
+  //       user_id_target
+  //       topic_id
+  //       updater_id
+  //     },
+  //   }).then((response: UsersResponseType) => setUsers(response.data));
+  // };
 
   const select = (user: UserType) => {
     setSelected(selected !== null ? user : null);
@@ -64,7 +77,7 @@ const DelegateVote = ({ isOpen, onClose }: Props) => {
   };
 
   useEffect(() => {
-    dataFetch();
+    userFetch();
   }, [filter]);
 
   /*

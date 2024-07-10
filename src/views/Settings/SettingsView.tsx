@@ -38,7 +38,7 @@ const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
-  const [state, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -51,10 +51,10 @@ const SettingsView = () => {
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const tableBody = useRef<HTMLTableSectionElement | null>(null)
+  const tableBody = useRef<HTMLTableSectionElement | null>(null);
 
   const dataFetch = async (filter: string) =>
-    await databaseRequest('model', {
+    await databaseRequest({
       model: SettingsConfig[setting_name].model,
       method: SettingsConfig[setting_name].requests.fetch,
       arguments: {
@@ -73,8 +73,10 @@ const SettingsView = () => {
   };
 
   const getLimit = () => {
-    setLimit(tableBody && tableBody.current ? Math.max(Math.floor((tableBody.current.clientHeight) / 55) - 1 || 10, 1) : 10);
-  }
+    setLimit(
+      tableBody && tableBody.current ? Math.max(Math.floor(tableBody.current.clientHeight / 55) - 1 || 10, 1) : 10
+    );
+  };
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
@@ -164,7 +166,9 @@ const SettingsView = () => {
           >
             <MenuItem value=""></MenuItem>
             {SettingsConfig[setting_name].rows.map((column) => (
-              <MenuItem value={column.name} key={column.name}>{column.displayName}</MenuItem>
+              <MenuItem value={column.name} key={column.name}>
+                {column.displayName}
+              </MenuItem>
             ))}
           </TextField>
           <FilledInput

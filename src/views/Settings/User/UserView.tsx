@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { databaseRequest } from '@/utils';
 import { useEffect, useState } from 'react';
 import { SingleUserResponseType, UserType } from '@/types/scopes/UserTypes';
 import ChangePassword from '@/components/ChangePassword';
@@ -30,17 +30,18 @@ import { useAppStore } from '@/store';
 const UserView = () => {
   const [user, setUser] = useState<UserType | null>(null);
   const [openDelete, setOpenDelete] = useState(false);
-  const [state, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const [isEditingImage, setEditingImage] = useState<boolean>(false);
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
 
   const getUserInfo = async () =>
-    databaseRequest('model', {
-      model: 'User',
-      method: 'getUserBaseData',
-      arguments: { user_id: jwt_payload.user_id },
-    }).then((response: SingleUserResponseType) => setUser(response.data));
+    databaseRequest(
+      {
+        model: 'User',
+        method: 'getUserBaseData',
+        arguments: {},
+      },
+      ['user_id']
+    ).then((response: SingleUserResponseType) => setUser(response.data));
 
   const onSubmit = (formData: Object) => console.log(formData);
   const toggleDrawer = () => setEditingImage(!isEditingImage);
@@ -48,7 +49,7 @@ const UserView = () => {
   const requestDelete = () => {
     setOpenDelete(false);
     dispatch({ type: 'ADD_ERROR', message: 'Data deletion requested' });
-  }
+  };
 
   useEffect(() => {
     getUserInfo();
@@ -126,7 +127,12 @@ const UserView = () => {
           <Typography variant="h6">Privacy Settings</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Button variant="contained" color="info" onClick={() => dispatch({ type: 'ADD_ERROR', message: 'Data export requested' })} fullWidth>
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => dispatch({ type: 'ADD_ERROR', message: 'Data export requested' })}
+            fullWidth
+          >
             Export account data
           </Button>
         </AccordionDetails>

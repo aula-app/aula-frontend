@@ -20,14 +20,14 @@ const IdeasBoxView = () => {
   const [delegation, setDelegation] = useState(false)
 
   const boxFetch = async () =>
-    await databaseRequest('model', {
+    await databaseRequest({
       model: 'Topic',
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
     }).then((response) => setBox(response));
 
   const boxIdeasFetch = async () =>
-    await databaseRequest('model', {
+    await databaseRequest({
       model: 'Idea',
       method: 'getIdeasByTopic',
       arguments: { topic_id: Number(params['box_id']) },

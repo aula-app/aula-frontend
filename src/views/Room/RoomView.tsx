@@ -31,17 +31,18 @@ const RoomView = () => {
   const [boxes, setBoxes] = useState<BoxesResponseType>();
   const [tab, setTab] = useState<TabOptions>('ideas');
 
-  const updateTab = () => setTab(location.pathname.split('/')[location.pathname.split('/').length - 1] === 'boxes' ? 'boxes' : 'ideas');
+  const updateTab = () =>
+    setTab(location.pathname.split('/')[location.pathname.split('/').length - 1] === 'boxes' ? 'boxes' : 'ideas');
 
   const ideasFetch = async () =>
-    await databaseRequest('model', {
+    await databaseRequest({
       model: 'Idea',
       method: 'getIdeasByRoom',
       arguments: { room_id: Number(params['room_id']) },
     }).then((response) => setIdeas(response));
 
   const boxesFetch = async () =>
-    await databaseRequest('model', {
+    await databaseRequest({
       model: 'Topic',
       method: 'getTopicsByRoom',
       arguments: { room_id: Number(params['room_id']) },
@@ -57,7 +58,7 @@ const RoomView = () => {
     setTab(newValue);
   };
 
-  useEffect(() => updateTab(), [location])
+  useEffect(() => updateTab(), [location]);
 
   return (
     <Stack width="100%" height="100%" overflow="hidden">
@@ -80,11 +81,11 @@ const RoomView = () => {
               bgcolor: grey[200],
               '.MuiTabs-indicator': {
                 top: 0,
-                bottom: 'auto'
+                bottom: 'auto',
               },
               '.MuiTab-labelIcon': {
-                textTransform: 'none'
-              }
+                textTransform: 'none',
+              },
             }}
           >
             <Tab

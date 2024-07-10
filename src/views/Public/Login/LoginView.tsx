@@ -45,7 +45,11 @@ const LoginView = () => {
 
 
   const onSubmit = async (formData: Object) => {
-    const request = await databaseRequest('login', formData)
+    const request = await databaseRequest({
+      model: 'User',
+      method: 'checkLogin',
+      arguments: {...formData},
+    })
 
     if(!request || request.success === "false") {
       return;

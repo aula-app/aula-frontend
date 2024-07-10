@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ApprovalCard from '@/components/ApprovalCard';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
-import { Vote, databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
+import { Vote, databaseRequest, phases } from '@/utils';
 import { CommentResponseType } from '@/types/scopes/CommentTypes';
 import { SingleIdeaResponseType } from '@/types/scopes/IdeaTypes';
 import { Add } from '@mui/icons-material';
@@ -23,16 +23,14 @@ import { useAppStore } from '@/store';
 
 const IdeaView = () => {
   const params = useParams();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
-  const [state, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const [idea, setIdea] = useState<SingleIdeaResponseType>();
   const [phase, setPhase] = useState(0);
   const [comments, setComments] = useState<CommentResponseType>();
   const [vote, setVote] = useState<Vote>(0);
 
   const ideaFetch = async () =>
-    await databaseRequest('model', {
+    await databaseRequest({
       model: 'Idea',
       method: 'getIdeaContent',
       arguments: { idea_id: params['idea_id'] },
@@ -41,28 +39,30 @@ const IdeaView = () => {
     });
 
   const commentsFetch = async () =>
-    await databaseRequest('model', {
+    await databaseRequest({
       model: 'Comment',
       method: 'getCommentsByIdeaId',
       arguments: { idea_id: Number(params['idea_id']) },
     }).then((response: CommentResponseType) => setComments(response));
 
   const getPhase = async () =>
-    databaseRequest('model', {
+    await databaseRequest({
       model: 'Topic',
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
     }).then((response: BoxResponseType) => setPhase(Number(response.data.phase_id)));
 
   const getVote = async () =>
-    await databaseRequest('model', {
-      model: 'Idea',
-      method: 'getVoteValue',
-      arguments: {
-        user_id: jwt_payload.user_id,
-        idea_id: Number(params['idea_id']),
+    await databaseRequest(
+      {
+        model: 'Idea',
+        method: 'getVoteValue',
+        arguments: {
+          idea_id: Number(params['idea_id']),
+        },
       },
-    }).then((response) => setVote((Number(response.data) + 1) as Vote));
+      ['user_id']
+    ).then((response) => setVote((Number(response.data) + 1) as Vote));
 
   useEffect(() => {
     ideaFetch();

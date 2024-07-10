@@ -1,15 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { AppIcon, AppLink } from '..';
-import {
-  approvalVariants,
-  databaseRequest,
-  localStorageGet,
-  parseJwt,
-  phases,
-  votingOptions,
-  votingVariants,
-} from '@/utils';
+import { approvalVariants, databaseRequest, phases, votingOptions, votingVariants } from '@/utils';
 import { useParams } from 'react-router-dom';
 import { IdeaType } from '@/types/scopes/IdeaTypes';
 import { useEffect, useState } from 'react';
@@ -25,35 +17,36 @@ interface IdeaCardProps {
  */
 const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
   const params = useParams();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const [vote, setVote] = useState(0);
   const [bg, setBg] = useState<string>(phases[phase].baseColor[300]);
 
   const getVote = async () =>
-    await databaseRequest('model', {
-      model: 'Idea',
-      method: 'getVoteValue',
-      arguments: {
-        user_id: jwt_payload.user_id,
-        idea_id: idea.id,
+    await databaseRequest(
+      {
+        model: 'Idea',
+        method: 'getVoteValue',
+        arguments: {
+          idea_id: idea.id,
+        },
       },
-    }).then((response) => setVote(response.data));
+      ['user_id']
+    ).then((response) => setVote(response.data));
 
   useEffect(() => {
     setBg(
-      Number(phase) === 30 && vote === 1 || idea.is_winner
+      (Number(phase) === 30 && vote === 1) || idea.is_winner
         ? votingVariants.for.color
-      : Number(phase) === 40 || vote === -1
-        ? votingVariants.against.color
-      : Number(phase) === 30 || idea.approved === 1
-        ? approvalVariants.approved.color
-      : idea.approved === 0
-        ? 'transparent'
-      : Number(phase) > 10
-        ? approvalVariants.rejected.color
-      : phases['0'].color
-  )}, [vote]);
+        : Number(phase) === 40 || vote === -1
+          ? votingVariants.against.color
+          : Number(phase) === 30 || idea.approved === 1
+            ? approvalVariants.approved.color
+            : idea.approved === 0
+              ? 'transparent'
+              : Number(phase) > 10
+                ? approvalVariants.rejected.color
+                : phases['0'].color
+    );
+  }, [vote]);
 
   useEffect(() => {
     if (Number(phase) === 30) getVote();
@@ -65,16 +58,18 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
         borderRadius: '25px',
         overflow: 'hidden',
         scrollSnapAlign: 'center',
-        backgroundColor: bg
+        backgroundColor: bg,
       }}
       variant="outlined"
     >
       <AppLink to={`/room/${params.room_id}/idea-box/${params.box_id}/idea/${idea.id}`}>
         <Stack direction="row" height={68} alignItems="center">
           <Stack pl={2}>
-            {Number(phase) != 40
-              ? <AppIcon icon="camera" />
-              : <AppIcon icon={votingOptions[idea.is_winner > 0 ? 2 : 0].label} size="xl" />}
+            {Number(phase) != 40 ? (
+              <AppIcon icon="camera" />
+            ) : (
+              <AppIcon icon={votingOptions[idea.is_winner > 0 ? 2 : 0].label} size="xl" />
+            )}
           </Stack>
           <Stack flexGrow={1} px={2} overflow="hidden">
             <Typography variant="h6" noWrap textOverflow="ellipsis">

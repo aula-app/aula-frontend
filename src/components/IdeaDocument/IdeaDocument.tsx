@@ -20,14 +20,16 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
   const displayDate = new Date(idea.created);
 
   const manageLike = (likeMethod: likeMethodType) => {
-    return databaseRequest('model', {
-      model: 'Idea',
-      method: likeMethod,
-      arguments: {
-        user_id: jwt_payload.user_id,
-        idea_id: idea.id,
+    return databaseRequest(
+      {
+        model: 'Idea',
+        method: likeMethod,
+        arguments: {
+          idea_id: idea.id,
+        },
       },
-    });
+      ['user_id']
+    );
   };
 
   const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
@@ -44,10 +46,10 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
   }, []);
 
   return (
-    <Stack width="100%" sx={{ scrollSnapAlign: 'center'}} color="secondary" mb={2}>
+    <Stack width="100%" sx={{ scrollSnapAlign: 'center' }} color="secondary" mb={2}>
       <Stack direction="row" justifyContent="space-between">
-        <Chip icon={<AppIcon name="settings" />} label="category" variant='outlined' />
-        <MoreOptions element='ideas' id={idea.id} onClose={onReload} />
+        <Chip icon={<AppIcon name="settings" />} label="category" variant="outlined" />
+        <MoreOptions element="ideas" id={idea.id} onClose={onReload} />
       </Stack>
       <Stack p={2} bgcolor={phases['0'].baseColor[50]} borderRadius={3} mb={1}>
         <Typography variant="h6">{idea.title}</Typography>

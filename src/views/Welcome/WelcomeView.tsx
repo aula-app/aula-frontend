@@ -11,7 +11,16 @@ const WelcomeView = () => {
   const [showDashboard, setDashboard] = useState(true);
 
   const roomsFetch = async () =>
-    await databaseRequest('rooms', {}).then((response: RoomsResponseType) => setRooms(response));
+    await databaseRequest(
+      {
+        model: 'Room',
+        method: 'getRooms',
+        arguments: {
+          offset: 0,
+          limit: 0,
+        },
+      }
+    ).then((response: RoomsResponseType) => setRooms(response));
 
   const handleScroll = (event: React.UIEvent<HTMLElement>) => {
     setDashboard(event.currentTarget.scrollTop === 0);

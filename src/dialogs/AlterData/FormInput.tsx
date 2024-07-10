@@ -20,7 +20,7 @@ const FormInput = ({ content, register, getValues, control, errors, ...restOfPro
   const [currentOptions, setOptions] = useState(content.options || []);
 
   async function fetchOptions(setting: SettingNamesType) {
-    await databaseRequest('model', {
+    await databaseRequest({
       model: SettingsConfig[setting].model,
       method: SettingsConfig[setting].requests.fetch,
       arguments: {

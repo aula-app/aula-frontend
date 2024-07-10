@@ -3,7 +3,7 @@ import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import { Avatar, Drawer, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '../../components/AppIcon';
-import { SettingsConfig, databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { SettingsConfig, databaseRequest } from '@/utils';
 import DataFields from './DataFields';
 
 /**
@@ -11,14 +11,12 @@ import DataFields from './DataFields';
  * url: /
  */
 const AlterData = () => {
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const [state, dispatch] = useAppStore();
   const [items, setItems] = useState<SingleResponseType>();
 
   const dataFetch = async () => {
     if (!state.editData) return;
-    await databaseRequest('model', {
+    await databaseRequest({
       model: SettingsConfig[state.editData.element].model,
       method: SettingsConfig[state.editData.element].requests.get,
       arguments: {
@@ -28,23 +26,27 @@ const AlterData = () => {
   };
 
   const handleSubmit = async (formData: Object) => {
-    if(!state.editData) return;
-    const config = SettingsConfig[state.editData.element]
-    const otherData = {updater_id: jwt_payload.user_id} as ObjectPropByName;
-    if(state.editData.type === 'edit') otherData[config.requests.id] = state.editData.id;
-    if(state.editData.element === 'comments') otherData.idea_id = state.editData.id;
-    if(['ideas', 'comments'].includes(state.editData.element)) otherData.user_id = jwt_payload.user_id;
+    if (!state.editData) return;
+    const config = SettingsConfig[state.editData.element];
+    const requestId = ['updater_id'];
+    const otherData = {} as ObjectPropByName;
+    if (state.editData.type === 'edit') otherData[config.requests.id] = state.editData.id;
+    if (state.editData.element === 'comments') otherData.idea_id = state.editData.id;
+    if (['ideas', 'comments'].includes(state.editData.element)) requestId.push(otherData.user_id);
 
-    await databaseRequest('model', {
-      model: config.model,
-      method: state.editData.type === 'edit' ? config.requests.edit : config.requests.add,
-      arguments: {
-        ...formData,
-        ...otherData
-      }
-    }).then((response) => {
+    await databaseRequest(
+      {
+        model: config.model,
+        method: state.editData.type === 'edit' ? config.requests.edit : config.requests.add,
+        arguments: {
+          ...formData,
+          ...otherData,
+        },
+      },
+      requestId
+    ).then((response) => {
       if (!response.success) return;
-      if(state.editData?.onClose) state.editData.onClose();
+      if (state.editData?.onClose) state.editData.onClose();
       handleClose();
     });
   };
@@ -68,15 +70,10 @@ const AlterData = () => {
               </Avatar>
             )}
             <Typography variant="h4" pb={2}>
-              {state.editData.type === 'edit'
-                ? 'Edit'
-              : state.editData.type === 'add'
-                ? 'New'
-              : 'Report'}{' '}
+              {state.editData.type === 'edit' ? 'Edit' : state.editData.type === 'add' ? 'New' : 'Report'}{' '}
               {state.editData.type === 'bug'
                 ? state.editData.type
-                : SettingsConfig[state.editData.element].item.toLowerCase()
-              }
+                : SettingsConfig[state.editData.element].item.toLowerCase()}
             </Typography>
           </Stack>
           <DataFields info={state.editData} items={items} onClose={handleClose} onSubmit={handleSubmit} />

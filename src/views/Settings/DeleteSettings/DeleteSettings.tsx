@@ -17,18 +17,18 @@ const DeleteSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) =>
 
   const request = async (id: number) => {
     const currentSetting = setting_name as keyof typeof SettingsConfig;
-    await databaseRequest('model', {
+    await databaseRequest({
       model: SettingsConfig[currentSetting].model,
       method: SettingsConfig[currentSetting].requests.delete,
-      arguments: {[`${SettingsConfig[currentSetting].model.toLowerCase()}_id`]: id},
+      arguments: { [`${SettingsConfig[currentSetting].model.toLowerCase()}_id`]: id },
     });
-  }
+  };
 
   const deleteRequest = () => {
-    items.forEach(item => request(item));
+    items.forEach((item) => request(item));
     reloadMethod();
     closeMethod();
-  }
+  };
 
   return (
     <Dialog
@@ -39,7 +39,7 @@ const DeleteSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) =>
     >
       <DialogTitle id="alert-dialog-title">
         <Stack direction="row" alignItems="center">
-          <WarningAmber sx={{mr: 1}} color='error' /> Delete selected {setting_name}
+          <WarningAmber sx={{ mr: 1 }} color="error" /> Delete selected {setting_name}
         </Stack>
       </DialogTitle>
       <DialogContent sx={{ overflowY: 'auto' }}>
