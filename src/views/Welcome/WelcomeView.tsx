@@ -23,7 +23,7 @@ const WelcomeView = () => {
     ).then((response: RoomsResponseType) => setRooms(response));
 
   const handleScroll = (event: React.UIEvent<HTMLElement>) => {
-    setDashboard(event.currentTarget.scrollTop === 0);
+    setDashboard(false);
   };
 
   useEffect(() => {
