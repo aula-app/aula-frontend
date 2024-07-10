@@ -1,7 +1,7 @@
 import { Avatar, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
-import { SingleUserResponseType, UserType } from '@/types/UserTypes';
+import { databaseRequest } from '@/utils';
+import { SingleUserResponseType, UserType } from '@/types/scopes/UserTypes';
 
 /**
  * Renders User info with Avatar
@@ -9,15 +9,16 @@ import { SingleUserResponseType, UserType } from '@/types/UserTypes';
  */
 const UserInfo = () => {
   const [user, setUser] = useState<UserType | null>(null);
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
 
   const getUserInfo = async () =>
-    databaseRequest('model', {
-      model: 'User',
-      method: 'getUserBaseData',
-      arguments: { user_id: jwt_payload.user_id },
-    }).then((response: SingleUserResponseType) => setUser(response.data));
+    databaseRequest(
+      {
+        model: 'User',
+        method: 'getUserBaseData',
+        arguments: {},
+      },
+      ['user_id']
+    ).then((response: SingleUserResponseType) => setUser(response.data));
 
   useEffect(() => {
     getUserInfo();

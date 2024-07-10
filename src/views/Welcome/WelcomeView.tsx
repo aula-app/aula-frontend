@@ -1,17 +1,26 @@
-import { Fab, Grid, Stack, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import { RoomCard } from '@/components/RoomCard';
 import React, { useEffect, useState } from 'react';
-import { RoomsResponseType } from '@/types/RoomTypes';
+import { RoomsResponseType } from '@/types/scopes/RoomTypes';
 import { databaseRequest } from '@/utils';
 import DashBoard from '@/components/DashBoard';
-import { Add } from '@mui/icons-material';
+import AskConsent from '../AskConsent/AskConsentView';
 
 const WelcomeView = () => {
   const [rooms, setRooms] = useState({} as RoomsResponseType);
   const [showDashboard, setDashboard] = useState(true);
 
   const roomsFetch = async () =>
-    await databaseRequest('rooms', {}).then((response: RoomsResponseType) => setRooms(response));
+    await databaseRequest(
+      {
+        model: 'Room',
+        method: 'getRooms',
+        arguments: {
+          offset: 0,
+          limit: 0,
+        },
+      }
+    ).then((response: RoomsResponseType) => setRooms(response));
 
   const handleScroll = (event: React.UIEvent<HTMLElement>) => {
     setDashboard(event.currentTarget.scrollTop === 0);
@@ -45,7 +54,7 @@ const WelcomeView = () => {
         >
           Rooms
         </Typography>
-        <Grid container spacing={2}>
+        <Grid container flex={1} spacing={2}>
           {rooms &&
             rooms.data &&
             rooms.data.map((room) => (
@@ -55,6 +64,7 @@ const WelcomeView = () => {
             ))}
         </Grid>
       </Stack>
+      <AskConsent />
     </Stack>
   );
 };

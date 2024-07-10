@@ -3,7 +3,7 @@ import {
   Checkbox,
   Divider,
   Fab,
-  InputAdornment,
+  MenuItem,
   Pagination,
   Stack,
   Table,
@@ -15,20 +15,21 @@ import {
   Typography,
   Button,
   TableSortLabel,
+  Collapse,
+  SelectChangeEvent,
+  Select,
+  FilledInput,
 } from '@mui/material';
-import { SettingNamesType } from '@/types/SettingsTypes';
+import { SettingNamesType } from '@/types/scopes/SettingsTypes';
 import { SubdirectoryArrowRight } from '@mui/icons-material';
 import { databaseRequest, SettingsConfig } from '@/utils';
 import { TableResponseType } from '@/types/TableTypes';
-import { ChangeEvent, useEffect, useState } from 'react';
-import EditSettings from './EditSettings';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
-import { AppIcon } from '@/components';
-import { ObjectPropByName } from '@/types/Generics';
+import { AppIcon, AppIconButton } from '@/components';
 import MoveSettings from './MoveSettings';
-
-const GET_LIMIT = () => Math.max(Math.floor((window.innerHeight - 200) / 55) - 1 || 10, 1);
+import { useAppStore } from '@/store';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -37,18 +38,23 @@ const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
+  const [, dispatch] = useAppStore();
   const [items, setItems] = useState<TableResponseType>();
-  const [limit, setLimit] = useState(GET_LIMIT());
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
   const [orderBy, setOrder] = useState(SettingsConfig[setting_name].rows[0]['id']);
   const [orderAsc, setOrderAsc] = useState(true);
+  const [filter, setFilter] = useState(['', '']);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [openDelete, setOpenDelete] = useState(false);
   const [openMove, setOpenMove] = useState(false);
+  const [openFilter, setOpenFilter] = useState(false);
 
-  const dataFetch = async () =>
-    await databaseRequest('model', {
+  const tableBody = useRef<HTMLTableSectionElement | null>(null);
+
+  const dataFetch = async (filter: string) =>
+    await databaseRequest({
       model: SettingsConfig[setting_name].model,
       method: SettingsConfig[setting_name].requests.fetch,
       arguments: {
@@ -56,15 +62,21 @@ const SettingsView = () => {
         offset: page * limit,
         orderby: orderBy,
         asc: orderAsc,
+        extra_where: filter,
       },
     });
 
   const loadData = async () => {
-    resetTable();
-    await dataFetch().then((response) => setItems(response));
+    getLimit();
+    const currentFilter = !filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '';
+    await dataFetch(currentFilter).then((response) => setItems(response));
   };
 
-
+  const getLimit = () => {
+    setLimit(
+      tableBody && tableBody.current ? Math.max(Math.floor(tableBody.current.clientHeight / 55) - 1 || 10, 1) : 10
+    );
+  };
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
@@ -73,6 +85,13 @@ const SettingsView = () => {
 
   const changePage = (event: ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage - 1);
+  };
+
+  const changeFilter = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setFilter([event.target.value, filter[1]]);
+  };
+  const changeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setFilter([filter[0], event.target.value]);
   };
 
   const toggleRow = (id: number) => {
@@ -92,12 +111,22 @@ const SettingsView = () => {
       setPage(0);
       setSelected([]);
       setOrderAsc(true);
-      setLimit(GET_LIMIT());
+      getLimit();
       setOrder(SettingsConfig[setting_name].rows[0]['id']);
     }
   };
 
-  const handleWindowSizeChange = () => setLimit(GET_LIMIT());
+  const handleWindowSizeChange = () => getLimit();
+
+  const onDelete = () => {
+    setOpenDelete(false);
+    setSelected([]);
+  };
+
+  const onMove = () => {
+    setOpenMove(false);
+    setSelected([]);
+  };
 
   useEffect(() => {
     window.addEventListener('resize', handleWindowSizeChange);
@@ -105,9 +134,14 @@ const SettingsView = () => {
       window.removeEventListener('resize', handleWindowSizeChange);
     };
   }, []);
+
   useEffect(() => {
     loadData();
-  }, [page, limit, orderBy, orderAsc, setting_id, setting_name]);
+  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter]);
+
+  useEffect(() => {
+    resetTable();
+  }, [setting_id, setting_name]);
 
   return (
     <Stack direction="column" height="100%">
@@ -115,24 +149,38 @@ const SettingsView = () => {
         <Typography variant="h4" sx={{ p: 2, textTransform: 'capitalize', flex: 1 }}>
           {SettingsConfig[setting_name].name}
         </Typography>
-        <Stack direction="row" alignItems="start" bottom={0} height={37} px={2} flex={1}>
-          <TextField
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <AppIcon name="search" />
-                </InputAdornment>
-              ),
-            }}
-            variant="standard"
-            color="secondary"
-            size="small"
-            sx={{ px: 1 }}
-          />
+        <Stack direction="row" alignItems="start" bottom={0} height={37} px={2}>
+          <AppIconButton icon="filter" onClick={() => setOpenFilter(!openFilter)} />
         </Stack>
       </Stack>
+      <Collapse in={openFilter}>
+        <Stack direction="row" alignItems="center" p={2} pt={0}>
+          <TextField
+            select
+            label="Column"
+            value={filter[0]}
+            onChange={changeFilter}
+            variant="filled"
+            size="small"
+            sx={{ width: 100, mr: 1 }}
+          >
+            <MenuItem value=""></MenuItem>
+            {SettingsConfig[setting_name].rows.map((column) => (
+              <MenuItem value={column.name} key={column.name}>
+                {column.displayName}
+              </MenuItem>
+            ))}
+          </TextField>
+          <FilledInput
+            size="small"
+            onChange={changeSearch}
+            value={filter[1]}
+            endAdornment={<AppIconButton icon="close" onClick={() => setFilter(['', ''])} />}
+          />
+        </Stack>
+      </Collapse>
       <Divider />
-      <Stack flexGrow={1} sx={{ overflowX: 'auto' }}>
+      <Stack flexGrow={1} sx={{ overflowX: 'auto' }} ref={tableBody}>
         <Table stickyHeader size="small">
           <TableHead>
             <TableRow>
@@ -170,7 +218,12 @@ const SettingsView = () => {
                     <TableCell
                       key={`${column.name}-${row.id}`}
                       sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                      onClick={() => navigate(`/settings/${setting_name}/${row.id}`)}
+                      onClick={() =>
+                        dispatch({
+                          type: 'EDIT_DATA',
+                          payload: { type: 'edit', element: setting_name, id: row.id, onClose: loadData },
+                        })
+                      }
                     >
                       {row[column.name]}
                     </TableCell>
@@ -210,7 +263,9 @@ const SettingsView = () => {
           bottom: 40,
           boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
         }}
-        onClick={() => navigate('new')}
+        onClick={() =>
+          dispatch({ type: 'EDIT_DATA', payload: { type: 'add', element: setting_name, id: 0, onClose: loadData } })
+        }
       >
         <AppIcon name="add" />
       </Fab>
@@ -220,19 +275,18 @@ const SettingsView = () => {
           <Pagination count={Math.ceil(Number(items.count) / limit)} onChange={changePage} sx={{ py: 1 }} />
         )}
       </Stack>
-      <EditSettings key={`${setting_name}_${setting_id || 'new'}`} />
       <DeleteSettings
         key={`${setting_name}`}
         items={selected}
         isOpen={openDelete}
-        closeMethod={() => setOpenDelete(false)}
+        closeMethod={onDelete}
         reloadMethod={() => loadData()}
       />
       <MoveSettings
         key={`move_${setting_name}`}
         items={selected}
         isOpen={openMove}
-        closeMethod={() => setOpenMove(false)}
+        closeMethod={onMove}
         reloadMethod={() => loadData()}
       />
     </Stack>

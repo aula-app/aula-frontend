@@ -2,7 +2,7 @@ import { FunctionComponent, PropsWithChildren } from 'react';
 import { useIsAuthenticated } from '@/hooks/auth';
 import PrivateLayout from './PrivateLayout';
 import PublicLayout from './PublicLayout';
-import ErrorMessages from '@/components/ErrorMessages';
+import ErrorMessages from '@/dialogs/ErrorMessages';
 
 /**
  * Returns the current Layout component depending on different circumstances.

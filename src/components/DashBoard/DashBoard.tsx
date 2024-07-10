@@ -1,31 +1,30 @@
 import { Badge, Box, Grid, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
-import { dashboardPhases, databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { dashboardPhases, databaseRequest } from '@/utils';
 import { useEffect, useState } from 'react';
-import { ObjectPropByName } from '@/types/Generics';
 import AppIconButton from '../AppIconButton';
 
-const displayPhases = Object.keys(Object.freeze(dashboardPhases)) as Array<keyof typeof dashboardPhases>;
+const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboardPhases>;
 
 const DashBoard = ({ show = false }) => {
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
-
   const [count, setCount] = useState<Record<number, number>>({});
   const [messages, setMessages] = useState(0);
   const [likes, setLikes] = useState(0);
 
-  const dashboardFetch = async (model: string, method: string, args?: ObjectPropByName) =>
-    await databaseRequest('model', {
-      model: model,
-      method: method,
-      arguments: args,
-    });
+  const dashboardFetch = async (model: string, method: string, idRequest: string[]) =>
+    await databaseRequest(
+      {
+        model: model,
+        method: method,
+        arguments: {},
+      },
+      idRequest
+    );
 
   useEffect(() => {
-    dashboardFetch('Idea', 'getDashboardByUser', {user_id: jwt_payload.user_id}).then((response) => setCount(response.data.phase_counts));
-    dashboardFetch('Text', 'getTexts').then((response) => setMessages(response.count));
-    dashboardFetch('Text', 'getTexts').then((response) => setLikes(response.count));
+    dashboardFetch('Idea', 'getDashboardByUser', ['user_id']).then((response) => setCount(response.data.phase_counts));
+    dashboardFetch('Text', 'getTexts', []).then((response) => setMessages(response.count));
+    dashboardFetch('Text', 'getTexts', []).then((response) => setLikes(response.count));
   }, []);
 
   return (
@@ -51,13 +50,13 @@ const DashBoard = ({ show = false }) => {
             Your Activity
           </Typography>
           <Badge badgeContent={messages} color="primary" sx={{ mx: 1 }}>
-            <AppIconButton icon="message" to='/messages' sx={{p: 0}} />
+            <AppIconButton icon="message" to="/messages" sx={{ p: 0 }} />
           </Badge>
           <Badge badgeContent={likes} color="primary" sx={{ mx: 1 }}>
-            <AppIconButton icon="heart" sx={{p: 0}} />
+            <AppIconButton icon="heart" sx={{ p: 0 }} />
           </Badge>
         </Stack>
-        {Object.keys(count).length > 6 && (
+        {Object.keys(count).length > 4 && (
           <Grid
             container
             spacing={1}

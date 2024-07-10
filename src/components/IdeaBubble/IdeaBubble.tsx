@@ -1,11 +1,12 @@
-import { Button, Stack, Typography } from '@mui/material';
-import { IdeaType } from '@/types/IdeaTypes';
+import { Button, Chip, Stack, Typography } from '@mui/material';
+import { IdeaType } from '@/types/scopes/IdeaTypes';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
 import { blue } from '@mui/material/colors';
-import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { databaseRequest } from '@/utils';
 import { useEffect, useState } from 'react';
 import AppLink from '../AppLink';
+import MoreOptions from '../MoreOptions';
 
 interface Props {
   idea: IdeaType;
@@ -17,20 +18,20 @@ interface Props {
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
 export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
   const displayDate = new Date(idea.created);
 
   const manageLike = (likeMethod: likeMethodType) => {
-    return databaseRequest('model', {
-      model: 'Idea',
-      method: likeMethod,
-      arguments: {
-        user_id: jwt_payload.user_id,
-        idea_id: idea.id,
+    return databaseRequest(
+      {
+        model: 'Idea',
+        method: likeMethod,
+        arguments: {
+          idea_id: idea.id,
+        },
       },
-    });
+      ['user_id']
+    );
   };
 
   const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
@@ -48,14 +49,20 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
 
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <AppLink to={to} disabled={!to}>
-        <ChatBubble color={blue[50]}>
-          <Stack>
-            <Typography variant="h6">{idea.title}</Typography>
-            <Typography mb={2}>{idea.content}</Typography>
+      <ChatBubble color={blue[50]}>
+        <Stack>
+          <AppLink to={to} disabled={!to}>
+            <Stack px={0.5}>
+              <Typography variant="h6">{idea.title}</Typography>
+              <Typography>{idea.content}</Typography>
+            </Stack>
+          </AppLink>
+          <Stack direction="row" justifyContent="space-between" my={1}>
+            <Chip icon={<AppIcon name="settings" />} label="category" variant="outlined" />
+            <MoreOptions element="ideas" id={idea.id} onClose={onReload} />
           </Stack>
-        </ChatBubble>
-      </AppLink>
+        </Stack>
+      </ChatBubble>
       <Stack direction="row" alignItems="center">
         <AppIcon name="account" size="xl" />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">

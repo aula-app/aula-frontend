@@ -1,4 +1,15 @@
+import { ICONS } from '@/components/AppIcon/AppIcon';
+import { ObjectPropByName } from '@/types/Generics';
 import { green, amber, deepPurple, deepOrange, blue, grey, red } from '@mui/material/colors';
+
+interface phaseType {
+  name: string,
+  call?: string,
+  description: string,
+  color: string,
+  baseColor: ObjectPropByName,
+  icon: keyof typeof ICONS,
+}
 
 export const phases = {
   '0': {
@@ -10,6 +21,7 @@ export const phases = {
   },
   '10': {
     name: 'Discussion',
+    call: 'to discuss',
     description: 'Ideas in Discussion',
     color: deepPurple[100],
     baseColor: deepPurple,
@@ -17,6 +29,7 @@ export const phases = {
   },
   '20': {
     name: 'Approval',
+    call: 'on approval',
     description: 'Ideas Under Approval',
     color: deepOrange[100],
     baseColor: deepOrange,
@@ -24,6 +37,7 @@ export const phases = {
   },
   '30': {
     name: 'Voting',
+    call: 'to vote',
     description: 'Ideas on Voting',
     color: amber[100],
     baseColor: amber,
@@ -36,7 +50,7 @@ export const phases = {
     baseColor: green,
     icon: 'chart',
   },
-};
+} as Record<string, phaseType>;
 
 export const approvalVariants = {
   approved: {
@@ -45,7 +59,6 @@ export const approvalVariants = {
     color: amber[100],
     baseColor: amber,
     icon: 'approved',
-    phase_id: 40,
   },
   rejected: {
     name: 'Not Approved',
@@ -53,7 +66,6 @@ export const approvalVariants = {
     color: grey[200],
     baseColor: grey,
     icon: 'rejected',
-    phase_id: 40,
   },
 }
 
@@ -64,7 +76,6 @@ export const votingVariants = {
     color: green[100],
     baseColor: green,
     icon: 'for',
-    phase_id: 40,
   },
   neutral: {
     name: 'Neutral',
@@ -72,7 +83,6 @@ export const votingVariants = {
     color: green[100],
     baseColor: green,
     icon: 'neutral',
-    phase_id: 40,
   },
   against: {
     name: 'Against',
@@ -80,7 +90,6 @@ export const votingVariants = {
     color: red[100],
     baseColor: red,
     icon: 'against',
-    phase_id: 40,
   },
 };
 
@@ -103,4 +112,4 @@ export const resultVariants = {
   },
 }
 
-export const dashboardPhases = {...(({ ['40']: _, ...o }) => o)(phases), ...resultVariants};
+export const dashboardPhases = {...(({ ['40']: _, ...o }) => o)(phases)};

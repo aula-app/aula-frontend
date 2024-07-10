@@ -49,6 +49,9 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
     case 'REMOVE_ALL_ERRORS': {
       return { ...state, errors: [] };
     };
+    case 'EDIT_DATA': {
+      return { ...state, editData: action?.payload };
+    };
     default:
       return state;
   }

@@ -1,19 +1,11 @@
 import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
 import { AppIcon } from '..';
-import {
-  approvalVariants,
-  databaseRequest,
-  localStorageGet,
-  parseJwt,
-  phases,
-  votingOptions,
-  votingVariants,
-} from '@/utils';
+import { approvalVariants, databaseRequest, phases, votingOptions, votingVariants } from '@/utils';
 import { useParams } from 'react-router-dom';
-import { IdeaType } from '@/types/IdeaTypes';
+import { IdeaType } from '@/types/scopes/IdeaTypes';
 import { useEffect, useState } from 'react';
-import { RoomPhases } from '@/types/RoomTypes';
+import { RoomPhases } from '@/types/scopes/RoomTypes';
 
 interface IdeaCardProps {
   idea: IdeaType;
@@ -25,20 +17,20 @@ interface IdeaCardProps {
  */
 const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
   const params = useParams();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const [vote, setVote] = useState(0);
   const [bg, setBg] = useState<string>(phases[phase].baseColor[300]);
 
   const getVote = async () =>
-    await databaseRequest('model', {
-      model: 'Idea',
-      method: 'getVoteValue',
-      arguments: {
-        user_id: jwt_payload.user_id,
-        idea_id: idea.id,
+    await databaseRequest(
+      {
+        model: 'Idea',
+        method: 'getVoteValue',
+        arguments: {
+          idea_id: idea.id,
+        },
       },
-    }).then((response) => setVote(response.data));
+      ['user_id']
+    ).then((response) => setVote(response.data));
 
   useEffect(() => {
     setBg(

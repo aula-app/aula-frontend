@@ -1,14 +1,21 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { Card, CardContent } from '@mui/material';
 import { phases } from '@/utils';
-import { BoxType } from '@/types/BoxTypes';
+import { BoxType } from '@/types/scopes/BoxTypes';
 import AppIcon from '../AppIcon';
+import MoreOptions from '../MoreOptions';
+import AppLink from '../AppLink';
+import { useParams } from 'react-router-dom';
 
 interface IdeaBoxProps {
   box: BoxType;
+  noLink?: boolean;
+  onReload: () => void;
 }
 
-const IdeaBox = ({ box }: IdeaBoxProps) => {
+const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
+  const params = useParams();
+
   return (
     <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
       <Stack
@@ -20,20 +27,11 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
         p={1}
         pr={2}
       >
-        <Stack
-          bgcolor="#fff"
-          borderRadius={999}
-          height="100%"
-          sx={{ aspectRatio: 1 }}
-          justifyContent="center"
-          alignItems="center"
-          mr="auto"
-        >
-          <AppIcon icon="box" />
-        </Stack>
-        <AppIcon icon={phases[box.phase_id].icon} size="small" sx={{ mx: 1 }} />
-        <Typography variant="caption">{phases[box.phase_id].name} phase</Typography>
+        <AppIcon icon={phases[box.phase_id].icon} size='large' sx={{ mr: 1 }} />
+        <Typography variant="caption" mr="auto">{phases[box.phase_id].name} phase</Typography>
+        <MoreOptions element='boxes' id={box.id} onClose={onReload} />
       </Stack>
+      <AppLink to={`/room/${params.room_id}/idea-box/${box.id}`} mb={2} key={box.id} disabled={noLink}>
       <CardContent>
         <Typography variant="h6" noWrap>
           {box.name}
@@ -66,6 +64,7 @@ const IdeaBox = ({ box }: IdeaBoxProps) => {
           </Stack>
         </Box>
       </CardContent>
+      </AppLink>
     </Card>
   );
 };

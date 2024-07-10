@@ -12,23 +12,23 @@ type Params = {
 /** * Renders "Settings" alert dialog component view
  * url: /settings/:setting_name/
  */
-const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
+const DeleteSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
   const { setting_name } = useParams();
 
   const request = async (id: number) => {
     const currentSetting = setting_name as keyof typeof SettingsConfig;
-    await databaseRequest('model', {
+    await databaseRequest({
       model: SettingsConfig[currentSetting].model,
       method: SettingsConfig[currentSetting].requests.delete,
-      arguments: {[`${SettingsConfig[currentSetting].model.toLowerCase()}_id`]: id},
+      arguments: { [`${SettingsConfig[currentSetting].model.toLowerCase()}_id`]: id },
     });
-  }
+  };
 
   const deleteRequest = () => {
-    items.forEach(item => request(item));
+    items.forEach((item) => request(item));
     reloadMethod();
     closeMethod();
-  }
+  };
 
   return (
     <Dialog
@@ -39,7 +39,7 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
     >
       <DialogTitle id="alert-dialog-title">
         <Stack direction="row" alignItems="center">
-          <WarningAmber sx={{mr: 1}} color='error' /> Delete selected {setting_name}
+          <WarningAmber sx={{ mr: 1 }} color="error" /> Delete selected {setting_name}
         </Stack>
       </DialogTitle>
       <DialogContent sx={{ overflowY: 'auto' }}>
@@ -48,7 +48,7 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeMethod} color="error" autoFocus>
+        <Button onClick={closeMethod} color="secondary" autoFocus>
           Cancel
         </Button>
         <Button onClick={deleteRequest} color="error" variant="contained">
@@ -59,4 +59,4 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
   );
 };
 
-export default EditSettings;
+export default DeleteSettings;

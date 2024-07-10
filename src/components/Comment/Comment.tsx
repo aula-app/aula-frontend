@@ -2,9 +2,10 @@ import { Button, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
 import { grey } from '@mui/material/colors';
-import { CommentType } from '@/types/CommentTypes';
-import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { CommentType } from '@/types/scopes/CommentTypes';
+import { databaseRequest } from '@/utils';
 import { useEffect, useState } from 'react';
+import MoreOptions from '../MoreOptions';
 
 interface Props {
   comment: CommentType;
@@ -15,20 +16,20 @@ interface Props {
 type likeMethodType = 'getLikeStatus' | 'CommentAddLike' | 'CommentRemoveLike';
 
 export const Comment = ({ comment, disabled = false, onReload }: Props) => {
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
   const displayDate = new Date(comment.created);
 
   const manageLike = (likeMethod: likeMethodType) => {
-    return databaseRequest('model', {
-      model: 'Comment',
-      method: likeMethod,
-      arguments: {
-        user_id: jwt_payload.user_id,
-        comment_id: comment.id,
+    return databaseRequest(
+      {
+        model: 'Comment',
+        method: likeMethod,
+        arguments: {
+          comment_id: comment.id,
+        },
       },
-    });
+      ['user_id']
+    );
   };
 
   const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
@@ -48,7 +49,10 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
       <ChatBubble color={grey[200]} disabled={disabled}>
         <Stack>
-          <Typography mb={2}>{comment.content}</Typography>
+          <Typography>{comment.content}</Typography>
+          <Stack direction="row" justifyContent="end">
+            <MoreOptions element="comments" id={comment.id} onClose={onReload} />
+          </Stack>
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
@@ -70,7 +74,7 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
             {comment.username}
           </Typography>
         </Stack>
-        <Button color="error" size='small' onClick={toggleLike} disabled={disabled}>
+        <Button color="error" size="small" onClick={toggleLike} disabled={disabled}>
           <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
           {comment.sum_likes}
         </Button>

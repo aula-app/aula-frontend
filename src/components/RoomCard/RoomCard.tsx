@@ -1,7 +1,7 @@
 import { CardMedia, Stack, Typography, capitalize } from '@mui/material';
 import { Card, CardContent } from '@mui/material';
 import { phases } from '@/utils';
-import { RoomType } from '@/types/RoomTypes';
+import { RoomType } from '@/types/scopes/RoomTypes';
 import AppIcon from '../AppIcon';
 import AppLink from '../AppLink';
 

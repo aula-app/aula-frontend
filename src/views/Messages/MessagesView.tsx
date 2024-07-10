@@ -1,8 +1,6 @@
 import { AppIcon, AppLink } from '@/components';
 import MessageCard from '@/components/MessageCard';
-import { MessageType, messageConsentValues } from '@/types/MessageTypes';
-import { localStorageGet } from '@/utils';
-import { parseJwt } from '@/utils/jwt';
+import { MessageType, messageConsentValues } from '@/types/scopes/MessageTypes';
 import { databaseRequest } from '@/utils/requests';
 import { IconButton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -13,12 +11,10 @@ import { useEffect, useState } from 'react';
  */
 
 const MessagesView = () => {
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const [messages, setMessages] = useState<MessageType[]>();
 
   const messageFetch = async () =>
-    await databaseRequest('model', {
+    await databaseRequest({
       model: 'Text',
       method: 'getTexts',
       arguments: {},
