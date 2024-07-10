@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { AppIcon, AppIconButton } from '@/components';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { UserType, UsersResponseType } from '@/types/scopes/UserTypes';
+import { SingleUserResponseType, UserType, UsersResponseType } from '@/types/scopes/UserTypes';
 import { databaseRequest } from '@/utils';
 import { grey } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
@@ -20,6 +20,7 @@ import { useParams } from 'react-router-dom';
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  delegate: DelegtionType[];
 }
 
 /**
@@ -27,14 +28,14 @@ interface Props {
  * @component ConsentDialog
  */
 
-const DelegateVote = ({ isOpen, onClose }: Props) => {
+const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
   const params = useParams();
   const [users, setUsers] = useState<UserType[]>();
   const [selected, setSelected] = useState<UserType | null>();
   const [filter, setFilter] = useState('');
-  const [confirm, setConfirm] = useState(false);
+  const [confirm, setConfirm] = useState(delegate.length > 0);
 
-  const userFetch = async () => {
+  const usersFetch = async () => {
     await databaseRequest({
       model: 'User',
       method: 'getUsers',
@@ -46,6 +47,17 @@ const DelegateVote = ({ isOpen, onClose }: Props) => {
         extra_where: ` AND (realname LIKE '%${filter}%' OR displayname LIKE '%${filter}%')`,
       },
     }).then((response: UsersResponseType) => setUsers(response.data));
+  };
+
+  const singleUserFetch = async () => {
+    if(delegate.length === 0) return;
+    await databaseRequest({
+      model: 'User',
+      method: 'getUserBaseData',
+      arguments: {
+        user_id: delegate[0].user_id_target,
+      },
+    }).then((response: SingleUserResponseType) => setSelected(response.data));
   };
 
   const setDelegate = async () => {
@@ -60,7 +72,21 @@ const DelegateVote = ({ isOpen, onClose }: Props) => {
         },
       },
       ['user_id', 'updater_id']
-    ).then(() => close());
+    ).then(() => onClose());
+  };
+
+  const removeDelegate = async () => {
+    if (!selected || !params.box_id) return;
+    await databaseRequest(
+      {
+        model: 'User',
+        method: 'giveBackAllDelegations',
+        arguments: {
+          topic_id: params.box_id,
+        },
+      },
+      ['user_id']
+    ).then(() => onClose());
   };
 
   const select = (user: UserType) => {
@@ -71,25 +97,16 @@ const DelegateVote = ({ isOpen, onClose }: Props) => {
     setFilter(event.target.value);
   };
 
-  const close = () => {
-    onClose();
-    setConfirm(false);
-  };
-
-  const delegate = () => {
-    confirm ? setDelegate() : setConfirm(true);
-  };
+  useEffect(() => {
+    delegate.length === 0 ? usersFetch() : singleUserFetch();
+  }, [filter, delegate.length]);
 
   useEffect(() => {
-    userFetch();
-  }, [filter]);
-
-  /*
-  user --> delegateVoteRight
-  */
+    setConfirm(delegate.length > 0)
+  }, [delegate.length]);
 
   return (
-    <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
+    <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="xs">
       <DialogTitle>Vote delegation</DialogTitle>
       <DialogContent>
         <Stack height={350} position="relative" overflow="hidden">
@@ -137,7 +154,10 @@ const DelegateVote = ({ isOpen, onClose }: Props) => {
           </Slide>
           <Slide direction="left" in={confirm} mountOnEnter unmountOnExit>
             <Stack height="100%" width="100%">
-              <Typography>Are you sure you want to delegate your voting rights on this box?</Typography>
+              <Typography>
+                Are you sure you want to {delegate.length === 0 ? 'delegate your' : 'revoke the'} voting rights on this
+                box {delegate.length === 0 ? '' : 'you have granted'} to the following person?
+              </Typography>
               {selected && (
                 <Stack flex={1} alignItems="center" justifyContent="center">
                   <Avatar sx={{ width: 56, height: 56, mb: 1 }}>
@@ -154,12 +174,22 @@ const DelegateVote = ({ isOpen, onClose }: Props) => {
         </Stack>
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
-        <Button color="secondary" onClick={close}>
+        <Button color="secondary" onClick={onClose}>
           Cancel
         </Button>
-        <Button variant="contained" onClick={delegate} disabled={!selected}>
-          {confirm ? 'Delegate' : 'Select'}
-        </Button>
+        {!confirm ? (
+          <Button variant="contained" onClick={() => setConfirm(true)} disabled={!selected}>
+            Select
+          </Button>
+        ) : delegate.length === 0 ? (
+          <Button variant="contained" onClick={setDelegate}>
+            Delegate
+          </Button>
+        ) : (
+          <Button variant="contained" onClick={removeDelegate}>
+            Revoke
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
