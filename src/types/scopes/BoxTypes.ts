@@ -4,6 +4,7 @@ export interface BoxType {
   id: number;
   name: string;
   description_public: string;
+  ideas_num: number;
   created: string;
   last_update: string;
   hash_id: string;

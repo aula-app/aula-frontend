@@ -14,6 +14,7 @@ const TITLE_PRIVATE = 'aula';
  * @component PrivateLayout
  */
 
+
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [sideBarVisible, setSideBarVisible] = useState(false);
 
@@ -38,15 +39,6 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const onSideBarClose = () => {
     if (sideBarVisible) setSideBarVisible(false); // Don't re-render Layout when SideBar is already closed
   };
-
-  // console.log(
-  //   'Render using PrivateLayout, onMobile:',
-  //   onMobile,
-  //   'sidebarOpen:',
-  //   sidebarOpen,
-  //   'sidebarVariant:',
-  //   sidebarVariant
-  // );
 
   return (
     <Stack

@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 import { BoxResponseType } from '@/types/scopes/BoxTypes';
 import { databaseRequest, phases } from '@/utils';
 import { IdeasResponseType } from '@/types/scopes/IdeaTypes';
-import { AppIcon } from '@/components';
+import { AppIcon, AppLink } from '@/components';
 import { grey } from '@mui/material/colors';
 import DelegateVote from '@/components/DelegateVote';
+import { DelegationType } from '@/types/Delegation';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/ideas-box/:box_id
@@ -17,14 +18,18 @@ const IdeasBoxView = () => {
   const params = useParams();
   const [box, setBox] = useState<BoxResponseType>();
   const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
-  const [delegation, setDelegation] = useState(false)
+  const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>();
+  const [delegationDialog, setDelegationDialog] = useState(false);
 
   const boxFetch = async () =>
     await databaseRequest({
       model: 'Topic',
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
-    }).then((response) => setBox(response));
+    }).then((response) => {
+      setBox(response);
+      if (response.data.phase_id === 30) getDelegation();
+    });
 
   const boxIdeasFetch = async () =>
     await databaseRequest({
@@ -33,9 +38,20 @@ const IdeasBoxView = () => {
       arguments: { topic_id: Number(params['box_id']) },
     }).then((response) => setBoxIdeas(response));
 
+  const getDelegation = async () =>
+    await databaseRequest(
+      {
+        model: 'User',
+        method: 'getDelegationStatus',
+        arguments: { topic_id: Number(params['box_id']) },
+      },
+      ['user_id']
+    ).then((response) => setDelegationStatus(response.data));
+
   useEffect(() => {
     boxFetch();
     boxIdeasFetch();
+    getDelegation();
   }, []);
 
   return (
@@ -56,17 +72,17 @@ const IdeasBoxView = () => {
             <IdeaBox box={box.data || {}} noLink onReload={boxFetch} />
             <Stack direction="row">
               <Typography variant="h6" p={2}>
-                {String(boxIdeas.count)} ideas {phases[box.data.phase_id].call}
+                {String(boxIdeas.count)} ideas {(delegationStatus && delegationStatus.length > 0) ? `delegated` : phases[box.data.phase_id].call}
               </Typography>
               {Number(box.data.phase_id) === 30 && (
                 <Button
                   size="small"
                   sx={{ ml: 'auto', mt: 0.5, px: 1, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}
-                  onClick={() => setDelegation(true)}
+                  onClick={() => setDelegationDialog(true)}
                 >
                   <Typography variant="caption">or</Typography>
                   <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
-                    DELEGATE VOTE
+                    {(delegationStatus && delegationStatus.length > 0) ? 'REVOKE DELEGATION' : 'DELEGATE VOTE'}
                   </Typography>
                   <AppIcon icon="delegate" size="small" />
                 </Button>
@@ -85,14 +101,25 @@ const IdeasBoxView = () => {
                   sx={{ scrollSnapAlign: 'center' }}
                   order={-idea.approved}
                 >
-                  <IdeaCard idea={idea} phase={box.data.phase_id} />
+                  <AppLink to={`idea/${idea.id}`}>
+                    <IdeaCard idea={idea} phase={box.data.phase_id} />
+                  </AppLink>
                 </Grid>
               ))}
             </Grid>
           </>
         )}
       </Box>
-      <DelegateVote isOpen={delegation} onClose={() => setDelegation(false)} />
+      {delegationStatus && (
+        <DelegateVote
+          isOpen={delegationDialog}
+          delegate={delegationStatus}
+          onClose={() => {
+            setDelegationDialog(false);
+            getDelegation();
+          }}
+        />
+      )}
     </>
   );
 };

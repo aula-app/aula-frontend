@@ -14,15 +14,15 @@ interface Props {
  */
 const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) => {
   const location = useLocation().pathname.split('/');
-  const displayPath = location.filter(curPath => /.*[A-Za-z\s]+.*/.test(curPath)).filter(curPath => curPath !== 'welcome');
+  const displayPath = location.filter(curPath => /.*[A-Za-z\s]+.*/.test(curPath)).filter(curPath => !['welcome', 'phase', 'settings'].includes(curPath));
   const goto = useNavigate();
 
-  const returnLocation = () => Number(location[location.length - 1]) ? location.splice(0, location.length - 2) : location.splice(0, location.length - 3)
+  const returnLocation = () => location.length !== 5 ? location.splice(0, location.length - 2) : location.splice(0, location.length - 4)
 
   return (
     <AppBar elevation={0}>
       <Toolbar>
-        {location.length <= 2 ? (
+        {location[1] === 'welcome' ? (
           <AppIcon icon="logo" size="large" sx={{mr: 1}} />
         ) : (
           <AppIconButton icon="back" onClick={() => goto(returnLocation().join('/'))} />
@@ -33,8 +33,7 @@ const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) 
             {home}
           </AppLink>
           {displayPath.map((currentPath, key) => {
-            const addBoxesPath = location.includes('idea-box') && key === 0 ? '/boxes' : ''; //checks if rooms link must have /boxes to correct tab navigation
-            const link = location.slice(0, 2 * (key + 1) + 1).join('/') + addBoxesPath;
+            const link = location.slice(0, 2 * (key + 1) + (currentPath === 'messages' ? 0 : 3)).join('/');
             return (
               <AppLink underline="hover" color="inherit" to={`${link}`} key={key}>
                 {currentPath}

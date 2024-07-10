@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import { Card } from '@mui/material';
-import { AppIcon, AppLink } from '..';
+import { AppIcon } from '..';
 import { approvalVariants, databaseRequest, phases, votingOptions, votingVariants } from '@/utils';
 import { useParams } from 'react-router-dom';
 import { IdeaType } from '@/types/scopes/IdeaTypes';
@@ -62,73 +62,71 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
       }}
       variant="outlined"
     >
-      <AppLink to={`/room/${params.room_id}/idea-box/${params.box_id}/idea/${idea.id}`}>
-        <Stack direction="row" height={68} alignItems="center">
-          <Stack pl={2}>
-            {Number(phase) != 40 ? (
-              <AppIcon icon="camera" />
-            ) : (
-              <AppIcon icon={votingOptions[idea.is_winner > 0 ? 2 : 0].label} size="xl" />
-            )}
-          </Stack>
-          <Stack flexGrow={1} px={2} overflow="hidden">
-            <Typography variant="h6" noWrap textOverflow="ellipsis">
-              {idea.title}
-            </Typography>
-            <Typography variant="body2" noWrap textOverflow="ellipsis">
-              {idea.content}
-            </Typography>
-          </Stack>
-          <Stack
-            p={1}
-            pl={2}
-            borderLeft="1px solid currentColor"
-            justifyContent="space-around"
-            height="100%"
-            sx={{ aspectRatio: 1 }}
-          >
-            {Number(phase) === 10 ? (
-              <>
-                <Stack direction="row" alignItems="center">
-                  <AppIcon icon="heart" size="small" />{' '}
-                  <Typography fontSize="small" ml={0.5}>
-                    {idea.sum_likes}
-                  </Typography>
-                </Stack>
-                <Stack direction="row" alignItems="center">
-                  <AppIcon icon="chat" size="small" />{' '}
-                  <Typography fontSize="small" ml={0.5}>
-                    {idea.sum_comments}
-                  </Typography>
-                </Stack>
-              </>
-            ) : Number(phase) === 20 ? (
-              <>
-                {idea.approved === 1 ? (
-                  <AppIcon icon={approvalVariants.approved.icon} />
-                ) : idea.approved === -1 ? (
-                  <AppIcon icon={approvalVariants.rejected.icon} />
-                ) : (
-                  <AppIcon icon={phases[phase].icon} />
-                )}
-              </>
-            ) : Number(phase) === 30 ? (
-              <AppIcon icon={votingOptions[vote + 1].label} />
-            ) : (
-              <>
-                {votingOptions.map((vote) => (
-                  <Stack direction="row" alignItems="center" key={vote.label}>
-                    <AppIcon icon={votingVariants[vote.label].icon} size="small" />{' '}
-                    <Typography fontSize="small" ml={0.5}>
-                      {0}
-                    </Typography>
-                  </Stack>
-                ))}
-              </>
-            )}
-          </Stack>
+      <Stack direction="row" height={68} alignItems="center">
+        <Stack pl={2}>
+          {Number(phase) != 40 ? (
+            <AppIcon icon="camera" />
+          ) : (
+            <AppIcon icon={votingOptions[idea.is_winner > 0 ? 2 : 0].label} size="xl" />
+          )}
         </Stack>
-      </AppLink>
+        <Stack flexGrow={1} px={2} overflow="hidden">
+          <Typography variant="h6" noWrap textOverflow="ellipsis">
+            {idea.title}
+          </Typography>
+          <Typography variant="body2" noWrap textOverflow="ellipsis">
+            {idea.content}
+          </Typography>
+        </Stack>
+        <Stack
+          p={1}
+          pl={2}
+          borderLeft="1px solid currentColor"
+          justifyContent="space-around"
+          height="100%"
+          sx={{ aspectRatio: 1 }}
+        >
+          {Number(phase) === 10 ? (
+            <>
+              <Stack direction="row" alignItems="center">
+                <AppIcon icon="heart" size="small" />{' '}
+                <Typography fontSize="small" ml={0.5}>
+                  {idea.sum_likes}
+                </Typography>
+              </Stack>
+              <Stack direction="row" alignItems="center">
+                <AppIcon icon="chat" size="small" />{' '}
+                <Typography fontSize="small" ml={0.5}>
+                  {idea.sum_comments}
+                </Typography>
+              </Stack>
+            </>
+          ) : Number(phase) === 20 ? (
+            <>
+              {idea.approved === 1 ? (
+                <AppIcon icon={approvalVariants.approved.icon} />
+              ) : idea.approved === -1 ? (
+                <AppIcon icon={approvalVariants.rejected.icon} />
+              ) : (
+                <AppIcon icon={phases[phase].icon} />
+              )}
+            </>
+          ) : Number(phase) === 30 ? (
+            <AppIcon icon={votingOptions[vote + 1].label} />
+          ) : (
+            <>
+              {votingOptions.map((vote) => (
+                <Stack direction="row" alignItems="center" key={vote.label}>
+                  <AppIcon icon={votingVariants[vote.label].icon} size="small" />{' '}
+                  <Typography fontSize="small" ml={0.5}>
+                    {0}
+                  </Typography>
+                </Stack>
+              ))}
+            </>
+          )}
+        </Stack>
+      </Stack>
     </Card>
   );
 };

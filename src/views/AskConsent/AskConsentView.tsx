@@ -1,9 +1,9 @@
-import { databaseRequest } from '@/utils';
+import { Box, Stack } from '@mui/material';
+import { localStorageGet } from '@/utils';
 import { useAppStore } from '@/store';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import ConsentDialog from '@/dialogs/ConsentDialog';
-import { MessageConsentType } from '@/types/scopes/MessageTypes';
 
 /**
  * Renders "Ask Consent" view
@@ -11,27 +11,43 @@ import { MessageConsentType } from '@/types/scopes/MessageTypes';
  */
 const AskConsent = () => {
   const [, dispatch] = useAppStore();
-  const [data, setData] = useState<MessageConsentType[]>();
+  const jwt_token = localStorageGet('token');
+  const [data, setData] = useState([] as any[]);
   const navigate = useNavigate();
 
-  const getData = async () =>
-    await databaseRequest(
-      {
-        model: 'User',
-        method: 'getMissingConsents',
-        arguments: {},
-      },
-      ['user_id']
-    ).then((response) => {
-      dispatch({ type: 'HAS_CONSENT', payload: response.count === 0 });
-      if (response.count === 0) setData(response.data);
-    });
-
   useEffect(() => {
-    getData();
-  }, [navigate]);
+    // fetch data
+    const dataFetch = async () => {
+      const getData = await (
+        await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/get_necessary_consents.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + jwt_token,
+          },
+        })
+      ).json();
 
-  return <>{!!data && data.length > 0 && <ConsentDialog texts={data} />}</>;
+      // set state when the data received
+      if (getData.count === 0) {
+        dispatch({ type: 'HAS_CONSENT', payload: true });
+        navigate('/welcome');
+      } else {
+        dispatch({ type: 'HAS_CONSENT', payload: false });
+        setData(getData.data);
+      }
+    };
+    dataFetch();
+
+  }, [dispatch, jwt_token, navigate]);
+
+
+  return (
+    <>
+      {data.length > 0 && <ConsentDialog texts={data} />}
+    </>
+  );
+
 };
 
 export default AskConsent;
