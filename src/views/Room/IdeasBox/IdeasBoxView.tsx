@@ -9,6 +9,7 @@ import { IdeasResponseType } from '@/types/scopes/IdeaTypes';
 import { AppIcon, AppLink } from '@/components';
 import { grey } from '@mui/material/colors';
 import DelegateVote from '@/components/DelegateVote';
+import { DelegationType } from '@/types/Delegation';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/ideas-box/:box_id

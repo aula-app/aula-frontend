@@ -16,6 +16,7 @@ import { SingleUserResponseType, UserType, UsersResponseType } from '@/types/sco
 import { databaseRequest } from '@/utils';
 import { grey } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
+import { DelegationType } from '@/types/Delegation';
 
 interface Props {
   isOpen: boolean;
