@@ -47,7 +47,7 @@ const DashBoard = ({ show = false }) => {
             variant="h4"
             sx={{ mr: 'auto', flexWrap: 'wrap', opacity: `${show ? 100 : 0}%`, transition: 'opacity .5s ease-in-out' }}
           >
-            Your Activity
+            Overview
           </Typography>
           <Badge badgeContent={messages} color="primary" sx={{ mx: 1 }}>
             <AppIconButton icon="message" to="/messages" sx={{ p: 0 }} />
