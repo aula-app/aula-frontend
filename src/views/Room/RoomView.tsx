@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import PhaseBar from '@/layout/PhaseBar';
 
 /**
@@ -7,9 +7,10 @@ import PhaseBar from '@/layout/PhaseBar';
  * url: /room/:room_id/:phase
  */
 const RoomView = () => {
+  const params = useParams()
   return (
     <Stack width="100%" height="100%" overflow="hidden">
-      <PhaseBar />
+      <PhaseBar room={Number(params.room_id)} />
       <Stack p={1} sx={{ flexGrow: 1, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
         <Outlet />
       </Stack>

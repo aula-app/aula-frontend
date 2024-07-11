@@ -16,9 +16,8 @@ const displayPhases = Object.keys(phases) as Array<keyof typeof phases>;
  */
 const RoomCard = ({ room }: RoomCardProps) => {
   return (
-    <Card sx={{ borderRadius: '25px', aspectRatio: 1 }} variant="outlined">
+    <Card sx={{ borderRadius: '25px', aspectRatio: 1, overflow: 'clip' }} variant="outlined">
       <Stack>
-      <PhaseBar />
       <CardContent sx={{flex: 1}}>
         <AppLink
           sx={{
@@ -40,6 +39,7 @@ const RoomCard = ({ room }: RoomCardProps) => {
           </Stack>
         </AppLink>
       </CardContent>
+      <PhaseBar room={room.id} />
       </Stack>
     </Card>
   );

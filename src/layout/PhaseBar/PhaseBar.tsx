@@ -9,22 +9,21 @@ import { useLocation, useParams } from 'react-router-dom';
  * @component PhaseBar
  */
 
-const PhaseBar = () => {
+const PhaseBar = ({room}: {room: number}) => {
   const params = useParams();
-  const displayPhases = Object.keys(Object.freeze(phases)) as Array<keyof typeof phases>;
-  const location = useLocation().pathname.split('/');
+  const displayPhases = Object.keys(phases) as Array<keyof typeof phases>;
   const [currentPhase, setPhase] = useState('ideas');
 
   const getPhase = () => setPhase(params.phase && Object.keys(phases).includes(params.phase) ? params.phase : '');
 
-  useEffect(getPhase, [location.join('/')]);
+  useEffect(getPhase, [useLocation().pathname]);
 
   return (
     <Stack direction="row" overflow="clip" width="100%">
       {displayPhases.map((phase) => (
         <AppLink
           key={phase}
-          to={`${location.slice(0, 3).join('/')}/phase/${phase}`}
+          to={`/room/${room}/phase/${phase}`}
           sx={{
             color: 'inherit',
             textDecoration: 'none',
@@ -45,7 +44,7 @@ const PhaseBar = () => {
               bgcolor: phases[phase].color,
             }}
           >
-            <AppIcon name={phases[phase].icon} size="small" />
+            <AppIcon name={phases[phase].icon} />
             <Typography noWrap overflow="ellipsis" pl={1} fontSize="small">
               {currentPhase === phase ? phases[phase].name : ''}
             </Typography>
