@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useAppStore } from '@/store';
-import { databaseRequest, localStorageSet } from '@/utils';
+import { localStorageGet, localStorageSet, parseJwt } from '@/utils';
 import { AppButton, AppLink, AppIconButton } from '@/components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -34,6 +34,8 @@ const LoginView = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = jwt_token ? parseJwt(jwt_token) : null;
 
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
@@ -45,19 +47,21 @@ const LoginView = () => {
 
 
   const onSubmit = async (formData: Object) => {
-    const request = await databaseRequest({
-      model: 'User',
-      method: 'checkLogin',
-      arguments: {...formData},
-    })
 
-    if(!request || request.success === "false") {
-      return;
-    }
+    const request = await (
+      await fetch(
+        `${import.meta.env.VITE_APP_API_URL}/api/controllers/login.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + jwt_token
+      },
+      body: JSON.stringify(formData),
+    })).json();
 
-    localStorageSet('token', request['JWT']);
-    dispatch({ type: 'LOG_IN' });
-    navigate('/', { replace: true });
+      localStorageSet('token', request['JWT']);
+      dispatch({ type: 'LOG_IN' });
+      navigate('/', { replace: true });
   }
 
   return (
