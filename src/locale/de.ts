@@ -1,9 +1,15 @@
 export default {
+  generics: {
+    or: 'oder',
+  },
   login: {
     button: 'Login',
+    forgot: 'Passwort vergessen?',
     login: 'Nutzername',
-    password: 'Passwort',
     loginError: 'Leider stimmt entweder Nutzername oder Passwort nicht.',
+    noAccount: 'Sie brauchen ein Konto?',
+    password: 'Passwort',
+    sign: 'Registrieren Sie sich',
     welcome: 'Willkommen bei aula',
   },
   validation: {

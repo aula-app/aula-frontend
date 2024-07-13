@@ -1,9 +1,15 @@
 export default {
+  generics: {
+    or: 'or',
+  },
   login: {
     button: 'Login',
+    forgot: 'Forgot password?',
     login: 'Username',
-    password: 'Password',
     loginError: 'Invalid Username or Password.',
+    noAccount: 'Need an account?',
+    password: 'Password',
+    sign: 'Sign up',
     welcome: 'Welcome!',
   },
   validation: {

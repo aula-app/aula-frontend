@@ -1,22 +1,20 @@
-import { Fragment, FunctionComponent, PropsWithChildren } from 'react';
+import { FunctionComponent, PropsWithChildren } from 'react';
 import { Button, Divider, Grid, Box, Stack } from '@mui/material/';
 import { AppLink, ErrorBoundary } from '@/components';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const TITLE_PUBLIC = 'aula';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   document.title = TITLE_PUBLIC; // Also Update Tab Title
 
+  const { t } = useTranslation();
   const location = useLocation();
 
   return (
-    <Stack
-      bgcolor="#fff"
-      width="100%"
-      minHeight="100vh"
-    >
-      <Box sx={{flexGrow: 1}}></Box>
+    <Stack bgcolor="#fff" width="100%" minHeight="100vh">
+      <Box sx={{ flexGrow: 1 }}></Box>
       <Stack
         mx="auto"
         maxWidth="18rem"
@@ -26,16 +24,14 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
           alignItems: 'center',
         }}
       >
-        <Box sx={{my: 1, mr: "auto"}}>
-          {toggleBackToSignIn()}
-        </Box>
+        <Box sx={{ my: 1, mr: 'auto' }}>{toggleBackToSignIn()}</Box>
         <Box sx={{ width: '100%', mb: 2 }}>
           <img src="/logo-text.svg" alt="aula" />
         </Box>
         <Stack component="main" sx={{ flexGrow: 1 }} width="100%">
           <ErrorBoundary name="Content">{children}</ErrorBoundary>
           <Stack>
-            <Divider sx={{ mt: 1, mb: 2 }}>or</Divider>
+            <Divider sx={{ mt: 1, mb: 2 }}>{t('login.sign')}</Divider>
             <Grid container justifyContent="space-between" gap={1} alignItems="center">
               <Button variant="contained" color="error" sx={{ flexGrow: 1, flexBasis: 1 }}>
                 Google
@@ -44,13 +40,13 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
                 Facebook
               </Button>
             </Grid>
-            <Grid container justifyContent="end" alignItems="center" sx={{ mt: 3, mb: 1 }}>
+            <Grid container justifyContent="center" alignItems="center" sx={{ mt: 3, mb: 1 }}>
               {toggleSignUp()}
             </Grid>
           </Stack>
         </Stack>
       </Stack>
-      <Box sx={{flexGrow: 1}}></Box>
+      <Box sx={{ flexGrow: 1 }}></Box>
     </Stack>
   );
 
@@ -58,13 +54,11 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     if (location.pathname !== '/') {
       return (
         <Button color="secondary" component={AppLink} to="/">
-          &lt; Sign In
+          &lt; {t('login.button')}
         </Button>
-      )
+      );
     }
-    return (
-      <Box height="2.25rem"></Box>
-    )
+    return <Box height="2.25rem"></Box>;
   }
 
   function toggleSignUp() {
@@ -72,12 +66,12 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       return;
     }
     return (
-      <Fragment>
-        Need an account?
+      <>
+        {t('login.noAccount')}
         <Button variant="text" color="primary" component={AppLink} to="/signup">
-          Sign Up
+          {t('login.sign')}
         </Button>
-      </Fragment>
+      </>
     );
   }
 };

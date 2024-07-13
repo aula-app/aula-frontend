@@ -140,7 +140,7 @@ const LoginView = () => {
             component={AppLink}
             to="/recovery/password"
           >
-            Forgot Password?
+            {t('login.forgot')}
           </Button>
         </Grid>
       </Stack>
