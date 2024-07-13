@@ -9,11 +9,12 @@ import {
   Typography,
 } from '@mui/material';
 import { useAppStore } from '@/store';
-import { localStorageGet, localStorageSet, parseJwt } from '@/utils';
+import { localStorageGet, localStorageSet } from '@/utils';
 import { AppButton, AppLink, AppIconButton } from '@/components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useTranslation } from 'react-i18next';
 
 const schema = yup
   .object({
@@ -34,8 +35,8 @@ const LoginView = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const { t, } = useTranslation();
   const jwt_token = localStorageGet('token');
-  const jwt_payload = jwt_token ? parseJwt(jwt_token) : null;
 
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
@@ -68,11 +69,11 @@ const LoginView = () => {
     <FormContainer>
       <Stack>
         <Typography variant="h5" sx={{ mb: 3 }}>
-          Sign In
+          {t('login.welcome')}
         </Typography>
         <TextField
           required
-          label="Username"
+          label={t('login.login')}
           inputProps={{ autoCapitalize: 'none' }}
           {...register('username')}
           error={errors.username ? true : false}
@@ -82,7 +83,7 @@ const LoginView = () => {
         <TextField
           required
           type={showPassword ? 'text' : 'password'}
-          label="Password"
+          label={t('login.password')}
           {...register('password')}
           error={errors.password ? true : false}
           helperText={errors.password?.message || ' '}
@@ -102,7 +103,7 @@ const LoginView = () => {
           }}
         />
         <AppButton type="submit" color="primary" sx={{ mx: 0, mt: 0 }} onClick={handleSubmit(onSubmit)}>
-          Sign In
+          {t('login.button')}
         </AppButton>
         <Grid container justifyContent="end" alignItems="center">
           <Button variant="text" color="secondary" component={AppLink} to="/recovery/password">
