@@ -7,6 +7,8 @@ import {
   InputAdornment,
   Stack,
   Typography,
+  Alert,
+  Collapse,
 } from '@mui/material';
 import { useAppStore } from '@/store';
 import { localStorageGet, localStorageSet } from '@/utils';
@@ -17,16 +19,16 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
 const schema = yup
-  .object({
-    username: yup.string().required(),
-    password: yup.string().required().min(4).max(32)
-  })
-  .required();
+.object({
+  username: yup.string().required(),
+  password: yup.string().required().min(4).max(32)
+})
+.required();
 
 /**
- * Renders "Login" view for Login flow
- * url: /login/email
- */
+* Renders "Login" view for Login flow
+* url: /login/email
+*/
 const LoginView = () => {
   const {
     register,
@@ -40,6 +42,7 @@ const LoginView = () => {
 
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
+  const [loginError, setError] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
 
   const handleShowPasswordClick = useCallback(() => {
@@ -52,25 +55,33 @@ const LoginView = () => {
     const request = await (
       await fetch(
         `${import.meta.env.VITE_APP_API_URL}/api/controllers/login.php`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + jwt_token
-      },
-      body: JSON.stringify(formData),
-    })).json();
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + jwt_token
+          },
+          body: JSON.stringify(formData),
+        })).json()
 
-      localStorageSet('token', request['JWT']);
-      dispatch({ type: 'LOG_IN' });
-      navigate('/', { replace: true });
-  }
+        if(request.success === 'false') {
+          setError(true)
+          return;
+        }
 
-  return (
-    <FormContainer>
-      <Stack>
-        <Typography variant="h5" sx={{ mb: 3 }}>
+        localStorageSet('token', request['JWT']);
+        dispatch({ type: 'LOG_IN' });
+        navigate('/', { replace: true });
+      }
+
+      return (
+        <FormContainer>
+        <Stack>
+        <Typography variant="h5" sx={{ mb: 1 }}>
           {t('login.welcome')}
         </Typography>
+        <Collapse in={loginError} sx={{mb: 2}}>
+          <Alert variant='outlined' severity="error" onClose={() => setError(false)}>{t('login.loginError')}</Alert>
+        </Collapse>
         <TextField
           required
           label={t('login.login')}
@@ -91,13 +102,13 @@ const LoginView = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <AppIconButton
-                  aria-label="toggle password visibility"
-                  icon={showPassword ? 'visibilityon' : 'visibilityoff'}
-                  title={showPassword ? 'Hide Password' : 'Show Password'}
-                  onClick={handleShowPasswordClick}
-                  onMouseDown={(e => e.preventDefault())}
-                />
+              <AppIconButton
+              aria-label="toggle password visibility"
+              icon={showPassword ? 'visibilityon' : 'visibilityoff'}
+              title={showPassword ? 'Hide Password' : 'Show Password'}
+              onClick={handleShowPasswordClick}
+              onMouseDown={(e => e.preventDefault())}
+              />
               </InputAdornment>
             ),
           }}
@@ -106,13 +117,13 @@ const LoginView = () => {
           {t('login.button')}
         </AppButton>
         <Grid container justifyContent="end" alignItems="center">
-          <Button variant="text" color="secondary" component={AppLink} to="/recovery/password">
-            Forgot Password?
-          </Button>
+        <Button variant="text" color="secondary" component={AppLink} to="/recovery/password">
+          Forgot Password?
+        </Button>
         </Grid>
-      </Stack>
-    </FormContainer>
-  );
-};
+        </Stack>
+        </FormContainer>
+      );
+    };
 
-export default LoginView;
+    export default LoginView;
