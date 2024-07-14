@@ -32,7 +32,7 @@ const LoginView = () => {
         .string()
         .required(t("validation.required"))
         .min(4, t("validation.min", { var: 4 }))
-        .max(32, t("validation.max", { var: 32 })),
+        .max(32, t("validation.max", { var: 32 }))
     })
     .required();
 

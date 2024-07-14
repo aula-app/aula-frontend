@@ -20,25 +20,31 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import KnowMore from '@/components/KnowMore';
+import { useTranslation } from 'react-i18next';
+import { ObjectPropByName } from '@/types/Generics';
 
-
-const schema = yup
-  .object({
-    email: yup.string().email().required(),
-    phone: yup.string().trim().matches(/^$|[- .+()0-9]+$/, 'should contain numbers'),
-    username: yup.string().nonNullable().matches(/^[A-Za-z ]+$/, 'should contain only letters'),
-    fullname: yup.string().nonNullable().matches(/^[A-Za-z ]+$/, 'should contain only letters'),
-    password: yup.string().min(8).max(32).required(),
-    confirmPassword: yup.string().oneOf([yup.ref('password')], 'Passwords must match'),
-    conditions: yup.boolean().oneOf([true],'You must agree to sign in.')
-  })
-  .required();
 
 /**
  * Renders "Signup" view
  * url: /signup
  */
 const SignupView = () => {
+  const { t } = useTranslation();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [activeStep, setActiveStep] = useState(0);
+
+  const schema = yup
+      .object({
+        username: yup.string().nonNullable().matches(/^[A-Za-z ]+$/, t("validation.name")),
+        fullname: yup.string().nonNullable().matches(/^[A-Za-z ]+$/, t("validation.name")),
+        email: yup.string().email().required(t("validation.required")),
+        password: yup.string().min(8, t("validation.min", { var: 8 })).max(32, t("validation.max", { var: 32 })).required(t("validation.required")),
+        confirmPassword: yup.string().oneOf([yup.ref('password')], t("validation.verify")),
+        conditions: yup.boolean().oneOf([true], t("validation.agree"))
+      }).required()
+
   const {
     register,
     handleSubmit,
@@ -47,17 +53,21 @@ const SignupView = () => {
     resolver: yupResolver(schema),
   });
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [activeStep, setActiveStep] = useState(0);
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const handleNext = (values: ObjectPropByName) => {
+    schema.validate(values).then(
+      () => {
+        if (activeStep >= steps.length - 1) return;
+        setActiveStep(activeStep + 1)
+      }
+    )
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    if (activeStep === 0) return;
+    setActiveStep(activeStep - 1);
   };
+
+  const onSubmit = e => console.log(e);
 
   useEffect(() => {
     // Component Mount
@@ -78,10 +88,6 @@ const SignupView = () => {
     };
   }, []);
 
-  const handleShowPasswordClick = useCallback(() => {
-    setShowPassword((oldValue) => !oldValue);
-  }, []);
-
   if (loading) return <LinearProgress />;
 
   const steps = [
@@ -89,7 +95,21 @@ const SignupView = () => {
       label: 'Login data',
       content: () => {
         return (
-          <Fragment>
+          <Fragment key={0}>
+            <TextField
+              required
+              label="User Name"
+              {...register('username')}
+              error={errors.username ? true : false}
+              helperText={errors.username?.message || ' '}
+            />
+            <TextField
+              required
+              label="Full Name"
+              {...register('fullname')}
+              error={errors.fullname ? true : false}
+              helperText={errors.fullname?.message || ' '}
+            />
             <KnowMore text="Some info text.">
               <TextField
                 required
@@ -97,7 +117,7 @@ const SignupView = () => {
                 {...register('email')}
                 error={errors.email ? true : false}
                 helperText={errors.email?.message || ' '}
-                sx={{width: '100%'}}
+                sx={{ width: '100%' }}
               />
             </KnowMore>
             <TextField
@@ -114,52 +134,33 @@ const SignupView = () => {
                       aria-label="toggle password visibility"
                       icon={showPassword ? 'visibilityon' : 'visibilityoff'}
                       title={showPassword ? 'Hide Password' : 'Show Password'}
-                      onClick={handleShowPasswordClick}
+                      onClick={() => setShowPassword(!showPassword)}
                       onMouseDown={e => e.preventDefault()}
                     />
                   </InputAdornment>
                 ),
               }}
             />
-            {!showPassword && (
-              <TextField
-                required
-                type="password"
-                label="Confirm Password"
-                {...register('confirmPassword')}
+            <TextField
+              required
+              type={showConfirmPassword ? 'text' : 'password'}
+              label="Confirm Password"
+              {...register('confirmPassword')}
               error={errors.confirmPassword ? true : false}
               helperText={errors.confirmPassword?.message || ' '}
-              />
-            )}
-          </Fragment>
-        );
-      },
-    },
-    {
-      label: 'Personal data',
-      content: () => {
-        return (
-          <Fragment>
-            <TextField
-              required
-              label="User Name"
-              {...register('username')}
-              error={errors.username ? true : false}
-              helperText={errors.username?.message || ' '}
-            />
-            <TextField
-              required
-              label="Full Name"
-              {...register('fullname')}
-              error={errors.fullname ? true : false}
-              helperText={errors.fullname?.message || ' '}
-            />
-            <TextField
-              required
-              label="Phone"
-              {...register('phone')}
-              error={errors.phone ? true : false}
-              helperText={errors.phone?.message || ' '}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <AppIconButton
+                      aria-label="toggle password visibility"
+                      icon={showConfirmPassword ? 'visibilityon' : 'visibilityoff'}
+                      title={showConfirmPassword ? 'Hide Password' : 'Show Password'}
+                      onClick={() => setConfirmPassword(!showConfirmPassword)}
+                      onMouseDown={e => e.preventDefault()}
+                    />
+                  </InputAdornment>
+                ),
+              }}
             />
           </Fragment>
         );
@@ -169,14 +170,14 @@ const SignupView = () => {
       label: 'Terms of Use',
       content: () => {
         return (
-          <FormControl required error={errors.password ? true : false}>
+          <FormControl required error={errors.password ? true : false} key={2}>
             <Box height={228} my={2} padding={2} border="1px solid #999" borderRadius={1} overflow='auto'>
-              <Typography>Terms and Conditions</Typography>
+              <Typography>{t("login.terms")}</Typography>
             </Box>
             <FormControlLabel
               control={
                 <Checkbox
-                {...register('conditions')} />
+                  {...register('conditions')} />
               }
               label="agree with Terms of Use and Privacy Policy"
             />
@@ -191,9 +192,9 @@ const SignupView = () => {
     <FormContainer>
       <Stack>
         <Typography variant="h5" sx={{ mb: 3 }}>
-          Sign Up
+          {t("login.sign")}
         </Typography>
-        <Stepper activeStep={activeStep} sx={{ mb: 2 }}>
+        <Stepper activeStep={activeStep} sx={{ mb: 3 }} alternativeLabel>
           {steps.map((label) => {
             const stepProps: { completed?: boolean } = {};
             return (
@@ -206,20 +207,16 @@ const SignupView = () => {
         {steps[activeStep].content()}
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-        {activeStep > 0 ? (
+          {/* {activeStep > 0 ? (
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
-              Back
+              {t("generics.back")}
             </Button>
           ) : ''
-        }
+          } */}
           <Box sx={{ flex: '1 1 auto' }} />
-          {activeStep === steps.length - 1 ? (
-            <AppButton type="submit" sx={{m: 0}}>
-              Sign Up
-            </AppButton>
-          ) : (
-            <Button onClick={handleNext}>Next</Button>
-          )}
+          <AppButton type="submit" sx={{ m: 0 }} onClick={handleSubmit(activeStep === steps.length - 1 ? onSubmit : handleNext)}>
+            {activeStep === steps.length - 1 ? t("login.sign") : t("generics.next")}
+          </AppButton>
         </Box>
       </Stack>
     </FormContainer>

@@ -1,8 +1,11 @@
 {
   "generics": {
+    "back": "zurück",
+    "next": "nächste",
     "or": "oder"
   },
   "login": {
+    "agree": "Stimmen Sie den Nutzungsbedingungen und der Datenschutzrichtlinie zu.",
     "button": "Login",
     "forgot": "Passwort vergessen?",
     "login": "Nutzername",
@@ -12,12 +15,17 @@
     "recover": "Wiederherstellen",
     "recovery": "Passwort-Wiederherstellung",
     "sign": "Registrieren Sie sich",
+    "terms": "Bedingungen und Konditionen",
     "welcome": "Willkommen bei aula"
   },
   "validation": {
+    "agree": "Sie müssen zustimmen, sich anzumelden.",
     "email": "Muss eine gültige E-Mail sein.",
-    "max": "Muss mindestens {{var}} Zeichen lang sein.",
-    "min": "Darf höchstens {{var}} Zeichen lang sein.",
-    "required": "Dieses Feld darf nicht leer sein."
+    "max": "Darf höchstens {{var}} Zeichen lang sein.",
+    "min": "Muss mindestens {{var}} Zeichen lang sein.",
+    "name": "Die Namen sollten nur Buchstaben enthalten.",
+    "phone": "Muss eine gültige Telefonnummer sein.",
+    "required": "Dieses Feld darf nicht leer sein.",
+    "verify": "Passwörter müssen übereinstimmen"
   }
 }
