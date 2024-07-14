@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { NotFoundView } from '../..';
-import RecoveryPasswordView from './RecoveryPasswordView';
+import RecoveryView from './RecoveryView';
 
 /**
  * Routes for "Recovery" flow
@@ -9,8 +9,8 @@ import RecoveryPasswordView from './RecoveryPasswordView';
 const RecoveryRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<RecoveryPasswordView />} />
-      <Route path="password" element={<RecoveryPasswordView />} />
+      <Route path="/" element={<RecoveryView />} />
+      <Route path="password" element={<RecoveryView />} />
       <Route path="*" element={<NotFoundView />} />
     </Routes>
   );
