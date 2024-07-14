@@ -15,8 +15,9 @@
     "welcome": "Welcome!"
   },
   "validation": {
-    "max": "Must be at least {{var}} characters long",
-    "min": "Must be at most {{var}} characters long",
+    "email": "Must be a valid email.",
+    "max": "Must be at least {{var}} characters long.",
+    "min": "Must be at most {{var}} characters long.",
     "required": "This field cannot be empty."
   }
 }

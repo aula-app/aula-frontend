@@ -13,7 +13,7 @@ const RecoveryPasswordView = () => {
   const { t } = useTranslation();
 
   const schema = yup.object({
-    email: yup.string().email().required(),
+    email: yup.string().email(t("validation.email")).required(t("validation.required")),
   })
   .required();
 
@@ -41,7 +41,7 @@ const RecoveryPasswordView = () => {
           helperText={errors.email?.message || ' '}
         />
         <AppButton type="submit" onClick={handleSubmit(onSubmit)} sx={{ mx: 0 }}>
-        {t('login.recover')}
+          {t('login.recover')}
         </AppButton>
       </Stack>
     </FormContainer>
