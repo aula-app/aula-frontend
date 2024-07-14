@@ -7,15 +7,19 @@
   "login": {
     "agree": "Stimmen Sie den Nutzungsbedingungen und der Datenschutzrichtlinie zu.",
     "button": "Login",
+    "email": "Email",
     "forgot": "Passwort vergessen?",
     "login": "Nutzername",
     "loginError": "Leider stimmt entweder Nutzername oder Passwort nicht.",
+    "name": "Name",
     "noAccount": "Sie brauchen ein Konto?",
     "password": "Passwort",
+    "passwordConfirm": "Passwort bestätigen",
     "recover": "Wiederherstellen",
     "recovery": "Passwort-Wiederherstellung",
     "sign": "Registrieren Sie sich",
     "terms": "Bedingungen und Konditionen",
+    "userName": "Name des Benutzers",
     "welcome": "Willkommen bei aula"
   },
   "validation": {

@@ -98,14 +98,14 @@ const SignupView = () => {
           <Fragment key={0}>
             <TextField
               required
-              label="User Name"
+              label={t('login.userName')}
               {...register('username')}
               error={errors.username ? true : false}
               helperText={errors.username?.message || ' '}
             />
             <TextField
               required
-              label="Full Name"
+              label={t('login.name')}
               {...register('fullname')}
               error={errors.fullname ? true : false}
               helperText={errors.fullname?.message || ' '}
@@ -113,7 +113,7 @@ const SignupView = () => {
             <KnowMore text="Some info text.">
               <TextField
                 required
-                label="Email"
+                label={t('login.email')}
                 {...register('email')}
                 error={errors.email ? true : false}
                 helperText={errors.email?.message || ' '}
@@ -123,7 +123,7 @@ const SignupView = () => {
             <TextField
               required
               type={showPassword ? 'text' : 'password'}
-              label="Password"
+              label={t('login.password')}
               {...register('password')}
               error={errors.password ? true : false}
               helperText={errors.password?.message || ' '}
@@ -144,7 +144,7 @@ const SignupView = () => {
             <TextField
               required
               type={showConfirmPassword ? 'text' : 'password'}
-              label="Confirm Password"
+              label={t('login.passwordConfirm')}
               {...register('confirmPassword')}
               error={errors.confirmPassword ? true : false}
               helperText={errors.confirmPassword?.message || ' '}

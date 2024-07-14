@@ -7,15 +7,19 @@
   "login": {
     "agree": "Agree with Terms of Use and Privacy Policy.",
     "button": "Login",
+    "email": "Email",
     "forgot": "Forgot password?",
     "login": "Username",
     "loginError": "Invalid Username or Password.",
+    "name": "Name",
     "noAccount": "Need an account?",
     "password": "Password",
+    "passwordConfirm": "Confirm password",
     "recover": "Recover password",
     "recovery": "Password Recovery",
     "sign": "Sign up",
     "terms": "Terms and conditions",
+    "userName": "User name",
     "welcome": "Welcome!"
   },
   "validation": {
