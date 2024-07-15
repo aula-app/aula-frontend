@@ -9,7 +9,7 @@ import { useLocation, useParams } from 'react-router-dom';
  * @component PhaseBar
  */
 
-const PhaseBar = ({room}: {room: number}) => {
+const PhaseBar = ({ room }: { room: number }) => {
   const params = useParams();
   const displayPhases = Object.keys(phases) as Array<keyof typeof phases>;
   const [currentPhase, setPhase] = useState('ideas');
@@ -37,14 +37,14 @@ const PhaseBar = ({room}: {room: number}) => {
             alignItems="center"
             justifyContent="center"
             p={1}
-            pl={phase === "0" ? 2 : 1}
+            pl={phase === '0' ? 2 : 1}
             pr={currentPhase === phase ? 3 : 1}
             height="100%"
             sx={{
               bgcolor: phases[phase].color,
             }}
           >
-            <AppIcon name={phases[phase].icon} />
+            <AppIcon name={phases[phase].name} />
             <Typography noWrap overflow="ellipsis" pl={1} fontSize="small">
               {currentPhase === phase ? phases[phase].name : ''}
             </Typography>
@@ -58,7 +58,7 @@ const PhaseBar = ({room}: {room: number}) => {
               transform: 'translateX(-100%)',
               clipPath: 'polygon(0% 0%, 100% 100%, 100% 0%)',
               bgcolor: phases[phase].color,
-              pointerEvents: 'none'
+              pointerEvents: 'none',
             }}
           ></Box>
           <Box
@@ -70,7 +70,7 @@ const PhaseBar = ({room}: {room: number}) => {
               transform: 'translateX(-100%)',
               clipPath: 'polygon(0% 100%, 100% 100%, 100% 0%)',
               bgcolor: phases[phase].color,
-              pointerEvents: 'none'
+              pointerEvents: 'none',
             }}
           ></Box>
         </AppLink>

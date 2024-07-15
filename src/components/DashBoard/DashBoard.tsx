@@ -3,10 +3,12 @@ import AppIcon from '../AppIcon';
 import { dashboardPhases, databaseRequest } from '@/utils';
 import { useEffect, useState } from 'react';
 import AppIconButton from '../AppIconButton';
+import { useTranslation } from 'react-i18next';
 
 const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboardPhases>;
 
 const DashBoard = ({ show = true }) => {
+  const { t } = useTranslation();
   const [count, setCount] = useState<Record<number, number>>({});
   const [messages, setMessages] = useState(0);
   const [likes, setLikes] = useState(0);
@@ -22,7 +24,9 @@ const DashBoard = ({ show = true }) => {
       idRequest
     );
 
-  useEffect(() => {setShowing(show)}, [show])
+  useEffect(() => {
+    setShowing(show);
+  }, [show]);
 
   useEffect(() => {
     dashboardFetch('Idea', 'getDashboardByUser', ['user_id']).then((response) => setCount(response.data.phase_counts));
@@ -42,9 +46,16 @@ const DashBoard = ({ show = true }) => {
         <Stack direction="row" width="100%" sx={{ alignItems: 'center' }}>
           <IconButton onClick={() => setShowing(!isShowing)} sx={{ mr: 'auto', color: 'inherit' }}>
             <Typography variant="h5" sx={{ flexWrap: 'wrap', transition: 'opacity .5s ease-in-out' }}>
-              Dashboard
+              {t('views.dashboard')}
             </Typography>
-            <AppIcon icon="arrowdown" sx={{ ml: 1, transform: `rotate(${isShowing ? '360deg' : '180deg'})`, transition: 'transform .2s ease-in-out' }} />
+            <AppIcon
+              icon="arrowdown"
+              sx={{
+                ml: 1,
+                transform: `rotate(${isShowing ? '360deg' : '180deg'})`,
+                transition: 'transform .2s ease-in-out',
+              }}
+            />
           </IconButton>
           <Badge badgeContent={messages} color="primary" sx={{ mx: 1 }}>
             <AppIconButton icon="message" to="/messages" sx={{ p: 0 }} />
@@ -68,7 +79,7 @@ const DashBoard = ({ show = true }) => {
                     }}
                   >
                     <Stack direction="row" alignItems="center" width="100%">
-                      <AppIcon name={dashboardPhases[phase].icon} />
+                      <AppIcon name={dashboardPhases[phase].name} />
                       <Box
                         flexGrow={1}
                         overflow="hidden"
@@ -77,7 +88,7 @@ const DashBoard = ({ show = true }) => {
                         textAlign="left"
                         pl={1}
                       >
-                        {dashboardPhases[phase].name}
+                        {t(`phases.${dashboardPhases[phase].name}`)}
                       </Box>
                       {count[Number(phase)]}
                     </Stack>
