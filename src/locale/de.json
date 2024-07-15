@@ -39,8 +39,10 @@
     "wild": "Wilde Ideen"
   },
   "texts": {
+    "delegated": "{{var}} delegierte Ideen",
     "ideaBox": "{{var}} Ideen zur {{phase}}",
-    "phaseEnd": "Phase endet am {{var}} Tage"
+    "phaseEnd": "Phase endet am {{var}} Tage",
+    "undelegated": "{{var}} ideen"
   },
   "validation": {
     "agree": "Sie müssen zustimmen, sich anzumelden.",

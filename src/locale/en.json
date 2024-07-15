@@ -39,7 +39,7 @@
     "wild": "Wild Ideas"
   },
   "texts": {
-    "delegated": "{{var}} ideas delegated",
+    "delegated": "{{var}} delegated ideas",
     "ideaBox": "{{var}} Ideas on {{phase}}",
     "phaseEnd": "Phase ends on {{var}} days",
     "undelegated": "{{var}} ideas"
