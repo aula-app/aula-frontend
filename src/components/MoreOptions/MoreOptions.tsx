@@ -6,7 +6,8 @@ import { useState } from 'react';
 import { ICONS } from '../AppIcon/AppIcon';
 import { AlterTypes, ColorTypes } from '@/types/Generics';
 import { useAppStore } from '@/store';
-import { SettingNamesType, SettingsType } from '@/types/scopes/SettingsTypes';
+import { SettingNamesType } from '@/types/scopes/SettingsTypes';
+import { useTranslation } from 'react-i18next';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -15,14 +16,8 @@ interface OptionsTypes {
   label: string;
 }
 
-const options = [
-  { type: 'edit', icon: 'edit', color: 'secondary', label: 'Edit' },
-  { type: 'bug', icon: 'bug', color: 'warning', label: 'Report Bug' },
-  { type: 'report', icon: 'report', color: 'error', label: 'Report Content' },
-] as OptionsTypes[];
-
 interface Props {
-  element:  SettingNamesType;
+  element: SettingNamesType;
   id: number;
   onClose?: () => void;
 }
@@ -30,9 +25,15 @@ interface Props {
  * Renders question mark badge that triggers a tooltip on hover
  * @component MoreOptions
  */
-const MoreOptions = ({element, id, onClose}: Props) => {
-  const [state, dispatch] = useAppStore();
+const MoreOptions = ({ element, id, onClose }: Props) => {
+  const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
   const [open, setOpen] = useState(false);
+  const options = [
+    { type: 'edit', icon: 'edit', color: 'secondary', label: t('generics.edit') },
+    { type: 'bug', icon: 'bug', color: 'warning', label: t('generics.bugReport') },
+    { type: 'report', icon: 'report', color: 'error', label: t('generics.contentReport') },
+  ] as OptionsTypes[];
 
   // @ts-ignore
   const toggleOptions = (e) => {
@@ -42,8 +43,8 @@ const MoreOptions = ({element, id, onClose}: Props) => {
 
   const handleClick = (type: AlterTypes, element: SettingNamesType) => {
     setOpen(false);
-    dispatch({ type: 'EDIT_DATA', payload: { type: type, element: element, id: id, onClose: onClose } })
-  }
+    dispatch({ type: 'EDIT_DATA', payload: { type: type, element: element, id: id, onClose: onClose } });
+  };
   return (
     <Box position="relative">
       <AppIconButton icon="more" onClick={toggleOptions} />

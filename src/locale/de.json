@@ -5,10 +5,13 @@
   },
   "generics": {
     "back": "zurück",
+    "bugReport": "Fehler melden",
     "cancel": "Abbrechen",
     "close": "Schließen",
     "confirm": "Bestätigen",
+    "contentReport": "Inhalt des Berichts",
     "delete": "Löschen",
+    "edit": "Bearbeiten",
     "logout": "Abmeldung",
     "modeDark": "Dunkler Modus",
     "modeLight": "Lichtmodus",
