@@ -5,13 +5,16 @@
   },
   "generics": {
     "back": "zurück",
+    "cancel": "Abbrechen",
     "close": "Schließen",
+    "delete": "Löschen",
     "logout": "Abmeldung",
     "modeDark": "Dunkler Modus",
     "modeLight": "Lichtmodus",
     "next": "nächste",
     "or": "oder",
-    "print": "Drucken"
+    "print": "Drucken",
+    "save": "Speichern"
   },
   "login": {
     "agree": "Stimmen Sie den Nutzungsbedingungen und der Datenschutzrichtlinie zu.",
@@ -38,9 +41,31 @@
     "voting": "Abstimmungsphase",
     "wild": "Wilde Ideen"
   },
+  "settings": {
+    "about_me": "Beschreibung",
+    "body": "Text",
+    "content": "Inhalt",
+    "created": "Erstellung",
+    "description_public": "Beschreibung",
+    "displayname": "Anzeigename",
+    "email": "Email",
+    "headline": "Titel",
+    "last_update": "Letzte Aktualisierung",
+    "password": "Passwort",
+    "passwordConfirm": "Passwort bestätigen",
+    "realname": "Name des Schülers",
+    "room_name": "Klass Name",
+    "username": "Benutzername"
+  },
   "texts": {
     "delegated": "{{var}} delegierte Ideen",
+    "exportData": "Kontodaten exportieren",
+    "exportRequest": "Datenexport angefordert",
+    "deleteData": "Konto löschen",
+    "deleteText": "Sind Sie sicher, dass Sie die Löschung Ihres Kontos beantragen wollen? Alle Ihre persönlichen Daten gehen dabei verloren. Diese Aktion kann nicht rückgängig gemacht werden.",
+    "deleteRequested": "Löschung der Daten beantragt",
     "ideaBox": "{{var}} Ideen zur {{phase}}",
+    "passChange": "Passwort ändern",
     "phaseEnd": "Phase endet am {{var}} Tage",
     "undelegated": "{{var}} ideen"
   },
@@ -56,8 +81,10 @@
   },
   "views": {
     "about": "Über uns",
+    "advanced": "Fortgeschrittene",
     "dashboard": "Dashboard",
     "box": "Ideen Box",
+    "boxes": "Boxen",
     "comments": "Kommentare",
     "home": "Startseite",
     "idea": "Idee",
@@ -65,7 +92,9 @@
     "idea-box": "Box",
     "messages": "Nachrichten",
     "message": "Nachricht",
+    "privacy": "Datenschutz",
     "profile": "Profil",
+    "security": "Sicherheit",
     "room": "Klass",
     "rooms": "Klasse",
     "users": "Benutzer"

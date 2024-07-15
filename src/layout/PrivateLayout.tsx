@@ -14,7 +14,6 @@ const TITLE_PRIVATE = 'aula';
  * @component PrivateLayout
  */
 
-
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [sideBarVisible, setSideBarVisible] = useState(false);
 
@@ -32,7 +31,6 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   document.title = title; // Also Update Tab Title
 
   const onSideBarOpen = () => {
-    console.log('OPEN', sideBarVisible);
     if (!sideBarVisible) setSideBarVisible(true); // Don't re-render Layout when SideBar is already open
   };
 

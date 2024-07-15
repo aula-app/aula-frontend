@@ -1,8 +1,8 @@
 import { SettingsType } from '@/types/scopes/SettingsTypes';
 import * as yup from 'yup';
 
-const name = 'Ideas';
-const item = 'Idea';
+const name = 'ideas';
+const item = 'idea';
 const model = 'Idea';
 const isChild = 'boxes';
 
@@ -10,79 +10,48 @@ const rows = [
   {
     id: 9,
     name: 'title',
-    displayName: 'Title',
   },
   {
     id: 7,
     name: 'content',
-    displayName: 'Idea',
   },
   {
     id: 2,
     name: 'created',
-    displayName: 'Created',
   },
   {
     id: 3,
     name: 'last_update',
-    displayName: 'Last Updated',
   },
   {
     id: 8,
     name: 'room_id',
-    displayName: 'Room',
   },
 ];
 
 const forms = [
   {
     type: 'input',
-    label: 'Title',
-    column: 'title',
+    name: 'title',
     required: true,
     hidden: false,
     schema: yup.string().max(50, 'Must be smaller than 50 characters').required(),
   },
   {
     type: 'text',
-    label: 'Content',
-    column: 'content',
+    name: 'content',
     required: true,
     hidden: false,
     schema: yup.string().required(),
   },
   {
     type: 'select',
-    label: 'Room',
-    column: 'room_id',
+    name: 'room_id',
     fetchOptions: 'rooms',
     required: true,
     hidden: false,
     schema: yup.number().required(),
   },
-  // {
-  //   type: 'select',
-  //   label: 'Status',
-  //   column: 'approved',
-  //   options: [
-  //     { label: '–', value: 0 },
-  //     { label: 'Approved', value: 1 },
-  //     { label: 'Rejected', value: -1 },
-  //   ],
-  //   required: true,
-  //   hidden: false,
-  //   phase: 20,
-  //   schema: yup.number().required(),
-  // },
-  // {
-  //   type: 'text',
-  //   label: 'Approval message',
-  //   column: 'approval_comment',
-  //   required: true,
-  //   hidden: false,
-  //   phase: 20,
-  //   schema: yup.string(),
-  // },
 ];
 
 const requests = {
@@ -92,7 +61,7 @@ const requests = {
   add: 'addIdea',
   edit: 'editIdea',
   delete: 'deleteIdea',
-  move: 'addIdeaToTopic'
+  move: 'addIdeaToTopic',
 };
 
 export const ideasSettings = {

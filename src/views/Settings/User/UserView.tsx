@@ -23,11 +23,13 @@ import { FormContainer } from 'react-hook-form-mui';
 import { grey } from '@mui/material/colors';
 import ImageEditor from '@/components/ImageEditor';
 import { useAppStore } from '@/store';
+import { useTranslation } from 'react-i18next';
 
 /** * Renders "User" view
  * url: /user
  */
 const UserView = () => {
+  const { t } = useTranslation();
   const [user, setUser] = useState<UserType | null>(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [, dispatch] = useAppStore();
@@ -48,7 +50,7 @@ const UserView = () => {
 
   const requestDelete = () => {
     setOpenDelete(false);
-    dispatch({ type: 'ADD_ERROR', message: 'Data deletion requested' });
+    dispatch({ type: 'ADD_ERROR', message: t('texts.deleteRequest') });
   };
 
   useEffect(() => {
@@ -57,7 +59,7 @@ const UserView = () => {
 
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
-      <Typography variant="h4">User Settings</Typography>
+      <Typography variant="h4">{t('views.profile')}</Typography>
       {user && (
         <FormContainer>
           <Stack alignItems="center" p={2}>
@@ -85,9 +87,11 @@ const UserView = () => {
                   height: 128,
                   fontSize: '3rem',
                 }}
-                alt={user.displayname || 'User Avatar'}
-                src={user.avatar || '/img/Aula_Logo_Kopf.svg'}
-              />
+                alt={user.displayname || 'User Name'}
+                src={user.avatar || ''}
+              >
+                {!user.avatar && <AppIcon icon="avatar" size="xl" />}
+              </Avatar>
             </IconButton>
             <Typography sx={{ mt: 1 }} variant="h6">
               {user.username}
@@ -109,14 +113,14 @@ const UserView = () => {
               sx={{ mt: 2, width: '100%' }}
             />
             <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={onSubmit}>
-              Save changes
+              {t('generics.save')}
             </AppButton>
           </Stack>
         </FormContainer>
       )}
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
-          <Typography variant="h6">Security Settings</Typography>
+          <Typography variant="h6">{t('views.security')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <ChangePassword />
@@ -124,26 +128,26 @@ const UserView = () => {
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
-          <Typography variant="h6">Privacy Settings</Typography>
+          <Typography variant="h6">{t('views.privacy')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Button
             variant="contained"
             color="info"
-            onClick={() => dispatch({ type: 'ADD_ERROR', message: 'Data export requested' })}
+            onClick={() => dispatch({ type: 'ADD_ERROR', message: t('texts.exportRequest') })}
             fullWidth
           >
-            Export account data
+            {t('texts.exportData')}
           </Button>
         </AccordionDetails>
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
-          <Typography variant="h6">Advanced Settings</Typography>
+          <Typography variant="h6">{t('views.advanced')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} fullWidth>
-            Delete account
+            {t('texts.deleteData')}
           </Button>
         </AccordionDetails>
       </Accordion>
@@ -161,24 +165,19 @@ const UserView = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          <Typography color="error">
-            <Stack direction="row" alignItems="center">
-              <AppIcon icon="alert" sx={{ mr: 1 }} /> Delete your account
-            </Stack>
+          <Typography color="error" sx={{ display: 'flex' }}>
+            <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('texts.deleteData')}
           </Typography>
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete request the deletion of your account? All your personal data will be lost.
-            This action cannot be undone.
-          </DialogContentText>
+          <DialogContentText id="alert-dialog-description">{t('texts.deleteText')}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDelete(false)} color="secondary" autoFocus>
-            Cancel
+            {t('generics.cancel')}
           </Button>
           <Button onClick={requestDelete} color="error" variant="contained">
-            Delete
+            {t('generics.delete')}
           </Button>
         </DialogActions>
       </Dialog>

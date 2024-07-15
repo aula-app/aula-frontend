@@ -16,8 +16,6 @@ import {
   Button,
   TableSortLabel,
   Collapse,
-  SelectChangeEvent,
-  Select,
   FilledInput,
 } from '@mui/material';
 import { SettingNamesType } from '@/types/scopes/SettingsTypes';
@@ -30,11 +28,13 @@ import { grey } from '@mui/material/colors';
 import { AppIcon, AppIconButton } from '@/components';
 import MoveSettings from './MoveSettings';
 import { useAppStore } from '@/store';
+import { useTranslation } from 'react-i18next';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
  */
 const SettingsView = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
@@ -147,7 +147,7 @@ const SettingsView = () => {
     <Stack direction="column" height="100%">
       <Stack direction="row" alignItems="center">
         <Typography variant="h4" sx={{ p: 2, textTransform: 'capitalize', flex: 1 }}>
-          {SettingsConfig[setting_name].name}
+          {t(`views.${SettingsConfig[setting_name].name}`)}
         </Typography>
         <Stack direction="row" alignItems="start" bottom={0} height={37} px={2}>
           <AppIconButton icon="filter" onClick={() => setOpenFilter(!openFilter)} />
@@ -201,7 +201,7 @@ const SettingsView = () => {
                     direction={orderAsc ? 'asc' : 'desc'}
                     onClick={() => handleOrder(column.id)}
                   >
-                    {column.displayName}
+                    {t(`settings.${column.name}`)}
                   </TableSortLabel>
                 </TableCell>
               ))}

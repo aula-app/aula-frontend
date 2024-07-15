@@ -110,12 +110,13 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
       >
         <Stack direction="row" justifyContent="space-between" p={2} pt={0}>
           <LocaleSwitch />
-          <Tooltip title={state.darkMode ? t('generics.modeLight') : t('generics.modeDark')}>
-            <AppIconButton color="secondary" onClick={onSwitchDarkMode} icon={state.darkMode ? 'day' : 'night'} />
-          </Tooltip>
-          <Tooltip title={t('generics.close')}>
-            <AppIconButton color="secondary" onClick={() => {}} icon="close" />
-          </Tooltip>
+          <AppIconButton
+            color="secondary"
+            onClick={onSwitchDarkMode}
+            icon={state.darkMode ? 'day' : 'night'}
+            title={state.darkMode ? t('generics.modeLight') : t('generics.modeDark')}
+          />
+          <AppIconButton color="secondary" onClick={() => {}} icon="close" title={t('generics.close')} />
         </Stack>
         {isAuthenticated && (
           <>
@@ -136,9 +137,13 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
             alignItems: 'center',
           }}
         >
-          <Tooltip title={t('generics.print')} sx={{ mx: 2 }}>
-            <AppIconButton color="secondary" onClick={window.print} icon="print" />
-          </Tooltip>
+          <AppIconButton
+            color="secondary"
+            onClick={window.print}
+            icon="print"
+            title={t('generics.print')}
+            sx={{ mx: 2 }}
+          />
           {isAuthenticated && (
             <AppButton variant="text" onClick={onLogout}>
               {t('generics.logout')}&nbsp;

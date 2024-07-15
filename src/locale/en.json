@@ -5,13 +5,16 @@
   },
   "generics": {
     "back": "back",
+    "cancel": "Cancel",
     "close": "Close",
+    "delete": "Delete",
     "logout": "Sign out",
     "modeDark": "Dark mode",
     "modeLight": "Light mode",
     "next": "next",
     "or": "or",
-    "print": "Print"
+    "print": "Print",
+    "save": "Save"
   },
   "login": {
     "agree": "Agree with Terms of Use and Privacy Policy.",
@@ -38,9 +41,31 @@
     "voting": "Voting",
     "wild": "Wild Ideas"
   },
+  "settings": {
+    "about_me": "Description",
+    "body": "Text",
+    "content": "Content",
+    "created": "Creation date",
+    "description_public": "Description",
+    "displayname": "Display Name",
+    "email": "Email",
+    "headline": "Title",
+    "last_update": "Last update",
+    "password": "Password",
+    "passwordConfirm": "Confirm password",
+    "realname": "Student Name",
+    "room_name": "Room Name",
+    "username": "User Name"
+  },
   "texts": {
     "delegated": "{{var}} delegated ideas",
+    "exportData": "Export account data",
+    "exportRequest": "Data export requested",
+    "deleteData": "Delete account",
+    "deleteText": "Are you sure you want to delete request the deletion of your account? All your personal data will be lost. This action cannot be undone.",
+    "deleteRequest": "Data deletion requested",
     "ideaBox": "{{var}} Ideas on {{phase}}",
+    "passChange": "Change password",
     "phaseEnd": "Phase ends on {{var}} days",
     "undelegated": "{{var}} ideas"
   },
@@ -56,8 +81,10 @@
   },
   "views": {
     "about": "About",
+    "advanced": "Advanced",
     "dashboard": "Dashboard",
     "box": "Ideas Box",
+    "boxes": "Boxes",
     "comments": "Comments",
     "home": "Home",
     "idea": "Idea",
@@ -65,7 +92,9 @@
     "idea-box": "Box",
     "messages": "Messages",
     "message": "Message",
+    "privacy": "Privacy",
     "profile": "Profile",
+    "security": "Security",
     "room": "Room",
     "rooms": "Rooms",
     "users": "Users"

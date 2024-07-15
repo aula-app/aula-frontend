@@ -3,6 +3,7 @@ import { databaseRequest, SettingsConfig } from '@/utils';
 import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control, Controller, FieldErrors, UseFormGetValues, UseFormRegister } from 'react-hook-form-mui';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   content: SettingForm;
@@ -17,6 +18,7 @@ type Props = {
  */
 
 const FormInput = ({ content, register, getValues, control, errors, ...restOfProps }: Props) => {
+  const { t } = useTranslation();
   const [currentOptions, setOptions] = useState(content.options || []);
 
   async function fetchOptions(setting: SettingNamesType) {
@@ -29,9 +31,11 @@ const FormInput = ({ content, register, getValues, control, errors, ...restOfPro
       },
     }).then((response) => {
       // @ts-ignore
-      setOptions(response.data.map((row) => {
-        return({ label: row[SettingsConfig[setting].rows[0].name], value: row.id })
-    }));
+      setOptions(
+        response.data.map((row) => {
+          return { label: row[SettingsConfig[setting].rows[0].name], value: row.id };
+        })
+      );
     });
   }
 
@@ -43,24 +47,24 @@ const FormInput = ({ content, register, getValues, control, errors, ...restOfPro
     <>
       {content.type === 'input' || content.type === 'text' ? (
         <TextField
-          label={content.label}
+          label={t(`settings.${content.name}`)}
           required={content.required}
           hidden={content.hidden}
           minRows={content.type === 'text' ? 4 : 1}
           multiline={content.type === 'text'}
           sx={content.hidden ? { display: 'none' } : { width: '100%' }}
           // @ts-ignore
-          {...register(content.column)}
+          {...register(content.name)}
           // @ts-ignore
-          error={errors[content.column] ? true : false}
+          error={errors[content.name] ? true : false}
           // @ts-ignore
-          helperText={errors[content.column]?.message || ' '}
+          helperText={errors[content.name]?.message || ' '}
           {...restOfProps}
         />
       ) : (
         <Controller
           // @ts-ignore
-          name={content.column}
+          name={content.name}
           control={control}
           // @ts-ignore
           defaultValue={0}

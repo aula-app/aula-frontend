@@ -4,8 +4,6 @@ import { UserTypeKeys } from './scopes/UserTypes';
 export interface TableRow {
   id: number;
   name: UserTypeKeys;
-  displayName: string;
-  encryption: boolean;
 }
 
 export interface TableOptions {

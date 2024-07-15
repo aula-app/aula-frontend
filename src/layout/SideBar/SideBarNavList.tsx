@@ -1,6 +1,5 @@
 import { FunctionComponent, MouseEventHandler } from 'react';
 import List from '@mui/material/List';
-import SideBarNavItem from './SideBarNavItem';
 import { LinkToPage } from '@/types/PageLinks';
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { AppIcon, AppLink } from '@/components';
