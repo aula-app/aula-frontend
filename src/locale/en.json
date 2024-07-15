@@ -31,5 +31,8 @@
     "phone": "Must be a valid phone number.",
     "required": "This field cannot be empty.",
     "verify": "Passwords must match"
+  },
+  "views": {
+    "rooms": "Rooms"
   }
 }

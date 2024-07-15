@@ -31,5 +31,8 @@
     "phone": "Muss eine gültige Telefonnummer sein.",
     "required": "Dieses Feld darf nicht leer sein.",
     "verify": "Passwörter müssen übereinstimmen"
+  },
+  "views": {
+    "rooms": "Klasse"
   }
 }
