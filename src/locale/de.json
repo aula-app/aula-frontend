@@ -1,9 +1,13 @@
 {
   "generics": {
     "back": "zurück",
+    "close": "Schließen",
     "logout": "Abmeldung",
+    "modeDark": "Dunkler Modus",
+    "modeLight": "Lichtmodus",
     "next": "nächste",
-    "or": "oder"
+    "or": "oder",
+    "print": "Drucken"
   },
   "login": {
     "agree": "Stimmen Sie den Nutzungsbedingungen und der Datenschutzrichtlinie zu.",

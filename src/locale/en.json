@@ -1,9 +1,13 @@
 {
   "generics": {
     "back": "back",
+    "close": "Close",
     "logout": "Sign out",
+    "modeDark": "Dark mode",
+    "modeLight": "Light mode",
     "next": "next",
-    "or": "or"
+    "or": "or",
+    "print": "Print"
   },
   "login": {
     "agree": "Agree with Terms of Use and Privacy Policy.",

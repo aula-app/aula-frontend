@@ -1,5 +1,5 @@
 import { AppIcon, AppIconButton, AppLink } from '@/components';
-import { AppBar, Breadcrumbs, Link, Toolbar } from '@mui/material';
+import { AppBar, Breadcrumbs, Toolbar } from '@mui/material';
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -35,7 +35,7 @@ const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) 
 
         <Breadcrumbs aria-label="breadcrumb" sx={{ flexGrow: 1, textAlign: 'center' }}>
           <AppLink underline="hover" color="inherit" to="/">
-            {home}
+            {t('views.home')}
           </AppLink>
           {displayPath.map((currentPath, key) => {
             const link = location.slice(0, 2 * (key + 1) + (currentPath === 'messages' ? 0 : 3)).join('/');
