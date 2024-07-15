@@ -7,6 +7,8 @@ import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile
 import SideBarNavList from './SideBarNavList';
 import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../config';
 import UserInfo from '@/components/UserInfo';
+import { useTranslation } from 'react-i18next';
+import LocaleSwitch from '@/components/LocaleSwitch';
 
 type Props = Pick<DrawerProps, 'anchor' | 'className' | 'open' | 'variant' | 'onClose'>;
 
@@ -15,50 +17,45 @@ type Props = Pick<DrawerProps, 'anchor' | 'className' | 'open' | 'variant' | 'on
  */
 const SIDEBAR_ITEMS: Array<LinkToPage> = [
   {
-    title: 'Home',
+    title: 'home',
     path: '/',
     icon: 'home',
   },
   {
-    title: 'Profile',
+    title: 'profile',
     path: '/settings/profile',
     icon: 'account',
   },
   {
-    title: 'Users',
+    title: 'users',
     path: '/settings/users',
     icon: 'group',
   },
   {
-    title: 'Rooms',
+    title: 'rooms',
     path: '/settings/rooms',
     icon: 'room',
   },
   {
-    title: 'Boxes',
+    title: 'boxes',
     path: '/settings/boxes',
     icon: 'box',
   },
   {
-    title: 'Ideas',
+    title: 'ideas',
     path: '/settings/ideas',
     icon: 'idea',
   },
   {
-    title: 'Messages',
+    title: 'messages',
     path: '/settings/messages',
     icon: 'message',
   },
   {
-    title: 'About',
+    title: 'about',
     path: '/about',
     icon: 'info',
   },
-  // {
-  //   title: 'Dev Tools',
-  //   path: '/dev',
-  //   icon: 'settings',
-  // },
 ];
 
 /**
@@ -71,6 +68,7 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
  * @param {function} onClose - called when the Drawer is closing
  */
 const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...restOfProps }) => {
+  const { t } = useTranslation();
   const [state] = useAppStore();
   const isAuthenticated = useIsAuthenticated();
   const onMobile = useOnMobile();
@@ -110,21 +108,13 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
         {...restOfProps}
         onClick={handleAfterLinkClick}
       >
-        <Stack direction="row" pb={2}>
+        <Stack direction="row" justifyContent="space-between" p={2} pt={0}>
+          <LocaleSwitch />
           <Tooltip title={state.darkMode ? 'Light mode' : 'Dark mode'}>
-            <Button color="secondary" onClick={onSwitchDarkMode}>
-              <AppIcon icon={state.darkMode ? 'day' : 'night'} />
-            </Button>
-          </Tooltip>
-          <Tooltip title="Print" sx={{ mx: 'auto' }}>
-            <Button color="secondary" onClick={window.print}>
-              <AppIcon icon="print" />
-            </Button>
+            <AppIconButton color="secondary" onClick={onSwitchDarkMode} icon={state.darkMode ? 'day' : 'night'} />
           </Tooltip>
           <Tooltip title="Close">
-            <Button color="secondary" onClick={() => {}}>
-              <AppIcon icon="Close" />
-            </Button>
+            <AppIconButton color="secondary" onClick={() => {}} icon="close" />
           </Tooltip>
         </Stack>
         {isAuthenticated && (
@@ -142,13 +132,16 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
           sx={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'end',
+            justifyContent: 'space-between',
             alignItems: 'center',
           }}
         >
+          <Tooltip title="Print" sx={{ mx: 2 }}>
+            <AppIconButton color="secondary" onClick={window.print} icon="print" />
+          </Tooltip>
           {isAuthenticated && (
             <AppButton variant="text" onClick={onLogout}>
-              LogOut&nbsp;
+              {t('generics.logout')}&nbsp;
               <AppIcon icon="logout" />
             </AppButton>
           )}

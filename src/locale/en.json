@@ -1,6 +1,7 @@
 {
   "generics": {
     "back": "back",
+    "logout": "Sign out",
     "next": "next",
     "or": "or"
   },
@@ -40,7 +41,18 @@
     "verify": "Passwords must match"
   },
   "views": {
+    "about": "About",
     "dashboard": "Dashboard",
-    "rooms": "Rooms"
+    "box": "Ideas Box",
+    "boxes": "Boxes",
+    "home": "Home",
+    "idea": "Idea",
+    "ideas": "Ideas",
+    "messages": "Messages",
+    "message": "Message",
+    "profile": "Profile",
+    "room": "Room",
+    "rooms": "Rooms",
+    "users": "Users"
   }
 }

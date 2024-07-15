@@ -1,6 +1,7 @@
 {
   "generics": {
     "back": "zurück",
+    "logout": "Abmeldung",
     "next": "nächste",
     "or": "oder"
   },
@@ -40,7 +41,18 @@
     "verify": "Passwörter müssen übereinstimmen"
   },
   "views": {
+    "about": "Über uns",
     "dashboard": "Dashboard",
-    "rooms": "Klasse"
+    "box": "Ideen Box",
+    "boxes": "Boxen",
+    "home": "Startseite",
+    "idea": "Idee",
+    "ideas": "Ideen",
+    "messages": "Nachrichten",
+    "message": "Nachricht",
+    "profile": "Profil",
+    "room": "Klass",
+    "rooms": "Klasse",
+    "users": "Benutzer"
   }
 }
