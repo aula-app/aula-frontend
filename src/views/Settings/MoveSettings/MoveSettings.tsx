@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 type Params = {
   isOpen: boolean;
@@ -27,6 +28,7 @@ type Params = {
  * url: /settings/:setting_name/
  */
 const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
+  const { t } = useTranslation();
   const { setting_name } = useParams();
   const [destination, setDestination] = useState<string>();
   const [destinationList, setDestinationList] = useState<{ value: number; label: string }[]>([]);
@@ -82,40 +84,34 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">
-        <Stack direction="row" alignItems="center">
-          Move selected {setting_name}
-        </Stack>
-      </DialogTitle>
+      <DialogTitle id="alert-dialog-title">Move selected {setting_name}</DialogTitle>
       <DialogContent sx={{ overflowY: 'auto' }}>
-        <DialogContentText id="alert-dialog-description">
-          <Stack>
-            Where do you want do move this {setting_name}?
-            <FormControl sx={{ m: 1, minWidth: 80 }}>
-              <Select
-                id="demo-simple-select"
-                value={destination}
-                label={SettingsConfig[currentSetting].isChild}
-                disabled={destinationList.length === 0}
-                fullWidth
-                onChange={handleChange}
-              >
-                {destinationList.map((destinationItem) => (
-                  <MenuItem key={destinationItem.value} value={destinationItem.value}>
-                    {destinationItem.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Stack>
+        <DialogContentText component={Stack} id="alert-dialog-description">
+          Where do you want do move this {setting_name}?
+          <FormControl sx={{ m: 1, minWidth: 80 }}>
+            <Select
+              id="demo-simple-select"
+              value={destination}
+              label={SettingsConfig[currentSetting].isChild}
+              disabled={destinationList.length === 0}
+              fullWidth
+              onChange={handleChange}
+            >
+              {destinationList.map((destinationItem) => (
+                <MenuItem key={destinationItem.value} value={destinationItem.value}>
+                  {destinationItem.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={closeMethod} color="secondary" autoFocus>
-          Cancel
+          {t('generics.cancel')}
         </Button>
         <Button onClick={moveRequest} color="primary" variant="contained">
-          Move
+          {t('generics.confirm')}
         </Button>
       </DialogActions>
     </Dialog>

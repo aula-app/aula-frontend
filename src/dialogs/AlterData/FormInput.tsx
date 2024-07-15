@@ -41,7 +41,7 @@ const FormInput = ({ content, register, getValues, control, errors, ...restOfPro
 
   useEffect(() => {
     if (content.fetchOptions) fetchOptions(content.fetchOptions);
-  }, [content.label]);
+  }, [content.name]);
 
   return (
     <>

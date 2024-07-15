@@ -50,7 +50,7 @@ const DataFields = ({ info, items, onClose, onSubmit }: Props) => {
     <FormContainer onSuccess={handleSubmit(onSubmit)}>
       {forms.map((field) => (
         <FormInput
-          key={field.column}
+          key={field.name}
           content={field}
           register={register}
           control={control}

@@ -240,7 +240,7 @@ const SettingsView = () => {
             <Stack direction="row" alignItems="center" flex={1}>
               <SubdirectoryArrowRight sx={{ ml: 3, fontSize: '1rem' }} color="secondary" />
               <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
-                <AppIcon sx={{ mr: 1 }} name="delete" /> Delete
+                <AppIcon sx={{ mr: 1 }} name="delete" /> {t('generics.delete')}
               </Button>
             </Stack>
             <Stack direction="row" alignItems="center" justifyContent="end" flex={1}>
