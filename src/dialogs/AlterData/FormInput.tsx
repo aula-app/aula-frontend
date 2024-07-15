@@ -30,8 +30,8 @@ const FormInput = ({ content, register, getValues, control, errors, ...restOfPro
         offset: 0,
       },
     }).then((response) => {
-      // @ts-ignore
       setOptions(
+        // @ts-ignore
         response.data.map((row) => {
           return { label: row[SettingsConfig[setting].rows[0].name], value: row.id };
         })
@@ -71,7 +71,7 @@ const FormInput = ({ content, register, getValues, control, errors, ...restOfPro
           render={({ field, fieldState }) => (
             <FormControl fullWidth>
               <TextField
-                label={content.label}
+                label={t(`settings.${content.name}`)}
                 required={content.required}
                 fullWidth
                 select

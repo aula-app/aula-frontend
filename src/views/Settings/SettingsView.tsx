@@ -167,7 +167,7 @@ const SettingsView = () => {
             <MenuItem value=""></MenuItem>
             {SettingsConfig[setting_name].rows.map((column) => (
               <MenuItem value={column.name} key={column.name}>
-                {column.displayName}
+                {t(`settings.${column.name}`)}
               </MenuItem>
             ))}
           </TextField>

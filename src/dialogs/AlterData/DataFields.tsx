@@ -22,7 +22,7 @@ const DataFields = ({ info, items, onClose, onSubmit }: Props) => {
   const forms = ['edit', 'add'].includes(info.type)
     ? SettingsConfig[info.element].forms
     : SettingsConfig[info.type === 'report' ? 'report' : 'bug'].forms;
-  const schema = forms.reduce((schema, form) => ({ ...schema, [form.column]: form.schema }), {});
+  const schema = forms.reduce((schema, form) => ({ ...schema, [form.name]: form.schema }), {});
   const {
     register,
     setValue,

@@ -61,12 +61,8 @@ const SignupView = () => {
     )
   };
 
-  const handleBack = () => {
-    if (activeStep === 0) return;
-    setActiveStep(activeStep - 1);
-  };
 
-  const onSubmit = e => console.log(e);
+  const onSubmit = (values: ObjectPropByName) => console.log(values);
 
   useEffect(() => {
     // Component Mount
