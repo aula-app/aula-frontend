@@ -16,30 +16,26 @@ const displayPhases = Object.keys(phases) as Array<keyof typeof phases>;
  */
 const RoomCard = ({ room }: RoomCardProps) => {
   return (
-    <Card sx={{ borderRadius: '25px', aspectRatio: 1 }} variant="outlined">
-        <Stack height="100%">
-          <AppLink
-            component={Stack}
-            sx={{
-              textDecoration: 'none',
-              color: 'inherit',
-              flex: 1,
-              p: 2
-            }}
-            to={`/room/${room.id}/phase/0`}
-          >
-              <Typography variant="h6" noWrap>
-                {capitalize(room.room_name)}
-              </Typography>
-              <CardMedia
-                component="img"
-                image={room.id % 2 === 0 ? '/img/aula-room1.jpg' : '/img/aula-room.jpg'}
-                alt="bg image"
-                sx={{ borderRadius: '10px', objectFit: 'contain', flex: 1 }}
-              />
-          </AppLink>
-          <PhaseBar room={room.id} />
+    <Card sx={{ borderRadius: '25px' }} variant="outlined">
+      <AppLink to={`/room/${room.id}/phase/0`}>
+        <Stack
+          sx={{
+            flex: 1,
+            p: 2,
+          }}
+        >
+          <Typography variant="h6" noWrap>
+            {capitalize(room.room_name)}
+          </Typography>
+          <CardMedia
+            component="img"
+            image={room.id % 2 === 0 ? '/img/aula-room1.jpg' : '/img/aula-room.jpg'}
+            alt="bg image"
+            sx={{ borderRadius: '10px', objectFit: 'contain', flex: 1 }}
+          />
         </Stack>
+      </AppLink>
+      <PhaseBar room={room.id} />
     </Card>
   );
 };

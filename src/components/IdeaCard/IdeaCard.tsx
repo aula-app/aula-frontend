@@ -104,11 +104,11 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
           ) : Number(phase) === 20 ? (
             <>
               {idea.approved === 1 ? (
-                <AppIcon icon={approvalVariants.approved.icon} />
+                <AppIcon icon="approved" />
               ) : idea.approved === -1 ? (
-                <AppIcon icon={approvalVariants.rejected.icon} />
+                <AppIcon icon="rejected" />
               ) : (
-                <AppIcon icon={phases[phase].icon} />
+                <AppIcon icon={phases[phase].name} />
               )}
             </>
           ) : Number(phase) === 30 ? (
@@ -117,7 +117,7 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
             <>
               {votingOptions.map((vote) => (
                 <Stack direction="row" alignItems="center" key={vote.label}>
-                  <AppIcon icon={votingVariants[vote.label].icon} size="small" />{' '}
+                  <AppIcon icon={votingVariants[vote.label].name} size="small" />{' '}
                   <Typography fontSize="small" ml={0.5}>
                     {0}
                   </Typography>

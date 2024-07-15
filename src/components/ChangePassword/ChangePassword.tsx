@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import AppButton from '../AppButton';
+import { useTranslation } from 'react-i18next';
 
 const schema = yup
   .object({
@@ -22,6 +23,7 @@ const schema = yup
  * @component UserInfo
  */
 const UserInfo = () => {
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -106,7 +108,7 @@ const UserInfo = () => {
           }}
         />
         <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(onSubmit)}>
-          Change Password
+          {t('texts.passChange')}
         </AppButton>
       </Stack>
     </FormContainer>

@@ -1,36 +1,32 @@
 import { SettingsType } from '@/types/scopes/SettingsTypes';
 import * as yup from 'yup';
 
-const name = 'Rooms';
-const item = 'Room';
+const name = 'rooms';
+const item = 'room';
 const model = 'Room';
 
 const rows = [
   {
     id: 0,
     name: 'room_name',
-    displayName: 'Name',
   },
   {
     id: 5,
     name: 'description_public',
-    displayName: 'Description',
   },
 ];
 
 const forms = [
   {
     type: 'input',
-    label: 'Room Name',
-    column: 'room_name',
+    name: 'room_name',
     required: true,
     hidden: false,
     schema: yup.string().required(),
   },
   {
     type: 'text',
-    label: 'Description',
-    column: 'description_public',
+    name: 'description_public',
     required: true,
     hidden: false,
     schema: yup.string().required(),

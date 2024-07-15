@@ -47,9 +47,9 @@ import {
   UserPlusIcon,
   UsersIcon,
   XCircleIcon,
-  XMarkIcon
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { HeartIcon as HeartFullIcon } from '@heroicons/react/24/solid'
+import { HeartIcon as HeartFullIcon } from '@heroicons/react/24/solid';
 import { Stack } from '@mui/material';
 import { ObjectPropByName } from '@/types/Generics';
 
@@ -105,6 +105,7 @@ export const ICONS: Record<string, React.ComponentType> = {
   night: MoonIcon,
   notifications: BellIcon,
   print: PrinterIcon,
+  results: ChartBarIcon,
   rejected: HandThumbDownIcon,
   report: FlagIcon,
   room: AcademicCapIcon,
@@ -115,7 +116,8 @@ export const ICONS: Record<string, React.ComponentType> = {
   users: UserGroupIcon,
   visibilityoff: EyeIcon,
   visibilityon: EyeSlashIcon,
-  vote: VotingIcon
+  voting: VotingIcon,
+  wild: LightBulbIcon,
 };
 
 export type IconType = keyof typeof ICONS;
@@ -137,17 +139,13 @@ const AppIcon: FunctionComponent<Props> = ({ name, icon, size = 'md', sx, ...res
   const iconName = (name || icon || 'default').trim().toLowerCase();
   const ComponentToRender = ICONS[iconName] || ICONS.default;
   const currentSize =
-    size === 'small'
-      ? '16px'
-    : size === 'large'
-      ? '32px'
-    : size === 'xl'
-      ? '40px'
-    : size === 'full'
-      ? '100%'
-      : '24px'; // no size === md
+    size === 'small' ? '16px' : size === 'large' ? '32px' : size === 'xl' ? '40px' : size === 'full' ? '100%' : '24px'; // no size === md
   return (
-    <Stack alignItems="center" justifyContent="center" sx={{ minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}>
+    <Stack
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}
+    >
       <ComponentToRender {...restOfProps} />
     </Stack>
   );

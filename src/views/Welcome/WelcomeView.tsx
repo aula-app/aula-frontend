@@ -5,22 +5,22 @@ import { RoomsResponseType } from '@/types/scopes/RoomTypes';
 import { databaseRequest } from '@/utils';
 import DashBoard from '@/components/DashBoard';
 import AskConsent from '../AskConsent/AskConsentView';
+import { useTranslation } from 'react-i18next';
 
 const WelcomeView = () => {
+  const { t } = useTranslation();
   const [rooms, setRooms] = useState({} as RoomsResponseType);
   const [showDashboard, setDashboard] = useState(true);
 
   const roomsFetch = async () =>
-    await databaseRequest(
-      {
-        model: 'Room',
-        method: 'getRooms',
-        arguments: {
-          offset: 0,
-          limit: 0,
-        },
-      }
-    ).then((response: RoomsResponseType) => setRooms(response));
+    await databaseRequest({
+      model: 'Room',
+      method: 'getRooms',
+      arguments: {
+        offset: 0,
+        limit: 0,
+      },
+    }).then((response: RoomsResponseType) => setRooms(response));
 
   const handleScroll = (event: React.UIEvent<HTMLElement>) => {
     setDashboard(false);
@@ -52,7 +52,7 @@ const WelcomeView = () => {
             transition: 'all .5s ease-in-out',
           }}
         >
-          Rooms
+          {t('views.rooms')}
         </Typography>
         <Grid container flex={1} spacing={2}>
           {rooms &&

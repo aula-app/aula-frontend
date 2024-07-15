@@ -1,38 +1,33 @@
 import { SettingsType } from '@/types/scopes/SettingsTypes';
 import * as yup from 'yup';
 
-const name = 'Bugs';
-const item = 'Bug';
+const name = 'bugs';
+const item = 'bug';
 const model = 'Bugs';
 
 const rows = [
   {
     id: 1,
     name: 'realname',
-    displayName: 'Full Name',
   },
   {
     id: 6,
     name: 'displayname',
-    displayName: 'User Name',
   },
   {
     id: 5,
     name: 'username',
-    displayName: 'login',
   },
   {
     id: 7,
     name: 'email',
-    displayName: 'Email',
   },
 ];
 
 const forms = [
   {
     type: 'text',
-    label: 'Description',
-    column: 'description',
+    name: 'description',
     required: true,
     hidden: false,
     schema: yup.string(),

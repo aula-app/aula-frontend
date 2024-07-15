@@ -1,7 +1,9 @@
 import { FunctionComponent, MouseEventHandler } from 'react';
 import List from '@mui/material/List';
-import SideBarNavItem from './SideBarNavItem';
 import { LinkToPage } from '@/types/PageLinks';
+import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { AppIcon, AppLink } from '@/components';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   items: Array<LinkToPage>;
@@ -17,16 +19,21 @@ interface Props {
  * @param {function} [onAfterLinkClick] - optional callback called when some navigation item was clicked
  */
 const SideBarNavList: FunctionComponent<Props> = ({ items, showIcons, onClick, ...restOfProps }) => {
+  const { t } = useTranslation();
   return (
     <List component="nav" {...restOfProps}>
       {items.map(({ icon, path, title }) => (
-        <SideBarNavItem
+        <ListItemButton
           key={`${title}-${path}`}
-          icon={showIcons ? icon : undefined}
-          path={path}
-          title={title}
+          component={AppLink}
+          to={path}
+          href="" // Hard reset for .href property, otherwise links are always opened in new tab :(
+          openInNewTab={false}
           onClick={onClick}
-        />
+        >
+          <ListItemIcon>{icon && <AppIcon icon={icon} />}</ListItemIcon>
+          <ListItemText primary={t(`views.${title}`)} />
+        </ListItemButton>
       ))}
     </List>
   );

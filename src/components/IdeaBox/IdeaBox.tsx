@@ -5,6 +5,7 @@ import { BoxType } from '@/types/scopes/BoxTypes';
 import AppIcon from '../AppIcon';
 import MoreOptions from '../MoreOptions';
 import AppLink from '../AppLink';
+import { useTranslation } from 'react-i18next';
 
 interface IdeaBoxProps {
   box: BoxType;
@@ -13,6 +14,7 @@ interface IdeaBoxProps {
 }
 
 const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
+  const { t } = useTranslation();
   return (
     <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
       <Stack
@@ -24,9 +26,9 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
         p={1}
         pr={2}
       >
-        <AppIcon icon={phases[box.phase_id].icon} sx={{ mx: 1 }} />
+        <AppIcon icon={phases[box.phase_id].name} sx={{ mx: 1 }} />
         <Typography variant="caption" mr="auto">
-          {box.ideas_num} Ideas on {phases[box.phase_id].name.toLowerCase()}
+          {t('texts.ideaBox', { var: box.ideas_num, phase: t(`phases.${phases[box.phase_id].name}`) })}
         </Typography>
         <MoreOptions element="boxes" id={box.id} onClose={onReload} />
       </Stack>
@@ -57,7 +59,7 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
               px={2}
             >
               <AppIcon icon="clock" size="small" sx={{ mx: 0.5 }} />
-              <Typography variant="caption">Phase ends in 3 days</Typography>
+              <Typography variant="caption">{t('texts.phaseEnd', { var: 3 })}</Typography>
             </Stack>
           </Box>
         </CardContent>

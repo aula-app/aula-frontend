@@ -13,16 +13,14 @@ export interface SettingsType {
 export interface SettingsRows {
   id: number;
   name: string;
-  displayName: string;
 }
 
 export interface SettingForm {
   type: 'input' | 'text' | 'select' | 'multiple';
-  label: string;
-  column: string;
+  name: string;
   value?: string;
   fetchOptions?: SettingNamesType;
-  options?: {label: string, value: number}[];
+  options?: { label: string; value: number }[];
   required: boolean;
   hidden: boolean;
   phase?: number;
