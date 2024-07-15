@@ -10,11 +10,13 @@ import { AppIcon, AppLink } from '@/components';
 import { grey } from '@mui/material/colors';
 import DelegateVote from '@/components/DelegateVote';
 import { DelegationType } from '@/types/Delegation';
+import { useTranslation } from 'react-i18next';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/ideas-box/:box_id
  */
 const IdeasBoxView = () => {
+  const { t } = useTranslation();
   const params = useParams();
   const [box, setBox] = useState<BoxResponseType>();
   const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
@@ -72,7 +74,9 @@ const IdeasBoxView = () => {
             <IdeaBox box={box.data || {}} noLink onReload={boxFetch} />
             <Stack direction="row">
               <Typography variant="h6" p={2}>
-                {String(boxIdeas.count)} ideas {(delegationStatus && delegationStatus.length > 0) ? `delegated` : phases[box.data.phase_id].call}
+                {delegationStatus && delegationStatus.length > 0
+                  ? t(`texts.delegated`, { var: boxIdeas.count })
+                  : t(`texts.undelegated`, { var: boxIdeas.count })}
               </Typography>
               {Number(box.data.phase_id) === 30 && (
                 <Button
@@ -82,7 +86,9 @@ const IdeasBoxView = () => {
                 >
                   <Typography variant="caption">or</Typography>
                   <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
-                    {(delegationStatus && delegationStatus.length > 0) ? 'REVOKE DELEGATION' : 'DELEGATE VOTE'}
+                    {delegationStatus && delegationStatus.length > 0
+                      ? t('delegation.revoke')
+                      : t('delegation.delegate')}
                   </Typography>
                   <AppIcon icon="delegate" size="small" />
                 </Button>

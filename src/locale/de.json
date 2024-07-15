@@ -1,4 +1,8 @@
 {
+  "delegation": {
+    "delegate": "Delegierte Stimme",
+    "revoke": "Delegation widerrufen"
+  },
   "generics": {
     "back": "zurück",
     "close": "Schließen",

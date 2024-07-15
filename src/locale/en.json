@@ -1,4 +1,8 @@
 {
+  "delegation": {
+    "delegate": "Delegate vote",
+    "revoke": "Revoke delegation"
+  },
   "generics": {
     "back": "back",
     "close": "Close",
@@ -35,8 +39,10 @@
     "wild": "Wild Ideas"
   },
   "texts": {
+    "delegated": "{{var}} ideas delegated",
     "ideaBox": "{{var}} Ideas on {{phase}}",
-    "phaseEnd": "Phase ends on {{var}} days"
+    "phaseEnd": "Phase ends on {{var}} days",
+    "undelegated": "{{var}} ideas"
   },
   "validation": {
     "agree": "You must agree to sign in.",
