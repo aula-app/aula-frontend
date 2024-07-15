@@ -34,6 +34,9 @@
     "voting": "Voting",
     "wild": "Wild Ideas"
   },
+  "texts": {
+    "ideaBox": "{{var}} Ideas on {{phase}}"
+  },
   "validation": {
     "agree": "You must agree to sign in.",
     "email": "Must be a valid email.",
@@ -48,10 +51,10 @@
     "about": "About",
     "dashboard": "Dashboard",
     "box": "Ideas Box",
-    "boxes": "Boxes",
     "home": "Home",
     "idea": "Idea",
     "ideas": "Ideas",
+    "idea-box": "Box",
     "messages": "Messages",
     "message": "Message",
     "profile": "Profile",
