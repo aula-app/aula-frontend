@@ -59,7 +59,7 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
               px={2}
             >
               <AppIcon icon="clock" size="small" sx={{ mx: 0.5 }} />
-              <Typography variant="caption">Phase ends in 3 days</Typography>
+              <Typography variant="caption">{t('texts.phaseEnd', { var: 3 })}</Typography>
             </Stack>
           </Box>
         </CardContent>

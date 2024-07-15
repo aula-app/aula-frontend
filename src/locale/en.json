@@ -35,7 +35,8 @@
     "wild": "Wild Ideas"
   },
   "texts": {
-    "ideaBox": "{{var}} Ideas on {{phase}}"
+    "ideaBox": "{{var}} Ideas on {{phase}}",
+    "phaseEnd": "Phase ends on {{var}} days"
   },
   "validation": {
     "agree": "You must agree to sign in.",
