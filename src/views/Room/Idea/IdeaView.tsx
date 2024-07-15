@@ -15,6 +15,7 @@ import IdeaDocument from '@/components/IdeaDocument';
 import { RoomPhases } from '@/types/scopes/RoomTypes';
 import { AppIcon } from '@/components';
 import { useAppStore } from '@/store';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Renders "Idea" view
@@ -22,6 +23,7 @@ import { useAppStore } from '@/store';
  */
 
 const IdeaView = () => {
+  const { t } = useTranslation();
   const params = useParams();
   const [, dispatch] = useAppStore();
   const [idea, setIdea] = useState<SingleIdeaResponseType>();
@@ -92,7 +94,7 @@ const IdeaView = () => {
           {comments && comments.data && (
             <>
               <Typography variant="h5" py={2}>
-                {String(comments.count)} Comments
+                {String(comments.count)} {t('views.comments')}
               </Typography>
               {comments.data.map((comment) => (
                 <Comment key={comment.id} comment={comment} onReload={commentsFetch} disabled={phase > 10} />
