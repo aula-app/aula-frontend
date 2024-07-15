@@ -24,7 +24,7 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
         p={1}
         pr={2}
       >
-        <AppIcon icon={phases[box.phase_id].icon} sx={{ mx: 1 }} />
+        <AppIcon icon={phases[box.phase_id].name} sx={{ mx: 1 }} />
         <Typography variant="caption" mr="auto">
           {box.ideas_num} Ideas on {phases[box.phase_id].name.toLowerCase()}
         </Typography>

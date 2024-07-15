@@ -35,7 +35,7 @@ const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) 
 
         <Breadcrumbs aria-label="breadcrumb" sx={{ flexGrow: 1, textAlign: 'center' }}>
           <AppLink underline="hover" color="inherit" to="/">
-            {t('views.home')}
+            Aula
           </AppLink>
           {displayPath.map((currentPath, key) => {
             const link = location.slice(0, 2 * (key + 1) + (currentPath === 'messages' ? 0 : 3)).join('/');
