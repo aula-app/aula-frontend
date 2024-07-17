@@ -57,6 +57,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const dataSave = async (args: ObjectPropByName) => {
     const requestId = ['updater_id'];
     if (scope === 'ideas') requestId.push('user_id');
+    if (scope === 'messages' && !id) requestId.push('creator_id');
     await databaseRequest(
       {
         model: requestDefinitions[scope].model,
@@ -73,7 +74,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const updateValues = () => {
     dataSettings[scope].forEach((field) => {
       // @ts-ignore
-      setValue(field, items ? items.data[field] : otherData[field]);
+      setValue(field, items ? items.data[field] : otherData[field] || formsSettings[field].defaultValue);
     });
   };
 

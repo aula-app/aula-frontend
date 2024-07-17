@@ -8,6 +8,7 @@ type FormSetting = {
   type: FormTypes;
   schema: yup.Schema;
   options?: SelectOptionsType[] | SettingNamesType;
+  defaultValue?: string | number;
 };
 
 const t = i18next.t;
@@ -64,6 +65,7 @@ export const formsSettings = {
   phase_id: {
     type: 'select',
     schema: yup.number().required(t('validation.required')),
+    defaultValue: 10,
     options: [
       { label: 'Discussion', value: 10 },
       { label: 'Approval', value: 20 },
@@ -84,6 +86,7 @@ export const formsSettings = {
   status: {
     type: 'select',
     schema: yup.number().required(t('validation.required')),
+    defaultValue: 1,
     options: [
       { label: 'Active', value: 1 },
       { label: 'Inactive', value: 0 },
@@ -94,6 +97,7 @@ export const formsSettings = {
   user_needs_to_consent: {
     type: 'select',
     schema: yup.number().required(t('validation.required')),
+    defaultValue: 0,
     options: [
       { label: 'No consent', value: 0 },
       { label: 'Optional', value: 1 },
