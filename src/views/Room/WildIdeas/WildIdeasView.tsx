@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import Idea from '@/components/IdeaBubble';
 import { databaseRequest } from '@/utils/requests';
 import { IdeasResponseType } from '@/types/scopes/IdeaTypes';
-import { useAppStore } from '@/store';
+import AlterData from '@/components/AlterData';
 
 /**
  * Renders "WildIdeas" view
@@ -14,8 +14,8 @@ import { useAppStore } from '@/store';
 
 const WildIdeas = () => {
   const params = useParams();
-  const [, dispatch] = useAppStore();
-  const [ideas, setIdeas] = useState({} as IdeasResponseType);
+  const [ideas, setIdeas] = useState<IdeasResponseType>();
+  const [add, setAdd] = useState(false);
 
   const ideasFetch = async () =>
     await databaseRequest({
@@ -23,6 +23,11 @@ const WildIdeas = () => {
       method: 'getIdeasByRoom',
       arguments: { room_id: Number(params['room_id']) },
     }).then((response) => setIdeas(response));
+
+  const closeAdd = () => {
+    ideasFetch();
+    setAdd(false);
+  };
 
   useEffect(() => {
     ideasFetch();
@@ -37,22 +42,16 @@ const WildIdeas = () => {
           position: 'absolute',
           bottom: 40,
         }}
-        onClick={() =>
-          dispatch({ type: 'EDIT_DATA', payload: { type: 'add', element: 'ideas', id: 0, onClose: ideasFetch } })
-        }
+        onClick={() => setAdd(true)}
       >
         <Add />
       </Fab>
-      {ideas.data &&
+      {ideas &&
+        ideas.data &&
         ideas.data.map((idea) => (
-          <Idea
-            idea={idea}
-            onReload={ideasFetch}
-            key={idea.id}
-            comments={idea.sum_comments}
-            to={`idea/${idea.id}`}
-          />
+          <Idea idea={idea} onReload={ideasFetch} key={idea.id} comments={idea.sum_comments} to={`idea/${idea.id}`} />
         ))}
+      <AlterData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id }} />
     </Stack>
   );
 };

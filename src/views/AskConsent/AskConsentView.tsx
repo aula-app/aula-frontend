@@ -38,16 +38,9 @@ const AskConsent = () => {
       }
     };
     dataFetch();
-
   }, [dispatch, jwt_token, navigate]);
 
-
-  return (
-    <>
-      {data.length > 0 && <ConsentDialog texts={data} />}
-    </>
-  );
-
+  return <>{data.length > 0 && <ConsentDialog texts={data} />}</>;
 };
 
 export default AskConsent;

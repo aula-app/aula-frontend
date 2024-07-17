@@ -30,7 +30,7 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
         <Typography variant="caption" mr="auto">
           {t('texts.ideaBox', { var: box.ideas_num, phase: t(`phases.${phases[box.phase_id].name}`) })}
         </Typography>
-        <MoreOptions element="boxes" id={box.id} onClose={onReload} />
+        <MoreOptions scope="boxes" id={box.id} onClose={onReload} />
       </Stack>
       <AppLink to={`idea-box/${box.id}`} mb={2} key={box.id} disabled={noLink}>
         <CardContent>

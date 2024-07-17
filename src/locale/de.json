@@ -58,7 +58,9 @@
     "password": "Passwort",
     "passwordConfirm": "Passwort bestätigen",
     "realname": "Name des Schülers",
+    "room_id": "Klass",
     "room_name": "Klass Name",
+    "title": "Titel",
     "username": "Benutzername"
   },
   "texts": {
@@ -76,8 +78,8 @@
   "validation": {
     "agree": "Sie müssen zustimmen, sich anzumelden.",
     "email": "Muss eine gültige E-Mail sein.",
-    "max": "Darf höchstens {{var}} Zeichen lang sein.",
-    "min": "Muss mindestens {{var}} Zeichen lang sein.",
+    "max": "Muss kleiner sein als {{var}} Zeichen.",
+    "min": "Muss größer sein als {{var}} Zeichen.",
     "name": "Die Namen sollten nur Buchstaben enthalten.",
     "phone": "Muss eine gültige Telefonnummer sein.",
     "required": "Dieses Feld darf nicht leer sein.",

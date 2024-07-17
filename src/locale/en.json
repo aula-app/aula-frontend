@@ -58,7 +58,9 @@
     "password": "Password",
     "passwordConfirm": "Confirm password",
     "realname": "Student Name",
+    "room_id": "Room",
     "room_name": "Room Name",
+    "title": "Title",
     "username": "User Name"
   },
   "texts": {
@@ -76,8 +78,8 @@
   "validation": {
     "agree": "You must agree to sign in.",
     "email": "Must be a valid email.",
-    "max": "Must be at most {{var}} characters long.",
-    "min": "Must be at least {{var}} characters long.",
+    "max": "Must be smaller than {{var}} characters.",
+    "min": "Must be bigger than {{var}} characters.",
     "name": "Names should contain only letters.",
     "phone": "Must be a valid phone number.",
     "required": "This field cannot be empty.",

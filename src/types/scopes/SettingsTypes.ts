@@ -1,4 +1,4 @@
-export type SettingNamesType = 'users' | 'rooms' | 'boxes' | 'ideas' | 'comments' | 'messages';
+export type SettingNamesType = 'bug' | 'boxes' | 'comments' | 'ideas' | 'messages' | 'report' | 'rooms' | 'users';
 
 export interface SettingsType {
   name: string;

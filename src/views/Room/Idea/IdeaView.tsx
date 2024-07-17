@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ApprovalCard from '@/components/ApprovalCard';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
-import { Vote, databaseRequest, phases } from '@/utils';
+import { Vote, databaseRequest } from '@/utils';
 import { CommentResponseType } from '@/types/scopes/CommentTypes';
 import { SingleIdeaResponseType } from '@/types/scopes/IdeaTypes';
 import { Add } from '@mui/icons-material';
@@ -12,10 +12,8 @@ import { BoxResponseType } from '@/types/scopes/BoxTypes';
 import IdeaBubble from '@/components/IdeaBubble';
 import Comment from '@/components/Comment';
 import IdeaDocument from '@/components/IdeaDocument';
-import { RoomPhases } from '@/types/scopes/RoomTypes';
-import { AppIcon } from '@/components';
-import { useAppStore } from '@/store';
 import { useTranslation } from 'react-i18next';
+import AlterData from '@/components/AlterData';
 
 /**
  * Renders "Idea" view
@@ -25,8 +23,8 @@ import { useTranslation } from 'react-i18next';
 const IdeaView = () => {
   const { t } = useTranslation();
   const params = useParams();
-  const [, dispatch] = useAppStore();
   const [idea, setIdea] = useState<SingleIdeaResponseType>();
+  const [add, setAdd] = useState(false);
   const [phase, setPhase] = useState(0);
   const [comments, setComments] = useState<CommentResponseType>();
   const [vote, setVote] = useState<Vote>(0);
@@ -65,6 +63,11 @@ const IdeaView = () => {
       },
       ['user_id']
     ).then((response) => setVote((Number(response.data) + 1) as Vote));
+
+  const closeAdd = () => {
+    commentsFetch();
+    setAdd(false);
+  };
 
   useEffect(() => {
     ideaFetch();
@@ -106,12 +109,7 @@ const IdeaView = () => {
               <Fab
                 aria-label="add"
                 color="primary"
-                onClick={() =>
-                  dispatch({
-                    type: 'EDIT_DATA',
-                    payload: { type: 'add', element: 'comments', id: idea.data.id, onClose: commentsFetch },
-                  })
-                }
+                onClick={() => setAdd(true)}
                 sx={{
                   position: 'absolute',
                   bottom: 0,
@@ -125,6 +123,7 @@ const IdeaView = () => {
           )}
         </Stack>
       )}
+      <AlterData scope="comments" isOpen={add} onClose={closeAdd} />
     </Stack>
   );
 };
