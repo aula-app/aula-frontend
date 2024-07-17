@@ -123,7 +123,7 @@ const IdeaView = () => {
           )}
         </Stack>
       )}
-      <AlterData scope="comments" isOpen={add} onClose={closeAdd} />
+      <AlterData scope="comments" isOpen={add} onClose={closeAdd} otherData={{ idea_id: params.idea_id }} />
     </Stack>
   );
 };

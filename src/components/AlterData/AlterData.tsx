@@ -8,7 +8,7 @@ import { dataSettings, getRequest, requestDefinitions } from '@/utils/settings';
 import { formsSettings } from '@/utils/formsSettings';
 import { useTranslation } from 'react-i18next';
 import FormInput from './FormInput';
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 
 interface Props {
@@ -57,6 +57,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const dataSave = async (args: ObjectPropByName) => {
     const requestId = ['updater_id'];
     if (scope === 'ideas') requestId.push('user_id');
+    if (scope === 'comments' && !id) requestId.push('user_id');
     if (scope === 'messages' && !id) requestId.push('creator_id');
     await databaseRequest(
       {

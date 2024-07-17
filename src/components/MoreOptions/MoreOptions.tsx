@@ -8,6 +8,9 @@ import { AlterTypes, ColorTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/scopes/SettingsTypes';
 import { useTranslation } from 'react-i18next';
 import AlterData from '../AlterData';
+import DeleteData from '../DeleteData';
+import { useParams } from 'react-router-dom';
+import { getRequest, requestDefinitions } from '@/utils/settings';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -27,13 +30,17 @@ interface Props {
  */
 const MoreOptions = ({ scope, id, onClose }: Props) => {
   const { t } = useTranslation();
+  const params = useParams();
+
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [del, setDel] = useState(false);
 
   const options = [
     { type: 'edit', icon: 'edit', color: 'secondary', label: t('generics.edit') },
     { type: 'bug', icon: 'bug', color: 'warning', label: t('generics.bugReport') },
     { type: 'report', icon: 'report', color: 'error', label: t('generics.contentReport') },
+    { type: 'delete', icon: 'delete', color: 'error', label: t('generics.delete') },
   ] as OptionsTypes[];
 
   // @ts-ignore
@@ -42,13 +49,14 @@ const MoreOptions = ({ scope, id, onClose }: Props) => {
     setOpen(!open);
   };
 
-  const handleClick = (type: AlterTypes, element: SettingNamesType) => {
+  const handleClick = (type: AlterTypes) => {
     setOpen(false);
-    setEdit(true);
+    type === 'delete' ? setDel(true) : setEdit(true);
   };
 
-  const closeEdit = () => {
+  const close = () => {
     setEdit(false);
+    setDel(false);
     onClose();
   };
   return (
@@ -73,7 +81,7 @@ const MoreOptions = ({ scope, id, onClose }: Props) => {
                   <Button
                     color={option.color}
                     sx={{ width: '100%', justifyContent: 'start' }}
-                    onClick={() => handleClick(option.type, scope)}
+                    onClick={() => handleClick(option.type)}
                   >
                     <Stack direction="row">
                       <AppIcon icon={option.icon} sx={{ mr: 1 }} />
@@ -87,7 +95,8 @@ const MoreOptions = ({ scope, id, onClose }: Props) => {
           </Zoom>
         </ClickAwayListener>
       </Box>
-      <AlterData id={id} scope={scope} isOpen={edit} onClose={closeEdit} />
+      <AlterData id={id} scope={scope} isOpen={edit} onClose={close} />
+      <DeleteData id={id} scope={scope} isOpen={del} onClose={close} />
     </>
   );
 };

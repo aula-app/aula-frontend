@@ -29,6 +29,7 @@ import { AppIcon, AppIconButton } from '@/components';
 import MoveSettings from './MoveSettings';
 import { useTranslation } from 'react-i18next';
 import AlterData from '@/components/AlterData';
+import DeleteData from '@/components/DeleteData';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -266,20 +267,8 @@ const SettingsView = () => {
         )}
       </Stack>
       <AlterData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
-      <DeleteSettings
-        key={`delete_${setting_name}`}
-        items={selected}
-        isOpen={openDelete}
-        closeMethod={onClose}
-        reloadMethod={() => loadData()}
-      />
-      <MoveSettings
-        key={`move_${setting_name}`}
-        items={selected}
-        isOpen={openMove}
-        closeMethod={onClose}
-        reloadMethod={() => loadData()}
-      />
+      <DeleteData key={`d_${setting_name}`} isOpen={openDelete} id={selected} scope={setting_name} onClose={onClose} />
+      <MoveSettings key={`m_${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
     </Stack>
   );
 };

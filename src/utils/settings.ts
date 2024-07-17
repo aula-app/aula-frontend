@@ -41,7 +41,7 @@ export const requestDefinitions = {
     model: 'User',
     isChild: 'rooms',
   },
-} as Record<SettingNamesType, { model: string; isChild: string }>;
+} as Record<SettingNamesType, { model: string; isChild: SettingNamesType }>;
 
 export const getRequest = (scope: SettingNamesType, type: 'id' | 'fetch' | 'get' | 'add' | 'edit' | 'delete') => {
   switch (type) {

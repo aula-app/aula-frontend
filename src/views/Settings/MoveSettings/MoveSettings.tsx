@@ -21,13 +21,12 @@ import { useTranslation } from 'react-i18next';
 type Params = {
   isOpen: boolean;
   items: number[];
-  closeMethod: () => void;
-  reloadMethod: () => void;
+  onClose: () => void;
 };
 /** * Renders "Settings" alert dialog component view
  * url: /settings/:setting_name/
  */
-const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
+const EditSettings = ({ isOpen, items, onClose }: Params) => {
   const { t } = useTranslation();
   const { setting_name } = useParams();
   const [destination, setDestination] = useState<string>();
@@ -69,8 +68,7 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
 
   const moveRequest = () => {
     items.forEach((item) => request(item));
-    reloadMethod();
-    closeMethod();
+    onClose();
   };
 
   useEffect(() => {
@@ -80,7 +78,7 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
   return (
     <Dialog
       open={isOpen}
-      onClose={closeMethod}
+      onClose={onClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -107,7 +105,7 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeMethod} color="secondary" autoFocus>
+        <Button onClick={onClose} color="secondary" autoFocus>
           {t('generics.cancel')}
         </Button>
         <Button onClick={moveRequest} color="primary" variant="contained">
