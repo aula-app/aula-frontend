@@ -69,14 +69,15 @@ const IdeasBoxView = () => {
           scrollSnapType: 'y mandatory',
         }}
       >
-        {box && box.data && boxIdeas && boxIdeas.data && (
+        {box && box.data && (
           <>
             <IdeaBox box={box.data || {}} noLink onReload={boxFetch} />
             <Stack direction="row">
               <Typography variant="h6" p={2}>
-                {delegationStatus && delegationStatus.length > 0
-                  ? t(`texts.delegated`, { var: boxIdeas.count })
-                  : t(`texts.undelegated`, { var: boxIdeas.count })}
+                {boxIdeas &&
+                  t(delegationStatus && delegationStatus.length > 0 ? `texts.delegated` : `texts.undelegated`, {
+                    var: boxIdeas.count,
+                  })}
               </Typography>
               {Number(box.data.phase_id) === 30 && (
                 <Button
@@ -95,23 +96,25 @@ const IdeasBoxView = () => {
               )}
             </Stack>
             <Grid container spacing={1}>
-              {boxIdeas.data.map((idea, key) => (
-                <Grid
-                  key={key}
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  sx={{ scrollSnapAlign: 'center' }}
-                  order={-idea.approved}
-                >
-                  <AppLink to={`idea/${idea.id}`}>
-                    <IdeaCard idea={idea} phase={box.data.phase_id} />
-                  </AppLink>
-                </Grid>
-              ))}
+              {boxIdeas &&
+                boxIdeas.data &&
+                boxIdeas.data.map((idea, key) => (
+                  <Grid
+                    key={key}
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={2}
+                    sx={{ scrollSnapAlign: 'center' }}
+                    order={-idea.approved}
+                  >
+                    <AppLink to={`idea/${idea.id}`}>
+                      <IdeaCard idea={idea} phase={box.data.phase_id} />
+                    </AppLink>
+                  </Grid>
+                ))}
             </Grid>
           </>
         )}
