@@ -46,7 +46,7 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center' }} color="secondary" mb={2}>
       <Stack direction="row" justifyContent="space-between">
-        <Chip icon={<AppIcon name="settings" />} label="category" variant="outlined" />
+        <Chip icon={<AppIcon icon="settings" />} label="category" variant="outlined" />
         <MoreOptions scope="ideas" id={idea.id} onClose={onReload} />
       </Stack>
       <Stack p={2} bgcolor={phases['0'].baseColor[50]} borderRadius={3} mb={1}>
@@ -54,7 +54,7 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
         <Typography mb={2}>{idea.content}</Typography>
       </Stack>
       <Stack direction="row" alignItems="center">
-        <AppIcon name="account" size="xl" />
+        <AppIcon icon="account" size="xl" />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>
@@ -73,7 +73,7 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
           </Typography>
         </Stack>
         <Button color="error" size="small" onClick={toggleLike} disabled={disabled}>
-          <AppIcon name={liked ? 'heartfull' : 'heart'} />
+          <AppIcon icon={liked ? 'heartfull' : 'heart'} />
           {idea.sum_likes}
         </Button>
       </Stack>

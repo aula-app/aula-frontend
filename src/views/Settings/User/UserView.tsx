@@ -79,7 +79,7 @@ const UserView = () => {
                   zIndex: 999,
                 }}
               >
-                <AppIcon name="camera" />
+                <AppIcon icon="camera" />
               </Stack>
               <Avatar
                 sx={{
@@ -119,7 +119,7 @@ const UserView = () => {
         </FormContainer>
       )}
       <Accordion>
-        <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
+        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.security')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -127,7 +127,7 @@ const UserView = () => {
         </AccordionDetails>
       </Accordion>
       <Accordion>
-        <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
+        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.privacy')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -142,7 +142,7 @@ const UserView = () => {
         </AccordionDetails>
       </Accordion>
       <Accordion>
-        <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
+        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.advanced')}</Typography>
         </AccordionSummary>
         <AccordionDetails>

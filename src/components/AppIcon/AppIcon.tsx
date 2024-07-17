@@ -57,9 +57,9 @@ import { ObjectPropByName } from '@/types/Generics';
  * How to use:
  * 1. Import all required MUI or other SVG icons into this file.
  * 2. Add icons with "unique lowercase names" into ICONS object.
- * 3. Use icons everywhere in the App by their names in <AppIcon name="xxx" /> component
+ * 3. Use icons everywhere in the App by their names in <AppIcon icon="xxx" /> component
  * Important: properties of ICONS object MUST be lowercase!
- * Note: You can use camelCase or UPPERCASE in the <AppIcon name="someIconByName" /> component
+ * Note: You can use camelCase or UPPERCASE in the <AppIcon icon="someIconByName" /> component
  */
 export const ICONS: Record<string, React.ComponentType> = {
   logo: LogoIcon,
@@ -123,8 +123,7 @@ export const ICONS: Record<string, React.ComponentType> = {
 export type IconType = keyof typeof ICONS;
 
 interface Props {
-  name?: keyof typeof ICONS; // Icon's name
-  icon?: keyof typeof ICONS; // Icon's name alternate prop
+  icon: keyof typeof ICONS; // Icon's name alternate prop
   size?: 'small' | 'medium' | 'large' | 'xl' | 'full'; // Icon's name alternate prop,
   sx?: ObjectPropByName;
 }
@@ -135,9 +134,8 @@ interface Props {
  * @param {string} [props.name] - name of the Icon to render
  * @param {string} [props.icon] - name of the Icon to render
  */
-const AppIcon: FunctionComponent<Props> = ({ name, icon, size = 'md', sx, ...restOfProps }) => {
-  const iconName = (name || icon || 'default').trim().toLowerCase();
-  const ComponentToRender = ICONS[iconName] || ICONS.default;
+const AppIcon: FunctionComponent<Props> = ({ icon, size = 'md', sx, ...restOfProps }) => {
+  const ComponentToRender = ICONS[icon] || ICONS.default;
   const currentSize =
     size === 'small' ? '16px' : size === 'large' ? '32px' : size === 'xl' ? '40px' : size === 'full' ? '100%' : '24px'; // no size === md
   return (

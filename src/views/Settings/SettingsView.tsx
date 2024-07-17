@@ -267,7 +267,7 @@ const SettingsView = () => {
           dispatch({ type: 'EDIT_DATA', payload: { type: 'add', element: setting_name, id: 0, onClose: loadData } })
         }
       >
-        <AppIcon name="add" />
+        <AppIcon icon="add" />
       </Fab>
       <Divider />
       <Stack direction="row" alignItems="center" justifyContent="center" bottom={0} height={48}>

@@ -56,7 +56,7 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <AppIcon name="account" size="large" />
+        <AppIcon icon="account" size="large" />
         <Stack maxWidth="100%" overflow="hidden" ml={2} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>
@@ -75,7 +75,7 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
           </Typography>
         </Stack>
         <Button color="error" size="small" onClick={toggleLike} disabled={disabled}>
-          <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
+          <AppIcon icon={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
           {comment.sum_likes}
         </Button>
       </Stack>

@@ -58,13 +58,13 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
             </Stack>
           </AppLink>
           <Stack direction="row" justifyContent="space-between" my={1}>
-            <Chip icon={<AppIcon name="settings" />} label="category" variant="outlined" />
+            <Chip icon={<AppIcon icon="settings" />} label="category" variant="outlined" />
             <MoreOptions scope="ideas" id={idea.id} onClose={onReload} />
           </Stack>
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <AppIcon name="account" size="xl" />
+        <AppIcon icon="account" size="xl" />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>
@@ -82,15 +82,15 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
             {idea.displayname}
           </Typography>
         </Stack>
-        {/* <Chip icon={<AppIcon name="settings" />} label="category" color="warning" /> */}
+        {/* <Chip icon={<AppIcon icon="settings" />} label="category" color="warning" /> */}
         {comments > 0 && (
           <Stack direction="row" alignItems="center">
-            <AppIcon name="chat" sx={{ mr: 0.5 }} />
+            <AppIcon icon="chat" sx={{ mr: 0.5 }} />
             {comments}
           </Stack>
         )}
         <Button color="error" size="small" onClick={toggleLike}>
-          <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
+          <AppIcon icon={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
           {idea.sum_likes}
         </Button>
       </Stack>

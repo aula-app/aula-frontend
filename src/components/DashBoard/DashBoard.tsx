@@ -79,7 +79,7 @@ const DashBoard = ({ show = true }) => {
                     }}
                   >
                     <Stack direction="row" alignItems="center" width="100%">
-                      <AppIcon name={dashboardPhases[phase].name} />
+                      <AppIcon icon={dashboardPhases[phase].name} />
                       <Box
                         flexGrow={1}
                         overflow="hidden"

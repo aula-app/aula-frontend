@@ -46,7 +46,7 @@ const PhaseBar = ({ room }: { room: number }) => {
               bgcolor: phases[phase].color,
             }}
           >
-            <AppIcon name={phases[phase].name} />
+            <AppIcon icon={phases[phase].name} />
             <Typography noWrap overflow="ellipsis" pl={1} fontSize="small">
               {currentPhase === phase ? t(`phases.${phases[phase].name}`) : ''}
             </Typography>
