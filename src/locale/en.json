@@ -50,6 +50,7 @@
     "body": "Text",
     "content": "Content",
     "created": "Creation date",
+    "description": "Description",
     "description_public": "Description",
     "displayname": "Display Name",
     "email": "Email",

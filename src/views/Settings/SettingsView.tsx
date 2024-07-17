@@ -27,8 +27,8 @@ import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
 import { AppIcon, AppIconButton } from '@/components';
 import MoveSettings from './MoveSettings';
-import { useAppStore } from '@/store';
 import { useTranslation } from 'react-i18next';
+import AlterData from '@/components/AlterData';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -38,7 +38,6 @@ const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
-  const [, dispatch] = useAppStore();
   const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -47,6 +46,7 @@ const SettingsView = () => {
   const [filter, setFilter] = useState(['', '']);
 
   const [selected, setSelected] = useState<number[]>([]);
+  const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
   const [openDelete, setOpenDelete] = useState(false);
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
@@ -118,14 +118,11 @@ const SettingsView = () => {
 
   const handleWindowSizeChange = () => getLimit();
 
-  const onDelete = () => {
+  const onClose = () => {
+    loadData();
+    setAlter({ open: false });
     setOpenDelete(false);
-    setSelected([]);
-  };
-
-  const onMove = () => {
     setOpenMove(false);
-    setSelected([]);
   };
 
   useEffect(() => {
@@ -218,12 +215,7 @@ const SettingsView = () => {
                     <TableCell
                       key={`${column.name}-${row.id}`}
                       sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                      onClick={() =>
-                        dispatch({
-                          type: 'EDIT_DATA',
-                          payload: { type: 'edit', element: setting_name, id: row.id, onClose: loadData },
-                        })
-                      }
+                      onClick={() => setAlter({ open: true, id: row.id })}
                     >
                       {row[column.name]}
                     </TableCell>
@@ -240,13 +232,13 @@ const SettingsView = () => {
             <Stack direction="row" alignItems="center" flex={1}>
               <SubdirectoryArrowRight sx={{ ml: 3, fontSize: '1rem' }} color="secondary" />
               <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
-                <AppIcon sx={{ mr: 1 }} name="delete" /> {t('generics.delete')}
+                <AppIcon sx={{ mr: 1 }} icon="delete" /> {t('generics.delete')}
               </Button>
             </Stack>
             <Stack direction="row" alignItems="center" justifyContent="end" flex={1}>
               {SettingsConfig[setting_name].isChild && (
                 <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenMove(true)}>
-                  <AppIcon sx={{ mr: 1 }} name={SettingsConfig[SettingsConfig[setting_name].isChild].item} /> Add to{' '}
+                  <AppIcon sx={{ mr: 1 }} icon={SettingsConfig[SettingsConfig[setting_name].isChild].item} /> Add to{' '}
                   {SettingsConfig[SettingsConfig[setting_name].isChild].item}
                 </Button>
               )}
@@ -263,9 +255,7 @@ const SettingsView = () => {
           bottom: 40,
           boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
         }}
-        onClick={() =>
-          dispatch({ type: 'EDIT_DATA', payload: { type: 'add', element: setting_name, id: 0, onClose: loadData } })
-        }
+        onClick={() => setAlter({ open: true })}
       >
         <AppIcon icon="add" />
       </Fab>
@@ -275,18 +265,19 @@ const SettingsView = () => {
           <Pagination count={Math.ceil(Number(items.count) / limit)} onChange={changePage} sx={{ py: 1 }} />
         )}
       </Stack>
+      <AlterData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
       <DeleteSettings
-        key={`${setting_name}`}
+        key={`delete_${setting_name}`}
         items={selected}
         isOpen={openDelete}
-        closeMethod={onDelete}
+        closeMethod={onClose}
         reloadMethod={() => loadData()}
       />
       <MoveSettings
         key={`move_${setting_name}`}
         items={selected}
         isOpen={openMove}
-        closeMethod={onMove}
+        closeMethod={onClose}
         reloadMethod={() => loadData()}
       />
     </Stack>
