@@ -1,6 +1,6 @@
 import { AppButton } from '@/components';
 import { MessageType } from '@/types/scopes/MessageTypes';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';

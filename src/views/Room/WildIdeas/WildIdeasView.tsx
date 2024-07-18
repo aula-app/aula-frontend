@@ -3,7 +3,7 @@ import { Add } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Idea from '@/components/IdeaBubble';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest } from '@/utils';
 import { IdeasResponseType } from '@/types/scopes/IdeaTypes';
 import AlterData from '@/components/AlterData';
 

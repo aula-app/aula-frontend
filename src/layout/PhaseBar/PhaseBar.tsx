@@ -1,5 +1,5 @@
 import { AppIcon, AppLink } from '@/components';
-import { phases } from '@/utils/phases';
+import { phases } from '@/utils';
 import { Box, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

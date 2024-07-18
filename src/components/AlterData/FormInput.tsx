@@ -1,6 +1,12 @@
 import { SettingNamesType } from '@/types/scopes/SettingsTypes';
-import { databaseRequest, SettingsConfig } from '@/utils';
-import { formsSettings, SelectOptionsType } from '@/utils/formsSettings';
+import {
+  databaseRequest,
+  dataSettings,
+  formsSettings,
+  getRequest,
+  requestDefinitions,
+  SelectOptionsType,
+} from '@/utils';
 import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control, Controller, FieldErrors, UseFormGetValues, UseFormRegister } from 'react-hook-form-mui';
@@ -23,10 +29,10 @@ const FormInput = ({ form, register, getValues, control, errors, disabled = fals
   const { t } = useTranslation();
   const [currentOptions, setOptions] = useState<SelectOptionsType[]>([]);
 
-  async function fetchOptions(setting: SettingNamesType) {
+  async function fetchOptions(scope: SettingNamesType) {
     await databaseRequest({
-      model: SettingsConfig[setting].model,
-      method: SettingsConfig[setting].requests.fetch,
+      model: requestDefinitions[scope].model,
+      method: getRequest(scope, 'fetch'),
       arguments: {
         limit: 0,
         offset: 0,
@@ -35,7 +41,8 @@ const FormInput = ({ form, register, getValues, control, errors, disabled = fals
       setOptions(
         // @ts-ignore
         response.data.map((row) => {
-          return { label: row[SettingsConfig[setting].rows[0].name], value: row.id };
+          console.log(row, dataSettings[scope]);
+          return { label: row[dataSettings[scope][0]], value: row.id };
         })
       );
     });

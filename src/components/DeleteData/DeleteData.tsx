@@ -1,6 +1,5 @@
 import { SettingNamesType } from '@/types/scopes/SettingsTypes';
-import { databaseRequest } from '@/utils';
-import { getRequest, requestDefinitions } from '@/utils/settings';
+import { databaseRequest, getRequest, requestDefinitions } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material';
 import { useTranslation } from 'react-i18next';

@@ -1,8 +1,17 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { AppIcon, AppIconButton } from '@/components';
+import AlterData from '@/components/AlterData';
+import DeleteData from '@/components/DeleteData';
+import { SettingNamesType } from '@/types/scopes/SettingsTypes';
+import { TableResponseType } from '@/types/TableTypes';
+import { databaseRequest, dataOrderId, dataSettings, getRequest, requestDefinitions } from '@/utils';
+import { SubdirectoryArrowRight } from '@mui/icons-material';
 import {
+  Button,
   Checkbox,
+  Collapse,
   Divider,
   Fab,
+  FilledInput,
   MenuItem,
   Pagination,
   Stack,
@@ -11,25 +20,15 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  TableSortLabel,
   TextField,
   Typography,
-  Button,
-  TableSortLabel,
-  Collapse,
-  FilledInput,
 } from '@mui/material';
-import { SettingNamesType } from '@/types/scopes/SettingsTypes';
-import { SubdirectoryArrowRight } from '@mui/icons-material';
-import { databaseRequest, SettingsConfig } from '@/utils';
-import { TableResponseType } from '@/types/TableTypes';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
-import { AppIcon, AppIconButton } from '@/components';
-import MoveSettings from './MoveSettings';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AlterData from '@/components/AlterData';
-import DeleteData from '@/components/DeleteData';
+import { useNavigate, useParams } from 'react-router-dom';
+import MoveSettings from './MoveSettings';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -42,7 +41,7 @@ const SettingsView = () => {
   const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
-  const [orderBy, setOrder] = useState(SettingsConfig[setting_name].rows[0]['id']);
+  const [orderBy, setOrder] = useState(dataOrderId[setting_name][0]);
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState(['', '']);
 
@@ -56,8 +55,8 @@ const SettingsView = () => {
 
   const dataFetch = async (filter: string) =>
     await databaseRequest({
-      model: SettingsConfig[setting_name].model,
-      method: SettingsConfig[setting_name].requests.fetch,
+      model: requestDefinitions[setting_name].model,
+      method: getRequest(setting_name, 'fetch'),
       arguments: {
         limit: limit,
         offset: page * limit,
@@ -106,14 +105,14 @@ const SettingsView = () => {
   };
 
   const resetTable = () => {
-    if (!SettingsConfig[setting_name]) {
+    if (!requestDefinitions[setting_name]) {
       navigate('/error');
     } else {
       setPage(0);
       setSelected([]);
       setOrderAsc(true);
       getLimit();
-      setOrder(SettingsConfig[setting_name].rows[0]['id']);
+      setOrder(dataOrderId[setting_name][0]);
     }
   };
 
@@ -145,7 +144,7 @@ const SettingsView = () => {
     <Stack direction="column" height="100%">
       <Stack direction="row" alignItems="center">
         <Typography variant="h4" sx={{ p: 2, textTransform: 'capitalize', flex: 1 }}>
-          {t(`views.${SettingsConfig[setting_name].name}`)}
+          {t(`views.${setting_name}`)}
         </Typography>
         <Stack direction="row" alignItems="start" bottom={0} height={37} px={2}>
           <AppIconButton icon="filter" onClick={() => setOpenFilter(!openFilter)} />
@@ -163,9 +162,9 @@ const SettingsView = () => {
             sx={{ width: 100, mr: 1 }}
           >
             <MenuItem value=""></MenuItem>
-            {SettingsConfig[setting_name].rows.map((column) => (
-              <MenuItem value={column.name} key={column.name}>
-                {t(`settings.${column.name}`)}
+            {dataSettings[setting_name].map((column) => (
+              <MenuItem value={column} key={column}>
+                {t(`settings.${column}`)}
               </MenuItem>
             ))}
           </TextField>
@@ -192,14 +191,14 @@ const SettingsView = () => {
                   />
                 </TableCell>
               )}
-              {SettingsConfig[setting_name].rows.map((column, key) => (
-                <TableCell key={`${column.name}${key}`} sx={{ whiteSpace: 'nowrap' }}>
+              {dataSettings[setting_name].map((column, key) => (
+                <TableCell key={`${column}${key}`} sx={{ whiteSpace: 'nowrap' }}>
                   <TableSortLabel
-                    active={orderBy === column.id}
+                    active={orderBy === dataOrderId[setting_name][key]}
                     direction={orderAsc ? 'asc' : 'desc'}
-                    onClick={() => handleOrder(column.id)}
+                    onClick={() => handleOrder(dataOrderId[setting_name][key])}
                   >
-                    {t(`settings.${column.name}`)}
+                    {t(`settings.${column}`)}
                   </TableSortLabel>
                 </TableCell>
               ))}
@@ -212,13 +211,13 @@ const SettingsView = () => {
                   <TableCell>
                     <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
                   </TableCell>
-                  {SettingsConfig[setting_name].rows.map((column) => (
+                  {dataSettings[setting_name].map((column) => (
                     <TableCell
-                      key={`${column.name}-${row.id}`}
+                      key={`${column}-${row.id}`}
                       sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                       onClick={() => setAlter({ open: true, id: row.id })}
                     >
-                      {row[column.name]}
+                      {row[column]}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -237,10 +236,17 @@ const SettingsView = () => {
               </Button>
             </Stack>
             <Stack direction="row" alignItems="center" justifyContent="end" flex={1}>
-              {SettingsConfig[setting_name].isChild && (
+              {requestDefinitions[setting_name].isChild && (
                 <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenMove(true)}>
-                  <AppIcon sx={{ mr: 1 }} icon={SettingsConfig[SettingsConfig[setting_name].isChild].item} /> Add to{' '}
-                  {SettingsConfig[SettingsConfig[setting_name].isChild].item}
+                  <AppIcon
+                    sx={{ mr: 1 }}
+                    icon={
+                      requestDefinitions[requestDefinitions[setting_name].isChild].model === 'Topic'
+                        ? 'box'
+                        : requestDefinitions[requestDefinitions[setting_name].isChild].model.toLowerCase()
+                    }
+                  />{' '}
+                  Add to {requestDefinitions[requestDefinitions[setting_name].isChild].model.toLowerCase()}
                 </Button>
               )}
             </Stack>

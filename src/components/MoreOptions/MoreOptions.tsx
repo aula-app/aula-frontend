@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 import AlterData from '../AlterData';
 import DeleteData from '../DeleteData';
 import { useParams } from 'react-router-dom';
-import { getRequest, requestDefinitions } from '@/utils/settings';
 
 interface OptionsTypes {
   type: AlterTypes;

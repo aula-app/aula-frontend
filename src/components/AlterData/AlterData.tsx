@@ -1,11 +1,9 @@
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
-import { databaseRequest, SettingsConfig } from '@/utils';
+import { databaseRequest, dataSettings, formsSettings, getRequest, requestDefinitions } from '@/utils';
 import { SettingNamesType } from '@/types/scopes/SettingsTypes';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { dataSettings, getRequest, requestDefinitions } from '@/utils/settings';
-import { formsSettings } from '@/utils/formsSettings';
 import { useTranslation } from 'react-i18next';
 import FormInput from './FormInput';
 import { useEffect, useState } from 'react';
@@ -105,7 +103,8 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
       {scope && (
         <Stack p={2}>
           <Typography variant="h4" pb={2}>
-            {!id ? 'New' : 'Edit'} {SettingsConfig[scope].item}
+            {!id ? 'New' : 'Edit'}{' '}
+            {requestDefinitions[scope].model === 'Topic' ? 'Box' : requestDefinitions[scope].model}
           </Typography>
           <FormContainer>
             {dataSettings[scope].map((field) => (

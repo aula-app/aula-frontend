@@ -1,6 +1,6 @@
 import { BoxType } from '@/types/scopes/BoxTypes';
 import { SingleResponseType } from '@/types/Generics';
-import { databaseRequest, SettingsConfig } from '@/utils';
+import { databaseRequest, getRequest, requestDefinitions } from '@/utils';
 import {
   Button,
   Dialog,
@@ -17,6 +17,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { SettingNamesType } from '@/types/scopes/SettingsTypes';
 
 type Params = {
   isOpen: boolean;
@@ -31,17 +32,17 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
   const { setting_name } = useParams();
   const [destination, setDestination] = useState<string>();
   const [destinationList, setDestinationList] = useState<{ value: number; label: string }[]>([]);
-  const currentSetting = setting_name as keyof typeof SettingsConfig;
+  const scope = setting_name as SettingNamesType;
 
   const handleChange = (event: SelectChangeEvent) => {
     setDestination(event.target.value);
   };
 
   const getDestination = async () => {
-    if (!Object.hasOwn(SettingsConfig[currentSetting], 'isChild')) return;
+    if (!Object.hasOwn(requestDefinitions[scope], 'isChild')) return;
     await databaseRequest({
-      model: SettingsConfig[SettingsConfig[currentSetting].isChild].model,
-      method: SettingsConfig[SettingsConfig[currentSetting].isChild].requests.fetch,
+      model: requestDefinitions[requestDefinitions[scope].isChild].model,
+      method: getRequest(requestDefinitions[scope].isChild, 'fetch'),
       arguments: {
         offset: 0,
         limit: 0,
@@ -52,14 +53,13 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
   };
 
   const request = async (id: number) => {
-    if (!SettingsConfig[currentSetting].requests.move) return;
     await databaseRequest(
       {
-        model: SettingsConfig[currentSetting].model,
-        method: SettingsConfig[currentSetting].requests.move,
+        model: requestDefinitions[scope].model,
+        method: getRequest(requestDefinitions[scope].isChild, 'move'),
         arguments: {
-          [`${SettingsConfig[currentSetting].model.toLowerCase()}_id`]: id,
-          [`${SettingsConfig[SettingsConfig[currentSetting].isChild].model.toLowerCase()}_id`]: destination,
+          [getRequest(scope, 'id')]: id,
+          [getRequest(requestDefinitions[scope].isChild, 'id')]: destination,
         },
       },
       ['updater_id']
@@ -90,7 +90,7 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
             <Select
               id="demo-simple-select"
               value={destination}
-              label={SettingsConfig[currentSetting].isChild}
+              label={requestDefinitions[scope].isChild}
               disabled={destinationList.length === 0}
               fullWidth
               onChange={handleChange}

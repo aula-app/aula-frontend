@@ -12,6 +12,17 @@ export const dataSettings = {
   users: ['displayname', 'realname', 'email', 'about_me', 'username'],
 } as Record<SettingNamesType, Array<keyof typeof formsSettings>>;
 
+export const dataOrderId = {
+  boxes: [1, 7, 6, 5],
+  bug: [1, 2],
+  comments: [5],
+  ideas: [9, 7, 8],
+  messages: [5, 6, 7, 8, 0],
+  report: [1, 2],
+  rooms: [0, 5],
+  users: [6, 1, 7, 12, 5],
+} as Record<SettingNamesType, Array<number>>;
+
 export const requestDefinitions = {
   boxes: {
     model: 'Topic',
@@ -43,7 +54,10 @@ export const requestDefinitions = {
   },
 } as Record<SettingNamesType, { model: string; isChild: SettingNamesType }>;
 
-export const getRequest = (scope: SettingNamesType, type: 'id' | 'fetch' | 'get' | 'add' | 'edit' | 'delete') => {
+export const getRequest = (
+  scope: SettingNamesType,
+  type: 'add' | 'delete' | 'edit' | 'fetch' | 'get' | 'id' | 'move'
+) => {
   switch (type) {
     case 'id':
       return `${requestDefinitions[scope].model.toLowerCase()}_id`;
@@ -51,6 +65,8 @@ export const getRequest = (scope: SettingNamesType, type: 'id' | 'fetch' | 'get'
       return `get${requestDefinitions[scope].model}s`;
     case 'get':
       return `get${requestDefinitions[scope].model}BaseData`;
+    case 'move':
+      return `add${requestDefinitions[scope].model}To${requestDefinitions[requestDefinitions[scope].isChild].model}`;
     default:
       return `${type}${requestDefinitions[scope].model}`;
   }

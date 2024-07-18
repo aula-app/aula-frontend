@@ -2,7 +2,7 @@ import { Fab, Grid, Stack } from '@mui/material';
 import { IdeaBox } from '@/components/IdeaBox';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { databaseRequest } from '@/utils/requests';
+import { databaseRequest } from '@/utils';
 import { BoxesResponseType } from '@/types/scopes/BoxTypes';
 import { AppIcon } from '@/components';
 import AlterData from '@/components/AlterData';
