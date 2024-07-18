@@ -6,6 +6,7 @@ import { databaseRequest } from '@/utils';
 import { BoxesResponseType } from '@/types/scopes/BoxTypes';
 import { AppIcon } from '@/components';
 import AlterData from '@/components/AlterData';
+import MoveData from '@/components/MoveData';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/:phase

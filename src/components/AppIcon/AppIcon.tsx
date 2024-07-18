@@ -1,7 +1,4 @@
-import { FunctionComponent } from 'react';
-import LogoIcon from './logo.svg?react';
-import VotingIcon from './voting.svg?react';
-import CircleIcon from './circle.svg?react';
+import { ObjectPropByName } from '@/types/Generics';
 import {
   AcademicCapIcon,
   ArchiveBoxIcon,
@@ -51,7 +48,10 @@ import {
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartFullIcon } from '@heroicons/react/24/solid';
 import { Stack } from '@mui/material';
-import { ObjectPropByName } from '@/types/Generics';
+import { FunctionComponent } from 'react';
+import CircleIcon from './circle.svg?react';
+import LogoIcon from './logo.svg?react';
+import VotingIcon from './voting.svg?react';
 
 /**
  * How to use:

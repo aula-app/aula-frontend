@@ -41,7 +41,6 @@ const FormInput = ({ form, register, getValues, control, errors, disabled = fals
       setOptions(
         // @ts-ignore
         response.data.map((row) => {
-          console.log(row, dataSettings[scope]);
           return { label: row[dataSettings[scope][0]], value: row.id };
         })
       );

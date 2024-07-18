@@ -33,7 +33,6 @@ export const requestDefinitions = {
   },
   comments: {
     model: 'Comment',
-    isChild: 'ideas',
   },
   ideas: {
     model: 'Idea',

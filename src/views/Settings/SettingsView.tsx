@@ -246,7 +246,12 @@ const SettingsView = () => {
                         : requestDefinitions[requestDefinitions[setting_name].isChild].model.toLowerCase()
                     }
                   />{' '}
-                  Add to {requestDefinitions[requestDefinitions[setting_name].isChild].model.toLowerCase()}
+                  {t('texts.addToParent', {
+                    var:
+                      requestDefinitions[setting_name].isChild === 'boxes'
+                        ? 'box'
+                        : requestDefinitions[requestDefinitions[setting_name].isChild].model.toLowerCase(),
+                  })}
                 </Button>
               )}
             </Stack>

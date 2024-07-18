@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import FormInput from './FormInput';
 import { useEffect, useState } from 'react';
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
+import MoveData from '../MoveData';
 
 interface Props {
   id?: number;
@@ -24,6 +25,8 @@ interface Props {
 const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const { t } = useTranslation();
   const [items, setItems] = useState<SingleResponseType>();
+  const [move, setMove] = useState<SettingNamesType>();
+  const [child, setChild] = useState<Record<SettingNamesType, number[]>>();
 
   const schema = dataSettings[scope].reduce(
     (schema, field) => ({ ...schema, [field]: formsSettings[field].schema }),
@@ -66,7 +69,34 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
       requestId
     ).then((response) => {
       if (!response.success) return;
-      onClose();
+      child ? moveChild(!id ? response.data : id) : onClose();
+    });
+  };
+
+  const setMoveData = (response: number[]) => {
+    if (!move) return;
+    const newChildList = { ...child, [move]: response };
+    setChild(newChildList);
+    setMove(undefined);
+  };
+
+  const moveChild = async (parentId: number) => {
+    if (!child) return;
+    const childList = Object.keys(child) as SettingNamesType[];
+    childList.map((childScope) => {
+      child[childScope].map((childId) =>
+        databaseRequest(
+          {
+            model: requestDefinitions[childScope].model,
+            method: getRequest(childScope, 'move'),
+            arguments: {
+              [getRequest(scope, 'id')]: parentId,
+              [getRequest(childScope, 'id')]: childId,
+            },
+          },
+          ['updater_id']
+        ).then(onClose)
+      );
     });
   };
 
@@ -90,6 +120,11 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
     });
   };
 
+  const getChild = () => {
+    const keys = Object.keys(requestDefinitions) as SettingNamesType[];
+    return keys.filter((curScope: SettingNamesType) => requestDefinitions[curScope].isChild === scope);
+  };
+
   useEffect(() => {
     updateValues();
   }, [items]);
@@ -99,36 +134,59 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   }, [isOpen]);
 
   return (
-    <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} key={`${id}_${scope}`}>
-      {scope && (
-        <Stack p={2}>
-          <Typography variant="h4" pb={2}>
-            {!id ? 'New' : 'Edit'}{' '}
-            {requestDefinitions[scope].model === 'Topic' ? 'Box' : requestDefinitions[scope].model}
-          </Typography>
-          <FormContainer>
-            {dataSettings[scope].map((field) => (
-              <FormInput
-                key={field}
-                form={field}
-                register={register}
-                control={control}
-                getValues={getValues}
-                errors={errors}
-              />
-            ))}
-            <Stack direction="row">
-              <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
-                {t('generics.cancel')}
-              </Button>
-              <Button type="submit" variant="contained" onClick={handleSubmit(onSubmit)}>
-                {t('generics.confirm')}
-              </Button>
-            </Stack>
-          </FormContainer>
-        </Stack>
+    <>
+      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} key={`${id}_${scope}`}>
+        {scope && (
+          <Stack p={2}>
+            <Typography variant="h4" pb={2}>
+              {!id ? 'New ' : 'Edit '}
+              {requestDefinitions[scope].model === 'Topic' ? 'Box' : requestDefinitions[scope].model}
+            </Typography>
+            <FormContainer>
+              {dataSettings[scope].map((field) => (
+                <FormInput
+                  key={field}
+                  form={field}
+                  register={register}
+                  control={control}
+                  getValues={getValues}
+                  errors={errors}
+                />
+              ))}
+              {getChild().length > 0 &&
+                getChild().map((child) => (
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="info"
+                    key={child}
+                    sx={{ mb: 3, display: scope === 'rooms' && child === 'boxes' ? 'none' : 'initial' }}
+                    onClick={() => setMove(child)}
+                  >
+                    {t('texts.addChild', { var: child })}
+                  </Button>
+                ))}
+              <Stack direction="row">
+                <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
+                  {t('generics.cancel')}
+                </Button>
+                <Button type="submit" variant="contained" onClick={handleSubmit(onSubmit)}>
+                  {t('generics.confirm')}
+                </Button>
+              </Stack>
+            </FormContainer>
+          </Stack>
+        )}
+      </Drawer>
+      {getChild().length > 0 && (
+        <MoveData
+          scope={move || getChild()[0]}
+          isOpen={!!move}
+          onConfirm={(response: number[]) => setMoveData(response)}
+          onClose={() => setMove(undefined)}
+        />
       )}
-    </Drawer>
+    </>
   );
 };
 

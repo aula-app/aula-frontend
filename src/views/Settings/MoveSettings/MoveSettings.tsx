@@ -1,5 +1,6 @@
+import { DatabaseResponseData, SingleResponseType } from '@/types/Generics';
 import { BoxType } from '@/types/scopes/BoxTypes';
-import { SingleResponseType } from '@/types/Generics';
+import { SettingNamesType } from '@/types/scopes/SettingsTypes';
 import { databaseRequest, getRequest, requestDefinitions } from '@/utils';
 import {
   Button,
@@ -15,9 +16,8 @@ import {
   Stack,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { SettingNamesType } from '@/types/scopes/SettingsTypes';
+import { useParams } from 'react-router-dom';
 
 type Params = {
   isOpen: boolean;
@@ -47,12 +47,13 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
         offset: 0,
         limit: 0,
       },
-    }).then((response: SingleResponseType) =>
+    }).then((response: DatabaseResponseData) =>
       setDestinationList(response.data.map((r: BoxType) => ({ value: r.id, label: r.name })))
     );
   };
 
   const request = async (id: number) => {
+    if (!requestDefinitions[scope].isChild) return;
     await databaseRequest(
       {
         model: requestDefinitions[scope].model,
