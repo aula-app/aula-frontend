@@ -123,7 +123,7 @@ export const ICONS: Record<string, React.ComponentType> = {
 export type IconType = keyof typeof ICONS;
 
 interface Props {
-  icon: keyof typeof ICONS; // Icon's name alternate prop
+  icon: IconType; // Icon's name alternate prop
   size?: 'small' | 'medium' | 'large' | 'xl' | 'full'; // Icon's name alternate prop,
   sx?: ObjectPropByName;
 }

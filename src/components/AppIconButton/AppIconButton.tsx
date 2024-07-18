@@ -8,7 +8,7 @@ const MUI_ICON_BUTTON_COLORS = ['inherit', 'default', 'primary', 'secondary', 's
 
 interface Props extends Omit<IconButtonProps, 'color'> {
   color?: string; // Not only 'inherit' | 'default' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
-  icon?: string;
+  icon: string;
   // Missing props
   component?: ElementType; // Could be RouterLink, AppLink, <a>, etc.
   to?: string; // Link prop
