@@ -29,7 +29,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const [child, setChild] = useState<Record<SettingNamesType, number[]>>();
 
   const schema = dataSettings[scope].reduce(
-    (schema, field) => ({ ...schema, [field]: formsSettings[field].schema }),
+    (schema, field) => ({ ...schema, [field]: formsSettings[field.name].schema }),
     {}
   );
 
@@ -103,7 +103,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const updateValues = () => {
     dataSettings[scope].forEach((field) => {
       // @ts-ignore
-      setValue(field, items ? items.data[field] : otherData[field] || formsSettings[field].defaultValue);
+      setValue(field, items ? items.data[field.name] : otherData[field.name] || formsSettings[field.name].defaultValue);
     });
   };
 
@@ -145,8 +145,8 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
             <FormContainer>
               {dataSettings[scope].map((field) => (
                 <FormInput
-                  key={field}
-                  form={field}
+                  key={field.name}
+                  form={field.name}
                   register={register}
                   control={control}
                   getValues={getValues}
@@ -179,12 +179,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
         )}
       </Drawer>
       {getChild().length > 0 && (
-        <MoveData
-          scope={move || getChild()[0]}
-          isOpen={!!move}
-          onConfirm={(response: number[]) => setMoveData(response)}
-          onClose={() => setMove(undefined)}
-        />
+        <MoveData parentId={id} scope={move || getChild()[0]} isOpen={!!move} onClose={() => setMove(undefined)} />
       )}
     </>
   );

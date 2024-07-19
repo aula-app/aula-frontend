@@ -1,27 +1,52 @@
 import { SettingNamesType } from '@/types/scopes/SettingsTypes';
 import { formsSettings } from './formsSettings';
 
-export const dataSettings = {
-  boxes: ['name', 'description_public', 'room_id', 'phase_id'],
-  bug: ['path', 'description'],
-  comments: ['content'],
-  ideas: ['title', 'content', 'room_id'],
-  messages: ['headline', 'body', 'user_needs_to_consent', 'consent_text', 'status'],
-  report: ['path', 'description'],
-  rooms: ['room_name', 'description_public'],
-  users: ['displayname', 'realname', 'email', 'about_me', 'username'],
-} as Record<SettingNamesType, Array<keyof typeof formsSettings>>;
+type DataSetting = {
+  name: keyof typeof formsSettings;
+  orderId: number;
+  role: 10 | 20 | 30 | 40 | 50 | 60;
+};
 
-export const dataOrderId = {
-  boxes: [1, 7, 6, 5],
-  bug: [1, 2],
-  comments: [5],
-  ideas: [9, 7, 8],
-  messages: [5, 6, 7, 8, 0],
-  report: [1, 2],
-  rooms: [0, 5],
-  users: [6, 1, 7, 12, 5],
-} as Record<SettingNamesType, Array<number>>;
+export const dataSettings = {
+  boxes: [
+    { name: 'name', orderId: 1, role: 10 },
+    { name: 'description_public', orderId: 7, role: 10 },
+    { name: 'room_id', orderId: 6, role: 10 },
+    { name: 'phase_id', orderId: 5, role: 10 },
+  ],
+  bug: [
+    { name: 'path', orderId: 1, role: 10 },
+    { name: 'description', orderId: 2, role: 10 },
+  ],
+  comments: [{ name: 'content', orderId: 5, role: 10 }],
+  ideas: [
+    { name: 'title', orderId: 9, role: 10 },
+    { name: 'content', orderId: 7, role: 10 },
+    { name: 'room_id', orderId: 8, role: 10 },
+  ],
+  messages: [
+    { name: 'headline', orderId: 5, role: 10 },
+    { name: 'body', orderId: 6, role: 10 },
+    { name: 'user_needs_to_consent', orderId: 7, role: 10 },
+    { name: 'consent_text', orderId: 8, role: 10 },
+    { name: 'status', orderId: 0, role: 10 },
+  ],
+  report: [
+    { name: 'path', orderId: 1, role: 10 },
+    { name: 'description', orderId: 2, role: 10 },
+  ],
+  rooms: [
+    { name: 'room_name', orderId: 0, role: 10 },
+    { name: 'description_public', orderId: 5, role: 10 },
+  ],
+  users: [
+    { name: 'displayname', orderId: 6, role: 10 },
+    { name: 'realname', orderId: 1, role: 10 },
+    { name: 'email', orderId: 7, role: 10 },
+    { name: 'about_me', orderId: 12, role: 10 },
+    { name: 'username', orderId: 5, role: 10 },
+  ],
+} as Record<SettingNamesType, Array<DataSetting>>;
 
 export const requestDefinitions = {
   boxes: {
@@ -55,7 +80,7 @@ export const requestDefinitions = {
 
 export const getRequest = (
   scope: SettingNamesType,
-  type: 'add' | 'delete' | 'edit' | 'fetch' | 'get' | 'id' | 'move'
+  type: 'add' | 'delete' | 'edit' | 'fetch' | 'get' | 'getChild' | 'id' | 'move'
 ) => {
   switch (type) {
     case 'id':
@@ -64,6 +89,8 @@ export const getRequest = (
       return `get${requestDefinitions[scope].model}s`;
     case 'get':
       return `get${requestDefinitions[scope].model}BaseData`;
+    case 'getChild':
+      return `get${requestDefinitions[scope].model}sBy${requestDefinitions[requestDefinitions[scope].isChild].model}`;
     case 'move':
       return `add${requestDefinitions[scope].model}To${requestDefinitions[requestDefinitions[scope].isChild].model}`;
     default:

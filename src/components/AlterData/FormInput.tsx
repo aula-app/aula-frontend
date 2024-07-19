@@ -41,7 +41,7 @@ const FormInput = ({ form, register, getValues, control, errors, disabled = fals
       setOptions(
         // @ts-ignore
         response.data.map((row) => {
-          return { label: row[dataSettings[scope][0]], value: row.id };
+          return { label: row[dataSettings[scope][0].name], value: row.id };
         })
       );
     });

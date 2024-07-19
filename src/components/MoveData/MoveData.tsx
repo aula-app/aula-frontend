@@ -1,7 +1,7 @@
 import { AppIcon, AppIconButton } from '@/components';
 import { DatabaseResponseData, DatabaseResponseType, ObjectPropByName } from '@/types/Generics';
 import { SettingNamesType } from '@/types/scopes/SettingsTypes';
-import { databaseRequest, dataOrderId, dataSettings, getRequest, requestDefinitions } from '@/utils';
+import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
 import {
   Button,
   Checkbox,
@@ -19,10 +19,10 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 interface Props {
+  parentId: number | undefined;
+  scope: SettingNamesType;
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (response: number[]) => void;
-  scope: SettingNamesType;
 }
 
 /**
@@ -30,7 +30,7 @@ interface Props {
  * @component ConsentDialog
  */
 
-const DelegateVote = ({ isOpen, scope, onConfirm, onClose }: Props) => {
+const DelegateVote = ({ scope, parentId, isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const params = useParams();
   const [data, setData] = useState<DatabaseResponseData[]>();
@@ -38,28 +38,61 @@ const DelegateVote = ({ isOpen, scope, onConfirm, onClose }: Props) => {
   const [filter, setFilter] = useState('');
 
   const dataFetch = async () => {
-    const extraArgs = {} as ObjectPropByName;
-    if (scope === 'ideas') extraArgs.room_id = params.room_id;
     await databaseRequest({
       model: requestDefinitions[scope].model,
-      method: scope === 'ideas' ? 'getIdeasByRoom' : getRequest(scope, 'fetch'),
+      method: getRequest(scope, 'fetch'),
       arguments: {
         offset: 0,
         limit: 0,
-        orderby: dataOrderId[scope][0],
+        orderby: dataSettings[scope][0].orderId,
         asc: 1,
-        extra_where: ` AND (${dataSettings[scope][0]} LIKE '%${filter}%' OR ${dataSettings[scope][1]} LIKE '%${filter}%')`,
-        ...extraArgs,
+        extra_where: ` AND (${dataSettings[scope][0].name} LIKE '%${filter}%' OR ${dataSettings[scope][1].name} LIKE '%${filter}%')`,
       },
     }).then((response: DatabaseResponseType) => setData(response.data));
   };
 
-  const select = (item: number) => {
-    setSelected([...selected, item]);
+  const getCurrentItems = async () => {
+    await databaseRequest({
+      model: requestDefinitions[scope].model,
+      method: getRequest(scope, 'getChild'),
+      arguments: {
+        [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
+      },
+    }).then((request: DatabaseResponseType) => setSelected(request.data.map((item) => item.id)));
+  };
+
+  const select = async (itemId: number) => {
+    if (!!parentId) return;
+    await databaseRequest(
+      {
+        model: requestDefinitions[scope].model,
+        method: getRequest(scope, 'move'),
+        arguments: {
+          [getRequest(scope, 'id')]: itemId,
+          [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
+        },
+      },
+      ['updater_id']
+    ).then(getCurrentItems);
+  };
+
+  const remove = async (itemId: number) => {
+    if (!!parentId) return;
+    await databaseRequest(
+      {
+        model: requestDefinitions[scope].model,
+        method: getRequest(scope, 'move'),
+        arguments: {
+          [getRequest(scope, 'id')]: itemId,
+          [getRequest(requestDefinitions[scope].isChild, 'id')]: 0,
+        },
+      },
+      ['updater_id']
+    ).then(getCurrentItems);
   };
 
   const toggleSelect = (item: number) => {
-    selected.includes(item) ? setSelected(selected.filter((value) => value !== item)) : select(item);
+    selected.includes(item) ? remove(item) : select(item);
   };
 
   const changeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -106,9 +139,9 @@ const DelegateVote = ({ isOpen, scope, onConfirm, onClose }: Props) => {
                   >
                     <Checkbox checked={selected.includes(item.id)} onChange={() => toggleSelect(item.id)} />
                     <Stack pl={2} flex={1}>
-                      <Typography noWrap>{item[dataSettings[scope][0]]}</Typography>
+                      <Typography noWrap>{item[dataSettings[scope][0].name]}</Typography>
                       <Typography noWrap color="secondary" fontSize="small">
-                        {item[dataSettings[scope][1]]}
+                        {item[dataSettings[scope][1].name]}
                       </Typography>
                     </Stack>
                   </Stack>
@@ -121,7 +154,7 @@ const DelegateVote = ({ isOpen, scope, onConfirm, onClose }: Props) => {
         <Button color="secondary" onClick={onClose}>
           {t('generics.cancel')}
         </Button>
-        <Button variant="contained" onClick={() => onConfirm(selected)} disabled={!selected}>
+        <Button variant="contained" onClick={() => {}} disabled={!selected}>
           {t('generics.confirm')}
         </Button>
       </DialogActions>

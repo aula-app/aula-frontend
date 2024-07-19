@@ -3,7 +3,7 @@ import AlterData from '@/components/AlterData';
 import DeleteData from '@/components/DeleteData';
 import { SettingNamesType } from '@/types/scopes/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
-import { databaseRequest, dataOrderId, dataSettings, getRequest, requestDefinitions } from '@/utils';
+import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
 import { SubdirectoryArrowRight } from '@mui/icons-material';
 import {
   Button,
@@ -41,7 +41,7 @@ const SettingsView = () => {
   const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
-  const [orderBy, setOrder] = useState(dataOrderId[setting_name][0]);
+  const [orderBy, setOrder] = useState(dataSettings[setting_name][0].orderId);
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState(['', '']);
 
@@ -112,7 +112,7 @@ const SettingsView = () => {
       setSelected([]);
       setOrderAsc(true);
       getLimit();
-      setOrder(dataOrderId[setting_name][0]);
+      setOrder(dataSettings[setting_name][0].orderId);
     }
   };
 
@@ -163,8 +163,8 @@ const SettingsView = () => {
           >
             <MenuItem value=""></MenuItem>
             {dataSettings[setting_name].map((column) => (
-              <MenuItem value={column} key={column}>
-                {t(`settings.${column}`)}
+              <MenuItem value={column.name} key={column.name}>
+                {t(`settings.${column.name}`)}
               </MenuItem>
             ))}
           </TextField>
@@ -194,11 +194,11 @@ const SettingsView = () => {
               {dataSettings[setting_name].map((column, key) => (
                 <TableCell key={`${column}${key}`} sx={{ whiteSpace: 'nowrap' }}>
                   <TableSortLabel
-                    active={orderBy === dataOrderId[setting_name][key]}
+                    active={orderBy === dataSettings[setting_name][key].orderId}
                     direction={orderAsc ? 'asc' : 'desc'}
-                    onClick={() => handleOrder(dataOrderId[setting_name][key])}
+                    onClick={() => handleOrder(dataSettings[setting_name][key].orderId)}
                   >
-                    {t(`settings.${column}`)}
+                    {t(`settings.${column.name}`)}
                   </TableSortLabel>
                 </TableCell>
               ))}
@@ -217,7 +217,7 @@ const SettingsView = () => {
                       sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                       onClick={() => setAlter({ open: true, id: row.id })}
                     >
-                      {row[column]}
+                      {row[column.name]}
                     </TableCell>
                   ))}
                 </TableRow>
