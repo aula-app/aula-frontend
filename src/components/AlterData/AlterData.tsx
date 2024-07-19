@@ -1,6 +1,6 @@
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, DataSetting, dataSettings, formsSettings, getRequest, requestDefinitions } from '@/utils';
+import { databaseRequest, dataSettings, formsSettings, getRequest, requestDefinitions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import MoveData from '../MoveData';
 import FormInput from './FormInput';
-import { PossibleFields } from '@/types/Scopes';
 
 interface Props {
   id?: number;
