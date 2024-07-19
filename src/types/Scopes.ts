@@ -17,6 +17,12 @@ export interface BoxType {
   phase_duration_4: number;
 }
 
+export interface BugType {
+  id: number;
+  path: string;
+  description: string;
+}
+
 export interface CommentType {
   id: number;
   content: string;
@@ -67,6 +73,12 @@ export interface MessageType {
   status: number;
 }
 
+export interface ReportType {
+  id: number;
+  path: string;
+  description: string;
+}
+
 export interface RoomType {
   access_code: string;
   created: string;
@@ -113,3 +125,13 @@ export interface UserType {
   consents_given: number;
   consents_needed: number;
 }
+
+export interface possibleFields
+  extends BoxType,
+    BugType,
+    CommentType,
+    IdeaType,
+    MessageType,
+    RoomType,
+    ReportType,
+    UserType {}

@@ -16,7 +16,6 @@ import {
 import { grey } from '@mui/material/colors';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 interface Props {
   parentId: number | undefined;
@@ -32,7 +31,6 @@ interface Props {
 
 const DelegateVote = ({ scope, parentId, isOpen, onClose }: Props) => {
   const { t } = useTranslation();
-  const params = useParams();
   const [data, setData] = useState<DatabaseResponseData[]>();
   const [selected, setSelected] = useState<number[]>([]);
   const [filter, setFilter] = useState('');

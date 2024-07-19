@@ -1,9 +1,9 @@
-import { BoxType, CommentType, IdeaType, MessageType, RoomType, UserType } from './Scopes';
+import { possibleFields } from './Scopes';
 import { SettingNamesType } from './SettingsTypes';
 
 // Helper to read object's properties as obj['name']
 export type ObjectPropByName = Record<string, any>;
-export type DatabaseResponseData = BoxType | CommentType | IdeaType | MessageType | RoomType | UserType;
+export type DatabaseResponseData = possibleFields;
 
 export interface SingleResponseType {
   success: Boolean;
