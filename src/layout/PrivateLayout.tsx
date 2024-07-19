@@ -1,10 +1,10 @@
-import { useState, FunctionComponent, PropsWithChildren } from 'react';
-import { Stack } from '@mui/material';
 import { ErrorBoundary } from '@/components';
 import { useOnMobile } from '@/hooks/layout';
+import { Stack } from '@mui/material';
+import { FunctionComponent, PropsWithChildren, useState } from 'react';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
-import TopBar from './TopBar';
 import SideBar from './SideBar';
+import TopBar from './TopBar';
 
 const TITLE_PRIVATE = 'aula';
 

@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
 import { useAppStore } from '@/store';
+import { useCallback } from 'react';
 
 /**
  * Returns event handler to toggle Dark/Light modes

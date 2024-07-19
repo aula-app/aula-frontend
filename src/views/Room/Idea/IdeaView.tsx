@@ -1,19 +1,16 @@
-import { Fab, Stack, Typography } from '@mui/material';
-import { useParams } from 'react-router';
-import { useEffect, useState } from 'react';
+import AlterData from '@/components/AlterData';
 import ApprovalCard from '@/components/ApprovalCard';
+import Comment from '@/components/Comment';
+import IdeaBubble from '@/components/IdeaBubble';
+import IdeaDocument from '@/components/IdeaDocument';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
 import { Vote, databaseRequest } from '@/utils';
-import { CommentResponseType } from '@/types/Scopes';
-import { SingleIdeaResponseType } from '@/types/Scopes';
 import { Add } from '@mui/icons-material';
-import { BoxResponseType } from '@/types/Scopes';
-import IdeaBubble from '@/components/IdeaBubble';
-import Comment from '@/components/Comment';
-import IdeaDocument from '@/components/IdeaDocument';
+import { Fab, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AlterData from '@/components/AlterData';
+import { useParams } from 'react-router';
 
 /**
  * Renders "Idea" view
@@ -34,7 +31,7 @@ const IdeaView = () => {
       model: 'Idea',
       method: 'getIdeaContent',
       arguments: { idea_id: params['idea_id'] },
-    }).then((response: SingleIdeaResponseType) => {
+    }).then((response) => {
       setIdea(response);
     });
 
@@ -43,14 +40,14 @@ const IdeaView = () => {
       model: 'Comment',
       method: 'getCommentsByIdeaId',
       arguments: { idea_id: Number(params['idea_id']) },
-    }).then((response: CommentResponseType) => setComments(response));
+    }).then((response) => setComments(response));
 
   const getPhase = async () =>
     await databaseRequest({
       model: 'Topic',
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
-    }).then((response: BoxResponseType) => setPhase(Number(response.data.phase_id)));
+    }).then((response) => setPhase(Number(response.data.phase_id)));
 
   const getVote = async () =>
     await databaseRequest(

@@ -1,5 +1,5 @@
-import { FunctionComponent } from 'react';
 import MuiAlert, { AlertProps as MuiAlertProps } from '@mui/material/Alert';
+import { FunctionComponent } from 'react';
 import { APP_ALERT_SEVERITY, APP_ALERT_VARIANT } from '../config';
 
 /**

@@ -1,9 +1,9 @@
-import { TextField, Typography, Stack } from '@mui/material';
 import { AppButton } from '@/components';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { Stack, TextField, Typography } from '@mui/material';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 
 /**
  * Renders "Recover Password" view for Login flow

@@ -1,11 +1,10 @@
-import { Box, Stack, Typography } from '@mui/material';
-import { Card, CardContent } from '@mui/material';
-import { phases } from '@/utils';
 import { BoxType } from '@/types/Scopes';
-import AppIcon from '../AppIcon';
-import MoreOptions from '../MoreOptions';
-import AppLink from '../AppLink';
+import { phases } from '@/utils';
+import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import AppIcon from '../AppIcon';
+import AppLink from '../AppLink';
+import MoreOptions from '../MoreOptions';
 
 interface IdeaBoxProps {
   box: BoxType;

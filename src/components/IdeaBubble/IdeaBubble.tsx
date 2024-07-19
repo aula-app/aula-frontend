@@ -1,11 +1,11 @@
-import { Button, Chip, Stack, Typography } from '@mui/material';
 import { IdeaType } from '@/types/Scopes';
-import AppIcon from '../AppIcon';
-import ChatBubble from '../ChatBubble';
-import { blue } from '@mui/material/colors';
 import { databaseRequest } from '@/utils';
+import { Button, Chip, Stack, Typography } from '@mui/material';
+import { blue } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
+import AppIcon from '../AppIcon';
 import AppLink from '../AppLink';
+import ChatBubble from '../ChatBubble';
 import MoreOptions from '../MoreOptions';
 
 interface Props {

@@ -1,11 +1,10 @@
-import { Grid, Stack, Typography } from '@mui/material';
-import { RoomCard } from '@/components/RoomCard';
-import React, { useEffect, useState } from 'react';
-import { RoomsResponseType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
 import DashBoard from '@/components/DashBoard';
-import AskConsent from '../AskConsent/AskConsentView';
+import { RoomCard } from '@/components/RoomCard';
+import { databaseRequest } from '@/utils';
+import { Grid, Stack, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import AskConsent from '../AskConsent/AskConsentView';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
@@ -20,7 +19,7 @@ const WelcomeView = () => {
         offset: 0,
         limit: 0,
       },
-    }).then((response: RoomsResponseType) => setRooms(response));
+    }).then((response) => setRooms(response));
 
   const handleScroll = (event: React.UIEvent<HTMLElement>) => {
     setDashboard(false);

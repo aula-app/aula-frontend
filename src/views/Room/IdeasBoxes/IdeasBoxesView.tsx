@@ -1,12 +1,11 @@
-import { Fab, Grid, Stack } from '@mui/material';
-import { IdeaBox } from '@/components/IdeaBox';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { databaseRequest } from '@/utils';
-import { BoxesResponseType } from '@/types/Scopes';
 import { AppIcon } from '@/components';
 import AlterData from '@/components/AlterData';
-import MoveData from '@/components/MoveData';
+import { IdeaBox } from '@/components/IdeaBox';
+import { BoxesResponseType } from '@/types/Scopes';
+import { databaseRequest } from '@/utils';
+import { Fab, Grid, Stack } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/:phase

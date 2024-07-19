@@ -1,14 +1,14 @@
-import * as yup from 'yup';
+import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
+import { SettingNamesType } from '@/types/SettingsTypes';
+import { databaseRequest, dataSettings, formsSettings, getRequest, requestDefinitions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
-import { databaseRequest, dataSettings, formsSettings, getRequest, requestDefinitions } from '@/utils';
-import { SettingNamesType } from '@/types/SettingsTypes';
+import { useEffect, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
-import FormInput from './FormInput';
-import { useEffect, useState } from 'react';
-import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
+import * as yup from 'yup';
 import MoveData from '../MoveData';
+import FormInput from './FormInput';
 
 interface Props {
   id?: number;

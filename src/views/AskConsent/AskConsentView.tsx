@@ -1,9 +1,8 @@
-import { Box, Stack } from '@mui/material';
-import { localStorageGet } from '@/utils';
+import ConsentDialog from '@/dialogs/ConsentDialog';
 import { useAppStore } from '@/store';
+import { localStorageGet } from '@/utils';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import ConsentDialog from '@/dialogs/ConsentDialog';
 
 /**
  * Renders "Ask Consent" view

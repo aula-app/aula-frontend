@@ -1,9 +1,9 @@
-import { Badge, Box, Collapse, Grid, IconButton, Stack, Typography } from '@mui/material';
-import AppIcon from '../AppIcon';
 import { dashboardPhases, databaseRequest } from '@/utils';
+import { Badge, Box, Collapse, Grid, IconButton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import AppIconButton from '../AppIconButton';
 import { useTranslation } from 'react-i18next';
+import AppIcon from '../AppIcon';
+import AppIconButton from '../AppIconButton';
 
 const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboardPhases>;
 

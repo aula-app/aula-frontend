@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
-import WildIdeasView from '../WildIdeas';
 import IdeasBoxesView from '../IdeasBoxes';
+import WildIdeasView from '../WildIdeas';
 
 /**
  * Renders "Room" view
@@ -8,11 +8,7 @@ import IdeasBoxesView from '../IdeasBoxes';
  */
 const RoomView = () => {
   const params = useParams();
-  return params['phase']
-    ? Number(params['phase']) === 0
-      ? <WildIdeasView />
-      : <IdeasBoxesView />
-    : null
+  return params['phase'] ? Number(params['phase']) === 0 ? <WildIdeasView /> : <IdeasBoxesView /> : null;
 };
 
 export default RoomView;

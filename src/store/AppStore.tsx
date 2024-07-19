@@ -1,15 +1,15 @@
-import {
-  createContext,
-  useReducer,
-  useContext,
-  FunctionComponent,
-  Dispatch,
-  ComponentType,
-  PropsWithChildren,
-} from 'react';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import AppReducer from './AppReducer';
 import { localStorageGet } from '@/utils';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {
+  ComponentType,
+  createContext,
+  Dispatch,
+  FunctionComponent,
+  PropsWithChildren,
+  useContext,
+  useReducer,
+} from 'react';
+import AppReducer from './AppReducer';
 
 /**
  * AppState structure and initial values
@@ -86,4 +86,4 @@ const withAppStore =
     return <Component {...props} store={useAppStore()} />;
   };
 
-export { AppStoreProvider as AppStore, AppContext, useAppStore, withAppStore };
+export { AppContext, AppStoreProvider as AppStore, useAppStore, withAppStore };

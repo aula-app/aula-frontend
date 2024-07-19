@@ -1,16 +1,14 @@
-import { Box, Button, Grid, Stack, Typography } from '@mui/material';
+import { AppIcon, AppLink } from '@/components';
+import DelegateVote from '@/components/DelegateVote';
 import { IdeaBox } from '@/components/IdeaBox';
 import { IdeaCard } from '@/components/IdeaCard';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { BoxResponseType } from '@/types/Scopes';
-import { databaseRequest, phases } from '@/utils';
-import { IdeasResponseType } from '@/types/Scopes';
-import { AppIcon, AppLink } from '@/components';
-import { grey } from '@mui/material/colors';
-import DelegateVote from '@/components/DelegateVote';
 import { DelegationType } from '@/types/Delegation';
+import { databaseRequest } from '@/utils';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/ideas-box/:box_id

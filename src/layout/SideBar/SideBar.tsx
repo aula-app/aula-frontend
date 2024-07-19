@@ -1,14 +1,14 @@
-import { FunctionComponent, useCallback, MouseEvent } from 'react';
-import { Stack, Divider, Drawer, DrawerProps, FormControlLabel, Switch, Tooltip, Button } from '@mui/material';
 import { AppButton, AppIcon, AppIconButton } from '@/components';
+import LocaleSwitch from '@/components/LocaleSwitch';
+import UserInfo from '@/components/UserInfo';
+import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
 import { LinkToPage } from '@/types/PageLinks';
-import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
-import SideBarNavList from './SideBarNavList';
-import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../config';
-import UserInfo from '@/components/UserInfo';
+import { Divider, Drawer, DrawerProps, Stack } from '@mui/material';
+import { FunctionComponent, MouseEvent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import LocaleSwitch from '@/components/LocaleSwitch';
+import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../config';
+import SideBarNavList from './SideBarNavList';
 
 type Props = Pick<DrawerProps, 'anchor' | 'className' | 'open' | 'variant' | 'onClose'>;
 

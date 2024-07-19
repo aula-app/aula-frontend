@@ -1,14 +1,14 @@
+import { MessageConsentValues } from '@/utils';
 import { IconButton, Stack, Typography } from '@mui/material';
-import { AppIcon } from '..';
-import { MessageConfigsType, MessageTypes } from '@/types/Scopes';
 import { cyan, deepPurple, red } from '@mui/material/colors';
+import { AppIcon } from '..';
 
 /**
  * Renders "MessageCard" component
  */
 
 interface Props {
-  type: MessageTypes;
+  type: MessageConsentValues;
   title: string;
 }
 
@@ -25,7 +25,7 @@ const messageConfig = {
     icon: 'alert',
     color: red,
   },
-} as MessageConfigsType;
+};
 
 const MessageCard = ({ type, title }: Props) => {
   return (

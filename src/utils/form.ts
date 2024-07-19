@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback, SyntheticEvent, ChangeEvent } from 'react';
-import validate from 'validate.js';
 import { ObjectPropByName } from '@/types/Generics';
+import { ChangeEvent, SyntheticEvent, useCallback, useEffect, useState } from 'react';
+import validate from 'validate.js';
 
 // Same props to style Input, TextField, and so on across the Application
 export const SHARED_CONTROL_PROPS = {
@@ -96,7 +96,8 @@ export function useAppForm({ validationSchema, initialValues = {} }: UseAppFormP
   // Event to call on every Input change. Note: the "name" props of the Input control must be set!
   const onFieldChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const name = event.target?.name;
-    const value = event.target?.type === 'checkbox'
+    const value =
+      event.target?.type === 'checkbox'
         ? event.target?.checked // Checkbox Input
         : event.target?.value; // Any other Input
 

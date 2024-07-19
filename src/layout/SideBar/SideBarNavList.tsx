@@ -1,8 +1,8 @@
-import { FunctionComponent, MouseEventHandler } from 'react';
-import List from '@mui/material/List';
+import { AppIcon, AppLink } from '@/components';
 import { LinkToPage } from '@/types/PageLinks';
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { AppIcon, AppLink } from '@/components';
+import List from '@mui/material/List';
+import { FunctionComponent, MouseEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {

@@ -1,7 +1,7 @@
+import { databaseRequest, noVoteOptions, Vote, votingOptions } from '@/utils';
 import { Button, Stack } from '@mui/material';
-import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { databaseRequest, Vote, noVoteOptions, votingOptions } from '@/utils';
+import { useParams } from 'react-router-dom';
 import AppIcon from '../AppIcon';
 
 /**

@@ -1,6 +1,6 @@
+import MuiLink, { LinkProps as MuiLinkProps } from '@mui/material/Link';
 import { forwardRef, ReactNode } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import MuiLink, { LinkProps as MuiLinkProps } from '@mui/material/Link';
 import { APP_LINK_COLOR, APP_LINK_UNDERLINE } from '../config';
 
 interface Props extends MuiLinkProps {

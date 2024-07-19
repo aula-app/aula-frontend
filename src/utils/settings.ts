@@ -1,6 +1,9 @@
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { formsSettings } from './formsSettings';
 
+export type MessageConsentValues = 'message' | 'announcement' | 'alert';
+export const messageConsentValues = ['message', 'announcement', 'alert'] as MessageConsentValues[];
+
 type DataSetting = {
   name: keyof typeof formsSettings;
   orderId: number;

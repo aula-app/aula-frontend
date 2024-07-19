@@ -1,7 +1,7 @@
 import { AppIcon, AppLink } from '@/components';
 import MessageCard from '@/components/MessageCard';
-import { MessageType, messageConsentValues } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
+import { MessageType } from '@/types/Scopes';
+import { databaseRequest, messageConsentValues } from '@/utils';
 import { IconButton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 

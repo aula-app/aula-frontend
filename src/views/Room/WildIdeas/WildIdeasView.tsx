@@ -1,11 +1,10 @@
-import { Fab, Stack } from '@mui/material';
-import { Add } from '@mui/icons-material';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import AlterData from '@/components/AlterData';
 import Idea from '@/components/IdeaBubble';
 import { databaseRequest } from '@/utils';
-import { IdeasResponseType } from '@/types/Scopes';
-import AlterData from '@/components/AlterData';
+import { Add } from '@mui/icons-material';
+import { Fab, Stack } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 /**
  * Renders "WildIdeas" view

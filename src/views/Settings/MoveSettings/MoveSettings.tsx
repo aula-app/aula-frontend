@@ -1,4 +1,4 @@
-import { DatabaseResponseData, SingleResponseType } from '@/types/Generics';
+import { DatabaseResponseData } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, getRequest, requestDefinitions } from '@/utils';

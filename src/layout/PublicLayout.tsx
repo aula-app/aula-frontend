@@ -1,9 +1,9 @@
-import { FunctionComponent, PropsWithChildren } from 'react';
-import { Box, Button, Divider, FormControl, Grid, MenuItem, Select, SelectChangeEvent, Stack } from '@mui/material/';
 import { AppLink, ErrorBoundary } from '@/components';
-import { useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import LocaleSwitch from '@/components/LocaleSwitch';
+import { Box, Button, Divider, Grid, Stack } from '@mui/material/';
+import { FunctionComponent, PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 const TITLE_PUBLIC = 'aula';
 

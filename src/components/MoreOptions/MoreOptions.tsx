@@ -1,15 +1,15 @@
-import { Box, Button, ClickAwayListener, Divider, Paper, Stack, Typography, Zoom } from '@mui/material';
-import AppIconButton from '../AppIconButton';
-import AppIcon from '../AppIcon';
-import { grey } from '@mui/material/colors';
-import { useState } from 'react';
-import { ICONS } from '../AppIcon/AppIcon';
 import { AlterTypes, ColorTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
+import { Box, Button, ClickAwayListener, Divider, Paper, Stack, Typography, Zoom } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AlterData from '../AlterData';
-import DeleteData from '../DeleteData';
 import { useParams } from 'react-router-dom';
+import AlterData from '../AlterData';
+import AppIcon from '../AppIcon';
+import { ICONS } from '../AppIcon/AppIcon';
+import AppIconButton from '../AppIconButton';
+import DeleteData from '../DeleteData';
 
 interface OptionsTypes {
   type: AlterTypes;

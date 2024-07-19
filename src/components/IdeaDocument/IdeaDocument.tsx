@@ -1,8 +1,8 @@
-import { Button, Chip, Stack, Typography } from '@mui/material';
 import { IdeaType } from '@/types/Scopes';
-import AppIcon from '../AppIcon';
 import { databaseRequest, phases } from '@/utils';
+import { Button, Chip, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import AppIcon from '../AppIcon';
 import MoreOptions from '../MoreOptions';
 
 interface Props {
