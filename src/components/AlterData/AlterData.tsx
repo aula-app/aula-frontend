@@ -1,6 +1,6 @@
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, dataSettings, formsSettings, getRequest, requestDefinitions } from '@/utils';
+import { databaseRequest, DataSetting, dataSettings, formsSettings, getRequest, requestDefinitions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import MoveData from '../MoveData';
 import FormInput from './FormInput';
+import { PossibleFields } from '@/types/Scopes';
 
 interface Props {
   id?: number;
@@ -28,10 +29,9 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const [move, setMove] = useState<SettingNamesType>();
   const [child, setChild] = useState<Record<SettingNamesType, number[]>>();
 
-  const schema = dataSettings[scope].reduce(
-    (schema, field) => ({ ...schema, [field]: formsSettings[field.name].schema }),
-    {}
-  );
+  const schema = dataSettings[scope].reduce((schema, field) => {
+    return { ...schema, [field.name]: formsSettings[field.name].schema };
+  }, {});
 
   const {
     register,
@@ -75,7 +75,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
 
   const setMoveData = (response: number[]) => {
     if (!move) return;
-    const newChildList = { ...child, [move]: response };
+    const newChildList = { ...child, [move]: response } as Record<SettingNamesType, number[]>;
     setChild(newChildList);
     setMove(undefined);
   };

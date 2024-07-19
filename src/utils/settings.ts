@@ -1,9 +1,8 @@
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { formsSettings } from './formsSettings';
-import { possibleFields } from '@/types/Scopes';
+import { PossibleFields } from '@/types/Scopes';
 
 type DataSetting = {
-  name: keyof possibleFields;
+  name: keyof PossibleFields;
   orderId: number;
   role: 10 | 20 | 30 | 40 | 50 | 60;
 };

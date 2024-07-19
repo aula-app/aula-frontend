@@ -1,9 +1,9 @@
-import { possibleFields } from './Scopes';
+import { PossibleFields } from './Scopes';
 import { SettingNamesType } from './SettingsTypes';
 
 // Helper to read object's properties as obj['name']
 export type ObjectPropByName = Record<string, any>;
-export type DatabaseResponseData = possibleFields;
+export type DatabaseResponseData = PossibleFields;
 
 export interface SingleResponseType {
   success: Boolean;

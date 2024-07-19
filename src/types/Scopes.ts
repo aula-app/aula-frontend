@@ -126,7 +126,7 @@ export interface UserType {
   consents_needed: number;
 }
 
-export interface possibleFields
+export interface PossibleFields
   extends BoxType,
     BugType,
     CommentType,
