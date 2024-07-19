@@ -1,6 +1,6 @@
 import { AppIcon, AppIconButton } from '@/components';
-import { DatabaseResponseData, DatabaseResponseType, ObjectPropByName } from '@/types/Generics';
-import { SettingNamesType } from '@/types/scopes/SettingsTypes';
+import { DatabaseResponseData, DatabaseResponseType } from '@/types/Generics';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
 import {
   Button,

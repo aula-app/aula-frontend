@@ -3,9 +3,9 @@ import { Card } from '@mui/material';
 import { AppIcon } from '..';
 import { approvalVariants, databaseRequest, phases, votingOptions, votingVariants } from '@/utils';
 import { useParams } from 'react-router-dom';
-import { IdeaType } from '@/types/scopes/IdeaTypes';
+import { IdeaType } from '@/types/Scopes';
 import { useEffect, useState } from 'react';
-import { RoomPhases } from '@/types/scopes/RoomTypes';
+import { RoomPhases } from '@/types/SettingsTypes';
 
 interface IdeaCardProps {
   idea: IdeaType;

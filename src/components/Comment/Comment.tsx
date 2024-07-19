@@ -2,7 +2,7 @@ import { Button, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
 import { grey } from '@mui/material/colors';
-import { CommentType } from '@/types/scopes/CommentTypes';
+import { CommentType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { useEffect, useState } from 'react';
 import MoreOptions from '../MoreOptions';

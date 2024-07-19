@@ -1,5 +1,5 @@
 import { Button, Chip, Stack, Typography } from '@mui/material';
-import { IdeaType } from '@/types/scopes/IdeaTypes';
+import { IdeaType } from '@/types/Scopes';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
 import { blue } from '@mui/material/colors';

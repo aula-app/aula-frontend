@@ -1,10 +1,5 @@
-import { BoxType } from './scopes/BoxTypes';
-import { CommentType } from './scopes/CommentTypes';
-import { IdeaType } from './scopes/IdeaTypes';
-import { MessageType } from './scopes/MessageTypes';
-import { RoomType } from './scopes/RoomTypes';
-import { SettingNamesType } from './scopes/SettingsTypes';
-import { UserType } from './scopes/UserTypes';
+import { BoxType, CommentType, IdeaType, MessageType, RoomType, UserType } from './Scopes';
+import { SettingNamesType } from './SettingsTypes';
 
 // Helper to read object's properties as obj['name']
 export type ObjectPropByName = Record<string, any>;
@@ -23,7 +18,6 @@ export interface DatabaseResponseType {
 }
 
 export type ColorTypes = 'secondary' | 'warning' | 'error' | 'inherit' | 'primary' | 'success' | 'info';
-
 export type AlterTypes = 'add' | 'edit' | 'delete' | 'report' | 'bug';
 
 export interface EditDataType {

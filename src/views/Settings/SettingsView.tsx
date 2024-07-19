@@ -1,7 +1,7 @@
 import { AppIcon, AppIconButton } from '@/components';
 import AlterData from '@/components/AlterData';
 import DeleteData from '@/components/DeleteData';
-import { SettingNamesType } from '@/types/scopes/SettingsTypes';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
 import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
 import { SubdirectoryArrowRight } from '@mui/icons-material';

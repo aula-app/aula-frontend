@@ -1,7 +1,7 @@
 import { Avatar, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { databaseRequest } from '@/utils';
-import { SingleUserResponseType, UserType } from '@/types/scopes/UserTypes';
+import { SingleUserResponseType, UserType } from '@/types/Scopes';
 import AppIcon from '../AppIcon';
 
 /**

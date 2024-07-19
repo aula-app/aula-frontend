@@ -1,4 +1,4 @@
-import { SettingNamesType } from '@/types/scopes/SettingsTypes';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, getRequest, requestDefinitions } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material';

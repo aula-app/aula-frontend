@@ -1,4 +1,4 @@
-import { SettingNamesType } from '@/types/scopes/SettingsTypes';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { formsSettings } from './formsSettings';
 
 type DataSetting = {

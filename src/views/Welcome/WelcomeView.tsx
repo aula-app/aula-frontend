@@ -1,7 +1,7 @@
 import { Grid, Stack, Typography } from '@mui/material';
 import { RoomCard } from '@/components/RoomCard';
 import React, { useEffect, useState } from 'react';
-import { RoomsResponseType } from '@/types/scopes/RoomTypes';
+import { RoomsResponseType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import DashBoard from '@/components/DashBoard';
 import AskConsent from '../AskConsent/AskConsentView';

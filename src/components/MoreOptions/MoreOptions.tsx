@@ -5,7 +5,7 @@ import { grey } from '@mui/material/colors';
 import { useState } from 'react';
 import { ICONS } from '../AppIcon/AppIcon';
 import { AlterTypes, ColorTypes } from '@/types/Generics';
-import { SettingNamesType } from '@/types/scopes/SettingsTypes';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { useTranslation } from 'react-i18next';
 import AlterData from '../AlterData';
 import DeleteData from '../DeleteData';

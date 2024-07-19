@@ -1,5 +1,5 @@
 import { AppButton } from '@/components';
-import { MessageType } from '@/types/scopes/MessageTypes';
+import { MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';

@@ -1,6 +1,6 @@
 import { DatabaseResponseData, SingleResponseType } from '@/types/Generics';
-import { BoxType } from '@/types/scopes/BoxTypes';
-import { SettingNamesType } from '@/types/scopes/SettingsTypes';
+import { BoxType } from '@/types/Scopes';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, getRequest, requestDefinitions } from '@/utils';
 import {
   Button,

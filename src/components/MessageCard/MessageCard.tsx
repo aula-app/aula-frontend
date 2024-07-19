@@ -1,6 +1,6 @@
 import { IconButton, Stack, Typography } from '@mui/material';
 import { AppIcon } from '..';
-import { MessageConfigsType, MessageTypes } from '@/types/scopes/MessageTypes';
+import { MessageConfigsType, MessageTypes } from '@/types/Scopes';
 import { cyan, deepPurple, red } from '@mui/material/colors';
 
 /**

@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
 import { databaseRequest, dataSettings, formsSettings, getRequest, requestDefinitions } from '@/utils';
-import { SettingNamesType } from '@/types/scopes/SettingsTypes';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import FormInput from './FormInput';

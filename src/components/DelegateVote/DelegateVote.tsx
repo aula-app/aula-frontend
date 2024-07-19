@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { AppIcon, AppIconButton } from '@/components';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { SingleUserResponseType, UserType, UsersResponseType } from '@/types/scopes/UserTypes';
+import { SingleUserResponseType, UserType, UsersResponseType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { grey } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
@@ -51,7 +51,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
   };
 
   const singleUserFetch = async () => {
-    if(delegate.length === 0) return;
+    if (delegate.length === 0) return;
     await databaseRequest({
       model: 'User',
       method: 'getUserBaseData',
@@ -103,7 +103,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
   }, [filter, delegate.length]);
 
   useEffect(() => {
-    setConfirm(delegate.length > 0)
+    setConfirm(delegate.length > 0);
   }, [delegate.length]);
 
   return (
