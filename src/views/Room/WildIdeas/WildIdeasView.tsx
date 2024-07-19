@@ -1,5 +1,6 @@
 import AlterData from '@/components/AlterData';
 import Idea from '@/components/IdeaBubble';
+import { IdeasResponseType } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
 import { Add } from '@mui/icons-material';
 import { Fab, Stack } from '@mui/material';

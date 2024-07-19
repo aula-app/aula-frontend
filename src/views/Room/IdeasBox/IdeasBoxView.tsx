@@ -3,6 +3,7 @@ import DelegateVote from '@/components/DelegateVote';
 import { IdeaBox } from '@/components/IdeaBox';
 import { IdeaCard } from '@/components/IdeaCard';
 import { DelegationType } from '@/types/Delegation';
+import { IdeasResponseType, SingleBoxResponseType } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
 import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
@@ -16,7 +17,7 @@ import { useParams } from 'react-router-dom';
 const IdeasBoxView = () => {
   const { t } = useTranslation();
   const params = useParams();
-  const [box, setBox] = useState<BoxResponseType>();
+  const [box, setBox] = useState<SingleBoxResponseType>();
   const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
   const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>();
   const [delegationDialog, setDelegationDialog] = useState(false);

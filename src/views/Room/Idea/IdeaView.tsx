@@ -5,6 +5,7 @@ import IdeaBubble from '@/components/IdeaBubble';
 import IdeaDocument from '@/components/IdeaDocument';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
+import { CommentsResponseType, SingleIdeaResponseType } from '@/types/RequestTypes';
 import { Vote, databaseRequest } from '@/utils';
 import { Add } from '@mui/icons-material';
 import { Fab, Stack, Typography } from '@mui/material';
@@ -23,7 +24,7 @@ const IdeaView = () => {
   const [idea, setIdea] = useState<SingleIdeaResponseType>();
   const [add, setAdd] = useState(false);
   const [phase, setPhase] = useState(0);
-  const [comments, setComments] = useState<CommentResponseType>();
+  const [comments, setComments] = useState<CommentsResponseType>();
   const [vote, setVote] = useState<Vote>(0);
 
   const ideaFetch = async () =>

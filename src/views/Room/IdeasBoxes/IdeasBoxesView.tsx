@@ -1,7 +1,7 @@
 import { AppIcon } from '@/components';
 import AlterData from '@/components/AlterData';
 import { IdeaBox } from '@/components/IdeaBox';
-import { BoxesResponseType } from '@/types/Scopes';
+import { BoxesResponseType } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
 import { Fab, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';

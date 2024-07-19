@@ -1,5 +1,6 @@
 import DashBoard from '@/components/DashBoard';
 import { RoomCard } from '@/components/RoomCard';
+import { RoomsResponseType } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
 import { Grid, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -8,7 +9,7 @@ import AskConsent from '../AskConsent/AskConsentView';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
-  const [rooms, setRooms] = useState({} as RoomsResponseType);
+  const [rooms, setRooms] = useState<RoomsResponseType>();
   const [showDashboard, setDashboard] = useState(true);
 
   const roomsFetch = async () =>
@@ -21,7 +22,7 @@ const WelcomeView = () => {
       },
     }).then((response) => setRooms(response));
 
-  const handleScroll = (event: React.UIEvent<HTMLElement>) => {
+  const handleScroll = () => {
     setDashboard(false);
   };
 

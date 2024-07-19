@@ -1,7 +1,46 @@
-import {ObjectPropByName} from './Generics'
+import { ObjectPropByName } from './Generics';
+import { BoxType, CommentType, IdeaType, MessageType, RoomType, UserType } from './Scopes';
 
 export interface ModelRequest {
-  model: string,
-  method: string,
-  arguments: ObjectPropByName,
+  model: string;
+  method: string;
+  arguments: ObjectPropByName;
+}
+
+interface BaseResponseType {
+  success: boolean;
+  count: number;
+  error_code: number;
+}
+
+export interface BoxesResponseType extends BaseResponseType {
+  data: BoxType[];
+}
+
+export interface CommentsResponseType extends BaseResponseType {
+  data: CommentType[];
+}
+
+export interface IdeasResponseType extends BaseResponseType {
+  data: IdeaType[];
+}
+
+export interface RoomsResponseType extends BaseResponseType {
+  data: RoomType[];
+}
+
+export interface SingleResponseType extends BaseResponseType {
+  data: BoxType | CommentType | IdeaType | MessageType | RoomType | UserType;
+}
+
+export interface SingleBoxResponseType extends BaseResponseType {
+  data: BoxType;
+}
+
+export interface SingleIdeaResponseType extends BaseResponseType {
+  data: IdeaType;
+}
+
+export interface SingleUserResponseType extends BaseResponseType {
+  data: UserType;
 }

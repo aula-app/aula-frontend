@@ -3,6 +3,7 @@ export * from './form';
 export * from './formsSettings';
 export * from './jwt';
 export * from './localStorage';
+export * from './messges';
 export * from './navigation';
 export * from './phases';
 export * from './requests';

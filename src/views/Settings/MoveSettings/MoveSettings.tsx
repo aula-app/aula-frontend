@@ -47,9 +47,7 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
         offset: 0,
         limit: 0,
       },
-    }).then((response: DatabaseResponseData) =>
-      setDestinationList(response.data.map((r: BoxType) => ({ value: r.id, label: r.name })))
-    );
+    }).then((response) => setDestinationList(response.data.map((r: BoxType) => ({ value: r.id, label: r.name }))));
   };
 
   const request = async (id: number) => {

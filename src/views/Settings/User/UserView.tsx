@@ -2,6 +2,7 @@ import { AppButton, AppIcon } from '@/components';
 import ChangePassword from '@/components/ChangePassword';
 import ImageEditor from '@/components/ImageEditor';
 import { useAppStore } from '@/store';
+import { SingleUserResponseType } from '@/types/RequestTypes';
 import { UserType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import {

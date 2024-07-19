@@ -1,9 +1,9 @@
 import { ObjectPropByName } from './Generics';
-import { UserTypeKeys } from './scopes/UserTypes';
+import { UserType } from './Scopes';
 
 export interface TableRow {
   id: number;
-  name: UserTypeKeys;
+  name: keyof UserType;
 }
 
 export interface TableOptions {
@@ -11,7 +11,7 @@ export interface TableOptions {
   method: 'getUsers' | 'getGroups';
   page: number;
   limit: number;
-  orderBy: UserTypeKeys;
+  orderBy: keyof UserType;
   orderAsc: boolean;
   rows: TableRow[];
 }
