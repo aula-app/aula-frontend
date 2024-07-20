@@ -26,7 +26,6 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const { t } = useTranslation();
   const [items, setItems] = useState<SingleResponseType>();
   const [move, setMove] = useState<SettingNamesType>();
-  const [child, setChild] = useState<Record<SettingNamesType, number[]>>();
 
   const schema = dataSettings[scope].reduce((schema, field) => {
     return { ...schema, [field.name]: formsSettings[field.name].schema };
@@ -68,41 +67,17 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
       requestId
     ).then((response) => {
       if (!response.success) return;
-      child ? moveChild(!id ? response.data : id) : onClose();
-    });
-  };
-
-  const setMoveData = (response: number[]) => {
-    if (!move) return;
-    const newChildList = { ...child, [move]: response } as Record<SettingNamesType, number[]>;
-    setChild(newChildList);
-    setMove(undefined);
-  };
-
-  const moveChild = async (parentId: number) => {
-    if (!child) return;
-    const childList = Object.keys(child) as SettingNamesType[];
-    childList.map((childScope) => {
-      child[childScope].map((childId) =>
-        databaseRequest(
-          {
-            model: requestDefinitions[childScope].model,
-            method: getRequest(childScope, 'move'),
-            arguments: {
-              [getRequest(scope, 'id')]: parentId,
-              [getRequest(childScope, 'id')]: childId,
-            },
-          },
-          ['updater_id']
-        ).then(onClose)
-      );
+      onClose();
     });
   };
 
   const updateValues = () => {
     dataSettings[scope].forEach((field) => {
-      // @ts-ignore
-      setValue(field, items ? items.data[field.name] : otherData[field.name] || formsSettings[field.name].defaultValue);
+      setValue(
+        // @ts-ignore
+        field.name,
+        items ? items.data[field.name] : otherData[field.name] || formsSettings[field.name].defaultValue
+      );
     });
   };
 

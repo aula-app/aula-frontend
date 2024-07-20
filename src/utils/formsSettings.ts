@@ -35,6 +35,11 @@ const password = {
     .required(t('validation.required')),
 };
 
+const duration = {
+  type: 'text',
+  schema: yup.string().required(t('validation.required')),
+};
+
 export const formsSettings = {
   about_me: longText,
   body: longText,
@@ -73,6 +78,11 @@ export const formsSettings = {
       { label: 'Results', value: 40 },
     ],
   },
+  phase_duration_0: duration,
+  phase_duration_1: duration,
+  phase_duration_2: duration,
+  phase_duration_3: duration,
+  phase_duration_4: duration,
   realname: {
     type: 'input',
     schema: yup.string().required(t('validation.required')),
