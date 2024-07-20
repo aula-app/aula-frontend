@@ -10,6 +10,7 @@ import AppIcon from '../AppIcon';
 import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
 import DeleteData from '../DeleteData';
+import { localStorageGet, parseJwt } from '@/utils';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -19,28 +20,33 @@ interface OptionsTypes {
 }
 
 interface Props {
-  scope: SettingNamesType;
   id: number;
+  scope: SettingNamesType;
+  canEdit?: boolean;
   onClose: () => void;
 }
 /**
  * Renders question mark badge that triggers a tooltip on hover
  * @component MoreOptions
  */
-const MoreOptions = ({ scope, id, onClose }: Props) => {
+const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
   const { t } = useTranslation();
-  const params = useParams();
-
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
   const [del, setDel] = useState(false);
 
-  const options = [
-    { type: 'edit', icon: 'edit', color: 'secondary', label: t('generics.edit') },
-    { type: 'bug', icon: 'bug', color: 'warning', label: t('generics.bugReport') },
+  const defaultOptions = [
     { type: 'report', icon: 'report', color: 'error', label: t('generics.contentReport') },
+    { type: 'bug', icon: 'bug', color: 'warning', label: t('generics.bugReport') },
+  ] as OptionsTypes[];
+
+  const editOptions = [
+    { type: 'edit', icon: 'edit', color: 'secondary', label: t('generics.edit') },
     { type: 'delete', icon: 'delete', color: 'error', label: t('generics.delete') },
   ] as OptionsTypes[];
+
+  const options = defaultOptions.concat(canEdit ? editOptions : []);
+  console.log(options);
 
   // @ts-ignore
   const toggleOptions = (e) => {

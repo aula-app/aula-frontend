@@ -1,5 +1,5 @@
 import { IdeaType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Button, Chip, Stack, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
@@ -18,6 +18,8 @@ interface Props {
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
 export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
   const displayDate = new Date(idea.created);
 
@@ -59,7 +61,12 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
           </AppLink>
           <Stack direction="row" justifyContent="space-between" my={1}>
             <Chip icon={<AppIcon icon="settings" />} label="category" variant="outlined" />
-            <MoreOptions scope="ideas" id={idea.id} onClose={onReload} />
+            <MoreOptions
+              scope="ideas"
+              id={idea.id}
+              onClose={onReload}
+              canEdit={jwt_payload.user_level >= 30 || jwt_payload.user_id === idea.user_id}
+            />
           </Stack>
         </Stack>
       </ChatBubble>

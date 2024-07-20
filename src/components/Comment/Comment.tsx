@@ -1,5 +1,5 @@
 import { CommentType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Button, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,8 @@ interface Props {
 type likeMethodType = 'getLikeStatus' | 'CommentAddLike' | 'CommentRemoveLike';
 
 export const Comment = ({ comment, disabled = false, onReload }: Props) => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
   const displayDate = new Date(comment.created);
 
@@ -51,7 +53,12 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
         <Stack>
           <Typography>{comment.content}</Typography>
           <Stack direction="row" justifyContent="end">
-            <MoreOptions scope="comments" id={comment.id} onClose={onReload} />
+            <MoreOptions
+              scope="comments"
+              id={comment.id}
+              onClose={onReload}
+              canEdit={jwt_payload.user_level >= 30 || jwt_payload.user_id === comment.user_id}
+            />
           </Stack>
         </Stack>
       </ChatBubble>

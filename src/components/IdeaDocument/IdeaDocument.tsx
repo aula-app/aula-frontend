@@ -1,5 +1,5 @@
 import { IdeaType } from '@/types/Scopes';
-import { databaseRequest, phases } from '@/utils';
+import { databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
 import { Button, Chip, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '../AppIcon';
@@ -14,6 +14,8 @@ interface Props {
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
 export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
   const displayDate = new Date(idea.created);
 
@@ -47,7 +49,12 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
     <Stack width="100%" sx={{ scrollSnapAlign: 'center' }} color="secondary" mb={2}>
       <Stack direction="row" justifyContent="space-between">
         <Chip icon={<AppIcon icon="settings" />} label="category" variant="outlined" />
-        <MoreOptions scope="ideas" id={idea.id} onClose={onReload} />
+        <MoreOptions
+          scope="ideas"
+          id={idea.id}
+          onClose={onReload}
+          canEdit={jwt_payload.user_level >= 30 || jwt_payload.user_id === idea.user_id}
+        />
       </Stack>
       <Stack p={2} bgcolor={phases['0'].baseColor[50]} borderRadius={3} mb={1}>
         <Typography variant="h6">{idea.title}</Typography>
