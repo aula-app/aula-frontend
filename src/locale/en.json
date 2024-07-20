@@ -80,6 +80,7 @@
     "deleteHeadline": "Delete selected {{var}}",
     "deleteRequest": "Data deletion requested",
     "deleteText": "Are you sure you want to delete request the deletion of your account? All your personal data will be lost. This action cannot be undone.",
+    "editChild": "Edit {{var}}",
     "exportData": "Export account data",
     "exportRequest": "Data export requested",
     "ideaBox": "{{var}} Ideas on {{phase}}",

@@ -93,7 +93,7 @@ export const requestDefinitions = {
 
 export const getRequest = (
   scope: SettingNamesType,
-  type: 'add' | 'delete' | 'edit' | 'fetch' | 'get' | 'getChild' | 'id' | 'move'
+  type: 'add' | 'delete' | 'edit' | 'fetch' | 'get' | 'getChild' | 'id' | 'move' | 'remove'
 ) => {
   switch (type) {
     case 'id':
@@ -106,6 +106,8 @@ export const getRequest = (
       return `get${requestDefinitions[scope].model}sBy${requestDefinitions[requestDefinitions[scope].isChild].model}`;
     case 'move':
       return `add${requestDefinitions[scope].model}To${requestDefinitions[requestDefinitions[scope].isChild].model}`;
+    case 'remove':
+      return `remove${requestDefinitions[scope].model}From${requestDefinitions[requestDefinitions[scope].isChild].model}`;
     default:
       return `${type}${requestDefinitions[scope].model}`;
   }

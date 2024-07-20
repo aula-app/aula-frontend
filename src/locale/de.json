@@ -80,6 +80,7 @@
     "deleteHeadline": "Ausgewählte {{var}} löschen",
     "deleteRequest": "Löschung der Daten beantragt",
     "deleteText": "Sind Sie sicher, dass Sie die Löschung Ihres Kontos beantragen wollen? Alle Ihre persönlichen Daten gehen dabei verloren. Diese Aktion kann nicht rückgängig gemacht werden.",
+    "editChild": "{{var}} bearbeiten",
     "exportData": "Kontodaten exportieren",
     "exportRequest": "Datenexport angefordert",
     "ideaBox": "{{var}} Ideen zur {{phase}}",

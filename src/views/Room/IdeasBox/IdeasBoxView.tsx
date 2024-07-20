@@ -2,9 +2,10 @@ import { AppIcon, AppLink } from '@/components';
 import DelegateVote from '@/components/DelegateVote';
 import { IdeaBox } from '@/components/IdeaBox';
 import { IdeaCard } from '@/components/IdeaCard';
+import MoveData from '@/components/MoveData';
 import { DelegationType } from '@/types/Delegation';
 import { IdeasResponseType, SingleBoxResponseType } from '@/types/RequestTypes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
@@ -16,6 +17,8 @@ import { useParams } from 'react-router-dom';
  */
 const IdeasBoxView = () => {
   const { t } = useTranslation();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const params = useParams();
   const [box, setBox] = useState<SingleBoxResponseType>();
   const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
@@ -94,27 +97,33 @@ const IdeasBoxView = () => {
                 </Button>
               )}
             </Stack>
-            <Grid container spacing={1}>
-              {boxIdeas &&
-                boxIdeas.data &&
-                boxIdeas.data.map((idea, key) => (
-                  <Grid
-                    key={key}
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    xl={2}
-                    sx={{ scrollSnapAlign: 'center' }}
-                    order={-idea.approved}
-                  >
-                    <AppLink to={`idea/${idea.id}`}>
-                      <IdeaCard idea={idea} phase={box.data.phase_id} />
-                    </AppLink>
-                  </Grid>
-                ))}
-            </Grid>
+            {boxIdeas && (
+              <>
+                <Grid container spacing={1}>
+                  {boxIdeas.data &&
+                    boxIdeas.data.map((idea, key) => (
+                      <Grid
+                        key={key}
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                        sx={{ scrollSnapAlign: 'center' }}
+                        order={-idea.approved}
+                      >
+                        <AppLink to={`idea/${idea.id}`}>
+                          <IdeaCard idea={idea} phase={box.data.phase_id} />
+                        </AppLink>
+                      </Grid>
+                    ))}
+                </Grid>
+                {jwt_payload.user_level >= 50 && (
+                  <MoveData parentId={Number(params['box_id'])} scope="ideas" onClose={boxIdeasFetch} />
+                )}
+              </>
+            )}
           </>
         )}
       </Box>

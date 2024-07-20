@@ -15,7 +15,6 @@ import { Fragment, useEffect, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import MoveData from '../MoveData';
 import FormInput from './FormInput';
 
 interface Props {
@@ -35,7 +34,6 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [items, setItems] = useState<SingleResponseType>();
-  const [move, setMove] = useState<SettingNamesType>();
 
   const schema = dataSettings[scope].reduce((schema, field) => {
     return { ...schema, [field.name]: formsSettings[field.name].schema };
@@ -104,11 +102,6 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
     });
   };
 
-  const getChild = () => {
-    const keys = Object.keys(requestDefinitions) as SettingNamesType[];
-    return keys.filter((curScope: SettingNamesType) => requestDefinitions[curScope].isChild === scope);
-  };
-
   useEffect(() => {
     updateValues();
   }, [items]);
@@ -145,19 +138,6 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
                   )}
                 </Fragment>
               ))}
-              {getChild().length > 0 &&
-                getChild().map((child) => (
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="info"
-                    key={child}
-                    sx={{ mb: 3, display: scope === 'rooms' && child === 'boxes' ? 'none' : 'initial' }}
-                    onClick={() => setMove(child)}
-                  >
-                    {t('texts.addChild', { var: child })}
-                  </Button>
-                ))}
               <Stack direction="row">
                 <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
                   {t('generics.cancel')}
@@ -170,9 +150,6 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
           </Stack>
         )}
       </Drawer>
-      {getChild().length > 0 && (
-        <MoveData parentId={id} scope={move || getChild()[0]} isOpen={!!move} onClose={() => setMove(undefined)} />
-      )}
     </>
   );
 };

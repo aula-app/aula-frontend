@@ -8,7 +8,6 @@ import { AppStoreState } from './AppStore';
  * @param {*} [action.payload] - optional data object or the function to get data object
  */
 const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
-  // console.log('AppReducer() - action:', action);
   switch (action.type || action.action) {
     case 'CURRENT_USER':
       return {

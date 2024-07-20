@@ -1,6 +1,7 @@
 import { AppIcon } from '@/components';
 import AlterData from '@/components/AlterData';
 import { IdeaBox } from '@/components/IdeaBox';
+import MoveData from '@/components/MoveData';
 import { BoxesResponseType } from '@/types/RequestTypes';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Fab, Grid, Stack } from '@mui/material';
@@ -43,6 +44,8 @@ const IdeasBoxView = () => {
 
   return (
     <Stack alignItems="center">
+      {jwt_payload.user_level >= 50 && <MoveData parentId={Number(params.room_id)} scope="users" />}
+
       <Grid container spacing={2} p={1}>
         {boxes &&
           boxes.data &&

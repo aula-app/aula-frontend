@@ -46,7 +46,6 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
   ] as OptionsTypes[];
 
   const options = defaultOptions.concat(canEdit ? editOptions : []);
-  console.log(options);
 
   // @ts-ignore
   const toggleOptions = (e) => {

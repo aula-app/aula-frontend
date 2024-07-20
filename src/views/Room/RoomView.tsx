@@ -1,13 +1,13 @@
+import PhaseBar from '@/layout/PhaseBar';
 import { Stack } from '@mui/material';
 import { Outlet, useParams } from 'react-router-dom';
-import PhaseBar from '@/layout/PhaseBar';
 
 /**
  * Renders "Room" view
  * url: /room/:room_id/:phase
  */
 const RoomView = () => {
-  const params = useParams()
+  const params = useParams();
   return (
     <Stack width="100%" height="100%" overflow="hidden">
       <PhaseBar room={Number(params.room_id)} />
