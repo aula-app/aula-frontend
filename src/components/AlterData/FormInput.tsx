@@ -110,6 +110,7 @@ const FormInput = ({ form, register, getValues, control, errors, disabled = fals
             required
             disabled={disabled}
             type="number"
+            InputProps={{ inputProps: { min: 1 } }}
             variant="standard"
             // @ts-ignore
             {...register(form)}
