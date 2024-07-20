@@ -3,7 +3,7 @@ import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, dataSettings, formsSettings, getRequest, requestDefinitions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -118,14 +118,20 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
             </Typography>
             <FormContainer>
               {dataSettings[scope].map((field) => (
-                <FormInput
-                  key={field.name}
-                  form={field.name}
-                  register={register}
-                  control={control}
-                  getValues={getValues}
-                  errors={errors}
-                />
+                <Fragment key={field.name}>
+                  {field.name === 'phase_duration_1' && (
+                    <Typography variant="h5" mb={1}>
+                      {t('texts.phaseDuration')}
+                    </Typography>
+                  )}
+                  <FormInput
+                    form={field.name}
+                    register={register}
+                    control={control}
+                    getValues={getValues}
+                    errors={errors}
+                  />
+                </Fragment>
               ))}
               {getChild().length > 0 &&
                 getChild().map((child) => (

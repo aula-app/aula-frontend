@@ -7,7 +7,7 @@ import {
   requestDefinitions,
   SelectOptionsType,
 } from '@/utils';
-import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
+import { FormControl, FormHelperText, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control, Controller, FieldErrors, UseFormGetValues, UseFormRegister } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
@@ -56,25 +56,9 @@ const FormInput = ({ form, register, getValues, control, errors, disabled = fals
     }
   }, [form]);
 
-  return (
-    <>
-      {formsSettings[form].type !== 'select' ? (
-        <TextField
-          label={t(`settings.${form}`)}
-          required
-          minRows={formsSettings[form].type === 'text' ? 4 : 1}
-          multiline={formsSettings[form].type === 'text'}
-          disabled={disabled}
-          fullWidth
-          // @ts-ignore
-          {...register(form)}
-          // @ts-ignore
-          error={errors[form] ? true : false}
-          // @ts-ignore
-          helperText={errors[form]?.message || ' '}
-          {...restOfProps}
-        />
-      ) : (
+  switch (formsSettings[form].type) {
+    case 'select':
+      return (
         <Controller
           // @ts-ignore
           name={form}
@@ -115,9 +99,52 @@ const FormInput = ({ form, register, getValues, control, errors, disabled = fals
             </FormControl>
           )}
         />
-      )}
-    </>
-  );
+      );
+    case 'duration':
+      return (
+        <Stack direction="row" alignItems="center" px={1}>
+          <Typography noWrap pb={1} mr="auto">
+            {t(`settings.${form}`)}:
+          </Typography>
+          <TextField
+            required
+            disabled={disabled}
+            type="number"
+            variant="standard"
+            // @ts-ignore
+            {...register(form)}
+            // @ts-ignore
+            error={errors[form] ? true : false}
+            // @ts-ignore
+            helperText={errors[form]?.message || ' '}
+            sx={{ mx: 2, width: 80 }}
+            {...restOfProps}
+          />
+          <Typography noWrap pb={1}>
+            {t(`generics.days`)}
+          </Typography>
+        </Stack>
+      );
+    default:
+      return (
+        <TextField
+          label={t(`settings.${form}`)}
+          required
+          minRows={formsSettings[form].type === 'text' ? 4 : 1}
+          multiline={formsSettings[form].type === 'text'}
+          disabled={disabled}
+          type={formsSettings[form].type}
+          fullWidth
+          // @ts-ignore
+          {...register(form)}
+          // @ts-ignore
+          error={errors[form] ? true : false}
+          // @ts-ignore
+          helperText={errors[form]?.message || ' '}
+          {...restOfProps}
+        />
+      );
+  }
 };
 
 export default FormInput;

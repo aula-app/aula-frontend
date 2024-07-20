@@ -13,7 +13,6 @@ export const dataSettings = {
     { name: 'description_public', orderId: 7, role: 10 },
     { name: 'room_id', orderId: 6, role: 10 },
     { name: 'phase_id', orderId: 5, role: 10 },
-    { name: 'phase_duration_0', orderId: 5, role: 10 },
     { name: 'phase_duration_1', orderId: 5, role: 10 },
     { name: 'phase_duration_2', orderId: 5, role: 10 },
     { name: 'phase_duration_3', orderId: 5, role: 10 },

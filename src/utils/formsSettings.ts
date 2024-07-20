@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import * as yup from 'yup';
 
 export type SelectOptionsType = { label: string; value: number };
-type FormTypes = 'input' | 'password' | 'select' | 'text';
+type FormTypes = 'input' | 'password' | 'select' | 'text' | 'duration';
 type FormSetting = {
   type: FormTypes;
   schema: yup.Schema;
@@ -36,8 +36,12 @@ const password = {
 };
 
 const duration = {
-  type: 'text',
-  schema: yup.string().required(t('validation.required')),
+  type: 'duration',
+  defaultValue: 7,
+  schema: yup
+    .number()
+    .min(1, t('validation.min', { var: 1 }))
+    .required(t('validation.required')),
 };
 
 export const formsSettings = {
