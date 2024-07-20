@@ -6,7 +6,7 @@ import IdeaDocument from '@/components/IdeaDocument';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
 import { CommentsResponseType, SingleIdeaResponseType } from '@/types/RequestTypes';
-import { Vote, databaseRequest } from '@/utils';
+import { Vote, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Add } from '@mui/icons-material';
 import { Fab, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -20,6 +20,8 @@ import { useParams } from 'react-router';
 
 const IdeaView = () => {
   const { t } = useTranslation();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const params = useParams();
   const [idea, setIdea] = useState<SingleIdeaResponseType>();
   const [add, setAdd] = useState(false);
@@ -102,7 +104,7 @@ const IdeaView = () => {
               ))}
             </>
           )}
-          {phase < 20 && (
+          {phase < 20 && jwt_payload.user_level >= 20 && (
             <Stack alignItems="center">
               <Fab
                 aria-label="add"
@@ -119,9 +121,9 @@ const IdeaView = () => {
               </Fab>
             </Stack>
           )}
+          <AlterData scope="comments" isOpen={add} onClose={closeAdd} otherData={{ idea_id: params.idea_id }} />
         </Stack>
       )}
-      <AlterData scope="comments" isOpen={add} onClose={closeAdd} otherData={{ idea_id: params.idea_id }} />
     </Stack>
   );
 };

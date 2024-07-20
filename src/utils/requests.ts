@@ -10,7 +10,7 @@ interface RequestObject {
 
 export const databaseRequest = async (requestData: RequestObject, userId = [] as string[]) => {
   const jwt_token = localStorageGet('token');
-  const jwt_payload = jwt_token ? parseJwt(jwt_token) : null;
+  const jwt_payload = parseJwt(jwt_token);
   const headers = {} as { 'Content-Type'?: string; Authorization?: string };
   headers['Content-Type'] = 'application/json';
 

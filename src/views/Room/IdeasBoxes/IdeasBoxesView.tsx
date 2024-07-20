@@ -2,7 +2,7 @@ import { AppIcon } from '@/components';
 import AlterData from '@/components/AlterData';
 import { IdeaBox } from '@/components/IdeaBox';
 import { BoxesResponseType } from '@/types/RequestTypes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Fab, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,6 +11,8 @@ import { useNavigate, useParams } from 'react-router-dom';
  * url: /room/:room_id/:phase
  */
 const IdeasBoxView = () => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const goto = useNavigate();
   const params = useParams();
   const [add, setAdd] = useState(false);
@@ -50,18 +52,22 @@ const IdeasBoxView = () => {
             </Grid>
           ))}
       </Grid>
-      <Fab
-        aria-label="add"
-        color="primary"
-        sx={{
-          position: 'absolute',
-          bottom: 40,
-        }}
-        onClick={() => setAdd(true)}
-      >
-        <AppIcon icon="add" />
-      </Fab>
-      <AlterData scope="boxes" isOpen={add} otherData={{ room_id: params.room_id }} onClose={closeAdd} />
+      {jwt_payload.user_level >= 50 && (
+        <>
+          <Fab
+            aria-label="add"
+            color="primary"
+            sx={{
+              position: 'absolute',
+              bottom: 40,
+            }}
+            onClick={() => setAdd(true)}
+          >
+            <AppIcon icon="add" />
+          </Fab>
+          <AlterData scope="boxes" isOpen={add} otherData={{ room_id: params.room_id }} onClose={closeAdd} />
+        </>
+      )}
     </Stack>
   );
 };

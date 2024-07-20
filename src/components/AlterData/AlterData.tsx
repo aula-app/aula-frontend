@@ -1,6 +1,14 @@
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, dataSettings, formsSettings, getRequest, requestDefinitions } from '@/utils';
+import {
+  databaseRequest,
+  dataSettings,
+  formsSettings,
+  getRequest,
+  localStorageGet,
+  parseJwt,
+  requestDefinitions,
+} from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
@@ -24,6 +32,8 @@ interface Props {
  */
 const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const { t } = useTranslation();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [items, setItems] = useState<SingleResponseType>();
   const [move, setMove] = useState<SettingNamesType>();
 
@@ -124,13 +134,15 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
                       {t('texts.phaseDuration')}
                     </Typography>
                   )}
-                  <FormInput
-                    form={field.name}
-                    register={register}
-                    control={control}
-                    getValues={getValues}
-                    errors={errors}
-                  />
+                  {jwt_payload.user_level >= field.role && (
+                    <FormInput
+                      form={field.name}
+                      register={register}
+                      control={control}
+                      getValues={getValues}
+                      errors={errors}
+                    />
+                  )}
                 </Fragment>
               ))}
               {getChild().length > 0 &&
