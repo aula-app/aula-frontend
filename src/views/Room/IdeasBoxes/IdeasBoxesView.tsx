@@ -45,7 +45,6 @@ const IdeasBoxView = () => {
   return (
     <Stack alignItems="center">
       {jwt_payload.user_level >= 50 && <MoveData parentId={Number(params.room_id)} scope="users" />}
-
       <Grid container spacing={2} p={1}>
         {boxes &&
           boxes.data &&

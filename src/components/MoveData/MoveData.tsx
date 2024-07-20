@@ -126,7 +126,7 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
         color="secondary"
         variant="outlined"
         startIcon={<AppIcon icon="edit" />}
-        sx={{ mt: 1, borderRadius: 30 }}
+        sx={{ borderRadius: 30 }}
         onClick={() => setOpen(true)}
       >
         {t('texts.editChild', { var: t(`views.${scope}`) })}

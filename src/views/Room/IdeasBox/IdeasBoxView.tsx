@@ -99,7 +99,10 @@ const IdeasBoxView = () => {
             </Stack>
             {boxIdeas && (
               <>
-                <Grid container spacing={1}>
+                {jwt_payload.user_level >= 50 && (
+                  <MoveData parentId={Number(params['box_id'])} scope="ideas" onClose={boxIdeasFetch} />
+                )}
+                <Grid container spacing={1} pt={1}>
                   {boxIdeas.data &&
                     boxIdeas.data.map((idea, key) => (
                       <Grid
@@ -119,9 +122,6 @@ const IdeasBoxView = () => {
                       </Grid>
                     ))}
                 </Grid>
-                {jwt_payload.user_level >= 50 && (
-                  <MoveData parentId={Number(params['box_id'])} scope="ideas" onClose={boxIdeasFetch} />
-                )}
               </>
             )}
           </>
