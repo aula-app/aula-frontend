@@ -54,6 +54,12 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
     }).then((response: DatabaseResponseType) => setData(response.data));
   };
 
+  const normalizeData = (selectedItems: DatabaseResponseData[]) => {
+    if (!data) return;
+    if (!selectedItems.every((element) => data.some((some) => some.id === element.id)))
+      setData([...new Set([...data, ...selectedItems])]);
+  };
+
   const getCurrentItems = async () => {
     if (!parentId) return;
     await databaseRequest({
@@ -63,11 +69,8 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
         [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
       },
     }).then((response: DatabaseResponseType) => {
-      if (!response || !response.data) return;
-      setSelected(response.data.map((item) => item.id));
-      if (!data) return;
-      if (!response.data.every((element) => data.some((some) => some.id === element.id)))
-        setData([...new Set([...data, ...response.data])]);
+      !response || !response.data ? setSelected([]) : setSelected(response.data.map((item) => item.id));
+      if (response && response.data) normalizeData(response.data);
     });
   };
 
@@ -131,7 +134,7 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
       >
         {t('texts.editChild', { var: t(`views.${scope}`) })}
       </Button>
-      <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="xs">
+      <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
         <DialogTitle>Select {scope}</DialogTitle>
         <DialogContent>
           <Stack height={350} position="relative" overflow="hidden">
