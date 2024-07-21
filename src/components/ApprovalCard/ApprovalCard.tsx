@@ -1,8 +1,6 @@
-import { Stack, Typography } from '@mui/material';
-import { Card } from '@mui/material';
-import { green, grey } from '@mui/material/colors';
-import AppIcon from '../AppIcon';
 import { approvalVariants } from '@/utils';
+import { Card, Stack, Typography } from '@mui/material';
+import AppIcon from '../AppIcon';
 
 interface IdeaBoxProps {
   disabled?: boolean;

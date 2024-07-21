@@ -1,8 +1,17 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { AppIcon, AppIconButton } from '@/components';
+import AlterData from '@/components/AlterData';
+import DeleteData from '@/components/DeleteData';
+import { SettingNamesType } from '@/types/SettingsTypes';
+import { TableResponseType } from '@/types/TableTypes';
+import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
+import { SubdirectoryArrowRight } from '@mui/icons-material';
 import {
+  Button,
   Checkbox,
+  Collapse,
   Divider,
   Fab,
+  FilledInput,
   MenuItem,
   Pagination,
   Stack,
@@ -11,24 +20,15 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  TableSortLabel,
   TextField,
   Typography,
-  Button,
-  TableSortLabel,
-  Collapse,
-  FilledInput,
 } from '@mui/material';
-import { SettingNamesType } from '@/types/scopes/SettingsTypes';
-import { SubdirectoryArrowRight } from '@mui/icons-material';
-import { databaseRequest, SettingsConfig } from '@/utils';
-import { TableResponseType } from '@/types/TableTypes';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import DeleteSettings from './DeleteSettings';
 import { grey } from '@mui/material/colors';
-import { AppIcon, AppIconButton } from '@/components';
-import MoveSettings from './MoveSettings';
-import { useAppStore } from '@/store';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import MoveSettings from './MoveSettings';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -38,15 +38,15 @@ const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
-  const [, dispatch] = useAppStore();
   const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
-  const [orderBy, setOrder] = useState(SettingsConfig[setting_name].rows[0]['id']);
+  const [orderBy, setOrder] = useState(dataSettings[setting_name][0].orderId);
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState(['', '']);
 
   const [selected, setSelected] = useState<number[]>([]);
+  const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
   const [openDelete, setOpenDelete] = useState(false);
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
@@ -55,8 +55,8 @@ const SettingsView = () => {
 
   const dataFetch = async (filter: string) =>
     await databaseRequest({
-      model: SettingsConfig[setting_name].model,
-      method: SettingsConfig[setting_name].requests.fetch,
+      model: requestDefinitions[setting_name].model,
+      method: getRequest(setting_name, 'fetch'),
       arguments: {
         limit: limit,
         offset: page * limit,
@@ -105,27 +105,24 @@ const SettingsView = () => {
   };
 
   const resetTable = () => {
-    if (!SettingsConfig[setting_name]) {
+    if (!requestDefinitions[setting_name]) {
       navigate('/error');
     } else {
       setPage(0);
       setSelected([]);
       setOrderAsc(true);
       getLimit();
-      setOrder(SettingsConfig[setting_name].rows[0]['id']);
+      setOrder(dataSettings[setting_name][0].orderId);
     }
   };
 
   const handleWindowSizeChange = () => getLimit();
 
-  const onDelete = () => {
+  const onClose = () => {
+    loadData();
+    setAlter({ open: false });
     setOpenDelete(false);
-    setSelected([]);
-  };
-
-  const onMove = () => {
     setOpenMove(false);
-    setSelected([]);
   };
 
   useEffect(() => {
@@ -147,7 +144,7 @@ const SettingsView = () => {
     <Stack direction="column" height="100%">
       <Stack direction="row" alignItems="center">
         <Typography variant="h4" sx={{ p: 2, textTransform: 'capitalize', flex: 1 }}>
-          {t(`views.${SettingsConfig[setting_name].name}`)}
+          {t(`views.${setting_name}`)}
         </Typography>
         <Stack direction="row" alignItems="start" bottom={0} height={37} px={2}>
           <AppIconButton icon="filter" onClick={() => setOpenFilter(!openFilter)} />
@@ -165,7 +162,7 @@ const SettingsView = () => {
             sx={{ width: 100, mr: 1 }}
           >
             <MenuItem value=""></MenuItem>
-            {SettingsConfig[setting_name].rows.map((column) => (
+            {dataSettings[setting_name].map((column) => (
               <MenuItem value={column.name} key={column.name}>
                 {t(`settings.${column.name}`)}
               </MenuItem>
@@ -194,12 +191,12 @@ const SettingsView = () => {
                   />
                 </TableCell>
               )}
-              {SettingsConfig[setting_name].rows.map((column, key) => (
-                <TableCell key={`${column.name}${key}`} sx={{ whiteSpace: 'nowrap' }}>
+              {dataSettings[setting_name].map((column, key) => (
+                <TableCell key={`${column}${key}`} sx={{ whiteSpace: 'nowrap' }}>
                   <TableSortLabel
-                    active={orderBy === column.id}
+                    active={orderBy === dataSettings[setting_name][key].orderId}
                     direction={orderAsc ? 'asc' : 'desc'}
-                    onClick={() => handleOrder(column.id)}
+                    onClick={() => handleOrder(dataSettings[setting_name][key].orderId)}
                   >
                     {t(`settings.${column.name}`)}
                   </TableSortLabel>
@@ -214,16 +211,11 @@ const SettingsView = () => {
                   <TableCell>
                     <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
                   </TableCell>
-                  {SettingsConfig[setting_name].rows.map((column) => (
+                  {dataSettings[setting_name].map((column) => (
                     <TableCell
-                      key={`${column.name}-${row.id}`}
+                      key={`${column}-${row.id}`}
                       sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                      onClick={() =>
-                        dispatch({
-                          type: 'EDIT_DATA',
-                          payload: { type: 'edit', element: setting_name, id: row.id, onClose: loadData },
-                        })
-                      }
+                      onClick={() => setAlter({ open: true, id: row.id })}
                     >
                       {row[column.name]}
                     </TableCell>
@@ -240,14 +232,26 @@ const SettingsView = () => {
             <Stack direction="row" alignItems="center" flex={1}>
               <SubdirectoryArrowRight sx={{ ml: 3, fontSize: '1rem' }} color="secondary" />
               <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenDelete(true)}>
-                <AppIcon sx={{ mr: 1 }} name="delete" /> {t('generics.delete')}
+                <AppIcon sx={{ mr: 1 }} icon="delete" /> {t('generics.delete')}
               </Button>
             </Stack>
             <Stack direction="row" alignItems="center" justifyContent="end" flex={1}>
-              {SettingsConfig[setting_name].isChild && (
+              {requestDefinitions[setting_name].isChild && (
                 <Button disabled={selected.length === 0} color="secondary" onClick={() => setOpenMove(true)}>
-                  <AppIcon sx={{ mr: 1 }} name={SettingsConfig[SettingsConfig[setting_name].isChild].item} /> Add to{' '}
-                  {SettingsConfig[SettingsConfig[setting_name].isChild].item}
+                  <AppIcon
+                    sx={{ mr: 1 }}
+                    icon={
+                      requestDefinitions[requestDefinitions[setting_name].isChild].model === 'Topic'
+                        ? 'box'
+                        : requestDefinitions[requestDefinitions[setting_name].isChild].model.toLowerCase()
+                    }
+                  />{' '}
+                  {t('texts.addToParent', {
+                    var:
+                      requestDefinitions[setting_name].isChild === 'boxes'
+                        ? 'box'
+                        : requestDefinitions[requestDefinitions[setting_name].isChild].model.toLowerCase(),
+                  })}
                 </Button>
               )}
             </Stack>
@@ -263,11 +267,9 @@ const SettingsView = () => {
           bottom: 40,
           boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
         }}
-        onClick={() =>
-          dispatch({ type: 'EDIT_DATA', payload: { type: 'add', element: setting_name, id: 0, onClose: loadData } })
-        }
+        onClick={() => setAlter({ open: true })}
       >
-        <AppIcon name="add" />
+        <AppIcon icon="add" />
       </Fab>
       <Divider />
       <Stack direction="row" alignItems="center" justifyContent="center" bottom={0} height={48}>
@@ -275,20 +277,9 @@ const SettingsView = () => {
           <Pagination count={Math.ceil(Number(items.count) / limit)} onChange={changePage} sx={{ py: 1 }} />
         )}
       </Stack>
-      <DeleteSettings
-        key={`${setting_name}`}
-        items={selected}
-        isOpen={openDelete}
-        closeMethod={onDelete}
-        reloadMethod={() => loadData()}
-      />
-      <MoveSettings
-        key={`move_${setting_name}`}
-        items={selected}
-        isOpen={openMove}
-        closeMethod={onMove}
-        reloadMethod={() => loadData()}
-      />
+      <AlterData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
+      <DeleteData key={`d_${setting_name}`} isOpen={openDelete} id={selected} scope={setting_name} onClose={onClose} />
+      <MoveSettings key={`m_${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
     </Stack>
   );
 };

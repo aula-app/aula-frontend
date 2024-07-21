@@ -1,10 +1,10 @@
+import { CommentType } from '@/types/Scopes';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Button, Stack, Typography } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import { useEffect, useState } from 'react';
 import AppIcon from '../AppIcon';
 import ChatBubble from '../ChatBubble';
-import { grey } from '@mui/material/colors';
-import { CommentType } from '@/types/scopes/CommentTypes';
-import { databaseRequest } from '@/utils';
-import { useEffect, useState } from 'react';
 import MoreOptions from '../MoreOptions';
 
 interface Props {
@@ -16,6 +16,8 @@ interface Props {
 type likeMethodType = 'getLikeStatus' | 'CommentAddLike' | 'CommentRemoveLike';
 
 export const Comment = ({ comment, disabled = false, onReload }: Props) => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
   const displayDate = new Date(comment.created);
 
@@ -51,12 +53,17 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
         <Stack>
           <Typography>{comment.content}</Typography>
           <Stack direction="row" justifyContent="end">
-            <MoreOptions element="comments" id={comment.id} onClose={onReload} />
+            <MoreOptions
+              scope="comments"
+              id={comment.id}
+              onClose={onReload}
+              canEdit={jwt_payload.user_level >= 30 || jwt_payload.user_id === comment.user_id}
+            />
           </Stack>
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <AppIcon name="account" size="large" />
+        <AppIcon icon="account" size="large" />
         <Stack maxWidth="100%" overflow="hidden" ml={2} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>
@@ -75,7 +82,7 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
           </Typography>
         </Stack>
         <Button color="error" size="small" onClick={toggleLike} disabled={disabled}>
-          <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
+          <AppIcon icon={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
           {comment.sum_likes}
         </Button>
       </Stack>

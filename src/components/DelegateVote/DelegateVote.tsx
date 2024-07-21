@@ -1,3 +1,7 @@
+import { AppIcon, AppIconButton } from '@/components';
+import { DelegationType } from '@/types/Delegation';
+import { UserType } from '@/types/Scopes';
+import { databaseRequest } from '@/utils';
 import {
   Avatar,
   Button,
@@ -10,13 +14,9 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { AppIcon, AppIconButton } from '@/components';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { SingleUserResponseType, UserType, UsersResponseType } from '@/types/scopes/UserTypes';
-import { databaseRequest } from '@/utils';
 import { grey } from '@mui/material/colors';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { DelegationType } from '@/types/Delegation';
 
 interface Props {
   isOpen: boolean;
@@ -47,18 +47,18 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         asc: 1,
         extra_where: ` AND (realname LIKE '%${filter}%' OR displayname LIKE '%${filter}%')`,
       },
-    }).then((response: UsersResponseType) => setUsers(response.data));
+    }).then((response) => setUsers(response.data));
   };
 
   const singleUserFetch = async () => {
-    if(delegate.length === 0) return;
+    if (delegate.length === 0) return;
     await databaseRequest({
       model: 'User',
       method: 'getUserBaseData',
       arguments: {
         user_id: delegate[0].user_id_target,
       },
-    }).then((response: SingleUserResponseType) => setSelected(response.data));
+    }).then((response) => setSelected(response.data));
   };
 
   const setDelegate = async () => {
@@ -103,7 +103,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
   }, [filter, delegate.length]);
 
   useEffect(() => {
-    setConfirm(delegate.length > 0)
+    setConfirm(delegate.length > 0);
   }, [delegate.length]);
 
   return (

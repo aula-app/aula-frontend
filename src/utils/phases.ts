@@ -1,6 +1,5 @@
-import { ICONS } from '@/components/AppIcon/AppIcon';
 import { ObjectPropByName } from '@/types/Generics';
-import { green, amber, deepPurple, deepOrange, blue, grey, red } from '@mui/material/colors';
+import { amber, blue, deepOrange, deepPurple, green, grey, red } from '@mui/material/colors';
 
 interface phaseType {
   name: string;

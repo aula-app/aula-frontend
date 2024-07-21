@@ -1,16 +1,15 @@
-import {
-  createContext,
-  useReducer,
-  useContext,
-  FunctionComponent,
-  Dispatch,
-  ComponentType,
-  PropsWithChildren,
-} from 'react';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import AppReducer from './AppReducer';
 import { localStorageGet } from '@/utils';
-import { EditDataType } from '@/types/Generics';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import {
+  ComponentType,
+  createContext,
+  Dispatch,
+  FunctionComponent,
+  PropsWithChildren,
+  useContext,
+  useReducer,
+} from 'react';
+import AppReducer from './AppReducer';
 
 /**
  * AppState structure and initial values
@@ -21,14 +20,12 @@ export interface AppStoreState {
   hasConsent: boolean;
   currentUser?: object | undefined;
   errors: string[];
-  editData: EditDataType | null;
 }
 const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
   isAuthenticated: false, // Overridden in AppStore by checking auth token
   hasConsent: false,
   errors: [],
-  editData: null,
 };
 
 /**
@@ -89,4 +86,4 @@ const withAppStore =
     return <Component {...props} store={useAppStore()} />;
   };
 
-export { AppStoreProvider as AppStore, AppContext, useAppStore, withAppStore };
+export { AppContext, AppStoreProvider as AppStore, useAppStore, withAppStore };

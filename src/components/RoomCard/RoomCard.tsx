@@ -1,10 +1,8 @@
-import { CardMedia, Stack, Typography, capitalize } from '@mui/material';
-import { Card, CardContent } from '@mui/material';
-import { phases } from '@/utils';
-import { RoomType } from '@/types/scopes/RoomTypes';
-import AppIcon from '../AppIcon';
-import AppLink from '../AppLink';
 import PhaseBar from '@/layout/PhaseBar';
+import { RoomType } from '@/types/Scopes';
+import { phases } from '@/utils';
+import { Card, CardMedia, Stack, Typography, capitalize } from '@mui/material';
+import AppLink from '../AppLink';
 
 interface RoomCardProps {
   room: RoomType;

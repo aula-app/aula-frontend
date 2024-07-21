@@ -1,26 +1,26 @@
-import { useState, useEffect, Fragment } from 'react';
+import { AppButton, AppIconButton } from '@/components';
+import KnowMore from '@/components/KnowMore';
+import { ObjectPropByName } from '@/types/Generics';
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
-  TextField,
+  Box,
   Checkbox,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
   InputAdornment,
   LinearProgress,
   Stack,
-  Typography,
-  Stepper,
   Step,
   StepLabel,
-  Box,
-  FormControl,
-  FormHelperText,
+  Stepper,
+  TextField,
+  Typography,
 } from '@mui/material';
-import { AppButton, AppIconButton } from '@/components';
+import { Fragment, useEffect, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import KnowMore from '@/components/KnowMore';
 import { useTranslation } from 'react-i18next';
-import { ObjectPropByName } from '@/types/Generics';
+import * as yup from 'yup';
 
 
 /**

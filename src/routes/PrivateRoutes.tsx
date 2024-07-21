@@ -1,16 +1,16 @@
-import { Route, Routes } from 'react-router-dom';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
-import SettingsView from '@/views/Settings';
-import UserView from '@/views/Settings/User';
-import WelcomeView from '@/views/Welcome';
+import AskConsentView from '@/views/AskConsent';
+import MessageView from '@/views/Message';
+import MessagesView from '@/views/Messages';
 import RoomView from '@/views/Room';
 import IdeaView from '@/views/Room/Idea';
 import IdeasBoxView from '@/views/Room/IdeasBox';
-import MessagesView from '@/views/Messages';
-import MessageView from '@/views/Message';
-import AskConsentView from '@/views/AskConsent';
 import RoomPhaseView from '@/views/Room/RoomPhaseView';
+import SettingsView from '@/views/Settings';
+import UserView from '@/views/Settings/User';
+import WelcomeView from '@/views/Welcome';
+import { Route, Routes } from 'react-router-dom';
 /**
  * List of routes available only for authenticated users
  * Also renders the "Private Layout" composition

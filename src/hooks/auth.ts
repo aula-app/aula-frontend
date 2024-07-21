@@ -1,6 +1,6 @@
-import { useCallback } from 'react';
 import { useAppStore } from '@/store';
-import { localStorageGet, localStorageDelete } from '@/utils';
+import { localStorageDelete, localStorageGet } from '@/utils';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 /**
@@ -23,12 +23,12 @@ export function useIsAuthenticated() {
  */
 export function useEventLogout() {
   const [, dispatch] = useAppStore();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return useCallback(() => {
     localStorageDelete('token');
 
     dispatch({ type: 'LOG_OUT' });
-    navigate('/')
+    navigate('/');
   }, [dispatch, navigate]);
 }

@@ -1,14 +1,14 @@
-import { FunctionComponent, useCallback, MouseEvent } from 'react';
-import { Stack, Divider, Drawer, DrawerProps, FormControlLabel, Switch, Tooltip, Button } from '@mui/material';
 import { AppButton, AppIcon, AppIconButton } from '@/components';
+import LocaleSwitch from '@/components/LocaleSwitch';
+import UserInfo from '@/components/UserInfo';
+import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
 import { LinkToPage } from '@/types/PageLinks';
-import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
-import SideBarNavList from './SideBarNavList';
-import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../config';
-import UserInfo from '@/components/UserInfo';
+import { Divider, Drawer, DrawerProps, Stack } from '@mui/material';
+import { FunctionComponent, MouseEvent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import LocaleSwitch from '@/components/LocaleSwitch';
+import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../config';
+import SideBarNavList from './SideBarNavList';
 
 type Props = Pick<DrawerProps, 'anchor' | 'className' | 'open' | 'variant' | 'onClose'>;
 
@@ -20,41 +20,49 @@ const SIDEBAR_ITEMS: Array<LinkToPage> = [
     title: 'home',
     path: '/',
     icon: 'home',
+    role: 10,
   },
   {
     title: 'profile',
     path: '/settings/profile',
     icon: 'account',
+    role: 20,
   },
   {
     title: 'users',
     path: '/settings/users',
     icon: 'group',
+    role: 50,
   },
   {
     title: 'rooms',
     path: '/settings/rooms',
     icon: 'room',
+    role: 50,
   },
   {
     title: 'boxes',
     path: '/settings/boxes',
     icon: 'box',
+    role: 50,
   },
   {
     title: 'ideas',
     path: '/settings/ideas',
     icon: 'idea',
+    role: 50,
   },
   {
     title: 'messages',
     path: '/settings/messages',
     icon: 'message',
+    role: 50,
   },
   {
     title: 'about',
     path: '/about',
     icon: 'info',
+    role: 10,
   },
 ];
 
@@ -103,20 +111,21 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
       <Stack
         sx={{
           height: '100%',
-          py: 2,
+          pt: 1,
         }}
         {...restOfProps}
         onClick={handleAfterLinkClick}
       >
         <Stack direction="row" justifyContent="space-between" p={2} pt={0}>
-          <LocaleSwitch />
+          <AppIconButton color="secondary" onClick={() => {}} icon="close" title={t('generics.close')} sx={{ px: 0 }} />
+          <AppIconButton color="secondary" onClick={window.print} icon="print" title={t('generics.print')} />
           <AppIconButton
             color="secondary"
             onClick={onSwitchDarkMode}
             icon={state.darkMode ? 'day' : 'night'}
             title={state.darkMode ? t('generics.modeLight') : t('generics.modeDark')}
           />
-          <AppIconButton color="secondary" onClick={() => {}} icon="close" title={t('generics.close')} />
+          <LocaleSwitch />
         </Stack>
         {isAuthenticated && (
           <>
@@ -133,17 +142,10 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
           sx={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             alignItems: 'center',
           }}
         >
-          <AppIconButton
-            color="secondary"
-            onClick={window.print}
-            icon="print"
-            title={t('generics.print')}
-            sx={{ mx: 2 }}
-          />
           {isAuthenticated && (
             <AppButton variant="text" onClick={onLogout}>
               {t('generics.logout')}&nbsp;

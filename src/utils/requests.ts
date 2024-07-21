@@ -3,26 +3,25 @@ import { parseJwt } from './jwt';
 import { localStorageGet } from './localStorage';
 
 interface RequestObject {
-  model: string,
-  method: string,
-  arguments: ObjectPropByName
+  model: string;
+  method: string;
+  arguments: ObjectPropByName;
 }
 
 export const databaseRequest = async (requestData: RequestObject, userId = [] as string[]) => {
   const jwt_token = localStorageGet('token');
-  const jwt_payload = jwt_token ? parseJwt(jwt_token) : null;
-  const headers = {} as {'Content-Type'?: string, 'Authorization'?: string};
+  const jwt_payload = parseJwt(jwt_token);
+  const headers = {} as { 'Content-Type'?: string; Authorization?: string };
   headers['Content-Type'] = 'application/json';
 
-  if(requestData.method !== 'checkLogin')  {
+  if (requestData.method !== 'checkLogin') {
     headers['Authorization'] = `Bearer ${jwt_token}`;
-    if (!jwt_payload) return null;
   }
 
-  if(userId.length > 0) {
-    userId.forEach(field => {
-      requestData.arguments[field] = jwt_payload.user_id
-    })
+  if (userId.length > 0) {
+    userId.forEach((field) => {
+      requestData.arguments[field] = jwt_payload.user_id;
+    });
   }
 
   try {

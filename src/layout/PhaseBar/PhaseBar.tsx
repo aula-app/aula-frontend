@@ -1,5 +1,5 @@
 import { AppIcon, AppLink } from '@/components';
-import { phases } from '@/utils/phases';
+import { phases } from '@/utils';
 import { Box, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -46,7 +46,7 @@ const PhaseBar = ({ room }: { room: number }) => {
               bgcolor: phases[phase].color,
             }}
           >
-            <AppIcon name={phases[phase].name} />
+            <AppIcon icon={phases[phase].name} />
             <Typography noWrap overflow="ellipsis" pl={1} fontSize="small">
               {currentPhase === phase ? t(`phases.${phases[phase].name}`) : ''}
             </Typography>

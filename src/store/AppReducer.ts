@@ -8,7 +8,6 @@ import { AppStoreState } from './AppStore';
  * @param {*} [action.payload] - optional data object or the function to get data object
  */
 const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
-  // console.log('AppReducer() - action:', action);
   switch (action.type || action.action) {
     case 'CURRENT_USER':
       return {
@@ -42,16 +41,13 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
     }
     case 'ADD_ERROR': {
       return { ...state, errors: [...state.errors, action?.message] };
-    };
+    }
     case 'REMOVE_ERROR': {
-      return { ...state, errors: [...state.errors.filter((e,i)=> i !== action?.index)] };
-    };
+      return { ...state, errors: [...state.errors.filter((e, i) => i !== action?.index)] };
+    }
     case 'REMOVE_ALL_ERRORS': {
       return { ...state, errors: [] };
-    };
-    case 'EDIT_DATA': {
-      return { ...state, editData: action?.payload };
-    };
+    }
     default:
       return state;
   }

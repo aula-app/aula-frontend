@@ -1,7 +1,7 @@
+import { databaseRequest, noVoteOptions, Vote, votingOptions } from '@/utils';
 import { Button, Stack } from '@mui/material';
-import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { databaseRequest, Vote, noVoteOptions, votingOptions } from '@/utils';
+import { useParams } from 'react-router-dom';
 import AppIcon from '../AppIcon';
 
 /**
@@ -35,7 +35,7 @@ const VotingCard = () => {
         method: 'voteForIdea',
         arguments: {
           idea_id: params['idea_id'],
-          vote_value: vote - 1, //turn 0, 1, 2 to -1, 0 , 1
+          vote_value: vote - 1, //turns 0, 1, 2 to -1, 0 , 1
         },
       },
       ['user_id']

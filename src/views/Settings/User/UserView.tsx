@@ -1,3 +1,10 @@
+import { AppButton, AppIcon } from '@/components';
+import ChangePassword from '@/components/ChangePassword';
+import ImageEditor from '@/components/ImageEditor';
+import { useAppStore } from '@/store';
+import { SingleUserResponseType } from '@/types/RequestTypes';
+import { UserType } from '@/types/Scopes';
+import { databaseRequest } from '@/utils';
 import {
   Accordion,
   AccordionDetails,
@@ -13,16 +20,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { Stack } from '@mui/system';
-import { databaseRequest } from '@/utils';
-import { useEffect, useState } from 'react';
-import { SingleUserResponseType, UserType } from '@/types/scopes/UserTypes';
-import ChangePassword from '@/components/ChangePassword';
-import { AppButton, AppIcon } from '@/components';
-import { FormContainer } from 'react-hook-form-mui';
 import { grey } from '@mui/material/colors';
-import ImageEditor from '@/components/ImageEditor';
-import { useAppStore } from '@/store';
+import { Stack } from '@mui/system';
+import { useEffect, useState } from 'react';
+import { FormContainer } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
 /** * Renders "User" view
@@ -79,7 +80,7 @@ const UserView = () => {
                   zIndex: 999,
                 }}
               >
-                <AppIcon name="camera" />
+                <AppIcon icon="camera" />
               </Stack>
               <Avatar
                 sx={{
@@ -119,7 +120,7 @@ const UserView = () => {
         </FormContainer>
       )}
       <Accordion>
-        <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
+        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.security')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -127,7 +128,7 @@ const UserView = () => {
         </AccordionDetails>
       </Accordion>
       <Accordion>
-        <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
+        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.privacy')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -142,7 +143,7 @@ const UserView = () => {
         </AccordionDetails>
       </Accordion>
       <Accordion>
-        <AccordionSummary expandIcon={<AppIcon name="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
+        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.advanced')}</Typography>
         </AccordionSummary>
         <AccordionDetails>

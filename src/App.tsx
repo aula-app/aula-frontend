@@ -1,9 +1,9 @@
+import { BrowserRouter } from 'react-router-dom';
+import { ErrorBoundary } from './components';
+import Layout from './layout';
+import Routes from './routes';
 import { AppStore } from './store';
 import { AppThemeProvider } from './theme';
-import Routes from './routes';
-import Layout from './layout';
-import { ErrorBoundary } from './components';
-import { BrowserRouter } from 'react-router-dom';
 
 /**
  * Root Application Component

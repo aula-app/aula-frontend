@@ -1,8 +1,8 @@
-import { FunctionComponent, PropsWithChildren } from 'react';
+import ErrorMessages from '@/dialogs/ErrorMessages';
 import { useIsAuthenticated } from '@/hooks/auth';
+import { FunctionComponent, PropsWithChildren } from 'react';
 import PrivateLayout from './PrivateLayout';
 import PublicLayout from './PublicLayout';
-import ErrorMessages from '@/dialogs/ErrorMessages';
 
 /**
  * Returns the current Layout component depending on different circumstances.
@@ -10,10 +10,10 @@ import ErrorMessages from '@/dialogs/ErrorMessages';
 const CurrentLayout: FunctionComponent<PropsWithChildren> = (props) => {
   return (
     <>
-      { useIsAuthenticated() ? <PrivateLayout {...props} /> : <PublicLayout {...props} /> }
+      {useIsAuthenticated() ? <PrivateLayout {...props} /> : <PublicLayout {...props} />}
       <ErrorMessages />
     </>
-  )
+  );
 };
 
 export default CurrentLayout;

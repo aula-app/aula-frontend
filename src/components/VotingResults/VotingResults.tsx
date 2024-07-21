@@ -1,8 +1,7 @@
-import { Stack, Typography } from '@mui/material';
-import { Card } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Vote, resultVariants, votingOptions } from '@/utils';
+import { Card, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { votingOptions, Vote, resultVariants } from '@/utils';
+import { useParams } from 'react-router-dom';
 import AppIcon from '../AppIcon';
 
 interface IdeaBoxProps {
@@ -37,9 +36,7 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
               aspectRatio: 1,
             }}
           >
-            {!rejected
-              ? <AppIcon icon="for" size='xl' />
-              : <AppIcon icon="against" size='xl' />}
+            {!rejected ? <AppIcon icon="for" size="xl" /> : <AppIcon icon="against" size="xl" />}
           </Stack>
           <Stack flexGrow={1} pr={2}>
             <Typography variant="body2">
@@ -48,15 +45,23 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
           </Stack>
           <Stack>
             {votingOptions.map((option, i) => (
-              <Stack direction="row" alignItems="center" fontSize="small" key={i} mr={1.5} sx={{ whiteSpace: 'nowrap' }}>
-                <AppIcon icon={option.label} size='small' sx={{mr: .5}} /> 3
+              <Stack
+                direction="row"
+                alignItems="center"
+                fontSize="small"
+                key={i}
+                mr={1.5}
+                sx={{ whiteSpace: 'nowrap' }}
+              >
+                <AppIcon icon={option.label} size="small" sx={{ mr: 0.5 }} /> 3
               </Stack>
             ))}
           </Stack>
         </Stack>
       </Card>
       <Stack direction="row" alignItems="center" color={grey[600]} mx={3} mt={1} fontSize="small">
-        <AppIcon icon={votingOptions[yourVote].label} />&nbsp; You voted {votingOptions[yourVote].label} this idea
+        <AppIcon icon={votingOptions[yourVote].label} />
+        &nbsp; You voted {votingOptions[yourVote].label} this idea
       </Stack>
     </Stack>
   );

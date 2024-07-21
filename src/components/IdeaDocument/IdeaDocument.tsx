@@ -1,8 +1,8 @@
-import { Button, Chip, Stack, Typography } from '@mui/material';
-import { IdeaType } from '@/types/scopes/IdeaTypes';
-import AppIcon from '../AppIcon';
+import { IdeaType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
+import { Button, Chip, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import AppIcon from '../AppIcon';
 import MoreOptions from '../MoreOptions';
 
 interface Props {
@@ -48,15 +48,20 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center' }} color="secondary" mb={2}>
       <Stack direction="row" justifyContent="space-between">
-        <Chip icon={<AppIcon name="settings" />} label="category" variant="outlined" />
-        <MoreOptions element="ideas" id={idea.id} onClose={onReload} />
+        <Chip icon={<AppIcon icon="settings" />} label="category" variant="outlined" />
+        <MoreOptions
+          scope="ideas"
+          id={idea.id}
+          onClose={onReload}
+          canEdit={jwt_payload.user_level >= 30 || jwt_payload.user_id === idea.user_id}
+        />
       </Stack>
       <Stack p={2} bgcolor={phases['0'].baseColor[50]} borderRadius={3} mb={1}>
         <Typography variant="h6">{idea.title}</Typography>
         <Typography mb={2}>{idea.content}</Typography>
       </Stack>
       <Stack direction="row" alignItems="center">
-        <AppIcon name="account" size="xl" />
+        <AppIcon icon="account" size="xl" />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>
@@ -75,7 +80,7 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
           </Typography>
         </Stack>
         <Button color="error" size="small" onClick={toggleLike} disabled={disabled}>
-          <AppIcon name={liked ? 'heartfull' : 'heart'} />
+          <AppIcon icon={liked ? 'heartfull' : 'heart'} />
           {idea.sum_likes}
         </Button>
       </Stack>

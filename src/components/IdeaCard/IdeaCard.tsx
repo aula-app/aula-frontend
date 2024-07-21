@@ -1,11 +1,10 @@
-import { Stack, Typography } from '@mui/material';
-import { Card } from '@mui/material';
-import { AppIcon } from '..';
+import { IdeaType } from '@/types/Scopes';
+import { RoomPhases } from '@/types/SettingsTypes';
 import { approvalVariants, databaseRequest, phases, votingOptions, votingVariants } from '@/utils';
-import { useParams } from 'react-router-dom';
-import { IdeaType } from '@/types/scopes/IdeaTypes';
+import { Card, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { RoomPhases } from '@/types/scopes/RoomTypes';
+import { useParams } from 'react-router-dom';
+import { AppIcon } from '..';
 
 interface IdeaCardProps {
   idea: IdeaType;

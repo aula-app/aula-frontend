@@ -1,13 +1,16 @@
+import { AlterTypes, ColorTypes } from '@/types/Generics';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { Box, Button, ClickAwayListener, Divider, Paper, Stack, Typography, Zoom } from '@mui/material';
-import AppIconButton from '../AppIconButton';
-import AppIcon from '../AppIcon';
 import { grey } from '@mui/material/colors';
 import { useState } from 'react';
-import { ICONS } from '../AppIcon/AppIcon';
-import { AlterTypes, ColorTypes } from '@/types/Generics';
-import { useAppStore } from '@/store';
-import { SettingNamesType } from '@/types/scopes/SettingsTypes';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import AlterData from '../AlterData';
+import AppIcon from '../AppIcon';
+import { ICONS } from '../AppIcon/AppIcon';
+import AppIconButton from '../AppIconButton';
+import DeleteData from '../DeleteData';
+import { localStorageGet, parseJwt } from '@/utils';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -17,23 +20,32 @@ interface OptionsTypes {
 }
 
 interface Props {
-  element: SettingNamesType;
   id: number;
-  onClose?: () => void;
+  scope: SettingNamesType;
+  canEdit?: boolean;
+  onClose: () => void;
 }
 /**
  * Renders question mark badge that triggers a tooltip on hover
  * @component MoreOptions
  */
-const MoreOptions = ({ element, id, onClose }: Props) => {
+const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
   const { t } = useTranslation();
-  const [, dispatch] = useAppStore();
   const [open, setOpen] = useState(false);
-  const options = [
-    { type: 'edit', icon: 'edit', color: 'secondary', label: t('generics.edit') },
-    { type: 'bug', icon: 'bug', color: 'warning', label: t('generics.bugReport') },
+  const [edit, setEdit] = useState(false);
+  const [del, setDel] = useState(false);
+
+  const defaultOptions = [
     { type: 'report', icon: 'report', color: 'error', label: t('generics.contentReport') },
+    { type: 'bug', icon: 'bug', color: 'warning', label: t('generics.bugReport') },
   ] as OptionsTypes[];
+
+  const editOptions = [
+    { type: 'edit', icon: 'edit', color: 'secondary', label: t('generics.edit') },
+    { type: 'delete', icon: 'delete', color: 'error', label: t('generics.delete') },
+  ] as OptionsTypes[];
+
+  const options = defaultOptions.concat(canEdit ? editOptions : []);
 
   // @ts-ignore
   const toggleOptions = (e) => {
@@ -41,45 +53,55 @@ const MoreOptions = ({ element, id, onClose }: Props) => {
     setOpen(!open);
   };
 
-  const handleClick = (type: AlterTypes, element: SettingNamesType) => {
+  const handleClick = (type: AlterTypes) => {
     setOpen(false);
-    dispatch({ type: 'EDIT_DATA', payload: { type: type, element: element, id: id, onClose: onClose } });
+    type === 'delete' ? setDel(true) : setEdit(true);
+  };
+
+  const close = () => {
+    setEdit(false);
+    setDel(false);
+    onClose();
   };
   return (
-    <Box position="relative">
-      <AppIconButton icon="more" onClick={toggleOptions} />
-      <ClickAwayListener onClickAway={() => setOpen(false)}>
-        <Zoom in={open}>
-          <Paper
-            sx={{
-              position: 'absolute',
-              top: '75%',
-              right: 0,
-              borderRadius: 3,
-              bgcolor: grey[100],
-              zIndex: 50,
-            }}
-            elevation={3}
-          >
-            {options.map((option, key) => (
-              <Box key={key}>
-                <Button
-                  color={option.color}
-                  sx={{ width: '100%', justifyContent: 'start' }}
-                  onClick={() => handleClick(option.type, element)}
-                >
-                  <Stack direction="row">
-                    <AppIcon icon={option.icon} sx={{ mr: 1 }} />
-                    <Typography noWrap>{option.label}</Typography>
-                  </Stack>
-                </Button>
-                {key !== options.length - 1 && <Divider />}
-              </Box>
-            ))}
-          </Paper>
-        </Zoom>
-      </ClickAwayListener>
-    </Box>
+    <>
+      <Box position="relative">
+        <AppIconButton icon="more" onClick={toggleOptions} />
+        <ClickAwayListener onClickAway={() => setOpen(false)}>
+          <Zoom in={open}>
+            <Paper
+              sx={{
+                position: 'absolute',
+                top: '75%',
+                right: 0,
+                borderRadius: 3,
+                bgcolor: grey[100],
+                zIndex: 50,
+              }}
+              elevation={3}
+            >
+              {options.map((option, key) => (
+                <Box key={key}>
+                  <Button
+                    color={option.color}
+                    sx={{ width: '100%', justifyContent: 'start' }}
+                    onClick={() => handleClick(option.type)}
+                  >
+                    <Stack direction="row">
+                      <AppIcon icon={option.icon} sx={{ mr: 1 }} />
+                      <Typography noWrap>{option.label}</Typography>
+                    </Stack>
+                  </Button>
+                  {key !== options.length - 1 && <Divider />}
+                </Box>
+              ))}
+            </Paper>
+          </Zoom>
+        </ClickAwayListener>
+      </Box>
+      <AlterData id={id} scope={scope} isOpen={edit} onClose={close} />
+      <DeleteData id={id} scope={scope} isOpen={del} onClose={close} />
+    </>
   );
 };
 

@@ -1,11 +1,11 @@
 import { Upload, ZoomIn, ZoomOut } from '@mui/icons-material';
 import { Button, Drawer, IconButton, Stack, Typography } from '@mui/material';
+import { createUseGesture, pinchAction } from '@use-gesture/react';
 import { ChangeEvent, useRef, useState } from 'react';
-import { createUseGesture, pinchAction } from '@use-gesture/react'
 import AvatarEditor from 'react-avatar-editor';
 import AppButton from '../AppButton';
 
-const useGesture = createUseGesture([pinchAction])
+const useGesture = createUseGesture([pinchAction]);
 
 interface NewCommentProps {
   closeMethod: () => void;
@@ -17,19 +17,19 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
   const [image, setImage] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
 
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null);
 
   useGesture(
     {
-      onPinch: ({ offset: [s, ] }) => {
-        setScale(s)
+      onPinch: ({ offset: [s] }) => {
+        setScale(s);
       },
     },
     {
       target: ref,
       pinch: { scaleBounds: { min: 1, max: 2 }, rubberband: true },
     }
-  )
+  );
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -45,8 +45,8 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
         </Typography>
         <input type="file" id="file" accept="image/*" hidden onChange={handleFileChange} />
         <label htmlFor="file">
-          <Button variant='outlined' color="secondary" fullWidth component="span">
-            <Upload sx={{mr: 1}} />
+          <Button variant="outlined" color="secondary" fullWidth component="span">
+            <Upload sx={{ mr: 1 }} />
             {image ? 'Change Image' : 'Upload Image'}
           </Button>
         </label>

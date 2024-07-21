@@ -1,24 +1,26 @@
-import { Box, Button, Grid, Stack, Typography } from '@mui/material';
+import { AppIcon, AppLink } from '@/components';
+import DelegateVote from '@/components/DelegateVote';
 import { IdeaBox } from '@/components/IdeaBox';
 import { IdeaCard } from '@/components/IdeaCard';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { BoxResponseType } from '@/types/scopes/BoxTypes';
-import { databaseRequest, phases } from '@/utils';
-import { IdeasResponseType } from '@/types/scopes/IdeaTypes';
-import { AppIcon, AppLink } from '@/components';
-import { grey } from '@mui/material/colors';
-import DelegateVote from '@/components/DelegateVote';
+import MoveData from '@/components/MoveData';
 import { DelegationType } from '@/types/Delegation';
+import { IdeasResponseType, SingleBoxResponseType } from '@/types/RequestTypes';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/ideas-box/:box_id
  */
 const IdeasBoxView = () => {
   const { t } = useTranslation();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const params = useParams();
-  const [box, setBox] = useState<BoxResponseType>();
+  const [box, setBox] = useState<SingleBoxResponseType>();
   const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
   const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>();
   const [delegationDialog, setDelegationDialog] = useState(false);
@@ -69,14 +71,15 @@ const IdeasBoxView = () => {
           scrollSnapType: 'y mandatory',
         }}
       >
-        {box && box.data && boxIdeas && boxIdeas.data && (
+        {box && box.data && (
           <>
             <IdeaBox box={box.data || {}} noLink onReload={boxFetch} />
             <Stack direction="row">
               <Typography variant="h6" p={2}>
-                {delegationStatus && delegationStatus.length > 0
-                  ? t(`texts.delegated`, { var: boxIdeas.count })
-                  : t(`texts.undelegated`, { var: boxIdeas.count })}
+                {boxIdeas &&
+                  t(delegationStatus && delegationStatus.length > 0 ? `texts.delegated` : `texts.undelegated`, {
+                    var: boxIdeas.count,
+                  })}
               </Typography>
               {Number(box.data.phase_id) === 30 && (
                 <Button
@@ -94,25 +97,33 @@ const IdeasBoxView = () => {
                 </Button>
               )}
             </Stack>
-            <Grid container spacing={1}>
-              {boxIdeas.data.map((idea, key) => (
-                <Grid
-                  key={key}
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  sx={{ scrollSnapAlign: 'center' }}
-                  order={-idea.approved}
-                >
-                  <AppLink to={`idea/${idea.id}`}>
-                    <IdeaCard idea={idea} phase={box.data.phase_id} />
-                  </AppLink>
+            {boxIdeas && (
+              <>
+                {jwt_payload.user_level >= 50 && (
+                  <MoveData parentId={Number(params['box_id'])} scope="ideas" onClose={boxIdeasFetch} />
+                )}
+                <Grid container spacing={1} pt={1}>
+                  {boxIdeas.data &&
+                    boxIdeas.data.map((idea, key) => (
+                      <Grid
+                        key={key}
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                        sx={{ scrollSnapAlign: 'center' }}
+                        order={-idea.approved}
+                      >
+                        <AppLink to={`idea/${idea.id}`}>
+                          <IdeaCard idea={idea} phase={box.data.phase_id} />
+                        </AppLink>
+                      </Grid>
+                    ))}
                 </Grid>
-              ))}
-            </Grid>
+              </>
+            )}
           </>
         )}
       </Box>

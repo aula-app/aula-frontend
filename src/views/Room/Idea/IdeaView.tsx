@@ -1,21 +1,17 @@
-import { Fab, Stack, Typography } from '@mui/material';
-import { useParams } from 'react-router';
-import { useEffect, useState } from 'react';
+import AlterData from '@/components/AlterData';
 import ApprovalCard from '@/components/ApprovalCard';
+import Comment from '@/components/Comment';
+import IdeaBubble from '@/components/IdeaBubble';
+import IdeaDocument from '@/components/IdeaDocument';
 import VotingCard from '@/components/VotingCard';
 import VotingResults from '@/components/VotingResults';
-import { Vote, databaseRequest, phases } from '@/utils';
-import { CommentResponseType } from '@/types/scopes/CommentTypes';
-import { SingleIdeaResponseType } from '@/types/scopes/IdeaTypes';
+import { CommentsResponseType, SingleIdeaResponseType } from '@/types/RequestTypes';
+import { Vote, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Add } from '@mui/icons-material';
-import { BoxResponseType } from '@/types/scopes/BoxTypes';
-import IdeaBubble from '@/components/IdeaBubble';
-import Comment from '@/components/Comment';
-import IdeaDocument from '@/components/IdeaDocument';
-import { RoomPhases } from '@/types/scopes/RoomTypes';
-import { AppIcon } from '@/components';
-import { useAppStore } from '@/store';
+import { Fab, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 
 /**
  * Renders "Idea" view
@@ -24,11 +20,13 @@ import { useTranslation } from 'react-i18next';
 
 const IdeaView = () => {
   const { t } = useTranslation();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const params = useParams();
-  const [, dispatch] = useAppStore();
   const [idea, setIdea] = useState<SingleIdeaResponseType>();
+  const [add, setAdd] = useState(false);
   const [phase, setPhase] = useState(0);
-  const [comments, setComments] = useState<CommentResponseType>();
+  const [comments, setComments] = useState<CommentsResponseType>();
   const [vote, setVote] = useState<Vote>(0);
 
   const ideaFetch = async () =>
@@ -36,7 +34,7 @@ const IdeaView = () => {
       model: 'Idea',
       method: 'getIdeaContent',
       arguments: { idea_id: params['idea_id'] },
-    }).then((response: SingleIdeaResponseType) => {
+    }).then((response) => {
       setIdea(response);
     });
 
@@ -45,14 +43,14 @@ const IdeaView = () => {
       model: 'Comment',
       method: 'getCommentsByIdeaId',
       arguments: { idea_id: Number(params['idea_id']) },
-    }).then((response: CommentResponseType) => setComments(response));
+    }).then((response) => setComments(response));
 
   const getPhase = async () =>
     await databaseRequest({
       model: 'Topic',
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
-    }).then((response: BoxResponseType) => setPhase(Number(response.data.phase_id)));
+    }).then((response) => setPhase(Number(response.data.phase_id)));
 
   const getVote = async () =>
     await databaseRequest(
@@ -65,6 +63,11 @@ const IdeaView = () => {
       },
       ['user_id']
     ).then((response) => setVote((Number(response.data) + 1) as Vote));
+
+  const closeAdd = () => {
+    commentsFetch();
+    setAdd(false);
+  };
 
   useEffect(() => {
     ideaFetch();
@@ -101,17 +104,12 @@ const IdeaView = () => {
               ))}
             </>
           )}
-          {phase < 20 && (
+          {phase < 20 && jwt_payload.user_level >= 20 && (
             <Stack alignItems="center">
               <Fab
                 aria-label="add"
                 color="primary"
-                onClick={() =>
-                  dispatch({
-                    type: 'EDIT_DATA',
-                    payload: { type: 'add', element: 'comments', id: idea.data.id, onClose: commentsFetch },
-                  })
-                }
+                onClick={() => setAdd(true)}
                 sx={{
                   position: 'absolute',
                   bottom: 0,
@@ -123,6 +121,7 @@ const IdeaView = () => {
               </Fab>
             </Stack>
           )}
+          <AlterData scope="comments" isOpen={add} onClose={closeAdd} otherData={{ idea_id: params.idea_id }} />
         </Stack>
       )}
     </Stack>

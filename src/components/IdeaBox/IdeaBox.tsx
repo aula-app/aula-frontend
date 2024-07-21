@@ -1,11 +1,10 @@
-import { Box, Stack, Typography } from '@mui/material';
-import { Card, CardContent } from '@mui/material';
-import { phases } from '@/utils';
-import { BoxType } from '@/types/scopes/BoxTypes';
-import AppIcon from '../AppIcon';
-import MoreOptions from '../MoreOptions';
-import AppLink from '../AppLink';
+import { BoxType } from '@/types/Scopes';
+import { localStorageGet, parseJwt, phases } from '@/utils';
+import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import AppIcon from '../AppIcon';
+import AppLink from '../AppLink';
+import MoreOptions from '../MoreOptions';
 
 interface IdeaBoxProps {
   box: BoxType;
@@ -15,6 +14,8 @@ interface IdeaBoxProps {
 
 const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
   const { t } = useTranslation();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   return (
     <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
       <Stack
@@ -30,7 +31,7 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
         <Typography variant="caption" mr="auto">
           {t('texts.ideaBox', { var: box.ideas_num, phase: t(`phases.${phases[box.phase_id].name}`) })}
         </Typography>
-        <MoreOptions element="boxes" id={box.id} onClose={onReload} />
+        <MoreOptions scope="boxes" id={box.id} onClose={onReload} canEdit={jwt_payload.user_level >= 50} />
       </Stack>
       <AppLink to={`idea-box/${box.id}`} mb={2} key={box.id} disabled={noLink}>
         <CardContent>

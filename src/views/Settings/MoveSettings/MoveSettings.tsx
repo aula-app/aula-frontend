@@ -1,6 +1,7 @@
-import { BoxType } from '@/types/scopes/BoxTypes';
-import { SingleResponseType } from '@/types/Generics';
-import { databaseRequest, SettingsConfig } from '@/utils';
+import { DatabaseResponseData } from '@/types/Generics';
+import { BoxType } from '@/types/Scopes';
+import { SettingNamesType } from '@/types/SettingsTypes';
+import { databaseRequest, getRequest, requestDefinitions } from '@/utils';
 import {
   Button,
   Dialog,
@@ -15,52 +16,49 @@ import {
   Stack,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 type Params = {
   isOpen: boolean;
   items: number[];
-  closeMethod: () => void;
-  reloadMethod: () => void;
+  onClose: () => void;
 };
 /** * Renders "Settings" alert dialog component view
  * url: /settings/:setting_name/
  */
-const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
+const EditSettings = ({ isOpen, items, onClose }: Params) => {
   const { t } = useTranslation();
   const { setting_name } = useParams();
   const [destination, setDestination] = useState<string>();
   const [destinationList, setDestinationList] = useState<{ value: number; label: string }[]>([]);
-  const currentSetting = setting_name as keyof typeof SettingsConfig;
+  const scope = setting_name as SettingNamesType;
 
   const handleChange = (event: SelectChangeEvent) => {
     setDestination(event.target.value);
   };
 
   const getDestination = async () => {
-    if (!Object.hasOwn(SettingsConfig[currentSetting], 'isChild')) return;
+    if (!Object.hasOwn(requestDefinitions[scope], 'isChild')) return;
     await databaseRequest({
-      model: SettingsConfig[SettingsConfig[currentSetting].isChild].model,
-      method: SettingsConfig[SettingsConfig[currentSetting].isChild].requests.fetch,
+      model: requestDefinitions[requestDefinitions[scope].isChild].model,
+      method: getRequest(requestDefinitions[scope].isChild, 'fetch'),
       arguments: {
         offset: 0,
         limit: 0,
       },
-    }).then((response: SingleResponseType) =>
-      setDestinationList(response.data.map((r: BoxType) => ({ value: r.id, label: r.name })))
-    );
+    }).then((response) => setDestinationList(response.data.map((r: BoxType) => ({ value: r.id, label: r.name }))));
   };
 
   const request = async (id: number) => {
-    if (!SettingsConfig[currentSetting].requests.move) return;
+    if (!requestDefinitions[scope].isChild) return;
     await databaseRequest(
       {
-        model: SettingsConfig[currentSetting].model,
-        method: SettingsConfig[currentSetting].requests.move,
+        model: requestDefinitions[scope].model,
+        method: getRequest(requestDefinitions[scope].isChild, 'move'),
         arguments: {
-          [`${SettingsConfig[currentSetting].model.toLowerCase()}_id`]: id,
-          [`${SettingsConfig[SettingsConfig[currentSetting].isChild].model.toLowerCase()}_id`]: destination,
+          [getRequest(scope, 'id')]: id,
+          [getRequest(requestDefinitions[scope].isChild, 'id')]: destination,
         },
       },
       ['updater_id']
@@ -69,8 +67,7 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
 
   const moveRequest = () => {
     items.forEach((item) => request(item));
-    reloadMethod();
-    closeMethod();
+    onClose();
   };
 
   useEffect(() => {
@@ -80,7 +77,7 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
   return (
     <Dialog
       open={isOpen}
-      onClose={closeMethod}
+      onClose={onClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -92,7 +89,7 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
             <Select
               id="demo-simple-select"
               value={destination}
-              label={SettingsConfig[currentSetting].isChild}
+              label={requestDefinitions[scope].isChild}
               disabled={destinationList.length === 0}
               fullWidth
               onChange={handleChange}
@@ -107,7 +104,7 @@ const EditSettings = ({ isOpen, items, closeMethod, reloadMethod }: Params) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeMethod} color="secondary" autoFocus>
+        <Button onClick={onClose} color="secondary" autoFocus>
           {t('generics.cancel')}
         </Button>
         <Button onClick={moveRequest} color="primary" variant="contained">

@@ -1,17 +1,23 @@
-import { Grid } from '@mui/material';
+import { AppIcon } from '@/components';
+import AlterData from '@/components/AlterData';
 import { IdeaBox } from '@/components/IdeaBox';
-import { useNavigate, useParams } from 'react-router-dom';
+import MoveData from '@/components/MoveData';
+import { BoxesResponseType } from '@/types/RequestTypes';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { Fab, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { databaseRequest } from '@/utils/requests';
-import { BoxesResponseType } from '@/types/scopes/BoxTypes';
+import { useNavigate, useParams } from 'react-router-dom';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/:phase
  */
 const IdeasBoxView = () => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const goto = useNavigate();
   const params = useParams();
-  const [boxes, setBoxes] = useState({} as BoxesResponseType);
+  const [add, setAdd] = useState(false);
+  const [boxes, setBoxes] = useState<BoxesResponseType>();
 
   const boxesFetch = async () =>
     await databaseRequest({
@@ -25,20 +31,46 @@ const IdeasBoxView = () => {
       },
     }).then((response) => setBoxes(response));
 
+  const closeAdd = () => {
+    boxesFetch();
+    setAdd(false);
+  };
+
   useEffect(() => {
     //@ts-ignore
-    if(params.phase) boxesFetch()
+    if (params.phase) boxesFetch();
     else goto('/error');
   }, [params['phase']]);
 
   return (
-    <Grid container spacing={2} p={1}>
-      {boxes.data && boxes.data.map((box) => (
-        <Grid key={box.id} item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ scrollSnapAlign: 'center' }}>
-          <IdeaBox box={box} onReload={boxesFetch} />
-        </Grid>
-      ))}
-    </Grid>
+    <Stack alignItems="center">
+      {jwt_payload.user_level >= 50 && <MoveData parentId={Number(params.room_id)} scope="users" />}
+      <Grid container spacing={2} p={1}>
+        {boxes &&
+          boxes.data &&
+          boxes.data.map((box) => (
+            <Grid key={box.id} item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ scrollSnapAlign: 'center' }}>
+              <IdeaBox box={box} onReload={boxesFetch} />
+            </Grid>
+          ))}
+      </Grid>
+      {jwt_payload.user_level >= 50 && (
+        <>
+          <Fab
+            aria-label="add"
+            color="primary"
+            sx={{
+              position: 'absolute',
+              bottom: 40,
+            }}
+            onClick={() => setAdd(true)}
+          >
+            <AppIcon icon="add" />
+          </Fab>
+          <AlterData scope="boxes" isOpen={add} otherData={{ room_id: params.room_id }} onClose={closeAdd} />
+        </>
+      )}
+    </Stack>
   );
 };
 

@@ -1,7 +1,7 @@
+import { UserType } from '@/types/Scopes';
+import { databaseRequest } from '@/utils';
 import { Avatar, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { databaseRequest } from '@/utils';
-import { SingleUserResponseType, UserType } from '@/types/scopes/UserTypes';
 import AppIcon from '../AppIcon';
 
 /**
@@ -19,7 +19,7 @@ const UserInfo = () => {
         arguments: {},
       },
       ['user_id']
-    ).then((response: SingleUserResponseType) => setUser(response.data));
+    ).then((response) => setUser(response.data));
 
   useEffect(() => {
     getUserInfo();

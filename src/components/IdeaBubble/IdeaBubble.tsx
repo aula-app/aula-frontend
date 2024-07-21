@@ -1,11 +1,11 @@
+import { IdeaType } from '@/types/Scopes';
+import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Button, Chip, Stack, Typography } from '@mui/material';
-import { IdeaType } from '@/types/scopes/IdeaTypes';
-import AppIcon from '../AppIcon';
-import ChatBubble from '../ChatBubble';
 import { blue } from '@mui/material/colors';
-import { databaseRequest } from '@/utils';
 import { useEffect, useState } from 'react';
+import AppIcon from '../AppIcon';
 import AppLink from '../AppLink';
+import ChatBubble from '../ChatBubble';
 import MoreOptions from '../MoreOptions';
 
 interface Props {
@@ -18,6 +18,8 @@ interface Props {
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
 export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
   const displayDate = new Date(idea.created);
 
@@ -58,13 +60,18 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
             </Stack>
           </AppLink>
           <Stack direction="row" justifyContent="space-between" my={1}>
-            <Chip icon={<AppIcon name="settings" />} label="category" variant="outlined" />
-            <MoreOptions element="ideas" id={idea.id} onClose={onReload} />
+            <Chip icon={<AppIcon icon="settings" />} label="category" variant="outlined" />
+            <MoreOptions
+              scope="ideas"
+              id={idea.id}
+              onClose={onReload}
+              canEdit={jwt_payload.user_level >= 30 || jwt_payload.user_id === idea.user_id}
+            />
           </Stack>
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <AppIcon name="account" size="xl" />
+        <AppIcon icon="account" size="xl" />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>
@@ -82,15 +89,15 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
             {idea.displayname}
           </Typography>
         </Stack>
-        {/* <Chip icon={<AppIcon name="settings" />} label="category" color="warning" /> */}
+        {/* <Chip icon={<AppIcon icon="settings" />} label="category" color="warning" /> */}
         {comments > 0 && (
           <Stack direction="row" alignItems="center">
-            <AppIcon name="chat" sx={{ mr: 0.5 }} />
+            <AppIcon icon="chat" sx={{ mr: 0.5 }} />
             {comments}
           </Stack>
         )}
         <Button color="error" size="small" onClick={toggleLike}>
-          <AppIcon name={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
+          <AppIcon icon={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
           {idea.sum_likes}
         </Button>
       </Stack>

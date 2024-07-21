@@ -1,9 +1,9 @@
-import { Badge, Box, Collapse, Grid, IconButton, Stack, Typography } from '@mui/material';
-import AppIcon from '../AppIcon';
 import { dashboardPhases, databaseRequest } from '@/utils';
+import { Badge, Box, Collapse, Grid, IconButton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import AppIconButton from '../AppIconButton';
 import { useTranslation } from 'react-i18next';
+import AppIcon from '../AppIcon';
+import AppIconButton from '../AppIconButton';
 
 const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboardPhases>;
 
@@ -79,7 +79,7 @@ const DashBoard = ({ show = true }) => {
                     }}
                   >
                     <Stack direction="row" alignItems="center" width="100%">
-                      <AppIcon name={dashboardPhases[phase].name} />
+                      <AppIcon icon={dashboardPhases[phase].name} />
                       <Box
                         flexGrow={1}
                         overflow="hidden"
