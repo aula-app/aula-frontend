@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "put your repo url here..."
+    "url": "https://github.com/aula-app/aula-frontend"
   },
   "scripts": {
     "start": "vite",
