@@ -61,7 +61,7 @@ const DashBoard = ({ show = true }) => {
             <AppIconButton icon="message" to="/messages" sx={{ p: 0 }} />
           </Badge>
           <Badge badgeContent={likes} color="primary" sx={{ mx: 1 }}>
-            <AppIconButton icon="heart" sx={{ p: 0 }} />
+            <AppIconButton icon="heart" to="/updates" sx={{ p: 0 }} />
           </Badge>
         </Stack>
         <Collapse in={isShowing}>

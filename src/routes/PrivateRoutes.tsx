@@ -9,6 +9,7 @@ import IdeasBoxView from '@/views/Room/IdeasBox';
 import RoomPhaseView from '@/views/Room/RoomPhaseView';
 import SettingsView from '@/views/Settings';
 import UserView from '@/views/Settings/User';
+import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';
 import { Route, Routes } from 'react-router-dom';
 /**
@@ -23,15 +24,16 @@ const PrivateRoutes = () => (
     <Route path="welcome" element={<WelcomeView />} />
     <Route path="messages" element={<MessagesView />} />
     <Route path="messages/message/:message_id" element={<MessageView />} />
-    <Route path="settings/profile" element={<UserView />} />
-    <Route path="settings/:setting_name" element={<SettingsView />} />
-    <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />
+    <Route path="updates" element={<UpdatesView />} />
     <Route path="room/:room_id/phase/:phase" element={<RoomView />}>
       <Route path="" element={<RoomPhaseView />} />
       <Route path="idea/:idea_id" element={<IdeaView />} />
       <Route path="idea-box/:box_id" element={<IdeasBoxView />} />
       <Route path="idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
     </Route>
+    <Route path="settings/profile" element={<UserView />} />
+    <Route path="settings/:setting_name" element={<SettingsView />} />
+    <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />
     <Route path="*" element={<NotFoundView />} />
   </Routes>
 );
