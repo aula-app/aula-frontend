@@ -43,7 +43,7 @@ const DashBoard = ({ show = true }) => {
           alignItems: 'center',
         }}
       >
-        <Stack direction="row" width="100%" sx={{ alignItems: 'center' }}>
+        <Stack direction="row" width="100%" pr={1} sx={{ alignItems: 'center' }}>
           <Button onClick={() => setShowing(!isShowing)} sx={{ mr: 'auto', color: 'inherit', textTransform: 'none' }}>
             <Typography variant="h5" sx={{ flexWrap: 'wrap', transition: 'opacity .5s ease-in-out' }}>
               {t('views.dashboard')}

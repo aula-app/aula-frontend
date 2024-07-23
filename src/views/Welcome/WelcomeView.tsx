@@ -31,7 +31,7 @@ const WelcomeView = () => {
   }, []);
 
   return (
-    <Stack height="100%">
+    <Stack height="100%" sx={{ p: { md: 1 } }}>
       <DashBoard show={showDashboard} />
       <Stack
         flexGrow={1}
