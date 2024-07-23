@@ -20,7 +20,6 @@ const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment' }:
         my: 2,
         py: 1,
         scrollSnapAlign: 'center',
-        color: disabled ? 'disabled.main' : 'inherit',
         bgcolor: rejected || disabled ? 'disabled.main' : 'for.main',
       }}
       variant="outlined"

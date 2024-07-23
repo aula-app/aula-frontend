@@ -59,7 +59,7 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
           </Stack>
         </Stack>
       </Card>
-      <Stack direction="row" alignItems="center" color={grey[600]} mx={3} mt={1} fontSize="small">
+      <Stack direction="row" alignItems="center" mx={3} mt={1} fontSize="small">
         <AppIcon icon={votingOptions[yourVote]} />
         &nbsp; You voted {votingOptions[yourVote]} this idea
       </Stack>

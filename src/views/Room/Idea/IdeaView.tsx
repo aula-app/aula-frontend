@@ -87,7 +87,7 @@ const IdeaView = () => {
           ) : (
             <IdeaDocument idea={idea.data} onReload={ideaFetch} disabled={phase > 10} />
           )}
-          {phase >= 20 && (
+          {phase >= 20 && idea.data.approved !== 0 && (
             <ApprovalCard
               comment={idea.data.approval_comment}
               rejected={idea.data.approved < 0}
