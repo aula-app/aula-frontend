@@ -1,4 +1,4 @@
-import { databaseRequest, noVoteOptions, Vote, votingOptions } from '@/utils';
+import { databaseRequest, Vote, votingOptions } from '@/utils';
 import { Button, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -52,15 +52,15 @@ const VotingCard = () => {
           <Button
             sx={{
               color: 'inherit',
-              backgroundColor: vote + 1 === i && hasVoted ? option[`button`] : noVoteOptions['button'],
+              bgcolor: vote + 1 === i && hasVoted ? `${option}.main` : 'transparent',
               borderRadius: 8,
             }}
             key={i}
             onClick={() => registerVote(i as Vote)}
           >
             <Stack alignItems="center" width={70}>
-              <AppIcon icon={option.label} size="full" />
-              {option.label}
+              <AppIcon icon={option} size="full" />
+              {option}
             </Stack>
           </Button>
         ))}

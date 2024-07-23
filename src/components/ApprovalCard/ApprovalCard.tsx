@@ -1,4 +1,3 @@
-import { approvalVariants } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
 import AppIcon from '../AppIcon';
 
@@ -21,8 +20,8 @@ const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment' }:
         my: 2,
         py: 1,
         scrollSnapAlign: 'center',
-        color: disabled ? approvalVariants.rejected.baseColor[700] : 'inherit',
-        bgcolor: approvalVariants[rejected || disabled ? 'rejected' : 'approved'].color,
+        color: disabled ? 'disabled.main' : 'inherit',
+        bgcolor: rejected || disabled ? 'disabled.main' : 'for.main',
       }}
       variant="outlined"
     >

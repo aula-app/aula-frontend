@@ -23,7 +23,7 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
         height="3rem"
         alignItems="center"
         direction="row"
-        bgcolor={phases[box.phase_id].color}
+        bgcolor={`${phases[box.phase_id].name}.main`}
         p={1}
         pr={2}
       >
@@ -45,10 +45,10 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
             borderRadius={999}
             width="100%"
             height="1.5rem"
-            bgcolor={phases[box.phase_id].color}
+            bgcolor={`${phases[box.phase_id].name}.main`}
             overflow="clip"
           >
-            <Box bgcolor={phases[box.phase_id].baseColor[300]} position="absolute" left={0} height="100%" width="50%" />
+            <Box bgcolor={`${phases[box.phase_id].name}.main`} position="absolute" left={0} height="100%" width="50%" />
             <Stack
               direction="row"
               position="absolute"

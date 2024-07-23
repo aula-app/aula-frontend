@@ -1,4 +1,4 @@
-import { Vote, resultVariants, votingOptions } from '@/utils';
+import { Vote, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
@@ -22,7 +22,7 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
           borderRadius: '25px',
           overflow: 'hidden',
           scrollSnapAlign: 'center',
-          bgcolor: resultVariants[rejected ? 'failure' : 'success'].color,
+          bgcolor: rejected ? 'against.main' : 'for.main',
         }}
         variant="outlined"
       >
@@ -53,15 +53,15 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
                 mr={1.5}
                 sx={{ whiteSpace: 'nowrap' }}
               >
-                <AppIcon icon={option.label} size="small" sx={{ mr: 0.5 }} /> 3
+                <AppIcon icon={option} size="small" sx={{ mr: 0.5 }} /> 3
               </Stack>
             ))}
           </Stack>
         </Stack>
       </Card>
       <Stack direction="row" alignItems="center" color={grey[600]} mx={3} mt={1} fontSize="small">
-        <AppIcon icon={votingOptions[yourVote].label} />
-        &nbsp; You voted {votingOptions[yourVote].label} this idea
+        <AppIcon icon={votingOptions[yourVote]} />
+        &nbsp; You voted {votingOptions[yourVote]} this idea
       </Stack>
     </Stack>
   );

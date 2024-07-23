@@ -52,6 +52,7 @@ import { FunctionComponent } from 'react';
 import CircleIcon from './circle.svg?react';
 import LogoIcon from './logo.svg?react';
 import VotingIcon from './voting.svg?react';
+import { Announcement } from '@mui/icons-material';
 
 /**
  * How to use:
@@ -67,6 +68,7 @@ export const ICONS: Record<string, React.ComponentType> = {
   add: PlusIcon,
   against: XCircleIcon,
   alert: ExclamationTriangleIcon,
+  announcement: BellIcon,
   arrowdown: ChevronDownIcon,
   approval: QuestionMarkCircleIcon,
   approved: HandThumbUpIcon,

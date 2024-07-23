@@ -73,7 +73,7 @@ const DashBoard = ({ show = true }) => {
                     sx={{
                       py: 1,
                       px: 2,
-                      backgroundColor: dashboardPhases[phase].color,
+                      backgroundColor: `${dashboardPhases[phase].name}.main`,
                       borderRadius: 9999,
                       textTransform: 'none',
                     }}
