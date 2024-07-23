@@ -111,8 +111,6 @@ const IdeasBoxView = () => {
                         xs={12}
                         sm={6}
                         md={4}
-                        lg={3}
-                        xl={2}
                         sx={{ scrollSnapAlign: 'center' }}
                         order={-idea.approved}
                       >

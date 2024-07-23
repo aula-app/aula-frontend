@@ -32,7 +32,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
       <Stack direction="row" component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
         <FixSideBar />
-        <Stack flex={1}>
+        <Stack flex={1} overflow="hidden">
           <ErrorBoundary name="Content">{children}</ErrorBoundary>
         </Stack>
       </Stack>
