@@ -10,14 +10,16 @@ interface ChatBubbleProps {
 export const ChatBubble = ({ color, children, disabled = false }: ChatBubbleProps) => (
   <Stack
     sx={{
-      color: disabled ? grey[700] : 'inherit',
-      background: color,
+      color: disabled ? 'secondary' : 'inherit',
+      bgcolor: color,
       mb: 2,
       borderRadius: 5,
       position: 'relative',
     }}
   >
-    <Box p={2} pb={0}>{children}</Box>
+    <Box p={2} pb={0}>
+      {children}
+    </Box>
     <Box
       className="noPrint point"
       sx={{
@@ -26,7 +28,7 @@ export const ChatBubble = ({ color, children, disabled = false }: ChatBubbleProp
         left: '1.75rem',
         width: '1rem',
         aspectRatio: 1,
-        background: color,
+        bgcolor: color,
         transform: 'translateY(100%)',
       }}
     />

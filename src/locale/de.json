@@ -4,6 +4,7 @@
     "revoke": "Delegation widerrufen"
   },
   "generics": {
+    "add": "Neuen {{var}} hinzufügen",
     "back": "zurück",
     "bugReport": "Fehler melden",
     "cancel": "Abbrechen",
@@ -19,7 +20,8 @@
     "next": "nächste",
     "or": "oder",
     "print": "Drucken",
-    "save": "Speichern"
+    "save": "Speichern",
+    "title": "aula"
   },
   "login": {
     "agree": "Stimmen Sie den Nutzungsbedingungen und der Datenschutzrichtlinie zu.",
@@ -117,6 +119,7 @@
     "security": "Sicherheit",
     "room": "Klass",
     "rooms": "Klasse",
+    "user": "Benutzer",
     "users": "Benutzer"
   }
 }

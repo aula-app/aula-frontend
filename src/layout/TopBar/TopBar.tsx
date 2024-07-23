@@ -1,25 +1,29 @@
 import { AppIcon, AppIconButton, AppLink } from '@/components';
 import { AppBar, Breadcrumbs, Toolbar } from '@mui/material';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+import SideBar from '../SideBar';
+import { SIDEBAR_DESKTOP_ANCHOR } from '../config';
 
 interface Props {
   home: string;
-  menuToggle: () => void;
 }
 
 /**
  * Renders TopBar composition
  * @component TopBar
  */
-const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) => {
+const TopBar: FunctionComponent<Props> = ({ home, ...restOfProps }) => {
   const { t } = useTranslation();
+  const [openSideBar, setSidebar] = useState(false);
   const location = useLocation().pathname.split('/');
   const displayPath = location
     .filter((curPath) => /.*[A-Za-z\s]+.*/.test(curPath))
     .filter((curPath) => !['welcome', 'phase', 'settings'].includes(curPath));
   const goto = useNavigate();
+
+  const menuToggle = () => setSidebar(!openSideBar);
 
   const returnLocation = () =>
     location.length !== 5 ? location.splice(0, location.length - 2) : location.splice(0, location.length - 4);
@@ -47,7 +51,13 @@ const TopBar: FunctionComponent<Props> = ({ home, menuToggle, ...restOfProps }) 
           })}
         </Breadcrumbs>
 
-        <AppIconButton icon="menu" onClick={menuToggle} />
+        <AppIconButton icon="menu" onClick={menuToggle} sx={{ display: { xs: 'block', md: 'none' } }} />
+        <SideBar
+          anchor={SIDEBAR_DESKTOP_ANCHOR}
+          open={openSideBar}
+          variant="temporary"
+          onClose={() => setSidebar(false)}
+        />
       </Toolbar>
     </AppBar>
   );

@@ -5,16 +5,14 @@ import { FunctionComponent, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-const TITLE_PUBLIC = 'aula';
-
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
-  document.title = TITLE_PUBLIC; // Also Update Tab Title
-
   const { t } = useTranslation();
   const location = useLocation();
 
+  document.title = t('generics.title'); // Also Update Tab Title
+
   return (
-    <Stack bgcolor="#fff" mx="auto" width="100%" p={2} maxWidth="20rem" minHeight="100vh">
+    <Stack mx="auto" width="100%" p={2} maxWidth="20rem" minHeight="100vh">
       <Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ pb: 2 }}>
           {toggleBackToSignIn()}

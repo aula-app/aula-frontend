@@ -51,7 +51,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
 
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <ChatBubble color={blue[50]}>
+      <ChatBubble color="wild.main">
         <Stack>
           <AppLink to={to} disabled={!to}>
             <Stack px={0.5}>
