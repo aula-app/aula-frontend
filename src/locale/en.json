@@ -4,6 +4,7 @@
     "revoke": "Revoke delegation"
   },
   "generics": {
+    "add": "Add new {{var}}",
     "back": "back",
     "bugReport": "Report Bug",
     "cancel": "Cancel",
@@ -19,7 +20,8 @@
     "next": "next",
     "or": "or",
     "print": "Print",
-    "save": "Save"
+    "save": "Save",
+    "title": "aula"
   },
   "login": {
     "agree": "Agree with Terms of Use and Privacy Policy.",
@@ -84,6 +86,7 @@
     "exportData": "Export account data",
     "exportRequest": "Data export requested",
     "ideaBox": "{{var}} Ideas on {{phase}}",
+    "moveData": "Where do you want do move this {{var}}?",
     "passChange": "Change password",
     "phaseDuration": "Phase durations",
     "phaseEnd": "Phase ends on {{var}} days",
@@ -117,6 +120,7 @@
     "security": "Security",
     "room": "Room",
     "rooms": "Rooms",
+    "user": "User",
     "users": "Users"
   }
 }

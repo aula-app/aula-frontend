@@ -1,5 +1,5 @@
 import { ObjectPropByName } from './Generics';
-import { UserType } from './Scopes';
+import { PossibleFields, UserType } from './Scopes';
 
 export interface TableRow {
   id: number;
@@ -19,5 +19,5 @@ export interface TableOptions {
 export interface TableResponseType {
   success: Boolean;
   count: Number;
-  data: ObjectPropByName[];
+  data: PossibleFields[];
 }
