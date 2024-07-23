@@ -1,9 +1,8 @@
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { approvalVariants, databaseRequest, phases, votingOptions, votingVariants } from '@/utils';
+import { databaseRequest, phases, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { AppIcon } from '..';
 
 interface IdeaCardProps {
@@ -15,9 +14,8 @@ interface IdeaCardProps {
  * Renders "IdeaCard" component
  */
 const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
-  const params = useParams();
   const [vote, setVote] = useState(0);
-  const [bg, setBg] = useState<string>(phases[phase].baseColor[300]);
+  const [variant, setVariant] = useState<string>();
 
   const getVote = async () =>
     await databaseRequest(
@@ -31,20 +29,23 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
       ['user_id']
     ).then((response) => setVote(response.data));
 
+  const getVariant = () => {
+    switch (Number(phase)) {
+      case 40:
+        return vote === 1 || idea.is_winner ? 'for' : 'against';
+      case 20:
+        if (idea.approved === 1) return 'for';
+        if (idea.approved === -1) return 'disabled';
+      case 30:
+        if (vote === 1) return 'for';
+        if (vote === -1) return 'against';
+      default:
+        return phases[phase].name;
+    }
+  };
+
   useEffect(() => {
-    setBg(
-      (Number(phase) === 30 && vote === 1) || idea.is_winner
-        ? votingVariants.for.color
-        : Number(phase) === 40 || vote === -1
-          ? votingVariants.against.color
-          : Number(phase) === 30 || idea.approved === 1
-            ? approvalVariants.approved.color
-            : idea.approved === 0
-              ? 'transparent'
-              : Number(phase) > 10
-                ? approvalVariants.rejected.color
-                : phases['0'].color
-    );
+    setVariant(getVariant());
   }, [vote]);
 
   useEffect(() => {
@@ -57,7 +58,7 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
         borderRadius: '25px',
         overflow: 'hidden',
         scrollSnapAlign: 'center',
-        backgroundColor: bg,
+        bgcolor: `${variant}.main`,
       }}
       variant="outlined"
     >
@@ -66,7 +67,7 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
           {Number(phase) != 40 ? (
             <AppIcon icon="camera" />
           ) : (
-            <AppIcon icon={votingOptions[idea.is_winner > 0 ? 2 : 0].label} size="xl" />
+            <AppIcon icon={votingOptions[idea.is_winner > 0 ? 2 : 0]} size="xl" />
           )}
         </Stack>
         <Stack flexGrow={1} px={2} overflow="hidden">
@@ -111,12 +112,12 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
               )}
             </>
           ) : Number(phase) === 30 ? (
-            <AppIcon icon={votingOptions[vote + 1].label} />
+            <AppIcon icon={votingOptions[vote + 1]} />
           ) : (
             <>
               {votingOptions.map((vote) => (
-                <Stack direction="row" alignItems="center" key={vote.label}>
-                  <AppIcon icon={votingVariants[vote.label].name} size="small" />{' '}
+                <Stack direction="row" alignItems="center" key={vote}>
+                  <AppIcon icon={vote} size="small" />{' '}
                   <Typography fontSize="small" ml={0.5}>
                     {0}
                   </Typography>

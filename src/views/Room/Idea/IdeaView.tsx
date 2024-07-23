@@ -81,13 +81,13 @@ const IdeaView = () => {
       {phase === 30 && <VotingCard />}
       {idea && idea.data && (
         <Stack p={2}>
-          {phase === 40 && <VotingResults yourVote={vote} />}
+          {phase === 40 && <VotingResults yourVote={vote} rejected={idea.data.is_winner !== 1} />}
           {phase === 0 ? (
             <IdeaBubble idea={idea.data} onReload={ideaFetch} />
           ) : (
             <IdeaDocument idea={idea.data} onReload={ideaFetch} disabled={phase > 10} />
           )}
-          {phase >= 20 && (
+          {phase >= 20 && idea.data.approved !== 0 && (
             <ApprovalCard
               comment={idea.data.approval_comment}
               rejected={idea.data.approved < 0}

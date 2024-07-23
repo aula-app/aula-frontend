@@ -56,7 +56,7 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
           canEdit={jwt_payload.user_level >= 30 || jwt_payload.user_id === idea.user_id}
         />
       </Stack>
-      <Stack p={2} bgcolor={phases['0'].baseColor[50]} borderRadius={3} mb={1}>
+      <Stack p={2} bgcolor={`${phases['0'].name}.main`} borderRadius={3} mb={1}>
         <Typography variant="h6">{idea.title}</Typography>
         <Typography mb={2}>{idea.content}</Typography>
       </Stack>

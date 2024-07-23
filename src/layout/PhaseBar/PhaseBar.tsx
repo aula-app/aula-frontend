@@ -43,7 +43,7 @@ const PhaseBar = ({ room }: { room: number }) => {
             pr={currentPhase === phase ? 3 : 1}
             height="100%"
             sx={{
-              bgcolor: phases[phase].color,
+              bgcolor: `${phases[phase].name}.main`,
             }}
           >
             <AppIcon icon={phases[phase].name} />
@@ -59,7 +59,7 @@ const PhaseBar = ({ room }: { room: number }) => {
               top: 0,
               transform: 'translateX(-100%)',
               clipPath: 'polygon(0% 0%, 100% 100%, 100% 0%)',
-              bgcolor: phases[phase].color,
+              bgcolor: `${phases[phase].name}.main`,
               pointerEvents: 'none',
             }}
           ></Box>
@@ -71,7 +71,7 @@ const PhaseBar = ({ room }: { room: number }) => {
               bottom: 0,
               transform: 'translateX(-100%)',
               clipPath: 'polygon(0% 100%, 100% 100%, 100% 0%)',
-              bgcolor: phases[phase].color,
+              bgcolor: `${phases[phase].name}.main`,
               pointerEvents: 'none',
             }}
           ></Box>
