@@ -5,13 +5,13 @@ import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
 import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
 import { Divider, Stack, Typography } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import MoveSettings from '../MoveSettings';
 import DataTable from './DataTable';
 import EditBar from './EditBar';
 import FilterBar from './FilterBar';
-import MoveSettings from '../MoveSettings';
 import PaginationBar from './PaginationBar';
 
 /** * Renders default "Settings" view
@@ -34,8 +34,6 @@ const SettingsView = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
-
-  const tableBody = useRef<HTMLTableSectionElement | null>(null);
 
   const dataFetch = async (filter: string) =>
     await databaseRequest({
