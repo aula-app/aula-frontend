@@ -3,7 +3,6 @@ import LocaleSwitch from '@/components/LocaleSwitch';
 import UserInfo from '@/components/UserInfo';
 import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
-import { LinkToPage } from '@/types/PageLinks';
 import { Divider, Drawer, DrawerProps, Stack } from '@mui/material';
 import { FunctionComponent, MouseEvent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,60 +10,6 @@ import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../config';
 import SideBarNavList from './SideBarNavList';
 
 type Props = Pick<DrawerProps, 'anchor' | 'className' | 'open' | 'variant' | 'onClose'>;
-
-/**
- * SideBar navigation items with links
- */
-const SIDEBAR_ITEMS: Array<LinkToPage> = [
-  {
-    title: 'home',
-    path: '/',
-    icon: 'home',
-    role: 10,
-  },
-  {
-    title: 'profile',
-    path: '/settings/profile',
-    icon: 'account',
-    role: 20,
-  },
-  {
-    title: 'users',
-    path: '/settings/users',
-    icon: 'group',
-    role: 50,
-  },
-  {
-    title: 'rooms',
-    path: '/settings/rooms',
-    icon: 'room',
-    role: 50,
-  },
-  {
-    title: 'boxes',
-    path: '/settings/boxes',
-    icon: 'box',
-    role: 50,
-  },
-  {
-    title: 'ideas',
-    path: '/settings/ideas',
-    icon: 'idea',
-    role: 50,
-  },
-  {
-    title: 'messages',
-    path: '/settings/messages',
-    icon: 'message',
-    role: 50,
-  },
-  {
-    title: 'about',
-    path: '/about',
-    icon: 'info',
-    role: 10,
-  },
-];
 
 /**
  * Renders SideBar with Menu and User details
@@ -134,7 +79,7 @@ const SideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...
           </>
         )}
 
-        <SideBarNavList items={SIDEBAR_ITEMS} showIcons />
+        <SideBarNavList />
 
         <Divider />
 

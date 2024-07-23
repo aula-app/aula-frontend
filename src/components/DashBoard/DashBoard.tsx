@@ -1,5 +1,5 @@
 import { dashboardPhases, databaseRequest } from '@/utils';
-import { Badge, Box, Collapse, Grid, IconButton, Stack, Typography } from '@mui/material';
+import { Badge, Box, Button, Collapse, Grid, IconButton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIcon from '../AppIcon';
@@ -43,8 +43,8 @@ const DashBoard = ({ show = true }) => {
           alignItems: 'center',
         }}
       >
-        <Stack direction="row" width="100%" sx={{ alignItems: 'center' }}>
-          <IconButton onClick={() => setShowing(!isShowing)} sx={{ mr: 'auto', color: 'inherit' }}>
+        <Stack direction="row" width="100%" pr={1} sx={{ alignItems: 'center' }}>
+          <Button onClick={() => setShowing(!isShowing)} sx={{ mr: 'auto', color: 'inherit', textTransform: 'none' }}>
             <Typography variant="h5" sx={{ flexWrap: 'wrap', transition: 'opacity .5s ease-in-out' }}>
               {t('views.dashboard')}
             </Typography>
@@ -56,7 +56,7 @@ const DashBoard = ({ show = true }) => {
                 transition: 'transform .2s ease-in-out',
               }}
             />
-          </IconButton>
+          </Button>
           <Badge badgeContent={messages} color="primary" sx={{ mx: 1 }}>
             <AppIconButton icon="message" to="/messages" sx={{ p: 0 }} />
           </Badge>
@@ -64,11 +64,11 @@ const DashBoard = ({ show = true }) => {
             <AppIconButton icon="heart" sx={{ p: 0 }} />
           </Badge>
         </Stack>
-        <Collapse in={isShowing}>
+        <Collapse in={isShowing} sx={{ width: '100%' }}>
           {Object.keys(count).length > 4 && (
             <Grid container spacing={1} p={1}>
               {displayPhases.map((phase, key) => (
-                <Grid item xs={6} sm={4} md={2} key={key}>
+                <Grid item xs={6} sm={3} key={key}>
                   <Box
                     sx={{
                       py: 1,
