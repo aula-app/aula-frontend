@@ -1,6 +1,7 @@
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
 import AskConsentView from '@/views/AskConsent';
+import CatView from '@/views/cat';
 import MessageView from '@/views/Message';
 import MessagesView from '@/views/Messages';
 import RoomView from '@/views/Room';
@@ -32,6 +33,7 @@ const PrivateRoutes = () => (
       <Route path="idea-box/:box_id" element={<IdeasBoxView />} />
       <Route path="idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
     </Route>
+    <Route path="cat" element={<CatView />} />
     <Route path="*" element={<NotFoundView />} />
   </Routes>
 );

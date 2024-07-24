@@ -125,7 +125,7 @@ export type IconType = keyof typeof ICONS;
 
 interface Props {
   icon: IconType; // Icon's name alternate prop
-  size?: 'small' | 'medium' | 'large' | 'xl' | 'full'; // Icon's name alternate prop,
+  size?: 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
   sx?: ObjectPropByName;
 }
 
@@ -138,12 +138,12 @@ interface Props {
 const AppIcon: FunctionComponent<Props> = ({ icon, size = 'md', sx, ...restOfProps }) => {
   const ComponentToRender = ICONS[icon] || ICONS.default;
   const currentSize =
-    size === 'small' ? '16px' : size === 'large' ? '32px' : size === 'xl' ? '40px' : size === 'full' ? '100%' : '24px'; // no size === md
+    size === 'small' ? '16px' : size === 'large' ? '32px' : size === 'xl' ? '40px' : size === 'xxl' ? '80px' : '24px'; // no size === md
   return (
     <Stack
       alignItems="center"
       justifyContent="center"
-      sx={{ minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}
+      sx={{ fontSize: currentSize, minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}
     >
       <ComponentToRender {...restOfProps} />
     </Stack>
