@@ -2,6 +2,7 @@ import { ObjectPropByName } from '@/types/Generics';
 import { Stack } from '@mui/material';
 import { FunctionComponent } from 'react';
 import {
+  BiAngry,
   BiBookAdd,
   BiBot,
   BiBowlHot,
@@ -10,13 +11,26 @@ import {
   BiChalkboard,
   BiCheese,
   BiCloset,
+  BiConfused,
   BiCookie,
+  BiCool,
   BiCut,
+  BiDizzy,
+  BiHandicap,
+  BiHappyAlt,
+  BiHappyBeaming,
+  BiHappyHeartEyes,
+  BiLaugh,
+  BiMehAlt,
+  BiMehBlank,
   BiPen,
   BiPencil,
   BiRun,
+  BiSad,
+  BiShocked,
+  BiSmile,
 } from 'react-icons/bi';
-import { BsGenderTrans } from 'react-icons/bs';
+import { BsGenderTrans, BsTree } from 'react-icons/bs';
 import {
   IoAccessibilityOutline,
   IoAirplaneOutline,
@@ -61,6 +75,7 @@ import {
   IoFingerPrintOutline,
   IoFishOutline,
   IoFlashOutline,
+  IoFlowerOutline,
   IoFootballOutline,
   IoFootstepsOutline,
   IoGameControllerOutline,
@@ -123,6 +138,8 @@ import {
   LiaPiggyBankSolid,
   LiaTshirtSolid,
 } from 'react-icons/lia';
+import { LuSigma } from 'react-icons/lu';
+import { PiCookingPotLight } from 'react-icons/pi';
 /**
  * How to use:
  * 1. Import all required MUI or other SVG icons into this file.
@@ -138,7 +155,6 @@ export const CAT_ICONS = {
   alarm: IoAlarmOutline,
   americanFootball: IoAmericanFootballOutline,
   anchor: LiaAnchorSolid,
-  angry: LiaAngry,
   ankh: LiaAnkhSolid,
   aperture: IoApertureOutline,
   apple: LiaAppleAltSolid,
@@ -208,6 +224,7 @@ export const CAT_ICONS = {
   fish: IoFishOutline,
   film: IoFilmOutline,
   flag: LiaFlag,
+  flower: IoFlowerOutline,
   food: IoRestaurantOutline,
   football: IoFootballOutline,
   footsteps: IoFootstepsOutline,
@@ -218,6 +235,7 @@ export const CAT_ICONS = {
   hammer: IoHammerOutline,
   hand: IoHandLeftOutline,
   handshake: LiaHandshake,
+  handycap: BiHandicap,
   horse: LiaHorseSolid,
   hourglass: IoHourglassOutline,
   iceCream: IoIceCreamOutline,
@@ -227,8 +245,10 @@ export const CAT_ICONS = {
   leaf: IoLeafOutline,
   magnet: IoMagnetOutline,
   male: IoMaleOutline,
+  math: LuSigma,
   mic: IoMicOutline,
   music: IoMusicalNotesOutline,
+  pan: PiCookingPotLight,
   party: IoBalloonOutline,
   planet: IoPlanetOutline,
   pen: BiPen,
@@ -244,10 +264,23 @@ export const CAT_ICONS = {
   telescope: IoTelescope,
   train: IoSubwayOutline,
   transgender: BsGenderTrans,
+  tree: BsTree,
   trophy: IoTrophyOutline,
   video: IoVideocamOutline,
   walk: IoWalk,
   wheelchair: LiaAccessibleIcon,
+  angry: BiAngry,
+  beaming: BiHappyBeaming,
+  blank: BiMehBlank,
+  confused: BiConfused,
+  cool: BiCool,
+  dizzy: BiDizzy,
+  happy: BiHappyAlt,
+  laugh: BiLaugh,
+  meh: BiMehAlt,
+  sad: BiSad,
+  shocked: BiShocked,
+  smile: BiSmile,
 };
 
 export type CategoryIconType = keyof typeof CAT_ICONS;
