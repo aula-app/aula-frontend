@@ -14,6 +14,7 @@
     "days": "tage",
     "delete": "Löschen",
     "edit": "Bearbeiten",
+    "image": "Bild",
     "logout": "Abmeldung",
     "modeDark": "Dunkler Modus",
     "modeLight": "Lichtmodus",
@@ -51,6 +52,7 @@
   "settings": {
     "about_me": "Beschreibung",
     "body": "Text",
+    "categories": "Kategorien",
     "content": "Inhalt",
     "created": "Erstellung",
     "description": "Beschreibung",
@@ -104,6 +106,7 @@
   "views": {
     "about": "Über uns",
     "advanced": "Fortgeschrittene",
+    "config": "Einstellungen",
     "dashboard": "Dashboard",
     "box": "Ideen Box",
     "boxes": "Boxen",
@@ -116,9 +119,9 @@
     "message": "Nachricht",
     "privacy": "Datenschutz",
     "profile": "Profil",
-    "security": "Sicherheit",
     "room": "Klass",
     "rooms": "Klasse",
+    "security": "Sicherheit",
     "user": "Benutzer",
     "users": "Benutzer"
   }

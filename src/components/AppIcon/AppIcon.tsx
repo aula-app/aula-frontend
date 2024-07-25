@@ -83,6 +83,7 @@ export const ICONS: Record<string, React.ComponentType> = {
   check: HiOutlineCheckCircle,
   close: HiOutlineXMark,
   clock: HiOutlineClock,
+  cog: HiOutlineCog6Tooth,
   day: HiOutlineSun,
   delete: HiOutlineTrash,
   delegate: HiOutlineUsers,

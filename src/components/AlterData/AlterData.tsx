@@ -122,19 +122,22 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
             <FormContainer>
               {dataSettings[scope].map((field) => (
                 <Fragment key={field.name}>
-                  {field.name === 'phase_duration_1' && (
-                    <Typography variant="h5" mb={1}>
-                      {t('texts.phaseDuration')}
-                    </Typography>
-                  )}
                   {jwt_payload.user_level >= field.role && (
-                    <FormInput
-                      form={field.name}
-                      register={register}
-                      control={control}
-                      getValues={getValues}
-                      errors={errors}
-                    />
+                    <>
+                      {field.name === 'phase_duration_1' && (
+                        <Typography variant="h5" mb={1}>
+                          {t('texts.phaseDuration')}
+                        </Typography>
+                      )}
+                      <FormInput
+                        form={field.name}
+                        register={register}
+                        control={control}
+                        getValues={getValues}
+                        setValue={setValue}
+                        errors={errors}
+                      />
+                    </>
                   )}
                 </Fragment>
               ))}

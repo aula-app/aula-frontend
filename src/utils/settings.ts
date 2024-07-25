@@ -51,6 +51,7 @@ export const dataSettings = {
   rooms: [
     { name: 'room_name', orderId: 0, role: 50 },
     { name: 'description_public', orderId: 5, role: 50 },
+    { name: 'description_internal', orderId: -1, role: 50 },
   ],
   users: [
     { name: 'displayname', orderId: 6, role: 20 },

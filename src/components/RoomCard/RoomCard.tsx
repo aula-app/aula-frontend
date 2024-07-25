@@ -3,6 +3,7 @@ import { RoomType } from '@/types/Scopes';
 import { phases } from '@/utils';
 import { Card, CardMedia, Stack, Typography, capitalize } from '@mui/material';
 import AppLink from '../AppLink';
+import DefaultImage from '../DefaultImages';
 
 interface RoomCardProps {
   room: RoomType;
@@ -25,12 +26,19 @@ const RoomCard = ({ room }: RoomCardProps) => {
           <Typography variant="h6" noWrap>
             {capitalize(room.room_name)}
           </Typography>
-          <CardMedia
-            component="img"
-            image={room.id % 2 === 0 ? '/img/aula-room1.jpg' : '/img/aula-room.jpg'}
-            alt="bg image"
-            sx={{ borderRadius: '10px', objectFit: 'contain', flex: 1 }}
-          />
+          {room.description_internal.substring(0, 3) === 'DI:' ? (
+            <DefaultImage
+              image={Number(room.description_internal.split(':')[1])}
+              shift={Number(room.description_internal.split(':')[2])}
+            />
+          ) : (
+            <CardMedia
+              component="img"
+              image={room.description_internal}
+              alt="bg image"
+              sx={{ borderRadius: '10px', objectFit: 'contain', flex: 1 }}
+            />
+          )}
         </Stack>
       </AppLink>
       <PhaseBar room={room.id} />

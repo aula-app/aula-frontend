@@ -14,6 +14,7 @@
     "days": "days",
     "delete": "Delete",
     "edit": "Edit",
+    "image": "Image",
     "logout": "Sign out",
     "modeDark": "Dark mode",
     "modeLight": "Light mode",
@@ -51,6 +52,7 @@
   "settings": {
     "about_me": "Description",
     "body": "Text",
+    "categories": "Categories",
     "content": "Content",
     "created": "Creation date",
     "description": "Description",
@@ -105,6 +107,7 @@
   "views": {
     "about": "About",
     "advanced": "Advanced",
+    "config": "Settings",
     "dashboard": "Dashboard",
     "box": "Ideas Box",
     "boxes": "Boxes",
@@ -117,9 +120,9 @@
     "message": "Message",
     "privacy": "Privacy",
     "profile": "Profile",
-    "security": "Security",
     "room": "Room",
     "rooms": "Rooms",
+    "security": "Security",
     "user": "User",
     "users": "Users"
   }
