@@ -4,13 +4,11 @@ import { Box, Button, ClickAwayListener, Divider, Paper, Stack, Typography, Zoom
 import { grey } from '@mui/material/colors';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import AlterData from '../AlterData';
 import AppIcon from '../AppIcon';
 import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
 import DeleteData from '../DeleteData';
-import { localStorageGet, parseJwt } from '@/utils';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -63,6 +61,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
     setDel(false);
     onClose();
   };
+
   return (
     <>
       <Box position="relative">

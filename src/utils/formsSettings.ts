@@ -44,12 +44,6 @@ const duration = {
     .required(t('validation.required')),
 };
 
-const roomImage = {
-  type: 'image',
-  defaultValue: 'DI:0:0',
-  schema: yup.string().required(t('validation.required')),
-};
-
 export const formsSettings = {
   about_me: longText,
   body: longText,
@@ -58,7 +52,7 @@ export const formsSettings = {
   confirmPassword: password,
   description: longText,
   description_public: longText,
-  description_internal: roomImage,
+  description_internal: shortText,
   displayname: shortText,
   email: {
     type: 'input',

@@ -17,11 +17,14 @@ const DeleteData = ({ isOpen, scope, id, onClose }: Params) => {
   const { t } = useTranslation();
 
   const request = async (id: number) => {
-    await databaseRequest({
-      model: requestDefinitions[scope].model,
-      method: getRequest(scope, 'delete'),
-      arguments: { [getRequest(scope, 'id')]: id },
-    }).then(onClose);
+    await databaseRequest(
+      {
+        model: requestDefinitions[scope].model,
+        method: getRequest(scope, 'delete'),
+        arguments: { [getRequest(scope, 'id')]: id },
+      },
+      ['updater_id']
+    ).then(onClose);
   };
 
   const deleteRequest = () => {
@@ -37,11 +40,13 @@ const DeleteData = ({ isOpen, scope, id, onClose }: Params) => {
     >
       <DialogTitle id="alert-dialog-title">
         <Stack direction="row" alignItems="center">
-          <WarningAmber sx={{ mr: 1 }} color="error" /> {t('texts.deleteHeadline', { var: scope })}
+          <WarningAmber sx={{ mr: 1 }} color="error" /> {t('texts.deleteHeadline', { var: t(`views.${scope}`) })}
         </Stack>
       </DialogTitle>
       <DialogContent sx={{ overflowY: 'auto' }}>
-        <DialogContentText id="alert-dialog-description">{t('texts.deleteConfirm', { var: scope })}</DialogContentText>
+        <DialogContentText id="alert-dialog-description">
+          {t('texts.deleteConfirm', { var: t(`views.${scope}`) })}
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="secondary" autoFocus>

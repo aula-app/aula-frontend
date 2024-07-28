@@ -1,7 +1,7 @@
 import DinamicImages from './DinamicImages';
 
 interface Props {
-  image: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  image: number;
   shift: number;
 }
 

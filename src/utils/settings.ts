@@ -60,37 +60,66 @@ export const dataSettings = {
     { name: 'about_me', orderId: 12, role: 20 },
     { name: 'username', orderId: 5, role: 50 },
   ],
+  categories: [
+    { name: 'description_internal', orderId: 6, role: 20 },
+    { name: 'name', orderId: 6, role: 20 },
+  ],
 } as Record<SettingNamesType, Array<DataSetting>>;
 
 export const requestDefinitions = {
   boxes: {
     model: 'Topic',
+    item: 'Topic',
+    items: 'Topics',
     isChild: 'rooms',
   },
   bug: {
     model: '',
+    item: '',
+    items: 's',
   },
   comments: {
     model: 'Comment',
+    item: 'Comment',
+    items: 'Comments',
   },
   ideas: {
     model: 'Idea',
+    item: 'Idea',
+    items: 'Ideas',
     isChild: 'boxes',
   },
   messages: {
     model: 'Text',
+    item: 'Text',
+    items: 'Texts',
   },
   report: {
     model: '',
+    item: '',
+    items: 's',
   },
   rooms: {
     model: 'Room',
+    item: 'Room',
+    items: 'Rooms',
   },
   users: {
     model: 'User',
+    item: 'User',
+    items: 'Users',
     isChild: 'rooms',
   },
-} as Record<SettingNamesType, { model: string; isChild: SettingNamesType }>;
+  categories: {
+    model: 'Idea',
+    item: 'Category',
+    items: 'Categories',
+    isChild: 'ideas',
+  },
+} as Record<
+  SettingNamesType,
+  { model: string; item: string; items: string; method?: string; isChild?: SettingNamesType }
+>;
 
 export const getRequest = (
   scope: SettingNamesType,
@@ -98,18 +127,24 @@ export const getRequest = (
 ) => {
   switch (type) {
     case 'id':
-      return `${requestDefinitions[scope].model.toLowerCase()}_id`;
+      return `${requestDefinitions[scope].item.toLowerCase()}_id`;
     case 'fetch':
-      return `get${requestDefinitions[scope].model}s`;
+      return `get${requestDefinitions[scope].items}`;
     case 'get':
-      return `get${requestDefinitions[scope].model}BaseData`;
+      return `get${requestDefinitions[scope].item}BaseData`;
     case 'getChild':
-      return `get${requestDefinitions[scope].model}sBy${requestDefinitions[requestDefinitions[scope].isChild].model}`;
+      return requestDefinitions[scope].isChild
+        ? `get${requestDefinitions[scope].item}sBy${requestDefinitions[requestDefinitions[scope].isChild].item}`
+        : null;
     case 'move':
-      return `add${requestDefinitions[scope].model}To${requestDefinitions[requestDefinitions[scope].isChild].model}`;
+      return requestDefinitions[scope].isChild
+        ? `add${requestDefinitions[scope].item}To${requestDefinitions[requestDefinitions[scope].isChild].item}`
+        : null;
     case 'remove':
-      return `remove${requestDefinitions[scope].model}From${requestDefinitions[requestDefinitions[scope].isChild].model}`;
+      return requestDefinitions[scope].isChild
+        ? `remove${requestDefinitions[scope].item}From${requestDefinitions[requestDefinitions[scope].isChild].item}`
+        : null;
     default:
-      return `${type}${requestDefinitions[scope].model}`;
+      return `${type}${requestDefinitions[scope].item}`;
   }
 };

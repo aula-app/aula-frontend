@@ -126,6 +126,15 @@ export interface UserType {
   consents_needed: number;
 }
 
+export interface CategoryType {
+  name: string;
+  description_public: string;
+  description_internal: string;
+  created: string;
+  last_update: string;
+  id: number;
+}
+
 export interface PossibleFields
   extends BoxType,
     BugType,

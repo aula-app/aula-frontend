@@ -16,6 +16,8 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import FormInput from './FormInput';
+import IconField from './FormInput/IconField';
+import ImageField from './FormInput/ImageField';
 
 interface Props {
   id?: number;
@@ -124,19 +126,27 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
                 <Fragment key={field.name}>
                   {jwt_payload.user_level >= field.role && (
                     <>
-                      {field.name === 'phase_duration_1' && (
-                        <Typography variant="h5" mb={1}>
-                          {t('texts.phaseDuration')}
-                        </Typography>
+                      {field.name !== 'description_internal' ? (
+                        <>
+                          {field.name === 'phase_duration_1' && (
+                            <Typography variant="h5" mb={1}>
+                              {t('texts.phaseDuration')}
+                            </Typography>
+                          )}
+                          <FormInput
+                            form={field.name}
+                            register={register}
+                            control={control}
+                            getValues={getValues}
+                            setValue={setValue}
+                            errors={errors}
+                          />
+                        </>
+                      ) : scope === 'categories' ? (
+                        <IconField form={field.name} control={control} setValue={setValue} />
+                      ) : (
+                        <ImageField form={field.name} control={control} setValue={setValue} />
                       )}
-                      <FormInput
-                        form={field.name}
-                        register={register}
-                        control={control}
-                        getValues={getValues}
-                        setValue={setValue}
-                        errors={errors}
-                      />
                     </>
                   )}
                 </Fragment>

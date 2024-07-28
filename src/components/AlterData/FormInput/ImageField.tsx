@@ -32,7 +32,7 @@ const ImageField = ({ form, control, disabled = false, setValue, ...restOfProps 
       name={form}
       control={control}
       // @ts-ignore
-      defaultValue={0}
+      defaultValue={'DI:0:0'}
       render={({ field, fieldState }) => {
         const value = String(field.value);
         return (
