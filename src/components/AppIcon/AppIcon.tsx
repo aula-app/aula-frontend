@@ -1,5 +1,36 @@
 import { ObjectPropByName } from '@/types/Generics';
+import { Stack } from '@mui/material';
 import {
+  BiAngry,
+  BiBookAdd,
+  BiBot,
+  BiBowlHot,
+  BiBrain,
+  BiCctv,
+  BiChalkboard,
+  BiCheese,
+  BiCloset,
+  BiConfused,
+  BiCookie,
+  BiCool,
+  BiCut,
+  BiDizzy,
+  BiHandicap,
+  BiHappyAlt,
+  BiHappyBeaming,
+  BiLaugh,
+  BiMehAlt,
+  BiMehBlank,
+  BiPen,
+  BiPencil,
+  BiRun,
+  BiSad,
+  BiShocked,
+  BiSmile,
+} from 'react-icons/bi';
+import { BsGenderTrans, BsTree } from 'react-icons/bs';
+import {
+  HiHeart,
   HiOutlineAcademicCap,
   HiOutlineArchiveBox,
   HiOutlineArrowRightEndOnRectangle,
@@ -39,44 +70,14 @@ import {
   HiOutlineQuestionMarkCircle,
   HiOutlineSun,
   HiOutlineTrash,
-  HiOutlineUserGroup,
   HiOutlineUser,
+  HiOutlineUserGroup,
   HiOutlineUserPlus,
   HiOutlineUsers,
   HiOutlineXCircle,
   HiOutlineXMark,
   HiTag,
 } from 'react-icons/hi2';
-import { HiHeart } from 'react-icons/hi2';
-import {
-  BiAngry,
-  BiBookAdd,
-  BiBot,
-  BiBowlHot,
-  BiBrain,
-  BiCctv,
-  BiChalkboard,
-  BiCheese,
-  BiCloset,
-  BiConfused,
-  BiCookie,
-  BiCool,
-  BiCut,
-  BiDizzy,
-  BiHandicap,
-  BiHappyAlt,
-  BiHappyBeaming,
-  BiLaugh,
-  BiMehAlt,
-  BiMehBlank,
-  BiPen,
-  BiPencil,
-  BiRun,
-  BiSad,
-  BiShocked,
-  BiSmile,
-} from 'react-icons/bi';
-import { BsGenderTrans, BsTree } from 'react-icons/bs';
 import {
   IoAccessibilityOutline,
   IoAirplaneOutline,
@@ -156,7 +157,6 @@ import {
   LiaAccessibleIcon,
   LiaAddressCard,
   LiaAnchorSolid,
-  LiaAngry,
   LiaAnkhSolid,
   LiaAppleAltSolid,
   LiaAtomSolid,
@@ -186,8 +186,6 @@ import {
 } from 'react-icons/lia';
 import { LuSigma } from 'react-icons/lu';
 import { PiCookingPotLight } from 'react-icons/pi';
-import { Stack } from '@mui/material';
-import { FunctionComponent } from 'react';
 import CircleIcon from './circle.svg?react';
 import LogoIcon from './logo.svg?react';
 import VotingIcon from './voting.svg?react';
