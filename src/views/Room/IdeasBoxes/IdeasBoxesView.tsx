@@ -49,7 +49,7 @@ const IdeasBoxView = () => {
         {boxes &&
           boxes.data &&
           boxes.data.map((box) => (
-            <Grid key={box.id} item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ scrollSnapAlign: 'center' }}>
+            <Grid key={box.id} item xs={12} sm={6} lg={4} xl={3} sx={{ scrollSnapAlign: 'center' }}>
               <IdeaBox box={box} onReload={boxesFetch} />
             </Grid>
           ))}
