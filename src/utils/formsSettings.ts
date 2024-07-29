@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import * as yup from 'yup';
 
 export type SelectOptionsType = { label: string; value: number };
-type FormTypes = 'input' | 'password' | 'select' | 'text' | 'duration';
+type FormTypes = 'input' | 'password' | 'select' | 'text' | 'image' | 'duration';
 type FormSetting = {
   type: FormTypes;
   schema: yup.Schema;
@@ -52,6 +52,7 @@ export const formsSettings = {
   confirmPassword: password,
   description: longText,
   description_public: longText,
+  description_internal: shortText,
   displayname: shortText,
   email: {
     type: 'input',

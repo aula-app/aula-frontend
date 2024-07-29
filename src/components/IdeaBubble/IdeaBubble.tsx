@@ -1,6 +1,6 @@
-import { IdeaType } from '@/types/Scopes';
+import { CategoryType, IdeaType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
-import { Button, Chip, Stack, Typography } from '@mui/material';
+import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import AppIcon from '../AppIcon';
@@ -21,6 +21,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
+  const [category, setCategory] = useState<CategoryType>();
   const displayDate = new Date(idea.created);
 
   const manageLike = (likeMethod: likeMethodType) => {
@@ -36,6 +37,15 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
     );
   };
 
+  const getCategory = async () =>
+    await databaseRequest({
+      model: 'Idea',
+      method: 'getIdeaCategory',
+      arguments: {
+        idea_id: idea.id,
+      },
+    }).then((response) => (response.data ? setCategory(response.data) : setCategory(undefined)));
+
   const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
   const addLike = async () => await manageLike('IdeaAddLike').then(() => onReload());
   const removeLike = async () => await manageLike('IdeaRemoveLike').then(() => onReload());
@@ -47,6 +57,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
 
   useEffect(() => {
     hasLiked();
+    getCategory();
   }, []);
 
   return (
@@ -60,7 +71,15 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
             </Stack>
           </AppLink>
           <Stack direction="row" justifyContent="space-between" my={1}>
-            <Chip icon={<AppIcon icon="settings" />} label="category" variant="outlined" />
+            {category ? (
+              <Chip
+                icon={<AppIcon icon={category.description_internal} size="small" sx={{ ml: 0.5 }} />}
+                label={category.name}
+                variant="outlined"
+              />
+            ) : (
+              <Box></Box>
+            )}{' '}
             <MoreOptions
               scope="ideas"
               id={idea.id}

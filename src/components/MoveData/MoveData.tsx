@@ -61,7 +61,7 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
   };
 
   const getCurrentItems = async () => {
-    if (!parentId) return;
+    if (!parentId || !requestDefinitions[scope].isChild) return;
     await databaseRequest({
       model: requestDefinitions[scope].model,
       method: getRequest(scope, 'getChild'),
@@ -75,7 +75,7 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
   };
 
   const select = async (itemId: number) => {
-    if (!parentId) return;
+    if (!parentId || !requestDefinitions[scope].isChild) return;
     await databaseRequest(
       {
         model: requestDefinitions[scope].model,
@@ -90,7 +90,7 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
   };
 
   const remove = async (itemId: number) => {
-    if (!parentId) return;
+    if (!parentId || !requestDefinitions[scope].isChild) return;
     await databaseRequest({
       model: requestDefinitions[scope].model,
       method: getRequest(scope, 'remove'),
@@ -128,11 +128,11 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
         fullWidth
         color="secondary"
         variant="outlined"
-        startIcon={<AppIcon icon="edit" />}
+        startIcon="edit"
         sx={{ borderRadius: 30 }}
         onClick={() => setOpen(true)}
       >
-        {t('texts.editChild', { var: t(`views.${scope}`) })}
+        {t('texts.edit', { var: t(`views.${scope}`) })}
       </Button>
       <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
         <DialogTitle>Select {scope}</DialogTitle>

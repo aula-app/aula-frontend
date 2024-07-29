@@ -1,5 +1,14 @@
 export type RoomPhases = '0' | '10' | '20' | '30' | '40';
-export type SettingNamesType = 'bug' | 'boxes' | 'comments' | 'ideas' | 'messages' | 'report' | 'rooms' | 'users';
+export type SettingNamesType =
+  | 'bug'
+  | 'boxes'
+  | 'comments'
+  | 'ideas'
+  | 'messages'
+  | 'report'
+  | 'rooms'
+  | 'users'
+  | 'categories';
 
 export interface SettingsType {
   name: string;

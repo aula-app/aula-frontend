@@ -1,6 +1,6 @@
 import { Vote, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import AppIcon from '../AppIcon';
 
@@ -13,6 +13,7 @@ interface IdeaBoxProps {
  * Renders "VotingResults" component
  */
 const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
+  const { t } = useTranslation();
   const params = useParams();
 
   return (
@@ -39,9 +40,7 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
             {!rejected ? <AppIcon icon="for" size="xl" /> : <AppIcon icon="against" size="xl" />}
           </Stack>
           <Stack flexGrow={1} pr={2}>
-            <Typography variant="body2">
-              {rejected ? 'This idea was not approved.' : 'This idea was approved.'}
-            </Typography>
+            <Typography variant="body2">{t(`texts.${rejected ? 'rejected' : 'approved'}`)}</Typography>
           </Stack>
           <Stack>
             {votingOptions.map((option, i) => (
@@ -60,8 +59,8 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
         </Stack>
       </Card>
       <Stack direction="row" alignItems="center" mx={3} mt={1} fontSize="small">
-        <AppIcon icon={votingOptions[yourVote]} />
-        &nbsp; You voted {votingOptions[yourVote]} this idea
+        <AppIcon icon={votingOptions[yourVote + 1]} />
+        &nbsp; {t('texts.yourVote', { var: t(`votes.${votingOptions[yourVote + 1]}`) })}
       </Stack>
     </Stack>
   );

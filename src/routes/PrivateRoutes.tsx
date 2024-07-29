@@ -8,6 +8,7 @@ import IdeaView from '@/views/Room/Idea';
 import IdeasBoxView from '@/views/Room/IdeasBox';
 import RoomPhaseView from '@/views/Room/RoomPhaseView';
 import SettingsView from '@/views/Settings';
+import ConfigView from '@/views/Settings/Config';
 import UserView from '@/views/Settings/User';
 import WelcomeView from '@/views/Welcome';
 import { Route, Routes } from 'react-router-dom';
@@ -23,6 +24,7 @@ const PrivateRoutes = () => (
     <Route path="welcome" element={<WelcomeView />} />
     <Route path="messages" element={<MessagesView />} />
     <Route path="messages/message/:message_id" element={<MessageView />} />
+    <Route path="settings/config" element={<ConfigView />} />
     <Route path="settings/profile" element={<UserView />} />
     <Route path="settings/:setting_name" element={<SettingsView />} />
     <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />

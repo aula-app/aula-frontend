@@ -16,6 +16,9 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import FormInput from './FormInput';
+import IconField from './FormInput/IconField';
+import ImageField from './FormInput/ImageField';
+import CategoryField from './FormInput/CategoryField';
 
 interface Props {
   id?: number;
@@ -34,6 +37,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [items, setItems] = useState<SingleResponseType>();
+  const [update, setUpdate] = useState<Array<{ model: string; method: string; args: ObjectPropByName }>>([]);
 
   const schema = dataSettings[scope].reduce((schema, field) => {
     return { ...schema, [field.name]: formsSettings[field.name].schema };
@@ -75,6 +79,18 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
       requestId
     ).then((response) => {
       if (!response.success) return;
+      update.forEach((update) => {
+        databaseRequest(
+          {
+            model: update.model,
+            method: update.method,
+            arguments: {
+              ...update.args,
+            },
+          },
+          ['updater_id']
+        );
+      });
       onClose();
     });
   };
@@ -116,28 +132,39 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
         {scope && (
           <Stack p={2}>
             <Typography variant="h4" pb={2}>
-              {!id ? 'New ' : 'Edit '}
-              {requestDefinitions[scope].model === 'Topic' ? 'Box' : requestDefinitions[scope].model}
+              {t(`texts.${!id ? 'add' : 'edit'}`, { var: t(`views.${requestDefinitions[scope].item.toLowerCase()}`) })}
             </Typography>
             <FormContainer>
               {dataSettings[scope].map((field) => (
                 <Fragment key={field.name}>
-                  {field.name === 'phase_duration_1' && (
-                    <Typography variant="h5" mb={1}>
-                      {t('texts.phaseDuration')}
-                    </Typography>
-                  )}
                   {jwt_payload.user_level >= field.role && (
-                    <FormInput
-                      form={field.name}
-                      register={register}
-                      control={control}
-                      getValues={getValues}
-                      errors={errors}
-                    />
+                    <>
+                      {field.name !== 'description_internal' ? (
+                        <>
+                          {field.name === 'phase_duration_1' && (
+                            <Typography variant="h5" mb={1}>
+                              {t('texts.phaseDuration')}
+                            </Typography>
+                          )}
+                          <FormInput
+                            form={field.name}
+                            register={register}
+                            control={control}
+                            getValues={getValues}
+                            setValue={setValue}
+                            errors={errors}
+                          />
+                        </>
+                      ) : scope === 'categories' ? (
+                        <IconField form={field.name} control={control} setValue={setValue} />
+                      ) : (
+                        <ImageField form={field.name} control={control} setValue={setValue} />
+                      )}
+                    </>
                   )}
                 </Fragment>
               ))}
+              {scope === 'ideas' && id && <CategoryField id={id} setUpdate={setUpdate} />}
               <Stack direction="row">
                 <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
                   {t('generics.cancel')}

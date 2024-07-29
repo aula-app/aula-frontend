@@ -14,6 +14,7 @@
     "days": "days",
     "delete": "Delete",
     "edit": "Edit",
+    "image": "Image",
     "logout": "Sign out",
     "modeDark": "Dark mode",
     "modeLight": "Light mode",
@@ -51,6 +52,7 @@
   "settings": {
     "about_me": "Description",
     "body": "Text",
+    "categories": "Categories",
     "content": "Content",
     "created": "Creation date",
     "description": "Description",
@@ -74,15 +76,16 @@
     "username": "User Name"
   },
   "texts": {
-    "addChild": "Add {{var}}",
+    "add": "Add {{var}}",
     "addToParent": "Add to {{var}}",
+    "approved": "This idea was approved.",
     "delegated": "{{var}} delegated ideas",
     "deleteConfirm": "Are you sure you want to delete the selected {{var}}? This action cannot be undone.",
     "deleteData": "Delete account",
     "deleteHeadline": "Delete selected {{var}}",
     "deleteRequest": "Data deletion requested",
     "deleteText": "Are you sure you want to delete request the deletion of your account? All your personal data will be lost. This action cannot be undone.",
-    "editChild": "Edit {{var}}",
+    "edit": "Edit {{var}}",
     "exportData": "Export account data",
     "exportRequest": "Data export requested",
     "ideaBox": "{{var}} Ideas on {{phase}}",
@@ -90,7 +93,9 @@
     "passChange": "Change password",
     "phaseDuration": "Phase durations",
     "phaseEnd": "Phase ends on {{var}} days",
-    "undelegated": "{{var}} ideas"
+    "rejected": "This idea was not approved.",
+    "undelegated": "{{var}} ideas",
+    "yourVote": "You voted {{var}} this idea"
   },
   "validation": {
     "agree": "You must agree to sign in.",
@@ -105,9 +110,12 @@
   "views": {
     "about": "About",
     "advanced": "Advanced",
+    "config": "Settings",
     "dashboard": "Dashboard",
     "box": "Ideas Box",
     "boxes": "Boxes",
+    "topics": "Boxes",
+    "category": "category",
     "comments": "Comments",
     "home": "Home",
     "idea": "Idea",
@@ -117,10 +125,15 @@
     "message": "Message",
     "privacy": "Privacy",
     "profile": "Profile",
-    "security": "Security",
     "room": "Room",
     "rooms": "Rooms",
+    "security": "Security",
     "user": "User",
     "users": "Users"
+  },
+  "votes": {
+    "against": "against",
+    "neutral": "neutral",
+    "for": "for"
   }
 }
