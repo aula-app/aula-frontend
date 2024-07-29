@@ -45,6 +45,7 @@ import {
   HiOutlineUsers,
   HiOutlineXCircle,
   HiOutlineXMark,
+  HiTag,
 } from 'react-icons/hi2';
 import { HiHeart } from 'react-icons/hi2';
 import {
@@ -199,7 +200,7 @@ import VotingIcon from './voting.svg?react';
  * Important: properties of ICONS object MUST be lowercase!
  * Note: You can use camelCase or UPPERCASE in the <AppIcon icon="someIconByName" /> component
  */
-export const ICONS: Record<string, React.ComponentType> = {
+export const ICONS = {
   logo: LogoIcon,
   account: HiOutlineFaceSmile,
   add: HiOutlinePlus,
@@ -216,6 +217,7 @@ export const ICONS: Record<string, React.ComponentType> = {
   bug: HiOutlineBugAnt,
   camera: HiOutlineCamera,
   cancel: HiOutlineXCircle,
+  categories: HiTag,
   chart: HiOutlineChartBar,
   chat: HiOutlineChatBubbleLeft,
   check: HiOutlineCheckCircle,
@@ -399,9 +401,10 @@ const ALL_ICONS = { ...ICONS, ...CAT_ICONS };
 
 export type IconType = keyof typeof ICONS;
 export type CategoryIconType = keyof typeof CAT_ICONS;
+export type AllIconsType = keyof typeof ALL_ICONS;
 
 interface Props {
-  icon: IconType | CategoryIconType; // Icon's name alternate prop
+  icon: AllIconsType; // Icon's name alternate prop
   size?: 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
   sx?: ObjectPropByName;
 }
@@ -409,10 +412,8 @@ interface Props {
 /**
  * Renders SVG icon by given Icon name
  * @component AppIcon
- * @param {string} [props.name] - name of the Icon to render
- * @param {string} [props.icon] - name of the Icon to render
  */
-const AppIcon: FunctionComponent<Props> = ({ icon, size = 'md', sx, ...restOfProps }) => {
+const AppIcon = ({ icon, size = 'medium', sx, ...restOfProps }: Props) => {
   const ComponentToRender = ALL_ICONS[icon] || ALL_ICONS['bug'];
   const currentSize =
     size === 'small' ? '16px' : size === 'large' ? '32px' : size === 'xl' ? '40px' : size === 'xxl' ? '80px' : '24px'; // no size === md

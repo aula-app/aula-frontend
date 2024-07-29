@@ -23,6 +23,7 @@ const ImageField = ({ form, control, disabled = false, setValue, ...restOfProps 
   const { t } = useTranslation();
   const [selector, setSelector] = useState(false);
   const onSubmit = (field: string, image: string) => {
+    // @ts-ignore
     setValue(field, image);
     setSelector(false);
   };
@@ -42,8 +43,8 @@ const ImageField = ({ form, control, disabled = false, setValue, ...restOfProps 
             </Typography>
             <TextField {...field} {...restOfProps} sx={{ visibility: 'hidden', height: 0 }} />
             {value === '' ? (
-              <AppButton variant="outlined" onClick={() => setSelector(true)} mt={2}>
-                {t('texts.addChild', { var: t('generics.image').toLowerCase() })}
+              <AppButton variant="outlined" onClick={() => setSelector(true)} sx={{ mt: 2 }}>
+                {t('texts.add', { var: t('generics.image').toLowerCase() })}
               </AppButton>
             ) : (
               <Stack direction="row" justifyContent="center">

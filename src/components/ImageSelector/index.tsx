@@ -1,3 +1,3 @@
-import ImageEditor from './ImageEditor';
+import ImageSelector from './ImageSelector';
 
-export { ImageEditor as default, ImageEditor };
+export { ImageSelector as default, ImageSelector };

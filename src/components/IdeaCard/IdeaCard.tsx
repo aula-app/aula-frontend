@@ -67,7 +67,7 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
           {Number(phase) != 40 ? (
             <AppIcon icon="camera" />
           ) : (
-            <AppIcon icon={votingOptions[idea.is_winner > 0 ? 2 : 0]} size="xl" />
+            <AppIcon icon={idea.is_winner > 0 ? 'for' : 'against'} size="xl" />
           )}
         </Stack>
         <Stack flexGrow={1} px={2} overflow="hidden">

@@ -135,15 +135,15 @@ export const getRequest = (
     case 'getChild':
       return requestDefinitions[scope].isChild
         ? `get${requestDefinitions[scope].item}sBy${requestDefinitions[requestDefinitions[scope].isChild].item}`
-        : null;
+        : '';
     case 'move':
       return requestDefinitions[scope].isChild
         ? `add${requestDefinitions[scope].item}To${requestDefinitions[requestDefinitions[scope].isChild].item}`
-        : null;
+        : '';
     case 'remove':
       return requestDefinitions[scope].isChild
         ? `remove${requestDefinitions[scope].item}From${requestDefinitions[requestDefinitions[scope].isChild].item}`
-        : null;
+        : '';
     default:
       return `${type}${requestDefinitions[scope].item}`;
   }

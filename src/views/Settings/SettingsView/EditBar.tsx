@@ -1,4 +1,5 @@
 import AppIcon from '@/components/AppIcon';
+import { AllIconsType } from '@/components/AppIcon/AppIcon';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { requestDefinitions } from '@/utils';
 import { SubdirectoryArrowRight } from '@mui/icons-material';
@@ -22,6 +23,10 @@ type Params = {
 
 const EditBar = ({ scope, selected, onAlter, onMove, onDelete }: Params) => {
   const { t } = useTranslation();
+  const currentIcon =
+    requestDefinitions[scope].isChild && requestDefinitions[requestDefinitions[scope].isChild].item !== 'Topic'
+      ? (requestDefinitions[requestDefinitions[scope].isChild].item.toLowerCase() as AllIconsType)
+      : 'box';
   return (
     <Stack direction="row" bottom={0} height={37} bgcolor={grey[200]} px={1} alignItems="center">
       <SubdirectoryArrowRight sx={{ ml: 3, fontSize: '1rem' }} color="secondary" />
@@ -36,14 +41,7 @@ const EditBar = ({ scope, selected, onAlter, onMove, onDelete }: Params) => {
           </Button>
           {requestDefinitions[scope].isChild && (
             <Button disabled={selected.length === 0} color="secondary" onClick={() => onMove(true)}>
-              <AppIcon
-                sx={{ mr: 1 }}
-                icon={
-                  requestDefinitions[requestDefinitions[scope].isChild].model === 'Topic'
-                    ? 'box'
-                    : requestDefinitions[requestDefinitions[scope].isChild].model.toLowerCase()
-                }
-              />{' '}
+              <AppIcon sx={{ mr: 1 }} icon={currentIcon} />{' '}
               {t('texts.addToParent', {
                 var:
                   requestDefinitions[scope].isChild === 'boxes'

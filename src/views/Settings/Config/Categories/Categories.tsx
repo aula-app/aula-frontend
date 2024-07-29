@@ -53,13 +53,13 @@ const CatView = () => {
               key={key}
               label={category.name}
               avatar={<AppIcon icon={currentIcon} />}
-              onClick={() => setEdit(category.id)}
+              // onClick={() => setEdit(category.id)}
               onDelete={() => setDelete(category.id)}
-              sx={{ ml: 1, mt: 1 }}
+              sx={{ mr: 1, mt: 1 }}
             />
           );
         })}
-        <Chip label="New Category" avatar={<AppIcon icon="add" />} onClick={() => setEdit()} sx={{ ml: 1, mt: 1 }} />
+        <Chip label="New Category" avatar={<AppIcon icon="add" />} onClick={() => setEdit()} sx={{ mt: 1 }} />
       </Box>
       <AlterData scope="categories" id={selectedId} isOpen={!!editCat} onClose={onClose} />
       <DeleteData scope="categories" id={selectedId || 0} isOpen={!!deleteCat} onClose={onClose} />

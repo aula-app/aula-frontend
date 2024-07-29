@@ -35,7 +35,7 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
   const scope = setting_name as SettingNamesType;
 
   const getDestination = async () => {
-    if (!Object.hasOwn(requestDefinitions[scope], 'isChild')) return;
+    if (!requestDefinitions[scope].isChild) return;
     await databaseRequest({
       model: requestDefinitions[requestDefinitions[scope].isChild].model,
       method: getRequest(requestDefinitions[scope].isChild, 'fetch'),

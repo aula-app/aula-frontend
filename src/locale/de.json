@@ -76,22 +76,25 @@
     "username": "Benutzername"
   },
   "texts": {
-    "addChild": "{{var}} hinzufügen",
+    "add": "{{var}} hinzufügen",
     "addToParent": "Zur {{var}} hinzufügen",
+    "approved": "Diese Idee wurde angenommen",
     "delegated": "{{var}} delegierte Ideen",
     "deleteConfirm": "Sind Sie sicher, dass Sie die ausgewählte {{var}} löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
     "deleteData": "Konto löschen",
     "deleteHeadline": "Ausgewählte {{var}} löschen",
     "deleteRequest": "Löschung der Daten beantragt",
     "deleteText": "Sind Sie sicher, dass Sie die Löschung Ihres Kontos beantragen wollen? Alle Ihre persönlichen Daten gehen dabei verloren. Diese Aktion kann nicht rückgängig gemacht werden.",
-    "editChild": "{{var}} bearbeiten",
+    "edit": "{{var}} bearbeiten",
     "exportData": "Kontodaten exportieren",
     "exportRequest": "Datenexport angefordert",
     "ideaBox": "{{var}} Ideen zur {{phase}}",
     "passChange": "Passwort ändern",
     "phaseDuration": "Dauer der Phasen",
     "phaseEnd": "Phase endet am {{var}} Tage",
-    "undelegated": "{{var}} ideen"
+    "rejected": "Diese Idee wurde nicht angenommen",
+    "undelegated": "{{var}} ideen",
+    "yourVote": "Sie haben {{var}} diese Idee gewählt"
   },
   "validation": {
     "agree": "Sie müssen zustimmen, sich anzumelden.",
@@ -110,6 +113,7 @@
     "dashboard": "Dashboard",
     "box": "Ideen Box",
     "boxes": "Boxen",
+    "topics": "Boxen",
     "comments": "Kommentare",
     "home": "Startseite",
     "idea": "Idee",

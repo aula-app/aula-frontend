@@ -118,8 +118,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
         {scope && (
           <Stack p={2}>
             <Typography variant="h4" pb={2}>
-              {!id ? 'New ' : 'Edit '}
-              {requestDefinitions[scope].model === 'Topic' ? 'Box' : requestDefinitions[scope].model}
+              {t(`texts.${!id ? 'add' : 'edit'}`, { var: t(`views.${requestDefinitions[scope].item.toLowerCase()}`) })}
             </Typography>
             <FormContainer>
               {dataSettings[scope].map((field) => (
