@@ -2,7 +2,7 @@ import AppIcon from '@/components/AppIcon';
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { ObjectPropByName } from '@/types/Generics';
 import { databaseRequest, SelectOptionsType } from '@/utils';
-import { MenuItem, SelectChangeEvent, Stack, TextField } from '@mui/material';
+import { MenuItem, Select, SelectChangeEvent, Stack, TextField } from '@mui/material';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -58,7 +58,7 @@ const CategoryField = ({ id, disabled = false, setUpdate, ...restOfProps }: Prop
       },
     }).then((response) => {
       if (!response.success) return;
-      console.log(Number(response.data));
+      setSelected(Number(response.data.id));
     });
   }
 
@@ -76,12 +76,11 @@ const CategoryField = ({ id, disabled = false, setUpdate, ...restOfProps }: Prop
   }, []);
 
   return (
-    <TextField
+    <Select
       label={t(`views.category`)}
       disabled={disabled}
-      select
       fullWidth
-      value={selected}
+      value={String(selected)}
       onChange={changeCategory}
       sx={{ mb: 2 }}
       {...restOfProps}
@@ -94,7 +93,7 @@ const CategoryField = ({ id, disabled = false, setUpdate, ...restOfProps }: Prop
           </Stack>
         </MenuItem>
       ))}
-    </TextField>
+    </Select>
   );
 };
 export default CategoryField;

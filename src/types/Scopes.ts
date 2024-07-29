@@ -1,3 +1,4 @@
+import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { RoomPhases } from './SettingsTypes';
 
 export interface BoxType {
@@ -129,7 +130,7 @@ export interface UserType {
 export interface CategoryType {
   name: string;
   description_public: string;
-  description_internal: string;
+  description_internal: CategoryIconType;
   created: string;
   last_update: string;
   id: number;

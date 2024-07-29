@@ -4,6 +4,7 @@ import { databaseRequest, phases, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { AppIcon } from '..';
+import { CategoryIconType } from '../AppIcon/AppIcon';
 
 interface IdeaCardProps {
   idea: IdeaType;
@@ -15,7 +16,7 @@ interface IdeaCardProps {
  */
 const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
   const [vote, setVote] = useState(0);
-  const [icon, setIcon] = useState('');
+  const [icon, setIcon] = useState<CategoryIconType>();
   const [variant, setVariant] = useState<string>();
 
   const getVote = async () =>
@@ -37,7 +38,7 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
       arguments: {
         idea_id: idea.id,
       },
-    }).then((response) => (response.data ? setIcon(response.data) : setIcon('')));
+    }).then((response) => (response.data ? setIcon(response.data.description_internal) : setIcon(undefined)));
 
   const getVariant = () => {
     switch (Number(phase)) {
@@ -78,7 +79,7 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
           {Number(phase) >= 40 ? (
             <AppIcon icon={idea.is_winner > 0 ? 'for' : 'against'} size="xl" />
           ) : icon ? (
-            <AppIcon icon="camera" />
+            <AppIcon icon={icon} />
           ) : (
             <></>
           )}
