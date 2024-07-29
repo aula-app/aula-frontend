@@ -126,7 +126,13 @@
     "room": "Klass",
     "rooms": "Klasse",
     "security": "Sicherheit",
+    "updates": "Aktualisierungen",
     "user": "Benutzer",
     "users": "Benutzer"
+  },
+  "votes": {
+    "against": "gegen",
+    "neutral": "neutral",
+    "for": "für"
   }
 }
