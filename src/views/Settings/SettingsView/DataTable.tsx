@@ -3,7 +3,7 @@ import { SettingNamesType } from '@/types/SettingsTypes';
 import { dataSettings } from '@/utils';
 import { Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import { Dispatch, Fragment, SetStateAction, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Params = {
@@ -75,15 +75,19 @@ const DataTable = ({
               />
             </TableCell>
             {dataSettings[scope].map((column) => (
-              <TableCell key={column.name} sx={{ whiteSpace: 'nowrap' }}>
-                <TableSortLabel
-                  active={orderBy === column.orderId}
-                  direction={orderAsc ? 'asc' : 'desc'}
-                  onClick={() => handleOrder(column.orderId)}
-                >
-                  {t(`settings.${column.name}`)}
-                </TableSortLabel>
-              </TableCell>
+              <Fragment key={column.name}>
+                {column.orderId >= 0 && (
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    <TableSortLabel
+                      active={orderBy === column.orderId}
+                      direction={orderAsc ? 'asc' : 'desc'}
+                      onClick={() => handleOrder(column.orderId)}
+                    >
+                      {t(`settings.${column.name}`)}
+                    </TableSortLabel>
+                  </TableCell>
+                )}
+              </Fragment>
             ))}
           </TableRow>
         </TableHead>
@@ -94,13 +98,16 @@ const DataTable = ({
                 <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
               </TableCell>
               {dataSettings[scope].map((column) => (
-                <TableCell
-                  key={`${column.name}-${row.id}`}
-                  sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 500 }}
-                  onClick={() => setAlter({ open: true, id: row.id })}
-                >
-                  {row[column.name]}
-                </TableCell>
+                <Fragment key={`${column.name}-${row.id}`}>
+                  {column.orderId >= 0 && (
+                    <TableCell
+                      sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 500 }}
+                      onClick={() => setAlter({ open: true, id: row.id })}
+                    >
+                      {row[column.name]}
+                    </TableCell>
+                  )}
+                </Fragment>
               ))}
             </TableRow>
           ))}

@@ -59,7 +59,7 @@ const VotingCard = () => {
             onClick={() => registerVote(i as Vote)}
           >
             <Stack alignItems="center" width={70}>
-              <AppIcon icon={option} size="full" />
+              <AppIcon icon={option} size="xxl" />
               {option}
             </Stack>
           </Button>

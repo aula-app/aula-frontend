@@ -8,6 +8,7 @@ import IdeaView from '@/views/Room/Idea';
 import IdeasBoxView from '@/views/Room/IdeasBox';
 import RoomPhaseView from '@/views/Room/RoomPhaseView';
 import SettingsView from '@/views/Settings';
+import ConfigView from '@/views/Settings/Config';
 import UserView from '@/views/Settings/User';
 import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';

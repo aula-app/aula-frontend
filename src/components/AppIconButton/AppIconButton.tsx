@@ -2,12 +2,13 @@ import { alpha, IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import { ElementType, FunctionComponent, useMemo } from 'react';
 import AppIcon from '../AppIcon';
 import AppLink from '../AppLink';
+import { AllIconsType } from '../AppIcon/AppIcon';
 
 const MUI_ICON_BUTTON_COLORS = ['inherit', 'default', 'primary', 'secondary', 'success', 'error', 'info', 'warning'];
 
 interface Props extends Omit<IconButtonProps, 'color'> {
   color?: string; // Not only 'inherit' | 'default' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
-  icon: string;
+  icon: AllIconsType;
   // Missing props
   component?: ElementType; // Could be RouterLink, AppLink, <a>, etc.
   to?: string; // Link prop

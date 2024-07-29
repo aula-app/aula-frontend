@@ -27,7 +27,7 @@ import { FormContainer } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
 /** * Renders "User" view
- * url: /user
+ * url: /settings/user
  */
 const UserView = () => {
   const { t } = useTranslation();

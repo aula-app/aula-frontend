@@ -58,7 +58,7 @@ const WelcomeView = () => {
           {rooms &&
             rooms.data &&
             rooms.data.map((room) => (
-              <Grid key={room.id} item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ scrollSnapAlign: 'center' }}>
+              <Grid key={room.id} item xs={12} sm={6} lg={4} xl={3} sx={{ scrollSnapAlign: 'center' }}>
                 <RoomCard room={room} />
               </Grid>
             ))}

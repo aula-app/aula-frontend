@@ -1,3 +1,4 @@
+import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { RoomPhases } from './SettingsTypes';
 
 export interface BoxType {
@@ -124,6 +125,15 @@ export interface UserType {
   o3: string;
   consents_given: number;
   consents_needed: number;
+}
+
+export interface CategoryType {
+  name: string;
+  description_public: string;
+  description_internal: CategoryIconType;
+  created: string;
+  last_update: string;
+  id: number;
 }
 
 export interface PossibleFields
