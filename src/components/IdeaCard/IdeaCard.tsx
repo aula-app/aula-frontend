@@ -15,6 +15,7 @@ interface IdeaCardProps {
  */
 const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
   const [vote, setVote] = useState(0);
+  const [icon, setIcon] = useState('');
   const [variant, setVariant] = useState<string>();
 
   const getVote = async () =>
@@ -28,6 +29,15 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
       },
       ['user_id']
     ).then((response) => setVote(response.data));
+
+  const getIcon = async () =>
+    await databaseRequest({
+      model: 'Idea',
+      method: 'getIdeaCategory',
+      arguments: {
+        idea_id: idea.id,
+      },
+    }).then((response) => (response.data ? setIcon(response.data) : setIcon('')));
 
   const getVariant = () => {
     switch (Number(phase)) {
@@ -49,6 +59,7 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
   }, [vote]);
 
   useEffect(() => {
+    getIcon();
     if (Number(phase) === 30) getVote();
   }, []);
 
@@ -64,10 +75,12 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
     >
       <Stack direction="row" height={68} alignItems="center">
         <Stack pl={2}>
-          {Number(phase) != 40 ? (
+          {Number(phase) >= 40 ? (
+            <AppIcon icon={idea.is_winner > 0 ? 'for' : 'against'} size="xl" />
+          ) : icon ? (
             <AppIcon icon="camera" />
           ) : (
-            <AppIcon icon={idea.is_winner > 0 ? 'for' : 'against'} size="xl" />
+            <></>
           )}
         </Stack>
         <Stack flexGrow={1} px={2} overflow="hidden">

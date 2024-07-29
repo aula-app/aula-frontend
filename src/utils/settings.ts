@@ -61,8 +61,8 @@ export const dataSettings = {
     { name: 'username', orderId: 5, role: 50 },
   ],
   categories: [
-    { name: 'description_internal', orderId: 6, role: 20 },
-    { name: 'name', orderId: 6, role: 20 },
+    { name: 'description_internal', orderId: -1, role: 20 },
+    { name: 'name', orderId: -1, role: 20 },
   ],
 } as Record<SettingNamesType, Array<DataSetting>>;
 

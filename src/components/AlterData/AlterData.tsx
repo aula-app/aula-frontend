@@ -18,6 +18,7 @@ import * as yup from 'yup';
 import FormInput from './FormInput';
 import IconField from './FormInput/IconField';
 import ImageField from './FormInput/ImageField';
+import CategoryField from './FormInput/CategoryField';
 
 interface Props {
   id?: number;
@@ -36,6 +37,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [items, setItems] = useState<SingleResponseType>();
+  const [update, setUpdate] = useState<Array<{ model: string; method: string; args: ObjectPropByName }>>([]);
 
   const schema = dataSettings[scope].reduce((schema, field) => {
     return { ...schema, [field.name]: formsSettings[field.name].schema };
@@ -77,6 +79,18 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
       requestId
     ).then((response) => {
       if (!response.success) return;
+      update.forEach((update) => {
+        databaseRequest(
+          {
+            model: update.model,
+            method: update.method,
+            arguments: {
+              ...update.args,
+            },
+          },
+          ['updater_id']
+        );
+      });
       onClose();
     });
   };
@@ -150,6 +164,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
                   )}
                 </Fragment>
               ))}
+              {scope === 'ideas' && id && <CategoryField id={id} setUpdate={setUpdate} />}
               <Stack direction="row">
                 <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
                   {t('generics.cancel')}
