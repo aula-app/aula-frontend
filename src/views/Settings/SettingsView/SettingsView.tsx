@@ -87,7 +87,7 @@ const SettingsView = () => {
   return (
     <Stack direction="column" height="100%">
       <Stack direction="row" alignItems="center">
-        <Typography variant="h4" sx={{ p: 2, textTransform: 'capitalize', flex: 1 }}>
+        <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
           {t(`views.${setting_name}`)}
         </Typography>
         <Stack direction="row" alignItems="start" bottom={0} height={37} px={2}>
