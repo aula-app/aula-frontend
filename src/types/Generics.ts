@@ -26,3 +26,12 @@ export interface EditDataType {
   onClose: () => void;
   id?: number;
 }
+
+export interface DefaultUpdate {
+  id: number;
+  idea_id: number;
+  topic_id: number | null;
+  phase_id: number | null;
+  room_id: number;
+  title: string;
+}

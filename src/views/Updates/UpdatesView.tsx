@@ -1,12 +1,15 @@
-import { AppIcon, AppLink } from '@/components';
-import IdeaCard from '@/components/IdeaCard';
-import MessageCard from '@/components/MessageCard';
-import { MessageType } from '@/types/Scopes';
-import { databaseRequest, messageConsentValues } from '@/utils';
-import { Card, IconButton, Stack, Typography } from '@mui/material';
+import { AppIcon } from '@/components';
+import { DefaultUpdate } from '@/types/Generics';
+import { databaseRequest } from '@/utils';
+import { IconButton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import UpdateCard from './UpdateCard';
+
+interface UpdatesResponse {
+  votes: DefaultUpdate[];
+  comments: DefaultUpdate[];
+}
 
 /**
  * Renders "Updates" view
@@ -15,7 +18,7 @@ import UpdateCard from './UpdateCard';
 
 const UpdatesView = () => {
   const { t } = useTranslation();
-  const [updates, setUpdates] = useState<MessageType[]>();
+  const [updates, setUpdates] = useState<UpdatesResponse>();
 
   const messageFetch = async () =>
     await databaseRequest(
@@ -44,32 +47,22 @@ const UpdatesView = () => {
           <AppIcon icon="filter" />
         </IconButton>
       </Stack>
-      {updates && (
-        <>
-          {updates.votes && updates.votes.length > 0 && (
-            <>
-              <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
-                {updates.votes.length} new votes
-              </Typography>
+      {updates &&
+        (Object.keys(updates) as Array<keyof UpdatesResponse>).map((update) => (
+          <>
+            {updates[update].length > 0 && (
+              <>
+                <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
+                  {updates[update].length} {t('texts.new', { var: t(`views.${update}`) })}
+                </Typography>
 
-              {updates.votes.map((vote, key) => (
-                <UpdateCard item={vote} icon="voting" variant="vote" key={key} />
-              ))}
-            </>
-          )}
-          {updates.comments && updates.comments.length > 0 && (
-            <>
-              <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
-                {updates.comments.length} new comments
-              </Typography>
-
-              {updates.comments.map((comment) => (
-                <UpdateCard item={comment} icon="comment" variant="comment" key={`c_${comment.id}`} />
-              ))}
-            </>
-          )}
-        </>
-      )}
+                {updates[update].map((item, key) => (
+                  <UpdateCard item={item} icon="voting" variant={update} key={key} />
+                ))}
+              </>
+            )}
+          </>
+        ))}
     </Stack>
   );
 };

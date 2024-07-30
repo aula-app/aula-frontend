@@ -89,6 +89,7 @@
     "exportData": "Export account data",
     "exportRequest": "Data export requested",
     "ideaBox": "{{var}} Ideas on {{phase}}",
+    "new": "new {{var}}",
     "moveData": "Where do you want do move this {{var}}?",
     "passChange": "Change password",
     "phaseDuration": "Phase durations",
@@ -133,7 +134,8 @@
     "updates": "updates",
     "user": "User",
     "users": "Users",
-    "vote": "vote"
+    "vote": "vote",
+    "votes": "votes"
   },
   "votes": {
     "against": "against",
