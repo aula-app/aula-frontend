@@ -4,6 +4,7 @@ import { createUseGesture, pinchAction } from '@use-gesture/react';
 import { ChangeEvent, useRef, useState } from 'react';
 import AvatarEditor from 'react-avatar-editor';
 import AppButton from '../AppButton';
+import { useTranslation } from 'react-i18next';
 
 const useGesture = createUseGesture([pinchAction]);
 
@@ -14,6 +15,7 @@ interface NewCommentProps {
 }
 
 export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentProps) => {
+  const { t } = useTranslation();
   const [image, setImage] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
 
@@ -41,7 +43,7 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
     <Drawer anchor="bottom" open={isOpen} onClose={closeMethod}>
       <Stack p={2}>
         <Typography variant="h5" pb={2}>
-          Edit avatar image
+          {t('texts.edit', { var: t('generics.image') })}
         </Typography>
         <input type="file" id="file" accept="image/*" hidden onChange={handleFileChange} />
         <label htmlFor="file">
@@ -71,9 +73,9 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
         </Stack>
         <Stack direction="row">
           <Button color="secondary" onClick={closeMethod} sx={{ mr: 'auto' }}>
-            Cancel
+            {t('generics.cancel')}
           </Button>
-          <AppButton color="primary">Submit</AppButton>
+          <AppButton color="primary">{t('generics.confirm')}</AppButton>
         </Stack>
       </Stack>
     </Drawer>
