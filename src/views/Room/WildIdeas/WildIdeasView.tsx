@@ -1,5 +1,5 @@
-import AlterData from '@/components/AlterData';
-import Idea from '@/components/IdeaBubble';
+import { AlterData } from '@/components/Data';
+import { IdeaBubble } from '@/components/IdeaComponents';
 import { IdeasResponseType } from '@/types/RequestTypes';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Add } from '@mui/icons-material';
@@ -40,7 +40,13 @@ const WildIdeas = () => {
       {ideas &&
         ideas.data &&
         ideas.data.map((idea) => (
-          <Idea idea={idea} onReload={ideasFetch} key={idea.id} comments={idea.sum_comments} to={`idea/${idea.id}`} />
+          <IdeaBubble
+            idea={idea}
+            onReload={ideasFetch}
+            key={idea.id}
+            comments={idea.sum_comments}
+            to={`idea/${idea.id}`}
+          />
         ))}
       {jwt_payload.user_level >= 20 && (
         <>

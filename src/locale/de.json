@@ -1,7 +1,8 @@
 {
   "delegation": {
-    "delegate": "Delegierte Stimme",
-    "revoke": "Delegation widerrufen"
+    "confirm": "Sind Sie sicher, dass Sie das Stimmrecht für dieses Feld der folgenden Person {{var}} wollen?",
+    "delegate": "übertragen",
+    "revoke": "entziehen"
   },
   "generics": {
     "add": "Neuen {{var}} hinzufügen",
@@ -37,7 +38,8 @@
     "passwordConfirm": "Passwort bestätigen",
     "recover": "Wiederherstellen",
     "recovery": "Passwort-Wiederherstellung",
-    "sign": "Registrieren Sie sich",
+    "signIn": "sich anmelden",
+    "signUp": "Registrieren Sie sich",
     "terms": "Bedingungen und Konditionen",
     "userName": "Name des Benutzers",
     "welcome": "Willkommen bei aula"
@@ -80,6 +82,7 @@
     "addToParent": "Zur {{var}} hinzufügen",
     "approved": "Diese Idee wurde angenommen",
     "delegated": "{{var}} delegierte Ideen",
+    "delegation": "Delegation abstimmen",
     "deleteConfirm": "Sind Sie sicher, dass Sie die ausgewählte {{var}} löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
     "deleteData": "Konto löschen",
     "deleteHeadline": "Ausgewählte {{var}} löschen",
@@ -89,12 +92,15 @@
     "exportData": "Kontodaten exportieren",
     "exportRequest": "Datenexport angefordert",
     "ideaBox": "{{var}} Ideen zur {{phase}}",
+    "move": "move selected {{var}}",
+    "moveData": "Where do you want do move this {{var}}?",
     "new": "neu {{var}}",
     "passChange": "Passwort ändern",
     "phaseDuration": "Dauer der Phasen",
     "phaseEnd": "Phase endet am {{var}} Tage",
     "rejected": "Diese Idee wurde nicht angenommen",
     "undelegated": "{{var}} ideen",
+    "unaltenticated": "Die Seite, auf die Sie zugreifen möchten, erfordert eine Authentifizierung.",
     "update": "Neue {{var}} für ",
     "yourVote": "Sie haben {{var}} diese Idee gewählt"
   },
@@ -116,14 +122,15 @@
     "box": "Ideen Box",
     "boxes": "Boxen",
     "topics": "Boxen",
+    "category": "Kategorie",
     "comment": "kommentar",
     "comments": "Kommentare",
     "home": "Startseite",
     "idea": "Idee",
     "ideas": "Ideen",
     "idea-box": "Box",
-    "messages": "Nachrichten",
     "message": "Nachricht",
+    "messages": "Nachrichten",
     "privacy": "Datenschutz",
     "profile": "Profil",
     "room": "Klass",

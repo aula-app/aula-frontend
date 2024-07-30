@@ -1,7 +1,8 @@
 {
   "delegation": {
-    "delegate": "Delegate vote",
-    "revoke": "Revoke delegation"
+    "confirm": "Are you sure you want to {{var}} the voting rights on this box to the following person?",
+    "delegate": "delegate",
+    "revoke": "revoke"
   },
   "generics": {
     "add": "Add new {{var}}",
@@ -37,7 +38,8 @@
     "passwordConfirm": "Confirm password",
     "recover": "Recover password",
     "recovery": "Password Recovery",
-    "sign": "Sign up",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
     "terms": "Terms and conditions",
     "userName": "User name",
     "welcome": "Welcome!"
@@ -80,6 +82,7 @@
     "addToParent": "Add to {{var}}",
     "approved": "This idea was approved.",
     "delegated": "{{var}} delegated ideas",
+    "delegation": "Vote delegation",
     "deleteConfirm": "Are you sure you want to delete the selected {{var}}? This action cannot be undone.",
     "deleteData": "Delete account",
     "deleteHeadline": "Delete selected {{var}}",
@@ -89,13 +92,15 @@
     "exportData": "Export account data",
     "exportRequest": "Data export requested",
     "ideaBox": "{{var}} Ideas on {{phase}}",
+    "move": "ausgewählte {{var}} verschieben",
+    "moveData": "Wohin wollen Sie diese {{var}} verschieben?",
     "new": "new {{var}}",
-    "moveData": "Where do you want do move this {{var}}?",
     "passChange": "Change password",
     "phaseDuration": "Phase durations",
     "phaseEnd": "Phase ends on {{var}} days",
     "rejected": "This idea was not approved.",
     "undelegated": "{{var}} ideas",
+    "unaltenticated": "The page you are trying to access requires authentication",
     "update": "New {{var}} for ",
     "yourVote": "You voted {{var}} this idea"
   },
@@ -124,8 +129,8 @@
     "idea": "Idea",
     "ideas": "Ideas",
     "idea-box": "Box",
-    "messages": "Messages",
     "message": "Message",
+    "messages": "Messages",
     "privacy": "Privacy",
     "profile": "Profile",
     "room": "Room",

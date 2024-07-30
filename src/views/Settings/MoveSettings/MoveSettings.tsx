@@ -81,7 +81,7 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">Move selected {setting_name}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{t('texts.move', { var: t(`views.${setting_name}`) })}</DialogTitle>
       <DialogContent sx={{ overflowY: 'auto' }}>
         <DialogContentText component={Stack} id="alert-dialog-description">
           {t('texts.moveData', { var: t(`views.${setting_name}`).toLowerCase() })}

@@ -1,6 +1,5 @@
 import { AppIconButton } from '@/components';
-import AlterData from '@/components/AlterData';
-import DeleteData from '@/components/DeleteData';
+import { AlterData, DeleteData } from '@/components/Data';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
 import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';

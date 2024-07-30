@@ -3,8 +3,7 @@ import { RoomPhases } from '@/types/SettingsTypes';
 import { databaseRequest, phases, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { AppIcon } from '..';
-import { CategoryIconType } from '../AppIcon/AppIcon';
+import AppIcon, { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { ObjectPropByName } from '@/types/Generics';
 
 interface IdeaCardProps {

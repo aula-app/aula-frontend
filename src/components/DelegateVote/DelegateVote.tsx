@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ChangeEvent, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 interface Props {
@@ -30,6 +31,7 @@ interface Props {
  */
 
 const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
+  const { t } = useTranslation();
   const params = useParams();
   const [users, setUsers] = useState<UserType[]>();
   const [selected, setSelected] = useState<UserType | null>();
@@ -108,7 +110,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
 
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>Vote delegation</DialogTitle>
+      <DialogTitle>{t('texts.delegation')}</DialogTitle>
       <DialogContent>
         <Stack height={350} position="relative" overflow="hidden">
           <Slide direction="right" in={!confirm} mountOnEnter unmountOnExit>
@@ -156,8 +158,9 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
           <Slide direction="left" in={confirm} mountOnEnter unmountOnExit>
             <Stack height="100%" width="100%">
               <Typography>
-                Are you sure you want to {delegate.length === 0 ? 'delegate your' : 'revoke the'} voting rights on this
-                box {delegate.length === 0 ? '' : 'you have granted'} to the following person?
+                {t('delegation.confirm', {
+                  var: t(delegate.length === 0 ? 'delegation.delegate' : 'delegation.revoke'),
+                })}
               </Typography>
               {selected && (
                 <Stack flex={1} alignItems="center" justifyContent="center">

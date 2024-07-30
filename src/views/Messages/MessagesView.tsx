@@ -4,6 +4,7 @@ import { MessageType } from '@/types/Scopes';
 import { databaseRequest, messageConsentValues } from '@/utils';
 import { IconButton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Renders "Messages" view
@@ -11,6 +12,7 @@ import { useEffect, useState } from 'react';
  */
 
 const MessagesView = () => {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<MessageType[]>();
 
   const messageFetch = async () =>
@@ -30,7 +32,7 @@ const MessagesView = () => {
     <Stack p={2} sx={{ overflowY: 'auto' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h5" py={2}>
-          Messages
+          {t('views.messages')}
         </Typography>
         <IconButton>
           <AppIcon icon="filter" />

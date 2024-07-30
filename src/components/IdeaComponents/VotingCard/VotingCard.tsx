@@ -2,7 +2,7 @@ import { databaseRequest, Vote, votingOptions } from '@/utils';
 import { Button, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import AppIcon from '../AppIcon';
+import AppIcon from '@/components/AppIcon';
 
 /**
  * Renders "VotingCards" component

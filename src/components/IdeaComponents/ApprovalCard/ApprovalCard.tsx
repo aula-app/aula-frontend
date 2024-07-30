@@ -1,7 +1,7 @@
+import AppIcon from '@/components/AppIcon';
 import { Card, Stack, Typography } from '@mui/material';
-import AppIcon from '../AppIcon';
 
-interface IdeaBoxProps {
+interface ApprovalCardProps {
   disabled?: boolean;
   rejected?: boolean;
   comment?: string | null;
@@ -11,7 +11,7 @@ interface IdeaBoxProps {
  * Renders "Welcome" view
  * url: /
  */
-const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment' }: IdeaBoxProps) => {
+const ApprovalCard = ({ disabled = false, rejected = false, comment = 'No comment' }: ApprovalCardProps) => {
   return (
     <Card
       sx={{
@@ -34,7 +34,7 @@ const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment' }:
           }}
           fontSize={40}
         >
-          {!rejected ? <AppIcon icon="approved" /> : <AppIcon icon="rejected" />}
+          <AppIcon icon={rejected ? 'rejected' : 'approved'} />
         </Stack>
         <Stack flexGrow={1} pr={2}>
           <Typography variant="body2" sx={{ color: 'inherit' }}>
@@ -46,4 +46,4 @@ const IdeaBox = ({ disabled = false, rejected = false, comment = 'No comment' }:
   );
 };
 
-export default IdeaBox;
+export default ApprovalCard;

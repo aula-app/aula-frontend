@@ -1,12 +1,11 @@
 import { CategoryType, IdeaType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
-import { blue } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
-import AppIcon from '../AppIcon';
-import AppLink from '../AppLink';
-import ChatBubble from '../ChatBubble';
-import MoreOptions from '../MoreOptions';
+import AppIcon from '@/components/AppIcon';
+import AppLink from '@/components/AppLink';
+import ChatBubble from '@/components/ChatBubble';
+import MoreOptions from '@/components/MoreOptions';
 
 interface Props {
   idea: IdeaType;

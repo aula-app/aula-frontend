@@ -187,7 +187,7 @@ const SignupView = () => {
     <FormContainer>
       <Stack>
         <Typography variant="h5" sx={{ mb: 3 }}>
-          {t("login.sign")}
+          {t("login.signUp")}
         </Typography>
         <Stepper activeStep={activeStep} sx={{ mb: 3 }} alternativeLabel>
           {steps.map((label) => {

@@ -1,11 +1,10 @@
+import AppIcon from '@/components/AppIcon';
+import MoreOptions from '@/components/MoreOptions';
 import { CommentType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import ChatBubble from '@/components/ChatBubble';
 import { Button, Stack, Typography } from '@mui/material';
-import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
-import AppIcon from '../AppIcon';
-import ChatBubble from '../ChatBubble';
-import MoreOptions from '../MoreOptions';
 
 interface Props {
   comment: CommentType;

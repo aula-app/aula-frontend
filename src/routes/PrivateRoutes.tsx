@@ -33,6 +33,7 @@ const PrivateRoutes = () => (
       <Route path="idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
     </Route>
     <Route path="settings/profile" element={<UserView />} />
+    <Route path="settings/config" element={<ConfigView />} />
     <Route path="settings/:setting_name" element={<SettingsView />} />
     <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />
     <Route path="*" element={<NotFoundView />} />
