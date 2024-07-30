@@ -1,7 +1,6 @@
 import { AppIcon } from '@/components';
-import AlterData from '@/components/AlterData';
 import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
-import DeleteData from '@/components/DeleteData';
+import { AlterData, DeleteData } from '@/components/Data';
 import { CategoryType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Box, Chip, Stack } from '@mui/material';

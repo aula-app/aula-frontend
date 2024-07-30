@@ -1,7 +1,6 @@
 import { AppIcon } from '@/components';
-import AlterData from '@/components/AlterData';
+import { AlterData, MoveData } from '@/components/Data';
 import { IdeaBox } from '@/components/IdeaComponents';
-import MoveData from '@/components/MoveData';
 import { BoxesResponseType } from '@/types/RequestTypes';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Fab, Grid, Stack } from '@mui/material';

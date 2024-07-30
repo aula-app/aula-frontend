@@ -1,7 +1,8 @@
 {
   "delegation": {
-    "delegate": "Delegate vote",
-    "revoke": "Revoke delegation"
+    "confirm": "Are you sure you want to {{var}} the voting rights on this box to the following person?",
+    "delegate": "delegate",
+    "revoke": "revoke"
   },
   "generics": {
     "add": "Add new {{var}}",
@@ -80,6 +81,7 @@
     "addToParent": "Add to {{var}}",
     "approved": "This idea was approved.",
     "delegated": "{{var}} delegated ideas",
+    "delegation": "Vote delegation",
     "deleteConfirm": "Are you sure you want to delete the selected {{var}}? This action cannot be undone.",
     "deleteData": "Delete account",
     "deleteHeadline": "Delete selected {{var}}",

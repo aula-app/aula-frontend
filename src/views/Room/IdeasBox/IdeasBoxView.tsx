@@ -1,7 +1,7 @@
 import { AppIcon, AppLink } from '@/components';
+import { MoveData } from '@/components/Data';
 import DelegateVote from '@/components/DelegateVote';
 import { IdeaBox, IdeaCard } from '@/components/IdeaComponents';
-import MoveData from '@/components/MoveData';
 import { DelegationType } from '@/types/Delegation';
 import { IdeasResponseType, SingleBoxResponseType } from '@/types/RequestTypes';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';

@@ -1,7 +1,8 @@
 {
   "delegation": {
-    "delegate": "Delegierte Stimme",
-    "revoke": "Delegation widerrufen"
+    "confirm": "Sind Sie sicher, dass Sie das Stimmrecht für dieses Feld der folgenden Person {{var}} wollen?",
+    "delegate": "übertragen",
+    "revoke": "entziehen"
   },
   "generics": {
     "add": "Neuen {{var}} hinzufügen",
@@ -80,6 +81,7 @@
     "addToParent": "Zur {{var}} hinzufügen",
     "approved": "Diese Idee wurde angenommen",
     "delegated": "{{var}} delegierte Ideen",
+    "delegation": "Delegation abstimmen",
     "deleteConfirm": "Sind Sie sicher, dass Sie die ausgewählte {{var}} löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
     "deleteData": "Konto löschen",
     "deleteHeadline": "Ausgewählte {{var}} löschen",

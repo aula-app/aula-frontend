@@ -1,4 +1,4 @@
-import AlterData from '@/components/AlterData';
+import { AlterData } from '@/components/Data';
 import {
   ApprovalCard,
   Comment,
