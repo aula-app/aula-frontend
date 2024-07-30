@@ -1,10 +1,12 @@
 import AlterData from '@/components/AlterData';
-import ApprovalCard from '@/components/ApprovalCard';
-import Comment from '@/components/Comment';
-import IdeaBubble from '@/components/IdeaBubble';
-import IdeaDocument from '@/components/IdeaDocument';
-import VotingCard from '@/components/VotingCard';
-import VotingResults from '@/components/VotingResults';
+import {
+  ApprovalCard,
+  Comment,
+  IdeaBubble,
+  IdeaDocument,
+  VotingCard,
+  VotingResults,
+} from '@/components/IdeaComponents';
 import { CommentsResponseType, SingleIdeaResponseType } from '@/types/RequestTypes';
 import { Vote, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Add } from '@mui/icons-material';

@@ -1,10 +1,10 @@
+import AppIcon from '@/components/AppIcon';
 import { Vote, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import AppIcon from '../AppIcon';
 
-interface IdeaBoxProps {
+interface VotingResultsProps {
   rejected?: boolean;
   yourVote: Vote;
 }
@@ -12,7 +12,7 @@ interface IdeaBoxProps {
 /**
  * Renders "VotingResults" component
  */
-const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
+const VotingResults = ({ rejected = false, yourVote }: VotingResultsProps) => {
   const { t } = useTranslation();
   const params = useParams();
 
@@ -66,4 +66,4 @@ const IdeaBox = ({ rejected = false, yourVote }: IdeaBoxProps) => {
   );
 };
 
-export default IdeaBox;
+export default VotingResults;

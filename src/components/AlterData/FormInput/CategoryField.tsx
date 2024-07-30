@@ -2,7 +2,7 @@ import AppIcon from '@/components/AppIcon';
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { ObjectPropByName } from '@/types/Generics';
 import { databaseRequest, SelectOptionsType } from '@/utils';
-import { MenuItem, Select, SelectChangeEvent, Stack, TextField } from '@mui/material';
+import { MenuItem, Select, SelectChangeEvent, Stack } from '@mui/material';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

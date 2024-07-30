@@ -2,8 +2,8 @@ import { CategoryType, IdeaType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import AppIcon from '../AppIcon';
-import MoreOptions from '../MoreOptions';
+import AppIcon from '@/components/AppIcon';
+import MoreOptions from '@/components/MoreOptions';
 
 interface Props {
   idea: IdeaType;

@@ -1,10 +1,10 @@
+import AppIcon from '@/components/AppIcon';
+import AppLink from '@/components/AppLink';
+import MoreOptions from '@/components/MoreOptions';
 import { BoxType } from '@/types/Scopes';
 import { localStorageGet, parseJwt, phases } from '@/utils';
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import AppIcon from '../AppIcon';
-import AppLink from '../AppLink';
-import MoreOptions from '../MoreOptions';
 
 interface IdeaBoxProps {
   box: BoxType;

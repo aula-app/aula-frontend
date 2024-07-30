@@ -1,6 +1,6 @@
 import { AppIcon } from '@/components';
 import AlterData from '@/components/AlterData';
-import { IdeaBox } from '@/components/IdeaBox';
+import { IdeaBox } from '@/components/IdeaComponents';
 import MoveData from '@/components/MoveData';
 import { BoxesResponseType } from '@/types/RequestTypes';
 import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
