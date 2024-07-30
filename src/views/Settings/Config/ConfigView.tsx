@@ -1,29 +1,5 @@
-import { AppButton, AppIcon } from '@/components';
-import ChangePassword from '@/components/ChangePassword';
-import ImageEditor from '@/components/ImageEditor';
-import { useAppStore } from '@/store';
-import { SingleUserResponseType } from '@/types/RequestTypes';
-import { UserType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Avatar,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useEffect, useState } from 'react';
-import { FormContainer } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import Categories from './Categories';
 
