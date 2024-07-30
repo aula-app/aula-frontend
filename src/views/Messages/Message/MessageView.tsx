@@ -22,6 +22,7 @@ const MessagesView = () => {
         text_id: params['message_id'],
       },
     }).then((response) => {
+      if (!response.success) return;
       setMessage(response.data);
     });
 

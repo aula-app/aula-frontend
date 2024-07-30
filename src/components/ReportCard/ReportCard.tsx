@@ -1,18 +1,18 @@
-import { MessageConsentValues } from '@/utils';
 import { IconButton, Stack, Typography } from '@mui/material';
 import { AppIcon, AppLink } from '..';
 
 /**
- * Renders "MessageCard" component
+ * Renders "ReportCard" component
  */
 
 interface Props {
-  type: MessageConsentValues;
+  type: 'bug' | 'report' | 'alert';
   title: string;
   to: string;
 }
 
-const MessageCard = ({ type, title, to }: Props) => {
+const ReportCard = ({ type, title, to }: Props) => {
+  const rxCommonMarkLink = /(\[([^\]]+)])\(([^)]+)\)/g;
   return (
     <Stack
       component={AppLink}
@@ -22,13 +22,13 @@ const MessageCard = ({ type, title, to }: Props) => {
       p={1}
       pl={2}
       mb={1}
-      bgcolor={`${type}.main`}
+      border={1}
       to={to}
       // color={messageConfig[type].color[800]}
     >
       <AppIcon icon={type} />
       <Typography flex={1} px={2}>
-        {title}
+        {title.replace(rxCommonMarkLink, '$2')}
       </Typography>
       <IconButton size="small">
         <AppIcon icon="close" />
@@ -37,4 +37,4 @@ const MessageCard = ({ type, title, to }: Props) => {
   );
 };
 
-export default MessageCard;
+export default ReportCard;

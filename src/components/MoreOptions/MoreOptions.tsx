@@ -8,12 +8,14 @@ import AppIcon from '../AppIcon';
 import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
 import { AlterData, DeleteData } from '../Data';
+import { useLocation } from 'react-router-dom';
 
 interface OptionsTypes {
   type: AlterTypes;
   icon: keyof typeof ICONS;
   color: ColorTypes;
   label: string;
+  otherData?: { headline: string; body: string };
 }
 
 interface Props {
@@ -28,13 +30,31 @@ interface Props {
  */
 const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
   const { t } = useTranslation();
+  const location = useLocation();
+  const [currentId, setId] = useState<number>();
   const [open, setOpen] = useState(false);
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState<SettingNamesType>();
   const [del, setDel] = useState(false);
 
   const defaultOptions = [
-    { type: 'report', icon: 'report', color: 'error', label: t('generics.contentReport') },
-    { type: 'bug', icon: 'bug', color: 'warning', label: t('generics.bugReport') },
+    {
+      type: 'report',
+      icon: 'report',
+      color: 'error',
+      label: t('generics.contentReport'),
+      otherData: {
+        headline: `User report on [${scope} #${id}](${location.pathname})`,
+      },
+    },
+    {
+      type: 'bug',
+      icon: 'bug',
+      color: 'warning',
+      label: t('generics.bugReport'),
+      otherData: {
+        headline: `Bug report on [${scope} #${id}](${location.pathname})`,
+      },
+    },
   ] as OptionsTypes[];
 
   const editOptions = [
@@ -51,12 +71,29 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
   };
 
   const handleClick = (type: AlterTypes) => {
+    console.log(type);
     setOpen(false);
-    type === 'delete' ? setDel(true) : setEdit(true);
+    switch (type) {
+      case 'delete':
+        setDel(true);
+        break;
+      case 'edit':
+        setId(id);
+        setEdit(scope);
+        break;
+      case 'add':
+        setId(undefined);
+        setEdit(scope);
+        break;
+      default:
+        setId(undefined);
+        setEdit(type);
+        break;
+    }
   };
 
   const close = () => {
-    setEdit(false);
+    setEdit(undefined);
     setDel(false);
     onClose();
   };
@@ -97,7 +134,13 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
           </Zoom>
         </ClickAwayListener>
       </Box>
-      <AlterData id={id} scope={scope} isOpen={edit} onClose={close} />
+      <AlterData
+        id={currentId}
+        scope={edit || scope}
+        isOpen={!!edit}
+        onClose={close}
+        otherData={options.filter((data) => data.type === edit)[0]?.otherData}
+      />
       <DeleteData id={id} scope={scope} isOpen={del} onClose={close} />
     </>
   );

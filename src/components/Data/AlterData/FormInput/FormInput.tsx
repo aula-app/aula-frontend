@@ -9,6 +9,7 @@ type Props = {
   form: keyof typeof formsSettings;
   control: Control<{}, any>;
   disabled?: boolean;
+  hidden?: boolean;
   register: UseFormRegister<{}>;
   getValues: UseFormGetValues<{}>;
   setValue: UseFormSetValue<{}>;
@@ -27,6 +28,7 @@ const FormInput = ({
   control,
   errors,
   disabled = false,
+  hidden = false,
   ...restOfProps
 }: Props) => {
   const { t } = useTranslation();
@@ -36,7 +38,7 @@ const FormInput = ({
       return <SelectField form={form} control={control} disabled={disabled} />;
     case 'duration':
       return (
-        <Stack direction="row" alignItems="center" px={1}>
+        <Stack direction="row" alignItems="center" px={1} sx={hidden ? { visibility: 'hidden', height: 0 } : {}}>
           <Typography noWrap pb={1} mr="auto">
             {t(`settings.${form}`)}:
           </Typography>
@@ -78,6 +80,7 @@ const FormInput = ({
           error={errors[form] ? true : false}
           // @ts-ignore
           helperText={errors[form]?.message || ' '}
+          sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
           {...restOfProps}
         />
       );

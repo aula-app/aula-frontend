@@ -1,8 +1,9 @@
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
 import AskConsentView from '@/views/AskConsent';
-import MessageView from '@/views/Message';
 import MessagesView from '@/views/Messages';
+import MessageView from '@/views/Messages/Message';
+import ReportView from '@/views/Messages/Report';
 import RoomView from '@/views/Room';
 import IdeaView from '@/views/Room/Idea';
 import IdeasBoxView from '@/views/Room/IdeasBox';
@@ -25,6 +26,7 @@ const PrivateRoutes = () => (
     <Route path="welcome" element={<WelcomeView />} />
     <Route path="messages" element={<MessagesView />} />
     <Route path="messages/message/:message_id" element={<MessageView />} />
+    <Route path="messages/report/:message_id" element={<ReportView />} />
     <Route path="updates" element={<UpdatesView />} />
     <Route path="room/:room_id/phase/:phase" element={<RoomView />}>
       <Route path="" element={<RoomPhaseView />} />
