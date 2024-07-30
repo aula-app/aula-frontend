@@ -1,18 +1,20 @@
 import { AppLink } from "@/components";
+import { useTranslation } from "react-i18next";
 
 /**
  * "Not Found" aka "Error 404" view
  */
-const NotFoundViewView = () => (
+const NotFoundViewView = () => {
+  const { t } = useTranslation();
+  return(
   <div>
-    <p>The page you are trying to access requires authentication</p>
+    <p>{t('texts.unaltenticated')}</p>
     <p>
-        Please consider&nbsp;
         <AppLink color="success" component={AppLink} to="/">
-          signing in
+        {t('login.signIn')}
         </AppLink>
       </p>
   </div>
-)
+)}
 
 export default NotFoundViewView;

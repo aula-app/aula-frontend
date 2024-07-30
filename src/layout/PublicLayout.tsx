@@ -69,7 +69,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       <>
         {t('login.noAccount')}
         <Button variant="text" component={AppLink} to="/signup">
-          {t('login.sign')}
+          {t('login.signUp')}
         </Button>
       </>
     );
