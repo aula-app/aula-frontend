@@ -5,16 +5,18 @@ import { Card, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { AppIcon } from '..';
 import { CategoryIconType } from '../AppIcon/AppIcon';
+import { ObjectPropByName } from '@/types/Generics';
 
 interface IdeaCardProps {
   idea: IdeaType;
   phase: RoomPhases;
+  sx?: ObjectPropByName;
 }
 
 /**
  * Renders "IdeaCard" component
  */
-const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
+const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
   const [vote, setVote] = useState(0);
   const [icon, setIcon] = useState<CategoryIconType>();
   const [variant, setVariant] = useState<string>();
@@ -71,8 +73,10 @@ const IdeaCard = ({ idea, phase }: IdeaCardProps) => {
         overflow: 'hidden',
         scrollSnapAlign: 'center',
         bgcolor: `${variant}.main`,
+        ...sx,
       }}
       variant="outlined"
+      {...restOfProps}
     >
       <Stack direction="row" height={68} alignItems="center">
         <Stack pl={2}>

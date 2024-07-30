@@ -1,5 +1,5 @@
 import { dashboardPhases, databaseRequest } from '@/utils';
-import { Badge, Box, Button, Collapse, Grid, IconButton, Stack, Typography } from '@mui/material';
+import { Badge, Box, Button, Collapse, Grid, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIcon from '../AppIcon';
@@ -31,7 +31,7 @@ const DashBoard = ({ show = true }) => {
   useEffect(() => {
     dashboardFetch('Idea', 'getDashboardByUser', ['user_id']).then((response) => setCount(response.data.phase_counts));
     dashboardFetch('Text', 'getTexts', []).then((response) => setMessages(response.count));
-    dashboardFetch('Text', 'getTexts', []).then((response) => setLikes(response.count));
+    dashboardFetch('Idea', 'getUpdatesByUser', ['user_id']).then((response) => setLikes(response.count));
   }, []);
 
   return (
