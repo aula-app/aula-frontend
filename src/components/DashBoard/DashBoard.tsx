@@ -1,4 +1,4 @@
-import { dashboardPhases, databaseRequest } from '@/utils';
+import { dashboardPhases, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Badge, Box, Button, Collapse, Grid, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,10 @@ const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboa
 
 const DashBoard = ({ show = true }) => {
   const { t } = useTranslation();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [count, setCount] = useState<Record<number, number>>({});
+  const [reports, setReports] = useState(0);
   const [messages, setMessages] = useState(0);
   const [likes, setLikes] = useState(0);
   const [isShowing, setShowing] = useState(show);
@@ -31,6 +34,11 @@ const DashBoard = ({ show = true }) => {
   useEffect(() => {
     dashboardFetch('Idea', 'getDashboardByUser', ['user_id']).then((response) => setCount(response.data.phase_counts));
     dashboardFetch('Text', 'getTexts', []).then((response) => setMessages(response.count));
+    dashboardFetch(
+      'Message',
+      jwt_payload.user_level >= 40 ? 'getMessages' : 'getMessagesByUser',
+      jwt_payload.user_level >= 40 ? [] : ['user_id']
+    ).then((response) => setReports(response.count));
     dashboardFetch('Idea', 'getUpdatesByUser', ['user_id']).then((response) => setLikes(response.count));
   }, []);
 
@@ -57,7 +65,7 @@ const DashBoard = ({ show = true }) => {
               }}
             />
           </Button>
-          <Badge badgeContent={messages} color="primary" sx={{ mx: 1 }}>
+          <Badge badgeContent={messages + reports} color="primary" sx={{ mx: 1 }}>
             <AppIconButton icon="message" to="/messages" sx={{ p: 0 }} />
           </Badge>
           <Badge badgeContent={likes} color="primary" sx={{ mx: 1 }}>

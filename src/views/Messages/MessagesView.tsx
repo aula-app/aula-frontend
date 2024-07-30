@@ -2,7 +2,7 @@ import { AppIcon, AppLink } from '@/components';
 import MessageCard from '@/components/MessageCard';
 import ReportCard from '@/components/ReportCard';
 import { MessageType } from '@/types/Scopes';
-import { databaseRequest, messageConsentValues } from '@/utils';
+import { databaseRequest, localStorageGet, messageConsentValues, parseJwt } from '@/utils';
 import { IconButton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,15 +14,20 @@ import { useTranslation } from 'react-i18next';
 
 const MessagesView = () => {
   const { t } = useTranslation();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [reports, setReports] = useState<MessageType[]>([]);
   const [messages, setMessages] = useState<MessageType[]>([]);
 
   const reportFetch = async () =>
-    await databaseRequest({
-      model: 'Message',
-      method: 'getMessages',
-      arguments: {},
-    }).then((response) => {
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: jwt_payload.user_level >= 40 ? 'getMessages' : 'getMessagesByUser',
+        arguments: {},
+      },
+      jwt_payload.user_level >= 40 ? [] : ['user_id']
+    ).then((response) => {
       if (!response.success) return;
       setReports(response.data);
     });
