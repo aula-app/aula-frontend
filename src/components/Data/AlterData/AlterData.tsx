@@ -146,6 +146,9 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
                               {t('texts.phaseDuration')}
                             </Typography>
                           )}
+                          {['bug', 'report'].includes(scope) && field.name !== 'headline' && (
+                            <Typography mb={1}>{t(`texts.${scope}`)}</Typography>
+                          )}
                           <FormInput
                             form={field.name}
                             register={register}
@@ -153,6 +156,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
                             getValues={getValues}
                             setValue={setValue}
                             errors={errors}
+                            hidden={['bug', 'report'].includes(scope) && field.name === 'headline'}
                           />
                         </>
                       ) : scope === 'categories' ? (

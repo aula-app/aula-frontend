@@ -31,6 +31,7 @@ import {
 import { BsGenderTrans, BsTree } from 'react-icons/bs';
 import {
   HiHeart,
+  HiLink,
   HiOutlineAcademicCap,
   HiOutlineArchiveBox,
   HiOutlineArrowRightEndOnRectangle,
@@ -238,6 +239,7 @@ export const ICONS = {
   home: HiOutlineHome,
   idea: HiOutlineLightBulb,
   info: HiOutlineInformationCircle,
+  link: HiLink,
   login: HiOutlineUser,
   logout: HiOutlineArrowRightEndOnRectangle,
   menu: HiOutlineBars3,

@@ -28,8 +28,8 @@ export const dataSettings = {
     { name: 'phase_duration_4', orderId: 5, role: 50 },
   ],
   bug: [
-    { name: 'path', orderId: 1, role: 10 },
-    { name: 'description', orderId: 2, role: 10 },
+    { name: 'headline', orderId: 1, role: 10 },
+    { name: 'body', orderId: 2, role: 10 },
   ],
   comments: [{ name: 'content', orderId: 5, role: 20 }],
   ideas: [
@@ -45,8 +45,8 @@ export const dataSettings = {
     { name: 'status', orderId: 0, role: 50 },
   ],
   report: [
-    { name: 'path', orderId: 1, role: 10 },
-    { name: 'description', orderId: 2, role: 10 },
+    { name: 'headline', orderId: 1, role: 10 },
+    { name: 'body', orderId: 2, role: 10 },
   ],
   rooms: [
     { name: 'room_name', orderId: 0, role: 50 },
@@ -74,9 +74,9 @@ export const requestDefinitions = {
     isChild: 'rooms',
   },
   bug: {
-    model: '',
-    item: '',
-    items: 's',
+    model: 'Message',
+    item: 'Message',
+    items: 'Messages',
   },
   comments: {
     model: 'Comment',
@@ -95,9 +95,9 @@ export const requestDefinitions = {
     items: 'Texts',
   },
   report: {
-    model: '',
-    item: '',
-    items: 's',
+    model: 'Message',
+    item: 'Message',
+    items: 'Messages',
   },
   rooms: {
     model: 'Room',

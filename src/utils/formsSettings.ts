@@ -17,7 +17,7 @@ const shortText = {
   type: 'input',
   schema: yup
     .string()
-    .max(50, t('validation.max', { var: 50 }))
+    .max(100, t('validation.max', { var: 100 }))
     .required(t('validation.required')),
 };
 

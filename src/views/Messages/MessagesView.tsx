@@ -1,5 +1,6 @@
 import { AppIcon, AppLink } from '@/components';
 import MessageCard from '@/components/MessageCard';
+import ReportCard from '@/components/ReportCard';
 import { MessageType } from '@/types/Scopes';
 import { databaseRequest, messageConsentValues } from '@/utils';
 import { IconButton, Stack, Typography } from '@mui/material';
@@ -13,7 +14,18 @@ import { useTranslation } from 'react-i18next';
 
 const MessagesView = () => {
   const { t } = useTranslation();
-  const [messages, setMessages] = useState<MessageType[]>();
+  const [reports, setReports] = useState<MessageType[]>([]);
+  const [messages, setMessages] = useState<MessageType[]>([]);
+
+  const reportFetch = async () =>
+    await databaseRequest({
+      model: 'Message',
+      method: 'getMessages',
+      arguments: {},
+    }).then((response) => {
+      if (!response.success) return;
+      setReports(response.data);
+    });
 
   const messageFetch = async () =>
     await databaseRequest({
@@ -21,10 +33,12 @@ const MessagesView = () => {
       method: 'getTexts',
       arguments: {},
     }).then((response) => {
+      if (!response.success) return;
       setMessages(response.data);
     });
 
   useEffect(() => {
+    reportFetch();
     messageFetch();
   }, []);
 
@@ -38,13 +52,42 @@ const MessagesView = () => {
           <AppIcon icon="filter" />
         </IconButton>
       </Stack>
-      {messages &&
-        messages.length > 0 &&
-        messages.map((message) => (
-          <AppLink to={`/messages/message/${message.id}`} key={message.id}>
-            <MessageCard type={messageConsentValues[message.user_needs_to_consent]} title={message.headline} />
-          </AppLink>
-        ))}
+      {reports.length > 0 && (
+        <Stack>
+          <Typography variant="h6" py={2} display="flex" alignItems="center">
+            <AppIcon icon="report" sx={{ mr: 1 }} /> {t('views.reports')}
+          </Typography>
+          {reports.map((report) => (
+            <ReportCard
+              type={
+                report.headline.substring(0, 3) === 'Bug'
+                  ? 'bug'
+                  : report.headline.substring(0, 7) !== 'Account'
+                    ? 'alert'
+                    : 'report'
+              }
+              title={report.headline}
+              to={`/messages/report/${report.id}`}
+              key={report.id}
+            />
+          ))}
+        </Stack>
+      )}
+      {messages.length > 0 && (
+        <Stack>
+          <Typography variant="h6" py={2} display="flex" alignItems="center">
+            <AppIcon icon="message" sx={{ mr: 1 }} /> {t('views.messages')}
+          </Typography>
+          {messages.map((message) => (
+            <MessageCard
+              type={messageConsentValues[message.user_needs_to_consent]}
+              title={message.headline}
+              to={`/messages/message/${message.id}`}
+              key={message.id}
+            />
+          ))}
+        </Stack>
+      )}
     </Stack>
   );
 };

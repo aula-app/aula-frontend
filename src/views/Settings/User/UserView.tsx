@@ -49,9 +49,33 @@ const UserView = () => {
   const onSubmit = (formData: Object) => console.log(formData);
   const toggleDrawer = () => setEditingImage(!isEditingImage);
 
+  const sendMessage = async (headline: string, body: string, returnMessage: string) =>
+    await databaseRequest({
+      model: 'Message',
+      method: 'addMessage',
+      arguments: { headline, body },
+    }).then((response) => {
+      if (!response.success) return;
+      setOpenDelete(false);
+      dispatch({ type: 'ADD_ERROR', message: returnMessage });
+    });
+
+  const requestExport = () => {
+    if (!user) return;
+    sendMessage(
+      `Account data export request for ${user.realname} [#${user.id}]`,
+      `A data data export procedure was requested for user ${user.realname}, alias ${user.displayname}`,
+      t('texts.exportRequest')
+    );
+  };
+
   const requestDelete = () => {
-    setOpenDelete(false);
-    dispatch({ type: 'ADD_ERROR', message: t('texts.deleteRequest') });
+    if (!user) return;
+    sendMessage(
+      `Account deletion request for ${user.realname} [#${user.id}]`,
+      `A data deletion procedure was requested for user ${user.realname}, alias ${user.displayname}`,
+      t('texts.deleteRequest')
+    );
   };
 
   useEffect(() => {
@@ -132,12 +156,7 @@ const UserView = () => {
           <Typography variant="h6">{t('views.privacy')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Button
-            variant="contained"
-            color="info"
-            onClick={() => dispatch({ type: 'ADD_ERROR', message: t('texts.exportRequest') })}
-            fullWidth
-          >
+          <Button variant="contained" color="info" onClick={requestExport} fullWidth>
             {t('texts.exportData')}
           </Button>
         </AccordionDetails>
