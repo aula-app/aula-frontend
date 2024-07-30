@@ -94,6 +94,7 @@
     "phaseEnd": "Phase endet am {{var}} Tage",
     "rejected": "Diese Idee wurde nicht angenommen",
     "undelegated": "{{var}} ideen",
+    "update": "Neue {{var}} für ",
     "yourVote": "Sie haben {{var}} diese Idee gewählt"
   },
   "validation": {
@@ -114,6 +115,7 @@
     "box": "Ideen Box",
     "boxes": "Boxen",
     "topics": "Boxen",
+    "comment": "kommentar",
     "comments": "Kommentare",
     "home": "Startseite",
     "idea": "Idee",
@@ -128,7 +130,8 @@
     "security": "Sicherheit",
     "updates": "Aktualisierungen",
     "user": "Benutzer",
-    "users": "Benutzer"
+    "users": "Benutzer",
+    "vote": "Abstimmung"
   },
   "votes": {
     "against": "gegen",

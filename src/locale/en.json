@@ -95,6 +95,7 @@
     "phaseEnd": "Phase ends on {{var}} days",
     "rejected": "This idea was not approved.",
     "undelegated": "{{var}} ideas",
+    "update": "New {{var}} for ",
     "yourVote": "You voted {{var}} this idea"
   },
   "validation": {
@@ -116,6 +117,7 @@
     "boxes": "Boxes",
     "topics": "Boxes",
     "category": "category",
+    "comment": "comment",
     "comments": "Comments",
     "home": "Home",
     "idea": "Idea",
@@ -130,7 +132,8 @@
     "security": "Security",
     "updates": "updates",
     "user": "User",
-    "users": "Users"
+    "users": "Users",
+    "vote": "vote"
   },
   "votes": {
     "against": "against",

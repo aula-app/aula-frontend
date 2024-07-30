@@ -6,6 +6,7 @@ import { databaseRequest, messageConsentValues } from '@/utils';
 import { Card, IconButton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import UpdateCard from './UpdateCard';
 
 /**
  * Renders "Updates" view
@@ -52,26 +53,7 @@ const UpdatesView = () => {
               </Typography>
 
               {updates.votes.map((vote, key) => (
-                <Card
-                  sx={{
-                    borderRadius: '25px',
-                    overflow: 'hidden',
-                    scrollSnapAlign: 'center',
-                    px: 3,
-                    mb: 1,
-                  }}
-                  variant="outlined"
-                >
-                  <AppLink to={`/room/${vote.room_id}/phase/30/idea-box/${vote.topic_id}/idea/${vote.idea_id}`}>
-                    <Stack direction="row" height={68} alignItems="center">
-                      <AppIcon icon="voting" sx={{ mr: 2 }} />
-                      new vote for
-                      <Typography ml={0.5} fontWeight={800}>
-                        {vote.title}
-                      </Typography>
-                    </Stack>
-                  </AppLink>
-                </Card>
+                <UpdateCard item={vote} icon="voting" variant="vote" key={key} />
               ))}
             </>
           )}
@@ -82,9 +64,7 @@ const UpdatesView = () => {
               </Typography>
 
               {updates.comments.map((comment) => (
-                <AppLink to={`/Updates/message/${comment.id}`} key={comment.id}>
-                  {comment.name}
-                </AppLink>
+                <UpdateCard item={comment} icon="comment" variant="comment" key={`c_${comment.id}`} />
               ))}
             </>
           )}
