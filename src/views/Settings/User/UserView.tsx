@@ -148,7 +148,7 @@ const UserView = () => {
           <Typography variant="h6">{t('views.security')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <ChangePassword />
+          <ChangePassword onSubmit={(e) => console.log(e)} />
         </AccordionDetails>
       </Accordion>
       <Accordion>

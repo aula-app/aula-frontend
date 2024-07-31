@@ -11,28 +11,26 @@ type FormSetting = {
   defaultValue?: string | number;
 };
 
-const t = i18next.t;
-
 const shortText = {
   type: 'input',
   schema: yup
     .string()
-    .max(100, t('validation.max', { var: 100 }))
-    .required(t('validation.required')),
+    .max(100, i18next.t('validation.max', { var: 100 }))
+    .required(i18next.t('validation.required')),
 };
 
 const longText = {
   type: 'text',
-  schema: yup.string().required(t('validation.required')),
+  schema: yup.string().required(i18next.t('validation.required')),
 };
 
 const password = {
   type: 'password',
   schema: yup
     .string()
-    .min(4, t('validation.min', { var: 4 }))
-    .max(32, t('validation.max', { var: 32 }))
-    .required(t('validation.required')),
+    .min(4, i18next.t('validation.min', { var: 4 }))
+    .max(32, i18next.t('validation.max', { var: 32 }))
+    .required(i18next.t('validation.required')),
 };
 
 const duration = {
@@ -40,8 +38,8 @@ const duration = {
   defaultValue: 7,
   schema: yup
     .number()
-    .min(1, t('validation.min', { var: 1 }))
-    .required(t('validation.required')),
+    .min(1, i18next.t('validation.min', { var: 1 }))
+    .required(i18next.t('validation.required')),
 };
 
 export const formsSettings = {
@@ -56,7 +54,7 @@ export const formsSettings = {
   displayname: shortText,
   email: {
     type: 'input',
-    schema: yup.string().email(t('validation.email')).required(t('validation.required')),
+    schema: yup.string().email(i18next.t('validation.email')).required(i18next.t('validation.required')),
   },
   headline: shortText,
   name: shortText,
@@ -64,23 +62,23 @@ export const formsSettings = {
     type: 'password',
     schema: yup
       .string()
-      .min(4, t('validation.min', { var: 4 }))
-      .max(32, t('validation.max', { var: 32 }))
-      .required(t('validation.required')),
+      .min(4, i18next.t('validation.min', { var: 4 }))
+      .max(32, i18next.t('validation.max', { var: 32 }))
+      .required(i18next.t('validation.required')),
   },
   path: {
     type: 'input',
-    schema: yup.string().required(t('validation.required')),
+    schema: yup.string().required(i18next.t('validation.required')),
   },
   phase_id: {
     type: 'select',
-    schema: yup.number().required(t('validation.required')),
+    schema: yup.number().required(i18next.t('validation.required')),
     defaultValue: 10,
     options: [
-      { label: 'Discussion', value: 10 },
-      { label: 'Approval', value: 20 },
-      { label: 'Voting', value: 30 },
-      { label: 'Results', value: 40 },
+      { label: i18next.t('phases.discussion'), value: 10 },
+      { label: i18next.t('phases.approval'), value: 20 },
+      { label: i18next.t('phases.voting'), value: 30 },
+      { label: i18next.t('phases.results'), value: 40 },
     ],
   },
   phase_duration_0: duration,
@@ -90,33 +88,45 @@ export const formsSettings = {
   phase_duration_4: duration,
   realname: {
     type: 'input',
-    schema: yup.string().required(t('validation.required')),
+    schema: yup.string().required(i18next.t('validation.required')),
   },
   room_id: {
     type: 'select',
-    schema: yup.number().required(t('validation.required')),
+    schema: yup.number().required(i18next.t('validation.required')),
     options: 'rooms',
   },
   room_name: shortText,
   status: {
     type: 'select',
-    schema: yup.number().required(t('validation.required')),
+    schema: yup.number().required(i18next.t('validation.required')),
     defaultValue: 1,
     options: [
-      { label: 'Active', value: 1 },
-      { label: 'Inactive', value: 0 },
+      { label: i18next.t('generics.active'), value: 1 },
+      { label: i18next.t('generics.inactive'), value: 0 },
     ],
   },
   title: shortText,
   user_id: shortText,
+  userlevel: {
+    type: 'select',
+    schema: yup.number().required(i18next.t('validation.required')),
+    defaultValue: 20,
+    options: [
+      { label: i18next.t('roles.10'), value: 10 },
+      { label: i18next.t('roles.20'), value: 20 },
+      { label: i18next.t('roles.30'), value: 30 },
+      { label: i18next.t('roles.40'), value: 40 },
+      { label: i18next.t('roles.50'), value: 50 },
+    ],
+  },
   user_needs_to_consent: {
     type: 'select',
-    schema: yup.number().required(t('validation.required')),
+    schema: yup.number().required(i18next.t('validation.required')),
     defaultValue: 0,
     options: [
-      { label: 'No consent', value: 0 },
-      { label: 'Optional', value: 1 },
-      { label: 'Mandatory', value: 2 },
+      { label: i18next.t('validation.consentNoNeed'), value: 0 },
+      { label: i18next.t('validation.consentOptional'), value: 1 },
+      { label: i18next.t('validation.consentNeeded'), value: 2 },
     ],
   },
   username: shortText,

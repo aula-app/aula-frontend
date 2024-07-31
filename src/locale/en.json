@@ -6,6 +6,7 @@
   },
   "generics": {
     "add": "Add new {{var}}",
+    "active": "Active",
     "back": "back",
     "bugReport": "Report Bug",
     "cancel": "Cancel",
@@ -16,6 +17,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "image": "Image",
+    "inactive": "Inactive",
     "logout": "Sign out",
     "modeDark": "Dark mode",
     "modeLight": "Light mode",
@@ -23,7 +25,8 @@
     "or": "or",
     "print": "Print",
     "save": "Save",
-    "title": "aula"
+    "title": "aula",
+    "wrong": "Something went wrong."
   },
   "login": {
     "agree": "Agree with Terms of Use and Privacy Policy.",
@@ -38,11 +41,13 @@
     "passwordConfirm": "Confirm password",
     "recover": "Recover password",
     "recovery": "Password Recovery",
+    "setPass": "Set your password",
     "signIn": "Sign in",
     "signUp": "Sign up",
     "terms": "Terms and conditions",
     "userName": "User name",
-    "welcome": "Welcome!"
+    "welcome": "Welcome!",
+    "wrongKey": "The provided authentication key is not valid."
   },
   "phases": {
     "approval": "Approval",
@@ -50,6 +55,14 @@
     "results": "Results",
     "voting": "Voting",
     "wild": "Wild Ideas"
+  },
+  "roles": {
+    "10": "Guest",
+    "20": "Student",
+    "30": "Moderator",
+    "40": "Super moderator",
+    "50": "Admin",
+    "60": "Tech Admin"
   },
   "settings": {
     "about_me": "Description",
@@ -75,7 +88,8 @@
     "room_id": "Room",
     "room_name": "Room Name",
     "title": "Title",
-    "username": "User Name"
+    "username": "User Name",
+    "userlevel": "User Role"
   },
   "texts": {
     "add": "Add {{var}}",
@@ -108,6 +122,9 @@
   },
   "validation": {
     "agree": "You must agree to sign in.",
+    "consentNeeded": "Mandatory consent",
+    "consentNoNeed": "No consent needed",
+    "consentOptional": "Optional consent",
     "email": "Must be a valid email.",
     "max": "Must be smaller than {{var}} characters.",
     "min": "Must be bigger than {{var}} characters.",

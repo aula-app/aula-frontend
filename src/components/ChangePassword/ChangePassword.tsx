@@ -1,3 +1,4 @@
+import { PassResponse } from '@/types/Generics';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { InputAdornment, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
@@ -7,23 +8,27 @@ import * as yup from 'yup';
 import AppButton from '../AppButton';
 import AppIconButton from '../AppIconButton';
 
-const schema = yup
-  .object({
-    currentPassword: yup.string().required().min(4).max(32),
-    newPassword: yup.string().required().min(4).max(32),
-    confirmPassword: yup
-      .string()
-      .required()
-      .oneOf([yup.ref('newPassword')], 'Passwords must match'),
-  })
-  .required();
+interface Props {
+  onSubmit: (formData: PassResponse) => void;
+}
 
 /**
  * Renders User info with Avatar
- * @component UserInfo
+ * @component ChangePassword
  */
-const UserInfo = () => {
+const ChangePassword = ({ onSubmit }: Props) => {
   const { t } = useTranslation();
+
+  const schema = yup
+    .object({
+      newPassword: yup.string().required().min(4).max(32),
+      confirmPassword: yup
+        .string()
+        .required()
+        .oneOf([yup.ref('newPassword')], 'Passwords must match'),
+    })
+    .required();
+
   const {
     register,
     handleSubmit,
@@ -32,37 +37,12 @@ const UserInfo = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (formData: Object) => console.log(formData);
-
-  const [showCurrentPassword, setCurrentPassword] = useState(false);
   const [showNewPassword, setNewPassword] = useState(false);
   const [showConfirmPassword, setConfirmPassword] = useState(false);
 
   return (
     <FormContainer>
       <Stack>
-        <TextField
-          required
-          type={showCurrentPassword ? 'text' : 'password'}
-          label="Current Password"
-          sx={{ width: '100%' }}
-          {...register('currentPassword')}
-          error={errors.currentPassword ? true : false}
-          helperText={errors.currentPassword?.message || ' '}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <AppIconButton
-                  aria-label="toggle password visibility"
-                  icon={showCurrentPassword ? 'visibilityon' : 'visibilityoff'}
-                  title={showCurrentPassword ? 'Hide Password' : 'Show Password'}
-                  onClick={() => setCurrentPassword(!showCurrentPassword)}
-                  onMouseDown={(e) => e.preventDefault()}
-                />
-              </InputAdornment>
-            ),
-          }}
-        />
         <TextField
           required
           type={showNewPassword ? 'text' : 'password'}
@@ -108,11 +88,11 @@ const UserInfo = () => {
           }}
         />
         <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(onSubmit)}>
-          {t('texts.passChange')}
+          {t('generics.confirm')}
         </AppButton>
       </Stack>
     </FormContainer>
   );
 };
 
-export default UserInfo;
+export default ChangePassword;

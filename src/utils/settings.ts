@@ -56,9 +56,10 @@ export const dataSettings = {
   users: [
     { name: 'displayname', orderId: 6, role: 20 },
     { name: 'realname', orderId: 1, role: 20 },
+    { name: 'username', orderId: 5, role: 50 },
     { name: 'email', orderId: 7, role: 20 },
     { name: 'about_me', orderId: 12, role: 20 },
-    { name: 'username', orderId: 5, role: 50 },
+    { name: 'userlevel', orderId: 13, role: 50 },
   ],
   categories: [
     { name: 'description_internal', orderId: -1, role: 20 },
