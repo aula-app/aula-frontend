@@ -53,7 +53,7 @@ const FormInput = ({
             // @ts-ignore
             error={errors[form] ? true : false}
             // @ts-ignore
-            helperText={errors[form]?.message || ' '}
+            helperText={t(errors[form]?.message || ' ')}
             sx={{ mx: 2, width: 80 }}
             {...restOfProps}
           />
@@ -79,7 +79,7 @@ const FormInput = ({
           // @ts-ignore
           error={errors[form] ? true : false}
           // @ts-ignore
-          helperText={errors[form]?.message || ' '}
+          helperText={t(errors[form]?.message || ' ')}
           sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
           {...restOfProps}
         />

@@ -46,17 +46,7 @@ const IconField = ({ form, control, disabled = false, setValue, ...restOfProps }
               />
             ))}
           </Stack>
-          <FormHelperText
-            error={
-              // @ts-ignore
-              fieldState.error ? true : false
-            }
-          >
-            {
-              // @ts-ignore
-              fieldState.error?.message || ' '
-            }
-          </FormHelperText>
+          <FormHelperText error={!!fieldState.error}>{t(fieldState.error?.message || ' ')}</FormHelperText>
         </FormControl>
       )}
     />
