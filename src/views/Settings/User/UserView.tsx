@@ -1,5 +1,4 @@
 import { AppButton, AppIcon } from '@/components';
-import ChangePassword from '@/components/ChangePassword';
 import ImageEditor from '@/components/ImageEditor';
 import { useAppStore } from '@/store';
 import { SingleUserResponseType } from '@/types/RequestTypes';
@@ -143,14 +142,14 @@ const UserView = () => {
           </Stack>
         </FormContainer>
       )}
-      <Accordion>
+      {/* <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.security')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <ChangePassword onSubmit={(e) => console.log(e)} />
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.privacy')}</Typography>

@@ -46,7 +46,10 @@ export const formsSettings = {
   about_me: longText,
   body: longText,
   content: longText,
-  consent_text: shortText,
+  consent_text: {
+    ...shortText,
+    defaultValue: 'Agree',
+  },
   confirmPassword: password,
   description: longText,
   description_public: longText,
