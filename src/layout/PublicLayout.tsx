@@ -32,7 +32,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         }}
       >
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
-        <Stack>
+        {/* <Stack>
           <Divider sx={{ mt: 1, mb: 2 }}>{t('generics.or')}</Divider>
           <Grid container justifyContent="space-between" gap={1} alignItems="center">
             <Button variant="contained" color="error" sx={{ flexGrow: 1, flexBasis: 1 }}>
@@ -45,7 +45,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
           <Grid container justifyContent="center" alignItems="center" sx={{ mt: 3, mb: 1 }}>
             {toggleSignUp()}
           </Grid>
-        </Stack>
+        </Stack>*/}
       </Stack>
     </Stack>
   );
