@@ -51,7 +51,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       },
       metadata: {
         location: location.pathname,
-        user: jwt_payload.user_id,
+        user: jwt_payload?.user_id,
       },
     },
     {
@@ -64,7 +64,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       },
       metadata: {
         location: location.pathname,
-        user: jwt_payload.user_id,
+        user: jwt_payload?.user_id,
         userAgent: window.navigator.userAgent,
       },
     },

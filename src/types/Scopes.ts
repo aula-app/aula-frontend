@@ -145,12 +145,4 @@ export interface CategoryType {
   id: number;
 }
 
-export interface PossibleFields
-  extends BoxType,
-    BugType,
-    CommentType,
-    IdeaType,
-    MessageType,
-    RoomType,
-    ReportType,
-    UserType {}
+export interface PossibleFields extends BoxType, BugType, CommentType, IdeaType, MessageType, RoomType, UserType {}
