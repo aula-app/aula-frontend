@@ -58,7 +58,7 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
     title: 'config',
     path: '/settings/config',
     icon: 'cog',
-    role: 10,
+    role: 50,
   },
   {
     title: 'about',
