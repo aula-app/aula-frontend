@@ -3,8 +3,9 @@ import { ObjectPropByName } from '@/types/Generics';
 import { MessageType, ReportBodyType, ReportType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Divider, Stack, Typography } from '@mui/material';
+import { t } from 'i18next';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 /**
  * Renders "Report" view
@@ -13,6 +14,7 @@ import { useParams } from 'react-router-dom';
 
 const ReportView = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const [report, setReport] = useState<ReportType>();
 
   const reportFetch = async () =>
@@ -28,6 +30,19 @@ const ReportView = () => {
       setReport(response.data);
     });
 
+  const deleteMessage = async () =>
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: 'setMessageStatus',
+        arguments: {
+          message_id: params['message_id'],
+          status: 4,
+        },
+      },
+      ['updater_id']
+    ).then(() => navigate('/messages'));
+
   useEffect(() => {
     reportFetch();
   }, []);
@@ -41,15 +56,14 @@ const ReportView = () => {
           </Typography>
           <Divider />
           <Stack my={2}>
-            {report.headline.substring(0, 7) !== 'Account' && (
-              <Stack direction="row">
-                <AppIcon icon="link" sx={{ mr: 0.5 }} />
-                <AppLink to={report.body.data.location}>{report.body.data.location}</AppLink>
-              </Stack>
-            )}
-            {Object.keys(report.body.data).map((data) => (
+            {(Object.keys(report.body.data) as Array<keyof ReportBodyType['data']>).map((data) => (
               <Typography mt={1} key={data}>
-                {data}: {report.body.data[data]}
+                {data}:{' '}
+                {data === 'location' ? (
+                  <AppLink to={report.body.data[data]}>{report.body.data[data]}</AppLink>
+                ) : (
+                  report.body.data[data]
+                )}
               </Typography>
             ))}
           </Stack>
@@ -59,6 +73,11 @@ const ReportView = () => {
           </Stack>
         </Stack>
       )}
+      <Stack direction="row" justifyContent="end">
+        <AppButton color="error" onClick={() => deleteMessage()}>
+          {t('generics.discard')}
+        </AppButton>
+      </Stack>
     </Stack>
   );
 };

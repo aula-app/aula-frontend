@@ -77,7 +77,7 @@ export interface MessageType {
 export interface ReportBodyType {
   data: {
     location: string;
-    user: number;
+    user: string;
     userAgent?: string;
   };
   content: string;
