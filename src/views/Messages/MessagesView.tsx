@@ -1,4 +1,4 @@
-import { AppIcon, AppLink } from '@/components';
+import { AppIcon } from '@/components';
 import MessageCard from '@/components/MessageCard';
 import ReportCard from '@/components/ReportCard';
 import { MessageType } from '@/types/Scopes';
@@ -63,7 +63,7 @@ const MessagesView = () => {
             <AppIcon icon="report" sx={{ mr: 1 }} /> {t('views.reports')}
           </Typography>
           {reports.map((report) => (
-            <ReportCard
+            <MessageCard
               type={
                 report.headline.substring(0, 3) === 'Bug'
                   ? 'bug'

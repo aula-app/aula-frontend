@@ -1,0 +1,44 @@
+import ReportCard from '@/components/ReportCard';
+import { ReportType } from '@/types/Scopes';
+import { databaseRequest } from '@/utils';
+import { Typography } from '@mui/material';
+import { Stack } from '@mui/system';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+/** * Renders "Config" view
+ * url: /settings/config
+ */
+const ReportsView = () => {
+  const { t } = useTranslation();
+  const [reports, setReports] = useState<ReportType[]>([]);
+
+  const reportFetch = async () =>
+    await databaseRequest({
+      model: 'Message',
+      method: 'getMessages',
+      arguments: {},
+    }).then((response) => {
+      if (!response.success) return;
+      if (response.data) {
+        response.data.map((r: any) => (r.body = JSON.parse(r.body)));
+        setReports(response.data);
+      }
+    });
+
+  useEffect(() => {
+    reportFetch();
+  }, []);
+
+  return (
+    <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
+      <Typography variant="h4" mb={2}>
+        {t('views.reports')}
+      </Typography>
+      {reports.length > 0 &&
+        reports.map((report) => <ReportCard headline={report.headline} body={report.body} key={report.id} />)}
+    </Stack>
+  );
+};
+
+export default ReportsView;

@@ -7,7 +7,7 @@ import { AppIcon, AppLink } from '..';
  */
 
 interface Props {
-  type: MessageConsentValues;
+  type: MessageConsentValues | 'bug' | 'report' | 'alert';
   title: string;
   to: string;
 }
