@@ -68,6 +68,7 @@
     "about_me": "Description",
     "body": "Text",
     "categories": "Categories",
+    "consent_text": "Consent message",
     "content": "Content",
     "created": "Creation date",
     "description": "Description",
@@ -87,8 +88,10 @@
     "realname": "Student Name",
     "room_id": "Room",
     "room_name": "Room Name",
+    "status": "Status",
     "title": "Title",
     "username": "User Name",
+    "user_needs_to_consent": "Consent needed?",
     "userlevel": "User Role"
   },
   "texts": {

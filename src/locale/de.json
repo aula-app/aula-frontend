@@ -68,6 +68,7 @@
     "about_me": "Beschreibung",
     "body": "Text",
     "categories": "Kategorien",
+    "consent_text": "Zustimmungsmeldung",
     "content": "Inhalt",
     "created": "Erstellung",
     "description": "Beschreibung",
@@ -87,8 +88,10 @@
     "realname": "Name des Schülers",
     "room_id": "Klass",
     "room_name": "Klass Name",
+    "status": "Status",
     "title": "Titel",
     "username": "Benutzername",
+    "user_needs_to_consent": "Zustimmung erforderlich?",
     "userlevel": "Benutzer-Rolle"
   },
   "texts": {
