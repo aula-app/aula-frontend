@@ -65,6 +65,12 @@ const OTHER_COLORS = {
   disabled: {
     main: grey[200],
   },
+  bug: {
+    main: grey[200],
+  },
+  report: {
+    main: amber[200],
+  },
 };
 /**
  * MUI theme options for "Light Mode"

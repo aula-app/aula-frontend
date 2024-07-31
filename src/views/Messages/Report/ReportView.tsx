@@ -1,9 +1,12 @@
 import { AppButton, AppIcon, AppLink } from '@/components';
-import { MessageType } from '@/types/Scopes';
+import ReportCard from '@/components/ReportCard';
+import { ObjectPropByName } from '@/types/Generics';
+import { MessageType, ReportBodyType, ReportType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
-import { Stack, Typography } from '@mui/material';
+import { Divider, Stack, Typography } from '@mui/material';
+import { t } from 'i18next';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 /**
  * Renders "Report" view
@@ -12,9 +15,8 @@ import { useParams } from 'react-router-dom';
 
 const ReportView = () => {
   const params = useParams();
-  const [report, setReport] = useState<MessageType>();
-
-  const rxCommonMarkLink = /(\[([^\]]+)])\(([^)]+)\)/g;
+  const navigate = useNavigate();
+  const [report, setReport] = useState<ReportType>();
 
   const reportFetch = async () =>
     await databaseRequest({
@@ -25,8 +27,22 @@ const ReportView = () => {
       },
     }).then((response) => {
       if (!response.success) return;
+      if (response.data.body) response.data.body = JSON.parse(response.data.body);
       setReport(response.data);
     });
+
+  const deleteMessage = async () =>
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: 'setMessageStatus',
+        arguments: {
+          message_id: params['message_id'],
+          status: 4,
+        },
+      },
+      ['updater_id']
+    ).then(() => navigate('/messages'));
 
   useEffect(() => {
     reportFetch();
@@ -34,24 +50,12 @@ const ReportView = () => {
 
   return (
     <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
-      {report && (
-        <Stack flex={1}>
-          <Typography fontWeight={700} align="center" py={2}>
-            {report.headline.replace(rxCommonMarkLink, '$2')}:
-          </Typography>
-          {report.headline.substring(0, 7) !== 'Account' && (
-            <Stack direction="row" justifyContent="center">
-              <AppIcon icon="link" sx={{ mr: 1 }} />
-              <AppLink to={String(report.headline.match(/\(([^)]+)\)/g)).replace(/[{()}]/g, '')} pb={2}>
-                {String(report.headline.match(/\(([^)]+)\)/g)).replace(/[{()}]/g, '')}
-              </AppLink>
-            </Stack>
-          )}
-          <Stack flex={1} alignItems="center">
-            <Typography>{report.body}</Typography>
-          </Stack>
-        </Stack>
-      )}
+      {report && <ReportCard headline={report.headline} body={report.body} />}
+      <Stack direction="row" justifyContent="end">
+        <AppButton color="error" onClick={() => deleteMessage()}>
+          {t('generics.discard')}
+        </AppButton>
+      </Stack>
     </Stack>
   );
 };

@@ -1,39 +1,38 @@
-import { IconButton, Stack, Typography } from '@mui/material';
-import { AppIcon, AppLink } from '..';
+import { ReportBodyType } from '@/types/Scopes';
+import { Card, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
+import { AppLink } from '..';
 
 /**
  * Renders "ReportCard" component
  */
 
 interface Props {
-  type: 'bug' | 'report' | 'alert';
-  title: string;
-  to: string;
+  headline: string;
+  body: ReportBodyType;
 }
 
-const ReportCard = ({ type, title, to }: Props) => {
-  const rxCommonMarkLink = /(\[([^\]]+)])\(([^)]+)\)/g;
+const ReportCard = ({ headline, body }: Props) => {
   return (
-    <Stack
-      component={AppLink}
-      direction="row"
-      alignItems="center"
-      borderRadius={5}
-      p={1}
-      pl={2}
-      mb={1}
-      border={1}
-      to={to}
-      // color={messageConfig[type].color[800]}
-    >
-      <AppIcon icon={type} />
-      <Typography flex={1} px={2}>
-        {title.replace(rxCommonMarkLink, '$2')}
-      </Typography>
-      <IconButton size="small">
-        <AppIcon icon="close" />
-      </IconButton>
-    </Stack>
+    <Card variant="outlined" sx={{ borderRadius: 5 }}>
+      <CardHeader title={headline} />
+      <Divider />
+      <CardContent sx={{ bgcolor: 'bug.main' }}>
+        <Stack>
+          {(Object.keys(body.data) as Array<keyof ReportBodyType['data']>).map((data) => (
+            <Typography mt={1} key={data}>
+              {data}:{' '}
+              {data === 'location' ? <AppLink to={body.data[data]}>{body.data[data]}</AppLink> : body.data[data]}
+            </Typography>
+          ))}
+        </Stack>
+      </CardContent>
+      <Divider />
+      <CardContent>
+        <Stack mt={2} flex={1}>
+          <Typography>{body.content}</Typography>
+        </Stack>
+      </CardContent>
+    </Card>
   );
 };
 

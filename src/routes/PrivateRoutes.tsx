@@ -10,6 +10,7 @@ import IdeasBoxView from '@/views/Room/IdeasBox';
 import RoomPhaseView from '@/views/Room/RoomPhaseView';
 import SettingsView from '@/views/Settings';
 import ConfigView from '@/views/Settings/Config';
+import ReportsView from '@/views/Settings/Report';
 import UserView from '@/views/Settings/User';
 import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';
@@ -35,6 +36,7 @@ const PrivateRoutes = () => (
       <Route path="idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
     </Route>
     <Route path="settings/profile" element={<UserView />} />
+    <Route path="settings/reports" element={<ReportsView />} />
     <Route path="settings/config" element={<ConfigView />} />
     <Route path="settings/:setting_name" element={<SettingsView />} />
     <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />

@@ -74,10 +74,19 @@ export interface MessageType {
   status: number;
 }
 
+export interface ReportBodyType {
+  data: {
+    location: string;
+    user: string;
+    userAgent?: string;
+  };
+  content: string;
+}
+
 export interface ReportType {
   id: number;
-  path: string;
-  description: string;
+  body: ReportBodyType;
+  headline: string;
 }
 
 export interface RoomType {
@@ -136,12 +145,4 @@ export interface CategoryType {
   id: number;
 }
 
-export interface PossibleFields
-  extends BoxType,
-    BugType,
-    CommentType,
-    IdeaType,
-    MessageType,
-    RoomType,
-    ReportType,
-    UserType {}
+export interface PossibleFields extends BoxType, BugType, CommentType, IdeaType, MessageType, RoomType, UserType {}

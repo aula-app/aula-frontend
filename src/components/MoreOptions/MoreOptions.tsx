@@ -1,4 +1,4 @@
-import { AlterTypes, ColorTypes } from '@/types/Generics';
+import { AlterTypes, ColorTypes, ObjectPropByName } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { Box, Button, ClickAwayListener, Divider, Paper, Stack, Typography, Zoom } from '@mui/material';
 import { grey } from '@mui/material/colors';
@@ -9,13 +9,15 @@ import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
 import { AlterData, DeleteData } from '../Data';
 import { useLocation } from 'react-router-dom';
+import { localStorageGet, parseJwt } from '@/utils';
 
 interface OptionsTypes {
   type: AlterTypes;
   icon: keyof typeof ICONS;
   color: ColorTypes;
   label: string;
-  otherData?: { headline: string; body: string };
+  otherData?: { headline?: string; body?: string };
+  metadata?: ObjectPropByName;
 }
 
 interface Props {
@@ -31,6 +33,8 @@ interface Props {
 const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = jwt_token ? parseJwt(jwt_token) : null;
   const [currentId, setId] = useState<number>();
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState<SettingNamesType>();
@@ -43,7 +47,11 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       color: 'error',
       label: t('generics.contentReport'),
       otherData: {
-        headline: `User report on [${scope} #${id}](${location.pathname})`,
+        headline: `Content report on ${scope} #${id}`,
+      },
+      metadata: {
+        location: location.pathname,
+        user: jwt_payload?.user_id,
       },
     },
     {
@@ -52,7 +60,12 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       color: 'warning',
       label: t('generics.bugReport'),
       otherData: {
-        headline: `Bug report on [${scope} #${id}](${location.pathname})`,
+        headline: `Bug report on ${scope} #${id}`,
+      },
+      metadata: {
+        location: location.pathname,
+        user: jwt_payload?.user_id,
+        userAgent: window.navigator.userAgent,
       },
     },
   ] as OptionsTypes[];
@@ -140,6 +153,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
         isOpen={!!edit}
         onClose={close}
         otherData={options.filter((data) => data.type === edit)[0]?.otherData}
+        metadata={options.filter((data) => data.type === edit)[0]?.metadata}
       />
       <DeleteData id={id} scope={scope} isOpen={del} onClose={close} />
     </>
