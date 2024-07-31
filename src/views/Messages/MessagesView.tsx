@@ -67,7 +67,7 @@ const MessagesView = () => {
               type={
                 report.headline.substring(0, 3) === 'Bug'
                   ? 'bug'
-                  : report.headline.substring(0, 7) !== 'Account'
+                  : report.headline.substring(0, 7) === 'Account'
                     ? 'alert'
                     : 'report'
               }

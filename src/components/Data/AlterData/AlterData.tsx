@@ -25,6 +25,7 @@ interface Props {
   isOpen: boolean;
   scope: SettingNamesType;
   otherData?: ObjectPropByName;
+  metadata?: ObjectPropByName;
   onClose: () => void;
 }
 
@@ -32,7 +33,7 @@ interface Props {
  * Renders "AlterData" component
  * url: /
  */
-const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
+const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Props) => {
   const { t } = useTranslation();
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
@@ -71,6 +72,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
     if (scope === 'comments' && !id) requestId.push('user_id');
     if (scope === 'messages' && !id) requestId.push('creator_id');
     if (scope === 'users' && !id) args['password'] = 'default_password';
+    if (metadata && args.body) args['body'] = JSON.stringify({ data: metadata, content: args['body'] });
     await databaseRequest(
       {
         model: requestDefinitions[scope].model,

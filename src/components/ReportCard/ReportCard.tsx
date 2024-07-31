@@ -12,7 +12,6 @@ interface Props {
 }
 
 const ReportCard = ({ type, title, to }: Props) => {
-  const rxCommonMarkLink = /(\[([^\]]+)])\(([^)]+)\)/g;
   return (
     <Stack
       component={AppLink}
@@ -28,11 +27,8 @@ const ReportCard = ({ type, title, to }: Props) => {
     >
       <AppIcon icon={type} />
       <Typography flex={1} px={2}>
-        {title.replace(rxCommonMarkLink, '$2')}
+        {title}
       </Typography>
-      <IconButton size="small">
-        <AppIcon icon="close" />
-      </IconButton>
     </Stack>
   );
 };

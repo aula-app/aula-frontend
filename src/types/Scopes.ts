@@ -74,10 +74,19 @@ export interface MessageType {
   status: number;
 }
 
+export interface ReportBodyType {
+  data: {
+    location: string;
+    user: number;
+    userAgent?: string;
+  };
+  content: string;
+}
+
 export interface ReportType {
   id: number;
-  path: string;
-  description: string;
+  body: ReportBodyType;
+  headline: string;
 }
 
 export interface RoomType {
