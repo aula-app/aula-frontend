@@ -35,3 +35,8 @@ export interface DefaultUpdate {
   room_id: number;
   title: string;
 }
+
+export interface PassResponse {
+  newPassword: string;
+  confirmPassword: string;
+}

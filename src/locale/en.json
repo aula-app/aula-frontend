@@ -23,7 +23,8 @@
     "or": "or",
     "print": "Print",
     "save": "Save",
-    "title": "aula"
+    "title": "aula",
+    "wrong": "Something went wrong."
   },
   "login": {
     "agree": "Agree with Terms of Use and Privacy Policy.",
@@ -38,11 +39,13 @@
     "passwordConfirm": "Confirm password",
     "recover": "Recover password",
     "recovery": "Password Recovery",
+    "setPass": "Set your password",
     "signIn": "Sign in",
     "signUp": "Sign up",
     "terms": "Terms and conditions",
     "userName": "User name",
-    "welcome": "Welcome!"
+    "welcome": "Welcome!",
+    "wrongKey": "The provided authentication key is not valid."
   },
   "phases": {
     "approval": "Approval",

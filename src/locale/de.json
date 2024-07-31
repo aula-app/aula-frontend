@@ -23,7 +23,8 @@
     "or": "oder",
     "print": "Drucken",
     "save": "Speichern",
-    "title": "aula"
+    "title": "aula",
+    "wrong": "Etwas ist schief gelaufen."
   },
   "login": {
     "agree": "Stimmen Sie den Nutzungsbedingungen und der Datenschutzrichtlinie zu.",
@@ -38,11 +39,13 @@
     "passwordConfirm": "Passwort bestätigen",
     "recover": "Wiederherstellen",
     "recovery": "Passwort-Wiederherstellung",
+    "setPass": "Ihr Passwort festlegen",
     "signIn": "sich anmelden",
     "signUp": "Registrieren Sie sich",
     "terms": "Bedingungen und Konditionen",
     "userName": "Name des Benutzers",
-    "welcome": "Willkommen bei aula"
+    "welcome": "Willkommen bei aula",
+    "wrongKey": "Der angegebene Authentifizierungsschlüssel ist ungültig."
   },
   "phases": {
     "approval": "Prüfungsphase",
