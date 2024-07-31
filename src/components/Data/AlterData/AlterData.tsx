@@ -70,6 +70,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, onClose }: Props) => {
     if (scope === 'ideas') requestId.push('user_id');
     if (scope === 'comments' && !id) requestId.push('user_id');
     if (scope === 'messages' && !id) requestId.push('creator_id');
+    if (scope === 'users' && !id) args['password'] = 'default_password';
     await databaseRequest(
       {
         model: requestDefinitions[scope].model,

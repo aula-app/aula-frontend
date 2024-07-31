@@ -6,6 +6,7 @@
   },
   "generics": {
     "add": "Add new {{var}}",
+    "active": "Active",
     "back": "back",
     "bugReport": "Report Bug",
     "cancel": "Cancel",
@@ -16,6 +17,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "image": "Image",
+    "inactive": "Inactive",
     "logout": "Sign out",
     "modeDark": "Dark mode",
     "modeLight": "Light mode",
@@ -54,6 +56,14 @@
     "voting": "Voting",
     "wild": "Wild Ideas"
   },
+  "roles": {
+    "10": "Guest",
+    "20": "Student",
+    "30": "Moderator",
+    "40": "Super moderator",
+    "50": "Admin",
+    "60": "Tech Admin"
+  },
   "settings": {
     "about_me": "Description",
     "body": "Text",
@@ -78,7 +88,8 @@
     "room_id": "Room",
     "room_name": "Room Name",
     "title": "Title",
-    "username": "User Name"
+    "username": "User Name",
+    "userlevel": "User Role"
   },
   "texts": {
     "add": "Add {{var}}",
@@ -111,6 +122,9 @@
   },
   "validation": {
     "agree": "You must agree to sign in.",
+    "consentNeeded": "Mandatory consent",
+    "consentNoNeed": "No consent needed",
+    "consentOptional": "Optional consent",
     "email": "Must be a valid email.",
     "max": "Must be smaller than {{var}} characters.",
     "min": "Must be bigger than {{var}} characters.",

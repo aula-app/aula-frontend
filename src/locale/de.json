@@ -6,6 +6,7 @@
   },
   "generics": {
     "add": "Neuen {{var}} hinzufügen",
+    "active": "Aktiv",
     "back": "zurück",
     "bugReport": "Fehler melden",
     "cancel": "Abbrechen",
@@ -16,6 +17,7 @@
     "delete": "Löschen",
     "edit": "Bearbeiten",
     "image": "Bild",
+    "inactive": "Inaktiv",
     "logout": "Abmeldung",
     "modeDark": "Dunkler Modus",
     "modeLight": "Lichtmodus",
@@ -54,6 +56,14 @@
     "voting": "Abstimmungsphase",
     "wild": "Wilde Ideen"
   },
+  "roles": {
+    "10": "Gast",
+    "20": "Student",
+    "30": "Moderator",
+    "40": "Super-Moderator",
+    "50": "Admin",
+    "60": "Tech Admin"
+  },
   "settings": {
     "about_me": "Beschreibung",
     "body": "Text",
@@ -78,7 +88,8 @@
     "room_id": "Klass",
     "room_name": "Klass Name",
     "title": "Titel",
-    "username": "Benutzername"
+    "username": "Benutzername",
+    "userlevel": "Benutzer-Rolle"
   },
   "texts": {
     "add": "{{var}} hinzufügen",
@@ -111,6 +122,9 @@
   },
   "validation": {
     "agree": "Sie müssen zustimmen, sich anzumelden.",
+    "consentNeeded": "Obligatorische Zustimmung",
+    "consentNoNeed": "Keine Zustimmung erforderlich",
+    "consentOptional": "Optionale Zustimmung",
     "email": "Muss eine gültige E-Mail sein.",
     "max": "Muss kleiner sein als {{var}} Zeichen.",
     "min": "Muss größer sein als {{var}} Zeichen.",
