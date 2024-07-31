@@ -32,14 +32,22 @@ const DashBoard = ({ show = true }) => {
   }, [show]);
 
   useEffect(() => {
-    dashboardFetch('Idea', 'getDashboardByUser', ['user_id']).then((response) => setCount(response.data.phase_counts));
-    dashboardFetch('Text', 'getTexts', []).then((response) => setMessages(response.count));
+    dashboardFetch('Idea', 'getDashboardByUser', ['user_id']).then((response) => {
+      if (response && response.success) setCount(response.data.phase_counts);
+    });
+    dashboardFetch('Text', 'getTexts', []).then((response) => {
+      if (response && response.success) setMessages(response.count);
+    });
     dashboardFetch(
       'Message',
       jwt_payload.user_level >= 40 ? 'getMessages' : 'getMessagesByUser',
       jwt_payload.user_level >= 40 ? [] : ['user_id']
-    ).then((response) => setReports(response.count));
-    dashboardFetch('Idea', 'getUpdatesByUser', ['user_id']).then((response) => setLikes(response.count));
+    ).then((response) => {
+      if (response && response.success) setReports(response.count);
+    });
+    dashboardFetch('Idea', 'getUpdatesByUser', ['user_id']).then((response) => {
+      if (response && response.success) setLikes(response.count);
+    });
   }, []);
 
   return (
@@ -73,7 +81,7 @@ const DashBoard = ({ show = true }) => {
           </Badge>
         </Stack>
         <Collapse in={isShowing} sx={{ width: '100%' }}>
-          {Object.keys(count).length > 4 && (
+          {count && Object.keys(count).length > 4 && (
             <Grid container spacing={1} p={1}>
               {displayPhases.map((phase, key) => (
                 <Grid item xs={6} sm={3} key={key}>
