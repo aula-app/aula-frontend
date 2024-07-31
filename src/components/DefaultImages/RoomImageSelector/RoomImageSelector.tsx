@@ -34,7 +34,7 @@ const RoomImageSelector = ({ onClose, onSubmit }: Props) => {
       </Stack>
       <Typography variant="h6">Select image</Typography>
       <Grid container spacing={2}>
-        {[...Array(7)].map((item, key) => (
+        {[...Array(8)].map((item, key) => (
           <Grid item xs={6} sm={3} key={`img_${key}`}>
             <Button
               sx={{

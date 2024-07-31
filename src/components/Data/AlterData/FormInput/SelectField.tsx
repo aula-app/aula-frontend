@@ -76,21 +76,11 @@ const SelectField = ({ form, control, disabled = false, ...restOfProps }: Props)
           >
             {currentOptions.map((option) => (
               <MenuItem value={option.value} key={option.label}>
-                {option.label}
+                {t(option.label)}
               </MenuItem>
             ))}
           </TextField>
-          <FormHelperText
-            error={
-              // @ts-ignore
-              fieldState.error ? true : false
-            }
-          >
-            {
-              // @ts-ignore
-              fieldState.error?.message || ' '
-            }
-          </FormHelperText>
+          <FormHelperText error={!!fieldState.error}>{t(fieldState.error?.message || ' ')}</FormHelperText>
         </FormControl>
       )}
     />

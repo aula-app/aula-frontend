@@ -64,17 +64,7 @@ const ImageField = ({ form, control, disabled = false, setValue, ...restOfProps 
               onClose={() => setSelector(false)}
               onSubmit={(image) => onSubmit(field.name, image)}
             />
-            <FormHelperText
-              error={
-                // @ts-ignore
-                fieldState.error ? true : false
-              }
-            >
-              {
-                // @ts-ignore
-                fieldState.error?.message || ' '
-              }
-            </FormHelperText>
+            <FormHelperText error={!!fieldState.error}>{t(fieldState.error?.message || ' ')}</FormHelperText>
           </FormControl>
         );
       }}
