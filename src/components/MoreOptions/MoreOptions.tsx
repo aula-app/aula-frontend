@@ -21,8 +21,8 @@ interface OptionsTypes {
 }
 
 interface Props {
-  id: number;
-  scope: SettingNamesType;
+  id?: number;
+  scope?: SettingNamesType;
   canEdit?: boolean;
   onClose: () => void;
 }
@@ -84,7 +84,6 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
   };
 
   const handleClick = (type: AlterTypes) => {
-    console.log(type);
     setOpen(false);
     switch (type) {
       case 'delete':
@@ -147,15 +146,17 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
           </Zoom>
         </ClickAwayListener>
       </Box>
-      <AlterData
-        id={currentId}
-        scope={edit || scope}
-        isOpen={!!edit}
-        onClose={close}
-        otherData={options.filter((data) => data.type === edit)[0]?.otherData}
-        metadata={options.filter((data) => data.type === edit)[0]?.metadata}
-      />
-      <DeleteData id={id} scope={scope} isOpen={del} onClose={close} />
+      {edit && (
+        <AlterData
+          id={currentId}
+          scope={edit}
+          isOpen={!!edit}
+          onClose={close}
+          otherData={options.filter((data) => data.type === edit)[0]?.otherData}
+          metadata={options.filter((data) => data.type === edit)[0]?.metadata}
+        />
+      )}
+      {id && scope && <DeleteData id={id} scope={scope} isOpen={del} onClose={close} />}
     </>
   );
 };

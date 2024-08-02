@@ -223,7 +223,6 @@ export const ICONS = {
   check: HiOutlineCheckCircle,
   close: HiOutlineXMark,
   clock: HiOutlineClock,
-  cog: HiOutlineCog6Tooth,
   comment: HiOutlineChatBubbleOvalLeft,
   day: HiOutlineSun,
   delete: HiOutlineTrash,

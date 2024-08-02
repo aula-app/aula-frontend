@@ -4,6 +4,7 @@ import { useAppStore } from '@/store';
 import { SingleUserResponseType } from '@/types/RequestTypes';
 import { UserType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Accordion,
   AccordionDetails,
@@ -22,8 +23,9 @@ import {
 import { grey } from '@mui/material/colors';
 import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
-import { FormContainer } from 'react-hook-form-mui';
+import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 
 /** * Renders "User" view
  * url: /settings/user
@@ -35,6 +37,25 @@ const UserView = () => {
   const [, dispatch] = useAppStore();
   const [isEditingImage, setEditingImage] = useState<boolean>(false);
 
+  const schema = yup
+    .object({
+      about_me: yup
+        .string()
+        .required(t('validation.required'))
+        .min(4, t('validation.min', { var: 4 }))
+        .max(32, t('validation.max', { var: 32 })),
+    })
+    .required();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   const getUserInfo = async () =>
     databaseRequest(
       {
@@ -45,7 +66,16 @@ const UserView = () => {
       ['user_id']
     ).then((response: SingleUserResponseType) => setUser(response.data));
 
-  const onSubmit = (formData: Object) => console.log(formData);
+  const onSubmit = async (formData: Object) =>
+    databaseRequest(
+      {
+        model: 'User',
+        method: 'setUserAbout',
+        arguments: formData,
+      },
+      ['user_id', 'updater_id']
+    ).then(() => getUserInfo());
+
   const toggleDrawer = () => setEditingImage(!isEditingImage);
 
   const sendMessage = async (headline: string, body: string, returnMessage: string) =>
@@ -76,6 +106,10 @@ const UserView = () => {
       t('texts.deleteRequest')
     );
   };
+
+  useEffect(() => {
+    if (user) setValue('about_me', user.about_me);
+  }, [user]);
 
   useEffect(() => {
     getUserInfo();
@@ -121,22 +155,18 @@ const UserView = () => {
               {user.username}
             </Typography>
             <Typography variant="body2">{user.displayname}</Typography>
-            <TextField
-              disabled
-              label="Email"
-              inputProps={{ autoCapitalize: 'none' }}
-              defaultValue={user.email}
-              sx={{ mt: 2, width: '100%' }}
-            />
+            <Typography variant="body2">{user.email}</Typography>
             <TextField
               multiline
               minRows={5}
-              label="About me"
-              inputProps={{ autoCapitalize: 'none' }}
-              defaultValue={user.about_me}
-              sx={{ mt: 2, width: '100%' }}
+              label={t('settings.about_me')}
+              {...register('about_me')}
+              error={errors.about_me ? true : false}
+              helperText={errors.about_me?.message || ' '}
+              fullWidth
+              sx={{ mt: 2 }}
             />
-            <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={onSubmit}>
+            <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(onSubmit)}>
               {t('generics.save')}
             </AppButton>
           </Stack>

@@ -1,6 +1,6 @@
 import { AppIcon, AppIconButton, AppLink } from '@/components';
 import { AppBar, Breadcrumbs, Toolbar } from '@mui/material';
-import { FunctionComponent, useState } from 'react';
+import { Dispatch, FunctionComponent, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
@@ -8,13 +8,14 @@ import { SIDEBAR_DESKTOP_ANCHOR } from '../config';
 
 interface Props {
   home: string;
+  setReport: Dispatch<SetStateAction<'bug' | 'report' | undefined>>;
 }
 
 /**
  * Renders TopBar composition
  * @component TopBar
  */
-const TopBar: FunctionComponent<Props> = ({ home, ...restOfProps }) => {
+const TopBar = ({ home, setReport, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const [openSideBar, setSidebar] = useState(false);
   const location = useLocation().pathname.split('/');
@@ -56,6 +57,7 @@ const TopBar: FunctionComponent<Props> = ({ home, ...restOfProps }) => {
           anchor={SIDEBAR_DESKTOP_ANCHOR}
           open={openSideBar}
           variant="temporary"
+          setReport={setReport}
           onClose={() => setSidebar(false)}
         />
       </Toolbar>

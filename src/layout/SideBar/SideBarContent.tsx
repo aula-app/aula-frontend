@@ -1,61 +1,66 @@
 import { AppButton, AppIcon, AppIconButton } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
-import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
+import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
-import { Divider, DrawerProps, Stack } from '@mui/material';
-import { FunctionComponent, MouseEvent, useCallback } from 'react';
+import { Divider, Stack } from '@mui/material';
+import { Dispatch, MouseEvent, SetStateAction, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SideBarNavList from './SideBarNavList';
-import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../config';
-import { grey } from '@mui/material/colors';
 
-type Props = Pick<DrawerProps, 'anchor' | 'className' | 'open' | 'variant' | 'onClose'>;
+type Props = {
+  isFixed?: boolean;
+  setReport: Dispatch<SetStateAction<'bug' | 'report' | undefined>>;
+  onClose?: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
+};
 
 /**
  * Renders SideBar with Menu and User details
  * Actually for Authenticated users only, rendered in "Private Layout"
  * @component SideBar
- * @param {string} anchor - 'left' or 'right'
- * @param {boolean} open - the Drawer is visible when true
- * @param {string} variant - variant of the Drawer, one of 'permanent', 'persistent', 'temporary'
  * @param {function} onClose - called when the Drawer is closing
  */
-const FixSideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, ...restOfProps }) => {
+const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const [state] = useAppStore();
+  const [scope, setScope] = useState<'bug' | 'report'>();
   const isAuthenticated = useIsAuthenticated();
 
   const onSwitchDarkMode = useEventSwitchDarkMode();
   const onLogout = useEventLogout();
 
+  const handleAfterLinkClick = useCallback(
+    (event: MouseEvent) => {
+      onClose(event, 'backdropClick');
+    },
+    [onClose]
+  );
+
+  const openReport = () => {
+    setScope(scope);
+  };
+
   return (
     <Stack
-      className="noPrint"
       sx={{
         height: '100%',
-        pt: 2,
-        borderRight: `1px solid ${grey[300]}`,
-        width: SIDEBAR_WIDTH,
-        display: { xs: 'none', md: 'flex' },
       }}
       {...restOfProps}
+      onClick={handleAfterLinkClick}
     >
-      <Stack direction="row" justifyContent="space-between" p={2} pt={0}>
-        <AppIconButton color="secondary" onClick={window.print} icon="print" title={t('generics.print')} />
+      <SideBarNavList />
+      <Divider />
+      <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
+        {isFixed && <LocaleSwitch />}
+        <AppIconButton onClick={() => setReport('report')} icon="report" title={t('generics.contentReport')} />
+        <AppIconButton onClick={() => setReport('bug')} icon="bug" title={t('generics.bugReport')} />
+        <AppIconButton onClick={window.print} icon="print" title={t('generics.print')} />
         <AppIconButton
-          color="secondary"
           onClick={onSwitchDarkMode}
           icon={state.darkMode ? 'day' : 'night'}
           title={state.darkMode ? t('generics.modeLight') : t('generics.modeDark')}
         />
-        <LocaleSwitch />
       </Stack>
       <Divider />
-
-      <SideBarNavList />
-
-      <Divider />
-
       <Stack
         sx={{
           display: 'flex',
@@ -75,4 +80,4 @@ const FixSideBar: FunctionComponent<Props> = ({ anchor, open, variant, onClose, 
   );
 };
 
-export default FixSideBar;
+export default SideBarContent;
