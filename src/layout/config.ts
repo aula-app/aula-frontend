@@ -63,7 +63,7 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
   {
     title: 'config',
     path: '/settings/config',
-    icon: 'cog',
+    icon: 'settings',
     role: 50,
   },
   {
