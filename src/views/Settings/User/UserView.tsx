@@ -33,6 +33,7 @@ import * as yup from 'yup';
 const UserView = () => {
   const { t } = useTranslation();
   const [user, setUser] = useState<UserType | null>(null);
+  const [userAvatar, setUserAvatar] = useState<string>('');
   const [openDelete, setOpenDelete] = useState(false);
   const [, dispatch] = useAppStore();
   const [isEditingImage, setEditingImage] = useState<boolean>(false);
@@ -56,6 +57,8 @@ const UserView = () => {
     resolver: yupResolver(schema),
   });
 
+  const user_avatar = ''
+
   const getUserInfo = async () =>
     databaseRequest(
       {
@@ -64,7 +67,21 @@ const UserView = () => {
         arguments: {},
       },
       ['user_id']
-    ).then((response: SingleUserResponseType) => setUser(response.data));
+    ).then((response: SingleUserResponseType) => {
+      setUser(response.data)
+      console.log("PEG")
+      databaseRequest(
+        {
+          model: 'Media',
+          method: 'userAvatar',
+          arguments: {
+            user_id: response.data.id
+          }
+        }
+      ).then((res:any) => {
+        setUserAvatar(res.data[0].filename)
+        });
+    });
 
   const onSubmit = async (formData: Object) =>
     databaseRequest(
@@ -146,9 +163,9 @@ const UserView = () => {
                   fontSize: '3rem',
                 }}
                 alt={user.displayname || 'User Name'}
-                src={user.avatar || ''}
+                src={`${import.meta.env.VITE_APP_API_URL}/files/${userAvatar}` || ''}
               >
-                {!user.avatar && <AppIcon icon="avatar" size="xl" />}
+                {!userAvatar && <AppIcon icon="avatar" size="xl" />}
               </Avatar>
             </IconButton>
             <Typography sx={{ mt: 1 }} variant="h6">
