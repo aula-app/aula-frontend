@@ -2,6 +2,7 @@ import { Upload, ZoomIn, ZoomOut } from '@mui/icons-material';
 import { Button, Drawer, IconButton, Stack, Typography } from '@mui/material';
 import { createUseGesture, pinchAction } from '@use-gesture/react';
 import { ChangeEvent, useRef, useState } from 'react';
+import { localStorageGet } from '@/utils';
 import AvatarEditor from 'react-avatar-editor';
 import AppButton from '../AppButton';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +20,10 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
   const [image, setImage] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
 
+  const jwt_token = localStorageGet('token');
   const ref = useRef<HTMLDivElement>(null);
+  const avatarEditor = useRef(null);
+  const imageUpload = useRef(null);
 
   useGesture(
     {
@@ -39,13 +43,30 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
     setImage(url);
   };
 
+  const uploadImage = (event) => {
+    console.log(imageUpload.current.files[0])
+
+    var data = new FormData()
+    data.append('file', imageUpload.current.files[0])
+
+    fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/upload.php`, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + jwt_token,
+      },
+      body: data 
+        })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+  }
+
   return (
     <Drawer anchor="bottom" open={isOpen} onClose={closeMethod}>
       <Stack p={2}>
         <Typography variant="h5" pb={2}>
           {t('texts.edit', { var: t('generics.image') })}
         </Typography>
-        <input type="file" id="file" accept="image/*" hidden onChange={handleFileChange} />
+        <input ref={imageUpload} type="file" id="file" accept="image/*" hidden onChange={handleFileChange} />
         <label htmlFor="file">
           <Button variant="outlined" color="secondary" fullWidth component="span">
             <Upload sx={{ mr: 1 }} />
@@ -54,6 +75,7 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
         </label>
         <Stack pt={2} alignItems="center" overflow="clip" ref={ref}>
           <AvatarEditor
+            ref={avatarEditor}
             image={image || currentImage}
             width={250}
             height={250}
@@ -75,7 +97,7 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
           <Button color="secondary" onClick={closeMethod} sx={{ mr: 'auto' }}>
             {t('generics.cancel')}
           </Button>
-          <AppButton color="primary">{t('generics.confirm')}</AppButton>
+          <AppButton color="primary" onClick={uploadImage}>{t('generics.confirm')}</AppButton>
         </Stack>
       </Stack>
     </Drawer>
