@@ -220,7 +220,7 @@ const UserView = () => {
         <ImageEditor
           isOpen={isEditingImage}
           closeMethod={toggleDrawer}
-          currentImage={user.avatar || '/img/aula_kopf.png'}
+          currentImage={`${import.meta.env.VITE_APP_API_URL}/files/${userAvatar}` || '/img/aula_kopf.png'}
         />
       )}
       <Dialog
