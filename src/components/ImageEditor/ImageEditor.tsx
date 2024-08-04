@@ -45,8 +45,8 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
 
   const uploadImage = (event:any) => {
     var data = new FormData()
-    if (imageUpload.current && imageUpload.current.files)
-      data.append('file', imageUpload.current.files[0])
+    if (imageUpload.current && imageUpload.current["files"])
+      data.append('file', imageUpload.current["files"][0])
     data.append('fileType', 'avatar')
 
     fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/upload.php`, {
