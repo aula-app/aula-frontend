@@ -69,7 +69,6 @@ const UserView = () => {
       ['user_id']
     ).then((response: SingleUserResponseType) => {
       setUser(response.data)
-      console.log("PEG")
       databaseRequest(
         {
           model: 'Media',
