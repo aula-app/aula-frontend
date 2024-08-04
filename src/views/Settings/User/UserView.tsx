@@ -69,16 +69,16 @@ const UserView = () => {
       ['user_id']
     ).then((response: SingleUserResponseType) => {
       setUser(response.data)
-      downloadUserAvatar()
+      downloadUserAvatar(response.data.id)
     });
 
-  const downloadUserAvatar = () => {
+  const downloadUserAvatar = (user_id = -1) => {
       databaseRequest(
         {
           model: 'Media',
           method: 'userAvatar',
           arguments: {
-          user_id: (user)?user.id:0
+          user_id: (user_id >= 0)?user_id:user.id
           }
         }).then((res:any) => {
         setUserAvatar(res.data[0].filename)
