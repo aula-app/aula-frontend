@@ -78,7 +78,7 @@ const UserView = () => {
           model: 'Media',
           method: 'userAvatar',
           arguments: {
-            user_id: user.id
+          user_id: (user)?user.id:0
           }
         }).then((res:any) => {
         setUserAvatar(res.data[0].filename)
