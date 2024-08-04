@@ -69,18 +69,21 @@ const UserView = () => {
       ['user_id']
     ).then((response: SingleUserResponseType) => {
       setUser(response.data)
+      downloadUserAvatar()
+    });
+
+  const downloadUserAvatar = () => {
       databaseRequest(
         {
           model: 'Media',
           method: 'userAvatar',
           arguments: {
-            user_id: response.data.id
+            user_id: user.id
           }
-        }
-      ).then((res:any) => {
+        }).then((res:any) => {
         setUserAvatar(res.data[0].filename)
         });
-    });
+  }
 
   const onSubmit = async (formData: Object) =>
     databaseRequest(
@@ -219,7 +222,7 @@ const UserView = () => {
       {user && (
         <ImageEditor
           isOpen={isEditingImage}
-          closeMethod={toggleDrawer}
+          closeMethod={() => { downloadUserAvatar(); toggleDrawer() }}
           currentImage={`${import.meta.env.VITE_APP_API_URL}/files/${userAvatar}` || '/img/aula_kopf.png'}
         />
       )}
