@@ -37,6 +37,23 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
   const [filter, setFilter] = useState('');
   const [isOpen, setOpen] = useState(false);
 
+  const dataFetch = async () => {
+    const moreArgs = scope === 'ideas' ? { room_id: Number(params['room_id']) } : {};
+
+    await databaseRequest({
+      model: requestDefinitions[scope].model,
+      method: scope === 'ideas' ? 'getIdeasByRoom' : getRequest(scope, 'fetch'),
+      arguments: {
+        offset: 0,
+        limit: 0,
+        orderby: dataSettings[scope][0].orderId,
+        asc: 1,
+        extra_where: ` AND (${dataSettings[scope][0].name} LIKE '%${filter}%' OR ${dataSettings[scope][1].name} LIKE '%${filter}%')`,
+        ...moreArgs,
+      },
+    }).then((response: DatabaseResponseType) => (response.data ? setData(response.data) : getCurrentItems()));
+  };
+
   const normalizeData = (selectedItems: DatabaseResponseData[]) => {
     if (!data) return;
     if (!selectedItems.every((element) => data.some((some) => some.id === element.id)))
@@ -53,25 +70,6 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
       },
     }).then((response: DatabaseResponseType) => {
       !response || !response.data ? setSelected([]) : setSelected(response.data.map((item) => item.id));
-      response.data ? setData(response.data) : getAvailibleItems();
-    });
-  };
-
-  const getAvailibleItems = async () => {
-    const moreArgs = scope === 'ideas' ? { room_id: Number(params['room_id']) } : {};
-
-    await databaseRequest({
-      model: requestDefinitions[scope].model,
-      method: scope === 'ideas' ? 'getIdeasByRoom' : getRequest(scope, 'fetch'),
-      arguments: {
-        offset: 0,
-        limit: 0,
-        orderby: dataSettings[scope][0].orderId,
-        asc: 1,
-        extra_where: ` AND (${dataSettings[scope][0].name} LIKE '%${filter}%' OR ${dataSettings[scope][1].name} LIKE '%${filter}%')`,
-        ...moreArgs,
-      },
-    }).then((response: DatabaseResponseType) => {
       if (response && response.data) normalizeData(response.data);
     });
   };
@@ -88,7 +86,7 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
         },
       },
       ['updater_id']
-    ).then(getCurrentItems);
+    ).then(() => getCurrentItems());
   };
 
   const remove = async (itemId: number) => {
@@ -100,10 +98,11 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
         [getRequest(scope, 'id')]: itemId,
         [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
       },
-    }).then(getCurrentItems);
+    }).then(() => getCurrentItems());
   };
 
   const toggleSelect = (item: number) => {
+    //selected.includes(item) ? setSelected(selected.filter((key) => key !== item)) : setSelected([...selected, item]);
     selected.includes(item) ? remove(item) : select(item);
   };
 
@@ -117,11 +116,11 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
   };
 
   useEffect(() => {
-    getCurrentItems();
+    dataFetch();
   }, [filter, isOpen]);
 
   useEffect(() => {
-    getAvailibleItems();
+    getCurrentItems();
   }, [data]);
 
   return (
@@ -167,7 +166,7 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
                         overflow: 'clip',
                       }}
                       fullWidth
-                      onClick={() => select(item.id)}
+                      onClick={() => toggleSelect(item.id)}
                     >
                       <Checkbox checked={selected.includes(item.id)} onChange={() => toggleSelect(item.id)} />
                       <Stack pl={2} flex={1}>
