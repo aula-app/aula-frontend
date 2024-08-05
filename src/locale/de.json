@@ -34,6 +34,7 @@
     "button": "Login",
     "email": "Email",
     "forgot": "Passwort vergessen?",
+    "forgotRequest": "Das Passwort für das Konto wurde zurückgesetzt. Registrierte Benutzer erhalten einen Link zum Zurücksetzen in ihrer E-Mail.",
     "login": "Nutzername",
     "loginError": "Leider stimmt entweder Nutzername oder Passwort nicht.",
     "name": "Name",
