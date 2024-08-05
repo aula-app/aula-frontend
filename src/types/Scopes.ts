@@ -50,6 +50,7 @@ export interface IdeaType {
   sum_votes: number;
   sum_comments: number;
   user_id: number;
+  room_id: number;
   status: number;
   language_id: number;
   is_winner: number;

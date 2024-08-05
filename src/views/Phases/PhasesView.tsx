@@ -64,7 +64,7 @@ const MessagesView = () => {
                   onReload={ideasFetch}
                   key={item.id}
                   comments={item.sum_comments}
-                  to={`/phase/0/idea/${item.id}`}
+                  to={`/room/${item.room_id}/phase/0/idea/${item.id}`}
                 />
               </Grid>
             );
