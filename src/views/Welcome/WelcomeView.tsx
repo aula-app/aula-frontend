@@ -3,9 +3,8 @@ import { RoomCard } from '@/components/RoomCard';
 import { RoomsResponseType } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
 import { Grid, Stack, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AskConsent from '../AskConsent/AskConsentView';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
@@ -64,7 +63,6 @@ const WelcomeView = () => {
             ))}
         </Grid>
       </Stack>
-      <AskConsent />
     </Stack>
   );
 };

@@ -8,6 +8,7 @@ import SideBarFixed from './SideBar/SideBarFixed';
 import { AlterData } from '@/components/Data';
 import { useLocation } from 'react-router-dom';
 import { localStorageGet, parseJwt } from '@/utils';
+import AskConsent from '@/views/AskConsent/AskConsentView';
 
 const TITLE_PRIVATE = 'aula';
 
@@ -57,6 +58,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         }}
         onClose={() => setScope(undefined)}
       />
+      <AskConsent />
     </Stack>
   );
 };

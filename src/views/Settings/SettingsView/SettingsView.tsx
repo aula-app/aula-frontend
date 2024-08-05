@@ -95,42 +95,42 @@ const SettingsView = () => {
       </Stack>
       <FilterBar scope={setting_name} filter={filter} setFilter={setFilter} isOpen={openFilter} />
       <Divider />
-      {items && items.data && (
-        <>
-          <DataTable
-            handleOrder={handleOrder}
-            items={items.data}
-            orderAsc={orderAsc}
-            orderBy={orderBy}
-            scope={setting_name}
-            selected={selected}
-            setAlter={setAlter}
-            setLimit={setLimit}
-            setSelected={setSelected}
-          />
-          <EditBar
-            scope={setting_name}
-            selected={selected}
-            onAlter={setAlter}
-            onMove={setOpenMove}
-            onDelete={setOpenDelete}
-          />
-          <Divider />
-          <PaginationBar pages={Math.ceil(Number(items.count) / limit)} setPage={setPage} />
-          <AlterData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
-          <DeleteData
-            key={`d_${setting_name}`}
-            isOpen={openDelete}
-            id={selected}
-            scope={setting_name}
-            onClose={() => {
-              onClose();
-              setSelected([]);
-            }}
-          />
-          <MoveSettings key={`m_${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
-        </>
+      {items && items.data ? (
+        <DataTable
+          handleOrder={handleOrder}
+          items={items.data}
+          orderAsc={orderAsc}
+          orderBy={orderBy}
+          scope={setting_name}
+          selected={selected}
+          setAlter={setAlter}
+          setLimit={setLimit}
+          setSelected={setSelected}
+        />
+      ) : (
+        <Stack flex={1}></Stack>
       )}
+      <EditBar
+        scope={setting_name}
+        selected={selected}
+        onAlter={setAlter}
+        onMove={setOpenMove}
+        onDelete={setOpenDelete}
+      />
+      <Divider />
+      {items && items.data && <PaginationBar pages={Math.ceil(Number(items.count) / limit)} setPage={setPage} />}
+      <AlterData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
+      <DeleteData
+        key={`d_${setting_name}`}
+        isOpen={openDelete}
+        id={selected}
+        scope={setting_name}
+        onClose={() => {
+          onClose();
+          setSelected([]);
+        }}
+      />
+      <MoveSettings key={`m_${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
     </Stack>
   );
 };
