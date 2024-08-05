@@ -37,23 +37,6 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
   const [filter, setFilter] = useState('');
   const [isOpen, setOpen] = useState(false);
 
-  const dataFetch = async () => {
-    const moreArgs = scope === 'ideas' ? { room_id: Number(params['room_id']) } : {};
-
-    await databaseRequest({
-      model: requestDefinitions[scope].model,
-      method: scope === 'ideas' ? 'getIdeasByRoom' : getRequest(scope, 'fetch'),
-      arguments: {
-        offset: 0,
-        limit: 0,
-        orderby: dataSettings[scope][0].orderId,
-        asc: 1,
-        extra_where: ` AND (${dataSettings[scope][0].name} LIKE '%${filter}%' OR ${dataSettings[scope][1].name} LIKE '%${filter}%')`,
-        ...moreArgs,
-      },
-    }).then((response: DatabaseResponseType) => setData(response.data));
-  };
-
   const normalizeData = (selectedItems: DatabaseResponseData[]) => {
     if (!data) return;
     if (!selectedItems.every((element) => data.some((some) => some.id === element.id)))
@@ -70,6 +53,25 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
       },
     }).then((response: DatabaseResponseType) => {
       !response || !response.data ? setSelected([]) : setSelected(response.data.map((item) => item.id));
+      response.data ? setData(response.data) : getAvailibleItems();
+    });
+  };
+
+  const getAvailibleItems = async () => {
+    const moreArgs = scope === 'ideas' ? { room_id: Number(params['room_id']) } : {};
+
+    await databaseRequest({
+      model: requestDefinitions[scope].model,
+      method: scope === 'ideas' ? 'getIdeasByRoom' : getRequest(scope, 'fetch'),
+      arguments: {
+        offset: 0,
+        limit: 0,
+        orderby: dataSettings[scope][0].orderId,
+        asc: 1,
+        extra_where: ` AND (${dataSettings[scope][0].name} LIKE '%${filter}%' OR ${dataSettings[scope][1].name} LIKE '%${filter}%')`,
+        ...moreArgs,
+      },
+    }).then((response: DatabaseResponseType) => {
       if (response && response.data) normalizeData(response.data);
     });
   };
@@ -115,11 +117,11 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
   };
 
   useEffect(() => {
-    dataFetch();
+    getCurrentItems();
   }, [filter, isOpen]);
 
   useEffect(() => {
-    getCurrentItems();
+    getAvailibleItems();
   }, [data]);
 
   return (

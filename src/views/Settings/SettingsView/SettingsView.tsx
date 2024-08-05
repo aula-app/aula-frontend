@@ -123,7 +123,10 @@ const SettingsView = () => {
             isOpen={openDelete}
             id={selected}
             scope={setting_name}
-            onClose={onClose}
+            onClose={() => {
+              onClose();
+              setSelected([]);
+            }}
           />
           <MoveSettings key={`m_${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
         </>
