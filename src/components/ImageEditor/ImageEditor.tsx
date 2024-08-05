@@ -22,8 +22,8 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
 
   const jwt_token = localStorageGet('token');
   const ref = useRef<HTMLDivElement>(null);
-  const avatarEditor = useRef(null);
-  const imageUpload = useRef(null);
+  const avatarEditor = useRef<AvatarEditor>(null);
+  const imageUpload = useRef<HTMLInputElement>(null);
 
   useGesture(
     {
@@ -43,25 +43,34 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
     setImage(url);
   };
 
-  const uploadImage = (event:any) => {
-    var data = new FormData()
-    if (imageUpload.current && imageUpload.current["files"])
-      data.append('file', imageUpload.current["files"][0])
-    data.append('fileType', 'avatar')
+  const uploadImage = () => {
+    if (!avatarEditor.current) return;
+    const canvasScaled = avatarEditor.current.getImageScaledToCanvas();
 
-    fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/upload.php`, {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + jwt_token,
-      },
-      body: data 
-        })
-        .then((res) => closeMethod())
-        .then((data) => console.log(data))
-  }
+    canvasScaled.toBlob((blob) => {
+      if (!blob) return;
+      const formData = new FormData();
+      formData.append('file', blob, 'newfile.png');
+      formData.append('fileType', 'avatar');
+
+      // Post via axios or other transport method
+      fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/upload.php`, {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + jwt_token,
+        },
+        body: formData,
+      }).then(onClose);
+    });
+  };
+
+  const onClose = () => {
+    setImage(null);
+    closeMethod();
+  };
 
   return (
-    <Drawer anchor="bottom" open={isOpen} onClose={closeMethod}>
+    <Drawer anchor="bottom" open={isOpen} onClose={onClose}>
       <Stack p={2}>
         <Typography variant="h5" pb={2}>
           {t('texts.edit', { var: t('generics.image') })}
@@ -94,10 +103,12 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
           </Stack>
         </Stack>
         <Stack direction="row">
-          <Button color="secondary" onClick={closeMethod} sx={{ mr: 'auto' }}>
+          <Button color="secondary" onClick={onClose} sx={{ mr: 'auto' }}>
             {t('generics.cancel')}
           </Button>
-          <AppButton color="primary" onClick={uploadImage}>{t('generics.confirm')}</AppButton>
+          <AppButton color="primary" onClick={uploadImage}>
+            {t('generics.confirm')}
+          </AppButton>
         </Stack>
       </Stack>
     </Drawer>
