@@ -83,7 +83,7 @@ const SetPasswordView = () => {
   };
 
   const onSubmit = (formData: PassResponse) => {
-    if (!isValid) return;
+    //if (!isValid) return;
     setPass(formData.newPassword);
   };
 
