@@ -1,11 +1,11 @@
-import { AppIcon } from '@/components';
+import { AppIcon, AppIconButton } from '@/components';
 import MessageCard from '@/components/MessageCard';
-import ReportCard from '@/components/ReportCard';
 import { MessageType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet, messageConsentValues, parseJwt } from '@/utils';
-import { IconButton, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import FilterBar from '../Settings/SettingsView/FilterBar';
 
 /**
  * Renders "Messages" view
@@ -18,13 +18,19 @@ const MessagesView = () => {
   const jwt_payload = parseJwt(jwt_token);
   const [reports, setReports] = useState<MessageType[]>([]);
   const [messages, setMessages] = useState<MessageType[]>([]);
+  const [openMessageFilter, setOpenMessageFilter] = useState(false);
+  const [openReportFilter, setOpenReportFilter] = useState(false);
+  const [messageFilter, setMessageFilter] = useState<[string, string]>(['', '']);
+  const [reportFilter, setReportFilter] = useState<[string, string]>(['', '']);
 
   const reportFetch = async () =>
     await databaseRequest(
       {
         model: 'Message',
         method: jwt_payload.user_level >= 40 ? 'getMessages' : 'getMessagesByUser',
-        arguments: {},
+        arguments: {
+          extra_where: !reportFilter.includes('') ? ` AND ${reportFilter[0]} LIKE '%${reportFilter[1]}%'` : '',
+        },
       },
       jwt_payload.user_level >= 40 ? [] : ['user_id']
     ).then((response) => {
@@ -36,7 +42,9 @@ const MessagesView = () => {
     await databaseRequest({
       model: 'Text',
       method: 'getTexts',
-      arguments: {},
+      arguments: {
+        extra_where: !messageFilter.includes('') ? ` AND ${messageFilter[0]} LIKE '%${messageFilter[1]}%'` : '',
+      },
     }).then((response) => {
       if (!response.success) return;
       setMessages(response.data);
@@ -44,24 +52,26 @@ const MessagesView = () => {
 
   useEffect(() => {
     reportFetch();
+  }, [reportFilter]);
+
+  useEffect(() => {
     messageFetch();
-  }, []);
+  }, [messageFilter]);
 
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="h5" py={2}>
-          {t('views.messages')}
-        </Typography>
-        <IconButton>
-          <AppIcon icon="filter" />
-        </IconButton>
-      </Stack>
+      <Typography variant="h5" py={2}>
+        {t('views.messages')}
+      </Typography>
       {reports.length > 0 && (
         <Stack>
-          <Typography variant="h6" py={2} display="flex" alignItems="center">
-            <AppIcon icon="report" sx={{ mr: 1 }} /> {t('views.reports')}
-          </Typography>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" py={2} display="flex" alignItems="center">
+              <AppIcon icon="message" sx={{ mr: 1 }} /> {t('views.reports')}
+            </Typography>
+            <AppIconButton icon="filter" onClick={() => setOpenReportFilter(!openReportFilter)} />
+          </Stack>
+          <FilterBar scope="report" filter={reportFilter} setFilter={setReportFilter} isOpen={openReportFilter} />
           {reports.map((report) => (
             <MessageCard
               type={
@@ -80,9 +90,14 @@ const MessagesView = () => {
       )}
       {messages.length > 0 && (
         <Stack>
-          <Typography variant="h6" py={2} display="flex" alignItems="center">
-            <AppIcon icon="message" sx={{ mr: 1 }} /> {t('views.messages')}
-          </Typography>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" py={2} display="flex" alignItems="center">
+              <AppIcon icon="message" sx={{ mr: 1 }} /> {t('views.messages')}
+            </Typography>
+            <AppIconButton icon="filter" onClick={() => setOpenMessageFilter(!openMessageFilter)} />
+          </Stack>
+          <FilterBar scope="messages" filter={messageFilter} setFilter={setMessageFilter} isOpen={openMessageFilter} />
+
           {messages.map((message) => (
             <MessageCard
               type={messageConsentValues[message.user_needs_to_consent]}
