@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 /**
  * Renders "Ask Consent" view
@@ -19,6 +20,7 @@ import { Fragment, useEffect, useState } from 'react';
  */
 const AskConsent = () => {
   const jwt_token = localStorageGet('token');
+  const location = useLocation();
   const [data, setData] = useState([]);
   const [activeStep, setActiveStep] = useState(0);
 
@@ -62,7 +64,7 @@ const AskConsent = () => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [location]);
   return (
     <Dialog
       open={data.length > 0}

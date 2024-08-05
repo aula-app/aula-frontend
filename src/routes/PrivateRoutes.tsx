@@ -1,6 +1,5 @@
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
-import AskConsentView from '@/views/AskConsent';
 import MessagesView from '@/views/Messages';
 import MessageView from '@/views/Messages/Message';
 import ReportView from '@/views/Messages/Report';
@@ -22,9 +21,8 @@ import { Route, Routes } from 'react-router-dom';
 
 const PrivateRoutes = () => (
   <Routes>
-    <Route path="/" element={<AskConsentView />} />
+    <Route path="/" element={<WelcomeView />} />
     <Route path="about" element={<AboutView />} />
-    <Route path="welcome" element={<WelcomeView />} />
     <Route path="messages" element={<MessagesView />} />
     <Route path="messages/message/:message_id" element={<MessageView />} />
     <Route path="messages/report/:message_id" element={<ReportView />} />
