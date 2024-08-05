@@ -24,28 +24,29 @@ const PALETTE_COLORS: Partial<PaletteOptions> = {
 
 const PHASE_COLORS = {
   wild: {
+    light: blue[50],
     main: blue[100],
+    dark: blue[200],
   },
   discussion: {
+    light: deepPurple[50],
     main: deepPurple[100],
+    dark: deepPurple[200],
   },
   approval: {
+    light: deepOrange[50],
     main: deepOrange[100],
+    dark: deepOrange[200],
   },
   voting: {
+    light: amber[50],
     main: amber[100],
+    dark: amber[200],
   },
   results: {
+    light: green[50],
     main: green[100],
-  },
-  message: {
-    main: cyan[100],
-  },
-  announcement: {
-    main: deepPurple[100],
-  },
-  alert: {
-    main: red[100],
+    dark: green[200],
   },
 };
 
@@ -64,6 +65,15 @@ const OTHER_COLORS = {
   },
   disabled: {
     main: grey[200],
+  },
+  message: {
+    main: cyan[100],
+  },
+  announcement: {
+    main: deepPurple[100],
+  },
+  alert: {
+    main: red[100],
   },
   bug: {
     main: grey[200],

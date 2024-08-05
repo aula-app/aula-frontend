@@ -1,4 +1,4 @@
-import DashBoard from '@/components/DashBoard';
+import DashBoard from './DashBoard';
 import { RoomCard } from '@/components/RoomCard';
 import { RoomsResponseType } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';

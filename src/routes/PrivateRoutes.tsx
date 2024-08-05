@@ -3,6 +3,7 @@ import AboutView from '@/views/About';
 import MessagesView from '@/views/Messages';
 import MessageView from '@/views/Messages/Message';
 import ReportView from '@/views/Messages/Report';
+import PhasesView from '@/views/Phases';
 import RoomView from '@/views/Room';
 import IdeaView from '@/views/Room/Idea';
 import IdeasBoxView from '@/views/Room/IdeasBox';
@@ -23,6 +24,7 @@ const PrivateRoutes = () => (
   <Routes>
     <Route path="/" element={<WelcomeView />} />
     <Route path="about" element={<AboutView />} />
+    <Route path="phase/:phase" element={<PhasesView />} />
     <Route path="messages" element={<MessagesView />} />
     <Route path="messages/message/:message_id" element={<MessageView />} />
     <Route path="messages/report/:message_id" element={<ReportView />} />

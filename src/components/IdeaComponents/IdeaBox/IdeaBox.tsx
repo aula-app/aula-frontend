@@ -33,7 +33,12 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
         </Typography>
         <MoreOptions scope="boxes" id={box.id} onClose={onReload} canEdit={jwt_payload.user_level >= 50} />
       </Stack>
-      <AppLink to={`idea-box/${box.id}`} mb={2} key={box.id} disabled={noLink}>
+      <AppLink
+        to={`/room/${box.room_id}/phase/${box.phase_id}/idea-box/${box.id}`}
+        mb={2}
+        key={box.id}
+        disabled={noLink}
+      >
         <CardContent>
           <Typography variant="h6" noWrap>
             {box.name}

@@ -1,14 +1,16 @@
+import AppIcon from '@/components/AppIcon';
+import AppIconButton from '@/components/AppIconButton';
 import { dashboardPhases, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Badge, Box, Button, Collapse, Grid, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AppIcon from '../AppIcon';
-import AppIconButton from '../AppIconButton';
+import { useNavigate } from 'react-router-dom';
 
 const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboardPhases>;
 
 const DashBoard = ({ show = true }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [count, setCount] = useState<Record<number, number>>({});
@@ -85,18 +87,24 @@ const DashBoard = ({ show = true }) => {
             <Grid container spacing={1} p={1}>
               {displayPhases.map((phase, key) => (
                 <Grid item xs={6} sm={3} key={key}>
-                  <Box
+                  <Button
                     sx={{
+                      width: '100%',
                       py: 1,
                       px: 2,
                       backgroundColor: `${dashboardPhases[phase].name}.main`,
                       borderRadius: 9999,
                       textTransform: 'none',
+                      color: 'inherit',
+                      '&:hover': {
+                        backgroundColor: `${dashboardPhases[phase].name}.dark`,
+                      },
                     }}
+                    onClick={() => navigate(`/phase/${phase}`)}
                   >
                     <Stack direction="row" alignItems="center" width="100%">
                       <AppIcon icon={dashboardPhases[phase].name} />
-                      <Box
+                      <Typography
                         flexGrow={1}
                         overflow="hidden"
                         textOverflow="ellipsis"
@@ -105,10 +113,10 @@ const DashBoard = ({ show = true }) => {
                         pl={1}
                       >
                         {t(`phases.${dashboardPhases[phase].name}`)}
-                      </Box>
+                      </Typography>
                       {count[Number(phase)]}
                     </Stack>
-                  </Box>
+                  </Button>
                 </Grid>
               ))}
             </Grid>

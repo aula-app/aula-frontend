@@ -24,19 +24,29 @@ const PALETTE_COLORS: Partial<PaletteOptions> = {
 
 const PHASE_COLORS = {
   wild: {
+    light: 'hsl(200, 30%, 40%)',
     main: 'hsl(200, 30%, 30%)',
+    dark: 'hsl(200, 30%, 20%)',
   },
   discussion: {
+    light: 'hsl(260, 30%, 40%)',
     main: 'hsl(260, 30%, 30%)',
+    dark: 'hsl(260, 30%, 20%)',
   },
   approval: {
+    light: 'hsl(320, 30%, 40%)',
     main: 'hsl(320, 30%, 30%)',
+    dark: 'hsl(320, 30%, 20%)',
   },
   voting: {
+    light: 'hsl(40, 40%, 40%)',
     main: 'hsl(40, 40%, 30%)',
+    dark: 'hsl(40, 40%, 20%)',
   },
   results: {
+    light: 'hsl(100, 30%, 40%)',
     main: 'hsl(100, 30%, 30%)',
+    dark: 'hsl(100, 30%, 20%)',
   },
 };
 
@@ -64,6 +74,12 @@ const OTHER_COLORS = {
   },
   alert: {
     main: 'hsl(325, 30%, 30%)',
+  },
+  bug: {
+    main: blueGrey[900],
+  },
+  report: {
+    main: 'hsl(40, 40%, 20%)',
   },
 };
 
