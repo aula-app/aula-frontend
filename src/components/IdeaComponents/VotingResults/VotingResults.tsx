@@ -1,6 +1,7 @@
 import AppIcon from '@/components/AppIcon';
-import { Vote, votingOptions } from '@/utils';
+import { databaseRequest, Vote, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -15,6 +16,24 @@ interface VotingResultsProps {
 const VotingResults = ({ rejected = false, yourVote }: VotingResultsProps) => {
   const { t } = useTranslation();
   const params = useParams();
+  const [numVotes, setNumVotes] = useState<Array<-1 | 0 | 1>>([0, 0, 0]);
+
+  const getResults = async () => {
+    await databaseRequest({
+      model: 'Idea',
+      method: 'getIdeaVoteStats',
+      arguments: {
+        idea_id: params['idea_id'],
+      },
+    }).then((response) => {
+      if (response.data)
+        setNumVotes([response.data.votes_negative, response.data.votes_neutral, response.data.votes_positive]);
+    });
+  };
+
+  useEffect(() => {
+    getResults();
+  }, []);
 
   return (
     <Stack mb={2}>
@@ -52,7 +71,7 @@ const VotingResults = ({ rejected = false, yourVote }: VotingResultsProps) => {
                 mr={1.5}
                 sx={{ whiteSpace: 'nowrap' }}
               >
-                <AppIcon icon={option} size="small" sx={{ mr: 0.5 }} /> 3
+                <AppIcon icon={option} size="small" sx={{ mr: 0.5 }} /> {numVotes[i]}
               </Stack>
             ))}
           </Stack>

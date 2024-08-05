@@ -19,6 +19,20 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
   const [vote, setVote] = useState(0);
   const [icon, setIcon] = useState<CategoryIconType>();
   const [variant, setVariant] = useState<string>();
+  const [numVotes, setNumVotes] = useState<Array<-1 | 0 | 1>>([0, 0, 0]);
+
+  const getResults = async () => {
+    await databaseRequest({
+      model: 'Idea',
+      method: 'getIdeaVoteStats',
+      arguments: {
+        idea_id: idea.id,
+      },
+    }).then((response) => {
+      if (response.data)
+        setNumVotes([response.data.votes_negative, response.data.votes_neutral, response.data.votes_positive]);
+    });
+  };
 
   const getVote = async () =>
     await databaseRequest(
@@ -62,7 +76,8 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
 
   useEffect(() => {
     getIcon();
-    if (Number(phase) === 30) getVote();
+    if (Number(phase) >= 30) getVote();
+    if (Number(phase) >= 40) getResults();
   }, []);
 
   return (
@@ -132,11 +147,11 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
             <AppIcon icon={votingOptions[vote + 1]} />
           ) : (
             <>
-              {votingOptions.map((vote) => (
+              {votingOptions.map((vote, i) => (
                 <Stack direction="row" alignItems="center" key={vote}>
                   <AppIcon icon={vote} size="small" />{' '}
                   <Typography fontSize="small" ml={0.5}>
-                    {0}
+                    {numVotes[i]}
                   </Typography>
                 </Stack>
               ))}

@@ -41,7 +41,7 @@ const RecoveryPasswordView = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + jwt_token,
-          }        }
+          }}
       )
     ).json();
 
