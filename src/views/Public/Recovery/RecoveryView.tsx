@@ -35,7 +35,7 @@ const RecoveryPasswordView = () => {
   const onSubmit = async (formData: ObjectPropByName) => {
     const request = await (
       await fetch(
-        `/controllers/forgot_password?email=${formData.email}`,
+        `${import.meta.env.VITE_APP_API_URL}/api/controllers/forgot_password.php?email=${formData.email}`,
         {
           method: "GET",
           headers: {
