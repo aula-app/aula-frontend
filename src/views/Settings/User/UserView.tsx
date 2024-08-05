@@ -1,5 +1,6 @@
 import { AppButton, AppIcon } from '@/components';
 import ImageEditor from '@/components/ImageEditor';
+import UserAvatar from '@/components/UserAvatar';
 import { useAppStore } from '@/store';
 import { SingleUserResponseType } from '@/types/RequestTypes';
 import { UserType } from '@/types/Scopes';
@@ -33,7 +34,6 @@ import * as yup from 'yup';
 const UserView = () => {
   const { t } = useTranslation();
   const [user, setUser] = useState<UserType | null>(null);
-  const [userAvatar, setUserAvatar] = useState<string>('');
   const [openDelete, setOpenDelete] = useState(false);
   const [, dispatch] = useAppStore();
   const [isEditingImage, setEditingImage] = useState<boolean>(false);
@@ -57,8 +57,6 @@ const UserView = () => {
     resolver: yupResolver(schema),
   });
 
-  const user_avatar = ''
-
   const getUserInfo = async () =>
     databaseRequest(
       {
@@ -68,22 +66,8 @@ const UserView = () => {
       },
       ['user_id']
     ).then((response: SingleUserResponseType) => {
-      setUser(response.data)
-      downloadUserAvatar(response.data.id)
+      setUser(response.data);
     });
-
-  const downloadUserAvatar = (user_id = -1) => {
-      databaseRequest(
-        {
-          model: 'Media',
-          method: 'userAvatar',
-          arguments: {
-          user_id: (user_id >= 0)?user_id:((user) ? user.id : 0)
-          }
-        }).then((res:any) => {
-        setUserAvatar(res.data[0].filename)
-        });
-  }
 
   const onSubmit = async (formData: Object) =>
     databaseRequest(
@@ -158,17 +142,7 @@ const UserView = () => {
               >
                 <AppIcon icon="camera" />
               </Stack>
-              <Avatar
-                sx={{
-                  width: 128,
-                  height: 128,
-                  fontSize: '3rem',
-                }}
-                alt={user.displayname || 'User Name'}
-                src={`${import.meta.env.VITE_APP_API_URL}/files/${userAvatar}` || ''}
-              >
-                {!userAvatar && <AppIcon icon="avatar" size="xl" />}
-              </Avatar>
+              <UserAvatar id={user.id} />
             </IconButton>
             <Typography sx={{ mt: 1 }} variant="h6">
               {user.username}
@@ -222,8 +196,10 @@ const UserView = () => {
       {user && (
         <ImageEditor
           isOpen={isEditingImage}
-          closeMethod={() => { downloadUserAvatar(); toggleDrawer() }}
-          currentImage={`${import.meta.env.VITE_APP_API_URL}/files/${userAvatar}` || '/img/aula_kopf.png'}
+          closeMethod={() => {
+            toggleDrawer();
+          }}
+          id={user.id}
         />
       )}
       <Dialog

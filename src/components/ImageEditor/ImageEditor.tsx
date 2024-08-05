@@ -1,8 +1,8 @@
 import { Upload, ZoomIn, ZoomOut } from '@mui/icons-material';
 import { Button, Drawer, IconButton, Stack, Typography } from '@mui/material';
 import { createUseGesture, pinchAction } from '@use-gesture/react';
-import { ChangeEvent, useRef, useState } from 'react';
-import { localStorageGet } from '@/utils';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { databaseRequest, localStorageGet } from '@/utils';
 import AvatarEditor from 'react-avatar-editor';
 import AppButton from '../AppButton';
 import { useTranslation } from 'react-i18next';
@@ -12,18 +12,30 @@ const useGesture = createUseGesture([pinchAction]);
 interface NewCommentProps {
   closeMethod: () => void;
   isOpen: boolean;
-  currentImage: string;
+  id: number;
 }
 
-export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentProps) => {
+export const ImageEditor = ({ closeMethod, isOpen, id }: NewCommentProps) => {
   const { t } = useTranslation();
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string>();
   const [scale, setScale] = useState(1);
 
   const jwt_token = localStorageGet('token');
   const ref = useRef<HTMLDivElement>(null);
   const avatarEditor = useRef<AvatarEditor>(null);
   const imageUpload = useRef<HTMLInputElement>(null);
+
+  const downloadUserAvatar = () => {
+    databaseRequest({
+      model: 'Media',
+      method: 'userAvatar',
+      arguments: {
+        user_id: id,
+      },
+    }).then((res: any) => {
+      setImage(`${import.meta.env.VITE_APP_API_URL}/files/${res.data[0].filename}`);
+    });
+  };
 
   useGesture(
     {
@@ -65,9 +77,13 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
   };
 
   const onClose = () => {
-    setImage(null);
+    setImage(undefined);
     closeMethod();
   };
+
+  useEffect(() => {
+    downloadUserAvatar();
+  }, []);
 
   return (
     <Drawer anchor="bottom" open={isOpen} onClose={onClose}>
@@ -82,26 +98,28 @@ export const ImageEditor = ({ closeMethod, isOpen, currentImage }: NewCommentPro
             {image ? 'Change Image' : 'Upload Image'}
           </Button>
         </label>
-        <Stack pt={2} alignItems="center" overflow="clip" ref={ref}>
-          <AvatarEditor
-            ref={avatarEditor}
-            image={image || currentImage}
-            width={250}
-            height={250}
-            border={50}
-            borderRadius={999}
-            color={[255, 255, 255, 0.75]} // RGBA
-            scale={scale}
-          />
-          <Stack direction="row">
-            <IconButton onClick={() => setScale(scale - 0.2)} disabled={scale <= 1}>
-              <ZoomOut />
-            </IconButton>
-            <IconButton onClick={() => setScale(scale + 0.2)} disabled={scale >= 3}>
-              <ZoomIn />
-            </IconButton>
+        {!!image && (
+          <Stack pt={2} alignItems="center" overflow="clip" ref={ref}>
+            <AvatarEditor
+              ref={avatarEditor}
+              image={image}
+              width={250}
+              height={250}
+              border={50}
+              borderRadius={999}
+              color={[255, 255, 255, 0.75]} // RGBA
+              scale={scale}
+            />
+            <Stack direction="row">
+              <IconButton onClick={() => setScale(scale - 0.2)} disabled={scale <= 1}>
+                <ZoomOut />
+              </IconButton>
+              <IconButton onClick={() => setScale(scale + 0.2)} disabled={scale >= 3}>
+                <ZoomIn />
+              </IconButton>
+            </Stack>
           </Stack>
-        </Stack>
+        )}
         <Stack direction="row">
           <Button color="secondary" onClick={onClose} sx={{ mr: 'auto' }}>
             {t('generics.cancel')}
