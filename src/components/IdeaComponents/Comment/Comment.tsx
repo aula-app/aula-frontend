@@ -5,6 +5,7 @@ import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import ChatBubble from '@/components/ChatBubble';
 import { Button, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import UserAvatar from '@/components/UserAvatar';
 
 interface Props {
   comment: CommentType;
@@ -62,7 +63,7 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <AppIcon icon="account" size="large" />
+        <UserAvatar id={comment.user_id} size="small" />
         <Stack maxWidth="100%" overflow="hidden" ml={2} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>

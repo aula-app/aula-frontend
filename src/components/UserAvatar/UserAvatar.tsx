@@ -1,19 +1,21 @@
-import { Avatar, Stack, Typography } from '@mui/material';
-import AppIcon from '../AppIcon';
-import { useEffect, useState } from 'react';
 import { databaseRequest } from '@/utils';
-import { SingleUserResponseType } from '@/types/RequestTypes';
+import { Avatar } from '@mui/material';
+import { useEffect, useState } from 'react';
+import AppIcon from '../AppIcon';
 
 interface Props {
   id: number;
+  size?: 'small' | 'large';
 }
 
 /**
  * Renders User info with Avatar
  * @component UserInfo
  */
-const UserAvatar = ({ id }: Props) => {
+const UserAvatar = ({ id, size }: Props) => {
   const [userAvatar, setUserAvatar] = useState<string>('');
+
+  const currentSize = size === 'small' ? 32 : size === 'large' ? 128 : 56;
 
   const downloadUserAvatar = () => {
     databaseRequest({
@@ -34,8 +36,8 @@ const UserAvatar = ({ id }: Props) => {
   return (
     <Avatar
       sx={{
-        width: 128,
-        height: 128,
+        width: currentSize,
+        height: currentSize,
         fontSize: '3rem',
       }}
       alt="User avatar"
