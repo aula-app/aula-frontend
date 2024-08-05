@@ -6,6 +6,7 @@ import AppIcon from '@/components/AppIcon';
 import AppLink from '@/components/AppLink';
 import ChatBubble from '@/components/ChatBubble';
 import MoreOptions from '@/components/MoreOptions';
+import UserAvatar from '@/components/UserAvatar';
 
 interface Props {
   idea: IdeaType;
@@ -89,7 +90,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <AppIcon icon="account" size="xl" />
+        <UserAvatar id={idea.user_id} />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>

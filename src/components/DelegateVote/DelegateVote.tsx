@@ -18,6 +18,7 @@ import { grey } from '@mui/material/colors';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import UserAvatar from '../UserAvatar';
 
 interface Props {
   isOpen: boolean;
@@ -141,9 +142,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
                       }}
                       onClick={() => select(user)}
                     >
-                      <Avatar>
-                        <AppIcon icon="avatar" />
-                      </Avatar>
+                      <UserAvatar id={user.id} />
                       <Stack ml={2}>
                         <Typography>{user.realname}</Typography>
                         <Typography color="secondary" fontSize="small">
@@ -164,9 +163,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
               </Typography>
               {selected && (
                 <Stack flex={1} alignItems="center" justifyContent="center">
-                  <Avatar sx={{ width: 56, height: 56, mb: 1 }}>
-                    <AppIcon icon="avatar" size="xl" />
-                  </Avatar>
+                  <UserAvatar id={selected.id} size="large" />
                   <Typography>{selected.realname}</Typography>
                   <Typography color="secondary" fontSize="small">
                     {selected.displayname}

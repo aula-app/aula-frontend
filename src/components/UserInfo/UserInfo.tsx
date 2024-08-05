@@ -3,6 +3,7 @@ import { databaseRequest } from '@/utils';
 import { Avatar, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '../AppIcon';
+import UserAvatar from '../UserAvatar';
 
 /**
  * Renders User info with Avatar
@@ -28,9 +29,7 @@ const UserInfo = () => {
     <>
       {user && (
         <Stack alignItems="center" minHeight="fit-content" marginBottom={2}>
-          <Avatar sx={{ width: 64, height: 64, mb: 1 }}>
-            <AppIcon icon="avatar" size="xl" />
-          </Avatar>
+          <UserAvatar id={user.id} />
           <Typography sx={{ mt: 1 }} variant="h6">
             {user.username}
           </Typography>
