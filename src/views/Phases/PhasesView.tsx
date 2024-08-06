@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FilterBar from '../Settings/SettingsView/FilterBar';
 import { useParams } from 'react-router-dom';
-import { BoxesResponseType, IdeasResponseType, itemsResponseType } from '@/types/RequestTypes';
+import { BoxesResponseType, IdeasResponseType } from '@/types/RequestTypes';
 import { IdeaBox, IdeaBubble } from '@/components/IdeaComponents';
 
 /**
