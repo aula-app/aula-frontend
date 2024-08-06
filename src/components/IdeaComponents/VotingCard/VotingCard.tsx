@@ -1,4 +1,4 @@
-import { databaseRequest, Vote, votingOptions } from '@/utils';
+import { databaseRequest, localStorageGet, parseJwt, Vote, votingOptions } from '@/utils';
 import { Button, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -10,6 +10,8 @@ import AppIcon from '@/components/AppIcon';
  */
 const VotingCard = () => {
   const params = useParams();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [vote, setVote] = useState<Vote>(0);
   const [hasVoted, setHasVoted] = useState<Boolean>(false);
 
@@ -55,6 +57,7 @@ const VotingCard = () => {
               bgcolor: vote + 1 === i && hasVoted ? `${option}.main` : 'transparent',
               borderRadius: 8,
             }}
+            disabled={jwt_payload.user_level >= 20}
             key={i}
             onClick={() => registerVote(i as Vote)}
           >

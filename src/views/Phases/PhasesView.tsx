@@ -1,14 +1,10 @@
-import { AppIcon, AppIconButton } from '@/components';
-import MessageCard from '@/components/MessageCard';
-import { MessageType } from '@/types/Scopes';
-import { dashboardPhases, databaseRequest, localStorageGet, messageConsentValues, parseJwt } from '@/utils';
+import { IdeaBox, IdeaBubble } from '@/components/IdeaComponents';
+import { BoxesResponseType, IdeasResponseType } from '@/types/RequestTypes';
+import { dashboardPhases, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Grid, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import FilterBar from '../Settings/SettingsView/FilterBar';
 import { useParams } from 'react-router-dom';
-import { BoxesResponseType, IdeasResponseType, itemsResponseType } from '@/types/RequestTypes';
-import { IdeaBox, IdeaBubble } from '@/components/IdeaComponents';
 
 /**
  * Renders "Phase" view
