@@ -68,11 +68,10 @@ const SelectField = ({ form, control, disabled = false, ...restOfProps }: Props)
             fullWidth
             disabled={disabled}
             select
-            // @ts-ignore
             {...field}
-            // @ts-ignore
             error={!!fieldState.error}
             {...restOfProps}
+            InputLabelProps={{ shrink: !!field.value }}
           >
             {currentOptions.map((option) => (
               <MenuItem value={option.value} key={option.label}>

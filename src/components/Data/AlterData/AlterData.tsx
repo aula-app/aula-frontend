@@ -100,7 +100,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
       setValue(
         // @ts-ignore
         field.name,
-        item ? item.data[field.name] : otherData[field.name] || formsSettings[field.name].defaultValue
+        item ? item.data[field.name] : otherData[field.name]
       );
     });
   };

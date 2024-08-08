@@ -1,6 +1,6 @@
 import { formsSettings } from '@/utils';
 import { Stack, TextField, Typography } from '@mui/material';
-import { Control, FieldErrors, UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form-mui';
+import { Control, Controller, FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import SelectField from './SelectField';
 import ImageField from './ImageField';
@@ -11,7 +11,7 @@ type Props = {
   disabled?: boolean;
   hidden?: boolean;
   register: UseFormRegister<{}>;
-  getValues: UseFormGetValues<{}>;
+  getValues: () => void;
   setValue: UseFormSetValue<{}>;
   errors: FieldErrors<{}>;
 };
@@ -56,6 +56,7 @@ const FormInput = ({
             helperText={t(errors[form]?.message || ' ')}
             sx={{ mx: 2, width: 80 }}
             {...restOfProps}
+            InputLabelProps={{ shrink: true }}
           />
           <Typography noWrap pb={1}>
             {t(`generics.days`)}
@@ -66,22 +67,30 @@ const FormInput = ({
       return <ImageField form={form} control={control} setValue={setValue} />;
     default:
       return (
-        <TextField
-          label={t(`settings.${form}`)}
-          required
-          minRows={formsSettings[form].type === 'text' ? 4 : 1}
-          multiline={formsSettings[form].type === 'text'}
-          disabled={disabled}
-          type={formsSettings[form].type}
-          fullWidth
+        <Controller
           // @ts-ignore
-          {...register(form)}
+          name={form}
+          control={control}
           // @ts-ignore
-          error={errors[form] ? true : false}
+          defaultValue={formsSettings[form].defaultValue || ''}
           // @ts-ignore
-          helperText={t(errors[form]?.message || ' ')}
-          sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
-          {...restOfProps}
+          render={({ field, fieldState }) => (
+            <TextField
+              label={t(`settings.${form}`)}
+              required
+              minRows={formsSettings[form].type === 'text' ? 4 : 1}
+              multiline={formsSettings[form].type === 'text'}
+              disabled={disabled}
+              type={formsSettings[form].type}
+              fullWidth
+              {...field}
+              error={!!fieldState.error}
+              helperText={t(fieldState.error?.message || ' ')}
+              sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
+              {...restOfProps}
+              InputLabelProps={{ shrink: !!field.value }}
+            />
+          )}
         />
       );
   }
