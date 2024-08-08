@@ -1,3 +1,4 @@
+import { AppIcon } from '@/components';
 import { AlterData } from '@/components/Data';
 import { IdeaBubble } from '@/components/Idea';
 import { IdeasResponseType } from '@/types/RequestTypes';
@@ -57,7 +58,7 @@ const WildIdeas = () => {
             }}
             onClick={() => setAdd(true)}
           >
-            <Add />
+            <AppIcon icon="idea" />
           </Fab>
           <AlterData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id }} />
         </>
