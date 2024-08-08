@@ -40,7 +40,7 @@ const TopBar = ({ home, setReport, ...restOfProps }: Props) => {
 
         <Breadcrumbs aria-label="breadcrumb" sx={{ flexGrow: 1, textAlign: 'center' }}>
           <AppLink underline="hover" color="inherit" to="/">
-            Aula
+            aula
           </AppLink>
           {displayPath.map((currentPath, key) => {
             const link = location.slice(0, 2 * (key + 1) + (currentPath === 'messages' ? 0 : 3)).join('/');
