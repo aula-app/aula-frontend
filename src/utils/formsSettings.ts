@@ -31,20 +31,19 @@ const duration = {
   schema: yup.number().min(1, 'validation.min').required('validation.required'),
 };
 
-const boolSelect = {
-  type: 'select',
-  schema: yup.number().required('validation.required'),
-  defaultValue: 0,
-  options: [
-    { label: 'generics.no', value: 0 },
-    { label: 'generics.yes', value: 1 },
-  ],
-};
-
 export const formsSettings = {
   about_me: longText,
   approval_comment: longText,
-  approved: boolSelect,
+  approved: {
+    type: 'select',
+    schema: yup.number().required('validation.required'),
+    defaultValue: 0,
+    options: [
+      { label: '-', value: 0 },
+      { label: 'generics.no', value: -1 },
+      { label: 'generics.yes', value: 1 },
+    ],
+  },
   body: longText,
   content: longText,
   consent_text: {
@@ -61,7 +60,6 @@ export const formsSettings = {
     schema: yup.string().email('validation.email').required('validation.required'),
   },
   headline: shortText,
-  is_winner: boolSelect,
   name: shortText,
   password: {
     type: 'password',

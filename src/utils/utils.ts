@@ -9,7 +9,7 @@ export const IS_WEBWORKER =
 /* eslint-enable no-restricted-globals */
 
 const jwt = localStorageGet('token');
-const user = parseJwt(jwt);
+const user = !!jwt ? parseJwt(jwt) : false;
 
 export function getCurrentVersion(): string {
   return import.meta.env?.npm_package_version ?? import.meta.env.VITE_APP_VERSION ?? 'unknown';
@@ -20,16 +20,16 @@ export function getCurrentEnvironment(): string {
 }
 
 export function getCurrentUser(): number {
-  if (!jwt) return 0;
+  if (!user) return 0;
   return user.user_id;
 }
 
 export function checkPermissions(role: number): boolean {
-  if (!jwt) return false;
+  if (!user) return false;
   return user.user_level >= role;
 }
 
 export function checkSelf(id: number): boolean {
-  if (!jwt) return false;
+  if (!user) return false;
   return user.user_id === id;
 }

@@ -53,6 +53,11 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
     setLiked(!liked);
   };
 
+  const onClose = () => {
+    onReload();
+    getCategory();
+  };
+
   useEffect(() => {
     hasLiked();
     getCategory();
@@ -81,7 +86,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
             <MoreOptions
               scope="ideas"
               id={idea.id}
-              onClose={onReload}
+              onClose={onClose}
               canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id))}
             />
           </Stack>
@@ -106,7 +111,6 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
             {idea.displayname}
           </Typography>
         </Stack>
-        {/* <Chip icon={<AppIcon icon="settings" />} label="category" color="warning" /> */}
         {comments > 0 && (
           <Stack direction="row" alignItems="center">
             <AppIcon icon="chat" sx={{ mr: 0.5 }} />

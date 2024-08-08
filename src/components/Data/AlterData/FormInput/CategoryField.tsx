@@ -2,12 +2,12 @@ import AppIcon from '@/components/AppIcon';
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { ObjectPropByName } from '@/types/Generics';
 import { databaseRequest, SelectOptionsType } from '@/utils';
-import { MenuItem, Select, SelectChangeEvent, Stack, TextField } from '@mui/material';
-import { ChangeEventHandler, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { MenuItem, Stack, TextField } from '@mui/material';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
-  id: number;
+  id?: number;
   disabled?: boolean;
   setUpdate: Dispatch<
     SetStateAction<
@@ -67,12 +67,14 @@ const CategoryField = ({ id, disabled = false, setUpdate, ...restOfProps }: Prop
   };
 
   useEffect(() => {
-    setUpdate([{ model: 'Idea', method: 'addIdeaToCategory', args: { idea_id: id, category_id: selected } }]);
+    const args = { category_id: selected } as ObjectPropByName;
+    if (id) args['idea_id'] = id;
+    setUpdate([{ model: 'Idea', method: 'addIdeaToCategory', args: args }]);
   }, [selected]);
 
   useEffect(() => {
     fetchOptions();
-    getCategory();
+    if (id) getCategory();
   }, []);
 
   return (
