@@ -32,7 +32,7 @@ const TopBar = ({ home, setReport, ...restOfProps }: Props) => {
   return (
     <AppBar elevation={0}>
       <Toolbar>
-        {location[1] === 'welcome' ? (
+        {location[1] === '' ? (
           <AppIcon icon="logo" size="large" sx={{ mr: 1 }} />
         ) : (
           <AppIconButton icon="back" onClick={() => goto(returnLocation().join('/'))} />
