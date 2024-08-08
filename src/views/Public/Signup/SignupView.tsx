@@ -105,7 +105,7 @@ const SignupView = () => {
               error={errors.fullname ? true : false}
               helperText={errors.fullname?.message || ' '}
             />
-            <KnowMore text="Some info text.">
+            <KnowMore title="Some info text.">
               <TextField
                 required
                 label={t('login.email')}

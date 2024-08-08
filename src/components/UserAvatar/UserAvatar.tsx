@@ -18,14 +18,16 @@ const UserAvatar = ({ id, size }: Props) => {
   const currentSize = size === 'small' ? 32 : size === 'large' ? 128 : 56;
 
   const downloadUserAvatar = () => {
+    if (!id) return;
     databaseRequest({
       model: 'Media',
       method: 'userAvatar',
       arguments: {
         user_id: id,
       },
-    }).then((res: any) => {
-      setUserAvatar(res.data[0].filename);
+    }).then((result: any) => {
+      if (!result || !result.success) return;
+      setUserAvatar(result.data[0].filename);
     });
   };
 

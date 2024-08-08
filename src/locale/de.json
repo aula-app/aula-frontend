@@ -130,6 +130,16 @@
     "update": "Neue {{var}} für ",
     "yourVote": "So hast du abgestimmt: {{var}}"
   },
+  "tooltips": {
+    "wild": "Hier kannst du „wilde Ideen“ posten. Du kannst auch Verbesserungsvorschläge schreiben und andere Ideen mit dem Herz liken.",
+    "discussion": "Hier werden Ideen in passenden Boxen sortiert. Sie werden durch weitere Bearbeitung und Verbesserungsvorschläge zu echten Projektplänen.",
+    "approval": "Das Prüfungsteam prüft, ob die Ideen durchführbar sind. Sie werden dann zur Abstimmung freigegeben oder abgelehnt.",
+    "voting": "Hier kannst du über Ideen abstimmen, endlich!",
+    "results": "Hier siehst du, wie über Ideen abgestimmt wurde. Die grün markierten Ideen können jetzt umgesetzt werden.",
+    "quorum": "Hier siehst du, wie viele Likes die Idee braucht, damit sie in die nächste Phase (Diskussion) kommt.",
+    "comment": "Ein Verbesserungsvorschlag sorgt dafür, dass eine Idee besser ausgearbeitet wird.",
+    "delegate": "Du kannst deine Stimme an eine andere Person abgeben. Die andere Person nutzt dann deine Stimme. Du kannst deine Stimme jederzeit zurücknehmen, indem du einfach selbst abstimmst."
+  },
   "validation": {
     "agree": "Du musst zustimmen, um dich anzumelden.",
     "consentNeeded": "Zustimmung erforderlich",
