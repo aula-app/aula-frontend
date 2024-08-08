@@ -1,6 +1,6 @@
 import { formsSettings } from '@/utils';
 import { Stack, TextField, Typography } from '@mui/material';
-import { Control, FieldErrors, UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form-mui';
+import { Control, Controller, FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import SelectField from './SelectField';
 import ImageField from './ImageField';
@@ -11,6 +11,7 @@ type Props = {
   disabled?: boolean;
   hidden?: boolean;
   register: UseFormRegister<{}>;
+  getValues: () => void;
   setValue: UseFormSetValue<{}>;
   errors: FieldErrors<{}>;
 };
@@ -22,6 +23,7 @@ type Props = {
 const FormInput = ({
   form,
   register,
+  getValues,
   setValue,
   control,
   errors,
@@ -65,23 +67,30 @@ const FormInput = ({
       return <ImageField form={form} control={control} setValue={setValue} />;
     default:
       return (
-        <TextField
-          label={t(`settings.${form}`)}
-          required
-          minRows={formsSettings[form].type === 'text' ? 4 : 1}
-          multiline={formsSettings[form].type === 'text'}
-          disabled={disabled}
-          type={formsSettings[form].type}
-          fullWidth
+        <Controller
           // @ts-ignore
-          {...register(form)}
+          name={form}
+          control={control}
           // @ts-ignore
-          error={errors[form] ? true : false}
-          // @ts-ignore
-          helperText={t(errors[form]?.message || ' ')}
-          sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
-          {...restOfProps}
-          InputLabelProps={{ shrink: true }}
+          defaultValue={0}
+          render={({ field, fieldState }) => (
+            <TextField
+              label={t(`settings.${form}`)}
+              required
+              minRows={formsSettings[form].type === 'text' ? 4 : 1}
+              multiline={formsSettings[form].type === 'text'}
+              disabled={disabled}
+              type={formsSettings[form].type}
+              fullWidth
+              defaultValue={formsSettings[form].defaultValue || ''}
+              {...field}
+              error={!!fieldState.error}
+              helperText={t(fieldState.error?.message || ' ')}
+              sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
+              {...restOfProps}
+              InputLabelProps={{ shrink: !!field.value }}
+            />
+          )}
         />
       );
   }
