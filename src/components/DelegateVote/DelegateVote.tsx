@@ -176,19 +176,19 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
         <Button color="secondary" onClick={onClose}>
-          Cancel
+          {t('defaults.cancel')}
         </Button>
         {!confirm ? (
           <Button variant="contained" onClick={() => setConfirm(true)} disabled={!selected}>
-            Select
+            {t('delegation.select')}
           </Button>
         ) : delegate.length === 0 ? (
           <Button variant="contained" onClick={setDelegate}>
-            Delegate
+            {t('delegation.delegate')}
           </Button>
         ) : (
           <Button variant="contained" onClick={removeDelegate}>
-            Revoke
+            {t('delegation.revoke')}
           </Button>
         )}
       </DialogActions>

@@ -2,7 +2,8 @@
   "delegation": {
     "confirm": "Are you sure you want to {{var}} the voting rights on this box to the following person?",
     "delegate": "delegate",
-    "revoke": "revoke"
+    "revoke": "revoke",
+    "select": "select"
   },
   "generics": {
     "add": "Add new {{var}}",

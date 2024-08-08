@@ -23,7 +23,7 @@ const KnowMore = ({ title, children }: Props) => {
             position: 'absolute',
             top: 0,
             right: 0,
-            transform: 'translate3d(75%,-30%,0)',
+            transform: 'translate3d(75%,-50%,0)',
             color: grey[500],
             zIndex: 5,
           }}

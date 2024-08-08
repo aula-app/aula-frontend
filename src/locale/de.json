@@ -2,7 +2,8 @@
   "delegation": {
     "confirm": "Bist du sicher, dass du das Stimmrecht für dieses Feld der folgenden Person {{var}} willst?",
     "delegate": "Stimme übertragen",
-    "revoke": "entziehen"
+    "revoke": "entziehen",
+    "select": "Wählen"
   },
   "generics": {
     "add": "Neuen {{var}} hinzufügen",
