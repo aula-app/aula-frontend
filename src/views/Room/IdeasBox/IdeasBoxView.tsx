@@ -85,7 +85,7 @@ const IdeasBoxView = () => {
                   sx={{ ml: 'auto', mt: 0.5, px: 1, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}
                   onClick={() => setDelegationDialog(true)}
                 >
-                  <Typography variant="caption">or</Typography>
+                  <Typography variant="caption">{t('generics.or')}</Typography>
                   <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
                     {delegationStatus && delegationStatus.length > 0
                       ? t('delegation.revoke')
