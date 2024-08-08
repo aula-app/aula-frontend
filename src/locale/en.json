@@ -2,7 +2,8 @@
   "delegation": {
     "confirm": "Are you sure you want to {{var}} the voting rights on this box to the following person?",
     "delegate": "delegate",
-    "revoke": "revoke"
+    "revoke": "revoke",
+    "select": "select"
   },
   "generics": {
     "add": "Add new {{var}}",
@@ -129,6 +130,16 @@
     "unaltenticated": "The page you are trying to access requires authentication",
     "update": "New {{var}} for ",
     "yourVote": "How you voted: {{var}}"
+  },
+  "tooltips": {
+    "wild": "You can post 'wild ideas' here. You can also write suggestions for improvement and like other ideas with the heart.",
+    "discussion": "Ideas are sorted into boxes here. They become real project plans when the authors continually work on them, and others provide suggestions for improvement.",
+    "approval": "The approval team checks whether the ideas are feasible. They are then approved or rejected for voting.",
+    "voting": "Here you can vote on ideas, finally!",
+    "results": "Here you can see how ideas were voted on. The ideas marked in green can now be implemented.",
+    "quorum": "Here you can see how many likes the idea needs to reach the next phase (discussion).",
+    "comment": "A comment is a suggestion for improvement that ensures that an idea is better developed.",
+    "delegate": "You can delegate your vote to another person. The other person then uses your vote. You can revoke your vote at any time by simply voting yourself."
   },
   "validation": {
     "agree": "You must agree to sign in.",

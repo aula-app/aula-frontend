@@ -1,5 +1,6 @@
 import { AlterData } from '@/components/Data';
 import { ApprovalCard, Comment, IdeaBubble, IdeaDocument, VotingCard, VotingResults } from '@/components/Idea';
+import KnowMore from '@/components/KnowMore';
 import { CommentsResponseType, SingleIdeaResponseType } from '@/types/RequestTypes';
 import { Vote, checkPermissions, databaseRequest } from '@/utils';
 import { Add } from '@mui/icons-material';
@@ -90,7 +91,9 @@ const IdeaView = () => {
           {comments && comments.data && (
             <>
               <Typography variant="h5" py={2}>
-                {String(comments.count)} {t('views.comments')}
+                <KnowMore title={t('tooltips.comment')}>
+                  {String(comments.count)} {t('views.comments')}
+                </KnowMore>
               </Typography>
               {comments.data.map((comment) => (
                 <Comment key={comment.id} comment={comment} onReload={commentsFetch} disabled={phase > 10} />

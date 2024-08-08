@@ -135,7 +135,6 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
   };
 
   useEffect(() => {
-    console.log(item);
     updateValues();
     if (scope === 'ideas' && !params['phase']) getIdeaPhase();
   }, [item]);

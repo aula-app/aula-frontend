@@ -3,6 +3,7 @@ import BoxCard from '@/components/BoxCard';
 import { AlterData, MoveData } from '@/components/Data';
 import DelegateVote from '@/components/DelegateVote';
 import { IdeaCard } from '@/components/Idea';
+import KnowMore from '@/components/KnowMore';
 import { DelegationType } from '@/types/Delegation';
 import { IdeasResponseType, SingleBoxResponseType } from '@/types/RequestTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
@@ -97,7 +98,9 @@ const IdeasBoxView = () => {
                       ? t('delegation.revoke')
                       : t('delegation.delegate')}
                   </Typography>
-                  <AppIcon icon="delegate" size="small" />
+                  <KnowMore title={t('tooltips.delegate')}>
+                    <AppIcon icon="delegate" size="small" />
+                  </KnowMore>
                 </Button>
               )}
             </Stack>

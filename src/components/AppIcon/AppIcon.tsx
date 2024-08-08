@@ -80,6 +80,7 @@ import {
   HiOutlineUsers,
   HiOutlineXCircle,
   HiOutlineXMark,
+  HiQuestionMarkCircle,
   HiTag,
 } from 'react-icons/hi2';
 import {
@@ -240,6 +241,7 @@ export const ICONS = {
   group: HiOutlineUsers,
   heart: HiOutlineHeart,
   heartfull: HiHeart,
+  help: HiQuestionMarkCircle,
   home: HiOutlineHome,
   idea: HiOutlineLightBulb,
   info: HiOutlineInformationCircle,
