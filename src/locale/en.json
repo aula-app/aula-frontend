@@ -23,11 +23,13 @@
     "modeDark": "Dark mode",
     "modeLight": "Light mode",
     "next": "next",
+    "no": "no",
     "or": "or",
     "print": "Print",
     "save": "Save",
     "title": "aula",
-    "wrong": "Something went wrong."
+    "wrong": "Something went wrong.",
+    "yes": "yes"
   },
   "login": {
     "agree": "Agree with Terms of Use and Privacy Policy.",
@@ -68,6 +70,8 @@
   },
   "settings": {
     "about_me": "Description",
+    "approval_comment": "Approval comment",
+    "approved": "Approve?",
     "body": "Text",
     "categories": "Categories",
     "consent_text": "Consent message",
@@ -78,6 +82,7 @@
     "displayname": "Display Name",
     "email": "Email",
     "headline": "Title",
+    "is_winner": "Set winner?",
     "last_update": "Last update",
     "name": "Name",
     "password": "Password",
@@ -111,7 +116,7 @@
     "edit": "Edit {{var}}",
     "exportData": "Export account data",
     "exportRequest": "Data export requested",
-    "ideaBox": "{{var}} ideas to {{phase}}",
+    "boxCard": "{{var}} ideas to {{phase}}",
     "move": "move selected {{var}} to",
     "moveData": "Where do you want to move {{var}} to?",
     "new": "new {{var}}",

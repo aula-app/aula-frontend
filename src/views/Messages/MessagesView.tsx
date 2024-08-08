@@ -1,7 +1,7 @@
 import { AppIcon, AppIconButton } from '@/components';
 import MessageCard from '@/components/MessageCard';
 import { MessageType } from '@/types/Scopes';
-import { databaseRequest, localStorageGet, messageConsentValues, parseJwt } from '@/utils';
+import { checkPermissions, databaseRequest, messageConsentValues } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,8 +14,6 @@ import FilterBar from '../Settings/SettingsView/FilterBar';
 
 const MessagesView = () => {
   const { t } = useTranslation();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const [reports, setReports] = useState<MessageType[]>([]);
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [openMessageFilter, setOpenMessageFilter] = useState(false);
@@ -27,12 +25,12 @@ const MessagesView = () => {
     await databaseRequest(
       {
         model: 'Message',
-        method: jwt_payload.user_level >= 40 ? 'getMessages' : 'getMessagesByUser',
+        method: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
         arguments: {
           extra_where: !reportFilter.includes('') ? ` AND ${reportFilter[0]} LIKE '%${reportFilter[1]}%'` : '',
         },
       },
-      jwt_payload.user_level >= 40 ? [] : ['user_id']
+      checkPermissions(40) ? [] : ['user_id']
     ).then((response) => {
       if (!response.success) return;
       setReports(response.data);

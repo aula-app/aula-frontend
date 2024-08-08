@@ -1,7 +1,7 @@
 import { AlterData } from '@/components/Data';
-import { IdeaBubble } from '@/components/IdeaComponents';
+import { IdeaBubble } from '@/components/Idea';
 import { IdeasResponseType } from '@/types/RequestTypes';
-import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { checkPermissions, databaseRequest } from '@/utils';
 import { Add } from '@mui/icons-material';
 import { Fab, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -13,8 +13,6 @@ import { useParams } from 'react-router-dom';
  */
 
 const WildIdeas = () => {
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const params = useParams();
   const [ideas, setIdeas] = useState<IdeasResponseType>();
   const [add, setAdd] = useState(false);
@@ -48,7 +46,7 @@ const WildIdeas = () => {
             to={`idea/${idea.id}`}
           />
         ))}
-      {jwt_payload.user_level >= 20 && (
+      {checkPermissions(20) && (
         <>
           <Fab
             aria-label="add"

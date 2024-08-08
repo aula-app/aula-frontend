@@ -7,7 +7,7 @@ import TopBar from './TopBar';
 import SideBarFixed from './SideBar/SideBarFixed';
 import { AlterData } from '@/components/Data';
 import { useLocation } from 'react-router-dom';
-import { localStorageGet, parseJwt } from '@/utils';
+import { getCurrentUser, localStorageGet, parseJwt } from '@/utils';
 import AskConsent from '@/views/AskConsent/AskConsentView';
 
 const TITLE_PRIVATE = 'aula';
@@ -19,8 +19,6 @@ const TITLE_PRIVATE = 'aula';
 
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const location = useLocation();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = jwt_token ? parseJwt(jwt_token) : null;
   const [scope, setScope] = useState<'bug' | 'report'>();
 
   const onMobile = useOnMobile();
@@ -53,7 +51,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         }}
         metadata={{
           location: location.pathname,
-          user: jwt_payload?.user_id,
+          user: getCurrentUser(),
           userAgent: window.navigator.userAgent,
         }}
         onClose={() => setScope(undefined)}

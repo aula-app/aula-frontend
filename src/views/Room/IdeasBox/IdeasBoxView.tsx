@@ -1,10 +1,11 @@
 import { AppIcon, AppLink } from '@/components';
+import BoxCard from '@/components/BoxCard';
 import { MoveData } from '@/components/Data';
 import DelegateVote from '@/components/DelegateVote';
-import { IdeaBox, IdeaCard } from '@/components/IdeaComponents';
+import { IdeaCard } from '@/components/Idea';
 import { DelegationType } from '@/types/Delegation';
 import { IdeasResponseType, SingleBoxResponseType } from '@/types/RequestTypes';
-import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { checkPermissions, databaseRequest } from '@/utils';
 import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
@@ -16,8 +17,6 @@ import { useParams } from 'react-router-dom';
  */
 const IdeasBoxView = () => {
   const { t } = useTranslation();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const params = useParams();
   const [box, setBox] = useState<SingleBoxResponseType>();
   const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
@@ -72,7 +71,7 @@ const IdeasBoxView = () => {
       >
         {box && box.data && (
           <>
-            <IdeaBox box={box.data || {}} noLink onReload={boxFetch} />
+            <BoxCard box={box.data || {}} noLink onReload={boxFetch} />
             <Stack direction="row">
               <Typography variant="h6" p={2}>
                 {boxIdeas &&
@@ -98,7 +97,7 @@ const IdeasBoxView = () => {
             </Stack>
             {boxIdeas && (
               <>
-                {jwt_payload.user_level >= 50 && (
+                {checkPermissions(50) && (
                   <MoveData parentId={Number(params['box_id'])} scope="ideas" onClose={boxIdeasFetch} />
                 )}
                 <Grid container spacing={1} pt={1}>

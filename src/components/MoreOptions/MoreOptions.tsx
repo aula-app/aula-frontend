@@ -9,7 +9,7 @@ import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
 import { AlterData, DeleteData } from '../Data';
 import { useLocation } from 'react-router-dom';
-import { localStorageGet, parseJwt } from '@/utils';
+import { getCurrentUser, localStorageGet, parseJwt } from '@/utils';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -33,8 +33,6 @@ interface Props {
 const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = jwt_token ? parseJwt(jwt_token) : null;
   const [currentId, setId] = useState<number>();
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState<SettingNamesType>();
@@ -51,7 +49,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       },
       metadata: {
         location: location.pathname,
-        user: jwt_payload?.user_id,
+        user: getCurrentUser(),
       },
     },
     {
@@ -64,7 +62,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       },
       metadata: {
         location: location.pathname,
-        user: jwt_payload?.user_id,
+        user: getCurrentUser(),
         userAgent: window.navigator.userAgent,
       },
     },

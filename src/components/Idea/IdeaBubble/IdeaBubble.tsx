@@ -1,5 +1,5 @@
 import { CategoryType, IdeaType } from '@/types/Scopes';
-import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { checkPermissions, checkSelf, databaseRequest, localStorageGet, parseJwt } from '@/utils';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '@/components/AppIcon';
@@ -18,8 +18,6 @@ interface Props {
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
 export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const [liked, setLiked] = useState(false);
   const [category, setCategory] = useState<CategoryType>();
   const displayDate = new Date(idea.created);
@@ -84,7 +82,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
               scope="ideas"
               id={idea.id}
               onClose={onReload}
-              canEdit={jwt_payload.user_level >= 30 || jwt_payload.user_id === idea.user_id}
+              canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id))}
             />
           </Stack>
         </Stack>
@@ -115,7 +113,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
             {comments}
           </Stack>
         )}
-        <Button color="error" size="small" onClick={toggleLike}>
+        <Button color="error" size="small" onClick={toggleLike} disabled={checkPermissions(20)}>
           <AppIcon icon={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
           {idea.sum_likes}
         </Button>
