@@ -1,5 +1,5 @@
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
-import { SettingNamesType } from '@/types/SettingsTypes';
+import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
 import {
   checkPermissions,
   databaseRequest,
@@ -18,6 +18,8 @@ import FormInput from './FormInput';
 import CategoryField from './FormInput/CategoryField';
 import IconField from './FormInput/IconField';
 import ImageField from './FormInput/ImageField';
+import { useParams } from 'react-router-dom';
+import SetWinnerField from './FormInput/SetWinnerField';
 
 interface Props {
   id?: number;
@@ -34,7 +36,9 @@ interface Props {
  */
 const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Props) => {
   const { t } = useTranslation();
+  const params = useParams();
   const [item, setItem] = useState<SingleResponseType>();
+  const [phase, setPhase] = useState<RoomPhases>((params['phase'] as RoomPhases) || '0');
   const [update, setUpdate] = useState<Array<{ model: string; method: string; args: ObjectPropByName }>>([]);
 
   const schema = dataSettings[scope].reduce((schema, field) => {
@@ -111,6 +115,17 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
     updateValues();
   };
 
+  const getIdeaPhase = async () => {
+    if (!item) return;
+    await databaseRequest({
+      model: 'Topic',
+      method: 'getTopicPhase',
+      arguments: {
+        topic_id: item.data.topic_id,
+      },
+    }).then((response) => setPhase(response.data));
+  };
+
   const onSubmit = (formData: Object) => {
     if (typeof id !== 'undefined') otherData[getRequest(scope, 'id')] = id;
     dataSave({
@@ -120,7 +135,9 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
   };
 
   useEffect(() => {
+    console.log(item);
     updateValues();
+    if (scope === 'ideas' && !params['phase']) getIdeaPhase();
   }, [item]);
 
   useEffect(() => {
@@ -138,7 +155,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
             <FormContainer>
               {dataSettings[scope].map((field) => (
                 <Fragment key={field.name}>
-                  {checkPermissions(field.role) && (
+                  {checkPermissions(field.role) && (!field.phase || field.phase === Number(phase)) && (
                     <>
                       {field.name !== 'description_internal' ? (
                         <>
@@ -170,6 +187,9 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
                 </Fragment>
               ))}
               {scope === 'ideas' && <CategoryField id={id} setUpdate={setUpdate} />}
+              {id && item && scope === 'ideas' && Number(phase) === 40 && (
+                <SetWinnerField id={id} defaultValue={!!item.data.is_winner} setUpdate={setUpdate} />
+              )}
               <Stack direction="row">
                 <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
                   {t('generics.cancel')}

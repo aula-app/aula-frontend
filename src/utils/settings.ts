@@ -37,9 +37,8 @@ export const dataSettings = {
     { name: 'title', orderId: 9, role: 20 },
     { name: 'content', orderId: 7, role: 20 },
     { name: 'room_id', orderId: 8, role: 50 },
-    // { name: 'approval_comment', orderId: 10, role: 50, phase: 20 },
-    // { name: 'approved', orderId: 11, role: 50, phase: 20 },
-    // { name: 'is_winner', orderId: 12, role: 50, phase: 30 },
+    { name: 'approval_comment', orderId: 10, role: 50, phase: 20 },
+    { name: 'approved', orderId: 11, role: 50, phase: 20 },
   ],
   messages: [
     { name: 'headline', orderId: 5, role: 50 },

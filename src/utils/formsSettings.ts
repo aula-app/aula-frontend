@@ -61,7 +61,6 @@ export const formsSettings = {
     schema: yup.string().email('validation.email').required('validation.required'),
   },
   headline: shortText,
-  is_winner: boolSelect,
   name: shortText,
   password: {
     type: 'password',
