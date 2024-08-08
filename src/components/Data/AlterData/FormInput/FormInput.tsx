@@ -11,7 +11,6 @@ type Props = {
   disabled?: boolean;
   hidden?: boolean;
   register: UseFormRegister<{}>;
-  getValues: UseFormGetValues<{}>;
   setValue: UseFormSetValue<{}>;
   errors: FieldErrors<{}>;
 };
@@ -23,7 +22,6 @@ type Props = {
 const FormInput = ({
   form,
   register,
-  getValues,
   setValue,
   control,
   errors,
@@ -56,6 +54,7 @@ const FormInput = ({
             helperText={t(errors[form]?.message || ' ')}
             sx={{ mx: 2, width: 80 }}
             {...restOfProps}
+            InputLabelProps={{ shrink: true }}
           />
           <Typography noWrap pb={1}>
             {t(`generics.days`)}
@@ -82,6 +81,7 @@ const FormInput = ({
           helperText={t(errors[form]?.message || ' ')}
           sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
           {...restOfProps}
+          InputLabelProps={{ shrink: true }}
         />
       );
   }

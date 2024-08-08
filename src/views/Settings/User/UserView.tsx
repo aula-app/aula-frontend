@@ -158,6 +158,7 @@ const UserView = () => {
               helperText={errors.about_me?.message || ' '}
               fullWidth
               sx={{ mt: 2 }}
+              InputLabelProps={{ shrink: true }}
             />
             <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(onSubmit)}>
               {t('generics.save')}

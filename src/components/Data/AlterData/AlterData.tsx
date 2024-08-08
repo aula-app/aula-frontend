@@ -46,7 +46,6 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
     setValue,
     control,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(yup.object(schema).required()),
@@ -153,7 +152,6 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
                             form={field.name}
                             register={register}
                             control={control}
-                            getValues={getValues}
                             setValue={setValue}
                             errors={errors}
                             hidden={['bug', 'report'].includes(scope) && field.name === 'headline'}
