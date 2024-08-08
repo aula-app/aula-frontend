@@ -5,15 +5,16 @@ type DataSetting = {
   name: keyof PossibleFields;
   orderId: number;
   role: 10 | 20 | 30 | 40 | 50 | 60;
+  phase?: 0 | 10 | 20 | 30 | 40;
 };
 
 /* ROLE DEFINITIONS
-10 => reading only, can report and bugs
-20 => comment, create ideas, like
-30 => edit comments and Ideas, delete within it´s own rooms
-40 => same thing, but in all rooms
-50 => Create rooms and users, edit roles, reports
-60 => System changes, restore backups, bug repors
+10 => Guest: reading only, can report and bugs
+20 => User: comment, create ideas, like
+30 => Moderator: edit comments and Ideas, delete within it´s own rooms
+40 => Super Moderator: same thing, but in all rooms
+50 => Admin: Create rooms and users, edit roles, reports
+60 => System Admin: System changes, restore backups, bug repors
 */
 
 export const dataSettings = {
@@ -22,10 +23,10 @@ export const dataSettings = {
     { name: 'description_public', orderId: 7, role: 50 },
     { name: 'room_id', orderId: 6, role: 50 },
     { name: 'phase_id', orderId: 5, role: 50 },
-    { name: 'phase_duration_1', orderId: 5, role: 50 },
-    { name: 'phase_duration_2', orderId: 5, role: 50 },
-    { name: 'phase_duration_3', orderId: 5, role: 50 },
-    { name: 'phase_duration_4', orderId: 5, role: 50 },
+    { name: 'phase_duration_1', orderId: -1, role: 50 },
+    { name: 'phase_duration_2', orderId: -1, role: 50 },
+    { name: 'phase_duration_3', orderId: -1, role: 50 },
+    { name: 'phase_duration_4', orderId: -1, role: 50 },
   ],
   bug: [
     { name: 'headline', orderId: 1, role: 10 },
@@ -36,6 +37,9 @@ export const dataSettings = {
     { name: 'title', orderId: 9, role: 20 },
     { name: 'content', orderId: 7, role: 20 },
     { name: 'room_id', orderId: 8, role: 50 },
+    { name: 'approval_comment', orderId: 10, role: 50, phase: 20 },
+    { name: 'approved', orderId: 11, role: 50, phase: 20 },
+    { name: 'is_winner', orderId: 12, role: 50, phase: 30 },
   ],
   messages: [
     { name: 'headline', orderId: 5, role: 50 },

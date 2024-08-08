@@ -1,14 +1,7 @@
 import { AlterData } from '@/components/Data';
-import {
-  ApprovalCard,
-  Comment,
-  IdeaBubble,
-  IdeaDocument,
-  VotingCard,
-  VotingResults,
-} from '@/components/IdeaComponents';
+import { ApprovalCard, Comment, IdeaBubble, IdeaDocument, VotingCard, VotingResults } from '@/components/Idea';
 import { CommentsResponseType, SingleIdeaResponseType } from '@/types/RequestTypes';
-import { Vote, databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { Vote, checkPermissions, databaseRequest } from '@/utils';
 import { Add } from '@mui/icons-material';
 import { Fab, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -22,8 +15,6 @@ import { useParams } from 'react-router';
 
 const IdeaView = () => {
   const { t } = useTranslation();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const params = useParams();
   const [idea, setIdea] = useState<SingleIdeaResponseType>();
   const [add, setAdd] = useState(false);
@@ -106,7 +97,7 @@ const IdeaView = () => {
               ))}
             </>
           )}
-          {phase < 20 && jwt_payload.user_level >= 20 && (
+          {phase < 20 && checkPermissions(20) && (
             <Stack alignItems="center">
               <Fab
                 aria-label="add"

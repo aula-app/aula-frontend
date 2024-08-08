@@ -1,5 +1,5 @@
 import { AppIcon, AppLink } from '@/components';
-import { localStorageGet, parseJwt } from '@/utils';
+import { checkPermissions } from '@/utils';
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import List from '@mui/material/List';
 import { Fragment, FunctionComponent, MouseEventHandler } from 'react';
@@ -19,13 +19,12 @@ interface Props {
  */
 const SideBarNavList: FunctionComponent<Props> = ({ onClick, ...restOfProps }) => {
   const { t } = useTranslation();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
+
   return (
     <List component="nav" {...restOfProps} sx={{ flex: 1, px: 1 }}>
       {SIDEBAR_ITEMS.map(({ icon, path, title, role }) => (
         <Fragment key={`${title}-${path}`}>
-          {jwt_payload.user_level >= role && (
+          {checkPermissions(role) && (
             <ListItemButton
               component={AppLink}
               to={path}

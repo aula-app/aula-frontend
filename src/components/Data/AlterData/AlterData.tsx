@@ -1,12 +1,11 @@
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import {
+  checkPermissions,
   databaseRequest,
   dataSettings,
   formsSettings,
   getRequest,
-  localStorageGet,
-  parseJwt,
   requestDefinitions,
 } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,9 +15,9 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import FormInput from './FormInput';
+import CategoryField from './FormInput/CategoryField';
 import IconField from './FormInput/IconField';
 import ImageField from './FormInput/ImageField';
-import CategoryField from './FormInput/CategoryField';
 
 interface Props {
   id?: number;
@@ -35,9 +34,7 @@ interface Props {
  */
 const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Props) => {
   const { t } = useTranslation();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
-  const [items, setItems] = useState<SingleResponseType>();
+  const [item, setItem] = useState<SingleResponseType>();
   const [update, setUpdate] = useState<Array<{ model: string; method: string; args: ObjectPropByName }>>([]);
 
   const schema = dataSettings[scope].reduce((schema, field) => {
@@ -63,7 +60,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
       arguments: {
         [getRequest(scope, 'id')]: id,
       },
-    }).then((response: SingleResponseType) => setItems(response));
+    }).then((response: SingleResponseType) => setItem(response));
   };
 
   const dataSave = async (args: ObjectPropByName) => {
@@ -103,13 +100,13 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
       setValue(
         // @ts-ignore
         field.name,
-        items ? items.data[field.name] : otherData[field.name] || formsSettings[field.name].defaultValue
+        item ? item.data[field.name] : otherData[field.name] || formsSettings[field.name].defaultValue
       );
     });
   };
 
   const clearValues = () => {
-    setItems(undefined);
+    setItem(undefined);
     updateValues();
   };
 
@@ -123,7 +120,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
 
   useEffect(() => {
     updateValues();
-  }, [items]);
+  }, [item]);
 
   useEffect(() => {
     !id ? clearValues() : dataFetch();
@@ -140,7 +137,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
             <FormContainer>
               {dataSettings[scope].map((field) => (
                 <Fragment key={field.name}>
-                  {jwt_payload.user_level >= field.role && (
+                  {checkPermissions(field.role) && (
                     <>
                       {field.name !== 'description_internal' ? (
                         <>

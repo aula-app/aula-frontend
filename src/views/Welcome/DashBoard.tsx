@@ -1,6 +1,6 @@
 import AppIcon from '@/components/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
-import { dashboardPhases, databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { checkPermissions, dashboardPhases, databaseRequest } from '@/utils';
 import { Badge, Box, Button, Collapse, Grid, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,8 +11,6 @@ const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboa
 const DashBoard = ({ show = true }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const [count, setCount] = useState<Record<number, number>>({});
   const [reports, setReports] = useState(0);
   const [messages, setMessages] = useState(0);
@@ -42,8 +40,8 @@ const DashBoard = ({ show = true }) => {
     });
     dashboardFetch(
       'Message',
-      jwt_payload.user_level >= 40 ? 'getMessages' : 'getMessagesByUser',
-      jwt_payload.user_level >= 40 ? [] : ['user_id']
+      checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
+      checkPermissions(40) ? [] : ['user_id']
     ).then((response) => {
       if (response && response.success) setReports(response.count);
     });

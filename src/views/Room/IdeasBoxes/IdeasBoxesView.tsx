@@ -1,8 +1,8 @@
 import { AppIcon } from '@/components';
+import BoxCard from '@/components/BoxCard';
 import { AlterData, MoveData } from '@/components/Data';
-import { IdeaBox } from '@/components/IdeaComponents';
 import { BoxesResponseType } from '@/types/RequestTypes';
-import { databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { checkPermissions, databaseRequest } from '@/utils';
 import { Fab, Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,8 +11,6 @@ import { useNavigate, useParams } from 'react-router-dom';
  * url: /room/:room_id/:phase
  */
 const IdeasBoxView = () => {
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
   const goto = useNavigate();
   const params = useParams();
   const [add, setAdd] = useState(false);
@@ -43,17 +41,17 @@ const IdeasBoxView = () => {
 
   return (
     <Stack alignItems="center">
-      {jwt_payload.user_level >= 50 && <MoveData parentId={Number(params.room_id)} scope="users" />}
+      {checkPermissions(50) && <MoveData parentId={Number(params.room_id)} scope="users" />}
       <Grid container spacing={2} p={1}>
         {boxes &&
           boxes.data &&
           boxes.data.map((box) => (
             <Grid key={box.id} item xs={12} sm={6} lg={4} xl={3} sx={{ scrollSnapAlign: 'center' }}>
-              <IdeaBox box={box} onReload={boxesFetch} />
+              <BoxCard box={box} onReload={boxesFetch} />
             </Grid>
           ))}
       </Grid>
-      {jwt_payload.user_level >= 50 && (
+      {checkPermissions(30) && (
         <>
           <Fab
             aria-label="add"

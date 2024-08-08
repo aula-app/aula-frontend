@@ -2,20 +2,19 @@ import AppIcon from '@/components/AppIcon';
 import AppLink from '@/components/AppLink';
 import MoreOptions from '@/components/MoreOptions';
 import { BoxType } from '@/types/Scopes';
-import { localStorageGet, parseJwt, phases } from '@/utils';
+import { checkPermissions, phases } from '@/utils';
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-interface IdeaBoxProps {
+interface BoxCardProps {
   box: BoxType;
   noLink?: boolean;
   onReload: () => void;
 }
 
-const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
+const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
   const { t } = useTranslation();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
+
   return (
     <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
       <Stack
@@ -29,9 +28,9 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
       >
         <AppIcon icon={phases[box.phase_id].name} sx={{ mx: 1 }} />
         <Typography variant="caption" mr="auto">
-          {t('texts.ideaBox', { var: box.ideas_num, phase: t(`phases.${phases[box.phase_id].name}`) })}
+          {t('texts.boxCard', { var: box.ideas_num, phase: t(`phases.${phases[box.phase_id].name}`) })}
         </Typography>
-        <MoreOptions scope="boxes" id={box.id} onClose={onReload} canEdit={jwt_payload.user_level >= 50} />
+        <MoreOptions scope="boxes" id={box.id} onClose={onReload} canEdit={checkPermissions(30)} />
       </Stack>
       <AppLink
         to={`/room/${box.room_id}/phase/${box.phase_id}/idea-box/${box.id}`}
@@ -74,4 +73,4 @@ const IdeaBox = ({ box, noLink = false, onReload }: IdeaBoxProps) => {
   );
 };
 
-export default IdeaBox;
+export default BoxCard;

@@ -23,11 +23,13 @@
     "modeDark": "Dunkler Modus",
     "modeLight": "Lichtmodus",
     "next": "nächste",
+    "no": "Nein",
     "or": "oder",
     "print": "Drucken",
     "save": "Speichern",
     "title": "aula",
-    "wrong": "Etwas ist schief gelaufen."
+    "wrong": "Etwas ist schief gelaufen.",
+    "yes": "Ja"
   },
   "login": {
     "agree": "Stimme den Nutzungsbedingungen und der Datenschutzrichtlinie zu.",
@@ -68,6 +70,8 @@
   },
   "settings": {
     "about_me": "Über mich",
+    "approval_comment": "Kommentar zur Genehmigung",
+    "approved": "Genehmigen?",
     "body": "Text",
     "categories": "Kategorien",
     "consent_text": "Zustimmungsmeldung",
@@ -78,6 +82,7 @@
     "displayname": "Anzeigename",
     "email": "E-Mail",
     "headline": "Titel",
+    "is_winner": "Gewinner einstellen?",
     "last_update": "Letzte Aktualisierung",
     "name": "Name",
     "password": "Passwort",
@@ -111,7 +116,7 @@
     "edit": "{{var}} bearbeiten",
     "exportData": "Kontodaten exportieren",
     "exportRequest": "Datenexport angefordert",
-    "ideaBox": "{{var}} Ideen zur {{phase}}",
+    "boxCard": "{{var}} Ideen zur {{phase}}",
     "move": "Bewege {{var}}",
     "moveData": "Wohin möchtest du {{var}} bewegen?",
     "new": "neu {{var}}",

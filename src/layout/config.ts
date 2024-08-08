@@ -40,13 +40,13 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
     title: 'boxes',
     path: '/settings/boxes',
     icon: 'box',
-    role: 50,
+    role: 30,
   },
   {
     title: 'ideas',
     path: '/settings/ideas',
     icon: 'idea',
-    role: 50,
+    role: 30,
   },
   {
     title: 'messages',
