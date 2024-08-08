@@ -80,6 +80,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
     ).then((response) => {
       if (!response.success) return;
       update.forEach((update) => {
+        if (!(getRequest(scope, 'id') in update.args)) update.args[getRequest(scope, 'id')] = response.data;
         databaseRequest(
           {
             model: update.model,
@@ -89,9 +90,9 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
             },
           },
           ['updater_id']
-        );
+        ).then(() => onClose());
       });
-      onClose();
+      if (update.length === 0) onClose();
     });
   };
 
@@ -168,7 +169,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
                   )}
                 </Fragment>
               ))}
-              {scope === 'ideas' && id && <CategoryField id={id} setUpdate={setUpdate} />}
+              {scope === 'ideas' && <CategoryField id={id} setUpdate={setUpdate} />}
               <Stack direction="row">
                 <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
                   {t('generics.cancel')}
