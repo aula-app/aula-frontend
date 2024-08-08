@@ -72,7 +72,8 @@ const FormInput = ({
           name={form}
           control={control}
           // @ts-ignore
-          defaultValue={0}
+          defaultValue={formsSettings[form].defaultValue || ''}
+          // @ts-ignore
           render={({ field, fieldState }) => (
             <TextField
               label={t(`settings.${form}`)}
@@ -82,7 +83,6 @@ const FormInput = ({
               disabled={disabled}
               type={formsSettings[form].type}
               fullWidth
-              defaultValue={formsSettings[form].defaultValue || ''}
               {...field}
               error={!!fieldState.error}
               helperText={t(fieldState.error?.message || ' ')}
