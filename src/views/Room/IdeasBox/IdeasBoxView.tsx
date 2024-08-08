@@ -1,12 +1,12 @@
 import { AppIcon, AppLink } from '@/components';
 import BoxCard from '@/components/BoxCard';
-import { MoveData } from '@/components/Data';
+import { AlterData, MoveData } from '@/components/Data';
 import DelegateVote from '@/components/DelegateVote';
 import { IdeaCard } from '@/components/Idea';
 import { DelegationType } from '@/types/Delegation';
 import { IdeasResponseType, SingleBoxResponseType } from '@/types/RequestTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Box, Button, Grid, Stack, Typography } from '@mui/material';
+import { Box, Button, Fab, Grid, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ import { useParams } from 'react-router-dom';
 const IdeasBoxView = () => {
   const { t } = useTranslation();
   const params = useParams();
+  const [add, setAdd] = useState(false);
   const [box, setBox] = useState<SingleBoxResponseType>();
   const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
   const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>();
@@ -50,6 +51,11 @@ const IdeasBoxView = () => {
       ['user_id']
     ).then((response) => setDelegationStatus(response.data));
 
+  const closeAdd = () => {
+    boxIdeasFetch();
+    setAdd(false);
+  };
+
   useEffect(() => {
     boxFetch();
     boxIdeasFetch();
@@ -58,7 +64,7 @@ const IdeasBoxView = () => {
 
   return (
     <>
-      <Box
+      <Stack
         height="100%"
         flexGrow={1}
         position="relative"
@@ -120,9 +126,26 @@ const IdeasBoxView = () => {
                 </Grid>
               </>
             )}
+            {checkPermissions(20) && String(box.data.phase_id) === '10' && (
+              <>
+                <Fab
+                  aria-label="add"
+                  color="primary"
+                  sx={{
+                    position: 'absolute',
+                    bottom: 40,
+                    alignSelf: 'center',
+                  }}
+                  onClick={() => setAdd(true)}
+                >
+                  <AppIcon icon="idea" />
+                </Fab>
+                <AlterData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id }} />
+              </>
+            )}
           </>
         )}
-      </Box>
+      </Stack>
       {delegationStatus && (
         <DelegateVote
           isOpen={delegationDialog}

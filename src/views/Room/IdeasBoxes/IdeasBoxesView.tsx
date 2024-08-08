@@ -62,7 +62,7 @@ const IdeasBoxView = () => {
             }}
             onClick={() => setAdd(true)}
           >
-            <AppIcon icon="add" />
+            <AppIcon icon="box" />
           </Fab>
           <AlterData scope="boxes" isOpen={add} otherData={{ room_id: params.room_id }} onClose={closeAdd} />
         </>
