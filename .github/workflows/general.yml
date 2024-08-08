@@ -17,6 +17,8 @@ jobs:
           npm i
           npm run build
           cp -vr build/* /var/www/
+          npm run build-test
+          cp -vr build/* /var/www-aula-test/
           git checkout test
           npm run build
           cp -vr build/* /var/www-test/
