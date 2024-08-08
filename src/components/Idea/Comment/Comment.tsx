@@ -55,7 +55,7 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
               scope="comments"
               id={comment.id}
               onClose={onReload}
-              canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(comment.user_id))}
+              canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(comment.user_id) && !disabled)}
             />
           </Stack>
         </Stack>

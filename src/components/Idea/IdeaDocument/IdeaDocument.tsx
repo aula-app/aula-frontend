@@ -70,7 +70,7 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
           scope="ideas"
           id={idea.id}
           onClose={onReload}
-          canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id))}
+          canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id) && !disabled)}
         />
       </Stack>
       <Stack p={2} bgcolor={`${phases['0'].name}.main`} borderRadius={3} mb={1}>
