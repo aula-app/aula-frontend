@@ -24,8 +24,9 @@ const ReportsView = () => {
         response.data.map((r: any) => {
             try {
               r.body = JSON.parse(r.body);
+              return r;
             } catch(error) {
-              r.body = r.body;
+              return r;
             } 
         });
         setReports(response.data);
