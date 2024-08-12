@@ -21,7 +21,13 @@ const ReportsView = () => {
     }).then((response) => {
       if (!response.success) return;
       if (response.data) {
-        response.data.map((r: any) => (r.body = JSON.parse(r.body)));
+        response.data.map((r: any) => {
+            try {
+              r.body = JSON.parse(r.body);
+            } catch(error) {
+              r.body = r.body;
+            } 
+        });
         setReports(response.data);
       }
     });
