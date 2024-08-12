@@ -38,7 +38,7 @@ const ReportsView = () => {
   }, []);
 
   return (
-    <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2} gap={2}>
+    <Stack width="100%" height="100%" p={2} gap={2}>
       <Typography variant="h4" mb={2}>
         {t('views.reports')}
       </Typography>
