@@ -2,6 +2,7 @@ import { AppButton, AppIcon } from '@/components';
 import ImageEditor from '@/components/ImageEditor';
 import UserAvatar from '@/components/UserAvatar';
 import { useAppStore } from '@/store';
+import { ObjectPropByName } from '@/types/Generics';
 import { SingleUserResponseType } from '@/types/RequestTypes';
 import { UserType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
@@ -10,7 +11,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Avatar,
   Button,
   Dialog,
   DialogActions,
@@ -81,11 +81,15 @@ const UserView = () => {
 
   const toggleDrawer = () => setEditingImage(!isEditingImage);
 
-  const sendMessage = async (headline: string, body: string, returnMessage: string) =>
+  const sendMessage = async (
+    headline: string,
+    body: { data: ObjectPropByName; content: string },
+    returnMessage: string
+  ) =>
     await databaseRequest({
       model: 'Message',
       method: 'addMessage',
-      arguments: { headline, body },
+      arguments: { headline, body: JSON.stringify(body) },
     }).then((response) => {
       if (!response.success) return;
       setOpenDelete(false);
@@ -95,8 +99,11 @@ const UserView = () => {
   const requestExport = () => {
     if (!user) return;
     sendMessage(
-      `Account data export request for ${user.realname} [#${user.id}]`,
-      `A data data export procedure was requested for user ${user.realname}, alias ${user.displayname}`,
+      `Account data export request for ${user.realname}`,
+      {
+        data: { id: user.id, username: user.displayname, email: user.email },
+        content: `A data data export procedure was requested for user ${user.realname}, alias ${user.displayname}`,
+      },
       t('texts.exportRequest')
     );
   };
@@ -104,8 +111,11 @@ const UserView = () => {
   const requestDelete = () => {
     if (!user) return;
     sendMessage(
-      `Account deletion request for ${user.realname} [#${user.id}]`,
-      `A data deletion procedure was requested for user ${user.realname}, alias ${user.displayname}`,
+      `Account deletion request for ${user.realname}`,
+      {
+        data: { id: user.id, username: user.displayname, email: user.email },
+        content: `A data deletion procedure was requested for user ${user.realname}, alias ${user.displayname}`,
+      },
       t('texts.deleteRequest')
     );
   };
