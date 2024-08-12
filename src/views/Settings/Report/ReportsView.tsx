@@ -38,12 +38,14 @@ const ReportsView = () => {
   }, []);
 
   return (
-    <Stack width="100%" height="100%" p={2} gap={2}>
+    <Stack width="100%" height="100%" p={2}>
       <Typography variant="h4" mb={2}>
         {t('views.reports')}
       </Typography>
-      {reports.length > 0 &&
-        reports.map((report) => <ReportCard headline={report.headline} body={report.body} key={report.id} />)}
+      <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
+        {reports.length > 0 &&
+          reports.map((report) => <ReportCard headline={report.headline} body={report.body} key={report.id} />)}
+      </Stack>
     </Stack>
   );
 };

@@ -13,7 +13,7 @@ interface Props {
 
 const ReportCard = ({ headline, body }: Props) => {
   return (
-    <Card variant="outlined" sx={{ borderRadius: 5 }}>
+    <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
       <CardHeader title={headline} />
       <Divider />
       <CardContent sx={{ bgcolor: 'bug.main' }}>
