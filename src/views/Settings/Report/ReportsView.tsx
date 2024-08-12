@@ -22,12 +22,12 @@ const ReportsView = () => {
       if (!response.success) return;
       if (response.data) {
         response.data.map((r: any) => {
-            try {
-              r.body = JSON.parse(r.body);
-              return r;
-            } catch(error) {
-              return r;
-            } 
+          try {
+            r.body = JSON.parse(r.body);
+            return r;
+          } catch (error) {
+            return r;
+          }
         });
         setReports(response.data);
       }
@@ -38,7 +38,7 @@ const ReportsView = () => {
   }, []);
 
   return (
-    <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
+    <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2} gap={2}>
       <Typography variant="h4" mb={2}>
         {t('views.reports')}
       </Typography>
