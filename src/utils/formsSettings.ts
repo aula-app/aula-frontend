@@ -33,10 +33,13 @@ const duration = {
 
 export const formsSettings = {
   about_me: longText,
-  approval_comment: longText,
+  approval_comment: {
+    type: 'text',
+    schema: yup.string(),
+  },
   approved: {
     type: 'select',
-    schema: yup.number().required('validation.required'),
+    schema: yup.number(),
     defaultValue: 0,
     options: [
       { label: '-', value: 0 },
