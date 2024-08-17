@@ -49,7 +49,9 @@ const SettingsView = () => {
 
   const loadData = async () => {
     const currentFilter = !filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '';
-    await dataFetch(currentFilter).then((response) => setItems(response));
+    await dataFetch(currentFilter).then((response) => {
+        setItems(response)
+        });
   };
 
   const handleOrder = (col: number) => {
