@@ -129,7 +129,7 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
         fullWidth
         color="secondary"
         variant="outlined"
-        startIcon="edit"
+        startIcon={<AppIcon icon="edit" />}
         sx={{ borderRadius: 30 }}
         onClick={() => setOpen(true)}
       >
