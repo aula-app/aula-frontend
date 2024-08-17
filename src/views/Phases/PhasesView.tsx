@@ -32,7 +32,7 @@ const MessagesView = () => {
     await databaseRequest(
       {
         model: 'Idea',
-        method: 'getIdeasByUser',
+        method: 'getWildIdeasByUser',
         arguments: {},
       },
       ['user_id']
