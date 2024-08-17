@@ -20,6 +20,11 @@ const longText = {
   schema: yup.string().required('validation.required'),
 };
 
+const notRequiredLongText = {
+  type: 'text',
+  schema: yup.string()
+};
+
 const password = {
   type: 'password',
   schema: yup.string().min(4, 'validation.min').max(32, 'validation.max').required('validation.required'),
@@ -32,7 +37,7 @@ const duration = {
 };
 
 export const formsSettings = {
-  about_me: longText,
+  about_me: notRequiredLongText,
   approval_comment: {
     type: 'text',
     schema: yup.string(),
