@@ -28,7 +28,7 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
       >
         <AppIcon icon={phases[box.phase_id].name} sx={{ mx: 1 }} />
         <Typography variant="caption" mr="auto">
-          {t('texts.boxCard', { var: box.ideas_num, phase: t(`phases.${phases[box.phase_id].name}`) })}
+          {t('texts.ideaBox', { var: box.ideas_num, phase: t(`phases.${phases[box.phase_id].name}`) })}
         </Typography>
         <MoreOptions scope="boxes" id={box.id} onClose={onReload} canEdit={checkPermissions(30)} />
       </Stack>
