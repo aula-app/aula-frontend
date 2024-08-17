@@ -103,6 +103,7 @@
     "userlevel": "Benutzer-Rolle"
   },
   "texts": {
+    "boxCard": "Ideen-Box", 
     "add": "{{var}} hinzufügen",
     "addToParent": "Zur {{var}} hinzufügen",
     "approved": "Diese Idee wurde angenommen",
