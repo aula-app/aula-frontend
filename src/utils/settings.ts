@@ -19,14 +19,14 @@ type DataSetting = {
 
 export const dataSettings = {
   boxes: [
-    { name: 'name', orderId: 1, role: 50 },
-    { name: 'description_public', orderId: 7, role: 50 },
-    { name: 'room_id', orderId: 6, role: 50 },
-    { name: 'phase_id', orderId: 5, role: 50 },
-    { name: 'phase_duration_1', orderId: -1, role: 50 },
-    { name: 'phase_duration_2', orderId: -1, role: 50 },
-    { name: 'phase_duration_3', orderId: -1, role: 50 },
-    { name: 'phase_duration_4', orderId: -1, role: 50 },
+    { name: 'name', orderId: 1, role: 30 },
+    { name: 'description_public', orderId: 7, role: 30 },
+    { name: 'room_id', orderId: 6, role: 30 },
+    { name: 'phase_id', orderId: 5, role: 30 },
+    { name: 'phase_duration_1', orderId: -1, role: 30 },
+    { name: 'phase_duration_2', orderId: -1, role: 30 },
+    { name: 'phase_duration_3', orderId: -1, role: 30 },
+    { name: 'phase_duration_4', orderId: -1, role: 30 },
   ],
   bug: [
     { name: 'headline', orderId: 1, role: 10 },
