@@ -55,7 +55,7 @@ const VotingCard = () => {
               bgcolor: vote + 1 === i && hasVoted ? `${option}.main` : 'transparent',
               borderRadius: 8,
             }}
-            disabled={checkPermissions(20)}
+            disabled={!checkPermissions(20)}
             key={i}
             onClick={() => registerVote(i as Vote)}
           >
