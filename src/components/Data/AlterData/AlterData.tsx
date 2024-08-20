@@ -130,16 +130,11 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
   };
 
   const onSubmit = (formData: Object) => {
-    console.log('aqui');
     if (typeof id !== 'undefined') otherData[getRequest(scope, 'id')] = id;
     dataSave({
       ...formData,
       ...otherData,
     });
-  };
-
-  const onError = (e) => {
-    console.log(e);
   };
 
   useEffect(() => {
@@ -201,7 +196,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
                 <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
                   {t('generics.cancel')}
                 </Button>
-                <Button type="submit" variant="contained" onClick={handleSubmit(onSubmit, onError)}>
+                <Button type="submit" variant="contained" onClick={handleSubmit(onSubmit)}>
                   {t('generics.confirm')}
                 </Button>
               </Stack>
