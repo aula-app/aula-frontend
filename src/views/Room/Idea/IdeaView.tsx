@@ -83,7 +83,7 @@ const IdeaView = () => {
           )}
           {phase >= 20 && idea.data.approved !== 0 && (
             <ApprovalCard
-              comment={idea.data.approval_comment}
+              comment={idea.data.approval_comment?idea.data.approval_comment:''}
               rejected={idea.data.approved < 0}
               disabled={phase > 20}
             />
