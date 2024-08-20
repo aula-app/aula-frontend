@@ -12,21 +12,25 @@ type FormSetting = {
 
 const shortText = {
   type: 'input',
+  defaultValue: '',
   schema: yup.string().max(100, 'validation.max').required('validation.required'),
 };
 
 const longText = {
   type: 'text',
+  defaultValue: '',
   schema: yup.string().required('validation.required'),
 };
 
 const notRequiredLongText = {
   type: 'text',
-  schema: yup.string()
+  defaultValue: '',
+  schema: yup.string(),
 };
 
 const password = {
   type: 'password',
+  defaultValue: '',
   schema: yup.string().min(4, 'validation.min').max(32, 'validation.max').required('validation.required'),
 };
 
@@ -65,16 +69,19 @@ export const formsSettings = {
   displayname: shortText,
   email: {
     type: 'input',
+    defaultValue: '',
     schema: yup.string().email('validation.email').required('validation.required'),
   },
   headline: shortText,
   name: shortText,
   password: {
     type: 'password',
+    defaultValue: '',
     schema: yup.string().min(4, 'validation.min').max(32, 'validation.max').required('validation.required'),
   },
   path: {
     type: 'input',
+    defaultValue: '',
     schema: yup.string().required('validation.required'),
   },
   phase_id: {
@@ -95,6 +102,7 @@ export const formsSettings = {
   phase_duration_4: duration,
   realname: {
     type: 'input',
+    defaultValue: '',
     schema: yup.string().required('validation.required'),
   },
   room_id: {
