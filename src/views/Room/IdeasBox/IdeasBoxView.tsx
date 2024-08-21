@@ -106,7 +106,7 @@ const IdeasBoxView = () => {
             </Stack>
             {boxIdeas && (
               <>
-                {checkPermissions(50) && (
+                {checkPermissions(30) && (
                   <MoveData parentId={Number(params['box_id'])} scope="ideas" onClose={boxIdeasFetch} />
                 )}
                 <Grid container spacing={1} pt={1}>
