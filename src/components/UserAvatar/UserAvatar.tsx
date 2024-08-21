@@ -6,6 +6,7 @@ import AppIcon from '../AppIcon';
 interface Props {
   id: number;
   size?: 'small' | 'large';
+  update: boollean;
 }
 
 /**
