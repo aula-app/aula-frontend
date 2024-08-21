@@ -43,7 +43,7 @@ const SideBar = ({ anchor, open, variant, setReport, onClose, ...restOfProps }: 
     >
       <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
         <LocaleSwitch />
-        <AppIconButton color="secondary" onClick={() => {}} icon="close" title={t('generics.close')} sx={{ px: 0 }} />
+        <AppIconButton color="secondary" onClick={() => onClose()} icon="close" title={t('generics.close')} sx={{ px: 0 }} />
       </Stack>
       {isAuthenticated && <UserInfo />}
       <Divider />
