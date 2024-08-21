@@ -76,8 +76,7 @@ export const ImageEditor = ({ closeMethod, isOpen, id }: NewCommentProps) => {
     });
   };
 
-  const onClose = () => {
-    setImage(undefined);
+  const onClose = (e) => {
     closeMethod();
   };
 

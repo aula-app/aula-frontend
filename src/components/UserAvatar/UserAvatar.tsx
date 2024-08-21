@@ -12,7 +12,7 @@ interface Props {
  * Renders User info with Avatar
  * @component UserInfo
  */
-const UserAvatar = ({ id, size }: Props) => {
+const UserAvatar = ({ id, size, update }: Props) => {
   const [userAvatar, setUserAvatar] = useState<string>('');
 
   const currentSize = size === 'small' ? 32 : size === 'large' ? 128 : 56;
@@ -32,8 +32,9 @@ const UserAvatar = ({ id, size }: Props) => {
   };
 
   useEffect(() => {
+    console.log("UPDATE", update)
     downloadUserAvatar();
-  }, []);
+  }, [update]);
 
   return (
     <Avatar

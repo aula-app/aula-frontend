@@ -37,6 +37,7 @@ const UserView = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const [, dispatch] = useAppStore();
   const [isEditingImage, setEditingImage] = useState<boolean>(false);
+  const [updateAvatar, setUpdateAvatar] = useState(false);
 
   const schema = yup
     .object({
@@ -77,7 +78,10 @@ const UserView = () => {
       ['user_id', 'updater_id']
     ).then(() => getUserInfo());
 
-  const toggleDrawer = () => setEditingImage(!isEditingImage);
+  const toggleDrawer = () => {
+    setUpdateAvatar(!updateAvatar);
+    setEditingImage(!isEditingImage);
+  }
 
   const sendMessage = async (
     headline: string,
@@ -150,7 +154,7 @@ const UserView = () => {
               >
                 <AppIcon icon="camera" />
               </Stack>
-              <UserAvatar id={user.id} />
+              <UserAvatar id={user.id} update={updateAvatar} />
             </IconButton>
             <Typography sx={{ mt: 1 }} variant="h6">
               {user.username}
@@ -205,6 +209,7 @@ const UserView = () => {
         <ImageEditor
           isOpen={isEditingImage}
           closeMethod={() => {
+            setUpdateAvatar(!updateAvatar);
             toggleDrawer();
           }}
           id={user.id}
