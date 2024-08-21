@@ -142,7 +142,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
                       }}
                       onClick={() => select(user)}
                     >
-                      <UserAvatar id={user.id} />
+                      <UserAvatar id={user.id} update={true}/>
                       <Stack ml={2}>
                         <Typography>{user.realname}</Typography>
                         <Typography color="secondary" fontSize="small">
@@ -163,7 +163,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
               </Typography>
               {selected && (
                 <Stack flex={1} alignItems="center" justifyContent="center">
-                  <UserAvatar id={selected.id} size="large" />
+                  <UserAvatar id={selected.id} update={true} size="large" />
                   <Typography>{selected.realname}</Typography>
                   <Typography color="secondary" fontSize="small">
                     {selected.displayname}

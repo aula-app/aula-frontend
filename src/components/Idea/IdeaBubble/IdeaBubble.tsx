@@ -93,7 +93,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <UserAvatar id={idea.user_id} />
+        <UserAvatar id={idea.user_id} update={true}/>
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>

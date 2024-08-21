@@ -61,7 +61,7 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <UserAvatar id={comment.user_id} size="small" />
+        <UserAvatar id={comment.user_id} update={true} size="small" />
         <Stack maxWidth="100%" overflow="hidden" ml={2} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>
