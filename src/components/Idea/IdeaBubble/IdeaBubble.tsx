@@ -117,7 +117,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
             {comments}
           </Stack>
         )}
-        <Button color="error" size="small" onClick={toggleLike} disabled={checkPermissions(20)}>
+        <Button color="error" size="small" onClick={toggleLike} disabled={!checkPermissions(20)}>
           <AppIcon icon={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
           {idea.sum_likes}
         </Button>

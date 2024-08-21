@@ -143,7 +143,7 @@ const IdeasBoxView = () => {
                 >
                   <AppIcon icon="idea" />
                 </Fab>
-                <AlterData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id }} />
+                <AlterData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id, box_id: params.box_id }} />
               </>
             )}
           </>
