@@ -9,15 +9,7 @@ import { useTranslation } from 'react-i18next';
 type Props = {
   id?: number;
   disabled?: boolean;
-  setUpdate: Dispatch<
-    SetStateAction<
-      {
-        model: string;
-        method: string;
-        args: ObjectPropByName;
-      }[]
-    >
-  >;
+  addUpdate: (newUpdate: { model: string; method: string; args: ObjectPropByName }) => void;
 };
 
 interface ThisOptionsType extends SelectOptionsType {
@@ -28,7 +20,7 @@ interface ThisOptionsType extends SelectOptionsType {
  * Renders "CategoryField" component
  */
 
-const CategoryField = ({ id, disabled = false, setUpdate, ...restOfProps }: Props) => {
+const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const [currentOptions, setOptions] = useState<ThisOptionsType[]>([]);
   const [selected, setSelected] = useState(0);
@@ -69,7 +61,7 @@ const CategoryField = ({ id, disabled = false, setUpdate, ...restOfProps }: Prop
   useEffect(() => {
     const args = { category_id: selected } as ObjectPropByName;
     if (id) args['idea_id'] = id;
-    setUpdate([{ model: 'Idea', method: 'addIdeaToCategory', args: args }]);
+    addUpdate({ model: 'Idea', method: 'addIdeaToCategory', args: args });
   }, [selected]);
 
   useEffect(() => {

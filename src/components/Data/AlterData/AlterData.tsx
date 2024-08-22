@@ -20,7 +20,6 @@ import IconField from './FormInput/IconField';
 import ImageField from './FormInput/ImageField';
 import { useParams } from 'react-router-dom';
 import SetWinnerField from './FormInput/SetWinnerField';
-import { CropLandscapeOutlined } from '@mui/icons-material';
 
 interface Props {
   id?: number;
@@ -29,6 +28,12 @@ interface Props {
   otherData?: ObjectPropByName;
   metadata?: ObjectPropByName;
   onClose: () => void;
+}
+
+interface updateType {
+  model: string;
+  method: string;
+  args: ObjectPropByName;
 }
 
 /**
@@ -40,7 +45,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
   const params = useParams();
   const [item, setItem] = useState<SingleResponseType>();
   const [phase, setPhase] = useState<RoomPhases>((params['phase'] as RoomPhases) || '0');
-  const [update, setUpdate] = useState<Array<{ model: string; method: string; args: ObjectPropByName }>>([]);
+  const [update, setUpdate] = useState<Array<updateType>>([]);
 
   const schema = dataSettings[scope].reduce((schema, field) => {
     return { ...schema, [field.name]: formsSettings[field.name].schema };
@@ -70,11 +75,15 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
 
   const dataSave = async (args: ObjectPropByName) => {
     const requestId = ['updater_id'];
+
+    console.log(update);
+
     if (scope === 'ideas') requestId.push('user_id');
     if (scope === 'comments' && !id) requestId.push('user_id');
     if (scope === 'messages' && !id) requestId.push('creator_id');
     if (scope === 'users' && !id) args['password'] = 'default_password';
     if (metadata && args.body) args['body'] = JSON.stringify({ data: metadata, content: args['body'] });
+
     await databaseRequest(
       {
         model: requestDefinitions[scope].model,
@@ -113,6 +122,10 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
     });
   };
 
+  const addUpdate = (newUpdate: updateType) => {
+    setUpdate([newUpdate, ...update]);
+  };
+
   const clearValues = () => {
     setItem(undefined);
     updateValues();
@@ -144,6 +157,8 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
 
   useEffect(() => {
     !id ? clearValues() : dataFetch();
+    if (scope === 'ideas' && !id && 'box_id' in params)
+      addUpdate({ model: 'Idea', method: 'addIdeaToTopic', args: { topic_id: params.box_id } });
   }, [isOpen]);
 
   return (
@@ -188,9 +203,9 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
                   )}
                 </Fragment>
               ))}
-              {scope === 'ideas' && <CategoryField id={id} setUpdate={setUpdate} />}
+              {scope === 'ideas' && <CategoryField id={id} addUpdate={addUpdate} />}
               {id && item && scope === 'ideas' && Number(phase) === 40 && (
-                <SetWinnerField id={id} defaultValue={!!item.data.is_winner} setUpdate={setUpdate} />
+                <SetWinnerField id={id} defaultValue={!!item.data.is_winner} addUpdate={addUpdate} />
               )}
               <Stack direction="row">
                 <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
