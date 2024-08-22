@@ -70,11 +70,15 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
 
   const dataSave = async (args: ObjectPropByName) => {
     const requestId = ['updater_id'];
+
     if (scope === 'ideas') requestId.push('user_id');
+    if (scope === 'ideas' && !id && 'box_id' in params)
+      setUpdate([...update, { model: 'Ideas', method: 'addIdeaToTopic', args: { topic_id: params.box_id } }]);
     if (scope === 'comments' && !id) requestId.push('user_id');
     if (scope === 'messages' && !id) requestId.push('creator_id');
     if (scope === 'users' && !id) args['password'] = 'default_password';
     if (metadata && args.body) args['body'] = JSON.stringify({ data: metadata, content: args['body'] });
+
     await databaseRequest(
       {
         model: requestDefinitions[scope].model,
