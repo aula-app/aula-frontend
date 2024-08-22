@@ -6,28 +6,18 @@ import { useTranslation } from 'react-i18next';
 type Props = {
   id: number;
   defaultValue: boolean;
-  setUpdate: Dispatch<
-    SetStateAction<
-      {
-        model: string;
-        method: string;
-        args: ObjectPropByName;
-      }[]
-    >
-  >;
+  addUpdate: (newUpdate: { model: string; method: string; args: ObjectPropByName }) => void;
 };
 
 /**
  * Renders "SetWinnerField" component
  */
 
-const SetWinnerField = ({ id, defaultValue, setUpdate }: Props) => {
+const SetWinnerField = ({ id, defaultValue, addUpdate }: Props) => {
   const { t } = useTranslation();
 
   const toggleWinner = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdate([
-      { model: 'Idea', method: event.target.checked ? 'setToWinning' : 'setToLosing', args: { idea_id: id } },
-    ]);
+    addUpdate({ model: 'Idea', method: event.target.checked ? 'setToWinning' : 'setToLosing', args: { idea_id: id } });
   };
 
   return (
