@@ -76,7 +76,7 @@ export interface MessageType {
 }
 
 export interface ReportBodyType {
-  data: {
+  data?: {
     location: string;
     user: string;
     userAgent?: string;
@@ -86,7 +86,7 @@ export interface ReportBodyType {
 
 export interface ReportType {
   id: number;
-  body: ReportBodyType;
+  body: string;
   headline: string;
 }
 

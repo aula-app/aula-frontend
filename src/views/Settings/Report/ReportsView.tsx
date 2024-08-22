@@ -20,17 +20,7 @@ const ReportsView = () => {
       arguments: {},
     }).then((response) => {
       if (!response.success) return;
-      if (response.data) {
-        response.data.map((r: any) => {
-          try {
-            r.body = JSON.parse(r.body);
-            return r;
-          } catch (error) {
-            return r;
-          }
-        });
-        setReports(response.data);
-      }
+      setReports(response.data);
     });
 
   useEffect(() => {
