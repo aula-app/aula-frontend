@@ -16,14 +16,14 @@ const ReportCard = ({ headline, body }: Props) => {
     try {
       JSON.parse(str);
     } catch (e) {
-      return { content: str };
+      return null;
     }
     return JSON.parse(str);
   }
 
-  const bodyData: ReportBodyType = convertToJson(body);
+  const bodyData: ReportBodyType | null = convertToJson(body);
 
-  return (
+  return bodyData ? (
     <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
       <CardHeader title={headline} />
       <Divider />
@@ -56,6 +56,8 @@ const ReportCard = ({ headline, body }: Props) => {
         </Stack>
       </CardContent>
     </Card>
+  ) : (
+    <></>
   );
 };
 
