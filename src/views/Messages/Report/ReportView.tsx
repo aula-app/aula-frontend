@@ -1,9 +1,8 @@
-import { AppButton, AppIcon, AppLink } from '@/components';
+import { AppButton } from '@/components';
 import ReportCard from '@/components/ReportCard';
-import { ObjectPropByName } from '@/types/Generics';
-import { MessageType, ReportBodyType, ReportType } from '@/types/Scopes';
+import { ReportType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
-import { Divider, Stack, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -27,7 +26,6 @@ const ReportView = () => {
       },
     }).then((response) => {
       if (!response.success) return;
-      if (response.data.body) response.data.body = JSON.parse(response.data.body);
       setReport(response.data);
     });
 

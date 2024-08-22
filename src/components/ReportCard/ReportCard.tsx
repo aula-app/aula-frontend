@@ -8,28 +8,51 @@ import { AppLink } from '..';
 
 interface Props {
   headline: string;
-  body: ReportBodyType;
+  body: string;
 }
 
 const ReportCard = ({ headline, body }: Props) => {
+  function convertToJson(str: string) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return { content: str };
+    }
+    return JSON.parse(str);
+  }
+
+  const bodyData: ReportBodyType = convertToJson(body);
+
   return (
     <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
       <CardHeader title={headline} />
       <Divider />
-      <CardContent sx={{ bgcolor: 'bug.main' }}>
-        <Stack>
-          {(Object.keys(body.data) as Array<keyof ReportBodyType['data']>).map((data) => (
-            <Typography mt={1} key={data}>
-              {data}:{' '}
-              {data === 'location' ? <AppLink to={body.data[data]}>{body.data[data]}</AppLink> : body.data[data]}
-            </Typography>
-          ))}
-        </Stack>
-      </CardContent>
-      <Divider />
+      {bodyData.data && (
+        <>
+          <CardContent sx={{ bgcolor: 'bug.main' }}>
+            <Stack>
+              {(Object.keys(bodyData.data) as Array<keyof ReportBodyType['data']>).map((data) => (
+                <>
+                  {bodyData.data && (
+                    <Typography mt={1} key={data}>
+                      {data}:{' '}
+                      {data === 'location' ? (
+                        <AppLink to={bodyData.data[data]}>{bodyData.data[data]}</AppLink>
+                      ) : (
+                        bodyData.data[data]
+                      )}
+                    </Typography>
+                  )}
+                </>
+              ))}
+            </Stack>
+          </CardContent>
+          <Divider />
+        </>
+      )}
       <CardContent>
         <Stack mt={2} flex={1}>
-          <Typography>{body.content}</Typography>
+          <Typography>{bodyData.content}</Typography>
         </Stack>
       </CardContent>
     </Card>
