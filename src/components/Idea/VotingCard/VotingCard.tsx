@@ -54,6 +54,9 @@ const VotingCard = () => {
               color: 'inherit',
               bgcolor: vote + 1 === i && hasVoted ? `${option}.main` : 'transparent',
               borderRadius: 8,
+              '&:hover': {
+                bgcolor: `${option}.main`,
+              },
             }}
             disabled={!checkPermissions(20)}
             key={i}
