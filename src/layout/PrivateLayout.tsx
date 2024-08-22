@@ -37,7 +37,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     >
       <TopBar home={title} setReport={setScope} />
 
-      <Stack direction="row" component="main" sx={{ flexGrow: 1  }}>
+      <Stack direction="row" component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
         <SideBarFixed setReport={setScope} />
         <Stack flex={1} overflow="hidden">
           <ErrorBoundary name="Content">{children}</ErrorBoundary>
