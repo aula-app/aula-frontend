@@ -15,6 +15,17 @@ interface BoxCardProps {
 const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
   const { t } = useTranslation();
 
+  const daysRemaining = () => {
+    let remaining = 0;
+    for (let i = 0; i < Number(box.phase_id) / 10 && i < 3; i++) {
+      remaining += Number(box[`phase_duration_${i + 1}`]);
+    }
+    const currentDate = new Date();
+    const endDate = new Date(box.created);
+    endDate.setDate(endDate.getDate() + remaining);
+    return Math.round((Number(endDate) - Number(currentDate)) / 86400000);
+  };
+
   return (
     <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
       <Stack
@@ -64,7 +75,9 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
               px={2}
             >
               <AppIcon icon="clock" size="small" sx={{ mx: 0.5 }} />
-              <Typography variant="caption">{t('texts.phaseEnd', { var: 3 })}</Typography>
+              <Typography variant="caption">
+                {daysRemaining() > 0 ? t('texts.phaseEnd', { var: daysRemaining() }) : t('texts.phaseEnded')}
+              </Typography>
             </Stack>
           </Box>
         </CardContent>
