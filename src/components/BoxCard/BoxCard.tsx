@@ -18,7 +18,12 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
   const daysRemaining = () => {
     let remaining = 0;
     for (let i = 0; i < Number(box.phase_id) / 10 && i < 3; i++) {
-      remaining += Number(box[`phase_duration_${i + 1}`]);
+      const phase = `phase_duration_${i + 1}` as
+        | 'phase_duration_1'
+        | 'phase_duration_2'
+        | 'phase_duration_3'
+        | 'phase_duration_4';
+      remaining += Number(box[phase]);
     }
     const currentDate = new Date();
     const endDate = new Date(box.created);
