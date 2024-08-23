@@ -53,7 +53,7 @@ const MessagesView = () => {
           items.data.map((item) => {
             return 'phase_id' in item ? (
               <Grid key={item.id} item xs={12} sm={6} lg={4} xl={3} sx={{ scrollSnapAlign: 'center' }}>
-                <BoxCard box={item} onReload={itemsFetch} />
+                <BoxCard box={item.id} onReload={itemsFetch} />
               </Grid>
             ) : (
               <Grid key={item.id} item xs={12} sm={6} lg={4} xl={3} sx={{ scrollSnapAlign: 'center' }}>

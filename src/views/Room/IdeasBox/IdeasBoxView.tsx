@@ -6,8 +6,9 @@ import { IdeaCard } from '@/components/Idea';
 import KnowMore from '@/components/KnowMore';
 import { DelegationType } from '@/types/Delegation';
 import { IdeasResponseType, SingleBoxResponseType } from '@/types/RequestTypes';
+import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Box, Button, Fab, Grid, Stack, Typography } from '@mui/material';
+import { Button, Fab, Grid, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,20 +21,9 @@ const IdeasBoxView = () => {
   const { t } = useTranslation();
   const params = useParams();
   const [add, setAdd] = useState(false);
-  const [box, setBox] = useState<SingleBoxResponseType>();
   const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
   const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>();
   const [delegationDialog, setDelegationDialog] = useState(false);
-
-  const boxFetch = async () =>
-    await databaseRequest({
-      model: 'Topic',
-      method: 'getTopicBaseData',
-      arguments: { topic_id: Number(params['box_id']) },
-    }).then((response) => {
-      setBox(response);
-      if (response.data.phase_id === 30) getDelegation();
-    });
 
   const boxIdeasFetch = async () =>
     await databaseRequest({
@@ -58,7 +48,6 @@ const IdeasBoxView = () => {
   };
 
   useEffect(() => {
-    boxFetch();
     boxIdeasFetch();
     getDelegation();
   }, []);
@@ -76,76 +65,62 @@ const IdeasBoxView = () => {
           scrollSnapType: 'y mandatory',
         }}
       >
-        {box && box.data && (
-          <>
-            <BoxCard box={box.data || {}} noLink onReload={boxFetch} />
-            <Stack direction="row">
-              <Typography variant="h6" p={2}>
-                {boxIdeas &&
-                  t(delegationStatus && delegationStatus.length > 0 ? `texts.delegated` : `texts.undelegated`, {
-                    var: boxIdeas.count,
-                  })}
+        <BoxCard box={Number(params['box_id'])} noLink />
+        <Stack direction="row">
+          <Typography variant="h6" p={2}>
+            {boxIdeas &&
+              t(delegationStatus && delegationStatus.length > 0 ? `texts.delegated` : `texts.undelegated`, {
+                var: boxIdeas.count,
+              })}
+          </Typography>
+          {Number(params['phase']) === 30 && (
+            <Button
+              size="small"
+              sx={{ ml: 'auto', mt: 0.5, px: 1, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}
+              onClick={() => setDelegationDialog(true)}
+            >
+              <Typography variant="caption">{t('generics.or')}</Typography>
+              <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
+                {delegationStatus && delegationStatus.length > 0 ? t('delegation.revoke') : t('delegation.delegate')}
               </Typography>
-              {Number(box.data.phase_id) === 30 && (
-                <Button
-                  size="small"
-                  sx={{ ml: 'auto', mt: 0.5, px: 1, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}
-                  onClick={() => setDelegationDialog(true)}
-                >
-                  <Typography variant="caption">{t('generics.or')}</Typography>
-                  <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
-                    {delegationStatus && delegationStatus.length > 0
-                      ? t('delegation.revoke')
-                      : t('delegation.delegate')}
-                  </Typography>
-                  <KnowMore title={t('tooltips.delegate')}>
-                    <AppIcon icon="delegate" size="small" />
-                  </KnowMore>
-                </Button>
-              )}
-            </Stack>
-            {boxIdeas && (
-              <>
-                {checkPermissions(30) && (
-                  <MoveData parentId={Number(params['box_id'])} scope="ideas" onClose={boxIdeasFetch} />
-                )}
-                <Grid container spacing={1} pt={1}>
-                  {boxIdeas.data &&
-                    boxIdeas.data.map((idea, key) => (
-                      <Grid
-                        key={key}
-                        item
-                        xs={12}
-                        sm={6}
-                        md={4}
-                        sx={{ scrollSnapAlign: 'center' }}
-                        order={-idea.approved}
-                      >
-                        <AppLink to={`idea/${idea.id}`}>
-                          <IdeaCard idea={idea} phase={box.data.phase_id} />
-                        </AppLink>
-                      </Grid>
-                    ))}
-                </Grid>
-              </>
+              <KnowMore title={t('tooltips.delegate')}>
+                <AppIcon icon="delegate" size="small" />
+              </KnowMore>
+            </Button>
+          )}
+        </Stack>
+        {boxIdeas && (
+          <>
+            {checkPermissions(30) && (
+              <MoveData parentId={Number(params['box_id'])} scope="ideas" onClose={boxIdeasFetch} />
             )}
-            {checkPermissions(20) && String(box.data.phase_id) === '10' && (
-              <>
-                <Fab
-                  aria-label="add"
-                  color="primary"
-                  sx={{
-                    position: 'absolute',
-                    bottom: 40,
-                    alignSelf: 'center',
-                  }}
-                  onClick={() => setAdd(true)}
-                >
-                  <AppIcon icon="idea" />
-                </Fab>
-                <AlterData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id }} />
-              </>
-            )}
+            <Grid container spacing={1} pt={1}>
+              {boxIdeas.data &&
+                boxIdeas.data.map((idea, key) => (
+                  <Grid key={key} item xs={12} sm={6} md={4} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
+                    <AppLink to={`idea/${idea.id}`}>
+                      <IdeaCard idea={idea} phase={params['phase'] as RoomPhases} />
+                    </AppLink>
+                  </Grid>
+                ))}
+            </Grid>
+          </>
+        )}
+        {checkPermissions(20) && String(params['phase']) === '10' && (
+          <>
+            <Fab
+              aria-label="add"
+              color="primary"
+              sx={{
+                position: 'absolute',
+                bottom: 40,
+                alignSelf: 'center',
+              }}
+              onClick={() => setAdd(true)}
+            >
+              <AppIcon icon="idea" />
+            </Fab>
+            <AlterData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id }} />
           </>
         )}
       </Stack>

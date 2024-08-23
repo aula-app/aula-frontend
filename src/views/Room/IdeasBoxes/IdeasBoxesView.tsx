@@ -47,7 +47,7 @@ const IdeasBoxView = () => {
           boxes.data &&
           boxes.data.map((box) => (
             <Grid key={box.id} item xs={12} sm={6} lg={4} xl={3} sx={{ scrollSnapAlign: 'center' }}>
-              <BoxCard box={box} onReload={boxesFetch} />
+              <BoxCard box={box.id} onReload={boxesFetch} />
             </Grid>
           ))}
       </Grid>
