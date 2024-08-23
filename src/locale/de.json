@@ -124,6 +124,7 @@
     "passChange": "Passwort ändern",
     "phaseDuration": "Dauer der Phasen",
     "phaseEnd": "Phase endet in {{var}} Tagen",
+    "phaseEnded": "Phase beendet",
     "rejected": "Diese Idee wurde nicht angenommen",
     "report": "Bitte erkläre, warum du diesen Inhalt melden möchtest",
     "undelegated": "{{var}} Ideen",
