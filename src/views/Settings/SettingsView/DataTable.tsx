@@ -93,7 +93,11 @@ const DataTable = ({
         </TableHead>
         <TableBody>
           {items.map((row) => (
-            <TableRow key={row.id} sx={{ background: selected.includes(row.id) ? grey[200] : '' }}>
+            <TableRow
+              key={row.id}
+              hover
+              sx={{ background: selected.includes(row.id) ? grey[200] : '', cursor: 'pointer' }}
+            >
               <TableCell>
                 <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
               </TableCell>
