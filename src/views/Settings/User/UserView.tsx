@@ -12,9 +12,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Alert,
   Button,
-  Collapse,
   Dialog,
   DialogActions,
   DialogContent,
@@ -26,7 +24,7 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { Stack } from '@mui/system';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -40,9 +38,9 @@ const UserView = () => {
   const [user, setUser] = useState<UserType | null>(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [, dispatch] = useAppStore();
-  const [passwordError, setError] = useState(false);
   const [isEditingImage, setEditingImage] = useState<boolean>(false);
   const [updateAvatar, setUpdateAvatar] = useState(false);
+  const passFields = useRef(null);
 
   const schema = yup.object({
     about_me: yup.string(),
@@ -108,11 +106,11 @@ const UserView = () => {
     ).json();
 
     if (!request.success) {
-      setError(true);
+      passFields.current?.displayMessage(false);
       return;
     }
 
-    dispatch({ type: 'ADD_ERROR', message: t('login.passwordChange') });
+    passFields.current?.displayMessage(true);
   };
 
   const sendMessage = async (
@@ -214,12 +212,7 @@ const UserView = () => {
           <Typography variant="h6">{t('views.security')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Collapse in={passwordError} sx={{ mb: 2 }}>
-            <Alert variant="outlined" severity="error" onClose={() => setError(false)}>
-              {t('login.passwordError')}
-            </Alert>
-          </Collapse>
-          <ChangePassword onSubmit={changePass} />
+          <ChangePassword onSubmit={changePass} ref={passFields} />
         </AccordionDetails>
       </Accordion>
       <Accordion>

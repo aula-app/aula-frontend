@@ -1,7 +1,7 @@
 import { PassResponse } from '@/types/Generics';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { InputAdornment, Stack, TextField } from '@mui/material';
-import { useState } from 'react';
+import { Alert, Collapse, InputAdornment, Stack, TextField } from '@mui/material';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -10,15 +10,17 @@ import AppIconButton from '../AppIconButton';
 
 interface Props {
   hideOld?: boolean;
-  onSubmit: (formData: PassResponse) => Promise<void>;
+  onSubmit: (formData: PassResponse) => void;
 }
 
 /**
  * Renders User info with Avatar
  * @component ChangePassword
  */
-const ChangePassword = ({ onSubmit, hideOld = false }: Props) => {
+const ChangePassword = forwardRef(({ onSubmit, hideOld = false }: Props, ref) => {
   const { t } = useTranslation();
+  const [messageType, setMessageType] = useState<'error' | 'success'>('error');
+  const [showMessage, setShowMessage] = useState(false);
   const [showOldPassword, setOldPassword] = useState(false);
   const [showNewPassword, setNewPassword] = useState(false);
   const [showConfirmPassword, setConfirmPassword] = useState(false);
@@ -49,14 +51,26 @@ const ChangePassword = ({ onSubmit, hideOld = false }: Props) => {
     resolver: yupResolver(schema),
   });
 
+  useImperativeHandle(ref, () => ({
+    displayMessage(isSuccess: boolean) {
+      setMessageType(isSuccess ? 'success' : 'error');
+      setShowMessage(true);
+    },
+  }));
+
   return (
     <FormContainer>
+      <Collapse in={showMessage} sx={{ mb: 2 }}>
+        <Alert variant="outlined" severity={messageType} onClose={() => setShowMessage(false)}>
+          {messageType === 'success' ? t('login.passwordChange') : t('login.passwordError')}
+        </Alert>
+      </Collapse>
       <Stack>
         {!hideOld && (
           <TextField
             required
             type={showOldPassword ? 'text' : 'password'}
-            label="Old Password"
+            label={t('settings.password')}
             sx={{ width: '100%' }}
             {...register('oldPassword')}
             error={errors.oldPassword ? true : false}
@@ -79,7 +93,7 @@ const ChangePassword = ({ onSubmit, hideOld = false }: Props) => {
         <TextField
           required
           type={showNewPassword ? 'text' : 'password'}
-          label="New Password"
+          label={t('settings.passwordChange')}
           sx={{ width: '100%' }}
           {...register('newPassword')}
           error={errors.newPassword ? true : false}
@@ -101,7 +115,7 @@ const ChangePassword = ({ onSubmit, hideOld = false }: Props) => {
         <TextField
           required
           type={showConfirmPassword ? 'text' : 'password'}
-          label="Confirm New Password"
+          label={t('settings.passwordConfirmChange')}
           sx={{ width: '100%' }}
           {...register('confirmPassword')}
           error={errors.confirmPassword ? true : false}
@@ -126,6 +140,6 @@ const ChangePassword = ({ onSubmit, hideOld = false }: Props) => {
       </Stack>
     </FormContainer>
   );
-};
+});
 
 export default ChangePassword;
