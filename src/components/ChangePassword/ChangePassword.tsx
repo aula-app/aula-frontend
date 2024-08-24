@@ -1,8 +1,7 @@
-import { PassResponse } from '@/types/Generics';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert, Collapse, InputAdornment, Stack, TextField } from '@mui/material';
 import { forwardRef, useImperativeHandle, useState } from 'react';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { FormContainer, SubmitHandler, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import AppButton from '../AppButton';
@@ -10,7 +9,7 @@ import AppIconButton from '../AppIconButton';
 
 interface Props {
   hideOld?: boolean;
-  onSubmit: (formData: Object) => void;
+  onSubmit: SubmitHandler<any>;
 }
 
 export interface ChangePasswordMethods {

@@ -3,7 +3,7 @@ import { useAppStore } from "@/store";
 import { PassResponse } from "@/types/Generics";
 import { localStorageGet } from "@/utils";
 import { Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FormContainer } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,8 +18,6 @@ const SetPasswordView = () => {
   const navigate = useNavigate();
   const jwt_token = localStorageGet("token");
   const [, dispatch] = useAppStore();
-
-  const [isValid, setValid] = useState(false);
 
   const checkKey = async () => {
     try {
