@@ -13,11 +13,15 @@ interface Props {
   onSubmit: (formData: PassResponse) => void;
 }
 
+export interface ChangePasswordMethods {
+  displayMessage: (isSuccess: boolean) => void;
+}
+
 /**
  * Renders User info with Avatar
  * @component ChangePassword
  */
-const ChangePassword = forwardRef(({ onSubmit, hideOld = false }: Props, ref) => {
+const ChangePassword = forwardRef<ChangePasswordMethods, Props>(({ onSubmit, hideOld = false }: Props, ref) => {
   const { t } = useTranslation();
   const [messageType, setMessageType] = useState<'error' | 'success'>('error');
   const [showMessage, setShowMessage] = useState(false);

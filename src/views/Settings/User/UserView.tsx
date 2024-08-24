@@ -1,5 +1,6 @@
 import { AppButton, AppIcon } from '@/components';
 import ChangePassword from '@/components/ChangePassword';
+import { ChangePasswordMethods } from '@/components/ChangePassword/ChangePassword';
 import ImageEditor from '@/components/ImageEditor';
 import UserAvatar from '@/components/UserAvatar';
 import { useAppStore } from '@/store';
@@ -40,7 +41,7 @@ const UserView = () => {
   const [, dispatch] = useAppStore();
   const [isEditingImage, setEditingImage] = useState<boolean>(false);
   const [updateAvatar, setUpdateAvatar] = useState(false);
-  const passFields = useRef(null);
+  const passFields = useRef<ChangePasswordMethods>(null);
 
   const schema = yup.object({
     about_me: yup.string(),
