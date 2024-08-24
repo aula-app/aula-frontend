@@ -10,7 +10,7 @@ import AppIconButton from '../AppIconButton';
 
 interface Props {
   hideOld?: boolean;
-  onSubmit: (formData: PassResponse) => void;
+  onSubmit: (formData: Object) => void;
 }
 
 export interface ChangePasswordMethods {
