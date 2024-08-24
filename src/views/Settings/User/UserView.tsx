@@ -1,17 +1,20 @@
 import { AppButton, AppIcon } from '@/components';
+import ChangePassword from '@/components/ChangePassword';
 import ImageEditor from '@/components/ImageEditor';
 import UserAvatar from '@/components/UserAvatar';
 import { useAppStore } from '@/store';
-import { ObjectPropByName } from '@/types/Generics';
+import { ObjectPropByName, PassResponse } from '@/types/Generics';
 import { SingleUserResponseType } from '@/types/RequestTypes';
 import { UserType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, localStorageGet } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Alert,
   Button,
+  Collapse,
   Dialog,
   DialogActions,
   DialogContent,
@@ -33,19 +36,20 @@ import * as yup from 'yup';
  */
 const UserView = () => {
   const { t } = useTranslation();
+  const jwt_token = localStorageGet('token');
   const [user, setUser] = useState<UserType | null>(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [, dispatch] = useAppStore();
+  const [passwordError, setError] = useState(false);
   const [isEditingImage, setEditingImage] = useState<boolean>(false);
   const [updateAvatar, setUpdateAvatar] = useState(false);
 
-  const schema = yup
-    .object({
-      about_me: yup.string()
-        // .required(t('validation.required'))
-        // .min(4, t('validation.min', { var: 4 }))
-        // .max(32, t('validation.max', { var: 32 })),
-    });
+  const schema = yup.object({
+    about_me: yup.string(),
+    // .required(t('validation.required'))
+    // .min(4, t('validation.min', { var: 4 }))
+    // .max(32, t('validation.max', { var: 32 })),
+  });
 
   const {
     register,
@@ -68,7 +72,7 @@ const UserView = () => {
       setUser(response.data);
     });
 
-  const onSubmit = async (formData: Object) =>
+  const setAbout = async (formData: Object) =>
     databaseRequest(
       {
         model: 'User',
@@ -81,7 +85,27 @@ const UserView = () => {
   const toggleDrawer = () => {
     setUpdateAvatar(!updateAvatar);
     setEditingImage(!isEditingImage);
-  }
+  };
+
+  const changePass = async (formData: PassResponse) => {
+    const request = await (
+      await fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/change_password.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwt_token,
+        },
+        body: JSON.stringify(formData),
+      })
+    ).json();
+
+    if (!request.success) {
+      setError(true);
+      return;
+    }
+
+    dispatch({ type: 'ADD_ERROR', message: t('login.passwordChange') });
+  };
 
   const sendMessage = async (
     headline: string,
@@ -171,20 +195,25 @@ const UserView = () => {
               fullWidth
               sx={{ mt: 2 }}
             />
-            <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(onSubmit)}>
+            <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(setAbout)}>
               {t('generics.save')}
             </AppButton>
           </Stack>
         </FormContainer>
       )}
-      {/* <Accordion>
+      <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.security')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <ChangePassword onSubmit={(e) => console.log(e)} />
+          <Collapse in={passwordError} sx={{ mb: 2 }}>
+            <Alert variant="outlined" severity="error" onClose={() => setError(false)}>
+              {t('login.passwordError')}
+            </Alert>
+          </Collapse>
+          <ChangePassword onSubmit={changePass} />
         </AccordionDetails>
-      </Accordion> */}
+      </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.privacy')}</Typography>

@@ -9,24 +9,36 @@ import AppButton from '../AppButton';
 import AppIconButton from '../AppIconButton';
 
 interface Props {
-  onSubmit: (formData: PassResponse) => void;
+  hideOld?: boolean;
+  onSubmit: (formData: PassResponse) => Promise<void>;
 }
 
 /**
  * Renders User info with Avatar
  * @component ChangePassword
  */
-const ChangePassword = ({ onSubmit }: Props) => {
+const ChangePassword = ({ onSubmit, hideOld = false }: Props) => {
   const { t } = useTranslation();
+  const [showOldPassword, setOldPassword] = useState(false);
+  const [showNewPassword, setNewPassword] = useState(false);
+  const [showConfirmPassword, setConfirmPassword] = useState(false);
 
   const schema = yup
-    .object({
+    .object()
+    .shape({
       newPassword: yup.string().required().min(4).max(32),
       confirmPassword: yup
         .string()
         .required()
         .oneOf([yup.ref('newPassword')], 'Passwords must match'),
     })
+    .shape(
+      hideOld
+        ? {
+            oldPassword: yup.string().required().min(4).max(32),
+          }
+        : {}
+    )
     .required();
 
   const {
@@ -37,12 +49,33 @@ const ChangePassword = ({ onSubmit }: Props) => {
     resolver: yupResolver(schema),
   });
 
-  const [showNewPassword, setNewPassword] = useState(false);
-  const [showConfirmPassword, setConfirmPassword] = useState(false);
-
   return (
     <FormContainer>
       <Stack>
+        {!hideOld && (
+          <TextField
+            required
+            type={showNewPassword ? 'text' : 'password'}
+            label="Old Password"
+            sx={{ width: '100%' }}
+            {...register('oldPassword')}
+            error={errors.oldPassword ? true : false}
+            helperText={errors.oldPassword?.message || ' '}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <AppIconButton
+                    aria-label="toggle password visibility"
+                    icon={showOldPassword ? 'visibilityon' : 'visibilityoff'}
+                    title={showOldPassword ? 'Hide Password' : 'Show Password'}
+                    onClick={() => setOldPassword(!showOldPassword)}
+                    onMouseDown={(e) => e.preventDefault()}
+                  />
+                </InputAdornment>
+              ),
+            }}
+          />
+        )}
         <TextField
           required
           type={showNewPassword ? 'text' : 'password'}

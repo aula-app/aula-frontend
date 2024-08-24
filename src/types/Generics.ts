@@ -37,6 +37,7 @@ export interface DefaultUpdate {
 }
 
 export interface PassResponse {
+  oldPassword?: string;
   newPassword: string;
   confirmPassword: string;
 }
