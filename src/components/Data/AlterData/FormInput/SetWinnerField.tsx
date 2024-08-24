@@ -1,6 +1,5 @@
 import { ObjectPropByName } from '@/types/Generics';
 import { FormControlLabel, Switch } from '@mui/material';
-import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {

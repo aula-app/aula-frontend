@@ -36,7 +36,8 @@ export interface DefaultUpdate {
   title: string;
 }
 
-export interface PassResponse {
+export type PassResponse = {
+  oldPassword?: string;
   newPassword: string;
   confirmPassword: string;
-}
+};

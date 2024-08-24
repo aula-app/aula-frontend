@@ -1,11 +1,13 @@
 import { AppButton, AppIcon } from '@/components';
+import ChangePassword from '@/components/ChangePassword';
+import { ChangePasswordMethods } from '@/components/ChangePassword/ChangePassword';
 import ImageEditor from '@/components/ImageEditor';
 import UserAvatar from '@/components/UserAvatar';
 import { useAppStore } from '@/store';
-import { ObjectPropByName } from '@/types/Generics';
+import { ObjectPropByName, PassResponse } from '@/types/Generics';
 import { SingleUserResponseType } from '@/types/RequestTypes';
 import { UserType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, localStorageGet } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Accordion,
@@ -23,7 +25,7 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { Stack } from '@mui/system';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -33,19 +35,20 @@ import * as yup from 'yup';
  */
 const UserView = () => {
   const { t } = useTranslation();
+  const jwt_token = localStorageGet('token');
   const [user, setUser] = useState<UserType | null>(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [, dispatch] = useAppStore();
   const [isEditingImage, setEditingImage] = useState<boolean>(false);
   const [updateAvatar, setUpdateAvatar] = useState(false);
+  const passFields = useRef<ChangePasswordMethods>(null);
 
-  const schema = yup
-    .object({
-      about_me: yup.string()
-        // .required(t('validation.required'))
-        // .min(4, t('validation.min', { var: 4 }))
-        // .max(32, t('validation.max', { var: 32 })),
-    });
+  const schema = yup.object({
+    about_me: yup.string(),
+    // .required(t('validation.required'))
+    // .min(4, t('validation.min', { var: 4 }))
+    // .max(32, t('validation.max', { var: 32 })),
+  });
 
   const {
     register,
@@ -68,7 +71,7 @@ const UserView = () => {
       setUser(response.data);
     });
 
-  const onSubmit = async (formData: Object) =>
+  const setAbout = async (formData: Object) =>
     databaseRequest(
       {
         model: 'User',
@@ -81,7 +84,35 @@ const UserView = () => {
   const toggleDrawer = () => {
     setUpdateAvatar(!updateAvatar);
     setEditingImage(!isEditingImage);
-  }
+  };
+
+  const changePass = (formData: PassResponse) => {
+    if (!formData.oldPassword) return;
+    setPass(formData.oldPassword, formData.newPassword);
+  };
+
+  const setPass = async (oldPass: string, newPass: string) => {
+    const request = await (
+      await fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/change_password.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwt_token,
+        },
+        body: JSON.stringify({
+          password: oldPass,
+          new_password: newPass,
+        }),
+      })
+    ).json();
+
+    if (!request.success) {
+      passFields.current?.displayMessage(false);
+      return;
+    }
+
+    passFields.current?.displayMessage(true);
+  };
 
   const sendMessage = async (
     headline: string,
@@ -171,20 +202,20 @@ const UserView = () => {
               fullWidth
               sx={{ mt: 2 }}
             />
-            <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(onSubmit)}>
+            <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(setAbout)}>
               {t('generics.save')}
             </AppButton>
           </Stack>
         </FormContainer>
       )}
-      {/* <Accordion>
+      <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.security')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <ChangePassword onSubmit={(e) => console.log(e)} />
+          <ChangePassword onSubmit={changePass} ref={passFields} />
         </AccordionDetails>
-      </Accordion> */}
+      </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.privacy')}</Typography>

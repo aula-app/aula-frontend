@@ -3,7 +3,7 @@ import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { ObjectPropByName } from '@/types/Generics';
 import { databaseRequest, SelectOptionsType } from '@/utils';
 import { MenuItem, Stack, TextField } from '@mui/material';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
