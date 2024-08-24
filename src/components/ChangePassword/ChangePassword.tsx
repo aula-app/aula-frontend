@@ -55,7 +55,7 @@ const ChangePassword = ({ onSubmit, hideOld = false }: Props) => {
         {!hideOld && (
           <TextField
             required
-            type={showNewPassword ? 'text' : 'password'}
+            type={showOldPassword ? 'text' : 'password'}
             label="Old Password"
             sx={{ width: '100%' }}
             {...register('oldPassword')}

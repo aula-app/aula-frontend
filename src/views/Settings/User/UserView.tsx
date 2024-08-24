@@ -87,7 +87,12 @@ const UserView = () => {
     setEditingImage(!isEditingImage);
   };
 
-  const changePass = async (formData: PassResponse) => {
+  const changePass = (formData: PassResponse) => {
+    if (!formData.oldPassword) return;
+    setPass(formData.oldPassword, formData.newPassword);
+  };
+
+  const setPass = async (oldPass: string, newPass: string) => {
     const request = await (
       await fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/change_password.php`, {
         method: 'POST',
@@ -95,7 +100,10 @@ const UserView = () => {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + jwt_token,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          password: oldPass,
+          new_password: newPass,
+        }),
       })
     ).json();
 
