@@ -141,6 +141,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
 
   const onSubmit = (formData: Object) => {
     if (typeof id !== 'undefined') otherData[getRequest(scope, 'id')] = id;
+    console.log(formData, otherData);
     dataSave({
       ...formData,
       ...otherData,

@@ -28,12 +28,12 @@ const UserAvatar = ({ id, size, update }: Props) => {
       },
     }).then((result: any) => {
       if (!result || !result.success) return;
-      setUserAvatar(result.data[0].filename);
+      if (result.data.length > 0) setUserAvatar(result.data[0].filename);
     });
   };
 
   useEffect(() => {
-    console.log("UPDATE", update)
+    console.log('UPDATE', update);
     downloadUserAvatar();
   }, [update]);
 
