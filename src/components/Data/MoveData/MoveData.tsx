@@ -133,7 +133,7 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
         sx={{ borderRadius: 30 }}
         onClick={() => setOpen(true)}
       >
-        {t('texts.edit', { var: t(`views.${scope}`) })}
+        {t('texts.select', { var: t(`views.${scope}`) })}
       </Button>
       <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
         <DialogTitle>Select {scope}</DialogTitle>
