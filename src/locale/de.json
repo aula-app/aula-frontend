@@ -131,6 +131,7 @@
     "phaseEnded": "Phase beendet",
     "rejected": "Diese Idee wurde nicht angenommen",
     "report": "Bitte erkläre, warum du diesen Inhalt melden möchtest",
+    "select": "{{var}} Auswählen",
     "undelegated": "{{var}} Ideen",
     "unaltenticated": "Die Seite, auf die du zugreifen möchtest, erfordert eine Authentifizierung.",
     "update": "Neue {{var}} für ",

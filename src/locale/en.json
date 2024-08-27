@@ -132,6 +132,7 @@
     "phaseEnded": "Phase ended",
     "rejected": "This idea was not approved.",
     "report": "Please explain why you are reporting this content",
+    "select": "Select {{var}}",
     "undelegated": "{{var}} ideas",
     "unaltenticated": "The page you are trying to access requires authentication",
     "update": "New {{var}} for ",
