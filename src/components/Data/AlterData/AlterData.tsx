@@ -20,6 +20,7 @@ import IconField from './FormInput/IconField';
 import ImageField from './FormInput/ImageField';
 import { useParams } from 'react-router-dom';
 import SetWinnerField from './FormInput/SetWinnerField';
+import MoveData from '../MoveData';
 
 interface Props {
   id?: number;
@@ -141,6 +142,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
 
   const onSubmit = (formData: Object) => {
     if (typeof id !== 'undefined') otherData[getRequest(scope, 'id')] = id;
+    console.log(formData, otherData);
     dataSave({
       ...formData,
       ...otherData,
@@ -201,6 +203,7 @@ const AlterData = ({ id, scope, isOpen, otherData = {}, metadata, onClose }: Pro
                 </Fragment>
               ))}
               {scope === 'ideas' && <CategoryField id={id} addUpdate={addUpdate} />}
+              {scope === 'rooms' && id && <MoveData parentId={id} scope="users" />}
               {id && item && scope === 'ideas' && Number(phase) === 40 && (
                 <SetWinnerField id={id} defaultValue={!!item.data.is_winner} addUpdate={addUpdate} />
               )}

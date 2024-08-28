@@ -1,7 +1,7 @@
 import DashBoard from './DashBoard';
 import { RoomCard } from '@/components/RoomCard';
 import { RoomsResponseType } from '@/types/RequestTypes';
-import { databaseRequest } from '@/utils';
+import { checkPermissions, databaseRequest } from '@/utils';
 import { Grid, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,14 +12,17 @@ const WelcomeView = () => {
   const [showDashboard, setDashboard] = useState(true);
 
   const roomsFetch = async () =>
-    await databaseRequest({
-      model: 'Room',
-      method: 'getRooms',
-      arguments: {
-        offset: 0,
-        limit: 0,
+    await databaseRequest(
+      {
+        model: 'Room',
+        method: checkPermissions(40) ? 'getRooms' : 'getRoomsByUser',
+        arguments: {
+          offset: 0,
+          limit: 0,
+        },
       },
-    }).then((response) => setRooms(response));
+      checkPermissions(40) ? [] : ['user_id']
+    ).then((response) => setRooms(response));
 
   const handleScroll = () => {
     setDashboard(false);
