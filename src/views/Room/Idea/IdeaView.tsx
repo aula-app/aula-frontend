@@ -83,7 +83,7 @@ const IdeaView = () => {
           )}
           {phase >= 20 && idea.data.approved !== 0 && (
             <ApprovalCard
-              comment={idea.data.approval_comment?idea.data.approval_comment:''}
+              comment={idea.data.approval_comment ? idea.data.approval_comment : ''}
               rejected={idea.data.approved < 0}
               disabled={phase > 20}
             />
@@ -107,7 +107,7 @@ const IdeaView = () => {
                 color="primary"
                 onClick={() => setAdd(true)}
                 sx={{
-                  position: 'absolute',
+                  position: 'fixed',
                   bottom: 0,
                   boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
                   m: 2,

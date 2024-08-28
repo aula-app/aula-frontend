@@ -112,7 +112,7 @@ const IdeasBoxView = () => {
               aria-label="add"
               color="primary"
               sx={{
-                position: 'absolute',
+                position: 'fixed',
                 bottom: 40,
                 alignSelf: 'center',
               }}

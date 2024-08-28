@@ -53,7 +53,7 @@ const WildIdeas = () => {
             aria-label="add"
             color="primary"
             sx={{
-              position: 'absolute',
+              position: 'fixed',
               bottom: 40,
             }}
             onClick={() => setAdd(true)}
