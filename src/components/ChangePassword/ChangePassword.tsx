@@ -39,10 +39,10 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(({ onSubmit, hid
     })
     .shape(
       hideOld
-        ? {
+        ? {}
+        : {
             oldPassword: yup.string().required().min(4).max(32),
           }
-        : {}
     )
     .required();
 
