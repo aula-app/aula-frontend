@@ -33,7 +33,6 @@ const UserAvatar = ({ id, size, update }: Props) => {
   };
 
   useEffect(() => {
-    console.log('UPDATE', update);
     downloadUserAvatar();
   }, [update]);
 
