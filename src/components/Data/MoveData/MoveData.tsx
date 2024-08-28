@@ -136,7 +136,7 @@ const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
         {t('texts.select', { var: t(`views.${scope}`) })}
       </Button>
       <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
-        <DialogTitle>Select {scope}</DialogTitle>
+        <DialogTitle>{t('texts.select', { var: t(`views.${scope}`) })}</DialogTitle>
         <DialogContent>
           <Stack height={350} position="relative" overflow="hidden">
             <Stack position="absolute" height="100%" width="100%">
