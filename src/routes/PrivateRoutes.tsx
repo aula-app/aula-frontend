@@ -14,7 +14,9 @@ import ReportsView from '@/views/Settings/Report';
 import UserView from '@/views/Settings/User';
 import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, redirect, Navigate } from 'react-router-dom';
+import { checkPermissions } from '@/utils';
+
 /**
  * List of routes available only for authenticated users
  * Also renders the "Private Layout" composition
@@ -36,9 +38,9 @@ const PrivateRoutes = () => (
       <Route path="idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
     </Route>
     <Route path="settings/profile" element={<UserView />} />
-    <Route path="settings/reports" element={<ReportsView />} />
-    <Route path="settings/config" element={<ConfigView />} />
-    <Route path="settings/:setting_name" element={<SettingsView />} />
+    <Route path="settings/reports" element={checkPermissions(50)?<ReportsView />:<Navigate to="/" />} />
+    <Route path="settings/config" element={checkPermissions(50)?<ConfigView />:<Navigate to="/" />} />
+    <Route path="settings/:setting_name" element={checkPermissions(50)?<SettingsView />:<Navigate to="/" />} />
     <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />
     <Route path="*" element={<NotFoundView />} />
   </Routes>
