@@ -95,7 +95,7 @@ const SetPasswordView = () => {
         <Typography variant="h5" sx={{ mb: 3 }}>
           {t("login.setPass")}
         </Typography>
-        <ChangePassword onSubmit={onSubmit} />
+        <ChangePassword onSubmit={onSubmit} hideOld />
       </Stack>
     </FormContainer>
   );

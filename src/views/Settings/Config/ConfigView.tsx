@@ -9,8 +9,6 @@ import Categories from './Categories';
 const ConfigView = () => {
   const { t } = useTranslation();
 
-  // Missing endpoint for categories
-
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
       <Typography variant="h4">{t('views.config')}</Typography>
