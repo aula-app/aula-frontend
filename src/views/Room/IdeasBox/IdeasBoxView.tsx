@@ -1,11 +1,12 @@
 import { AppIcon, AppLink } from '@/components';
 import BoxCard from '@/components/BoxCard';
-import { AlterData, MoveData } from '@/components/Data';
+import { MoveData } from '@/components/Data';
+import EditData from '@/components/Data/EditData';
 import DelegateVote from '@/components/DelegateVote';
 import { IdeaCard } from '@/components/Idea';
 import KnowMore from '@/components/KnowMore';
 import { DelegationType } from '@/types/Delegation';
-import { IdeasResponseType, SingleBoxResponseType } from '@/types/RequestTypes';
+import { IdeasResponseType } from '@/types/RequestTypes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
 import { Button, Fab, Grid, Stack, Typography } from '@mui/material';
@@ -99,7 +100,7 @@ const IdeasBoxView = () => {
                 boxIdeas.data.map((idea, key) => (
                   <Grid key={key} item xs={12} sm={6} md={4} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
                     <AppLink to={`idea/${idea.id}`}>
-                      <IdeaCard idea={idea} phase={params['phase'] as RoomPhases} />
+                      <IdeaCard idea={idea} phase={Number(params['phase']) as RoomPhases} />
                     </AppLink>
                   </Grid>
                 ))}
@@ -120,7 +121,7 @@ const IdeasBoxView = () => {
             >
               <AppIcon icon="idea" />
             </Fab>
-            <AlterData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id }} />
+            <EditData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id }} />
           </>
         )}
       </Stack>

@@ -1,4 +1,4 @@
-import { AlterData } from '@/components/Data';
+import EditData from '@/components/Data/EditData';
 import { ApprovalCard, Comment, IdeaBubble, IdeaDocument, VotingCard, VotingResults } from '@/components/Idea';
 import KnowMore from '@/components/KnowMore';
 import { CommentsResponseType, SingleIdeaResponseType } from '@/types/RequestTypes';
@@ -117,7 +117,7 @@ const IdeaView = () => {
               </Fab>
             </Stack>
           )}
-          <AlterData scope="comments" isOpen={add} onClose={closeAdd} otherData={{ idea_id: params.idea_id }} />
+          <EditData scope="comments" isOpen={add} onClose={closeAdd} otherData={{ idea_id: params.idea_id }} />
         </Stack>
       )}
     </Stack>

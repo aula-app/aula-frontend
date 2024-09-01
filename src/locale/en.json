@@ -108,7 +108,7 @@
   },
   "texts": {
     "boxCard": "Ideas Box",
-    "add": "Add {{var}}",
+    "add": "New {{var}}",
     "addToParent": "Add to {{var}}",
     "approved": "This idea was approved.",
     "bug": "Please try to shortly describe the bug",
@@ -168,6 +168,7 @@
     "dashboard": "Dashboard",
     "box": "Ideas box",
     "boxes": "Boxes",
+    "bug": "Bug Report",
     "topic": "Box",
     "topics": "Boxes",
     "category": "category",

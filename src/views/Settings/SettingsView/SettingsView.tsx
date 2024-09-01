@@ -1,5 +1,5 @@
 import { AppIconButton } from '@/components';
-import { AlterData, DeleteData } from '@/components/Data';
+import { EditData, DeleteData } from '@/components/Data';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
 import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
@@ -50,8 +50,8 @@ const SettingsView = () => {
   const loadData = async () => {
     const currentFilter = !filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '';
     await dataFetch(currentFilter).then((response) => {
-        setItems(response)
-        });
+      setItems(response);
+    });
   };
 
   const handleOrder = (col: number) => {
@@ -121,7 +121,7 @@ const SettingsView = () => {
       />
       <Divider />
       {items && items.data && <PaginationBar pages={Math.ceil(Number(items.count) / limit)} setPage={setPage} />}
-      <AlterData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
+      <EditData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
       <DeleteData
         key={`d_${setting_name}`}
         isOpen={openDelete}

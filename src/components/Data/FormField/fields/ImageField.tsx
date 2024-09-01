@@ -2,14 +2,14 @@ import AppButton from '@/components/AppButton';
 import AppIcon from '@/components/AppIcon';
 import DefaultImage from '@/components/DefaultImages';
 import ImageSelector from '@/components/ImageSelector/ImageSelector';
-import { formsSettings } from '@/utils';
 import { Button, FormControl, FormHelperText, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
+import { InputSettings } from '../../EditData/DataConfig';
 
 type Props = {
-  form: keyof typeof formsSettings;
+  data: InputSettings;
   control: Control<{}, any>;
   disabled?: boolean;
   setValue: UseFormSetValue<{}>;
@@ -19,7 +19,7 @@ type Props = {
  * Renders "SelectInput" component
  */
 
-const ImageField = ({ form, control, disabled = false, setValue, ...restOfProps }: Props) => {
+const ImageField = ({ data, control, disabled = false, setValue, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const [selector, setSelector] = useState(false);
   const onSubmit = (field: string, image: string) => {
@@ -30,10 +30,10 @@ const ImageField = ({ form, control, disabled = false, setValue, ...restOfProps 
   return (
     <Controller
       // @ts-ignore
-      name={form}
+      name={data.name}
       control={control}
       // @ts-ignore
-      defaultValue={'DI:0:0'}
+      defaultValue={data.form.defaultValue}
       render={({ field, fieldState }) => {
         const value = String(field.value);
         return (

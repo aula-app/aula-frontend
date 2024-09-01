@@ -1,6 +1,5 @@
 export * from './date';
 export * from './form';
-export * from './formsSettings';
 export * from './jwt';
 export * from './localStorage';
 export * from './messges';

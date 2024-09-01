@@ -1,3 +1,4 @@
+import EditData from '@/components/Data/EditData';
 import DashBoard from './DashBoard';
 import { RoomCard } from '@/components/RoomCard';
 import { RoomsResponseType } from '@/types/RequestTypes';

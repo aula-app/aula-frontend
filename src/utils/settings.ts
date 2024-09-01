@@ -82,6 +82,12 @@ export const requestDefinitions = {
     item: 'Message',
     items: 'Messages',
   },
+  categories: {
+    model: 'Idea',
+    item: 'Category',
+    items: 'Categories',
+    isChild: 'ideas',
+  },
   comments: {
     model: 'Comment',
     item: 'Comment',
@@ -113,12 +119,6 @@ export const requestDefinitions = {
     item: 'User',
     items: 'Users',
     isChild: 'rooms',
-  },
-  categories: {
-    model: 'Idea',
-    item: 'Category',
-    items: 'Categories',
-    isChild: 'ideas',
   },
 } as Record<
   SettingNamesType,

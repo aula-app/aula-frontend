@@ -1,5 +1,5 @@
 import { AppIcon, AppIconButton } from '@/components';
-import { DatabaseResponseData, DatabaseResponseType } from '@/types/Generics';
+import { DatabaseResponseData, DatabaseResponseType, ObjectPropByName } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
 import {
@@ -19,9 +19,10 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 interface Props {
-  parentId: number | undefined;
+  parentId?: number;
   scope: SettingNamesType;
   onClose?: () => void;
+  addUpdate?: (newUpdate: { model: string; method: string; args: ObjectPropByName }) => void;
 }
 
 /**
@@ -29,7 +30,7 @@ interface Props {
  * @component ConsentDialog
  */
 
-const DelegateVote = ({ scope, parentId, onClose = () => {} }: Props) => {
+const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props) => {
   const { t } = useTranslation();
   const params = useParams();
   const [data, setData] = useState<DatabaseResponseData[]>();

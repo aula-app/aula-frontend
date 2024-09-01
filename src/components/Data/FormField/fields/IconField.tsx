@@ -1,12 +1,12 @@
 import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
-import { formsSettings } from '@/utils';
 import { FormControl, FormHelperText, Stack, TextField, Typography } from '@mui/material';
 import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
+import { InputSettings } from '../../EditData/DataConfig';
 
 type Props = {
-  form: keyof typeof formsSettings;
+  data: InputSettings;
   control: Control<{}, any>;
   disabled?: boolean;
   setValue: UseFormSetValue<{}>;
@@ -16,7 +16,7 @@ type Props = {
  * Renders "SelectInput" component
  */
 
-const IconField = ({ form, control, disabled = false, setValue, ...restOfProps }: Props) => {
+const IconField = ({ data, control, disabled = false, setValue, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const onSubmit = (field: string, image: string) => {
     // @ts-ignore
@@ -26,10 +26,10 @@ const IconField = ({ form, control, disabled = false, setValue, ...restOfProps }
   return (
     <Controller
       // @ts-ignore
-      name={form}
+      name={data.name}
       control={control}
       // @ts-ignore
-      defaultValue={''}
+      defaultValue={data.form.defaultValue}
       render={({ field, fieldState }) => (
         <FormControl fullWidth>
           <Typography variant="caption" pl={2}>

@@ -1,6 +1,7 @@
 import { ReportBodyType } from '@/types/Scopes';
 import { Card, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
 import { AppLink } from '..';
+import { Fragment } from 'react/jsx-runtime';
 
 /**
  * Renders "ReportCard" component
@@ -31,8 +32,8 @@ const ReportCard = ({ headline, body }: Props) => {
         <>
           <CardContent sx={{ bgcolor: 'bug.main' }}>
             <Stack>
-              {(Object.keys(bodyData.data) as Array<keyof ReportBodyType['data']>).map((data) => (
-                <>
+              {(Object.keys(bodyData.data) as Array<keyof ReportBodyType['data']>).map((data, key) => (
+                <Fragment key={key}>
                   {bodyData.data && (
                     <Typography mt={1} key={data}>
                       {data}:{' '}
@@ -43,7 +44,7 @@ const ReportCard = ({ headline, body }: Props) => {
                       )}
                     </Typography>
                   )}
-                </>
+                </Fragment>
               ))}
             </Stack>
           </CardContent>

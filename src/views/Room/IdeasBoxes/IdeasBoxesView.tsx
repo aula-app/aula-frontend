@@ -1,6 +1,7 @@
 import { AppIcon } from '@/components';
 import BoxCard from '@/components/BoxCard';
-import { AlterData, MoveData } from '@/components/Data';
+import { MoveData } from '@/components/Data';
+import EditData from '@/components/Data/EditData';
 import { BoxesResponseType } from '@/types/RequestTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
 import { Fab, Grid, Stack } from '@mui/material';
@@ -64,7 +65,7 @@ const IdeasBoxView = () => {
           >
             <AppIcon icon="box" />
           </Fab>
-          <AlterData scope="boxes" isOpen={add} otherData={{ room_id: params.room_id }} onClose={closeAdd} />
+          <EditData scope="boxes" isOpen={add} otherData={{ room_id: params.room_id }} onClose={closeAdd} />
         </>
       )}
     </Stack>

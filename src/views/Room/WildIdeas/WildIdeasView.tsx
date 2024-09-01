@@ -1,9 +1,8 @@
 import { AppIcon } from '@/components';
-import { AlterData } from '@/components/Data';
+import EditData from '@/components/Data/EditData';
 import { IdeaBubble } from '@/components/Idea';
 import { IdeasResponseType } from '@/types/RequestTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Add } from '@mui/icons-material';
 import { Fab, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -60,7 +59,7 @@ const WildIdeas = () => {
           >
             <AppIcon icon="idea" />
           </Fab>
-          <AlterData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id }} />
+          <EditData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id }} />
         </>
       )}
     </Stack>

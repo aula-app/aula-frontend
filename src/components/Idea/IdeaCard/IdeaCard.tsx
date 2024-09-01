@@ -56,7 +56,7 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
     }).then((response) => (response.data ? setIcon(response.data.description_internal) : setIcon(undefined)));
 
   const getVariant = () => {
-    switch (Number(phase)) {
+    switch (phase) {
       case 40:
         return vote === 1 || idea.is_winner ? 'for' : 'against';
       case 20:
@@ -76,8 +76,8 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
 
   useEffect(() => {
     getIcon();
-    if (Number(phase) >= 30) getVote();
-    if (Number(phase) >= 40) getResults();
+    if (phase >= 30) getVote();
+    if (phase >= 40) getResults();
   }, []);
 
   return (
@@ -94,7 +94,7 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
     >
       <Stack direction="row" height={68} alignItems="center">
         <Stack pl={2}>
-          {Number(phase) >= 40 ? (
+          {phase >= 40 ? (
             <AppIcon icon={idea.is_winner > 0 ? 'for' : 'against'} size="xl" />
           ) : icon ? (
             <AppIcon icon={icon} />
@@ -118,7 +118,7 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
           height="100%"
           sx={{ aspectRatio: 1 }}
         >
-          {Number(phase) === 10 ? (
+          {phase === 10 ? (
             <>
               <Stack direction="row" alignItems="center">
                 <AppIcon icon="heart" size="small" />{' '}
@@ -133,7 +133,7 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
                 </Typography>
               </Stack>
             </>
-          ) : Number(phase) === 20 ? (
+          ) : phase === 20 ? (
             <>
               {idea.approved === 1 ? (
                 <AppIcon icon="approved" />
@@ -143,7 +143,7 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
                 <AppIcon icon={phases[phase].name} />
               )}
             </>
-          ) : Number(phase) === 30 ? (
+          ) : phase === 30 ? (
             <AppIcon icon={votingOptions[vote + 1]} />
           ) : (
             <>

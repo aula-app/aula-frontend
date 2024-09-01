@@ -1,5 +1,5 @@
-import AlterData from './AlterData';
+import EditData from './EditData';
 import DeleteData from './DeleteData';
 import MoveData from './MoveData';
 
-export { AlterData, DeleteData, MoveData };
+export { EditData, DeleteData, MoveData };

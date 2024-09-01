@@ -1,19 +1,13 @@
 import { SettingNamesType } from '@/types/SettingsTypes';
-import {
-  databaseRequest,
-  dataSettings,
-  formsSettings,
-  getRequest,
-  requestDefinitions,
-  SelectOptionsType,
-} from '@/utils';
+import { databaseRequest, dataSettings, getRequest, requestDefinitions, SelectOptionsType } from '@/utils';
 import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
+import { InputSettings } from '../../EditData/DataConfig';
 
 type Props = {
-  form: keyof typeof formsSettings;
+  data: InputSettings;
   control: Control<{}, any>;
   disabled?: boolean;
 };
@@ -22,7 +16,7 @@ type Props = {
  * Renders "SelectInput" component
  */
 
-const SelectField = ({ form, control, disabled = false, ...restOfProps }: Props) => {
+const SelectField = ({ data, control, disabled = false, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const [currentOptions, setOptions] = useState<SelectOptionsType[]>([]);
 
@@ -45,25 +39,23 @@ const SelectField = ({ form, control, disabled = false, ...restOfProps }: Props)
   }
 
   useEffect(() => {
-    if (Object.hasOwn(formsSettings[form], 'options')) {
-      if (!('options' in formsSettings[form]) || formsSettings[form].options === undefined) return;
-      typeof formsSettings[form].options === 'string'
-        ? fetchOptions(formsSettings[form].options)
-        : setOptions(formsSettings[form].options);
+    if (Object.hasOwn(data.form, 'options')) {
+      if (!('options' in data.form) || data.form.options === undefined) return;
+      typeof data.form.options === 'string' ? fetchOptions(data.form.options) : setOptions(data.form.options);
     }
-  }, [form]);
+  }, [data.form]);
 
   return (
     <Controller
       // @ts-ignore
-      name={form}
+      name={data.name}
       control={control}
       // @ts-ignore
       defaultValue={0}
       render={({ field, fieldState }) => (
         <FormControl fullWidth>
           <TextField
-            label={t(`settings.${form}`)}
+            label={t(`settings.${data.name}`)}
             required
             fullWidth
             disabled={disabled}
