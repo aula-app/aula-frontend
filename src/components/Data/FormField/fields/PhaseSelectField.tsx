@@ -12,7 +12,7 @@ type Props = {
 };
 
 /**
- * Renders "SelectInput" component
+ * Renders "PhaseSelectField" component
  */
 
 const PhaseSelectField = ({ data, phase, control, disabled = false, ...restOfProps }: Props) => {
