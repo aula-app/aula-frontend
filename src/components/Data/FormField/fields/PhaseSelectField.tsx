@@ -28,7 +28,7 @@ const PhaseSelectField = ({ data, phase, control, disabled = false, ...restOfPro
       : []
   );
 
-  return <SelectField data={data} control={control} disabled={phase >= 30} />;
+  return <SelectField data={data} control={control} disabled={!checkPermissions(50) && phase >= 30} />;
 };
 
 export default PhaseSelectField;
