@@ -1,3 +1,4 @@
+import { checkPermissions } from '@/utils';
 import { inputType } from '../formDefaults';
 
 export default [
@@ -22,14 +23,8 @@ export default [
   {
     name: 'phase_id',
     form: {
-      ...inputType.select,
+      type: 'phaseSelect',
       defaultValue: 10,
-      options: [
-        { label: 'phases.discussion', value: 10 },
-        { label: 'phases.approval', value: 20 },
-        { label: 'phases.voting', value: 30 },
-        { label: 'phases.results', value: 40 },
-      ],
     },
     role: 30,
   },

@@ -5,6 +5,8 @@ import SelectField from './fields/SelectField';
 import ImageField from './fields/ImageField';
 import IconField from './fields/IconField';
 import { InputSettings } from '../EditData/DataConfig';
+import PhaseSelectField from './fields/PhaseSelectField';
+import { RoomPhases } from '@/types/SettingsTypes';
 
 type Props = {
   data: InputSettings;
@@ -15,6 +17,7 @@ type Props = {
   getValues: () => void;
   setValue: UseFormSetValue<{}>;
   errors: FieldErrors<{}>;
+  phase?: RoomPhases;
 };
 
 /**
@@ -30,6 +33,7 @@ const FormInput = ({
   errors,
   disabled = false,
   hidden = false,
+  phase = 0,
   ...restOfProps
 }: Props) => {
   const { t } = useTranslation();
@@ -68,6 +72,8 @@ const FormInput = ({
       return <ImageField data={data} control={control} setValue={setValue} />;
     case 'select':
       return <SelectField data={data} control={control} disabled={disabled} />;
+    case 'phaseSelect':
+      return <PhaseSelectField data={data} control={control} phase={phase} disabled={disabled} />;
     default:
       return (
         <Controller

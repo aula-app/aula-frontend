@@ -11,11 +11,11 @@ import { checkPermissions, databaseRequest, getRequest, requestDefinitions } fro
 import { useEffect, useState } from 'react';
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import DataUpdates from './DataUpdates';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   id?: number;
   scope: SettingNamesType;
-  phase?: RoomPhases;
   otherData?: ObjectPropByName;
   metadata?: ObjectPropByName;
   isOpen: boolean;
@@ -31,8 +31,9 @@ interface updateType {
 /**
  * Renders "EditData" component
  */
-const EditData = ({ id, scope, phase = 0, otherData = {}, metadata, isOpen, onClose }: Props) => {
+const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Props) => {
   const { t } = useTranslation();
+  const params = useParams();
   const schema = getFields().reduce((schema, field) => {
     return { ...schema, [field.name]: field.form.schema };
   }, {});
@@ -48,6 +49,7 @@ const EditData = ({ id, scope, phase = 0, otherData = {}, metadata, isOpen, onCl
     resolver: yupResolver(yup.object(schema)),
   });
 
+  const [phase, setPhase] = useState<RoomPhases>((Number(params['phase']) as RoomPhases) || 0);
   const [fieldValues, setFieldValues] = useState<SingleResponseType>();
   const [update, setUpdate] = useState<Array<updateType>>([]);
 
@@ -72,6 +74,7 @@ const EditData = ({ id, scope, phase = 0, otherData = {}, metadata, isOpen, onCl
       },
     }).then((response: SingleResponseType) => {
       if (response.success) setFieldValues(response);
+      if (response.data.phase_id) setPhase(Number(response.data.phase_id) as RoomPhases);
     });
   };
 
@@ -155,6 +158,7 @@ const EditData = ({ id, scope, phase = 0, otherData = {}, metadata, isOpen, onCl
                 getValues={getValues}
                 setValue={setValue}
                 errors={errors}
+                phase={phase}
               />
             ))}
         </FormContainer>

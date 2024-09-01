@@ -2,7 +2,9 @@ import { SettingNamesType } from '@/types/SettingsTypes';
 import * as yup from 'yup';
 
 export type SelectOptionsType = { label: string; value: number };
-type FormTypes = 'input' | 'password' | 'select' | 'text' | 'icon' | 'image' | 'duration';
+
+type FormTypes = 'duration' | 'icon' | 'image' | 'input' | 'password' | 'phaseSelect' | 'select' | 'text';
+
 export type inputType = {
   type: FormTypes;
   defaultValue: string | number;
