@@ -17,12 +17,13 @@ import { grey } from '@mui/material/colors';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { updateType } from '../EditData/EditData';
 
 interface Props {
   parentId?: number;
   scope: SettingNamesType;
   onClose?: () => void;
-  addUpdate?: (newUpdate: { model: string; method: string; args: ObjectPropByName }) => void;
+  addUpdate?: (newUpdate: updateType) => void;
 }
 
 /**
@@ -33,14 +34,15 @@ interface Props {
 const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props) => {
   const { t } = useTranslation();
   const params = useParams();
+  const [availableItems, setAvailableItems] = useState<DatabaseResponseData[]>();
+  const [selectedItems, setSelectedItems] = useState<DatabaseResponseData[]>();
   const [data, setData] = useState<DatabaseResponseData[]>();
   const [selected, setSelected] = useState<number[]>([]);
   const [filter, setFilter] = useState('');
   const [isOpen, setOpen] = useState(false);
 
-  const dataFetch = async () => {
+  const getAvailableItems = async () => {
     const moreArgs = scope === 'ideas' ? { room_id: Number(params['room_id']) } : {};
-
     await databaseRequest({
       model: requestDefinitions[scope].model,
       method: scope === 'ideas' ? 'getIdeasByRoom' : getRequest(scope, 'fetch'),
@@ -52,17 +54,17 @@ const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props)
         extra_where: ` AND (${dataSettings[scope][0].name} LIKE '%${filter}%' OR ${dataSettings[scope][1].name} LIKE '%${filter}%')`,
         ...moreArgs,
       },
-    }).then((response: DatabaseResponseType) => (response.data ? setData(response.data) : getCurrentItems()));
-  };
-
-  const normalizeData = (selectedItems: DatabaseResponseData[]) => {
-    if (!data) return;
-    if (!selectedItems.every((element) => data.some((some) => some.id === element.id)))
-      setData([...new Set([...data, ...selectedItems])]);
+    }).then((response: DatabaseResponseType) => {
+      response.data ? setAvailableItems(response.data) : setAvailableItems([]);
+    });
   };
 
   const getCurrentItems = async () => {
-    if (!parentId || !requestDefinitions[scope].isChild) return;
+    if (!parentId || !requestDefinitions[scope].isChild) {
+      setSelectedItems([]);
+      return;
+    }
+
     await databaseRequest({
       model: requestDefinitions[scope].model,
       method: getRequest(scope, 'getChild'),
@@ -70,45 +72,79 @@ const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props)
         [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
       },
     }).then((response: DatabaseResponseType) => {
-      !response || !response.data ? setSelected([]) : setSelected(response.data.map((item) => item.id));
-      if (response && response.data) normalizeData(response.data);
+      response.data ? setSelectedItems(response.data) : setSelectedItems([]);
+      response.data ? setSelected(response.data.map((item) => item.id)) : setSelected([]);
     });
   };
 
+  const normalizeData = () => {
+    if (!availableItems || !selectedItems) return;
+    setData([...new Map([...availableItems, ...selectedItems].map((c) => [c.id, c])).values()]);
+  };
+
   const select = async (itemId: number) => {
-    if (!parentId || !requestDefinitions[scope].isChild) return;
-    await databaseRequest(
-      {
-        model: requestDefinitions[scope].model,
-        method: getRequest(scope, 'move'),
-        arguments: {
-          [getRequest(scope, 'id')]: itemId,
-          [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
-        },
-      },
-      ['updater_id']
-    ).then(() => getCurrentItems());
+    setSelected([...selected, itemId]);
   };
 
   const remove = async (itemId: number) => {
+    setSelected(selected.filter((id) => id !== itemId));
+  };
+
+  const requestAdd = async (id: number) => {
+    if (!parentId || !requestDefinitions[scope].isChild) return;
+    await databaseRequest({
+      model: requestDefinitions[scope].model,
+      method: getRequest(scope, 'move'),
+      arguments: {
+        [getRequest(scope, 'id')]: id,
+        [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
+      },
+    });
+  };
+
+  const requestRemove = async (id: number) => {
     if (!parentId || !requestDefinitions[scope].isChild) return;
     await databaseRequest({
       model: requestDefinitions[scope].model,
       method: getRequest(scope, 'remove'),
       arguments: {
-        [getRequest(scope, 'id')]: itemId,
+        [getRequest(scope, 'id')]: id,
         [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
       },
-    }).then(() => getCurrentItems());
+    });
+  };
+
+  const requestUpdates = () => {
+    if (!selectedItems) return;
+    const originalSelection = selectedItems.map((item) => item.id);
+    const toAdd = selected.filter((x) => !originalSelection.includes(x));
+    const toRemove = originalSelection.filter((x) => !selected.includes(x));
+    if (parentId) {
+      toAdd.forEach((id) => requestAdd(id));
+      toRemove.forEach((id) => requestRemove(id));
+    } else if (addUpdate) {
+      selected.forEach((id) =>
+        addUpdate({
+          model: requestDefinitions[scope].model,
+          method: getRequest(scope, 'move'),
+          args: { [getRequest(scope, 'id')]: id },
+          requestId: requestDefinitions[scope].isChild,
+        })
+      );
+    }
+    close();
   };
 
   const toggleSelect = (item: number) => {
-    //selected.includes(item) ? setSelected(selected.filter((key) => key !== item)) : setSelected([...selected, item]);
     selected.includes(item) ? remove(item) : select(item);
   };
 
   const changeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setFilter(event.target.value);
+  };
+
+  const onSubmit = () => {
+    requestUpdates();
   };
 
   const close = () => {
@@ -117,12 +153,13 @@ const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props)
   };
 
   useEffect(() => {
-    dataFetch();
+    getAvailableItems();
+    getCurrentItems();
   }, [filter, isOpen]);
 
   useEffect(() => {
-    getCurrentItems();
-  }, [data]);
+    if (availableItems && selectedItems) normalizeData();
+  }, [availableItems, selectedItems]);
 
   return (
     <>
@@ -185,6 +222,9 @@ const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props)
         <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
           <Button color="error" onClick={close}>
             {t('generics.close')}
+          </Button>
+          <Button type="submit" variant="contained" onClick={onSubmit}>
+            {t('generics.confirm')}
           </Button>
         </DialogActions>
       </Dialog>

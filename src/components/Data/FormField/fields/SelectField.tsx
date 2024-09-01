@@ -1,10 +1,11 @@
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, dataSettings, getRequest, requestDefinitions, SelectOptionsType } from '@/utils';
+import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
 import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { InputSettings } from '../../EditData/DataConfig';
+import { SelectOptionsType } from '../../EditData/DataConfig/formDefaults';
 
 type Props = {
   data: InputSettings;

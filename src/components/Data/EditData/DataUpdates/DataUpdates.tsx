@@ -30,7 +30,7 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
         </>
       );
     case 'rooms':
-      return <MoveData parentId={id} scope="users" />;
+      return <MoveData parentId={id} scope="users" addUpdate={addUpdate} />;
     default:
       return <></>;
   }

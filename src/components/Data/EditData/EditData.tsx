@@ -22,10 +22,11 @@ interface Props {
   onClose: () => void;
 }
 
-interface updateType {
+export interface updateType {
   model: string;
   method: string;
   args: ObjectPropByName;
+  requestId?: SettingNamesType;
 }
 
 /**
@@ -134,6 +135,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     ).then((response) => {
       if (!response.success) return;
       update.forEach((update) => {
+        if (update.requestId) update.args[getRequest(update.requestId, 'id')] = response.data;
         if (!(getRequest(scope, 'id') in update.args)) update.args[getRequest(scope, 'id')] = response.data;
         databaseRequest(
           {
