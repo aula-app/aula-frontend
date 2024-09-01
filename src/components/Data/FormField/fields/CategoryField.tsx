@@ -50,7 +50,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
       },
     }).then((response) => {
       if (!response.success) return;
-      setSelected(Number(response.data.id));
+      if (response.data) setSelected(Number(response.data.id));
     });
   }
 

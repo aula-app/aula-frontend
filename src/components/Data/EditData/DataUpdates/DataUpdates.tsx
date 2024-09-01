@@ -9,13 +9,14 @@ interface Props {
   id?: number;
   phase: RoomPhases;
   scope: SettingNamesType;
+  defaultValue?: any;
   addUpdate: (newUpdate: { model: string; method: string; args: ObjectPropByName }) => void;
 }
 
 /**
  * Renders "DataUpdates" component
  */
-const DataUpdates = ({ id, phase, scope, addUpdate }: Props) => {
+const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
   const params = useParams();
 
   switch (scope) {
@@ -25,7 +26,7 @@ const DataUpdates = ({ id, phase, scope, addUpdate }: Props) => {
       return (
         <>
           <CategoryField id={id} addUpdate={addUpdate} />
-          {id && phase === 40 && <SetWinnerField id={id} addUpdate={addUpdate} />}
+          {id && phase >= 40 && <SetWinnerField id={id} defaultValue={defaultValue} addUpdate={addUpdate} />}
         </>
       );
     case 'rooms':

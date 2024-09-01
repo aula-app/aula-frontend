@@ -34,6 +34,11 @@ interface updateType {
 const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const params = useParams();
+
+  const [phase, setPhase] = useState<RoomPhases>((Number(params['phase']) as RoomPhases) || 0);
+  const [fieldValues, setFieldValues] = useState<SingleResponseType>();
+  const [update, setUpdate] = useState<Array<updateType>>([]);
+
   const schema = getFields().reduce((schema, field) => {
     return { ...schema, [field.name]: field.form.schema };
   }, {});
@@ -48,10 +53,6 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   } = useForm({
     resolver: yupResolver(yup.object(schema)),
   });
-
-  const [phase, setPhase] = useState<RoomPhases>((Number(params['phase']) as RoomPhases) || 0);
-  const [fieldValues, setFieldValues] = useState<SingleResponseType>();
-  const [update, setUpdate] = useState<Array<updateType>>([]);
 
   const clearValues = () => {
     setFieldValues(undefined);
@@ -73,8 +74,32 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
         [getRequest(scope, 'id')]: id,
       },
     }).then((response: SingleResponseType) => {
-      if (response.success) setFieldValues(response);
-      if (response.data.phase_id) setPhase(Number(response.data.phase_id) as RoomPhases);
+      if (!response.success) return;
+      if (scope === 'boxes') setPhase(Number(response.data.phase_id) as RoomPhases);
+      setFieldValues(response);
+    });
+  };
+
+  const getIdeaPhase = async () => {
+    if (!fieldValues) return;
+    await databaseRequest({
+      model: 'Idea',
+      method: 'getIdeaTopic',
+      arguments: {
+        idea_id: fieldValues.data.id,
+      },
+    }).then(async (response) => {
+      if (!response.success) return;
+      await databaseRequest({
+        model: 'Topic',
+        method: 'getTopicPhase',
+        arguments: {
+          topic_id: response.data,
+        },
+      }).then((response) => {
+        if (!response.success) return;
+        setPhase(response.data);
+      });
     });
   };
 
@@ -135,6 +160,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
 
   useEffect(() => {
     updateValues();
+    if (scope === 'ideas') getIdeaPhase();
   }, [fieldValues]);
 
   useEffect(() => {
@@ -162,7 +188,13 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
               />
             ))}
         </FormContainer>
-        <DataUpdates id={id} phase={phase} scope={scope} addUpdate={addUpdate} />
+        <DataUpdates
+          id={id}
+          phase={phase}
+          scope={scope}
+          defaultValue={scope === 'ideas' ? !!fieldValues?.data.is_winner : undefined}
+          addUpdate={addUpdate}
+        />
         <Stack direction="row">
           <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
             {t('generics.cancel')}
