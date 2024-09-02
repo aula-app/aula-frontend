@@ -1,11 +1,9 @@
-import { ObjectPropByName } from '@/types/Generics';
 import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
-import MoveData from '../../MoveData';
+import { useParams } from 'react-router-dom';
 import CategoryField from '../../FormField/fields/CategoryField';
 import SetWinnerField from '../../FormField/fields/SetWinnerField';
-import { useParams } from 'react-router-dom';
+import MoveData from '../../MoveData';
 import { updateType } from '../EditData';
-import RoomField from '../../FormField/fields/RoomField';
 
 interface Props {
   id?: number;
