@@ -1,6 +1,7 @@
 import { AppIcon } from '@/components';
 import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
-import { AlterData, DeleteData } from '@/components/Data';
+import { DeleteData } from '@/components/Data';
+import EditData from '@/components/Data/EditData';
 import { CategoryType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Box, Chip, Stack } from '@mui/material';
@@ -60,7 +61,7 @@ const CatView = () => {
         })}
         <Chip label="New Category" avatar={<AppIcon icon="add" />} onClick={() => setEdit()} sx={{ mt: 1 }} />
       </Box>
-      <AlterData scope="categories" id={selectedId} isOpen={!!editCat} onClose={onClose} />
+      <EditData scope="categories" id={selectedId} isOpen={!!editCat} onClose={onClose} />
       <DeleteData scope="categories" id={selectedId || 0} isOpen={!!deleteCat} onClose={onClose} />
     </Stack>
   );

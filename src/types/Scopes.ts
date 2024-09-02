@@ -10,7 +10,7 @@ export interface BoxType {
   last_update: string;
   updater_id: number;
   room_id: number;
-  phase_id: RoomPhases;
+  phase_id: `${RoomPhases}`;
   phase_duration_0: number;
   phase_duration_1: number;
   phase_duration_2: number;

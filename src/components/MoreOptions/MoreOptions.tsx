@@ -1,15 +1,16 @@
 import { AlterTypes, ColorTypes, ObjectPropByName } from '@/types/Generics';
-import { SettingNamesType } from '@/types/SettingsTypes';
+import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
+import { getCurrentUser } from '@/utils';
 import { Box, Button, ClickAwayListener, Divider, Paper, Stack, Typography, Zoom } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useParams } from 'react-router-dom';
 import AppIcon from '../AppIcon';
 import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
-import { AlterData, DeleteData } from '../Data';
-import { useLocation } from 'react-router-dom';
-import { getCurrentUser, localStorageGet, parseJwt } from '@/utils';
+import { DeleteData } from '../Data';
+import EditData from '../Data/EditData';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -22,7 +23,7 @@ interface OptionsTypes {
 
 interface Props {
   id?: number;
-  scope?: SettingNamesType;
+  scope: SettingNamesType;
   canEdit?: boolean;
   onClose: () => void;
 }
@@ -33,6 +34,7 @@ interface Props {
 const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const params = useParams();
   const [currentId, setId] = useState<number>();
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState<SettingNamesType>();
@@ -144,16 +146,14 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
           </Zoom>
         </ClickAwayListener>
       </Box>
-      {edit && (
-        <AlterData
-          id={currentId}
-          scope={edit}
-          isOpen={!!edit}
-          onClose={close}
-          otherData={options.filter((data) => data.type === edit)[0]?.otherData}
-          metadata={options.filter((data) => data.type === edit)[0]?.metadata}
-        />
-      )}
+      <EditData
+        id={currentId}
+        scope={scope}
+        isOpen={!!edit}
+        onClose={close}
+        // otherData={options.filter((data) => data.type === edit)[0]?.otherData}
+        // metadata={options.filter((data) => data.type === edit)[0]?.metadata}
+      />
       {id && scope && <DeleteData id={id} scope={scope} isOpen={del} onClose={close} />}
     </>
   );

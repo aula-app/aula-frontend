@@ -1,5 +1,5 @@
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, getRequest, requestDefinitions } from '@/utils';
+import { databaseRequest, scopeDefinitions } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -19,9 +19,9 @@ const DeleteData = ({ isOpen, scope, id, onClose }: Params) => {
   const request = async (id: number) => {
     await databaseRequest(
       {
-        model: requestDefinitions[scope].model,
-        method: getRequest(scope, 'delete'),
-        arguments: { [getRequest(scope, 'id')]: id },
+        model: scopeDefinitions[scope].model,
+        method: scopeDefinitions[scope].delete,
+        arguments: { [scopeDefinitions[scope].id]: id },
       },
       ['updater_id']
     ).then(onClose);

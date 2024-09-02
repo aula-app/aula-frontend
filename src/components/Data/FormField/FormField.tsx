@@ -1,12 +1,15 @@
-import { formsSettings } from '@/utils';
 import { Stack, TextField, Typography } from '@mui/material';
 import { Control, Controller, FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
-import SelectField from './SelectField';
-import ImageField from './ImageField';
+import SelectField from './fields/SelectField';
+import ImageField from './fields/ImageField';
+import IconField from './fields/IconField';
+import { InputSettings } from '../EditData/DataConfig';
+import PhaseSelectField from './fields/PhaseSelectField';
+import { RoomPhases } from '@/types/SettingsTypes';
 
 type Props = {
-  form: keyof typeof formsSettings;
+  data: InputSettings;
   control: Control<{}, any>;
   disabled?: boolean;
   hidden?: boolean;
@@ -14,6 +17,7 @@ type Props = {
   getValues: () => void;
   setValue: UseFormSetValue<{}>;
   errors: FieldErrors<{}>;
+  phase?: RoomPhases;
 };
 
 /**
@@ -21,7 +25,7 @@ type Props = {
  */
 
 const FormInput = ({
-  form,
+  data,
   register,
   getValues,
   setValue,
@@ -29,18 +33,17 @@ const FormInput = ({
   errors,
   disabled = false,
   hidden = false,
+  phase = 0,
   ...restOfProps
 }: Props) => {
   const { t } = useTranslation();
 
-  switch (formsSettings[form].type) {
-    case 'select':
-      return <SelectField form={form} control={control} disabled={disabled} />;
+  switch (data.form.type) {
     case 'duration':
       return (
         <Stack direction="row" alignItems="center" px={1} sx={hidden ? { visibility: 'hidden', height: 0 } : {}}>
           <Typography noWrap pb={1} mr="auto">
-            {t(`settings.${form}`)}:
+            {t(`settings.${data.name}`)}:
           </Typography>
           <TextField
             required
@@ -49,11 +52,11 @@ const FormInput = ({
             InputProps={{ inputProps: { min: 1 } }}
             variant="standard"
             // @ts-ignore
-            {...register(form)}
+            {...register(data.name)}
             // @ts-ignore
-            error={errors[form] ? true : false}
+            error={errors[data.name] ? true : false}
             // @ts-ignore
-            helperText={t(errors[form]?.message || ' ')}
+            helperText={t(errors[data.name]?.message || ' ')}
             sx={{ mx: 2, width: 80 }}
             {...restOfProps}
             InputLabelProps={{ shrink: true }}
@@ -63,25 +66,31 @@ const FormInput = ({
           </Typography>
         </Stack>
       );
+    case 'icon':
+      return <IconField data={data} control={control} setValue={setValue} />;
     case 'image':
-      return <ImageField form={form} control={control} setValue={setValue} />;
+      return <ImageField data={data} control={control} setValue={setValue} />;
+    case 'select':
+      return <SelectField data={data} control={control} disabled={disabled} />;
+    case 'phaseSelect':
+      return <PhaseSelectField data={data} control={control} phase={phase} disabled={disabled} />;
     default:
       return (
         <Controller
           // @ts-ignore
-          name={form}
+          name={data.name}
           control={control}
           // @ts-ignore
-          defaultValue={formsSettings[form].defaultValue || ''}
+          defaultValue={data.form.defaultValue}
           // @ts-ignore
           render={({ field, fieldState }) => (
             <TextField
-              label={t(`settings.${form}`)}
+              label={t(`settings.${data.name}`)}
               required
-              minRows={formsSettings[form].type === 'text' ? 4 : 1}
-              multiline={formsSettings[form].type === 'text'}
+              minRows={data.form.type === 'text' ? 4 : 1}
+              multiline={data.form.type === 'text'}
               disabled={disabled}
-              type={formsSettings[form].type}
+              type={data.form.type}
               fullWidth
               {...field}
               error={!!fieldState.error}

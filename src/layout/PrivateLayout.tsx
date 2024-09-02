@@ -1,14 +1,14 @@
 import { ErrorBoundary } from '@/components';
+import EditData from '@/components/Data/EditData';
 import { useOnMobile } from '@/hooks/layout';
+import { getCurrentUser } from '@/utils';
+import AskConsent from '@/views/AskConsent/AskConsentView';
 import { Stack } from '@mui/material';
 import { FunctionComponent, PropsWithChildren, useState } from 'react';
-import { TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
-import TopBar from './TopBar';
-import SideBarFixed from './SideBar/SideBarFixed';
-import { AlterData } from '@/components/Data';
 import { useLocation } from 'react-router-dom';
-import { getCurrentUser, localStorageGet, parseJwt } from '@/utils';
-import AskConsent from '@/views/AskConsent/AskConsentView';
+import { TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
+import SideBarFixed from './SideBar/SideBarFixed';
+import TopBar from './TopBar';
 
 const TITLE_PRIVATE = 'aula';
 
@@ -43,7 +43,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
           <ErrorBoundary name="Content">{children}</ErrorBoundary>
         </Stack>
       </Stack>
-      <AlterData
+      <EditData
         isOpen={!!scope}
         scope={scope || 'bug'}
         otherData={{

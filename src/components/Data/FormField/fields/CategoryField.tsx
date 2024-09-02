@@ -1,10 +1,11 @@
 import AppIcon from '@/components/AppIcon';
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { ObjectPropByName } from '@/types/Generics';
-import { databaseRequest, SelectOptionsType } from '@/utils';
+import { databaseRequest } from '@/utils';
 import { MenuItem, Stack, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { SelectOptionsType } from '../../EditData/DataConfig/formDefaults';
 
 type Props = {
   id?: number;
@@ -50,7 +51,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
       },
     }).then((response) => {
       if (!response.success) return;
-      setSelected(Number(response.data.id));
+      if (response.data) setSelected(Number(response.data.id));
     });
   }
 

@@ -1,6 +1,6 @@
 import { BoxType, RoomType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, getRequest, requestDefinitions } from '@/utils';
+import { databaseRequest, scopeDefinitions } from '@/utils';
 import {
   Button,
   Dialog,
@@ -35,10 +35,10 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
   const scope = setting_name as SettingNamesType;
 
   const getDestination = async () => {
-    if (!requestDefinitions[scope].isChild) return;
+    if (!scopeDefinitions[scope].isChild) return;
     await databaseRequest({
-      model: requestDefinitions[requestDefinitions[scope].isChild].model,
-      method: getRequest(requestDefinitions[scope].isChild, 'fetch'),
+      model: scopeDefinitions[scopeDefinitions[scope].isChild].model,
+      method: scopeDefinitions[scope].fetch,
       arguments: {
         offset: 0,
         limit: 0,
@@ -50,15 +50,15 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
     });
   };
 
-  const request = async (id: number, parentId: number) => {
-    if (!requestDefinitions[scope].isChild || !parentId) return;
+  const request = async (id: number, targetId: number) => {
+    if (!scopeDefinitions[scope].move || !targetId) return;
     await databaseRequest(
       {
-        model: requestDefinitions[scope].model,
-        method: getRequest(requestDefinitions[scope].isChild, 'move'),
+        model: scopeDefinitions[scope].model,
+        method: scopeDefinitions[scope].add,
         arguments: {
-          [getRequest(scope, 'id')]: id,
-          [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
+          [scopeDefinitions[scope].id]: id,
+          [scopeDefinitions[scope].move.targetId]: targetId,
         },
       },
       ['updater_id']
@@ -95,7 +95,7 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
               <FormControl sx={{ m: 1, minWidth: 80 }}>
                 <Select
                   id="demo-simple-select"
-                  label={requestDefinitions[scope].isChild}
+                  label={scopeDefinitions[scope].isChild}
                   disabled={destinationList.length === 0}
                   fullWidth
                   // @ts-ignore

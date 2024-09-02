@@ -1,8 +1,8 @@
 import { AppIconButton } from '@/components';
-import { AlterData, DeleteData } from '@/components/Data';
+import { EditData, DeleteData } from '@/components/Data';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
-import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
+import { databaseRequest, dataSettings, scopeDefinitions } from '@/utils';
 import { Divider, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -36,8 +36,8 @@ const SettingsView = () => {
 
   const dataFetch = async (filter: string) =>
     await databaseRequest({
-      model: requestDefinitions[setting_name].model,
-      method: getRequest(setting_name, 'fetch'),
+      model: scopeDefinitions[setting_name].model,
+      method: scopeDefinitions[setting_name].fetch,
       arguments: {
         limit: limit,
         offset: page * limit,
@@ -50,8 +50,8 @@ const SettingsView = () => {
   const loadData = async () => {
     const currentFilter = !filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '';
     await dataFetch(currentFilter).then((response) => {
-        setItems(response)
-        });
+      setItems(response);
+    });
   };
 
   const handleOrder = (col: number) => {
@@ -60,7 +60,7 @@ const SettingsView = () => {
   };
 
   const resetTable = () => {
-    if (!requestDefinitions[setting_name]) {
+    if (!scopeDefinitions[setting_name]) {
       navigate('/error');
     } else {
       setPage(0);
@@ -121,7 +121,7 @@ const SettingsView = () => {
       />
       <Divider />
       {items && items.data && <PaginationBar pages={Math.ceil(Number(items.count) / limit)} setPage={setPage} />}
-      <AlterData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
+      <EditData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
       <DeleteData
         key={`d_${setting_name}`}
         isOpen={openDelete}
