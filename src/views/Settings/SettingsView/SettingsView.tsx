@@ -2,7 +2,7 @@ import { AppIconButton } from '@/components';
 import { EditData, DeleteData } from '@/components/Data';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
-import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
+import { databaseRequest, dataSettings, scopeDefinitions } from '@/utils';
 import { Divider, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -36,8 +36,8 @@ const SettingsView = () => {
 
   const dataFetch = async (filter: string) =>
     await databaseRequest({
-      model: requestDefinitions[setting_name].model,
-      method: getRequest(setting_name, 'fetch'),
+      model: scopeDefinitions[setting_name].model,
+      method: scopeDefinitions[setting_name].fetch,
       arguments: {
         limit: limit,
         offset: page * limit,
@@ -60,7 +60,7 @@ const SettingsView = () => {
   };
 
   const resetTable = () => {
-    if (!requestDefinitions[setting_name]) {
+    if (!scopeDefinitions[setting_name]) {
       navigate('/error');
     } else {
       setPage(0);

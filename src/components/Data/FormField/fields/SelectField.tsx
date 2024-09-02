@@ -1,5 +1,5 @@
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
+import { databaseRequest, dataSettings, scopeDefinitions } from '@/utils';
 import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control, Controller } from 'react-hook-form-mui';
@@ -23,8 +23,8 @@ const SelectField = ({ data, control, disabled = false, ...restOfProps }: Props)
 
   async function fetchOptions(scope: SettingNamesType) {
     await databaseRequest({
-      model: requestDefinitions[scope].model,
-      method: getRequest(scope, 'fetch'),
+      model: scopeDefinitions[scope].model,
+      method: scopeDefinitions[scope].fetch,
       arguments: {
         limit: 0,
         offset: 0,

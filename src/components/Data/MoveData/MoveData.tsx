@@ -1,7 +1,7 @@
 import { AppIcon, AppIconButton } from '@/components';
-import { DatabaseResponseData, DatabaseResponseType, ObjectPropByName } from '@/types/Generics';
+import { DatabaseResponseData, DatabaseResponseType } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, dataSettings, getRequest, requestDefinitions } from '@/utils';
+import { databaseRequest, dataSettings, scopeDefinitions } from '@/utils';
 import {
   Button,
   Checkbox,
@@ -20,10 +20,11 @@ import { useParams } from 'react-router-dom';
 import { updateType } from '../EditData/EditData';
 
 interface Props {
-  parentId?: number;
+  id?: number;
   scope: SettingNamesType;
+  targetId?: number;
   onClose?: () => void;
-  addUpdate?: (newUpdate: updateType) => void;
+  addUpdate?: (newUpdate: updateType[]) => void;
 }
 
 /**
@@ -31,27 +32,30 @@ interface Props {
  * @component ConsentDialog
  */
 
-const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props) => {
+const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props) => {
   const { t } = useTranslation();
   const params = useParams();
   const [availableItems, setAvailableItems] = useState<DatabaseResponseData[]>();
   const [selectedItems, setSelectedItems] = useState<DatabaseResponseData[]>();
-  const [data, setData] = useState<DatabaseResponseData[]>();
+  const [displayItems, setDisplayItems] = useState<DatabaseResponseData[]>();
   const [selected, setSelected] = useState<number[]>([]);
   const [filter, setFilter] = useState('');
   const [isOpen, setOpen] = useState(false);
 
   const getAvailableItems = async () => {
-    const moreArgs = scope === 'ideas' ? { room_id: Number(params['room_id']) } : {};
+    if (!scopeDefinitions[scope].move) return;
+    const moreArgs = params[scopeDefinitions[scope].move.targetId]
+      ? { [scopeDefinitions[scope].move.targetId]: targetId }
+      : {};
     await databaseRequest({
-      model: requestDefinitions[scope].model,
-      method: scope === 'ideas' ? 'getIdeasByRoom' : getRequest(scope, 'fetch'),
+      model: scopeDefinitions[scopeDefinitions[scope].move.target].model,
+      method: scopeDefinitions[scopeDefinitions[scope].move.target].fetch,
       arguments: {
         offset: 0,
         limit: 0,
-        orderby: dataSettings[scope][0].orderId,
+        orderby: dataSettings[scopeDefinitions[scope].move.target][0].orderId,
         asc: 1,
-        extra_where: ` AND (${dataSettings[scope][0].name} LIKE '%${filter}%' OR ${dataSettings[scope][1].name} LIKE '%${filter}%')`,
+        extra_where: ` AND (${dataSettings[scopeDefinitions[scope].move.target][0].name} LIKE '%${filter}%' OR ${dataSettings[scopeDefinitions[scope].move.target][1].name} LIKE '%${filter}%')`,
         ...moreArgs,
       },
     }).then((response: DatabaseResponseType) => {
@@ -60,17 +64,17 @@ const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props)
   };
 
   const getCurrentItems = async () => {
-    if (!parentId || !requestDefinitions[scope].isChild) {
+    if (!id || !scopeDefinitions[scope].move) {
       setSelectedItems([]);
       return;
     }
 
+    console.log({ [scopeDefinitions[scope].id]: id });
+
     await databaseRequest({
-      model: requestDefinitions[scope].model,
-      method: getRequest(scope, 'getChild'),
-      arguments: {
-        [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
-      },
+      model: scopeDefinitions[scopeDefinitions[scope].move.target].model,
+      method: scopeDefinitions[scope].move.get,
+      arguments: { [scopeDefinitions[scope].id]: id },
     }).then((response: DatabaseResponseType) => {
       response.data ? setSelectedItems(response.data) : setSelectedItems([]);
       response.data ? setSelected(response.data.map((item) => item.id)) : setSelected([]);
@@ -79,7 +83,7 @@ const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props)
 
   const normalizeData = () => {
     if (!availableItems || !selectedItems) return;
-    setData([...new Map([...availableItems, ...selectedItems].map((c) => [c.id, c])).values()]);
+    setDisplayItems([...new Map([...availableItems, ...selectedItems].map((c) => [c.id, c])).values()]);
   };
 
   const select = async (itemId: number) => {
@@ -90,26 +94,26 @@ const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props)
     setSelected(selected.filter((id) => id !== itemId));
   };
 
-  const requestAdd = async (id: number) => {
-    if (!parentId || !requestDefinitions[scope].isChild) return;
+  const requestAdd = async (targetId: number) => {
+    if (!id || !scopeDefinitions[scope].move) return;
     await databaseRequest({
-      model: requestDefinitions[scope].model,
-      method: getRequest(scope, 'move'),
+      model: scopeDefinitions[scope].move.model,
+      method: scopeDefinitions[scope].move.add,
       arguments: {
-        [getRequest(scope, 'id')]: id,
-        [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
+        [scopeDefinitions[scope].id]: id,
+        [scopeDefinitions[scope].move.targetId]: targetId,
       },
     });
   };
 
-  const requestRemove = async (id: number) => {
-    if (!parentId || !requestDefinitions[scope].isChild) return;
+  const requestRemove = async (targetId: number) => {
+    if (!id || !scopeDefinitions[scope].move) return;
     await databaseRequest({
-      model: requestDefinitions[scope].model,
-      method: getRequest(scope, 'remove'),
+      model: scopeDefinitions[scope].move.model,
+      method: scopeDefinitions[scope].move.remove,
       arguments: {
-        [getRequest(scope, 'id')]: id,
-        [getRequest(requestDefinitions[scope].isChild, 'id')]: parentId,
+        [scopeDefinitions[scope].id]: id,
+        [scopeDefinitions[scope].move.targetId]: targetId,
       },
     });
   };
@@ -119,16 +123,20 @@ const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props)
     const originalSelection = selectedItems.map((item) => item.id);
     const toAdd = selected.filter((x) => !originalSelection.includes(x));
     const toRemove = originalSelection.filter((x) => !selected.includes(x));
-    if (parentId) {
-      toAdd.forEach((id) => requestAdd(id));
-      toRemove.forEach((id) => requestRemove(id));
+    if (id) {
+      toAdd.forEach((targetId) => requestAdd(targetId));
+      toRemove.forEach((targetId) => requestRemove(targetId));
     } else if (addUpdate) {
-      selected.forEach((id) =>
-        addUpdate({
-          model: requestDefinitions[scope].model,
-          method: getRequest(scope, 'move'),
-          args: { [getRequest(scope, 'id')]: id },
-          requestId: requestDefinitions[scope].isChild,
+      if (!scopeDefinitions[scope].move) return;
+      const moveSettings = scopeDefinitions[scope].move;
+      addUpdate(
+        selected.map((targetId) => {
+          return {
+            model: moveSettings.model,
+            method: moveSettings.add,
+            args: { [scopeDefinitions[scope].id]: id, [moveSettings.targetId]: targetId },
+            requestId: moveSettings.target,
+          };
         })
       );
     }
@@ -163,73 +171,79 @@ const DelegateVote = ({ scope, parentId, onClose = () => {}, addUpdate }: Props)
 
   return (
     <>
-      <Button
-        fullWidth
-        color="secondary"
-        variant="outlined"
-        startIcon={<AppIcon icon="edit" />}
-        sx={{ borderRadius: 30 }}
-        onClick={() => setOpen(true)}
-      >
-        {t('texts.select', { var: t(`views.${scope}`) })}
-      </Button>
-      <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
-        <DialogTitle>{t('texts.select', { var: t(`views.${scope}`) })}</DialogTitle>
-        <DialogContent>
-          <Stack height={350} position="relative" overflow="hidden">
-            <Stack position="absolute" height="100%" width="100%">
-              <FilledInput
-                size="small"
-                onChange={changeSearch}
-                value={filter}
-                fullWidth
-                startAdornment={<AppIcon icon="search" size="small" sx={{ mr: 1 }} />}
-                endAdornment={<AppIconButton icon="close" size="small" onClick={() => setFilter('')} />}
-              />
-              <Stack my={1} sx={{ overflowY: 'auto' }}>
-                {data &&
-                  data.map((item) => (
-                    <Stack
-                      component={Button}
-                      direction="row"
-                      mt={1}
-                      key={item.id}
-                      borderRadius={30}
-                      bgcolor={selected.includes(item.id) ? grey[200] : 'transparent'}
-                      sx={{
-                        textTransform: 'none',
-                        textAlign: 'left',
-                        justifyContent: 'start',
-                        color: 'inherit',
-                        overflow: 'clip',
-                      }}
-                      fullWidth
-                      onClick={() => toggleSelect(item.id)}
-                    >
-                      <Checkbox checked={selected.includes(item.id)} onChange={() => toggleSelect(item.id)} />
-                      <Stack pl={2} flex={1}>
-                        <Typography noWrap>{item[dataSettings[scope][0].name]}</Typography>
-                        <Typography noWrap color="secondary" fontSize="small">
-                          {item[dataSettings[scope][1].name]}
-                        </Typography>
-                      </Stack>
-                    </Stack>
-                  ))}
+      {scopeDefinitions[scope].move && (
+        <>
+          <Button
+            fullWidth
+            color="secondary"
+            variant="outlined"
+            startIcon={<AppIcon icon="edit" />}
+            sx={{ borderRadius: 30 }}
+            onClick={() => setOpen(true)}
+          >
+            {t('texts.select', { var: t(`views.${scopeDefinitions[scope].move.target}`) })}
+          </Button>
+          <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
+            <DialogTitle>{t('texts.select', { var: t(`views.${scopeDefinitions[scope].move.target}`) })}</DialogTitle>
+            <DialogContent>
+              <Stack height={350} position="relative" overflow="hidden">
+                <Stack position="absolute" height="100%" width="100%">
+                  <FilledInput
+                    size="small"
+                    onChange={changeSearch}
+                    value={filter}
+                    fullWidth
+                    startAdornment={<AppIcon icon="search" size="small" sx={{ mr: 1 }} />}
+                    endAdornment={<AppIconButton icon="close" size="small" onClick={() => setFilter('')} />}
+                  />
+                  <Stack my={1} sx={{ overflowY: 'auto' }}>
+                    {displayItems &&
+                      displayItems.map((item) => (
+                        <Stack
+                          component={Button}
+                          direction="row"
+                          mt={1}
+                          key={item.id}
+                          borderRadius={30}
+                          bgcolor={selected.includes(item.id) ? grey[200] : 'transparent'}
+                          sx={{
+                            textTransform: 'none',
+                            textAlign: 'left',
+                            justifyContent: 'start',
+                            color: 'inherit',
+                            overflow: 'clip',
+                          }}
+                          fullWidth
+                          onClick={() => toggleSelect(item.id)}
+                        >
+                          <Checkbox checked={selected.includes(item.id)} onChange={() => toggleSelect(item.id)} />
+                          <Stack pl={2} flex={1}>
+                            <Typography noWrap>
+                              {item[dataSettings[scopeDefinitions[scope].move.target][0].name]}
+                            </Typography>
+                            <Typography noWrap color="secondary" fontSize="small">
+                              {item[dataSettings[scopeDefinitions[scope].move.target][1].name]}
+                            </Typography>
+                          </Stack>
+                        </Stack>
+                      ))}
+                  </Stack>
+                </Stack>
               </Stack>
-            </Stack>
-          </Stack>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
-          <Button color="error" onClick={close}>
-            {t('generics.close')}
-          </Button>
-          <Button type="submit" variant="contained" onClick={onSubmit}>
-            {t('generics.confirm')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+            </DialogContent>
+            <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
+              <Button color="error" onClick={close}>
+                {t('generics.close')}
+              </Button>
+              <Button type="submit" variant="contained" onClick={onSubmit}>
+                {t('generics.confirm')}
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </>
+      )}
     </>
   );
 };
 
-export default DelegateVote;
+export default MoveData;

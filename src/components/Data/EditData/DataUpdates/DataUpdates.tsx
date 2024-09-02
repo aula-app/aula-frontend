@@ -4,13 +4,14 @@ import MoveData from '../../MoveData';
 import CategoryField from '../../FormField/fields/CategoryField';
 import SetWinnerField from '../../FormField/fields/SetWinnerField';
 import { useParams } from 'react-router-dom';
+import { updateType } from '../EditData';
 
 interface Props {
   id?: number;
   phase: RoomPhases;
   scope: SettingNamesType;
   defaultValue?: any;
-  addUpdate: (newUpdate: { model: string; method: string; args: ObjectPropByName }) => void;
+  addUpdate: (newUpdate: updateType | updateType[]) => void;
 }
 
 /**
@@ -29,8 +30,8 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
           {id && phase >= 40 && <SetWinnerField id={id} defaultValue={defaultValue} addUpdate={addUpdate} />}
         </>
       );
-    case 'rooms':
-      return <MoveData parentId={id} scope="users" addUpdate={addUpdate} />;
+    case 'rooms' || 'users':
+      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
     default:
       return <></>;
   }

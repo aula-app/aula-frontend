@@ -1,7 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import { AllIconsType } from '@/components/AppIcon/AppIcon';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { requestDefinitions } from '@/utils';
+import { scopeDefinitions } from '@/utils';
 import { SubdirectoryArrowRight } from '@mui/icons-material';
 import { Button, Stack } from '@mui/material';
 import { grey } from '@mui/material/colors';
@@ -24,8 +24,8 @@ type Params = {
 const EditBar = ({ scope, selected, onAlter, onMove, onDelete }: Params) => {
   const { t } = useTranslation();
   const currentIcon =
-    requestDefinitions[scope].isChild && requestDefinitions[requestDefinitions[scope].isChild].item !== 'Topic'
-      ? (requestDefinitions[requestDefinitions[scope].isChild].item.toLowerCase() as AllIconsType)
+    scopeDefinitions[scope].isChild && scopeDefinitions[scopeDefinitions[scope].isChild].item !== 'Topic'
+      ? (scopeDefinitions[scopeDefinitions[scope].isChild].item.toLowerCase() as AllIconsType)
       : 'box';
   return (
     <Stack direction="row" bottom={0} height={37} bgcolor={grey[200]} px={1} alignItems="center">
@@ -39,14 +39,14 @@ const EditBar = ({ scope, selected, onAlter, onMove, onDelete }: Params) => {
           <Button color="error" onClick={() => onDelete(true)}>
             <AppIcon sx={{ mr: 1 }} icon="delete" /> {t('generics.delete')}
           </Button>
-          {requestDefinitions[scope].isChild && (
+          {scopeDefinitions[scope].isChild && (
             <Button disabled={selected.length === 0} color="secondary" onClick={() => onMove(true)}>
               <AppIcon sx={{ mr: 1 }} icon={currentIcon} />{' '}
               {t('texts.addToParent', {
                 var:
-                  requestDefinitions[scope].isChild === 'boxes'
+                  scopeDefinitions[scope].isChild === 'boxes'
                     ? 'box'
-                    : requestDefinitions[requestDefinitions[scope].isChild].model.toLowerCase(),
+                    : scopeDefinitions[scopeDefinitions[scope].isChild].model.toLowerCase(),
               })}
             </Button>
           )}

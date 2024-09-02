@@ -112,7 +112,7 @@ const DashBoard = ({ show = true }) => {
                       >
                         {t(`phases.${dashboardPhases[phase].name}`)}
                       </Typography>
-                      {count[phase]}
+                      {count[Number(phase)]}
                     </Stack>
                   </Button>
                 </Grid>

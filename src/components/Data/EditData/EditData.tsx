@@ -7,7 +7,7 @@ import { FormContainer } from 'react-hook-form-mui';
 import FormField from '../FormField';
 import DataConfig from './DataConfig';
 import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
-import { checkPermissions, databaseRequest, getRequest, requestDefinitions } from '@/utils';
+import { checkPermissions, databaseRequest, scopeDefinitions } from '@/utils';
 import { useEffect, useState } from 'react';
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import DataUpdates from './DataUpdates';
@@ -69,10 +69,10 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const getFieldValues = async () => {
     if (!scope) return;
     await databaseRequest({
-      model: requestDefinitions[scope].model,
-      method: getRequest(scope, 'get'),
+      model: scopeDefinitions[scope].model,
+      method: scopeDefinitions[scope].get,
       arguments: {
-        [getRequest(scope, 'id')]: id,
+        [scopeDefinitions[scope].id]: id,
       },
     }).then((response: SingleResponseType) => {
       if (!response.success) return;
@@ -112,10 +112,12 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
         fieldValues ? fieldValues.data[field.name] : field.form.defaultValue
       );
     });
+    setUpdate([]);
   };
 
-  const addUpdate = (newUpdate: updateType) => {
-    setUpdate([newUpdate, ...update]);
+  const addUpdate = (newUpdate: updateType | updateType[]) => {
+    if (!Array.isArray(newUpdate)) newUpdate = [newUpdate];
+    setUpdate([...newUpdate, ...update]);
   };
 
   const dataSave = async (args: ObjectPropByName) => {
@@ -127,16 +129,16 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
 
     await databaseRequest(
       {
-        model: requestDefinitions[scope].model,
-        method: getRequest(scope, !id ? 'add' : 'edit'),
+        model: scopeDefinitions[scope].model,
+        method: !id ? scopeDefinitions[scope].add : scopeDefinitions[scope].edit,
         arguments: args,
       },
       requestId
     ).then((response) => {
       if (!response.success) return;
       update.forEach((update) => {
-        if (update.requestId) update.args[getRequest(update.requestId, 'id')] = response.data;
-        if (!(getRequest(scope, 'id') in update.args)) update.args[getRequest(scope, 'id')] = response.data;
+        if (update.requestId) update.args[scopeDefinitions[scope].id] = response.data;
+        if (!(scopeDefinitions[scope].id in update.args)) update.args[scopeDefinitions[scope].id] = response.data;
         databaseRequest(
           {
             model: update.model,
@@ -153,7 +155,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   };
 
   const onSubmit = (formData: Object) => {
-    if (typeof id !== 'undefined') otherData[getRequest(scope, 'id')] = id;
+    if (typeof id !== 'undefined') otherData[scopeDefinitions[scope].id] = id;
     dataSave({
       ...formData,
       ...otherData,
@@ -173,7 +175,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} key={scope}>
       <Stack p={2} overflow="auto">
         <Typography variant="h4" pb={2}>
-          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${requestDefinitions[scope].item.toLowerCase()}`) })}
+          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${scopeDefinitions[scope].item.toLowerCase()}`) })}
         </Typography>
         <FormContainer>
           {getFields() &&

@@ -149,7 +149,6 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       <EditData
         id={currentId}
         scope={scope}
-        phase={(Number(params['phase']) as RoomPhases) || 0}
         isOpen={!!edit}
         onClose={close}
         // otherData={options.filter((data) => data.type === edit)[0]?.otherData}
