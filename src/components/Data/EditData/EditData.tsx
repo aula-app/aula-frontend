@@ -136,7 +136,6 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
       requestId
     ).then((response) => {
       if (!response.success) return;
-      console.log(updates);
       updates.forEach((update) => {
         if (update.requestId) update.args[scopeDefinitions[scope].id] = response.data;
         if (!(scopeDefinitions[scope].id in update.args)) update.args[scopeDefinitions[scope].id] = response.data;
