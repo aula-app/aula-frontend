@@ -69,8 +69,6 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
       return;
     }
 
-    og({ [scopeDefinitions[scope].id]: id });
-
     await databaseRequest({
       model: scopeDefinitions[scopeDefinitions[scope].move.target].model,
       method: scopeDefinitions[scope].move.get,
