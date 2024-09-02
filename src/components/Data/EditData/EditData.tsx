@@ -38,7 +38,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
 
   const [phase, setPhase] = useState<RoomPhases>((Number(params['phase']) as RoomPhases) || 0);
   const [fieldValues, setFieldValues] = useState<SingleResponseType>();
-  const [update, setUpdate] = useState<Array<updateType>>([]);
+  const [updates, setUpdate] = useState<Array<updateType>>([]);
 
   const schema = getFields().reduce((schema, field) => {
     return { ...schema, [field.name]: field.form.schema };
@@ -117,7 +117,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
 
   const addUpdate = (newUpdate: updateType | updateType[]) => {
     if (!Array.isArray(newUpdate)) newUpdate = [newUpdate];
-    setUpdate([...newUpdate, ...update]);
+    setUpdate([...newUpdate, ...updates]);
   };
 
   const dataSave = async (args: ObjectPropByName) => {
@@ -136,7 +136,8 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
       requestId
     ).then((response) => {
       if (!response.success) return;
-      update.forEach((update) => {
+      console.log(updates);
+      updates.forEach((update) => {
         if (update.requestId) update.args[scopeDefinitions[scope].id] = response.data;
         if (!(scopeDefinitions[scope].id in update.args)) update.args[scopeDefinitions[scope].id] = response.data;
         databaseRequest(

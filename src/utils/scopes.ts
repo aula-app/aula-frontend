@@ -133,7 +133,7 @@ export const scopeDefinitions = {
     edit: 'editRoom',
     delete: 'deleteRoom',
     move: {
-      model: 'user',
+      model: 'User',
       add: 'addUserToRoom',
       remove: 'removeUserFromRoom',
       get: 'getUsersByRoom',
@@ -153,7 +153,7 @@ export const scopeDefinitions = {
     edit: 'editUser',
     delete: 'deleteUser',
     move: {
-      model: 'user',
+      model: 'User',
       add: 'addUserToRoom',
       remove: 'removeUserFromRoom',
       get: 'getRoomsByUser',
