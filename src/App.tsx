@@ -17,7 +17,7 @@ const App = () => {
           domain={import.meta.env.VITE_APP_AUTH_DOMAIN}
           clientId={import.meta.env.VITE_APP_AUTH_ID}
           authorizationParams={{
-            redirect_uri: `${window.location.origin}/api/controllers/auth`,
+            redirect_uri: `${window.location.origin}/api/controllers/auth.php`,
           }}
         >
           <AppThemeProvider>
