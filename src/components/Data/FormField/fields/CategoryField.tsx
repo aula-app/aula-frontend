@@ -6,11 +6,12 @@ import { MenuItem, Stack, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SelectOptionsType } from '../../EditData/DataConfig/formDefaults';
+import { updateType } from '../../EditData/EditData';
 
 type Props = {
   id?: number;
   disabled?: boolean;
-  addUpdate: (newUpdate: { model: string; method: string; args: ObjectPropByName }) => void;
+  addUpdate: (newUpdate: updateType | updateType[]) => void;
 };
 
 interface ThisOptionsType extends SelectOptionsType {

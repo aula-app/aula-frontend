@@ -5,6 +5,7 @@ import CategoryField from '../../FormField/fields/CategoryField';
 import SetWinnerField from '../../FormField/fields/SetWinnerField';
 import { useParams } from 'react-router-dom';
 import { updateType } from '../EditData';
+import RoomField from '../../FormField/fields/RoomField';
 
 interface Props {
   id?: number;
@@ -30,7 +31,9 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
           {id && phase >= 40 && <SetWinnerField id={id} defaultValue={defaultValue} addUpdate={addUpdate} />}
         </>
       );
-    case 'rooms' || 'users':
+    case 'rooms':
+      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
+    case 'users':
       return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
     case 'boxes':
       return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
