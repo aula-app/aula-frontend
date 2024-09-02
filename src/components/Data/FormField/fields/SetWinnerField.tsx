@@ -1,11 +1,12 @@
 import { ObjectPropByName } from '@/types/Generics';
 import { FormControlLabel, Switch } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { updateType } from '../../EditData/EditData';
 
 type Props = {
   id: number;
   defaultValue: boolean;
-  addUpdate: (newUpdate: { model: string; method: string; args: ObjectPropByName }) => void;
+  addUpdate: (newUpdate: updateType | updateType[]) => void;
 };
 
 /**

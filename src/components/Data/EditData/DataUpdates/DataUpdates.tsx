@@ -1,9 +1,8 @@
-import { ObjectPropByName } from '@/types/Generics';
 import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
-import MoveData from '../../MoveData';
+import { useParams } from 'react-router-dom';
 import CategoryField from '../../FormField/fields/CategoryField';
 import SetWinnerField from '../../FormField/fields/SetWinnerField';
-import { useParams } from 'react-router-dom';
+import MoveData from '../../MoveData';
 import { updateType } from '../EditData';
 
 interface Props {
@@ -30,7 +29,9 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
           {id && phase >= 40 && <SetWinnerField id={id} defaultValue={defaultValue} addUpdate={addUpdate} />}
         </>
       );
-    case 'rooms' || 'users':
+    case 'rooms':
+      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
+    case 'users':
       return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
     case 'boxes':
       return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
