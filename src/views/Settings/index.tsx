@@ -1,3 +1,3 @@
-import SettingsView from './SettingsView/SettingsView';
+import Settings from './Settings';
 
-export { SettingsView as default, SettingsView };
+export { Settings as default, Settings };
