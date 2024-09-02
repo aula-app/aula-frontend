@@ -43,7 +43,7 @@ const FormInput = ({
       return (
         <Stack direction="row" alignItems="center" px={1} sx={hidden ? { visibility: 'hidden', height: 0 } : {}}>
           <Typography noWrap pb={1} mr="auto">
-            {t(`settings.${data.form.type}`)}:
+            {t(`settings.${data.name}`)}:
           </Typography>
           <TextField
             required

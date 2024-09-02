@@ -96,14 +96,17 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
 
   const requestAdd = async (targetId: number) => {
     if (!id || !scopeDefinitions[scope].move) return;
-    await databaseRequest({
-      model: scopeDefinitions[scope].move.model,
-      method: scopeDefinitions[scope].move.add,
-      arguments: {
-        [scopeDefinitions[scope].id]: id,
-        [scopeDefinitions[scope].move.targetId]: targetId,
+    await databaseRequest(
+      {
+        model: scopeDefinitions[scope].move.model,
+        method: scopeDefinitions[scope].move.add,
+        arguments: {
+          [scopeDefinitions[scope].id]: id,
+          [scopeDefinitions[scope].move.targetId]: targetId,
+        },
       },
-    });
+      ['updater_id']
+    );
   };
 
   const requestRemove = async (targetId: number) => {
@@ -178,7 +181,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
             color="secondary"
             variant="outlined"
             startIcon={<AppIcon icon="edit" />}
-            sx={{ borderRadius: 30 }}
+            sx={{ borderRadius: 30, mb: 2 }}
             onClick={() => setOpen(true)}
           >
             {t('texts.select', { var: t(`views.${scopeDefinitions[scope].move.target}`) })}
@@ -219,10 +222,12 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
                           <Checkbox checked={selected.includes(item.id)} onChange={() => toggleSelect(item.id)} />
                           <Stack pl={2} flex={1}>
                             <Typography noWrap>
-                              {item[dataSettings[scopeDefinitions[scope].move.target][0].name]}
+                              {scopeDefinitions[scope].move &&
+                                item[dataSettings[scopeDefinitions[scope].move.target][0].name]}
                             </Typography>
                             <Typography noWrap color="secondary" fontSize="small">
-                              {item[dataSettings[scopeDefinitions[scope].move.target][1].name]}
+                              {scopeDefinitions[scope].move &&
+                                item[dataSettings[scopeDefinitions[scope].move.target][1].name]}
                             </Typography>
                           </Stack>
                         </Stack>

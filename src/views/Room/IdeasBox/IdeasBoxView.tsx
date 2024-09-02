@@ -92,9 +92,7 @@ const IdeasBoxView = () => {
         </Stack>
         {boxIdeas && (
           <>
-            {checkPermissions(30) && (
-              <MoveData parentId={Number(params['box_id'])} scope="ideas" onClose={boxIdeasFetch} />
-            )}
+            {checkPermissions(30) && <MoveData id={Number(params['box_id'])} scope="ideas" onClose={boxIdeasFetch} />}
             <Grid container spacing={1} pt={1}>
               {boxIdeas.data &&
                 boxIdeas.data.map((idea, key) => (

@@ -34,6 +34,14 @@ export const scopeDefinitions = {
     add: 'addTopic',
     edit: 'editTopic',
     delete: 'deleteTopic',
+    move: {
+      model: 'Idea',
+      add: 'addIdeaToTopic',
+      remove: 'removeIdeaFromTopic',
+      get: 'getIdeasByTopic',
+      target: 'ideas',
+      targetId: 'idea_id',
+    },
   },
   bug: {
     name: 'bug',

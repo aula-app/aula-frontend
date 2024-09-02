@@ -32,6 +32,8 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
       );
     case 'rooms' || 'users':
       return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
+    case 'boxes':
+      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
     default:
       return <></>;
   }
