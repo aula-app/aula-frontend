@@ -6,6 +6,7 @@ import {
   Alert,
   Button,
   Collapse,
+  Divider,
   Grid,
   InputAdornment,
   Stack,
@@ -17,6 +18,7 @@ import { FormContainer, useForm } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { useAuth0 } from "@auth0/auth0-react";
 
 /**
  * Renders "Login" view for Login flow
@@ -79,72 +81,82 @@ const LoginView = () => {
     navigate("/", { replace: true });
   };
 
+  const { loginWithRedirect } = useAuth0();
+
   return (
-    <FormContainer>
-      <Stack>
-        <Typography variant="h5" sx={{ mb: 1 }}>
-          {t("login.welcome")}
-        </Typography>
-        <Collapse in={loginError} sx={{ mb: 2 }}>
-          <Alert
-            variant="outlined"
-            severity="error"
-            onClose={() => setError(false)}
+    <Stack>
+      <FormContainer>
+        <Stack>
+          <Typography variant="h5" sx={{ mb: 1 }}>
+            {t("login.welcome")}
+          </Typography>
+          <Collapse in={loginError} sx={{ mb: 2 }}>
+            <Alert
+              variant="outlined"
+              severity="error"
+              onClose={() => setError(false)}
+            >
+              {t("login.loginError")}
+            </Alert>
+          </Collapse>
+          <TextField
+            required
+            label={t("login.login")}
+            inputProps={{ autoCapitalize: "none" }}
+            {...register("username")}
+            error={errors.username ? true : false}
+            helperText={errors.username?.message || " "}
+            sx={{ mt: 0 }}
+          />
+          <TextField
+            required
+            type={showPassword ? "text" : "password"}
+            label={t("login.password")}
+            {...register("password")}
+            error={errors.password ? true : false}
+            helperText={errors.password?.message || " "}
+            sx={{ mt: 0 }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <AppIconButton
+                    aria-label="toggle password visibility"
+                    icon={showPassword ? "visibilityon" : "visibilityoff"}
+                    title={showPassword ? "Hide Password" : "Show Password"}
+                    onClick={handleShowPasswordClick}
+                    onMouseDown={(e) => e.preventDefault()}
+                  />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <AppButton
+            type="submit"
+            color="primary"
+            sx={{ mx: 0, mt: 0 }}
+            onClick={handleSubmit(onSubmit)}
           >
-            {t("login.loginError")}
-          </Alert>
-        </Collapse>
-        <TextField
-          required
-          label={t("login.login")}
-          inputProps={{ autoCapitalize: "none" }}
-          {...register("username")}
-          error={errors.username ? true : false}
-          helperText={errors.username?.message || " "}
-          sx={{ mt: 0 }}
-        />
-        <TextField
-          required
-          type={showPassword ? "text" : "password"}
-          label={t("login.password")}
-          {...register("password")}
-          error={errors.password ? true : false}
-          helperText={errors.password?.message || " "}
-          sx={{ mt: 0 }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <AppIconButton
-                  aria-label="toggle password visibility"
-                  icon={showPassword ? "visibilityon" : "visibilityoff"}
-                  title={showPassword ? "Hide Password" : "Show Password"}
-                  onClick={handleShowPasswordClick}
-                  onMouseDown={(e) => e.preventDefault()}
-                />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <AppButton
-          type="submit"
-          color="primary"
-          sx={{ mx: 0, mt: 0 }}
-          onClick={handleSubmit(onSubmit)}
-        >
-          {t("login.button")}
-        </AppButton>
-        <Grid container justifyContent="end" alignItems="center">
-          <Button
-            variant="text"
-            color="secondary"
-            component={AppLink}
-            to="/recovery/password"
-          >
-            {t('login.forgot')}
-          </Button>
-        </Grid>
+            {t("login.button")}
+          </AppButton>
+          <Grid container justifyContent="end" alignItems="center">
+            <Button
+              variant="text"
+              color="secondary"
+              component={AppLink}
+              to="/recovery/password"
+            >
+              {t('login.forgot')}
+            </Button>
+          </Grid>
+        </Stack>
+      </FormContainer>
+      <Stack direction='row' mb={2} alignItems='center'>
+        <Divider sx={{flex: 1}} />
+        <Typography px={2} color="secondary">{t('generics.or')}</Typography>
+        <Divider sx={{flex: 1}} />
       </Stack>
-    </FormContainer>
+      <Button variant="outlined" onClick={() => loginWithRedirect()}>Authenticate</Button>
+    </Stack>
   );
 };
 

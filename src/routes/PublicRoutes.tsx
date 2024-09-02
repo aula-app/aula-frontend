@@ -1,4 +1,5 @@
 import { NotFoundView } from '@/views/Public';
+import AuthView from '@/views/Public/Auth';
 import LoginRoutes from '@/views/Public/Login';
 import RecoveryRoutes from '@/views/Public/Recovery';
 import SetPasswordView from '@/views/Public/SetPassword';
@@ -16,6 +17,7 @@ const PublicRoutes = () => {
       <Route path="login/*" element={<LoginRoutes />} />
       <Route path="recovery/*" element={<RecoveryRoutes />} />
       <Route path="password/:key" element={<SetPasswordView />} />
+      <Route path="auth" element={<AuthView />} />
       <Route path="*" element={<NotFoundView />} />
     </Routes>
   );
