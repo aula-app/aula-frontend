@@ -84,7 +84,7 @@ const DashBoard = ({ show = true }) => {
           {count && Object.keys(count).length > 4 && (
             <Grid container spacing={1} p={1}>
               {displayPhases.map((phase, key) => (
-                <Grid item size={{ xs: 6, sm: 3 }} key={key}>
+                <Grid size={{ xs: 6, sm: 3 }} key={key}>
                   <Button
                     sx={{
                       width: '100%',
