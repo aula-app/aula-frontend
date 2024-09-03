@@ -43,7 +43,7 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/joy": "^5.0.0-alpha.84",
     "@mui/lab": "^5.0.0-alpha.140",
-    "@mui/material": "^6.0.2",
+    "@mui/material": "latest",
     "@mui/x-data-grid": "^6.7.0",
     "@mui/x-date-pickers": "^6.9.0",
     "@types/react-avatar-editor": "^13.0.2",
