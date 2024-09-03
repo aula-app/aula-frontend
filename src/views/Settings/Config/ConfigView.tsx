@@ -1,10 +1,12 @@
 import { AppIcon } from '@/components';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useTranslation } from 'react-i18next';
 import Categories from './Categories';
 import SchoolInfo from './SchoolInfo';
 import SystemSettings from './SystemSettings';
+import { red } from '@mui/material/colors';
+import SchoolDelete from './SchoolDelete';
 
 /** * Renders "Config" view
  * url: /settings/config
@@ -39,7 +41,7 @@ const ConfigView = () => {
           <SystemSettings />
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      {/* <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h5" py={1}>
             {t(`settings.advanced`)}
@@ -48,15 +50,22 @@ const ConfigView = () => {
         <AccordionDetails>
           <Typography variant="h6">Deactivate</Typography>
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
       <Accordion>
-        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
+        <AccordionSummary
+          expandIcon={<AppIcon icon="arrowdown" />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+          sx={{
+            backgroundColor: red[100],
+          }}
+        >
           <Typography variant="h5" py={1}>
             {t(`settings.danger`)}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography variant="h6">Deactivate</Typography>
+          <SchoolDelete />
         </AccordionDetails>
       </Accordion>
     </Stack>
