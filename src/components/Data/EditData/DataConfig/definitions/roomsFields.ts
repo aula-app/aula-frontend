@@ -19,4 +19,9 @@ export default [
     },
     role: 50,
   },
+  {
+    name: 'status',
+    form: inputType.status,
+    role: 50,
+  },
 ];

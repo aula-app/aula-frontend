@@ -1,7 +1,6 @@
 import { AppIconButton } from '@/components';
 import { EditData, DeleteData } from '@/components/Data';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { TableResponseType } from '@/types/TableTypes';
 import { databaseRequest, dataSettings, scopeDefinitions } from '@/utils';
 import { Divider, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -12,6 +11,7 @@ import DataTable from './DataTable';
 import EditBar from './EditBar';
 import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
+import { PossibleFields } from '@/types/Scopes';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -21,7 +21,8 @@ const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
-  const [items, setItems] = useState<TableResponseType>();
+  const [activeItems, setActiveItems] = useState<PossibleFields[]>([]);
+  const [suspendedItems, setSuspendedItems] = useState<PossibleFields[]>([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
   const [orderBy, setOrder] = useState(dataSettings[setting_name][0].orderId);
@@ -34,7 +35,7 @@ const SettingsView = () => {
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const dataFetch = async (filter: string) =>
+  const dataFetch = async (filter: string, status: 0 | 1) =>
     await databaseRequest({
       model: scopeDefinitions[setting_name].model,
       method: scopeDefinitions[setting_name].fetch,
@@ -44,13 +45,17 @@ const SettingsView = () => {
         orderby: orderBy,
         asc: orderAsc,
         extra_where: filter,
+        status: status,
       },
     });
 
   const loadData = async () => {
     const currentFilter = !filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '';
-    await dataFetch(currentFilter).then((response) => {
-      setItems(response);
+    await dataFetch(currentFilter, 1).then((response) => {
+      if (response.success) setActiveItems(response.data || []);
+    });
+    await dataFetch(currentFilter, 0).then((response) => {
+      if (response.success) setSuspendedItems(response.data || []);
     });
   };
 
@@ -97,10 +102,11 @@ const SettingsView = () => {
       </Stack>
       <FilterBar scope={setting_name} filter={filter} setFilter={setFilter} isOpen={openFilter} />
       <Divider />
-      {items && items.data ? (
+      {activeItems && suspendedItems ? (
         <DataTable
           handleOrder={handleOrder}
-          items={items.data}
+          activeItems={activeItems}
+          suspendedItems={suspendedItems}
           orderAsc={orderAsc}
           orderBy={orderBy}
           scope={setting_name}
@@ -120,7 +126,12 @@ const SettingsView = () => {
         onDelete={setOpenDelete}
       />
       <Divider />
-      {items && items.data && <PaginationBar pages={Math.ceil(Number(items.count) / limit)} setPage={setPage} />}
+      {activeItems && suspendedItems && (
+        <PaginationBar
+          pages={Math.ceil(Number([...activeItems, ...suspendedItems].length) / limit)}
+          setPage={setPage}
+        />
+      )}
       <EditData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
       <DeleteData
         key={`d_${setting_name}`}

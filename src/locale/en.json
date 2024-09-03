@@ -73,6 +73,7 @@
   },
   "settings": {
     "about_me": "Description",
+    "advanced": "Advanced Settings",
     "approval_comment": "Approval comment",
     "approved": "Approve?",
     "body": "Text",
@@ -80,6 +81,7 @@
     "consent_text": "Consent message",
     "content": "Content",
     "created": "Creation date",
+    "danger": "Danger Zone",
     "description": "Description",
     "description_public": "Description",
     "displayname": "Display Name",
@@ -87,7 +89,9 @@
     "headline": "Title",
     "is_winner": "Set winner?",
     "last_update": "Last update",
+    "login": "Login Settings",
     "name": "Name",
+    "oauth": "Enable oAuth",
     "password": "Password",
     "passwordChange": "New Password",
     "passwordConfirm": "Confirm password",
@@ -98,13 +102,27 @@
     "phase_duration_3": "Voting",
     "phase_duration_4": "Results",
     "realname": "Student Name",
+    "registration": "Allow registration",
     "room_id": "Room",
     "room_name": "Name of room",
+    "settings": "General Settings",
+    "school": "School Info",
     "status": "Status",
+    "system": "System Settings",
+    "time": "Time Settings",
+    "timeEnd": "Time End",
+    "timeStart": "Time Start",
     "title": "Title",
     "username": "User name",
     "user_needs_to_consent": "Consent needed?",
-    "userlevel": "User role"
+    "userlevel": "User role",
+    "vacation": "Vacation Mode",
+    "workDays": "Work Days",
+    "workHours": "Work Hours"
+  },
+  "status": {
+    "active": "Active",
+    "suspended": "Suspended"
   },
   "texts": {
     "boxCard": "Ideas Box",
@@ -118,7 +136,7 @@
     "deleteData": "Delete account",
     "deleteHeadline": "Delete selected {{var}}",
     "deleteRequest": "Data deletion requested",
-    "deleteText": "Are you sure you want to delete request the deletion of your account? All your personal data will be lost. This action cannot be undone.",
+    "deleteText": "Are you sure you want to request the deletion of your account? All your data will be lost. This action cannot be undone.",
     "edit": "Edit {{var}}",
     "exportData": "Export account data",
     "exportRequest": "Data export requested",
@@ -164,7 +182,7 @@
   "views": {
     "about": "About",
     "advanced": "Advanced",
-    "config": "Settings",
+    "configuration": "Configurations",
     "dashboard": "Dashboard",
     "box": "Ideas box",
     "boxes": "Boxes",
@@ -200,5 +218,14 @@
     "against": "against",
     "neutral": "neutral",
     "for": "for"
+  },
+  "week": {
+    "Sunday": "Sunday",
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Friday": "Friday",
+    "Saturday": "Saturday"
   }
 }

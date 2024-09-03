@@ -39,7 +39,7 @@ const PrivateRoutes = () => (
     </Route>
     <Route path="settings/profile" element={<UserView />} />
     <Route path="settings/reports" element={checkPermissions(50) ? <ReportsView /> : <Navigate to="/" />} />
-    <Route path="settings/config" element={checkPermissions(50) ? <ConfigView /> : <Navigate to="/" />} />
+    <Route path="settings/configuration" element={checkPermissions(50) ? <ConfigView /> : <Navigate to="/" />} />
     <Route path="settings/:setting_name" element={<SettingsView />} />
     <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />
     <Route path="*" element={<NotFoundView />} />

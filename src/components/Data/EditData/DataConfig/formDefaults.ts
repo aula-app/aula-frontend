@@ -42,4 +42,14 @@ export const inputType = {
     defaultValue: '',
     schema: yup.string().max(100, 'validation.max'),
   },
+
+  status: {
+    type: 'select',
+    defaultValue: 1,
+    schema: yup.number(),
+    options: [
+      { label: 'status.suspended', value: 0 },
+      { label: 'status.active', value: 1 },
+    ],
+  },
 };

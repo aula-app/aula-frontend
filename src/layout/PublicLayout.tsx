@@ -1,6 +1,6 @@
 import { AppLink, ErrorBoundary } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
-import { Box, Button, Divider, Grid, Stack } from '@mui/material/';
+import { Box, Button, Stack } from '@mui/material/';
 import { FunctionComponent, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -32,20 +32,6 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         }}
       >
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
-        {/* <Stack>
-          <Divider sx={{ mt: 1, mb: 2 }}>{t('generics.or')}</Divider>
-          <Grid container justifyContent="space-between" gap={1} alignItems="center">
-            <Button variant="contained" color="error" sx={{ flexGrow: 1, flexBasis: 1 }}>
-              Google
-            </Button>
-            <Button variant="contained" color="info" sx={{ flexGrow: 1, flexBasis: 1 }}>
-              Facebook
-            </Button>
-          </Grid>
-          <Grid container justifyContent="center" alignItems="center" sx={{ mt: 3, mb: 1 }}>
-            {toggleSignUp()}
-          </Grid>
-        </Stack>*/}
       </Stack>
     </Stack>
   );

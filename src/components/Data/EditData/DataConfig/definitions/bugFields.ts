@@ -6,4 +6,9 @@ export default [
     form: inputType.longText,
     role: 10,
   },
+  {
+    name: 'status',
+    form: inputType.status,
+    role: 50,
+  },
 ];

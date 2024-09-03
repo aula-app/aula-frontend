@@ -23,7 +23,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { grey, red } from '@mui/material/colors';
 import { Stack } from '@mui/system';
 import { useEffect, useRef, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
@@ -227,8 +227,15 @@ const UserView = () => {
         </AccordionDetails>
       </Accordion>
       <Accordion>
-        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
-          <Typography variant="h6">{t('views.advanced')}</Typography>
+        <AccordionSummary
+          expandIcon={<AppIcon icon="arrowdown" />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+          sx={{
+            backgroundColor: red[100],
+          }}
+        >
+          <Typography variant="h6">{t('settings.danger')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} fullWidth>

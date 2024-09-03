@@ -1,4 +1,4 @@
-import { Button, Drawer, Stack, Typography } from '@mui/material';
+import { Box, Button, Drawer, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -179,27 +179,31 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
           {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${scopeDefinitions[scope].item.toLowerCase()}`) })}
         </Typography>
         <FormContainer>
-          {getFields() &&
-            getFields().map((field) => (
-              <FormField
-                key={field.name}
-                data={field}
-                register={register}
-                control={control}
-                getValues={getValues}
-                setValue={setValue}
-                errors={errors}
-                phase={phase}
-              />
-            ))}
+          <Stack>
+            {getFields() &&
+              getFields().map((field, key) => (
+                <Box order={key} key={key}>
+                  <FormField
+                    data={field}
+                    register={register}
+                    control={control}
+                    getValues={getValues}
+                    setValue={setValue}
+                    errors={errors}
+                    phase={phase}
+                  />
+                </Box>
+              ))}
+
+            <DataUpdates
+              id={id}
+              phase={phase}
+              scope={scope}
+              defaultValue={scope === 'ideas' ? !!fieldValues?.data.is_winner : undefined}
+              addUpdate={addUpdate}
+            />
+          </Stack>
         </FormContainer>
-        <DataUpdates
-          id={id}
-          phase={phase}
-          scope={scope}
-          defaultValue={scope === 'ideas' ? !!fieldValues?.data.is_winner : undefined}
-          addUpdate={addUpdate}
-        />
         <Stack direction="row">
           <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
             {t('generics.cancel')}

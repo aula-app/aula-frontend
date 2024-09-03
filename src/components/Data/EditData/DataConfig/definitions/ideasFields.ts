@@ -38,4 +38,9 @@ export default [
     role: 50,
     phase: 20,
   },
+  {
+    name: 'status',
+    form: inputType.status,
+    role: 50,
+  },
 ];
