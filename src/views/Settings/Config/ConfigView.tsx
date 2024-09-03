@@ -49,6 +49,21 @@ const ConfigView = () => {
           <Typography variant="h6">Deactivate</Typography>
         </AccordionDetails>
       </Accordion>
+      <Accordion>
+        <AccordionSummary
+          color="error"
+          expandIcon={<AppIcon icon="arrowdown" />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+        >
+          <Typography variant="h5" py={1}>
+            {t(`settings.danger`)}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="h6">Deactivate</Typography>
+        </AccordionDetails>
+      </Accordion>
     </Stack>
   );
 };
