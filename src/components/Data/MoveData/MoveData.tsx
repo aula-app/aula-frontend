@@ -178,7 +178,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
             color="secondary"
             variant="outlined"
             startIcon={<AppIcon icon="edit" />}
-            sx={{ borderRadius: 30, mb: 2 }}
+            sx={{ borderRadius: 30, mb: 3, order: 999 }}
             onClick={() => setOpen(true)}
           >
             {t('texts.select', { var: t(`views.${scopeDefinitions[scope].move.target}`) })}
