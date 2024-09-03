@@ -17,8 +17,10 @@ const App = () => {
           domain={import.meta.env.VITE_APP_AUTH_DOMAIN}
           clientId={import.meta.env.VITE_APP_AUTH_ID}
           authorizationParams={{
-            redirect_uri: `${window.location.origin}/api/controllers/auth.php`,
+            redirect_uri: `${window.location.origin}/auth`,
           }}
+          audient="https://dev-9wmjojqr.us.auth0.com/api/v2/"
+          scope="read:current_user"
         >
           <AppThemeProvider>
             <BrowserRouter>

@@ -31,7 +31,10 @@ const IdeasBoxView = () => {
       model: 'Idea',
       method: 'getIdeasByTopic',
       arguments: { topic_id: Number(params['box_id']) },
-    }).then((response) => setBoxIdeas(response));
+    }).then((response) => {
+      console.log('aqui', response);
+      setBoxIdeas(response);
+    });
 
   const getDelegation = async () =>
     await databaseRequest(
@@ -92,7 +95,9 @@ const IdeasBoxView = () => {
         </Stack>
         {boxIdeas && (
           <>
-            {checkPermissions(30) && <MoveData id={Number(params['box_id'])} scope="boxes" onClose={boxIdeasFetch} />}
+            {checkPermissions(30) && (
+              <MoveData id={Number(params['box_id'])} scope="boxes" onClose={() => boxIdeasFetch()} />
+            )}
             <Grid container spacing={1} pt={1}>
               {boxIdeas.data &&
                 boxIdeas.data.map((idea, key) => (
