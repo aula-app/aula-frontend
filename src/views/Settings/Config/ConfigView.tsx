@@ -13,7 +13,7 @@ const ConfigView = () => {
   const { t } = useTranslation();
 
   return (
-    <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} gap={2} p={2}>
+    <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
       <Typography variant="h4" pb={2}>
         {t('views.configuration')}
       </Typography>
