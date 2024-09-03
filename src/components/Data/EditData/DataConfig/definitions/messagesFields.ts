@@ -30,14 +30,7 @@ export default [
   },
   {
     name: 'status',
-    form: {
-      ...inputType.select,
-      defaultValue: 1,
-      options: [
-        { label: 'generics.active', value: 1 },
-        { label: 'generics.inactive', value: 0 },
-      ],
-    },
+    form: inputType.status,
     role: 50,
   },
 ];

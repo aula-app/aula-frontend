@@ -79,7 +79,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
       select
       value={String(selected)}
       onChange={changeCategory}
-      sx={{ mb: 2 }}
+      sx={{ mb: 3, order: 1 }}
       {...restOfProps}
     >
       {currentOptions.map((option) => (

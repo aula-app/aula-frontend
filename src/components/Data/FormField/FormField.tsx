@@ -41,7 +41,13 @@ const FormInput = ({
   switch (data.form.type) {
     case 'duration':
       return (
-        <Stack direction="row" alignItems="center" px={1} sx={hidden ? { visibility: 'hidden', height: 0 } : {}}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          px={1}
+          sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
+          {...restOfProps}
+        >
           <Typography noWrap pb={1} mr="auto">
             {t(`settings.${data.name}`)}:
           </Typography>
@@ -67,13 +73,13 @@ const FormInput = ({
         </Stack>
       );
     case 'icon':
-      return <IconField data={data} control={control} setValue={setValue} />;
+      return <IconField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'image':
-      return <ImageField data={data} control={control} setValue={setValue} />;
+      return <ImageField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'select':
-      return <SelectField data={data} control={control} disabled={disabled} />;
+      return <SelectField data={data} control={control} disabled={disabled} {...restOfProps} />;
     case 'phaseSelect':
-      return <PhaseSelectField data={data} control={control} phase={phase} disabled={disabled} />;
+      return <PhaseSelectField data={data} control={control} phase={phase} disabled={disabled} {...restOfProps} />;
     default:
       return (
         <Controller
@@ -96,8 +102,8 @@ const FormInput = ({
               error={!!fieldState.error}
               helperText={t(fieldState.error?.message || ' ')}
               sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
+              slotProps={{ inputLabel: { shrink: !!field.value } }}
               {...restOfProps}
-              InputLabelProps={{ shrink: !!field.value }}
             />
           )}
         />

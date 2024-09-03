@@ -48,4 +48,9 @@ export default [
     form: inputType.duration,
     role: 30,
   },
+  {
+    name: 'status',
+    form: inputType.status,
+    role: 50,
+  },
 ];
