@@ -26,12 +26,13 @@ const IdeasBoxView = () => {
   const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>();
   const [delegationDialog, setDelegationDialog] = useState(false);
 
-  const boxIdeasFetch = async () =>
+  const boxIdeasFetch = async () => {
     await databaseRequest({
       model: 'Idea',
       method: 'getIdeasByTopic',
       arguments: { topic_id: Number(params['box_id']) },
     }).then((response) => setBoxIdeas(response));
+  };
 
   const getDelegation = async () =>
     await databaseRequest(
