@@ -104,7 +104,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
         },
       },
       ['updater_id']
-    );
+    ).then(() => onClose());
   };
 
   const requestRemove = async (targetId: number) => {
@@ -116,7 +116,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
         [scopeDefinitions[scope].id]: id,
         [scopeDefinitions[scope].move.targetId]: targetId,
       },
-    });
+    }).then(() => onClose());
   };
 
   const requestUpdates = () => {
@@ -157,7 +157,6 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
   };
 
   const close = () => {
-    onClose();
     setOpen(false);
   };
 
