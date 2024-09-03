@@ -2,12 +2,7 @@ import { inputType } from '../formDefaults';
 
 export default [
   {
-    name: 'headline',
-    form: inputType.shortText,
-    role: 10,
-  },
-  {
-    name: 'body',
+    name: 'content',
     form: inputType.longText,
     role: 10,
   },
