@@ -1,10 +1,9 @@
 import { AppIcon } from '@/components';
 import BoxCard from '@/components/BoxCard';
-import { MoveData } from '@/components/Data';
 import EditData from '@/components/Data/EditData';
 import { BoxesResponseType } from '@/types/RequestTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Fab, Grid, Stack } from '@mui/material';
+import { Fab, Grid2 as Grid, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -46,7 +45,7 @@ const IdeasBoxView = () => {
         {boxes &&
           boxes.data &&
           boxes.data.map((box) => (
-            <Grid key={box.id} item xs={12} sm={6} lg={4} xl={3} sx={{ scrollSnapAlign: 'center' }}>
+            <Grid key={box.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
               <BoxCard box={box.id} onReload={boxesFetch} />
             </Grid>
           ))}

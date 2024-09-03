@@ -6,7 +6,7 @@ import {
   Alert,
   Button,
   Collapse,
-  Grid,
+  Grid2 as Grid,
   InputAdornment,
   Stack,
   TextField,

@@ -87,7 +87,9 @@
     "headline": "Title",
     "is_winner": "Set winner?",
     "last_update": "Last update",
+    "login": "Login Settings",
     "name": "Name",
+    "oauth": "Enable oAuth",
     "password": "Password",
     "passwordChange": "New Password",
     "passwordConfirm": "Confirm password",
@@ -98,13 +100,22 @@
     "phase_duration_3": "Voting",
     "phase_duration_4": "Results",
     "realname": "Student Name",
+    "registration": "Allow registration",
     "room_id": "Room",
     "room_name": "Name of room",
+    "settings": "General Settings",
     "status": "Status",
+    "school": "School Info",
+    "time": "Time Settings",
+    "timeEnd": "Time End",
+    "timeStart": "Time Start",
     "title": "Title",
     "username": "User name",
     "user_needs_to_consent": "Consent needed?",
-    "userlevel": "User role"
+    "userlevel": "User role",
+    "vacation": "Vacation Mode",
+    "workDays": "Work Days",
+    "workHours": "Work Hours"
   },
   "texts": {
     "boxCard": "Ideas Box",
@@ -164,7 +175,7 @@
   "views": {
     "about": "About",
     "advanced": "Advanced",
-    "config": "Settings",
+    "configuration": "Configurations",
     "dashboard": "Dashboard",
     "box": "Ideas box",
     "boxes": "Boxes",
@@ -200,5 +211,14 @@
     "against": "against",
     "neutral": "neutral",
     "for": "for"
+  },
+  "week": {
+    "Sunday": "Sunday",
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Friday": "Friday",
+    "Saturday": "Saturday"
   }
 }

@@ -87,7 +87,9 @@
     "headline": "Titel",
     "is_winner": "Gewinner einstellen?",
     "last_update": "Letzte Aktualisierung",
+    "login": "Login-Einstellungen",
     "name": "Name",
+    "oauth": "oAuth aktivieren",
     "password": "Passwort",
     "passwordChange": "Neues Passwort",
     "passwordConfirm": "Passwort bestätigen",
@@ -98,13 +100,22 @@
     "phase_duration_3": "Abstimmung",
     "phase_duration_4": "Ergebnisse",
     "realname": "Name des Nutzers",
+    "registration": "Registrierung zulassen",
     "room_id": "Raum",
     "room_name": "Raum Name",
+    "settings": "Allgemeine Einstellungen",
     "status": "Status",
+    "school": "Schule Info",
+    "time": "Zeiteinstellungen",
+    "timeEnd": "Zeit Ende",
+    "timeStart": "Zeit Beginn",
     "title": "Titel",
     "username": "Benutzername",
     "user_needs_to_consent": "Zustimmung erforderlich?",
-    "userlevel": "Benutzer-Rolle"
+    "userlevel": "Benutzer-Rolle",
+    "vacation": "Urlaubsmodus",
+    "workDays": "Arbeitstage",
+    "workHours": "Arbeitsstunden"
   },
   "texts": {
     "add": "{{var}} hinzufügen",
@@ -163,7 +174,7 @@
   "views": {
     "about": "Über uns",
     "advanced": "Mehr",
-    "config": "Einstellungen",
+    "configuration": "Einstellungen",
     "dashboard": "Dashboard",
     "box": "Ideen-Box",
     "boxes": "Boxen",
@@ -199,5 +210,14 @@
     "against": "dagegen",
     "neutral": "neutral",
     "for": "dafür"
+  },
+  "week": {
+    "Sunday": "Sonntag",
+    "Monday": "Montag",
+    "Tuesday": "Dienstag",
+    "Wednesday": "Mittwoch",
+    "Thursday": "Donnerstag",
+    "Friday": "Freitag",
+    "Saturday": "Samstag"
   }
 }

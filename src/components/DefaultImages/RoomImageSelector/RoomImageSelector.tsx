@@ -1,6 +1,6 @@
 import AppButton from '@/components/AppButton';
 import DefaultImage from '@/components/DefaultImages';
-import { Button, Grid, Stack, Typography } from '@mui/material';
+import { Button, Grid2 as Grid, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -35,7 +35,7 @@ const RoomImageSelector = ({ onClose, onSubmit }: Props) => {
       <Typography variant="h6">Select image</Typography>
       <Grid container spacing={2}>
         {[...Array(8)].map((item, key) => (
-          <Grid item xs={6} sm={3} key={`img_${key}`}>
+          <Grid size={{ xs: 6, sm: 3 }} key={`img_${key}`}>
             <Button
               sx={{
                 display: 'flex',

@@ -49,6 +49,7 @@
     "@types/react-avatar-editor": "^13.0.2",
     "@use-gesture/react": "^10.3.1",
     "date-fns": "^2.30.0",
+    "dayjs": "^1.11.13",
     "i18next": "^23.11.5",
     "notistack": "^3.0.1",
     "react": "latest",

@@ -1,7 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
 import { checkPermissions, dashboardPhases, databaseRequest } from '@/utils';
-import { Badge, Box, Button, Collapse, Grid, Stack, Typography } from '@mui/material';
+import { Badge, Box, Button, Collapse, Grid2 as Grid, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -84,7 +84,7 @@ const DashBoard = ({ show = true }) => {
           {count && Object.keys(count).length > 4 && (
             <Grid container spacing={1} p={1}>
               {displayPhases.map((phase, key) => (
-                <Grid item xs={6} sm={3} key={key}>
+                <Grid item size={{ xs: 6, sm: 3 }} key={key}>
                   <Button
                     sx={{
                       width: '100%',
