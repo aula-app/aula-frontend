@@ -1,7 +1,8 @@
 import AppIcon from '@/components/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
 import { checkPermissions, dashboardPhases, databaseRequest } from '@/utils';
-import { Badge, Box, Button, Collapse, Grid2 as Grid, Stack, Typography } from '@mui/material';
+import { Badge, Box, Button, Collapse, Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

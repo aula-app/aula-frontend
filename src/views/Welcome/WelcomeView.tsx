@@ -1,7 +1,8 @@
 import { RoomCard } from '@/components/RoomCard';
 import { RoomsResponseType } from '@/types/RequestTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Grid2 as Grid, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DashBoard from './DashBoard';

@@ -1,4 +1,5 @@
-import { Button, Checkbox, FormControlLabel, FormGroup, Grid2 as Grid, Stack, Switch, Typography } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, FormGroup, Stack, Switch, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';

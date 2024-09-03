@@ -1,4 +1,5 @@
-import { Box, Grid2 as Grid } from '@mui/material';
+import { Box } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { FormHTMLAttributes, FunctionComponent, ReactNode } from 'react';
 
 interface Props extends FormHTMLAttributes<HTMLFormElement> {

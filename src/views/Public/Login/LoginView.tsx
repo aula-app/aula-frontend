@@ -6,12 +6,12 @@ import {
   Alert,
   Button,
   Collapse,
-  Grid2 as Grid,
   InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import { useCallback, useState } from "react";
 import { FormContainer, useForm } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";

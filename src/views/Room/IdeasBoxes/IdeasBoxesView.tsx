@@ -3,7 +3,8 @@ import BoxCard from '@/components/BoxCard';
 import EditData from '@/components/Data/EditData';
 import { BoxesResponseType } from '@/types/RequestTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Fab, Grid2 as Grid, Stack } from '@mui/material';
+import { Fab, Stack } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 

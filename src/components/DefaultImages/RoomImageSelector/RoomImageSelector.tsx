@@ -1,6 +1,7 @@
 import AppButton from '@/components/AppButton';
 import DefaultImage from '@/components/DefaultImages';
-import { Button, Grid2 as Grid, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -50,12 +50,7 @@ const ConfigView = () => {
         </AccordionDetails>
       </Accordion>
       <Accordion>
-        <AccordionSummary
-          color="error"
-          expandIcon={<AppIcon icon="arrowdown" />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
+        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h5" py={1}>
             {t(`settings.danger`)}
           </Typography>
