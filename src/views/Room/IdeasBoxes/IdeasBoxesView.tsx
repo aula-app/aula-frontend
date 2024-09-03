@@ -40,8 +40,8 @@ const IdeasBoxView = () => {
   }, [params['phase']]);
 
   return (
-    <Stack>
-      <Grid container spacing={2} p={1}>
+    <Stack alignItems="center">
+      <Grid container spacing={2} p={1} width="100%">
         {boxes &&
           boxes.data &&
           boxes.data.map((box) => (
