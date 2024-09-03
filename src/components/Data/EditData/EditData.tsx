@@ -106,10 +106,11 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
 
   const updateValues = () => {
     getFields().forEach((field) => {
+      const defautltValue = params[field.name] || field.form.defaultValue;
       setValue(
         // @ts-ignore
         field.name,
-        fieldValues ? fieldValues.data[field.name] : field.form.defaultValue
+        fieldValues ? fieldValues.data[field.name] : defautltValue
       );
     });
     setUpdate([]);
