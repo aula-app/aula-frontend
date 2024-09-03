@@ -73,6 +73,7 @@
   },
   "settings": {
     "about_me": "Description",
+    "advanced": "Advanced Settings",
     "approval_comment": "Approval comment",
     "approved": "Approve?",
     "body": "Text",
@@ -104,8 +105,9 @@
     "room_id": "Room",
     "room_name": "Name of room",
     "settings": "General Settings",
-    "status": "Status",
     "school": "School Info",
+    "status": "Status",
+    "system": "System Settings",
     "time": "Time Settings",
     "timeEnd": "Time End",
     "timeStart": "Time Start",
@@ -116,6 +118,10 @@
     "vacation": "Vacation Mode",
     "workDays": "Work Days",
     "workHours": "Work Hours"
+  },
+  "status": {
+    "active": "Active",
+    "suspended": "Suspended"
   },
   "texts": {
     "boxCard": "Ideas Box",

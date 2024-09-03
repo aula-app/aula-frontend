@@ -73,6 +73,7 @@
   },
   "settings": {
     "about_me": "Über mich",
+    "advanced": "Erweiterte Einstellungen",
     "approval_comment": "Kommentar zur Genehmigung",
     "approved": "Genehmigen?",
     "body": "Text",
@@ -104,8 +105,9 @@
     "room_id": "Raum",
     "room_name": "Raum Name",
     "settings": "Allgemeine Einstellungen",
-    "status": "Status",
     "school": "Schule Info",
+    "status": "Status",
+    "system": "System-Einstellungen",
     "time": "Zeiteinstellungen",
     "timeEnd": "Zeit Ende",
     "timeStart": "Zeit Beginn",
@@ -116,6 +118,10 @@
     "vacation": "Urlaubsmodus",
     "workDays": "Arbeitstage",
     "workHours": "Arbeitsstunden"
+  },
+  "status": {
+    "active": "Aktiv",
+    "suspended": "Aufgehängt"
   },
   "texts": {
     "add": "{{var}} hinzufügen",
