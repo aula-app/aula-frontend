@@ -45,13 +45,13 @@ const SettingsView = () => {
         offset: page * limit,
         orderby: orderBy,
         asc: orderAsc,
-        status: -1,
+        status: status,
         extra_where: filter,
       },
     });
 
   const loadData = async () => {
-    const currentFilter = `${status !== -1 ? ` AND status LIKE ${status}` : ''} ${!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : ''}`;
+    const currentFilter = !filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '';
     await dataFetch(currentFilter).then((response) => {
       setItems(response);
     });
@@ -114,6 +114,7 @@ const SettingsView = () => {
           orderAsc={orderAsc}
           orderBy={orderBy}
           scope={setting_name}
+          status={status}
           selected={selected}
           setAlter={setAlter}
           setLimit={setLimit}
