@@ -8,8 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 type Params = {
   handleOrder: (col: number) => void;
-  activeItems: PossibleFields[];
-  suspendedItems: PossibleFields[];
+  items: PossibleFields[];
   orderAsc: boolean;
   orderBy: number;
   scope: SettingNamesType;
@@ -26,8 +25,7 @@ type Params = {
 
 const DataTable = ({
   handleOrder,
-  activeItems,
-  suspendedItems,
+  items,
   orderAsc,
   orderBy,
   scope,
@@ -50,8 +48,8 @@ const DataTable = ({
   };
 
   const toggleAllRows = () => {
-    if (activeItems.length === 0) return;
-    selected.length > 0 ? setSelected([]) : setSelected(activeItems.map((item) => item.id));
+    if (items.length === 0) return;
+    selected.length > 0 ? setSelected([]) : setSelected(items.map((item) => item.id));
   };
 
   useEffect(() => {
@@ -61,7 +59,7 @@ const DataTable = ({
     };
   }, []);
 
-  useEffect(getLimit, [activeItems.length]);
+  useEffect(getLimit, [items.length]);
 
   return (
     <Stack flex={1} sx={{ overflowX: 'auto' }} ref={tableBody}>
@@ -71,8 +69,8 @@ const DataTable = ({
             <TableCell>
               <Checkbox
                 onChange={toggleAllRows}
-                checked={selected.length === activeItems.length}
-                indeterminate={selected.length > 0 && selected.length < activeItems.length}
+                checked={selected.length === items.length}
+                indeterminate={selected.length > 0 && selected.length < items.length}
                 color="secondary"
               />
             </TableCell>
@@ -94,7 +92,7 @@ const DataTable = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {activeItems.map((row) => (
+          {items.map((row) => (
             <DataRow
               key={row.id}
               row={row}
@@ -102,17 +100,7 @@ const DataTable = ({
               selected={selected}
               toggleRow={toggleRow}
               setAlter={setAlter}
-            />
-          ))}
-          {suspendedItems.map((row) => (
-            <DataRow
-              key={`s${row.id}`}
-              row={row}
-              scope={scope}
-              selected={selected}
-              toggleRow={toggleRow}
-              setAlter={setAlter}
-              suspended
+              suspended={row.status !== 1}
             />
           ))}
         </TableBody>

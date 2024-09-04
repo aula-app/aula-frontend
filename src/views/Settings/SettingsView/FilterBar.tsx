@@ -1,22 +1,31 @@
 import AppIconButton from '@/components/AppIconButton';
+import { STATUS } from '@/components/Data/EditData/DataConfig/formDefaults';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { dataSettings } from '@/utils';
-import { Collapse, FilledInput, MenuItem, Stack, TextField } from '@mui/material';
+import { Collapse, FilledInput, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Params = {
   filter: [string, string];
+  status: -1 | 0 | 1 | 2 | 3;
   isOpen: boolean;
   scope: SettingNamesType;
   setFilter: Dispatch<SetStateAction<[string, string]>>;
+  setStatus: Dispatch<SetStateAction<-1 | 0 | 1 | 2 | 3>>;
 };
 
-const FilterBar = ({ scope, filter, isOpen, setFilter }: Params) => {
+const FilterBar = ({ filter, status, scope, isOpen, setFilter, setStatus }: Params) => {
   const { t } = useTranslation();
+
+  const statusOptions = [{ label: 'status.all', value: -1 }, ...STATUS];
 
   const changeFilter = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setFilter([event.target.value, filter[1]]);
+  };
+
+  const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setStatus(Number(event.target.value) as -1 | 0 | 1 | 2 | 3);
   };
 
   const changeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -25,30 +34,50 @@ const FilterBar = ({ scope, filter, isOpen, setFilter }: Params) => {
 
   return (
     <Collapse in={isOpen}>
-      <Stack direction="row" alignItems="center" p={2} pt={0}>
-        <TextField
-          select
-          label="Column"
-          value={filter[0]}
-          onChange={changeFilter}
-          variant="filled"
-          size="small"
-          sx={{ width: 100, mr: 1 }}
-        >
-          <MenuItem value="">&nbsp;</MenuItem>
-          {dataSettings[scope].map((column) => (
-            <MenuItem value={column.name} key={column.name}>
-              {t(`settings.${column.name}`)}
-            </MenuItem>
-          ))}
-        </TextField>
-        <FilledInput
-          size="small"
-          onChange={changeSearch}
-          value={filter[1]}
-          disabled={filter[0] === ''}
-          endAdornment={<AppIconButton icon="close" onClick={() => setFilter(['', ''])} />}
-        />
+      <Stack direction="row" alignItems="center" flexWrap="wrap">
+        <Stack direction="row" alignItems="center" p={2} pt={0} gap={1}>
+          <TextField
+            select
+            label={t('texts.filter')}
+            value={filter[0]}
+            onChange={changeFilter}
+            variant="filled"
+            size="small"
+            sx={{ minWidth: 130 }}
+          >
+            <MenuItem value="">&nbsp;</MenuItem>
+            {dataSettings[scope].map((column) => (
+              <MenuItem value={column.name} key={column.name}>
+                {t(`settings.${column.name}`)}
+              </MenuItem>
+            ))}
+          </TextField>
+          <FilledInput
+            size="small"
+            onChange={changeSearch}
+            value={filter[1]}
+            disabled={filter[0] === ''}
+            endAdornment={<AppIconButton icon="close" onClick={() => setFilter(['', ''])} />}
+          />
+        </Stack>
+        <Stack direction="row" alignItems="center" p={2} pt={0} gap={2}>
+          <Typography>{t('texts.show')}</Typography>
+          <TextField
+            select
+            label={t('settings.status')}
+            value={status}
+            onChange={changeStatus}
+            variant="filled"
+            size="small"
+            sx={{ minWidth: 200 }}
+          >
+            {statusOptions.map((column) => (
+              <MenuItem value={column.value} key={column.label}>
+                {t(column.label)}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Stack>
       </Stack>
     </Collapse>
   );

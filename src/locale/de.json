@@ -124,6 +124,9 @@
   },
   "status": {
     "active": "Aktiv",
+    "all": "Alle",
+    "archived": "Archiv",
+    "inactive": "Inaktiv",
     "suspended": "Aufgehängt"
   },
   "texts": {
@@ -141,6 +144,7 @@
     "edit": "{{var}} bearbeiten",
     "exportData": "Kontodaten exportieren",
     "exportRequest": "Datenexport angefordert",
+    "filter": "Filter",
     "ideaBox": "{{var}} Ideen zur {{phase}}",
     "move": "Bewege {{var}}",
     "moveData": "Wohin möchtest du {{var}} bewegen?",
@@ -152,6 +156,7 @@
     "rejected": "Diese Idee wurde nicht angenommen",
     "report": "Bitte erkläre, warum du diesen Inhalt melden möchtest",
     "select": "{{var}} Auswählen",
+    "show": "Anzeigen",
     "undelegated": "{{var}} Ideen",
     "unaltenticated": "Die Seite, auf die du zugreifen möchtest, erfordert eine Authentifizierung.",
     "update": "Neue {{var}} für ",
