@@ -130,10 +130,10 @@
     "suspended": "Suspended"
   },
   "texts": {
-    "boxCard": "Ideas Box",
     "add": "New {{var}}",
     "addToParent": "Add to {{var}}",
     "approved": "This idea was approved.",
+    "boxCard": "Ideas Box",
     "bug": "Please try to shortly describe the bug",
     "delegated": "{{var}} delegated ideas",
     "delegation": "Vote delegation",
@@ -147,6 +147,7 @@
     "exportRequest": "Data export requested",
     "filter": "Filter",
     "ideaBox": "{{var}} ideas to {{phase}}",
+    "instance": "Instance status",
     "move": "move selected {{var}} to",
     "moveData": "Where do you want to move {{var}} to?",
     "new": "new {{var}}",

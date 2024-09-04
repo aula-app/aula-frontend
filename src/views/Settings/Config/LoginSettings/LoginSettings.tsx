@@ -1,4 +1,4 @@
-import { ConfigResponse, SingleResponseType } from '@/types/Generics';
+import { ConfigResponse } from '@/types/Generics';
 import { StatusRequest } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
 import { FormControlLabel, Switch } from '@mui/material';

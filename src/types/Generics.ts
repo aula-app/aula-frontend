@@ -67,3 +67,13 @@ export type ConfigResponse = {
   time_format: number;
   updater_id: number;
 };
+
+export type InstanceResponse = {
+  created: Date;
+  id: number;
+  last_update: Date;
+  online_mode: 0 | 1;
+  revert_to_on_active: 0 | 1;
+  revert_to_on_date: Date;
+  updater_id: number;
+};
