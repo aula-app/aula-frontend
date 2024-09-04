@@ -37,7 +37,7 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
       return response;
     } else {
       console.log(response.error);
-      return null;
+      return response;
     }
   } catch (e) {
     console.log(e);

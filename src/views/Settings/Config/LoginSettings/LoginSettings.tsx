@@ -18,7 +18,6 @@ const SystemSettings = () => {
       method: 'getInstanceSettings',
       arguments: {},
     }).then((response) => {
-      console.log(response.data);
       if (response.success) setOnline(response.data['online_mode']);
     });
   };

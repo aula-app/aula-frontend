@@ -206,6 +206,7 @@
     "message": "Message",
     "messages": "Messages",
     "notFound": "There are no news here",
+    "offline": "The access to this school is suspended. Please come back later!",
     "privacy": "Privacy",
     "profile": "Profile",
     "report": "Report",
