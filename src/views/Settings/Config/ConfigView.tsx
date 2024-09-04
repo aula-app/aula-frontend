@@ -9,19 +9,40 @@ import { red } from '@mui/material/colors';
 import SchoolDelete from './SchoolDelete';
 import TimeSettings from './TimeSettings';
 import LoginSettings from './LoginSettings';
+import { databaseRequest } from '@/utils';
+import { useEffect, useState } from 'react';
+import { ConfigResponse, SingleResponseType } from '@/types/Generics';
 
 /** * Renders "Config" view
  * url: /settings/config
  */
 const ConfigView = () => {
   const { t } = useTranslation();
+  const [config, setConfig] = useState<ConfigResponse>();
+
+  const getConfig = async () => {
+    await databaseRequest({
+      model: 'Settings',
+      method: 'getGlobalConfig',
+      arguments: {},
+    }).then((response) => {
+      if (response.success) {
+        console.log(response);
+        setConfig(response.data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getConfig();
+  }, []);
 
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
       <Typography variant="h4" pb={2}>
         {t('views.configuration')}
       </Typography>
-      <SchoolInfo />
+      {config && <SchoolInfo config={config} onReload={getConfig} />}
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h5" py={1}>
@@ -39,9 +60,7 @@ const ConfigView = () => {
             {t(`settings.time`)}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <TimeSettings />
-        </AccordionDetails>
+        <AccordionDetails>{config && <TimeSettings config={config} onRelod={getConfig} />}</AccordionDetails>
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
@@ -49,9 +68,7 @@ const ConfigView = () => {
             {t(`settings.login`)}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <LoginSettings />
-        </AccordionDetails>
+        <AccordionDetails>{config && <LoginSettings config={config} onRelod={getConfig} />}</AccordionDetails>
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
