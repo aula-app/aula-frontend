@@ -76,6 +76,8 @@
     "advanced": "Advanced Settings",
     "approval_comment": "Approval comment",
     "approved": "Approve?",
+    "backup": "Create Backup",
+    "backupRestore": "Restore Backup",
     "body": "Text",
     "categories": "Categories",
     "consent_text": "Consent message",

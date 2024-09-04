@@ -7,6 +7,8 @@ import SchoolInfo from './SchoolInfo';
 import SystemSettings from './SystemSettings';
 import { red } from '@mui/material/colors';
 import SchoolDelete from './SchoolDelete';
+import TimeSettings from './TimeSettings';
+import LoginSettings from './LoginSettings';
 
 /** * Renders "Config" view
  * url: /settings/config
@@ -29,6 +31,26 @@ const ConfigView = () => {
         <AccordionDetails>
           <Typography variant="h6">{t('settings.categories')}</Typography>
           <Categories />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
+          <Typography variant="h5" py={1}>
+            {t(`settings.time`)}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <TimeSettings />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
+          <Typography variant="h5" py={1}>
+            {t(`settings.login`)}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <LoginSettings />
         </AccordionDetails>
       </Accordion>
       <Accordion>

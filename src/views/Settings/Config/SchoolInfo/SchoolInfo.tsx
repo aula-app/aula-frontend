@@ -5,7 +5,7 @@ const SchoolInfo = () => {
   const { t } = useTranslation();
 
   return (
-    <Stack gap={1}>
+    <Stack gap={1} mb={1.5}>
       <Typography variant="h5" py={1}>
         {t(`settings.school`)}
       </Typography>
