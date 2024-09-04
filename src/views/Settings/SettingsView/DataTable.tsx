@@ -1,19 +1,20 @@
+import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { dataSettings } from '@/utils';
 import { Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
-import { blueGrey, cyan, grey } from '@mui/material/colors';
+import { deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
 import { Dispatch, Fragment, SetStateAction, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Params = {
   handleOrder: (col: number) => void;
-  activeItems: PossibleFields[];
-  suspendedItems: PossibleFields[];
+  items: PossibleFields[];
   orderAsc: boolean;
   orderBy: number;
   scope: SettingNamesType;
   selected: number[];
+  status: StatusTypes;
   setLimit: Dispatch<SetStateAction<number>>;
   setSelected: Dispatch<SetStateAction<number[]>>;
   setAlter: Dispatch<
@@ -26,12 +27,12 @@ type Params = {
 
 const DataTable = ({
   handleOrder,
-  activeItems,
-  suspendedItems,
+  items,
   orderAsc,
   orderBy,
   scope,
   selected,
+  status,
   setAlter,
   setLimit,
   setSelected,
@@ -50,8 +51,8 @@ const DataTable = ({
   };
 
   const toggleAllRows = () => {
-    if (activeItems.length === 0) return;
-    selected.length > 0 ? setSelected([]) : setSelected(activeItems.map((item) => item.id));
+    if (items.length === 0) return;
+    selected.length > 0 ? setSelected([]) : setSelected(items.map((item) => item.id));
   };
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const DataTable = ({
     };
   }, []);
 
-  useEffect(getLimit, [activeItems.length]);
+  useEffect(getLimit, [items.length]);
 
   return (
     <Stack flex={1} sx={{ overflowX: 'auto' }} ref={tableBody}>
@@ -71,8 +72,8 @@ const DataTable = ({
             <TableCell>
               <Checkbox
                 onChange={toggleAllRows}
-                checked={selected.length === activeItems.length}
-                indeterminate={selected.length > 0 && selected.length < activeItems.length}
+                checked={selected.length === items.length}
+                indeterminate={selected.length > 0 && selected.length < items.length}
                 color="secondary"
               />
             </TableCell>
@@ -94,7 +95,7 @@ const DataTable = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {activeItems.map((row) => (
+          {items.map((row) => (
             <DataRow
               key={row.id}
               row={row}
@@ -102,17 +103,7 @@ const DataTable = ({
               selected={selected}
               toggleRow={toggleRow}
               setAlter={setAlter}
-            />
-          ))}
-          {suspendedItems.map((row) => (
-            <DataRow
-              key={`s${row.id}`}
-              row={row}
-              scope={scope}
-              selected={selected}
-              toggleRow={toggleRow}
-              setAlter={setAlter}
-              suspended
+              status={Number(row.status) as StatusTypes}
             />
           ))}
         </TableBody>
@@ -127,29 +118,34 @@ function DataRow({
   selected,
   toggleRow,
   setAlter,
-  suspended = false,
+  status,
 }: {
   row: PossibleFields;
   scope: SettingNamesType;
   selected: number[];
   toggleRow: (id: number) => void;
   setAlter: ({ open, id }: { open: boolean; id: number }) => void;
-  suspended?: boolean;
+  status: StatusTypes;
 }) {
-  const background = suspended
-    ? selected.includes(row.id)
-      ? blueGrey[100]
-      : blueGrey[50]
-    : selected.includes(row.id)
-      ? grey[100]
-      : '';
+  const getBackground = () => {
+    switch (status) {
+      case 0:
+        return selected.includes(row.id) ? deepOrange[100] : deepOrange[50];
+      case 2:
+        return selected.includes(row.id) ? deepPurple[100] : deepPurple[50];
+      case 3:
+        return selected.includes(row.id) ? orange[100] : orange[50];
+      default:
+        return selected.includes(row.id) ? grey[100] : '';
+    }
+  };
   return (
     <TableRow
       hover
       sx={{
-        background: background,
+        background: getBackground,
         cursor: 'pointer',
-        textDecorationLine: suspended ? 'line-through' : 'none',
+        textDecorationLine: status !== 1 ? 'line-through' : 'none',
       }}
     >
       <TableCell>

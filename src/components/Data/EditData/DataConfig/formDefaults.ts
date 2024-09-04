@@ -5,6 +5,13 @@ export type SelectOptionsType = { label: string; value: number };
 
 type FormTypes = 'duration' | 'icon' | 'image' | 'input' | 'password' | 'phaseSelect' | 'select' | 'text';
 
+export const STATUS = [
+  { label: 'status.inactive', value: 0 },
+  { label: 'status.active', value: 1 },
+  { label: 'status.suspended', value: 2 },
+  { label: 'status.archived', value: 3 },
+];
+
 export type inputType = {
   type: FormTypes;
   defaultValue: string | number;
@@ -47,9 +54,6 @@ export const inputType = {
     type: 'select',
     defaultValue: 1,
     schema: yup.number(),
-    options: [
-      { label: 'status.suspended', value: 0 },
-      { label: 'status.active', value: 1 },
-    ],
+    options: STATUS,
   },
 };
