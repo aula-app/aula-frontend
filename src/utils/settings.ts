@@ -1,11 +1,11 @@
-import { SettingNamesType } from '@/types/SettingsTypes';
+import { RoleTypes, RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
 import { PossibleFields } from '@/types/Scopes';
 
 type DataSetting = {
   name: keyof PossibleFields;
   orderId: number;
-  role: 10 | 20 | 30 | 40 | 50 | 60;
-  phase?: 0 | 10 | 20 | 30 | 40;
+  role: RoleTypes;
+  phase?: RoomPhases;
 };
 
 /* ROLE DEFINITIONS

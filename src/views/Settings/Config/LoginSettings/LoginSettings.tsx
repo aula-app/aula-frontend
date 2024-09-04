@@ -1,18 +1,25 @@
+import { ConfigResponse, SingleResponseType } from '@/types/Generics';
+import { StatusRequest } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
 import { FormControlLabel, Switch } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+interface Props {
+  config: ConfigResponse;
+  onReload: () => void;
+}
+
 /** * Renders "SystemSettings" component
  */
 
-const SystemSettings = () => {
+const SystemSettings = ({ config, onReload }: Props) => {
   const { t } = useTranslation();
 
   const [online, setOnline] = useState<0 | 1>();
-  const [oAuth, setOAuth] = useState<0 | 1>();
-  const [registration, setRegistration] = useState<0 | 1>();
+  const [oAuth, setOAuth] = useState<0 | 1>(config['enable_oauth']);
+  const [registration, setRegistration] = useState<0 | 1>(config['allow_registration']);
 
   const getOnlineStatus = async () => {
     await databaseRequest({
@@ -24,23 +31,7 @@ const SystemSettings = () => {
     });
   };
 
-  const getConfigs = async () => {
-    await databaseRequest({
-      model: 'Settings',
-      method: 'getGlobalConfig',
-      arguments: {},
-    }).then((response) => {
-      console.log(response.data);
-      if (response.success) {
-        setOAuth(response.data['enable_oauth']);
-        setRegistration(response.data['allow_registration']);
-      }
-    });
-  };
-
-  type ConfigRequest = { method: string; status: number; callback: () => {} };
-
-  const setConfig = async ({ method, status, callback }: ConfigRequest) => {
+  const setConfig = async ({ method, status, callback }: StatusRequest) => {
     await databaseRequest(
       {
         model: 'Settings',
@@ -71,17 +62,16 @@ const SystemSettings = () => {
   }, [online]);
 
   useEffect(() => {
-    if (typeof oAuth !== 'undefined') setConfig({ method: 'setOauthStatus', status: oAuth, callback: getConfigs });
+    if (typeof oAuth !== 'undefined') setConfig({ method: 'setOauthStatus', status: oAuth, callback: onReload });
   }, [oAuth]);
 
   useEffect(() => {
     if (typeof registration !== 'undefined')
-      setConfig({ method: 'setAllowRegistration', status: registration, callback: getConfigs });
+      setConfig({ method: 'setAllowRegistration', status: registration, callback: onReload });
   }, [registration]);
 
   useEffect(() => {
     getOnlineStatus();
-    getConfigs();
   }, []);
 
   return (
