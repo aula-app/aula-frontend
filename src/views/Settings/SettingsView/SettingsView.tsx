@@ -114,7 +114,6 @@ const SettingsView = () => {
           orderAsc={orderAsc}
           orderBy={orderBy}
           scope={setting_name}
-          status={status}
           selected={selected}
           setAlter={setAlter}
           setLimit={setLimit}
