@@ -125,7 +125,7 @@
   "status": {
     "active": "Active",
     "all": "All",
-    "archived": "Archive",
+    "archived": "Archived",
     "inactive": "Inactive",
     "suspended": "Suspended"
   },

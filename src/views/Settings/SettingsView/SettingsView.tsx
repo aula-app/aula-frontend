@@ -12,6 +12,7 @@ import DataTable from './DataTable';
 import EditBar from './EditBar';
 import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
+import { StatusTypes } from '@/types/Generics';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -27,7 +28,7 @@ const SettingsView = () => {
   const [orderBy, setOrder] = useState(dataSettings[setting_name][0].orderId);
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
-  const [status, setStatus] = useState<-1 | 0 | 1 | 2 | 3>(1);
+  const [status, setStatus] = useState<StatusTypes>(1);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
@@ -50,7 +51,7 @@ const SettingsView = () => {
     });
 
   const loadData = async () => {
-    const currentFilter = ` AND status LIKE '${status}' ${!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : ''}`;
+    const currentFilter = `${status !== -1 ? ` AND status LIKE ${status}` : ''} ${!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : ''}`;
     await dataFetch(currentFilter).then((response) => {
       setItems(response);
     });

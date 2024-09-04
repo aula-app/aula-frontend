@@ -1,8 +1,9 @@
+import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { dataSettings } from '@/utils';
 import { Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
-import { blueGrey, cyan, grey } from '@mui/material/colors';
+import { blueGrey, deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
 import { Dispatch, Fragment, SetStateAction, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +14,7 @@ type Params = {
   orderBy: number;
   scope: SettingNamesType;
   selected: number[];
+  status: StatusTypes;
   setLimit: Dispatch<SetStateAction<number>>;
   setSelected: Dispatch<SetStateAction<number[]>>;
   setAlter: Dispatch<
@@ -30,6 +32,7 @@ const DataTable = ({
   orderBy,
   scope,
   selected,
+  status,
   setAlter,
   setLimit,
   setSelected,
@@ -100,7 +103,7 @@ const DataTable = ({
               selected={selected}
               toggleRow={toggleRow}
               setAlter={setAlter}
-              suspended={row.status !== 1}
+              status={row.status}
             />
           ))}
         </TableBody>
@@ -115,29 +118,34 @@ function DataRow({
   selected,
   toggleRow,
   setAlter,
-  suspended = false,
+  status,
 }: {
   row: PossibleFields;
   scope: SettingNamesType;
   selected: number[];
   toggleRow: (id: number) => void;
   setAlter: ({ open, id }: { open: boolean; id: number }) => void;
-  suspended?: boolean;
+  status: StatusTypes;
 }) {
-  const background = suspended
-    ? selected.includes(row.id)
-      ? blueGrey[100]
-      : blueGrey[50]
-    : selected.includes(row.id)
-      ? grey[100]
-      : '';
+  const getBackground = () => {
+    switch (status) {
+      case 0:
+        return selected.includes(row.id) ? deepOrange[100] : deepOrange[50];
+      case 2:
+        return selected.includes(row.id) ? deepPurple[100] : deepPurple[50];
+      case 3:
+        return selected.includes(row.id) ? orange[100] : orange[50];
+      default:
+        return selected.includes(row.id) ? grey[100] : '';
+    }
+  };
   return (
     <TableRow
       hover
       sx={{
-        background: background,
+        background: getBackground,
         cursor: 'pointer',
-        textDecorationLine: suspended ? 'line-through' : 'none',
+        textDecorationLine: status !== 1 ? 'line-through' : 'none',
       }}
     >
       <TableCell>
