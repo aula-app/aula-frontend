@@ -1,5 +1,5 @@
 import { useAppStore } from '@/store';
-import { localStorageDelete, localStorageGet } from '@/utils';
+import { databaseRequest, localStorageDelete, localStorageGet } from '@/utils';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,6 +15,18 @@ export function useIsAuthenticated() {
   result = Boolean(localStorageGet('token', ''));
 
   return result;
+}
+
+export async function useIsOnline(): Promise<boolean> {
+  let isOnline = true;
+  await databaseRequest({
+    model: 'Settings',
+    method: 'getInstanceSettings',
+    arguments: {},
+  }).then((response) => {
+    isOnline = response.success && response.data['online_mode'] === 1;
+  });
+  return isOnline;
 }
 
 /**

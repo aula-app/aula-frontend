@@ -22,7 +22,6 @@ type Props = {
 const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const [state] = useAppStore();
-  const [scope, setScope] = useState<'bug' | 'report'>();
   const isAuthenticated = useIsAuthenticated();
 
   const onSwitchDarkMode = useEventSwitchDarkMode();
@@ -34,10 +33,6 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
     },
     [onClose]
   );
-
-  const openReport = () => {
-    setScope(scope);
-  };
 
   return (
     <Stack
