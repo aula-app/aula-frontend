@@ -15,7 +15,7 @@ const CurrentLayout: FunctionComponent<PropsWithChildren> = (props) => {
   const checkOnlineStatus = async () => setOnline(await useIsOnline());
 
   useEffect(() => {
-    if (!checkPermissions(50)) checkOnlineStatus();
+    checkOnlineStatus();
   }, [location]);
 
   return (
