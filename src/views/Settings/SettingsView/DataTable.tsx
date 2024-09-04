@@ -3,7 +3,7 @@ import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { dataSettings } from '@/utils';
 import { Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
-import { blueGrey, deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
+import { deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
 import { Dispatch, Fragment, SetStateAction, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -103,7 +103,7 @@ const DataTable = ({
               selected={selected}
               toggleRow={toggleRow}
               setAlter={setAlter}
-              status={row.status}
+              status={Number(row.status) as StatusTypes}
             />
           ))}
         </TableBody>

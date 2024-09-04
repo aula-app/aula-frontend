@@ -1,5 +1,6 @@
 import AppIconButton from '@/components/AppIconButton';
 import { STATUS } from '@/components/Data/EditData/DataConfig/formDefaults';
+import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { dataSettings } from '@/utils';
 import { Collapse, FilledInput, MenuItem, Stack, TextField, Typography } from '@mui/material';
@@ -8,11 +9,11 @@ import { useTranslation } from 'react-i18next';
 
 type Params = {
   filter: [string, string];
-  status: -1 | 0 | 1 | 2 | 3;
+  status?: -1 | 0 | 1 | 2 | 3;
   isOpen: boolean;
   scope: SettingNamesType;
   setFilter: Dispatch<SetStateAction<[string, string]>>;
-  setStatus: Dispatch<SetStateAction<-1 | 0 | 1 | 2 | 3>>;
+  setStatus?: Dispatch<SetStateAction<StatusTypes>>;
 };
 
 const FilterBar = ({ filter, status, scope, isOpen, setFilter, setStatus }: Params) => {
@@ -25,7 +26,8 @@ const FilterBar = ({ filter, status, scope, isOpen, setFilter, setStatus }: Para
   };
 
   const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setStatus(Number(event.target.value) as -1 | 0 | 1 | 2 | 3);
+    if (!setStatus) return;
+    setStatus(Number(event.target.value) as StatusTypes);
   };
 
   const changeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -60,24 +62,26 @@ const FilterBar = ({ filter, status, scope, isOpen, setFilter, setStatus }: Para
             endAdornment={<AppIconButton icon="close" onClick={() => setFilter(['', ''])} />}
           />
         </Stack>
-        <Stack direction="row" alignItems="center" p={2} pt={0} gap={2}>
-          <Typography>{t('texts.show')}</Typography>
-          <TextField
-            select
-            label={t('settings.status')}
-            value={status}
-            onChange={changeStatus}
-            variant="filled"
-            size="small"
-            sx={{ minWidth: 200 }}
-          >
-            {statusOptions.map((column) => (
-              <MenuItem value={column.value} key={column.label}>
-                {t(column.label)}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Stack>
+        {status && (
+          <Stack direction="row" alignItems="center" p={2} pt={0} gap={2}>
+            <Typography>{t('texts.show')}</Typography>
+            <TextField
+              select
+              label={t('settings.status')}
+              value={status}
+              onChange={changeStatus}
+              variant="filled"
+              size="small"
+              sx={{ minWidth: 200 }}
+            >
+              {statusOptions.map((column) => (
+                <MenuItem value={column.value} key={column.label}>
+                  {t(column.label)}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Stack>
+        )}
       </Stack>
     </Collapse>
   );
