@@ -1,7 +1,7 @@
 import { ConfigResponse } from '@/types/Generics';
 import { ConfigRequest } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
-import { Button, Checkbox, FormControlLabel, FormGroup, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { Button, FormGroup, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
