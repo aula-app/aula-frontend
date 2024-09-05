@@ -27,7 +27,6 @@ const ConfigView = () => {
       arguments: {},
     }).then((response) => {
       if (response.success) {
-        console.log(response);
         setConfig(response.data);
       }
     });
@@ -60,7 +59,7 @@ const ConfigView = () => {
             {t(`settings.time`)}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails>{config && <TimeSettings config={config} onRelod={getConfig} />}</AccordionDetails>
+        <AccordionDetails>{config && <TimeSettings config={config} onReload={getConfig} />}</AccordionDetails>
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
@@ -68,7 +67,7 @@ const ConfigView = () => {
             {t(`settings.login`)}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails>{config && <LoginSettings config={config} onRelod={getConfig} />}</AccordionDetails>
+        <AccordionDetails>{config && <LoginSettings config={config} onReload={getConfig} />}</AccordionDetails>
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
