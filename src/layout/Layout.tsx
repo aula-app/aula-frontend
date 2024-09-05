@@ -1,9 +1,8 @@
-import ErrorMessages from '@/dialogs/ErrorMessages';
 import { useIsAuthenticated, useIsOnline } from '@/hooks/auth';
 import { FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
 import PrivateLayout from './PrivateLayout';
 import PublicLayout from './PublicLayout';
-import OfflineView from '@/views/OfflineView';
+import PopupMessages from '@/dialogs/PopupMessages';
 import { checkPermissions } from '@/utils';
 
 /**
@@ -20,8 +19,8 @@ const CurrentLayout: FunctionComponent<PropsWithChildren> = (props) => {
 
   return (
     <>
-      {useIsAuthenticated() ? online ? <PrivateLayout {...props} /> : <OfflineView /> : <PublicLayout {...props} />}
-      <ErrorMessages />
+      {useIsAuthenticated() ? <PrivateLayout {...props} /> : <PublicLayout {...props} />}
+      <PopupMessages />
     </>
   );
 };
