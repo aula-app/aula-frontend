@@ -121,6 +121,8 @@
     "user_needs_to_consent": "Consent needed?",
     "userlevel": "User role",
     "vacation": "Vacation Mode",
+    "weekEnd": "Ending day",
+    "weekStart": "Starting day",
     "workDays": "Work Days",
     "workHours": "Work Hours"
   },

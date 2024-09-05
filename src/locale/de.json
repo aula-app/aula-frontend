@@ -121,6 +121,8 @@
     "user_needs_to_consent": "Zustimmung erforderlich?",
     "userlevel": "Benutzer-Rolle",
     "vacation": "Urlaubsmodus",
+    "weekEnd": "Wochenendes",
+    "weekStart": "Wochenbeginns",
     "workDays": "Arbeitstage",
     "workHours": "Arbeitsstunden"
   },

@@ -1,7 +1,7 @@
 import { ConfigResponse } from '@/types/Generics';
 import { ConfigRequest } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
-import { Button, Checkbox, FormControlLabel, FormGroup, Stack, Typography } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, FormGroup, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -22,15 +22,12 @@ const DATE_FORMAT = 'YYYY-MM-DD[ ]HH:mm:ss';
 const SystemSettings = ({ config, onReload }: Props) => {
   const { t } = useTranslation();
 
-  const [weekDays, setWeekDays] = useState<number[]>([]);
+  const [startDay, setStartDay] = useState<number>(config.first_workday_week);
+  const [endDay, setEndDay] = useState<number>(config.last_workday_week);
   const [startTime, setStartTime] = useState<dayjs.ConfigType>(config.start_time);
   const [endTime, setEndTime] = useState<dayjs.ConfigType>(config.daily_end_time);
 
   var week = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
-
-  const toggleDay = (day: number) => {
-    weekDays.includes(day) ? setWeekDays([...weekDays.filter((i) => i !== day)]) : setWeekDays([...weekDays, day]);
-  };
 
   const setConfig = async ({ method, args }: ConfigRequest) => {
     await databaseRequest(
@@ -46,6 +43,7 @@ const SystemSettings = ({ config, onReload }: Props) => {
   };
 
   const onSubmit = () => {
+    setConfig({ method: 'setWorkdays', args: { first_day: startDay, last_day: endDay } });
     setConfig({ method: 'setDailyStartTime', args: { time: startTime } });
     setConfig({ method: 'setDailyEndTime', args: { time: endTime } });
   };
@@ -56,23 +54,47 @@ const SystemSettings = ({ config, onReload }: Props) => {
   };
 
   return (
-    <Stack>
+    <Stack gap={2}>
       <Typography variant="h6" py={1}>
         {t(`settings.workDays`)}
       </Typography>
-      <Grid component={FormGroup} container>
-        {week.map((day, i) => (
-          <Grid size="auto" key={i}>
-            <FormControlLabel
-              control={<Checkbox checked={weekDays.includes(i)} onChange={() => toggleDay(i)} />}
-              label={t(`week.${day}`)}
-            />
-          </Grid>
-        ))}
+      <Grid component={FormGroup} container spacing={1}>
+        <Grid size="auto">
+          <TextField
+            select
+            label={t('settings.weekStart')}
+            value={startDay}
+            onChange={(data) => setStartDay(Number(data.target.value))}
+            variant="outlined"
+            sx={{ minWidth: 263 }}
+          >
+            {week.map((label, value) => (
+              <MenuItem value={value} key={value}>
+                {t(label)}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        <Grid size="auto">
+          <TextField
+            select
+            label={t('settings.weekEnd')}
+            value={endDay}
+            onChange={(data) => setEndDay(Number(data.target.value))}
+            variant="outlined"
+            sx={{ minWidth: 263 }}
+          >
+            {week.map((label, value) => (
+              <MenuItem value={value} key={value}>
+                {t(label)}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
       </Grid>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Grid container spacing={1}>
-          <Grid size="auto" pt={1}>
+          <Grid size="auto">
             <TimePicker
               label={t(`settings.timeStart`)}
               value={dayjs(startTime)}
@@ -81,7 +103,7 @@ const SystemSettings = ({ config, onReload }: Props) => {
               }}
             />
           </Grid>
-          <Grid size="auto" pt={1}>
+          <Grid size="auto">
             <TimePicker
               label={t(`settings.timeEnd`)}
               value={dayjs(endTime)}
