@@ -14,18 +14,24 @@ import AppReducer from './AppReducer';
 /**
  * AppState structure and initial values
  */
+
+export interface PopupType {
+  message: string;
+  type: 'error' | 'success';
+}
+
 export interface AppStoreState {
   darkMode: boolean;
   isAuthenticated: boolean;
   hasConsent: boolean;
   currentUser?: object | undefined;
-  errors: string[];
+  messages: PopupType[];
 }
 const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
   isAuthenticated: false, // Overridden in AppStore by checking auth token
   hasConsent: false,
-  errors: [],
+  messages: [],
 };
 
 /**

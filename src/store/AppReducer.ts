@@ -39,14 +39,14 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
         darkMode,
       };
     }
-    case 'ADD_ERROR': {
-      return { ...state, errors: [...state.errors, action?.message] };
+    case 'ADD_POPUP': {
+      return { ...state, messages: [...state.messages, action?.message] };
     }
-    case 'REMOVE_ERROR': {
-      return { ...state, errors: [...state.errors.filter((e, i) => i !== action?.index)] };
+    case 'REMOVE_POPUP': {
+      return { ...state, messages: [...state.messages.filter((e, i) => i !== action?.index)] };
     }
-    case 'REMOVE_ALL_ERRORS': {
-      return { ...state, errors: [] };
+    case 'REMOVE_ALL_POPUP': {
+      return { ...state, messages: [] };
     }
     default:
       return state;

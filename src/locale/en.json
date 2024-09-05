@@ -143,6 +143,7 @@
     "deleteRequest": "Data deletion requested",
     "deleteText": "Are you sure you want to request the deletion of your account? All your data will be lost. This action cannot be undone.",
     "edit": "Edit {{var}}",
+    "error": "Something went wrong.",
     "exportData": "Export account data",
     "exportRequest": "Data export requested",
     "filter": "Filter",
@@ -162,6 +163,7 @@
     "undelegated": "{{var}} ideas",
     "unaltenticated": "The page you are trying to access requires authentication",
     "update": "New {{var}} for ",
+    "updated": "{{var}} updated",
     "yourVote": "How you voted: {{var}}"
   },
   "tooltips": {

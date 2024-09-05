@@ -46,11 +46,11 @@ const RecoveryPasswordView = () => {
     ).json();
 
     if (request.success === "false") {
-      dispatch({ type: 'ADD_ERROR', message: t('generics.wrong') });
+      dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
       return;
     }
 
-    dispatch({ type: 'ADD_ERROR', message: t('login.forgotRequest') });
+    dispatch({ type: 'ADD_POPUP', message: {message: t('login.forgotRequest'), type: 'error'} });
     navigate("/", { replace: true });
   }
 

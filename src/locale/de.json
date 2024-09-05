@@ -143,6 +143,7 @@
     "deleteRequest": "Löschung der Daten beantragt",
     "deleteText": "Bist du sicher, dass du die Löschung deines Kontos beantragen willst? Alle deine Daten gehen dabei verloren. Diese Aktion kann nicht rückgängig gemacht werden.",
     "edit": "{{var}} bearbeiten",
+    "error": "Etwas ist schief gelaufen.",
     "exportData": "Kontodaten exportieren",
     "exportRequest": "Datenexport angefordert",
     "filter": "Filter",
@@ -162,6 +163,7 @@
     "undelegated": "{{var}} Ideen",
     "unaltenticated": "Die Seite, auf die du zugreifen möchtest, erfordert eine Authentifizierung.",
     "update": "Neue {{var}} für ",
+    "updated": "{{var}} aktualisiert",
     "yourVote": "So hast du abgestimmt: {{var}}"
   },
   "tooltips": {

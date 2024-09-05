@@ -1,4 +1,5 @@
 import { useAppStore } from '@/store';
+import { PopupType } from '@/store/AppStore';
 import { Alert } from '@mui/material';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import { ForwardedRef, forwardRef, useEffect } from 'react';
@@ -13,18 +14,20 @@ interface SnackbarProps {
  */
 const ErrorMessages = () => {
   const [state, dispatch] = useAppStore();
-  let currentStack = [] as string[];
+  let currentStack = [] as PopupType[];
 
   const handleClose = (index: number) => {
     currentStack.filter((e, i) => i !== index);
-    dispatch({ type: 'REMOVE_ERROR', index });
+    dispatch({ type: 'REMOVE_POPUP', index });
   };
 
   useEffect(() => {
-    const newMessages = [...new Set(state.errors.filter(x => !currentStack.includes(x)))];
-    newMessages.map((error, i) => enqueueSnackbar(error, { variant: 'error', onClose: () => handleClose(i) }));
-    currentStack = [...currentStack, ...newMessages]
-  }, [JSON.stringify(state.errors)]);
+    const newMessages = [...new Set(state.messages.filter((x) => !currentStack.includes(x)))];
+    newMessages.map((message, i) =>
+      enqueueSnackbar(message.message, { variant: message.type, onClose: () => handleClose(i) })
+    );
+    currentStack = [...currentStack, ...newMessages];
+  }, [JSON.stringify(state.messages)]);
 
   const AlertSnackbar = forwardRef((props: SnackbarProps, ref: ForwardedRef<HTMLDivElement>) => (
     <Alert ref={ref} severity="error" variant="filled" sx={{ width: '100%' }} role="alert">
