@@ -44,3 +44,7 @@ export interface SingleIdeaResponseType extends BaseResponseType {
 export interface SingleUserResponseType extends BaseResponseType {
   data: UserType;
 }
+
+export type StatusRequest = { method: string; status: number; callback: () => void | Promise<void> };
+
+export type ConfigRequest = { method: string; args: ObjectPropByName };

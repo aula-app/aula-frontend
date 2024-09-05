@@ -32,8 +32,9 @@ export const ImageEditor = ({ closeMethod, isOpen, id }: NewCommentProps) => {
       arguments: {
         user_id: id,
       },
-    }).then((res: any) => {
-      setImage(`${import.meta.env.VITE_APP_API_URL}/files/${res.data[0].filename}`);
+    }).then((response) => {
+      if (response.success && response.data && response.data.length > 0)
+        setImage(`${import.meta.env.VITE_APP_API_URL}/files/${response.data[0].filename}`);
     });
   };
 

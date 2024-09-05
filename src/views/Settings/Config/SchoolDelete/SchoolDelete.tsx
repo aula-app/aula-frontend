@@ -1,4 +1,7 @@
 import { AppIcon } from '@/components';
+import { useEventLogout } from '@/hooks';
+import { useAppStore } from '@/store';
+import { databaseRequest } from '@/utils';
 import {
   Button,
   Dialog,
@@ -16,7 +19,24 @@ import { useTranslation } from 'react-i18next';
  */
 const SchoolDelete = () => {
   const { t } = useTranslation();
+  const onLogout = useEventLogout();
+  const [, dispatch] = useAppStore();
   const [openDelete, setOpenDelete] = useState(false);
+
+  const lockInstance = async () => {
+    await databaseRequest(
+      {
+        model: 'Settings',
+        method: 'setInstanceOnlineMode',
+        arguments: { status: 5 },
+      },
+      ['updater_id']
+    ).then((response) => {
+      response.success
+        ? onLogout()
+        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+    });
+  };
 
   return (
     <>
@@ -29,10 +49,8 @@ const SchoolDelete = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          <Typography color="error" sx={{ display: 'flex' }}>
-            <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('texts.deleteData')}
-          </Typography>
+        <DialogTitle id="alert-dialog-title" color="error" sx={{ display: 'flex', alignItems: 'center' }}>
+          <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('texts.deleteData')}
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
           <DialogContentText id="alert-dialog-description">{t('texts.deleteText')}</DialogContentText>
@@ -41,7 +59,7 @@ const SchoolDelete = () => {
           <Button onClick={() => setOpenDelete(false)} color="secondary" autoFocus>
             {t('generics.cancel')}
           </Button>
-          <Button onClick={() => setOpenDelete(false)} color="error" variant="contained">
+          <Button onClick={lockInstance} color="error" variant="contained">
             {t('generics.delete')}
           </Button>
         </DialogActions>

@@ -3,7 +3,7 @@ import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { dataSettings } from '@/utils';
 import { Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
-import { deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
+import { blueGrey, deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
 import { Dispatch, Fragment, SetStateAction, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -14,7 +14,6 @@ type Params = {
   orderBy: number;
   scope: SettingNamesType;
   selected: number[];
-  status: StatusTypes;
   setLimit: Dispatch<SetStateAction<number>>;
   setSelected: Dispatch<SetStateAction<number[]>>;
   setAlter: Dispatch<
@@ -32,7 +31,6 @@ const DataTable = ({
   orderBy,
   scope,
   selected,
-  status,
   setAlter,
   setLimit,
   setSelected,

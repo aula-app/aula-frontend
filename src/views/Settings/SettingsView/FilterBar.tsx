@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 type Params = {
   filter: [string, string];
-  status?: -1 | 0 | 1 | 2 | 3;
+  status?: StatusTypes;
   isOpen: boolean;
   scope: SettingNamesType;
   setFilter: Dispatch<SetStateAction<[string, string]>>;
@@ -62,7 +62,7 @@ const FilterBar = ({ filter, status, scope, isOpen, setFilter, setStatus }: Para
             endAdornment={<AppIconButton icon="close" onClick={() => setFilter(['', ''])} />}
           />
         </Stack>
-        {status && (
+        {typeof status !== 'undefined' && (
           <Stack direction="row" alignItems="center" p={2} pt={0} gap={2}>
             <Typography>{t('texts.show')}</Typography>
             <TextField

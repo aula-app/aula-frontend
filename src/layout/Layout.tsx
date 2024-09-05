@@ -1,10 +1,10 @@
-import ErrorMessages from '@/dialogs/ErrorMessages';
 import { useIsAuthenticated, useIsOnline } from '@/hooks/auth';
 import { FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
 import PrivateLayout from './PrivateLayout';
 import PublicLayout from './PublicLayout';
-import OfflineView from '@/views/OfflineView';
+import PopupMessages from '@/dialogs/PopupMessages';
 import { checkPermissions } from '@/utils';
+import OfflineView from '@/views/OfflineView';
 
 /**
  * Returns the current Layout component depending on different circumstances.
@@ -15,13 +15,13 @@ const CurrentLayout: FunctionComponent<PropsWithChildren> = (props) => {
   const checkOnlineStatus = async () => setOnline(await useIsOnline());
 
   useEffect(() => {
-    if (!checkPermissions(50)) checkOnlineStatus();
+    checkOnlineStatus();
   }, [location]);
 
   return (
     <>
       {useIsAuthenticated() ? online ? <PrivateLayout {...props} /> : <OfflineView /> : <PublicLayout {...props} />}
-      <ErrorMessages />
+      <PopupMessages />
     </>
   );
 };
