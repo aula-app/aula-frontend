@@ -1,5 +1,5 @@
 import { useAppStore } from '@/store';
-import { databaseRequest, localStorageDelete, localStorageGet } from '@/utils';
+import { checkPermissions, databaseRequest, localStorageDelete, localStorageGet } from '@/utils';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,7 +24,9 @@ export async function useIsOnline(): Promise<boolean> {
     method: 'getInstanceSettings',
     arguments: {},
   }).then((response) => {
-    isOnline = response.success && response.data['online_mode'] === 1;
+    console.log(response.data['online_mode']);
+    if (response.success)
+      isOnline = response.data['online_mode'] === 1 || (checkPermissions(50) && response.data['online_mode'] !== 5);
   });
   return isOnline;
 }
