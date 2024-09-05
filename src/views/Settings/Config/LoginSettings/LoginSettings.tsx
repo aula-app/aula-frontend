@@ -1,5 +1,5 @@
-import { ConfigResponse } from '@/types/Generics';
-import { StatusRequest } from '@/types/RequestTypes';
+import { ConfigResponse, InstanceResponse } from '@/types/Generics';
+import { ConfigRequest } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
 import { FormControlLabel, Switch } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -8,18 +8,19 @@ import { useTranslation } from 'react-i18next';
 
 interface Props {
   config: ConfigResponse;
+  settings: InstanceResponse;
   onReload: () => void | Promise<void>;
 }
 
 /** * Renders "SystemSettings" component
  */
 
-const SystemSettings = ({ config, onReload }: Props) => {
+const SystemSettings = ({ config, settings, onReload }: Props) => {
   const { t } = useTranslation();
 
-  const [online, setOnline] = useState<0 | 1>();
-  const [oAuth, setOAuth] = useState<0 | 1>(config['enable_oauth']);
-  const [registration, setRegistration] = useState<0 | 1>(config['allow_registration']);
+  const [online, setOnline] = useState<boolean>(settings.online_mode === 1);
+  const [oAuth, setOAuth] = useState<0 | 1>(config.enable_oauth);
+  const [registration, setRegistration] = useState<0 | 1>(config.allow_registration);
 
   const getOnlineStatus = async () => {
     await databaseRequest({
@@ -27,25 +28,25 @@ const SystemSettings = ({ config, onReload }: Props) => {
       method: 'getInstanceSettings',
       arguments: {},
     }).then((response) => {
-      if (response.success) setOnline(response.data['online_mode']);
+      if (response.success) onReload();
     });
   };
 
-  const setConfig = async ({ method, status, callback }: StatusRequest) => {
+  const setConfig = async ({ method, args }: ConfigRequest) => {
     await databaseRequest(
       {
         model: 'Settings',
         method: method,
-        arguments: { status: status },
+        arguments: args,
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success) callback();
+      if (response.success) onReload();
     });
   };
 
   const toggleOnline = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setOnline(event.target.checked ? 0 : 1);
+    setOnline(!event.target.checked);
   };
 
   const toggleOAuth = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,17 +58,19 @@ const SystemSettings = ({ config, onReload }: Props) => {
   };
 
   useEffect(() => {
-    if (typeof online !== 'undefined')
-      setConfig({ method: 'setInstanceOnlineMode', status: online, callback: getOnlineStatus });
+    setConfig({ method: 'setInstanceOnlineMode', args: { status: !!online } });
   }, [online]);
 
   useEffect(() => {
-    if (typeof oAuth !== 'undefined') setConfig({ method: 'setOauthStatus', status: oAuth, callback: onReload });
+    setOnline(settings.online_mode === 1);
+  }, [settings.online_mode]);
+
+  useEffect(() => {
+    setConfig({ method: 'setOauthStatus', args: { status: oAuth } });
   }, [oAuth]);
 
   useEffect(() => {
-    if (typeof registration !== 'undefined')
-      setConfig({ method: 'setAllowRegistration', status: registration, callback: onReload });
+    setConfig({ method: 'setAllowRegistration', args: { status: registration } });
   }, [registration]);
 
   useEffect(() => {
@@ -78,8 +81,8 @@ const SystemSettings = ({ config, onReload }: Props) => {
     <Grid container spacing={1}>
       <Grid size="auto">
         <FormControlLabel
-          control={<Switch checked={!Boolean(online)} onChange={toggleOnline} />}
-          label={t(`settings.vacation`)}
+          control={<Switch checked={!online} onChange={toggleOnline} />}
+          label={t(`settings.offline`)}
         />
       </Grid>
       <Grid size="auto">

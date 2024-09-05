@@ -1,17 +1,17 @@
 import { AppIcon } from '@/components';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from '@mui/material';
+import { ConfigResponse, InstanceResponse } from '@/types/Generics';
+import { databaseRequest } from '@/utils';
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { red } from '@mui/material/colors';
 import { Stack } from '@mui/system';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Categories from './Categories';
+import LoginSettings from './LoginSettings';
+import SchoolDelete from './SchoolDelete';
 import SchoolInfo from './SchoolInfo';
 import SystemSettings from './SystemSettings';
-import { red } from '@mui/material/colors';
-import SchoolDelete from './SchoolDelete';
 import TimeSettings from './TimeSettings';
-import LoginSettings from './LoginSettings';
-import { databaseRequest } from '@/utils';
-import { useEffect, useState } from 'react';
-import { ConfigResponse, SingleResponseType } from '@/types/Generics';
 
 /** * Renders "Config" view
  * url: /settings/config
@@ -19,6 +19,7 @@ import { ConfigResponse, SingleResponseType } from '@/types/Generics';
 const ConfigView = () => {
   const { t } = useTranslation();
   const [config, setConfig] = useState<ConfigResponse>();
+  const [settings, setSettings] = useState<InstanceResponse>();
 
   const getConfig = async () => {
     await databaseRequest({
@@ -32,8 +33,23 @@ const ConfigView = () => {
     });
   };
 
-  useEffect(() => {
+  const getSettings = async () => {
+    await databaseRequest({
+      model: 'Settings',
+      method: 'getInstanceSettings',
+      arguments: {},
+    }).then((response) => {
+      if (response.success) setSettings(response.data);
+    });
+  };
+
+  const loadData = () => {
     getConfig();
+    getSettings();
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
 
   return (
@@ -67,7 +83,9 @@ const ConfigView = () => {
             {t(`settings.login`)}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails>{config && <LoginSettings config={config} onReload={getConfig} />}</AccordionDetails>
+        <AccordionDetails>
+          {config && settings && <LoginSettings config={config} settings={settings} onReload={loadData} />}
+        </AccordionDetails>
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
@@ -75,9 +93,7 @@ const ConfigView = () => {
             {t(`settings.system`)}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <SystemSettings />
-        </AccordionDetails>
+        <AccordionDetails>{settings && <SystemSettings settings={settings} onReload={getSettings} />}</AccordionDetails>
       </Accordion>
       {/* <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
