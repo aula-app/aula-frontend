@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 type Params = {
   filter: [string, string];
-  status?: -1 | 0 | 1 | 2 | 3;
+  status: StatusTypes;
   isOpen: boolean;
   scope: SettingNamesType;
   setFilter: Dispatch<SetStateAction<[string, string]>>;
@@ -62,26 +62,24 @@ const FilterBar = ({ filter, status, scope, isOpen, setFilter, setStatus }: Para
             endAdornment={<AppIconButton icon="close" onClick={() => setFilter(['', ''])} />}
           />
         </Stack>
-        {status && (
-          <Stack direction="row" alignItems="center" p={2} pt={0} gap={2}>
-            <Typography>{t('texts.show')}</Typography>
-            <TextField
-              select
-              label={t('settings.status')}
-              value={status}
-              onChange={changeStatus}
-              variant="filled"
-              size="small"
-              sx={{ minWidth: 200 }}
-            >
-              {statusOptions.map((column) => (
-                <MenuItem value={column.value} key={column.label}>
-                  {t(column.label)}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Stack>
-        )}
+        <Stack direction="row" alignItems="center" p={2} pt={0} gap={2}>
+          <Typography>{t('texts.show')}</Typography>
+          <TextField
+            select
+            label={t('settings.status')}
+            value={status}
+            onChange={changeStatus}
+            variant="filled"
+            size="small"
+            sx={{ minWidth: 200 }}
+          >
+            {statusOptions.map((column) => (
+              <MenuItem value={column.value} key={column.label}>
+                {t(column.label)}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Stack>
       </Stack>
     </Collapse>
   );
