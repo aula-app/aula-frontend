@@ -199,7 +199,13 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
               id={id}
               phase={phase}
               scope={scope}
-              defaultValue={scope === 'ideas' ? !!fieldValues?.data.is_winner : undefined}
+              defaultValue={
+                scope === 'ideas'
+                  ? !!fieldValues?.data.is_winner
+                  : scope === 'users'
+                    ? fieldValues?.data.email
+                    : undefined
+              }
               addUpdate={addUpdate}
             />
           </Stack>

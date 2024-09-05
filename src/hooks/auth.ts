@@ -24,7 +24,6 @@ export async function useIsOnline(): Promise<boolean> {
     method: 'getInstanceSettings',
     arguments: {},
   }).then((response) => {
-    console.log(response.data['online_mode']);
     if (response.success)
       isOnline = response.data['online_mode'] === 1 || (checkPermissions(50) && response.data['online_mode'] !== 5);
   });
