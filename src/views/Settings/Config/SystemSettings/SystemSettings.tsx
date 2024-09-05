@@ -1,5 +1,4 @@
-import { STATUS } from '@/components/Data/EditData/DataConfig/formDefaults';
-import { InstanceResponse, OnlineOptions, StatusTypes } from '@/types/Generics';
+import { InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { StatusRequest } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
