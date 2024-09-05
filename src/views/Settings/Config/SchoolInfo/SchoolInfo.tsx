@@ -36,7 +36,7 @@ const SchoolInfo = ({ config, onReload }: Props) => {
   };
 
   return (
-    <Stack gap={1} mb={1.5}>
+    <Stack gap={2} mb={1.5}>
       <Typography variant="h5" py={1}>
         {t(`settings.school`)}
       </Typography>
