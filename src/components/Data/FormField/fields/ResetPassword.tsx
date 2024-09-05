@@ -17,12 +17,13 @@ import { useTranslation } from 'react-i18next';
 
 interface Props {
   email: string;
+  order: number;
 }
 
 /** * Renders "Config" view
  * url: /settings/config
  */
-const ResetPassword = ({ email, ...restOfProps }: Props) => {
+const ResetPassword = ({ email, order, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const jwt_token = localStorageGet('token');
@@ -52,7 +53,7 @@ const ResetPassword = ({ email, ...restOfProps }: Props) => {
   };
 
   return (
-    <Stack {...restOfProps}>
+    <Stack order={order}>
       <Button variant="outlined" color="error" onClick={() => setOpenReset(true)} fullWidth sx={{ mb: 3 }}>
         {t('login.passwordReset')}
       </Button>
