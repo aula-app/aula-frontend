@@ -72,8 +72,10 @@ export type InstanceResponse = {
   created: Date;
   id: number;
   last_update: Date;
-  online_mode: 0 | 1;
+  online_mode: OnlineOptions;
   revert_to_on_active: 0 | 1;
   revert_to_on_date: Date;
   updater_id: number;
 };
+
+export type OnlineOptions = 0 | 1 | 2 | 3 | 4;
