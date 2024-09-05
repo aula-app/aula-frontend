@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 interface Props {
   config: ConfigResponse;
-  onReload: () => void;
+  onReload: () => void | Promise<void>;
 }
 
 /** * Renders "SystemSettings" component

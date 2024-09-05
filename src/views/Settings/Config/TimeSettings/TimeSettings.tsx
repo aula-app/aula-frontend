@@ -6,13 +6,15 @@ import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
   config: ConfigResponse;
   onReload: () => void;
 }
+
+const DATE_FORMAT = 'YYYY-MM-DD[ ]HH:mm:ss';
 
 /** * Renders "SystemSettings" component
  */
@@ -21,8 +23,8 @@ const SystemSettings = ({ config, onReload }: Props) => {
   const { t } = useTranslation();
 
   const [weekDays, setWeekDays] = useState<number[]>([]);
-  const [startTime, setStartTime] = useState<Date>(config.start_time);
-  const [endTime, setEndTime] = useState<Date>(config.daily_end_time);
+  const [startTime, setStartTime] = useState<dayjs.ConfigType>(config.start_time);
+  const [endTime, setEndTime] = useState<dayjs.ConfigType>(config.daily_end_time);
 
   var week = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
@@ -75,7 +77,7 @@ const SystemSettings = ({ config, onReload }: Props) => {
               label={t(`settings.timeStart`)}
               value={dayjs(startTime)}
               onChange={(date) => {
-                if (date) setStartTime(dayjs(date).toDate());
+                if (date) setStartTime(dayjs(date).format(DATE_FORMAT));
               }}
             />
           </Grid>
@@ -84,7 +86,7 @@ const SystemSettings = ({ config, onReload }: Props) => {
               label={t(`settings.timeEnd`)}
               value={dayjs(endTime)}
               onChange={(date) => {
-                if (date) setEndTime(dayjs(date).toDate());
+                if (date) setEndTime(dayjs(date).format(DATE_FORMAT));
               }}
             />
           </Grid>
