@@ -4,6 +4,7 @@ import PrivateLayout from './PrivateLayout';
 import PublicLayout from './PublicLayout';
 import PopupMessages from '@/dialogs/PopupMessages';
 import { checkPermissions } from '@/utils';
+import OfflineView from '@/views/OfflineView';
 
 /**
  * Returns the current Layout component depending on different circumstances.
@@ -19,7 +20,7 @@ const CurrentLayout: FunctionComponent<PropsWithChildren> = (props) => {
 
   return (
     <>
-      {useIsAuthenticated() ? <PrivateLayout {...props} /> : <PublicLayout {...props} />}
+      {useIsAuthenticated() ? online ? <PrivateLayout {...props} /> : <OfflineView /> : <PublicLayout {...props} />}
       <PopupMessages />
     </>
   );

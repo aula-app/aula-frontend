@@ -1,7 +1,8 @@
+import { useAppStore } from '@/store';
 import { ConfigResponse } from '@/types/Generics';
 import { databaseRequest } from '@/utils';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 
 const SchoolInfo = ({ config, onReload }: Props) => {
   const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
   const [name, setName] = useState<String>(config.name);
   const [description, setDescription] = useState<String>(config.description_public);
 
@@ -26,7 +28,13 @@ const SchoolInfo = ({ config, onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success) onReload();
+      response.success
+        ? dispatch({
+            type: 'ADD_POPUP',
+            message: { message: t('texts.updated', { var: t(`settings.settings`) }), type: 'success' },
+          })
+        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+      onReload();
     });
   };
 
