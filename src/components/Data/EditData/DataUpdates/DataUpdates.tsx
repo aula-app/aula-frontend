@@ -4,6 +4,7 @@ import CategoryField from '../../FormField/fields/CategoryField';
 import SetWinnerField from '../../FormField/fields/SetWinnerField';
 import MoveData from '../../MoveData';
 import { updateType } from '../EditData';
+import ResetPassword from '../../FormField/fields/ResetPassword';
 
 interface Props {
   id?: number;
@@ -29,9 +30,14 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
           {id && phase >= 40 && <SetWinnerField id={id} defaultValue={defaultValue} addUpdate={addUpdate} />}
         </>
       );
-    case 'rooms':
-      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
     case 'users':
+      return (
+        <>
+          <MoveData id={id} scope={scope} addUpdate={addUpdate} />
+          <ResetPassword order={4} email={defaultValue} />
+        </>
+      );
+    case 'rooms':
       return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
     case 'boxes':
       return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
