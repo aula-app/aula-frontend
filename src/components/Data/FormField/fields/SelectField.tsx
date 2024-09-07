@@ -64,7 +64,7 @@ const SelectField = ({ data, control, disabled = false, ...restOfProps }: Props)
             {...field}
             error={!!fieldState.error}
             {...restOfProps}
-            InputLabelProps={{ shrink: true }}
+            slotProps={{ inputLabel: { shrink: true } }}
           >
             {currentOptions.map((option) => (
               <MenuItem value={option.value} key={option.label}>
