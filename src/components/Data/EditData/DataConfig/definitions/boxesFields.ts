@@ -33,25 +33,7 @@ export default [
     role: 30,
   },
   {
-    name: 'phase_duration_1',
-    form: inputType.duration,
-    required: true,
-    role: 30,
-  },
-  {
-    name: 'phase_duration_2',
-    form: inputType.duration,
-    required: true,
-    role: 30,
-  },
-  {
-    name: 'phase_duration_3',
-    form: inputType.duration,
-    required: true,
-    role: 30,
-  },
-  {
-    name: 'phase_duration_4',
+    name: ['phase_duration_1', 'phase_duration_2', 'phase_duration_3', 'phase_duration_4'],
     form: inputType.duration,
     required: true,
     role: 30,

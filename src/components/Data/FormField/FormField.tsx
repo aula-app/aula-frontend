@@ -7,6 +7,7 @@ import IconField from './fields/IconField';
 import { InputSettings } from '../EditData/DataConfig';
 import PhaseSelectField from './fields/PhaseSelectField';
 import { RoomPhases } from '@/types/SettingsTypes';
+import DurationField from './fields/DurationField';
 
 type Props = {
   data: InputSettings;
@@ -40,37 +41,7 @@ const FormInput = ({
 
   switch (data.form.type) {
     case 'duration':
-      return (
-        <Stack
-          direction="row"
-          alignItems="center"
-          px={1}
-          sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
-          {...restOfProps}
-        >
-          <Typography noWrap pb={1} mr="auto">
-            {t(`settings.${data.name}`)}:
-          </Typography>
-          <TextField
-            required={data.required}
-            disabled={disabled}
-            type="number"
-            variant="standard"
-            // @ts-ignore
-            {...register(data.name)}
-            // @ts-ignore
-            error={errors[data.name] ? true : false}
-            // @ts-ignore
-            helperText={t(errors[data.name]?.message || ' ')}
-            sx={{ mx: 2, width: 80 }}
-            {...restOfProps}
-            InputLabelProps={{ shrink: true }}
-          />
-          <Typography noWrap pb={1}>
-            {t(`generics.days`)}
-          </Typography>
-        </Stack>
-      );
+      return <DurationField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'icon':
       return <IconField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'image':

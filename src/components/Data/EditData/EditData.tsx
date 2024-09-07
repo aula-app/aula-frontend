@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormContainer } from 'react-hook-form-mui';
 import FormField from '../FormField';
-import DataConfig from './DataConfig';
+import DataConfig, { InputSettings } from './DataConfig';
 import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest, scopeDefinitions } from '@/utils';
 import { useEffect, useState } from 'react';
@@ -40,7 +40,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const [fieldValues, setFieldValues] = useState<SingleResponseType>();
   const [updates, setUpdate] = useState<Array<updateType>>([]);
 
-  const schema = getFields().reduce((schema, field) => {
+  const schema = getSchema().reduce((schema, field) => {
     return {
       ...schema,
       [field.name]: field.required ? field.form.schema?.required(t('validation.required')) : field.form.schema,
@@ -67,6 +67,26 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     return DataConfig[scope]
       .filter((field) => checkPermissions(field.role))
       .filter((field) => !field.phase || field.phase <= phase);
+  }
+
+  function getSchema() {
+    const newSchema = [] as InputSettings[];
+    DataConfig[scope]
+      .filter((field) => checkPermissions(field.role))
+      .filter((field) => !field.phase || field.phase <= phase)
+      .forEach((field) => {
+        Array.isArray(field.name)
+          ? field.name.forEach((name) =>
+              newSchema.push({
+                name: name,
+                form: field.form,
+                required: field.required,
+                role: field.role,
+              })
+            )
+          : newSchema.push(field);
+      });
+    return newSchema;
   }
 
   const getFieldValues = async () => {
@@ -108,7 +128,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   };
 
   const updateValues = () => {
-    getFields().forEach((field) => {
+    getSchema().forEach((field) => {
       const defautltValue = params[field.name] || field.form.defaultValue;
       setValue(
         // @ts-ignore
