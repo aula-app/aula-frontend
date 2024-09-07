@@ -176,7 +176,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} key={scope}>
       <Stack p={2} overflow="auto">
         <Typography variant="h4" pb={2}>
-          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${scopeDefinitions[scope].item.toLowerCase()}`) })}
+          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${scopeDefinitions[scope].name.toLowerCase()}`) })}
         </Typography>
         <FormContainer>
           <Stack>

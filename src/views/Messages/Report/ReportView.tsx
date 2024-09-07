@@ -1,6 +1,6 @@
 import { AppButton } from '@/components';
 import ReportCard from '@/components/ReportCard';
-import { ReportType } from '@/types/Scopes';
+import { MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Stack } from '@mui/material';
 import { t } from 'i18next';
@@ -15,7 +15,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 const ReportView = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const [report, setReport] = useState<ReportType>();
+  const [report, setReport] = useState<MessageType>();
 
   const reportFetch = async () =>
     await databaseRequest({

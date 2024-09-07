@@ -10,6 +10,7 @@ import roomsFields from './definitions/roomsFields';
 import usersFields from './definitions/usersFields';
 import { inputType } from './formDefaults';
 import { PossibleFields } from '@/types/Scopes';
+import announcementsFields from './definitions/announcementsFields';
 
 export type InputSettings = {
   name: keyof PossibleFields;
@@ -19,6 +20,7 @@ export type InputSettings = {
 };
 
 const DataConfig = {
+  announcements: announcementsFields,
   boxes: boxesFields,
   bug: bugFields,
   categories: categoriesFields,

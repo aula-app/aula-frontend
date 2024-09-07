@@ -48,6 +48,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         scope={scope || 'bug'}
         otherData={{
           headline: `${scope === 'bug' ? 'Bug' : 'Content'} report`,
+          status: 4,
         }}
         metadata={{
           location: location.pathname,

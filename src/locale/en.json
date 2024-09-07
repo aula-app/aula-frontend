@@ -141,6 +141,7 @@
     "add": "New {{var}}",
     "addToParent": "Add to {{var}}",
     "approved": "This idea was approved.",
+    "archive": "archive",
     "boxCard": "Ideas Box",
     "bug": "Please try to shortly describe the bug",
     "delegated": "{{var}} delegated ideas",
@@ -171,6 +172,7 @@
     "show": "Show",
     "undelegated": "{{var}} ideas",
     "unaltenticated": "The page you are trying to access requires authentication",
+    "unarchive": "unarchive",
     "update": "New {{var}} for ",
     "updated": "{{var}} updated",
     "yourVote": "How you voted: {{var}}"
@@ -201,6 +203,8 @@
   "views": {
     "about": "About",
     "advanced": "Advanced",
+    "announcement": "Announcement",
+    "announcements": "Announcements",
     "configuration": "Configurations",
     "dashboard": "Dashboard",
     "box": "Ideas box",

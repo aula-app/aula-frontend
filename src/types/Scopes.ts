@@ -84,12 +84,6 @@ export interface ReportBodyType {
   content: string;
 }
 
-export interface ReportType {
-  id: number;
-  body: string;
-  headline: string;
-}
-
 export interface RoomType {
   access_code: string;
   created: string;

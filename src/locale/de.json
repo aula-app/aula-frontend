@@ -141,6 +141,7 @@
     "add": "{{var}} hinzufügen",
     "addToParent": "Zur {{var}} hinzufügen",
     "approved": "Diese Idee wurde angenommen",
+    "archive": "archivieren",
     "boxCard": "Ideen-Box",
     "bug": "Bitte versuche, den Fehler kurz zu beschreiben",
     "delegated": "{{var}} delegierte Ideen",
@@ -171,6 +172,7 @@
     "show": "Anzeigen",
     "undelegated": "{{var}} Ideen",
     "unaltenticated": "Die Seite, auf die du zugreifen möchtest, erfordert eine Authentifizierung.",
+    "unarchive": "unarchivieren",
     "update": "Neue {{var}} für ",
     "updated": "{{var}} aktualisiert",
     "yourVote": "So hast du abgestimmt: {{var}}"
@@ -201,6 +203,8 @@
   "views": {
     "about": "Über uns",
     "advanced": "Mehr",
+    "announcement": "Ankündigung",
+    "announcements": "Ankündigungen",
     "configuration": "Einstellungen",
     "dashboard": "Dashboard",
     "box": "Ideen-Box",

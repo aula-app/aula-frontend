@@ -1,6 +1,7 @@
 export type RoomPhases = 0 | 10 | 20 | 30 | 40;
 export type RoleTypes = 10 | 20 | 30 | 40 | 50 | 60;
 export type SettingNamesType =
+  | 'announcements'
   | 'bug'
   | 'boxes'
   | 'comments'

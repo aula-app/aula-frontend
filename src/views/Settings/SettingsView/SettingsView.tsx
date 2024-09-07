@@ -13,6 +13,8 @@ import EditBar from './EditBar';
 import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
 import { StatusTypes } from '@/types/Generics';
+import { useAppStore } from '@/store';
+import { STATUS } from '@/components/Data/EditData/DataConfig/formDefaults';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -22,13 +24,15 @@ const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
+  const [, dispatch] = useAppStore();
+
   const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
   const [orderBy, setOrder] = useState(dataSettings[setting_name][0].orderId);
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
-  const [status, setStatus] = useState<StatusTypes>(1);
+  const [status, setStatus] = useState<number>(1);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
@@ -36,7 +40,9 @@ const SettingsView = () => {
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const dataFetch = async (filter: string) =>
+  const statusOptions = [{ label: 'status.all', value: -1 }, ...STATUS];
+
+  const dataFetch = async () =>
     await databaseRequest({
       model: scopeDefinitions[setting_name].model,
       method: scopeDefinitions[setting_name].fetch,
@@ -46,16 +52,15 @@ const SettingsView = () => {
         orderby: orderBy,
         asc: orderAsc,
         status: status,
-        extra_where: filter,
+        extra_where: getFilter(),
       },
+    }).then((response) => {
+      response.success
+        ? setItems(response)
+        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
     });
 
-  const loadData = async () => {
-    const currentFilter = !filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '';
-    await dataFetch(currentFilter).then((response) => {
-      setItems(response);
-    });
-  };
+  const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
@@ -74,14 +79,14 @@ const SettingsView = () => {
   };
 
   const onClose = () => {
-    loadData();
+    dataFetch();
     setAlter({ open: false });
     setOpenDelete(false);
     setOpenMove(false);
   };
 
   useEffect(() => {
-    loadData();
+    dataFetch();
   }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status]);
 
   useEffect(() => {
@@ -101,6 +106,7 @@ const SettingsView = () => {
       <FilterBar
         scope={setting_name}
         filter={filter}
+        statusOptions={statusOptions}
         status={status}
         setFilter={setFilter}
         setStatus={setStatus}
