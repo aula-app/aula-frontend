@@ -44,7 +44,6 @@ const MessagesView = () => {
         model: 'Message',
         method: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
         arguments: {
-          status: 1,
           extra_where: !reportFilter.includes('') ? ` AND ${reportFilter[0]} LIKE '%${reportFilter[1]}%'` : '',
         },
       },
