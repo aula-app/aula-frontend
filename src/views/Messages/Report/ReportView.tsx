@@ -48,7 +48,7 @@ const ReportView = () => {
 
   return (
     <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
-      {report && <ReportCard headline={report.headline} body={report.body} />}
+      {report && <ReportCard report={report} onReload={reportFetch} />}
       <Stack direction="row" justifyContent="end">
         <AppButton color="error" onClick={() => deleteMessage()}>
           {t('generics.discard')}
