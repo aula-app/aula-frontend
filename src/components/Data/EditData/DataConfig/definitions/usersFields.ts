@@ -4,26 +4,31 @@ export default [
   {
     name: 'displayname',
     form: inputType.shortText,
+    required: true,
     role: 20,
   },
   {
     name: 'realname',
     form: inputType.shortText,
+    required: true,
     role: 20,
   },
   {
     name: 'username',
     form: inputType.shortText,
+    required: true,
     role: 50,
   },
   {
     name: 'email',
     form: inputType.shortText,
+    required: true,
     role: 20,
   },
   {
     name: 'about_me',
     form: inputType.longText,
+    required: false,
     role: 20,
   },
   {
@@ -39,11 +44,13 @@ export default [
         { label: 'roles.50', value: 50 },
       ],
     },
+    required: true,
     role: 50,
   },
   {
     name: 'status',
     form: inputType.status,
+    required: true,
     role: 50,
   },
 ];

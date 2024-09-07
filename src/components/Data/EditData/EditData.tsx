@@ -41,7 +41,10 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const [updates, setUpdate] = useState<Array<updateType>>([]);
 
   const schema = getFields().reduce((schema, field) => {
-    return { ...schema, [field.name]: field.form.schema };
+    return {
+      ...schema,
+      [field.name]: field.required ? field.form.schema?.required(t('validation.required')) : field.form.schema,
+    };
   }, {});
 
   const {

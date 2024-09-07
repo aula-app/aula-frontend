@@ -15,6 +15,7 @@ import announcementsFields from './definitions/announcementsFields';
 export type InputSettings = {
   name: keyof PossibleFields;
   form: inputType;
+  required: boolean;
   role: 10 | 20 | 30 | 40 | 50 | 60;
   phase?: 0 | 10 | 20 | 30 | 40;
 };

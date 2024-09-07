@@ -114,6 +114,7 @@
     "school": "School Info",
     "status": "Status",
     "system": "System Settings",
+    "target_id": "User",
     "time": "Time Settings",
     "timeEnd": "Time End",
     "timeStart": "Time Start",

@@ -52,10 +52,9 @@ const FormInput = ({
             {t(`settings.${data.name}`)}:
           </Typography>
           <TextField
-            required
+            required={data.required}
             disabled={disabled}
             type="number"
-            InputProps={{ inputProps: { min: 1 } }}
             variant="standard"
             // @ts-ignore
             {...register(data.name)}
@@ -92,7 +91,7 @@ const FormInput = ({
           render={({ field, fieldState }) => (
             <TextField
               label={t(`settings.${data.name}`)}
-              required
+              required={data.required}
               minRows={data.form.type === 'text' ? 4 : 1}
               multiline={data.form.type === 'text'}
               disabled={disabled}

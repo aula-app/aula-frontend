@@ -5,11 +5,13 @@ export default [
   {
     name: 'name',
     form: inputType.shortText,
+    required: true,
     role: 30,
   },
   {
     name: 'description_public',
     form: inputType.longText,
+    required: false,
     role: 30,
   },
   {
@@ -18,6 +20,7 @@ export default [
       ...inputType.select,
       options: 'rooms',
     },
+    required: true,
     role: 30,
   },
   {
@@ -26,31 +29,37 @@ export default [
       type: 'phaseSelect',
       defaultValue: 10,
     },
+    required: true,
     role: 30,
   },
   {
     name: 'phase_duration_1',
     form: inputType.duration,
+    required: true,
     role: 30,
   },
   {
     name: 'phase_duration_2',
     form: inputType.duration,
+    required: true,
     role: 30,
   },
   {
     name: 'phase_duration_3',
     form: inputType.duration,
+    required: true,
     role: 30,
   },
   {
     name: 'phase_duration_4',
     form: inputType.duration,
+    required: true,
     role: 30,
   },
   {
     name: 'status',
     form: inputType.status,
+    required: true,
     role: 50,
   },
 ];
