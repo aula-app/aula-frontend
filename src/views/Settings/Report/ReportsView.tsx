@@ -8,6 +8,7 @@ import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FilterBar from '../SettingsView/FilterBar';
+import { StatusTypes } from '@/types/Generics';
 
 /** * Renders "Config" view
  * url: /settings/config
@@ -16,7 +17,7 @@ const ReportsView = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [reports, setReports] = useState<MessageType[]>([]);
-  const [status, setStatus] = useState<number>(4);
+  const [status, setStatus] = useState<StatusTypes>(1);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -25,6 +26,7 @@ const ReportsView = () => {
       model: 'Message',
       method: 'getMessages',
       arguments: {
+        msg_type: 4,
         status: status,
         extra_where: getFilter(),
       },
@@ -52,8 +54,8 @@ const ReportsView = () => {
         scope={'report'}
         filter={filter}
         statusOptions={[
-          { label: 'status.active', value: 4 },
-          { label: 'status.archived', value: 5 },
+          { label: 'status.active', value: 1 },
+          { label: 'status.archived', value: 3 },
         ]}
         status={status}
         setFilter={setFilter}

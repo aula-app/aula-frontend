@@ -1,5 +1,8 @@
 import { AppIconButton } from '@/components';
-import { EditData, DeleteData } from '@/components/Data';
+import { DeleteData, EditData } from '@/components/Data';
+import { STATUS } from '@/components/Data/EditData/DataConfig/formDefaults';
+import { useAppStore } from '@/store';
+import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
 import { databaseRequest, dataSettings, scopeDefinitions } from '@/utils';
@@ -12,9 +15,6 @@ import DataTable from './DataTable';
 import EditBar from './EditBar';
 import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
-import { StatusTypes } from '@/types/Generics';
-import { useAppStore } from '@/store';
-import { STATUS } from '@/components/Data/EditData/DataConfig/formDefaults';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -32,7 +32,7 @@ const SettingsView = () => {
   const [orderBy, setOrder] = useState(dataSettings[setting_name][0].orderId);
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
-  const [status, setStatus] = useState<number>(1);
+  const [status, setStatus] = useState<StatusTypes>(1);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });

@@ -6,7 +6,6 @@ import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FilterBar from '../Settings/SettingsView/FilterBar';
-import { STATUS } from '@/components/Data/EditData/DataConfig/formDefaults';
 
 /**
  * Renders "Messages" view
@@ -24,8 +23,6 @@ const MessagesView = () => {
   const [announcementsFilter, setAnnouncementsFilter] = useState<[string, string]>(['', '']);
   const [messagesFilter, setMessagesFilter] = useState<[string, string]>(['', '']);
   const [reportFilter, setReportFilter] = useState<[string, string]>(['', '']);
-
-  const statusOptions = [{ label: 'status.all', value: -1 }, ...STATUS];
 
   const announcementsFetch = async () =>
     await databaseRequest({

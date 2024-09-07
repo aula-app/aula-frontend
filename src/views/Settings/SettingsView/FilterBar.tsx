@@ -1,5 +1,6 @@
 import AppIconButton from '@/components/AppIconButton';
 import { STATUS } from '@/components/Data/EditData/DataConfig/formDefaults';
+import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { dataSettings } from '@/utils';
 import { Collapse, FilledInput, MenuItem, Stack, TextField, Typography } from '@mui/material';
@@ -9,11 +10,11 @@ import { useTranslation } from 'react-i18next';
 type Params = {
   filter: [string, string];
   statusOptions?: typeof STATUS;
-  status?: number;
+  status?: StatusTypes;
   isOpen: boolean;
   scope: SettingNamesType;
   setFilter: Dispatch<SetStateAction<[string, string]>>;
-  setStatus?: Dispatch<SetStateAction<number>>;
+  setStatus?: Dispatch<SetStateAction<StatusTypes>>;
 };
 
 const FilterBar = ({ filter, status, statusOptions, scope, isOpen, setFilter, setStatus }: Params) => {
@@ -25,7 +26,7 @@ const FilterBar = ({ filter, status, statusOptions, scope, isOpen, setFilter, se
 
   const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if (!setStatus) return;
-    setStatus(Number(event.target.value) as number);
+    setStatus(Number(event.target.value) as StatusTypes);
   };
 
   const changeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
