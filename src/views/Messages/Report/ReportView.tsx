@@ -36,7 +36,7 @@ const ReportView = () => {
         method: 'setMessageStatus',
         arguments: {
           message_id: params['message_id'],
-          status: 4,
+          msg_type: 4,
         },
       },
       ['updater_id']

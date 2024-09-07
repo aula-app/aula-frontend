@@ -34,7 +34,7 @@ const ReportCard = ({ report, onReload }: Props) => {
         model: 'Message',
         method: 'setMessageStatus',
         arguments: {
-          status: value ? 5 : 4,
+          status: value ? 3 : 1,
           message_id: report.id,
         },
       },
@@ -52,7 +52,7 @@ const ReportCard = ({ report, onReload }: Props) => {
       <CardHeader
         title={report.headline}
         action={
-          report.status === 4 ? (
+          report.status === 1 ? (
             <Button color="error" onClick={() => archiveReport(true)}>
               {t(`texts.archive`)}
             </Button>

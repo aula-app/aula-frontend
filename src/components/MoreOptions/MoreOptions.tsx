@@ -17,7 +17,7 @@ interface OptionsTypes {
   icon: keyof typeof ICONS;
   color: ColorTypes;
   label: string;
-  otherData?: { headline?: string; body?: string; status: number };
+  otherData?: { headline?: string; body?: string; msg_type: number };
   metadata?: ObjectPropByName;
 }
 
@@ -48,7 +48,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       label: t('generics.contentReport'),
       otherData: {
         headline: `Content report on ${scope} #${id}`,
-        status: 4,
+        msg_type: 4,
       },
       metadata: {
         location: location.pathname,
@@ -62,7 +62,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       label: t('generics.bugReport'),
       otherData: {
         headline: `Bug report on ${scope} #${id}`,
-        status: 4,
+        msg_type: 4,
       },
       metadata: {
         location: location.pathname,
