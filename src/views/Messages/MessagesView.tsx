@@ -1,6 +1,6 @@
 import { AppIcon, AppIconButton } from '@/components';
 import MessageCard from '@/components/MessageCard';
-import { MessageType } from '@/types/Scopes';
+import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest, messageConsentValues } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -16,7 +16,7 @@ const MessagesView = () => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [reports, setReports] = useState<MessageType[]>([]);
-  const [announcements, setAnnouncements] = useState<MessageType[]>([]);
+  const [announcements, setAnnouncements] = useState<AnnouncementType[]>([]);
   const [openAnnouncementsFilter, setOpenAnnouncementsFilter] = useState(false);
   const [openMessagesFilter, setOpenMessagesFilter] = useState(false);
   const [openReportFilter, setOpenReportFilter] = useState(false);
@@ -42,12 +42,12 @@ const MessagesView = () => {
     await databaseRequest(
       {
         model: 'Message',
-        method: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
+        method: 'getMessages',
         arguments: {
           extra_where: !reportFilter.includes('') ? ` AND ${reportFilter[0]} LIKE '%${reportFilter[1]}%'` : '',
         },
       },
-      checkPermissions(40) ? [] : ['user_id']
+      ['user_id']
     ).then((response) => {
       if (!response.success) return;
       setMessages(response.data);
@@ -150,12 +150,12 @@ const MessagesView = () => {
             isOpen={openAnnouncementsFilter}
           />
 
-          {announcements.map((message) => (
+          {announcements.map((announcement) => (
             <MessageCard
-              type={messageConsentValues[message.user_needs_to_consent]}
-              title={message.headline}
-              to={`/messages/message/${message.id}`}
-              key={message.id}
+              type={messageConsentValues[announcement.user_needs_to_consent]}
+              title={announcement.headline}
+              to={`/messages/message/${announcement.id}`}
+              key={announcement.id}
             />
           ))}
         </Stack>
