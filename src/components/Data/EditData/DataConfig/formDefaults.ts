@@ -3,7 +3,7 @@ import * as yup from 'yup';
 
 export type SelectOptionsType = { label: string; value: number };
 
-type FormTypes = 'duration' | 'icon' | 'image' | 'input' | 'password' | 'phaseSelect' | 'select' | 'text';
+type FormTypes = 'duration' | 'icon' | 'image' | 'input' | 'password' | 'phaseSelect' | 'select' | 'target' | 'text';
 
 export const STATUS = [
   { label: 'status.inactive', value: 0 },

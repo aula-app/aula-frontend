@@ -18,6 +18,13 @@ type DataSetting = {
 */
 
 export const dataSettings = {
+  announcements: [
+    { name: 'headline', orderId: 5, role: 50 },
+    { name: 'body', orderId: 6, role: 50 },
+    { name: 'user_needs_to_consent', orderId: 7, role: 50 },
+    { name: 'consent_text', orderId: 8, role: 50 },
+    { name: 'status', orderId: 0, role: 50 },
+  ],
   boxes: [
     { name: 'name', orderId: 1, role: 30 },
     { name: 'description_public', orderId: 7, role: 30 },
@@ -41,11 +48,8 @@ export const dataSettings = {
     // { name: 'approved', orderId: 11, role: 50, phase: 20 },
   ],
   messages: [
-    { name: 'headline', orderId: 5, role: 50 },
-    { name: 'body', orderId: 6, role: 50 },
-    { name: 'user_needs_to_consent', orderId: 7, role: 50 },
-    { name: 'consent_text', orderId: 8, role: 50 },
-    { name: 'status', orderId: 0, role: 50 },
+    { name: 'headline', orderId: 1, role: 10 },
+    { name: 'body', orderId: 2, role: 10 },
   ],
   report: [
     { name: 'headline', orderId: 1, role: 10 },

@@ -23,6 +23,18 @@ interface scopeType {
 }
 
 export const scopeDefinitions = {
+  announcements: {
+    name: 'announcements',
+    model: 'Text',
+    item: 'Text',
+    items: 'Texts',
+    id: 'text_id',
+    fetch: 'getTexts',
+    get: 'getTextBaseData',
+    add: 'addText',
+    edit: 'editText',
+    delete: 'deleteText',
+  },
   boxes: {
     name: 'boxes',
     model: 'Topic',
@@ -99,15 +111,15 @@ export const scopeDefinitions = {
   },
   messages: {
     name: 'messages',
-    model: 'Text',
-    item: 'Text',
-    items: 'Texts',
-    id: 'text_id',
-    fetch: 'getTexts',
-    get: 'getTextBaseData',
-    add: 'addText',
-    edit: 'editText',
-    delete: 'deleteText',
+    model: 'Message',
+    item: 'Message',
+    items: 'Messages',
+    id: 'message_id',
+    fetch: 'getMessages',
+    get: 'getMessageBaseData',
+    add: 'addMessage',
+    edit: 'editMessage',
+    delete: 'deleteMessage',
   },
   report: {
     name: 'report',

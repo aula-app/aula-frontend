@@ -1,18 +1,23 @@
-import { ReportBodyType } from '@/types/Scopes';
-import { Card, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
-import { AppLink } from '..';
+import { useAppStore } from '@/store';
+import { MessageType, ReportBodyType } from '@/types/Scopes';
+import { databaseRequest } from '@/utils';
+import { Button, Card, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { Fragment } from 'react/jsx-runtime';
+import { AppLink } from '..';
 
 /**
  * Renders "ReportCard" component
  */
 
 interface Props {
-  headline: string;
-  body: string;
+  report: MessageType;
+  onReload: () => Promise<void>;
 }
 
-const ReportCard = ({ headline, body }: Props) => {
+const ReportCard = ({ report, onReload }: Props) => {
+  const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
   function convertToJson(str: string) {
     try {
       JSON.parse(str);
@@ -22,11 +27,39 @@ const ReportCard = ({ headline, body }: Props) => {
     return JSON.parse(str);
   }
 
-  const bodyData: ReportBodyType | null = convertToJson(body);
+  const archiveReport = async (value: boolean) =>
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: 'setMessageStatus',
+        arguments: {
+          status: value ? 3 : 1,
+          message_id: report.id,
+        },
+      },
+      ['updater_id']
+    ).then((response) => {
+      response.success
+        ? onReload()
+        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+    });
+
+  const bodyData: ReportBodyType | null = convertToJson(report.body);
 
   return bodyData ? (
     <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
-      <CardHeader title={headline} />
+      <CardHeader
+        title={report.headline}
+        action={
+          report.status === 1 ? (
+            <Button color="error" onClick={() => archiveReport(true)}>
+              {t(`texts.archive`)}
+            </Button>
+          ) : (
+            <Button onClick={() => archiveReport(false)}>{t(`texts.unarchive`)}</Button>
+          )
+        }
+      />
       <Divider />
       {bodyData.data && (
         <>

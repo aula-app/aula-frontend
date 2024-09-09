@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormContainer } from 'react-hook-form-mui';
 import FormField from '../FormField';
-import DataConfig from './DataConfig';
+import DataConfig, { InputSettings } from './DataConfig';
 import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest, scopeDefinitions } from '@/utils';
 import { useEffect, useState } from 'react';
@@ -40,13 +40,17 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const [fieldValues, setFieldValues] = useState<SingleResponseType>();
   const [updates, setUpdate] = useState<Array<updateType>>([]);
 
-  const schema = getFields().reduce((schema, field) => {
-    return { ...schema, [field.name]: field.form.schema };
+  const schema = getSchema().reduce((schema, field) => {
+    return {
+      ...schema,
+      [field.name]: field.required ? field.form.schema?.required(t('validation.required')) : field.form.schema,
+    };
   }, {});
 
   const {
     register,
     setValue,
+    setError,
     control,
     handleSubmit,
     getValues,
@@ -64,6 +68,26 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     return DataConfig[scope]
       .filter((field) => checkPermissions(field.role))
       .filter((field) => !field.phase || field.phase <= phase);
+  }
+
+  function getSchema() {
+    const newSchema = [] as InputSettings[];
+    DataConfig[scope]
+      .filter((field) => checkPermissions(field.role))
+      .filter((field) => !field.phase || field.phase <= phase)
+      .forEach((field) => {
+        Array.isArray(field.name)
+          ? field.name.forEach((name) =>
+              newSchema.push({
+                name: name,
+                form: field.form,
+                required: field.required,
+                role: field.role,
+              })
+            )
+          : newSchema.push(field);
+      });
+    return newSchema;
   }
 
   const getFieldValues = async () => {
@@ -105,12 +129,12 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   };
 
   const updateValues = () => {
-    getFields().forEach((field) => {
-      const defautltValue = params[field.name] || field.form.defaultValue;
+    getSchema().forEach((field) => {
+      const defaultValue = params[field.name] || field.form.defaultValue;
       setValue(
         // @ts-ignore
         field.name,
-        fieldValues ? fieldValues.data[field.name] : defautltValue
+        fieldValues && fieldValues.data[field.name] ? fieldValues.data[field.name] : defaultValue
       );
     });
     setUpdate([]);
@@ -155,8 +179,9 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     });
   };
 
-  const onSubmit = (formData: Object) => {
+  const onSubmit = (formData: ObjectPropByName) => {
     if (typeof id !== 'undefined') otherData[scopeDefinitions[scope].id] = id;
+    if (scope === 'messages') delete formData.undefined;
     dataSave({
       ...formData,
       ...otherData,
@@ -176,7 +201,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} key={scope}>
       <Stack p={2} overflow="auto">
         <Typography variant="h4" pb={2}>
-          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${scopeDefinitions[scope].item.toLowerCase()}`) })}
+          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${scopeDefinitions[scope].name.toLowerCase()}`) })}
         </Typography>
         <FormContainer>
           <Stack>
@@ -184,6 +209,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
               getFields().map((field, key) => (
                 <Box order={key} key={key}>
                   <FormField
+                    isNew={typeof id === 'undefined'}
                     data={field}
                     register={register}
                     control={control}

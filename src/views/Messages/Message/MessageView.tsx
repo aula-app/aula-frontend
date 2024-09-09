@@ -1,5 +1,5 @@
 import { AppButton } from '@/components';
-import { MessageType } from '@/types/Scopes';
+import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom';
 
 const MessagesView = () => {
   const params = useParams();
-  const [message, setMessage] = useState<MessageType>();
+  const [message, setMessage] = useState<MessageType | AnnouncementType>();
 
   const messageFetch = async () =>
     await databaseRequest({
@@ -56,7 +56,7 @@ const MessagesView = () => {
             {/* <IconButton>
             <AppIcon icon="delete" />
           </IconButton> */}
-            {message.user_needs_to_consent > 0 && (
+            {'user_needs_to_consent' in message && message.user_needs_to_consent > 0 && (
               <AppButton color="primary" onClick={() => giveConsent(message.id)}>
                 {message.consent_text}
               </AppButton>

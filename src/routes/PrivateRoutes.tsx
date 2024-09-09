@@ -27,6 +27,8 @@ const PrivateRoutes = () => (
     <Route path="/" element={<WelcomeView />} />
     <Route path="about" element={<AboutView />} />
     <Route path="phase/:phase" element={<PhasesView />} />
+    <Route path="announcements" element={<MessagesView />} />
+    <Route path="announcements/message/:message_id" element={<MessageView />} />
     <Route path="messages" element={<MessagesView />} />
     <Route path="messages/message/:message_id" element={<MessageView />} />
     <Route path="messages/report/:message_id" element={<ReportView />} />

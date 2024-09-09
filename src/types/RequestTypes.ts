@@ -1,5 +1,5 @@
 import { ObjectPropByName } from './Generics';
-import { BoxType, CommentType, IdeaType, MessageType, RoomType, UserType } from './Scopes';
+import { AnnouncementType, BoxType, CommentType, IdeaType, MessageType, RoomType, UserType } from './Scopes';
 
 export interface ModelRequest {
   model: string;
@@ -30,7 +30,7 @@ export interface RoomsResponseType extends BaseResponseType {
 }
 
 export interface SingleResponseType extends BaseResponseType {
-  data: BoxType | CommentType | IdeaType | MessageType | RoomType | UserType;
+  data: AnnouncementType | BoxType | CommentType | IdeaType | MessageType | RoomType | UserType;
 }
 
 export interface SingleBoxResponseType extends BaseResponseType {

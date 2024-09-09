@@ -7,6 +7,8 @@ import IconField from './fields/IconField';
 import { InputSettings } from '../EditData/DataConfig';
 import PhaseSelectField from './fields/PhaseSelectField';
 import { RoomPhases } from '@/types/SettingsTypes';
+import DurationField from './fields/DurationField';
+import MessageTarget from './fields/MessageTarget';
 
 type Props = {
   data: InputSettings;
@@ -18,6 +20,7 @@ type Props = {
   setValue: UseFormSetValue<{}>;
   errors: FieldErrors<{}>;
   phase?: RoomPhases;
+  isNew: boolean;
 };
 
 /**
@@ -34,44 +37,14 @@ const FormInput = ({
   disabled = false,
   hidden = false,
   phase = 0,
+  isNew,
   ...restOfProps
 }: Props) => {
   const { t } = useTranslation();
 
   switch (data.form.type) {
     case 'duration':
-      return (
-        <Stack
-          direction="row"
-          alignItems="center"
-          px={1}
-          sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
-          {...restOfProps}
-        >
-          <Typography noWrap pb={1} mr="auto">
-            {t(`settings.${data.name}`)}:
-          </Typography>
-          <TextField
-            required
-            disabled={disabled}
-            type="number"
-            InputProps={{ inputProps: { min: 1 } }}
-            variant="standard"
-            // @ts-ignore
-            {...register(data.name)}
-            // @ts-ignore
-            error={errors[data.name] ? true : false}
-            // @ts-ignore
-            helperText={t(errors[data.name]?.message || ' ')}
-            sx={{ mx: 2, width: 80 }}
-            {...restOfProps}
-            InputLabelProps={{ shrink: true }}
-          />
-          <Typography noWrap pb={1}>
-            {t(`generics.days`)}
-          </Typography>
-        </Stack>
-      );
+      return <DurationField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'icon':
       return <IconField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'image':
@@ -80,6 +53,17 @@ const FormInput = ({
       return <SelectField data={data} control={control} disabled={disabled} {...restOfProps} />;
     case 'phaseSelect':
       return <PhaseSelectField data={data} control={control} phase={phase} disabled={disabled} {...restOfProps} />;
+    case 'target':
+      return (
+        <MessageTarget
+          data={data}
+          control={control}
+          disabled={!isNew}
+          setValue={setValue}
+          getValues={getValues}
+          {...restOfProps}
+        />
+      );
     default:
       return (
         <Controller
@@ -92,7 +76,7 @@ const FormInput = ({
           render={({ field, fieldState }) => (
             <TextField
               label={t(`settings.${data.name}`)}
-              required
+              required={data.required}
               minRows={data.form.type === 'text' ? 4 : 1}
               multiline={data.form.type === 'text'}
               disabled={disabled}
@@ -101,7 +85,6 @@ const FormInput = ({
               {...field}
               error={!!fieldState.error}
               helperText={t(fieldState.error?.message || ' ')}
-              sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
               slotProps={{ inputLabel: { shrink: !!field.value } }}
               {...restOfProps}
             />

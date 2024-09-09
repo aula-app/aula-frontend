@@ -1,6 +1,22 @@
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { RoomPhases } from './SettingsTypes';
 
+export interface AnnouncementType {
+  id: number;
+  creator_id: number;
+  headline: string;
+  body: string;
+  user_needs_to_consent: number;
+  service_id_consent: number;
+  consent_text: string;
+  language_id: number;
+  location: null;
+  created: string;
+  last_update: string;
+  updater_id: number;
+  status: number;
+}
+
 export interface BoxType {
   id: number;
   name: string;
@@ -64,15 +80,20 @@ export interface MessageType {
   creator_id: number;
   headline: string;
   body: string;
-  user_needs_to_consent: number;
-  service_id_consent: number;
-  consent_text: string;
   language_id: number;
   location: null;
+  publish_date: string;
   created: string;
   last_update: string;
   updater_id: number;
   status: number;
+  target_group: number;
+  target_id: number;
+  only_on_dashboard: number;
+  level_of_detail: number;
+  msg_type: number;
+  room_id: number;
+  pin_to_top: number;
 }
 
 export interface ReportBodyType {
@@ -82,12 +103,6 @@ export interface ReportBodyType {
     userAgent?: string;
   };
   content: string;
-}
-
-export interface ReportType {
-  id: number;
-  body: string;
-  headline: string;
 }
 
 export interface RoomType {
@@ -146,4 +161,12 @@ export interface CategoryType {
   id: number;
 }
 
-export interface PossibleFields extends BoxType, BugType, CommentType, IdeaType, MessageType, RoomType, UserType {}
+export interface PossibleFields
+  extends AnnouncementType,
+    BoxType,
+    BugType,
+    CommentType,
+    IdeaType,
+    MessageType,
+    RoomType,
+    UserType {}

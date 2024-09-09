@@ -10,15 +10,18 @@ import roomsFields from './definitions/roomsFields';
 import usersFields from './definitions/usersFields';
 import { inputType } from './formDefaults';
 import { PossibleFields } from '@/types/Scopes';
+import announcementsFields from './definitions/announcementsFields';
 
 export type InputSettings = {
   name: keyof PossibleFields;
   form: inputType;
+  required: boolean;
   role: 10 | 20 | 30 | 40 | 50 | 60;
   phase?: 0 | 10 | 20 | 30 | 40;
 };
 
 const DataConfig = {
+  announcements: announcementsFields,
   boxes: boxesFields,
   bug: bugFields,
   categories: categoriesFields,

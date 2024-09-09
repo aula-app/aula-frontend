@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 type Params = {
   filter: [string, string];
+  statusOptions?: typeof STATUS;
   status?: StatusTypes;
   isOpen: boolean;
   scope: SettingNamesType;
@@ -16,10 +17,8 @@ type Params = {
   setStatus?: Dispatch<SetStateAction<StatusTypes>>;
 };
 
-const FilterBar = ({ filter, status, scope, isOpen, setFilter, setStatus }: Params) => {
+const FilterBar = ({ filter, status, statusOptions, scope, isOpen, setFilter, setStatus }: Params) => {
   const { t } = useTranslation();
-
-  const statusOptions = [{ label: 'status.all', value: -1 }, ...STATUS];
 
   const changeFilter = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setFilter([event.target.value, filter[1]]);
@@ -62,7 +61,7 @@ const FilterBar = ({ filter, status, scope, isOpen, setFilter, setStatus }: Para
             endAdornment={<AppIconButton icon="close" onClick={() => setFilter(['', ''])} />}
           />
         </Stack>
-        {typeof status !== 'undefined' && (
+        {statusOptions && typeof status !== 'undefined' && (
           <Stack direction="row" alignItems="center" p={2} pt={0} gap={2}>
             <Typography>{t('texts.show')}</Typography>
             <TextField

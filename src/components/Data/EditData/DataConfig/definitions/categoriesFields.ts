@@ -4,6 +4,7 @@ export default [
   {
     name: 'name',
     form: inputType.shortText,
+    required: true,
     role: 20,
   },
   {
@@ -12,11 +13,13 @@ export default [
       type: 'icon',
       defaultValue: '',
     },
+    required: false,
     role: 20,
   },
   {
     name: 'status',
     form: inputType.status,
+    required: true,
     role: 50,
   },
 ];

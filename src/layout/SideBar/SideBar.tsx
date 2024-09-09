@@ -34,7 +34,7 @@ const SideBar = ({ anchor, open, variant, setReport, onClose, ...restOfProps }: 
       variant={variant}
       PaperProps={{
         sx: {
-          width: SIDEBAR_WIDTH,
+          minWidth: SIDEBAR_WIDTH,
           marginTop: onMobile ? 0 : variant === 'temporary' ? 0 : TOPBAR_DESKTOP_HEIGHT,
           height: onMobile ? '100%' : variant === 'temporary' ? '100%' : `calc(100% - ${TOPBAR_DESKTOP_HEIGHT})`,
         },
@@ -43,7 +43,13 @@ const SideBar = ({ anchor, open, variant, setReport, onClose, ...restOfProps }: 
     >
       <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
         <LocaleSwitch />
-        <AppIconButton color="secondary" onClick={(evt) => onClose(evt, 'backdropClick')} icon="close" title={t('generics.close')} sx={{ px: 0 }} />
+        <AppIconButton
+          color="secondary"
+          onClick={(evt) => onClose(evt, 'backdropClick')}
+          icon="close"
+          title={t('generics.close')}
+          sx={{ px: 0 }}
+        />
       </Stack>
       {isAuthenticated && <UserInfo />}
       <Divider />

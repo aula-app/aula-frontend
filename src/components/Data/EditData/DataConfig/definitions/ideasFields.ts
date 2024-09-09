@@ -4,17 +4,20 @@ export default [
   {
     name: 'title',
     form: inputType.shortText,
+    required: true,
     role: 20,
   },
   {
     name: 'content',
     form: inputType.longText,
+    required: true,
     role: 20,
   },
   {
     name: 'room_id',
     form: {
       ...inputType.select,
+      required: true,
       options: 'rooms',
     },
     role: 50,
@@ -22,6 +25,7 @@ export default [
   {
     name: 'approval_comment',
     form: inputType.longText,
+    required: false,
     role: 50,
     phase: 20,
   },
@@ -35,12 +39,14 @@ export default [
         { label: 'generics.yes', value: 1 },
       ],
     },
+    required: false,
     role: 50,
     phase: 20,
   },
   {
     name: 'status',
     form: inputType.status,
+    required: true,
     role: 50,
   },
 ];
