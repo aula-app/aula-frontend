@@ -180,15 +180,8 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   };
 
   const onSubmit = (formData: ObjectPropByName) => {
-    console.log(formData);
     if (typeof id !== 'undefined') otherData[scopeDefinitions[scope].id] = id;
-    if (scope === 'messages') {
-      if (formData.room_id === 0 && formData.target_id === 0 && formData.target_group === 0) {
-        getFields()[0].name.forEach((name) => setError(name, { type: 'custom', message: t('validation.recipient') }));
-        return;
-      }
-      delete formData.undefined;
-    }
+    if (scope === 'messages') delete formData.undefined;
     dataSave({
       ...formData,
       ...otherData,

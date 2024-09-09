@@ -8,6 +8,7 @@
   "generics": {
     "add": "Add new {{var}}",
     "active": "active",
+    "all": "All users",
     "back": "back",
     "bugReport": "report bug",
     "cancel": "cancel",

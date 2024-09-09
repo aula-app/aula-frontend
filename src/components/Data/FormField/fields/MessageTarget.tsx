@@ -47,21 +47,23 @@ const MessageTarget = ({ data, control, disabled = false, setValue, getValues, .
 
   return (
     <Stack direction="row" gap={2} alignItems="center">
-      {t('texts.recipient')}:
-      <TextField
-        label={t(`views.category`)}
-        select
-        value={recipientType}
-        onChange={changeType}
-        sx={{ mb: 3, order: 0, minWidth: 100, display: disabled ? 'none' : 'box' }}
-        {...restOfProps}
-      >
-        {Object.values(recipientTypes).map((type, i) => (
-          <MenuItem value={i} key={i}>
-            {type.name}
-          </MenuItem>
-        ))}
-      </TextField>
+      {!disabled && (
+        <TextField
+          label={t('texts.recipient')}
+          select
+          value={recipientType}
+          onChange={changeType}
+          sx={{ mb: 3, order: 0, minWidth: 100 }}
+          {...restOfProps}
+        >
+          <MenuItem value={0}>{t('generics.all')}</MenuItem>
+          {Object.values(recipientTypes).map((type, i) => (
+            <MenuItem value={i + 1} key={i}>
+              {t(`views.${type.name}`)}
+            </MenuItem>
+          ))}
+        </TextField>
+      )}
       {Object.entries(recipientTypes).map(([fieldName, fieldData], i) => {
         const currentData: InputSettings = {
           ...data,
@@ -71,7 +73,7 @@ const MessageTarget = ({ data, control, disabled = false, setValue, getValues, .
             options: fieldData.options,
           } as inputType,
         };
-        const isHidden = disabled ? getValues()[fieldName] === 0 : recipientType !== i;
+        const isHidden = disabled ? getValues()[fieldName] === 0 : recipientType !== i + 1;
         return (
           <Box sx={{ display: isHidden ? 'none' : 'box' }} flex={1} key={`field${i}`}>
             <SelectField data={currentData} control={control} disabled={disabled} />
