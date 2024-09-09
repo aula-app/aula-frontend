@@ -1,11 +1,10 @@
+import { useAppStore } from '@/store';
 import { MessageType, ReportBodyType } from '@/types/Scopes';
+import { databaseRequest } from '@/utils';
 import { Button, Card, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { Fragment } from 'react/jsx-runtime';
 import { AppLink } from '..';
-import { useTranslation } from 'react-i18next';
-import { databaseRequest } from '@/utils';
-import { boolean } from 'yup';
-import { useAppStore } from '@/store';
 
 /**
  * Renders "ReportCard" component

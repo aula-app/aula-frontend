@@ -166,6 +166,7 @@
     "phaseDuration": "Phase durations",
     "phaseEnd": "Phase ends in {{var}} days",
     "phaseEnded": "Phase ended",
+    "recipient": "To",
     "rejected": "This idea was not approved.",
     "report": "Please explain why you are reporting this content",
     "resetPasswordText": "Are you sure you want to request a new password for this user?",
@@ -198,6 +199,7 @@
     "min": "Must be more than {{var}} characters.",
     "name": "Names should contain only letters.",
     "phone": "Must be a valid phone number.",
+    "recipient": "You must select a recipient for your message.",
     "required": "This field cannot be empty.",
     "verify": "Passwords must match"
   },

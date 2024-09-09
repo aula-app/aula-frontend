@@ -50,6 +50,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const {
     register,
     setValue,
+    setError,
     control,
     handleSubmit,
     getValues,
@@ -178,8 +179,16 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     });
   };
 
-  const onSubmit = (formData: Object) => {
+  const onSubmit = (formData: ObjectPropByName) => {
+    console.log(formData);
     if (typeof id !== 'undefined') otherData[scopeDefinitions[scope].id] = id;
+    if (scope === 'messages') {
+      if (formData.room_id === 0 && formData.target_id === 0 && formData.target_group === 0) {
+        getFields()[0].name.forEach((name) => setError(name, { type: 'custom', message: t('validation.recipient') }));
+        return;
+      }
+      delete formData.undefined;
+    }
     dataSave({
       ...formData,
       ...otherData,
@@ -207,6 +216,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
               getFields().map((field, key) => (
                 <Box order={key} key={key}>
                   <FormField
+                    isNew={typeof id === 'undefined'}
                     data={field}
                     register={register}
                     control={control}

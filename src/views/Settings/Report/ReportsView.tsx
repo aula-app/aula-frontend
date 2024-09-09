@@ -1,14 +1,14 @@
 import { AppIconButton } from '@/components';
 import ReportCard from '@/components/ReportCard';
 import { useAppStore } from '@/store';
-import { MessageType } from '@/types/Scopes';
+import { StatusTypes } from '@/types/Generics';
+import { AnnouncementType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FilterBar from '../SettingsView/FilterBar';
-import { StatusTypes } from '@/types/Generics';
 
 /** * Renders "Config" view
  * url: /settings/config
@@ -16,7 +16,7 @@ import { StatusTypes } from '@/types/Generics';
 const ReportsView = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
-  const [reports, setReports] = useState<MessageType[]>([]);
+  const [reports, setReports] = useState<AnnouncementType[]>([]);
   const [status, setStatus] = useState<StatusTypes>(1);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [openFilter, setOpenFilter] = useState(false);

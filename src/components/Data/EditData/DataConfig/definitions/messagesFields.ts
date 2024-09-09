@@ -1,6 +1,17 @@
 import { inputType } from '../formDefaults';
+import * as yup from 'yup';
 
 export default [
+  {
+    name: ['room_id', 'target_id', 'target_group'],
+    form: {
+      type: 'target',
+      defaultValue: 0,
+      schema: yup.number(),
+    },
+    required: false,
+    role: 30,
+  },
   {
     name: 'headline',
     form: inputType.shortText,
@@ -12,24 +23,6 @@ export default [
     form: inputType.longText,
     required: true,
     role: 10,
-  },
-  {
-    name: 'room_id',
-    form: {
-      ...inputType.select,
-      options: 'rooms',
-    },
-    required: false,
-    role: 30,
-  },
-  {
-    name: 'target_id',
-    form: {
-      ...inputType.select,
-      options: 'users',
-    },
-    required: false,
-    role: 30,
   },
   {
     name: 'status',

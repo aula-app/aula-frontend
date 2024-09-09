@@ -166,6 +166,7 @@
     "phaseDuration": "Dauer der Phasen",
     "phaseEnd": "Phase endet in {{var}} Tagen",
     "phaseEnded": "Phase beendet",
+    "recipient": "An",
     "rejected": "Diese Idee wurde nicht angenommen",
     "report": "Bitte erkläre, warum du diesen Inhalt melden möchtest",
     "resetPasswordText": "Sind Sie sicher, dass Sie ein neues Passwort für diesen Benutzer anfordern möchten?",
@@ -198,6 +199,7 @@
     "min": "Muss größer sein als {{var}} Zeichen.",
     "name": "Die Namen sollten nur Buchstaben enthalten.",
     "phone": "Muss eine gültige Telefonnummer sein.",
+    "recipient": "Sie müssen einen Empfänger für Ihre Nachricht auswählen.",
     "required": "Dieses Feld darf nicht leer sein.",
     "verify": "Passwörter müssen übereinstimmen"
   },
