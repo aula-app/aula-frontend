@@ -2,7 +2,7 @@ import { AppIconButton } from '@/components';
 import ReportCard from '@/components/ReportCard';
 import { useAppStore } from '@/store';
 import { StatusTypes } from '@/types/Generics';
-import { AnnouncementType } from '@/types/Scopes';
+import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
@@ -16,7 +16,7 @@ import FilterBar from '../SettingsView/FilterBar';
 const ReportsView = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
-  const [reports, setReports] = useState<AnnouncementType[]>([]);
+  const [reports, setReports] = useState<MessageType[]>([]);
   const [status, setStatus] = useState<StatusTypes>(1);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [openFilter, setOpenFilter] = useState(false);
