@@ -27,7 +27,7 @@ const MessageTarget = ({ data, control, disabled = false, setValue, getValues, .
   const recipientTypes = {
     room_id: { name: 'room', options: 'rooms' },
     target_id: { name: 'user', options: 'users' },
-    target_group: { name: 'group', options: 'users' },
+    target_group: { name: 'group', options: 'groups' },
   } as Record<keyof PossibleFields, { name: string; options: SettingNamesType }>;
 
   const changeType = (event: any) => {

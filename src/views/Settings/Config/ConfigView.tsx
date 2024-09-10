@@ -12,6 +12,7 @@ import SchoolDelete from './SchoolDelete';
 import SchoolInfo from './SchoolInfo';
 import SystemSettings from './SystemSettings';
 import TimeSettings from './TimeSettings';
+import Groups from './Groups';
 
 /** * Renders "Config" view
  * url: /settings/config
@@ -76,6 +77,8 @@ const ConfigView = () => {
         <AccordionDetails>
           <Typography variant="h6">{t('settings.categories')}</Typography>
           <Categories />
+          <Typography variant="h6">{t('settings.groups')}</Typography>
+          <Groups />
         </AccordionDetails>
       </Accordion>
       <Accordion expanded={expanded === 'panel1'} onChange={() => toggleExpanded('panel1')}>

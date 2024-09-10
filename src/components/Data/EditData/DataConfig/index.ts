@@ -11,6 +11,7 @@ import usersFields from './definitions/usersFields';
 import { inputType } from './formDefaults';
 import { PossibleFields } from '@/types/Scopes';
 import announcementsFields from './definitions/announcementsFields';
+import groupFields from './definitions/groupFields';
 
 export type InputSettings = {
   name: keyof PossibleFields;
@@ -26,6 +27,7 @@ const DataConfig = {
   bug: bugFields,
   categories: categoriesFields,
   comments: commentsFields,
+  groups: groupFields,
   ideas: ideasFields,
   messages: messagesFields,
   report: reportFields,

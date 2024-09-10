@@ -5,6 +5,7 @@ export type SettingNamesType =
   | 'bug'
   | 'boxes'
   | 'comments'
+  | 'groups'
   | 'ideas'
   | 'messages'
   | 'report'

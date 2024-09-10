@@ -1,43 +1,42 @@
 import { AppIcon } from '@/components';
-import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
 import { DeleteData } from '@/components/Data';
 import EditData from '@/components/Data/EditData';
-import { CategoryType } from '@/types/Scopes';
+import { GroupType } from '@/types/GroupTypes';
 import { databaseRequest } from '@/utils';
 import { Box, Chip, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const CatView = () => {
+const GroupView = () => {
   const { t } = useTranslation();
-  const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [groups, setGroups] = useState<GroupType[]>([]);
   const [selectedId, setId] = useState<number | undefined>();
-  const [editCat, setEditCat] = useState(false);
-  const [deleteCat, setDeleteCat] = useState(false);
+  const [editGroup, setEditGroup] = useState(false);
+  const [deleteGroup, setDeleteGroup] = useState(false);
 
   const categoriesFetch = async () =>
     await databaseRequest({
-      model: 'Idea',
-      method: 'getCategories',
+      model: 'Group',
+      method: 'getGroups',
       arguments: {},
     }).then((response) => {
-      if (response.success) setCategories(response.data ? response.data : []);
+      if (response.success) setGroups(response.data ? response.data : []);
     });
 
   const setDelete = (id: number) => {
     setId(id);
-    setDeleteCat(true);
+    setDeleteGroup(true);
   };
 
   const setEdit = (id?: number) => {
     setId(id || undefined);
-    setEditCat(true);
+    setEditGroup(true);
   };
 
   const onClose = () => {
     setId(undefined);
-    setEditCat(false);
-    setDeleteCat(false);
+    setEditGroup(false);
+    setDeleteGroup(false);
     categoriesFetch();
   };
 
@@ -49,27 +48,27 @@ const CatView = () => {
     <Stack pt={1} pb={3}>
       <Stack direction="row" flexWrap="wrap" gap={1}>
         <Chip
-          label={t('generics.add', { var: t('settings.category') })}
+          label={t('generics.add', { var: t('views.group') })}
           avatar={<AppIcon icon="add" />}
           onClick={() => setEdit()}
+          sx={{ mt: 1 }}
         />
-        {categories.map((category, key) => {
-          const currentIcon = category.description_internal as keyof typeof CAT_ICONS;
+        {groups.map((group, key) => {
           return (
             <Chip
               key={key}
-              label={category.name}
-              avatar={<AppIcon icon={currentIcon} />}
+              label={group.group_name}
               // onClick={() => setEdit(category.id)}
-              onDelete={() => setDelete(category.id)}
+              onDelete={() => setDelete(group.id)}
+              sx={{ mr: 1, mt: 1 }}
             />
           );
         })}
       </Stack>
-      <EditData scope="categories" id={selectedId} isOpen={!!editCat} onClose={onClose} />
-      <DeleteData scope="categories" id={selectedId || 0} isOpen={!!deleteCat} onClose={onClose} />
+      <EditData scope="groups" id={selectedId} isOpen={!!editGroup} onClose={onClose} />
+      <DeleteData scope="groups" id={selectedId || 0} isOpen={!!deleteGroup} onClose={onClose} />
     </Stack>
   );
 };
 
-export default CatView;
+export default GroupView;

@@ -1,5 +1,6 @@
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { RoomPhases } from './SettingsTypes';
+import { GroupType } from './GroupTypes';
 
 export interface AnnouncementType {
   id: number;
@@ -166,6 +167,7 @@ export interface PossibleFields
     BoxType,
     BugType,
     CommentType,
+    GroupType,
     IdeaType,
     MessageType,
     RoomType,

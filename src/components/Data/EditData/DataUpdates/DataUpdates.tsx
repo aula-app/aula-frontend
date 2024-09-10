@@ -21,6 +21,10 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
   const params = useParams();
 
   switch (scope) {
+    case 'boxes':
+      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
+    case 'groups':
+      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
     case 'ideas':
       if (!id && 'box_id' in params)
         addUpdate({ model: 'Idea', method: 'addIdeaToTopic', args: { topic_id: params.box_id } });
@@ -30,6 +34,8 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
           {id && phase >= 40 && <SetWinnerField id={id} defaultValue={defaultValue} addUpdate={addUpdate} />}
         </>
       );
+    case 'rooms':
+      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
     case 'users':
       return (
         <>
@@ -37,10 +43,6 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
           <ResetPassword order={4} email={defaultValue} />
         </>
       );
-    case 'rooms':
-      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
-    case 'boxes':
-      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
     default:
       return <></>;
   }
