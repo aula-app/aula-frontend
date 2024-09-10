@@ -1,17 +1,17 @@
-import { Box, Button, Drawer, Stack, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { FormContainer } from 'react-hook-form-mui';
-import FormField from '../FormField';
-import DataConfig, { InputSettings } from './DataConfig';
+import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest, scopeDefinitions } from '@/utils';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Box, Button, Drawer, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
-import DataUpdates from './DataUpdates';
+import { useForm } from 'react-hook-form';
+import { FormContainer } from 'react-hook-form-mui';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import * as yup from 'yup';
+import FormField from '../FormField';
+import DataConfig, { InputSettings } from './DataConfig';
+import DataUpdates from './DataUpdates';
 
 interface Props {
   id?: number;
@@ -50,7 +50,6 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const {
     register,
     setValue,
-    setError,
     control,
     handleSubmit,
     getValues,

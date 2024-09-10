@@ -40,6 +40,7 @@ export const dataSettings = {
     { name: 'body', orderId: 2, role: 10 },
   ],
   comments: [{ name: 'content', orderId: 5, role: 20 }],
+  groups: [{ name: 'group_name', orderId: 5, role: 20 }],
   ideas: [
     { name: 'title', orderId: 9, role: 20 },
     { name: 'content', orderId: 7, role: 20 },
