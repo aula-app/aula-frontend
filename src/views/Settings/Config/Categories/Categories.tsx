@@ -49,7 +49,7 @@ const CatView = () => {
     <Stack pt={1} pb={3}>
       <Stack direction="row" flexWrap="wrap" gap={1}>
         <Chip
-          label={t('generics.add', { var: t('settings.category') })}
+          label={t('generics.add', { var: t('views.category') })}
           avatar={<AppIcon icon="add" />}
           onClick={() => setEdit()}
         />
@@ -60,7 +60,7 @@ const CatView = () => {
               key={key}
               label={category.name}
               avatar={<AppIcon icon={currentIcon} />}
-              // onClick={() => setEdit(category.id)}
+              onClick={() => setEdit(category.id)}
               onDelete={() => setDelete(category.id)}
             />
           );
