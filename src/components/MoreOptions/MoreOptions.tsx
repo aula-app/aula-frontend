@@ -1,11 +1,11 @@
 import { AlterTypes, ColorTypes, ObjectPropByName } from '@/types/Generics';
-import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { getCurrentUser } from '@/utils';
 import { Box, Button, ClickAwayListener, Divider, Paper, Stack, Typography, Zoom } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import AppIcon from '../AppIcon';
 import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
@@ -34,7 +34,6 @@ interface Props {
 const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const params = useParams();
   const [currentId, setId] = useState<number>();
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState<SettingNamesType>();
@@ -150,11 +149,11 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       </Box>
       <EditData
         id={currentId}
-        scope={scope}
+        scope={edit || scope}
         isOpen={!!edit}
         onClose={close}
-        // otherData={options.filter((data) => data.type === edit)[0]?.otherData}
-        // metadata={options.filter((data) => data.type === edit)[0]?.metadata}
+        otherData={options.filter((data) => data.type === edit)[0]?.otherData}
+        metadata={options.filter((data) => data.type === edit)[0]?.metadata}
       />
       {id && scope && <DeleteData id={id} scope={scope} isOpen={del} onClose={close} />}
     </>
