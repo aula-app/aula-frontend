@@ -76,7 +76,7 @@ const DataTable = ({
               />
             </TableCell>
             {DataConfig[scope].columns.map((column) => (
-              <Fragment key={column}>
+              <Fragment key={column.name}>
                 {column.orderId >= 0 && (
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
                     <TableSortLabel
@@ -149,7 +149,7 @@ function DataRow({
       <TableCell>
         <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
       </TableCell>
-      {dataSettings[scope].map((column) => (
+      {DataConfig[scope].columns.map((column) => (
         <Fragment key={`${column.name}-${row.id}`}>
           {column.orderId >= 0 && (
             <TableCell

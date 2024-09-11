@@ -15,7 +15,6 @@ const columns = [
   { name: 'content', orderId: 6 },
   { name: 'room_id', orderId: 7 },
   { name: 'created', orderId: 4 },
-  { name: 'creator_id', orderId: 3 },
   { name: 'last_update', orderId: 0 },
 ] as Array<IdeaColumns>;
 

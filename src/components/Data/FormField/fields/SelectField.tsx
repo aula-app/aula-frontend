@@ -33,7 +33,7 @@ const SelectField = ({ data, control, disabled = false, ...restOfProps }: Props)
       setOptions(
         // @ts-ignore
         response.data.map((row) => {
-          return { label: row[DataConfig[scope].columns[0]], value: row.id };
+          return { label: row[DataConfig[scope].columns[0].name], value: row.id };
         })
       );
     });

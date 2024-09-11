@@ -16,7 +16,6 @@ const columns = [
   { name: 'room_id', orderId: 7 },
   { name: 'phase_id', orderId: 8 },
   { name: 'created', orderId: 4 },
-  { name: 'creator_id', orderId: 3 },
   { name: 'last_update', orderId: 0 },
 ] as Array<BoxColumns>;
 

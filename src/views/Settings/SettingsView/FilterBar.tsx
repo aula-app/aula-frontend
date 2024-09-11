@@ -48,8 +48,8 @@ const FilterBar = ({ filter, status, statusOptions, scope, isOpen, setFilter, se
           >
             <MenuItem value="">&nbsp;</MenuItem>
             {DataConfig[scope].columns.map((column) => (
-              <MenuItem value={column} key={column}>
-                {t(`settings.${column}`)}
+              <MenuItem value={column.name} key={column.name}>
+                {t(`settings.${column.name}`)}
               </MenuItem>
             ))}
           </TextField>

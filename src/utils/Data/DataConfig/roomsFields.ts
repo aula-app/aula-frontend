@@ -12,9 +12,7 @@ interface RoomColumns extends ColumnSettings {
 
 const columns = [
   { name: 'room_name', orderId: 5 },
-  { name: 'description_public', orderId: 6 },
   { name: 'created', orderId: 4 },
-  { name: 'creator_id', orderId: 3 },
   { name: 'last_update', orderId: 0 },
 ] as Array<RoomColumns>;
 

@@ -24,8 +24,8 @@ type Params = {
 const EditBar = ({ scope, selected, onAlter, onMove, onDelete }: Params) => {
   const { t } = useTranslation();
   const currentIcon =
-    DataConfig[scope].requests.isChild && DataConfig[DataConfig[scope].requests.isChild].requests.item !== 'Topic'
-      ? (DataConfig[DataConfig[scope].requests.isChild].requests.item.toLowerCase() as AllIconsType)
+    DataConfig[scope].requests.move && DataConfig[DataConfig[scope].requests.move.target].requests.item !== 'Topic'
+      ? (DataConfig[DataConfig[scope].requests.move.target].requests.item.toLowerCase() as AllIconsType)
       : 'box';
   return (
     <Stack direction="row" bottom={0} height={37} bgcolor={grey[200]} px={1} alignItems="center">
@@ -39,14 +39,14 @@ const EditBar = ({ scope, selected, onAlter, onMove, onDelete }: Params) => {
           <Button color="error" onClick={() => onDelete(true)}>
             <AppIcon sx={{ mr: 1 }} icon="delete" /> {t('generics.delete')}
           </Button>
-          {DataConfig[scope].requests.isChild && (
+          {DataConfig[scope].requests.move && (
             <Button disabled={selected.length === 0} color="secondary" onClick={() => onMove(true)}>
               <AppIcon sx={{ mr: 1 }} icon={currentIcon} />{' '}
               {t('texts.addToParent', {
                 var:
-                  DataConfig[scope].requests.isChild === 'boxes'
+                  DataConfig[scope].requests.move.target === 'boxes'
                     ? 'box'
-                    : DataConfig[DataConfig[scope].requests.isChild].request.model.toLowerCase(),
+                    : DataConfig[DataConfig[scope].requests.move.target].requests.model.toLowerCase(),
               })}
             </Button>
           )}
