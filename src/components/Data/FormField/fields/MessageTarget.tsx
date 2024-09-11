@@ -1,12 +1,12 @@
+import { PossibleFields } from '@/types/Scopes';
+import { SettingNamesType } from '@/types/SettingsTypes';
+import { InputSettings } from '@/utils/Data';
+import { inputType, InputType } from '@/utils/Data/formDefaults';
 import { Box, MenuItem, Stack, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
-import { InputSettings } from '../../EditData/DataConfig';
 import SelectField from './SelectField';
-import { inputType } from '../../EditData/DataConfig/formDefaults';
-import { PossibleFields } from '@/types/Scopes';
-import { SettingNamesType } from '@/types/SettingsTypes';
 
 type Props = {
   data: InputSettings;
@@ -71,7 +71,7 @@ const MessageTarget = ({ data, control, disabled = false, setValue, getValues, .
           form: {
             ...inputType.select,
             options: fieldData.options,
-          } as inputType,
+          } as InputType,
         };
         const isHidden = disabled ? getValues()[fieldName] === 0 : recipientType !== i + 1;
         return (

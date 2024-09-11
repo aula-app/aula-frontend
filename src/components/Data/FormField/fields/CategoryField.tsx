@@ -5,8 +5,8 @@ import { databaseRequest } from '@/utils';
 import { MenuItem, Stack, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SelectOptionsType } from '../../EditData/DataConfig/formDefaults';
 import { updateType } from '../../EditData/EditData';
+import { SelectOptionsType } from '@/utils/Data/formDefaults';
 
 type Props = {
   id?: number;

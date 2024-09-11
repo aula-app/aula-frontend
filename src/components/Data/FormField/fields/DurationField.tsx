@@ -1,9 +1,8 @@
-import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
+import { InputSettings } from '@/utils/Data';
+import { Label } from '@mui/icons-material';
 import { Stack, TextField, Typography } from '@mui/material';
 import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
-import { InputSettings } from '../../EditData/DataConfig';
-import { Label } from '@mui/icons-material';
 
 type Props = {
   data: InputSettings;

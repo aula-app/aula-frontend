@@ -7,8 +7,6 @@ export * from './navigation';
 export * from './phases';
 export * from './requests';
 export * from './sessionStorage';
-export * from './settings';
-export * from './scopes';
 export * from './style';
 export * from './utils';
 export * from './votes';

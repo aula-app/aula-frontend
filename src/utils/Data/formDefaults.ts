@@ -1,9 +1,8 @@
 import { SettingNamesType } from '@/types/SettingsTypes';
 import * as yup from 'yup';
 
-export type SelectOptionsType = { label: string; value: number };
-
 type FormTypes = 'duration' | 'icon' | 'image' | 'input' | 'password' | 'phaseSelect' | 'select' | 'target' | 'text';
+export type SelectOptionsType = { label: string; value: number };
 
 export const STATUS = [
   { label: 'status.inactive', value: 0 },
@@ -12,7 +11,7 @@ export const STATUS = [
   { label: 'status.archived', value: 3 },
 ];
 
-export type inputType = {
+export type InputType = {
   type: FormTypes;
   defaultValue: string | number;
   schema?: yup.Schema;

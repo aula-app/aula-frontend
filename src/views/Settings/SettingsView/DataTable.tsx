@@ -1,9 +1,9 @@
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { dataSettings } from '@/utils';
+import DataConfig from '@/utils/Data';
 import { Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
-import { blueGrey, deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
+import { deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
 import { Dispatch, Fragment, SetStateAction, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -75,7 +75,7 @@ const DataTable = ({
                 color="secondary"
               />
             </TableCell>
-            {dataSettings[scope].map((column) => (
+            {DataConfig[scope].columns.map((column) => (
               <Fragment key={column.name}>
                 {column.orderId >= 0 && (
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
@@ -149,7 +149,7 @@ function DataRow({
       <TableCell>
         <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
       </TableCell>
-      {dataSettings[scope].map((column) => (
+      {DataConfig[scope].columns.map((column) => (
         <Fragment key={`${column.name}-${row.id}`}>
           {column.orderId >= 0 && (
             <TableCell

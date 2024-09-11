@@ -1,11 +1,11 @@
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, dataSettings, scopeDefinitions } from '@/utils';
+import { databaseRequest } from '@/utils';
+import DataConfig, { InputSettings } from '@/utils/Data';
+import { SelectOptionsType } from '@/utils/Data/formDefaults';
 import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
-import { InputSettings } from '../../EditData/DataConfig';
-import { SelectOptionsType } from '../../EditData/DataConfig/formDefaults';
 
 type Props = {
   data: InputSettings;
@@ -23,8 +23,8 @@ const SelectField = ({ data, control, disabled = false, ...restOfProps }: Props)
 
   async function fetchOptions(scope: SettingNamesType) {
     await databaseRequest({
-      model: scopeDefinitions[scope].model,
-      method: scopeDefinitions[scope].fetch,
+      model: DataConfig[scope].requests.model,
+      method: DataConfig[scope].requests.fetch,
       arguments: {
         limit: 0,
         offset: 0,
@@ -33,7 +33,7 @@ const SelectField = ({ data, control, disabled = false, ...restOfProps }: Props)
       setOptions(
         // @ts-ignore
         response.data.map((row) => {
-          return { label: row[dataSettings[scope][0].name], value: row.id };
+          return { label: row[DataConfig[scope].columns[0].name], value: row.id };
         })
       );
     });

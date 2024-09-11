@@ -1,7 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import { AllIconsType } from '@/components/AppIcon/AppIcon';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { scopeDefinitions } from '@/utils';
+import DataConfig from '@/utils/Data';
 import { SubdirectoryArrowRight } from '@mui/icons-material';
 import { Button, Stack } from '@mui/material';
 import { grey } from '@mui/material/colors';
@@ -24,8 +24,8 @@ type Params = {
 const EditBar = ({ scope, selected, onAlter, onMove, onDelete }: Params) => {
   const { t } = useTranslation();
   const currentIcon =
-    scopeDefinitions[scope].isChild && scopeDefinitions[scopeDefinitions[scope].isChild].item !== 'Topic'
-      ? (scopeDefinitions[scopeDefinitions[scope].isChild].item.toLowerCase() as AllIconsType)
+    DataConfig[scope].requests.move && DataConfig[DataConfig[scope].requests.move.target].requests.item !== 'Topic'
+      ? (DataConfig[DataConfig[scope].requests.move.target].requests.item.toLowerCase() as AllIconsType)
       : 'box';
   return (
     <Stack direction="row" bottom={0} height={37} bgcolor={grey[200]} px={1} alignItems="center">
@@ -39,14 +39,14 @@ const EditBar = ({ scope, selected, onAlter, onMove, onDelete }: Params) => {
           <Button color="error" onClick={() => onDelete(true)}>
             <AppIcon sx={{ mr: 1 }} icon="delete" /> {t('generics.delete')}
           </Button>
-          {scopeDefinitions[scope].isChild && (
+          {DataConfig[scope].requests.move && (
             <Button disabled={selected.length === 0} color="secondary" onClick={() => onMove(true)}>
               <AppIcon sx={{ mr: 1 }} icon={currentIcon} />{' '}
               {t('texts.addToParent', {
                 var:
-                  scopeDefinitions[scope].isChild === 'boxes'
+                  DataConfig[scope].requests.move.target === 'boxes'
                     ? 'box'
-                    : scopeDefinitions[scopeDefinitions[scope].isChild].model.toLowerCase(),
+                    : DataConfig[DataConfig[scope].requests.move.target].requests.model.toLowerCase(),
               })}
             </Button>
           )}
