@@ -42,6 +42,16 @@ const SystemSettings = ({ settings, onReload }: Props) => {
     });
   };
 
+  const getBackup = async () => {
+    await databaseRequest({
+      model: 'Converters',
+      method: 'createDBDump',
+      arguments: {},
+    }).then((response) => {
+      if (response.success) console.log(response);
+    });
+  };
+
   useEffect(() => {
     setStatus(settings.online_mode);
   }, [settings.online_mode]);
@@ -70,7 +80,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
           ))}
         </TextField>
       </Stack>
-      <Button variant="contained" color="secondary" fullWidth>
+      <Button variant="contained" color="secondary" onClick={getBackup} fullWidth>
         {t('settings.backup')}
       </Button>
       <Button variant="contained" color="info" fullWidth>
