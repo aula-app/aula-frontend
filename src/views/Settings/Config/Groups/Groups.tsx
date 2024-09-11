@@ -58,7 +58,7 @@ const GroupView = () => {
             <Chip
               key={key}
               label={group.group_name}
-              // onClick={() => setEdit(category.id)}
+              onClick={() => setEdit(group.id)}
               onDelete={() => setDelete(group.id)}
               sx={{ mr: 1, mt: 1 }}
             />
