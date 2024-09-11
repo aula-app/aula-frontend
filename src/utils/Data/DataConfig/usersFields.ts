@@ -16,6 +16,7 @@ const columns = [
   { name: 'username', orderId: 7 },
   { name: 'email', orderId: 8 },
   { name: 'about_me', orderId: 10 },
+  { name: 'userlevel', orderId: 9 },
   { name: 'created', orderId: 4 },
   { name: 'last_update', orderId: 0 },
 ] as Array<UserColumns>;
