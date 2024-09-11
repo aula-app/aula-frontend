@@ -1,8 +1,8 @@
 import AppIconButton from '@/components/AppIconButton';
-import { STATUS } from '@/components/Data/EditData/DataConfig/formDefaults';
 import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { dataSettings } from '@/utils';
+import DataConfig from '@/utils/Data';
+import { STATUS } from '@/utils/Data/formDefaults';
 import { Collapse, FilledInput, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -47,9 +47,9 @@ const FilterBar = ({ filter, status, statusOptions, scope, isOpen, setFilter, se
             sx={{ minWidth: 130 }}
           >
             <MenuItem value="">&nbsp;</MenuItem>
-            {dataSettings[scope].map((column) => (
-              <MenuItem value={column.name} key={column.name}>
-                {t(`settings.${column.name}`)}
+            {DataConfig[scope].columns.map((column) => (
+              <MenuItem value={column} key={column}>
+                {t(`settings.${column}`)}
               </MenuItem>
             ))}
           </TextField>

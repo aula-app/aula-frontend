@@ -35,11 +35,7 @@ export interface BoxType {
   phase_duration_4: number;
 }
 
-export interface BugType {
-  id: number;
-  path: string;
-  description: string;
-}
+export interface BugType extends MessageType {}
 
 export interface CommentType {
   id: number;
@@ -97,14 +93,7 @@ export interface MessageType {
   pin_to_top: number;
 }
 
-export interface ReportBodyType {
-  data?: {
-    location: string;
-    user: string;
-    userAgent?: string;
-  };
-  content: string;
-}
+export interface ReportType extends MessageType {}
 
 export interface RoomType {
   access_code: string;
@@ -172,3 +161,12 @@ export interface PossibleFields
     MessageType,
     RoomType,
     UserType {}
+
+export interface ReportBodyType {
+  data?: {
+    location: string;
+    user: string;
+    userAgent?: string;
+  };
+  content: string;
+}

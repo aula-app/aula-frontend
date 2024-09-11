@@ -1,11 +1,10 @@
 import { AppIconButton } from '@/components';
 import { DeleteData, EditData } from '@/components/Data';
-import { STATUS } from '@/components/Data/EditData/DataConfig/formDefaults';
 import { useAppStore } from '@/store';
 import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
-import { databaseRequest, dataSettings, scopeDefinitions } from '@/utils';
+import { databaseRequest } from '@/utils';
 import { Divider, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +14,8 @@ import DataTable from './DataTable';
 import EditBar from './EditBar';
 import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
+import { STATUS } from '@/utils/Data/formDefaults';
+import DataConfig from '@/utils/Data';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -29,7 +30,7 @@ const SettingsView = () => {
   const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
-  const [orderBy, setOrder] = useState(dataSettings[setting_name][0].orderId);
+  const [orderBy, setOrder] = useState(DataConfig[setting_name].columns[0].orderId);
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [status, setStatus] = useState<StatusTypes>(1);
@@ -44,8 +45,8 @@ const SettingsView = () => {
 
   const dataFetch = async () =>
     await databaseRequest({
-      model: scopeDefinitions[setting_name].model,
-      method: scopeDefinitions[setting_name].fetch,
+      model: DataConfig[setting_name].requests.model,
+      method: DataConfig[setting_name].requests.fetch,
       arguments: {
         limit: limit,
         offset: page * limit,
@@ -68,13 +69,13 @@ const SettingsView = () => {
   };
 
   const resetTable = () => {
-    if (!scopeDefinitions[setting_name]) {
+    if (!DataConfig[setting_name]) {
       navigate('/error');
     } else {
       setPage(0);
       setSelected([]);
       setOrderAsc(true);
-      setOrder(dataSettings[setting_name][0].orderId);
+      setOrder(DataConfig[setting_name].columns[0].orderId);
     }
   };
 

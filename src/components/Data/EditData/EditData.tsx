@@ -1,6 +1,6 @@
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
-import { checkPermissions, databaseRequest, scopeDefinitions } from '@/utils';
+import { checkPermissions, databaseRequest } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Drawer, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -10,8 +10,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import FormField from '../FormField';
-import DataConfig, { InputSettings } from './DataConfig';
 import DataUpdates from './DataUpdates';
+import DataConfig, { InputSettings } from '@/utils/Data';
 
 interface Props {
   id?: number;
@@ -64,14 +64,14 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   };
 
   function getFields() {
-    return DataConfig[scope]
+    return DataConfig[scope].fields
       .filter((field) => checkPermissions(field.role))
       .filter((field) => !field.phase || field.phase <= phase);
   }
 
   function getSchema() {
     const newSchema = [] as InputSettings[];
-    DataConfig[scope]
+    DataConfig[scope].fields
       .filter((field) => checkPermissions(field.role))
       .filter((field) => !field.phase || field.phase <= phase)
       .forEach((field) => {
@@ -92,10 +92,10 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const getFieldValues = async () => {
     if (!scope) return;
     await databaseRequest({
-      model: scopeDefinitions[scope].model,
-      method: scopeDefinitions[scope].get,
+      model: DataConfig[scope].requests.model,
+      method: DataConfig[scope].requests.get,
       arguments: {
-        [scopeDefinitions[scope].id]: id,
+        [DataConfig[scope].requests.id]: id,
       },
     }).then((response: SingleResponseType) => {
       if (!response.success) return;
@@ -153,16 +153,16 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
 
     await databaseRequest(
       {
-        model: scopeDefinitions[scope].model,
-        method: !id ? scopeDefinitions[scope].add : scopeDefinitions[scope].edit,
+        model: DataConfig[scope].requests.model,
+        method: !id ? DataConfig[scope].requests.add : DataConfig[scope].requests.edit,
         arguments: args,
       },
       requestId
     ).then((response) => {
       if (!response.success) return;
       updates.forEach((update) => {
-        if (update.requestId) update.args[scopeDefinitions[scope].id] = response.data;
-        if (!(scopeDefinitions[scope].id in update.args)) update.args[scopeDefinitions[scope].id] = response.data;
+        if (update.requestId) update.args[DataConfig[scope].requests.id] = response.data;
+        if (!(DataConfig[scope].requests.id in update.args)) update.args[DataConfig[scope].requests.id] = response.data;
         databaseRequest(
           {
             model: update.model,
@@ -179,7 +179,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   };
 
   const onSubmit = (formData: ObjectPropByName) => {
-    if (typeof id !== 'undefined') otherData[scopeDefinitions[scope].id] = id;
+    if (typeof id !== 'undefined') otherData[DataConfig[scope].requests.id] = id;
     if (scope === 'messages') delete formData.undefined;
     dataSave({
       ...formData,
@@ -200,7 +200,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} key={scope}>
       <Stack p={2} overflow="auto">
         <Typography variant="h4" pb={2}>
-          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${scopeDefinitions[scope].name.toLowerCase()}`) })}
+          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${DataConfig[scope].requests.name.toLowerCase()}`) })}
         </Typography>
         <FormContainer>
           <Stack>
