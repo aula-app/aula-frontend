@@ -7,7 +7,6 @@ import { Pagination, Stack, Table, TableBody, TableCell, TableContainer, TableRo
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import TimedCommandInput from './TimedCommandInput';
-import { InstanceResponse } from '@/types/Generics';
 
 const LIST_LIMIT = 10;
 
