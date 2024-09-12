@@ -151,11 +151,29 @@ export interface CategoryType {
   id: number;
 }
 
+export interface CommandType {
+  id: number;
+  cmd_id: number;
+  command: string;
+  parameters: string;
+  date_start: string;
+  date_end: string;
+  active: number;
+  status: number;
+  info: string;
+  target_id: number;
+  creator_id: number;
+  created: string;
+  last_update: string;
+  updater_id: number;
+}
+
 export interface PossibleFields
   extends AnnouncementType,
     BoxType,
     BugType,
     CommentType,
+    CommandType,
     GroupType,
     IdeaType,
     MessageType,

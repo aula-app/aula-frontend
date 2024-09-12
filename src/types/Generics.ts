@@ -6,14 +6,14 @@ export type ObjectPropByName = Record<string, any>;
 export type DatabaseResponseData = PossibleFields;
 
 export interface SingleResponseType {
-  success: Boolean;
-  count: Number;
+  success: boolean;
+  count: number;
   data: DatabaseResponseData;
 }
 
 export interface DatabaseResponseType {
-  success: Boolean;
-  count: Number;
+  success: boolean;
+  count: number;
   data: DatabaseResponseData[];
 }
 

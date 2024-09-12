@@ -1,3 +1,4 @@
+import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import * as yup from 'yup';
 
@@ -10,6 +11,14 @@ export const STATUS = [
   { label: 'status.suspended', value: 2 },
   { label: 'status.archived', value: 3 },
 ];
+
+export type InputSettings = {
+  name: keyof PossibleFields;
+  form: InputType;
+  required: boolean;
+  role: 10 | 20 | 30 | 40 | 50 | 60;
+  phase?: 0 | 10 | 20 | 30 | 40;
+};
 
 export type InputType = {
   type: FormTypes;

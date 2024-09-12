@@ -45,13 +45,12 @@ const GroupView = () => {
   }, []);
 
   return (
-    <Stack pt={1} pb={3}>
+    <Stack pt={2} pb={3}>
       <Stack direction="row" flexWrap="wrap" gap={1}>
         <Chip
           label={t('generics.add', { var: t('views.group') })}
           avatar={<AppIcon icon="add" />}
           onClick={() => setEdit()}
-          sx={{ mt: 1 }}
         />
         {groups.map((group, key) => {
           return (
@@ -60,7 +59,6 @@ const GroupView = () => {
               label={group.group_name}
               onClick={() => setEdit(group.id)}
               onDelete={() => setDelete(group.id)}
-              sx={{ mr: 1, mt: 1 }}
             />
           );
         })}

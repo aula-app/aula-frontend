@@ -1,6 +1,6 @@
 import { useAppStore } from '@/store';
 import { ConfigResponse } from '@/types/Generics';
-import { databaseRequest } from '@/utils';
+import { checkPermissions, databaseRequest } from '@/utils';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -58,14 +58,16 @@ const SchoolInfo = ({ config, onReload }: Props) => {
         type="text"
         fullWidth
       />
-      <Stack direction="row">
-        <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onCancel}>
-          {t('generics.cancel')}
-        </Button>
-        <Button type="submit" variant="contained" onClick={onSubmit}>
-          {t('generics.confirm')}
-        </Button>
-      </Stack>
+      {checkPermissions(50) && (
+        <Stack direction="row">
+          <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onCancel}>
+            {t('generics.cancel')}
+          </Button>
+          <Button type="submit" variant="contained" onClick={onSubmit}>
+            {t('generics.confirm')}
+          </Button>
+        </Stack>
+      )}
     </Stack>
   );
 };

@@ -1,5 +1,4 @@
 import { RoomPhases } from '@/types/SettingsTypes';
-import { InputSettings } from '@/utils/Data';
 import { TextField } from '@mui/material';
 import { Control, Controller, FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +8,7 @@ import ImageField from './fields/ImageField';
 import MessageTarget from './fields/MessageTarget';
 import PhaseSelectField from './fields/PhaseSelectField';
 import SelectField from './fields/SelectField';
+import { InputSettings } from '@/utils/Data/formDefaults';
 
 type Props = {
   data: InputSettings;

@@ -4,7 +4,7 @@ import { DeleteData } from '@/components/Data';
 import EditData from '@/components/Data/EditData';
 import { CategoryType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
-import { Box, Chip, Stack } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -46,7 +46,7 @@ const CatView = () => {
   }, []);
 
   return (
-    <Stack pt={1} pb={3}>
+    <Stack pt={2} pb={3}>
       <Stack direction="row" flexWrap="wrap" gap={1}>
         <Chip
           label={t('generics.add', { var: t('views.category') })}

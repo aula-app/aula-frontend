@@ -1,6 +1,6 @@
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
-import { InputSettings } from '@/utils/Data';
+import { InputSettings } from '@/utils/Data/formDefaults';
 import { Control } from 'react-hook-form-mui';
 import SelectField from './SelectField';
 
