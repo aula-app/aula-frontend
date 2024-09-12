@@ -106,7 +106,7 @@ const ConfigView = () => {
             {t(`settings.actions`)}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails>{settings && <TimedCommands settings={settings} onReload={getSettings} />}</AccordionDetails>
+        <AccordionDetails>{settings && <TimedCommands />}</AccordionDetails>
       </Accordion>
       <Accordion expanded={expanded === 'panel4'} onChange={() => toggleExpanded('panel4')}>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
