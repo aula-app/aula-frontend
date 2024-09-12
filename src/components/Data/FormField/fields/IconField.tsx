@@ -1,6 +1,6 @@
 import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
-import { InputSettings } from '@/utils/Data';
+import { InputSettings } from '@/utils/Data/formDefaults';
 import { FormControl, FormHelperText, Stack, TextField, Typography } from '@mui/material';
 import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';

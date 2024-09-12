@@ -1,4 +1,4 @@
-import { InputSettings } from '@/utils/Data';
+import { InputSettings } from '@/utils/Data/formDefaults';
 import { Label } from '@mui/icons-material';
 import { Stack, TextField, Typography } from '@mui/material';
 import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';

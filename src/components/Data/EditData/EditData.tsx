@@ -11,7 +11,8 @@ import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import FormField from '../FormField';
 import DataUpdates from './DataUpdates';
-import DataConfig, { InputSettings } from '@/utils/Data';
+import DataConfig from '@/utils/Data';
+import { InputSettings } from '@/utils/Data/formDefaults';
 
 interface Props {
   id?: number;

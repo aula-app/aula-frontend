@@ -1,6 +1,6 @@
 import { ConfigResponse } from '@/types/Generics';
 import { ConfigRequest } from '@/types/RequestTypes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, FORMAT_DATE_TIME } from '@/utils';
 import { Button, FormGroup, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
@@ -13,8 +13,6 @@ interface Props {
   config: ConfigResponse;
   onReload: () => void;
 }
-
-const DATE_FORMAT = 'YYYY-MM-DD[ ]HH:mm:ss';
 
 /** * Renders "SystemSettings" component
  */
@@ -99,7 +97,7 @@ const SystemSettings = ({ config, onReload }: Props) => {
               label={t(`settings.timeStart`)}
               value={dayjs(startTime)}
               onChange={(date) => {
-                if (date) setStartTime(dayjs(date).format(DATE_FORMAT));
+                if (date) setStartTime(dayjs(date).format(FORMAT_DATE_TIME));
               }}
             />
           </Grid>
@@ -108,7 +106,7 @@ const SystemSettings = ({ config, onReload }: Props) => {
               label={t(`settings.timeEnd`)}
               value={dayjs(endTime)}
               onChange={(date) => {
-                if (date) setEndTime(dayjs(date).format(DATE_FORMAT));
+                if (date) setEndTime(dayjs(date).format(FORMAT_DATE_TIME));
               }}
             />
           </Grid>

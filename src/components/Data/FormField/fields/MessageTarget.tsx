@@ -1,7 +1,6 @@
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { InputSettings } from '@/utils/Data';
-import { inputType, InputType } from '@/utils/Data/formDefaults';
+import { InputSettings, inputType, InputType } from '@/utils/Data/formDefaults';
 import { Box, MenuItem, Stack, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control } from 'react-hook-form-mui';

@@ -1,4 +1,10 @@
 {
+  "commands": {
+    "set": "Set",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "delete": "Delete"
+  },
   "delegation": {
     "confirm": "Are you sure you want to {{var}} the voting rights on this box to the following person?",
     "delegate": "delegate",
@@ -26,6 +32,7 @@
     "modeLight": "Light mode",
     "next": "next",
     "no": "no",
+    "on": "on",
     "or": "or",
     "print": "print",
     "save": "save",
@@ -76,6 +83,8 @@
   },
   "settings": {
     "about_me": "Description",
+    "action": "Action",
+    "actions": "Scheduled actions",
     "advanced": "Advanced Settings",
     "approval_comment": "Approval comment",
     "approved": "Approve?",
@@ -83,10 +92,12 @@
     "backupRestore": "Restore Backup",
     "body": "Text",
     "categories": "Categories",
+    "command": "Command",
     "consent_text": "Consent message",
     "content": "Content",
     "created": "Creation date",
     "danger": "Danger Zone",
+    "dateStart": "Start Date",
     "description": "Description",
     "description_public": "Description",
     "displayname": "Display Name",
@@ -118,8 +129,8 @@
     "target_id": "User",
     "target_group": "Group",
     "time": "Time Settings",
-    "timeEnd": "Time End",
-    "timeStart": "Time Start",
+    "timeEnd": "End Time",
+    "timeStart": "Start Time",
     "title": "Title",
     "username": "User name",
     "user_needs_to_consent": "Consent needed?",
@@ -141,12 +152,14 @@
     "weekend": "Weekend"
   },
   "texts": {
+    "activate": "Activate {{var}}",
     "add": "New {{var}}",
     "addToParent": "Add to {{var}}",
     "approved": "This idea was approved.",
     "archive": "archive",
     "boxCard": "Ideas Box",
     "bug": "Please try to shortly describe the bug",
+    "deactivate": "Deactivate {{var}}",
     "delegated": "{{var}} delegated ideas",
     "delegation": "Vote delegation",
     "deleteConfirm": "Are you sure you want to delete the selected {{var}}? This action cannot be undone.",

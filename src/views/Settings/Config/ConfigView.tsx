@@ -13,6 +13,7 @@ import SchoolInfo from './SchoolInfo';
 import SystemSettings from './SystemSettings';
 import TimeSettings from './TimeSettings';
 import Groups from './Groups';
+import TimedCommands from './TimedCommands';
 
 /** * Renders "Config" view
  * url: /settings/config
@@ -102,12 +103,20 @@ const ConfigView = () => {
       <Accordion expanded={expanded === 'panel3'} onChange={() => toggleExpanded('panel3')}>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
           <Typography variant="h5" py={1}>
+            {t(`settings.actions`)}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>{settings && <TimedCommands settings={settings} onReload={getSettings} />}</AccordionDetails>
+      </Accordion>
+      <Accordion expanded={expanded === 'panel4'} onChange={() => toggleExpanded('panel4')}>
+        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
+          <Typography variant="h5" py={1}>
             {t(`settings.system`)}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>{settings && <SystemSettings settings={settings} onReload={getSettings} />}</AccordionDetails>
       </Accordion>
-      <Accordion expanded={expanded === 'panel4'} onChange={() => toggleExpanded('panel4')}>
+      <Accordion expanded={expanded === 'panel5'} onChange={() => toggleExpanded('panel5')}>
         <AccordionSummary
           expandIcon={<AppIcon icon="arrowdown" />}
           aria-controls="panel2-content"

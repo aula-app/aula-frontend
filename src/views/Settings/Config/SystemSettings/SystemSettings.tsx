@@ -1,6 +1,7 @@
 import { InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { StatusRequest } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
+import { InstanceStatusOptions } from '@/utils/commands';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,14 +17,6 @@ interface Props {
 const SystemSettings = ({ settings, onReload }: Props) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState<OnlineOptions>(settings.online_mode);
-
-  const statusOptions = [
-    { value: 0, label: t('status.inactive') },
-    { value: 1, label: t('status.active') },
-    { value: 2, label: t('status.weekend') },
-    { value: 3, label: t('status.vacation') },
-    { value: 4, label: t('status.holiday') },
-  ];
 
   const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setStatus(Number(event.target.value) as OnlineOptions);
@@ -73,7 +66,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
           size="small"
           sx={{ minWidth: 200 }}
         >
-          {statusOptions.map((column) => (
+          {InstanceStatusOptions.map((column) => (
             <MenuItem value={column.value} key={column.label}>
               {t(column.label)}
             </MenuItem>
