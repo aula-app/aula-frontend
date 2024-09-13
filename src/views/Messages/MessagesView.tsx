@@ -42,7 +42,7 @@ const MessagesView = () => {
     await databaseRequest(
       {
         model: 'Message',
-        method: 'getMessages',
+        method: 'getPersonalMessagesByUser',
         arguments: {
           extra_where: !reportFilter.includes('') ? ` AND ${reportFilter[0]} LIKE '%${reportFilter[1]}%'` : '',
         },
