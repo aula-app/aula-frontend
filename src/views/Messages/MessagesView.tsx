@@ -71,7 +71,7 @@ const MessagesView = () => {
 
   useEffect(() => {
     messagesFetch();
-  }, [reportFilter]);
+  }, [messagesFilter]);
 
   useEffect(() => {
     reportsFetch();
