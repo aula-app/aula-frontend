@@ -14,6 +14,7 @@ interface MessageColumns extends ColumnSettings {
 const columns = [
   { name: 'headline', orderId: 5 },
   { name: 'body', orderId: 6 },
+  { name: 'status', orderId: 2 },
   { name: 'created', orderId: 4 },
   { name: 'last_update', orderId: 0 },
 ] as Array<MessageColumns>;
