@@ -30,7 +30,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
       label: string;
     }[]
   >();
-  const [startTime, setStartTime] = useState<dayjs.ConfigType>();
+  const [startTime, setStartTime] = useState<dayjs.ConfigType>(dayjs(new Date()).format(FORMAT_DATE_TIME));
 
   async function addField() {
     if (typeof action === 'undefined' || typeof command === 'undefined' || typeof option === 'undefined') return;
@@ -42,7 +42,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
           cmd_id: Commands[action].value,
           cmd_name: Commands[action].options[command].label,
           parameters: option,
-          date_start: startTime,
+          date_start: dayjs(startTime).format(FORMAT_DATE_TIME),
         },
       },
       ['updater_id']
