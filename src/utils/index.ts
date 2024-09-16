@@ -2,7 +2,7 @@ export * from './date';
 export * from './form';
 export * from './jwt';
 export * from './localStorage';
-export * from './messges';
+export * from './messages';
 export * from './navigation';
 export * from './phases';
 export * from './requests';

@@ -1,7 +1,7 @@
 import BoxCard from '@/components/BoxCard';
 import { IdeaBubble } from '@/components/Idea';
 import { BoxesResponseType, IdeasResponseType } from '@/types/RequestTypes';
-import { dashboardPhases, databaseRequest } from '@/utils';
+import { dashboardPhases, useRequest } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
@@ -17,6 +17,8 @@ const MessagesView = () => {
   const { t } = useTranslation();
   const params = useParams();
   const [items, setItems] = useState<BoxesResponseType | IdeasResponseType>();
+
+  const databaseRequest = useRequest();
 
   const itemsFetch = async () =>
     await databaseRequest({
