@@ -44,7 +44,7 @@ const UserView = () => {
       },
       ['user_id']
     ).then((response: SingleUserResponseType) => {
-      setUser(response.data);
+      if (response.success) setUser(response.data);
     });
 
   const changePass = (formData: PassResponse) => {

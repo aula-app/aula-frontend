@@ -22,7 +22,9 @@ const WildIdeas = () => {
       model: 'Idea',
       method: 'getIdeasByRoom',
       arguments: { room_id: Number(params['room_id']) },
-    }).then((response) => setIdeas(response));
+    }).then((response) => {
+      if (response.success) setIdeas(response);
+    });
 
   const closeAdd = () => {
     ideasFetch();

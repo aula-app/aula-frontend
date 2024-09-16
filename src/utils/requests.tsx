@@ -1,6 +1,8 @@
 import { ObjectPropByName } from '@/types/Generics';
 import { parseJwt } from './jwt';
 import { localStorageGet } from './localStorage';
+import { useAppStore } from '@/store';
+import { useTranslation } from 'react-i18next';
 
 interface RequestObject {
   model: string;
@@ -9,6 +11,8 @@ interface RequestObject {
 }
 
 export const databaseRequest = async (requestData: RequestObject, userId = [] as string[]) => {
+  const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const headers = {} as { 'Content-Type'?: string; Authorization?: string };
@@ -36,11 +40,11 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
     if (response && response.success) {
       return response;
     } else {
-      console.log(response.error);
+      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
       return response;
     }
   } catch (e) {
-    console.log(e);
+    dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
     return null;
   }
 };

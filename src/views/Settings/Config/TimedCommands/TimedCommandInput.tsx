@@ -47,9 +47,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      response.success
-        ? onReload()
-        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+      if (response.success) onReload();
     });
   }
 
@@ -74,14 +72,13 @@ const TimeCommandInput = ({ onReload }: Props) => {
         offset: 0,
       },
     }).then((response) => {
-      response.success
-        ? setOptions(
-            // @ts-ignore
-            response.data.map((row) => {
-              return { label: row[DataConfig[scope].columns[0].name], value: row.id };
-            })
-          )
-        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+      if (response.success)
+        setOptions(
+          // @ts-ignore
+          response.data.map((row) => {
+            return { label: row[DataConfig[scope].columns[0].name], value: row.id };
+          })
+        );
     });
   }
 

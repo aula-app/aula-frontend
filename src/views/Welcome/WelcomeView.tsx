@@ -23,7 +23,9 @@ const WelcomeView = () => {
         },
       },
       checkPermissions(40) ? [] : ['user_id']
-    ).then((response) => setRooms(response));
+    ).then((response) => {
+      if (response.success) setRooms(response);
+    });
 
   const handleScroll = () => {
     setDashboard(false);

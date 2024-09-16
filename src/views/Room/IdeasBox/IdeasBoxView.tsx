@@ -32,7 +32,9 @@ const IdeasBoxView = () => {
       model: 'Idea',
       method: 'getIdeasByTopic',
       arguments: { topic_id: Number(params['box_id']) },
-    }).then((response) => setBoxIdeas(response));
+    }).then((response) => {
+      if (response.success) setBoxIdeas(response);
+    });
   };
 
   const getDelegation = async () =>
@@ -43,7 +45,9 @@ const IdeasBoxView = () => {
         arguments: { topic_id: Number(params['box_id']) },
       },
       ['user_id']
-    ).then((response) => setDelegationStatus(response.data));
+    ).then((response) => {
+      if (response.success) setDelegationStatus(response.data);
+    });
 
   const closeAdd = () => {
     boxIdeasFetch();

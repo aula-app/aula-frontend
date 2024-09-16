@@ -32,9 +32,7 @@ const SchoolDelete = () => {
       },
       ['updater_id']
     ).then((response) => {
-      response.success
-        ? onLogout()
-        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+      if (response.success) onLogout();
     });
   };
 

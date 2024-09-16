@@ -50,12 +50,11 @@ const SystemSettings = ({ user, onReload }: Props) => {
       },
       ['user_id', 'updater_id']
     ).then((response) => {
-      response.success
-        ? dispatch({
-            type: 'ADD_POPUP',
-            message: { message: t('texts.updated', { var: t(`settings.${Object.keys(args)[0]}`) }), type: 'success' },
-          })
-        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+      if (response.success)
+        dispatch({
+          type: 'ADD_POPUP',
+          message: { message: t('texts.updated', { var: t(`settings.${Object.keys(args)[0]}`) }), type: 'success' },
+        });
       onReload();
     });
   };

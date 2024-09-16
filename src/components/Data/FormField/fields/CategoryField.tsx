@@ -51,8 +51,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
         idea_id: id,
       },
     }).then((response) => {
-      if (!response.success) return;
-      if (response.data) setSelected(Number(response.data.id));
+      if (response.success && response.data) setSelected(Number(response.data.id));
     });
   }
 

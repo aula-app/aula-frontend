@@ -30,12 +30,13 @@ const SelectField = ({ data, control, disabled = false, ...restOfProps }: Props)
         offset: 0,
       },
     }).then((response) => {
-      setOptions(
-        // @ts-ignore
-        response.data.map((row) => {
-          return { label: row[DataConfig[scope].columns[0].name], value: row.id };
-        })
-      );
+      if (response.success)
+        setOptions(
+          // @ts-ignore
+          response.data.map((row) => {
+            return { label: row[DataConfig[scope].columns[0].name], value: row.id };
+          })
+        );
     });
   }
 
