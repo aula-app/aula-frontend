@@ -13,6 +13,8 @@ const DataItem = ({ row, column }: Params) => {
   switch (column) {
     case 'status':
       return <>{t(statusOptions.find((status) => status.value === row[column])?.label || '')}</>;
+    case 'userlevel':
+      return <>{t(`roles.${row[column]}` || '')}</>;
     default:
       return <>{row[column]}</>;
   }
