@@ -1,6 +1,3 @@
-import { ObjectPropByName } from '@/types/Generics';
-import { amber, blue, deepOrange, deepPurple, green, grey, red } from '@mui/material/colors';
-
 interface phaseType {
   name: 'wild' | 'discussion' | 'approval' | 'voting' | 'results';
 }

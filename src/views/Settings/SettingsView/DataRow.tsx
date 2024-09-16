@@ -49,7 +49,7 @@ const DataRow = ({ row, scope, selected, toggleRow, setAlter, status }: Params) 
               sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 500 }}
               onClick={() => setAlter({ open: true, id: row.id })}
             >
-              <DataItem row={row} column={column.name} />
+              {column.name in row && <DataItem row={row} column={column.name} />}
             </TableCell>
           )}
         </Fragment>
