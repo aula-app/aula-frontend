@@ -39,7 +39,7 @@ const RequestsManager = ({ report, onReload }: Props) => {
       ['creator_id', 'updater_id']
     ).then((response) => {
       if (!response.success) return;
-      dispatch({ type: 'ADD_POPUP', message: { message: 'success', type: 'success' } });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.success'), type: 'success' } });
     });
   };
 
@@ -83,7 +83,7 @@ const RequestsManager = ({ report, onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success) dispatch({ type: 'ADD_POPUP', message: { message: 'success', type: 'success' } });
+      if (response.success) dispatch({ type: 'ADD_POPUP', message: { message: t('texts.success'), type: 'success' } });
     });
   };
 

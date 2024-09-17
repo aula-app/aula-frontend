@@ -196,6 +196,7 @@
     "resetPasswordText": "Sind Sie sicher, dass Sie ein neues Passwort für diesen Benutzer anfordern möchten?",
     "select": "{{var}} Auswählen",
     "show": "Anzeigen",
+    "success": "Erfolg",
     "undelegated": "{{var}} Ideen",
     "unaltenticated": "Die Seite, auf die du zugreifen möchtest, erfordert eine Authentifizierung.",
     "unarchive": "unarchivieren",

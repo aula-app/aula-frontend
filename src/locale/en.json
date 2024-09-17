@@ -196,6 +196,7 @@
     "resetPasswordText": "Are you sure you want to request a new password for this user?",
     "select": "Select {{var}}",
     "show": "Show",
+    "success": "Success",
     "undelegated": "{{var}} ideas",
     "unaltenticated": "The page you are trying to access requires authentication",
     "unarchive": "unarchive",
