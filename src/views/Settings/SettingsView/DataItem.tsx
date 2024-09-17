@@ -1,6 +1,6 @@
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, phases } from '@/utils';
+import { databaseRequest, messageConsentValues, phases } from '@/utils';
 import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
 import { useState } from 'react';
@@ -24,13 +24,16 @@ const DataItem = ({ row, column }: Params) => {
       },
     }).then((response) => {
       if (!response.success) return;
-      setName(column === 'user_id' ? response.data.realname : response.data.room_name);
+      setName(scope === 'users' ? response.data.realname : response.data.room_name);
     });
   }
 
   switch (column) {
     case 'approved':
       return <>{t(`generics.${Boolean(row[column]) ? 'yes' : 'no'}`)}</>;
+    case 'creator_id':
+      getNames('users', Number(row[column]));
+      return <>{name}</>;
     case 'phase_id':
       return <>{t(`phases.${phases[row[column]].name}` || '')}</>;
     case 'room_id':
@@ -43,6 +46,8 @@ const DataItem = ({ row, column }: Params) => {
       return <>{name}</>;
     case 'userlevel':
       return <>{t(`roles.${row[column]}` || '')}</>;
+    case 'user_needs_to_consent':
+      return <>{t(`consent.${messageConsentValues[row[column]]}` || '')}</>;
     default:
       return <>{row[column]}</>;
   }

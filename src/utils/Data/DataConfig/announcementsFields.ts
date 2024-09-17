@@ -13,6 +13,8 @@ interface AnnouncementColumns extends ColumnSettings {
 const columns = [
   { name: 'headline', orderId: 5 },
   { name: 'body', orderId: 6 },
+  { name: 'user_needs_to_consent', orderId: 8 },
+  { name: 'creator_id', orderId: 3 },
   { name: 'created', orderId: 4 },
   { name: 'last_update', orderId: 0 },
 ] as Array<AnnouncementColumns>;

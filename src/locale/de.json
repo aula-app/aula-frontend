@@ -1,4 +1,15 @@
 {
+  "commands": {
+    "set": "Setzen",
+    "activate": "Aktivieren",
+    "deactivate": "Deaktivieren",
+    "delete": "Löschen"
+  },
+  "consent": {
+    "message": "Keine Zustimmung",
+    "announcement": "Optionale Zustimmung",
+    "alert": "Obligatorische Zustimmung"
+  },
   "delegation": {
     "confirm": "Bist du sicher, dass du das Stimmrecht für dieses Feld der folgenden Person {{var}} willst?",
     "delegate": "Stimme übertragen",
@@ -90,6 +101,7 @@
     "consent_text": "Zustimmungsmeldung",
     "content": "Inhalt",
     "created": "erstellt",
+    "creator_id": "Ersteller",
     "danger": "Gefahrenzone",
     "dateStart": "Start Date",
     "description": "Beschreibung",

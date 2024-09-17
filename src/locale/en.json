@@ -5,6 +5,11 @@
     "deactivate": "Deactivate",
     "delete": "Delete"
   },
+  "consent": {
+    "message": "No consent",
+    "announcement": "Optional consent",
+    "alert": "Mandatory consent"
+  },
   "delegation": {
     "confirm": "Are you sure you want to {{var}} the voting rights on this box to the following person?",
     "delegate": "delegate",
@@ -96,6 +101,7 @@
     "consent_text": "Consent message",
     "content": "Content",
     "created": "Creation date",
+    "creator_id": "Creator",
     "danger": "Danger Zone",
     "dateStart": "Start Date",
     "description": "Description",
