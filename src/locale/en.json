@@ -198,6 +198,7 @@
     "unaltenticated": "The page you are trying to access requires authentication",
     "unarchive": "unarchive",
     "update": "New {{var}} for ",
+    "updateRequest": "Data update requested",
     "updated": "{{var}} updated",
     "yourVote": "How you voted: {{var}}"
   },

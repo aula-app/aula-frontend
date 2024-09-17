@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+import RestrictedField from './RestrictedField';
 
 /** * Renders "SystemSettings" component
  */
@@ -81,7 +82,7 @@ const SystemSettings = ({ user, onReload }: Props) => {
 
   return (
     <FormContainer>
-      <Stack alignItems="center" p={2} gap={1}>
+      <Stack alignItems="center" p={2} gap={2}>
         <IconButton onClick={toggleDrawer} sx={{ position: 'relative' }}>
           <Stack
             color="white"
@@ -102,9 +103,9 @@ const SystemSettings = ({ user, onReload }: Props) => {
           </Stack>
           <UserAvatar id={user.id} update={updateAvatar} />
         </IconButton>
-        <Typography variant="h6">{user.realname}</Typography>
-        <Typography variant="body2">{user.email}</Typography>
-        <Typography variant="body2">{user.username}</Typography>
+        <RestrictedField user={user} option={'realname'} />
+        <RestrictedField user={user} option={'email'} />
+        <RestrictedField user={user} option={'username'} />
         <TextField
           label={t('settings.displayname')}
           {...register('displayname')}
@@ -112,7 +113,6 @@ const SystemSettings = ({ user, onReload }: Props) => {
           helperText={errors.displayname?.message || ' '}
           fullWidth
           slotProps={{ inputLabel: { shrink: !!user.displayname } }}
-          sx={{ mt: 2 }}
         />
         <TextField
           multiline

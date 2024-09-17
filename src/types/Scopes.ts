@@ -192,3 +192,16 @@ export interface ReportBodyType {
   };
   content: string;
 }
+
+export interface RequestBodyType {
+  type?: UserRequestTypes;
+  data?: {
+    id?: number;
+    username?: string;
+    email?: string;
+    change?: string;
+    from?: string;
+    to?: string;
+  };
+  content: string;
+}

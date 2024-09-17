@@ -1,6 +1,6 @@
 import ReportCard from '@/components/ReportCard';
 import { useAppStore } from '@/store';
-import { MessageType, ReportBodyType } from '@/types/Scopes';
+import { MessageType, ReportBodyType, RequestBodyType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,7 @@ const RequestsManager = ({ report, onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
 
-  const bodyData: ReportBodyType = JSON.parse(report.body);
+  const bodyData: RequestBodyType = JSON.parse(report.body);
 
   const confirmRequestData = async () => {
     if (!bodyData.data) return;
@@ -69,8 +69,13 @@ const RequestsManager = ({ report, onReload }: Props) => {
     document.body.removeChild(file);
   };
 
+  const confirmNameChange = () => {};
+
   const onConfirm = () => {
     switch (bodyData.type) {
+      case 'changeName':
+        confirmNameChange();
+        break;
       case 'exportData':
         confirmExportData();
         break;

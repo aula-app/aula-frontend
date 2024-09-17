@@ -198,6 +198,7 @@
     "unaltenticated": "Die Seite, auf die du zugreifen möchtest, erfordert eine Authentifizierung.",
     "unarchive": "unarchivieren",
     "update": "Neue {{var}} für ",
+    "updateRequest": "Datenaktualisierung angefordert",
     "updated": "{{var}} aktualisiert",
     "yourVote": "So hast du abgestimmt: {{var}}"
   },

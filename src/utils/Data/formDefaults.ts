@@ -34,6 +34,12 @@ export const inputType = {
     schema: yup.number().min(1, 'validation.min'),
   },
 
+  email: {
+    type: 'input',
+    defaultValue: '',
+    schema: yup.string().email('validation.email').max(100, 'validation.max'),
+  },
+
   longText: {
     type: 'text',
     defaultValue: '',

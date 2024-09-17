@@ -2,9 +2,9 @@ import { AppIcon } from '@/components';
 import ChangePassword from '@/components/ChangePassword';
 import { ChangePasswordMethods } from '@/components/ChangePassword/ChangePassword';
 import { useAppStore } from '@/store';
-import { ObjectPropByName, PassResponse } from '@/types/Generics';
-import { SingleUserResponseType, UserRequestBody, userRequestBody } from '@/types/RequestTypes';
-import { UserType } from '@/types/Scopes';
+import { PassResponse } from '@/types/Generics';
+import { SingleUserResponseType } from '@/types/RequestTypes';
+import { RequestBodyType, UserType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet } from '@/utils';
 import {
   Accordion,
@@ -75,7 +75,7 @@ const UserView = () => {
     passFields.current?.displayMessage(true);
   };
 
-  const sendMessage = async (headline: string, body: UserRequestBody, returnMessage: string) =>
+  const sendMessage = async (headline: string, body: RequestBodyType, returnMessage: string) =>
     await databaseRequest(
       {
         model: 'Message',
@@ -96,7 +96,7 @@ const UserView = () => {
       {
         type: 'requestData',
         data: { id: user.id, username: user.displayname, email: user.email },
-        content: `A data data export procedure was requested for user ${user.realname}, alias ${user.displayname}`,
+        content: `A data export procedure was requested for user ${user.realname}, alias ${user.displayname}`,
       },
       t('texts.exportRequest')
     );
