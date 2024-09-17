@@ -3,7 +3,7 @@ import ChangePassword from '@/components/ChangePassword';
 import { ChangePasswordMethods } from '@/components/ChangePassword/ChangePassword';
 import { useAppStore } from '@/store';
 import { ObjectPropByName, PassResponse } from '@/types/Generics';
-import { SingleUserResponseType } from '@/types/RequestTypes';
+import { SingleUserResponseType, UserRequestBody, userRequestBody } from '@/types/RequestTypes';
 import { UserType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet } from '@/utils';
 import {
@@ -75,11 +75,7 @@ const UserView = () => {
     passFields.current?.displayMessage(true);
   };
 
-  const sendMessage = async (
-    headline: string,
-    body: { data: ObjectPropByName; content: string },
-    returnMessage: string
-  ) =>
+  const sendMessage = async (headline: string, body: UserRequestBody, returnMessage: string) =>
     await databaseRequest(
       {
         model: 'Message',
@@ -98,6 +94,7 @@ const UserView = () => {
     sendMessage(
       `Account data export request for ${user.realname}`,
       {
+        type: 'requestData',
         data: { id: user.id, username: user.displayname, email: user.email },
         content: `A data data export procedure was requested for user ${user.realname}, alias ${user.displayname}`,
       },
@@ -110,6 +107,7 @@ const UserView = () => {
     sendMessage(
       `Account deletion request for ${user.realname}`,
       {
+        type: 'deleteAccount',
         data: { id: user.id, username: user.displayname, email: user.email },
         content: `A data deletion procedure was requested for user ${user.realname}, alias ${user.displayname}`,
       },

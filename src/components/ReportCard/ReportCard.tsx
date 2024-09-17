@@ -11,22 +11,14 @@ import { AppLink } from '..';
 
 interface Props {
   report: MessageType;
-  onAction?: () => Promise<void>;
+  onConfirm?: () => void;
   onReload: () => Promise<void>;
 }
 
-const ReportCard = ({ report, onReload, onAction }: Props) => {
+const ReportCard = ({ report, onReload, onConfirm }: Props) => {
   const { t } = useTranslation();
-  function convertToJson(str: string) {
-    try {
-      JSON.parse(str);
-    } catch (e) {
-      return null;
-    }
-    return JSON.parse(str);
-  }
 
-  const archiveReport = async (value: boolean) =>
+  const onArchive = async (value: boolean) =>
     await databaseRequest(
       {
         model: 'Message',
@@ -39,7 +31,7 @@ const ReportCard = ({ report, onReload, onAction }: Props) => {
       ['updater_id']
     ).then((response) => onReload());
 
-  const bodyData: ReportBodyType | null = convertToJson(report.body);
+  const bodyData: ReportBodyType | null = JSON.parse(report.body);
 
   return bodyData ? (
     <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
@@ -52,7 +44,7 @@ const ReportCard = ({ report, onReload, onAction }: Props) => {
               {(Object.keys(bodyData.data) as Array<keyof ReportBodyType['data']>).map((data, key) => (
                 <Fragment key={key}>
                   {bodyData.data && (
-                    <Typography mt={1} key={data}>
+                    <Typography key={data}>
                       {data}:{' '}
                       {data === 'location' ? (
                         <AppLink to={bodyData.data[data]}>{bodyData.data[data]}</AppLink>
@@ -77,13 +69,17 @@ const ReportCard = ({ report, onReload, onAction }: Props) => {
       <CardContent>
         <Stack direction="row" mt={0.5} flex={1} gap={3} justifyContent="end">
           {report.status === 1 ? (
-            <Button color="error" onClick={() => archiveReport(true)}>
+            <Button color="error" onClick={() => onArchive(true)}>
               {t(`texts.archive`)}
             </Button>
           ) : (
-            <Button onClick={() => archiveReport(false)}>{t(`texts.unarchive`)}</Button>
+            <Button onClick={() => onArchive(false)}>{t(`texts.unarchive`)}</Button>
           )}
-          <Button variant="contained">{t('generics.confirm')}</Button>
+          {!!onConfirm && (
+            <Button variant="contained" onClick={onConfirm}>
+              {t('generics.confirm')}
+            </Button>
+          )}
         </Stack>
       </CardContent>
     </Card>
