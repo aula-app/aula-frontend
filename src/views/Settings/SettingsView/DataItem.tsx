@@ -1,6 +1,8 @@
 import { PossibleFields } from '@/types/Scopes';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, phases } from '@/utils';
 import { statusOptions } from '@/utils/commands';
+import DataConfig from '@/utils/Data';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,15 +15,16 @@ const DataItem = ({ row, column }: Params) => {
   const { t } = useTranslation();
   const [name, setName] = useState('');
 
-  async function getNames(id: number) {
+  async function getNames(scope: SettingNamesType, id: number) {
     await databaseRequest({
-      model: 'Room',
-      method: 'getRoomBaseData',
+      model: DataConfig[scope].requests.model,
+      method: DataConfig[scope].requests.get,
       arguments: {
-        room_id: id,
+        [DataConfig[scope].requests.id]: id,
       },
     }).then((response) => {
-      setName(response.success ? response.data.room_name : '');
+      if (!response.success) return;
+      setName(column === 'user_id' ? response.data.realname : response.data.room_name);
     });
   }
 
@@ -31,10 +34,13 @@ const DataItem = ({ row, column }: Params) => {
     case 'phase_id':
       return <>{t(`phases.${phases[row[column]].name}` || '')}</>;
     case 'room_id':
-      getNames(Number(row[column]));
+      getNames('rooms', Number(row[column]));
       return <>{name}</>;
     case 'status':
       return <>{t(statusOptions.find((status) => status.value === row[column])?.label || '')}</>;
+    case 'user_id':
+      getNames('users', Number(row[column]));
+      return <>{name}</>;
     case 'userlevel':
       return <>{t(`roles.${row[column]}` || '')}</>;
     default:

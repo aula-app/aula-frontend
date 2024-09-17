@@ -13,9 +13,10 @@ interface IdeaColumns extends ColumnSettings {
 const columns = [
   { name: 'title', orderId: 5 },
   { name: 'content', orderId: 6 },
+  { name: 'user_id', orderId: 8 },
   { name: 'room_id', orderId: 7 },
-  { name: 'approved', orderId: 11 },
-  { name: 'approval_comment', orderId: 12 },
+  { name: 'approved', orderId: 12 },
+  { name: 'approval_comment', orderId: 13 },
   { name: 'status', orderId: 2 },
   { name: 'created', orderId: 4 },
   { name: 'last_update', orderId: 0 },

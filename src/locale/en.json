@@ -132,6 +132,7 @@
     "timeEnd": "End Time",
     "timeStart": "Start Time",
     "title": "Title",
+    "user_id": "User",
     "username": "User name",
     "user_needs_to_consent": "Consent needed?",
     "userlevel": "User role",
