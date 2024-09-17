@@ -1,7 +1,6 @@
 import { checkPermissions } from '@/utils';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
-import LogOutView from '@/views/LogOutView';
 import MessagesView from '@/views/Messages';
 import AnnouncementView from '@/views/Messages/Announcement';
 import MessageView from '@/views/Messages/Message';
