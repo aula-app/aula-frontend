@@ -80,11 +80,14 @@ const UserView = () => {
     body: { data: ObjectPropByName; content: string },
     returnMessage: string
   ) =>
-    await databaseRequest({
-      model: 'Message',
-      method: 'addMessage',
-      arguments: { headline, body: JSON.stringify(body) },
-    }).then((response) => {
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: 'addMessage',
+        arguments: { headline, body: JSON.stringify(body), msg_type: 5 },
+      },
+      ['creator_id', 'updater_id']
+    ).then((response) => {
       if (!response.success) return;
       setOpenDelete(false);
       dispatch({ type: 'ADD_POPUP', message: { message: returnMessage, type: 'success' } });

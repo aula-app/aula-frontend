@@ -1,4 +1,3 @@
-import { useAppStore } from '@/store';
 import { MessageType, ReportBodyType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Button, Card, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
@@ -17,7 +16,6 @@ interface Props {
 
 const ReportCard = ({ report, onReload }: Props) => {
   const { t } = useTranslation();
-  const [, dispatch] = useAppStore();
   function convertToJson(str: string) {
     try {
       JSON.parse(str);
