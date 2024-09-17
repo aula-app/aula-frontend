@@ -24,7 +24,13 @@ const DataItem = ({ row, column }: Params) => {
       },
     }).then((response) => {
       if (!response.success) return;
-      setName(scope === 'users' ? response.data.realname : response.data.room_name);
+      setName(
+        scope === 'users'
+          ? response.data.realname
+          : scope === 'rooms'
+            ? response.data.room_name
+            : response.data.group_name
+      );
     });
   }
 
@@ -41,6 +47,12 @@ const DataItem = ({ row, column }: Params) => {
       return <>{name}</>;
     case 'status':
       return <>{t(statusOptions.find((status) => status.value === row[column])?.label || '')}</>;
+    case 'target_group':
+      getNames('groups', Number(row[column]));
+      return <>{name}</>;
+    case 'target_id':
+      getNames('users', Number(row[column]));
+      return <>{name}</>;
     case 'user_id':
       getNames('users', Number(row[column]));
       return <>{name}</>;
