@@ -11,10 +11,11 @@ import { AppLink } from '..';
 
 interface Props {
   report: MessageType;
+  onAction?: () => Promise<void>;
   onReload: () => Promise<void>;
 }
 
-const ReportCard = ({ report, onReload }: Props) => {
+const ReportCard = ({ report, onReload, onAction }: Props) => {
   const { t } = useTranslation();
   function convertToJson(str: string) {
     try {
@@ -42,18 +43,7 @@ const ReportCard = ({ report, onReload }: Props) => {
 
   return bodyData ? (
     <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
-      <CardHeader
-        title={report.headline}
-        action={
-          report.status === 1 ? (
-            <Button color="error" onClick={() => archiveReport(true)}>
-              {t(`texts.archive`)}
-            </Button>
-          ) : (
-            <Button onClick={() => archiveReport(false)}>{t(`texts.unarchive`)}</Button>
-          )
-        }
-      />
+      <CardHeader title={report.headline} />
       <Divider />
       {bodyData.data && (
         <>
@@ -79,8 +69,21 @@ const ReportCard = ({ report, onReload }: Props) => {
         </>
       )}
       <CardContent>
-        <Stack mt={2} flex={1}>
+        <Stack my={2} flex={1}>
           <Typography>{bodyData.content}</Typography>
+        </Stack>
+      </CardContent>
+      <Divider />
+      <CardContent>
+        <Stack direction="row" mt={0.5} flex={1} gap={3} justifyContent="end">
+          {report.status === 1 ? (
+            <Button color="error" onClick={() => archiveReport(true)}>
+              {t(`texts.archive`)}
+            </Button>
+          ) : (
+            <Button onClick={() => archiveReport(false)}>{t(`texts.unarchive`)}</Button>
+          )}
+          <Button variant="contained">{t('generics.confirm')}</Button>
         </Stack>
       </CardContent>
     </Card>

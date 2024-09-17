@@ -67,6 +67,12 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
     role: 50,
   },
   {
+    title: 'requests',
+    path: '/settings/requests',
+    icon: 'request',
+    role: 50,
+  },
+  {
     title: 'configuration',
     path: '/settings/configuration',
     icon: 'settings',
