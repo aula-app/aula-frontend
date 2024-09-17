@@ -154,7 +154,7 @@ const MessagesView = () => {
             <MessageCard
               type={messageConsentValues[announcement.user_needs_to_consent]}
               title={announcement.headline}
-              to={`/messages/message/${announcement.id}`}
+              to={`/messages/announcement/${announcement.id}`}
               key={announcement.id}
             />
           ))}

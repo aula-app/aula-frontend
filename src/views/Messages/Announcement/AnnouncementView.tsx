@@ -10,16 +10,16 @@ import { useParams } from 'react-router-dom';
  * url: /messages
  */
 
-const MessagesView = () => {
+const AnnouncementView = () => {
   const params = useParams();
   const [message, setMessage] = useState<MessageType | AnnouncementType>();
 
   const messageFetch = async () =>
     await databaseRequest({
-      model: 'Message',
-      method: 'getMessageBaseData',
+      model: 'Text',
+      method: 'getTextBaseData',
       arguments: {
-        message_id: params['message_id'],
+        text_id: params['message_id'],
       },
     }).then((response) => {
       if (!response.success) return;
@@ -68,4 +68,4 @@ const MessagesView = () => {
   );
 };
 
-export default MessagesView;
+export default AnnouncementView;
