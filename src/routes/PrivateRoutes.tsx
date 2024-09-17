@@ -1,10 +1,12 @@
 import { checkPermissions } from '@/utils';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
+import LogOutView from '@/views/LogOutView';
 import MessagesView from '@/views/Messages';
 import AnnouncementView from '@/views/Messages/Announcement';
 import MessageView from '@/views/Messages/Message';
 import ReportView from '@/views/Messages/Report';
+import OfflineView from '@/views/OfflineView';
 import PhasesView from '@/views/Phases';
 import RoomView from '@/views/Room';
 import IdeaView from '@/views/Room/Idea';
@@ -50,6 +52,7 @@ const PrivateRoutes = () => (
         <Route path="settings/configuration" element={checkPermissions(50) ? <ConfigView /> : <Navigate to="/" />} />
         <Route path="settings/:setting_name" element={<SettingsView />} />
         <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />
+        <Route path="offline" element={<OfflineView />} />
       </>
     )}
     <Route path="*" element={<NotFoundView />} />

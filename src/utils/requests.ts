@@ -40,8 +40,12 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
     if (response && response.success) {
       return response;
     } else {
-      document.dispatchEvent(error);
-      return response;
+      if ('online_mode' in response && response.online_mode === 0) {
+        if (window.location.pathname !== '/offline') window.location.href = '/offline';
+      } else {
+        document.dispatchEvent(error);
+        return response;
+      }
     }
   } catch (e) {
     document.dispatchEvent(error);
