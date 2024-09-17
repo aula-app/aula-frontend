@@ -1,4 +1,15 @@
 {
+  "commands": {
+    "set": "Setzen",
+    "activate": "Aktivieren",
+    "deactivate": "Deaktivieren",
+    "delete": "Löschen"
+  },
+  "consent": {
+    "message": "Keine Zustimmung",
+    "announcement": "Optionale Zustimmung",
+    "alert": "Obligatorische Zustimmung"
+  },
   "delegation": {
     "confirm": "Bist du sicher, dass du das Stimmrecht für dieses Feld der folgenden Person {{var}} willst?",
     "delegate": "Stimme übertragen",
@@ -81,7 +92,7 @@
     "actions": "Geplante Aktionen",
     "advanced": "Erweiterte Einstellungen",
     "approval_comment": "Kommentar zur Genehmigung",
-    "approved": "Genehmigen?",
+    "approved": "Genehmigung",
     "backup": "Sicherung erstellen",
     "backupRestore": "Sicherung wiederherstellen",
     "body": "Text",
@@ -90,6 +101,7 @@
     "consent_text": "Zustimmungsmeldung",
     "content": "Inhalt",
     "created": "erstellt",
+    "creator_id": "Ersteller",
     "danger": "Gefahrenzone",
     "dateStart": "Start Date",
     "description": "Beschreibung",
@@ -112,7 +124,7 @@
     "phase_duration_2": "Prüfung",
     "phase_duration_3": "Abstimmung",
     "phase_duration_4": "Ergebnisse",
-    "realname": "Name des Nutzers",
+    "realname": "Echter Name",
     "registration": "Registrierung zulassen",
     "room_id": "Raum",
     "room_name": "Raum Name",
@@ -126,6 +138,7 @@
     "timeEnd": "Zeit Ende",
     "timeStart": "Zeit Beginn",
     "title": "Titel",
+    "user_id": "Benutzer",
     "username": "Benutzername",
     "user_needs_to_consent": "Zustimmung erforderlich?",
     "userlevel": "Benutzer-Rolle",

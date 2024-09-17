@@ -1,10 +1,11 @@
 import { AppIconButton } from '@/components';
 import { DeleteData, EditData } from '@/components/Data';
-import { useAppStore } from '@/store';
 import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
 import { databaseRequest } from '@/utils';
+import DataConfig from '@/utils/Data';
+import { STATUS } from '@/utils/Data/formDefaults';
 import { Divider, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,8 +15,7 @@ import DataTable from './DataTable';
 import EditBar from './EditBar';
 import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
-import { STATUS } from '@/utils/Data/formDefaults';
-import DataConfig from '@/utils/Data';
+import { statusOptions } from '@/utils/commands';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -24,8 +24,6 @@ const SettingsView = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
-
-  const [, dispatch] = useAppStore();
 
   const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(10);
@@ -41,8 +39,6 @@ const SettingsView = () => {
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const statusOptions = [{ label: 'status.all', value: -1 }, ...STATUS];
-
   const dataFetch = async () =>
     await databaseRequest({
       model: DataConfig[setting_name].requests.model,
@@ -56,9 +52,7 @@ const SettingsView = () => {
         extra_where: getFilter(),
       },
     }).then((response) => {
-      response.success
-        ? setItems(response)
-        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+      if (response.success) setItems(response);
     });
 
   const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');

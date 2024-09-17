@@ -25,7 +25,7 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
       method: 'getTopicBaseData',
       arguments: { topic_id: box },
     }).then((response) => {
-      setBox(response.data);
+      if (response.success) setBox(response.data);
     });
 
   const daysRemaining = (): number => {

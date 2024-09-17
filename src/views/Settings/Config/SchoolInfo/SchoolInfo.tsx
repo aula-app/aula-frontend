@@ -28,12 +28,11 @@ const SchoolInfo = ({ config, onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      response.success
-        ? dispatch({
-            type: 'ADD_POPUP',
-            message: { message: t('texts.updated', { var: t(`settings.settings`) }), type: 'success' },
-          })
-        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+      if (response.success)
+        dispatch({
+          type: 'ADD_POPUP',
+          message: { message: t('texts.updated', { var: t(`settings.settings`) }), type: 'success' },
+        });
       onReload();
     });
   };

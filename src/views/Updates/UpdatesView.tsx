@@ -29,8 +29,7 @@ const UpdatesView = () => {
       },
       ['user_id']
     ).then((response) => {
-      // console.log(response.data);
-      setUpdates(response.data);
+      if (response.success) setUpdates(response.data);
     });
 
   useEffect(() => {

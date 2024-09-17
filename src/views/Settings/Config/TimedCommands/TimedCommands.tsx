@@ -36,9 +36,7 @@ const TimedCommands = () => {
         offset: page * LIST_LIMIT,
       },
     }).then((response) => {
-      response.success
-        ? setTable(response)
-        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+      if (response.success) setTable(response);
     });
   }
 
@@ -53,9 +51,7 @@ const TimedCommands = () => {
       },
       ['updater_id']
     ).then((response) => {
-      response.success
-        ? getCommands()
-        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+      if (response.success) getCommands();
     });
   }
 

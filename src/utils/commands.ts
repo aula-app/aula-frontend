@@ -1,5 +1,5 @@
 import { PossibleFields } from '@/types/Scopes';
-import { InputType } from './Data/formDefaults';
+import { InputType, STATUS } from './Data/formDefaults';
 
 export const InstanceStatusOptions = [
   { value: 0, label: 'status.inactive' },
@@ -40,3 +40,5 @@ export const Commands = [
     ],
   },
 ];
+
+export const statusOptions = [{ label: 'status.all', value: -1 }, ...STATUS];

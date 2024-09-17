@@ -26,9 +26,9 @@ const UserAvatar = ({ id, size, update }: Props) => {
       arguments: {
         user_id: id,
       },
-    }).then((result: any) => {
-      if (!result || !result.success) return;
-      if (result.data.length > 0) setUserAvatar(result.data[0].filename);
+    }).then((response: any) => {
+      if (!response.success) return;
+      if (response.data.length > 0) setUserAvatar(response.data[0].filename);
     });
   };
 

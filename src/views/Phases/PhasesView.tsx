@@ -27,7 +27,9 @@ const MessagesView = () => {
         limit: 0,
         phase_id: Number(params.phase),
       },
-    }).then((response) => setItems(response));
+    }).then((response) => {
+      if (response.success) setItems(response);
+    });
 
   const ideasFetch = async () =>
     await databaseRequest(
@@ -37,7 +39,9 @@ const MessagesView = () => {
         arguments: {},
       },
       ['user_id']
-    ).then((response) => setItems(response));
+    ).then((response) => {
+      if (response.success) setItems(response);
+    });
 
   useEffect(() => {
     //@ts-ignore

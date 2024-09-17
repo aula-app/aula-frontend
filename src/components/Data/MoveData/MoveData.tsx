@@ -60,6 +60,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
         ...moreArgs,
       },
     }).then((response: DatabaseResponseType) => {
+      if (!response.success) return;
       response.data ? setAvailableItems(response.data) : setAvailableItems([]);
     });
   };
@@ -75,6 +76,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
       method: DataConfig[scope].requests.move.get,
       arguments: { [DataConfig[scope].requests.id]: id },
     }).then((response: DatabaseResponseType) => {
+      if (!response.success) return;
       response.data ? setSelectedItems(response.data) : setSelectedItems([]);
       response.data ? setSelected(response.data.map((item) => item.id)) : setSelected([]);
     });
@@ -105,7 +107,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
         },
       },
       ['updater_id']
-    ).then(() => onClose());
+    ).then(onClose);
   };
 
   const requestRemove = async (targetId: number) => {
@@ -117,7 +119,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
         [DataConfig[scope].requests.id]: id,
         [DataConfig[scope].requests.move.targetId]: targetId,
       },
-    }).then(() => onClose());
+    }).then(onClose);
   };
 
   const requestUpdates = () => {

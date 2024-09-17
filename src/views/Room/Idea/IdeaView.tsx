@@ -29,7 +29,7 @@ const IdeaView = () => {
       method: 'getIdeaContent',
       arguments: { idea_id: params['idea_id'] },
     }).then((response) => {
-      setIdea(response);
+      if (response.success) setIdea(response);
     });
 
   const commentsFetch = async () =>
@@ -37,14 +37,18 @@ const IdeaView = () => {
       model: 'Comment',
       method: 'getCommentsByIdeaId',
       arguments: { idea_id: Number(params['idea_id']) },
-    }).then((response) => setComments(response));
+    }).then((response) => {
+      if (response.success) setComments(response);
+    });
 
   const getPhase = async () =>
     await databaseRequest({
       model: 'Topic',
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
-    }).then((response) => setPhase(Number(response.data.phase_id)));
+    }).then((response) => {
+      if (response.success) setPhase(Number(response.data.phase_id));
+    });
 
   const getVote = async () =>
     await databaseRequest(
@@ -56,7 +60,9 @@ const IdeaView = () => {
         },
       },
       ['user_id']
-    ).then((response) => setVote((Number(response.data) + 1) as Vote));
+    ).then((response) => {
+      if (response.success) setVote((Number(response.data) + 1) as Vote);
+    });
 
   const closeAdd = () => {
     commentsFetch();

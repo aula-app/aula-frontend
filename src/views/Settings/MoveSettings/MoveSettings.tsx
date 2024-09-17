@@ -39,7 +39,7 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
     if (!DataConfig[scope].requests.move) return;
     await databaseRequest({
       model: DataConfig[DataConfig[scope].requests.move.target].requests.model,
-      method: DataConfig[scope].requests.fetch,
+      method: DataConfig[DataConfig[scope].requests.move.target].requests.fetch,
       arguments: {
         offset: 0,
         limit: 0,

@@ -3,6 +3,7 @@ import { PopupType } from '@/store/AppStore';
 import { Alert } from '@mui/material';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import { ForwardedRef, forwardRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface SnackbarProps {
   message: string;
@@ -12,7 +13,9 @@ interface SnackbarProps {
  * Renders "ErrorMessages" component
  * url: /
  */
+
 const ErrorMessages = () => {
+  const { t } = useTranslation();
   const [state, dispatch] = useAppStore();
   let currentStack = [] as PopupType[];
 
@@ -34,6 +37,14 @@ const ErrorMessages = () => {
       {props.message}
     </Alert>
   ));
+
+  const addError = (e: CustomEvent<any>) => {
+    dispatch({ type: 'ADD_POPUP', message: { message: t(e.detail), type: 'error' } });
+  };
+
+  useEffect(() => {
+    document.addEventListener('AppErrorDialog', ((e: CustomEvent) => addError(e)) as EventListener);
+  }, []);
 
   return (
     <SnackbarProvider

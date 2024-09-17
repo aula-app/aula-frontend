@@ -34,20 +34,20 @@ const DashBoard = ({ show = true }) => {
 
   useEffect(() => {
     dashboardFetch('Idea', 'getDashboardByUser', ['user_id']).then((response) => {
-      if (response && response.success) setCount(response.data.phase_counts);
+      if (response.success) setCount(response.data.phase_counts);
     });
     dashboardFetch('Text', 'getTexts', []).then((response) => {
-      if (response && response.success) setMessages(response.count);
+      if (response.success) setMessages(response.count);
     });
     dashboardFetch(
       'Message',
       checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
       checkPermissions(40) ? [] : ['user_id']
     ).then((response) => {
-      if (response && response.success) setReports(response.count);
+      if (response.success) setReports(response.count);
     });
     dashboardFetch('Idea', 'getUpdatesByUser', ['user_id']).then((response) => {
-      if (response && response.success) setLikes(response.count);
+      if (response.success) setLikes(response.count);
     });
   }, []);
 

@@ -1,4 +1,5 @@
 import { ObjectPropByName } from '@/types/Generics';
+import { useTranslation } from 'react-i18next';
 import { parseJwt } from './jwt';
 import { localStorageGet } from './localStorage';
 
@@ -13,6 +14,10 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
   const jwt_payload = parseJwt(jwt_token);
   const headers = {} as { 'Content-Type'?: string; Authorization?: string };
   headers['Content-Type'] = 'application/json';
+
+  const error = new CustomEvent('AppErrorDialog', {
+    detail: 'texts.error',
+  });
 
   if (requestData.method !== 'checkLogin') {
     headers['Authorization'] = `Bearer ${jwt_token}`;
@@ -36,11 +41,11 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
     if (response && response.success) {
       return response;
     } else {
-      console.log(response.error);
+      document.dispatchEvent(error);
       return response;
     }
   } catch (e) {
-    console.log(e);
-    return null;
+    document.dispatchEvent(error);
+    return { success: false };
   }
 };

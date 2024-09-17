@@ -38,11 +38,7 @@ const ReportCard = ({ report, onReload }: Props) => {
         },
       },
       ['updater_id']
-    ).then((response) => {
-      response.success
-        ? onReload()
-        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
-    });
+    ).then((response) => onReload());
 
   const bodyData: ReportBodyType | null = convertToJson(report.body);
 

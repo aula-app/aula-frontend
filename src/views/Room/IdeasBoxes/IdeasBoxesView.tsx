@@ -27,7 +27,9 @@ const IdeasBoxView = () => {
         room_id: Number(params['room_id']),
         phase_id: Number(params['phase']),
       },
-    }).then((response) => setBoxes(response));
+    }).then((response) => {
+      if (response.success) setBoxes(response);
+    });
 
   const closeAdd = () => {
     boxesFetch();

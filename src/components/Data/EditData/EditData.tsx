@@ -122,8 +122,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
           topic_id: response.data,
         },
       }).then((response) => {
-        if (!response.success) return;
-        setPhase(response.data);
+        if (response.success) setPhase(response.data);
       });
     });
   };

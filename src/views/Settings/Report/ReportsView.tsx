@@ -31,9 +31,7 @@ const ReportsView = () => {
         extra_where: getFilter(),
       },
     }).then((response) => {
-      response.success
-        ? setReports(response.data)
-        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+      if (response.success) setReports(response.data);
     });
 
   const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');

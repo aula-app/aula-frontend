@@ -44,7 +44,11 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
       },
     }).then((response) => (response.data ? setCategory(response.data) : setCategory(undefined)));
 
-  const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
+  const hasLiked = async () =>
+    await manageLike('getLikeStatus').then((response) => {
+      if (!response.success) return;
+      setLiked(Boolean(response.data));
+    });
   const addLike = async () => await manageLike('IdeaAddLike').then(() => onReload());
   const removeLike = async () => await manageLike('IdeaRemoveLike').then(() => onReload());
 
@@ -93,7 +97,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <UserAvatar id={idea.user_id} update={true}/>
+        <UserAvatar id={idea.user_id} update={true} />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>

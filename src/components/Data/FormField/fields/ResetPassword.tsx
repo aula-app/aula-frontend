@@ -1,17 +1,7 @@
 import { AppIcon } from '@/components';
-import { useEventLogout } from '@/hooks';
 import { useAppStore } from '@/store';
-import { databaseRequest, localStorageGet } from '@/utils';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { localStorageGet } from '@/utils';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
