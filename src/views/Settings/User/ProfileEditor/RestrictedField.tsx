@@ -71,7 +71,7 @@ const RestrictedField = ({ user, option }: Props) => {
       `Data change request for ${user.realname}`,
       {
         type: 'changeName',
-        data: { id: user.id, change: option, from: String(user[option]), to: value[option] },
+        data: { id: user.id, property: option, from: String(user[option]), to: value[option] },
         content: `A data change procedure was requested for user ${user.realname}. They want to change their ${option} to ${value[option]}`,
       },
       t('texts.updateRequest')

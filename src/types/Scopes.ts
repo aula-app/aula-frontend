@@ -198,7 +198,7 @@ export interface RequestBodyType {
     id?: number;
     username?: string;
     email?: string;
-    change?: string;
+    property?: string;
     from?: string;
     to?: string;
   };
