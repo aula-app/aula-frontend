@@ -1,6 +1,5 @@
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { GroupType } from './GroupTypes';
-import { UserRequestBody } from './RequestTypes';
 import { RoomPhases } from './SettingsTypes';
 
 export interface AnnouncementType {
