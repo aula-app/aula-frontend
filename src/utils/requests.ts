@@ -1,5 +1,4 @@
 import { ObjectPropByName } from '@/types/Generics';
-import { useTranslation } from 'react-i18next';
 import { parseJwt } from './jwt';
 import { localStorageGet } from './localStorage';
 

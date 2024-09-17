@@ -1,5 +1,4 @@
 import { AppIconButton } from '@/components';
-import { useAppStore } from '@/store';
 import { CommandType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Commands } from '@/utils/commands';
@@ -21,7 +20,6 @@ interface CommandsResponseType {
 
 const TimedCommands = () => {
   const { t } = useTranslation();
-  const [, dispatch] = useAppStore();
 
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);

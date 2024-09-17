@@ -259,6 +259,7 @@ export const ICONS = {
   results: HiOutlineChartBar,
   rejected: HiOutlineHandThumbDown,
   report: HiOutlineFlag,
+  request: HiOutlineExclamationTriangle,
   room: HiOutlineAcademicCap,
   search: HiOutlineMagnifyingGlass,
   settings: HiOutlineCog6Tooth,

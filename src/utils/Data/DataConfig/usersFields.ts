@@ -42,7 +42,7 @@ const fields = [
   },
   {
     name: 'email',
-    form: inputType.shortText,
+    form: inputType.email,
     required: true,
     role: 20,
   },

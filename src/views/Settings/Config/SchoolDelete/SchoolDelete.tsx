@@ -1,16 +1,7 @@
 import { AppIcon } from '@/components';
 import { useEventLogout } from '@/hooks';
-import { useAppStore } from '@/store';
 import { databaseRequest } from '@/utils';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Typography,
-} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -20,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 const SchoolDelete = () => {
   const { t } = useTranslation();
   const onLogout = useEventLogout();
-  const [, dispatch] = useAppStore();
   const [openDelete, setOpenDelete] = useState(false);
 
   const lockInstance = async () => {

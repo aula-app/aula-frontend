@@ -2,9 +2,9 @@ import { AppIcon } from '@/components';
 import ChangePassword from '@/components/ChangePassword';
 import { ChangePasswordMethods } from '@/components/ChangePassword/ChangePassword';
 import { useAppStore } from '@/store';
-import { ObjectPropByName, PassResponse } from '@/types/Generics';
+import { PassResponse } from '@/types/Generics';
 import { SingleUserResponseType } from '@/types/RequestTypes';
-import { UserType } from '@/types/Scopes';
+import { RequestBodyType, UserType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet } from '@/utils';
 import {
   Accordion,
@@ -75,16 +75,15 @@ const UserView = () => {
     passFields.current?.displayMessage(true);
   };
 
-  const sendMessage = async (
-    headline: string,
-    body: { data: ObjectPropByName; content: string },
-    returnMessage: string
-  ) =>
-    await databaseRequest({
-      model: 'Message',
-      method: 'addMessage',
-      arguments: { headline, body: JSON.stringify(body) },
-    }).then((response) => {
+  const sendMessage = async (headline: string, body: RequestBodyType, returnMessage: string) =>
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: 'addMessage',
+        arguments: { headline, body: JSON.stringify(body), msg_type: 5 },
+      },
+      ['creator_id', 'updater_id']
+    ).then((response) => {
       if (!response.success) return;
       setOpenDelete(false);
       dispatch({ type: 'ADD_POPUP', message: { message: returnMessage, type: 'success' } });
@@ -95,8 +94,9 @@ const UserView = () => {
     sendMessage(
       `Account data export request for ${user.realname}`,
       {
+        type: 'requestData',
         data: { id: user.id, username: user.displayname, email: user.email },
-        content: `A data data export procedure was requested for user ${user.realname}, alias ${user.displayname}`,
+        content: `A data export procedure was requested for user ${user.realname}, alias ${user.displayname}`,
       },
       t('texts.exportRequest')
     );
@@ -107,6 +107,7 @@ const UserView = () => {
     sendMessage(
       `Account deletion request for ${user.realname}`,
       {
+        type: 'deleteAccount',
         data: { id: user.id, username: user.displayname, email: user.email },
         content: `A data deletion procedure was requested for user ${user.realname}, alias ${user.displayname}`,
       },

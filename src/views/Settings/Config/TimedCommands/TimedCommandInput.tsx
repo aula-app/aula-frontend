@@ -1,4 +1,3 @@
-import { useAppStore } from '@/store';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, FORMAT_DATE_ONLY, FORMAT_DATE_TIME } from '@/utils';
 import { Commands } from '@/utils/commands';
@@ -19,7 +18,6 @@ interface Props {
 
 const TimeCommandInput = ({ onReload }: Props) => {
   const { t } = useTranslation();
-  const [, dispatch] = useAppStore();
 
   const [action, setAction] = useState<number>();
   const [command, setCommand] = useState<number>();

@@ -1,5 +1,4 @@
 import { AppIconButton } from '@/components';
-import ReportCard from '@/components/ReportCard';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
@@ -8,11 +7,12 @@ import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FilterBar from '../SettingsView/FilterBar';
+import RequestsManager from './RequestsManager';
 
-/** * Renders "Config" view
- * url: /settings/config
+/** * Renders "requests" view
+ * url: /settings/requests
  */
-const ReportsView = () => {
+const RequestsView = () => {
   const { t } = useTranslation();
   const [reports, setReports] = useState<MessageType[]>([]);
   const [status, setStatus] = useState<StatusTypes>(1);
@@ -24,14 +24,13 @@ const ReportsView = () => {
       model: 'Message',
       method: 'getMessages',
       arguments: {
-        msg_type: 4,
+        msg_type: 5,
         status: status,
         extra_where: getFilter(),
       },
     }).then((response) => {
       if (response.success) setReports(response.data);
     });
-
   const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
 
   useEffect(() => {
@@ -41,7 +40,7 @@ const ReportsView = () => {
   return (
     <Stack width="100%" height="100%" p={2} gap={2}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="h4">{t('views.reports')}</Typography>
+        <Typography variant="h4">{t('views.requests')}</Typography>
         <Stack direction="row" px={2}>
           <AppIconButton icon="filter" onClick={() => setOpenFilter(!openFilter)} />
         </Stack>
@@ -60,10 +59,10 @@ const ReportsView = () => {
       />
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
         {reports.length > 0 &&
-          reports.map((report) => <ReportCard report={report} onReload={reportFetch} key={report.id} />)}
+          reports.map((report) => <RequestsManager report={report} onReload={reportFetch} key={report.id} />)}
       </Stack>
     </Stack>
   );
 };
 
-export default ReportsView;
+export default RequestsView;

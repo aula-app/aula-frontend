@@ -1,6 +1,6 @@
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
-import { RoomPhases } from './SettingsTypes';
 import { GroupType } from './GroupTypes';
+import { RoomPhases } from './SettingsTypes';
 
 export interface AnnouncementType {
   id: number;
@@ -180,11 +180,27 @@ export interface PossibleFields
     RoomType,
     UserType {}
 
+export type UserRequestTypes = 'changeName' | 'deleteAccount' | 'exportData' | 'requestData';
+
 export interface ReportBodyType {
+  type?: UserRequestTypes;
   data?: {
     location: string;
     user: string;
     userAgent?: string;
+  };
+  content: string;
+}
+
+export interface RequestBodyType {
+  type?: UserRequestTypes;
+  data?: {
+    id?: number;
+    username?: string;
+    email?: string;
+    change?: string;
+    from?: string;
+    to?: string;
   };
   content: string;
 }
