@@ -69,7 +69,23 @@ const RequestsManager = ({ report, onReload }: Props) => {
     document.body.removeChild(file);
   };
 
-  const confirmNameChange = () => {};
+  const confirmNameChange = async () => {
+    if (!bodyData.data) return;
+    await databaseRequest(
+      {
+        model: 'User',
+        method: 'setUserProperty',
+        arguments: {
+          user_id: bodyData.data.id,
+          property: bodyData.data.property,
+          prop_value: bodyData.data.to,
+        },
+      },
+      ['updater_id']
+    ).then((response) => {
+      if (response.success) dispatch({ type: 'ADD_POPUP', message: { message: 'success', type: 'success' } });
+    });
+  };
 
   const onConfirm = () => {
     switch (bodyData.type) {
