@@ -114,10 +114,12 @@ const RestrictedField = ({ user, option }: Props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" color="error" sx={{ display: 'flex', alignItems: 'center' }}>
-          <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('login.passwordReset')}
+          <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('texts.dataUpdate')}
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
-          <DialogContentText id="alert-dialog-description">{t('texts.resetPasswordText')}</DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            {t('texts.dataUpdateText', { var: option })}
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeConfirm} color="secondary" autoFocus>

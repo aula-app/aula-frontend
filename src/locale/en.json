@@ -166,6 +166,8 @@
     "archive": "archive",
     "boxCard": "Ideas Box",
     "bug": "Please try to shortly describe the bug",
+    "dataUpdate": "Update data",
+    "dataUpdateText": "Are you sure you want to request the update of your {{var}}? This action should be validated by an Admin to take place.",
     "deactivate": "Deactivate {{var}}",
     "delegated": "{{var}} delegated ideas",
     "delegation": "Vote delegation",

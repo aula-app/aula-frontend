@@ -166,6 +166,8 @@
     "archive": "archivieren",
     "boxCard": "Ideen-Box",
     "bug": "Bitte versuche, den Fehler kurz zu beschreiben",
+    "dataUpdate": "Daten aktualisieren",
+    "dataUpdateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer {{var}} anfordern möchten? Diese Aktion muss von einem Admin bestätigt werden, damit sie durchgeführt werden kann.",
     "deactivate": "{{var}} deaktivieren",
     "delegated": "{{var}} delegierte Ideen",
     "delegation": "Delegation abstimmen",
