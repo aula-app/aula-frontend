@@ -14,15 +14,18 @@ import FilterBar from '../Settings/SettingsView/FilterBar';
 
 const MessagesView = () => {
   const { t } = useTranslation();
+  const [announcements, setAnnouncements] = useState<AnnouncementType[]>([]);
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [reports, setReports] = useState<MessageType[]>([]);
-  const [announcements, setAnnouncements] = useState<AnnouncementType[]>([]);
+  const [requests, setRequests] = useState<MessageType[]>([]);
   const [openAnnouncementsFilter, setOpenAnnouncementsFilter] = useState(false);
   const [openMessagesFilter, setOpenMessagesFilter] = useState(false);
-  const [openReportFilter, setOpenReportFilter] = useState(false);
+  const [openReportsFilter, setOpenReportsFilter] = useState(false);
+  const [openRequestsFilter, setOpenRequestsFilter] = useState(false);
   const [announcementsFilter, setAnnouncementsFilter] = useState<[string, string]>(['', '']);
   const [messagesFilter, setMessagesFilter] = useState<[string, string]>(['', '']);
-  const [reportFilter, setReportFilter] = useState<[string, string]>(['', '']);
+  const [reportsFilter, setReportsFilter] = useState<[string, string]>(['', '']);
+  const [requestsFilter, setRequestsFilter] = useState<[string, string]>(['', '']);
 
   const announcementsFetch = async () =>
     await databaseRequest({
@@ -44,7 +47,7 @@ const MessagesView = () => {
         model: 'Message',
         method: 'getPersonalMessagesByUser',
         arguments: {
-          extra_where: !reportFilter.includes('') ? ` AND ${reportFilter[0]} LIKE '%${reportFilter[1]}%'` : '',
+          extra_where: !messagesFilter.includes('') ? ` AND ${messagesFilter[0]} LIKE '%${messagesFilter[1]}%'` : '',
         },
       },
       ['user_id']
@@ -60,7 +63,7 @@ const MessagesView = () => {
         method: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
         arguments: {
           msg_type: 4,
-          extra_where: !reportFilter.includes('') ? ` AND ${reportFilter[0]} LIKE '%${reportFilter[1]}%'` : '',
+          extra_where: !reportsFilter.includes('') ? ` AND ${reportsFilter[0]} LIKE '%${reportsFilter[1]}%'` : '',
         },
       },
       checkPermissions(40) ? [] : ['user_id']
@@ -69,13 +72,33 @@ const MessagesView = () => {
       setReports(response.data);
     });
 
+  const requestsFetch = async () =>
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: 'getMessages',
+        arguments: {
+          msg_type: 5,
+          extra_where: !requestsFilter.includes('') ? ` AND ${requestsFilter[0]} LIKE '%${requestsFilter[1]}%'` : '',
+        },
+      },
+      ['target_id']
+    ).then((response) => {
+      if (!response.success) return;
+      setRequests(response.data);
+    });
+
   useEffect(() => {
     messagesFetch();
   }, [messagesFilter]);
 
   useEffect(() => {
     reportsFetch();
-  }, [reportFilter]);
+  }, [reportsFilter]);
+
+  useEffect(() => {
+    requestsFetch();
+  }, [requestsFilter]);
 
   useEffect(() => {
     announcementsFetch();
@@ -110,31 +133,6 @@ const MessagesView = () => {
           ))}
         </Stack>
       )}
-      {reports.length > 0 && (
-        <Stack>
-          <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Typography variant="h6" py={2} display="flex" alignItems="center">
-              <AppIcon icon="report" sx={{ mr: 1 }} /> {t('views.reports')}
-            </Typography>
-            <AppIconButton icon="filter" onClick={() => setOpenReportFilter(!openReportFilter)} />
-          </Stack>
-          <FilterBar scope="report" filter={reportFilter} setFilter={setReportFilter} isOpen={openReportFilter} />
-          {reports.map((report) => (
-            <MessageCard
-              type={
-                report.headline.substring(0, 3) === 'Bug'
-                  ? 'bug'
-                  : report.headline.substring(0, 7) === 'Account'
-                    ? 'alert'
-                    : 'report'
-              }
-              title={report.headline}
-              to={`/messages/report/${report.id}`}
-              key={report.id}
-            />
-          ))}
-        </Stack>
-      )}
       {announcements.length > 0 && (
         <Stack>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -156,6 +154,50 @@ const MessagesView = () => {
               title={announcement.headline}
               to={`/messages/announcement/${announcement.id}`}
               key={announcement.id}
+            />
+          ))}
+        </Stack>
+      )}
+      {requests.length > 0 && (
+        <Stack>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" py={2} display="flex" alignItems="center">
+              <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('views.requests')}
+            </Typography>
+            <AppIconButton icon="filter" onClick={() => setOpenRequestsFilter(!openRequestsFilter)} />
+          </Stack>
+          <FilterBar scope="report" filter={requestsFilter} setFilter={setRequestsFilter} isOpen={openRequestsFilter} />
+          {requests.map((request) => (
+            <MessageCard
+              type="request"
+              title={request.headline}
+              to={`/messages/request/${request.id}`}
+              key={request.id}
+            />
+          ))}
+        </Stack>
+      )}
+      {reports.length > 0 && (
+        <Stack>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" py={2} display="flex" alignItems="center">
+              <AppIcon icon="report" sx={{ mr: 1 }} /> {t('views.reports')}
+            </Typography>
+            <AppIconButton icon="filter" onClick={() => setOpenReportsFilter(!openReportsFilter)} />
+          </Stack>
+          <FilterBar scope="report" filter={reportsFilter} setFilter={setReportsFilter} isOpen={openReportsFilter} />
+          {reports.map((report) => (
+            <MessageCard
+              type={
+                report.headline.substring(0, 3) === 'Bug'
+                  ? 'bug'
+                  : report.headline.substring(0, 7) === 'Account'
+                    ? 'alert'
+                    : 'report'
+              }
+              title={report.headline}
+              to={`/messages/report/${report.id}`}
+              key={report.id}
             />
           ))}
         </Stack>
