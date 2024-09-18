@@ -13,9 +13,14 @@ interface BoxColumns extends ColumnSettings {
 const columns = [
   { name: 'name', orderId: 5 },
   { name: 'description_public', orderId: 6 },
-  { name: 'room_id', orderId: 7 },
-  { name: 'phase_id', orderId: 8 },
+  { name: 'description_internal', orderId: 7 },
+  { name: 'room_id', orderId: 8 },
+  { name: 'phase_id', orderId: 9 },
   { name: 'status', orderId: 2 },
+  { name: 'phase_duration_1', orderId: 11 },
+  { name: 'phase_duration_2', orderId: 12 },
+  { name: 'phase_duration_3', orderId: 13 },
+  { name: 'phase_duration_4', orderId: 14 },
   { name: 'created', orderId: 4 },
   { name: 'last_update', orderId: 0 },
 ] as Array<BoxColumns>;
@@ -29,6 +34,12 @@ const fields = [
   },
   {
     name: 'description_public',
+    form: inputType.longText,
+    required: false,
+    role: 30,
+  },
+  {
+    name: 'description_internal',
     form: inputType.longText,
     required: false,
     role: 30,
