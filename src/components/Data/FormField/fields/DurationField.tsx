@@ -1,6 +1,5 @@
 import { InputSettings } from '@/utils/Data/formDefaults';
-import { Label } from '@mui/icons-material';
-import { Stack, TextField, Typography } from '@mui/material';
+import { FormLabel, Stack, TextField, Typography } from '@mui/material';
 import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
@@ -19,8 +18,8 @@ const DurationField = ({ data, control, disabled = false, setValue, ...restOfPro
   const { t } = useTranslation();
 
   return (
-    <Stack direction="row" alignItems="center" justifyContent="space-between" px={1} flexWrap="wrap" {...restOfProps}>
-      <Label>{t(`texts.phaseDuration`)}:</Label>
+    <Stack direction="row" alignItems="center" px={1} flexWrap="wrap" {...restOfProps}>
+      <FormLabel sx={{ mr: 3, pb: 1 }}>{t(`texts.phaseDuration`)}:</FormLabel>
       {Array.isArray(data.name) ? (
         data.name.map((name) => (
           <Controller
@@ -49,9 +48,6 @@ const DurationField = ({ data, control, disabled = false, setValue, ...restOfPro
                   {...restOfProps}
                   slotProps={{ inputLabel: { shrink: !!field.value } }}
                 />
-                <Typography noWrap pb={1}>
-                  {t(`generics.days`)}
-                </Typography>
               </Stack>
             )}
           />

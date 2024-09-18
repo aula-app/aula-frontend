@@ -14,12 +14,12 @@ import RequestsManager from './RequestsManager';
  */
 const RequestsView = () => {
   const { t } = useTranslation();
-  const [reports, setReports] = useState<MessageType[]>([]);
+  const [requests, setRequests] = useState<MessageType[]>([]);
   const [status, setStatus] = useState<StatusTypes>(1);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const reportFetch = async () =>
+  const requestFetch = async () =>
     await databaseRequest({
       model: 'Message',
       method: 'getMessages',
@@ -29,12 +29,12 @@ const RequestsView = () => {
         extra_where: getFilter(),
       },
     }).then((response) => {
-      if (response.success) setReports(response.data);
+      if (response.success) setRequests(response.data);
     });
   const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
 
   useEffect(() => {
-    reportFetch();
+    requestFetch();
   }, [filter, status]);
 
   return (
@@ -46,7 +46,7 @@ const RequestsView = () => {
         </Stack>
       </Stack>
       <FilterBar
-        scope={'report'}
+        scope={'messages'}
         filter={filter}
         statusOptions={[
           { label: 'status.active', value: 1 },
@@ -58,8 +58,8 @@ const RequestsView = () => {
         isOpen={openFilter}
       />
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
-        {reports.length > 0 &&
-          reports.map((report) => <RequestsManager report={report} onReload={reportFetch} key={report.id} />)}
+        {requests.length > 0 &&
+          requests.map((request) => <RequestsManager request={request} onReload={requestFetch} key={request.id} />)}
       </Stack>
     </Stack>
   );

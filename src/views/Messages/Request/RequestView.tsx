@@ -1,22 +1,20 @@
-import { AppButton } from '@/components';
-import ReportCard from '@/components/ReportCard';
 import { MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
+import RequestsManager from '@/views/Settings/Requests/RequestsManager';
 import { Stack } from '@mui/material';
-import { t } from 'i18next';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 /**
  * Renders "Report" view
- * url: /report
+ * url: /request
  */
 
-const ReportView = () => {
+const RequestView = () => {
   const params = useParams();
-  const [report, setReport] = useState<MessageType>();
+  const [request, setRequest] = useState<MessageType>();
 
-  const reportFetch = async () =>
+  const requestFetch = async () =>
     await databaseRequest({
       model: 'Message',
       method: 'getMessageBaseData',
@@ -25,18 +23,18 @@ const ReportView = () => {
       },
     }).then((response) => {
       if (!response.success) return;
-      setReport(response.data);
+      setRequest(response.data);
     });
 
   useEffect(() => {
-    reportFetch();
+    requestFetch();
   }, []);
 
   return (
     <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
-      {report && <ReportCard report={report} onReload={reportFetch} />}
+      {request && <RequestsManager request={request} onReload={requestFetch} />}
     </Stack>
   );
 };
 
-export default ReportView;
+export default RequestView;

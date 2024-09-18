@@ -81,6 +81,9 @@ const OTHER_COLORS = {
   report: {
     main: amber[200],
   },
+  request: {
+    main: grey[200],
+  },
 };
 /**
  * MUI theme options for "Light Mode"

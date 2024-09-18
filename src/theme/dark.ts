@@ -81,6 +81,9 @@ const OTHER_COLORS = {
   report: {
     main: 'hsl(40, 40%, 20%)',
   },
+  request: {
+    main: blueGrey[800],
+  },
 };
 
 /**

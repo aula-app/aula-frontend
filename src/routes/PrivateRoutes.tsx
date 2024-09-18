@@ -5,6 +5,7 @@ import MessagesView from '@/views/Messages';
 import AnnouncementView from '@/views/Messages/Announcement';
 import MessageView from '@/views/Messages/Message';
 import ReportView from '@/views/Messages/Report';
+import RequestView from '@/views/Messages/Request';
 import OfflineView from '@/views/OfflineView';
 import PhasesView from '@/views/Phases';
 import RoomView from '@/views/Room';
@@ -37,6 +38,7 @@ const PrivateRoutes = () => (
         <Route path="messages" element={<MessagesView />} />
         <Route path="messages/message/:message_id" element={<MessageView />} />
         <Route path="messages/report/:message_id" element={<ReportView />} />
+        <Route path="messages/request/:message_id" element={<RequestView />} />
         <Route path="messages/announcement/:message_id" element={<AnnouncementView />} />
         <Route path="updates" element={<UpdatesView />} />
         <Route path="room/:room_id/phase/:phase" element={<RoomView />}>

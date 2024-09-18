@@ -147,14 +147,16 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
           </Zoom>
         </ClickAwayListener>
       </Box>
-      <EditData
-        id={currentId}
-        scope={edit || scope}
-        isOpen={!!edit}
-        onClose={close}
-        otherData={options.filter((data) => data.type === edit)[0]?.otherData}
-        metadata={options.filter((data) => data.type === edit)[0]?.metadata}
-      />
+      {edit && (
+        <EditData
+          id={currentId}
+          scope={edit}
+          isOpen={!!edit}
+          onClose={close}
+          otherData={options.filter((data) => data.type === edit)[0]?.otherData}
+          metadata={options.filter((data) => data.type === edit)[0]?.metadata}
+        />
+      )}
       {id && scope && <DeleteData id={id} scope={scope} isOpen={del} onClose={close} />}
     </>
   );
