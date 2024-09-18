@@ -20,7 +20,7 @@ import * as yup from 'yup';
 
 interface Props {
   user: UserType;
-  option: keyof UserType;
+  option: 'email' | 'realname' | 'username';
 }
 
 /** * Renders "requests" view
