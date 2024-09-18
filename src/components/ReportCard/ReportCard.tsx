@@ -29,7 +29,7 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
         },
       },
       ['updater_id']
-    ).then((response) => onReload());
+    ).then(() => onReload());
 
   const bodyData: ReportBodyType | null = JSON.parse(report.body);
 

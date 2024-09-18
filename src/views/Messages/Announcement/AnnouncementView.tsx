@@ -1,8 +1,9 @@
 import { AppButton } from '@/components';
 import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
-import { Stack, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Divider, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 /**
@@ -11,6 +12,7 @@ import { useParams } from 'react-router-dom';
  */
 
 const AnnouncementView = () => {
+  const { t } = useTranslation();
   const params = useParams();
   const [message, setMessage] = useState<MessageType | AnnouncementType>();
 
@@ -38,6 +40,21 @@ const AnnouncementView = () => {
       ['user_id']
     );
 
+  const onArchive = async (value: boolean) => {
+    if (!message) return;
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: 'setMessageStatus',
+        arguments: {
+          status: value ? 3 : 1,
+          message_id: message.id,
+        },
+      },
+      ['updater_id']
+    ).then(() => messageFetch());
+  };
+
   useEffect(() => {
     messageFetch();
   }, []);
@@ -45,24 +62,37 @@ const AnnouncementView = () => {
   return (
     <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
       {message && (
-        <Stack flex={1}>
-          <Typography fontWeight={700} align="center" py={2}>
-            {message.headline}
-          </Typography>
-          <Stack flex={1} alignItems="center">
-            <Typography>{message.body}</Typography>
-          </Stack>
-          <Stack direction="row" justifyContent="end">
-            {/* <IconButton>
-            <AppIcon icon="delete" />
-          </IconButton> */}
-            {'user_needs_to_consent' in message && message.user_needs_to_consent > 0 && (
-              <AppButton color="primary" onClick={() => giveConsent(message.id)}>
-                {message.consent_text}
-              </AppButton>
+        <Card variant="outlined">
+          <CardContent>
+            <Typography variant="h5" py={2}>
+              {message.headline}
+            </Typography>
+            <Typography py={2}>
+              <Typography>{message.body}</Typography>
+            </Typography>
+          </CardContent>
+          <Divider />
+          <CardActions sx={{ justifyContent: 'end' }}>
+            {'user_needs_to_consent' in message && (
+              <>
+                {message.user_needs_to_consent < 2 && (
+                  <Button
+                    color="error"
+                    onClick={() => onArchive(message.status === 1 ? true : false)}
+                    sx={{ ml: 'auto', mr: 2, my: 1 }}
+                  >
+                    {message.status === 1 ? t(`texts.archive`) : t(`texts.unarchive`)}
+                  </Button>
+                )}
+                {message.user_needs_to_consent > 0 && (
+                  <AppButton color="primary" onClick={() => giveConsent(message.id)}>
+                    {message.consent_text}
+                  </AppButton>
+                )}
+              </>
             )}
-          </Stack>
-        </Stack>
+          </CardActions>
+        </Card>
       )}
     </Stack>
   );

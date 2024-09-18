@@ -1,12 +1,12 @@
 import ReportCard from '@/components/ReportCard';
 import { useAppStore } from '@/store';
-import { MessageType, ReportBodyType, RequestBodyType } from '@/types/Scopes';
+import { MessageType, RequestBodyType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-  report: MessageType;
+  request: MessageType;
   onReload: () => Promise<void>;
 }
 
@@ -14,11 +14,11 @@ interface Props {
  * url: /settings/requests
  */
 
-const RequestsManager = ({ report, onReload }: Props) => {
+const RequestsManager = ({ request, onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
 
-  const bodyData: RequestBodyType = JSON.parse(report.body);
+  const bodyData: RequestBodyType = JSON.parse(request.body);
 
   const confirmRequestData = async () => {
     if (!bodyData.data) return;
@@ -103,7 +103,7 @@ const RequestsManager = ({ report, onReload }: Props) => {
     }
   };
 
-  return <ReportCard report={report} onConfirm={onConfirm} onReload={onReload} />;
+  return <ReportCard report={request} onConfirm={onConfirm} onReload={onReload} />;
 };
 
 export default RequestsManager;
