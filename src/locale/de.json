@@ -106,6 +106,7 @@
     "dateStart": "Start Date",
     "description": "Beschreibung",
     "description_public": "Beschreibung (öffentlich)",
+    "description_internal": "Interne Notizen",
     "displayname": "Anzeigename",
     "email": "E-Mail",
     "headline": "Titel",
