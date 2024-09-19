@@ -75,4 +75,5 @@ export type DataRequestsType = {
     remove: string;
     get: string;
   };
+  check?: string;
 };
