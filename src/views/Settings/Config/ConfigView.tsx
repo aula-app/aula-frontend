@@ -94,7 +94,7 @@ const ConfigView = () => {
               {t(`settings.idea`)}
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>{config && <IdeaSettings config={config} onReload={getConfig} />}</AccordionDetails>
+          <AccordionDetails>{config && <IdeaSettings onReload={getConfig} />}</AccordionDetails>
         </Accordion>
       )}
       {checkPermissions(60) && (
