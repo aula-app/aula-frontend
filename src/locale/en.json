@@ -1,8 +1,6 @@
 {
   "commands": {
-    "set": "Set",
-    "activate": "Activate",
-    "deactivate": "Deactivate",
+    "status": "Set status",
     "delete": "Delete"
   },
   "consent": {
@@ -135,6 +133,7 @@
     "room_name": "Room name",
     "settings": "Settings",
     "school": "School Info",
+    "scope": "Scope",
     "status": "Status",
     "system": "System Settings",
     "target_id": "User",
@@ -267,6 +266,7 @@
     "room": "Room",
     "rooms": "Rooms",
     "security": "Security",
+    "system": "System",
     "updates": "updates",
     "user": "User",
     "users": "Users",
