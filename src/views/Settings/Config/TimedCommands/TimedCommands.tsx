@@ -6,6 +6,7 @@ import { Pagination, Stack, Table, TableBody, TableCell, TableContainer, TableRo
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import TimedCommandInput from './TimedCommandInput';
+import { ObjectPropByName } from '@/types/Generics';
 
 const LIST_LIMIT = 10;
 
@@ -34,7 +35,9 @@ const TimedCommands = () => {
         offset: page * LIST_LIMIT,
       },
     }).then((response) => {
-      if (response.success) setTable(response);
+      if (!response.success) return;
+      response.data.map((r: ObjectPropByName) => (r.parameters = JSON.parse(r.parameters)));
+      setTable(response);
     });
   }
 
@@ -75,15 +78,18 @@ const TimedCommands = () => {
           <TableBody>
             {commands &&
               commands.map((command, i) => {
-                const action = Commands.filter((cmd) => cmd.value === command.cmd_id);
+                const scope = command.cmd_id > 9 ? Math.floor(command.cmd_id / 10) : 0;
+                const action = Commands[scope].actions.find(
+                  (action) => action.value === Number(String(command.cmd_id).slice(1))
+                );
+                const option = action?.options?.find((option) => option.value === command.parameters.value);
                 return (
                   <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell component="th" scope="row">
-                      {command.date_start}
-                    </TableCell>
-                    <TableCell align="left">{action[0].label}</TableCell>
-                    <TableCell align="left">{command.command}</TableCell>
-                    <TableCell align="left">{command.parameters}</TableCell>
+                    <TableCell>{t(Commands[scope].label)}</TableCell>
+                    <TableCell>{command.parameters.target || ''}</TableCell>
+                    <TableCell>{t(action?.label || '')}</TableCell>
+                    <TableCell>{t(option?.label || '')}</TableCell>
+                    <TableCell>{command.date_start}</TableCell>
                     <TableCell align="right">
                       <AppIconButton icon="delete" onClick={() => deleteCommand(command.id)} />
                     </TableCell>
