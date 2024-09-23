@@ -29,10 +29,17 @@ interface Props extends Omit<IconButtonProps, 'color'> {
  * @param {string} [title] - when set, the IconButton is rendered inside Tooltip with this text
  * @param {string} [to] - internal link URI
  */
-const AppIconButton = forwardRef(function (
-  { color = 'default', component, children, disabled, icon, size, sx, title, ...restOfProps },
-  ref
-) {
+const AppIconButton = ({
+  color = 'default',
+  component,
+  children,
+  disabled,
+  icon,
+  size,
+  sx,
+  title,
+  ...restOfProps
+}: Props) => {
   const componentToRender = !component && (restOfProps?.href || restOfProps?.to) ? AppLink : (component ?? IconButton);
 
   const isMuiColor = useMemo(() => MUI_ICON_BUTTON_COLORS.includes(color), [color]);
@@ -52,7 +59,6 @@ const AppIconButton = forwardRef(function (
     };
     return (
       <IconButton
-        ref={ref}
         component={componentToRender}
         color={colorToRender}
         disabled={disabled}
@@ -67,7 +73,13 @@ const AppIconButton = forwardRef(function (
 
   // When title is set, wrap the IconButton with Tooltip.
   // Note: when IconButton is disabled the Tooltip is not working, so we don't need it
-  return title && !disabled ? <Tooltip title={title}>{IconButtonToRender}</Tooltip> : IconButtonToRender;
-});
+  return title && !disabled ? (
+    <Tooltip title={title} arrow>
+      {IconButtonToRender}
+    </Tooltip>
+  ) : (
+    IconButtonToRender
+  );
+};
 
 export default AppIconButton;
