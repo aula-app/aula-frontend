@@ -56,7 +56,7 @@ const LoginView = () => {
   const onSubmit = async (formData: Object) => {
     const request = await (
       await fetch(
-        `${import.meta.env.VITE_APP_API_URL}/api/controllers/login.php`,
+        `${api_url}/api/controllers/login.php`,
         {
           method: "POST",
           headers: {

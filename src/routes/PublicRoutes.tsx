@@ -2,6 +2,7 @@ import { NotFoundView } from '@/views/Public';
 import ChangePasswordView from '@/views/UpdatePassword';
 import LoginRoutes from '@/views/Public/Login';
 import RecoveryRoutes from '@/views/Public/Recovery';
+import InstanceCodeView from '@/views/Public/InstanceCodeView';
 import SetPasswordView from '@/views/Public/SetPassword';
 import { Route, Routes } from 'react-router-dom';
 
@@ -9,6 +10,16 @@ import { Route, Routes } from 'react-router-dom';
  * List of routes available only for anonymous users
  */
 const PublicRoutes = () => {
+  let navigate = useNavigate();
+  let location = useLocation();
+
+  useEffect(() => {
+    const instance_token = localStorageGet('code', false);
+    console.log('instance token', instance_token, location.pathname);
+
+    if (!instance_token && location.pathname != '/code') navigate('/code');
+  });
+
   return (
     <Routes>
       <Route path="/" element={<LoginRoutes />} />
