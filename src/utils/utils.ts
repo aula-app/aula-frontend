@@ -32,6 +32,16 @@ export function checkPermissions(role: number): boolean {
   return user.user_level >= role;
 }
 
+export function checkRoutesPermissions(role: number, route: string): boolean {
+  const ROUTES_PERMISSIONS = {
+    'boxes': 30
+  }
+  const jwt = localStorageGet('token');
+  const user = !!jwt ? parseJwt(jwt) : false;
+
+  if (!user) return false;
+  return (user.user_level >= ROUTES_PERMISSIONS[route]);
+}
 export function checkSelf(id: number): boolean {
   const jwt = localStorageGet('token');
   const user = !!jwt ? parseJwt(jwt) : false;

@@ -2,6 +2,7 @@ import { localStorageGet, localStorageSet } from '@/utils';
 import { NotFoundView } from '@/views/Public';
 import LoginRoutes from '@/views/Public/Login';
 import RecoveryRoutes from '@/views/Public/Recovery';
+import InstanceCodeView from '@/views/Public/InstanceCodeView';
 import SetPasswordView from '@/views/Public/SetPassword';
 import ChangePasswordView from '@/views/UpdatePassword';
 
