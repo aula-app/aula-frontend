@@ -41,7 +41,6 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
       };
     }
     case 'ADD_POPUP': {
-      console.log('aqui');
       return { ...state, messages: [...state.messages, action?.message] };
     }
     case 'REMOVE_POPUP': {

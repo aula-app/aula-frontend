@@ -40,6 +40,7 @@ export type InputType = {
 export const inputType = {
   custom: {
     type: 'custom',
+    defaultValue: '',
     schema: yup.string(),
   },
 

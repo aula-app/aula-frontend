@@ -2,7 +2,7 @@ import { IdeaType } from '@/types/Scopes';
 import { CustomFieldsType } from '@/types/SettingsTypes';
 import { databaseRequest } from '@/utils';
 import { Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 interface Props {
   idea: IdeaType;
@@ -37,13 +37,13 @@ export const IdeaContent = ({ idea }: Props) => {
       <Typography variant="h6">{idea.title}</Typography>
       <Typography>{idea.content}</Typography>
       {(Object.keys(fields) as Array<keyof CustomFieldsType>).map((customField) => (
-        <>
+        <Fragment key={customField}>
           {fields[customField] && idea[customField] && (
             <Typography mt={2}>
               <b>{fields[customField]}:</b> {idea[customField]}
             </Typography>
           )}
-        </>
+        </Fragment>
       ))}
     </Stack>
   );

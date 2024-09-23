@@ -46,6 +46,7 @@ const CustomField = ({ data, control, disabled = false, setValue, ...restOfProps
     <Stack direction="row" alignItems="center" flexWrap="wrap" {...restOfProps}>
       {(Object.keys(fields) as Array<keyof CustomFieldsType>).map((customField) => (
         <Controller
+          key={customField}
           // @ts-ignore
           name={customField}
           control={control}
@@ -55,9 +56,6 @@ const CustomField = ({ data, control, disabled = false, setValue, ...restOfProps
           render={({ field, fieldState }) => (
             <TextField
               label={fields[customField]}
-              required={data.required}
-              minRows={data.form.type === 'text' ? 4 : 1}
-              multiline={data.form.type === 'text'}
               disabled={disabled}
               type={data.form.type}
               fullWidth
