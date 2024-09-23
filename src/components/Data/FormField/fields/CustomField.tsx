@@ -1,3 +1,4 @@
+import { CustomFieldsType } from '@/types/SettingsTypes';
 import { databaseRequest } from '@/utils';
 import { InputSettings } from '@/utils/Data/formDefaults';
 import { Stack, TextField } from '@mui/material';
@@ -12,11 +13,6 @@ type Props = {
   setValue: UseFormSetValue<{}>;
 };
 
-interface CustomFieldsType {
-  custom_field1_name: string | null;
-  custom_field2_name: string | null;
-}
-
 /**
  * Renders "CustomField" component
  */
@@ -24,8 +20,8 @@ interface CustomFieldsType {
 const CustomField = ({ data, control, disabled = false, setValue, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const [fields, setFields] = useState<CustomFieldsType>({
-    custom_field1_name: null,
-    custom_field2_name: null,
+    custom_field1: null,
+    custom_field2: null,
   });
 
   async function getFields() {
@@ -34,11 +30,13 @@ const CustomField = ({ data, control, disabled = false, setValue, ...restOfProps
       method: 'getCustomfields',
       arguments: {},
     }).then((response) => {
-      if (response.success) setFields(response.data);
+      if (response.success)
+        setFields({
+          custom_field1: response.data.custom_field1_name,
+          custom_field2: response.data.custom_field2_name,
+        });
     });
   }
-
-  console.log(data);
 
   useEffect(() => {
     getFields();
