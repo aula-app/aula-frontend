@@ -24,6 +24,7 @@ const SetWinnerField = ({ id, defaultValue, addUpdate }: Props) => {
     <FormControlLabel
       control={<Switch checked={defaultValue} onChange={toggleWinner} />}
       label={t('settings.is_winner')}
+      sx={{ order: 5, mb: 3 }}
     />
   );
 };

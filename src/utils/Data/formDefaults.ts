@@ -2,7 +2,17 @@ import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import * as yup from 'yup';
 
-type FormTypes = 'duration' | 'icon' | 'image' | 'input' | 'password' | 'phaseSelect' | 'select' | 'target' | 'text';
+type FormTypes =
+  | 'custom'
+  | 'duration'
+  | 'icon'
+  | 'image'
+  | 'input'
+  | 'password'
+  | 'phaseSelect'
+  | 'select'
+  | 'target'
+  | 'text';
 export type SelectOptionsType = { label: string; value: number };
 
 export const STATUS = [
@@ -28,6 +38,11 @@ export type InputType = {
 };
 
 export const inputType = {
+  custom: {
+    type: 'custom',
+    schema: yup.string(),
+  },
+
   duration: {
     type: 'duration',
     defaultValue: 7,
