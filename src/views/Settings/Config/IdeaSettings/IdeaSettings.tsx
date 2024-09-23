@@ -1,5 +1,6 @@
 import { AppButton, AppIconButton } from '@/components';
 import { ConfigResponse, InstanceResponse, ObjectPropByName } from '@/types/Generics';
+import { CustomFieldsNameType } from '@/types/SettingsTypes';
 import { databaseRequest } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { InputAdornment, Stack, TextField, Typography } from '@mui/material';
@@ -14,14 +15,10 @@ interface Props {
 
 /** * Renders "IdeaSettings" component
  */
-interface CustomFieldsType {
-  custom_field1_name: string | null;
-  custom_field2_name: string | null;
-}
 
 const IdeaSettings = ({ onReload }: Props) => {
   const { t } = useTranslation();
-  const [fields, setFields] = useState<CustomFieldsType>();
+  const [fields, setFields] = useState<CustomFieldsNameType>();
 
   const {
     setValue,

@@ -70,6 +70,8 @@ export interface IdeaType {
   approved: number;
   approval_comment: null;
   topic_id: number;
+  custom_field1: string | null;
+  custom_field2: string | null;
 }
 
 export interface MessageType {

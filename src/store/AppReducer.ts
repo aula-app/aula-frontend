@@ -14,7 +14,8 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
         ...state,
         currentUser: action?.currentUser || action?.payload,
       };
-    case 'SIGN_UP':
+    // case 'SIGN_UP':
+    //   return { ...state };
     case 'LOG_IN':
       return {
         ...state,
@@ -40,6 +41,7 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
       };
     }
     case 'ADD_POPUP': {
+      console.log('aqui');
       return { ...state, messages: [...state.messages, action?.message] };
     }
     case 'REMOVE_POPUP': {
