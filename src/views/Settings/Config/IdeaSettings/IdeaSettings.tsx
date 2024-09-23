@@ -1,10 +1,10 @@
 import { AppButton, AppIconButton } from '@/components';
-import { ObjectPropByName } from '@/types/Generics';
+import { ConfigResponse, InstanceResponse, ObjectPropByName } from '@/types/Generics';
 import { databaseRequest } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 

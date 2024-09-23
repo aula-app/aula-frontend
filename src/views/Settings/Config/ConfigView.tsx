@@ -1,9 +1,8 @@
 import { AppIcon } from '@/components';
 import { ConfigResponse, InstanceResponse } from '@/types/Generics';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Stack, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Categories from './Categories';
@@ -73,6 +72,7 @@ const ConfigView = () => {
       <Accordion expanded={expanded === 'panel0'} onChange={() => toggleExpanded('panel0')}>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
           <Typography variant="h5" py={1}>
+            {t(`settings.general`)}
             {t(`settings.general`)}
           </Typography>
         </AccordionSummary>
