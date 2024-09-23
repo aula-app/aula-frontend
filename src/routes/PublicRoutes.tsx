@@ -2,6 +2,7 @@ import { localStorageGet, localStorageSet } from '@/utils';
 import { NotFoundView } from '@/views/Public';
 import LoginRoutes from '@/views/Public/Login';
 import RecoveryRoutes from '@/views/Public/Recovery';
+import InstanceCodeView from '@/views/Public/InstanceCodeView';
 import SetPasswordView from '@/views/Public/SetPassword';
 import ChangePasswordView from '@/views/UpdatePassword';
 
@@ -29,6 +30,7 @@ const PublicRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginRoutes />} />
+      <Route path="/code" element={<InstanceCodeView />} />
       <Route path="login/*" element={<LoginRoutes />} />
       <Route path="recovery/*" element={<RecoveryRoutes />} />
       <Route path="password/" element={<ChangePasswordView />} />

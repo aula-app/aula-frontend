@@ -29,6 +29,7 @@ const LoginView = () => {
   const jwt_token = localStorageGet("token");
   const [loginError, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const api_url = localStorageGet('api_url');
 
   const schema = yup
     .object({
