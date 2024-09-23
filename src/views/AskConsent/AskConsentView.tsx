@@ -20,13 +20,14 @@ import { useLocation } from 'react-router-dom';
  */
 const AskConsent = () => {
   const jwt_token = localStorageGet('token');
+  const api_url = localStorageGet('api_url');
   const location = useLocation();
   const [data, setData] = useState([]);
   const [activeStep, setActiveStep] = useState(0);
 
   const getData = async () => {
     const data = await (
-      await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/get_necessary_consents.php', {
+      await fetch(api_url + '/api/controllers/get_necessary_consents.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +41,7 @@ const AskConsent = () => {
 
   const giveConsent = async (text_id: number) => {
     const data = await (
-      await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/give_consent.php', {
+      await fetch(api_url + '/api/controllers/give_consent.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
