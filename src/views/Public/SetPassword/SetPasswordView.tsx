@@ -17,6 +17,7 @@ const SetPasswordView = () => {
   const params = useParams();
   const navigate = useNavigate();
   const jwt_token = localStorageGet("token");
+  const api_url = localStorageGet("api_url");
   const [, dispatch] = useAppStore();
 
   const checkKey = async () => {
@@ -24,7 +25,7 @@ const SetPasswordView = () => {
       const response = await (
         await fetch(
           `${
-            import.meta.env.VITE_APP_API_URL
+            api_url
           }/api/controllers/set_password.php?secret=${params.key}`,
           {
             method: "GET",
@@ -54,7 +55,7 @@ const SetPasswordView = () => {
       const response = await (
         await fetch(
           `${
-            import.meta.env.VITE_APP_API_URL
+            api_url
           }/api/controllers/set_password.php`,
           {
             method: "POST",

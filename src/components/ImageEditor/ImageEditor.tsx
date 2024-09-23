@@ -21,6 +21,7 @@ export const ImageEditor = ({ closeMethod, isOpen, id }: NewCommentProps) => {
   const [scale, setScale] = useState(1);
 
   const jwt_token = localStorageGet('token');
+  const api_url = localStorageGet('api_url');
   const ref = useRef<HTMLDivElement>(null);
   const avatarEditor = useRef<AvatarEditor>(null);
   const imageUpload = useRef<HTMLInputElement>(null);
@@ -33,7 +34,7 @@ export const ImageEditor = ({ closeMethod, isOpen, id }: NewCommentProps) => {
         user_id: id,
       },
     }).then((res: any) => {
-      setImage(`${import.meta.env.VITE_APP_API_URL}/files/${res.data[0].filename}`);
+      setImage(`${api_url}/files/${res.data[0].filename}`);
     });
   };
 
@@ -66,7 +67,7 @@ export const ImageEditor = ({ closeMethod, isOpen, id }: NewCommentProps) => {
       formData.append('fileType', 'avatar');
 
       // Post via axios or other transport method
-      fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/upload.php`, {
+      fetch(`${api_url}/api/controllers/upload.php`, {
         method: 'POST',
         headers: {
           Authorization: 'Bearer ' + jwt_token,

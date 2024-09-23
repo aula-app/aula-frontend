@@ -16,6 +16,7 @@ import * as yup from 'yup';
 const RecoveryPasswordView = () => {
   const { t } = useTranslation();
   const jwt_token = localStorageGet("token");
+  const api_url = localStorageGet("api_url");
   const [, dispatch] = useAppStore();
   const navigate = useNavigate()
 
@@ -35,7 +36,7 @@ const RecoveryPasswordView = () => {
   const onSubmit = async (formData: ObjectPropByName) => {
     const request = await (
       await fetch(
-        `${import.meta.env.VITE_APP_API_URL}/api/controllers/forgot_password.php?email=${formData.email}`,
+        `${api_url}/api/controllers/forgot_password.php?email=${formData.email}`,
         {
           method: "GET",
           headers: {

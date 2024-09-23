@@ -1,4 +1,4 @@
-import { databaseRequest } from '@/utils';
+import { localStorageGet, databaseRequest } from '@/utils';
 import { Avatar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '../AppIcon';
@@ -15,6 +15,7 @@ interface Props {
  */
 const UserAvatar = ({ id, size, update }: Props) => {
   const [userAvatar, setUserAvatar] = useState<string>('');
+  const api_url = localStorageGet('api_url');
 
   const currentSize = size === 'small' ? 32 : size === 'large' ? 128 : 56;
 
@@ -44,7 +45,7 @@ const UserAvatar = ({ id, size, update }: Props) => {
         fontSize: '3rem',
       }}
       alt="User avatar"
-      src={`${import.meta.env.VITE_APP_API_URL}/files/${userAvatar}` || ''}
+      src={`${api_url}/files/${userAvatar}` || ''}
     >
       {!userAvatar && <AppIcon icon="avatar" size="xl" />}
     </Avatar>

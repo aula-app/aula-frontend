@@ -10,6 +10,7 @@ interface RequestObject {
 
 export const databaseRequest = async (requestData: RequestObject, userId = [] as string[]) => {
   const jwt_token = localStorageGet('token');
+  const api_url = localStorageGet('api_url');
   const jwt_payload = parseJwt(jwt_token);
   const headers = {} as { 'Content-Type'?: string; Authorization?: string };
   headers['Content-Type'] = 'application/json';
@@ -26,7 +27,7 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
 
   try {
     const response = await (
-      await fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/model.php`, {
+      await fetch(`${api_url}/api/controllers/model.php`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(requestData),

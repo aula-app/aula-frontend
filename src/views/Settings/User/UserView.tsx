@@ -36,6 +36,7 @@ import * as yup from 'yup';
 const UserView = () => {
   const { t } = useTranslation();
   const jwt_token = localStorageGet('token');
+  const api_url = localStorageGet('api_url');
   const [user, setUser] = useState<UserType | null>(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [, dispatch] = useAppStore();
@@ -93,7 +94,7 @@ const UserView = () => {
 
   const setPass = async (oldPass: string, newPass: string) => {
     const request = await (
-      await fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/change_password.php`, {
+      await fetch(`${api_url}/api/controllers/change_password.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

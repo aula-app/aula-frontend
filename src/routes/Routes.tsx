@@ -11,6 +11,7 @@ import PublicRoutes from './PublicRoutes';
  */
 const Routes = () => {
   const location = useLocation();
+  const api_url = localStorageGet('api_url');
   const isAuthenticated = useIsAuthenticated(); // Variant 2
   const [, dispatch] = useAppStore();
 
@@ -19,7 +20,7 @@ const Routes = () => {
 
     const getConsent = async () => {
       const data = await (
-        await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/user_consent.php', {
+        await fetch(api_url + '/api/controllers/user_consent.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
