@@ -1,5 +1,4 @@
 import { AppButton, AppIconButton } from '@/components';
-import KnowMore from '@/components/KnowMore';
 import { ObjectPropByName } from '@/types/Generics';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -105,16 +104,14 @@ const SignupView = () => {
               error={errors.fullname ? true : false}
               helperText={errors.fullname?.message || ' '}
             />
-            <KnowMore title="Some info text.">
-              <TextField
-                required
-                label={t('login.email')}
-                {...register('email')}
-                error={errors.email ? true : false}
-                helperText={errors.email?.message || ' '}
-                sx={{ width: '100%' }}
-              />
-            </KnowMore>
+            <TextField
+              required
+              label={t('login.email')}
+              {...register('email')}
+              error={errors.email ? true : false}
+              helperText={errors.email?.message || ' '}
+              sx={{ width: '100%' }}
+            />
             <TextField
               required
               type={showPassword ? 'text' : 'password'}

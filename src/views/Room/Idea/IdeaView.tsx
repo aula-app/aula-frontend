@@ -98,7 +98,9 @@ const IdeaView = () => {
             <>
               <Typography variant="h5" py={2}>
                 <KnowMore title={t('tooltips.comment')}>
-                  {String(comments.count)} {t('views.comments')}
+                  <Typography>
+                    {String(comments.count)} {t('views.comments')}
+                  </Typography>
                 </KnowMore>
               </Typography>
               {comments.data.map((comment) => (
