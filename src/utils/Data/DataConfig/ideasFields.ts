@@ -38,6 +38,12 @@ const fields = [
     role: 20,
   },
   {
+    name: ['custom_field1', 'custom_field2'],
+    form: inputType.custom,
+    required: false,
+    role: 30,
+  },
+  {
     name: 'room_id',
     form: {
       ...inputType.select,
