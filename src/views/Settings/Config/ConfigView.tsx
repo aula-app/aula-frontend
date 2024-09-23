@@ -73,7 +73,6 @@ const ConfigView = () => {
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
           <Typography variant="h5" py={1}>
             {t(`settings.general`)}
-            {t(`settings.general`)}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
