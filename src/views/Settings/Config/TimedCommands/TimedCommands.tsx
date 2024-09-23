@@ -81,7 +81,7 @@ const TimedCommands = () => {
               commands.map((command, i) => {
                 const scope = command.cmd_id > 9 ? Math.floor(command.cmd_id / 10) : 0;
                 const action = Commands[scope].actions.find(
-                  (action) => action.value === Number(String(command.cmd_id).slice(1))
+                  (action) => action.value === Number(String(command.cmd_id).slice(-1))
                 );
                 const option = action?.options?.find((option) => option.value === command.parameters.value);
                 return (

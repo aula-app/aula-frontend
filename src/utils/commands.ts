@@ -20,7 +20,10 @@ export const ScopeStatusOptions = [
 export const Commands = [
   {
     label: 'system',
-    actions: [{ label: 'commands.status', value: 0, options: InstanceStatusOptions }],
+    actions: [
+      { label: 'commands.status', value: 0, options: InstanceStatusOptions },
+      { label: 'commands.delete', value: 5 },
+    ],
   },
   {
     label: 'users',
