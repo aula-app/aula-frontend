@@ -9,6 +9,7 @@ import MessageTarget from './fields/MessageTarget';
 import PhaseSelectField from './fields/PhaseSelectField';
 import SelectField from './fields/SelectField';
 import { InputSettings } from '@/utils/Data/formDefaults';
+import CustomField from './fields/CustomField';
 
 type Props = {
   data: InputSettings;
@@ -43,6 +44,8 @@ const FormInput = ({
   const { t } = useTranslation();
 
   switch (data.form.type) {
+    case 'custom':
+      return <CustomField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'duration':
       return <DurationField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'icon':

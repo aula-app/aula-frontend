@@ -13,10 +13,12 @@ interface IdeaColumns extends ColumnSettings {
 const columns = [
   { name: 'title', orderId: 5 },
   { name: 'content', orderId: 6 },
+  { name: 'custom_field1_name', orderId: 11 },
+  { name: 'custom_field2_name', orderId: 12 },
   { name: 'user_id', orderId: 8 },
   { name: 'room_id', orderId: 7 },
-  { name: 'approved', orderId: 12 },
-  { name: 'approval_comment', orderId: 13 },
+  { name: 'approved', orderId: 13 },
+  { name: 'approval_comment', orderId: 14 },
   { name: 'status', orderId: 2 },
   { name: 'created', orderId: 4 },
   { name: 'last_update', orderId: 0 },
@@ -34,6 +36,12 @@ const fields = [
     form: inputType.longText,
     required: true,
     role: 20,
+  },
+  {
+    name: ['custom_field1', 'custom_field2'],
+    form: inputType.custom,
+    required: false,
+    role: 30,
   },
   {
     name: 'room_id',

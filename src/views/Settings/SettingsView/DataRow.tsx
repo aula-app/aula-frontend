@@ -1,22 +1,18 @@
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
-import { SettingNamesType } from '@/types/SettingsTypes';
-import DataConfig from '@/utils/Data';
 import { Checkbox, TableCell, TableRow } from '@mui/material';
 import { deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
-import { Fragment } from 'react';
-import DataItem from './DataItem';
+import { ReactNode } from 'react';
 
 type Params = {
   row: PossibleFields;
-  scope: SettingNamesType;
   selected: number[];
   toggleRow: (id: number) => void;
-  setAlter: ({ open, id }: { open: boolean; id: number }) => void;
   status: StatusTypes;
+  children: ReactNode;
 };
 
-const DataRow = ({ row, scope, selected, toggleRow, setAlter, status }: Params) => {
+const DataRow = ({ row, selected, toggleRow, status, children }: Params) => {
   const getBackground = () => {
     switch (status) {
       case 0:
@@ -42,18 +38,7 @@ const DataRow = ({ row, scope, selected, toggleRow, setAlter, status }: Params) 
       <TableCell>
         <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
       </TableCell>
-      {DataConfig[scope].columns.map((column) => (
-        <Fragment key={`${column.name}-${row.id}`}>
-          {column.orderId >= 0 && (
-            <TableCell
-              sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 500 }}
-              onClick={() => setAlter({ open: true, id: row.id })}
-            >
-              {column.name in row && <DataItem row={row} column={column.name} />}
-            </TableCell>
-          )}
-        </Fragment>
-      ))}
+      {children}
     </TableRow>
   );
 };

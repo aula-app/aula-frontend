@@ -75,4 +75,15 @@ export type DataRequestsType = {
     remove: string;
     get: string;
   };
+  check?: string;
 };
+
+export interface CustomFieldsType {
+  custom_field1: string | null;
+  custom_field2: string | null;
+}
+
+export interface CustomFieldsNameType {
+  custom_field1_name: string | null;
+  custom_field2_name: string | null;
+}
