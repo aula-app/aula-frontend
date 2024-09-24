@@ -31,7 +31,7 @@ const SettingsView = () => {
   const [orderBy, setOrder] = useState(DataConfig[setting_name].columns[0].orderId);
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
-  const [status, setStatus] = useState<StatusTypes>(1);
+  const [status, setStatus] = useState<StatusTypes>(-1);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
