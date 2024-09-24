@@ -76,7 +76,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
       method: DataConfig[scope].requests.move.get,
       arguments: { [DataConfig[scope].requests.id]: id },
     }).then((response: DatabaseResponseType) => {
-      if (!response.success) return;
+      //if (!response.success) return;
       response.data ? setSelectedItems(response.data) : setSelectedItems([]);
       response.data ? setSelected(response.data.map((item) => item.id)) : setSelected([]);
     });
