@@ -15,7 +15,7 @@ const InstanceCodeView = () => {
 
   const saveCode = async function (evt:React.KeyboardEvent<HTMLInputElement>) {
     if (evt.key === 'Enter') {
-        let api_url = await (await fetch(import.meta.env.VITE_APP_MULTI_AULA + '/' + code)).json();
+        let api_url = await (await fetch(import.meta.env.VITE_APP_MULTI_AULA + '/instance/' + code)).json();
         // TODO: Show message that the code was not found
         if (api_url.length > 0) {
           localStorageSet("code", code);
