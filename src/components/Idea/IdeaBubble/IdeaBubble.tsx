@@ -7,6 +7,8 @@ import AppLink from '@/components/AppLink';
 import ChatBubble from '@/components/ChatBubble';
 import MoreOptions from '@/components/MoreOptions';
 import UserAvatar from '@/components/UserAvatar';
+import { CustomFieldsType } from '@/types/SettingsTypes';
+import IdeaContent from '../IdeaContent';
 
 interface Props {
   idea: IdeaType;
@@ -20,6 +22,10 @@ type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
   const [liked, setLiked] = useState(false);
   const [category, setCategory] = useState<CategoryType>();
+  const [fields, setFields] = useState<CustomFieldsType>({
+    custom_field1: null,
+    custom_field2: null,
+  });
   const displayDate = new Date(idea.created);
 
   const manageLike = (likeMethod: likeMethodType) => {
@@ -44,7 +50,25 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
       },
     }).then((response) => (response.data ? setCategory(response.data) : setCategory(undefined)));
 
-  const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
+  async function getFields() {
+    await databaseRequest({
+      model: 'Settings',
+      method: 'getCustomfields',
+      arguments: {},
+    }).then((response) => {
+      if (response.success)
+        setFields({
+          custom_field1: response.data.custom_field1_name,
+          custom_field2: response.data.custom_field2_name,
+        });
+    });
+  }
+
+  const hasLiked = async () =>
+    await manageLike('getLikeStatus').then((response) => {
+      if (!response.success) return;
+      setLiked(Boolean(response.data));
+    });
   const addLike = async () => await manageLike('IdeaAddLike').then(() => onReload());
   const removeLike = async () => await manageLike('IdeaRemoveLike').then(() => onReload());
 
@@ -61,6 +85,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
   useEffect(() => {
     hasLiked();
     getCategory();
+    getFields();
   }, []);
 
   return (
@@ -68,12 +93,9 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
       <ChatBubble color="wild.main">
         <Stack>
           <AppLink to={to} disabled={!to}>
-            <Stack px={0.5}>
-              <Typography variant="h6">{idea.title}</Typography>
-              <Typography>{idea.content}</Typography>
-            </Stack>
+            <IdeaContent idea={idea} />
           </AppLink>
-          <Stack direction="row" justifyContent="space-between" my={1}>
+          <Stack direction="row" justifyContent="space-between" mb={1} mt={2}>
             {category ? (
               <Chip
                 icon={<AppIcon icon={category.description_internal} size="small" sx={{ ml: 0.5 }} />}
@@ -93,7 +115,7 @@ export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">
-        <UserAvatar id={idea.user_id} update={true}/>
+        <UserAvatar id={idea.user_id} update={true} />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
           {displayDate && (
             <Typography variant="caption" lineHeight={1.5}>

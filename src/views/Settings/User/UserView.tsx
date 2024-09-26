@@ -1,14 +1,11 @@
-import { AppButton, AppIcon } from '@/components';
+import { AppIcon } from '@/components';
 import ChangePassword from '@/components/ChangePassword';
 import { ChangePasswordMethods } from '@/components/ChangePassword/ChangePassword';
-import ImageEditor from '@/components/ImageEditor';
-import UserAvatar from '@/components/UserAvatar';
 import { useAppStore } from '@/store';
-import { ObjectPropByName, PassResponse } from '@/types/Generics';
+import { PassResponse } from '@/types/Generics';
 import { SingleUserResponseType } from '@/types/RequestTypes';
-import { UserType } from '@/types/Scopes';
+import { RequestBodyType, UserType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet } from '@/utils';
-import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Accordion,
   AccordionDetails,
@@ -19,16 +16,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
-  TextField,
   Typography,
 } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { red } from '@mui/material/colors';
 import { Stack } from '@mui/system';
 import { useEffect, useRef, useState } from 'react';
-import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
+import ProfileEditor from './ProfileEditor';
 
 /** * Renders "User" view
  * url: /settings/user
@@ -40,25 +34,7 @@ const UserView = () => {
   const [user, setUser] = useState<UserType | null>(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [, dispatch] = useAppStore();
-  const [isEditingImage, setEditingImage] = useState<boolean>(false);
-  const [updateAvatar, setUpdateAvatar] = useState(false);
   const passFields = useRef<ChangePasswordMethods>(null);
-
-  const schema = yup.object({
-    about_me: yup.string(),
-    // .required(t('validation.required'))
-    // .min(4, t('validation.min', { var: 4 }))
-    // .max(32, t('validation.max', { var: 32 })),
-  });
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
 
   const getUserInfo = async () =>
     databaseRequest(
@@ -69,23 +45,8 @@ const UserView = () => {
       },
       ['user_id']
     ).then((response: SingleUserResponseType) => {
-      setUser(response.data);
+      if (response.success) setUser(response.data);
     });
-
-  const setAbout = async (formData: Object) =>
-    databaseRequest(
-      {
-        model: 'User',
-        method: 'setUserAbout',
-        arguments: formData,
-      },
-      ['user_id', 'updater_id']
-    ).then(() => getUserInfo());
-
-  const toggleDrawer = () => {
-    setUpdateAvatar(!updateAvatar);
-    setEditingImage(!isEditingImage);
-  };
 
   const changePass = (formData: PassResponse) => {
     if (!formData.oldPassword) return;
@@ -115,19 +76,18 @@ const UserView = () => {
     passFields.current?.displayMessage(true);
   };
 
-  const sendMessage = async (
-    headline: string,
-    body: { data: ObjectPropByName; content: string },
-    returnMessage: string
-  ) =>
-    await databaseRequest({
-      model: 'Message',
-      method: 'addMessage',
-      arguments: { headline, body: JSON.stringify(body) },
-    }).then((response) => {
+  const sendMessage = async (headline: string, body: RequestBodyType, returnMessage: string) =>
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: 'addMessage',
+        arguments: { headline, body: JSON.stringify(body), msg_type: 5 },
+      },
+      ['creator_id', 'updater_id']
+    ).then((response) => {
       if (!response.success) return;
       setOpenDelete(false);
-      dispatch({ type: 'ADD_ERROR', message: returnMessage });
+      dispatch({ type: 'ADD_POPUP', message: { message: returnMessage, type: 'success' } });
     });
 
   const requestExport = () => {
@@ -135,8 +95,9 @@ const UserView = () => {
     sendMessage(
       `Account data export request for ${user.realname}`,
       {
+        type: 'requestData',
         data: { id: user.id, username: user.displayname, email: user.email },
-        content: `A data data export procedure was requested for user ${user.realname}, alias ${user.displayname}`,
+        content: `A data export procedure was requested for user ${user.realname}, alias ${user.displayname}`,
       },
       t('texts.exportRequest')
     );
@@ -147,6 +108,7 @@ const UserView = () => {
     sendMessage(
       `Account deletion request for ${user.realname}`,
       {
+        type: 'deleteAccount',
         data: { id: user.id, username: user.displayname, email: user.email },
         content: `A data deletion procedure was requested for user ${user.realname}, alias ${user.displayname}`,
       },
@@ -155,60 +117,13 @@ const UserView = () => {
   };
 
   useEffect(() => {
-    if (user) setValue('about_me', user.about_me);
-  }, [user]);
-
-  useEffect(() => {
     getUserInfo();
   }, []);
 
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
       <Typography variant="h4">{t('views.profile')}</Typography>
-      {user && (
-        <FormContainer>
-          <Stack alignItems="center" p={2}>
-            <IconButton onClick={toggleDrawer} sx={{ position: 'relative' }}>
-              <Stack
-                color="white"
-                bgcolor={grey[400]}
-                p={1}
-                sx={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  aspectRatio: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 999,
-                  zIndex: 999,
-                }}
-              >
-                <AppIcon icon="camera" />
-              </Stack>
-              <UserAvatar id={user.id} update={updateAvatar} />
-            </IconButton>
-            <Typography sx={{ mt: 1 }} variant="h6">
-              {user.username}
-            </Typography>
-            <Typography variant="body2">{user.displayname}</Typography>
-            <Typography variant="body2">{user.email}</Typography>
-            <TextField
-              multiline
-              minRows={5}
-              label={t('settings.about_me')}
-              {...register('about_me')}
-              error={errors.about_me ? true : false}
-              helperText={errors.about_me?.message || ' '}
-              fullWidth
-              sx={{ mt: 2 }}
-            />
-            <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(setAbout)}>
-              {t('generics.save')}
-            </AppButton>
-          </Stack>
-        </FormContainer>
-      )}
+      {user && <ProfileEditor user={user} onReload={getUserInfo} />}
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.security')}</Typography>
@@ -228,8 +143,15 @@ const UserView = () => {
         </AccordionDetails>
       </Accordion>
       <Accordion>
-        <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
-          <Typography variant="h6">{t('views.advanced')}</Typography>
+        <AccordionSummary
+          expandIcon={<AppIcon icon="arrowdown" />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+          sx={{
+            backgroundColor: red[100],
+          }}
+        >
+          <Typography variant="h6">{t('settings.danger')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} fullWidth>
@@ -237,16 +159,6 @@ const UserView = () => {
           </Button>
         </AccordionDetails>
       </Accordion>
-      {user && (
-        <ImageEditor
-          isOpen={isEditingImage}
-          closeMethod={() => {
-            setUpdateAvatar(!updateAvatar);
-            toggleDrawer();
-          }}
-          id={user.id}
-        />
-      )}
       <Dialog
         open={openDelete}
         onClose={() => setOpenDelete(false)}

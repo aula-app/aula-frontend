@@ -6,12 +6,12 @@ import {
   Alert,
   Button,
   Collapse,
-  Grid,
   InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import { useCallback, useState } from "react";
 import { FormContainer, useForm } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
@@ -98,7 +98,7 @@ const LoginView = () => {
         <TextField
           required
           label={t("login.login")}
-          inputProps={{ autoCapitalize: "none" }}
+          slotProps={{ input: { autoCapitalize: "none" }}}
           {...register("username")}
           error={errors.username ? true : false}
           helperText={errors.username?.message || " "}
@@ -112,7 +112,7 @@ const LoginView = () => {
           error={errors.password ? true : false}
           helperText={errors.password?.message || " "}
           sx={{ mt: 0 }}
-          InputProps={{
+          slotProps={{ input: {
             endAdornment: (
               <InputAdornment position="end">
                 <AppIconButton
@@ -124,7 +124,7 @@ const LoginView = () => {
                 />
               </InputAdornment>
             ),
-          }}
+          }}}
         />
         <AppButton
           type="submit"

@@ -29,7 +29,7 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
         idea_id: idea.id,
       },
     }).then((response) => {
-      if (response.data)
+      if (response.success)
         setNumVotes([response.data.votes_negative, response.data.votes_neutral, response.data.votes_positive]);
     });
   };
@@ -44,7 +44,9 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
         },
       },
       ['user_id']
-    ).then((response) => setVote(response.data));
+    ).then((response) => {
+      if (response.success) setVote(response.data);
+    });
 
   const getIcon = async () =>
     await databaseRequest({
@@ -53,7 +55,10 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
       arguments: {
         idea_id: idea.id,
       },
-    }).then((response) => (response.data ? setIcon(response.data.description_internal) : setIcon(undefined)));
+    }).then((response) => {
+      if (!response.success) return;
+      response.data ? setIcon(response.data.description_internal) : setIcon(undefined);
+    });
 
   const getVariant = () => {
     switch (phase) {

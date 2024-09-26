@@ -20,7 +20,7 @@ const SideBarFixed = ({ setReport, ...restOfProps }: Props) => {
       sx={{
         height: '100%',
         borderRight: `1px solid ${grey[300]}`,
-        width: SIDEBAR_WIDTH,
+        minWidth: SIDEBAR_WIDTH,
         display: { xs: 'none', md: 'flex' },
       }}
       {...restOfProps}

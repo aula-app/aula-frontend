@@ -9,7 +9,8 @@ import { DelegationType } from '@/types/Delegation';
 import { IdeasResponseType } from '@/types/RequestTypes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Button, Fab, Grid, Stack, Typography } from '@mui/material';
+import { Button, Fab, Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +32,9 @@ const IdeasBoxView = () => {
       model: 'Idea',
       method: 'getIdeasByTopic',
       arguments: { topic_id: Number(params['box_id']) },
-    }).then((response) => setBoxIdeas(response));
+    }).then((response) => {
+      if (response.success) setBoxIdeas(response);
+    });
   };
 
   const getDelegation = async () =>
@@ -42,7 +45,9 @@ const IdeasBoxView = () => {
         arguments: { topic_id: Number(params['box_id']) },
       },
       ['user_id']
-    ).then((response) => setDelegationStatus(response.data));
+    ).then((response) => {
+      if (response.success) setDelegationStatus(response.data);
+    });
 
   const closeAdd = () => {
     boxIdeasFetch();
@@ -96,10 +101,15 @@ const IdeasBoxView = () => {
             {checkPermissions(30) && (
               <MoveData id={Number(params['box_id'])} scope="boxes" onClose={() => boxIdeasFetch()} />
             )}
-            <Grid container spacing={1} pt={1}>
+            <Grid container spacing={1} pt={1} pb={2}>
               {boxIdeas.data &&
                 boxIdeas.data.map((idea, key) => (
-                  <Grid key={key} item xs={12} sm={6} md={4} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
+                  <Grid
+                    key={key}
+                    size={{ xs: 12, sm: 6, md: 4 }}
+                    sx={{ scrollSnapAlign: 'center' }}
+                    order={-idea.approved}
+                  >
                     <AppLink to={`idea/${idea.id}`}>
                       <IdeaCard idea={idea} phase={Number(params['phase']) as RoomPhases} />
                     </AppLink>

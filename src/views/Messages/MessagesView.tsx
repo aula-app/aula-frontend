@@ -1,6 +1,6 @@
 import { AppIcon, AppIconButton } from '@/components';
 import MessageCard from '@/components/MessageCard';
-import { MessageType } from '@/types/Scopes';
+import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest, messageConsentValues } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -14,20 +14,56 @@ import FilterBar from '../Settings/SettingsView/FilterBar';
 
 const MessagesView = () => {
   const { t } = useTranslation();
-  const [reports, setReports] = useState<MessageType[]>([]);
+  const [announcements, setAnnouncements] = useState<AnnouncementType[]>([]);
   const [messages, setMessages] = useState<MessageType[]>([]);
-  const [openMessageFilter, setOpenMessageFilter] = useState(false);
-  const [openReportFilter, setOpenReportFilter] = useState(false);
-  const [messageFilter, setMessageFilter] = useState<[string, string]>(['', '']);
-  const [reportFilter, setReportFilter] = useState<[string, string]>(['', '']);
+  const [reports, setReports] = useState<MessageType[]>([]);
+  const [requests, setRequests] = useState<MessageType[]>([]);
+  const [openAnnouncementsFilter, setOpenAnnouncementsFilter] = useState(false);
+  const [openMessagesFilter, setOpenMessagesFilter] = useState(false);
+  const [openReportsFilter, setOpenReportsFilter] = useState(false);
+  const [openRequestsFilter, setOpenRequestsFilter] = useState(false);
+  const [announcementsFilter, setAnnouncementsFilter] = useState<[string, string]>(['', '']);
+  const [messagesFilter, setMessagesFilter] = useState<[string, string]>(['', '']);
+  const [reportsFilter, setReportsFilter] = useState<[string, string]>(['', '']);
+  const [requestsFilter, setRequestsFilter] = useState<[string, string]>(['', '']);
 
-  const reportFetch = async () =>
+  const announcementsFetch = async () =>
+    await databaseRequest({
+      model: 'Text',
+      method: 'getTexts',
+      arguments: {
+        extra_where: !announcementsFilter.includes('')
+          ? ` AND ${announcementsFilter[0]} LIKE '%${announcementsFilter[1]}%'`
+          : '',
+      },
+    }).then((response) => {
+      if (!response.success) return;
+      setAnnouncements(response.data);
+    });
+
+  const messagesFetch = async () =>
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: 'getPersonalMessagesByUser',
+        arguments: {
+          extra_where: !messagesFilter.includes('') ? ` AND ${messagesFilter[0]} LIKE '%${messagesFilter[1]}%'` : '',
+        },
+      },
+      ['user_id']
+    ).then((response) => {
+      if (!response.success) return;
+      setMessages(response.data);
+    });
+
+  const reportsFetch = async () =>
     await databaseRequest(
       {
         model: 'Message',
         method: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
         arguments: {
-          extra_where: !reportFilter.includes('') ? ` AND ${reportFilter[0]} LIKE '%${reportFilter[1]}%'` : '',
+          msg_type: 4,
+          extra_where: !reportsFilter.includes('') ? ` AND ${reportsFilter[0]} LIKE '%${reportsFilter[1]}%'` : '',
         },
       },
       checkPermissions(40) ? [] : ['user_id']
@@ -36,40 +72,120 @@ const MessagesView = () => {
       setReports(response.data);
     });
 
-  const messageFetch = async () =>
-    await databaseRequest({
-      model: 'Text',
-      method: 'getTexts',
-      arguments: {
-        extra_where: !messageFilter.includes('') ? ` AND ${messageFilter[0]} LIKE '%${messageFilter[1]}%'` : '',
+  const requestsFetch = async () =>
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: 'getMessages',
+        arguments: {
+          msg_type: 5,
+          extra_where: !requestsFilter.includes('') ? ` AND ${requestsFilter[0]} LIKE '%${requestsFilter[1]}%'` : '',
+        },
       },
-    }).then((response) => {
+      ['target_id']
+    ).then((response) => {
       if (!response.success) return;
-      setMessages(response.data);
+      setRequests(response.data);
     });
 
   useEffect(() => {
-    reportFetch();
-  }, [reportFilter]);
+    messagesFetch();
+  }, [messagesFilter]);
 
   useEffect(() => {
-    messageFetch();
-  }, [messageFilter]);
+    reportsFetch();
+  }, [reportsFilter]);
+
+  useEffect(() => {
+    requestsFetch();
+  }, [requestsFilter]);
+
+  useEffect(() => {
+    announcementsFetch();
+  }, [announcementsFilter]);
 
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
       <Typography variant="h5" py={2}>
         {t('views.messages')}
       </Typography>
+      {messages.length > 0 && (
+        <Stack>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" py={2} display="flex" alignItems="center">
+              <AppIcon icon="message" sx={{ mr: 1 }} /> {t('views.messages')}
+            </Typography>
+            <AppIconButton icon="filter" onClick={() => setOpenMessagesFilter(!openMessagesFilter)} />
+          </Stack>
+          <FilterBar
+            scope="messages"
+            filter={messagesFilter}
+            setFilter={setMessagesFilter}
+            isOpen={openMessagesFilter}
+          />
+          {messages.map((message) => (
+            <MessageCard
+              type="message"
+              title={message.headline}
+              to={`/messages/message/${message.id}`}
+              key={message.id}
+            />
+          ))}
+        </Stack>
+      )}
+      {announcements.length > 0 && (
+        <Stack>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" py={2} display="flex" alignItems="center">
+              <AppIcon icon="announcement" sx={{ mr: 1 }} /> {t('views.announcements')}
+            </Typography>
+            <AppIconButton icon="filter" onClick={() => setOpenAnnouncementsFilter(!openAnnouncementsFilter)} />
+          </Stack>
+          <FilterBar
+            scope="messages"
+            filter={announcementsFilter}
+            setFilter={setAnnouncementsFilter}
+            isOpen={openAnnouncementsFilter}
+          />
+
+          {announcements.map((announcement) => (
+            <MessageCard
+              type={messageConsentValues[announcement.user_needs_to_consent]}
+              title={announcement.headline}
+              to={`/messages/announcement/${announcement.id}`}
+              key={announcement.id}
+            />
+          ))}
+        </Stack>
+      )}
+      {requests.length > 0 && (
+        <Stack>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" py={2} display="flex" alignItems="center">
+              <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('views.requests')}
+            </Typography>
+            <AppIconButton icon="filter" onClick={() => setOpenRequestsFilter(!openRequestsFilter)} />
+          </Stack>
+          <FilterBar scope="report" filter={requestsFilter} setFilter={setRequestsFilter} isOpen={openRequestsFilter} />
+          {requests.map((request) => (
+            <MessageCard
+              type="request"
+              title={request.headline}
+              to={`/messages/request/${request.id}`}
+              key={request.id}
+            />
+          ))}
+        </Stack>
+      )}
       {reports.length > 0 && (
         <Stack>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="h6" py={2} display="flex" alignItems="center">
-              <AppIcon icon="message" sx={{ mr: 1 }} /> {t('views.reports')}
+              <AppIcon icon="report" sx={{ mr: 1 }} /> {t('views.reports')}
             </Typography>
-            <AppIconButton icon="filter" onClick={() => setOpenReportFilter(!openReportFilter)} />
+            <AppIconButton icon="filter" onClick={() => setOpenReportsFilter(!openReportsFilter)} />
           </Stack>
-          <FilterBar scope="report" filter={reportFilter} setFilter={setReportFilter} isOpen={openReportFilter} />
+          <FilterBar scope="report" filter={reportsFilter} setFilter={setReportsFilter} isOpen={openReportsFilter} />
           {reports.map((report) => (
             <MessageCard
               type={
@@ -82,26 +198,6 @@ const MessagesView = () => {
               title={report.headline}
               to={`/messages/report/${report.id}`}
               key={report.id}
-            />
-          ))}
-        </Stack>
-      )}
-      {messages.length > 0 && (
-        <Stack>
-          <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Typography variant="h6" py={2} display="flex" alignItems="center">
-              <AppIcon icon="message" sx={{ mr: 1 }} /> {t('views.messages')}
-            </Typography>
-            <AppIconButton icon="filter" onClick={() => setOpenMessageFilter(!openMessageFilter)} />
-          </Stack>
-          <FilterBar scope="messages" filter={messageFilter} setFilter={setMessageFilter} isOpen={openMessageFilter} />
-
-          {messages.map((message) => (
-            <MessageCard
-              type={messageConsentValues[message.user_needs_to_consent]}
-              title={message.headline}
-              to={`/messages/message/${message.id}`}
-              key={message.id}
             />
           ))}
         </Stack>

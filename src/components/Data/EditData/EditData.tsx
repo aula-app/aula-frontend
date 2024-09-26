@@ -1,17 +1,18 @@
-import { Button, Drawer, Stack, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { FormContainer } from 'react-hook-form-mui';
-import FormField from '../FormField';
-import DataConfig from './DataConfig';
-import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
-import { checkPermissions, databaseRequest, scopeDefinitions } from '@/utils';
-import { useEffect, useState } from 'react';
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
-import DataUpdates from './DataUpdates';
+import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
+import { checkPermissions, databaseRequest } from '@/utils';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Box, Button, Drawer, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { FormContainer } from 'react-hook-form-mui';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import * as yup from 'yup';
+import FormField from '../FormField';
+import DataUpdates from './DataUpdates';
+import DataConfig from '@/utils/Data';
+import { InputSettings } from '@/utils/Data/formDefaults';
 
 interface Props {
   id?: number;
@@ -40,8 +41,11 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const [fieldValues, setFieldValues] = useState<SingleResponseType>();
   const [updates, setUpdate] = useState<Array<updateType>>([]);
 
-  const schema = getFields().reduce((schema, field) => {
-    return { ...schema, [field.name]: field.form.schema };
+  const schema = getSchema().reduce((schema, field) => {
+    return {
+      ...schema,
+      [field.name]: field.required ? field.form.schema?.required(t('validation.required')) : field.form.schema,
+    };
   }, {});
 
   const {
@@ -61,18 +65,38 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   };
 
   function getFields() {
-    return DataConfig[scope]
+    return DataConfig[scope].fields
       .filter((field) => checkPermissions(field.role))
       .filter((field) => !field.phase || field.phase <= phase);
+  }
+
+  function getSchema() {
+    const newSchema = [] as InputSettings[];
+    DataConfig[scope].fields
+      .filter((field) => checkPermissions(field.role))
+      .filter((field) => !field.phase || field.phase <= phase)
+      .forEach((field) => {
+        Array.isArray(field.name)
+          ? field.name.forEach((name) =>
+              newSchema.push({
+                name: name,
+                form: field.form,
+                required: field.required,
+                role: field.role,
+              })
+            )
+          : newSchema.push(field);
+      });
+    return newSchema;
   }
 
   const getFieldValues = async () => {
     if (!scope) return;
     await databaseRequest({
-      model: scopeDefinitions[scope].model,
-      method: scopeDefinitions[scope].get,
+      model: DataConfig[scope].requests.model,
+      method: DataConfig[scope].requests.get,
       arguments: {
-        [scopeDefinitions[scope].id]: id,
+        [DataConfig[scope].requests.id]: id,
       },
     }).then((response: SingleResponseType) => {
       if (!response.success) return;
@@ -98,19 +122,18 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
           topic_id: response.data,
         },
       }).then((response) => {
-        if (!response.success) return;
-        setPhase(response.data);
+        if (response.success) setPhase(response.data);
       });
     });
   };
 
   const updateValues = () => {
-    getFields().forEach((field) => {
-      const defautltValue = params[field.name] || field.form.defaultValue;
+    getSchema().forEach((field) => {
+      const defaultValue = params[field.name] || field.form.defaultValue;
       setValue(
         // @ts-ignore
         field.name,
-        fieldValues ? fieldValues.data[field.name] : defautltValue
+        fieldValues && fieldValues.data[field.name] ? fieldValues.data[field.name] : defaultValue
       );
     });
     setUpdate([]);
@@ -130,16 +153,16 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
 
     await databaseRequest(
       {
-        model: scopeDefinitions[scope].model,
-        method: !id ? scopeDefinitions[scope].add : scopeDefinitions[scope].edit,
+        model: DataConfig[scope].requests.model,
+        method: !id ? DataConfig[scope].requests.add : DataConfig[scope].requests.edit,
         arguments: args,
       },
       requestId
     ).then((response) => {
       if (!response.success) return;
       updates.forEach((update) => {
-        if (update.requestId) update.args[scopeDefinitions[scope].id] = response.data;
-        if (!(scopeDefinitions[scope].id in update.args)) update.args[scopeDefinitions[scope].id] = response.data;
+        if (update.requestId) update.args[DataConfig[scope].requests.id] = response.data;
+        if (!(DataConfig[scope].requests.id in update.args)) update.args[DataConfig[scope].requests.id] = response.data;
         databaseRequest(
           {
             model: update.model,
@@ -155,8 +178,9 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     });
   };
 
-  const onSubmit = (formData: Object) => {
-    if (typeof id !== 'undefined') otherData[scopeDefinitions[scope].id] = id;
+  const onSubmit = (formData: ObjectPropByName) => {
+    if (typeof id !== 'undefined') otherData[DataConfig[scope].requests.id] = id;
+    if (scope === 'messages') delete formData.undefined;
     dataSave({
       ...formData,
       ...otherData,
@@ -176,30 +200,41 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} key={scope}>
       <Stack p={2} overflow="auto">
         <Typography variant="h4" pb={2}>
-          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${scopeDefinitions[scope].item.toLowerCase()}`) })}
+          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${DataConfig[scope].requests.name.toLowerCase()}`) })}
         </Typography>
         <FormContainer>
-          {getFields() &&
-            getFields().map((field) => (
-              <FormField
-                key={field.name}
-                data={field}
-                register={register}
-                control={control}
-                getValues={getValues}
-                setValue={setValue}
-                errors={errors}
-                phase={phase}
-              />
-            ))}
+          <Stack>
+            {getFields() &&
+              getFields().map((field, key) => (
+                <Box order={key} key={key}>
+                  <FormField
+                    isNew={typeof id === 'undefined'}
+                    data={field}
+                    register={register}
+                    control={control}
+                    getValues={getValues}
+                    setValue={setValue}
+                    errors={errors}
+                    phase={phase}
+                  />
+                </Box>
+              ))}
+
+            <DataUpdates
+              id={id}
+              phase={phase}
+              scope={scope}
+              defaultValue={
+                scope === 'ideas'
+                  ? !!fieldValues?.data.is_winner
+                  : scope === 'users'
+                    ? fieldValues?.data.email
+                    : undefined
+              }
+              addUpdate={addUpdate}
+            />
+          </Stack>
         </FormContainer>
-        <DataUpdates
-          id={id}
-          phase={phase}
-          scope={scope}
-          defaultValue={scope === 'ideas' ? !!fieldValues?.data.is_winner : undefined}
-          addUpdate={addUpdate}
-        />
         <Stack direction="row">
           <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
             {t('generics.cancel')}

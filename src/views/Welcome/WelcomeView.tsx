@@ -1,11 +1,11 @@
-import EditData from '@/components/Data/EditData';
-import DashBoard from './DashBoard';
 import { RoomCard } from '@/components/RoomCard';
 import { RoomsResponseType } from '@/types/RequestTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Grid, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import DashBoard from './DashBoard';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
@@ -23,7 +23,9 @@ const WelcomeView = () => {
         },
       },
       checkPermissions(40) ? [] : ['user_id']
-    ).then((response) => setRooms(response));
+    ).then((response) => {
+      if (response.success) setRooms(response);
+    });
 
   const handleScroll = () => {
     setDashboard(false);
@@ -61,7 +63,7 @@ const WelcomeView = () => {
           {rooms &&
             rooms.data &&
             rooms.data.map((room) => (
-              <Grid key={room.id} item xs={12} sm={6} lg={4} xl={3} sx={{ scrollSnapAlign: 'center' }}>
+              <Grid key={room.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
                 <RoomCard room={room} />
               </Grid>
             ))}

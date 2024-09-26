@@ -1,10 +1,13 @@
+import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { dataSettings } from '@/utils';
+import DataConfig from '@/utils/Data';
 import { Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
-import { grey } from '@mui/material/colors';
-import { Dispatch, Fragment, SetStateAction, useEffect, useRef } from 'react';
+import { Dispatch, Fragment, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import DataRow from './DataRow';
+import { databaseRequest } from '@/utils';
+import DataItem from './DataItem';
 
 type Params = {
   handleOrder: (col: number) => void;
@@ -37,6 +40,8 @@ const DataTable = ({
   const { t } = useTranslation();
   const tableBody = useRef<HTMLTableSectionElement | null>(null);
 
+  const [customFields, setCustomFields] = useState<Record<string, string>>({});
+
   const getLimit = () => {
     setLimit(
       tableBody && tableBody.current ? Math.max(Math.floor(tableBody.current.clientHeight / 55) - 1 || 10, 1) : 10
@@ -52,6 +57,17 @@ const DataTable = ({
     selected.length > 0 ? setSelected([]) : setSelected(items.map((item) => item.id));
   };
 
+  const getCustomFields = async () => {
+    await databaseRequest({
+      model: 'Settings',
+      method: 'getCustomfields',
+      arguments: {},
+    }).then((response) => {
+      if (!response.success) return;
+      setCustomFields(response.data);
+    });
+  };
+
   useEffect(() => {
     window.addEventListener('resize', getLimit);
     return () => {
@@ -60,6 +76,10 @@ const DataTable = ({
   }, []);
 
   useEffect(getLimit, [items.length]);
+
+  useEffect(() => {
+    if (scope === 'ideas') getCustomFields();
+  }, []);
 
   return (
     <Stack flex={1} sx={{ overflowX: 'auto' }} ref={tableBody}>
@@ -74,16 +94,16 @@ const DataTable = ({
                 color="secondary"
               />
             </TableCell>
-            {dataSettings[scope].map((column) => (
+            {DataConfig[scope].columns.map((column) => (
               <Fragment key={column.name}>
-                {column.orderId >= 0 && (
+                {((column.name in customFields && customFields[column.name]) || !(column.name in customFields)) && (
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
                     <TableSortLabel
                       active={orderBy === column.orderId}
                       direction={orderAsc ? 'asc' : 'desc'}
                       onClick={() => handleOrder(column.orderId)}
                     >
-                      {t(`settings.${column.name}`)}
+                      {customFields[column.name] || t(`settings.${column.name}`)}
                     </TableSortLabel>
                   </TableCell>
                 )}
@@ -93,27 +113,27 @@ const DataTable = ({
         </TableHead>
         <TableBody>
           {items.map((row) => (
-            <TableRow
+            <DataRow
               key={row.id}
-              hover
-              sx={{ background: selected.includes(row.id) ? grey[200] : '', cursor: 'pointer' }}
+              row={row}
+              selected={selected}
+              toggleRow={toggleRow}
+              status={Number(row.status) as StatusTypes}
             >
-              <TableCell>
-                <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
-              </TableCell>
-              {dataSettings[scope].map((column) => (
-                <Fragment key={`${column.name}-${row.id}`}>
-                  {column.orderId >= 0 && (
+              {DataConfig[scope].columns.map((column) => (
+                <Fragment key={column.orderId}>
+                  {((column.name in customFields && customFields[column.name]) || !(column.name in customFields)) && (
                     <TableCell
                       sx={{ overflow: 'clip', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 500 }}
                       onClick={() => setAlter({ open: true, id: row.id })}
+                      key={`${column.name}-${row.id}`}
                     >
-                      {row[column.name]}
+                      {column.name in row && <DataItem row={row} column={column.name} />}
                     </TableCell>
                   )}
                 </Fragment>
               ))}
-            </TableRow>
+            </DataRow>
           ))}
         </TableBody>
       </Table>

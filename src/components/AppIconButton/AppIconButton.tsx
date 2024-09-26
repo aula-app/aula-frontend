@@ -1,5 +1,5 @@
 import { alpha, IconButton, IconButtonProps, Tooltip } from '@mui/material';
-import { ElementType, FunctionComponent, useMemo } from 'react';
+import { ElementType, forwardRef, FunctionComponent, useMemo } from 'react';
 import AppIcon from '../AppIcon';
 import AppLink from '../AppLink';
 import { AllIconsType } from '../AppIcon/AppIcon';
@@ -29,7 +29,7 @@ interface Props extends Omit<IconButtonProps, 'color'> {
  * @param {string} [title] - when set, the IconButton is rendered inside Tooltip with this text
  * @param {string} [to] - internal link URI
  */
-const AppIconButton: FunctionComponent<Props> = ({
+const AppIconButton = ({
   color = 'default',
   component,
   children,
@@ -39,8 +39,8 @@ const AppIconButton: FunctionComponent<Props> = ({
   sx,
   title,
   ...restOfProps
-}) => {
-  const componentToRender = !component && (restOfProps?.href || restOfProps?.to) ? AppLink : component ?? IconButton;
+}: Props) => {
+  const componentToRender = !component && (restOfProps?.href || restOfProps?.to) ? AppLink : (component ?? IconButton);
 
   const isMuiColor = useMemo(() => MUI_ICON_BUTTON_COLORS.includes(color), [color]);
 
@@ -73,7 +73,13 @@ const AppIconButton: FunctionComponent<Props> = ({
 
   // When title is set, wrap the IconButton with Tooltip.
   // Note: when IconButton is disabled the Tooltip is not working, so we don't need it
-  return title && !disabled ? <Tooltip title={title}>{IconButtonToRender}</Tooltip> : IconButtonToRender;
+  return title && !disabled ? (
+    <Tooltip title={title} arrow>
+      {IconButtonToRender}
+    </Tooltip>
+  ) : (
+    IconButtonToRender
+  );
 };
 
 export default AppIconButton;

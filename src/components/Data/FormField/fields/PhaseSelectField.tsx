@@ -1,8 +1,8 @@
-import { Control } from 'react-hook-form-mui';
-import { InputSettings } from '../../EditData/DataConfig';
 import { RoomPhases } from '@/types/SettingsTypes';
-import SelectField from './SelectField';
 import { checkPermissions } from '@/utils';
+import { InputSettings } from '@/utils/Data/formDefaults';
+import { Control } from 'react-hook-form-mui';
+import SelectField from './SelectField';
 
 type Props = {
   phase: RoomPhases;

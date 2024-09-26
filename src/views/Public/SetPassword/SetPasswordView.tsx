@@ -41,11 +41,11 @@ const SetPasswordView = () => {
       if (response && response.success) {
         console.log(response.data);
       } else {
-        dispatch({ type: 'ADD_ERROR', message: t('login.wrongKey') });
+        dispatch({ type: 'ADD_POPUP', message: {message: t('login.wrongKey'), type: 'error'} });
       }
     } catch (e) {
       console.log(e);
-      dispatch({ type: 'ADD_ERROR', message: t('generics.wrong') });
+      dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
     }
     return;
   };
@@ -76,7 +76,7 @@ const SetPasswordView = () => {
       }
     } catch (e) {
       console.log(e);
-      dispatch({ type: 'ADD_ERROR', message: t('generics.wrong') });
+      dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
     }
     return;
   };

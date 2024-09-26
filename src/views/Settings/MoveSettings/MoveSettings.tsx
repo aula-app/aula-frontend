@@ -1,6 +1,7 @@
 import { BoxType, RoomType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, scopeDefinitions } from '@/utils';
+import { databaseRequest } from '@/utils';
+import DataConfig from '@/utils/Data';
 import {
   Button,
   Dialog,
@@ -35,10 +36,10 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
   const scope = setting_name as SettingNamesType;
 
   const getDestination = async () => {
-    if (!scopeDefinitions[scope].isChild) return;
+    if (!DataConfig[scope].requests.move) return;
     await databaseRequest({
-      model: scopeDefinitions[scopeDefinitions[scope].isChild].model,
-      method: scopeDefinitions[scope].fetch,
+      model: DataConfig[DataConfig[scope].requests.move.target].requests.model,
+      method: DataConfig[DataConfig[scope].requests.move.target].requests.fetch,
       arguments: {
         offset: 0,
         limit: 0,
@@ -51,14 +52,14 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
   };
 
   const request = async (id: number, targetId: number) => {
-    if (!scopeDefinitions[scope].move || !targetId) return;
+    if (!DataConfig[scope].requests.move || !targetId) return;
     await databaseRequest(
       {
-        model: scopeDefinitions[scope].model,
-        method: scopeDefinitions[scope].add,
+        model: DataConfig[scope].requests.model,
+        method: DataConfig[scope].requests.add,
         arguments: {
-          [scopeDefinitions[scope].id]: id,
-          [scopeDefinitions[scope].move.targetId]: targetId,
+          [DataConfig[scope].requests.id]: id,
+          [DataConfig[scope].requests.move.targetId]: targetId,
         },
       },
       ['updater_id']
@@ -95,7 +96,7 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
               <FormControl sx={{ m: 1, minWidth: 80 }}>
                 <Select
                   id="demo-simple-select"
-                  label={scopeDefinitions[scope].isChild}
+                  label={DataConfig[scope].requests.move?.target}
                   disabled={destinationList.length === 0}
                   fullWidth
                   // @ts-ignore

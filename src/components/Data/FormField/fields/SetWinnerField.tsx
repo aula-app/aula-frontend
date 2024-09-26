@@ -2,6 +2,7 @@ import { ObjectPropByName } from '@/types/Generics';
 import { FormControlLabel, Switch } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { updateType } from '../../EditData/EditData';
+import { useEffect, useState } from 'react';
 
 type Props = {
   id: number;
@@ -15,15 +16,21 @@ type Props = {
 
 const SetWinnerField = ({ id, defaultValue, addUpdate }: Props) => {
   const { t } = useTranslation();
+  const [winner, setWinner] = useState(defaultValue);
 
   const toggleWinner = (event: React.ChangeEvent<HTMLInputElement>) => {
-    addUpdate({ model: 'Idea', method: event.target.checked ? 'setToWinning' : 'setToLosing', args: { idea_id: id } });
+    setWinner(event.target.checked);
   };
+
+  useEffect(() => {
+    addUpdate({ model: 'Idea', method: winner ? 'setToWinning' : 'setToLosing', args: { idea_id: id } });
+  }, [winner]);
 
   return (
     <FormControlLabel
-      control={<Switch checked={defaultValue} onChange={toggleWinner} />}
+      control={<Switch checked={winner} onChange={toggleWinner} />}
       label={t('settings.is_winner')}
+      sx={{ order: 5, mb: 3 }}
     />
   );
 };

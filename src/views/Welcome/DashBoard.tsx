@@ -1,7 +1,8 @@
 import AppIcon from '@/components/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
 import { checkPermissions, dashboardPhases, databaseRequest } from '@/utils';
-import { Badge, Box, Button, Collapse, Grid, Stack, Typography } from '@mui/material';
+import { Badge, Box, Button, Collapse, Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -33,20 +34,20 @@ const DashBoard = ({ show = true }) => {
 
   useEffect(() => {
     dashboardFetch('Idea', 'getDashboardByUser', ['user_id']).then((response) => {
-      if (response && response.success) setCount(response.data.phase_counts);
+      if (response.success) setCount(response.data.phase_counts);
     });
     dashboardFetch('Text', 'getTexts', []).then((response) => {
-      if (response && response.success) setMessages(response.count);
+      if (response.success) setMessages(response.count);
     });
     dashboardFetch(
       'Message',
       checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
       checkPermissions(40) ? [] : ['user_id']
     ).then((response) => {
-      if (response && response.success) setReports(response.count);
+      if (response.success) setReports(response.count);
     });
     dashboardFetch('Idea', 'getUpdatesByUser', ['user_id']).then((response) => {
-      if (response && response.success) setLikes(response.count);
+      if (response.success) setLikes(response.count);
     });
   }, []);
 
@@ -84,7 +85,7 @@ const DashBoard = ({ show = true }) => {
           {count && Object.keys(count).length > 4 && (
             <Grid container spacing={1} p={1}>
               {displayPhases.map((phase, key) => (
-                <Grid item xs={6} sm={3} key={key}>
+                <Grid size={{ xs: 6, sm: 3 }} key={key}>
                   <Button
                     sx={{
                       width: '100%',

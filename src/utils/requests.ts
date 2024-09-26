@@ -15,6 +15,10 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
   const headers = {} as { 'Content-Type'?: string; Authorization?: string };
   headers['Content-Type'] = 'application/json';
 
+  const error = new CustomEvent('AppErrorDialog', {
+    detail: 'texts.error',
+  });
+
   if (requestData.method !== 'checkLogin') {
     headers['Authorization'] = `Bearer ${jwt_token}`;
   }
@@ -37,11 +41,15 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
     if (response && response.success) {
       return response;
     } else {
-      console.log(response.error);
-      return null;
+      if ('online_mode' in response && response.online_mode === 0) {
+        if (window.location.pathname !== '/offline') window.location.href = '/offline';
+      } else {
+        document.dispatchEvent(error);
+        return response;
+      }
     }
   } catch (e) {
-    console.log(e);
-    return null;
+    document.dispatchEvent(error);
+    return { success: false };
   }
 };

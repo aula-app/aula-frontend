@@ -3,7 +3,6 @@ import { DelegationType } from '@/types/Delegation';
 import { UserType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import {
-  Avatar,
   Button,
   Dialog,
   DialogActions,
@@ -50,7 +49,9 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         asc: 1,
         extra_where: ` AND (realname LIKE '%${filter}%' OR displayname LIKE '%${filter}%')`,
       },
-    }).then((response) => setUsers(response.data));
+    }).then((response) => {
+      if (response.success) setUsers(response.data);
+    });
   };
 
   const singleUserFetch = async () => {
@@ -61,7 +62,9 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
       arguments: {
         user_id: delegate[0].user_id_target,
       },
-    }).then((response) => setSelected(response.data));
+    }).then((response) => {
+      if (response.success) setSelected(response.data);
+    });
   };
 
   const setDelegate = async () => {
@@ -76,7 +79,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         },
       },
       ['user_id', 'updater_id']
-    ).then(() => onClose());
+    ).then(onClose);
   };
 
   const removeDelegate = async () => {
@@ -90,7 +93,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         },
       },
       ['user_id']
-    ).then(() => onClose());
+    ).then(onClose);
   };
 
   const select = (user: UserType) => {
@@ -142,7 +145,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
                       }}
                       onClick={() => select(user)}
                     >
-                      <UserAvatar id={user.id} update={true}/>
+                      <UserAvatar id={user.id} update={true} />
                       <Stack ml={2}>
                         <Typography>{user.realname}</Typography>
                         <Typography color="secondary" fontSize="small">

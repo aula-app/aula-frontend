@@ -4,6 +4,7 @@ import CategoryField from '../../FormField/fields/CategoryField';
 import SetWinnerField from '../../FormField/fields/SetWinnerField';
 import MoveData from '../../MoveData';
 import { updateType } from '../EditData';
+import ResetPassword from '../../FormField/fields/ResetPassword';
 
 interface Props {
   id?: number;
@@ -20,6 +21,10 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
   const params = useParams();
 
   switch (scope) {
+    case 'boxes':
+      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
+    case 'groups':
+      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
     case 'ideas':
       if (!id && 'box_id' in params)
         addUpdate({ model: 'Idea', method: 'addIdeaToTopic', args: { topic_id: params.box_id } });
@@ -32,9 +37,12 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
     case 'rooms':
       return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
     case 'users':
-      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
-    case 'boxes':
-      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
+      return (
+        <>
+          <MoveData id={id} scope={scope} addUpdate={addUpdate} />
+          <ResetPassword order={4} email={defaultValue} />
+        </>
+      );
     default:
       return <></>;
   }

@@ -1,32 +1,41 @@
-import { ReportBodyType } from '@/types/Scopes';
-import { Card, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
-import { AppLink } from '..';
+import { MessageType, ReportBodyType } from '@/types/Scopes';
+import { databaseRequest } from '@/utils';
+import { Button, Card, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { Fragment } from 'react/jsx-runtime';
+import { AppLink } from '..';
 
 /**
  * Renders "ReportCard" component
  */
 
 interface Props {
-  headline: string;
-  body: string;
+  report: MessageType;
+  onConfirm?: () => void;
+  onReload: () => Promise<void>;
 }
 
-const ReportCard = ({ headline, body }: Props) => {
-  function convertToJson(str: string) {
-    try {
-      JSON.parse(str);
-    } catch (e) {
-      return null;
-    }
-    return JSON.parse(str);
-  }
+const ReportCard = ({ report, onReload, onConfirm }: Props) => {
+  const { t } = useTranslation();
 
-  const bodyData: ReportBodyType | null = convertToJson(body);
+  const onArchive = async (value: boolean) =>
+    await databaseRequest(
+      {
+        model: 'Message',
+        method: 'setMessageStatus',
+        arguments: {
+          status: value ? 3 : 1,
+          message_id: report.id,
+        },
+      },
+      ['updater_id']
+    ).then(() => onReload());
+
+  const bodyData: ReportBodyType | null = JSON.parse(report.body);
 
   return bodyData ? (
     <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
-      <CardHeader title={headline} />
+      <CardHeader title={report.headline} />
       <Divider />
       {bodyData.data && (
         <>
@@ -35,7 +44,7 @@ const ReportCard = ({ headline, body }: Props) => {
               {(Object.keys(bodyData.data) as Array<keyof ReportBodyType['data']>).map((data, key) => (
                 <Fragment key={key}>
                   {bodyData.data && (
-                    <Typography mt={1} key={data}>
+                    <Typography key={data}>
                       {data}:{' '}
                       {data === 'location' ? (
                         <AppLink to={bodyData.data[data]}>{bodyData.data[data]}</AppLink>
@@ -52,8 +61,25 @@ const ReportCard = ({ headline, body }: Props) => {
         </>
       )}
       <CardContent>
-        <Stack mt={2} flex={1}>
+        <Stack my={2} flex={1}>
           <Typography>{bodyData.content}</Typography>
+        </Stack>
+      </CardContent>
+      <Divider />
+      <CardContent>
+        <Stack direction="row" mt={0.5} flex={1} gap={3} justifyContent="end">
+          {report.status === 1 ? (
+            <Button color="error" onClick={() => onArchive(true)}>
+              {t(`texts.archive`)}
+            </Button>
+          ) : (
+            <Button onClick={() => onArchive(false)}>{t(`texts.unarchive`)}</Button>
+          )}
+          {!!onConfirm && (
+            <Button variant="contained" onClick={onConfirm}>
+              {t('generics.confirm')}
+            </Button>
+          )}
         </Stack>
       </CardContent>
     </Card>

@@ -1,8 +1,11 @@
 import { AppIconButton } from '@/components';
-import { EditData, DeleteData } from '@/components/Data';
+import { DeleteData, EditData } from '@/components/Data';
+import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
-import { databaseRequest, dataSettings, scopeDefinitions } from '@/utils';
+import { databaseRequest } from '@/utils';
+import DataConfig from '@/utils/Data';
+import { STATUS } from '@/utils/Data/formDefaults';
 import { Divider, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +15,7 @@ import DataTable from './DataTable';
 import EditBar from './EditBar';
 import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
+import { statusOptions } from '@/utils/commands';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -24,9 +28,10 @@ const SettingsView = () => {
   const [items, setItems] = useState<TableResponseType>();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
-  const [orderBy, setOrder] = useState(dataSettings[setting_name][0].orderId);
+  const [orderBy, setOrder] = useState(DataConfig[setting_name].columns[0].orderId);
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
+  const [status, setStatus] = useState<StatusTypes>(1);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
@@ -34,25 +39,23 @@ const SettingsView = () => {
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const dataFetch = async (filter: string) =>
+  const dataFetch = async () =>
     await databaseRequest({
-      model: scopeDefinitions[setting_name].model,
-      method: scopeDefinitions[setting_name].fetch,
+      model: DataConfig[setting_name].requests.model,
+      method: DataConfig[setting_name].requests.fetch,
       arguments: {
         limit: limit,
         offset: page * limit,
         orderby: orderBy,
         asc: orderAsc,
-        extra_where: filter,
+        status: status,
+        extra_where: getFilter(),
       },
+    }).then((response) => {
+      if (response.success) setItems(response);
     });
 
-  const loadData = async () => {
-    const currentFilter = !filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '';
-    await dataFetch(currentFilter).then((response) => {
-      setItems(response);
-    });
-  };
+  const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
@@ -60,26 +63,26 @@ const SettingsView = () => {
   };
 
   const resetTable = () => {
-    if (!scopeDefinitions[setting_name]) {
+    if (!DataConfig[setting_name]) {
       navigate('/error');
     } else {
       setPage(0);
       setSelected([]);
       setOrderAsc(true);
-      setOrder(dataSettings[setting_name][0].orderId);
+      setOrder(DataConfig[setting_name].columns[0].orderId);
     }
   };
 
   const onClose = () => {
-    loadData();
+    dataFetch();
     setAlter({ open: false });
     setOpenDelete(false);
     setOpenMove(false);
   };
 
   useEffect(() => {
-    loadData();
-  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter]);
+    dataFetch();
+  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status]);
 
   useEffect(() => {
     resetTable();
@@ -95,7 +98,15 @@ const SettingsView = () => {
           <AppIconButton icon="filter" onClick={() => setOpenFilter(!openFilter)} />
         </Stack>
       </Stack>
-      <FilterBar scope={setting_name} filter={filter} setFilter={setFilter} isOpen={openFilter} />
+      <FilterBar
+        scope={setting_name}
+        filter={filter}
+        statusOptions={statusOptions}
+        status={status}
+        setFilter={setFilter}
+        setStatus={setStatus}
+        isOpen={openFilter}
+      />
       <Divider />
       {items && items.data ? (
         <DataTable

@@ -5,8 +5,8 @@ import { databaseRequest } from '@/utils';
 import { MenuItem, Stack, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SelectOptionsType } from '../../EditData/DataConfig/formDefaults';
 import { updateType } from '../../EditData/EditData';
+import { SelectOptionsType } from '@/utils/Data/formDefaults';
 
 type Props = {
   id?: number;
@@ -51,8 +51,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
         idea_id: id,
       },
     }).then((response) => {
-      if (!response.success) return;
-      if (response.data) setSelected(Number(response.data.id));
+      if (response.success && response.data) setSelected(Number(response.data.id));
     });
   }
 
@@ -79,7 +78,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
       select
       value={String(selected)}
       onChange={changeCategory}
-      sx={{ mb: 2 }}
+      sx={{ mb: 3, order: 1 }}
       {...restOfProps}
     >
       {currentOptions.map((option) => (

@@ -33,8 +33,9 @@ export const ImageEditor = ({ closeMethod, isOpen, id }: NewCommentProps) => {
       arguments: {
         user_id: id,
       },
-    }).then((res: any) => {
-      setImage(`${api_url}/files/${res.data[0].filename}`);
+    }).then((response) => {
+      if (response.success && response.data && response.data.length > 0)
+        setImage(`${api_url}/files/${response.data[0].filename}`);
     });
   };
 

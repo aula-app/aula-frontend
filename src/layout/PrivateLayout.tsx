@@ -1,7 +1,7 @@
 import { ErrorBoundary } from '@/components';
 import EditData from '@/components/Data/EditData';
 import { useOnMobile } from '@/hooks/layout';
-import { getCurrentUser } from '@/utils';
+import { checkPermissions, getCurrentUser } from '@/utils';
 import AskConsent from '@/views/AskConsent/AskConsentView';
 import { Stack } from '@mui/material';
 import { FunctionComponent, PropsWithChildren, useState } from 'react';
@@ -38,7 +38,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       <TopBar home={title} setReport={setScope} />
 
       <Stack direction="row" component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
-        <SideBarFixed setReport={setScope} />
+        {!checkPermissions(60) && <SideBarFixed setReport={setScope} />}
         <Stack flex={1} overflow="hidden">
           <ErrorBoundary name="Content">{children}</ErrorBoundary>
         </Stack>
@@ -48,6 +48,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         scope={scope || 'bug'}
         otherData={{
           headline: `${scope === 'bug' ? 'Bug' : 'Content'} report`,
+          msg_type: 4,
         }}
         metadata={{
           location: location.pathname,

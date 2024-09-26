@@ -1,12 +1,15 @@
-import { Stack, TextField, Typography } from '@mui/material';
+import { RoomPhases } from '@/types/SettingsTypes';
+import { TextField } from '@mui/material';
 import { Control, Controller, FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
-import SelectField from './fields/SelectField';
-import ImageField from './fields/ImageField';
+import DurationField from './fields/DurationField';
 import IconField from './fields/IconField';
-import { InputSettings } from '../EditData/DataConfig';
+import ImageField from './fields/ImageField';
+import MessageTarget from './fields/MessageTarget';
 import PhaseSelectField from './fields/PhaseSelectField';
-import { RoomPhases } from '@/types/SettingsTypes';
+import SelectField from './fields/SelectField';
+import { InputSettings } from '@/utils/Data/formDefaults';
+import CustomField from './fields/CustomField';
 
 type Props = {
   data: InputSettings;
@@ -18,6 +21,7 @@ type Props = {
   setValue: UseFormSetValue<{}>;
   errors: FieldErrors<{}>;
   phase?: RoomPhases;
+  isNew: boolean;
 };
 
 /**
@@ -34,46 +38,35 @@ const FormInput = ({
   disabled = false,
   hidden = false,
   phase = 0,
+  isNew,
   ...restOfProps
 }: Props) => {
   const { t } = useTranslation();
 
   switch (data.form.type) {
+    case 'custom':
+      return <CustomField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'duration':
-      return (
-        <Stack direction="row" alignItems="center" px={1} sx={hidden ? { visibility: 'hidden', height: 0 } : {}}>
-          <Typography noWrap pb={1} mr="auto">
-            {t(`settings.${data.name}`)}:
-          </Typography>
-          <TextField
-            required
-            disabled={disabled}
-            type="number"
-            InputProps={{ inputProps: { min: 1 } }}
-            variant="standard"
-            // @ts-ignore
-            {...register(data.name)}
-            // @ts-ignore
-            error={errors[data.name] ? true : false}
-            // @ts-ignore
-            helperText={t(errors[data.name]?.message || ' ')}
-            sx={{ mx: 2, width: 80 }}
-            {...restOfProps}
-            InputLabelProps={{ shrink: true }}
-          />
-          <Typography noWrap pb={1}>
-            {t(`generics.days`)}
-          </Typography>
-        </Stack>
-      );
+      return <DurationField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'icon':
-      return <IconField data={data} control={control} setValue={setValue} />;
+      return <IconField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'image':
-      return <ImageField data={data} control={control} setValue={setValue} />;
+      return <ImageField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'select':
-      return <SelectField data={data} control={control} disabled={disabled} />;
+      return <SelectField data={data} control={control} disabled={disabled} {...restOfProps} />;
     case 'phaseSelect':
-      return <PhaseSelectField data={data} control={control} phase={phase} disabled={disabled} />;
+      return <PhaseSelectField data={data} control={control} phase={phase} disabled={disabled} {...restOfProps} />;
+    case 'target':
+      return (
+        <MessageTarget
+          data={data}
+          control={control}
+          disabled={!isNew}
+          setValue={setValue}
+          getValues={getValues}
+          {...restOfProps}
+        />
+      );
     default:
       return (
         <Controller
@@ -86,7 +79,7 @@ const FormInput = ({
           render={({ field, fieldState }) => (
             <TextField
               label={t(`settings.${data.name}`)}
-              required
+              required={data.required}
               minRows={data.form.type === 'text' ? 4 : 1}
               multiline={data.form.type === 'text'}
               disabled={disabled}
@@ -95,9 +88,8 @@ const FormInput = ({
               {...field}
               error={!!fieldState.error}
               helperText={t(fieldState.error?.message || ' ')}
-              sx={hidden ? { visibility: 'hidden', height: 0 } : {}}
+              slotProps={{ inputLabel: { shrink: !!field.value } }}
               {...restOfProps}
-              InputLabelProps={{ shrink: !!field.value }}
             />
           )}
         />

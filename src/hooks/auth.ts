@@ -1,5 +1,5 @@
 import { useAppStore } from '@/store';
-import { localStorageDelete, localStorageGet } from '@/utils';
+import { checkPermissions, databaseRequest, localStorageDelete, localStorageGet } from '@/utils';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,6 +15,19 @@ export function useIsAuthenticated() {
   result = Boolean(localStorageGet('token', ''));
 
   return result;
+}
+
+export async function useIsOnline(): Promise<boolean> {
+  let isOnline = true;
+  await databaseRequest({
+    model: 'Settings',
+    method: 'getInstanceSettings',
+    arguments: {},
+  }).then((response) => {
+    if (!response.success) return false;
+    isOnline = response.data['online_mode'] === 1 || (checkPermissions(50) && response.data['online_mode'] !== 5);
+  });
+  return isOnline;
 }
 
 /**
