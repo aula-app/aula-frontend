@@ -6,6 +6,7 @@ import { STATUS } from '@/utils/Data/formDefaults';
 import { Collapse, FilledInput, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import FilterSelect from './FilterSelect';
 
 type Params = {
   filter: [string, string];
@@ -37,22 +38,7 @@ const FilterBar = ({ filter, status, statusOptions, scope, isOpen, setFilter, se
     <Collapse in={isOpen}>
       <Stack direction="row" alignItems="center" flexWrap="wrap">
         <Stack direction="row" alignItems="center" p={2} pt={0} gap={1}>
-          <TextField
-            select
-            label={t('texts.filter')}
-            value={filter[0]}
-            onChange={changeFilter}
-            variant="filled"
-            size="small"
-            sx={{ minWidth: 130 }}
-          >
-            <MenuItem value="">&nbsp;</MenuItem>
-            {DataConfig[scope].columns.map((column) => (
-              <MenuItem value={column.name} key={column.name}>
-                {t(`settings.${column.name}`)}
-              </MenuItem>
-            ))}
-          </TextField>
+          <FilterSelect scope={scope} filter={filter} setFilter={setFilter} />
           <FilledInput
             size="small"
             onChange={changeSearch}
