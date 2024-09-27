@@ -1,15 +1,15 @@
 import { StatusTypes } from '@/types/Generics';
-import { SettingNamesType } from '@/types/SettingsTypes';
 import { statusOptions } from '@/utils/commands';
 import { MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Params = {
+  status: StatusTypes;
   setStatus: Dispatch<SetStateAction<StatusTypes>>;
 };
 
-const FilterStatus = ({ setStatus }: Params) => {
+const FilterStatus = ({ status, setStatus }: Params) => {
   const { t } = useTranslation();
 
   const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
