@@ -8,11 +8,10 @@ import { RoomType } from '@/types/Scopes';
 
 type Params = {
   filter: [string, string];
-  scope: SettingNamesType;
   setFilter: Dispatch<SetStateAction<[string, string]>>;
 };
 
-const FilterInput = ({ filter, scope, setFilter }: Params) => {
+const FilterInput = ({ filter, setFilter }: Params) => {
   const { t } = useTranslation();
   const [rooms, setRooms] = useState<Array<RoomType>>();
 
@@ -34,29 +33,29 @@ const FilterInput = ({ filter, scope, setFilter }: Params) => {
     setFilter([filter[0], event.target.value]);
   };
 
-  useEffect(() => {
-    if (scope === 'users') getRooms();
-  }, []);
-
   switch (filter[0]) {
     case 'room_id':
-      <TextField
-        select
-        label={t('texts.filter')}
-        value={filter[1]}
-        onChange={changeSearch}
-        variant="filled"
-        size="small"
-        sx={{ minWidth: 130 }}
-      >
-        <MenuItem value="">&nbsp;</MenuItem>
-        {rooms &&
-          rooms.map((room) => (
-            <MenuItem value={room.id} key={room.room_name}>
-              {room.room_name}
-            </MenuItem>
-          ))}
-      </TextField>;
+      if (!rooms) getRooms();
+      return (
+        <TextField
+          select
+          label={t('texts.filter')}
+          value={filter[1]}
+          onChange={changeSearch}
+          variant="filled"
+          size="small"
+          sx={{ minWidth: 282 }}
+          disabled={!rooms}
+        >
+          <MenuItem value="">&nbsp;</MenuItem>
+          {rooms &&
+            rooms.map((room) => (
+              <MenuItem value={room.id} key={room.room_name}>
+                {room.room_name}
+              </MenuItem>
+            ))}
+        </TextField>
+      );
     default:
       return (
         <FilledInput

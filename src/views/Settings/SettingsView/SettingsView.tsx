@@ -1,7 +1,7 @@
 import { AppIconButton } from '@/components';
 import { DeleteData, EditData } from '@/components/Data';
 import FilterBar from '@/components/FilterBar';
-import { StatusTypes } from '@/types/Generics';
+import { ObjectPropByName, StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
 import { databaseRequest } from '@/utils';
@@ -31,6 +31,7 @@ const SettingsView = () => {
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [status, setStatus] = useState<StatusTypes>(-1);
+  const [room, setRoom] = useState(0);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
@@ -38,21 +39,27 @@ const SettingsView = () => {
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const dataFetch = async () =>
+  const dataFetch = async () => {
+    const args = {
+      limit: limit,
+      offset: page * limit,
+      orderby: orderBy,
+      asc: orderAsc,
+      status: status,
+      extra_where: getFilter(),
+    } as ObjectPropByName;
+
+    const method = room > 0 ? 'getUsersByRoom' : DataConfig[setting_name].requests.fetch;
+    if (room > 0) args.room_id === filter[1];
+
     await databaseRequest({
       model: DataConfig[setting_name].requests.model,
-      method: DataConfig[setting_name].requests.fetch,
-      arguments: {
-        limit: limit,
-        offset: page * limit,
-        orderby: orderBy,
-        asc: orderAsc,
-        status: status,
-        extra_where: getFilter(),
-      },
+      method: method,
+      arguments: args,
     }).then((response) => {
       if (response.success) setItems(response);
     });
+  };
 
   const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
 
@@ -66,6 +73,7 @@ const SettingsView = () => {
       navigate('/error');
     } else {
       setPage(0);
+      setRoom(0);
       setSelected([]);
       setOrderAsc(true);
       setOrder(DataConfig[setting_name].columns[0].orderId);
@@ -81,7 +89,7 @@ const SettingsView = () => {
 
   useEffect(() => {
     dataFetch();
-  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status]);
+  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status, room]);
 
   useEffect(() => {
     resetTable();
@@ -100,8 +108,10 @@ const SettingsView = () => {
       <FilterBar
         scope={setting_name}
         filter={filter}
+        room={room}
         statusOptions={statusOptions}
         status={status}
+        setRoom={setRoom}
         setFilter={setFilter}
         setStatus={setStatus}
         isOpen={openFilter}
