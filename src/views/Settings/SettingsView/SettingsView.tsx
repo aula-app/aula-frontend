@@ -1,7 +1,7 @@
 import { AppIconButton } from '@/components';
 import { DeleteData, EditData } from '@/components/Data';
 import FilterBar from '@/components/FilterBar';
-import { StatusTypes } from '@/types/Generics';
+import { ObjectPropByName, StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
 import { databaseRequest, RequestObject } from '@/utils';
@@ -31,6 +31,7 @@ const SettingsView = () => {
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [status, setStatus] = useState<StatusTypes>(-1);
+  const [room, setRoom] = useState(0);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
@@ -71,6 +72,7 @@ const SettingsView = () => {
       navigate('/error');
     } else {
       setPage(0);
+      setRoom(0);
       setSelected([]);
       setOrderAsc(true);
       setOrder(DataConfig[setting_name].columns[0].orderId);
@@ -86,7 +88,7 @@ const SettingsView = () => {
 
   useEffect(() => {
     dataFetch();
-  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status]);
+  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status, room]);
 
   useEffect(() => {
     resetTable();
@@ -105,8 +107,10 @@ const SettingsView = () => {
       <FilterBar
         scope={setting_name}
         filter={filter}
+        room={room}
         statusOptions={statusOptions}
         status={status}
+        setRoom={setRoom}
         setFilter={setFilter}
         setStatus={setStatus}
         isOpen={openFilter}
