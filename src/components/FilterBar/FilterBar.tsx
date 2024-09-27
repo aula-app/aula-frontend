@@ -7,6 +7,7 @@ import { Collapse, FilledInput, MenuItem, Stack, TextField, Typography } from '@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import FilterSelect from './FilterSelect';
+import FilterStatus from './FilterStatus';
 
 type Params = {
   filter: [string, string];
@@ -20,15 +21,6 @@ type Params = {
 
 const FilterBar = ({ filter, status, statusOptions, scope, isOpen, setFilter, setStatus }: Params) => {
   const { t } = useTranslation();
-
-  const changeFilter = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setFilter([event.target.value, filter[1]]);
-  };
-
-  const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (!setStatus) return;
-    setStatus(Number(event.target.value) as StatusTypes);
-  };
 
   const changeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setFilter([filter[0], event.target.value]);
@@ -47,26 +39,7 @@ const FilterBar = ({ filter, status, statusOptions, scope, isOpen, setFilter, se
             endAdornment={<AppIconButton icon="close" onClick={() => setFilter(['', ''])} />}
           />
         </Stack>
-        {statusOptions && typeof status !== 'undefined' && (
-          <Stack direction="row" alignItems="center" p={2} pt={0} gap={2}>
-            <Typography>{t('texts.show')}</Typography>
-            <TextField
-              select
-              label={t('settings.status')}
-              value={status}
-              onChange={changeStatus}
-              variant="filled"
-              size="small"
-              sx={{ minWidth: 200 }}
-            >
-              {statusOptions.map((column) => (
-                <MenuItem value={column.value} key={column.label}>
-                  {t(column.label)}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Stack>
-        )}
+        {setStatus && typeof status !== 'undefined' && <FilterStatus setStatus={setStatus} />}
       </Stack>
     </Collapse>
   );
