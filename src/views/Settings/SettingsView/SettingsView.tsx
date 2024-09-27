@@ -1,11 +1,12 @@
 import { AppIconButton } from '@/components';
 import { DeleteData, EditData } from '@/components/Data';
+import FilterBar from '@/components/FilterBar';
 import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
 import { databaseRequest } from '@/utils';
+import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
-import { STATUS } from '@/utils/Data/formDefaults';
 import { Divider, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,9 +14,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import MoveSettings from '../MoveSettings';
 import DataTable from './DataTable';
 import EditBar from './EditBar';
-import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
-import { statusOptions } from '@/utils/commands';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
