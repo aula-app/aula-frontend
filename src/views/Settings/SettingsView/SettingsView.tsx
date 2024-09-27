@@ -1,5 +1,6 @@
 import { AppIconButton } from '@/components';
 import { DeleteData, EditData } from '@/components/Data';
+import FilterBar from '@/components/FilterBar';
 import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
@@ -13,7 +14,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import MoveSettings from '../MoveSettings';
 import DataTable from './DataTable';
 import EditBar from './EditBar';
-import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
 
 /** * Renders default "Settings" view

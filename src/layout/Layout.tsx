@@ -2,7 +2,7 @@ import { useIsAuthenticated, useIsOnline } from '@/hooks/auth';
 import { FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
 import PrivateLayout from './PrivateLayout';
 import PublicLayout from './PublicLayout';
-import PopupMessages from '@/dialogs/PopupMessages';
+import PopupMessages from '@/components/PopupMessages';
 import OfflineView from '@/views/OfflineView';
 import { useLocation } from 'react-router-dom';
 
