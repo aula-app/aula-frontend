@@ -5,6 +5,7 @@ import { Collapse, Stack } from '@mui/material';
 import { Dispatch, SetStateAction } from 'react';
 import FilterSelect from './FilterSelect';
 import FilterStatus from './FilterStatus';
+import FilterInput from './FilterInput';
 
 type Params = {
   filter: [string, string];
@@ -21,8 +22,9 @@ const FilterBar = ({ filter, status, statusOptions, scope, isOpen, setFilter, se
     <Stack direction="row" alignItems="center" flexWrap="wrap">
       <Stack direction="row" alignItems="center" p={2} pt={0} gap={1}>
         <FilterSelect scope={scope} filter={filter} setFilter={setFilter} />
+        <FilterInput scope={scope} filter={filter} setFilter={setFilter} />
       </Stack>
-      {setStatus && typeof status !== 'undefined' && <FilterStatus setStatus={setStatus} />}
+      {setStatus && typeof status !== 'undefined' && <FilterStatus status={status} setStatus={setStatus} />}
     </Stack>
   </Collapse>
 );
