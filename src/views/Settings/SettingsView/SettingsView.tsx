@@ -39,8 +39,8 @@ const SettingsView = () => {
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const dataFetch = async () =>
-    await databaseRequest({
+  const dataFetch = async () => {
+    let requestData = {
       model: DataConfig[setting_name].requests.model,
       method: DataConfig[setting_name].requests.fetch,
       arguments: {
@@ -49,11 +49,18 @@ const SettingsView = () => {
         orderby: orderBy,
         asc: orderAsc,
         status: status,
-        extra_where: getFilter(),
-      },
-    }).then((response) => {
+      }
+    };
+
+    if (!filter.includes('')) {
+      requestData['arguments']['search_field'] = filter[0];
+      requestData['arguments']['search_text'] = filter[1];
+    }
+
+    await databaseRequest(requestData).then((response) => {
       if (response.success) setItems(response);
     });
+  };
 
   const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
 
