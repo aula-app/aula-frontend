@@ -37,28 +37,6 @@ const Routes = () => {
   };
 
   useEffect(() => {
-    const jwt_token = localStorageGet('token');
-
-    const getConsent = async () => {
-      const data = await (
-        await fetch(api_url + '/api/controllers/user_consent.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + jwt_token,
-          },
-          body: JSON.stringify({ user_id: getCurrentUser() }),
-        })
-      ).json();
-
-      const result = data; // await api.auth.loginWithEmail(values);
-      if (result.data && result.data === 0) {
-        dispatch({ action: 'HAS_CONSENT', payload: false });
-      } else {
-        dispatch({ action: 'HAS_CONSENT', payload: true });
-      }
-    };
-
     getConsent();
   }, [isAuthenticated, location]);
 

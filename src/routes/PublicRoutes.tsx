@@ -4,7 +4,7 @@ import RecoveryRoutes from '@/views/Public/Recovery';
 import InstanceCodeView from '@/views/Public/InstanceCodeView';
 import SetPasswordView from '@/views/Public/SetPassword';
 import SignupRoutes from '@/views/Public/Signup';
-import { localStorageGet } from '@/utils';
+import { localStorageGet, localStorageSet } from '@/utils';
 
 import { useEffect } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
@@ -18,10 +18,14 @@ const PublicRoutes = () => {
 
   useEffect(() => {
     const instance_token = localStorageGet('code', false);
-    console.log('instance token', instance_token, location.pathname);
 
-    if (!instance_token && location.pathname != '/code')
-       navigate('/code')
+    if (import.meta.env.VITE_APP_MULTI != 'false') {
+      if (!instance_token && location.pathname != '/code')
+         navigate('/code')
+    } else {
+      localStorageSet('code', 'SINGLE');
+      localStorageSet('api_url', import.meta.env.VITE_APP_API_URL);
+    }
   })
 
   return (
