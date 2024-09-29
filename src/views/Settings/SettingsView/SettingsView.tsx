@@ -3,9 +3,9 @@ import { DeleteData, EditData } from '@/components/Data';
 import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, RequestObject } from '@/utils';
+import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
-import { STATUS } from '@/utils/Data/formDefaults';
 import { Divider, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,6 @@ import DataTable from './DataTable';
 import EditBar from './EditBar';
 import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
-import { statusOptions } from '@/utils/commands';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -40,7 +39,7 @@ const SettingsView = () => {
   const [openFilter, setOpenFilter] = useState(false);
 
   const dataFetch = async () => {
-    let requestData = {
+    const requestData = {
       model: DataConfig[setting_name].requests.model,
       method: DataConfig[setting_name].requests.fetch,
       arguments: {
@@ -49,8 +48,8 @@ const SettingsView = () => {
         orderby: orderBy,
         asc: orderAsc,
         status: status,
-      }
-    };
+      },
+    } as RequestObject;
 
     if (!filter.includes('')) {
       requestData['arguments']['search_field'] = filter[0];
@@ -61,8 +60,6 @@ const SettingsView = () => {
       if (response.success) setItems(response);
     });
   };
-
-  const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);

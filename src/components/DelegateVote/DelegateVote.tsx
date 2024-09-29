@@ -1,7 +1,7 @@
 import { AppIcon, AppIconButton } from '@/components';
 import { DelegationType } from '@/types/Delegation';
 import { UserType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, RequestObject } from '@/utils';
 import {
   Button,
   Dialog,
@@ -33,13 +33,13 @@ interface Props {
 const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
   const { t } = useTranslation();
   const params = useParams();
-  const [users, setUsers] = useState<UserType[]>();
+  const [users, setUsers] = useState<UserType[]>([]);
   const [selected, setSelected] = useState<UserType | null>();
   const [filter, setFilter] = useState('');
   const [confirm, setConfirm] = useState(delegate.length > 0);
 
   const usersFetch = async () => {
-    await databaseRequest({
+    const requestData = {
       model: 'User',
       method: 'getUsers',
       arguments: {
@@ -47,9 +47,14 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         limit: 0,
         orderby: 1,
         asc: 1,
-        extra_where: ` AND (realname LIKE '%${filter}%' OR displayname LIKE '%${filter}%')`,
       },
-    }).then((response) => {
+    } as RequestObject;
+
+    if (filter !== '') {
+      requestData['arguments']['both_names'] = filter;
+    }
+
+    await databaseRequest(requestData).then((response) => {
       if (response.success) setUsers(response.data);
     });
   };
@@ -128,7 +133,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
                 endAdornment={<AppIconButton icon="close" size="small" onClick={() => setFilter('')} />}
               />
               <Stack my={1} overflow="auto">
-                {users &&
+                {users.length > 0 &&
                   users.map((user) => (
                     <Stack
                       component={Button}
