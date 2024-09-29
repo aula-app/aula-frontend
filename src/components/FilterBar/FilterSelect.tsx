@@ -45,14 +45,16 @@ const FilterSelect = ({ filter, scope, setFilter }: Params) => {
       sx={{ minWidth: 130 }}
     >
       <MenuItem value="">&nbsp;</MenuItem>
-      {DataConfig[scope].columns.map((column) => {
-        if ((column.name in customFields && customFields[column.name]) || !(column.name in customFields))
-          return (
-            <MenuItem value={column.name} key={column.name}>
-              {customFields[column.name] || t(`settings.${column.name}`)}
-            </MenuItem>
-          );
-      })}
+      {DataConfig[scope].columns
+        .filter((column) => !['status', 'created', 'last_update'].includes(column.name))
+        .map((column) => {
+          if ((column.name in customFields && customFields[column.name]) || !(column.name in customFields))
+            return (
+              <MenuItem value={column.name} key={column.name}>
+                {customFields[column.name] || t(`settings.${column.name}`)}
+              </MenuItem>
+            );
+        })}
     </TextField>
   );
 };

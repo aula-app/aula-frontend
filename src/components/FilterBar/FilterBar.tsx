@@ -9,15 +9,15 @@ import FilterInput from './FilterInput';
 import FilterRoom from './FilterRoom';
 
 type Params = {
+  isOpen: boolean;
   filter: [string, string];
   statusOptions?: typeof STATUS;
   status?: StatusTypes;
-  isOpen: boolean;
   scope: SettingNamesType;
-  room: number;
+  room?: number;
   setFilter: Dispatch<SetStateAction<[string, string]>>;
   setStatus?: Dispatch<SetStateAction<StatusTypes>>;
-  setRoom: Dispatch<SetStateAction<number>>;
+  setRoom?: Dispatch<SetStateAction<number>>;
 };
 
 const FilterBar = ({ filter, status, statusOptions, scope, room, isOpen, setFilter, setStatus, setRoom }: Params) => (
@@ -26,7 +26,7 @@ const FilterBar = ({ filter, status, statusOptions, scope, room, isOpen, setFilt
       <Stack direction="row" alignItems="center" p={2} pt={0} gap={1}>
         <FilterSelect scope={scope} filter={filter} setFilter={setFilter} />
         <FilterInput filter={filter} setFilter={setFilter} />
-        {scope === 'users' && <FilterRoom room={room} setRoom={setRoom} />}
+        {scope === 'users' && room && setRoom && <FilterRoom room={room} setRoom={setRoom} />}
         {statusOptions && setStatus && typeof status !== 'undefined' && (
           <FilterStatus options={statusOptions} status={status} setStatus={setStatus} />
         )}

@@ -125,10 +125,10 @@ const MessagesView = () => {
             <AppIconButton icon="filter" onClick={() => setOpenMessagesFilter(!openMessagesFilter)} />
           </Stack>
           <FilterBar
-            scope="messages"
-            filter={messagesFilter}
-            setFilter={setMessagesFilter}
             isOpen={openMessagesFilter}
+            filter={messagesFilter}
+            scope="messages"
+            setFilter={setMessagesFilter}
           />
           {messages.map((message) => (
             <MessageCard
