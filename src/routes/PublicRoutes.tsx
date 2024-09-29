@@ -1,10 +1,12 @@
+import { localStorageGet, localStorageSet } from '@/utils';
 import { NotFoundView } from '@/views/Public';
-import ChangePasswordView from '@/views/UpdatePassword';
 import LoginRoutes from '@/views/Public/Login';
 import RecoveryRoutes from '@/views/Public/Recovery';
-import InstanceCodeView from '@/views/Public/InstanceCodeView';
 import SetPasswordView from '@/views/Public/SetPassword';
-import { Route, Routes } from 'react-router-dom';
+import ChangePasswordView from '@/views/UpdatePassword';
+
+import { useEffect } from 'react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 /**
  * List of routes available only for anonymous users
@@ -15,9 +17,13 @@ const PublicRoutes = () => {
 
   useEffect(() => {
     const instance_token = localStorageGet('code', false);
-    console.log('instance token', instance_token, location.pathname);
 
-    if (!instance_token && location.pathname != '/code') navigate('/code');
+    if (import.meta.env.VITE_APP_MULTI != 'false') {
+      if (!instance_token && location.pathname != '/code') navigate('/code');
+    } else {
+      localStorageSet('code', 'SINGLE');
+      localStorageSet('api_url', import.meta.env.VITE_APP_API_URL);
+    }
   });
 
   return (
