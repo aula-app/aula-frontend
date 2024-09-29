@@ -18,7 +18,7 @@ const Routes = () => {
 
   const getConsent = async () => {
     const data = await (
-      await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/user_consent.php', {
+      await fetch(api_url + '/api/controllers/user_consent.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

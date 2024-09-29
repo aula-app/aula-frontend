@@ -17,13 +17,14 @@ const ResetPassword = ({ email, order, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const jwt_token = localStorageGet('token');
+  const api_url = localStorageGet('api_url');
   const [openReset, setOpenReset] = useState(false);
 
   const requestPassword = async () => {
     if (!email) return;
     try {
       const response = await (
-        await fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/forgot_password.php?email=${email}`, {
+        await fetch(`${api_url}/api/controllers/forgot_password.php?email=${email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
