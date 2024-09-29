@@ -14,7 +14,6 @@ const columns = [
   { name: 'room_name', orderId: 5 },
   { name: 'description_public', orderId: 6 },
   // { name: 'description_internal', orderId: 7 },
-  { name: 'status', orderId: 2 },
   { name: 'created', orderId: 4 },
   { name: 'last_update', orderId: 0 },
 ] as Array<RoomColumns>;
