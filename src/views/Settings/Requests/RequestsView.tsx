@@ -37,6 +37,7 @@ const RequestsView = () => {
     await databaseRequest(requestData).then((response) => {
       if (response.success) setRequests(response.data);
     });
+  };
 
   useEffect(() => {
     requestFetch();
