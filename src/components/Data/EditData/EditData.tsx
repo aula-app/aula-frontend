@@ -148,7 +148,6 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     const requestId = ['updater_id'];
 
     if (['ideas', 'comments'].includes(scope) && !id) requestId.push('user_id');
-    if (scope === 'ideas' && !args.room_id) args.room_id = params.room_id;
     if (scope === 'messages' && !id) requestId.push('creator_id');
     if (metadata && args.body) args['body'] = JSON.stringify({ data: metadata, content: args['body'] });
 
