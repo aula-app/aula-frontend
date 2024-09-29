@@ -2,7 +2,7 @@ import { ObjectPropByName } from '@/types/Generics';
 import { parseJwt } from './jwt';
 import { localStorageGet } from './localStorage';
 
-interface RequestObject {
+export interface RequestObject {
   model: string;
   method: string;
   arguments: ObjectPropByName;
