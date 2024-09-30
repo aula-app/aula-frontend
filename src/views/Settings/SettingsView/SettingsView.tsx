@@ -138,7 +138,7 @@ const SettingsView = () => {
       {items && items.data && <PaginationBar pages={Math.ceil(Number(items.count) / limit)} setPage={setPage} />}
       <EditData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
       <DeleteData
-        key={`d_${setting_name}`}
+        key={`d${setting_name}`}
         isOpen={openDelete}
         id={selected}
         scope={setting_name}
@@ -147,7 +147,7 @@ const SettingsView = () => {
           setSelected([]);
         }}
       />
-      <MoveSettings key={`m_${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
+      <MoveSettings key={`m${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
     </Stack>
   );
 };
