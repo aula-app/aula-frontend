@@ -2,11 +2,12 @@ import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { STATUS } from '@/utils/Data/formDefaults';
 import { Collapse, Stack } from '@mui/material';
-import { Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import FilterSelect from './FilterSelect';
 import FilterStatus from './FilterStatus';
 import FilterInput from './FilterInput';
 import FilterRoom from './FilterRoom';
+import FilterGroup from './FilterGroup';
 
 type Params = {
   isOpen: boolean;
@@ -14,25 +15,43 @@ type Params = {
   statusOptions?: typeof STATUS;
   status?: StatusTypes;
   scope: SettingNamesType;
-  room?: number;
+  target?: number;
   setFilter: Dispatch<SetStateAction<[string, string]>>;
   setStatus?: Dispatch<SetStateAction<StatusTypes>>;
-  setRoom?: Dispatch<SetStateAction<number>>;
+  setTarget?: Dispatch<SetStateAction<number>>;
 };
 
-const FilterBar = ({ filter, status, statusOptions, scope, room, isOpen, setFilter, setStatus, setRoom }: Params) => (
-  <Collapse in={isOpen}>
-    <Stack direction="row" alignItems="center" flexWrap="wrap">
-      <Stack direction="row" alignItems="center" p={2} pt={0} gap={1}>
-        <FilterSelect scope={scope} filter={filter} setFilter={setFilter} />
-        <FilterInput filter={filter} setFilter={setFilter} />
-        {scope === 'users' && room && setRoom && <FilterRoom room={room} setRoom={setRoom} />}
-        {statusOptions && setStatus && typeof status !== 'undefined' && (
-          <FilterStatus options={statusOptions} status={status} setStatus={setStatus} />
-        )}
+const FilterBar = ({
+  filter,
+  status,
+  statusOptions,
+  scope,
+  target,
+  isOpen,
+  setFilter,
+  setStatus,
+  setTarget,
+}: Params) => {
+  const setRoom = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    if (setTarget) setTarget(Number(event.target.value));
+  };
+
+  return (
+    <Collapse in={isOpen}>
+      <Stack direction="row" alignItems="center" flexWrap="wrap">
+        <Stack direction="row" alignItems="center" p={2} pt={0} gap={1}>
+          <FilterSelect scope={scope} filter={filter} setFilter={setFilter} />
+          <FilterInput filter={filter} setFilter={setFilter} />
+          {scope === 'users' && typeof target === 'number' && setTarget && (
+            <FilterRoom room={target} setRoom={setRoom} />
+          )}
+          {statusOptions && setStatus && typeof status !== 'undefined' && (
+            <FilterStatus options={statusOptions} status={status} setStatus={setStatus} />
+          )}
+        </Stack>
       </Stack>
-    </Stack>
-  </Collapse>
-);
+    </Collapse>
+  );
+};
 
 export default FilterBar;

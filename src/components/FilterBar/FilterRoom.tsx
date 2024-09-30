@@ -1,12 +1,12 @@
 import { RoomType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { MenuItem, TextField } from '@mui/material';
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Params = {
   room: number;
-  setRoom: Dispatch<SetStateAction<number>>;
+  setRoom: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 };
 
 const FilterRoom = ({ room, setRoom }: Params) => {
@@ -28,7 +28,7 @@ const FilterRoom = ({ room, setRoom }: Params) => {
   };
 
   const changeRoom = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setRoom(Number(event.target.value));
+    setRoom(event);
   };
 
   useEffect(() => {

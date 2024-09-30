@@ -46,7 +46,12 @@ const FilterSelect = ({ filter, scope, setFilter }: Params) => {
     >
       <MenuItem value="">&nbsp;</MenuItem>
       {DataConfig[scope].columns
-        .filter((column) => !['status', 'created', 'last_update'].includes(column.name))
+        .filter(
+          (column) =>
+            !['status', 'created', 'last_update', 'userlevel', 'phase', 'approv', 'target_id'].some((element) =>
+              column.name.includes(element)
+            )
+        )
         .map((column) => {
           if ((column.name in customFields && customFields[column.name]) || !(column.name in customFields))
             return (

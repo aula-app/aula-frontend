@@ -1,10 +1,10 @@
 import { AppIconButton } from '@/components';
 import { DeleteData, EditData } from '@/components/Data';
 import FilterBar from '@/components/FilterBar';
-import { ObjectPropByName, StatusTypes } from '@/types/Generics';
+import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, RequestObject } from '@/utils';
 import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
 import { Divider, Stack, Typography } from '@mui/material';
@@ -31,7 +31,7 @@ const SettingsView = () => {
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [status, setStatus] = useState<StatusTypes>(-1);
-  const [room, setRoom] = useState(0);
+  const [target, setTarget] = useState(0);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
@@ -40,28 +40,32 @@ const SettingsView = () => {
   const [openFilter, setOpenFilter] = useState(false);
 
   const dataFetch = async () => {
-    const args = {
-      limit: limit,
-      offset: page * limit,
-      orderby: orderBy,
-      asc: orderAsc,
-      status: status,
-      extra_where: getFilter(),
-    } as ObjectPropByName;
-
-    const method = room > 0 ? 'getUsersByRoom' : DataConfig[setting_name].requests.fetch;
-    if (room > 0) args.room_id === filter[1];
-
-    await databaseRequest({
+    const requestData = {
       model: DataConfig[setting_name].requests.model,
-      method: method,
-      arguments: args,
-    }).then((response) => {
+      method: DataConfig[setting_name].requests.fetch,
+      arguments: {
+        limit: limit,
+        offset: page * limit,
+        orderby: orderBy,
+        asc: orderAsc,
+        status: status,
+      },
+    } as RequestObject;
+
+    if (target > 0) {
+      requestData.method = 'getUsersByRoom';
+      requestData.arguments.room_id = target;
+    }
+
+    if (!filter.includes('')) {
+      requestData['arguments']['search_field'] = filter[0];
+      requestData['arguments']['search_text'] = filter[1];
+    }
+
+    await databaseRequest(requestData).then((response) => {
       if (response.success) setItems(response);
     });
   };
-
-  const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
@@ -73,7 +77,7 @@ const SettingsView = () => {
       navigate('/error');
     } else {
       setPage(0);
-      setRoom(0);
+      setTarget(0);
       setSelected([]);
       setOrderAsc(true);
       setOrder(DataConfig[setting_name].columns[0].orderId);
@@ -89,7 +93,7 @@ const SettingsView = () => {
 
   useEffect(() => {
     dataFetch();
-  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status, room]);
+  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status, target]);
 
   useEffect(() => {
     resetTable();
@@ -108,10 +112,10 @@ const SettingsView = () => {
       <FilterBar
         scope={setting_name}
         filter={filter}
-        room={room}
+        target={target}
         statusOptions={statusOptions}
         status={status}
-        setRoom={setRoom}
+        setTarget={setTarget}
         setFilter={setFilter}
         setStatus={setStatus}
         isOpen={openFilter}
