@@ -1,7 +1,7 @@
 import { AppIcon, AppIconButton } from '@/components';
 import { DatabaseResponseData, DatabaseResponseType } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, RequestObject } from '@/utils';
 import DataConfig from '@/utils/Data';
 import {
   Button,
@@ -48,7 +48,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
     const moreArgs = params[DataConfig[scope].requests.move.targetId]
       ? { [DataConfig[scope].requests.move.targetId]: targetId }
       : {};
-    await databaseRequest({
+    const requestData = {
       model: DataConfig[DataConfig[scope].requests.move.target].requests.model,
       method: DataConfig[DataConfig[scope].requests.move.target].requests.fetch,
       arguments: {
@@ -56,10 +56,16 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
         limit: 0,
         orderby: DataConfig[DataConfig[scope].requests.move.target].columns[0].orderId,
         asc: 1,
-        extra_where: ` AND (${DataConfig[DataConfig[scope].requests.move.target].columns[0].name} LIKE '%${filter}%' OR ${DataConfig[DataConfig[scope].requests.move.target].columns[1].name} LIKE '%${filter}%')`,
         ...moreArgs,
       },
-    }).then((response: DatabaseResponseType) => {
+    } as RequestObject;
+
+    if (filter !== '') {
+      requestData['arguments']['search_field'] = DataConfig[DataConfig[scope].requests.move.target].columns[0].name;
+      requestData['arguments']['search_text'] = filter;
+    }
+
+    await databaseRequest(requestData).then((response) => {
       if (!response.success) return;
       response.data ? setAvailableItems(response.data) : setAvailableItems([]);
     });
@@ -71,12 +77,19 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
       return;
     }
 
-    await databaseRequest({
+    const requestData = {
       model: DataConfig[DataConfig[scope].requests.move.target].requests.model,
       method: DataConfig[scope].requests.move.get,
       arguments: { [DataConfig[scope].requests.id]: id },
-    }).then((response: DatabaseResponseType) => {
-      //if (!response.success) return;
+    } as RequestObject;
+
+    if (filter !== '') {
+      requestData['arguments']['search_field'] = DataConfig[DataConfig[scope].requests.move.target].columns[0].name;
+      requestData['arguments']['search_text'] = filter;
+    }
+
+    await databaseRequest(requestData).then((response: DatabaseResponseType) => {
+      if (!response.success) return;
       response.data ? setSelectedItems(response.data) : setSelectedItems([]);
       response.data ? setSelected(response.data.map((item) => item.id)) : setSelected([]);
     });
