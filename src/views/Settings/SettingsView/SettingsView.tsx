@@ -3,9 +3,9 @@ import { DeleteData, EditData } from '@/components/Data';
 import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, RequestObject } from '@/utils';
+import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
-import { STATUS } from '@/utils/Data/formDefaults';
 import { Divider, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,6 @@ import DataTable from './DataTable';
 import EditBar from './EditBar';
 import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
-import { statusOptions } from '@/utils/commands';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -39,8 +38,8 @@ const SettingsView = () => {
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const dataFetch = async () =>
-    await databaseRequest({
+  const dataFetch = async () => {
+    const requestData = {
       model: DataConfig[setting_name].requests.model,
       method: DataConfig[setting_name].requests.fetch,
       arguments: {
@@ -49,13 +48,18 @@ const SettingsView = () => {
         orderby: orderBy,
         asc: orderAsc,
         status: status,
-        extra_where: getFilter(),
       },
-    }).then((response) => {
+    } as RequestObject;
+
+    if (!filter.includes('')) {
+      requestData['arguments']['search_field'] = filter[0];
+      requestData['arguments']['search_text'] = filter[1];
+    }
+
+    await databaseRequest(requestData).then((response) => {
       if (response.success) setItems(response);
     });
-
-  const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
+  };
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
@@ -134,7 +138,7 @@ const SettingsView = () => {
       {items && items.data && <PaginationBar pages={Math.ceil(Number(items.count) / limit)} setPage={setPage} />}
       <EditData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
       <DeleteData
-        key={`d_${setting_name}`}
+        key={`d${setting_name}`}
         isOpen={openDelete}
         id={selected}
         scope={setting_name}
@@ -143,7 +147,7 @@ const SettingsView = () => {
           setSelected([]);
         }}
       />
-      <MoveSettings key={`m_${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
+      <MoveSettings key={`m${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
     </Stack>
   );
 };
