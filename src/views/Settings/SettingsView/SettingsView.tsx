@@ -4,7 +4,7 @@ import FilterBar from '@/components/FilterBar';
 import { ObjectPropByName, StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
-import { databaseRequest, RequestObject } from '@/utils';
+import { databaseRequest } from '@/utils';
 import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
 import { Divider, Stack, Typography } from '@mui/material';
@@ -40,27 +40,28 @@ const SettingsView = () => {
   const [openFilter, setOpenFilter] = useState(false);
 
   const dataFetch = async () => {
-    const requestData = {
+    const args = {
+      limit: limit,
+      offset: page * limit,
+      orderby: orderBy,
+      asc: orderAsc,
+      status: status,
+      extra_where: getFilter(),
+    } as ObjectPropByName;
+
+    const method = room > 0 ? 'getUsersByRoom' : DataConfig[setting_name].requests.fetch;
+    if (room > 0) args.room_id === filter[1];
+
+    await databaseRequest({
       model: DataConfig[setting_name].requests.model,
-      method: DataConfig[setting_name].requests.fetch,
-      arguments: {
-        limit: limit,
-        offset: page * limit,
-        orderby: orderBy,
-        asc: orderAsc,
-        status: status,
-      },
-    } as RequestObject;
-
-    if (!filter.includes('')) {
-      requestData['arguments']['search_field'] = filter[0];
-      requestData['arguments']['search_text'] = filter[1];
-    }
-
-    await databaseRequest(requestData).then((response) => {
+      method: method,
+      arguments: args,
+    }).then((response) => {
       if (response.success) setItems(response);
     });
   };
+
+  const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
