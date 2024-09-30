@@ -1,5 +1,6 @@
 import { AppIconButton } from '@/components';
 import { DeleteData, EditData } from '@/components/Data';
+import FilterBar from '@/components/FilterBar';
 import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
@@ -13,7 +14,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import MoveSettings from '../MoveSettings';
 import DataTable from './DataTable';
 import EditBar from './EditBar';
-import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
 
 /** * Renders default "Settings" view
@@ -31,6 +31,7 @@ const SettingsView = () => {
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [status, setStatus] = useState<StatusTypes>(-1);
+  const [target, setTarget] = useState(0);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
@@ -50,6 +51,11 @@ const SettingsView = () => {
         status: status,
       },
     } as RequestObject;
+
+    if (target > 0) {
+      requestData.method = 'getUsersByRoom';
+      requestData.arguments.room_id = target;
+    }
 
     if (!filter.includes('')) {
       requestData['arguments']['search_field'] = filter[0];
@@ -71,6 +77,7 @@ const SettingsView = () => {
       navigate('/error');
     } else {
       setPage(0);
+      setTarget(0);
       setSelected([]);
       setOrderAsc(true);
       setOrder(DataConfig[setting_name].columns[0].orderId);
@@ -86,7 +93,7 @@ const SettingsView = () => {
 
   useEffect(() => {
     dataFetch();
-  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status]);
+  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status, target]);
 
   useEffect(() => {
     resetTable();
@@ -105,8 +112,10 @@ const SettingsView = () => {
       <FilterBar
         scope={setting_name}
         filter={filter}
+        target={target}
         statusOptions={statusOptions}
         status={status}
+        setTarget={setTarget}
         setFilter={setFilter}
         setStatus={setStatus}
         isOpen={openFilter}

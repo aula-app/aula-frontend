@@ -1,11 +1,11 @@
 import { AppIcon, AppIconButton } from '@/components';
+import FilterBar from '@/components/FilterBar';
 import MessageCard from '@/components/MessageCard';
 import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest, messageConsentValues, RequestObject } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import FilterBar from '../Settings/SettingsView/FilterBar';
 
 /**
  * Renders "Messages" view
@@ -125,10 +125,10 @@ const MessagesView = () => {
             <AppIconButton icon="filter" onClick={() => setOpenMessagesFilter(!openMessagesFilter)} />
           </Stack>
           <FilterBar
-            scope="messages"
-            filter={messagesFilter}
-            setFilter={setMessagesFilter}
             isOpen={openMessagesFilter}
+            filter={messagesFilter}
+            scope="messages"
+            setFilter={setMessagesFilter}
           />
           {messages.map((message) => (
             <MessageCard

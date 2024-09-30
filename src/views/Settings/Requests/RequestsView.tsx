@@ -1,4 +1,5 @@
 import { AppIconButton } from '@/components';
+import FilterBar from '@/components/FilterBar';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType } from '@/types/Scopes';
 import { databaseRequest, RequestObject } from '@/utils';
@@ -6,7 +7,6 @@ import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import FilterBar from '../SettingsView/FilterBar';
 import RequestsManager from './RequestsManager';
 
 /** * Renders "requests" view
