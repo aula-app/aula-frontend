@@ -20,7 +20,7 @@ const IdeasBoxView = () => {
   const boxesFetch = async () =>
     await databaseRequest({
       model: 'Topic',
-      method: 'getTopicsByPhase',
+      method: 'getTopics',
       arguments: {
         offset: 0,
         limit: 0,

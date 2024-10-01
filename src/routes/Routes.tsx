@@ -23,7 +23,6 @@ const Routes = () => {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + jwt_token,
         },
-        body: JSON.stringify({ user_id: getCurrentUser() }),
       })
     ).json();
 
