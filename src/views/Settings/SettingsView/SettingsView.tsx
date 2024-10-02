@@ -12,9 +12,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import MoveSettings from '../MoveSettings';
-import DataTable from './DataTable';
-import EditBar from './EditBar';
-import PaginationBar from './PaginationBar';
+import EditBar from '@/components/Data/DataTable/EditBar';
+import DataTable from '@/components/Data/DataTable';
+import PaginationBar from '@/components/Data/DataTable/PaginationBar';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users

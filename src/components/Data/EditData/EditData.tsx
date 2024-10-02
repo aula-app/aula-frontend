@@ -9,10 +9,10 @@ import { FormContainer } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import FormField from '../FormField';
 import DataUpdates from './DataUpdates';
 import DataConfig from '@/utils/Data';
 import { InputSettings } from '@/utils/Data/formDefaults';
+import FormField from './FormField';
 
 interface Props {
   id?: number;

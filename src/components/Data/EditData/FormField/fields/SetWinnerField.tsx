@@ -1,8 +1,8 @@
 import { ObjectPropByName } from '@/types/Generics';
 import { FormControlLabel, Switch } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { updateType } from '../../EditData/EditData';
 import { useEffect, useState } from 'react';
+import { updateType } from '../../EditData';
 
 type Props = {
   id: number;
