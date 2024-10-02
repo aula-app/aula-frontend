@@ -1,10 +1,10 @@
 import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
 import { useParams } from 'react-router-dom';
-import CategoryField from '../../FormField/fields/CategoryField';
-import SetWinnerField from '../../FormField/fields/SetWinnerField';
 import MoveData from '../../MoveData';
 import { updateType } from '../EditData';
-import ResetPassword from '../../FormField/fields/ResetPassword';
+import CategoryField from '../FormField/fields/CategoryField';
+import SetWinnerField from '../FormField/fields/SetWinnerField';
+import ResetPassword from '../FormField/fields/ResetPassword';
 
 interface Props {
   id?: number;
