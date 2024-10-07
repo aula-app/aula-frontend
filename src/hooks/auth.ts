@@ -12,7 +12,7 @@ export function useIsAuthenticated() {
   let result = state.isAuthenticated;
 
   // TODO: AUTH: add access token verification or other authentication check here
-  result = Boolean(localStorageGet('token', ''));
+  result = Boolean(localStorageGet('token'));
 
   return result;
 }
