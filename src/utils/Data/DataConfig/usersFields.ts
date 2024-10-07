@@ -43,7 +43,7 @@ const fields = [
   {
     name: 'email',
     form: inputType.email,
-    required: true,
+    required: false,
     role: 20,
   },
   {
