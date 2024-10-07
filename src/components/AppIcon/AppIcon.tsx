@@ -264,6 +264,7 @@ export const ICONS = {
   search: HiOutlineMagnifyingGlass,
   settings: HiOutlineCog6Tooth,
   signup: HiOutlineUserPlus,
+  survey: HiOutlineQuestionMarkCircle,
   text: HiOutlineDocumentText,
   users: HiOutlineUserGroup,
   visibilityoff: HiOutlineEye,

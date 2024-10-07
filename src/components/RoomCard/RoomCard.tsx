@@ -26,7 +26,7 @@ const RoomCard = ({ room }: RoomCardProps) => {
           <Typography variant="h6" noWrap>
             {capitalize(room.room_name)}
           </Typography>
-          {room.description_internal.substring(0, 3) === 'DI:' ? (
+          {room.description_internal && room.description_internal.substring(0, 3) === 'DI:' ? (
             <DefaultImage
               image={Number(room.description_internal.split(':')[1])}
               shift={Number(room.description_internal.split(':')[2])}
