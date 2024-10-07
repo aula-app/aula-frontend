@@ -1,8 +1,11 @@
+import { AppIcon } from '@/components';
+import { useAppStore } from '@/store';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, messageConsentValues, phases } from '@/utils';
 import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
+import { Box, Chip } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,7 +16,9 @@ type Params = {
 
 const DataItem = ({ row, column }: Params) => {
   const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
   const [name, setName] = useState('');
+  const [hidden, setHidden] = useState(true);
 
   async function getNames(scope: SettingNamesType, id: number) {
     await databaseRequest({
@@ -53,6 +58,25 @@ const DataItem = ({ row, column }: Params) => {
     case 'target_id':
       getNames('users', Number(row[column]));
       return <>{name}</>;
+    case 'temp_pw':
+      return row[column] ? (
+        <Chip
+          label={<Box width={55}>{hidden ? '*********' : row[column]}</Box>}
+          onClick={(e) => {
+            e.stopPropagation();
+            navigator.clipboard
+              .writeText(row[column])
+              .then(() => dispatch({ type: 'ADD_POPUP', message: { message: t('texts.passCopy'), type: 'success' } }));
+          }}
+          onDelete={(e) => {
+            e.stopPropagation();
+            setHidden(!hidden);
+          }}
+          deleteIcon={<AppIcon icon={hidden ? 'visibilityon' : 'visibilityoff'} />}
+        />
+      ) : (
+        <></>
+      );
     case 'user_id':
       getNames('users', Number(row[column]));
       return <>{name}</>;
