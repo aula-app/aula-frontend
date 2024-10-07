@@ -4,7 +4,7 @@ import LocaleSwitch from '@/components/LocaleSwitch';
 import { useEventLogout } from '@/hooks';
 import { PassResponse } from '@/types/Generics';
 import { localStorageGet, localStorageSet } from '@/utils';
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -72,6 +72,9 @@ const ChangePasswordView = () => {
           justifyContent: 'center',
         }}
       >
+        <Typography variant="h5" sx={{ mb: 3 }}>
+          {t('login.setPass')}
+        </Typography>
         <ChangePassword onSubmit={changePass} ref={passFields} />
       </Stack>
     </Stack>
