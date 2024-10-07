@@ -64,10 +64,8 @@ const DataTable = ({
       arguments: {},
     }).then((response) => {
       if (!response.success) return;
-      if (typeof(response.data) == typeof({}))
-        setCustomFields(response.data);
-      else
-        setCustomFields({});
+      if (typeof response.data == typeof {}) setCustomFields(response.data);
+      else setCustomFields({});
     });
   };
 

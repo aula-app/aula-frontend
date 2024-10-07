@@ -140,6 +140,7 @@ export interface UserType {
   o1: string;
   o2: string;
   o3: string;
+  temp_pw: string;
   consents_given: number;
   consents_needed: number;
 }
