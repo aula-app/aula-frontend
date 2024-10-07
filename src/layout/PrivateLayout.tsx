@@ -1,8 +1,9 @@
 import { ErrorBoundary } from '@/components';
 import EditData from '@/components/Data/EditData';
 import { useOnMobile } from '@/hooks/layout';
-import { checkPermissions, getCurrentUser } from '@/utils';
+import { checkPermissions, getCurrentUser, localStorageGet, parseJwt } from '@/utils';
 import AskConsent from '@/views/AskConsent/AskConsentView';
+import UpdatePassword from '@/views/UpdatePassword';
 import { Stack } from '@mui/material';
 import { FunctionComponent, PropsWithChildren, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -20,13 +21,16 @@ const TITLE_PRIVATE = 'aula';
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const location = useLocation();
   const [scope, setScope] = useState<'bug' | 'report'>();
+  const jwt = parseJwt(localStorageGet('token'));
 
   const onMobile = useOnMobile();
 
   const title = TITLE_PRIVATE;
   document.title = title; // Also Update Tab Title
 
-  return (
+  return jwt.temp_pw ? (
+    <UpdatePassword />
+  ) : (
     <Stack
       sx={{
         height: '100vh',
