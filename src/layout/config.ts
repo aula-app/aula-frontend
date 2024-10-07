@@ -49,6 +49,12 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
     role: 30,
   },
   {
+    title: 'surveys',
+    path: '/settings/surveys',
+    icon: 'survey',
+    role: 50,
+  },
+  {
     title: 'messages',
     path: '/settings/messages',
     icon: 'message',
