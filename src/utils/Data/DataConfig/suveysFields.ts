@@ -24,22 +24,28 @@ const columns = [
 
 const fields = [
   {
-    name: 'title',
+    name: 'name',
     form: inputType.shortText,
     required: true,
     role: 20,
   },
   {
-    name: 'content',
+    name: 'description_public',
     form: inputType.longText,
     required: true,
     role: 20,
   },
   {
-    name: ['custom_field1', 'custom_field2'],
-    form: inputType.custom,
-    required: false,
-    role: 30,
+    name: 'idea_headline',
+    form: inputType.shortText,
+    required: true,
+    role: 20,
+  },
+  {
+    name: 'idea_content',
+    form: inputType.longText,
+    required: true,
+    role: 20,
   },
   {
     name: 'room_id',
@@ -51,38 +57,21 @@ const fields = [
     role: 50,
   },
   {
-    name: 'approval_comment',
-    form: inputType.longText,
-    required: false,
-    role: 50,
-    phase: 20,
-  },
-  {
-    name: 'approved',
+    name: 'phase_duration_3',
     form: {
-      ...inputType.select,
-      options: [
-        { label: '-', value: 0 },
-        { label: 'generics.no', value: -1 },
-        { label: 'generics.yes', value: 1 },
-      ],
+      ...inputType.duration,
+      type: 'singleDuration',
+      required: true,
+      options: 'rooms',
     },
-    required: false,
-    role: 50,
-    phase: 20,
-  },
-  {
-    name: 'status',
-    form: inputType.status,
-    required: true,
     role: 50,
   },
-] as Array<IdeaFields>;
+];
 
 const requests = {
-  name: 'ideas',
+  name: 'surveys',
   model: 'Idea',
-  item: 'Idea',
+  item: 'survey',
   items: 'Ideas',
   id: 'idea_id',
   fetch: 'getIdeas',
