@@ -10,6 +10,7 @@ import PhaseSelectField from './fields/PhaseSelectField';
 import SelectField from './fields/SelectField';
 import { InputSettings } from '@/utils/Data/formDefaults';
 import CustomField from './fields/CustomField';
+import SingleDurationField from './fields/SingleDurationField';
 
 type Props = {
   data: InputSettings;
@@ -54,6 +55,8 @@ const FormInput = ({
       return <ImageField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'select':
       return <SelectField data={data} control={control} disabled={disabled} {...restOfProps} />;
+    case 'singleDuration':
+      return <SingleDurationField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'phaseSelect':
       return <PhaseSelectField data={data} control={control} phase={phase} disabled={disabled} {...restOfProps} />;
     case 'target':
