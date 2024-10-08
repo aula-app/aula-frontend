@@ -11,6 +11,7 @@ type FormTypes =
   | 'password'
   | 'phaseSelect'
   | 'select'
+  | 'singleDuration'
   | 'target'
   | 'text';
 export type SelectOptionsType = { label: string; value: number };

@@ -13,6 +13,7 @@ export type SettingNamesType =
   | 'messages'
   | 'report'
   | 'rooms'
+  | 'surveys'
   | 'users'
   | 'categories';
 

@@ -8,6 +8,7 @@ import ideasFields from './DataConfig/ideasFields';
 import messagesFields from './DataConfig/messagesFields';
 import reportFields from './DataConfig/reportFields';
 import roomsFields from './DataConfig/roomsFields';
+import suveysFields from './DataConfig/suveysFields';
 import usersFields from './DataConfig/usersFields';
 
 const DataConfig = {
@@ -21,6 +22,7 @@ const DataConfig = {
   messages: messagesFields,
   report: reportFields,
   rooms: roomsFields,
+  surveys: suveysFields,
   users: usersFields,
 };
 
