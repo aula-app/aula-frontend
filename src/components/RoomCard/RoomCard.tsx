@@ -26,17 +26,17 @@ const RoomCard = ({ room }: RoomCardProps) => {
           <Typography variant="h6" noWrap>
             {capitalize(room.room_name)}
           </Typography>
-          {room.description_internal.substring(0, 3) === 'DI:' ? (
+          {room.description_internal && room.description_internal.substring(0, 3) === 'DI:' ? (
             <DefaultImage
-              image={Number(room.description_internal.split(':')[1])}
-              shift={Number(room.description_internal.split(':')[2])}
+              image={Number(room.description_internal.split(':')[1] || 0)}
+              shift={Number(room.description_internal.split(':')[2] || 0)}
             />
           ) : (
             <CardMedia
               component="img"
               image={room.description_internal}
               alt="bg image"
-              sx={{ borderRadius: '10px', objectFit: 'contain', flex: 1 }}
+              sx={{ borderRadius: '10px', objectFit: 'cover', flex: 1, aspectRatio: '16/9', width: '100%' }}
             />
           )}
         </Stack>

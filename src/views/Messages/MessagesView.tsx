@@ -1,11 +1,11 @@
 import { AppIcon, AppIconButton } from '@/components';
+import FilterBar from '@/components/FilterBar';
 import MessageCard from '@/components/MessageCard';
 import { AnnouncementType, MessageType } from '@/types/Scopes';
-import { checkPermissions, databaseRequest, messageConsentValues } from '@/utils';
+import { checkPermissions, databaseRequest, messageConsentValues, RequestObject } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import FilterBar from '../Settings/SettingsView/FilterBar';
 
 /**
  * Renders "Messages" view
@@ -27,66 +27,73 @@ const MessagesView = () => {
   const [reportsFilter, setReportsFilter] = useState<[string, string]>(['', '']);
   const [requestsFilter, setRequestsFilter] = useState<[string, string]>(['', '']);
 
-  const announcementsFetch = async () =>
-    await databaseRequest({
+  const announcementsFetch = async () => {
+    const requestData = {
       model: 'Text',
       method: 'getTexts',
-      arguments: {
-        extra_where: !announcementsFilter.includes('')
-          ? ` AND ${announcementsFilter[0]} LIKE '%${announcementsFilter[1]}%'`
-          : '',
-      },
-    }).then((response) => {
-      if (!response.success) return;
-      setAnnouncements(response.data);
-    });
+      arguments: {},
+    } as RequestObject;
 
-  const messagesFetch = async () =>
-    await databaseRequest(
-      {
-        model: 'Message',
-        method: 'getPersonalMessagesByUser',
-        arguments: {
-          extra_where: !messagesFilter.includes('') ? ` AND ${messagesFilter[0]} LIKE '%${messagesFilter[1]}%'` : '',
-        },
-      },
-      ['user_id']
-    ).then((response) => {
-      if (!response.success) return;
-      setMessages(response.data);
-    });
+    if (!announcementsFilter.includes('')) {
+      requestData['arguments']['search_field'] = announcementsFilter[0];
+      requestData['arguments']['search_text'] = announcementsFilter[1];
+    }
 
-  const reportsFetch = async () =>
-    await databaseRequest(
-      {
-        model: 'Message',
-        method: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
-        arguments: {
-          msg_type: 4,
-          extra_where: !reportsFilter.includes('') ? ` AND ${reportsFilter[0]} LIKE '%${reportsFilter[1]}%'` : '',
-        },
-      },
-      checkPermissions(40) ? [] : ['user_id']
-    ).then((response) => {
-      if (!response.success) return;
-      setReports(response.data);
+    await databaseRequest(requestData).then((response) => {
+      if (response.success) setAnnouncements(response.data);
     });
+  };
 
-  const requestsFetch = async () =>
-    await databaseRequest(
-      {
-        model: 'Message',
-        method: 'getMessages',
-        arguments: {
-          msg_type: 5,
-          extra_where: !requestsFilter.includes('') ? ` AND ${requestsFilter[0]} LIKE '%${requestsFilter[1]}%'` : '',
-        },
-      },
-      ['target_id']
-    ).then((response) => {
-      if (!response.success) return;
-      setRequests(response.data);
+  const messagesFetch = async () => {
+    const requestData = {
+      model: 'Message',
+      method: 'getPersonalMessagesByUser',
+      arguments: {},
+    } as RequestObject;
+
+    if (!announcementsFilter.includes('')) {
+      requestData['arguments']['search_field'] = announcementsFilter[0];
+      requestData['arguments']['search_text'] = announcementsFilter[1];
+    }
+
+    await databaseRequest(requestData).then((response) => {
+      if (response.success) setMessages(response.data);
     });
+  };
+
+  const reportsFetch = async () => {
+    const requestData = {
+      model: 'Message',
+      method: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
+      arguments: { msg_type: 4 },
+    } as RequestObject;
+
+    if (!announcementsFilter.includes('')) {
+      requestData['arguments']['search_field'] = announcementsFilter[0];
+      requestData['arguments']['search_text'] = announcementsFilter[1];
+    }
+
+    await databaseRequest(requestData).then((response) => {
+      if (response.success) setReports(response.data);
+    });
+  };
+
+  const requestsFetch = async () => {
+    const requestData = {
+      model: 'Message',
+      method: 'getMessages',
+      arguments: { msg_type: 5 },
+    } as RequestObject;
+
+    if (!announcementsFilter.includes('')) {
+      requestData['arguments']['search_field'] = announcementsFilter[0];
+      requestData['arguments']['search_text'] = announcementsFilter[1];
+    }
+
+    await databaseRequest(requestData).then((response) => {
+      if (response.success) setRequests(response.data);
+    });
+  };
 
   useEffect(() => {
     messagesFetch();
@@ -118,10 +125,10 @@ const MessagesView = () => {
             <AppIconButton icon="filter" onClick={() => setOpenMessagesFilter(!openMessagesFilter)} />
           </Stack>
           <FilterBar
-            scope="messages"
-            filter={messagesFilter}
-            setFilter={setMessagesFilter}
             isOpen={openMessagesFilter}
+            filter={messagesFilter}
+            scope="messages"
+            setFilter={setMessagesFilter}
           />
           {messages.map((message) => (
             <MessageCard

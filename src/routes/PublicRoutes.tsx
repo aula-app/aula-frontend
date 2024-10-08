@@ -1,9 +1,9 @@
 import { NotFoundView } from '@/views/Public';
+import ChangePasswordView from '@/views/UpdatePassword';
 import LoginRoutes from '@/views/Public/Login';
 import RecoveryRoutes from '@/views/Public/Recovery';
 import InstanceCodeView from '@/views/Public/InstanceCodeView';
 import SetPasswordView from '@/views/Public/SetPassword';
-import SignupRoutes from '@/views/Public/Signup';
 import { localStorageGet, localStorageSet } from '@/utils';
 
 import { useEffect } from 'react';
@@ -32,9 +32,9 @@ const PublicRoutes = () => {
     <Routes>
       <Route path="/" element={<LoginRoutes />} />
       <Route path="/code" element={<InstanceCodeView />} />
-      <Route path="signup/*" element={<SignupRoutes />} />
       <Route path="login/*" element={<LoginRoutes />} />
       <Route path="recovery/*" element={<RecoveryRoutes />} />
+      <Route path="password/" element={<ChangePasswordView />} />
       <Route path="password/:key" element={<SetPasswordView />} />
       <Route path="*" element={<NotFoundView />} />
     </Routes>

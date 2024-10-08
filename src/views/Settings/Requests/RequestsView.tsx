@@ -1,12 +1,12 @@
 import { AppIconButton } from '@/components';
+import FilterBar from '@/components/FilterBar';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, RequestObject } from '@/utils';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import FilterBar from '../SettingsView/FilterBar';
 import RequestsManager from './RequestsManager';
 
 /** * Renders "requests" view
@@ -19,19 +19,25 @@ const RequestsView = () => {
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const requestFetch = async () =>
-    await databaseRequest({
+  const requestFetch = async () => {
+    const requestData = {
       model: 'Message',
       method: 'getMessages',
       arguments: {
-        msg_type: 5,
+        msg_type: 4,
         status: status,
-        extra_where: getFilter(),
       },
-    }).then((response) => {
+    } as RequestObject;
+
+    if (!filter.includes('')) {
+      requestData['arguments']['search_field'] = filter[0];
+      requestData['arguments']['search_text'] = filter[1];
+    }
+
+    await databaseRequest(requestData).then((response) => {
       if (response.success) setRequests(response.data);
     });
-  const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
+  };
 
   useEffect(() => {
     requestFetch();

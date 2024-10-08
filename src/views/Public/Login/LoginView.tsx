@@ -25,6 +25,11 @@ import * as yup from "yup";
 const LoginView = () => {
   const { t } = useTranslation();
   const api_url = localStorageGet('api_url');
+  const navigate = useNavigate();
+  const [, dispatch] = useAppStore();
+  const jwt_token = localStorageGet("token");
+  const [loginError, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const schema = yup
     .object({
@@ -44,12 +49,6 @@ const LoginView = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
-  const jwt_token = localStorageGet("token");
-  const navigate = useNavigate();
-  const [, dispatch] = useAppStore();
-  const [loginError, setError] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleShowPasswordClick = useCallback(() => {
     setShowPassword((oldValue) => !oldValue);

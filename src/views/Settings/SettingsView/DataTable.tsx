@@ -64,7 +64,8 @@ const DataTable = ({
       arguments: {},
     }).then((response) => {
       if (!response.success) return;
-      setCustomFields(response.data);
+      if (typeof response.data == typeof {}) setCustomFields(response.data);
+      else setCustomFields({});
     });
   };
 
@@ -94,10 +95,10 @@ const DataTable = ({
                 color="secondary"
               />
             </TableCell>
-            {DataConfig[scope].columns.map((column) => (
-              <Fragment key={column.name}>
-                {((column.name in customFields && customFields[column.name]) || !(column.name in customFields)) && (
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+            {DataConfig[scope].columns.map((column) => {
+              if ((column.name in customFields && customFields[column.name]) || !(column.name in customFields))
+                return (
+                  <TableCell sx={{ whiteSpace: 'nowrap' }} key={column.name}>
                     <TableSortLabel
                       active={orderBy === column.orderId}
                       direction={orderAsc ? 'asc' : 'desc'}
@@ -106,9 +107,8 @@ const DataTable = ({
                       {customFields[column.name] || t(`settings.${column.name}`)}
                     </TableSortLabel>
                   </TableCell>
-                )}
-              </Fragment>
-            ))}
+                );
+            })}
           </TableRow>
         </TableHead>
         <TableBody>

@@ -1,11 +1,12 @@
 import { AppIconButton } from '@/components';
 import { DeleteData, EditData } from '@/components/Data';
+import FilterBar from '@/components/FilterBar';
 import { StatusTypes } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { TableResponseType } from '@/types/TableTypes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, RequestObject } from '@/utils';
+import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
-import { STATUS } from '@/utils/Data/formDefaults';
 import { Divider, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,9 +14,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import MoveSettings from '../MoveSettings';
 import DataTable from './DataTable';
 import EditBar from './EditBar';
-import FilterBar from './FilterBar';
 import PaginationBar from './PaginationBar';
-import { statusOptions } from '@/utils/commands';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -31,7 +30,8 @@ const SettingsView = () => {
   const [orderBy, setOrder] = useState(DataConfig[setting_name].columns[0].orderId);
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
-  const [status, setStatus] = useState<StatusTypes>(1);
+  const [status, setStatus] = useState<StatusTypes>(-1);
+  const [target, setTarget] = useState(0);
 
   const [selected, setSelected] = useState<number[]>([]);
   const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
@@ -39,8 +39,8 @@ const SettingsView = () => {
   const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const dataFetch = async () =>
-    await databaseRequest({
+  const dataFetch = async () => {
+    const requestData = {
       model: DataConfig[setting_name].requests.model,
       method: DataConfig[setting_name].requests.fetch,
       arguments: {
@@ -49,13 +49,23 @@ const SettingsView = () => {
         orderby: orderBy,
         asc: orderAsc,
         status: status,
-        extra_where: getFilter(),
       },
-    }).then((response) => {
+    } as RequestObject;
+
+    if (target > 0) {
+      requestData.method = 'getUsersByRoom';
+      requestData.arguments.room_id = target;
+    }
+
+    if (!filter.includes('')) {
+      requestData['arguments']['search_field'] = filter[0];
+      requestData['arguments']['search_text'] = filter[1];
+    }
+
+    await databaseRequest(requestData).then((response) => {
       if (response.success) setItems(response);
     });
-
-  const getFilter = () => (!filter.includes('') ? ` AND ${filter[0]} LIKE '%${filter[1]}%'` : '');
+  };
 
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
@@ -67,6 +77,7 @@ const SettingsView = () => {
       navigate('/error');
     } else {
       setPage(0);
+      setTarget(0);
       setSelected([]);
       setOrderAsc(true);
       setOrder(DataConfig[setting_name].columns[0].orderId);
@@ -82,7 +93,7 @@ const SettingsView = () => {
 
   useEffect(() => {
     dataFetch();
-  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status]);
+  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status, target]);
 
   useEffect(() => {
     resetTable();
@@ -101,8 +112,10 @@ const SettingsView = () => {
       <FilterBar
         scope={setting_name}
         filter={filter}
+        target={target}
         statusOptions={statusOptions}
         status={status}
+        setTarget={setTarget}
         setFilter={setFilter}
         setStatus={setStatus}
         isOpen={openFilter}
@@ -134,7 +147,7 @@ const SettingsView = () => {
       {items && items.data && <PaginationBar pages={Math.ceil(Number(items.count) / limit)} setPage={setPage} />}
       <EditData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
       <DeleteData
-        key={`d_${setting_name}`}
+        key={`d${setting_name}`}
         isOpen={openDelete}
         id={selected}
         scope={setting_name}
@@ -143,7 +156,7 @@ const SettingsView = () => {
           setSelected([]);
         }}
       />
-      <MoveSettings key={`m_${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
+      <MoveSettings key={`m${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
     </Stack>
   );
 };

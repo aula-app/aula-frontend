@@ -1,10 +1,9 @@
 import { useIsAuthenticated, useIsOnline } from '@/hooks/auth';
+import OfflineView from '@/views/OfflineView';
 import { FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import PrivateLayout from './PrivateLayout';
 import PublicLayout from './PublicLayout';
-import PopupMessages from '@/dialogs/PopupMessages';
-import OfflineView from '@/views/OfflineView';
-import { useLocation } from 'react-router-dom';
 
 /**
  * Returns the current Layout component depending on different circumstances.
@@ -21,12 +20,10 @@ const CurrentLayout: FunctionComponent<PropsWithChildren> = (props) => {
     checkOnlineStatus();
   }, [location]);
 
-  return (
-    <>
-      {useIsAuthenticated() ? online ? <PrivateLayout {...props} /> : <OfflineView /> : <PublicLayout {...props} />}
-      <PopupMessages />
-    </>
-  );
+  if (!useIsAuthenticated()) return <PublicLayout {...props} />;
+  if (!online) return <OfflineView />;
+
+  return <PrivateLayout {...props} />;
 };
 
 export default CurrentLayout;

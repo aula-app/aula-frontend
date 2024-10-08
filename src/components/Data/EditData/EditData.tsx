@@ -162,7 +162,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
       if (!response.success) return;
       updates.forEach((update) => {
         if (update.requestId) update.args[DataConfig[scope].requests.id] = response.data;
-        if (!(DataConfig[scope].requests.id in update.args)) update.args[DataConfig[scope].requests.id] = response.data;
+        if (!update.args[DataConfig[scope].requests.id]) update.args[DataConfig[scope].requests.id] = response.data;
         databaseRequest(
           {
             model: update.model,
