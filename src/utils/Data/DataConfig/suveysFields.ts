@@ -1,5 +1,5 @@
 import { IdeaType } from '@/types/Scopes';
-import { inputType } from '../formDefaults';
+import { InputSettings, inputType } from '../formDefaults';
 import { ColumnSettings, DataRequestsType, FieldType } from '@/types/SettingsTypes';
 
 interface IdeaFields extends FieldType {
@@ -66,7 +66,7 @@ const fields = [
     },
     role: 50,
   },
-];
+] as InputSettings[];
 
 const requests = {
   name: 'surveys',

@@ -67,14 +67,14 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   function getFields() {
     return DataConfig[scope].fields
       .filter((field) => checkPermissions(field.role))
-      .filter((field) => !field.phase || field.phase <= phase);
+      .filter((field) => !('phase' in field) || ('phase' in field && field.phase && field.phase <= phase));
   }
 
   function getSchema() {
     const newSchema = [] as InputSettings[];
     DataConfig[scope].fields
       .filter((field) => checkPermissions(field.role))
-      .filter((field) => !field.phase || field.phase <= phase)
+      .filter((field) => !('phase' in field) || ('phase' in field && field.phase && field.phase <= phase))
       .forEach((field) => {
         Array.isArray(field.name)
           ? field.name.forEach((name) =>
