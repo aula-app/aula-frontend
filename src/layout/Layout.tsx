@@ -9,6 +9,8 @@ import PublicLayout from './PublicLayout';
  * Returns the current Layout component depending on different circumstances.
  */
 const CurrentLayout: FunctionComponent<PropsWithChildren> = (props) => {
+  if (!useIsAuthenticated()) return <PublicLayout {...props} />;
+
   const [online, setOnline] = useState(true);
   const location = useLocation();
 
@@ -20,10 +22,7 @@ const CurrentLayout: FunctionComponent<PropsWithChildren> = (props) => {
     checkOnlineStatus();
   }, [location]);
 
-  if (!useIsAuthenticated()) return <PublicLayout {...props} />;
-  if (!online) return <OfflineView />;
-
-  return <PrivateLayout {...props} />;
+  return online ? <PrivateLayout {...props} /> : <OfflineView />;
 };
 
 export default CurrentLayout;

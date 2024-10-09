@@ -1,3 +1,4 @@
+import { useAppStore } from '@/store';
 import { checkPermissions, localStorageGet, parseJwt } from '@/utils';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
@@ -8,7 +9,6 @@ import ReportView from '@/views/Messages/Report';
 import RequestView from '@/views/Messages/Request';
 import OfflineView from '@/views/OfflineView';
 import PhasesView from '@/views/Phases';
-import ChangePasswordView from '@/views/UpdatePassword';
 import RoomView from '@/views/Room';
 import IdeaView from '@/views/Room/Idea';
 import IdeasBoxView from '@/views/Room/IdeasBox';
@@ -20,7 +20,8 @@ import RequestsView from '@/views/Settings/Requests';
 import UserView from '@/views/Settings/User';
 import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 /**
  * List of routes available only for authenticated users
@@ -28,7 +29,32 @@ import { Navigate, Route, Routes } from 'react-router-dom';
  */
 
 const PrivateRoutes = () => {
-  const jwt = parseJwt(localStorageGet('token'));
+  const [, dispatch] = useAppStore();
+  const location = useLocation();
+  const jwt_token = localStorageGet('token');
+
+  const getConsent = async () => {
+    const result = await (
+      await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/user_consent.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + jwt_token,
+        },
+      })
+    ).json();
+
+    if (result.data && result.data === 0) {
+      dispatch({ action: 'HAS_CONSENT', payload: false });
+    } else {
+      dispatch({ action: 'HAS_CONSENT', payload: true });
+    }
+  };
+
+  useEffect(() => {
+    getConsent();
+  }, [location]);
+
   return (
     <Routes>
       <Route path="/" element={checkPermissions(60) ? <ConfigView /> : <WelcomeView />} />
