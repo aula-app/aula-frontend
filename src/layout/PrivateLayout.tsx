@@ -2,7 +2,7 @@ import { ErrorBoundary } from '@/components';
 import EditData from '@/components/Data/EditData';
 import { useOnMobile } from '@/hooks/layout';
 import { checkPermissions, getCurrentUser, localStorageGet, parseJwt } from '@/utils';
-import AskConsent from '@/views/AskConsent/AskConsentView';
+import AskConsent from '@/views/AskConsent';
 import UpdatePassword from '@/views/UpdatePassword';
 import { Stack } from '@mui/material';
 import { FunctionComponent, PropsWithChildren, useState } from 'react';

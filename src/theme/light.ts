@@ -88,7 +88,7 @@ const OTHER_COLORS = {
 /**
  * MUI theme options for "Light Mode"
  */
-export const LIGHT_THEME: ThemeOptions = {
+const LIGHT_THEME: ThemeOptions = {
   palette: {
     mode: 'light',
     background: {

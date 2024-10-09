@@ -15,7 +15,7 @@ interface NewCommentProps {
   id: number;
 }
 
-export const ImageEditor = ({ closeMethod, isOpen, id }: NewCommentProps) => {
+const ImageEditor = ({ closeMethod, isOpen, id }: NewCommentProps) => {
   const { t } = useTranslation();
   const [image, setImage] = useState<string>();
   const [scale, setScale] = useState(1);

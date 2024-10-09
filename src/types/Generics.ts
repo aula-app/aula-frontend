@@ -21,13 +21,6 @@ export type ColorTypes = 'secondary' | 'warning' | 'error' | 'inherit' | 'primar
 export type AlterTypes = 'add' | 'edit' | 'delete' | 'report' | 'bug';
 export type StatusTypes = -1 | 0 | 1 | 2 | 3;
 
-export interface EditDataType {
-  type: AlterTypes;
-  element: SettingNamesType;
-  onClose: () => void;
-  id?: number;
-}
-
 export interface DefaultUpdate {
   id: number;
   idea_id: number;

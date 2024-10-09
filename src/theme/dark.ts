@@ -89,7 +89,7 @@ const OTHER_COLORS = {
 /**
  * MUI theme options for "Dark Mode"
  */
-export const DARK_THEME: ThemeOptions = {
+const DARK_THEME: ThemeOptions = {
   palette: {
     mode: 'dark',
     background: {

@@ -8,7 +8,7 @@ interface Props {
   idea: IdeaType;
 }
 
-export const IdeaContent = ({ idea }: Props) => {
+const IdeaContent = ({ idea }: Props) => {
   const [fields, setFields] = useState<CustomFieldsType>({
     custom_field1: null,
     custom_field2: null,

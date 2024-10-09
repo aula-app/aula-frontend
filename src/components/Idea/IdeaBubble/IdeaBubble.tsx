@@ -19,7 +19,7 @@ interface Props {
 
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
-export const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
+const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
   const [liked, setLiked] = useState(false);
   const [category, setCategory] = useState<CategoryType>();
   const [fields, setFields] = useState<CustomFieldsType>({

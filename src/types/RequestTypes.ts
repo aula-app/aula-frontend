@@ -1,12 +1,6 @@
 import { ObjectPropByName } from './Generics';
 import { AnnouncementType, BoxType, CommentType, IdeaType, MessageType, RoomType, UserType } from './Scopes';
 
-export interface ModelRequest {
-  model: string;
-  method: string;
-  arguments: ObjectPropByName;
-}
-
 interface BaseResponseType {
   success: boolean;
   count: number;

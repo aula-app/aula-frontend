@@ -7,7 +7,7 @@ import { AllIconsType } from '../AppIcon/AppIcon';
 
 const MUI_BUTTON_COLORS = ['inherit', 'primary', 'secondary', 'success', 'error', 'info', 'warning'];
 
-export interface AppButtonProps extends Omit<ButtonProps, 'color' | 'endIcon' | 'startIcon'> {
+interface AppButtonProps extends Omit<ButtonProps, 'color' | 'endIcon' | 'startIcon'> {
   color?: string; // Not only 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
   endIcon?: AllIconsType;
   label?: string; // Alternate to .text
@@ -50,7 +50,7 @@ const AppButton = ({
   const isMuiColor = useMemo(() => MUI_BUTTON_COLORS.includes(propColor), [propColor]);
 
   const componentToRender =
-    !propComponent && (restOfProps?.href || restOfProps?.to) ? AppLink : propComponent ?? Button;
+    !propComponent && (restOfProps?.href || restOfProps?.to) ? AppLink : (propComponent ?? Button);
 
   const colorToRender = isMuiColor ? (propColor as ButtonProps['color']) : 'inherit';
   const sxToRender = {
