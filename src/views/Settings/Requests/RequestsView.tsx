@@ -24,7 +24,7 @@ const RequestsView = () => {
       model: 'Message',
       method: 'getMessages',
       arguments: {
-        msg_type: 4,
+        msg_type: 5,
         status: status,
       },
     } as RequestObject;
