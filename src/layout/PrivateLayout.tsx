@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import SideBarFixed from './SideBar/SideBarFixed';
 import TopBar from './TopBar';
+import PopupMessages from '@/components/PopupMessages';
 
 const TITLE_PRIVATE = 'aula';
 
@@ -62,6 +63,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         onClose={() => setScope(undefined)}
       />
       <AskConsent />
+      <PopupMessages />
     </Stack>
   );
 };
