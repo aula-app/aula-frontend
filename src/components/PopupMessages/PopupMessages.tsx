@@ -49,6 +49,7 @@ const ErrorMessages = () => {
   return (
     <SnackbarProvider
       autoHideDuration={3000}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       Components={{
         error: AlertSnackbar,
       }}
