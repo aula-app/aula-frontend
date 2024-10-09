@@ -44,6 +44,8 @@ const ConfigView = () => {
       arguments: {},
     }).then((response) => {
       if (response.success) {
+        console.log(response);
+
         setSettings(response.data);
         setExpanded(null);
       }
@@ -68,7 +70,7 @@ const ConfigView = () => {
       <Typography variant="h4" pb={2}>
         {t('views.configuration')}
       </Typography>
-      {config && <SchoolInfo config={config} onReload={getConfig} />}
+      <SchoolInfo config={config} onReload={getConfig} />
       <Accordion expanded={expanded === 'panel0'} onChange={() => toggleExpanded('panel0')}>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
           <Typography variant="h5" py={1}>
@@ -93,7 +95,9 @@ const ConfigView = () => {
               {t(`settings.idea`)}
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>{config && <IdeaSettings onReload={getConfig} />}</AccordionDetails>
+          <AccordionDetails>
+            <IdeaSettings onReload={getConfig} />
+          </AccordionDetails>
         </Accordion>
       )}
       {checkPermissions(60) && (
@@ -113,7 +117,7 @@ const ConfigView = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              {config && settings && <LoginSettings config={config} settings={settings} onReload={loadData} />}
+              <LoginSettings config={config} settings={settings} onReload={loadData} />
             </AccordionDetails>
           </Accordion>
           <Accordion expanded={expanded === 'panel4'} onChange={() => toggleExpanded('panel4')}>
@@ -122,7 +126,9 @@ const ConfigView = () => {
                 {t(`settings.actions`)}
               </Typography>
             </AccordionSummary>
-            <AccordionDetails>{settings && <TimedCommands />}</AccordionDetails>
+            <AccordionDetails>
+              <TimedCommands />
+            </AccordionDetails>
           </Accordion>
           <Accordion expanded={expanded === 'panel5'} onChange={() => toggleExpanded('panel5')}>
             <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
@@ -131,7 +137,7 @@ const ConfigView = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              {settings && <SystemSettings settings={settings} onReload={getSettings} />}
+              <SystemSettings settings={settings} onReload={getSettings} />
             </AccordionDetails>
           </Accordion>
           <Accordion expanded={expanded === 'panel6'} onChange={() => toggleExpanded('panel6')}>

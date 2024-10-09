@@ -10,13 +10,13 @@ import { useTranslation } from 'react-i18next';
  */
 
 interface Props {
-  settings: InstanceResponse;
+  settings?: InstanceResponse;
   onReload: () => void;
 }
 
 const SystemSettings = ({ settings, onReload }: Props) => {
   const { t } = useTranslation();
-  const [status, setStatus] = useState<OnlineOptions>(settings.online_mode);
+  const [status, setStatus] = useState<OnlineOptions>(settings?.online_mode || 1);
 
   const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setStatus(Number(event.target.value) as OnlineOptions);
@@ -46,8 +46,8 @@ const SystemSettings = ({ settings, onReload }: Props) => {
   };
 
   useEffect(() => {
-    setStatus(settings.online_mode);
-  }, [settings.online_mode]);
+    setStatus(settings?.online_mode || 1);
+  }, [settings?.online_mode]);
 
   useEffect(() => {
     setConfig({ method: 'setInstanceOnlineMode', status: status, callback: onReload });

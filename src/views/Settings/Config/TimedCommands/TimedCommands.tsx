@@ -73,38 +73,41 @@ const TimedCommands = () => {
   return (
     <Stack gap={2}>
       <TimedCommandInput onReload={getCommands} />
-      <Typography variant="h6">{t('settings.actions')}</Typography>
-      <TableContainer>
-        <Table aria-label="simple table">
-          <TableBody>
-            {commands &&
-              commands.map((command, i) => {
-                const scope = command.cmd_id > 9 ? Math.floor(command.cmd_id / 10) : 0;
-                const action = Commands[scope].actions.find(
-                  (action) => action.value === Number(String(command.cmd_id).slice(-1))
-                );
-                const option = action?.options?.find((option) => option.value === command.parameters.value);
-                return (
-                  <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell>{t(Commands[scope].label)}</TableCell>
-                    <TableCell>{command.parameters.target || ''}</TableCell>
-                    <TableCell>{t(action?.label || '')}</TableCell>
-                    <TableCell>{t(option?.label || '')}</TableCell>
-                    <TableCell>{command.date_start}</TableCell>
-                    <TableCell align="right">
-                      <AppIconButton icon="delete" onClick={() => deleteCommand(command.id)} />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-        {count > 1 && (
-          <Stack direction="row" alignItems="center" justifyContent="center" width="100%">
-            <Pagination count={count} onChange={handleChangePage} sx={{ py: 1 }} />
-          </Stack>
-        )}
-      </TableContainer>
+      {commands && (
+        <Stack>
+          <Typography variant="h6">{t('settings.actions')}</Typography>
+          <TableContainer>
+            <Table aria-label="simple table">
+              <TableBody>
+                {commands.map((command, i) => {
+                  const scope = command.cmd_id > 9 ? Math.floor(command.cmd_id / 10) : 0;
+                  const action = Commands[scope].actions.find(
+                    (action) => action.value === Number(String(command.cmd_id).slice(-1))
+                  );
+                  const option = action?.options?.find((option) => option.value === command.parameters.value);
+                  return (
+                    <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell>{t(Commands[scope].label)}</TableCell>
+                      <TableCell>{command.parameters.target || ''}</TableCell>
+                      <TableCell>{t(action?.label || '')}</TableCell>
+                      <TableCell>{t(option?.label || '')}</TableCell>
+                      <TableCell>{command.date_start}</TableCell>
+                      <TableCell align="right">
+                        <AppIconButton icon="delete" onClick={() => deleteCommand(command.id)} />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+            {count > 1 && (
+              <Stack direction="row" alignItems="center" justifyContent="center" width="100%">
+                <Pagination count={count} onChange={handleChangePage} sx={{ py: 1 }} />
+              </Stack>
+            )}
+          </TableContainer>
+        </Stack>
+      )}
     </Stack>
   );
 };
