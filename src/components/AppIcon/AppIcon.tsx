@@ -50,6 +50,7 @@ import {
   HiOutlineChevronUp,
   HiOutlineClock,
   HiOutlineCog6Tooth,
+  HiOutlineDocumentDuplicate,
   HiOutlineDocumentText,
   HiOutlineEllipsisHorizontal,
   HiOutlineEnvelope,
@@ -231,6 +232,7 @@ export const ICONS = {
   close: HiOutlineXMark,
   clock: HiOutlineClock,
   comment: HiOutlineChatBubbleOvalLeft,
+  copy: HiOutlineDocumentDuplicate,
   day: HiOutlineSun,
   delete: HiOutlineTrash,
   delegate: HiOutlineUsers,
@@ -416,7 +418,7 @@ export type AllIconsType = keyof typeof ALL_ICONS;
 
 interface Props {
   icon: AllIconsType; // Icon's name alternate prop
-  size?: 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
+  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
   sx?: ObjectPropByName;
 }
 
@@ -427,7 +429,17 @@ interface Props {
 const AppIcon = ({ icon, size = 'medium', sx, ...restOfProps }: Props) => {
   const ComponentToRender = ALL_ICONS[icon] || ALL_ICONS['bug'];
   const currentSize =
-    size === 'small' ? '16px' : size === 'large' ? '32px' : size === 'xl' ? '40px' : size === 'xxl' ? '80px' : '24px'; // no size === md
+    size === 'xs'
+      ? '16px'
+      : size === 'small'
+        ? '18px'
+        : size === 'large'
+          ? '32px'
+          : size === 'xl'
+            ? '40px'
+            : size === 'xxl'
+              ? '80px'
+              : '24px'; // no size === md
   return (
     <Stack
       alignItems="center"
