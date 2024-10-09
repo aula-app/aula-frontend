@@ -56,7 +56,7 @@ const MessagesView = () => {
       requestData['arguments']['search_text'] = announcementsFilter[1];
     }
 
-    await databaseRequest(requestData).then((response) => {
+    await databaseRequest(requestData, ['user_id']).then((response) => {
       if (response.success) setMessages(response.data);
     });
   };
@@ -68,12 +68,14 @@ const MessagesView = () => {
       arguments: { msg_type: 4 },
     } as RequestObject;
 
+    const getId = checkPermissions(40) ? [] : ['user_id'];
+
     if (!announcementsFilter.includes('')) {
       requestData['arguments']['search_field'] = announcementsFilter[0];
       requestData['arguments']['search_text'] = announcementsFilter[1];
     }
 
-    await databaseRequest(requestData).then((response) => {
+    await databaseRequest(requestData, getId).then((response) => {
       if (response.success) setReports(response.data);
     });
   };
