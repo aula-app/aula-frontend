@@ -9,10 +9,10 @@ import PublicLayout from './PublicLayout';
  * Returns the current Layout component depending on different circumstances.
  */
 const CurrentLayout: FunctionComponent<PropsWithChildren> = (props) => {
-  if (!useIsAuthenticated()) return <PublicLayout {...props} />;
-
-  const [online, setOnline] = useState(true);
   const location = useLocation();
+  const [online, setOnline] = useState(true);
+
+  if (!useIsAuthenticated()) return <PublicLayout {...props} />;
 
   const checkOnlineStatus = async () => {
     setOnline(await useIsOnline());
