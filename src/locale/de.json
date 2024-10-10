@@ -175,6 +175,8 @@
     "archive": "archivieren",
     "boxCard": "Ideen-Box",
     "bug": "Bitte versuche, den Fehler kurz zu beschreiben",
+    "CSVempty": "Ihre Datei enthält keine Daten. Bitte stellen Sie eine gültige CSV-Datei bereit.",
+    "CSVinvalid": "Ihre Datei scheint nicht gültig zu sein. Bitte stellen Sie eine gültige CSV-Datei bereit.",
     "dataUpdate": "Daten aktualisieren",
     "dataUpdateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer {{var}} anfordern möchten? Diese Aktion muss von einem Admin bestätigt werden, damit sie durchgeführt werden kann.",
     "deactivate": "{{var}} deaktivieren",

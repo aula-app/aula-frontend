@@ -175,6 +175,8 @@
     "archive": "archive",
     "boxCard": "Ideas Box",
     "bug": "Please try to shortly describe the bug",
+    "CSVempty": "Your file doesn't contain any data. Please provide a valid CSV file.",
+    "CSVinvalid": "Your file doesn't seem to be valid. Please provide a valid CSV file.",
     "dataUpdate": "Update data",
     "dataUpdateText": "Are you sure you want to request the update of your {{var}}? This action should be validated by an Admin to take place.",
     "deactivate": "Deactivate {{var}}",
