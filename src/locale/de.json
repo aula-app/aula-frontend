@@ -113,6 +113,8 @@
     "groups": "Gruppen",
     "headline": "Titel",
     "idea": "Idee",
+    "idea_content": "Beschreibung der Frage",
+    "idea_headline": "Frage Titel",
     "is_winner": "Gewinner einstellen",
     "last_update": "Letzte Aktualisierung",
     "login": "Login",
