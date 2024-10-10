@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-  config: ConfigResponse;
+  config?: ConfigResponse;
   onReload: () => void;
 }
 
@@ -20,10 +20,10 @@ interface Props {
 const SystemSettings = ({ config, onReload }: Props) => {
   const { t } = useTranslation();
 
-  const [startDay, setStartDay] = useState<number>(config.first_workday_week);
-  const [endDay, setEndDay] = useState<number>(config.last_workday_week);
-  const [startTime, setStartTime] = useState<dayjs.ConfigType>(config.start_time);
-  const [endTime, setEndTime] = useState<dayjs.ConfigType>(config.daily_end_time);
+  const [startDay, setStartDay] = useState<number>(config?.first_workday_week || 1);
+  const [endDay, setEndDay] = useState<number>(config?.last_workday_week || 5);
+  const [startTime, setStartTime] = useState<dayjs.ConfigType>(config?.start_time);
+  const [endTime, setEndTime] = useState<dayjs.ConfigType>(config?.daily_end_time);
 
   var week = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
@@ -47,8 +47,8 @@ const SystemSettings = ({ config, onReload }: Props) => {
   };
 
   const onCancel = () => {
-    setStartTime(config.start_time);
-    setEndTime(config.daily_end_time);
+    setStartTime(config?.start_time);
+    setEndTime(config?.daily_end_time);
   };
 
   return (
