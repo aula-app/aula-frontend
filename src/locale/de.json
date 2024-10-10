@@ -187,6 +187,8 @@
     "error": "Etwas ist schief gelaufen.",
     "exportData": "Kontodaten exportieren",
     "exportRequest": "Datenexport angefordert",
+    "fileDownload": "Beispieldatei herunterladen",
+    "fileUpload": "Hochladen von Dateien",
     "filter": "Filter",
     "ideaBox": "{{var}} Ideen zur {{phase}}",
     "instance": "Status der Instanz",

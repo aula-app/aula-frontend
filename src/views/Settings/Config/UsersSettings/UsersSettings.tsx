@@ -44,16 +44,16 @@ const DataSettings = ({ onReload }: Props) => {
   return (
     <Stack>
       <Stack direction="row" alignItems="center" mb={2} gap={1}>
-        Download sample file:{' '}
+        {t('texts.fileDownload')}:{' '}
         <a href="/data/aula_users.csv" download target="_blank" rel="noreferrer">
           <Button color="secondary" variant="outlined">
             <AppIcon icon="download" size="small" sx={{ mr: 1, ml: -0.5 }} />
-            file
+            aula_users.csv
           </Button>
         </a>
       </Stack>
       <Button variant="contained" component="label">
-        Upload File
+        {t('texts.fileUpload')}
         <input type="file" name="my_files" multiple hidden onChange={handleFileChange} />
       </Button>
     </Stack>

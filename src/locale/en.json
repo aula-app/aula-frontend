@@ -189,6 +189,8 @@
     "error": "Something went wrong.",
     "exportData": "Export account data",
     "exportRequest": "Data export requested",
+    "fileDownload": "Download sample file",
+    "fileUpload": "File Upload",
     "filter": "Filter",
     "ideaBox": "{{var}} ideas to {{phase}}",
     "instance": "Instance status",
