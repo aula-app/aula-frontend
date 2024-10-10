@@ -53,6 +53,7 @@
     "dayjs": "^1.11.13",
     "i18next": "^23.11.5",
     "notistack": "^3.0.1",
+    "papaparse": "^5.4.1",
     "react": "latest",
     "react-avatar-editor": "^13.0.2",
     "react-dom": "latest",

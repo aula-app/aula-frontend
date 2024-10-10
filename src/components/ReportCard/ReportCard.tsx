@@ -31,6 +31,12 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
       ['updater_id']
     ).then(() => onReload());
 
+  const confirmRequest = () => {
+    if (!onConfirm) return;
+    onConfirm();
+    onReload();
+  };
+
   const bodyData: ReportBodyType | null = JSON.parse(report.body);
 
   return bodyData ? (
@@ -76,7 +82,7 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
             <Button onClick={() => onArchive(false)}>{t(`texts.unarchive`)}</Button>
           )}
           {!!onConfirm && (
-            <Button variant="contained" onClick={onConfirm}>
+            <Button variant="contained" onClick={confirmRequest}>
               {t('generics.confirm')}
             </Button>
           )}

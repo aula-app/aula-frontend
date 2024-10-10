@@ -46,7 +46,7 @@ const CatView = () => {
   }, []);
 
   return (
-    <Stack pt={2} pb={3}>
+    <Stack pb={3}>
       <Stack direction="row" flexWrap="wrap" gap={1}>
         <Chip
           label={t('generics.add', { var: t('views.category') })}
