@@ -24,7 +24,7 @@ const TITLE_PRIVATE = 'aula';
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const location = useLocation();
   const [scope, setScope] = useState<'bug' | 'report'>();
-  const [online, setOnline] = useState(false);
+  const [online, setOnline] = useState(true);
   const jwt = parseJwt(localStorageGet('token'));
 
   const onMobile = useOnMobile();
