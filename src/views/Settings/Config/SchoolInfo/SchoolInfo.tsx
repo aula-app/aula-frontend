@@ -38,8 +38,8 @@ const SchoolInfo = ({ config, onReload }: Props) => {
   };
 
   const onCancel = () => {
-    setName(config.name);
-    setDescription(config.description_public);
+    setName(config?.name || '');
+    setDescription(config?.description_public || '');
   };
 
   return (

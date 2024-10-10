@@ -29,7 +29,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const title = TITLE_PRIVATE;
   document.title = title; // Also Update Tab Title
 
-  return jwt.temp_pw ? (
+  return jwt?.temp_pw ? (
     <UpdatePassword />
   ) : (
     <Stack
