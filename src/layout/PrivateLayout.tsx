@@ -5,12 +5,14 @@ import { checkPermissions, getCurrentUser, localStorageGet, parseJwt } from '@/u
 import AskConsent from '@/views/AskConsent';
 import UpdatePassword from '@/views/UpdatePassword';
 import { Stack } from '@mui/material';
-import { FunctionComponent, PropsWithChildren, useState } from 'react';
+import { FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import SideBarFixed from './SideBar/SideBarFixed';
 import TopBar from './TopBar';
 import PopupMessages from '@/components/PopupMessages';
+import { useIsOnline } from '@/hooks';
+import OfflineView from '@/views/OfflineView';
 
 const TITLE_PRIVATE = 'aula';
 
@@ -22,6 +24,7 @@ const TITLE_PRIVATE = 'aula';
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const location = useLocation();
   const [scope, setScope] = useState<'bug' | 'report'>();
+  const [online, setOnline] = useState(false);
   const jwt = parseJwt(localStorageGet('token'));
 
   const onMobile = useOnMobile();
@@ -29,7 +32,17 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const title = TITLE_PRIVATE;
   document.title = title; // Also Update Tab Title
 
-  return jwt?.temp_pw ? (
+  const checkOnlineStatus = async () => {
+    setOnline(await useIsOnline());
+  };
+
+  useEffect(() => {
+    checkOnlineStatus();
+  }, [location]);
+
+  return !online ? (
+    <OfflineView />
+  ) : jwt?.temp_pw ? (
     <UpdatePassword />
   ) : (
     <Stack
