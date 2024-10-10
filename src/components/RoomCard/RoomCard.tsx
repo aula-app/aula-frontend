@@ -36,7 +36,7 @@ const RoomCard = ({ room }: RoomCardProps) => {
               component="img"
               image={room.description_internal}
               alt="bg image"
-              sx={{ borderRadius: '10px', objectFit: 'cover', flex: 1, aspectRatio: '16/9', width: '100%' }}
+              sx={{ borderRadius: '10px', objectFit: 'cover', flex: 1, aspectRatio: '1.33', width: '100%' }}
             />
           )}
         </Stack>
