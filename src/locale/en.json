@@ -178,7 +178,7 @@
     "CSVempty": "Your file doesn't contain any data. Please provide a valid CSV file.",
     "CSVinvalid": "Your file doesn't seem to be valid. Please provide a valid CSV file.",
     "dataUpdate": "Update data",
-    "dataUpdateText": "Are you sure you want to request the update of your {{var}}? This action should be validated by an Admin to take place.",
+    "dataUpdateText": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place.",
     "deactivate": "Deactivate {{var}}",
     "delegated": "{{var}} delegated ideas",
     "delegation": "Vote delegation",
@@ -215,7 +215,7 @@
     "unaltenticated": "The page you are trying to access requires authentication",
     "unarchive": "unarchive",
     "update": "New {{var}} for ",
-    "updateRequest": "Data update requested",
+    "updateRequest": "Data update requested for {{var}}",
     "updated": "{{var}} updated",
     "yourVote": "How you voted: {{var}}"
   },
