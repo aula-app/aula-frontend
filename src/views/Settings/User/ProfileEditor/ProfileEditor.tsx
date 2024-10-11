@@ -60,12 +60,13 @@ const SystemSettings = ({ user, onReload }: Props) => {
     });
   };
 
-  const updateUserInfo = (formData: Record<string, string>) => {
+  const updateUserInfo = (formData: Record<'about_me' | 'displayname', string>) => {
     const methods = {
       about_me: 'setUserAbout',
       displayname: 'setUserDisplayname',
-    } as Record<string, string>;
-    Object.keys(formData).map((form) => {
+    } as Record<'about_me' | 'displayname', string>;
+    (Object.keys(formData) as Array<'about_me' | 'displayname'>).map((form) => {
+      if (formData[form] === user[form]) return;
       setUserInfo(methods[form], { [form]: formData[form] });
     });
   };
