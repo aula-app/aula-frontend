@@ -214,7 +214,6 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
                     control={control}
                     getValues={getValues}
                     setValue={setValue}
-                    errors={errors}
                     phase={phase}
                   />
                 </Box>

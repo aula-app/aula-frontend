@@ -1,15 +1,15 @@
 import { RoomPhases } from '@/types/SettingsTypes';
+import { InputSettings } from '@/utils/Data/formDefaults';
 import { TextField } from '@mui/material';
-import { Control, Controller, FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form-mui';
+import { Control, Controller, UseFormRegister, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
+import CustomField from './fields/CustomField';
 import DurationField from './fields/DurationField';
 import IconField from './fields/IconField';
 import ImageField from './fields/ImageField';
 import MessageTarget from './fields/MessageTarget';
 import PhaseSelectField from './fields/PhaseSelectField';
 import SelectField from './fields/SelectField';
-import { InputSettings } from '@/utils/Data/formDefaults';
-import CustomField from './fields/CustomField';
 import SingleDurationField from './fields/SingleDurationField';
 
 type Props = {
@@ -20,22 +20,20 @@ type Props = {
   register: UseFormRegister<{}>;
   getValues: () => void;
   setValue: UseFormSetValue<{}>;
-  errors: FieldErrors<{}>;
   phase?: RoomPhases;
   isNew: boolean;
 };
 
 /**
- * Renders "FormInput" component
+ * Renders "FormField" component
  */
 
-const FormInput = ({
+const FormField = ({
   data,
   register,
   getValues,
   setValue,
   control,
-  errors,
   disabled = false,
   hidden = false,
   phase = 0,
@@ -100,4 +98,4 @@ const FormInput = ({
   }
 };
 
-export default FormInput;
+export default FormField;
