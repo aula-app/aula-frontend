@@ -13,35 +13,9 @@ export type SettingNamesType =
   | 'messages'
   | 'report'
   | 'rooms'
+  | 'surveys'
   | 'users'
   | 'categories';
-
-export interface SettingsRows {
-  id: number;
-  name: string;
-}
-
-export interface SettingForm {
-  type: 'input' | 'text' | 'select' | 'multiple';
-  name: string;
-  value?: string;
-  fetchOptions?: SettingNamesType;
-  options?: { label: string; value: number }[];
-  required: boolean;
-  hidden: boolean;
-  phase?: number;
-  schema: any;
-}
-
-export interface SettingRequests {
-  id: string;
-  fetch: string;
-  get: string;
-  add: string;
-  edit: string;
-  delete: string;
-  move?: string;
-}
 
 export type ColumnSettings = {
   name: keyof PossibleFields;

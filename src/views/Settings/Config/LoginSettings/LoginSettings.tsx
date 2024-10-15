@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-  config: ConfigResponse;
-  settings: InstanceResponse;
+  config?: ConfigResponse;
+  settings?: InstanceResponse;
   onReload: () => void | Promise<void>;
 }
 
@@ -18,9 +18,9 @@ interface Props {
 const SystemSettings = ({ config, settings, onReload }: Props) => {
   const { t } = useTranslation();
 
-  const [online, setOnline] = useState<boolean>(settings.online_mode === 1);
-  const [oAuth, setOAuth] = useState<0 | 1>(config.enable_oauth);
-  const [registration, setRegistration] = useState<0 | 1>(config.allow_registration);
+  const [online, setOnline] = useState<boolean>(Boolean(settings?.online_mode) || true);
+  const [oAuth, setOAuth] = useState<0 | 1>(config?.enable_oauth || 0);
+  const [registration, setRegistration] = useState<0 | 1>(config?.allow_registration || 1);
 
   const getOnlineStatus = async () => {
     await databaseRequest({
@@ -62,8 +62,8 @@ const SystemSettings = ({ config, settings, onReload }: Props) => {
   }, [online]);
 
   useEffect(() => {
-    setOnline(settings.online_mode === 1);
-  }, [settings.online_mode]);
+    setOnline(Boolean(settings?.online_mode) || true);
+  }, [settings?.online_mode]);
 
   useEffect(() => {
     setConfig({ method: 'setOauthStatus', args: { status: oAuth } });

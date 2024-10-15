@@ -6,15 +6,15 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-  config: ConfigResponse;
+  config?: ConfigResponse;
   onReload: () => void;
 }
 
 const SchoolInfo = ({ config, onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
-  const [name, setName] = useState<String>(config.name);
-  const [description, setDescription] = useState<String>(config.description_public);
+  const [name, setName] = useState<String>(config?.name || '');
+  const [description, setDescription] = useState<String>(config?.description_public || '');
 
   const onSubmit = async () => {
     await databaseRequest(
@@ -38,8 +38,8 @@ const SchoolInfo = ({ config, onReload }: Props) => {
   };
 
   const onCancel = () => {
-    setName(config.name);
-    setDescription(config.description_public);
+    setName(config?.name || '');
+    setDescription(config?.description_public || '');
   };
 
   return (

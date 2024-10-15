@@ -14,7 +14,7 @@ interface Props {
 
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
-export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
+const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
   const [liked, setLiked] = useState(false);
   const [category, setCategory] = useState<CategoryType>();
   const displayDate = new Date(idea.created);

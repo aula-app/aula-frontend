@@ -9,10 +9,10 @@ import { FormContainer } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import FormField from '../FormField';
 import DataUpdates from './DataUpdates';
 import DataConfig from '@/utils/Data';
 import { InputSettings } from '@/utils/Data/formDefaults';
+import FormField from './FormField';
 
 interface Props {
   id?: number;
@@ -67,14 +67,14 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   function getFields() {
     return DataConfig[scope].fields
       .filter((field) => checkPermissions(field.role))
-      .filter((field) => !field.phase || field.phase <= phase);
+      .filter((field) => !('phase' in field) || ('phase' in field && field.phase && field.phase <= phase));
   }
 
   function getSchema() {
     const newSchema = [] as InputSettings[];
     DataConfig[scope].fields
       .filter((field) => checkPermissions(field.role))
-      .filter((field) => !field.phase || field.phase <= phase)
+      .filter((field) => !('phase' in field) || ('phase' in field && field.phase && field.phase <= phase))
       .forEach((field) => {
         Array.isArray(field.name)
           ? field.name.forEach((name) =>
@@ -200,7 +200,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} key={scope}>
       <Stack p={2} overflow="auto">
         <Typography variant="h4" pb={2}>
-          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${DataConfig[scope].requests.name.toLowerCase()}`) })}
+          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${DataConfig[scope].requests.item.toLowerCase()}`) })}
         </Typography>
         <FormContainer>
           <Stack>

@@ -15,7 +15,7 @@ interface Props {
 
 type likeMethodType = 'getLikeStatus' | 'CommentAddLike' | 'CommentRemoveLike';
 
-export const Comment = ({ comment, disabled = false, onReload }: Props) => {
+const Comment = ({ comment, disabled = false, onReload }: Props) => {
   const [liked, setLiked] = useState(false);
   const displayDate = new Date(comment.created);
 

@@ -28,7 +28,7 @@ export function useOnMobileByTrackingWindowsResize() {
  * Hook to detect onMobile vs. onDesktop using Media Query
  * @returns {boolean} true when on onMobile, false when on onDesktop
  */
-export function useOnMobileByMediaQuery() {
+function useOnMobileByMediaQuery() {
   const theme = useTheme();
   return useMediaQuery(theme.breakpoints.down('sm'));
 }

@@ -30,7 +30,8 @@
     "format:all": "prettier . --write",
     "lint": "eslint ./src --ext .js,.ts,.tsx",
     "check": "tsc",
-    "type": "tsc"
+    "type": "tsc",
+    "knip": "knip"
   },
   "dependencies": {
     "@capacitor/android": "^5.1.1",
@@ -53,6 +54,7 @@
     "dayjs": "^1.11.13",
     "i18next": "^23.11.5",
     "notistack": "^3.0.1",
+    "papaparse": "^5.4.1",
     "react": "latest",
     "react-avatar-editor": "^13.0.2",
     "react-dom": "latest",
@@ -75,13 +77,14 @@
     "@testing-library/user-event": "latest",
     "@tsconfig/create-react-app": "^2.0.1",
     "@types/jest": "^29.5.3",
-    "@types/node": "^20.4.5",
+    "@types/node": "^22.7.5",
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "latest",
     "@vitejs/plugin-react": "^4.2.1",
+    "knip": "^5.33.2",
     "prettier": "^3.0.0",
-    "typescript": "^5.5.2",
+    "typescript": "^5.6.3",
     "vite": "^5.0.12",
     "vite-plugin-svgr": "^4.2.0"
   },

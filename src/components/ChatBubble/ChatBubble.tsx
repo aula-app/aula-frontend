@@ -1,5 +1,4 @@
 import { Box, Stack } from '@mui/material';
-import { grey } from '@mui/material/colors';
 
 interface ChatBubbleProps {
   color: string;
@@ -7,7 +6,7 @@ interface ChatBubbleProps {
   disabled?: boolean;
 }
 
-export const ChatBubble = ({ color, children, disabled = false }: ChatBubbleProps) => (
+const ChatBubble = ({ color, children, disabled = false }: ChatBubbleProps) => (
   <Stack
     sx={{
       color: disabled ? 'secondary' : 'inherit',

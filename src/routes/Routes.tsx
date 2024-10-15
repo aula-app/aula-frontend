@@ -39,6 +39,7 @@ const Routes = () => {
     getConsent();
   }, [isAuthenticated, location]);
 
+  const isAuthenticated = useIsAuthenticated();
   return isAuthenticated ? <PrivateRoutes /> : <PublicRoutes />;
 };
 export default Routes;

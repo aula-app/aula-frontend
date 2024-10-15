@@ -14,7 +14,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 const IdeasBoxView = () => {
   const goto = useNavigate();
   const params = useParams();
-  const [add, setAdd] = useState(false);
+  const [addBox, setAddBox] = useState(false);
+  const [addSurvey, setAddSurvey] = useState(false);
   const [boxes, setBoxes] = useState<BoxesResponseType>();
 
   const boxesFetch = async () =>
@@ -33,7 +34,8 @@ const IdeasBoxView = () => {
 
   const closeAdd = () => {
     boxesFetch();
-    setAdd(false);
+    setAddBox(false);
+    setAddSurvey(false);
   };
 
   useEffect(() => {
@@ -54,20 +56,18 @@ const IdeasBoxView = () => {
           ))}
       </Grid>
       {checkPermissions(30) && (
-        <>
-          <Fab
-            aria-label="add"
-            color="primary"
-            sx={{
-              position: 'fixed',
-              bottom: 40,
-            }}
-            onClick={() => setAdd(true)}
-          >
+        <Stack direction="row" sx={{ position: 'fixed', bottom: 40 }} gap={5}>
+          <Fab aria-label="add" color="primary" onClick={() => setAddBox(true)}>
             <AppIcon icon="box" />
           </Fab>
-          <EditData scope="boxes" isOpen={add} otherData={{ room_id: params.room_id }} onClose={closeAdd} />
-        </>
+          {Number(params['phase']) === 30 && (
+            <Fab aria-label="add" color="primary" onClick={() => setAddSurvey(true)}>
+              <AppIcon icon="survey" />
+            </Fab>
+          )}
+          <EditData scope="boxes" isOpen={addBox} otherData={{ room_id: params.room_id }} onClose={closeAdd} />
+          <EditData scope="surveys" isOpen={addSurvey} otherData={{ room_id: params.room_id }} onClose={closeAdd} />
+        </Stack>
       )}
     </Stack>
   );

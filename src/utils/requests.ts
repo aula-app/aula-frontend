@@ -25,7 +25,7 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
 
   if (userId.length > 0) {
     userId.forEach((field) => {
-      requestData.arguments[field] = jwt_payload.user_id;
+      requestData.arguments[field] = jwt_payload?.user_id;
     });
   }
 
