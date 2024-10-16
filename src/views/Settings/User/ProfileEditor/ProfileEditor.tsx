@@ -43,8 +43,8 @@ const SystemSettings = ({ user, onReload }: Props) => {
 
   const schema = yup.object({
     realname: yup.string().max(30, 'validation.max').min(5, 'validation.min').required(),
-    email: yup.string().email().max(30, 'validation.max').min(5, 'validation.min').required(),
     username: yup.string().max(30, 'validation.max').min(5, 'validation.min').required(),
+    email: yup.string().email().max(30, 'validation.max').min(5, 'validation.min'),
     about_me: yup.string(),
     displayname: yup.string().max(30, 'validation.max'),
   });
