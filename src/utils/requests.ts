@@ -30,7 +30,7 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
 
   try {
     const response = await (
-      await fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/model.php`, {
+      await fetch(`${import.meta.env.VITE_APP_API_URL}/api/controllers/model.php?${requestData.method}`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(requestData),

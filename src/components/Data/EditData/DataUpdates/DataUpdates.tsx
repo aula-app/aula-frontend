@@ -40,7 +40,7 @@ const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
       return (
         <>
           <MoveData id={id} scope={scope} addUpdate={addUpdate} />
-          <ResetPassword order={4} email={defaultValue} />
+          {id && <ResetPassword order={4} email={defaultValue} />}
         </>
       );
     default:
