@@ -1,5 +1,6 @@
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
+import { t } from 'i18next';
 import * as yup from 'yup';
 
 type FormTypes =
@@ -48,13 +49,16 @@ export const inputType = {
   duration: {
     type: 'duration',
     defaultValue: 7,
-    schema: yup.number().min(1, 'validation.min'),
+    schema: yup.number(),
   },
 
   email: {
     type: 'input',
     defaultValue: '',
-    schema: yup.string().email('validation.email').max(100, 'validation.max'),
+    schema: yup
+      .string()
+      .email(t('validation.email'))
+      .max(50, t('validation.max', { var: 50 })),
   },
 
   longText: {
@@ -66,7 +70,10 @@ export const inputType = {
   password: {
     type: 'password',
     defaultValue: '',
-    schema: yup.string().min(4, 'validation.min').max(32, 'validation.max'),
+    schema: yup
+      .string()
+      .min(4, t('validation.min', { var: 4 }))
+      .max(32, t('validation.max', { var: 32 })),
   },
 
   select: {
@@ -78,7 +85,10 @@ export const inputType = {
   shortText: {
     type: 'input',
     defaultValue: '',
-    schema: yup.string().max(100, 'validation.max'),
+    schema: yup
+      .string()
+      .min(3, t('validation.min', { var: 3 }))
+      .max(100, t('validation.max', { var: 100 })),
   },
 
   status: {

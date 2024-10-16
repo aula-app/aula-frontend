@@ -1,11 +1,9 @@
-import { AppButton } from '@/components';
 import ReportCard from '@/components/ReportCard';
 import { MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Stack } from '@mui/material';
-import { t } from 'i18next';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 /**
  * Renders "Report" view

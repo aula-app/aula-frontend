@@ -44,7 +44,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const schema = getSchema().reduce((schema, field) => {
     return {
       ...schema,
-      [field.name]: field.required ? field.form.schema?.required(t('validation.required')) : field.form.schema,
+      [field.name]: field.required ? field.form.schema?.required('validation.required') : field.form.schema,
     };
   }, {});
 

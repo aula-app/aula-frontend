@@ -28,8 +28,8 @@ const IdeaSettings = ({ onReload }: Props) => {
   } = useForm({
     resolver: yupResolver(
       yup.object().shape({
-        custom_field1_name: yup.string().max(50, 'validation.max'),
-        custom_field2_name: yup.string().max(50, 'validation.max'),
+        custom_field1_name: yup.string().max(50, t('validation.max', { var: 50 })),
+        custom_field2_name: yup.string().max(50, t('validation.max', { var: 50 })),
       })
     ),
   });

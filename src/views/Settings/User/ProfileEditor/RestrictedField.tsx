@@ -47,7 +47,7 @@ const RestrictedField = ({ user, option, unlocked, setUnlocked, control }: Props
             fullWidth
             {...field}
             error={!!fieldState.error}
-            helperText={t(fieldState.error?.message || ' ')}
+            helperText={fieldState.error?.message || ' '}
             slotProps={{ inputLabel: { shrink: !!field.value } }}
           />
         )}

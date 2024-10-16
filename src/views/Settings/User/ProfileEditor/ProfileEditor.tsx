@@ -42,11 +42,19 @@ const SystemSettings = ({ user, onReload }: Props) => {
   const [unlocked, setUnlocked] = useState<'realname' | 'email' | 'username'>();
 
   const schema = yup.object({
-    realname: yup.string().max(30, 'validation.max').min(5, 'validation.min').required(),
-    username: yup.string().max(30, 'validation.max').min(5, 'validation.min').required(),
-    email: yup.string().email().max(30, 'validation.max').min(5, 'validation.min'),
+    realname: yup
+      .string()
+      .max(30, t('validation.max', { var: 30 }))
+      .min(3, t('validation.min', { var: 3 }))
+      .required(),
+    username: yup
+      .string()
+      .max(30, t('validation.max', { var: 30 }))
+      .min(3, t('validation.min', { var: 3 }))
+      .required(),
+    email: yup.string().email(),
     about_me: yup.string(),
-    displayname: yup.string().max(30, 'validation.max'),
+    displayname: yup.string().max(30, t('validation.max', { var: 30 })),
   });
 
   const {
