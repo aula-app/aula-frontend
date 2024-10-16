@@ -15,7 +15,7 @@ interface Props {
       about_me?: string | undefined;
       displayname?: string | undefined;
       realname: string;
-      email: string;
+      email?: string;
       username: string;
     },
     any
@@ -42,7 +42,7 @@ const RestrictedField = ({ user, option, unlocked, setUnlocked, control }: Props
             label={t(`settings.${option}`)}
             variant="filled"
             size="small"
-            required
+            required={option !== 'email'}
             disabled={!unlocked}
             fullWidth
             {...field}

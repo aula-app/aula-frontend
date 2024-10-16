@@ -196,17 +196,17 @@ const SystemSettings = ({ user, onReload }: Props) => {
         />
         <RestrictedField
           user={user}
-          unlocked={unlocked === 'email'}
-          setUnlocked={setUnlocked}
-          control={control}
-          option={'email'}
-        />
-        <RestrictedField
-          user={user}
           unlocked={unlocked === 'username'}
           setUnlocked={setUnlocked}
           control={control}
           option={'username'}
+        />
+        <RestrictedField
+          user={user}
+          unlocked={unlocked === 'email'}
+          setUnlocked={setUnlocked}
+          control={control}
+          option={'email'}
         />
         <TextField
           label={t('settings.displayname')}
