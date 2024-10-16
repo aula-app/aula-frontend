@@ -220,22 +220,21 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
                         <Stack
                           component={Button}
                           direction="row"
-                          mt={1}
                           key={item.id}
                           borderRadius={30}
                           bgcolor={selected.includes(item.id) ? grey[200] : 'transparent'}
+                          gap={2}
                           sx={{
                             textTransform: 'none',
                             textAlign: 'left',
                             justifyContent: 'start',
                             color: 'inherit',
-                            overflow: 'clip',
                           }}
                           fullWidth
                           onClick={() => toggleSelect(item.id)}
                         >
                           <Checkbox checked={selected.includes(item.id)} onChange={() => toggleSelect(item.id)} />
-                          <Stack pl={2} flex={1}>
+                          <Stack flex={1}>
                             <Typography noWrap>
                               {DataConfig[scope].requests.move &&
                                 item[DataConfig[DataConfig[scope].requests.move.target].columns[0].name]}
