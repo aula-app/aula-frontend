@@ -1,0 +1,22 @@
+name: multi instance
+
+on:
+  push:
+    branches:
+      - multi-instance
+
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      CI: false
+      LOCAL: test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Build frontend
+        run: |
+          npm i
+          npm run build
+          cp -vr build/* /var/www/
+        shell: bash
