@@ -76,6 +76,7 @@ const SettingsView = () => {
     if (!DataConfig[setting_name]) {
       navigate('/error');
     } else {
+      setItems(undefined);
       setPage(0);
       setTarget(0);
       setSelected([]);
