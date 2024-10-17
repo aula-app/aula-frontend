@@ -31,7 +31,7 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
 
   try {
     const response = await (
-      await fetch(`${api_url}/api/controllers/model.php`, {
+      await fetch(`${api_url}/api/controllers/model.php?${requestData.method}`, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(requestData),
