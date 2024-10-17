@@ -35,7 +35,7 @@ const ImageEditor = ({ closeMethod, isOpen, id }: NewCommentProps) => {
       },
     }).then((response) => {
       if (response.success && response.data && response.data.length > 0)
-        setImage(`${import.meta.env.VITE_APP_API_URL}/files/${response.data[0].filename}`);
+        setImage(`${api_url}/files/${response.data[0].filename}`);
     });
   };
 

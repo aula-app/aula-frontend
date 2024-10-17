@@ -24,6 +24,7 @@ import * as yup from "yup";
  */
 const LoginView = () => {
   const { t } = useTranslation();
+  const api_url = localStorageGet('api_url');
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const jwt_token = localStorageGet("token");
