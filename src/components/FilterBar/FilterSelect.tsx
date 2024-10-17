@@ -21,7 +21,7 @@ const FilterSelect = ({ filter, scope, setFilter }: Params) => {
       method: 'getCustomfields',
       arguments: {},
     }).then((response) => {
-      if (!response.success) return;
+      if (!response.success || !response.data) return;
       setCustomFields(response.data);
     });
   };
