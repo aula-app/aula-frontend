@@ -128,7 +128,7 @@ const SystemSettings = ({ user, onReload }: Props) => {
   const onSubmit = (formData: {
     about_me?: string | undefined;
     displayname?: string | undefined;
-    email: string;
+    email?: string;
     realname: string;
     username: string;
   }) => {
