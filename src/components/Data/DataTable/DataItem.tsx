@@ -20,6 +20,8 @@ const DataItem = ({ row, column }: Params) => {
   const [name, setName] = useState('');
   const [hidden, setHidden] = useState(true);
 
+  console.log(column);
+
   async function getNames(scope: SettingNamesType, id: number) {
     await databaseRequest({
       model: DataConfig[scope].requests.model,
@@ -53,7 +55,7 @@ const DataItem = ({ row, column }: Params) => {
       getNames('users', Number(row[column]));
       return <>{name}</>;
     case 'phase_id':
-      return <>{t(`phases.${phases[row[column]].name}` || '')}</>;
+      return <>{phases[row[column]]?.name ? t(`phases.${phases[row[column]].name}`) : ''}</>;
     case 'room_id':
       getNames('rooms', Number(row[column]));
       return <>{name}</>;
