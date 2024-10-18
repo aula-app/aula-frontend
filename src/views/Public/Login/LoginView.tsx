@@ -29,6 +29,7 @@ const LoginView = () => {
   const jwt_token = localStorageGet("token");
   const [loginError, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const api_url = localStorageGet('api_url');
 
   const schema = yup
     .object({
@@ -56,7 +57,7 @@ const LoginView = () => {
   const onSubmit = async (formData: Object) => {
     const request = await (
       await fetch(
-        `${import.meta.env.VITE_APP_API_URL}/api/controllers/login.php`,
+        `${api_url}/api/controllers/login.php`,
         {
           method: "POST",
           headers: {

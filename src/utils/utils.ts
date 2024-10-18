@@ -8,7 +8,6 @@ export const IS_WEBWORKER =
   typeof self === 'object' && self.constructor && self.constructor.name === 'DedicatedWorkerGlobalScope';
 /* eslint-enable no-restricted-globals */
 
-
 export function getCurrentVersion(): string {
   return import.meta.env?.npm_package_version ?? import.meta.env.VITE_APP_VERSION ?? 'unknown';
 }
