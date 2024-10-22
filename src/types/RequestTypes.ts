@@ -1,10 +1,37 @@
 import { ObjectPropByName } from './Generics';
-import { AnnouncementType, BoxType, CommentType, IdeaType, MessageType, RoomType, UserType } from './Scopes';
+import {
+  AnnouncementType,
+  BoxType,
+  BugType,
+  CategoryType,
+  CommentType,
+  GroupType,
+  IdeaType,
+  MessageType,
+  ReportType,
+  RoomType,
+  UserType,
+} from './Scopes';
 
 interface BaseResponseType {
   success: boolean;
   count: number;
   error_code: number;
+}
+
+export interface ScopeResponseType extends BaseResponseType {
+  data:
+    | AnnouncementType
+    | BoxType
+    | BugType
+    | CategoryType
+    | CommentType
+    | GroupType
+    | IdeaType
+    | MessageType
+    | ReportType
+    | RoomType
+    | UserType;
 }
 
 export interface BoxesResponseType extends BaseResponseType {

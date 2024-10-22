@@ -1,6 +1,6 @@
 import { ColumnSettings, DataRequestsType, FieldType } from '@/types/SettingsTypes';
 import { inputType } from '../formDefaults';
-import { GroupType } from '@/types/GroupTypes';
+import { GroupType } from '@/types/Scopes';
 
 interface GroupFields extends FieldType {
   name: keyof GroupType;
