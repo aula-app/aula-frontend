@@ -1,7 +1,7 @@
 import { AppIcon } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import EditData from '@/components/Data/EditData';
-import { BoxesResponseType } from '@/types/RequestTypes';
+import { BoxType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest } from '@/utils';
 import { Fab, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -16,7 +16,7 @@ const IdeasBoxView = () => {
   const params = useParams();
   const [addBox, setAddBox] = useState(false);
   const [addSurvey, setAddSurvey] = useState(false);
-  const [boxes, setBoxes] = useState<BoxesResponseType>();
+  const [boxes, setBoxes] = useState<BoxType[]>([]);
 
   const boxesFetch = async () =>
     await databaseRequest({
@@ -29,7 +29,8 @@ const IdeasBoxView = () => {
         phase_id: Number(params['phase']),
       },
     }).then((response) => {
-      if (response.success) setBoxes(response);
+      if (!response.success || !response) return;
+      setBoxes(response.data as BoxType[]);
     });
 
   const closeAdd = () => {
@@ -48,8 +49,8 @@ const IdeasBoxView = () => {
     <Stack alignItems="center">
       <Grid container spacing={2} p={1} width="100%">
         {boxes &&
-          boxes.data &&
-          boxes.data.map((box) => (
+          boxes &&
+          boxes.map((box) => (
             <Grid key={box.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
               <BoxCard box={box.id} onReload={boxesFetch} />
             </Grid>
