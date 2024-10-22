@@ -6,7 +6,7 @@ import DelegateVote from '@/components/DelegateVote';
 import { IdeaCard } from '@/components/Idea';
 import KnowMore from '@/components/KnowMore';
 import { DelegationType } from '@/types/Delegation';
-import { IdeasResponseType } from '@/types/RequestTypes';
+import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
 import { Button, Fab, Stack, Typography } from '@mui/material';
@@ -23,8 +23,8 @@ const IdeasBoxView = () => {
   const { t } = useTranslation();
   const params = useParams();
   const [add, setAdd] = useState(false);
-  const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
-  const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>();
+  const [boxIdeas, setBoxIdeas] = useState<IdeaType[]>([]);
+  const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>([]);
   const [delegationDialog, setDelegationDialog] = useState(false);
 
   const boxIdeasFetch = async () => {
@@ -33,7 +33,8 @@ const IdeasBoxView = () => {
       method: 'getIdeasByTopic',
       arguments: { topic_id: Number(params['box_id']) },
     }).then((response) => {
-      if (response.success) setBoxIdeas(response);
+      if (!response.success || !response.data) return;
+      setBoxIdeas(response.data as IdeaType[]);
     });
   };
 
@@ -46,7 +47,8 @@ const IdeasBoxView = () => {
       },
       ['user_id']
     ).then((response) => {
-      if (response.success) setDelegationStatus(response.data);
+      if (!response.success || !response.data) return;
+      setDelegationStatus(response.data as DelegationType[]);
     });
 
   const closeAdd = () => {
@@ -77,7 +79,7 @@ const IdeasBoxView = () => {
           <Typography variant="h6" p={2}>
             {boxIdeas &&
               t(delegationStatus && delegationStatus.length > 0 ? `texts.delegated` : `texts.undelegated`, {
-                var: boxIdeas.count,
+                var: boxIdeas.length,
               })}
           </Typography>
           {Number(params['phase']) === 30 && (
@@ -102,8 +104,8 @@ const IdeasBoxView = () => {
               <MoveData id={Number(params['box_id'])} scope="boxes" onClose={() => boxIdeasFetch()} />
             )}
             <Grid container spacing={1} pt={1} pb={2}>
-              {boxIdeas.data &&
-                boxIdeas.data.map((idea, key) => (
+              {boxIdeas &&
+                boxIdeas.map((idea, key) => (
                   <Grid
                     key={key}
                     size={{ xs: 12, sm: 6, md: 4 }}
