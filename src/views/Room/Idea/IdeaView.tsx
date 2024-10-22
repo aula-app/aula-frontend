@@ -29,8 +29,8 @@ const IdeaView = () => {
       method: 'getIdeaContent',
       arguments: { idea_id: params['idea_id'] },
     }).then((response) => {
-      if (!response.success || !response) return;
-      setIdea(response as IdeaType);
+      if (!response.success || !response.data) return;
+      setIdea(response.data as IdeaType);
     });
 
   const commentsFetch = async () =>
@@ -39,8 +39,8 @@ const IdeaView = () => {
       method: 'getCommentsByIdeaId',
       arguments: { idea_id: Number(params['idea_id']) },
     }).then((response) => {
-      if (!response.success || !response) return;
-      setComments(response as CommentType[]);
+      if (!response.success || !response.data) return;
+      setComments(response.data as CommentType[]);
     });
 
   const getPhase = async () =>

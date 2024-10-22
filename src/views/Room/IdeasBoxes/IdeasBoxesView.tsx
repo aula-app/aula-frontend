@@ -29,7 +29,7 @@ const IdeasBoxView = () => {
         phase_id: Number(params['phase']),
       },
     }).then((response) => {
-      if (!response.success || !response) return;
+      if (!response.success || !response.data) return;
       setBoxes(response.data as BoxType[]);
     });
 

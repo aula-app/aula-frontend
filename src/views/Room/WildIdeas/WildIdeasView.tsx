@@ -1,7 +1,7 @@
 import { AppIcon } from '@/components';
 import EditData from '@/components/Data/EditData';
 import { IdeaBubble } from '@/components/Idea';
-import { IdeasResponseType } from '@/types/RequestTypes';
+import { IdeaType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest } from '@/utils';
 import { Fab, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ import { useParams } from 'react-router-dom';
 
 const WildIdeas = () => {
   const params = useParams();
-  const [ideas, setIdeas] = useState<IdeasResponseType>();
+  const [ideas, setIdeas] = useState<IdeaType[]>();
   const [add, setAdd] = useState(false);
 
   const ideasFetch = async () =>
@@ -23,7 +23,8 @@ const WildIdeas = () => {
       method: 'getIdeasByRoom',
       arguments: { room_id: Number(params['room_id']) },
     }).then((response) => {
-      if (response.success) setIdeas(response);
+      if (!response.success || !response.data) return;
+      setIdeas(response.data);
     });
 
   const closeAdd = () => {
@@ -38,8 +39,7 @@ const WildIdeas = () => {
   return (
     <Stack alignItems="center" width="100%" px={1}>
       {ideas &&
-        ideas.data &&
-        ideas.data.map((idea) => (
+        ideas.map((idea) => (
           <IdeaBubble
             idea={idea}
             onReload={ideasFetch}
