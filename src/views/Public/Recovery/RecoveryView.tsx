@@ -47,7 +47,7 @@ const RecoveryPasswordView = () => {
           }}
       )
 
-    const response = await request.json() as {success: boolean, JWT: string};
+    const response = await request.json();
     setLoading(false)
 
     if (!response.success) {

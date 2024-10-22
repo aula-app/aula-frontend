@@ -9,9 +9,10 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 
 /**
- * Renders "Recover Password" view for Login flow
- * url: /recovery/password
+ * Renders "Set Password" view for Login flow
+ * url: /password/:key
  */
+
 const SetPasswordView = () => {
   const { t } = useTranslation();
   const params = useParams();
