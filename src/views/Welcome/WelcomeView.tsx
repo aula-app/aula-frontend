@@ -26,7 +26,7 @@ const WelcomeView = () => {
       },
       checkPermissions(40) ? [] : ['user_id']
     ).then((response) => {
-      // setLoading(false);
+      setLoading(false);
       if (!response.success || !response.data) return;
       setRooms(response.data as RoomType[]);
     });

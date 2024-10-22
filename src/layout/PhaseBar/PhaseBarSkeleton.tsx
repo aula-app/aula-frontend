@@ -1,9 +1,5 @@
-import { AppIcon, AppLink } from '@/components';
 import { phases } from '@/utils';
-import { Box, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useLocation, useParams } from 'react-router-dom';
+import { Skeleton, Stack } from '@mui/material';
 
 /**
  * Renders TopBar composition
