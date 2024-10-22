@@ -14,7 +14,7 @@ const AppSubmitButton = ({ disabled = false, label, ...restOfProps }: Props) => 
   const { t } = useTranslation();
   return (
     <Button type="submit" color="primary" variant="contained" disabled={disabled} {...restOfProps}>
-      {disabled ? t('generics.loading') : label || t('generics.confirm')}
+      {disabled ? t('generics.waiting') : label || t('generics.confirm')}
     </Button>
   );
 };
