@@ -49,7 +49,8 @@ const IdeaView = () => {
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
     }).then((response) => {
-      if (response.success) setPhase(Number(response.phase_id));
+      if (!response.success || !response.data) return;
+      setPhase(Number(response.phase_id));
     });
 
   const getVote = async () =>
@@ -63,7 +64,8 @@ const IdeaView = () => {
       },
       ['user_id']
     ).then((response) => {
-      if (response.success) setVote((Number(response) + 1) as Vote);
+      if (!response.success || !response.data) return;
+      setVote((Number(response) + 1) as Vote);
     });
 
   const closeAdd = () => {

@@ -3,7 +3,6 @@ import ChangePassword from '@/components/ChangePassword';
 import { ChangePasswordMethods } from '@/components/ChangePassword/ChangePassword';
 import { useAppStore } from '@/store';
 import { PassResponse } from '@/types/Generics';
-import { SingleUserResponseType } from '@/types/RequestTypes';
 import { RequestBodyType, UserType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet } from '@/utils';
 import {
@@ -31,7 +30,7 @@ const UserView = () => {
   const { t } = useTranslation();
   const jwt_token = localStorageGet('token');
   const api_url = localStorageGet('api_url');
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<UserType>();
   const [openDelete, setOpenDelete] = useState(false);
   const [, dispatch] = useAppStore();
   const passFields = useRef<ChangePasswordMethods>(null);
@@ -44,8 +43,9 @@ const UserView = () => {
         arguments: {},
       },
       ['user_id']
-    ).then((response: SingleUserResponseType) => {
-      if (response.success) setUser(response.data);
+    ).then((response) => {
+      if (!response.success || !response.data) return;
+      setUser(response.data as UserType);
     });
 
   const changePass = (formData: PassResponse) => {
@@ -85,7 +85,7 @@ const UserView = () => {
       },
       ['creator_id', 'updater_id']
     ).then((response) => {
-      if (!response.success) return;
+      if (!response.success || !response.data) return;
       setOpenDelete(false);
       dispatch({ type: 'ADD_POPUP', message: { message: returnMessage, type: 'success' } });
     });
