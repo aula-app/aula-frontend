@@ -1,4 +1,5 @@
 import { AppButton } from '@/components';
+import AppSubmitButton from '@/components/AppSubmitButton';
 import { useAppStore } from '@/store';
 import { ObjectPropByName } from '@/types/Generics';
 import { localStorageGet } from '@/utils';
@@ -73,9 +74,7 @@ const RecoveryPasswordView = () => {
           error={errors.email ? true : false}
           helperText={errors.email?.message || ' '}
         />
-        <AppButton type="submit" disabled={isLoading} onClick={handleSubmit(onSubmit)} sx={{ mx: 0 }}>
-          {t('login.recover')}
-        </AppButton>
+        <AppSubmitButton label={t('login.recover')} disabled={isLoading} onClick={handleSubmit(onSubmit)} />
       </Stack>
     </FormContainer>
   );

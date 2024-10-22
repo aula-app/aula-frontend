@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import AppButton from '../AppButton';
 import AppIconButton from '../AppIconButton';
+import AppSubmitButton from '../AppSubmitButton';
 
 interface Props {
   hideOld?: boolean;
@@ -148,15 +149,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(
               },
             }}
           />
-          <AppButton
-            type="submit"
-            disabled={disabled}
-            color="primary"
-            sx={{ ml: 'auto', mr: 0 }}
-            onClick={handleSubmit(onSubmit)}
-          >
-            {t('generics.confirm')}
-          </AppButton>
+          <AppSubmitButton disabled={disabled} onClick={handleSubmit(onSubmit)} />
         </Stack>
       </FormContainer>
     );

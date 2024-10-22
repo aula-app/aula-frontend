@@ -1,4 +1,5 @@
 import { AppButton, AppIconButton, AppLink } from "@/components";
+import AppSubmitButton from "@/components/AppSubmitButton";
 import { useAppStore } from "@/store";
 import { localStorageGet, localStorageSet } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -131,15 +132,8 @@ const LoginView = () => {
             ),
           }}}
         />
-        <AppButton
-          type="submit"
-          disabled={isLoading}
-          color="primary"
-          sx={{ mx: 0, mt: 0 }}
-          onClick={handleSubmit(onSubmit)}
-        >
-          {t("login.button")}
-        </AppButton>
+        <AppSubmitButton label={t("login.button")} disabled={isLoading} onClick={handleSubmit(onSubmit)} />
+
         <Grid container justifyContent="end" alignItems="center">
           <Button
             variant="text"

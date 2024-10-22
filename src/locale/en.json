@@ -31,6 +31,7 @@
     "hide": "Hide",
     "image": "image",
     "inactive": "inactive",
+    "loading": "loading",
     "logout": "Sign out",
     "modeDark": "Dark mode",
     "modeLight": "Light mode",
@@ -42,6 +43,7 @@
     "save": "save",
     "show": "Show",
     "title": "aula",
+    "waiting": "Waiting",
     "wrong": "Something went wrong.",
     "yes": "yes"
   },
