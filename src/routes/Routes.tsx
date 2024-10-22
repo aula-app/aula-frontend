@@ -1,6 +1,6 @@
 import { useIsAuthenticated } from '@/hooks/auth';
 import { useAppStore } from '@/store/AppStore';
-import { localStorageGet, parseJwt } from '@/utils';
+import { localStorageGet } from '@/utils';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PrivateRoutes from './PrivateRoutes';
