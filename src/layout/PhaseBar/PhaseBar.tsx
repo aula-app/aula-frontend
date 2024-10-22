@@ -29,7 +29,7 @@ const PhaseBar = ({ room }: { room: number }) => {
           sx={{
             color: 'inherit',
             textDecoration: 'none',
-            flex: 1,
+            flex: currentPhase === phase ? 3 : 1,
             position: 'relative',
           }}
         >
@@ -42,9 +42,11 @@ const PhaseBar = ({ room }: { room: number }) => {
               p={1}
               pl={phase === '0' ? 2 : 1}
               pr={currentPhase === phase ? 3 : 1}
-              height="100%"
+              mx="-16px"
+              height="24"
               sx={{
                 bgcolor: `${phases[phase].name}.main`,
+                clipPath: 'polygon(0% 0%, 16px 50%, 0% 100%, calc(100% - 16px) 100%, 100% 50%, calc(100% - 16px) 0%)',
               }}
             >
               <AppIcon icon={phases[phase].name} />
@@ -53,30 +55,6 @@ const PhaseBar = ({ room }: { room: number }) => {
               </Typography>
             </Stack>
           </Tooltip>
-          <Box
-            sx={{
-              position: 'absolute',
-              height: '50%',
-              aspectRatio: 1,
-              top: 0,
-              transform: 'translateX(-100%)',
-              clipPath: 'polygon(0% 0%, 100% 100%, 100% 0%)',
-              bgcolor: `${phases[phase].name}.main`,
-              pointerEvents: 'none',
-            }}
-          ></Box>
-          <Box
-            sx={{
-              position: 'absolute',
-              height: '50%',
-              aspectRatio: 1,
-              bottom: 0,
-              transform: 'translateX(-100%)',
-              clipPath: 'polygon(0% 100%, 100% 100%, 100% 0%)',
-              bgcolor: `${phases[phase].name}.main`,
-              pointerEvents: 'none',
-            }}
-          ></Box>
         </AppLink>
       ))}
     </Stack>

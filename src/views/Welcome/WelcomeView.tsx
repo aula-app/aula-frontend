@@ -1,5 +1,6 @@
 import { RoomCard } from '@/components/RoomCard';
-import { RoomsResponseType } from '@/types/RequestTypes';
+import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
+import { RoomType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -9,8 +10,9 @@ import DashBoard from './DashBoard';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
-  const [rooms, setRooms] = useState<RoomsResponseType>();
+  const [rooms, setRooms] = useState<Array<RoomType>>([]);
   const [showDashboard, setDashboard] = useState(true);
+  const [isLoading, setLoading] = useState(true);
 
   const roomsFetch = async () =>
     await databaseRequest(
@@ -24,7 +26,9 @@ const WelcomeView = () => {
       },
       checkPermissions(40) ? [] : ['user_id']
     ).then((response) => {
-      if (response.success) setRooms(response);
+      // setLoading(false);
+      if (!response.success || !response.data) return;
+      setRooms(response.data as RoomType[]);
     });
 
   const handleScroll = () => {
@@ -60,13 +64,8 @@ const WelcomeView = () => {
           {t('views.rooms')}
         </Typography>
         <Grid container flex={1} spacing={2}>
-          {rooms &&
-            rooms.data &&
-            rooms.data.map((room) => (
-              <Grid key={room.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-                <RoomCard room={room} />
-              </Grid>
-            ))}
+          {isLoading && <RoomCardSkeleton />}
+          {rooms && rooms.map((room) => <RoomCard room={room} key={room.id} />)}
         </Grid>
       </Stack>
     </Stack>

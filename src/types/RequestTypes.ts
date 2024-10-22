@@ -13,6 +13,8 @@ import {
   UserType,
 } from './Scopes';
 
+type FailedResponseType = { success: false };
+
 interface BaseResponseType {
   success: boolean;
   count: number;
@@ -20,6 +22,23 @@ interface BaseResponseType {
 }
 
 export interface ScopeResponseType extends BaseResponseType {
+  data:
+    | AnnouncementType[]
+    | BoxType[]
+    | BugType[]
+    | CategoryType[]
+    | CommentType[]
+    | GroupType[]
+    | IdeaType[]
+    | MessageType[]
+    | ReportType[]
+    | RoomType[]
+    | UserType[];
+}
+
+export type ResponseType = FailedResponseType | ScopeResponseType;
+
+export interface SingleScopeResponseType extends BaseResponseType {
   data:
     | AnnouncementType
     | BoxType
@@ -34,6 +53,13 @@ export interface ScopeResponseType extends BaseResponseType {
     | UserType;
 }
 
+export type SingleResponseType = FailedResponseType | SingleScopeResponseType;
+
+export type StatusRequest = { method: string; status: number; callback: () => void | Promise<void> };
+
+export type ConfigRequest = { method: string; args: ObjectPropByName };
+
+// cortar abaixo
 export interface BoxesResponseType extends BaseResponseType {
   data: BoxType[];
 }
@@ -50,10 +76,6 @@ export interface RoomsResponseType extends BaseResponseType {
   data: RoomType[];
 }
 
-export interface SingleResponseType extends BaseResponseType {
-  data: AnnouncementType | BoxType | CommentType | IdeaType | MessageType | RoomType | UserType;
-}
-
 export interface SingleBoxResponseType extends BaseResponseType {
   data: BoxType;
 }
@@ -65,7 +87,3 @@ export interface SingleIdeaResponseType extends BaseResponseType {
 export interface SingleUserResponseType extends BaseResponseType {
   data: UserType;
 }
-
-export type StatusRequest = { method: string; status: number; callback: () => void | Promise<void> };
-
-export type ConfigRequest = { method: string; args: ObjectPropByName };
