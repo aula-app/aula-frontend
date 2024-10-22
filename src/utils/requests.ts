@@ -1,7 +1,6 @@
 import { ObjectPropByName } from '@/types/Generics';
 import { parseJwt } from './jwt';
 import { localStorageGet } from './localStorage';
-import { ScopeResponseType } from '@/types/RequestTypes';
 
 export interface RequestObject {
   model: string;
@@ -11,10 +10,7 @@ export interface RequestObject {
 
 const error = new CustomEvent('AppErrorDialog', { detail: 'texts.error' });
 
-export const databaseRequest = async (
-  requestData: RequestObject,
-  userId = [] as string[]
-): Promise<ScopeResponseType | { success: false }> => {
+export const databaseRequest = async (requestData: RequestObject, userId = [] as string[]) => {
   const api_url = localStorageGet('api_url');
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
