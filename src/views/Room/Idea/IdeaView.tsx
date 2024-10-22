@@ -1,7 +1,7 @@
 import EditData from '@/components/Data/EditData';
 import { ApprovalCard, Comment, IdeaBubble, IdeaDocument, VotingCard, VotingResults } from '@/components/Idea';
 import KnowMore from '@/components/KnowMore';
-import { CommentsResponseType, SingleIdeaResponseType } from '@/types/RequestTypes';
+import { CommentType, IdeaType } from '@/types/Scopes';
 import { Vote, checkPermissions, databaseRequest } from '@/utils';
 import { Add } from '@mui/icons-material';
 import { Fab, Stack, Typography } from '@mui/material';
@@ -17,10 +17,10 @@ import { useParams } from 'react-router';
 const IdeaView = () => {
   const { t } = useTranslation();
   const params = useParams();
-  const [idea, setIdea] = useState<SingleIdeaResponseType>();
+  const [idea, setIdea] = useState<IdeaType>();
   const [add, setAdd] = useState(false);
   const [phase, setPhase] = useState(0);
-  const [comments, setComments] = useState<CommentsResponseType>();
+  const [comments, setComments] = useState<CommentType[]>([]);
   const [vote, setVote] = useState<Vote>(0);
 
   const ideaFetch = async () =>
@@ -29,7 +29,8 @@ const IdeaView = () => {
       method: 'getIdeaContent',
       arguments: { idea_id: params['idea_id'] },
     }).then((response) => {
-      if (response.success) setIdea(response);
+      if (!response.success || !response) return;
+      setIdea(response as IdeaType);
     });
 
   const commentsFetch = async () =>
@@ -38,7 +39,8 @@ const IdeaView = () => {
       method: 'getCommentsByIdeaId',
       arguments: { idea_id: Number(params['idea_id']) },
     }).then((response) => {
-      if (response.success) setComments(response);
+      if (!response.success || !response) return;
+      setComments(response as CommentType[]);
     });
 
   const getPhase = async () =>
@@ -47,7 +49,7 @@ const IdeaView = () => {
       method: 'getTopicBaseData',
       arguments: { topic_id: Number(params['box_id']) },
     }).then((response) => {
-      if (response.success) setPhase(Number(response.data.phase_id));
+      if (response.success) setPhase(Number(response.phase_id));
     });
 
   const getVote = async () =>
@@ -61,7 +63,7 @@ const IdeaView = () => {
       },
       ['user_id']
     ).then((response) => {
-      if (response.success) setVote((Number(response.data) + 1) as Vote);
+      if (response.success) setVote((Number(response) + 1) as Vote);
     });
 
   const closeAdd = () => {
@@ -79,31 +81,31 @@ const IdeaView = () => {
   return (
     <Stack width="100%" height="100%" overflow="auto">
       {phase === 30 && <VotingCard />}
-      {idea && idea.data && (
+      {idea && (
         <Stack p={2}>
-          {phase === 40 && <VotingResults yourVote={vote} rejected={idea.data.is_winner !== 1} />}
+          {phase === 40 && <VotingResults yourVote={vote} rejected={idea.is_winner !== 1} />}
           {phase === 0 ? (
-            <IdeaBubble idea={idea.data} onReload={ideaFetch} />
+            <IdeaBubble idea={idea} onReload={ideaFetch} />
           ) : (
-            <IdeaDocument idea={idea.data} onReload={ideaFetch} disabled={phase > 10} />
+            <IdeaDocument idea={idea} onReload={ideaFetch} disabled={phase > 10} />
           )}
-          {phase >= 20 && idea.data.approved !== 0 && (
+          {phase >= 20 && idea.approved !== 0 && (
             <ApprovalCard
-              comment={idea.data.approval_comment ? idea.data.approval_comment : ''}
-              rejected={idea.data.approved < 0}
+              comment={idea.approval_comment ? idea.approval_comment : ''}
+              rejected={idea.approved < 0}
               disabled={phase > 20}
             />
           )}
-          {comments && comments.data && (
+          {comments && (
             <>
               <Typography variant="h5" py={2}>
                 <KnowMore title={t('tooltips.comment')}>
                   <Typography>
-                    {String(comments.count)} {t('views.comments')}
+                    {String(comments.length)} {t('views.comments')}
                   </Typography>
                 </KnowMore>
               </Typography>
-              {comments.data.map((comment) => (
+              {comments.map((comment) => (
                 <Comment key={comment.id} comment={comment} onReload={commentsFetch} disabled={phase > 10} />
               ))}
             </>
