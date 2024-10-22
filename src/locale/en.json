@@ -28,6 +28,7 @@
     "delete": "delete",
     "discard": "discard",
     "edit": "edit",
+    "hide": "Hide",
     "image": "image",
     "inactive": "inactive",
     "logout": "Sign out",
@@ -39,6 +40,7 @@
     "or": "or",
     "print": "print",
     "save": "save",
+    "show": "Show",
     "title": "aula",
     "wrong": "Something went wrong.",
     "yes": "yes"
@@ -210,7 +212,6 @@
     "report": "Please explain why you are reporting this content",
     "resetPasswordText": "Are you sure you want to request a new password for this user?",
     "select": "Select {{var}}",
-    "show": "Show",
     "success": "Success",
     "undelegated": "{{var}} ideas",
     "unaltenticated": "The page you are trying to access requires authentication",

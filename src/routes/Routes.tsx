@@ -17,6 +17,7 @@ const Routes = () => {
   const jwt_token = localStorageGet('token');
 
   const getConsent = async () => {
+    if (!jwt_token) return;
     const data = await (
       await fetch(api_url + '/api/controllers/user_consent.php', {
         method: 'POST',

@@ -29,6 +29,7 @@ const LoginView = () => {
   const jwt_token = localStorageGet("token");
   const [loginError, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const api_url = localStorageGet('api_url');
 
   const schema = yup
@@ -55,8 +56,9 @@ const LoginView = () => {
   }, []);
 
   const onSubmit = async (formData: Object) => {
-    const request = await (
-      await fetch(
+    setLoading(true)
+
+    const request = await fetch(
         `${api_url}/api/controllers/login.php`,
         {
           method: "POST",
@@ -66,15 +68,17 @@ const LoginView = () => {
           },
           body: JSON.stringify(formData),
         }
-      )
-    ).json();
+      );
 
-    if (request.success === "false") {
+    const response = await request.json() as {success: boolean, JWT: string};
+    setLoading(false)
+
+    if (!response.success) {
       setError(true);
       return;
     }
 
-    localStorageSet("token", request["JWT"]);
+    localStorageSet("token", response["JWT"]);
     dispatch({ type: "LOG_IN" });
     navigate("/", { replace: true });
   };
@@ -96,6 +100,7 @@ const LoginView = () => {
         </Collapse>
         <TextField
           required
+          disabled={isLoading}
           label={t("login.login")}
           slotProps={{ input: { autoCapitalize: "none" }}}
           {...register("username")}
@@ -105,6 +110,7 @@ const LoginView = () => {
         />
         <TextField
           required
+          disabled={isLoading}
           type={showPassword ? "text" : "password"}
           label={t("login.password")}
           {...register("password")}
@@ -116,8 +122,8 @@ const LoginView = () => {
               <InputAdornment position="end">
                 <AppIconButton
                   aria-label="toggle password visibility"
-                  icon={showPassword ? "visibilityon" : "visibilityoff"}
-                  title={showPassword ? "Hide Password" : "Show Password"}
+                  icon={showPassword ? "visibilityOn" : "visibilityOff"}
+                  title={showPassword ? t("generics.hide") : t("generics.show")}
                   onClick={handleShowPasswordClick}
                   onMouseDown={(e) => e.preventDefault()}
                 />
@@ -127,6 +133,7 @@ const LoginView = () => {
         />
         <AppButton
           type="submit"
+          disabled={isLoading}
           color="primary"
           sx={{ mx: 0, mt: 0 }}
           onClick={handleSubmit(onSubmit)}

@@ -28,6 +28,7 @@
     "delete": "löschen",
     "discard": "verwerfen",
     "edit": "bearbeiten",
+    "hide": "Ausblenden",
     "image": "Bild",
     "inactive": "inaktiv",
     "logout": "Logout",
@@ -39,6 +40,7 @@
     "or": "oder",
     "print": "drucken",
     "save": "speichern",
+    "show": "Anzeigen",
     "title": "aula",
     "wrong": "Etwas ist schief gelaufen.",
     "yes": "Ja"
@@ -210,7 +212,6 @@
     "report": "Bitte erkläre, warum du diesen Inhalt melden möchtest",
     "resetPasswordText": "Sind Sie sicher, dass Sie ein neues Passwort für diesen Benutzer anfordern möchten?",
     "select": "{{var}} Auswählen",
-    "show": "Anzeigen",
     "success": "Erfolg",
     "undelegated": "{{var}} Ideen",
     "unaltenticated": "Die Seite, auf die du zugreifen möchtest, erfordert eine Authentifizierung.",

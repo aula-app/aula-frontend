@@ -83,7 +83,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(({ onSubmit, hid
                 <InputAdornment position="end">
                   <AppIconButton
                     aria-label="toggle password visibility"
-                    icon={showOldPassword ? 'visibilityon' : 'visibilityoff'}
+                    icon={showOldPassword ? 'visibilityOn' : 'visibilityOff'}
                     title={showOldPassword ? 'Hide Password' : 'Show Password'}
                     onClick={() => setOldPassword(!showOldPassword)}
                     onMouseDown={(e) => e.preventDefault()}
@@ -106,7 +106,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(({ onSubmit, hid
               <InputAdornment position="end">
                 <AppIconButton
                   aria-label="toggle password visibility"
-                  icon={showNewPassword ? 'visibilityon' : 'visibilityoff'}
+                  icon={showNewPassword ? 'visibilityOn' : 'visibilityOff'}
                   title={showNewPassword ? 'Hide Password' : 'Show Password'}
                   onClick={() => setNewPassword(!showNewPassword)}
                   onMouseDown={(e) => e.preventDefault()}
@@ -128,7 +128,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(({ onSubmit, hid
               <InputAdornment position="end">
                 <AppIconButton
                   aria-label="toggle password visibility"
-                  icon={showConfirmPassword ? 'visibilityon' : 'visibilityoff'}
+                  icon={showConfirmPassword ? 'visibilityOn' : 'visibilityOff'}
                   title={showConfirmPassword ? 'Hide Password' : 'Show Password'}
                   onClick={() => setConfirmPassword(!showConfirmPassword)}
                   onMouseDown={(e) => e.preventDefault()}
