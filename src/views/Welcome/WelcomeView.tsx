@@ -10,7 +10,7 @@ import DashBoard from './DashBoard';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
-  const [rooms, setRooms] = useState<Array<RoomType>>([]);
+  const [rooms, setRooms] = useState<RoomType[]>([]);
   const [showDashboard, setDashboard] = useState(true);
   const [isLoading, setLoading] = useState(true);
 
@@ -65,7 +65,9 @@ const WelcomeView = () => {
         </Typography>
         <Grid container flex={1} spacing={2}>
           {isLoading && <RoomCardSkeleton />}
-          {rooms && rooms.map((room) => <RoomCard room={room} key={room.id} />)}
+          {rooms.map((room) => (
+            <RoomCard room={room} key={room.id} />
+          ))}
         </Grid>
       </Stack>
     </Stack>

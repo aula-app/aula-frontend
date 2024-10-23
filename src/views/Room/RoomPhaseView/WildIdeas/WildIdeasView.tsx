@@ -14,7 +14,7 @@ import { useParams } from 'react-router-dom';
 
 const WildIdeas = () => {
   const params = useParams();
-  const [ideas, setIdeas] = useState<IdeaType[]>();
+  const [ideas, setIdeas] = useState<IdeaType[]>([]);
   const [add, setAdd] = useState(false);
 
   const ideasFetch = async () =>
@@ -24,7 +24,7 @@ const WildIdeas = () => {
       arguments: { room_id: Number(params['room_id']) },
     }).then((response) => {
       if (!response.success || !response.data) return;
-      setIdeas(response.data);
+      setIdeas(response.data as IdeaType[]);
     });
 
   const closeAdd = () => {
@@ -38,16 +38,15 @@ const WildIdeas = () => {
 
   return (
     <Stack alignItems="center" width="100%" px={1}>
-      {ideas &&
-        ideas.map((idea) => (
-          <IdeaBubble
-            idea={idea}
-            onReload={ideasFetch}
-            key={idea.id}
-            comments={idea.sum_comments}
-            to={`idea/${idea.id}`}
-          />
-        ))}
+      {ideas.map((idea) => (
+        <IdeaBubble
+          idea={idea}
+          onReload={ideasFetch}
+          key={idea.id}
+          comments={idea.sum_comments}
+          to={`idea/${idea.id}`}
+        />
+      ))}
       {checkPermissions(20) && (
         <>
           <Fab
