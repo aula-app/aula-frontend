@@ -15,8 +15,9 @@ import { useParams } from 'react-router-dom';
 
 const WildIdeas = () => {
   const params = useParams();
-  const [ideas, setIdeas] = useState<IdeaType[]>([]);
   const [add, setAdd] = useState(false);
+  const [isLoading, setLoading] = useState(true);
+  const [ideas, setIdeas] = useState<IdeaType[]>([]);
 
   const ideasFetch = async () =>
     await databaseRequest({
@@ -24,6 +25,7 @@ const WildIdeas = () => {
       method: 'getIdeasByRoom',
       arguments: { room_id: Number(params['room_id']) },
     }).then((response) => {
+      setLoading(false);
       if (!response.success || !response.data) return;
       setIdeas(response.data as IdeaType[]);
     });
@@ -39,7 +41,7 @@ const WildIdeas = () => {
 
   return (
     <Stack alignItems="center" width="100%" px={1}>
-      <IdeaBubbleSkeleton />
+      {isLoading && <IdeaBubbleSkeleton />}
       {ideas.map((idea) => (
         <IdeaBubble
           idea={idea}
