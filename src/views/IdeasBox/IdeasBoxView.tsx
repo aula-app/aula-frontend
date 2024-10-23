@@ -104,10 +104,11 @@ const IdeasBoxView = () => {
           <MoveData id={Number(params['box_id'])} scope="boxes" onClose={() => boxIdeasFetch()} />
         )}
         <Grid container spacing={1} pt={1} pb={2}>
-          {isLoading && <></>}
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
-            <IdeaCardSkeleton />
-          </Grid>
+          {isLoading && (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
+              <IdeaCardSkeleton />
+            </Grid>
+          )}
           {boxIdeas.map((idea, key) => (
             <Grid key={key} size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
               <AppLink to={`idea/${idea.id}`}>
