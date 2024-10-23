@@ -48,13 +48,11 @@ const IdeasBoxView = () => {
   return (
     <Stack alignItems="center">
       <Grid container spacing={2} p={1} width="100%">
-        {boxes &&
-          boxes &&
-          boxes.map((box) => (
-            <Grid key={box.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-              <BoxCard box={box.id} onReload={boxesFetch} />
-            </Grid>
-          ))}
+        {boxes.map((box) => (
+          <Grid key={box.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
+            <BoxCard box={box.id} onReload={boxesFetch} />
+          </Grid>
+        ))}
       </Grid>
       {checkPermissions(30) && (
         <Stack direction="row" sx={{ position: 'fixed', bottom: 40 }} gap={5}>
