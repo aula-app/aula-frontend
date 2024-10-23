@@ -1,6 +1,7 @@
 import { AppIcon } from '@/components';
 import EditData from '@/components/Data/EditData';
 import { IdeaBubble } from '@/components/Idea';
+import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest } from '@/utils';
 import { Fab, Stack } from '@mui/material';
@@ -38,6 +39,7 @@ const WildIdeas = () => {
 
   return (
     <Stack alignItems="center" width="100%" px={1}>
+      <IdeaBubbleSkeleton />
       {ideas.map((idea) => (
         <IdeaBubble
           idea={idea}

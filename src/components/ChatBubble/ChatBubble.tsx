@@ -24,7 +24,7 @@ const ChatBubble = ({ color, children, disabled = false }: ChatBubbleProps) => (
       sx={{
         position: 'absolute',
         bottom: 0,
-        left: '1.75rem',
+        left: '45px',
         width: '1rem',
         aspectRatio: 1,
         bgcolor: color,
