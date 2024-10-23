@@ -1,6 +1,5 @@
 import { AppIcon } from '@/components';
 import BoxCard from '@/components/BoxCard';
-import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import EditData from '@/components/Data/EditData';
 import { BoxType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest } from '@/utils';
@@ -18,7 +17,6 @@ const IdeasBoxView = () => {
   const [addBox, setAddBox] = useState(false);
   const [addSurvey, setAddSurvey] = useState(false);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
-  const [isLoading, setLoading] = useState(true);
 
   const boxesFetch = async () =>
     await databaseRequest({
@@ -31,7 +29,6 @@ const IdeasBoxView = () => {
         phase_id: Number(params['phase']),
       },
     }).then((response) => {
-      setLoading(false);
       if (!response.success || !response.data) return;
       setBoxes(response.data as BoxType[]);
     });
@@ -51,11 +48,6 @@ const IdeasBoxView = () => {
   return (
     <Stack alignItems="center">
       <Grid container spacing={2} p={1} width="100%">
-        {isLoading && (
-          <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-            <BoxCardSkeleton />
-          </Grid>
-        )}
         {boxes.map((box) => (
           <Grid key={box.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
             <BoxCard box={box.id} onReload={boxesFetch} />
