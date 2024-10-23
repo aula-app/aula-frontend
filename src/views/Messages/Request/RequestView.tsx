@@ -1,3 +1,4 @@
+import ReportCardSkeleton from '@/components/ReportCard/ReportCardSkeleton';
 import { MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import RequestsManager from '@/views/Settings/Requests/RequestsManager';
@@ -31,8 +32,8 @@ const RequestView = () => {
   }, []);
 
   return (
-    <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
-      {request && <RequestsManager request={request} onReload={requestFetch} />}
+    <Stack p={2} flex={1} gap={1} sx={{ overflowY: 'auto' }}>
+      {request ? <RequestsManager request={request} onReload={requestFetch} /> : <ReportCardSkeleton />}
     </Stack>
   );
 };

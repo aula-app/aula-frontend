@@ -20,7 +20,7 @@ const DataConfig = {
   groups: groupFields,
   ideas: ideasFields,
   messages: messagesFields,
-  reports: reportFields,
+  report: reportFields,
   rooms: roomsFields,
   surveys: suveysFields,
   users: usersFields,
