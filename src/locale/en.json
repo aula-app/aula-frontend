@@ -183,6 +183,8 @@
     "deactivate": "Deactivate {{var}}",
     "delegated": "{{var}} delegated ideas",
     "delegation": "Vote delegation",
+    "delegationSuccess": "Votes on this box have been delegated.",
+    "delegationRevoke": "Vote delegation for this box have been revoked.",
     "deleteConfirm": "Are you sure you want to delete the selected {{var}}? This action cannot be undone.",
     "deleteData": "Delete account",
     "deleteHeadline": "Delete selected {{var}}",

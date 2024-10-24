@@ -18,6 +18,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
+import { useAppStore } from '@/store';
 
 interface Props {
   isOpen: boolean;
@@ -33,6 +34,8 @@ interface Props {
 const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
   const { t } = useTranslation();
   const params = useParams();
+  const [, dispatch] = useAppStore();
+
   const [users, setUsers] = useState<UserType[]>([]);
   const [selected, setSelected] = useState<UserType | null>();
   const [filter, setFilter] = useState('');
@@ -84,7 +87,10 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         },
       },
       ['user_id', 'updater_id']
-    ).then(onClose);
+    ).then(() => {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.delegationSuccess'), type: 'success' } });
+      onClose();
+    });
   };
 
   const removeDelegate = async () => {
@@ -98,7 +104,10 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         },
       },
       ['user_id']
-    ).then(onClose);
+    ).then(() => {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.delegationRevoke'), type: 'success' } });
+      onClose();
+    });
   };
 
   const select = (user: UserType) => {

@@ -183,6 +183,8 @@
     "deactivate": "{{var}} deaktivieren",
     "delegated": "{{var}} delegierte Ideen",
     "delegation": "Delegation abstimmen",
+    "delegationSuccess": "Die Stimmabgabe für dieses Feld wurde delegiert.",
+    "delegationRevoke": "Die Stimmrechtsübertragung für dieses Feld wurde widerrufen.",
     "deleteConfirm": "Bist du sicher, dass du die ausgewählte {{var}} löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
     "deleteData": "Konto löschen",
     "deleteHeadline": "Ausgewählte {{var}} löschen",
