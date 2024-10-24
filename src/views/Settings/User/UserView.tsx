@@ -22,6 +22,7 @@ import { Stack } from '@mui/system';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProfileEditor from './ProfileEditor';
+import ProfileEditorSkeleton from './ProfileEditor/ProfileEditorSkeleton';
 
 /** * Renders "User" view
  * url: /settings/user
@@ -123,7 +124,7 @@ const UserView = () => {
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
       <Typography variant="h4">{t('views.profile')}</Typography>
-      {user && <ProfileEditor user={user} onReload={getUserInfo} />}
+      {user ? <ProfileEditor user={user} onReload={getUserInfo} /> : <ProfileEditorSkeleton />}
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.security')}</Typography>
