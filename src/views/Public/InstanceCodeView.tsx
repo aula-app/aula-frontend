@@ -1,3 +1,4 @@
+import { useAppStore } from "@/store";
 import { localStorageSet } from "@/utils";
 import { Button, Stack } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -10,24 +11,33 @@ import { useNavigate } from "react-router-dom";
  */
 const InstanceCodeView = () => {
   const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
   const [code, setCode] = useState("");
+  const [isLoading, setLoading] = useState(false);
   let navigate = useNavigate();
 
   const saveCode = async () => {
-    let api_url = await (
-      await fetch(import.meta.env.VITE_APP_MULTI_AULA + "/instance/" + code)
-    ).json();
-    // TODO: Show message that the code was not found
-    if (api_url.length > 0) {
+
+    setLoading(true)
+
+    const request =  await fetch(import.meta.env.VITE_APP_MULTI_AULA + "/instance/" + code)
+
+    const response = await request.json();
+    setLoading(false)
+
+    if (response.length > 0) {
       localStorageSet("code", code);
-      localStorageSet("api_url", api_url[0].api);
+      localStorageSet("api_url", response[0].api);
       navigate("/");
+    } else {
+      dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
     }
   };
 
   return (
     <Stack>
       <TextField
+      disabled={isLoading}
         id="outlined-basic"
         label="code"
         variant="outlined"
@@ -39,7 +49,7 @@ const InstanceCodeView = () => {
           setCode(event.target.value);
         }}
       />
-      <Button variant="contained" onClick={saveCode}>
+      <Button disabled={isLoading} variant="contained" onClick={saveCode}>
         {t("confirm")}
       </Button>
     </Stack>

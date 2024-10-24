@@ -1,7 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
 import { checkPermissions, dashboardPhases, databaseRequest } from '@/utils';
-import { Badge, Box, Button, Collapse, Stack, Typography } from '@mui/material';
+import { Badge, Box, Button, Collapse, Skeleton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,10 +12,10 @@ const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboa
 const DashBoard = ({ show = true }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [count, setCount] = useState<Record<number, number>>({});
-  const [reports, setReports] = useState(0);
-  const [messages, setMessages] = useState(0);
-  const [likes, setLikes] = useState(0);
+  const [count, setCount] = useState<Record<number, number>>();
+  const [reports, setReports] = useState<number>();
+  const [messages, setMessages] = useState<number>();
+  const [likes, setLikes] = useState<number>();
   const [isShowing, setShowing] = useState(show);
 
   const dashboardFetch = async (model: string, method: string, idRequest: string[]) =>
@@ -34,20 +34,24 @@ const DashBoard = ({ show = true }) => {
 
   useEffect(() => {
     dashboardFetch('Idea', 'getDashboardByUser', ['user_id']).then((response) => {
-      if (response.success) setCount(response.data.phase_counts);
+      if (!response.success || !response.data) return;
+      setCount(response.data.phase_counts);
     });
     dashboardFetch('Text', 'getTexts', []).then((response) => {
-      if (response.success) setMessages(response.count);
+      if (!response.success || !response.count) return;
+      setMessages(response.count);
     });
     dashboardFetch(
       'Message',
       checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
       checkPermissions(40) ? [] : ['user_id']
     ).then((response) => {
-      if (response.success) setReports(response.count);
+      if (!response.success) return;
+      setReports(Number(response.count));
     });
     dashboardFetch('Idea', 'getUpdatesByUser', ['user_id']).then((response) => {
-      if (response.success) setLikes(response.count);
+      if (!response.success) return;
+      setLikes(Number(response.count));
     });
   }, []);
 
@@ -60,7 +64,7 @@ const DashBoard = ({ show = true }) => {
           alignItems: 'center',
         }}
       >
-        <Stack direction="row" width="100%" pr={1} sx={{ alignItems: 'center' }}>
+        <Stack direction="row" width="100%" pr={1} gap={1} sx={{ alignItems: 'center' }}>
           <Button onClick={() => setShowing(!isShowing)} sx={{ mr: 'auto', color: 'inherit', textTransform: 'none' }}>
             <Typography variant="h5" sx={{ flexWrap: 'wrap', transition: 'opacity .5s ease-in-out' }}>
               {t('views.dashboard')}
@@ -74,21 +78,29 @@ const DashBoard = ({ show = true }) => {
               }}
             />
           </Button>
-          <Badge badgeContent={messages + reports} color="primary" sx={{ mx: 1 }}>
-            <AppIconButton icon="message" to="/messages" sx={{ p: 0 }} />
-          </Badge>
-          <Badge badgeContent={likes} color="primary" sx={{ mx: 1 }}>
-            <AppIconButton icon="heart" to="/updates" sx={{ p: 0 }} />
-          </Badge>
+          {typeof messages === 'number' && typeof reports === 'number' ? (
+            <Badge badgeContent={messages + reports} color="primary">
+              <AppIconButton icon="message" to="/messages" sx={{ p: 0 }} />
+            </Badge>
+          ) : (
+            <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />
+          )}
+          {typeof likes === 'number' ? (
+            <Badge badgeContent={likes} color="primary" sx={{ mx: 1 }}>
+              <AppIconButton icon="heart" to="/updates" sx={{ p: 0 }} />
+            </Badge>
+          ) : (
+            <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />
+          )}
         </Stack>
         <Collapse in={isShowing} sx={{ width: '100%' }}>
-          {count && Object.keys(count).length > 4 && (
-            <Grid container spacing={1} p={1}>
-              {displayPhases.map((phase, key) => (
-                <Grid size={{ xs: 6, sm: 3 }} key={key}>
+          <Grid container spacing={1} p={1}>
+            {displayPhases.map((phase, key) => (
+              <Grid size={{ xs: 6, sm: 3 }} key={key}>
+                {count && dashboardPhases[phase] ? (
                   <Button
+                    fullWidth
                     sx={{
-                      width: '100%',
                       py: 1,
                       px: 2,
                       backgroundColor: `${dashboardPhases[phase].name}.main`,
@@ -116,10 +128,12 @@ const DashBoard = ({ show = true }) => {
                       {count[Number(phase)]}
                     </Stack>
                   </Button>
-                </Grid>
-              ))}
-            </Grid>
-          )}
+                ) : (
+                  <Skeleton variant="rectangular" sx={{ borderRadius: 9999, height: 40.5 }} />
+                )}
+              </Grid>
+            ))}
+          </Grid>
         </Collapse>
       </Stack>
     </Box>

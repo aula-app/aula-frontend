@@ -1,20 +1,20 @@
 import { AppIconButton } from '@/components';
 import { DeleteData, EditData } from '@/components/Data';
+import DataTable from '@/components/Data/DataTable';
+import EditBar from '@/components/Data/DataTable/EditBar';
+import PaginationBar from '@/components/Data/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import { StatusTypes } from '@/types/Generics';
+import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { TableResponseType } from '@/types/TableTypes';
 import { databaseRequest, RequestObject } from '@/utils';
 import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
-import { Divider, Stack, Typography } from '@mui/material';
+import { Divider, Skeleton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import MoveSettings from '../MoveSettings';
-import EditBar from '@/components/Data/DataTable/EditBar';
-import DataTable from '@/components/Data/DataTable';
-import PaginationBar from '@/components/Data/DataTable/PaginationBar';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -24,7 +24,9 @@ const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
-  const [items, setItems] = useState<TableResponseType>();
+  const [items, setItems] = useState<PossibleFields[]>([]);
+  const [pageCount, setPageCount] = useState(0);
+
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
   const [orderBy, setOrder] = useState(DataConfig[setting_name].columns[0].orderId);
@@ -63,7 +65,9 @@ const SettingsView = () => {
     }
 
     await databaseRequest(requestData).then((response) => {
-      if (response.success) setItems(response);
+      if (!response.success || !response.data) return;
+      setItems(response.data);
+      setPageCount(response.count);
     });
   };
 
@@ -76,7 +80,7 @@ const SettingsView = () => {
     if (!DataConfig[setting_name]) {
       navigate('/error');
     } else {
-      setItems(undefined);
+      setItems([]);
       setPage(0);
       setTarget(0);
       setSelected([]);
@@ -107,7 +111,7 @@ const SettingsView = () => {
           {t(`views.${setting_name}`)}
         </Typography>
         <Stack direction="row" alignItems="start" bottom={0} height={37} px={2}>
-          <AppIconButton icon="filter" onClick={() => setOpenFilter(!openFilter)} />
+          {items.length > 0 && <AppIconButton icon="filter" onClick={() => setOpenFilter(!openFilter)} />}
         </Stack>
       </Stack>
       <FilterBar
@@ -122,10 +126,10 @@ const SettingsView = () => {
         isOpen={openFilter}
       />
       <Divider />
-      {items && items.data ? (
+      {items.length > 0 ? (
         <DataTable
           handleOrder={handleOrder}
-          items={items.data}
+          items={items}
           orderAsc={orderAsc}
           orderBy={orderBy}
           scope={setting_name}
@@ -135,7 +139,19 @@ const SettingsView = () => {
           setSelected={setSelected}
         />
       ) : (
-        <Stack flex={1}></Stack>
+        <Stack flex={1}>
+          <Divider />
+          <Stack direction="row" height={56} justifyContent="space-around" alignItems="center">
+            <Skeleton variant="text" width={20} height={30} />
+            {[...Array(7)].map(() => (
+              <Skeleton variant="text" width="10%" height={30} />
+            ))}
+          </Stack>
+          <Divider />
+          {[...Array(7)].map(() => (
+            <Skeleton variant="rectangular" height={42} sx={{ mt: 0.5 }} />
+          ))}
+        </Stack>
       )}
       <EditBar
         scope={setting_name}
@@ -145,7 +161,7 @@ const SettingsView = () => {
         onDelete={setOpenDelete}
       />
       <Divider />
-      {items && items.data && <PaginationBar pages={Math.ceil(Number(items.count) / limit)} setPage={setPage} />}
+      {pageCount && <PaginationBar pages={Math.ceil(Number(pageCount) / limit)} setPage={setPage} />}
       <EditData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
       <DeleteData
         key={`d${setting_name}`}

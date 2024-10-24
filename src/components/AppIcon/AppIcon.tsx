@@ -271,8 +271,8 @@ export const ICONS = {
   survey: HiOutlineQuestionMarkCircle,
   text: HiOutlineDocumentText,
   users: HiOutlineUserGroup,
-  visibilityoff: HiOutlineEye,
-  visibilityon: HiOutlineEyeSlash,
+  visibilityOff: HiOutlineEye,
+  visibilityOn: HiOutlineEyeSlash,
   voting: VotingIcon,
   wild: HiOutlineLightBulb,
 };

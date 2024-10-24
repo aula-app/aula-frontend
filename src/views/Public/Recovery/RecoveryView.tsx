@@ -1,9 +1,11 @@
 import { AppButton } from '@/components';
+import AppSubmitButton from '@/components/AppSubmitButton';
 import { useAppStore } from '@/store';
 import { ObjectPropByName } from '@/types/Generics';
 import { localStorageGet } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Stack, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -17,8 +19,9 @@ const RecoveryPasswordView = () => {
   const { t } = useTranslation();
   const jwt_token = localStorageGet("token");
   const api_url = localStorageGet("api_url");
-  const [, dispatch] = useAppStore();
   const navigate = useNavigate()
+  const [, dispatch] = useAppStore();
+  const [isLoading, setLoading] = useState(false);
 
   const schema = yup.object({
     email: yup.string().email(t("validation.email")).required(t("validation.required")),
@@ -34,8 +37,8 @@ const RecoveryPasswordView = () => {
   });
 
   const onSubmit = async (formData: ObjectPropByName) => {
-    const request = await (
-      await fetch(
+    setLoading(true)
+    const request = await fetch(
         `${api_url}/api/controllers/forgot_password.php?email=${formData.email}`,
         {
           method: "GET",
@@ -44,9 +47,11 @@ const RecoveryPasswordView = () => {
             Authorization: "Bearer " + jwt_token,
           }}
       )
-    ).json();
 
-    if (request.success === "false") {
+    const response = await request.json();
+    setLoading(false)
+
+    if (!response.success) {
       dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
       return;
     }
@@ -63,14 +68,13 @@ const RecoveryPasswordView = () => {
         </Typography>
         <TextField
           required
+          disabled={isLoading}
           label="Email"
           {...register('email')}
           error={errors.email ? true : false}
           helperText={errors.email?.message || ' '}
         />
-        <AppButton type="submit" onClick={handleSubmit(onSubmit)} sx={{ mx: 0 }}>
-          {t('login.recover')}
-        </AppButton>
+        <AppSubmitButton label={t('login.recover')} disabled={isLoading} onClick={handleSubmit(onSubmit)} />
       </Stack>
     </FormContainer>
   );

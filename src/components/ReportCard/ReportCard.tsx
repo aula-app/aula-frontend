@@ -1,6 +1,6 @@
 import { MessageType, ReportBodyType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
-import { Button, Card, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Fragment } from 'react/jsx-runtime';
 import { AppLink } from '..';
@@ -72,7 +72,7 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
         </Stack>
       </CardContent>
       <Divider />
-      <CardContent>
+      <CardActions>
         <Stack direction="row" mt={0.5} flex={1} gap={3} justifyContent="end">
           {report.status === 1 ? (
             <Button color="error" onClick={() => onArchive(true)}>
@@ -87,7 +87,7 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
             </Button>
           )}
         </Stack>
-      </CardContent>
+      </CardActions>
     </Card>
   ) : (
     <></>

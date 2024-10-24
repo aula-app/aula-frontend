@@ -6,6 +6,7 @@ import { checkPermissions, databaseRequest, phases } from '@/utils';
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import BoxCardSkeleton from './BoxCardSkeleton';
 
 interface BoxCardProps {
   box: number;
@@ -122,7 +123,7 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
       </AppLink>
     </Card>
   ) : (
-    <></>
+    <BoxCardSkeleton />
   );
 };
 

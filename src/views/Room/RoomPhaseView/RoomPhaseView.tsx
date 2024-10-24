@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
-import IdeasBoxesView from '../IdeasBoxes';
-import WildIdeasView from '../WildIdeas';
+import IdeasBoxesView from './IdeasBoxes';
+import WildIdeasView from './WildIdeas';
 
 /**
  * Renders "Room" view

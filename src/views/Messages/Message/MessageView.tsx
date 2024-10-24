@@ -1,6 +1,6 @@
 import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
-import { Button, Card, CardActions, CardContent, Divider, Stack, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Divider, Skeleton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -23,7 +23,7 @@ const MessagesView = () => {
         message_id: params['message_id'],
       },
     }).then((response) => {
-      if (!response.success) return;
+      if (!response.success || !response.data) return;
       setMessage(response.data);
     });
 
@@ -48,7 +48,7 @@ const MessagesView = () => {
 
   return (
     <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
-      {message && (
+      {message ? (
         <Card variant="outlined">
           <CardContent>
             <Typography variant="h5" py={2}>
@@ -67,6 +67,18 @@ const MessagesView = () => {
             >
               {message.status === 1 ? t(`texts.archive`) : t(`texts.unarchive`)}
             </Button>
+          </CardActions>
+        </Card>
+      ) : (
+        <Card variant="outlined">
+          <CardContent>
+            <Skeleton variant="rectangular" height={24} width="30%" sx={{ mb: 3 }} />
+            <Skeleton variant="text" />
+            <Skeleton variant="text" width="75%" />
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <Skeleton variant="rectangular" width={100} sx={{ ml: 'auto', mr: 2, my: 1 }} />
           </CardActions>
         </Card>
       )}

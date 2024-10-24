@@ -32,7 +32,7 @@ interface Props {
   onReload: () => void;
 }
 
-const SystemSettings = ({ user, onReload }: Props) => {
+const ProfileEditor = ({ user, onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [updates, setUpdates] = useState<Array<[keyof typeof schema.fields, string | undefined]>>([]);
@@ -276,4 +276,4 @@ const SystemSettings = ({ user, onReload }: Props) => {
   );
 };
 
-export default SystemSettings;
+export default ProfileEditor;
