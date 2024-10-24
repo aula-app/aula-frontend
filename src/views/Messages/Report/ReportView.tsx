@@ -34,7 +34,7 @@ const ReportView = () => {
 
   return (
     <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
-      {report ? <ReportCard report={report} onReload={() => navigate('/messages')} /> : <ReportCardSkeleton /> />}
+      {report ? <ReportCard report={report} onReload={() => navigate('/messages')} /> : <ReportCardSkeleton />}
     </Stack>
   );
 };
