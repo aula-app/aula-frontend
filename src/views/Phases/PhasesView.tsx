@@ -1,6 +1,6 @@
 import BoxCard from '@/components/BoxCard';
 import { IdeaBubble } from '@/components/Idea';
-import { BoxesResponseType, IdeasResponseType } from '@/types/RequestTypes';
+import { BoxType, IdeaType } from '@/types/Scopes';
 import { dashboardPhases, databaseRequest } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -16,9 +16,9 @@ import { useParams } from 'react-router-dom';
 const MessagesView = () => {
   const { t } = useTranslation();
   const params = useParams();
-  const [items, setItems] = useState<BoxesResponseType | IdeasResponseType>();
+  const [items, setItems] = useState<BoxType[] | IdeaType[]>([]);
 
-  const itemsFetch = async () =>
+  const boxesFetch = async () =>
     await databaseRequest({
       model: 'Topic',
       method: 'getTopicsByPhase',
@@ -28,7 +28,8 @@ const MessagesView = () => {
         phase_id: Number(params.phase),
       },
     }).then((response) => {
-      if (response.success) setItems(response);
+      if (!response.success || !response.data) return;
+      setItems(response.data as BoxType[]);
     });
 
   const ideasFetch = async () =>
@@ -40,12 +41,13 @@ const MessagesView = () => {
       },
       ['user_id']
     ).then((response) => {
-      if (response.success) setItems(response);
+      if (!response.success || !response.data) return;
+      setItems(response.data as IdeaType[]);
     });
 
   useEffect(() => {
     //@ts-ignore
-    params.phase === '0' ? ideasFetch() : itemsFetch();
+    params.phase === '0' ? ideasFetch() : boxesFetch();
   }, [params.phase]);
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
@@ -54,11 +56,10 @@ const MessagesView = () => {
       </Typography>
       <Grid container spacing={2} p={1}>
         {items &&
-          items.data &&
-          items.data.map((item) => {
+          items.map((item) => {
             return 'phase_id' in item ? (
               <Grid key={item.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-                <BoxCard box={item.id} onReload={itemsFetch} />
+                <BoxCard box={item.id} onReload={boxesFetch} />
               </Grid>
             ) : (
               <Grid key={item.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>

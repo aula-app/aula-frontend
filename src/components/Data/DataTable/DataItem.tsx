@@ -76,7 +76,7 @@ const DataItem = ({ row, column }: Params) => {
           />
           <AppIconButton
             size="small"
-            icon={hidden ? 'visibilityon' : 'visibilityoff'}
+            icon={hidden ? 'visibilityOn' : 'visibilityOff'}
             onClick={(e) => {
               e.stopPropagation();
               setHidden(!hidden);

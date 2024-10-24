@@ -1,4 +1,5 @@
 import ReportCard from '@/components/ReportCard';
+import ReportCardSkeleton from '@/components/ReportCard/ReportCardSkeleton';
 import { MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Stack } from '@mui/material';
@@ -31,8 +32,8 @@ const ReportView = () => {
   }, []);
 
   return (
-    <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
-      {report && <ReportCard report={report} onReload={reportFetch} />}
+    <Stack p={2} flex={1} gap={1} sx={{ overflowY: 'auto' }}>
+      {report ? <ReportCard report={report} onReload={reportFetch} /> : <ReportCardSkeleton />}
     </Stack>
   );
 };

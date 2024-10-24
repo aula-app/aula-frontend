@@ -1,5 +1,19 @@
 import { ObjectPropByName } from './Generics';
-import { AnnouncementType, BoxType, CommentType, IdeaType, MessageType, RoomType, UserType } from './Scopes';
+import {
+  AnnouncementType,
+  BoxType,
+  BugType,
+  CategoryType,
+  CommentType,
+  GroupType,
+  IdeaType,
+  MessageType,
+  ReportType,
+  RoomType,
+  UserType,
+} from './Scopes';
+
+type FailedResponseType = { success: false };
 
 interface BaseResponseType {
   success: boolean;
@@ -7,37 +21,39 @@ interface BaseResponseType {
   error_code: number;
 }
 
-export interface BoxesResponseType extends BaseResponseType {
-  data: BoxType[];
+export interface ScopeResponseType extends BaseResponseType {
+  data:
+    | AnnouncementType[]
+    | BoxType[]
+    | BugType[]
+    | CategoryType[]
+    | CommentType[]
+    | GroupType[]
+    | IdeaType[]
+    | MessageType[]
+    | ReportType[]
+    | RoomType[]
+    | UserType[];
 }
 
-export interface CommentsResponseType extends BaseResponseType {
-  data: CommentType[];
+export type ResponseType = FailedResponseType | ScopeResponseType;
+
+export interface SingleScopeResponseType extends BaseResponseType {
+  data:
+    | AnnouncementType
+    | BoxType
+    | BugType
+    | CategoryType
+    | CommentType
+    | GroupType
+    | IdeaType
+    | MessageType
+    | ReportType
+    | RoomType
+    | UserType;
 }
 
-export interface IdeasResponseType extends BaseResponseType {
-  data: IdeaType[];
-}
-
-export interface RoomsResponseType extends BaseResponseType {
-  data: RoomType[];
-}
-
-export interface SingleResponseType extends BaseResponseType {
-  data: AnnouncementType | BoxType | CommentType | IdeaType | MessageType | RoomType | UserType;
-}
-
-export interface SingleBoxResponseType extends BaseResponseType {
-  data: BoxType;
-}
-
-export interface SingleIdeaResponseType extends BaseResponseType {
-  data: IdeaType;
-}
-
-export interface SingleUserResponseType extends BaseResponseType {
-  data: UserType;
-}
+export type SingleResponseType = FailedResponseType | SingleScopeResponseType;
 
 export type StatusRequest = { method: string; status: number; callback: () => void | Promise<void> };
 

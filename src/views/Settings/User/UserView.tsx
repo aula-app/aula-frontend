@@ -3,7 +3,6 @@ import ChangePassword from '@/components/ChangePassword';
 import { ChangePasswordMethods } from '@/components/ChangePassword/ChangePassword';
 import { useAppStore } from '@/store';
 import { PassResponse } from '@/types/Generics';
-import { SingleUserResponseType } from '@/types/RequestTypes';
 import { RequestBodyType, UserType } from '@/types/Scopes';
 import { databaseRequest, localStorageGet } from '@/utils';
 import {
@@ -23,6 +22,7 @@ import { Stack } from '@mui/system';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProfileEditor from './ProfileEditor';
+import ProfileEditorSkeleton from './ProfileEditor/ProfileEditorSkeleton';
 
 /** * Renders "User" view
  * url: /settings/user
@@ -31,7 +31,7 @@ const UserView = () => {
   const { t } = useTranslation();
   const jwt_token = localStorageGet('token');
   const api_url = localStorageGet('api_url');
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<UserType>();
   const [openDelete, setOpenDelete] = useState(false);
   const [, dispatch] = useAppStore();
   const passFields = useRef<ChangePasswordMethods>(null);
@@ -44,8 +44,9 @@ const UserView = () => {
         arguments: {},
       },
       ['user_id']
-    ).then((response: SingleUserResponseType) => {
-      if (response.success) setUser(response.data);
+    ).then((response) => {
+      if (!response.success || !response.data) return;
+      setUser(response.data as UserType);
     });
 
   const changePass = (formData: PassResponse) => {
@@ -85,7 +86,7 @@ const UserView = () => {
       },
       ['creator_id', 'updater_id']
     ).then((response) => {
-      if (!response.success) return;
+      if (!response.success || !response.data) return;
       setOpenDelete(false);
       dispatch({ type: 'ADD_POPUP', message: { message: returnMessage, type: 'success' } });
     });
@@ -123,7 +124,7 @@ const UserView = () => {
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
       <Typography variant="h4">{t('views.profile')}</Typography>
-      {user && <ProfileEditor user={user} onReload={getUserInfo} />}
+      {user ? <ProfileEditor user={user} onReload={getUserInfo} /> : <ProfileEditorSkeleton />}
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('views.security')}</Typography>

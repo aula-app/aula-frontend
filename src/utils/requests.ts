@@ -8,16 +8,18 @@ export interface RequestObject {
   arguments: ObjectPropByName;
 }
 
-export const databaseRequest = async (requestData: RequestObject, userId = [] as string[]) => {
-  const jwt_token = localStorageGet('token');
-  const api_url = localStorageGet('api_url');
-  const jwt_payload = parseJwt(jwt_token);
-  const headers = {} as { 'Content-Type'?: string; Authorization?: string };
-  headers['Content-Type'] = 'application/json';
+const error = new CustomEvent('AppErrorDialog', { detail: 'texts.error' });
 
-  const error = new CustomEvent('AppErrorDialog', {
-    detail: 'texts.error',
-  });
+export const databaseRequest = async (requestData: RequestObject, userId = [] as string[]) => {
+  const api_url = localStorageGet('api_url');
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
+  const headers = { 'Content-Type': 'application/json' } as { 'Content-Type': string; Authorization?: string };
+
+  if (!api_url || !jwt_payload) {
+    document.dispatchEvent(error);
+    return { success: false };
+  }
 
   if (requestData.method !== 'checkLogin') {
     headers['Authorization'] = `Bearer ${jwt_token}`;
@@ -30,24 +32,25 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
   }
 
   try {
-    const response = await (
-      await fetch(`${api_url}/api/controllers/model.php?${requestData.method}`, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(requestData),
-      })
-    ).json();
+    const data = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(requestData),
+    };
 
-    if (response && response.success) {
-      return response;
-    } else {
+    const request = await fetch(`${api_url}/api/controllers/model.php?${requestData.method}`, data);
+
+    const response = await request.json();
+
+    if (!response.success) {
       if ('online_mode' in response && response.online_mode === 0) {
         if (window.location.pathname !== '/offline') window.location.href = '/offline';
       } else {
         document.dispatchEvent(error);
-        return response;
       }
     }
+
+    return response;
   } catch (e) {
     document.dispatchEvent(error);
     return { success: false };

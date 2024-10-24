@@ -4,9 +4,10 @@ import { MoveData } from '@/components/Data';
 import EditData from '@/components/Data/EditData';
 import DelegateVote from '@/components/DelegateVote';
 import { IdeaCard } from '@/components/Idea';
+import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
 import KnowMore from '@/components/KnowMore';
 import { DelegationType } from '@/types/Delegation';
-import { IdeasResponseType } from '@/types/RequestTypes';
+import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
 import { Button, Fab, Stack, Typography } from '@mui/material';
@@ -23,8 +24,9 @@ const IdeasBoxView = () => {
   const { t } = useTranslation();
   const params = useParams();
   const [add, setAdd] = useState(false);
-  const [boxIdeas, setBoxIdeas] = useState<IdeasResponseType>();
-  const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>();
+  const [isLoading, setLoading] = useState(true);
+  const [boxIdeas, setBoxIdeas] = useState<IdeaType[]>([]);
+  const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>([]);
   const [delegationDialog, setDelegationDialog] = useState(false);
 
   const boxIdeasFetch = async () => {
@@ -33,7 +35,9 @@ const IdeasBoxView = () => {
       method: 'getIdeasByTopic',
       arguments: { topic_id: Number(params['box_id']) },
     }).then((response) => {
-      if (response.success) setBoxIdeas(response);
+      setLoading(false);
+      if (!response.success || !response.data) return;
+      setBoxIdeas(response.data as IdeaType[]);
     });
   };
 
@@ -46,7 +50,8 @@ const IdeasBoxView = () => {
       },
       ['user_id']
     ).then((response) => {
-      if (response.success) setDelegationStatus(response.data);
+      if (!response.success || !response.data) return;
+      setDelegationStatus(response.data as DelegationType[]);
     });
 
   const closeAdd = () => {
@@ -75,10 +80,9 @@ const IdeasBoxView = () => {
         <BoxCard box={Number(params['box_id'])} noLink />
         <Stack direction="row">
           <Typography variant="h6" p={2}>
-            {boxIdeas &&
-              t(delegationStatus && delegationStatus.length > 0 ? `texts.delegated` : `texts.undelegated`, {
-                var: boxIdeas.count,
-              })}
+            {t(delegationStatus && delegationStatus.length > 0 ? `texts.delegated` : `texts.undelegated`, {
+              var: boxIdeas.length,
+            })}
           </Typography>
           {Number(params['phase']) === 30 && (
             <Button
@@ -96,28 +100,23 @@ const IdeasBoxView = () => {
             </Button>
           )}
         </Stack>
-        {boxIdeas && (
-          <>
-            {checkPermissions(30) && (
-              <MoveData id={Number(params['box_id'])} scope="boxes" onClose={() => boxIdeasFetch()} />
-            )}
-            <Grid container spacing={1} pt={1} pb={2}>
-              {boxIdeas.data &&
-                boxIdeas.data.map((idea, key) => (
-                  <Grid
-                    key={key}
-                    size={{ xs: 12, sm: 6, md: 4 }}
-                    sx={{ scrollSnapAlign: 'center' }}
-                    order={-idea.approved}
-                  >
-                    <AppLink to={`idea/${idea.id}`}>
-                      <IdeaCard idea={idea} phase={Number(params['phase']) as RoomPhases} />
-                    </AppLink>
-                  </Grid>
-                ))}
-            </Grid>
-          </>
+        {checkPermissions(30) && (
+          <MoveData id={Number(params['box_id'])} scope="boxes" onClose={() => boxIdeasFetch()} />
         )}
+        <Grid container spacing={1} pt={1} pb={2}>
+          {isLoading && (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
+              <IdeaCardSkeleton />
+            </Grid>
+          )}
+          {boxIdeas.map((idea, key) => (
+            <Grid key={key} size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
+              <AppLink to={`idea/${idea.id}`}>
+                <IdeaCard idea={idea} phase={Number(params['phase']) as RoomPhases} />
+              </AppLink>
+            </Grid>
+          ))}
+        </Grid>
         {checkPermissions(20) && String(params['phase']) === '10' && (
           <>
             <Fab

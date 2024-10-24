@@ -1,9 +1,9 @@
 import { AppIcon } from '@/components';
 import { DeleteData } from '@/components/Data';
 import EditData from '@/components/Data/EditData';
-import { GroupType } from '@/types/GroupTypes';
+import { GroupType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
-import { Box, Chip, Stack } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

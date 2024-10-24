@@ -1,6 +1,6 @@
 import { useIsAuthenticated } from '@/hooks/auth';
 import { useAppStore } from '@/store/AppStore';
-import { localStorageGet, parseJwt } from '@/utils';
+import { localStorageGet } from '@/utils';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PrivateRoutes from './PrivateRoutes';
@@ -17,6 +17,7 @@ const Routes = () => {
   const jwt_token = localStorageGet('token');
 
   const getConsent = async () => {
+    if (!jwt_token) return;
     const data = await (
       await fetch(api_url + '/api/controllers/user_consent.php', {
         method: 'POST',
