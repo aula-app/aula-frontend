@@ -12,7 +12,7 @@ import { AppLink } from '..';
 interface Props {
   report: MessageType;
   onConfirm?: () => void;
-  onReload: () => Promise<void>;
+  onReload: () => void;
 }
 
 const ReportCard = ({ report, onReload, onConfirm }: Props) => {
@@ -34,7 +34,7 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
   const confirmRequest = () => {
     if (!onConfirm) return;
     onConfirm();
-    onReload();
+    onArchive(true);
   };
 
   const bodyData: ReportBodyType | null = JSON.parse(report.body);
