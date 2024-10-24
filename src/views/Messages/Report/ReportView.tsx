@@ -4,7 +4,7 @@ import { MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 /**
  * Renders "Report" view
@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 
 const ReportView = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const [report, setReport] = useState<MessageType>();
 
   const reportFetch = async () =>
@@ -32,8 +33,8 @@ const ReportView = () => {
   }, []);
 
   return (
-    <Stack p={2} flex={1} gap={1} sx={{ overflowY: 'auto' }}>
-      {report ? <ReportCard report={report} onReload={reportFetch} /> : <ReportCardSkeleton />}
+    <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
+      {report ? <ReportCard report={report} onReload={() => navigate('/messages')} /> : <ReportCardSkeleton />}
     </Stack>
   );
 };

@@ -3,7 +3,7 @@ import { databaseRequest } from '@/utils';
 import { Button, Card, CardActions, CardContent, Divider, Skeleton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 /**
  * Renders "Messages" view
@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 const MessagesView = () => {
   const { t } = useTranslation();
   const params = useParams();
+  const navigate = useNavigate();
   const [message, setMessage] = useState<MessageType | AnnouncementType>();
 
   const messageFetch = async () =>
@@ -39,7 +40,7 @@ const MessagesView = () => {
         },
       },
       ['updater_id']
-    ).then(() => messageFetch());
+    ).then(() => navigate('/messages'));
   };
 
   useEffect(() => {
