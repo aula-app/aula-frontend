@@ -91,7 +91,7 @@ const SystemSettings = ({ user, onReload }: Props) => {
           headline: `Data change request for ${user.realname}`,
           body: JSON.stringify({
             type: 'changeName',
-            data: { id: user.id, property: field, from: String(user[field[0]]), to: field[1] },
+            data: { id: user.id, property: field[0], from: String(user[field[0]]), to: field[1] },
             content: `A data change procedure was requested for user ${user.realname}. They want to change their ${field[0]} to ${field[1]}`,
           }),
           msg_type: 5,
