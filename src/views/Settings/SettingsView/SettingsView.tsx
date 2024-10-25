@@ -1,7 +1,7 @@
-import { AppIconButton } from '@/components';
+import { AppIcon, AppIconButton } from '@/components';
 import { DeleteData, EditData } from '@/components/Data';
 import DataTable from '@/components/Data/DataTable';
-import EditBar from '@/components/Data/DataTable/EditBar';
+import DataTableSkeleton from '@/components/Data/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/Data/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import { StatusTypes } from '@/types/Generics';
@@ -10,11 +10,10 @@ import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, RequestObject } from '@/utils';
 import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
-import { Divider, Skeleton, Stack, Typography } from '@mui/material';
+import { Divider, Fab, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import MoveSettings from '../MoveSettings';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -38,7 +37,6 @@ const SettingsView = () => {
   const [selected, setSelected] = useState<number[]>([]);
   const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
   const [openDelete, setOpenDelete] = useState(false);
-  const [openMove, setOpenMove] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
   const dataFetch = async () => {
@@ -142,29 +140,11 @@ const SettingsView = () => {
           setSelected={setSelected}
         />
       ) : (
-        <Stack flex={1}>
-          <Divider />
-          <Stack direction="row" height={56} justifyContent="space-around" alignItems="center">
-            <Skeleton variant="text" width={20} height={30} />
-            {[...Array(7)].map(() => (
-              <Skeleton variant="text" width="10%" height={30} />
-            ))}
-          </Stack>
-          <Divider />
-          {[...Array(7)].map(() => (
-            <Skeleton variant="rectangular" height={42} sx={{ mt: 0.5 }} />
-          ))}
-        </Stack>
+        <DataTableSkeleton />
       )}
-      <EditBar
-        scope={setting_name}
-        selected={selected}
-        onAlter={setAlter}
-        onMove={setOpenMove}
-        onDelete={setOpenDelete}
-      />
       <Divider />
       {pageCount && <PaginationBar pages={Math.ceil(Number(pageCount) / limit)} setPage={setPage} />}
+
       <EditData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
       <DeleteData
         key={`d${setting_name}`}
@@ -176,7 +156,34 @@ const SettingsView = () => {
           setSelected([]);
         }}
       />
-      <MoveSettings key={`m${setting_name}`} items={selected} isOpen={openMove} onClose={onClose} />
+
+      {selected.length > 0 ? (
+        <Fab
+          aria-label="add"
+          color="error"
+          onClick={() => setOpenDelete(true)}
+          sx={{
+            position: 'fixed',
+            bottom: 40,
+            alignSelf: 'center',
+          }}
+        >
+          <AppIcon icon="delete" />
+        </Fab>
+      ) : (
+        <Fab
+          aria-label="add"
+          color="primary"
+          onClick={() => setAlter({ open: true })}
+          sx={{
+            position: 'fixed',
+            bottom: 40,
+            alignSelf: 'center',
+          }}
+        >
+          <AppIcon icon="add" />
+        </Fab>
+      )}
     </Stack>
   );
 };
