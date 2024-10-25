@@ -1,28 +1,29 @@
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
-import { Checkbox, TableCell, TableRow } from '@mui/material';
+import { Checkbox, SxProps, TableCell, TableRow, Theme } from '@mui/material';
 import { deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
 import { ReactNode } from 'react';
 
 type Params = {
-  row: PossibleFields;
-  selected: number[];
-  toggleRow: (id: number) => void;
+  id: number;
   status: StatusTypes;
+  selected?: boolean;
+  toggleRow: (id: number) => void;
   children: ReactNode;
+  sx?: SxProps<Theme>;
 };
 
-const DataRow = ({ row, selected, toggleRow, status, children }: Params) => {
+const DataRow = ({ id, selected = false, toggleRow, status, children, sx, ...restOfProps }: Params) => {
   const getBackground = () => {
     switch (status) {
       case 0:
-        return selected.includes(row.id) ? deepOrange[100] : deepOrange[50];
+        return selected ? deepOrange[100] : deepOrange[50];
       case 2:
-        return selected.includes(row.id) ? deepPurple[100] : deepPurple[50];
+        return selected ? deepPurple[100] : deepPurple[50];
       case 3:
-        return selected.includes(row.id) ? orange[100] : orange[50];
+        return selected ? orange[100] : orange[50];
       default:
-        return selected.includes(row.id) ? grey[100] : '';
+        return selected ? grey[100] : '';
     }
   };
 
@@ -33,10 +34,12 @@ const DataRow = ({ row, selected, toggleRow, status, children }: Params) => {
         background: getBackground,
         cursor: 'pointer',
         textDecorationLine: status !== 1 ? 'line-through' : 'none',
+        ...sx,
       }}
+      {...restOfProps}
     >
       <TableCell>
-        <Checkbox checked={selected.includes(row.id)} onChange={() => toggleRow(row.id)} />
+        <Checkbox checked={selected} onChange={() => toggleRow(id)} />
       </TableCell>
       {children}
     </TableRow>

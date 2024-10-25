@@ -10,7 +10,7 @@ import { SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Params = {
-  row: PossibleFields;
+  row: Record<keyof PossibleFields, string>;
   column: keyof PossibleFields;
 };
 

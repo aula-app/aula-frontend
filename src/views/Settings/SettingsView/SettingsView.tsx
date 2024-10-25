@@ -14,6 +14,7 @@ import { Divider, Fab, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { number } from 'yup';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -23,7 +24,7 @@ const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
-  const [items, setItems] = useState<PossibleFields[]>([]);
+  const [items, setItems] = useState<Array<Record<keyof PossibleFields, string>>>([]);
   const [pageCount, setPageCount] = useState(0);
 
   const [limit, setLimit] = useState(10);
@@ -35,7 +36,8 @@ const SettingsView = () => {
   const [target, setTarget] = useState(0);
 
   const [selected, setSelected] = useState<number[]>([]);
-  const [alter, setAlter] = useState<{ open: boolean; id?: number }>({ open: false });
+  const [editId, setEditId] = useState(0);
+  const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -72,6 +74,12 @@ const SettingsView = () => {
     });
   };
 
+  const setEdit = (id: number) => {
+    if (id === 0) return;
+    setEditId(id);
+    setOpenEdit(true);
+  };
+
   const handleOrder = (col: number) => {
     if (orderBy === col) setOrderAsc(!orderAsc);
     setOrder(col);
@@ -92,7 +100,7 @@ const SettingsView = () => {
 
   const onClose = () => {
     dataFetch();
-    setAlter({ open: false });
+    setOpenEdit(false);
     setOpenDelete(false);
   };
 
@@ -128,15 +136,14 @@ const SettingsView = () => {
       <Divider />
       {items.length > 0 ? (
         <DataTable
+          columns={DataConfig[setting_name].columns}
+          rows={items}
+          selected={selected}
+          onSelect={setSelected}
+          onClick={setEdit}
           handleOrder={handleOrder}
-          items={items}
           orderAsc={orderAsc}
           orderBy={orderBy}
-          scope={setting_name}
-          selected={selected}
-          setAlter={setAlter}
-          setLimit={setLimit}
-          setSelected={setSelected}
         />
       ) : (
         <DataTableSkeleton />
@@ -144,7 +151,7 @@ const SettingsView = () => {
       <Divider />
       {pageCount && <PaginationBar pages={Math.ceil(Number(pageCount) / limit)} setPage={setPage} />}
 
-      <EditData key={`${setting_name}`} isOpen={alter.open} id={alter.id} scope={setting_name} onClose={onClose} />
+      <EditData key={`${setting_name}`} isOpen={openEdit} id={editId} scope={setting_name} onClose={onClose} />
       <DeleteData
         key={`d${setting_name}`}
         isOpen={openDelete}
@@ -158,7 +165,7 @@ const SettingsView = () => {
 
       {selected.length > 0 ? (
         <Fab
-          aria-label="add"
+          aria-label="delete"
           color="error"
           onClick={() => setOpenDelete(true)}
           sx={{
@@ -173,7 +180,10 @@ const SettingsView = () => {
         <Fab
           aria-label="add"
           color="primary"
-          onClick={() => setAlter({ open: true })}
+          onClick={() => {
+            setEditId(0);
+            setOpenEdit(true);
+          }}
           sx={{
             position: 'fixed',
             bottom: 40,
