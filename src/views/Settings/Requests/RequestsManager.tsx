@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 interface Props {
   request: MessageType;
-  onReload: () => Promise<void>;
+  onReload: () => void;
 }
 
 /** * Renders "RequestsManager" component

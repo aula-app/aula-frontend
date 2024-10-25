@@ -4,7 +4,7 @@ import { databaseRequest } from '@/utils';
 import { Button, Card, CardActions, CardContent, Divider, Skeleton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 /**
  * Renders "Messages" view
@@ -14,6 +14,7 @@ import { useParams } from 'react-router-dom';
 const AnnouncementView = () => {
   const { t } = useTranslation();
   const params = useParams();
+  const navigate = useNavigate();
   const [message, setMessage] = useState<MessageType | AnnouncementType>();
 
   const messageFetch = async () =>
@@ -28,7 +29,7 @@ const AnnouncementView = () => {
       setMessage(response.data);
     });
 
-  const giveConsent = async (text_id: number) =>
+  const giveConsent = async () =>
     await databaseRequest(
       {
         model: 'User',
@@ -38,21 +39,23 @@ const AnnouncementView = () => {
         },
       },
       ['user_id']
-    );
+    ).then((response) => {
+      if (response.success) onArchive(true);
+    });
 
-  const onArchive = async (value: boolean) => {
+  const onArchive = async (setArchived: boolean) => {
     if (!message) return;
     await databaseRequest(
       {
-        model: 'Message',
-        method: 'setMessageStatus',
+        model: 'Text',
+        method: 'setTextStatus',
         arguments: {
-          status: value ? 3 : 1,
-          message_id: message.id,
+          status: setArchived ? 3 : 1,
+          text_id: message.id,
         },
       },
       ['updater_id']
-    ).then(() => messageFetch());
+    ).then(() => navigate('/messages'));
   };
 
   useEffect(() => {
@@ -85,7 +88,7 @@ const AnnouncementView = () => {
                   </Button>
                 )}
                 {message.user_needs_to_consent > 0 && (
-                  <AppButton color="primary" onClick={() => giveConsent(message.id)}>
+                  <AppButton color="primary" onClick={giveConsent}>
                     {message.consent_text}
                   </AppButton>
                 )}

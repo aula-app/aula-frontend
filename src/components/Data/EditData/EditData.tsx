@@ -159,22 +159,31 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
       },
       requestId
     ).then((response) => {
-      if (!response.success) return;
-      updates.forEach((update) => {
-        if (update.requestId) update.args[DataConfig[scope].requests.id] = response.data;
-        if (!update.args[DataConfig[scope].requests.id]) update.args[DataConfig[scope].requests.id] = response.data;
-        databaseRequest(
-          {
-            model: update.model,
-            method: update.method,
-            arguments: {
-              ...update.args,
-            },
+      if (response.success && updates.length > 0) dataUpdates(response.data);
+    });
+  };
+
+  const dataUpdates = async (newId: number) => {
+    let updated = 0;
+    updates.forEach((update) => {
+      console.log(updates, update);
+
+      if (update.requestId || !update.args[DataConfig[scope].requests.id])
+        update.args[DataConfig[scope].requests.id] = newId;
+
+      databaseRequest(
+        {
+          model: update.model,
+          method: update.method,
+          arguments: {
+            ...update.args,
           },
-          ['updater_id']
-        );
+        },
+        ['updater_id']
+      ).then(() => {
+        updated++;
+        if (updated === updates.length) onClose();
       });
-      onClose();
     });
   };
 

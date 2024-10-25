@@ -1,5 +1,6 @@
 import { AppIcon, AppIconButton, AppLink } from '@/components';
 import FilterBar from '@/components/FilterBar';
+import { StatusTypes } from '@/types/Generics';
 import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest, RequestObject } from '@/utils';
 import { Skeleton, Stack, Typography } from '@mui/material';
@@ -26,6 +27,7 @@ const MessageCard = ({ type }: Props) => {
   const { t } = useTranslation();
   const [isLoading, setLoading] = useState(true);
   const [messages, setMessages] = useState<MessageType[] | AnnouncementType[]>([]);
+  const [status, setStatus] = useState<StatusTypes>(1);
   const [openMessagesFilter, setOpenMessagesFilter] = useState(false);
   const [messagesFilter, setMessagesFilter] = useState<[string, string]>(['', '']);
 
@@ -33,7 +35,7 @@ const MessageCard = ({ type }: Props) => {
     const requestData = {
       model: type === 'announcement' ? 'Text' : 'Message',
       method: METHODS[type],
-      arguments: {},
+      arguments: { status: status },
     } as RequestObject;
 
     if (type === 'report') requestData.arguments['msg_type'] = 4;
@@ -56,7 +58,7 @@ const MessageCard = ({ type }: Props) => {
 
   useEffect(() => {
     messagesFetch();
-  }, [messagesFilter]);
+  }, [messagesFilter, status]);
 
   return isLoading ? (
     <Stack gap={1} mb={2}>
@@ -68,44 +70,54 @@ const MessageCard = ({ type }: Props) => {
       <Skeleton variant="rectangular" height={50} sx={{ borderRadius: 5 }} />
     </Stack>
   ) : (
-    <Stack>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="h6" py={2} display="flex" alignItems="center">
-          <AppIcon icon={type} sx={{ mr: 1 }} /> {t(`views.${type}s`)}
-        </Typography>
-        <AppIconButton icon="filter" onClick={() => setOpenMessagesFilter(!openMessagesFilter)} />
-      </Stack>
-      <FilterBar isOpen={openMessagesFilter} filter={messagesFilter} scope="messages" setFilter={setMessagesFilter} />
-      {messages.map((message) => {
-        const variant =
-          type === 'report'
-            ? message.headline.substring(0, 3) === 'Bug'
-              ? 'bug'
-              : message.headline.substring(0, 7) === 'Account'
-                ? 'alert'
-                : 'report'
-            : type;
-        return (
-          <Stack
-            component={AppLink}
-            direction="row"
-            alignItems="center"
-            borderRadius={5}
-            p={1}
-            pl={2}
-            mb={1}
-            to={`/messages/${type}/${message.id}`}
-            bgcolor={`${type}.main`}
-          >
-            <AppIcon icon={variant} />
-            <Typography flex={1} px={2}>
-              {message.headline}
+    <>
+      {messages.length > 0 && (
+        <Stack>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" py={2} display="flex" alignItems="center">
+              <AppIcon icon={type} sx={{ mr: 1 }} /> {t(`views.${type}s`)}
             </Typography>
-            <AppIconButton size="small" icon="close" />
+            <AppIconButton icon="filter" onClick={() => setOpenMessagesFilter(!openMessagesFilter)} />
           </Stack>
-        );
-      })}
-    </Stack>
+          <FilterBar
+            isOpen={openMessagesFilter}
+            filter={messagesFilter}
+            scope="messages"
+            setFilter={setMessagesFilter}
+            setStatus={setStatus}
+          />
+          {messages.map((message) => {
+            const variant =
+              type === 'report'
+                ? message.headline.substring(0, 3) === 'Bug'
+                  ? 'bug'
+                  : message.headline.substring(0, 7) === 'Account'
+                    ? 'alert'
+                    : 'report'
+                : type;
+            return (
+              <Stack
+                component={AppLink}
+                direction="row"
+                alignItems="center"
+                borderRadius={5}
+                p={1}
+                pl={2}
+                mb={1}
+                to={`/messages/${type}/${message.id}`}
+                bgcolor={`${type}.main`}
+              >
+                <AppIcon icon={variant} />
+                <Typography flex={1} px={2}>
+                  {message.headline}
+                </Typography>
+                <AppIconButton size="small" icon="close" />
+              </Stack>
+            );
+          })}
+        </Stack>
+      )}
+    </>
   );
 };
 

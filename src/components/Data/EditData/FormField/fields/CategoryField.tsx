@@ -26,6 +26,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
   const { t } = useTranslation();
   const [currentOptions, setOptions] = useState<ThisOptionsType[]>([]);
   const [selected, setSelected] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
   async function fetchOptions() {
     await databaseRequest({
@@ -52,6 +53,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
       },
     }).then((response) => {
       if (response.success && response.data) setSelected(Number(response.data.id));
+      setMounted(true);
     });
   }
 
@@ -60,6 +62,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
   };
 
   useEffect(() => {
+    if (!mounted) return;
     const args = { category_id: selected } as ObjectPropByName;
     if (id) args['idea_id'] = id;
     addUpdate({ model: 'Idea', method: 'addIdeaToCategory', args: args });
@@ -67,7 +70,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
 
   useEffect(() => {
     fetchOptions();
-    if (id) getCategory();
+    id ? getCategory() : setMounted(true);
   }, []);
 
   return (
@@ -76,7 +79,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
       disabled={disabled}
       fullWidth
       select
-      value={String(selected)}
+      value={selected}
       onChange={changeCategory}
       sx={{ mb: 3, order: 1 }}
       {...restOfProps}
