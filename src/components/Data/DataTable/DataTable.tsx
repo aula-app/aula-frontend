@@ -16,6 +16,7 @@ type Params = {
   handleOrder: (col: number) => void;
   orderAsc: boolean;
   orderBy: number;
+  setLimit: Dispatch<SetStateAction<number>>;
 };
 
 const DataTable = ({
@@ -27,6 +28,7 @@ const DataTable = ({
   handleOrder,
   orderAsc,
   orderBy,
+  setLimit,
   ...restOfProps
 }: Params) => {
   const { t } = useTranslation();
@@ -37,11 +39,11 @@ const DataTable = ({
     custom_field2_name: '',
   });
 
-  // const getLimit = () => {
-  //   setLimit(
-  //     tableBody && tableBody.current ? Math.max(Math.floor(tableBody.current.clientHeight / 55) - 1 || 10, 1) : 10
-  //   );
-  // };
+  const getLimit = () => {
+    setLimit(
+      tableBody && tableBody.current ? Math.max(Math.floor(tableBody.current.clientHeight / 55) - 1 || 10, 1) : 10
+    );
+  };
 
   const toggleRow = (id: number) => {
     selected.includes(id) ? onSelect(selected.filter((value) => value !== id)) : onSelect([...selected, id]);
@@ -63,21 +65,21 @@ const DataTable = ({
     });
   };
 
-  // useEffect(() => {
-  //   window.addEventListener('resize', getLimit);
-  //   return () => {
-  //     window.removeEventListener('resize', getLimit);
-  //   };
-  // }, []);
+  useEffect(() => {
+    window.addEventListener('resize', getLimit);
+    return () => {
+      window.removeEventListener('resize', getLimit);
+    };
+  }, []);
 
-  // useEffect(getLimit, [items.length]);
+  useEffect(getLimit, [rows.length]);
 
   useEffect(() => {
     if ((columns.map((column) => column.name) as string[]).includes('custom_field1_name')) getCustomFields();
   }, []);
 
   return (
-    <Stack flex={1} sx={{ overflowX: 'auto' }} {...restOfProps}>
+    <Stack flex={1} sx={{ overflowX: 'auto' }} ref={tableBody} {...restOfProps}>
       <Table stickyHeader size="small">
         <TableHead>
           <TableRow>

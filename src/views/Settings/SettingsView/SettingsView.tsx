@@ -14,7 +14,6 @@ import { Divider, Fab, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { number } from 'yup';
 
 /** * Renders default "Settings" view
  * urls: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
@@ -144,6 +143,7 @@ const SettingsView = () => {
           handleOrder={handleOrder}
           orderAsc={orderAsc}
           orderBy={orderBy}
+          setLimit={setLimit}
         />
       ) : (
         <DataTableSkeleton />
