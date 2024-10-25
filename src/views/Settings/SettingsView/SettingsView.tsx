@@ -94,7 +94,6 @@ const SettingsView = () => {
     dataFetch();
     setAlter({ open: false });
     setOpenDelete(false);
-    setOpenMove(false);
   };
 
   useEffect(() => {
