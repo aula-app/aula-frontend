@@ -19,16 +19,19 @@ const IdeasBoxView = () => {
   const [boxes, setBoxes] = useState<BoxType[]>([]);
 
   const boxesFetch = async () =>
-    await databaseRequest({
-      model: 'Topic',
-      method: 'getTopics',
-      arguments: {
-        offset: 0,
-        limit: 0,
-        room_id: Number(params['room_id']),
-        phase_id: Number(params['phase']),
+    await databaseRequest(
+      {
+        model: 'Topic',
+        method: 'getTopics',
+        arguments: {
+          offset: 0,
+          limit: 0,
+          room_id: Number(params['room_id']),
+          phase_id: Number(params['phase']),
+        },
       },
-    }).then((response) => {
+      ['user_id']
+    ).then((response) => {
       if (!response.success || !response.data) return;
       setBoxes(response.data as BoxType[]);
     });

@@ -42,6 +42,9 @@ const SettingsView = () => {
   const [openFilter, setOpenFilter] = useState(false);
 
   const dataFetch = async () => {
+    const requestId = [];
+    if (setting_name === 'ideas' || setting_name === 'boxes') requestId.push('user_id');
+
     const requestData = {
       model: DataConfig[setting_name].requests.model,
       method: DataConfig[setting_name].requests.fetch,
@@ -64,7 +67,7 @@ const SettingsView = () => {
       requestData['arguments']['search_text'] = filter[1];
     }
 
-    await databaseRequest(requestData).then((response) => {
+    await databaseRequest(requestData, requestId).then((response) => {
       if (!response.success || !response.data) return;
       setItems(response.data);
       setPageCount(response.count);

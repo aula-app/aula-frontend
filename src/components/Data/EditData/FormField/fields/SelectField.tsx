@@ -22,14 +22,20 @@ const SelectField = ({ data, control, disabled = false, ...restOfProps }: Props)
   const [currentOptions, setOptions] = useState<SelectOptionsType[]>([]);
 
   async function getOptions(scope: SettingNamesType) {
-    await databaseRequest({
-      model: DataConfig[scope].requests.model,
-      method: DataConfig[scope].requests.fetch,
-      arguments: {
-        limit: 0,
-        offset: 0,
+    const requestId = [];
+    if (scope === 'ideas' || scope === 'boxes') requestId.push('user_id');
+
+    await databaseRequest(
+      {
+        model: DataConfig[scope].requests.model,
+        method: DataConfig[scope].requests.fetch,
+        arguments: {
+          limit: 0,
+          offset: 0,
+        },
       },
-    }).then((response) => {
+      requestId
+    ).then((response) => {
       if (response.success)
         setOptions(
           // @ts-ignore

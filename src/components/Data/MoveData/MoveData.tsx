@@ -43,48 +43,53 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
   const [filter, setFilter] = useState('');
   const [isOpen, setOpen] = useState(false);
 
+  const currentTarget = DataConfig[scope].requests.move || null;
+
   const getAvailableItems = async () => {
-    if (!DataConfig[scope].requests.move) return;
-    const moreArgs = params[DataConfig[scope].requests.move.targetId]
-      ? { [DataConfig[scope].requests.move.targetId]: targetId }
-      : {};
+    if (!currentTarget) return;
+
+    const requestId = [];
+    if (currentTarget.target === 'ideas' || currentTarget.target === 'boxes') requestId.push('user_id');
+
+    const moreArgs = params[currentTarget.targetId] ? { [currentTarget.targetId]: targetId } : {};
+
     const requestData = {
-      model: DataConfig[DataConfig[scope].requests.move.target].requests.model,
-      method: DataConfig[DataConfig[scope].requests.move.target].requests.fetch,
+      model: DataConfig[currentTarget.target].requests.model,
+      method: DataConfig[currentTarget.target].requests.fetch,
       arguments: {
         offset: 0,
         limit: 0,
-        orderby: DataConfig[DataConfig[scope].requests.move.target].columns[0].orderId,
+        orderby: DataConfig[currentTarget.target].columns[0].orderId,
         asc: 1,
         ...moreArgs,
       },
     } as RequestObject;
 
     if (filter !== '') {
-      requestData['arguments']['search_field'] = DataConfig[DataConfig[scope].requests.move.target].columns[0].name;
+      requestData['arguments']['search_field'] = DataConfig[currentTarget.target].columns[0].name;
       requestData['arguments']['search_text'] = filter;
     }
 
-    await databaseRequest(requestData).then((response) => {
+    await databaseRequest(requestData, requestId).then((response) => {
       if (!response.success) return;
       response.data ? setAvailableItems(response.data) : setAvailableItems([]);
     });
   };
 
   const getCurrentItems = async () => {
-    if (!id || !DataConfig[scope].requests.move) {
+    if (!id || !currentTarget) {
       setSelectedItems([]);
       return;
     }
 
     const requestData = {
-      model: DataConfig[DataConfig[scope].requests.move.target].requests.model,
-      method: DataConfig[scope].requests.move.get,
+      model: DataConfig[currentTarget.target].requests.model,
+      method: currentTarget.get,
       arguments: { [DataConfig[scope].requests.id]: id },
     } as RequestObject;
 
     if (filter !== '') {
-      requestData['arguments']['search_field'] = DataConfig[DataConfig[scope].requests.move.target].columns[0].name;
+      requestData['arguments']['search_field'] = DataConfig[currentTarget.target].columns[0].name;
       requestData['arguments']['search_text'] = filter;
     }
 
@@ -109,14 +114,14 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
   };
 
   const requestAdd = async (targetId: number) => {
-    if (!id || !DataConfig[scope].requests.move) return;
+    if (!id || !currentTarget) return;
     await databaseRequest(
       {
-        model: DataConfig[scope].requests.move.model,
-        method: DataConfig[scope].requests.move.add,
+        model: currentTarget.model,
+        method: currentTarget.add,
         arguments: {
           [DataConfig[scope].requests.id]: id,
-          [DataConfig[scope].requests.move.targetId]: targetId,
+          [currentTarget.targetId]: targetId,
         },
       },
       ['updater_id']
@@ -124,13 +129,13 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
   };
 
   const requestRemove = async (targetId: number) => {
-    if (!id || !DataConfig[scope].requests.move) return;
+    if (!id || !currentTarget) return;
     await databaseRequest({
-      model: DataConfig[scope].requests.move.model,
-      method: DataConfig[scope].requests.move.remove,
+      model: currentTarget.model,
+      method: currentTarget.remove,
       arguments: {
         [DataConfig[scope].requests.id]: id,
-        [DataConfig[scope].requests.move.targetId]: targetId,
+        [currentTarget.targetId]: targetId,
       },
     }).then(onClose);
   };
@@ -144,8 +149,8 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
       toAdd.forEach((targetId) => requestAdd(targetId));
       toRemove.forEach((targetId) => requestRemove(targetId));
     } else if (addUpdate) {
-      if (!DataConfig[scope].requests.move) return;
-      const moveSettings = DataConfig[scope].requests.move;
+      if (!currentTarget) return;
+      const moveSettings = currentTarget;
       addUpdate(
         selected.map((targetId) => {
           return {
@@ -187,7 +192,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
 
   return (
     <>
-      {DataConfig[scope].requests.move && (
+      {currentTarget && (
         <>
           <Button
             fullWidth
@@ -197,12 +202,10 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
             sx={{ borderRadius: 30, mb: 3, order: 999 }}
             onClick={() => setOpen(true)}
           >
-            {t('texts.select', { var: t(`views.${DataConfig[scope].requests.move.target}`) })}
+            {t('texts.select', { var: t(`views.${currentTarget.target}`) })}
           </Button>
           <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
-            <DialogTitle>
-              {t('texts.select', { var: t(`views.${DataConfig[scope].requests.move.target}`) })}
-            </DialogTitle>
+            <DialogTitle>{t('texts.select', { var: t(`views.${currentTarget.target}`) })}</DialogTitle>
             <DialogContent>
               <Stack height={350} position="relative" overflow="hidden">
                 <Stack position="absolute" height="100%" width="100%">
@@ -236,12 +239,10 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
                           <Checkbox checked={selected.includes(item.id)} onChange={() => toggleSelect(item.id)} />
                           <Stack flex={1}>
                             <Typography noWrap>
-                              {DataConfig[scope].requests.move &&
-                                item[DataConfig[DataConfig[scope].requests.move.target].columns[0].name]}
+                              {currentTarget && item[DataConfig[currentTarget.target].columns[0].name]}
                             </Typography>
                             <Typography noWrap color="secondary" fontSize="small">
-                              {DataConfig[scope].requests.move &&
-                                item[DataConfig[DataConfig[scope].requests.move.target].columns[1].name]}
+                              {currentTarget && item[DataConfig[currentTarget.target].columns[1].name]}
                             </Typography>
                           </Stack>
                         </Stack>
