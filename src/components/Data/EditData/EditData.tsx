@@ -159,7 +159,8 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
       },
       requestId
     ).then((response) => {
-      if (response.success && updates.length > 0) dataUpdates(response.data);
+      if (!response.success || !response.data) return;
+      updates.length > 0 ? dataUpdates(response.data) : onClose();
     });
   };
 
