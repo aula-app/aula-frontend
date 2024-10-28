@@ -5,7 +5,7 @@ import KnowMore from '@/components/KnowMore';
 import { CommentType, IdeaType } from '@/types/Scopes';
 import { Vote, checkPermissions, databaseRequest } from '@/utils';
 import { Add } from '@mui/icons-material';
-import { Fab, Skeleton, Stack, Typography } from '@mui/material';
+import { Fab, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
@@ -21,7 +21,7 @@ const IdeaView = () => {
 
   const [idea, setIdea] = useState<IdeaType>();
   const [add, setAdd] = useState(false);
-  const [phase, setPhase] = useState(0);
+  const [phase, setPhase] = useState(Number(params.phase) || 0);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [vote, setVote] = useState<Vote>(0);
 
@@ -52,7 +52,7 @@ const IdeaView = () => {
       arguments: { topic_id: Number(params['box_id']) },
     }).then((response) => {
       if (!response.success || !response.data) return;
-      setPhase(Number(response.phase_id));
+      setPhase(Number(response.phase_id) || Number(params.phase));
     });
 
   const getVote = async () =>
@@ -85,6 +85,7 @@ const IdeaView = () => {
   return idea ? (
     <Stack width="100%" height="100%" overflow="auto" p={2}>
       {phase === 40 && <VotingResults yourVote={vote} rejected={idea.is_winner !== 1} />}
+      {phase === 30 && <VotingCard />}
       {phase === 0 ? (
         <IdeaBubble idea={idea} onReload={ideaFetch} />
       ) : (
