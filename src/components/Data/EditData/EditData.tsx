@@ -189,7 +189,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   };
 
   const onSubmit = (formData: ObjectPropByName) => {
-    if (typeof id !== 'undefined') otherData[DataConfig[scope].requests.id] = id;
+    if (id !== 0) otherData[DataConfig[scope].requests.id] = id;
     if (scope === 'messages') delete formData.undefined;
     dataSave({
       ...formData,
