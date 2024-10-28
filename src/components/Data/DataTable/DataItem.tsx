@@ -58,7 +58,7 @@ const DataItem = ({ row, column }: Params) => {
       getNames('rooms', Number(row[column]));
       return <>{name}</>;
     case 'status':
-      return <>{t(statusOptions.find((status) => status.value === row[column])?.label || '')}</>;
+      return <>{t(statusOptions.find((status) => String(status.value) === row[column])?.label || '')}</>;
     case 'target_group':
       getNames('groups', Number(row[column]));
       return <>{name}</>;
@@ -92,7 +92,7 @@ const DataItem = ({ row, column }: Params) => {
     case 'userlevel':
       return <>{t(`roles.${row[column]}` || '')}</>;
     case 'user_needs_to_consent':
-      return <>{t(`consent.${messageConsentValues[row[column]]}` || '')}</>;
+      return <>{t(`consent.${messageConsentValues[Number(row[column])]}` || '')}</>;
     default:
       return <>{row[column]}</>;
   }

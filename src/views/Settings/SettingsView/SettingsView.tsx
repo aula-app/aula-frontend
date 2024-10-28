@@ -25,7 +25,7 @@ const SettingsView = () => {
 
   const [isLoading, setLoading] = useState(true);
   const [pageCount, setPageCount] = useState(0);
-  const [items, setItems] = useState<PossibleFields[]>([]);
+  const [items, setItems] = useState<Array<Record<keyof PossibleFields, string>>>([]);
 
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
