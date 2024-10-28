@@ -26,12 +26,6 @@ const fields = [
     required: true,
     role: 10,
   },
-  {
-    name: 'status',
-    form: inputType.status,
-    required: true,
-    role: 50,
-  },
 ] as Array<ReportFields>;
 
 const requests = {

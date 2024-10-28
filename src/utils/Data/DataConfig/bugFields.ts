@@ -25,12 +25,6 @@ const fields = [
     form: inputType.longText,
     role: 10,
   },
-  {
-    name: 'status',
-    required: true,
-    form: inputType.status,
-    role: 50,
-  },
 ] as Array<BugFields>;
 
 const requests = {
