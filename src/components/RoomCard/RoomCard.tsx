@@ -1,6 +1,5 @@
 import PhaseBar from '@/layout/PhaseBar';
 import { RoomType } from '@/types/Scopes';
-import { phases } from '@/utils';
 import { Card, CardMedia, Stack, Typography, capitalize } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import AppLink from '../AppLink';
@@ -10,7 +9,6 @@ interface RoomCardProps {
   room: RoomType;
 }
 
-const displayPhases = Object.keys(phases) as Array<keyof typeof phases>;
 /**
  * Renders "RoomCard" component
  */

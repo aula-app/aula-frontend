@@ -53,7 +53,7 @@ const DataItem = ({ row, column }: Params) => {
       getNames('users', Number(row[column]));
       return <>{name}</>;
     case 'phase_id':
-      return <>{phases[row[column]]?.name ? t(`phases.${phases[row[column]].name}`) : ''}</>;
+      return <>{phases[row[column]] ? t(`phases.${phases[row[column]]}`) : ''}</>;
     case 'room_id':
       getNames('rooms', Number(row[column]));
       return <>{name}</>;
