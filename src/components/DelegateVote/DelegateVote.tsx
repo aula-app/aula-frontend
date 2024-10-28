@@ -193,7 +193,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
         <Button color="secondary" onClick={onClose}>
-          {t('defaults.cancel')}
+          {t('generics.cancel')}
         </Button>
         {!confirm ? (
           <Button variant="contained" onClick={() => setConfirm(true)} disabled={!selected}>
