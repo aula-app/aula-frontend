@@ -21,7 +21,7 @@ const PhaseBar = ({ room }: { room: number }) => {
   useEffect(getPhase, [useLocation().pathname]);
 
   return (
-    <Stack direction="row" overflow="clip" width="100%">
+    <Stack direction="row" overflow="clip" width="100%" minHeight={40}>
       {displayPhases.map((phase) => (
         <AppLink
           key={phase}
@@ -43,7 +43,7 @@ const PhaseBar = ({ room }: { room: number }) => {
               pl={phase === '0' ? 2 : 1}
               pr={currentPhase === phase ? 3 : 1}
               mx="-16px"
-              height="24"
+              height={40}
               sx={{
                 bgcolor: `${phases[phase]}.main`,
                 clipPath: 'polygon(0% 0%, 16px 50%, 0% 100%, calc(100% - 16px) 100%, 100% 50%, calc(100% - 16px) 0%)',
