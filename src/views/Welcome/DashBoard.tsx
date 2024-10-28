@@ -103,18 +103,18 @@ const DashBoard = ({ show = true }) => {
                     sx={{
                       py: 1,
                       px: 2,
-                      backgroundColor: `${dashboardPhases[phase].name}.main`,
+                      backgroundColor: `${dashboardPhases[phase]}.main`,
                       borderRadius: 9999,
                       textTransform: 'none',
                       color: 'inherit',
                       '&:hover': {
-                        backgroundColor: `${dashboardPhases[phase].name}.dark`,
+                        backgroundColor: `${dashboardPhases[phase]}.dark`,
                       },
                     }}
                     onClick={() => navigate(`/phase/${phase}`)}
                   >
                     <Stack direction="row" alignItems="center" width="100%">
-                      <AppIcon icon={dashboardPhases[phase].name} />
+                      <AppIcon icon={dashboardPhases[phase]} />
                       <Typography
                         flexGrow={1}
                         overflow="hidden"
@@ -123,7 +123,7 @@ const DashBoard = ({ show = true }) => {
                         textAlign="left"
                         pl={1}
                       >
-                        {t(`phases.${dashboardPhases[phase].name}`)}
+                        {t(`phases.${dashboardPhases[phase]}`)}
                       </Typography>
                       {count[Number(phase)]}
                     </Stack>

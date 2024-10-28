@@ -11,7 +11,7 @@ type Params = {
 
 const FilterRoom = ({ room, setRoom }: Params) => {
   const { t } = useTranslation();
-  const [rooms, setRooms] = useState<Array<RoomType>>();
+  const [rooms, setRooms] = useState<Array<RoomType>>([]);
 
   const getRooms = async () => {
     await databaseRequest({
@@ -43,16 +43,15 @@ const FilterRoom = ({ room, setRoom }: Params) => {
       onChange={changeRoom}
       variant="filled"
       size="small"
-      sx={{ minWidth: 282 }}
+      sx={{ flex: 1 }}
       disabled={!rooms}
     >
       <MenuItem value="">&nbsp;</MenuItem>
-      {rooms &&
-        rooms.map((room) => (
-          <MenuItem value={room.id} key={room.room_name}>
-            {room.room_name}
-          </MenuItem>
-        ))}
+      {rooms.map((room) => (
+        <MenuItem value={room.id} key={room.room_name}>
+          {room.room_name}
+        </MenuItem>
+      ))}
     </TextField>
   );
 };

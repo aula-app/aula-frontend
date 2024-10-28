@@ -6,6 +6,7 @@ export * from './messages';
 export * from './navigation';
 export * from './phases';
 export * from './requests';
+export * from './roles';
 export * from './sessionStorage';
 export * from './style';
 export * from './utils';

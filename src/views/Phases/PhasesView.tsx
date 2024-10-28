@@ -52,7 +52,7 @@ const MessagesView = () => {
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
       <Typography variant="h5" py={2}>
-        {t(`phases.${dashboardPhases[params.phase || 'WildIdeas'].name}`)}
+        {t(`phases.${dashboardPhases[params.phase || 'WildIdeas']}`)}
       </Typography>
       <Grid container spacing={2} p={1}>
         {items &&

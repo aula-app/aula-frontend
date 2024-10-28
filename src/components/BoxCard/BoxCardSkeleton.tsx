@@ -1,11 +1,4 @@
-import AppIcon from '@/components/AppIcon';
-import AppLink from '@/components/AppLink';
-import MoreOptions from '@/components/MoreOptions';
-import { BoxType } from '@/types/Scopes';
-import { checkPermissions, databaseRequest, phases } from '@/utils';
-import { Box, Card, CardContent, Skeleton, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Card, CardContent, Skeleton } from '@mui/material';
 
 const BoxCardSkeleton = () => (
   <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
