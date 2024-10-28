@@ -71,7 +71,7 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
         if (vote === 1) return 'for';
         if (vote === -1) return 'against';
       default:
-        return phases[phase].name;
+        return phases[phase];
     }
   };
 
@@ -145,7 +145,7 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
               ) : idea.approved === -1 ? (
                 <AppIcon icon="rejected" />
               ) : (
-                <AppIcon icon={phases[phase].name} />
+                <AppIcon icon={phases[phase]} />
               )}
             </>
           ) : phase === 30 ? (

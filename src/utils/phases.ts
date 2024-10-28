@@ -1,23 +1,11 @@
-interface phaseType {
-  name: 'wild' | 'discussion' | 'approval' | 'voting' | 'results';
-}
+type phaseType = 'wild' | 'discussion' | 'approval' | 'voting' | 'results';
 
 export const phases = {
-  '0': {
-    name: 'wild',
-  },
-  '10': {
-    name: 'discussion',
-  },
-  '20': {
-    name: 'approval',
-  },
-  '30': {
-    name: 'voting',
-  },
-  '40': {
-    name: 'results',
-  },
+  '0': 'wild',
+  '10': 'discussion',
+  '20': 'approval',
+  '30': 'voting',
+  '40': 'results',
 } as Record<string, phaseType>;
 
 export const dashboardPhases = { ...(({ ['40']: _, ...o }) => o)(phases) };

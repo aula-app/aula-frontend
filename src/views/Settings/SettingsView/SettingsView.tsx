@@ -6,7 +6,7 @@ import PaginationBar from '@/components/Data/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
-import { SettingNamesType } from '@/types/SettingsTypes';
+import { RoleTypes, SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, RequestObject } from '@/utils';
 import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
@@ -23,8 +23,9 @@ const SettingsView = () => {
   const navigate = useNavigate();
   const { setting_name, setting_id } = useParams() as { setting_name: SettingNamesType; setting_id: number | 'new' };
 
-  const [items, setItems] = useState<Array<Record<keyof PossibleFields, string>>>([]);
+  const [isLoading, setLoading] = useState(true);
   const [pageCount, setPageCount] = useState(0);
+  const [items, setItems] = useState<PossibleFields[]>([]);
 
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -32,6 +33,7 @@ const SettingsView = () => {
   const [orderAsc, setOrderAsc] = useState(true);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [status, setStatus] = useState<StatusTypes>(-1);
+  const [role, setRole] = useState<RoleTypes | -1>(-1);
   const [target, setTarget] = useState(0);
 
   const [selected, setSelected] = useState<number[]>([]);
@@ -41,6 +43,7 @@ const SettingsView = () => {
   const [openFilter, setOpenFilter] = useState(false);
 
   const dataFetch = async () => {
+    setLoading(true);
     const requestId = [];
     if (setting_name === 'ideas' || setting_name === 'boxes') requestId.push('user_id');
 
@@ -61,14 +64,19 @@ const SettingsView = () => {
       requestData.arguments.room_id = target;
     }
 
+    if (setting_name === 'users' && role > 0) {
+      requestData.arguments.userlevel = role;
+    }
+
     if (!filter.includes('')) {
       requestData['arguments']['search_field'] = filter[0];
       requestData['arguments']['search_text'] = filter[1];
     }
 
     await databaseRequest(requestData, requestId).then((response) => {
-      if (!response.success || !response.data) return;
-      setItems(response.data);
+      setLoading(false);
+      if (!response.success) return;
+      setItems(response.data || []);
       setPageCount(response.count);
     });
   };
@@ -104,8 +112,9 @@ const SettingsView = () => {
   };
 
   useEffect(() => {
+    console.log('aqui');
     dataFetch();
-  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status, target]);
+  }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status, role, target]);
 
   useEffect(() => {
     resetTable();
@@ -124,16 +133,18 @@ const SettingsView = () => {
       <FilterBar
         scope={setting_name}
         filter={filter}
+        role={role}
         target={target}
         statusOptions={statusOptions}
         status={status}
+        setRole={setRole}
         setTarget={setTarget}
         setFilter={setFilter}
         setStatus={setStatus}
         isOpen={openFilter}
       />
       <Divider />
-      {items.length > 0 ? (
+      {!isLoading ? (
         <DataTable
           columns={DataConfig[setting_name].columns}
           rows={items}

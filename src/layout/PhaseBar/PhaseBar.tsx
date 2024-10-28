@@ -1,6 +1,6 @@
 import { AppIcon, AppLink } from '@/components';
 import { phases } from '@/utils';
-import { Box, Stack, Tooltip, Typography } from '@mui/material';
+import { Stack, Tooltip, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router-dom';
@@ -33,7 +33,7 @@ const PhaseBar = ({ room }: { room: number }) => {
             position: 'relative',
           }}
         >
-          <Tooltip arrow title={t(`tooltips.${phases[phase].name}`)}>
+          <Tooltip arrow title={t(`tooltips.${phases[phase]}`)}>
             <Stack
               key={phase}
               direction="row"
@@ -45,13 +45,13 @@ const PhaseBar = ({ room }: { room: number }) => {
               mx="-16px"
               height="24"
               sx={{
-                bgcolor: `${phases[phase].name}.main`,
+                bgcolor: `${phases[phase]}.main`,
                 clipPath: 'polygon(0% 0%, 16px 50%, 0% 100%, calc(100% - 16px) 100%, 100% 50%, calc(100% - 16px) 0%)',
               }}
             >
-              <AppIcon icon={phases[phase].name} />
+              <AppIcon icon={phases[phase]} />
               <Typography noWrap overflow="ellipsis" pl={1} fontSize="small">
-                {currentPhase === phase ? t(`phases.${phases[phase].name}`) : ''}
+                {currentPhase === phase ? t(`phases.${phases[phase]}`) : ''}
               </Typography>
             </Stack>
           </Tooltip>

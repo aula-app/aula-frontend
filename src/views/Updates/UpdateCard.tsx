@@ -25,7 +25,7 @@ const UpdateCard = ({ item, icon, variant, ...restOfProps }: Props) => {
         scrollSnapAlign: 'center',
         px: 3,
         mb: 1,
-        bgcolor: `${phases[item.phase_id || 0].name}.main`,
+        bgcolor: `${phases[item.phase_id || 0]}.main`,
       }}
       variant="outlined"
       {...restOfProps}
