@@ -1,4 +1,4 @@
-import { AppButton, AppIconButton, AppLink } from "@/components";
+import { AppIconButton, AppLink } from "@/components";
 import AppSubmitButton from "@/components/AppSubmitButton";
 import { useAppStore } from "@/store";
 import { localStorageGet, localStorageSet } from "@/utils";
@@ -21,8 +21,9 @@ import * as yup from "yup";
 
 /**
  * Renders "Login" view for Login flow
- * url: /login/email
+ * url: /login
  */
+
 const LoginView = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -57,9 +58,10 @@ const LoginView = () => {
   }, []);
 
   const onSubmit = async (formData: Object) => {
-    setLoading(true)
+    try {
+      setLoading(true)
 
-    const request = await fetch(
+      const request = await fetch(
         `${api_url}/api/controllers/login.php`,
         {
           method: "POST",
@@ -71,17 +73,21 @@ const LoginView = () => {
         }
       );
 
-    const response = await request.json() as {success: boolean, JWT: string};
-    setLoading(false)
+      setLoading(false)
+      const response = await request.json() as { success: boolean, JWT: string };
 
-    if (!response.success) {
-      setError(true);
-      return;
+      if (!response.success) {
+        setError(true);
+        return;
+      }
+
+      localStorageSet("token", response["JWT"]);
+      dispatch({ type: "LOG_IN" });
+      navigate("/", { replace: true });
+    } catch (e) {
+      setLoading(false)
+      dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
     }
-
-    localStorageSet("token", response["JWT"]);
-    dispatch({ type: "LOG_IN" });
-    navigate("/", { replace: true });
   };
 
   return (
@@ -103,7 +109,7 @@ const LoginView = () => {
           required
           disabled={isLoading}
           label={t("login.login")}
-          slotProps={{ input: { autoCapitalize: "none" }}}
+          slotProps={{ input: { autoCapitalize: "none" } }}
           {...register("username")}
           error={errors.username ? true : false}
           helperText={errors.username?.message || " "}
@@ -118,19 +124,21 @@ const LoginView = () => {
           error={errors.password ? true : false}
           helperText={errors.password?.message || " "}
           sx={{ mt: 0 }}
-          slotProps={{ input: {
-            endAdornment: (
-              <InputAdornment position="end">
-                <AppIconButton
-                  aria-label="toggle password visibility"
-                  icon={showPassword ? "visibilityOn" : "visibilityOff"}
-                  title={showPassword ? t("generics.hide") : t("generics.show")}
-                  onClick={handleShowPasswordClick}
-                  onMouseDown={(e) => e.preventDefault()}
-                />
-              </InputAdornment>
-            ),
-          }}}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <AppIconButton
+                    aria-label="toggle password visibility"
+                    icon={showPassword ? "visibilityOn" : "visibilityOff"}
+                    title={showPassword ? t("generics.hide") : t("generics.show")}
+                    onClick={handleShowPasswordClick}
+                    onMouseDown={(e) => e.preventDefault()}
+                  />
+                </InputAdornment>
+              ),
+            }
+          }}
         />
         <AppSubmitButton label={t("login.button")} disabled={isLoading} onClick={handleSubmit(onSubmit)} />
 
