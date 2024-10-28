@@ -1,8 +1,10 @@
 import { ErrorBoundary } from '@/components';
 import EditData from '@/components/Data/EditData';
+import { useIsOnline } from '@/hooks';
 import { useOnMobile } from '@/hooks/layout';
 import { checkPermissions, getCurrentUser, localStorageGet, parseJwt } from '@/utils';
 import AskConsent from '@/views/AskConsent';
+import OfflineView from '@/views/OfflineView';
 import UpdatePassword from '@/views/UpdatePassword';
 import { Stack } from '@mui/material';
 import { FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
@@ -10,9 +12,6 @@ import { useLocation } from 'react-router-dom';
 import { TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import SideBarFixed from './SideBar/SideBarFixed';
 import TopBar from './TopBar';
-import PopupMessages from '@/components/PopupMessages';
-import { useIsOnline } from '@/hooks';
-import OfflineView from '@/views/OfflineView';
 
 const TITLE_PRIVATE = 'aula';
 
@@ -76,7 +75,6 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         onClose={() => setScope(undefined)}
       />
       <AskConsent />
-      <PopupMessages />
     </Stack>
   );
 };
