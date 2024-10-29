@@ -87,16 +87,10 @@ const MessageCard = ({ type }: Props) => {
             setStatus={setStatus}
           />
           {messages.map((message) => {
-            const variant =
-              type === 'report'
-                ? message.headline.substring(0, 3) === 'Bug'
-                  ? 'bug'
-                  : message.headline.substring(0, 7) === 'Account'
-                    ? 'alert'
-                    : 'report'
-                : type;
+            const variant = type === 'report' ? JSON.parse(message.body).data.type : type;
             return (
               <Stack
+                key={message.id}
                 component={AppLink}
                 direction="row"
                 alignItems="center"
@@ -105,7 +99,7 @@ const MessageCard = ({ type }: Props) => {
                 pl={2}
                 mb={1}
                 to={`/messages/${type}/${message.id}`}
-                bgcolor={`${type}.main`}
+                bgcolor={`${variant}.main`}
               >
                 <AppIcon icon={variant} />
                 <Typography flex={1} px={2}>

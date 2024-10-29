@@ -11,6 +11,7 @@ import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
 import { DeleteData } from '../Data';
 import EditData from '../Data/EditData';
+import { ReportMetadataType } from '@/types/Scopes';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -18,7 +19,7 @@ interface OptionsTypes {
   color: ColorTypes;
   label: string;
   otherData?: { headline?: string; body?: string; msg_type: number };
-  metadata?: ObjectPropByName;
+  metadata?: ReportMetadataType;
 }
 
 interface Props {
@@ -46,11 +47,11 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       color: 'error',
       label: t('generics.contentReport'),
       otherData: {
-        type: 'report',
         headline: `${scope} #${id}`,
         msg_type: 4,
       },
       metadata: {
+        type: 'report',
         location: location.pathname,
         user: getCurrentUser(),
       },

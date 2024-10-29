@@ -112,7 +112,6 @@ const SettingsView = () => {
   };
 
   useEffect(() => {
-    console.log('aqui');
     dataFetch();
   }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status, role, target]);
 
