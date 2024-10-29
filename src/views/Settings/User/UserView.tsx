@@ -94,11 +94,10 @@ const UserView = () => {
   const requestExport = () => {
     if (!user) return;
     sendMessage(
-      `Account data export request for ${user.realname}`,
+      `${user.realname}`,
       {
-        type: 'requestData',
-        data: { id: user.id, username: user.displayname, email: user.email },
-        content: `A data export procedure was requested for user ${user.realname}, alias ${user.displayname}`,
+        data: { type: 'requestData', id: user.id, username: user.displayname, email: user.email },
+        content: '',
       },
       t('texts.exportRequest')
     );
@@ -107,11 +106,10 @@ const UserView = () => {
   const requestDelete = () => {
     if (!user) return;
     sendMessage(
-      `Account deletion request for ${user.realname}`,
+      `${user.realname}`,
       {
-        type: 'deleteAccount',
-        data: { id: user.id, username: user.displayname, email: user.email },
-        content: `A data deletion procedure was requested for user ${user.realname}, alias ${user.displayname}`,
+        data: { type: 'deleteAccount', id: user.id, username: user.displayname, email: user.email },
+        content: '',
       },
       t('texts.deleteRequest')
     );
@@ -139,7 +137,7 @@ const UserView = () => {
         </AccordionSummary>
         <AccordionDetails>
           <Button variant="contained" color="info" onClick={requestExport} fullWidth>
-            {t('texts.exportData')}
+            {t('texts.dataExport')}
           </Button>
         </AccordionDetails>
       </Accordion>

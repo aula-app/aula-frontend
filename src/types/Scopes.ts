@@ -199,7 +199,7 @@ export interface PossibleFields
     UserType {}
 
 export interface ReportBodyType {
-  data?: ReportMetadataType;
+  data: ReportMetadataType;
   content: string;
 }
 
@@ -213,14 +213,14 @@ export interface ReportMetadataType {
 export type UserRequestTypes = 'changeName' | 'deleteAccount' | 'exportData' | 'requestData';
 
 export interface RequestBodyType {
-  type?: UserRequestTypes;
-  data?: RequestMetadataType;
+  data: RequestMetadataType;
   content: string;
 }
 
 export interface RequestMetadataType {
-  id?: number;
-  username?: string;
+  type: UserRequestTypes;
+  id: number;
+  username: string;
   email?: string;
   property?: 'email' | 'realname' | 'username';
   from?: string;
