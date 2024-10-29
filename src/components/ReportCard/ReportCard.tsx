@@ -41,7 +41,7 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
 
   return bodyData ? (
     <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
-      <CardHeader title={report.headline} />
+      <CardHeader title={`${t(`views.${bodyData.data?.type}`)}: ${report.headline}`} />
       <Divider />
       {bodyData.data && (
         <>

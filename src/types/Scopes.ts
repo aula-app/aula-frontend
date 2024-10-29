@@ -203,6 +203,7 @@ export type UserRequestTypes = 'changeName' | 'deleteAccount' | 'exportData' | '
 export interface ReportBodyType {
   type?: UserRequestTypes;
   data?: {
+    type: 'bug' | 'report';
     location: string;
     user: string;
     userAgent?: string;

@@ -46,7 +46,8 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       color: 'error',
       label: t('generics.contentReport'),
       otherData: {
-        headline: `Content report on ${scope} #${id}`,
+        type: 'report',
+        headline: `${scope} #${id}`,
         msg_type: 4,
       },
       metadata: {
@@ -60,10 +61,11 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       color: 'warning',
       label: t('generics.bugReport'),
       otherData: {
-        headline: `Bug report on ${scope} #${id}`,
+        headline: `${scope} #${id}`,
         msg_type: 4,
       },
       metadata: {
+        type: 'bug',
         location: location.pathname,
         user: getCurrentUser(),
         userAgent: window.navigator.userAgent,

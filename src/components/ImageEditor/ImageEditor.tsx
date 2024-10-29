@@ -96,7 +96,7 @@ const ImageEditor = ({ closeMethod, isOpen, id }: NewCommentProps) => {
         <label htmlFor="file">
           <Button variant="outlined" color="secondary" fullWidth component="span">
             <Upload sx={{ mr: 1 }} />
-            {image ? 'Change Image' : 'Upload Image'}
+            {t(`texts.${image ? 'imageChange' : 'imageUpload'}`)}
           </Button>
         </label>
         {!!image && (
