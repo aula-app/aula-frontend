@@ -184,6 +184,8 @@
     "changeNameBody": "A data change procedure was requested for user {{var}}. They want to change their {{old}} to {{new}}.",
     "CSVempty": "Your file doesn't contain any data. Please provide a valid CSV file.",
     "CSVinvalid": "Your file doesn't seem to be valid. Please provide a valid CSV file.",
+    "CSVsuccess": "New users created.",
+    "customField": "Custom Fields Updated.",
     "dataExport": "Export account data",
     "dataUpdate": "Update data",
     "dataUpdateText": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place.",

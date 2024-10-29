@@ -50,7 +50,12 @@ const DataSettings = ({ onReload }: Props) => {
       method: 'addCSV',
       arguments: { csv: csv },
     }).then((response) => {
-      if (response.success) onReload();
+      if (!response.success) {
+        dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+        return;
+      }
+      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.CSVsuccess'), type: 'success' } });
+      onReload();
     });
   };
 
