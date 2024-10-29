@@ -4,9 +4,9 @@ import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
+  control: Control<{}, any>;
   data: InputSettings;
   disabled?: boolean;
-  control: Control<{}, any>;
   setValue: UseFormSetValue<{}>;
 };
 
