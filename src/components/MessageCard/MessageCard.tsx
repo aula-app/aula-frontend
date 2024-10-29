@@ -103,7 +103,7 @@ const MessageCard = ({ type }: Props) => {
               >
                 <AppIcon icon={variant} />
                 <Typography flex={1} px={2}>
-                  {message.headline}
+                  {type === 'report' && <>{t(`views.${variant}`)}:</>} {message.headline}
                 </Typography>
                 <AppIconButton size="small" icon="close" />
               </Stack>
