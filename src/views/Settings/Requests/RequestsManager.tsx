@@ -27,10 +27,10 @@ const RequestsManager = ({ request, onReload }: Props) => {
         model: 'Message',
         method: 'addMessage',
         arguments: {
-          headline: 'Account data export granted',
+          headline: bodyData.data.username,
           body: JSON.stringify({
-            type: 'exportData',
-            content: `Your data request is availible`,
+            data: { type: 'exportData' },
+            content: '',
           }),
           target_id: bodyData.data.id,
           msg_type: 5,
@@ -92,7 +92,7 @@ const RequestsManager = ({ request, onReload }: Props) => {
   };
 
   const onConfirm = () => {
-    switch (bodyData.type) {
+    switch (bodyData.data.type) {
       case 'changeName':
         confirmNameChange();
         break;

@@ -11,8 +11,8 @@ const ReportCardSkeleton = () => (
     </CardContent>
     <Divider />
     <CardContent>
-      {[...Array(3)].map(() => (
-        <Stack direction="row" gap={1}>
+      {[...Array(3)].map((item, i) => (
+        <Stack direction="row" gap={1} key={i}>
           <Skeleton variant="text" width={80} />
           <Skeleton variant="text" width={120} />
         </Stack>

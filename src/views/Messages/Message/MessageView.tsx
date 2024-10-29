@@ -55,9 +55,7 @@ const MessagesView = () => {
             <Typography variant="h5" py={2}>
               {message.headline}
             </Typography>
-            <Typography py={2}>
-              <Typography>{message.body}</Typography>
-            </Typography>
+            <Typography py={2}>{message.body}</Typography>
           </CardContent>
           <Divider />
           <CardActions>
