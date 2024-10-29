@@ -185,6 +185,7 @@
     "CSVempty": "Ihre Datei enthält keine Daten. Bitte stellen Sie eine gültige CSV-Datei bereit.",
     "CSVinvalid": "Ihre Datei scheint nicht gültig zu sein. Bitte stellen Sie eine gültige CSV-Datei bereit.",
     "CSVsuccess": "Neue Benutzer erstellt.",
+    "customField": "Benutzerdefinierte Felder aktualisiert.",
     "dataExport": "Kontodaten exportieren",
     "dataUpdate": "Daten aktualisieren",
     "dataUpdateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer {{var}} anfordern möchten? Diese Aktion muss von einem Admin bestätigt werden, damit sie durchgeführt werden kann.",
