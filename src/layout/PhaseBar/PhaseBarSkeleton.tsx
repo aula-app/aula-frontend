@@ -13,6 +13,7 @@ const PhaseBarSkeleton = () => {
     <Stack direction="row" overflow="clip" width="100%">
       {displayPhases.map((phase, i) => (
         <Skeleton
+          key={i}
           variant="rectangular"
           sx={{
             height: '36px',

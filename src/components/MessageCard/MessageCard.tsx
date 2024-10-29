@@ -89,9 +89,10 @@ const MessageCard = ({ type }: Props) => {
           {messages.map((message) => {
             const messageData = ['report', 'request'].includes(type) ? JSON.parse(message.body).data.type : type;
             const variant = type === 'report' ? JSON.parse(message.body).data.type : type;
-            const headline = ['report', 'request'].includes(type)
-              ? t(`texts.${messageData}`, { var: message.headline })
-              : message.headline;
+            const headline =
+              ['report', 'request'].includes(type) && messageData
+                ? t(`texts.${messageData}`, { var: message.headline })
+                : message.headline;
             return (
               <Stack
                 key={message.id}
