@@ -16,13 +16,6 @@ interface Props {
  * url: /messages
  */
 
-const METHODS = {
-  announcement: 'getTexts',
-  message: 'getPersonalMessagesByUser',
-  report: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
-  request: 'getMessages',
-} as Record<Props['type'], string>;
-
 const MessageCard = ({ type }: Props) => {
   const { t } = useTranslation();
   const [isLoading, setLoading] = useState(true);
@@ -30,6 +23,13 @@ const MessageCard = ({ type }: Props) => {
   const [status, setStatus] = useState<StatusTypes>(1);
   const [openMessagesFilter, setOpenMessagesFilter] = useState(false);
   const [messagesFilter, setMessagesFilter] = useState<[string, string]>(['', '']);
+
+  const METHODS = {
+    announcement: 'getTexts',
+    message: 'getPersonalMessagesByUser',
+    report: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
+    request: 'getMessages',
+  } as Record<Props['type'], string>;
 
   const messagesFetch = async () => {
     const requestData = {

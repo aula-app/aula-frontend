@@ -76,7 +76,7 @@ const LoginView = () => {
       setLoading(false)
       const response = await request.json() as { success: boolean, JWT: string };
 
-      if (!response.success) {
+      if (response.success !== true) {
         setError(true);
         return;
       }
