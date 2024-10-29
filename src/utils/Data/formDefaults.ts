@@ -48,7 +48,6 @@ export const inputType = {
 
   duration: {
     type: 'duration',
-    defaultValue: 7,
     schema: yup.number(),
   },
 
