@@ -13,6 +13,7 @@ import DataUpdates from './DataUpdates';
 import DataConfig from '@/utils/Data';
 import { InputSettings } from '@/utils/Data/formDefaults';
 import FormField from './FormField';
+import { use } from 'i18next';
 
 interface Props {
   id?: number;
@@ -230,6 +231,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
 
   useEffect(() => {
     id ? getFieldValues() : clearValues();
+    if (scope === 'boxes' && otherData.room_id) getDefaultRoomDurations(otherData.room_id);
   }, [isOpen]);
 
   return (

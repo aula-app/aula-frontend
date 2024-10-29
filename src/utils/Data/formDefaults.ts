@@ -48,6 +48,7 @@ export const inputType = {
 
   duration: {
     type: 'duration',
+    defaultValue: 0,
     schema: yup.number().integer(t('validation.int')).min(1, t('validation.duration')),
   },
 
