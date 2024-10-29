@@ -41,7 +41,9 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
 
   return bodyData ? (
     <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
-      <CardHeader title={`${t(`texts.${bodyData.data.type}`, { var: report.headline })}`} />
+      <CardHeader
+        title={bodyData.data.type ? t(`texts.${bodyData.data.type}`, { var: report.headline }) : report.headline}
+      />
       <Divider />
       {bodyData.data && (
         <>
@@ -72,16 +74,18 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
       <CardContent>
         <Stack my={2} flex={1}>
           <Typography>
-            {t(
-              `texts.${bodyData.data.type}Body`,
-              'from' in bodyData.data && 'to' in bodyData.data
-                ? {
-                    var: report.headline,
-                    old: bodyData.data.from || '',
-                    new: bodyData.data.to || '',
-                  }
-                : { var: report.headline }
-            )}
+            {bodyData.content !== ''
+              ? bodyData.content
+              : t(
+                  `texts.${bodyData.data.type}Body`,
+                  'from' in bodyData.data && 'to' in bodyData.data
+                    ? {
+                        var: report.headline,
+                        old: bodyData.data.from || '',
+                        new: bodyData.data.to || '',
+                      }
+                    : { var: report.headline }
+                )}
           </Typography>
         </Stack>
       </CardContent>
