@@ -74,7 +74,7 @@ const SetPasswordView = () => {
       const response = await request.json();
       setLoading(false)
 
-      if (response.success) dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
+      if (!response.success) dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
       else navigate("/");
     } catch (e) {
       dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
