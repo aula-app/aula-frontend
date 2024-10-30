@@ -13,6 +13,7 @@ import DataUpdates from './DataUpdates';
 import DataConfig from '@/utils/Data';
 import { InputSettings } from '@/utils/Data/formDefaults';
 import FormField from './FormField';
+import { use } from 'i18next';
 
 interface Props {
   id?: number;
@@ -49,11 +50,12 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   }, {});
 
   const {
+    control,
+    getValues,
+    handleSubmit,
     register,
     setValue,
-    control,
-    handleSubmit,
-    getValues,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(yup.object(schema)),
@@ -124,6 +126,25 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
       }).then((response) => {
         if (response.success) setPhase(response.data);
       });
+    });
+  };
+
+  const getDefaultRoomDurations = async (room_id: number) => {
+    if (!room_id) return;
+    await databaseRequest({
+      model: 'Room',
+      method: 'getRoomBaseData',
+      arguments: {
+        room_id: room_id,
+      },
+    }).then((response: SingleResponseType) => {
+      if (!response.success || !response.data) return;
+      Object.keys(response.data)
+        .filter((field) => field.includes('phase_duration_'))
+        .map((phase) => {
+          if (getValues(phase)) return;
+          setValue(phase, response.data[phase] || 0);
+        });
     });
   };
 
@@ -198,10 +219,19 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   useEffect(() => {
     updateValues();
     if (scope === 'ideas') getIdeaPhase();
+    if (scope === 'boxes' && fieldValues?.data.room_id) getDefaultRoomDurations(fieldValues.data.room_id);
   }, [fieldValues]);
+
+  // @ts-ignore
+  const watchRoom = watch('room_id');
+
+  useEffect(() => {
+    if (scope === 'boxes') getDefaultRoomDurations(getValues('room_id'));
+  }, [watchRoom]);
 
   useEffect(() => {
     id ? getFieldValues() : clearValues();
+    if (scope === 'boxes' && otherData.room_id) getDefaultRoomDurations(otherData.room_id);
   }, [isOpen]);
 
   return (
@@ -217,12 +247,12 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
                 <Box order={key} key={key}>
                   <FormField
                     isNew={typeof id === 'undefined'}
-                    data={field}
-                    register={register}
                     control={control}
+                    data={field}
                     getValues={getValues}
-                    setValue={setValue}
                     phase={phase}
+                    register={register}
+                    setValue={setValue}
                   />
                 </Box>
               ))}
