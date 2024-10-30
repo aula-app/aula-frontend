@@ -1,6 +1,8 @@
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
+import DataConfig from '@/utils/Data';
+import { InputSettings } from '@/utils/Data/formDefaults';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Drawer, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -10,10 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import DataUpdates from './DataUpdates';
-import DataConfig from '@/utils/Data';
-import { InputSettings } from '@/utils/Data/formDefaults';
 import FormField from './FormField';
-import { use } from 'i18next';
 
 interface Props {
   id?: number;
@@ -142,7 +141,9 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
       Object.keys(response.data)
         .filter((field) => field.includes('phase_duration_'))
         .map((phase) => {
+          // @ts-ignore
           if (getValues(phase)) return;
+          // @ts-ignore
           setValue(phase, response.data[phase] || 0);
         });
     });
@@ -226,6 +227,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const watchRoom = watch('room_id');
 
   useEffect(() => {
+    // @ts-ignore
     if (scope === 'boxes') getDefaultRoomDurations(getValues('room_id'));
   }, [watchRoom]);
 
