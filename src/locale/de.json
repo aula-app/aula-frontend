@@ -50,6 +50,7 @@
   "login": {
     "agree": "Stimme den Nutzungsbedingungen und der Datenschutzrichtlinie zu.",
     "button": "Login",
+    "codeError": "Ungültiger Benutzercode",
     "email": "E-Mail",
     "exit": "Ausgang",
     "forgot": "Passwort vergessen?",

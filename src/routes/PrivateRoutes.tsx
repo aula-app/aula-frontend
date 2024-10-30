@@ -1,5 +1,5 @@
 import { useAppStore } from '@/store';
-import { checkPermissions, localStorageGet } from '@/utils';
+import { checkPermissions, localStorageDelete, localStorageGet } from '@/utils';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
 import IdeaView from '@/views/Idea';
@@ -21,7 +21,7 @@ import UserView from '@/views/Settings/User';
 import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';
 import { useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 /**
  * List of routes available only for authenticated users
@@ -30,6 +30,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 const PrivateRoutes = () => {
   const [, dispatch] = useAppStore();
+  const navigate = useNavigate();
   const location = useLocation();
   const jwt_token = localStorageGet('token');
 
@@ -51,9 +52,16 @@ const PrivateRoutes = () => {
     }
   };
 
+  const checkOnboarding = () => {
+    localStorageDelete('token');
+    dispatch({ type: 'LOG_OUT' });
+  };
+
   useEffect(() => {
     getConsent();
-  }, [location]);
+    console.log(location.pathname);
+    if (location.pathname.includes('password')) checkOnboarding();
+  }, [location.pathname]);
 
   return (
     <Routes>

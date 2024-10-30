@@ -2,7 +2,7 @@ import ChangePassword from "@/components/ChangePassword";
 import { useAppStore } from "@/store";
 import { PassResponse } from "@/types/Generics";
 import { localStorageGet } from "@/utils";
-import { Stack, Typography } from "@mui/material";
+import { Alert, Collapse, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FormContainer } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
@@ -21,6 +21,7 @@ const SetPasswordView = () => {
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(false);
+  const [isValid, setValid] = useState(true);
 
   const checkKey = async () => {
     try {
@@ -38,13 +39,10 @@ const SetPasswordView = () => {
             body: null,
           }
         )
-
-      const response = await request.json();
       setLoading(false)
+      const response = await request.json();
 
-      if (!response.success) {
-        dispatch({ type: 'ADD_POPUP', message: {message: t('login.wrongKey'), type: 'error'} });
-      }
+      if (!response.success) setValid(false);
     } catch (e) {
       dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
     }
@@ -96,6 +94,15 @@ const SetPasswordView = () => {
         <Typography variant="h5" sx={{ mb: 3 }}>
           {t("login.setPass")}
         </Typography>
+        <Collapse in={!isValid} sx={{ mb: 2 }}>
+          <Alert
+            variant="outlined"
+            severity="error"
+            onClose={() => setValid(true)}
+          >
+            {t("login.codeError")}
+          </Alert>
+        </Collapse>
         <ChangePassword disabled={isLoading} onSubmit={onSubmit} hideOld />
       </Stack>
     </FormContainer>

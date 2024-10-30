@@ -50,6 +50,7 @@
   "login": {
     "agree": "Agree with Terms of Use and Privacy Policy.",
     "button": "Login",
+    "codeError": "Invalid user code",
     "email": "Email",
     "exit": "exit",
     "forgot": "Forgot password?",
