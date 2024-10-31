@@ -41,7 +41,9 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
       };
     }
     case 'ADD_POPUP': {
-      return { ...state, messages: [...state.messages, action?.message] };
+      return state.messages.find((messages) => messages.message === action?.message.message)
+        ? state
+        : { ...state, messages: [...state.messages, action?.message] };
     }
     case 'REMOVE_POPUP': {
       return { ...state, messages: [...state.messages.filter((e, i) => i !== action?.index)] };
