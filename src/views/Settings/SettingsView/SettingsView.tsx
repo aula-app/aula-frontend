@@ -45,7 +45,7 @@ const SettingsView = () => {
   const dataFetch = async () => {
     setLoading(true);
     const requestId = [];
-    if (setting_name === 'ideas' || setting_name === 'boxes') requestId.push('use_id');
+    if (setting_name === 'ideas' || setting_name === 'boxes') requestId.push('user_id');
 
     const requestData = {
       model: DataConfig[setting_name].requests.model,

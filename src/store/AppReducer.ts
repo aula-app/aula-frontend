@@ -41,7 +41,7 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
       };
     }
     case 'ADD_POPUP': {
-      return state.messages.find((messages) => messages.message === action?.message.message)
+      return state.messages.find((messages) => messages.message === action?.message.message) // prevent duplicates
         ? state
         : { ...state, messages: [...state.messages, action?.message] };
     }
