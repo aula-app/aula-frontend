@@ -1,4 +1,5 @@
 import { IdeaBubble } from '@/components/Idea';
+import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import { dashboardPhases, databaseRequest } from '@/utils';
 import { Stack, Typography } from '@mui/material';
@@ -16,9 +17,10 @@ import DashBoard from '../DashBoard';
 const MessagesView = () => {
   const { t } = useTranslation();
   const params = useParams();
+  const [isLoading, setLoading] = useState(true);
   const [items, setItems] = useState<IdeaType[]>([]);
 
-  const boxesFetch = async () =>
+  const boxesFetch = async () => {
     await databaseRequest({
       model: 'Topic',
       method: 'getTopicsByPhase',
@@ -30,7 +32,9 @@ const MessagesView = () => {
     }).then(async (response: { success: boolean; count: number; data: BoxType[] }) => {
       if (!response.success || !response.data) return;
       boxIdeasFetch(response.data).then((items) => setItems(items));
+      setLoading(false);
     });
+  };
 
   async function boxIdeasFetch(boxes: BoxType[]): Promise<IdeaType[]> {
     // Use Promise.all to await all fetches
@@ -60,9 +64,11 @@ const MessagesView = () => {
     ).then((response) => {
       if (!response.success || !response.data) return;
       setItems(response.data as IdeaType[]);
+      setLoading(false);
     });
 
   useEffect(() => {
+    setLoading(true);
     params.phase === '0' ? ideasFetch() : boxesFetch();
   }, [params.phase]);
   return (
@@ -72,6 +78,11 @@ const MessagesView = () => {
         {t(`phases.${dashboardPhases[params.phase || 'WildIdeas']}`)}
       </Typography>
       <Grid container spacing={2} p={1}>
+        {isLoading && (
+          <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
+            <IdeaBubbleSkeleton />
+          </Grid>
+        )}
         {items.map((item) => (
           <Grid key={item.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
             <IdeaBubble
