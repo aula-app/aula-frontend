@@ -85,19 +85,21 @@ const IdeasBoxView = () => {
             })}
           </Typography>
           {Number(params['phase']) === 30 && (
-            <Button
-              size="small"
-              sx={{ ml: 'auto', mt: 0.5, px: 1, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}
-              onClick={() => setDelegationDialog(true)}
-            >
-              <Typography variant="caption">{t('generics.or')}</Typography>
-              <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
-                {delegationStatus && delegationStatus.length > 0 ? t('delegation.revoke') : t('delegation.delegate')}
-              </Typography>
+            <Stack direction="row" position="relative" alignItems="center" sx={{ ml: 'auto', pr: 3 }}>
+              <Button
+                size="small"
+                sx={{ mt: 0.75, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}
+                onClick={() => setDelegationDialog(true)}
+              >
+                <Typography variant="caption">{t('generics.or')}</Typography>
+                <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
+                  {delegationStatus && delegationStatus.length > 0 ? t('delegation.revoke') : t('delegation.delegate')}
+                </Typography>
+              </Button>
               <KnowMore title={t('tooltips.delegate')}>
                 <AppIcon icon="delegate" size="small" />
               </KnowMore>
-            </Button>
+            </Stack>
           )}
         </Stack>
         {checkPermissions(30) && (
