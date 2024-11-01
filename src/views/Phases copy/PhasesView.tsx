@@ -1,3 +1,4 @@
+import BoxCard from '@/components/BoxCard';
 import { IdeaBubble } from '@/components/Idea';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import { dashboardPhases, databaseRequest } from '@/utils';
@@ -6,7 +7,7 @@ import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import DashBoard from '../DashBoard';
+import DashBoard from '../DashBoard/DashBoard';
 
 /**
  * Renders "Phase" view
@@ -18,7 +19,7 @@ const MessagesView = () => {
   const params = useParams();
   const [items, setItems] = useState<IdeaType[]>([]);
 
-  const boxesFetch = async () =>
+  const boxesFetch = async () => {
     await databaseRequest({
       model: 'Topic',
       method: 'getTopicsByPhase',
@@ -29,25 +30,19 @@ const MessagesView = () => {
       },
     }).then(async (response: { success: boolean; count: number; data: BoxType[] }) => {
       if (!response.success || !response.data) return;
-      boxIdeasFetch(response.data).then((items) => setItems(items));
-    });
-
-  async function boxIdeasFetch(boxes: BoxType[]): Promise<IdeaType[]> {
-    // Use Promise.all to await all fetches
-    const results = await Promise.all(
-      boxes.map(async (box) => {
-        const result = await databaseRequest({
+      for await (const ideas of response.data.map((topic) =>
+        databaseRequest({
           model: 'Idea',
           method: 'getIdeasByTopic',
           arguments: {
-            topic_id: box.id,
+            topic_id: topic.id,
           },
-        });
-        return result.data;
-      })
-    );
-    return results.flat();
-  }
+        })
+      )) {
+        setItems([...items, ...ideas.data]);
+      }
+    });
+  };
 
   const ideasFetch = async () =>
     await databaseRequest(
@@ -63,6 +58,8 @@ const MessagesView = () => {
     });
 
   useEffect(() => {
+    setItems([]);
+    //@ts-ignore
     params.phase === '0' ? ideasFetch() : boxesFetch();
   }, [params.phase]);
   return (
