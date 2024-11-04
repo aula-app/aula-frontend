@@ -1,69 +1,107 @@
+import { ObjectPropByName } from '@/types/Generics';
 import { InputSettings } from '@/utils/Data/formDefaults';
 import { FormHelperText, FormLabel, Stack, TextField, Typography } from '@mui/material';
-import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';
+import { useState } from 'react';
+import {
+  Control,
+  Controller,
+  UseFormClearErrors,
+  UseFormGetValues,
+  UseFormSetError,
+  UseFormSetValue,
+} from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
   control: Control<{}, any>;
   data: InputSettings;
   disabled?: boolean;
-  setValue: UseFormSetValue<{}>;
-  getValues: () => void;
+  setError: UseFormSetError<ObjectPropByName>;
+  clearErrors: UseFormClearErrors<ObjectPropByName>;
+  setValue: UseFormSetValue<ObjectPropByName>;
+  getValues: UseFormGetValues<ObjectPropByName>;
 };
 
 /**
  * Renders "SelectInput" component
  */
 
-const DurationField = ({ data, control, disabled = false, setValue, getValues, ...restOfProps }: Props) => {
+const DurationField = ({
+  data,
+  control,
+  disabled = false,
+  setValue,
+  getValues,
+  setError,
+  clearErrors,
+  ...restOfProps
+}: Props) => {
   const { t } = useTranslation();
+  const [multiError, setMultiError] = useState(false);
+
+  const checkNull = () => {
+    if (!Array.isArray(data.name)) return;
+    if (getValues(data.name).every((item) => item === '0')) {
+      setError('notRegisteredInput', { type: 'custom', message: '' });
+      setMultiError(true);
+    } else {
+      clearErrors('notRegisteredInput');
+      setMultiError(false);
+    }
+  };
 
   return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      justifyContent="space-between"
-      px={1}
-      flexWrap="wrap"
-      {...restOfProps}
-      gap={2}
-    >
-      <FormLabel sx={{ mr: 3, pb: 3 }}>{t(`texts.phaseDuration`)}:</FormLabel>
-      {Array.isArray(data.name) ? (
-        data.name.map((name) => (
-          <Controller
-            key={name}
-            // @ts-ignore
-            name={name}
-            control={control}
-            // @ts-ignore
-            defaultValue={data.form.defaultValue}
-            render={({ field, fieldState }) => (
-              <Stack>
-                <Stack direction="row" alignItems="center" gap={1}>
-                  <Typography noWrap>{t(`settings.${name}`)}:</Typography>
-                  <TextField
-                    required={data.required}
-                    disabled={disabled}
-                    type="number"
-                    variant="standard"
-                    {...field}
-                    sx={{ width: 80 }}
-                    {...restOfProps}
-                    slotProps={{ inputLabel: { shrink: !!field.value } }}
-                  />
-                  <Typography noWrap>{t('generics.days')}</Typography>
+    <Stack>
+      <FormHelperText hidden={!multiError} error={multiError} sx={{ mx: 'auto' }}>
+        {t('validation.duration')}
+      </FormHelperText>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        px={1}
+        flexWrap="wrap"
+        {...restOfProps}
+        gap={2}
+      >
+        <FormLabel sx={{ mr: 3, pb: 3 }}>{t(`texts.phaseDuration`)}:</FormLabel>
+        {Array.isArray(data.name) &&
+          data.name.map((name) => (
+            <Controller
+              key={name}
+              // @ts-ignore
+              name={name}
+              control={control}
+              // @ts-ignore
+              defaultValue={data.form.defaultValue}
+              render={({ field, fieldState }) => (
+                <Stack>
+                  <Stack direction="row" alignItems="center" gap={1}>
+                    <Typography noWrap>{t(`settings.${name}`)}:</Typography>
+                    <TextField
+                      required={data.required}
+                      disabled={disabled}
+                      type="number"
+                      variant="standard"
+                      {...field}
+                      onChange={(event) => {
+                        field.onChange(event);
+                        checkNull();
+                      }}
+                      sx={{ width: 80 }}
+                      {...restOfProps}
+                      slotProps={{ inputLabel: { shrink: !!field.value } }}
+                    />
+                    <Typography noWrap>{t('generics.days')}</Typography>
+                  </Stack>
+                  <FormHelperText error={!!fieldState.error} sx={{ mx: 'auto' }}>
+                    {t(fieldState.error?.message || ' ')}
+                  </FormHelperText>
                 </Stack>
-                <FormHelperText error={!!fieldState.error} sx={{ mx: 'auto' }}>
-                  {t(fieldState.error?.message || ' ')}
-                </FormHelperText>
-              </Stack>
-            )}
-          />
-        ))
-      ) : (
-        <></>
-      )}
+              )}
+            />
+          ))}
+      </Stack>
     </Stack>
   );
 };

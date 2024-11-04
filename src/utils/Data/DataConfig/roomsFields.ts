@@ -35,7 +35,7 @@ const fields = [
     name: 'description_internal',
     form: {
       type: 'image',
-      defaultValue: 'DI:0:0',
+      defaultValue: '',
     },
     required: false,
     role: 50,
