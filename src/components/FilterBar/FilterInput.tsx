@@ -11,7 +11,7 @@ type Params = {
 
 const FilterInput = ({ filter, setFilter }: Params) => {
   const changeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setFilter([filter[0], event.target.value]);
+    setFilter([filter[0], String(event.target.value)]);
   };
 
   switch (filter[0]) {
