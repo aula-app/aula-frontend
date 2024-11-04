@@ -60,7 +60,7 @@ const SettingsView = () => {
     } as RequestObject;
 
     if (target > 0) {
-      requestData.method = 'getUsersByRoom';
+      if (setting_name === 'users') requestData.method = 'getUsersByRoom';
       requestData.arguments.room_id = target;
     }
 
@@ -72,6 +72,8 @@ const SettingsView = () => {
       requestData['arguments']['search_field'] = filter[0];
       requestData['arguments']['search_text'] = filter[1];
     }
+
+    console.log(requestData);
 
     await databaseRequest(requestData, requestId).then((response) => {
       setLoading(false);

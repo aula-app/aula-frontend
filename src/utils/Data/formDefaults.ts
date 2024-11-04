@@ -49,7 +49,7 @@ export const inputType = {
   duration: {
     type: 'duration',
     defaultValue: 14,
-    schema: yup.number().integer(t('validation.int')),
+    schema: yup.number().integer(t('validation.int')).positive(t('validation.positive')),
   },
 
   email: {

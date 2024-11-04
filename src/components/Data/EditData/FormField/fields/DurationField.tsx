@@ -8,13 +8,14 @@ type Props = {
   data: InputSettings;
   disabled?: boolean;
   setValue: UseFormSetValue<{}>;
+  getValues: () => void;
 };
 
 /**
  * Renders "SelectInput" component
  */
 
-const DurationField = ({ data, control, disabled = false, setValue, ...restOfProps }: Props) => {
+const DurationField = ({ data, control, disabled = false, setValue, getValues, ...restOfProps }: Props) => {
   const { t } = useTranslation();
 
   return (

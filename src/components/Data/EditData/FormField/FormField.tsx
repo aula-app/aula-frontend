@@ -46,7 +46,7 @@ const FormField = ({
     case 'custom':
       return <CustomField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'duration':
-      return <DurationField data={data} control={control} setValue={setValue} {...restOfProps} />;
+      return <DurationField data={data} control={control} setValue={setValue} getValues={getValues} {...restOfProps} />;
     case 'icon':
       return <IconField data={data} control={control} setValue={setValue} {...restOfProps} />;
     case 'image':

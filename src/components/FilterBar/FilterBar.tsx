@@ -8,6 +8,7 @@ import FilterRoom from './FilterRoom';
 import FilterSelect from './FilterSelect';
 import FilterStatus from './FilterStatus';
 import FilterRole from './FilterRole';
+import { CropLandscapeOutlined } from '@mui/icons-material';
 
 type Params = {
   isOpen: boolean;
@@ -48,12 +49,10 @@ const FilterBar = ({
           <FilterInput filter={filter} setFilter={setFilter} />
         </Stack>
         <Stack direction="row" alignItems="center" gap={1} flex={1}>
-          {scope === 'users' && (
-            <>
-              {typeof target === 'number' && setTarget && <FilterRoom room={target} setRoom={setRoom} />}
-              {typeof role === 'number' && setRole && <FilterRole role={role} setRole={setRole} />}
-            </>
+          {['users', 'ideas'].includes(scope) && typeof target === 'number' && setTarget && (
+            <FilterRoom room={target} setRoom={setRoom} />
           )}
+          {scope === 'users' && typeof role === 'number' && setRole && <FilterRole role={role} setRole={setRole} />}
           {statusOptions && setStatus && typeof status !== 'undefined' && (
             <FilterStatus options={statusOptions} status={status} setStatus={setStatus} />
           )}

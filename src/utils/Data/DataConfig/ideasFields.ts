@@ -43,15 +43,15 @@ const fields = [
     required: false,
     role: 30,
   },
-  {
-    name: 'room_id',
-    form: {
-      ...inputType.select,
-      required: true,
-      options: 'rooms',
-    },
-    role: 50,
-  },
+  // {
+  //   name: 'room_id',
+  //   form: {
+  //     ...inputType.select,
+  //     required: true,
+  //     options: 'rooms',
+  //   },
+  //   role: 50,
+  // },
   {
     name: 'approval_comment',
     form: inputType.longText,

@@ -11,9 +11,9 @@ type Params = {
 
 const FilterRoom = ({ room, setRoom }: Params) => {
   const { t } = useTranslation();
-  const [rooms, setRooms] = useState<Array<RoomType>>([]);
+  const [options, setOptions] = useState<Array<RoomType>>([]);
 
-  const getRooms = async () => {
+  const getOptions = async () => {
     await databaseRequest({
       model: 'Room',
       method: 'getRooms',
@@ -23,7 +23,7 @@ const FilterRoom = ({ room, setRoom }: Params) => {
       },
     }).then((response) => {
       if (!response.success) return;
-      setRooms(response.data);
+      setOptions(response.data);
     });
   };
 
@@ -32,7 +32,7 @@ const FilterRoom = ({ room, setRoom }: Params) => {
   };
 
   useEffect(() => {
-    getRooms();
+    getOptions();
   }, []);
 
   return (
@@ -43,13 +43,13 @@ const FilterRoom = ({ room, setRoom }: Params) => {
       onChange={changeRoom}
       variant="filled"
       size="small"
-      sx={{ flex: 1 }}
-      disabled={!rooms}
+      sx={{ flex: 1, minWidth: 200 }}
+      disabled={!options}
     >
       <MenuItem value="">&nbsp;</MenuItem>
-      {rooms.map((room) => (
-        <MenuItem value={room.id} key={room.room_name}>
-          {room.room_name}
+      {options.map((option) => (
+        <MenuItem value={option.id} key={option.id}>
+          {option.room_name}
         </MenuItem>
       ))}
     </TextField>
