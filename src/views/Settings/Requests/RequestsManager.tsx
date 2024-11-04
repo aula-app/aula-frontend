@@ -91,6 +91,19 @@ const RequestsManager = ({ request, onReload }: Props) => {
     });
   };
 
+  const confirmDeleteAccount = async () => {
+    await databaseRequest({
+      model: 'User',
+      method: 'deleteUser',
+      arguments: {
+        user_id: bodyData.data.id,
+        delete_mode: 1,
+      },
+    }).then((response) => {
+      if (response.success) dispatch({ type: 'ADD_POPUP', message: { message: t('texts.success'), type: 'success' } });
+    });
+  };
+
   const onConfirm = () => {
     switch (bodyData.data.type) {
       case 'changeName':
@@ -101,6 +114,9 @@ const RequestsManager = ({ request, onReload }: Props) => {
         break;
       case 'requestData':
         confirmRequestData();
+        break;
+      case 'deleteAccount':
+        confirmDeleteAccount();
         break;
       default:
         () => {};
