@@ -73,8 +73,6 @@ const SettingsView = () => {
       requestData['arguments']['search_text'] = filter[1];
     }
 
-    console.log(requestData);
-
     await databaseRequest(requestData, requestId).then((response) => {
       setLoading(false);
       if (!response.success) return;

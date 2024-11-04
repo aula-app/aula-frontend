@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import DataUpdates from './DataUpdates';
 import FormField from './FormField';
+import { PossibleFields } from '@/types/Scopes';
 
 interface Props {
   id?: number;
@@ -42,21 +43,14 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const [updates, setUpdate] = useState<Array<updateType>>([]);
 
   const schema = getSchema().reduce((schema, field) => {
+    const name = field.name as keyof PossibleFields;
     return {
       ...schema,
-      [field.name]: field.required ? field.form.schema?.required('validation.required') : field.form.schema,
+      [name]: field.required ? field.form.schema?.required('validation.required') : field.form.schema,
     };
   }, {});
 
-  const {
-    control,
-    getValues,
-    handleSubmit,
-    register,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm({
+  const { control, getValues, handleSubmit, register, setValue, setError, clearErrors, watch } = useForm({
     resolver: yupResolver(yup.object(schema)),
   });
 
@@ -151,11 +145,12 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
 
   const updateValues = () => {
     getSchema().forEach((field) => {
-      const defaultValue = params[field.name] || field.form.defaultValue;
+      const name = field.name as keyof PossibleFields;
+      const defaultValue = params[name] || field.form.defaultValue;
       setValue(
         // @ts-ignore
         field.name,
-        fieldValues && fieldValues.data[field.name] ? fieldValues.data[field.name] : defaultValue
+        fieldValues && fieldValues.data[name] ? fieldValues.data[name] : defaultValue
       );
     });
     setUpdate([]);
@@ -251,10 +246,12 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
                     isNew={typeof id === 'undefined'}
                     control={control}
                     data={field}
-                    getValues={getValues}
                     phase={phase}
                     register={register}
                     setValue={setValue}
+                    getValues={getValues}
+                    setError={setError}
+                    clearErrors={clearErrors}
                   />
                 </Box>
               ))}

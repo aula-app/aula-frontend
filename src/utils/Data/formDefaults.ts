@@ -25,7 +25,7 @@ export const STATUS = [
 ];
 
 export type InputSettings = {
-  name: keyof PossibleFields;
+  name: keyof PossibleFields | Array<keyof PossibleFields>;
   form: InputType;
   required: boolean;
   role: 10 | 20 | 30 | 40 | 50 | 60;
@@ -49,7 +49,7 @@ export const inputType = {
   duration: {
     type: 'duration',
     defaultValue: 14,
-    schema: yup.number().integer(t('validation.int')).positive(t('validation.positive')),
+    schema: yup.number().integer(t('validation.int')).min(0, t('validation.positive')),
   },
 
   email: {
