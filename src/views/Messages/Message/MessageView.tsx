@@ -1,9 +1,9 @@
-import { AppButton } from '@/components';
-import { MessageType } from '@/types/Scopes';
+import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
-import { Stack, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Divider, Skeleton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 
 /**
  * Renders "Messages" view
@@ -11,32 +11,37 @@ import { useParams } from 'react-router-dom';
  */
 
 const MessagesView = () => {
+  const { t } = useTranslation();
   const params = useParams();
-  const [message, setMessage] = useState<MessageType>();
+  const navigate = useNavigate();
+  const [message, setMessage] = useState<MessageType | AnnouncementType>();
 
   const messageFetch = async () =>
     await databaseRequest({
-      model: 'Text',
-      method: 'getTextBaseData',
+      model: 'Message',
+      method: 'getMessageBaseData',
       arguments: {
-        text_id: params['message_id'],
+        message_id: params['message_id'],
       },
     }).then((response) => {
-      if (!response.success) return;
+      if (!response.success || !response.data) return;
       setMessage(response.data);
     });
 
-  const giveConsent = async (text_id: number) =>
+  const onArchive = async (value: boolean) => {
+    if (!message) return;
     await databaseRequest(
       {
-        model: 'User',
-        method: 'giveConsent',
+        model: 'Message',
+        method: 'setMessageStatus',
         arguments: {
-          text_id: params['message_id'],
+          status: value ? 3 : 1,
+          message_id: message.id,
         },
       },
-      ['user_id']
-    );
+      ['updater_id']
+    ).then(() => navigate('/messages'));
+  };
 
   useEffect(() => {
     messageFetch();
@@ -44,25 +49,39 @@ const MessagesView = () => {
 
   return (
     <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
-      {message && (
-        <Stack flex={1}>
-          <Typography fontWeight={700} align="center" py={2}>
-            {message.headline}
-          </Typography>
-          <Stack flex={1} alignItems="center">
-            <Typography>{message.body}</Typography>
-          </Stack>
-          <Stack direction="row" justifyContent="end">
-            {/* <IconButton>
-            <AppIcon icon="delete" />
-          </IconButton> */}
-            {message.user_needs_to_consent > 0 && (
-              <AppButton color="primary" onClick={() => giveConsent(message.id)}>
-                {message.consent_text}
-              </AppButton>
-            )}
-          </Stack>
-        </Stack>
+      {message ? (
+        <Card variant="outlined">
+          <CardContent>
+            <Typography variant="h5" py={2}>
+              {message.headline}
+            </Typography>
+            <Typography py={2}>
+              <Typography>{message.body}</Typography>
+            </Typography>
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <Button
+              color="error"
+              onClick={() => onArchive(message.status === 1 ? true : false)}
+              sx={{ ml: 'auto', mr: 2, my: 1 }}
+            >
+              {message.status === 1 ? t(`texts.archive`) : t(`texts.unarchive`)}
+            </Button>
+          </CardActions>
+        </Card>
+      ) : (
+        <Card variant="outlined">
+          <CardContent>
+            <Skeleton variant="rectangular" height={24} width="30%" sx={{ mb: 3 }} />
+            <Skeleton variant="text" />
+            <Skeleton variant="text" width="75%" />
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <Skeleton variant="rectangular" width={100} sx={{ ml: 'auto', mr: 2, my: 1 }} />
+          </CardActions>
+        </Card>
       )}
     </Stack>
   );

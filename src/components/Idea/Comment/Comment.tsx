@@ -15,7 +15,7 @@ interface Props {
 
 type likeMethodType = 'getLikeStatus' | 'CommentAddLike' | 'CommentRemoveLike';
 
-export const Comment = ({ comment, disabled = false, onReload }: Props) => {
+const Comment = ({ comment, disabled = false, onReload }: Props) => {
   const [liked, setLiked] = useState(false);
   const displayDate = new Date(comment.created);
 
@@ -32,7 +32,11 @@ export const Comment = ({ comment, disabled = false, onReload }: Props) => {
     );
   };
 
-  const hasLiked = async () => await manageLike('getLikeStatus').then((result) => setLiked(Boolean(result.data)));
+  const hasLiked = async () =>
+    await manageLike('getLikeStatus').then((response) => {
+      if (!response.success) return;
+      setLiked(Boolean(response.data));
+    });
   const addLike = async () => await manageLike(`CommentAddLike`).then(() => onReload());
   const removeLike = async () => await manageLike(`CommentRemoveLike`).then(() => onReload());
 

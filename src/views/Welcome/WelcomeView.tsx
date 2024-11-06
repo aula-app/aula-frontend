@@ -1,16 +1,18 @@
-import EditData from '@/components/Data/EditData';
-import DashBoard from './DashBoard';
 import { RoomCard } from '@/components/RoomCard';
-import { RoomsResponseType } from '@/types/RequestTypes';
+import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
+import { RoomType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Grid, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import DashBoard from './DashBoard';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
-  const [rooms, setRooms] = useState<RoomsResponseType>();
+  const [rooms, setRooms] = useState<RoomType[]>([]);
   const [showDashboard, setDashboard] = useState(true);
+  const [isLoading, setLoading] = useState(true);
 
   const roomsFetch = async () =>
     await databaseRequest(
@@ -23,7 +25,11 @@ const WelcomeView = () => {
         },
       },
       checkPermissions(40) ? [] : ['user_id']
-    ).then((response) => setRooms(response));
+    ).then((response) => {
+      setLoading(false);
+      if (!response.success || !response.data) return;
+      setRooms(response.data as RoomType[]);
+    });
 
   const handleScroll = () => {
     setDashboard(false);
@@ -58,13 +64,10 @@ const WelcomeView = () => {
           {t('views.rooms')}
         </Typography>
         <Grid container flex={1} spacing={2}>
-          {rooms &&
-            rooms.data &&
-            rooms.data.map((room) => (
-              <Grid key={room.id} item xs={12} sm={6} lg={4} xl={3} sx={{ scrollSnapAlign: 'center' }}>
-                <RoomCard room={room} />
-              </Grid>
-            ))}
+          {isLoading && <RoomCardSkeleton />}
+          {rooms.map((room) => (
+            <RoomCard room={room} key={room.id} />
+          ))}
         </Grid>
       </Stack>
     </Stack>

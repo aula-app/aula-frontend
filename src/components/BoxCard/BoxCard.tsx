@@ -6,6 +6,7 @@ import { checkPermissions, databaseRequest, phases } from '@/utils';
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import BoxCardSkeleton from './BoxCardSkeleton';
 
 interface BoxCardProps {
   box: number;
@@ -25,7 +26,7 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
       method: 'getTopicBaseData',
       arguments: { topic_id: box },
     }).then((response) => {
-      setBox(response.data);
+      if (response.success) setBox(response.data);
     });
 
   const daysRemaining = (): number => {
@@ -65,13 +66,13 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
         height="3rem"
         alignItems="center"
         direction="row"
-        bgcolor={`${phases[boxData.phase_id].name}.main`}
+        bgcolor={`${phases[boxData.phase_id]}.main`}
         p={1}
         pr={2}
       >
-        <AppIcon icon={phases[boxData.phase_id].name} sx={{ mx: 1 }} />
+        <AppIcon icon={phases[boxData.phase_id]} sx={{ mx: 1 }} />
         <Typography variant="caption" mr="auto">
-          {t('texts.ideaBox', { var: boxData.ideas_num, phase: t(`phases.${phases[boxData.phase_id].name}`) })}
+          {t('texts.ideaBox', { var: boxData.ideas_num, phase: t(`phases.${phases[boxData.phase_id]}`) })}
         </Typography>
         <MoreOptions scope="boxes" id={boxData.id} onClose={reload} canEdit={checkPermissions(30)} />
       </Stack>
@@ -92,16 +93,10 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
             borderRadius={999}
             width="100%"
             height="1.5rem"
-            bgcolor={`${phases[boxData.phase_id].name}.main`}
+            bgcolor={`${phases[boxData.phase_id]}.main`}
             overflow="clip"
           >
-            <Box
-              bgcolor={`${phases[boxData.phase_id].name}.main`}
-              position="absolute"
-              left={0}
-              height="100%"
-              width="50%"
-            />
+            <Box bgcolor={`${phases[boxData.phase_id]}.main`} position="absolute" left={0} height="100%" width="50%" />
             <Stack
               direction="row"
               position="absolute"
@@ -122,7 +117,7 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
       </AppLink>
     </Card>
   ) : (
-    <></>
+    <BoxCardSkeleton />
   );
 };
 

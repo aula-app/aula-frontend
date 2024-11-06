@@ -1,7 +1,8 @@
 import { AppIcon, AppIconButton } from '@/components';
 import { DatabaseResponseData, DatabaseResponseType } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, dataSettings, scopeDefinitions } from '@/utils';
+import { databaseRequest, RequestObject } from '@/utils';
+import DataConfig from '@/utils/Data';
 import {
   Button,
   Checkbox,
@@ -42,38 +43,58 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
   const [filter, setFilter] = useState('');
   const [isOpen, setOpen] = useState(false);
 
+  const currentTarget = DataConfig[scope].requests.move || null;
+
   const getAvailableItems = async () => {
-    if (!scopeDefinitions[scope].move) return;
-    const moreArgs = params[scopeDefinitions[scope].move.targetId]
-      ? { [scopeDefinitions[scope].move.targetId]: targetId }
-      : {};
-    await databaseRequest({
-      model: scopeDefinitions[scopeDefinitions[scope].move.target].model,
-      method: scopeDefinitions[scopeDefinitions[scope].move.target].fetch,
+    if (!currentTarget) return;
+
+    const requestId = [];
+    if (currentTarget.target === 'ideas' || currentTarget.target === 'boxes') requestId.push('user_id');
+
+    const moreArgs = params[currentTarget.targetId] ? { [currentTarget.targetId]: targetId } : {};
+
+    const requestData = {
+      model: DataConfig[currentTarget.target].requests.model,
+      method: DataConfig[currentTarget.target].requests.fetch,
       arguments: {
         offset: 0,
         limit: 0,
-        orderby: dataSettings[scopeDefinitions[scope].move.target][0].orderId,
+        orderby: DataConfig[currentTarget.target].columns[0].orderId,
         asc: 1,
-        extra_where: ` AND (${dataSettings[scopeDefinitions[scope].move.target][0].name} LIKE '%${filter}%' OR ${dataSettings[scopeDefinitions[scope].move.target][1].name} LIKE '%${filter}%')`,
         ...moreArgs,
       },
-    }).then((response: DatabaseResponseType) => {
+    } as RequestObject;
+
+    if (filter !== '') {
+      requestData['arguments']['search_field'] = DataConfig[currentTarget.target].columns[0].name;
+      requestData['arguments']['search_text'] = filter;
+    }
+
+    await databaseRequest(requestData, requestId).then((response) => {
+      if (!response.success) return;
       response.data ? setAvailableItems(response.data) : setAvailableItems([]);
     });
   };
 
   const getCurrentItems = async () => {
-    if (!id || !scopeDefinitions[scope].move) {
+    if (!id || !currentTarget) {
       setSelectedItems([]);
       return;
     }
 
-    await databaseRequest({
-      model: scopeDefinitions[scopeDefinitions[scope].move.target].model,
-      method: scopeDefinitions[scope].move.get,
-      arguments: { [scopeDefinitions[scope].id]: id },
-    }).then((response: DatabaseResponseType) => {
+    const requestData = {
+      model: DataConfig[currentTarget.target].requests.model,
+      method: currentTarget.get,
+      arguments: { [DataConfig[scope].requests.id]: id },
+    } as RequestObject;
+
+    if (filter !== '') {
+      requestData['arguments']['search_field'] = DataConfig[currentTarget.target].columns[0].name;
+      requestData['arguments']['search_text'] = filter;
+    }
+
+    await databaseRequest(requestData).then((response: DatabaseResponseType) => {
+      if (!response.success) return;
       response.data ? setSelectedItems(response.data) : setSelectedItems([]);
       response.data ? setSelected(response.data.map((item) => item.id)) : setSelected([]);
     });
@@ -93,30 +114,30 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
   };
 
   const requestAdd = async (targetId: number) => {
-    if (!id || !scopeDefinitions[scope].move) return;
+    if (!id || !currentTarget) return;
     await databaseRequest(
       {
-        model: scopeDefinitions[scope].move.model,
-        method: scopeDefinitions[scope].move.add,
+        model: currentTarget.model,
+        method: currentTarget.add,
         arguments: {
-          [scopeDefinitions[scope].id]: id,
-          [scopeDefinitions[scope].move.targetId]: targetId,
+          [DataConfig[scope].requests.id]: id,
+          [currentTarget.targetId]: targetId,
         },
       },
       ['updater_id']
-    );
+    ).then(onClose);
   };
 
   const requestRemove = async (targetId: number) => {
-    if (!id || !scopeDefinitions[scope].move) return;
+    if (!id || !currentTarget) return;
     await databaseRequest({
-      model: scopeDefinitions[scope].move.model,
-      method: scopeDefinitions[scope].move.remove,
+      model: currentTarget.model,
+      method: currentTarget.remove,
       arguments: {
-        [scopeDefinitions[scope].id]: id,
-        [scopeDefinitions[scope].move.targetId]: targetId,
+        [DataConfig[scope].requests.id]: id,
+        [currentTarget.targetId]: targetId,
       },
-    });
+    }).then(onClose);
   };
 
   const requestUpdates = () => {
@@ -128,14 +149,14 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
       toAdd.forEach((targetId) => requestAdd(targetId));
       toRemove.forEach((targetId) => requestRemove(targetId));
     } else if (addUpdate) {
-      if (!scopeDefinitions[scope].move) return;
-      const moveSettings = scopeDefinitions[scope].move;
+      if (!currentTarget) return;
+      const moveSettings = currentTarget;
       addUpdate(
         selected.map((targetId) => {
           return {
             model: moveSettings.model,
             method: moveSettings.add,
-            args: { [scopeDefinitions[scope].id]: id, [moveSettings.targetId]: targetId },
+            args: { [DataConfig[scope].requests.id]: id, [moveSettings.targetId]: targetId },
             requestId: moveSettings.target,
           };
         })
@@ -157,7 +178,6 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
   };
 
   const close = () => {
-    onClose();
     setOpen(false);
   };
 
@@ -172,20 +192,20 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
 
   return (
     <>
-      {scopeDefinitions[scope].move && (
+      {currentTarget && (
         <>
           <Button
             fullWidth
             color="secondary"
             variant="outlined"
             startIcon={<AppIcon icon="edit" />}
-            sx={{ borderRadius: 30, mb: 2 }}
+            sx={{ borderRadius: 30, mb: 3, order: 999 }}
             onClick={() => setOpen(true)}
           >
-            {t('texts.select', { var: t(`views.${scopeDefinitions[scope].move.target}`) })}
+            {t('texts.select', { var: t(`views.${currentTarget.target}`) })}
           </Button>
           <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
-            <DialogTitle>{t('texts.select', { var: t(`views.${scopeDefinitions[scope].move.target}`) })}</DialogTitle>
+            <DialogTitle>{t('texts.select', { var: t(`views.${currentTarget.target}`) })}</DialogTitle>
             <DialogContent>
               <Stack height={350} position="relative" overflow="hidden">
                 <Stack position="absolute" height="100%" width="100%">
@@ -203,29 +223,26 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
                         <Stack
                           component={Button}
                           direction="row"
-                          mt={1}
                           key={item.id}
                           borderRadius={30}
                           bgcolor={selected.includes(item.id) ? grey[200] : 'transparent'}
+                          gap={2}
                           sx={{
                             textTransform: 'none',
                             textAlign: 'left',
                             justifyContent: 'start',
                             color: 'inherit',
-                            overflow: 'clip',
                           }}
                           fullWidth
                           onClick={() => toggleSelect(item.id)}
                         >
                           <Checkbox checked={selected.includes(item.id)} onChange={() => toggleSelect(item.id)} />
-                          <Stack pl={2} flex={1}>
+                          <Stack flex={1}>
                             <Typography noWrap>
-                              {scopeDefinitions[scope].move &&
-                                item[dataSettings[scopeDefinitions[scope].move.target][0].name]}
+                              {currentTarget && item[DataConfig[currentTarget.target].columns[0].name]}
                             </Typography>
                             <Typography noWrap color="secondary" fontSize="small">
-                              {scopeDefinitions[scope].move &&
-                                item[dataSettings[scopeDefinitions[scope].move.target][1].name]}
+                              {currentTarget && item[DataConfig[currentTarget.target].columns[1].name]}
                             </Typography>
                           </Stack>
                         </Stack>

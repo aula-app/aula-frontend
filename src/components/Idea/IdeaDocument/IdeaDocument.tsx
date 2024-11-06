@@ -4,6 +4,7 @@ import { CategoryType, IdeaType } from '@/types/Scopes';
 import { checkPermissions, checkSelf, databaseRequest, phases } from '@/utils';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import IdeaContent from '../IdeaContent';
 
 interface Props {
   idea: IdeaType;
@@ -13,7 +14,7 @@ interface Props {
 
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
-export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
+const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
   const [liked, setLiked] = useState(false);
   const [category, setCategory] = useState<CategoryType>();
   const displayDate = new Date(idea.created);
@@ -73,11 +74,8 @@ export const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
           canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id) && !disabled)}
         />
       </Stack>
-      <Stack p={2} bgcolor={`${phases['0'].name}.main`} borderRadius={3} mb={1}>
-        <Typography variant="h6">{idea.title}</Typography>
-        <Typography mb={2}>{idea.content}</Typography>
-      </Stack>
-      <Stack direction="row" alignItems="center">
+      <IdeaContent idea={idea} />
+      <Stack direction="row" alignItems="center" mt={2}>
         <AppIcon icon="account" size="xl" />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
           {displayDate && (

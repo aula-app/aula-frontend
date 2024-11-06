@@ -24,6 +24,7 @@ const VotingCard = () => {
       },
       ['user_id']
     ).then((response) => {
+      if (!response.success) return;
       setVote(response.data);
       setHasVoted(response.count > 0);
     });

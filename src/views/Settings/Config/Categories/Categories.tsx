@@ -4,10 +4,12 @@ import { DeleteData } from '@/components/Data';
 import EditData from '@/components/Data/EditData';
 import { CategoryType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
-import { Box, Chip, Stack } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const CatView = () => {
+  const { t } = useTranslation();
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [selectedId, setId] = useState<number | undefined>();
   const [editCat, setEditCat] = useState(false);
@@ -44,8 +46,13 @@ const CatView = () => {
   }, []);
 
   return (
-    <Stack>
-      <Box>
+    <Stack pb={3}>
+      <Stack direction="row" flexWrap="wrap" gap={1}>
+        <Chip
+          label={t('generics.add', { var: t('views.category') })}
+          avatar={<AppIcon icon="add" />}
+          onClick={() => setEdit()}
+        />
         {categories.map((category, key) => {
           const currentIcon = category.description_internal as keyof typeof CAT_ICONS;
           return (
@@ -53,14 +60,12 @@ const CatView = () => {
               key={key}
               label={category.name}
               avatar={<AppIcon icon={currentIcon} />}
-              // onClick={() => setEdit(category.id)}
+              onClick={() => setEdit(category.id)}
               onDelete={() => setDelete(category.id)}
-              sx={{ mr: 1, mt: 1 }}
             />
           );
         })}
-        <Chip label="New Category" avatar={<AppIcon icon="add" />} onClick={() => setEdit()} sx={{ mt: 1 }} />
-      </Box>
+      </Stack>
       <EditData scope="categories" id={selectedId} isOpen={!!editCat} onClose={onClose} />
       <DeleteData scope="categories" id={selectedId || 0} isOpen={!!deleteCat} onClose={onClose} />
     </Stack>

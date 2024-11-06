@@ -1,16 +1,5 @@
 import { Theme } from '@mui/material/styles';
 
-export type ColorName =
-  | 'default' // MUI 5.x removes 'default' form Button, we need to fix this
-  | 'primary'
-  | 'secondary'
-  | 'error' // Missing in MUI 4.x
-  | 'warning' // Missing in MUI 4.x
-  | 'info' // Missing in MUI 4.x
-  | 'success' // Missing in MUI 4.x
-  | 'false' // Missing in MUI 5.x
-  | 'true'; // Missing in MUI 5.x
-
 /**
  * Makes style to use for Material UI Paper components across the App
  */

@@ -1,9 +1,8 @@
 import { AppIcon, AppIconButton } from '@/components';
 import { DelegationType } from '@/types/Delegation';
 import { UserType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, RequestObject } from '@/utils';
 import {
-  Avatar,
   Button,
   Dialog,
   DialogActions,
@@ -19,6 +18,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
+import { useAppStore } from '@/store';
 
 interface Props {
   isOpen: boolean;
@@ -34,13 +34,15 @@ interface Props {
 const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
   const { t } = useTranslation();
   const params = useParams();
-  const [users, setUsers] = useState<UserType[]>();
+  const [, dispatch] = useAppStore();
+
+  const [users, setUsers] = useState<UserType[]>([]);
   const [selected, setSelected] = useState<UserType | null>();
   const [filter, setFilter] = useState('');
   const [confirm, setConfirm] = useState(delegate.length > 0);
 
   const usersFetch = async () => {
-    await databaseRequest({
+    const requestData = {
       model: 'User',
       method: 'getUsers',
       arguments: {
@@ -48,9 +50,16 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         limit: 0,
         orderby: 1,
         asc: 1,
-        extra_where: ` AND (realname LIKE '%${filter}%' OR displayname LIKE '%${filter}%')`,
       },
-    }).then((response) => setUsers(response.data));
+    } as RequestObject;
+
+    if (filter !== '') {
+      requestData['arguments']['both_names'] = filter;
+    }
+
+    await databaseRequest(requestData).then((response) => {
+      if (response.success) setUsers(response.data);
+    });
   };
 
   const singleUserFetch = async () => {
@@ -61,7 +70,9 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
       arguments: {
         user_id: delegate[0].user_id_target,
       },
-    }).then((response) => setSelected(response.data));
+    }).then((response) => {
+      if (response.success) setSelected(response.data);
+    });
   };
 
   const setDelegate = async () => {
@@ -76,7 +87,10 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         },
       },
       ['user_id', 'updater_id']
-    ).then(() => onClose());
+    ).then(() => {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.delegationSuccess'), type: 'success' } });
+      onClose();
+    });
   };
 
   const removeDelegate = async () => {
@@ -90,7 +104,10 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         },
       },
       ['user_id']
-    ).then(() => onClose());
+    ).then(() => {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.delegationRevoke'), type: 'success' } });
+      onClose();
+    });
   };
 
   const select = (user: UserType) => {
@@ -125,7 +142,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
                 endAdornment={<AppIconButton icon="close" size="small" onClick={() => setFilter('')} />}
               />
               <Stack my={1} overflow="auto">
-                {users &&
+                {users.length > 0 &&
                   users.map((user) => (
                     <Stack
                       component={Button}
@@ -142,7 +159,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
                       }}
                       onClick={() => select(user)}
                     >
-                      <UserAvatar id={user.id} update={true}/>
+                      <UserAvatar id={user.id} update={true} />
                       <Stack ml={2}>
                         <Typography>{user.realname}</Typography>
                         <Typography color="secondary" fontSize="small">
@@ -176,7 +193,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
         <Button color="secondary" onClick={onClose}>
-          {t('defaults.cancel')}
+          {t('generics.cancel')}
         </Button>
         {!confirm ? (
           <Button variant="contained" onClick={() => setConfirm(true)} disabled={!selected}>

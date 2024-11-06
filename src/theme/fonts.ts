@@ -5,7 +5,7 @@ import { ThemeOptions } from '@mui/material';
 /**
  * MUI theme options for "Dark Mode"
  */
-export const THEME_FONTS: ThemeOptions = {
+const THEME_FONTS: ThemeOptions = {
   typography: {
     allVariants: {
       fontFamily: 'Nunito Variable',

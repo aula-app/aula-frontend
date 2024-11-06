@@ -1,10 +1,13 @@
 import { ErrorBoundary } from '@/components';
 import EditData from '@/components/Data/EditData';
+import { useIsOnline } from '@/hooks';
 import { useOnMobile } from '@/hooks/layout';
-import { getCurrentUser } from '@/utils';
-import AskConsent from '@/views/AskConsent/AskConsentView';
+import { checkPermissions, getCurrentUser, localStorageGet, parseJwt } from '@/utils';
+import AskConsent from '@/views/AskConsent';
+import OfflineView from '@/views/OfflineView';
+import UpdatePassword from '@/views/UpdatePassword';
 import { Stack } from '@mui/material';
-import { FunctionComponent, PropsWithChildren, useState } from 'react';
+import { FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import SideBarFixed from './SideBar/SideBarFixed';
@@ -20,13 +23,27 @@ const TITLE_PRIVATE = 'aula';
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const location = useLocation();
   const [scope, setScope] = useState<'bug' | 'report'>();
+  const [online, setOnline] = useState(true);
+  const jwt = parseJwt(localStorageGet('token'));
 
   const onMobile = useOnMobile();
 
   const title = TITLE_PRIVATE;
   document.title = title; // Also Update Tab Title
 
-  return (
+  const checkOnlineStatus = async () => {
+    setOnline(await useIsOnline());
+  };
+
+  useEffect(() => {
+    checkOnlineStatus();
+  }, [location]);
+
+  return !online ? (
+    <OfflineView />
+  ) : jwt?.temp_pw ? (
+    <UpdatePassword />
+  ) : (
     <Stack
       sx={{
         height: '100vh',
@@ -38,7 +55,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       <TopBar home={title} setReport={setScope} />
 
       <Stack direction="row" component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
-        <SideBarFixed setReport={setScope} />
+        {!checkPermissions(60) && <SideBarFixed setReport={setScope} />}
         <Stack flex={1} overflow="hidden">
           <ErrorBoundary name="Content">{children}</ErrorBoundary>
         </Stack>
@@ -48,6 +65,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         scope={scope || 'bug'}
         otherData={{
           headline: `${scope === 'bug' ? 'Bug' : 'Content'} report`,
+          msg_type: 4,
         }}
         metadata={{
           location: location.pathname,

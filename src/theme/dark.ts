@@ -81,12 +81,15 @@ const OTHER_COLORS = {
   report: {
     main: 'hsl(40, 40%, 20%)',
   },
+  request: {
+    main: blueGrey[800],
+  },
 };
 
 /**
  * MUI theme options for "Dark Mode"
  */
-export const DARK_THEME: ThemeOptions = {
+const DARK_THEME: ThemeOptions = {
   palette: {
     mode: 'dark',
     background: {

@@ -1,6 +1,7 @@
 import { BoxType, RoomType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, scopeDefinitions } from '@/utils';
+import { databaseRequest } from '@/utils';
+import DataConfig from '@/utils/Data';
 import {
   Button,
   Dialog,
@@ -34,16 +35,25 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
   const { control, handleSubmit } = useForm();
   const scope = setting_name as SettingNamesType;
 
+  const currentTarget = DataConfig[scope].requests.move || null;
+
   const getDestination = async () => {
-    if (!scopeDefinitions[scope].isChild) return;
-    await databaseRequest({
-      model: scopeDefinitions[scopeDefinitions[scope].isChild].model,
-      method: scopeDefinitions[scope].fetch,
-      arguments: {
-        offset: 0,
-        limit: 0,
+    if (!currentTarget) return;
+
+    const requestId = [];
+    if (currentTarget.target === 'ideas' || currentTarget.target === 'boxes') requestId.push('user_id');
+
+    await databaseRequest(
+      {
+        model: DataConfig[currentTarget.target].requests.model,
+        method: DataConfig[currentTarget.target].requests.fetch,
+        arguments: {
+          offset: 0,
+          limit: 0,
+        },
       },
-    }).then((response) => {
+      requestId
+    ).then((response) => {
       setDestinationList(
         response.data.map((r: BoxType | RoomType) => ({ value: r.id, label: 'room_name' in r ? r.room_name : r.name }))
       );
@@ -51,14 +61,14 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
   };
 
   const request = async (id: number, targetId: number) => {
-    if (!scopeDefinitions[scope].move || !targetId) return;
+    if (!currentTarget || !targetId) return;
     await databaseRequest(
       {
-        model: scopeDefinitions[scope].model,
-        method: scopeDefinitions[scope].add,
+        model: DataConfig[scope].requests.model,
+        method: DataConfig[scope].requests.add,
         arguments: {
-          [scopeDefinitions[scope].id]: id,
-          [scopeDefinitions[scope].move.targetId]: targetId,
+          [DataConfig[scope].requests.id]: id,
+          [currentTarget.targetId]: targetId,
         },
       },
       ['updater_id']
@@ -81,10 +91,10 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{t('texts.move', { var: t(`views.${setting_name}`) })}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{t('texts.move', { var: t(`views.${scope}`) })}</DialogTitle>
       <DialogContent sx={{ overflowY: 'auto' }}>
         <DialogContentText component={Stack} id="alert-dialog-description">
-          {t('texts.moveData', { var: t(`views.${setting_name}`).toLowerCase() })}
+          {t('texts.moveData', { var: t(`views.${scope}`).toLowerCase() })}
           <Controller
             // @ts-ignore
             name="select"
@@ -95,7 +105,7 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
               <FormControl sx={{ m: 1, minWidth: 80 }}>
                 <Select
                   id="demo-simple-select"
-                  label={scopeDefinitions[scope].isChild}
+                  label={currentTarget?.target}
                   disabled={destinationList.length === 0}
                   fullWidth
                   // @ts-ignore

@@ -1,4 +1,5 @@
-import { AppButton, AppIconButton, AppLink } from "@/components";
+import { AppIconButton, AppLink } from "@/components";
+import AppSubmitButton from "@/components/AppSubmitButton";
 import { useAppStore } from "@/store";
 import { localStorageGet, localStorageSet } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -6,13 +7,17 @@ import {
   Alert,
   Button,
   Collapse,
+<<<<<<< HEAD
   Divider,
   Grid,
+=======
+>>>>>>> main
   InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
+import Grid from '@mui/material/Grid2';
 import { useCallback, useState } from "react";
 import { FormContainer, useForm } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
@@ -21,11 +26,22 @@ import * as yup from "yup";
 
 /**
  * Renders "Login" view for Login flow
- * url: /login/email
+ * url: /login
  */
+
 const LoginView = () => {
   const { t } = useTranslation();
+<<<<<<< HEAD
   const oauthEnabled = import.meta.env.VITE_APP_OAUTH;
+=======
+  const navigate = useNavigate();
+  const [, dispatch] = useAppStore();
+  const jwt_token = localStorageGet("token");
+  const [loginError, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const api_url = localStorageGet('api_url');
+>>>>>>> main
 
   const schema = yup
     .object({
@@ -46,20 +62,16 @@ const LoginView = () => {
     resolver: yupResolver(schema),
   });
 
-  const jwt_token = localStorageGet("token");
-  const navigate = useNavigate();
-  const [, dispatch] = useAppStore();
-  const [loginError, setError] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-
   const handleShowPasswordClick = useCallback(() => {
     setShowPassword((oldValue) => !oldValue);
   }, []);
 
   const onSubmit = async (formData: Object) => {
-    const request = await (
-      await fetch(
-        `${import.meta.env.VITE_APP_API_URL}/api/controllers/login.php`,
+    try {
+      setLoading(true)
+
+      const request = await fetch(
+        `${api_url}/api/controllers/login.php`,
         {
           method: "POST",
           headers: {
@@ -68,17 +80,23 @@ const LoginView = () => {
           },
           body: JSON.stringify(formData),
         }
-      )
-    ).json();
+      );
 
-    if (request.success === "false") {
-      setError(true);
-      return;
+      setLoading(false)
+      const response = await request.json() as { success: boolean, JWT: string };
+
+      if (!response.success) {
+        setError(true);
+        return;
+      }
+
+      localStorageSet("token", response["JWT"]);
+      dispatch({ type: "LOG_IN" });
+      navigate("/", { replace: true });
+    } catch (e) {
+      setLoading(false)
+      dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
     }
-
-    localStorageSet("token", request["JWT"]);
-    dispatch({ type: "LOG_IN" });
-    navigate("/", { replace: true });
   };
 
   return (
@@ -148,13 +166,13 @@ const LoginView = () => {
           </Grid>
         </Stack>
       </FormContainer>
-
       {oauthEnabled === "true"?
       (<>
        <Stack direction='row' mb={2} alignItems='center'>
         <Divider sx={{flex: 1}} />
         <Typography px={2} color="secondary">{t('generics.or')}</Typography>
         <Divider sx={{flex: 1}} />
+
       </Stack>
        <Button variant="outlined" onClick={() => window.location.href="/api/controllers/login_oauth.php"}>Authenticate</Button>
        </>) 

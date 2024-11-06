@@ -34,6 +34,7 @@ import {
   HiLink,
   HiOutlineAcademicCap,
   HiOutlineArchiveBox,
+  HiOutlineArrowDownOnSquare,
   HiOutlineArrowRightEndOnRectangle,
   HiOutlineBars3,
   HiOutlineBell,
@@ -50,6 +51,7 @@ import {
   HiOutlineChevronUp,
   HiOutlineClock,
   HiOutlineCog6Tooth,
+  HiOutlineDocumentDuplicate,
   HiOutlineDocumentText,
   HiOutlineEllipsisHorizontal,
   HiOutlineEnvelope,
@@ -66,6 +68,7 @@ import {
   HiOutlineInformationCircle,
   HiOutlineLightBulb,
   HiOutlineMagnifyingGlass,
+  HiOutlineMegaphone,
   HiOutlineMinusCircle,
   HiOutlineMoon,
   HiOutlinePencil,
@@ -209,7 +212,7 @@ export const ICONS = {
   add: HiOutlinePlus,
   against: HiOutlineXCircle,
   alert: HiOutlineExclamationTriangle,
-  announcement: HiOutlineBell,
+  announcement: HiOutlineMegaphone,
   arrowup: HiOutlineChevronUp,
   arrowdown: HiOutlineChevronDown,
   arrowright: HiOutlineChevronRight,
@@ -230,10 +233,12 @@ export const ICONS = {
   close: HiOutlineXMark,
   clock: HiOutlineClock,
   comment: HiOutlineChatBubbleOvalLeft,
+  copy: HiOutlineDocumentDuplicate,
   day: HiOutlineSun,
   delete: HiOutlineTrash,
   delegate: HiOutlineUsers,
   discussion: HiOutlineChatBubbleLeftRight,
+  download: HiOutlineArrowDownOnSquare,
   edit: HiOutlinePencil,
   filter: HiOutlineFunnel,
   for: HiOutlineCheckCircle,
@@ -258,14 +263,16 @@ export const ICONS = {
   results: HiOutlineChartBar,
   rejected: HiOutlineHandThumbDown,
   report: HiOutlineFlag,
+  request: HiOutlineExclamationTriangle,
   room: HiOutlineAcademicCap,
   search: HiOutlineMagnifyingGlass,
   settings: HiOutlineCog6Tooth,
   signup: HiOutlineUserPlus,
+  survey: HiOutlineQuestionMarkCircle,
   text: HiOutlineDocumentText,
   users: HiOutlineUserGroup,
-  visibilityoff: HiOutlineEye,
-  visibilityon: HiOutlineEyeSlash,
+  visibilityOff: HiOutlineEye,
+  visibilityOn: HiOutlineEyeSlash,
   voting: VotingIcon,
   wild: HiOutlineLightBulb,
 };
@@ -413,7 +420,7 @@ export type AllIconsType = keyof typeof ALL_ICONS;
 
 interface Props {
   icon: AllIconsType; // Icon's name alternate prop
-  size?: 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
+  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
   sx?: ObjectPropByName;
 }
 
@@ -424,7 +431,17 @@ interface Props {
 const AppIcon = ({ icon, size = 'medium', sx, ...restOfProps }: Props) => {
   const ComponentToRender = ALL_ICONS[icon] || ALL_ICONS['bug'];
   const currentSize =
-    size === 'small' ? '16px' : size === 'large' ? '32px' : size === 'xl' ? '40px' : size === 'xxl' ? '80px' : '24px'; // no size === md
+    size === 'xs'
+      ? '16px'
+      : size === 'small'
+        ? '18px'
+        : size === 'large'
+          ? '32px'
+          : size === 'xl'
+            ? '40px'
+            : size === 'xxl'
+              ? '80px'
+              : '24px'; // no size === md
   return (
     <Stack
       alignItems="center"

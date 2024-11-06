@@ -1,11 +1,11 @@
 import { AlterTypes, ColorTypes, ObjectPropByName } from '@/types/Generics';
-import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { getCurrentUser } from '@/utils';
 import { Box, Button, ClickAwayListener, Divider, Paper, Stack, Typography, Zoom } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import AppIcon from '../AppIcon';
 import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
@@ -17,7 +17,7 @@ interface OptionsTypes {
   icon: keyof typeof ICONS;
   color: ColorTypes;
   label: string;
-  otherData?: { headline?: string; body?: string };
+  otherData?: { headline?: string; body?: string; msg_type: number };
   metadata?: ObjectPropByName;
 }
 
@@ -34,7 +34,6 @@ interface Props {
 const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const params = useParams();
   const [currentId, setId] = useState<number>();
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState<SettingNamesType>();
@@ -48,6 +47,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       label: t('generics.contentReport'),
       otherData: {
         headline: `Content report on ${scope} #${id}`,
+        msg_type: 4,
       },
       metadata: {
         location: location.pathname,
@@ -61,6 +61,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       label: t('generics.bugReport'),
       otherData: {
         headline: `Bug report on ${scope} #${id}`,
+        msg_type: 4,
       },
       metadata: {
         location: location.pathname,
@@ -146,14 +147,16 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
           </Zoom>
         </ClickAwayListener>
       </Box>
-      <EditData
-        id={currentId}
-        scope={scope}
-        isOpen={!!edit}
-        onClose={close}
-        // otherData={options.filter((data) => data.type === edit)[0]?.otherData}
-        // metadata={options.filter((data) => data.type === edit)[0]?.metadata}
-      />
+      {edit && (
+        <EditData
+          id={currentId}
+          scope={edit}
+          isOpen={!!edit}
+          onClose={close}
+          otherData={options.filter((data) => data.type === edit)[0]?.otherData}
+          metadata={options.filter((data) => data.type === edit)[0]?.metadata}
+        />
+      )}
       {id && scope && <DeleteData id={id} scope={scope} isOpen={del} onClose={close} />}
     </>
   );
