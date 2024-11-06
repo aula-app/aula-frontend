@@ -161,7 +161,9 @@ const LoginView = () => {
           <Typography px={2} color="secondary">{t('generics.or')}</Typography>
           <Divider sx={{flex: 1}} />
         </Stack>
-         <Button variant="outlined" onClick={() => window.location.href="/api/controllers/login_oauth.php"}>Authenticate</Button>
+        <Stack direction='column' mb={2} alignItems='center'>
+         <AppSubmitButton variant="outlined" onClick={() => window.location.href="/api/controllers/login_oauth.php"} label={"OAuth Authenticate"}/>
+        </Stack>
          </>) 
          : ''}
 
