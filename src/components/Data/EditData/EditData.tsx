@@ -1,6 +1,8 @@
 import { ObjectPropByName, SingleResponseType } from '@/types/Generics';
 import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
+import DataConfig from '@/utils/Data';
+import { InputSettings } from '@/utils/Data/formDefaults';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Drawer, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -10,9 +12,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import DataUpdates from './DataUpdates';
-import DataConfig from '@/utils/Data';
-import { InputSettings } from '@/utils/Data/formDefaults';
 import FormField from './FormField';
+import { PossibleFields } from '@/types/Scopes';
 
 interface Props {
   id?: number;
@@ -42,20 +43,14 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const [updates, setUpdate] = useState<Array<updateType>>([]);
 
   const schema = getSchema().reduce((schema, field) => {
+    const name = field.name as keyof PossibleFields;
     return {
       ...schema,
-      [field.name]: field.required ? field.form.schema?.required('validation.required') : field.form.schema,
+      [name]: field.required ? field.form.schema?.required('validation.required') : field.form.schema,
     };
   }, {});
 
-  const {
-    register,
-    setValue,
-    control,
-    handleSubmit,
-    getValues,
-    formState: { errors },
-  } = useForm({
+  const { control, getValues, handleSubmit, register, setValue, setError, clearErrors, watch } = useForm({
     resolver: yupResolver(yup.object(schema)),
   });
 
@@ -127,13 +122,35 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
     });
   };
 
+  const getDefaultRoomDurations = async (room_id: number) => {
+    if (!room_id) return;
+    await databaseRequest({
+      model: 'Room',
+      method: 'getRoomBaseData',
+      arguments: {
+        room_id: room_id,
+      },
+    }).then((response: SingleResponseType) => {
+      if (!response.success || !response.data) return;
+      Object.keys(response.data)
+        .filter((field) => field.includes('phase_duration_'))
+        .map((phase) => {
+          // @ts-ignore
+          if (getValues(phase)) return;
+          // @ts-ignore
+          setValue(phase, response.data[phase] || 0);
+        });
+    });
+  };
+
   const updateValues = () => {
     getSchema().forEach((field) => {
-      const defaultValue = params[field.name] || field.form.defaultValue;
+      const name = field.name as keyof PossibleFields;
+      const defaultValue = params[name] || field.form.defaultValue;
       setValue(
         // @ts-ignore
         field.name,
-        fieldValues && fieldValues.data[field.name] ? fieldValues.data[field.name] : defaultValue
+        fieldValues && fieldValues.data[name] ? fieldValues.data[name] : defaultValue
       );
     });
     setUpdate([]);
@@ -167,8 +184,6 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   const dataUpdates = async (newId: number) => {
     let updated = 0;
     updates.forEach((update) => {
-      console.log(updates, update);
-
       if (update.requestId || !update.args[DataConfig[scope].requests.id])
         update.args[DataConfig[scope].requests.id] = newId;
 
@@ -189,7 +204,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   };
 
   const onSubmit = (formData: ObjectPropByName) => {
-    if (typeof id !== 'undefined') otherData[DataConfig[scope].requests.id] = id;
+    if (id !== 0) otherData[DataConfig[scope].requests.id] = id;
     if (scope === 'messages') delete formData.undefined;
     dataSave({
       ...formData,
@@ -200,17 +215,27 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   useEffect(() => {
     updateValues();
     if (scope === 'ideas') getIdeaPhase();
+    if (scope === 'boxes' && fieldValues?.data.room_id) getDefaultRoomDurations(fieldValues.data.room_id);
   }, [fieldValues]);
+
+  // @ts-ignore
+  const watchRoom = watch('room_id');
+
+  useEffect(() => {
+    // @ts-ignore
+    if (scope === 'boxes') getDefaultRoomDurations(getValues('room_id'));
+  }, [watchRoom]);
 
   useEffect(() => {
     id ? getFieldValues() : clearValues();
+    if (scope === 'boxes' && otherData.room_id) getDefaultRoomDurations(otherData.room_id);
   }, [isOpen]);
 
   return (
     <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} key={scope}>
       <Stack p={2} overflow="auto">
         <Typography variant="h4" pb={2}>
-          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${DataConfig[scope].requests.item.toLowerCase()}`) })}
+          {t(`texts.${id ? 'edit' : 'add'}`, { var: t(`views.${DataConfig[scope].requests.name}`) })}
         </Typography>
         <FormContainer>
           <Stack>
@@ -219,12 +244,14 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
                 <Box order={key} key={key}>
                   <FormField
                     isNew={typeof id === 'undefined'}
-                    data={field}
-                    register={register}
                     control={control}
-                    getValues={getValues}
-                    setValue={setValue}
+                    data={field}
                     phase={phase}
+                    register={register}
+                    setValue={setValue}
+                    getValues={getValues}
+                    setError={setError}
+                    clearErrors={clearErrors}
                   />
                 </Box>
               ))}

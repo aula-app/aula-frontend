@@ -198,27 +198,31 @@ export interface PossibleFields
     RoomType,
     UserType {}
 
-export type UserRequestTypes = 'changeName' | 'deleteAccount' | 'exportData' | 'requestData';
-
 export interface ReportBodyType {
-  type?: UserRequestTypes;
-  data?: {
-    location: string;
-    user: string;
-    userAgent?: string;
-  };
+  data: ReportMetadataType;
   content: string;
 }
 
+export interface ReportMetadataType {
+  type: 'bug' | 'report';
+  location: string;
+  user: number;
+  userAgent?: string;
+}
+
+export type UserRequestTypes = 'changeName' | 'deleteAccount' | 'exportData' | 'requestData';
+
 export interface RequestBodyType {
-  type?: UserRequestTypes;
-  data?: {
-    id?: number;
-    username?: string;
-    email?: string;
-    property?: 'email' | 'realname' | 'username';
-    from?: string;
-    to?: string;
-  };
+  data: RequestMetadataType;
   content: string;
+}
+
+export interface RequestMetadataType {
+  type: UserRequestTypes;
+  id: number;
+  username: string;
+  email?: string;
+  property?: 'email' | 'realname' | 'username';
+  from?: string;
+  to?: string;
 }

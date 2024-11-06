@@ -60,7 +60,7 @@ const SettingsView = () => {
     } as RequestObject;
 
     if (target > 0) {
-      requestData.method = 'getUsersByRoom';
+      if (setting_name === 'users') requestData.method = 'getUsersByRoom';
       requestData.arguments.room_id = target;
     }
 
@@ -112,7 +112,6 @@ const SettingsView = () => {
   };
 
   useEffect(() => {
-    console.log('aqui');
     dataFetch();
   }, [page, limit, orderBy, orderAsc, setting_id, setting_name, filter, status, role, target]);
 

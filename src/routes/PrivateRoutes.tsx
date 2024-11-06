@@ -1,5 +1,5 @@
 import { useAppStore } from '@/store';
-import { checkPermissions, localStorageGet } from '@/utils';
+import { checkPermissions, localStorageDelete, localStorageGet } from '@/utils';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
 import IdeaView from '@/views/Idea';
@@ -51,9 +51,15 @@ const PrivateRoutes = () => {
     }
   };
 
+  const checkOnboarding = () => {
+    localStorageDelete('token');
+    dispatch({ type: 'LOG_OUT' });
+  };
+
   useEffect(() => {
     getConsent();
-  }, [location]);
+    if (location.pathname.includes('password')) checkOnboarding();
+  }, [location.pathname]);
 
   return (
     <Routes>

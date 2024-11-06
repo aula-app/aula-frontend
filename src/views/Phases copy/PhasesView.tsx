@@ -1,5 +1,5 @@
+import BoxCard from '@/components/BoxCard';
 import { IdeaBubble } from '@/components/Idea';
-import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import { dashboardPhases, databaseRequest } from '@/utils';
 import { Stack, Typography } from '@mui/material';
@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import DashBoard from '../DashBoard';
+import DashBoard from '../DashBoard/DashBoard';
 
 /**
  * Renders "Phase" view
@@ -17,7 +17,6 @@ import DashBoard from '../DashBoard';
 const MessagesView = () => {
   const { t } = useTranslation();
   const params = useParams();
-  const [isLoading, setLoading] = useState(true);
   const [items, setItems] = useState<IdeaType[]>([]);
 
   const boxesFetch = async () => {
@@ -31,27 +30,19 @@ const MessagesView = () => {
       },
     }).then(async (response: { success: boolean; count: number; data: BoxType[] }) => {
       if (!response.success || !response.data) return;
-      boxIdeasFetch(response.data).then((items) => setItems(items));
-      setLoading(false);
-    });
-  };
-
-  async function boxIdeasFetch(boxes: BoxType[]): Promise<IdeaType[]> {
-    // Use Promise.all to await all fetches
-    const results = await Promise.all(
-      boxes.map(async (box) => {
-        const result = await databaseRequest({
+      for await (const ideas of response.data.map((topic) =>
+        databaseRequest({
           model: 'Idea',
           method: 'getIdeasByTopic',
           arguments: {
-            topic_id: box.id,
+            topic_id: topic.id,
           },
-        });
-        return result.data;
-      })
-    );
-    return results.flat();
-  }
+        })
+      )) {
+        setItems([...items, ...ideas.data]);
+      }
+    });
+  };
 
   const ideasFetch = async () =>
     await databaseRequest(
@@ -64,11 +55,11 @@ const MessagesView = () => {
     ).then((response) => {
       if (!response.success || !response.data) return;
       setItems(response.data as IdeaType[]);
-      setLoading(false);
     });
 
   useEffect(() => {
-    setLoading(true);
+    setItems([]);
+    //@ts-ignore
     params.phase === '0' ? ideasFetch() : boxesFetch();
   }, [params.phase]);
   return (
@@ -78,11 +69,6 @@ const MessagesView = () => {
         {t(`phases.${dashboardPhases[params.phase || 'WildIdeas']}`)}
       </Typography>
       <Grid container spacing={2} p={1}>
-        {isLoading && (
-          <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-            <IdeaBubbleSkeleton />
-          </Grid>
-        )}
         {items.map((item) => (
           <Grid key={item.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
             <IdeaBubble
@@ -90,7 +76,7 @@ const MessagesView = () => {
               onReload={ideasFetch}
               key={item.id}
               comments={item.sum_comments}
-              to={`/room/${item.room_id}/phase/${params.phase}/idea/${item.id}`}
+              to={`/room/${item.room_id}/phase/0/idea/${item.id}`}
             />
           </Grid>
         ))}

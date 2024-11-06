@@ -27,10 +27,10 @@ const RequestsManager = ({ request, onReload }: Props) => {
         model: 'Message',
         method: 'addMessage',
         arguments: {
-          headline: 'Account data export granted',
+          headline: bodyData.data.username,
           body: JSON.stringify({
-            type: 'exportData',
-            content: `Your data request is availible`,
+            data: { type: 'exportData' },
+            content: '',
           }),
           target_id: bodyData.data.id,
           msg_type: 5,
@@ -91,8 +91,21 @@ const RequestsManager = ({ request, onReload }: Props) => {
     });
   };
 
+  const confirmDeleteAccount = async () => {
+    await databaseRequest({
+      model: 'User',
+      method: 'deleteUser',
+      arguments: {
+        user_id: bodyData.data.id,
+        delete_mode: 1,
+      },
+    }).then((response) => {
+      if (response.success) dispatch({ type: 'ADD_POPUP', message: { message: t('texts.success'), type: 'success' } });
+    });
+  };
+
   const onConfirm = () => {
-    switch (bodyData.type) {
+    switch (bodyData.data.type) {
       case 'changeName':
         confirmNameChange();
         break;
@@ -101,6 +114,9 @@ const RequestsManager = ({ request, onReload }: Props) => {
         break;
       case 'requestData':
         confirmRequestData();
+        break;
+      case 'deleteAccount':
+        confirmDeleteAccount();
         break;
       default:
         () => {};

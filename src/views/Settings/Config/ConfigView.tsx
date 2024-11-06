@@ -45,8 +45,6 @@ const ConfigView = () => {
       arguments: {},
     }).then((response) => {
       if (response.success) {
-        console.log(response);
-
         setSettings(response.data);
         setExpanded(null);
       }

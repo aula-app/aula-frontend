@@ -35,10 +35,16 @@ const fields = [
     name: 'description_internal',
     form: {
       type: 'image',
-      defaultValue: 'DI:0:0',
+      defaultValue: '',
     },
     required: false,
     role: 50,
+  },
+  {
+    name: ['phase_duration_1', 'phase_duration_2', 'phase_duration_3', 'phase_duration_4'],
+    form: inputType.duration,
+    required: true,
+    role: 30,
   },
   {
     name: 'status',

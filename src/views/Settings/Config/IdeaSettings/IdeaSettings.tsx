@@ -1,11 +1,12 @@
 import { AppButton, AppIconButton } from '@/components';
-import { ConfigResponse, InstanceResponse, ObjectPropByName } from '@/types/Generics';
+import { useAppStore } from '@/store';
+import { ObjectPropByName } from '@/types/Generics';
 import { CustomFieldsNameType } from '@/types/SettingsTypes';
 import { databaseRequest } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -18,6 +19,7 @@ interface Props {
 
 const IdeaSettings = ({ onReload }: Props) => {
   const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
   const [fields, setFields] = useState<CustomFieldsNameType>();
 
   const {
@@ -53,7 +55,12 @@ const IdeaSettings = ({ onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success) onReload();
+      if (!response.success) {
+        dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+        return;
+      }
+      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.customField'), type: 'success' } });
+      onReload();
     });
   }
 

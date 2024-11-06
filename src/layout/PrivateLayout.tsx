@@ -64,10 +64,11 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         isOpen={!!scope}
         scope={scope || 'bug'}
         otherData={{
-          headline: `${scope === 'bug' ? 'Bug' : 'Content'} report`,
+          headline: `${location.pathname}`,
           msg_type: 4,
         }}
         metadata={{
+          type: scope,
           location: location.pathname,
           user: getCurrentUser(),
           userAgent: window.navigator.userAgent,

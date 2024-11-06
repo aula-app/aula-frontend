@@ -134,10 +134,12 @@ const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
           </Typography>
         </Stack>
         {comments > 0 && (
-          <Stack direction="row" alignItems="center">
-            <AppIcon icon="chat" sx={{ mr: 0.5 }} />
-            {comments}
-          </Stack>
+          <AppLink to={to} disabled={!to}>
+            <Stack direction="row" alignItems="center">
+              <AppIcon icon="chat" sx={{ mr: 0.5 }} />
+              {comments}
+            </Stack>
+          </AppLink>
         )}
         <Button color="error" size="small" onClick={toggleLike} disabled={!checkPermissions(20)}>
           <AppIcon icon={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />

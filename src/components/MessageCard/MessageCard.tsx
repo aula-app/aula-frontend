@@ -16,13 +16,6 @@ interface Props {
  * url: /messages
  */
 
-const METHODS = {
-  announcement: 'getTexts',
-  message: 'getPersonalMessagesByUser',
-  report: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
-  request: 'getMessages',
-} as Record<Props['type'], string>;
-
 const MessageCard = ({ type }: Props) => {
   const { t } = useTranslation();
   const [isLoading, setLoading] = useState(true);
@@ -30,6 +23,13 @@ const MessageCard = ({ type }: Props) => {
   const [status, setStatus] = useState<StatusTypes>(1);
   const [openMessagesFilter, setOpenMessagesFilter] = useState(false);
   const [messagesFilter, setMessagesFilter] = useState<[string, string]>(['', '']);
+
+  const METHODS = {
+    announcement: 'getTexts',
+    message: 'getPersonalMessagesByUser',
+    report: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
+    request: 'getMessages',
+  } as Record<Props['type'], string>;
 
   const messagesFetch = async () => {
     const requestData = {
@@ -87,16 +87,15 @@ const MessageCard = ({ type }: Props) => {
             setStatus={setStatus}
           />
           {messages.map((message) => {
-            const variant =
-              type === 'report'
-                ? message.headline.substring(0, 3) === 'Bug'
-                  ? 'bug'
-                  : message.headline.substring(0, 7) === 'Account'
-                    ? 'alert'
-                    : 'report'
-                : type;
+            const messageData = ['report', 'request'].includes(type) ? JSON.parse(message.body).data.type : type;
+            const variant = type === 'report' ? JSON.parse(message.body).data.type : type;
+            const headline =
+              ['report', 'request'].includes(type) && messageData
+                ? t(`texts.${messageData}`, { var: message.headline })
+                : message.headline;
             return (
               <Stack
+                key={message.id}
                 component={AppLink}
                 direction="row"
                 alignItems="center"
@@ -105,11 +104,11 @@ const MessageCard = ({ type }: Props) => {
                 pl={2}
                 mb={1}
                 to={`/messages/${type}/${message.id}`}
-                bgcolor={`${type}.main`}
+                bgcolor={`${variant}.main`}
               >
                 <AppIcon icon={variant} />
                 <Typography flex={1} px={2}>
-                  {message.headline}
+                  {headline}
                 </Typography>
                 <AppIconButton size="small" icon="close" />
               </Stack>
