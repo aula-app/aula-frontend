@@ -1,6 +1,7 @@
 import { NotFoundView } from '@/views/Public';
 import AuthView from '@/views/Public/Auth';
 import LoginRoutes from '@/views/Public/Login';
+import OAuthLogin from '@/views/Public/OAuthLogin';
 import RecoveryRoutes from '@/views/Public/Recovery';
 import SetPasswordView from '@/views/Public/SetPassword';
 import SignupRoutes from '@/views/Public/Signup';
@@ -15,6 +16,7 @@ const PublicRoutes = () => {
       <Route path="/" element={<LoginRoutes />} />
       <Route path="signup/*" element={<SignupRoutes />} />
       <Route path="login/*" element={<LoginRoutes />} />
+      <Route path="oauth-login/:jwt_token" element={<OAuthLogin />} />
       <Route path="recovery/*" element={<RecoveryRoutes />} />
       <Route path="password/:key" element={<SetPasswordView />} />
       <Route path="auth" element={<AuthView />} />

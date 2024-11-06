@@ -18,7 +18,6 @@ import { FormContainer, useForm } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { useAuth0 } from "@auth0/auth0-react";
 
 /**
  * Renders "Login" view for Login flow
@@ -26,6 +25,7 @@ import { useAuth0 } from "@auth0/auth0-react";
  */
 const LoginView = () => {
   const { t } = useTranslation();
+  const oauthEnabled = import.meta.env.VITE_APP_OAUTH;
 
   const schema = yup
     .object({
@@ -80,8 +80,6 @@ const LoginView = () => {
     dispatch({ type: "LOG_IN" });
     navigate("/", { replace: true });
   };
-
-  const { loginWithRedirect } = useAuth0();
 
   return (
     <Stack>
@@ -150,12 +148,17 @@ const LoginView = () => {
           </Grid>
         </Stack>
       </FormContainer>
-      <Stack direction='row' mb={2} alignItems='center'>
+
+      {oauthEnabled === "true"?
+      (<>
+       <Stack direction='row' mb={2} alignItems='center'>
         <Divider sx={{flex: 1}} />
         <Typography px={2} color="secondary">{t('generics.or')}</Typography>
         <Divider sx={{flex: 1}} />
       </Stack>
-      <Button variant="outlined" onClick={() => loginWithRedirect()}>Authenticate</Button>
+       <Button variant="outlined" onClick={() => window.location.href="/api/controllers/login_oauth.php"}>Authenticate</Button>
+       </>) 
+       : ''}
     </Stack>
   );
 };
