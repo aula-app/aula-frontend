@@ -161,7 +161,7 @@ const LoginView = () => {
           <Typography px={2} color="secondary">{t('generics.or')}</Typography>
           <Divider sx={{flex: 1}} />
         </Stack>
-         <Button variant="outlined" onClick={() => window.location.href="/api/controllers/auth0.php"}>Authenticate</Button>
+         <Button variant="outlined" onClick={() => window.location.href="/api/controllers/login_auth.php"}>Authenticate</Button>
          </>) 
          : ''}
 
