@@ -15,6 +15,8 @@ const OAuthLogin = () => {
     navigate("/", { replace: true });
   }, []);
 
+  return (<></>);
+
 }
 
 export default OAuthLogin;
