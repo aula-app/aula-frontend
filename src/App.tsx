@@ -12,13 +12,13 @@ const App = () => {
   return (
     <ErrorBoundary name="App">
       <AppStore>
-        <AppThemeProvider>
-          <BrowserRouter>
-            <Layout>
-              <Routes />
-            </Layout>
-          </BrowserRouter>
-        </AppThemeProvider>
+          <AppThemeProvider>
+            <BrowserRouter>
+              <Layout>
+                <Routes />
+              </Layout>
+            </BrowserRouter>
+          </AppThemeProvider>
       </AppStore>
     </ErrorBoundary>
   );

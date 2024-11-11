@@ -35,6 +35,7 @@
     "knip": "knip"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
     "@capacitor/android": "^5.1.1",
     "@capacitor/core": "^5.1.1",
     "@emotion/react": "^11.11.1",

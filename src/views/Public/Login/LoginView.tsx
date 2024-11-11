@@ -7,6 +7,7 @@ import {
   Alert,
   Button,
   Collapse,
+  Divider,
   InputAdornment,
   Stack,
   TextField,
@@ -26,6 +27,7 @@ import * as yup from "yup";
 
 const LoginView = () => {
   const { t } = useTranslation();
+  const oauthEnabled = import.meta.env.VITE_APP_OAUTH;
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const jwt_token = localStorageGet("token");
@@ -153,8 +155,20 @@ const LoginView = () => {
           </Button>
         </Grid>
       </Stack>
+      { oauthEnabled === "true" ? (<>
+         <Stack direction='row' mb={2} alignItems='center'>
+          <Divider sx={{flex: 1}} />
+          <Typography px={2} color="secondary">{t('generics.or')}</Typography>
+          <Divider sx={{flex: 1}} />
+        </Stack>
+        <Stack direction='column' mb={2} alignItems='center'>
+         <AppSubmitButton variant="outlined" onClick={() => window.location.href="/api/controllers/login_oauth.php"} label={"OAuth Authenticate"}/>
+        </Stack>
+         </>) 
+         : ''}
+
     </FormContainer>
-  );
+    );
 };
 
 export default LoginView;
