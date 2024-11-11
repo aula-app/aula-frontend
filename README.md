@@ -32,7 +32,7 @@ This document provides an overview of the React application, including setup ins
 
 ### Database Setup and Configuration
 
-4. Set up a Development Back End based on the [Aula's Backend Repository](https://github.com/aula-app/playground).
+4. Set up aula's API Back End based on the [Aula's Backend Repository](https://github.com/aula-app/playground).
 
 ### Environment Configuration
 
@@ -42,7 +42,7 @@ This document provides an overview of the React application, including setup ins
    cp .env.sample .env.development
    ```
 
-6. Update the values in the `.env.development` file with your database's specific configuration:
+6. Update the values in the `.env.development` file with your aula's API backend configuration on VITE_APP_API_URL:
 
    ```
     VITE_APP_API_URL = https://your-api-endpoint.com
