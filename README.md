@@ -74,6 +74,6 @@ To deploy the application, follow these steps:
    npm run build
    ```
 
-2. Deploy the contents of the `build/` directory to your hosting platform.
+2. Deploy the contents of the `build/` directory to your aual server as described on the [step 9](https://github.com/aula-app/playground/blob/main/README.md).
 
 For more detailed deployment instructions, please refer to the [Create React App documentation](https://create-react-app.dev/docs/deployment/).
