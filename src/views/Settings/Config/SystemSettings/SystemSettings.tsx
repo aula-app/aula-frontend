@@ -41,8 +41,34 @@ const SystemSettings = ({ settings, onReload }: Props) => {
       method: 'createDBDump',
       arguments: {},
     }).then((response) => {
-      if (response.success) console.log(response);
+      if (!response.success || !response.data) return;
+      triggerSqlDumpDownload(response.data);
     });
+  };
+
+  const triggerSqlDumpDownload = (sqlDumpLines: string[]) => {
+    // Convert array of lines to single string
+    const sqlDumpContent = sqlDumpLines.join('\n');
+
+    // Create a Blob from the SQL dump content
+    const blob = new Blob([sqlDumpContent], { type: 'text/sql' });
+
+    // Generate a timestamp for the filename
+    const timestamp = new Date().toISOString().replace(/[:\.]/g, '-');
+    const filename = `aula_bakcup_${timestamp}.sql.bkp`;
+
+    // Create a download link
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+
+    // Trigger download immediately
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Clean up the URL object
+    URL.revokeObjectURL(link.href);
   };
 
   useEffect(() => {
