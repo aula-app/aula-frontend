@@ -2,7 +2,18 @@ import { InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { StatusRequest } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
 import { InstanceStatusOptions } from '@/utils/commands';
-import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -17,6 +28,7 @@ interface Props {
 const SystemSettings = ({ settings, onReload }: Props) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState<OnlineOptions>(settings?.online_mode || 1);
+  const [restoreDialog, setRestoreDialog] = useState<boolean>(false);
 
   const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setStatus(Number(event.target.value) as OnlineOptions);
@@ -102,9 +114,23 @@ const SystemSettings = ({ settings, onReload }: Props) => {
       <Button variant="contained" color="secondary" onClick={getBackup} fullWidth>
         {t('settings.backup')}
       </Button>
-      <Button variant="contained" color="info" fullWidth>
+      <Button variant="contained" color="info" onClick={() => setRestoreDialog(true)} fullWidth>
         {t('settings.backupRestore')}
       </Button>
+      <Dialog open={restoreDialog} onClose={() => setRestoreDialog(false)} aria-labelledby="responsive-dialog-title">
+        <DialogTitle id="responsive-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Let Google help apps determine location. This means sending anonymous location data to Google, even when no
+            apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="secondary" onClick={() => setRestoreDialog(false)} autoFocus>
+            {t('generics.close')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Stack>
   );
 };
