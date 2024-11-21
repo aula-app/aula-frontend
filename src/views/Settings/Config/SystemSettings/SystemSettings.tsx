@@ -1,21 +1,46 @@
+import { AppIconButton } from '@/components';
+import MarkdownLoader from '@/components/MarkdownLoader';
+import i18n from '@/i18n';
 import { InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { StatusRequest } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
 import { InstanceStatusOptions } from '@/utils/commands';
 import {
+  AppBar,
   Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   MenuItem,
+  Slide,
   Stack,
   TextField,
+  Toolbar,
   Typography,
 } from '@mui/material';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { TransitionProps } from 'notistack';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+// Import markdown files for different languages
+import markdownDE from './RestoreBackup/restore_backup.de.md';
+import markdownEN from './RestoreBackup/restore_backup.en.md';
+
+// Mapping of language codes to markdown files
+const languageMarkdownMap = {
+  en: markdownEN,
+  de: markdownDE,
+};
+
+// Dialog trasition
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<unknown>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 /** * Renders "SystemSettings" component
  */
@@ -117,19 +142,26 @@ const SystemSettings = ({ settings, onReload }: Props) => {
       <Button variant="contained" color="info" onClick={() => setRestoreDialog(true)} fullWidth>
         {t('settings.backupRestore')}
       </Button>
-      <Dialog open={restoreDialog} onClose={() => setRestoreDialog(false)} aria-labelledby="responsive-dialog-title">
-        <DialogTitle id="responsive-dialog-title">{"Use Google's location service?"}</DialogTitle>
+      <Dialog
+        fullScreen
+        open={restoreDialog}
+        onClose={() => setRestoreDialog(false)}
+        TransitionComponent={Transition}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <AppBar sx={{ position: 'relative' }} color="secondary">
+          <Toolbar>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              {t('texts.restoreBackup')}
+            </Typography>
+            <AppIconButton icon="close" autoFocus onClick={() => setRestoreDialog(false)} />
+          </Toolbar>
+        </AppBar>
         <DialogContent>
           <DialogContentText>
-            Let Google help apps determine location. This means sending anonymous location data to Google, even when no
-            apps are running.
+            <MarkdownLoader src={languageMarkdownMap[i18n.language as 'en' | 'de']} />
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button color="secondary" onClick={() => setRestoreDialog(false)} autoFocus>
-            {t('generics.close')}
-          </Button>
-        </DialogActions>
       </Dialog>
     </Stack>
   );

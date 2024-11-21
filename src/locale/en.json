@@ -228,6 +228,7 @@
     "requestData": "Account data export request for {{var}}.",
     "requestDataBody": "A data export procedure was requested for user {{var}}.",
     "resetPasswordText": "Are you sure you want to request a new password for this user?",
+    "restoreBackup": "Backup Restore Instructions",
     "select": "Select {{var}}",
     "success": "Success",
     "unaltenticated": "The page you are trying to access requires authentication",
