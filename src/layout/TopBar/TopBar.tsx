@@ -1,5 +1,5 @@
 import { AppIcon, AppIconButton, AppLink } from '@/components';
-import { AppBar, Breadcrumbs, Toolbar } from '@mui/material';
+import { AppBar, Breadcrumbs, Stack, Toolbar } from '@mui/material';
 import { Dispatch, FunctionComponent, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import SideBar from '../SideBar';
 import { SIDEBAR_DESKTOP_ANCHOR } from '../config';
 import { checkPermissions } from '@/utils';
 import { useEventLogout } from '@/hooks';
+import LocaleSwitch from '@/components/LocaleSwitch';
 
 interface Props {
   home: string;
@@ -56,7 +57,10 @@ const TopBar = ({ home, setReport, ...restOfProps }: Props) => {
         </Breadcrumbs>
 
         {checkPermissions(60) ? (
-          <AppIconButton icon="logout" onClick={onLogout} />
+          <Stack direction="row">
+            <LocaleSwitch />
+            <AppIconButton icon="logout" onClick={onLogout} />
+          </Stack>
         ) : (
           <AppIconButton icon="menu" onClick={menuToggle} sx={{ display: { xs: 'block', md: 'none' } }} />
         )}

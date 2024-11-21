@@ -16,6 +16,7 @@ export default defineConfig({
       include: '**/*.svg?react',
     }),
   ],
+  assetsInclude: ['**/*.md'],
   server: {
     open: true,
     port: 3000,
