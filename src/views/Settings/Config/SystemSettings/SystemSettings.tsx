@@ -3,7 +3,7 @@ import MarkdownLoader from '@/components/MarkdownLoader';
 import i18n from '@/i18n';
 import { InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { StatusRequest } from '@/types/RequestTypes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, InstanceStatusOptions } from '@/utils';
 import {
   AppBar,
   Button,
