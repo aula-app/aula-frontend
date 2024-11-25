@@ -1,7 +1,7 @@
-import { PossibleFields } from '@/types/Scopes';
-import { InputType, STATUS } from './Data/formDefaults';
 import { SettingNamesType } from '@/types/SettingsTypes';
+import { STATUS } from './Data/formDefaults';
 
+// Sets instance status value and labels
 export const InstanceStatusOptions = [
   { value: 0, label: 'status.inactive' },
   { value: 1, label: 'status.active' },
@@ -10,6 +10,7 @@ export const InstanceStatusOptions = [
   { value: 4, label: 'status.holiday' },
 ];
 
+// Sets scope (ideas, boxes, etc) status value and labels
 export const ScopeStatusOptions = [
   { value: 0, label: 'status.inactive' },
   { value: 1, label: 'status.active' },
@@ -17,6 +18,7 @@ export const ScopeStatusOptions = [
   { value: 3, label: 'status.archived' },
 ];
 
+// Sets variable commands for different scopes (instance, ideas, boxes, etc) status value and labels
 export const Commands = [
   {
     label: 'system',
@@ -43,25 +45,5 @@ export const Commands = [
   label: SettingNamesType | 'system';
   actions: { label: string; value: number; options?: { value: number; label: string }[] }[];
 }>;
-
-//   {
-//     label: 'system',
-//     options: [{ label: 'status', options: InstanceStatusOptions }],
-//   },
-//   {
-//     label: 'users',
-//     options: [
-//       { label: 'user', options: 'users' },
-//       { label: 'room', options: 'rooms' },
-//     ],
-//   },
-//   {
-//     label: 'groups',
-//     options: [
-//       { label: 'user', options: 'users' },
-//       { label: 'room', options: 'rooms' },
-//     ],
-//   },
-// ];
 
 export const statusOptions = [{ label: 'status.all', value: -1 }, ...STATUS];
