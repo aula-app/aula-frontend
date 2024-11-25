@@ -1,15 +1,22 @@
+// Import necessary types for announcements, column settings, and form input configurations
 import { ColumnSettings, DataRequestsType, FieldType } from '@/types/SettingsTypes';
 import { inputType } from '../formDefaults';
 import { UserType } from '@/types/Scopes';
 
+// Interface defining the structure of fields, extending the base FieldType
+// with a specific name property that must be a key of UserType
 interface UserFields extends FieldType {
   name: keyof UserType;
 }
 
+// Interface defining the structure of columns, extending the base ColumnSettings
+// with a specific name property that must be a key of UserType
 interface UserColumns extends ColumnSettings {
   name: keyof UserType;
 }
 
+// Configuration for table columns display order
+// Each object defines a column with its name and order position
 const columns = [
   { name: 'displayname', orderId: 5 },
   { name: 'realname', orderId: 6 },
@@ -22,6 +29,8 @@ const columns = [
   { name: 'last_update', orderId: 0 },
 ] as Array<UserColumns>;
 
+// Definition of form fields for announcements
+// Each field specifies its input type, validation requirements, and access role level
 const fields = [
   {
     name: 'displayname',
@@ -56,7 +65,7 @@ const fields = [
   {
     name: 'userlevel',
     form: {
-      ...inputType.select,
+      ...inputType.select, // Dropdown selection with predefined options
       defaultValue: 20,
       options: [
         { label: 'roles.10', value: 10 },
@@ -77,6 +86,8 @@ const fields = [
   },
 ] as Array<UserFields>;
 
+// API request configuration for announcement operations
+// Defines endpoints and model names for CRUD operations
 const requests = {
   name: 'users',
   model: 'User',

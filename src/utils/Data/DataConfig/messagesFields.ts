@@ -1,16 +1,23 @@
+// Import necessary types for announcements, column settings, and form input configurations
 import { MessageType } from '@/types/Scopes';
 import { ColumnSettings, DataRequestsType, FieldType } from '@/types/SettingsTypes';
 import * as yup from 'yup';
 import { inputType } from '../formDefaults';
 
+// Interface defining the structure of fields, extending the base FieldType
+// with a specific name property that must be a key of MessageType
 interface MessageFields extends FieldType {
   name: keyof MessageType;
 }
 
+// Interface defining the structure of columns, extending ColumnSettings
+// with a specific name property that must be a key of MessageType
 interface MessageColumns extends ColumnSettings {
   name: keyof MessageType;
 }
 
+// Configuration for table columns display order
+// Each object defines a column with its name and order position
 const columns = [
   { name: 'headline', orderId: 5 },
   { name: 'body', orderId: 6 },
@@ -23,6 +30,8 @@ const columns = [
   { name: 'last_update', orderId: 0 },
 ] as Array<MessageColumns>;
 
+// Definition of form fields for announcements
+// Each field specifies its input type, validation requirements, and access role level
 const fields = [
   {
     name: ['room_id', 'target_id', 'target_group'],
@@ -54,6 +63,8 @@ const fields = [
   },
 ] as Array<MessageFields>;
 
+// API request configuration for announcement operations
+// Defines endpoints and model names for CRUD operations
 const requests = {
   name: 'messages',
   model: 'Message',
