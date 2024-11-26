@@ -2,75 +2,48 @@
 
 Thank you for your interest in contributing to Aula Frontend! This document provides guidelines and instructions for contributing to our project.
 
+For setup instructions and project overview, please refer to our [README.md](../README.md).
+
 ## Table of Contents
 
-- [Project Overview](#project-overview)
-- [Getting Started](#getting-started)
-- [Development Setup](#development-setup)
 - [Project Structure](#project-structure)
 - [Contributing Guidelines](#contributing-guidelines)
 - [Code Style](#code-style)
 - [Submitting Changes](#submitting-changes)
 - [Code of Conduct](#code-of-conduct)
 
-## Project Overview
-
-Aula Frontend is a React-based web application built with TypeScript and Vite. The project uses modern web technologies and follows best practices for frontend development.
-
-### Key Technologies
-
-- React
-- TypeScript
-- Vite
-- Capacitor (for mobile support)
-- i18n (for internationalization)
-
-## Getting Started
-
-1. Fork the repository
-2. Clone your fork:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/aula-frontend.git
-   cd aula-frontend
-   ```
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-4. Copy the environment file:
-   ```bash
-   cp .env.sample .env
-   ```
-
-## Development Setup
-
-1. Start the development server:
-   ```bash
-   npm run dev
-   ```
-2. For mobile development:
-   ```bash
-   npm run build
-   npx cap sync
-   ```
-
 ## Project Structure
 
 ```
 ├── src/
-│   ├── [components/](COMPONENTS.md)     # Reusable React components
-│   ├── [hooks/](HOOKS.md)         # Custom React hooks
-│   ├── [layout/](LAYOUT.md)       # Layout components
-│   ├── [locale/](LOCALE.md)       # Layout components
-│   ├── [routes/](ROUTES.md)       # Route definitions
-│   ├── [store/](STORE.md)         # State management
-│   ├── [theme/](THEME.md)         # Theme configuration
-│   ├── [types/](TYPES.md)         # TypeScript type definitions
-│   ├── [utils/](UTILS.md)         # Utility functions
-│   └── [views/](VIEWS.md)         # Page components
+│   ├── components/     # Reusable React components
+│   ├── hooks/         # Custom React hooks
+│   ├── layout/       # Layout components
+│   ├── locale/       # Layout components
+│   ├── routes/       # Route definitions
+│   ├── store/        # State management
+│   ├── theme/        # Theme configuration
+│   ├── types/        # TypeScript type definitions
+│   ├── utils/        # Utility functions
+│   └── views/        # Page components
 ├── public/            # Static assets
 └── android/          # Mobile platform specific code
 ```
+
+### Detailed Documentation
+
+For detailed information about specific parts of the codebase, please refer to the following documentation:
+
+- [Components Documentation](docs/COMPONENTS.md) - Details about reusable React components
+- [Hooks Documentation](docs/HOOKS.md) - Information about custom React hooks
+- [Layout Documentation](docs/LAYOUT.md) - Layout system and components
+- [Locale Documentation](docs/LOCALE.md) - Internationalization setup and usage
+- [Routes Documentation](docs/ROUTES.md) - Routing system and configuration
+- [Store Documentation](docs/STORE.md) - State management implementation
+- [Theme Documentation](docs/THEME.md) - Theming system and customization
+- [Types Documentation](docs/TYPES.md) - TypeScript types and interfaces
+- [Utils Documentation](docs/UTILS.md) - Utility functions and helpers
+- [Views Documentation](docs/VIEWS.md) - Page components and views
 
 ## Contributing Guidelines
 
