@@ -8,42 +8,42 @@ The data structure files are stored in `src/utils/Data/DataConfig`. Each file co
 
 These files are structured containing:
 
-- _columns_: A list of objects containing the name and orderId of each column to be displayed on the [settings menu tables](../src/views/settings/).
-- _fields_: A list of objects containing the definition of the forms to be displayed on the [edit data](../src/components/Data/EditData) dialog.
+- _columns_: A list of objects containing the name and orderId of each column to be displayed on the [settings menu tables](https://github.com/aula-app/aula-frontend/tree/main/src/views/Settings/).
+- _fields_: A list of objects containing the definition of the forms to be displayed on the [edit data](https://github.com/aula-app/aula-frontend/tree/main/src/components/Data/EditData) dialog.
 - _requests_: defines endpoints and model names for CRUD operations.
 
 For our purposes, we will consider each data type as a different _scope_:
 
 ### Basic Scopes:
 
-- **Boxes** ([boxesFields.ts](../src/utils/Data/DataConfig/boxesFields.ts)): Defines the structure for `idea boxes` where `ideas` are grouped in order to progress through the voting phases.
-- **Ideas** ([ideasFields.ts](../src/utils/Data/DataConfig/ideasFields.ts)): Contains the structure for user-submitted ideas.
-- **Rooms** ([roomsFields.ts](../src/utils/Data/DataConfig/roomsFields.ts)): Defines spaces where users can collaborate and discuss ideas.
-- **Users** ([usersFields.ts](../src/utils/Data/DataConfig/usersFields.ts)): Contains user profile and account information structure.
+- **Boxes** ([boxesFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/boxesFields.ts)): Defines the structure for `idea boxes` where `ideas` are grouped in order to progress through the voting phases.
+- **Ideas** ([ideasFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/ideasFields.ts)): Contains the structure for user-submitted ideas.
+- **Rooms** ([roomsFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/roomsFields.ts)): Defines spaces where users can collaborate and discuss ideas.
+- **Users** ([usersFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/usersFields.ts)): Contains user profile and account information structure.
 
 ### Message Scopes:
 
-- **Announcements** ([announcementsFields.ts](../src/utils/Data/DataConfig/announcementsFields.ts)): Defines system-wide announcements and notifications.
-- **Messages** ([messagesFields.ts](../src/utils/Data/DataConfig/messagesFields.ts)): Contains structure for direct communication with individual or groups of users.
-- **Bugs** ([bugFields.ts](../src/utils/Data/DataConfig/bugFields.ts)): Defines bug report structure and tracking.
-- **Reports** ([reportFields.ts](../src/utils/Data/DataConfig/reportFields.ts)): Contains structure for user-submitted reports and feedback.
+- **Announcements** ([announcementsFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/announcementsFields.ts)): Defines system-wide announcements and notifications.
+- **Messages** ([messagesFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/messagesFields.ts)): Contains structure for direct communication with individual or groups of users.
+- **Bugs** ([bugFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/bugFields.ts)): Defines bug report structure and tracking.
+- **Reports** ([reportFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/reportFields.ts)): Contains structure for user-submitted reports and feedback.
 
 ### Idea Related Scopes:
 
-- **Categories** ([categoriesFields.ts](../src/utils/Data/DataConfig/categoriesFields.ts)): Defines classification and organization structure for ideas.
-- **Comments** ([commentsFields.ts](../src/utils/Data/DataConfig/commentsFields.ts)): Contains structure for user feedback and discussions on ideas.
+- **Categories** ([categoriesFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/categoriesFields.ts)): Defines classification and organization structure for ideas.
+- **Comments** ([commentsFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/commentsFields.ts)): Contains structure for user feedback and discussions on ideas.
 
 ### User Related Scopes:
 
-- **Groups** ([groupFields.ts](../src/utils/Data/DataConfig/groupFields.ts)): Defines user group organization.
+- **Groups** ([groupFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/groupFields.ts)): Defines user group organization.
 
 ### Accessory Scopes:
 
-- **Surveys** ([suveysFields.ts](../src/utils/Data/DataConfig/suveysFields.ts)): Contains structure for creation of special boxes, with defined ideas and immediate voting, skipping Discussion and Approval phases.
+- **Surveys** ([suveysFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/suveysFields.ts)): Contains structure for creation of special boxes, with defined ideas and immediate voting, skipping Discussion and Approval phases.
 
 ## Database Requests
 
-The application uses a centralized `databaseRequest` method located in [src/utils/requests.ts](../src/utils/requests.ts) to handle all private API communications. This method provides several key features:
+The application uses a centralized `databaseRequest` method located in [src/utils/requests.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/requests.ts) to handle all private API communications. This method provides several key features:
 
 1. **Authentication**: Automatically handles JWT token management by:
 
