@@ -1,5 +1,5 @@
 import { AppButton, AppIcon } from '@/components';
-import { localStorageGet, MessageConsentType } from '@/utils';
+import { localStorageGet } from '@/utils';
 import {
   Button,
   Dialog,
@@ -13,6 +13,14 @@ import {
 } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+
+export interface MessageConsentType {
+  id: number;
+  headline: string;
+  body: string;
+  consent_text: string;
+  consent: null | number;
+}
 
 /**
  * Renders "Ask Consent" view

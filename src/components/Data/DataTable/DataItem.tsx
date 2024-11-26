@@ -2,7 +2,7 @@ import { AppIcon, AppIconButton } from '@/components';
 import { useAppStore } from '@/store';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, messageConsentValues, phases } from '@/utils';
+import { databaseRequest, phases } from '@/utils';
 import { statusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
 import { Chip, Stack } from '@mui/material';
@@ -13,6 +13,9 @@ type Params = {
   row: Record<keyof PossibleFields, string>;
   column: keyof PossibleFields;
 };
+
+type MessageConsentValues = 'message' | 'announcement' | 'alert';
+const messageConsentValues = ['message', 'announcement', 'alert'] as MessageConsentValues[];
 
 const DataItem = ({ row, column }: Params) => {
   const { t } = useTranslation();
