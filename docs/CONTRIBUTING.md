@@ -34,16 +34,16 @@ For setup instructions and project overview, please refer to our [README.md](../
 
 For detailed information about specific parts of the codebase, please refer to the following documentation:
 
-- [Components Documentation](docs/COMPONENTS.md) - Details about reusable React components
-- [Hooks Documentation](docs/HOOKS.md) - Information about custom React hooks
-- [Layout Documentation](docs/LAYOUT.md) - Layout system and components
-- [Locale Documentation](docs/LOCALE.md) - Internationalization setup and usage
-- [Routes Documentation](docs/ROUTES.md) - Routing system and configuration
-- [Store Documentation](docs/STORE.md) - State management implementation
-- [Theme Documentation](docs/THEME.md) - Theming system and customization
-- [Types Documentation](docs/TYPES.md) - TypeScript types and interfaces
-- [Utils Documentation](docs/UTILS.md) - Utility functions and helpers
-- [Views Documentation](docs/VIEWS.md) - Page components and views
+- [Components Documentation](COMPONENTS.md) - Details about reusable React components
+- [Hooks Documentation](HOOKS.md) - Information about custom React hooks
+- [Layout Documentation](LAYOUT.md) - Layout system and components
+- [Locale Documentation](LOCALE.md) - Internationalization setup and usage
+- [Routes Documentation](ROUTES.md) - Routing system and configuration
+- [Store Documentation](STORE.md) - State management implementation
+- [Theme Documentation](THEME.md) - Theming system and customization
+- [Types Documentation](TYPES.md) - TypeScript types and interfaces
+- [Utils Documentation](UTILS.md) - Utility functions and helpers
+- [Views Documentation](VIEWS.md) - Page components and views
 
 ## Contributing Guidelines
 
