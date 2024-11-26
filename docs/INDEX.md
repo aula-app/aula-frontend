@@ -1,8 +1,6 @@
-# Contributing to Aula Frontend
+# Contributing to Aula
 
-Thank you for your interest in contributing to Aula Frontend! This document provides guidelines and instructions for contributing to our project.
-
-For setup instructions and project overview, please refer to our [README.md](../README.md).
+Thank you for your interest in contributing to Aula! This document provides guidelines and instructions for contributing to our project.
 
 ## Table of Contents
 
@@ -10,7 +8,6 @@ For setup instructions and project overview, please refer to our [README.md](../
 - [Contributing Guidelines](#contributing-guidelines)
 - [Code Style](#code-style)
 - [Submitting Changes](#submitting-changes)
-- [Code of Conduct](#code-of-conduct)
 
 ## Project Structure
 
@@ -34,6 +31,10 @@ For setup instructions and project overview, please refer to our [README.md](../
 
 For detailed information about specific parts of the codebase, please refer to the following documentation:
 
+- [Data Structure](DATA.md) - Details about reusable React
+
+For detailed information about specific parts of the Project Structure, please refer to the following documentation:
+
 - [Components Documentation](COMPONENTS.md) - Details about reusable React components
 - [Hooks Documentation](HOOKS.md) - Information about custom React hooks
 - [Layout Documentation](LAYOUT.md) - Layout system and components
@@ -46,6 +47,8 @@ For detailed information about specific parts of the codebase, please refer to t
 - [Views Documentation](VIEWS.md) - Page components and views
 
 ## Contributing Guidelines
+
+For setup instructions and project overview, please refer to our [Gettig Started Documentation](../GETSTARTED.md).
 
 ### Before You Start
 

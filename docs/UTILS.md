@@ -4,6 +4,7 @@ This document provides an overview of all utility functions used in the Aula Fro
 
 ## Table of Contents
 
+- [Data](#data)
 - [Authentication](#authentication)
 - [Storage Management](#storage-management)
 - [Date Handling](#date-handling)
@@ -16,6 +17,10 @@ This document provides an overview of all utility functions used in the Aula Fro
 - [General Utilities](#general-utilities)
 - [Vote Handling](#vote-handling)
 - [Command Handling](#command-handling)
+
+## Data
+
+Provides the configuration for data handling the data scopes, as described on the [Data Handling Documentation](DATA.md).
 
 ## Authentication
 
@@ -160,12 +165,12 @@ Located in `src/utils/roles.ts`, defines user roles:
 
 Defines user permission levels:
 
-- 10: Guest (Read only)
-- 20: Student (Can comment and interact)
-- 30: Moderator (Can moderate own rooms)
-- 40: Super Moderator (Can moderate any school's rooms)
-- 50: School Admin (Has access to admin settings)
-- 60: Tech Admin (Technical settings access only)
+- 10: _Guest_ - Read only
+- 20: _Student_ - Can comment and interact
+- 30: _Moderator_ - Can moderate rooms in which they have been assigned to
+- 40: _Super Moderator_ - Can access and moderate any school's rooms
+- 50: _School Admin_ - Has access to admin settings
+- 60: _Tech Admin_ - Technical settings access only
 
 ## Styling Utilities
 

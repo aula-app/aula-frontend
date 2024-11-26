@@ -7,7 +7,7 @@ This document provides an overview of all components used in the Aula Frontend p
 - [Core UI Components](#core-ui-components)
 - [Form Components](#form-components)
 - [Layout Components](#layout-components)
-- [Data Display Components](#data-display-components)
+- [Data Components](#data-components)
 - [User Interface Components](#user-interface-components)
 - [Feature Components](#feature-components)
 
@@ -150,7 +150,27 @@ A component for displaying room information:
 - Supports room actions and navigation
 - Includes loading state handling
 
-## Data Display Components
+### ReportCard
+
+A component for displaying reports:
+
+- Shows report statistics and data
+- Supports different report types
+- Includes loading states
+
+## Data Components
+
+Data components are dynamic components based on data configurations for each scope types and definitions located at `src/utils/Data/DataConfig/`.
+
+More information on this topic is provided on the [data documentation](DATA.md).
+
+These files are structured with the following objects:
+
+- _columns_: a list of columns to be displayed on the tables.
+- _fields_: a list with the definition of the forms to be displayed on the EditData dialog.
+- _requests_: a dictionary containing the endpoints and model names for CRUD operations
+
+These objects are used on the following components:
 
 ### DataTable
 
@@ -161,6 +181,8 @@ A comprehensive table component that:
 - Provides row actions
 - Includes loading states
 
+It is populated by the information set on the _columns_ settings of each data scope (ideas, rooms, etc.)
+
 ### FilterBar
 
 A component for data filtering:
@@ -169,19 +191,15 @@ A component for data filtering:
 - Handles filter combinations
 - Provides clear filter feedback
 
-### ReportCard
+It is populated by the information set on the _columns_ settings of each data scope (ideas, rooms, etc.)
 
-A component for displaying reports:
-
-- Shows report statistics and data
-- Supports different report types
-- Includes loading states
-
-## Data Management Components
+For more information, please check the _Data_ section under the (utils documentation)[UTILS.md].
 
 ### EditData System
 
-Located in `src/components/Data/EditData/`, this is a sophisticated form dialog system that dynamically generates and manages forms based on data configurations. The system consists of several key parts:
+A dialog system that dynamically generates and manages forms based on data configurations. It is populated by the information set on the _fields_ settings of each data scope (ideas, rooms, etc.).
+
+The system consists of several key parts:
 
 #### EditData.tsx
 
@@ -197,7 +215,7 @@ The main component that serves as a form dialog generator. It:
 
 #### FormField System
 
-Located in `src/components/Data/EditData/FormField/`, handles the rendering of individual form fields:
+Located in `src/components/Data/EditData/FormField/`, handles the rendering of individual form fields, according to the above mentioned setting:
 
 - Supports multiple field types:
   - `custom`: Custom field implementations
@@ -212,18 +230,13 @@ Located in `src/components/Data/EditData/FormField/`, handles the rendering of i
 
 #### DataUpdates System
 
-Located in `src/components/Data/EditData/DataUpdates/`, manages post-creation operations:
+Located in `src/components/Data/EditData/DataUpdates/`, handles specific update operations based on the newly created entry, after receiving it's ID:
 
-- Handles specific update operations based on the newly created entry, after receiving it's ID:
-  - Box management
-  - Group operations
-  - Idea categorization and winner selection
-  - Room management
-  - User management and password resets
-
-#### Configuration System
-
-Located in `src/utils/Data/`, provides the form definitions:
+- Adding Users to Rooms
+- Adding Boxes to Rooms
+- Adding Ideas to Boxes
+- Setting Users or groups as target for messages
+- etc...
 
 ## User Interface Components
 
