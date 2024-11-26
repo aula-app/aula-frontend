@@ -1,15 +1,15 @@
 # Aula App
 
-Stack: React + Material UI + Auth starter using TypeScript
+Stack: React + Material UI + TypeScript + Vite
 
 ## React App Documentation
 
-This document provides an overview of the React application, including setup instructions and information about the development environment.
+This document provides an overview of the Aula application, including setup instructions and information about the development environment.
 
 ### Prerequisites
 
-- Node.js (version 14 or higher)
-- npm (version 6 or higher)
+- Node.js (version 16 or higher recommended)
+- npm (version 7 or higher recommended)
 
 ### Getting Started
 
@@ -36,37 +36,46 @@ This document provides an overview of the React application, including setup ins
 
 ### Environment Configuration
 
-5. Create a `.env.development` file based on the `.env.sample` file:
+5. Create a `.env` file based on the `.env.sample` file:
 
    ```
-   cp .env.sample .env.development
+   cp .env.sample .env
    ```
 
-6. Update the values in the `.env.development` file with your aula's API backend configuration on VITE_APP_API_URL:
+6. Update the values in the `.env` file with your configuration:
 
    ```
-    VITE_APP_API_URL = https://your-api-endpoint.com
-    VITE_APP_MULTI = false
+   VITE_APP_VERSION = $npm_package_version
+   VITE_APP_API_URL = http://localhost/
+   VITE_APP_MULTI_AULA = https://m.aula.de/instances
+   VITE_APP_MULTI = false
    ```
 
 7. Start the development server:
 
    ```
-   npm start
+   npm run dev
    ```
 
-   The application should now be running at the Apache's defined location.
+   The application will start in development mode. Open your browser to the URL shown in the terminal to view the app.
 
-### Scripts
+### Available Scripts
 
 The following npm scripts are available:
 
-- `npm start`: Starts the development server.
-- `npm run build`: Builds the production-ready application.
+- `npm run dev`: Starts the development server
+- `npm run build`: Builds the production-ready application
+- `npm run build-devel`: Builds the application in development mode
+- `npm run build-test`: Builds the application in test mode
+- `npm run preview`: Preview the production build locally
+- `npm run format`: Format source files using Prettier
+- `npm run lint`: Lint source files using ESLint
+- `npm run check`: Type check TypeScript files
+- `npm run type`: Alias for TypeScript checking
 
 ### Deployment
 
-To deploy the application, follow these steps:
+To deploy the application:
 
 1. Build the production-ready application:
 
@@ -74,6 +83,26 @@ To deploy the application, follow these steps:
    npm run build
    ```
 
-2. Deploy the contents of the `build/` directory to your aual server as described on the [step 9](https://github.com/aula-app/playground/blob/main/README.md) of the aula backend installation.
+2. The build output will be generated in the `dist/` directory. Deploy these files to your web server.
 
-For more detailed deployment instructions, please refer to the [Create React App documentation](https://create-react-app.dev/docs/deployment/).
+3. For proper routing to work, ensure your web server is configured to redirect all requests to `index.html`, as this is a single-page application.
+
+   If using Nginx, you might add this to your server configuration:
+
+   ```nginx
+   location / {
+     try_files $uri $uri/ /index.html;
+   }
+   ```
+
+### Additional Features
+
+- Multi-language support using i18next
+- Form handling with react-hook-form
+- Material UI components with emotion styling
+- File upload capabilities with react-dropzone
+- Markdown support with react-markdown
+- Mobile-friendly with swipe gestures support
+- Capacitor integration for Android builds
+
+For more information about the project, visit [aula.de](https://aula.de).
