@@ -2,6 +2,10 @@
 
 Stack: React + Material UI + TypeScript + Vite
 
+### Contributing
+
+Please read our [Contributing Guidelines](docs/CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
 ## React App Documentation
 
 This document provides an overview of the Aula application, including setup instructions and information about the development environment.
@@ -58,10 +62,6 @@ This document provides an overview of the Aula application, including setup inst
    ```
 
    The application will start in development mode. Open your browser to the URL shown in the terminal to view the app.
-
-### Contributing
-
-Please read our [Contributing Guidelines](docs/CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ### Available Scripts
 
