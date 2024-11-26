@@ -19,7 +19,7 @@ For setup instructions and project overview, please refer to our [README.md](../
 │   ├── components/     # Reusable React components
 │   ├── hooks/         # Custom React hooks
 │   ├── layout/       # Layout components
-│   ├── locale/       # Layout components
+│   ├── locale/       # Language definitions
 │   ├── routes/       # Route definitions
 │   ├── store/        # State management
 │   ├── theme/        # Theme configuration
@@ -95,25 +95,6 @@ Key points:
    - Describe your changes
    - Mention any breaking changes
 4. Wait for review and address any feedback
-
-## Code of Conduct
-
-### Our Pledge
-
-We are committed to providing a welcoming and inspiring community for all.
-
-### Our Standards
-
-- Be respectful and inclusive
-- Accept constructive criticism gracefully
-- Focus on what's best for the community
-- Show empathy towards others
-
-### Enforcement
-
-Violations of the code of conduct may result in temporary or permanent restrictions.
-
----
 
 ## Questions or Need Help?
 
