@@ -2,12 +2,14 @@
 
 This document provides an overview of the Aula application, including setup instructions and information about the development environment.
 
-## Prerequisites
+## Getting Started
+
+### Prerequisites
 
 - Node.js (version 16 or higher recommended)
 - npm (version 7 or higher recommended)
 
-## Getting Started
+### Installation
 
 1. Clone the repository:
 
