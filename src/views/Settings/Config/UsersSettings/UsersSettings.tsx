@@ -62,7 +62,7 @@ const DataSettings = ({ onReload }: Props) => {
       method: 'addCSV',
       arguments: {
         csv: csv,
-        room: room,
+        room_id: room,
       },
     }).then((response) => {
       if (!response.success) {
