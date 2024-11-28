@@ -3,12 +3,11 @@ import { RoleTypes, SettingNamesType } from '@/types/SettingsTypes';
 import { STATUS } from '@/utils/Data/formDefaults';
 import { Collapse, Stack } from '@mui/material';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import SelectRoom from '../SelectRoom';
 import FilterInput from './FilterInput';
-import FilterRoom from './FilterRoom';
+import FilterRole from './FilterRole';
 import FilterSelect from './FilterSelect';
 import FilterStatus from './FilterStatus';
-import FilterRole from './FilterRole';
-import { CropLandscapeOutlined } from '@mui/icons-material';
 
 type Params = {
   isOpen: boolean;
@@ -50,7 +49,7 @@ const FilterBar = ({
         </Stack>
         <Stack direction="row" alignItems="center" gap={1} flex={1}>
           {['users', 'ideas'].includes(scope) && typeof target === 'number' && setTarget && (
-            <FilterRoom room={target} setRoom={setRoom} />
+            <SelectRoom room={target} setRoom={setRoom} />
           )}
           {scope === 'users' && typeof role === 'number' && setRole && <FilterRole role={role} setRole={setRole} />}
           {statusOptions && setStatus && typeof status !== 'undefined' && (

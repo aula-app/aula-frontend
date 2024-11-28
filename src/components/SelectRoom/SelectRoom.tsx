@@ -5,11 +5,11 @@ import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Params = {
-  room: number;
+  room: number | '';
   setRoom: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 };
 
-const FilterRoom = ({ room, setRoom }: Params) => {
+const SelectRoom = ({ room, setRoom }: Params) => {
   const { t } = useTranslation();
   const [options, setOptions] = useState<Array<RoomType>>([]);
 
@@ -43,7 +43,7 @@ const FilterRoom = ({ room, setRoom }: Params) => {
       onChange={changeRoom}
       variant="filled"
       size="small"
-      sx={{ flex: 1, minWidth: 200 }}
+      sx={{ minWidth: 200 }}
       disabled={!options}
     >
       <MenuItem value="">&nbsp;</MenuItem>
@@ -56,4 +56,4 @@ const FilterRoom = ({ room, setRoom }: Params) => {
   );
 };
 
-export default FilterRoom;
+export default SelectRoom;
