@@ -2,7 +2,7 @@ import { FilledInput } from '@mui/material';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import AppIconButton from '../AppIconButton';
 import FilterGroup from './FilterGroup';
-import FilterRoom from './FilterRoom';
+import SelectRoom from '../SelectRoom';
 
 type Params = {
   filter: [string, string];
@@ -16,7 +16,7 @@ const FilterInput = ({ filter, setFilter }: Params) => {
 
   switch (filter[0]) {
     case 'room_id':
-      return <FilterRoom room={Number(filter[1])} setRoom={changeSearch} />;
+      return <SelectRoom room={Number(filter[1])} setRoom={changeSearch} />;
     case 'target_group':
       return <FilterGroup group={Number(filter[1])} setGroup={changeSearch} />;
     default:

@@ -24,7 +24,7 @@ const FilterRole = ({ role, setRole }: Params) => {
       onChange={changeRole}
       variant="filled"
       size="small"
-      sx={{ flex: 1 }}
+      sx={{ minWidth: 200 }}
     >
       <MenuItem value={-1}>{t('status.all')}</MenuItem>
       {roles.map((roleItem) => (

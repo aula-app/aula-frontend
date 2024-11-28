@@ -185,6 +185,7 @@
     "changeNameBody": "Für den Benutzer {{var}} wurde ein Datenänderungsverfahren beantragt. Er möchte seine {{Alt}} in {{Neu}} ändern.",
     "CSVempty": "Ihre Datei enthält keine Daten. Bitte stellen Sie eine gültige CSV-Datei bereit.",
     "CSVinvalid": "Ihre Datei scheint nicht gültig zu sein. Bitte stellen Sie eine gültige CSV-Datei bereit.",
+    "CSVnoRoom": "Bitte wählen Sie den Zielraum für die Benutzer",
     "CSVsuccess": "Neue Benutzer erstellt.",
     "customField": "Benutzerdefinierte Felder aktualisiert.",
     "dataExport": "Kontodaten exportieren",

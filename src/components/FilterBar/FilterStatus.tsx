@@ -28,7 +28,7 @@ const FilterStatus = ({ options, status, setStatus }: Params) => {
       onChange={changeStatus}
       variant="filled"
       size="small"
-      sx={{ flex: 1 }}
+      sx={{ minWidth: 200 }}
     >
       {options.map((column) => (
         <MenuItem value={column.value} key={column.label}>
