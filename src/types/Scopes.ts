@@ -127,6 +127,7 @@ export interface RoomType {
   room_name: string;
   status: number;
   updater_id: number;
+  type: 0 | 1;
 }
 
 export interface UserType {
