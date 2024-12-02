@@ -34,6 +34,7 @@ const DataSettings = ({ onReload }: Props) => {
   const [error, setError] = useState<string>('');
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onReset();
     if (!e.target.files || e.target.files.length < 1) return;
 
     Array.from(e.target.files).forEach((file) => readCSV(file));
@@ -54,6 +55,7 @@ const DataSettings = ({ onReload }: Props) => {
   const onReset = () => {
     setUsers([]);
     setRoom('');
+    setError('');
   };
 
   const readCSV = (file: File) => {
@@ -64,15 +66,22 @@ const DataSettings = ({ onReload }: Props) => {
         return;
       }
       const lines = String(reader.result).split('\n');
-      console.log(lines.length);
       if (lines.length < 2) {
         setError(t('texts.CSVempty'));
         return;
       }
-      if (lines[0].replace('\r', '') !== 'realname;displayname;username;email;about_me') {
-        setError(t('texts.CSVinvalid'));
-        return;
-      }
+      lines.map((line, i) => {
+        const items = line.split(';');
+        if (
+          !items[0] ||
+          !items[1] ||
+          !items[2] ||
+          (i === 0 && line !== 'realname;displayname;username;email;about_me')
+        ) {
+          setError(t('texts.CSVinvalid'));
+          return;
+        }
+      });
       lines.splice(0, 1);
       setUsers(lines);
     };
