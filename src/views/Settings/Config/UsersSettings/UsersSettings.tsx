@@ -1,8 +1,20 @@
 import { AppIcon } from '@/components';
+import SelectRole from '@/components/SelectRole';
 import SelectRoom from '@/components/SelectRoom';
 import { useAppStore } from '@/store';
+import { RoleTypes } from '@/types/SettingsTypes';
 import { databaseRequest } from '@/utils';
-import { Button, FormHelperText, Stack, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import {
+  Button,
+  FormHelperText,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -17,6 +29,7 @@ const DataSettings = ({ onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [users, setUsers] = useState<Array<string>>([]);
+  const [role, setRole] = useState<RoleTypes>(10);
   const [room, setRoom] = useState<number | ''>('');
   const [error, setError] = useState<string>('');
 
@@ -36,6 +49,11 @@ const DataSettings = ({ onReload }: Props) => {
       return;
     }
     uploadCSV(users.join('/n'));
+  };
+
+  const onReset = () => {
+    setUsers([]);
+    setRoom('');
   };
 
   const readCSV = (file: File) => {
@@ -65,6 +83,10 @@ const DataSettings = ({ onReload }: Props) => {
     setRoom(Number(event.target.value));
   };
 
+  const selectRole = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setRole(Number(event.target.value) as RoleTypes);
+  };
+
   const uploadCSV = async (csv: string) => {
     await databaseRequest({
       model: 'User',
@@ -72,6 +94,7 @@ const DataSettings = ({ onReload }: Props) => {
       arguments: {
         csv: csv,
         room_id: room,
+        user_level: role,
       },
     }).then((response) => {
       if (!response.success) {
@@ -79,40 +102,45 @@ const DataSettings = ({ onReload }: Props) => {
         return;
       }
       dispatch({ type: 'ADD_POPUP', message: { message: t('texts.CSVsuccess'), type: 'success' } });
-      setUsers([]);
-      setRoom('');
       onReload();
+      onReset();
     });
   };
 
   return (
     <Stack gap={2}>
       <Stack direction="row" alignItems="center" gap={3} flexWrap="wrap">
-        {t('texts.fileDownload')}:{' '}
-        <a href="/data/aula_users.csv" download target="_blank" rel="noreferrer">
-          <Button color="secondary" variant="outlined">
-            <AppIcon icon="download" size="small" sx={{ mr: 1, ml: -0.5 }} />
-            aula_users.csv
-          </Button>
-        </a>
-      </Stack>
-      <Stack>
-        <Stack direction="row" alignItems="center" gap={3}>
-          <Button variant="contained" component="label" color="secondary">
+        <Typography flex={1}>{t('texts.CSV')}</Typography>
+        <Stack flex={1} gap={2}>
+          <Button variant="contained" component="label" fullWidth>
             {t('texts.fileUpload')}
             <input type="file" name="my_files" multiple hidden onChange={handleFileChange} />
           </Button>
-          {t('texts.select', { var: t('views.room') })}:
-          <SelectRoom room={room} setRoom={selectRoom} />
+          <Stack direction="row" alignItems="center" gap={2}>
+            <Button variant="contained" component="label" color="error" fullWidth onClick={onReset}>
+              {t('generics.cancel')}
+            </Button>
+            <Button
+              color="secondary"
+              variant="contained"
+              fullWidth
+              href="/data/aula_users.csv"
+              download
+              target="_blank"
+              rel="noreferrer"
+            >
+              <AppIcon icon="download" size="small" sx={{ mr: 1, ml: -0.5 }} />
+              {t('texts.fileDownload')}
+            </Button>
+          </Stack>
         </Stack>
-        <FormHelperText error={error !== ''}>{error}</FormHelperText>
       </Stack>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>{t('settings.realname')}</TableCell>
-            <TableCell>{t('settings.displayname')}</TableCell>
-            <TableCell>{t('settings.username')}</TableCell>
+            <TableCell>{t('settings.realname')}*</TableCell>
+            <TableCell>{t('settings.displayname')}*</TableCell>
+            <TableCell>{t('settings.username')}*</TableCell>
             <TableCell>{t('settings.email')}</TableCell>
             <TableCell>{t('settings.about_me')}</TableCell>
           </TableRow>
@@ -130,6 +158,15 @@ const DataSettings = ({ onReload }: Props) => {
           })}
         </TableBody>
       </Table>
+      <Stack>
+        <Stack direction="row" alignItems="center" gap={3}>
+          {t('texts.select', { var: t('views.room') })}:
+          <SelectRoom room={room} setRoom={selectRoom} />
+          {t('texts.select', { var: t('settings.userlevel') })}:
+          <SelectRole role={role} setRole={selectRole} />
+        </Stack>
+        <FormHelperText error={error !== ''}>{error}</FormHelperText>
+      </Stack>
       <Button variant="contained" component="label" onClick={onSubmit}>
         {t('generics.confirm')}
       </Button>

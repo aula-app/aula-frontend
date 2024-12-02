@@ -183,6 +183,7 @@
     "bug": "Fehlerbericht zu '{{var}}'",
     "changeName": "Datenänderungsanfrage für {{var}}.",
     "changeNameBody": "Für den Benutzer {{var}} wurde ein Datenänderungsverfahren beantragt. Er möchte seine {{Alt}} in {{Neu}} ändern.",
+    "CSV": "Hier können neue Nutzer*innen von einer Tabelle angelegt werden. Die Datei muss als CSV-Datei hochgeladen sein und die folgenden Spalten besitzen: 'realname', 'displayname', 'username', 'email', 'about_me'. Nicht alle Felder müssen ausgefüllt sein, wenn bspw. eine Schüler*in nicht über eine Email verfügt kann die Spalte leer bleiben.",
     "CSVempty": "Ihre Datei enthält keine Daten. Bitte stellen Sie eine gültige CSV-Datei bereit.",
     "CSVinvalid": "Ihre Datei scheint nicht gültig zu sein. Bitte stellen Sie eine gültige CSV-Datei bereit.",
     "CSVnoRoom": "Bitte wählen Sie den Zielraum für die Benutzer",
