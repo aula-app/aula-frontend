@@ -143,7 +143,7 @@ const SettingsView = () => {
         isOpen={openFilter}
       />
       <Divider />
-      {!isLoading ? (
+      {!isLoading && items.length > 0 ? (
         <DataTable
           columns={DataConfig[setting_name].columns}
           rows={items}
