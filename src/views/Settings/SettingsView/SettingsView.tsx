@@ -75,7 +75,7 @@ const SettingsView = () => {
 
     await databaseRequest(requestData, requestId).then((response) => {
       setLoading(false);
-      if (!response.success) return;
+      if (!response.success || !response.data) return;
       setItems(response.data || []);
       setPageCount(response.count);
     });
