@@ -33,6 +33,9 @@ const DataRow = ({ item, selected = false, toggleRow, status, children, sx, ...r
    * Determines the background color based on the row's status and selection state
    * @returns {string} The background color value
    */
+
+  const isFixed = (): boolean => 'room_name' in item && 'type' in item && Number(item.type) === 1; // determine fixed rooms
+
   const getBackground = () => {
     switch (status) {
       case 0:
@@ -61,8 +64,10 @@ const DataRow = ({ item, selected = false, toggleRow, status, children, sx, ...r
         {/* disable toggle if room type = 1 */}
         <Checkbox
           checked={selected}
-          onChange={() => toggleRow(Number(item.id))}
-          disabled={'room_name' in item && 'type' in item && Number(item.type) === 1}
+          onChange={() => {
+            if (!isFixed()) toggleRow(Number(item.id));
+          }}
+          disabled={isFixed()}
         />
       </TableCell>
       {children}
