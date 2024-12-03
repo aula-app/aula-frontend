@@ -5,6 +5,7 @@ import { updateType } from '../EditData';
 import CategoryField from '../FormField/fields/CategoryField';
 import SetWinnerField from '../FormField/fields/SetWinnerField';
 import ResetPassword from '../FormField/fields/ResetPassword';
+import { ScopeType } from '@/types/Scopes';
 
 interface Props {
   item?: Partial<ScopeType>;
