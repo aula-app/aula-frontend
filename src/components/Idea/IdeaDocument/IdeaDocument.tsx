@@ -69,7 +69,7 @@ const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
         )}{' '}
         <MoreOptions
           scope="ideas"
-          id={idea.id}
+          item={idea}
           onClose={onReload}
           canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id) && !disabled)}
         />

@@ -187,17 +187,29 @@ export interface CommandType {
   updater_id: number;
 }
 
-export interface PossibleFields
-  extends AnnouncementType,
-    BoxType,
-    BugType,
-    CommentType,
-    CommandType,
-    GroupType,
-    IdeaType,
-    MessageType,
-    RoomType,
-    UserType {}
+// Type for generic constraints
+export type ScopeType =
+  | AnnouncementType
+  | BoxType
+  | BugType
+  | CommentType
+  | GroupType
+  | IdeaType
+  | MessageType
+  | ReportType
+  | RoomType
+  | UserType
+  | CategoryType
+  | CommandType;
+
+// Common fields that can be used in forms
+export type CommonFormFields = 'id' | 'created';
+
+// Type for form data
+export type PossibleFields = Record<string, string>;
+
+// Helper type to convert a specific type's values to strings
+export type ToFormData<T> = Record<string, string>;
 
 export interface ReportBodyType {
   data: ReportMetadataType;
@@ -227,3 +239,13 @@ export interface RequestMetadataType {
   from?: string;
   to?: string;
 }
+
+// Helper function to convert data to form format
+export const toFormData = <T extends object>(data: T): Record<string, string> => {
+  const result: Record<string, string> = {};
+  for (const key in data) {
+    const value = data[key];
+    result[key] = value === null || value === undefined ? '' : String(value);
+  }
+  return result;
+};

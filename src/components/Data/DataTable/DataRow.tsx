@@ -4,8 +4,23 @@ import { Checkbox, SxProps, TableCell, TableRow, Theme } from '@mui/material';
 import { deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
 import { ReactNode } from 'react';
 
+/**
+ * @component
+ * @param {Object} props - Component props
+ * @param {Record<keyof PossibleFields, string>} props.item - Data item to be displayed in the row
+ * @param {StatusTypes} props.status - Current status of the row that determines its visual style
+ *                                    0: Inactive (orange)
+ *                                    1: Active (default/no highlight)
+ *                                    2: Special status (purple)
+ *                                    3: Warning status (light orange)
+ * @param {boolean} [props.selected=false] - Whether the row is currently selected
+ * @param {(id: number) => void} props.toggleRow - Callback function to handle row selection/deselection
+ * @param {ReactNode} props.children - Child elements to be rendered within the row (typically TableCell components)
+ * @param {SxProps<Theme>} [props.sx] - Additional styles to apply to the TableRow using MUI's sx prop
+ */
+
 type Params = {
-  id: number;
+  item: Record<keyof PossibleFields, string>;
   status: StatusTypes;
   selected?: boolean;
   toggleRow: (id: number) => void;
@@ -13,7 +28,11 @@ type Params = {
   sx?: SxProps<Theme>;
 };
 
-const DataRow = ({ id, selected = false, toggleRow, status, children, sx, ...restOfProps }: Params) => {
+const DataRow = ({ item, selected = false, toggleRow, status, children, sx, ...restOfProps }: Params) => {
+  /**
+   * Determines the background color based on the row's status and selection state
+   * @returns {string} The background color value
+   */
   const getBackground = () => {
     switch (status) {
       case 0:
@@ -39,7 +58,12 @@ const DataRow = ({ id, selected = false, toggleRow, status, children, sx, ...res
       {...restOfProps}
     >
       <TableCell>
-        <Checkbox checked={selected} onChange={() => toggleRow(id)} />
+        {/* disable toggle if room type = 1 */}
+        <Checkbox
+          checked={selected}
+          onChange={() => toggleRow(Number(item.id))}
+          disabled={'room_name' in item && 'type' in item && Number(item.type) === 1}
+        />
       </TableCell>
       {children}
     </TableRow>

@@ -107,7 +107,7 @@ const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
             )}{' '}
             <MoreOptions
               scope="ideas"
-              id={idea.id}
+              item={idea}
               onClose={onClose}
               canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id))}
             />

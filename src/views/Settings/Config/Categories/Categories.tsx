@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 const CatView = () => {
   const { t } = useTranslation();
   const [categories, setCategories] = useState<CategoryType[]>([]);
-  const [selectedId, setId] = useState<number | undefined>();
+  const [selectedItem, setItem] = useState<CategoryType>();
   const [editCat, setEditCat] = useState(false);
   const [deleteCat, setDeleteCat] = useState(false);
 
@@ -24,18 +24,18 @@ const CatView = () => {
       if (response.success) setCategories(response.data ? response.data : []);
     });
 
-  const setDelete = (id: number) => {
-    setId(id);
+  const setDelete = (item: CategoryType) => {
+    setItem(item);
     setDeleteCat(true);
   };
 
-  const setEdit = (id?: number) => {
-    setId(id || undefined);
+  const setEdit = (item?: CategoryType) => {
+    setItem(item || undefined);
     setEditCat(true);
   };
 
   const onClose = () => {
-    setId(undefined);
+    setItem(undefined);
     setEditCat(false);
     setDeleteCat(false);
     categoriesFetch();
@@ -60,14 +60,14 @@ const CatView = () => {
               key={key}
               label={category.name}
               avatar={<AppIcon icon={currentIcon} />}
-              onClick={() => setEdit(category.id)}
-              onDelete={() => setDelete(category.id)}
+              onClick={() => setEdit(category)}
+              onDelete={() => setDelete(category)}
             />
           );
         })}
       </Stack>
-      <EditData scope="categories" id={selectedId} isOpen={!!editCat} onClose={onClose} />
-      <DeleteData scope="categories" id={selectedId || 0} isOpen={!!deleteCat} onClose={onClose} />
+      <EditData scope="categories" item={selectedItem} isOpen={!!editCat} onClose={onClose} />
+      <DeleteData scope="categories" id={Number(selectedItem?.id)} isOpen={!!deleteCat} onClose={onClose} />
     </Stack>
   );
 };
