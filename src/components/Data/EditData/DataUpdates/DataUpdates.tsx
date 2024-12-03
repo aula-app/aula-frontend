@@ -38,7 +38,7 @@ const DataUpdates = ({ item, phase, scope, defaultValue, addUpdate }: Props) => 
         </>
       );
     case 'rooms':
-      if ('room_name' in item && 'type' in item && Number(item.type) === 1) return; // prevent user removal from default room
+      if (item && 'room_name' in item && 'type' in item && Number(item.type) === 1) return; // prevent user removal from default room
       return <MoveData id={Number(item?.id)} scope={scope} addUpdate={addUpdate} />;
     case 'users':
       return (
