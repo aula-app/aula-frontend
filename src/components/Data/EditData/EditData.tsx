@@ -246,7 +246,7 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
               ))}
 
             <DataUpdates
-              id={Number(item?.id)}
+              item={item}
               phase={phase}
               scope={scope}
               defaultValue={getDefaultValue()}
