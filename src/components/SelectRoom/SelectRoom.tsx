@@ -22,7 +22,7 @@ const SelectRoom = ({ room, setRoom }: Params) => {
         limit: 0,
       },
     }).then((response) => {
-      if (!response.success) return;
+      if (!response.success || !response.data) return;
       setOptions(response.data);
     });
   };
