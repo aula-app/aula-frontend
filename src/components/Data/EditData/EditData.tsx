@@ -15,6 +15,16 @@ import DataUpdates from './DataUpdates';
 import FormField from './FormField';
 import { BoxType, IdeaType, PossibleFields, ScopeType, UserType } from '@/types/Scopes';
 
+/**
+ * Props interface for the EditData component
+ * @interface Props
+ * @property {Partial<ScopeType>} [item] - Optional item to edit. If not provided, component operates in 'add' mode
+ * @property {SettingNamesType} scope - The type of data being edited (e.g., 'ideas', 'comments', 'messages')
+ * @property {ObjectPropByName} [otherData] - Additional data to be included in the form submission
+ * @property {ObjectPropByName} [metadata] - Metadata for the form, used particularly with message bodies
+ * @property {boolean} isOpen - Controls the visibility of the drawer
+ * @property {() => void} onClose - Callback function to close the drawer
+ */
 interface Props {
   item?: Partial<ScopeType>;
   scope: SettingNamesType;
@@ -24,6 +34,14 @@ interface Props {
   onClose: () => void;
 }
 
+/**
+ * Interface defining the structure of update operations
+ * @interface updateType
+ * @property {string} model - The data model to update
+ * @property {string} method - The method to call on the model
+ * @property {ObjectPropByName} args - Arguments for the update operation
+ * @property {SettingNamesType} [requestId] - Optional request identifier
+ */
 export interface updateType {
   model: string;
   method: string;
@@ -31,18 +49,32 @@ export interface updateType {
   requestId?: SettingNamesType;
 }
 
+/**
+ * Type for form values, allowing any string key with any value
+ */
 type FormValues = Record<string, any>;
 
 /**
- * Renders "EditData" component
+ * EditData Component
+ *
+ * A reusable drawer component that provides form functionality for creating or editing various data types.
+ * It supports dynamic form fields based on the scope, handles form validation, and manages data updates.
+ *
+ * @component
+ * @param {Props} props - Component props
+ * @returns {JSX.Element} Rendered component
  */
 const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const params = useParams();
 
+  // State for tracking the current phase and pending updates
   const [phase, setPhase] = useState<RoomPhases>((Number(params['phase']) as RoomPhases) || 0);
   const [updates, setUpdate] = useState<Array<updateType>>([]);
 
+  /**
+   * Builds the validation schema based on field configurations
+   */
   const schema = getSchema().reduce((schema, field) => {
     const name = field.name as keyof PossibleFields;
     return {
@@ -51,20 +83,32 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
     };
   }, {});
 
+  // Initialize form with validation schema
   const { control, getValues, handleSubmit, register, setValue, setError, clearErrors, watch } = useForm<FormValues>({
     resolver: yupResolver(yup.object(schema)),
   });
 
+  /**
+   * Resets form values to their defaults or current item values
+   */
   const clearValues = () => {
     updateValues();
   };
 
+  /**
+   * Retrieves fields based on user permissions and current phase
+   * @returns {Array<InputSettings>} Filtered array of field configurations
+   */
   function getFields() {
     return DataConfig[scope].fields
       .filter((field) => checkPermissions(field.role))
       .filter((field) => !('phase' in field) || ('phase' in field && field.phase && field.phase <= phase));
   }
 
+  /**
+   * Generates schema for form fields considering permissions and phases
+   * @returns {Array<InputSettings>} Array of field schemas
+   */
   function getSchema() {
     const newSchema = [] as InputSettings[];
     DataConfig[scope].fields
@@ -85,6 +129,9 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
     return newSchema;
   }
 
+  /**
+   * Fetches and sets the phase for an idea
+   */
   const getIdeaPhase = async () => {
     if (!item) return;
     await databaseRequest({
@@ -107,6 +154,10 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
     });
   };
 
+  /**
+   * Fetches default room durations for a given room
+   * @param {number} room_id - ID of the room
+   */
   const getDefaultRoomDurations = async (room_id: number) => {
     if (id || !room_id) return;
     await databaseRequest({
@@ -126,6 +177,9 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
     });
   };
 
+  /**
+   * Updates form values with current item data or defaults
+   */
   const updateValues = () => {
     getSchema().forEach((field) => {
       const name = typeof field.name === 'string' ? field.name : field.name[0];
@@ -135,11 +189,19 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
     setUpdate([]);
   };
 
+  /**
+   * Adds new updates to the pending updates queue
+   * @param {updateType | updateType[]} newUpdate - Update(s) to add
+   */
   const addUpdate = (newUpdate: updateType | updateType[]) => {
     if (!Array.isArray(newUpdate)) newUpdate = [newUpdate];
     setUpdate([...newUpdate, ...updates]);
   };
 
+  /**
+   * Saves form data to the database
+   * @param {ObjectPropByName} args - Form data to save
+   */
   const dataSave = async (args: ObjectPropByName) => {
     const requestId = ['updater_id'];
 
@@ -160,6 +222,10 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
     });
   };
 
+  /**
+   * Processes pending updates after main data save
+   * @param {number} newId - ID of the newly created/updated item
+   */
   const dataUpdates = async (newId: number) => {
     let updated = 0;
     updates.forEach((update) => {
@@ -182,6 +248,10 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
     });
   };
 
+  /**
+   * Form submission handler
+   * @param {ObjectPropByName} formData - Form data to submit
+   */
   const onSubmit = (formData: ObjectPropByName) => {
     if (item) otherData[DataConfig[scope].requests.id] = item.id;
     if (scope === 'messages') delete formData.undefined;
@@ -191,6 +261,7 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
     });
   };
 
+  // Effect hooks for initialization and updates
   useEffect(() => {
     updateValues();
     if (scope === 'ideas') getIdeaPhase();
@@ -210,6 +281,10 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
     if (scope === 'boxes' && otherData.room_id) getDefaultRoomDurations(otherData.room_id);
   }, [isOpen]);
 
+  /**
+   * Gets default value based on scope and item type
+   * @returns {boolean | string | undefined} Default value for the form
+   */
   const getDefaultValue = () => {
     if (scope === 'ideas') {
       return !!(item as Partial<IdeaType>)?.is_winner;
