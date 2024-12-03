@@ -143,23 +143,29 @@ const SettingsView = () => {
         isOpen={openFilter}
       />
       <Divider />
-      {!isLoading && items.length > 0 ? (
-        <DataTable
-          columns={DataConfig[setting_name].columns}
-          rows={items}
-          selected={selected}
-          onSelect={setSelected}
-          onClick={setEdit}
-          handleOrder={handleOrder}
-          orderAsc={orderAsc}
-          orderBy={orderBy}
-          setLimit={setLimit}
-        />
+      {!isLoading ? (
+        <>
+          {items.length > 0 && (
+            <DataTable
+              columns={DataConfig[setting_name].columns}
+              rows={items}
+              selected={selected}
+              onSelect={setSelected}
+              onClick={setEdit}
+              handleOrder={handleOrder}
+              orderAsc={orderAsc}
+              orderBy={orderBy}
+              setLimit={setLimit}
+            />
+          )}
+        </>
       ) : (
         <DataTableSkeleton />
       )}
       <Divider />
-      {pageCount && <PaginationBar pages={Math.ceil(Number(pageCount) / limit)} setPage={setPage} />}
+      {typeof pageCount === 'number' && (
+        <PaginationBar pages={Math.ceil(Number(pageCount) / limit)} setPage={setPage} />
+      )}
 
       <EditData key={`${setting_name}`} isOpen={openEdit} id={editId} scope={setting_name} onClose={onClose} />
       <DeleteData
