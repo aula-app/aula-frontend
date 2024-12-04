@@ -91,7 +91,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
 
     // Generate a timestamp for the filename
     const timestamp = new Date().toISOString().replace(/[:\.]/g, '-');
-    const filename = `aula_bakcup_${timestamp}.sql.bkp`;
+    const filename = `aula_backup_${timestamp}.sql.bkp`;
 
     // Create a download link
     const link = document.createElement('a');
@@ -108,7 +108,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
   };
 
   useEffect(() => {
-    setStatus(settings?.online_mode || 1);
+    if (settings && settings.online_mode !== status) setStatus(settings.online_mode);
   }, [settings?.online_mode]);
 
   useEffect(() => {
