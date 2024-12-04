@@ -43,6 +43,7 @@ const IdeasBoxView = () => {
   };
 
   useEffect(() => {
+    setBoxes([]);
     //@ts-ignore
     if (params.phase) boxesFetch();
     else goto('/error');
