@@ -48,7 +48,7 @@ const VotingCard = () => {
 
   return (
     <Stack p={2}>
-      <Stack direction="row-reverse" justifyContent="space-around" py={2}>
+      <Stack direction="row-reverse" justifyContent="space-around">
         {votingOptions.map((option, i) => (
           <Button
             sx={{

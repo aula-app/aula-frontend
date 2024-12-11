@@ -1,6 +1,7 @@
 import EditData from '@/components/Data/EditData';
 import { ApprovalCard, Comment, IdeaBubble, IdeaDocument, VotingCard, VotingResults } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
+import VotingQuorum from '@/components/Idea/VotingQuorum';
 import KnowMore from '@/components/KnowMore';
 import { CommentType, IdeaType } from '@/types/Scopes';
 import { Vote, checkPermissions, databaseRequest } from '@/utils';
@@ -28,7 +29,7 @@ const IdeaView = () => {
   const ideaFetch = async () =>
     await databaseRequest({
       model: 'Idea',
-      method: 'getIdeaContent',
+      method: 'getIdeaBaseData',
       arguments: { idea_id: params['idea_id'] },
     }).then((response) => {
       if (!response.success || !response.data) return;
@@ -85,7 +86,12 @@ const IdeaView = () => {
   return idea ? (
     <Stack width="100%" height="100%" overflow="auto" p={2}>
       {phase === 40 && <VotingResults yourVote={vote} rejected={idea.is_winner !== 1} />}
-      {phase === 30 && <VotingCard />}
+      {phase === 30 && (
+        <>
+          <VotingQuorum votes={idea.number_of_votes} users={idea.number_of_users} />
+          <VotingCard />
+        </>
+      )}
       {phase === 0 ? (
         <IdeaBubble idea={idea} onReload={ideaFetch} />
       ) : (
