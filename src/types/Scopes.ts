@@ -69,6 +69,7 @@ export interface GroupType {
 
 export interface IdeaType {
   id: number;
+  hash_id: string;
   content: string;
   title: string;
   displayname: string;
@@ -77,16 +78,15 @@ export interface IdeaType {
   sum_likes: number;
   sum_votes: number;
   sum_comments: number;
-  user_id: number;
   room_id: number;
   status: number;
-  language_id: number;
   is_winner: number;
   approved: number;
   approval_comment: null;
-  topic_id: number;
   custom_field1: string | null;
   custom_field2: string | null;
+  number_of_votes: number;
+  number_of_users: number;
 }
 
 export interface MessageType {
