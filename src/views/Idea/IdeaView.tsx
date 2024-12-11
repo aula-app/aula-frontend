@@ -88,7 +88,7 @@ const IdeaView = () => {
       {phase === 40 && <VotingResults yourVote={vote} rejected={idea.is_winner !== 1} />}
       {phase === 30 && (
         <>
-          <VotingQuorum votes={idea.number_of_votes} users={idea.number_of_users} />
+          <VotingQuorum votes={Number(idea.number_of_votes)} users={Number(idea.number_of_users)} />
           <VotingCard />
         </>
       )}
