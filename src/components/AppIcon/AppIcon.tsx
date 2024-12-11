@@ -68,6 +68,8 @@ import {
   HiOutlineInformationCircle,
   HiOutlineLightBulb,
   HiOutlineMagnifyingGlass,
+  HiOutlineMagnifyingGlassMinus,
+  HiOutlineMagnifyingGlassPlus,
   HiOutlineMegaphone,
   HiOutlineMinusCircle,
   HiOutlineMoon,
@@ -275,6 +277,8 @@ export const ICONS = {
   visibilityOn: HiOutlineEyeSlash,
   voting: VotingIcon,
   wild: HiOutlineLightBulb,
+  zoomIn: HiOutlineMagnifyingGlassPlus,
+  zoomOut: HiOutlineMagnifyingGlassMinus,
 };
 
 export const CAT_ICONS = {
