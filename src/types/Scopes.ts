@@ -70,6 +70,7 @@ export interface GroupType {
 export interface IdeaType {
   id: number;
   hash_id: string;
+  user_id: number;
   content: string;
   title: string;
   displayname: string;

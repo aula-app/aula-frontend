@@ -240,8 +240,11 @@ const ProfileEditor = ({ user, onReload }: Props) => {
       </Stack>
       {user && (
         <ImageEditor
+          width={250}
+          height={250}
+          rounded
           isOpen={isEditingImage}
-          closeMethod={() => {
+          onClose={() => {
             setUpdateAvatar(!updateAvatar);
             toggleDrawer();
           }}

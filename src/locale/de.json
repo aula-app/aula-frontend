@@ -214,7 +214,7 @@
     "filter": "Filter",
     "ideaBox": "{{var}} Ideen zur {{phase}}",
     "imageChange": "Bild ändern",
-    "imageUpload": "Bild hochladen",
+    "imageUpload": "Klicken Sie, um ein Bild auszuwählen",
     "instance": "Status der Instanz",
     "move": "Bewege {{var}}",
     "moveData": "Wohin möchtest du {{var}} bewegen?",
