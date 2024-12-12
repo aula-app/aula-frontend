@@ -6,7 +6,7 @@ const PALETTE_COLORS: Partial<PaletteOptions> = {
     main: 'hsl(133, 65%, 70%)',
   },
   secondary: {
-    main: 'hsl(180, 10%, 70%)',
+    main: 'hsl(180, 10%, 50%)',
   },
   error: {
     main: 'hsl(355, 60%, 73%)',

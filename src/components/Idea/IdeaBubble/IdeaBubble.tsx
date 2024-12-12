@@ -1,5 +1,5 @@
 import { CategoryType, IdeaType } from '@/types/Scopes';
-import { checkPermissions, checkSelf, databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { checkPermissions, checkSelf, databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '@/components/AppIcon';
@@ -7,8 +7,10 @@ import AppLink from '@/components/AppLink';
 import ChatBubble from '@/components/ChatBubble';
 import MoreOptions from '@/components/MoreOptions';
 import UserAvatar from '@/components/UserAvatar';
-import { CustomFieldsType } from '@/types/SettingsTypes';
+import { CustomFieldsType, RoomPhases } from '@/types/SettingsTypes';
 import IdeaContent from '../IdeaContent';
+import VotingQuorum from '../VotingQuorum';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   idea: IdeaType;
@@ -20,6 +22,7 @@ interface Props {
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
 const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
+  const { phase } = useParams();
   const [liked, setLiked] = useState(false);
   const [category, setCategory] = useState<CategoryType>();
   const [fields, setFields] = useState<CustomFieldsType>({
@@ -90,21 +93,19 @@ const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
 
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <ChatBubble color="wild.main">
+      <ChatBubble color={`${phases[Number(phase)]}.main`}>
         <Stack>
-          <AppLink to={to} disabled={!to}>
-            <IdeaContent idea={idea} />
-          </AppLink>
-          <Stack direction="row" justifyContent="space-between" mb={1} mt={2}>
+          <Stack direction="row" justifyContent="space-between">
             {category ? (
               <Chip
-                icon={<AppIcon icon={category.description_internal} size="small" sx={{ ml: 0.5 }} />}
+                icon={<AppIcon icon={category.description_internal} size="xs" sx={{ ml: 0.5 }} />}
                 label={category.name}
                 variant="outlined"
+                color="secondary"
               />
             ) : (
               <Box></Box>
-            )}{' '}
+            )}
             <MoreOptions
               scope="ideas"
               id={idea.id}
@@ -112,6 +113,16 @@ const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
               canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id))}
             />
           </Stack>
+          <AppLink to={to} disabled={!to}>
+            <Stack gap={2}>
+              <IdeaContent idea={idea} />
+              {/* <VotingQuorum
+              phase={Number(phase) as RoomPhases}
+              votes={Number(phase) > 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
+              users={Number(idea.number_of_users)}
+            /> */}
+            </Stack>
+          </AppLink>
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">

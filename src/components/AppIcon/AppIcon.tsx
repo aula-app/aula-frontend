@@ -450,7 +450,13 @@ const AppIcon = ({ icon, size = 'medium', sx, ...restOfProps }: Props) => {
     <Stack
       alignItems="center"
       justifyContent="center"
-      sx={{ fontSize: currentSize, minWidth: currentSize, width: currentSize, height: currentSize, ...sx }}
+      sx={{
+        fontSize: currentSize,
+        minWidth: currentSize,
+        width: currentSize,
+        height: currentSize,
+        ...sx,
+      }}
     >
       <ComponentToRender {...restOfProps} />
     </Stack>

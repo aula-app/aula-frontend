@@ -4,6 +4,7 @@ import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton'
 import VotingQuorum from '@/components/Idea/VotingQuorum';
 import KnowMore from '@/components/KnowMore';
 import { CommentType, IdeaType } from '@/types/Scopes';
+import { RoomPhases } from '@/types/SettingsTypes';
 import { Vote, checkPermissions, databaseRequest } from '@/utils';
 import { Add } from '@mui/icons-material';
 import { Fab, Stack, Typography } from '@mui/material';
@@ -22,7 +23,7 @@ const IdeaView = () => {
 
   const [idea, setIdea] = useState<IdeaType>();
   const [add, setAdd] = useState(false);
-  const [phase, setPhase] = useState(Number(params.phase) || 0);
+  const [phase, setPhase] = useState<RoomPhases>((Number(params.phase) as RoomPhases) || 0);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [vote, setVote] = useState<Vote>(0);
 
@@ -53,7 +54,7 @@ const IdeaView = () => {
       arguments: { topic_id: Number(params['box_id']) },
     }).then((response) => {
       if (!response.success || !response.data) return;
-      setPhase(Number(response.phase_id) || Number(params.phase));
+      setPhase(Number(response.phase_id || params.phase) as RoomPhases);
     });
 
   const getVote = async () =>
@@ -84,11 +85,17 @@ const IdeaView = () => {
   }, []);
 
   return idea ? (
-    <Stack width="100%" height="100%" overflow="auto" p={2}>
+    <Stack width="100%" height="100%" overflow="auto" p={2} gap={2}>
+      <Stack px={0.5}>
+        <VotingQuorum
+          phase={phase}
+          votes={phase > 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
+          users={Number(idea.number_of_users)}
+        />
+      </Stack>
       {phase === 40 && <VotingResults yourVote={vote} rejected={idea.is_winner !== 1} />}
       {phase === 30 && (
         <>
-          <VotingQuorum votes={Number(idea.number_of_votes)} users={Number(idea.number_of_users)} />
           <VotingCard />
         </>
       )}
