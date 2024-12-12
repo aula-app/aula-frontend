@@ -113,13 +113,15 @@ const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
               canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id))}
             />
           </Stack>
-          <AppLink component={Stack} to={to} disabled={!to} gap={2}>
-            <IdeaContent idea={idea} />
-            <VotingQuorum
+          <AppLink to={to} disabled={!to}>
+            <Stack gap={2}>
+              <IdeaContent idea={idea} />
+              {/* <VotingQuorum
               phase={Number(phase) as RoomPhases}
               votes={Number(phase) > 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
               users={Number(idea.number_of_users)}
-            />
+            /> */}
+            </Stack>
           </AppLink>
         </Stack>
       </ChatBubble>

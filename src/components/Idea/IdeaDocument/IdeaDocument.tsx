@@ -56,7 +56,7 @@ const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
   }, []);
 
   return (
-    <Stack width="100%" sx={{ scrollSnapAlign: 'center' }} color="secondary" mb={2}>
+    <Stack width="100%" sx={{ scrollSnapAlign: 'center' }} color="secondary">
       <Stack direction="row" justifyContent="space-between">
         {category ? (
           <Chip

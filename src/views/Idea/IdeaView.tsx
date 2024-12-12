@@ -85,12 +85,14 @@ const IdeaView = () => {
   }, []);
 
   return idea ? (
-    <Stack width="100%" height="100%" overflow="auto" p={2}>
-      <VotingQuorum
-        phase={phase}
-        votes={phase > 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
-        users={Number(idea.number_of_users)}
-      />
+    <Stack width="100%" height="100%" overflow="auto" p={2} gap={2}>
+      <Stack px={0.5}>
+        <VotingQuorum
+          phase={phase}
+          votes={phase > 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
+          users={Number(idea.number_of_users)}
+        />
+      </Stack>
       {phase === 40 && <VotingResults yourVote={vote} rejected={idea.is_winner !== 1} />}
       {phase === 30 && (
         <>
