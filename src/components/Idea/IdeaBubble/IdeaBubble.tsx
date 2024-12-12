@@ -1,5 +1,5 @@
 import { CategoryType, IdeaType } from '@/types/Scopes';
-import { checkPermissions, checkSelf, databaseRequest, localStorageGet, parseJwt } from '@/utils';
+import { checkPermissions, checkSelf, databaseRequest, localStorageGet, parseJwt, phases } from '@/utils';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '@/components/AppIcon';
@@ -22,7 +22,7 @@ interface Props {
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
 const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
-  const params = useParams();
+  const { phase } = useParams();
   const [liked, setLiked] = useState(false);
   const [category, setCategory] = useState<CategoryType>();
   const [fields, setFields] = useState<CustomFieldsType>({
@@ -93,7 +93,7 @@ const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
 
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <ChatBubble color="wild.main">
+      <ChatBubble color={`${phases[Number(phase)]}.main`}>
         <Stack>
           <Stack direction="row" justifyContent="space-between">
             {category ? (
@@ -116,8 +116,8 @@ const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
           <AppLink component={Stack} to={to} disabled={!to} gap={2}>
             <IdeaContent idea={idea} />
             <VotingQuorum
-              phase={Number(params.phase) as RoomPhases}
-              votes={Number(params.phase) > 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
+              phase={Number(phase) as RoomPhases}
+              votes={Number(phase) > 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
               users={Number(idea.number_of_users)}
             />
           </AppLink>
