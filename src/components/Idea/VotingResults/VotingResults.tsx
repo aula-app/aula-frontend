@@ -36,7 +36,7 @@ const VotingResults = ({ rejected = false, yourVote }: VotingResultsProps) => {
   }, []);
 
   return (
-    <Stack mb={2}>
+    <Stack mt={2}>
       <Card
         sx={{
           borderRadius: '25px',

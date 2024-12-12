@@ -7,8 +7,10 @@ import AppLink from '@/components/AppLink';
 import ChatBubble from '@/components/ChatBubble';
 import MoreOptions from '@/components/MoreOptions';
 import UserAvatar from '@/components/UserAvatar';
-import { CustomFieldsType } from '@/types/SettingsTypes';
+import { CustomFieldsType, RoomPhases } from '@/types/SettingsTypes';
 import IdeaContent from '../IdeaContent';
+import VotingQuorum from '../VotingQuorum';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   idea: IdeaType;
@@ -20,6 +22,7 @@ interface Props {
 type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 
 const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
+  const params = useParams();
   const [liked, setLiked] = useState(false);
   const [category, setCategory] = useState<CategoryType>();
   const [fields, setFields] = useState<CustomFieldsType>({
@@ -92,19 +95,17 @@ const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
       <ChatBubble color="wild.main">
         <Stack>
-          <AppLink to={to} disabled={!to}>
-            <IdeaContent idea={idea} />
-          </AppLink>
-          <Stack direction="row" justifyContent="space-between" mb={1} mt={2}>
+          <Stack direction="row" justifyContent="space-between">
             {category ? (
               <Chip
-                icon={<AppIcon icon={category.description_internal} size="small" sx={{ ml: 0.5 }} />}
+                icon={<AppIcon icon={category.description_internal} size="xs" sx={{ ml: 0.5 }} />}
                 label={category.name}
                 variant="outlined"
+                color="secondary"
               />
             ) : (
               <Box></Box>
-            )}{' '}
+            )}
             <MoreOptions
               scope="ideas"
               id={idea.id}
@@ -112,6 +113,14 @@ const IdeaBubble = ({ idea, comments = 0, to, onReload }: Props) => {
               canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id))}
             />
           </Stack>
+          <AppLink component={Stack} to={to} disabled={!to} gap={2}>
+            <IdeaContent idea={idea} />
+            <VotingQuorum
+              phase={Number(params.phase) as RoomPhases}
+              votes={Number(params.phase) > 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
+              users={Number(idea.number_of_users)}
+            />
+          </AppLink>
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center">

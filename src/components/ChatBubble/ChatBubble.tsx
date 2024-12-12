@@ -16,9 +16,7 @@ const ChatBubble = ({ color, children, disabled = false }: ChatBubbleProps) => (
       position: 'relative',
     }}
   >
-    <Box p={2} pb={0}>
-      {children}
-    </Box>
+    <Box p={2}>{children}</Box>
     <Box
       className="noPrint point"
       sx={{

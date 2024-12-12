@@ -33,7 +33,7 @@ const IdeaContent = ({ idea }: Props) => {
   }, []);
 
   return (
-    <Stack px={0.5}>
+    <Stack gap={1}>
       <Typography variant="h6">{idea.title}</Typography>
       <Typography>{idea.content}</Typography>
       {(Object.keys(fields) as Array<keyof CustomFieldsType>).map((customField) => (

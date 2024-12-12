@@ -1,3 +1,5 @@
+import { RoomPhases } from '@/types/SettingsTypes';
+import { phases } from '@/utils';
 import { LinearProgress, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -7,11 +9,12 @@ import { useTranslation } from 'react-i18next';
  */
 
 interface Props {
+  phase: RoomPhases;
   users: number;
   votes: number;
 }
 
-const VotingQuorum = ({ users, votes }: Props) => {
+const VotingQuorum = ({ phase, users, votes }: Props) => {
   const { t } = useTranslation();
 
   return (
@@ -19,11 +22,11 @@ const VotingQuorum = ({ users, votes }: Props) => {
       <LinearProgress
         variant="determinate"
         value={(votes / users) * 100}
-        sx={{ bgcolor: 'voting.light', '& .MuiLinearProgress-bar': { bgcolor: 'voting.dark' } }}
+        sx={{ bgcolor: `${phases[phase]}.light`, '& .MuiLinearProgress-bar': { bgcolor: `${phases[phase]}.dark` } }}
       />
       <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
         <Typography variant="caption" color="secondary">
-          {votes} {t('views.votes')}
+          {votes} {t(`views.${phase >= 30 ? 'votes' : 'likes'}`)}
         </Typography>
         <Typography variant="caption" color="secondary">
           {users} {t('views.users').toLowerCase()}
