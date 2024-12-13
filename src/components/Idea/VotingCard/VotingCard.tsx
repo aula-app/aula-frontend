@@ -4,11 +4,15 @@ import { Button, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+interface Props {
+  onReload: () => void;
+}
+
 /**
  * Renders "VotingCards" component
  * url: /
  */
-const VotingCard = () => {
+const VotingCard = ({ onReload }: Props) => {
   const params = useParams();
   const [vote, setVote] = useState<Vote>(0);
   const [hasVoted, setHasVoted] = useState<Boolean>(false);
@@ -40,7 +44,10 @@ const VotingCard = () => {
         },
       },
       ['user_id']
-    ).then(() => getVote());
+    ).then(() => {
+      getVote();
+      onReload();
+    });
 
   useEffect(() => {
     getVote();

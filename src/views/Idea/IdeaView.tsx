@@ -89,16 +89,12 @@ const IdeaView = () => {
       <Stack px={0.5}>
         <VotingQuorum
           phase={phase}
-          votes={phase > 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
+          votes={phase >= 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
           users={Number(idea.number_of_users)}
         />
       </Stack>
       {phase === 40 && <VotingResults yourVote={vote} rejected={idea.is_winner !== 1} />}
-      {phase === 30 && (
-        <>
-          <VotingCard />
-        </>
-      )}
+      {phase === 30 && <VotingCard onReload={ideaFetch} />}
       {phase === 0 ? (
         <IdeaBubble idea={idea} onReload={ideaFetch} />
       ) : (
