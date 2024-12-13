@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import CustomFields from './CustomFIelds';
+import CustomFields from './CustomFields';
 import QuorumSettings from './QuorumSettings';
 
 interface Props {
@@ -20,8 +20,6 @@ interface Props {
  */
 
 const IdeaSettings = ({ onReload }: Props) => {
-  const { t } = useTranslation();
-
   return (
     <Stack gap={2}>
       <QuorumSettings onReload={onReload} />
