@@ -136,6 +136,7 @@
     "phase_duration_2": "Approval",
     "phase_duration_3": "Voting",
     "phase_duration_4": "Results",
+    "quorum": "Quorum",
     "realname": "Real Name",
     "registration": "Allow registration",
     "room_id": "Room",
