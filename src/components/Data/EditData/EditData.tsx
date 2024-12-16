@@ -148,7 +148,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
       setValue(
         // @ts-ignore
         field.name,
-        fieldValues && fieldValues.data[name] ? fieldValues.data[name] : defaultValue
+        fieldValues && name in fieldValues.data ? fieldValues.data[name] : defaultValue
       );
     });
     setUpdate([]);
