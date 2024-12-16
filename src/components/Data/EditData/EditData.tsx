@@ -123,7 +123,7 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
   };
 
   const getDefaultRoomDurations = async (room_id: number) => {
-    if (!room_id) return;
+    if (id || !room_id) return;
     await databaseRequest({
       model: 'Room',
       method: 'getRoomBaseData',
@@ -135,8 +135,6 @@ const EditData = ({ id, scope, otherData = {}, metadata, isOpen, onClose }: Prop
       Object.keys(response.data)
         .filter((field) => field.includes('phase_duration_'))
         .map((phase) => {
-          // @ts-ignore
-          if (getValues(phase)) return;
           // @ts-ignore
           setValue(phase, response.data[phase] || 0);
         });
