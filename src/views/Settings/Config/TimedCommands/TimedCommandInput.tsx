@@ -42,6 +42,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
           command: '',
           parameters: JSON.stringify(scope === 0 ? { value: value } : { value: value, target: target }),
           date_start: dayjs(startTime).format(FORMAT_DATE_TIME),
+          target_id: target
         },
       },
       ['updater_id']
