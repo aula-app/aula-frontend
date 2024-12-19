@@ -40,7 +40,8 @@ const TimeCommandInput = ({ onReload }: Props) => {
         arguments: {
           cmd_id: Number(`${scope}${Commands[scope].actions[action].value}`),
           command: '',
-          parameters: JSON.stringify(scope === 0 ? { value: value } : { value: value, target: target }),
+          target_id: target,
+          parameters: value,
           date_start: dayjs(startTime).format(FORMAT_DATE_TIME),
         },
       },
@@ -98,12 +99,6 @@ const TimeCommandInput = ({ onReload }: Props) => {
   useEffect(() => {
     if (scope && Commands[scope].label !== 'system') getOptions(Commands[scope].label);
   }, [scope]);
-  // useEffect(() => {
-  //   if (typeof action !== 'number' || typeof command !== 'number') return;
-  //   Array.isArray(Commands[action].options[command].options)
-  //     ? setOptions(Commands[action].options[command].options)
-  //     : getOptions(Commands[action].options[command].options as SettingNamesType);
-  // }, [command]);
 
   return (
     <Stack gap={2}>

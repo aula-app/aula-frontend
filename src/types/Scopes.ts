@@ -174,7 +174,7 @@ export interface CommandType {
   id: number;
   cmd_id: number;
   command: string;
-  parameters: { value: number; target?: number };
+  parameters: number;
   date_start: string;
   date_end: string;
   active: number;

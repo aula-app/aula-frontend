@@ -2,7 +2,17 @@ import { AppIconButton } from '@/components';
 import { CommandType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Commands } from '@/utils/commands';
-import { Pagination, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
+import {
+  Pagination,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import TimedCommandInput from './TimedCommandInput';
@@ -84,13 +94,12 @@ const TimedCommands = () => {
                   const action = Commands[scope].actions.find(
                     (action) => action.value === Number(String(command.cmd_id).slice(-1))
                   );
-                  const option = action?.options?.find((option) => option.value === command.parameters.value);
                   return (
                     <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell>{t(Commands[scope].label)}</TableCell>
-                      <TableCell>{command.parameters.target || ''}</TableCell>
+                      <TableCell>{command.target_id || ''}</TableCell>
                       <TableCell>{t(action?.label || '')}</TableCell>
-                      <TableCell>{t(option?.label || '')}</TableCell>
+                      <TableCell>{command.parameters}</TableCell>
                       <TableCell>{command.date_start}</TableCell>
                       <TableCell align="right">
                         <AppIconButton icon="delete" onClick={() => deleteCommand(command.id)} />
