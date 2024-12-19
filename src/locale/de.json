@@ -48,6 +48,9 @@
     "yes": "Ja"
   },
   "login": {
+    "accountInactive": "Dein Account ist inaktive.",
+    "accountSuspended": "Dein Account wurde{{}} gesperrt. Für nachfragen wende dich bitte an deine Schule oder Organisation.",
+    "accountSuspendDate": " bis zum {{var}}",
     "agree": "Stimme den Nutzungsbedingungen und der Datenschutzrichtlinie zu.",
     "button": "Login",
     "codeError": "Ungültiger Benutzercode",

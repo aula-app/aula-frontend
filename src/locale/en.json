@@ -48,6 +48,9 @@
     "yes": "yes"
   },
   "login": {
+    "accountInactive": "Your Account is inactive.",
+    "accountSuspended": "Your account has been suspended{{var}}. Please contact your admin for more information.",
+    "accountSuspendDate": " until {{var}}",
     "agree": "Agree with Terms of Use and Privacy Policy.",
     "button": "Login",
     "codeError": "Invalid user code",

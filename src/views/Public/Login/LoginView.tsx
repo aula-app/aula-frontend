@@ -25,13 +25,23 @@ import * as yup from "yup";
  * url: /login
  */
 
+type LoginResponseType = {
+  success: boolean, 
+  JWT?: string,
+  error_code?: number | null,
+  user_status?: number | null,
+  user_id?: number | null,
+  data?:	string | null,
+  count?: number
+}
+
 const LoginView = () => {
   const { t } = useTranslation();
   const oauthEnabled = import.meta.env.VITE_APP_OAUTH;
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const jwt_token = localStorageGet("token");
-  const [loginError, setError] = useState(false);
+  const [loginError, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const api_url = localStorageGet('api_url');
@@ -76,10 +86,17 @@ const LoginView = () => {
       );
 
       setLoading(false)
-      const response = await request.json() as { success: boolean, JWT: string };
+      const response = await request.json() as LoginResponseType;
+      
+      if (response.success !== true || !('JWT' in response)) {
+        setError(
+          'user_status' in response && response.user_status !== null
+            ? response.user_status === 0 
+              ? t('login.accountInactive')
+              : t('login.accountSuspended', {var: response.data ? t('login.accountSuspendDate', {var: response.data}) : ''})
+            : t('login.loginError')
 
-      if (response.success !== true) {
-        setError(true);
+        );
         return;
       }
 
@@ -98,13 +115,13 @@ const LoginView = () => {
         <Typography variant="h5" sx={{ mb: 1 }}>
           {t("login.welcome")}
         </Typography>
-        <Collapse in={loginError} sx={{ mb: 2 }}>
+        <Collapse in={loginError !== ''} sx={{ mb: 2 }}>
           <Alert
             variant="outlined"
             severity="error"
-            onClose={() => setError(false)}
+            onClose={() => setError('')}
           >
-            {t("login.loginError")}
+            {loginError}
           </Alert>
         </Collapse>
         <TextField
