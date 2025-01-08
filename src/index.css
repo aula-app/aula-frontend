@@ -13,3 +13,5 @@ code {
 .point {
   clip-path: polygon(20% 0%, 0% 100%, 100% 0%)
 }
+
+.printOnly { display: none; }

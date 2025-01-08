@@ -3,7 +3,7 @@ import { useAppStore } from '@/store';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, phases } from '@/utils';
-import { statusOptions } from '@/utils/commands';
+import { ScopeStatusOptions } from '@/utils/commands';
 import DataConfig from '@/utils/Data';
 import { Chip, Stack } from '@mui/material';
 import { SyntheticEvent, useState } from 'react';
@@ -98,7 +98,7 @@ const DataItem = ({ row, column }: Params) => {
       getNames('rooms', Number(row[column]));
       return <>{name}</>;
     case 'status':
-      return <>{t(statusOptions.find((status) => String(status.value) === row[column])?.label || '')}</>;
+      return <>{t(ScopeStatusOptions[Number(row[column])].label)}</>;
     case 'target_group':
       getNames('groups', Number(row[column]));
       return <>{name}</>;
@@ -109,12 +109,14 @@ const DataItem = ({ row, column }: Params) => {
       return row[column] ? (
         <Stack direction="row" alignItems="center">
           <Chip
+            className="noPrint"
             sx={{ width: '100%', justifyContent: 'space-between', px: 1 }}
             label={hidden ? '*********' : row[column]}
             onClick={copyText}
             icon={<AppIcon icon="copy" size="small" />}
           />
           <AppIconButton
+            className="noPrint"
             size="small"
             icon={hidden ? 'visibilityOn' : 'visibilityOff'}
             onClick={(e) => {
@@ -122,9 +124,10 @@ const DataItem = ({ row, column }: Params) => {
               setHidden(!hidden);
             }}
           />
+          <Stack className="printOnly">{row[column]}</Stack>
         </Stack>
       ) : (
-        <></>
+        <Stack className="printOnly">{t('texts.checkEmail')}</Stack>
       );
     case 'user_id':
       getNames('users', Number(row[column]));

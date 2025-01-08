@@ -187,6 +187,7 @@
     "bug": "Bug report on '{{var}}'",
     "changeName": "Data change request for {{var}}.",
     "changeNameBody": "A data change procedure was requested for user {{var}}. They want to change their {{old}} to {{new}}.",
+    "checkEmail": "Check your email for further instructions.",
     "CSV": "New users can be created from a table here. The file must be uploaded as a CSV file and have the following columns: 'realname', 'displayname', 'username', 'email', 'about_me'. Not all fields must be filled in, e.g. if a student does not have an email, the column can remain empty.",
     "CSVempty": "Your file doesn't contain any data. Please provide a valid CSV file.",
     "CSVinvalid": "Your file doesn't seem to be valid. Please provide a valid CSV file.",
