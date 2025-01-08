@@ -14,7 +14,7 @@ interface RoomCardProps {
  */
 const RoomCard = ({ room, ...restOfProps }: RoomCardProps) => {
   return (
-    <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }} {...restOfProps}>
+    <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center', order: -room.type }} {...restOfProps}>
       <Card sx={{ borderRadius: '25px' }} variant="outlined">
         <AppLink to={`/room/${room.id}/phase/0`}>
           <Stack

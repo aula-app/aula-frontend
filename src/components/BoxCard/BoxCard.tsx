@@ -1,7 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import AppLink from '@/components/AppLink';
 import MoreOptions from '@/components/MoreOptions';
-import { BoxType } from '@/types/Scopes';
+import { BoxType, PossibleFields } from '@/types/Scopes';
 import { checkPermissions, databaseRequest, phases } from '@/utils';
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -74,7 +74,7 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
         <Typography variant="caption" mr="auto">
           {t('texts.ideaBox', { var: boxData.ideas_num, phase: t(`phases.${phases[boxData.phase_id]}`) })}
         </Typography>
-        <MoreOptions scope="boxes" id={boxData.id} onClose={reload} canEdit={checkPermissions(30)} />
+        <MoreOptions scope="boxes" item={boxData} onClose={reload} canEdit={checkPermissions(30)} />
       </Stack>
       <AppLink
         to={`/room/${boxData.room_id}/phase/${boxData.phase_id}/idea-box/${boxData.id}`}

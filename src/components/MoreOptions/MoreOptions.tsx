@@ -1,4 +1,5 @@
-import { AlterTypes, ColorTypes, ObjectPropByName } from '@/types/Generics';
+import { AlterTypes, ColorTypes } from '@/types/Generics';
+import { ReportMetadataType, ScopeType, toFormData } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { getCurrentUser } from '@/utils';
 import { Box, Button, ClickAwayListener, Divider, Paper, Stack, Typography, Zoom } from '@mui/material';
@@ -11,7 +12,6 @@ import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
 import { DeleteData } from '../Data';
 import EditData from '../Data/EditData';
-import { ReportMetadataType } from '@/types/Scopes';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -22,20 +22,20 @@ interface OptionsTypes {
   metadata?: ReportMetadataType;
 }
 
-interface Props {
-  id?: number;
+interface Props<T extends ScopeType> {
+  item: T;
   scope: SettingNamesType;
   canEdit?: boolean;
   onClose: () => void;
 }
+
 /**
  * Renders question mark badge that triggers a tooltip on hover
  * @component MoreOptions
  */
-const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
+const MoreOptions = <T extends ScopeType>({ item, scope, canEdit = false, onClose }: Props<T>) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const [currentId, setId] = useState<number>();
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState<SettingNamesType>();
   const [del, setDel] = useState(false);
@@ -47,7 +47,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       color: 'error',
       label: t('generics.contentReport'),
       otherData: {
-        headline: `${scope} #${id}`,
+        headline: `${scope} #${item.id}`,
         msg_type: 4,
       },
       metadata: {
@@ -62,7 +62,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       color: 'warning',
       label: t('generics.bugReport'),
       otherData: {
-        headline: `${scope} #${id}`,
+        headline: `${scope} #${item.id}`,
         msg_type: 4,
       },
       metadata: {
@@ -81,8 +81,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
 
   const options = defaultOptions.concat(canEdit ? editOptions : []);
 
-  // @ts-ignore
-  const toggleOptions = (e) => {
+  const toggleOptions = (e: React.MouseEvent) => {
     e.stopPropagation();
     setOpen(!open);
   };
@@ -94,15 +93,12 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
         setDel(true);
         break;
       case 'edit':
-        setId(id);
         setEdit(scope);
         break;
       case 'add':
-        setId(undefined);
         setEdit(scope);
         break;
       default:
-        setId(undefined);
         setEdit(type);
         break;
     }
@@ -113,6 +109,8 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
     setDel(false);
     onClose();
   };
+
+  const formattedItem = toFormData(item);
 
   return (
     <>
@@ -152,7 +150,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
       </Box>
       {edit && (
         <EditData
-          id={currentId}
+          item={formattedItem}
           scope={edit}
           isOpen={!!edit}
           onClose={close}
@@ -160,7 +158,7 @@ const MoreOptions = ({ id, scope, canEdit = false, onClose }: Props) => {
           metadata={options.filter((data) => data.type === edit)[0]?.metadata}
         />
       )}
-      {id && scope && <DeleteData id={id} scope={scope} isOpen={del} onClose={close} />}
+      {item.id && scope && <DeleteData id={item.id} scope={scope} isOpen={del} onClose={close} />}
     </>
   );
 };
