@@ -159,7 +159,7 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
    * @param {number} room_id - ID of the room
    */
   const getDefaultRoomDurations = async (room_id: number) => {
-    if (id || !room_id) return;
+    if (!room_id) return;
     await databaseRequest({
       model: 'Room',
       method: 'getRoomBaseData',
