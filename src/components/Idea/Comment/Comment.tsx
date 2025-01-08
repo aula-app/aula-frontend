@@ -57,7 +57,7 @@ const Comment = ({ comment, disabled = false, onReload }: Props) => {
           <Stack direction="row" justifyContent="end">
             <MoreOptions
               scope="comments"
-              id={comment.id}
+              item={comment}
               onClose={onReload}
               canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(comment.user_id) && !disabled)}
             />

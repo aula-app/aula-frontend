@@ -96,7 +96,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
     await databaseRequest(requestData).then((response: DatabaseResponseType) => {
       if (!response.success) return;
       response.data ? setSelectedItems(response.data) : setSelectedItems([]);
-      response.data ? setSelected(response.data.map((item) => item.id)) : setSelected([]);
+      response.data ? setSelected(response.data.map((item) => Number(Number(item.id)))) : setSelected([]);
     });
   };
 
@@ -142,7 +142,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
 
   const requestUpdates = () => {
     if (!selectedItems) return;
-    const originalSelection = selectedItems.map((item) => item.id);
+    const originalSelection = selectedItems.map((item) => Number(Number(item.id)));
     const toAdd = selected.filter((x) => !originalSelection.includes(x));
     const toRemove = originalSelection.filter((x) => !selected.includes(x));
     if (id) {
@@ -225,7 +225,7 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
                           direction="row"
                           key={item.id}
                           borderRadius={30}
-                          bgcolor={selected.includes(item.id) ? grey[200] : 'transparent'}
+                          bgcolor={selected.includes(Number(Number(item.id))) ? grey[200] : 'transparent'}
                           gap={2}
                           sx={{
                             textTransform: 'none',
@@ -234,9 +234,12 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
                             color: 'inherit',
                           }}
                           fullWidth
-                          onClick={() => toggleSelect(item.id)}
+                          onClick={() => toggleSelect(Number(item.id))}
                         >
-                          <Checkbox checked={selected.includes(item.id)} onChange={() => toggleSelect(item.id)} />
+                          <Checkbox
+                            checked={selected.includes(Number(item.id))}
+                            onChange={() => toggleSelect(Number(item.id))}
+                          />
                           <Stack flex={1}>
                             <Typography noWrap>
                               {currentTarget && item[DataConfig[currentTarget.target].columns[0].name]}

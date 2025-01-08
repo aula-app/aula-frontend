@@ -5,9 +5,10 @@ import { updateType } from '../EditData';
 import CategoryField from '../FormField/fields/CategoryField';
 import SetWinnerField from '../FormField/fields/SetWinnerField';
 import ResetPassword from '../FormField/fields/ResetPassword';
+import { ScopeType } from '@/types/Scopes';
 
 interface Props {
-  id?: number;
+  item?: Partial<ScopeType>;
   phase: RoomPhases;
   scope: SettingNamesType;
   defaultValue?: any;
@@ -17,30 +18,33 @@ interface Props {
 /**
  * Renders "DataUpdates" component
  */
-const DataUpdates = ({ id, phase, scope, defaultValue, addUpdate }: Props) => {
+const DataUpdates = ({ item, phase, scope, defaultValue, addUpdate }: Props) => {
   const params = useParams();
 
   switch (scope) {
     case 'boxes':
-      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
+      return <MoveData id={Number(item?.id)} scope={scope} addUpdate={addUpdate} />;
     case 'groups':
-      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
+      return <MoveData id={Number(item?.id)} scope={scope} addUpdate={addUpdate} />;
     case 'ideas':
-      if (!id && 'box_id' in params)
+      if (!item && 'box_id' in params)
         addUpdate({ model: 'Idea', method: 'addIdeaToTopic', args: { topic_id: params.box_id } });
       return (
         <>
-          <CategoryField id={id} addUpdate={addUpdate} />
-          {id && phase >= 40 && <SetWinnerField id={id} defaultValue={defaultValue} addUpdate={addUpdate} />}
+          <CategoryField id={Number(item?.id)} addUpdate={addUpdate} />
+          {item && phase >= 40 && (
+            <SetWinnerField id={Number(item.id)} defaultValue={defaultValue} addUpdate={addUpdate} />
+          )}
         </>
       );
     case 'rooms':
-      return <MoveData id={id} scope={scope} addUpdate={addUpdate} />;
+      if (item && 'room_name' in item && 'type' in item && Number(item.type) === 1) return; // prevent user removal from default room
+      return <MoveData id={Number(item?.id)} scope={scope} addUpdate={addUpdate} />;
     case 'users':
       return (
         <>
-          <MoveData id={id} scope={scope} addUpdate={addUpdate} />
-          {typeof id !== 'undefined' && id > 0 && <ResetPassword order={6} email={defaultValue} />}
+          <MoveData id={Number(item?.id)} scope={scope} addUpdate={addUpdate} />
+          {typeof item !== 'undefined' && Number(item.id) > 0 && <ResetPassword order={6} email={defaultValue} />}
         </>
       );
     default:

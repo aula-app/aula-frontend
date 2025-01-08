@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 const GroupView = () => {
   const { t } = useTranslation();
   const [groups, setGroups] = useState<GroupType[]>([]);
-  const [selectedId, setId] = useState<number | undefined>();
+  const [selectedItem, setItem] = useState<GroupType>();
   const [editGroup, setEditGroup] = useState(false);
   const [deleteGroup, setDeleteGroup] = useState(false);
 
@@ -23,18 +23,18 @@ const GroupView = () => {
       if (response.success) setGroups(response.data ? response.data : []);
     });
 
-  const setDelete = (id: number) => {
-    setId(id);
+  const setDelete = (item: GroupType) => {
+    setItem(item);
     setDeleteGroup(true);
   };
 
-  const setEdit = (id?: number) => {
-    setId(id || undefined);
+  const setEdit = (item?: GroupType) => {
+    setItem(item || undefined);
     setEditGroup(true);
   };
 
   const onClose = () => {
-    setId(undefined);
+    setItem(undefined);
     setEditGroup(false);
     setDeleteGroup(false);
     categoriesFetch();
@@ -54,17 +54,12 @@ const GroupView = () => {
         />
         {groups.map((group, key) => {
           return (
-            <Chip
-              key={key}
-              label={group.group_name}
-              onClick={() => setEdit(group.id)}
-              onDelete={() => setDelete(group.id)}
-            />
+            <Chip key={key} label={group.group_name} onClick={() => setEdit(group)} onDelete={() => setDelete(group)} />
           );
         })}
       </Stack>
-      <EditData scope="groups" id={selectedId} isOpen={!!editGroup} onClose={onClose} />
-      <DeleteData scope="groups" id={selectedId || 0} isOpen={!!deleteGroup} onClose={onClose} />
+      <EditData scope="groups" item={selectedItem} isOpen={!!editGroup} onClose={onClose} />
+      <DeleteData scope="groups" id={Number(selectedItem?.id)} isOpen={!!deleteGroup} onClose={onClose} />
     </Stack>
   );
 };
