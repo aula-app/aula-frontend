@@ -48,7 +48,7 @@ const WildIdeas = () => {
           onReload={ideasFetch}
           key={idea.id}
           comments={idea.sum_comments}
-          to={`idea/${idea.id}`}
+          to={`idea/${idea.hash_id}`}
         />
       ))}
       {checkPermissions(20) && (
