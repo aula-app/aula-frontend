@@ -11,7 +11,7 @@ const RoomView = () => {
   return (
     params.room_id && (
       <Stack width="100%" height="100%" overflow="hidden">
-        <PhaseBar room={params.room_id} />
+        <PhaseBar room={Number(params.room_id)} />
         <Stack p={1} sx={{ flexGrow: 1, overflow: 'auto', scrollSnapType: 'y mandatory' }}>
           <Outlet />
         </Stack>
