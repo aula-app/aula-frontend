@@ -26,7 +26,7 @@ const IdeasBoxView = () => {
         arguments: {
           offset: 0,
           limit: 0,
-          room_id: Number(params['room_id']),
+          room_id: params['room_id'],
           phase_id: Number(params['phase']),
         },
       },

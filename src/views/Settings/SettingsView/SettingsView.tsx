@@ -93,8 +93,8 @@ const SettingsView = () => {
     // Execute request and update state
     await databaseRequest(requestData, requestId).then((response) => {
       setLoading(false);
-      if (!response.success || !response.data) return;
-      setItems(response.data || []);
+      if (!response.success) return;
+      setItems(response.data.length > 0 ? response.data : []);
       setPageCount(response.count);
     });
   };

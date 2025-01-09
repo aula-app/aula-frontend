@@ -1,5 +1,5 @@
 import { useAppStore } from '@/store';
-import { checkPermissions, localStorageDelete, localStorageGet } from '@/utils';
+import { checkPermissions, localStorageDelete } from '@/utils';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
 import IdeaView from '@/views/Idea';
@@ -31,34 +31,14 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 const PrivateRoutes = () => {
   const [, dispatch] = useAppStore();
   const location = useLocation();
-  const jwt_token = localStorageGet('token');
 
-  const getConsent = async () => {
-    const result = await (
-      await fetch(import.meta.env.VITE_APP_API_URL + '/api/controllers/user_consent.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwt_token,
-        },
-      })
-    ).json();
-
-    if (result.data && result.data === 0) {
-      dispatch({ action: 'HAS_CONSENT', payload: false });
-    } else {
-      dispatch({ action: 'HAS_CONSENT', payload: true });
-    }
-  };
-
-  const checkOnboarding = () => {
+  const clearLocalStorage = () => {
     localStorageDelete('token');
     dispatch({ type: 'LOG_OUT' });
   };
 
   useEffect(() => {
-    getConsent();
-    if (location.pathname.includes('password')) checkOnboarding();
+    if (location.pathname.includes('password')) clearLocalStorage();
   }, [location.pathname]);
 
   return (

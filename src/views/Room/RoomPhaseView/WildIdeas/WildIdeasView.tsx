@@ -23,7 +23,7 @@ const WildIdeas = () => {
     await databaseRequest({
       model: 'Idea',
       method: 'getIdeasByRoom',
-      arguments: { room_id: Number(params['room_id']) },
+      arguments: { room_id: params['room_id'] },
     }).then((response) => {
       setLoading(false);
       if (!response.success || !response.data) return;
