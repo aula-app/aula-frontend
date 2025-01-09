@@ -1,5 +1,6 @@
 import { RoomPhases, SettingNamesType } from '@/types/SettingsTypes';
 import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import MoveData from '../../MoveData';
 import { updateType } from '../EditData';
 import CategoryField from '../FormField/fields/CategoryField';
@@ -27,8 +28,10 @@ const DataUpdates = ({ item, phase, scope, defaultValue, addUpdate }: Props) => 
     case 'groups':
       return <MoveData id={Number(item?.id)} scope={scope} addUpdate={addUpdate} />;
     case 'ideas':
-      if (!item && 'box_id' in params)
-        addUpdate({ model: 'Idea', method: 'addIdeaToTopic', args: { topic_id: params.box_id } });
+      useEffect(() => {
+        if (!item && 'box_id' in params)
+          addUpdate({ model: 'Idea', method: 'addIdeaToTopic', args: { topic_id: params.box_id } });
+      }, [item, params.box_id]);
       return (
         <>
           <CategoryField id={Number(item?.id)} addUpdate={addUpdate} />

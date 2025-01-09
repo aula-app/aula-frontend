@@ -270,13 +270,6 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
     }
   }, [JSON.stringify(item)]);
 
-  // @ts-ignore
-  const watchRoom = watch('room_id');
-
-  useEffect(() => {
-    if (scope === 'boxes') getDefaultRoomDurations(getValues('room_id'));
-  }, [watchRoom]);
-
   useEffect(() => {
     if (scope === 'boxes' && otherData.room_id) getDefaultRoomDurations(otherData.room_id);
   }, [isOpen]);
