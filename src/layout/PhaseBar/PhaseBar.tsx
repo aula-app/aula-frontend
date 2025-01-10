@@ -10,7 +10,7 @@ import { useLocation, useParams } from 'react-router-dom';
  * @component PhaseBar
  */
 
-const PhaseBar = ({ room }: { room: number }) => {
+const PhaseBar = ({ room }: { room: string }) => {
   const { t } = useTranslation();
   const params = useParams();
   const displayPhases = Object.keys(phases) as Array<keyof typeof phases>;

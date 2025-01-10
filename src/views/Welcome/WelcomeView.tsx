@@ -66,7 +66,7 @@ const WelcomeView = () => {
         <Grid container flex={1} spacing={2}>
           {isLoading && <RoomCardSkeleton />}
           {rooms.map((room) => (
-            <RoomCard room={room} key={room.id} />
+            <RoomCard room={room} key={room.hash_id} />
           ))}
         </Grid>
       </Stack>

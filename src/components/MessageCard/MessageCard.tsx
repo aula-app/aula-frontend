@@ -103,7 +103,7 @@ const MessageCard = ({ type }: Props) => {
                 p={1}
                 pl={2}
                 mb={1}
-                to={`/messages/${type}/${message.id}`}
+                to={`/messages/${type}/${message.hash_id}`}
                 bgcolor={`${variant}.main`}
               >
                 <AppIcon icon={variant} />

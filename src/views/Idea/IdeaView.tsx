@@ -63,7 +63,7 @@ const IdeaView = () => {
         model: 'Idea',
         method: 'getVoteValue',
         arguments: {
-          idea_id: Number(params['idea_id']),
+          idea_id: params['idea_id'],
         },
       },
       ['user_id']

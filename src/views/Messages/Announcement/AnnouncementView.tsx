@@ -25,7 +25,7 @@ const AnnouncementView = () => {
         text_id: params['message_id'],
       },
     }).then((response) => {
-      if (!response.success) return;
+      if (!response.success || !response.data) return;
       setMessage(response.data);
     });
 

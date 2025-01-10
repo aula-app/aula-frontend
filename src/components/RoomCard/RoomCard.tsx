@@ -16,7 +16,7 @@ const RoomCard = ({ room, ...restOfProps }: RoomCardProps) => {
   return (
     <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center', order: -room.type }} {...restOfProps}>
       <Card sx={{ borderRadius: '25px' }} variant="outlined">
-        <AppLink to={`/room/${room.id}/phase/0`}>
+        <AppLink to={`/room/${room.hash_id}/phase/0`}>
           <Stack
             sx={{
               flex: 1,
@@ -41,7 +41,7 @@ const RoomCard = ({ room, ...restOfProps }: RoomCardProps) => {
             )}
           </Stack>
         </AppLink>
-        <PhaseBar room={room.id} />
+        <PhaseBar room={room.hash_id} />
       </Card>
     </Grid>
   );
