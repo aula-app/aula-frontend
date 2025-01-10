@@ -27,6 +27,7 @@ export interface DefaultUpdate {
   topic_id: number | null;
   phase_id: number | null;
   room_id: number;
+  room_hash_id: string;
   title: string;
 }
 

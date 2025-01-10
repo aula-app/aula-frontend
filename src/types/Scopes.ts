@@ -3,6 +3,7 @@ import { RoomPhases } from './SettingsTypes';
 
 export interface AnnouncementType {
   id: number;
+  hash_id: string;
   creator_id: number;
   headline: string;
   body: string;
@@ -27,6 +28,7 @@ export interface BoxType {
   last_update: string;
   updater_id: number;
   room_id: number;
+  room_hash_id: string;
   phase_id: `${RoomPhases}`;
   phase_duration_0: number;
   phase_duration_1: number;
@@ -81,6 +83,7 @@ export interface IdeaType {
   sum_votes: number;
   sum_comments: number;
   room_id: number;
+  room_hash_id: string;
   status: number;
   is_winner: number;
   approved: number;
@@ -93,6 +96,7 @@ export interface IdeaType {
 
 export interface MessageType {
   id: number;
+  hash_id: string;
   creator_id: number;
   headline: string;
   body: string;

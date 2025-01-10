@@ -40,20 +40,21 @@ const MessagesView = () => {
     // Use Promise.all to await all fetches
     const results = await Promise.all(
       boxes.map(async (box) => {
-        const result = await databaseRequest({
+        const response = await databaseRequest({
           model: 'Idea',
           method: 'getIdeasByTopic',
           arguments: {
             topic_id: box.id,
           },
         });
-        return result.data;
+        if (!response.success || !response.data) return;
+        return response.data;
       })
     );
     return results.flat();
   }
 
-  const ideasFetch = async () =>
+  const wildIdeasFetch = async () =>
     await databaseRequest(
       {
         model: 'Idea',
@@ -67,9 +68,13 @@ const MessagesView = () => {
       setLoading(false);
     });
 
+  const ideasFetch = () => {
+    params.phase === '0' ? wildIdeasFetch() : boxesFetch();
+  };
+
   useEffect(() => {
     setLoading(true);
-    params.phase === '0' ? ideasFetch() : boxesFetch();
+    ideasFetch();
   }, [params.phase]);
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
@@ -84,13 +89,13 @@ const MessagesView = () => {
           </Grid>
         )}
         {items.map((item) => (
-          <Grid key={item.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
+          <Grid key={item.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
             <IdeaBubble
               idea={item}
               onReload={ideasFetch}
-              key={item.id}
+              key={item.hash_id}
+              to={`/room/${item.room_hash_id}/phase/${params.phase}/idea/${item.hash_id}`}
               comments={item.sum_comments}
-              to={`/room/${item.room_id}/phase/${params.phase}/idea/${item.id}`}
             />
           </Grid>
         ))}

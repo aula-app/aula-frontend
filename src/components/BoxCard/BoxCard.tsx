@@ -77,7 +77,7 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
         <MoreOptions scope="boxes" item={boxData} onClose={reload} canEdit={checkPermissions(30)} />
       </Stack>
       <AppLink
-        to={`/room/${boxData.room_id}/phase/${boxData.phase_id}/idea-box/${boxData.hash_id}`}
+        to={`/room/${boxData.room_hash_id}/phase/${boxData.phase_id}/idea-box/${boxData.hash_id}`}
         mb={2}
         key={boxData.hash_id}
         disabled={noLink}
