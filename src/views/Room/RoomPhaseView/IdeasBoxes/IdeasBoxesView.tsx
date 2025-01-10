@@ -53,8 +53,8 @@ const IdeasBoxView = () => {
     <Stack alignItems="center">
       <Grid container spacing={2} p={1} width="100%">
         {boxes.map((box) => (
-          <Grid key={box.id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-            <BoxCard box={box.id} onReload={boxesFetch} />
+          <Grid key={box.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
+            <BoxCard box={box.hash_id} onReload={boxesFetch} />
           </Grid>
         ))}
       </Grid>

@@ -1,7 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import AppLink from '@/components/AppLink';
 import MoreOptions from '@/components/MoreOptions';
-import { BoxType, PossibleFields } from '@/types/Scopes';
+import { BoxType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest, phases } from '@/utils';
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import BoxCardSkeleton from './BoxCardSkeleton';
 
 interface BoxCardProps {
-  box: number;
+  box: string;
   noLink?: boolean;
   onReload?: () => void;
 }
@@ -77,9 +77,9 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
         <MoreOptions scope="boxes" item={boxData} onClose={reload} canEdit={checkPermissions(30)} />
       </Stack>
       <AppLink
-        to={`/room/${boxData.room_id}/phase/${boxData.phase_id}/idea-box/${boxData.id}`}
+        to={`/room/${boxData.room_id}/phase/${boxData.phase_id}/idea-box/${boxData.hash_id}`}
         mb={2}
-        key={boxData.id}
+        key={boxData.hash_id}
         disabled={noLink}
       >
         <CardContent>

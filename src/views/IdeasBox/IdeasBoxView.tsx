@@ -33,7 +33,7 @@ const IdeasBoxView = () => {
     await databaseRequest({
       model: 'Idea',
       method: 'getIdeasByTopic',
-      arguments: { topic_id: Number(params['box_id']) },
+      arguments: { topic_id: params['box_id'] },
     }).then((response) => {
       setLoading(false);
       if (!response.success || !response.data) return;
@@ -46,7 +46,7 @@ const IdeasBoxView = () => {
       {
         model: 'User',
         method: 'getDelegationStatus',
-        arguments: { topic_id: Number(params['box_id']) },
+        arguments: { topic_id: params['box_id'] },
       },
       ['user_id']
     ).then((response) => {
@@ -77,7 +77,7 @@ const IdeasBoxView = () => {
           scrollSnapType: 'y mandatory',
         }}
       >
-        <BoxCard box={Number(params['box_id'])} noLink />
+        <BoxCard box={String(params['box_id'])} noLink />
         <Stack direction="row">
           <Typography variant="h6" p={2}>
             {t(delegationStatus && delegationStatus.length > 0 ? `texts.delegated` : `texts.undelegated`, {
@@ -113,7 +113,7 @@ const IdeasBoxView = () => {
           )}
           {boxIdeas.map((idea, key) => (
             <Grid key={key} size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
-              <AppLink to={`idea/${idea.id}`}>
+              <AppLink to={`idea/${idea.hash_id}`}>
                 <IdeaCard idea={idea} phase={Number(params['phase']) as RoomPhases} />
               </AppLink>
             </Grid>

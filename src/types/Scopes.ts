@@ -19,6 +19,7 @@ export interface AnnouncementType {
 
 export interface BoxType {
   id: number;
+  hash_id: string;
   name: string;
   description_public: string;
   ideas_num: number;
