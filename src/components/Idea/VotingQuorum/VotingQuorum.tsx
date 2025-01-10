@@ -37,9 +37,11 @@ const VotingQuorum = ({ phase, users, votes }: Props) => {
   return (
     <Stack>
       <Stack sx={{ position: 'relative' }}>
-        <Tooltip title={`${Math.round(quorum)}%`} open={true} placement="bottom" arrow={true}>
-          <Box sx={{ position: 'absolute', left: `${Math.round(quorum)}%` }} />
-        </Tooltip>
+        {quorum > 0 && (
+          <Tooltip title={`${Math.round(quorum)}%`} open={true} placement="bottom" arrow={true}>
+            <Box sx={{ position: 'absolute', left: `${Math.round(quorum)}%` }} />
+          </Tooltip>
+        )}
         <LinearProgress
           variant="determinate"
           value={(votes / users) * 100}
