@@ -1,9 +1,9 @@
 import { AppIconButton, AppLink } from "@/components";
 import AppSubmitButton from "@/components/AppSubmitButton";
+import { loginUser } from "@/services/auth";
 import { useAppStore } from "@/store";
 import { localStorageGet, localStorageSet } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginUser } from "@/services/auth";
 import {
   Alert,
   Button,
@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
-import { LoginFormValues } from "@/types/Auth";
+import { LoginFormValues } from "@/types/LoginTypes";
 
 /**
  * Renders "Login" view for Login flow

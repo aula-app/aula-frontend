@@ -1,15 +1,11 @@
 import { useIsAuthenticated } from '@/hooks/auth';
 import { useAppStore } from '@/store/AppStore';
 import { localStorageGet } from '@/utils';
+import { getUserConsent } from '@/services/consent';
 import { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import PrivateRoutes from './PrivateRoutes';
 import PublicRoutes from './PublicRoutes';
-
-interface ConsentResponse {
-  data: number;
-  error?: string;
-}
 
 /**
  * Renders routes depending on Authenticated or Anonymous users
@@ -25,31 +21,26 @@ const Routes = () => {
     if (!jwt_token || !api_url) return;
 
     try {
-      const response = await fetch(api_url + '/api/controllers/user_consent.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwt_token,
-        },
-      });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result: ConsentResponse = await response.json();
-
-      if (result.error) {
-        throw new Error(result.error);
-      }
+      const result = await getUserConsent(api_url, jwt_token, controller.signal);
+      clearTimeout(timeoutId);
 
       dispatch({
         action: 'HAS_CONSENT',
         payload: !(result.data === 0),
       });
     } catch (error) {
-      console.error('Failed to fetch consent:', error);
-      // You might want to dispatch an error state here
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          console.error('Consent request timeout');
+        } else if (error.name === 'NetworkError') {
+          console.error('Network error while fetching consent');
+        } else {
+          console.error('Failed to fetch consent:', error.message);
+        }
+      }
       dispatch({
         action: 'HAS_CONSENT',
         payload: false,
