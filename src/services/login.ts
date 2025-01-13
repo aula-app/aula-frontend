@@ -90,6 +90,12 @@ export const setPassword = async (
   }
 };
 
+export const logout = () => {
+  // Perform any cleanup needed for logout
+  localStorage.clear();
+  sessionStorage.clear();
+};
+
 export const recoverPassword = async (
   apiUrl: string,
   email: string,
