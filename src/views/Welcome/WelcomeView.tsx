@@ -2,7 +2,7 @@ import { RoomCard } from '@/components/RoomCard';
 import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
 import { RoomType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,28 +11,37 @@ import DashBoard from '../DashBoard';
 const WelcomeView = () => {
   const { t } = useTranslation();
   const [rooms, setRooms] = useState<RoomType[]>([]);
-  const [showDashboard, setDashboard] = useState(true);
+  const [showDashboard, setShowDashboard] = useState(true);
   const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const roomsFetch = async () =>
-    await databaseRequest(
+  const roomsFetch = async () => {
+    // Check if user has Super Moderator (40) access to view all rooms
+    const hasSuperModAccess = checkPermissions(40);
+
+    const response = await databaseRequest(
       {
         model: 'Room',
-        method: checkPermissions(40) ? 'getRooms' : 'getRoomsByUser',
+        method: hasSuperModAccess ? 'getRooms' : 'getRoomsByUser',
         arguments: {
           offset: 0,
           limit: 0,
         },
       },
-      checkPermissions(40) ? [] : ['user_id']
-    ).then((response) => {
-      setLoading(false);
-      if (!response.success || !response.data) return;
-      setRooms(response.data as RoomType[]);
-    });
+      hasSuperModAccess ? [] : ['user_id']
+    );
+    setLoading(false);
+    if (!response.success || !response.data) {
+      setError(true);
+      return;
+    }
+    setError(false);
+    setRooms(response.data as RoomType[]);
+  };
 
-  const handleScroll = () => {
-    setDashboard(false);
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop } = event.currentTarget;
+    setShowDashboard(scrollTop < 100);
   };
 
   useEffect(() => {
@@ -63,8 +72,9 @@ const WelcomeView = () => {
         >
           {t('views.rooms')}
         </Typography>
-        <Grid container flex={1} spacing={2}>
+        <Grid container spacing={2}>
           {isLoading && <RoomCardSkeleton />}
+          {error && <Box />}
           {rooms.map((room) => (
             <RoomCard room={room} key={room.hash_id} />
           ))}
