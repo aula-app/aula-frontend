@@ -1,6 +1,6 @@
 import { AppIcon, AppLink } from '@/components';
 import { phases } from '@/utils';
-import { PhaseType, RoomPhases } from '@/types/SettingsTypes';
+import { RoomPhases } from '@/types/SettingsTypes';
 import { Stack, Tooltip, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,8 +13,7 @@ interface PhaseBarProps {
   room: string;
 }
 
-const isValidPhase = (phase: string): phase is `${RoomPhases}` =>
-  Object.keys(phases).includes(phase);
+const isValidPhase = (phase: string): phase is `${RoomPhases}` => Object.keys(phases).includes(phase);
 
 /**
  * Renders the phase navigation bar showing the room's workflow progression
@@ -77,3 +76,6 @@ const PhaseBar: React.FC<PhaseBarProps> = ({ room }) => {
       ))}
     </Stack>
   );
+};
+
+export default PhaseBar;
