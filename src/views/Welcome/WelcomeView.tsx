@@ -2,7 +2,7 @@ import { RoomCard } from '@/components/RoomCard';
 import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
 import { RoomType } from '@/types/Scopes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
