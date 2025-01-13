@@ -4,7 +4,6 @@ import { loginUser } from "@/services/login";
 import { useAppStore } from "@/store";
 import { localStorageGet, localStorageSet } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginUser } from "@/services/auth";
 import {
   Alert,
   Button,
