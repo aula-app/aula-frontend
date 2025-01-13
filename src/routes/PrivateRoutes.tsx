@@ -1,5 +1,6 @@
 import { useAppStore } from '@/store';
-import { checkPermissions, localStorageDelete } from '@/utils';
+import { checkPermissions } from '@/utils';
+import { clearAuth, checkPasswordRoute } from '@/services/auth';
 import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
 import IdeaView from '@/views/Idea';
@@ -32,14 +33,9 @@ const PrivateRoutes = () => {
   const [, dispatch] = useAppStore();
   const location = useLocation();
 
-  const clearLocalStorage = () => {
-    localStorageDelete('token');
-    dispatch({ type: 'LOG_OUT' });
-  };
-
   useEffect(() => {
-    if (location.pathname.includes('password')) clearLocalStorage();
-  }, [location.pathname]);
+    if (location.pathname.includes('password')) clearAuth(dispatch);
+  }, [location.pathname, dispatch]);
 
   return (
     <Routes>
