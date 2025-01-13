@@ -1,5 +1,5 @@
 import AppSubmitButton from '@/components/AppSubmitButton';
-import { recoverPassword } from '@/services/auth';
+import { recoverPassword } from '@/services/login';
 import { useAppStore } from '@/store';
 import { localStorageGet } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
