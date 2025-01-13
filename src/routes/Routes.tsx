@@ -22,10 +22,7 @@ const Routes = () => {
   const jwt_token = localStorageGet('token');
 
   const getConsent = useCallback(async () => {
-    if (!jwt_token || !api_url) {
-      console.error('Missing token or API URL');
-      return;
-    }
+    if (!jwt_token || !api_url) return;
 
     try {
       const response = await fetch(api_url + '/api/controllers/user_consent.php', {
