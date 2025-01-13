@@ -1,4 +1,4 @@
-import { LoginFormValues, LoginResponseType } from '@/types/Auth';
+import { LoginFormValues, LoginResponseType } from '@/types/LoginTypes';
 
 export const loginUser = async (
   apiUrl: string,
