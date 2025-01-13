@@ -76,6 +76,3 @@ const PhaseBar: React.FC<PhaseBarProps> = ({ room }) => {
       ))}
     </Stack>
   );
-};
-
-export default PhaseBar;
