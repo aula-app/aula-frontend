@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import { localStorageGet, localStorageSet } from '@/utils';
-import { NotFoundView, Auth, Login, OAuthLogin, Recovery, InstanceCodeView, SetPassword } from '@/views/Public';
+import { PublicNotFoundView, Auth, Login, OAuthLogin, Recovery, InstanceCodeView, SetPassword } from '@/views/Public';
 import ChangePasswordView from '@/views/UpdatePassword';
 
 const useInstanceCheck = () => {
@@ -40,7 +40,7 @@ const PublicRoutes = () => {
       <Route path="password/" element={<ChangePasswordView />} />
       <Route path="password/:key" element={<SetPassword />} />
       <Route path="auth" element={<Auth />} />
-      <Route path="*" element={<NotFoundView />} />
+      <Route path="*" element={<PublicNotFoundView />} />
     </Routes>
   );
 };
