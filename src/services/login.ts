@@ -1,19 +1,16 @@
-import { LoginFormValues, LoginResponseType } from '@/types/LoginTypes';
-
-export const loginUser = async (
+export const recoverPassword = async (
   apiUrl: string,
-  formData: LoginFormValues,
+  email: string,
   token: string | null,
   signal: AbortSignal
-): Promise<LoginResponseType> => {
+): Promise<{ success: boolean }> => {
   try {
-    const response = await fetch(`${apiUrl}/api/controllers/login.php`, {
-      method: 'POST',
+    const response = await fetch(`${apiUrl}/api/controllers/forgot_password.php?email=${email}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: token ? `Bearer ${token}` : '',
       },
-      body: JSON.stringify(formData),
       signal,
     });
 
