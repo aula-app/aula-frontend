@@ -8,19 +8,21 @@ import { Dispatch, Fragment, MouseEvent, SetStateAction, useCallback } from 'rea
 import { useTranslation } from 'react-i18next';
 import { SIDEBAR_ITEMS } from '../config';
 
-type Props = {
-  isFixed?: boolean;
-  setReport: Dispatch<SetStateAction<'bug' | 'report' | undefined>>;
-  onClose?: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
-};
-
 /**
- * Renders SideBar with Menu and User details
- * Actually for Authenticated users only, rendered in "Private Layout"
- * @component SideBar
- * @param {function} onClose - called when the Drawer is closing
+ * Renders SideBar content including navigation, actions and user controls
+ * @component SideBarContent
+ * @param {SideBarContentProps} props - Component props
+ * @param {boolean} [props.isFixed] - Whether the sidebar is fixed or in a drawer
+ * @param {function} props.setReport - Callback to set report type
+ * @param {function} [props.onClose] - Optional callback when drawer closes
+ * @returns {JSX.Element} Rendered SideBarContent component
  */
-const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...restOfProps }: Props) => {
+const SideBarContent = ({
+  isFixed = false,
+  setReport,
+  onClose = () => {},
+  ...restOfProps
+}: SideBarContentProps): JSX.Element => {
   const { t } = useTranslation();
   const [state] = useAppStore();
   const isAuthenticated = useIsAuthenticated();
@@ -29,7 +31,7 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
   const onLogout = useEventLogout();
 
   const handleAfterLinkClick = useCallback(
-    (event: MouseEvent) => {
+    (event: React.MouseEvent) => {
       onClose(event, 'backdropClick');
     },
     [onClose]
@@ -73,14 +75,7 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
         />
       </Stack>
       <Divider />
-      <Stack
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <Stack sx={actionStackStyles}>
         {isAuthenticated && (
           <AppButton variant="text" onClick={onLogout}>
             {t('generics.logout')}&nbsp;
@@ -92,4 +87,4 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
   );
 };
 
-export default SideBarContent;
+export default memo(SideBarContent);
