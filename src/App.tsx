@@ -7,18 +7,19 @@ import { AppThemeProvider } from './theme';
 
 /**
  * Root Application Component
+ * Provides core application providers and routing setup
  */
-const App = () => {
+const App: React.FC = () => {
   return (
     <ErrorBoundary name="App">
       <AppStore>
-          <AppThemeProvider>
-            <BrowserRouter>
-              <Layout>
-                <Routes />
-              </Layout>
-            </BrowserRouter>
-          </AppThemeProvider>
+        <AppThemeProvider>
+          <BrowserRouter>
+            <Layout>
+              <Routes />
+            </Layout>
+          </BrowserRouter>
+        </AppThemeProvider>
       </AppStore>
     </ErrorBoundary>
   );
