@@ -34,20 +34,44 @@ class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Save information to help render Error UI
     this.setState({ error, errorInfo });
-    // TODO: Add log error messages to an error reporting service here
+
+    // Log error to console in development
+    if (import.meta.env.DEV) {
+      console.error(`Error in ${this.props.name}:`, error);
+      console.error('Component Stack:', errorInfo.componentStack);
+    }
+
+    // Here you could add error reporting service integration
+    // e.g., Sentry, LogRocket, etc.
   }
 
   render() {
     if (this.state.hasError) {
       // Error UI rendering
       return (
-        <div>
-          <h2>{this.props.name} - Something went wrong</h2>
-          <details style={{ whiteSpace: 'pre-wrap' }}>
-            {this.state?.error?.toString()}
-            <br />
-            {this.state?.errorInfo?.componentStack}
-          </details>
+        <div
+          style={{
+            padding: '20px',
+            margin: '20px',
+            borderRadius: '8px',
+            backgroundColor: '#fff3f3',
+            border: '1px solid #ffcdd2',
+          }}
+        >
+          <h2 style={{ color: '#d32f2f', margin: '0 0 16px 0' }}>{this.props.name} - Something went wrong</h2>
+          <p style={{ color: '#555', margin: '0 0 16px 0' }}>
+            We apologize for the inconvenience. Please try refreshing the page.
+          </p>
+          {import.meta.env.DEV && (
+            <details style={{ whiteSpace: 'pre-wrap' }}>
+              <summary style={{ cursor: 'pointer', color: '#666' }}>Error Details</summary>
+              <div style={{ marginTop: '8px', padding: '8px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
+                {this.state?.error?.toString()}
+                <br />
+                {this.state?.errorInfo?.componentStack}
+              </div>
+            </details>
+          )}
         </div>
       );
     }
