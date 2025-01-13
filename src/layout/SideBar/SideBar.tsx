@@ -3,25 +3,24 @@ import LocaleSwitch from '@/components/LocaleSwitch';
 import UserInfo from '@/components/UserInfo';
 import { useIsAuthenticated, useOnMobile } from '@/hooks';
 import { Divider, Drawer, Stack } from '@mui/material';
-import { Dispatch, SetStateAction } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../config';
+import { drawerPaperStyles } from './styles';
+import { DrawerSideBarProps } from './types';
 import SideBarContent from './SideBarContent';
 
-type Props = {
-  anchor: 'left' | 'right';
-  open: boolean;
-  variant: 'permanent' | 'persistent' | 'temporary';
-  setReport: Dispatch<SetStateAction<'bug' | 'report' | undefined>>;
-  onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
-};
-
 /**
- * Renders SideBar with Menu and User details
- * Actually for Authenticated users only, rendered in "Private Layout"
+ * Renders SideBar with Menu and User details for authenticated users in Private Layout
  * @component SideBar
+ * @param {DrawerSideBarProps} props - Component props
+ * @param {('left'|'right')} props.anchor - Drawer anchor position
+ * @param {boolean} props.open - Controls drawer open state
+ * @param {('permanent'|'persistent'|'temporary')} props.variant - Drawer variant
+ * @param {function} props.setReport - Callback to set report type
+ * @param {function} props.onClose - Callback when drawer closes
+ * @returns {JSX.Element} Rendered SideBar component
  */
-const SideBar = ({ anchor, open, variant, setReport, onClose, ...restOfProps }: Props) => {
+const SideBar = ({ anchor, open, variant, setReport, onClose, ...restOfProps }: DrawerSideBarProps): JSX.Element => {
   const { t } = useTranslation();
   const onMobile = useOnMobile();
   const isAuthenticated = useIsAuthenticated();
@@ -33,13 +32,10 @@ const SideBar = ({ anchor, open, variant, setReport, onClose, ...restOfProps }: 
       open={open}
       variant={variant}
       PaperProps={{
-        sx: {
-          minWidth: SIDEBAR_WIDTH,
-          marginTop: onMobile ? 0 : variant === 'temporary' ? 0 : TOPBAR_DESKTOP_HEIGHT,
-          height: onMobile ? '100%' : variant === 'temporary' ? '100%' : `calc(100% - ${TOPBAR_DESKTOP_HEIGHT})`,
-        },
+        sx: drawerPaperStyles(onMobile, variant),
       }}
       onClose={onClose}
+      {...restOfProps}
     >
       <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
         <LocaleSwitch />
@@ -58,4 +54,4 @@ const SideBar = ({ anchor, open, variant, setReport, onClose, ...restOfProps }: 
   );
 };
 
-export default SideBar;
+export default memo(SideBar);
