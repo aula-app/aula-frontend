@@ -1,7 +1,6 @@
-import { AppButton } from '@/components';
 import AppSubmitButton from '@/components/AppSubmitButton';
+import { recoverPassword } from '@/services/auth';
 import { useAppStore } from '@/store';
-import { ObjectPropByName } from '@/types/Generics';
 import { localStorageGet } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Stack, TextField, Typography } from '@mui/material';
@@ -11,70 +10,64 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-/**
- * Renders "Recover Password" view for Login flow
- * url: /recovery/password
- */
+interface FormData {
+  email: string;
+}
+
 const RecoveryPasswordView = () => {
   const { t } = useTranslation();
-  const jwt_token = localStorageGet("token");
-  const api_url = localStorageGet("api_url");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(false);
 
-  const schema = yup.object({
-    email: yup.string().email(t("validation.email")).required(t("validation.required")),
-  })
-  .required();
+  const schema = yup.object().shape({
+    email: yup.string().email(t('validation.email')).required(t('validation.required')),
+  });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const form = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (formData: ObjectPropByName) => {
-    setLoading(true)
-    const request = await fetch(
-        `${api_url}/api/controllers/forgot_password.php?email=${formData.email}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + jwt_token,
-          }}
-      )
+  const onSubmit = async (formData: FormData) => {
+    setLoading(true);
+    const controller = new AbortController();
 
-    const response = await request.json();
-    setLoading(false)
+    try {
+      const response = await recoverPassword(
+        localStorageGet('api_url'),
+        formData.email,
+        localStorageGet('token'),
+        controller.signal
+      );
 
-    if (!response.success) {
-      dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
-      return;
+      if (response.success) {
+        dispatch({ type: 'ADD_POPUP', message: { message: t('login.forgotRequest'), type: 'success' } });
+        navigate('/', { replace: true });
+      } else {
+        dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+      }
+    } catch (error) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+    } finally {
+      setLoading(false);
     }
 
-    dispatch({ type: 'ADD_POPUP', message: {message: t('login.forgotRequest'), type: 'error'} });
-    navigate("/", { replace: true });
-  }
+    return () => controller.abort();
+  };
 
   return (
-    <FormContainer>
-      <Stack>
-        <Typography variant="h5" sx={{ mb: 3 }}>
-          {t('login.recovery')}
-        </Typography>
+    <FormContainer onSuccess={onSubmit}>
+      <Stack spacing={3}>
+        <Typography variant="h5">{t('login.recovery')}</Typography>
         <TextField
           required
           disabled={isLoading}
           label="Email"
-          {...register('email')}
-          error={errors.email ? true : false}
-          helperText={errors.email?.message || ' '}
+          {...form.register('email')}
+          error={!!form.formState.errors.email}
+          helperText={form.formState.errors.email?.message || ' '}
         />
-        <AppSubmitButton label={t('login.recover')} disabled={isLoading} onClick={handleSubmit(onSubmit)} />
+        <AppSubmitButton label={t('login.recover')} disabled={isLoading} />
       </Stack>
     </FormContainer>
   );
