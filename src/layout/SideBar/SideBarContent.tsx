@@ -75,14 +75,7 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
         />
       </Stack>
       <Divider />
-      <Stack
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <Stack sx={actionStackStyles}>
         {isAuthenticated && (
           <AppButton variant="text" onClick={onLogout}>
             {t('auth.logout')}&nbsp;
