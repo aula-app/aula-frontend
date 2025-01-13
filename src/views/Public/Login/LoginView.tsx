@@ -1,6 +1,6 @@
 import { AppIconButton, AppLink } from "@/components";
 import AppSubmitButton from "@/components/AppSubmitButton";
-import { loginUser } from "@/services/auth";
+import { loginUser } from "@/services/login";
 import { useAppStore } from "@/store";
 import { localStorageGet, localStorageSet } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -175,9 +175,9 @@ const LoginView = () => {
           <Divider sx={{flex: 1}} />
         </Stack>
         <Stack direction='column' mb={2} alignItems='center'>
-         <AppSubmitButton 
-           variant="outlined" 
-           onClick={() => window.location.href="/api/controllers/login_oauth.php"} 
+         <AppSubmitButton
+           variant="outlined"
+           onClick={() => window.location.href="/api/controllers/login_oauth.php"}
            label={t('login.oauthButton')}
            disabled={isLoading}
            aria-label={t('login.oauthButtonAriaLabel')}
