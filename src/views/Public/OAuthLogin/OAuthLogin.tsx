@@ -1,22 +1,24 @@
-import { localStorageSet } from "@/utils";
-import { useAppStore } from "@/store";
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useAppStore } from '@/store';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { handleOAuthLogin } from '@/services/oauth';
 
 const OAuthLogin = () => {
-  const params = useParams();
+  const { jwt_token } = useParams<{ jwt_token?: string }>();
   const [, dispatch] = useAppStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorageSet("token", params.jwt_token);
-    console.log(params.jwt_token, params, "TOKEN");
-    dispatch({ type: "LOG_IN" });
-    navigate("/", { replace: true });
-  }, []);
+    try {
+      handleOAuthLogin(jwt_token);
+      dispatch({ type: 'LOG_IN' });
+      navigate('/', { replace: true });
+    } catch (error) {
+      navigate('/login', { replace: true });
+    }
+  }, [jwt_token, dispatch, navigate]);
 
-  return (<></>);
-
+  return null;
 }
 
 export default OAuthLogin;
