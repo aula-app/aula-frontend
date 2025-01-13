@@ -3,6 +3,7 @@ import AppSubmitButton from "@/components/AppSubmitButton";
 import { useAppStore } from "@/store";
 import { localStorageGet, localStorageSet } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { loginUser } from "@/services/auth";
 import {
   Alert,
   Button,
@@ -14,26 +15,18 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { FormContainer, useForm } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
+import { LoginFormValues } from "@/types/Auth";
+
 /**
  * Renders "Login" view for Login flow
  * url: /login
  */
-
-type LoginResponseType = {
-  success: boolean, 
-  JWT?: string,
-  error_code?: number | null,
-  user_status?: number | null,
-  user_id?: number | null,
-  data?:	string | null,
-  count?: number
-}
 
 const LoginView = () => {
   const { t } = useTranslation();
@@ -65,47 +58,50 @@ const LoginView = () => {
     resolver: yupResolver(schema),
   });
 
-  const handleShowPasswordClick = useCallback(() => {
+  const handleShowPasswordClick = () => {
     setShowPassword((oldValue) => !oldValue);
-  }, []);
+  };
 
-  const onSubmit = async (formData: Object) => {
+  const onSubmit = async (formData: LoginFormValues) => {
+    if (!api_url) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('generics.configError'), type: 'error' } });
+      return;
+    }
+
     try {
-      setLoading(true)
+      setLoading(true);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const request = await fetch(
-        `${api_url}/api/controllers/login.php`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + jwt_token,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await loginUser(api_url, formData, jwt_token, controller.signal);
+      clearTimeout(timeoutId);
+      setLoading(false);
 
-      setLoading(false)
-      const response = await request.json() as LoginResponseType;
-      
       if (response.success !== true || !('JWT' in response)) {
         setError(
           'user_status' in response && response.user_status !== null
-            ? response.user_status === 0 
+            ? response.user_status === 0
               ? t('login.accountInactive')
               : t('login.accountSuspended', {var: response.data ? t('login.accountSuspendDate', {var: response.data}) : ''})
             : t('login.loginError')
-
         );
         return;
       }
 
-      localStorageSet("token", response["JWT"]);
+      localStorageSet("token", response.JWT);
       dispatch({ type: "LOG_IN" });
       navigate("/", { replace: true });
     } catch (e) {
-      setLoading(false)
-      dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+      setLoading(false);
+      if (e instanceof Error) {
+        if (e.name === 'AbortError') {
+          dispatch({ type: 'ADD_POPUP', message: { message: t('generics.timeout'), type: 'error' } });
+        } else if (e.name === 'NetworkError') {
+          dispatch({ type: 'ADD_POPUP', message: { message: t('generics.networkError'), type: 'error' } });
+        } else {
+          dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+        }
+      }
     }
   };
 
@@ -179,9 +175,15 @@ const LoginView = () => {
           <Divider sx={{flex: 1}} />
         </Stack>
         <Stack direction='column' mb={2} alignItems='center'>
-         <AppSubmitButton variant="outlined" onClick={() => window.location.href="/api/controllers/login_oauth.php"} label={"OAuth Authenticate"}/>
+         <AppSubmitButton 
+           variant="outlined" 
+           onClick={() => window.location.href="/api/controllers/login_oauth.php"} 
+           label={t('login.oauthButton')}
+           disabled={isLoading}
+           aria-label={t('login.oauthButtonAriaLabel')}
+         />
         </Stack>
-         </>) 
+         </>)
          : ''}
 
     </FormContainer>
