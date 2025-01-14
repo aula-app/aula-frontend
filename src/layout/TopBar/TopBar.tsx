@@ -19,7 +19,7 @@ interface Props {
   /** Home path for navigation */
   home: string;
   /** Callback to set the type of report */
-  setReport: Dispatch<SetStateAction<'bug' | 'report' | undefined>>;
+  setReport: Dispatch<SetStateAction<'bugs' | 'reports' | undefined>>;
 }
 
 /**
@@ -71,7 +71,7 @@ const TopBar = ({ home, setReport }: Props) => {
 
             return (
               <AppLink underline="hover" color="inherit" to={link} key={index}>
-                {t(`views.${currentPath}`)}
+                {currentPath}
               </AppLink>
             );
           })}

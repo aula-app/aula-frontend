@@ -56,10 +56,10 @@ const RoomImageSelector = ({ onClose, onSubmit }: Props) => {
       </Grid>
       <Stack direction="row" width="100%" justifyContent="end" py={2}>
         <Button color="error" sx={{ mr: 2 }} onClick={onClose}>
-          {t('generics.cancel')}
+          {t('actions.cancel')}
         </Button>
         <AppButton color="primary" onClick={() => onSubmit(`DI:${selected}:${shift}`)}>
-          {t('generics.confirm')}
+          {t('actions.confirm')}
         </AppButton>
       </Stack>
     </Stack>

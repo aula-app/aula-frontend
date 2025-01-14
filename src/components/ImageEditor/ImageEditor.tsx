@@ -185,7 +185,7 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
     <Drawer anchor="bottom" open={isOpen} onClose={onClose}>
       <Stack p={2}>
         <Typography variant="h5" pb={2}>
-          {t('texts.edit', { var: t('generics.image') })}
+          {t('actions.edit', { var: t('ui.files.image.label') })}
         </Typography>
         <Stack direction="row" justifyContent="center">
           {!image ? (
@@ -213,7 +213,7 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
                 onChange={handleFileChange}
                 style={{ display: 'none' }}
               />
-              <p>{t('texts.imageUpload')}</p>
+              <p>{t('ui.files.image.upload')}</p>
             </Paper>
           ) : (
             <Box sx={{ position: 'relative' }}>
@@ -255,10 +255,10 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
         </Stack>
         <Stack direction="row">
           <Button color="secondary" onClick={onClose} sx={{ mr: 'auto' }}>
-            {t('generics.cancel')}
+            {t('actions.cancel')}
           </Button>
           <AppButton color="primary" onClick={saveImage}>
-            {t('generics.confirm')}
+            {t('actions.confirm')}
           </AppButton>
         </Stack>
       </Stack>

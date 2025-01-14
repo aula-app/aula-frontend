@@ -39,12 +39,12 @@ const ImageField = ({ data, control, disabled = false, setValue, ...restOfProps 
         return (
           <FormControl fullWidth>
             <Typography variant="caption" pl={2}>
-              {t('generics.image')}
+              {t('ui.files.image.label')}
             </Typography>
             <TextField {...field} {...restOfProps} sx={{ visibility: 'hidden', height: 0 }} />
             {value === '' ? (
               <AppButton variant="outlined" onClick={() => setSelector(true)} sx={{ mt: 2 }}>
-                {t('texts.add', { var: t('generics.image').toLowerCase() })}
+                {t('actions.add', { var: t('ui.files.image.label').toLowerCase() })}
               </AppButton>
             ) : (
               <Stack direction="row" justifyContent="center">

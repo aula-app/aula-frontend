@@ -59,7 +59,7 @@ const VotingResults = ({ rejected = false, yourVote }: VotingResultsProps) => {
             {!rejected ? <AppIcon icon="for" size="xl" /> : <AppIcon icon="against" size="xl" />}
           </Stack>
           <Stack flexGrow={1} pr={2}>
-            <Typography variant="body2">{t(`texts.${rejected ? 'rejected' : 'approved'}`)}</Typography>
+            <Typography variant="body2">{t(`scopes.ideas.${rejected ? 'rejected' : 'approved'}`)}</Typography>
           </Stack>
           <Stack>
             {votingOptions.map((option, i) => (
@@ -79,7 +79,7 @@ const VotingResults = ({ rejected = false, yourVote }: VotingResultsProps) => {
       </Card>
       <Stack direction="row" alignItems="center" mx={3} mt={1} fontSize="small">
         <AppIcon icon={votingOptions[yourVote + 1]} />
-        &nbsp; {t('texts.yourVote', { var: t(`votes.${votingOptions[yourVote + 1]}`) })}
+        &nbsp; {t('votes.yourVote', { var: t(`votes.${votingOptions[yourVote + 1]}`) })}
       </Stack>
     </Stack>
   );

@@ -102,7 +102,7 @@ const FormField = ({
           // @ts-ignore
           render={({ field, fieldState }) => (
             <TextField
-              label={t(`settings.${data.name}`)}
+              label={t(`settings.columns.${data.name}`)}
               required={data.required}
               minRows={data.form.type === 'text' ? 4 : 1}
               multiline={data.form.type === 'text'}

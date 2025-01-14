@@ -88,7 +88,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
       },
       ['user_id', 'updater_id']
     ).then(() => {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.delegationSuccess'), type: 'success' } });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('delegation.status.success'), type: 'success' } });
       onClose();
     });
   };
@@ -105,7 +105,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
       },
       ['user_id']
     ).then(() => {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.delegationRevoke'), type: 'success' } });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('delegation.status.revoked'), type: 'success' } });
       onClose();
     });
   };
@@ -128,7 +128,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
 
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>{t('texts.delegation')}</DialogTitle>
+      <DialogTitle>{t('delegation.label')}</DialogTitle>
       <DialogContent>
         <Stack height={350} position="relative" overflow="hidden">
           <Slide direction="right" in={!confirm} mountOnEnter unmountOnExit>
@@ -193,11 +193,11 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
         <Button color="secondary" onClick={onClose}>
-          {t('generics.cancel')}
+          {t('actions.cancel')}
         </Button>
         {!confirm ? (
           <Button variant="contained" onClick={() => setConfirm(true)} disabled={!selected}>
-            {t('delegation.select')}
+            {t('actions.select')}
           </Button>
         ) : delegate.length === 0 ? (
           <Button variant="contained" onClick={setDelegate}>

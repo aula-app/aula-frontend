@@ -24,21 +24,21 @@ export const Commands = [
     label: 'system',
     actions: [
       { label: 'commands.status', value: 0, options: InstanceStatusOptions },
-      { label: 'commands.delete', value: 5 },
+      { label: 'actions.delete', value: 5 },
     ],
   },
   {
     label: 'users',
     actions: [
       { label: 'commands.status', value: 0, options: ScopeStatusOptions },
-      { label: 'commands.delete', value: 5 },
+      { label: 'actions.delete', value: 5 },
     ],
   },
   {
     label: 'groups',
     actions: [
       { label: 'commands.status', value: 0, options: ScopeStatusOptions },
-      { label: 'commands.delete', value: 5 },
+      { label: 'actions.delete', value: 5 },
     ],
   },
 ] as Array<{

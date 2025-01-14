@@ -38,7 +38,7 @@ const SelectRoom = ({ room, setRoom }: Params) => {
   return (
     <TextField
       select
-      label={t('views.room')}
+      label={t('scopes.room.name')}
       value={room}
       onChange={changeRoom}
       variant="filled"

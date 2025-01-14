@@ -54,13 +54,13 @@ const SystemSettings = ({ config, onReload }: Props) => {
   return (
     <Stack gap={2}>
       <Typography variant="h6" py={1}>
-        {t(`settings.workDays`)}
+        {t(`settings.time.workdays`)}
       </Typography>
       <Grid component={FormGroup} container spacing={1}>
         <Grid size="auto">
           <TextField
             select
-            label={t('settings.weekStart')}
+            label={t('settings.time.startDay')}
             value={startDay}
             onChange={(data) => setStartDay(Number(data.target.value))}
             variant="outlined"
@@ -76,7 +76,7 @@ const SystemSettings = ({ config, onReload }: Props) => {
         <Grid size="auto">
           <TextField
             select
-            label={t('settings.weekEnd')}
+            label={t('settings.time.endDay')}
             value={endDay}
             onChange={(data) => setEndDay(Number(data.target.value))}
             variant="outlined"
@@ -94,7 +94,7 @@ const SystemSettings = ({ config, onReload }: Props) => {
         <Grid container spacing={1}>
           <Grid size="auto">
             <TimePicker
-              label={t(`settings.timeStart`)}
+              label={t(`settings.time.startTime`)}
               value={dayjs(startTime)}
               onChange={(date) => {
                 if (date) setStartTime(dayjs(date).format(FORMAT_DATE_TIME));
@@ -103,7 +103,7 @@ const SystemSettings = ({ config, onReload }: Props) => {
           </Grid>
           <Grid size="auto">
             <TimePicker
-              label={t(`settings.timeEnd`)}
+              label={t(`settings.time.endTime`)}
               value={dayjs(endTime)}
               onChange={(date) => {
                 if (date) setEndTime(dayjs(date).format(FORMAT_DATE_TIME));
@@ -114,10 +114,10 @@ const SystemSettings = ({ config, onReload }: Props) => {
       </LocalizationProvider>
       <Stack direction="row">
         <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onCancel}>
-          {t('generics.cancel')}
+          {t('actions.cancel')}
         </Button>
         <Button type="submit" variant="contained" onClick={onSubmit}>
-          {t('generics.confirm')}
+          {t('actions.confirm')}
         </Button>
       </Stack>
     </Stack>

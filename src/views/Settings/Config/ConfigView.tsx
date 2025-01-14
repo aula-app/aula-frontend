@@ -67,13 +67,13 @@ const ConfigView = () => {
   }, []);
 
   const SETTINGS_PANELS = [
-    { name: 'categories', role: 30, component: <Categories /> },
-    { name: 'groups', role: 50, component: <Groups /> },
+    { name: 'category', role: 30, component: <Categories /> },
+    { name: 'group', role: 50, component: <Groups /> },
     { name: 'idea', role: 50, component: <IdeaSettings onReload={getConfig} /> },
-    { name: 'users', role: 50, component: <UsersSettings onReload={closePanels} /> },
+    { name: 'user', role: 50, component: <UsersSettings onReload={closePanels} /> },
     { name: 'time', role: 60, component: <TimeSettings config={config} onReload={getConfig} /> },
     { name: 'login', role: 60, component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
-    { name: 'actions', role: 60, component: <TimedCommands /> },
+    { name: 'action', role: 60, component: <TimedCommands /> },
     { name: 'system', role: 60, component: <SystemSettings settings={settings} onReload={getSettings} /> },
     { name: 'danger', role: 60, component: <SchoolDelete /> },
   ];
@@ -83,14 +83,14 @@ const ConfigView = () => {
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
       <Typography variant="h4" pb={2}>
-        {t('views.configuration')}
+        {t('settings.labels.configuration')}
       </Typography>
       <SchoolInfo config={config} onReload={getConfig} />
       {panels.map((panel, i) => (
         <Accordion expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)} key={i}>
           <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
             <Typography variant="h5" py={1}>
-              {t(`settings.${panel.name}`)}
+              {t('settings.advanced.system', { var: t(`settings.panels.${panel.name}`) })}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>{panel.component}</AccordionDetails>

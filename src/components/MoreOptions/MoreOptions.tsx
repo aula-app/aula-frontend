@@ -42,31 +42,31 @@ const MoreOptions = <T extends ScopeType>({ item, scope, canEdit = false, onClos
 
   const defaultOptions = [
     {
-      type: 'report',
+      type: 'reports',
       icon: 'report',
       color: 'error',
-      label: t('generics.contentReport'),
+      label: t('actions.contentReport'),
       otherData: {
         headline: `${scope} #${item.id}`,
         msg_type: 4,
       },
       metadata: {
-        type: 'report',
+        type: 'reports',
         location: location.pathname,
         user: getCurrentUser(),
       },
     },
     {
-      type: 'bug',
+      type: 'bugs',
       icon: 'bug',
       color: 'warning',
-      label: t('generics.bugReport'),
+      label: t('actions.bugReport'),
       otherData: {
         headline: `${scope} #${item.id}`,
         msg_type: 4,
       },
       metadata: {
-        type: 'bug',
+        type: 'bugs',
         location: location.pathname,
         user: getCurrentUser(),
         userAgent: window.navigator.userAgent,
@@ -75,8 +75,8 @@ const MoreOptions = <T extends ScopeType>({ item, scope, canEdit = false, onClos
   ] as OptionsTypes[];
 
   const editOptions = [
-    { type: 'edit', icon: 'edit', color: 'secondary', label: t('generics.edit') },
-    { type: 'delete', icon: 'delete', color: 'error', label: t('generics.delete') },
+    { type: 'edit', icon: 'edit', color: 'secondary', label: t('actions.edit') },
+    { type: 'delete', icon: 'delete', color: 'error', label: t('actions.delete') },
   ] as OptionsTypes[];
 
   const options = defaultOptions.concat(canEdit ? editOptions : []);

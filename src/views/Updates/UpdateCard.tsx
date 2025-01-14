@@ -35,7 +35,7 @@ const UpdateCard = ({ item, icon, variant, ...restOfProps }: Props) => {
       >
         <Stack direction="row" height={68} alignItems="center">
           <AppIcon icon={icon} sx={{ mr: 2 }} />
-          {t('texts.update', { var: t(`views.${variant}`) })}
+          {t('settings.messages.update', { var: t(`scopes.${variant}.plural`) })}
           <Typography ml={0.5} fontWeight={800}>
             {item.title}
           </Typography>

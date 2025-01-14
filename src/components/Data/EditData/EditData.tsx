@@ -292,7 +292,7 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
     <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} key={scope}>
       <Stack p={2} overflow="auto">
         <Typography variant="h4" pb={2}>
-          {t(`texts.${item ? 'edit' : 'add'}`, { var: t(`views.${DataConfig[scope].requests.name}`) })}
+          {t(`actions.${item ? 'edit' : 'add'}`, { var: t(`scopes.${DataConfig[scope].requests.name}.name`) })}
         </Typography>
         <FormContainer>
           <Stack>
@@ -324,10 +324,10 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
         </FormContainer>
         <Stack direction="row">
           <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onClose}>
-            {t('generics.cancel')}
+            {t('actions.cancel')}
           </Button>
           <Button type="submit" variant="contained" onClick={handleSubmit(onSubmit)}>
-            {t('generics.confirm')}
+            {t('actions.confirm')}
           </Button>
         </Stack>
       </Stack>

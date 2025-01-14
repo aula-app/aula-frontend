@@ -118,10 +118,10 @@ const SystemSettings = ({ settings, onReload }: Props) => {
   return (
     <Stack gap={2}>
       <Stack direction="row" alignItems="end" p={2} pt={0} gap={2}>
-        <Typography variant="h6">{t('texts.instance')}:</Typography>
+        <Typography variant="h6">{t('instance.status')}:</Typography>
         <TextField
           select
-          label={t('settings.status')}
+          label={t('settings.columns.status')}
           value={status}
           onChange={changeStatus}
           variant="filled"
@@ -136,10 +136,10 @@ const SystemSettings = ({ settings, onReload }: Props) => {
         </TextField>
       </Stack>
       <Button variant="contained" color="secondary" onClick={getBackup} fullWidth>
-        {t('settings.backup')}
+        {t('settings.backup.create')}
       </Button>
       <Button variant="contained" color="info" onClick={() => setRestoreDialog(true)} fullWidth>
-        {t('settings.backupRestore')}
+        {t('settings.backup.restore')}
       </Button>
       <Dialog
         fullScreen
@@ -151,7 +151,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
         <AppBar sx={{ position: 'relative' }} color="secondary">
           <Toolbar>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              {t('texts.restoreBackup')}
+              {t('settings.backup.headline')}
             </Typography>
             <AppIconButton icon="close" autoFocus onClick={() => setRestoreDialog(false)} />
           </Toolbar>

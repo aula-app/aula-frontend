@@ -9,7 +9,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation();
   const location = useLocation();
 
-  document.title = t('generics.title'); // Also Update Tab Title
+  document.title = 'aula'; // Also Update Tab Title
 
   return (
     <Stack mx="auto" width="100%" p={2} maxWidth="20rem" minHeight="100vh">
@@ -40,7 +40,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     if (location.pathname !== '/') {
       return (
         <AppLink color="primary" component={AppLink} to="/">
-          &lt; {t('login.button')}
+          &lt; {t('auth.login.button')}
         </AppLink>
       );
     }
@@ -53,9 +53,9 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     }
     return (
       <>
-        {t('login.noAccount')}
+        {t('auth.login.noAccount')}
         <Button variant="text" component={AppLink} to="/signup">
-          {t('login.signUp')}
+          {t('auth.register.button')}
         </Button>
       </>
     );

@@ -38,7 +38,7 @@ const fields = [
 // API request configuration for announcement operations
 // Defines endpoints and model names for CRUD operations
 const requests = {
-  name: 'bug',
+  name: 'bugs',
   model: 'Message',
   item: 'Message',
   items: 'Messages',

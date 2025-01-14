@@ -38,7 +38,7 @@ const FilterGroup = ({ group, setGroup }: Params) => {
   return (
     <TextField
       select
-      label={t('views.group')}
+      label={t('scopes.group.name')}
       value={group}
       onChange={changeRoom}
       variant="filled"

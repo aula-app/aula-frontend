@@ -99,7 +99,7 @@ const UserView = () => {
         data: { type: 'requestData', id: user.id, username: user.displayname, email: user.email },
         content: '',
       },
-      t('texts.exportRequest')
+      t('settings.account.exportRequest')
     );
   };
 
@@ -111,7 +111,7 @@ const UserView = () => {
         data: { type: 'deleteAccount', id: user.id, username: user.displayname, email: user.email },
         content: '',
       },
-      t('texts.deleteRequest')
+      t('settings.account.deleteRequest')
     );
   };
 
@@ -121,11 +121,11 @@ const UserView = () => {
 
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
-      <Typography variant="h4">{t('views.profile')}</Typography>
+      <Typography variant="h4">{t('ui.navigation.profile')}</Typography>
       {user ? <ProfileEditor user={user} onReload={getUserInfo} /> : <ProfileEditorSkeleton />}
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
-          <Typography variant="h6">{t('views.security')}</Typography>
+          <Typography variant="h6">{t('ui.navigation.security')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <ChangePassword onSubmit={changePass} ref={passFields} />
@@ -133,11 +133,11 @@ const UserView = () => {
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
-          <Typography variant="h6">{t('views.privacy')}</Typography>
+          <Typography variant="h6">{t('ui.navigation.privacy')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Button variant="contained" color="info" onClick={requestExport} fullWidth>
-            {t('texts.dataExport')}
+            {t('settings.account.export')}
           </Button>
         </AccordionDetails>
       </Accordion>
@@ -150,11 +150,11 @@ const UserView = () => {
             backgroundColor: red[100],
           }}
         >
-          <Typography variant="h6">{t('settings.danger')}</Typography>
+          <Typography variant="h6">{t('settings.panels.danger')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} fullWidth>
-            {t('texts.deleteData')}
+            {t('requests.deleteAccount.button')}
           </Button>
         </AccordionDetails>
       </Accordion>
@@ -166,18 +166,20 @@ const UserView = () => {
       >
         <DialogTitle id="alert-dialog-title">
           <Typography color="error" sx={{ display: 'flex' }}>
-            <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('texts.deleteData')}
+            <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('requests.deleteAccount.button')}
           </Typography>
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
-          <DialogContentText id="alert-dialog-description">{t('texts.deleteText')}</DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            {t('requests.deleteAccount.confirmation')}
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDelete(false)} color="secondary" autoFocus>
-            {t('generics.cancel')}
+            {t('actions.cancel')}
           </Button>
           <Button onClick={requestDelete} color="error" variant="contained">
-            {t('generics.delete')}
+            {t('actions.delete')}
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,12 +1,75 @@
 {
+  "actions": {
+    "activate": "{{var}} aktivieren",
+    "add": "{{var}} hinzufügen",
+    "addToParent": "Zu {{var}} hinzufügen",
+    "archive": "Archivieren",
+    "bugReport": "Fehler melden",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "contentReport": "Inhalt melden",
+    "deactivate": "{{var}} deaktivieren",
+    "delete": "Löschen",
+    "discard": "Verwerfen",
+    "edit": "Bearbeiten",
+    "hide": "Ausblenden",
+    "move": "{{var}} verschieben",
+    "print": "Drucken",
+    "save": "Speichern",
+    "select": "{{var}} auswählen",
+    "show": "Anzeigen",
+    "unarchive": "Aus Archiv holen"
+  },
   "commands": {
     "status": "Status setzen",
     "delete": "Löschen"
   },
+  "auth": {
+    "agree": "Ich stimme den Nutzungsbedingungen und der Datenschutzrichtlinie zu",
+    "checkEmail": "Überprüfe deine E-Mail für weitere Anweisungen",
+    "email": "E-Mail",
+    "errors": {
+      "accountInactive": "Dein Account ist inaktiv",
+      "accountSuspended": "Dein Account wurde{{var}} gesperrt. Bitte kontaktiere deinen Administrator",
+      "accountSuspendDate": " bis zum {{var}}",
+      "invalidCode": "Ungültiger Benutzercode",
+      "invalidCredentials": "Ungültiger Benutzername oder Passwort",
+      "invalidPassword": "Ungültiges Passwort",
+      "invalidToken": "Ungültiger Authentifizierungsschlüssel"
+    },
+    "forgotPassword": {
+      "button": "Passwort zurücksetzen",
+      "link": "Passwort vergessen?",
+      "success": "Ein Link zum Zurücksetzen des Passworts wurde an deine E-Mail gesendet"
+    },
+    "login": {
+      "button": "Anmelden",
+      "noAccount": "Noch kein Konto?",
+      "title": "Anmelden",
+      "username": "Benutzername"
+    },
+    "logout": "Abmelden",
+    "password": {
+      "change": "Passwort ändern",
+      "confirm": "Passwort bestätigen",
+      "current": "Aktuelles Passwort",
+      "new": "Neues Passwort",
+      "set": "Passwort festlegen",
+      "success": "Passwort erfolgreich geändert"
+    },
+    "register": {
+      "button": "Registrieren",
+      "name": "Vollständiger Name",
+      "title": "Konto erstellen",
+      "username": "Benutzername wählen"
+    },
+    "welcome": "Willkommen!"
+  },
   "consent": {
-    "message": "Keine Zustimmung",
-    "announcement": "Optionale Zustimmung",
-    "alert": "Obligatorische Zustimmung"
+    "mandatory": "Obligatorische Zustimmung erforderlich",
+    "none": "Keine Zustimmung erforderlich",
+    "optional": "Optionale Zustimmung verfügbar"
   },
   "delegation": {
     "confirm": "Bist du sicher, dass du das Stimmrecht für diese Ideenbox der folgenden Person {{var}} willst?",
@@ -82,7 +145,11 @@
     "discussion": "Diskussion",
     "results": "Ergebnisse",
     "voting": "Abstimmung",
-    "wild": "Wilde Ideen"
+    "wild": "Wilde Ideen",
+    "status": {
+      "end": "Phase endet in {{var}} Tagen",
+      "ended": "Phase beendet"
+    }
   },
   "roles": {
     "10": "Gast",
@@ -171,10 +238,12 @@
     "active": "Aktiv",
     "all": "Alle",
     "archived": "Archiviert",
-    "holiday": "Urlaub",
+    "holiday": "Feiertag",
     "inactive": "Inaktiv",
+    "loading": "Lädt...",
     "suspended": "Gesperrt",
-    "vacation": "Ferien",
+    "vacation": "Urlaub",
+    "waiting": "Warten",
     "weekend": "Wochenende"
   },
   "texts": {
@@ -247,14 +316,14 @@
     "yourVote": "So hast du abgestimmt: {{var}}"
   },
   "tooltips": {
-    "wild": "Hier kannst du „wilde Ideen“ posten. Du kannst auch Verbesserungsvorschläge schreiben und andere Ideen mit dem Herz liken.",
-    "discussion": "Hier werden Ideen in passenden Boxen sortiert. Sie werden durch weitere Bearbeitung und Verbesserungsvorschläge zu echten Projektplänen.",
-    "approval": "Das Prüfungsteam prüft, ob die Ideen durchführbar sind. Sie werden dann zur Abstimmung freigegeben oder abgelehnt.",
-    "voting": "Hier kannst du über Ideen abstimmen, endlich!",
-    "results": "Hier siehst du, wie über Ideen abgestimmt wurde. Die grün markierten Ideen können jetzt umgesetzt werden.",
-    "quorum": "Hier siehst du, wie viele Likes die Idee braucht, damit sie in die nächste Phase (Diskussion) kommt.",
-    "comment": "Ein Verbesserungsvorschlag sorgt dafür, dass eine Idee besser ausgearbeitet wird.",
-    "delegate": "Du kannst deine Stimme an eine andere Person abgeben. Die andere Person nutzt dann deine Stimme. Du kannst deine Stimme jederzeit zurücknehmen, indem du einfach selbst abstimmst."
+    "approval": "Das Prüfungsteam bewertet die Durchführbarkeit der Ideen vor der Abstimmung",
+    "comment": "Kommentare helfen, Ideen durch konstruktives Feedback zu verbessern",
+    "delegate": "Du kannst deine Stimme an eine andere Person delegieren und jederzeit widerrufen",
+    "discussion": "Ideen werden durch Zusammenarbeit zu konkreten Projektplänen",
+    "quorum": "Benötigte Likes für den Übergang in die Diskussionsphase",
+    "results": "Siehe Abstimmungsergebnisse und genehmigte Ideen zur Umsetzung",
+    "voting": "Stimme über freigegebene Ideen ab",
+    "wild": "Teile und like erste Ideen und Vorschläge"
   },
   "validation": {
     "agree": "Du musst zustimmen, um dich anzumelden.",
@@ -320,17 +389,18 @@
     "votes": "Abstimmungen"
   },
   "votes": {
-    "against": "dagegen",
-    "neutral": "neutral",
-    "for": "dafür"
+    "against": "Dagegen",
+    "for": "Dafür",
+    "neutral": "Neutral",
+    "yourVote": "Deine Stimme: {{var}}"
   },
-  "week": {
-    "Sunday": "Sonntag",
-    "Monday": "Montag",
-    "Tuesday": "Dienstag",
-    "Wednesday": "Mittwoch",
-    "Thursday": "Donnerstag",
-    "Friday": "Freitag",
-    "Saturday": "Samstag"
+  "weekDays": {
+    "friday": "Freitag",
+    "monday": "Montag",
+    "saturday": "Samstag",
+    "sunday": "Sonntag",
+    "thursday": "Donnerstag",
+    "tuesday": "Dienstag",
+    "wednesday": "Mittwoch"
   }
 }

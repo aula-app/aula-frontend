@@ -65,20 +65,20 @@ const SideBarContent = ({
       <Divider />
       <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
         {isFixed && <LocaleSwitch />}
-        <AppIconButton onClick={() => setReport('report')} icon="report" title={t('generics.contentReport')} />
-        <AppIconButton onClick={() => setReport('bug')} icon="bug" title={t('generics.bugReport')} />
-        <AppIconButton onClick={window.print} icon="print" title={t('generics.print')} />
+        <AppIconButton onClick={() => setReport('reports')} icon="report" title={t('actions.contentReport')} />
+        <AppIconButton onClick={() => setReport('bugs')} icon="bug" title={t('actions.bugReport')} />
+        <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} />
         <AppIconButton
           onClick={onSwitchDarkMode}
           icon={state.darkMode ? 'day' : 'night'}
-          title={state.darkMode ? t('generics.modeLight') : t('generics.modeDark')}
+          title={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
         />
       </Stack>
       <Divider />
       <Stack sx={actionStackStyles}>
         {isAuthenticated && (
           <AppButton variant="text" onClick={onLogout}>
-            {t('generics.logout')}&nbsp;
+            {t('auth.logout')}&nbsp;
             <AppIcon icon="logout" />
           </AppButton>
         )}
