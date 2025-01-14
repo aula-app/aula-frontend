@@ -112,7 +112,7 @@ const IdeaView = () => {
           <Typography variant="h5" py={2}>
             <KnowMore title={t('tooltips.comment')}>
               <Typography>
-                {String(comments.length)} {t('scopes.comment.plural')}
+                {String(comments.length)} {t('scopes.comments.plural')}
               </Typography>
             </KnowMore>
           </Typography>

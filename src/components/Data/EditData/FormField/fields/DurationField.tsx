@@ -78,7 +78,7 @@ const DurationField = ({
               render={({ field, fieldState }) => (
                 <Stack>
                   <Stack direction="row" alignItems="center" gap={1}>
-                    <Typography noWrap>{t(`scopes.${name}.name`)}:</Typography>
+                    <Typography noWrap>{t(`settings.columns.${name}`)}:</Typography>
                     <TextField
                       required={data.required}
                       disabled={disabled}

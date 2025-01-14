@@ -45,9 +45,9 @@ const fields = [
     form: {
       ...inputType.select, // Dropdown selection with predefined options
       options: [
-        { label: 'validation.consentNoNeed', value: 0 }, // No consent required
-        { label: 'validation.consentOptional', value: 1 }, // Optional consent
-        { label: 'validation.consentNeeded', value: 2 }, // Mandatory consent
+        { label: 'consent.message', value: 0 }, // No consent required
+        { label: 'consent.announcement', value: 1 }, // Optional consent
+        { label: 'consent.alert', value: 2 }, // Mandatory consent
       ],
     },
     required: true,
