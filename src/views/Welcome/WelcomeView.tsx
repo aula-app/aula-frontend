@@ -70,7 +70,7 @@ const WelcomeView = () => {
             transition: 'all .5s ease-in-out',
           }}
         >
-          {t('scopes.room.plural')}
+          {t('scopes.rooms.plural')}
         </Typography>
         <Grid container spacing={2}>
           {isLoading && <RoomCardSkeleton />}

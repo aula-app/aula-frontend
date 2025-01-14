@@ -93,6 +93,10 @@
       "undelegated": "{{var}} ideas"
     }
   },
+  "delete": {
+    "confirm": "Are you sure you want to delete the selected {{var}}? This action cannot be undone",
+    "headline": "Delete selected {{var}}"
+  },
   "errors": {
     "default": "Something went wrong",
     "network": "Network error",
@@ -102,33 +106,6 @@
     "offline": "The access to this school is suspended. Please try again later",
     "timeout": "The request timed out",
     "unauthorized": "This page requires authentication"
-  },
-  "delete": {
-    "confirm": "Are you sure you want to delete the selected {{var}}? This action cannot be undone",
-    "headline": "Delete selected {{var}}"
-  },
-  "requests": {
-    "label": "Requests",
-    "changeName": {
-      "title": "Data change request for {{var}}",
-      "body": "A data change procedure was requested for user {{var}}. They want to change their {{old}} to {{new}}"
-    },
-    "deleteAccount": {
-      "button": "Delete account",
-      "confirmation": "Are you sure you want to delete your account? All your data will be lost. This action cannot be undone",
-      "title": "Account deletion request for {{var}}",
-      "body": "A data deletion procedure was requested for user {{var}}"
-    },
-    "exportData": {
-      "title": "Account data export request for {{var}}",
-      "body": "A data export procedure was requested for user {{var}}"
-    },
-    "updateData": {
-      "headline": "Data update request",
-      "confirm": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place",
-      "title": "Account data update request for {{var}}",
-      "body": "A data update procedure was requested for user {{var}}"
-    }
   },
   "forms": {
     "validation": {
@@ -158,6 +135,29 @@
     "error": "The instance code is invalid",
     "headline": "Enter the instance code",
     "status": "Instance status"
+  },
+  "requests": {
+    "label": "Requests",
+    "changeName": {
+      "title": "Data change request for {{var}}",
+      "body": "A data change procedure was requested for user {{var}}. They want to change their {{old}} to {{new}}"
+    },
+    "deleteAccount": {
+      "button": "Delete account",
+      "confirm": "Are you sure you want to delete your account? All your data will be lost. This action cannot be undone",
+      "title": "Account deletion request for {{var}}",
+      "body": "A data deletion procedure was requested for user {{var}}"
+    },
+    "exportData": {
+      "title": "Account data export request for {{var}}",
+      "body": "A data export procedure was requested for user {{var}}"
+    },
+    "updateData": {
+      "headline": "Data update request",
+      "confirm": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place",
+      "title": "Account data update request for {{var}}",
+      "body": "A data update procedure was requested for user {{var}}"
+    }
   },
   "phases": {
     "approval": "Approval",

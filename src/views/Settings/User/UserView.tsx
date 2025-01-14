@@ -170,9 +170,7 @@ const UserView = () => {
           </Typography>
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
-          <DialogContentText id="alert-dialog-description">
-            {t('requests.deleteAccount.confirmation')}
-          </DialogContentText>
+          <DialogContentText id="alert-dialog-description">{t('requests.deleteAccount.confirm')}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDelete(false)} color="secondary" autoFocus>
