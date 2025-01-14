@@ -86,16 +86,18 @@ const ConfigView = () => {
         {t('settings.labels.configuration')}
       </Typography>
       <SchoolInfo config={config} onReload={getConfig} />
-      {panels.map((panel, i) => (
-        <Accordion expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)} key={i}>
-          <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
-            <Typography variant="h5" py={1}>
-              {t('settings.advanced.system', { var: t(`settings.panels.${panel.name}`) })}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>{panel.component}</AccordionDetails>
-        </Accordion>
-      ))}
+      {settings &&
+        config &&
+        panels.map((panel, i) => (
+          <Accordion expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)} key={i}>
+            <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
+              <Typography variant="h5" py={1}>
+                {t('settings.advanced.system', { var: t(`settings.panels.${panel.name}`) })}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>{panel.component}</AccordionDetails>
+          </Accordion>
+        ))}
     </Stack>
   );
 };
