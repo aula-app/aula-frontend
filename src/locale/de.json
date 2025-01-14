@@ -12,7 +12,8 @@
     "deactivate": "{{var}} deaktivieren",
     "delete": "Löschen",
     "discard": "Verwerfen",
-    "edit": "Bearbeiten",
+    "edit": "{{var}} bearbeiten",
+    "filter": "Filtern",
     "hide": "Ausblenden",
     "move": "{{var}} verschieben",
     "print": "Drucken",
@@ -22,8 +23,7 @@
     "unarchive": "Aus Archiv holen"
   },
   "commands": {
-    "status": "Status setzen",
-    "delete": "Löschen"
+    "status": "Status setzen"
   },
   "auth": {
     "errors": {
@@ -63,6 +63,7 @@
       "label": "Passwort",
       "change": "Passwort ändern",
       "confirm": "Passwort bestätigen",
+      "copied": "Passwort in die Zwischenablage kopiert",
       "current": "Aktuelles Passwort",
       "new": "Neues Passwort",
       "set": "Passwort festlegen",
@@ -73,7 +74,7 @@
       "name": "Vollständiger Name",
       "title": "Konto erstellen",
       "username": "Benutzername wählen"
-    },
+    }
   },
   "consent": {
     "message": "Keine Zustimmung erforderlich",
@@ -148,6 +149,35 @@
     "userName": "Name des Benutzers",
     "welcome": "Willkommen bei aula",
     "wrongKey": "Der angegebene Authentifizierungsschlüssel ist ungültig."
+  },
+  "instance": {
+    "label": "Instanzcode",
+    "error": "Instanzcode nicht gefunden",
+    "headline": "Geben Sie den Instanzcode ein",
+    "status": "Instanz Status"
+  },
+  "requests": {
+    "label": "Anfragen",
+    "changeName": {
+      "title": "Datenänderungsantrag für {{var}}",
+      "body": "Ein Datenänderungsverfahren wurde für Benutzer {{var}} angefordert. Sie möchten ihren {{old}} zu {{new}} ändern"
+    },
+    "deleteAccount": {
+      "button": "Konto löschen",
+      "confirm": "Möchtest du wirklich die Löschung deines Kontos beantragen? Alle deine Daten gehen verloren. Diese Aktion kann nicht rückgängig gemacht werden",
+      "title": "Kontolöschungsantrag für {{var}}",
+      "body": "Ein Datenlöschungsverfahren wurde für Benutzer {{var}} angefordert"
+    },
+    "exportData": {
+      "title": "Datenexportanfrage für {{var}}",
+      "body": "Ein Datenexportverfahren wurde für Benutzer {{var}} angefordert"
+    },
+    "updateData": {
+      "headline": "Datenaktualisierungsantrag",
+      "confirm": "Möchtest du wirklich die Aktualisierung deiner Felder anfordern? Diese Aktion muss von einem Administrator validiert werden",
+      "title": "Datenaktualisierungsantrag für {{var}}",
+      "body": "Ein Datenaktualisierungsverfahren wurde für Benutzer {{var}} angefordert"
+    }
   },
   "phases": {
     "phase": "{{var}}-Phase",
