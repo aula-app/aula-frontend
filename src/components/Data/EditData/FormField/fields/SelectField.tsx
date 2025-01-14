@@ -63,7 +63,7 @@ const SelectField = ({ data, control, disabled = false, ...restOfProps }: Props)
       render={({ field, fieldState }) => (
         <FormControl fullWidth>
           <TextField
-            label={t(`scopes.${data.name}.name`)}
+            label={t(`settings.columns.${data.name}`)}
             required
             fullWidth
             disabled={disabled}

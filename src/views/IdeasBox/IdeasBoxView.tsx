@@ -83,9 +83,14 @@ const IdeasBoxView = () => {
         <BoxCard box={String(params['box_id'])} noLink />
         <Stack direction="row">
           <Typography variant="h6" p={2}>
-            {t(delegationStatus && delegationStatus.length > 0 ? `texts.delegated` : `texts.undelegated`, {
-              var: boxIdeas.length,
-            })}
+            {t(
+              delegationStatus && delegationStatus.length > 0
+                ? `delegation.status.delegated`
+                : `delegation.status.undelegated`,
+              {
+                var: boxIdeas.length,
+              }
+            )}
           </Typography>
           {Number(params['phase']) === 30 && (
             <Stack direction="row" position="relative" alignItems="center" sx={{ ml: 'auto', pr: 3 }}>
