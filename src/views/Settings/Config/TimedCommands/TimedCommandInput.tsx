@@ -103,10 +103,12 @@ const TimeCommandInput = ({ onReload }: Props) => {
   return (
     <Stack gap={2}>
       <Stack direction="row" alignItems="center" flexWrap="wrap" gap={2}>
-        <Typography variant="h6">{t('generics.add', { var: t('settings.command') })}:</Typography>
+        <Typography variant="h6">
+          {t('actions.add', { var: t('settings.columns.command').toLocaleLowerCase() })}:
+        </Typography>
         <TextField
           select
-          label={t('settings.scope')}
+          label={t('settings.labels.scope')}
           value={scope}
           onChange={changeScope}
           variant="outlined"
@@ -116,16 +118,16 @@ const TimeCommandInput = ({ onReload }: Props) => {
         >
           {Commands.map((scopeOptions, i) => (
             <MenuItem value={i} key={i}>
-              {t(
-                `views.${scopeOptions.label === 'system' ? scopeOptions.label : DataConfig[scopeOptions.label].requests.item.toLowerCase()}`
-              )}
+              {scopeOptions.label === 'system'
+                ? t('settings.panels.system')
+                : t(`scopes.${DataConfig[scopeOptions.label].requests.item.toLowerCase()}.name`)}
             </MenuItem>
           ))}
         </TextField>
         {Commands[scope].label !== 'system' && (
           <TextField
             select
-            label={t(`views.${DataConfig[Commands[scope].label].requests.item.toLowerCase()}`)}
+            label={t(`scopes.${DataConfig[Commands[scope].label].requests.item.toLowerCase()}.name`)}
             value={target}
             onChange={changeTarget}
             variant="outlined"
@@ -148,7 +150,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
         {Commands[scope].actions && (
           <TextField
             select
-            label={t('settings.command')}
+            label={t('settings.columns.command')}
             value={action}
             onChange={changeAction}
             variant="outlined"
@@ -193,7 +195,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
         )}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            label={t(`settings.dateStart`)}
+            label={t(`settings.time.startDate`)}
             value={dayjs(startTime)}
             disabled={typeof action !== 'number'}
             format={FORMAT_DATE_ONLY}
@@ -204,7 +206,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
           />
         </LocalizationProvider>
         <Button variant="contained" onClick={addField} sx={{ py: 0.9, alignSelf: 'start' }}>
-          {t('generics.confirm')}
+          {t('actions.confirm')}
         </Button>
       </Stack>
     </Stack>

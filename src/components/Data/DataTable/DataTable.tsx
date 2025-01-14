@@ -150,7 +150,7 @@ const DataTable = ({
                       direction={orderAsc ? 'asc' : 'desc'}
                       onClick={() => handleOrder(column.orderId)}
                     >
-                      {customFields[column.name as keyof typeof customFields] || t(`settings.${column.name}`)}
+                      {customFields[column.name as keyof typeof customFields] || t(`settings.columns.${column.name}`)}
                     </TableSortLabel>
                   </TableCell>
                 )

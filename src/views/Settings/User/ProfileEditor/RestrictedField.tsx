@@ -39,7 +39,7 @@ const RestrictedField = ({ user, option, unlocked, setUnlocked, control }: Props
         // @ts-ignore
         render={({ field, fieldState }) => (
           <TextField
-            label={t(`settings.${option}`)}
+            label={t(`settings.columns.${option}`)}
             variant="filled"
             size="small"
             required={option !== 'email'}

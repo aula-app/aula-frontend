@@ -204,10 +204,10 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
             sx={{ borderRadius: 30, mb: 3, order: 999 }}
             onClick={() => setOpen(true)}
           >
-            {t('texts.select', { var: t(`views.${currentTarget.target}`) })}
+            {t('actions.select', { var: t(`scopes.${currentTarget.target}.name`) })}
           </Button>
           <Dialog open={isOpen} onClose={close} fullWidth maxWidth="xs">
-            <DialogTitle>{t('texts.select', { var: t(`views.${currentTarget.target}`) })}</DialogTitle>
+            <DialogTitle>{t('actions.select', { var: t(`scopes.${currentTarget.target}.name`) })}</DialogTitle>
             <DialogContent>
               <Stack height={350} position="relative" overflow="hidden">
                 <Stack position="absolute" height="100%" width="100%">
@@ -258,10 +258,10 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
             </DialogContent>
             <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
               <Button color="error" onClick={close}>
-                {t('generics.close')}
+                {t('actions.close')}
               </Button>
               <Button type="submit" variant="contained" onClick={onSubmit}>
-                {t('generics.confirm')}
+                {t('actions.confirm')}
               </Button>
             </DialogActions>
           </Dialog>

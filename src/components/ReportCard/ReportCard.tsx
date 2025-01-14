@@ -42,7 +42,9 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
   return bodyData ? (
     <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
       <CardHeader
-        title={bodyData.data.type ? t(`texts.${bodyData.data.type}`, { var: report.headline }) : report.headline}
+        title={
+          bodyData.data.type ? t(`scopes.${bodyData.data.type}.headline`, { var: report.headline }) : report.headline
+        }
       />
       <Divider />
       {bodyData.data && (
@@ -94,14 +96,14 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
         <Stack direction="row" mt={0.5} flex={1} gap={3} justifyContent="end">
           {report.status === 1 ? (
             <Button color="error" onClick={() => onArchive(true)}>
-              {t(`texts.archive`)}
+              {t('actions.archive')}
             </Button>
           ) : (
-            <Button onClick={() => onArchive(false)}>{t(`texts.unarchive`)}</Button>
+            <Button onClick={() => onArchive(false)}>{t('actions.unarchive')}</Button>
           )}
           {!!onConfirm && (
             <Button variant="contained" onClick={confirmRequest}>
-              {t('generics.confirm')}
+              {t('actions.confirm')}
             </Button>
           )}
         </Stack>

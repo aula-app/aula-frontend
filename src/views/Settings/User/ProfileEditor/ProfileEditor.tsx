@@ -44,17 +44,17 @@ const ProfileEditor = ({ user, onReload }: Props) => {
   const schema = yup.object({
     realname: yup
       .string()
-      .max(30, t('validation.max', { var: 30 }))
-      .min(3, t('validation.min', { var: 3 }))
+      .max(30, t('forms.validation.maxLength', { var: 30 }))
+      .min(3, t('forms.validation.minLength', { var: 3 }))
       .required(),
     username: yup
       .string()
-      .max(30, t('validation.max', { var: 30 }))
-      .min(3, t('validation.min', { var: 3 }))
+      .max(30, t('forms.validation.maxLength', { var: 30 }))
+      .min(3, t('forms.validation.minLength', { var: 3 }))
       .required(),
     email: yup.string().email(),
     about_me: yup.string(),
-    displayname: yup.string().max(30, t('validation.max', { var: 30 })),
+    displayname: yup.string().max(30, t('forms.validation.maxLength', { var: 30 })),
   });
 
   const {
@@ -74,7 +74,7 @@ const ProfileEditor = ({ user, onReload }: Props) => {
     dispatch({
       type: 'ADD_POPUP',
       message: {
-        message: t('texts.updated', { var: String(updates.map((update) => ` ${update[0]}`)) }),
+        message: t('settings.messages.updated', { var: String(updates.map((update) => ` ${update[0]}`)) }),
         type: 'success',
       },
     });
@@ -116,7 +116,7 @@ const ProfileEditor = ({ user, onReload }: Props) => {
         dispatch({
           type: 'ADD_POPUP',
           message: {
-            message: t('texts.updateRequest', { var: t(`settings.${Object.keys(args)[0]}`) }),
+            message: t('requests.updateData.title', { var: t(`settings.${Object.keys(args)[0]}`) }),
             type: 'success',
           },
         });
@@ -216,7 +216,7 @@ const ProfileEditor = ({ user, onReload }: Props) => {
           option={'email'}
         />
         <TextField
-          label={t('settings.displayname')}
+          label={t('settings.columns.displayname')}
           {...register('displayname')}
           error={errors.displayname ? true : false}
           helperText={errors.displayname?.message || ' '}
@@ -227,7 +227,7 @@ const ProfileEditor = ({ user, onReload }: Props) => {
         <TextField
           multiline
           minRows={5}
-          label={t('settings.about_me')}
+          label={t('settings.columns.about_me')}
           {...register('about_me')}
           error={errors.about_me ? true : false}
           helperText={errors.about_me?.message || ' '}
@@ -235,7 +235,7 @@ const ProfileEditor = ({ user, onReload }: Props) => {
           fullWidth
         />
         <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(onSubmit)}>
-          {t('generics.save')}
+          {t('actions.save')}
         </AppButton>
       </Stack>
       {user && (
@@ -258,19 +258,19 @@ const ProfileEditor = ({ user, onReload }: Props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" color="error" sx={{ display: 'flex', alignItems: 'center' }}>
-          <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('texts.dataUpdate')}
+          <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('requests.updateData.headline')}
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
           <DialogContentText id="alert-dialog-description">
-            {t('texts.dataUpdateText', { var: String(updates.map((update) => ` ${update[0]}`)) })}
+            {t('requests.updateData.confirm', { var: String(updates.map((update) => ` ${update[0]}`)) })}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog} color="secondary" autoFocus>
-            {t('generics.cancel')}
+            {t('actions.cancel')}
           </Button>
           <Button onClick={requestUpdates} color="error" variant="contained">
-            {t('generics.confirm')}
+            {t('actions.confirm')}
           </Button>
         </DialogActions>
       </Dialog>

@@ -41,20 +41,20 @@ const DeleteData = ({ isOpen, scope, id, onClose }: Params) => {
     >
       <DialogTitle id="alert-dialog-title">
         <Stack direction="row" alignItems="center">
-          <WarningAmber sx={{ mr: 1 }} color="error" /> {t('texts.deleteHeadline', { var: t(`views.${scope}`) })}
+          <WarningAmber sx={{ mr: 1 }} color="error" /> {t('delete.headline', { var: t(`scopes.${scope}.name`) })}
         </Stack>
       </DialogTitle>
       <DialogContent sx={{ overflowY: 'auto' }}>
         <DialogContentText id="alert-dialog-description">
-          {t('texts.deleteConfirm', { var: t(`views.${scope}`) })}
+          {t('delete.confirm', { var: t(`scopes.${scope}.name`) })}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="secondary" autoFocus>
-          {t('generics.cancel')}
+          {t('actions.cancel')}
         </Button>
         <Button onClick={deleteRequest} color="error" variant="contained">
-          {t('generics.delete')}
+          {t('actions.delete')}
         </Button>
       </DialogActions>
     </Dialog>

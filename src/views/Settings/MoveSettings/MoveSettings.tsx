@@ -91,10 +91,10 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{t('texts.move', { var: t(`views.${scope}`) })}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{t('actions.move', { var: t(`scopes.${scope}.name`) })}</DialogTitle>
       <DialogContent sx={{ overflowY: 'auto' }}>
         <DialogContentText component={Stack} id="alert-dialog-description">
-          {t('texts.moveData', { var: t(`views.${scope}`).toLowerCase() })}
+          {t('actions.move', { var: t(`scopes.${scope}.name`).toLowerCase() })}
           <Controller
             // @ts-ignore
             name="select"
@@ -126,10 +126,10 @@ const EditSettings = ({ isOpen, items, onClose }: Params) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="secondary" autoFocus>
-          {t('generics.cancel')}
+          {t('actions.cancel')}
         </Button>
         <Button onClick={handleSubmit(moveRequest)} color="primary" variant="contained">
-          {t('generics.confirm')}
+          {t('actions.confirm')}
         </Button>
       </DialogActions>
     </Dialog>

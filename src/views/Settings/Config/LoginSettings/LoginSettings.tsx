@@ -82,19 +82,19 @@ const SystemSettings = ({ config, settings, onReload }: Props) => {
       <Grid size="auto">
         <FormControlLabel
           control={<Switch checked={!online} onChange={toggleOnline} />}
-          label={t(`settings.offline`)}
+          label={t(`settings.advanced.offline`)}
         />
       </Grid>
       <Grid size="auto">
         <FormControlLabel
           control={<Switch checked={Boolean(oAuth)} onChange={toggleOAuth} />}
-          label={t(`settings.oauth`)}
+          label={t(`settings.advanced.oauth`)}
         />
       </Grid>
       <Grid size="auto">
         <FormControlLabel
           control={<Switch checked={Boolean(registration)} onChange={toggleRegistration} />}
-          label={t(`settings.registration`)}
+          label={t(`settings.advanced.registration`)}
         />
       </Grid>
     </Grid>

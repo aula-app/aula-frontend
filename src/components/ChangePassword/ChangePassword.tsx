@@ -4,7 +4,6 @@ import { forwardRef, useImperativeHandle, useState } from 'react';
 import { FormContainer, SubmitHandler, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import AppButton from '../AppButton';
 import AppIconButton from '../AppIconButton';
 import AppSubmitButton from '../AppSubmitButton';
 
@@ -68,7 +67,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(
       <FormContainer>
         <Collapse in={showMessage} sx={{ mb: 2 }}>
           <Alert variant="outlined" severity={messageType} onClose={() => setShowMessage(false)}>
-            {messageType === 'success' ? t('login.passwordChange') : t('login.passwordError')}
+            {messageType === 'success' ? t('auth.password.success') : t('auth.errors.invalidPassword')}
           </Alert>
         </Collapse>
         <Stack>
@@ -77,7 +76,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(
               required
               disabled={disabled}
               type={showOldPassword ? 'text' : 'password'}
-              label={t('settings.password')}
+              label={t('auth.password.label')}
               sx={{ width: '100%' }}
               {...register('oldPassword')}
               error={errors.oldPassword ? true : false}
@@ -89,7 +88,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(
                       <AppIconButton
                         aria-label="toggle password visibility"
                         icon={showOldPassword ? 'visibilityOn' : 'visibilityOff'}
-                        title={showOldPassword ? t('generics.hide') : t('generics.show')}
+                        title={showOldPassword ? t('actions.hide') : t('actions.show')}
                         onClick={() => setOldPassword(!showOldPassword)}
                         onMouseDown={(e) => e.preventDefault()}
                       />
@@ -103,7 +102,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(
             required
             disabled={disabled}
             type={showNewPassword ? 'text' : 'password'}
-            label={t('settings.passwordChange')}
+            label={t('auth.password.change')}
             sx={{ width: '100%' }}
             {...register('newPassword')}
             error={errors.newPassword ? true : false}
@@ -115,7 +114,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(
                     <AppIconButton
                       aria-label="toggle password visibility"
                       icon={showNewPassword ? 'visibilityOn' : 'visibilityOff'}
-                      title={showNewPassword ? t('generics.hide') : t('generics.show')}
+                      title={showNewPassword ? t('actions.hide') : t('actions.show')}
                       onClick={() => setNewPassword(!showNewPassword)}
                       onMouseDown={(e) => e.preventDefault()}
                     />
@@ -128,7 +127,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(
             required
             disabled={disabled}
             type={showConfirmPassword ? 'text' : 'password'}
-            label={t('settings.passwordConfirmChange')}
+            label={t('auth.password.confirm')}
             sx={{ width: '100%' }}
             {...register('confirmPassword')}
             error={errors.confirmPassword ? true : false}
@@ -140,7 +139,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(
                     <AppIconButton
                       aria-label="toggle password visibility"
                       icon={showConfirmPassword ? 'visibilityOn' : 'visibilityOff'}
-                      title={showConfirmPassword ? t('generics.hide') : t('generics.show')}
+                      title={showConfirmPassword ? t('actions.hide') : t('actions.show')}
                       onClick={() => setConfirmPassword(!showConfirmPassword)}
                       onMouseDown={(e) => e.preventDefault()}
                     />

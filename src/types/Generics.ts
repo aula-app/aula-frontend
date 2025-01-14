@@ -18,7 +18,7 @@ export interface DatabaseResponseType {
 }
 
 export type ColorTypes = 'secondary' | 'warning' | 'error' | 'inherit' | 'primary' | 'success' | 'info';
-export type AlterTypes = 'add' | 'edit' | 'delete' | 'report' | 'bug';
+export type AlterTypes = 'add' | 'edit' | 'delete' | 'reports' | 'bugs';
 export type StatusTypes = -1 | 0 | 1 | 2 | 3;
 
 export interface DefaultUpdate {

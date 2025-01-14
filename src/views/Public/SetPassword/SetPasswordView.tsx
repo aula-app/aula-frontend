@@ -38,7 +38,7 @@ const SetPasswordView = () => {
           setValid(false);
         }
       } catch (error) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
         setValid(false);
       } finally {
         setLoading(false);
@@ -66,10 +66,10 @@ const SetPasswordView = () => {
       if (response.success) {
         navigate('/');
       } else {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
       }
     } catch (error) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
     } finally {
       setLoading(false);
     }
@@ -80,10 +80,10 @@ const SetPasswordView = () => {
   return (
     <FormContainer>
       <Stack spacing={3}>
-        <Typography variant="h5">{t('login.setPass')}</Typography>
+        <Typography variant="h5">{t('auth.password.set')}</Typography>
         <Collapse in={!isValid}>
           <Alert variant="outlined" severity="error" onClose={() => setValid(true)}>
-            {t('login.codeError')}
+            {t('auth.errors.invalidCode')}
           </Alert>
         </Collapse>
         <ChangePassword disabled={isLoading} onSubmit={onSubmit} hideOld />

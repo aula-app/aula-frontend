@@ -19,7 +19,7 @@ const FilterRole = ({ role, setRole }: Params) => {
   return (
     <TextField
       select
-      label={t('settings.userlevel')}
+      label={t('settings.columns.userlevel')}
       value={role}
       onChange={changeRole}
       variant="filled"

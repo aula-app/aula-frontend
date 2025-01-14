@@ -46,13 +46,13 @@ const ReportsView = () => {
   return (
     <Stack width="100%" height="100%" p={2} gap={2}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="h4">{t('views.reports')}</Typography>
+        <Typography variant="h4">{t('scopes.reports.plural')}</Typography>
         <Stack direction="row" px={2}>
           <AppIconButton icon="filter" onClick={() => setOpenFilter(!openFilter)} />
         </Stack>
       </Stack>
       <FilterBar
-        scope={'report'}
+        scope={'reports'}
         filter={filter}
         statusOptions={[
           { label: 'status.active', value: 1 },

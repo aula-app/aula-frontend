@@ -18,7 +18,7 @@ const SelectRoom = ({ role, setRole }: Params) => {
   return (
     <TextField
       select
-      label={t('settings.userlevel')}
+      label={t('settings.columns.userlevel')}
       value={role}
       onChange={changeRoom}
       variant="filled"

@@ -21,7 +21,7 @@ const RecoveryPasswordView = () => {
   const [isLoading, setLoading] = useState(false);
 
   const schema = yup.object().shape({
-    email: yup.string().email(t('validation.email')).required(t('validation.required')),
+    email: yup.string().email(t('forms.validation.email')).required(t('forms.validation.required')),
   });
 
   const form = useForm<FormData>({
@@ -41,13 +41,13 @@ const RecoveryPasswordView = () => {
       );
 
       if (response.success) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('login.forgotRequest'), type: 'success' } });
+        dispatch({ type: 'ADD_POPUP', message: { message: t('auth.forgotPassword.forgotRequest'), type: 'success' } });
         navigate('/', { replace: true });
       } else {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
       }
     } catch (error) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
     } finally {
       setLoading(false);
     }
@@ -58,7 +58,7 @@ const RecoveryPasswordView = () => {
   return (
     <FormContainer onSuccess={onSubmit}>
       <Stack spacing={3}>
-        <Typography variant="h5">{t('login.recovery')}</Typography>
+        <Typography variant="h5">{t('auth.forgotPassword.recovery')}</Typography>
         <TextField
           required
           disabled={isLoading}
@@ -67,7 +67,7 @@ const RecoveryPasswordView = () => {
           error={!!form.formState.errors.email}
           helperText={form.formState.errors.email?.message || ' '}
         />
-        <AppSubmitButton label={t('login.recover')} disabled={isLoading} />
+        <AppSubmitButton label={t('auth.forgotPassword.recover')} disabled={isLoading} />
       </Stack>
     </FormContainer>
   );

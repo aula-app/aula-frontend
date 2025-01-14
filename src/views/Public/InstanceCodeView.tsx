@@ -16,7 +16,7 @@ const InstanceCodeView = () => {
 
   const handleSubmit = async () => {
     if (!code.trim()) {
-      setError(t('generics.required'));
+      setError(t('forms.validation.required'));
       return;
     }
 
@@ -28,12 +28,12 @@ const InstanceCodeView = () => {
       if (isValid) {
         navigate('/');
       } else {
-        setError(t('generics.wrong'));
-        dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+        setError(t('errors.default'));
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
       }
     } catch (err) {
-      setError(t('generics.error'));
-      dispatch({ type: 'ADD_POPUP', message: { message: t('generics.error'), type: 'error' } });
+      setError(t('instance.error'));
+      dispatch({ type: 'ADD_POPUP', message: { message: t('instance.error'), type: 'error' } });
     } finally {
       setLoading(false);
     }
@@ -44,10 +44,10 @@ const InstanceCodeView = () => {
       <TextField
         disabled={isLoading}
         id="instance-code"
-        label={t('code')}
+        label={t('instance.label')}
         variant="outlined"
         error={!!error}
-        helperText={error || t('type_instance_code')}
+        helperText={error || t('instance.headline')}
         onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
           if (event.key === 'Enter') handleSubmit();
         }}
@@ -62,7 +62,7 @@ const InstanceCodeView = () => {
         onClick={handleSubmit}
         startIcon={isLoading ? <CircularProgress size={20} /> : null}
       >
-        {t("confirm")}
+        {t('actions.confirm')}
       </Button>
     </Stack>
   );

@@ -64,7 +64,7 @@ const MessagesView = () => {
               onClick={() => onArchive(message.status === 1 ? true : false)}
               sx={{ ml: 'auto', mr: 2, my: 1 }}
             >
-              {message.status === 1 ? t(`texts.archive`) : t(`texts.unarchive`)}
+              {message.status === 1 ? t('actions.archive') : t('actions.unarchive')}
             </Button>
           </CardActions>
         </Card>

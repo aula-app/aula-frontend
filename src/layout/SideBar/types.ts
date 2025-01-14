@@ -1,6 +1,6 @@
-import { Dispatch, MouseEvent, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
-export type ReportType = 'bug' | 'report' | undefined;
+export type ReportType = 'bugs' | 'reports' | undefined;
 
 export interface BaseSideBarProps {
   setReport: Dispatch<SetStateAction<ReportType>>;

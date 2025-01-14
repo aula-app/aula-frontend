@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 const PublicNotFoundView = () => {
   const { t } = useTranslation();
-  
+
   return (
     <Stack spacing={2} alignItems="center" sx={{ p: 2 }}>
-      <Typography>{t('texts.unaltenticated')}</Typography>
+      <Typography>{t('errors.unauthorized')}</Typography>
       <AppLink color="success" to="/">
-        {t('login.signIn')}
+        {t('auth.login.button')}
       </AppLink>
     </Stack>
   );

@@ -7,13 +7,13 @@ export type RoleTypes = 10 | 20 | 30 | 40 | 50 | 60;
 
 export type SettingNamesType =
   | 'announcements'
-  | 'bug'
+  | 'bugs'
   | 'boxes'
   | 'comments'
   | 'groups'
   | 'ideas'
   | 'messages'
-  | 'report'
+  | 'reports'
   | 'rooms'
   | 'surveys'
   | 'users'

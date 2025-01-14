@@ -159,7 +159,7 @@ const SettingsView = () => {
     <Stack direction="column" height="100%">
       <Stack direction="row" alignItems="center">
         <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
-          {t(`views.${setting_name}`)}
+          {t(`scopes.${setting_name}.plural`)}
         </Typography>
         <Stack direction="row" alignItems="start" bottom={0} height={37} px={2}>
           {items.length > 0 && <AppIconButton icon="filter" onClick={() => setOpenFilter(!openFilter)} />}

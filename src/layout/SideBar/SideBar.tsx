@@ -43,7 +43,7 @@ const SideBar = ({ anchor, open, variant, setReport, onClose, ...restOfProps }: 
           color="secondary"
           onClick={(evt) => onClose(evt, 'backdropClick')}
           icon="close"
-          title={t('generics.close')}
+          title={t('actions.close')}
           sx={{ px: 0 }}
         />
       </Stack>

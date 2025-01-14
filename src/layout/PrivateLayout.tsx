@@ -22,7 +22,7 @@ const TITLE_PRIVATE = 'aula';
 
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const location = useLocation();
-  const [scope, setScope] = useState<'bug' | 'report'>();
+  const [scope, setScope] = useState<'bugs' | 'reports'>();
   const [online, setOnline] = useState(true);
   const jwt = parseJwt(localStorageGet('token'));
 
@@ -62,7 +62,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       </Stack>
       <EditData
         isOpen={!!scope}
-        scope={scope || 'bug'}
+        scope={scope || 'bugs'}
         otherData={{
           headline: `${location.pathname}`,
           msg_type: 4,

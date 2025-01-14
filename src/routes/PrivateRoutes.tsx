@@ -16,7 +16,7 @@ import RoomView from '@/views/Room';
 import RoomPhaseView from '@/views/Room/RoomPhaseView';
 import SettingsView from '@/views/Settings';
 import ConfigView from '@/views/Settings/Config';
-import ReportsView from '@/views/Settings/Report';
+import ReportsView from '@/views/Settings/Reports';
 import RequestsView from '@/views/Settings/Requests';
 import UserView from '@/views/Settings/User';
 import UpdatesView from '@/views/Updates';
