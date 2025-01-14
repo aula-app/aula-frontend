@@ -1,5 +1,5 @@
 import { StatusTypes } from '@/types/Generics';
-import { MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { MenuItem, TextField } from '@mui/material';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -23,7 +23,7 @@ const FilterStatus = ({ options, status, setStatus }: Params) => {
   return (
     <TextField
       select
-      label={t('settings.status')}
+      label={t('settings.columns.status')}
       value={status}
       onChange={changeStatus}
       variant="filled"

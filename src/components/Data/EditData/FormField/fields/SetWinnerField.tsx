@@ -1,7 +1,6 @@
-import { ObjectPropByName } from '@/types/Generics';
 import { FormControlLabel, Switch } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { updateType } from '../../EditData';
 
 type Props = {
@@ -29,7 +28,7 @@ const SetWinnerField = ({ id, defaultValue, addUpdate }: Props) => {
   return (
     <FormControlLabel
       control={<Switch checked={winner} onChange={toggleWinner} />}
-      label={t('settings.is_winner')}
+      label={t('settings.columns.is_winner')}
       sx={{ order: 5, mb: 3 }}
     />
   );

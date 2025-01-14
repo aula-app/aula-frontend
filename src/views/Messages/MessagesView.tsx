@@ -13,7 +13,7 @@ const MessagesView = () => {
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
       <Typography variant="h5" py={2}>
-        {t('views.messages')}
+        {t('scopes.message.plural')}
       </Typography>
       <MessageCard type="message" />
       <MessageCard type="announcement" />

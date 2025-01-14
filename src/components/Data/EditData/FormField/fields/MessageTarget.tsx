@@ -48,17 +48,17 @@ const MessageTarget = ({ data, control, disabled = false, setValue, getValues, .
     <Stack direction="row" gap={2} alignItems="center">
       {!disabled && (
         <TextField
-          label={t('texts.recipient')}
+          label={t('forms.validation.recipient')}
           select
           value={recipientType}
           onChange={changeType}
           sx={{ mb: 3, order: 0, minWidth: 100 }}
           {...restOfProps}
         >
-          <MenuItem value={0}>{t('generics.all')}</MenuItem>
+          <MenuItem value={0}>{t('status.all')}</MenuItem>
           {Object.values(recipientTypes).map((type, i) => (
             <MenuItem value={i + 1} key={i}>
-              {t(`views.${type.name}`)}
+              {t(`scopes.${type.name}.name`)}
             </MenuItem>
           ))}
         </TextField>

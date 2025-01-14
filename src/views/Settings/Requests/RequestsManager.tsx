@@ -39,7 +39,7 @@ const RequestsManager = ({ request, onReload }: Props) => {
       ['creator_id', 'updater_id']
     ).then((response) => {
       if (!response.success) return;
-      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.success'), type: 'success' } });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('ui.common.success'), type: 'success' } });
     });
   };
 
@@ -87,7 +87,8 @@ const RequestsManager = ({ request, onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success) dispatch({ type: 'ADD_POPUP', message: { message: t('texts.success'), type: 'success' } });
+      if (response.success)
+        dispatch({ type: 'ADD_POPUP', message: { message: t('ui.common.success'), type: 'success' } });
     });
   };
 

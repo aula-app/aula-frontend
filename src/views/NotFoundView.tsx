@@ -11,7 +11,7 @@ const NotFoundView = (): JSX.Element => {
     <Stack flex={1} alignItems="center" justifyContent="center">
       <img src="/img/aula_happy.png" alt="Not found" loading="lazy" width={150} />
       <Typography variant="h6" mt={2}>
-        {t('views.notFound')}
+        {t('errors.notFound')}
       </Typography>
     </Stack>
   );

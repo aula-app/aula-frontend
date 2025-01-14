@@ -75,7 +75,7 @@ const MessageCard = ({ type }: Props) => {
         <Stack>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="h6" py={2} display="flex" alignItems="center">
-              <AppIcon icon={type} sx={{ mr: 1 }} /> {t(`views.${type}s`)}
+              <AppIcon icon={type} sx={{ mr: 1 }} /> {t(`scopes.${type}s.plural`)}
             </Typography>
             <AppIconButton icon="filter" onClick={() => setOpenMessagesFilter(!openMessagesFilter)} />
           </Stack>
@@ -91,7 +91,7 @@ const MessageCard = ({ type }: Props) => {
             const variant = type === 'report' ? JSON.parse(message.body).data.type : type;
             const headline =
               ['report', 'request'].includes(type) && messageData
-                ? t(`texts.${messageData}`, { var: message.headline })
+                ? t(`scopes.${messageData}.headline`, { var: message.headline })
                 : message.headline;
             return (
               <Stack

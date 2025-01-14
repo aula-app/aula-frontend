@@ -33,7 +33,7 @@ const IconField = ({ data, control, disabled = false, setValue, ...restOfProps }
       render={({ field, fieldState }) => (
         <FormControl fullWidth>
           <Typography variant="caption" pl={2}>
-            {t('generics.image')}
+            {t('ui.files.image.label')}
           </Typography>
           <TextField {...field} {...restOfProps} sx={{ visibility: 'hidden', height: 0 }} />
           <Stack direction="row" flexWrap="wrap" justifyContent="center">

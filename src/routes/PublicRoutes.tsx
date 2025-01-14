@@ -1,9 +1,8 @@
+import { localStorageGet, localStorageSet } from '@/utils';
+import { Auth, InstanceCodeView, Login, OAuthLogin, PublicNotFoundView, Recovery, SetPassword } from '@/views/Public';
+import ChangePasswordView from '@/views/UpdatePassword';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-
-import { localStorageGet, localStorageSet } from '@/utils';
-import { PublicNotFoundView, Auth, Login, OAuthLogin, Recovery, InstanceCodeView, SetPassword } from '@/views/Public';
-import ChangePasswordView from '@/views/UpdatePassword';
 
 const useInstanceCheck = () => {
   const navigate = useNavigate();

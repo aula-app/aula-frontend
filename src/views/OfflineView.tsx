@@ -17,11 +17,11 @@ const OfflineView: React.FC<OfflineViewProps> = () => {
   return (
     <Stack height="100vh" alignItems="center" justifyContent="center" p={4}>
       <Button color="error" sx={{ position: 'absolute', top: 10, left: 10 }} onClick={logout}>
-        &lt; {t('login.exit')}
+        &lt; {t('auth.logout')}
       </Button>
       <img src={OFFLINE_IMAGE} alt="Offline status" loading="lazy" width={150} />
       <Typography variant="h6" mt={6} textAlign="center">
-        {t('views.offline')}
+        {t('errors.offline')}
       </Typography>
     </Stack>
   );

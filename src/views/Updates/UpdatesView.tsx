@@ -40,7 +40,7 @@ const UpdatesView = () => {
     <Stack p={2} sx={{ overflowY: 'auto' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
-          {t('views.updates')}
+          {t('ui.units.updates')}
         </Typography>
         <IconButton>
           <AppIcon icon="filter" />
@@ -52,7 +52,7 @@ const UpdatesView = () => {
             {updates[update].length > 0 && (
               <>
                 <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
-                  {updates[update].length} {t('texts.new', { var: t(`views.${update}`) })}
+                  {updates[update].length} {t('actions.add', { var: t(`scopes.${update}.name`) })}
                 </Typography>
 
                 {updates[update].map((item, key) => (

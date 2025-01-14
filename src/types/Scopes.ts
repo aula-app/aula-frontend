@@ -223,7 +223,7 @@ export interface ReportBodyType {
 }
 
 export interface ReportMetadataType {
-  type: 'bug' | 'report';
+  type: 'bugs' | 'reports';
   location: string;
   user: number;
   userAgent?: string;

@@ -2,7 +2,7 @@ import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest } from '@/utils';
 import DataConfig from '@/utils/Data';
 import { MenuItem, TextField } from '@mui/material';
-import { ChangeEvent, Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Params = {
@@ -37,7 +37,7 @@ const FilterSelect = ({ filter, scope, setFilter }: Params) => {
   return (
     <TextField
       select
-      label={t('texts.filter')}
+      label={t('actions.filter')}
       value={filter[0]}
       onChange={changeFilter}
       variant="filled"
@@ -56,7 +56,7 @@ const FilterSelect = ({ filter, scope, setFilter }: Params) => {
           if ((column.name in customFields && customFields[column.name]) || !(column.name in customFields))
             return (
               <MenuItem value={column.name} key={column.name}>
-                {customFields[column.name] || t(`settings.${column.name}`)}
+                {customFields[column.name] || t(`settings.columns.${column.name}`)}
               </MenuItem>
             );
         })}

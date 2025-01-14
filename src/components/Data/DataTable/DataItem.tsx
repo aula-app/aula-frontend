@@ -83,12 +83,12 @@ const DataItem = ({ row, column }: Params) => {
     e.stopPropagation();
     navigator.clipboard
       .writeText(String(row[column]))
-      .then(() => dispatch({ type: 'ADD_POPUP', message: { message: t('texts.passCopy'), type: 'success' } }));
+      .then(() => dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.copied'), type: 'success' } }));
   };
 
   switch (column) {
     case 'approved':
-      return <>{t(`generics.${Boolean(row[column]) ? 'yes' : 'no'}`)}</>;
+      return <>{t(Boolean(row[column]) ? 'ui.common.yes' : 'ui.common.no')}</>;
     case 'creator_id':
       getNames('users', Number(row[column]));
       return <>{name}</>;
@@ -127,7 +127,7 @@ const DataItem = ({ row, column }: Params) => {
           <Stack className="printOnly">{row[column]}</Stack>
         </Stack>
       ) : (
-        <Stack className="printOnly">{t('texts.checkEmail')}</Stack>
+        <Stack className="printOnly">{t('auth.checkEmail')}</Stack>
       );
     case 'user_id':
       getNames('users', Number(row[column]));

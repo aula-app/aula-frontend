@@ -34,10 +34,10 @@ const ResetPassword = ({ email, order, ...restOfProps }: Props) => {
       ).json();
 
       response.success
-        ? dispatch({ type: 'ADD_POPUP', message: { message: t('texts.forgotRequest'), type: 'success' } })
-        : dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+        ? dispatch({ type: 'ADD_POPUP', message: { message: t('auth.forgotPassword.success'), type: 'success' } })
+        : dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
     } catch (e) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
     }
 
     setOpenReset(false);
@@ -46,7 +46,7 @@ const ResetPassword = ({ email, order, ...restOfProps }: Props) => {
   return (
     <Stack order={order}>
       <Button variant="outlined" color="error" onClick={() => setOpenReset(true)} fullWidth sx={{ mb: 3 }}>
-        {t('login.passwordReset')}
+        {t('auth.forgotPassword.button')}
       </Button>
       <Dialog
         open={openReset}
@@ -55,17 +55,17 @@ const ResetPassword = ({ email, order, ...restOfProps }: Props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" color="error" sx={{ display: 'flex', alignItems: 'center' }}>
-          <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('login.passwordReset')}
+          <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('auth.forgotPassword.button')}
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
-          <DialogContentText id="alert-dialog-description">{t('texts.resetPasswordText')}</DialogContentText>
+          <DialogContentText id="alert-dialog-description">{t('auth.forgotPassword.message')}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenReset(false)} color="secondary" autoFocus>
-            {t('generics.cancel')}
+            {t('actions.cancel')}
           </Button>
           <Button onClick={requestPassword} color="error" variant="contained">
-            {t('generics.confirm')}
+            {t('actions.confirm')}
           </Button>
         </DialogActions>
       </Dialog>

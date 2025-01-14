@@ -75,7 +75,7 @@ const CategoryField = ({ id, disabled = false, addUpdate, ...restOfProps }: Prop
 
   return (
     <TextField
-      label={t(`views.category`)}
+      label={t(`scopes.category.name`)}
       disabled={disabled}
       fullWidth
       select

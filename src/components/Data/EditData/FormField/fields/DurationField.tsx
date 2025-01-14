@@ -54,7 +54,7 @@ const DurationField = ({
   return (
     <Stack>
       <FormHelperText hidden={!multiError} error={multiError} sx={{ mx: 'auto' }}>
-        {t('validation.duration')}
+        {t('forms.validation.duration')}
       </FormHelperText>
       <Stack
         direction="row"
@@ -65,7 +65,7 @@ const DurationField = ({
         {...restOfProps}
         gap={2}
       >
-        <FormLabel sx={{ mr: 3, pb: 3 }}>{t(`texts.phaseDuration`)}:</FormLabel>
+        <FormLabel sx={{ mr: 3, pb: 3 }}>{t(`settings.time.phase`)}:</FormLabel>
         {Array.isArray(data.name) &&
           data.name.map((name) => (
             <Controller
@@ -78,7 +78,7 @@ const DurationField = ({
               render={({ field, fieldState }) => (
                 <Stack>
                   <Stack direction="row" alignItems="center" gap={1}>
-                    <Typography noWrap>{t(`settings.${name}`)}:</Typography>
+                    <Typography noWrap>{t(`scopes.${name}.name`)}:</Typography>
                     <TextField
                       required={data.required}
                       disabled={disabled}
@@ -93,7 +93,7 @@ const DurationField = ({
                       {...restOfProps}
                       slotProps={{ inputLabel: { shrink: !!field.value } }}
                     />
-                    <Typography noWrap>{t('generics.days')}</Typography>
+                    <Typography noWrap>{t('ui.units.days')}</Typography>
                   </Stack>
                   <FormHelperText error={!!fieldState.error} sx={{ mx: 'auto' }}>
                     {t(fieldState.error?.message || ' ')}

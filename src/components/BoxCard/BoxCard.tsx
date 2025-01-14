@@ -72,7 +72,7 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
       >
         <AppIcon icon={phases[boxData.phase_id]} sx={{ mx: 1 }} />
         <Typography variant="caption" mr="auto">
-          {t('texts.ideaBox', { var: boxData.ideas_num, phase: t(`phases.${phases[boxData.phase_id]}`) })}
+          {t('ideas.box.toPhase', { var: boxData.ideas_num, phase: t(`phases.${phases[boxData.phase_id]}`) })}
         </Typography>
         <MoreOptions scope="boxes" item={boxData} onClose={reload} canEdit={checkPermissions(30)} />
       </Stack>
@@ -109,7 +109,7 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
             >
               <AppIcon icon="clock" size="small" sx={{ mx: 0.5 }} />
               <Typography variant="caption">
-                {remaining > 0 ? t('texts.phaseEnd', { var: remaining }) : t('texts.phaseEnded')}
+                {remaining > 0 ? t('phases.status.end', { var: remaining }) : t('phases.status.ended')}
               </Typography>
             </Stack>
           </Box>

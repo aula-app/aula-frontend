@@ -19,7 +19,7 @@ const SingleDurationField = ({ data, control, disabled = false, setValue, ...res
 
   return (
     <Stack direction="row" alignItems="center" px={1} flexWrap="wrap" {...restOfProps}>
-      <FormLabel sx={{ mr: 3, pb: 1 }}>{t(`texts.phaseDuration`)}:</FormLabel>
+      <FormLabel sx={{ mr: 3, pb: 1 }}>{t('settings.time.phase')}:</FormLabel>
       <Controller
         // @ts-ignore
         name={'phase_duration_3'}
@@ -29,7 +29,7 @@ const SingleDurationField = ({ data, control, disabled = false, setValue, ...res
         render={({ field, fieldState }) => (
           <Stack direction="row" alignItems="center">
             <Typography noWrap pb={1}>
-              {t(`settings.phase_duration_3`)}:
+              {t(`settings.columns.phase_duration_3`)}:
             </Typography>
             <TextField
               required={data.required}
