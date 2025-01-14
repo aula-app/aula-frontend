@@ -1,7 +1,7 @@
 import { AppIcon } from '@/components';
 import { ConfigResponse, InstanceResponse } from '@/types/Generics';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Accordion, AccordionDetails, AccordionSummary, Stack, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Skeleton, Stack, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -86,18 +86,22 @@ const ConfigView = () => {
         {t('settings.labels.configuration')}
       </Typography>
       <SchoolInfo config={config} onReload={getConfig} />
-      {settings &&
-        config &&
-        panels.map((panel, i) => (
-          <Accordion expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)} key={i}>
-            <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
-              <Typography variant="h5" py={1}>
-                {t('settings.advanced.system', { var: t(`settings.panels.${panel.name}`) })}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>{panel.component}</AccordionDetails>
-          </Accordion>
-        ))}
+      {panels.map((panel, i) => (
+        <>
+          {settings && config ? (
+            <Accordion expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)} key={i}>
+              <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
+                <Typography variant="h5" py={1}>
+                  {t('settings.advanced.system', { var: t(`settings.panels.${panel.name}`) })}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>{panel.component}</AccordionDetails>
+            </Accordion>
+          ) : (
+            <Skeleton key={i} variant="rectangular" width="100%" height={45} sx={{ mt: 3 }} />
+          )}
+        </>
+      ))}
     </Stack>
   );
 };
