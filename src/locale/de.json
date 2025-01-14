@@ -26,9 +26,6 @@
     "delete": "Löschen"
   },
   "auth": {
-    "agree": "Ich stimme den Nutzungsbedingungen und der Datenschutzrichtlinie zu",
-    "checkEmail": "Überprüfe deine E-Mail für weitere Anweisungen",
-    "email": "E-Mail",
     "errors": {
       "accountInactive": "Dein Account ist inaktiv",
       "accountSuspended": "Dein Account wurde{{var}} gesperrt. Bitte kontaktiere deinen Administrator",
@@ -41,16 +38,29 @@
     "forgotPassword": {
       "button": "Passwort zurücksetzen",
       "link": "Passwort vergessen?",
-      "success": "Ein Link zum Zurücksetzen des Passworts wurde an deine E-Mail gesendet"
+      "message": "Möchtest du wirklich ein neues Passwort für diesen Benutzer anfordern?",
+      "recover": "Passwort wiederherstellen",
+      "recovery": "Passwort-Wiederherstellung",
+      "success": "Das Passwort wurde zurückgesetzt. Registrierte Benutzer erhalten einen Reset-Link per E-Mail."
     },
     "login": {
       "button": "Anmelden",
+      "label": "Benutzername",
       "noAccount": "Noch kein Konto?",
-      "title": "Anmelden",
-      "username": "Benutzername"
+      "title": "Anmelden"
     },
     "logout": "Abmelden",
+    "messages": {
+      "agree": "Ich stimme den Nutzungsbedingungen und der Datenschutzrichtlinie zu",
+      "email": "Überprüfe deine E-Mail für weitere Anweisungen",
+      "welcome": "Willkommen!"
+    },
+    "oauth": {
+      "arialabel": "OAuth-Authentifizierung",
+      "button": "OAuth-Authentifizierung"
+    },
     "password": {
+      "label": "Passwort",
       "change": "Passwort ändern",
       "confirm": "Passwort bestätigen",
       "current": "Aktuelles Passwort",
@@ -64,12 +74,11 @@
       "title": "Konto erstellen",
       "username": "Benutzername wählen"
     },
-    "welcome": "Willkommen!"
   },
   "consent": {
-    "mandatory": "Obligatorische Zustimmung erforderlich",
-    "none": "Keine Zustimmung erforderlich",
-    "optional": "Optionale Zustimmung verfügbar"
+    "message": "Keine Zustimmung erforderlich",
+    "announcement": "Optionale Zustimmung verfügbar",
+    "alert": "Obligatorische Zustimmung erforderlich"
   },
   "delegation": {
     "confirm": "Bist du sicher, dass du das Stimmrecht für diese Ideenbox der folgenden Person {{var}} willst?",
@@ -141,6 +150,7 @@
     "wrongKey": "Der angegebene Authentifizierungsschlüssel ist ungültig."
   },
   "phases": {
+    "phase": "{{var}}-Phase",
     "approval": "Prüfung",
     "discussion": "Diskussion",
     "results": "Ergebnisse",
