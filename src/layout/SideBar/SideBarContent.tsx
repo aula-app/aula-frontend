@@ -1,11 +1,12 @@
-import { AppButton, AppIcon, AppIconButton } from '@/components';
+import { AppButton, AppIcon, AppIconButton, AppLink } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
-import { Divider, Stack } from '@mui/material';
-import { Dispatch, MouseEvent, SetStateAction, useCallback, useState } from 'react';
+import { checkPermissions } from '@/utils';
+import { Divider, List, ListItemButton, ListItemIcon, ListItemText, Stack } from '@mui/material';
+import { Dispatch, Fragment, MouseEvent, SetStateAction, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import SideBarNavList from './SideBarNavList';
+import { SIDEBAR_ITEMS } from '../config';
 
 type Props = {
   isFixed?: boolean;
@@ -42,7 +43,23 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
       {...restOfProps}
       onClick={handleAfterLinkClick}
     >
-      <SideBarNavList />
+      <List component="nav" {...restOfProps} sx={{ flex: 1, px: 1, overflow: 'auto' }}>
+        {SIDEBAR_ITEMS.map(({ icon, path, title, role }) => (
+          <Fragment key={`${title}-${path}`}>
+            {checkPermissions(role) && (
+              <ListItemButton
+                component={AppLink}
+                to={path}
+                href="" // Hard reset for .href property, otherwise links are always opened in new tab :(
+                openInNewTab={false}
+              >
+                <ListItemIcon>{icon && <AppIcon icon={icon} />}</ListItemIcon>
+                <ListItemText primary={t(`views.${title}`)} />
+              </ListItemButton>
+            )}
+          </Fragment>
+        ))}
+      </List>
       <Divider />
       <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
         {isFixed && <LocaleSwitch />}
