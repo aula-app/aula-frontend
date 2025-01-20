@@ -3,7 +3,7 @@ import ChatBubble from '@/components/ChatBubble';
 import MoreOptions from '@/components/MoreOptions';
 import UserAvatar from '@/components/UserAvatar';
 import { CommentType } from '@/types/Scopes';
-import { checkPermissions, checkSelf, databaseRequest } from '@/utils';
+import { checkPermissions, checkSelf, databaseRequest, getDisplayDate } from '@/utils';
 import { Button, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
@@ -17,7 +17,6 @@ type likeMethodType = 'getLikeStatus' | 'CommentAddLike' | 'CommentRemoveLike';
 
 const Comment = ({ comment, disabled = false, onReload }: Props) => {
   const [liked, setLiked] = useState(false);
-  const displayDate = new Date(comment.created);
 
   const manageLike = (likeMethod: likeMethodType) => {
     return databaseRequest(
@@ -67,11 +66,9 @@ const Comment = ({ comment, disabled = false, onReload }: Props) => {
       <Stack direction="row" alignItems="center">
         <UserAvatar id={comment.user_id} update={true} size="small" />
         <Stack maxWidth="100%" overflow="hidden" ml={2} mr="auto">
-          {displayDate && (
-            <Typography variant="caption" lineHeight={1.5}>
-              {displayDate.getFullYear()}/{displayDate.getMonth()}/{displayDate.getDate()}
-            </Typography>
-          )}
+          <Typography variant="caption" lineHeight={1.5}>
+            {getDisplayDate(comment.created)}
+          </Typography>
           <Typography
             variant="overline"
             overflow="hidden"

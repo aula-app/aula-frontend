@@ -3,6 +3,7 @@ import EditData from '@/components/Data/EditData';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { IdeaType } from '@/types/Scopes';
+import { CustomFieldsType } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
 import { Fab, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
@@ -26,6 +27,10 @@ const WildIdeas = () => {
   const [add, setAdd] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
+  const [fields, setFields] = useState<CustomFieldsType>({
+    custom_field1: null,
+    custom_field2: null,
+  });
 
   const ideasFetch = useCallback(async () => {
     setLoading(true);
@@ -40,8 +45,23 @@ const WildIdeas = () => {
     }
 
     setIdeas(response.data as IdeaType[]);
+    getFields();
     setLoading(false);
   }, [room_id]);
+
+  async function getFields() {
+    await databaseRequest({
+      model: 'Settings',
+      method: 'getCustomfields',
+      arguments: {},
+    }).then((response) => {
+      if (response.success)
+        setFields({
+          custom_field1: response.data.custom_field1_name,
+          custom_field2: response.data.custom_field2_name,
+        });
+    });
+  }
 
   const handleCloseAdd = useCallback(() => {
     ideasFetch();
@@ -68,6 +88,7 @@ const WildIdeas = () => {
         ideas.map((idea) => (
           <IdeaBubble
             idea={idea}
+            extraFields={fields}
             onReload={ideasFetch}
             key={idea.id}
             comments={idea.sum_comments}
