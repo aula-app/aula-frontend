@@ -1,7 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import MoreOptions from '@/components/MoreOptions';
 import { CategoryType, IdeaType } from '@/types/Scopes';
-import { checkPermissions, checkSelf, databaseRequest, phases } from '@/utils';
+import { checkPermissions, checkSelf, databaseRequest, getDisplayDate, phases } from '@/utils';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import IdeaContent from '../IdeaContent';
@@ -17,7 +17,6 @@ type likeMethodType = 'getLikeStatus' | 'IdeaAddLike' | 'IdeaRemoveLike';
 const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
   const [liked, setLiked] = useState(false);
   const [category, setCategory] = useState<CategoryType>();
-  const displayDate = new Date(idea.created);
 
   const manageLike = (likeMethod: likeMethodType) => {
     return databaseRequest(
@@ -78,11 +77,9 @@ const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
       <Stack direction="row" alignItems="center" mt={2}>
         <AppIcon icon="account" size="xl" />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
-          {displayDate && (
-            <Typography variant="caption" lineHeight={1.5}>
-              {displayDate.getFullYear()}/{displayDate.getMonth()}/{displayDate.getDate()}
-            </Typography>
-          )}
+          <Typography variant="caption" lineHeight={1.5}>
+            {getDisplayDate(idea.created)}
+          </Typography>
           <Typography
             variant="overline"
             overflow="hidden"
