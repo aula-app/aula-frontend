@@ -4,25 +4,25 @@ import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated } from '@/ho
 import { useAppStore } from '@/store/AppStore';
 import { checkPermissions } from '@/utils';
 import { Divider, List, ListItemButton, ListItemIcon, ListItemText, Stack } from '@mui/material';
-import { Dispatch, Fragment, MouseEvent, SetStateAction, useCallback } from 'react';
+import { Dispatch, Fragment, memo, SetStateAction, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SIDEBAR_ITEMS } from '../config';
+
+type Props = {
+  isFixed?: boolean;
+  setReport: Dispatch<SetStateAction<'bugs' | 'reports' | undefined>>;
+  onClose?: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
+};
 
 /**
  * Renders SideBar content including navigation, actions and user controls
  * @component SideBarContent
- * @param {SideBarContentProps} props - Component props
  * @param {boolean} [props.isFixed] - Whether the sidebar is fixed or in a drawer
  * @param {function} props.setReport - Callback to set report type
  * @param {function} [props.onClose] - Optional callback when drawer closes
  * @returns {JSX.Element} Rendered SideBarContent component
  */
-const SideBarContent = ({
-  isFixed = false,
-  setReport,
-  onClose = () => {},
-  ...restOfProps
-}: SideBarContentProps): JSX.Element => {
+const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...restOfProps }: Props): JSX.Element => {
   const { t } = useTranslation();
   const [state] = useAppStore();
   const isAuthenticated = useIsAuthenticated();
@@ -56,7 +56,7 @@ const SideBarContent = ({
                 openInNewTab={false}
               >
                 <ListItemIcon>{icon && <AppIcon icon={icon} />}</ListItemIcon>
-                <ListItemText primary={t(`views.${title}`)} />
+                <ListItemText primary={t(`ui.navigation.${title}`)} />
               </ListItemButton>
             )}
           </Fragment>
@@ -75,7 +75,14 @@ const SideBarContent = ({
         />
       </Stack>
       <Divider />
-      <Stack sx={actionStackStyles}>
+      <Stack
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         {isAuthenticated && (
           <AppButton variant="text" onClick={onLogout}>
             {t('auth.logout')}&nbsp;
