@@ -32,7 +32,6 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
 
   const handleAfterLinkClick = useCallback(
     (event: React.MouseEvent) => {
-    (event: React.MouseEvent) => {
       onClose(event, 'backdropClick');
     },
     [onClose]
@@ -76,11 +75,17 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
           onClick={onSwitchDarkMode}
           icon={state.darkMode ? 'day' : 'night'}
           title={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
-          title={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
         />
       </Stack>
       <Divider />
-      <Stack sx={actionStackStyles}>
+      <Stack
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         {isAuthenticated && (
           <AppButton variant="text" onClick={onLogout}>
             {t('auth.logout')}&nbsp;
@@ -93,5 +98,4 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
   );
 };
 
-export default memo(SideBarContent);
 export default memo(SideBarContent);
