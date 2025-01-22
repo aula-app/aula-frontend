@@ -1,7 +1,7 @@
 import { RoomCard } from '@/components/RoomCard';
 import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
 import { RoomType } from '@/types/Scopes';
-import { checkPermissions, databaseRequest } from '@/utils';
+import { getRooms } from '@/services/rooms';
 import { Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
@@ -13,31 +13,7 @@ const WelcomeView = () => {
   const [rooms, setRooms] = useState<RoomType[]>([]);
   const [showDashboard, setShowDashboard] = useState(true);
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-
-  const roomsFetch = async () => {
-    // Check if user has Super Moderator (40) access to view all rooms
-    const hasSuperModAccess = checkPermissions(40);
-
-    const response = await databaseRequest(
-      {
-        model: 'Room',
-        method: hasSuperModAccess ? 'getRooms' : 'getRoomsByUser',
-        arguments: {
-          offset: 0,
-          limit: 0,
-        },
-      },
-      hasSuperModAccess ? [] : ['user_id']
-    );
-    setLoading(false);
-    if (!response.success || !response.data) {
-      setError(true);
-      return;
-    }
-    setError(false);
-    setRooms(response.data as RoomType[]);
-  };
+  const [error, setError] = useState<string | null>(null);
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop } = event.currentTarget;
@@ -45,7 +21,14 @@ const WelcomeView = () => {
   };
 
   useEffect(() => {
-    roomsFetch();
+    const fetchRooms = async () => {
+      const response = await getRooms();
+      setLoading(false);
+      setError(response.error);
+      if (!response.error && response.data) setRooms(response.data);
+    };
+
+    fetchRooms();
   }, []);
 
   return (
@@ -74,7 +57,7 @@ const WelcomeView = () => {
         </Typography>
         <Grid container spacing={2}>
           {isLoading && <RoomCardSkeleton />}
-          {error && <Typography>{t('errors.noData')}</Typography>}
+          {error && <Typography>{t(error)}</Typography>}
           {rooms.map((room) => (
             <RoomCard room={room} key={room.hash_id} />
           ))}

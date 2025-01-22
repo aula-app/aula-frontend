@@ -37,36 +37,37 @@ const PrivateRoutes = () => {
     if (location.pathname.includes('password')) clearAuth(dispatch);
   }, [location.pathname, dispatch]);
 
-  return (
+  return checkPermissions(60) ? (
     <Routes>
-      <Route path="/" element={checkPermissions(60) ? <ConfigView /> : <WelcomeView />} />
-      {!checkPermissions(60) && (
-        <>
-          <Route path="about" element={<AboutView />} />
-          <Route path="phase/:phase" element={<PhasesView />} />
-          <Route path="announcements" element={<MessagesView />} />
-          <Route path="announcements/message/:message_id" element={<MessageView />} />
-          <Route path="messages" element={<MessagesView />} />
-          <Route path="messages/message/:message_id" element={<MessageView />} />
-          <Route path="messages/report/:message_id" element={<ReportView />} />
-          <Route path="messages/request/:message_id" element={<RequestView />} />
-          <Route path="messages/announcement/:message_id" element={<AnnouncementView />} />
-          <Route path="updates" element={<UpdatesView />} />
-          <Route path="room/:room_id/phase/:phase" element={<RoomView />}>
-            <Route path="" element={<RoomPhaseView />} />
-            <Route path="idea/:idea_id" element={<IdeaView />} />
-            <Route path="idea-box/:box_id" element={<IdeasBoxView />} />
-            <Route path="idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
-          </Route>
-          <Route path="settings/profile" element={<UserView />} />
-          <Route path="settings/reports" element={checkPermissions(50) ? <ReportsView /> : <Navigate to="/" />} />
-          <Route path="settings/requests" element={checkPermissions(50) ? <RequestsView /> : <Navigate to="/" />} />
-          <Route path="settings/configuration" element={checkPermissions(50) ? <ConfigView /> : <Navigate to="/" />} />
-          <Route path="settings/:setting_name" element={<SettingsView />} />
-          <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />
-          <Route path="offline" element={<OfflineView />} />
-        </>
-      )}
+      <Route path="/" element={<ConfigView />} />
+      <Route path="*" element={<NotFoundView />} />
+    </Routes>
+  ) : (
+    <Routes>
+      <Route path="/" element={<WelcomeView />} />
+      <Route path="about" element={<AboutView />} />
+      <Route path="phase/:phase" element={<PhasesView />} />
+      <Route path="announcements" element={<MessagesView />} />
+      <Route path="announcements/message/:message_id" element={<MessageView />} />
+      <Route path="messages" element={<MessagesView />} />
+      <Route path="messages/message/:message_id" element={<MessageView />} />
+      <Route path="messages/report/:message_id" element={<ReportView />} />
+      <Route path="messages/request/:message_id" element={<RequestView />} />
+      <Route path="messages/announcement/:message_id" element={<AnnouncementView />} />
+      <Route path="updates" element={<UpdatesView />} />
+      <Route path="room/:room_id/phase/:phase" element={<RoomView />}>
+        <Route path="" element={<RoomPhaseView />} />
+        <Route path="idea/:idea_id" element={<IdeaView />} />
+        <Route path="idea-box/:box_id" element={<IdeasBoxView />} />
+        <Route path="idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
+      </Route>
+      <Route path="settings/profile" element={<UserView />} />
+      <Route path="settings/reports" element={checkPermissions(50) ? <ReportsView /> : <Navigate to="/" />} />
+      <Route path="settings/requests" element={checkPermissions(50) ? <RequestsView /> : <Navigate to="/" />} />
+      <Route path="settings/configuration" element={checkPermissions(50) ? <ConfigView /> : <Navigate to="/" />} />
+      <Route path="settings/:setting_name" element={<SettingsView />} />
+      <Route path="settings/:setting_name/:setting_id" element={<SettingsView />} />
+      <Route path="offline" element={<OfflineView />} />
       <Route path="*" element={<NotFoundView />} />
     </Routes>
   );
