@@ -37,7 +37,10 @@ const IdeasBoxView = () => {
     }).then((response) => {
       setLoading(false);
       if (!response.success || !response.data) return;
-      setBoxIdeas(response.data as IdeaType[]);
+      const currentIdeas = (response.data as IdeaType[]).filter((idea) =>
+        Number(params['phase']) >= 30 ? idea.approved > -1 : true
+      ); // Filter out unapproved ideas
+      setBoxIdeas(currentIdeas);
     });
   };
 
