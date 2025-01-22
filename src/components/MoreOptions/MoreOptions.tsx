@@ -150,7 +150,7 @@ const MoreOptions = <T extends ScopeType>({ item, scope, canEdit = false, onClos
       </Box>
       {edit && (
         <EditData
-          item={formattedItem}
+          item={edit === 'report' || edit === 'bug' ? undefined : formattedItem}
           scope={edit}
           isOpen={!!edit}
           onClose={close}
