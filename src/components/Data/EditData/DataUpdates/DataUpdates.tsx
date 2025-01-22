@@ -24,6 +24,7 @@ const DataUpdates = ({ item, phase, scope, defaultValue, addUpdate }: Props) => 
 
   switch (scope) {
     case 'boxes':
+      if (!item && !('room_id' in params)) return;
       return <MoveData id={Number(item?.id)} scope={scope} addUpdate={addUpdate} />;
     case 'groups':
       return <MoveData id={Number(item?.id)} scope={scope} addUpdate={addUpdate} />;

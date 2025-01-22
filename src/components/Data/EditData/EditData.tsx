@@ -312,7 +312,6 @@ const EditData = ({ item, scope, otherData = {}, metadata, isOpen, onClose }: Pr
                   />
                 </Box>
               ))}
-
             <DataUpdates
               item={item}
               phase={phase}

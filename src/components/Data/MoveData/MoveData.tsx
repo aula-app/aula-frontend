@@ -1,5 +1,5 @@
 import { AppIcon, AppIconButton } from '@/components';
-import { DatabaseResponseData, DatabaseResponseType } from '@/types/Generics';
+import { DatabaseResponseData, DatabaseResponseType, ObjectPropByName } from '@/types/Generics';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, RequestObject } from '@/utils';
 import DataConfig from '@/utils/Data';
@@ -51,7 +51,9 @@ const MoveData = ({ id, scope, targetId, onClose = () => {}, addUpdate }: Props)
     const requestId = [];
     if (currentTarget.target === 'ideas' || currentTarget.target === 'boxes') requestId.push('user_id');
 
-    const moreArgs = params[currentTarget.targetId] ? { [currentTarget.targetId]: targetId } : {};
+    const moreArgs = {} as ObjectPropByName;
+    if (params[currentTarget.targetId]) moreArgs[currentTarget.targetId] = targetId;
+    if (currentTarget.target === 'ideas' && 'room_id' in params) moreArgs['room_id'] = params.room_id;
 
     const requestData = {
       model: DataConfig[currentTarget.target].requests.model,
