@@ -246,6 +246,18 @@ export interface RequestMetadataType {
   to?: string;
 }
 
+export interface VoteType {
+  idea_id: number;
+  title: string;
+  room_id: number;
+  topic_id: number;
+  phase_id: number;
+  id: string;
+  vote_value: number;
+  vote_weight: number;
+  number_of_delegations: number;
+}
+
 // Helper function to convert data to form format
 export const toFormData = <T extends object>(data: T): Record<string, string> => {
   const result: Record<string, string> = {};

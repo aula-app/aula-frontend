@@ -1,6 +1,7 @@
+import { ScopeType } from '@/types/Scopes';
 import { ObjectPropByName } from '../types/Generics';
-import { parseJwt } from './jwt';
-import { localStorageGet } from './localStorage';
+import { parseJwt } from '../utils/jwt';
+import { localStorageGet } from '../utils/localStorage';
 
 /**
  * Interface representing a database request object.
@@ -9,10 +10,17 @@ import { localStorageGet } from './localStorage';
  * @property {string} method - The method/operation to execute (e.g., 'checkLogin')
  * @property {ObjectPropByName} arguments - Key-value pairs of arguments for the request
  */
+
 export interface RequestObject {
   model: string;
   method: string;
   arguments: ObjectPropByName;
+}
+
+interface GetResponse {
+  data: Array<ScopeType> | null;
+  count: number | null;
+  error: string | null;
 }
 
 /**
@@ -52,7 +60,8 @@ const error = new CustomEvent('AppErrorDialog', { detail: 'texts.error' });
  *   - The API request fails
  *   - The response indicates failure (success: false)
  */
-export const databaseRequest = async (requestData: RequestObject, userId = [] as string[]) => {
+
+export const databaseRequest = async (requestData: RequestObject, userId = [] as string[]): Promise<GetResponse> => {
   const api_url = localStorageGet('api_url');
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
@@ -60,7 +69,11 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
 
   if (!api_url || !jwt_payload) {
     document.dispatchEvent(error);
-    return { success: false };
+    return {
+      data: null,
+      count: null,
+      error: 'Invalid API URL or JWT token',
+    };
   }
 
   if (requestData.method !== 'checkLogin') {
@@ -89,12 +102,25 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
         if (window.location.pathname !== '/offline') window.location.href = '/offline';
       } else {
         document.dispatchEvent(error);
+        return {
+          data: null,
+          count: null,
+          error: 'Failed to fetch data',
+        };
       }
     }
 
-    return response;
+    return {
+      data: response.data,
+      count: response.count,
+      error: null,
+    };
   } catch (e) {
     document.dispatchEvent(error);
-    return { success: false };
+    return {
+      data: null,
+      count: null,
+      error: 'Something went wrong',
+    };
   }
 };

@@ -1,6 +1,9 @@
 import AppIcon from '@/components/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
-import { checkPermissions, dashboardPhases, databaseRequest } from '@/utils';
+import { getDashboard, getUpdates } from '@/services/dashboard';
+import { getMessages } from '@/services/messages';
+import { getAnnouncements } from '@/services/announcements';
+import { dashboardPhases } from '@/utils';
 import { Badge, Box, Button, Collapse, Skeleton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
@@ -18,41 +21,32 @@ const DashBoard = ({ show = true }) => {
   const [likes, setLikes] = useState<number>();
   const [isShowing, setShowing] = useState(show);
 
-  const dashboardFetch = async (model: string, method: string, idRequest: string[]) =>
-    await databaseRequest(
-      {
-        model: model,
-        method: method,
-        arguments: {},
-      },
-      idRequest
-    );
+  const fetchDashboard = async () => {
+    const response = await getDashboard();
+    if (!response.error && response.data) setCount(response.data.phase_counts);
+  };
+  const fetchUpdates = async () => {
+    const response = await getUpdates();
+    if (!response.error && response.count) setLikes(response.count);
+  };
+  const fetchMessages = async () => {
+    const response = await getMessages();
+    if (!response.error && response.data) setMessages(response.data.length);
+  };
+  const fetchTexts = async () => {
+    const response = await getAnnouncements();
+    if (!response.error && response.data) setReports(response.data.length);
+  };
 
   useEffect(() => {
     setShowing(show);
   }, [show]);
 
   useEffect(() => {
-    dashboardFetch('Idea', 'getDashboardByUser', ['user_id']).then((response) => {
-      if (!response.success || !response.data) return;
-      setCount(response.data.phase_counts);
-    });
-    dashboardFetch('Text', 'getTexts', []).then((response) => {
-      if (!response.success || !response.count) return;
-      setMessages(response.count);
-    });
-    dashboardFetch(
-      'Message',
-      checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
-      checkPermissions(40) ? [] : ['user_id']
-    ).then((response) => {
-      if (!response.success) return;
-      setReports(Number(response.count));
-    });
-    dashboardFetch('Idea', 'getUpdatesByUser', ['user_id']).then((response) => {
-      if (!response.success) return;
-      setLikes(Number(response.count));
-    });
+    fetchDashboard();
+    fetchUpdates();
+    fetchMessages();
+    fetchTexts();
   }, []);
 
   return (

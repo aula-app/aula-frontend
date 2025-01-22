@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import DashBoard from '../DashBoard';
+import DashBoard from '../Welcome/DashBoard';
 
 /**
  * Renders "Phase" view

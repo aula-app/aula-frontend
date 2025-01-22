@@ -5,7 +5,7 @@ export * from './jwt';
 export * from './localStorage';
 export * from './navigation';
 export * from './phases';
-export * from './requests';
+export * from '../services/requests';
 export * from './roles';
 export * from './sessionStorage';
 export * from './style';
