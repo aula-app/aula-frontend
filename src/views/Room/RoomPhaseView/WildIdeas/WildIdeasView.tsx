@@ -2,7 +2,7 @@ import { AppIcon } from '@/components';
 import AddData from '@/components/Data/AddData';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
-import { getIdeasByRoom } from '@/services/ideas';
+import { addIdeas, getIdeasByRoom } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { Fab, Stack, Typography } from '@mui/material';
@@ -29,6 +29,11 @@ const WildIdeas = () => {
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
 
+  interface IdeaFormData {
+    title: string;
+    content: string;
+  }
+
   const fetchIdeas = useCallback(async () => {
     if (!room_id) return;
     setLoading(true);
@@ -39,9 +44,18 @@ const WildIdeas = () => {
     setLoading(false);
   }, [room_id]);
 
-  const handleCloseAdd = () => {
-    fetchIdeas();
+  const onSubmit = async (data: IdeaFormData) => {
+    if (!room_id) return;
+    const request = await addIdeas({
+      room_id: room_id,
+      ...data,
+    });
+    if (!request.error) onClose();
+  };
+
+  const onClose = () => {
     setAdd(false);
+    fetchIdeas();
   };
 
   useEffect(() => {
@@ -73,7 +87,7 @@ const WildIdeas = () => {
           <Fab aria-label="add idea" color="primary" sx={fabStyles} onClick={() => setAdd(true)}>
             <AppIcon icon="idea" />
           </Fab>
-          <AddData scope="ideas" isOpen={add} onClose={handleCloseAdd} parentId={room_id} />
+          <AddData scope="ideas" isOpen={add} onClose={onClose} onSubmit={onSubmit} parentId={room_id} />
         </>
       )}
     </Stack>

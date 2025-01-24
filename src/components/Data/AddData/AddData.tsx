@@ -8,12 +8,12 @@ import IdeaForms from '../DataForms/IdeaForms';
 interface Props {
   item?: Partial<ScopeType>;
   scope: SettingNamesType;
-  parentId: string;
   isOpen: boolean;
   onClose: () => void;
+  onSubmit: (data: Record<string, string>) => Promise<void>;
 }
 
-const AddData = ({ isOpen, scope, parentId, onClose }: Props) => {
+const AddData = ({ isOpen, scope, onClose, onSubmit }: Props) => {
   const { t } = useTranslation();
 
   return (
@@ -22,7 +22,7 @@ const AddData = ({ isOpen, scope, parentId, onClose }: Props) => {
         <Typography variant="h4">
           {t(`actions.add`, { var: t(`scopes.${DataConfig[scope].requests.name}.name`) })}
         </Typography>
-        <IdeaForms parentId={parentId} />
+        <IdeaForms onClose={onClose} onSubmit={onSubmit} />
       </Stack>
     </Drawer>
   );
