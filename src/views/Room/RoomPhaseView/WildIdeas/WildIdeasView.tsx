@@ -2,6 +2,7 @@ import { AppIcon } from '@/components';
 import EditData from '@/components/Data/EditData';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
+import { getIdeasByRoom } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { CustomFieldsType } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
@@ -26,51 +27,27 @@ const WildIdeas = () => {
   const { room_id } = useParams<RouteParams>();
   const [add, setAdd] = useState(false);
   const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
-  const [fields, setFields] = useState<CustomFieldsType>({
-    custom_field1: null,
-    custom_field2: null,
-  });
 
-  const ideasFetch = useCallback(async () => {
+  const fetchIdeas = useCallback(async () => {
+    if (!room_id) return;
     setLoading(true);
-    const response = await databaseRequest({
-      model: 'Idea',
-      method: 'getIdeasByRoom',
-      arguments: { room_id },
-    });
-
-    if (!response.success || !response.data) {
-      throw new Error('Failed to fetch ideas');
-    }
-
-    setIdeas(response.data as IdeaType[]);
-    getFields();
+    const response = await getIdeasByRoom(room_id);
+    setLoading(false);
+    setError(response.error);
+    if (!response.error && response.data) setIdeas(response.data);
     setLoading(false);
   }, [room_id]);
 
-  async function getFields() {
-    await databaseRequest({
-      model: 'Settings',
-      method: 'getCustomfields',
-      arguments: {},
-    }).then((response) => {
-      if (response.success)
-        setFields({
-          custom_field1: response.data.custom_field1_name,
-          custom_field2: response.data.custom_field2_name,
-        });
-    });
-  }
-
-  const handleCloseAdd = useCallback(() => {
-    ideasFetch();
+  const handleCloseAdd = () => {
+    fetchIdeas();
     setAdd(false);
-  }, [ideasFetch]);
+  };
 
   useEffect(() => {
-    ideasFetch();
-  }, [ideasFetch]);
+    fetchIdeas();
+  }, []);
 
   const fabStyles = {
     position: 'fixed',
@@ -80,22 +57,18 @@ const WildIdeas = () => {
 
   return (
     <Stack alignItems="center" width="100%" px={1} spacing={2}>
-      {isLoading ? (
-        <IdeaBubbleSkeleton />
-      ) : ideas.length === 0 ? (
-        <Typography>{t('errors.noData')}</Typography>
-      ) : (
+      {isLoading && <IdeaBubbleSkeleton />}
+      {error && <Typography>{t(error)}</Typography>}
+      {!isLoading &&
         ideas.map((idea) => (
           <IdeaBubble
             idea={idea}
-            extraFields={fields}
-            onReload={ideasFetch}
+            onReload={fetchIdeas}
             key={idea.id}
             comments={idea.sum_comments}
             to={`idea/${idea.hash_id}`}
           />
-        ))
-      )}
+        ))}
       {checkPermissions(20) && (
         <>
           <Fab aria-label="add idea" color="primary" sx={fabStyles} onClick={() => setAdd(true)}>

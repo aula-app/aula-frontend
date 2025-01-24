@@ -7,18 +7,21 @@ import { databaseRequest } from '@/utils';
  * @param room_id - The ID of the room to fetch ideas for
  * @returns Promise resolving to an array of ideas with custom fields
  */
-export async function getIdeasByRoom(room_id: string): Promise<IdeaType[]> {
+
+interface GetIdeasResponse {
+  data: IdeaType[] | null;
+  count: number | null;
+  error: string | null;
+}
+
+export async function getIdeasByRoom(room_id: string): Promise<GetIdeasResponse> {
   const response = await databaseRequest({
     model: 'Idea',
     method: 'getIdeasByRoom',
     arguments: { room_id },
   });
 
-  if (!response.success || !response.data) {
-    throw new Error('Failed to fetch ideas');
-  }
-
-  return response.data as IdeaType[];
+  return response as GetIdeasResponse;
 }
 
 /**
