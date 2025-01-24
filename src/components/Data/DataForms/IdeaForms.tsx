@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor } from '../DataFields';
-import { addIdeas } from '@/services/ideas';
 
 /**
  * IdeaForms component is used to create or edit an idea.
@@ -14,10 +13,11 @@ import { addIdeas } from '@/services/ideas';
  */
 
 interface IdeaFormsProps {
-  parentId: string;
+  onClose: () => void;
+  onSubmit: (data: Record<string, string>) => Promise<void>;
 }
 
-const IdeaForms: React.FC<IdeaFormsProps> = (parentId) => {
+const IdeaForms: React.FC<IdeaFormsProps> = ({ onClose, onSubmit }) => {
   const { t } = useTranslation();
 
   const schema = yup
@@ -36,15 +36,8 @@ const IdeaForms: React.FC<IdeaFormsProps> = (parentId) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: Record<string, string>) => {
-    addIdeas({
-      room_id: parentId,
-      ...data,
-    });
-  };
-
   return (
-    <form onSubmit={handleSubmit((data) => onSubmit(data))} noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Stack gap={2}>
         {/* title */}
         <TextField
@@ -58,7 +51,10 @@ const IdeaForms: React.FC<IdeaFormsProps> = (parentId) => {
         {/* content */}
         <MarkdownEditor name="content" control={control} />
       </Stack>
-      <Stack direction="row" justifyContent="end">
+      <Stack direction="row" justifyContent="end" gap={2}>
+        <Button onClick={onClose} color="error">
+          {t('actions.cancel')}
+        </Button>
         <Button type="submit" variant="contained">
           {t('actions.confirm')}
         </Button>
