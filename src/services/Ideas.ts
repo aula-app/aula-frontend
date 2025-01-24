@@ -1,6 +1,35 @@
+import { StatusTypes } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
-import { CustomFieldsType, CustomFieldsNameType } from '@/types/SettingsTypes';
+import { CustomFieldsNameType, CustomFieldsType } from '@/types/SettingsTypes';
 import { databaseRequest } from '@/utils';
+
+/**
+ * Adds a new idea to the database
+ * @param arguments - The idea data to add
+ * @returns Promise resolving to the new idea
+ */
+
+interface IdeaArguments {
+  title: string;
+  content: string;
+  room_id: string;
+  custom_field1?: string;
+  custom_field2?: string;
+  status?: StatusTypes;
+}
+
+export async function addIdeas(args: IdeaArguments): Promise<GetIdeasResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'addIdea',
+      arguments: args,
+    },
+    ['user_id']
+  );
+
+  return response as GetIdeasResponse;
+}
 
 /**
  * Fetches ideas for a specific room including custom fields
@@ -25,6 +54,7 @@ export async function getIdeasByRoom(room_id: string): Promise<GetIdeasResponse>
 }
 
 /**
+ * NOT WORKING
  * Fetches custom fields configuration
  * @returns Promise resolving to custom fields configuration
  */
@@ -44,18 +74,4 @@ export async function getCustomFields(): Promise<CustomFieldsType> {
     custom_field1: data.custom_field1_name,
     custom_field2: data.custom_field2_name,
   };
-}
-
-/**
- * Fetches ideas for a room including custom fields configuration
- * @param room_id - The ID of the room to fetch ideas for
- * @returns Promise resolving to ideas and custom fields
- */
-export async function getIdeasWithCustomFields(room_id: string): Promise<{
-  ideas: IdeaType[];
-  fields: CustomFieldsType;
-}> {
-  const [ideas, fields] = await Promise.all([getIdeasByRoom(room_id), getCustomFields()]);
-
-  return { ideas, fields };
 }

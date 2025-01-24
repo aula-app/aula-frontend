@@ -1,7 +1,7 @@
 {
   "actions": {
     "activate": "Activate {{var}}",
-    "add": "Add new {{var}}",
+    "add": "New {{var}}",
     "addToParent": "Add to {{var}}",
     "archive": "Archive",
     "bugReport": "Report bug",

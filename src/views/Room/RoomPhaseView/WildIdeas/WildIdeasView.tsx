@@ -1,11 +1,10 @@
 import { AppIcon } from '@/components';
-import EditData from '@/components/Data/EditData';
+import AddData from '@/components/Data/AddData';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { getIdeasByRoom } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
-import { CustomFieldsType } from '@/types/SettingsTypes';
-import { checkPermissions, databaseRequest } from '@/utils';
+import { checkPermissions } from '@/utils';
 import { Fab, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -69,12 +68,12 @@ const WildIdeas = () => {
             to={`idea/${idea.hash_id}`}
           />
         ))}
-      {checkPermissions(20) && (
+      {checkPermissions(20) && room_id && (
         <>
           <Fab aria-label="add idea" color="primary" sx={fabStyles} onClick={() => setAdd(true)}>
             <AppIcon icon="idea" />
           </Fab>
-          <EditData scope="ideas" isOpen={add} onClose={handleCloseAdd} otherData={{ room_id }} />
+          <AddData scope="ideas" isOpen={add} onClose={handleCloseAdd} parentId={room_id} />
         </>
       )}
     </Stack>
