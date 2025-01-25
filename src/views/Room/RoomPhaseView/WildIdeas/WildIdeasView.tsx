@@ -72,16 +72,7 @@ const WildIdeas = () => {
     <Stack alignItems="center" width="100%" px={1} spacing={2}>
       {isLoading && <IdeaBubbleSkeleton />}
       {error && <Typography>{t(error)}</Typography>}
-      {!isLoading &&
-        ideas.map((idea) => (
-          <IdeaBubble
-            idea={idea}
-            onReload={fetchIdeas}
-            key={idea.id}
-            comments={idea.sum_comments}
-            to={`idea/${idea.hash_id}`}
-          />
-        ))}
+      {!isLoading && ideas.map((idea) => <IdeaBubble key={idea.id} idea={idea} />)}
       {checkPermissions(20) && room_id && (
         <>
           <Fab aria-label="add idea" color="primary" sx={fabStyles} onClick={() => setAdd(true)}>

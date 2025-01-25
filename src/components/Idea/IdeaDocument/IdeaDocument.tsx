@@ -4,7 +4,6 @@ import { CategoryType, IdeaType } from '@/types/Scopes';
 import { checkPermissions, checkSelf, databaseRequest, getDisplayDate, phases } from '@/utils';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import IdeaContent from '../IdeaContent';
 
 interface Props {
   idea: IdeaType;
@@ -73,7 +72,7 @@ const IdeaDocument = ({ idea, disabled = false, onReload }: Props) => {
           canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id) && !disabled)}
         />
       </Stack>
-      <IdeaContent idea={idea} />
+      {/* <IdeaContent idea={idea} /> */}
       <Stack direction="row" alignItems="center" mt={2}>
         <AppIcon icon="account" size="xl" />
         <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
