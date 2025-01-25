@@ -11,18 +11,20 @@ const ChatBubble = ({ color, children, disabled = false }: ChatBubbleProps) => (
     sx={{
       color: disabled ? 'secondary' : 'inherit',
       bgcolor: color,
-      mb: 2,
+      mb: 1,
       borderRadius: 5,
       position: 'relative',
     }}
   >
-    <Box p={2}>{children}</Box>
+    <Box px={3} py={2}>
+      {children}
+    </Box>
     <Box
       className="noPrint point"
       sx={{
         position: 'absolute',
         bottom: 0,
-        left: '45px',
+        left: '32px',
         width: '1rem',
         aspectRatio: 1,
         bgcolor: color,

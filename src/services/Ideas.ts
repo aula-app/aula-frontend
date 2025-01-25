@@ -1,6 +1,5 @@
 import { StatusTypes } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
-import { CustomFieldsNameType, CustomFieldsType } from '@/types/SettingsTypes';
 import { databaseRequest } from '@/utils';
 
 /**
@@ -58,20 +57,73 @@ export async function getIdeasByRoom(room_id: string): Promise<GetIdeasResponse>
  * Fetches custom fields configuration
  * @returns Promise resolving to custom fields configuration
  */
-export async function getCustomFields(): Promise<CustomFieldsType> {
-  const response = await databaseRequest({
-    model: 'Settings',
-    method: 'getCustomfields',
-    arguments: {},
-  });
+// export async function getCustomFields(): Promise<CustomFieldsType> {
+//   const response = await databaseRequest({
+//     model: 'Settings',
+//     method: 'getCustomfields',
+//     arguments: {},
+//   });
 
-  if (!response.success || !response.data) {
-    throw new Error('Failed to fetch custom fields');
-  }
+//   if (!response.success || !response.data) {
+//     throw new Error('Failed to fetch custom fields');
+//   }
 
-  const data = response.data as CustomFieldsNameType;
-  return {
-    custom_field1: data.custom_field1_name,
-    custom_field2: data.custom_field2_name,
-  };
+//   const data = response.data as CustomFieldsNameType;
+//   return {
+//     custom_field1: data.custom_field1_name,
+//     custom_field2: data.custom_field2_name,
+//   };
+// }
+
+/**
+ * Fetches the like status of an idea
+ * @param idea_id - The ID of the idea to like
+ * @returns Promise resolving to the updated idea list
+ */
+
+export async function getLike(idea_id: string): Promise<boolean> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'getLikeStatus',
+      arguments: { idea_id },
+    },
+    ['user_id']
+  );
+
+  return Boolean(response.data);
+}
+
+/**
+ * Adds a like to an idea
+ * @param idea_id - The ID of the idea to like
+ * @returns Promise resolving to the updated idea list
+ */
+
+export async function addLike(idea_id: string): Promise<void> {
+  await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'IdeaAddLike',
+      arguments: { idea_id },
+    },
+    ['user_id']
+  );
+}
+
+/**
+ * Removes a like to an idea
+ * @param idea_id - The ID of the idea to like
+ * @returns Promise resolving to the updated idea list
+ */
+
+export async function removeLike(idea_id: string): Promise<void> {
+  await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'IdeaRemoveLike',
+      arguments: { idea_id },
+    },
+    ['user_id']
+  );
 }
