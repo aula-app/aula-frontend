@@ -69,7 +69,7 @@ const WildIdeas = () => {
   };
 
   return (
-    <Stack alignItems="center" width="100%" px={1} spacing={2}>
+    <Stack alignItems="center" width="100%" spacing={2}>
       {isLoading && <IdeaBubbleSkeleton />}
       {error && <Typography>{t(error)}</Typography>}
       {!isLoading && ideas.map((idea) => <IdeaBubble key={idea.id} idea={idea} />)}

@@ -1,4 +1,4 @@
-import { alpha, IconButton, IconButtonProps, Tooltip } from '@mui/material';
+import { alpha, IconButton, IconButtonProps, Tooltip, Typography } from '@mui/material';
 import { ElementType, forwardRef, FunctionComponent, useMemo } from 'react';
 import AppIcon from '../AppIcon';
 import AppLink from '../AppLink';
@@ -9,7 +9,6 @@ const MUI_ICON_BUTTON_COLORS = ['inherit', 'default', 'primary', 'secondary', 's
 interface Props extends Omit<IconButtonProps, 'color'> {
   color?: string; // Not only 'inherit' | 'default' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
   icon: AllIconsType;
-  // Missing props
   component?: ElementType; // Could be RouterLink, AppLink, <a>, etc.
   to?: string; // Link prop
   href?: string; // Link prop
@@ -19,16 +18,8 @@ interface Props extends Omit<IconButtonProps, 'color'> {
 /**
  * Renders MUI IconButton with SVG image by given Icon name
  * @component AppIconButton
- * @param {string} [color] - color of background and hover effect. Non MUI values is also accepted.
- * @param {boolean} [disabled] - the IconButton is not active when true, also the Tooltip is not rendered.
- * @param {string} [href] - external link URI
- * @param {string} [icon] - name of Icon to render inside the IconButton
- * @param {boolean} [openInNewTab] - link will be opened in new tab when true
- * @param {string} [size] - size of the button: 'small', 'medium' or 'large'
- * @param {Array<func| object| bool> | func | object} [sx] - additional CSS styles to apply to the button
- * @param {string} [title] - when set, the IconButton is rendered inside Tooltip with this text
- * @param {string} [to] - internal link URI
  */
+
 const AppIconButton = ({
   color = 'default',
   component,
@@ -66,7 +57,7 @@ const AppIconButton = ({
         {...restOfProps}
       >
         <AppIcon icon={icon} size={size} />
-        {children}
+        <Typography pl={0.3}>{children}</Typography>
       </IconButton>
     );
   }, [color, componentToRender, children, disabled, icon, isMuiColor, sx, restOfProps]);
