@@ -1,8 +1,7 @@
-import AppIcon from '@/components/AppIcon';
+import AppIconButton from '@/components/AppIconButton';
 import { addLike, getLike, removeLike } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
-import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -18,19 +17,22 @@ const LikeButton: React.FC<Props> = ({ idea }) => {
   };
 
   const toggleLike = async () => {
-    (await liked) ? removeLike(idea.hash_id) : addLike(idea.hash_id);
+    if (liked) {
+      await removeLike(idea.hash_id);
+    } else {
+      await addLike(idea.hash_id);
+    }
     getLikeState();
   };
 
   useEffect(() => {
     getLikeState();
-  }, [idea]);
+  }, []);
 
   return (
-    <Button color="error" size="small" onClick={toggleLike} disabled={!checkPermissions(20)}>
-      <AppIcon icon={liked ? 'heartfull' : 'heart'} sx={{ mr: 0.5 }} />
+    <AppIconButton icon={liked ? 'heartFull' : 'heart'} onClick={toggleLike} disabled={!checkPermissions(20)}>
       {idea.sum_likes}
-    </Button>
+    </AppIconButton>
   );
 };
 
