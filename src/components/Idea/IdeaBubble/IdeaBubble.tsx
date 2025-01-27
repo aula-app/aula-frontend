@@ -5,6 +5,7 @@ import { phases } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import UserBar from '../UserBar';
+import CategoryList from '../CategoryList';
 
 interface Props {
   idea: IdeaType;
@@ -23,13 +24,14 @@ const IdeaBubble: React.FC<Props> = ({ idea, disabled = false }) => {
             <Typography>{idea.content}</Typography>
             {/* {(Object.keys(fields) as Array<keyof CustomFieldsType>).map((customField) => (
                 <Fragment key={customField}>
-                  {fields[customField] && idea[customField] && (
-                    <Typography mt={2}>
-                      <b>{fields[customField]}:</b> {idea[customField]}
-                    </Typography>
+                {fields[customField] && idea[customField] && (
+                  <Typography mt={2}>
+                  <b>{fields[customField]}:</b> {idea[customField]}
+                  </Typography>
                   )}
-                </Fragment>
-              ))} */}
+                  </Fragment>
+                  ))} */}
+            <CategoryList idea={idea} />
           </Stack>
         </AppLink>
       </ChatBubble>

@@ -1,5 +1,5 @@
 import AppIconButton from '@/components/AppIconButton';
-import { addLike, getLike, removeLike } from '@/services/ideas';
+import { addLike, getLike, removeLike } from '@/services/likes';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { useEffect, useState } from 'react';
