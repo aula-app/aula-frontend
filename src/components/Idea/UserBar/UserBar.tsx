@@ -2,7 +2,7 @@ import AppIconButton from '@/components/AppIconButton';
 import MoreOptions from '@/components/MoreOptions';
 import UserAvatar from '@/components/UserAvatar';
 import { IdeaType } from '@/types/Scopes';
-import { getDisplayDate } from '@/utils';
+import { checkPermissions, checkSelf, getDisplayDate } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import LikeButton from '../LikeButton';
 
@@ -30,7 +30,11 @@ const UserBar: React.FC<Props> = ({ idea, disabled = false }) => {
           {idea.displayname}
         </Typography>
       </Stack>
-      <MoreOptions item={idea} scope="ideas">
+      <MoreOptions
+        item={idea}
+        scope="ideas"
+        canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id) && !disabled)}
+      >
         <Stack direction="row" alignItems="center">
           <LikeButton disabled={disabled} idea={idea} />
           {idea.sum_comments > 0 && (

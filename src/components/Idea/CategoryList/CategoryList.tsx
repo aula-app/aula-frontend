@@ -21,13 +21,13 @@ const LikeButton: React.FC<Props> = ({ idea }) => {
   }, []);
 
   return category ? (
-    <Stack direction="row" justifyContent="end" mx={-1}>
-      <Chip
-        icon={<AppIcon icon={category.description_internal} size="xs" sx={{ ml: 0.5 }} />}
-        label={category.name}
-        variant="filled"
-      />
-    </Stack>
+    <Chip
+      icon={<AppIcon icon={category.description_internal} size="xs" />}
+      label={category.name}
+      variant="filled"
+      size="small"
+      sx={{ ml: 1, mt: -0.5 }}
+    />
   ) : null;
 };
 

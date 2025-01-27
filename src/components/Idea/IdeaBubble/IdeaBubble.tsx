@@ -20,7 +20,12 @@ const IdeaBubble: React.FC<Props> = ({ idea, disabled = false }) => {
       <ChatBubble color={`${phases[Number(phase)]}.main`}>
         <AppLink to={`/idea/${idea.hash_id}`} disabled={disabled}>
           <Stack gap={1}>
-            <Typography variant="h6">{idea.title}</Typography>
+            <Typography>
+              <Typography variant="h6" display="inline">
+                {idea.title}
+              </Typography>
+              <CategoryList idea={idea} />
+            </Typography>
             <Typography>{idea.content}</Typography>
             {/* {(Object.keys(fields) as Array<keyof CustomFieldsType>).map((customField) => (
                 <Fragment key={customField}>
@@ -31,7 +36,6 @@ const IdeaBubble: React.FC<Props> = ({ idea, disabled = false }) => {
                   )}
                   </Fragment>
                   ))} */}
-            <CategoryList idea={idea} />
           </Stack>
         </AppLink>
       </ChatBubble>
