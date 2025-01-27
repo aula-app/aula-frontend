@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 
 interface Props {
   idea: IdeaType;
+  disabled?: boolean;
 }
 
-const LikeButton: React.FC<Props> = ({ idea }) => {
+const LikeButton: React.FC<Props> = ({ idea, disabled }) => {
   const [liked, setLiked] = useState(false);
 
   const getLikeState = async () => {
@@ -30,7 +31,11 @@ const LikeButton: React.FC<Props> = ({ idea }) => {
   }, []);
 
   return (
-    <AppIconButton icon={liked ? 'heartFull' : 'heart'} onClick={toggleLike} disabled={!checkPermissions(20)}>
+    <AppIconButton
+      icon={liked ? 'heartFull' : 'heart'}
+      onClick={toggleLike}
+      disabled={disabled || !checkPermissions(20)}
+    >
       {idea.sum_likes}
     </AppIconButton>
   );

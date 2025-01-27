@@ -1,17 +1,12 @@
 import { AlterTypes, ColorTypes } from '@/types/Generics';
-import { ReportMetadataType, ScopeType, toFormData } from '@/types/Scopes';
+import { ReportMetadataType, ScopeType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { getCurrentUser } from '@/utils';
-import { Box, Button, ClickAwayListener, Divider, Paper, Stack, Typography, Zoom } from '@mui/material';
-import { grey } from '@mui/material/colors';
-import { useState } from 'react';
+import { ClickAwayListener, Collapse, Stack, Tooltip } from '@mui/material';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
-import AppIcon from '../AppIcon';
 import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
-import { DeleteData } from '../Data';
-import EditData from '../Data/EditData';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -22,23 +17,22 @@ interface OptionsTypes {
   metadata?: ReportMetadataType;
 }
 
-interface Props<T extends ScopeType> {
-  item: T;
+interface Props {
+  item: ScopeType;
   scope: SettingNamesType;
-  canEdit?: boolean;
-  onClose: () => void;
+  children?: React.ReactNode;
 }
 
 /**
  * Renders question mark badge that triggers a tooltip on hover
  * @component MoreOptions
  */
-const MoreOptions = <T extends ScopeType>({ item, scope, canEdit = false, onClose }: Props<T>) => {
+const MoreOptions: React.FC<Props> = ({ item, scope, children }) => {
   const { t } = useTranslation();
-  const location = useLocation();
+  // const location = useLocation();
   const [open, setOpen] = useState(false);
-  const [edit, setEdit] = useState<SettingNamesType>();
-  const [del, setDel] = useState(false);
+  // const [edit, setEdit] = useState<SettingNamesType>();
+  // const [del, setDel] = useState(false);
 
   const defaultOptions = [
     {
@@ -75,42 +69,47 @@ const MoreOptions = <T extends ScopeType>({ item, scope, canEdit = false, onClos
   ] as OptionsTypes[];
 
   const editOptions = [
-    { type: 'edit', icon: 'edit', color: 'secondary', label: t('actions.edit') },
+    { type: 'edit', icon: 'edit', color: 'secondary', label: t('actions.edit', { var: t(`scopes.${scope}.name`) }) },
     { type: 'delete', icon: 'delete', color: 'error', label: t('actions.delete') },
   ] as OptionsTypes[];
 
-  const options = defaultOptions.concat(canEdit ? editOptions : []);
+  const options = defaultOptions.concat(editOptions);
 
   const toggleOptions = (e: React.MouseEvent) => {
     e.stopPropagation();
     setOpen(!open);
   };
 
-  const handleClick = (type: AlterTypes) => {
-    setOpen(false);
-    switch (type) {
-      case 'delete':
-        setDel(true);
-        break;
-      case 'edit':
-        setEdit(scope);
-        break;
-      case 'add':
-        setEdit(scope);
-        break;
-      default:
-        setEdit(type);
-        break;
-    }
+  const closeOptions = (e: MouseEvent | TouchEvent) => {
+    e.stopPropagation();
+    if (open) setOpen(false);
   };
 
-  const close = () => {
-    setEdit(undefined);
-    setDel(false);
-    onClose();
-  };
+  // const handleClick = (type: AlterTypes) => {
+  //   setOpen(false);
+  //   switch (type) {
+  //     case 'delete':
+  //       setDel(true);
+  //       break;
+  //     case 'edit':
+  //       setEdit(scope);
+  //       break;
+  //     case 'add':
+  //       setEdit(scope);
+  //       break;
+  //     default:
+  //       setEdit(type);
+  //       break;
+  //   }
+  // };
 
-  const formattedItem = toFormData(item);
+  // const close = () => {
+  //   setEdit(undefined);
+  //   setDel(false);
+  //   onClose();
+  // };
+
+  // const formattedItem = toFormData(item);
 
   return (
     <>

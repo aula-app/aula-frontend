@@ -1,11 +1,10 @@
-import AppIcon from '@/components/AppIcon';
-import AppLink from '@/components/AppLink';
+import AppIconButton from '@/components/AppIconButton';
+import MoreOptions from '@/components/MoreOptions';
 import UserAvatar from '@/components/UserAvatar';
 import { IdeaType } from '@/types/Scopes';
 import { getDisplayDate } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import LikeButton from '../LikeButton';
-import AppIconButton from '@/components/AppIconButton';
 
 interface Props {
   idea: IdeaType;
@@ -31,13 +30,16 @@ const UserBar: React.FC<Props> = ({ idea, disabled = false }) => {
           {idea.displayname}
         </Typography>
       </Stack>
-      <AppIconButton icon="more" />
-      {idea.sum_comments > 0 && (
-        <AppIconButton icon="chat" to={`/idea/${idea.hash_id}`}>
-          {idea.sum_comments}
-        </AppIconButton>
-      )}
-      <LikeButton idea={idea} />
+      <MoreOptions item={idea} scope="ideas">
+        <Stack direction="row" alignItems="center">
+          <LikeButton disabled={disabled} idea={idea} />
+          {idea.sum_comments > 0 && (
+            <AppIconButton icon="chat" to={`/idea/${idea.hash_id}`}>
+              {idea.sum_comments}
+            </AppIconButton>
+          )}
+        </Stack>
+      </MoreOptions>
     </Stack>
   );
 };
