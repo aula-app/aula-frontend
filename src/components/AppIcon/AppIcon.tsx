@@ -30,6 +30,7 @@ import {
 } from 'react-icons/bi';
 import { BsGenderTrans, BsTree } from 'react-icons/bs';
 import {
+  HiFlag,
   HiHeart,
   HiLink,
   HiOutlineAcademicCap,
@@ -266,7 +267,7 @@ export const ICONS = {
   print: HiOutlinePrinter,
   results: HiOutlineChartBar,
   rejected: HiOutlineHandThumbDown,
-  report: HiOutlineFlag,
+  report: HiFlag,
   request: HiOutlineExclamationTriangle,
   room: HiOutlineAcademicCap,
   search: HiOutlineMagnifyingGlass,

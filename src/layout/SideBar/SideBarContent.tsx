@@ -68,9 +68,6 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
         <AppIconButton onClick={() => setReport('reports')} icon="report" title={t('actions.contentReport')} />
         <AppIconButton onClick={() => setReport('bugs')} icon="bug" title={t('actions.bugReport')} />
         <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} />
-        <AppIconButton onClick={() => setReport('reports')} icon="report" title={t('actions.contentReport')} />
-        <AppIconButton onClick={() => setReport('bugs')} icon="bug" title={t('actions.bugReport')} />
-        <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} />
         <AppIconButton
           onClick={onSwitchDarkMode}
           icon={state.darkMode ? 'day' : 'night'}
@@ -88,7 +85,6 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
       >
         {isAuthenticated && (
           <AppButton variant="text" onClick={onLogout}>
-            {t('auth.logout')}&nbsp;
             {t('auth.logout')}&nbsp;
             <AppIcon icon="logout" />
           </AppButton>
