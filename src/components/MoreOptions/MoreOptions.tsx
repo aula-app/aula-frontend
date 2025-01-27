@@ -1,7 +1,6 @@
 import { AlterTypes, ColorTypes } from '@/types/Generics';
 import { ReportMetadataType, ScopeType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { getCurrentUser } from '@/utils';
 import { ClickAwayListener, Collapse, Stack, Tooltip } from '@mui/material';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +19,7 @@ interface OptionsTypes {
 interface Props {
   item: ScopeType;
   scope: SettingNamesType;
+  canEdit?: boolean;
   children?: React.ReactNode;
 }
 
@@ -27,7 +27,7 @@ interface Props {
  * Renders question mark badge that triggers a tooltip on hover
  * @component MoreOptions
  */
-const MoreOptions: React.FC<Props> = ({ item, scope, children }) => {
+const MoreOptions: React.FC<Props> = ({ item, scope, children, canEdit = false }) => {
   const { t } = useTranslation();
   // const location = useLocation();
   const [open, setOpen] = useState(false);
@@ -35,37 +35,8 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children }) => {
   // const [del, setDel] = useState(false);
 
   const defaultOptions = [
-    {
-      type: 'reports',
-      icon: 'report',
-      color: 'error',
-      label: t('actions.contentReport'),
-      otherData: {
-        headline: `${scope} #${item.id}`,
-        msg_type: 4,
-      },
-      metadata: {
-        type: 'reports',
-        location: location.pathname,
-        user: getCurrentUser(),
-      },
-    },
-    {
-      type: 'bugs',
-      icon: 'bug',
-      color: 'warning',
-      label: t('actions.bugReport'),
-      otherData: {
-        headline: `${scope} #${item.id}`,
-        msg_type: 4,
-      },
-      metadata: {
-        type: 'bugs',
-        location: location.pathname,
-        user: getCurrentUser(),
-        userAgent: window.navigator.userAgent,
-      },
-    },
+    { type: 'reports', icon: 'report', color: 'error', label: t('actions.contentReport') },
+    { type: 'bugs', icon: 'bug', color: 'warning', label: t('actions.bugReport') },
   ] as OptionsTypes[];
 
   const editOptions = [
@@ -73,7 +44,7 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children }) => {
     { type: 'delete', icon: 'delete', color: 'error', label: t('actions.delete') },
   ] as OptionsTypes[];
 
-  const options = defaultOptions.concat(editOptions);
+  const options = canEdit ? defaultOptions.concat(editOptions) : defaultOptions;
 
   const toggleOptions = (e: React.MouseEvent) => {
     e.stopPropagation();
