@@ -172,6 +172,9 @@
       "body": "Eine Datenaktualisierungsprozedur wurde für den Benutzer {{var}} angefordert"
     }
   },
+  "patterns": {
+    "on": "{{a}} zur {{b}}"
+  },
   "phases": {
     "approval": "Genehmigung",
     "discussion": "Diskussion",
