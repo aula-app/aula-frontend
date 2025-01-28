@@ -2,6 +2,32 @@ import { StatusTypes } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
 import { databaseRequest, GenericResponse } from '@/utils';
 
+/**
+ * Fetches ideas for a specific room including custom fields
+ * @param room_id - The ID of the room to fetch ideas for
+ * @returns Promise resolving to an array of ideas with custom fields
+ */
+
+interface GetIdeasResponse {
+  data: IdeaType[] | null;
+  count: number | null;
+  error: string | null;
+}
+
+export async function getIdeasByRoom(room_id: string): Promise<GetIdeasResponse> {
+  const response = await databaseRequest({
+    model: 'Idea',
+    method: 'getIdeasByRoom',
+    arguments: { room_id },
+  });
+
+  return response as GetIdeasResponse;
+}
+
+/**
+ * Sets Idea update types
+ */
+
 interface IdeaArguments {
   title: string;
   content: string;
@@ -10,15 +36,20 @@ interface IdeaArguments {
   status?: StatusTypes;
 }
 
+interface AddIdeaArguments extends IdeaArguments {
+  room_id: string;
+}
+
+interface EditIdeaArguments extends IdeaArguments {
+  idea_id: string;
+  room_id?: string;
+}
+
 /**
  * Adds a new idea to the database
  * @param arguments - The idea data to add
  * @returns Promise resolving to the new idea
  */
-
-interface AddIdeaArguments extends IdeaArguments {
-  room_id: string;
-}
 
 export async function addIdeas(args: AddIdeaArguments): Promise<GetIdeasResponse> {
   const response = await databaseRequest(
@@ -38,11 +69,6 @@ export async function addIdeas(args: AddIdeaArguments): Promise<GetIdeasResponse
  * @param arguments - The idea data to add
  * @returns Promise resolving to the new idea
  */
-
-interface EditIdeaArguments extends IdeaArguments {
-  idea_id: string;
-  room_id?: string;
-}
 
 export async function editIdea(args: EditIdeaArguments): Promise<GenericResponse> {
   const response = await databaseRequest(
@@ -76,28 +102,6 @@ export async function deleteIdea(id: string): Promise<GenericResponse> {
   );
 
   return response as GenericResponse;
-}
-
-/**
- * Fetches ideas for a specific room including custom fields
- * @param room_id - The ID of the room to fetch ideas for
- * @returns Promise resolving to an array of ideas with custom fields
- */
-
-interface GetIdeasResponse {
-  data: IdeaType[] | null;
-  count: number | null;
-  error: string | null;
-}
-
-export async function getIdeasByRoom(room_id: string): Promise<GetIdeasResponse> {
-  const response = await databaseRequest({
-    model: 'Idea',
-    method: 'getIdeasByRoom',
-    arguments: { room_id },
-  });
-
-  return response as GetIdeasResponse;
 }
 
 /**

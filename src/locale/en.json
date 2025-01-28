@@ -172,6 +172,9 @@
       "body": "A data update procedure was requested for user {{var}}"
     }
   },
+  "patterns": {
+    "on": "{{a}} on {{b}}"
+  },
   "phases": {
     "approval": "Approval",
     "discussion": "Discussion",
