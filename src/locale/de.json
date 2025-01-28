@@ -93,7 +93,7 @@
       "undelegated": "{{var}} Ideen"
     }
   },
-  "delete": {
+  "deletion": {
     "confirm": "Bist du sicher, dass du die ausgewählte {{var}} löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden",
     "headline": "Ausgewählte {{var}} löschen"
   },

@@ -1,15 +1,14 @@
 import { ScopeType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { ClickAwayListener, Collapse, Stack } from '@mui/material';
+import { ClickAwayListener, Collapse, IconButtonOwnProps, Stack } from '@mui/material';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
-import BugButton from '../Buttons/BugButton';
 import DeleteButton from '../Buttons/DeleteButton';
 import EditButton from '../Buttons/EditButton';
 import ReportButton from '../Buttons/ReportButton';
 
-interface Props {
+interface Props extends IconButtonOwnProps {
   item: ScopeType;
   scope: SettingNamesType;
   onDelete: () => void;
@@ -22,7 +21,16 @@ interface Props {
  * Renders question mark badge that triggers a tooltip on hover
  * @component MoreOptions
  */
-const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit, canEdit = false }) => {
+const MoreOptions: React.FC<Props> = ({
+  item,
+  scope,
+  children,
+  onDelete,
+  onEdit,
+  color,
+  canEdit = false,
+  ...restOfProps
+}) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 

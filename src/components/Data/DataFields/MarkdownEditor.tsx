@@ -50,7 +50,7 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
               field.onChange(editor.getHTML());
             },
           },
-          [field.value]
+          [JSON.stringify(control._defaultValues)]
         );
         return (
           <FormControl fullWidth>
