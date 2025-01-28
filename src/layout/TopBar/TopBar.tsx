@@ -1,13 +1,13 @@
 import { AppIcon, AppIconButton, AppLink } from '@/components';
+import LocaleSwitch from '@/components/LocaleSwitch';
+import { useEventLogout, useOnMobile } from '@/hooks';
+import { checkPermissions } from '@/utils';
 import { AppBar, Breadcrumbs, Stack, Toolbar } from '@mui/material';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
 import { SIDEBAR_DESKTOP_ANCHOR } from '../config';
-import { checkPermissions } from '@/utils';
-import { useEventLogout, useOnMobile } from '@/hooks';
-import LocaleSwitch from '@/components/LocaleSwitch';
 
 // Role required for admin features
 const TECH_ADMIN_ROLE = 60;
@@ -18,15 +18,13 @@ const EXCLUDED_PATHS = ['welcome', 'phase', 'settings'];
 interface Props {
   /** Home path for navigation */
   home: string;
-  /** Callback to set the type of report */
-  setReport: Dispatch<SetStateAction<'bugs' | 'reports' | undefined>>;
 }
 
 /**
  * TopBar component that provides navigation, breadcrumbs, and user controls
  * @component TopBar
  */
-const TopBar = ({ home, setReport }: Props) => {
+const TopBar = ({ home }: Props) => {
   const { t } = useTranslation();
   const [openSideBar, setSidebar] = useState(false);
   const location = useLocation().pathname.split('/');
@@ -90,7 +88,6 @@ const TopBar = ({ home, setReport }: Props) => {
           anchor={SIDEBAR_DESKTOP_ANCHOR}
           open={openSideBar}
           variant="temporary"
-          setReport={setReport}
           onClose={() => setSidebar(false)}
         />
       </Toolbar>

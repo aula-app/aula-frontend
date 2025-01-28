@@ -8,13 +8,12 @@ import SideBarContent from './SideBarContent';
  * Renders fixed SideBar with Menu and User details for desktop view
  * @component SideBarFixed
  * @param {BaseSideBarProps} props - Component props
- * @param {function} props.setReport - Callback to set report type
  * @returns {JSX.Element} Rendered SideBarFixed component
  */
-const SideBarFixed = ({ setReport, ...restOfProps }: BaseSideBarProps): JSX.Element => {
+const SideBarFixed = ({ ...restOfProps }: BaseSideBarProps): JSX.Element => {
   return (
     <Stack className="noPrint" sx={fixedSideBarStyles} {...restOfProps}>
-      <SideBarContent isFixed setReport={setReport} />
+      <SideBarContent isFixed />
     </Stack>
   );
 };

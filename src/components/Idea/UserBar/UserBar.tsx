@@ -9,9 +9,11 @@ import LikeButton from '../LikeButton';
 interface Props {
   idea: IdeaType;
   disabled?: boolean;
+  onDelete: () => void;
+  onEdit: () => void;
 }
 
-const UserBar: React.FC<Props> = ({ idea, disabled = false }) => {
+const UserBar: React.FC<Props> = ({ idea, disabled = false, onDelete, onEdit }) => {
   return (
     <Stack direction="row" alignItems="center">
       <UserAvatar id={String(idea.user_id)} />
@@ -33,6 +35,8 @@ const UserBar: React.FC<Props> = ({ idea, disabled = false }) => {
       <MoreOptions
         item={idea}
         scope="ideas"
+        onDelete={onDelete}
+        onEdit={onEdit}
         canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id) && !disabled)}
       >
         <Stack direction="row" alignItems="center">

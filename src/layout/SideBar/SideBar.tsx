@@ -16,11 +16,10 @@ import SideBarContent from './SideBarContent';
  * @param {('left'|'right')} props.anchor - Drawer anchor position
  * @param {boolean} props.open - Controls drawer open state
  * @param {('permanent'|'persistent'|'temporary')} props.variant - Drawer variant
- * @param {function} props.setReport - Callback to set report type
  * @param {function} props.onClose - Callback when drawer closes
  * @returns {JSX.Element} Rendered SideBar component
  */
-const SideBar = ({ anchor, open, variant, setReport, onClose, ...restOfProps }: DrawerSideBarProps): JSX.Element => {
+const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideBarProps): JSX.Element => {
   const { t } = useTranslation();
   const onMobile = useOnMobile();
   const isAuthenticated = useIsAuthenticated();
@@ -49,7 +48,7 @@ const SideBar = ({ anchor, open, variant, setReport, onClose, ...restOfProps }: 
       </Stack>
       {isAuthenticated && <UserInfo />}
       <Divider />
-      <SideBarContent setReport={setReport} onClose={onClose} />
+      <SideBarContent onClose={onClose} />
     </Drawer>
   );
 };
