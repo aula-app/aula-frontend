@@ -17,6 +17,12 @@ export interface RequestObject {
   arguments: ObjectPropByName;
 }
 
+export interface GenericResponse {
+  data: number | null;
+  count: number | null;
+  error: string | null;
+}
+
 interface GetResponse {
   data: Array<ScopeType> | null;
   count: number | null;

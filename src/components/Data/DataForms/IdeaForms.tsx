@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -15,27 +15,32 @@ import { IdeaFormData } from '@/views/Room/RoomPhaseView/WildIdeas/WildIdeasView
 
 interface IdeaFormsProps {
   onClose: () => void;
-  onSubmit: (data: IdeaFormData) => Promise<void>;
+  defaultValues?: IdeaFormData;
+  onSubmit: (data: IdeaFormData) => void;
 }
 
-const IdeaForms: React.FC<IdeaFormsProps> = ({ onClose, onSubmit }) => {
+const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues = {}, onClose, onSubmit }) => {
   const { t } = useTranslation();
 
-  const schema = yup
-    .object({
-      title: yup.string().required(t('forms.validation.required')),
-      content: yup.string().required(t('forms.validation.required')),
-    })
-    .required();
+  const schema = yup.object({
+    title: yup.string().required(t('forms.validation.required')),
+    content: yup.string().required(t('forms.validation.required')),
+  });
 
   const {
     register,
+    reset,
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {},
   });
+
+  useEffect(() => {
+    reset({ ...defaultValues });
+  }, [JSON.stringify(defaultValues)]);
 
   return (
     <Stack p={2} overflow="auto" gap={2}>

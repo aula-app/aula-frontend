@@ -1,16 +1,17 @@
 import { AppButton, AppIcon, AppIconButton, AppLink } from '@/components';
+import BugButton from '@/components/Buttons/BugButton';
+import ReportButton from '@/components/Buttons/ReportButton';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
 import { checkPermissions } from '@/utils';
 import { Divider, List, ListItemButton, ListItemIcon, ListItemText, Stack } from '@mui/material';
-import { Dispatch, Fragment, memo, SetStateAction, useCallback } from 'react';
+import { Fragment, memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SIDEBAR_ITEMS } from '../config';
 
 type Props = {
   isFixed?: boolean;
-  setReport: Dispatch<SetStateAction<'bugs' | 'reports' | undefined>>;
   onClose?: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 };
 
@@ -18,11 +19,10 @@ type Props = {
  * Renders SideBar content including navigation, actions and user controls
  * @component SideBarContent
  * @param {boolean} [props.isFixed] - Whether the sidebar is fixed or in a drawer
- * @param {function} props.setReport - Callback to set report type
  * @param {function} [props.onClose] - Optional callback when drawer closes
  * @returns {JSX.Element} Rendered SideBarContent component
  */
-const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...restOfProps }: Props): JSX.Element => {
+const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }: Props): JSX.Element => {
   const { t } = useTranslation();
   const [state] = useAppStore();
   const isAuthenticated = useIsAuthenticated();
@@ -65,8 +65,8 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
       <Divider />
       <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
         {isFixed && <LocaleSwitch />}
-        <AppIconButton onClick={() => setReport('reports')} icon="report" title={t('actions.contentReport')} />
-        <AppIconButton onClick={() => setReport('bugs')} icon="bug" title={t('actions.bugReport')} />
+        <ReportButton target={location.pathname} />
+        <BugButton target={location.pathname} />
         <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} />
         <AppIconButton
           onClick={onSwitchDarkMode}

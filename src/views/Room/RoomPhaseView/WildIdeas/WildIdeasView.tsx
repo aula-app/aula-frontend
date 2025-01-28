@@ -2,7 +2,7 @@ import { AppIcon } from '@/components';
 import { IdeaForms } from '@/components/Data/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
-import { addIdeas, getIdeasByRoom } from '@/services/ideas';
+import { addIdeas, deleteIdea, editIdea, getIdeasByRoom } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
@@ -29,10 +29,11 @@ export interface IdeaFormData {
 const WildIdeas = () => {
   const { t } = useTranslation();
   const { room_id } = useParams<RouteParams>();
-  const [add, setAdd] = useState(false);
+  const [edit, setEdit] = useState<string | boolean>(false); // true = new idea; id = edit idea; false = closed;
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
+  const [defaultValues, setDefaultValues] = useState<IdeaFormData>();
 
   const fetchIdeas = useCallback(async () => {
     if (!room_id) return;
@@ -44,7 +45,12 @@ const WildIdeas = () => {
     setLoading(false);
   }, [room_id]);
 
-  const onSubmit = async (data: IdeaFormData) => {
+  const onSubmit = (data: IdeaFormData) => {
+    if (!edit) return;
+    typeof edit === 'string' ? updateIdea(data) : addIdea(data);
+  };
+
+  const addIdea = async (data: IdeaFormData) => {
     if (!room_id) return;
     const request = await addIdeas({
       room_id: room_id,
@@ -53,8 +59,31 @@ const WildIdeas = () => {
     if (!request.error) onClose();
   };
 
+  const updateIdea = async (data: IdeaFormData) => {
+    if (typeof edit !== 'string') return;
+    const request = await editIdea({
+      idea_id: edit,
+      ...data,
+    });
+    if (!request.error) onClose();
+  };
+
+  const onEdit = (idea: IdeaType) => {
+    setDefaultValues({
+      title: idea.title,
+      content: idea.content,
+    });
+    setEdit(idea.hash_id);
+  };
+
+  const onDelete = async (id: string) => {
+    const request = await deleteIdea(id);
+    if (!request.error) onClose();
+  };
+
   const onClose = () => {
-    setAdd(false);
+    setDefaultValues(undefined);
+    setEdit(false);
     fetchIdeas();
   };
 
@@ -72,14 +101,17 @@ const WildIdeas = () => {
     <Stack alignItems="center" width="100%" spacing={2}>
       {isLoading && <IdeaBubbleSkeleton />}
       {error && <Typography>{t(error)}</Typography>}
-      {!isLoading && ideas.map((idea) => <IdeaBubble key={idea.id} idea={idea} />)}
+      {!isLoading &&
+        ideas.map((idea) => (
+          <IdeaBubble key={idea.id} idea={idea} onEdit={() => onEdit(idea)} onDelete={() => onDelete(idea.hash_id)} />
+        ))}
       {checkPermissions(20) && room_id && (
         <>
           <Fab aria-label="add idea" color="primary" sx={fabStyles} onClick={() => setAdd(true)}>
             <AppIcon icon="idea" />
           </Fab>
-          <Drawer anchor="bottom" open={add} onClose={onClose} sx={{ overflowY: 'auto' }}>
-            <IdeaForms onClose={onClose} onSubmit={onSubmit} />
+          <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
+            <IdeaForms onClose={onClose} onSubmit={onSubmit} defaultValues={defaultValues} />
           </Drawer>
         </>
       )}

@@ -23,10 +23,10 @@ interface Props {
   name: string;
   control: Control<any, any>;
   required?: boolean;
-  disbled?: boolean;
+  disabled?: boolean;
 }
 
-const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disbled = false }) => {
+const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disabled = false }) => {
   const { t } = useTranslation();
 
   return (
@@ -36,19 +36,22 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disb
       control={control}
       // @ts-ignore
       render={({ field, fieldState }) => {
-        const tipTapEditor = useEditor({
-          extensions: [
-            StarterKit,
-            Placeholder.configure({
-              placeholder: `${t(`settings.columns.${name}`)}${required ? '*' : ` ${t('forms.validation.optional').toLowerCase()}`}`,
-              showOnlyWhenEditable: false,
-            }),
-          ],
-          content: field.value,
-          onUpdate({ editor }) {
-            field.onChange(editor.getHTML());
+        const tipTapEditor = useEditor(
+          {
+            extensions: [
+              StarterKit,
+              Placeholder.configure({
+                placeholder: `${t(`settings.columns.${name}`)}${required ? '*' : ` ${t('forms.validation.optional').toLowerCase()}`}`,
+                showOnlyWhenEditable: false,
+              }),
+            ],
+            content: field.value,
+            onUpdate({ editor }) {
+              field.onChange(editor.getHTML());
+            },
           },
-        });
+          [field.value]
+        );
         return (
           <FormControl fullWidth>
             <RichTextEditorProvider editor={tipTapEditor}>

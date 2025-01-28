@@ -6,13 +6,16 @@ import { Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import UserBar from '../UserBar';
 import CategoryList from '../CategoryList';
+import { deleteIdea } from '@/services/ideas';
 
 interface Props {
   idea: IdeaType;
+  onDelete: () => void;
+  onEdit: () => void;
   disabled?: boolean;
 }
 
-const IdeaBubble: React.FC<Props> = ({ idea, disabled = false }) => {
+const IdeaBubble: React.FC<Props> = ({ idea, disabled = false, onDelete, onEdit }) => {
   const { phase } = useParams();
 
   return (
@@ -39,7 +42,7 @@ const IdeaBubble: React.FC<Props> = ({ idea, disabled = false }) => {
           </Stack>
         </AppLink>
       </ChatBubble>
-      <UserBar idea={idea} />
+      <UserBar idea={idea} onDelete={onDelete} onEdit={onEdit} />
     </Stack>
   );
 };
