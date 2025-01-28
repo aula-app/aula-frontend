@@ -1,10 +1,48 @@
 import AppIconButton from '@/components/AppIconButton';
-import { IconButtonProps } from '@mui/material';
+import { BugForms } from '@/components/Data/DataForms';
+import { addReport } from '@/services/messages';
+import { Drawer, IconButtonProps } from '@mui/material';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-interface Props extends IconButtonProps {}
+interface Props extends IconButtonProps {
+  target: string;
+}
 
-const BugButton: React.FC<Props> = ({ disabled = false, ...restOfProps }) => {
-  return <AppIconButton icon="bug" disabled={disabled} {...restOfProps} />;
+export interface BugFormData {
+  description_public: string;
+}
+
+const BugButton: React.FC<Props> = ({ target, disabled = false, ...restOfProps }) => {
+  const { t } = useTranslation();
+  const [isOpen, setOpen] = useState(false);
+
+  const onSubmit = async (data: BugFormData) => {
+    const body = `
+      ***
+      location: ${location.pathname},
+      userAgent: ${window.navigator.userAgent},
+      ***
+      ${data.description_public || ''}
+    `;
+
+    const request = await addReport({
+      headline: t('scopes.bugs.headline', { var: target }),
+      body,
+    });
+    if (!request.error) onClose();
+  };
+
+  const onClose = () => setOpen(false);
+
+  return (
+    <>
+      <AppIconButton icon="bug" disabled={disabled} {...restOfProps} onClick={() => setOpen(true)} />
+      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }}>
+        <BugForms onClose={onClose} onSubmit={onSubmit} />
+      </Drawer>
+    </>
+  );
 };
 
 export default BugButton;

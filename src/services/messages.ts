@@ -37,7 +37,7 @@ export const getMessages = async (): Promise<GetMessagesResponse> => {
 };
 
 /**
- * Get a list of messages from the database.
+ * Adds a new report to the database
  */
 
 export const addReport = async (args: MessageArguments): Promise<GetMessagesResponse> => {

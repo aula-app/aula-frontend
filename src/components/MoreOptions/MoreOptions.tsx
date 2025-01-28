@@ -71,7 +71,7 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, canEdit = false }
         <Collapse orientation="horizontal" in={open}>
           <Stack direction="row" position="relative">
             <ReportButton color="error" target={`${t(`scopes.${scope}.name`)}: ${item.id}`} />
-            <BugButton color="warning" />
+            <BugButton color="warning" target={`${t(`scopes.${scope}.name`)}: ${item.id}`} />
             {canEdit && (
               <>
                 <EditButton color="secondary" />
