@@ -1,1 +1,4 @@
-export { default as MarkdownEditor } from './MarkdownEditor';
+import MarkdownEditor from './MarkdownEditor';
+import SelectField from './SelectField';
+
+export { MarkdownEditor, SelectField };

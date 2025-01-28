@@ -108,6 +108,25 @@
     "unauthorized": "Diese Seite erfordert eine Authentifizierung"
   },
   "forms": {
+    "csv": {
+      "empty": "Ihre Datei enthält keine Daten. Bitte stellen Sie eine gültige CSV-Datei bereit",
+      "invalid": "Ihre Datei scheint nicht gültig zu sein. Bitte stellen Sie eine gültige CSV-Datei bereit",
+      "noRoom": "Bitte wählen Sie den Zielraum für die Benutzer",
+      "success": "Neue Benutzer erstellt",
+      "template": "Hier können neue Nutzer*innen von einer Tabelle angelegt werden. Die Datei muss als CSV-Datei hochgeladen sein und die folgenden Spalten besitzen: 'realname', 'displayname', 'username', 'email', 'about_me'. Nicht alle Felder müssen ausgefüllt sein, wenn bspw. ein*e Schüler*in nicht über eine Email verfügt, kann die Spalte leer bleiben"
+    },
+    "report": {
+      "language": "Unangemessene Sprache",
+      "harassment": "Mobbing oder Belästigung",
+      "hate": "Hassrede",
+      "violence": "Gewalt oder Drohungen",
+      "misinformation": "Fehlinformation",
+      "content": "Unangemessener Inhalt für Kinder",
+      "spam": "Spam oder Werbung",
+      "privacy": "Verletzung der Privatsphäre",
+      "copyright": "Urheberrechtsverletzung",
+      "other": "Andere"
+    },
     "validation": {
       "agreement": "Du musst zustimmen, um dich anzumelden",
       "duration": "Eine der Phasen muss mindestens einen Tag lang verfügbar sein",
@@ -120,14 +139,8 @@
       "phone": "Muss eine gültige Telefonnummer sein",
       "recipient": "Sie müssen einen Empfänger für Ihre Nachricht auswählen",
       "required": "Dieses Feld darf nicht leer sein",
+      "optional": "Optional",
       "passwordMatch": "Passwörter müssen übereinstimmen"
-    },
-    "csv": {
-      "empty": "Ihre Datei enthält keine Daten. Bitte stellen Sie eine gültige CSV-Datei bereit",
-      "invalid": "Ihre Datei scheint nicht gültig zu sein. Bitte stellen Sie eine gültige CSV-Datei bereit",
-      "noRoom": "Bitte wählen Sie den Zielraum für die Benutzer",
-      "success": "Neue Benutzer erstellt",
-      "template": "Hier können neue Nutzer*innen von einer Tabelle angelegt werden. Die Datei muss als CSV-Datei hochgeladen sein und die folgenden Spalten besitzen: 'realname', 'displayname', 'username', 'email', 'about_me'. Nicht alle Felder müssen ausgefüllt sein, wenn bspw. ein*e Schüler*in nicht über eine Email verfügt, kann die Spalte leer bleiben"
     }
   },
   "instance": {
@@ -316,6 +329,7 @@
       "pw": "Passwort",
       "realname": "Echter Name",
       "registration_status": "Registrierungsstatus",
+      "report": "Berichtskategorie",
       "restrict_to_roomusers_only": "Nur für Raumnutzer beschränken",
       "room_id": "Raum",
       "room_name": "Raumname",

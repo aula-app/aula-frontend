@@ -22,10 +22,11 @@ import { useTranslation } from 'react-i18next';
 interface Props {
   name: string;
   control: Control<any, any>;
-  disabled?: boolean;
+  required?: boolean;
+  disbled?: boolean;
 }
 
-const MarkdownEditor: React.FC<Props> = ({ name, control, disabled }) => {
+const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disbled = false }) => {
   const { t } = useTranslation();
 
   return (
@@ -34,13 +35,12 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, disabled }) => {
       name={name}
       control={control}
       // @ts-ignore
-      defaultValue={0}
       render={({ field, fieldState }) => {
         const tipTapEditor = useEditor({
           extensions: [
             StarterKit,
             Placeholder.configure({
-              placeholder: t(`settings.columns.${name}`),
+              placeholder: `${t(`settings.columns.${name}`)}${required ? '*' : ` ${t('forms.validation.optional').toLowerCase()}`}`,
               showOnlyWhenEditable: false,
             }),
           ],

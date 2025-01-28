@@ -5,55 +5,38 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor } from '../DataFields';
-import { IdeaFormData } from '@/views/Room/RoomPhaseView/WildIdeas/WildIdeasView';
+import { ReportFormData } from '@/components/Buttons/ReportButton/ReportButton';
 
 /**
- * IdeaForms component is used to create or edit an idea.
+ * ReportForms component is used to create or edit an idea.
  *
  * @component
  */
 
-interface IdeaFormsProps {
+interface ReportFormsProps {
   onClose: () => void;
-  onSubmit: (data: IdeaFormData) => Promise<void>;
+  onSubmit: (data: ReportFormData) => Promise<void>;
 }
 
-const IdeaForms: React.FC<IdeaFormsProps> = ({ onClose, onSubmit }) => {
+const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
   const { t } = useTranslation();
 
   const schema = yup
     .object({
-      title: yup.string().required(t('forms.validation.required')),
       content: yup.string().required(t('forms.validation.required')),
     })
     .required();
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit } = useForm({
     resolver: yupResolver(schema),
   });
 
   return (
     <Stack p={2} overflow="auto" gap={2}>
-      <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.ideas.name`).toLowerCase() })}</Typography>
+      <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.reports.name`).toLowerCase() })}</Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Stack gap={2}>
-          {/* title */}
-          <TextField
-            {...register('title')}
-            label={t('settings.columns.title')}
-            error={!!errors.title}
-            helperText={errors.title?.message}
-            fullWidth
-            required
-          />
-          {/* content */}
-          <MarkdownEditor name="content" control={control} required />
-        </Stack>
+        {/* content */}
+        <MarkdownEditor name="content" control={control} />
         <Stack direction="row" justifyContent="end" gap={2}>
           <Button onClick={onClose} color="error">
             {t('actions.cancel')}
@@ -67,4 +50,4 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ onClose, onSubmit }) => {
   );
 };
 
-export default IdeaForms;
+export default ReportForms;

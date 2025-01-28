@@ -108,6 +108,25 @@
     "unauthorized": "This page requires authentication"
   },
   "forms": {
+    "csv": {
+      "empty": "Your file doesn't contain any data. Please provide a valid CSV file",
+      "invalid": "Your file doesn't seem to be valid. Please provide a valid CSV file",
+      "noRoom": "Please, select the destination room for the users",
+      "success": "New users created",
+      "template": "New users can be created from a table here. The file must be uploaded as a CSV file and have the following columns: 'realname', 'displayname', 'username', 'email', 'about_me'. Not all fields must be filled in, e.g. if a student does not have an email, the column can remain empty"
+    },
+    "report": {
+      "language": "Inappropriate Language",
+      "harassment": "Bullying or Harassment",
+      "hate": "Hate Speech",
+      "violence": "Violence or Threats",
+      "misinformation": "Misinformation",
+      "content": "Inappropriate Content for Children",
+      "spam": "Spam or Advertising",
+      "privacy": "Privacy Violation",
+      "copyright": "Copyright Violation",
+      "other": "Other"
+    },
     "validation": {
       "agreement": "You must accept the terms to continue",
       "duration": "One of the phases must be available for at least one day.",
@@ -120,14 +139,8 @@
       "phone": "Please enter a valid phone number",
       "recipient": "Please select a recipient",
       "required": "This field is required",
+      "optional": "Optional",
       "passwordMatch": "Passwords must match"
-    },
-    "csv": {
-      "empty": "Your file doesn't contain any data. Please provide a valid CSV file",
-      "invalid": "Your file doesn't seem to be valid. Please provide a valid CSV file",
-      "noRoom": "Please, select the destination room for the users",
-      "success": "New users created",
-      "template": "New users can be created from a table here. The file must be uploaded as a CSV file and have the following columns: 'realname', 'displayname', 'username', 'email', 'about_me'. Not all fields must be filled in, e.g. if a student does not have an email, the column can remain empty"
     }
   },
   "instance": {
@@ -316,6 +329,7 @@
       "pw": "Password",
       "realname": "Real Name",
       "registration_status": "Registration Status",
+      "report": "Report category",
       "restrict_to_roomusers_only": "Restrict to Room Users",
       "room_id": "Room",
       "room_name": "Room Name",

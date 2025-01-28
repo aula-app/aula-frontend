@@ -1,17 +1,22 @@
 import { AppIcon } from '@/components';
-import AddData from '@/components/Data/AddData';
+import { IdeaForms } from '@/components/Data/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { addIdeas, getIdeasByRoom } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
-import { Fab, Stack, Typography } from '@mui/material';
+import { Drawer, Fab, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 interface RouteParams extends Record<string, string | undefined> {
   room_id: string;
+}
+
+export interface IdeaFormData {
+  title: string;
+  content: string;
 }
 
 /**
@@ -28,11 +33,6 @@ const WildIdeas = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
-
-  interface IdeaFormData {
-    title: string;
-    content: string;
-  }
 
   const fetchIdeas = useCallback(async () => {
     if (!room_id) return;
@@ -78,7 +78,9 @@ const WildIdeas = () => {
           <Fab aria-label="add idea" color="primary" sx={fabStyles} onClick={() => setAdd(true)}>
             <AppIcon icon="idea" />
           </Fab>
-          <AddData scope="ideas" isOpen={add} onClose={onClose} onSubmit={onSubmit} parentId={room_id} />
+          <Drawer anchor="bottom" open={add} onClose={onClose} sx={{ overflowY: 'auto' }}>
+            <IdeaForms onClose={onClose} onSubmit={onSubmit} />
+          </Drawer>
         </>
       )}
     </Stack>

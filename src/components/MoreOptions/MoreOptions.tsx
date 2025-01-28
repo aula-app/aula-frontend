@@ -6,6 +6,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
+import ReportButton from '../Buttons/ReportButton';
+import BugButton from '../Buttons/BugButton';
+import EditButton from '../Buttons/EditButton';
+import DeleteButton from '../Buttons/DeleteButton';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -55,32 +59,6 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, canEdit = false }
     e.stopPropagation();
     if (open) setOpen(false);
   };
-
-  // const handleClick = (type: AlterTypes) => {
-  //   setOpen(false);
-  //   switch (type) {
-  //     case 'delete':
-  //       setDel(true);
-  //       break;
-  //     case 'edit':
-  //       setEdit(scope);
-  //       break;
-  //     case 'add':
-  //       setEdit(scope);
-  //       break;
-  //     default:
-  //       setEdit(type);
-  //       break;
-  //   }
-  // };
-
-  // const close = () => {
-  //   setEdit(undefined);
-  //   setDel(false);
-  //   onClose();
-  // };
-
-  // const formattedItem = toFormData(item);
 
   return (
     <>
