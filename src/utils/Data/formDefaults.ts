@@ -18,7 +18,7 @@ type FormTypes =
   | 'text';
 
 // Type definition for select field options with label and numeric value
-export type SelectOptionsType = { label: string; value: number };
+export type SelectOptionsType = { label: string; value: string | number };
 
 // Array defining possible status options for status select fields
 // Values correspond to different states: inactive (0), active (1), suspended (2), archived (3)

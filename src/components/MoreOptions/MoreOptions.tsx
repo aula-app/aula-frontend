@@ -6,6 +6,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ICONS } from '../AppIcon/AppIcon';
 import AppIconButton from '../AppIconButton';
+import ReportButton from '../Buttons/ReportButton';
+import BugButton from '../Buttons/BugButton';
+import EditButton from '../Buttons/EditButton';
+import DeleteButton from '../Buttons/DeleteButton';
 
 interface OptionsTypes {
   type: AlterTypes;
@@ -56,32 +60,6 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, canEdit = false }
     if (open) setOpen(false);
   };
 
-  // const handleClick = (type: AlterTypes) => {
-  //   setOpen(false);
-  //   switch (type) {
-  //     case 'delete':
-  //       setDel(true);
-  //       break;
-  //     case 'edit':
-  //       setEdit(scope);
-  //       break;
-  //     case 'add':
-  //       setEdit(scope);
-  //       break;
-  //     default:
-  //       setEdit(type);
-  //       break;
-  //   }
-  // };
-
-  // const close = () => {
-  //   setEdit(undefined);
-  //   setDel(false);
-  //   onClose();
-  // };
-
-  // const formattedItem = toFormData(item);
-
   return (
     <ClickAwayListener onClickAway={closeOptions}>
       <Stack direction="row">
@@ -92,11 +70,14 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, canEdit = false }
         )}
         <Collapse orientation="horizontal" in={open}>
           <Stack direction="row" position="relative">
-            {options.map((option, key) => (
-              <Tooltip placement="top" title={option.label} arrow>
-                <AppIconButton key={key} icon={option.icon} color={option.color} />
-              </Tooltip>
-            ))}
+            <ReportButton color="error" target={`${t(`scopes.${scope}.name`)}: ${item.id}`} />
+            <BugButton color="warning" />
+            {canEdit && (
+              <>
+                <EditButton color="secondary" />
+                <DeleteButton color="error" />
+              </>
+            )}
           </Stack>
         </Collapse>
         <AppIconButton icon={open ? 'close' : 'more'} onClick={toggleOptions} />

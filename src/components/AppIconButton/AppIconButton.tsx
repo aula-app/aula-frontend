@@ -20,7 +20,7 @@ interface Props extends Omit<IconButtonProps, 'color'> {
  * @component AppIconButton
  */
 
-const AppIconButton = ({
+const AppIconButton: React.FC<Props> = ({
   color = 'default',
   component,
   children,
@@ -30,7 +30,7 @@ const AppIconButton = ({
   sx,
   title,
   ...restOfProps
-}: Props) => {
+}) => {
   const componentToRender = !component && (restOfProps?.href || restOfProps?.to) ? AppLink : (component ?? IconButton);
 
   const isMuiColor = useMemo(() => MUI_ICON_BUTTON_COLORS.includes(color), [color]);

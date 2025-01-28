@@ -1,0 +1,71 @@
+import { ReportFormData } from '@/components/Buttons/ReportButton/ReportButton';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Button, Stack, Typography } from '@mui/material';
+import React from 'react';
+import { useForm } from 'react-hook-form-mui';
+import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+import { MarkdownEditor, SelectField } from '../DataFields';
+import { SelectOptionsType } from '@/utils/Data/formDefaults';
+
+/**
+ * ReportForms component is used to create or edit an idea.
+ *
+ * @component
+ */
+
+interface ReportFormsProps {
+  onClose: () => void;
+  onSubmit: (data: ReportFormData) => Promise<void>;
+}
+
+const ReportOptions = [
+  { value: 'language', label: 'forms.report.language' },
+  { value: 'harassment', label: 'forms.report.harassment' },
+  { value: 'hate', label: 'forms.report.hate' },
+  { value: 'violence', label: 'forms.report.violence' },
+  { value: 'misinformation', label: 'forms.report.misinformation' },
+  { value: 'content', label: 'forms.report.content' },
+  { value: 'spam', label: 'forms.report.spam' },
+  { value: 'privacy', label: 'forms.report.privacy' },
+  { value: 'copyright', label: 'forms.report.copyright' },
+  { value: 'other', label: 'forms.report.other' },
+] as SelectOptionsType[];
+
+const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
+  const { t } = useTranslation();
+
+  const schema = yup
+    .object({
+      report: yup.string().required(t('forms.validation.required')),
+      content: yup.string(),
+    })
+    .required();
+
+  const { control, handleSubmit } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  return (
+    <Stack p={2} overflow="auto" gap={2}>
+      <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.reports.name`).toLowerCase() })}</Typography>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Stack>
+          <SelectField label="report" options={ReportOptions} control={control} />
+          {/* content */}
+          <MarkdownEditor name="content" control={control} />
+        </Stack>
+        <Stack direction="row" justifyContent="end" gap={2}>
+          <Button onClick={onClose} color="error">
+            {t('actions.cancel')}
+          </Button>
+          <Button type="submit" variant="contained">
+            {t('actions.confirm')}
+          </Button>
+        </Stack>
+      </form>
+    </Stack>
+  );
+};
+
+export default ReportForms;
