@@ -1,4 +1,5 @@
+import BugForms from './BugForms';
 import IdeaForms from './IdeaForms';
 import ReportForms from './ReportForms';
 
-export { IdeaForms, ReportForms };
+export { BugForms, IdeaForms, ReportForms };

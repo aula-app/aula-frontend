@@ -1,24 +1,24 @@
+import { BugFormData } from '@/components/Buttons/BugButton/BugButton';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Stack, TextField, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor } from '../DataFields';
-import { ReportFormData } from '@/components/Buttons/ReportButton/ReportButton';
 
 /**
- * ReportForms component is used to create or edit an idea.
+ * BugForms component is used to create or edit an idea.
  *
  * @component
  */
 
-interface ReportFormsProps {
+interface BugFormsProps {
   onClose: () => void;
-  onSubmit: (data: ReportFormData) => Promise<void>;
+  onSubmit: (data: BugFormData) => Promise<void>;
 }
 
-const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
+const BugForms: React.FC<BugFormsProps> = ({ onClose, onSubmit }) => {
   const { t } = useTranslation();
 
   const schema = yup
@@ -33,10 +33,12 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
 
   return (
     <Stack p={2} overflow="auto" gap={2}>
-      <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.reports.name`).toLowerCase() })}</Typography>
+      <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.bugs.name`).toLowerCase() })}</Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        {/* content */}
-        <MarkdownEditor name="content" control={control} />
+        <Stack>
+          {/* content */}
+          <MarkdownEditor name="description_public" control={control} required />
+        </Stack>
         <Stack direction="row" justifyContent="end" gap={2}>
           <Button onClick={onClose} color="error">
             {t('actions.cancel')}
@@ -50,4 +52,4 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
   );
 };
 
-export default ReportForms;
+export default BugForms;

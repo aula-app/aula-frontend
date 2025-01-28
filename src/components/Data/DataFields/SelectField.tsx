@@ -1,7 +1,7 @@
 import { SelectOptionsType } from '@/utils/Data/formDefaults';
 import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
 import { SelectInputProps } from '@mui/material/Select/SelectInput';
-import { Control, Controller, SelectElement } from 'react-hook-form-mui';
+import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends SelectInputProps {
