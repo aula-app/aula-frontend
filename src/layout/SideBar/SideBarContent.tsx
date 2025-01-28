@@ -1,6 +1,5 @@
 import { AppButton, AppIcon, AppIconButton, AppLink } from '@/components';
 import BugButton from '@/components/Buttons/BugButton';
-import ReportButton from '@/components/Buttons/ReportButton';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
@@ -65,7 +64,6 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
       <Divider />
       <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
         {isFixed && <LocaleSwitch />}
-        <ReportButton target={location.pathname} />
         <BugButton target={location.pathname} />
         <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} />
         <AppIconButton

@@ -2,7 +2,7 @@ import { AppIcon } from '@/components';
 import { IdeaForms } from '@/components/Data/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
-import { addIdeas, deleteIdea, editIdea, getIdeasByRoom } from '@/services/ideas';
+import { addIdea, deleteIdea, editIdea, getIdeasByRoom } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
@@ -45,14 +45,18 @@ const WildIdeas = () => {
     setLoading(false);
   }, [room_id]);
 
+  useEffect(() => {
+    fetchIdeas();
+  }, []);
+
   const onSubmit = (data: IdeaFormData) => {
     if (!edit) return;
-    typeof edit === 'string' ? updateIdea(data) : addIdea(data);
+    typeof edit === 'string' ? updateIdea(data) : newIdea(data);
   };
 
-  const addIdea = async (data: IdeaFormData) => {
+  const newIdea = async (data: IdeaFormData) => {
     if (!room_id) return;
-    const request = await addIdeas({
+    const request = await addIdea({
       room_id: room_id,
       ...data,
     });
@@ -87,16 +91,6 @@ const WildIdeas = () => {
     fetchIdeas();
   };
 
-  useEffect(() => {
-    fetchIdeas();
-  }, []);
-
-  const fabStyles = {
-    position: 'fixed',
-    bottom: 40,
-    zIndex: 1000,
-  };
-
   return (
     <Stack alignItems="center" width="100%" spacing={2}>
       {isLoading && <IdeaBubbleSkeleton />}
@@ -107,7 +101,16 @@ const WildIdeas = () => {
         ))}
       {checkPermissions(20) && room_id && (
         <>
-          <Fab aria-label="add idea" color="primary" sx={fabStyles} onClick={() => setAdd(true)}>
+          <Fab
+            aria-label="add idea"
+            color="primary"
+            sx={{
+              position: 'fixed',
+              bottom: 40,
+              zIndex: 1000,
+            }}
+            onClick={() => setEdit(true)}
+          >
             <AppIcon icon="idea" />
           </Fab>
           <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>

@@ -8,11 +8,12 @@ import { useTranslation } from 'react-i18next';
 
 interface BoxCardProps {
   box: BoxType;
-  noLink?: boolean;
-  onReload: () => void;
+  onDelete: () => void;
+  onEdit: () => void;
+  disabled?: boolean;
 }
 
-const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
+const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
   const { t } = useTranslation();
 
   // const [remaining, setRemaining] = useState(0);
@@ -42,22 +43,28 @@ const BoxCard = ({ box, noLink = false, onReload }: BoxCardProps) => {
         direction="row"
         bgcolor={`${phases[box.phase_id]}.main`}
         p={1}
-        pr={2}
       >
         <AppIcon icon={phases[box.phase_id]} sx={{ mx: 1 }} />
-        <Typography variant="caption" mr="auto">
+        <Typography variant="caption" mr="auto" noWrap>
           {t('patterns.on', {
             a: t('delegation.status.undelegated', { var: box.ideas_num }),
             b: t('phases.phase', { var: t(`phases.${phases[box.phase_id]}`) }).toLowerCase(),
           })}
         </Typography>
-        {/* <MoreOptions scope="boxes" item={box} onClose={onReload} canEdit={checkPermissions(30)} /> */}
+        <MoreOptions
+          item={box}
+          scope="boxes"
+          canEdit={checkPermissions(30)}
+          color="default"
+          onDelete={onDelete}
+          onEdit={onEdit}
+        />
       </Stack>
       <AppLink
         to={`/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`}
         mb={2}
         key={box.hash_id}
-        disabled={noLink}
+        disabled={disabled}
       >
         <CardContent>
           <Typography variant="h6" noWrap>

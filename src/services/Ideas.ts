@@ -51,7 +51,7 @@ interface EditIdeaArguments extends IdeaArguments {
  * @returns Promise resolving to the new idea
  */
 
-export async function addIdeas(args: AddIdeaArguments): Promise<GetIdeasResponse> {
+export async function addIdea(args: AddIdeaArguments): Promise<GetIdeasResponse> {
   const response = await databaseRequest(
     {
       model: 'Idea',
