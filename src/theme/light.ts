@@ -26,27 +26,27 @@ const PHASE_COLORS = {
   wild: {
     light: blue[50],
     main: blue[100],
-    dark: blue[200],
+    dark: blue[300],
   },
   discussion: {
     light: deepPurple[50],
     main: deepPurple[100],
-    dark: deepPurple[200],
+    dark: deepPurple[300],
   },
   approval: {
     light: deepOrange[50],
     main: deepOrange[100],
-    dark: deepOrange[200],
+    dark: deepOrange[300],
   },
   voting: {
     light: amber[50],
     main: amber[100],
-    dark: amber[200],
+    dark: amber[400],
   },
   results: {
     light: green[50],
     main: green[100],
-    dark: green[200],
+    dark: green[300],
   },
 };
 

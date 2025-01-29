@@ -476,7 +476,7 @@
     "for": "Dafür",
     "neutral": "Neutral",
     "vote": "Abstimmen",
-    "yourVote": "Deine Stimme: {{var}}"
+    "yourVote": "Sie haben gewählt {{var}}"
   },
   "weekDays": {
     "friday": "Freitag",

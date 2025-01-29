@@ -91,13 +91,15 @@ const Comments = () => {
 
   return (
     <Stack alignItems="center" width="100%" spacing={2} pt={2}>
-      <Box pl={1} width="100%">
-        <KnowMore title={t('tooltips.comment')}>
-          <Typography variant="h6">
-            {String(comments.length)} {t('scopes.comments.plural')}
-          </Typography>
-        </KnowMore>
-      </Box>
+      {comments.length > 0 && (
+        <Box pl={1} width="100%">
+          <KnowMore title={t('tooltips.comment')}>
+            <Typography variant="h6">
+              {String(comments.length)} {t('scopes.comments.plural')}
+            </Typography>
+          </KnowMore>
+        </Box>
+      )}
       {isLoading && <IdeaBubbleSkeleton />}
       {error && <Typography>{t(error)}</Typography>}
       {!isLoading &&
@@ -112,18 +114,20 @@ const Comments = () => {
         ))}
       {checkPermissions(20) && idea_id && (
         <>
-          <Fab
-            aria-label="add comment"
-            color="primary"
-            sx={{
-              position: 'fixed',
-              bottom: 40,
-              zIndex: 1000,
-            }}
-            onClick={() => setEdit(true)}
-          >
-            <AppIcon icon="add" />
-          </Fab>
+          {Number(phase) < 30 && (
+            <Fab
+              aria-label="add comment"
+              color="primary"
+              sx={{
+                position: 'fixed',
+                bottom: 40,
+                zIndex: 1000,
+              }}
+              onClick={() => setEdit(true)}
+            >
+              <AppIcon icon="add" />
+            </Fab>
+          )}
           <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
             <CommentForms
               onClose={onClose}

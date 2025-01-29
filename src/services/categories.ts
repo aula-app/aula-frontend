@@ -1,10 +1,8 @@
 import { CategoryType } from '@/types/Scopes';
-import { databaseRequest } from './requests';
+import { databaseRequest, GenericResponse } from './requests';
 
-interface GetCategoriesResponse {
+interface GetCategoriesResponse extends GenericResponse {
   data: CategoryType | null;
-  count: number | null;
-  error: string | null;
 }
 
 /**

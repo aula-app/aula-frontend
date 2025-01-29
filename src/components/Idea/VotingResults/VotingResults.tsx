@@ -1,37 +1,49 @@
 import AppIcon from '@/components/AppIcon';
+import { getVote, getVoteResults } from '@/services/vote';
+import { IdeaType } from '@/types/Scopes';
 import { databaseRequest, Vote, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 interface VotingResultsProps {
-  rejected?: boolean;
-  yourVote: Vote;
+  idea: IdeaType;
 }
 
 /**
  * Renders "VotingResults" component
  */
-const VotingResults = ({ rejected = false, yourVote }: VotingResultsProps) => {
+const VotingResults = ({ idea }: VotingResultsProps) => {
   const { t } = useTranslation();
-  const params = useParams();
+
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [vote, setVote] = useState<Vote>(0);
+
+  const fetchVote = useCallback(async () => {
+    setLoading(true);
+    const response = await getVote(idea.hash_id);
+    if (response.error) setError(response.error);
+    if (!response.error && typeof response.data === 'number') setVote(response.data);
+    setLoading(false);
+  }, [idea.hash_id]);
+
   const [numVotes, setNumVotes] = useState<Array<-1 | 0 | 1>>([0, 0, 0]);
 
-  const getResults = async () => {
-    await databaseRequest({
-      model: 'Idea',
-      method: 'getIdeaVoteStats',
-      arguments: {
-        idea_id: params['idea_id'],
-      },
-    }).then((response) => {
-      if (response.data)
-        setNumVotes([response.data.votes_negative, response.data.votes_neutral, response.data.votes_positive]);
+  const getResults = () => {
+    getVoteResults(idea.hash_id).then((response) => {
+      if (!response.data) return;
+      setNumVotes([
+        response.data.votes_negative as Vote,
+        response.data.votes_neutral as Vote,
+        response.data.votes_positive as Vote,
+      ]);
     });
   };
 
   useEffect(() => {
+    fetchVote();
     getResults();
   }, []);
 
@@ -42,7 +54,7 @@ const VotingResults = ({ rejected = false, yourVote }: VotingResultsProps) => {
           borderRadius: '25px',
           overflow: 'hidden',
           scrollSnapAlign: 'center',
-          bgcolor: rejected ? 'against.main' : 'for.main',
+          bgcolor: idea.is_winner ? 'for.main' : 'against.main',
         }}
         variant="outlined"
       >
@@ -56,10 +68,13 @@ const VotingResults = ({ rejected = false, yourVote }: VotingResultsProps) => {
               aspectRatio: 1,
             }}
           >
-            {!rejected ? <AppIcon icon="for" size="xl" /> : <AppIcon icon="against" size="xl" />}
+            {idea.is_winner ? <AppIcon icon="for" size="xl" /> : <AppIcon icon="against" size="xl" />}
           </Stack>
           <Stack flexGrow={1} pr={2}>
-            <Typography variant="body2">{t(`scopes.ideas.${rejected ? 'rejected' : 'approved'}`)}</Typography>
+            <Typography variant="h6">{t(`scopes.ideas.${idea.is_winner ? 'approved' : 'rejected'}`)}</Typography>
+            <Typography variant="caption">
+              {t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`).toLowerCase() })}
+            </Typography>
           </Stack>
           <Stack>
             {votingOptions.map((option, i) => (
@@ -77,10 +92,6 @@ const VotingResults = ({ rejected = false, yourVote }: VotingResultsProps) => {
           </Stack>
         </Stack>
       </Card>
-      <Stack direction="row" alignItems="center" mx={3} mt={1} fontSize="small">
-        <AppIcon icon={votingOptions[yourVote + 1]} />
-        &nbsp; {t('votes.yourVote', { var: t(`votes.${votingOptions[yourVote + 1]}`) })}
-      </Stack>
     </Stack>
   );
 };

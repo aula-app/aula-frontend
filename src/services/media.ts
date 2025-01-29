@@ -1,4 +1,4 @@
-import { databaseRequest } from './requests';
+import { databaseRequest, GenericResponse } from './requests';
 
 /**
  * gets user avatar url
@@ -6,10 +6,8 @@ import { databaseRequest } from './requests';
  * @returns Promise resolving to the avatar url
  */
 
-interface GetAvatarResponse {
+interface GetAvatarResponse extends GenericResponse {
   data: { filename: string }[] | null;
-  count: number | null;
-  error: string | null;
 }
 
 export async function getAvatar(user_id: string): Promise<GetAvatarResponse> {

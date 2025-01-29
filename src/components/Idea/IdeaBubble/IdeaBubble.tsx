@@ -1,13 +1,14 @@
+import AppIconButton from '@/components/AppIconButton';
 import AppLink from '@/components/AppLink';
 import ChatBubble from '@/components/ChatBubble';
-import { IdeaType } from '@/types/Scopes';
-import { Stack, Typography } from '@mui/material';
-import CategoryList from '../CategoryList';
-import UserBar from '../UserBar';
 import MoreOptions from '@/components/MoreOptions';
-import LikeButton from '../LikeButton';
-import AppIconButton from '@/components/AppIconButton';
+import { IdeaType } from '@/types/Scopes';
 import { checkPermissions, checkSelf } from '@/utils';
+import { Stack, Typography } from '@mui/material';
+import { ReactNode } from 'react';
+import CategoryList from '../CategoryList';
+import LikeButton from '../LikeButton';
+import UserBar from '../UserBar';
 
 interface Props {
   idea: IdeaType;
@@ -15,9 +16,10 @@ interface Props {
   onDelete: () => void;
   onEdit: () => void;
   disabled?: boolean;
+  children?: ReactNode;
 }
 
-const IdeaBubble: React.FC<Props> = ({ idea, to, disabled = false, onDelete, onEdit }) => {
+const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onDelete, onEdit }) => {
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center' }}>
       <ChatBubble disabled={disabled}>
@@ -39,6 +41,7 @@ const IdeaBubble: React.FC<Props> = ({ idea, to, disabled = false, onDelete, onE
                   )}
                   </Fragment>
                   ))} */}
+            {children}
           </Stack>
         </AppLink>
       </ChatBubble>

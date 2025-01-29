@@ -1,13 +1,12 @@
 import { AnnouncementType } from '@/types/Scopes';
-import { databaseRequest } from './requests';
+import { databaseRequest, GenericResponse } from './requests';
 
 /**
  * Get a list of Announcements from the database.
  */
 
-interface GetAnnouncementsResponse {
+interface GetAnnouncementsResponse extends GenericResponse {
   data: AnnouncementType[] | null;
-  error: string | null;
 }
 
 export const getAnnouncements = async (): Promise<GetAnnouncementsResponse> => {

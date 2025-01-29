@@ -8,10 +8,8 @@ import { databaseRequest, GenericResponse } from '@/utils';
  * @returns Promise resolving to an array of ideas with custom fields
  */
 
-interface GetIdeaResponse {
+interface GetIdeaResponse extends GenericResponse {
   data: IdeaType | null;
-  count: number | null;
-  error: string | null;
 }
 
 export async function getIdea(idea_id: string): Promise<GetIdeaResponse> {
@@ -30,10 +28,8 @@ export async function getIdea(idea_id: string): Promise<GetIdeaResponse> {
  * @returns Promise resolving to an array of ideas with custom fields
  */
 
-interface GetIdeasResponse {
+interface GetIdeasResponse extends GenericResponse {
   data: IdeaType[] | null;
-  count: number | null;
-  error: string | null;
 }
 
 export async function getIdeasByRoom(room_id: string): Promise<GetIdeasResponse> {

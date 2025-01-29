@@ -1,5 +1,5 @@
 import { CommentType, VoteType } from '@/types/Scopes';
-import { databaseRequest } from './requests';
+import { databaseRequest, GenericResponse } from './requests';
 
 /**
  * Fetches dashboard data for the current user
@@ -15,10 +15,8 @@ interface DashboardResponse {
   phase_counts: Record<number, number>;
 }
 
-interface GetDashboardResponse {
+interface GetDashboardResponse extends GenericResponse {
   data: DashboardResponse | null;
-  count: number | null;
-  error: string | null;
 }
 
 export const getDashboard = async (): Promise<GetDashboardResponse> => {
@@ -44,10 +42,8 @@ interface UpdateResponse {
   comments: CommentType[];
 }
 
-interface GetUpdatesResponse {
+interface GetUpdatesResponse extends GenericResponse {
   data: UpdateResponse | null;
-  count: number | null;
-  error: string | null;
 }
 
 export const getUpdates = async (): Promise<GetUpdatesResponse> => {
