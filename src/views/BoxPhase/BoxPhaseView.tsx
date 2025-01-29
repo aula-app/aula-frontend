@@ -21,7 +21,7 @@ export interface BoxFormData {
  * url: /room/:room_id/:phase
  */
 
-const IdeasBoxesView = () => {
+const BoxPhaseView = () => {
   const { t } = useTranslation();
   const { room_id, phase } = useParams();
   const [isLoading, setLoading] = useState(true);
@@ -42,7 +42,7 @@ const IdeasBoxesView = () => {
 
   useEffect(() => {
     fetchBoxes();
-  }, []);
+  }, [phase]);
 
   const onSubmit = (data: BoxFormData) => {
     if (!edit) return;
@@ -115,7 +115,7 @@ const IdeasBoxesView = () => {
             }}
             onClick={() => setEdit(true)}
           >
-            <AppIcon icon="idea" />
+            <AppIcon icon="box" />
           </Fab>
           <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
             <BoxForms onClose={onClose} onSubmit={onSubmit} defaultValues={defaultValues} />
@@ -126,4 +126,4 @@ const IdeasBoxesView = () => {
   );
 };
 
-export default IdeasBoxesView;
+export default BoxPhaseView;
