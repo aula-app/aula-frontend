@@ -5,6 +5,7 @@ import { Card, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon, { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { ObjectPropByName } from '@/types/Generics';
+import MarkdownReader from '@/components/MarkdownReader';
 
 interface IdeaCardProps {
   idea: IdeaType;
@@ -110,9 +111,6 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
         <Stack flexGrow={1} px={2} overflow="hidden">
           <Typography variant="h6" noWrap textOverflow="ellipsis">
             {idea.title}
-          </Typography>
-          <Typography variant="body2" noWrap textOverflow="ellipsis">
-            {idea.content}
           </Typography>
         </Stack>
         <Stack
