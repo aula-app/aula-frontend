@@ -140,10 +140,8 @@ export async function deleteBox(box_id: string): Promise<GenericResponse> {
  * @returns Promise resolving to the new box
  */
 
-interface GetDelegationResponse {
+interface GetDelegationResponse extends GenericResponse {
   data: DelegationType[] | null;
-  count: number | null;
-  error: string | null;
 }
 
 export const getBoxDelegation = async (box_id: string): Promise<GetDelegationResponse> => {

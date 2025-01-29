@@ -8,10 +8,8 @@ import { databaseRequest, GenericResponse } from '@/utils';
  * @returns Promise resolving to an array of ideas with custom fields
  */
 
-interface GetCommentsResponse {
+interface GetCommentsResponse extends GenericResponse {
   data: CommentType[] | null;
-  count: number | null;
-  error: string | null;
 }
 
 export async function getCommentsByIdea(idea_id: string): Promise<GetCommentsResponse> {

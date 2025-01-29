@@ -1,15 +1,13 @@
 import { RoomType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, GenericResponse } from '@/utils';
 import { checkPermissions } from '@/utils';
 
 /**
  * Get a list of rooms from the database.
  */
 
-interface GetRoomsResponse {
+interface GetRoomsResponse extends GenericResponse {
   data: RoomType[] | null;
-  count: number | null;
-  error: string | null;
 }
 
 export const getRooms = async (): Promise<GetRoomsResponse> => {

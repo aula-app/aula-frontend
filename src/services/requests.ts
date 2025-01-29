@@ -18,15 +18,13 @@ export interface RequestObject {
 }
 
 export interface GenericResponse {
-  data: number | null;
+  data: any;
   count: number | null;
   error: string | null;
 }
 
-interface GetResponse {
+interface GetResponse extends GenericResponse {
   data: Array<ScopeType> | null;
-  count: number | null;
-  error: string | null;
 }
 
 /**

@@ -10,7 +10,7 @@ interface ChatBubbleProps {
 
 const ChatBubble = ({ children, comment = false, disabled = false }: ChatBubbleProps) => {
   const { phase } = useParams();
-  const color = disabled || comment ? 'disabled.main' : `${phases[Number(phase)]}.main`;
+  const color = comment ? 'disabled.main' : `${phases[Number(phase)]}.main`;
   return (
     <Stack
       sx={{

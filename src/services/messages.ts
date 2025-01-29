@@ -1,11 +1,9 @@
 import { MessageType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
+import { databaseRequest, GenericResponse } from '@/utils';
 import { checkPermissions } from '@/utils';
 
-interface GetMessagesResponse {
+interface GetMessagesResponse extends GenericResponse {
   data: MessageType[] | null;
-  count: number | null;
-  error: string | null;
 }
 
 interface MessageArguments {
