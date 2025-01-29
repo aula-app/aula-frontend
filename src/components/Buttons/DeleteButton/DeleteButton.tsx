@@ -36,12 +36,12 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
       >
         <DialogTitle id="alert-dialog-title">
           <Stack direction="row" alignItems="center">
-            <WarningAmber sx={{ mr: 1 }} color="error" /> {t('arvore.headline', { var: t(`scopes.${scope}.name`) })}
+            <WarningAmber sx={{ mr: 1 }} color="error" /> {t('deletion.headline', { var: t(`scopes.${scope}.name`) })}
           </Stack>
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
           <DialogContentText id="alert-dialog-description">
-            {t('arvore.confirm', { var: t(`scopes.${scope}.name`) })}
+            {t('deletion.confirm', { var: t(`scopes.${scope}.name`) })}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

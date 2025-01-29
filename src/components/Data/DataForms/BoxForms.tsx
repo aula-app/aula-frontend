@@ -6,25 +6,26 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor } from '../DataFields';
 import { IdeaFormData } from '@/views/WildIdeas/WildIdeasView';
+import { BoxFormData } from '@/views/BoxPhase/BoxPhaseView';
 
 /**
- * IdeaForms component is used to create or edit an idea.
+ * BoxForms component is used to create or edit an idea.
  *
  * @component
  */
 
-interface IdeaFormsProps {
+interface BoxFormsProps {
   onClose: () => void;
-  defaultValues?: IdeaFormData;
-  onSubmit: (data: IdeaFormData) => void;
+  defaultValues?: BoxFormData;
+  onSubmit: (data: BoxFormData) => void;
 }
 
-const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues = {}, onClose, onSubmit }) => {
+const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues = {}, onClose, onSubmit }) => {
   const { t } = useTranslation();
 
   const schema = yup.object({
-    title: yup.string().required(t('forms.validation.required')),
-    content: yup.string().required(t('forms.validation.required')),
+    name: yup.string().required(t('forms.validation.required')),
+    description_public: yup.string().required(t('forms.validation.required')),
   });
 
   const {
@@ -44,20 +45,20 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues = {}, onClose, onSu
 
   return (
     <Stack p={2} overflow="auto" gap={2}>
-      <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.ideas.name`).toLowerCase() })}</Typography>
+      <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.boxes.name`).toLowerCase() })}</Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
-          {/* title */}
+          {/* name */}
           <TextField
-            {...register('title')}
-            label={t('settings.columns.title')}
-            error={!!errors.title}
-            helperText={errors.title?.message}
+            {...register('name')}
+            label={t('settings.columns.name')}
+            error={!!errors.name}
+            helperText={errors.name?.message}
             fullWidth
             required
           />
-          {/* content */}
-          <MarkdownEditor name="content" control={control} required />
+          {/* description */}
+          <MarkdownEditor name="description_public" control={control} required />
         </Stack>
         <Stack direction="row" justifyContent="end" gap={2}>
           <Button onClick={onClose} color="error">
@@ -72,4 +73,4 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues = {}, onClose, onSu
   );
 };
 
-export default IdeaForms;
+export default BoxForms;
