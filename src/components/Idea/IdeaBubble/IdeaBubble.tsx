@@ -11,16 +11,17 @@ import { checkPermissions, checkSelf } from '@/utils';
 
 interface Props {
   idea: IdeaType;
+  to?: string;
   onDelete: () => void;
   onEdit: () => void;
   disabled?: boolean;
 }
 
-const IdeaBubble: React.FC<Props> = ({ idea, disabled = false, onDelete, onEdit }) => {
+const IdeaBubble: React.FC<Props> = ({ idea, to, disabled = false, onDelete, onEdit }) => {
   return (
-    <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
+    <Stack width="100%" sx={{ scrollSnapAlign: 'center' }}>
       <ChatBubble disabled={disabled}>
-        <AppLink to={`idea/${idea.hash_id}`} disabled={disabled}>
+        <AppLink to={to} disabled={!to || disabled}>
           <Stack gap={1}>
             <span>
               <Typography variant="h6" display="inline">
@@ -54,7 +55,7 @@ const IdeaBubble: React.FC<Props> = ({ idea, disabled = false, onDelete, onEdit 
             <Stack direction="row" alignItems="center">
               <LikeButton disabled={disabled} item={idea} />
               {idea.sum_comments > 0 && (
-                <AppIconButton icon="chat" to={`/idea/${idea.hash_id}`}>
+                <AppIconButton icon="chat" to={`/idea/${idea.hash_id}`} disabled={disabled}>
                   {idea.sum_comments}
                 </AppIconButton>
               )}

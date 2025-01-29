@@ -16,13 +16,11 @@ interface Props {
 const CommentBubble: React.FC<Props> = ({ comment, disabled = false, onDelete, onEdit }) => {
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <Box ml={2}>
-        <ChatBubble disabled={disabled} comment>
-          <Stack gap={1}>
-            <Typography>{comment.content}</Typography>
-          </Stack>
-        </ChatBubble>
-      </Box>
+      <ChatBubble disabled={disabled} comment>
+        <Stack gap={1}>
+          <Typography>{comment.content}</Typography>
+        </Stack>
+      </ChatBubble>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <UserBar info={comment} />
         <MoreOptions

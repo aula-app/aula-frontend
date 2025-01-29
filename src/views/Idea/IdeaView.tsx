@@ -1,5 +1,5 @@
 import { IdeaForms } from '@/components/Data/DataForms';
-import { IdeaBubble } from '@/components/Idea';
+import { ApprovalCard, IdeaBubble, VotingCard } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { deleteIdea, editIdea, getIdea } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
@@ -37,7 +37,7 @@ const IdeaView = () => {
     if (!idea_id) return;
     setLoading(true);
     const response = await getIdea(idea_id);
-    setError(response.error);
+    if (response.error) setError(response.error);
     if (!response.error && response.data) setIdea(response.data);
     setLoading(false);
   }, [idea_id]);
@@ -121,7 +121,7 @@ const IdeaView = () => {
     fetchIdea();
   };
 
-  return idea ? (
+  return !isLoading && idea ? (
     <Stack width="100%" height="100%" overflow="auto" gap={2}>
       {/* <Stack px={0.5}>
         <VotingQuorum
@@ -130,20 +130,18 @@ const IdeaView = () => {
           users={Number(idea.number_of_users)}
         />
       </Stack>
-      {phase === 40 && <VotingResults yourVote={vote} rejected={idea.is_winner !== 1} />}
-      {phase === 30 && <VotingCard onReload={ideaFetch} />}*/}
-      {isLoading && <IdeaBubbleSkeleton />}
-      {error && <Typography>{t(error)}</Typography>}
-      {!isLoading && <IdeaBubble idea={idea} onEdit={() => ideaEdit(idea)} onDelete={() => ideaDelete(idea.hash_id)} />}
-      {/*{phase >= 20 && idea.approved !== 0 && (
-        <ApprovalCard
-          comment={idea.approval_comment ? idea.approval_comment : ''}
-          rejected={idea.approved < 0}
-          disabled={phase > 20}
-        />
-      )}*/}
-      <CommentView />
-      {/*}
+      {phase === 40 && <VotingResults yourVote={vote} rejected={idea.is_winner !== 1} />*/}
+      {phase === '20' && <ApprovalCard idea={idea} disabled={Number(phase) > 20} />}
+      {phase === '30' && <VotingCard onReload={fetchIdea} />}
+      <IdeaBubble
+        idea={idea}
+        onEdit={() => ideaEdit(idea)}
+        onDelete={() => ideaDelete(idea.hash_id)}
+        disabled={Number(phase) >= 20}
+      />
+      <Stack px={2}>
+        <CommentView />
+        {/*}
       {comments && (
         <>
           <Typography variant="h5" py={2}>
@@ -176,13 +174,15 @@ const IdeaView = () => {
         </Stack>
       )}
       <EditData scope="comments" isOpen={add} onClose={closeAdd} otherData={{ idea_id: params.idea_id }} /> */}
+      </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <IdeaForms onClose={onClose} onSubmit={ideaUpdate} defaultValues={edit} />
       </Drawer>
     </Stack>
   ) : (
     <Stack width="100%" height="100%" overflow="auto">
-      <IdeaBubbleSkeleton />
+      {isLoading && <IdeaBubbleSkeleton />}
+      {error && <Typography>{t(error)}</Typography>}
     </Stack>
   );
 };

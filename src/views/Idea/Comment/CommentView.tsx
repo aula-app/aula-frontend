@@ -32,7 +32,7 @@ interface CommentBDData extends CommentFormData {
  */
 const Comments = () => {
   const { t } = useTranslation();
-  const { idea_id } = useParams<RouteParams>();
+  const { idea_id, phase } = useParams<RouteParams>();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [comments, setComments] = useState<CommentType[]>([]);
@@ -42,7 +42,7 @@ const Comments = () => {
     if (!idea_id) return;
     setLoading(true);
     const response = await getCommentsByIdea(idea_id);
-    setError(response.error);
+    if (response.error) setError(response.error);
     if (!response.error && response.data) setComments(response.data);
     setLoading(false);
   }, [idea_id]);
@@ -90,8 +90,8 @@ const Comments = () => {
   };
 
   return (
-    <Stack alignItems="center" width="100%" spacing={2} px={2}>
-      <Box pl={3} width="100%">
+    <Stack alignItems="center" width="100%" spacing={2} pt={2}>
+      <Box pl={1} width="100%">
         <KnowMore title={t('tooltips.comment')}>
           <Typography variant="h6">
             {String(comments.length)} {t('scopes.comments.plural')}
@@ -107,6 +107,7 @@ const Comments = () => {
             comment={comment}
             onEdit={() => onEdit(comment)}
             onDelete={() => onDelete(comment.id)}
+            disabled={Number(phase) >= 20}
           />
         ))}
       {checkPermissions(20) && idea_id && (

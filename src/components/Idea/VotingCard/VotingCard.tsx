@@ -1,7 +1,8 @@
 import AppIcon from '@/components/AppIcon';
-import { checkPermissions, databaseRequest, Vote, votingOptions } from '@/utils';
+import { addVote, getVote } from '@/services/vote';
+import { checkPermissions, Vote, votingOptions } from '@/utils';
 import { Button, Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface Props {
@@ -13,44 +14,30 @@ interface Props {
  * url: /
  */
 const VotingCard = ({ onReload }: Props) => {
-  const params = useParams();
-  const [vote, setVote] = useState<Vote>(0);
-  const [hasVoted, setHasVoted] = useState<Boolean>(false);
+  const { idea_id } = useParams();
 
-  const getVote = async () =>
-    await databaseRequest(
-      {
-        model: 'Idea',
-        method: 'getVoteValue',
-        arguments: {
-          idea_id: params['idea_id'],
-        },
-      },
-      ['user_id']
-    ).then((response) => {
-      if (!response.success) return;
-      setVote(response.data);
-      setHasVoted(response.count > 0);
-    });
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [vote, setVote] = useState<Vote>();
 
-  const registerVote = async (vote: number) =>
-    await databaseRequest(
-      {
-        model: 'Idea',
-        method: 'voteForIdea',
-        arguments: {
-          idea_id: params['idea_id'],
-          vote_value: vote - 1, //turns 0, 1, 2 to -1, 0 , 1
-        },
-      },
-      ['user_id']
-    ).then(() => {
-      getVote();
-      onReload();
+  const fetchVote = useCallback(async () => {
+    if (!idea_id) return;
+    setLoading(true);
+    const response = await getVote(idea_id);
+    if (response.error) setError(response.error);
+    if (!response.error && typeof response.data === 'number') setVote(response.data);
+    setLoading(false);
+  }, [idea_id]);
+
+  const registerVote = async (vote: Vote) => {
+    if (!idea_id) return;
+    addVote(idea_id, vote).then(() => {
+      fetchVote();
     });
+  };
 
   useEffect(() => {
-    getVote();
+    fetchVote();
   }, []);
 
   return (
@@ -60,15 +47,15 @@ const VotingCard = ({ onReload }: Props) => {
           <Button
             sx={{
               color: 'inherit',
-              bgcolor: vote + 1 === i && hasVoted ? `${option}.main` : 'transparent',
+              bgcolor: typeof vote === 'number' && vote + 1 === i ? `${option}.main` : 'transparent',
               borderRadius: 8,
               '&:hover': {
                 bgcolor: `${option}.main`,
               },
             }}
-            disabled={!checkPermissions(20)}
+            disabled={!checkPermissions(20) || isLoading}
             key={i}
-            onClick={() => registerVote(i as Vote)}
+            onClick={() => registerVote((i - 1) as Vote)}
           >
             <Stack alignItems="center" width={70}>
               <AppIcon icon={option} size="xxl" />
