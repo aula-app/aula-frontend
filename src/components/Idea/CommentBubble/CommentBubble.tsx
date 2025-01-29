@@ -5,6 +5,7 @@ import UserBar from '../UserBar';
 import MoreOptions from '@/components/MoreOptions';
 import LikeButton from '../LikeButton';
 import { checkPermissions, checkSelf } from '@/utils';
+import MarkdownReader from '@/components/MarkdownReader';
 
 interface Props {
   comment: CommentType;
@@ -18,7 +19,7 @@ const CommentBubble: React.FC<Props> = ({ comment, disabled = false, onDelete, o
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
       <ChatBubble disabled={disabled} comment>
         <Stack gap={1}>
-          <Typography>{comment.content}</Typography>
+          <MarkdownReader>{comment.content}</MarkdownReader>
         </Stack>
       </ChatBubble>
       <Stack direction="row" alignItems="center" justifyContent="space-between">

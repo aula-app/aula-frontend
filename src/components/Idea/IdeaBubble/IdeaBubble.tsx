@@ -6,10 +6,10 @@ import { IdeaType } from '@/types/Scopes';
 import { checkPermissions, checkSelf } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
-import ReactMarkdown from 'react-markdown';
 import CategoryList from '../CategoryList';
 import LikeButton from '../LikeButton';
 import UserBar from '../UserBar';
+import MarkdownReader from '@/components/MarkdownReader';
 
 interface Props {
   idea: IdeaType;
@@ -32,7 +32,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
               </Typography>
               <CategoryList idea={idea} />
             </span>
-            <ReactMarkdown>{idea.content}</ReactMarkdown>
+            <MarkdownReader>{idea.content}</MarkdownReader>
             {/* {(Object.keys(fields) as Array<keyof CustomFieldsType>).map((customField) => (
                 <Fragment key={customField}>
                 {fields[customField] && idea[customField] && (

@@ -5,6 +5,7 @@ import { BoxType } from '@/types/Scopes';
 import { checkPermissions, phases } from '@/utils';
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import MarkdownReader from '../MarkdownReader';
 
 interface BoxCardProps {
   box: BoxType;
@@ -70,7 +71,9 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
           <Typography variant="h6" noWrap>
             {box.name}
           </Typography>
-          <Typography variant="body2">{box.description_public}</Typography>
+          <Typography variant="body2">
+            <MarkdownReader>{box.description_public}</MarkdownReader>
+          </Typography>
           <Box
             mt={2}
             position="relative"
