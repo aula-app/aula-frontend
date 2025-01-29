@@ -1,4 +1,4 @@
-import AppSubmitButton from '@/components/AppSubmitButton';
+import AppButton from '@/components/AppButton';
 import { recoverPassword } from '@/services/login';
 import { useAppStore } from '@/store';
 import { localStorageGet } from '@/utils';
@@ -67,7 +67,7 @@ const RecoveryPasswordView = () => {
           error={!!form.formState.errors.email}
           helperText={form.formState.errors.email?.message || ' '}
         />
-        <AppSubmitButton label={t('auth.forgotPassword.recover')} disabled={isLoading} />
+        <AppButton label={t('auth.forgotPassword.recover')} disabled={isLoading} />
       </Stack>
     </FormContainer>
   );

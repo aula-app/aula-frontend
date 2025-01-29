@@ -5,7 +5,7 @@ import { FormContainer, SubmitHandler, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import AppIconButton from '../AppIconButton';
-import AppSubmitButton from '../AppSubmitButton';
+import AppButton from '../AppButton';
 
 interface Props {
   hideOld?: boolean;
@@ -148,7 +148,7 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(
               },
             }}
           />
-          <AppSubmitButton disabled={disabled} onClick={handleSubmit(onSubmit)} />
+          <AppButton disabled={disabled} onClick={handleSubmit(onSubmit)} />
         </Stack>
       </FormContainer>
     );

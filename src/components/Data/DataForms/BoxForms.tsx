@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor } from '../DataFields';
-import { IdeaFormData } from '@/views/WildIdeas/WildIdeasView';
+import { IdeaFormData } from '@/views/Room/RoomPhaseView/WildIdeas/WildIdeasView';
 import { BoxFormData } from '@/views/BoxPhase/BoxPhaseView';
 
 /**
@@ -45,7 +45,9 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues = {}, onClose, onSubm
 
   return (
     <Stack p={2} overflow="auto" gap={2}>
-      <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.boxes.name`).toLowerCase() })}</Typography>
+      <Typography variant="h4">
+        {t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.boxes.name`).toLowerCase() })}
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
           {/* name */}
