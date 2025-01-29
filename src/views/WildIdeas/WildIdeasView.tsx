@@ -17,6 +17,7 @@ interface RouteParams extends Record<string, string | undefined> {
 export interface IdeaFormData {
   title: string;
   content: string;
+  idea_id?: string;
 }
 
 /**
@@ -32,14 +33,12 @@ const WildIdeas = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
-  const [edit, setEdit] = useState<string | boolean>(false); // true = new idea; id = edit idea; false = closed;
-  const [defaultValues, setDefaultValues] = useState<IdeaFormData>();
+  const [edit, setEdit] = useState<IdeaFormData | boolean>(false); // false = update dialog closed ;true = new idea; IdeaFormData = edit idea;
 
   const fetchIdeas = useCallback(async () => {
     if (!room_id) return;
     setLoading(true);
     const response = await getIdeasByRoom(room_id);
-    setLoading(false);
     setError(response.error);
     if (!response.error && response.data) setIdeas(response.data);
     setLoading(false);
@@ -51,7 +50,7 @@ const WildIdeas = () => {
 
   const onSubmit = (data: IdeaFormData) => {
     if (!edit) return;
-    typeof edit === 'string' ? updateIdea(data) : newIdea(data);
+    typeof edit === 'boolean' ? newIdea(data) : updateIdea(data);
   };
 
   const newIdea = async (data: IdeaFormData) => {
@@ -64,20 +63,21 @@ const WildIdeas = () => {
   };
 
   const updateIdea = async (data: IdeaFormData) => {
-    if (typeof edit !== 'string') return;
-    const request = await editIdea({
-      idea_id: edit,
-      ...data,
-    });
-    if (!request.error) onClose();
+    if (typeof edit === 'object' && edit.idea_id) {
+      const request = await editIdea({
+        idea_id: edit.idea_id,
+        ...data,
+      });
+      if (!request.error) onClose();
+    }
   };
 
   const onEdit = (idea: IdeaType) => {
-    setDefaultValues({
+    setEdit({
       title: idea.title,
       content: idea.content,
+      idea_id: idea.hash_id,
     });
-    setEdit(idea.hash_id);
   };
 
   const onDelete = async (id: string) => {
@@ -86,7 +86,6 @@ const WildIdeas = () => {
   };
 
   const onClose = () => {
-    setDefaultValues(undefined);
     setEdit(false);
     fetchIdeas();
   };
@@ -114,7 +113,11 @@ const WildIdeas = () => {
             <AppIcon icon="idea" />
           </Fab>
           <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-            <IdeaForms onClose={onClose} onSubmit={onSubmit} defaultValues={defaultValues} />
+            <IdeaForms
+              onClose={onClose}
+              onSubmit={onSubmit}
+              defaultValues={typeof edit !== 'boolean' ? edit : undefined}
+            />
           </Drawer>
         </>
       )}

@@ -1,33 +1,41 @@
 import { AppIcon, AppLink } from '@/components';
 import BoxCard from '@/components/BoxCard';
+import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import { MoveData } from '@/components/Data';
-import EditData from '@/components/Data/EditData';
-import DelegateVote from '@/components/DelegateVote';
+import BoxForms from '@/components/Data/DataForms/BoxForms';
 import { IdeaCard } from '@/components/Idea';
 import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
 import KnowMore from '@/components/KnowMore';
+import { deleteBox, editBox, getBox, getBoxDelegation } from '@/services/boxes';
+import { getIdeasByBox } from '@/services/ideas';
 import { DelegationType } from '@/types/Delegation';
-import { IdeaType } from '@/types/Scopes';
+import { BoxType, IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Button, Fab, Stack, Typography } from '@mui/material';
+import { Button, Drawer, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { grey } from '@mui/material/colors';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { BoxFormData } from '../BoxPhase/BoxPhaseView';
+import { grey } from '@mui/material/colors';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/ideas-box/:box_id
  */
 const IdeasBoxView = () => {
   const { t } = useTranslation();
-  const params = useParams();
-  const [add, setAdd] = useState(false);
-  const [isLoading, setLoading] = useState(true);
-  const [boxIdeas, setBoxIdeas] = useState<IdeaType[]>([]);
-  const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>([]);
-  const [delegationDialog, setDelegationDialog] = useState(false);
+  const navigate = useNavigate();
+  const { room_id, box_id, phase } = useParams();
+
+  /**
+   * Box data
+   */
+
+  const [isBoxLoading, setBoxLoading] = useState(true);
+  const [boxError, setBoxError] = useState<string | null>(null);
+  const [box, setBox] = useState<BoxType>();
+  const [edit, setEdit] = useState<BoxFormData>(); // undefined = closed;
 
   const boxIdeasFetch = async () => {
     await databaseRequest({
@@ -44,27 +52,78 @@ const IdeasBoxView = () => {
     });
   };
 
-  const getDelegation = async () =>
-    await databaseRequest(
-      {
-        model: 'User',
-        method: 'getDelegationStatus',
-        arguments: { topic_id: params['box_id'] },
-      },
-      ['user_id']
-    ).then((response) => {
-      if (!response.success || !response.data) return;
-      setDelegationStatus(response.data as DelegationType[]);
-    });
-
-  const closeAdd = () => {
-    boxIdeasFetch();
-    setAdd(false);
+  const boxUpdate = async (data: BoxFormData) => {
+    if (!(typeof edit === 'object') || !edit.topic_id) return;
+    const request = await editBox(data);
+    if (!request.error) boxClose();
   };
 
+  const boxDelete = async () => {
+    if (!box_id) return;
+    const request = await deleteBox(box_id);
+    if (!request.error) navigate(`/room/${room_id}/phase/${phase}`);
+  };
+
+  const boxClose = () => {
+    setEdit(undefined);
+    fetchBox();
+  };
+
+  /**
+   * Box's ideas data
+   */
+
+  const [isIdeasLoading, setIdeasLoading] = useState(true);
+  const [ideasError, setIdeasError] = useState<string | null>(null);
+  const [ideas, setIdeas] = useState<IdeaType[]>([]);
+
+  const fetchIdeas = useCallback(async () => {
+    if (!box_id) return;
+    setIdeasLoading(true);
+    const response = await getIdeasByBox(box_id);
+    setIdeasError(response.error);
+    if (!response.error && response.data) setIdeas(response.data);
+    setIdeasLoading(false);
+  }, [box_id]);
+
+  /**
+   * Delegation data
+   */
+
+  const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>([]);
+  //const [delegationDialog, setDelegationDialog] = useState(false);
+
+  const fetchDelegation = useCallback(async () => {
+    if (!box_id) return;
+    setIdeasLoading(true);
+    const response = await getBoxDelegation(box_id);
+    setIdeasError(response.error);
+    if (!response.error && response.data) setDelegationStatus(response.data);
+    setIdeasLoading(false);
+  }, [box_id]);
+
+  // const getDelegation = async () =>
+  //   await databaseRequest(
+  //     {
+  //       model: 'User',
+  //       method: 'getDelegationStatus',
+  //       arguments: { topic_id: box_id },
+  //     },
+  //     ['user_id']
+  //   ).then((response) => {
+  //     if (!response.success || !response.data) return;
+  //     setDelegationStatus(response.data as DelegationType[]);
+  //   });
+
+  // const closeAdd = () => {
+  //   boxIdeasFetch();
+  //   setAdd(false);
+  // };
+
   useEffect(() => {
-    boxIdeasFetch();
-    getDelegation();
+    fetchIdeas();
+    fetchBox();
+    fetchDelegation();
   }, []);
 
   return (
@@ -122,12 +181,12 @@ const IdeasBoxView = () => {
           {boxIdeas.map((idea, key) => (
             <Grid key={key} size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
               <AppLink to={`idea/${idea.hash_id}`}>
-                <IdeaCard idea={idea} phase={Number(params['phase']) as RoomPhases} />
+                <IdeaCard idea={idea} phase={Number(phase) as RoomPhases} />
               </AppLink>
             </Grid>
           ))}
-        </Grid>
-        {checkPermissions(20) && String(params['phase']) === '10' && (
+      </Grid>
+      {/* {checkPermissions(20) && phase === '10' && (
           <>
             <Fab
               aria-label="add"
@@ -154,8 +213,11 @@ const IdeasBoxView = () => {
             getDelegation();
           }}
         />
-      )}
-    </>
+      )} */}
+      <Drawer anchor="bottom" open={!!edit} onClose={boxClose} sx={{ overflowY: 'auto' }}>
+        <BoxForms onClose={boxClose} onSubmit={boxUpdate} defaultValues={edit} />
+      </Drawer>
+    </Stack>
   );
 };
 

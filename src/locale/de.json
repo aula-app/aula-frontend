@@ -474,6 +474,7 @@
     "against": "Dagegen",
     "for": "Dafür",
     "neutral": "Neutral",
+    "vote": "Abstimmen",
     "yourVote": "Deine Stimme: {{var}}"
   },
   "weekDays": {

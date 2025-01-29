@@ -1,6 +1,29 @@
+import { DelegationType } from '@/types/Delegation';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { databaseRequest, GenericResponse } from '@/utils';
+
+/**
+ * Fetches box
+ * @param box_id - The ID of the idea to fetch
+ * @returns Promise resolving to an array of ideas with custom fields
+ */
+
+interface GetBoxResponse {
+  data: BoxType | null;
+  count: number | null;
+  error: string | null;
+}
+
+export async function getBox(topic_id: string): Promise<GetBoxResponse> {
+  const response = await databaseRequest({
+    model: 'Topic',
+    method: 'getTopicBaseData',
+    arguments: { topic_id },
+  });
+
+  return response as GetBoxResponse;
+}
 
 /**
  * Fetches boxes for a specific room including custom fields
@@ -92,17 +115,17 @@ export async function editBox(args: EditBoxArguments): Promise<GenericResponse> 
 
 /**
  * Removes an box from the database
- * @param id - The box id
+ * @param box_id - The box id
  * @returns Promise resolving to the new box
  */
 
-export async function deleteBox(id: string): Promise<GenericResponse> {
+export async function deleteBox(box_id: string): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
       model: 'Topic',
       method: 'deleteTopic',
       arguments: {
-        topic_id: id,
+        topic_id: box_id,
       },
     },
     ['updater_id']
@@ -110,3 +133,30 @@ export async function deleteBox(id: string): Promise<GenericResponse> {
 
   return response as GenericResponse;
 }
+
+/**
+ * Gets an box delegation status from the database
+ * @param box_id - The box id
+ * @returns Promise resolving to the new box
+ */
+
+interface GetDelegationResponse {
+  data: DelegationType[] | null;
+  count: number | null;
+  error: string | null;
+}
+
+export const getBoxDelegation = async (box_id: string): Promise<GetDelegationResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'getDelegationStatus',
+      arguments: {
+        topic_id: box_id,
+      },
+    },
+    ['user_id']
+  );
+
+  return response as GetDelegationResponse;
+};

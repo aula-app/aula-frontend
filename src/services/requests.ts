@@ -119,7 +119,7 @@ export const databaseRequest = async (requestData: RequestObject, userId = [] as
     return {
       data: response.data,
       count: response.count,
-      error: null,
+      error: '',
     };
   } catch (e) {
     document.dispatchEvent(error);

@@ -1,12 +1,13 @@
 import AppLink from '@/components/AppLink';
 import ChatBubble from '@/components/ChatBubble';
 import { IdeaType } from '@/types/Scopes';
-import { phases } from '@/utils';
 import { Stack, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
-import UserBar from '../UserBar';
 import CategoryList from '../CategoryList';
-import { deleteIdea } from '@/services/ideas';
+import UserBar from '../UserBar';
+import MoreOptions from '@/components/MoreOptions';
+import LikeButton from '../LikeButton';
+import AppIconButton from '@/components/AppIconButton';
+import { checkPermissions, checkSelf } from '@/utils';
 
 interface Props {
   idea: IdeaType;
@@ -16,19 +17,17 @@ interface Props {
 }
 
 const IdeaBubble: React.FC<Props> = ({ idea, disabled = false, onDelete, onEdit }) => {
-  const { phase } = useParams();
-
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <ChatBubble color={`${phases[Number(phase)]}.main`}>
-        <AppLink to={`/idea/${idea.hash_id}`} disabled={disabled}>
+      <ChatBubble disabled={disabled}>
+        <AppLink to={`idea/${idea.hash_id}`} disabled={disabled}>
           <Stack gap={1}>
-            <Typography>
+            <span>
               <Typography variant="h6" display="inline">
                 {idea.title}
               </Typography>
               <CategoryList idea={idea} />
-            </Typography>
+            </span>
             <Typography>{idea.content}</Typography>
             {/* {(Object.keys(fields) as Array<keyof CustomFieldsType>).map((customField) => (
                 <Fragment key={customField}>
@@ -42,7 +41,27 @@ const IdeaBubble: React.FC<Props> = ({ idea, disabled = false, onDelete, onEdit 
           </Stack>
         </AppLink>
       </ChatBubble>
-      <UserBar idea={idea} onDelete={onDelete} onEdit={onEdit} />
+      <Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <UserBar info={idea} />
+          <MoreOptions
+            item={idea}
+            scope="ideas"
+            onDelete={onDelete}
+            onEdit={onEdit}
+            canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id) && !disabled)}
+          >
+            <Stack direction="row" alignItems="center">
+              <LikeButton disabled={disabled} item={idea} />
+              {idea.sum_comments > 0 && (
+                <AppIconButton icon="chat" to={`/idea/${idea.hash_id}`}>
+                  {idea.sum_comments}
+                </AppIconButton>
+              )}
+            </Stack>
+          </MoreOptions>
+        </Stack>
+      </Stack>
     </Stack>
   );
 };
