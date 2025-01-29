@@ -30,7 +30,6 @@ import {
 } from 'react-icons/bi';
 import { BsGenderTrans, BsTree } from 'react-icons/bs';
 import {
-  HiFlag,
   HiHeart,
   HiLink,
   HiOutlineAcademicCap,
@@ -110,7 +109,6 @@ import {
   IoBriefcaseOutline,
   IoBrushOutline,
   IoBugOutline,
-  IoBugSharp,
   IoBuildOutline,
   IoBulbOutline,
   IoBusinessOutline,
@@ -280,6 +278,7 @@ export const ICONS = {
   visibilityOff: HiOutlineEye,
   visibilityOn: HiOutlineEyeSlash,
   voting: VotingIcon,
+  waiting: HiOutlineQuestionMarkCircle,
   wild: HiOutlineLightBulb,
   zoomIn: HiOutlineMagnifyingGlassPlus,
   zoomOut: HiOutlineMagnifyingGlassMinus,

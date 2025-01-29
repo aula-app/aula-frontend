@@ -24,7 +24,7 @@ const WelcomeView = () => {
     const fetchRooms = async () => {
       const response = await getRooms();
       setLoading(false);
-      setError(response.error);
+      if (response.error) setError(response.error);
       if (!response.error && response.data) setRooms(response.data);
     };
 

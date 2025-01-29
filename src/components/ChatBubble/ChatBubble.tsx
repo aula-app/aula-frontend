@@ -30,7 +30,7 @@ const ChatBubble = ({ children, comment = false, disabled = false }: ChatBubbleP
           sx={{
             position: 'absolute',
             bottom: 0,
-            left: comment ? '18px' : '32px',
+            left: '32px',
             width: '1rem',
             aspectRatio: 1,
             bgcolor: color,

@@ -221,7 +221,8 @@
       "name": "Idee",
       "plural": "Ideen",
       "approved": "Diese Idee wurde angenommen",
-      "rejected": "Diese Idee wurde nicht angenommen"
+      "rejected": "Diese Idee wurde nicht angenommen",
+      "waiting": "Diese Idee wartet auf Genehmigung"
     },
     "messages": {
       "name": "Nachricht",

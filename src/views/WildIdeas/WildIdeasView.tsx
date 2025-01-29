@@ -39,7 +39,7 @@ const WildIdeas = () => {
     if (!room_id) return;
     setLoading(true);
     const response = await getIdeasByRoom(room_id);
-    setError(response.error);
+    if (response.error) setError(response.error);
     if (!response.error && response.data) setIdeas(response.data);
     setLoading(false);
   }, [room_id]);
@@ -96,7 +96,13 @@ const WildIdeas = () => {
       {error && <Typography>{t(error)}</Typography>}
       {!isLoading &&
         ideas.map((idea) => (
-          <IdeaBubble key={idea.id} idea={idea} onEdit={() => onEdit(idea)} onDelete={() => onDelete(idea.hash_id)} />
+          <IdeaBubble
+            key={idea.id}
+            idea={idea}
+            to={`idea/${idea.hash_id}`}
+            onEdit={() => onEdit(idea)}
+            onDelete={() => onDelete(idea.hash_id)}
+          />
         ))}
       {checkPermissions(20) && room_id && (
         <>
