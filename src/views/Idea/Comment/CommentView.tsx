@@ -17,7 +17,10 @@ interface RouteParams extends Record<string, string | undefined> {
 
 export interface CommentFormData {
   content: string;
-  comment_id: string;
+}
+
+interface CommentBDData extends CommentFormData {
+  comment_id: number;
 }
 
 /**
@@ -72,7 +75,7 @@ const Comments = () => {
   const onEdit = (comment: CommentType) => {
     setEdit({
       content: comment.content,
-      comment_id: String(comment.id),
+      comment_id: comment.id,
     });
   };
 
