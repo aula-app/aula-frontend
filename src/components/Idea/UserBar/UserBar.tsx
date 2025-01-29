@@ -1,25 +1,23 @@
 import AppIconButton from '@/components/AppIconButton';
 import MoreOptions from '@/components/MoreOptions';
 import UserAvatar from '@/components/UserAvatar';
-import { IdeaType } from '@/types/Scopes';
+import { CommentType, IdeaType } from '@/types/Scopes';
 import { checkPermissions, checkSelf, getDisplayDate } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import LikeButton from '../LikeButton';
 
 interface Props {
-  idea: IdeaType;
+  info: IdeaType | CommentType;
   disabled?: boolean;
-  onDelete: () => void;
-  onEdit: () => void;
 }
 
-const UserBar: React.FC<Props> = ({ idea, disabled = false, onDelete, onEdit }) => {
+const UserBar: React.FC<Props> = ({ info, disabled = false }) => {
   return (
     <Stack direction="row" alignItems="center">
-      <UserAvatar id={String(idea.user_id)} />
+      <UserAvatar id={String(info.user_id)} />
       <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
         <Typography variant="caption" lineHeight={1.5}>
-          {getDisplayDate(idea.created)}
+          {getDisplayDate(info.created)}
         </Typography>
         <Typography
           variant="overline"
@@ -29,25 +27,9 @@ const UserBar: React.FC<Props> = ({ idea, disabled = false, onDelete, onEdit }) 
           lineHeight={1.5}
           maxWidth="100%"
         >
-          {idea.displayname}
+          {info.displayname}
         </Typography>
       </Stack>
-      <MoreOptions
-        item={idea}
-        scope="ideas"
-        onDelete={onDelete}
-        onEdit={onEdit}
-        canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id) && !disabled)}
-      >
-        <Stack direction="row" alignItems="center">
-          <LikeButton disabled={disabled} idea={idea} />
-          {idea.sum_comments > 0 && (
-            <AppIconButton icon="chat" to={`/idea/${idea.hash_id}`}>
-              {idea.sum_comments}
-            </AppIconButton>
-          )}
-        </Stack>
-      </MoreOptions>
     </Stack>
   );
 };

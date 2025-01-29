@@ -3,7 +3,29 @@ import { IdeaType } from '@/types/Scopes';
 import { databaseRequest, GenericResponse } from '@/utils';
 
 /**
- * Fetches ideas for a specific room including custom fields
+ * Fetches idea
+ * @param idea_id - The ID of the idea to fetch
+ * @returns Promise resolving to an array of ideas with custom fields
+ */
+
+interface GetIdeaResponse {
+  data: IdeaType | null;
+  count: number | null;
+  error: string | null;
+}
+
+export async function getIdea(idea_id: string): Promise<GetIdeaResponse> {
+  const response = await databaseRequest({
+    model: 'Idea',
+    method: 'getIdeaBaseData',
+    arguments: { idea_id },
+  });
+
+  return response as GetIdeaResponse;
+}
+
+/**
+ * Fetches ideas for a specific room
  * @param room_id - The ID of the room to fetch ideas for
  * @returns Promise resolving to an array of ideas with custom fields
  */
@@ -19,6 +41,22 @@ export async function getIdeasByRoom(room_id: string): Promise<GetIdeasResponse>
     model: 'Idea',
     method: 'getIdeasByRoom',
     arguments: { room_id },
+  });
+
+  return response as GetIdeasResponse;
+}
+
+/**
+ * Fetches ideas for a specific box
+ * @param room_id - The ID of the room to fetch ideas for
+ * @returns Promise resolving to an array of ideas with custom fields
+ */
+
+export async function getIdeasByBox(topic_id: string): Promise<GetIdeasResponse> {
+  const response = await databaseRequest({
+    model: 'Idea',
+    method: 'getIdeasByTopic',
+    arguments: { topic_id },
   });
 
   return response as GetIdeasResponse;
@@ -126,3 +164,56 @@ export async function deleteIdea(id: string): Promise<GenericResponse> {
 //     custom_field2: data.custom_field2_name,
 //   };
 // }
+
+/**
+ * Fetches the like status of an idea
+ * @param idea_id - The ID of the idea to like
+ * @returns Promise resolving to the updated idea list
+ */
+
+export async function getIdeaLike(idea_id: string): Promise<boolean> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'getLikeStatus',
+      arguments: { idea_id },
+    },
+    ['user_id']
+  );
+
+  return Boolean(response.data);
+}
+
+/**
+ * Adds a like to an idea
+ * @param idea_id - The ID of the idea to like
+ * @returns Promise resolving to the updated idea list
+ */
+
+export async function addIdeaLike(idea_id: string): Promise<void> {
+  await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'IdeaAddLike',
+      arguments: { idea_id },
+    },
+    ['user_id']
+  );
+}
+
+/**
+ * Removes a like to an idea
+ * @param idea_id - The ID of the idea to like
+ * @returns Promise resolving to the updated idea list
+ */
+
+export async function removeIdeaLike(idea_id: string): Promise<void> {
+  await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'IdeaRemoveLike',
+      arguments: { idea_id },
+    },
+    ['user_id']
+  );
+}

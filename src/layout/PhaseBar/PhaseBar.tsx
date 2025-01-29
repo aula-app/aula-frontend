@@ -21,17 +21,17 @@ const isValidPhase = (phase: string): phase is `${RoomPhases}` => Object.keys(ph
  */
 const PhaseBar: React.FC<PhaseBarProps> = ({ room }) => {
   const { t } = useTranslation();
-  const params = useParams();
-  const displayPhases = Object.keys(phases).map(Number) as RoomPhases[];
+  const { phase } = useParams();
+  const displayPhases = Object.keys(phases);
   const [currentPhase, setPhase] = useState<`${RoomPhases}`>('0');
 
   const getPhase = useCallback(() => {
-    if (params.phase && isValidPhase(params.phase)) {
-      setPhase(params.phase);
+    if (phase && isValidPhase(phase)) {
+      setPhase(phase);
     } else {
       setPhase('0');
     }
-  }, [params.phase]);
+  }, [phase]);
 
   useEffect(() => {
     getPhase();
@@ -39,36 +39,35 @@ const PhaseBar: React.FC<PhaseBarProps> = ({ room }) => {
 
   return (
     <Stack direction="row" overflow="clip" width="100%" minHeight={phaseStyles.height}>
-      {displayPhases.map((phase) => (
+      {displayPhases.map((displayPhase) => (
         <AppLink
-          key={phase}
-          to={`/room/${room}/phase/${phase}`}
+          key={displayPhase}
+          to={`/room/${room}/phase/${displayPhase}`}
           sx={{
             color: 'inherit',
             textDecoration: 'none',
-            flex: currentPhase === `${phase}` ? 3 : 1,
+            flex: currentPhase === displayPhase ? 3 : 1,
             position: 'relative',
           }}
         >
-          <Tooltip arrow title={t(`tooltips.${phases[phase]}`)}>
+          <Tooltip arrow title={t(`tooltips.${phases[displayPhase]}`)}>
             <Stack
-              key={phase}
               direction="row"
               alignItems="center"
               justifyContent="center"
               p={1}
-              pl={phase === 0 ? 2 : 1}
+              pl={displayPhase === '0' ? 2 : 1}
               pr={currentPhase === `${phase}` ? 3 : 1}
               mx={`-${phaseStyles.spacing}px`}
               height={phaseStyles.height}
               sx={{
-                bgcolor: `${phases[phase]}.main`,
+                bgcolor: `${phases[displayPhase]}.main`,
                 clipPath: PHASE_CLIP_PATH,
               }}
             >
-              <AppIcon icon={phases[phase]} />
+              <AppIcon icon={phases[displayPhase]} />
               <Typography noWrap overflow="ellipsis" pl={1} fontSize="small">
-                {currentPhase === `${phase}` ? t(`phases.${phases[phase]}`) : ''}
+                {currentPhase === `${displayPhase}` ? t(`phases.${phases[displayPhase]}`) : ''}
               </Typography>
             </Stack>
           </Tooltip>

@@ -1,27 +1,30 @@
 import AppIconButton from '@/components/AppIconButton';
-import { addLike, getLike, removeLike } from '@/services/likes';
-import { IdeaType } from '@/types/Scopes';
+import { addCommentLike, getCommentLike, removeCommentLike } from '@/services/comments';
+import { addIdeaLike, getIdeaLike, removeIdeaLike } from '@/services/ideas';
+import { CommentType, IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { useEffect, useState } from 'react';
 
 interface Props {
-  idea: IdeaType;
+  item: IdeaType | CommentType;
   disabled?: boolean;
 }
 
-const LikeButton: React.FC<Props> = ({ idea, disabled }) => {
+const LikeButton: React.FC<Props> = ({ item, disabled }) => {
   const [liked, setLiked] = useState(false);
 
+  const isIdea = 'room_id' in item;
+
   const getLikeState = async () => {
-    const likeState = await getLike(idea.hash_id);
+    const likeState = await (isIdea ? getIdeaLike(item.hash_id) : getCommentLike(item.id));
     setLiked(likeState);
   };
 
   const toggleLike = async () => {
     if (liked) {
-      await removeLike(idea.hash_id);
+      await (isIdea ? removeIdeaLike(item.hash_id) : removeCommentLike(item.id));
     } else {
-      await addLike(idea.hash_id);
+      await (isIdea ? addIdeaLike(item.hash_id) : addCommentLike(item.id));
     }
     getLikeState();
   };
@@ -36,7 +39,7 @@ const LikeButton: React.FC<Props> = ({ idea, disabled }) => {
       onClick={toggleLike}
       disabled={disabled || !checkPermissions(20)}
     >
-      {idea.sum_likes}
+      {item.sum_likes}
     </AppIconButton>
   );
 };

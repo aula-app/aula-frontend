@@ -15,6 +15,7 @@ import { useParams } from 'react-router-dom';
 export interface BoxFormData {
   name: string;
   description_public: string;
+  topic_id: string;
 }
 
 /** * Renders "IdeaBoxes" view
@@ -27,14 +28,12 @@ const BoxPhaseView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
-  const [edit, setEdit] = useState<string | boolean>(false); // true = new idea; id = edit idea; false = closed;
-  const [defaultValues, setDefaultValues] = useState<BoxFormData>();
+  const [edit, setEdit] = useState<BoxFormData | true>(); // undefined = update dialog closed; true = new idea; EditFormData = edit idea;
 
   const fetchBoxes = useCallback(async () => {
     if (!room_id || !phase) return;
     setLoading(true);
     const response = await getBoxesByPhase(Number(phase), room_id);
-    setLoading(false);
     setError(response.error);
     if (!response.error && response.data) setBoxes(response.data);
     setLoading(false);
@@ -44,9 +43,17 @@ const BoxPhaseView = () => {
     fetchBoxes();
   }, [phase]);
 
-  const onSubmit = (data: BoxFormData) => {
+  const boxEdit = (box: BoxType) => {
+    setEdit({
+      name: box.name,
+      description_public: box.description_public,
+      topic_id: box.hash_id,
+    });
+  };
+
+  const boxSubmit = (data: BoxFormData) => {
     if (!edit) return;
-    typeof edit === 'string' ? updateBox(data) : newBox(data);
+    edit === true ? newBox(data) : updateBox(data);
   };
 
   const newBox = async (data: BoxFormData) => {
@@ -60,30 +67,18 @@ const BoxPhaseView = () => {
   };
 
   const updateBox = async (data: BoxFormData) => {
-    if (typeof edit !== 'string') return;
-    const request = await editBox({
-      topic_id: edit,
-      ...data,
-    });
+    if (!(typeof edit === 'object') || !edit.topic_id) return;
+    const request = await editBox(data);
     if (!request.error) onClose();
   };
 
-  const onEdit = (box: BoxType) => {
-    setDefaultValues({
-      name: box.name,
-      description_public: box.description_public,
-    });
-    setEdit(box.hash_id);
-  };
-
-  const onDelete = async (id: string) => {
+  const boxDelete = async (id: string) => {
     const request = await deleteBox(id);
     if (!request.error) onClose();
   };
 
   const onClose = () => {
-    setDefaultValues(undefined);
-    setEdit(false);
+    setEdit(undefined);
     fetchBoxes();
   };
 
@@ -99,7 +94,7 @@ const BoxPhaseView = () => {
         {!isLoading &&
           boxes.map((box) => (
             <Grid key={box.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-              <BoxCard box={box} onEdit={() => onEdit(box)} onDelete={() => onDelete(box.hash_id)} />
+              <BoxCard box={box} onEdit={() => boxEdit(box)} onDelete={() => boxDelete(box.hash_id)} />
             </Grid>
           ))}
       </Grid>
@@ -118,7 +113,11 @@ const BoxPhaseView = () => {
             <AppIcon icon="box" />
           </Fab>
           <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-            <BoxForms onClose={onClose} onSubmit={onSubmit} defaultValues={defaultValues} />
+            <BoxForms
+              onClose={onClose}
+              onSubmit={boxSubmit}
+              defaultValues={typeof edit === 'object' ? edit : undefined}
+            />
           </Drawer>
         </>
       )}
