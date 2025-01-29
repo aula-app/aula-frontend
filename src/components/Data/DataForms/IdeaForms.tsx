@@ -19,7 +19,7 @@ interface IdeaFormsProps {
   onSubmit: (data: IdeaFormData) => void;
 }
 
-const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues = {}, onClose, onSubmit }) => {
+const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose, onSubmit }) => {
   const { t } = useTranslation();
 
   const schema = yup.object({
@@ -44,7 +44,9 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues = {}, onClose, onSu
 
   return (
     <Stack p={2} overflow="auto" gap={2}>
-      <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.ideas.name`).toLowerCase() })}</Typography>
+      <Typography variant="h4">
+        {t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.ideas.name`).toLowerCase() })}
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
           {/* title */}

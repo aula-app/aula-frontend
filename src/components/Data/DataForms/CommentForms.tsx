@@ -43,7 +43,9 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues = {}, onClose
 
   return (
     <Stack p={2} overflow="auto" gap={2}>
-      <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.comments.name`).toLowerCase() })}</Typography>
+      <Typography variant="h4">
+        {t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.comments.name`).toLowerCase() })}
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
           {/* content */}

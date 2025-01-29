@@ -1,5 +1,5 @@
 import { AppIconButton, AppLink } from "@/components";
-import AppSubmitButton from "@/components/AppSubmitButton";
+import AppButton from "@/components/AppButton";
 import { loginUser } from "@/services/login";
 import { useAppStore } from "@/store";
 import { localStorageGet, localStorageSet } from "@/utils";
@@ -155,7 +155,7 @@ const LoginView = () => {
             }
           }}
         />
-        <AppSubmitButton label={t("auth.login.button")} disabled={isLoading} onClick={handleSubmit(onSubmit)} />
+        <AppButton label={t("auth.login.button")} disabled={isLoading} onClick={handleSubmit(onSubmit)} />
 
         <Grid container justifyContent="end" alignItems="center">
           <Button
@@ -175,7 +175,7 @@ const LoginView = () => {
           <Divider sx={{flex: 1}} />
         </Stack>
         <Stack direction='column' mb={2} alignItems='center'>
-         <AppSubmitButton
+         <AppButton
            variant="outlined"
            onClick={() => window.location.href="/api/controllers/login_oauth.php"}
            label={t('auth.oauth.button')}
