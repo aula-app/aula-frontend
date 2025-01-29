@@ -1,9 +1,8 @@
-import AppButton from '@/components/AppButton';
 import { recoverPassword } from '@/services/login';
 import { useAppStore } from '@/store';
 import { localStorageGet } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Stack, TextField, Typography } from '@mui/material';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +23,11 @@ const RecoveryPasswordView = () => {
     email: yup.string().email(t('forms.validation.email')).required(t('forms.validation.required')),
   });
 
-  const form = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
@@ -63,11 +66,11 @@ const RecoveryPasswordView = () => {
           required
           disabled={isLoading}
           label="Email"
-          {...form.register('email')}
-          error={!!form.formState.errors.email}
-          helperText={form.formState.errors.email?.message || ' '}
+          {...register('email')}
+          error={!!errors.email}
+          helperText={errors.email?.message || ' '}
         />
-        <AppButton label={t('auth.forgotPassword.recover')} disabled={isLoading} />
+        <Button variant="contained" disabled={isLoading} onClick={handleSubmit(onSubmit)}>{t('auth.forgotPassword.recover')}</Button>
       </Stack>
     </FormContainer>
   );

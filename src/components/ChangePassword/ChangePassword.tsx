@@ -1,11 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Alert, Collapse, InputAdornment, Stack, TextField } from '@mui/material';
+import { Alert, Button, Collapse, InputAdornment, Stack, TextField } from '@mui/material';
 import { forwardRef, useImperativeHandle, useState } from 'react';
 import { FormContainer, SubmitHandler, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import AppIconButton from '../AppIconButton';
-import AppButton from '../AppButton';
 
 interface Props {
   hideOld?: boolean;
@@ -148,7 +147,9 @@ const ChangePassword = forwardRef<ChangePasswordMethods, Props>(
               },
             }}
           />
-          <AppButton disabled={disabled} onClick={handleSubmit(onSubmit)} />
+          <Button variant="contained" disabled={disabled} onClick={handleSubmit(onSubmit)}>
+            {t('actions.confirm')}
+          </Button>
         </Stack>
       </FormContainer>
     );

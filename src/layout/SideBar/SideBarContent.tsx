@@ -1,10 +1,10 @@
-import { AppButton, AppIcon, AppIconButton, AppLink } from '@/components';
+import { AppIcon, AppIconButton, AppLink } from '@/components';
 import BugButton from '@/components/Buttons/BugButton';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
 import { checkPermissions } from '@/utils';
-import { Divider, List, ListItemButton, ListItemIcon, ListItemText, Stack } from '@mui/material';
+import { Button, Divider, List, ListItemButton, ListItemIcon, ListItemText, Stack } from '@mui/material';
 import { Fragment, memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SIDEBAR_ITEMS } from '../config';
@@ -82,10 +82,10 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
         }}
       >
         {isAuthenticated && (
-          <AppButton variant="text" onClick={onLogout}>
+          <Button onClick={onLogout} sx={{ py: 1, width: '100%', color: 'inherit' }}>
             {t('auth.logout')}&nbsp;
             <AppIcon icon="logout" />
-          </AppButton>
+          </Button>
         )}
       </Stack>
     </Stack>

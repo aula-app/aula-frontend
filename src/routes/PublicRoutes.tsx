@@ -1,5 +1,5 @@
 import { localStorageGet, localStorageSet } from '@/utils';
-import { Auth, InstanceCodeView, Login, OAuthLogin, PublicNotFoundView, Recovery, SetPassword } from '@/views/Public';
+import { InstanceCodeView, Login, OAuthLogin, PublicNotFoundView, Recovery, SetPassword } from '@/views/Public';
 import ChangePasswordView from '@/views/UpdatePassword';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
@@ -38,7 +38,6 @@ const PublicRoutes = () => {
       <Route path="recovery/*" element={<Recovery />} />
       <Route path="password/" element={<ChangePasswordView />} />
       <Route path="password/:key" element={<SetPassword />} />
-      <Route path="auth" element={<Auth />} />
       <Route path="*" element={<PublicNotFoundView />} />
     </Routes>
   );

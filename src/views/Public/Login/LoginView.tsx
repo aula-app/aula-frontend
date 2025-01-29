@@ -1,5 +1,4 @@
 import { AppIconButton, AppLink } from "@/components";
-import AppButton from "@/components/AppButton";
 import { loginUser } from "@/services/login";
 import { useAppStore } from "@/store";
 import { localStorageGet, localStorageSet } from "@/utils";
@@ -155,7 +154,7 @@ const LoginView = () => {
             }
           }}
         />
-        <AppButton label={t("auth.login.button")} disabled={isLoading} onClick={handleSubmit(onSubmit)} />
+        <Button variant="contained" disabled={isLoading} onClick={handleSubmit(onSubmit)}>{t("auth.login.button")}</Button>
 
         <Grid container justifyContent="end" alignItems="center">
           <Button
@@ -175,13 +174,13 @@ const LoginView = () => {
           <Divider sx={{flex: 1}} />
         </Stack>
         <Stack direction='column' mb={2} alignItems='center'>
-         <AppButton
+         <Button
            variant="outlined"
+           color="secondary"
            onClick={() => window.location.href="/api/controllers/login_oauth.php"}
-           label={t('auth.oauth.button')}
            disabled={isLoading}
            aria-label={t('auth.oauth.arialabel')}
-         />
+         >{t('auth.oauth.button')}</Button>
         </Stack>
          </>)
          : ''}
