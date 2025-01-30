@@ -25,10 +25,7 @@ const AdvancedFields: React.FC<Props> = ({ children, control, ...restOfProps }) 
   return (
     <Accordion expanded={expanded} onChange={toggleExpanded}>
       <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>{t('settings.advanced.headline')}</AccordionSummary>
-      <AccordionDetails>
-        {children}
-        <SelectField name="status" options={STATUS} control={control} defaultValue={1} />
-      </AccordionDetails>
+      <AccordionDetails>{children}</AccordionDetails>
     </Accordion>
   );
 };
