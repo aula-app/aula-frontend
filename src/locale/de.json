@@ -167,9 +167,10 @@
     },
     "updateData": {
       "headline": "Datenaktualisierungsanfrage",
-      "confirm": "Bist du sicher, dass du die Aktualisierung deiner Felder anfordern möchtest: {{var}}? Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden",
+      "confirm": "Bist du sicher, dass du die Aktualisierung deiner Felder anfordern möchtest?",
       "title": "Kontodatenaktualisierungsanfrage für {{var}}",
-      "body": "Eine Datenaktualisierungsprozedur wurde für den Benutzer {{var}} angefordert"
+      "body": "Eine Datenaktualisierungsprozedur wurde für den Benutzer {{var}} angefordert",
+      "validation": "Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden."
     }
   },
   "patterns": {
@@ -374,6 +375,7 @@
     },
     "messages": {
       "create": "{{var}} erstellt",
+      "notUpdated": "{{var}} nicht aktualisiert",
       "update": "{{var}} aktualisieren",
       "updated": "{{var}} aktualisiert"
     },
@@ -426,12 +428,14 @@
   "ui": {
     "common": {
       "all": "Alle",
-      "success": "Erfolg",
       "back": "Zurück",
+      "from": "von",
       "next": "Weiter",
       "no": "Nein",
       "on": "an",
       "or": "oder",
+      "success": "Erfolg",
+      "to": "zu",
       "yes": "Ja"
     },
     "darkMode": "Dunkelmodus",

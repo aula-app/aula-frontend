@@ -167,9 +167,10 @@
     },
     "updateData": {
       "headline": "Data update request",
-      "confirm": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place",
+      "confirm": "Are you sure you want to request the update of your fields?",
       "title": "Account data update request for {{var}}",
-      "body": "A data update procedure was requested for user {{var}}"
+      "body": "A data update procedure was requested for user {{var}}",
+      "validation": "This action should be validated by an Admin to take place."
     }
   },
   "patterns": {
@@ -374,6 +375,7 @@
     },
     "messages": {
       "create": "{{var}} created",
+      "notUpdated": "{{var}} not updated",
       "update": "Update {{var}}",
       "updated": "{{var}} updated"
     },
@@ -426,12 +428,14 @@
   "ui": {
     "common": {
       "all": "All",
-      "success": "Success",
       "back": "Back",
+      "from": "from",
       "next": "Next",
       "no": "No",
       "on": "on",
       "or": "or",
+      "success": "Success",
+      "to": "to",
       "yes": "Yes"
     },
     "darkMode": "Dark mode",

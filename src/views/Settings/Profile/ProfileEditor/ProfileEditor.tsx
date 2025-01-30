@@ -1,10 +1,7 @@
-import { AppButton, AppIcon } from '@/components';
-import ImageEditor from '@/components/ImageEditor';
+import { MarkdownEditor } from '@/components/Data/DataFields';
 import UserAvatar from '@/components/UserAvatar';
-import { useAppStore } from '@/store';
-import { ObjectPropByName } from '@/types/Generics';
+import { editSelf, getSelf } from '@/services/users';
 import { UserType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
@@ -13,34 +10,41 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
+  InputAdornment,
   Stack,
   TextField,
+  Typography,
 } from '@mui/material';
-import { grey } from '@mui/material/colors';
-import { useEffect, useState } from 'react';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useCallback, useEffect, useState } from 'react';
+import { Controller, FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+import ProfileEditorSkeleton from './ProfileEditorSkeleton';
+import { AppIcon, AppIconButton } from '@/components';
 import RestrictedField from './RestrictedField';
-import { MarkdownEditor } from '@/components/Data/DataFields';
+import { useAppStore } from '@/store';
 
 /** * Renders "SystemSettings" component
  */
 
-interface Props {
-  user: UserType;
-  onReload: () => void;
-}
-
-const ProfileEditor = ({ user, onReload }: Props) => {
+const ProfileEditor: React.FC = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
-  const [updates, setUpdates] = useState<Array<[keyof typeof schema.fields, string | undefined]>>([]);
-  const [isEditingImage, setEditingImage] = useState(false);
-  const [updateAvatar, setUpdateAvatar] = useState(false);
-  const [openDialog, setDialog] = useState(false);
-  const [unlocked, setUnlocked] = useState<'realname' | 'email' | 'username'>();
+
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<UserType>();
+
+  const [updateRequests, setUpdateRequests] = useState<Array<{ field: keyof SchemaType; value: string | undefined }>>(
+    []
+  );
+
+  // const [, dispatch] = useAppStore();
+  // const [updates, setUpdates] = useState<Array<[keyof SchemaType, string | undefined]>>([]);
+  // const [isEditingImage, setEditingImage] = useState(false);
+  // const [updateAvatar, setUpdateAvatar] = useState(false);
+  // const [openDialog, setDialog] = useState(false);
+  // const [unlocked, setUnlocked] = useState<'realname' | 'email' | 'username'>();
 
   const schema = yup.object({
     realname: yup
@@ -55,18 +59,34 @@ const ProfileEditor = ({ user, onReload }: Props) => {
       .required(),
     email: yup.string().email(),
     about_me: yup.string(),
-    displayname: yup.string().max(30, t('forms.validation.maxLength', { var: 30 })),
+    displayname: yup
+      .string()
+      .max(30, t('forms.validation.maxLength', { var: 30 }))
+      .required(),
   });
+
+  // Infer TypeScript type from the Yup schema
+  type SchemaType = yup.InferType<typeof schema>;
 
   const {
     control,
-    register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm({
+    defaultValues: user,
     resolver: yupResolver(schema),
   });
+
+  const userFields = ['username', 'realname', 'email', 'displayname', 'about_me'] as Array<keyof SchemaType>;
+
+  const fetchProfile = useCallback(async () => {
+    setLoading(true);
+    const response = await getSelf();
+    if (response.error) setError(response.error);
+    if (!response.error && response.data) setUser(response.data);
+    setLoading(false);
+  }, []);
 
   // const requestUpdates = () => {
   //   updates.forEach((update) => {
@@ -82,7 +102,7 @@ const ProfileEditor = ({ user, onReload }: Props) => {
   //   closeDialog();
   // };
 
-  // const sendMessage = async (field: [keyof typeof schema.fields, string | undefined]) => {
+  // const sendMessage = async (field: [keyof SchemaType, string | undefined]) => {
   //   if (!field[0] || !field[1]) return;
   //   await databaseRequest(
   //     {
@@ -133,8 +153,8 @@ const ProfileEditor = ({ user, onReload }: Props) => {
   //   username: string;
   // }) => {
   //   setUnlocked(undefined);
-  //   const updatedFields = [] as Array<[keyof typeof schema.fields, string | undefined]>;
-  //   (Object.keys(formData) as Array<keyof typeof schema.fields>).forEach((form) => {
+  //   const updatedFields = [] as Array<[keyof SchemaType, string | undefined]>;
+  //   (Object.keys(formData) as Array<keyof SchemaType>).forEach((form) => {
   //     if (formData[form] === user[form]) return;
   //     switch (form) {
   //       case 'about_me':
@@ -153,7 +173,7 @@ const ProfileEditor = ({ user, onReload }: Props) => {
 
   // const closeDialog = () => {
   //   setDialog(false);
-  //   (['realname', 'email', 'username'] as Array<keyof typeof schema.fields>).forEach((field) => {
+  //   (['realname', 'email', 'username'] as Array<keyof SchemaType>).forEach((field) => {
   //     setValue(field, user[field]);
   //   });
   // };
@@ -172,25 +192,85 @@ const ProfileEditor = ({ user, onReload }: Props) => {
   //   setValue('displayname', user.displayname);
   // }, [user]);
 
+  const onSubmit = (data: SchemaType) => {
+    if (!user) return;
+    let updates = 0;
+    userFields.slice(0, -2).map((field) => {
+      if (data[field] === user[field]) return;
+      setUpdateRequests((prev) => [...prev, { field: field, value: data[field] }]);
+      updates++;
+    });
+    if (updates > 0) return;
+    updateProfile(data);
+  };
+
+  const updateProfile = async (data: SchemaType) => {
+    await editSelf(data).then((response) => {
+      console.log(response);
+      !response.error
+        ? dispatch({
+            type: 'ADD_POPUP',
+            message: {
+              message: t('settings.messages.updated', { var: t('ui.navigation.profile') }),
+              type: 'success',
+            },
+          })
+        : dispatch({
+            type: 'ADD_POPUP',
+            message: {
+              message: t('settings.messages.notUpdated', { var: t('ui.navigation.profile') }),
+              type: 'error',
+            },
+          });
+    });
+  };
+
+  const resetFields = () => {
+    if (!user) return;
+    userFields.map((field) => setValue(field, user[field]));
+  };
+
+  const closeDialog = () => setUpdateRequests([]);
+
+  useEffect(() => {
+    resetFields();
+  }, [user]);
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
   return (
-    <FormContainer>
-      <Stack direction="row" flexWrap="wrap" p={2} gap={2}>
-        <UserAvatar id={user.hash_id} size={180} sx={{ mx: 'auto' }} />
-        <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
-          {['realname', 'username', 'email', 'displayname'].map((field) => (
-            <TextField
-              fullWidth
-              key={field}
-              label={t(`settings.columns.${field}`)}
-              name={field}
-              size="small"
-              {...register}
-            />
-          ))}
-        </Stack>
-        <MarkdownEditor name="about_me" control={control} sx={{ flex: 2, minWidth: `min(300px, 100%)` }} />
-      </Stack>
-      {/* 
+    <>
+      {isLoading && <ProfileEditorSkeleton />}
+      {error && <Typography>{t(error)}</Typography>}
+      {user && !isLoading && (
+        <FormContainer>
+          <Stack direction="row" flexWrap="wrap" py={2} gap={2}>
+            <UserAvatar id={user.hash_id} size={180} sx={{ mx: 'auto' }} />
+            <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
+              <Controller
+                name="displayname"
+                control={control}
+                render={({ field }) => (
+                  <TextField fullWidth label={t(`settings.columns.displayname`)} size="small" {...field} />
+                )}
+              />
+              {userFields.slice(0, -2).map((name, i) => (
+                <RestrictedField key={i} name={name} control={control} />
+              ))}
+            </Stack>
+            <MarkdownEditor name="about_me" control={control} sx={{ flex: 2, minWidth: `min(300px, 100%)` }} />
+          </Stack>
+          <Stack direction="row" justifyContent="end" gap={2}>
+            <Button color="error" onClick={resetFields}>
+              {t('actions.cancel')}
+            </Button>
+            <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+              {t('actions.save')}
+            </Button>
+          </Stack>
+          {/*
         <IconButton onClick={toggleDrawer} sx={{ position: 'relative' }}>
           <Stack
             color="white"
@@ -268,30 +348,45 @@ const ProfileEditor = ({ user, onReload }: Props) => {
           id={user.id}
         />
       )}
-      <Dialog
-        open={openDialog}
-        onClose={closeDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title" color="error" sx={{ display: 'flex', alignItems: 'center' }}>
-          <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('requests.updateData.headline')}
-        </DialogTitle>
-        <DialogContent sx={{ overflowY: 'auto' }}>
-          <DialogContentText id="alert-dialog-description">
-            {t('requests.updateData.confirm', { var: String(updates.map((update) => ` ${update[0]}`)) })}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialog} color="secondary" autoFocus>
-            {t('actions.cancel')}
-          </Button>
-          <Button onClick={requestUpdates} color="error" variant="contained">
-            {t('actions.confirm')}
-          </Button>
-        </DialogActions>
-      </Dialog> */}
-    </FormContainer>
+      */}
+          <Dialog
+            open={updateRequests.length > 0}
+            onClose={closeDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title" color="error" sx={{ display: 'flex', alignItems: 'center' }}>
+              <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('requests.updateData.headline')}
+            </DialogTitle>
+            <DialogContent sx={{ overflowY: 'auto' }}>
+              <DialogContentText id="alert-dialog-description">
+                {t('requests.updateData.confirm')}
+                <Stack my={1}>
+                  {updateRequests.map((update) => (
+                    <Stack direction="row">
+                      <b>{t(`settings.columns.${update.field}`)}</b>
+                      <Typography mx={1}>{t('ui.common.from')}</Typography>
+                      <b>{user[update.field]}</b>
+                      <Typography mx={1}>{t('ui.common.to')}</Typography>
+                      <b>{update.value}</b>
+                    </Stack>
+                  ))}
+                </Stack>
+                {t('requests.updateData.validation')}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={closeDialog} color="secondary" autoFocus>
+                {t('actions.cancel')}
+              </Button>
+              <Button onClick={() => {}} color="error" variant="contained">
+                {t('actions.confirm')}
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </FormContainer>
+      )}
+    </>
   );
 };
 
