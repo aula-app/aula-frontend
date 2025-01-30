@@ -31,6 +31,7 @@ export interface IdeaFormData {
 const WildIdeas = () => {
   const { t } = useTranslation();
   const { room_id } = useParams<RouteParams>();
+
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);

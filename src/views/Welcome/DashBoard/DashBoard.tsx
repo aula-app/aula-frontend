@@ -27,7 +27,7 @@ const DashBoard = ({ show = true }) => {
   };
   const fetchUpdates = async () => {
     const response = await getUpdates();
-    if (!response.error && response.count) setLikes(response.count);
+    if (!response.error && typeof response.count === 'number') setLikes(response.count);
   };
   const fetchMessages = async () => {
     const response = await getMessages();
