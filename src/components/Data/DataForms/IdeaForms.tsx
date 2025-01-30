@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { MarkdownEditor } from '../DataFields';
+import { MarkdownEditor, StatusField } from '../DataFields';
 import { IdeaFormData } from '@/views/WildIdeas/WildIdeasView';
 import { checkPermissions } from '@/utils';
 import AdvancedFields from '../DataFields/AdvancedFields';
@@ -45,32 +45,41 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose, onSubmit 
   }, [JSON.stringify(defaultValues)]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <Stack gap={2}>
+    <Stack p={2} overflow="auto" gap={2}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
-          {/* title */}
-          <TextField
-            {...register('title')}
-            label={t('settings.columns.title')}
-            error={!!errors.title}
-            helperText={errors.title?.message}
-            fullWidth
-            required
-          />
-          {/* content */}
-          <MarkdownEditor name="content" control={control} required />
-          {checkPermissions(40) && <AdvancedFields control={control} />}
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="h4">
+              {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
+                var: t(`scopes.ideas.name`).toLowerCase(),
+              })}
+            </Typography>
+            {checkPermissions(40) && <StatusField control={control} />}
+          </Stack>
+          <Stack gap={2}>
+            {/* title */}
+            <TextField
+              {...register('title')}
+              label={t('settings.columns.title')}
+              error={!!errors.title}
+              helperText={errors.title?.message}
+              fullWidth
+              required
+            />
+            {/* content */}
+            <MarkdownEditor name="content" control={control} required />
+          </Stack>
+          <Stack direction="row" justifyContent="end" gap={2}>
+            <Button onClick={onClose} color="error">
+              {t('actions.cancel')}
+            </Button>
+            <Button type="submit" variant="contained">
+              {t('actions.confirm')}
+            </Button>
+          </Stack>
         </Stack>
-        <Stack direction="row" justifyContent="end" gap={2}>
-          <Button onClick={onClose} color="error">
-            {t('actions.cancel')}
-          </Button>
-          <Button type="submit" variant="contained">
-            {t('actions.confirm')}
-          </Button>
-        </Stack>
-      </Stack>
-    </form>
+      </form>
+    </Stack>
   );
 };
 

@@ -120,20 +120,11 @@ const WildIdeas = () => {
             <AppIcon icon="idea" />
           </Fab>
           <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-            <Stack p={2} overflow="auto" gap={2}>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="h4">
-                  {t(`actions.${typeof edit !== 'boolean' ? 'edit' : 'add'}`, {
-                    var: t(`scopes.ideas.name`).toLowerCase(),
-                  })}
-                </Typography>
-              </Stack>
-              <IdeaForms
-                onClose={onClose}
-                onSubmit={onSubmit}
-                defaultValues={typeof edit !== 'boolean' ? edit : undefined}
-              />
-            </Stack>
+            <IdeaForms
+              onClose={onClose}
+              onSubmit={onSubmit}
+              defaultValues={typeof edit !== 'boolean' ? edit : undefined}
+            />
           </Drawer>
         </>
       )}
