@@ -1,10 +1,11 @@
+import { PossibleFields } from '@/types/Scopes';
 import { SelectOptionsType } from '@/utils/Data/formDefaults';
 import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-  name: string;
+  name: keyof PossibleFields;
   options: SelectOptionsType[];
   control: Control<any, any>;
   disabled?: boolean;

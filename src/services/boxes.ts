@@ -1,4 +1,5 @@
 import { DelegationType } from '@/types/Delegation';
+import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { databaseRequest, GenericResponse } from '@/utils';
@@ -63,6 +64,7 @@ interface BoxArguments {
   phase_duration_2?: number;
   phase_duration_3?: number;
   phase_duration_4?: number;
+  status?: StatusTypes;
 }
 
 interface AddBoxArguments extends BoxArguments {

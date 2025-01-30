@@ -1,13 +1,9 @@
 import AppIcon from '@/components/AppIcon';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import SelectField from './SelectField';
-import { Control } from 'react-hook-form';
-import { STATUS } from '@/utils/Data/formDefaults';
 
 interface Props {
-  control: Control<any, any>;
   children?: React.ReactNode;
 }
 
@@ -15,7 +11,7 @@ interface Props {
  * Renders "AdvancedFields" component
  */
 
-const AdvancedFields: React.FC<Props> = ({ children, control, ...restOfProps }) => {
+const AdvancedFields: React.FC<Props> = ({ children, ...restOfProps }) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => {
@@ -25,7 +21,11 @@ const AdvancedFields: React.FC<Props> = ({ children, control, ...restOfProps }) 
   return (
     <Accordion expanded={expanded} onChange={toggleExpanded}>
       <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>{t('settings.advanced.headline')}</AccordionSummary>
-      <AccordionDetails>{children}</AccordionDetails>
+      <AccordionDetails>
+        <Stack direction="row" flexWrap="wrap" gap={2}>
+          {children}
+        </Stack>
+      </AccordionDetails>
     </Accordion>
   );
 };

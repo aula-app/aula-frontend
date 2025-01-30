@@ -3,6 +3,7 @@ import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import BoxForms from '@/components/Data/DataForms/BoxForms';
 import { addBox, deleteBox, editBox, getBoxesByPhase } from '@/services/boxes';
+import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
@@ -15,7 +16,7 @@ import { useParams } from 'react-router-dom';
 export interface BoxFormData {
   name: string;
   description_public: string;
-  topic_id: string;
+  status?: StatusTypes;
 }
 
 /** * Renders "IdeaBoxes" view
@@ -28,7 +29,7 @@ const BoxPhaseView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
-  const [edit, setEdit] = useState<BoxFormData | true>(); // undefined = update dialog closed; true = new idea; EditFormData = edit idea;
+  const [edit, setEdit] = useState<BoxType | true>(); // undefined = update dialog closed; true = new idea; EditFormData = edit idea;
 
   const fetchBoxes = useCallback(async () => {
     if (!room_id || !phase) return;
@@ -44,11 +45,7 @@ const BoxPhaseView = () => {
   }, [phase]);
 
   const boxEdit = (box: BoxType) => {
-    setEdit({
-      name: box.name,
-      description_public: box.description_public,
-      topic_id: box.hash_id,
-    });
+    setEdit(box);
   };
 
   const boxSubmit = (data: BoxFormData) => {
@@ -61,14 +58,21 @@ const BoxPhaseView = () => {
     const request = await addBox({
       room_id: room_id,
       phase_id: Number(phase) as RoomPhases,
-      ...data,
+      name: data.name,
+      description_public: data.description_public,
+      status: data.status,
     });
     if (!request.error) onClose();
   };
 
   const updateBox = async (data: BoxFormData) => {
-    if (!(typeof edit === 'object') || !edit.topic_id) return;
-    const request = await editBox(data);
+    if (!(typeof edit === 'object') || !edit.hash_id) return;
+    const request = await editBox({
+      topic_id: edit.hash_id,
+      name: data.name,
+      description_public: data.description_public,
+      status: data.status,
+    });
     if (!request.error) onClose();
   };
 
