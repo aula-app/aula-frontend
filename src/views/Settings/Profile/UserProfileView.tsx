@@ -1,29 +1,7 @@
-import { AppIcon } from '@/components';
-import ChangePassword from '@/components/ChangePassword';
-import { ChangePasswordMethods } from '@/components/ChangePassword/ChangePassword';
-import { useAppStore } from '@/store';
-import { PassResponse } from '@/types/Generics';
-import { RequestBodyType, UserType } from '@/types/Scopes';
-import { databaseRequest, localStorageGet } from '@/utils';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Typography,
-} from '@mui/material';
-import { red } from '@mui/material/colors';
+import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProfileEditor from './ProfileEditor';
-import ProfileEditorSkeleton from './ProfileEditor/ProfileEditorSkeleton';
-import { getSelf } from '@/services/users';
 
 /** * Renders "User" view
  * url: /settings/user
@@ -31,21 +9,9 @@ import { getSelf } from '@/services/users';
 const UserView = () => {
   const { t } = useTranslation();
 
-  const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<UserType>();
-
   // const [openDelete, setOpenDelete] = useState(false);
   // const [, dispatch] = useAppStore();
   // const passFields = useRef<ChangePasswordMethods>(null);
-
-  const fetchProfile = useCallback(async () => {
-    setLoading(true);
-    const response = await getSelf();
-    if (response.error) setError(response.error);
-    if (!response.error && response.data) setUser(response.data);
-    setLoading(false);
-  }, []);
 
   // const changePass = (formData: PassResponse) => {
   //   if (!formData.oldPassword) return;
@@ -113,16 +79,13 @@ const UserView = () => {
   //   );
   // };
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
       <Typography variant="h4">{t('ui.navigation.profile')}</Typography>
-      {isLoading && <ProfileEditorSkeleton />}
-      {error && <Typography>{t(error)}</Typography>}
-      {user && !isLoading && <ProfileEditor user={user} onReload={fetchProfile} />}
+      <ProfileEditor />
+      <Typography variant="h4" mt={4}>
+        {t('ui.navigation.security')}
+      </Typography>
       {/* <Accordion>
         <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />} aria-controls="panel2-content" id="panel2-header">
           <Typography variant="h6">{t('ui.navigation.security')}</Typography>

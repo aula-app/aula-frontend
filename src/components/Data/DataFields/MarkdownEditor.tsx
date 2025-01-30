@@ -67,8 +67,7 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
       render={({ field, fieldState }) => {
         useEffect(() => {
           if (field.value) mdxEditorRef.current?.setMarkdown(field.value);
-        }, [JSON.stringify(control._defaultValues)]);
-
+        }, [JSON.stringify(control._defaultValues), field.value]);
         return (
           <FormControl fullWidth {...restOfProps}>
             <FormLabel
