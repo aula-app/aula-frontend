@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { MarkdownEditor, SelectField, SelectRoomField, StatusField } from '../DataFields';
+import { MarkdownEditor, PhaseDurationFields, SelectField, SelectRoomField, StatusField } from '../DataFields';
 import { BoxType } from '@/types/Scopes';
 import { checkPermissions, phaseOptions } from '@/utils';
 import AdvancedFields from '../DataFields/AdvancedFields';
@@ -22,12 +22,19 @@ interface BoxFormsProps {
   onSubmit: (data: BoxFormData) => void;
 }
 
-const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues = {}, onClose, onSubmit }) => {
+const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit }) => {
   const { t } = useTranslation();
 
   const schema = yup.object({
     name: yup.string().required(t('forms.validation.required')),
     description_public: yup.string().required(t('forms.validation.required')),
+    status: yup.number(),
+    room_id: yup.string(),
+    phase_id: yup.string(),
+    phase_duration_1: yup.number(),
+    phase_duration_2: yup.number(),
+    phase_duration_3: yup.number(),
+    phase_duration_4: yup.number(),
   });
 
   const {
@@ -72,6 +79,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues = {}, onClose, onSubm
               <AdvancedFields>
                 <SelectRoomField control={control} />
                 <SelectField control={control} name="phase_id" options={phaseOptions} defaultValue={10} />
+                <PhaseDurationFields control={control} />
               </AdvancedFields>
             )}
           </Stack>

@@ -17,6 +17,12 @@ export interface BoxFormData {
   name: string;
   description_public: string;
   status?: StatusTypes;
+  room_id?: string;
+  phase_id?: string;
+  phase_duration_1?: number;
+  phase_duration_2?: number;
+  phase_duration_3?: number;
+  phase_duration_4?: number;
 }
 
 /** * Renders "IdeaBoxes" view
