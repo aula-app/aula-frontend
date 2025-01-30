@@ -9,12 +9,13 @@ import {
   toolbarPlugin,
   UndoRedo,
 } from '@mdxeditor/editor';
-import { FormControl, FormHelperText, Stack, styled } from '@mui/material';
+import { BorderBottom } from '@mui/icons-material';
+import { FormControl, FormControlProps, FormHelperText, FormLabel, Stack, styled, useTheme } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-interface Props {
+interface Props extends FormControlProps {
   name: string;
   control: Control<any, any>;
   required?: boolean;
@@ -54,8 +55,9 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
   },
 }));
 
-const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disabled = false }) => {
+const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
+  const theme = useTheme();
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
 
   return (
@@ -68,15 +70,33 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
         }, [JSON.stringify(control._defaultValues)]);
 
         return (
-          <FormControl fullWidth>
+          <FormControl fullWidth {...restOfProps}>
+            <FormLabel
+              sx={{
+                position: 'absolute',
+                fontSize: '1rem',
+                zIndex: 999,
+                transform: 'translate(0, -.7rem) scale(0.75)',
+                transformOrigin: 'top left',
+                color: 'rgba(0, 0, 0, 0.6)',
+                top: 0,
+                left: 10,
+                backgroundColor: theme.palette.background.default,
+                px: 1,
+              }}
+            >
+              {t(`settings.columns.${name}`)}
+            </FormLabel>
             <Editor
               className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}
               markdown={''}
               toMarkdownOptions={{}}
+              sx={{ height: '100%' }}
               plugins={[
                 headingsPlugin(),
                 listsPlugin(),
                 toolbarPlugin({
+                  toolbarClassName: 'editor-toolbar',
                   toolbarContents: () => (
                     <Stack direction="row" justifyContent="space-between" width="100%">
                       <Stack direction="row">

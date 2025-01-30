@@ -1,9 +1,9 @@
 import { getAvatar } from '@/services/media';
-import { Avatar } from '@mui/material';
+import { Avatar, AvatarProps } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '../AppIcon';
 
-interface Props {
+interface Props extends AvatarProps {
   id: string;
   size?: number;
 }
@@ -12,7 +12,7 @@ interface Props {
  * Renders User info with Avatar
  * @component UserInfo
  */
-const UserAvatar = ({ id, size = 32 }: Props) => {
+const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
   const [userAvatar, setUserAvatar] = useState<string>('');
   const downloadUserAvatar = async () => {
     const response = await getAvatar(id);
@@ -26,10 +26,12 @@ const UserAvatar = ({ id, size = 32 }: Props) => {
 
   return (
     <Avatar
+      {...restOfProps}
       sx={{
         width: size,
         height: size,
         fontSize: '3rem',
+        ...sx,
       }}
       alt="User avatar"
       src={`/files/${userAvatar}` || ''}

@@ -16,9 +16,9 @@ import RoomView from '@/views/Room';
 import RoomPhaseView from '@/views/Room/RoomPhaseView';
 import SettingsView from '@/views/Settings';
 import ConfigView from '@/views/Settings/Config';
+import { UserProfileView } from '@/views/Settings/Profile';
 import ReportsView from '@/views/Settings/Reports';
 import RequestsView from '@/views/Settings/Requests';
-import UserView from '@/views/Settings/User';
 import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';
 import { useEffect } from 'react';
@@ -61,7 +61,7 @@ const PrivateRoutes = () => {
         <Route path="idea-box/:box_id" element={<IdeasBoxView />} />
         <Route path="idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
       </Route>
-      <Route path="settings/profile" element={<UserView />} />
+      <Route path="settings/profile" element={<UserProfileView />} />
       <Route path="settings/reports" element={checkPermissions(50) ? <ReportsView /> : <Navigate to="/" />} />
       <Route path="settings/requests" element={checkPermissions(50) ? <RequestsView /> : <Navigate to="/" />} />
       <Route path="settings/configuration" element={checkPermissions(50) ? <ConfigView /> : <Navigate to="/" />} />
