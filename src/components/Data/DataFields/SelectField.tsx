@@ -1,13 +1,13 @@
 import { SelectOptionsType } from '@/utils/Data/formDefaults';
 import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
-import { SelectInputProps } from '@mui/material/Select/SelectInput';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
-interface Props extends SelectInputProps {
-  label: string;
+interface Props {
+  name: string;
   options: SelectOptionsType[];
   control: Control<any, any>;
+  disabled?: boolean;
   defaultValue?: string | number;
   onChange?: (...event: any[]) => void;
 }
@@ -16,18 +16,18 @@ interface Props extends SelectInputProps {
  * Renders "SelectInput" component
  */
 
-const SelectField = ({ label, options, control, defaultValue, disabled = false, ...restOfProps }: Props) => {
+const SelectField: React.FC<Props> = ({ name, options, control, defaultValue, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
 
   return (
     <Controller
-      name={label}
+      name={name}
       control={control}
-      defaultValue={defaultValue}
+      defaultValue={control._defaultValues[name] || defaultValue}
       render={({ field, fieldState }) => (
-        <FormControl fullWidth>
+        <FormControl>
           <TextField
-            label={t(`settings.columns.${label}`)}
+            label={t(`settings.columns.${name}`)}
             required
             fullWidth
             disabled={disabled}

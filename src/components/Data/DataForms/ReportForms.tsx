@@ -51,7 +51,7 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
       <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.reports.name`).toLowerCase() })}</Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack>
-          <SelectField label="report" options={ReportOptions} control={control} />
+          <SelectField name="report" options={ReportOptions} control={control} />
           {/* content */}
           <MarkdownEditor name="content" control={control} />
         </Stack>
