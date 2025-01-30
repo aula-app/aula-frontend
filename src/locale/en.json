@@ -263,6 +263,7 @@
       "deleteRequest": "Data deletion requested"
     },
     "advanced": {
+      "headline": "Advanced options",
       "oauth": "Enable OAuth",
       "offline": "Offline Mode",
       "registration": "Allow Registration",

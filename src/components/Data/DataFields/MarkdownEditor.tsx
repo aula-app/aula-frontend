@@ -92,7 +92,9 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
               {...field}
               ref={mdxEditorRef}
             />
-            <FormHelperText error={!!fieldState.error}>{t(fieldState.error?.message || ' ')}</FormHelperText>
+            {!!fieldState.error && (
+              <FormHelperText error={!!fieldState.error}>{t(fieldState.error?.message || ' ')}</FormHelperText>
+            )}
           </FormControl>
         );
       }}

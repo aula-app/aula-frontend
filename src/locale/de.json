@@ -263,6 +263,7 @@
       "deleteRequest": "Datenlöschung angefordert"
     },
     "advanced": {
+      "headline": "Erweiterte Optionen",
       "oauth": "OAuth aktivieren",
       "offline": "Offline-Modus",
       "registration": "Registrierung erlauben",

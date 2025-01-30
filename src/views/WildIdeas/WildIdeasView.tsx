@@ -3,6 +3,7 @@ import { IdeaForms } from '@/components/Data/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { addIdea, deleteIdea, editIdea, getIdeasByRoom } from '@/services/ideas';
+import { StatusTypes } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
@@ -17,7 +18,7 @@ interface RouteParams extends Record<string, string | undefined> {
 export interface IdeaFormData {
   title: string;
   content: string;
-  idea_id?: string;
+  status?: StatusTypes;
 }
 
 /**
@@ -57,27 +58,27 @@ const WildIdeas = () => {
     if (!room_id) return;
     const request = await addIdea({
       room_id: room_id,
-      ...data,
+      title: data.title,
+      content: data.content,
+      status: data.status,
     });
     if (!request.error) onClose();
   };
 
   const updateIdea = async (data: IdeaFormData) => {
-    if (typeof edit === 'object' && edit.idea_id) {
+    if (typeof edit === 'object' && edit.hash_id) {
       const request = await editIdea({
-        idea_id: edit.idea_id,
-        ...data,
+        idea_id: edit.hash_id,
+        title: data.title,
+        content: data.content,
+        status: data.status,
       });
       if (!request.error) onClose();
     }
   };
 
   const onEdit = (idea: IdeaType) => {
-    setEdit({
-      title: idea.title,
-      content: idea.content,
-      idea_id: idea.hash_id,
-    });
+    setEdit(idea);
   };
 
   const onDelete = async (id: string) => {
@@ -119,11 +120,20 @@ const WildIdeas = () => {
             <AppIcon icon="idea" />
           </Fab>
           <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-            <IdeaForms
-              onClose={onClose}
-              onSubmit={onSubmit}
-              defaultValues={typeof edit !== 'boolean' ? edit : undefined}
-            />
+            <Stack p={2} overflow="auto" gap={2}>
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="h4">
+                  {t(`actions.${typeof edit !== 'boolean' ? 'edit' : 'add'}`, {
+                    var: t(`scopes.ideas.name`).toLowerCase(),
+                  })}
+                </Typography>
+              </Stack>
+              <IdeaForms
+                onClose={onClose}
+                onSubmit={onSubmit}
+                defaultValues={typeof edit !== 'boolean' ? edit : undefined}
+              />
+            </Stack>
           </Drawer>
         </>
       )}

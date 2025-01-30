@@ -1,7 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import { getCategories } from '@/services/categories';
 import { CategoryType, IdeaType } from '@/types/Scopes';
-import { Chip, Stack } from '@mui/material';
+import { Chip } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 interface Props {
