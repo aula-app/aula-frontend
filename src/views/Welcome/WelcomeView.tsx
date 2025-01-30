@@ -20,14 +20,14 @@ const WelcomeView = () => {
     setShowDashboard(scrollTop < 100);
   };
 
-  useEffect(() => {
-    const fetchRooms = async () => {
-      const response = await getRooms();
-      setLoading(false);
-      if (response.error) setError(response.error);
-      if (!response.error && response.data) setRooms(response.data);
-    };
+  const fetchRooms = async () => {
+    const response = await getRooms();
+    setLoading(false);
+    if (response.error) setError(response.error);
+    if (!response.error && response.data) setRooms(response.data);
+  };
 
+  useEffect(() => {
     fetchRooms();
   }, []);
 

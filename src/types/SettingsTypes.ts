@@ -5,6 +5,8 @@ export type RoomPhases = 0 | 10 | 20 | 30 | 40;
 export type PhaseType = 'wild' | 'discussion' | 'approval' | 'voting' | 'results';
 export type RoleTypes = 10 | 20 | 30 | 40 | 50 | 60;
 
+export type ScopeNameType = 'idea' | 'room' | 'user';
+
 export type SettingNamesType =
   | 'announcements'
   | 'bugs'
@@ -63,3 +65,8 @@ export interface CustomFieldsNameType {
   custom_field1_name: string | null;
   custom_field2_name: string | null;
 }
+
+export type SelectOptionsType = Array<{
+  label: string;
+  value: string | number;
+}>;

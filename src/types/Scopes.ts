@@ -132,7 +132,7 @@ export interface RoomType {
   restrict_to_roomusers_only: number;
   room_name: string;
   status: number;
-  updater_id: number;
+  updater_id: string;
   type: 0 | 1;
 }
 
