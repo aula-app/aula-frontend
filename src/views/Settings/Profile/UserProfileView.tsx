@@ -120,7 +120,7 @@ const UserView = () => {
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
       <Typography variant="h4">{t('ui.navigation.profile')}</Typography>
-      <ProfileEditorSkeleton />
+      {isLoading && <ProfileEditorSkeleton />}
       {error && <Typography>{t(error)}</Typography>}
       {user && !isLoading && <ProfileEditor user={user} onReload={fetchProfile} />}
       {/* <Accordion>
