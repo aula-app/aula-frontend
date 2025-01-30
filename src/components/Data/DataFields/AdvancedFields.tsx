@@ -22,7 +22,7 @@ const AdvancedFields: React.FC<Props> = ({ children, ...restOfProps }) => {
     <Accordion expanded={expanded} onChange={toggleExpanded}>
       <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>{t('settings.advanced.headline')}</AccordionSummary>
       <AccordionDetails>
-        <Stack direction="row" flexWrap="wrap" gap={2}>
+        <Stack direction="row" flexWrap="wrap" alignItems="center" gap={2}>
           {children}
         </Stack>
       </AccordionDetails>

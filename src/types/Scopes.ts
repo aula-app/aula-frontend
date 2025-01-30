@@ -130,6 +130,11 @@ export interface RoomType {
   last_update: string;
   order_importance: number;
   restrict_to_roomusers_only: number;
+  phase_duration_0: number;
+  phase_duration_1: number;
+  phase_duration_2: number;
+  phase_duration_3: number;
+  phase_duration_4: number;
   room_name: string;
   status: number;
   updater_id: string;

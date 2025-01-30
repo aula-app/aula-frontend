@@ -65,7 +65,10 @@ const error = new CustomEvent('AppErrorDialog', { detail: 'texts.error' });
  *   - The response indicates failure (success: false)
  */
 
-export const databaseRequest = async (requestData: RequestObject, userId = [] as string[]): Promise<GetResponse> => {
+export const databaseRequest = async (
+  requestData: RequestObject,
+  userId = [] as string[]
+): Promise<GenericResponse> => {
   const api_url = localStorageGet('api_url');
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);

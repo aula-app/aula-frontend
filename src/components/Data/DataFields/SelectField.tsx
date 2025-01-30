@@ -26,11 +26,10 @@ const SelectField: React.FC<Props> = ({ name, options, control, defaultValue, di
       control={control}
       defaultValue={control._defaultValues[name] || defaultValue}
       render={({ field, fieldState }) => (
-        <FormControl>
+        <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)' }}>
           <TextField
             label={t(`settings.columns.${name}`)}
             required
-            fullWidth
             disabled={disabled}
             select
             {...field}
