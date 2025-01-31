@@ -12,6 +12,28 @@ interface MessageArguments {
 }
 
 /**
+ * Create a message messages on the database.
+ */
+
+interface AddMessageArguments extends MessageArguments {
+  msg_type: 0 | 1 | 2 | 3 | 4 | 5; // 1=system message, 2= message from admin, 3=message from user, 4=report, 5= requests
+  target_id?: string;
+}
+
+export const addMessage = async (args: AddMessageArguments): Promise<GenericResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: 'addMessage',
+      arguments: { ...args },
+    },
+    ['creator_id', 'updater_id']
+  );
+
+  return response as GenericResponse;
+};
+
+/**
  * Get a list of messages from the database.
  */
 
