@@ -153,7 +153,8 @@
     "label": "Anfragen",
     "changeName": {
       "title": "Datenänderungsanfrage für {{var}}",
-      "body": "Eine Datenänderungsprozedur wurde für den Benutzer {{var}} angefordert. Sie möchten ihren {{old}} in {{new}} ändern"
+      "body": "Eine Datenänderungsprozedur wurde für den Benutzer {{var}} angefordert. Sie möchten ihren {{old}} in {{new}} ändern",
+      "request": "Datenänderungsprozedur angefordert. Bitte warten Sie auf die Genehmigung."
     },
     "deleteAccount": {
       "button": "Konto löschen",

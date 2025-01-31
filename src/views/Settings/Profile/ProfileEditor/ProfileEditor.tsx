@@ -20,9 +20,11 @@ import { Controller, FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import ProfileEditorSkeleton from './ProfileEditorSkeleton';
-import { AppIcon, AppIconButton } from '@/components';
+import { AppIcon } from '@/components';
 import RestrictedField from './RestrictedField';
 import { useAppStore } from '@/store';
+import { addMessage } from '@/services/messages';
+import { errorAlert, successAlert } from '@/utils';
 
 /** * Renders "SystemSettings" component
  */
@@ -35,16 +37,7 @@ const ProfileEditor: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<UserType>();
 
-  const [updateRequests, setUpdateRequests] = useState<Array<{ field: keyof SchemaType; value: string | undefined }>>(
-    []
-  );
-
-  // const [, dispatch] = useAppStore();
-  // const [updates, setUpdates] = useState<Array<[keyof SchemaType, string | undefined]>>([]);
-  // const [isEditingImage, setEditingImage] = useState(false);
-  // const [updateAvatar, setUpdateAvatar] = useState(false);
-  // const [openDialog, setDialog] = useState(false);
-  // const [unlocked, setUnlocked] = useState<'realname' | 'email' | 'username'>();
+  const [updateRequests, setUpdateRequests] = useState<Array<fieldOptions>>([]);
 
   const schema = yup.object({
     realname: yup
@@ -67,13 +60,9 @@ const ProfileEditor: React.FC = () => {
 
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
+  type fieldOptions = { field: keyof SchemaType; value: string | undefined };
 
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: user,
     resolver: yupResolver(schema),
   });
@@ -88,109 +77,32 @@ const ProfileEditor: React.FC = () => {
     setLoading(false);
   }, []);
 
-  // const requestUpdates = () => {
-  //   updates.forEach((update) => {
-  //     sendMessage(update);
-  //   });
-  //   dispatch({
-  //     type: 'ADD_POPUP',
-  //     message: {
-  //       message: t('settings.messages.updated', { var: String(updates.map((update) => ` ${update[0]}`)) }),
-  //       type: 'success',
-  //     },
-  //   });
-  //   closeDialog();
-  // };
+  const approveUpdates = () => {
+    updateRequests.map((update) => sendMessage(update));
+  };
 
-  // const sendMessage = async (field: [keyof SchemaType, string | undefined]) => {
-  //   if (!field[0] || !field[1]) return;
-  //   await databaseRequest(
-  //     {
-  //       model: 'Message',
-  //       method: 'addMessage',
-  //       arguments: {
-  //         headline: `${user.realname}`,
-  //         body: JSON.stringify({
-  //           content: '',
-  //           data: { type: 'changeName', id: user.id, property: field[0], from: String(user[field[0]]), to: field[1] },
-  //         }),
-  //         msg_type: 5,
-  //       },
-  //     },
-  //     ['creator_id', 'updater_id']
-  //   ).then((response) => {
-  //     if (!response.success) return;
-  //     onReload();
-  //   });
-  // };
-
-  // const setUserInfo = async (method: string, args: ObjectPropByName) => {
-  //   databaseRequest(
-  //     {
-  //       model: 'User',
-  //       method: method,
-  //       arguments: args,
-  //     },
-  //     ['user_id', 'updater_id']
-  //   ).then((response) => {
-  //     if (response.success)
-  //       dispatch({
-  //         type: 'ADD_POPUP',
-  //         message: {
-  //           message: t('requests.updateData.title', { var: t(`settings.${Object.keys(args)[0]}`) }),
-  //           type: 'success',
-  //         },
-  //       });
-  //     onReload();
-  //   });
-  // };
-
-  // const onSubmit = (formData: {
-  //   about_me?: string | undefined;
-  //   displayname?: string | undefined;
-  //   email?: string;
-  //   realname: string;
-  //   username: string;
-  // }) => {
-  //   setUnlocked(undefined);
-  //   const updatedFields = [] as Array<[keyof SchemaType, string | undefined]>;
-  //   (Object.keys(formData) as Array<keyof SchemaType>).forEach((form) => {
-  //     if (formData[form] === user[form]) return;
-  //     switch (form) {
-  //       case 'about_me':
-  //         setUserInfo('setUserAbout', { [form]: formData[form] });
-  //         break;
-  //       case 'displayname':
-  //         setUserInfo('setUserDisplayname', { [form]: formData[form] });
-  //         break;
-  //       default:
-  //         updatedFields.push([form, formData[form]]);
-  //         break;
-  //     }
-  //     if (updatedFields.length > 0) setUpdates(updatedFields);
-  //   });
-  // };
-
-  // const closeDialog = () => {
-  //   setDialog(false);
-  //   (['realname', 'email', 'username'] as Array<keyof SchemaType>).forEach((field) => {
-  //     setValue(field, user[field]);
-  //   });
-  // };
-
-  // const toggleDrawer = () => {
-  //   setUpdateAvatar(!updateAvatar);
-  //   setEditingImage(!isEditingImage);
-  // };
-
-  // useEffect(() => {
-  //   if (updates.length > 0) setDialog(true);
-  // }, [updates.length]);
-
-  // useEffect(() => {
-  //   setValue('about_me', user.about_me);
-  //   setValue('displayname', user.displayname);
-  // }, [user]);
+  const sendMessage = async (field: fieldOptions) => {
+    if (!user) return;
+    await addMessage({
+      headline: `${t('requests.changeName.title', { var: user.realname })}: ${field.field}`,
+      body: `
+          ---
+          type: changeName
+          id: ${user.hash_id}
+          property: ${field.field}
+          value: ${field.value}
+          ---
+          ${t('requests.changeName.body', { var: user.realname, old: user[field.field], new: field.value })}`,
+      msg_type: 5,
+    }).then((response) => {
+      if (response.error) {
+        errorAlert(t(response.error), dispatch);
+        return;
+      }
+      successAlert(t('requests.changeName.request'), dispatch);
+      resetFields();
+    });
+  };
 
   const onSubmit = (data: SchemaType) => {
     if (!user) return;
@@ -208,20 +120,8 @@ const ProfileEditor: React.FC = () => {
     await editSelf(data).then((response) => {
       console.log(response);
       !response.error
-        ? dispatch({
-            type: 'ADD_POPUP',
-            message: {
-              message: t('settings.messages.updated', { var: t('ui.navigation.profile') }),
-              type: 'success',
-            },
-          })
-        : dispatch({
-            type: 'ADD_POPUP',
-            message: {
-              message: t('settings.messages.notUpdated', { var: t('ui.navigation.profile') }),
-              type: 'error',
-            },
-          });
+        ? successAlert(t('settings.messages.updated', { var: t('ui.navigation.profile') }), dispatch)
+        : errorAlert(t('settings.messages.notUpdated', { var: t('ui.navigation.profile') }), dispatch);
     });
   };
 
@@ -270,85 +170,6 @@ const ProfileEditor: React.FC = () => {
               {t('actions.save')}
             </Button>
           </Stack>
-          {/*
-        <IconButton onClick={toggleDrawer} sx={{ position: 'relative' }}>
-          <Stack
-            color="white"
-            bgcolor={grey[400]}
-            p={1}
-            sx={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              aspectRatio: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 999,
-              zIndex: 999,
-            }}
-          >
-            <AppIcon icon="camera" />
-          </Stack>
-          <UserAvatar id={user.hash_id} update={updateAvatar} />
-        </IconButton>
-        <RestrictedField
-          user={user}
-          unlocked={unlocked === 'realname'}
-          setUnlocked={setUnlocked}
-          control={control}
-          option={'realname'}
-        />
-        <RestrictedField
-          user={user}
-          unlocked={unlocked === 'username'}
-          setUnlocked={setUnlocked}
-          control={control}
-          option={'username'}
-        />
-        <RestrictedField
-          user={user}
-          unlocked={unlocked === 'email'}
-          setUnlocked={setUnlocked}
-          control={control}
-          option={'email'}
-        />
-        <TextField
-          label={t('settings.columns.displayname')}
-          {...register('displayname')}
-          error={errors.displayname ? true : false}
-          helperText={errors.displayname?.message || ' '}
-          fullWidth
-          slotProps={{ inputLabel: { shrink: !!user.displayname } }}
-          onFocus={() => setUnlocked(undefined)}
-        />
-        <TextField
-          multiline
-          minRows={5}
-          label={t('settings.columns.about_me')}
-          {...register('about_me')}
-          error={errors.about_me ? true : false}
-          helperText={errors.about_me?.message || ' '}
-          onFocus={() => setUnlocked(undefined)}
-          fullWidth
-        />
-        <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(onSubmit)}>
-          {t('actions.save')}
-        </AppButton>
-      </Stack>
-      {user && (
-        <ImageEditor
-          width={250}
-          height={250}
-          rounded
-          isOpen={isEditingImage}
-          onClose={() => {
-            setUpdateAvatar(!updateAvatar);
-            toggleDrawer();
-          }}
-          id={user.id}
-        />
-      )}
-      */}
           <Dialog
             open={updateRequests.length > 0}
             onClose={closeDialog}
@@ -379,7 +200,7 @@ const ProfileEditor: React.FC = () => {
               <Button onClick={closeDialog} color="secondary" autoFocus>
                 {t('actions.cancel')}
               </Button>
-              <Button onClick={() => {}} color="error" variant="contained">
+              <Button onClick={approveUpdates} color="error" variant="contained">
                 {t('actions.confirm')}
               </Button>
             </DialogActions>
