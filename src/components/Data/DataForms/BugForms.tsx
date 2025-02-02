@@ -32,20 +32,20 @@ const BugForms: React.FC<BugFormsProps> = ({ onClose, onSubmit }) => {
   });
 
   return (
-    <Stack p={2} overflow="auto" gap={2}>
+    <Stack overflow="auto" p={2} gap={2}>
       <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.bugs.name`).toLowerCase() })}</Typography>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Stack>
+      <form noValidate>
+        <Stack gap={2}>
           {/* content */}
-          <MarkdownEditor name="description_public" control={control} required />
-        </Stack>
-        <Stack direction="row" justifyContent="end" gap={2}>
-          <Button onClick={onClose} color="error">
-            {t('actions.cancel')}
-          </Button>
-          <Button type="submit" variant="contained">
-            {t('actions.confirm')}
-          </Button>
+          <MarkdownEditor name="content" control={control} required />
+          <Stack direction="row" justifyContent="end" gap={2}>
+            <Button onClick={onClose} color="error">
+              {t('actions.cancel')}
+            </Button>
+            <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+              {t('actions.confirm')}
+            </Button>
+          </Stack>
         </Stack>
       </form>
     </Stack>

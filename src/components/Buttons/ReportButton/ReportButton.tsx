@@ -20,10 +20,10 @@ const ReportButton: React.FC<Props> = ({ target, disabled = false, ...restOfProp
 
   const onSubmit = async (data: ReportFormData) => {
     const body = `
-      ***
-      ${t(`forms.report.${data.report}`)}
-      ***
-      ${data.content || ''}
+---
+type: ${t(`forms.report.${data.report}`)}
+---
+${data.content || ''}
     `;
 
     const request = await addReport({
