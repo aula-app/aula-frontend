@@ -1,7 +1,7 @@
 import { useAppStore } from '@/store';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { handleOAuthLogin } from '@/services/oauth';
+import { handleOAuthLogin } from '@/services/auth';
 
 const OAuthLogin = () => {
   const { jwt_token } = useParams<{ jwt_token?: string }>();

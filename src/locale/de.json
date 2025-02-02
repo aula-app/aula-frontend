@@ -60,12 +60,13 @@
       "button": "OAuth-Authentifizierung"
     },
     "password": {
-      "label": "Passwort",
       "change": "Passwort ändern",
-      "confirm": "Passwort bestätigen",
+      "confirmPassword": "Neues Passwort bestätigen",
       "copied": "Passwort in die Zwischenablage kopiert",
       "current": "Aktuelles Passwort",
-      "new": "Neues Passwort",
+      "label": "Passwort",
+      "newPassword": "Neues Passwort",
+      "oldPassword": "Passwort",
       "set": "Passwort festlegen",
       "success": "Passwort erfolgreich geändert"
     },
@@ -157,12 +158,13 @@
       "request": "Datenänderungsprozedur angefordert. Bitte warten Sie auf die Genehmigung."
     },
     "deleteAccount": {
-      "button": "Konto löschen",
+      "button": "Kontolöschen anfordern",
       "confirm": "Bist du sicher, dass du dein Konto löschen möchtest? Alle deine Daten werden verloren gehen. Diese Aktion kann nicht rückgängig gemacht werden",
       "title": "Kontolöschungsanfrage für {{var}}",
       "body": "Eine Datenlöschungsprozedur wurde für den Benutzer {{var}} angefordert"
     },
     "exportData": {
+      "button": "Datenexport anfordern",
       "title": "Kontodatenexportanfrage für {{var}}",
       "body": "Eine Datenexportprozedur wurde für den Benutzer {{var}} angefordert"
     },
@@ -429,6 +431,7 @@
   "ui": {
     "common": {
       "all": "Alle",
+      "and": "und",
       "back": "Zurück",
       "from": "von",
       "next": "Weiter",

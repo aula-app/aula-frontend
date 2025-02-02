@@ -25,7 +25,7 @@ const BugForms: React.FC<BugFormsProps> = ({ onClose, onSubmit }) => {
     .object({
       content: yup.string().required(t('forms.validation.required')),
     })
-    .required();
+    .required(t('forms.validation.required'));
 
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(schema),

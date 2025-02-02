@@ -1,4 +1,5 @@
 import { LoginFormValues, LoginResponseType } from '@/types/LoginTypes';
+import { baseRequest, GenericResponse } from './requests';
 
 export const loginUser = async (
   apiUrl: string,
@@ -59,35 +60,11 @@ export const checkPasswordKey = async (
   }
 };
 
-export const setPassword = async (
-  apiUrl: string,
-  secret: string,
-  password: string,
-  token: string | null,
-  signal: AbortSignal
-): Promise<{ success: boolean }> => {
-  try {
-    const response = await fetch(`${apiUrl}/api/controllers/set_password.php`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token ? `Bearer ${token}` : '',
-      },
-      body: JSON.stringify({ secret, password }),
-      signal,
-    });
-
-    if (!response.ok) {
-      throw new Error('NetworkError');
-    }
-
-    return await response.json();
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error('Unknown error occurred');
-  }
+export const setPassword = async (password: string, secret: string) => {
+  return baseRequest(`/api/controllers/set_password.php`, {
+    secret,
+    password,
+  });
 };
 
 export const logout = () => {
