@@ -2,6 +2,8 @@ import { AppIcon } from '@/components';
 import ChangePassword from '@/components/ChangePassword';
 import DataDelete from '@/components/DataDelete';
 import DataExport from '@/components/DataExport';
+import ProfileEditor from '@/components/ProfileEditor';
+import ProfileEditorSkeleton from '@/components/ProfileEditor/ProfileEditorSkeleton';
 import { getSelf } from '@/services/users';
 import { UserType } from '@/types/Scopes';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
@@ -9,8 +11,6 @@ import { red } from '@mui/material/colors';
 import { Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ProfileEditor from './ProfileEditor';
-import ProfileEditorSkeleton from './ProfileEditor/ProfileEditorSkeleton';
 
 /** * Renders "User" view
  * url: /settings/user
