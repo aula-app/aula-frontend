@@ -40,7 +40,7 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
       report: yup.string().required(t('forms.validation.required')),
       content: yup.string(),
     })
-    .required();
+    .required(t('forms.validation.required'));
 
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(schema),

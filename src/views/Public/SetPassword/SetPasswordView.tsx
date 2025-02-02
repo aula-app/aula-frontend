@@ -52,15 +52,11 @@ const SetPasswordView = () => {
   const onSubmit = async (formData: PassResponse) => {
     if (!key) return;
 
-    const controller = new AbortController();
     try {
       setLoading(true);
       const response = await setPassword(
-        localStorageGet('api_url'),
-        key,
         formData.newPassword,
-        localStorageGet('token'),
-        controller.signal
+        key
       );
 
       if (response.success) {

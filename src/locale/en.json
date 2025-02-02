@@ -61,11 +61,12 @@
     },
     "password": {
       "change": "Change password",
-      "confirm": "Confirm password",
+      "confirmPassword": "Confirm new password",
       "copied": "Password copied to the clipboard",
       "current": "Current password",
       "label": "Password",
-      "new": "New password",
+      "newPassword": "New password",
+      "oldPassword": "Password",
       "set": "Set your password",
       "success": "Password changed successfully"
     },
@@ -157,12 +158,13 @@
       "request": "Data change procedure requested. Please wait for approval."
     },
     "deleteAccount": {
-      "button": "Delete account",
+      "button": "Request account deletion",
       "confirm": "Are you sure you want to delete your account? All your data will be lost. This action cannot be undone",
       "title": "Account deletion request for {{var}}",
       "body": "A data deletion procedure was requested for user {{var}}"
     },
     "exportData": {
+      "button": "Request data export",
       "title": "Account data export request for {{var}}",
       "body": "A data export procedure was requested for user {{var}}"
     },
@@ -429,6 +431,7 @@
   "ui": {
     "common": {
       "all": "All",
+      "and": "and",
       "back": "Back",
       "from": "from",
       "next": "Next",

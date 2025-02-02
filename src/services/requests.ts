@@ -23,10 +23,6 @@ export interface GenericResponse {
   error: string | null;
 }
 
-interface GetResponse extends GenericResponse {
-  data: Array<ScopeType> | null;
-}
-
 /**
  * Custom error event used for displaying error messages in the application.
  */
@@ -65,10 +61,7 @@ const error = new CustomEvent('AppErrorDialog', { detail: 'texts.error' });
  *   - The response indicates failure (success: false)
  */
 
-export const databaseRequest = async (
-  requestData: RequestObject,
-  userId = [] as string[]
-): Promise<GenericResponse> => {
+export const baseRequest = async (url: string, data: ObjectPropByName): Promise<GenericResponse> => {
   const api_url = localStorageGet('api_url');
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
@@ -83,24 +76,18 @@ export const databaseRequest = async (
     };
   }
 
-  if (requestData.method !== 'checkLogin') {
+  if (data.method !== 'checkLogin') {
     headers['Authorization'] = `Bearer ${jwt_token}`;
   }
 
-  if (userId.length > 0) {
-    userId.forEach((field) => {
-      requestData.arguments[field] = jwt_payload?.user_id;
-    });
-  }
-
   try {
-    const data = {
+    const requestData = {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify(requestData),
+      body: JSON.stringify(data),
     };
 
-    const request = await fetch(`${api_url}/api/controllers/model.php?${requestData.method}`, data);
+    const request = await fetch(`${api_url}${url}`, requestData);
 
     const response = await request.json();
 
@@ -130,4 +117,17 @@ export const databaseRequest = async (
       error: 'Something went wrong',
     };
   }
+};
+
+export const databaseRequest = async (data: RequestObject, userId = [] as string[]) => {
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
+
+  if (userId.length > 0) {
+    userId.forEach((field) => {
+      data.arguments[field] = jwt_payload?.user_id;
+    });
+  }
+
+  return baseRequest(`/api/controllers/model.php?${data.method}`, data);
 };
