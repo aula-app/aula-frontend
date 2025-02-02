@@ -1,3 +1,4 @@
+import { StatusTypes } from '@/types/Generics';
 import { MessageType } from '@/types/Scopes';
 import { databaseRequest, GenericResponse } from '@/utils';
 import { checkPermissions } from '@/utils';
@@ -48,6 +49,52 @@ export const getMessages = async (): Promise<GetMessagesResponse> => {
       arguments: {
         offset: 0,
         limit: 0,
+      },
+    },
+    hasSuperModAccess ? [] : ['user_id']
+  );
+
+  return response as GetMessagesResponse;
+};
+
+/**
+ * Sets message Status.
+ */
+
+interface MessageStatusArguments {
+  status: StatusTypes;
+  message_id: string;
+}
+
+export const setMessageStatus = async (args: MessageStatusArguments): Promise<GenericResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: 'setMessageStatus',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+};
+
+/**
+ * Get a list of reports from the database.
+ */
+
+export const getReports = async (): Promise<GetMessagesResponse> => {
+  // Check if user has Super Moderator (40) access to view all rooms
+  const hasSuperModAccess = checkPermissions(40);
+
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: 'getMessages',
+      arguments: {
+        offset: 0,
+        limit: 0,
+        msg_type: 4,
       },
     },
     hasSuperModAccess ? [] : ['user_id']

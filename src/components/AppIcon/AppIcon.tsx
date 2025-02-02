@@ -2,6 +2,8 @@ import { ObjectPropByName } from '@/types/Generics';
 import { Stack } from '@mui/material';
 import {
   BiAngry,
+  BiArchiveIn,
+  BiArchiveOut,
   BiBookAdd,
   BiBot,
   BiBowlHot,
@@ -218,6 +220,7 @@ export const ICONS = {
   against: HiOutlineXCircle,
   alert: HiOutlineExclamationTriangle,
   announcement: HiOutlineMegaphone,
+  archive: BiArchiveIn,
   arrowup: HiOutlineChevronUp,
   arrowdown: HiOutlineChevronDown,
   arrowright: HiOutlineChevronRight,
@@ -278,6 +281,7 @@ export const ICONS = {
   signup: HiOutlineUserPlus,
   survey: HiOutlineQuestionMarkCircle,
   text: HiOutlineDocumentText,
+  unarchive: BiArchiveOut,
   users: HiOutlineUserGroup,
   visibilityOff: HiOutlineEye,
   visibilityOn: HiOutlineEyeSlash,

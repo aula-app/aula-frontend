@@ -1,12 +1,13 @@
 import { AppIconButton } from '@/components';
 import FilterBar from '@/components/FilterBar';
 import ReportCard from '@/components/ReportCard';
+import ReportCardSkeleton from '@/components/ReportCard/ReportCardSkeleton';
+import { getReports } from '@/services/messages';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType } from '@/types/Scopes';
-import { databaseRequest, RequestObject } from '@/utils';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /** * Renders "Config" view
@@ -14,33 +15,23 @@ import { useTranslation } from 'react-i18next';
  */
 const ReportsView = () => {
   const { t } = useTranslation();
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [reports, setReports] = useState<MessageType[]>([]);
   const [status, setStatus] = useState<StatusTypes>(1);
   const [filter, setFilter] = useState<[string, string]>(['', '']);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const reportFetch = async () => {
-    const requestData = {
-      model: 'Message',
-      method: 'getMessages',
-      arguments: {
-        msg_type: 4,
-        status: status,
-      },
-    } as RequestObject;
-
-    if (!filter.includes('')) {
-      requestData['arguments']['search_field'] = filter[0];
-      requestData['arguments']['search_text'] = filter[1];
-    }
-
-    await databaseRequest(requestData).then((response) => {
-      if (response.success) setReports(response.data);
-    });
-  };
+  const fetchReports = useCallback(async () => {
+    setLoading(true);
+    const response = await getReports();
+    if (response.error) setError(response.error);
+    if (!response.error && response.data) setReports(response.data);
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
-    reportFetch();
+    fetchReports();
   }, [filter, status]);
 
   return (
@@ -64,8 +55,10 @@ const ReportsView = () => {
         isOpen={openFilter}
       />
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
+        {isLoading && <ReportCardSkeleton />}
+        {error && <Typography>{t(error)}</Typography>}
         {reports.length > 0 &&
-          reports.map((report) => <ReportCard report={report} onReload={reportFetch} key={report.id} />)}
+          reports.map((report) => <ReportCard report={report} onReload={fetchReports} key={report.id} />)}
       </Stack>
     </Stack>
   );

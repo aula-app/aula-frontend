@@ -1,9 +1,11 @@
-import { MessageType, ReportBodyType, ReportMetadataType, RequestBodyType, RequestMetadataType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
+import { MessageType } from '@/types/Scopes';
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Fragment } from 'react/jsx-runtime';
-import { AppLink } from '..';
+import MarkdownReader from '../MarkdownReader';
+import { blueGrey } from '@mui/material/colors';
+import AppLink from '../AppLink';
+import AppIconButton from '../AppIconButton';
+import { setMessageStatus } from '@/services/messages';
 
 /**
  * Renders "ReportCard" component
@@ -11,88 +13,68 @@ import { AppLink } from '..';
 
 interface Props {
   report: MessageType;
-  onConfirm?: () => void;
   onReload: () => void;
 }
 
-const ReportCard = ({ report, onReload, onConfirm }: Props) => {
+const ReportCard = ({ report, onReload }: Props) => {
   const { t } = useTranslation();
 
-  const onArchive = async (value: boolean) =>
-    await databaseRequest(
-      {
-        model: 'Message',
-        method: 'setMessageStatus',
-        arguments: {
-          status: value ? 3 : 1,
-          message_id: report.id,
-        },
-      },
-      ['updater_id']
-    ).then(() => onReload());
+  const YAML = report.body.split('---')[1];
+  const content = report.body.replace(`---${YAML}---`, '');
+  const metadata = YAML?.split(/\r?\n/)
+    .filter((n) => n)
+    .map((n) => ({ key: n.split(': ')[0], value: n.split(': ')[1] }));
 
-  const confirmRequest = () => {
-    if (!onConfirm) return;
-    onConfirm();
-    onArchive(true);
+  const toggleArchive = async () => {
+    setMessageStatus({
+      status: report.status ? 3 : 1,
+      message_id: report.hash_id,
+    }).then(onReload);
   };
+  //   await databaseRequest(
+  //     {
+  //       model: 'Message',
+  //       method: 'setMessageStatus',
+  //       arguments: {
+  //         status: value ? 3 : 1,
+  //         message_id: report.id,
+  //       },
+  //     },
+  //     ['updater_id']
+  //   ).then(() => onReload());
 
-  const bodyData: ReportBodyType | RequestBodyType = JSON.parse(report.body);
+  // const confirmRequest = () => {
+  //   if (!onConfirm) return;
+  //   onConfirm();
+  //   onArchive(true);
+  // };
 
-  return bodyData ? (
+  return (
     <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
       <CardHeader
-        title={
-          bodyData.data.type ? t(`scopes.${bodyData.data.type}.headline`, { var: report.headline }) : report.headline
-        }
+        title={report.headline}
+        action={<AppIconButton icon={report.status === 1 ? 'archive' : 'unarchive'} onClick={toggleArchive} />}
       />
       <Divider />
-      {bodyData.data && (
-        <>
-          <CardContent sx={{ bgcolor: 'bug.main' }}>
-            <Stack>
-              {(Object.keys(bodyData.data) as Array<keyof ReportMetadataType | keyof RequestMetadataType>).map(
-                (data, key) => (
-                  <Fragment key={key}>
-                    {bodyData.data && (
-                      <Typography key={data}>
-                        {data}:{' '}
-                        {'location' in bodyData.data && data === 'location' ? (
-                          <AppLink to={bodyData.data[data]}>{bodyData.data[data]}</AppLink>
-                        ) : (
-                          // @ts-ignore
-                          bodyData.data[data]
-                        )}
-                      </Typography>
-                    )}
-                  </Fragment>
-                )
-              )}
-            </Stack>
-          </CardContent>
-          <Divider />
-        </>
-      )}
-      <CardContent>
-        <Stack my={2} flex={1}>
-          <Typography>
-            {bodyData.content !== ''
-              ? bodyData.content
-              : t(
-                  `texts.${bodyData.data.type}Body`,
-                  'from' in bodyData.data && 'to' in bodyData.data
-                    ? {
-                        var: report.headline,
-                        old: bodyData.data.from || '',
-                        new: bodyData.data.to || '',
-                      }
-                    : { var: report.headline }
-                )}
-          </Typography>
+      <CardContent sx={{ bgcolor: blueGrey[50] }}>
+        <Stack>
+          {metadata &&
+            metadata.map((data) => (
+              <Typography color="secondary">
+                <b>{data.key}</b>:{' '}
+                <AppLink to={data.value} disabled={data.key !== 'location'}>
+                  {data.value}
+                </AppLink>
+              </Typography>
+            ))}
         </Stack>
       </CardContent>
       <Divider />
-      <CardActions>
+      <CardContent>
+        <MarkdownReader>{content}</MarkdownReader>
+      </CardContent>
+      <Divider />
+      {/* <CardActions>
         <Stack direction="row" mt={0.5} flex={1} gap={3} justifyContent="end">
           {report.status === 1 ? (
             <Button color="error" onClick={() => onArchive(true)}>
@@ -107,10 +89,8 @@ const ReportCard = ({ report, onReload, onConfirm }: Props) => {
             </Button>
           )}
         </Stack>
-      </CardActions>
+      </CardActions> */}
     </Card>
-  ) : (
-    <></>
   );
 };
 
