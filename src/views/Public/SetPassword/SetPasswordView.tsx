@@ -1,8 +1,6 @@
 import ChangePassword from '@/components/ChangePassword';
-import { checkPasswordKey, setPassword } from '@/services/login';
+import { checkPasswordKey } from '@/services/login';
 import { useAppStore } from '@/store';
-import { PassResponse } from '@/types/Generics';
-import { localStorageGet } from '@/utils';
 import { Alert, Collapse, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { FormContainer } from 'react-hook-form-mui';
@@ -17,61 +15,31 @@ const SetPasswordView = () => {
   const [isLoading, setLoading] = useState(false);
   const [isValid, setValid] = useState(true);
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const validateKey = async () => {
-      if (!key) {
-        setValid(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        const response = await checkPasswordKey(
-          localStorageGet('api_url'),
-          key,
-          localStorageGet('token'),
-          controller.signal
-        );
-        if (!response.success) {
-          setValid(false);
-        }
-      } catch (error) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
-        setValid(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    validateKey();
-    return () => controller.abort();
-  }, [key, dispatch, t]);
-
-  const onSubmit = async (formData: PassResponse) => {
-    if (!key) return;
+  const validateKey = async () => {
+    if (!key) {
+      setValid(false);
+      return;
+    }
 
     try {
       setLoading(true);
-      const response = await setPassword(
-        formData.newPassword,
-        key
+      const response = await checkPasswordKey(
+        key,
       );
-
-      if (response.success) {
-        navigate('/');
-      } else {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      if (response.error) {
+        setValid(false);
       }
     } catch (error) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      setValid(false);
     } finally {
       setLoading(false);
     }
-
-    return () => controller.abort();
   };
+
+  useEffect(() => {
+    validateKey();
+  }, [key, dispatch, t]);
 
   return (
     <FormContainer>
@@ -82,7 +50,7 @@ const SetPasswordView = () => {
             {t('auth.errors.invalidCode')}
           </Alert>
         </Collapse>
-        <ChangePassword disabled={isLoading} onSubmit={onSubmit} hideOld />
+        <ChangePassword disabled={isLoading} />
       </Stack>
     </FormContainer>
   );

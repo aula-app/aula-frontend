@@ -31,33 +31,10 @@ export const loginUser = async (
   }
 };
 
-export const checkPasswordKey = async (
-  apiUrl: string,
-  secret: string,
-  token: string | null,
-  signal: AbortSignal
-): Promise<{ success: boolean }> => {
-  try {
-    const response = await fetch(`${apiUrl}/api/controllers/set_password.php?secret=${secret}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token ? `Bearer ${token}` : '',
-      },
-      signal,
-    });
-
-    if (!response.ok) {
-      throw new Error('NetworkError');
-    }
-
-    return await response.json();
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error('Unknown error occurred');
-  }
+export const checkPasswordKey = async (secret: string) => {
+  return baseRequest(`/api/controllers/set_password.php`, {
+    secret,
+  });
 };
 
 export const setPassword = async (password: string, secret: string) => {
