@@ -16,7 +16,6 @@ const FilterStatus = ({ options, status, setStatus }: Params) => {
   const { t } = useTranslation();
 
   const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    if (!setStatus) return;
     setStatus(Number(event.target.value) as StatusTypes);
   };
 

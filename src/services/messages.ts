@@ -1,6 +1,7 @@
+import { FilterOptionsType } from '@/components/FilterBar/FilterBar';
 import { StatusTypes } from '@/types/Generics';
-import { MessageType } from '@/types/Scopes';
-import { databaseRequest, GenericResponse } from '@/utils';
+import { MessageType, PossibleFields } from '@/types/Scopes';
+import { databaseRequest, GenericResponse, RequestObject } from '@/utils';
 import { checkPermissions } from '@/utils';
 
 interface GetMessagesResponse extends GenericResponse {
@@ -83,18 +84,28 @@ export const setMessageStatus = async (args: MessageStatusArguments): Promise<Ge
  * Get a list of reports from the database.
  */
 
-export const getReports = async (): Promise<GetMessagesResponse> => {
+const getSpecialMessages = async (args: FilterOptionsType, msg_type: 4 | 5): Promise<GetMessagesResponse> => {
+  const requestData = {
+    msg_type,
+    status: typeof args.status === 'number' ? args.status : 1,
+  } as Record<keyof PossibleFields, string | number>;
+
+  if (!args.filter.includes('')) {
+    requestData['search_field'] = args.filter[0];
+    requestData['search_text'] = args.filter[1];
+  }
+
   const response = await databaseRequest({
     model: 'Message',
     method: 'getMessages',
-    arguments: {
-      offset: 0,
-      limit: 0,
-      msg_type: 4,
-    },
+    arguments: requestData,
   });
 
   return response as GetMessagesResponse;
+};
+
+export const getReports = async (args: FilterOptionsType): Promise<GetMessagesResponse> => {
+  return getSpecialMessages(args, 4);
 };
 
 /**
@@ -121,16 +132,6 @@ export const addReport = async (args: MessageArguments): Promise<GetMessagesResp
  * Get a list of reports from the database.
  */
 
-export const getRequests = async (): Promise<GetMessagesResponse> => {
-  const response = await databaseRequest({
-    model: 'Message',
-    method: 'getMessages',
-    arguments: {
-      offset: 0,
-      limit: 0,
-      msg_type: 5,
-    },
-  });
-
-  return response as GetMessagesResponse;
+export const getRequests = async (args: FilterOptionsType): Promise<GetMessagesResponse> => {
+  return getSpecialMessages(args, 5);
 };
