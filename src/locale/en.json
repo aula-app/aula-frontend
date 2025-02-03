@@ -12,6 +12,7 @@
     "deactivate": "Deactivate {{var}}",
     "delete": "Delete",
     "discard": "Discard",
+    "download": "Download",
     "edit": "Edit {{var}}",
     "filter": "Filter",
     "hide": "Hide",
@@ -151,6 +152,10 @@
     "status": "Instance status"
   },
   "requests": {
+    "accepted": "Your data change request has been accepted.",
+    "confirm": "Data request change confirmed",
+    "cancel": "Data request change denied",
+    "denied": "Your data change request has been denied. Please contact the school admin for further information.",
     "label": "Requests",
     "changeName": {
       "title": "Data change request for {{var}}",

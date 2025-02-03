@@ -42,6 +42,22 @@ export async function getUser(user_id: string): Promise<GetUserResponse> {
 }
 
 /**
+ * Delete user
+ * @param user_id - The ID of the user to fetch
+ * @returns Promise resolving to an array of users with custom fields
+ */
+
+export async function deleteUser(user_id: string): Promise<GetUserResponse> {
+  const response = await databaseRequest({
+    model: 'User',
+    method: 'deleteUser',
+    arguments: { user_id },
+  });
+
+  return response as GetUserResponse;
+}
+
+/**
  * Sets User update types
  */
 
@@ -99,4 +115,48 @@ export async function editSelf(args: UserArguments): Promise<GenericResponse> {
   };
 
   return response as GenericResponse;
+}
+
+interface RestrictedUpdateArgs {
+  field: 'realname' | 'username' | 'email';
+  id: string;
+  value: string;
+}
+
+export async function editSelfRestricted(args: RestrictedUpdateArgs) {
+  const method = {
+    email: 'setUserEmail',
+    realname: 'setUserRealname',
+    username: 'setUserUsername',
+  };
+  const request = await databaseRequest(
+    {
+      model: 'User',
+      method: method[args.field],
+      arguments: {
+        user_id: args.id,
+        [args.field]: args.value,
+      },
+    },
+    ['updater_id']
+  );
+  return request;
+}
+
+/**
+ * Get user GDPR data
+ * @returns Promise resolving to an array of users with custom fields
+ */
+
+export async function exportSelfData(): Promise<GetUserResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'getUserGDPRData',
+      arguments: {},
+    },
+    ['user_id']
+  );
+
+  return response as GetUserResponse;
 }

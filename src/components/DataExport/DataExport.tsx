@@ -22,14 +22,14 @@ const DataExport: React.FC<Props> = ({ user, onReload }) => {
     await addMessage({
       headline: `${t('requests.exportData.title', { var: user.displayname })}`,
       body: `
-            ---
-            type: requestData
-            id: ${user.hash_id}
-            realname: ${user.realname}
-            username: ${user.username}
-            email: ${user.email}
-            ---
-            ${t('requests.exportData.body', { var: user.displayname })}`,
+---
+type: requestData
+id: ${user.hash_id}
+realname: ${user.realname}
+username: ${user.username}
+email: ${user.email}
+---
+${t('requests.exportData.body', { var: user.displayname })}`,
       msg_type: 5,
     }).then((response) => {
       if (response.error) {

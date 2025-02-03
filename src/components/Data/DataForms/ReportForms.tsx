@@ -50,18 +50,18 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
     <Stack p={2} overflow="auto" gap={2}>
       <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.reports.name`).toLowerCase() })}</Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Stack>
+        <Stack gap={2}>
           <SelectField name="report" options={ReportOptions} control={control} />
           {/* content */}
           <MarkdownEditor name="content" control={control} />
-        </Stack>
-        <Stack direction="row" justifyContent="end" gap={2}>
-          <Button onClick={onClose} color="error">
-            {t('actions.cancel')}
-          </Button>
-          <Button type="submit" variant="contained">
-            {t('actions.confirm')}
-          </Button>
+          <Stack direction="row" justifyContent="end" gap={2}>
+            <Button onClick={onClose} color="error">
+              {t('actions.cancel')}
+            </Button>
+            <Button type="submit" variant="contained">
+              {t('actions.confirm')}
+            </Button>
+          </Stack>
         </Stack>
       </form>
     </Stack>
