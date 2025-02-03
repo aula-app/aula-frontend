@@ -76,13 +76,13 @@ const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
     await addMessage({
       headline: `${t('requests.changeName.title', { var: user.realname })}: ${field.field}`,
       body: `
-          ---
-          type: changeName
-          id: ${user.hash_id}
-          property: ${field.field}
-          value: ${field.value}
-          ---
-          ${t('requests.changeName.body', { var: user.realname, old: user[field.field], new: field.value })}`,
+---
+type: changeName
+id: ${user.hash_id}
+property: ${field.field}
+value: ${field.value}
+---
+${t('requests.changeName.body', { var: user.realname, old: user[field.field], new: field.value })}`,
       msg_type: 5,
     }).then((response) => {
       if (response.error) {

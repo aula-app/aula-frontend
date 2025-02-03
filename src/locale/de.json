@@ -12,6 +12,7 @@
     "deactivate": "{{var}} deaktivieren",
     "delete": "Löschen",
     "discard": "Verwerfen",
+    "download": "Herunterladen",
     "edit": "{{var}} bearbeiten",
     "filter": "Filtern",
     "hide": "Ausblenden",
@@ -151,6 +152,10 @@
     "status": "Instanzstatus"
   },
   "requests": {
+    "accepted": "Deine Datenänderungsanfrage wurde akzeptiert.",
+    "confirm": "Datenänderungsanfrage bestätigt",
+    "cancel": "Datenänderungsanfrage abgelehnt",
+    "denied": "Deine Datenänderungsanfrage wurde abgelehnt. Bitte kontaktiere den Schuladministrator für weitere Informationen.",
     "label": "Anfragen",
     "changeName": {
       "title": "Datenänderungsanfrage für {{var}}",

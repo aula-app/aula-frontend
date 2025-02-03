@@ -18,7 +18,7 @@ interface MessageArguments {
 
 interface AddMessageArguments extends MessageArguments {
   msg_type: 0 | 1 | 2 | 3 | 4 | 5; // 1=system message, 2= message from admin, 3=message from user, 4=report, 5= requests
-  target_id?: string;
+  target_id?: string | number;
 }
 
 export const addMessage = async (args: AddMessageArguments): Promise<GenericResponse> => {
@@ -84,21 +84,15 @@ export const setMessageStatus = async (args: MessageStatusArguments): Promise<Ge
  */
 
 export const getReports = async (): Promise<GetMessagesResponse> => {
-  // Check if user has Super Moderator (40) access to view all rooms
-  const hasSuperModAccess = checkPermissions(40);
-
-  const response = await databaseRequest(
-    {
-      model: 'Message',
-      method: 'getMessages',
-      arguments: {
-        offset: 0,
-        limit: 0,
-        msg_type: 4,
-      },
+  const response = await databaseRequest({
+    model: 'Message',
+    method: 'getMessages',
+    arguments: {
+      offset: 0,
+      limit: 0,
+      msg_type: 4,
     },
-    hasSuperModAccess ? [] : ['user_id']
-  );
+  });
 
   return response as GetMessagesResponse;
 };
@@ -108,9 +102,6 @@ export const getReports = async (): Promise<GetMessagesResponse> => {
  */
 
 export const addReport = async (args: MessageArguments): Promise<GetMessagesResponse> => {
-  // Check if user has Super Moderator (40) access to view all rooms
-  const hasSuperModAccess = checkPermissions(40);
-
   const response = await databaseRequest(
     {
       model: 'Message',
@@ -122,6 +113,24 @@ export const addReport = async (args: MessageArguments): Promise<GetMessagesResp
     },
     ['creator_id']
   );
+
+  return response as GetMessagesResponse;
+};
+
+/**
+ * Get a list of reports from the database.
+ */
+
+export const getRequests = async (): Promise<GetMessagesResponse> => {
+  const response = await databaseRequest({
+    model: 'Message',
+    method: 'getMessages',
+    arguments: {
+      offset: 0,
+      limit: 0,
+      msg_type: 5,
+    },
+  });
 
   return response as GetMessagesResponse;
 };

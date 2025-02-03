@@ -11,7 +11,7 @@ interface Props extends IconButtonProps {
 
 export interface ReportFormData {
   report: string;
-  content: string;
+  content?: string;
 }
 
 const ReportButton: React.FC<Props> = ({ target, disabled = false, ...restOfProps }) => {
@@ -21,7 +21,7 @@ const ReportButton: React.FC<Props> = ({ target, disabled = false, ...restOfProp
   const onSubmit = async (data: ReportFormData) => {
     const body = `
 ---
-type: ${t(`forms.report.${data.report}`)}
+claim: ${t(`forms.report.${data.report}`)}
 ---
 ${data.content || ''}
     `;

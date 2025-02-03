@@ -34,14 +34,14 @@ const DataDelete: React.FC<Props> = ({ user, onReload }) => {
     await addMessage({
       headline: `${t('requests.deleteAccount.title', { var: user.displayname })}`,
       body: `
-            ---
-            type: deleteAccount
-            id: ${user.hash_id}
-            realname: ${user.realname}
-            username: ${user.username}
-            email: ${user.email}
-            ---
-            ${t('requests.deleteAccount.body', { var: user.displayname })}`,
+---
+type: deleteAccount
+id: ${user.hash_id}
+realname: ${user.realname}
+username: ${user.username}
+email: ${user.email}
+---
+${t('requests.deleteAccount.body', { var: user.displayname })}`,
       msg_type: 5,
     }).then((response) => {
       if (response.error) {
