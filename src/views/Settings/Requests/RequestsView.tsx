@@ -37,7 +37,7 @@ const RequestsView = () => {
   return (
     <Stack width="100%" height="100%" p={2} gap={2}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="h4">{t('scopes.reports.plural')}</Typography>
+        <Typography variant="h4">{t('ui.navigation.requests')}</Typography>
         <Stack direction="row" px={2}>
           <AppIconButton icon="filter" onClick={() => setOpenFilter(!openFilter)} />
         </Stack>
