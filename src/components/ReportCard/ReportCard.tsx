@@ -192,11 +192,11 @@ ${message}`,
         {metadata && !!metadata.type && (
           <CardActions>
             <Stack direction="row" mt={0.5} flex={1} gap={1} justifyContent="space-between">
-              <Button variant="contained" onClick={confirmRequest}>
-                {t('actions.confirm')}
-              </Button>
               <Button variant="contained" color="error" onClick={cancelRequest}>
                 {t('actions.cancel')}
+              </Button>
+              <Button variant="contained" onClick={confirmRequest}>
+                {t('actions.confirm')}
               </Button>
             </Stack>
           </CardActions>
