@@ -18,8 +18,11 @@ const ReportsView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reports, setReports] = useState<MessageType[]>([]);
+
   const [status, setStatus] = useState<StatusTypes>(1);
   const [filter, setFilter] = useState<[keyof PossibleFields, string]>(['', '']);
+
+  const filterOptions = ['headline', 'body', 'creator_id'] as Array<keyof MessageType>;
 
   const fetchReports = useCallback(async () => {
     setLoading(true);
@@ -36,12 +39,10 @@ const ReportsView = () => {
   return (
     <Stack width="100%" height="100%" p={2} gap={2}>
       <FilterBar
-        title={t('scopes.reports.plural')}
+        fields={filterOptions}
         scope={'reports'}
-        filter={filter}
-        status={status}
-        setFilter={setFilter}
-        setStatus={setStatus}
+        onStatusChange={(newStatus) => setStatus(newStatus)}
+        onFilterChange={(newFilter) => setFilter(newFilter)}
       />
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
         {isLoading && <ReportCardSkeleton />}

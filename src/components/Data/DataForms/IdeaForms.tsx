@@ -1,6 +1,5 @@
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
-import { IdeaFormData } from '@/views/WildIdeas/WildIdeasView';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
@@ -8,6 +7,8 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, StatusField } from '../DataFields';
+import { StatusTypes } from '@/types/Generics';
+import { IdeaArguments } from '@/services/ideas';
 
 /**
  * IdeaForms component is used to create or edit an idea.
@@ -17,8 +18,8 @@ import { MarkdownEditor, StatusField } from '../DataFields';
 
 interface IdeaFormsProps {
   onClose: () => void;
-  defaultValues?: IdeaType;
-  onSubmit: (data: IdeaFormData) => void;
+  defaultValues?: IdeaArguments;
+  onSubmit: (data: IdeaArguments) => void;
 }
 
 const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose, onSubmit }) => {
@@ -27,7 +28,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose, onSubmit 
   const schema = yup.object({
     title: yup.string().required(t('forms.validation.required')),
     content: yup.string().required(t('forms.validation.required')),
-  });
+  } as Record<keyof IdeaType, any>);
 
   const {
     register,

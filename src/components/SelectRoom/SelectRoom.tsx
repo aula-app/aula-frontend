@@ -1,55 +1,42 @@
+import { getRooms } from '@/services/rooms';
 import { RoomType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
 import { MenuItem, TextField } from '@mui/material';
-import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Params = {
-  room: number | '';
-  setRoom: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  room: string | '';
+  setRoom: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const SelectRoom = ({ room, setRoom }: Params) => {
   const { t } = useTranslation();
-  const [options, setOptions] = useState<Array<RoomType>>([]);
+  const [rooms, setRooms] = useState<Array<RoomType>>([]);
 
-  const getOptions = async () => {
-    await databaseRequest({
-      model: 'Room',
-      method: 'getRooms',
-      arguments: {
-        offset: 0,
-        limit: 0,
-      },
-    }).then((response) => {
-      if (!response.success || !response.data) return;
-      setOptions(response.data);
-    });
-  };
-
-  const changeRoom = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setRoom(event);
-  };
+  const fetchRooms = useCallback(async () => {
+    const response = await getRooms();
+    if (!response.error && response.data) setRooms(response.data);
+  }, []);
 
   useEffect(() => {
-    getOptions();
+    fetchRooms();
   }, []);
 
   return (
     <TextField
       select
-      label={t('scopes.room.name')}
+      label={t('scopes.rooms.name')}
       value={room}
-      onChange={changeRoom}
+      onChange={(event) => setRoom(event.target.value)}
       variant="filled"
       size="small"
       sx={{ minWidth: 200 }}
-      disabled={!options}
+      disabled={rooms.length === 0}
     >
       <MenuItem value="">&nbsp;</MenuItem>
-      {options.map((option) => (
-        <MenuItem value={option.id} key={option.id}>
-          {option.room_name}
+      {rooms.map((room) => (
+        <MenuItem value={room.hash_id} key={room.hash_id}>
+          {room.room_name}
         </MenuItem>
       ))}
     </TextField>

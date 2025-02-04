@@ -1,6 +1,6 @@
 import { AppIcon, AppIconButton } from '@/components';
 import { useAppStore } from '@/store';
-import { PossibleFields } from '@/types/Scopes';
+import { PossibleFields, ScopeType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, phases } from '@/utils';
 import { ScopeStatusOptions } from '@/utils/commands';
@@ -11,12 +11,9 @@ import { useTranslation } from 'react-i18next';
 
 /**
  * Props for the DataItem component
- * @typedef {Object} Params
- * @property {Record<keyof PossibleFields, string>} row - The data row containing all field values
- * @property {keyof PossibleFields} column - The specific column to render from the row
  */
-type Params = {
-  row: Record<keyof PossibleFields, string>;
+type Props = {
+  row: ScopeType;
   column: keyof PossibleFields;
 };
 
@@ -29,23 +26,8 @@ const messageConsentValues = ['message', 'announcement', 'alert'] as MessageCons
 
 /**
  * Component that renders a table cell's content with specialized formatting based on the column type.
- * Handles various data types including:
- * - Boolean values (approved)
- * - User IDs (creator_id, target_id, user_id)
- * - Phase IDs with translation
- * - Room IDs
- * - Status values with translation
- * - Group targets
- * - Temporary passwords (with show/hide functionality)
- * - User levels with translation
- * - Message consent values
- *
- * @param {Params} props - Component props
- * @param {Record<keyof PossibleFields, string>} props.row - The data row containing all field values
- * @param {keyof PossibleFields} props.column - The specific column to render from the row
- * @returns {JSX.Element} Rendered cell content with appropriate formatting
  */
-const DataItem = ({ row, column }: Params) => {
+const DataItem: React.FC<Props> = ({ row, column }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [name, setName] = useState('');

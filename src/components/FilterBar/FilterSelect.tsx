@@ -1,66 +1,67 @@
-import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest } from '@/utils';
-import DataConfig from '@/utils/Data';
-import { MenuItem, TextField } from '@mui/material';
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { PossibleFields } from '@/types/Scopes';
+import { FilledInput, MenuItem, Stack, TextField } from '@mui/material';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import AppIconButton from '../AppIconButton';
 
-type Params = {
-  filter: [string, string];
-  scope: SettingNamesType;
-  setFilter: Dispatch<SetStateAction<[string, string]>>;
+type Props = {
+  fields: Array<keyof PossibleFields>;
+  onChange: (filter: [keyof PossibleFields, string]) => void;
 };
 
-const FilterSelect = ({ filter, scope, setFilter }: Params) => {
+const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
   const { t } = useTranslation();
-  const [customFields, setCustomFields] = useState<Record<string, string>>({});
+  const [key, setKey] = useState<keyof PossibleFields>('');
+  const [filterValue, setFilterValue] = useState('');
 
-  const getCustomFields = async () => {
-    await databaseRequest({
-      model: 'Settings',
-      method: 'getCustomfields',
-      arguments: {},
-    }).then((response) => {
-      if (!response.success || !response.data) return;
-      setCustomFields(response.data);
-    });
+  const handleKeyChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const selectedKey = event.target.value as keyof PossibleFields;
+    setKey(selectedKey);
+
+    // Reset filter value when key changes
+    if (selectedKey === '') {
+      setFilterValue('');
+    }
   };
 
-  const changeFilter = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setFilter([event.target.value, filter[1]]);
+  const handleFilterChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setFilterValue(event.target.value);
+  };
+
+  const handleClearFilter = () => {
+    setFilterValue('');
   };
 
   useEffect(() => {
-    if (scope === 'ideas') getCustomFields();
-  }, []);
+    onChange([key, filterValue || '']);
+  }, [key, filterValue, onChange]);
 
   return (
-    <TextField
-      select
-      label={t('actions.filter')}
-      value={filter[0]}
-      onChange={changeFilter}
-      variant="filled"
-      size="small"
-      sx={{ minWidth: 130 }}
-    >
-      <MenuItem value="">&nbsp;</MenuItem>
-      {DataConfig[scope].columns
-        .filter(
-          (column) =>
-            !['status', 'created', 'last_update', 'userlevel', 'phase', 'approv', 'target_id'].some((element) =>
-              column.name.includes(element)
-            )
-        )
-        .map((column) => {
-          if ((column.name in customFields && customFields[column.name]) || !(column.name in customFields))
-            return (
-              <MenuItem value={column.name} key={column.name}>
-                {customFields[column.name] || t(`settings.columns.${column.name}`)}
-              </MenuItem>
-            );
-        })}
-    </TextField>
+    <Stack direction="row" alignItems="center" gap={1}>
+      <TextField
+        select
+        label={t('actions.filter')}
+        value={key}
+        onChange={handleKeyChange}
+        variant="filled"
+        size="small"
+        sx={{ minWidth: 130 }}
+      >
+        <MenuItem value="">&nbsp;</MenuItem>
+        {fields.map((column) => (
+          <MenuItem value={column} key={column}>
+            {t(`settings.columns.${column}`)}
+          </MenuItem>
+        ))}
+      </TextField>
+      <FilledInput
+        size="small"
+        onChange={handleFilterChange}
+        value={filterValue}
+        disabled={key === ''}
+        endAdornment={filterValue && <AppIconButton icon="close" onClick={handleClearFilter} disabled={key === ''} />}
+      />
+    </Stack>
   );
 };
 

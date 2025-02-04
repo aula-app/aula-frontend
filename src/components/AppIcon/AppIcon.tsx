@@ -1,5 +1,5 @@
-import { ObjectPropByName } from '@/types/Generics';
-import { Stack } from '@mui/material';
+import { Stack, StackProps } from '@mui/material';
+import React from 'react';
 import {
   BiAngry,
   BiArchiveIn,
@@ -433,18 +433,16 @@ export type IconType = keyof typeof ICONS;
 export type CategoryIconType = keyof typeof CAT_ICONS;
 export type AllIconsType = keyof typeof ALL_ICONS;
 
-interface Props {
+interface Props extends StackProps {
   icon: AllIconsType; // Icon's name alternate prop
   size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
-  sx?: ObjectPropByName;
 }
 
 /**
  * Renders SVG icon by given Icon name
  * @component AppIcon
  */
-const AppIcon = ({ icon, size = 'medium', sx, ...restOfProps }: Props) => {
-  const ComponentToRender = ALL_ICONS[icon] || ALL_ICONS['bug'];
+const AppIcon: React.FC<Props> = ({ icon, size = 'medium', sx, ...restOfProps }) => {
   const currentSize =
     size === 'xs'
       ? '16px'
@@ -468,8 +466,9 @@ const AppIcon = ({ icon, size = 'medium', sx, ...restOfProps }: Props) => {
         height: currentSize,
         ...sx,
       }}
+      {...restOfProps}
     >
-      <ComponentToRender {...restOfProps} />
+      {React.createElement(ALL_ICONS[icon] || ALL_ICONS['bug'])}
     </Stack>
   );
 };

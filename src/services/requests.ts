@@ -1,5 +1,4 @@
-import { ScopeType } from '@/types/Scopes';
-import { ObjectPropByName } from '../types/Generics';
+import { ObjectPropByName, StatusTypes } from '../types/Generics';
 import { parseJwt } from '../utils/jwt';
 import { localStorageGet } from '../utils/localStorage';
 
@@ -21,6 +20,16 @@ export interface GenericResponse {
   data: any;
   count: number | null;
   error: string | null;
+}
+
+export interface GenericListRequest {
+  offset: number;
+  limit: number;
+  orderby: number;
+  asc: 0 | 1;
+  search_field?: string;
+  search_text?: string;
+  status?: StatusTypes;
 }
 
 /**

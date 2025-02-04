@@ -14,7 +14,7 @@ interface Props {
 }
 
 /**
- * Renders "SelectInput" component
+ * Renders "SelectField" component
  */
 
 const SelectField: React.FC<Props> = ({ name, options, control, defaultValue, disabled = false, ...restOfProps }) => {

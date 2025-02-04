@@ -1,21 +1,15 @@
 import { IdeaForms } from '@/components/Data/DataForms';
 import { ApprovalCard, IdeaBubble, VotingCard, VotingResults } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
-import { deleteIdea, editIdea, getIdea } from '@/services/ideas';
+import VotingQuorum from '@/components/Idea/VotingQuorum';
+import { deleteIdea, editIdea, EditIdeaArguments, getIdea, IdeaArguments } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
+import { RoomPhases } from '@/types/SettingsTypes';
 import { Drawer, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
-import { IdeaFormData } from '../WildIdeas/WildIdeasView';
-import { navigateTo } from '@/utils';
 import CommentView from './Comment';
-import VotingQuorum from '@/components/Idea/VotingQuorum';
-import { RoomPhases } from '@/types/SettingsTypes';
-
-interface EditFormData extends IdeaFormData {
-  idea_id: string;
-}
 
 /**
  * Renders "Idea" view
@@ -30,7 +24,7 @@ const IdeaView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [idea, setIdea] = useState<IdeaType>();
-  const [edit, setEdit] = useState<EditFormData>(); // undefined = update dialog closed; EditFormData = edit idea;
+  const [edit, setEdit] = useState<EditIdeaArguments>(); // undefined = update dialog closed; EditFormData = edit idea;
 
   // const [comments, setComments] = useState<CommentType[]>([]);
   // const [vote, setVote] = useState<Vote>(0);
@@ -56,7 +50,7 @@ const IdeaView = () => {
     });
   };
 
-  const ideaUpdate = async (data: IdeaFormData) => {
+  const ideaUpdate = async (data: IdeaArguments) => {
     if (!edit) return;
     const request = await editIdea({
       idea_id: edit.idea_id,

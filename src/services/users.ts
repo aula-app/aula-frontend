@@ -1,28 +1,32 @@
 import { StatusTypes } from '@/types/Generics';
 import { UserType } from '@/types/Scopes';
-import { databaseRequest, GenericResponse } from '@/utils';
+import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 
 interface GetUserResponse extends GenericResponse {
   data: UserType | null;
 }
 
+interface GetUsersResponse extends GenericResponse {
+  data: UserType[] | null;
+}
+
 /**
- * Fetches user
- * @param user_id - The ID of the user to fetch
+ * Fetches users from DB
  * @returns Promise resolving to an array of users with custom fields
  */
 
-export async function getSelf(): Promise<GetUserResponse> {
-  const response = await databaseRequest(
-    {
-      model: 'User',
-      method: 'getUserBaseData',
-      arguments: {},
-    },
-    ['user_id']
-  );
+interface UserListRequest extends GenericListRequest {
+  room_id?: string;
+}
 
-  return response as GetUserResponse;
+export async function getUsers(args: UserListRequest): Promise<GetUsersResponse> {
+  const response = await databaseRequest({
+    model: 'User',
+    method: 'getUsers',
+    arguments: args,
+  });
+
+  return response as GetUsersResponse;
 }
 
 /**
@@ -42,6 +46,66 @@ export async function getUser(user_id: string): Promise<GetUserResponse> {
 }
 
 /**
+ * Sets User update types
+ */
+
+export interface UserArguments {
+  realname: string;
+  username: string;
+  displayname: string;
+  email?: string;
+  about_me?: string;
+  status?: StatusTypes;
+}
+
+export interface AddUserArguments extends UserArguments {
+  userlevel: string;
+}
+
+export interface EditUserArguments extends UserArguments {
+  user_id: string;
+  userlevel?: string;
+}
+
+/**
+ * Adds a new user to the database
+ * @param arguments - The user data to add
+ * @returns Promise resolving to the new user
+ */
+
+export async function addUser(args: AddUserArguments): Promise<GetUsersResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'addUser',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GetUsersResponse;
+}
+
+/**
+ * Edit an user on the database
+ * @param arguments - The user data to add
+ * @returns Promise resolving to the new user
+ */
+
+export async function editUser(args: EditUserArguments): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'editUser',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+/**
  * Delete user
  * @param user_id - The ID of the user to fetch
  * @returns Promise resolving to an array of users with custom fields
@@ -58,20 +122,25 @@ export async function deleteUser(user_id: string): Promise<GetUserResponse> {
 }
 
 /**
- * Sets User update types
+ * Fetches current user
+ * @returns Promise resolving to an array of users with custom fields
  */
 
-interface UserArguments {
-  realname: string;
-  username: string;
-  displayname: string;
-  email?: string;
-  about_me?: string;
-  status?: StatusTypes;
+export async function getSelf(): Promise<GetUserResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'getUserBaseData',
+      arguments: {},
+    },
+    ['user_id']
+  );
+
+  return response as GetUserResponse;
 }
 
 /**
- * Edit an user on the database
+ * Edit the user on the database
  * @param arguments - The user data to add
  * @returns Promise resolving to the new user
  */
