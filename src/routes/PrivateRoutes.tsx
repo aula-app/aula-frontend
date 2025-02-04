@@ -19,6 +19,7 @@ import ConfigView from '@/views/Settings/Config';
 import { UserProfileView } from '@/views/Settings/Profile';
 import ReportsView from '@/views/Settings/Reports';
 import RequestsView from '@/views/Settings/Requests';
+import RoomsView from '@/views/Settings/Rooms';
 import UsersView from '@/views/Settings/Users';
 import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';
@@ -64,6 +65,7 @@ const PrivateRoutes = () => {
       </Route>
       <Route path="settings/profile" element={<UserProfileView />} />
       <Route path="settings/users" element={<UsersView />} />
+      <Route path="settings/rooms" element={<RoomsView />} />
       <Route path="settings/reports" element={checkPermissions(50) ? <ReportsView /> : <Navigate to="/" />} />
       <Route path="settings/requests" element={checkPermissions(50) ? <RequestsView /> : <Navigate to="/" />} />
       <Route path="settings/configuration" element={checkPermissions(50) ? <ConfigView /> : <Navigate to="/" />} />

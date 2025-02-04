@@ -9,7 +9,6 @@ import {
   toolbarPlugin,
   UndoRedo,
 } from '@mdxeditor/editor';
-import { BorderBottom } from '@mui/icons-material';
 import { FormControl, FormControlProps, FormHelperText, FormLabel, Stack, styled, useTheme } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Control, Controller } from 'react-hook-form';
@@ -85,6 +84,7 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
               }}
             >
               {t(`settings.columns.${name}`)}
+              {required ? '*' : ''}
             </FormLabel>
             <Editor
               className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}

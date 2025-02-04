@@ -90,6 +90,7 @@ const ChangePassword: React.FC<Props> = ({ disabled = false }) => {
         <Stack gap={1} direction="row" flexWrap="wrap">
           {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
             <TextField
+              key={field}
               required
               disabled={disabled}
               type={showPassword[field] ? 'text' : 'password'}
