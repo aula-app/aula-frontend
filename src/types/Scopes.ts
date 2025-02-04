@@ -24,6 +24,7 @@ export interface BoxType {
   hash_id: string;
   name: string;
   description_public: string;
+  description_internal: string;
   ideas_num: number;
   created: string;
   last_update: string;

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 type Params = {
   room: string | '';
-  setRoom: React.Dispatch<React.SetStateAction<string>>;
+  setRoom: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 const SelectRoom = ({ room, setRoom }: Params) => {

@@ -2,18 +2,14 @@ import { DelegationType } from '@/types/Delegation';
 import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { databaseRequest, GenericResponse } from '@/utils';
+import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 
 /**
  * Fetches box
- * @param box_id - The ID of the idea to fetch
- * @returns Promise resolving to an array of ideas with custom fields
  */
 
-interface GetBoxResponse {
+interface GetBoxResponse extends GenericResponse {
   data: BoxType | null;
-  count: number | null;
-  error: string | null;
 }
 
 export async function getBox(topic_id: string): Promise<GetBoxResponse> {
@@ -28,14 +24,20 @@ export async function getBox(topic_id: string): Promise<GetBoxResponse> {
 
 /**
  * Fetches boxes for a specific room including custom fields
- * @param room_id - The ID of the room to fetch boxes for
- * @returns Promise resolving to an array of boxes with custom fields
  */
 
-interface GetBoxesResponse {
+interface GetBoxesResponse extends GenericResponse {
   data: BoxType[] | null;
-  count: number | null;
-  error: string | null;
+}
+
+export async function getBoxes(args: GenericListRequest): Promise<GetBoxesResponse> {
+  const response = await databaseRequest({
+    model: 'Topic',
+    method: 'getTopics',
+    arguments: args,
+  });
+
+  return response as GetBoxesResponse;
 }
 
 export async function getBoxesByPhase(phase_id: number, room_id?: string): Promise<GetBoxesResponse> {
@@ -55,11 +57,10 @@ export async function getBoxesByPhase(phase_id: number, room_id?: string): Promi
  * Sets Box update types
  */
 
-interface BoxArguments {
+export interface BoxArguments {
   name: string;
   description_public: string;
   description_internal?: string;
-  phase_duration_0?: number;
   phase_duration_1?: number;
   phase_duration_2?: number;
   phase_duration_3?: number;
@@ -67,20 +68,18 @@ interface BoxArguments {
   status?: StatusTypes;
 }
 
-interface AddBoxArguments extends BoxArguments {
+export interface AddBoxArguments extends BoxArguments {
   room_id: string;
   phase_id: RoomPhases;
 }
 
-interface EditBoxArguments extends BoxArguments {
+export interface EditBoxArguments extends BoxArguments {
   topic_id: string;
   room_id?: string;
 }
 
 /**
  * Adds a new box to the database
- * @param arguments - The box data to add
- * @returns Promise resolving to the new box
  */
 
 export async function addBox(args: AddBoxArguments): Promise<GetBoxesResponse> {
@@ -98,8 +97,6 @@ export async function addBox(args: AddBoxArguments): Promise<GetBoxesResponse> {
 
 /**
  * Edit an box on the database
- * @param arguments - The box data to add
- * @returns Promise resolving to the new box
  */
 
 export async function editBox(args: EditBoxArguments): Promise<GenericResponse> {
