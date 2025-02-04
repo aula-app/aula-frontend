@@ -217,7 +217,6 @@ export type ScopeType =
   | CategoryType
   | CommandType;
 
-// Type for generic constraints
 export type ScopeListType =
   | AnnouncementType[]
   | BoxType[]
@@ -231,6 +230,9 @@ export type ScopeListType =
   | UserType[]
   | CategoryType[]
   | CommandType[];
+
+export type SettingType = BoxType | IdeaType | MessageType | RoomType | UserType;
+export type SettingsType = BoxType[] | IdeaType[] | MessageType[] | RoomType[] | UserType[];
 
 // Common fields that can be used in forms
 export type CommonFormFields = 'id' | 'created';

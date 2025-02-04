@@ -18,6 +18,7 @@
     "hide": "Ausblenden",
     "move": "{{var}} verschieben",
     "print": "Drucken",
+    "remove": "{{var}} entfernen",
     "save": "Speichern",
     "select": "{{var}} auswählen",
     "show": "Anzeigen",

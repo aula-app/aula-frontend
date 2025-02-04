@@ -1,23 +1,25 @@
+import ToolBar from '@/components/Data/DataTable/ToolBar';
 import { StatusTypes } from '@/types/Generics';
-import { PossibleFields, ScopeListType } from '@/types/Scopes';
+import { PossibleFields, SettingsType } from '@/types/Scopes';
+import { SettingNamesType } from '@/types/SettingsTypes';
 import { Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataItem from './DataItem';
 import DataRow from './DataRow';
-import ToolBar from '@/components/Data/DataTable/ToolBar';
-import { SettingNamesType } from '@/types/SettingsTypes';
 
 type Props = {
   scope: SettingNamesType;
   columns: Array<{ name: keyof PossibleFields; orderId: number }>;
-  rows: ScopeListType;
+  rows: SettingsType;
   orderAsc: boolean;
   orderBy: number;
+  extraTools?: ({ items }: { items: Array<string> }) => JSX.Element;
   setAsc: Dispatch<SetStateAction<boolean>>;
   setLimit: Dispatch<SetStateAction<number>>;
   setOrderby: Dispatch<SetStateAction<number>>;
-  setEdit: Dispatch<SetStateAction<number | boolean>>;
+  setEdit: Dispatch<SetStateAction<string | boolean>>;
+  setDelete: (items: Array<string>) => void;
 };
 
 /**
@@ -29,9 +31,11 @@ const DataTable: React.FC<Props> = ({
   rows,
   orderAsc,
   orderBy,
+  extraTools,
   setAsc,
   setLimit,
   setOrderby,
+  setDelete,
   setEdit,
   ...restOfProps
 }) => {
@@ -50,7 +54,7 @@ const DataTable: React.FC<Props> = ({
 
   const toggleAllRows = () => {
     if (rows.length === 0) return;
-    selected.length > 0 ? setSelected([]) : setSelected(rows.map((row) => String(row.id)));
+    selected.length > 0 ? setSelected([]) : setSelected(rows.map((row) => row.hash_id));
   };
 
   /**
@@ -74,7 +78,7 @@ const DataTable: React.FC<Props> = ({
 
   return (
     <Stack flex={1} sx={{ overflowX: 'auto' }} ref={tableBody} {...restOfProps}>
-      <ToolBar scope={scope} selected={selected} setEdit={setEdit} />
+      <ToolBar scope={scope} selected={selected} setEdit={setEdit} setDelete={setDelete} extraTools={extraTools} />
       <Table stickyHeader size="small">
         <TableHead>
           <TableRow>
@@ -105,15 +109,15 @@ const DataTable: React.FC<Props> = ({
             <DataRow
               key={row.id}
               item={row}
-              selected={selected.includes(String(row.id))}
+              selected={selected.includes(row.hash_id)}
               status={Number(row.status) as StatusTypes}
               toggleRow={toggleRow}
             >
               {columns.map((column) => (
                 <TableCell
                   sx={{ whiteSpace: 'nowrap' }}
-                  onClick={() => setEdit(row.id)}
-                  key={`${column.name}-${row.id}`}
+                  onClick={() => setEdit(row.hash_id)}
+                  key={`${column.name}-${row.hash_id}`}
                 >
                   {column.name in row && <DataItem row={row} column={column.name} />}
                 </TableCell>
