@@ -1,3 +1,5 @@
+import { BoxType } from '@/types/Scopes';
+import { checkPermissions, phaseOptions } from '@/utils';
 import { BoxFormData } from '@/views/BoxPhase/BoxPhaseView';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
@@ -6,9 +8,6 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, PhaseDurationFields, SelectField, SelectRoomField, StatusField } from '../DataFields';
-import { BoxType } from '@/types/Scopes';
-import { checkPermissions, phaseOptions } from '@/utils';
-import AdvancedFields from '../DataFields/AdvancedFields';
 
 /**
  * BoxForms component is used to create or edit an idea.
@@ -74,11 +73,11 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit })
             />
             <MarkdownEditor name="description_public" control={control} required />
             {checkPermissions(40) && (
-              <AdvancedFields>
+              <Stack direction="row" flexWrap="wrap" alignItems="center" gap={2}>
                 <SelectRoomField control={control} />
                 <SelectField control={control} name="phase_id" options={phaseOptions} defaultValue={10} />
-                <PhaseDurationFields control={control} />
-              </AdvancedFields>
+                <PhaseDurationFields control={control} room={defaultValues?.room_hash_id} />
+              </Stack>
             )}
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>

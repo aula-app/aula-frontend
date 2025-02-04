@@ -95,8 +95,6 @@ const PhaseDurationFields: React.FC<Props> = ({
           }}
         >
           {t('settings.time.phase')}
-          {required ? '*' : ''}
-          {JSON.stringify(durations)}
         </FormLabel>
         {fields.map((name, i) => (
           <Controller

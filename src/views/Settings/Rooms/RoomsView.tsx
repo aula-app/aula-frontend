@@ -123,7 +123,6 @@ const RoomsView: React.FC = () => {
           scope="rooms"
           onStatusChange={(newStatus) => setStatus(newStatus)}
           onFilterChange={(newFilter) => setFilter(newFilter)}
-          onRoomChange={(newRoom) => setRoom(newRoom)}
         />
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>

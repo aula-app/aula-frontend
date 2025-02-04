@@ -1,5 +1,6 @@
 import { StatusTypes } from '@/types/Generics';
 import { UserType } from '@/types/Scopes';
+import { RoleTypes } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 
 interface GetUserResponse extends GenericResponse {
@@ -17,6 +18,7 @@ interface GetUsersResponse extends GenericResponse {
 
 interface UserListRequest extends GenericListRequest {
   room_id?: string;
+  userlevel?: 0 | RoleTypes;
 }
 
 export async function getUsers(args: UserListRequest): Promise<GetUsersResponse> {

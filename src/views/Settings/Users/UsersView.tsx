@@ -4,6 +4,8 @@ import DataTable from '@/components/Data/DataTable';
 import DataTableSkeleton from '@/components/Data/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/Data/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
+import SelectRole from '@/components/SelectRole';
+import SelectRoom from '@/components/SelectRoom';
 import {
   addUser,
   AddUserArguments,
@@ -15,6 +17,7 @@ import {
 } from '@/services/users';
 import { StatusTypes } from '@/types/Generics';
 import { UserType } from '@/types/Scopes';
+import { RoleTypes } from '@/types/SettingsTypes';
 import { Button, Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
@@ -54,6 +57,7 @@ const UsersView: React.FC = () => {
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
 
   const [room_id, setRoom] = useState<string | undefined>();
+  const [userlevel, setRole] = useState<RoleTypes | 0 | undefined>();
   const [edit, setEdit] = useState<string | boolean>(false); // false = update dialog closed ;true = new idea; string = item hash_id;
 
   const fetchUsers = useCallback(async () => {
@@ -64,6 +68,7 @@ const UsersView: React.FC = () => {
       offset,
       orderby,
       room_id,
+      userlevel,
       search_field: filter[0],
       search_text: filter[1],
       status,
@@ -74,7 +79,7 @@ const UsersView: React.FC = () => {
       setTotalUsers(response.count as number);
     }
     setLoading(false);
-  }, [JSON.stringify(filter), status, asc, limit, offset, orderby, room_id]);
+  }, [JSON.stringify(filter), status, asc, limit, offset, orderby, room_id, userlevel]);
 
   const onSubmit = (data: UserArguments) => {
     if (!edit) return;
@@ -162,8 +167,10 @@ const UsersView: React.FC = () => {
           scope="users"
           onStatusChange={(newStatus) => setStatus(newStatus)}
           onFilterChange={(newFilter) => setFilter(newFilter)}
-          onRoomChange={(newRoom) => setRoom(newRoom)}
-        />
+        >
+          <SelectRoom room={room_id || ''} setRoom={setRoom} />
+          <SelectRole role={userlevel} setRole={setRole} />
+        </FilterBar>
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
         {isLoading && <DataTableSkeleton />}
