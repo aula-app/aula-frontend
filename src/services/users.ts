@@ -69,8 +69,6 @@ export interface EditUserArguments extends UserArguments {
 
 /**
  * Adds a new user to the database
- * @param arguments - The user data to add
- * @returns Promise resolving to the new user
  */
 
 export async function addUser(args: AddUserArguments): Promise<GetUsersResponse> {
@@ -88,8 +86,6 @@ export async function addUser(args: AddUserArguments): Promise<GetUsersResponse>
 
 /**
  * Edit an user on the database
- * @param arguments - The user data to add
- * @returns Promise resolving to the new user
  */
 
 export async function editUser(args: EditUserArguments): Promise<GenericResponse> {
@@ -107,8 +103,6 @@ export async function editUser(args: EditUserArguments): Promise<GenericResponse
 
 /**
  * Delete user
- * @param user_id - The ID of the user to fetch
- * @returns Promise resolving to an array of users with custom fields
  */
 
 export async function deleteUser(user_id: string): Promise<GetUserResponse> {

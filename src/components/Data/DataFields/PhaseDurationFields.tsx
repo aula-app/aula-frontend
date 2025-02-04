@@ -1,13 +1,25 @@
+import { getDefaultDurations } from '@/services/config';
 import { getRoom } from '@/services/rooms';
-import { FormControl, FormHelperText, FormLabel, InputAdornment, Stack, TextField, useTheme } from '@mui/material';
+import {
+  FormControl,
+  FormControlProps,
+  FormHelperText,
+  FormLabel,
+  InputAdornment,
+  Stack,
+  TextField,
+  useTheme,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 interface Props {
+  room?: string;
   control: Control<any, any>;
   disabled?: boolean;
+  required?: boolean;
   onChange?: (...event: any[]) => void;
 }
 
@@ -15,7 +27,13 @@ interface Props {
  * Renders "PhaseDurationFields" component
  */
 
-const PhaseDurationFields: React.FC<Props> = ({ control, disabled = false, ...restOfProps }) => {
+const PhaseDurationFields: React.FC<Props> = ({
+  control,
+  disabled = false,
+  required = false,
+  room,
+  ...restOfProps
+}) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const { room_id } = useParams();
@@ -28,15 +46,20 @@ const PhaseDurationFields: React.FC<Props> = ({ control, disabled = false, ...re
   >;
 
   const getDurations = () => {
-    if (!room_id) return;
-    getRoom(room_id).then((response) => {
-      setDurations(
-        fields.map((field) => {
-          if (!response.data || !(field in response.data)) return 0;
-          return response.data[field];
-        })
-      );
-    });
+    const id = room || room_id;
+    if (id)
+      getRoom(id).then((response) => {
+        setDurations(
+          fields.map((field) => {
+            if (!response.data || !(field in response.data)) return 0;
+            return response.data[field];
+          })
+        );
+      });
+    else
+      getDefaultDurations().then((response) => {
+        if (response.data.length > 0) setDurations(response.data.slice(1, 4));
+      });
   };
 
   useEffect(() => {
@@ -72,13 +95,15 @@ const PhaseDurationFields: React.FC<Props> = ({ control, disabled = false, ...re
           }}
         >
           {t('settings.time.phase')}
+          {required ? '*' : ''}
+          {JSON.stringify(durations)}
         </FormLabel>
         {fields.map((name, i) => (
           <Controller
             key={name}
             name={name}
             control={control}
-            defaultValue={control._defaultValues.status || durations[i]}
+            defaultValue={control._defaultValues[name] || durations[i] || 5}
             render={({ field, fieldState }) => {
               if (!!fieldState.error) setError(fieldState.error.message);
               return (
@@ -88,6 +113,8 @@ const PhaseDurationFields: React.FC<Props> = ({ control, disabled = false, ...re
                     type="number"
                     size="small"
                     variant="standard"
+                    required={required}
+                    disabled={disabled}
                     {...field}
                     error={!!fieldState.error}
                     {...restOfProps}

@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import CustomField from './fields/CustomField';
 import DurationField from './fields/DurationField';
 import IconField from './fields/IconField';
-import ImageField from './fields/ImageField';
+import ImageField from '../../DataFields/ImageField';
 import MessageTarget from './fields/MessageTarget';
 import PhaseSelectField from './fields/PhaseSelectField';
 import SelectField from './fields/SelectField';
