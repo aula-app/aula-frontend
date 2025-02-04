@@ -2,8 +2,15 @@ import { AppIcon } from '@/components';
 import { IdeaForms } from '@/components/Data/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
-import { addIdea, deleteIdea, editIdea, getIdeasByRoom } from '@/services/ideas';
-import { StatusTypes } from '@/types/Generics';
+import {
+  addIdea,
+  AddIdeaArguments,
+  deleteIdea,
+  editIdea,
+  EditIdeaArguments,
+  getIdeasByRoom,
+  IdeaArguments,
+} from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
@@ -13,12 +20,6 @@ import { useParams } from 'react-router-dom';
 
 interface RouteParams extends Record<string, string | undefined> {
   room_id: string;
-}
-
-export interface IdeaFormData {
-  title: string;
-  content: string;
-  status?: StatusTypes;
 }
 
 /**
@@ -50,12 +51,12 @@ const WildIdeas = () => {
     fetchIdeas();
   }, []);
 
-  const onSubmit = (data: IdeaFormData) => {
+  const onSubmit = (data: IdeaArguments) => {
     if (!edit) return;
-    typeof edit === 'boolean' ? newIdea(data) : updateIdea(data);
+    typeof edit === 'boolean' ? newIdea(data as AddIdeaArguments) : updateIdea(data as EditIdeaArguments);
   };
 
-  const newIdea = async (data: IdeaFormData) => {
+  const newIdea = async (data: AddIdeaArguments) => {
     if (!room_id) return;
     const request = await addIdea({
       room_id: room_id,
@@ -66,7 +67,7 @@ const WildIdeas = () => {
     if (!request.error) onClose();
   };
 
-  const updateIdea = async (data: IdeaFormData) => {
+  const updateIdea = async (data: EditIdeaArguments) => {
     if (typeof edit === 'object' && edit.hash_id) {
       const request = await editIdea({
         idea_id: edit.hash_id,
@@ -124,7 +125,7 @@ const WildIdeas = () => {
             <IdeaForms
               onClose={onClose}
               onSubmit={onSubmit}
-              defaultValues={typeof edit !== 'boolean' ? edit : undefined}
+              defaultValues={typeof edit !== 'boolean' ? (edit as IdeaArguments) : undefined}
             />
           </Drawer>
         </>

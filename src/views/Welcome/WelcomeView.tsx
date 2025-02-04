@@ -4,7 +4,7 @@ import { RoomType } from '@/types/Scopes';
 import { getRooms } from '@/services/rooms';
 import { Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DashBoard from './DashBoard';
 
@@ -20,12 +20,12 @@ const WelcomeView = () => {
     setShowDashboard(scrollTop < 100);
   };
 
-  const fetchRooms = async () => {
+  const fetchRooms = useCallback(async () => {
     const response = await getRooms();
     setLoading(false);
     if (response.error) setError(response.error);
     if (!response.error && response.data) setRooms(response.data);
-  };
+  }, []);
 
   useEffect(() => {
     fetchRooms();

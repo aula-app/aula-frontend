@@ -11,7 +11,7 @@ interface Props {
 }
 
 /**
- * Renders "SelectInput" component
+ * Renders "StatusField" component
  */
 
 const StatusField: React.FC<Props> = ({ control, disabled = false, ...restOfProps }) => {
@@ -27,7 +27,7 @@ const StatusField: React.FC<Props> = ({ control, disabled = false, ...restOfProp
       render={({ field, fieldState }) => {
         return (
           <TextField
-            label="Status"
+            label={t('settings.columns.status')}
             required
             disabled={disabled}
             select

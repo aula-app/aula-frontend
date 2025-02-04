@@ -1,13 +1,14 @@
 import { Pagination, Stack } from '@mui/material';
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent } from 'react';
 
-type Params = {
+type Props = {
   pages: number;
-  setPage: Dispatch<SetStateAction<number>>;
+  setPage: (page: number) => void;
 };
 
-const PaginationBar = ({ pages, setPage }: Params) => {
+const PaginationBar: React.FC<Props> = ({ pages, setPage }) => {
   const changePage = (event: ChangeEvent<unknown>, newPage: number) => {
+    console.log(newPage - 1);
     setPage(newPage - 1);
   };
 

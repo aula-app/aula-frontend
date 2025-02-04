@@ -35,7 +35,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit })
     phase_duration_2: yup.number(),
     phase_duration_3: yup.number(),
     phase_duration_4: yup.number(),
-  });
+  } as Record<keyof BoxType, any>);
 
   const {
     register,
@@ -64,7 +64,6 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit })
           </Stack>
 
           <Stack gap={2}>
-            {/* name */}
             <TextField
               {...register('name')}
               label={t('settings.columns.name')}
@@ -73,7 +72,6 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit })
               fullWidth
               required
             />
-            {/* description */}
             <MarkdownEditor name="description_public" control={control} required />
             {checkPermissions(40) && (
               <AdvancedFields>

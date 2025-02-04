@@ -21,7 +21,7 @@ import { useNavigate, useParams } from 'react-router-dom';
  * Supports features like pagination, filtering, sorting, and CRUD operations
  * URLs: /settings/boxes, /settings/ideas, /settings/rooms, /settings/messages, /settings/users
  */
-const SettingsView = () => {
+const SettingsView: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   // Extract setting name and ID from URL parameters

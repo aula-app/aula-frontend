@@ -1,5 +1,6 @@
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { RoomPhases } from './SettingsTypes';
+import { StatusTypes } from './Generics';
 
 export interface AnnouncementType {
   id: number;
@@ -35,6 +36,7 @@ export interface BoxType {
   phase_duration_2: number;
   phase_duration_3: number;
   phase_duration_4: number;
+  status: StatusTypes;
 }
 
 export interface BugType extends MessageType {}
@@ -180,6 +182,7 @@ export interface CategoryType {
   created: string;
   last_update: string;
   id: number;
+  status: StatusTypes;
 }
 
 export interface CommandType {
@@ -213,6 +216,21 @@ export type ScopeType =
   | UserType
   | CategoryType
   | CommandType;
+
+// Type for generic constraints
+export type ScopeListType =
+  | AnnouncementType[]
+  | BoxType[]
+  | BugType[]
+  | CommentType[]
+  | GroupType[]
+  | IdeaType[]
+  | MessageType[]
+  | ReportType[]
+  | RoomType[]
+  | UserType[]
+  | CategoryType[]
+  | CommandType[];
 
 // Common fields that can be used in forms
 export type CommonFormFields = 'id' | 'created';

@@ -62,7 +62,7 @@ export async function getIdeasByBox(topic_id: string): Promise<GetIdeasResponse>
  * Sets Idea update types
  */
 
-interface IdeaArguments {
+export interface IdeaArguments {
   title: string;
   content: string;
   custom_field1?: string;
@@ -70,11 +70,11 @@ interface IdeaArguments {
   status?: StatusTypes;
 }
 
-interface AddIdeaArguments extends IdeaArguments {
+export interface AddIdeaArguments extends IdeaArguments {
   room_id: string;
 }
 
-interface EditIdeaArguments extends IdeaArguments {
+export interface EditIdeaArguments extends IdeaArguments {
   idea_id: string;
   room_id?: string;
 }
@@ -92,7 +92,7 @@ export async function addIdea(args: AddIdeaArguments): Promise<GetIdeasResponse>
       method: 'addIdea',
       arguments: args,
     },
-    ['user_id']
+    ['user_id', 'updater_id']
   );
 
   return response as GetIdeasResponse;
