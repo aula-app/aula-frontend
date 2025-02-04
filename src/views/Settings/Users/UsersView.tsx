@@ -1,12 +1,21 @@
+import { AppIcon } from '@/components';
 import UserForms from '@/components/Data/DataForms/UserForms';
 import DataTable from '@/components/Data/DataTable';
 import DataTableSkeleton from '@/components/Data/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/Data/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
-import { addUser, AddUserArguments, editUser, EditUserArguments, getUsers, UserArguments } from '@/services/users';
+import {
+  addUser,
+  AddUserArguments,
+  deleteUser,
+  editUser,
+  EditUserArguments,
+  getUsers,
+  UserArguments,
+} from '@/services/users';
 import { StatusTypes } from '@/types/Generics';
 import { UserType } from '@/types/Scopes';
-import { Drawer, Typography } from '@mui/material';
+import { Button, Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -45,7 +54,7 @@ const UsersView: React.FC = () => {
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
 
   const [room_id, setRoom] = useState<string | undefined>();
-  const [edit, setEdit] = useState<number | boolean>(false); // false = update dialog closed ;true = new idea; number = edit idea id;
+  const [edit, setEdit] = useState<string | boolean>(false); // false = update dialog closed ;true = new idea; string = item hash_id;
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -69,10 +78,10 @@ const UsersView: React.FC = () => {
 
   const onSubmit = (data: UserArguments) => {
     if (!edit) return;
-    typeof edit === 'boolean' ? newIdea(data as AddUserArguments) : updateIdea(data as EditUserArguments);
+    typeof edit === 'boolean' ? newUser(data as AddUserArguments) : updateUser(data as EditUserArguments);
   };
 
-  const newIdea = async (data: AddUserArguments) => {
+  const newUser = async (data: AddUserArguments) => {
     const request = await addUser({
       userlevel: String(data.userlevel || 20),
       displayname: data.displayname,
@@ -85,22 +94,39 @@ const UsersView: React.FC = () => {
     if (!request.error) onClose();
   };
 
-  const updateIdea = async (data: EditUserArguments) => {
-    const user = users.find((user) => user.id === edit);
-    if (user && user.hash_id) {
-      const request = await editUser({
-        user_id: user.hash_id,
-        userlevel: data.userlevel,
-        displayname: data.displayname,
-        realname: data.realname,
-        username: data.username,
-        email: data.email,
-        about_me: data.about_me,
-        status: data.status,
-      });
-      if (!request.error) onClose();
-    }
+  const updateUser = async (data: EditUserArguments) => {
+    const user = users.find((user) => user.hash_id === edit);
+    if (!user || !user.hash_id) return;
+    const request = await editUser({
+      user_id: user.hash_id,
+      userlevel: data.userlevel,
+      displayname: data.displayname,
+      realname: data.realname,
+      username: data.username,
+      email: data.email,
+      about_me: data.about_me,
+      status: data.status,
+    });
+    if (!request.error) onClose();
   };
+
+  const deleteUsers = (items: Array<string>) =>
+    items.map(async (user) => {
+      const request = await deleteUser(user);
+      if (!request.error) onClose();
+    });
+
+  const addToRoom = (items: Array<string>) =>
+    items.map(async (user) => {
+      const request = await deleteUser(user);
+      if (!request.error) onClose();
+    });
+
+  const addToGroup = (items: Array<string>) =>
+    items.map(async (user) => {
+      const request = await deleteUser(user);
+      if (!request.error) onClose();
+    });
 
   const onClose = () => {
     setEdit(false);
@@ -110,6 +136,23 @@ const UsersView: React.FC = () => {
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
+
+  const extraTools = ({ items }: { items: Array<string> }) => (
+    <>
+      <Button variant="outlined" color="secondary" onClick={() => addToRoom(items)}>
+        <AppIcon icon="room" pr={2} />
+        {t('actions.addToParent', {
+          var: t('scopes.rooms.name'),
+        })}
+      </Button>
+      <Button variant="outlined" color="secondary" onClick={() => addToGroup(items)}>
+        <AppIcon icon="group" pr={2} />
+        {t('actions.addToParent', {
+          var: t('scopes.groups.name'),
+        })}
+      </Button>
+    </>
+  );
 
   return (
     <Stack width="100%" height="100%" py={2}>
@@ -136,6 +179,8 @@ const UsersView: React.FC = () => {
             setLimit={setLimit}
             setOrderby={setOrderby}
             setEdit={setEdit}
+            setDelete={deleteUsers}
+            // extraTools={extraTools}
           />
         )}
         <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />
@@ -145,7 +190,7 @@ const UsersView: React.FC = () => {
           onClose={onClose}
           onSubmit={onSubmit}
           defaultValues={
-            typeof edit !== 'boolean' ? (users.find((user) => user.id === edit) as UserArguments) : undefined
+            typeof edit !== 'boolean' ? (users.find((user) => user.hash_id === edit) as UserArguments) : undefined
           }
         />
       </Drawer>

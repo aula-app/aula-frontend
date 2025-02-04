@@ -18,6 +18,7 @@
     "hide": "Hide",
     "move": "Move selected {{var}} to",
     "print": "Print",
+    "remove": "Delete {{var}}",
     "save": "Save",
     "select": "Select {{var}}",
     "show": "Show",

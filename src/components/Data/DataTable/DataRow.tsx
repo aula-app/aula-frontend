@@ -1,12 +1,12 @@
 import { StatusTypes } from '@/types/Generics';
-import { ScopeType } from '@/types/Scopes';
+import { SettingType } from '@/types/Scopes';
 import { Checkbox, TableCell, TableRow, TableRowProps, useTheme } from '@mui/material';
 import { deepOrange, deepPurple, grey, orange } from '@mui/material/colors';
 import { ReactNode } from 'react';
 
 interface Props extends TableRowProps {
   children: ReactNode;
-  item: ScopeType;
+  item: SettingType;
   selected?: boolean;
   status: StatusTypes;
   toggleRow: (id: string) => void;
@@ -44,7 +44,7 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
         <Checkbox
           checked={selected}
           onChange={() => {
-            if (!isFixed()) toggleRow(String(item.id));
+            if (!isFixed()) toggleRow(String(item.hash_id));
           }}
           disabled={isFixed()}
         />
