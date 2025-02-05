@@ -1,7 +1,5 @@
 import { AppIcon } from '@/components';
 import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
-import { DeleteData } from '@/components/Data';
-import EditData from '@/components/Data/EditData';
 import { CategoryType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Chip, Stack } from '@mui/material';
@@ -66,8 +64,8 @@ const CatView = () => {
           );
         })}
       </Stack>
-      <EditData scope="categories" item={selectedItem} isOpen={!!editCat} onClose={onClose} />
-      <DeleteData scope="categories" id={Number(selectedItem?.id)} isOpen={!!deleteCat} onClose={onClose} />
+      {/* <EditData scope="categories" item={selectedItem} isOpen={!!editCat} onClose={onClose} />
+      <DeleteData scope="categories" id={Number(selectedItem?.id)} isOpen={!!deleteCat} onClose={onClose} /> */}
     </Stack>
   );
 };

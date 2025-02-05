@@ -1,6 +1,5 @@
 import { BoxType } from '@/types/Scopes';
 import { checkPermissions, phaseOptions } from '@/utils';
-import { BoxFormData } from '@/views/BoxPhase/BoxPhaseView';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
@@ -8,6 +7,7 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, PhaseDurationFields, SelectField, SelectRoomField, StatusField } from '../DataFields';
+import { BoxArguments } from '@/services/boxes';
 
 /**
  * BoxForms component is used to create or edit an idea.
@@ -18,7 +18,7 @@ import { MarkdownEditor, PhaseDurationFields, SelectField, SelectRoomField, Stat
 interface BoxFormsProps {
   onClose: () => void;
   defaultValues?: BoxType;
-  onSubmit: (data: BoxFormData) => void;
+  onSubmit: (data: BoxArguments) => void;
 }
 
 const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit }) => {

@@ -1,5 +1,4 @@
 import { checkPermissions } from '@/utils';
-import { CommentFormData } from '@/views/Idea/Comment/CommentView';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
@@ -7,6 +6,8 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, StatusField } from '../DataFields';
+import { CommentArguments } from '@/services/comments';
+import { CommentType } from '@/types/Scopes';
 
 /**
  * CommentForms component is used to create or edit an idea.
@@ -16,8 +17,8 @@ import { MarkdownEditor, StatusField } from '../DataFields';
 
 interface CommentFormsProps {
   onClose: () => void;
-  defaultValues?: CommentFormData;
-  onSubmit: (data: CommentFormData) => void;
+  defaultValues?: CommentType;
+  onSubmit: (data: CommentArguments) => void;
 }
 
 const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues = {}, onClose, onSubmit }) => {

@@ -2,8 +2,15 @@ import { AppIcon } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import BoxForms from '@/components/Data/DataForms/BoxForms';
-import { addBox, deleteBox, editBox, getBoxesByPhase } from '@/services/boxes';
-import { StatusTypes } from '@/types/Generics';
+import {
+  addBox,
+  AddBoxArguments,
+  BoxArguments,
+  deleteBox,
+  editBox,
+  EditBoxArguments,
+  getBoxesByPhase,
+} from '@/services/boxes';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
@@ -12,18 +19,6 @@ import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-
-export interface BoxFormData {
-  name: string;
-  description_public: string;
-  status?: StatusTypes;
-  room_id?: string;
-  phase_id?: string;
-  phase_duration_1?: number;
-  phase_duration_2?: number;
-  phase_duration_3?: number;
-  phase_duration_4?: number;
-}
 
 /** * Renders "IdeaBoxes" view
  * url: /room/:room_id/:phase
@@ -35,7 +30,7 @@ const BoxPhaseView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
-  const [edit, setEdit] = useState<BoxType | true>(); // undefined = update dialog closed; true = new idea; EditFormData = edit idea;
+  const [edit, setEdit] = useState<BoxType | true>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
 
   const fetchBoxes = useCallback(async () => {
     if (!room_id || !phase) return;
@@ -54,15 +49,15 @@ const BoxPhaseView = () => {
     setEdit(box);
   };
 
-  const boxSubmit = (data: BoxFormData) => {
+  const boxSubmit = (data: BoxArguments) => {
     if (!edit) return;
-    edit === true ? newBox(data) : updateBox(data);
+    edit === true ? newBox(data as AddBoxArguments) : updateBox(data as EditBoxArguments);
   };
 
-  const newBox = async (data: BoxFormData) => {
+  const newBox = async (data: AddBoxArguments) => {
     if (!room_id || !phase) return;
     const request = await addBox({
-      room_id: room_id,
+      room_hash_id: room_id,
       phase_id: Number(phase) as RoomPhases,
       name: data.name,
       description_public: data.description_public,
@@ -71,7 +66,7 @@ const BoxPhaseView = () => {
     if (!request.error) onClose();
   };
 
-  const updateBox = async (data: BoxFormData) => {
+  const updateBox = async (data: EditBoxArguments) => {
     if (!(typeof edit === 'object') || !edit.hash_id) return;
     const request = await editBox({
       topic_id: edit.hash_id,

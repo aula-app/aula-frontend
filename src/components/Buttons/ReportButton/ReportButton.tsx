@@ -1,6 +1,6 @@
 import AppIconButton from '@/components/AppIconButton';
 import { ReportForms } from '@/components/Data/DataForms';
-import { addReport } from '@/services/messages';
+import { addReport, ReportArguments } from '@/services/messages';
 import { Drawer, IconButtonProps } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,16 +9,11 @@ interface Props extends IconButtonProps {
   target: string;
 }
 
-export interface ReportFormData {
-  report: string;
-  content?: string;
-}
-
 const ReportButton: React.FC<Props> = ({ target, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
 
-  const onSubmit = async (data: ReportFormData) => {
+  const onSubmit = async (data: ReportArguments) => {
     const body = `
 ---
 claim: ${t(`forms.report.${data.report}`)}

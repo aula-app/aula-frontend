@@ -232,8 +232,8 @@ export type ScopeListType =
   | CategoryType[]
   | CommandType[];
 
-export type SettingType = BoxType | IdeaType | MessageType | RoomType | UserType;
-export type SettingsType = BoxType[] | IdeaType[] | MessageType[] | RoomType[] | UserType[];
+export type SettingType = AnnouncementType | BoxType | IdeaType | MessageType | RoomType | UserType;
+export type SettingsType = AnnouncementType[] | BoxType[] | IdeaType[] | MessageType[] | RoomType[] | UserType[];
 
 // Common fields that can be used in forms
 export type CommonFormFields = 'id' | 'created';

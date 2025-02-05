@@ -9,6 +9,7 @@ interface Props {
   options: SelectOptionsType[];
   control: Control<any, any>;
   disabled?: boolean;
+  required?: boolean;
   defaultValue?: string | number;
   onChange?: (...event: any[]) => void;
 }
@@ -17,7 +18,15 @@ interface Props {
  * Renders "SelectField" component
  */
 
-const SelectField: React.FC<Props> = ({ name, options, control, defaultValue, disabled = false, ...restOfProps }) => {
+const SelectField: React.FC<Props> = ({
+  name,
+  options,
+  control,
+  defaultValue,
+  disabled = false,
+  required = false,
+  ...restOfProps
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -29,7 +38,7 @@ const SelectField: React.FC<Props> = ({ name, options, control, defaultValue, di
         <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)' }}>
           <TextField
             label={t(`settings.columns.${name}`)}
-            required
+            required={required}
             disabled={disabled}
             select
             {...field}
