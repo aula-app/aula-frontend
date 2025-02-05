@@ -1,5 +1,4 @@
 import { RoomArguments } from '@/services/rooms';
-import { RoomType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
@@ -8,7 +7,6 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, PhaseDurationFields, StatusField } from '../DataFields';
-import ImageField from '../DataFields/ImageField';
 
 /**
  * RoomForms component is used to create or edit an room.

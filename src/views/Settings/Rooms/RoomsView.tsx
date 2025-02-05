@@ -1,7 +1,7 @@
-import RoomForms from '@/components/Data/DataForms/RoomForms';
-import DataTable from '@/components/Data/DataTable';
-import DataTableSkeleton from '@/components/Data/DataTable/DataTableSkeleton';
-import PaginationBar from '@/components/Data/DataTable/PaginationBar';
+import { RoomForms } from '@/components/DataForms';
+import DataTable from '@/components/DataTable';
+import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
+import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import { addRoom, deleteRoom, editRoom, EditRoomArguments, getRooms, RoomArguments } from '@/services/rooms';
 import { StatusTypes } from '@/types/Generics';

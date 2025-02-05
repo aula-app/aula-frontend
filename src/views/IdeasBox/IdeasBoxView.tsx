@@ -1,11 +1,11 @@
 import { AppIcon, AppLink } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
-import BoxForms from '@/components/DataForms/BoxForms';
+import { BoxForms } from '@/components/DataForms';
 import { IdeaCard } from '@/components/Idea';
 import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
 import KnowMore from '@/components/KnowMore';
-import { BoxArguments, deleteBox, editBox, EditBoxArguments, getBox, getBoxDelegation } from '@/services/boxes';
+import { deleteBox, editBox, EditBoxArguments, getBox, getBoxDelegation } from '@/services/boxes';
 import { getIdeasByBox } from '@/services/ideas';
 import { DelegationType } from '@/types/Delegation';
 import { BoxType, IdeaType } from '@/types/Scopes';

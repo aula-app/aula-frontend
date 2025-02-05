@@ -7,8 +7,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { MarkdownEditor, StatusField } from '../DataFields';
-import RoleField from '../DataFields/RoleField';
+import { MarkdownEditor, RoleField, StatusField } from '../DataFields';
 
 /**
  * UserForms component is used to create or edit an user.

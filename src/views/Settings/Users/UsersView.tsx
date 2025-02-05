@@ -1,8 +1,8 @@
 import { AppIcon } from '@/components';
-import UserForms from '@/components/Data/DataForms/UserForms';
-import DataTable from '@/components/Data/DataTable';
-import DataTableSkeleton from '@/components/Data/DataTable/DataTableSkeleton';
-import PaginationBar from '@/components/Data/DataTable/PaginationBar';
+import { UserForms } from '@/components/DataForms';
+import DataTable from '@/components/DataTable';
+import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
+import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import SelectRole from '@/components/SelectRole';
 import SelectRoom from '@/components/SelectRoom';
