@@ -1,13 +1,15 @@
 import AppIcon from '@/components/AppIcon';
 import { getRooms } from '@/services/rooms';
-import { getUserRooms } from '@/services/users';
+import { addUserRoom, getUserRooms, removeUserRoom } from '@/services/users';
 import { RoomType } from '@/types/Scopes';
+import { UpdtesObject } from '@/types/SettingsTypes';
 import {
   Button,
   ButtonProps,
   Checkbox,
   Dialog,
   DialogActions,
+  DialogContent,
   DialogTitle,
   List,
   ListItem,
@@ -17,21 +19,30 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { set } from 'date-fns';
+import { useCallback, useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends ButtonProps {
-  items?: string[];
-  onSubmit: () => void;
+  users?: string[];
 }
 
-const AddRoomButton: React.FC<Props> = ({ disabled = false, items = [], onSubmit, ...restOfProps }) => {
+/**
+ * Interface that will be exposed to the parent component.
+ */
+export interface AddRoomRefProps {
+  setNewUserRooms: (id: string) => Promise<void>;
+}
+
+const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled = false, ...restOfProps }, ref) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rooms, setRooms] = useState<RoomType[]>([]);
   const [selectedRooms, setSelectedRooms] = useState<string[]>([]);
+  const [indeterminateRooms, setIndeterminateRooms] = useState<string[]>([]);
+  const [updates, setUpdates] = useState<UpdtesObject>({ add: [], remove: [] });
 
   const fetchRooms = useCallback(async () => {
     const response = await getRooms();
@@ -40,24 +51,94 @@ const AddRoomButton: React.FC<Props> = ({ disabled = false, items = [], onSubmit
     if (!response.error && response.data) setRooms(response.data);
   }, []);
 
-  const fetchUserRoom = useCallback(async (id: string) => {
-    const response = await getUserRooms(id);
-    if (!response.error && response.data)
-      console.log(`user: ${id} => rooms: ${response.data.map((room) => room.room_id)}`);
-  }, []);
+  const fetchUsersRooms = () => {
+    if (users.length === 0) return;
 
-  const getOwnRooms = () => {
-    items.forEach((item) => {
-      fetchUserRoom(item);
+    const roomCounts: { [key: string]: number } = {};
+    const commonRooms = [] as string[];
+    const partialRooms = [] as string[];
+
+    users.forEach(async (user) => {
+      const rooms = await getUserRooms(user);
+      if (users.length === 1) {
+        if (rooms.data) setSelectedRooms(rooms.data.map((room) => room.hash_id));
+      } else {
+        rooms.data?.forEach((room) => {
+          roomCounts[room.hash_id] = (roomCounts[room.hash_id] || 0) + 1;
+        });
+      }
+
+      const roomPromises = users.map(async (user) => {
+        const rooms = await getUserRooms(user);
+        if (users.length === 1) {
+          if (rooms.data) setSelectedRooms(rooms.data.map((room) => room.hash_id));
+        } else {
+          rooms.data?.forEach((room) => {
+            roomCounts[room.hash_id] = (roomCounts[room.hash_id] || 0) + 1;
+          });
+        }
+      });
+
+      await Promise.all(roomPromises).then(() => {
+        Object.keys(roomCounts).forEach((room_id) => {
+          if (roomCounts[room_id] === users.length) {
+            commonRooms.push(room_id);
+          } else {
+            partialRooms.push(room_id);
+          }
+        });
+
+        setSelectedRooms(commonRooms);
+        setIndeterminateRooms(partialRooms);
+      });
     });
   };
 
   const toggleRoom = (id: string) => {
-    if (selectedRooms.includes(id)) {
-      setSelectedRooms(selectedRooms.filter((room) => room !== id));
-    } else {
+    if (!selectedRooms.includes(id)) {
+      // add
       setSelectedRooms([...selectedRooms, id]);
+      addUpdate(true, id);
+    } else {
+      // remove
+      setSelectedRooms(selectedRooms.filter((room) => room !== id));
+      addUpdate(false, id);
     }
+  };
+
+  const addUpdate = (add: boolean, id: string) => {
+    if (add) {
+      if (updates.add.includes(id)) return;
+      if (updates.remove.includes(id))
+        setUpdates({ add: updates.add.filter((room) => room !== id), remove: updates.remove });
+      else setUpdates({ add: [...updates.add, id], remove: updates.remove });
+    } else {
+      if (updates.remove.includes(id)) return;
+      if (updates.add.includes(id))
+        setUpdates({ add: updates.add, remove: updates.remove.filter((room) => room !== id) });
+      if (indeterminateRooms.includes(id)) {
+        setIndeterminateRooms(indeterminateRooms.filter((room) => room !== id));
+        setUpdates({ add: updates.add, remove: [...updates.remove, id] });
+      } else setUpdates({ add: updates.add, remove: [...updates.remove, id] });
+    }
+  };
+
+  const setUsersRooms = async () => {
+    const add = users.map((user_id) => updates.add.map((room_id) => addUserRoom(user_id, room_id)));
+    const remove = users.map((user_id) => updates.remove.map((room_id) => removeUserRoom(user_id, room_id)));
+    await Promise.all([...add, ...remove]);
+    setUpdates({ add: [], remove: [] });
+  };
+
+  const setNewUserRooms = async (user_id: string) => {
+    const add = updates.add.map((room_id) => addUserRoom(user_id, room_id));
+    await Promise.all([...add]);
+    setUpdates({ add: [], remove: [] });
+  };
+
+  const onSubmit = () => {
+    if (users.length > 0) setUsersRooms();
+    setOpen(false);
   };
 
   const onClose = () => {
@@ -65,12 +146,15 @@ const AddRoomButton: React.FC<Props> = ({ disabled = false, items = [], onSubmit
     setSelectedRooms([]);
   };
 
-  useEffect(() => {
+  const onReset = () => {
+    setUpdates({ add: [], remove: [] });
     fetchRooms();
-    if (items.length > 0) {
-      getOwnRooms();
-    }
-  }, [items]);
+    fetchUsersRooms();
+  };
+
+  useEffect(() => {
+    onReset();
+  }, [users]);
 
   return (
     <>
@@ -88,27 +172,34 @@ const AddRoomButton: React.FC<Props> = ({ disabled = false, items = [], onSubmit
         </DialogTitle>
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        <List sx={{ pt: 0 }}>
-          {rooms.map((room) => (
-            <ListItem disablePadding key={room.hash_id}>
-              <ListItemButton onClick={() => toggleRoom(room.hash_id)}>
-                <ListItemAvatar>
-                  <Checkbox checked={selectedRooms.includes(room.hash_id)} />
-                </ListItemAvatar>
-                <ListItemText primary={room.room_name} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <DialogContent>
+          <List sx={{ pt: 0 }}>
+            {rooms.map((room) => (
+              <ListItem disablePadding key={room.hash_id}>
+                <ListItemButton onClick={() => toggleRoom(room.hash_id)}>
+                  <ListItemAvatar>
+                    <Checkbox
+                      checked={selectedRooms.includes(room.hash_id)}
+                      indeterminate={!selectedRooms.includes(room.hash_id) && indeterminateRooms.includes(room.hash_id)}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary={room.room_name} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="secondary" autoFocus>
             {t('actions.cancel')}
           </Button>
-          <Button variant="contained">{t('actions.confirm')}</Button>
+          <Button onClick={onSubmit} variant="contained">
+            {t('actions.confirm')}
+          </Button>
         </DialogActions>
       </Dialog>
     </>
   );
-};
+});
 
 export default AddRoomButton;

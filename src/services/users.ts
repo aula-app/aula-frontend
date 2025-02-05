@@ -70,7 +70,11 @@ export interface EditUserArguments extends UserArguments {
  * Adds a new user to the database
  */
 
-export async function addUser(args: AddUserArguments): Promise<GetUsersResponse> {
+interface addResponse extends GenericResponse {
+  data: { insert_id: string; hash_id: string; temp_pw: string } | null;
+}
+
+export async function addUser(args: AddUserArguments): Promise<addResponse> {
   const response = await databaseRequest(
     {
       model: 'User',
@@ -80,7 +84,7 @@ export async function addUser(args: AddUserArguments): Promise<GetUsersResponse>
     ['updater_id']
   );
 
-  return response as GetUsersResponse;
+  return response as addResponse;
 }
 
 /**
@@ -224,7 +228,7 @@ export async function exportSelfData(): Promise<GetUserResponse> {
  */
 
 interface GetUserRoomsResponse extends GenericResponse {
-  data: { room_id: string }[] | null;
+  data: { hash_id: string }[] | null;
 }
 
 export async function getUserRooms(user_id: string): Promise<GetUserRoomsResponse> {
@@ -235,6 +239,34 @@ export async function getUserRooms(user_id: string): Promise<GetUserRoomsRespons
   });
 
   return response as GetUserRoomsResponse;
+}
+
+/**
+ * Add user room
+ */
+
+export async function addUserRoom(user_id: string, room_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest({
+    model: 'User',
+    method: 'addUserToRoom',
+    arguments: { user_id, room_id },
+  });
+
+  return response as GenericResponse;
+}
+
+/**
+ * Remove user room
+ */
+
+export async function removeUserRoom(user_id: string, room_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest({
+    model: 'User',
+    method: 'removeUserFromRoom',
+    arguments: { user_id, room_id },
+  });
+
+  return response as GenericResponse;
 }
 
 /**
