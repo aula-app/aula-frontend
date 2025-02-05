@@ -1,10 +1,10 @@
 import { PossibleFields } from '@/types/Scopes';
 import { SelectOptionsType } from '@/utils/Data/formDefaults';
-import { FormControl, FormHelperText, MenuItem, TextField } from '@mui/material';
+import { FormControl, FormHelperText, MenuItem, StandardTextFieldProps, TextField } from '@mui/material';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
-interface Props {
+interface Props extends StandardTextFieldProps {
   name: keyof PossibleFields;
   options: SelectOptionsType[];
   control: Control<any, any>;
@@ -25,6 +25,7 @@ const SelectField: React.FC<Props> = ({
   defaultValue,
   disabled = false,
   required = false,
+  sx,
   ...restOfProps
 }) => {
   const { t } = useTranslation();
@@ -35,7 +36,7 @@ const SelectField: React.FC<Props> = ({
       control={control}
       defaultValue={control._defaultValues[name] || defaultValue}
       render={({ field, fieldState }) => (
-        <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)' }}>
+        <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)', ...sx }}>
           <TextField
             label={t(`settings.columns.${name}`)}
             required={required}
