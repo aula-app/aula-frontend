@@ -18,7 +18,6 @@ const BugButton: React.FC<Props> = ({ target, disabled = false, ...restOfProps }
   const [isOpen, setOpen] = useState(false);
 
   const onSubmit = async (data: BugFormData) => {
-    console.log(data);
     const body = `
 ---
 location: ${location.pathname}

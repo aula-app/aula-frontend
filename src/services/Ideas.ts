@@ -1,11 +1,9 @@
 import { StatusTypes } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
-import { databaseRequest, GenericResponse } from '@/utils';
+import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 
 /**
  * Fetches idea
- * @param idea_id - The ID of the idea to fetch
- * @returns Promise resolving to an array of ideas with custom fields
  */
 
 interface GetIdeaResponse extends GenericResponse {
@@ -23,9 +21,25 @@ export async function getIdea(idea_id: string): Promise<GetIdeaResponse> {
 }
 
 /**
+ * Fetches all ideas
+ */
+
+interface GetIdeasResponse extends GenericResponse {
+  data: IdeaType[] | null;
+}
+
+export async function getIdeas(args: GenericListRequest): Promise<GetIdeasResponse> {
+  const response = await databaseRequest({
+    model: 'Idea',
+    method: 'getIdeas',
+    arguments: args,
+  });
+
+  return response as GetIdeasResponse;
+}
+
+/**
  * Fetches ideas for a specific room
- * @param room_id - The ID of the room to fetch ideas for
- * @returns Promise resolving to an array of ideas with custom fields
  */
 
 interface GetIdeasResponse extends GenericResponse {
@@ -44,8 +58,6 @@ export async function getIdeasByRoom(room_id: string): Promise<GetIdeasResponse>
 
 /**
  * Fetches ideas for a specific box
- * @param room_id - The ID of the room to fetch ideas for
- * @returns Promise resolving to an array of ideas with custom fields
  */
 
 export async function getIdeasByBox(topic_id: string): Promise<GetIdeasResponse> {
@@ -71,18 +83,16 @@ export interface IdeaArguments {
 }
 
 export interface AddIdeaArguments extends IdeaArguments {
-  room_id: string;
+  room_hash_id: string;
 }
 
 export interface EditIdeaArguments extends IdeaArguments {
   idea_id: string;
-  room_id?: string;
+  room_hash_id?: string;
 }
 
 /**
  * Adds a new idea to the database
- * @param arguments - The idea data to add
- * @returns Promise resolving to the new idea
  */
 
 export async function addIdea(args: AddIdeaArguments): Promise<GetIdeasResponse> {
@@ -100,8 +110,6 @@ export async function addIdea(args: AddIdeaArguments): Promise<GetIdeasResponse>
 
 /**
  * Edit an idea on the database
- * @param arguments - The idea data to add
- * @returns Promise resolving to the new idea
  */
 
 export async function editIdea(args: EditIdeaArguments): Promise<GenericResponse> {
@@ -119,8 +127,6 @@ export async function editIdea(args: EditIdeaArguments): Promise<GenericResponse
 
 /**
  * Removes an idea from the database
- * @param id - The idea id
- * @returns Promise resolving to the new idea
  */
 
 export async function deleteIdea(id: string): Promise<GenericResponse> {
@@ -182,8 +188,6 @@ export async function getIdeaLike(idea_id: string): Promise<boolean> {
 
 /**
  * Adds a like to an idea
- * @param idea_id - The ID of the idea to like
- * @returns Promise resolving to the updated idea list
  */
 
 export async function addIdeaLike(idea_id: string): Promise<void> {
@@ -199,8 +203,6 @@ export async function addIdeaLike(idea_id: string): Promise<void> {
 
 /**
  * Removes a like to an idea
- * @param idea_id - The ID of the idea to like
- * @returns Promise resolving to the updated idea list
  */
 
 export async function removeIdeaLike(idea_id: string): Promise<void> {
