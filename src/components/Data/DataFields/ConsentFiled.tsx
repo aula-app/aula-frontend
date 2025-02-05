@@ -39,6 +39,7 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
               <Controller
                 name="consent_text"
                 control={control}
+                defaultValue={t('actions.agree')}
                 render={({ field, fieldState }) => (
                   <TextField
                     label={t('settings.columns.consent_text')}
