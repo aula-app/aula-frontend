@@ -244,6 +244,11 @@
       "plural": "Meldungen",
       "headline": "Inhaltsbericht zu '{{var}}'"
     },
+    "requests": {
+      "name": "Anfrage",
+      "plural": "Anfragen",
+      "headline": "Aktualisierungsanfrage zu '{{var}}'"
+    },
     "rooms": {
       "name": "Raum",
       "plural": "Räume"

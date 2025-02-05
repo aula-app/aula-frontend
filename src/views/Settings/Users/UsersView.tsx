@@ -1,4 +1,6 @@
 import { AppIcon } from '@/components';
+import AddGroupButton from '@/components/Buttons/AddGroups/AddGroupsButton';
+import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
 import { UserForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
@@ -146,18 +148,8 @@ const UsersView: React.FC = () => {
 
   const extraTools = ({ items }: { items: Array<string> }) => (
     <>
-      <Button variant="outlined" color="secondary" onClick={() => addToRoom(items)}>
-        <AppIcon icon="room" pr={2} />
-        {t('actions.addToParent', {
-          var: t('scopes.rooms.name'),
-        })}
-      </Button>
-      <Button variant="outlined" color="secondary" onClick={() => addToGroup(items)}>
-        <AppIcon icon="group" pr={2} />
-        {t('actions.addToParent', {
-          var: t('scopes.groups.name'),
-        })}
-      </Button>
+      <AddRoomButton items={items} onSubmit={() => addToRoom(items)} />
+      <AddGroupButton items={items} onSubmit={() => addToGroup(items)} />
     </>
   );
 
