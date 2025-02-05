@@ -1,5 +1,5 @@
 import { AppIcon } from '@/components';
-import { MarkdownEditor } from '@/components/Data/DataFields';
+import { MarkdownEditor } from '@/components/DataFields';
 import UserAvatar from '@/components/UserAvatar';
 import { addMessage } from '@/services/messages';
 import { editSelf } from '@/services/users';

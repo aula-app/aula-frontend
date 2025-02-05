@@ -1,3 +1,4 @@
+import { AnnouncementArguments } from '@/services/announcements';
 import { AnnouncementType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,9 +7,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { MarkdownEditor, PhaseDurationFields, SelectField, SelectRoomField, StatusField } from '../DataFields';
-import { AnnouncementArguments } from '@/services/announcements';
-import ConsentField from '../DataFields/ConsentFiled';
+import { ConsentField, MarkdownEditor, StatusField } from '../DataFields';
 
 /**
  * AnnouncementForms component is used to create or edit an idea.

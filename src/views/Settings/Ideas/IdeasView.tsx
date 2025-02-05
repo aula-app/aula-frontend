@@ -1,4 +1,4 @@
-import IdeaForms from '@/components/DataForms/IdeaForms';
+import { IdeaForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
