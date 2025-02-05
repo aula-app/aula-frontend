@@ -3,6 +3,7 @@
     "activate": "{{var}} aktivieren",
     "add": "{{var}} hinzufügen",
     "addToParent": "Zu {{var}} hinzufügen",
+    "agree": "Zustimmen",
     "archive": "Archivieren",
     "bugReport": "Fehler melden",
     "cancel": "Abbrechen",
