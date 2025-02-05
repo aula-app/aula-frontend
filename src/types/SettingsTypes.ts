@@ -16,6 +16,7 @@ export type SettingNamesType =
   | 'ideas'
   | 'messages'
   | 'reports'
+  | 'requests'
   | 'rooms'
   | 'surveys'
   | 'users'

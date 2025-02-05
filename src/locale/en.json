@@ -244,6 +244,11 @@
       "plural": "Reports",
       "headline": "Content report on '{{var}}'"
     },
+    "requests": {
+      "name": "Request",
+      "plural": "Requests",
+      "headline": "Update request on '{{var}}'"
+    },
     "rooms": {
       "name": "Room",
       "plural": "Rooms"

@@ -1,8 +1,8 @@
 import { GroupType } from '@/types/Scopes';
-import { databaseRequest, GenericResponse } from './requests';
+import { databaseRequest, GenericListRequest, GenericResponse } from './requests';
 
 /**
- * Get a list of Groups from the database.
+ * Get a Group from the database.
  */
 
 interface GetGroupResponse extends GenericResponse {
@@ -19,4 +19,22 @@ export const getGroup = async (id: string): Promise<GetGroupResponse> => {
   });
 
   return response as GetGroupResponse;
+};
+
+/**
+ * Get a list of Groups from the database.
+ */
+
+interface GetGroupsResponse extends GenericResponse {
+  data: GroupType[] | null;
+}
+
+export const getGroups = async (args?: GenericListRequest): Promise<GetGroupsResponse> => {
+  const response = await databaseRequest({
+    model: 'Group',
+    method: 'getGroups',
+    arguments: args || {},
+  });
+
+  return response as GetGroupsResponse;
 };

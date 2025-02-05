@@ -13,7 +13,6 @@ interface GetUsersResponse extends GenericResponse {
 
 /**
  * Fetches users from DB
- * @returns Promise resolving to an array of users with custom fields
  */
 
 interface UserListRequest extends GenericListRequest {
@@ -33,8 +32,6 @@ export async function getUsers(args: UserListRequest): Promise<GetUsersResponse>
 
 /**
  * Fetches user
- * @param user_id - The ID of the user to fetch
- * @returns Promise resolving to an array of users with custom fields
  */
 
 export async function getUser(user_id: string): Promise<GetUserResponse> {
@@ -119,7 +116,6 @@ export async function deleteUser(user_id: string): Promise<GetUserResponse> {
 
 /**
  * Fetches current user
- * @returns Promise resolving to an array of users with custom fields
  */
 
 export async function getSelf(): Promise<GetUserResponse> {
@@ -137,8 +133,6 @@ export async function getSelf(): Promise<GetUserResponse> {
 
 /**
  * Edit the user on the database
- * @param arguments - The user data to add
- * @returns Promise resolving to the new user
  */
 
 export async function editSelf(args: UserArguments): Promise<GenericResponse> {
@@ -210,7 +204,6 @@ export async function editSelfRestricted(args: RestrictedUpdateArgs) {
 
 /**
  * Get user GDPR data
- * @returns Promise resolving to an array of users with custom fields
  */
 
 export async function exportSelfData(): Promise<GetUserResponse> {
@@ -224,4 +217,40 @@ export async function exportSelfData(): Promise<GetUserResponse> {
   );
 
   return response as GetUserResponse;
+}
+
+/**
+ * Get user rooms
+ */
+
+interface GetUserRoomsResponse extends GenericResponse {
+  data: { room_id: string }[] | null;
+}
+
+export async function getUserRooms(user_id: string): Promise<GetUserRoomsResponse> {
+  const response = await databaseRequest({
+    model: 'User',
+    method: 'getUserRooms',
+    arguments: { user_id },
+  });
+
+  return response as GetUserRoomsResponse;
+}
+
+/**
+ * Get user rooms
+ */
+
+interface GetUserGroupsResponse extends GenericResponse {
+  data: { group_id: string }[] | null;
+}
+
+export async function getUserGroups(user_id: string): Promise<GetUserGroupsResponse> {
+  const response = await databaseRequest({
+    model: 'User',
+    method: 'getUserGroups',
+    arguments: { user_id },
+  });
+
+  return response as GetUserGroupsResponse;
 }

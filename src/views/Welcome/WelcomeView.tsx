@@ -10,10 +10,10 @@ import DashBoard from './DashBoard';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
-  const [rooms, setRooms] = useState<RoomType[]>([]);
   const [showDashboard, setShowDashboard] = useState(true);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [rooms, setRooms] = useState<RoomType[]>([]);
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop } = event.currentTarget;
