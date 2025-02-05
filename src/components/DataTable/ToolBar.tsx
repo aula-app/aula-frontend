@@ -47,22 +47,17 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
       }}
     >
       <Stack direction="row" gap={1} alignItems="center" width="100%" flexWrap="wrap">
-        {selected.length === 0 ? (
-          <Button variant="outlined" onClick={() => setEdit(true)}>
-            <AppIcon icon="add" pr={2} />
-            {t('actions.add', { var: t(`scopes.${scope}.name`) })}
-          </Button>
-        ) : (
-          <>
-            <Button variant="outlined" color="error" onClick={() => setOpen(true)}>
-              <AppIcon icon="delete" pr={2} />
-              {t('actions.remove', {
-                var: t(`scopes.${scope}.${selected.length === 1 ? 'name' : 'plural'}`),
-              })}
-            </Button>
-            {extraTools && extraTools({ items: selected })}
-          </>
-        )}
+        <Button variant="outlined" onClick={() => setEdit(true)}>
+          <AppIcon icon="add" pr={2} />
+          {t('actions.add', { var: t(`scopes.${scope}.name`) })}
+        </Button>
+        <Button variant="outlined" color="error" onClick={() => setOpen(true)} disabled={selected.length === 0}>
+          <AppIcon icon="delete" pr={2} />
+          {t('actions.remove', {
+            var: t(`scopes.${scope}.${selected.length === 1 ? 'name' : 'plural'}`),
+          })}
+        </Button>
+        {extraTools && extraTools({ items: selected })}
       </Stack>
       <Dialog
         open={isOpen}

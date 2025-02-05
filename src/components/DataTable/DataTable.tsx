@@ -73,7 +73,7 @@ const DataTable: React.FC<Props> = ({
   }, []);
 
   return (
-    <Stack flex={1} sx={{ overflowX: 'auto' }} {...restOfProps}>
+    <Stack sx={{ overflowX: 'auto' }} {...restOfProps}>
       <ToolBar scope={scope} selected={selected} setEdit={setEdit} setDelete={setDelete} extraTools={extraTools} />
       <Table stickyHeader size="small">
         <TableHead>

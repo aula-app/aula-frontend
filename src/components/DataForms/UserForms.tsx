@@ -16,12 +16,13 @@ import { MarkdownEditor, RoleField, StatusField } from '../DataFields';
  */
 
 interface UserFormsProps {
+  children?: React.ReactNode;
   onClose: () => void;
   defaultValues?: UserArguments;
   onSubmit: (data: UserArguments) => void;
 }
 
-const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose, onSubmit }) => {
+const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose, onSubmit }) => {
   const { t } = useTranslation();
 
   const schema = yup.object({
@@ -59,7 +60,10 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose, onSubmit 
                 var: t(`scopes.users.name`).toLowerCase(),
               })}
             </Typography>
-            {checkPermissions(40) && <StatusField control={control} />}
+            <Stack direction="row" gap={2}>
+              {children}
+              {checkPermissions(40) && <StatusField control={control} />}
+            </Stack>
           </Stack>
           <Stack direction="row" flexWrap="wrap" gap={2}>
             <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
