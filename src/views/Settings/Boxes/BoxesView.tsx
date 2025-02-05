@@ -1,37 +1,49 @@
-import RoomForms from '@/components/Data/DataForms/RoomForms';
+import BoxForms from '@/components/Data/DataForms/BoxForms';
 import DataTable from '@/components/Data/DataTable';
 import DataTableSkeleton from '@/components/Data/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/Data/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
-import { addRoom, deleteRoom, editRoom, EditRoomArguments, getRooms, RoomArguments } from '@/services/rooms';
+import SelectRoom from '@/components/SelectRoom';
+import {
+  addBox,
+  AddBoxArguments,
+  BoxArguments,
+  deleteBox,
+  editBox,
+  EditBoxArguments,
+  getBoxes,
+} from '@/services/boxes';
 import { StatusTypes } from '@/types/Generics';
-import { RoomType } from '@/types/Scopes';
+import { BoxType } from '@/types/Scopes';
 import { getDataLimit } from '@/utils';
 import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-/** * Renders "Rooms" view
- * url: /settings/rooms
+/** * Renders "Boxes" view
+ * url: /settings/boxes
  */
 
-const FILTER = ['room_name', 'description_public'] as Array<keyof RoomType>;
+const FILTER = ['name', 'description_public', 'description_internal'] as Array<keyof BoxType>;
 
 const COLUMNS = [
-  { name: 'room_name', orderId: 5 },
+  { name: 'name', orderId: 5 },
   { name: 'description_public', orderId: 6 },
+  { name: 'description_internal', orderId: 7 },
+  { name: 'room_hash_id', orderId: 8 },
+  { name: 'phase_id', orderId: 9 },
   { name: 'status', orderId: 2 },
   { name: 'created', orderId: 4 },
   { name: 'last_update', orderId: 0 },
-] as Array<{ name: keyof RoomType; orderId: number }>;
+] as Array<{ name: keyof BoxArguments; orderId: number }>;
 
-const RoomsView: React.FC = () => {
+const BoxesView: React.FC = () => {
   const { t } = useTranslation();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [rooms, setRooms] = useState<RoomType[]>([]);
-  const [totalRooms, setTotalRooms] = useState(0);
+  const [boxes, setBoxes] = useState<BoxType[]>([]);
+  const [totalBoxes, setTotalBoxes] = useState(0);
 
   const [status, setStatus] = useState<StatusTypes>(1);
   const [search_field, setSearchField] = useState('');
@@ -45,9 +57,9 @@ const RoomsView: React.FC = () => {
   const [room_id, setRoom] = useState<string | undefined>();
   const [edit, setEdit] = useState<string | boolean>(false); // false = update dialog closed ;true = new idea; string = item hash_id;
 
-  const fetchRooms = useCallback(async () => {
+  const fetchBoxes = useCallback(async () => {
     setLoading(true);
-    const response = await getRooms({
+    const response = await getBoxes({
       asc: Number(asc) as 0 | 1,
       limit,
       offset,
@@ -58,23 +70,24 @@ const RoomsView: React.FC = () => {
     });
     if (response.error) setError(response.error);
     else {
-      setRooms(response.data || []);
-      setTotalRooms(response.count as number);
+      setBoxes(response.data || []);
+      setTotalBoxes(response.count as number);
     }
     setLoading(false);
   }, [search_field, search_text, status, asc, limit, offset, orderby, room_id]);
 
-  const onSubmit = (data: RoomArguments) => {
+  const onSubmit = (data: BoxArguments) => {
     if (!edit) return;
-    typeof edit === 'boolean' ? newRoom(data) : updateRoom(data as EditRoomArguments);
+    typeof edit === 'boolean' ? newBox(data as AddBoxArguments) : updateBox(data as EditBoxArguments);
   };
 
-  const newRoom = async (data: RoomArguments) => {
-    const request = await addRoom({
-      room_name: data.room_name,
-      description_internal: data.description_internal,
+  const newBox = async (data: AddBoxArguments) => {
+    const request = await addBox({
+      name: data.name,
       description_public: data.description_public,
-      internal_info: data.internal_info,
+      description_internal: data.description_internal,
+      room_hash_id: data.room_hash_id,
+      phase_id: data.phase_id,
       phase_duration_1: data.phase_duration_1,
       phase_duration_2: data.phase_duration_2,
       phase_duration_3: data.phase_duration_3,
@@ -84,15 +97,15 @@ const RoomsView: React.FC = () => {
     if (!request.error) onClose();
   };
 
-  const updateRoom = async (data: EditRoomArguments) => {
-    const room = rooms.find((room) => room.hash_id === edit);
-    if (!room || !room.hash_id) return;
-    const request = await editRoom({
-      room_id: room.hash_id,
-      room_name: data.room_name,
-      description_internal: data.description_internal,
+  const updateBox = async (data: EditBoxArguments) => {
+    const box = boxes.find((box) => box.hash_id === edit);
+    if (!box || !box.hash_id) return;
+    const request = await editBox({
+      topic_id: box.hash_id,
+      name: data.name,
       description_public: data.description_public,
-      internal_info: data.internal_info,
+      description_internal: data.description_internal,
+      room_hash_id: data.room_hash_id,
       phase_duration_1: data.phase_duration_1,
       phase_duration_2: data.phase_duration_2,
       phase_duration_3: data.phase_duration_3,
@@ -102,64 +115,64 @@ const RoomsView: React.FC = () => {
     if (!request.error) onClose();
   };
 
-  const deleteRooms = (items: Array<string>) =>
-    items.map(async (room) => {
-      const request = await deleteRoom(room);
+  const deleteBoxes = (items: Array<string>) =>
+    items.map(async (box) => {
+      const request = await deleteBox(box);
       if (!request.error) onClose();
     });
 
   const onClose = () => {
     setEdit(false);
-    fetchRooms();
+    fetchBoxes();
   };
 
   useEffect(() => {
-    fetchRooms();
-  }, [fetchRooms]);
+    fetchBoxes();
+  }, [fetchBoxes]);
 
   return (
     <Stack width="100%" height="100%" py={2}>
       <Stack pl={2}>
         <FilterBar
           fields={FILTER}
-          scope="rooms"
+          scope="boxes"
           onStatusChange={(newStatus) => setStatus(newStatus)}
           onFilterChange={([field, text]) => {
             setSearchField(field);
             setSearchText(text);
           }}
-        />
+        >
+          <SelectRoom room={room_id || ''} setRoom={setRoom} />
+        </FilterBar>
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
         {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        {!isLoading && rooms.length > 0 && (
+        {!isLoading && boxes.length > 0 && (
           <DataTable
-            scope="rooms"
+            scope="boxes"
             columns={COLUMNS}
-            rows={rooms}
+            rows={boxes}
             orderAsc={asc}
             orderBy={orderby}
             setAsc={setAsc}
             setLimit={setLimit}
             setOrderby={setOrderby}
             setEdit={setEdit}
-            setDelete={deleteRooms}
+            setDelete={deleteBoxes}
           />
         )}
-        <PaginationBar pages={Math.ceil(totalRooms / limit)} setPage={(page) => setOffset(page * limit)} />
+        <PaginationBar pages={Math.ceil(totalBoxes / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <RoomForms
+        <BoxForms
           onClose={onClose}
           onSubmit={onSubmit}
-          defaultValues={
-            typeof edit !== 'boolean' ? (rooms.find((room) => room.hash_id === edit) as RoomArguments) : undefined
-          }
+          defaultValues={typeof edit !== 'boolean' ? (boxes.find((box) => box.hash_id === edit) as BoxType) : undefined}
         />
       </Drawer>
     </Stack>
   );
 };
 
-export default RoomsView;
+export default BoxesView;

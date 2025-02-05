@@ -66,3 +66,7 @@ export function checkSelf(id: number): boolean {
   if (!user) return false;
   return user.user_id === id;
 }
+
+export function getDataLimit(): number {
+  return Math.floor((window.innerHeight - 285) / 55);
+}

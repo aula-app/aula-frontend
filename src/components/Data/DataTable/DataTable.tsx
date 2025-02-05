@@ -2,11 +2,12 @@ import ToolBar from '@/components/Data/DataTable/ToolBar';
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields, SettingsType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
+import { Box, Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataItem from './DataItem';
 import DataRow from './DataRow';
+import { getDataLimit } from '@/utils';
 
 type Props = {
   scope: SettingNamesType;
@@ -40,9 +41,9 @@ const DataTable: React.FC<Props> = ({
   ...restOfProps
 }) => {
   const { t } = useTranslation();
-  const tableBody = useRef<HTMLTableSectionElement | null>(null);
 
   const [selected, setSelected] = useState<Array<string>>([]);
+  const [currentLimit, setCurrentLimit] = useState(getDataLimit());
 
   const toggleColumn = (order_id: number) => {
     orderBy === order_id ? setAsc(!orderAsc) : setOrderby(order_id);
@@ -59,12 +60,14 @@ const DataTable: React.FC<Props> = ({
 
   /**
    * Calculates and sets the row limit based on the table's viewport height
-   * Ensures optimal display by fitting as many rows as possible in the visible area
+   * Ensures limit is only updated when the limit value is different than it was previously set
    */
   const getLimit = () => {
-    setLimit(
-      tableBody && tableBody.current ? Math.max(Math.floor(tableBody.current.clientHeight / 55) - 1 || 10, 1) : 10
-    );
+    const newLimit = getDataLimit();
+    console.log('getLimit', newLimit, currentLimit);
+    if (currentLimit === newLimit) return;
+    setCurrentLimit(newLimit);
+    setLimit(newLimit);
   };
 
   useEffect(() => {
@@ -74,14 +77,12 @@ const DataTable: React.FC<Props> = ({
     };
   }, []);
 
-  useEffect(getLimit, [rows.length]);
-
   return (
-    <Stack flex={1} sx={{ overflowX: 'auto' }} ref={tableBody} {...restOfProps}>
+    <Stack flex={1} sx={{ overflowX: 'auto' }} {...restOfProps}>
       <ToolBar scope={scope} selected={selected} setEdit={setEdit} setDelete={setDelete} extraTools={extraTools} />
       <Table stickyHeader size="small">
         <TableHead>
-          <TableRow>
+          <TableRow sx={{ maxHeight: '55px' }}>
             <TableCell sx={{ position: 'sticky', left: 0, zIndex: 3, pl: 1, pr: 0 }}>
               <Checkbox
                 onChange={toggleAllRows}
@@ -115,7 +116,7 @@ const DataTable: React.FC<Props> = ({
             >
               {columns.map((column) => (
                 <TableCell
-                  sx={{ whiteSpace: 'nowrap' }}
+                  sx={{ whiteSpace: 'nowrap', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}
                   onClick={() => setEdit(row.hash_id)}
                   key={`${column.name}-${row.hash_id}`}
                 >

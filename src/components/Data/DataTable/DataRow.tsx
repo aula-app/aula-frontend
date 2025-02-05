@@ -36,6 +36,7 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
         background: getBackground(),
         cursor: 'pointer',
         textDecorationLine: status !== 1 ? 'line-through' : 'none',
+        maxHeight: '55px',
         ...sx,
       }}
       {...restOfProps}

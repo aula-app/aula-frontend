@@ -347,6 +347,7 @@
       "report": "Report category",
       "restrict_to_roomusers_only": "Restrict to Room Users",
       "room_id": "Room",
+      "room_hash_id": "Room",
       "room_name": "Room Name",
       "service_id_consent": "Service Consent ID",
       "status": "Status",

@@ -8,16 +8,13 @@ type Props = {
 
 const PaginationBar: React.FC<Props> = ({ pages, setPage }) => {
   const changePage = (event: ChangeEvent<unknown>, newPage: number) => {
-    console.log(newPage - 1);
     setPage(newPage - 1);
   };
 
-  return pages > 1 ? (
+  return (
     <Stack direction="row" alignItems="center" justifyContent="center" bottom={0} height={48}>
-      <Pagination count={pages} onChange={changePage} sx={{ py: 1 }} />
+      {pages > 1 && <Pagination count={pages} onChange={changePage} sx={{ py: 1 }} />}
     </Stack>
-  ) : (
-    <></>
   );
 };
 

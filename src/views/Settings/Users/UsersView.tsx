@@ -18,6 +18,7 @@ import {
 import { StatusTypes } from '@/types/Generics';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
+import { getDataLimit } from '@/utils';
 import { Button, Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
@@ -49,10 +50,11 @@ const UsersView: React.FC = () => {
   const [totalUsers, setTotalUsers] = useState(0);
 
   const [status, setStatus] = useState<StatusTypes>(1);
-  const [filter, setFilter] = useState<[string, string]>(['', '']);
+  const [search_field, setSearchField] = useState('');
+  const [search_text, setSearchText] = useState('');
 
   const [asc, setAsc] = useState(true);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(getDataLimit());
   const [offset, setOffset] = useState(0);
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
 
@@ -69,8 +71,8 @@ const UsersView: React.FC = () => {
       orderby,
       room_id,
       userlevel,
-      search_field: filter[0],
-      search_text: filter[1],
+      search_field,
+      search_text,
       status,
     });
     if (response.error) setError(response.error);
@@ -79,7 +81,7 @@ const UsersView: React.FC = () => {
       setTotalUsers(response.count as number);
     }
     setLoading(false);
-  }, [JSON.stringify(filter), status, asc, limit, offset, orderby, room_id, userlevel]);
+  }, [search_field, search_text, status, asc, limit, offset, orderby, room_id, userlevel]);
 
   const onSubmit = (data: UserArguments) => {
     if (!edit) return;
@@ -166,7 +168,10 @@ const UsersView: React.FC = () => {
           fields={FILTER}
           scope="users"
           onStatusChange={(newStatus) => setStatus(newStatus)}
-          onFilterChange={(newFilter) => setFilter(newFilter)}
+          onFilterChange={([field, text]) => {
+            setSearchField(field);
+            setSearchText(text);
+          }}
         >
           <SelectRoom room={room_id || ''} setRoom={setRoom} />
           <SelectRole role={userlevel} setRole={setRole} />
@@ -187,7 +192,7 @@ const UsersView: React.FC = () => {
             setOrderby={setOrderby}
             setEdit={setEdit}
             setDelete={deleteUsers}
-            // extraTools={extraTools}
+            extraTools={extraTools}
           />
         )}
         <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />
