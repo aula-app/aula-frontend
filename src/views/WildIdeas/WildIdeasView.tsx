@@ -1,5 +1,5 @@
 import { AppIcon } from '@/components';
-import { IdeaForms } from '@/components/Data/DataForms';
+import { IdeaForms } from '@/components/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import {

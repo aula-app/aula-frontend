@@ -1,5 +1,5 @@
 import { AppIcon } from '@/components';
-import { CommentForms } from '@/components/Data/DataForms';
+import { CommentForms } from '@/components/DataForms';
 import CommentBubble from '@/components/Idea/CommentBubble';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import KnowMore from '@/components/KnowMore';
