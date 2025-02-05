@@ -71,3 +71,5 @@ export type SelectOptionsType = Array<{
   label: string;
   value: string | number;
 }>;
+
+export type UpdtesObject = { add: string[]; remove: string[] };

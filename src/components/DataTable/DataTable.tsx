@@ -2,12 +2,12 @@ import ToolBar from '@/components/DataTable/ToolBar';
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields, SettingsType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { Box, Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { getDataLimit } from '@/utils';
+import { Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataItem from './DataItem';
 import DataRow from './DataRow';
-import { getDataLimit } from '@/utils';
 
 type Props = {
   scope: SettingNamesType;

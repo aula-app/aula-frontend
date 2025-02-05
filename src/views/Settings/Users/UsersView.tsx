@@ -1,6 +1,4 @@
-import { AppIcon } from '@/components';
-import AddGroupButton from '@/components/Buttons/AddGroups/AddGroupsButton';
-import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
+import AddRoomButton, { AddRoomRefProps } from '@/components/Buttons/AddRooms/AddRoomsButton';
 import { UserForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
@@ -21,9 +19,9 @@ import { StatusTypes } from '@/types/Generics';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { getDataLimit } from '@/utils';
-import { Button, Drawer, Typography } from '@mui/material';
+import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useCallback, useEffect, useState } from 'react';
+import { createRef, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /** * Renders "Users" view
@@ -46,6 +44,9 @@ const COLUMNS = [
 
 const UsersView: React.FC = () => {
   const { t } = useTranslation();
+
+  const addRoom = createRef<AddRoomRefProps>();
+
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [users, setUsers] = useState<UserType[]>([]);
@@ -100,7 +101,9 @@ const UsersView: React.FC = () => {
       about_me: data.about_me,
       status: data.status || 1,
     });
-    if (!request.error) onClose();
+    if (request.error || !request.data) return;
+    addRoom.current?.setNewUserRooms(request.data.hash_id);
+    onClose();
   };
 
   const updateUser = async (data: EditUserArguments) => {
@@ -125,18 +128,6 @@ const UsersView: React.FC = () => {
       if (!request.error) onClose();
     });
 
-  const addToRoom = (items: Array<string>) =>
-    items.map(async (user) => {
-      const request = await deleteUser(user);
-      if (!request.error) onClose();
-    });
-
-  const addToGroup = (items: Array<string>) =>
-    items.map(async (user) => {
-      const request = await deleteUser(user);
-      if (!request.error) onClose();
-    });
-
   const onClose = () => {
     setEdit(false);
     fetchUsers();
@@ -148,8 +139,8 @@ const UsersView: React.FC = () => {
 
   const extraTools = ({ items }: { items: Array<string> }) => (
     <>
-      <AddRoomButton items={items} onSubmit={() => addToRoom(items)} />
-      <AddGroupButton items={items} onSubmit={() => addToGroup(items)} />
+      <AddRoomButton users={items} ref={addRoom} />
+      {/* <AddGroupButton users={items} /> */}
     </>
   );
 
