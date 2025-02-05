@@ -1,3 +1,4 @@
+import AddGroupButton from '@/components/Buttons/AddGroups/AddGroupsButton';
 import AddRoomButton, { AddRoomRefProps } from '@/components/Buttons/AddRooms/AddRoomsButton';
 import { UserForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
@@ -21,7 +22,7 @@ import { RoleTypes } from '@/types/SettingsTypes';
 import { getDataLimit } from '@/utils';
 import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { createRef, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /** * Renders "Users" view
@@ -45,7 +46,7 @@ const COLUMNS = [
 const UsersView: React.FC = () => {
   const { t } = useTranslation();
 
-  const addRoom = createRef<AddRoomRefProps>();
+  const addRoom = useRef<AddRoomRefProps>(null);
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -101,8 +102,8 @@ const UsersView: React.FC = () => {
       about_me: data.about_me,
       status: data.status || 1,
     });
-    if (request.error || !request.data) return;
-    addRoom.current?.setNewUserRooms(request.data.hash_id);
+    if (request.error) return;
+    if (addRoom.current && request.data) await addRoom.current.setNewUserRooms(request.data.hash_id);
     onClose();
   };
 
@@ -139,8 +140,8 @@ const UsersView: React.FC = () => {
 
   const extraTools = ({ items }: { items: Array<string> }) => (
     <>
-      <AddRoomButton users={items} ref={addRoom} />
-      {/* <AddGroupButton users={items} /> */}
+      <AddRoomButton users={items} disabled={items.length === 0} />
+      <AddGroupButton users={items} />
     </>
   );
 
@@ -161,23 +162,22 @@ const UsersView: React.FC = () => {
         </FilterBar>
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
+        <DataTable
+          scope="users"
+          columns={COLUMNS}
+          rows={users}
+          orderAsc={asc}
+          orderBy={orderby}
+          setAsc={setAsc}
+          setLimit={setLimit}
+          setOrderby={setOrderby}
+          setEdit={setEdit}
+          setDelete={deleteUsers}
+          extraTools={extraTools}
+        />
         {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        {!isLoading && users.length > 0 && (
-          <DataTable
-            scope="users"
-            columns={COLUMNS}
-            rows={users}
-            orderAsc={asc}
-            orderBy={orderby}
-            setAsc={setAsc}
-            setLimit={setLimit}
-            setOrderby={setOrderby}
-            setEdit={setEdit}
-            setDelete={deleteUsers}
-            extraTools={extraTools}
-          />
-        )}
+
         <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
@@ -187,7 +187,9 @@ const UsersView: React.FC = () => {
           defaultValues={
             typeof edit !== 'boolean' ? (users.find((user) => user.hash_id === edit) as UserArguments) : undefined
           }
-        />
+        >
+          <AddRoomButton users={typeof edit === 'string' ? [edit] : []} ref={addRoom} />
+        </UserForms>
       </Drawer>
     </Stack>
   );

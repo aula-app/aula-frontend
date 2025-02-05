@@ -19,8 +19,7 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material';
-import { set } from 'date-fns';
-import { useCallback, useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends ButtonProps {
@@ -31,7 +30,7 @@ interface Props extends ButtonProps {
  * Interface that will be exposed to the parent component.
  */
 export interface AddRoomRefProps {
-  setNewUserRooms: (id: string) => Promise<void>;
+  setNewUserRooms: (id: string) => void;
 }
 
 const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled = false, ...restOfProps }, ref) => {
@@ -130,11 +129,14 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
     setUpdates({ add: [], remove: [] });
   };
 
-  const setNewUserRooms = async (user_id: string) => {
-    const add = updates.add.map((room_id) => addUserRoom(user_id, room_id));
-    await Promise.all([...add]);
+  const setNewUserRooms = (user_id: string) => {
+    updates.add.map((room_id) => addUserRoom(user_id, room_id));
     setUpdates({ add: [], remove: [] });
   };
+
+  useImperativeHandle(ref, () => ({
+    setNewUserRooms,
+  }));
 
   const onSubmit = () => {
     if (users.length > 0) setUsersRooms();
@@ -158,7 +160,7 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
 
   return (
     <>
-      <Button variant="outlined" color="secondary" onClick={() => setOpen(true)} {...restOfProps}>
+      <Button variant="outlined" color="secondary" onClick={() => setOpen(true)} disabled={disabled} {...restOfProps}>
         <AppIcon icon="room" pr={2} />
         {t('actions.addToParent', {
           var: t('scopes.rooms.name'),
