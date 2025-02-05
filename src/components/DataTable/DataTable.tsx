@@ -1,4 +1,4 @@
-import ToolBar from '@/components/Data/DataTable/ToolBar';
+import ToolBar from '@/components/DataTable/ToolBar';
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields, SettingsType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';

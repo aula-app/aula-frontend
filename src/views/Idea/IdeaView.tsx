@@ -1,4 +1,4 @@
-import { IdeaForms } from '@/components/Data/DataForms';
+import { IdeaForms } from '@/components/DataForms';
 import { ApprovalCard, IdeaBubble, VotingCard, VotingResults } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import VotingQuorum from '@/components/Idea/VotingQuorum';

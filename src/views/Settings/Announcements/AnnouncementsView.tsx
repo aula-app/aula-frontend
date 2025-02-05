@@ -1,7 +1,7 @@
-import AnnouncementForms from '@/components/Data/DataForms/AnnouncementForms';
-import DataTable from '@/components/Data/DataTable';
-import DataTableSkeleton from '@/components/Data/DataTable/DataTableSkeleton';
-import PaginationBar from '@/components/Data/DataTable/PaginationBar';
+import AnnouncementForms from '@/components/DataForms/AnnouncementForms';
+import DataTable from '@/components/DataTable';
+import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
+import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import {
   addAnnouncement,

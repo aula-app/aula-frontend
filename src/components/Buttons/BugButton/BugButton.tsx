@@ -1,5 +1,5 @@
 import AppIconButton from '@/components/AppIconButton';
-import { BugForms } from '@/components/Data/DataForms';
+import { BugForms } from '@/components/DataForms';
 import { addReport, BugArguments } from '@/services/messages';
 import { Drawer, IconButtonProps } from '@mui/material';
 import { useState } from 'react';

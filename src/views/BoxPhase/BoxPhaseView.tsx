@@ -1,7 +1,7 @@
 import { AppIcon } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
-import BoxForms from '@/components/Data/DataForms/BoxForms';
+import BoxForms from '@/components/DataForms/BoxForms';
 import {
   addBox,
   AddBoxArguments,
