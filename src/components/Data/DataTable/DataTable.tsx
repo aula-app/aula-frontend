@@ -43,7 +43,6 @@ const DataTable: React.FC<Props> = ({
   const { t } = useTranslation();
 
   const [selected, setSelected] = useState<Array<string>>([]);
-  const [currentLimit, setCurrentLimit] = useState(getDataLimit());
 
   const toggleColumn = (order_id: number) => {
     orderBy === order_id ? setAsc(!orderAsc) : setOrderby(order_id);
@@ -63,11 +62,7 @@ const DataTable: React.FC<Props> = ({
    * Ensures limit is only updated when the limit value is different than it was previously set
    */
   const getLimit = () => {
-    const newLimit = getDataLimit();
-    console.log('getLimit', newLimit, currentLimit);
-    if (currentLimit === newLimit) return;
-    setCurrentLimit(newLimit);
-    setLimit(newLimit);
+    setLimit(getDataLimit());
   };
 
   useEffect(() => {

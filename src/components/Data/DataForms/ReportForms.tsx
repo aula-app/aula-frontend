@@ -1,4 +1,3 @@
-import { ReportFormData } from '@/components/Buttons/ReportButton/ReportButton';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, Typography } from '@mui/material';
 import React from 'react';
@@ -7,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, SelectField } from '../DataFields';
 import { SelectOptionsType } from '@/utils/Data/formDefaults';
+import { ReportArguments } from '@/services/messages';
 
 /**
  * ReportForms component is used to create or edit an idea.
@@ -16,7 +16,7 @@ import { SelectOptionsType } from '@/utils/Data/formDefaults';
 
 interface ReportFormsProps {
   onClose: () => void;
-  onSubmit: (data: ReportFormData) => Promise<void>;
+  onSubmit: (data: ReportArguments) => Promise<void>;
 }
 
 const ReportOptions = [

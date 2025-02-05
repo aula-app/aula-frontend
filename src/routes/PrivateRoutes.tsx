@@ -14,7 +14,7 @@ import OfflineView from '@/views/OfflineView';
 import PhasesView from '@/views/Phases';
 import RoomView from '@/views/Room';
 import RoomPhaseView from '@/views/Room/RoomPhaseView';
-import SettingsView from '@/views/Settings';
+import AnnouncementsView from '@/views/Settings/Announcements';
 import BoxesView from '@/views/Settings/Boxes';
 import ConfigView from '@/views/Settings/Config';
 import IdeasView from '@/views/Settings/Ideas';
@@ -50,29 +50,30 @@ const PrivateRoutes = () => {
     <Routes>
       <Route path="/" element={<WelcomeView />} />
       <Route path="about" element={<AboutView />} />
-      <Route path="phase/:phase" element={<PhasesView />} />
       <Route path="announcements" element={<MessagesView />} />
       <Route path="announcements/message/:message_id" element={<MessageView />} />
       <Route path="messages" element={<MessagesView />} />
+      <Route path="messages/announcement/:message_id" element={<AnnouncementView />} />
       <Route path="messages/message/:message_id" element={<MessageView />} />
       <Route path="messages/report/:message_id" element={<ReportView />} />
       <Route path="messages/request/:message_id" element={<RequestView />} />
-      <Route path="messages/announcement/:message_id" element={<AnnouncementView />} />
-      <Route path="updates" element={<UpdatesView />} />
+      <Route path="phase/:phase" element={<PhasesView />} />
       <Route path="room/:room_id/phase/:phase" element={<RoomView />}>
         <Route path="" element={<RoomPhaseView />} />
         <Route path="idea/:idea_id" element={<IdeaView />} />
         <Route path="idea-box/:box_id" element={<IdeasBoxView />} />
         <Route path="idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
       </Route>
-      <Route path="settings/profile" element={<UserProfileView />} />
-      <Route path="settings/users" element={<UsersView />} />
-      <Route path="settings/rooms" element={<RoomsView />} />
+      <Route path="settings/announcements" element={<AnnouncementsView />} />
       <Route path="settings/boxes" element={<BoxesView />} />
+      <Route path="settings/configuration" element={<ConfigView />} />
       <Route path="settings/ideas" element={<IdeasView />} />
-      <Route path="settings/reports" element={checkPermissions(50) ? <ReportsView /> : <Navigate to="/" />} />
-      <Route path="settings/requests" element={checkPermissions(50) ? <RequestsView /> : <Navigate to="/" />} />
-      <Route path="settings/configuration" element={checkPermissions(50) ? <ConfigView /> : <Navigate to="/" />} />
+      <Route path="settings/profile" element={<UserProfileView />} />
+      <Route path="settings/reports" element={<ReportsView />} />
+      <Route path="settings/requests" element={<RequestsView />} />
+      <Route path="settings/rooms" element={<RoomsView />} />
+      <Route path="settings/users" element={<UsersView />} />
+      <Route path="updates" element={<UpdatesView />} />
       <Route path="offline" element={<OfflineView />} />
       <Route path="*" element={<NotFoundView />} />
     </Routes>

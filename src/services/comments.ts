@@ -26,16 +26,16 @@ export async function getCommentsByIdea(idea_id: string): Promise<GetCommentsRes
  * Sets Comment update types
  */
 
-interface CommentArguments {
+export interface CommentArguments {
   content: string;
   status?: StatusTypes;
 }
 
-interface AddCommentArguments extends CommentArguments {
+export interface AddCommentArguments extends CommentArguments {
   idea_id: string;
 }
 
-interface EditCommentArguments extends CommentArguments {
+export interface EditCommentArguments extends CommentArguments {
   comment_id: string;
   idea_id?: string;
 }

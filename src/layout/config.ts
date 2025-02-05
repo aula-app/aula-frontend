@@ -48,12 +48,12 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
     icon: 'idea',
     role: 30,
   },
-  {
-    title: 'messages',
-    path: '/settings/messages',
-    icon: 'message',
-    role: 50,
-  },
+  // {
+  //   title: 'messages',
+  //   path: '/settings/messages',
+  //   icon: 'message',
+  //   role: 50,
+  // },
   {
     title: 'announcements',
     path: '/settings/announcements',

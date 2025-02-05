@@ -1,24 +1,20 @@
 import { AppIcon, AppLink } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
-import { MoveData } from '@/components/Data';
 import BoxForms from '@/components/Data/DataForms/BoxForms';
 import { IdeaCard } from '@/components/Idea';
 import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
 import KnowMore from '@/components/KnowMore';
-import { deleteBox, editBox, getBox, getBoxDelegation } from '@/services/boxes';
+import { BoxArguments, deleteBox, editBox, EditBoxArguments, getBox, getBoxDelegation } from '@/services/boxes';
 import { getIdeasByBox } from '@/services/ideas';
 import { DelegationType } from '@/types/Delegation';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { checkPermissions, databaseRequest } from '@/utils';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BoxFormData } from '../BoxPhase/BoxPhaseView';
-import { grey } from '@mui/material/colors';
 
 /** * Renders "IdeasBox" view
  * url: /room/:room_id/ideas-box/:box_id
@@ -35,7 +31,7 @@ const IdeasBoxView = () => {
   const [isBoxLoading, setBoxLoading] = useState(true);
   const [boxError, setBoxError] = useState<string | null>(null);
   const [box, setBox] = useState<BoxType>();
-  const [edit, setEdit] = useState<BoxFormData>(); // undefined = closed;
+  const [edit, setEdit] = useState<EditBoxArguments>(); // undefined = closed;
 
   const boxIdeasFetch = async () => {
     await databaseRequest({
@@ -52,9 +48,9 @@ const IdeasBoxView = () => {
     });
   };
 
-  const boxUpdate = async (data: BoxFormData) => {
+  const boxUpdate = async (data: EditBoxArguments) => {
     if (!(typeof edit === 'object') || !edit.topic_id) return;
-    const request = await editBox(data);
+    const request = await editBox(edit);
     if (!request.error) boxClose();
   };
 

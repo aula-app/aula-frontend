@@ -8,11 +8,22 @@ interface GetMessagesResponse extends GenericResponse {
   data: MessageType[] | null;
 }
 
-interface MessageArguments {
+export interface MessageArguments {
   headline: string;
   body: string;
+  status: StatusTypes;
 }
 
+export interface ReportArguments {
+  report: string;
+  content?: string;
+  status: StatusTypes;
+}
+
+export interface BugArguments {
+  content: string;
+  status: StatusTypes;
+}
 /**
  * Create a message messages on the database.
  */

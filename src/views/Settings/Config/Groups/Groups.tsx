@@ -1,6 +1,4 @@
 import { AppIcon } from '@/components';
-import { DeleteData } from '@/components/Data';
-import EditData from '@/components/Data/EditData';
 import { GroupType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Chip, Stack } from '@mui/material';
@@ -58,8 +56,8 @@ const GroupView = () => {
           );
         })}
       </Stack>
-      <EditData scope="groups" item={selectedItem} isOpen={!!editGroup} onClose={onClose} />
-      <DeleteData scope="groups" id={Number(selectedItem?.id)} isOpen={!!deleteGroup} onClose={onClose} />
+      {/* <EditData scope="groups" item={selectedItem} isOpen={!!editGroup} onClose={onClose} />
+      <DeleteData scope="groups" id={Number(selectedItem?.id)} isOpen={!!deleteGroup} onClose={onClose} /> */}
     </Stack>
   );
 };

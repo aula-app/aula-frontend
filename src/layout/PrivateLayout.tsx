@@ -1,8 +1,7 @@
 import { ErrorBoundary } from '@/components';
-import EditData from '@/components/Data/EditData';
 import { useIsOnline } from '@/hooks';
 import { useOnMobile } from '@/hooks/layout';
-import { checkPermissions, getCurrentUser, localStorageGet, parseJwt } from '@/utils';
+import { checkPermissions, localStorageGet, parseJwt } from '@/utils';
 import AskConsent from '@/views/AskConsent';
 import OfflineView from '@/views/OfflineView';
 import UpdatePassword from '@/views/UpdatePassword';
@@ -60,21 +59,6 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
           <ErrorBoundary name="Content">{children}</ErrorBoundary>
         </Stack>
       </Stack>
-      <EditData
-        isOpen={!!scope}
-        scope={scope || 'bugs'}
-        otherData={{
-          headline: `${location.pathname}`,
-          msg_type: 4,
-        }}
-        metadata={{
-          type: scope,
-          location: location.pathname,
-          user: getCurrentUser(),
-          userAgent: window.navigator.userAgent,
-        }}
-        onClose={() => setScope(undefined)}
-      />
       <AskConsent />
     </Stack>
   );

@@ -1,4 +1,3 @@
-import { BugFormData } from '@/components/Buttons/BugButton/BugButton';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, Typography } from '@mui/material';
 import React from 'react';
@@ -6,6 +5,7 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor } from '../DataFields';
+import { BugArguments } from '@/services/messages';
 
 /**
  * BugForms component is used to create or edit an idea.
@@ -15,7 +15,7 @@ import { MarkdownEditor } from '../DataFields';
 
 interface BugFormsProps {
   onClose: () => void;
-  onSubmit: (data: BugFormData) => Promise<void>;
+  onSubmit: (data: BugArguments) => Promise<void>;
 }
 
 const BugForms: React.FC<BugFormsProps> = ({ onClose, onSubmit }) => {

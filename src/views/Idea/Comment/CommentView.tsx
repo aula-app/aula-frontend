@@ -3,7 +3,15 @@ import { CommentForms } from '@/components/Data/DataForms';
 import CommentBubble from '@/components/Idea/CommentBubble';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import KnowMore from '@/components/KnowMore';
-import { addComment, deleteComment, editComment, getCommentsByIdea } from '@/services/comments';
+import {
+  addComment,
+  AddCommentArguments,
+  CommentArguments,
+  deleteComment,
+  editComment,
+  EditCommentArguments,
+  getCommentsByIdea,
+} from '@/services/comments';
 import { CommentType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { Box, Drawer, Fab, Stack, Typography } from '@mui/material';
@@ -13,14 +21,6 @@ import { useParams } from 'react-router-dom';
 
 interface RouteParams extends Record<string, string | undefined> {
   room_id: string;
-}
-
-export interface CommentFormData {
-  content: string;
-}
-
-interface CommentBDData extends CommentFormData {
-  comment_id: number;
 }
 
 /**
@@ -36,7 +36,7 @@ const Comments = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [comments, setComments] = useState<CommentType[]>([]);
-  const [edit, setEdit] = useState<CommentFormData | boolean>(false); // false = update dialog closed ;true = new idea; CommentFormData = edit idea;
+  const [edit, setEdit] = useState<CommentType | boolean>(false); // false = update dialog closed ;true = new idea; CommentFormData = edit idea;
 
   const fetchComments = useCallback(async () => {
     if (!idea_id) return;
@@ -51,12 +51,12 @@ const Comments = () => {
     fetchComments();
   }, [idea_id]);
 
-  const onSubmit = (data: CommentFormData) => {
+  const onSubmit = (data: CommentArguments) => {
     if (!edit) return;
-    typeof edit === 'boolean' ? newComment(data) : updateComment(data);
+    typeof edit === 'boolean' ? newComment(data) : updateComment(data as EditCommentArguments);
   };
 
-  const newComment = async (data: CommentFormData) => {
+  const newComment = async (data: CommentArguments) => {
     if (!idea_id) return;
     const request = await addComment({
       idea_id: idea_id,
@@ -65,18 +65,11 @@ const Comments = () => {
     if (!request.error) onClose();
   };
 
-  const updateComment = async (data: CommentFormData) => {
+  const updateComment = async (data: EditCommentArguments) => {
     if (typeof edit === 'object') {
       const request = await editComment(data);
       if (!request.error) onClose();
     }
-  };
-
-  const onEdit = (comment: CommentType) => {
-    setEdit({
-      content: comment.content,
-      comment_id: comment.id,
-    });
   };
 
   const onDelete = async (id: number) => {
@@ -107,7 +100,7 @@ const Comments = () => {
           <CommentBubble
             key={comment.id}
             comment={comment}
-            onEdit={() => onEdit(comment)}
+            onEdit={() => setEdit(comment)}
             onDelete={() => onDelete(comment.id)}
             disabled={Number(phase) >= 20}
           />
