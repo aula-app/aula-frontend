@@ -2,7 +2,6 @@ import { databaseRequest, localStorageGet } from '@/utils';
 import { Box, Button, Drawer, Paper, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AppButton from '../AppButton';
 import AppIconButton from '../AppIconButton';
 
 interface Props {
@@ -256,9 +255,9 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
           <Button color="secondary" onClick={onClose} sx={{ mr: 'auto' }}>
             {t('actions.cancel')}
           </Button>
-          <AppButton color="primary" onClick={saveImage}>
+          <Button variant="contained" onClick={saveImage}>
             {t('actions.confirm')}
-          </AppButton>
+          </Button>
         </Stack>
       </Stack>
     </Drawer>

@@ -52,23 +52,24 @@ const AddGroupButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disable
   const fetchUsersGropus = async () => {
     if (users.length === 0) return;
 
+    if (users.length === 1) {
+      const boxes = await getUserGroups(users[0]);
+      if (boxes.data) setSelectedGroups(boxes.data.map((box) => box.hash_id));
+      return;
+    }
+
     const groupCounts: { [key: string]: number } = {};
     const commonGroups = [] as string[];
     const partialGroups = [] as string[];
 
-    const roomPromises = users.map(async (user) => {
+    const Promises = users.map(async (user) => {
       const groups = await getUserGroups(user);
-      if (!groups.data) return;
-      if (users.length === 1) {
-        if (groups.data) setSelectedGroups(groups.data.map((group) => group.hash_id));
-      } else {
-        groups.data.forEach((group) => {
-          groupCounts[group.hash_id] = (groupCounts[group.hash_id] || 0) + 1;
-        });
-      }
+      groups.data?.forEach((group) => {
+        groupCounts[group.hash_id] = (groupCounts[group.hash_id] || 0) + 1;
+      });
     });
 
-    await Promise.all(roomPromises).then(() => {
+    await Promise.all(Promises).then(() => {
       Object.keys(groupCounts).forEach((group_id) => {
         if (groupCounts[group_id] === users.length) {
           commonGroups.push(group_id);

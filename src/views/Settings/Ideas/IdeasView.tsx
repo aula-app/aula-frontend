@@ -1,3 +1,5 @@
+import AddBoxesButton from '@/components/Buttons/AddBoxes';
+import { AddBoxRefProps } from '@/components/Buttons/AddBoxes/AddBoxesButton';
 import { IdeaForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
@@ -17,7 +19,7 @@ import { IdeaType } from '@/types/Scopes';
 import { getDataLimit } from '@/utils';
 import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /** * Renders "Ideas" view
@@ -91,7 +93,8 @@ const IdeasView: React.FC = () => {
       custom_field1: data.custom_field1,
       custom_field2: data.custom_field2,
     });
-    if (!request.error) onClose();
+    if (request.error) return;
+    onClose();
   };
 
   const updateIdea = async (data: EditIdeaArguments) => {
@@ -123,6 +126,12 @@ const IdeasView: React.FC = () => {
     fetchIdeas();
   }, [fetchIdeas]);
 
+  const extraTools = ({ items }: { items: Array<string> }) => (
+    <>
+      <AddBoxesButton ideas={items} disabled={items.length === 0} />
+    </>
+  );
+
   return (
     <Stack width="100%" height="100%" pt={2}>
       <Stack pl={2}>
@@ -151,6 +160,7 @@ const IdeasView: React.FC = () => {
             setOrderby={setOrderby}
             setEdit={setEdit}
             setDelete={deleteIdeas}
+            extraTools={extraTools}
           />
         )}
         <PaginationBar pages={Math.ceil(totalIdeas / limit)} setPage={(page) => setOffset(page * limit)} />
@@ -162,7 +172,9 @@ const IdeasView: React.FC = () => {
           defaultValues={
             typeof edit !== 'boolean' ? (ideas.find((idea) => idea.hash_id === edit) as IdeaArguments) : undefined
           }
-        />
+        >
+          <AddBoxesButton ideas={typeof edit === 'string' ? [edit] : []} />
+        </IdeaForms>
       </Drawer>
     </Stack>
   );

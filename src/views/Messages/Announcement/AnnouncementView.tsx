@@ -1,4 +1,4 @@
-import { AppButton, AppIconButton } from '@/components';
+import { AppIconButton } from '@/components';
 import { getAnnouncement, setAnnouncementStatus } from '@/services/announcements';
 import { AnnouncementType } from '@/types/Scopes';
 import {
@@ -13,7 +13,6 @@ import {
   Typography,
 } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 /**

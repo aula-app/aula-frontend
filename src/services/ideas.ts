@@ -212,3 +212,52 @@ export async function removeIdeaLike(idea_id: string): Promise<void> {
     ['user_id']
   );
 }
+
+/**
+ * Get user rooms
+ */
+
+interface GetIdeaBoxesResponse extends GenericResponse {
+  data: { hash_id: string }[] | null;
+}
+
+export async function getIdeaBoxes(idea_id: string): Promise<GetIdeaBoxesResponse> {
+  const response = await databaseRequest({
+    model: 'Idea',
+    method: 'getIdeaTopic',
+    arguments: { idea_id },
+  });
+
+  return response as GetIdeaBoxesResponse;
+}
+
+/**
+ * Add user room
+ */
+
+export async function addIdeaBox(user_id: string, room_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'addIdeaToTopic',
+      arguments: { user_id, room_id },
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+/**
+ * Remove user room
+ */
+
+export async function removeIdeaBox(user_id: string, room_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest({
+    model: 'Idea',
+    method: 'removeIdeaFromTopic',
+    arguments: { user_id, room_id },
+  });
+
+  return response as GenericResponse;
+}

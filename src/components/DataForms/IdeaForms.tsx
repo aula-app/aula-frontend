@@ -16,12 +16,13 @@ import { MarkdownEditor, StatusField } from '../DataFields';
  */
 
 interface IdeaFormsProps {
+  children?: React.ReactNode;
   onClose: () => void;
   defaultValues?: IdeaArguments;
   onSubmit: (data: IdeaArguments) => void;
 }
 
-const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose, onSubmit }) => {
+const IdeaForms: React.FC<IdeaFormsProps> = ({ children, defaultValues, onClose, onSubmit }) => {
   const { t } = useTranslation();
 
   const schema = yup.object({
@@ -54,7 +55,10 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose, onSubmit 
                 var: t(`scopes.ideas.name`).toLowerCase(),
               })}
             </Typography>
-            {checkPermissions(40) && <StatusField control={control} />}
+            <Stack direction="row" gap={2}>
+              {children}
+              {checkPermissions(40) && <StatusField control={control} />}
+            </Stack>
           </Stack>
           <Stack gap={2}>
             {/* title */}

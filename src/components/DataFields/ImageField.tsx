@@ -1,4 +1,3 @@
-import AppButton from '@/components/AppButton';
 import AppIcon from '@/components/AppIcon';
 import DefaultImage from '@/components/DefaultImages';
 import ImageSelector from '@/components/ImageSelector';
@@ -42,9 +41,9 @@ const ImageField = ({ data, control, disabled = false, setValue, ...restOfProps 
             </Typography>
             <TextField {...field} {...restOfProps} sx={{ visibility: 'hidden', height: 0 }} />
             {value === '' ? (
-              <AppButton variant="outlined" onClick={() => setSelector(true)} sx={{ mt: 2 }}>
+              <Button variant="outlined" onClick={() => setSelector(true)} sx={{ mt: 2 }}>
                 {t('actions.add', { var: t('ui.files.image.label').toLowerCase() })}
-              </AppButton>
+              </Button>
             ) : (
               <Stack direction="row" justifyContent="center">
                 <Button onClick={() => setSelector(true)} sx={{ position: 'relative', width: 300 }}>

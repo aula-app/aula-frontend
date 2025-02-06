@@ -30,16 +30,6 @@ When creating new components:
 
 ## Core UI Components
 
-### AppButton
-
-A customized Material-UI Button component that provides:
-
-- Custom styling with consistent margins
-- Icon support (start and end icons)
-- Link functionality when href or to props are provided
-- Color customization beyond Material-UI's default palette
-- Variant support (contained, outlined, text)
-
 ### AppIcon
 
 An icon component that:

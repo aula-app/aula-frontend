@@ -1,4 +1,4 @@
-import { AppButton, AppIcon } from '@/components';
+import { AppIcon } from '@/components';
 import { localStorageGet } from '@/utils';
 import {
   Button,
@@ -110,9 +110,9 @@ const AskConsent = () => {
                   <Button color="secondary" sx={{ ml: 2 }}>
                     Cancel
                   </Button>
-                  <AppButton color="primary" onClick={() => giveConsent(text.id)}>
+                  <Button variant="contained" onClick={() => giveConsent(text.id)}>
                     {text.consent_text}
-                  </AppButton>
+                  </Button>
                 </DialogActions>
               </Fragment>
             )}

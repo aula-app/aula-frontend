@@ -47,10 +47,12 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
       }}
     >
       <Stack direction="row" gap={1} alignItems="center" width="100%" flexWrap="wrap">
-        <Button variant="outlined" onClick={() => setEdit(true)}>
-          <AppIcon icon="add" pr={2} />
-          {t('actions.add', { var: t(`scopes.${scope}.name`) })}
-        </Button>
+        {scope !== 'ideas' && (
+          <Button variant="outlined" onClick={() => setEdit(true)}>
+            <AppIcon icon="add" pr={2} />
+            {t('actions.add', { var: t(`scopes.${scope}.name`) })}
+          </Button>
+        )}
         <Button variant="outlined" color="error" onClick={() => setOpen(true)} disabled={selected.length === 0}>
           <AppIcon icon="delete" pr={2} />
           {t('actions.remove', {

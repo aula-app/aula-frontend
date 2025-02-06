@@ -52,22 +52,24 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
   const fetchUsersRooms = async () => {
     if (users.length === 0) return;
 
+    if (users.length === 1) {
+      const rooms = await getUserRooms(users[0]);
+      if (rooms.data) setSelectedRooms(rooms.data.map((room) => room.hash_id));
+      return;
+    }
+
     const roomCounts: { [key: string]: number } = {};
     const commonRooms = [] as string[];
     const partialRooms = [] as string[];
 
-    const roomPromises = users.map(async (user) => {
+    const Promises = users.map(async (user) => {
       const rooms = await getUserRooms(user);
-      if (users.length === 1) {
-        if (rooms.data) setSelectedRooms(rooms.data.map((room) => room.hash_id));
-      } else {
-        rooms.data?.forEach((room) => {
-          roomCounts[room.hash_id] = (roomCounts[room.hash_id] || 0) + 1;
-        });
-      }
+      rooms.data?.forEach((room) => {
+        roomCounts[room.hash_id] = (roomCounts[room.hash_id] || 0) + 1;
+      });
     });
 
-    await Promise.all(roomPromises).then(() => {
+    await Promise.all(Promises).then(() => {
       Object.keys(roomCounts).forEach((room_id) => {
         if (roomCounts[room_id] === users.length) {
           commonRooms.push(room_id);

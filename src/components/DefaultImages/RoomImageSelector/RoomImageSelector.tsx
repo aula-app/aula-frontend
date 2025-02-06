@@ -1,4 +1,3 @@
-import AppButton from '@/components/AppButton';
 import DefaultImage from '@/components/DefaultImages';
 import { Button, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -58,9 +57,9 @@ const RoomImageSelector = ({ onClose, onSubmit }: Props) => {
         <Button color="error" sx={{ mr: 2 }} onClick={onClose}>
           {t('actions.cancel')}
         </Button>
-        <AppButton color="primary" onClick={() => onSubmit(`DI:${selected}:${shift}`)}>
+        <Button variant="contained" onClick={() => onSubmit(`DI:${selected}:${shift}`)}>
           {t('actions.confirm')}
-        </AppButton>
+        </Button>
       </Stack>
     </Stack>
   );

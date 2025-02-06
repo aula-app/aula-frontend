@@ -1,9 +1,8 @@
-import { AppButton } from '@/components';
 import { useAppStore } from '@/store';
 import { ObjectPropByName } from '@/types/Generics';
 import { databaseRequest } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Slider, Stack, Typography } from '@mui/material';
+import { Button, Slider, Stack, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -140,9 +139,9 @@ const QuorumSettings = ({ onReload }: Props) => {
           />
         )}
       />
-      <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(addQuorum)}>
+      <Button variant="contained" type="submit" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(addQuorum)}>
         {t('actions.save')}
-      </AppButton>
+      </Button>
     </Stack>
   );
 };
