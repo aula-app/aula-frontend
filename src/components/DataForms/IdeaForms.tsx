@@ -1,3 +1,4 @@
+import { IdeaArguments } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,7 +8,6 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, StatusField } from '../DataFields';
-import { IdeaArguments } from '@/services/ideas';
 
 /**
  * IdeaForms component is used to create or edit an idea.
