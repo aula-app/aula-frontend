@@ -66,7 +66,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose, onSubmit 
               label={t(`settings.columns.room_name`)}
               size="small"
               error={!!errors.room_name}
-              helperText={errors.room_name?.message}
+              helperText={`${errors.room_name?.message}`}
               {...register('room_name')}
             />
             <MarkdownEditor

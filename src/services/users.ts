@@ -49,9 +49,9 @@ export async function getUser(user_id: string): Promise<GetUserResponse> {
  */
 
 export interface UserArguments {
-  realname: string;
-  username: string;
-  displayname: string;
+  realname?: string;
+  username?: string;
+  displayname?: string;
   email?: string;
   about_me?: string;
   status?: StatusTypes;

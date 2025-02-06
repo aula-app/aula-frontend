@@ -48,9 +48,9 @@ export const getAnnouncements = async (args: GenericListRequest): Promise<GetAnn
  */
 
 export interface AnnouncementArguments {
-  headline: string;
-  body: string;
-  user_needs_to_consent: 0 | 1 | 2;
+  headline?: string;
+  body?: string;
+  user_needs_to_consent?: 0 | 1 | 2;
   consent_text?: string;
   status?: StatusTypes;
 }

@@ -1,17 +1,14 @@
 import { AppIcon, AppIconButton } from '@/components';
+import { getGroup } from '@/services/groups';
+import { getRoom } from '@/services/rooms';
+import { getUser } from '@/services/users';
 import { useAppStore } from '@/store';
 import { PossibleFields, SettingType } from '@/types/Scopes';
-import { SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, phases } from '@/utils';
+import { phases } from '@/utils';
 import { ScopeStatusOptions } from '@/utils/commands';
 import { Chip, Stack } from '@mui/material';
-import { SyntheticEvent, useState, useEffect } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GenericResponse } from '@/types/RequestTypes';
-import { getUser } from '@/services/users';
-import { getRoom } from '@/services/rooms';
-import { getGroup } from '@/services/groups';
-import { use } from 'i18next';
 
 /**
  * Props for the DataItem component

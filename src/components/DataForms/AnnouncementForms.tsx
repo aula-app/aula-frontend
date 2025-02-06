@@ -24,13 +24,13 @@ interface AnnouncementFormsProps {
 const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, onClose, onSubmit }) => {
   const { t } = useTranslation();
 
-  const schema = yup.object({
+  const schema = yup.object().shape({
     headline: yup.string().required(t('forms.validation.required')),
     body: yup.string().required(t('forms.validation.required')),
     user_needs_to_consent: yup.number(),
     consent_text: yup.string(),
     status: yup.number(),
-  } as Record<keyof AnnouncementType, any>);
+  } as Record<keyof AnnouncementArguments, any>);
 
   const {
     register,
@@ -60,15 +60,15 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
 
           <Stack gap={2}>
             <TextField
-              {...register('headline')}
+              required
               label={t('settings.columns.headline')}
               error={!!errors.headline}
-              helperText={errors.headline?.message}
+              helperText={`${errors.headline?.message}`}
               fullWidth
-              required
+              {...register('headline')}
             />
             <MarkdownEditor name="body" control={control} required />
-            <ConsentField control={control} />
+            <ConsentField control={control} required />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error">

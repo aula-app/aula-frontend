@@ -1,4 +1,4 @@
-import { STATUS } from '@/utils/Data/formDefaults';
+import { STATUS, statusOptions } from '@/utils';
 import { MenuItem, TextField, Typography } from '@mui/material';
 import { amber, blueGrey, green, red } from '@mui/material/colors';
 import { Control, Controller } from 'react-hook-form-mui';
@@ -24,7 +24,7 @@ const StatusField: React.FC<Props> = ({ control, disabled = false, ...restOfProp
       name="status"
       control={control}
       defaultValue={control._defaultValues.status || 1}
-      render={({ field, fieldState }) => {
+      render={({ field }) => {
         return (
           <TextField
             label={t('settings.columns.status')}
@@ -38,7 +38,7 @@ const StatusField: React.FC<Props> = ({ control, disabled = false, ...restOfProp
           >
             {STATUS.map((status) => (
               <MenuItem value={status.value}>
-                <Typography sx={{ color: colors[status.value], display: 'inline' }}>&#x25CF;</Typography>{' '}
+                <Typography sx={{ color: colors[status.value], display: 'inline' }}>&#x25CF;</Typography>&nbsp;&nbsp;
                 {t(status.label)}
               </MenuItem>
             ))}

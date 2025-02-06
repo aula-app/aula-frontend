@@ -2,14 +2,13 @@ import AppButton from '@/components/AppButton';
 import AppIcon from '@/components/AppIcon';
 import DefaultImage from '@/components/DefaultImages';
 import ImageSelector from '@/components/ImageSelector';
-import { InputSettings } from '@/utils/Data/formDefaults';
 import { Button, FormControl, FormHelperText, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
-  data: InputSettings;
+  data: any;
   control: Control<{}, any>;
   disabled?: boolean;
   setValue: UseFormSetValue<{}>;

@@ -71,8 +71,8 @@ export async function getIdeasByBox(topic_id: string): Promise<GetIdeasResponse>
  */
 
 export interface IdeaArguments {
-  title: string;
-  content: string;
+  title?: string;
+  content?: string;
   custom_field1?: string;
   custom_field2?: string;
   status?: StatusTypes;

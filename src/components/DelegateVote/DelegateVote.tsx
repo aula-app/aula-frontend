@@ -58,7 +58,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
     }
 
     await databaseRequest(requestData).then((response) => {
-      if (response.success) setUsers(response.data);
+      if (!response.error) setUsers(response.data);
     });
   };
 
@@ -71,7 +71,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         user_id: delegate[0].user_id_target,
       },
     }).then((response) => {
-      if (response.success) setSelected(response.data);
+      if (!response.error) setSelected(response.data);
     });
   };
 
@@ -159,7 +159,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
                       }}
                       onClick={() => select(user)}
                     >
-                      <UserAvatar id={user.id} update={true} />
+                      <UserAvatar id={user.hash_id} />
                       <Stack ml={2}>
                         <Typography>{user.realname}</Typography>
                         <Typography color="secondary" fontSize="small">
@@ -180,7 +180,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
               </Typography>
               {selected && (
                 <Stack flex={1} alignItems="center" justifyContent="center">
-                  <UserAvatar id={selected.id} update={true} size="large" />
+                  <UserAvatar id={selected.hash_id} size={52} />
                   <Typography>{selected.realname}</Typography>
                   <Typography color="secondary" fontSize="small">
                     {selected.displayname}

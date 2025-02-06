@@ -1,12 +1,12 @@
 import { PossibleFields } from '@/types/Scopes';
-import { SelectOptionsType } from '@/utils/Data/formDefaults';
+import { SelectOptionsType } from '@/types/SettingsTypes';
 import { FormControl, FormHelperText, MenuItem, StandardTextFieldProps, TextField } from '@mui/material';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends StandardTextFieldProps {
   name: keyof PossibleFields;
-  options: SelectOptionsType[];
+  options: SelectOptionsType;
   control: Control<any, any>;
   disabled?: boolean;
   required?: boolean;

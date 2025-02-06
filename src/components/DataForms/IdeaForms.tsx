@@ -62,7 +62,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose, onSubmit 
               {...register('title')}
               label={t('settings.columns.title')}
               error={!!errors.title}
-              helperText={errors.title?.message}
+              helperText={`${errors.title?.message}`}
               fullWidth
               required
             />

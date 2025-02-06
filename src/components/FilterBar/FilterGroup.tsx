@@ -22,7 +22,7 @@ const FilterGroup = ({ group, setGroup }: Params) => {
         limit: 0,
       },
     }).then((response) => {
-      if (!response.success) return;
+      if (!response.data) return;
       setGroups(response.data);
     });
   };

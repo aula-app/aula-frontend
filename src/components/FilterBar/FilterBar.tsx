@@ -1,13 +1,13 @@
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { STATUS } from '@/utils/Data/formDefaults';
 import { Collapse, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
 import FilterSelect from './FilterSelect';
 import FilterStatus from './FilterStatus';
+import { STATUS } from '@/utils';
 
 export interface FilterOptionsType {
   status: StatusTypes;
