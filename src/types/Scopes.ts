@@ -44,6 +44,7 @@ export interface BugType extends MessageType {}
 
 export interface CommentType {
   id: number;
+  hash_id: string;
   content: string;
   username: string;
   displayname: string;

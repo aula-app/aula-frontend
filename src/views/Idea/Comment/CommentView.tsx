@@ -5,7 +5,6 @@ import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton'
 import KnowMore from '@/components/KnowMore';
 import {
   addComment,
-  AddCommentArguments,
   CommentArguments,
   deleteComment,
   editComment,
@@ -67,7 +66,11 @@ const Comments = () => {
 
   const updateComment = async (data: EditCommentArguments) => {
     if (typeof edit === 'object') {
-      const request = await editComment(data);
+      const request = await editComment({
+        comment_id: edit.hash_id,
+        content: data.content,
+        status: data.status,
+      });
       if (!request.error) onClose();
     }
   };
