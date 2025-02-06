@@ -28,7 +28,7 @@ const SchoolInfo = ({ config, onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success)
+      if (response.data)
         dispatch({
           type: 'ADD_POPUP',
           message: { message: t('settings.messages.updated', { var: t(`ui.navigation.settings`) }), type: 'success' },

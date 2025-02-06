@@ -35,7 +35,7 @@ const QuorumSettings = ({ onReload }: Props) => {
       method: 'getQuorum',
       arguments: {},
     }).then((response) => {
-      if (!response.success || !response.data) return;
+      if (!response.data || !response.data) return;
       setValue('quorum_wild_ideas', Number(response.data.quorum_wild_ideas));
       setValue('quorum_votes', Number(response.data.quorum_votes));
     });
@@ -50,7 +50,7 @@ const QuorumSettings = ({ onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      if (!response.success) {
+      if (!response.data) {
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
         return;
       }

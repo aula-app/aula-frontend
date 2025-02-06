@@ -67,7 +67,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success) callback();
+      if (response.data) callback();
     });
   };
 
@@ -77,7 +77,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
       method: 'createDBDump',
       arguments: {},
     }).then((response) => {
-      if (!response.success || !response.data) return;
+      if (!response.data || !response.data) return;
       triggerSqlDumpDownload(response.data);
     });
   };

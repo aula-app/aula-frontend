@@ -30,7 +30,7 @@ const BoxPhaseView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
-  const [edit, setEdit] = useState<BoxType | true>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
+  const [edit, setEdit] = useState<EditBoxArguments | true>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
 
   const fetchBoxes = useCallback(async () => {
     if (!room_id || !phase) return;
@@ -45,7 +45,7 @@ const BoxPhaseView = () => {
     fetchBoxes();
   }, [phase]);
 
-  const boxEdit = (box: BoxType) => {
+  const boxEdit = (box: EditBoxArguments) => {
     setEdit(box);
   };
 

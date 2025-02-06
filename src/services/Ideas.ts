@@ -152,7 +152,7 @@ export async function deleteIdea(id: string): Promise<GenericResponse> {
 //     arguments: {},
 //   });
 
-//   if (!response.success || !response.data) {
+//   if (!response.data || !response.data) {
 //     throw new Error('Failed to fetch custom fields');
 //   }
 

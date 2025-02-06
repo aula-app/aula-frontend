@@ -76,8 +76,9 @@ export interface AddBoxArguments extends BoxArguments {
 
 export interface EditBoxArguments extends BoxArguments {
   topic_id?: string;
-  room_id?: string;
+  room_id?: number;
   room_hash_id?: string;
+  hash_id?: string;
 }
 
 /**

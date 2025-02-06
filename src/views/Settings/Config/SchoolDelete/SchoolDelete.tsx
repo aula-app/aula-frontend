@@ -22,7 +22,7 @@ const SchoolDelete = () => {
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success) onLogout();
+      if (response.data) onLogout();
     });
   };
 

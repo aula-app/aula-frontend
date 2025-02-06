@@ -169,7 +169,9 @@ const BoxesView: React.FC = () => {
         <BoxForms
           onClose={onClose}
           onSubmit={onSubmit}
-          defaultValues={typeof edit !== 'boolean' ? (boxes.find((box) => box.hash_id === edit) as BoxType) : undefined}
+          defaultValues={
+            typeof edit !== 'boolean' ? (boxes.find((box) => box.hash_id === edit) as EditBoxArguments) : undefined
+          }
         />
       </Drawer>
     </Stack>

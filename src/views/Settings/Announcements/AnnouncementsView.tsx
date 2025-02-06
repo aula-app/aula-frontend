@@ -154,7 +154,7 @@ const AnnouncementsView: React.FC = () => {
           onSubmit={onSubmit}
           defaultValues={
             typeof edit !== 'boolean'
-              ? (announcements.find((announcement) => announcement.hash_id === edit) as AnnouncementArguments)
+              ? (announcements.find((announcement) => announcement.hash_id === edit) as AnnouncementType)
               : undefined
           }
         />

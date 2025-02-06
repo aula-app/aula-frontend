@@ -18,7 +18,7 @@ const GroupView = () => {
       method: 'getGroups',
       arguments: {},
     }).then((response) => {
-      if (response.success) setGroups(response.data ? response.data : []);
+      if (response.data) setGroups(response.data ? response.data : []);
     });
 
   const setDelete = (item: GroupType) => {

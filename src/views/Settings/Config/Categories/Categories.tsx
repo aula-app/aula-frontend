@@ -19,7 +19,7 @@ const CatView = () => {
       method: 'getCategories',
       arguments: {},
     }).then((response) => {
-      if (response.success) setCategories(response.data ? response.data : []);
+      if (response.data) setCategories(response.data ? response.data : []);
     });
 
   const setDelete = (item: CategoryType) => {

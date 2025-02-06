@@ -42,7 +42,7 @@ const CustomFields = ({ onReload }: Props) => {
       method: 'getCustomfields',
       arguments: {},
     }).then((response) => {
-      if (response.success) setFields(response.data);
+      if (response.data) setFields(response.data);
     });
   }
 
@@ -55,7 +55,7 @@ const CustomFields = ({ onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      if (!response.success) {
+      if (!response.data) {
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
         return;
       }

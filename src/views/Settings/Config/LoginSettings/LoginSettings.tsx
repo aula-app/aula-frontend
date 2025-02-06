@@ -31,7 +31,7 @@ const SystemSettings = ({ config, settings, onReload }: Props) => {
       method: 'getInstanceSettings',
       arguments: {},
     }).then((response) => {
-      if (response.success) onReload();
+      if (response.data) onReload();
     });
   };
 
@@ -44,7 +44,7 @@ const SystemSettings = ({ config, settings, onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success) onReload();
+      if (response.data) onReload();
     });
   };
 
