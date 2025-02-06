@@ -1,4 +1,3 @@
-import { InputType } from '@/utils/Data/formDefaults';
 import { PossibleFields } from './Scopes';
 
 export type RoomPhases = 0 | 10 | 20 | 30 | 40;
@@ -25,14 +24,6 @@ export type SettingNamesType =
 export type ColumnSettings = {
   name: keyof PossibleFields;
   orderId: number;
-};
-
-export type FieldType = {
-  name: keyof PossibleFields | Array<keyof PossibleFields>;
-  form: InputType;
-  required: boolean;
-  role: RoleTypes;
-  phase?: RoomPhases;
 };
 
 export type DataRequestsType = {

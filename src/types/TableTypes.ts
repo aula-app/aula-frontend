@@ -1,6 +1,4 @@
-import { ObjectPropByName } from './Generics';
 import { PossibleFields, UserType } from './Scopes';
-import { FieldType } from './SettingsTypes';
 
 export interface TableRow {
   id: number;

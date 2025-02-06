@@ -1,4 +1,4 @@
-import { UserArguments } from '@/services/users';
+import { EditUserArguments, UserArguments } from '@/services/users';
 import { UserType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -18,7 +18,7 @@ import { MarkdownEditor, RoleField, StatusField } from '../DataFields';
 interface UserFormsProps {
   children?: React.ReactNode;
   onClose: () => void;
-  defaultValues?: UserArguments;
+  defaultValues?: EditUserArguments;
   onSubmit: (data: UserArguments) => void;
 }
 
