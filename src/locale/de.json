@@ -22,11 +22,9 @@
     "remove": "{{var}} entfernen",
     "save": "Speichern",
     "select": "{{var}} auswählen",
+    "set": "{{var}} setzen",
     "show": "Anzeigen",
     "unarchive": "Aus Archiv holen"
-  },
-  "commands": {
-    "status": "Status setzen"
   },
   "auth": {
     "forgotPassword": {
@@ -263,6 +261,10 @@
     "commands": {
       "name": "Befehl",
       "plural": "Befehle"
+    },
+    "votes": {
+      "name": "Stimme",
+      "plural": "Stimmen"
     }
   },
   "settings": {

@@ -22,11 +22,9 @@
     "remove": "Delete {{var}}",
     "save": "Save",
     "select": "Select {{var}}",
+    "set": "Set {{var}}",
     "show": "Show",
     "unarchive": "Unarchive"
-  },
-  "commands": {
-    "status": "Set status"
   },
   "auth": {
     "forgotPassword": {
