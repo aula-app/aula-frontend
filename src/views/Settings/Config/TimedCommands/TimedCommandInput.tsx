@@ -1,7 +1,6 @@
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, FORMAT_DATE_ONLY, FORMAT_DATE_TIME } from '@/utils';
 import { Commands } from '@/utils/commands';
-import DataConfig from '@/utils/Data';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -47,7 +46,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success) onReload();
+      if (response.error) onReload();
     });
   }
 
@@ -75,25 +74,25 @@ const TimeCommandInput = ({ onReload }: Props) => {
     const requestId = [];
     if (scope === 'ideas' || scope === 'boxes') requestId.push('user_id');
 
-    await databaseRequest(
-      {
-        model: DataConfig[scope].requests.model,
-        method: DataConfig[scope].requests.fetch,
-        arguments: {
-          limit: 0,
-          offset: 0,
-        },
-      },
-      requestId
-    ).then((response) => {
-      if (response.success)
-        setOptions(
-          // @ts-ignore
-          response.data.map((row) => {
-            return { label: row[DataConfig[scope].columns[0].name], value: row.id };
-          })
-        );
-    });
+    // await databaseRequest(
+    //   {
+    //     model: DataConfig[scope].requests.model,
+    //     method: DataConfig[scope].requests.fetch,
+    //     arguments: {
+    //       limit: 0,
+    //       offset: 0,
+    //     },
+    //   },
+    //   requestId
+    // ).then((response) => {
+    //   if (response.success)
+    //     setOptions(
+    //       // @ts-ignore
+    //       response.data.map((row) => {
+    //         return { label: row[DataConfig[scope].columns[0].name], value: row.id };
+    //       })
+    //     );
+    // });
   }
 
   useEffect(() => {
@@ -106,7 +105,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
         <Typography variant="h6">
           {t('actions.add', { var: t('settings.columns.command').toLocaleLowerCase() })}:
         </Typography>
-        <TextField
+        {/* <TextField
           select
           label={t('settings.labels.scope')}
           value={scope}
@@ -146,7 +145,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
               <MenuItem></MenuItem>
             )}
           </TextField>
-        )}
+        )} */}
         {Commands[scope].actions && (
           <TextField
             select
