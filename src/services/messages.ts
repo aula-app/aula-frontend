@@ -4,14 +4,79 @@ import { MessageType, PossibleFields } from '@/types/Scopes';
 import { databaseRequest, GenericResponse, RequestObject } from '@/utils';
 import { checkPermissions } from '@/utils';
 
+/**
+ * Get a list of messages from the database.
+ */
+
+interface GetMessageResponse extends GenericResponse {
+  data: MessageType | null;
+}
+
+export const getMessage = async (message_id: string): Promise<GetMessageResponse> => {
+  // Check if user has Super Moderator (40) access to view all rooms
+
+  const response = await databaseRequest({
+    model: 'Message',
+    method: 'getMessageBaseData',
+    arguments: {
+      message_id,
+    },
+  });
+
+  return response as GetMessageResponse;
+};
+
+/**
+ * Get a list of messages from the database.
+ */
+
 interface GetMessagesResponse extends GenericResponse {
   data: MessageType[] | null;
 }
 
+export const getMessages = async (): Promise<GetMessagesResponse> => {
+  // Check if user has Super Moderator (40) access to view all rooms
+  const hasSuperModAccess = checkPermissions(40);
+
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: hasSuperModAccess ? 'getMessages' : 'getMessagesByUser',
+      arguments: {
+        offset: 0,
+        limit: 0,
+      },
+    },
+    hasSuperModAccess ? [] : ['user_id']
+  );
+
+  return response as GetMessagesResponse;
+};
+
+/**
+ * Get a list of messages from the database.
+ */
+
+export const getPersonalMessages = async (): Promise<GetMessagesResponse> => {
+  // Check if user has Super Moderator (40) access to view all rooms
+  const hasSuperModAccess = checkPermissions(40);
+
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: 'getPersonalMessagesByUser',
+      arguments: {},
+    },
+    ['user_id']
+  );
+
+  return response as GetMessagesResponse;
+};
+
 export interface MessageArguments {
   headline: string;
   body: string;
-  status: StatusTypes;
+  status?: StatusTypes;
 }
 
 export interface ReportArguments {
@@ -47,29 +112,6 @@ export const addMessage = async (args: AddMessageArguments): Promise<GenericResp
 };
 
 /**
- * Get a list of messages from the database.
- */
-
-export const getMessages = async (): Promise<GetMessagesResponse> => {
-  // Check if user has Super Moderator (40) access to view all rooms
-  const hasSuperModAccess = checkPermissions(40);
-
-  const response = await databaseRequest(
-    {
-      model: 'Message',
-      method: hasSuperModAccess ? 'getMessages' : 'getMessagesByUser',
-      arguments: {
-        offset: 0,
-        limit: 0,
-      },
-    },
-    hasSuperModAccess ? [] : ['user_id']
-  );
-
-  return response as GetMessagesResponse;
-};
-
-/**
  * Sets message Status.
  */
 
@@ -100,11 +142,6 @@ const getSpecialMessages = async (args: FilterOptionsType, msg_type: 4 | 5): Pro
     msg_type,
     status: typeof args.status === 'number' ? args.status : 1,
   } as Record<keyof PossibleFields, string | number>;
-
-  if (!args.filter.includes('')) {
-    requestData['search_field'] = args.filter[0];
-    requestData['search_text'] = args.filter[1];
-  }
 
   const response = await databaseRequest({
     model: 'Message',

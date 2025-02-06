@@ -1,8 +1,8 @@
 import { phases } from '@/utils';
-import { Box, Stack } from '@mui/material';
+import { Box, Stack, StackProps } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
-interface ChatBubbleProps {
+interface ChatBubbleProps extends StackProps {
   children: React.ReactElement | string | number;
   comment?: boolean;
   disabled?: boolean;
@@ -10,7 +10,7 @@ interface ChatBubbleProps {
 
 const ChatBubble = ({ children, comment = false, disabled = false }: ChatBubbleProps) => {
   const { phase } = useParams();
-  const color = comment ? 'disabled.main' : `${phases[Number(phase)]}.main`;
+  const color = comment ? 'comments.main' : `${phases[Number(phase)]}.main`;
   return (
     <Stack
       sx={{

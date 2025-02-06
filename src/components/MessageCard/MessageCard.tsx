@@ -1,14 +1,15 @@
 import { AppIcon, AppIconButton, AppLink } from '@/components';
 import FilterBar from '@/components/FilterBar';
-import { StatusTypes } from '@/types/Generics';
+import { getAnnouncements } from '@/services/announcements';
+import { getPersonalMessages, getReports, getRequests } from '@/services/messages';
+import { ObjectPropByName, StatusTypes } from '@/types/Generics';
 import { AnnouncementType, MessageType } from '@/types/Scopes';
-import { checkPermissions, databaseRequest, RequestObject } from '@/utils';
 import { Skeleton, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-  type: 'announcement' | 'message' | 'report' | 'request';
+  type: 'announcements' | 'messages' | 'reports' | 'requests';
 }
 
 /**
@@ -16,49 +17,41 @@ interface Props {
  * url: /messages
  */
 
-const MessageCard = ({ type }: Props) => {
+const MessageCard: React.FC<Props> = ({ type }) => {
   const { t } = useTranslation();
   const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [messages, setMessages] = useState<MessageType[] | AnnouncementType[]>([]);
+
   const [status, setStatus] = useState<StatusTypes>(1);
+  const [search_field, setSearchField] = useState('');
+  const [search_text, setSearchText] = useState('');
+
   const [openMessagesFilter, setOpenMessagesFilter] = useState(false);
-  const [messagesFilter, setMessagesFilter] = useState<[string, string]>(['', '']);
 
   const METHODS = {
-    announcement: 'getTexts',
-    message: 'getPersonalMessagesByUser',
-    report: checkPermissions(40) ? 'getMessages' : 'getMessagesByUser',
-    request: 'getMessages',
-  } as Record<Props['type'], string>;
+    announcements: getAnnouncements,
+    messages: getPersonalMessages,
+    requests: getRequests,
+    reports: getReports,
+  } as Record<Props['type'], (args?: ObjectPropByName) => Promise<any>>;
 
-  const messagesFetch = async () => {
-    const requestData = {
-      model: type === 'announcement' ? 'Text' : 'Message',
-      method: METHODS[type],
-      arguments: { status: status },
-    } as RequestObject;
-
-    if (type === 'report') requestData.arguments['msg_type'] = 4;
-    if (type === 'request') requestData.arguments['msg_type'] = 5;
-
-    if (!messagesFilter.includes('')) {
-      requestData['arguments']['search_field'] = messagesFilter[0];
-      requestData['arguments']['search_text'] = messagesFilter[1];
-    }
-
-    const requestIds = [] as string[];
-    if (type !== 'announcement' && !(type === 'report' && checkPermissions(40))) requestIds.push('user_id');
-
-    await databaseRequest(requestData, requestIds).then((response) => {
-      if (!response.success || !response.data) return;
-      setLoading(false);
-      setMessages(response.data);
+  const fetchMessages = useCallback(async () => {
+    setLoading(true);
+    const response = await METHODS[type]({
+      status,
+      search_field,
+      search_text,
     });
-  };
+    if (response.error) setError(response.error);
+    if (!response.error && response.data) setMessages(response.data);
+    setLoading(false);
+  }, [type, status, search_field, search_text]);
 
   useEffect(() => {
-    messagesFetch();
-  }, [messagesFilter, status]);
+    console.log(type);
+    fetchMessages();
+  }, [fetchMessages]);
 
   return isLoading ? (
     <Stack gap={1} mb={2}>
@@ -75,24 +68,20 @@ const MessageCard = ({ type }: Props) => {
         <Stack>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="h6" py={2} display="flex" alignItems="center">
-              <AppIcon icon={type} sx={{ mr: 1 }} /> {t(`scopes.${type}s.plural`)}
+              <AppIcon icon={type} sx={{ mr: 1 }} /> {t(`scopes.${type}.plural`)}
             </Typography>
             <AppIconButton icon="filter" onClick={() => setOpenMessagesFilter(!openMessagesFilter)} />
           </Stack>
           <FilterBar
-            isOpen={openMessagesFilter}
-            filter={messagesFilter}
-            scope="messages"
-            setFilter={setMessagesFilter}
-            setStatus={setStatus}
+            scope={type}
+            onStatusChange={(newStatus) => setStatus(newStatus)}
+            onFilterChange={([field, text]) => {
+              setSearchField(field);
+              setSearchText(text);
+            }}
           />
           {messages.map((message) => {
-            const messageData = ['report', 'request'].includes(type) ? JSON.parse(message.body).data.type : type;
-            const variant = type === 'report' ? JSON.parse(message.body).data.type : type;
-            const headline =
-              ['report', 'request'].includes(type) && messageData
-                ? t(`scopes.${messageData}.headline`, { var: message.headline })
-                : message.headline;
+            const variant = message.headline.substring(0, 3) === 'Bug' ? 'bugs' : type;
             return (
               <Stack
                 key={message.id}
@@ -103,12 +92,12 @@ const MessageCard = ({ type }: Props) => {
                 p={1}
                 pl={2}
                 mb={1}
-                to={`/messages/${type}/${message.hash_id}`}
+                to={`/${type}/${message.hash_id}`}
                 bgcolor={`${variant}.main`}
               >
                 <AppIcon icon={variant} />
                 <Typography flex={1} px={2}>
-                  {headline}
+                  {message.headline}
                 </Typography>
                 <AppIconButton size="small" icon="close" />
               </Stack>

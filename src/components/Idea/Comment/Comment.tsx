@@ -50,7 +50,7 @@ const Comment = ({ comment, disabled = false, onReload }: Props) => {
 
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
-      <ChatBubble color="comment.main" disabled={disabled}>
+      <ChatBubble disabled={disabled}>
         <Stack>
           <Typography>{comment.content}</Typography>
           <Stack direction="row" justifyContent="end">
