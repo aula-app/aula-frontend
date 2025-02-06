@@ -76,6 +76,7 @@ export interface IdeaArguments {
   custom_field1?: string;
   custom_field2?: string;
   status?: StatusTypes;
+  room_hash_id?: string;
 }
 
 export interface AddIdeaArguments extends IdeaArguments {

@@ -83,8 +83,9 @@ const IdeasView: React.FC = () => {
   };
 
   const newIdea = async (data: AddIdeaArguments) => {
+    if (!data.room_hash_id) return;
     const request = await addIdea({
-      room_hash_id: data.room_hash_id,
+      room_id: data.room_hash_id,
       title: data.title,
       content: data.content,
       custom_field1: data.custom_field1,
@@ -98,7 +99,7 @@ const IdeasView: React.FC = () => {
     if (!idea || !idea.hash_id) return;
     const request = await editIdea({
       idea_id: idea.hash_id,
-      room_hash_id: data.room_hash_id,
+      room_id: data.room_hash_id,
       title: data.title,
       content: data.content,
       custom_field1: data.custom_field1,
