@@ -1,5 +1,6 @@
+import { getQuorum } from '@/services/vote';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { databaseRequest, phases } from '@/utils';
+import { phases } from '@/utils';
 import { Box, LinearProgress, Stack, Tooltip, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,23 +20,19 @@ const VotingQuorum = ({ phase, users, votes }: Props) => {
   const { t } = useTranslation();
   const [quorum, setQuorum] = useState<number>(0);
 
-  async function getQuorum() {
-    await databaseRequest({
-      model: 'Settings',
-      method: 'getQuorum',
-      arguments: {},
-    }).then((response) => {
-      if (!response.success || !response.data) return;
+  async function fetchQuorum() {
+    getQuorum().then((response) => {
+      if (response.error || !response.data) return;
       setQuorum(phase >= 30 ? Number(response.data.quorum_votes) : Number(response.data.quorum_wild_ideas));
     });
   }
 
   useEffect(() => {
-    getQuorum();
+    fetchQuorum();
   }, []);
 
   return (
-    <Stack>
+    <Stack pt={2}>
       <Stack sx={{ position: 'relative' }}>
         {quorum > 0 && (
           <Tooltip title={`${Math.round(quorum)}%`} open={true} placement="bottom" arrow={true}>
@@ -49,11 +46,11 @@ const VotingQuorum = ({ phase, users, votes }: Props) => {
         />
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
-        <Typography variant="caption" color="secondary">
-          {votes} {t(`views.${phase >= 30 ? 'votes' : 'likes'}`)}
+        <Typography variant="caption">
+          {votes} {t(`ui.units.${phase >= 30 ? 'votes' : 'likes'}`)}
         </Typography>
-        <Typography variant="caption" color="secondary">
-          {users} {t('views.users').toLowerCase()}
+        <Typography variant="caption">
+          {users} {t('scopes.users.plural').toLowerCase()}
         </Typography>
       </Stack>
     </Stack>

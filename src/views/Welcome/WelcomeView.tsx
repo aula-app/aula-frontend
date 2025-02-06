@@ -1,42 +1,34 @@
 import { RoomCard } from '@/components/RoomCard';
 import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
 import { RoomType } from '@/types/Scopes';
-import { checkPermissions, databaseRequest } from '@/utils';
+import { getRooms } from '@/services/rooms';
 import { Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import DashBoard from '../DashBoard';
+import DashBoard from './DashBoard';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
-  const [rooms, setRooms] = useState<RoomType[]>([]);
-  const [showDashboard, setDashboard] = useState(true);
+  const [showDashboard, setShowDashboard] = useState(true);
   const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [rooms, setRooms] = useState<RoomType[]>([]);
 
-  const roomsFetch = async () =>
-    await databaseRequest(
-      {
-        model: 'Room',
-        method: checkPermissions(40) ? 'getRooms' : 'getRoomsByUser',
-        arguments: {
-          offset: 0,
-          limit: 0,
-        },
-      },
-      checkPermissions(40) ? [] : ['user_id']
-    ).then((response) => {
-      setLoading(false);
-      if (!response.success || !response.data) return;
-      setRooms(response.data as RoomType[]);
-    });
-
-  const handleScroll = () => {
-    setDashboard(false);
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop } = event.currentTarget;
+    setShowDashboard(scrollTop < 100);
   };
 
+  const fetchRooms = useCallback(async () => {
+    const response = await getRooms();
+    setLoading(false);
+    if (response.error) setError(response.error);
+    if (!response.error && response.data) setRooms(response.data);
+  }, []);
+
   useEffect(() => {
-    roomsFetch();
+    fetchRooms();
   }, []);
 
   return (
@@ -61,10 +53,11 @@ const WelcomeView = () => {
             transition: 'all .5s ease-in-out',
           }}
         >
-          {t('views.rooms')}
+          {t('scopes.rooms.plural')}
         </Typography>
-        <Grid container flex={1} spacing={2}>
+        <Grid container spacing={2}>
           {isLoading && <RoomCardSkeleton />}
+          {error && <Typography>{t(error)}</Typography>}
           {rooms.map((room) => (
             <RoomCard room={room} key={room.hash_id} />
           ))}

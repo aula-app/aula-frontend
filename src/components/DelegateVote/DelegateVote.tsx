@@ -58,7 +58,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
     }
 
     await databaseRequest(requestData).then((response) => {
-      if (response.success) setUsers(response.data);
+      if (!response.error) setUsers(response.data);
     });
   };
 
@@ -71,7 +71,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         user_id: delegate[0].user_id_target,
       },
     }).then((response) => {
-      if (response.success) setSelected(response.data);
+      if (!response.error) setSelected(response.data);
     });
   };
 
@@ -88,7 +88,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
       },
       ['user_id', 'updater_id']
     ).then(() => {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.delegationSuccess'), type: 'success' } });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('delegation.status.success'), type: 'success' } });
       onClose();
     });
   };
@@ -105,7 +105,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
       },
       ['user_id']
     ).then(() => {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.delegationRevoke'), type: 'success' } });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('delegation.status.revoked'), type: 'success' } });
       onClose();
     });
   };
@@ -128,7 +128,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
 
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>{t('texts.delegation')}</DialogTitle>
+      <DialogTitle>{t('delegation.label')}</DialogTitle>
       <DialogContent>
         <Stack height={350} position="relative" overflow="hidden">
           <Slide direction="right" in={!confirm} mountOnEnter unmountOnExit>
@@ -159,7 +159,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
                       }}
                       onClick={() => select(user)}
                     >
-                      <UserAvatar id={user.id} update={true} />
+                      <UserAvatar id={user.hash_id} />
                       <Stack ml={2}>
                         <Typography>{user.realname}</Typography>
                         <Typography color="secondary" fontSize="small">
@@ -180,7 +180,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
               </Typography>
               {selected && (
                 <Stack flex={1} alignItems="center" justifyContent="center">
-                  <UserAvatar id={selected.id} update={true} size="large" />
+                  <UserAvatar id={selected.hash_id} size={52} />
                   <Typography>{selected.realname}</Typography>
                   <Typography color="secondary" fontSize="small">
                     {selected.displayname}
@@ -193,11 +193,11 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
         <Button color="secondary" onClick={onClose}>
-          {t('generics.cancel')}
+          {t('actions.cancel')}
         </Button>
         {!confirm ? (
           <Button variant="contained" onClick={() => setConfirm(true)} disabled={!selected}>
-            {t('delegation.select')}
+            {t('actions.select')}
           </Button>
         ) : delegate.length === 0 ? (
           <Button variant="contained" onClick={setDelegate}>

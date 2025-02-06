@@ -1,15 +1,9 @@
 import { AppIcon } from '@/components';
-import { DefaultUpdate } from '@/types/Generics';
-import { databaseRequest } from '@/utils';
+import { getUpdates, UpdateResponse } from '@/services/dashboard';
 import { IconButton, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import UpdateCard from './UpdateCard';
-
-interface UpdatesResponse {
-  votes: DefaultUpdate[];
-  comments: DefaultUpdate[];
-}
 
 /**
  * Renders "Updates" view
@@ -18,50 +12,49 @@ interface UpdatesResponse {
 
 const UpdatesView = () => {
   const { t } = useTranslation();
-  const [updates, setUpdates] = useState<UpdatesResponse>();
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [updates, setUpdates] = useState<UpdateResponse>({
+    votes: [],
+    comments: [],
+  });
 
-  const messageFetch = async () =>
-    await databaseRequest(
-      {
-        model: 'Idea',
-        method: 'getUpdatesByUser',
-        arguments: {},
-      },
-      ['user_id']
-    ).then((response) => {
-      if (response.success) setUpdates(response.data);
-    });
+  const fetchUpdates = useCallback(async () => {
+    setLoading(true);
+    const response = await getUpdates();
+    if (response.error) setError(response.error);
+    if (!response.error && response.data) setUpdates(response.data);
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
-    messageFetch();
+    fetchUpdates();
   }, []);
 
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
-          {t('views.updates')}
+          {t('ui.units.updates')}
         </Typography>
         <IconButton>
           <AppIcon icon="filter" />
         </IconButton>
       </Stack>
       {updates &&
-        (Object.keys(updates) as Array<keyof UpdatesResponse>).map((update) => (
-          <>
-            {updates[update].length > 0 && (
-              <>
-                <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
-                  {updates[update].length} {t('texts.new', { var: t(`views.${update}`) })}
-                </Typography>
+        (Object.keys(updates) as Array<keyof UpdateResponse>).map((update) => {
+          return updates[update].length === 0 ? null : (
+            <>
+              <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
+                {updates[update].length} {t('actions.add', { var: t(`scopes.${update}.name`) })}
+              </Typography>
 
-                {updates[update].map((item, key) => (
-                  <UpdateCard item={item} icon="voting" variant={update} key={key} />
-                ))}
-              </>
-            )}
-          </>
-        ))}
+              {updates[update].map((item, key) => (
+                <UpdateCard item={item} icon="voting" variant={update} key={key} />
+              ))}
+            </>
+          );
+        })}
     </Stack>
   );
 };

@@ -1,26 +1,27 @@
-import { AppButton, AppIcon, AppIconButton, AppLink } from '@/components';
+import { AppIcon, AppIconButton, AppLink } from '@/components';
+import BugButton from '@/components/Buttons/BugButton';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
 import { checkPermissions } from '@/utils';
-import { Divider, List, ListItemButton, ListItemIcon, ListItemText, Stack } from '@mui/material';
-import { Dispatch, Fragment, MouseEvent, SetStateAction, useCallback } from 'react';
+import { Button, Divider, List, ListItemButton, ListItemIcon, ListItemText, Stack } from '@mui/material';
+import { Fragment, memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SIDEBAR_ITEMS } from '../config';
 
 type Props = {
   isFixed?: boolean;
-  setReport: Dispatch<SetStateAction<'bug' | 'report' | undefined>>;
   onClose?: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 };
 
 /**
- * Renders SideBar with Menu and User details
- * Actually for Authenticated users only, rendered in "Private Layout"
- * @component SideBar
- * @param {function} onClose - called when the Drawer is closing
+ * Renders SideBar content including navigation, actions and user controls
+ * @component SideBarContent
+ * @param {boolean} [props.isFixed] - Whether the sidebar is fixed or in a drawer
+ * @param {function} [props.onClose] - Optional callback when drawer closes
+ * @returns {JSX.Element} Rendered SideBarContent component
  */
-const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...restOfProps }: Props) => {
+const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }: Props): JSX.Element => {
   const { t } = useTranslation();
   const [state] = useAppStore();
   const isAuthenticated = useIsAuthenticated();
@@ -29,7 +30,7 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
   const onLogout = useEventLogout();
 
   const handleAfterLinkClick = useCallback(
-    (event: MouseEvent) => {
+    (event: React.MouseEvent) => {
       onClose(event, 'backdropClick');
     },
     [onClose]
@@ -54,7 +55,7 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
                 openInNewTab={false}
               >
                 <ListItemIcon>{icon && <AppIcon icon={icon} />}</ListItemIcon>
-                <ListItemText primary={t(`views.${title}`)} />
+                <ListItemText primary={t(`ui.navigation.${title}`)} />
               </ListItemButton>
             )}
           </Fragment>
@@ -63,13 +64,12 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
       <Divider />
       <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
         {isFixed && <LocaleSwitch />}
-        <AppIconButton onClick={() => setReport('report')} icon="report" title={t('generics.contentReport')} />
-        <AppIconButton onClick={() => setReport('bug')} icon="bug" title={t('generics.bugReport')} />
-        <AppIconButton onClick={window.print} icon="print" title={t('generics.print')} />
+        <BugButton target={location.pathname} />
+        <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} />
         <AppIconButton
           onClick={onSwitchDarkMode}
           icon={state.darkMode ? 'day' : 'night'}
-          title={state.darkMode ? t('generics.modeLight') : t('generics.modeDark')}
+          title={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
         />
       </Stack>
       <Divider />
@@ -82,14 +82,14 @@ const SideBarContent = ({ isFixed = false, setReport, onClose = () => {}, ...res
         }}
       >
         {isAuthenticated && (
-          <AppButton variant="text" onClick={onLogout}>
-            {t('generics.logout')}&nbsp;
+          <Button onClick={onLogout} sx={{ py: 1, width: '100%', color: 'inherit' }}>
+            {t('auth.logout')}&nbsp;
             <AppIcon icon="logout" />
-          </AppButton>
+          </Button>
         )}
       </Stack>
     </Stack>
   );
 };
 
-export default SideBarContent;
+export default memo(SideBarContent);

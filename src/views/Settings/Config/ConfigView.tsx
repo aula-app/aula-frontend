@@ -1,9 +1,9 @@
 import { AppIcon } from '@/components';
 import { ConfigResponse, InstanceResponse } from '@/types/Generics';
 import { checkPermissions, databaseRequest } from '@/utils';
-import { Accordion, AccordionDetails, AccordionSummary, Stack, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Skeleton, Stack, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Categories from './Categories';
 import LoginSettings from './LoginSettings';
@@ -31,7 +31,7 @@ const ConfigView = () => {
       method: 'getGlobalConfig',
       arguments: {},
     }).then((response) => {
-      if (response.success) {
+      if (response.data) {
         setConfig(response.data);
         setExpanded(null);
       }
@@ -44,7 +44,7 @@ const ConfigView = () => {
       method: 'getInstanceSettings',
       arguments: {},
     }).then((response) => {
-      if (response.success) {
+      if (response.data) {
         setSettings(response.data);
         setExpanded(null);
       }
@@ -67,15 +67,15 @@ const ConfigView = () => {
   }, []);
 
   const SETTINGS_PANELS = [
-    { name: 'categories', role: 30, component: <Categories /> },
-    { name: 'groups', role: 50, component: <Groups /> },
+    { name: 'category', role: 30, component: <Categories /> },
+    { name: 'group', role: 50, component: <Groups /> },
     { name: 'idea', role: 50, component: <IdeaSettings onReload={getConfig} /> },
-    { name: 'users', role: 50, component: <UsersSettings onReload={closePanels} /> },
-    { name: 'time', role: 60, component: <TimeSettings config={config} onReload={getConfig} /> },
-    { name: 'login', role: 60, component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
-    { name: 'actions', role: 60, component: <TimedCommands /> },
-    { name: 'system', role: 60, component: <SystemSettings settings={settings} onReload={getSettings} /> },
-    { name: 'danger', role: 60, component: <SchoolDelete /> },
+    { name: 'user', role: 50, component: <UsersSettings onReload={closePanels} /> },
+    { name: 'time', role: 50, component: <TimeSettings config={config} onReload={getConfig} /> },
+    { name: 'login', role: 50, component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
+    { name: 'action', role: 50, component: <TimedCommands /> },
+    { name: 'system', role: 50, component: <SystemSettings settings={settings} onReload={getSettings} /> },
+    { name: 'danger', role: 50, component: <SchoolDelete /> },
   ];
 
   const panels = SETTINGS_PANELS.filter((panel) => checkPermissions(panel.role));
@@ -83,18 +83,24 @@ const ConfigView = () => {
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
       <Typography variant="h4" pb={2}>
-        {t('views.configuration')}
+        {t('settings.labels.configuration')}
       </Typography>
       <SchoolInfo config={config} onReload={getConfig} />
       {panels.map((panel, i) => (
-        <Accordion expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)} key={i}>
-          <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
-            <Typography variant="h5" py={1}>
-              {t(`settings.${panel.name}`)}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>{panel.component}</AccordionDetails>
-        </Accordion>
+        <Fragment key={i}>
+          {settings && config ? (
+            <Accordion expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)}>
+              <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
+                <Typography variant="h5" py={1}>
+                  {t('settings.advanced.system', { var: t(`settings.panels.${panel.name}`) })}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>{panel.component}</AccordionDetails>
+            </Accordion>
+          ) : (
+            <Skeleton variant="rectangular" width="100%" height={45} sx={{ mt: 3 }} />
+          )}
+        </Fragment>
       ))}
     </Stack>
   );

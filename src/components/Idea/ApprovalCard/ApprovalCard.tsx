@@ -1,17 +1,25 @@
 import AppIcon from '@/components/AppIcon';
+import { IconType } from '@/components/AppIcon/AppIcon';
+import { IdeaType } from '@/types/Scopes';
 import { Card, Stack, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 interface ApprovalCardProps {
+  idea: IdeaType;
   disabled?: boolean;
-  rejected?: boolean;
-  comment?: string | null;
 }
 
 /**
  * Renders "Welcome" view
  * url: /
  */
-const ApprovalCard = ({ disabled = false, rejected = false, comment = 'No comment' }: ApprovalCardProps) => {
+
+const ApprovalCard = ({ idea, disabled = false }: ApprovalCardProps) => {
+  const { t } = useTranslation();
+
+  const approvalMessages = ['rejected', 'waiting', 'approved'] as IconType[];
+  const approvalColors = ['against.main', 'approval.main', 'for.main'];
+
   return (
     <Card
       sx={{
@@ -20,13 +28,12 @@ const ApprovalCard = ({ disabled = false, rejected = false, comment = 'No commen
         my: 2,
         py: 1,
         scrollSnapAlign: 'center',
-        bgcolor: rejected || disabled ? 'disabled.main' : 'for.main',
+        bgcolor: disabled ? 'disabled.main' : approvalColors[idea.approved + 1],
       }}
       variant="outlined"
     >
-      <Stack direction="row" alignItems="center">
+      <Stack height="75px" direction="row" alignItems="center" p={2} gap={2}>
         <Stack
-          height="75px"
           alignItems="center"
           justifyContent="center"
           sx={{
@@ -34,11 +41,11 @@ const ApprovalCard = ({ disabled = false, rejected = false, comment = 'No commen
           }}
           fontSize={40}
         >
-          <AppIcon icon={rejected ? 'rejected' : 'approved'} />
+          <AppIcon icon={approvalMessages[idea.approved + 1]} />
         </Stack>
-        <Stack flexGrow={1} pr={2}>
+        <Stack flexGrow={1}>
           <Typography variant="body2" sx={{ color: 'inherit' }}>
-            {comment || 'Approval text'}
+            {idea.approval_comment || t(`scopes.ideas.${approvalMessages[idea.approved + 1]}`)}
           </Typography>
         </Stack>
       </Stack>

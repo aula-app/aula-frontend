@@ -1,5 +1,6 @@
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { RoomPhases } from './SettingsTypes';
+import { StatusTypes } from './Generics';
 
 export interface AnnouncementType {
   id: number;
@@ -23,6 +24,7 @@ export interface BoxType {
   hash_id: string;
   name: string;
   description_public: string;
+  description_internal: string;
   ideas_num: number;
   created: string;
   last_update: string;
@@ -35,14 +37,17 @@ export interface BoxType {
   phase_duration_2: number;
   phase_duration_3: number;
   phase_duration_4: number;
+  status: StatusTypes;
 }
 
 export interface BugType extends MessageType {}
 
 export interface CommentType {
   id: number;
+  hash_id: string;
   content: string;
   username: string;
+  displayname: string;
   sum_likes: number;
   idea_id: number;
   user_id: number;
@@ -86,7 +91,7 @@ export interface IdeaType {
   room_hash_id: string;
   status: number;
   is_winner: number;
-  approved: number;
+  approved: -1 | 0 | 1;
   approval_comment: null;
   custom_field1: string | null;
   custom_field2: string | null;
@@ -129,9 +134,14 @@ export interface RoomType {
   last_update: string;
   order_importance: number;
   restrict_to_roomusers_only: number;
+  phase_duration_0: number;
+  phase_duration_1: number;
+  phase_duration_2: number;
+  phase_duration_3: number;
+  phase_duration_4: number;
   room_name: string;
   status: number;
-  updater_id: number;
+  updater_id: string;
   type: 0 | 1;
 }
 
@@ -174,6 +184,7 @@ export interface CategoryType {
   created: string;
   last_update: string;
   id: number;
+  status: StatusTypes;
 }
 
 export interface CommandType {
@@ -208,6 +219,23 @@ export type ScopeType =
   | CategoryType
   | CommandType;
 
+export type ScopeListType =
+  | AnnouncementType[]
+  | BoxType[]
+  | BugType[]
+  | CommentType[]
+  | GroupType[]
+  | IdeaType[]
+  | MessageType[]
+  | ReportType[]
+  | RoomType[]
+  | UserType[]
+  | CategoryType[]
+  | CommandType[];
+
+export type SettingType = AnnouncementType | BoxType | IdeaType | MessageType | RoomType | UserType;
+export type SettingsType = AnnouncementType[] | BoxType[] | IdeaType[] | MessageType[] | RoomType[] | UserType[];
+
 // Common fields that can be used in forms
 export type CommonFormFields = 'id' | 'created';
 
@@ -223,7 +251,7 @@ export interface ReportBodyType {
 }
 
 export interface ReportMetadataType {
-  type: 'bug' | 'report';
+  type: 'bugs' | 'reports';
   location: string;
   user: number;
   userAgent?: string;
@@ -244,6 +272,18 @@ export interface RequestMetadataType {
   property?: 'email' | 'realname' | 'username';
   from?: string;
   to?: string;
+}
+
+export interface VoteType {
+  idea_id: number;
+  title: string;
+  room_id: number;
+  topic_id: number;
+  phase_id: number;
+  id: string;
+  vote_value: number;
+  vote_weight: number;
+  number_of_delegations: number;
 }
 
 // Helper function to convert data to form format

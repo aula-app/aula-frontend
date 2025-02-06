@@ -1,7 +1,5 @@
 import { AppIcon } from '@/components';
 import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
-import { DeleteData } from '@/components/Data';
-import EditData from '@/components/Data/EditData';
 import { CategoryType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { Chip, Stack } from '@mui/material';
@@ -21,7 +19,7 @@ const CatView = () => {
       method: 'getCategories',
       arguments: {},
     }).then((response) => {
-      if (response.success) setCategories(response.data ? response.data : []);
+      if (response.data) setCategories(response.data ? response.data : []);
     });
 
   const setDelete = (item: CategoryType) => {
@@ -49,7 +47,7 @@ const CatView = () => {
     <Stack pb={3}>
       <Stack direction="row" flexWrap="wrap" gap={1}>
         <Chip
-          label={t('generics.add', { var: t('views.category') })}
+          label={t('actions.add', { var: t('scopes.category.name') })}
           avatar={<AppIcon icon="add" />}
           onClick={() => setEdit()}
         />
@@ -66,8 +64,8 @@ const CatView = () => {
           );
         })}
       </Stack>
-      <EditData scope="categories" item={selectedItem} isOpen={!!editCat} onClose={onClose} />
-      <DeleteData scope="categories" id={Number(selectedItem?.id)} isOpen={!!deleteCat} onClose={onClose} />
+      {/* <EditData scope="categories" item={selectedItem} isOpen={!!editCat} onClose={onClose} />
+      <DeleteData scope="categories" id={Number(selectedItem?.id)} isOpen={!!deleteCat} onClose={onClose} /> */}
     </Stack>
   );
 };

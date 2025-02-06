@@ -1,53 +1,42 @@
-import { localStorageGet, databaseRequest } from '@/utils';
-import { Avatar } from '@mui/material';
+import { getAvatar } from '@/services/media';
+import { Avatar, AvatarProps } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '../AppIcon';
 
-interface Props {
-  id: number;
-  size?: 'small' | 'large';
-  update: boolean;
+interface Props extends AvatarProps {
+  id: string;
+  size?: number;
 }
 
 /**
  * Renders User info with Avatar
  * @component UserInfo
  */
-const UserAvatar = ({ id, size, update }: Props) => {
+const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
   const [userAvatar, setUserAvatar] = useState<string>('');
-  const api_url = localStorageGet('api_url');
-
-  const currentSize = size === 'small' ? 32 : size === 'large' ? 128 : 56;
-
-  const downloadUserAvatar = () => {
-    if (!id) return;
-    databaseRequest({
-      model: 'Media',
-      method: 'userAvatar',
-      arguments: {
-        user_id: id,
-      },
-    }).then((response: any) => {
-      if (!response.success) return;
-      if (response.data.length > 0) setUserAvatar(response.data[0].filename);
-    });
+  const downloadUserAvatar = async () => {
+    const response = await getAvatar(id);
+    if (!response.data) return;
+    if (response.data.length > 0) setUserAvatar(response.data[0].filename);
   };
 
   useEffect(() => {
     downloadUserAvatar();
-  }, [update]);
+  }, [id]);
 
   return (
     <Avatar
+      {...restOfProps}
       sx={{
-        width: currentSize,
-        height: currentSize,
+        width: size,
+        height: size,
         fontSize: '3rem',
+        ...sx,
       }}
       alt="User avatar"
-      src={`${api_url}/files/${userAvatar}` || ''}
+      src={`/files/${userAvatar}` || ''}
     >
-      {!userAvatar && <AppIcon icon="avatar" size="xl" />}
+      {!userAvatar && <AppIcon icon="avatar" />}
     </Avatar>
   );
 };

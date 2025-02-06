@@ -4,6 +4,7 @@ import App from './App';
 import './i18n';
 import './index.css';
 import './print.css';
+import '@mdxeditor/editor/style.css';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);

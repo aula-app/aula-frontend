@@ -31,11 +31,11 @@ const UpdateCard = ({ item, icon, variant, ...restOfProps }: Props) => {
       {...restOfProps}
     >
       <AppLink
-        to={`/room/${item.room_hash_id}/phase/${item.phase_id || 0}${item.topic_id ? `/idea-box/${item.topic_id}` : ''}/idea/${item.idea_id}`}
+        to={`/room/${item.room_id}/phase/${item.phase_id || 0}${item.topic_id ? `/idea-box/${item.topic_id}` : ''}/idea/${item.idea_id}`}
       >
         <Stack direction="row" height={68} alignItems="center">
           <AppIcon icon={icon} sx={{ mr: 2 }} />
-          {t('texts.update', { var: t(`views.${variant}`) })}
+          {t('settings.messages.update', { var: t(`scopes.${variant}.plural`) })}
           <Typography ml={0.5} fontWeight={800}>
             {item.title}
           </Typography>

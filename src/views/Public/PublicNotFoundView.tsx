@@ -1,20 +1,18 @@
-import { AppLink } from "@/components";
-import { useTranslation } from "react-i18next";
+import { AppLink } from '@/components';
+import { Stack, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
-/**
- * "Not Found" aka "Error 404" view
- */
-const NotFoundViewView = () => {
+const PublicNotFoundView = () => {
   const { t } = useTranslation();
-  return(
-  <div>
-    <p>{t('texts.unaltenticated')}</p>
-    <p>
-        <AppLink color="success" component={AppLink} to="/">
-        {t('login.signIn')}
-        </AppLink>
-      </p>
-  </div>
-)}
 
-export default NotFoundViewView;
+  return (
+    <Stack spacing={2} alignItems="center" sx={{ p: 2 }}>
+      <Typography>{t('errors.unauthorized')}</Typography>
+      <AppLink color="success" to="/">
+        {t('auth.login.button')}
+      </AppLink>
+    </Stack>
+  );
+};
+
+export default PublicNotFoundView;

@@ -21,7 +21,7 @@ const UserInfo = () => {
       },
       ['user_id']
     ).then((response) => {
-      if (response.success) setUser(response.data);
+      if (response.data) setUser(response.data);
     });
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const UserInfo = () => {
     <>
       {user && (
         <Stack alignItems="center" minHeight="fit-content" marginBottom={2}>
-          <UserAvatar id={user.id} update={true} />
+          <UserAvatar id={user.hash_id} size={80} />
           <Typography sx={{ mt: 1 }} variant="h6">
             {user.username}
           </Typography>

@@ -1,100 +1,84 @@
-import { AppButton } from '@/components';
-import { AnnouncementType, MessageType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
-import { Button, Card, CardActions, CardContent, Divider, Skeleton, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { AppButton, AppIconButton } from '@/components';
+import { getAnnouncement, setAnnouncementStatus } from '@/services/announcements';
+import { AnnouncementType } from '@/types/Scopes';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Divider,
+  Skeleton,
+  Stack,
+  Typography,
+} from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 /**
- * Renders "Messages" view
- * url: /messages
+ * Renders "Announcement" view
+ * url: /announcements
  */
 
 const AnnouncementView = () => {
-  const { t } = useTranslation();
-  const params = useParams();
-  const navigate = useNavigate();
-  const [message, setMessage] = useState<MessageType | AnnouncementType>();
+  const { announcement_id } = useParams();
 
-  const messageFetch = async () =>
-    await databaseRequest({
-      model: 'Text',
-      method: 'getTextBaseData',
-      arguments: {
-        text_id: params['message_id'],
-      },
-    }).then((response) => {
-      if (!response.success || !response.data) return;
-      setMessage(response.data);
-    });
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [announcement, setAnnouncement] = useState<AnnouncementType | AnnouncementType>();
 
-  const giveConsent = async () =>
-    await databaseRequest(
-      {
-        model: 'User',
-        method: 'giveConsent',
-        arguments: {
-          text_id: params['message_id'],
-        },
-      },
-      ['user_id']
-    ).then((response) => {
-      if (response.success) onArchive(true);
-    });
+  const fetchAnnouncement = useCallback(async () => {
+    if (!announcement_id) return;
+    setLoading(true);
+    const response = await getAnnouncement(announcement_id);
+    if (response.error) setError(response.error);
+    if (!response.error && response.data) setAnnouncement(response.data);
+    setLoading(false);
+  }, [announcement_id]);
 
-  const onArchive = async (setArchived: boolean) => {
-    if (!message) return;
-    await databaseRequest(
-      {
-        model: 'Text',
-        method: 'setTextStatus',
-        arguments: {
-          status: setArchived ? 3 : 1,
-          text_id: message.id,
-        },
-      },
-      ['updater_id']
-    ).then(() => navigate('/messages'));
+  // const giveConsent = async () =>
+  //   await databaseRequest(
+  //     {
+  //       model: 'User',
+  //       method: 'giveConsent',
+  //       arguments: {
+  //         text_id: params['announcement_id'],
+  //       },
+  //     },
+  //     ['user_id']
+  //   ).then((response) => {
+  //     if (response.data) onArchive(true);
+  //   });
+
+  const archiveAnnouncement = async () => {
+    if (!announcement) return;
+    setAnnouncementStatus({
+      status: 3,
+      text_id: announcement.hash_id,
+    }).then(fetchAnnouncement);
+  };
+
+  const unarchiveAnnouncement = async () => {
+    if (!announcement) return;
+    setAnnouncementStatus({
+      status: 1,
+      text_id: announcement.hash_id,
+    }).then(fetchAnnouncement);
+  };
+
+  const toggleArchive = () => {
+    if (!announcement) return;
+    announcement.status === 1 ? archiveAnnouncement() : unarchiveAnnouncement();
   };
 
   useEffect(() => {
-    messageFetch();
+    fetchAnnouncement();
   }, []);
 
   return (
     <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
-      {message ? (
-        <Card variant="outlined">
-          <CardContent>
-            <Typography variant="h5" py={2}>
-              {message.headline}
-            </Typography>
-            <Typography py={2}>{message.body}</Typography>
-          </CardContent>
-          <Divider />
-          <CardActions sx={{ justifyContent: 'end' }}>
-            {'user_needs_to_consent' in message && (
-              <>
-                {message.user_needs_to_consent < 2 && (
-                  <Button
-                    color="error"
-                    onClick={() => onArchive(message.status === 1 ? true : false)}
-                    sx={{ ml: 'auto', mr: 2, my: 1 }}
-                  >
-                    {message.status === 1 ? t(`texts.archive`) : t(`texts.unarchive`)}
-                  </Button>
-                )}
-                {message.user_needs_to_consent > 0 && (
-                  <AppButton color="primary" onClick={giveConsent}>
-                    {message.consent_text}
-                  </AppButton>
-                )}
-              </>
-            )}
-          </CardActions>
-        </Card>
-      ) : (
+      {isLoading && (
         <Card variant="outlined">
           <CardContent>
             <Skeleton variant="rectangular" height={24} width="30%" sx={{ mb: 3 }} />
@@ -105,6 +89,27 @@ const AnnouncementView = () => {
           <CardActions>
             <Skeleton variant="rectangular" width={100} sx={{ ml: 'auto', mr: 2, my: 1 }} />
           </CardActions>
+        </Card>
+      )}
+      {error && <Typography variant="h5">{error}</Typography>}
+      {!isLoading && announcement && (
+        <Card variant="outlined">
+          <CardHeader
+            title={announcement.headline}
+            action={
+              <AppIconButton icon={announcement.status === 1 ? 'archive' : 'unarchive'} onClick={toggleArchive} />
+            }
+          />
+          <CardContent>
+            <Typography py={2}>{announcement.body}</Typography>
+          </CardContent>
+          {announcement.user_needs_to_consent > 0 && (
+            <CardActions sx={{ justifyContent: 'end' }}>
+              <Button color="primary" onClick={() => {}}>
+                {announcement.consent_text}
+              </Button>
+            </CardActions>
+          )}
         </Card>
       )}
     </Stack>

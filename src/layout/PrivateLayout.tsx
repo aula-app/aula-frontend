@@ -1,8 +1,7 @@
 import { ErrorBoundary } from '@/components';
-import EditData from '@/components/Data/EditData';
 import { useIsOnline } from '@/hooks';
 import { useOnMobile } from '@/hooks/layout';
-import { checkPermissions, getCurrentUser, localStorageGet, parseJwt } from '@/utils';
+import { checkPermissions, localStorageGet, parseJwt } from '@/utils';
 import AskConsent from '@/views/AskConsent';
 import OfflineView from '@/views/OfflineView';
 import UpdatePassword from '@/views/UpdatePassword';
@@ -22,7 +21,7 @@ const TITLE_PRIVATE = 'aula';
 
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const location = useLocation();
-  const [scope, setScope] = useState<'bug' | 'report'>();
+  const [scope, setScope] = useState<'bugs' | 'reports'>();
   const [online, setOnline] = useState(true);
   const jwt = parseJwt(localStorageGet('token'));
 
@@ -52,29 +51,14 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         paddingRight: 0,
       }}
     >
-      <TopBar home={title} setReport={setScope} />
+      <TopBar home={title} />
 
       <Stack direction="row" component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
-        {!checkPermissions(60) && <SideBarFixed setReport={setScope} />}
+        {!checkPermissions(60) && <SideBarFixed />}
         <Stack flex={1} overflow="hidden">
           <ErrorBoundary name="Content">{children}</ErrorBoundary>
         </Stack>
       </Stack>
-      <EditData
-        isOpen={!!scope}
-        scope={scope || 'bug'}
-        otherData={{
-          headline: `${location.pathname}`,
-          msg_type: 4,
-        }}
-        metadata={{
-          type: scope,
-          location: location.pathname,
-          user: getCurrentUser(),
-          userAgent: window.navigator.userAgent,
-        }}
-        onClose={() => setScope(undefined)}
-      />
       <AskConsent />
     </Stack>
   );

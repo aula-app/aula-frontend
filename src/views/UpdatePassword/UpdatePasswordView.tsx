@@ -56,7 +56,7 @@ const ChangePasswordView = () => {
       <Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ pb: 2 }}>
           <Button color="primary" onClick={onLogout}>
-            &lt; {t('login.button')}
+            &lt; {t('auth.login.button')}
           </Button>
           <LocaleSwitch />
         </Stack>
@@ -74,9 +74,9 @@ const ChangePasswordView = () => {
         }}
       >
         <Typography variant="h5" sx={{ mb: 3 }}>
-          {t('login.setPass')}
+          {t('auth.password.set')}
         </Typography>
-        <ChangePassword onSubmit={changePass} ref={passFields} />
+        <ChangePassword />
       </Stack>
     </Stack>
   );

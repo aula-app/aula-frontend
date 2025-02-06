@@ -1,56 +1,68 @@
-import { useAppStore } from "@/store";
-import { localStorageSet } from "@/utils";
-import { Button, Stack } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import React, { KeyboardEvent, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useAppStore } from '@/store';
+import { Button, CircularProgress, Stack } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import React, { KeyboardEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { validateInstanceCode } from '@/services/instance';
 
-/**
- * Choose your instance view
- */
 const InstanceCodeView = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [code, setCode] = useState("");
   const [isLoading, setLoading] = useState(false);
-  let navigate = useNavigate();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const saveCode = async () => {
+  const handleSubmit = async () => {
+    if (!code.trim()) {
+      setError(t('forms.validation.required'));
+      return;
+    }
 
-    setLoading(true)
+    setLoading(true);
+    setError('');
 
-    const request =  await fetch(import.meta.env.VITE_APP_MULTI_AULA + "/instance/" + code)
-
-    const response = await request.json();
-    setLoading(false)
-
-    if (response.length > 0) {
-      localStorageSet("code", code);
-      localStorageSet("api_url", response[0].api);
-      navigate("/");
-    } else {
-      dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
+    try {
+      const isValid = await validateInstanceCode(code.trim());
+      if (isValid) {
+        navigate('/');
+      } else {
+        setError(t('errors.default'));
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      }
+    } catch (err) {
+      setError(t('instance.error'));
+      dispatch({ type: 'ADD_POPUP', message: { message: t('instance.error'), type: 'error' } });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Stack>
+    <Stack spacing={2} sx={{ maxWidth: 400, margin: '0 auto', p: 2 }}>
       <TextField
-      disabled={isLoading}
-        id="outlined-basic"
-        label="code"
+        disabled={isLoading}
+        id="instance-code"
+        label={t('instance.label')}
         variant="outlined"
-        helperText="type instance code"
+        error={!!error}
+        helperText={error || t('instance.headline')}
         onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
-          if (event.key === "Enter") saveCode();
+          if (event.key === 'Enter') handleSubmit();
         }}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setCode(event.target.value);
+          if (error) setError('');
         }}
       />
-      <Button disabled={isLoading} variant="contained" onClick={saveCode}>
-        {t("confirm")}
+      <Button
+        disabled={isLoading}
+        variant="contained"
+        onClick={handleSubmit}
+        startIcon={isLoading ? <CircularProgress size={20} /> : null}
+      >
+        {t('actions.confirm')}
       </Button>
     </Stack>
   );

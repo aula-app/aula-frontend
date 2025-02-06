@@ -1,17 +1,16 @@
+import { changePassword } from '@/services/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Alert, Collapse, InputAdornment, Stack, TextField } from '@mui/material';
-import { forwardRef, useImperativeHandle, useState } from 'react';
-import { FormContainer, SubmitHandler, useForm } from 'react-hook-form-mui';
+import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
+import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import AppButton from '../AppButton';
 import AppIconButton from '../AppIconButton';
-import AppSubmitButton from '../AppSubmitButton';
+import { setPassword } from '@/services/login';
+import { useParams } from 'react-router-dom';
 
 interface Props {
-  hideOld?: boolean;
   disabled?: boolean;
-  onSubmit: SubmitHandler<any>;
 }
 
 export interface ChangePasswordMethods {
@@ -22,138 +21,122 @@ export interface ChangePasswordMethods {
  * Renders User info with Avatar
  * @component ChangePassword
  */
-const ChangePassword = forwardRef<ChangePasswordMethods, Props>(
-  ({ onSubmit, disabled = false, hideOld = false }: Props, ref) => {
-    const { t } = useTranslation();
-    const [messageType, setMessageType] = useState<'error' | 'success'>('error');
-    const [showMessage, setShowMessage] = useState(false);
-    const [showOldPassword, setOldPassword] = useState(false);
-    const [showNewPassword, setNewPassword] = useState(false);
-    const [showConfirmPassword, setConfirmPassword] = useState(false);
+const ChangePassword: React.FC<Props> = ({ disabled = false }) => {
+  const { t } = useTranslation();
+  const { key } = useParams();
+  const [showMessage, setShowMessage] = useState(false);
+  const [messageSuccess, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState<Record<keyof typeof fields, boolean>>({
+    oldPassword: false,
+    confirmPassword: false,
+    newPassword: false,
+  });
 
-    const schema = yup
-      .object()
-      .shape({
-        newPassword: yup.string().required().min(4).max(32),
-        confirmPassword: yup
-          .string()
-          .required()
-          .oneOf([yup.ref('newPassword')], 'Passwords must match'),
-      })
-      .shape(
-        hideOld
-          ? {}
-          : {
-              oldPassword: yup.string().required().min(4).max(32),
-            }
-      )
-      .required();
+  const schema = yup
+    .object({
+      oldPassword: key
+        ? yup.string().notRequired()
+        : yup
+            .string()
+            .required(t('forms.validation.required'))
+            .min(4, t('forms.validation.minLength', { var: 4 }))
+            .max(32, t('forms.validation.maxLength', { var: 32 })),
+      newPassword: yup
+        .string()
+        .required(t('forms.validation.required'))
+        .min(4, t('forms.validation.minLength', { var: 4 }))
+        .max(32, t('forms.validation.maxLength', { var: 32 })),
+      confirmPassword: yup
+        .string()
+        .required(t('forms.validation.required'))
+        .oneOf([yup.ref('newPassword')], t('forms.validation.passwordMatch')),
+    })
+    .required(t('forms.validation.required'));
 
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm({
-      resolver: yupResolver(schema),
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  // Infer TypeScript type from the Yup schema
+  type SchemaType = yup.InferType<typeof schema>;
+  const fields = schema.fields;
+
+  const onSubmit = async (data: SchemaType) => {
+    const result = key
+      ? await setPassword(data.newPassword, key)
+      : await changePassword(data.oldPassword as 'string', data.newPassword);
+
+    setSuccess(!result.error);
+  };
+
+  const resetFields = () => {
+    reset();
+    setShowPassword({
+      oldPassword: false,
+      confirmPassword: false,
+      newPassword: false,
     });
+  };
 
-    useImperativeHandle(ref, () => ({
-      displayMessage(isSuccess: boolean) {
-        setMessageType(isSuccess ? 'success' : 'error');
-        setShowMessage(true);
-      },
-    }));
-
-    return (
-      <FormContainer>
-        <Collapse in={showMessage} sx={{ mb: 2 }}>
-          <Alert variant="outlined" severity={messageType} onClose={() => setShowMessage(false)}>
-            {messageType === 'success' ? t('login.passwordChange') : t('login.passwordError')}
-          </Alert>
-        </Collapse>
-        <Stack>
-          {!hideOld && (
+  return (
+    <FormContainer>
+      <Stack gap={2} mt={2}>
+        <Typography variant="h6">{t('auth.password.change')}</Typography>
+        <Stack gap={1} direction="row" flexWrap="wrap">
+          {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
             <TextField
+              key={field}
               required
               disabled={disabled}
-              type={showOldPassword ? 'text' : 'password'}
-              label={t('settings.password')}
-              sx={{ width: '100%' }}
-              {...register('oldPassword')}
-              error={errors.oldPassword ? true : false}
-              helperText={errors.oldPassword?.message || ' '}
+              type={showPassword[field] ? 'text' : 'password'}
+              label={t(`auth.password.${field}`)}
+              sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
+              {...register(field)}
+              error={!!errors[field]}
+              helperText={errors[field]?.message}
               slotProps={{
                 input: {
                   endAdornment: (
                     <InputAdornment position="end">
                       <AppIconButton
                         aria-label="toggle password visibility"
-                        icon={showOldPassword ? 'visibilityOn' : 'visibilityOff'}
-                        title={showOldPassword ? t('generics.hide') : t('generics.show')}
-                        onClick={() => setOldPassword(!showOldPassword)}
-                        onMouseDown={(e) => e.preventDefault()}
+                        icon={showPassword[field] ? 'visibilityOn' : 'visibilityOff'}
+                        title={showPassword[field] ? t('actions.hide') : t('actions.show')}
+                        onClick={() => setShowPassword({ ...showPassword, [field]: !showPassword[field] })}
                       />
                     </InputAdornment>
                   ),
                 },
               }}
             />
-          )}
-          <TextField
-            required
-            disabled={disabled}
-            type={showNewPassword ? 'text' : 'password'}
-            label={t('settings.passwordChange')}
-            sx={{ width: '100%' }}
-            {...register('newPassword')}
-            error={errors.newPassword ? true : false}
-            helperText={errors.newPassword?.message || ' '}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <AppIconButton
-                      aria-label="toggle password visibility"
-                      icon={showNewPassword ? 'visibilityOn' : 'visibilityOff'}
-                      title={showNewPassword ? t('generics.hide') : t('generics.show')}
-                      onClick={() => setNewPassword(!showNewPassword)}
-                      onMouseDown={(e) => e.preventDefault()}
-                    />
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-          <TextField
-            required
-            disabled={disabled}
-            type={showConfirmPassword ? 'text' : 'password'}
-            label={t('settings.passwordConfirmChange')}
-            sx={{ width: '100%' }}
-            {...register('confirmPassword')}
-            error={errors.confirmPassword ? true : false}
-            helperText={errors.confirmPassword?.message || ' '}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <AppIconButton
-                      aria-label="toggle password visibility"
-                      icon={showConfirmPassword ? 'visibilityOn' : 'visibilityOff'}
-                      title={showConfirmPassword ? t('generics.hide') : t('generics.show')}
-                      onClick={() => setConfirmPassword(!showConfirmPassword)}
-                      onMouseDown={(e) => e.preventDefault()}
-                    />
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-          <AppSubmitButton disabled={disabled} onClick={handleSubmit(onSubmit)} />
+          ))}
         </Stack>
-      </FormContainer>
-    );
-  }
-);
+
+        <Stack direction="row" justifyContent="end" gap={2}>
+          <Collapse in={showMessage}>
+            <Alert
+              variant="outlined"
+              severity={messageSuccess ? 'success' : 'error'}
+              onClose={() => setShowMessage(false)}
+            >
+              {messageSuccess ? t('auth.password.success') : t('auth.errors.invalidPassword')}
+            </Alert>
+          </Collapse>
+          <Button color="error" disabled={disabled} onClick={resetFields}>
+            {t('actions.cancel')}
+          </Button>
+          <Button variant="contained" disabled={disabled} onClick={handleSubmit(onSubmit)}>
+            {t('actions.save')}
+          </Button>
+        </Stack>
+      </Stack>
+    </FormContainer>
+  );
+};
 
 export default ChangePassword;

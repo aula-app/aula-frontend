@@ -1,9 +1,9 @@
 import ReportCard from '@/components/ReportCard';
 import ReportCardSkeleton from '@/components/ReportCard/ReportCardSkeleton';
+import { getMessage } from '@/services/messages';
 import { MessageType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
 import { Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 /**
@@ -12,29 +12,33 @@ import { useNavigate, useParams } from 'react-router-dom';
  */
 
 const ReportView = () => {
-  const params = useParams();
   const navigate = useNavigate();
+  const { report_id } = useParams();
+
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [report, setReport] = useState<MessageType>();
 
-  const reportFetch = async () =>
-    await databaseRequest({
-      model: 'Message',
-      method: 'getMessageBaseData',
-      arguments: {
-        message_id: params['message_id'],
-      },
-    }).then((response) => {
-      if (!response.success) return;
-      setReport(response.data);
-    });
+  const fetchReport = useCallback(async () => {
+    if (!report_id) return;
+    setLoading(true);
+    const response = await getMessage(report_id);
+    if (response.error) setError(response.error);
+    if (!response.error && response.data) setReport(response.data);
+    setLoading(false);
+  }, [report_id]);
 
   useEffect(() => {
-    reportFetch();
+    fetchReport();
   }, []);
 
   return (
     <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
-      {report ? <ReportCard report={report} onReload={() => navigate('/messages')} /> : <ReportCardSkeleton />}
+      {!isLoading && report ? (
+        <ReportCard report={report} onReload={() => navigate('/messages')} />
+      ) : (
+        <ReportCardSkeleton />
+      )}
     </Stack>
   );
 };

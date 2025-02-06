@@ -1,10 +1,10 @@
-import { AppButton, AppIconButton } from '@/components';
+import { AppButton } from '@/components';
 import { useAppStore } from '@/store';
 import { ObjectPropByName } from '@/types/Generics';
 import { databaseRequest } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { InputAdornment, Slider, Stack, TextField, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Slider, Stack, Typography } from '@mui/material';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -35,7 +35,7 @@ const QuorumSettings = ({ onReload }: Props) => {
       method: 'getQuorum',
       arguments: {},
     }).then((response) => {
-      if (!response.success || !response.data) return;
+      if (!response.data) return;
       setValue('quorum_wild_ideas', Number(response.data.quorum_wild_ideas));
       setValue('quorum_votes', Number(response.data.quorum_votes));
     });
@@ -50,11 +50,14 @@ const QuorumSettings = ({ onReload }: Props) => {
       },
       ['updater_id']
     ).then((response) => {
-      if (!response.success) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+      if (!response.data) {
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
         return;
       }
-      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.customField'), type: 'success' } });
+      dispatch({
+        type: 'ADD_POPUP',
+        message: { message: t('settings.messages.updated', { var: t('settings.labels.quorum') }), type: 'success' },
+      });
       onReload();
     });
   }
@@ -92,9 +95,9 @@ const QuorumSettings = ({ onReload }: Props) => {
 
   return (
     <Stack gap={2}>
-      <Typography variant="h6">{t(`settings.quorum`)}</Typography>
+      <Typography variant="h6">{t(`settings.labels.quorum`)}</Typography>
       <Typography variant="subtitle2" color="secondary">
-        {t(`views.ideas`).replace(/^./, (char) => char.toUpperCase())}
+        {t(`scopes.idea.plural`).replace(/^./, (char) => char.toUpperCase())}
       </Typography>
       <Controller
         name="quorum_wild_ideas"
@@ -105,7 +108,7 @@ const QuorumSettings = ({ onReload }: Props) => {
             {...field}
             value={value}
             orientation="horizontal"
-            aria-label="Wild Ideas Quorum"
+            aria-label={t('settings.labels.quorumLabel', { var: t(`phases.wild`) })}
             valueLabelDisplay="auto"
             valueLabelFormat={valueText}
             min={0}
@@ -116,7 +119,7 @@ const QuorumSettings = ({ onReload }: Props) => {
         )}
       />
       <Typography variant="subtitle2" color="secondary">
-        {t(`views.votes`).replace(/^./, (char) => char.toUpperCase())}
+        {t(`ui.units.votes`).replace(/^./, (char) => char.toUpperCase())}
       </Typography>
       <Controller
         name="quorum_votes"
@@ -127,7 +130,7 @@ const QuorumSettings = ({ onReload }: Props) => {
             {...field}
             value={value}
             orientation="horizontal"
-            aria-label="Votes Quorum"
+            aria-label={t('settings.labels.quorumLabel', { var: t(`ui.units.votes`) })}
             valueLabelDisplay="auto"
             valueLabelFormat={valueText}
             min={0}
@@ -138,7 +141,7 @@ const QuorumSettings = ({ onReload }: Props) => {
         )}
       />
       <AppButton type="submit" color="primary" sx={{ ml: 'auto', mr: 0 }} onClick={handleSubmit(addQuorum)}>
-        {t('generics.save')}
+        {t('actions.save')}
       </AppButton>
     </Stack>
   );

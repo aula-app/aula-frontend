@@ -26,62 +26,62 @@ const PHASE_COLORS = {
   wild: {
     light: blue[50],
     main: blue[100],
-    dark: blue[200],
+    dark: blue[300],
   },
   discussion: {
     light: deepPurple[50],
     main: deepPurple[100],
-    dark: deepPurple[200],
+    dark: deepPurple[300],
   },
   approval: {
     light: deepOrange[50],
     main: deepOrange[100],
-    dark: deepOrange[200],
+    dark: deepOrange[300],
   },
   voting: {
     light: amber[50],
     main: amber[100],
-    dark: amber[200],
+    dark: amber[400],
   },
   results: {
     light: green[50],
     main: green[100],
-    dark: green[200],
+    dark: green[300],
   },
 };
 
 const OTHER_COLORS = {
-  comment: {
+  against: {
+    main: red[100],
+  },
+  alert: {
+    main: red[100],
+  },
+  announcements: {
+    main: deepPurple[100],
+  },
+  bugs: {
+    main: grey[200],
+  },
+  comments: {
+    main: grey[200],
+  },
+  disabled: {
     main: grey[200],
   },
   for: {
     main: green[100],
   },
+  reports: {
+    main: amber[200],
+  },
+  messages: {
+    main: cyan[100],
+  },
   neutral: {
     main: amber[100],
   },
-  against: {
-    main: red[100],
-  },
-  disabled: {
-    main: grey[200],
-  },
-  message: {
-    main: cyan[100],
-  },
-  announcement: {
-    main: deepPurple[100],
-  },
-  alert: {
-    main: red[100],
-  },
-  bug: {
-    main: grey[200],
-  },
-  report: {
-    main: amber[200],
-  },
-  request: {
+  requests: {
     main: grey[200],
   },
 };

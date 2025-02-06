@@ -1,7 +1,8 @@
 import { useIsAuthenticated } from '@/hooks/auth';
 import { useAppStore } from '@/store/AppStore';
 import { localStorageGet } from '@/utils';
-import { useEffect } from 'react';
+import { getUserConsent } from '@/services/consent';
+import { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import PrivateRoutes from './PrivateRoutes';
 import PublicRoutes from './PublicRoutes';
@@ -16,29 +17,40 @@ const Routes = () => {
   const isAuthenticated = useIsAuthenticated(); // Variant 2
   const jwt_token = localStorageGet('token');
 
-  const getConsent = async () => {
-    if (!jwt_token) return;
-    const data = await (
-      await fetch(api_url + '/api/controllers/user_consent.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwt_token,
-        },
-      })
-    ).json();
+  const getConsent = useCallback(async () => {
+    if (!jwt_token || !api_url) return;
 
-    const result = data; // await api.auth.loginWithEmail(values);
-    if (result.data && result.data === 0) {
-      dispatch({ action: 'HAS_CONSENT', payload: false });
-    } else {
-      dispatch({ action: 'HAS_CONSENT', payload: true });
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+      const result = await getUserConsent(api_url, jwt_token, controller.signal);
+      clearTimeout(timeoutId);
+
+      dispatch({
+        action: 'HAS_CONSENT',
+        payload: !(result.data === 0),
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          console.error('Consent request timeout');
+        } else if (error.name === 'NetworkError') {
+          console.error('Network error while fetching consent');
+        } else {
+          console.error('Failed to fetch consent:', error.message);
+        }
+      }
+      dispatch({
+        action: 'HAS_CONSENT',
+        payload: false,
+      });
     }
-  };
+  }, [api_url, jwt_token, dispatch]);
 
   useEffect(() => {
     getConsent();
-  }, [isAuthenticated, location]);
+  }, [isAuthenticated, location, getConsent]);
 
   return isAuthenticated ? <PrivateRoutes /> : <PublicRoutes />;
 };

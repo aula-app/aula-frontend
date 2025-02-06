@@ -51,37 +51,37 @@ const PHASE_COLORS = {
 };
 
 const OTHER_COLORS = {
-  comment: {
+  against: {
+    main: 'hsl(350, 30%, 30%)',
+  },
+  alert: {
+    main: 'hsl(325, 30%, 30%)',
+  },
+  announcements: {
+    main: 'hsl(220, 30%, 30%)',
+  },
+  bugs: {
+    main: blueGrey[900],
+  },
+  comments: {
+    main: blueGrey[800],
+  },
+  disabled: {
     main: blueGrey[800],
   },
   for: {
     main: 'hsl(120, 30%, 30%)',
   },
+  messages: {
+    main: 'hsl(175, 30%, 30%)',
+  },
   neutral: {
     main: 'hsl(40, 40%, 30%)',
   },
-  against: {
-    main: 'hsl(350, 30%, 30%)',
-  },
-  disabled: {
-    main: blueGrey[800],
-  },
-  message: {
-    main: 'hsl(175, 30%, 30%)',
-  },
-  announcement: {
-    main: 'hsl(220, 30%, 30%)',
-  },
-  alert: {
-    main: 'hsl(325, 30%, 30%)',
-  },
-  bug: {
-    main: blueGrey[900],
-  },
-  report: {
+  reports: {
     main: 'hsl(40, 40%, 20%)',
   },
-  request: {
+  requests: {
     main: blueGrey[800],
   },
 };

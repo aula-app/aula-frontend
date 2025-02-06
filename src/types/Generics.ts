@@ -18,16 +18,15 @@ export interface DatabaseResponseType {
 }
 
 export type ColorTypes = 'secondary' | 'warning' | 'error' | 'inherit' | 'primary' | 'success' | 'info';
-export type AlterTypes = 'add' | 'edit' | 'delete' | 'report' | 'bug';
+export type AlterTypes = 'add' | 'edit' | 'delete' | 'reports' | 'bugs';
 export type StatusTypes = -1 | 0 | 1 | 2 | 3;
 
 export interface DefaultUpdate {
-  id: number;
-  idea_id: number;
-  topic_id: number | null;
-  phase_id: number | null;
-  room_id: number;
-  room_hash_id: string;
+  id: string;
+  idea_id: string;
+  topic_id: string | null;
+  phase_id: string | null;
+  room_id: string;
   title: string;
 }
 

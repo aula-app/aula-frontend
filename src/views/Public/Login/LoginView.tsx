@@ -1,5 +1,5 @@
 import { AppIconButton, AppLink } from "@/components";
-import AppSubmitButton from "@/components/AppSubmitButton";
+import { loginUser } from "@/services/login";
 import { useAppStore } from "@/store";
 import { localStorageGet, localStorageSet } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,26 +14,18 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { FormContainer, useForm } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
+import { LoginFormValues } from "@/types/LoginTypes";
+
 /**
  * Renders "Login" view for Login flow
  * url: /login
  */
-
-type LoginResponseType = {
-  success: boolean, 
-  JWT?: string,
-  error_code?: number | null,
-  user_status?: number | null,
-  user_id?: number | null,
-  data?:	string | null,
-  count?: number
-}
 
 const LoginView = () => {
   const { t } = useTranslation();
@@ -51,11 +43,11 @@ const LoginView = () => {
       username: yup.string().required(t("validation.required")),
       password: yup
         .string()
-        .required(t("validation.required"))
-        .min(4, t("validation.min", { var: 4 }))
-        .max(32, t("validation.max", { var: 32 }))
+        .required(t("forms.validation.required"))
+        .min(4, t("forms.validation.minLength", { var: 4 }))
+        .max(32, t("forms.validation.maxLength", { var: 32 }))
     })
-    .required();
+    .required(t('forms.validation.required'));
 
   const {
     register,
@@ -65,47 +57,50 @@ const LoginView = () => {
     resolver: yupResolver(schema),
   });
 
-  const handleShowPasswordClick = useCallback(() => {
+  const handleShowPasswordClick = () => {
     setShowPassword((oldValue) => !oldValue);
-  }, []);
+  };
 
-  const onSubmit = async (formData: Object) => {
+  const onSubmit = async (formData: LoginFormValues) => {
+    if (!api_url) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
+      return;
+    }
+
     try {
-      setLoading(true)
+      setLoading(true);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const request = await fetch(
-        `${api_url}/api/controllers/login.php`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + jwt_token,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await loginUser(api_url, formData, jwt_token, controller.signal);
+      clearTimeout(timeoutId);
+      setLoading(false);
 
-      setLoading(false)
-      const response = await request.json() as LoginResponseType;
-      
-      if (response.success !== true || !('JWT' in response)) {
+      if (!response.data || !('JWT' in response)) {
         setError(
           'user_status' in response && response.user_status !== null
-            ? response.user_status === 0 
-              ? t('login.accountInactive')
-              : t('login.accountSuspended', {var: response.data ? t('login.accountSuspendDate', {var: response.data}) : ''})
-            : t('login.loginError')
-
+            ? response.user_status === 0
+              ? t('auth.errors.accountInactive')
+              : t('auth.errors.accountSuspended', {var: response.data ? t('auth.errors.accountSuspendDate', {var: response.data}) : ''})
+            : t('auth.errors.invalidCredentials')
         );
         return;
       }
 
-      localStorageSet("token", response["JWT"]);
+      localStorageSet("token", response.JWT);
       dispatch({ type: "LOG_IN" });
       navigate("/", { replace: true });
     } catch (e) {
-      setLoading(false)
-      dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+      setLoading(false);
+      if (e instanceof Error) {
+        if (e.name === 'AbortError') {
+          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.timeout'), type: 'error' } });
+        } else if (e.name === 'NetworkError') {
+          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.network'), type: 'error' } });
+        } else {
+          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+        }
+      }
     }
   };
 
@@ -113,7 +108,7 @@ const LoginView = () => {
     <FormContainer>
       <Stack>
         <Typography variant="h5" sx={{ mb: 1 }}>
-          {t("login.welcome")}
+          {t("auth.messages.welcome")}
         </Typography>
         <Collapse in={loginError !== ''} sx={{ mb: 2 }}>
           <Alert
@@ -127,7 +122,7 @@ const LoginView = () => {
         <TextField
           required
           disabled={isLoading}
-          label={t("login.login")}
+          label={t("auth.login.label")}
           slotProps={{ input: { autoCapitalize: "none" } }}
           {...register("username")}
           error={errors.username ? true : false}
@@ -138,7 +133,7 @@ const LoginView = () => {
           required
           disabled={isLoading}
           type={showPassword ? "text" : "password"}
-          label={t("login.password")}
+          label={t("auth.password.label")}
           {...register("password")}
           error={errors.password ? true : false}
           helperText={errors.password?.message || " "}
@@ -150,7 +145,7 @@ const LoginView = () => {
                   <AppIconButton
                     aria-label="toggle password visibility"
                     icon={showPassword ? "visibilityOn" : "visibilityOff"}
-                    title={showPassword ? t("generics.hide") : t("generics.show")}
+                    title={showPassword ? t("actions.hide") : t("actions.show")}
                     onClick={handleShowPasswordClick}
                     onMouseDown={(e) => e.preventDefault()}
                   />
@@ -159,7 +154,7 @@ const LoginView = () => {
             }
           }}
         />
-        <AppSubmitButton label={t("login.button")} disabled={isLoading} onClick={handleSubmit(onSubmit)} />
+        <Button variant="contained" disabled={isLoading} onClick={handleSubmit(onSubmit)}>{t("auth.login.button")}</Button>
 
         <Grid container justifyContent="end" alignItems="center">
           <Button
@@ -168,20 +163,26 @@ const LoginView = () => {
             component={AppLink}
             to="/recovery/password"
           >
-            {t('login.forgot')}
+            {t('auth.forgotPassword.link')}
           </Button>
         </Grid>
       </Stack>
       { oauthEnabled === "true" ? (<>
          <Stack direction='row' mb={2} alignItems='center'>
           <Divider sx={{flex: 1}} />
-          <Typography px={2} color="secondary">{t('generics.or')}</Typography>
+          <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
           <Divider sx={{flex: 1}} />
         </Stack>
         <Stack direction='column' mb={2} alignItems='center'>
-         <AppSubmitButton variant="outlined" onClick={() => window.location.href="/api/controllers/login_oauth.php"} label={"OAuth Authenticate"}/>
+         <Button
+           variant="outlined"
+           color="secondary"
+           onClick={() => window.location.href="/api/controllers/login_oauth.php"}
+           disabled={isLoading}
+           aria-label={t('auth.oauth.arialabel')}
+         >{t('auth.oauth.button')}</Button>
         </Stack>
-         </>) 
+         </>)
          : ''}
 
     </FormContainer>

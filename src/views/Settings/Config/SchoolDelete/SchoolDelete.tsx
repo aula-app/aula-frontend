@@ -22,14 +22,14 @@ const SchoolDelete = () => {
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success) onLogout();
+      if (response.data) onLogout();
     });
   };
 
   return (
     <>
       <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} fullWidth>
-        {t('texts.deleteData')}
+        {t('settings.account.delete')}
       </Button>
       <Dialog
         open={openDelete}
@@ -38,17 +38,17 @@ const SchoolDelete = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" color="error" sx={{ display: 'flex', alignItems: 'center' }}>
-          <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('texts.deleteData')}
+          <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('settings.account.delete')}
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
-          <DialogContentText id="alert-dialog-description">{t('texts.deleteText')}</DialogContentText>
+          <DialogContentText id="alert-dialog-description">{t('settings.account.deleteText')}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDelete(false)} color="secondary" autoFocus>
-            {t('generics.cancel')}
+            {t('actions.cancel')}
           </Button>
           <Button onClick={lockInstance} color="error" variant="contained">
-            {t('generics.delete')}
+            {t('actions.delete')}
           </Button>
         </DialogActions>
       </Dialog>

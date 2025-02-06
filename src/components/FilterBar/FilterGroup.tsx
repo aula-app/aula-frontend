@@ -22,7 +22,7 @@ const FilterGroup = ({ group, setGroup }: Params) => {
         limit: 0,
       },
     }).then((response) => {
-      if (!response.success) return;
+      if (!response.data) return;
       setGroups(response.data);
     });
   };
@@ -38,7 +38,7 @@ const FilterGroup = ({ group, setGroup }: Params) => {
   return (
     <TextField
       select
-      label={t('views.group')}
+      label={t('scopes.group.name')}
       value={group}
       onChange={changeRoom}
       variant="filled"

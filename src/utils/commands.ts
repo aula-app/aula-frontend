@@ -1,5 +1,4 @@
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { STATUS } from './Data/formDefaults';
 
 // Sets instance status value and labels
 export const InstanceStatusOptions = [
@@ -24,21 +23,21 @@ export const Commands = [
     label: 'system',
     actions: [
       { label: 'commands.status', value: 0, options: InstanceStatusOptions },
-      { label: 'commands.delete', value: 5 },
+      { label: 'actions.delete', value: 5 },
     ],
   },
   {
     label: 'users',
     actions: [
       { label: 'commands.status', value: 0, options: ScopeStatusOptions },
-      { label: 'commands.delete', value: 5 },
+      { label: 'actions.delete', value: 5 },
     ],
   },
   {
     label: 'groups',
     actions: [
       { label: 'commands.status', value: 0, options: ScopeStatusOptions },
-      { label: 'commands.delete', value: 5 },
+      { label: 'actions.delete', value: 5 },
     ],
   },
 ] as Array<{
@@ -46,4 +45,10 @@ export const Commands = [
   actions: { label: string; value: number; options?: { value: number; label: string }[] }[];
 }>;
 
+export const STATUS = [
+  { label: 'status.inactive', value: 0 },
+  { label: 'status.active', value: 1 },
+  { label: 'status.suspended', value: 2 },
+  { label: 'status.archived', value: 3 },
+];
 export const statusOptions = [{ label: 'status.all', value: -1 }, ...STATUS];

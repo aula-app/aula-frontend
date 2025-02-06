@@ -1,0 +1,118 @@
+import { RoomType } from '@/types/Scopes';
+import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
+import { checkPermissions } from '@/utils';
+
+export interface GetRoomResponse extends GenericResponse {
+  data: RoomType | null;
+}
+
+export const getRoom = async function (room_id: string): Promise<GetRoomResponse> {
+  const response = await databaseRequest({
+    model: 'Room',
+    method: 'getRoomBaseData',
+    arguments: {
+      room_id: room_id,
+    },
+  });
+
+  return response as GetRoomResponse;
+};
+
+/**
+ * Get a list of rooms from the database.
+ */
+
+export interface GetRoomsResponse extends GenericResponse {
+  data: RoomType[] | null;
+}
+
+export const getRooms = async (
+  args: GenericListRequest = {
+    offset: 0,
+    limit: 0,
+    orderby: 0,
+    asc: 0,
+  }
+): Promise<GetRoomsResponse> => {
+  // Check if room has Super Moderator (40) access to view all rooms
+  const hasSuperModAccess = checkPermissions(40);
+
+  const response = await databaseRequest(
+    {
+      model: 'Room',
+      method: hasSuperModAccess ? 'getRooms' : 'getRoomsByUser',
+      arguments: args,
+    },
+    hasSuperModAccess ? [] : ['user_id']
+  );
+
+  return response as GetRoomsResponse;
+};
+
+/**
+ * Sets Room update types
+ */
+
+export interface RoomArguments {
+  room_name?: string;
+  description_internal?: string;
+  description_public?: string;
+  internal_info?: string;
+  phase_duration_1?: number;
+  phase_duration_2?: number;
+  phase_duration_3?: number;
+  phase_duration_4?: number;
+  status?: number;
+}
+
+export interface EditRoomArguments extends RoomArguments {
+  room_id: string;
+}
+
+/**
+ * Adds a new room to the database
+ */
+
+export async function addRoom(args: RoomArguments): Promise<GetRoomsResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Room',
+      method: 'addRoom',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GetRoomsResponse;
+}
+
+/**
+ * Edit an room on the database
+ */
+
+export async function editRoom(args: EditRoomArguments): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Room',
+      method: 'editRoom',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+/**
+ * Delete room
+ */
+
+export async function deleteRoom(room_id: string): Promise<GetRoomResponse> {
+  const response = await databaseRequest({
+    model: 'Room',
+    method: 'deleteRoom',
+    arguments: { room_id },
+  });
+
+  return response as GetRoomResponse;
+}

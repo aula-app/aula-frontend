@@ -29,8 +29,8 @@ const DataSettings = ({ onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [users, setUsers] = useState<Array<string>>([]);
-  const [role, setRole] = useState<RoleTypes>(10);
-  const [room, setRoom] = useState<number | ''>('');
+  const [role, setRole] = useState<RoleTypes | 0 | undefined>(10);
+  const [room, setRoom] = useState<string | undefined>('');
   const [error, setError] = useState<string>('');
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -42,11 +42,11 @@ const DataSettings = ({ onReload }: Props) => {
 
   const onSubmit = () => {
     if (room === '') {
-      setError(t('texts.CSVnoRoom'));
+      setError(t('forms.csv.noRoom'));
       return;
     }
     if (users.length === 0) {
-      setError(t('texts.CSVempty'));
+      setError(t('forms.csv.empty'));
       return;
     }
     uploadCSV(users.join('/n'));
@@ -62,12 +62,12 @@ const DataSettings = ({ onReload }: Props) => {
     const reader = new FileReader();
     reader.onload = function () {
       if (!reader.result) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('texts.error'), type: 'error' } });
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
         return;
       }
       const lines = String(reader.result).split('\n');
       if (lines.length < 2) {
-        setError(t('texts.CSVempty'));
+        setError(t('forms.csv.empty'));
         return;
       }
       lines.map((line, i) => {
@@ -78,7 +78,7 @@ const DataSettings = ({ onReload }: Props) => {
           !items[2] ||
           (i === 0 && line !== 'realname;displayname;username;email;about_me')
         ) {
-          setError(t('texts.CSVinvalid'));
+          setError(t('forms.csv.invalid'));
           return;
         }
       });
@@ -86,14 +86,6 @@ const DataSettings = ({ onReload }: Props) => {
       setUsers(lines);
     };
     reader.readAsText(file);
-  };
-
-  const selectRoom = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setRoom(Number(event.target.value));
-  };
-
-  const selectRole = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setRole(Number(event.target.value) as RoleTypes);
   };
 
   const uploadCSV = async (csv: string) => {
@@ -106,11 +98,11 @@ const DataSettings = ({ onReload }: Props) => {
         user_level: role,
       },
     }).then((response) => {
-      if (!response.success) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('generics.wrong'), type: 'error' } });
+      if (!response.data) {
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
         return;
       }
-      dispatch({ type: 'ADD_POPUP', message: { message: t('texts.CSVsuccess'), type: 'success' } });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('forms.csv.success'), type: 'success' } });
       onReload();
       onReset();
     });
@@ -119,15 +111,15 @@ const DataSettings = ({ onReload }: Props) => {
   return (
     <Stack gap={2}>
       <Stack direction="row" alignItems="center" gap={3} flexWrap="wrap">
-        <Typography flex={1}>{t('texts.CSV')}</Typography>
+        <Typography flex={1}>{t('forms.csv.template')}</Typography>
         <Stack flex={1} gap={2}>
           <Button variant="contained" component="label" fullWidth>
-            {t('texts.fileUpload')}
+            {t('ui.files.upload')}
             <input type="file" name="my_files" multiple hidden onChange={handleFileChange} />
           </Button>
           <Stack direction="row" alignItems="center" gap={2}>
             <Button variant="contained" component="label" color="error" fullWidth onClick={onReset}>
-              {t('generics.cancel')}
+              {t('actions.cancel')}
             </Button>
             <Button
               color="secondary"
@@ -139,7 +131,7 @@ const DataSettings = ({ onReload }: Props) => {
               rel="noreferrer"
             >
               <AppIcon icon="download" size="small" sx={{ mr: 1, ml: -0.5 }} />
-              {t('texts.fileDownload')}
+              {t('ui.files.download')}
             </Button>
           </Stack>
         </Stack>
@@ -147,11 +139,11 @@ const DataSettings = ({ onReload }: Props) => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>{t('settings.realname')}*</TableCell>
-            <TableCell>{t('settings.displayname')}*</TableCell>
-            <TableCell>{t('settings.username')}*</TableCell>
-            <TableCell>{t('settings.email')}</TableCell>
-            <TableCell>{t('settings.about_me')}</TableCell>
+            <TableCell>{t('settings.columns.realname')}*</TableCell>
+            <TableCell>{t('settings.columns.displayname')}*</TableCell>
+            <TableCell>{t('settings.columns.username')}*</TableCell>
+            <TableCell>{t('settings.columns.email')}</TableCell>
+            <TableCell>{t('settings.columns.about_me')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -169,15 +161,15 @@ const DataSettings = ({ onReload }: Props) => {
       </Table>
       <Stack>
         <Stack direction="row" alignItems="center" gap={3}>
-          {t('texts.select', { var: t('views.room') })}:
-          <SelectRoom room={room} setRoom={selectRoom} />
-          {t('texts.select', { var: t('settings.userlevel') })}:
-          <SelectRole role={role} setRole={selectRole} />
+          {t('actions.select', { var: t('scopes.room.name') })}:
+          <SelectRoom room={room || ''} setRoom={setRoom} />
+          {t('actions.select', { var: t('settings.columns.userlevel') })}:
+          <SelectRole role={role} setRole={setRole} />
         </Stack>
         <FormHelperText error={error !== ''}>{error}</FormHelperText>
       </Stack>
       <Button variant="contained" component="label" onClick={onSubmit}>
-        {t('generics.confirm')}
+        {t('actions.confirm')}
       </Button>
     </Stack>
   );

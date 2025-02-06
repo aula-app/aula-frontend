@@ -1,80 +1,76 @@
-import { AppButton } from '@/components';
-import AppSubmitButton from '@/components/AppSubmitButton';
+import { recoverPassword } from '@/services/login';
 import { useAppStore } from '@/store';
-import { ObjectPropByName } from '@/types/Generics';
 import { localStorageGet } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Stack, TextField, Typography } from '@mui/material';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-/**
- * Renders "Recover Password" view for Login flow
- * url: /recovery/password
- */
+interface FormData {
+  email: string;
+}
+
 const RecoveryPasswordView = () => {
   const { t } = useTranslation();
-  const jwt_token = localStorageGet("token");
-  const api_url = localStorageGet("api_url");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(false);
 
-  const schema = yup.object({
-    email: yup.string().email(t("validation.email")).required(t("validation.required")),
-  })
-  .required();
+  const schema = yup.object().shape({
+    email: yup.string().email(t('forms.validation.email')).required(t('forms.validation.required')),
+  });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (formData: ObjectPropByName) => {
-    setLoading(true)
-    const request = await fetch(
-        `${api_url}/api/controllers/forgot_password.php?email=${formData.email}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + jwt_token,
-          }}
-      )
+  const onSubmit = async (formData: FormData) => {
+    setLoading(true);
+    const controller = new AbortController();
 
-    const response = await request.json();
-    setLoading(false)
+    try {
+      const response = await recoverPassword(
+        localStorageGet('api_url'),
+        formData.email,
+        localStorageGet('token'),
+        controller.signal
+      );
 
-    if (!response.success) {
-      dispatch({ type: 'ADD_POPUP', message: {message: t('generics.wrong'), type: 'error'} });
-      return;
+      if (response.success) {
+        dispatch({ type: 'ADD_POPUP', message: { message: t('auth.forgotPassword.forgotRequest'), type: 'success' } });
+        navigate('/', { replace: true });
+      } else {
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      }
+    } catch (error) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+    } finally {
+      setLoading(false);
     }
 
-    dispatch({ type: 'ADD_POPUP', message: {message: t('login.forgotRequest'), type: 'error'} });
-    navigate("/", { replace: true });
-  }
+    return () => controller.abort();
+  };
 
   return (
-    <FormContainer>
-      <Stack>
-        <Typography variant="h5" sx={{ mb: 3 }}>
-          {t('login.recovery')}
-        </Typography>
+    <FormContainer onSuccess={onSubmit}>
+      <Stack spacing={3}>
+        <Typography variant="h5">{t('auth.forgotPassword.recovery')}</Typography>
         <TextField
           required
           disabled={isLoading}
           label="Email"
           {...register('email')}
-          error={errors.email ? true : false}
+          error={!!errors.email}
           helperText={errors.email?.message || ' '}
         />
-        <AppSubmitButton label={t('login.recover')} disabled={isLoading} onClick={handleSubmit(onSubmit)} />
+        <Button variant="contained" disabled={isLoading} onClick={handleSubmit(onSubmit)}>{t('auth.forgotPassword.recover')}</Button>
       </Stack>
     </FormContainer>
   );

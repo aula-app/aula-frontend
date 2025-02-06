@@ -1,74 +1,63 @@
-import { AnnouncementType, MessageType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
-import { Button, Card, CardActions, CardContent, Divider, Skeleton, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { AppIconButton } from '@/components';
+import { getMessage, setMessageStatus } from '@/services/messages';
+import { MessageType } from '@/types/Scopes';
+import { Card, CardActions, CardContent, CardHeader, Divider, Skeleton, Stack, Typography } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 /**
- * Renders "Messages" view
+ * Renders "Message" view
  * url: /messages
  */
 
-const MessagesView = () => {
-  const { t } = useTranslation();
-  const params = useParams();
+const MessageView = () => {
   const navigate = useNavigate();
-  const [message, setMessage] = useState<MessageType | AnnouncementType>();
+  const { message_id } = useParams();
 
-  const messageFetch = async () =>
-    await databaseRequest({
-      model: 'Message',
-      method: 'getMessageBaseData',
-      arguments: {
-        message_id: params['message_id'],
-      },
-    }).then((response) => {
-      if (!response.success || !response.data) return;
-      setMessage(response.data);
-    });
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<MessageType | MessageType>();
 
-  const onArchive = async (value: boolean) => {
+  const fetchMessage = useCallback(async () => {
+    if (!message_id) return;
+    setLoading(true);
+    const response = await getMessage(message_id);
+    if (response.error) setError(response.error);
+    if (!response.error && response.data) setMessage(response.data);
+    setLoading(false);
+  }, [message_id]);
+
+  const archiveMessage = async () => {
     if (!message) return;
-    await databaseRequest(
-      {
-        model: 'Message',
-        method: 'setMessageStatus',
-        arguments: {
-          status: value ? 3 : 1,
-          message_id: message.id,
-        },
-      },
-      ['updater_id']
-    ).then(() => navigate('/messages'));
+    setMessageStatus({
+      status: 3,
+      message_id: message.hash_id,
+    }).then(onReload);
   };
 
+  const unarchiveMessage = async () => {
+    if (!message) return;
+    setMessageStatus({
+      status: 1,
+      message_id: message.hash_id,
+    }).then(onReload);
+  };
+
+  const toggleArchive = () => {
+    if (!message) return;
+    message.status === 1 ? archiveMessage() : unarchiveMessage();
+  };
+
+  const onReload = () => navigate('/messages');
+
   useEffect(() => {
-    messageFetch();
+    fetchMessage();
   }, []);
 
   return (
     <Stack p={2} flex={1} sx={{ overflowY: 'auto' }}>
-      {message ? (
-        <Card variant="outlined">
-          <CardContent>
-            <Typography variant="h5" py={2}>
-              {message.headline}
-            </Typography>
-            <Typography py={2}>{message.body}</Typography>
-          </CardContent>
-          <Divider />
-          <CardActions>
-            <Button
-              color="error"
-              onClick={() => onArchive(message.status === 1 ? true : false)}
-              sx={{ ml: 'auto', mr: 2, my: 1 }}
-            >
-              {message.status === 1 ? t(`texts.archive`) : t(`texts.unarchive`)}
-            </Button>
-          </CardActions>
-        </Card>
-      ) : (
+      {isLoading && (
         <Card variant="outlined">
           <CardContent>
             <Skeleton variant="rectangular" height={24} width="30%" sx={{ mb: 3 }} />
@@ -81,8 +70,20 @@ const MessagesView = () => {
           </CardActions>
         </Card>
       )}
+      {error && <Typography variant="h5">{error}</Typography>}
+      {!isLoading && message && (
+        <Card variant="outlined">
+          <CardHeader
+            title={message.headline}
+            action={<AppIconButton icon={message.status === 1 ? 'archive' : 'unarchive'} onClick={toggleArchive} />}
+          />
+          <CardContent>
+            <Typography py={2}>{message.body}</Typography>
+          </CardContent>
+        </Card>
+      )}
     </Stack>
   );
 };
 
-export default MessagesView;
+export default MessageView;

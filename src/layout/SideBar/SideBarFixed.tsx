@@ -1,33 +1,19 @@
 import { Stack } from '@mui/material';
-import { grey } from '@mui/material/colors';
-import { Dispatch, SetStateAction } from 'react';
-import { SIDEBAR_WIDTH } from '../config';
+import { memo } from 'react';
+import { fixedSideBarStyles } from './styles';
 import SideBarContent from './SideBarContent';
 
-interface Props {
-  setReport: Dispatch<SetStateAction<'bug' | 'report' | undefined>>;
-}
-
 /**
- * Renders SideBar with Menu and User details
- * Actually for Authenticated users only, rendered in "Private Layout"
+ * Renders fixed SideBar with Menu and User details for desktop view
  * @component SideBarFixed
+ * @returns {JSX.Element} Rendered SideBarFixed component
  */
-const SideBarFixed = ({ setReport, ...restOfProps }: Props) => {
+const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
   return (
-    <Stack
-      className="noPrint"
-      sx={{
-        height: '100%',
-        borderRight: `1px solid ${grey[300]}`,
-        minWidth: SIDEBAR_WIDTH,
-        display: { xs: 'none', md: 'flex' },
-      }}
-      {...restOfProps}
-    >
-      <SideBarContent isFixed setReport={setReport} />
+    <Stack className="noPrint" sx={fixedSideBarStyles} {...restOfProps}>
+      <SideBarContent isFixed />
     </Stack>
   );
 };
 
-export default SideBarFixed;
+export default memo(SideBarFixed);

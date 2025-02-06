@@ -1,7 +1,9 @@
-import { ObjectPropByName } from '@/types/Generics';
-import { Stack } from '@mui/material';
+import { Stack, StackProps } from '@mui/material';
+import React from 'react';
 import {
   BiAngry,
+  BiArchiveIn,
+  BiArchiveOut,
   BiBookAdd,
   BiBot,
   BiBowlHot,
@@ -54,6 +56,7 @@ import {
   HiOutlineDocumentDuplicate,
   HiOutlineDocumentText,
   HiOutlineEllipsisHorizontal,
+  HiOutlineEllipsisVertical,
   HiOutlineEnvelope,
   HiOutlineExclamationTriangle,
   HiOutlineEye,
@@ -67,6 +70,8 @@ import {
   HiOutlineHome,
   HiOutlineInformationCircle,
   HiOutlineLightBulb,
+  HiOutlineLockClosed,
+  HiOutlineLockOpen,
   HiOutlineMagnifyingGlass,
   HiOutlineMagnifyingGlassMinus,
   HiOutlineMagnifyingGlassPlus,
@@ -107,7 +112,7 @@ import {
   IoBowlingBallOutline,
   IoBriefcaseOutline,
   IoBrushOutline,
-  IoBugSharp,
+  IoBugOutline,
   IoBuildOutline,
   IoBulbOutline,
   IoBusinessOutline,
@@ -215,6 +220,8 @@ export const ICONS = {
   against: HiOutlineXCircle,
   alert: HiOutlineExclamationTriangle,
   announcement: HiOutlineMegaphone,
+  announcements: HiOutlineMegaphone,
+  archive: BiArchiveIn,
   arrowup: HiOutlineChevronUp,
   arrowdown: HiOutlineChevronDown,
   arrowright: HiOutlineChevronRight,
@@ -242,22 +249,26 @@ export const ICONS = {
   discussion: HiOutlineChatBubbleLeftRight,
   download: HiOutlineArrowDownOnSquare,
   edit: HiOutlinePencil,
+  ellipsis: HiOutlineEllipsisHorizontal,
   filter: HiOutlineFunnel,
   for: HiOutlineCheckCircle,
   forbid: HiOutlineMinusCircle,
   group: HiOutlineUsers,
   heart: HiOutlineHeart,
-  heartfull: HiHeart,
+  heartFull: HiHeart,
   help: HiQuestionMarkCircle,
   home: HiOutlineHome,
   idea: HiOutlineLightBulb,
   info: HiOutlineInformationCircle,
   link: HiLink,
+  lockOpen: HiOutlineLockOpen,
+  lockClosed: HiOutlineLockClosed,
   login: HiOutlineUser,
   logout: HiOutlineArrowRightEndOnRectangle,
   menu: HiOutlineBars3,
-  more: HiOutlineEllipsisHorizontal,
+  more: HiOutlineEllipsisVertical,
   message: HiOutlineEnvelope,
+  messages: HiOutlineEnvelope,
   neutral: CircleIcon,
   night: HiOutlineMoon,
   notifications: HiOutlineBell,
@@ -265,17 +276,21 @@ export const ICONS = {
   results: HiOutlineChartBar,
   rejected: HiOutlineHandThumbDown,
   report: HiOutlineFlag,
+  reports: HiOutlineFlag,
   request: HiOutlineExclamationTriangle,
+  requests: HiOutlineExclamationTriangle,
   room: HiOutlineAcademicCap,
   search: HiOutlineMagnifyingGlass,
   settings: HiOutlineCog6Tooth,
   signup: HiOutlineUserPlus,
   survey: HiOutlineQuestionMarkCircle,
   text: HiOutlineDocumentText,
+  unarchive: BiArchiveOut,
   users: HiOutlineUserGroup,
   visibilityOff: HiOutlineEye,
   visibilityOn: HiOutlineEyeSlash,
   voting: VotingIcon,
+  waiting: HiOutlineQuestionMarkCircle,
   wild: HiOutlineLightBulb,
   zoomIn: HiOutlineMagnifyingGlassPlus,
   zoomOut: HiOutlineMagnifyingGlassMinus,
@@ -318,7 +333,8 @@ export const CAT_ICONS = {
   briefcase: IoBriefcaseOutline,
   broom: LiaBroomSolid,
   brush: IoBrushOutline,
-  bug: IoBugSharp,
+  bug: IoBugOutline,
+  bugs: IoBugOutline,
   build: IoBuildOutline,
   bulb: IoBulbOutline,
   bullseye: LiaBullseyeSolid,
@@ -422,18 +438,16 @@ export type IconType = keyof typeof ICONS;
 export type CategoryIconType = keyof typeof CAT_ICONS;
 export type AllIconsType = keyof typeof ALL_ICONS;
 
-interface Props {
+interface Props extends StackProps {
   icon: AllIconsType; // Icon's name alternate prop
   size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
-  sx?: ObjectPropByName;
 }
 
 /**
  * Renders SVG icon by given Icon name
  * @component AppIcon
  */
-const AppIcon = ({ icon, size = 'medium', sx, ...restOfProps }: Props) => {
-  const ComponentToRender = ALL_ICONS[icon] || ALL_ICONS['bug'];
+const AppIcon: React.FC<Props> = ({ icon, size = 'medium', sx, ...restOfProps }) => {
   const currentSize =
     size === 'xs'
       ? '16px'
@@ -457,8 +471,9 @@ const AppIcon = ({ icon, size = 'medium', sx, ...restOfProps }: Props) => {
         height: currentSize,
         ...sx,
       }}
+      {...restOfProps}
     >
-      <ComponentToRender {...restOfProps} />
+      {React.createElement(ALL_ICONS[icon] || ALL_ICONS['bug'])}
     </Stack>
   );
 };
