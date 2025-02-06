@@ -21,7 +21,7 @@ interface CommentFormsProps {
   onSubmit: (data: CommentArguments) => void;
 }
 
-const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues = {}, onClose, onSubmit }) => {
+const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose, onSubmit }) => {
   const { t } = useTranslation();
 
   const schema = yup.object({
@@ -44,7 +44,7 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues = {}, onClose
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h4">
               {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
-                var: t(`scopes.ideas.name`).toLowerCase(),
+                var: t(`scopes.comments.name`).toLowerCase(),
               })}
             </Typography>
             {checkPermissions(40) && <StatusField control={control} />}

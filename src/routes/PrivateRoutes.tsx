@@ -9,7 +9,6 @@ import MessagesView from '@/views/Messages';
 import AnnouncementView from '@/views/Messages/Announcement';
 import MessageView from '@/views/Messages/Message';
 import ReportView from '@/views/Messages/Report';
-import RequestView from '@/views/Messages/Request';
 import OfflineView from '@/views/OfflineView';
 import PhasesView from '@/views/Phases';
 import RoomView from '@/views/Room';
@@ -26,7 +25,7 @@ import UsersView from '@/views/Settings/Users';
 import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';
 import { useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
 /**
  * List of routes available only for authenticated users

@@ -82,11 +82,12 @@ const BoxesView: React.FC = () => {
   };
 
   const newBox = async (data: AddBoxArguments) => {
+    if (!data.room_hash_id) return;
     const request = await addBox({
       name: data.name,
       description_public: data.description_public,
       description_internal: data.description_internal,
-      room_hash_id: data.room_hash_id,
+      room_id: data.room_hash_id,
       phase_id: data.phase_id,
       phase_duration_1: data.phase_duration_1,
       phase_duration_2: data.phase_duration_2,
@@ -105,7 +106,7 @@ const BoxesView: React.FC = () => {
       name: data.name,
       description_public: data.description_public,
       description_internal: data.description_internal,
-      room_hash_id: data.room_hash_id,
+      room_id: data.room_hash_id,
       phase_duration_1: data.phase_duration_1,
       phase_duration_2: data.phase_duration_2,
       phase_duration_3: data.phase_duration_3,
