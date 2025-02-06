@@ -74,20 +74,20 @@ export const getPersonalMessages = async (): Promise<GetMessagesResponse> => {
 };
 
 export interface MessageArguments {
-  headline: string;
-  body: string;
+  headline?: string;
+  body?: string;
   status?: StatusTypes;
 }
 
 export interface ReportArguments {
-  report: string;
+  report?: string;
   content?: string;
-  status: StatusTypes;
+  status?: StatusTypes;
 }
 
 export interface BugArguments {
-  content: string;
-  status: StatusTypes;
+  content?: string;
+  status?: StatusTypes;
 }
 /**
  * Create a message messages on the database.

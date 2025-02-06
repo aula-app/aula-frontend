@@ -54,14 +54,14 @@ export const getRooms = async (
  */
 
 export interface RoomArguments {
-  room_name: string;
-  description_internal: string;
-  description_public: string;
-  internal_info: string;
-  phase_duration_1: number;
-  phase_duration_2: number;
-  phase_duration_3: number;
-  phase_duration_4: number;
+  room_name?: string;
+  description_internal?: string;
+  description_public?: string;
+  internal_info?: string;
+  phase_duration_1?: number;
+  phase_duration_2?: number;
+  phase_duration_3?: number;
+  phase_duration_4?: number;
   status?: number;
 }
 

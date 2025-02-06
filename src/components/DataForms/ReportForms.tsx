@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, SelectField } from '../DataFields';
-import { SelectOptionsType } from '@/utils/Data/formDefaults';
 import { ReportArguments } from '@/services/messages';
+import { SelectOptionsType } from '@/types/SettingsTypes';
 
 /**
  * ReportForms component is used to create or edit an idea.
@@ -30,7 +30,7 @@ const ReportOptions = [
   { value: 'privacy', label: 'forms.report.privacy' },
   { value: 'copyright', label: 'forms.report.copyright' },
   { value: 'other', label: 'forms.report.other' },
-] as SelectOptionsType[];
+] as SelectOptionsType;
 
 const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
   const { t } = useTranslation();

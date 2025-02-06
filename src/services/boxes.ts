@@ -58,8 +58,8 @@ export async function getBoxesByPhase(phase_id: number, room_id?: string): Promi
  */
 
 export interface BoxArguments {
-  name: string;
-  description_public: string;
+  name?: string;
+  description_public?: string;
   description_internal?: string;
   phase_duration_1?: number;
   phase_duration_2?: number;
@@ -75,7 +75,7 @@ export interface AddBoxArguments extends BoxArguments {
 }
 
 export interface EditBoxArguments extends BoxArguments {
-  topic_id: string;
+  topic_id?: string;
   room_id?: string;
   room_hash_id?: string;
 }
