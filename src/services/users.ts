@@ -62,7 +62,7 @@ export interface AddUserArguments extends UserArguments {
 }
 
 export interface EditUserArguments extends UserArguments {
-  user_id: string;
+  user_id?: string;
   userlevel?: string;
 }
 

@@ -1,4 +1,4 @@
-import { EditUserArguments, UserArguments } from '@/services/users';
+import { EditUserArguments } from '@/services/users';
 import { UserType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,7 +19,7 @@ interface UserFormsProps {
   children?: React.ReactNode;
   onClose: () => void;
   defaultValues?: EditUserArguments;
-  onSubmit: (data: UserArguments) => void;
+  onSubmit: (data: EditUserArguments) => void;
 }
 
 const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose, onSubmit }) => {
