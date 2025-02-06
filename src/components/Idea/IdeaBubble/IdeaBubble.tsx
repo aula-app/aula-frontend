@@ -7,9 +7,10 @@ import { checkPermissions, checkSelf } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import CategoryList from '../CategoryList';
-import LikeButton from '../LikeButton';
+import LikeButton from '../../Buttons/LikeButton';
 import UserBar from '../UserBar';
 import MarkdownReader from '@/components/MarkdownReader';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   idea: IdeaType;
@@ -21,6 +22,7 @@ interface Props {
 }
 
 const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onDelete, onEdit }) => {
+  const { idea_id } = useParams();
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center' }}>
       <ChatBubble disabled={disabled}>
@@ -59,7 +61,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
             <Stack direction="row" alignItems="center">
               <LikeButton disabled={disabled} item={idea} />
               {idea.sum_comments > 0 && (
-                <AppIconButton icon="chat" to={`/idea/${idea.hash_id}`} disabled={disabled}>
+                <AppIconButton icon="chat" to={`idea/${idea.hash_id}`} disabled={disabled || !!idea_id}>
                   {idea.sum_comments}
                 </AppIconButton>
               )}

@@ -3,7 +3,7 @@ import { CommentType } from '@/types/Scopes';
 import { Box, Stack, Typography } from '@mui/material';
 import UserBar from '../UserBar';
 import MoreOptions from '@/components/MoreOptions';
-import LikeButton from '../LikeButton';
+import LikeButton from '../../Buttons/LikeButton';
 import { checkPermissions, checkSelf } from '@/utils';
 import MarkdownReader from '@/components/MarkdownReader';
 

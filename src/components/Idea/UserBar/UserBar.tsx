@@ -4,7 +4,7 @@ import UserAvatar from '@/components/UserAvatar';
 import { CommentType, IdeaType } from '@/types/Scopes';
 import { checkPermissions, checkSelf, getDisplayDate } from '@/utils';
 import { Stack, Typography } from '@mui/material';
-import LikeButton from '../LikeButton';
+import LikeButton from '../../Buttons/LikeButton';
 
 interface Props {
   info: IdeaType | CommentType;
