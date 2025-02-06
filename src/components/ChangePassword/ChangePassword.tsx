@@ -98,7 +98,7 @@ const ChangePassword: React.FC<Props> = ({ disabled = false }) => {
               sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
               {...register(field)}
               error={!!errors[field]}
-              helperText={errors[field]?.message}
+              helperText={`${errors[field]?.message || ' '}`}
               slotProps={{
                 input: {
                   endAdornment: (
