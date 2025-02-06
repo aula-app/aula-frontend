@@ -20,7 +20,7 @@ const LikeButton: React.FC<Props> = ({ idea }) => {
     getCategory();
   }, []);
 
-  return category ? (
+  return !!category ? (
     <Chip
       icon={<AppIcon icon={category.description_internal} size="xs" />}
       label={category.name}
