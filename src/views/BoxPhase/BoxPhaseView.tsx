@@ -57,7 +57,7 @@ const BoxPhaseView = () => {
   const newBox = async (data: AddBoxArguments) => {
     if (!room_id || !phase) return;
     const request = await addBox({
-      room_hash_id: room_id,
+      room_id: room_id,
       phase_id: Number(phase) as RoomPhases,
       name: data.name,
       description_public: data.description_public,

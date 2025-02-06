@@ -40,9 +40,9 @@ const SelectRoomField: React.FC<Props> = ({ control, disabled = false, ...restOf
     <SelectField
       control={control}
       options={rooms}
-      name="room_id"
+      name="room_hash_id"
       disabled={disabled || rooms.length === 0}
-      defaultValue={room_id}
+      defaultValue={room_id || ''}
     />
   );
 };

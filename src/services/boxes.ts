@@ -69,12 +69,14 @@ export interface BoxArguments {
 }
 
 export interface AddBoxArguments extends BoxArguments {
-  room_hash_id: string;
+  room_id: string;
   phase_id: RoomPhases;
+  room_hash_id?: string;
 }
 
 export interface EditBoxArguments extends BoxArguments {
   topic_id: string;
+  room_id?: string;
   room_hash_id?: string;
 }
 

@@ -107,7 +107,7 @@ const Comments = () => {
         ))}
       {checkPermissions(20) && idea_id && (
         <>
-          {Number(phase) < 30 && (
+          {Number(phase) < 20 && (
             <Fab
               aria-label="add comment"
               color="primary"
@@ -118,7 +118,7 @@ const Comments = () => {
               }}
               onClick={() => setEdit(true)}
             >
-              <AppIcon icon="add" />
+              <AppIcon icon="comment" />
             </Fab>
           )}
           <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
