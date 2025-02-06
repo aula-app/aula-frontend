@@ -80,9 +80,9 @@ const LoginView = () => {
         setError(
           'user_status' in response && response.user_status !== null
             ? response.user_status === 0
-              ? t('auth.errors.accountInactive')
-              : t('auth.errors.accountSuspended', {var: response.data ? t('auth.errors.accountSuspendDate', {var: response.data}) : ''})
-            : t('auth.errors.invalidCredentials')
+              ? t('errors.accountInactive')
+              : t('errors.accountSuspended', {var: response.data ? t('errors.accountSuspendDate', {var: response.data}) : ''})
+            : t('errors.invalidCredentials')
         );
         return;
       }

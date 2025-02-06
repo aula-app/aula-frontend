@@ -47,7 +47,7 @@ const SetPasswordView = () => {
         <Typography variant="h5">{t('auth.password.set')}</Typography>
         <Collapse in={!isValid}>
           <Alert variant="outlined" severity="error" onClose={() => setValid(true)}>
-            {t('auth.errors.invalidCode')}
+            {t('errors.invalidCode')}
           </Alert>
         </Collapse>
         <ChangePassword disabled={isLoading} />

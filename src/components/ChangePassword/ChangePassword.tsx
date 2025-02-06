@@ -124,7 +124,7 @@ const ChangePassword: React.FC<Props> = ({ disabled = false }) => {
               severity={messageSuccess ? 'success' : 'error'}
               onClose={() => setShowMessage(false)}
             >
-              {messageSuccess ? t('auth.password.success') : t('auth.errors.invalidPassword')}
+              {messageSuccess ? t('auth.password.success') : t('errors.invalidPassword')}
             </Alert>
           </Collapse>
           <Button color="error" disabled={disabled} onClick={resetFields}>
