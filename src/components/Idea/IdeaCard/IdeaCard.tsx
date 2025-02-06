@@ -2,10 +2,12 @@ import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { databaseRequest, phases, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AppIcon, { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { ObjectPropByName } from '@/types/Generics';
 import MarkdownReader from '@/components/MarkdownReader';
+import { getVote, getVoteResults, ResultResponse } from '@/services/vote';
+import { getCategories } from '@/services/categories';
 
 interface IdeaCardProps {
   idea: IdeaType;
@@ -17,48 +19,38 @@ interface IdeaCardProps {
  * Renders "IdeaCard" component
  */
 const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [vote, setVote] = useState(0);
+
   const [icon, setIcon] = useState<CategoryIconType>();
   const [variant, setVariant] = useState<string>();
-  const [numVotes, setNumVotes] = useState<Array<-1 | 0 | 1>>([0, 0, 0]);
+  const [numVotes, setNumVotes] = useState<ResultResponse>({
+    votes_negative: 0,
+    votes_neutral: 0,
+    votes_positive: 0,
+  });
 
-  const getResults = async () => {
-    await databaseRequest({
-      model: 'Idea',
-      method: 'getIdeaVoteStats',
-      arguments: {
-        idea_id: idea.id,
-      },
-    }).then((response) => {
-      if (response.success)
-        setNumVotes([response.data.votes_negative, response.data.votes_neutral, response.data.votes_positive]);
-    });
-  };
+  const fetchResults = useCallback(async () => {
+    if (!idea.hash_id) return;
+    setLoading(true);
+    const response = await getVoteResults(idea.hash_id);
+    if (response.error) setError(response.error);
+    if (!response.error && typeof response.data === 'number') setNumVotes(response.data);
+    setLoading(false);
+  }, [idea.hash_id]);
 
-  const getVote = async () =>
-    await databaseRequest(
-      {
-        model: 'Idea',
-        method: 'getVoteValue',
-        arguments: {
-          idea_id: idea.id,
-        },
-      },
-      ['user_id']
-    ).then((response) => {
-      if (response.success) setVote(response.data);
-    });
+  const fetchVote = useCallback(async () => {
+    setLoading(true);
+    const response = await getVote(idea.hash_id);
+    if (response.error) setError(response.error);
+    if (!response.error && typeof response.data === 'number') setVote(response.data);
+    setLoading(false);
+  }, [idea.hash_id]);
 
   const getIcon = async () =>
-    await databaseRequest({
-      model: 'Idea',
-      method: 'getIdeaCategory',
-      arguments: {
-        idea_id: idea.id,
-      },
-    }).then((response) => {
-      if (!response.success) return;
-      response.data ? setIcon(response.data.description_internal) : setIcon(undefined);
+    await getCategories(idea.hash_id).then((response) => {
+      setIcon(response.data?.description_internal);
     });
 
   const getVariant = () => {
@@ -82,8 +74,8 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
 
   useEffect(() => {
     getIcon();
-    if (phase >= 30) getVote();
-    if (phase >= 40) getResults();
+    if (phase >= 30) fetchVote();
+    if (phase >= 40) fetchResults();
   }, []);
 
   return (
@@ -150,14 +142,17 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
             <AppIcon icon={votingOptions[vote + 1]} />
           ) : (
             <>
-              {votingOptions.map((vote, i) => (
-                <Stack direction="row" alignItems="center" key={vote}>
-                  <AppIcon icon={vote} size="small" />{' '}
-                  <Typography fontSize="small" ml={0.5}>
-                    {numVotes[i]}
-                  </Typography>
-                </Stack>
-              ))}
+              {votingOptions.map((vote, i) => {
+                const voteCount = Object.values(numVotes)[i];
+                return (
+                  <Stack direction="row" alignItems="center" key={vote}>
+                    <AppIcon icon={vote} size="small" />{' '}
+                    <Typography fontSize="small" ml={0.5}>
+                      {voteCount}
+                    </Typography>
+                  </Stack>
+                );
+              })}
             </>
           )}
         </Stack>
