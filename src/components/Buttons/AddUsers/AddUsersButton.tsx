@@ -1,5 +1,6 @@
 import AppIcon from '@/components/AppIcon';
-import { getUsers } from '@/services/users';
+import { getRoomUsers } from '@/services/rooms';
+import { addUserRoom, getUsers, removeUserRoom } from '@/services/users';
 import { UserType } from '@/types/Scopes';
 import { UpdtesObject } from '@/types/SettingsTypes';
 import {
@@ -28,7 +29,7 @@ interface Props extends ButtonProps {
  * Interface that will be exposed to the parent component.
  */
 export interface AddUserRefProps {
-  setNewUserUsers: (id: string) => void;
+  setNewUserRooms: (id: string) => void;
 }
 
 const AddUserButton = forwardRef<AddUserRefProps, Props>(({ rooms = [], disabled = false, ...restOfProps }, ref) => {
@@ -52,10 +53,10 @@ const AddUserButton = forwardRef<AddUserRefProps, Props>(({ rooms = [], disabled
   }, []);
 
   const fetchUsersUsers = async () => {
-    if (users.length === 0) return;
+    if (rooms.length === 0) return;
 
-    if (users.length === 1) {
-      const users = await getUserUsers(users[0]);
+    if (rooms.length === 1) {
+      const users = await getRoomUsers(rooms[0]);
       if (users.data) setSelectedUsers(users.data.map((user) => user.hash_id));
       return;
     }
@@ -64,10 +65,10 @@ const AddUserButton = forwardRef<AddUserRefProps, Props>(({ rooms = [], disabled
     const commonUsers = [] as string[];
     const partialUsers = [] as string[];
 
-    const Promises = users.map(async (user) => {
-      const users = await getUserUsers(user);
-      users.data?.forEach((user) => {
-        userCounts[user.hash_id] = (userCounts[user.hash_id] || 0) + 1;
+    const Promises = rooms.map(async (room) => {
+      const rooms = await getRoomUsers(room);
+      rooms.data?.forEach((room) => {
+        userCounts[room.hash_id] = (userCounts[room.hash_id] || 0) + 1;
       });
     });
 
@@ -115,19 +116,19 @@ const AddUserButton = forwardRef<AddUserRefProps, Props>(({ rooms = [], disabled
   };
 
   const setUsersUsers = async () => {
-    const add = users.map((user_id) => updates.add.map((user_id) => addUserUser(user_id, user_id)));
-    const remove = users.map((user_id) => updates.remove.map((user_id) => removeUserUser(user_id, user_id)));
+    const add = users.map((user) => updates.add.map((room_id) => addUserRoom(user.hash_id, room_id)));
+    const remove = users.map((user) => updates.remove.map((room_id) => removeUserRoom(user.hash_id, room_id)));
     await Promise.all([...add, ...remove]);
     setUpdates({ add: [], remove: [] });
   };
 
-  const setNewUserUsers = (user_id: string) => {
-    updates.add.map((user_id) => addUserUser(user_id, user_id));
+  const setNewUserRooms = (user_id: string) => {
+    updates.add.map((room_id) => addUserRoom(user_id, room_id));
     setUpdates({ add: [], remove: [] });
   };
 
   useImperativeHandle(ref, () => ({
-    setNewUserUsers,
+    setNewUserRooms,
   }));
 
   const onSubmit = () => {
@@ -153,7 +154,7 @@ const AddUserButton = forwardRef<AddUserRefProps, Props>(({ rooms = [], disabled
   return (
     <>
       <Button variant="outlined" color="secondary" onClick={() => setOpen(true)} disabled={disabled} {...restOfProps}>
-        <AppIcon icon="user" pr={2} />
+        <AppIcon icon="users" pr={2} />
         {t('actions.addToParent', {
           var: t('scopes.users.name'),
         })}
@@ -176,7 +177,7 @@ const AddUserButton = forwardRef<AddUserRefProps, Props>(({ rooms = [], disabled
                     indeterminate={!selectedUsers.includes(user.hash_id) && indeterminateUsers.includes(user.hash_id)}
                   />
                 </ListItemAvatar>
-                <ListItemText primary={user.user_name} />
+                <ListItemText primary={user.displayname} />
               </ListItemButton>
             </ListItem>
           ))}

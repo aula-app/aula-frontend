@@ -116,3 +116,21 @@ export async function deleteRoom(room_id: string): Promise<GetRoomResponse> {
 
   return response as GetRoomResponse;
 }
+
+/**
+ * Get user rooms
+ */
+
+interface GetRoomUsersResponse extends GenericResponse {
+  data: { hash_id: string }[] | null;
+}
+
+export async function getRoomUsers(room_id: string): Promise<GetRoomUsersResponse> {
+  const response = await databaseRequest({
+    model: 'User',
+    method: 'getUsersByRoom',
+    arguments: { room_id },
+  });
+
+  return response as GetRoomUsersResponse;
+}
