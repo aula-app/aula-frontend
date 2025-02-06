@@ -70,9 +70,9 @@
     }
   },
   "consent": {
-    "message": "Keine Zustimmung erforderlich",
+    "alert": "Obligatorische Zustimmung erforderlich",
     "announcement": "Optionale Zustimmung verfügbar",
-    "alert": "Obligatorische Zustimmung erforderlich"
+    "message": "Keine Zustimmung erforderlich"
   },
   "delegation": {
     "confirm": "Bist du sicher, dass du das Stimmrecht für diese Ideenbox der folgenden Person {{var}} willst?",
@@ -117,16 +117,16 @@
       "template": "Hier können neue Nutzer*innen von einer Tabelle angelegt werden. Die Datei muss als CSV-Datei hochgeladen sein und die folgenden Spalten besitzen: 'realname', 'displayname', 'username', 'email', 'about_me'. Nicht alle Felder müssen ausgefüllt sein, wenn bspw. ein*e Schüler*in nicht über eine Email verfügt, kann die Spalte leer bleiben"
     },
     "report": {
-      "language": "Unangemessene Sprache",
+      "content": "Unangemessener Inhalt für Kinder",
+      "copyright": "Urheberrechtsverletzung",
       "harassment": "Mobbing oder Belästigung",
       "hate": "Hassrede",
-      "violence": "Gewalt oder Drohungen",
+      "language": "Unangemessene Sprache",
       "misinformation": "Fehlinformation",
-      "content": "Unangemessener Inhalt für Kinder",
-      "spam": "Spam oder Werbung",
+      "other": "Andere",
       "privacy": "Verletzung der Privatsphäre",
-      "copyright": "Urheberrechtsverletzung",
-      "other": "Andere"
+      "spam": "Spam oder Werbung",
+      "violence": "Gewalt oder Drohungen"
     },
     "validation": {
       "agreement": "Du musst zustimmen, um dich anzumelden",
@@ -137,48 +137,18 @@
       "minLength": "Muss größer sein als {{var}} Zeichen",
       "name": "Die Namen sollten nur Buchstaben enthalten",
       "nonNegative": "Kann keine negative Zahl sein",
+      "optional": "Optional",
+      "passwordMatch": "Passwörter müssen übereinstimmen",
       "phone": "Muss eine gültige Telefonnummer sein",
       "recipient": "Sie müssen einen Empfänger für Ihre Nachricht auswählen",
-      "required": "Dieses Feld darf nicht leer sein",
-      "optional": "Optional",
-      "passwordMatch": "Passwörter müssen übereinstimmen"
+      "required": "Dieses Feld darf nicht leer sein"
     }
   },
   "instance": {
-    "label": "Instanzcode",
     "error": "Der Instanzcode ist ungültig",
     "headline": "Geben Sie den Instanzcode ein",
+    "label": "Instanzcode",
     "status": "Instanzstatus"
-  },
-  "requests": {
-    "accepted": "Deine Datenänderungsanfrage wurde akzeptiert.",
-    "confirm": "Datenänderungsanfrage bestätigt",
-    "cancel": "Datenänderungsanfrage abgelehnt",
-    "denied": "Deine Datenänderungsanfrage wurde abgelehnt. Bitte kontaktiere den Schuladministrator für weitere Informationen.",
-    "label": "Anfragen",
-    "changeName": {
-      "title": "Datenänderungsanfrage für {{var}}",
-      "body": "Eine Datenänderungsprozedur wurde für den Benutzer {{var}} angefordert. Sie möchten ihren {{old}} in {{new}} ändern",
-      "request": "Datenänderungsprozedur angefordert. Bitte warten Sie auf die Genehmigung."
-    },
-    "deleteAccount": {
-      "button": "Kontolöschen anfordern",
-      "confirm": "Bist du sicher, dass du dein Konto löschen möchtest? Alle deine Daten werden verloren gehen. Diese Aktion kann nicht rückgängig gemacht werden",
-      "title": "Kontolöschungsanfrage für {{var}}",
-      "body": "Eine Datenlöschungsprozedur wurde für den Benutzer {{var}} angefordert"
-    },
-    "exportData": {
-      "button": "Datenexport anfordern",
-      "title": "Kontodatenexportanfrage für {{var}}",
-      "body": "Eine Datenexportprozedur wurde für den Benutzer {{var}} angefordert"
-    },
-    "updateData": {
-      "headline": "Datenaktualisierungsanfrage",
-      "confirm": "Bist du sicher, dass du die Aktualisierung deiner Felder anfordern möchtest?",
-      "title": "Kontodatenaktualisierungsanfrage für {{var}}",
-      "body": "Eine Datenaktualisierungsprozedur wurde für den Benutzer {{var}} angefordert",
-      "validation": "Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden."
-    }
   },
   "patterns": {
     "on": "{{a}} zur {{b}}"
@@ -186,13 +156,43 @@
   "phases": {
     "approval": "Genehmigung",
     "discussion": "Diskussion",
-    "results": "Ergebnisse",
-    "voting": "Abstimmung",
-    "wild": "Wilde Ideen",
     "phase": "{{var}} Phase",
+    "results": "Ergebnisse",
     "status": {
       "end": "Phase endet in {{var}} Tagen",
       "ended": "Phase beendet"
+    },
+    "voting": "Abstimmung",
+    "wild": "Wilde Ideen"
+  },
+  "requests": {
+    "accepted": "Deine Datenänderungsanfrage wurde akzeptiert.",
+    "cancel": "Datenänderungsanfrage abgelehnt",
+    "changeName": {
+      "body": "Eine Datenänderungsprozedur wurde für den Benutzer {{var}} angefordert. Sie möchten ihren {{old}} in {{new}} ändern",
+      "request": "Datenänderungsprozedur angefordert. Bitte warten Sie auf die Genehmigung.",
+      "title": "Datenänderungsanfrage für {{var}}"
+    },
+    "confirm": "Datenänderungsanfrage bestätigt",
+    "deleteAccount": {
+      "body": "Eine Datenlöschungsprozedur wurde für den Benutzer {{var}} angefordert",
+      "button": "Kontolöschen anfordern",
+      "confirm": "Bist du sicher, dass du dein Konto löschen möchtest? Alle deine Daten werden verloren gehen. Diese Aktion kann nicht rückgängig gemacht werden",
+      "title": "Kontolöschungsanfrage für {{var}}"
+    },
+    "denied": "Deine Datenänderungsanfrage wurde abgelehnt. Bitte kontaktiere den Schuladministrator für weitere Informationen.",
+    "exportData": {
+      "body": "Eine Datenexportprozedur wurde für den Benutzer {{var}} angefordert",
+      "button": "Datenexport anfordern",
+      "title": "Kontodatenexportanfrage für {{var}}"
+    },
+    "label": "Anfragen",
+    "updateData": {
+      "body": "Eine Datenaktualisierungsprozedur wurde für den Benutzer {{var}} angefordert",
+      "confirm": "Bist du sicher, dass du die Aktualisierung deiner Felder anfordern möchtest?",
+      "headline": "Datenaktualisierungsanfrage",
+      "title": "Kontodatenaktualisierungsanfrage für {{var}}",
+      "validation": "Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden."
     }
   },
   "roles": {
@@ -213,9 +213,17 @@
       "plural": "Boxen"
     },
     "bugs": {
+      "headline": "Fehlerbericht zu '{{var}}'",
       "name": "Fehlerbericht",
-      "plural": "Fehlerberichte",
-      "headline": "Fehlerbericht zu '{{var}}'"
+      "plural": "Fehlerberichte"
+    },
+    "categories": {
+      "name": "Kategorie",
+      "plural": "Kategorien"
+    },
+    "commands": {
+      "name": "Befehl",
+      "plural": "Befehle"
     },
     "comments": {
       "name": "Verbesserungsvorschlag",
@@ -226,9 +234,9 @@
       "plural": "Gruppen"
     },
     "ideas": {
+      "approved": "Diese Idee wurde angenommen",
       "name": "Idee",
       "plural": "Ideen",
-      "approved": "Diese Idee wurde angenommen",
       "rejected": "Diese Idee wurde nicht angenommen",
       "waiting": "Diese Idee wartet auf Genehmigung"
     },
@@ -237,14 +245,14 @@
       "plural": "Nachrichten"
     },
     "reports": {
+      "headline": "Inhaltsbericht zu '{{var}}'",
       "name": "Meldung",
-      "plural": "Meldungen",
-      "headline": "Inhaltsbericht zu '{{var}}'"
+      "plural": "Meldungen"
     },
     "requests": {
+      "headline": "Aktualisierungsanfrage zu '{{var}}'",
       "name": "Anfrage",
-      "plural": "Anfragen",
-      "headline": "Aktualisierungsanfrage zu '{{var}}'"
+      "plural": "Anfragen"
     },
     "rooms": {
       "name": "Raum",
@@ -254,14 +262,6 @@
       "name": "Benutzer",
       "plural": "Benutzer"
     },
-    "categories": {
-      "name": "Kategorie",
-      "plural": "Kategorien"
-    },
-    "commands": {
-      "name": "Befehl",
-      "plural": "Befehle"
-    },
     "votes": {
       "name": "Stimme",
       "plural": "Stimmen"
@@ -269,15 +269,15 @@
   },
   "settings": {
     "account": {
-      "export": "Kontodaten exportieren",
-      "update": "Daten aktualisieren",
       "delete": "Konto löschen",
-      "exportRequest": "Datenexport angefordert",
-      "exportGranted": "Kontodatenexport gewährt",
-      "exportBody": "Deine Datenanforderung ist verfügbar. Klicken zum Herunterladen",
-      "updateText": "Bist du sicher, dass du die Aktualisierung deiner Felder anfordern möchtest: {{var}}? Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden",
+      "deleteRequest": "Datenlöschung angefordert",
       "deleteText": "Bist du sicher, dass du die Löschung deines Kontos anfordern möchtest? Alle deine Daten werden verloren gehen. Diese Aktion kann nicht rückgängig gemacht werden",
-      "deleteRequest": "Datenlöschung angefordert"
+      "export": "Kontodaten exportieren",
+      "exportBody": "Deine Datenanforderung ist verfügbar. Klicken zum Herunterladen",
+      "exportGranted": "Kontodatenexport gewährt",
+      "exportRequest": "Datenexport angefordert",
+      "update": "Daten aktualisieren",
+      "updateText": "Bist du sicher, dass du die Aktualisierung deiner Felder anfordern möchtest: {{var}}? Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden"
     },
     "advanced": {
       "headline": "Erweiterte Optionen",
@@ -288,8 +288,8 @@
     },
     "backup": {
       "create": "Backup erstellen",
-      "restore": "Backup wiederherstellen",
-      "headline": "Anweisungen zur Backup-Wiederherstellung"
+      "headline": "Anweisungen zur Backup-Wiederherstellung",
+      "restore": "Backup wiederherstellen"
     },
     "columns": {
       "about_me": "Über mich",
@@ -353,8 +353,8 @@
       "registration_status": "Registrierungsstatus",
       "report": "Berichtskategorie",
       "restrict_to_roomusers_only": "Nur für Raumnutzer beschränken",
-      "room_id": "Raum",
       "room_hash_id": "Raum",
+      "room_id": "Raum",
       "room_name": "Raumname",
       "service_id_consent": "Dienst-Zustimmungs-ID",
       "status": "Status",
@@ -375,8 +375,8 @@
       "vote_bias": "Stimmverzerrung"
     },
     "customFields": {
-      "label": "Benutzerdefinierte Felder",
-      "form": "Benutzerdefiniertes Feld {{var}}"
+      "form": "Benutzerdefiniertes Feld {{var}}",
+      "label": "Benutzerdefinierte Felder"
     },
     "general": {
       "description": "Beschreibung",
@@ -385,10 +385,10 @@
     },
     "labels": {
       "configuration": "Konfigurationen",
-      "school": "Schulinfo",
-      "scope": "Geltungsbereich",
       "quorum": "Quorum",
-      "quorumLabel": "{{var}} Quorum"
+      "quorumLabel": "{{var}} Quorum",
+      "school": "Schulinfo",
+      "scope": "Geltungsbereich"
     },
     "messages": {
       "create": "{{var}} erstellt",
@@ -397,25 +397,25 @@
       "updated": "{{var}} aktualisiert"
     },
     "panels": {
+      "action": "Geplante Aktionen",
       "category": "Kategorie",
+      "danger": "Gefahrenzone",
       "group": "Gruppe",
       "idea": "Idee",
-      "user": "Benutzer",
-      "time": "Zeit",
       "login": "Anmeldung",
-      "action": "Geplante Aktionen",
       "system": "System",
-      "danger": "Gefahrenzone"
+      "time": "Zeit",
+      "user": "Benutzer"
     },
     "time": {
       "actions": "Geplante Aktionen",
       "endDate": "Enddatum",
       "endDay": "Endtag",
       "endTime": "Endzeit",
+      "phase": "Phasendauern",
       "startDate": "Startdatum",
       "startDay": "Starttag",
       "startTime": "Startzeit",
-      "phase": "Phasendauern",
       "workHours": "Arbeitszeiten",
       "workdays": "Arbeitstage"
     }
@@ -457,6 +457,15 @@
       "yes": "Ja"
     },
     "darkMode": "Dunkelmodus",
+    "files": {
+      "download": "Beispieldatei herunterladen",
+      "image": {
+        "change": "Bild ändern",
+        "label": "Bild",
+        "upload": "Klicken, um ein Bild auszuwählen"
+      },
+      "upload": "Datei hochladen"
+    },
     "lightMode": "Hellmodus",
     "navigation": {
       "about": "Über",
@@ -467,31 +476,22 @@
       "home": "Startseite",
       "ideas": "Ideen",
       "messages": "Nachrichten",
-      "profile": "Profil",
-      "settings": "Einstellungen",
-      "users": "Benutzer",
       "privacy": "Datenschutz",
+      "profile": "Profil",
       "reports": "Berichte",
       "requests": "Anfragen",
       "rooms": "Räume",
       "security": "Sicherheit",
-      "system": "System"
+      "settings": "Einstellungen",
+      "system": "System",
+      "users": "Benutzer"
     },
     "units": {
       "days": "Tage",
       "ideas": "Ideen",
       "likes": "Likes",
-      "votes": "Stimmen",
-      "updates": "Aktualisierungen"
-    },
-    "files": {
-      "download": "Beispieldatei herunterladen",
-      "upload": "Datei hochladen",
-      "image": {
-        "label": "Bild",
-        "change": "Bild ändern",
-        "upload": "Klicken, um ein Bild auszuwählen"
-      }
+      "updates": "Aktualisierungen",
+      "votes": "Stimmen"
     }
   },
   "votes": {

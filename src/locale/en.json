@@ -70,9 +70,9 @@
     }
   },
   "consent": {
-    "message": "No consent required",
+    "alert": "Mandatory consent required",
     "announcement": "Optional consent available",
-    "alert": "Mandatory consent required"
+    "message": "No consent required"
   },
   "delegation": {
     "confirm": "Are you sure you want to {{var}} the voting rights on this box to the following person?",
@@ -117,16 +117,16 @@
       "template": "New users can be created from a table here. The file must be uploaded as a CSV file and have the following columns: 'realname', 'displayname', 'username', 'email', 'about_me'. Not all fields must be filled in, e.g. if a student does not have an email, the column can remain empty"
     },
     "report": {
-      "language": "Inappropriate Language",
+      "content": "Inappropriate Content for Children",
+      "copyright": "Copyright Violation",
       "harassment": "Bullying or Harassment",
       "hate": "Hate Speech",
-      "violence": "Violence or Threats",
+      "language": "Inappropriate Language",
       "misinformation": "Misinformation",
-      "content": "Inappropriate Content for Children",
-      "spam": "Spam or Advertising",
+      "other": "Other",
       "privacy": "Privacy Violation",
-      "copyright": "Copyright Violation",
-      "other": "Other"
+      "spam": "Spam or Advertising",
+      "violence": "Violence or Threats"
     },
     "validation": {
       "agreement": "You must accept the terms to continue",
@@ -137,48 +137,18 @@
       "minLength": "Must be at least {{var}} characters",
       "name": "Name can only contain letters",
       "nonNegative": "Number cannot be negative",
+      "optional": "Optional",
+      "passwordMatch": "Passwords must match",
       "phone": "Please enter a valid phone number",
       "recipient": "Please select a recipient",
-      "required": "This field is required",
-      "optional": "Optional",
-      "passwordMatch": "Passwords must match"
+      "required": "This field is required"
     }
   },
   "instance": {
-    "label": "Instance code",
     "error": "The instance code is invalid",
     "headline": "Enter the instance code",
+    "label": "Instance code",
     "status": "Instance status"
-  },
-  "requests": {
-    "accepted": "Your data change request has been accepted.",
-    "confirm": "Data request change confirmed",
-    "cancel": "Data request change denied",
-    "denied": "Your data change request has been denied. Please contact the school admin for further information.",
-    "label": "Requests",
-    "changeName": {
-      "title": "Data change request for {{var}}",
-      "body": "A data change procedure was requested for user {{var}}. They want to change their {{old}} to {{new}}",
-      "request": "Data change procedure requested. Please wait for approval."
-    },
-    "deleteAccount": {
-      "button": "Request account deletion",
-      "confirm": "Are you sure you want to delete your account? All your data will be lost. This action cannot be undone",
-      "title": "Account deletion request for {{var}}",
-      "body": "A data deletion procedure was requested for user {{var}}"
-    },
-    "exportData": {
-      "button": "Request data export",
-      "title": "Account data export request for {{var}}",
-      "body": "A data export procedure was requested for user {{var}}"
-    },
-    "updateData": {
-      "headline": "Data update request",
-      "confirm": "Are you sure you want to request the update of your fields?",
-      "title": "Account data update request for {{var}}",
-      "body": "A data update procedure was requested for user {{var}}",
-      "validation": "This action should be validated by an Admin to take place."
-    }
   },
   "patterns": {
     "on": "{{a}} on {{b}}"
@@ -186,13 +156,43 @@
   "phases": {
     "approval": "Approval",
     "discussion": "Discussion",
-    "results": "Results",
-    "voting": "Voting",
-    "wild": "Wild Ideas",
     "phase": "{{var}} phase",
+    "results": "Results",
     "status": {
       "end": "Phase ends in {{var}} days",
       "ended": "Phase ended"
+    },
+    "voting": "Voting",
+    "wild": "Wild Ideas"
+  },
+  "requests": {
+    "accepted": "Your data change request has been accepted.",
+    "cancel": "Data request change denied",
+    "changeName": {
+      "body": "A data change procedure was requested for user {{var}}. They want to change their {{old}} to {{new}}",
+      "request": "Data change procedure requested. Please wait for approval.",
+      "title": "Data change request for {{var}}"
+    },
+    "confirm": "Data request change confirmed",
+    "deleteAccount": {
+      "body": "A data deletion procedure was requested for user {{var}}",
+      "button": "Request account deletion",
+      "confirm": "Are you sure you want to delete your account? All your data will be lost. This action cannot be undone",
+      "title": "Account deletion request for {{var}}"
+    },
+    "denied": "Your data change request has been denied. Please contact the school admin for further information.",
+    "exportData": {
+      "body": "A data export procedure was requested for user {{var}}",
+      "button": "Request data export",
+      "title": "Account data export request for {{var}}"
+    },
+    "label": "Requests",
+    "updateData": {
+      "body": "A data update procedure was requested for user {{var}}",
+      "confirm": "Are you sure you want to request the update of your fields?",
+      "headline": "Data update request",
+      "title": "Account data update request for {{var}}",
+      "validation": "This action should be validated by an Admin to take place."
     }
   },
   "roles": {
@@ -213,9 +213,17 @@
       "plural": "Boxes"
     },
     "bugs": {
+      "headline": "Bug report on '{{var}}'",
       "name": "Bug Report",
-      "plural": "Bug Reports",
-      "headline": "Bug report on '{{var}}'"
+      "plural": "Bug Reports"
+    },
+    "categories": {
+      "name": "Category",
+      "plural": "Categories"
+    },
+    "commands": {
+      "name": "Command",
+      "plural": "Commands"
     },
     "comments": {
       "name": "Comment",
@@ -226,9 +234,9 @@
       "plural": "Groups"
     },
     "ideas": {
+      "approved": "This idea was approved.",
       "name": "Idea",
       "plural": "Ideas",
-      "approved": "This idea was approved.",
       "rejected": "This idea was not approved.",
       "waiting": "This idea is waiting for approval."
     },
@@ -237,14 +245,14 @@
       "plural": "Messages"
     },
     "reports": {
+      "headline": "Content report on '{{var}}'",
       "name": "Report",
-      "plural": "Reports",
-      "headline": "Content report on '{{var}}'"
+      "plural": "Reports"
     },
     "requests": {
+      "headline": "Update request on '{{var}}'",
       "name": "Request",
-      "plural": "Requests",
-      "headline": "Update request on '{{var}}'"
+      "plural": "Requests"
     },
     "rooms": {
       "name": "Room",
@@ -254,14 +262,6 @@
       "name": "User",
       "plural": "Users"
     },
-    "categories": {
-      "name": "Category",
-      "plural": "Categories"
-    },
-    "commands": {
-      "name": "Command",
-      "plural": "Commands"
-    },
     "votes": {
       "name": "vote",
       "plural": "votes"
@@ -269,15 +269,15 @@
   },
   "settings": {
     "account": {
-      "export": "Export account data",
-      "update": "Update data",
       "delete": "Delete account",
-      "exportRequest": "Data export requested",
-      "exportGranted": "Account data export granted",
-      "exportBody": "Your data request is available. Click to download",
-      "updateText": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place",
+      "deleteRequest": "Data deletion requested",
       "deleteText": "Are you sure you want to request the deletion of your account? All your data will be lost. This action cannot be undone",
-      "deleteRequest": "Data deletion requested"
+      "export": "Export account data",
+      "exportBody": "Your data request is available. Click to download",
+      "exportGranted": "Account data export granted",
+      "exportRequest": "Data export requested",
+      "update": "Update data",
+      "updateText": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place"
     },
     "advanced": {
       "headline": "Advanced options",
@@ -288,8 +288,8 @@
     },
     "backup": {
       "create": "Create Backup",
-      "restore": "Restore Backup",
-      "headline": "Backup restore instructions"
+      "headline": "Backup restore instructions",
+      "restore": "Restore Backup"
     },
     "columns": {
       "about_me": "About Me",
@@ -353,8 +353,8 @@
       "registration_status": "Registration Status",
       "report": "Report category",
       "restrict_to_roomusers_only": "Restrict to Room Users",
-      "room_id": "Room",
       "room_hash_id": "Room",
+      "room_id": "Room",
       "room_name": "Room Name",
       "service_id_consent": "Service Consent ID",
       "status": "Status",
@@ -375,8 +375,8 @@
       "vote_bias": "Vote Bias"
     },
     "customFields": {
-      "label": "Custom fields",
-      "form": "Custom field {{var}}"
+      "form": "Custom field {{var}}",
+      "label": "Custom fields"
     },
     "general": {
       "description": "Description",
@@ -385,10 +385,10 @@
     },
     "labels": {
       "configuration": "Configurations",
-      "school": "School Info",
-      "scope": "Scope",
       "quorum": "Quorum",
-      "quorumLabel": "{{var}} quorum"
+      "quorumLabel": "{{var}} quorum",
+      "school": "School Info",
+      "scope": "Scope"
     },
     "messages": {
       "create": "{{var}} created",
@@ -397,25 +397,25 @@
       "updated": "{{var}} updated"
     },
     "panels": {
+      "action": "Scheduled actions",
       "category": "Category",
+      "danger": "Danger Zone",
       "group": "Group",
       "idea": "Idea",
-      "user": "User",
-      "time": "Time",
       "login": "Login",
-      "action": "Scheduled actions",
       "system": "System",
-      "danger": "Danger Zone"
+      "time": "Time",
+      "user": "User"
     },
     "time": {
       "actions": "Scheduled actions",
       "endDate": "End Date",
       "endDay": "Ending day",
       "endTime": "Ending time",
+      "phase": "Phase durations",
       "startDate": "Start Date",
       "startDay": "Starting day",
       "startTime": "Starting time",
-      "phase": "Phase durations",
       "workHours": "Work Hours",
       "workdays": "Work Days"
     }
@@ -457,6 +457,15 @@
       "yes": "Yes"
     },
     "darkMode": "Dark mode",
+    "files": {
+      "download": "Download sample file",
+      "image": {
+        "change": "Change image",
+        "label": "Image",
+        "upload": "Click to select an image"
+      },
+      "upload": "File upload"
+    },
     "lightMode": "Light mode",
     "navigation": {
       "about": "About",
@@ -467,31 +476,22 @@
       "home": "Home",
       "ideas": "Ideas",
       "messages": "Messages",
-      "profile": "Profile",
-      "settings": "Settings",
-      "users": "Users",
       "privacy": "Privacy",
+      "profile": "Profile",
       "reports": "Reports",
       "requests": "Requests",
       "rooms": "Rooms",
       "security": "Security",
-      "system": "System"
+      "settings": "Settings",
+      "system": "System",
+      "users": "Users"
     },
     "units": {
       "days": "days",
       "ideas": "ideas",
       "likes": "likes",
-      "votes": "votes",
-      "updates": "updates"
-    },
-    "files": {
-      "download": "Download sample file",
-      "upload": "File upload",
-      "image": {
-        "label": "Image",
-        "change": "Change image",
-        "upload": "Click to select an image"
-      }
+      "updates": "updates",
+      "votes": "votes"
     }
   },
   "votes": {
