@@ -59,7 +59,7 @@ const WildIdeas = () => {
   const newIdea = async (data: AddIdeaArguments) => {
     if (!room_id) return;
     const request = await addIdea({
-      room_hash_id: room_id,
+      room_id: room_id,
       title: data.title,
       content: data.content,
       status: data.status,

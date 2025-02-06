@@ -79,12 +79,12 @@ export interface IdeaArguments {
 }
 
 export interface AddIdeaArguments extends IdeaArguments {
-  room_hash_id: string;
+  room_id: string;
 }
 
 export interface EditIdeaArguments extends IdeaArguments {
   idea_id: string;
-  room_hash_id?: string;
+  room_id?: string;
 }
 
 /**
