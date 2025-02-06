@@ -31,7 +31,6 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
       <Dialog
         open={isOpen}
         onClose={onClose}
-        onClick={onDelete}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -49,7 +48,7 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
           <Button onClick={onClose} color="secondary" autoFocus>
             {t('actions.cancel')}
           </Button>
-          <Button color="error" variant="contained">
+          <Button onClick={onDelete} color="error" variant="contained">
             {t('actions.delete')}
           </Button>
         </DialogActions>

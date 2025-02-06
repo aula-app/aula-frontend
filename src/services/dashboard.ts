@@ -1,5 +1,7 @@
 import { CommentType, VoteType } from '@/types/Scopes';
 import { databaseRequest, GenericResponse } from './requests';
+import { DefaultUpdate } from '@/types/Generics';
+import { GetIdeasResponse } from './ideas';
 
 /**
  * Fetches dashboard data for the current user
@@ -35,11 +37,11 @@ export const getDashboard = async (): Promise<GetDashboardResponse> => {
 /**
  * Fetches updates data for the current user
  * Makes a database request to get user-specific update information
- */
+ */ 0;
 
-interface UpdateResponse {
-  votes: VoteType[];
-  comments: CommentType[];
+export interface UpdateResponse {
+  votes: DefaultUpdate[];
+  comments: DefaultUpdate[];
 }
 
 interface GetUpdatesResponse extends GenericResponse {
@@ -57,4 +59,21 @@ export const getUpdates = async (): Promise<GetUpdatesResponse> => {
   );
 
   return response as GetUpdatesResponse;
+};
+
+/**
+ * Fetches wild ideas data for the current user
+ */
+
+export const getWildIdeasByUser = async (): Promise<GetIdeasResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'getWildIdeasByUser',
+      arguments: {},
+    },
+    ['user_id']
+  );
+
+  return response as GetIdeasResponse;
 };
