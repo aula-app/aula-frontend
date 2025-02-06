@@ -9,7 +9,6 @@ import {
   Checkbox,
   Dialog,
   DialogActions,
-  DialogContent,
   DialogTitle,
   List,
   ListItem,
@@ -50,14 +49,14 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
     if (!response.error && response.data) setRooms(response.data);
   }, []);
 
-  const fetchUsersRooms = () => {
+  const fetchUsersRooms = async () => {
     if (users.length === 0) return;
 
     const roomCounts: { [key: string]: number } = {};
     const commonRooms = [] as string[];
     const partialRooms = [] as string[];
 
-    users.forEach(async (user) => {
+    const roomPromises = users.map(async (user) => {
       const rooms = await getUserRooms(user);
       if (users.length === 1) {
         if (rooms.data) setSelectedRooms(rooms.data.map((room) => room.hash_id));
@@ -66,30 +65,19 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
           roomCounts[room.hash_id] = (roomCounts[room.hash_id] || 0) + 1;
         });
       }
+    });
 
-      const roomPromises = users.map(async (user) => {
-        const rooms = await getUserRooms(user);
-        if (users.length === 1) {
-          if (rooms.data) setSelectedRooms(rooms.data.map((room) => room.hash_id));
+    await Promise.all(roomPromises).then(() => {
+      Object.keys(roomCounts).forEach((room_id) => {
+        if (roomCounts[room_id] === users.length) {
+          commonRooms.push(room_id);
         } else {
-          rooms.data?.forEach((room) => {
-            roomCounts[room.hash_id] = (roomCounts[room.hash_id] || 0) + 1;
-          });
+          partialRooms.push(room_id);
         }
       });
 
-      await Promise.all(roomPromises).then(() => {
-        Object.keys(roomCounts).forEach((room_id) => {
-          if (roomCounts[room_id] === users.length) {
-            commonRooms.push(room_id);
-          } else {
-            partialRooms.push(room_id);
-          }
-        });
-
-        setSelectedRooms(commonRooms);
-        setIndeterminateRooms(partialRooms);
-      });
+      setSelectedRooms(commonRooms);
+      setIndeterminateRooms(partialRooms);
     });
   };
 
@@ -174,23 +162,21 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
         </DialogTitle>
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        <DialogContent>
-          <List sx={{ pt: 0 }}>
-            {rooms.map((room) => (
-              <ListItem disablePadding key={room.hash_id}>
-                <ListItemButton onClick={() => toggleRoom(room.hash_id)}>
-                  <ListItemAvatar>
-                    <Checkbox
-                      checked={selectedRooms.includes(room.hash_id)}
-                      indeterminate={!selectedRooms.includes(room.hash_id) && indeterminateRooms.includes(room.hash_id)}
-                    />
-                  </ListItemAvatar>
-                  <ListItemText primary={room.room_name} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </DialogContent>
+        <List sx={{ pt: 0 }}>
+          {rooms.map((room) => (
+            <ListItem disablePadding key={room.hash_id}>
+              <ListItemButton onClick={() => toggleRoom(room.hash_id)}>
+                <ListItemAvatar>
+                  <Checkbox
+                    checked={selectedRooms.includes(room.hash_id)}
+                    indeterminate={!selectedRooms.includes(room.hash_id) && indeterminateRooms.includes(room.hash_id)}
+                  />
+                </ListItemAvatar>
+                <ListItemText primary={room.room_name} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
         <DialogActions>
           <Button onClick={onClose} color="secondary" autoFocus>
             {t('actions.cancel')}

@@ -246,11 +246,14 @@ export async function getUserRooms(user_id: string): Promise<GetUserRoomsRespons
  */
 
 export async function addUserRoom(user_id: string, room_id: string): Promise<GenericResponse> {
-  const response = await databaseRequest({
-    model: 'User',
-    method: 'addUserToRoom',
-    arguments: { user_id, room_id },
-  });
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'addUserToRoom',
+      arguments: { user_id, room_id },
+    },
+    ['updater_id']
+  );
 
   return response as GenericResponse;
 }
@@ -274,7 +277,7 @@ export async function removeUserRoom(user_id: string, room_id: string): Promise<
  */
 
 interface GetUserGroupsResponse extends GenericResponse {
-  data: { group_id: string }[] | null;
+  data: { hash_id: string }[] | null;
 }
 
 export async function getUserGroups(user_id: string): Promise<GetUserGroupsResponse> {
@@ -285,4 +288,35 @@ export async function getUserGroups(user_id: string): Promise<GetUserGroupsRespo
   });
 
   return response as GetUserGroupsResponse;
+}
+
+/**
+ * Add user group
+ */
+
+export async function addUserGroup(user_id: string, group_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'addUserToGroup',
+      arguments: { user_id, group_id },
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+/**
+ * Remove user group
+ */
+
+export async function removeUserGroup(user_id: string, group_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest({
+    model: 'User',
+    method: 'removeUserFromGroup',
+    arguments: { user_id, group_id },
+  });
+
+  return response as GenericResponse;
 }
