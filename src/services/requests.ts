@@ -25,8 +25,8 @@ export interface GenericResponse {
 export interface GenericListRequest {
   offset: number;
   limit: number;
-  orderby: number;
-  asc: 0 | 1;
+  orderby?: number;
+  asc?: 0 | 1;
   search_field?: string;
   search_text?: string;
   status?: StatusTypes;

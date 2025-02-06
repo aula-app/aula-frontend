@@ -48,7 +48,7 @@ const TimedCommands = () => {
       if (!response.data) return;
       if (Array.isArray(response.data))
         response.data.map((r: ObjectPropByName) => (r.parameters = JSON.parse(r.parameters)));
-      setTable(response);
+      setTable(response.data);
     });
   }
 

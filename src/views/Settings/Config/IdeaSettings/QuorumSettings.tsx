@@ -35,7 +35,7 @@ const QuorumSettings = ({ onReload }: Props) => {
       method: 'getQuorum',
       arguments: {},
     }).then((response) => {
-      if (!response.data || !response.data) return;
+      if (!response.data) return;
       setValue('quorum_wild_ideas', Number(response.data.quorum_wild_ideas));
       setValue('quorum_votes', Number(response.data.quorum_votes));
     });

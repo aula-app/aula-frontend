@@ -76,7 +76,7 @@ const LoginView = () => {
       clearTimeout(timeoutId);
       setLoading(false);
 
-      if (response.data !== true || !('JWT' in response)) {
+      if (!response.data || !('JWT' in response)) {
         setError(
           'user_status' in response && response.user_status !== null
             ? response.user_status === 0
