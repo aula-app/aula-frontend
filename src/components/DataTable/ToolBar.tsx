@@ -53,13 +53,13 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
             {t('actions.add', { var: t(`scopes.${scope}.name`) })}
           </Button>
         )}
+        {extraTools && extraTools({ items: selected })}
         <Button variant="outlined" color="error" onClick={() => setOpen(true)} disabled={selected.length === 0}>
           <AppIcon icon="delete" pr={2} />
           {t('actions.remove', {
             var: t(`scopes.${scope}.${selected.length === 1 ? 'name' : 'plural'}`),
           })}
         </Button>
-        {extraTools && extraTools({ items: selected })}
       </Stack>
       <Dialog
         open={isOpen}
