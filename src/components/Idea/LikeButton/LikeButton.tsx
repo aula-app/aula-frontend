@@ -12,21 +12,23 @@ interface Props {
 
 const LikeButton: React.FC<Props> = ({ item, disabled }) => {
   const [liked, setLiked] = useState(false);
+  const [likeStatus, setLikeStatus] = useState(false);
 
   const isIdea = 'room_id' in item;
 
   const getLikeState = async () => {
     const likeState = await (isIdea ? getIdeaLike(item.hash_id) : getCommentLike(item.id));
     setLiked(likeState);
+    setLikeStatus(likeState);
   };
 
   const toggleLike = async () => {
-    if (liked) {
+    if (likeStatus) {
       await (isIdea ? removeIdeaLike(item.hash_id) : removeCommentLike(item.id));
     } else {
       await (isIdea ? addIdeaLike(item.hash_id) : addCommentLike(item.id));
     }
-    getLikeState();
+    setLikeStatus(!likeStatus);
   };
 
   useEffect(() => {
@@ -35,11 +37,11 @@ const LikeButton: React.FC<Props> = ({ item, disabled }) => {
 
   return (
     <AppIconButton
-      icon={liked ? 'heartFull' : 'heart'}
+      icon={likeStatus ? 'heartFull' : 'heart'}
       onClick={toggleLike}
       disabled={disabled || !checkPermissions(20)}
     >
-      {item.sum_likes}
+      {`${item.sum_likes + Number(likeStatus) - Number(liked)}`}
     </AppIconButton>
   );
 };
