@@ -33,18 +33,20 @@ const IdeasBoxView = () => {
   const [box, setBox] = useState<BoxType>();
   const [edit, setEdit] = useState<EditBoxArguments>(); // undefined = closed;
 
-  const boxIdeasFetch = async () => {
-    await databaseRequest({
-      model: 'Idea',
-      method: 'getIdeasByTopic',
-      arguments: { topic_id: params['box_id'] },
-    }).then((response) => {
-      setLoading(false);
-      if (!response.success || !response.data) return;
-      const currentIdeas = (response.data as IdeaType[]).filter((idea) =>
-        Number(params['phase']) >= 30 ? idea.approved > -1 : true
-      ); // Filter out unapproved ideas
-      setBoxIdeas(currentIdeas);
+  const fetchBox = useCallback(async () => {
+    if (!box_id) return;
+    setBoxLoading(true);
+    const response = await getBox(box_id);
+    setBoxError(response.error);
+    if (!response.error && response.data) setBox(response.data);
+    setBoxLoading(false);
+  }, [box_id]);
+
+  const boxEdit = (box: BoxType) => {
+    setEdit({
+      name: box.name,
+      description_public: box.description_public,
+      topic_id: box.hash_id,
     });
   };
 
@@ -123,58 +125,49 @@ const IdeasBoxView = () => {
   }, []);
 
   return (
-    <>
-      <Stack
-        height="100%"
-        flexGrow={1}
-        position="relative"
-        px={1}
-        py={2}
-        sx={{
-          overflowY: 'auto',
-          scrollSnapType: 'y mandatory',
-        }}
-      >
-        <BoxCard box={String(params['box_id'])} noLink />
-        <Stack direction="row">
-          <Typography variant="h6" p={2}>
-            {t(
-              delegationStatus && delegationStatus.length > 0
-                ? `delegation.status.delegated`
-                : `delegation.status.undelegated`,
-              {
-                var: boxIdeas.length,
-              }
-            )}
-          </Typography>
-          {Number(params['phase']) === 30 && (
-            <Stack direction="row" position="relative" alignItems="center" sx={{ ml: 'auto', pr: 3 }}>
-              <Button
-                size="small"
-                sx={{ mt: 0.75, bgcolor: '#fff', color: grey[600], borderRadius: 5 }}
-                onClick={() => setDelegationDialog(true)}
-              >
-                <Typography variant="caption">{t('ui.common.or')}</Typography>
-                <Typography variant="caption" color="primary" fontWeight={700} sx={{ mx: 1 }}>
-                  {delegationStatus && delegationStatus.length > 0 ? t('delegation.revoke') : t('delegation.delegate')}
-                </Typography>
-              </Button>
-              <KnowMore title={t('tooltips.delegate')}>
-                <AppIcon icon="delegate" size="small" />
-              </KnowMore>
-            </Stack>
-          )}
-        </Stack>
-        {checkPermissions(30) && String(params['phase']) === '10' && (
-          <MoveData id={Number(params['box_id'])} scope="boxes" onClose={() => boxIdeasFetch()} />
+    <Stack
+      height="100%"
+      flexGrow={1}
+      position="relative"
+      gap={1}
+      sx={{
+        overflowY: 'auto',
+        scrollSnapType: 'y mandatory',
+      }}
+    >
+      {isBoxLoading && <BoxCardSkeleton />}
+      {boxError && <Typography>{t(boxError)}</Typography>}
+      {!isBoxLoading && box && <BoxCard box={box} onDelete={() => boxDelete()} onEdit={() => boxEdit(box)} disabled />}
+      <Stack direction="row" pt={3} px={1} alignItems="center">
+        <Typography variant="h6">
+          {t(delegationStatus.length > 0 ? `delegation.status.delegated` : `delegation.status.undelegated`, {
+            var: ideas.length,
+          })}
+        </Typography>
+        {phase === '30' && (
+          <Stack direction="row" position="relative" alignItems="center" sx={{ ml: 'auto', pr: 3 }}>
+            <Typography variant="caption">
+              {t('votes.vote').toUpperCase()} {t('ui.common.or')}
+            </Typography>
+            <Button size="small" sx={{ bgcolor: '#fff' }} onClick={() => {}}>
+              {delegationStatus && delegationStatus.length > 0 ? t('delegation.revoke') : t('delegation.delegate')}
+            </Button>
+            <KnowMore title={t('tooltips.delegate')}>
+              <AppIcon icon="delegate" size="small" />
+            </KnowMore>
+          </Stack>
         )}
-        <Grid container spacing={1} pt={1} pb={2}>
-          {isLoading && (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
-              <IdeaCardSkeleton />
-            </Grid>
-          )}
-          {boxIdeas.map((idea, key) => (
+      </Stack>
+      {/* {checkPermissions(30) && <MoveData id={Number(box_id)} scope="boxes" onClose={() => boxIdeasFetch()} />} */}
+      <Grid container spacing={1} pt={1} pb={2}>
+        {isIdeasLoading && (
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
+            <IdeaCardSkeleton />
+          </Grid>
+        )}
+        {ideasError && <Typography>{t(ideasError)}</Typography>}
+        {!isIdeasLoading &&
+          ideas.map((idea, key) => (
             <Grid key={key} size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
               <AppLink to={`idea/${idea.hash_id}`}>
                 <IdeaCard idea={idea} phase={Number(phase) as RoomPhases} />

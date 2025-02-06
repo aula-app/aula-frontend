@@ -45,53 +45,27 @@ const MoreOptions: React.FC<Props> = ({
   };
 
   return (
-    <>
-      <Box position="relative">
-        <AppIconButton icon="more" onClick={toggleOptions} />
-        <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <Zoom in={open}>
-            <Paper
-              sx={{
-                position: 'absolute',
-                top: '75%',
-                right: 0,
-                borderRadius: 3,
-                bgcolor: grey[100],
-                zIndex: 50,
-              }}
-              elevation={3}
-            >
-              {options.map((option, key) => (
-                <Box key={key}>
-                  <Button
-                    color={option.color}
-                    sx={{ width: '100%', justifyContent: 'start' }}
-                    onClick={() => handleClick(option.type)}
-                  >
-                    <Stack direction="row">
-                      <AppIcon icon={option.icon} sx={{ mr: 1 }} />
-                      <Typography noWrap>{option.label}</Typography>
-                    </Stack>
-                  </Button>
-                  {key !== options.length - 1 && <Divider />}
-                </Box>
-              ))}
-            </Paper>
-          </Zoom>
-        </ClickAwayListener>
-      </Box>
-      {edit && (
-        <EditData
-          item={edit === 'report' || edit === 'bug' ? undefined : formattedItem}
-          scope={edit}
-          isOpen={!!edit}
-          onClose={close}
-          otherData={options.filter((data) => data.type === edit)[0]?.otherData}
-          metadata={options.filter((data) => data.type === edit)[0]?.metadata}
-        />
-      )}
-      {item.id && scope && <DeleteData id={item.id} scope={scope} isOpen={del} onClose={close} />}
-    </>
+    <ClickAwayListener onClickAway={closeOptions}>
+      <Stack direction="row">
+        {children && (
+          <Collapse orientation="horizontal" in={!open}>
+            {children}
+          </Collapse>
+        )}
+        <Collapse orientation="horizontal" in={open}>
+          <Stack direction="row" position="relative">
+            <ReportButton color={color || 'error'} target={`${t(`scopes.${scope}.name`)}: ${item.id}`} />
+            {canEdit && (
+              <>
+                <EditButton color={color || 'secondary'} onEdit={onEdit} />
+                <DeleteButton color={color || 'error'} scope={scope} onDelete={onDelete} />
+              </>
+            )}
+          </Stack>
+        </Collapse>
+        <AppIconButton icon={open ? 'close' : 'more'} onClick={toggleOptions} />
+      </Stack>
+    </ClickAwayListener>
   );
 };
 
