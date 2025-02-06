@@ -106,7 +106,7 @@ const DataSettings = ({ onReload }: Props) => {
         user_level: role,
       },
     }).then((response) => {
-      if (!response.success) {
+      if (!response.data) {
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
         return;
       }

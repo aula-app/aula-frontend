@@ -48,7 +48,7 @@ const AnnouncementView = () => {
   //     },
   //     ['user_id']
   //   ).then((response) => {
-  //     if (response.success) onArchive(true);
+  //     if (response.data) onArchive(true);
   //   });
 
   const archiveAnnouncement = async () => {

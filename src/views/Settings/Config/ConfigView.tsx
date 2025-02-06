@@ -31,7 +31,7 @@ const ConfigView = () => {
       method: 'getGlobalConfig',
       arguments: {},
     }).then((response) => {
-      if (response.success) {
+      if (response.data) {
         setConfig(response.data);
         setExpanded(null);
       }
@@ -44,7 +44,7 @@ const ConfigView = () => {
       method: 'getInstanceSettings',
       arguments: {},
     }).then((response) => {
-      if (response.success) {
+      if (response.data) {
         setSettings(response.data);
         setExpanded(null);
       }

@@ -45,7 +45,7 @@ const TimedCommands = () => {
         offset: page * LIST_LIMIT,
       },
     }).then((response) => {
-      if (!response.success) return;
+      if (!response.data) return;
       if (Array.isArray(response.data))
         response.data.map((r: ObjectPropByName) => (r.parameters = JSON.parse(r.parameters)));
       setTable(response);
@@ -63,7 +63,7 @@ const TimedCommands = () => {
       },
       ['updater_id']
     ).then((response) => {
-      if (response.success) getCommands();
+      if (response.data) getCommands();
     });
   }
 

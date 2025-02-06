@@ -100,7 +100,7 @@ export const baseRequest = async (url: string, data: ObjectPropByName): Promise<
 
     const response = await request.json();
 
-    if (!response.success) {
+    if (!response.data) {
       if ('online_mode' in response && response.online_mode === 0) {
         if (window.location.pathname !== '/offline') window.location.href = '/offline';
       } else {

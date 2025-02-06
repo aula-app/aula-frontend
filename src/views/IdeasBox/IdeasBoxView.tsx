@@ -107,7 +107,7 @@ const IdeasBoxView = () => {
   //     },
   //     ['user_id']
   //   ).then((response) => {
-  //     if (!response.success || !response.data) return;
+  //     if (!response.data || !response.data) return;
   //     setDelegationStatus(response.data as DelegationType[]);
   //   });
 

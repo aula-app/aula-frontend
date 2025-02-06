@@ -51,8 +51,7 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
         user_id: id,
       },
     }).then((response) => {
-      if (response.success && response.data && response.data.length > 0)
-        setImage(`${api_url}/files/${response.data[0].filename}`);
+      if (response.data && response.data.length > 0) setImage(`${api_url}/files/${response.data[0].filename}`);
     });
   };
 

@@ -85,7 +85,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
     //   },
     //   requestId
     // ).then((response) => {
-    //   if (response.success)
+    //   if (response.data)
     //     setOptions(
     //       // @ts-ignore
     //       response.data.map((row) => {
