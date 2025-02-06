@@ -1,13 +1,12 @@
+import AppIcon, { CategoryIconType } from '@/components/AppIcon/AppIcon';
+import { getCategories } from '@/services/categories';
+import { getVote, getVoteResults, ResultResponse } from '@/services/vote';
+import { ObjectPropByName } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { databaseRequest, phases, votingOptions } from '@/utils';
+import { phases, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
-import AppIcon, { CategoryIconType } from '@/components/AppIcon/AppIcon';
-import { ObjectPropByName } from '@/types/Generics';
-import MarkdownReader from '@/components/MarkdownReader';
-import { getVote, getVoteResults, ResultResponse } from '@/services/vote';
-import { getCategories } from '@/services/categories';
 
 interface IdeaCardProps {
   idea: IdeaType;

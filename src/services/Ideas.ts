@@ -24,7 +24,7 @@ export async function getIdea(idea_id: string): Promise<GetIdeaResponse> {
  * Fetches all ideas
  */
 
-interface GetIdeasResponse extends GenericResponse {
+export interface GetIdeasResponse extends GenericResponse {
   data: IdeaType[] | null;
 }
 
@@ -41,10 +41,6 @@ export async function getIdeas(args: GenericListRequest): Promise<GetIdeasRespon
 /**
  * Fetches ideas for a specific room
  */
-
-interface GetIdeasResponse extends GenericResponse {
-  data: IdeaType[] | null;
-}
 
 export async function getIdeasByRoom(room_id: string): Promise<GetIdeasResponse> {
   const response = await databaseRequest({

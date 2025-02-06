@@ -264,6 +264,10 @@
     "commands": {
       "name": "Command",
       "plural": "Commands"
+    },
+    "votes": {
+      "name": "vote",
+      "plural": "votes"
     }
   },
   "settings": {
