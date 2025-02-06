@@ -34,7 +34,7 @@ const ErrorMessages = () => {
 
   const AlertSnackbar = forwardRef((props: SnackbarProps, ref: ForwardedRef<HTMLDivElement>) => (
     <Alert ref={ref} severity="error" variant="filled" sx={{ width: '100%' }} role="alert">
-      {t(`${props.message}`)}
+      {props.message}
     </Alert>
   ));
 

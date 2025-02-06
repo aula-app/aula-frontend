@@ -29,15 +29,6 @@
     "status": "Status setzen"
   },
   "auth": {
-    "errors": {
-      "accountInactive": "Dein Account ist inaktiv",
-      "accountSuspended": "Dein Account wurde{{var}} gesperrt. Bitte kontaktiere deinen Administrator",
-      "accountSuspendDate": " bis zum {{var}}",
-      "invalidCode": "Ungültiger Benutzercode",
-      "invalidCredentials": "Ungültiger Benutzername oder Passwort",
-      "invalidPassword": "Ungültiges Passwort",
-      "invalidToken": "Ungültiger Authentifizierungsschlüssel"
-    },
     "forgotPassword": {
       "button": "Passwort zurücksetzen",
       "link": "Passwort vergessen?",
@@ -102,7 +93,15 @@
     "headline": "Ausgewählte {{var}} löschen"
   },
   "errors": {
+    "accountInactive": "Dein Account ist inaktiv",
+    "accountSuspendDate": " bis zum {{var}}",
+    "accountSuspended": "Dein Account wurde{{var}} gesperrt. Bitte kontaktiere deinen Administrator",
+    "databaseError": "Daten konnten nicht abgerufen werden",
     "default": "Etwas ist schief gelaufen",
+    "invalidCode": "Ungültiger Benutzercode",
+    "invalidCredentials": "Ungültiger Benutzername oder Passwort",
+    "invalidPassword": "Ungültiges Passwort",
+    "invalidToken": "Ungültiger Authentifizierungsschlüssel",
     "network": "Netzwerkfehler",
     "noData": "Keine Daten verfügbar",
     "noServer": "Server ist nicht verfügbar",

@@ -1,6 +1,7 @@
 import { ObjectPropByName, StatusTypes } from '../types/Generics';
 import { parseJwt } from '../utils/jwt';
 import { localStorageGet } from '../utils/localStorage';
+import { t } from 'i18next';
 
 /**
  * Interface representing a database request object.
@@ -35,7 +36,7 @@ export interface GenericListRequest {
 /**
  * Custom error event used for displaying error messages in the application.
  */
-const error = new CustomEvent('AppErrorDialog', { detail: 'texts.error' });
+const addError = (error: string) => new CustomEvent('AppErrorDialog', { detail: error });
 
 /**
  * Makes an authenticated request to the database API.
@@ -77,11 +78,11 @@ export const baseRequest = async (url: string, data: ObjectPropByName): Promise<
   const headers = { 'Content-Type': 'application/json' } as { 'Content-Type': string; Authorization?: string };
 
   if (!api_url || !jwt_payload) {
-    document.dispatchEvent(error);
+    document.dispatchEvent(addError(t('errors.invalidToken')));
     return {
       data: null,
       count: null,
-      error: 'Invalid API URL or JWT token',
+      error: t('errors.invalidToken'),
     };
   }
 
@@ -104,11 +105,10 @@ export const baseRequest = async (url: string, data: ObjectPropByName): Promise<
       if ('online_mode' in response && response.online_mode === 0) {
         if (window.location.pathname !== '/offline') window.location.href = '/offline';
       } else {
-        document.dispatchEvent(error);
         return {
           data: null,
           count: null,
-          error: 'Failed to fetch data',
+          error: t(`errors.noData`),
         };
       }
     }
@@ -119,11 +119,11 @@ export const baseRequest = async (url: string, data: ObjectPropByName): Promise<
       error: null,
     };
   } catch (e) {
-    document.dispatchEvent(error);
+    document.dispatchEvent(addError(t('errors.default')));
     return {
       data: null,
       count: null,
-      error: 'Something went wrong',
+      error: t('errors.databaseError'),
     };
   }
 };

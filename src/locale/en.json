@@ -29,15 +29,6 @@
     "status": "Set status"
   },
   "auth": {
-    "errors": {
-      "accountInactive": "Your account is inactive",
-      "accountSuspended": "Your account has been suspended{{var}}. Please contact your administrator",
-      "accountSuspendDate": " until {{var}}",
-      "invalidCode": "Invalid user code",
-      "invalidCredentials": "Invalid username or password",
-      "invalidPassword": "Invalid password",
-      "invalidToken": "Invalid authentication token"
-    },
     "forgotPassword": {
       "button": "Reset password",
       "link": "Forgot password?",
@@ -102,7 +93,15 @@
     "headline": "Delete selected {{var}}"
   },
   "errors": {
+    "accountInactive": "Your account is inactive",
+    "accountSuspendDate": " until {{var}}",
+    "accountSuspended": "Your account has been suspended{{var}}. Please contact your administrator",
+    "databaseError": "Failed to fetch data",
     "default": "Something went wrong",
+    "invalidCode": "Invalid user code",
+    "invalidCredentials": "Invalid username or password",
+    "invalidPassword": "Invalid password",
+    "invalidToken": "Invalid authentication token",
     "network": "Network error",
     "noData": "No data available",
     "noServer": "Server is not available",
