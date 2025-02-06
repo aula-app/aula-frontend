@@ -76,7 +76,7 @@ const ChangePasswordView = () => {
         <Typography variant="h5" sx={{ mb: 3 }}>
           {t('auth.password.set')}
         </Typography>
-        <ChangePassword onSubmit={changePass} ref={passFields} />
+        <ChangePassword />
       </Stack>
     </Stack>
   );

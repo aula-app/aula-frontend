@@ -34,7 +34,10 @@ const DashBoard = ({ show = true }) => {
     if (!response.error && response.data) setMessages(response.data.length);
   };
   const fetchTexts = async () => {
-    const response = await getAnnouncements();
+    const response = await getAnnouncements({
+      offset: 0,
+      limit: 0,
+    });
     if (!response.error && response.data) setReports(response.data.length);
   };
 

@@ -29,8 +29,8 @@ const DataSettings = ({ onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [users, setUsers] = useState<Array<string>>([]);
-  const [role, setRole] = useState<RoleTypes>(10);
-  const [room, setRoom] = useState<number | ''>('');
+  const [role, setRole] = useState<RoleTypes | 0 | undefined>(10);
+  const [room, setRoom] = useState<string | undefined>('');
   const [error, setError] = useState<string>('');
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -86,14 +86,6 @@ const DataSettings = ({ onReload }: Props) => {
       setUsers(lines);
     };
     reader.readAsText(file);
-  };
-
-  const selectRoom = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setRoom(Number(event.target.value));
-  };
-
-  const selectRole = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setRole(Number(event.target.value) as RoleTypes);
   };
 
   const uploadCSV = async (csv: string) => {
@@ -170,9 +162,9 @@ const DataSettings = ({ onReload }: Props) => {
       <Stack>
         <Stack direction="row" alignItems="center" gap={3}>
           {t('actions.select', { var: t('scopes.room.name') })}:
-          <SelectRoom room={room} setRoom={selectRoom} />
+          <SelectRoom room={room || ''} setRoom={setRoom} />
           {t('actions.select', { var: t('settings.columns.userlevel') })}:
-          <SelectRole role={role} setRole={selectRole} />
+          <SelectRole role={role} setRole={setRole} />
         </Stack>
         <FormHelperText error={error !== ''}>{error}</FormHelperText>
       </Stack>
