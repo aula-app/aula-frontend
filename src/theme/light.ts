@@ -51,37 +51,37 @@ const PHASE_COLORS = {
 };
 
 const OTHER_COLORS = {
-  comment: {
+  against: {
+    main: red[100],
+  },
+  alert: {
+    main: red[100],
+  },
+  announcements: {
+    main: deepPurple[100],
+  },
+  bugs: {
+    main: grey[200],
+  },
+  comments: {
+    main: grey[200],
+  },
+  disabled: {
     main: grey[200],
   },
   for: {
     main: green[100],
   },
+  reports: {
+    main: amber[200],
+  },
+  messages: {
+    main: cyan[100],
+  },
   neutral: {
     main: amber[100],
   },
-  against: {
-    main: red[100],
-  },
-  disabled: {
-    main: grey[200],
-  },
-  message: {
-    main: cyan[100],
-  },
-  announcement: {
-    main: deepPurple[100],
-  },
-  alert: {
-    main: red[100],
-  },
-  bug: {
-    main: grey[200],
-  },
-  report: {
-    main: amber[200],
-  },
-  request: {
+  requests: {
     main: grey[200],
   },
 };

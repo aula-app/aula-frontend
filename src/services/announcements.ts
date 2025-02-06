@@ -3,6 +3,26 @@ import { databaseRequest, GenericListRequest, GenericResponse } from './requests
 import { StatusTypes } from '@/types/Generics';
 
 /**
+ * Get an Announcement from the database.
+ */
+
+interface GetAnnouncementResponse extends GenericResponse {
+  data: AnnouncementType | null;
+}
+
+export const getAnnouncement = async (text_id: string): Promise<GetAnnouncementResponse> => {
+  const response = await databaseRequest({
+    model: 'Text',
+    method: 'getTextBaseData',
+    arguments: {
+      text_id,
+    },
+  });
+
+  return response as GetAnnouncementResponse;
+};
+
+/**
  * Get a list of Announcements from the database.
  */
 
@@ -91,3 +111,25 @@ export async function deleteAnnouncement(id: string): Promise<GenericResponse> {
 
   return response as GenericResponse;
 }
+
+/**
+ * Sets announcement Status.
+ */
+
+interface AnnouncementStatusArguments {
+  status: StatusTypes;
+  text_id: string;
+}
+
+export const setAnnouncementStatus = async (args: AnnouncementStatusArguments): Promise<GenericResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Text',
+      method: 'setTextStatus',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+};

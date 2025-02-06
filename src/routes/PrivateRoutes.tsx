@@ -51,12 +51,13 @@ const PrivateRoutes = () => {
       <Route path="/" element={<WelcomeView />} />
       <Route path="about" element={<AboutView />} />
       <Route path="announcements" element={<MessagesView />} />
-      <Route path="announcements/message/:message_id" element={<MessageView />} />
+      <Route path="announcements/:announcement_id" element={<AnnouncementView />} />
       <Route path="messages" element={<MessagesView />} />
-      <Route path="messages/announcement/:message_id" element={<AnnouncementView />} />
-      <Route path="messages/message/:message_id" element={<MessageView />} />
-      <Route path="messages/report/:message_id" element={<ReportView />} />
-      <Route path="messages/request/:message_id" element={<RequestView />} />
+      <Route path="messages/:message_id" element={<MessageView />} />
+      <Route path="reports" element={<MessagesView />} />
+      <Route path="reports/:report_id" element={<ReportView />} />
+      <Route path="requests" element={<MessagesView />} />
+      <Route path="requests/:report_id" element={<ReportView />} />
       <Route path="phase/:phase" element={<PhasesView />} />
       <Route path="room/:room_id/phase/:phase" element={<RoomView />}>
         <Route path="" element={<RoomPhaseView />} />
