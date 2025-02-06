@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, PhaseDurationFields, SelectField, SelectRoomField, StatusField } from '../DataFields';
-import { BoxArguments } from '@/services/boxes';
+import { BoxArguments, EditBoxArguments } from '@/services/boxes';
 
 /**
  * BoxForms component is used to create or edit an idea.
@@ -17,8 +17,8 @@ import { BoxArguments } from '@/services/boxes';
 
 interface BoxFormsProps {
   onClose: () => void;
-  defaultValues?: BoxType;
-  onSubmit: (data: BoxArguments) => void;
+  defaultValues?: EditBoxArguments;
+  onSubmit: (data: EditBoxArguments) => void;
 }
 
 const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit }) => {
