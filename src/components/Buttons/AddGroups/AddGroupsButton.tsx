@@ -103,7 +103,7 @@ const AddGroupButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disable
       if (updates.remove.includes(id)) return;
       if (updates.add.includes(id))
         setUpdates({ add: updates.add, remove: updates.remove.filter((group) => group !== id) });
-      if (indeterminateGroups.includes(id)) {
+      else if (indeterminateGroups.includes(id)) {
         setIndeterminateGroups(indeterminateGroups.filter((group) => group !== id));
         setUpdates({ add: updates.add, remove: [...updates.remove, id] });
       } else setUpdates({ add: updates.add, remove: [...updates.remove, id] });
@@ -143,8 +143,8 @@ const AddGroupButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disable
   };
 
   useEffect(() => {
-    onReset();
-  }, [users]);
+    if (open) onReset();
+  }, [open, users]);
 
   return (
     <>

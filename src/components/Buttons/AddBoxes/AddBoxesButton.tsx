@@ -151,12 +151,8 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
   };
 
   useEffect(() => {
-    onReset();
-  }, [ideas]);
-
-  useEffect(() => {
     if (open) onReset();
-  }, [open]);
+  }, [open, ideas]);
 
   return (
     <>

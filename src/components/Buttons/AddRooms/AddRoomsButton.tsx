@@ -105,7 +105,7 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
       if (updates.remove.includes(id)) return;
       if (updates.add.includes(id))
         setUpdates({ add: updates.add, remove: updates.remove.filter((room) => room !== id) });
-      if (indeterminateRooms.includes(id)) {
+      else if (indeterminateRooms.includes(id)) {
         setIndeterminateRooms(indeterminateRooms.filter((room) => room !== id));
         setUpdates({ add: updates.add, remove: [...updates.remove, id] });
       } else setUpdates({ add: updates.add, remove: [...updates.remove, id] });
@@ -145,8 +145,8 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
   };
 
   useEffect(() => {
-    onReset();
-  }, [users]);
+    if (open) onReset();
+  }, [users, open]);
 
   return (
     <>
