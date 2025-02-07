@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormContainer, useForm } from "react-hook-form-mui";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +36,7 @@ const LoginView = () => {
   const [loginError, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const api_url = localStorageGet('api_url');
+  const [api_url, setApiUrl] = useState('');
 
   const schema = yup
     .object({
@@ -103,6 +103,10 @@ const LoginView = () => {
       }
     }
   };
+
+  useEffect(() => {
+    setApiUrl(localStorageGet('api_url'));
+  }, []);
 
   return (
     <FormContainer>
