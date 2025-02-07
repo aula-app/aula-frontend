@@ -4,11 +4,14 @@ import ChangePasswordView from '@/views/UpdatePassword';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-const useInstanceCheck = () => {
+/**
+ * List of routes available only for anonymous users
+ */
+const PublicRoutes = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
+  const useInstanceCheck = () => {
     const instance_token = localStorageGet('code', false);
     const isMultiInstance = import.meta.env.VITE_APP_MULTI !== 'false';
 
@@ -20,14 +23,11 @@ const useInstanceCheck = () => {
       localStorageSet('code', 'SINGLE');
       localStorageSet('api_url', import.meta.env.VITE_APP_API_URL);
     }
-  }, [location.pathname, navigate]);
-};
+  };
 
-/**
- * List of routes available only for anonymous users
- */
-const PublicRoutes = () => {
-  useInstanceCheck();
+  useEffect(() => {
+    useInstanceCheck();
+  }, [location.pathname, navigate]);
 
   return (
     <Routes>
