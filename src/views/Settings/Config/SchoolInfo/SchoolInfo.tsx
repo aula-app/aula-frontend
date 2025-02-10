@@ -2,7 +2,7 @@ import { useAppStore } from '@/store';
 import { ConfigResponse } from '@/types/Generics';
 import { checkPermissions, databaseRequest } from '@/utils';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -41,6 +41,10 @@ const SchoolInfo = ({ config, onReload }: Props) => {
     setName(config?.name || '');
     setDescription(config?.description_public || '');
   };
+
+  useEffect(() => {
+    onCancel();
+  }, [config]);
 
   return (
     <Stack gap={2} mb={1.5}>
