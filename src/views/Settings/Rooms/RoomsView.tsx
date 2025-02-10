@@ -131,22 +131,20 @@ const RoomsView: React.FC = () => {
         />
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
+        <DataTable
+          scope="rooms"
+          columns={COLUMNS}
+          rows={rooms}
+          orderAsc={asc}
+          orderBy={orderby}
+          setAsc={setAsc}
+          setLimit={setLimit}
+          setOrderby={setOrderby}
+          setEdit={setEdit}
+          setDelete={deleteRooms}
+        />
         {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        {!isLoading && rooms.length > 0 && (
-          <DataTable
-            scope="rooms"
-            columns={COLUMNS}
-            rows={rooms}
-            orderAsc={asc}
-            orderBy={orderby}
-            setAsc={setAsc}
-            setLimit={setLimit}
-            setOrderby={setOrderby}
-            setEdit={setEdit}
-            setDelete={deleteRooms}
-          />
-        )}
         <PaginationBar pages={Math.ceil(totalRooms / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>

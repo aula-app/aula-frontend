@@ -146,23 +146,21 @@ const IdeasView: React.FC = () => {
         />
       </Stack>
       <Stack flex={1} sx={{ overflowY: 'auto' }}>
+        <DataTable
+          scope="ideas"
+          columns={COLUMNS}
+          rows={ideas}
+          orderAsc={asc}
+          orderBy={orderby}
+          setAsc={setAsc}
+          setLimit={setLimit}
+          setOrderby={setOrderby}
+          setEdit={setEdit}
+          setDelete={deleteIdeas}
+          extraTools={extraTools}
+        />
         {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        {!isLoading && ideas.length > 0 && (
-          <DataTable
-            scope="ideas"
-            columns={COLUMNS}
-            rows={ideas}
-            orderAsc={asc}
-            orderBy={orderby}
-            setAsc={setAsc}
-            setLimit={setLimit}
-            setOrderby={setOrderby}
-            setEdit={setEdit}
-            setDelete={deleteIdeas}
-            extraTools={extraTools}
-          />
-        )}
         <PaginationBar pages={Math.ceil(totalIdeas / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>

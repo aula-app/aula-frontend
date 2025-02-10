@@ -147,22 +147,20 @@ const BoxesView: React.FC = () => {
         </FilterBar>
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
+        <DataTable
+          scope="boxes"
+          columns={COLUMNS}
+          rows={boxes}
+          orderAsc={asc}
+          orderBy={orderby}
+          setAsc={setAsc}
+          setLimit={setLimit}
+          setOrderby={setOrderby}
+          setEdit={setEdit}
+          setDelete={deleteBoxes}
+        />
         {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        {!isLoading && boxes.length > 0 && (
-          <DataTable
-            scope="boxes"
-            columns={COLUMNS}
-            rows={boxes}
-            orderAsc={asc}
-            orderBy={orderby}
-            setAsc={setAsc}
-            setLimit={setLimit}
-            setOrderby={setOrderby}
-            setEdit={setEdit}
-            setDelete={deleteBoxes}
-          />
-        )}
         <PaginationBar pages={Math.ceil(totalBoxes / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>

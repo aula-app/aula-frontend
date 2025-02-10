@@ -130,22 +130,20 @@ const AnnouncementsView: React.FC = () => {
         />
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
+        <DataTable
+          scope="announcements"
+          columns={COLUMNS}
+          rows={announcements}
+          orderAsc={asc}
+          orderBy={orderby}
+          setAsc={setAsc}
+          setLimit={setLimit}
+          setOrderby={setOrderby}
+          setEdit={setEdit}
+          setDelete={deleteAnnouncements}
+        />
         {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        {!isLoading && announcements.length > 0 && (
-          <DataTable
-            scope="announcements"
-            columns={COLUMNS}
-            rows={announcements}
-            orderAsc={asc}
-            orderBy={orderby}
-            setAsc={setAsc}
-            setLimit={setLimit}
-            setOrderby={setOrderby}
-            setEdit={setEdit}
-            setDelete={deleteAnnouncements}
-          />
-        )}
         <PaginationBar pages={Math.ceil(totalAnnouncements / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
