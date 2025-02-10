@@ -1,4 +1,5 @@
 import { LoginFormValues, LoginResponseType } from '@/types/LoginTypes';
+import { localStorageGet } from '../utils/localStorage';
 import { baseRequest, GenericResponse } from './requests';
 
 export const loginUser = async (
@@ -7,6 +8,8 @@ export const loginUser = async (
   token: string | null,
   signal: AbortSignal
 ): Promise<LoginResponseType> => {
+  const api_url = localStorageGet('api_url');
+
   try {
     const response = await fetch(`${apiUrl}/api/controllers/login.php`, {
       method: 'POST',
@@ -32,6 +35,8 @@ export const loginUser = async (
 };
 
 export const checkPasswordKey = async (secret: string) => {
+  const api_url = localStorageGet('api_url');
+
   try {
     const response = await fetch(`${apiUrl}/api/controllers/set_password.php?secret=${secret}`, {
       method: 'GET',
@@ -55,6 +60,8 @@ export const checkPasswordKey = async (secret: string) => {
 };
 
 export const setPassword = async (password: string, secret: string) => {
+  const api_url = localStorageGet('api_url');
+
   const formData = {
     "secret": secret,
     "password": password
