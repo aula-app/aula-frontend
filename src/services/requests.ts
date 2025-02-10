@@ -71,13 +71,16 @@ const addError = (error: string) => new CustomEvent('AppErrorDialog', { detail: 
  *   - The response indicates failure (success: false)
  */
 
-export const baseRequest = async (url: string, data: ObjectPropByName): Promise<GenericResponse> => {
+export const baseRequest = async (
+  url: string,
+  data: ObjectPropByName,
+  tmp_token?: string
+): Promise<GenericResponse> => {
   const api_url = localStorageGet('api_url');
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
+  const jwt_token = tmp_token || localStorageGet('token');
   const headers = { 'Content-Type': 'application/json' } as { 'Content-Type': string; Authorization?: string };
 
-  if (!api_url || !jwt_payload) {
+  if (!api_url || !jwt_token) {
     document.dispatchEvent(addError(t('errors.invalidToken')));
     return {
       data: null,
@@ -113,8 +116,16 @@ export const baseRequest = async (url: string, data: ObjectPropByName): Promise<
       }
     }
 
+    if (!response.success) {
+      return {
+        data: null,
+        count: null,
+        error: t(`errors.failed`),
+      };
+    }
+
     return {
-      data: response.data,
+      data: response.data || response.JWT,
       count: response.count,
       error: null,
     };

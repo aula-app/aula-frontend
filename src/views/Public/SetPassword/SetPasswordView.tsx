@@ -1,19 +1,56 @@
-import SetPassword from '@/components/SetPassword';
-import { checkPasswordKey } from '@/services/login';
+import { AppIconButton } from '@/components';
+import { checkPasswordKey, setPassword } from '@/services/login';
 import { useAppStore } from '@/store';
-import { Alert, Collapse, Stack, Typography } from '@mui/material';
+import { localStorageSet } from '@/utils';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { FormContainer } from 'react-hook-form-mui';
+import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import * as yup from 'yup';
 
 const SetPasswordView = () => {
   const { t } = useTranslation();
   const { key } = useParams();
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
-  const [isLoading, setLoading] = useState(false);
+
+  const [error, setError] = useState<string>('');
+  const [showMessage, setShowMessage] = useState(false);
+  const [showPassword, setShowPassword] = useState<Record<keyof typeof fields, boolean>>({
+    confirmPassword: false,
+    newPassword: false,
+  });
+
   const [isValid, setValid] = useState(true);
+
+  const schema = yup
+  .object({
+    newPassword: yup
+      .string()
+      .required(t('forms.validation.required'))
+      .min(4, t('forms.validation.minLength', { var: 4 }))
+      .max(32, t('forms.validation.maxLength', { var: 32 })),
+    confirmPassword: yup
+      .string()
+      .required(t('forms.validation.required'))
+      .oneOf([yup.ref('newPassword')], t('forms.validation.passwordMatch')),
+  })
+  .required(t('forms.validation.required'));
+
+const {
+  register,
+  handleSubmit,
+  reset,
+  formState: { errors },
+} = useForm({
+  resolver: yupResolver(schema),
+});
+
+// Infer TypeScript type from the Yup schema
+type SchemaType = yup.InferType<typeof schema>;
+const fields = schema.fields;
 
   const validateKey = async () => {
     if (!key) {
@@ -22,7 +59,6 @@ const SetPasswordView = () => {
     }
 
     try {
-      setLoading(true);
       const response = await checkPasswordKey(
         key,
       );
@@ -32,10 +68,32 @@ const SetPasswordView = () => {
     } catch (error) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
       setValid(false);
-    } finally {
-      setLoading(false);
     }
   };
+
+    const onSubmit = async (data: SchemaType) => {
+      if (!key)
+        return
+
+      const result = await setPassword(data.newPassword, key)
+
+      if (result.error) {
+        setError(t(result.error));
+        return;
+      }
+
+      localStorageSet("token", result.JWT);
+      dispatch({ type: "LOG_IN" });
+      navigate("/", { replace: true });
+    };
+
+    const resetFields = () => {
+      reset();
+      setShowPassword({
+        confirmPassword: false,
+        newPassword: false,
+      });
+    };
 
   useEffect(() => {
     validateKey();
@@ -50,7 +108,56 @@ const SetPasswordView = () => {
             {t('errors.invalidCode')}
           </Alert>
         </Collapse>
-        <SetPassword disabled={isLoading} />
+        <FormContainer>
+      <Stack gap={2} mt={2}>
+        <Stack gap={1} direction="row" flexWrap="wrap">
+          {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
+            <TextField
+              key={field}
+              required
+              type={showPassword[field] ? 'text' : 'password'}
+              label={t(`auth.password.${field}`)}
+              sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
+              {...register(field)}
+              error={!!errors[field]}
+              helperText={`${errors[field]?.message || ' '}`}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <AppIconButton
+                        aria-label="toggle password visibility"
+                        icon={showPassword[field] ? 'visibilityOn' : 'visibilityOff'}
+                        title={showPassword[field] ? t('actions.hide') : t('actions.show')}
+                        onClick={() => setShowPassword({ ...showPassword, [field]: !showPassword[field] })}
+                      />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+          ))}
+        </Stack>
+
+        <Stack direction="row" justifyContent="end" gap={2}>
+          <Collapse in={showMessage}>
+            <Alert
+              variant="outlined"
+              severity={!error ? 'success' : 'error'}
+              onClose={() => setShowMessage(false)}
+            >
+              {!error ? t('auth.password.success') : t('errors.invalidPassword')}
+            </Alert>
+          </Collapse>
+          <Button color="error" onClick={resetFields}>
+            {t('actions.cancel')}
+          </Button>
+          <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+            {t('actions.save')}
+          </Button>
+        </Stack>
+      </Stack>
+    </FormContainer>
       </Stack>
     </FormContainer>
   );

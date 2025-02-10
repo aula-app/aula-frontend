@@ -1,10 +1,9 @@
 import { ErrorBoundary } from '@/components';
 import { useIsOnline } from '@/hooks';
 import { useOnMobile } from '@/hooks/layout';
-import { checkPermissions, localStorageGet, parseJwt } from '@/utils';
+import { checkPermissions } from '@/utils';
 import AskConsent from '@/views/AskConsent';
 import OfflineView from '@/views/OfflineView';
-import UpdatePassword from '@/views/UpdatePassword';
 import { Stack } from '@mui/material';
 import { FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -21,9 +20,7 @@ const TITLE_PRIVATE = 'aula';
 
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const location = useLocation();
-  const [scope, setScope] = useState<'bugs' | 'reports'>();
   const [online, setOnline] = useState(true);
-  const jwt = parseJwt(localStorageGet('token'));
 
   const onMobile = useOnMobile();
 
@@ -40,8 +37,6 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
   return !online ? (
     <OfflineView />
-  ) : jwt?.temp_pw ? (
-    <UpdatePassword />
   ) : (
     <Stack
       sx={{
