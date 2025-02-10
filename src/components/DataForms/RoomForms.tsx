@@ -76,7 +76,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose, onSubmit 
                 </>
               )}
             />
-            <Stack gap={2}>
+            <Stack gap={2} flex={1}>
               <TextField
                 fullWidth
                 required

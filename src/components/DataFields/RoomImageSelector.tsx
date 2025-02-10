@@ -60,11 +60,7 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
   }, [image]);
   return (
     <>
-      <Button
-        sx={{ flex: 1, minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }}
-        onClick={() => setEditImage(true)}
-      >
-        {image}
+      <Button sx={{ minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }} onClick={() => setEditImage(true)}>
         <DefaultImage image={selected} shift={shift} />
       </Button>
       <Dialog open={editImage} onClose={() => setEditImage(false)} fullWidth>
