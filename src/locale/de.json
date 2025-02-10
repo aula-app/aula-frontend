@@ -155,9 +155,9 @@
     "on": "{{a}} zur {{b}}"
   },
   "phases": {
-    "approval": "Genehmigung",
+    "approval": "Prüfung",
     "discussion": "Diskussion",
-    "phase": "{{var}} Phase",
+    "phase": "{{var}}-Phase",
     "results": "Ergebnisse",
     "status": {
       "end": "Phase endet in {{var}} Tagen",
@@ -198,11 +198,11 @@
   },
   "roles": {
     "10": "Gast",
-    "20": "Schüler",
-    "30": "Moderator",
-    "40": "Super Moderator",
-    "50": "Administrator",
-    "60": "Technischer Administrator"
+    "20": "Nutzer*in",
+    "30": "Moderator*in",
+    "40": "Super-Moderator*in",
+    "50": "Admin",
+    "60": "Tech-Admin"
   },
   "scopes": {
     "announcements": {
@@ -434,14 +434,14 @@
     "weekend": "Wochenende"
   },
   "tooltips": {
-    "approval": "Das Genehmigungsteam überprüft Ideen auf Machbarkeit vor der Abstimmung",
+    "approval": "Das Prüfungsteam überprüft Ideen auf Machbarkeit vor der Abstimmung",
     "comment": "Kommentare helfen, Ideen durch konstruktives Feedback zu verbessern",
-    "delegate": "Du kannst deine Stimme an eine andere Person delegieren und sie jederzeit widerrufen",
-    "discussion": "Ideen werden durch Zusammenarbeit in Projektpläne verfeinert",
+    "delegate": "Du kannst deine Stimme an eine andere Person übertragen und sie jederzeit zurücknehmen",
+    "discussion": "Hier werden Ideen durch Zusammenarbeit in Projektpläne verwandelt",
     "quorum": "Erforderliche Likes, um in die Diskussionsphase zu gelangen",
     "results": "Abstimmungsergebnisse und genehmigte Ideen zur Umsetzung anzeigen",
     "voting": "Stimme für genehmigte Ideen abgeben",
-    "wild": "Teile und like erste Ideen und Vorschläge"
+    "wild": "Hier kannst du erste Ideen und Vorschläge posten"
   },
   "ui": {
     "common": {
