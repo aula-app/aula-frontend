@@ -21,6 +21,7 @@ export const changePassword = async (oldPass: string, newPass: string, tmp_token
       password: oldPass,
       new_password: newPass,
     },
+    true,
     tmp_token
   );
 };

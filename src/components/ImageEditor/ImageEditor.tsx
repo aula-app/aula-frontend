@@ -1,14 +1,15 @@
 import { databaseRequest, localStorageGet } from '@/utils';
-import { Box, Button, Drawer, Paper, Stack, Typography } from '@mui/material';
+import { Box, Button, Dialog, Paper, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
+import { uploadImage } from '@/services/media';
 
 interface Props {
-  id: number;
-  width: number;
-  height: number;
+  id: string;
   isOpen: boolean;
+  width?: number;
+  height?: number;
   onClose: () => void;
   rounded?: boolean;
 }
@@ -19,7 +20,6 @@ interface Props {
 const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const api_url = localStorageGet('api_url');
-  const jwt_token = localStorageGet('token');
 
   const [image, setImage] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -52,20 +52,6 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
     }).then((response) => {
       if (response.data && response.data.length > 0) setImage(`${api_url}/files/${response.data[0].filename}`);
     });
-  };
-
-  const onSave = (image: Blob) => {
-    const formData = new FormData();
-    formData.append('file', image, 'newfile.png');
-    formData.append('fileType', 'avatar');
-
-    fetch(`${api_url}/api/controllers/upload.php`, {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + jwt_token,
-      },
-      body: formData,
-    }).then(onClose);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,14 +139,16 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
       // Draw the cropped and scaled portion of the image
       ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
 
-      canvas.toBlob(
-        (blob) => {
-          if (!blob) return;
-          onSave(blob);
-        },
-        'image/png',
-        1.0
-      );
+      // Convert canvas to blob
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const imageFile = new File([blob], 'avatar.png', { type: 'image/png' });
+          uploadImage(imageFile).then((response) => {
+            if (!response.data) return;
+            onClose();
+          });
+        }
+      }, 'image/png');
     };
     img.src = image;
   };
@@ -180,11 +168,9 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
     setDefaultValues();
   }, [image]);
   return (
-    <Drawer anchor="bottom" open={isOpen} onClose={onClose}>
-      <Stack p={2}>
-        <Typography variant="h5" pb={2}>
-          {t('actions.edit', { var: t('ui.files.image.label') })}
-        </Typography>
+    <Dialog open={isOpen} onClose={onClose}>
+      <Stack p={2} gap={2}>
+        <Typography variant="h5">{t('actions.edit', { var: t('ui.files.image.label') })}</Typography>
         <Stack direction="row" justifyContent="center">
           {!image ? (
             <Paper
@@ -251,8 +237,8 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
             </Box>
           )}
         </Stack>
-        <Stack direction="row">
-          <Button color="secondary" onClick={onClose} sx={{ mr: 'auto' }}>
+        <Stack direction="row" gap={2} justifyContent="end">
+          <Button color="error" onClick={onClose}>
             {t('actions.cancel')}
           </Button>
           <Button variant="contained" onClick={saveImage}>
@@ -260,7 +246,7 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
           </Button>
         </Stack>
       </Stack>
-    </Drawer>
+    </Dialog>
   );
 };
 
