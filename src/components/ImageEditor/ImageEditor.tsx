@@ -3,7 +3,7 @@ import { Box, Button, Dialog, Paper, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
-import { uploadImage } from '@/services/images';
+import { uploadImage } from '@/services/media';
 
 interface Props {
   id: string;
@@ -20,7 +20,6 @@ interface Props {
 const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const api_url = localStorageGet('api_url');
-  const jwt_token = localStorageGet('token');
 
   const [image, setImage] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -145,9 +144,8 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
         if (blob) {
           const imageFile = new File([blob], 'avatar.png', { type: 'image/png' });
           uploadImage(imageFile).then((response) => {
-            if (response.success) {
-              onClose();
-            }
+            if (!response.data) return;
+            onClose();
           });
         }
       }, 'image/png');

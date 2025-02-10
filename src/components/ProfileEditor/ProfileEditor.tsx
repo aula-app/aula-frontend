@@ -122,6 +122,11 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
 
   const closeDialog = () => setUpdateRequests([]);
 
+  const onClose = () => {
+    setEditImage(false);
+    onReload();
+  };
+
   useEffect(() => {
     resetFields();
   }, [user]);
@@ -146,7 +151,7 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
           />
           <UserAvatar id={user.hash_id} size={180} sx={{ mx: 'auto' }} />
         </Button>
-        {user && <ImageEditor isOpen={editImage} onClose={() => setEditImage(false)} id={user.hash_id} />}
+        {user && <ImageEditor isOpen={editImage} onClose={onClose} id={user.hash_id} />}
         <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
           <Controller
             name="displayname"
