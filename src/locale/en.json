@@ -7,6 +7,7 @@
     "archive": "Archive",
     "bugReport": "Report bug",
     "cancel": "Cancel",
+    "change": "Change {{var}}",
     "close": "Close",
     "confirm": "Confirm",
     "contentReport": "Report content",

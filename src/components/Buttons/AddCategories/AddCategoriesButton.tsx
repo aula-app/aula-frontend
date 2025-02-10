@@ -4,7 +4,6 @@ import { CategoryType } from '@/types/Scopes';
 import {
   Button,
   ButtonProps,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogTitle,
@@ -40,7 +39,7 @@ const AddCategoryButton = forwardRef<AddRoomRefProps, Props>(
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [categories, setCategories] = useState<CategoryType[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<number>();
+    const [selectedCategory, setSelectedCategory] = useState<CategoryType>();
     const [update, setUpdate] = useState<number>();
 
     const fetchCategories = useCallback(async () => {
@@ -55,12 +54,12 @@ const AddCategoryButton = forwardRef<AddRoomRefProps, Props>(
       if (ideas.length !== 1) return;
 
       const category = await getCategories(ideas[0]);
-      if (category.data) setSelectedCategory(category.data[0].id);
+      if (category.data) setSelectedCategory(category.data[0]);
     };
 
-    const toggleCategory = (id: number) => {
-      if (selectedCategory !== id) {
-        setSelectedCategory(id);
+    const toggleCategory = (cat: CategoryType) => {
+      if (selectedCategory?.id !== cat.id) {
+        setSelectedCategory(cat);
       } else {
         setSelectedCategory(undefined);
       }
@@ -68,7 +67,7 @@ const AddCategoryButton = forwardRef<AddRoomRefProps, Props>(
 
     const setNewIdeaCategory = async (id: string) => {
       if (!selectedCategory) return;
-      setCategory(id, selectedCategory);
+      setCategory(id, selectedCategory.id);
       onReset();
     };
 
@@ -92,20 +91,22 @@ const AddCategoryButton = forwardRef<AddRoomRefProps, Props>(
     };
 
     useEffect(() => {
-      if (open) onReset();
+      onReset();
     }, [open, JSON.stringify(ideas)]);
 
     return (
       <>
         <Button variant="outlined" color="secondary" onClick={() => setOpen(true)} {...restOfProps}>
-          <AppIcon icon="add" pr={2} />
-          {t('actions.addToParent', {
-            var: t('scopes.categories.name'),
-          })}
+          <AppIcon icon={selectedCategory?.description_internal || 'add'} pr={2} />
+          {selectedCategory
+            ? selectedCategory.name
+            : t('actions.addToParent', {
+                var: t('scopes.categories.name'),
+              })}
         </Button>
         <Dialog onClose={onClose} open={open}>
           <DialogTitle>
-            {t('actions.addToParent', {
+            {t(selectedCategory ? 'actions.change' : 'actions.addToParent', {
               var: t('scopes.categories.name'),
             })}
           </DialogTitle>
@@ -116,9 +117,9 @@ const AddCategoryButton = forwardRef<AddRoomRefProps, Props>(
               <ListItem
                 disablePadding
                 key={category.id}
-                sx={{ bgcolor: category.id === selectedCategory ? 'disabled.main' : 'inherit' }}
+                sx={{ bgcolor: category.id === selectedCategory?.id ? 'disabled.main' : 'inherit' }}
               >
-                <ListItemButton onClick={() => toggleCategory(category.id)}>
+                <ListItemButton onClick={() => toggleCategory(category)}>
                   <ListItemAvatar>
                     <AppIcon icon={category.description_internal} />
                   </ListItemAvatar>
