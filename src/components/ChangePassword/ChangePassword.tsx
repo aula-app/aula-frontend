@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import AppIconButton from '../AppIconButton';
 import { useNavigate } from 'react-router-dom';
-import { localStorageSet } from '@/utils';
 import { useAppStore } from '@/store';
 
 interface Props {
@@ -75,9 +74,7 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
     setSuccess(!result.error);
 
     if (tmp_token && !result.error) {
-      console.log(result);
-      localStorageSet('token', result.data);
-      dispatch({ type: 'LOG_IN' });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.success'), type: 'success' } });
       navigate('/', { replace: true });
     }
   };

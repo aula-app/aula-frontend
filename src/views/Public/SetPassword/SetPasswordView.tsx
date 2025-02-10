@@ -1,7 +1,6 @@
 import { AppIconButton } from '@/components';
 import { checkPasswordKey, setPassword } from '@/services/login';
 import { useAppStore } from '@/store';
-import { localStorageSet } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -82,8 +81,7 @@ const fields = schema.fields;
         return;
       }
 
-      localStorageSet("token", result.JWT);
-      dispatch({ type: "LOG_IN" });
+      dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.success'), type: 'success' } });
       navigate("/", { replace: true });
     };
 
