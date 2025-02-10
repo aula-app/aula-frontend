@@ -79,10 +79,10 @@ export const baseRequest = async (
 ): Promise<GenericResponse> => {
   const api_url = localStorageGet('api_url');
   const jwt_token = tmp_token || localStorageGet('token');
-  const headers = { 'Content-Type': 'application/json' } as { 'Content-Type': string; Authorization?: string };
+  const headers = {} as { 'Content-Type': string; Authorization?: string };
 
-  if (!isJson) {
-    delete headers['Content-Type'];
+  if (isJson) {
+    headers['Content-Type'] = 'application/json';
   }
 
   if (!api_url || !jwt_token) {
@@ -99,13 +99,14 @@ export const baseRequest = async (
   }
 
   try {
-    const requestBody = isJson? JSON.stringify(data): data;
+    const requestBody = isJson ? JSON.stringify(data) : data;
     const requestData = {
       method: 'POST',
       headers: headers,
       body: requestBody,
     };
 
+    /* @ts-ignore */
     const request = await fetch(`${api_url}${url}`, requestData);
 
     const response = await request.json();
