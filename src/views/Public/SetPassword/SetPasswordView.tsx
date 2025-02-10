@@ -1,4 +1,4 @@
-import ChangePassword from '@/components/ChangePassword';
+import SetPassword from '@/components/SetPassword';
 import { checkPasswordKey } from '@/services/login';
 import { useAppStore } from '@/store';
 import { Alert, Collapse, Stack, Typography } from '@mui/material';
