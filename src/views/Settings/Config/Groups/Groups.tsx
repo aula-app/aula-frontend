@@ -46,7 +46,7 @@ const GroupView = () => {
     <Stack pb={3}>
       <Stack direction="row" flexWrap="wrap" gap={1}>
         <Chip
-          label={t('actions.add', { var: t('scopes.group.name') })}
+          label={t('actions.add', { var: t('scopes.groups.name') })}
           avatar={<AppIcon icon="add" />}
           onClick={() => setEdit()}
         />
