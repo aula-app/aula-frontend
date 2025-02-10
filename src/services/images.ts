@@ -5,5 +5,5 @@ export const uploadImage = async (file: File): Promise<any> => {
   formData.append('file', file, 'avatar.png');
   formData.append('fileType', 'avatar');
 
-  return baseRequest('/api/controllers/upload.php', formData);
+  return baseRequest('/api/controllers/upload.php', formData, false);
 };
