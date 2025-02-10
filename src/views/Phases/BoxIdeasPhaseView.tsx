@@ -1,13 +1,14 @@
+import AddCategoriesButton from '@/components/Buttons/AddCategories';
+import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
 import { IdeaForms } from '@/components/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { getBoxesByPhase } from '@/services/boxes';
-import { getWildIdeasByUser } from '@/services/dashboard';
 import { deleteIdea, editIdea, EditIdeaArguments, getIdeasByBox, IdeaArguments } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { Drawer, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -19,6 +20,8 @@ import { useParams } from 'react-router-dom';
 const BoxIdeasPhaseView = () => {
   const { t } = useTranslation();
   const { phase } = useParams();
+
+  const addCategory = useRef<AddCategoryRefProps>(null);
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +48,12 @@ const BoxIdeasPhaseView = () => {
         content: data.content,
         status: data.status,
       });
-      if (!request.error) onClose();
+      if (request.error) {
+        setError(request.error);
+        return;
+      }
+      addCategory.current?.setNewIdeaCategory(edit.hash_id);
+      onClose();
     }
   };
 
@@ -100,7 +108,9 @@ const BoxIdeasPhaseView = () => {
           onClose={onClose}
           onSubmit={onSubmit}
           defaultValues={typeof edit !== 'boolean' ? (edit as IdeaArguments) : undefined}
-        />
+        >
+          <AddCategoriesButton ideas={!!edit ? [edit.hash_id] : []} ref={addCategory} />
+        </IdeaForms>
       </Drawer>
     </Stack>
   );

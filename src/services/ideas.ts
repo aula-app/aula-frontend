@@ -92,7 +92,11 @@ export interface EditIdeaArguments extends IdeaArguments {
  * Adds a new idea to the database
  */
 
-export async function addIdea(args: AddIdeaArguments): Promise<GetIdeasResponse> {
+export interface AddIdeaResponse extends GenericResponse {
+  data: { hash_id: string } | null;
+}
+
+export async function addIdea(args: AddIdeaArguments): Promise<AddIdeaResponse> {
   const response = await databaseRequest(
     {
       model: 'Idea',
@@ -102,7 +106,7 @@ export async function addIdea(args: AddIdeaArguments): Promise<GetIdeasResponse>
     ['user_id', 'updater_id']
   );
 
-  return response as GetIdeasResponse;
+  return response as AddIdeaResponse;
 }
 
 /**

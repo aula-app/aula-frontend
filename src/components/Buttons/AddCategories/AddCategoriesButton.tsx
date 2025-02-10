@@ -1,5 +1,5 @@
 import AppIcon from '@/components/AppIcon';
-import { getCategories, setCategory } from '@/services/categories';
+import { addIdeaCategory, getCategories } from '@/services/categories';
 import { CategoryType } from '@/types/Scopes';
 import {
   Button,
@@ -14,7 +14,6 @@ import {
   ListItemText,
   Skeleton,
   Typography,
-  useTheme,
 } from '@mui/material';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,21 +25,19 @@ interface Props extends ButtonProps {
 /**
  * Interface that will be exposed to the parent component.
  */
-export interface AddRoomRefProps {
+export interface AddCategoryRefProps {
   setNewIdeaCategory: (id: string) => void;
 }
 
-const AddCategoryButton = forwardRef<AddRoomRefProps, Props>(
+const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
   ({ ideas = [], disabled = false, ...restOfProps }, ref) => {
     const { t } = useTranslation();
-    const theme = useTheme();
 
     const [open, setOpen] = useState(false);
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [categories, setCategories] = useState<CategoryType[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<CategoryType>();
-    const [update, setUpdate] = useState<number>();
 
     const fetchCategories = useCallback(async () => {
       setLoading(true);
@@ -67,7 +64,7 @@ const AddCategoryButton = forwardRef<AddRoomRefProps, Props>(
 
     const setNewIdeaCategory = async (id: string) => {
       if (!selectedCategory) return;
-      setCategory(id, selectedCategory.id);
+      addIdeaCategory(id, selectedCategory.id);
       onReset();
     };
 
@@ -77,7 +74,6 @@ const AddCategoryButton = forwardRef<AddRoomRefProps, Props>(
 
     const onSubmit = () => {
       setOpen(false);
-      if (ideas.length === 1) setNewIdeaCategory(ideas[0]);
     };
 
     const onClose = () => {
@@ -92,7 +88,7 @@ const AddCategoryButton = forwardRef<AddRoomRefProps, Props>(
 
     useEffect(() => {
       onReset();
-    }, [open, JSON.stringify(ideas)]);
+    }, [JSON.stringify(ideas)]);
 
     return (
       <>

@@ -1,5 +1,6 @@
 import AddBoxesButton from '@/components/Buttons/AddBoxes';
 import AddCategoriesButton from '@/components/Buttons/AddCategories';
+import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
 import { IdeaForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
@@ -44,6 +45,9 @@ const COLUMNS = [
 
 const IdeasView: React.FC = () => {
   const { t } = useTranslation();
+
+  const addCategory = useRef<AddCategoryRefProps>(null);
+
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
@@ -93,7 +97,11 @@ const IdeasView: React.FC = () => {
       custom_field1: data.custom_field1,
       custom_field2: data.custom_field2,
     });
-    if (request.error) return;
+    if (request.error || !request.data) {
+      setError(request.error);
+      return;
+    }
+    addCategory.current?.setNewIdeaCategory(request.data.hash_id);
     onClose();
   };
 
@@ -108,7 +116,12 @@ const IdeasView: React.FC = () => {
       custom_field1: data.custom_field1,
       custom_field2: data.custom_field2,
     });
-    if (!request.error) onClose();
+    if (request.error) {
+      setError(request.error);
+      return;
+    }
+    addCategory.current?.setNewIdeaCategory(idea.hash_id);
+    onClose();
   };
 
   const deleteIdeas = (items: Array<string>) =>
@@ -171,7 +184,7 @@ const IdeasView: React.FC = () => {
             typeof edit !== 'boolean' ? (ideas.find((idea) => idea.hash_id === edit) as IdeaArguments) : undefined
           }
         >
-          <AddCategoriesButton ideas={typeof edit === 'string' ? [edit] : []} />
+          <AddCategoriesButton ideas={typeof edit === 'string' ? [edit] : []} ref={addCategory} />
           <AddBoxesButton ideas={typeof edit === 'string' ? [edit] : []} />
         </IdeaForms>
       </Drawer>

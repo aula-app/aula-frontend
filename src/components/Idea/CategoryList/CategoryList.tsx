@@ -13,7 +13,7 @@ const LikeButton: React.FC<Props> = ({ idea }) => {
 
   const getCategory = async () => {
     const result = await getCategories(idea.hash_id);
-    if (result.data) setCategory(result.data);
+    if (result.data) setCategory(result.data[0]);
   };
 
   useEffect(() => {
