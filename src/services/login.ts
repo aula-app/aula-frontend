@@ -38,7 +38,7 @@ export const checkPasswordKey = async (secret: string) => {
   const api_url = localStorageGet('api_url');
 
   try {
-    const response = await fetch(`${apiUrl}/api/controllers/set_password.php?secret=${secret}`, {
+    const response = await fetch(`${api_url}/api/controllers/set_password.php?secret=${secret}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -67,14 +67,12 @@ export const setPassword = async (password: string, secret: string) => {
     "password": password
   }
   try {
-    const response = await fetch(`${apiUrl}/api/controllers/set_password.php`, {
+    const response = await fetch(`${api_url}/api/controllers/set_password.php`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: token ? `Bearer ${token}` : '',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(formData),
-      signal,
+      body: JSON.stringify(formData)
     });
 
     if (!response.ok) {
