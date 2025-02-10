@@ -44,7 +44,7 @@ const RecoveryPasswordView = () => {
       );
 
       if (response.success) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('auth.forgotPassword.forgotRequest'), type: 'success' } });
+        dispatch({ type: 'ADD_POPUP', message: { message: t('auth.forgotPassword.success'), type: 'success' } });
         navigate('/', { replace: true });
       } else {
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
