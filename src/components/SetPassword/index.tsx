@@ -1,3 +1,3 @@
-import ChangePassword from './ChangePassword';
+import SetPassword from './SetPassword';
 
-export { ChangePassword as default, ChangePassword };
+export { SetPassword as default, SetPassword };

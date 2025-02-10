@@ -50,7 +50,7 @@ const SetPasswordView = () => {
             {t('errors.invalidCode')}
           </Alert>
         </Collapse>
-        <ChangePassword disabled={isLoading} />
+        <SetPassword disabled={isLoading} />
       </Stack>
     </FormContainer>
   );
