@@ -38,7 +38,6 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
   const schema = yup
     .object({
       report: yup.string().required(t('forms.validation.required')),
-      content: yup.string(),
     })
     .required(t('forms.validation.required'));
 
