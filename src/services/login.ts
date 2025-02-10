@@ -32,16 +32,55 @@ export const loginUser = async (
 };
 
 export const checkPasswordKey = async (secret: string) => {
-  return baseRequest(`/api/controllers/set_password.php`, {
-    secret,
-  });
+  try {
+    const response = await fetch(`${apiUrl}/api/controllers/set_password.php?secret=${secret}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('NetworkError');
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error('Unknown error occurred');
+  }
+
 };
 
 export const setPassword = async (password: string, secret: string) => {
-  return baseRequest(`/api/controllers/set_password.php`, {
-    secret,
-    password,
-  });
+  const formData = {
+    "secret": secret,
+    "password": password
+  }
+  try {
+    const response = await fetch(`${apiUrl}/api/controllers/set_password.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token ? `Bearer ${token}` : '',
+      },
+      body: JSON.stringify(formData),
+      signal,
+    });
+
+    if (!response.ok) {
+      throw new Error('NetworkError');
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error('Unknown error occurred');
+  }
 };
 
 export const logout = () => {
