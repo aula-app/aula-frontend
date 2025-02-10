@@ -31,14 +31,14 @@ const DashBoard = ({ show = true }) => {
   };
   const fetchMessages = async () => {
     const response = await getMessages();
-    if (!response.error && response.data) setMessages(response.data.length);
+    if (!response.error) setMessages(response.data?.length || 0);
   };
   const fetchTexts = async () => {
     const response = await getAnnouncements({
       offset: 0,
       limit: 0,
     });
-    if (!response.error && response.data) setReports(response.data.length);
+    if (!response.error) setReports(response.data?.length || 0);
   };
 
   useEffect(() => {

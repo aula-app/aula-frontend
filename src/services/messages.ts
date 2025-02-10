@@ -42,10 +42,7 @@ export const getMessages = async (): Promise<GetMessagesResponse> => {
     {
       model: 'Message',
       method: hasSuperModAccess ? 'getMessages' : 'getMessagesByUser',
-      arguments: {
-        offset: 0,
-        limit: 0,
-      },
+      arguments: {},
     },
     hasSuperModAccess ? [] : ['user_id']
   );
