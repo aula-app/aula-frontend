@@ -49,7 +49,9 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
 
   const getIcon = async () =>
     await getCategories(idea.hash_id).then((response) => {
-      setIcon(response.data?.description_internal);
+      if (!response.data) return;
+      const category = response.data[0];
+      setIcon(category.description_internal);
     });
 
   const getVariant = () => {
