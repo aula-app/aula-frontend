@@ -1,10 +1,7 @@
-import AppIconButton from '@/components/AppIconButton';
-import MoreOptions from '@/components/MoreOptions';
 import UserAvatar from '@/components/UserAvatar';
 import { CommentType, IdeaType } from '@/types/Scopes';
-import { checkPermissions, checkSelf, getDisplayDate } from '@/utils';
+import { getDisplayDate } from '@/utils';
 import { Stack, Typography } from '@mui/material';
-import LikeButton from '../../Buttons/LikeButton';
 
 interface Props {
   info: IdeaType | CommentType;
@@ -14,7 +11,7 @@ interface Props {
 const UserBar: React.FC<Props> = ({ info, disabled = false }) => {
   return (
     <Stack direction="row" alignItems="center">
-      <UserAvatar id={String(info.user_id)} />
+      <UserAvatar id={String(info.user_hash_id)} />
       <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
         <Typography variant="caption" lineHeight={1.5}>
           {getDisplayDate(info.created)}

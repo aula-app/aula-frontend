@@ -74,11 +74,16 @@ const addError = (error: string) => new CustomEvent('AppErrorDialog', { detail: 
 export const baseRequest = async (
   url: string,
   data: ObjectPropByName,
+  isJson: boolean = true,
   tmp_token?: string
 ): Promise<GenericResponse> => {
   const api_url = localStorageGet('api_url');
   const jwt_token = tmp_token || localStorageGet('token');
-  const headers = { 'Content-Type': 'application/json' } as { 'Content-Type': string; Authorization?: string };
+  const headers = {} as { 'Content-Type': string; Authorization?: string };
+
+  if (isJson) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   if (!api_url || !jwt_token) {
     document.dispatchEvent(addError(t('errors.invalidToken')));
@@ -94,12 +99,14 @@ export const baseRequest = async (
   }
 
   try {
+    const requestBody = isJson ? JSON.stringify(data) : data;
     const requestData = {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify(data),
+      body: requestBody,
     };
 
+    /* @ts-ignore */
     const request = await fetch(`${api_url}${url}`, requestData);
 
     const response = await request.json();
