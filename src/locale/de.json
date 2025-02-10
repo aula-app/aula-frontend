@@ -96,6 +96,7 @@
     "accountSuspended": "Dein Account wurde{{var}} gesperrt. Bitte kontaktiere deinen Administrator",
     "databaseError": "Daten konnten nicht abgerufen werden",
     "default": "Etwas ist schief gelaufen",
+    "failed": "Anfrage fehlgeschlagen",
     "invalidCode": "Ungültiger Benutzercode",
     "invalidCredentials": "Ungültiger Benutzername oder Passwort",
     "invalidPassword": "Ungültiges Passwort",

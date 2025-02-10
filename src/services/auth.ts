@@ -14,9 +14,13 @@ export const handleOAuthLogin = (token: string | undefined) => {
   return true;
 };
 
-export const changePassword = async (oldPass: string, newPass: string) => {
-  return baseRequest(`/api/controllers/change_password.php`, {
-    password: oldPass,
-    new_password: newPass,
-  });
+export const changePassword = async (oldPass: string, newPass: string, tmp_token?: string) => {
+  return baseRequest(
+    `/api/controllers/change_password.php`,
+    {
+      password: oldPass,
+      new_password: newPass,
+    },
+    tmp_token
+  );
 };

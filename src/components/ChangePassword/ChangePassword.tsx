@@ -6,10 +6,12 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import AppIconButton from '../AppIconButton';
-import { setPassword } from '@/services/login';
-import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { localStorageSet } from '@/utils';
+import { useAppStore } from '@/store';
 
 interface Props {
+  tmp_token?: string;
   disabled?: boolean;
 }
 
@@ -21,9 +23,11 @@ export interface ChangePasswordMethods {
  * Renders User info with Avatar
  * @component ChangePassword
  */
-const ChangePassword: React.FC<Props> = ({ disabled = false }) => {
+const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
   const { t } = useTranslation();
-  const { key } = useParams();
+  const navigate = useNavigate();
+  const [, dispatch] = useAppStore();
+
   const [showMessage, setShowMessage] = useState(false);
   const [messageSuccess, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState<Record<keyof typeof fields, boolean>>({
@@ -34,13 +38,11 @@ const ChangePassword: React.FC<Props> = ({ disabled = false }) => {
 
   const schema = yup
     .object({
-      oldPassword: key
-        ? yup.string().notRequired()
-        : yup
-            .string()
-            .required(t('forms.validation.required'))
-            .min(4, t('forms.validation.minLength', { var: 4 }))
-            .max(32, t('forms.validation.maxLength', { var: 32 })),
+      oldPassword: yup
+        .string()
+        .required(t('forms.validation.required'))
+        .min(4, t('forms.validation.minLength', { var: 4 }))
+        .max(32, t('forms.validation.maxLength', { var: 32 })),
       newPassword: yup
         .string()
         .required(t('forms.validation.required'))
@@ -67,11 +69,17 @@ const ChangePassword: React.FC<Props> = ({ disabled = false }) => {
   const fields = schema.fields;
 
   const onSubmit = async (data: SchemaType) => {
-    const result = key
-      ? await setPassword(data.newPassword, key)
-      : await changePassword(data.oldPassword as 'string', data.newPassword);
+    const result = await changePassword(data.oldPassword, data.newPassword, tmp_token);
 
+    setShowMessage(true);
     setSuccess(!result.error);
+
+    if (tmp_token && !result.error) {
+      console.log(result);
+      localStorageSet('token', result.data);
+      dispatch({ type: 'LOG_IN' });
+      navigate('/', { replace: true });
+    }
   };
 
   const resetFields = () => {
@@ -86,6 +94,15 @@ const ChangePassword: React.FC<Props> = ({ disabled = false }) => {
   return (
     <FormContainer>
       <Stack gap={2} mt={2}>
+        <Collapse in={showMessage}>
+          <Alert
+            variant="outlined"
+            severity={messageSuccess ? 'success' : 'error'}
+            onClose={() => setShowMessage(false)}
+          >
+            {messageSuccess ? t('auth.password.success') : t('errors.invalidPassword')}
+          </Alert>
+        </Collapse>
         <Typography variant="h6">{t('auth.password.change')}</Typography>
         <Stack gap={1} direction="row" flexWrap="wrap">
           {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
@@ -118,15 +135,6 @@ const ChangePassword: React.FC<Props> = ({ disabled = false }) => {
         </Stack>
 
         <Stack direction="row" justifyContent="end" gap={2}>
-          <Collapse in={showMessage}>
-            <Alert
-              variant="outlined"
-              severity={messageSuccess ? 'success' : 'error'}
-              onClose={() => setShowMessage(false)}
-            >
-              {messageSuccess ? t('auth.password.success') : t('errors.invalidPassword')}
-            </Alert>
-          </Collapse>
           <Button color="error" disabled={disabled} onClick={resetFields}>
             {t('actions.cancel')}
           </Button>

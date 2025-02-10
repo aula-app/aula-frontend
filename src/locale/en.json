@@ -96,6 +96,7 @@
     "accountSuspended": "Your account has been suspended{{var}}. Please contact your administrator",
     "databaseError": "Failed to fetch data",
     "default": "Something went wrong",
+    "failed": "Request failed",
     "invalidCode": "Invalid user code",
     "invalidCredentials": "Invalid username or password",
     "invalidPassword": "Invalid password",

@@ -1,7 +1,7 @@
 import { AppIconButton, AppLink } from "@/components";
 import { loginUser } from "@/services/login";
 import { useAppStore } from "@/store";
-import { localStorageGet, localStorageSet } from "@/utils";
+import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Alert,
@@ -84,6 +84,13 @@ const LoginView = () => {
               : t('errors.accountSuspended', {var: response.data ? t('errors.accountSuspendDate', {var: response.data}) : ''})
             : t('errors.invalidCredentials')
         );
+        return;
+      }
+
+      const responseJWT = parseJwt(response.JWT || '');
+
+      if(responseJWT?.temp_pw) {
+        navigate(`/password`, { replace: true, state: { tmp_jwt: response.JWT } });
         return;
       }
 
