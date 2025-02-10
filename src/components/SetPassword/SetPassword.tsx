@@ -61,7 +61,8 @@ const SetPassword: React.FC<Props> = ({ disabled = false }) => {
   const onSubmit = async (data: SchemaType) => {
     const result = await setPassword(data.newPassword, key)
 
-    setSuccess(!result.error);
+    if (result.error)
+      setSuccess(!result.error);
   };
 
   const resetFields = () => {
