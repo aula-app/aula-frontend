@@ -64,7 +64,6 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
       <Dialog
         open={isOpen}
         onClose={() => setOpen(false)}
-        onClick={() => setDelete(selected)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -83,7 +82,7 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
           <Button onClick={() => setOpen(false)} color="secondary" autoFocus>
             {t('actions.cancel')}
           </Button>
-          <Button color="error" variant="contained">
+          <Button color="error" variant="contained" onClick={() => setDelete(selected)}>
             {t('actions.delete')}
           </Button>
         </DialogActions>
