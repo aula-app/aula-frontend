@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, StatusField } from '../DataFields';
+import AddCategoriesButton from '../Buttons/AddCategories';
 
 /**
  * IdeaForms component is used to create or edit an idea.

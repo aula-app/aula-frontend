@@ -1,5 +1,5 @@
 import AddBoxesButton from '@/components/Buttons/AddBoxes';
-import { AddBoxRefProps } from '@/components/Buttons/AddBoxes/AddBoxesButton';
+import AddCategoriesButton from '@/components/Buttons/AddCategories';
 import { IdeaForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
@@ -171,6 +171,7 @@ const IdeasView: React.FC = () => {
             typeof edit !== 'boolean' ? (ideas.find((idea) => idea.hash_id === edit) as IdeaArguments) : undefined
           }
         >
+          <AddCategoriesButton ideas={typeof edit === 'string' ? [edit] : []} />
           <AddBoxesButton ideas={typeof edit === 'string' ? [edit] : []} />
         </IdeaForms>
       </Drawer>
