@@ -1,4 +1,4 @@
-import { AppIcon } from '@/components';
+import { AppIcon, AppIconButton } from '@/components';
 import { MarkdownEditor } from '@/components/DataFields';
 import UserAvatar from '@/components/UserAvatar';
 import { addMessage } from '@/services/messages';
@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import RestrictedField from './RestrictedField';
 import { UserType } from '@/types/Scopes';
+import ImageEditor from '../ImageEditor';
 
 interface Props {
   user: UserType;
@@ -37,6 +38,7 @@ const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
   const [, dispatch] = useAppStore();
 
   const [updateRequests, setUpdateRequests] = useState<Array<fieldOptions>>([]);
+  const [editImage, setEditImage] = useState(false);
 
   const schema = yup.object({
     realname: yup
@@ -127,7 +129,24 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
   return (
     <FormContainer>
       <Stack direction="row" flexWrap="wrap" py={2} gap={2}>
-        <UserAvatar id={user.hash_id} size={180} sx={{ mx: 'auto' }} />
+        <Button color="secondary" onClick={() => setEditImage(true)} sx={{ position: 'relative' }}>
+          <AppIcon
+            icon="edit"
+            sx={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              aspectRatio: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 999,
+              bgcolor: 'background.paper',
+              zIndex: 999,
+            }}
+          />
+          <UserAvatar id={user.hash_id} size={180} sx={{ mx: 'auto' }} />
+        </Button>
+        {user && <ImageEditor isOpen={editImage} onClose={() => setEditImage(false)} id={user.hash_id} />}
         <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
           <Controller
             name="displayname"

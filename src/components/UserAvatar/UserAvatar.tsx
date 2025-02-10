@@ -26,7 +26,6 @@ const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
 
   return (
     <Avatar
-      {...restOfProps}
       sx={{
         width: size,
         height: size,
@@ -35,6 +34,7 @@ const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
       }}
       alt="User avatar"
       src={`/files/${userAvatar}` || ''}
+      {...restOfProps}
     >
       {!userAvatar && <AppIcon icon="avatar" />}
     </Avatar>
