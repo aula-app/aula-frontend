@@ -40,6 +40,21 @@ export async function addIdeaCategory(idea_id: string, category_id: number): Pro
   return response as GenericResponse;
 }
 
+/**
+ * Fetches the categories of an idea
+ * @param idea_id - The ID of the idea to like
+ * @returns Promise resolving to the updated idea list
+ */
+
+export async function removeIdeaCategory(idea_id: string, category_id: number): Promise<GenericResponse> {
+  const response = await databaseRequest({
+    model: 'Idea',
+    method: 'removeIdeaFromCategory',
+    arguments: { idea_id, category_id },
+  });
+
+  return response as GenericResponse;
+}
 // /**
 //  * Fetches the categories of an idea
 //  * @param idea_id - The ID of the idea to like

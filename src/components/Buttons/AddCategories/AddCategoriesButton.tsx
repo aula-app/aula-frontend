@@ -1,5 +1,5 @@
 import AppIcon from '@/components/AppIcon';
-import { addIdeaCategory, getCategories } from '@/services/categories';
+import { addIdeaCategory, getCategories, removeIdeaCategory } from '@/services/categories';
 import { CategoryType } from '@/types/Scopes';
 import {
   Button,
@@ -38,6 +38,7 @@ const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
     const [error, setError] = useState<string | null>(null);
     const [categories, setCategories] = useState<CategoryType[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<CategoryType>();
+    const [originalCategory, setOriginalCategory] = useState<CategoryType>();
 
     const fetchCategories = useCallback(async () => {
       setLoading(true);
@@ -51,7 +52,9 @@ const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
       if (ideas.length !== 1) return;
 
       const category = await getCategories(ideas[0]);
-      if (category.data) setSelectedCategory(category.data[0]);
+      if (!category.data) return;
+      setSelectedCategory(category.data[0]);
+      setOriginalCategory(category.data[0]);
     };
 
     const toggleCategory = (cat: CategoryType) => {
@@ -63,8 +66,12 @@ const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
     };
 
     const setNewIdeaCategory = async (id: string) => {
-      if (!selectedCategory) return;
-      addIdeaCategory(id, selectedCategory.id);
+      if (!selectedCategory && originalCategory) removeIdeaCategory(id, originalCategory.id);
+      if (
+        (selectedCategory && !originalCategory) ||
+        (selectedCategory && originalCategory && selectedCategory.id !== originalCategory.id)
+      )
+        addIdeaCategory(id, selectedCategory.id);
       onReset();
     };
 
