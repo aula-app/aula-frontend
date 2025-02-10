@@ -3,10 +3,11 @@ import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form-mui';
+import { Controller, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, PhaseDurationFields, StatusField } from '../DataFields';
+import RoomImageSelector from '../DataFields/RoomImageSelector';
 
 /**
  * RoomForms component is used to create or edit an room.
@@ -26,6 +27,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose, onSubmit 
   const schema = yup.object({
     room_name: yup.string().required(t('forms.validation.required')),
     description_public: yup.string().required(t('forms.validation.required')),
+    description_internal: yup.string().required(t('forms.validation.required')),
     phase_duration_1: yup.number().required(t('forms.validation.required')),
     phase_duration_2: yup.number().required(t('forms.validation.required')),
     phase_duration_3: yup.number().required(t('forms.validation.required')),
@@ -33,6 +35,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose, onSubmit 
   } as Record<keyof RoomArguments, any>);
 
   const {
+    setValue,
     register,
     reset,
     control,
@@ -59,23 +62,38 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose, onSubmit 
             </Typography>
             {checkPermissions(40) && <StatusField control={control} />}
           </Stack>
-          <Stack gap={2}>
-            <TextField
-              fullWidth
-              required
-              label={t(`settings.columns.room_name`)}
-              size="small"
-              error={!!errors.room_name}
-              helperText={`${errors.room_name?.message || ' '}`}
-              {...register('room_name')}
-            />
-            <MarkdownEditor
-              required
-              name="description_public"
+          <Stack gap={2} direction="row" flexWrap="wrap">
+            <Controller
+              name="description_internal"
               control={control}
-              sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
+              render={({ field }) => (
+                <>
+                  <RoomImageSelector
+                    image={field.value || control._defaultValues['description_internal'] || 'DI:0:0'}
+                    onClose={() => reset({ ...defaultValues })}
+                    onSubmit={(value) => setValue('description_internal', value)}
+                  />
+                </>
+              )}
             />
-            <PhaseDurationFields control={control} required />
+            <Stack gap={2}>
+              <TextField
+                fullWidth
+                required
+                label={t(`settings.columns.room_name`)}
+                size="small"
+                error={!!errors.room_name}
+                helperText={`${errors.room_name?.message || ' '}`}
+                {...register('room_name')}
+              />
+              <MarkdownEditor
+                required
+                name="description_public"
+                control={control}
+                sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
+              />
+              <PhaseDurationFields control={control} required />
+            </Stack>
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error">

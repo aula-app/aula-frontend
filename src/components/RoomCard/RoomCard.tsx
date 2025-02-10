@@ -33,7 +33,7 @@ const parseDescription = (description: string) => {
  * @param className - Optional CSS class name
  */
 const RoomCard = ({ room, className }: RoomCardProps) => {
-  const { isDefaultImage, imageNumber, imageShift } = parseDescription(room.description_internal);
+  const { imageNumber, imageShift } = parseDescription(room.description_internal);
 
   return (
     <Grid
@@ -52,16 +52,16 @@ const RoomCard = ({ room, className }: RoomCardProps) => {
             <Typography variant="h6" noWrap title={room.room_name}>
               {capitalize(room.room_name)}
             </Typography>
-            {isDefaultImage ? (
-              <DefaultImage image={imageNumber} shift={imageShift} />
-            ) : (
+            {/* {isDefaultImage ? ( */}
+            <DefaultImage image={imageNumber || 0} shift={imageShift || 0} />
+            {/* ) : (
               <CardMedia
                 component="img"
                 image={room.description_internal}
                 alt={`${room.room_name} background`}
                 sx={{ borderRadius: '10px', objectFit: 'cover', flex: 1, aspectRatio: '1.33', width: '100%' }}
               />
-            )}
+            )} */}
           </Stack>
         </AppLink>
         <PhaseBar room={room.hash_id} />
