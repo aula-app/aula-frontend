@@ -43,7 +43,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose, onSubmit 
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { room_name: ' ' },
+    defaultValues: { room_name: (defaultValues)?' ':'' },
   });
 
   useEffect(() => {

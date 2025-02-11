@@ -40,7 +40,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { headline: ' ' },
+    defaultValues: { headline: (defaultValues)?' ':'' },
   });
 
   useEffect(() => {
