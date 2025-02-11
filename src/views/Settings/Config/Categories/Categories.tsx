@@ -1,5 +1,7 @@
 import { AppIcon } from '@/components';
 import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
+import CategoryForms from '@/components/DataForms/CategoryForms';
+import { CategoryArguments } from '@/services/categories';
 import { CategoryType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
@@ -11,15 +13,17 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Drawer,
   Stack,
+  Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const CatView = () => {
+const CatView: React.FC = () => {
   const { t } = useTranslation();
   const [categories, setCategories] = useState<CategoryType[]>([]);
-  const [editCat, setEditCat] = useState(false);
+  const [editCat, setEditCat] = useState<CategoryType | boolean>(false);
   const [deleteCat, setDeleteCat] = useState<CategoryType>();
 
   const categoriesFetch = async () =>
@@ -30,10 +34,6 @@ const CatView = () => {
     }).then((response) => {
       if (response.data) setCategories(response.data ? response.data : []);
     });
-
-  const setEdit = (item?: CategoryType) => {
-    setEditCat(true);
-  };
 
   const onDelete = async () => {};
 
@@ -48,12 +48,13 @@ const CatView = () => {
   }, []);
 
   return (
-    <Stack pb={3}>
+    <Stack gap={2}>
+      <Typography variant="h6">{t('scopes.categories.name')}</Typography>
       <Stack direction="row" flexWrap="wrap" gap={1}>
         <Chip
-          label={t('actions.add', { var: t('scopes.categories.name') })}
+          label={t('actions.add', { var: t('scopes.categories.name').toLowerCase() })}
           avatar={<AppIcon icon="add" />}
-          onClick={() => setEdit()}
+          onClick={() => setEditCat(true)}
         />
         {categories.map((category, key) => {
           const currentIcon = category.description_internal as keyof typeof CAT_ICONS;
@@ -62,14 +63,19 @@ const CatView = () => {
               key={key}
               label={category.name}
               avatar={<AppIcon icon={currentIcon} />}
-              onClick={() => setEdit(category)}
+              onClick={() => setEditCat(category)}
               onDelete={() => setDeleteCat(category)}
             />
           );
         })}
       </Stack>
-      {/* <EditData scope="categories" item={selectedItem} isOpen={!!editCat} onClose={onClose} />
-      <DeleteData scope="categories" id={Number(selectedItem?.id)} isOpen={!!deleteCat} onClose={onClose} /> */}
+      <Drawer anchor="bottom" open={!!editCat} onClose={onClose} sx={{ overflowY: 'auto' }}>
+        <CategoryForms
+          onClose={onClose}
+          onSubmit={() => {}}
+          defaultValues={typeof editCat !== 'boolean' ? editCat : undefined}
+        />
+      </Drawer>
       <Dialog
         open={!!deleteCat}
         onClose={onClose}

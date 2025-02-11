@@ -1,6 +1,8 @@
 import { Stack } from '@mui/material';
 import CustomFields from './CustomFields';
 import QuorumSettings from './QuorumSettings';
+import { InstanceResponse } from '@/types/Generics';
+import Categories from '../Categories';
 
 interface Props {
   onReload: () => void | Promise<void>;
@@ -12,8 +14,7 @@ interface Props {
 const IdeaSettings = ({ onReload }: Props) => {
   return (
     <Stack gap={2}>
-      <QuorumSettings onReload={onReload} />
-      <CustomFields onReload={onReload} />
+      <Categories />
     </Stack>
   );
 };

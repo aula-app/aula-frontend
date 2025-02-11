@@ -22,6 +22,77 @@ export async function getCategories(idea_id?: string): Promise<GetCategoriesResp
 }
 
 /**
+ * Sets category update types
+ */
+
+export interface CategoryArguments {
+  name: string;
+  description_internal: string; // label
+  status?: string;
+}
+
+export interface EditCategoryArguments extends CategoryArguments {
+  category_id: string;
+}
+
+/**
+ * Adds a new idea to the database
+ */
+
+export interface AddResponse extends GenericResponse {
+  data: { hash_id: string } | null;
+}
+
+export async function addCategory(args: CategoryArguments): Promise<AddResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'addIdea',
+      arguments: args,
+    },
+    ['user_id', 'updater_id']
+  );
+
+  return response as AddResponse;
+}
+
+/**
+ * Edit an idea on the database
+ */
+
+export async function editCategory(args: EditCategoryArguments): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'editIdea',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+/**
+ * Removes an idea from the database
+ */
+
+export async function deleteCategory(id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'deleteIdea',
+      arguments: {
+        idea_id: id,
+      },
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+/**
  * Fetches the categories of an idea
  * @param idea_id - The ID of the idea to like
  * @returns Promise resolving to the updated idea list

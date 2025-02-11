@@ -1,3 +1,4 @@
+import { getQuorum } from '@/services/vote';
 import { useAppStore } from '@/store';
 import { ObjectPropByName } from '@/types/Generics';
 import { databaseRequest } from '@/utils';
@@ -28,16 +29,11 @@ const QuorumSettings = ({ onReload }: Props) => {
     ),
   });
 
-  async function getQuorum() {
-    await databaseRequest({
-      model: 'Settings',
-      method: 'getQuorum',
-      arguments: {},
-    }).then((response) => {
-      if (!response.data) return;
-      setValue('quorum_wild_ideas', Number(response.data.quorum_wild_ideas));
-      setValue('quorum_votes', Number(response.data.quorum_votes));
-    });
+  async function getQuorumValues() {
+    const response = await getQuorum();
+    if (!response.data) return;
+    setValue('quorum_wild_ideas', Number(response.data.quorum_wild_ideas));
+    setValue('quorum_votes', Number(response.data.quorum_votes));
   }
 
   async function addQuorum(fieldValues: ObjectPropByName) {
@@ -62,7 +58,7 @@ const QuorumSettings = ({ onReload }: Props) => {
   }
 
   useEffect(() => {
-    getQuorum();
+    getQuorumValues();
   }, []);
 
   const marks = [
@@ -96,12 +92,12 @@ const QuorumSettings = ({ onReload }: Props) => {
     <Stack gap={2}>
       <Typography variant="h6">{t(`settings.labels.quorum`)}</Typography>
       <Typography variant="subtitle2" color="secondary">
-        {t(`scopes.idea.plural`).replace(/^./, (char) => char.toUpperCase())}
+        {t(`scopes.ideas.plural`).replace(/^./, (char) => char.toUpperCase())}
       </Typography>
       <Controller
         name="quorum_wild_ideas"
         control={control}
-        defaultValue={50}
+        defaultValue={0}
         render={({ field: { value, ...field } }) => (
           <Slider
             {...field}
@@ -123,7 +119,7 @@ const QuorumSettings = ({ onReload }: Props) => {
       <Controller
         name="quorum_votes"
         control={control}
-        defaultValue={50}
+        defaultValue={0}
         render={({ field: { value, ...field } }) => (
           <Slider
             {...field}

@@ -15,6 +15,8 @@ import Groups from './Groups';
 import TimedCommands from './TimedCommands';
 import IdeaSettings from './IdeaSettings';
 import UsersSettings from './UsersSettings';
+import { getGlobalConfigs, getInstanceSettings } from '@/services/config';
+import QuorumSettings from './IdeaSettings/QuorumSettings';
 
 /** * Renders "Config" view
  * url: /settings/config
@@ -23,32 +25,20 @@ const ConfigView = () => {
   const { t } = useTranslation();
   const [config, setConfig] = useState<ConfigResponse>();
   const [settings, setSettings] = useState<InstanceResponse>();
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<string>();
 
   const getConfig = async () => {
-    await databaseRequest({
-      model: 'Settings',
-      method: 'getGlobalConfig',
-      arguments: {},
-    }).then((response) => {
-      if (response.data) {
-        setConfig(response.data);
-        setExpanded(null);
-      }
-    });
+    const response = await getGlobalConfigs();
+    if (!response.data) return;
+    setConfig(response.data);
+    setExpanded(undefined);
   };
 
   const getSettings = async () => {
-    await databaseRequest({
-      model: 'Settings',
-      method: 'getInstanceSettings',
-      arguments: {},
-    }).then((response) => {
-      if (response.data) {
-        setSettings(response.data);
-        setExpanded(null);
-      }
-    });
+    const response = await getInstanceSettings();
+    if (!response.data) return;
+    setSettings(response.data);
+    setExpanded(undefined);
   };
 
   const loadData = () => {
@@ -57,19 +47,20 @@ const ConfigView = () => {
   };
 
   const toggleExpanded = (panel: string) => {
-    expanded !== panel ? setExpanded(panel) : setExpanded(null);
+    expanded !== panel ? setExpanded(panel) : setExpanded(undefined);
   };
 
-  const closePanels = () => setExpanded(null);
+  const closePanels = () => setExpanded(undefined);
 
   useEffect(() => {
     loadData();
   }, []);
 
   const SETTINGS_PANELS = [
-    { name: 'category', role: 30, component: <Categories /> },
-    { name: 'group', role: 50, component: <Groups /> },
-    { name: 'idea', role: 50, component: <IdeaSettings onReload={getConfig} /> },
+    // { name: 'category', role: 30, component: <Categories /> },
+    // { name: 'group', role: 50, component: <Groups /> },
+    { name: 'idea', role: 50, component: <Categories /> },
+    { name: 'vote', role: 50, component: <QuorumSettings onReload={getConfig} /> },
     { name: 'user', role: 50, component: <UsersSettings onReload={closePanels} /> },
     { name: 'time', role: 50, component: <TimeSettings config={config} onReload={getConfig} /> },
     { name: 'login', role: 50, component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
