@@ -47,10 +47,7 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
       >
         <AppIcon icon={phases[box.phase_id]} sx={{ mx: 1 }} />
         <Typography variant="caption" mr="auto" noWrap>
-          {t('patterns.on', {
-            a: t('delegation.status.undelegated', { var: box.ideas_num }),
-            b: t('phases.phase', { var: t(`phases.${phases[box.phase_id]}`) }).toLowerCase(),
-          })}
+          {t(`phases.id-${box.phase_id}`, { var: box.ideas_num })}
         </Typography>
         <MoreOptions
           item={box}
