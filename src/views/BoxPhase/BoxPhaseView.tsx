@@ -61,6 +61,10 @@ const BoxPhaseView = () => {
       phase_id: Number(phase) as RoomPhases,
       name: data.name,
       description_public: data.description_public,
+      phase_duration_1: data.phase_duration_1,
+      phase_duration_2: data.phase_duration_2,
+      phase_duration_3: data.phase_duration_3,
+      phase_duration_4: data.phase_duration_4,
       status: data.status,
     });
     if (!request.error) onClose();

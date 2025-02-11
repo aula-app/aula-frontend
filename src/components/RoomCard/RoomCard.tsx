@@ -50,7 +50,7 @@ const RoomCard = ({ room, className }: RoomCardProps) => {
             }}
           >
             <Typography variant="h6" noWrap title={room.room_name}>
-              {capitalize(room.room_name)}
+              {room.room_name || 'AULA'}
             </Typography>
             {/* {isDefaultImage ? ( */}
             <DefaultImage image={imageNumber || 0} shift={imageShift || 0} />

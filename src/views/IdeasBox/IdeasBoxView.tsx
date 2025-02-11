@@ -43,18 +43,13 @@ const IdeasBoxView = () => {
   }, [box_id]);
 
   const boxEdit = (box: BoxType) => {
-    setEdit({
-      name: box.name,
-      description_public: box.description_public,
-      phase_id: box.phase_id,
-      topic_id: box.hash_id,
-    });
+    setEdit(box);
   };
 
   const boxUpdate = async (data: EditBoxArguments) => {
-    if (!(typeof edit === 'object') || !edit.topic_id) return;
+    if (!(typeof edit === 'object') || !edit.hash_id) return;
     const request = await editBox({
-      topic_id: edit.topic_id,
+      topic_id: edit.hash_id,
       name: data.name,
       description_public: data.description_public,
       description_internal: data.description_internal,
@@ -97,12 +92,7 @@ const IdeasBoxView = () => {
     setIdeasLoading(false);
   }, [box_id]);
 
-  /**
-   * Delegation data
-   */
-
   const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>([]);
-  //const [delegationDialog, setDelegationDialog] = useState(false);
 
   const fetchDelegation = useCallback(async () => {
     if (!box_id) return;
@@ -112,24 +102,6 @@ const IdeasBoxView = () => {
     if (!response.error && response.data) setDelegationStatus(response.data);
     setIdeasLoading(false);
   }, [box_id]);
-
-  // const getDelegation = async () =>
-  //   await databaseRequest(
-  //     {
-  //       model: 'User',
-  //       method: 'getDelegationStatus',
-  //       arguments: { topic_id: box_id },
-  //     },
-  //     ['user_id']
-  //   ).then((response) => {
-  //     if (!response.data || !response.data) return;
-  //     setDelegationStatus(response.data as DelegationType[]);
-  //   });
-
-  // const closeAdd = () => {
-  //   boxIdeasFetch();
-  //   setAdd(false);
-  // };
 
   useEffect(() => {
     fetchIdeas();
@@ -153,9 +125,10 @@ const IdeasBoxView = () => {
       {!isBoxLoading && box && <BoxCard box={box} onDelete={() => boxDelete()} onEdit={() => boxEdit(box)} disabled />}
       <Stack direction="row" pt={3} px={1} alignItems="center">
         <Typography variant="h6">
-         {box && t(`phases.id-${box.phase_id}`, {
-            var: ideas.length,
-          })}
+          {box &&
+            t(`phases.id-${box.phase_id}`, {
+              var: ideas.length,
+            })}
         </Typography>
         {phase === '30' && (
           <Stack direction="row" position="relative" alignItems="center" sx={{ ml: 'auto', pr: 3 }}>
@@ -188,34 +161,6 @@ const IdeasBoxView = () => {
             </Grid>
           ))}
       </Grid>
-      {/* {checkPermissions(20) && phase === '10' && (
-          <>
-            <Fab
-              aria-label="add"
-              color="primary"
-              sx={{
-                position: 'fixed',
-                bottom: 40,
-                alignSelf: 'center',
-              }}
-              onClick={() => setAdd(true)}
-            >
-              <AppIcon icon="idea" />
-            </Fab>
-            <EditData scope="ideas" isOpen={add} onClose={closeAdd} otherData={{ room_id: params.room_id }} />
-          </>
-        )}
-      </Stack>
-      {delegationStatus && (
-        <DelegateVote
-          isOpen={delegationDialog}
-          delegate={delegationStatus}
-          onClose={() => {
-            setDelegationDialog(false);
-            getDelegation();
-          }}
-        />
-      )} */}
       <Drawer anchor="bottom" open={!!edit} onClose={boxClose} sx={{ overflowY: 'auto' }}>
         <BoxForms onClose={boxClose} onSubmit={boxUpdate} defaultValues={edit} />
       </Drawer>
