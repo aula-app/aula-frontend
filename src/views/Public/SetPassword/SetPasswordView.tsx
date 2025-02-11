@@ -99,7 +99,7 @@ const fields = schema.fields;
 
   return (
     <FormContainer>
-      <Stack spacing={3}>
+      <Stack gap={2}>
         <Typography variant="h5">{t('auth.password.set')}</Typography>
         <Collapse in={!isValid}>
           <Alert variant="outlined" severity="error" onClose={() => setValid(true)}>
@@ -107,7 +107,7 @@ const fields = schema.fields;
           </Alert>
         </Collapse>
         <FormContainer>
-      <Stack gap={2} mt={2}>
+      <Stack gap={2}>
         <Stack gap={1} direction="row" flexWrap="wrap">
           {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
             <TextField
@@ -118,7 +118,7 @@ const fields = schema.fields;
               sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
               {...register(field)}
               error={!!errors[field]}
-              helperText={`${errors[field]?.message}`}
+              helperText={`${errors[field]?.message || ''}`}
               slotProps={{
                 input: {
                   endAdornment: (

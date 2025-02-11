@@ -127,7 +127,7 @@ const PhaseDurationFields: React.FC<Props> = ({
           />
         ))}
       </Stack>
-      <FormHelperText error={!!error}>{t(`${error}`)}</FormHelperText>
+      <FormHelperText error={!!error}>{t(`${error || ''}`)}</FormHelperText>
     </Stack>
   );
 };

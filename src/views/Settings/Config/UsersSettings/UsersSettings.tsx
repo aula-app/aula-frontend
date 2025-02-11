@@ -166,7 +166,7 @@ const DataSettings = ({ onReload }: Props) => {
           {t('actions.select', { var: t('settings.columns.userlevel') })}:
           <SelectRole role={role} setRole={setRole} />
         </Stack>
-        <FormHelperText error={error !== ''}>{`${error}`}</FormHelperText>
+        <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
       </Stack>
       <Button variant="contained" component="label" onClick={onSubmit}>
         {t('actions.confirm')}

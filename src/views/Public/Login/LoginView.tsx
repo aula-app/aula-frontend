@@ -40,7 +40,7 @@ const LoginView = () => {
 
   const schema = yup
     .object({
-      username: yup.string().required(t("validation.required")),
+      username: yup.string().required(t("forms.validation.required")),
       password: yup
         .string()
         .required(t("forms.validation.required"))
@@ -117,7 +117,7 @@ const LoginView = () => {
 
   return (
     <FormContainer>
-      <Stack gap={1}>
+      <Stack gap={2}>
         <Typography variant="h5">
           {t("auth.messages.welcome")}
         </Typography>
@@ -130,14 +130,15 @@ const LoginView = () => {
             {loginError}
           </Alert>
         </Collapse>
+        <Stack gap={1}>
         <TextField
           required
           disabled={isLoading}
           label={t("auth.login.label")}
           slotProps={{ input: { autoCapitalize: "none" } }}
           {...register("username")}
-          error={errors.username ? true : false}
-          helperText={`${errors.username?.message}`}
+          error={!!errors.username}
+          helperText={`${errors.username?.message || ''}`}
           sx={{ mt: 0 }}
         />
         <TextField
@@ -146,8 +147,8 @@ const LoginView = () => {
           type={showPassword ? "text" : "password"}
           label={t("auth.password.label")}
           {...register("password")}
-          error={errors.password ? true : false}
-          helperText={`${errors.password?.message}`}
+          error={!!errors.password}
+          helperText={`${errors.password?.message || ''}`}
           sx={{ mt: 0 }}
           slotProps={{
             input: {
@@ -165,6 +166,7 @@ const LoginView = () => {
             }
           }}
         />
+        </Stack>
         <Button variant="contained" disabled={isLoading} onClick={handleSubmit(onSubmit)}>{t("auth.login.button")}</Button>
 
         <Grid container justifyContent="end" alignItems="center">

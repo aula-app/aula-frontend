@@ -78,7 +78,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose,
                 label={t(`settings.columns.displayname`)}
                 size="small"
                 error={!!errors.displayname}
-                helperText={`${errors.displayname?.message}`}
+                helperText={`${errors.displayname?.message || ''}`}
                 {...register('displayname')}
               />
               <TextField
@@ -87,7 +87,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose,
                 label={t(`settings.columns.username`)}
                 size="small"
                 error={!!errors.username}
-                helperText={`${errors.username?.message}`}
+                helperText={`${errors.username?.message || ''}`}
                 {...register('username')}
               />
               <TextField
@@ -96,7 +96,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose,
                 label={t(`settings.columns.realname`)}
                 size="small"
                 error={!!errors.realname}
-                helperText={`${errors.realname?.message}`}
+                helperText={`${errors.realname?.message || ''}`}
                 {...register('realname')}
               />
               <TextField
@@ -104,7 +104,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose,
                 label={t(`settings.columns.email`)}
                 size="small"
                 error={!!errors.email}
-                helperText={`${errors.email?.message}`}
+                helperText={`${errors.email?.message || ''}`}
                 {...register('email')}
               />
               {checkPermissions(40) && Number(defaultValues?.userlevel) < 50 && <RoleField control={control} />}
