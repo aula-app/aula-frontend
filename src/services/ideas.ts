@@ -239,12 +239,12 @@ export async function getIdeaBoxes(idea_id: string): Promise<GetIdeaBoxesRespons
  * Add user room
  */
 
-export async function addIdeaBox(idea_id: string, box_id: string): Promise<GenericResponse> {
+export async function addIdeaBox(idea_id: string, topic_id: string): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
       model: 'Idea',
       method: 'addIdeaToTopic',
-      arguments: { idea_id, box_id },
+      arguments: { idea_id, topic_id },
     },
     ['updater_id']
   );
@@ -256,11 +256,11 @@ export async function addIdeaBox(idea_id: string, box_id: string): Promise<Gener
  * Remove user room
  */
 
-export async function removeIdeaBox(idea_id: string, box_id: string): Promise<GenericResponse> {
+export async function removeIdeaBox(idea_id: string, topic_id: string): Promise<GenericResponse> {
   const response = await databaseRequest({
     model: 'Idea',
     method: 'removeIdeaFromTopic',
-    arguments: { idea_id, box_id },
+    arguments: { idea_id, topic_id },
   },
   ['updater_id']
   );
