@@ -1,5 +1,5 @@
-import { CategoryArguments } from '@/services/categories';
-import { CategoryType, GroupType } from '@/types/Scopes';
+import { GroupArguments } from '@/services/groups';
+import { GroupType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, StatusField } from '../DataFields';
-import { GroupArguments } from '@/services/groups';
 
 /**
  * CategoryForms component is used to create or edit an idea.
@@ -27,7 +26,7 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose, o
 
   const schema = yup.object({
     group_name: yup.string().required(t('forms.validation.required')),
-    description_public: yup.string().nullable(),
+    description_public: yup.string(),
   });
 
   const {

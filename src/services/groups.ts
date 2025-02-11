@@ -45,7 +45,7 @@ export const getGroups = async (args?: GenericListRequest): Promise<GetGroupsRes
 
 export interface GroupArguments {
   group_name: string;
-  description_public: string;
+  description_public?: string;
   status?: string;
 }
 

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 type Props = {
   name: keyof PossibleFields;
-  control: Control<{}, any>;
+  control: Control<any, any>;
   disabled?: boolean;
 };
 
