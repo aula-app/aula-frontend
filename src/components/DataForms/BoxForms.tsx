@@ -67,7 +67,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit })
               {...register('name')}
               label={t('settings.columns.name')}
               error={!!errors.name}
-              helperText={`${errors.name?.message}`}
+              helperText={errors ? errors.name?.message : ''}
               fullWidth
               required
             />
