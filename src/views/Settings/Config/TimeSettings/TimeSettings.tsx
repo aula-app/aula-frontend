@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -22,8 +22,8 @@ const SystemSettings = ({ config, onReload }: Props) => {
 
   const [startDay, setStartDay] = useState<number>(config?.first_workday_week || 1);
   const [endDay, setEndDay] = useState<number>(config?.last_workday_week || 5);
-  const [startTime, setStartTime] = useState<dayjs.ConfigType>(config?.start_time);
-  const [endTime, setEndTime] = useState<dayjs.ConfigType>(config?.daily_end_time);
+  const [startTime, setStartTime] = useState<dayjs.ConfigType>(config?.start_time || new Date('2025-01-01T08:30:00'));
+  const [endTime, setEndTime] = useState<dayjs.ConfigType>(config?.daily_end_time || new Date('2025-01-01T17:00:00'));
 
   var week = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
@@ -50,6 +50,13 @@ const SystemSettings = ({ config, onReload }: Props) => {
     setStartTime(config?.start_time);
     setEndTime(config?.daily_end_time);
   };
+
+  useEffect(() => {
+    setStartDay(config?.first_workday_week || 1);
+    setEndDay(config?.last_workday_week || 5);
+    setStartTime(config?.start_time || new Date('2025-01-01T08:30:00'));
+    setEndTime(config?.daily_end_time || new Date('2025-01-01T17:00:00'));
+  }, [JSON.stringify(config)]);
 
   return (
     <Stack gap={2}>

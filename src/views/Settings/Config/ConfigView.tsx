@@ -58,10 +58,10 @@ const ConfigView = () => {
 
   const SETTINGS_PANELS = [
     // { name: 'category', role: 30, component: <Categories /> },
-    // { name: 'group', role: 50, component: <Groups /> },
-    { name: 'idea', role: 50, component: <Categories /> },
-    { name: 'vote', role: 50, component: <QuorumSettings onReload={getConfig} /> },
+    { name: 'idea', role: 50, component: <IdeaSettings onReload={getConfig} /> },
+    { name: 'vote', role: 50, component: <QuorumSettings onReload={closePanels} /> },
     { name: 'user', role: 50, component: <UsersSettings onReload={closePanels} /> },
+    { name: 'group', role: 50, component: <Groups /> },
     { name: 'time', role: 50, component: <TimeSettings config={config} onReload={getConfig} /> },
     { name: 'login', role: 50, component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
     { name: 'action', role: 50, component: <TimedCommands /> },

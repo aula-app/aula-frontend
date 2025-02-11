@@ -1,65 +1,127 @@
 import { AppIcon } from '@/components';
+import GroupForms from '@/components/DataForms/GroupForms';
+import { addGroup, deleteGroup, editGroup, getGroups, GroupArguments } from '@/services/groups';
 import { GroupType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
-import { Chip, Stack } from '@mui/material';
+import { WarningAmber } from '@mui/icons-material';
+import {
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Drawer,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const GroupView = () => {
+const View: React.FC = () => {
   const { t } = useTranslation();
   const [groups, setGroups] = useState<GroupType[]>([]);
-  const [selectedItem, setItem] = useState<GroupType>();
-  const [editGroup, setEditGroup] = useState(false);
-  const [deleteGroup, setDeleteGroup] = useState(false);
+  const [edit, setEdit] = useState<GroupType | boolean>(false);
+  const [del, setDel] = useState<GroupType>();
 
-  const categoriesFetch = async () =>
-    await databaseRequest({
-      model: 'Group',
-      method: 'getGroups',
-      arguments: {},
-    }).then((response) => {
-      if (response.data) setGroups(response.data ? response.data : []);
-    });
-
-  const setDelete = (item: GroupType) => {
-    setItem(item);
-    setDeleteGroup(true);
+  const groupsFetch = async () => {
+    const response = await getGroups();
+    setGroups(response.data ? response.data : []);
   };
 
-  const setEdit = (item?: GroupType) => {
-    setItem(item || undefined);
-    setEditGroup(true);
+  const onSubmit = (data: GroupArguments) => {
+    typeof edit === 'boolean' ? newGroup(data) : updateGroup(data);
+  };
+
+  const newGroup = async (data: GroupArguments) => {
+    const request = await addGroup({
+      group_name: data.group_name,
+      description_public: data.description_public,
+      status: data.status,
+    });
+    if (request.error || !request.data) return;
+    onClose();
+  };
+
+  const updateGroup = async (data: GroupArguments) => {
+    if (typeof edit === 'boolean') return;
+    const request = await editGroup({
+      group_id: edit.id,
+      group_name: data.group_name,
+      description_public: data.description_public,
+      status: data.status,
+    });
+    if (request.error) return;
+    onClose();
+  };
+
+  const onDel = async () => {
+    if (!del) return;
+    const request = await deleteGroup(del.id);
+    if (request.error) return;
+    onClose();
   };
 
   const onClose = () => {
-    setItem(undefined);
-    setEditGroup(false);
-    setDeleteGroup(false);
-    categoriesFetch();
+    setEdit(false);
+    setDel(undefined);
+    groupsFetch();
   };
 
   useEffect(() => {
-    categoriesFetch();
+    groupsFetch();
   }, []);
 
   return (
-    <Stack pb={3}>
+    <Stack gap={2}>
+      {/* <Typography variant="h6">{t('scopes.groups.plural')}</Typography> */}
       <Stack direction="row" flexWrap="wrap" gap={1}>
         <Chip
-          label={t('actions.add', { var: t('scopes.groups.name') })}
+          label={t('actions.add', { var: t('scopes.groups.name').toLowerCase() })}
           avatar={<AppIcon icon="add" />}
-          onClick={() => setEdit()}
+          onClick={() => setEdit(true)}
         />
         {groups.map((group, key) => {
           return (
-            <Chip key={key} label={group.group_name} onClick={() => setEdit(group)} onDelete={() => setDelete(group)} />
+            <Chip key={key} label={group.group_name} onClick={() => setEdit(group)} onDelete={() => setDel(group)} />
           );
         })}
       </Stack>
-      {/* <EditData scope="groups" item={selectedItem} isOpen={!!editGroup} onClose={onClose} />
-      <DeleteData scope="groups" id={Number(selectedItem?.id)} isOpen={!!deleteGroup} onClose={onClose} /> */}
+      <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
+        <GroupForms
+          onClose={onClose}
+          onSubmit={onSubmit}
+          defaultValues={typeof edit !== 'boolean' ? edit : undefined}
+        />
+      </Drawer>
+      <Dialog
+        open={!!del}
+        onClose={onClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          <Stack direction="row" alignItems="center">
+            <WarningAmber sx={{ mr: 1 }} color="error" /> {t('deletion.headline', { var: t(`scopes.groups.name`) })}
+          </Stack>
+        </DialogTitle>
+        <DialogContent sx={{ overflowY: 'auto' }}>
+          <DialogContentText id="alert-dialog-description">
+            {t('deletion.confirm', { var: t(`scopes.groups.name`) })}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDel(undefined)} color="secondary" autoFocus>
+            {t('actions.cancel')}
+          </Button>
+          <Button onClick={onDel} color="error" variant="contained">
+            {t('actions.delete')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Stack>
   );
 };
 
-export default GroupView;
+export default View;

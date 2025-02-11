@@ -32,39 +32,39 @@ export interface CategoryArguments {
 }
 
 export interface EditCategoryArguments extends CategoryArguments {
-  category_id: string;
+  category_id: number;
 }
 
 /**
- * Adds a new idea to the database
+ * Adds a new category to the database
  */
 
 export interface AddResponse extends GenericResponse {
-  data: { hash_id: string } | null;
+  data: { id: number } | null;
 }
 
 export async function addCategory(args: CategoryArguments): Promise<AddResponse> {
   const response = await databaseRequest(
     {
       model: 'Idea',
-      method: 'addIdea',
+      method: 'addCategory',
       arguments: args,
     },
-    ['user_id', 'updater_id']
+    ['updater_id']
   );
 
   return response as AddResponse;
 }
 
 /**
- * Edit an idea on the database
+ * Edit a category on the database
  */
 
 export async function editCategory(args: EditCategoryArguments): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
       model: 'Idea',
-      method: 'editIdea',
+      method: 'editCategory',
       arguments: args,
     },
     ['updater_id']
@@ -77,13 +77,13 @@ export async function editCategory(args: EditCategoryArguments): Promise<Generic
  * Removes an idea from the database
  */
 
-export async function deleteCategory(id: string): Promise<GenericResponse> {
+export async function deleteCategory(category_id: number): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
       model: 'Idea',
-      method: 'deleteIdea',
+      method: 'deleteCategory',
       arguments: {
-        idea_id: id,
+        category_id,
       },
     },
     ['updater_id']

@@ -1,7 +1,7 @@
 import { AppIcon } from '@/components';
 import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
 import CategoryForms from '@/components/DataForms/CategoryForms';
-import { CategoryArguments } from '@/services/categories';
+import { addCategory, CategoryArguments, deleteCategory, editCategory, getCategories } from '@/services/categories';
 import { CategoryType } from '@/types/Scopes';
 import { databaseRequest } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
@@ -26,16 +26,43 @@ const CatView: React.FC = () => {
   const [editCat, setEditCat] = useState<CategoryType | boolean>(false);
   const [deleteCat, setDeleteCat] = useState<CategoryType>();
 
-  const categoriesFetch = async () =>
-    await databaseRequest({
-      model: 'Idea',
-      method: 'getCategories',
-      arguments: {},
-    }).then((response) => {
-      if (response.data) setCategories(response.data ? response.data : []);
-    });
+  const categoriesFetch = async () => {
+    const response = await getCategories();
+    setCategories(response.data ? response.data : []);
+  };
 
-  const onDelete = async () => {};
+  const onSubmit = (data: CategoryArguments) => {
+    typeof editCat === 'boolean' ? newCategory(data) : updateCategory(data);
+  };
+
+  const newCategory = async (data: CategoryArguments) => {
+    const request = await addCategory({
+      name: data.name,
+      description_internal: data.description_internal,
+      status: data.status,
+    });
+    if (request.error || !request.data) return;
+    onClose();
+  };
+
+  const updateCategory = async (data: CategoryArguments) => {
+    if (typeof editCat === 'boolean') return;
+    const request = await editCategory({
+      category_id: editCat.id,
+      name: data.name,
+      description_internal: data.description_internal,
+      status: data.status,
+    });
+    if (request.error) return;
+    onClose();
+  };
+
+  const onDelete = async () => {
+    if (!deleteCat) return;
+    const request = await deleteCategory(deleteCat.id);
+    if (request.error) return;
+    onClose();
+  };
 
   const onClose = () => {
     setEditCat(false);
@@ -49,7 +76,7 @@ const CatView: React.FC = () => {
 
   return (
     <Stack gap={2}>
-      <Typography variant="h6">{t('scopes.categories.name')}</Typography>
+      <Typography variant="h6">{t('scopes.categories.plural')}</Typography>
       <Stack direction="row" flexWrap="wrap" gap={1}>
         <Chip
           label={t('actions.add', { var: t('scopes.categories.name').toLowerCase() })}
@@ -72,7 +99,7 @@ const CatView: React.FC = () => {
       <Drawer anchor="bottom" open={!!editCat} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <CategoryForms
           onClose={onClose}
-          onSubmit={() => {}}
+          onSubmit={onSubmit}
           defaultValues={typeof editCat !== 'boolean' ? editCat : undefined}
         />
       </Drawer>

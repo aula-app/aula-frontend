@@ -407,14 +407,14 @@
     },
     "panels": {
       "action": "Geplante Aktionen",
-      "category": "Kategorie",
       "danger": "Gefahrenzone",
       "group": "Gruppe",
       "idea": "Idee",
       "login": "Anmeldung",
       "system": "System",
       "time": "Zeit",
-      "user": "Benutzer"
+      "user": "Benutzer",
+      "vote": "Abstimmung"
     },
     "time": {
       "actions": "Geplante Aktionen",
