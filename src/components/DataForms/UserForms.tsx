@@ -44,10 +44,10 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      displayname: ' ',
-      username: ' ',
-      realname: ' ',
-      email: ' ',
+      displayname: (defaultValues)?' ':'',
+      username: (defaultValues)?' ':'',
+      realname: (defaultValues)?' ':'',
+      email: (defaultValues)?' ':'',
     },
   });
 
