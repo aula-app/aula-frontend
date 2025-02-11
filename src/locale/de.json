@@ -34,32 +34,32 @@
       "message": "Möchtest du wirklich ein neues Passwort für diesen Benutzer anfordern?",
       "recover": "Passwort wiederherstellen",
       "recovery": "Passwort-Wiederherstellung",
-      "success": "Das Passwort wurde zurückgesetzt. Registrierte Benutzer erhalten einen Reset-Link per E-Mail."
+      "success": "Das Passwort für das Konto wurde zurückgesetzt. Registrierte Benutzer erhalten einen Link zum Zurücksetzen in ihrer E-Mail."
     },
     "login": {
-      "button": "Anmelden",
-      "label": "Benutzername",
-      "noAccount": "Noch kein Konto?",
+      "button": "Login",
+      "label": "Nutzername",
+      "noAccount": "Du hast noch kein Konto?",
       "title": "Anmelden"
     },
-    "logout": "Abmelden",
+    "logout": "Logout",
     "messages": {
       "agree": "Ich stimme den Nutzungsbedingungen und der Datenschutzrichtlinie zu",
       "email": "Überprüfe deine E-Mail für weitere Anweisungen",
-      "welcome": "Willkommen!"
+      "welcome": "Willkommen bei aula!"
     },
     "oauth": {
       "arialabel": "OAuth-Authentifizierung",
       "button": "OAuth-Authentifizierung"
     },
     "password": {
-      "change": "Passwort ändern",
-      "confirmPassword": "Neues Passwort bestätigen",
+      "change": "Passwort geändert",
+      "confirmPassword": "Passwort bestätigen",
       "copied": "Passwort in die Zwischenablage kopiert",
       "current": "Aktuelles Passwort",
       "label": "Passwort",
       "newPassword": "Neues Passwort",
-      "oldPassword": "Passwort",
+      "oldPassword": "Aktuelles Passwort",
       "set": "Passwort festlegen",
       "success": "Passwort erfolgreich geändert"
     },
@@ -71,20 +71,20 @@
     }
   },
   "consent": {
-    "alert": "Obligatorische Zustimmung erforderlich",
-    "announcement": "Optionale Zustimmung verfügbar",
-    "message": "Keine Zustimmung erforderlich"
+    "alert": "Obligatorische Zustimmung",
+    "announcement": "Optionale Zustimmung",
+    "message": "Keine Zustimmung"
   },
   "delegation": {
     "confirm": "Bist du sicher, dass du das Stimmrecht für diese Ideenbox der folgenden Person {{var}} willst?",
-    "delegate": "übertragen",
-    "label": "Stimmrechtsübertragung",
+    "delegate": "Stimme übertragen",
+    "label": "Delegation abstimmen",
     "revoke": "entziehen",
     "status": {
       "delegated": "{{var}} delegierte Ideen",
-      "revoked": "Stimmrechtsübertragung widerrufen",
-      "success": "Stimmen erfolgreich delegiert",
-      "undelegated": "{{var}} Ideen"
+      "revoked": "Die Stimmrechtsübertragung für dieses Feld wurde widerrufen.",
+      "success": "Die Stimmabgabe für dieses Feld wurde delegiert.",
+      "undelegated": "{{var}} nicht delegiert Ideen"
     }
   },
   "deletion": {
@@ -100,8 +100,8 @@
     "failed": "Anfrage fehlgeschlagen",
     "invalidCode": "Ungültiger Benutzercode",
     "invalidCredentials": "Ungültiger Benutzername oder Passwort",
-    "invalidPassword": "Ungültiges Passwort",
-    "invalidToken": "Ungültiger Authentifizierungsschlüssel",
+    "invalidPassword": "Leider stimmt entweder Nutzername oder Passwort nicht.",
+    "invalidToken": "Der angegebene Authentifizierungsschlüssel ist ungültig.",
     "network": "Netzwerkfehler",
     "noData": "Keine Daten verfügbar",
     "noServer": "Server ist nicht verfügbar",
@@ -171,7 +171,7 @@
     "accepted": "Deine Datenänderungsanfrage wurde akzeptiert.",
     "cancel": "Datenänderungsanfrage abgelehnt",
     "changeName": {
-      "body": "Eine Datenänderungsprozedur wurde für den Benutzer {{var}} angefordert. Sie möchten ihren {{old}} in {{new}} ändern",
+      "body": "Für den Benutzer {{var}} wurde ein Datenänderungsverfahren beantragt. Er möchte seine {{old}} in {{new}} ändern",
       "request": "Datenänderungsprozedur angefordert. Bitte warten Sie auf die Genehmigung.",
       "title": "Datenänderungsanfrage für {{var}}"
     },
@@ -199,7 +199,7 @@
   },
   "roles": {
     "10": "Gast",
-    "20": "Nutzer*in",
+    "20": "Student*in",
     "30": "Moderator*in",
     "40": "Super-Moderator*in",
     "50": "Admin",
@@ -279,7 +279,7 @@
       "exportGranted": "Kontodatenexport gewährt",
       "exportRequest": "Datenexport angefordert",
       "update": "Daten aktualisieren",
-      "updateText": "Bist du sicher, dass du die Aktualisierung deiner Felder anfordern möchtest: {{var}}? Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden"
+      "dataUpdateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer {{var}} anfordern möchten? Diese Aktion muss von einem Admin bestätigt werden, damit sie durchgeführt werden kann."
     },
     "advanced": {
       "headline": "Erweiterte Optionen",
@@ -297,11 +297,11 @@
       "about_me": "Über mich",
       "access_code": "Zugangscode",
       "active": "Aktiv",
-      "approval_comment": "Genehmigungskommentar",
+      "approval_comment": "Kommentar zur Genehmigung",
       "approved": "Genehmigt",
       "auto_delegation": "Automatische Delegation",
       "avatar": "Avatar",
-      "body": "Inhalt",
+      "body": "Text",
       "cmd_id": "Befehl-ID",
       "command": "Befehl",
       "consent_text": "Zustimmungstext",
@@ -314,7 +314,7 @@
       "custom_field2": "Benutzerdefiniertes Feld 2",
       "date_end": "Enddatum",
       "date_start": "Startdatum",
-      "description_internal": "Detail",
+      "description_internal": "Notizen",
       "description_public": "Beschreibung",
       "displayname": "Anzeigename",
       "email": "E-Mail",
@@ -326,7 +326,7 @@
       "infinite_votes": "Unendliche Stimmen",
       "info": "Info",
       "internal_info": "Interne Info",
-      "is_winner": "Gewinner",
+      "is_winner": "Gewinner einstellen",
       "language_id": "Sprache",
       "last_login": "Letzte Anmeldung",
       "last_update": "Letzte Aktualisierung",
@@ -341,10 +341,10 @@
       "parameters": "Parameter",
       "parent_id": "Elternteil",
       "phase_duration_0": "wilden Ideen",
-      "phase_duration_1": "Diskussions",
-      "phase_duration_2": "Genehmigungs",
-      "phase_duration_3": "Abstimmungs",
-      "phase_duration_4": "Ergebnis",
+      "phase_duration_1": "Diskussion",
+      "phase_duration_2": "Prüfung",
+      "phase_duration_3": "Abstimmung",
+      "phase_duration_4": "Ergebnisse",
       "phase_id": "Phase",
       "pin_to_top": "Oben anheften",
       "position": "Position",
@@ -357,7 +357,7 @@
       "restrict_to_roomusers_only": "Nur für Raumnutzer beschränken",
       "room_hash_id": "Raum",
       "room_id": "Raum",
-      "room_name": "Raumname",
+      "room_name": "Raum Name",
       "service_id_consent": "Dienst-Zustimmungs-ID",
       "status": "Status",
       "sum_comments": "Gesamtanzahl der Kommentare",
@@ -372,7 +372,7 @@
       "updater_id": "Zuletzt aktualisiert von",
       "user_id": "Benutzer",
       "user_needs_to_consent": "Zustimmung erforderlich",
-      "userlevel": "Benutzerebene",
+      "userlevel": "Benutzer-Rolle",
       "username": "Benutzername",
       "vote_bias": "Stimmverzerrung"
     },
@@ -428,7 +428,7 @@
     "archived": "Archiviert",
     "holiday": "Urlaub",
     "inactive": "Inaktiv",
-    "loading": "Lädt...",
+    "loading": "Laden",
     "suspended": "Gesperrt",
     "vacation": "Ferien",
     "waiting": "Warten",
@@ -450,7 +450,7 @@
       "and": "und",
       "back": "Zurück",
       "from": "von",
-      "next": "Weiter",
+      "next": "nächste",
       "no": "Nein",
       "on": "an",
       "or": "oder",
@@ -468,7 +468,7 @@
       },
       "upload": "Datei hochladen"
     },
-    "lightMode": "Hellmodus",
+    "lightMode": "Hellermodus",
     "navigation": {
       "about": "Über",
       "announcements": "Ankündigungen",
