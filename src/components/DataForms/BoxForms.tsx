@@ -44,7 +44,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit })
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { name: (defaultValues)?' ':'' },
+    defaultValues: { name: defaultValues ? ' ' : '' },
   });
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit })
               {...register('name')}
               label={t('settings.columns.name')}
               error={!!errors.name}
-              helperText={`${errors.name?.message || ' '}`}
+              helperText={`${errors.name?.message}`}
               fullWidth
               required
             />

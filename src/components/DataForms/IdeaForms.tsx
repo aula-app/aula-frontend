@@ -38,7 +38,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ children, defaultValues, onClose,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { title: (defaultValues)?' ':'' },
+    defaultValues: { title: defaultValues ? ' ' : '' },
   });
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ children, defaultValues, onClose,
               {...register('title')}
               label={t('settings.columns.title')}
               error={!!errors.title}
-              helperText={`${errors.title?.message || ' '}`}
+              helperText={`${errors.title?.message}`}
               fullWidth
               required
             />

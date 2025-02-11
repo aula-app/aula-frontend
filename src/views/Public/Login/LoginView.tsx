@@ -137,7 +137,7 @@ const LoginView = () => {
           slotProps={{ input: { autoCapitalize: "none" } }}
           {...register("username")}
           error={errors.username ? true : false}
-          helperText={errors.username?.message || " "}
+          helperText={errors.username?.message}
           sx={{ mt: 0 }}
         />
         <TextField
@@ -147,7 +147,7 @@ const LoginView = () => {
           label={t("auth.password.label")}
           {...register("password")}
           error={errors.password ? true : false}
-          helperText={errors.password?.message || " "}
+          helperText={errors.password?.message}
           sx={{ mt: 0 }}
           slotProps={{
             input: {

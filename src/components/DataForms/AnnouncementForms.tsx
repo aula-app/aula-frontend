@@ -40,7 +40,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { headline: (defaultValues)?' ':'' },
+    defaultValues: { headline: defaultValues ? ' ' : '' },
   });
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
               required
               label={t('settings.columns.headline')}
               error={!!errors.headline}
-              helperText={`${errors.headline?.message || ' '}`}
+              helperText={`${errors.headline?.message}`}
               fullWidth
               {...register('headline')}
             />
