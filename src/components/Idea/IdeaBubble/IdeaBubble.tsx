@@ -61,7 +61,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
             <Stack direction="row" alignItems="center">
               <LikeButton disabled={disabled} item={idea} />
               {idea.sum_comments > 0 && !idea_id && (
-                <AppIconButton icon="chat" to={`idea/${idea.hash_id}`} disabled={disabled}>
+                <AppIconButton icon="chat" to={to} disabled={disabled}>
                   {idea.sum_comments}
                 </AppIconButton>
               )}
