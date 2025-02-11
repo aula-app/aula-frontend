@@ -203,7 +203,7 @@
   },
   "roles": {
     "10": "Gast",
-    "20": "Student*in",
+    "20": "Nutzer*in",
     "30": "Moderator*in",
     "40": "Super-Moderator*in",
     "50": "Admin",
