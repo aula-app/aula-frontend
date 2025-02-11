@@ -44,7 +44,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit })
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {},
+    defaultValues: { name: ' ' },
   });
 
   useEffect(() => {

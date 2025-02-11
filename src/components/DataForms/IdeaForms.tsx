@@ -38,7 +38,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ children, defaultValues, onClose,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {},
+    defaultValues: { title: ' ' },
   });
 
   useEffect(() => {
