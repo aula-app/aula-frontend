@@ -37,7 +37,7 @@ const BoxPhaseView = () => {
     setLoading(true);
     const response = await getBoxesByPhase(Number(phase), room_id);
     setError(response.error);
-    if (!response.error && response.data) setBoxes(response.data);
+    if (!response.error) setBoxes(response.data || []);
     setLoading(false);
   }, [room_id, phase]);
 
