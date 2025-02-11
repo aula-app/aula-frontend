@@ -2,6 +2,7 @@ import { getAvatar } from '@/services/media';
 import { Avatar, AvatarProps } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '../AppIcon';
+import { localStorageGet } from '@/utils';
 
 interface Props extends AvatarProps {
   id: string;
@@ -13,6 +14,7 @@ interface Props extends AvatarProps {
  * @component UserInfo
  */
 const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
+  const api_url = localStorageGet('api_url');
   const [userAvatar, setUserAvatar] = useState<string>('');
   const downloadUserAvatar = async () => {
     const response = await getAvatar(id);
@@ -33,7 +35,7 @@ const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
         ...sx,
       }}
       alt="User avatar"
-      src={`/files/${userAvatar}` || ''}
+      src={`${api_url}/files/${userAvatar}` || ''}
       {...restOfProps}
     >
       {!userAvatar && <AppIcon icon="avatar" />}
