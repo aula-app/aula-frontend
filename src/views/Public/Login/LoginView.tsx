@@ -117,11 +117,11 @@ const LoginView = () => {
 
   return (
     <FormContainer>
-      <Stack>
-        <Typography variant="h5" sx={{ mb: 1 }}>
+      <Stack gap={1}>
+        <Typography variant="h5">
           {t("auth.messages.welcome")}
         </Typography>
-        <Collapse in={loginError !== ''} sx={{ mb: 2 }}>
+        <Collapse in={loginError !== ''}>
           <Alert
             variant="outlined"
             severity="error"
