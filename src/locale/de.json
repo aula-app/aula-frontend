@@ -159,6 +159,9 @@
     "approval": "Prüfung",
     "discussion": "Diskussion",
     "phase": "{{var}}-Phase",
+    "name-10": "Diskussion",
+    "name-20": "Prüfung",
+    "name-30": "Abstimmung",
     "results": "Ergebnisse",
     "status": {
       "end": "Phase endet in {{var}} Tagen",
