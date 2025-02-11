@@ -71,6 +71,7 @@ const BoxPhaseView = () => {
     const request = await editBox({
       topic_id: edit.hash_id,
       name: data.name,
+      phase_id: data.phase_id,
       description_public: data.description_public,
       status: data.status,
     });
