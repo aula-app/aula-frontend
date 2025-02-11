@@ -53,7 +53,7 @@ const SelectField: React.FC<Props> = ({
               </MenuItem>
             ))}
           </TextField>
-          <FormHelperText error={!!fieldState.error}>{t(fieldState.error?.message || ' ')}</FormHelperText>
+          <FormHelperText error={!!fieldState.error}>{t(`${fieldState.error?.message}`)}</FormHelperText>
         </FormControl>
       )}
     />

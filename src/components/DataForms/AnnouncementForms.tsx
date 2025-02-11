@@ -63,7 +63,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
               required
               label={t('settings.columns.headline')}
               error={!!errors.headline}
-              helperText={errors ? errors.headline?.message : ''}
+              helperText={`${errors.headline?.message}`}
               fullWidth
               {...register('headline')}
             />

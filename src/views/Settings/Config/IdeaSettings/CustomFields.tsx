@@ -85,7 +85,7 @@ const CustomFields = ({ onReload }: Props) => {
         label={t(`settings.customFields.form`, { var: 1 })}
         {...register('custom_field1_name')}
         error={errors.custom_field1_name ? true : false}
-        helperText={errors ? errors.custom_field1_name?.message : ''}
+        helperText={`${errors.custom_field1_name?.message}`}
         sx={{ mt: 0 }}
         slotProps={{
           inputLabel: { shrink: true },
@@ -108,7 +108,7 @@ const CustomFields = ({ onReload }: Props) => {
         label={t(`settings.customFields.form`, { var: 2 })}
         {...register('custom_field2_name')}
         error={errors.custom_field2_name ? true : false}
-        helperText={errors ? errors.custom_field2_name?.message : ''}
+        helperText={`${errors.custom_field2_name?.message}`}
         sx={{ mt: 0 }}
         slotProps={{
           inputLabel: { shrink: true },
