@@ -104,7 +104,6 @@ export async function addBox(args: AddBoxArguments): Promise<GetBoxesResponse> {
  */
 
 export async function editBox(args: EditBoxArguments): Promise<GenericResponse> {
-  console.log("BOX ARGS", args)
   const response = await databaseRequest(
     {
       model: 'Topic',
