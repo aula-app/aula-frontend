@@ -119,8 +119,8 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
   };
 
   const setIdeasBoxes = async () => {
-    const add = ideas.map((user_id) => updates.add.map((box_id) => addIdeaBox(user_id, box_id)));
-    const remove = ideas.map((user_id) => updates.remove.map((box_id) => removeIdeaBox(user_id, box_id)));
+    const add = ideas.map((idea_id) => updates.add.map((box_id) => addIdeaBox(idea_id, box_id)));
+    const remove = ideas.map((idea_id) => updates.remove.map((box_id) => removeIdeaBox(idea_id,  box_id)));
     await Promise.all([...add, ...remove]);
     setUpdates({ add: [], remove: [] });
   };
