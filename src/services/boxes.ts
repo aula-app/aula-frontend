@@ -77,6 +77,7 @@ export interface AddBoxArguments extends BoxArguments {
 export interface EditBoxArguments extends BoxArguments {
   topic_id?: string;
   room_id?: number | string;
+  phase_id: number;
   room_hash_id?: string;
   hash_id?: string;
 }
@@ -103,6 +104,7 @@ export async function addBox(args: AddBoxArguments): Promise<GetBoxesResponse> {
  */
 
 export async function editBox(args: EditBoxArguments): Promise<GenericResponse> {
+  console.log("BOX ARGS", args)
   const response = await databaseRequest(
     {
       model: 'Topic',
