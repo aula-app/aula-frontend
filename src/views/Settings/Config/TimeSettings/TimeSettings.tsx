@@ -56,62 +56,64 @@ const SystemSettings = ({ config, onReload }: Props) => {
       <Typography variant="h6" py={1}>
         {t(`settings.time.workdays`)}
       </Typography>
-      <Grid component={FormGroup} container spacing={1}>
-        <Grid size="auto">
-          <TextField
-            select
-            label={t('settings.time.startDay')}
-            value={startDay}
-            onChange={(data) => setStartDay(Number(data.target.value))}
-            variant="outlined"
-            sx={{ minWidth: 263 }}
-          >
-            {week.map((label, value) => (
-              <MenuItem value={value} key={value}>
-                {t(label)}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-        <Grid size="auto">
-          <TextField
-            select
-            label={t('settings.time.endDay')}
-            value={endDay}
-            onChange={(data) => setEndDay(Number(data.target.value))}
-            variant="outlined"
-            sx={{ minWidth: 263 }}
-          >
-            {week.map((label, value) => (
-              <MenuItem value={value} key={value}>
-                {t(label)}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-      </Grid>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Grid container spacing={1}>
+      <Stack direction="row" flexWrap={'wrap'} gap={2}>
+        <Grid component={FormGroup} container spacing={1}>
           <Grid size="auto">
-            <TimePicker
-              label={t(`settings.time.startTime`)}
-              value={dayjs(startTime)}
-              onChange={(date) => {
-                if (date) setStartTime(dayjs(date).format(FORMAT_DATE_TIME));
-              }}
-            />
+            <TextField
+              select
+              label={t('settings.time.startDay')}
+              value={startDay}
+              onChange={(data) => setStartDay(Number(data.target.value))}
+              variant="outlined"
+              sx={{ minWidth: 263 }}
+            >
+              {week.map((label, value) => (
+                <MenuItem value={value} key={value}>
+                  {t(label)}
+                </MenuItem>
+              ))}
+            </TextField>
           </Grid>
           <Grid size="auto">
-            <TimePicker
-              label={t(`settings.time.endTime`)}
-              value={dayjs(endTime)}
-              onChange={(date) => {
-                if (date) setEndTime(dayjs(date).format(FORMAT_DATE_TIME));
-              }}
-            />
+            <TextField
+              select
+              label={t('settings.time.endDay')}
+              value={endDay}
+              onChange={(data) => setEndDay(Number(data.target.value))}
+              variant="outlined"
+              sx={{ minWidth: 263 }}
+            >
+              {week.map((label, value) => (
+                <MenuItem value={value} key={value}>
+                  {t(label)}
+                </MenuItem>
+              ))}
+            </TextField>
           </Grid>
         </Grid>
-      </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Grid container spacing={1}>
+            <Grid size="auto">
+              <TimePicker
+                label={t(`settings.time.startTime`)}
+                value={dayjs(startTime)}
+                onChange={(date) => {
+                  if (date) setStartTime(dayjs(date).format(FORMAT_DATE_TIME));
+                }}
+              />
+            </Grid>
+            <Grid size="auto">
+              <TimePicker
+                label={t(`settings.time.endTime`)}
+                value={dayjs(endTime)}
+                onChange={(date) => {
+                  if (date) setEndTime(dayjs(date).format(FORMAT_DATE_TIME));
+                }}
+              />
+            </Grid>
+          </Grid>
+        </LocalizationProvider>
+      </Stack>
       <Stack direction="row">
         <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onCancel}>
           {t('actions.cancel')}
