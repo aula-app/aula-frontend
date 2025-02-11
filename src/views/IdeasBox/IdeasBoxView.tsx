@@ -153,7 +153,7 @@ const IdeasBoxView = () => {
       {!isBoxLoading && box && <BoxCard box={box} onDelete={() => boxDelete()} onEdit={() => boxEdit(box)} disabled />}
       <Stack direction="row" pt={3} px={1} alignItems="center">
         <Typography variant="h6">
-          {t(delegationStatus.length > 0 ? `delegation.status.delegated` : `delegation.status.undelegated`, {
+         {box && t(`phases.id-${box.phase_id}`, {
             var: ideas.length,
           })}
         </Typography>

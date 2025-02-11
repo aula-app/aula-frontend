@@ -165,7 +165,11 @@
       "ended": "Phase beendet"
     },
     "voting": "Abstimmung",
-    "wild": "Wilde Ideen"
+    "wild": "Wilde Ideen",
+    "id-10": "{{var}} Ideen zur Diskussion",
+    "id-20": "{{var}} Ideen zur Prüfung",
+    "id-30": "{{var}} Ideen zur Abstimmung",
+    "id-40": "{{var}} Ideen in Ergebnisse"
   },
   "requests": {
     "accepted": "Deine Datenänderungsanfrage wurde akzeptiert.",

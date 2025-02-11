@@ -165,7 +165,11 @@
       "ended": "Phase ended"
     },
     "voting": "Voting",
-    "wild": "Wild Ideas"
+    "wild": "Wild Ideas",
+    "id-10": "{{var}} ideas in discussion",
+    "id-20": "{{var}} ideas in approval",
+    "id-30": "{{var}} ideas in voting",
+    "id-40": "{{var}} ideas in results"
   },
   "requests": {
     "accepted": "Your data change request has been accepted.",
