@@ -107,6 +107,7 @@ const BoxesView: React.FC = () => {
       description_public: data.description_public,
       description_internal: data.description_internal,
       room_id: data.room_hash_id,
+      phase_id: data.phase_id,
       phase_duration_1: data.phase_duration_1,
       phase_duration_2: data.phase_duration_2,
       phase_duration_3: data.phase_duration_3,
