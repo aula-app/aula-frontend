@@ -32,12 +32,14 @@ const BoxIdeasPhaseView = () => {
     if (!phase) return;
     setLoading(true);
     const boxes = await getBoxesByPhase(Number(phase));
-    if (!boxes.data) return;
+    if (!boxes.data) {
+      setLoading(false);
+      return;
+    }
     const responses = await Promise.all(boxes.data.map((box) => getIdeasByBox(box.hash_id)));
     const response = responses.flat()[0];
     if (response.error) setError(response.error);
-    if (!response.error && response.data) setIdeas(response.data);
-    setLoading(false);
+    if (!response.error) setIdeas(response.data || []);
   }, [phase]);
 
   const updateIdea = async (data: EditIdeaArguments) => {
