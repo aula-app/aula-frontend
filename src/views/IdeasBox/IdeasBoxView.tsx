@@ -46,6 +46,7 @@ const IdeasBoxView = () => {
     setEdit({
       name: box.name,
       description_public: box.description_public,
+      phase_id: box.phase_id,
       topic_id: box.hash_id,
     });
   };
