@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid2';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -22,8 +22,8 @@ const SystemSettings = ({ config, onReload }: Props) => {
 
   const [startDay, setStartDay] = useState<number>(config?.first_workday_week || 1);
   const [endDay, setEndDay] = useState<number>(config?.last_workday_week || 5);
-  const [startTime, setStartTime] = useState<dayjs.ConfigType>(config?.start_time);
-  const [endTime, setEndTime] = useState<dayjs.ConfigType>(config?.daily_end_time);
+  const [startTime, setStartTime] = useState<dayjs.ConfigType>(config?.start_time || new Date('2025-01-01T08:30:00'));
+  const [endTime, setEndTime] = useState<dayjs.ConfigType>(config?.daily_end_time || new Date('2025-01-01T17:00:00'));
 
   var week = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
@@ -51,67 +51,76 @@ const SystemSettings = ({ config, onReload }: Props) => {
     setEndTime(config?.daily_end_time);
   };
 
+  useEffect(() => {
+    setStartDay(config?.first_workday_week || 1);
+    setEndDay(config?.last_workday_week || 5);
+    setStartTime(config?.start_time || new Date('2025-01-01T08:30:00'));
+    setEndTime(config?.daily_end_time || new Date('2025-01-01T17:00:00'));
+  }, [JSON.stringify(config)]);
+
   return (
     <Stack gap={2}>
       <Typography variant="h6" py={1}>
         {t(`settings.time.workdays`)}
       </Typography>
-      <Grid component={FormGroup} container spacing={1}>
-        <Grid size="auto">
-          <TextField
-            select
-            label={t('settings.time.startDay')}
-            value={startDay}
-            onChange={(data) => setStartDay(Number(data.target.value))}
-            variant="outlined"
-            sx={{ minWidth: 263 }}
-          >
-            {week.map((label, value) => (
-              <MenuItem value={value} key={value}>
-                {t(label)}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-        <Grid size="auto">
-          <TextField
-            select
-            label={t('settings.time.endDay')}
-            value={endDay}
-            onChange={(data) => setEndDay(Number(data.target.value))}
-            variant="outlined"
-            sx={{ minWidth: 263 }}
-          >
-            {week.map((label, value) => (
-              <MenuItem value={value} key={value}>
-                {t(label)}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-      </Grid>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Grid container spacing={1}>
+      <Stack direction="row" flexWrap={'wrap'} gap={2}>
+        <Grid component={FormGroup} container spacing={1}>
           <Grid size="auto">
-            <TimePicker
-              label={t(`settings.time.startTime`)}
-              value={dayjs(startTime)}
-              onChange={(date) => {
-                if (date) setStartTime(dayjs(date).format(FORMAT_DATE_TIME));
-              }}
-            />
+            <TextField
+              select
+              label={t('settings.time.startDay')}
+              value={startDay}
+              onChange={(data) => setStartDay(Number(data.target.value))}
+              variant="outlined"
+              sx={{ minWidth: 263 }}
+            >
+              {week.map((label, value) => (
+                <MenuItem value={value} key={value}>
+                  {t(label)}
+                </MenuItem>
+              ))}
+            </TextField>
           </Grid>
           <Grid size="auto">
-            <TimePicker
-              label={t(`settings.time.endTime`)}
-              value={dayjs(endTime)}
-              onChange={(date) => {
-                if (date) setEndTime(dayjs(date).format(FORMAT_DATE_TIME));
-              }}
-            />
+            <TextField
+              select
+              label={t('settings.time.endDay')}
+              value={endDay}
+              onChange={(data) => setEndDay(Number(data.target.value))}
+              variant="outlined"
+              sx={{ minWidth: 263 }}
+            >
+              {week.map((label, value) => (
+                <MenuItem value={value} key={value}>
+                  {t(label)}
+                </MenuItem>
+              ))}
+            </TextField>
           </Grid>
         </Grid>
-      </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Grid container spacing={1}>
+            <Grid size="auto">
+              <TimePicker
+                label={t(`settings.time.startTime`)}
+                value={dayjs(startTime)}
+                onChange={(date) => {
+                  if (date) setStartTime(dayjs(date).format(FORMAT_DATE_TIME));
+                }}
+              />
+            </Grid>
+            <Grid size="auto">
+              <TimePicker
+                label={t(`settings.time.endTime`)}
+                value={dayjs(endTime)}
+                onChange={(date) => {
+                  if (date) setEndTime(dayjs(date).format(FORMAT_DATE_TIME));
+                }}
+              />
+            </Grid>
+          </Grid>
+        </LocalizationProvider>
+      </Stack>
       <Stack direction="row">
         <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onCancel}>
           {t('actions.cancel')}

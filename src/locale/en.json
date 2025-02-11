@@ -407,14 +407,14 @@
     },
     "panels": {
       "action": "Scheduled actions",
-      "category": "Category",
       "danger": "Danger Zone",
       "group": "Group",
       "idea": "Idea",
       "login": "Login",
       "system": "System",
       "time": "Time",
-      "user": "User"
+      "user": "User",
+      "vote": "Vote"
     },
     "time": {
       "actions": "Scheduled actions",
