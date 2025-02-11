@@ -68,7 +68,7 @@ const RecoveryPasswordView = () => {
           label="Email"
           {...register('email')}
           error={!!errors.email}
-          helperText={errors.email?.message}
+          helperText={errors ? errors.email?.message : ''}
         />
         <Button variant="contained" disabled={isLoading} onClick={handleSubmit(onSubmit)}>{t('auth.forgotPassword.recover')}</Button>
       </Stack>

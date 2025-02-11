@@ -44,7 +44,7 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
                   <TextField
                     label={t('settings.columns.consent_text')}
                     error={!!fieldState.error}
-                    helperText={`${fieldState.error?.message}`}
+                    helperText={errors ? fieldState.error?.message : ''}
                     required
                     sx={{ flex: 1 }}
                     {...field}
