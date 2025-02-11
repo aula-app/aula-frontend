@@ -82,7 +82,7 @@ const BoxIdeasPhaseView = () => {
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
       <Typography variant="h5" py={2}>
-        {t(`phases.wild`)}
+        {t(`phases.name-${phase}`)}
       </Typography>
       <Grid container spacing={2} p={1}>
         {isLoading && (

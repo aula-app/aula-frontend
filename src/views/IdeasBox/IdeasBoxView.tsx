@@ -46,13 +46,26 @@ const IdeasBoxView = () => {
     setEdit({
       name: box.name,
       description_public: box.description_public,
+      phase_id: box.phase_id,
       topic_id: box.hash_id,
     });
   };
 
   const boxUpdate = async (data: EditBoxArguments) => {
     if (!(typeof edit === 'object') || !edit.topic_id) return;
-    const request = await editBox(edit);
+    const request = await editBox({
+      topic_id: edit.topic_id,
+      name: data.name,
+      description_public: data.description_public,
+      description_internal: data.description_internal,
+      room_id: data.room_hash_id,
+      phase_id: data.phase_id,
+      phase_duration_1: data.phase_duration_1,
+      phase_duration_2: data.phase_duration_2,
+      phase_duration_3: data.phase_duration_3,
+      phase_duration_4: data.phase_duration_4,
+      status: data.status,
+    });
     if (!request.error) boxClose();
   };
 
@@ -140,7 +153,7 @@ const IdeasBoxView = () => {
       {!isBoxLoading && box && <BoxCard box={box} onDelete={() => boxDelete()} onEdit={() => boxEdit(box)} disabled />}
       <Stack direction="row" pt={3} px={1} alignItems="center">
         <Typography variant="h6">
-          {t(delegationStatus.length > 0 ? `delegation.status.delegated` : `delegation.status.undelegated`, {
+         {box && t(`phases.id-${box.phase_id}`, {
             var: ideas.length,
           })}
         </Typography>

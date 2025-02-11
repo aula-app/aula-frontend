@@ -159,13 +159,20 @@
     "approval": "Approval",
     "discussion": "Discussion",
     "phase": "{{var}} phase",
+    "name-10": "Discussion",
+    "name-20": "Approval",
+    "name-30": "Results",
     "results": "Results",
     "status": {
       "end": "Phase ends in {{var}} days",
       "ended": "Phase ended"
     },
     "voting": "Voting",
-    "wild": "Wild Ideas"
+    "wild": "Wild Ideas",
+    "id-10": "{{var}} ideas in discussion",
+    "id-20": "{{var}} ideas in approval",
+    "id-30": "{{var}} ideas in voting",
+    "id-40": "{{var}} ideas in results"
   },
   "requests": {
     "accepted": "Your data change request has been accepted.",

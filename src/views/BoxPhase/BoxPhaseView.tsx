@@ -37,7 +37,7 @@ const BoxPhaseView = () => {
     setLoading(true);
     const response = await getBoxesByPhase(Number(phase), room_id);
     setError(response.error);
-    if (!response.error && response.data) setBoxes(response.data);
+    if (!response.error) setBoxes(response.data || []);
     setLoading(false);
   }, [room_id, phase]);
 
@@ -71,6 +71,7 @@ const BoxPhaseView = () => {
     const request = await editBox({
       topic_id: edit.hash_id,
       name: data.name,
+      phase_id: data.phase_id,
       description_public: data.description_public,
       status: data.status,
     });
