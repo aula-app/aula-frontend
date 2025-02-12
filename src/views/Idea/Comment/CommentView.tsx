@@ -42,7 +42,7 @@ const Comments = () => {
     setLoading(true);
     const response = await getCommentsByIdea(idea_id);
     if (response.error) setError(response.error);
-    if (!response.error && response.data) setComments(response.data);
+    if (!response.error) setComments(response.data || []);
     setLoading(false);
   }, [idea_id]);
 
