@@ -42,6 +42,7 @@ const BoxIdeasPhaseView = () => {
     const response = responses.flat()[0];
     if (response.error) setError(response.error);
     if (!response.error) setIdeas(response.data || []);
+    setLoading(false);
   }, [phase]);
 
   const updateIdea = async (data: EditIdeaArguments) => {
