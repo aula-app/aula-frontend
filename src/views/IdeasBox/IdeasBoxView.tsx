@@ -10,6 +10,7 @@ import { getIdeasByBox } from '@/services/ideas';
 import { DelegationType } from '@/types/Delegation';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
+import { checkPermissions } from '@/utils';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
@@ -144,7 +145,6 @@ const IdeasBoxView = () => {
           </Stack>
         )}
       </Stack>
-      {/* {checkPermissions(30) && <MoveData id={Number(box_id)} scope="boxes" onClose={() => boxIdeasFetch()} />} */}
       <Grid container spacing={1} pt={1} pb={2}>
         {isIdeasLoading && (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
@@ -161,6 +161,7 @@ const IdeasBoxView = () => {
             </Grid>
           ))}
       </Grid>
+      {checkPermissions(30) && Number(phase) < 30 && <>lalala</> /* add ideas */}
       <Drawer anchor="bottom" open={!!edit} onClose={boxClose} sx={{ overflowY: 'auto' }}>
         <BoxForms onClose={boxClose} onSubmit={boxUpdate} defaultValues={edit} />
       </Drawer>

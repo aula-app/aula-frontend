@@ -26,8 +26,12 @@ export interface GetRoomsResponse extends GenericResponse {
   data: RoomType[] | null;
 }
 
+interface RoomListRequest extends GenericListRequest {
+  type?: number;
+}
+
 export const getRooms = async (
-  args: GenericListRequest = {
+  args: RoomListRequest = {
     offset: 0,
     limit: 0,
     orderby: 0,

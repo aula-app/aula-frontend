@@ -55,6 +55,7 @@ const RoomsView: React.FC = () => {
       search_field,
       search_text,
       status,
+      type: 0,
     });
     if (response.error) setError(response.error);
     else {
