@@ -1,4 +1,3 @@
-import { DelegationType } from '@/types/Delegation';
 import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';

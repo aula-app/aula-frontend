@@ -1,6 +1,5 @@
-import { DelegationType } from '@/types/Delegation';
 import { StatusTypes } from '@/types/Generics';
-import { UserType } from '@/types/Scopes';
+import { DelegationType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 
