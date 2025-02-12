@@ -1,7 +1,8 @@
 import { AppIcon, AppIconButton } from '@/components';
-import { DelegationType } from '@/types/Delegation';
+import { delegateVote, getUser, getUsers, revokeDelegation } from '@/services/users';
+import { useAppStore } from '@/store';
 import { UserType } from '@/types/Scopes';
-import { databaseRequest, RequestObject } from '@/utils';
+import { GenericListRequest } from '@/utils';
 import {
   Button,
   Dialog,
@@ -18,12 +19,11 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
-import { useAppStore } from '@/store';
 
 interface Props {
-  isOpen: boolean;
+  open: boolean;
   onClose: () => void;
-  delegate: DelegationType[];
+  delegate?: string;
 }
 
 /**
@@ -31,107 +31,88 @@ interface Props {
  * @component ConsentDialog
  */
 
-const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
+const DelegateVote = ({ open, delegate, onClose }: Props) => {
   const { t } = useTranslation();
   const params = useParams();
   const [, dispatch] = useAppStore();
 
   const [users, setUsers] = useState<UserType[]>([]);
-  const [selected, setSelected] = useState<UserType | null>();
+  const [selected, setSelected] = useState<UserType>();
   const [filter, setFilter] = useState('');
-  const [confirm, setConfirm] = useState(delegate.length > 0);
 
   const usersFetch = async () => {
     const requestData = {
-      model: 'User',
-      method: 'getUsers',
-      arguments: {
-        offset: 0,
-        limit: 0,
-        orderby: 1,
-        asc: 1,
-      },
-    } as RequestObject;
+      offset: 0,
+      limit: 0,
+      orderby: 1,
+      asc: 1,
+    } as GenericListRequest;
 
     if (filter !== '') {
-      requestData['arguments']['both_names'] = filter;
+      requestData['both_names'] = filter;
     }
 
-    await databaseRequest(requestData).then((response) => {
-      if (!response.error) setUsers(response.data);
-    });
+    const response = await getUsers(requestData);
+
+    if (response.error || !response.data) return;
+    setUsers(response.data);
   };
 
-  const singleUserFetch = async () => {
-    if (delegate.length === 0) return;
-    await databaseRequest({
-      model: 'User',
-      method: 'getUserBaseData',
-      arguments: {
-        user_id: delegate[0].user_id_target,
-      },
-    }).then((response) => {
-      if (!response.error) setSelected(response.data);
-    });
+  const delegateFetch = async () => {
+    if (!delegate) return;
+    const response = await getUser(delegate);
+    if (response.error || !response.data) return;
+    setSelected(response.data);
   };
 
   const setDelegate = async () => {
     if (!selected || !params.box_id) return;
-    await databaseRequest(
-      {
-        model: 'User',
-        method: 'delegateVoteRight',
-        arguments: {
-          user_id_target: selected.id,
-          topic_id: params.box_id,
-        },
-      },
-      ['user_id', 'updater_id']
-    ).then(() => {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('delegation.status.success'), type: 'success' } });
-      onClose();
-    });
+    const response = await delegateVote(selected.hash_id, params.box_id);
+
+    if (response.error) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+    }
+
+    dispatch({ type: 'ADD_POPUP', message: { message: t('delegation.status.success'), type: 'success' } });
+    handleClose();
   };
 
   const removeDelegate = async () => {
-    if (!selected || !params.box_id) return;
-    await databaseRequest(
-      {
-        model: 'User',
-        method: 'giveBackAllDelegations',
-        arguments: {
-          topic_id: params.box_id,
-        },
-      },
-      ['user_id']
-    ).then(() => {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('delegation.status.revoked'), type: 'success' } });
-      onClose();
-    });
-  };
+    if (!params.box_id) return;
+    const response = await revokeDelegation(params.box_id);
 
-  const select = (user: UserType) => {
-    setSelected(selected !== null ? user : null);
+    if (response.error) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+    }
+
+    dispatch({ type: 'ADD_POPUP', message: { message: t('delegation.status.revoked'), type: 'success' } });
+    handleClose();
   };
 
   const changeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setFilter(event.target.value);
   };
 
-  useEffect(() => {
-    delegate.length === 0 ? usersFetch() : singleUserFetch();
-  }, [filter, delegate.length]);
+  const onReset = () => {
+    setFilter('');
+    setSelected(undefined);
+  };
+
+  const handleClose = () => {
+    onReset();
+    onClose();
+  };
 
   useEffect(() => {
-    setConfirm(delegate.length > 0);
-  }, [delegate.length]);
+    !delegate ? usersFetch() : delegateFetch();
+  }, [filter, delegate]);
 
   return (
-    <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="xs">
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogTitle>{t('delegation.label')}</DialogTitle>
       <DialogContent>
         <Stack height={350} position="relative" overflow="hidden">
-          <Slide direction="right" in={!confirm} mountOnEnter unmountOnExit>
+          <Slide direction="right" in={!selected && !delegate} mountOnEnter unmountOnExit>
             <Stack position="absolute" height="100%" width="100%">
               <FilledInput
                 size="small"
@@ -149,7 +130,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
                       direction="row"
                       mt={1}
                       key={user.id}
-                      bgcolor={selected && selected.id === user.id ? grey[200] : 'transparent'}
+                      bgcolor={selected && selected.hash_id === user.hash_id ? grey[200] : 'transparent'}
                       borderRadius={30}
                       sx={{
                         textTransform: 'none',
@@ -157,7 +138,7 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
                         justifyContent: 'start',
                         color: 'inherit',
                       }}
-                      onClick={() => select(user)}
+                      onClick={() => setSelected(user)}
                     >
                       <UserAvatar id={user.hash_id} />
                       <Stack ml={2}>
@@ -171,16 +152,16 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
               </Stack>
             </Stack>
           </Slide>
-          <Slide direction="left" in={confirm} mountOnEnter unmountOnExit>
+          <Slide direction="left" in={!!selected || !!delegate} mountOnEnter unmountOnExit>
             <Stack height="100%" width="100%">
               <Typography>
                 {t('delegation.confirm', {
-                  var: t(delegate.length === 0 ? 'delegation.delegate' : 'delegation.revoke'),
+                  var: t(!delegate ? 'delegation.delegate' : 'delegation.revoke'),
                 })}
               </Typography>
               {selected && (
                 <Stack flex={1} alignItems="center" justifyContent="center">
-                  <UserAvatar id={selected.hash_id} size={52} />
+                  <UserAvatar id={selected.hash_id} size={150} />
                   <Typography>{selected.realname}</Typography>
                   <Typography color="secondary" fontSize="small">
                     {selected.displayname}
@@ -192,21 +173,21 @@ const DelegateVote = ({ isOpen, delegate, onClose }: Props) => {
         </Stack>
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2, pt: 0 }}>
-        <Button color="secondary" onClick={onClose}>
+        <Button color="secondary" onClick={handleClose}>
           {t('actions.cancel')}
         </Button>
-        {!confirm ? (
-          <Button variant="contained" onClick={() => setConfirm(true)} disabled={!selected}>
-            {t('actions.select')}
-          </Button>
-        ) : delegate.length === 0 ? (
-          <Button variant="contained" onClick={setDelegate}>
-            {t('delegation.delegate')}
-          </Button>
-        ) : (
-          <Button variant="contained" onClick={removeDelegate}>
-            {t('delegation.revoke')}
-          </Button>
+        {selected && (
+          <>
+            {!delegate ? (
+              <Button variant="contained" onClick={setDelegate}>
+                {t('delegation.delegate')}
+              </Button>
+            ) : (
+              <Button variant="contained" onClick={removeDelegate}>
+                {t('delegation.revoke')}
+              </Button>
+            )}
+          </>
         )}
       </DialogActions>
     </Dialog>

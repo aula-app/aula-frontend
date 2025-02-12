@@ -30,6 +30,7 @@ export interface GenericListRequest {
   asc?: 0 | 1;
   search_field?: string;
   search_text?: string;
+  both_names?: string;
   status?: StatusTypes;
 }
 

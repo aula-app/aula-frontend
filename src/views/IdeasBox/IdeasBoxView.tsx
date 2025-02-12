@@ -2,13 +2,14 @@ import { AppIcon, AppLink } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import { BoxForms } from '@/components/DataForms';
+import DelegateVote from '@/components/DelegateVote';
 import { IdeaCard } from '@/components/Idea';
 import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
 import KnowMore from '@/components/KnowMore';
-import { deleteBox, editBox, EditBoxArguments, getBox, getBoxDelegation } from '@/services/boxes';
+import { deleteBox, editBox, EditBoxArguments, getBox } from '@/services/boxes';
 import { getIdeasByBox } from '@/services/ideas';
-import { DelegationType } from '@/types/Delegation';
-import { BoxType, IdeaType } from '@/types/Scopes';
+import { getDelegations } from '@/services/users';
+import { BoxType, DelegationType, IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
@@ -93,16 +94,27 @@ const IdeasBoxView = () => {
     setIdeasLoading(false);
   }, [box_id]);
 
-  const [delegationStatus, setDelegationStatus] = useState<DelegationType[]>([]);
+  /**
+   * Delegation data
+   */
+
+  const [delegating, setDelegating] = useState(false);
+  const [delegates, setDelegates] = useState<DelegationType[]>([]);
 
   const fetchDelegation = useCallback(async () => {
     if (!box_id) return;
     setIdeasLoading(true);
-    const response = await getBoxDelegation(box_id);
+    const response = await getDelegations(box_id);
     setIdeasError(response.error);
-    if (!response.error && response.data) setDelegationStatus(response.data);
+    console.log(response);
+    if (!response.error && response.data) setDelegates(response.data);
     setIdeasLoading(false);
   }, [box_id]);
+
+  const closeDelection = () => {
+    fetchDelegation();
+    setDelegating(false);
+  };
 
   useEffect(() => {
     fetchIdeas();
@@ -136,8 +148,8 @@ const IdeasBoxView = () => {
             <Typography variant="caption">
               {t('votes.vote').toUpperCase()} {t('ui.common.or')}
             </Typography>
-            <Button size="small" sx={{ bgcolor: '#fff' }} onClick={() => {}}>
-              {delegationStatus && delegationStatus.length > 0 ? t('delegation.revoke') : t('delegation.delegate')}
+            <Button size="small" sx={{ bgcolor: '#fff' }} onClick={() => setDelegating(true)}>
+              {delegates && delegates.length > 0 ? t('delegation.revoke') : t('delegation.delegate')}
             </Button>
             <KnowMore title={t('tooltips.delegate')}>
               <AppIcon icon="delegate" size="small" />
@@ -165,6 +177,11 @@ const IdeasBoxView = () => {
       <Drawer anchor="bottom" open={!!edit} onClose={boxClose} sx={{ overflowY: 'auto' }}>
         <BoxForms onClose={boxClose} onSubmit={boxUpdate} defaultValues={edit} />
       </Drawer>
+      <DelegateVote
+        open={delegating}
+        delegate={delegates[0] ? delegates[0].user_id_target : undefined}
+        onClose={closeDelection}
+      />
     </Stack>
   );
 };
