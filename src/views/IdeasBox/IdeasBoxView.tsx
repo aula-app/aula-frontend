@@ -173,7 +173,7 @@ const IdeasBoxView = () => {
             </Grid>
           ))}
       </Grid>
-      {checkPermissions(30) && Number(phase) < 30 && <>lalala</> /* add ideas */}
+      {checkPermissions(30) && Number(phase) < 30 && <></> /* add ideas */}
       <Drawer anchor="bottom" open={!!edit} onClose={boxClose} sx={{ overflowY: 'auto' }}>
         <BoxForms onClose={boxClose} onSubmit={boxUpdate} defaultValues={edit} />
       </Drawer>
