@@ -136,28 +136,3 @@ export async function deleteBox(box_id: string): Promise<GenericResponse> {
 
   return response as GenericResponse;
 }
-
-/**
- * Gets an box delegation status from the database
- * @param box_id - The box id
- * @returns Promise resolving to the new box
- */
-
-interface GetDelegationResponse extends GenericResponse {
-  data: DelegationType[] | null;
-}
-
-export const getBoxDelegation = async (box_id: string): Promise<GetDelegationResponse> => {
-  const response = await databaseRequest(
-    {
-      model: 'User',
-      method: 'getDelegationStatus',
-      arguments: {
-        topic_id: box_id,
-      },
-    },
-    ['user_id']
-  );
-
-  return response as GetDelegationResponse;
-};

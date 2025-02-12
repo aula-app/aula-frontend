@@ -1,3 +1,4 @@
+import { DelegationType } from '@/types/Delegation';
 import { StatusTypes } from '@/types/Generics';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
@@ -317,6 +318,68 @@ export async function removeUserGroup(user_id: string, group_id: string): Promis
     method: 'removeUserFromGroup',
     arguments: { user_id, group_id },
   });
+
+  return response as GenericResponse;
+}
+
+/**
+ * Gets an box delegation status from the database
+ */
+
+interface GetDelegationResponse extends GenericResponse {
+  data: DelegationType[] | null;
+}
+
+export const getDelegations = async (box_id: string): Promise<GetDelegationResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'getDelegationStatus',
+      arguments: {
+        topic_id: box_id,
+      },
+    },
+    ['user_id']
+  );
+
+  return response as GetDelegationResponse;
+};
+
+/**
+ * Add delegation
+ */
+
+export async function delegateVote(target_id: string, topic_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'delegateVoteRight',
+      arguments: {
+        user_id_target: target_id,
+        topic_id,
+      },
+    },
+    ['user_id', 'updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+/**
+ * Remove delegation
+ */
+
+export async function revokeDelegation(topic_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'giveBackAllDelegations',
+      arguments: {
+        topic_id,
+      },
+    },
+    ['user_id']
+  );
 
   return response as GenericResponse;
 }
