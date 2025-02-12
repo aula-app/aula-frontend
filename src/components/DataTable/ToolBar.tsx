@@ -25,7 +25,7 @@ type Props = {
   extraTools?: ({ items }: { items: Array<string> }) => JSX.Element;
   scope: SettingNamesType;
   selected: Array<string>;
-  setEdit: Dispatch<SetStateAction<string | boolean>>;
+  setEdit: (value: boolean) => void;
   setDelete: (ideas: Array<string>) => void;
 };
 
@@ -34,6 +34,11 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
   const theme = useTheme();
 
   const [isOpen, setOpen] = useState(false);
+
+  const onDelete = () => {
+    setDelete(selected);
+    setOpen(false);
+  };
 
   return (
     <Stack
@@ -82,7 +87,7 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
           <Button onClick={() => setOpen(false)} color="secondary" autoFocus>
             {t('actions.cancel')}
           </Button>
-          <Button color="error" variant="contained" onClick={() => setDelete(selected)}>
+          <Button color="error" variant="contained" onClick={onDelete}>
             {t('actions.delete')}
           </Button>
         </DialogActions>

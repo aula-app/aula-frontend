@@ -27,13 +27,13 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose, onSubmit })
   const schema = yup.object({
     name: yup.string().required(t('forms.validation.required')),
     description_public: yup.string().required(t('forms.validation.required')),
-    status: yup.number(),
-    room_id: yup.string(),
+    room_hash_id: yup.string().required(t('forms.validation.required')),
     phase_id: yup.string(),
     phase_duration_1: yup.number(),
     phase_duration_2: yup.number(),
     phase_duration_3: yup.number(),
     phase_duration_4: yup.number(),
+    status: yup.number(),
   } as Record<keyof BoxType, any>);
 
   const {

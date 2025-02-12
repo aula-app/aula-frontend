@@ -44,6 +44,7 @@ const SelectField: React.FC<Props> = ({
             select
             {...field}
             error={!!fieldState.error}
+            helperText={t(`${fieldState.error?.message || ''}`)}
             {...restOfProps}
             slotProps={{ inputLabel: { shrink: true } }}
           >
@@ -53,7 +54,6 @@ const SelectField: React.FC<Props> = ({
               </MenuItem>
             ))}
           </TextField>
-          <FormHelperText error={!!fieldState.error}>{t(`${fieldState.error?.message || ''}`)}</FormHelperText>
         </FormControl>
       )}
     />

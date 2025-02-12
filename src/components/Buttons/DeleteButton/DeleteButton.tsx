@@ -23,6 +23,11 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
 
+  const handleDelete = () => {
+    onDelete();
+    setOpen(false);
+  };
+
   const onClose = () => setOpen(false);
 
   return (
@@ -48,7 +53,7 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
           <Button onClick={onClose} color="secondary" autoFocus>
             {t('actions.cancel')}
           </Button>
-          <Button onClick={onDelete} color="error" variant="contained">
+          <Button onClick={handleDelete} color="error" variant="contained">
             {t('actions.delete')}
           </Button>
         </DialogActions>

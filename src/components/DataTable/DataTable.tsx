@@ -65,6 +65,16 @@ const DataTable: React.FC<Props> = ({
     setLimit(getDataLimit());
   };
 
+  const hendleDelete = () => {
+    setDelete(selected);
+    setSelected([]);
+  };
+
+  const handleEdit = (value: boolean) => {
+    setEdit(value);
+    setSelected([]);
+  };
+
   useEffect(() => {
     window.addEventListener('resize', getLimit);
     return () => {
@@ -74,7 +84,13 @@ const DataTable: React.FC<Props> = ({
 
   return (
     <Stack sx={{ overflowX: 'auto' }} {...restOfProps}>
-      <ToolBar scope={scope} selected={selected} setEdit={setEdit} setDelete={setDelete} extraTools={extraTools} />
+      <ToolBar
+        scope={scope}
+        selected={selected}
+        setEdit={handleEdit}
+        setDelete={hendleDelete}
+        extraTools={extraTools}
+      />
       <Table stickyHeader size="small">
         <TableHead>
           <TableRow sx={{ maxHeight: '55px' }}>
