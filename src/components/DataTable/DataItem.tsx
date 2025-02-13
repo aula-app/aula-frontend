@@ -4,8 +4,7 @@ import { getRoom } from '@/services/rooms';
 import { getUser } from '@/services/users';
 import { useAppStore } from '@/store';
 import { PossibleFields, SettingType } from '@/types/Scopes';
-import { phases } from '@/utils';
-import { ScopeStatusOptions } from '@/utils/commands';
+import { phases, STATUS } from '@/utils';
 import { Chip, Stack } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -100,7 +99,7 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
     case 'phase_id':
       return <>{phases[Number()] ? t(`phases.${phases[Number(value)]}`) : ''}</>;
     case 'status':
-      return <>{t(ScopeStatusOptions[Number(value)].label)}</>;
+      return <>{t(STATUS[Number(value)].label)}</>;
     case 'userlevel':
       return <>{t(`roles.${value}` || '')}</>;
     case 'user_needs_to_consent':

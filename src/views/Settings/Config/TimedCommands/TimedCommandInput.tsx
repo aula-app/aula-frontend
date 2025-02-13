@@ -1,9 +1,12 @@
-import { SettingNamesType } from '@/types/SettingsTypes';
+import { getGroups } from '@/services/groups';
+import { getUsers } from '@/services/users';
+import { SelectOptionsType, SettingNamesType } from '@/types/SettingsTypes';
 import { databaseRequest, FORMAT_DATE_ONLY, FORMAT_DATE_TIME } from '@/utils';
 import { Commands } from '@/utils/commands';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { set } from 'date-fns';
 import dayjs from 'dayjs';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,12 +26,10 @@ const TimeCommandInput = ({ onReload }: Props) => {
   const [action, setAction] = useState<number>(0);
   const [value, setValue] = useState<number>(1);
   const [startTime, setStartTime] = useState<dayjs.ConfigType>(dayjs(new Date()).format(FORMAT_DATE_TIME));
-  const [options, setOptions] = useState<
-    {
-      value: number;
-      label: string;
-    }[]
-  >();
+  const [options, setOptions] = useState<{ users: SelectOptionsType; groups: SelectOptionsType }>({
+    users: [],
+    groups: [],
+  });
 
   async function addField() {
     if (typeof action === 'undefined' || typeof scope === 'undefined' || typeof startTime === 'undefined') return;
@@ -70,34 +71,30 @@ const TimeCommandInput = ({ onReload }: Props) => {
     setValue(Number(event.target.value));
   };
 
-  async function getOptions(scope: SettingNamesType) {
-    const requestId = [];
-    if (scope === 'ideas' || scope === 'boxes') requestId.push('user_id');
+  const getOptions = () => {
+    fetchUsers();
+    fetchGroups();
+  };
 
-    // await databaseRequest(
-    //   {
-    //     model: DataConfig[scope].requests.model,
-    //     method: DataConfig[scope].requests.fetch,
-    //     arguments: {
-    //       limit: 0,
-    //       offset: 0,
-    //     },
-    //   },
-    //   requestId
-    // ).then((response) => {
-    //   if (response.data)
-    //     setOptions(
-    //       // @ts-ignore
-    //       response.data.map((row) => {
-    //         return { label: row[DataConfig[scope].columns[0].name], value: row.id };
-    //       })
-    //     );
-    // });
-  }
+  const fetchUsers = async () => {
+    const response = await getUsers();
+    if (response.error || !response.data) return;
+
+    const users = response.data.map((user) => ({ label: user.displayname, value: user.hash_id }));
+    setOptions({ ...options, users });
+  };
+
+  const fetchGroups = async () => {
+    const response = await getGroups();
+    if (response.error || !response.data) return;
+
+    const groups = response.data.map((group) => ({ label: group.group_name, value: group.hash_id }));
+    setOptions({ ...options, groups });
+  };
 
   useEffect(() => {
-    if (scope && Commands[scope].label !== 'system') getOptions(Commands[scope].label);
-  }, [scope]);
+    getOptions();
+  }, []);
 
   return (
     <Stack gap={2}>
@@ -105,7 +102,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
         <Typography variant="h6">
           {t('actions.add', { var: t('settings.columns.command').toLocaleLowerCase() })}:
         </Typography>
-        {/* <TextField
+        <TextField
           select
           label={t('settings.labels.scope')}
           value={scope}
@@ -117,35 +114,28 @@ const TimeCommandInput = ({ onReload }: Props) => {
         >
           {Commands.map((scopeOptions, i) => (
             <MenuItem value={i} key={i}>
-              {scopeOptions.label === 'system'
-                ? t('settings.panels.system')
-                : t(`scopes.${DataConfig[scopeOptions.label].requests.item.toLowerCase()}.name`)}
+              {scopeOptions.label === 'system' ? t('settings.panels.system') : t(`scopes.${scopeOptions.label}.name`)}
             </MenuItem>
           ))}
         </TextField>
-        {Commands[scope].label !== 'system' && (
+        {(Commands[scope].label === 'users' || Commands[scope].label === 'groups') && (
           <TextField
             select
-            label={t(`scopes.${DataConfig[Commands[scope].label].requests.item.toLowerCase()}.name`)}
+            label={t(`scopes.${Commands[scope].label}.name`)}
             value={target}
             onChange={changeTarget}
             variant="outlined"
             sx={{ minWidth: 180 }}
             size="small"
             required
-            disabled={!options}
           >
-            {options ? (
-              options.map((statusOptions) => (
-                <MenuItem value={statusOptions.value} key={statusOptions.value}>
-                  {statusOptions.label}
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem></MenuItem>
-            )}
+            {options[Commands[scope].label].map((statusOptions) => (
+              <MenuItem value={statusOptions.value} key={statusOptions.value}>
+                {statusOptions.label}
+              </MenuItem>
+            ))}
           </TextField>
-        )} */}
+        )}
         {Commands[scope].actions && (
           <TextField
             select
