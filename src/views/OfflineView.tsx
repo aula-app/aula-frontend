@@ -1,6 +1,7 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { useEventLogout } from '@/hooks';
+import { useAppStore } from '@/store';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { logout } from '@/services/login';
 
 const OFFLINE_IMAGE = '/img/aula_happy.png';
 
@@ -13,18 +14,15 @@ interface OfflineViewProps {
  */
 const OfflineView: React.FC<OfflineViewProps> = () => {
   const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
+  const logout = useEventLogout();
 
-  return (
-    <Stack height="100vh" alignItems="center" justifyContent="center" p={4}>
-      <Button color="error" sx={{ position: 'absolute', top: 10, left: 10 }} onClick={logout}>
-        &lt; {t('auth.logout')}
-      </Button>
-      <img src={OFFLINE_IMAGE} alt="Offline status" loading="lazy" width={150} />
-      <Typography variant="h6" mt={6} textAlign="center">
-        {t('errors.offline')}
-      </Typography>
-    </Stack>
-  );
+  useEffect(() => {
+    logout();
+    dispatch({ type: 'ADD_POPUP', message: { message: t('errors.offline'), type: 'error' } });
+  }, []);
+
+  return <></>;
 };
 
 export default OfflineView;

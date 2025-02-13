@@ -1,9 +1,7 @@
-import { useEventLogout } from '@/hooks';
 import { ObjectPropByName, StatusTypes } from '../types/Generics';
 import { parseJwt } from '../utils/jwt';
 import { localStorageGet } from '../utils/localStorage';
 import { t } from 'i18next';
-import { useAppStore } from '@/store';
 
 /**
  * Interface representing a database request object.
@@ -82,7 +80,6 @@ export const baseRequest = async (
 ): Promise<GenericResponse> => {
   const api_url = localStorageGet('api_url');
   const jwt_token = tmp_token || localStorageGet('token');
-  const [, dispatch] = useAppStore();
   const headers = {} as { 'Content-Type': string; Authorization?: string };
 
   if (isJson) {
@@ -114,17 +111,16 @@ export const baseRequest = async (
 
     const response = await request.json();
 
+    if ('online_mode' in response && response.online_mode === 0) {
+      if (window.location.pathname !== '/offline') window.location.href = '/offline';
+    }
+
     if (response.error) {
-      if ('online_mode' in response && response.online_mode === 0) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.offline'), type: 'error' } });
-        useEventLogout();
-      } else {
-        return {
-          data: null,
-          count: null,
-          error: t(`errors.noData`),
-        };
-      }
+      return {
+        data: null,
+        count: null,
+        error: t(`errors.noData`),
+      };
     }
 
     if (!response.success) {
