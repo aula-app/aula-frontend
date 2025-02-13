@@ -42,7 +42,7 @@ export const getRooms = async (
   // Check if room has Super Moderator (40) access to view all rooms
   const hasSuperModAccess = checkPermissions(40);
 
-  hasSuperModAccess && delete args.type;
+  if (!hasSuperModAccess) delete args.type;
 
   const response = await databaseRequest(
     {
