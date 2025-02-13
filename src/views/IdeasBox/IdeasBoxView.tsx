@@ -143,7 +143,8 @@ const IdeasBoxView = () => {
               var: ideas.length,
             })}
         </Typography>
-        {phase === '30' && (
+        {checkPermissions(30) && Number(phase) < 20 && <></> /* add ideas */}
+        {Number(phase) === 30 && (
           <Stack direction="row" position="relative" alignItems="center" sx={{ ml: 'auto', pr: 3 }}>
             <Typography variant="caption">
               {t('votes.vote').toUpperCase()} {t('ui.common.or')}
@@ -173,7 +174,6 @@ const IdeasBoxView = () => {
             </Grid>
           ))}
       </Grid>
-      {checkPermissions(30) && Number(phase) < 30 && <></> /* add ideas */}
       <Drawer anchor="bottom" open={!!edit} onClose={boxClose} sx={{ overflowY: 'auto' }}>
         <BoxForms onClose={boxClose} onSubmit={boxUpdate} defaultValues={edit} />
       </Drawer>
