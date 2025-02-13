@@ -18,7 +18,7 @@ import { MarkdownEditor, RoleField, StatusField } from '../DataFields';
 interface UserFormsProps {
   children?: React.ReactNode;
   onClose: () => void;
-  defaultValues?: EditUserArguments;
+  defaultValues?: UserType;
   onSubmit: (data: EditUserArguments) => void;
 }
 

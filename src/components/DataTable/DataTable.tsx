@@ -1,6 +1,6 @@
 import ToolBar from '@/components/DataTable/ToolBar';
 import { StatusTypes } from '@/types/Generics';
-import { PossibleFields, SettingsType } from '@/types/Scopes';
+import { PossibleFields, SettingsType, SettingType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { getDataLimit } from '@/utils';
 import { Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
@@ -19,7 +19,7 @@ type Props = {
   setAsc: Dispatch<SetStateAction<boolean>>;
   setLimit: Dispatch<SetStateAction<number>>;
   setOrderby: Dispatch<SetStateAction<number>>;
-  setEdit: Dispatch<SetStateAction<string | boolean>>;
+  setEdit: (item: SettingType) => void;
   setDelete: (items: Array<string>) => void;
 };
 
@@ -128,7 +128,7 @@ const DataTable: React.FC<Props> = ({
               {columns.map((column) => (
                 <TableCell
                   sx={{ whiteSpace: 'nowrap', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                  onClick={() => setEdit(row.hash_id)}
+                  onClick={() => setEdit(row)}
                   key={`${column.name}-${row.hash_id}`}
                 >
                   {column.name in row && <DataItem row={row} column={column.name} />}

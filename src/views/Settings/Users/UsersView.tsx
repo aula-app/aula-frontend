@@ -1,5 +1,6 @@
 import AddGroupButton from '@/components/Buttons/AddGroups/AddGroupsButton';
 import AddRoomButton, { AddRoomRefProps } from '@/components/Buttons/AddRooms/AddRoomsButton';
+import AddSpecialRolesButton from '@/components/Buttons/AddSpecialRoles/AddSpecialRoles';
 import { UserForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
@@ -64,7 +65,7 @@ const UsersView: React.FC = () => {
 
   const [room_id, setRoom] = useState<string | undefined>();
   const [userlevel, setRole] = useState<RoleTypes | 0 | undefined>();
-  const [edit, setEdit] = useState<string | boolean>(false); // false = update dialog closed ;true = new idea; string = item hash_id;
+  const [edit, setEdit] = useState<UserType | boolean>(false); // false = update dialog closed ;true = new idea; UserType = item;
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -87,7 +88,7 @@ const UsersView: React.FC = () => {
     setLoading(false);
   }, [search_field, search_text, status, asc, limit, offset, orderby, room_id, userlevel]);
 
-  const onSubmit = (data: UserArguments) => {
+  const onSubmit = (data: AddUserArguments | EditUserArguments) => {
     if (!edit) return;
     typeof edit === 'boolean' ? newUser(data as AddUserArguments) : updateUser(data as EditUserArguments);
   };
@@ -108,7 +109,8 @@ const UsersView: React.FC = () => {
   };
 
   const updateUser = async (data: EditUserArguments) => {
-    const user = users.find((user) => user.hash_id === edit);
+    if (typeof edit === 'boolean') return;
+    const user = users.find((user) => user.hash_id === edit.hash_id);
     if (!user || !user.hash_id) return;
     const request = await editUser({
       user_id: user.hash_id,
@@ -171,7 +173,7 @@ const UsersView: React.FC = () => {
           setAsc={setAsc}
           setLimit={setLimit}
           setOrderby={setOrderby}
-          setEdit={setEdit}
+          setEdit={(user) => setEdit(user as UserType)}
           setDelete={deleteUsers}
           extraTools={extraTools}
         />
@@ -181,14 +183,9 @@ const UsersView: React.FC = () => {
         <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <UserForms
-          onClose={onClose}
-          onSubmit={onSubmit}
-          defaultValues={
-            typeof edit !== 'boolean' ? (users.find((user) => user.hash_id === edit) as UserArguments) : undefined
-          }
-        >
-          <AddRoomButton users={typeof edit === 'string' ? [edit] : []} ref={addRoom} />
+        <UserForms onClose={onClose} onSubmit={onSubmit} defaultValues={typeof edit !== 'boolean' ? edit : undefined}>
+          {typeof edit !== 'boolean' && Number(edit.userlevel) < 50 && <AddSpecialRolesButton user={edit} />}
+          <AddRoomButton users={typeof edit !== 'boolean' ? [edit.hash_id] : []} ref={addRoom} />
         </UserForms>
       </Drawer>
     </Stack>

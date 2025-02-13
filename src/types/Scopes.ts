@@ -1,5 +1,5 @@
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
-import { RoomPhases } from './SettingsTypes';
+import { RoleTypes, RoomPhases } from './SettingsTypes';
 import { StatusTypes } from './Generics';
 
 export interface AnnouncementType {
@@ -177,6 +177,12 @@ export interface UserType {
   temp_pw: string;
   consents_given: number;
   consents_needed: number;
+  roles:
+    | {
+        role: RoleTypes;
+        room: string;
+      }[]
+    | null;
 }
 
 export interface CategoryType {
