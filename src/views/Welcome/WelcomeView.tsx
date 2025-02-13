@@ -21,7 +21,11 @@ const WelcomeView = () => {
   };
 
   const fetchRooms = useCallback(async () => {
-    const response = await getRooms();
+    const response = await getRooms({
+      offset: 0,
+      limit: 0,
+      type: -1,
+    });
     setLoading(false);
     if (response.error) setError(response.error);
     if (!response.error && response.data) setRooms(response.data);
