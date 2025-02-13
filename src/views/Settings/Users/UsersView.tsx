@@ -91,7 +91,7 @@ const UsersView: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.users'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.users'), '']] });
     fetchUsers();
   }, [fetchUsers]);
 
