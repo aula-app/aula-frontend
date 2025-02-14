@@ -59,12 +59,12 @@ export interface UserArguments {
 }
 
 export interface AddUserArguments extends UserArguments {
-  userlevel: string;
+  userlevel: RoleTypes;
 }
 
 export interface EditUserArguments extends UserArguments {
   user_id?: string;
-  userlevel?: string;
+  userlevel?: RoleTypes;
 }
 
 /**
