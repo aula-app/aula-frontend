@@ -30,7 +30,7 @@ const DataSettings = ({ onReload }: Props) => {
   const [, dispatch] = useAppStore();
   const [users, setUsers] = useState<Array<string>>([]);
   const [role, setRole] = useState<RoleTypes | 0 | undefined>(10);
-  const [room, setRoom] = useState<string | undefined>('');
+  const [room, setRoom] = useState<string>('');
   const [error, setError] = useState<string>('');
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
