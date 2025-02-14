@@ -18,6 +18,7 @@
     "edit": "Edit {{var}}",
     "filter": "Filter",
     "hide": "Hide",
+    "loading": "Loading",
     "move": "Move selected {{var}} to",
     "print": "Print",
     "remove": "Delete {{var}}",

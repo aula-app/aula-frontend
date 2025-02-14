@@ -1,13 +1,6 @@
-import {
-  addUser,
-  addUserRoom,
-  editUser,
-  EditUserArguments,
-  getUserRooms,
-  removeUserRoom,
-  UserArguments,
-} from '@/services/users';
+import { addUser, addUserRoom, editUser, getUserRooms, removeUserRoom } from '@/services/users';
 import { UserType } from '@/types/Scopes';
+import { UpdateType } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
@@ -17,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, RoleField, StatusField } from '../DataFields';
 import RoomField from '../DataFields/RoomField';
-import { SelectOptionsType, UpdateType } from '@/types/SettingsTypes';
 
 /**
  * UserForms component is used to create or edit an user.
@@ -35,6 +27,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
   const { t } = useTranslation();
   const [rooms, setRooms] = useState<string[]>([]);
   const [updateRooms, setUpdateRooms] = useState<UpdateType>({ add: [], remove: [] });
+  const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object({
     about_me: yup.string().nullable(),
@@ -67,19 +60,24 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
 
   const fetchUserRooms = async () => {
     if (!defaultValues?.hash_id) return;
-    const response = await getUserRooms(defaultValues.hash_id);
+    const response = await getUserRooms(defaultValues.hash_id, 0);
     if (!response.data) return;
     const rooms = response.data.map((room) => room.hash_id);
     setRooms(rooms);
   };
 
   const onSubmit = async (data: SchemaType, e?: React.BaseSyntheticEvent) => {
-    if (!defaultValues) {
-      await newUser(data);
-    } else {
-      await updateUser(data);
+    try {
+      setIsLoading(true);
+      if (!defaultValues) {
+        await newUser(data);
+      } else {
+        await updateUser(data);
+      }
+      onClose();
+    } finally {
+      setIsLoading(false);
     }
-    onClose();
   };
 
   const setUserRooms = async (user_id: string) => {
@@ -135,7 +133,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
             </Typography>
             <Stack direction="row" gap={2}>
               {children}
-              {checkPermissions(40) && <StatusField control={control} />}
+              {checkPermissions(40) && <StatusField control={control} disabled={isLoading} />}
             </Stack>
           </Stack>
           <Stack direction="row" flexWrap="wrap" gap={2}>
@@ -143,6 +141,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
               <TextField
                 fullWidth
                 required
+                disabled={isLoading}
                 label={t(`settings.columns.displayname`)}
                 size="small"
                 error={!!errors.displayname}
@@ -152,6 +151,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
               <TextField
                 fullWidth
                 required
+                disabled={isLoading}
                 label={t(`settings.columns.username`)}
                 size="small"
                 error={!!errors.username}
@@ -161,6 +161,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
               <TextField
                 fullWidth
                 required
+                disabled={isLoading}
                 label={t(`settings.columns.realname`)}
                 size="small"
                 error={!!errors.realname}
@@ -169,25 +170,33 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
               />
               <TextField
                 fullWidth
+                disabled={isLoading}
                 label={t(`settings.columns.email`)}
                 size="small"
                 error={!!errors.email}
                 helperText={`${errors.email?.message || ''}`}
                 {...register('email')}
               />
-              {checkPermissions(40) && Number(defaultValues?.userlevel) < 50 && <RoleField control={control} />}
+              {checkPermissions(40) && Number(defaultValues?.userlevel) < 50 && (
+                <RoleField control={control} disabled={isLoading} />
+              )}
               {checkPermissions(40) && (
-                <RoomField defaultValues={rooms} onChange={(updates) => setUpdateRooms(updates)} />
+                <RoomField defaultValues={rooms} onChange={(updates) => setUpdateRooms(updates)} disabled={isLoading} />
               )}
             </Stack>
-            <MarkdownEditor name="about_me" control={control} sx={{ flex: 2, minWidth: `min(300px, 100%)` }} />
+            <MarkdownEditor
+              name="about_me"
+              control={control}
+              disabled={isLoading}
+              sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
+            />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error">
+            <Button onClick={onClose} color="error" disabled={isLoading}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained">
-              {t('actions.confirm')}
+            <Button type="submit" variant="contained" disabled={isLoading}>
+              {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>
         </Stack>
