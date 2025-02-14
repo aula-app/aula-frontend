@@ -7,27 +7,27 @@ import AppIcon from '../AppIcon';
 import { IconType } from '../AppIcon/AppIcon';
 
 interface Props extends BaseTextFieldProps {
-  defaultValues: number[];
+  defaultValue: number;
   disabled?: boolean;
-  onChange: (updates: { add: number[]; remove: number[] }) => void;
+  onChange: (value: number) => void;
 }
 
 /**
  * Renders "CategoryField" component
  */
 
-type CategoryOptionsType = {
+type CategoryOptionType = {
   label: string;
   value: number;
   icon: string;
-}[];
+};
 
-const CategoryField: React.FC<Props> = ({ defaultValues, onChange, disabled = false, ...restOfProps }) => {
+const CategoryField: React.FC<Props> = ({ defaultValue, onChange, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [options, setOptions] = useState<CategoryOptionsType>([]);
-  const [selectedOptions, setSelectedOptions] = useState<CategoryOptionsType>([]);
+  const [options, setOptions] = useState<CategoryOptionType[]>([]);
+  const [value, setValue] = useState<CategoryOptionType>({ label: '', value: 0, icon: '' });
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -42,50 +42,36 @@ const CategoryField: React.FC<Props> = ({ defaultValues, onChange, disabled = fa
     setOptions(categories);
   };
 
-  const handleChange = (selected: CategoryOptionsType) => {
-    setSelectedOptions(selected);
-    const selectedValues = selected.map((option) => Number(option.value));
-    onChange({
-      add: selectedValues.filter((value) => !defaultValues.includes(value)),
-      remove: defaultValues.filter((value) => !selectedValues.includes(value)),
-    });
+  const handleChange = (value: CategoryOptionType | null) => {
+    const selected = options.filter((options) => options.value === value?.value)[0];
+    setValue(selected);
+    onChange(value?.value || 0);
   };
 
   useEffect(() => {
     if (options.length > 0) {
-      const filtered = options.filter((option) => defaultValues.includes(Number(option.value)));
-      setSelectedOptions(filtered);
+      const currentId = defaultValue || 0;
+      setValue(options.filter((option) => option.value === currentId)[0]);
     }
-  }, [options, defaultValues]);
+  }, [options, defaultValue]);
 
   useEffect(() => {
     fetchCategories();
-  }, [defaultValues]);
+  }, [defaultValue]);
 
   return (
     <Autocomplete
-      multiple
       fullWidth
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
       onChange={(_, value) => handleChange(value)}
-      value={selectedOptions}
+      value={value || null}
       isOptionEqualToValue={(option, value) => option.value === value.value}
       getOptionLabel={(option) => option.label}
       options={options}
       loading={loading}
       disabled={disabled}
-      renderTags={(value, getTagProps) => {
-        return value.map((option, index) => (
-          <Chip
-            avatar={<AppIcon icon={option.icon as IconType} mr={1} />}
-            label="Avatar"
-            variant="outlined"
-            {...getTagProps({ index })}
-          />
-        ));
-      }}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
         return (
@@ -98,7 +84,7 @@ const CategoryField: React.FC<Props> = ({ defaultValues, onChange, disabled = fa
       renderInput={(params) => (
         <TextField
           {...params}
-          label={t('scopes.categories.plural')}
+          label={t('scopes.categories.name')}
           disabled={disabled}
           slotProps={{
             input: {

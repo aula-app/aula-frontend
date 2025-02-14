@@ -1,5 +1,5 @@
 import { addIdeaCategory, getCategories, removeIdeaCategory } from '@/services/categories';
-import { addIdea, addIdeaBox, editIdea, getIdeaBoxes } from '@/services/ideas';
+import { addIdea, addIdeaBox, editIdea, getIdeaBoxes, removeIdeaBox } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,9 +8,11 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { MarkdownEditor, StatusField } from '../DataFields';
-import SelectBoxField from '../DataFields/SelectBoxField';
+import { MarkdownEditor, SelectRoomField, StatusField } from '../DataFields';
 import CategoryField from '../DataFields/CategoriesField';
+import SelectBoxField from '../DataFields/SelectBoxField';
+import { start } from 'repl';
+import { useParams } from 'react-router-dom';
 
 /**
  * IdeaForms component is used to create or edit an idea.
@@ -25,13 +27,12 @@ interface IdeaFormsProps {
 
 const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
+  const { room_id } = useParams();
 
   const [box, setBox] = useState<string>('');
-  const [categories, setCategories] = useState<number[]>([]);
-  const [updateCategories, setUpdateCategories] = useState<{ add: number[]; remove: number[] }>({
-    add: [],
-    remove: [],
-  });
+  const [category, setCategory] = useState(0);
+  const [startingBox, setStartingBox] = useState<string>('');
+  const [startingCategory, setStartingCategory] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object({
@@ -57,16 +58,18 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     if (!defaultValues?.hash_id) return;
     const response = await getIdeaBoxes(defaultValues.hash_id);
     if (!response.data) return;
-    const box = response.data.map((box) => box.hash_id)[0];
-    setBox(box);
+    const responseBox = response.data.map((box) => box.hash_id)[0];
+    setBox(responseBox);
+    setStartingBox(responseBox);
   };
 
   const fetchIdeaCategories = async () => {
     if (!defaultValues?.hash_id) return;
     const response = await getCategories(defaultValues.hash_id);
     if (!response.data) return;
-    const categories = response.data.map((category) => category.id);
-    setCategories(categories);
+    const responseCategory = response.data.map((category) => category.id)[0];
+    setCategory(responseCategory);
+    setStartingCategory(responseCategory);
   };
 
   const onSubmit = async (data: SchemaType) => {
@@ -85,15 +88,16 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
 
   const newIdea = async (data: SchemaType) => {
     const response = await addIdea({
-      room_id: data.room_hash_id,
+      room_id: data.room_hash_id || room_id,
       title: data.title,
       content: data.content,
       custom_field1: data.custom_field1,
       custom_field2: data.custom_field2,
     });
     if (response.error || !response.data) return;
-    if (box) await addIdeaBox(response.data.hash_id, box);
-    await setIdeaCategory(response.data.hash_id);
+    setIdeaBox(response.data.hash_id);
+    setIdeaCategory(response.data.hash_id);
+    onClose();
   };
 
   const updateIdea = async (data: SchemaType) => {
@@ -107,14 +111,21 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       idea_id: defaultValues.hash_id,
     });
     if (response.error || !response.data) return;
-    if (box) await addIdeaBox(defaultValues?.hash_id, box);
-    await setIdeaCategory(defaultValues?.hash_id);
+    setIdeaBox(defaultValues?.hash_id);
+    setIdeaCategory(defaultValues?.hash_id);
+    onClose();
+  };
+
+  const setIdeaBox = async (idea_id: string) => {
+    if (box === startingBox) return;
+    if (box !== '') await addIdeaBox(idea_id, box);
+    else await removeIdeaBox(idea_id, startingBox);
   };
 
   const setIdeaCategory = async (idea_id: string) => {
-    const addPromises = updateCategories.add.map((category_id) => addIdeaCategory(idea_id, category_id));
-    const removePromises = updateCategories.remove.map((category_id) => removeIdeaCategory(idea_id, category_id));
-    await Promise.all([...addPromises, ...removePromises]);
+    if (category === startingCategory) return;
+    if (category !== 0) await addIdeaCategory(idea_id, category);
+    else await removeIdeaCategory(idea_id, startingCategory);
   };
 
   useEffect(() => {
@@ -150,12 +161,17 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             />
             {/* content */}
             <MarkdownEditor name="content" control={control} required disabled={isLoading} />
-            <SelectBoxField defaultValue={box} onChange={setBox} disabled={isLoading} />
-            <CategoryField
-              defaultValues={categories}
-              onChange={(updates) => setUpdateCategories(updates)}
-              disabled={isLoading}
-            />
+            {checkPermissions(40) && (
+              <Stack direction="row" gap={2}>
+                {/* <SelectRoomField control={control} disabled={isLoading} /> */}
+                <SelectBoxField defaultValue={box} onChange={setBox} disabled={isLoading} />
+                <CategoryField
+                  defaultValue={category}
+                  onChange={(updates) => setCategory(updates)}
+                  disabled={isLoading}
+                />
+              </Stack>
+            )}
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error">

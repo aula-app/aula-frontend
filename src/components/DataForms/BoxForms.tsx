@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, PhaseDurationFields, SelectField, SelectRoomField, StatusField } from '../DataFields';
 import IdeaField from '../DataFields/IdeaField';
+import { useParams } from 'react-router-dom';
 
 /**
  * BoxForms component is used to create or edit an idea.

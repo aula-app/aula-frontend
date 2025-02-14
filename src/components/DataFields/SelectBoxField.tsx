@@ -1,6 +1,5 @@
 import { getBoxes } from '@/services/boxes';
 import { BoxType } from '@/types/Scopes';
-import { SelectOptionsType, SelectOptionType } from '@/types/SettingsTypes';
 import { Autocomplete, CircularProgress, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
