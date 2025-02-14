@@ -35,11 +35,6 @@ export interface GenericListRequest {
 }
 
 /**
- * Custom error event used for displaying error messages in the application.
- */
-const addError = (error: string) => new CustomEvent('AppErrorDialog', { detail: error });
-
-/**
  * Makes an authenticated request to the database API.
  *
  * This function handles API requests with JWT authentication, error handling, and offline mode detection.

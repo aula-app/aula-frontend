@@ -53,8 +53,6 @@ export const getNecessaryConsents = async () => {
     })
   ).json();
 
-  console.log('get', response);
-
   return response.data as MessageConsentType[];
 };
 
@@ -70,8 +68,6 @@ export const giveConsent = async (text_id: number) => {
       body: JSON.stringify({ text_id, user_id: jwt_payload.user_id }),
     })
   ).json();
-
-  console.log('give', response);
 
   return response.data;
 };
