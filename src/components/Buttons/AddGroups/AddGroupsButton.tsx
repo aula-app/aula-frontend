@@ -148,7 +148,13 @@ const AddGroupButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disable
 
   return (
     <>
-      <Button variant="outlined" color="secondary" onClick={() => setOpen(true)} {...restOfProps}>
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={() => setOpen(true)}
+        disabled={users.length === 0}
+        {...restOfProps}
+      >
         <AppIcon icon="group" pr={2} />
         {t('actions.addToParent', {
           var: t('scopes.groups.name'),

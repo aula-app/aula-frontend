@@ -27,7 +27,6 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
   const { t } = useTranslation();
   const [rooms, setRooms] = useState<string[]>([]);
   const [updateRooms, setUpdateRooms] = useState<UpdateType>({ add: [], remove: [] });
-  const [noRooms, setNoRooms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object({
@@ -67,7 +66,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
     setRooms(rooms);
   };
 
-  const onSubmit = async (data: SchemaType, e?: React.BaseSyntheticEvent) => {
+  const onSubmit = async (data: SchemaType) => {
     try {
       setIsLoading(true);
       if (!defaultValues) {
@@ -79,12 +78,6 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const setUserRooms = async (user_id: string) => {
-    const addPromises = updateRooms.add.map((room_id) => addUserRoom(user_id, room_id));
-    const removePromises = updateRooms.remove.map((room_id) => removeUserRoom(user_id, room_id));
-    await Promise.all([...addPromises, ...removePromises]);
   };
 
   const newUser = async (data: SchemaType) => {
@@ -109,12 +102,18 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
       email: data.email,
       realname: data.realname,
       status: data.status,
-      user_id: defaultValues?.hash_id,
       userlevel: data.userlevel,
       username: data.username,
+      user_id: defaultValues.hash_id,
     });
     if (response.error) return;
     await setUserRooms(defaultValues.hash_id);
+  };
+
+  const setUserRooms = async (user_id: string) => {
+    const addPromises = updateRooms.add.map((room_id) => addUserRoom(user_id, room_id));
+    const removePromises = updateRooms.remove.map((room_id) => removeUserRoom(user_id, room_id));
+    await Promise.all([...addPromises, ...removePromises]);
   };
 
   useEffect(() => {
@@ -198,7 +197,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
             />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" disabled={isLoading}>
+            <Button onClick={onClose} color="error">
               {t('actions.cancel')}
             </Button>
             <Button type="submit" variant="contained" disabled={isLoading}>
