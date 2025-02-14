@@ -159,10 +159,7 @@ const IdeasView: React.FC = () => {
         <IdeaForms
           onClose={onClose}
           defaultValues={typeof edit !== 'boolean' ? ideas.find((idea) => idea.hash_id === edit.hash_id) : undefined}
-        >
-          {/* <AddCategoriesButton ideas={typeof edit === 'string' ? [edit] : []} ref={addCategory} />
-          <AddBoxesButton ideas={typeof edit === 'string' ? [edit] : []} /> */}
-        </IdeaForms>
+        />
       </Drawer>
     </Stack>
   );

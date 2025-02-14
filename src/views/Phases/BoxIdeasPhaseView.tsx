@@ -45,30 +45,8 @@ const BoxIdeasPhaseView = () => {
     setLoading(false);
   }, [phase]);
 
-  const updateIdea = async (data: EditIdeaArguments) => {
-    if (typeof edit === 'object' && edit.hash_id) {
-      const request = await editIdea({
-        idea_id: edit.hash_id,
-        title: data.title,
-        content: data.content,
-        status: data.status,
-      });
-      if (request.error) {
-        setError(request.error);
-        return;
-      }
-      addCategory.current?.setNewIdeaCategory(edit.hash_id);
-      onClose();
-    }
-  };
-
   const onEdit = (idea: IdeaType) => {
     setEdit(idea);
-  };
-
-  const onSubmit = (data: IdeaArguments) => {
-    if (!edit) return;
-    updateIdea(data as EditIdeaArguments);
   };
 
   const onDelete = async (id: string) => {
@@ -109,13 +87,7 @@ const BoxIdeasPhaseView = () => {
           ))}
       </Grid>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <IdeaForms
-          onClose={onClose}
-          onSubmit={onSubmit}
-          defaultValues={typeof edit !== 'boolean' ? (edit as IdeaArguments) : undefined}
-        >
-          <AddCategoriesButton ideas={!!edit ? [edit.hash_id] : []} ref={addCategory} />
-        </IdeaForms>
+        <IdeaForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
       </Drawer>
     </Stack>
   );

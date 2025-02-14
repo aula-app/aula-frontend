@@ -112,10 +112,7 @@ const RoomsView: React.FC = () => {
         <PaginationBar pages={Math.ceil(totalRooms / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <RoomForms
-          onClose={onClose}
-          defaultValues={typeof edit !== 'boolean' ? rooms.find((room) => room.hash_id === edit.hash_id) : undefined}
-        />
+        <RoomForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
       </Drawer>
     </Stack>
   );

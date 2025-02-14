@@ -50,7 +50,7 @@ const AnnouncementsView: React.FC = () => {
   const [offset, setOffset] = useState(0);
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
 
-  const [edit, setEdit] = useState<string | boolean>(false); // false = update dialog closed ;true = new idea; string = item hash_id;
+  const [edit, setEdit] = useState<AnnouncementType | boolean>(false); // false = update dialog closed ;true = new idea; AnnouncementType = item to edit;
 
   const fetchAnnouncements = useCallback(async () => {
     setLoading(true);
@@ -70,36 +70,6 @@ const AnnouncementsView: React.FC = () => {
     }
     setLoading(false);
   }, [search_field, search_text, status, asc, limit, offset, orderby]);
-
-  const onSubmit = (data: AnnouncementArguments) => {
-    if (!edit) return;
-    typeof edit === 'boolean' ? newAnnouncement(data) : updateAnnouncement(data as EditAnnouncementArguments);
-  };
-
-  const newAnnouncement = async (data: AnnouncementArguments) => {
-    const request = await addAnnouncement({
-      headline: data.headline,
-      body: data.body,
-      user_needs_to_consent: data.user_needs_to_consent,
-      consent_text: data.consent_text,
-      status: data.status,
-    });
-    if (!request.error) onClose();
-  };
-
-  const updateAnnouncement = async (data: EditAnnouncementArguments) => {
-    const announcement = announcements.find((announcement) => announcement.hash_id === edit);
-    if (!announcement || !announcement.hash_id) return;
-    const request = await editAnnouncement({
-      text_id: announcement.hash_id,
-      headline: data.headline,
-      body: data.body,
-      user_needs_to_consent: data.user_needs_to_consent,
-      consent_text: data.consent_text,
-      status: data.status,
-    });
-    if (!request.error) onClose();
-  };
 
   const deleteAnnouncements = (items: Array<string>) =>
     items.map(async (announcement) => {
@@ -139,7 +109,7 @@ const AnnouncementsView: React.FC = () => {
           setAsc={setAsc}
           setLimit={setLimit}
           setOrderby={setOrderby}
-          setEdit={setEdit}
+          setEdit={(text) => setEdit(text as AnnouncementType)}
           setDelete={deleteAnnouncements}
         />
         {isLoading && <DataTableSkeleton />}
@@ -147,15 +117,7 @@ const AnnouncementsView: React.FC = () => {
         <PaginationBar pages={Math.ceil(totalAnnouncements / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <AnnouncementForms
-          onClose={onClose}
-          onSubmit={onSubmit}
-          defaultValues={
-            typeof edit !== 'boolean'
-              ? (announcements.find((announcement) => announcement.hash_id === edit) as AnnouncementType)
-              : undefined
-          }
-        />
+        <AnnouncementForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
       </Drawer>
     </Stack>
   );

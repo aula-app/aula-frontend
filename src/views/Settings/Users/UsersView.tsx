@@ -135,10 +135,7 @@ const UsersView: React.FC = () => {
         <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <UserForms
-          onClose={onClose}
-          defaultValues={typeof edit !== 'boolean' ? users.find((user) => user.hash_id === edit.hash_id) : undefined}
-        />
+        <UserForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
       </Drawer>
     </Stack>
   );

@@ -7,12 +7,11 @@ import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import { MarkdownEditor, SelectRoomField, StatusField } from '../DataFields';
+import { MarkdownEditor, StatusField } from '../DataFields';
 import CategoryField from '../DataFields/CategoriesField';
 import SelectBoxField from '../DataFields/SelectBoxField';
-import { start } from 'repl';
-import { useParams } from 'react-router-dom';
 
 /**
  * IdeaForms component is used to create or edit an idea.

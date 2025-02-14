@@ -37,7 +37,7 @@ export interface BoxType {
   phase_duration_2: number;
   phase_duration_3: number;
   phase_duration_4: number;
-  status: StatusTypess;
+  status: StatusTypes;
 }
 
 export interface BugType extends MessageType {}
@@ -159,7 +159,7 @@ export interface UserType {
   position: string;
   hash_id: string;
   registration_status: null;
-  status: StatusTypess;
+  status: StatusTypes;
   created: string;
   last_update: string;
   updater_id: number;
