@@ -1,7 +1,8 @@
 import { ConsentResponse } from '@/types/LoginTypes';
-import { localStorageGet } from '@/utils';
+import { localStorageGet, parseJwt } from '@/utils';
 const api_url = localStorageGet('api_url');
 const jwt_token = localStorageGet('token');
+const jwt_payload = parseJwt(jwt_token);
 
 export const getUserConsent = async (token: string, signal?: AbortSignal): Promise<ConsentResponse> => {
   try {
@@ -58,6 +59,7 @@ export const getNecessaryConsents = async () => {
 };
 
 export const giveConsent = async (text_id: number) => {
+  if (!jwt_payload) return;
   const response = await (
     await fetch(api_url + '/api/controllers/give_consent.php', {
       method: 'POST',
@@ -65,7 +67,7 @@ export const giveConsent = async (text_id: number) => {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + jwt_token,
       },
-      body: JSON.stringify({ text_id: text_id }),
+      body: JSON.stringify({ text_id, user_id: jwt_payload.user_id }),
     })
   ).json();
 
