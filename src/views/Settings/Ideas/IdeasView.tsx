@@ -1,21 +1,11 @@
 import AddBoxesButton from '@/components/Buttons/AddBoxes';
-import AddCategoriesButton from '@/components/Buttons/AddCategories';
 import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
 import { IdeaForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
-import {
-  addIdea,
-  AddIdeaArguments,
-  deleteIdea,
-  editIdea,
-  EditIdeaArguments,
-  getIdeas,
-  getIdeasByBox,
-  IdeaArguments,
-} from '@/services/ideas';
+import { deleteIdea, getIdeas, getIdeasByBox } from '@/services/ideas';
 import { StatusTypes } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
 import { getDataLimit } from '@/utils';

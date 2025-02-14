@@ -1,6 +1,4 @@
 import { AppIcon } from '@/components';
-import AddCategoriesButton from '@/components/Buttons/AddCategories';
-import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
 import { IdeaForms } from '@/components/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
@@ -8,7 +6,7 @@ import { deleteIdea, getIdeasByRoom } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
