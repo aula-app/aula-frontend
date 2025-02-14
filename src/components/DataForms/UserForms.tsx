@@ -27,6 +27,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
   const { t } = useTranslation();
   const [rooms, setRooms] = useState<string[]>([]);
   const [updateRooms, setUpdateRooms] = useState<UpdateType>({ add: [], remove: [] });
+  const [noRooms, setNoRooms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object({
@@ -181,7 +182,12 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
                 <RoleField control={control} disabled={isLoading} />
               )}
               {checkPermissions(40) && (
-                <RoomField defaultValues={rooms} onChange={(updates) => setUpdateRooms(updates)} disabled={isLoading} />
+                <RoomField
+                  defaultValues={rooms}
+                  onChange={(updates) => setUpdateRooms(updates)}
+                  hasError
+                  disabled={isLoading}
+                />
               )}
             </Stack>
             <MarkdownEditor

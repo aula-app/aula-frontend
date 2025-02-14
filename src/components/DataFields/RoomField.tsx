@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 interface Props extends BaseTextFieldProps {
   defaultValues: string[];
+  hasError?: boolean;
   disabled?: boolean;
   onChange: (updates: UpdateType) => void;
 }
@@ -14,7 +15,13 @@ interface Props extends BaseTextFieldProps {
  * Renders "RoomField" component
  */
 
-const RoomField: React.FC<Props> = ({ defaultValues, onChange, disabled = false, ...restOfProps }) => {
+const RoomField: React.FC<Props> = ({
+  defaultValues,
+  onChange,
+  hasError = false,
+  disabled = false,
+  ...restOfProps
+}) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -68,10 +75,7 @@ const RoomField: React.FC<Props> = ({ defaultValues, onChange, disabled = false,
         <TextField
           {...params}
           label={t('scopes.rooms.plural')}
-          required
           disabled={disabled}
-          error={selectedOptions.length === 0}
-          helperText={selectedOptions.length === 0 ? t('forms.validation.required') : ''}
           slotProps={{
             input: {
               ...params.InputProps,
