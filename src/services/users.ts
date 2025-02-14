@@ -2,6 +2,7 @@ import { StatusTypes } from '@/types/Generics';
 import { DelegationType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
+import { off } from 'process';
 
 interface GetUserResponse extends GenericResponse {
   data: UserType | null;
@@ -20,11 +21,11 @@ interface UserListRequest extends GenericListRequest {
   userlevel?: 0 | RoleTypes;
 }
 
-export async function getUsers(args: UserListRequest): Promise<GetUsersResponse> {
+export async function getUsers(args?: UserListRequest): Promise<GetUsersResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'getUsers',
-    arguments: args,
+    arguments: args || { offset: 0, limit: 0 },
   });
 
   return response as GetUsersResponse;

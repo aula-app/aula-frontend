@@ -1,3 +1,5 @@
+import AddGroupButton from '@/components/Buttons/AddGroups/AddGroupsButton';
+import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
 import { UserForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
@@ -90,12 +92,12 @@ const UsersView: React.FC = () => {
     fetchUsers();
   }, [fetchUsers]);
 
-  // const extraTools = ({ items }: { items: Array<string> }) => (
-  //   <>
-  //     <AddRoomButton users={items} disabled={items.length === 0} />
-  //     <AddGroupButton users={items} />
-  //   </>
-  // );
+  const extraTools = ({ items }: { items: Array<string> }) => (
+    <>
+      <AddRoomButton users={items} disabled={items.length === 0} />
+      <AddGroupButton users={items} />
+    </>
+  );
 
   return (
     <Stack width="100%" height="100%" py={2}>
@@ -125,7 +127,7 @@ const UsersView: React.FC = () => {
           setOrderby={setOrderby}
           setEdit={(user) => setEdit(user as UserType | boolean)}
           setDelete={deleteUsers}
-          // extraTools={extraTools}
+          extraTools={extraTools}
         />
         {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
