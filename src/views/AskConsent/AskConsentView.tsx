@@ -30,9 +30,10 @@ const AskConsent = () => {
   };
 
   const consent = async (text_id: number) => {
-    giveConsent(text_id);
-    getData();
-    setActiveStep(0);
+    giveConsent(text_id).then(() => {
+      getData();
+      setActiveStep(0);
+    });
   };
 
   const handleNext = () => {
