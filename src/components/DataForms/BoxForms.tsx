@@ -26,6 +26,7 @@ interface BoxFormsProps {
 
 const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
+  const { room_id } = useParams();
 
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
   const [room, setRoom] = useState<string>(defaultValues?.room_hash_id || '');
@@ -35,7 +36,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   const schema = yup.object({
     name: yup.string().required(t('forms.validation.required')),
     description_public: yup.string().required(t('forms.validation.required')),
-    room_hash_id: yup.string().required(t('forms.validation.required')),
+    room_hash_id: yup.string(),
     phase_id: yup.string(),
     phase_duration_1: yup.number(),
     phase_duration_2: yup.number(),
@@ -81,13 +82,12 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   };
 
   const newBox = async (data: SchemaType) => {
-    if (!data.room_hash_id) return;
     const response = await addBox({
       name: data.name,
       description_public: data.description_public,
       description_internal: data.description_internal,
-      room_id: data.room_hash_id,
-      phase_id: data.phase_id,
+      room_id: data.room_hash_id || room_id,
+      phase_id: data.phase_id || 10,
       phase_duration_1: data.phase_duration_1,
       phase_duration_2: data.phase_duration_2,
       phase_duration_3: data.phase_duration_3,
