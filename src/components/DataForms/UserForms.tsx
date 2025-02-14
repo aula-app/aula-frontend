@@ -54,6 +54,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       email: defaultValues ? ' ' : '',
       realname: defaultValues ? ' ' : '',
       username: defaultValues ? ' ' : '',
+      userlevel: defaultValues ? ' ' : 10,
     },
   });
 
@@ -178,18 +179,25 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 helperText={`${errors.email?.message || ''}`}
                 {...register('email')}
               />
-              {checkPermissions(40) && Number(defaultValues?.userlevel) < 50 && (
+              {checkPermissions(40) && Number(defaultValues?.userlevel || 0) < 50 && (
                 <Stack direction="row" gap={1}>
                   <RoleField control={control} disabled={isLoading} sx={{ flex: 1 }} />
-                  <SpecialRolesField
-                    disabled={isLoading}
-                    defaultValues={rooms}
-                    onChange={(updates) => setUpdateRoles(updates)}
-                  />
+                  {defaultValues && (
+                    <SpecialRolesField
+                      disabled={isLoading}
+                      user={defaultValues}
+                      onChange={(updates) => setUpdateRoles(updates)}
+                    />
+                  )}
                 </Stack>
               )}
               {checkPermissions(40) && (
-                <RoomField defaultValues={rooms} onChange={(updates) => setUpdateRooms(updates)} disabled={isLoading} />
+                <RoomField
+                  defaultValues={rooms}
+                  onChange={(updates) => setUpdateRooms(updates)}
+                  disabled={isLoading}
+                  size="small"
+                />
               )}
             </Stack>
             <MarkdownEditor

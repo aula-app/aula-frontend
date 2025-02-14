@@ -1,13 +1,13 @@
 import { RoleTypes } from '@/types/SettingsTypes';
-import { BaseSelectProps, BaseTextFieldProps, MenuItem, TextField, TextFieldProps } from '@mui/material';
+import { BaseTextFieldProps, MenuItem, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends BaseTextFieldProps {
   userRole: RoleTypes | 0 | undefined;
-  setRole: React.Dispatch<React.SetStateAction<RoleTypes | 0 | undefined>>;
+  setRole: (role: RoleTypes | 0 | undefined) => void;
 }
 
-const SelectRoom: React.FC<Props> = ({ userRole, setRole, ...restOfProps }) => {
+const SelectRole: React.FC<Props> = ({ userRole, setRole, ...restOfProps }) => {
   const { t } = useTranslation();
 
   return (
@@ -16,7 +16,7 @@ const SelectRoom: React.FC<Props> = ({ userRole, setRole, ...restOfProps }) => {
       label={t('settings.columns.userlevel')}
       value={userRole || ''}
       onChange={(event) =>
-        setRole(typeof event.target.value === 'number' ? (event.target.value as RoleTypes | 0) : undefined)
+        setRole(typeof event.target.value === 'number' ? (event.target.value as RoleTypes) : undefined)
       }
       sx={{ minWidth: 200 }}
       {...restOfProps}
@@ -33,4 +33,4 @@ const SelectRoom: React.FC<Props> = ({ userRole, setRole, ...restOfProps }) => {
   );
 };
 
-export default SelectRoom;
+export default SelectRole;

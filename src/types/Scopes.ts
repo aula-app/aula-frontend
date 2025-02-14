@@ -177,6 +177,7 @@ export interface UserType {
   temp_pw: string;
   consents_given: number;
   consents_needed: number;
+  roles?: { role: RoleTypes; room: string }[];
 }
 
 export interface CategoryType {

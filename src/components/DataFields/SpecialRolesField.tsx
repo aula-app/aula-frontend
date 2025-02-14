@@ -1,42 +1,40 @@
 import AppIcon from '@/components/AppIcon';
 import { getRooms } from '@/services/rooms';
-import { RoomType } from '@/types/Scopes';
-import { UpdtesObject } from '@/types/SettingsTypes';
+import { RoomType, UserType } from '@/types/Scopes';
+import { RoleTypes, UpdtesObject } from '@/types/SettingsTypes';
 import {
   Button,
   ButtonProps,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogTitle,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemButton,
   ListItemText,
   Skeleton,
   Typography,
 } from '@mui/material';
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SelectRole from '../SelectRole';
 
 /**
  * Interface that will be exposed to the parent component.
  */
-export interface AddRoomRefProps {
-  setNewIdeaRooms: (id: string) => void;
+
+interface Props extends ButtonProps {
+  user: UserType;
 }
 
-const SpecialRolesField: React.FC<ButtonProps> = ({ disabled = false, ...restOfProps }) => {
+const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
+
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rooms, setRooms] = useState<RoomType[]>([]);
-  const [selectedRoom, setSelectedRoom] = useState<string>('');
-  const [indeterminateRooms, setIndeterminateRooms] = useState<string[]>([]);
-  const [updates, setUpdates] = useState<UpdtesObject>({ add: [], remove: [] });
+  const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes }[]>([]);
 
   const fetchRooms = async () => {
     setLoading(true);
@@ -45,6 +43,29 @@ const SpecialRolesField: React.FC<ButtonProps> = ({ disabled = false, ...restOfP
     if (response.error) setError(response.error);
     if (!response.data) return;
     setRooms(response.data);
+  };
+
+  const handleUpdate = async (room: string, role?: RoleTypes | 0) => {
+    if (!role) return;
+
+    // delete existing role if it is the same as the new role
+    const existingRole = user.roles?.find((r) => r.room === room)?.role || user.userlevel;
+    if (existingRole === role) {
+      setUpdateRoles(updateRoles.filter((r) => r.room !== room));
+      return;
+    }
+
+    // update existing role if it exists
+    const existingIndex = updateRoles.findIndex((r) => r.room === room);
+    if (existingIndex !== -1) {
+      const updatedRoles = [...updateRoles];
+      updatedRoles[existingIndex].role = role;
+      setUpdateRoles(updatedRoles);
+      return;
+    }
+
+    // add new role
+    setUpdateRoles([{ room, role }, ...updateRoles]);
   };
 
   const onClose = () => {
@@ -72,13 +93,27 @@ const SpecialRolesField: React.FC<ButtonProps> = ({ disabled = false, ...restOfP
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
         <List sx={{ maxHeight: 300, overflow: 'auto' }}>
-          {rooms.map((room) => (
-            <ListItemButton key={room.hash_id} sx={{ py: 0 }}>
-              <ListItem secondaryAction={<SelectRole userRole={20} setRole={() => {}} size="small" />}>
-                <ListItemText primary={room.room_name} />
-              </ListItem>
-            </ListItemButton>
-          ))}
+          {rooms.map((room) => {
+            const currentRole =
+              updateRoles.find((role) => role.room === room.hash_id)?.role ||
+              user.roles?.find((role) => role.room === room.hash_id)?.role ||
+              user.userlevel;
+            return (
+              <ListItemButton key={room.hash_id} sx={{ py: 0 }}>
+                <ListItem
+                  secondaryAction={
+                    <SelectRole
+                      userRole={currentRole}
+                      setRole={(role) => handleUpdate(room.hash_id, role)}
+                      size="small"
+                    />
+                  }
+                >
+                  <ListItemText primary={room.room_name} />
+                </ListItem>
+              </ListItemButton>
+            );
+          })}
         </List>
         <DialogActions sx={{ p: 3, pt: 2 }}>
           <Button onClick={onClose} color="secondary" autoFocus>

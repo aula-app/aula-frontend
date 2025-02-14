@@ -52,7 +52,7 @@ const UsersView: React.FC = () => {
   const [offset, setOffset] = useState(0);
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
   const [room_id, setRoom] = useState<string>('');
-  const [userlevel, setRole] = useState<RoleTypes | 0 | undefined>();
+  const [userlevel, setRole] = useState<RoleTypes>();
 
   const [edit, setEdit] = useState<UserType | boolean>(false); // false = update dialog closed ;true = new idea; UserType = user to edit;
 
@@ -112,7 +112,7 @@ const UsersView: React.FC = () => {
           }}
         >
           <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
-          <SelectRole userRole={userlevel} setRole={setRole} variant="filled" />
+          <SelectRole userRole={userlevel} setRole={(role) => setRole(role)} variant="filled" size="small" />
         </FilterBar>
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
