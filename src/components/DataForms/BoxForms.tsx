@@ -155,7 +155,6 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
               disabled={isLoading}
             />
             <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
-            <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
             {checkPermissions(40) && (
               <>
                 <Stack direction="row" flexWrap="wrap" alignItems="center" gap={2}>
