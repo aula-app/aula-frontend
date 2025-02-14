@@ -1,5 +1,6 @@
 import AddGroupButton from '@/components/Buttons/AddGroups/AddGroupsButton';
 import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
+import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
 import { UserForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
@@ -8,12 +9,14 @@ import FilterBar from '@/components/FilterBar';
 import SelectRole from '@/components/SelectRole';
 import SelectRoom from '@/components/SelectRoom';
 import { deleteUser, getUsers } from '@/services/users';
+import { deleteUser, getUsers } from '@/services/users';
 import { StatusTypes } from '@/types/Generics';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { getDataLimit } from '@/utils';
 import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
+import { useCallback, useEffect, useState } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -53,6 +56,8 @@ const UsersView: React.FC = () => {
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
   const [room_id, setRoom] = useState<string>('');
   const [userlevel, setRole] = useState<RoleTypes | 0 | undefined>();
+
+  const [edit, setEdit] = useState<UserType | boolean>(false); // false = update dialog closed ;true = new idea; UserType = user to edit;
 
   const [edit, setEdit] = useState<UserType | boolean>(false); // false = update dialog closed ;true = new idea; UserType = user to edit;
 
@@ -125,6 +130,7 @@ const UsersView: React.FC = () => {
           setAsc={setAsc}
           setLimit={setLimit}
           setOrderby={setOrderby}
+          setEdit={(user) => setEdit(user as UserType | boolean)}
           setEdit={(user) => setEdit(user as UserType | boolean)}
           setDelete={deleteUsers}
           extraTools={extraTools}

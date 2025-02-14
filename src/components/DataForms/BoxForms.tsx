@@ -2,9 +2,14 @@ import { addBox, editBox } from '@/services/boxes';
 import { addIdeaBox, getIdeasByBox, removeIdeaBox } from '@/services/ideas';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import { UpdateType } from '@/types/SettingsTypes';
+import { addBox, editBox } from '@/services/boxes';
+import { addIdeaBox, getIdeasByBox, removeIdeaBox } from '@/services/ideas';
+import { BoxType, IdeaType } from '@/types/Scopes';
+import { UpdateType } from '@/types/SettingsTypes';
 import { checkPermissions, phaseOptions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
@@ -22,10 +27,17 @@ import { useParams } from 'react-router-dom';
 interface BoxFormsProps {
   onClose: () => void;
   defaultValues?: BoxType;
+  defaultValues?: BoxType;
 }
 
 const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
+const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
+
+  const [ideas, setIdeas] = useState<IdeaType[]>([]);
+  const [room, setRoom] = useState<string>(defaultValues?.room_hash_id || '');
+  const [updateIdeas, setUpdateIdeas] = useState<UpdateType>({ add: [], remove: [] });
+  const [isLoading, setIsLoading] = useState(false);
 
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
   const [room, setRoom] = useState<string>(defaultValues?.room_hash_id || '');
@@ -48,8 +60,12 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     control,
     formState: { errors },
     handleSubmit,
+    control,
+    formState: { errors },
+    handleSubmit,
     register,
     reset,
+    watch,
     watch,
   } = useForm({
     resolver: yupResolver(schema),
@@ -130,6 +146,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   useEffect(() => {
     reset({ ...defaultValues });
     fetchBoxIdeas();
+    fetchBoxIdeas();
   }, [JSON.stringify(defaultValues)]);
 
   return (
@@ -152,9 +169,32 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
               fullWidth
               required
               disabled={isLoading}
+              disabled={isLoading}
             />
             <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
+            <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
             {checkPermissions(40) && (
+              <>
+                <Stack direction="row" flexWrap="wrap" alignItems="center" gap={2}>
+                  <SelectRoomField control={control} disabled={isLoading} />
+                  <SelectField
+                    control={control}
+                    name="phase_id"
+                    options={phaseOptions}
+                    defaultValue={10}
+                    disabled={isLoading}
+                  />
+                  <PhaseDurationFields control={control} room={defaultValues?.room_hash_id} disabled={isLoading} />
+                </Stack>
+                {room && (
+                  <IdeaField
+                    room={room}
+                    defaultValues={ideas}
+                    onChange={(updates) => setUpdateIdeas(updates)}
+                    disabled={isLoading}
+                  />
+                )}
+              </>
               <>
                 <Stack direction="row" flexWrap="wrap" alignItems="center" gap={2}>
                   <SelectRoomField control={control} disabled={isLoading} />

@@ -70,4 +70,9 @@ export type UpdateType = {
   remove: string[];
 };
 
+export type UpdateType = {
+  add: string[];
+  remove: string[];
+};
+
 export type UpdtesObject = { add: string[]; remove: string[] };

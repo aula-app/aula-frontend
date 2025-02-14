@@ -49,6 +49,7 @@ const BoxesView: React.FC = () => {
   const [room_id, setRoom] = useState<string>('');
 
   const [edit, setEdit] = useState<BoxType | boolean>(false); // false = update dialog closed ;true = new idea; BoxType = item to edit;
+  const [edit, setEdit] = useState<BoxType | boolean>(false); // false = update dialog closed ;true = new idea; BoxType = item to edit;
 
   const fetchBoxes = useCallback(async () => {
     setLoading(true);
@@ -110,6 +111,7 @@ const BoxesView: React.FC = () => {
           setAsc={setAsc}
           setLimit={setLimit}
           setOrderby={setOrderby}
+          setEdit={(box) => setEdit(box as BoxType | boolean)}
           setEdit={(box) => setEdit(box as BoxType | boolean)}
           setDelete={deleteBoxes}
         />

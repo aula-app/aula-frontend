@@ -3,6 +3,7 @@ import { DelegationType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 import { off } from 'process';
+import { off } from 'process';
 
 interface GetUserResponse extends GenericResponse {
   data: UserType | null;
@@ -62,10 +63,12 @@ export interface UserArguments {
 
 export interface AddUserArguments extends UserArguments {
   userlevel: RoleTypes;
+  userlevel: RoleTypes;
 }
 
 export interface EditUserArguments extends UserArguments {
   user_id?: string;
+  userlevel?: RoleTypes;
   userlevel?: RoleTypes;
 }
 
@@ -235,9 +238,11 @@ interface GetUserRoomsResponse extends GenericResponse {
 }
 
 export async function getUserRooms(user_id: string, type?: 0 | 1): Promise<GetUserRoomsResponse> {
+export async function getUserRooms(user_id: string, type?: 0 | 1): Promise<GetUserRoomsResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'getUserRooms',
+    arguments: { user_id, type },
     arguments: { user_id, type },
   });
 
