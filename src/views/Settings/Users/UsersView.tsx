@@ -51,7 +51,7 @@ const UsersView: React.FC = () => {
   const [limit, setLimit] = useState(getDataLimit());
   const [offset, setOffset] = useState(0);
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
-  const [room_id, setRoom] = useState<string | undefined>();
+  const [room_id, setRoom] = useState<string>('');
   const [userlevel, setRole] = useState<RoleTypes | 0 | undefined>();
 
   const [edit, setEdit] = useState<UserType | boolean>(false); // false = update dialog closed ;true = new idea; UserType = user to edit;
@@ -111,7 +111,7 @@ const UsersView: React.FC = () => {
             setSearchText(text);
           }}
         >
-          <SelectRoom room={room_id || ''} setRoom={setRoom} />
+          <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
           <SelectRole role={userlevel} setRole={setRole} />
         </FilterBar>
       </Stack>
