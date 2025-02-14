@@ -2,17 +2,8 @@ import { AppIcon } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import { BoxForms } from '@/components/DataForms';
-import {
-  addBox,
-  AddBoxArguments,
-  BoxArguments,
-  deleteBox,
-  editBox,
-  EditBoxArguments,
-  getBoxesByPhase,
-} from '@/services/boxes';
+import { deleteBox, getBoxesByPhase } from '@/services/boxes';
 import { BoxType } from '@/types/Scopes';
-import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
