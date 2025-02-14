@@ -258,7 +258,6 @@ export async function getIdeaBoxes(idea_id: string): Promise<GetIdeaBoxesRespons
  */
 
 export async function addIdeaBox(idea_id: string, topic_id: string): Promise<GenericResponse> {
-  console.log(idea_id, topic_id);
   const response = await databaseRequest(
     {
       model: 'Idea',
