@@ -58,10 +58,12 @@ export interface CustomFieldsNameType {
   custom_field2_name: string | null;
 }
 
-export type SelectOptionsType = Array<{
+export type SelectOptionType = {
   label: string;
   value: string | number;
-}>;
+};
+
+export type SelectOptionsType = Array<SelectOptionType>;
 
 export type UpdateType = {
   add: string[];
