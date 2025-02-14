@@ -28,7 +28,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
 
   const [rooms, setRooms] = useState<string[]>([]);
   const [updateRooms, setUpdateRooms] = useState<UpdateType>({ add: [], remove: [] });
-  const [updateRoles, setUpdateRoles] = useState<UpdateType>({ add: [], remove: [] });
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object({
@@ -182,13 +181,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               {checkPermissions(40) && Number(defaultValues?.userlevel || 0) < 50 && (
                 <Stack direction="row" gap={1}>
                   <RoleField control={control} disabled={isLoading} sx={{ flex: 1 }} />
-                  {defaultValues && (
-                    <SpecialRolesField
-                      disabled={isLoading}
-                      user={defaultValues}
-                      onChange={(updates) => setUpdateRoles(updates)}
-                    />
-                  )}
+                  {defaultValues && <SpecialRolesField disabled={isLoading} user={defaultValues} onClose={onClose} />}
                 </Stack>
               )}
               {checkPermissions(40) && (

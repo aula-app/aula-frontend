@@ -1,7 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import { getRooms } from '@/services/rooms';
 import { RoomType, UserType } from '@/types/Scopes';
-import { RoleTypes, UpdtesObject } from '@/types/SettingsTypes';
+import { RoleTypes } from '@/types/SettingsTypes';
 import {
   Button,
   ButtonProps,
@@ -18,6 +18,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SelectRole from '../SelectRole';
+import { setSpecialRoles } from '@/services/users';
 
 /**
  * Interface that will be exposed to the parent component.
@@ -25,15 +26,17 @@ import SelectRole from '../SelectRole';
 
 interface Props extends ButtonProps {
   user: UserType;
+  onClose: () => void;
 }
 
-const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, ...restOfProps }) => {
+const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rooms, setRooms] = useState<RoomType[]>([]);
+  const [userRoles, setUserRoles] = useState<{ room: string; role: RoleTypes }[]>(JSON.parse(user.roles || '[]'));
   const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes }[]>([]);
 
   const fetchRooms = async () => {
@@ -49,7 +52,7 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, ...restOfP
     if (!role) return;
 
     // delete existing role if it is the same as the new role
-    const existingRole = user.roles?.find((r) => r.room === room)?.role || user.userlevel;
+    const existingRole = userRoles.find((r) => r.room === room)?.role || user.userlevel;
     if (existingRole === role) {
       setUpdateRoles(updateRoles.filter((r) => r.room !== room));
       return;
@@ -68,13 +71,25 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, ...restOfP
     setUpdateRoles([{ room, role }, ...updateRoles]);
   };
 
-  const onClose = () => {
+  const onSubmit = async () => {
+    setLoading(true);
+    const response = await setSpecialRoles(user.hash_id, updateRoles);
+    setLoading(false);
+    console.log(response);
+    if (response.error) setError(response.error);
+    else setOpen(false);
+    onClose();
+  };
+
+  const handleClose = () => {
+    setUpdateRoles([]);
     setOpen(false);
   };
 
   useEffect(() => {
     fetchRooms();
-  }, []);
+    setUserRoles(JSON.parse(user.roles || '[]'));
+  }, [user]);
 
   return (
     <>
@@ -84,7 +99,7 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, ...restOfP
           var: t('roles.roomRoles'),
         })}
       </Button>
-      <Dialog onClose={onClose} open={open} fullWidth maxWidth="sm">
+      <Dialog onClose={() => setOpen(false)} open={open} fullWidth maxWidth="sm">
         <DialogTitle>
           {t('actions.set', {
             var: t('roles.roomRoles'),
@@ -96,7 +111,7 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, ...restOfP
           {rooms.map((room) => {
             const currentRole =
               updateRoles.find((role) => role.room === room.hash_id)?.role ||
-              user.roles?.find((role) => role.room === room.hash_id)?.role ||
+              userRoles.find((role) => role.room === room.hash_id)?.role ||
               user.userlevel;
             return (
               <ListItemButton key={room.hash_id} sx={{ py: 0 }}>
@@ -116,10 +131,10 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, ...restOfP
           })}
         </List>
         <DialogActions sx={{ p: 3, pt: 2 }}>
-          <Button onClick={onClose} color="secondary" autoFocus>
+          <Button onClick={handleClose} color="secondary" autoFocus>
             {t('actions.cancel')}
           </Button>
-          <Button onClick={() => {}} variant="contained">
+          <Button onClick={onSubmit} variant="contained">
             {t('actions.confirm')}
           </Button>
         </DialogActions>
