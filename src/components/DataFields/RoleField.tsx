@@ -1,9 +1,9 @@
 import { roles } from '@/utils';
-import { MenuItem, TextField } from '@mui/material';
+import { BaseTextFieldProps, MenuItem, TextField } from '@mui/material';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
-interface Props {
+interface Props extends BaseTextFieldProps {
   control: Control<any, any>;
   disabled?: boolean;
   onChange?: (...event: any[]) => void;

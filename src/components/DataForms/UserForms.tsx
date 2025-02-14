@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, RoleField, StatusField } from '../DataFields';
 import RoomField from '../DataFields/RoomField';
+import SpecialRolesField from '../DataFields/SpecialRolesField';
 
 /**
  * UserForms component is used to create or edit an user.
@@ -27,6 +28,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
 
   const [rooms, setRooms] = useState<string[]>([]);
   const [updateRooms, setUpdateRooms] = useState<UpdateType>({ add: [], remove: [] });
+  const [updateRoles, setUpdateRoles] = useState<UpdateType>({ add: [], remove: [] });
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object({
@@ -177,7 +179,14 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 {...register('email')}
               />
               {checkPermissions(40) && Number(defaultValues?.userlevel) < 50 && (
-                <RoleField control={control} disabled={isLoading} />
+                <Stack direction="row" gap={1}>
+                  <RoleField control={control} disabled={isLoading} sx={{ flex: 1 }} />
+                  <SpecialRolesField
+                    disabled={isLoading}
+                    defaultValues={rooms}
+                    onChange={(updates) => setUpdateRoles(updates)}
+                  />
+                </Stack>
               )}
               {checkPermissions(40) && (
                 <RoomField defaultValues={rooms} onChange={(updates) => setUpdateRooms(updates)} disabled={isLoading} />

@@ -164,7 +164,7 @@ const DataSettings = ({ onReload }: Props) => {
           {t('actions.select', { var: t('scopes.room.name') })}:
           <SelectRoom room={room || ''} setRoom={setRoom} />
           {t('actions.select', { var: t('settings.columns.userlevel') })}:
-          <SelectRole role={role} setRole={setRole} />
+          <SelectRole userRole={role} setRole={setRole} variant="filled" />
         </Stack>
         <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
       </Stack>
