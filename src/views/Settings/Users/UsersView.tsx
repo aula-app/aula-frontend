@@ -5,7 +5,7 @@ import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import SelectRole from '@/components/SelectRole';
 import SelectRoom from '@/components/SelectRoom';
-import { addUser, deleteUser, editUser, getUsers, UserArguments } from '@/services/users';
+import { deleteUser, getUsers } from '@/services/users';
 import { StatusTypes } from '@/types/Generics';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
@@ -135,11 +135,7 @@ const UsersView: React.FC = () => {
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <UserForms
           onClose={onClose}
-          defaultValues={
-            typeof edit !== 'boolean'
-              ? (users.find((user) => user.hash_id === edit.hash_id) as UserArguments)
-              : undefined
-          }
+          defaultValues={typeof edit !== 'boolean' ? users.find((user) => user.hash_id === edit.hash_id) : undefined}
         />
       </Drawer>
     </Stack>

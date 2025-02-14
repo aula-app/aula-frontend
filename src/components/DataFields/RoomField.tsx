@@ -70,6 +70,8 @@ const RoomField: React.FC<Props> = ({ defaultValues, onChange, disabled = false,
           label={t('scopes.rooms.plural')}
           required
           disabled={disabled}
+          error={selectedOptions.length === 0}
+          helperText={selectedOptions.length === 0 ? t('forms.validation.required') : ''}
           slotProps={{
             input: {
               ...params.InputProps,
