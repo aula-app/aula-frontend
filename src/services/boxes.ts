@@ -25,11 +25,15 @@ export async function getBox(topic_id: string): Promise<GetBoxResponse> {
  * Fetches boxes for a specific room including custom fields
  */
 
+interface BoxListRequest extends GenericListRequest {
+  room_id?: string;
+}
+
 interface GetBoxesResponse extends GenericResponse {
   data: BoxType[] | null;
 }
 
-export async function getBoxes(args: GenericListRequest): Promise<GetBoxesResponse> {
+export async function getBoxes(args: BoxListRequest): Promise<GetBoxesResponse> {
   const response = await databaseRequest({
     model: 'Topic',
     method: 'getTopics',

@@ -3,6 +3,7 @@ import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
+import SelectRoom from '@/components/SelectRoom';
 import { BoxArguments, deleteBox, getBoxes } from '@/services/boxes';
 import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
@@ -45,6 +46,7 @@ const BoxesView: React.FC = () => {
   const [limit, setLimit] = useState(getDataLimit());
   const [offset, setOffset] = useState(0);
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
+  const [room_id, setRoom] = useState<string>('');
 
   const [edit, setEdit] = useState<BoxType | boolean>(false); // false = update dialog closed ;true = new idea; BoxType = item to edit;
 
@@ -58,6 +60,7 @@ const BoxesView: React.FC = () => {
       search_field,
       search_text,
       status,
+      room_id,
     });
     if (response.error) setError(response.error);
     else {
@@ -65,7 +68,7 @@ const BoxesView: React.FC = () => {
       setTotalBoxes(response.count as number);
     }
     setLoading(false);
-  }, [search_field, search_text, status, asc, limit, offset, orderby]);
+  }, [search_field, search_text, status, asc, limit, offset, orderby, room_id]);
 
   const deleteBoxes = (items: Array<string>) =>
     items.map(async (box) => {
@@ -94,7 +97,7 @@ const BoxesView: React.FC = () => {
             setSearchText(text);
           }}
         >
-          {/* <SelectRoom room={room_id || ''} setRoom={setRoom} /> */}
+          <SelectRoom room={room_id} setRoom={setRoom} />
         </FilterBar>
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
