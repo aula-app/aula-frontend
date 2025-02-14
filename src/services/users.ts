@@ -3,6 +3,7 @@ import { DelegationType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 import { off } from 'process';
+import { off } from 'process';
 
 interface GetUserResponse extends GenericResponse {
   data: UserType | null;
@@ -22,9 +23,11 @@ interface UserListRequest extends GenericListRequest {
 }
 
 export async function getUsers(args?: UserListRequest): Promise<GetUsersResponse> {
+  if (args?.room_id === 'all') delete args.room_id;
+  const method = args?.room_id ? 'getUsersByRoom' : 'getUsers';
   const response = await databaseRequest({
     model: 'User',
-    method: 'getUsers',
+    method: method,
     arguments: args || { offset: 0, limit: 0 },
   });
 
@@ -59,12 +62,14 @@ export interface UserArguments {
 }
 
 export interface AddUserArguments extends UserArguments {
-  userlevel: string;
+  userlevel: RoleTypes;
+  userlevel: RoleTypes;
 }
 
 export interface EditUserArguments extends UserArguments {
   user_id?: string;
-  userlevel?: string;
+  userlevel?: RoleTypes;
+  userlevel?: RoleTypes;
 }
 
 /**
@@ -232,11 +237,13 @@ interface GetUserRoomsResponse extends GenericResponse {
   data: { hash_id: string }[] | null;
 }
 
-export async function getUserRooms(user_id: string): Promise<GetUserRoomsResponse> {
+export async function getUserRooms(user_id: string, type?: 0 | 1): Promise<GetUserRoomsResponse> {
+export async function getUserRooms(user_id: string, type?: 0 | 1): Promise<GetUserRoomsResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'getUserRooms',
-    arguments: { user_id },
+    arguments: { user_id, type },
+    arguments: { user_id, type },
   });
 
   return response as GetUserRoomsResponse;

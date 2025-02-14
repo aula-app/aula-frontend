@@ -1,5 +1,6 @@
 import AddGroupButton from '@/components/Buttons/AddGroups/AddGroupsButton';
-import AddRoomButton, { AddRoomRefProps } from '@/components/Buttons/AddRooms/AddRoomsButton';
+import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
+import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
 import { UserForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
@@ -7,22 +8,16 @@ import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import SelectRole from '@/components/SelectRole';
 import SelectRoom from '@/components/SelectRoom';
-import {
-  addUser,
-  AddUserArguments,
-  deleteUser,
-  editUser,
-  EditUserArguments,
-  getUsers,
-  UserArguments,
-} from '@/services/users';
+import { deleteUser, getUsers } from '@/services/users';
+import { deleteUser, getUsers } from '@/services/users';
 import { StatusTypes } from '@/types/Generics';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { getDataLimit } from '@/utils';
 import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /** * Renders "Users" view
@@ -46,8 +41,6 @@ const COLUMNS = [
 const UsersView: React.FC = () => {
   const { t } = useTranslation();
 
-  const addRoom = useRef<AddRoomRefProps>(null);
-
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [users, setUsers] = useState<UserType[]>([]);
@@ -61,10 +54,12 @@ const UsersView: React.FC = () => {
   const [limit, setLimit] = useState(getDataLimit());
   const [offset, setOffset] = useState(0);
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
-
-  const [room_id, setRoom] = useState<string | undefined>();
+  const [room_id, setRoom] = useState<string>('');
   const [userlevel, setRole] = useState<RoleTypes | 0 | undefined>();
-  const [edit, setEdit] = useState<string | boolean>(false); // false = update dialog closed ;true = new idea; string = item hash_id;
+
+  const [edit, setEdit] = useState<UserType | boolean>(false); // false = update dialog closed ;true = new idea; UserType = user to edit;
+
+  const [edit, setEdit] = useState<UserType | boolean>(false); // false = update dialog closed ;true = new idea; UserType = user to edit;
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -86,42 +81,6 @@ const UsersView: React.FC = () => {
     }
     setLoading(false);
   }, [search_field, search_text, status, asc, limit, offset, orderby, room_id, userlevel]);
-
-  const onSubmit = (data: UserArguments) => {
-    if (!edit) return;
-    typeof edit === 'boolean' ? newUser(data as AddUserArguments) : updateUser(data as EditUserArguments);
-  };
-
-  const newUser = async (data: AddUserArguments) => {
-    const request = await addUser({
-      userlevel: String(data.userlevel || 20),
-      displayname: data.displayname,
-      realname: data.realname,
-      username: data.username,
-      email: data.email,
-      about_me: data.about_me,
-      status: data.status || 1,
-    });
-    if (request.error) return;
-    if (addRoom.current && request.data) await addRoom.current.setNewUserRooms(request.data.hash_id);
-    onClose();
-  };
-
-  const updateUser = async (data: EditUserArguments) => {
-    const user = users.find((user) => user.hash_id === edit);
-    if (!user || !user.hash_id) return;
-    const request = await editUser({
-      user_id: user.hash_id,
-      userlevel: data.userlevel,
-      displayname: data.displayname,
-      realname: data.realname,
-      username: data.username,
-      email: data.email,
-      about_me: data.about_me,
-      status: data.status,
-    });
-    if (!request.error) onClose();
-  };
 
   const deleteUsers = (items: Array<string>) =>
     items.map(async (user) => {
@@ -157,7 +116,7 @@ const UsersView: React.FC = () => {
             setSearchText(text);
           }}
         >
-          <SelectRoom room={room_id || ''} setRoom={setRoom} />
+          <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
           <SelectRole role={userlevel} setRole={setRole} />
         </FilterBar>
       </Stack>
@@ -171,7 +130,8 @@ const UsersView: React.FC = () => {
           setAsc={setAsc}
           setLimit={setLimit}
           setOrderby={setOrderby}
-          setEdit={setEdit}
+          setEdit={(user) => setEdit(user as UserType | boolean)}
+          setEdit={(user) => setEdit(user as UserType | boolean)}
           setDelete={deleteUsers}
           extraTools={extraTools}
         />
@@ -181,15 +141,7 @@ const UsersView: React.FC = () => {
         <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <UserForms
-          onClose={onClose}
-          onSubmit={onSubmit}
-          defaultValues={
-            typeof edit !== 'boolean' ? (users.find((user) => user.hash_id === edit) as UserArguments) : undefined
-          }
-        >
-          <AddRoomButton users={typeof edit === 'string' ? [edit] : []} ref={addRoom} />
-        </UserForms>
+        <UserForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
       </Drawer>
     </Stack>
   );

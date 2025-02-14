@@ -1,5 +1,6 @@
 import { CategoryIconType } from '@/components/AppIcon/AppIcon';
-import { RoomPhases } from './SettingsTypes';
+import { RoleTypes, RoomPhases } from './SettingsTypes';
+import { RoleTypes, RoomPhases } from './SettingsTypes';
 import { StatusTypes } from './Generics';
 
 export interface AnnouncementType {
@@ -16,7 +17,8 @@ export interface AnnouncementType {
   created: string;
   last_update: string;
   updater_id: number;
-  status: number;
+  status: StatusTypes;
+  status: StatusTypes;
 }
 
 export interface BoxType {
@@ -37,7 +39,7 @@ export interface BoxType {
   phase_duration_2: number;
   phase_duration_3: number;
   phase_duration_4: number;
-  status: StatusTypes;
+  status: StatusTypess;
 }
 
 export interface BugType extends MessageType {}
@@ -54,7 +56,8 @@ export interface CommentType {
   user_hash_id: number;
   language_id: number;
   parent_id: number;
-  status: number;
+  status: StatusTypes;
+  status: StatusTypes;
   created: string;
   last_update: string;
   updater_id: number;
@@ -65,7 +68,8 @@ export interface GroupType {
   group_name: string;
   description_public: string;
   description_internal: string;
-  status: number;
+  status: StatusTypes;
+  status: StatusTypes;
   internal_info: string;
   created: string;
   last_update: string;
@@ -91,7 +95,8 @@ export interface IdeaType {
   sum_comments: number;
   room_id: number;
   room_hash_id: string;
-  status: number;
+  status: StatusTypes;
+  status: StatusTypes;
   is_winner: number;
   approved: -1 | 0 | 1;
   approval_comment: null;
@@ -113,7 +118,8 @@ export interface MessageType {
   created: string;
   last_update: string;
   updater_id: number;
-  status: number;
+  status: StatusTypes;
+  status: StatusTypes;
   target_group: number;
   target_id: number;
   only_on_dashboard: number;
@@ -142,7 +148,8 @@ export interface RoomType {
   phase_duration_3: number;
   phase_duration_4: number;
   room_name: string;
-  status: number;
+  status: StatusTypes;
+  status: StatusTypes;
   updater_id: string;
   type: 0 | 1;
 }
@@ -159,12 +166,13 @@ export interface UserType {
   position: string;
   hash_id: string;
   registration_status: null;
-  status: number;
+  status: StatusTypes;
   created: string;
   last_update: string;
   updater_id: number;
   bi: string;
-  userlevel: string;
+  userlevel: RoleTypes;
+  userlevel: RoleTypes;
   infinite_votes: string;
   last_login: string;
   presence: string;
@@ -197,7 +205,8 @@ export interface CommandType {
   date_start: string;
   date_end: string;
   active: number;
-  status: number;
+  status: StatusTypes;
+  status: StatusTypes;
   info: string;
   target_id: number;
   creator_id: number;
@@ -303,7 +312,8 @@ export interface DelegationType {
   user_id_target: string;
   room_id: string;
   topic_id: string;
-  status: number;
+  status: StatusTypes;
+  status: StatusTypes;
   updater_id: number;
   created: string;
   last_update: string;

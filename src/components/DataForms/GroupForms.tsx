@@ -1,33 +1,34 @@
-import { GroupArguments } from '@/services/groups';
+import { addGroup, editGroup, GroupArguments } from '@/services/groups';
 import { GroupType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, StatusField } from '../DataFields';
 
 /**
- * CategoryForms component is used to create or edit an idea.
+ * GroupForms component is used to create or edit an idea.
  *
  * @component
  */
 
-interface CategoryFormsProps {
+interface GroupFormsProps {
   onClose: () => void;
   defaultValues?: GroupType;
-  onSubmit: (data: GroupArguments) => void;
 }
 
-const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose, onSubmit }) => {
+const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object({
     group_name: yup.string().required(t('forms.validation.required')),
     description_public: yup.string(),
-  });
+  } as Record<keyof GroupArguments, any>);
 
   const {
     control,
@@ -37,8 +38,50 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose, o
     reset,
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {},
+    defaultValues: {
+      group_name: defaultValues ? ' ' : '',
+      description_public: defaultValues ? ' ' : '',
+    },
   });
+
+  // Infer TypeScript type from the Yup schema
+  type SchemaType = yup.InferType<typeof schema>;
+
+  const onSubmit = async (data: SchemaType) => {
+    try {
+      setIsLoading(true);
+      if (!defaultValues) {
+        await newGroup(data);
+      } else {
+        await updateGroup(data);
+      }
+      onClose();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const newGroup = async (data: SchemaType) => {
+    const request = await addGroup({
+      group_name: data.group_name,
+      description_public: data.description_public,
+      status: data.status,
+    });
+    if (request.error || !request.data) return;
+    onClose();
+  };
+
+  const updateGroup = async (data: SchemaType) => {
+    if (!defaultValues?.id) return;
+    const request = await editGroup({
+      group_id: defaultValues?.id,
+      group_name: data.group_name,
+      description_public: data.description_public,
+      status: data.status,
+    });
+    if (request.error) return;
+    onClose();
+  };
 
   useEffect(() => {
     reset({ ...defaultValues });
@@ -46,7 +89,7 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose, o
 
   return (
     <Stack p={2} overflow="auto">
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h4">
@@ -65,16 +108,17 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose, o
               fullWidth
               {...register('group_name')}
               required
+              disabled={isLoading}
             />
             {/* content */}
-            <MarkdownEditor name="description_public" control={control} required />
+            <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error">
               {t('actions.cancel')}
             </Button>
             <Button type="submit" variant="contained">
-              {t('actions.confirm')}
+              {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>
         </Stack>
@@ -83,4 +127,4 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose, o
   );
 };
 
-export default CategoryForms;
+export default GroupForms;

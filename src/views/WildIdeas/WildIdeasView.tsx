@@ -1,22 +1,12 @@
 import { AppIcon } from '@/components';
-import AddCategoriesButton from '@/components/Buttons/AddCategories';
-import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
 import { IdeaForms } from '@/components/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
-import {
-  addIdea,
-  AddIdeaArguments,
-  deleteIdea,
-  editIdea,
-  EditIdeaArguments,
-  getIdeasByRoom,
-  IdeaArguments,
-} from '@/services/ideas';
+import { deleteIdea, getIdeasByRoom } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -35,8 +25,6 @@ const WildIdeas = () => {
   const { t } = useTranslation();
   const { room_id } = useParams<RouteParams>();
 
-  const addCategory = useRef<AddCategoryRefProps>(null);
-
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
@@ -54,44 +42,6 @@ const WildIdeas = () => {
   useEffect(() => {
     fetchIdeas();
   }, []);
-
-  const onSubmit = (data: IdeaArguments) => {
-    if (!edit) return;
-    typeof edit === 'boolean' ? newIdea(data as AddIdeaArguments) : updateIdea(data as EditIdeaArguments);
-  };
-
-  const newIdea = async (data: AddIdeaArguments) => {
-    if (!room_id) return;
-    const request = await addIdea({
-      room_id: room_id,
-      title: data.title,
-      content: data.content,
-      status: data.status,
-    });
-    if (request.error || !request.data) {
-      setError(request.error);
-      return;
-    }
-    addCategory.current?.setNewIdeaCategory(request.data.hash_id);
-    onClose();
-  };
-
-  const updateIdea = async (data: EditIdeaArguments) => {
-    if (typeof edit === 'object' && edit.hash_id) {
-      const request = await editIdea({
-        idea_id: edit.hash_id,
-        title: data.title,
-        content: data.content,
-        status: data.status,
-      });
-      if (request.error) {
-        setError(request.error);
-        return;
-      }
-      addCategory.current?.setNewIdeaCategory(edit.hash_id);
-      onClose();
-    }
-  };
 
   const onEdit = (idea: IdeaType) => {
     setEdit(idea);
@@ -138,13 +88,7 @@ const WildIdeas = () => {
         </>
       )}
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <IdeaForms
-          onClose={onClose}
-          onSubmit={onSubmit}
-          defaultValues={typeof edit !== 'boolean' ? (edit as IdeaArguments) : undefined}
-        >
-          <AddCategoriesButton ideas={typeof edit === 'string' ? [edit] : []} ref={addCategory} />
-        </IdeaForms>
+        <IdeaForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
       </Drawer>
     </Stack>
   );

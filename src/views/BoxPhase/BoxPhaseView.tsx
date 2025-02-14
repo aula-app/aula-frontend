@@ -30,7 +30,7 @@ const BoxPhaseView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
-  const [edit, setEdit] = useState<EditBoxArguments | true>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
+  const [edit, setEdit] = useState<BoxType | true>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
 
   const fetchBoxes = useCallback(async () => {
     if (!room_id || !phase) return;
@@ -44,47 +44,6 @@ const BoxPhaseView = () => {
   useEffect(() => {
     fetchBoxes();
   }, [phase]);
-
-  const boxEdit = (box: EditBoxArguments) => {
-    setEdit(box);
-  };
-
-  const boxSubmit = (data: BoxArguments) => {
-    if (!edit) return;
-    edit === true ? newBox(data as AddBoxArguments) : updateBox(data as EditBoxArguments);
-  };
-
-  const newBox = async (data: AddBoxArguments) => {
-    if (!room_id || !phase) return;
-    const request = await addBox({
-      room_id: room_id,
-      phase_id: Number(phase) as RoomPhases,
-      name: data.name,
-      description_public: data.description_public,
-      phase_duration_1: data.phase_duration_1,
-      phase_duration_2: data.phase_duration_2,
-      phase_duration_3: data.phase_duration_3,
-      phase_duration_4: data.phase_duration_4,
-      status: data.status,
-    });
-    if (!request.error) onClose();
-  };
-
-  const updateBox = async (data: EditBoxArguments) => {
-    if (!(typeof edit === 'object') || !edit.hash_id) return;
-    const request = await editBox({
-      topic_id: edit.hash_id,
-      name: data.name,
-      phase_id: data.phase_id,
-      description_public: data.description_public,
-      phase_duration_1: data.phase_duration_1,
-      phase_duration_2: data.phase_duration_2,
-      phase_duration_3: data.phase_duration_3,
-      phase_duration_4: data.phase_duration_4,
-      status: data.status,
-    });
-    if (!request.error) onClose();
-  };
 
   const boxDelete = async (id: string) => {
     const request = await deleteBox(id);
@@ -108,7 +67,7 @@ const BoxPhaseView = () => {
         {!isLoading &&
           boxes.map((box) => (
             <Grid key={box.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-              <BoxCard box={box} onEdit={() => boxEdit(box)} onDelete={() => boxDelete(box.hash_id)} />
+              <BoxCard box={box} onEdit={() => setEdit(box)} onDelete={() => boxDelete(box.hash_id)} />
             </Grid>
           ))}
       </Grid>
@@ -127,11 +86,7 @@ const BoxPhaseView = () => {
             <AppIcon icon="box" />
           </Fab>
           <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-            <BoxForms
-              onClose={onClose}
-              onSubmit={boxSubmit}
-              defaultValues={typeof edit === 'object' ? edit : undefined}
-            />
+            <BoxForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
           </Drawer>
         </>
       )}

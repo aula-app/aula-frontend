@@ -80,7 +80,11 @@ export interface EditRoomArguments extends RoomArguments {
  * Adds a new room to the database
  */
 
-export async function addRoom(args: RoomArguments): Promise<GetRoomsResponse> {
+interface addResponse extends GenericResponse {
+  data: { insert_id: number; hash_id: string } | null;
+}
+
+export async function addRoom(args: RoomArguments): Promise<addResponse> {
   const response = await databaseRequest(
     {
       model: 'Room',
@@ -90,7 +94,7 @@ export async function addRoom(args: RoomArguments): Promise<GetRoomsResponse> {
     ['updater_id']
   );
 
-  return response as GetRoomsResponse;
+  return response as addResponse;
 }
 
 /**
@@ -114,14 +118,14 @@ export async function editRoom(args: EditRoomArguments): Promise<GenericResponse
  * Delete room
  */
 
-export async function deleteRoom(room_id: string): Promise<GetRoomResponse> {
+export async function deleteRoom(room_id: string): Promise<GenericResponse> {
   const response = await databaseRequest({
     model: 'Room',
     method: 'deleteRoom',
     arguments: { room_id },
   });
 
-  return response as GetRoomResponse;
+  return response as GenericResponse;
 }
 
 /**

@@ -1,10 +1,9 @@
-import AddCategoriesButton from '@/components/Buttons/AddCategories';
 import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
 import { IdeaForms } from '@/components/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { getWildIdeasByUser } from '@/services/dashboard';
-import { deleteIdea, editIdea, EditIdeaArguments, IdeaArguments } from '@/services/ideas';
+import { deleteIdea } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { Drawer, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -37,30 +36,8 @@ const WildIdeaPhaseView = () => {
     setLoading(false);
   }, [phase]);
 
-  const updateIdea = async (data: EditIdeaArguments) => {
-    if (typeof edit === 'object' && edit.hash_id) {
-      const request = await editIdea({
-        idea_id: edit.hash_id,
-        title: data.title,
-        content: data.content,
-        status: data.status,
-      });
-      if (request.error) {
-        setError(request.error);
-        return;
-      }
-      addCategory.current?.setNewIdeaCategory(edit.hash_id);
-      onClose();
-    }
-  };
-
   const onEdit = (idea: IdeaType) => {
     setEdit(idea);
-  };
-
-  const onSubmit = (data: IdeaArguments) => {
-    if (!edit) return;
-    updateIdea(data as EditIdeaArguments);
   };
 
   const onDelete = async (id: string) => {
@@ -101,13 +78,7 @@ const WildIdeaPhaseView = () => {
           ))}
       </Grid>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <IdeaForms
-          onClose={onClose}
-          onSubmit={onSubmit}
-          defaultValues={typeof edit !== 'boolean' ? (edit as IdeaArguments) : undefined}
-        >
-          <AddCategoriesButton ideas={!!edit ? [edit.hash_id] : []} ref={addCategory} />
-        </IdeaForms>
+        <IdeaForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
       </Drawer>
     </Stack>
   );
