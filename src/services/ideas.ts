@@ -261,9 +261,7 @@ export async function removeIdeaBox(idea_id: string, topic_id: string): Promise<
     model: 'Idea',
     method: 'removeIdeaFromTopic',
     arguments: { idea_id, topic_id },
-  },
-  ['updater_id']
-  );
+  });
 
   return response as GenericResponse;
 }

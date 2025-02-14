@@ -168,12 +168,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose }) => {
               />
               <PhaseDurationFields control={control} required disabled={isLoading} />
               {checkPermissions(40) && (
-                <UserField
-                  defaultValues={users}
-                  onChange={(updates) => setUpdateUsers(updates)}
-                  hasError
-                  disabled={isLoading}
-                />
+                <UserField defaultValues={users} onChange={(updates) => setUpdateUsers(updates)} disabled={isLoading} />
               )}
             </Stack>
           </Stack>
