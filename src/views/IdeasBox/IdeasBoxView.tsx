@@ -92,7 +92,7 @@ const IdeasBoxView = () => {
     setIdeasLoading(false);
   }, [box_id]);
 
-  const closeDelection = () => {
+  const closeDeletion = () => {
     fetchDelegation();
     setDelegating(false);
   };
@@ -161,7 +161,7 @@ const IdeasBoxView = () => {
       <DelegateVote
         open={delegating}
         delegate={delegates[0] ? delegates[0].user_id_target : undefined}
-        onClose={closeDelection}
+        onClose={closeDeletion}
       />
     </Stack>
   );

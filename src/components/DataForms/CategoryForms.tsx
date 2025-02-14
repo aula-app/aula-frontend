@@ -105,16 +105,17 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
               fullWidth
               {...register('name')}
               required
+              disabled={isLoading}
             />
             {/* content */}
-            <IconField name="description_internal" control={control} />
+            <IconField name="description_internal" control={control} disabled={isLoading} />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error">
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained">
-              {t('actions.confirm')}
+            <Button type="submit" variant="contained" disabled={isLoading}>
+              {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>
         </Stack>
