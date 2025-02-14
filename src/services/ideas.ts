@@ -24,11 +24,16 @@ export async function getIdea(idea_id: string): Promise<GetIdeaResponse> {
  * Fetches all ideas
  */
 
+interface IdeasListRequest extends GenericListRequest {
+  room_id?: string;
+}
+
 export interface GetIdeasResponse extends GenericResponse {
   data: IdeaType[] | null;
 }
 
-export async function getIdeas(args: GenericListRequest): Promise<GetIdeasResponse> {
+export async function getIdeas(args: IdeasListRequest): Promise<GetIdeasResponse> {
+  if (args?.room_id === 'all') delete args.room_id;
   const response = await databaseRequest({
     model: 'Idea',
     method: 'getIdeas',
@@ -56,11 +61,24 @@ export async function getIdeasByRoom(room_id: string): Promise<GetIdeasResponse>
  * Fetches ideas for a specific box
  */
 
-export async function getIdeasByBox(topic_id: string): Promise<GetIdeasResponse> {
+interface BoxIdeasListRequest {
+  offset?: number;
+  limit?: number;
+  orderby?: number;
+  asc?: 0 | 1;
+  search_field?: string;
+  search_text?: string;
+  both_names?: string;
+  status?: StatusTypes;
+  room_id?: string;
+  topic_id?: string;
+}
+
+export async function getIdeasByBox(args: BoxIdeasListRequest): Promise<GetIdeasResponse> {
   const response = await databaseRequest({
     model: 'Idea',
     method: 'getIdeasByTopic',
-    arguments: { topic_id },
+    arguments: args,
   });
 
   return response as GetIdeasResponse;

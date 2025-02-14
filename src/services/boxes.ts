@@ -2,6 +2,7 @@ import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
+import { off } from 'process';
 
 /**
  * Fetches box
@@ -33,11 +34,11 @@ interface GetBoxesResponse extends GenericResponse {
   data: BoxType[] | null;
 }
 
-export async function getBoxes(args: BoxListRequest): Promise<GetBoxesResponse> {
+export async function getBoxes(args?: BoxListRequest): Promise<GetBoxesResponse> {
   const response = await databaseRequest({
     model: 'Topic',
     method: 'getTopics',
-    arguments: args,
+    arguments: args || { offset: 0, limit: 0 },
   });
 
   return response as GetBoxesResponse;

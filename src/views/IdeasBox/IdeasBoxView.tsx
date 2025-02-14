@@ -33,7 +33,7 @@ const IdeasBoxView = () => {
   const [isBoxLoading, setBoxLoading] = useState(true);
   const [boxError, setBoxError] = useState<string | null>(null);
   const [box, setBox] = useState<BoxType>();
-  const [edit, setEdit] = useState<EditBoxArguments>(); // undefined = closed;
+  const [edit, setEdit] = useState<BoxType>(); // undefined = closed;
 
   const fetchBox = useCallback(async () => {
     if (!box_id) return;
@@ -46,24 +46,6 @@ const IdeasBoxView = () => {
 
   const boxEdit = (box: BoxType) => {
     setEdit(box);
-  };
-
-  const boxUpdate = async (data: EditBoxArguments) => {
-    if (!(typeof edit === 'object') || !edit.hash_id) return;
-    const request = await editBox({
-      topic_id: edit.hash_id,
-      name: data.name,
-      description_public: data.description_public,
-      description_internal: data.description_internal,
-      room_id: data.room_hash_id,
-      phase_id: data.phase_id,
-      phase_duration_1: data.phase_duration_1,
-      phase_duration_2: data.phase_duration_2,
-      phase_duration_3: data.phase_duration_3,
-      phase_duration_4: data.phase_duration_4,
-      status: data.status,
-    });
-    if (!request.error) boxClose();
   };
 
   const boxDelete = async () => {
@@ -88,7 +70,7 @@ const IdeasBoxView = () => {
   const fetchIdeas = useCallback(async () => {
     if (!box_id) return;
     setIdeasLoading(true);
-    const response = await getIdeasByBox(box_id);
+    const response = await getIdeasByBox({ topic_id: box_id });
     setIdeasError(response.error);
     if (!response.error && response.data) setIdeas(response.data);
     setIdeasLoading(false);
@@ -174,7 +156,7 @@ const IdeasBoxView = () => {
           ))}
       </Grid>
       <Drawer anchor="bottom" open={!!edit} onClose={boxClose} sx={{ overflowY: 'auto' }}>
-        <BoxForms onClose={boxClose} onSubmit={boxUpdate} defaultValues={edit} />
+        <BoxForms onClose={boxClose} defaultValues={edit} />
       </Drawer>
       <DelegateVote
         open={delegating}

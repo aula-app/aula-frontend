@@ -60,7 +60,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
 
   const fetchBoxIdeas = async () => {
     if (!defaultValues?.hash_id) return;
-    const response = await getIdeasByBox(defaultValues.hash_id);
+    const response = await getIdeasByBox({ topic_id: defaultValues.hash_id });
     if (!response.data) return;
     setIdeas(response.data);
   };

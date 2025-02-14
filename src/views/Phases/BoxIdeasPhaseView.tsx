@@ -38,7 +38,7 @@ const BoxIdeasPhaseView = () => {
       return;
     }
 
-    const responses = await Promise.all(boxes.data.map((box) => getIdeasByBox(box.hash_id)));
+    const responses = await Promise.all(boxes.data.map((box) => getIdeasByBox({ topic_id: box.hash_id })));
     const response = responses.flat()[0];
     if (response.error) setError(response.error);
     if (!response.error) setIdeas(response.data || []);

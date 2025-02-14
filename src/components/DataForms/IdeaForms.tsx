@@ -1,13 +1,16 @@
-import { IdeaArguments } from '@/services/ideas';
+import { addIdea, addIdeaBox, editIdea, getIdeaBoxes, IdeaArguments } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, StatusField } from '../DataFields';
+import { UpdateType } from '@/types/SettingsTypes';
+import SelectBoxField from '../DataFields/SelectBoxField';
+import { addIdeaCategory, getCategories, removeIdeaCategory } from '@/services/categories';
 
 /**
  * IdeaForms component is used to create or edit an idea.
@@ -16,14 +19,20 @@ import { MarkdownEditor, StatusField } from '../DataFields';
  */
 
 interface IdeaFormsProps {
-  children?: React.ReactNode;
   onClose: () => void;
-  defaultValues?: IdeaArguments;
-  onSubmit: (data: IdeaArguments) => void;
+  defaultValues?: IdeaType;
 }
 
-const IdeaForms: React.FC<IdeaFormsProps> = ({ children, defaultValues, onClose, onSubmit }) => {
+const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
+
+  const [box, setBox] = useState<string>('');
+  const [categories, setCategories] = useState<number[]>([]);
+  const [updateCategories, setUpdateCategories] = useState<{ add: number[]; remove: number[] }>({
+    add: [],
+    remove: [],
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object({
     title: yup.string().required(t('forms.validation.required')),
@@ -41,8 +50,77 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ children, defaultValues, onClose,
     defaultValues: { title: defaultValues ? ' ' : '' },
   });
 
+  // Infer TypeScript type from the Yup schema
+  type SchemaType = yup.InferType<typeof schema>;
+
+  const fetchIdeaBox = async () => {
+    if (!defaultValues?.hash_id) return;
+    const response = await getIdeaBoxes(defaultValues.hash_id);
+    if (!response.data) return;
+    const box = response.data.map((box) => box.hash_id)[0];
+    setBox(box);
+  };
+
+  const fetchIdeaCategories = async () => {
+    if (!defaultValues?.hash_id) return;
+    const response = await getCategories(defaultValues.hash_id);
+    if (!response.data) return;
+    const categories = response.data.map((category) => category.id);
+    setCategories(categories);
+  };
+
+  const onSubmit = async (data: SchemaType) => {
+    try {
+      setIsLoading(true);
+      if (!defaultValues) {
+        await newIdea(data);
+      } else {
+        await updateIdea(data);
+      }
+      onClose();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const newIdea = async (data: SchemaType) => {
+    const response = await addIdea({
+      room_id: data.room_hash_id,
+      title: data.title,
+      content: data.content,
+      custom_field1: data.custom_field1,
+      custom_field2: data.custom_field2,
+    });
+    if (response.error || !response.data) return;
+    if (box) await addIdeaBox(response.data.hash_id, box);
+    await setIdeaCategory(response.data.hash_id);
+  };
+
+  const updateIdea = async (data: SchemaType) => {
+    if (!defaultValues?.hash_id) return;
+    const response = await editIdea({
+      room_id: data.room_hash_id,
+      title: data.title,
+      content: data.content,
+      custom_field1: data.custom_field1,
+      custom_field2: data.custom_field2,
+      idea_id: defaultValues.hash_id,
+    });
+    if (response.error || !response.data) return;
+    if (box) await addIdeaBox(defaultValues?.hash_id, box);
+    await setIdeaCategory(defaultValues?.hash_id);
+  };
+
+  const setIdeaCategory = async (idea_id: string) => {
+    const addPromises = updateCategories.add.map((category_id) => addIdeaCategory(idea_id, category_id));
+    const removePromises = updateCategories.remove.map((category_id) => removeIdeaCategory(idea_id, category_id));
+    await Promise.all([...addPromises, ...removePromises]);
+  };
+
   useEffect(() => {
     reset({ ...defaultValues });
+    fetchIdeaBox();
+    fetchIdeaCategories();
   }, [JSON.stringify(defaultValues)]);
 
   return (
@@ -56,7 +134,6 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ children, defaultValues, onClose,
               })}
             </Typography>
             <Stack direction="row" gap={2}>
-              {children}
               {checkPermissions(40) && <StatusField control={control} />}
             </Stack>
           </Stack>
@@ -72,6 +149,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ children, defaultValues, onClose,
             />
             {/* content */}
             <MarkdownEditor name="content" control={control} required />
+            <SelectBoxField defaultValue={box} onChange={setBox} />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error">
