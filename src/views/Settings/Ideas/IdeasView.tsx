@@ -156,10 +156,7 @@ const IdeasView: React.FC = () => {
         <PaginationBar pages={Math.ceil(totalIdeas / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <IdeaForms
-          onClose={onClose}
-          defaultValues={typeof edit !== 'boolean' ? ideas.find((idea) => idea.hash_id === edit.hash_id) : undefined}
-        />
+        <IdeaForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
       </Drawer>
     </Stack>
   );
