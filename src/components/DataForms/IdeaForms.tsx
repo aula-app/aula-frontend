@@ -1,4 +1,5 @@
-import { addIdea, addIdeaBox, editIdea, getIdeaBoxes, IdeaArguments } from '@/services/ideas';
+import { addIdeaCategory, getCategories, removeIdeaCategory } from '@/services/categories';
+import { addIdea, addIdeaBox, editIdea, getIdeaBoxes } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,9 +9,8 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, StatusField } from '../DataFields';
-import { UpdateType } from '@/types/SettingsTypes';
 import SelectBoxField from '../DataFields/SelectBoxField';
-import { addIdeaCategory, getCategories, removeIdeaCategory } from '@/services/categories';
+import CategoryField from '../DataFields/CategoriesField';
 
 /**
  * IdeaForms component is used to create or edit an idea.
@@ -146,10 +146,16 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               helperText={`${errors.title?.message || ''}`}
               fullWidth
               required
+              disabled={isLoading}
             />
             {/* content */}
-            <MarkdownEditor name="content" control={control} required />
-            <SelectBoxField defaultValue={box} onChange={setBox} />
+            <MarkdownEditor name="content" control={control} required disabled={isLoading} />
+            <SelectBoxField defaultValue={box} onChange={setBox} disabled={isLoading} />
+            <CategoryField
+              defaultValues={categories}
+              onChange={(updates) => setUpdateCategories(updates)}
+              disabled={isLoading}
+            />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error">

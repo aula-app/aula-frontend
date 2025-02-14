@@ -57,8 +57,24 @@ const SelectBoxField: React.FC<Props> = ({ defaultValue, onChange, disabled = fa
       id="controllable-states-demo"
       loading={loading}
       options={boxes}
-      sx={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label={t(`scopes.boxes.name`)} />}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={t(`scopes.boxes.name`)}
+          disabled={disabled}
+          slotProps={{
+            input: {
+              ...params.InputProps,
+              endAdornment: (
+                <>
+                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
+            },
+          }}
+        />
+      )}
     />
   );
 };
