@@ -3,16 +3,7 @@ import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
-import SelectRoom from '@/components/SelectRoom';
-import {
-  addBox,
-  AddBoxArguments,
-  BoxArguments,
-  deleteBox,
-  editBox,
-  EditBoxArguments,
-  getBoxes,
-} from '@/services/boxes';
+import { BoxArguments, deleteBox, getBoxes } from '@/services/boxes';
 import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
 import { getDataLimit } from '@/utils';
@@ -40,6 +31,7 @@ const COLUMNS = [
 
 const BoxesView: React.FC = () => {
   const { t } = useTranslation();
+
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
@@ -54,8 +46,7 @@ const BoxesView: React.FC = () => {
   const [offset, setOffset] = useState(0);
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
 
-  const [room_id, setRoom] = useState<string | undefined>();
-  const [edit, setEdit] = useState<string | boolean>(false); // false = update dialog closed ;true = new idea; string = item hash_id;
+  const [edit, setEdit] = useState<BoxType | boolean>(false); // false = update dialog closed ;true = new idea; BoxType = item to edit;
 
   const fetchBoxes = useCallback(async () => {
     setLoading(true);
@@ -74,48 +65,7 @@ const BoxesView: React.FC = () => {
       setTotalBoxes(response.count as number);
     }
     setLoading(false);
-  }, [search_field, search_text, status, asc, limit, offset, orderby, room_id]);
-
-  const onSubmit = (data: BoxArguments) => {
-    if (!edit) return;
-    typeof edit === 'boolean' ? newBox(data as AddBoxArguments) : updateBox(data as EditBoxArguments);
-  };
-
-  const newBox = async (data: AddBoxArguments) => {
-    if (!data.room_hash_id) return;
-    const request = await addBox({
-      name: data.name,
-      description_public: data.description_public,
-      description_internal: data.description_internal,
-      room_id: data.room_hash_id,
-      phase_id: data.phase_id,
-      phase_duration_1: data.phase_duration_1,
-      phase_duration_2: data.phase_duration_2,
-      phase_duration_3: data.phase_duration_3,
-      phase_duration_4: data.phase_duration_4,
-      status: data.status,
-    });
-    if (!request.error) onClose();
-  };
-
-  const updateBox = async (data: EditBoxArguments) => {
-    const box = boxes.find((box) => box.hash_id === edit);
-    if (!box || !box.hash_id) return;
-    const request = await editBox({
-      topic_id: box.hash_id,
-      name: data.name,
-      description_public: data.description_public,
-      description_internal: data.description_internal,
-      room_id: data.room_hash_id,
-      phase_id: data.phase_id,
-      phase_duration_1: data.phase_duration_1,
-      phase_duration_2: data.phase_duration_2,
-      phase_duration_3: data.phase_duration_3,
-      phase_duration_4: data.phase_duration_4,
-      status: data.status,
-    });
-    if (!request.error) onClose();
-  };
+  }, [search_field, search_text, status, asc, limit, offset, orderby]);
 
   const deleteBoxes = (items: Array<string>) =>
     items.map(async (box) => {
@@ -144,7 +94,7 @@ const BoxesView: React.FC = () => {
             setSearchText(text);
           }}
         >
-          <SelectRoom room={room_id || ''} setRoom={setRoom} />
+          {/* <SelectRoom room={room_id || ''} setRoom={setRoom} /> */}
         </FilterBar>
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
@@ -157,7 +107,7 @@ const BoxesView: React.FC = () => {
           setAsc={setAsc}
           setLimit={setLimit}
           setOrderby={setOrderby}
-          setEdit={setEdit}
+          setEdit={(box) => setEdit(box as BoxType | boolean)}
           setDelete={deleteBoxes}
         />
         {isLoading && <DataTableSkeleton />}
@@ -167,10 +117,7 @@ const BoxesView: React.FC = () => {
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <BoxForms
           onClose={onClose}
-          onSubmit={onSubmit}
-          defaultValues={
-            typeof edit !== 'boolean' ? (boxes.find((box) => box.hash_id === edit) as EditBoxArguments) : undefined
-          }
+          defaultValues={typeof edit !== 'boolean' ? boxes.find((box) => box.hash_id === edit.hash_id) : undefined}
         />
       </Drawer>
     </Stack>

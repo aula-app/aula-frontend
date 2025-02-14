@@ -106,7 +106,6 @@ const IdeasBoxView = () => {
     setIdeasLoading(true);
     const response = await getDelegations(box_id);
     setIdeasError(response.error);
-    console.log(response);
     if (!response.error && response.data) setDelegates(response.data);
     setIdeasLoading(false);
   }, [box_id]);

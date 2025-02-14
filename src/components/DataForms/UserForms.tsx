@@ -18,13 +18,13 @@ import RoomField from '../DataFields/RoomField';
  */
 
 interface UserFormsProps {
-  children?: React.ReactNode;
   onClose: () => void;
   defaultValues?: UserType;
 }
 
-const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose }) => {
+const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
+
   const [rooms, setRooms] = useState<string[]>([]);
   const [updateRooms, setUpdateRooms] = useState<UpdateType>({ add: [], remove: [] });
   const [isLoading, setIsLoading] = useState(false);
@@ -132,7 +132,6 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
               })}
             </Typography>
             <Stack direction="row" gap={2}>
-              {children}
               {checkPermissions(40) && <StatusField control={control} disabled={isLoading} />}
             </Stack>
           </Stack>
@@ -181,12 +180,7 @@ const UserForms: React.FC<UserFormsProps> = ({ children, defaultValues, onClose 
                 <RoleField control={control} disabled={isLoading} />
               )}
               {checkPermissions(40) && (
-                <RoomField
-                  defaultValues={rooms}
-                  onChange={(updates) => setUpdateRooms(updates)}
-                  hasError
-                  disabled={isLoading}
-                />
+                <RoomField defaultValues={rooms} onChange={(updates) => setUpdateRooms(updates)} disabled={isLoading} />
               )}
             </Stack>
             <MarkdownEditor

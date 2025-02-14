@@ -140,6 +140,7 @@
       "minLength": "Must be at least {{var}} characters",
       "name": "Name can only contain letters",
       "nonNegative": "Number cannot be negative",
+      "noOptions": "No options available",
       "optional": "Optional",
       "passwordMatch": "Passwords must match",
       "phone": "Please enter a valid phone number",

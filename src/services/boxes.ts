@@ -85,7 +85,11 @@ export interface EditBoxArguments extends BoxArguments {
  * Adds a new box to the database
  */
 
-export async function addBox(args: AddBoxArguments): Promise<GetBoxesResponse> {
+interface addResponse extends GenericResponse {
+  data: { insert_id: number; hash_id: string } | null;
+}
+
+export async function addBox(args: AddBoxArguments): Promise<addResponse> {
   const response = await databaseRequest(
     {
       model: 'Topic',
@@ -95,7 +99,7 @@ export async function addBox(args: AddBoxArguments): Promise<GetBoxesResponse> {
     ['updater_id']
   );
 
-  return response as GetBoxesResponse;
+  return response as addResponse;
 }
 
 /**
