@@ -106,6 +106,21 @@ export const baseRequest = async (
 
     const response = await request.json();
 
+    if ('success' in response && response.error === 'refresh_token') {
+      const requestData = {
+        method: 'GET',
+        headers: headers
+      };
+
+      const request = await fetch(`${api_url}/api/controllers/refresh_token.php`, requestData);
+      const new_jwt = await request.json();
+
+      console.log(new_jwt["JWT"])
+      localStorage.setItem("token", new_jwt["JWT"]);
+      window.location.reload(false);
+      // TODO: Make reload the page
+    }
+
     if ('online_mode' in response && response.online_mode === 0) {
       if (window.location.pathname !== '/offline') window.location.href = '/offline';
     }
