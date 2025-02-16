@@ -393,7 +393,7 @@ export async function revokeDelegation(topic_id: string): Promise<GenericRespons
 export async function addSpecialRoles(user_id: string, role: RoleTypes, room_id: string): Promise<GenericResponse> {
   const response = await databaseRequest({
     model: 'User',
-    method: 'addUserRoles',
+    method: 'addUserRole',
     arguments: {
       user_id,
       role,
