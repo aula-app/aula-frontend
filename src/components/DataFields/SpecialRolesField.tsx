@@ -1,5 +1,6 @@
 import AppIcon from '@/components/AppIcon';
 import { getRooms } from '@/services/rooms';
+import { addSpecialRoles } from '@/services/users';
 import { RoomType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
 import {
@@ -18,7 +19,6 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SelectRole from '../SelectRole';
-import { setSpecialRoles } from '@/services/users';
 
 /**
  * Interface that will be exposed to the parent component.
@@ -73,11 +73,16 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, .
 
   const onSubmit = async () => {
     setLoading(true);
-    const response = await setSpecialRoles(user.hash_id, updateRoles);
+    const responses = await Promise.all(updateRoles.map((role) => addSpecialRoles(user.hash_id, role.role, role.room)));
+
+    const errorResponse = responses.find((response) => response.error);
+    if (errorResponse) {
+      setError(errorResponse.error);
+    } else {
+      setOpen(false);
+    }
+
     setLoading(false);
-    console.log(response);
-    if (response.error) setError(response.error);
-    else setOpen(false);
     onClose();
   };
 
