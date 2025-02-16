@@ -18,6 +18,7 @@
     "edit": "Edit {{var}}",
     "filter": "Filter",
     "hide": "Hide",
+    "loading": "Loading",
     "move": "Move selected {{var}} to",
     "print": "Print",
     "remove": "Delete {{var}}",
@@ -139,6 +140,7 @@
       "minLength": "Must be at least {{var}} characters",
       "name": "Name can only contain letters",
       "nonNegative": "Number cannot be negative",
+      "noOptions": "No options available",
       "optional": "Optional",
       "passwordMatch": "Passwords must match",
       "phone": "Please enter a valid phone number",
@@ -210,7 +212,9 @@
     "30": "Moderator",
     "40": "Super Moderator",
     "50": "Administrator",
-    "60": "Technical Administrator"
+    "60": "Technical Administrator",
+    "title": "User Roles",
+    "roomRoles": "Room Roles"
   },
   "scopes": {
     "announcements": {

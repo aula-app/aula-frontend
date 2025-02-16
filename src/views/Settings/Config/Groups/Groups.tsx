@@ -1,8 +1,7 @@
 import { AppIcon } from '@/components';
 import GroupForms from '@/components/DataForms/GroupForms';
-import { addGroup, deleteGroup, editGroup, getGroups, GroupArguments } from '@/services/groups';
+import { deleteGroup, getGroups } from '@/services/groups';
 import { GroupType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
 import {
   Button,
@@ -14,7 +13,6 @@ import {
   DialogTitle,
   Drawer,
   Stack,
-  Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,32 +26,6 @@ const View: React.FC = () => {
   const groupsFetch = async () => {
     const response = await getGroups();
     setGroups(response.data ? response.data : []);
-  };
-
-  const onSubmit = (data: GroupArguments) => {
-    typeof edit === 'boolean' ? newGroup(data) : updateGroup(data);
-  };
-
-  const newGroup = async (data: GroupArguments) => {
-    const request = await addGroup({
-      group_name: data.group_name,
-      description_public: data.description_public,
-      status: data.status,
-    });
-    if (request.error || !request.data) return;
-    onClose();
-  };
-
-  const updateGroup = async (data: GroupArguments) => {
-    if (typeof edit === 'boolean') return;
-    const request = await editGroup({
-      group_id: edit.id,
-      group_name: data.group_name,
-      description_public: data.description_public,
-      status: data.status,
-    });
-    if (request.error) return;
-    onClose();
   };
 
   const onDel = async () => {
@@ -89,11 +61,7 @@ const View: React.FC = () => {
         })}
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <GroupForms
-          onClose={onClose}
-          onSubmit={onSubmit}
-          defaultValues={typeof edit !== 'boolean' ? edit : undefined}
-        />
+        <GroupForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
       </Drawer>
       <Dialog
         open={!!del}

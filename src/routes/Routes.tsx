@@ -24,7 +24,7 @@ const Routes = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const result = await getUserConsent(api_url, jwt_token, controller.signal);
+      const result = await getUserConsent(jwt_token, controller.signal);
       clearTimeout(timeoutId);
 
       dispatch({

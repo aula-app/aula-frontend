@@ -1,8 +1,11 @@
 import { ConsentResponse } from '@/types/LoginTypes';
+import { localStorageGet } from '@/utils';
+const api_url = localStorageGet('api_url');
+const jwt_token = localStorageGet('token');
 
-export const getUserConsent = async (apiUrl: string, token: string, signal?: AbortSignal): Promise<ConsentResponse> => {
+export const getUserConsent = async (token: string, signal?: AbortSignal): Promise<ConsentResponse> => {
   try {
-    const response = await fetch(`${apiUrl}/api/controllers/user_consent.php`, {
+    const response = await fetch(`${api_url}/api/controllers/user_consent.php`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -28,4 +31,41 @@ export const getUserConsent = async (apiUrl: string, token: string, signal?: Abo
     }
     throw new Error('Unknown error occurred');
   }
+};
+
+export interface MessageConsentType {
+  id: number;
+  headline: string;
+  body: string;
+  consent_text: string;
+  consent?: number;
+}
+
+export const getNecessaryConsents = async () => {
+  const response = await (
+    await fetch(api_url + '/api/controllers/get_necessary_consents.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwt_token,
+      },
+    })
+  ).json();
+
+  return response.data as MessageConsentType[];
+};
+
+export const giveConsent = async (text_id: number) => {
+  const response = await (
+    await fetch(api_url + '/api/controllers/give_consent.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwt_token,
+      },
+      body: JSON.stringify({ text_id: text_id }),
+    })
+  ).json();
+
+  return response.data;
 };

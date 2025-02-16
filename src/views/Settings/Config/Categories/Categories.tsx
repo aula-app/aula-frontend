@@ -1,9 +1,8 @@
 import { AppIcon } from '@/components';
 import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
 import CategoryForms from '@/components/DataForms/CategoryForms';
-import { addCategory, CategoryArguments, deleteCategory, editCategory, getCategories } from '@/services/categories';
+import { deleteCategory, getCategories } from '@/services/categories';
 import { CategoryType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
 import {
   Button,
@@ -29,32 +28,6 @@ const CatView: React.FC = () => {
   const categoriesFetch = async () => {
     const response = await getCategories();
     setCategories(response.data ? response.data : []);
-  };
-
-  const onSubmit = (data: CategoryArguments) => {
-    typeof editCat === 'boolean' ? newCategory(data) : updateCategory(data);
-  };
-
-  const newCategory = async (data: CategoryArguments) => {
-    const request = await addCategory({
-      name: data.name,
-      description_internal: data.description_internal,
-      status: data.status,
-    });
-    if (request.error || !request.data) return;
-    onClose();
-  };
-
-  const updateCategory = async (data: CategoryArguments) => {
-    if (typeof editCat === 'boolean') return;
-    const request = await editCategory({
-      category_id: editCat.id,
-      name: data.name,
-      description_internal: data.description_internal,
-      status: data.status,
-    });
-    if (request.error) return;
-    onClose();
   };
 
   const onDelete = async () => {
@@ -97,11 +70,7 @@ const CatView: React.FC = () => {
         })}
       </Stack>
       <Drawer anchor="bottom" open={!!editCat} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <CategoryForms
-          onClose={onClose}
-          onSubmit={onSubmit}
-          defaultValues={typeof editCat !== 'boolean' ? editCat : undefined}
-        />
+        <CategoryForms onClose={onClose} defaultValues={typeof editCat !== 'boolean' ? editCat : undefined} />
       </Drawer>
       <Dialog
         open={!!deleteCat}

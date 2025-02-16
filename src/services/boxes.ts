@@ -2,6 +2,7 @@ import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
+import { off } from 'process';
 
 /**
  * Fetches box
@@ -25,15 +26,19 @@ export async function getBox(topic_id: string): Promise<GetBoxResponse> {
  * Fetches boxes for a specific room including custom fields
  */
 
+interface BoxListRequest extends GenericListRequest {
+  room_id?: string;
+}
+
 interface GetBoxesResponse extends GenericResponse {
   data: BoxType[] | null;
 }
 
-export async function getBoxes(args: GenericListRequest): Promise<GetBoxesResponse> {
+export async function getBoxes(args?: BoxListRequest): Promise<GetBoxesResponse> {
   const response = await databaseRequest({
     model: 'Topic',
     method: 'getTopics',
-    arguments: args,
+    arguments: args || { offset: 0, limit: 0 },
   });
 
   return response as GetBoxesResponse;
@@ -85,7 +90,11 @@ export interface EditBoxArguments extends BoxArguments {
  * Adds a new box to the database
  */
 
-export async function addBox(args: AddBoxArguments): Promise<GetBoxesResponse> {
+interface addResponse extends GenericResponse {
+  data: { insert_id: number; hash_id: string } | null;
+}
+
+export async function addBox(args: AddBoxArguments): Promise<addResponse> {
   const response = await databaseRequest(
     {
       model: 'Topic',
@@ -95,7 +104,7 @@ export async function addBox(args: AddBoxArguments): Promise<GetBoxesResponse> {
     ['updater_id']
   );
 
-  return response as GetBoxesResponse;
+  return response as addResponse;
 }
 
 /**

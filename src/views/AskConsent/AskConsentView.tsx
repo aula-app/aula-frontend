@@ -1,5 +1,5 @@
 import { AppIcon } from '@/components';
-import { localStorageGet } from '@/utils';
+import { getNecessaryConsents, giveConsent, MessageConsentType } from '@/services/consent';
 import {
   Button,
   Dialog,
@@ -14,51 +14,23 @@ import {
 import { Fragment, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-export interface MessageConsentType {
-  id: number;
-  headline: string;
-  body: string;
-  consent_text: string;
-  consent: null | number;
-}
-
 /**
  * Renders "Ask Consent" view
  * url: /
  */
 const AskConsent = () => {
-  const jwt_token = localStorageGet('token');
-  const api_url = localStorageGet('api_url');
   const location = useLocation();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<MessageConsentType[]>([]);
   const [activeStep, setActiveStep] = useState(0);
 
   const getData = async () => {
-    const data = await (
-      await fetch(api_url + '/api/controllers/get_necessary_consents.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwt_token,
-        },
-      })
-    ).json();
+    const data = await getNecessaryConsents();
 
-    setData(data.data != 0 ? data.data : []);
+    setData(data ? data : []);
   };
 
-  const giveConsent = async (text_id: number) => {
-    const data = await (
-      await fetch(api_url + '/api/controllers/give_consent.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwt_token,
-        },
-        body: JSON.stringify({ text_id: text_id }),
-      })
-    ).json();
-
+  const consent = async (text_id: number) => {
+    giveConsent(text_id);
     getData();
     setActiveStep(0);
   };
@@ -110,7 +82,7 @@ const AskConsent = () => {
                   <Button color="secondary" sx={{ ml: 2 }}>
                     Cancel
                   </Button>
-                  <Button variant="contained" onClick={() => giveConsent(text.id)}>
+                  <Button variant="contained" onClick={() => consent(text.id)}>
                     {text.consent_text}
                   </Button>
                 </DialogActions>

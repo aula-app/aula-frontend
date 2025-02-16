@@ -19,7 +19,7 @@ type Props = {
   setAsc: Dispatch<SetStateAction<boolean>>;
   setLimit: Dispatch<SetStateAction<number>>;
   setOrderby: Dispatch<SetStateAction<number>>;
-  setEdit: (item: SettingType) => void;
+  setEdit: (item: SettingType | boolean) => void;
   setDelete: (items: Array<string>) => void;
 };
 

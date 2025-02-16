@@ -1,3 +1,5 @@
+import { addCategory, CategoryArguments, editCategory } from '@/services/categories';
+import { CategoryType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
@@ -5,10 +7,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { MarkdownEditor, StatusField } from '../DataFields';
-import { CategoryType } from '@/types/Scopes';
-import { CategoryArguments } from '@/services/categories';
-import { Category } from '@mui/icons-material';
+import { StatusField } from '../DataFields';
 import IconField from '../DataFields/IconField';
 
 /**
@@ -20,16 +19,16 @@ import IconField from '../DataFields/IconField';
 interface CategoryFormsProps {
   onClose: () => void;
   defaultValues?: CategoryType;
-  onSubmit: (data: CategoryArguments) => void;
 }
 
-const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose, onSubmit }) => {
+const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const schema = yup.object({
     name: yup.string().required(t('forms.validation.required')),
     description_internal: yup.string().required(t('forms.validation.required')),
-  });
+  } as Record<keyof CategoryArguments, any>);
 
   const {
     control,
@@ -41,6 +40,45 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose, o
     resolver: yupResolver(schema),
     defaultValues: {},
   });
+
+  // Infer TypeScript type from the Yup schema
+  type SchemaType = yup.InferType<typeof schema>;
+
+  const onSubmit = async (data: SchemaType) => {
+    try {
+      setIsLoading(true);
+      if (!defaultValues) {
+        await newCategory(data);
+      } else {
+        await updateCategory(data);
+      }
+      onClose();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const newCategory = async (data: SchemaType) => {
+    const request = await addCategory({
+      name: data.name,
+      description_internal: data.description_internal,
+      status: data.status,
+    });
+    if (request.error || !request.data) return;
+    onClose();
+  };
+
+  const updateCategory = async (data: SchemaType) => {
+    if (!defaultValues?.id) return;
+    const request = await editCategory({
+      category_id: defaultValues.id,
+      name: data.name,
+      description_internal: data.description_internal,
+      status: data.status,
+    });
+    if (request.error) return;
+    onClose();
+  };
 
   useEffect(() => {
     reset({ ...defaultValues });
@@ -67,16 +105,17 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose, o
               fullWidth
               {...register('name')}
               required
+              disabled={isLoading}
             />
             {/* content */}
-            <IconField name="description_internal" control={control} />
+            <IconField name="description_internal" control={control} disabled={isLoading} />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error">
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained">
-              {t('actions.confirm')}
+            <Button type="submit" variant="contained" disabled={isLoading}>
+              {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>
         </Stack>
