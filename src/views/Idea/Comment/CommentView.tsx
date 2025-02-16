@@ -3,14 +3,7 @@ import { CommentForms } from '@/components/DataForms';
 import CommentBubble from '@/components/Idea/CommentBubble';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import KnowMore from '@/components/KnowMore';
-import {
-  addComment,
-  CommentArguments,
-  deleteComment,
-  editComment,
-  EditCommentArguments,
-  getCommentsByIdea,
-} from '@/services/comments';
+import { deleteComment, getCommentsByIdea } from '@/services/comments';
 import { CommentType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { Box, Drawer, Fab, Stack, Typography } from '@mui/material';
@@ -49,31 +42,6 @@ const Comments = () => {
   useEffect(() => {
     fetchComments();
   }, [idea_id]);
-
-  const onSubmit = (data: CommentArguments) => {
-    if (!edit) return;
-    typeof edit === 'boolean' ? newComment(data) : updateComment(data as EditCommentArguments);
-  };
-
-  const newComment = async (data: CommentArguments) => {
-    if (!idea_id) return;
-    const request = await addComment({
-      idea_id: idea_id,
-      ...data,
-    });
-    if (!request.error) onClose();
-  };
-
-  const updateComment = async (data: EditCommentArguments) => {
-    if (typeof edit === 'object') {
-      const request = await editComment({
-        comment_id: edit.hash_id,
-        content: data.content,
-        status: data.status,
-      });
-      if (!request.error) onClose();
-    }
-  };
 
   const onDelete = async (id: number) => {
     const request = await deleteComment(id);
@@ -125,11 +93,7 @@ const Comments = () => {
             </Fab>
           )}
           <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-            <CommentForms
-              onClose={onClose}
-              onSubmit={onSubmit}
-              defaultValues={typeof edit !== 'boolean' ? edit : undefined}
-            />
+            <CommentForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
           </Drawer>
         </>
       )}

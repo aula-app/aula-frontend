@@ -2,14 +2,9 @@ import { addBox, editBox } from '@/services/boxes';
 import { addIdeaBox, getIdeasByBox, removeIdeaBox } from '@/services/ideas';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import { UpdateType } from '@/types/SettingsTypes';
-import { addBox, editBox } from '@/services/boxes';
-import { addIdeaBox, getIdeasByBox, removeIdeaBox } from '@/services/ideas';
-import { BoxType, IdeaType } from '@/types/Scopes';
-import { UpdateType } from '@/types/SettingsTypes';
 import { checkPermissions, phaseOptions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
@@ -27,17 +22,11 @@ import { useParams } from 'react-router-dom';
 interface BoxFormsProps {
   onClose: () => void;
   defaultValues?: BoxType;
-  defaultValues?: BoxType;
 }
 
 const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
-const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
-
-  const [ideas, setIdeas] = useState<IdeaType[]>([]);
-  const [room, setRoom] = useState<string>(defaultValues?.room_hash_id || '');
-  const [updateIdeas, setUpdateIdeas] = useState<UpdateType>({ add: [], remove: [] });
-  const [isLoading, setIsLoading] = useState(false);
+  const { room_id } = useParams();
 
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
   const [room, setRoom] = useState<string>(defaultValues?.room_hash_id || '');
@@ -47,7 +36,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   const schema = yup.object({
     name: yup.string().required(t('forms.validation.required')),
     description_public: yup.string().required(t('forms.validation.required')),
-    room_hash_id: yup.string().required(t('forms.validation.required')),
+    room_hash_id: yup.string(),
     phase_id: yup.string(),
     phase_duration_1: yup.number(),
     phase_duration_2: yup.number(),
@@ -60,12 +49,8 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     control,
     formState: { errors },
     handleSubmit,
-    control,
-    formState: { errors },
-    handleSubmit,
     register,
     reset,
-    watch,
     watch,
   } = useForm({
     resolver: yupResolver(schema),
@@ -97,13 +82,12 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   };
 
   const newBox = async (data: SchemaType) => {
-    if (!data.room_hash_id) return;
     const response = await addBox({
       name: data.name,
       description_public: data.description_public,
       description_internal: data.description_internal,
-      room_id: data.room_hash_id,
-      phase_id: data.phase_id,
+      room_id: data.room_hash_id || room_id,
+      phase_id: data.phase_id || 10,
       phase_duration_1: data.phase_duration_1,
       phase_duration_2: data.phase_duration_2,
       phase_duration_3: data.phase_duration_3,
@@ -169,32 +153,9 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
               fullWidth
               required
               disabled={isLoading}
-              disabled={isLoading}
             />
             <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
-            <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
             {checkPermissions(40) && (
-              <>
-                <Stack direction="row" flexWrap="wrap" alignItems="center" gap={2}>
-                  <SelectRoomField control={control} disabled={isLoading} />
-                  <SelectField
-                    control={control}
-                    name="phase_id"
-                    options={phaseOptions}
-                    defaultValue={10}
-                    disabled={isLoading}
-                  />
-                  <PhaseDurationFields control={control} room={defaultValues?.room_hash_id} disabled={isLoading} />
-                </Stack>
-                {room && (
-                  <IdeaField
-                    room={room}
-                    defaultValues={ideas}
-                    onChange={(updates) => setUpdateIdeas(updates)}
-                    disabled={isLoading}
-                  />
-                )}
-              </>
               <>
                 <Stack direction="row" flexWrap="wrap" alignItems="center" gap={2}>
                   <SelectRoomField control={control} disabled={isLoading} />
@@ -222,8 +183,8 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
             <Button onClick={onClose} color="error">
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained">
-              {t('actions.confirm')}
+            <Button type="submit" variant="contained" disabled={isLoading}>
+              {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>
         </Stack>

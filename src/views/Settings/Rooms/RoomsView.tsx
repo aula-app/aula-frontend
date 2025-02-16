@@ -4,7 +4,6 @@ import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import { deleteRoom, getRooms } from '@/services/rooms';
-import { deleteRoom, getRooms } from '@/services/rooms';
 import { StatusTypes } from '@/types/Generics';
 import { RoomType } from '@/types/Scopes';
 import { getDataLimit } from '@/utils';
@@ -30,7 +29,6 @@ const COLUMNS = [
 const RoomsView: React.FC = () => {
   const { t } = useTranslation();
 
-
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rooms, setRooms] = useState<RoomType[]>([]);
@@ -45,8 +43,6 @@ const RoomsView: React.FC = () => {
   const [offset, setOffset] = useState(0);
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
 
-  //const [room_id, setRoom] = useState<string | undefined>();
-  const [edit, setEdit] = useState<RoomType | boolean>(false); // false = update dialog closed ;true = new idea; RoomType = item to edit;
   //const [room_id, setRoom] = useState<string | undefined>();
   const [edit, setEdit] = useState<RoomType | boolean>(false); // false = update dialog closed ;true = new idea; RoomType = item to edit;
 
@@ -68,7 +64,6 @@ const RoomsView: React.FC = () => {
       setTotalRooms(response.count as number);
     }
     setLoading(false);
-  }, [search_field, search_text, status, asc, limit, offset, orderby]);
   }, [search_field, search_text, status, asc, limit, offset, orderby]);
 
   const deleteRooms = (items: Array<string>) =>
@@ -109,7 +104,6 @@ const RoomsView: React.FC = () => {
           setAsc={setAsc}
           setLimit={setLimit}
           setOrderby={setOrderby}
-          setEdit={(room) => setEdit(room as RoomType | boolean)}
           setEdit={(room) => setEdit(room as RoomType | boolean)}
           setDelete={deleteRooms}
         />

@@ -212,7 +212,9 @@
     "30": "Moderator*in",
     "40": "Super-Moderator*in",
     "50": "Admin",
-    "60": "Tech-Admin"
+    "60": "Tech-Admin",
+    "title": "Benutzerrollen",
+    "roomRoles": "Raumrollen"
   },
   "scopes": {
     "announcements": {

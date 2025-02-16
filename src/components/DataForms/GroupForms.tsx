@@ -117,7 +117,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
             <Button onClick={onClose} color="error">
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="contained" disabled={isLoading}>
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>

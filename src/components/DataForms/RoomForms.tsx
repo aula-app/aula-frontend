@@ -1,4 +1,4 @@
-import { addRoom, editRoom, RoomArguments } from '@/services/rooms';
+import { addRoom, editRoom, getRoomUsers, RoomArguments } from '@/services/rooms';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
@@ -57,7 +57,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose }) => {
 
   const fetchRoomUsers = async () => {
     if (!defaultValues?.hash_id) return;
-    const response = await getUserRooms(defaultValues.hash_id);
+    const response = await getRoomUsers(defaultValues.hash_id);
     if (!response.data) return;
     const users = response.data.map((user) => user.hash_id);
     setUsers(users);

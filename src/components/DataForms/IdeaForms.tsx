@@ -177,8 +177,8 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             <Button onClick={onClose} color="error">
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained">
-              {t('actions.confirm')}
+            <Button type="submit" variant="contained" disabled={isLoading}>
+              {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>
         </Stack>
