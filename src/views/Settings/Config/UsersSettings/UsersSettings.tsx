@@ -76,8 +76,9 @@ const DataSettings = ({ onReload }: Props) => {
           !items[0] ||
           !items[1] ||
           !items[2] ||
-          (i === 0 && line !== 'realname;displayname;username;email;about_me')
+          (i === 0 && !line.includes('realname;displayname;username;email;about_me'))
         ) {
+          console.log(i, line);
           setError(t('forms.csv.invalid'));
           return;
         }
@@ -161,7 +162,7 @@ const DataSettings = ({ onReload }: Props) => {
       </Table>
       <Stack>
         <Stack direction="row" alignItems="center" gap={3}>
-          {t('actions.select', { var: t('scopes.room.name') })}:
+          {t('actions.select', { var: t('scopes.rooms.name') })}:
           <SelectRoom room={room || ''} setRoom={setRoom} />
           {t('actions.select', { var: t('settings.columns.userlevel') })}:
           <SelectRole userRole={role || 10} setRole={(role) => setRole(role)} variant="filled" />
