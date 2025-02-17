@@ -49,7 +49,7 @@ const DataSettings = ({ onReload }: Props) => {
       setError(t('forms.csv.empty'));
       return;
     }
-    uploadCSV(users.join('/n'));
+    uploadCSV(users.join('\n'));
   };
 
   const onReset = () => {
@@ -65,7 +65,7 @@ const DataSettings = ({ onReload }: Props) => {
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
         return;
       }
-      const lines = String(reader.result).split('\n');
+      const lines = String(reader.result).split('\n').filter((l) => l != "");
       if (lines.length < 2) {
         setError(t('forms.csv.empty'));
         return;
