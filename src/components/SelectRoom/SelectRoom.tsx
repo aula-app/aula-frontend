@@ -6,11 +6,10 @@ import { useTranslation } from 'react-i18next';
 
 type Params = {
   room: string;
-  notEmpty?: boolean;
   setRoom: Dispatch<SetStateAction<string>>;
 };
 
-const SelectRoom = ({ room, notEmpty = false, setRoom }: Params) => {
+const SelectRoom = ({ room, setRoom }: Params) => {
   const { t } = useTranslation();
   const [rooms, setRooms] = useState<Array<RoomType>>([]);
 
@@ -27,14 +26,14 @@ const SelectRoom = ({ room, notEmpty = false, setRoom }: Params) => {
     <TextField
       select
       label={t('scopes.rooms.name')}
-      value={!!room ? room : notEmpty ? 'all' : ''}
+      value={room || 'all'}
       onChange={(event) => setRoom(event.target.value)}
       variant="filled"
       size="small"
       sx={{ minWidth: 200 }}
       disabled={rooms.length === 0}
     >
-      {notEmpty && <MenuItem value="all">{t('ui.common.all')}</MenuItem>}
+      <MenuItem value="all">{t('ui.common.all')}</MenuItem>
       {rooms.map((room) => (
         <MenuItem value={room.hash_id} key={room.hash_id}>
           {room.room_name}
