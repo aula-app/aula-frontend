@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 interface Props extends BaseTextFieldProps {
   control: Control<any, any>;
   disabled?: boolean;
+  noAdmin?: boolean;
   onChange?: (...event: any[]) => void;
 }
 
@@ -13,7 +14,7 @@ interface Props extends BaseTextFieldProps {
  * Renders "RoleField" component
  */
 
-const RoleField: React.FC<Props> = ({ control, disabled = false, ...restOfProps }) => {
+const RoleField: React.FC<Props> = ({ control, disabled = false, noAdmin = false, ...restOfProps }) => {
   const { t } = useTranslation();
 
   return (
@@ -33,9 +34,11 @@ const RoleField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
             {...restOfProps}
             slotProps={{ inputLabel: { shrink: true } }}
           >
-            {roles.map((role) => (
-              <MenuItem value={role}>{t(`roles.${role}`)}</MenuItem>
-            ))}
+            {roles
+              .filter((role) => (noAdmin ? role < 50 : true))
+              .map((role) => (
+                <MenuItem value={role}>{t(`roles.${role}`)}</MenuItem>
+              ))}
           </TextField>
         );
       }}
