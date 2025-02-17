@@ -1,5 +1,5 @@
 import AppIcon from '@/components/AppIcon';
-import { getRooms, getRoomsByUser } from '@/services/rooms';
+import { getRoomsByUser } from '@/services/rooms';
 import { addSpecialRoles } from '@/services/users';
 import { RoomType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
@@ -26,10 +26,9 @@ import SelectRole from '../SelectRole';
 
 interface Props extends ButtonProps {
   user: UserType;
-  onClose: () => void;
 }
 
-const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, ...restOfProps }) => {
+const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
@@ -83,7 +82,6 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, .
     }
 
     setLoading(false);
-    onClose();
   };
 
   const handleClose = () => {
