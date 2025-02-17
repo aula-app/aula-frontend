@@ -4,7 +4,7 @@ import { BaseTextFieldProps, MenuItem, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends BaseTextFieldProps {
-  userRole: RoleTypes | undefined;
+  userRole: RoleTypes | 0;
   noAdmin?: boolean;
   noRoom?: boolean;
   setRole: (role: RoleTypes | 0) => void;

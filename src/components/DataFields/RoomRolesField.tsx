@@ -26,10 +26,11 @@ import SelectRole from '../SelectRole';
 interface Props extends ButtonProps {
   user?: UserType;
   rooms: string[];
+  defaultLevel: RoleTypes;
   onUpdate: (updates: { room: string; role: RoleTypes | 0 }[]) => void;
 }
 
-const RoomRolesField: React.FC<Props> = ({ user, rooms, disabled = false, onUpdate, ...restOfProps }) => {
+const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled = false, onUpdate, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
@@ -100,13 +101,15 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, disabled = false, onUpda
         </DialogTitle>
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        <List sx={{ maxHeight: 300, overflow: 'auto' }}>
+        <List sx={{ maxHeight: 300, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
           {schoolRooms.map((room) => {
             const currentRole =
               updateRoles.find((role) => role.room === room.hash_id)?.role ||
-              userRoles.find((role) => role.room === room.hash_id)?.role;
+              userRoles.find((role) => role.room === room.hash_id)?.role ||
+              (room.type === 1 && defaultLevel) ||
+              0;
             return (
-              <ListItemButton key={room.hash_id} sx={{ py: 0 }}>
+              <ListItemButton key={room.hash_id} sx={{ py: 0, order: room.type === 1 ? 0 : 1 }}>
                 <ListItem
                   secondaryAction={
                     <SelectRole
@@ -114,7 +117,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, disabled = false, onUpda
                       setRole={(role) => handleUpdate(room.hash_id, role)}
                       size="small"
                       noAdmin
-                      noRoom
+                      noRoom={room.type !== 1}
                     />
                   }
                 >
