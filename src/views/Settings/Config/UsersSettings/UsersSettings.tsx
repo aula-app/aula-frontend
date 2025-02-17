@@ -1,6 +1,7 @@
 import { AppIcon } from '@/components';
 import SelectRole from '@/components/SelectRole';
 import SelectRoom from '@/components/SelectRoom';
+import { addCSV } from '@/services/config';
 import { useAppStore } from '@/store';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { databaseRequest } from '@/utils';
@@ -29,7 +30,7 @@ const DataSettings = ({ onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [users, setUsers] = useState<Array<string>>([]);
-  const [role, setRole] = useState<RoleTypes | 0 | undefined>(10);
+  const [role, setRole] = useState<RoleTypes>(10);
   const [room, setRoom] = useState<string>('');
   const [error, setError] = useState<string>('');
 
@@ -65,7 +66,9 @@ const DataSettings = ({ onReload }: Props) => {
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
         return;
       }
-      const lines = String(reader.result).split('\n').filter((l) => l != "");
+      const lines = String(reader.result)
+        .split('\n')
+        .filter((l) => l != '');
       if (lines.length < 2) {
         setError(t('forms.csv.empty'));
         return;
@@ -90,23 +93,15 @@ const DataSettings = ({ onReload }: Props) => {
   };
 
   const uploadCSV = async (csv: string) => {
-    await databaseRequest({
-      model: 'User',
-      method: 'addCSV',
-      arguments: {
-        csv: csv,
-        room_id: room,
-        user_level: role,
-      },
-    }).then((response) => {
-      if (!response.data) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
-        return;
-      }
-      dispatch({ type: 'ADD_POPUP', message: { message: t('forms.csv.success'), type: 'success' } });
-      onReload();
-      onReset();
-    });
+    const response = await addCSV(csv, room, role);
+
+    if (!response.data) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      return;
+    }
+    dispatch({ type: 'ADD_POPUP', message: { message: t('forms.csv.success'), type: 'success' } });
+    onReload();
+    onReset();
   };
 
   return (
@@ -163,9 +158,9 @@ const DataSettings = ({ onReload }: Props) => {
       <Stack>
         <Stack direction="row" alignItems="center" gap={3}>
           {t('actions.select', { var: t('scopes.rooms.name') })}:
-          <SelectRoom room={room || ''} setRoom={setRoom} />
+          <SelectRoom room={room} setRoom={setRoom} />
           {t('actions.select', { var: t('settings.columns.userlevel') })}:
-          <SelectRole userRole={role || 10} setRole={(role) => setRole(role)} variant="filled" />
+          <SelectRole userRole={role || 10} setRole={(role) => setRole(role as RoleTypes)} variant="filled" />
         </Stack>
         <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
       </Stack>
