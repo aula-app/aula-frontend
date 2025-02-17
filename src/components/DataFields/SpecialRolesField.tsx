@@ -1,5 +1,5 @@
 import AppIcon from '@/components/AppIcon';
-import { getRooms } from '@/services/rooms';
+import { getRooms, getRoomsByUser } from '@/services/rooms';
 import { addSpecialRoles } from '@/services/users';
 import { RoomType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
@@ -41,7 +41,7 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, .
 
   const fetchRooms = async () => {
     setLoading(true);
-    const response = await getRooms();
+    const response = await getRoomsByUser(user.hash_id);
     setLoading(false);
     if (response.error) setError(response.error);
     if (!response.data) return;
@@ -129,7 +129,7 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, .
                     />
                   }
                 >
-                  <ListItemText primary={room.room_name} />
+                  <ListItemText primary={room.room_name || 'Aula'} />
                 </ListItem>
               </ListItemButton>
             );
