@@ -271,6 +271,10 @@
       "name": "Raum",
       "plural": "Räume"
     },
+    "surveys": {
+      "name": "Umfrage",
+      "plural": "Umfragen"
+    },
     "users": {
       "name": "Benutzer",
       "plural": "Benutzer"
@@ -333,6 +337,8 @@
       "hash_id": "Hash-ID",
       "headline": "Titel",
       "id": "ID",
+      "idea_headline": "Ideenüberschrift",
+      "idea_content": "Ideeninhalt",
       "ideas_num": "Anzahl der Ideen",
       "infinite_votes": "Unendliche Stimmen",
       "info": "Info",
@@ -351,6 +357,7 @@
       "order_importance": "Wichtigkeitsreihenfolge",
       "parameters": "Parameter",
       "parent_id": "Elternteil",
+      "phase_duration": "Dauer",
       "phase_duration_0": "wilden Ideen",
       "phase_duration_1": "Diskussion",
       "phase_duration_2": "Prüfung",

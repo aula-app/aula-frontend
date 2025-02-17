@@ -143,3 +143,30 @@ export async function deleteBox(box_id: string): Promise<GenericResponse> {
 
   return response as GenericResponse;
 }
+
+/**
+ * Adds a new Survey to the database
+ */
+
+export interface AddSurveyArguments extends BoxArguments {
+  room_id: string;
+  idea_headline: string;
+  idea_content: string;
+}
+
+interface addResponse extends GenericResponse {
+  data: { insert_id: number; hash_id: string } | null;
+}
+
+export async function addSurvey(args: AddSurveyArguments): Promise<addResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'addSurvey',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as addResponse;
+}
