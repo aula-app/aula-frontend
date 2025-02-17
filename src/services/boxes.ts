@@ -2,7 +2,6 @@ import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
-import { off } from 'process';
 
 /**
  * Fetches box
