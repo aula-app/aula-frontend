@@ -181,7 +181,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               {checkPermissions(40) && Number(defaultValues?.userlevel || 0) < 50 && (
                 <Stack direction="row" gap={1}>
                   <RoleField control={control} disabled={isLoading} sx={{ flex: 1 }} />
-                  {defaultValues && <SpecialRolesField disabled={isLoading} user={defaultValues} onClose={onClose} />}
+                  {defaultValues && <SpecialRolesField disabled={isLoading} user={defaultValues} />}
                 </Stack>
               )}
               {checkPermissions(40) && (
