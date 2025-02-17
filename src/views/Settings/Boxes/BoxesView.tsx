@@ -97,7 +97,7 @@ const BoxesView: React.FC = () => {
             setSearchText(text);
           }}
         >
-          <SelectRoom room={room_id} setRoom={setRoom} notEmpty />
+          <SelectRoom room={room_id} setRoom={setRoom} />
         </FilterBar>
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
