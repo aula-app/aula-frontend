@@ -73,10 +73,11 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
 
   const onSubmit = async () => {
     onUpdate(updateRoles);
-    handleClose();
+    setOpen(false);
   };
 
   const handleClose = () => {
+    setUserRoles(JSON.parse(user?.roles || '[]'));
     setOpen(false);
   };
 
