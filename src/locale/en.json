@@ -218,7 +218,8 @@
     "50": "Admin",
     "60": "Tech admin",
     "title": "User Roles",
-    "roomRoles": "Room Roles"
+    "roomRoles": "Room Roles",
+    "empty": "Not in this room"
   },
   "scopes": {
     "announcements": {

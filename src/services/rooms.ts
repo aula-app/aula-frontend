@@ -57,6 +57,26 @@ export const getRooms = async (
   return response as GetRoomsResponse;
 };
 
+export const getAllRooms = async (
+  args: RoomListRequest = {
+    offset: 0,
+    limit: 0,
+    orderby: 0,
+    asc: 0,
+  }
+): Promise<GetRoomsResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Room',
+      method: 'getRooms',
+      arguments: args,
+    },
+    []
+  );
+
+  return response as GetRoomsResponse;
+};
+
 /**
  * Get a list of the rooms of a user from the database.
  */

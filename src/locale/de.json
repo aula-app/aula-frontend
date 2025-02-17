@@ -208,7 +208,7 @@
       "validation": "Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden."
     }
   },
-  "roles": {
+  "rollen": {
     "10": "Gast",
     "20": "Nutzer*in",
     "30": "Moderator*in",
@@ -220,7 +220,8 @@
     "50": "Admin",
     "60": "Tech-Admin",
     "title": "Benutzerrollen",
-    "roomRoles": "Raumrollen"
+    "roomRoles": "Raumrollen",
+    "empty": "Nicht in diesem Raum"
   },
   "scopes": {
     "announcements": {
