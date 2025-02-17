@@ -161,7 +161,7 @@ const DataSettings = ({ onReload }: Props) => {
       </Table>
       <Stack>
         <Stack direction="row" alignItems="center" gap={3}>
-          <SelectRole userRole={role || 10} setRole={(role) => setRole(role as RoleTypes)} variant="filled" />
+          <SelectRole userRole={role || 10} setRole={(role) => setRole(role as RoleTypes)} variant="filled" noAdmin />
           <RoomField onChange={(updates) => setRooms(updates)} />
         </Stack>
         <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>

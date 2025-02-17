@@ -121,6 +121,7 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, .
                       userRole={currentRole}
                       setRole={(role) => handleUpdate(room.hash_id, role)}
                       size="small"
+                      noAdmin
                     />
                   }
                 >
