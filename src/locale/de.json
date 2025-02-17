@@ -208,7 +208,7 @@
       "validation": "Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden."
     }
   },
-  "rollen": {
+  "roles": {
     "10": "Gast",
     "20": "Nutzer*in",
     "30": "Moderator*in",
