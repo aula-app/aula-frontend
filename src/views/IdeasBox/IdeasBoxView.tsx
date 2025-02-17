@@ -156,9 +156,11 @@ const IdeasBoxView = () => {
                 </AppLink>
               </Grid>
             ))}
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
-              <AddIdeasButton ideas={ideas} onClose={fetchIdeas} />
-            </Grid>
+            {checkPermissions(30) && (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
+                <AddIdeasButton ideas={ideas} onClose={fetchIdeas} />
+              </Grid>
+            )}
           </>
         )}
       </Grid>
