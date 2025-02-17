@@ -1,6 +1,6 @@
-import { addUser, addUserRoom, editUser, getUserRooms, removeUserRoom } from '@/services/users';
+import { addSpecialRoles, addUser, addUserRoom, editUser, getUserRooms, removeUserRoom } from '@/services/users';
 import { UserType } from '@/types/Scopes';
-import { UpdateType } from '@/types/SettingsTypes';
+import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
@@ -9,8 +9,7 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, RoleField, StatusField } from '../DataFields';
-import RoomField from '../DataFields/RoomField';
-import SpecialRolesField from '../DataFields/SpecialRolesField';
+import RoomRolesField from '../DataFields/RoomRolesField';
 
 /**
  * UserForms component is used to create or edit an user.
@@ -28,6 +27,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
 
   const [rooms, setRooms] = useState<string[]>([]);
   const [updateRooms, setUpdateRooms] = useState<UpdateType>({ add: [], remove: [] });
+  const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes }[]>();
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object({
@@ -41,11 +41,12 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   } as Record<keyof UserType, any>);
 
   const {
+    control,
+    formState: { errors },
+    handleSubmit,
     register,
     reset,
-    control,
-    handleSubmit,
-    formState: { errors },
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -60,12 +61,25 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
+  const currentLevel = watch('userlevel') || 10;
+
   const fetchUserRooms = async () => {
     if (!defaultValues?.hash_id) return;
     const response = await getUserRooms(defaultValues.hash_id, 0);
     if (!response.data) return;
     const rooms = response.data.map((room) => room.hash_id);
     setRooms(rooms);
+  };
+
+  const onUpdate = (updates: { room: string; role: RoleTypes | 0 }[]) => {
+    const add = updates
+      .filter((update) => update.role !== 0 && !rooms.includes(update.room))
+      .map((update) => update.room);
+    const remove = updates
+      .filter((update) => update.role === 0 && rooms.includes(update.room))
+      .map((update) => update.room);
+    setUpdateRooms({ add, remove });
+    setUpdateRoles(updates.filter((update) => update.role !== 0) as { room: string; role: RoleTypes }[]);
   };
 
   const onSubmit = async (data: SchemaType) => {
@@ -94,6 +108,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     });
     if (response.error || !response.data) return;
     await setUserRooms(response.data.hash_id);
+    await setRoomRoles(response.data.hash_id);
   };
 
   const updateUser = async (data: SchemaType) => {
@@ -110,12 +125,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     });
     if (response.error) return;
     await setUserRooms(defaultValues.hash_id);
+    await setRoomRoles(defaultValues.hash_id);
   };
 
   const setUserRooms = async (user_id: string) => {
     const addPromises = updateRooms.add.map((room_id) => addUserRoom(user_id, room_id));
     const removePromises = updateRooms.remove.map((room_id) => removeUserRoom(user_id, room_id));
     await Promise.all([...addPromises, ...removePromises]);
+  };
+
+  const setRoomRoles = async (user_id: string) => {
+    await Promise.all(updateRoles?.map((update) => addSpecialRoles(user_id, update.role, update.room)) || []);
   };
 
   useEffect(() => {
@@ -179,18 +199,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 {...register('email')}
               />
               {checkPermissions(40) && Number(defaultValues?.userlevel || 0) < 50 && (
-                <Stack direction="row" gap={1}>
-                  <RoleField control={control} disabled={isLoading} sx={{ flex: 1 }} />
-                  {defaultValues && <SpecialRolesField disabled={isLoading} user={defaultValues} />}
-                </Stack>
-              )}
-              {checkPermissions(40) && (
-                <RoomField
-                  defaultValues={rooms}
-                  onChange={(updates) => setUpdateRooms(updates)}
-                  disabled={isLoading}
-                  size="small"
-                />
+                <>
+                  <RoleField control={control} disabled={isLoading} sx={{ flex: 1 }} noAdmin />
+                  {currentLevel < 40 && (
+                    <RoomRolesField
+                      rooms={rooms}
+                      user={defaultValues}
+                      onUpdate={(data) => onUpdate(data)}
+                      disabled={isLoading}
+                    />
+                  )}
+                </>
               )}
             </Stack>
             <MarkdownEditor
