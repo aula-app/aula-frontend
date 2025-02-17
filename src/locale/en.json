@@ -271,6 +271,10 @@
       "name": "Room",
       "plural": "Rooms"
     },
+    "surveys": {
+      "name": "Survey",
+      "plural": "Surveys"
+    },
     "users": {
       "name": "User",
       "plural": "Users"
@@ -333,6 +337,8 @@
       "hash_id": "Hash ID",
       "headline": "Title",
       "id": "ID",
+      "idea_headline": "Idea Title",
+      "idea_content": "Idea Content",
       "ideas_num": "Number of Ideas",
       "infinite_votes": "Infinite Votes",
       "info": "Info",
@@ -351,6 +357,7 @@
       "order_importance": "Order Importance",
       "parameters": "Parameters",
       "parent_id": "Parent",
+      "phase_duration": "Duration",
       "phase_duration_0": "Wild Ideas",
       "phase_duration_1": "Discussion",
       "phase_duration_2": "Approval",

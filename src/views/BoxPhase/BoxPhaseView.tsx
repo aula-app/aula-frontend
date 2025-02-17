@@ -2,11 +2,13 @@ import { AppIcon } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import { BoxForms } from '@/components/DataForms';
+import SurveyForms from '@/components/DataForms/SurveyForms';
 import { deleteBox, getBoxesByPhase } from '@/services/boxes';
 import { BoxType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { set } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -21,7 +23,9 @@ const BoxPhaseView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
+
   const [edit, setEdit] = useState<BoxType | true>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
+  const [addSurvey, setAddSurvey] = useState(false);
 
   const fetchBoxes = useCallback(async () => {
     if (!room_id || !phase) return;
@@ -43,6 +47,7 @@ const BoxPhaseView = () => {
 
   const onClose = () => {
     setEdit(undefined);
+    setAddSurvey(false);
     fetchBoxes();
   };
 
@@ -63,23 +68,36 @@ const BoxPhaseView = () => {
           ))}
       </Grid>
       {checkPermissions(30) && room_id && (
-        <>
-          <Fab
-            aria-label="add idea"
-            color="primary"
-            sx={{
-              position: 'fixed',
-              bottom: 40,
-              zIndex: 1000,
-            }}
-            onClick={() => setEdit(true)}
-          >
-            <AppIcon icon="box" />
-          </Fab>
-          <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-            <BoxForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
-          </Drawer>
-        </>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            position: 'fixed',
+            bottom: 40,
+            zIndex: 1000,
+          }}
+        >
+          {Number(phase) === 10 && (
+            <>
+              <Fab aria-label="add idea" color="primary" onClick={() => setEdit(true)}>
+                <AppIcon icon="box" />
+              </Fab>
+              <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
+                <BoxForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
+              </Drawer>
+            </>
+          )}
+          {Number(phase) === 30 && (
+            <>
+              <Fab aria-label="add" color="primary" onClick={() => setAddSurvey(true)}>
+                <AppIcon icon="survey" />
+              </Fab>
+              <Drawer anchor="bottom" open={!!addSurvey} onClose={onClose} sx={{ overflowY: 'auto' }}>
+                <SurveyForms onClose={onClose} />
+              </Drawer>
+            </>
+          )}
+        </Stack>
       )}
     </Stack>
   );
