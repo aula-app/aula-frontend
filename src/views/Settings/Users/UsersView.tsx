@@ -66,7 +66,7 @@ const UsersView: React.FC = () => {
       offset,
       orderby,
       room_id,
-      userlevel,
+      userlevel: userlevel === 0 ? undefined : userlevel,
       search_field,
       search_text,
       status,

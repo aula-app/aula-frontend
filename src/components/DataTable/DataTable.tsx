@@ -54,7 +54,9 @@ const DataTable: React.FC<Props> = ({
 
   const toggleAllRows = () => {
     if (rows.length === 0) return;
-    selected.length > 0 ? setSelected([]) : setSelected(rows.map((row) => row.hash_id));
+    selected.length > 0
+      ? setSelected([])
+      : setSelected(rows.filter((row) => !('userlevel' in row && row.userlevel >= 50)).map((row) => row.hash_id));
   };
 
   /**
