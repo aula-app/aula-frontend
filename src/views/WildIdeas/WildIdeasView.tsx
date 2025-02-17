@@ -2,6 +2,8 @@ import { AppIcon } from '@/components';
 import { IdeaForms } from '@/components/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
+import { useAppStore } from '@/store/AppStore';
+import { getRoom } from '@/services/rooms';
 import { deleteIdea, getIdeasByRoom } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
@@ -23,13 +25,22 @@ interface RouteParams extends Record<string, string | undefined> {
  */
 const WildIdeas = () => {
   const { t } = useTranslation();
-  const { room_id } = useParams<RouteParams>();
-
+  const { phase, room_id } = useParams<RouteParams>();
+  const [appState, dispatch] = useAppStore();
+ 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
   const [edit, setEdit] = useState<IdeaType | boolean>(false); // false = update dialog closed ;true = new idea; IdeaType = edit idea;
 
+  const getRoomName = (id: string) => {
+    return getRoom(id).then((response) => {
+      if (response.error || !response.data) return;
+      let roomName = response.data.room_name;
+      return roomName;
+    });
+  };
+  
   const fetchIdeas = useCallback(async () => {
     if (!room_id) return;
     setLoading(true);
@@ -37,9 +48,14 @@ const WildIdeas = () => {
     if (response.error) setError(response.error);
     if (!response.error && response.data) setIdeas(response.data);
     setLoading(false);
+
+    let roomName = await getRoomName(room_id);
+    roomName = roomName ? roomName : 'aula';
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`]]});
   }, [room_id]);
 
   useEffect(() => {
+
     fetchIdeas();
   }, []);
 

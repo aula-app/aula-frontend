@@ -2,6 +2,7 @@ import { RoomCard } from '@/components/RoomCard';
 import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
 import { RoomType } from '@/types/Scopes';
 import { getRooms } from '@/services/rooms';
+import { useAppStore } from '@/store/AppStore';
 import { Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
@@ -14,6 +15,9 @@ const WelcomeView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rooms, setRooms] = useState<RoomType[]>([]);
+
+  const [appState, dispatch] = useAppStore();
+  
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop } = event.currentTarget;
@@ -32,6 +36,7 @@ const WelcomeView = () => {
   }, []);
 
   useEffect(() => {
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": []})
     fetchRooms();
   }, []);
 

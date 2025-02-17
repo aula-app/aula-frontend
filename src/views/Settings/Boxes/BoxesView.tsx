@@ -7,6 +7,7 @@ import SelectRoom from '@/components/SelectRoom';
 import { BoxArguments, deleteBox, getBoxes } from '@/services/boxes';
 import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
+import { useAppStore } from '@/store/AppStore';
 import { getDataLimit } from '@/utils';
 import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
@@ -33,6 +34,7 @@ const COLUMNS = [
 const BoxesView: React.FC = () => {
   const { t } = useTranslation();
 
+  const [appState, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
@@ -82,6 +84,7 @@ const BoxesView: React.FC = () => {
   };
 
   useEffect(() => {
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.boxes'), '']]});
     fetchBoxes();
   }, [fetchBoxes]);
 

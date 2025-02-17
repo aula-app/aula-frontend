@@ -5,6 +5,7 @@ import DataExport from '@/components/DataExport';
 import ProfileEditor from '@/components/ProfileEditor';
 import ProfileEditorSkeleton from '@/components/ProfileEditor/ProfileEditorSkeleton';
 import { getSelf } from '@/services/users';
+import { useAppStore } from '@/store/AppStore';
 import { UserType } from '@/types/Scopes';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
@@ -20,6 +21,7 @@ const UserView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<UserType>();
+  const [appState, dispatch] = useAppStore();
 
   const fetchUser = useCallback(async () => {
     setLoading(true);
@@ -30,6 +32,7 @@ const UserView = () => {
   }, []);
 
   useEffect(() => {
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.profile'), '']]});
     fetchUser();
   }, []);
 

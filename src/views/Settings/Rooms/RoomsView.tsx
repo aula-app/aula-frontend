@@ -6,6 +6,7 @@ import FilterBar from '@/components/FilterBar';
 import { deleteRoom, getRooms } from '@/services/rooms';
 import { StatusTypes } from '@/types/Generics';
 import { RoomType } from '@/types/Scopes';
+import { useAppStore } from '@/store/AppStore';
 import { getDataLimit } from '@/utils';
 import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
@@ -29,6 +30,7 @@ const COLUMNS = [
 const RoomsView: React.FC = () => {
   const { t } = useTranslation();
 
+  const [appState, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rooms, setRooms] = useState<RoomType[]>([]);
@@ -78,6 +80,7 @@ const RoomsView: React.FC = () => {
   };
 
   useEffect(() => {
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.rooms'), '']]});
     fetchRooms();
   }, [fetchRooms]);
 

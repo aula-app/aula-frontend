@@ -1,10 +1,20 @@
+import { useAppStore } from '@/store/AppStore';
+import { useTranslation } from 'react-i18next';
 import { Stack } from '@mui/material';
+import { useEffect } from 'react';
 
 /**
  * Renders "About" view
  * url: /about
  */
 const AboutView = () => {
+  const { t } = useTranslation();
+  const [appState, dispatch] = useAppStore();
+
+  useEffect(() => {
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.about'), '']]});
+  }, []);
+
   return (
     <Stack sx={{ padding: '20px 20px', overflow: 'auto' }}>
       <h2>Herausgeber:</h2>

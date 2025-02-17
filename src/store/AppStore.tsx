@@ -26,12 +26,14 @@ export interface AppStoreState {
   hasConsent: boolean;
   currentUser?: object | undefined;
   messages: PopupType[];
+  breadcrumb: [string, string][];
 }
 const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
   isAuthenticated: false, // Overridden in AppStore by checking auth token
   hasConsent: false,
   messages: [],
+  breadcrumb: []
 };
 
 /**
