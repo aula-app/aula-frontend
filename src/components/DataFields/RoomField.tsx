@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends BaseTextFieldProps {
-  defaultValues: string[];
+  defaultValues?: string[];
   disabled?: boolean;
   onChange: (updates: UpdateType) => void;
 }
@@ -33,15 +33,17 @@ const RoomField: React.FC<Props> = ({ defaultValues, onChange, disabled = false,
   const handleChange = (selected: SelectOptionsType) => {
     setSelectedOptions(selected);
     const selectedValues = selected.map((option) => String(option.value));
-    onChange({
-      add: selectedValues.filter((value) => !defaultValues.includes(value)),
-      remove: defaultValues.filter((value) => !selectedValues.includes(value)),
-    });
+    if (!defaultValues) onChange({ add: selectedValues, remove: [] });
+    else
+      onChange({
+        add: selectedValues.filter((value) => !defaultValues.includes(value)),
+        remove: defaultValues.filter((value) => !selectedValues.includes(value)),
+      });
   };
 
   useEffect(() => {
     if (options.length > 0) {
-      const filtered = options.filter((option) => defaultValues.includes(String(option.value)));
+      const filtered = options.filter((option) => defaultValues?.includes(String(option.value)));
       setSelectedOptions(filtered);
     }
   }, [options, defaultValues]);

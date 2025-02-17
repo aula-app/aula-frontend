@@ -111,7 +111,7 @@ const UsersView: React.FC = () => {
             setSearchText(text);
           }}
         >
-          <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
+          <SelectRoom room={room_id || 'all'} setRoom={setRoom} notEmpty />
           <SelectRole userRole={userlevel} setRole={(role) => setRole(role)} variant="filled" size="small" />
         </FilterBar>
       </Stack>
