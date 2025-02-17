@@ -207,6 +207,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                       user={defaultValues}
                       onUpdate={(data) => onUpdate(data)}
                       disabled={isLoading}
+                      defaultLevel={currentLevel}
                     />
                   )}
                 </>
