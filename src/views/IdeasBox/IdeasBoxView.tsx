@@ -1,12 +1,13 @@
 import { AppIcon, AppLink } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
+import AddIdeasButton from '@/components/Buttons/AddIdeas';
 import { BoxForms } from '@/components/DataForms';
 import DelegateVote from '@/components/DelegateVote';
 import { IdeaCard } from '@/components/Idea';
 import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
 import KnowMore from '@/components/KnowMore';
-import { deleteBox, editBox, EditBoxArguments, getBox } from '@/services/boxes';
+import { deleteBox, getBox } from '@/services/boxes';
 import { getIdeasByBox } from '@/services/ideas';
 import { getDelegations } from '@/services/users';
 import { BoxType, DelegationType, IdeaType } from '@/types/Scopes';
@@ -146,14 +147,22 @@ const IdeasBoxView = () => {
           </Grid>
         )}
         {ideasError && <Typography>{t(ideasError)}</Typography>}
-        {!isIdeasLoading &&
-          ideas.map((idea, key) => (
-            <Grid key={key} size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
-              <AppLink to={`idea/${idea.hash_id}`}>
-                <IdeaCard idea={idea} phase={Number(phase) as RoomPhases} />
-              </AppLink>
-            </Grid>
-          ))}
+        {!isIdeasLoading && (
+          <>
+            {ideas.map((idea, key) => (
+              <Grid key={key} size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
+                <AppLink to={`idea/${idea.hash_id}`}>
+                  <IdeaCard idea={idea} phase={Number(phase) as RoomPhases} />
+                </AppLink>
+              </Grid>
+            ))}
+            {checkPermissions(30) && (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
+                <AddIdeasButton ideas={ideas} onClose={fetchIdeas} />
+              </Grid>
+            )}
+          </>
+        )}
       </Grid>
       <Drawer anchor="bottom" open={!!edit} onClose={boxClose} sx={{ overflowY: 'auto' }}>
         <BoxForms onClose={boxClose} defaultValues={edit} />
