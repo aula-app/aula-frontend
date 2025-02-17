@@ -1,4 +1,5 @@
 import { RoomType } from '@/types/Scopes';
+import { RoleTypes } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 import { checkPermissions } from '@/utils';
 
@@ -52,6 +53,20 @@ export const getRooms = async (
     },
     hasSuperModAccess ? [] : ['user_id']
   );
+
+  return response as GetRoomsResponse;
+};
+
+/**
+ * Get a list of the rooms of a user from the database.
+ */
+
+export const getRoomsByUser = async (user_id: string): Promise<GetRoomsResponse> => {
+  const response = await databaseRequest({
+    model: 'Room',
+    method: 'getRoomsByUser',
+    arguments: { user_id },
+  });
 
   return response as GetRoomsResponse;
 };
