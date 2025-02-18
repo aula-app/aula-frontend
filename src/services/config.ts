@@ -1,5 +1,6 @@
 import { ConfigResponse, InstanceResponse } from '@/types/Generics';
 import { databaseRequest, GenericResponse } from './requests';
+import { RoleTypes } from '@/types/SettingsTypes';
 
 interface DefaultDurationsResponse extends GenericResponse {
   data: Array<number>;
@@ -41,4 +42,18 @@ export async function getInstanceSettings(): Promise<DefaultSettingsResponse> {
   });
 
   return response as DefaultSettingsResponse;
+}
+
+export async function addCSV(csv: string, room_id: string, user_level: RoleTypes): Promise<GenericResponse> {
+  const response = await databaseRequest({
+    model: 'User',
+    method: 'addCSV',
+    arguments: {
+      csv,
+      room_id,
+      user_level,
+    },
+  });
+
+  return response as GenericResponse;
 }

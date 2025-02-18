@@ -212,7 +212,11 @@
     "10": "Gast",
     "20": "Nutzer*in",
     "30": "Moderator*in",
+    "31": "Moderator*in mit Stimmrecht",
     "40": "Super-Moderator*in",
+    "41": "Super-Moderator*in mit Stimmrecht",
+    "44": "Schulleiter",
+    "45": "Schulleiter mit Stimmrecht",
     "50": "Admin",
     "60": "Tech-Admin",
     "title": "Benutzerrollen",
@@ -272,6 +276,10 @@
     "rooms": {
       "name": "Raum",
       "plural": "Räume"
+    },
+    "surveys": {
+      "name": "Umfrage",
+      "plural": "Umfragen"
     },
     "users": {
       "name": "Benutzer",
@@ -335,6 +343,8 @@
       "hash_id": "Hash-ID",
       "headline": "Titel",
       "id": "ID",
+      "idea_headline": "Ideenüberschrift",
+      "idea_content": "Ideeninhalt",
       "ideas_num": "Anzahl der Ideen",
       "infinite_votes": "Unendliche Stimmen",
       "info": "Info",
@@ -353,6 +363,7 @@
       "order_importance": "Wichtigkeitsreihenfolge",
       "parameters": "Parameter",
       "parent_id": "Elternteil",
+      "phase_duration": "Dauer",
       "phase_duration_0": "wilden Ideen",
       "phase_duration_1": "Diskussion",
       "phase_duration_2": "Prüfung",

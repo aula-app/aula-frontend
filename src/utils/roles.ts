@@ -1,12 +1,16 @@
 import { RoleTypes } from '@/types/SettingsTypes';
 
 /** User roles:
- * 10 - Guest – Read only
- * 20 - Student - Can comment and interact
- * 30 - Moderator - Can moderate within it´s own rooms
- * 40 - Super Moderator - Can moderate any school's rooms
- * 50 - School Admin - Has access to admin settings
- * 60 - Tech Admin - Does not interact, only has access to a technical settings menu
+ * 10 => "guest",
+ * 20 => "user",
+ * 30 => "moderator",
+ * 31 => "moderator_v",
+ * 40 => "super_moderator",
+ * 41 => "super_moderator_v",
+ * 44 => "principal",
+ * 45 => "principal_v",
+ * 50 => "admin",
+ * 60 => "tech_admin"
  */
 
-export const roles = [10, 20, 30, 40, 50, 60] as Array<RoleTypes>;
+export const roles = [10, 20, 30, 31, 40, 41, 44, 45, 50, 60] as Array<RoleTypes>;
