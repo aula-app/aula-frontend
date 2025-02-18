@@ -41,7 +41,7 @@ const permissions = {
   ideas: {
     addCategory: { role: 20 },
     create: { role: 20 },
-    edit: { role: 20, self: true },
+    edit: { role: 30, self: true },
     delete: { role: 40, self: true },
     like: { role: [20, 31, 41, 45] },
     vote: { role: [20, 31, 41, 45] },
@@ -98,13 +98,10 @@ export function checkPermissions(model: keyof typeof permissions, action: string
   const roomIndex = location.findIndex((l) => l.includes('room')) + 1;
   const room_id = roomIndex === 0 ? '' : location[roomIndex];
 
-  if (action == 'edit')
-    console.log(model, action, room_id, user_id)
-
   if (!(action in permissions[model])) return false;
   if (!user) return false;
 
-  if (!!room_id) {
+  if (!!room_id && user.user_level < 40) {
     let rooms = user.roles.filter((r) => r.room == room_id);
 
     if (rooms.length < 1) return false;
@@ -121,7 +118,7 @@ export function checkPermissions(model: keyof typeof permissions, action: string
     }
 
     if (permissions[model][action].self) {
-      return hasRolePermission && user_id === user.user_hash;
+      return hasRolePermission || user_id === user.user_hash;
     }
 
     return hasRolePermission;
