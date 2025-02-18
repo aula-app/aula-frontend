@@ -51,7 +51,7 @@ export interface CommentType {
   sum_likes: number;
   idea_id: number;
   user_id: number;
-  user_hash_id: number;
+  user_hash_id: string;
   language_id: number;
   parent_id: number;
   status: StatusTypes;
@@ -80,7 +80,7 @@ export interface IdeaType {
   id: number;
   hash_id: string;
   user_id: number;
-  user_hash_id: number;
+  user_hash_id: string;
   content: string;
   title: string;
   displayname: string;
