@@ -96,7 +96,10 @@ export function checkPermissions(model: keyof typeof permissions, action: string
   const user = !!jwt ? parseJwt(jwt) : false;
   const location = window.location.pathname.split('/');
   const roomIndex = location.findIndex((l) => l.includes('room')) + 1;
-  const room_id = roomIndex === 1 ? '' : location[roomIndex];
+  const room_id = roomIndex === 0 ? '' : location[roomIndex];
+
+  if (action == 'edit')
+    console.log(model, action, room_id, user_id)
 
   if (!(action in permissions[model])) return false;
   if (!user) return false;
