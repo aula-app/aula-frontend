@@ -42,7 +42,7 @@ const permissions = {
   ideas: {
     addCategory: { role: 20 },
     create: { role: 20 },
-    edit: { role: 30, self: true },
+    edit: { role: 20, self: true },
     delete: { role: 40, self: true },
     like: { role: [20, 31, 41, 45] },
     vote: { role: [20, 31, 41, 45] },
@@ -92,19 +92,42 @@ const permissions = {
 /**
  * Checks if the current user has sufficient permissions for a given role level
  */
-const jwt = localStorageGet('token');
-const user = !!jwt ? parseJwt(jwt) : false;
+export function checkPermissions(model: keyof typeof permissions, action: string, room_id: string, user_id?: string): boolean {
+  const jwt = localStorageGet('token');
+  const user = !!jwt ? parseJwt(jwt) : false;
 
-export function checkPermissions(path: keyof typeof permissions, value: string, user_id?: number): boolean {
-  if (!(value in permissions[path])) return false;
+  if (!(action in permissions[model])) return false;
   if (!user) return false;
 
-  const isAllowed =
-    typeof permissions[path][value].role === 'number'
-      ? permissions[path][value].role <= user.user_level
-      : permissions[path][value].role.includes(user.user_level);
+  if (room_id) {
+    let rooms = user.roles.filter((r) => r.room == room_id)
 
-  const isSelf = user_id ? user_id === user.user_id : false;
+    if (rooms.length < 1)
+      return false;
 
-  return isAllowed && (permissions[path][value].self ? isSelf : true);
+    const roleInRoom = rooms[0].role;
+    let hasRolePermission = false;
+
+    if ((typeof permissions[model][action].role === 'number' 
+        && (roleInRoom >= permissions[model][action].role)) 
+        || permissions[model][action].role.includes(roleInRoom)
+       ) {
+      hasRolePermission = true;
+    }
+
+    if (permissions[model][action].self) {
+      return (hasRolePermission) && (user_id === user.user_hash);
+    }
+
+    return hasRolePermission;
+  }
+
+  if (typeof permissions[model][action].role === 'number') {
+    return user.user_level >= permissions[model][action].role;
+  } else {
+    return permissions[model][action].role.includes(user.user_level)
+  }
+
+  return false;
+
 }
