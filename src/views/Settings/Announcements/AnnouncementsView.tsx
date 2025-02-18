@@ -14,6 +14,7 @@ import {
 import { StatusTypes } from '@/types/Generics';
 import { AnnouncementType } from '@/types/Scopes';
 import { getDataLimit } from '@/utils';
+import { useAppStore } from '@/store/AppStore';
 import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
@@ -36,6 +37,7 @@ const COLUMNS = [
 
 const AnnouncementsView: React.FC = () => {
   const { t } = useTranslation();
+  const [appState, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [announcements, setAnnouncements] = useState<AnnouncementType[]>([]);
@@ -83,6 +85,7 @@ const AnnouncementsView: React.FC = () => {
   };
 
   useEffect(() => {
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.announcements'), '']]});
     fetchAnnouncements();
   }, [fetchAnnouncements]);
 

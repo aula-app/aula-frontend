@@ -4,6 +4,8 @@ import { ApprovalCard, IdeaBubble, VotingCard, VotingResults } from '@/component
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import VotingQuorum from '@/components/Idea/VotingQuorum';
 import { deleteIdea, getIdea } from '@/services/ideas';
+import { useAppStore } from '@/store/AppStore';
+import { getRoom } from '@/services/rooms';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { Drawer, Stack, Typography } from '@mui/material';
@@ -23,6 +25,7 @@ const IdeaView = () => {
   const { idea_id, room_id, phase } = useParams();
 
   const addCategory = useRef<AddCategoryRefProps>(null);
+  const [appState, dispatch] = useAppStore();
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,16 +35,36 @@ const IdeaView = () => {
   // const [comments, setComments] = useState<CommentType[]>([]);
   // const [vote, setVote] = useState<Vote>(0);
 
+  const getRoomName = (id: string) => {
+    return getRoom(id).then((response) => {
+      if (response.error || !response.data) return;
+      let roomName = response.data.room_name;
+      return roomName;
+    });
+  };
+
   const fetchIdea = useCallback(async () => {
     if (!idea_id) return;
     setLoading(true);
     const response = await getIdea(idea_id);
+
+    let roomName = 'aula'
+    if (room_id) {
+      let nameResponse = await getRoomName(room_id);
+      if (nameResponse)
+        roomName = nameResponse
+    }
+
+    if (response.data && response.data.title)
+      dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`], [response.data.title, '']]});
+
     if (response.error) setError(response.error);
     if (!response.error && response.data) setIdea(response.data);
     setLoading(false);
   }, [idea_id]);
 
   useEffect(() => {
+
     fetchIdea();
   }, [idea_id]);
 

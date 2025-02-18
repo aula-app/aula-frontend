@@ -6,6 +6,7 @@ import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import { deleteIdea, getIdeas, getIdeasByBox } from '@/services/ideas';
+import { useAppStore } from '@/store/AppStore';
 import { StatusTypes } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
 import { getDataLimit } from '@/utils';
@@ -39,6 +40,7 @@ const IdeasView: React.FC = () => {
 
   const addCategory = useRef<AddCategoryRefProps>(null);
 
+  const [appState, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
@@ -105,6 +107,7 @@ const IdeasView: React.FC = () => {
   };
 
   useEffect(() => {
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.ideas'), '/']]});
     fetchIdeas();
   }, [fetchIdeas]);
 

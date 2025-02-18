@@ -32,6 +32,24 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
         ...state,
         hasConsent: action.payload,
       };
+    case 'ADD_BREADCRUMB_PHASE':
+      let new_phase = []
+      console.log(state.breadcrumb, action.path)
+      if (state.breadcrumb.length == 2) {
+        new_phase = [state.breadcrumb[0], action.path]
+      } else {
+        new_phase = [...state.breadcrumb, action.path]
+      }
+      return {
+        ...state,
+        breadcrumb: new_phase 
+      };
+
+    case 'SET_BREADCRUMB':
+      return {
+        ...state,
+        breadcrumb: action.breadcrumb
+      };
     case 'DARK_MODE': {
       const darkMode = action?.darkMode ?? action?.payload;
       localStorageSet('darkMode', darkMode);

@@ -1,4 +1,5 @@
 import { AppIcon } from '@/components';
+import { useAppStore } from '@/store/AppStore';
 import { getUpdates, UpdateResponse } from '@/services/dashboard';
 import { IconButton, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
@@ -12,6 +13,8 @@ import UpdateCard from './UpdateCard';
 
 const UpdatesView = () => {
   const { t } = useTranslation();
+  const [appState, dispatch] = useAppStore();
+
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [updates, setUpdates] = useState<UpdateResponse>({
@@ -28,6 +31,7 @@ const UpdatesView = () => {
   }, []);
 
   useEffect(() => {
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.units.updates'), '']]});
     fetchUpdates();
   }, []);
 

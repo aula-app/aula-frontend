@@ -161,9 +161,11 @@
     "approval": "Prüfung",
     "discussion": "Diskussion",
     "phase": "{{var}}-Phase",
+    "name-0": "Wilde Ideen",
     "name-10": "Diskussion",
     "name-20": "Prüfung",
     "name-30": "Abstimmung",
+    "name-40": "Ergebnisse",
     "results": "Ergebnisse",
     "status": {
       "end": "Phase endet in {{var}} Tagen",

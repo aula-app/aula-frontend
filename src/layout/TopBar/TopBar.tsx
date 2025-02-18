@@ -3,7 +3,8 @@ import LocaleSwitch from '@/components/LocaleSwitch';
 import { useEventLogout, useOnMobile } from '@/hooks';
 import { checkPermissions } from '@/utils';
 import { AppBar, Breadcrumbs, Stack, Toolbar } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState, ReactNode } from 'react';
+import { useAppStore } from '@/store/AppStore';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
@@ -27,6 +28,8 @@ interface Props {
 const TopBar = ({ home }: Props) => {
   const { t } = useTranslation();
   const [openSideBar, setSidebar] = useState(false);
+  const [appState] = useAppStore();
+
   const location = useLocation().pathname.split('/');
   const onLogout = useEventLogout();
   const onMobile = useOnMobile();
@@ -41,11 +44,32 @@ const TopBar = ({ home }: Props) => {
 
   // Calculate return path based on current location
   const getReturnPath = () => {
-    const pathSegments = [...location];
-    const segmentsToRemove = pathSegments.length >= 5 ? 4 : 2;
-    return pathSegments.slice(0, -segmentsToRemove).join('/');
+    if (appState.breadcrumb.length >= 2) {
+      if ((appState.breadcrumb[appState.breadcrumb.length - 1][1] != undefined) && !appState.breadcrumb[appState.breadcrumb.length - 1][1].endsWith('/phase/0')) { 
+        return appState.breadcrumb[appState.breadcrumb.length - 2][1];
+      }
+    }
+    return '/';
   };
 
+  let crumbs:ReactNode[] = []
+  if (appState.breadcrumb.length > 1) {
+    let index = 0;
+    for (let i = 0;  i < appState.breadcrumb.length - 1; ++i) {
+      let b = appState.breadcrumb[i];
+      crumbs.push(<AppLink underline="hover" color="inherit" to={b[1]} key={i}>
+                  {b[0]}  
+                </AppLink>);
+      index++;
+    }
+    crumbs.push(
+      <b key={appState.breadcrumb.length}>{appState.breadcrumb[appState.breadcrumb.length - 1][0]}</b>
+    )
+  } else {
+    if (appState.breadcrumb.length  == 1)
+     crumbs = [<b key="0">{appState.breadcrumb[0][0]}</b>];
+  } 
+  
   return (
     <AppBar elevation={0}>
       <Toolbar>
@@ -61,18 +85,9 @@ const TopBar = ({ home }: Props) => {
           <AppLink underline="hover" color="inherit" to="/">
             aula
           </AppLink>
-          {displayPath.map((currentPath, index) => {
-            // Calculate path segments for current breadcrumb
-            const pathDepth = index + 1;
-            const extraSegments = currentPath === 'messages' ? 0 : 3;
-            const link = location.slice(0, 2 * pathDepth + extraSegments).join('/');
-
-            return (
-              <AppLink underline="hover" color="inherit" to={link} key={index}>
-                {currentPath}
-              </AppLink>
-            );
-          })}
+          {crumbs.map((b, index) => {
+            return b;
+            })}
         </Breadcrumbs>
 
         {/* User Controls */}

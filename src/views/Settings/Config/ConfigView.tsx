@@ -1,6 +1,7 @@
 import { AppIcon } from '@/components';
 import { ConfigResponse, InstanceResponse } from '@/types/Generics';
 import { checkPermissions, databaseRequest } from '@/utils';
+import { useAppStore } from '@/store/AppStore';
 import { Accordion, AccordionDetails, AccordionSummary, Skeleton, Stack, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { Fragment, useEffect, useState } from 'react';
@@ -23,6 +24,7 @@ import QuorumSettings from './IdeaSettings/QuorumSettings';
  */
 const ConfigView = () => {
   const { t } = useTranslation();
+  const [appState, dispatch] = useAppStore();
   const [config, setConfig] = useState<ConfigResponse>();
   const [settings, setSettings] = useState<InstanceResponse>();
   const [expanded, setExpanded] = useState<string>();
@@ -53,6 +55,7 @@ const ConfigView = () => {
   const closePanels = () => setExpanded(undefined);
 
   useEffect(() => {
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.configuration'), '']]});
     loadData();
   }, []);
 

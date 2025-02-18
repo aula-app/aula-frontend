@@ -1,5 +1,9 @@
 import PhaseBar from '@/layout/PhaseBar';
+import { getRoom } from '@/services/rooms';
+import { useAppStore } from '@/store/AppStore';
 import { Stack } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 import { Navigate, Outlet, useParams } from 'react-router-dom';
 
 /**
@@ -11,8 +15,10 @@ import { Navigate, Outlet, useParams } from 'react-router-dom';
  * redirecting to the root path.
  */
 const RoomView = () => {
+  const { t } = useTranslation();
   const { room_id } = useParams<{ room_id: string }>();
-
+  const [appState, dispatch] = useAppStore();
+  
   // Redirect to root if no room_id is provided
   if (!room_id) {
     return <Navigate to="/" replace />;

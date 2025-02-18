@@ -8,6 +8,7 @@ import FilterBar from '@/components/FilterBar';
 import SelectRole from '@/components/SelectRole';
 import SelectRoom from '@/components/SelectRoom';
 import { deleteUser, getUsers } from '@/services/users';
+import { useAppStore } from '@/store/AppStore';
 import { StatusTypes } from '@/types/Generics';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
@@ -53,6 +54,7 @@ const UsersView: React.FC = () => {
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
   const [room_id, setRoom] = useState<string>('');
   const [userlevel, setRole] = useState<RoleTypes | 0>();
+  const [appState, dispatch] = useAppStore();
 
   const [edit, setEdit] = useState<UserType | boolean>(false); // false = update dialog closed ;true = new idea; UserType = user to edit;
 
@@ -89,6 +91,7 @@ const UsersView: React.FC = () => {
   };
 
   useEffect(() => {
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.users'), '']]});
     fetchUsers();
   }, [fetchUsers]);
 

@@ -4,8 +4,10 @@ import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import { BoxForms } from '@/components/DataForms';
 import SurveyForms from '@/components/DataForms/SurveyForms';
 import { deleteBox, getBoxesByPhase } from '@/services/boxes';
+import { getRoom } from '@/services/rooms';
 import { BoxType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
+import { useAppStore } from '@/store/AppStore';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { set } from 'date-fns';
@@ -25,6 +27,17 @@ const BoxPhaseView = () => {
   const [boxes, setBoxes] = useState<BoxType[]>([]);
 
   const [edit, setEdit] = useState<BoxType | true>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
+  const [appState, dispatch] = useAppStore();
+ 
+  const getRoomName = (id: string) => {
+    return getRoom(id).then((response) => {
+      if (response.error || !response.data) return;
+      let roomName = response.data.room_name;
+      roomName = roomName?roomName:'aula';
+      return roomName;
+    });
+  };
+
   const [addSurvey, setAddSurvey] = useState(false);
 
   const fetchBoxes = useCallback(async () => {
@@ -34,6 +47,10 @@ const BoxPhaseView = () => {
     setError(response.error);
     if (!response.error) setBoxes(response.data || []);
     setLoading(false);
+
+    let roomName = await getRoomName(room_id);
+
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`]]});
   }, [room_id, phase]);
 
   useEffect(() => {
