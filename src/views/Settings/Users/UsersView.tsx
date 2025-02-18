@@ -39,6 +39,7 @@ const COLUMNS = [
 const UsersView: React.FC = () => {
   const { t } = useTranslation();
 
+  const [appState, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [users, setUsers] = useState<UserType[]>([]);
