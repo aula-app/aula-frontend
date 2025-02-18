@@ -4,6 +4,7 @@ import { UserType } from '@/types/Scopes';
 import { errorAlert, successAlert } from '@/utils';
 import { Button, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import KnowMore from '../KnowMore';
 
 interface Props {
   user: UserType;
@@ -43,7 +44,9 @@ ${t('requests.exportData.body', { var: user.displayname })}`,
 
   return (
     <Stack gap={2}>
-      <Typography variant="h6">{t('settings.account.export')}</Typography>
+      <Typography variant="h6">
+        <KnowMore title={t('requests.exportData.info')}>{t('settings.account.export')}</KnowMore>
+      </Typography>
 
       <Button variant="contained" color="info" onClick={requestDataExport} fullWidth>
         {t('requests.exportData.button')}
