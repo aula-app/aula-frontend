@@ -45,7 +45,7 @@ const TopBar = ({ home }: Props) => {
   // Calculate return path based on current location
   const getReturnPath = () => {
     if (appState.breadcrumb.length >= 2) {
-      if (appState.breadcrumb[appState.breadcrumb.length - 1][1] && !appState.breadcrumb[appState.breadcrumb.length - 1][1].includes('/phase/0')) { 
+      if ((appState.breadcrumb[appState.breadcrumb.length - 1][1] != undefined) && !appState.breadcrumb[appState.breadcrumb.length - 1][1].endsWith('/phase/0')) { 
         return appState.breadcrumb[appState.breadcrumb.length - 2][1];
       }
     }
@@ -57,17 +57,17 @@ const TopBar = ({ home }: Props) => {
     let index = 0;
     for (let i = 0;  i < appState.breadcrumb.length - 1; ++i) {
       let b = appState.breadcrumb[i];
-      crumbs.push(<AppLink underline="hover" color="inherit" to={b[1]}>
+      crumbs.push(<AppLink underline="hover" color="inherit" to={b[1]} key={i}>
                   {b[0]}  
                 </AppLink>);
       index++;
     }
     crumbs.push(
-      <b>{appState.breadcrumb[appState.breadcrumb.length - 1][0]}</b>
+      <b key={appState.breadcrumb.length}>{appState.breadcrumb[appState.breadcrumb.length - 1][0]}</b>
     )
   } else {
     if (appState.breadcrumb.length  == 1)
-     crumbs = [<b>{appState.breadcrumb[0][0]}</b>];
+     crumbs = [<b key="0">{appState.breadcrumb[0][0]}</b>];
   } 
   
   return (

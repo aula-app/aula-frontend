@@ -56,7 +56,7 @@ const IdeaView = () => {
     }
 
     if (response.data && response.data.title)
-      dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`], [[response.data.title, '']]]});
+      dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`], [response.data.title, '']]});
 
     if (response.error) setError(response.error);
     if (!response.error && response.data) setIdea(response.data);
