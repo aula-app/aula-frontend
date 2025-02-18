@@ -47,10 +47,16 @@ const IdeaView = () => {
     if (!idea_id) return;
     setLoading(true);
     const response = await getIdea(idea_id);
-    let roomName = await getRoomName(room_id);
-    roomName = roomName ? roomName : 'aula';
 
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`], [[response.data.title, '']]]});
+    let roomName = 'aula'
+    if (room_id) {
+      let nameResponse = await getRoomName(room_id);
+      if (nameResponse)
+        roomName = nameResponse
+    }
+
+    if (response.data && response.data.title)
+      dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`], [[response.data.title, '']]]});
 
     if (response.error) setError(response.error);
     if (!response.error && response.data) setIdea(response.data);

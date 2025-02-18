@@ -3,7 +3,7 @@ import LocaleSwitch from '@/components/LocaleSwitch';
 import { useEventLogout, useOnMobile } from '@/hooks';
 import { checkPermissions } from '@/utils';
 import { AppBar, Breadcrumbs, Stack, Toolbar } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ReactNode } from 'react';
 import { useAppStore } from '@/store/AppStore';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -52,12 +52,12 @@ const TopBar = ({ home }: Props) => {
     return '/';
   };
 
-  let crumbs = []
+  let crumbs:ReactNode[] = []
   if (appState.breadcrumb.length > 1) {
     let index = 0;
     for (let i = 0;  i < appState.breadcrumb.length - 1; ++i) {
       let b = appState.breadcrumb[i];
-      crumbs.push(<AppLink underline="hover" color="inherit" to={b[1]} index={i}>
+      crumbs.push(<AppLink underline="hover" color="inherit" to={b[1]}>
                   {b[0]}  
                 </AppLink>);
       index++;

@@ -19,24 +19,10 @@ const RoomView = () => {
   const { room_id } = useParams<{ room_id: string }>();
   const [appState, dispatch] = useAppStore();
   
-  const getRoomName = (id: string) => {
-    getRoom(room_id).then((response) => {
-      if (response.error || !response.data) return;
-      let roomName = response.data.room_name;
-      if (roomName == 'a' || !roomName) {
-        roomName = 'aula';
-      }
-    });
-  };
-
   // Redirect to root if no room_id is provided
   if (!room_id) {
     return <Navigate to="/" replace />;
   }
-
-  useEffect(() => {
-    getRoomName();
-  }, [room_id]);
 
   return (
     <Stack width="100%" height="100%" overflow="hidden">
