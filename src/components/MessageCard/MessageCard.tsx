@@ -49,7 +49,6 @@ const MessageCard: React.FC<Props> = ({ type }) => {
   }, [type, status, search_field, search_text]);
 
   useEffect(() => {
-    console.log(type);
     fetchMessages();
   }, [fetchMessages]);
 

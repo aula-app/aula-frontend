@@ -94,7 +94,6 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       custom_field2: data.custom_field2,
     });
     if (response.error || !response.data) return;
-    console.log(response.data);
     setIdeaBox(response.data.hash_id);
     setIdeaCategory(response.data.hash_id);
     onClose();

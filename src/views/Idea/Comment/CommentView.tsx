@@ -24,7 +24,7 @@ interface RouteParams extends Record<string, string | undefined> {
  */
 const Comments = () => {
   const { t } = useTranslation();
-  const { idea_id, phase } = useParams<RouteParams>();
+  const { idea_id, phase, room_id } = useParams<RouteParams>();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [comments, setComments] = useState<CommentType[]>([]);

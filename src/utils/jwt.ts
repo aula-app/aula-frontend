@@ -1,3 +1,5 @@
+import { RoleTypes } from '@/types/SettingsTypes';
+
 /**
  * Parses and decodes a JWT (JSON Web Token) to extract its payload.
  * This function only decodes the token's payload without verifying its signature.
@@ -9,9 +11,14 @@
  *   - user_level: User's permission level
  *   - temp_pw: Optional flag indicating temporary password status
  */
-export function parseJwt(
-  token: String
-): { exp: number; user_id: number; user_level: number; temp_pw?: boolean } | null {
+export function parseJwt(token: String): {
+  exp: number;
+  user_id: number;
+  user_hash: string;
+  user_level: number;
+  roles: { role: RoleTypes; room: string }[];
+  temp_pw?: boolean;
+} | null {
   try {
     // Extract the payload (second) part of the JWT
     var base64Url = token.split('.')[1];

@@ -83,7 +83,6 @@ const DataSettings = ({ onReload }: Props) => {
           !items[2] ||
           (i === 0 && !line.includes('realname;displayname;username;email;about_me'))
         ) {
-          console.log(i, line);
           setError(t('forms.csv.invalid'));
           return;
         }

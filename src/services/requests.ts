@@ -115,7 +115,6 @@ export const baseRequest = async (
       const request = await fetch(`${api_url}/api/controllers/refresh_token.php`, requestData);
       const new_jwt = await request.json();
 
-      console.log(new_jwt['JWT']);
       localStorage.setItem('token', new_jwt['JWT']);
       window.location.reload();
       // TODO: Make reload the page

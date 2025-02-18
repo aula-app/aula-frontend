@@ -1,4 +1,3 @@
-import { is } from 'date-fns/locale';
 import { parseJwt } from './jwt';
 import { localStorageGet } from './localStorage';
 
@@ -92,31 +91,34 @@ const permissions = {
 /**
  * Checks if the current user has sufficient permissions for a given role level
  */
-export function checkPermissions(model: keyof typeof permissions, action: string, room_id: string, user_id?: string): boolean {
+export function checkPermissions(model: keyof typeof permissions, action: string, user_id?: string): boolean {
   const jwt = localStorageGet('token');
   const user = !!jwt ? parseJwt(jwt) : false;
+  const location = window.location.pathname.split('/');
+  const roomIndex = location.findIndex((l) => l.includes('room')) + 1;
+  const room_id = roomIndex === 1 ? '' : location[roomIndex];
 
   if (!(action in permissions[model])) return false;
   if (!user) return false;
 
-  if (room_id) {
-    let rooms = user.roles.filter((r) => r.room == room_id)
+  if (!!room_id) {
+    let rooms = user.roles.filter((r) => r.room == room_id);
 
-    if (rooms.length < 1)
-      return false;
+    if (rooms.length < 1) return false;
 
     const roleInRoom = rooms[0].role;
     let hasRolePermission = false;
 
-    if ((typeof permissions[model][action].role === 'number' 
-        && (roleInRoom >= permissions[model][action].role)) 
-        || permissions[model][action].role.includes(roleInRoom)
-       ) {
+    if (
+      typeof permissions[model][action].role === 'number'
+        ? roleInRoom >= permissions[model][action].role
+        : permissions[model][action].role.includes(roleInRoom)
+    ) {
       hasRolePermission = true;
     }
 
     if (permissions[model][action].self) {
-      return (hasRolePermission) && (user_id === user.user_hash);
+      return hasRolePermission && user_id === user.user_hash;
     }
 
     return hasRolePermission;
@@ -125,9 +127,8 @@ export function checkPermissions(model: keyof typeof permissions, action: string
   if (typeof permissions[model][action].role === 'number') {
     return user.user_level >= permissions[model][action].role;
   } else {
-    return permissions[model][action].role.includes(user.user_level)
+    return permissions[model][action].role.includes(user.user_level);
   }
 
   return false;
-
 }
