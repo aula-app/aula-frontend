@@ -3,11 +3,11 @@ import { localStorageGet } from './localStorage';
 
 const permissions = {
   announcements: {
-    create: { role: 40 },
-    edit: { role: 40 },
-    delete: { role: 40 },
-    viewAll: { role: 40 },
-    status: { role: 40 },
+    create: { role: 50 },
+    edit: { role: 50 },
+    delete: { role: 50 },
+    viewAll: { role: [50] },
+    status: { role: 50 },
   },
   boxes: {
     addIdea: { role: 30 },
