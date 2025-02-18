@@ -58,7 +58,6 @@ const ConfigView = () => {
   }, []);
 
   const SETTINGS_PANELS = [
-    // { name: 'category', role: 30, component: <Categories /> },
     { name: 'idea', role: 50, component: <IdeaSettings onReload={getConfig} /> },
     { name: 'vote', role: 50, component: <QuorumSettings onReload={closePanels} /> },
     { name: 'user', role: 50, component: <UsersSettings onReload={closePanels} /> },
