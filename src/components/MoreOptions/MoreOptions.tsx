@@ -7,6 +7,7 @@ import AppIconButton from '../AppIconButton';
 import DeleteButton from '../Buttons/DeleteButton';
 import EditButton from '../Buttons/EditButton';
 import ReportButton from '../Buttons/ReportButton';
+import { checkPermissions } from '@/utils';
 
 interface Props extends IconButtonOwnProps {
   item: ScopeType;
@@ -55,15 +56,15 @@ const MoreOptions: React.FC<Props> = ({
         <Collapse orientation="horizontal" in={open}>
           <Stack direction="row" position="relative">
             <ReportButton color={color || 'error'} target={`${t(`scopes.${scope}.name`)}: ${item.id}`} />
-            {canEdit && (
-              <>
-                <EditButton color={color || 'secondary'} onEdit={onEdit} />
-                <DeleteButton color={color || 'error'} scope={scope} onDelete={onDelete} />
-              </>
+            {checkPermissions(scope, 'edit', 'user_id' in item ? item.user_id : undefined) && (
+              <EditButton color={color || 'secondary'} onEdit={onEdit} />
+            )}
+            {checkPermissions(scope, 'delete', 'user_id' in item ? item.user_id : undefined) && (
+              <DeleteButton color={color || 'error'} scope={scope} onDelete={onDelete} />
             )}
           </Stack>
         </Collapse>
-        <AppIconButton icon={open ? 'close' : 'more'} onClick={toggleOptions} />
+        <AppIconButton icon={open ? 'close' : 'more'} onClick={toggleOptions} {...restOfProps} />
       </Stack>
     </ClickAwayListener>
   );

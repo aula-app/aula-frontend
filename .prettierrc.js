@@ -1,3 +1,5 @@
+const { parse } = require("path");
+
 module.exports = {
   printWidth: 120, // max 120 chars in line, code is easy to read
   useTabs: false, // use spaces instead of tabs

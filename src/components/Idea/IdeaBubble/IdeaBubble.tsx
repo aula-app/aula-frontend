@@ -1,16 +1,15 @@
 import AppIconButton from '@/components/AppIconButton';
 import AppLink from '@/components/AppLink';
 import ChatBubble from '@/components/ChatBubble';
+import MarkdownReader from '@/components/MarkdownReader';
 import MoreOptions from '@/components/MoreOptions';
 import { IdeaType } from '@/types/Scopes';
-import { checkPermissions, checkSelf } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
-import CategoryList from '../CategoryList';
-import LikeButton from '../../Buttons/LikeButton';
-import UserBar from '../UserBar';
-import MarkdownReader from '@/components/MarkdownReader';
 import { useParams } from 'react-router-dom';
+import LikeButton from '../../Buttons/LikeButton';
+import CategoryList from '../CategoryList';
+import UserBar from '../UserBar';
 
 interface Props {
   idea: IdeaType;
@@ -51,13 +50,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
       <Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <UserBar info={idea} />
-          <MoreOptions
-            item={idea}
-            scope="ideas"
-            onDelete={onDelete}
-            onEdit={onEdit}
-            canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id) && !disabled)}
-          >
+          <MoreOptions item={idea} scope="ideas" onDelete={onDelete} onEdit={onEdit}>
             <Stack direction="row" alignItems="center">
               <LikeButton disabled={disabled} item={idea} />
               {idea.sum_comments > 0 && !idea_id && (

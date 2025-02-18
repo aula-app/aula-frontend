@@ -1,11 +1,10 @@
 import ChatBubble from '@/components/ChatBubble';
-import { CommentType } from '@/types/Scopes';
-import { Box, Stack, Typography } from '@mui/material';
-import UserBar from '../UserBar';
-import MoreOptions from '@/components/MoreOptions';
-import LikeButton from '../../Buttons/LikeButton';
-import { checkPermissions, checkSelf } from '@/utils';
 import MarkdownReader from '@/components/MarkdownReader';
+import MoreOptions from '@/components/MoreOptions';
+import { CommentType } from '@/types/Scopes';
+import { Stack } from '@mui/material';
+import LikeButton from '../../Buttons/LikeButton';
+import UserBar from '../UserBar';
 
 interface Props {
   comment: CommentType;
@@ -24,13 +23,7 @@ const CommentBubble: React.FC<Props> = ({ comment, disabled = false, onDelete, o
       </ChatBubble>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <UserBar info={comment} />
-        <MoreOptions
-          item={comment}
-          scope="comments"
-          onDelete={onDelete}
-          onEdit={onEdit}
-          canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(comment.user_id) && !disabled)}
-        >
+        <MoreOptions item={comment} scope="comments" onDelete={onDelete} onEdit={onEdit}>
           <LikeButton disabled={disabled} item={comment} />
         </MoreOptions>
       </Stack>

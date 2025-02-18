@@ -49,14 +49,7 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
         <Typography variant="caption" mr="auto" noWrap>
           {t(`phases.id-${box.phase_id}`, { var: box.ideas_num })}
         </Typography>
-        <MoreOptions
-          item={box}
-          scope="boxes"
-          canEdit={checkPermissions(30)}
-          color="default"
-          onDelete={onDelete}
-          onEdit={onEdit}
-        />
+        <MoreOptions item={box} scope="boxes" color="default" onDelete={onDelete} onEdit={onEdit} />
       </Stack>
       <AppLink
         to={`/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`}

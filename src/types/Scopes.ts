@@ -50,7 +50,7 @@ export interface CommentType {
   displayname: string;
   sum_likes: number;
   idea_id: number;
-  user_id: number;
+  user_id: string;
   user_hash_id: number;
   language_id: number;
   parent_id: number;
@@ -79,7 +79,7 @@ export interface GroupType {
 export interface IdeaType {
   id: number;
   hash_id: string;
-  user_id: number;
+  user_id: string;
   user_hash_id: number;
   content: string;
   title: string;

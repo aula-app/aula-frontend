@@ -39,7 +39,7 @@ const IdeasBoxView = () => {
   const [boxError, setBoxError] = useState<string | null>(null);
   const [box, setBox] = useState<BoxType>();
   const [edit, setEdit] = useState<BoxType>(); // undefined = closed;
-  
+
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
       if (response.error || !response.data) return '';
@@ -56,13 +56,18 @@ const IdeasBoxView = () => {
     if (!response.error && response.data) setBox(response.data);
     setBoxLoading(false);
 
-    
-    let roomName = 'aula' 
-    if (room_id)
-      roomName = await getRoomName(room_id);
+    let roomName = 'aula';
+    if (room_id) roomName = await getRoomName(room_id);
 
     if (response.data && response.data.name)
-      dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`], [response.data.name, '']]});
+      dispatch({
+        action: 'SET_BREADCRUMB',
+        breadcrumb: [
+          [roomName, `/room/${room_id}/phase/0`],
+          [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
+          [response.data.name, ''],
+        ],
+      });
   }, [box_id]);
 
   const boxEdit = (box: BoxType) => {
@@ -78,7 +83,6 @@ const IdeasBoxView = () => {
   const boxClose = () => {
     setEdit(undefined);
     fetchBox();
-
   };
 
   /**
@@ -146,7 +150,6 @@ const IdeasBoxView = () => {
               var: ideas.length,
             })}
         </Typography>
-        {checkPermissions(30) && Number(phase) < 20 && <></> /* add ideas */}
         {Number(phase) === 30 && (
           <Stack direction="row" position="relative" alignItems="center" sx={{ ml: 'auto', pr: 3 }}>
             <Typography variant="caption">

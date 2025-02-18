@@ -9,12 +9,10 @@ import { useTranslation } from 'react-i18next';
 import Groups from './Groups';
 import IdeaSettings from './IdeaSettings';
 import QuorumSettings from './IdeaSettings/QuorumSettings';
-import LoginSettings from './LoginSettings';
 import SchoolDelete from './SchoolDelete';
 import SchoolInfo from './SchoolInfo';
 import SystemSettings from './SystemSettings';
 import TimedCommands from './TimedCommands';
-import TimeSettings from './TimeSettings';
 import UsersSettings from './UsersSettings';
 
 /** * Renders "Config" view
