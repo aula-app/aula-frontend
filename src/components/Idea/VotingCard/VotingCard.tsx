@@ -53,7 +53,7 @@ const VotingCard = ({ onReload }: Props) => {
                 bgcolor: `${option}.main`,
               },
             }}
-            disabled={!checkPermissions(20) || isLoading}
+            disabled={!checkPermissions('ideas', 'vote') || isLoading}
             key={i}
             onClick={() => registerVote((i - 1) as Vote)}
           >

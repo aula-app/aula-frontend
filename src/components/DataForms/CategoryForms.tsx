@@ -94,7 +94,7 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
                 var: t(`scopes.categories.name`).toLowerCase(),
               })}
             </Typography>
-            {checkPermissions(40) && <StatusField control={control} />}
+            {checkPermissions('categories', 'status') && <StatusField control={control} />}
           </Stack>
           <Stack gap={2}>
             {/* name */}

@@ -1,7 +1,4 @@
 import { Stack } from '@mui/material';
-import CustomFields from './CustomFields';
-import QuorumSettings from './QuorumSettings';
-import { InstanceResponse } from '@/types/Generics';
 import Categories from '../Categories';
 
 interface Props {

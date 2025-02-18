@@ -2,7 +2,7 @@ import AppIcon from '@/components/AppIcon';
 import AppLink from '@/components/AppLink';
 import MoreOptions from '@/components/MoreOptions';
 import { BoxType } from '@/types/Scopes';
-import { checkPermissions, phases } from '@/utils';
+import { phases } from '@/utils';
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import MarkdownReader from '../MarkdownReader';

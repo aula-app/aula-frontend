@@ -145,7 +145,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               })}
             </Typography>
             <Stack direction="row" gap={2}>
-              {checkPermissions(40) && <StatusField control={control} />}
+              {checkPermissions('ideas', 'status') && <StatusField control={control} />}
             </Stack>
           </Stack>
           <Stack gap={2}>
@@ -161,17 +161,18 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             />
             {/* content */}
             <MarkdownEditor name="content" control={control} required disabled={isLoading} />
-            {checkPermissions(40) && (
-              <Stack direction="row" gap={2}>
-                {/* <SelectRoomField control={control} disabled={isLoading} /> */}
+            <Stack direction="row" gap={2}>
+              {checkPermissions('boxes', 'addIdea') && (
                 <SelectBoxField defaultValue={box} onChange={setBox} disabled={isLoading} />
+              )}
+              {checkPermissions('ideas', 'addCategory') && (
                 <CategoryField
                   defaultValue={category}
                   onChange={(updates) => setCategory(updates)}
                   disabled={isLoading}
                 />
-              </Stack>
-            )}
+              )}
+            </Stack>
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error">

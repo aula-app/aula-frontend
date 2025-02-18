@@ -28,12 +28,12 @@ const BoxPhaseView = () => {
 
   const [edit, setEdit] = useState<BoxType | true>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
   const [appState, dispatch] = useAppStore();
- 
+
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
       if (response.error || !response.data) return;
       let roomName = response.data.room_name;
-      roomName = roomName?roomName:'aula';
+      roomName = roomName ? roomName : 'aula';
       return roomName;
     });
   };
@@ -50,7 +50,13 @@ const BoxPhaseView = () => {
 
     let roomName = await getRoomName(room_id);
 
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`]]});
+    dispatch({
+      action: 'SET_BREADCRUMB',
+      breadcrumb: [
+        [roomName, `/room/${room_id}/phase/0`],
+        [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
+      ],
+    });
   }, [room_id, phase]);
 
   useEffect(() => {
@@ -84,38 +90,36 @@ const BoxPhaseView = () => {
             </Grid>
           ))}
       </Grid>
-      {checkPermissions(30) && room_id && (
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{
-            position: 'fixed',
-            bottom: 40,
-            zIndex: 1000,
-          }}
-        >
-          {Number(phase) === 10 && (
-            <>
-              <Fab aria-label="add idea" color="primary" onClick={() => setEdit(true)}>
-                <AppIcon icon="box" />
-              </Fab>
-              <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-                <BoxForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
-              </Drawer>
-            </>
-          )}
-          {Number(phase) === 30 && (
-            <>
-              <Fab aria-label="add" color="primary" onClick={() => setAddSurvey(true)}>
-                <AppIcon icon="survey" />
-              </Fab>
-              <Drawer anchor="bottom" open={!!addSurvey} onClose={onClose} sx={{ overflowY: 'auto' }}>
-                <SurveyForms onClose={onClose} />
-              </Drawer>
-            </>
-          )}
-        </Stack>
-      )}
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{
+          position: 'fixed',
+          bottom: 40,
+          zIndex: 1000,
+        }}
+      >
+        {checkPermissions('boxes', 'addIdea') && Number(phase) === 10 && (
+          <>
+            <Fab aria-label="add idea" color="primary" onClick={() => setEdit(true)}>
+              <AppIcon icon="box" />
+            </Fab>
+            <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
+              <BoxForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
+            </Drawer>
+          </>
+        )}
+        {checkPermissions('surveys', 'create') && Number(phase) === 30 && (
+          <>
+            <Fab aria-label="add" color="primary" onClick={() => setAddSurvey(true)}>
+              <AppIcon icon="survey" />
+            </Fab>
+            <Drawer anchor="bottom" open={!!addSurvey} onClose={onClose} sx={{ overflowY: 'auto' }}>
+              <SurveyForms onClose={onClose} />
+            </Drawer>
+          </>
+        )}
+      </Stack>
     </Stack>
   );
 };

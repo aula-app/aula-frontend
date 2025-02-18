@@ -154,7 +154,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               })}
             </Typography>
             <Stack direction="row" gap={2}>
-              {checkPermissions(40) && <StatusField control={control} disabled={isLoading} />}
+              {checkPermissions('users', 'status') && <StatusField control={control} disabled={isLoading} />}
             </Stack>
           </Stack>
           <Stack direction="row" flexWrap="wrap" gap={2}>
@@ -198,19 +198,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 helperText={`${errors.email?.message || ''}`}
                 {...register('email')}
               />
-              {checkPermissions(40) && Number(defaultValues?.userlevel || 0) < 50 && (
-                <>
-                  <RoleField control={control} disabled={isLoading} sx={{ flex: 1 }} noAdmin />
-                  {currentLevel < 40 && (
-                    <RoomRolesField
-                      rooms={rooms}
-                      user={defaultValues}
-                      onUpdate={(data) => onUpdate(data)}
-                      disabled={isLoading}
-                      defaultLevel={currentLevel}
-                    />
-                  )}
-                </>
+              {checkPermissions('users', 'addRole') && (
+                <RoleField control={control} disabled={isLoading} sx={{ flex: 1 }} noAdmin />
+              )}
+              {checkPermissions('rooms', 'addUser') && currentLevel < 40 && (
+                <RoomRolesField
+                  rooms={rooms}
+                  user={defaultValues}
+                  onUpdate={(data) => onUpdate(data)}
+                  disabled={isLoading}
+                  defaultLevel={currentLevel}
+                />
               )}
             </Stack>
             <MarkdownEditor

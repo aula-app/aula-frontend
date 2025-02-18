@@ -3,6 +3,7 @@
  */
 
 import { LinkToPage } from '@/types/PageLinks';
+import { checkPermissions } from '@/utils';
 
 /**
  * SideBar configuration
@@ -16,73 +17,73 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
     title: 'home',
     path: '/',
     icon: 'home',
-    role: 10,
+    permission: true,
   },
   {
     title: 'profile',
     path: '/settings/profile',
     icon: 'account',
-    role: 20,
+    permission: checkPermissions('system', 'profile'),
   },
   {
     title: 'users',
     path: '/settings/users',
     icon: 'group',
-    role: 50,
+    permission: checkPermissions('users', 'viewAll'),
   },
   {
     title: 'rooms',
     path: '/settings/rooms',
     icon: 'room',
-    role: 50,
+    permission: checkPermissions('rooms', 'viewAll'),
   },
   {
     title: 'boxes',
     path: '/settings/boxes',
     icon: 'box',
-    role: 30,
+    permission: checkPermissions('boxes', 'viewAll'),
   },
   {
     title: 'ideas',
     path: '/settings/ideas',
     icon: 'idea',
-    role: 30,
+    permission: checkPermissions('ideas', 'viewAll'),
   },
   // {
   //   title: 'messages',
   //   path: '/settings/messages',
   //   icon: 'message',
-  //   role: 50,
+  //   permission: 50,
   // },
   {
     title: 'announcements',
     path: '/settings/announcements',
     icon: 'announcement',
-    role: 50,
+    permission: checkPermissions('announcements', 'viewAll'),
   },
   {
     title: 'reports',
     path: '/settings/reports',
     icon: 'report',
-    role: 50,
+    permission: checkPermissions('reports', 'viewAll'),
   },
   {
     title: 'requests',
     path: '/settings/requests',
     icon: 'request',
-    role: 50,
+    permission: checkPermissions('requests', 'viewAll'),
   },
   {
     title: 'configuration',
     path: '/settings/configuration',
     icon: 'settings',
-    role: 50,
+    permission: checkPermissions('system', 'edit'),
   },
   {
     title: 'about',
     path: '/about',
     icon: 'info',
-    role: 10,
+    permission: true,
   },
 ];
 
