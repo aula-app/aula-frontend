@@ -53,8 +53,7 @@ const UsersView: React.FC = () => {
   const [offset, setOffset] = useState(0);
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
   const [room_id, setRoom] = useState<string>('');
-  const [userlevel, setRole] = useState<RoleTypes | 0>();
-  const [appState, dispatch] = useAppStore();
+  const [userlevel, setRole] = useState<RoleTypes | 0>(0);
 
   const [edit, setEdit] = useState<UserType | boolean>(false); // false = update dialog closed ;true = new idea; UserType = user to edit;
 

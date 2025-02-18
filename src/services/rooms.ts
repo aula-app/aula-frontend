@@ -92,34 +92,6 @@ export const getRoomsByUser = async (user_id: string): Promise<GetRoomsResponse>
 };
 
 /**
- * Get a list of the rooms of a user from the database.
- */
-
-export const getRoomsByUser = async (user_id: string): Promise<GetRoomsResponse> => {
-  const response = await databaseRequest({
-    model: 'Room',
-    method: 'getRoomsByUser',
-    arguments: { user_id },
-  });
-
-  return response as GetRoomsResponse;
-};
-
-/**
- * Get a list of the rooms of a user from the database.
- */
-
-export const getRoomsByUser = async (user_id: string): Promise<GetRoomsResponse> => {
-  const response = await databaseRequest({
-    model: 'Room',
-    method: 'getRoomsByUser',
-    arguments: { user_id },
-  });
-
-  return response as GetRoomsResponse;
-};
-
-/**
  * Sets Room update types
  */
 
