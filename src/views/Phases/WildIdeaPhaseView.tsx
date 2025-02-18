@@ -5,6 +5,7 @@ import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton'
 import { getWildIdeasByUser } from '@/services/dashboard';
 import { deleteIdea } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
+import { useAppStore } from '@/store/AppStore';
 import { Drawer, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -18,6 +19,8 @@ import { useParams } from 'react-router-dom';
 
 const WildIdeaPhaseView = () => {
   const { t } = useTranslation();
+  const [appState, dispatch] = useAppStore();
+
   const { phase } = useParams();
 
   const addCategory = useRef<AddCategoryRefProps>(null);
@@ -51,6 +54,7 @@ const WildIdeaPhaseView = () => {
   };
 
   useEffect(() => {
+    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.dashboard')]]});
     fetchIdeas();
   }, [phase]);
   return (
