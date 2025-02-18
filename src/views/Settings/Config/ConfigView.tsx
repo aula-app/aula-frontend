@@ -63,7 +63,7 @@ const ConfigView = () => {
     { name: 'user', role: 50, component: <UsersSettings onReload={closePanels} /> },
     { name: 'group', role: 50, component: <Groups /> },
     // { name: 'time', role: 50, component: <TimeSettings config={config} onReload={getConfig} /> },
-    { name: 'login', role: 50, component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
+    // { name: 'login', role: 50, component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
     { name: 'action', role: 50, component: <TimedCommands /> },
     { name: 'system', role: 50, component: <SystemSettings settings={settings} onReload={getSettings} /> },
     { name: 'danger', role: 50, component: <SchoolDelete /> },
