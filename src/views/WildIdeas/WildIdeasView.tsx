@@ -92,7 +92,7 @@ const WildIdeas = () => {
             onDelete={() => onDelete(idea.hash_id)}
           />
         ))}
-      {checkPermissions('idea', 'create') && room_id && (
+      {checkPermissions('ideas', 'create') && room_id && (
         <>
           <Fab
             aria-label="add idea"
