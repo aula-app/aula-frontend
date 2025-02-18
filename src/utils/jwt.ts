@@ -11,7 +11,7 @@
  */
 export function parseJwt(
   token: String
-): { exp: number; user_id: string; user_level: number; temp_pw?: boolean } | null {
+): { exp: number; user_id: number; user_level: number; temp_pw?: boolean } | null {
   try {
     // Extract the payload (second) part of the JWT
     var base64Url = token.split('.')[1];

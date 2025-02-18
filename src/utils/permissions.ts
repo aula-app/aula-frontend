@@ -95,8 +95,7 @@ const permissions = {
 const jwt = localStorageGet('token');
 const user = !!jwt ? parseJwt(jwt) : false;
 
-export function checkPermissions(path: keyof typeof permissions, value: string, user_id?: string): boolean {
-  console.log('checkPermissions', path, value, permissions[path]);
+export function checkPermissions(path: keyof typeof permissions, value: string, user_id?: number): boolean {
   if (!(value in permissions[path])) return false;
   if (!user) return false;
 
