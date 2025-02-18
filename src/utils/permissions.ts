@@ -10,7 +10,7 @@ const permissions = {
     status: { role: 40 },
   },
   boxes: {
-    addIdea: { role: 40 },
+    addIdea: { role: 30 },
     create: { role: 40 },
     edit: { role: 40 },
     delete: { role: 40 },
@@ -28,7 +28,7 @@ const permissions = {
   comments: {
     create: { role: 20 },
     edit: { role: 30, self: true },
-    delete: { role: 30 },
+    delete: { role: 30, self: true },
     status: { role: 40 },
   },
   groups: {
@@ -42,7 +42,7 @@ const permissions = {
     addCategory: { role: 20 },
     create: { role: 20 },
     edit: { role: 30, self: true },
-    delete: { role: 40, self: true },
+    delete: { role: 30, self: true },
     like: { role: [20, 31, 41, 45] },
     vote: { role: [20, 31, 41, 45] },
     viewAll: { role: 40 },

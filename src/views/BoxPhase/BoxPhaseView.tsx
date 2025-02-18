@@ -99,7 +99,7 @@ const BoxPhaseView = () => {
           zIndex: 1000,
         }}
       >
-        {checkPermissions('boxes', 'addIdea') && Number(phase) === 10 && (
+        {checkPermissions('boxes', 'create') && Number(phase) === 10 && (
           <>
             <Fab aria-label="add idea" color="primary" onClick={() => setEdit(true)}>
               <AppIcon icon="box" />
