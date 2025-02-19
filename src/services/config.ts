@@ -1,6 +1,7 @@
 import { ConfigResponse, InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { databaseRequest, GenericResponse } from './requests';
 import { RoleTypes } from '@/types/SettingsTypes';
+import { CommandType } from '@/types/Scopes';
 
 interface DefaultDurationsResponse extends GenericResponse {
   data: Array<number>;
@@ -109,6 +110,23 @@ export async function createBackup(): Promise<GenericResponse> {
   return response as GenericResponse;
 }
 
+export interface CommandResponse extends GenericResponse {
+  data: CommandType[];
+}
+
+export async function getCommands(limit: number, offset: number): Promise<CommandResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Command',
+      method: 'getCommands',
+      arguments: { limit, offset },
+    },
+    ['updater_id']
+  );
+
+  return response as CommandResponse;
+}
+
 interface AddCommandRequest {
   cmd_id: number;
   command: string;
@@ -123,6 +141,19 @@ export async function addCommand(args: AddCommandRequest): Promise<GenericRespon
       model: 'Command',
       method: 'addCommand',
       arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+export async function deleteCommand(command_id: number): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Command',
+      method: 'deleteCommand',
+      arguments: { command_id },
     },
     ['updater_id']
   );
