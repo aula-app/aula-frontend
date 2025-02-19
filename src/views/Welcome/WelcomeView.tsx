@@ -20,7 +20,7 @@ const WelcomeView = () => {
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop } = event.currentTarget;
-    setShowDashboard(scrollTop < 100);
+    setShowDashboard(scrollTop === 0);
   };
 
   const fetchRooms = useCallback(async () => {
