@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 // Import markdown files for different languages
 import markdownDE from './RestoreBackup/restore_backup.de.md';
 import markdownEN from './RestoreBackup/restore_backup.en.md';
+import { createBackup, setInstanceOnlineMode } from '@/services/config';
 
 // Mapping of language codes to markdown files
 const languageMarkdownMap = {
@@ -58,28 +59,15 @@ const SystemSettings = ({ settings, onReload }: Props) => {
     setStatus(Number(event.target.value) as OnlineOptions);
   };
 
-  const setConfig = async ({ method, status, callback }: StatusRequest) => {
-    await databaseRequest(
-      {
-        model: 'Settings',
-        method: method,
-        arguments: { status: status },
-      },
-      ['updater_id']
-    ).then((response) => {
-      if (response.data) callback();
-    });
+  const setOnlineMode = async () => {
+    const response = await setInstanceOnlineMode(status);
+    if (response.data) onReload();
   };
 
   const getBackup = async () => {
-    await databaseRequest({
-      model: 'Converters',
-      method: 'createDBDump',
-      arguments: {},
-    }).then((response) => {
-      if (!response.data || !response.data) return;
-      triggerSqlDumpDownload(response.data);
-    });
+    const response = await createBackup();
+    if (!response.data || !response.data) return;
+    triggerSqlDumpDownload(response.data);
   };
 
   const triggerSqlDumpDownload = (sqlDumpLines: string[]) => {
@@ -112,7 +100,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
   }, [settings?.online_mode]);
 
   useEffect(() => {
-    setConfig({ method: 'setInstanceOnlineMode', status: status, callback: onReload });
+    setOnlineMode();
   }, [status]);
 
   return (
