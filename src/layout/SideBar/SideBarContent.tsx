@@ -47,7 +47,7 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
       <List component="nav" {...restOfProps} sx={{ flex: 1, px: 1, overflow: 'auto' }}>
         {SIDEBAR_ITEMS.map(({ icon, path, title, permission }) => (
           <Fragment key={`${title}-${path}`}>
-            {permission && (
+            {permission() && (
               <ListItemButton
                 component={AppLink}
                 to={path}
