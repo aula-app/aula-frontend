@@ -1,3 +1,4 @@
+import { getInstanceSettings } from '@/services/config';
 import { ConfigResponse, InstanceResponse } from '@/types/Generics';
 import { ConfigRequest } from '@/types/RequestTypes';
 import { databaseRequest } from '@/utils';
@@ -15,7 +16,7 @@ interface Props {
 /** * Renders "SystemSettings" component
  */
 
-const SystemSettings = ({ config, settings, onReload }: Props) => {
+const SystemSettings: React.FC<Props> = ({ config, settings, onReload }) => {
   const { t } = useTranslation();
 
   const isInitialMount = useRef(true);
@@ -26,13 +27,8 @@ const SystemSettings = ({ config, settings, onReload }: Props) => {
   const [registration, setRegistration] = useState<0 | 1>(config?.allow_registration ?? 1);
 
   const getOnlineStatus = async () => {
-    await databaseRequest({
-      model: 'Settings',
-      method: 'getInstanceSettings',
-      arguments: {},
-    }).then((response) => {
-      if (response.data) onReload();
-    });
+    const response = await getInstanceSettings();
+    if (response.data) onReload();
   };
 
   const setConfig = async ({ method, args }: ConfigRequest) => {
