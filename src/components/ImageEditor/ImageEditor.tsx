@@ -1,9 +1,9 @@
-import { databaseRequest, localStorageGet } from '@/utils';
+import { getAvatar, uploadImage } from '@/services/media';
+import { localStorageGet } from '@/utils';
 import { Box, Button, Dialog, Paper, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
-import { uploadImage } from '@/services/media';
 
 interface Props {
   id: string;
@@ -17,7 +17,7 @@ interface Props {
 /**
  * Renders "ImageEditor" component for uploading and cropping avatar images
  */
-const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, onClose }: Props) => {
+const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded = false, isOpen, onClose }) => {
   const { t } = useTranslation();
   const api_url = localStorageGet('api_url');
 
@@ -42,16 +42,9 @@ const ImageEditor = ({ id, width = 200, height = 200, rounded = false, isOpen, o
     img.src = image;
   };
 
-  const downloadUserAvatar = () => {
-    databaseRequest({
-      model: 'Media',
-      method: 'userAvatar',
-      arguments: {
-        user_id: id,
-      },
-    }).then((response) => {
-      if (response.data && response.data.length > 0) setImage(`${api_url}/files/${response.data[0].filename}`);
-    });
+  const downloadUserAvatar = async () => {
+    const response = await getAvatar(id);
+    if (response.data && response.data.length > 0) setImage(`${api_url}/files/${response.data[0].filename}`);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

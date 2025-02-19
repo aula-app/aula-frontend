@@ -2,7 +2,6 @@ import { StatusTypes } from '@/types/Generics';
 import { DelegationType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
-import { off } from 'process';
 
 interface GetUserResponse extends GenericResponse {
   data: UserType | null;

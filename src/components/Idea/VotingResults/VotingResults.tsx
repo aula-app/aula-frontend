@@ -1,11 +1,10 @@
 import AppIcon from '@/components/AppIcon';
 import { getVote, getVoteResults } from '@/services/vote';
 import { IdeaType } from '@/types/Scopes';
-import { databaseRequest, Vote, votingOptions } from '@/utils';
+import { Vote, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 interface VotingResultsProps {
   idea: IdeaType;

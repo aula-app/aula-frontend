@@ -1,30 +1,25 @@
+import { getGroups } from '@/services/groups';
 import { GroupType } from '@/types/GroupTypes';
-import { databaseRequest } from '@/utils';
-import { MenuItem, TextField } from '@mui/material';
+import { BaseTextFieldProps, MenuItem, TextField } from '@mui/material';
 import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-type Params = {
+interface Props extends BaseTextFieldProps {
   group: number;
   setGroup: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-};
+}
 
-const FilterGroup = ({ group, setGroup }: Params) => {
+const FilterGroup: React.FC<Props> = ({ group, setGroup, ...restOfProps }) => {
   const { t } = useTranslation();
   const [groups, setGroups] = useState<Array<GroupType>>();
 
-  const getGroups = async () => {
-    await databaseRequest({
-      model: 'Group',
-      method: 'getGroups',
-      arguments: {
-        offset: 0,
-        limit: 0,
-      },
-    }).then((response) => {
-      if (!response.data) return;
-      setGroups(response.data);
+  const fetchGroups = async () => {
+    const response = await getGroups({
+      offset: 0,
+      limit: 0,
     });
+    if (!response.data) return;
+    setGroups(response.data);
   };
 
   const changeRoom = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -32,7 +27,7 @@ const FilterGroup = ({ group, setGroup }: Params) => {
   };
 
   useEffect(() => {
-    getGroups();
+    fetchGroups();
   }, []);
 
   return (
@@ -45,6 +40,7 @@ const FilterGroup = ({ group, setGroup }: Params) => {
       size="small"
       sx={{ minWidth: 282 }}
       disabled={!groups}
+      {...restOfProps}
     >
       <MenuItem value="">&nbsp;</MenuItem>
       {groups &&
