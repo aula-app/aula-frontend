@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
 
 interface Props {
-  user_id: string;
+  id: string;
   isOpen: boolean;
   width?: number;
   height?: number;
@@ -17,7 +17,7 @@ interface Props {
 /**
  * Renders "ImageEditor" component for uploading and cropping avatar images
  */
-const ImageEditor: React.FC<Props> = ({ user_id, width = 200, height = 200, rounded = false, isOpen, onClose }) => {
+const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded = false, isOpen, onClose }) => {
   const { t } = useTranslation();
   const api_url = localStorageGet('api_url');
 
@@ -43,7 +43,7 @@ const ImageEditor: React.FC<Props> = ({ user_id, width = 200, height = 200, roun
   };
 
   const downloadUserAvatar = async () => {
-    const response = await getAvatar(user_id);
+    const response = await getAvatar(id);
     if (response.data && response.data.length > 0) setImage(`${api_url}/files/${response.data[0].filename}`);
   };
 
