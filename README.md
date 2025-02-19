@@ -45,4 +45,5 @@ For detailed setup instructions, see our [Getting Started Guide](docs/GETSTARTED
   - Vote delegation system
   - Reporting system
 
+
 For more information about the project, visit [aula.de](https://aula.de).

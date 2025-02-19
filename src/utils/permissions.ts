@@ -131,7 +131,7 @@ export function checkPermissions(model: keyof typeof permissions, action: string
   if (typeof permissions[model][action].role === 'number') {
     return user.user_level >= permissions[model][action].role;
   } else {
-    return permissions[model][action].role.includes(user.user_level);
+    return permissions[model][action].role.includes(user.user_level as RoleTypes);
   }
 
   return false;
