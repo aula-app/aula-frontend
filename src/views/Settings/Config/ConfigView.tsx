@@ -1,23 +1,21 @@
 import { AppIcon } from '@/components';
-import { ConfigResponse, InstanceResponse } from '@/types/Generics';
-import { checkPermissions, databaseRequest } from '@/utils';
+import { getGlobalConfigs, getInstanceSettings } from '@/services/config';
 import { useAppStore } from '@/store/AppStore';
-import { Accordion, AccordionDetails, AccordionSummary, Skeleton, Stack, Typography } from '@mui/material';
-import { red } from '@mui/material/colors';
-import { Fragment, useEffect, useState } from 'react';
+import { ConfigResponse, InstanceResponse } from '@/types/Generics';
+import { checkPermissions } from '@/utils';
+import { Accordion, AccordionDetails, AccordionSummary, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Categories from './Categories';
+import Groups from './Groups';
+import IdeaSettings from './IdeaSettings';
+import QuorumSettings from './IdeaSettings/QuorumSettings';
 import LoginSettings from './LoginSettings';
 import SchoolDelete from './SchoolDelete';
 import SchoolInfo from './SchoolInfo';
 import SystemSettings from './SystemSettings';
-import TimeSettings from './TimeSettings';
-import Groups from './Groups';
 import TimedCommands from './TimedCommands';
-import IdeaSettings from './IdeaSettings';
+import TimeSettings from './TimeSettings';
 import UsersSettings from './UsersSettings';
-import { getGlobalConfigs, getInstanceSettings } from '@/services/config';
-import QuorumSettings from './IdeaSettings/QuorumSettings';
 
 /** * Renders "Config" view
  * url: /settings/config
@@ -55,18 +53,17 @@ const ConfigView = () => {
   const closePanels = () => setExpanded(undefined);
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.configuration'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.configuration'), '']] });
     loadData();
   }, []);
 
   const SETTINGS_PANELS = [
-    // { name: 'category', role: 30, component: <Categories /> },
     { name: 'idea', role: 50, component: <IdeaSettings onReload={getConfig} /> },
     { name: 'vote', role: 50, component: <QuorumSettings onReload={closePanels} /> },
     { name: 'user', role: 50, component: <UsersSettings onReload={closePanels} /> },
     { name: 'group', role: 50, component: <Groups /> },
-    { name: 'time', role: 50, component: <TimeSettings config={config} onReload={getConfig} /> },
-    { name: 'login', role: 50, component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
+    // { name: 'time', role: 50, component: <TimeSettings config={config} onReload={getConfig} /> },
+    // { name: 'login', role: 50, component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
     { name: 'action', role: 50, component: <TimedCommands /> },
     { name: 'system', role: 50, component: <SystemSettings settings={settings} onReload={getSettings} /> },
     { name: 'danger', role: 50, component: <SchoolDelete /> },

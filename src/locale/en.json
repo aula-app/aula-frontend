@@ -195,7 +195,8 @@
     "exportData": {
       "body": "A data export procedure was requested for user {{var}}",
       "button": "Request data export",
-      "title": "Account data export request for {{var}}"
+      "title": "Account data export request for {{var}}",
+      "info": "According to data protection requirements (GDPR), online services must provide their users with all stored data upon request."
     },
     "label": "Requests",
     "updateData": {

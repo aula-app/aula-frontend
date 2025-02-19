@@ -197,7 +197,8 @@
     "exportData": {
       "body": "Eine Datenexportprozedur wurde für den Benutzer {{var}} angefordert",
       "button": "Datenexport anfordern",
-      "title": "Kontodatenexportanfrage für {{var}}"
+      "title": "Kontodatenexportanfrage für {{var}}",
+      "info": "Nach Datenschutzanforderungen (DSGVO) müssen Online-Dienste ihren Nutzer auf Anfrage alle gespeicherten Daten zur Verfügung stellen."
     },
     "label": "Anfragen",
     "updateData": {
