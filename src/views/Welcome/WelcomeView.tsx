@@ -17,11 +17,10 @@ const WelcomeView = () => {
   const [rooms, setRooms] = useState<RoomType[]>([]);
 
   const [appState, dispatch] = useAppStore();
-  
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop } = event.currentTarget;
-    setShowDashboard(scrollTop < 100);
+    setShowDashboard(scrollTop === 0);
   };
 
   const fetchRooms = useCallback(async () => {
@@ -36,7 +35,7 @@ const WelcomeView = () => {
   }, []);
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": []})
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [] });
     fetchRooms();
   }, []);
 
