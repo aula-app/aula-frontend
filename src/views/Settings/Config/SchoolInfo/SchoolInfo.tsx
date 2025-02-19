@@ -1,81 +1,51 @@
+import { RoomForms } from '@/components/DataForms';
+import { getRooms } from '@/services/rooms';
 import { useAppStore } from '@/store';
-import { ConfigResponse } from '@/types/Generics';
-import { checkPermissions, databaseRequest } from '@/utils';
-import { Button, Stack, TextField, Typography } from '@mui/material';
+import { RoomType } from '@/types/Scopes';
+import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import SchoolInfoSkeleton from './SchooInfoSkeleton';
 
-interface Props {
-  config?: ConfigResponse;
-  onReload: () => void;
-}
-
-const SchoolInfo = ({ config, onReload }: Props) => {
+const SchoolInfo: React.FC = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
-  const [name, setName] = useState<String>(config?.name || '');
-  const [description, setDescription] = useState<String>(config?.description_public || '');
 
-  const onSubmit = async () => {
-    await databaseRequest(
-      {
-        model: 'Settings',
-        method: 'setInstanceInfo',
-        arguments: {
-          name: name,
-          description: description,
-        },
-      },
-      ['updater_id']
-    ).then((response) => {
-      if (response.data)
-        dispatch({
-          type: 'ADD_POPUP',
-          message: { message: t('settings.messages.updated', { var: t(`ui.navigation.settings`) }), type: 'success' },
-        });
-      onReload();
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [room, setRoom] = useState<RoomType>();
+
+  const fetchRoom = async () => {
+    setLoading(true);
+    const response = await getRooms({
+      offset: 0,
+      limit: 0,
+      type: 1,
     });
+
+    if (response.error) setError(response.error);
+    if (response.data) setRoom(response.data[0]);
+    setLoading(false);
   };
 
-  const onCancel = () => {
-    setName(config?.name || '');
-    setDescription(config?.description_public || '');
+  const onClose = () => {
+    dispatch({
+      type: 'ADD_POPUP',
+      message: { message: t('settings.messages.updated', { var: t(`ui.navigation.settings`) }), type: 'success' },
+    });
+    fetchRoom();
   };
 
   useEffect(() => {
-    onCancel();
-  }, [config]);
+    fetchRoom();
+  }, []);
 
   return (
     <Stack gap={2} mb={1.5}>
       <Typography variant="h5" py={1}>
         {t(`settings.labels.school`)}
       </Typography>
-      <TextField
-        label={t(`settings.columns.name`)}
-        value={name}
-        onChange={(data) => setName(data.target.value)}
-        fullWidth
-      />
-      <TextField
-        label={t(`settings.general.description`)}
-        value={description}
-        onChange={(data) => setDescription(data.target.value)}
-        minRows={4}
-        multiline
-        type="text"
-        fullWidth
-      />
-      {checkPermissions(50) && (
-        <Stack direction="row">
-          <Button color="error" sx={{ ml: 'auto', mr: 2 }} onClick={onCancel}>
-            {t('actions.cancel')}
-          </Button>
-          <Button type="submit" variant="contained" onClick={onSubmit}>
-            {t('actions.confirm')}
-          </Button>
-        </Stack>
-      )}
+      {!isLoading && room ? <RoomForms onClose={onClose} defaultValues={room} isDefault /> : <SchoolInfoSkeleton />}
     </Stack>
   );
 };
