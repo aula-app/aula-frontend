@@ -32,7 +32,6 @@ const LoginView = () => {
   const oauthEnabled = import.meta.env.VITE_APP_OAUTH;
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
-  const jwt_token = localStorageGet("token");
   const [loginError, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
@@ -69,6 +68,7 @@ const LoginView = () => {
 
     try {
       setLoading(true);
+      const jwt_token = localStorageGet("token");
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
