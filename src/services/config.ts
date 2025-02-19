@@ -108,3 +108,24 @@ export async function createBackup(): Promise<GenericResponse> {
 
   return response as GenericResponse;
 }
+
+interface AddCommandRequest {
+  cmd_id: number;
+  command: string;
+  target_id?: string;
+  parameters: string | number;
+  date_start: string;
+}
+
+export async function addCommand(args: AddCommandRequest): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Command',
+      method: 'addCommand',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}

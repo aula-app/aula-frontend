@@ -1,12 +1,12 @@
+import { addCommand } from '@/services/config';
 import { getGroups } from '@/services/groups';
 import { getUsers } from '@/services/users';
-import { SelectOptionsType, SettingNamesType } from '@/types/SettingsTypes';
-import { databaseRequest, FORMAT_DATE_ONLY, FORMAT_DATE_TIME } from '@/utils';
+import { SelectOptionsType } from '@/types/SettingsTypes';
+import { FORMAT_DATE_ONLY, FORMAT_DATE_TIME } from '@/utils';
 import { Commands } from '@/utils/commands';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { set } from 'date-fns';
 import dayjs from 'dayjs';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
   const { t } = useTranslation();
 
   const [scope, setScope] = useState<number>(0);
-  const [target, setTarget] = useState<number>();
+  const [target, setTarget] = useState<string>();
   const [action, setAction] = useState<number>(0);
   const [value, setValue] = useState<number>(1);
   const [startTime, setStartTime] = useState<dayjs.ConfigType>(dayjs(new Date()).format(FORMAT_DATE_TIME));
@@ -33,22 +33,14 @@ const TimeCommandInput = ({ onReload }: Props) => {
 
   async function addField() {
     if (typeof action === 'undefined' || typeof scope === 'undefined' || typeof startTime === 'undefined') return;
-    await databaseRequest(
-      {
-        model: 'Command',
-        method: 'addCommand',
-        arguments: {
-          cmd_id: Number(`${scope}${Commands[scope].actions[action].value}`),
-          command: '',
-          target_id: target,
-          parameters: value,
-          date_start: dayjs(startTime).format(FORMAT_DATE_TIME),
-        },
-      },
-      ['updater_id']
-    ).then((response) => {
-      if (response.error) onReload();
+    const response = await addCommand({
+      cmd_id: Number(`${scope}${Commands[scope].actions[action].value}`),
+      command: '',
+      target_id: target,
+      parameters: value,
+      date_start: dayjs(startTime).format(FORMAT_DATE_TIME),
     });
+    if (response.error) onReload();
   }
 
   const changeScope = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -64,7 +56,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
   };
 
   const changeTarget = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setTarget(Number(event.target.value));
+    setTarget(event.target.value);
   };
 
   const changeValue = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
