@@ -1,12 +1,16 @@
+import { RoleTypes } from '@/types/SettingsTypes';
 import { parseJwt } from './jwt';
 import { localStorageGet } from './localStorage';
+
+const VOTING_ROLES = [20, 31, 41, 45];
+const ADMIN = [50];
 
 const permissions = {
   announcements: {
     create: { role: 50 },
     edit: { role: 50 },
     delete: { role: 50 },
-    viewAll: { role: [50] },
+    viewAll: { role: ADMIN },
     status: { role: 50 },
   },
   boxes: {
@@ -40,11 +44,11 @@ const permissions = {
   },
   ideas: {
     addCategory: { role: 20 },
-    create: { role: 20 },
+    create: { role: VOTING_ROLES },
     edit: { role: 30, self: true },
     delete: { role: 30, self: true },
-    like: { role: [20, 31, 41, 45] },
-    vote: { role: [20, 31, 41, 45] },
+    like: { role: VOTING_ROLES },
+    vote: { role: VOTING_ROLES },
     viewAll: { role: 40 },
     status: { role: 40 },
   },
@@ -57,7 +61,7 @@ const permissions = {
     status: { role: 50 },
   },
   requests: {
-    viewAll: { role: [50] },
+    viewAll: { role: ADMIN },
     status: { role: 50 },
   },
   rooms: {
@@ -83,10 +87,10 @@ const permissions = {
     create: { role: 50 },
     edit: { role: 50 },
     delete: { role: 50 },
-    viewAll: { role: [50] },
+    viewAll: { role: ADMIN },
     status: { role: 50 },
   },
-} as Record<string, Record<string, { role: number | number[]; self?: boolean }>>;
+} as Record<string, Record<string, { role: RoleTypes | RoleTypes[]; self?: boolean }>>;
 
 /**
  * Checks if the current user has sufficient permissions for a given role level

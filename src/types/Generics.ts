@@ -71,4 +71,4 @@ export type InstanceResponse = {
   updater_id: number;
 };
 
-export type OnlineOptions = 0 | 1 | 2 | 3 | 4;
+export type OnlineOptions = 0 | 1 | 2 | 3 | 4 | 5;

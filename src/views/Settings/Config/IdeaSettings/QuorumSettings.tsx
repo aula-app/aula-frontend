@@ -1,30 +1,28 @@
-import { getQuorum } from '@/services/vote';
+import { getQuorum, setQuorum } from '@/services/vote';
 import { useAppStore } from '@/store';
-import { ObjectPropByName } from '@/types/Generics';
-import { databaseRequest } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Slider, Stack, Typography } from '@mui/material';
+import { Button, Slider, SliderProps, Stack, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-interface Props {
+interface Props extends SliderProps {
   onReload: () => void | Promise<void>;
 }
 
 /** * Renders "QuorumSettings" component
  */
 
-const QuorumSettings = ({ onReload }: Props) => {
+const QuorumSettings: React.FC<Props> = ({ onReload, ...restOfProps }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
 
   const { setValue, handleSubmit, control } = useForm({
     resolver: yupResolver(
       yup.object().shape({
-        quorum_wild_ideas: yup.number(),
-        quorum_votes: yup.number(),
+        quorum_wild_ideas: yup.number().required(t('forms.validation.required')),
+        quorum_votes: yup.number().required(t('forms.validation.required')),
       })
     ),
   });
@@ -36,25 +34,17 @@ const QuorumSettings = ({ onReload }: Props) => {
     setValue('quorum_votes', Number(response.data.quorum_votes));
   }
 
-  async function addQuorum(fieldValues: ObjectPropByName) {
-    await databaseRequest(
-      {
-        model: 'Settings',
-        method: 'setQuorum',
-        arguments: fieldValues,
-      },
-      ['updater_id']
-    ).then((response) => {
-      if (!response.data) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
-        return;
-      }
-      dispatch({
-        type: 'ADD_POPUP',
-        message: { message: t('settings.messages.updated', { var: t('settings.labels.quorum') }), type: 'success' },
-      });
-      onReload();
+  async function addQuorum(data: { quorum_wild_ideas: number; quorum_votes: number }) {
+    const response = await setQuorum(data.quorum_wild_ideas, data.quorum_votes);
+    if (!response.data) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      return;
+    }
+    dispatch({
+      type: 'ADD_POPUP',
+      message: { message: t('settings.messages.updated', { var: t('settings.labels.quorum') }), type: 'success' },
     });
+    onReload();
   }
 
   useEffect(() => {
@@ -132,6 +122,7 @@ const QuorumSettings = ({ onReload }: Props) => {
             max={100}
             step={5}
             marks={marks}
+            {...restOfProps}
           />
         )}
       />

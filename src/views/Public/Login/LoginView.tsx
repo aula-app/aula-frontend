@@ -68,6 +68,7 @@ const LoginView = () => {
 
     try {
       setLoading(true);
+
       const jwt_token = localStorageGet("token");
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);

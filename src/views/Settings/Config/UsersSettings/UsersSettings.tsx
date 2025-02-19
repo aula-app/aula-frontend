@@ -1,12 +1,9 @@
 import { AppIcon } from '@/components';
-import { SelectRoomField } from '@/components/DataFields';
 import RoomField from '@/components/DataFields/RoomField';
 import SelectRole from '@/components/SelectRole';
-import SelectRoom from '@/components/SelectRoom';
 import { addCSV } from '@/services/config';
 import { useAppStore } from '@/store';
 import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
-import { databaseRequest } from '@/utils';
 import {
   Button,
   FormHelperText,

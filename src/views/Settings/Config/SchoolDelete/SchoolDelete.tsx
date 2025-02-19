@@ -1,6 +1,6 @@
 import { AppIcon } from '@/components';
 import { useEventLogout } from '@/hooks';
-import { databaseRequest } from '@/utils';
+import { setInstanceOnlineMode } from '@/services/config';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,16 +14,8 @@ const SchoolDelete = () => {
   const [openDelete, setOpenDelete] = useState(false);
 
   const lockInstance = async () => {
-    await databaseRequest(
-      {
-        model: 'Settings',
-        method: 'setInstanceOnlineMode',
-        arguments: { status: 5 },
-      },
-      ['updater_id']
-    ).then((response) => {
-      if (response.data) onLogout();
-    });
+    const response = await setInstanceOnlineMode(5);
+    if (response.data) onLogout();
   };
 
   return (

@@ -20,11 +20,12 @@ import UserField from '../DataFields/UserFIeld';
  */
 
 interface RoomFormsProps {
+  isDefault?: boolean;
   onClose: () => void;
   defaultValues?: RoomType;
 }
 
-const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose }) => {
+const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false, onClose }) => {
   const { t } = useTranslation();
   const [users, setUsers] = useState<string[]>([]);
   const [updateUsers, setUpdateUsers] = useState<UpdateType>({ add: [], remove: [] });
@@ -56,7 +57,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose }) => {
   type SchemaType = yup.InferType<typeof schema>;
 
   const fetchRoomUsers = async () => {
-    if (!defaultValues?.hash_id) return;
+    if (!defaultValues?.hash_id || isDefault) return;
     const response = await getRoomUsers(defaultValues.hash_id);
     if (!response.data) return;
     const users = response.data.map((user) => user.hash_id);
@@ -126,14 +127,16 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose }) => {
     <Stack p={2} overflow="auto">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h4">
-              {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
-                var: t(`scopes.rooms.name`).toLowerCase(),
-              })}
-            </Typography>
-            {checkPermissions('rooms', 'status') && <StatusField control={control} />}
-          </Stack>
+          {!isDefault && (
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="h4">
+                {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
+                  var: t(`scopes.rooms.name`).toLowerCase(),
+                })}
+              </Typography>
+              {checkPermissions('rooms', 'status') && <StatusField control={control} />}
+            </Stack>
+          )}
           <Stack gap={2} direction="row" flexWrap="wrap">
             <Controller
               name="description_internal"
@@ -166,8 +169,8 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, onClose }) => {
                 control={control}
                 sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
               />
-              <PhaseDurationFields control={control} required disabled={isLoading} />
-              {checkPermissions('rooms', 'addUser') && (
+              {!isDefault && <PhaseDurationFields control={control} required disabled={isLoading} />}
+              {checkPermissions('rooms', 'addUser') && !isDefault && (
                 <UserField defaultValues={users} onChange={(updates) => setUpdateUsers(updates)} disabled={isLoading} />
               )}
             </Stack>

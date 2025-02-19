@@ -1,33 +1,17 @@
 import { AppIconButton } from '@/components';
+import { CommandResponse, deleteCommand, getCommands } from '@/services/config';
+import { ObjectPropByName } from '@/types/Generics';
 import { CommandType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
 import { Commands } from '@/utils/commands';
-import {
-  Pagination,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Pagination, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import TimedCommandInput from './TimedCommandInput';
-import { ObjectPropByName } from '@/types/Generics';
 
 const LIST_LIMIT = 10;
 
 /** * Renders "TimedCommands" component
  */
-
-interface CommandsResponseType {
-  success: boolean;
-  count: number;
-  data: CommandType[];
-}
 
 const TimedCommands = () => {
   const { t } = useTranslation();
@@ -36,40 +20,22 @@ const TimedCommands = () => {
   const [count, setCount] = useState(0);
   const [commands, setCommands] = useState<CommandType[]>();
 
-  async function getCommands() {
-    await databaseRequest({
-      model: 'Command',
-      method: 'getCommands',
-      arguments: {
-        limit: LIST_LIMIT,
-        offset: page * LIST_LIMIT,
-      },
-    }).then((response) => {
-      if (!response.data) return;
-      if (Array.isArray(response.data))
-        response.data.map((r: ObjectPropByName) => (r.parameters = JSON.parse(r.parameters)));
-      setTable(response.data);
-    });
+  async function fetchCommands() {
+    const response = await getCommands(LIST_LIMIT, page * LIST_LIMIT);
+    if (!response.data) return;
+    if (Array.isArray(response.data))
+      response.data.map((r: ObjectPropByName) => (r.parameters = JSON.parse(r.parameters)));
+    setTable(response);
   }
 
-  async function deleteCommand(id: number) {
-    await databaseRequest(
-      {
-        model: 'Command',
-        method: 'deleteCommand',
-        arguments: {
-          command_id: id,
-        },
-      },
-      ['updater_id']
-    ).then((response) => {
-      if (response.data) getCommands();
-    });
+  async function removeCommand(id: number) {
+    const response = await deleteCommand(id);
+    if (response.data) fetchCommands();
   }
 
-  const setTable = (response: CommandsResponseType) => {
+  const setTable = (response: CommandResponse) => {
     setCommands(response.data);
-    setCount(Math.floor(response.count / LIST_LIMIT));
+    setCount(Math.floor(response.count || 0 / LIST_LIMIT));
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -77,12 +43,12 @@ const TimedCommands = () => {
   };
 
   useEffect(() => {
-    getCommands();
+    fetchCommands();
   }, [page]);
 
   return (
     <Stack gap={2}>
-      <TimedCommandInput onReload={getCommands} />
+      <TimedCommandInput onReload={fetchCommands} />
       {commands && (
         <Stack>
           <Typography variant="h6">{t('settings.time.actions')}</Typography>
@@ -102,7 +68,7 @@ const TimedCommands = () => {
                       <TableCell>{command.parameters}</TableCell>
                       <TableCell>{command.date_start}</TableCell>
                       <TableCell align="right">
-                        <AppIconButton icon="delete" onClick={() => deleteCommand(command.id)} />
+                        <AppIconButton icon="delete" onClick={() => removeCommand(command.id)} />
                       </TableCell>
                     </TableRow>
                   );
