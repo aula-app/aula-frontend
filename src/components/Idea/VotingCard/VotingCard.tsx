@@ -25,7 +25,7 @@ const VotingCard = ({ onReload }: Props) => {
     setLoading(true);
     const response = await getVote(idea_id);
     if (response.error) setError(response.error);
-    if (!response.error && typeof response.data === 'number') setVote(response.data);
+    if (!response.error) setVote(response.data || 0);
     setLoading(false);
   }, [idea_id]);
 

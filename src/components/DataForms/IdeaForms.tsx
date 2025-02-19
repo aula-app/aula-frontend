@@ -116,12 +116,14 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
   };
 
   const setIdeaBox = async (idea_id: string) => {
+    if (!idea_id) return;
     if (box === startingBox) return;
     if (box !== '') await addIdeaBox(idea_id, box);
     else await removeIdeaBox(idea_id, startingBox);
   };
 
   const setIdeaCategory = async (idea_id: string) => {
+    if (!idea_id) return;
     if (category === startingCategory) return;
     if (category !== 0) await addIdeaCategory(idea_id, category);
     else await removeIdeaCategory(idea_id, startingCategory);
