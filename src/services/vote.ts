@@ -63,6 +63,23 @@ export async function getQuorum(): Promise<GetQuorumResponse> {
 }
 
 /**
+ * Add Quorum.
+ */
+
+export async function setQuorum(quorum_wild_ideas: number, quorum_votes: number): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Settings',
+      method: 'setQuorum',
+      arguments: { quorum_wild_ideas, quorum_votes },
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+/**
  * Register vote.
  */
 

@@ -76,7 +76,7 @@ const ConfigView = () => {
       <Typography variant="h4" pb={2}>
         {t('settings.labels.configuration')}
       </Typography>
-      <SchoolInfo config={config} onReload={getConfig} />
+      <SchoolInfo />
       {panels.map((panel, i) => (
         <Accordion key={i} expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)}>
           <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>

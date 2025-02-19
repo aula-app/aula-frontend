@@ -1,8 +1,7 @@
+import { getSelf } from '@/services/users';
 import { UserType } from '@/types/Scopes';
-import { databaseRequest } from '@/utils';
-import { Avatar, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import AppIcon from '../AppIcon';
 import UserAvatar from '../UserAvatar';
 
 /**
@@ -12,17 +11,10 @@ import UserAvatar from '../UserAvatar';
 const UserInfo = () => {
   const [user, setUser] = useState<UserType | null>(null);
 
-  const getUserInfo = async () =>
-    databaseRequest(
-      {
-        model: 'User',
-        method: 'getUserBaseData',
-        arguments: {},
-      },
-      ['user_id']
-    ).then((response) => {
-      if (response.data) setUser(response.data);
-    });
+  const getUserInfo = async () => {
+    const response = await getSelf();
+    if (response.data) setUser(response.data);
+  };
 
   useEffect(() => {
     getUserInfo();
