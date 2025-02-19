@@ -2,8 +2,7 @@ import { AppIconButton } from '@/components';
 import MarkdownLoader from '@/components/MarkdownLoader';
 import i18n from '@/i18n';
 import { InstanceResponse, OnlineOptions } from '@/types/Generics';
-import { StatusRequest } from '@/types/RequestTypes';
-import { databaseRequest, InstanceStatusOptions } from '@/utils';
+import { InstanceStatusOptions } from '@/utils';
 import {
   AppBar,
   Button,
@@ -22,9 +21,9 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // Import markdown files for different languages
+import { createBackup, setInstanceOnlineMode } from '@/services/config';
 import markdownDE from './RestoreBackup/restore_backup.de.md';
 import markdownEN from './RestoreBackup/restore_backup.en.md';
-import { createBackup, setInstanceOnlineMode } from '@/services/config';
 
 // Mapping of language codes to markdown files
 const languageMarkdownMap = {
