@@ -1,4 +1,4 @@
-name: copy files
+name: Update test instance
 
 on:
   push:
