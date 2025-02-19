@@ -15,7 +15,7 @@ export function parseJwt(token: String): {
   exp: number;
   user_id: number;
   user_hash: string;
-  user_level: number;
+  user_level: RoleTypes;
   roles: { role: RoleTypes; room: string }[];
   temp_pw?: boolean;
 } | null {
