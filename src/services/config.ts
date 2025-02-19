@@ -1,4 +1,4 @@
-import { ConfigResponse, InstanceResponse } from '@/types/Generics';
+import { ConfigResponse, InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { databaseRequest, GenericResponse } from './requests';
 import { RoleTypes } from '@/types/SettingsTypes';
 
@@ -44,7 +44,9 @@ export async function getInstanceSettings(): Promise<DefaultSettingsResponse> {
   return response as DefaultSettingsResponse;
 }
 
-export async function setInstanceOnlineMode(status: boolean): Promise<DefaultSettingsResponse> {
+export async function setInstanceOnlineMode(status: OnlineOptions): Promise<DefaultSettingsResponse> {
+  // 0=off, 1=on, 2=off(weekend) 3=off (vacation) 4=off (holiday) // 5=off for all roles (Lock out)
+
   const response = await databaseRequest(
     {
       model: 'Settings',

@@ -53,7 +53,7 @@ const SystemSettings: React.FC<Props> = ({ config, settings, onReload }) => {
       isInitialMount.current = false;
       return;
     }
-    setInstanceOnlineMode(!!online);
+    setInstanceOnlineMode(online ? 1 : 0);
   }, [online]);
 
   useEffect(() => {
