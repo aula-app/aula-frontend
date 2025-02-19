@@ -1,7 +1,5 @@
-import { getInstanceSettings } from '@/services/config';
+import { getInstanceSettings, setAllowRegistration, setInstanceOnlineMode, setOauthStatus } from '@/services/config';
 import { ConfigResponse, InstanceResponse } from '@/types/Generics';
-import { ConfigRequest } from '@/types/RequestTypes';
-import { databaseRequest } from '@/utils';
 import { FormControlLabel, Switch } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect, useRef, useState } from 'react';
@@ -23,25 +21,12 @@ const SystemSettings: React.FC<Props> = ({ config, settings, onReload }) => {
   const [online, setOnline] = useState<boolean>(
     settings?.online_mode !== undefined ? Boolean(settings?.online_mode) : true
   );
-  const [oAuth, setOAuth] = useState<0 | 1>(config?.enable_oauth ?? 0);
-  const [registration, setRegistration] = useState<0 | 1>(config?.allow_registration ?? 1);
+  const [oAuth, setOAuth] = useState<boolean>(Boolean(config?.enable_oauth));
+  const [registration, setRegistration] = useState<boolean>(Boolean(config?.allow_registration));
 
   const getOnlineStatus = async () => {
     const response = await getInstanceSettings();
     if (response.data) onReload();
-  };
-
-  const setConfig = async ({ method, args }: ConfigRequest) => {
-    await databaseRequest(
-      {
-        model: 'Settings',
-        method: method,
-        arguments: args,
-      },
-      ['updater_id']
-    ).then((response) => {
-      if (response.data) onReload();
-    });
   };
 
   const toggleOnline = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,11 +34,11 @@ const SystemSettings: React.FC<Props> = ({ config, settings, onReload }) => {
   };
 
   const toggleOAuth = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setOAuth(event.target.checked ? 1 : 0);
+    setOAuth(event.target.checked);
   };
 
   const toggleRegistration = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRegistration(event.target.checked ? 1 : 0);
+    setRegistration(event.target.checked);
   };
 
   // Reset isInitialMount on unmount
@@ -68,7 +53,7 @@ const SystemSettings: React.FC<Props> = ({ config, settings, onReload }) => {
       isInitialMount.current = false;
       return;
     }
-    setConfig({ method: 'setInstanceOnlineMode', args: { status: !!online } });
+    setInstanceOnlineMode(!!online);
   }, [online]);
 
   useEffect(() => {
@@ -79,12 +64,12 @@ const SystemSettings: React.FC<Props> = ({ config, settings, onReload }) => {
 
   useEffect(() => {
     if (isInitialMount.current) return;
-    setConfig({ method: 'setOauthStatus', args: { status: oAuth } });
+    setOauthStatus(oAuth);
   }, [oAuth]);
 
   useEffect(() => {
     if (isInitialMount.current) return;
-    setConfig({ method: 'setAllowRegistration', args: { status: registration } });
+    setAllowRegistration(registration);
   }, [registration]);
 
   useEffect(() => {
