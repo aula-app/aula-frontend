@@ -48,15 +48,21 @@ const IdeaView = () => {
     setLoading(true);
     const response = await getIdea(idea_id);
 
-    let roomName = 'aula'
+    let roomName = 'aula';
     if (room_id) {
       let nameResponse = await getRoomName(room_id);
-      if (nameResponse)
-        roomName = nameResponse
+      if (nameResponse) roomName = nameResponse;
     }
 
     if (response.data && response.data.title)
-      dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`], [response.data.title, '']]});
+      dispatch({
+        action: 'SET_BREADCRUMB',
+        breadcrumb: [
+          [roomName, `/room/${room_id}/phase/0`],
+          [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
+          [response.data.title, ''],
+        ],
+      });
 
     if (response.error) setError(response.error);
     if (!response.error && response.data) setIdea(response.data);
@@ -64,7 +70,6 @@ const IdeaView = () => {
   }, [idea_id]);
 
   useEffect(() => {
-
     fetchIdea();
   }, [idea_id]);
 
@@ -81,7 +86,6 @@ const IdeaView = () => {
 
   return !isLoading && idea ? (
     <Stack width="100%" height="100%" overflow="auto" gap={2}>
-      {phase === '20' && <ApprovalCard idea={idea} disabled={Number(phase) > 20} />}
       {phase === '30' && <VotingCard onReload={fetchIdea} />}
       {phase === '40' && <VotingResults idea={idea} />}
       <IdeaBubble
@@ -96,6 +100,7 @@ const IdeaView = () => {
           users={Number(idea.number_of_users)}
         />
       </IdeaBubble>
+      {Number(phase) >= 20 && <ApprovalCard idea={idea} disabled={Number(phase) > 20} onReload={fetchIdea} />}
       <Stack px={2}>
         <CommentView />
       </Stack>

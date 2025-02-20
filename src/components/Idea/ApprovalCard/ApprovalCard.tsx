@@ -1,20 +1,22 @@
 import AppIcon from '@/components/AppIcon';
 import { IconType } from '@/components/AppIcon/AppIcon';
+import AppIconButton from '@/components/AppIconButton';
 import { MarkdownEditor } from '@/components/DataFields';
 import ApproveField from '@/components/DataFields/ApproveField';
-import { approveIdea } from '@/services/ideas';
+import { setApprovalStatus } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, ButtonGroup, Card, CardContent, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Button, Card, CardContent, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 interface ApprovalCardProps {
   idea: IdeaType;
   disabled?: boolean;
+  onReload: () => void;
 }
 
 /**
@@ -22,13 +24,14 @@ interface ApprovalCardProps {
  * url: /
  */
 
-const ApprovalCard = ({ idea, disabled = false }: ApprovalCardProps) => {
+const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) => {
   const { t } = useTranslation();
 
   const approvalMessages = ['rejected', 'waiting', 'approved'] as IconType[];
   const approvalColors = ['against.main', 'disabled.main', 'for.main'];
 
   const [isLoading, setLoading] = useState(false);
+  const [isEditing, setEditing] = useState(false);
 
   const schema = yup.object().shape({
     approved: yup.number().required(t('forms.validation.required')),
@@ -44,6 +47,7 @@ const ApprovalCard = ({ idea, disabled = false }: ApprovalCardProps) => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: { approved: idea.approved || 0, approval_comment: idea.approval_comment || '' },
   });
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
@@ -54,16 +58,23 @@ const ApprovalCard = ({ idea, disabled = false }: ApprovalCardProps) => {
       return;
     }
     setLoading(true);
-    await approveIdea({
+    await setApprovalStatus({
       idea_id: idea.hash_id,
       ...data,
     });
     setLoading(false);
+    setEditing(false);
+    onReload();
   };
 
-  const onReset = () => {
-    reset();
+  const onClose = () => {
+    if (watch('approved') !== 0) setEditing(false);
+    reset({ approved: idea.approved || 0, approval_comment: idea.approval_comment || '' });
   };
+
+  useEffect(() => {
+    reset({ approved: idea.approved || 0, approval_comment: idea.approval_comment || '' });
+  }, [idea]);
 
   return (
     <Card
@@ -71,37 +82,21 @@ const ApprovalCard = ({ idea, disabled = false }: ApprovalCardProps) => {
         borderRadius: '25px',
         overflow: 'hidden',
         scrollSnapAlign: 'center',
-        minHeight: 75,
         bgcolor: disabled ? 'disabled.main' : approvalColors[(watch('approved') ?? idea.approved) + 1],
       }}
       variant="outlined"
     >
-      <CardContent>
-        {!checkPermissions('ideas', 'approve') ? (
-          <Stack direction="row" alignItems="center" gap={2}>
-            <Stack
-              alignItems="center"
-              justifyContent="center"
-              sx={{
-                aspectRatio: 1,
-              }}
-              fontSize={40}
-            >
-              <AppIcon icon={approvalMessages[idea.approved + 1]} />
-            </Stack>
-            <Stack flexGrow={1}>
-              <Typography variant="body2" sx={{ color: 'inherit' }}>
-                {idea.approval_comment || t(`scopes.ideas.${approvalMessages[idea.approved + 1]}`)}
-              </Typography>
-            </Stack>
-          </Stack>
-        ) : (
+      <CardContent sx={{ p: 3 }}>
+        {checkPermissions('ideas', 'approve') && (watch('approved') === 0 || isEditing) ? (
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <Stack gap={2}>
-              <ApproveField control={control} disabled={isLoading} />
+              <Stack direction="row" alignItems="center" justifyContent="space-between" gap={1}>
+                <ApproveField control={control} disabled={isLoading} />
+                {watch('approved') !== 0 && <AppIconButton icon="close" onClick={onClose} sx={{ m: -1 }} />}
+              </Stack>
               <MarkdownEditor name="approval_comment" control={control} required />
               <Stack direction="row" justifyContent="end" gap={2}>
-                <Button onClick={onReset} color="error">
+                <Button onClick={onClose} color="error">
                   {t('actions.cancel')}
                 </Button>
                 <Button type="submit" variant="contained">
@@ -110,6 +105,18 @@ const ApprovalCard = ({ idea, disabled = false }: ApprovalCardProps) => {
               </Stack>
             </Stack>
           </form>
+        ) : (
+          <Stack direction="row" alignItems="center" gap={2}>
+            <AppIcon icon={approvalMessages[idea.approved + 1]} />
+            <Stack flexGrow={1}>
+              <Typography variant="body2" sx={{ color: 'inherit' }}>
+                {idea.approval_comment || t(`scopes.ideas.${approvalMessages[idea.approved + 1]}`)}
+              </Typography>
+            </Stack>
+            {checkPermissions('ideas', 'approve') && (
+              <AppIconButton icon="edit" onClick={() => setEditing(true)} sx={{ m: -1 }} />
+            )}
+          </Stack>
         )}
       </CardContent>
     </Card>

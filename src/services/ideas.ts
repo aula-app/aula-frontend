@@ -294,11 +294,11 @@ interface ApproveIdeaArguments {
   approval_comment: string;
 }
 
-export async function approveIdea(args: ApproveIdeaArguments): Promise<GenericResponse> {
+export async function setApprovalStatus(args: ApproveIdeaArguments): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
       model: 'Idea',
-      method: 'approveIdea',
+      method: 'setApprovalStatus',
       arguments: args,
     },
     ['updater_id']
