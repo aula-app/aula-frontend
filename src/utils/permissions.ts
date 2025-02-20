@@ -49,6 +49,7 @@ const permissions = {
     delete: { role: 30, self: true },
     like: { role: VOTING_ROLES },
     vote: { role: VOTING_ROLES },
+    approve: { role: 44 },
     viewAll: { role: 40 },
     status: { role: 40 },
   },

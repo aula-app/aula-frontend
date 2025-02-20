@@ -283,3 +283,26 @@ export async function removeIdeaBox(idea_id: string, topic_id: string): Promise<
 
   return response as GenericResponse;
 }
+
+/**
+ * Approve an idea
+ */
+
+interface ApproveIdeaArguments {
+  idea_id: string;
+  approved: number;
+  approval_comment: string;
+}
+
+export async function approveIdea(args: ApproveIdeaArguments): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'approveIdea',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}

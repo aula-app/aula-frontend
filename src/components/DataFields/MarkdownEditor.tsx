@@ -79,8 +79,9 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
                 color: 'rgba(0, 0, 0, 0.6)',
                 top: 0,
                 left: 10,
-                backgroundColor: theme.palette.background.default,
+                backgroundColor: 'transparent',
                 px: 1,
+                backdropFilter: 'blur(4px)',
               }}
             >
               {t(`settings.columns.${name}`)}

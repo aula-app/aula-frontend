@@ -255,9 +255,11 @@
       "plural": "Gruppen"
     },
     "ideas": {
+      "approve": "Genehmigen",
       "approved": "Diese Idee wurde angenommen",
       "name": "Idee",
       "plural": "Ideen",
+      "reject": "Ablehnen",
       "rejected": "Diese Idee wurde nicht angenommen",
       "waiting": "Diese Idee wartet auf Genehmigung"
     },
