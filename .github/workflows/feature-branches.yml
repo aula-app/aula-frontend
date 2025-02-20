@@ -31,11 +31,12 @@ jobs:
       - name: Get branch name
         id: branch-name
         run: |
-          if [[ $GITHUB_EVENT_NAME == 'push' ]]; then
-            echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
+          if [[ $GITHUB_EVENT_NAME == 'pull_request' ]]; then
+            BRANCH_NAME="${{ github.head_ref }}"
           else
-            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+            BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           fi
+          echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
           # Convert branch name to URL-safe format
           SAFE_BRANCH_NAME=$(echo $BRANCH_NAME | sed 's/[^a-zA-Z0-9]/-/g')
           echo "SAFE_BRANCH_NAME=$SAFE_BRANCH_NAME" >> $GITHUB_ENV
