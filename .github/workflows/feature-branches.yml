@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Get branch name
         id: branch-name
@@ -41,10 +41,10 @@ jobs:
           echo "SAFE_BRANCH_NAME=$SAFE_BRANCH_NAME" >> $GITHUB_ENV
 
       - name: Install dependencies
-        run: npm i
+        run: yarn
 
       - name: Build application
-        run: npm run build
+        run: yarn run build
         env:
           # Add any environment variables needed for your build
           PUBLIC_URL: /${{ env.SAFE_BRANCH_NAME }}
