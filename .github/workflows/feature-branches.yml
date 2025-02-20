@@ -54,7 +54,7 @@ jobs:
           DEPLOY_PATH="${{ env.DEPLOY_BASE_PATH }}/${{ env.SAFE_BRANCH_NAME }}"
           
           # Create the directory if it doesn't exist
-          sudo mkdir -p $DEPLOY_PATH
+          mkdir -p $DEPLOY_PATH
           
           # Copy the built files
           rm -rf $DEPLOY_PATH/*
