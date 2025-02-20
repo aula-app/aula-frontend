@@ -31,7 +31,6 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
   const approvalColors = ['against.main', 'disabled.main', 'for.main'];
 
   const [isLoading, setLoading] = useState(false);
-  const [isEditing, setEditing] = useState(false);
 
   const schema = yup.object().shape({
     approved: yup.number().required(t('forms.validation.required')),
@@ -43,6 +42,7 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
     control,
     handleSubmit,
     setError,
+    getValues,
     watch,
     formState: { errors },
   } = useForm({
@@ -51,6 +51,8 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
   });
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
+
+  const [isEditing, setEditing] = useState(getValues('approved') === 0);
 
   const onSubmit = async (data: SchemaType) => {
     if (data.approved === 0) {
@@ -87,7 +89,7 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
       variant="outlined"
     >
       <CardContent sx={{ p: 3 }}>
-        {checkPermissions('ideas', 'approve') && (watch('approved') === 0 || isEditing) ? (
+        {checkPermissions('ideas', 'approve') && isEditing ? (
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <Stack gap={2}>
               <Stack direction="row" alignItems="center" justifyContent="space-between" gap={1}>
