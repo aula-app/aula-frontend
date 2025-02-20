@@ -1,11 +1,13 @@
 import AppIcon from '@/components/AppIcon';
 import { IconType } from '@/components/AppIcon/AppIcon';
 import { MarkdownEditor } from '@/components/DataFields';
+import ApproveField from '@/components/DataFields/ApproveField';
 import { approveIdea } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, ButtonGroup, Card, CardContent, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -23,8 +25,10 @@ interface ApprovalCardProps {
 const ApprovalCard = ({ idea, disabled = false }: ApprovalCardProps) => {
   const { t } = useTranslation();
 
-  const approvalMessages = ['reject', 'waiting', 'approve'] as IconType[];
+  const approvalMessages = ['rejected', 'waiting', 'approved'] as IconType[];
   const approvalColors = ['against.main', 'disabled.main', 'for.main'];
+
+  const [isLoading, setLoading] = useState(false);
 
   const schema = yup.object().shape({
     approved: yup.number().required(t('forms.validation.required')),
@@ -44,15 +48,17 @@ const ApprovalCard = ({ idea, disabled = false }: ApprovalCardProps) => {
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
-  const onSubmit = (data: SchemaType) => {
+  const onSubmit = async (data: SchemaType) => {
     if (data.approved === 0) {
       setError('approved', { message: t('forms.validation.required') });
       return;
     }
-    approveIdea({
+    setLoading(true);
+    await approveIdea({
       idea_id: idea.hash_id,
       ...data,
     });
+    setLoading(false);
   };
 
   const onReset = () => {
@@ -92,50 +98,14 @@ const ApprovalCard = ({ idea, disabled = false }: ApprovalCardProps) => {
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <Stack gap={2}>
-              <Controller
-                name="approved"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <Stack direction="row" alignItems="center" gap={1}>
-                    <ButtonGroup sx={{ mr: 1 }}>
-                      <Button
-                        sx={{
-                          border: '1px solid #888',
-                          backgroundColor: field.value === -1 ? 'error.main' : 'disabled.main',
-                        }}
-                        onClick={() => field.onChange(-1)}
-                        variant="contained"
-                        size="small"
-                      >
-                        <AppIcon icon="rejected" />
-                      </Button>
-                      <Button
-                        sx={{
-                          border: '1px solid #888',
-                          backgroundColor: field.value === 1 ? 'primary.main' : 'disabled.main',
-                        }}
-                        onClick={() => field.onChange(1)}
-                        variant="contained"
-                        size="small"
-                      >
-                        <AppIcon icon="approved" />
-                      </Button>
-                    </ButtonGroup>
-                    <Typography color={fieldState.error ? 'error' : ''}>
-                      {fieldState.error
-                        ? fieldState.error.message
-                        : t(`scopes.ideas.${approvalMessages[(field.value || 0) + 1]}`)}
-                    </Typography>
-                  </Stack>
-                )}
-              />
+              <ApproveField control={control} disabled={isLoading} />
               <MarkdownEditor name="approval_comment" control={control} required />
               <Stack direction="row" justifyContent="end" gap={2}>
                 <Button onClick={onReset} color="error">
                   {t('actions.cancel')}
                 </Button>
                 <Button type="submit" variant="contained">
-                  {t('actions.confirm')}
+                  {isLoading ? t('actions.loading') : t('actions.confirm')}
                 </Button>
               </Stack>
             </Stack>
