@@ -55,6 +55,7 @@ jobs:
             sed -i 's#^VITE_APP_BASENAME.*=.*#VITE_APP_BASENAME = /${{ env.SAFE_BRANCH_NAME }}/#g' .env.branch
             sed -i 's#^VITE_APP_MULTI.*=.*#VITE_APP_MULTI = false#g' .env.branch
           fi
+          cp .env.branch .env
 
       - name: Build application
         run: yarn run build-branch
