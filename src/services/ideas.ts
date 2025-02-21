@@ -306,3 +306,16 @@ export async function setApprovalStatus(args: ApproveIdeaArguments): Promise<Gen
 
   return response as GenericResponse;
 }
+
+export async function setWinning(winnig_status: boolean, idea_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: winnig_status ? 'setToWinning' : 'setToLosing',
+      arguments: { idea_id },
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}

@@ -1,5 +1,6 @@
 import AppIcon from '@/components/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
+import { setWinning } from '@/services/ideas';
 import { getVote, getVoteResults, ResultResponse } from '@/services/vote';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions, Vote, votingOptions } from '@/utils';
@@ -53,6 +54,14 @@ const VotingResults = ({ idea }: VotingResultsProps) => {
       if (!response.data) return;
       setNumVotes(response.data);
     });
+  };
+
+  const onSubmit = async () => {
+    const result = await setWinning(!idea.is_winner, idea.hash_id);
+    if (!result.error) {
+      setEditing(false);
+      getResults();
+    }
   };
 
   useEffect(() => {
@@ -120,7 +129,7 @@ const VotingResults = ({ idea }: VotingResultsProps) => {
             <Button onClick={() => setEditing(false)} color="secondary" autoFocus>
               {t('actions.cancel')}
             </Button>
-            <Button onClick={() => {}} variant="contained">
+            <Button onClick={onSubmit} variant="contained">
               {t('actions.confirm')}
             </Button>
           </DialogActions>
