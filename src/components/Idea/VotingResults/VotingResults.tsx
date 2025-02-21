@@ -70,7 +70,20 @@ const VotingResults = ({ idea }: VotingResultsProps) => {
   }, []);
 
   return (
-    <Stack mt={2}>
+    <Stack mt={2} position="relative">
+      {checkPermissions('ideas', 'setWinner') && (
+        <AppIconButton
+          icon="edit"
+          size="xs"
+          onClick={() => setEditing(true)}
+          sx={{
+            position: 'absolute',
+            top: 5,
+            left: 40,
+            bgcolor: 'background.paper',
+          }}
+        />
+      )}
       <Card
         sx={{
           borderRadius: '25px',
@@ -90,17 +103,10 @@ const VotingResults = ({ idea }: VotingResultsProps) => {
               aspectRatio: 1,
             }}
           >
-            {checkPermissions('ideas', 'setWinner') ? (
-              <AppIconButton icon="edit" size="large" onClick={() => setEditing(true)} sx={{ position: 'relative' }} />
-            ) : (
-              <AppIcon icon={idea.is_winner ? 'for' : 'against'} size="xl" />
-            )}
+            <AppIcon icon={idea.is_winner ? 'for' : 'against'} size="xl" />
           </Stack>
           <Stack flexGrow={1} pr={2}>
-            <Stack direction="row" alignItems="center">
-              {checkPermissions('ideas', 'setWinner') && <AppIcon mr={1} icon={idea.is_winner ? 'for' : 'against'} />}
-              <Typography variant="h6">{t(`scopes.ideas.${idea.is_winner ? 'approved' : 'rejected'}`)}</Typography>
-            </Stack>
+            <Typography variant="h6">{t(`scopes.ideas.${idea.is_winner ? 'approved' : 'rejected'}`)}</Typography>
             <Typography variant="caption">
               {t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`).toLowerCase() })}
             </Typography>
