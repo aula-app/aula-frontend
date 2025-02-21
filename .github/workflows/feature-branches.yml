@@ -49,12 +49,13 @@ jobs:
       - name: Update environment variables
         run: |
           # Replace or add environment variables
-          if [ -f ".env" ]; then
+          if [ -f ".env.branch" ]; then
             # Update existing variables
-            sed -i 's#^VITE_APP_API_URL.*=.*#VITE_APP_API_URL = https://test.aula.de#g' .env
-            sed -i 's#^VITE_APP_BASENAME.*=.*#VITE_APP_BASENAME = /${{ env.SAFE_BRANCH_NAME }}/#g' .env
-            sed -i 's#^VITE_APP_MULTI.*=.*#VITE_APP_MULTI = false#g' .env
+            sed -i 's#^VITE_APP_API_URL.*=.*#VITE_APP_API_URL = https://test.aula.de#g' .env.branch
+            sed -i 's#^VITE_APP_BASENAME.*=.*#VITE_APP_BASENAME = /${{ env.SAFE_BRANCH_NAME }}/#g' .env.branch
+            sed -i 's#^VITE_APP_MULTI.*=.*#VITE_APP_MULTI = false#g' .env.branch
           fi
+          cp .env.branch .env
 
       - name: Build application
         run: yarn run build-branch
