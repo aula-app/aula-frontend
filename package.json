@@ -22,6 +22,7 @@
     "start": "vite",
     "dev": "vite",
     "build": "tsc && vite build",
+    "build-branch": "tsc && vite --config vite.branch.config.mts build",
     "build-devel": "tsc && vite build --mode devel",
     "build-single": "vite build --mode single",
     "build-test": "tsc && vite build --mode test",
