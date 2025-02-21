@@ -209,6 +209,10 @@
       "validation": "Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden."
     }
   },
+  "results": {
+    "approveConfirm": "Bist du sicher, dass du diese Idee genehmigen möchtest?",
+    "rejectConfirm": "Bist du sicher, dass du diese Idee nicht genehmigen möchtest?"
+  },
   "roles": {
     "10": "Gast",
     "20": "Nutzer*in",

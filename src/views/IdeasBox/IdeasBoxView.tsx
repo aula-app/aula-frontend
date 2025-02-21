@@ -174,11 +174,7 @@ const IdeasBoxView = () => {
         {!isIdeasLoading && (
           <>
             {ideas.map((idea, key) => (
-              <Grid key={key} size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
-                <AppLink to={`idea/${idea.hash_id}`}>
-                  <IdeaCard idea={idea} phase={Number(phase) as RoomPhases} />
-                </AppLink>
-              </Grid>
+              <IdeaCard idea={idea} phase={Number(phase) as RoomPhases} key={key} />
             ))}
             {checkPermissions('boxes', 'addIdea') && Number(phase) < 20 && (
               <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>

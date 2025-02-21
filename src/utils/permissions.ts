@@ -50,6 +50,7 @@ const permissions = {
     like: { role: VOTING_ROLES },
     vote: { role: VOTING_ROLES },
     approve: { role: 44 },
+    setWinner: { role: 44 },
     viewAll: { role: 40 },
     status: { role: 40 },
   },

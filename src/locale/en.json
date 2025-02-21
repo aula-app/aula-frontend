@@ -161,9 +161,11 @@
     "approval": "Approval",
     "discussion": "Discussion",
     "phase": "{{var}} phase",
+    "name-0": "Wild Ideas",
     "name-10": "Discussion",
     "name-20": "Approval",
-    "name-30": "Results",
+    "name-30": "Voting",
+    "name-40": "Results",
     "results": "Results",
     "status": {
       "end": "Phase ends in {{var}} days",
@@ -206,6 +208,10 @@
       "title": "Account data update request for {{var}}",
       "validation": "This action should be validated by an Admin to take place."
     }
+  },
+  "results": {
+    "approveConfirm": "Are you sure you want to approve this idea?",
+    "rejectConfirm": "Are you sure you want to not approve this idea?"
   },
   "roles": {
     "10": "Guest",
