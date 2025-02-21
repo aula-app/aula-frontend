@@ -57,7 +57,7 @@ jobs:
           fi
 
       - name: Build application
-        run: yarn run build
+        run: yarn run build-branch
         env:
           # Add any environment variables needed for your build
           PUBLIC_URL: /${{ env.SAFE_BRANCH_NAME }}
