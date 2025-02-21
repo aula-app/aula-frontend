@@ -2,12 +2,6 @@ name: Feature Branch Deployment
 
 on:
   push:
-    branches:
-      - '*'
-      - 'feature-**'
-      - 'feat-**'
-      - 'feature/**'
-      - 'feat/**'
     branches-ignore:
       - main
       - master
