@@ -35,7 +35,7 @@ const LoginView = () => {
   const [loginError, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [api_url, setApiUrl] = useState('');
+  const [api_url, setApiUrl] = useState(import.meta.env.VITE_APP_API_URL);
 
   const schema = yup
     .object({
