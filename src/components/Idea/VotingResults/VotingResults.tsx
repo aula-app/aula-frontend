@@ -4,28 +4,19 @@ import { setWinning } from '@/services/ideas';
 import { getVote, getVoteResults, ResultResponse } from '@/services/vote';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions, Vote, votingOptions } from '@/utils';
-import {
-  Badge,
-  Button,
-  Card,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Button, Card, Dialog, DialogActions, DialogTitle, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface VotingResultsProps {
+interface Props {
   idea: IdeaType;
+  onReload: () => void;
 }
 
 /**
  * Renders "VotingResults" component
  */
-const VotingResults = ({ idea }: VotingResultsProps) => {
+const VotingResults: React.FC<Props> = ({ idea, onReload }) => {
   const { t } = useTranslation();
 
   const [isLoading, setLoading] = useState(true);
@@ -60,7 +51,7 @@ const VotingResults = ({ idea }: VotingResultsProps) => {
     const result = await setWinning(!idea.is_winner, idea.hash_id);
     if (!result.error) {
       setEditing(false);
-      getResults();
+      onReload();
     }
   };
 

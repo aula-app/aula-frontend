@@ -87,7 +87,7 @@ const IdeaView = () => {
   return !isLoading && idea ? (
     <Stack width="100%" height="100%" overflow="auto" gap={2}>
       {phase === '30' && <VotingCard onReload={fetchIdea} />}
-      {phase === '40' && <VotingResults idea={idea} />}
+      {phase === '40' && <VotingResults idea={idea} onReload={fetchIdea} />}
       <IdeaBubble
         idea={idea}
         onEdit={() => setEdit(idea)}
