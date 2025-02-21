@@ -52,7 +52,7 @@ jobs:
           if [ -f ".env" ]; then
             # Update existing variables
             sed -i 's#^VITE_APP_API_URL.*=.*#VITE_APP_API_URL = https://test.aula.de#g' .env
-            sed -i 's#^VITE_APP_BASENAME.*=.*#VITE_APP_BASENAME = /${{ env.SAFE_BRANCH_NAME }}#g' .env
+            sed -i 's#^VITE_APP_BASENAME.*=.*#VITE_APP_BASENAME = /${{ env.SAFE_BRANCH_NAME }}/#g' .env
             sed -i 's#^VITE_APP_MULTI.*=.*#VITE_APP_MULTI = false#g' .env
           fi
 
