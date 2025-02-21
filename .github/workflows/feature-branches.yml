@@ -3,10 +3,18 @@ name: Feature Branch Deployment
 on:
   push:
     branches:
+      - '*'
       - 'feature-**'
       - 'feat-**'
       - 'feature/**'
       - 'feat/**'
+    branches-ignore:
+      - main
+      - master
+      - production
+      - test
+      - dev
+
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -43,6 +51,16 @@ jobs:
 
       - name: Install dependencies
         run: yarn
+
+      - name: Update environment variables
+        run: |
+          # Replace or add environment variables
+          if [ -f ".env" ]; then
+            # Update existing variables
+            sed -i 's#^VITE_APP_API_URL.*=.*#VITE_APP_API_URL = https://test.aula.de#g' .env
+            sed -i 's#^VITE_APP_BASENAME.*=.*#VITE_APP_BASENAME = /${{ env.SAFE_BRANCH_NAME }}#g' .env
+            sed -i 's#^VITE_APP_MULTI.*=.*#VITE_APP_MULTI = false#g' .env
+          fi
 
       - name: Build application
         run: yarn run build
