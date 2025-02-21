@@ -5,6 +5,7 @@ import { MarkdownEditor } from '@/components/DataFields';
 import ApproveField from '@/components/DataFields/ApproveField';
 import { setApprovalStatus } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
+import { PhaseType, RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Card, CardContent, Stack, Typography } from '@mui/material';
@@ -15,6 +16,7 @@ import * as yup from 'yup';
 
 interface ApprovalCardProps {
   idea: IdeaType;
+  phase: number;
   disabled?: boolean;
   onReload: () => void;
 }
@@ -24,7 +26,7 @@ interface ApprovalCardProps {
  * url: /
  */
 
-const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) => {
+const ApprovalCard = ({ idea, phase, disabled = false, onReload }: ApprovalCardProps) => {
   const { t } = useTranslation();
 
   const approvalMessages = ['rejected', 'waiting', 'approved'] as IconType[];
@@ -115,7 +117,7 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
                 {idea.approval_comment || t(`scopes.ideas.${approvalMessages[idea.approved + 1]}`)}
               </Typography>
             </Stack>
-            {checkPermissions('ideas', 'approve') && (
+            {checkPermissions('ideas', 'approve') && phase === 20 && (
               <AppIconButton icon="edit" onClick={() => setEditing(true)} sx={{ m: -1 }} />
             )}
           </Stack>

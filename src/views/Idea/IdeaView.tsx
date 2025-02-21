@@ -100,7 +100,9 @@ const IdeaView = () => {
           users={Number(idea.number_of_users)}
         />
       </IdeaBubble>
-      {Number(phase) >= 20 && <ApprovalCard idea={idea} disabled={Number(phase) > 20} onReload={fetchIdea} />}
+      {Number(phase) >= 20 && (
+        <ApprovalCard idea={idea} phase={Number(phase)} disabled={Number(phase) > 20} onReload={fetchIdea} />
+      )}
       <Stack px={2}>
         <CommentView />
       </Stack>
