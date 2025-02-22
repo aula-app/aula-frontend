@@ -6,6 +6,7 @@ import VotingQuorum from '@/components/Idea/VotingQuorum';
 import { deleteIdea, getIdea } from '@/services/ideas';
 import { useAppStore } from '@/store/AppStore';
 import { getRoom } from '@/services/rooms';
+import { getIdeaBoxes } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { Drawer, Stack, Typography } from '@mui/material';
@@ -43,6 +44,13 @@ const IdeaView = () => {
     });
   };
 
+  const getIdeaBox = (idea_id: string) => {
+    return getIdeaBoxes(idea_id).then((response) => {
+      if (response.error || !response.data) return;
+      return response.data[0];
+    });
+  }
+
   const fetchIdea = useCallback(async () => {
     if (!idea_id) return;
     setLoading(true);
@@ -54,15 +62,37 @@ const IdeaView = () => {
       if (nameResponse) roomName = nameResponse;
     }
 
-    if (response.data && response.data.title)
+    const topic = await getIdeaBox(idea_id);
+
+    let topicName = '';
+    let topicId = '';
+    if (topic) {
+      if (topic.name)
+        topicName = topic.name;
+
+      if (topic.hash_id)
+        topicId = topic.hash_id;
+    }
+
+    if (response.data && response.data.title) {
+      let breadCrumbs = [
+            [roomName, `/room/${room_id}/phase/0`],
+            [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
+      ]
+ 
+      if (phase && phase != "0") {
+        // Add Topic Name to breadcrumb
+        breadCrumbs.push([topicName, `/room/${room_id}/phase/${phase}/idea-box/${topicId}`])
+      }
+
+      // Add Idea Title to breadcrumb
+      breadCrumbs.push([response.data.title, ''])
       dispatch({
         action: 'SET_BREADCRUMB',
-        breadcrumb: [
-          [roomName, `/room/${room_id}/phase/0`],
-          [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
-          [response.data.title, ''],
-        ],
+        breadcrumb: breadCrumbs 
       });
+      
+    } 
 
     if (response.error) setError(response.error);
     if (!response.error && response.data) setIdea(response.data);

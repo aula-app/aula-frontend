@@ -240,7 +240,7 @@ export async function removeIdeaLike(idea_id: string): Promise<void> {
  */
 
 interface GetIdeaBoxesResponse extends GenericResponse {
-  data: { hash_id: string }[] | null;
+  data: { hash_id: string, name: string }[] | null;
 }
 
 export async function getIdeaBoxes(idea_id: string): Promise<GetIdeaBoxesResponse> {
