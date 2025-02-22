@@ -116,21 +116,22 @@ const IdeaView = () => {
 
   return !isLoading && idea ? (
     <Stack width="100%" height="100%" overflow="auto" gap={2}>
-      {phase === '30' && <VotingCard onReload={fetchIdea} />}
-      {phase === '40' && <VotingResults idea={idea} onReload={fetchIdea} />}
+      {(!!phase && Number(phase) === 30) && <VotingCard onReload={fetchIdea} />}
+      {(!!phase && (Number(phase) === 20 || Number(phase) === 40)) && <VotingResults phase={Number(phase)} idea={idea} onReload={fetchIdea} />}
       <IdeaBubble
         idea={idea}
         onEdit={() => setEdit(idea)}
         onDelete={() => ideaDelete(idea.hash_id)}
         disabled={Number(phase) >= 20}
       >
+
         <VotingQuorum
           phase={Number(phase) as RoomPhases}
-          votes={Number(phase) >= 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
+          votes={Number(phase) >= 30 ? Number(idea.sum_votes) : Number(idea.sum_likes)}
           users={Number(idea.number_of_users)}
         />
       </IdeaBubble>
-      {Number(phase) > 30 && (
+      {(phase == "40"  || phase == "20") && (
         <ApprovalCard idea={idea} phase={Number(phase)} disabled={Number(phase) > 20} onReload={fetchIdea} />
       )}
       <Stack px={2}>

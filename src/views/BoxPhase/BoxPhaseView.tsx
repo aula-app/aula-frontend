@@ -26,7 +26,7 @@ const BoxPhaseView = () => {
   const [error, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
 
-  const [edit, setEdit] = useState<BoxType | true>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
+  const [edit, setEdit] = useState<BoxType | boolean>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
   const [appState, dispatch] = useAppStore();
 
   const getRoomName = (id: string) => {
@@ -86,7 +86,7 @@ const BoxPhaseView = () => {
         {!isLoading &&
           boxes.map((box) => (
             <Grid key={box.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-              <BoxCard box={box} onEdit={() => setEdit(box)} onDelete={() => boxDelete(box.hash_id)} />
+              <BoxCard box={box} onEdit={() => { setEdit(box) }} onDelete={() => boxDelete(box.hash_id)} />
             </Grid>
           ))}
       </Grid>
@@ -100,14 +100,13 @@ const BoxPhaseView = () => {
         }}
       >
         {checkPermissions('boxes', 'create') && Number(phase) === 10 && (
-          <>
             <Fab aria-label="add idea" color="primary" onClick={() => setEdit(true)}>
               <AppIcon icon="box" />
-            </Fab>
+            </Fab>)}
+        {checkPermissions('boxes', 'edit') && (
             <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
               <BoxForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
             </Drawer>
-          </>
         )}
         {checkPermissions('surveys', 'create') && Number(phase) === 30 && (
           <>

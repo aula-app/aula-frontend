@@ -9,6 +9,7 @@ import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
 import KnowMore from '@/components/KnowMore';
 import { deleteBox, getBox } from '@/services/boxes';
 import { getIdeasByBox } from '@/services/ideas';
+import { getQuorum } from '@/services/vote';
 import { getDelegations } from '@/services/users';
 import { getRoom } from '@/services/rooms';
 import { useAppStore } from '@/store/AppStore';
@@ -30,6 +31,15 @@ const IdeasBoxView = () => {
 
   const navigate = useNavigate();
   const { room_id, box_id, phase } = useParams();
+
+  const [quorum, setQuorum] = useState<number>(0);
+
+  async function fetchQuorum() {
+    getQuorum().then((response) => {
+      if (response.error || !response.data) return;
+      setQuorum((!!phase && Number(phase) >= 30) ? Number(response.data.quorum_votes) : Number(response.data.quorum_wild_ideas));
+    });
+  }
 
   /**
    * Box data
@@ -55,6 +65,8 @@ const IdeasBoxView = () => {
     setBoxError(response.error);
     if (!response.error && response.data) setBox(response.data);
     setBoxLoading(false);
+
+    await fetchQuorum();
 
     let roomName = 'aula';
     if (room_id) roomName = await getRoomName(room_id);
@@ -174,7 +186,7 @@ const IdeasBoxView = () => {
         {!isIdeasLoading && (
           <>
             {ideas.map((idea, key) => (
-              <IdeaCard idea={idea} phase={Number(phase) as RoomPhases} key={key} />
+              <IdeaCard idea={idea} quorum={quorum} phase={Number(phase) as RoomPhases} key={key} />
             ))}
             {checkPermissions('boxes', 'addIdea') && Number(phase) < 20 && (
               <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>

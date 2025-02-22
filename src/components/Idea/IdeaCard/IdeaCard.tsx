@@ -15,12 +15,13 @@ interface IdeaCardProps {
   idea: IdeaType;
   phase: RoomPhases;
   sx?: ObjectPropByName;
+  quorum?: number;
 }
 
 /**
  * Renders "IdeaCard" component
  */
-const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
+const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) => {
   const { t } = useTranslation();
 
   const [isLoading, setLoading] = useState(true);
@@ -66,7 +67,8 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
         return idea.is_winner ? 'for' : 'disabled';
       case 20:
         if (idea.approved === 1) return 'for';
-        if (idea.approved === -1) return 'disabled';
+        if (idea.approved === -1) return 'against';
+        return 'disabled;'
       case 30:
         if (vote === 1) return 'for';
         if (vote === -1) return 'against';
@@ -85,6 +87,13 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
     if (phase >= 40) fetchResults();
   }, []);
 
+  const passedQuorum = () => {
+    if (!!quorum)
+      return (idea.sum_votes / idea.number_of_users)*100 > quorum;
+    else 
+      return false
+  }
+
   return (
     <Grid
       size={{ xs: 12, sm: 6, md: 4 }}
@@ -93,8 +102,8 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
         order:
           phase === 40
             ? idea.is_winner
-              ? -2 - numVotes.votes_positive / numVotes.total_votes
-              : -(numVotes.votes_positive / numVotes.total_votes)
+              ? idea.sum_votes / idea.number_of_users
+              : -(idea.sum_votes / numVotes.total_votes)
             : 0,
       }}
       order={-idea.approved}
@@ -114,7 +123,7 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
           <Stack direction="row" height={68} alignItems="center">
             <Stack pl={2}>
               {phase >= 40 ? (
-                <AppIcon icon={idea.is_winner > 0 ? 'for' : 'against'} size="xl" />
+                <AppIcon icon={idea.is_winner > 0 || passedQuorum() ? 'for' : 'against'} size="xl" />
               ) : icon ? (
                 <AppIcon icon={icon} />
               ) : (
@@ -127,7 +136,7 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
               </Typography>
               {phase === 40 && (
                 <Typography variant="caption" fontSize="small" ml={0.5}>
-                  {t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`) })}
+                  { checkPermissions('ideas', 'vote') ? t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`) }) : ''}
                 </Typography>
               )}
             </Stack>

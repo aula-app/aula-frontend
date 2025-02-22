@@ -33,6 +33,7 @@ const VotingCard = ({ onReload }: Props) => {
     if (!idea_id) return;
     addVote(idea_id, vote).then(() => {
       fetchVote();
+      onReload();
     });
   };
 

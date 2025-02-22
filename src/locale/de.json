@@ -260,7 +260,8 @@
     },
     "ideas": {
       "approve": "Genehmigen",
-      "approved": "Diese Idee wurde angenommen",
+      "approved": "Diese Idee wurde angenommen.",
+      "winner": "Diese Idee hat gewonnen.",
       "name": "Idee",
       "plural": "Ideen",
       "reject": "Ablehnen",

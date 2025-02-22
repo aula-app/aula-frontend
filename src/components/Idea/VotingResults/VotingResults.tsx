@@ -10,13 +10,14 @@ import { useTranslation } from 'react-i18next';
 
 interface Props {
   idea: IdeaType;
+  phase: number;
   onReload: () => void;
 }
 
 /**
  * Renders "VotingResults" component
  */
-const VotingResults: React.FC<Props> = ({ idea, onReload }) => {
+const VotingResults: React.FC<Props> = ({ idea, phase, onReload }) => {
   const { t } = useTranslation();
 
   const [isLoading, setLoading] = useState(true);
@@ -63,25 +64,13 @@ const VotingResults: React.FC<Props> = ({ idea, onReload }) => {
 
   return (
     <Stack mt={2} position="relative">
-      {checkPermissions('ideas', 'setWinner') && (
-        <AppIconButton
-          icon="edit"
-          size="xs"
-          onClick={() => setEditing(true)}
-          sx={{
-            position: 'absolute',
-            top: 5,
-            left: 40,
-            bgcolor: 'background.paper',
-          }}
-        />
-      )}
+      { ((phase == 20 && idea.approved != null) || (phase == 40 && idea.is_winner == 1)) && (
       <Card
         sx={{
           borderRadius: '25px',
           overflow: 'hidden',
           scrollSnapAlign: 'center',
-          bgcolor: idea.is_winner ? 'for.main' : 'disabled.main',
+          bgcolor: ((idea.approved == 1) || (idea.is_winner == 1)) ? 'for.main' : 'disabled.main',
         }}
         variant="outlined"
       >
@@ -95,13 +84,20 @@ const VotingResults: React.FC<Props> = ({ idea, onReload }) => {
               aspectRatio: 1,
             }}
           >
-            <AppIcon icon={idea.is_winner ? 'for' : 'against'} size="xl" />
+            <AppIcon icon={((idea.approved == 1) || idea.is_winner) ? 'for' : 'against'} size="xl" />
           </Stack>
           <Stack flexGrow={1} pr={2}>
-            <Typography variant="h6">{t(`scopes.ideas.${idea.is_winner ? 'approved' : 'rejected'}`)}</Typography>
+            <Typography variant="h6">
+                  {(phase == 20) ? 
+                    t(`scopes.ideas.${idea.approved == 1 ? 'approved' : 'rejected'}`)
+                  :t(`scopes.ideas.${idea.is_winner == 1 ? 'winner' : 'rejected'}`)
+                  }
+            </Typography>
+            {checkPermissions('ideas', 'vote') && (
             <Typography variant="caption">
               {t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`).toLowerCase() })}
-            </Typography>
+            </Typography>)
+            }
           </Stack>
           <Stack>
             {votingOptions.map((option, i) => (
@@ -120,6 +116,7 @@ const VotingResults: React.FC<Props> = ({ idea, onReload }) => {
           </Stack>
         </Stack>
       </Card>
+      )}
       {checkPermissions('ideas', 'setWinner') && (
         <Dialog open={isEditing} onClose={() => setEditing(false)}>
           <DialogTitle>{t(`results.${!idea.is_winner ? 'approveConfirm' : 'rejectConfirm'}`)}</DialogTitle>

@@ -3,7 +3,7 @@ import { IconType } from '@/components/AppIcon/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
 import { MarkdownEditor } from '@/components/DataFields';
 import ApproveField from '@/components/DataFields/ApproveField';
-import { setApprovalStatus } from '@/services/ideas';
+import { setWinning, setApprovalStatus } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { PhaseType, RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
@@ -62,6 +62,7 @@ const ApprovalCard = ({ idea, phase, disabled = false, onReload }: ApprovalCardP
       return;
     }
     setLoading(true);
+
     await setApprovalStatus({
       idea_id: idea.hash_id,
       ...data,
@@ -69,6 +70,10 @@ const ApprovalCard = ({ idea, phase, disabled = false, onReload }: ApprovalCardP
     setLoading(false);
     setEditing(false);
     onReload();
+
+    if (phase == 40) {
+      const result = await setWinning((data.approved != -1), idea.hash_id);
+    }
   };
 
   const onClose = () => {
@@ -81,6 +86,7 @@ const ApprovalCard = ({ idea, phase, disabled = false, onReload }: ApprovalCardP
   }, [idea]);
 
   return (
+    (phase == 20 || (phase == 40 && !!checkPermissions('ideas', 'setWinner'))) && (
     <Card
       sx={{
         borderRadius: '25px',
@@ -91,7 +97,7 @@ const ApprovalCard = ({ idea, phase, disabled = false, onReload }: ApprovalCardP
       variant="outlined"
     >
       <CardContent sx={{ p: 3 }}>
-        {checkPermissions('ideas', 'approve') && isEditing ? (
+        {((phase == 20 && checkPermissions('ideas', 'approve')  ) || (phase == 40 && checkPermissions('ideas', 'setWinner'))) && isEditing ? (
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <Stack gap={2}>
               <Stack direction="row" alignItems="center" justifyContent="space-between" gap={1}>
@@ -123,7 +129,7 @@ const ApprovalCard = ({ idea, phase, disabled = false, onReload }: ApprovalCardP
           </Stack>
         )}
       </CardContent>
-    </Card>
+    </Card>)
   );
 };
 

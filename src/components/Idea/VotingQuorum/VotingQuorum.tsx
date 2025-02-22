@@ -47,7 +47,7 @@ const VotingQuorum = ({ phase, users, votes }: Props) => {
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
         <Typography variant="caption">
-          {votes} {t(`ui.units.${phase >= 30 ? 'votes' : 'likes'}`)}
+          {t(`ui.units.${phase >= 30 ? 'votes' : 'likes'}`)}
         </Typography>
         <Typography variant="caption">
           {users} {t('scopes.users.plural').toLowerCase()}
