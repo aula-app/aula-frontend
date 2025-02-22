@@ -5,7 +5,7 @@ import { getVote, getVoteResults, ResultResponse } from '@/services/vote';
 import { ObjectPropByName } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { phases, votingOptions } from '@/utils';
+import { checkPermissions, phases, votingOptions } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
@@ -81,7 +81,7 @@ const IdeaCard = ({ idea, phase, sx, ...restOfProps }: IdeaCardProps) => {
 
   useEffect(() => {
     getIcon();
-    if (phase >= 30) fetchVote();
+    if (phase >= 30 && checkPermissions('ideas', 'vote')) fetchVote();
     if (phase >= 40) fetchResults();
   }, []);
 

@@ -37,7 +37,8 @@ const VotingCard = ({ onReload }: Props) => {
   };
 
   useEffect(() => {
-    fetchVote();
+    if (checkPermissions('ideas', 'vote'))
+      fetchVote();
   }, []);
 
   return (

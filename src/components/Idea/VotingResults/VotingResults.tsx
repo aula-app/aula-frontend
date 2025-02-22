@@ -56,7 +56,8 @@ const VotingResults: React.FC<Props> = ({ idea, onReload }) => {
   };
 
   useEffect(() => {
-    fetchVote();
+    if (checkPermissions('ideas', 'vote'))
+      fetchVote();
     getResults();
   }, []);
 
