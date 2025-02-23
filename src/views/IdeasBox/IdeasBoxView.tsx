@@ -28,10 +28,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 const IdeasBoxView = () => {
   const { t } = useTranslation();
   const [appState, dispatch] = useAppStore();
-
   const navigate = useNavigate();
   const { room_id, box_id, phase } = useParams();
-
   const [quorum, setQuorum] = useState<number>(0);
 
   async function fetchQuorum() {
@@ -49,7 +47,7 @@ const IdeasBoxView = () => {
   const [boxError, setBoxError] = useState<string | null>(null);
   const [box, setBox] = useState<BoxType>();
   const [edit, setEdit] = useState<BoxType>(); // undefined = closed;
-  const [boxPhase, setBoxPhase] = useState<string>(phase);
+  const [boxPhase, setBoxPhase] = useState<string | null>(phase ? phase: '');
 
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
@@ -72,8 +70,8 @@ const IdeasBoxView = () => {
     let roomName = 'aula';
     if (room_id) roomName = await getRoomName(room_id);
 
-    const currentBoxPhase = response.data.phase_id
-    if (currentBoxPhase != boxPhase) {
+    const currentBoxPhase = response.data ? response.data.phase_id : ''
+    if (currentBoxPhase != boxPhase && response.data) {
       setBoxPhase(currentBoxPhase)
       dispatch({
         action: 'SET_BREADCRUMB',

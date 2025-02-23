@@ -21,6 +21,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
+    "check-type": "tsc --noEmit",
     "build": "tsc && vite build",
     "build-branch": "tsc && vite --config vite.branch.config.mts --mode branch build",
     "build-devel": "tsc && vite build --mode devel",
