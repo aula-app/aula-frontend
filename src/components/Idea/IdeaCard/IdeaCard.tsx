@@ -64,7 +64,6 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
   const getBgColor = () => {
     switch (phase) {
       case 40:
-        console.log(idea)
         return idea.is_winner ? 'for' : 'disabled';
       case 20:
         if (idea.approved === 1) return 'for';

@@ -102,9 +102,6 @@ const SetWinnerCard = ({ idea, phase, disabled = false, onReload }: SetWinnerCar
                 <SetWinnerField control={control} disabled={isLoading} />
               </Stack>
               <Stack direction="row" justifyContent="end" gap={2}>
-                <Button onClick={onClose} color="error">
-                  {t('actions.cancel')}
-                </Button>
                 <Button type="submit" variant="contained">
                   {isLoading ? t('actions.loading') : t('actions.confirm')}
                 </Button>
