@@ -264,6 +264,7 @@
       "winner": "Diese Idee hat gewonnen.",
       "marked_winner": "Diese Idee wird als Gewinner ausgewählt.",
       "marked_not_winner": "Diese Idee wird nicht als Gewinner ausgewählt.",
+      "not_marked_yet": "Noch nicht als Gewinner markiert.",
       "name": "Idee",
       "plural": "Ideen",
       "reject": "Ablehnen",

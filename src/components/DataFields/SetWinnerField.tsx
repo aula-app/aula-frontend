@@ -16,7 +16,7 @@ interface Props extends ButtonGroupProps {
 const SetWinnerField: React.FC<Props> = ({ control, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
 
-  const winnerMessages = ['marked_not_winner', 'marked_winner'];
+  const winnerMessages = ['marked_not_winner', 'marked_winner', 'not_marked_yet'];
 
   return (
     <Controller
@@ -53,7 +53,7 @@ const SetWinnerField: React.FC<Props> = ({ control, disabled = false, ...restOfP
           <Typography color={fieldState.error ? 'error' : ''}>
             {fieldState.error
               ? fieldState.error.message
-              : t(`scopes.ideas.${winnerMessages[field.value]}`)}
+              : t(`scopes.ideas.${winnerMessages[(field.value == null)?2:field.value]}`)}
           </Typography>
         </Stack>
       )}

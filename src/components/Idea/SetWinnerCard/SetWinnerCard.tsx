@@ -48,39 +48,27 @@ const SetWinnerCard = ({ idea, phase, disabled = false, onReload }: SetWinnerCar
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { is_winner: idea.is_winner || 0 },
+    defaultValues: { is_winner: idea.is_winner },
   });
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
-  const [isEditing, setEditing] = useState(getValues('is_winner') === 0);
-
   const onSubmit = async (data: SchemaType) => {
-    // if (data.is_winner === 0) {
-    //   setError('is_winner', { message: t('forms.validation.required') });
-    //   return;
-    // }
     setLoading(true);
 
-//    await setApprovalStatus({
-//      idea_id: idea.hash_id,
-//      ...data,
-//    });
     const result = await setWinning((data.is_winner == 1), idea.hash_id);
 
     setLoading(false);
-    setEditing(false);
     onReload();
 
   };
 
   const onClose = () => {
-    if (watch('is_winner') !== 0) setEditing(false);
-    reset({ is_winner: idea.is_winner || 0 });
+    reset({ is_winner: idea.is_winner });
   };
 
   useEffect(() => {
-    reset({ is_winner: idea.is_winner || 0 });
+    reset({ is_winner: idea.is_winner });
   }, [idea]);
 
   return (
