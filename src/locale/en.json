@@ -261,6 +261,9 @@
     "ideas": {
       "approve": "Approve",
       "approved": "This idea was approved.",
+      "winner": "This idea has won.",
+      "marked_winner": "This idea is selected as a winner.",
+      "marked_not_winner": "This idea is not selected as a winner.",
       "name": "Idea",
       "plural": "Ideas",
       "reject": "Reject",

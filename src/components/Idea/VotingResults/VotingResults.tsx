@@ -46,6 +46,7 @@ const VotingResults: React.FC<Props> = ({ idea, phase, onReload }) => {
       if (!response.data) return;
       setNumVotes(response.data);
     });
+    console.log(idea)
   };
 
   const onSubmit = async () => {

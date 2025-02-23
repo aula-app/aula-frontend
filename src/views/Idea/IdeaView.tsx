@@ -1,6 +1,6 @@
 import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
 import { IdeaForms } from '@/components/DataForms';
-import { ApprovalCard, IdeaBubble, VotingCard, VotingResults } from '@/components/Idea';
+import { SetWinnerCard, ApprovalCard, IdeaBubble, VotingCard, VotingResults } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import VotingQuorum from '@/components/Idea/VotingQuorum';
 import { deleteIdea, getIdea } from '@/services/ideas';
@@ -131,8 +131,11 @@ const IdeaView = () => {
           users={Number(idea.number_of_users)}
         />
       </IdeaBubble>
-      {(phase == "40"  || phase == "20") && (
+      {(phase == "20") && (
         <ApprovalCard idea={idea} phase={Number(phase)} disabled={Number(phase) > 20} onReload={fetchIdea} />
+      )}
+      {(phase == "40") && (
+        <SetWinnerCard idea={idea} phase={Number(phase)} disabled={Number(phase) > 20} onReload={fetchIdea} />
       )}
       <Stack px={2}>
         <CommentView />

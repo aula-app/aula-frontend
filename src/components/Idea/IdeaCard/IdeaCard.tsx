@@ -29,7 +29,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
   const [vote, setVote] = useState(0);
 
   const [icon, setIcon] = useState<CategoryIconType>();
-  const [variant, setVariant] = useState<string>();
+  const [bgColor, setBgColor] = useState<string>();
   const [numVotes, setNumVotes] = useState<ResultResponse>({
     total_votes: 0,
     votes_negative: 0,
@@ -61,9 +61,10 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
       setIcon(category.description_internal);
     });
 
-  const getVariant = () => {
+  const getBgColor = () => {
     switch (phase) {
       case 40:
+        console.log(idea)
         return idea.is_winner ? 'for' : 'disabled';
       case 20:
         if (idea.approved === 1) return 'for';
@@ -78,7 +79,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
   };
 
   useEffect(() => {
-    setVariant(getVariant());
+    setBgColor(getBgColor());
   }, [vote]);
 
   useEffect(() => {
@@ -114,7 +115,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
             borderRadius: '25px',
             overflow: 'hidden',
             scrollSnapAlign: 'center',
-            bgcolor: `${variant}.main`,
+            bgcolor: `${bgColor}.main`,
             ...sx,
           }}
           variant="outlined"
