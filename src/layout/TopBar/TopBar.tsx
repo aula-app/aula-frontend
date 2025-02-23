@@ -41,6 +41,7 @@ const TopBar: React.FC = () => {
 
   // Calculate return path based on current location
   const getReturnPath = () => {
+    console.log("BREAD", appState.breadcrumb)
     if (appState.breadcrumb.length >= 2) {
       if (
         appState.breadcrumb[appState.breadcrumb.length - 1][1] != undefined &&

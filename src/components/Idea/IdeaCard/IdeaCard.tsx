@@ -79,13 +79,13 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
 
   useEffect(() => {
     setBgColor(getBgColor());
-  }, [vote]);
+  }, [vote, phase]);
 
   useEffect(() => {
     getIcon();
     if (phase >= 30 && checkPermissions('ideas', 'vote')) fetchVote();
     if (phase >= 40) fetchResults();
-  }, []);
+  }, [phase]);
 
   const passedQuorum = () => {
     if (!!quorum)
