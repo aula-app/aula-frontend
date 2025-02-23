@@ -1,0 +1,13 @@
+#!/bin/sh
+
+yarn run check-type
+check_type=$?
+
+echo $check_type
+if [ $check_type -ne 0 ]
+then
+  echo "Typescript validation failed"
+  exit 1
+fi
+
+exit 0
