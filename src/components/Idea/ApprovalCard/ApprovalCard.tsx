@@ -102,7 +102,6 @@ const ApprovalCard = ({ idea, phase, disabled = false, onReload }: ApprovalCardP
             <Stack gap={2}>
               <Stack direction="row" alignItems="center" justifyContent="space-between" gap={1}>
                 <ApproveField control={control} disabled={isLoading} />
-                {watch('approved') !== 0 && <AppIconButton icon="close" onClick={onClose} sx={{ m: -1 }} />}
               </Stack>
               <MarkdownEditor name="approval_comment" control={control} required />
               <Stack direction="row" justifyContent="end" gap={2}>
