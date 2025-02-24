@@ -20,7 +20,6 @@ const VotingQuorum = ({ phase, users, votes }: Props) => {
   const { t } = useTranslation();
   const [quorum, setQuorum] = useState<number>(0);
 
-  console.log('VOTES', (votes / users) * 100);
   async function fetchQuorum() {
     getQuorum().then((response) => {
       if (response.error || !response.data) return;
