@@ -74,7 +74,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     }
 
     // Prevent moving to Voting phase if there is still ideas waiting for approval
-    phaseOptions[2] = { ...phaseOptions[2], disabled: ideasWithApprovalStatus < response.data.length };
+    phaseOptions[2] = { ...phaseOptions[2], disabled: ideasWithApprovalStatus < ideas.length };
 
     // A Box can only fo to results if it passed Voting phase
     if (defaultValues && Number(defaultValues['phase_id']) !== 30)
