@@ -20,6 +20,7 @@ const VotingQuorum = ({ phase, users, votes }: Props) => {
   const { t } = useTranslation();
   const [quorum, setQuorum] = useState<number>(0);
 
+  console.log('VOTES', (votes / users) * 100);
   async function fetchQuorum() {
     getQuorum().then((response) => {
       if (response.error || !response.data) return;
@@ -47,7 +48,7 @@ const VotingQuorum = ({ phase, users, votes }: Props) => {
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
         <Typography variant="caption">
-          {t(`ui.units.${phase >= 30 ? 'votes' : 'likes'}`)}
+          {votes} {t(`ui.units.${phase >= 30 ? 'votes' : 'likes'}`)}
         </Typography>
         <Typography variant="caption">
           {users} {t('scopes.users.plural').toLowerCase()}

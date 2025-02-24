@@ -127,7 +127,7 @@ const IdeaView = () => {
 
         <VotingQuorum
           phase={Number(phase) as RoomPhases}
-          votes={Number(phase) >= 30 ? Number(idea.sum_votes) : Number(idea.sum_likes)}
+          votes={Number(phase) >= 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
           users={Number(idea.number_of_users)}
         />
       </IdeaBubble>
