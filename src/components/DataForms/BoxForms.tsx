@@ -65,6 +65,22 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     const response = await getIdeasByBox({ topic_id: defaultValues.hash_id });
     if (!response.data) return;
     setIdeas(response.data);
+
+    let ideasWithApprovalStatus = 0
+    for (let idea of response.data) {
+      if (idea.approved != null)
+        ideasWithApprovalStatus += 1
+    }
+    
+    // Prevent moving to Voting phase if there is still ideas waiting for approval
+    phaseOptions[2] = {...phaseOptions[2], disabled: ideasWithApprovalStatus < response.data.length}
+
+    // A Box can only fo to results if it passed Voting phase
+    if (Number(defaultValues['phase_id']) !== 30)
+      phaseOptions[3] = {...phaseOptions[3], disabled: true}
+    else
+      phaseOptions[3] = {...phaseOptions[3], disabled: false}
+
   };
 
   const onSubmit = async (data: SchemaType) => {
@@ -96,6 +112,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     });
     if (response.error || !response.data) return;
     await setBoxIdeas(response.data.hash_id);
+
   };
 
   const updateBox = async (data: SchemaType) => {
@@ -129,7 +146,6 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
 
   useEffect(() => {
     reset({ ...defaultValues });
-    fetchBoxIdeas();
     fetchBoxIdeas();
   }, [JSON.stringify(defaultValues)]);
 

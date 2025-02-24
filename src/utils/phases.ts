@@ -17,10 +17,10 @@ export const phases = {
 } as Record<string, PhaseType>;
 
 export const phaseOptions = [
-  { label: 'phases.discussion', value: 10 },
-  { label: 'phases.approval', value: 20 },
-  { label: 'phases.voting', value: 30 },
-  { label: 'phases.results', value: 40 },
+  { label: 'phases.discussion', value: 10, disabled: false },
+  { label: 'phases.approval', value: 20, disabled: false },
+  { label: 'phases.voting', value: 30, disabled: false },
+  { label: 'phases.results', value: 40, disabled: false },
 ];
 
 export const dashboardPhases = { ...(({ ['40']: _, ...o }) => o)(phases) };
