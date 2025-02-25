@@ -231,7 +231,7 @@ const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
           <Button onClick={onClose} color="secondary" autoFocus>
             {t('actions.cancel')}
           </Button>
-          <Button onClick={onSubmit} disabled={!hasUsers()} variant="contained">
+          <Button onClick={onSubmit} variant="contained">
             {t('actions.confirm')}
           </Button>
         </DialogActions>
