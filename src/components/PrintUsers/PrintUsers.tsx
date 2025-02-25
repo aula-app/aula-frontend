@@ -35,6 +35,7 @@ const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
   const [onlyTempPass, setOnlyTempPass] = useState<boolean>(true);
   const [roomId, setRoomId] = useState<string>('all');
   const [rooms, setRooms] = useState<RoomType[]>([]);
+  const [message, setMessage] = useState<string>('');
 
   const fetchRooms =  useCallback(async () => {
     setLoading(true);
@@ -63,6 +64,22 @@ const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
   }, []);
 
   const onSubmit = () => {
+      if (!hasUsers()) {
+        if (roomId === '') {
+          let message = t('settings.users.no_users')
+          if (onlyTempPass)
+            message += ' ' + t('settings.users.temp_pass')
+          setMessage(message)
+        } else {
+          let message = t('settings.users.no_users_in_room')
+          if (onlyTempPass)
+            message += ' ' + t('settings.users.temp_pass')
+          setMessage(message)
+        }
+        return
+      }
+
+      setMessage('')
       const printWindow = window.open('', '_blank');
 
       let usersPasswords = '<tr>'
@@ -189,7 +206,10 @@ const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
   };
 
   const hasUsers = () => {
-    return users.filter((u) => !!u.temp_pw).length
+    if (onlyTempPass)
+      return users.filter((u) => !!u.temp_pw).length > 0
+    else
+      return users.length > 0
   }
 
   useEffect(() => {
@@ -199,6 +219,7 @@ const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
   }, [open]);
 
   useEffect(() => {
+    setMessage('')
     fetchUsers(roomId);
   }, [roomId]);
 
@@ -226,6 +247,7 @@ const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
         <FormGroup>
           <FormControlLabel control={<Checkbox checked={onlyTempPass} onChange={() => setOnlyTempPass(!onlyTempPass)}/>} label={t('settings.users.onlyTemporaryPasswords')}/>
         </FormGroup>
+        <b>{message}</b>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="secondary" autoFocus>
