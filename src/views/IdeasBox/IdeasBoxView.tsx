@@ -18,7 +18,7 @@ import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useCallback, useEffect, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -154,8 +154,28 @@ const IdeasBoxView = () => {
     fetchDelegation();
   }, []);
 
+  const saveScroll = (evt: SyntheticEvent) => {
+    dispatch({ 
+      action: 'SAVE_SCROLL',
+      lastScroll: (evt.target as HTMLElement).scrollTop,
+      lastIdeaList: 'box-ideas-' + phase
+    })
+  }
+
+  useEffect(() => {
+    let ideasList = document.getElementById("box-ideas")
+    if (!!ideasList) {
+      if (appState.lastIdeaList == 'box-ideas-' + phase) {
+        ideasList.scrollTop = appState.lastScroll
+      }
+    }
+  }, [box])
+
   return (
     <Stack
+      id="box-ideas"
+      style={{overflowY: "scroll"}}
+      onScroll={saveScroll} 
       height="100%"
       flexGrow={1}
       position="relative"
