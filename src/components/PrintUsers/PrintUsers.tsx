@@ -1,60 +1,37 @@
 import AppIcon from '@/components/AppIcon';
-import { getRooms } from '@/services/rooms';
-import { getUsers, addUserGroup, getUserGroups, removeUserGroup } from '@/services/users';
 import SelectRoom from '@/components/SelectRoom';
-import { UserType, RoomType } from '@/types/Scopes';
-import { UpdtesObject } from '@/types/SettingsTypes';
+import { getUsers } from '@/services/users';
+import { UserType } from '@/types/Scopes';
 import {
   Button,
   ButtonProps,
   Checkbox,
   Dialog,
-  DialogContent,
   DialogActions,
+  DialogContent,
   DialogTitle,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemText,
+  FormControlLabel,
+  FormGroup,
   Skeleton,
   Typography,
-  FormGroup,
-  FormControlLabel
 } from '@mui/material';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
+const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [updates, setUpdates] = useState<UpdtesObject>({ add: [], remove: [] });
   const [users, setUsers] = useState<UserType[]>([]);
   const [onlyTempPass, setOnlyTempPass] = useState<boolean>(true);
   const [roomId, setRoomId] = useState<string>('all');
-  const [rooms, setRooms] = useState<RoomType[]>([]);
-  const [message, setMessage] = useState<string>('');
 
-  const fetchRooms =  useCallback(async () => {
+  const fetchUsers = useCallback(async (roomId: string) => {
     setLoading(true);
-    const response = await getRooms();
-
-    if (response.error) setError(response.error);
-    if (response.data)
-      setRooms(response.data)
-    setLoading(false);
-  }, []);
-
-
-  const fetchUsers = useCallback(async (roomId:string) => {
-    setLoading(true);
-    let response
-    if (roomId !== 'all')
-      response = await getUsers({room_id: roomId});
-    else 
-      response = await getUsers();
+    let response;
+    if (roomId !== 'all') response = await getUsers({ room_id: roomId });
+    else response = await getUsers();
 
     if (response.error) setError(response.error);
     else {
@@ -64,54 +41,34 @@ const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
   }, []);
 
   const onSubmit = () => {
-      if (!hasUsers()) {
-        if (roomId === '') {
-          let message = t('settings.users.no_users')
-          if (onlyTempPass)
-            message += ' ' + t('settings.users.temp_pass')
-          setMessage(message)
-        } else {
-          let message = t('settings.users.no_users_in_room')
-          if (onlyTempPass)
-            message += ' ' + t('settings.users.temp_pass')
-          setMessage(message)
-        }
-        return
+    const printWindow = window.open('', '_blank');
+
+    let usersPasswords = '<tr>';
+    let columns = 2;
+    let i = 1;
+    for (let user of users) {
+      if (i == 1) usersPasswords += '<tr>';
+      let username = user['username'];
+      let realname = user['realname'];
+      let password = `<i>${t('settings.users.passwordChanged')}</i>`;
+      if (!!user['temp_pw']) {
+        password = user['temp_pw'];
+      } else {
+        if (onlyTempPass) continue;
       }
-
-      setMessage('')
-      const printWindow = window.open('', '_blank');
-
-      let usersPasswords = '<tr>'
-      let nextLine = false;
-      let columns = 2;
-      let i = 1;
-      for (let user of users) {
-        if (i == 1)
-          usersPasswords += '<tr>'
-        let username = user['username']
-        let realname = user['realname']
-        let password = `<i>${t('settings.users.passwordChanged')}</i>`
-        if (!!user["temp_pw"]) {
-          password = user['temp_pw']
-        } else {
-          if (onlyTempPass)
-            continue;
-        }
-        usersPasswords += `<td><b>${realname}</b><p/><b>${t("settings.columns.username")}:</b> ${username}<br/><b>${t("settings.columns.pw")}:</b> ${password}</td>`
-        if (++i > columns) {
-          usersPasswords += '</tr>'
-          i = 1;
-        }
-      }  
-      
-      if (i <= columns) {
-          usersPasswords += '</tr>'
+      usersPasswords += `<td><b>${realname}</b><p/><b>${t('settings.columns.username')}:</b> ${username}<br/><b>${t('settings.columns.pw')}:</b> ${password}</td>`;
+      if (++i > columns) {
+        usersPasswords += '</tr>';
+        i = 1;
       }
+    }
 
+    if (i <= columns) {
+      usersPasswords += '</tr>';
+    }
 
-      // Generate HTML content for the new window
-      const htmlContent = `
+    // Generate HTML content for the new window
+    const htmlContent = `
         <!DOCTYPE html>
         <html>
           <head>
@@ -185,15 +142,15 @@ const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
         </html>
       `;
 
-      // Write the HTML content to the new window
-      if (printWindow && printWindow.document) {
-        // @ts-ignore
-        printWindow.document.open();
-        // @ts-ignore
-        printWindow.document.write(htmlContent);
-        // @ts-ignore
-        printWindow.document.close();
-      }
+    // Write the HTML content to the new window
+    if (printWindow && printWindow.document) {
+      // @ts-ignore
+      printWindow.document.open();
+      // @ts-ignore
+      printWindow.document.write(htmlContent);
+      // @ts-ignore
+      printWindow.document.close();
+    }
     //setOpen(false);
   };
 
@@ -201,53 +158,44 @@ const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
     setOpen(false);
   };
 
-  const onReset = () => {
-    setUpdates({ add: [], remove: [] });
+  const hasUsers = () => {
+    if (onlyTempPass) return users.filter((u) => !!u.temp_pw).length > 0;
+    else return users.length > 0;
   };
 
-  const hasUsers = () => {
-    if (onlyTempPass)
-      return users.filter((u) => !!u.temp_pw).length > 0
-    else
-      return users.length > 0
-  }
-
   useEffect(() => {
-    if (open) onReset();
-    fetchRooms();
-    fetchUsers(roomId);
+    fetchUsers('all');
+    setOnlyTempPass(true);
   }, [open]);
 
   useEffect(() => {
-    setMessage('')
     fetchUsers(roomId);
-  }, [roomId]);
+  }, [open, roomId]);
 
   return (
     <>
-      <Button
-        variant="outlined"
-        color="secondary"
-        onClick={() => setOpen(true)}
-        {...restOfProps}
-      >
+      <Button variant="outlined" color="secondary" onClick={() => setOpen(true)} {...restOfProps}>
         <AppIcon icon="print" pr={2} />
         {t('settings.users.printTitle')}
       </Button>
-      <Dialog  onClose={onClose} open={open}>
-        <DialogTitle>
-          {
-            t('settings.users.printTitle')
-          }
-        </DialogTitle>
+      <Dialog onClose={onClose} open={open} fullWidth maxWidth="sm">
+        <DialogTitle>{t('settings.users.printTitle')}</DialogTitle>
         <DialogContent>
-        {isLoading && <Skeleton />}
-        {error && <Typography>{t(error)}</Typography>}
-        <SelectRoom room={roomId} setRoom={setRoomId} />
-        <FormGroup>
-          <FormControlLabel control={<Checkbox checked={onlyTempPass} onChange={() => setOnlyTempPass(!onlyTempPass)}/>} label={t('settings.users.onlyTemporaryPasswords')}/>
-        </FormGroup>
-        <b>{message}</b>
+          {isLoading && <Skeleton />}
+          {error && <Typography>{t(error)}</Typography>}
+          <SelectRoom room={roomId} setRoom={setRoomId} />
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox checked={onlyTempPass} onChange={() => setOnlyTempPass(!onlyTempPass)} />}
+              label={t('settings.users.onlyTemporaryPasswords')}
+            />
+          </FormGroup>
+          {!hasUsers() && (
+            <b>
+              {roomId === '' ? t('settings.users.no_users') : t('settings.users.no_users_in_room')}{' '}
+              {onlyTempPass && t('settings.users.temp_pass')}
+            </b>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="secondary" autoFocus>
