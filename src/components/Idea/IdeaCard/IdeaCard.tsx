@@ -70,6 +70,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
         if (idea.approved === -1) return 'against';
         return 'disabled;'
       case 30:
+        if (idea.approved == -1) return 'disabled';
         if (vote === 1) return 'for';
         if (vote === -1) return 'against';
       default:

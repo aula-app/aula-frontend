@@ -303,6 +303,11 @@
     }
   },
   "settings": {
+    "users": {
+      "printTitle": "Passwords list",
+      "passwordChanged": "Password changed",
+      "onlyTemporaryPasswords": "Only temporary passwords"
+    },
     "account": {
       "delete": "Delete account",
       "deleteRequest": "Data deletion requested",

@@ -86,7 +86,7 @@ const ApprovalCard = ({ idea, phase, disabled = false, onReload }: ApprovalCardP
   }, [idea]);
 
   return (
-    (phase == 20 || (phase == 40 && !!checkPermissions('ideas', 'setWinner'))) && (
+    (phase == 20 || (phase == 30 && idea.approved == -1) || (phase == 40 && !!checkPermissions('ideas', 'setWinner'))) && (
     <Card
       sx={{
         borderRadius: '25px',

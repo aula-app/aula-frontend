@@ -24,8 +24,8 @@ export interface GenericResponse {
 }
 
 export interface GenericListRequest {
-  offset: number;
-  limit: number;
+  offset?: number;
+  limit?: number;
   orderby?: number;
   asc?: 0 | 1;
   search_field?: string;
