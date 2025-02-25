@@ -65,9 +65,6 @@ const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
   const onSubmit = () => {
       const printWindow = window.open('', '_blank');
 
-      if (!!printWindow)
-        return
-
       let usersPasswords = '<tr>'
       let nextLine = false;
       let columns = 2;
@@ -172,7 +169,7 @@ const PrintUsers = forwardRef<ButtonProps>(({  ...restOfProps }, ref) => {
       `;
 
       // Write the HTML content to the new window
-      if (printWindow && (printWindow as any).document) {
+      if (printWindow && printWindow.document) {
         // @ts-ignore
         printWindow.document.open();
         // @ts-ignore
