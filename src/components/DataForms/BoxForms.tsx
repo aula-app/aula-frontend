@@ -77,8 +77,6 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
 
     setOptions((prevOptions) =>
       prevOptions.map((option, index) => {
-        console.log(index, index === 3 && defaultValues && Number(defaultValues['phase_id']) < 30);
-
         // Prevent moving to Voting phase if there is still ideas waiting for approval
         if (index === 2) return { ...option, disabled: ideasWithApprovalStatus < ideas.length };
 
