@@ -93,24 +93,22 @@ const WildIdeas = () => {
           />
         ))}
       {checkPermissions('ideas', 'create') && room_id && (
-        <>
-          <Fab
-            aria-label="add idea"
-            color="primary"
-            sx={{
-              position: 'fixed',
-              bottom: 40,
-              zIndex: 1000,
-            }}
-            onClick={() => setEdit(true)}
-          >
-            <AppIcon icon="idea" />
-          </Fab>
-          <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-            <IdeaForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
-          </Drawer>
-        </>
+        <Fab
+          aria-label="add idea"
+          color="primary"
+          sx={{
+            position: 'fixed',
+            bottom: 40,
+            zIndex: 1000,
+          }}
+          onClick={() => setEdit(true)}
+        >
+          <AppIcon icon="idea" />
+        </Fab>
       )}
+      <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
+        <IdeaForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
+      </Drawer>
     </Stack>
   );
 };

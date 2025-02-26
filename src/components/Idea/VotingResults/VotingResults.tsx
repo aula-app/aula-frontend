@@ -1,23 +1,20 @@
 import AppIcon from '@/components/AppIcon';
-import AppIconButton from '@/components/AppIconButton';
-import { setWinning } from '@/services/ideas';
-import { getVote, getVoteResults, ResultResponse } from '@/services/vote';
+import { getVote, getVoteResults, setToLosing, setToWinning } from '@/services/vote';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions, Vote, votingOptions } from '@/utils';
-import { Button, Card, Dialog, DialogActions, DialogTitle, Stack, Typography } from '@mui/material';
+import { Card, FormControlLabel, Stack, Switch, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
   idea: IdeaType;
-  phase: number;
   onReload: () => void;
 }
 
 /**
  * Renders "VotingResults" component
  */
-const VotingResults: React.FC<Props> = ({ idea, phase, onReload }) => {
+const VotingResults = ({ idea, onReload }: VotingResultsProps) => {
   const { t } = useTranslation();
 
   const [isLoading, setLoading] = useState(true);
@@ -44,34 +41,38 @@ const VotingResults: React.FC<Props> = ({ idea, phase, onReload }) => {
   const getResults = () => {
     getVoteResults(idea.hash_id).then((response) => {
       if (!response.data) return;
-      setNumVotes(response.data);
+      setNumVotes([
+        response.data.votes_negative as Vote,
+        response.data.votes_neutral as Vote,
+        response.data.votes_positive as Vote,
+      ]);
     });
-    console.log(idea)
   };
 
-  const onSubmit = async () => {
-    const result = await setWinning(!idea.is_winner, idea.hash_id);
-    if (!result.error) {
-      setEditing(false);
-      onReload();
-    }
+  const handleSetWinner = async (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    const response = checked ? await setToWinning(idea.hash_id) : await setToLosing(idea.hash_id);
+    if (!response.error) onReload();
   };
 
   useEffect(() => {
-    if (checkPermissions('ideas', 'vote'))
-      fetchVote();
+    if (checkPermissions('ideas', 'vote')) fetchVote();
     getResults();
   }, []);
 
   return (
-    <Stack mt={2} position="relative">
-      { ((phase == 20 && idea.approved != null) || (phase == 40 && idea.is_winner == 1)) && (
+    <Stack mt={2}>
+      {checkPermissions('ideas', 'setWinner') && (
+        <FormControlLabel
+          control={<Switch onChange={handleSetWinner} checked={Boolean(idea.is_winner)} />}
+          label={t('settings.columns.is_winner')}
+        />
+      )}
       <Card
         sx={{
           borderRadius: '25px',
           overflow: 'hidden',
           scrollSnapAlign: 'center',
-          bgcolor: ((idea.approved == 1) || (idea.is_winner == 1)) ? 'for.main' : 'disabled.main',
+          bgcolor: idea.is_winner ? 'for.main' : 'disabled.main',
         }}
         variant="outlined"
       >
@@ -100,7 +101,7 @@ const VotingResults: React.FC<Props> = ({ idea, phase, onReload }) => {
             </Typography>)
             }
           </Stack>
-          <Stack>
+          <Stack direction="column-reverse">
             {votingOptions.map((option, i) => (
               <Stack
                 order={-i}

@@ -1,19 +1,17 @@
-import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
 import { IdeaForms } from '@/components/DataForms';
 import { SetWinnerCard, ApprovalCard, IdeaBubble, VotingCard, VotingResults } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import VotingQuorum from '@/components/Idea/VotingQuorum';
 import { deleteIdea, getIdea } from '@/services/ideas';
-import { useAppStore } from '@/store/AppStore';
 import { getRoom } from '@/services/rooms';
-import { getIdeaBoxes } from '@/services/ideas';
+import { useAppStore } from '@/store/AppStore';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { Drawer, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
-import CommentView from './Comment';
+import CommentView from '../Comment';
 
 /**
  * Renders "Idea" view
@@ -25,7 +23,6 @@ const IdeaView = () => {
   const navigate = useNavigate();
   const { idea_id, room_id, phase } = useParams();
 
-  const addCategory = useRef<AddCategoryRefProps>(null);
   const [appState, dispatch] = useAppStore();
 
   const [isLoading, setLoading] = useState(true);
@@ -44,16 +41,9 @@ const IdeaView = () => {
     });
   };
 
-  const getIdeaBox = (idea_id: string) => {
-    return getIdeaBoxes(idea_id).then((response) => {
-      if (response.error || !response.data) return;
-      return response.data[0];
-    });
-  }
-
-  const fetchIdea = useCallback(async () => {
+  const fetchIdea = async () => {
     if (!idea_id) return;
-    setLoading(true);
+    if (typeof idea === 'undefined') setLoading(true);
     const response = await getIdea(idea_id);
 
     let roomName = 'aula';
@@ -67,37 +57,34 @@ const IdeaView = () => {
     let topicName = '';
     let topicId = '';
     if (topic) {
-      if (topic.name)
-        topicName = topic.name;
+      if (topic.name) topicName = topic.name;
 
-      if (topic.hash_id)
-        topicId = topic.hash_id;
+      if (topic.hash_id) topicId = topic.hash_id;
     }
 
     if (response.data && response.data.title) {
       let breadCrumbs = [
-            [roomName, `/room/${room_id}/phase/0`],
-            [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
-      ]
- 
-      if (phase && phase != "0") {
+        [roomName, `/room/${room_id}/phase/0`],
+        [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
+      ];
+
+      if (phase && phase != '0') {
         // Add Topic Name to breadcrumb
-        breadCrumbs.push([topicName, `/room/${room_id}/phase/${phase}/idea-box/${topicId}`])
+        breadCrumbs.push([topicName, `/room/${room_id}/phase/${phase}/idea-box/${topicId}`]);
       }
 
       // Add Idea Title to breadcrumb
-      breadCrumbs.push([response.data.title, ''])
+      breadCrumbs.push([response.data.title, '']);
       dispatch({
         action: 'SET_BREADCRUMB',
-        breadcrumb: breadCrumbs 
+        breadcrumb: breadCrumbs,
       });
-      
-    } 
+    }
 
     if (response.error) setError(response.error);
     if (!response.error && response.data) setIdea(response.data);
-    setLoading(false);
-  }, [idea_id]);
+    if (isLoading) setLoading(false);
+  };
 
   useEffect(() => {
     fetchIdea();
@@ -116,27 +103,21 @@ const IdeaView = () => {
 
   return !isLoading && idea ? (
     <Stack width="100%" height="100%" overflow="auto" gap={2}>
-      {(!!phase && Number(phase) === 30) && <VotingCard onReload={fetchIdea} />}
-      {(!!phase && (Number(phase) === 20 || Number(phase) === 40)) && <VotingResults phase={Number(phase)} idea={idea} onReload={fetchIdea} />}
+      {phase === '30' && <VotingCard onReload={fetchIdea} />}
+      {phase === '40' && <VotingResults idea={idea} onReload={fetchIdea} />}
       <IdeaBubble
         idea={idea}
         onEdit={() => setEdit(idea)}
         onDelete={() => ideaDelete(idea.hash_id)}
         disabled={Number(phase) >= 20}
       >
-
         <VotingQuorum
           phase={Number(phase) as RoomPhases}
           votes={Number(phase) >= 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
           users={Number(idea.number_of_users)}
         />
       </IdeaBubble>
-      {(phase == "20") && (
-        <ApprovalCard idea={idea} phase={Number(phase)} disabled={Number(phase) > 20} onReload={fetchIdea} />
-      )}
-      {(phase == "40") && (
-        <SetWinnerCard idea={idea} phase={Number(phase)} disabled={Number(phase) > 20} onReload={fetchIdea} />
-      )}
+      {Number(phase) === 20 && <ApprovalCard idea={idea} disabled={Number(phase) > 20} onReload={fetchIdea} />}
       <Stack px={2}>
         <CommentView />
       </Stack>

@@ -24,7 +24,7 @@ const ApproveField: React.FC<Props> = ({ control, disabled = false, ...restOfPro
       control={control}
       render={({ field, fieldState }) => (
         <Stack direction="row" alignItems="center" gap={1}>
-          <ButtonGroup sx={{ m: -1, mr: 1 }} {...restOfProps}>
+          <ButtonGroup sx={{ mr: 1 }} {...restOfProps}>
             <Button
               sx={{
                 border: '1px solid #888',

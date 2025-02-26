@@ -216,6 +216,7 @@ import VotingIcon from './voting.svg?react';
  */
 export const ICONS = {
   logo: LogoIcon,
+  abstention: CircleIcon,
   account: HiOutlineFaceSmile,
   add: HiOutlinePlus,
   against: HiOutlineXCircle,
@@ -271,7 +272,7 @@ export const ICONS = {
   more: HiOutlineEllipsisVertical,
   message: HiOutlineEnvelope,
   messages: HiOutlineEnvelope,
-  neutral: CircleIcon,
+  neutral: HiOutlineMinusCircle,
   night: HiOutlineMoon,
   notifications: HiOutlineBell,
   print: HiOutlinePrinter,
