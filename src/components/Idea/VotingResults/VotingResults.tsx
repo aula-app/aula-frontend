@@ -20,7 +20,7 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [vote, setVote] = useState<Vote>(0);
+  const [vote, setVote] = useState<Vote | null>();
 
   const fetchVote = useCallback(async () => {
     setLoading(true);
@@ -94,7 +94,7 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
                   ? t(`scopes.ideas.approved`)
                   : t(`scopes.ideas.rejected`)}
             </Typography>
-            {checkPermissions('ideas', 'vote') && (
+            {checkPermissions('ideas', 'vote') && !!vote && (
               <Typography variant="caption">
                 {t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`).toLowerCase() })}
               </Typography>
