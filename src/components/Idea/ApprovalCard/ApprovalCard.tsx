@@ -3,6 +3,7 @@ import { IconType } from '@/components/AppIcon/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
 import { MarkdownEditor } from '@/components/DataFields';
 import ApproveField from '@/components/DataFields/ApproveField';
+import MarkdownReader from '@/components/MarkdownReader';
 import { setApprovalStatus } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
@@ -32,20 +33,15 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
 
   const [isLoading, setLoading] = useState(false);
 
-  const schema = yup.object().shape({
+  const schema = yup.object({
     approved: yup.number().required(t('forms.validation.required')),
-    approval_comment: yup.string().required(t('forms.validation.required')),
+    approval_comment: yup.string().when('approved', {
+      is: (val: number | undefined): val is number => val === -1,
+      then: (schema) => schema.required(t('forms.validation.required')),
+    }),
   });
 
-  const {
-    reset,
-    control,
-    handleSubmit,
-    setError,
-    getValues,
-    watch,
-    formState: { errors },
-  } = useForm({
+  const { reset, control, handleSubmit, setError, getValues, watch } = useForm({
     resolver: yupResolver(schema),
     defaultValues: { approved: idea.approved || 0, approval_comment: idea.approval_comment || '' },
   });
@@ -62,7 +58,8 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
     setLoading(true);
     await setApprovalStatus({
       idea_id: idea.hash_id,
-      ...data,
+      approved: data.approved,
+      approval_comment: data.approval_comment || '',
     });
     setLoading(false);
     setEditing(false);
@@ -94,17 +91,14 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
             <Stack gap={2}>
               <Stack direction="row" alignItems="center" justifyContent="space-between" gap={1}>
                 <ApproveField control={control} disabled={isLoading} />
-                {watch('approved') !== 0 && <AppIconButton icon="close" onClick={onClose} sx={{ m: -1 }} />}
-              </Stack>
-              <MarkdownEditor name="approval_comment" control={control} required />
-              <Stack direction="row" justifyContent="end" gap={2}>
-                <Button onClick={onClose} color="error">
+                <Button onClick={onClose} color="error" sx={{ ml: 'auto' }}>
                   {t('actions.cancel')}
                 </Button>
                 <Button type="submit" variant="contained">
                   {isLoading ? t('actions.loading') : t('actions.confirm')}
                 </Button>
               </Stack>
+              {watch('approved') !== 1 && <MarkdownEditor name="approval_comment" control={control} required />}
             </Stack>
           </form>
         ) : (
@@ -112,7 +106,9 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
             <AppIcon icon={approvalMessages[idea.approved + 1]} />
             <Stack flexGrow={1}>
               <Typography variant="body2" sx={{ color: 'inherit' }}>
-                {idea.approval_comment || t(`scopes.ideas.${approvalMessages[idea.approved + 1]}`)}
+                <MarkdownReader>
+                  {idea.approval_comment || t(`scopes.ideas.${approvalMessages[idea.approved + 1]}`)}
+                </MarkdownReader>
               </Typography>
             </Stack>
             {checkPermissions('ideas', 'approve') && (
