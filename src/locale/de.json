@@ -258,10 +258,12 @@
       "approve": "Genehmigen",
       "approved": "Diese Idee wurde angenommen",
       "name": "Idee",
+      "notWinner": "",
       "plural": "Ideen",
       "reject": "Ablehnen",
       "rejected": "Diese Idee wurde nicht angenommen",
-      "waiting": "Diese Idee wartet auf Genehmigung"
+      "waiting": "Diese Idee wartet auf Genehmigung",
+      "winner": ""
     },
     "messages": {
       "name": "Nachricht",

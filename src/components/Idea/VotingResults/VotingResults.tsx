@@ -53,7 +53,7 @@ const VotingResults = ({ idea }: VotingResultsProps) => {
           borderRadius: '25px',
           overflow: 'hidden',
           scrollSnapAlign: 'center',
-          bgcolor: idea.is_winner ? 'for.main' : 'against.main',
+          bgcolor: idea.is_winner ? 'for.main' : 'disabled.main',
         }}
         variant="outlined"
       >
@@ -75,7 +75,7 @@ const VotingResults = ({ idea }: VotingResultsProps) => {
               {t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`).toLowerCase() })}
             </Typography>
           </Stack>
-          <Stack>
+          <Stack direction="column-reverse">
             {votingOptions.map((option, i) => (
               <Stack
                 direction="row"
