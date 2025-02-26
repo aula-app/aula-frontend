@@ -88,7 +88,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
   }, [phase]);
 
   const passedQuorum = () => {
-    if (!!quorum) return (idea.sum_votes / idea.number_of_users) * 100 > quorum;
+    if (!!quorum) return (idea.sum_votes / idea.number_of_users) * 100 >= quorum;
     else return false;
   };
 
