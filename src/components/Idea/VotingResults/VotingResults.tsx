@@ -1,19 +1,20 @@
 import AppIcon from '@/components/AppIcon';
-import { getVote, getVoteResults } from '@/services/vote';
+import { getVote, getVoteResults, setToLosing, setToWinning } from '@/services/vote';
 import { IdeaType } from '@/types/Scopes';
-import { Vote, votingOptions } from '@/utils';
-import { Card, Stack, Typography } from '@mui/material';
+import { checkPermissions, Vote, votingOptions } from '@/utils';
+import { Card, FormControlLabel, Stack, Switch, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface VotingResultsProps {
   idea: IdeaType;
+  onReload: () => void;
 }
 
 /**
  * Renders "VotingResults" component
  */
-const VotingResults = ({ idea }: VotingResultsProps) => {
+const VotingResults = ({ idea, onReload }: VotingResultsProps) => {
   const { t } = useTranslation();
 
   const [isLoading, setLoading] = useState(true);
@@ -41,13 +42,24 @@ const VotingResults = ({ idea }: VotingResultsProps) => {
     });
   };
 
+  const handleSetWinner = async (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    const response = checked ? await setToWinning(idea.hash_id) : await setToLosing(idea.hash_id);
+    if (!response.error) onReload();
+  };
+
   useEffect(() => {
-    fetchVote();
+    if (checkPermissions('ideas', 'vote')) fetchVote();
     getResults();
   }, []);
 
   return (
     <Stack mt={2}>
+      {checkPermissions('ideas', 'setWinner') && (
+        <FormControlLabel
+          control={<Switch onChange={handleSetWinner} checked={Boolean(idea.is_winner)} />}
+          label={t('settings.columns.is_winner')}
+        />
+      )}
       <Card
         sx={{
           borderRadius: '25px',

@@ -42,6 +42,32 @@ export async function getVoteResults(idea_id: string): Promise<GetVoteResultResp
   return response as GetVoteResultResponse;
 }
 
+export async function setToWinning(idea_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'setToWinning',
+      arguments: { idea_id },
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+export async function setToLosing(idea_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'setToLosing',
+      arguments: { idea_id },
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
 /**
  * Get Quorum.
  */

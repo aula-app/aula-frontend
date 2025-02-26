@@ -1,15 +1,14 @@
-import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
 import { IdeaForms } from '@/components/DataForms';
 import { ApprovalCard, IdeaBubble, VotingCard, VotingResults } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import VotingQuorum from '@/components/Idea/VotingQuorum';
 import { deleteIdea, getIdea } from '@/services/ideas';
-import { useAppStore } from '@/store/AppStore';
 import { getRoom } from '@/services/rooms';
+import { useAppStore } from '@/store/AppStore';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { Drawer, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import CommentView from '../Comment';
@@ -24,7 +23,6 @@ const IdeaView = () => {
   const navigate = useNavigate();
   const { idea_id, room_id, phase } = useParams();
 
-  const addCategory = useRef<AddCategoryRefProps>(null);
   const [appState, dispatch] = useAppStore();
 
   const [isLoading, setLoading] = useState(true);
@@ -43,9 +41,9 @@ const IdeaView = () => {
     });
   };
 
-  const fetchIdea = useCallback(async () => {
+  const fetchIdea = async () => {
     if (!idea_id) return;
-    setLoading(true);
+    if (typeof idea === 'undefined') setLoading(true);
     const response = await getIdea(idea_id);
 
     let roomName = 'aula';
@@ -66,8 +64,8 @@ const IdeaView = () => {
 
     if (response.error) setError(response.error);
     if (!response.error && response.data) setIdea(response.data);
-    setLoading(false);
-  }, [idea_id]);
+    if (isLoading) setLoading(false);
+  };
 
   useEffect(() => {
     fetchIdea();
@@ -87,7 +85,7 @@ const IdeaView = () => {
   return !isLoading && idea ? (
     <Stack width="100%" height="100%" overflow="auto" gap={2}>
       {phase === '30' && <VotingCard onReload={fetchIdea} />}
-      {phase === '40' && <VotingResults idea={idea} />}
+      {phase === '40' && <VotingResults idea={idea} onReload={fetchIdea} />}
       <IdeaBubble
         idea={idea}
         onEdit={() => setEdit(idea)}

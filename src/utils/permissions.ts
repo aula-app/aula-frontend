@@ -51,6 +51,7 @@ const permissions = {
     vote: { role: VOTING_ROLES },
     approve: { role: 44 },
     viewAll: { role: 40 },
+    setWinner: { role: 44 },
     status: { role: 40 },
   },
   messages: {

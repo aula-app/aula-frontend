@@ -258,12 +258,10 @@
       "approve": "Genehmigen",
       "approved": "Diese Idee wurde angenommen",
       "name": "Idee",
-      "notWinner": "",
       "plural": "Ideen",
       "reject": "Ablehnen",
       "rejected": "Diese Idee wurde nicht angenommen",
-      "waiting": "Diese Idee wartet auf Genehmigung",
-      "winner": ""
+      "waiting": "Diese Idee wartet auf Genehmigung"
     },
     "messages": {
       "name": "Nachricht",
@@ -355,7 +353,7 @@
       "infinite_votes": "Unendliche Stimmen",
       "info": "Info",
       "internal_info": "Interne Info",
-      "is_winner": "Gewinner einstellen",
+      "is_winner": "Als Gewinner markieren",
       "language_id": "Sprache",
       "last_login": "Letzte Anmeldung",
       "last_update": "Letzte Aktualisierung",
