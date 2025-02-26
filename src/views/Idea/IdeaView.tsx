@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import CommentView from '../Comment';
+import { getQuorum } from '@/services/vote';
 
 /**
  * Renders "Idea" view
@@ -29,6 +30,7 @@ const IdeaView = () => {
   const [error, setError] = useState<string | null>(null);
   const [idea, setIdea] = useState<IdeaType>();
   const [edit, setEdit] = useState<IdeaType>(); // undefined = update dialog closed; EditFormData = edit idea;
+  const [quorum, setQuorum] = useState<number>(0);
 
   // const [comments, setComments] = useState<CommentType[]>([]);
   // const [vote, setVote] = useState<Vote>(0);
@@ -86,8 +88,16 @@ const IdeaView = () => {
     if (isLoading) setLoading(false);
   };
 
+  async function fetchQuorum() {
+    getQuorum().then((response) => {
+      if (response.error || !response.data) return;
+      setQuorum(Number(phase) >= 30 ? Number(response.data.quorum_votes) : Number(response.data.quorum_wild_ideas));
+    });
+  }
+
   useEffect(() => {
     fetchIdea();
+    fetchQuorum();
   }, [idea_id]);
 
   const ideaDelete = async (id: string) => {
@@ -104,7 +114,7 @@ const IdeaView = () => {
   return !isLoading && idea ? (
     <Stack width="100%" height="100%" overflow="auto" gap={2}>
       {phase === '30' && <VotingCard onReload={fetchIdea} />}
-      {phase === '40' && <VotingResults idea={idea} onReload={fetchIdea} />}
+      {phase === '40' && <VotingResults idea={idea} onReload={fetchIdea} quorum={quorum} />}
       <IdeaBubble
         idea={idea}
         onEdit={() => setEdit(idea)}
@@ -112,6 +122,7 @@ const IdeaView = () => {
         disabled={Number(phase) >= 20}
       >
         <VotingQuorum
+          quorum={quorum}
           phase={Number(phase) as RoomPhases}
           votes={Number(phase) >= 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
           users={Number(idea.number_of_users)}

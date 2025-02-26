@@ -261,7 +261,6 @@
     "ideas": {
       "approve": "Approve",
       "approved": "This idea was approved.",
-      "winner": "This idea has won.",
       "marked_winner": "This idea is selected as a winner.",
       "marked_not_winner": "This idea is not selected as a winner.",
       "not_marked_yet": "This idea is still not marked as a winner.",
@@ -269,7 +268,8 @@
       "plural": "Ideas",
       "reject": "Reject",
       "rejected": "This idea was not approved.",
-      "waiting": "This idea is waiting for approval."
+      "waiting": "This idea is waiting for approval.",
+      "winner": "This idea has won."
     },
     "messages": {
       "name": "Message",

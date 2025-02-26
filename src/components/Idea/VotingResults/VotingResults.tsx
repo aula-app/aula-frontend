@@ -1,37 +1,26 @@
 import AppIcon from '@/components/AppIcon';
-import { getVote, getVoteResults, ResultResponse, setToLosing, setToWinning } from '@/services/vote';
+import { getQuorum, getVote, getVoteResults, ResultResponse, setToLosing, setToWinning } from '@/services/vote';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions, Vote, votingOptions } from '@/utils';
-import {
-  Button,
-  Card,
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  FormControlLabel,
-  Stack,
-  Switch,
-  Typography,
-} from '@mui/material';
+import { Card, FormControlLabel, Stack, Switch, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
   idea: IdeaType;
+  quorum: number;
   onReload: () => void;
 }
 
 /**
  * Renders "VotingResults" component
  */
-const VotingResults: React.FC<Props> = ({ idea, onReload }) => {
+const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
   const { t } = useTranslation();
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [vote, setVote] = useState<Vote>(0);
-
-  const [isEditing, setEditing] = useState(false);
 
   const fetchVote = useCallback(async () => {
     setLoading(true);
@@ -59,6 +48,8 @@ const VotingResults: React.FC<Props> = ({ idea, onReload }) => {
     const response = checked ? await setToWinning(idea.hash_id) : await setToLosing(idea.hash_id);
     if (!response.error) onReload();
   };
+
+  const quorumPassed = () => quorum < numVotes.votes_positive + numVotes.votes_negative + numVotes.votes_neutral;
 
   useEffect(() => {
     if (checkPermissions('ideas', 'vote')) fetchVote();
@@ -92,10 +83,16 @@ const VotingResults: React.FC<Props> = ({ idea, onReload }) => {
               aspectRatio: 1,
             }}
           >
-            <AppIcon icon={idea.is_winner ? 'for' : 'against'} size="xl" />
+            <AppIcon icon={idea.is_winner ? 'winner' : quorumPassed() ? 'for' : 'against'} size="xl" />
           </Stack>
           <Stack flexGrow={1} pr={2}>
-            <Typography variant="h6">{t(`scopes.ideas.${idea.is_winner == 1 ? 'approved' : 'rejected'}`)}</Typography>
+            <Typography variant="h6">
+              {idea.is_winner === 1
+                ? t(`scopes.ideas.winner`)
+                : quorumPassed()
+                  ? t(`scopes.ideas.approved`)
+                  : t(`scopes.ideas.rejected`)}
+            </Typography>
             {checkPermissions('ideas', 'vote') && (
               <Typography variant="caption">
                 {t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`).toLowerCase() })}

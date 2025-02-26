@@ -261,7 +261,6 @@
     "ideas": {
       "approve": "Genehmigen",
       "approved": "Diese Idee wurde angenommen.",
-      "winner": "Diese Idee hat gewonnen.",
       "marked_winner": "Diese Idee wird als Gewinner ausgewählt.",
       "marked_not_winner": "Diese Idee wird nicht als Gewinner ausgewählt.",
       "not_marked_yet": "Noch nicht als Gewinner markiert.",
@@ -269,7 +268,8 @@
       "plural": "Ideen",
       "reject": "Ablehnen",
       "rejected": "Diese Idee wurde nicht angenommen",
-      "waiting": "Diese Idee wartet auf Genehmigung"
+      "waiting": "Diese Idee wartet auf Genehmigung",
+      "winner": "Diese Idee hat gewonnen."
     },
     "messages": {
       "name": "Nachricht",
