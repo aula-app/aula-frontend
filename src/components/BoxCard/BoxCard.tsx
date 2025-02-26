@@ -61,7 +61,7 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
           <Typography variant="h6" noWrap>
             {box.name}
           </Typography>
-          <Typography variant="body2">
+          <Typography component={Box} variant="body2">
             <MarkdownReader>{box.description_public}</MarkdownReader>
           </Typography>
           <Box

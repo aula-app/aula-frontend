@@ -8,7 +8,7 @@ import { setApprovalStatus } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Card, CardContent, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -105,7 +105,7 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
           <Stack direction="row" alignItems="center" gap={2}>
             <AppIcon icon={approvalMessages[idea.approved + 1]} />
             <Stack flexGrow={1}>
-              <Typography variant="body2" sx={{ color: 'inherit' }}>
+              <Typography component={Box} variant="body2" sx={{ color: 'inherit' }}>
                 <MarkdownReader>
                   {idea.approval_comment || t(`scopes.ideas.${approvalMessages[idea.approved + 1]}`)}
                 </MarkdownReader>
