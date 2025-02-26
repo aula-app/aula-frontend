@@ -49,7 +49,8 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
     if (!response.error) onReload();
   };
 
-  const quorumPassed = () => quorum <= numVotes.votes_positive + numVotes.votes_negative + numVotes.votes_neutral;
+  const quorumPassed = () =>
+    quorum / 100 <= (numVotes.votes_positive + numVotes.votes_negative + numVotes.votes_neutral) / numVotes.total_votes;
 
   useEffect(() => {
     if (checkPermissions('ideas', 'vote')) fetchVote();
