@@ -26,7 +26,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [vote, setVote] = useState(0);
+  const [vote, setVote] = useState<number | null>();
 
   const [icon, setIcon] = useState<CategoryIconType>();
   const [bgColor, setBgColor] = useState<string>();
@@ -132,7 +132,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
               <Typography variant="h6" noWrap textOverflow="ellipsis">
                 {idea.title}
               </Typography>
-              {phase === 40 && (
+              {phase === 40 && !!vote && (
                 <Typography variant="caption" fontSize="small" ml={0.5}>
                   {checkPermissions('ideas', 'vote')
                     ? t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`) })
@@ -173,7 +173,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
                     <AppIcon icon={phases[phase]} />
                   )}
                 </>
-              ) : phase === 30 ? (
+              ) : ( phase === 30  && !!vote ) ? (
                 <AppIcon icon={votingOptions[vote + 1]} />
               ) : (
                 <>
