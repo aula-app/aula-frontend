@@ -18,14 +18,14 @@ const VotingCard = ({ onReload }: Props) => {
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [vote, setVote] = useState<Vote>();
+  const [vote, setVote] = useState<Vote | null>();
 
   const fetchVote = useCallback(async () => {
     if (!idea_id) return;
     setLoading(true);
     const response = await getVote(idea_id);
     if (response.error) setError(response.error);
-    if (!response.error) setVote(response.data || 0);
+    if (!response.error) setVote(response.data || null);
     setLoading(false);
   }, [idea_id]);
 
