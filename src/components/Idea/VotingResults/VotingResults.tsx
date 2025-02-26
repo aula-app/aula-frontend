@@ -1,8 +1,18 @@
 import AppIcon from '@/components/AppIcon';
-import { getVote, getVoteResults, setToLosing, setToWinning } from '@/services/vote';
+import { getVote, getVoteResults, ResultResponse, setToLosing, setToWinning } from '@/services/vote';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions, Vote, votingOptions } from '@/utils';
-import { Card, FormControlLabel, Stack, Switch, Typography } from '@mui/material';
+import {
+  Button,
+  Card,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  FormControlLabel,
+  Stack,
+  Switch,
+  Typography,
+} from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -14,7 +24,7 @@ interface Props {
 /**
  * Renders "VotingResults" component
  */
-const VotingResults = ({ idea, onReload }: VotingResultsProps) => {
+const VotingResults: React.FC<Props> = ({ idea, onReload }) => {
   const { t } = useTranslation();
 
   const [isLoading, setLoading] = useState(true);
@@ -41,11 +51,7 @@ const VotingResults = ({ idea, onReload }: VotingResultsProps) => {
   const getResults = () => {
     getVoteResults(idea.hash_id).then((response) => {
       if (!response.data) return;
-      setNumVotes([
-        response.data.votes_negative as Vote,
-        response.data.votes_neutral as Vote,
-        response.data.votes_positive as Vote,
-      ]);
+      setNumVotes(response.data);
     });
   };
 
@@ -60,7 +66,7 @@ const VotingResults = ({ idea, onReload }: VotingResultsProps) => {
   }, []);
 
   return (
-    <Stack mt={2}>
+    <Stack>
       {checkPermissions('ideas', 'setWinner') && (
         <FormControlLabel
           control={<Switch onChange={handleSetWinner} checked={Boolean(idea.is_winner)} />}
@@ -86,20 +92,15 @@ const VotingResults = ({ idea, onReload }: VotingResultsProps) => {
               aspectRatio: 1,
             }}
           >
-            <AppIcon icon={((idea.approved == 1) || idea.is_winner) ? 'for' : 'against'} size="xl" />
+            <AppIcon icon={idea.is_winner ? 'for' : 'against'} size="xl" />
           </Stack>
           <Stack flexGrow={1} pr={2}>
-            <Typography variant="h6">
-                  {(phase == 20) ? 
-                    t(`scopes.ideas.${idea.approved == 1 ? 'approved' : 'rejected'}`)
-                  :t(`scopes.ideas.${idea.is_winner == 1 ? 'winner' : 'rejected'}`)
-                  }
-            </Typography>
+            <Typography variant="h6">{t(`scopes.ideas.${idea.is_winner == 1 ? 'approved' : 'rejected'}`)}</Typography>
             {checkPermissions('ideas', 'vote') && (
-            <Typography variant="caption">
-              {t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`).toLowerCase() })}
-            </Typography>)
-            }
+              <Typography variant="caption">
+                {t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`).toLowerCase() })}
+              </Typography>
+            )}
           </Stack>
           <Stack direction="column-reverse">
             {votingOptions.map((option, i) => (
@@ -118,20 +119,6 @@ const VotingResults = ({ idea, onReload }: VotingResultsProps) => {
           </Stack>
         </Stack>
       </Card>
-      )}
-      {checkPermissions('ideas', 'setWinner') && (
-        <Dialog open={isEditing} onClose={() => setEditing(false)}>
-          <DialogTitle>{t(`results.${!idea.is_winner ? 'approveConfirm' : 'rejectConfirm'}`)}</DialogTitle>
-          <DialogActions>
-            <Button onClick={() => setEditing(false)} color="secondary" autoFocus>
-              {t('actions.cancel')}
-            </Button>
-            <Button onClick={onSubmit} variant="contained">
-              {t('actions.confirm')}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
     </Stack>
   );
 };

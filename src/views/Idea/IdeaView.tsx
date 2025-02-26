@@ -1,14 +1,14 @@
 import { IdeaForms } from '@/components/DataForms';
-import { SetWinnerCard, ApprovalCard, IdeaBubble, VotingCard, VotingResults } from '@/components/Idea';
+import { ApprovalCard, IdeaBubble, VotingCard, VotingResults } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import VotingQuorum from '@/components/Idea/VotingQuorum';
-import { deleteIdea, getIdea } from '@/services/ideas';
+import { deleteIdea, getIdea, getIdeaBoxes } from '@/services/ideas';
 import { getRoom } from '@/services/rooms';
 import { useAppStore } from '@/store/AppStore';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { Drawer, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import CommentView from '../Comment';
@@ -52,7 +52,7 @@ const IdeaView = () => {
       if (nameResponse) roomName = nameResponse;
     }
 
-    const topic = await getIdeaBox(idea_id);
+    const topic = (await getIdeaBoxes(idea_id)).data?.[0];
 
     let topicName = '';
     let topicId = '';
@@ -117,7 +117,7 @@ const IdeaView = () => {
           users={Number(idea.number_of_users)}
         />
       </IdeaBubble>
-      {Number(phase) === 20 && <ApprovalCard idea={idea} disabled={Number(phase) > 20} onReload={fetchIdea} />}
+      {Number(phase) === 20 && <ApprovalCard idea={idea} onReload={fetchIdea} />}
       <Stack px={2}>
         <CommentView />
       </Stack>
