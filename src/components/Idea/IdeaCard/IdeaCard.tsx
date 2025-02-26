@@ -68,7 +68,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
       case 20:
         if (idea.approved === 1) return 'for';
         if (idea.approved === -1) return 'against';
-        return 'disabled;'
+        return 'disabled;';
       case 30:
         if (vote === 1) return 'for';
         if (vote === -1) return 'against';
@@ -88,11 +88,9 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
   }, [phase]);
 
   const passedQuorum = () => {
-    if (!!quorum)
-      return (idea.sum_votes / idea.number_of_users)*100 > quorum;
-    else 
-      return false
-  }
+    if (!!quorum) return (idea.sum_votes / idea.number_of_users) * 100 > quorum;
+    else return false;
+  };
 
   return (
     <Grid
@@ -123,7 +121,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
           <Stack direction="row" height={68} alignItems="center">
             <Stack pl={2}>
               {phase >= 40 ? (
-                <AppIcon icon={idea.is_winner > 0 || passedQuorum() ? 'for' : 'against'} size="xl" />
+                <AppIcon icon={Number(idea.is_winner) > 0 ? 'winner' : passedQuorum() ? 'for' : 'against'} size="xl" />
               ) : icon ? (
                 <AppIcon icon={icon} />
               ) : (
@@ -136,7 +134,9 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
               </Typography>
               {phase === 40 && (
                 <Typography variant="caption" fontSize="small" ml={0.5}>
-                  { checkPermissions('ideas', 'vote') ? t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`) }) : ''}
+                  {checkPermissions('ideas', 'vote')
+                    ? t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`) })
+                    : ''}
                 </Typography>
               )}
             </Stack>
