@@ -25,6 +25,7 @@
     "build": "tsc && vite build",
     "build-branch": "tsc && vite --config vite.branch.config.mts --mode branch build",
     "build-devel": "tsc && vite build --mode devel",
+    "build-staging": "tsc && vite build --mode staging",
     "build-single": "vite build --mode single",
     "build-test": "tsc && vite build --mode test",
     "build-bw": "tsc && vite build --mode bw",

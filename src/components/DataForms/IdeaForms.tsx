@@ -142,7 +142,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h4">
               {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
-                var: t(`scopes.ideas.name`).toLowerCase(),
+                var: t(`scopes.ideas.name`),
               })}
             </Typography>
             <Stack direction="row" gap={2}>

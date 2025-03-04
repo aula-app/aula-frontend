@@ -1,9 +1,9 @@
-name: Update production environment
+name: Update staging instance
 
 on:
   push:
     branches:
-      - main
+      - staging
 
 jobs:
   build:
@@ -17,6 +17,6 @@ jobs:
       - name: Build frontend
         run: |
           npm i
-          npm run build
-          cp -vr build/* /var/www-multi/www
+          npm run build-staging
+          cp -vr build/* /var/www-aula-staging/
         shell: bash

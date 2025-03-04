@@ -1,9 +1,9 @@
-name: Update production environment
+name: Update development environment
 
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   build:
@@ -17,6 +17,9 @@ jobs:
       - name: Build frontend
         run: |
           npm i
-          npm run build
-          cp -vr build/* /var/www-multi/www
+          npm run build-devel
+          cp -vr build/* /var/www/
+          # git checkout test
+          # npm run build
+          # cp -vr build/* /var/www-test/
         shell: bash
