@@ -35,7 +35,7 @@ const RoleField: React.FC<Props> = ({ control, disabled = false, noAdmin = false
             slotProps={{ inputLabel: { shrink: true } }}
           >
             {roles
-              .filter((role) => (noAdmin ? role < 50 : true))
+              .filter((role) => (noAdmin ? role < 50 : role < 60))
               .map((role) => (
                 <MenuItem value={role}>{t(`roles.${role}`)}</MenuItem>
               ))}
