@@ -80,7 +80,7 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
     <Card
       sx={{
         borderRadius: '25px',
-        overflow: 'hidden',
+        overflow: 'visible',
         scrollSnapAlign: 'center',
         bgcolor: disabled ? 'disabled.main' : approvalColors[(watch('approved') ?? idea.approved) + 1],
       }}
