@@ -35,7 +35,9 @@ const IdeasBoxView = () => {
   async function fetchQuorum() {
     getQuorum().then((response) => {
       if (response.error || !response.data) return;
-      setQuorum((!!phase && Number(phase) >= 30) ? Number(response.data.quorum_votes) : Number(response.data.quorum_wild_ideas));
+      setQuorum(
+        !!phase && Number(phase) >= 30 ? Number(response.data.quorum_votes) : Number(response.data.quorum_wild_ideas)
+      );
     });
   }
 
@@ -47,7 +49,7 @@ const IdeasBoxView = () => {
   const [boxError, setBoxError] = useState<string | null>(null);
   const [box, setBox] = useState<BoxType>();
   const [edit, setEdit] = useState<BoxType>(); // undefined = closed;
-  const [boxPhase, setBoxPhase] = useState<string | null>(phase ? phase: '');
+  const [boxPhase, setBoxPhase] = useState<string | null>(phase ? phase : '');
 
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
@@ -70,9 +72,9 @@ const IdeasBoxView = () => {
     let roomName = 'aula';
     if (room_id) roomName = await getRoomName(room_id);
 
-    const currentBoxPhase = response.data ? response.data.phase_id : ''
+    const currentBoxPhase = response.data ? response.data.phase_id : '';
     if (currentBoxPhase != boxPhase && response.data) {
-      setBoxPhase(currentBoxPhase)
+      setBoxPhase(currentBoxPhase);
       dispatch({
         action: 'SET_BREADCRUMB',
         breadcrumb: [
@@ -81,7 +83,7 @@ const IdeasBoxView = () => {
           [response.data.name, ''],
         ],
       });
-      navigate(`/room/${room_id}/phase/${currentBoxPhase}/idea-box/${box_id}`, { replace: true })
+      navigate(`/room/${room_id}/phase/${currentBoxPhase}/idea-box/${box_id}`, { replace: true });
     } else {
       if (response.data && response.data.name)
         dispatch({
@@ -198,9 +200,11 @@ const IdeasBoxView = () => {
         {ideasError && <Typography>{t(ideasError)}</Typography>}
         {!isIdeasLoading && box && (
           <>
-            {ideas.map((idea, key) => (
-              <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={key} />
-            ))}
+            {ideas
+              .filter((idea) => (Number(phase) >= 30 ? idea.approved > 0 : true))
+              .map((idea, key) => (
+                <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={key} />
+              ))}
             {checkPermissions('boxes', 'addIdea') && Number(phase) < 20 && (
               <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
                 <AddIdeasButton ideas={ideas} onClose={fetchIdeas} />
