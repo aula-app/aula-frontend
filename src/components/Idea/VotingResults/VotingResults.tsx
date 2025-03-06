@@ -59,12 +59,6 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
 
   return (
     <Stack>
-      {checkPermissions('ideas', 'setWinner') && (
-        <FormControlLabel
-          control={<Switch onChange={handleSetWinner} checked={Boolean(idea.is_winner)} />}
-          label={t('settings.columns.is_winner')}
-        />
-      )}
       <Card
         sx={{
           borderRadius: '25px',
@@ -117,6 +111,13 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
           </Stack>
         </Stack>
       </Card>
+      {checkPermissions('ideas', 'setWinner') && (
+        <FormControlLabel
+          control={<Switch onChange={handleSetWinner} checked={Boolean(idea.is_winner)} sx={{ ml: 3 }} />}
+          label={t('settings.columns.is_winner')}
+          sx={{ mt: 2 }}
+        />
+      )}
     </Stack>
   );
 };
