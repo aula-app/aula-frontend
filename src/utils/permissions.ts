@@ -2,8 +2,10 @@ import { RoleTypes } from '@/types/SettingsTypes';
 import { parseJwt } from './jwt';
 import { localStorageGet } from './localStorage';
 
+const USER_ROLES = [20, 30, 31, 40, 41, 44, 45];
 const VOTING_ROLES = [20, 31, 41, 45];
 const ADMIN = [50];
+const USERS_ADMIN = USER_ROLES.concat(ADMIN);
 
 const permissions = {
   announcements: {
@@ -30,8 +32,8 @@ const permissions = {
     status: { role: 40 },
   },
   comments: {
-    create: { role: 20 },
-    edit: { role: 30, self: true },
+    create: { role: USER_ROLES },
+    edit: { role: USER_ROLES, self: true },
     delete: { role: 30, self: true },
     status: { role: 40 },
   },
@@ -44,11 +46,11 @@ const permissions = {
   },
   ideas: {
     addCategory: { role: 20 },
-    create: { role: VOTING_ROLES },
+    create: { role: USERS_ADMIN },
     edit: { role: 30, self: true },
     delete: { role: 30, self: true },
-    like: { role: VOTING_ROLES },
-    vote: { role: VOTING_ROLES },
+    like: { role: USERS_ADMIN },
+    vote: { role: USERS_ADMIN },
     approve: { role: 44 },
     setWinner: { role: 30 },
     viewAll: { role: 40 },

@@ -88,6 +88,15 @@ A component for selecting images:
 - Handles image preview
 - Integrates with DefaultImages for fallback options
 
+### SetWinnerField
+
+A form field component for marking ideas as winners:
+
+- Provides visual feedback with icon buttons
+- Integrates with React Hook Form for state management
+- Shows different states (not winner, winner, not marked yet)
+- Used by moderators during the result phase
+
 ## Layout Components
 
 ### BoxCard
@@ -123,6 +132,7 @@ A collection of components for idea management:
 - IdeaContent: Renders idea details
 - VotingCard: Handles idea voting
 - ApprovalCard: Manages idea approval process
+- VotingResults: Displays voting results and allows marking ideas as winners
 
 ### MessageCard
 

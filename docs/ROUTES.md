@@ -19,6 +19,7 @@ The main router component that:
 - Determines user authentication status
 - Handles user consent checks
 - Switches between public and private routes based on auth state
+- Manages Auth0 integration for authentication
 
 ### PrivateRoutes.tsx
 
@@ -32,7 +33,7 @@ Manages routes for authenticated users, including:
 
 Key features:
 
-- Role-based access control
+- Role-based access control using checkPermissions
 - Nested routing for complex views
 - Automatic redirect for unauthorized access
 
@@ -45,6 +46,46 @@ Handles unauthenticated user routes, including:
 - Instance code management
 - OAuth integration
 - Initial setup flows
+
+## Route Structure
+
+### Main Routes
+
+- `/`: Welcome view/dashboard
+- `/about`: About page
+- `/phase/:phase`: Ideas filtered by phase
+- `/offline`: Offline mode view
+- `/updates`: System updates information
+
+### Room-Related Routes
+
+- `/room/:room_id/phase/:phase`: Room view filtered by phase
+- `/room/:room_id/phase/:phase/idea/:idea_id`: Single idea view within a room
+- `/room/:room_id/phase/:phase/idea-box/:box_id`: Ideas box view
+- `/room/:room_id/phase/:phase/idea-box/:box_id/idea/:idea_id`: Single idea within a box
+
+### Message System Routes
+
+- `/announcements`: List of announcements
+- `/announcements/:announcement_id`: Single announcement view
+- `/messages`: List of messages
+- `/messages/:message_id`: Single message view
+- `/reports`: List of reports
+- `/reports/:report_id`: Single report view
+- `/requests`: List of requests
+- `/requests/:report_id`: Single request view
+
+### Settings Routes
+
+- `/settings/profile`: User profile management
+- `/settings/announcements`: Announcement management
+- `/settings/boxes`: Box management
+- `/settings/configuration`: System configuration
+- `/settings/ideas`: Idea management
+- `/settings/reports`: Report management
+- `/settings/requests`: Request management
+- `/settings/rooms`: Room management
+- `/settings/users`: User management
 
 ## Usage Guidelines
 
