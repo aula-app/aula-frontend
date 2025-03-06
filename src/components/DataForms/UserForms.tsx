@@ -199,7 +199,12 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 {...register('email')}
               />
               {checkPermissions('users', 'addRole') && (
-                <RoleField control={control} disabled={isLoading} sx={{ flex: 1 }} noAdmin />
+                <RoleField
+                  control={control}
+                  disabled={isLoading}
+                  sx={{ flex: 1 }}
+                  noAdmin={!checkPermissions('users', 'createAdmin')}
+                />
               )}
               {checkPermissions('rooms', 'addUser') && currentLevel < 40 && (
                 <RoomRolesField

@@ -88,6 +88,7 @@ const permissions = {
   },
   users: {
     addRole: { role: 50 },
+    createAdmin: { role: ADMIN },
     create: { role: 50 },
     edit: { role: 50 },
     delete: { role: 50 },
