@@ -94,6 +94,10 @@ const PHASE_COLORS = {
 };
 
 const OTHER_COLORS = {
+  input: {
+    border: 'rgba(0, 0, 0, 0.23)',
+    borderHover: 'rgba(0, 0, 0, 0.87)',
+  },
   against: {
     main: 'hsl(0, 84%, 76%)',
   },

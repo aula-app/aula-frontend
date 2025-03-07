@@ -9,7 +9,7 @@ import {
   toolbarPlugin,
   UndoRedo,
 } from '@mdxeditor/editor';
-import { FormControl, FormControlProps, FormHelperText, FormLabel, Stack, styled, useTheme } from '@mui/material';
+import { FormControl, FormControlProps, FormHelperText, FormLabel, Stack, styled } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -26,15 +26,14 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
     position: 'relative',
     width: '100%',
     minWidth: '250px',
-    outline: `1px solid rgba(0, 0, 0, 0.23)`,
+    outline: `1px solid ${theme.palette.input.border}`,
     borderRadius: theme.shape.borderRadius,
     fontFamily: theme.typography.fontFamily,
     fontSize: '1rem',
     lineHeight: 1.4375,
-    backgroundColor: theme.palette.background.paper,
 
     '&:hover': {
-      outlineColor: `rgb(0, 0, 0)`,
+      outlineColor: theme.palette.input.borderHover,
     },
 
     '&:focus-within': {
@@ -51,12 +50,76 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
       borderColor: theme.palette.action.disabled,
       color: theme.palette.text.disabled,
     },
+
+    svg: {
+      color: theme.palette.text.primary,
+    },
+
+    // Textbox button styles
+    '.mdxeditor-root-contenteditable *': {
+      color: theme.palette.text.primary,
+    },
+
+    // Toolbar button styles
+    '.mdxeditor-toolbar button': {
+      backgroundColor: 'transparent',
+      border: 'none',
+      borderRadius: theme.shape.borderRadius,
+      padding: theme.spacing(0.5),
+      margin: theme.spacing(0.25),
+      cursor: 'pointer',
+      transition: theme.transitions.create(['background-color', 'color']),
+
+      '&:hover': {
+        backgroundColor: theme.palette.action.hover,
+      },
+
+      '&[data-active=true]': {
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.action.selected,
+      },
+
+      '&:disabled': {
+        color: theme.palette.action.disabled,
+        cursor: 'not-allowed',
+      },
+    },
+
+    // Separator style
+    '.separator': {
+      width: '1px',
+      margin: theme.spacing(0, 1),
+      backgroundColor: theme.palette.input.border,
+    },
+
+    '&:hover .separator': {
+      backgroundColor: theme.palette.input.borderHover,
+    },
+
+    '&:focus-within .separator': {
+      backgroundColor: theme.palette.primary.main,
+    },
+
+    // Toolbar container
+    '.editor-toolbar': {
+      borderBottom: `1px solid ${theme.palette.input.border}`,
+      padding: theme.spacing(1),
+      backgroundColor: theme.palette.background.paper,
+    },
+
+    '&:hover .editor-toolbar': {
+      borderBottomColor: theme.palette.input.borderHover,
+    },
+
+    '&:focus-within .editor-toolbar': {
+      borderBottomColor: theme.palette.primary.main,
+      borderBottomWidth: '2px',
+    },
   },
 }));
 
 const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
-  const theme = useTheme();
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
 
   return (
@@ -76,12 +139,11 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
                 zIndex: 999,
                 transform: 'translate(0, -.7rem) scale(0.75)',
                 transformOrigin: 'top left',
-                color: 'rgba(0, 0, 0, 0.6)',
                 top: 0,
                 left: 10,
-                backgroundColor: 'transparent',
+                backgroundColor: 'paper.main',
                 px: 1,
-                backdropFilter: 'blur(4px)',
+                backdropFilter: 'blur(100px)',
               }}
             >
               {t(`settings.columns.${name}`)}

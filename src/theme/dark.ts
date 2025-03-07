@@ -2,13 +2,13 @@ import { PaletteOptions, ThemeOptions } from '@mui/material';
 
 const PALETTE_COLORS: Partial<PaletteOptions> = {
   primary: {
-    main: 'hsl(134, 20%, 30%)',
+    main: 'hsl(134, 20%, 40%)',
   },
   secondary: {
-    main: 'hsl(200, 19%, 30%)',
+    main: 'hsl(200, 19%, 40%)',
   },
   error: {
-    main: 'hsl(358, 35%, 53%)',
+    main: 'hsl(358, 40%, 50%)',
   },
   warning: {
     main: 'hsl(45, 45%, 50%)',
@@ -17,7 +17,7 @@ const PALETTE_COLORS: Partial<PaletteOptions> = {
     main: 'hsl(205, 30%, 50%)',
   },
   success: {
-    main: 'hsl(134, 20%, 30%)',
+    main: 'hsl(134, 20%, 40%)',
   },
 };
 
@@ -94,6 +94,10 @@ const PHASE_COLORS = {
 };
 
 const OTHER_COLORS = {
+  input: {
+    border: 'rgba(255, 255, 255, 0.23)',
+    borderHover: 'rgba(255, 255, 255, 0.87)',
+  },
   against: {
     main: 'hsl(358, 35%, 30%)',
   },
@@ -136,7 +140,7 @@ const DARK_THEME: ThemeOptions = {
   palette: {
     mode: 'dark',
     background: {
-      paper: 'hsl(200, 19%, 30%)',
+      paper: 'hsl(200, 19%, 25%)',
       default: 'hsl(200, 19%, 20%)',
     },
     ...BASE_COLORS,

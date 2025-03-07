@@ -106,6 +106,10 @@ declare module '@mui/material/styles' {
     requests: {
       main: string;
     };
+    input: {
+      border: string;
+      borderHover: string;
+    };
   }
 
   interface PaletteOptions {
@@ -212,6 +216,10 @@ declare module '@mui/material/styles' {
     };
     requests?: {
       main?: string;
+    };
+    input?: {
+      border?: string;
+      borderHover?: string;
     };
   }
 }
