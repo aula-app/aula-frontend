@@ -1,10 +1,10 @@
 import { AppIcon, AppIconButton, AppLink } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import { useEventLogout, useOnMobile } from '@/hooks';
+import { useAppStore } from '@/store/AppStore';
 import { checkPermissions } from '@/utils';
 import { AppBar, Breadcrumbs, Stack, Toolbar } from '@mui/material';
-import { useEffect, useState, ReactNode } from 'react';
-import { useAppStore } from '@/store/AppStore';
+import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
@@ -25,51 +25,46 @@ interface Props {
  * TopBar component that provides navigation, breadcrumbs, and user controls
  * @component TopBar
  */
-const TopBar = ({ home }: Props) => {
-  const { t } = useTranslation();
+const TopBar: React.FC = () => {
   const [openSideBar, setSidebar] = useState(false);
   const [appState] = useAppStore();
 
   const location = useLocation().pathname.split('/');
   const onLogout = useEventLogout();
-  const onMobile = useOnMobile();
   const goto = useNavigate();
-
-  // Filter valid paths for breadcrumbs
-  const displayPath = location
-    .filter((path) => path.trim().length > 0) // Remove empty paths
-    .filter((path) => !EXCLUDED_PATHS.includes(path));
 
   const menuToggle = () => setSidebar(!openSideBar);
 
   // Calculate return path based on current location
   const getReturnPath = () => {
     if (appState.breadcrumb.length >= 2) {
-      if ((appState.breadcrumb[appState.breadcrumb.length - 1][1] != undefined) && !appState.breadcrumb[appState.breadcrumb.length - 1][1].endsWith('/phase/0')) { 
+      if (
+        appState.breadcrumb[appState.breadcrumb.length - 1][1] != undefined &&
+        !appState.breadcrumb[appState.breadcrumb.length - 1][1].endsWith('/phase/0')
+      ) {
         return appState.breadcrumb[appState.breadcrumb.length - 2][1];
       }
     }
     return '/';
   };
 
-  let crumbs:ReactNode[] = []
+  let crumbs: ReactNode[] = [];
   if (appState.breadcrumb.length > 1) {
     let index = 0;
-    for (let i = 0;  i < appState.breadcrumb.length - 1; ++i) {
+    for (let i = 0; i < appState.breadcrumb.length - 1; ++i) {
       let b = appState.breadcrumb[i];
-      crumbs.push(<AppLink underline="hover" color="inherit" to={b[1]} key={i}>
-                  {b[0]}  
-                </AppLink>);
+      crumbs.push(
+        <AppLink underline="hover" color="inherit" to={b[1]} key={i}>
+          {b[0]}
+        </AppLink>
+      );
       index++;
     }
-    crumbs.push(
-      <b key={appState.breadcrumb.length}>{appState.breadcrumb[appState.breadcrumb.length - 1][0]}</b>
-    )
+    crumbs.push(<b key={appState.breadcrumb.length}>{appState.breadcrumb[appState.breadcrumb.length - 1][0]}</b>);
   } else {
-    if (appState.breadcrumb.length  == 1)
-     crumbs = [<b key="0">{appState.breadcrumb[0][0]}</b>];
-  } 
-  
+    if (appState.breadcrumb.length == 1) crumbs = [<b key="0">{appState.breadcrumb[0][0]}</b>];
+  }
+
   return (
     <AppBar elevation={0}>
       <Toolbar>
@@ -87,7 +82,7 @@ const TopBar = ({ home }: Props) => {
           </AppLink>
           {crumbs.map((b, index) => {
             return b;
-            })}
+          })}
         </Breadcrumbs>
 
         {/* User Controls */}
