@@ -1,88 +1,131 @@
 import { PaletteOptions, ThemeOptions } from '@mui/material';
-import { amber, blue, cyan, deepOrange, deepPurple, green, grey, red } from '@mui/material/colors';
 
 const PALETTE_COLORS: Partial<PaletteOptions> = {
   primary: {
-    main: 'hsl(133, 65%, 70%)',
+    main: 'hsl(134, 72%, 67%)',
   },
   secondary: {
-    main: 'hsl(180, 10%, 50%)',
+    main: 'hsl(0, 0%, 59%)',
   },
   error: {
-    main: 'hsl(355, 60%, 73%)',
+    main: 'hsl(0, 84%, 76%)',
   },
   warning: {
-    main: 'hsl(40, 65%, 70%)',
+    main: 'hsl(45, 100%, 79%)',
   },
   info: {
-    main: 'hsl(190, 65%, 70%)',
+    main: 'hsl(204, 82%, 86%)',
   },
   success: {
-    main: 'hsl(113, 65%, 60%)',
+    main: 'hsl(134, 72%, 67%)',
+  },
+};
+
+const BASE_COLORS = {
+  themeBlue: {
+    light: 'hsl(210, 100%, 94%)',
+    main: 'hsl(210, 100%, 86%)',
+    dark: 'hsl(210, 88%, 67%)',
+    darker: 'hsl(210, 61%, 63%)',
+  },
+  themePurple: {
+    light: 'hsl(270, 50%, 94%)',
+    main: 'hsl(270, 50%, 82%)',
+    dark: 'hsl(270, 50%, 70%)',
+    darker: 'hsl(270, 25%, 47%)',
+  },
+  themeRed: {
+    light: 'hsl(0, 100%, 94%)',
+    main: 'hsl(0, 84%, 76%)',
+    dark: 'hsl(0, 84%, 58%)',
+    darker: 'hsl(0, 56%, 39%)',
+  },
+  themeYellow: {
+    light: 'hsl(45, 100%, 90%)',
+    main: 'hsl(45, 100%, 79%)',
+    dark: 'hsl(45, 100%, 68%)',
+    darker: 'hsl(45, 100%, 56%)',
+  },
+  themeGreen: {
+    light: 'hsl(134, 72%, 94%)',
+    main: 'hsl(134, 72%, 88%)',
+    dark: 'hsl(134, 72%, 67%)',
+    darker: 'hsl(134, 28%, 49%)',
+  },
+  themeGrey: {
+    light: 'hsl(0, 0%, 98%)',
+    main: 'hsl(0, 0%, 90%)',
+    dark: 'hsl(0, 0%, 78%)',
+    darker: 'hsl(0, 0%, 59%)',
   },
 };
 
 const PHASE_COLORS = {
   wild: {
-    light: blue[50],
-    main: blue[100],
-    dark: blue[300],
+    light: 'hsl(210, 100%, 94%)',
+    main: 'hsl(210, 100%, 86%)',
+    dark: 'hsl(210, 88%, 67%)',
+    darker: 'hsl(210, 61%, 63%)',
   },
   discussion: {
-    light: deepPurple[50],
-    main: deepPurple[100],
-    dark: deepPurple[300],
+    light: 'hsl(270, 50%, 94%)',
+    main: 'hsl(270, 50%, 82%)',
+    dark: 'hsl(270, 50%, 70%)',
+    darker: 'hsl(270, 25%, 47%)',
   },
   approval: {
-    light: deepOrange[50],
-    main: deepOrange[100],
-    dark: deepOrange[300],
+    light: 'hsl(0, 100%, 94%)',
+    main: 'hsl(0, 84%, 76%)',
+    dark: 'hsl(0, 84%, 58%)',
+    darker: 'hsl(0, 56%, 39%)',
   },
   voting: {
-    light: amber[50],
-    main: amber[100],
-    dark: amber[400],
+    light: 'hsl(45, 100%, 90%)',
+    main: 'hsl(45, 100%, 79%)',
+    dark: 'hsl(45, 100%, 68%)',
+    darker: 'hsl(45, 100%, 56%)',
   },
   results: {
-    light: green[50],
-    main: green[100],
-    dark: green[300],
+    light: 'hsl(134, 72%, 94%)',
+    main: 'hsl(134, 72%, 88%)',
+    dark: 'hsl(134, 72%, 67%)',
+    darker: 'hsl(134, 28%, 49%)',
   },
 };
 
 const OTHER_COLORS = {
   against: {
-    main: red[100],
+    main: 'hsl(0, 84%, 76%)',
   },
   alert: {
-    main: red[100],
+    main: 'hsl(0, 84%, 76%)',
   },
   announcements: {
-    main: deepPurple[100],
+    main: 'hsl(270, 50%, 82%)',
   },
   bugs: {
-    main: grey[200],
+    main: 'hsl(0, 0%, 90%)',
   },
   comments: {
-    main: grey[200],
+    main: 'hsl(0, 0%, 90%)',
   },
   disabled: {
-    main: grey[200],
+    main: 'hsl(0, 0%, 90%)',
   },
   for: {
-    main: green[100],
+    main: 'hsl(134, 72%, 88%)',
   },
   reports: {
-    main: amber[200],
+    main: 'hsl(45, 100%, 79%)',
   },
   messages: {
-    main: cyan[100],
+    main: 'hsl(210, 100%, 86%)',
   },
   neutral: {
-    main: amber[100],
+    main: 'hsl(45, 100%, 79%)',
   },
   requests: {
-    main: grey[200],
+    main: 'hsl(0, 0%, 90%)',
   },
 };
 /**
@@ -94,6 +137,7 @@ const LIGHT_THEME: ThemeOptions = {
     background: {
       default: '#FFFFFF',
     },
+    ...BASE_COLORS,
     ...PALETTE_COLORS,
     ...PHASE_COLORS,
     ...OTHER_COLORS,

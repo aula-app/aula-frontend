@@ -23,19 +23,12 @@ interface Props {
  * @component TopBar
  */
 const TopBar: React.FC = () => {
-  const { t } = useTranslation();
   const [openSideBar, setSidebar] = useState(false);
   const [appState] = useAppStore();
 
   const location = useLocation().pathname.split('/');
   const onLogout = useEventLogout();
-  const onMobile = useOnMobile();
   const goto = useNavigate();
-
-  // Filter valid paths for breadcrumbs
-  const displayPath = location
-    .filter((path) => path.trim().length > 0) // Remove empty paths
-    .filter((path) => !EXCLUDED_PATHS.includes(path));
 
   const menuToggle = () => setSidebar(!openSideBar);
 
