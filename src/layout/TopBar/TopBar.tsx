@@ -80,7 +80,7 @@ const TopBar: React.FC = () => {
           <AppLink underline="hover" color="inherit" to="/">
             aula
           </AppLink>
-          {crumbs.map((b, index) => {
+          {crumbs.map((b) => {
             return b;
           })}
         </Breadcrumbs>
