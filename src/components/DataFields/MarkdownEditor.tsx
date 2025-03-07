@@ -9,7 +9,7 @@ import {
   toolbarPlugin,
   UndoRedo,
 } from '@mdxeditor/editor';
-import { FormControl, FormControlProps, FormHelperText, FormLabel, Stack, styled } from '@mui/material';
+import { FormControl, FormControlProps, FormHelperText, FormLabel as MuiFormLabel, Stack, styled } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,23 @@ interface Props extends FormControlProps {
   required?: boolean;
   disabled?: boolean;
 }
+
+const StyledFormLabel = styled(MuiFormLabel)(({ theme }) => ({
+  position: 'absolute',
+  fontSize: '1rem',
+  zIndex: 999,
+  transform: 'translate(0, -.7rem) scale(0.75)',
+  transformOrigin: 'top left',
+  top: 0,
+  left: 10,
+  padding: theme.spacing(0, 1),
+  backdropFilter: 'blur(100px)',
+  transition: theme.transitions.create('color'),
+
+  '.md-editor:focus-within + &': {
+    color: theme.palette.primary.main,
+  },
+}));
 
 const Editor = styled(MDXEditor)(({ theme }) => ({
   '&.md-editor': {
@@ -132,23 +149,6 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
         }, [control._defaultValues[name], field.value]);
         return (
           <FormControl fullWidth {...restOfProps}>
-            <FormLabel
-              sx={{
-                position: 'absolute',
-                fontSize: '1rem',
-                zIndex: 999,
-                transform: 'translate(0, -.7rem) scale(0.75)',
-                transformOrigin: 'top left',
-                top: 0,
-                left: 10,
-                backgroundColor: 'paper.main',
-                px: 1,
-                backdropFilter: 'blur(100px)',
-              }}
-            >
-              {t(`settings.columns.${name}`)}
-              {required ? '*' : ''}
-            </FormLabel>
             <Editor
               className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}
               markdown={''}
@@ -174,6 +174,10 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
               {...field}
               ref={mdxEditorRef}
             />
+            <StyledFormLabel>
+              {t(`settings.columns.${name}`)}
+              {required ? '*' : ''}
+            </StyledFormLabel>
             {!!fieldState.error && (
               <FormHelperText error={!!fieldState.error}>{t(`${fieldState.error?.message || ''}`)}</FormHelperText>
             )}
