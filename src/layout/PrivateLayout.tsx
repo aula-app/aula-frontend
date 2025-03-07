@@ -46,7 +46,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         paddingRight: 0,
       }}
     >
-      <TopBar home={title} />
+      <TopBar />
 
       <Stack direction="row" component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
         {!checkPermissions(60) && <SideBarFixed />}
