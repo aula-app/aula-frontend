@@ -3,22 +3,22 @@ import { amber, blue, cyan, deepOrange, deepPurple, green, grey, red } from '@mu
 
 const PALETTE_COLORS: Partial<PaletteOptions> = {
   primary: {
-    main: 'hsl(133, 65%, 70%)',
+    main: 'rgb(117, 224, 140)',
   },
   secondary: {
-    main: 'hsl(180, 10%, 50%)',
+    main: 'rgb(150, 150, 150)',
   },
   error: {
-    main: 'hsl(355, 60%, 73%)',
+    main: 'rgb(243, 146, 148)',
   },
   warning: {
-    main: 'hsl(40, 65%, 70%)',
+    main: 'rgb(255, 229, 147)',
   },
   info: {
-    main: 'hsl(190, 65%, 70%)',
+    main: 'rgb(187, 222, 250)',
   },
   success: {
-    main: 'hsl(113, 65%, 60%)',
+    main: 'rgb(117, 224, 140)',
   },
 };
 
