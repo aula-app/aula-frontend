@@ -72,6 +72,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
       case 30:
         if (vote === 1) return 'for';
         if (vote === -1) return 'against';
+        if (!vote) return 'disabled';
       default:
         return phases[phase];
     }
@@ -173,7 +174,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
                     <AppIcon icon={phases[phase]} />
                   )}
                 </>
-              ) : ( phase === 30  && !!vote ) ? (
+              ) : phase === 30 && !!vote ? (
                 <AppIcon icon={votingOptions[vote + 1]} />
               ) : (
                 <>

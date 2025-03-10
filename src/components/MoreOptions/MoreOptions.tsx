@@ -52,7 +52,7 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
         <Collapse orientation="horizontal" in={open}>
           <Stack direction="row" position="relative">
             <ReportButton color={color || 'error'} target={`${t(`scopes.${scope}.name`)}: ${targetName}`} link={link} />
-            {phase && Number(phase) < 20 && (
+            {phase && (
               <>
                 {checkPermissions(scope, 'edit', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
                   <EditButton color={color || 'secondary'} onEdit={onEdit} />
