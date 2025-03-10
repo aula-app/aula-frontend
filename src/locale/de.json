@@ -152,7 +152,8 @@
     "error": "Der Instanzcode ist ungültig",
     "headline": "Geben Sie den Instanzcode ein",
     "label": "Instanzcode",
-    "status": "Instanzstatus"
+    "status": "Instanzstatus",
+    "chip": "Code"
   },
   "patterns": {
     "on": "{{a}} zur {{b}}"
