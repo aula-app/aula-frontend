@@ -16,7 +16,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
 
   return (
     <Stack className="noPrint" sx={fixedSideBarStyles} {...restOfProps}>
-      {code && (
+      {import.meta.env.VITE_APP_MULTI !== 'false' && (
         <>
           <Button onClick={() => navigator.clipboard.writeText(code)} color="secondary">
             {`${t('instance.chip')}: ${code}`}

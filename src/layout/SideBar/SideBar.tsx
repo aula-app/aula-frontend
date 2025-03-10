@@ -40,7 +40,7 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
     >
       <Stack direction="row" justifyContent="space-between" alignItems="center" px={2} pt={0}>
         <LocaleSwitch />
-        {code && (
+        {import.meta.env.VITE_APP_MULTI !== 'false' && (
           <Chip
             label={`${t('instance.chip')}: ${code}`}
             onClick={() => navigator.clipboard.writeText(code)}
