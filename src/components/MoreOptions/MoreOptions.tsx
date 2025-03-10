@@ -38,6 +38,9 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
     if (open) setOpen(false);
   };
 
+  const targetName =
+    'title' in item ? item.title : 'name' in item ? item.name : 'content' in item ? item.content : item.id;
+
   return (
     <ClickAwayListener onClickAway={closeOptions}>
       <Stack direction="row">
@@ -48,7 +51,7 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
         )}
         <Collapse orientation="horizontal" in={open}>
           <Stack direction="row" position="relative">
-            <ReportButton color={color || 'error'} target={`${t(`scopes.${scope}.name`)}: ${item.id}`} link={link} />
+            <ReportButton color={color || 'error'} target={`${t(`scopes.${scope}.name`)}: ${targetName}`} link={link} />
             {phase && Number(phase) < 20 && (
               <>
                 {checkPermissions(scope, 'edit', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
