@@ -204,7 +204,6 @@ import {
 import { LuSigma } from 'react-icons/lu';
 import { PiCookingPotLight } from 'react-icons/pi';
 import CircleIcon from './circle.svg?react';
-import LogoIcon from './logo.svg?react';
 import VotingIcon from './voting.svg?react';
 
 /**
@@ -216,7 +215,6 @@ import VotingIcon from './voting.svg?react';
  * Note: You can use camelCase or UPPERCASE in the <AppIcon icon="someIconByName" /> component
  */
 export const ICONS = {
-  logo: LogoIcon,
   abstention: CircleIcon,
   account: HiOutlineFaceSmile,
   add: HiOutlinePlus,

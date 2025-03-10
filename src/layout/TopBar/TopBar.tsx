@@ -1,14 +1,13 @@
-import { AppIcon, AppIconButton, AppLink } from '@/components';
+import { AppIconButton, AppLink } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import { useEventLogout, useOnMobile } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
 import { checkPermissions } from '@/utils';
-import { AppBar, Breadcrumbs, Stack, Toolbar } from '@mui/material';
+import { AppBar, Box, Breadcrumbs, Stack, Toolbar } from '@mui/material';
 import { ReactNode, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
-import { SIDEBAR_DESKTOP_ANCHOR } from '../config';
+import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../config';
 
 // Paths that should be excluded from breadcrumbs
 const EXCLUDED_PATHS = ['welcome', 'phase', 'settings'];
@@ -28,6 +27,7 @@ const TopBar: React.FC = () => {
 
   const location = useLocation().pathname.split('/');
   const onLogout = useEventLogout();
+  const onMobile = useOnMobile();
   const goto = useNavigate();
 
   const menuToggle = () => setSidebar(!openSideBar);
@@ -63,14 +63,16 @@ const TopBar: React.FC = () => {
   }
 
   return (
-    <AppBar elevation={0}>
+    <AppBar elevation={0} sx={{ height: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT }}>
       <Toolbar>
-        {/* Logo or Back Button */}
-        {location[1] === '' ? (
-          <AppIcon icon="logo" size="large" sx={{ mr: 1 }} />
-        ) : (
-          <AppIconButton icon="back" onClick={() => goto(getReturnPath())} />
-        )}
+        <Box width={56}>
+          {/* Logo or Back Button */}
+          {location[1] === '' ? (
+            <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Icon.svg`} alt="aula" />
+          ) : (
+            <AppIconButton icon="back" onClick={() => goto(getReturnPath())} />
+          )}
+        </Box>
 
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs aria-label="breadcrumb" sx={{ flexGrow: 1, textAlign: 'center' }}>
