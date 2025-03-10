@@ -3,6 +3,7 @@ import { addVote, getVote } from '@/services/vote';
 import { checkPermissions, Vote, votingOptions } from '@/utils';
 import { Button, Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
  * url: /
  */
 const VotingCard = ({ onReload }: Props) => {
+  const { t } = useTranslation();
   const { idea_id } = useParams();
 
   const [isLoading, setLoading] = useState(true);
@@ -38,8 +40,7 @@ const VotingCard = ({ onReload }: Props) => {
   };
 
   useEffect(() => {
-    if (checkPermissions('ideas', 'vote'))
-      fetchVote();
+    if (checkPermissions('ideas', 'vote')) fetchVote();
   }, []);
 
   return (
@@ -61,7 +62,7 @@ const VotingCard = ({ onReload }: Props) => {
           >
             <Stack alignItems="center" width={70}>
               <AppIcon icon={option} size="xxl" />
-              {option}
+              {t(`votes.${option}`)}
             </Stack>
           </Button>
         ))}
