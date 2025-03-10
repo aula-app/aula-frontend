@@ -112,9 +112,7 @@ const IdeasView: React.FC = () => {
   }, [fetchIdeas]);
 
   const extraTools = ({ items }: { items: Array<string> }) => (
-    <>
-      // <AddBoxesButton ideas={items} disabled={items.length === 0} />
-    </>
+    <>{/* <AddBoxesButton ideas={items} disabled={items.length === 0} /> */}</>
   );
 
   return (
