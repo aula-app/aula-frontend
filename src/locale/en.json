@@ -152,7 +152,8 @@
     "error": "The instance code is invalid",
     "headline": "Enter the instance code",
     "label": "Instance code",
-    "status": "Instance status"
+    "status": "Instance status",
+    "chip": "Code"
   },
   "patterns": {
     "on": "{{a}} on {{b}}"
