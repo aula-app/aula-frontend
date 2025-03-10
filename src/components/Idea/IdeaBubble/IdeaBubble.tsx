@@ -27,7 +27,11 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
     <Stack width="100%" sx={{ scrollSnapAlign: 'center' }}>
       <ChatBubble disabled={disabled}>
         <AppLink to={to} disabled={!to || disabled}>
-          <Stack gap={1}>
+          <Stack
+            gap={1}
+            overflow="clip"
+            sx={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+          >
             <span>
               <Typography variant="h6" display="inline">
                 {idea.title}
