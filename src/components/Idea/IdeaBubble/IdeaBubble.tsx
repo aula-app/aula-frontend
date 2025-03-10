@@ -6,7 +6,7 @@ import MoreOptions from '@/components/MoreOptions';
 import { IdeaType } from '@/types/Scopes';
 import { Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import LikeButton from '../../Buttons/LikeButton';
 import CategoryList from '../CategoryList';
 import UserBar from '../UserBar';
@@ -22,6 +22,7 @@ interface Props {
 
 const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onDelete, onEdit }) => {
   const { idea_id } = useParams();
+  const location = useLocation();
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center' }}>
       <ChatBubble disabled={disabled}>
@@ -50,7 +51,13 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
       <Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <UserBar info={idea} />
-          <MoreOptions item={idea} scope="ideas" onDelete={onDelete} onEdit={onEdit}>
+          <MoreOptions
+            item={idea}
+            scope="ideas"
+            onDelete={onDelete}
+            onEdit={onEdit}
+            link={`${location.pathname}/${to}`}
+          >
             <Stack direction="row" alignItems="center">
               <LikeButton disabled={disabled} item={idea} />
               {idea.sum_comments > 0 && !idea_id && (

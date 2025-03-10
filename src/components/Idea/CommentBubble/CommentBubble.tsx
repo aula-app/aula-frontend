@@ -5,6 +5,7 @@ import { CommentType } from '@/types/Scopes';
 import { Stack } from '@mui/material';
 import LikeButton from '../../Buttons/LikeButton';
 import UserBar from '../UserBar';
+import { useLocation } from 'react-router-dom';
 
 interface Props {
   comment: CommentType;
@@ -14,6 +15,8 @@ interface Props {
 }
 
 const CommentBubble: React.FC<Props> = ({ comment, disabled = false, onDelete, onEdit }) => {
+  const location = useLocation();
+
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center', mb: 2, mt: 1 }}>
       <ChatBubble disabled={disabled} comment>
@@ -23,7 +26,7 @@ const CommentBubble: React.FC<Props> = ({ comment, disabled = false, onDelete, o
       </ChatBubble>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <UserBar info={comment} />
-        <MoreOptions item={comment} scope="comments" onDelete={onDelete} onEdit={onEdit}>
+        <MoreOptions item={comment} scope="comments" onDelete={onDelete} onEdit={onEdit} link={location.pathname}>
           <LikeButton disabled={disabled} item={comment} />
         </MoreOptions>
       </Stack>

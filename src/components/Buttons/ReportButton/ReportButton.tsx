@@ -4,19 +4,23 @@ import { addReport, ReportArguments } from '@/services/messages';
 import { Drawer, IconButtonProps } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 interface Props extends IconButtonProps {
   target: string;
+  link?: string;
 }
 
-const ReportButton: React.FC<Props> = ({ target, disabled = false, ...restOfProps }) => {
+const ReportButton: React.FC<Props> = ({ target, link, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
+  const location = useLocation();
   const [isOpen, setOpen] = useState(false);
 
   const onSubmit = async (data: ReportArguments) => {
     const body = `
 ---
 claim: ${t(`forms.report.${data.report}`)}
+location: ${link || location.pathname}
 ---
 ${data.content || ''}
     `;

@@ -35,6 +35,8 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
     return Math.round((Number(endDate) - Number(currentDate)) / 86400000);
   };
 
+  const to = `/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`;
+
   return (
     <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
       <Stack
@@ -49,14 +51,9 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
         <Typography variant="caption" mr="auto" noWrap>
           {t(`phases.id-${box.phase_id}`, { var: box.ideas_num })}
         </Typography>
-        <MoreOptions item={box} scope="boxes" color="default" onDelete={onDelete} onEdit={onEdit} />
+        <MoreOptions item={box} scope="boxes" color="default" onDelete={onDelete} onEdit={onEdit} link={to} />
       </Stack>
-      <AppLink
-        to={`/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`}
-        mb={2}
-        key={box.hash_id}
-        disabled={disabled}
-      >
+      <AppLink to={to} mb={2} key={box.hash_id} disabled={disabled}>
         <CardContent>
           <Typography variant="h6" noWrap>
             {box.name}
