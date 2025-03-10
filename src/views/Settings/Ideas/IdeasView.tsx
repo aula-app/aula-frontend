@@ -107,14 +107,14 @@ const IdeasView: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.ideas'), '/']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.ideas'), '/']] });
     fetchIdeas();
   }, [fetchIdeas]);
 
   const extraTools = ({ items }: { items: Array<string> }) => (
-    // <>
-    //   <AddBoxesButton ideas={items} disabled={items.length === 0} />
-    // </>
+    <>
+      // <AddBoxesButton ideas={items} disabled={items.length === 0} />
+    </>
   );
 
   return (
