@@ -52,6 +52,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     formState: { errors },
     handleSubmit,
     register,
+    setValue,
     reset,
     watch,
   } = useForm({
@@ -181,7 +182,9 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
             />
             <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
             <Stack direction="row" flexWrap="wrap" alignItems="center" gap={2}>
-              {checkPermissions('rooms', 'addBox') && <SelectRoomField control={control} disabled={isLoading} />}
+              {checkPermissions('rooms', 'addBox') && (
+                <SelectRoomField control={control} setValue={setValue} disabled={isLoading} />
+              )}
               {checkPermissions('boxes', 'changePhase') && (
                 <SelectField
                   control={control}
