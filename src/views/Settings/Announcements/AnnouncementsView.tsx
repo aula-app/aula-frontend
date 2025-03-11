@@ -38,7 +38,7 @@ const AnnouncementsView: React.FC = () => {
   const [totalAnnouncements, setTotalAnnouncements] = useState(0);
 
   const [status, setStatus] = useState<StatusTypes>(1);
-  const [consentType, setConsentType] = useState<StatusTypes>(-1);
+  const [user_needs_to_consent, setConsentType] = useState<StatusTypes>(-1);
   const [search_field, setSearchField] = useState('');
   const [search_text, setSearchText] = useState('');
 
@@ -59,6 +59,7 @@ const AnnouncementsView: React.FC = () => {
       search_field,
       search_text,
       status,
+      user_needs_to_consent,
     });
     if (response.error) setError(response.error);
     else {
@@ -66,7 +67,7 @@ const AnnouncementsView: React.FC = () => {
       setTotalAnnouncements(response.count as number);
     }
     setLoading(false);
-  }, [search_field, search_text, status, asc, limit, offset, orderby]);
+  }, [search_field, search_text, status, asc, limit, offset, orderby, user_needs_to_consent]);
 
   const deleteAnnouncements = (items: Array<string>) =>
     items.map(async (announcement) => {
@@ -102,7 +103,7 @@ const AnnouncementsView: React.FC = () => {
             variant="filled"
             size="small"
             onChange={(e) => setConsentType(Number(e.target.value) as StatusTypes)}
-            value={consentType}
+            value={user_needs_to_consent}
             sx={{ minWidth: 200 }}
           >
             <MenuItem value={-1}>&nbsp;</MenuItem>

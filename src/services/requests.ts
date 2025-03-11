@@ -32,6 +32,7 @@ export interface GenericListRequest {
   search_text?: string;
   both_names?: string;
   status?: StatusTypes;
+  user_needs_to_consent?: StatusTypes;
 }
 
 /**
