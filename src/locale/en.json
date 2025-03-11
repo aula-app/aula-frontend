@@ -79,8 +79,9 @@
   "delegation": {
     "confirm": "Are you sure you want to {{var}} the voting rights on this box to the following person?",
     "delegate": "delegate",
+    "delegated": "<strong>{{var}}</strong> can vote for you",
     "label": "Vote delegation",
-    "revoke": "revoke",
+    "revoke": "revoke delegation",
     "status": {
       "delegated": "{{var}} delegated ideas",
       "revoked": "Vote delegation revoked",

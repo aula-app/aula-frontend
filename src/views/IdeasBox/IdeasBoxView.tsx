@@ -19,7 +19,7 @@ import { checkPermissions } from '@/utils';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 /** * Renders "IdeasBox" view
@@ -134,14 +134,17 @@ const IdeasBoxView = () => {
    */
 
   const [delegating, setDelegating] = useState(false);
-  const [delegates, setDelegates] = useState<DelegationType[]>([]);
+  const [delegate, setDelegate] = useState<DelegationType>();
 
   const fetchDelegation = useCallback(async () => {
     if (!box_id) return;
+
     setIdeasLoading(true);
+
     const response = await getDelegations(box_id);
     setIdeasError(response.error);
-    if (!response.error && response.data) setDelegates(response.data);
+    if (!response.error && response.data) setDelegate(response.data[0]);
+
     setIdeasLoading(false);
   }, [box_id]);
 
@@ -177,13 +180,20 @@ const IdeasBoxView = () => {
               var: ideas.length,
             })}
         </Typography>
-        {Number(phase) === 30 && (
+        {Number(phase) === 30 && checkPermissions('ideas', 'vote') && (
           <Stack direction="row" position="relative" alignItems="center" sx={{ ml: 'auto', pr: 3 }}>
             <Typography variant="caption">
-              {t('votes.vote').toUpperCase()} {t('ui.common.or')}
+              <Trans
+                i18nKey={
+                  delegate
+                    ? t('delegation.delegated', { var: delegate.delegate_displayname })
+                    : t('votes.vote').toUpperCase()
+                }
+              />{' '}
+              {t('ui.common.or')}
             </Typography>
             <Button size="small" sx={{ bgcolor: '#fff' }} onClick={() => setDelegating(true)}>
-              {delegates && delegates.length > 0 ? t('delegation.revoke') : t('delegation.delegate')}
+              {delegate ? t('delegation.revoke') : t('delegation.delegate')}
             </Button>
             <KnowMore title={t('tooltips.delegate')}>
               <AppIcon icon="delegate" size="small" />
@@ -218,7 +228,7 @@ const IdeasBoxView = () => {
       </Drawer>
       <DelegateVote
         open={delegating}
-        delegate={delegates[0] ? delegates[0].user_id_target : undefined}
+        delegate={delegate ? delegate.user_id_target : undefined}
         onClose={closeDeletion}
       />
     </Stack>

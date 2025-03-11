@@ -309,4 +309,7 @@ export interface DelegationType {
   updater_id: number;
   created: string;
   last_update: string;
+  delegate_hash_id: string;
+  delegate_realname: string;
+  delegate_displayname: string;
 }

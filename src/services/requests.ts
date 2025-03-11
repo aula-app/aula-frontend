@@ -142,7 +142,7 @@ export const baseRequest = async (
     }
 
     return {
-      data: response.data || response.JWT,
+      data: response.JWT ? response.JWT : response.data,
       count: response.count,
       error: null,
     };
