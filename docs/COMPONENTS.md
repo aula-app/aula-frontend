@@ -160,17 +160,9 @@ A component for displaying reports:
 
 ## Data Components
 
-Data components are dynamic components based on data configurations for each scope types and definitions located at `src/utils/Data/DataConfig/`.
+Data components are dynamic components for handling forms, tables, and fields related to different data scopes (ideas, rooms, users, etc.) in the application.
 
-More information on this topic is provided on the [data documentation](DATA.md).
-
-These files are structured with the following objects:
-
-- _columns_: a list of columns to be displayed on the tables.
-- _fields_: a list with the definition of the forms to be displayed on the EditData dialog.
-- _requests_: a dictionary containing the endpoints and model names for CRUD operations
-
-These objects are used on the following components:
+More information on this topic is provided in the [data documentation](DATA.md).
 
 ### DataTable
 
@@ -180,8 +172,7 @@ A comprehensive table component that:
 - Handles sorting and filtering
 - Provides row actions
 - Includes loading states
-
-It is populated by the information set on the _columns_ settings of each data scope (ideas, rooms, etc.)
+- Displays data rows based on specified columns
 
 ### FilterBar
 
@@ -190,53 +181,54 @@ A component for data filtering:
 - Supports multiple filter types
 - Handles filter combinations
 - Provides clear filter feedback
+- Dynamically generates filters based on data type
 
-It is populated by the information set on the _columns_ settings of each data scope (ideas, rooms, etc.)
+### DataFields
 
-For more information, please check the _Data_ section under the (utils documentation)[UTILS.md].
+Located in `src/components/DataFields/`, this set of components provides specialized form fields for different data types:
 
-### EditData System
+- `ApproveField`: Handles approval status toggling
+- `CategoriesField`: Manages category selection
+- `ConsentField`: Manages user consent options
+- `IconField`: Provides icon selection interface
+- `IdeaField`: Custom field for idea entry
+- `MarkdownEditor`: Rich text editor with markdown support
+- `MessageToField`: Manages message recipient selection
+- `PhaseDurationFields`: Manages phase duration settings
+- `RoleField`: User role selection
+- `RoomField`: Room selection and management
+- `RoomImageSelector`: Image selection for rooms
+- `RoomRolesField`: Role management within rooms
+- `SelectBoxField`: Box selection interface
+- `SelectField`: Generic selection component
+- `SelectRoomField`: Room selection interface
+- `SetWinnerField`: Winner designation interface
+- `StatusField`: Status management component
+- `UserField`: User selection interface
 
-A dialog system that dynamically generates and manages forms based on data configurations. It is populated by the information set on the _fields_ settings of each data scope (ideas, rooms, etc.).
+### DataForms
 
-The system consists of several key parts:
+Located in `src/components/DataForms/`, these components provide specialized form implementations for each data type:
 
-#### EditData.tsx
+- `AnnouncementForms`: Create and edit system announcements
+- `BoxForms`: Manage idea boxes
+- `BugForms`: Create and manage bug reports
+- `CategoryForms`: Create and edit categories for ideas
+- `CommentForms`: Manage user comments
+- `GroupForms`: Create and edit user groups
+- `IdeaForms`: Create and edit ideas
+- `ReportForms`: Manage user reports
+- `RoomForms`: Create and edit rooms
+- `SurveyForms`: Create and manage surveys
+- `UserForms`: Manage user accounts and profiles
 
-The main component that serves as a form dialog generator. It:
-
-- Renders a Material-UI Drawer containing dynamic form fields
-- Uses React Hook Form for form state management and validation
-- Loads field configurations from DataConfig based on the provided scope
-- Handles form submission and data updates
-- Supports both creation and editing modes
-- Manages phase-dependent field visibility
-- Integrates with a permission system for field access control
-
-#### FormField System
-
-Located in `src/components/Data/EditData/FormField/`, handles the rendering of individual form fields, according to the above mentioned setting:
-
-- Supports multiple field types:
-  - `custom`: Custom field implementations
-  - `duration`: Time duration inputs
-  - `icon`: Icon selection
-  - `image`: Image upload/selection
-  - `select`: Dropdown selections
-  - `singleDuration`: Single duration input
-  - `phaseSelect`: Phase selection dropdown
-  - `target`: Message target selection
-  - Default text/input fields
-
-#### DataUpdates System
-
-Located in `src/components/Data/EditData/DataUpdates/`, handles specific update operations based on the newly created entry, after receiving it's ID:
-
-- Adding Users to Rooms
-- Adding Boxes to Rooms
-- Adding Ideas to Boxes
-- Setting Users or groups as target for messages
-- etc...
+Each form component follows a consistent pattern:
+- Uses React Hook Form for form state management
+- Implements Yup validation schemas
+- Provides loading states during submission
+- Handles both creation and editing modes
+- Integrates with permissions system
+- Uses appropriate field components from DataFields
 
 ## User Interface Components
 

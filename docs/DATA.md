@@ -2,44 +2,96 @@
 
 This document provides an overview of Aula's Frontend data structure.
 
-## Data
+## Data Architecture
 
-The data structure files are stored in `src/utils/Data/DataConfig`. Each file corresponds to a different data type, according to the database tables.
+The application has moved from a configuration-based approach to a more component-based architecture for handling data. Data-related functionality is now primarily implemented through dedicated components rather than configuration files.
 
-These files are structured containing:
+### Data Services
 
-- _columns_: A list of objects containing the name and orderId of each column to be displayed on the [settings menu tables](https://github.com/aula-app/aula-frontend/tree/main/src/views/Settings/).
-- _fields_: A list of objects containing the definition of the forms to be displayed on the [edit data](https://github.com/aula-app/aula-frontend/tree/main/src/components/Data/EditData) dialog.
-- _requests_: defines endpoints and model names for CRUD operations.
+API communication is now handled through dedicated service modules in the `services/` directory:
 
-For our purposes, we will consider each data type as a different _scope_:
+- `announcements.ts`: Handles announcement-related API requests
+- `auth.ts`: Authentication-related operations
+- `boxes.ts`: Box management operations
+- `categories.ts`: Category management
+- `comments.ts`: Comment functionality
+- `consent.ts`: User consent management
+- `groups.ts`: User group management
+- `ideas.ts`: Idea management
+- `messages.ts`: Messaging functionality
+- `rooms.ts`: Room management
+- `users.ts`: User account operations
+- `vote.ts`: Voting functionality
 
-### Basic Scopes:
+### Data Components
 
-- **Boxes** ([boxesFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/boxesFields.ts)): Defines the structure for `idea boxes` where `ideas` are grouped in order to progress through the voting phases.
-- **Ideas** ([ideasFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/ideasFields.ts)): Contains the structure for user-submitted ideas.
-- **Rooms** ([roomsFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/roomsFields.ts)): Defines spaces where users can collaborate and discuss ideas.
-- **Users** ([usersFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/usersFields.ts)): Contains user profile and account information structure.
+#### DataFields Components
 
-### Message Scopes:
+Located in `src/components/DataFields/`, these components provide specialized form fields for different data types:
 
-- **Announcements** ([announcementsFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/announcementsFields.ts)): Defines system-wide announcements and notifications.
-- **Messages** ([messagesFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/messagesFields.ts)): Contains structure for direct communication with individual or groups of users.
-- **Bugs** ([bugFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/bugFields.ts)): Defines bug report structure and tracking.
-- **Reports** ([reportFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/reportFields.ts)): Contains structure for user-submitted reports and feedback.
+- **Core Fields**:
+  - `ApproveField`: Toggle for approval status
+  - `CategoriesField`: Category selection
+  - `ConsentField`: User consent options
+  - `IconField`: Icon selection
+  - `MarkdownEditor`: Rich text editor with markdown
+  - `StatusField`: Status management
+  
+- **Entity-specific Fields**:
+  - `IdeaField`: Idea entry field
+  - `MessageToField`: Message recipient selection
+  - `RoleField`: User role selection
+  - `RoomField`: Room selection
+  - `RoomImageSelector`: Room image selection
+  - `UserField`: User selection
 
-### Idea Related Scopes:
+#### DataForms Components
 
-- **Categories** ([categoriesFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/categoriesFields.ts)): Defines classification and organization structure for ideas.
-- **Comments** ([commentsFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/commentsFields.ts)): Contains structure for user feedback and discussions on ideas.
+Located in `src/components/DataForms/`, these components provide specialized form implementations for each data type:
 
-### User Related Scopes:
+- **Core Forms**:
+  - `AnnouncementForms`: Announcement management
+  - `BoxForms`: Idea box management
+  - `IdeaForms`: Idea management
+  - `RoomForms`: Room management
+  - `UserForms`: User management
+  
+- **Supporting Forms**:
+  - `BugForms`: Bug report management
+  - `CategoryForms`: Category management
+  - `CommentForms`: Comment management
+  - `GroupForms`: User group management
+  - `ReportForms`: Report management
+  - `SurveyForms`: Survey management
 
-- **Groups** ([groupFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/groupFields.ts)): Defines user group organization.
+Each form component:
+- Uses React Hook Form for form state
+- Implements Yup validation
+- Handles loading states
+- Supports creation and editing
+- Integrates with the permissions system
 
-### Accessory Scopes:
+### Data Scopes
 
-- **Surveys** ([suveysFields.ts](https://github.com/aula-app/aula-frontend/tree/main/src/utils/Data/DataConfig/suveysFields.ts)): Contains structure for creation of special boxes, with defined ideas and immediate voting, skipping Discussion and Approval phases.
+The application handles various data types, each representing a different scope:
+
+#### Basic Scopes:
+- **Boxes**: Container for ideas in voting phases
+- **Ideas**: User-submitted ideas and proposals
+- **Rooms**: Collaboration spaces
+- **Users**: User accounts and profiles
+
+#### Message Scopes:
+- **Announcements**: System notifications
+- **Messages**: Direct communications
+- **Reports**: User-submitted reports
+- **Bugs**: Bug reports
+
+#### Organization Scopes:
+- **Categories**: Classification for ideas
+- **Groups**: User group organization
+- **Comments**: Feedback on ideas
+- **Surveys**: Quick voting containers
 
 ## Database Requests
 
