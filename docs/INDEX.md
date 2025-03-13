@@ -1,208 +1,127 @@
-# Contributing to Aula
+# Aula Frontend Documentation
 
-Thank you for your interest in contributing to Aula! This document provides guidelines and instructions for contributing to our project.
+Welcome to the Aula Frontend documentation. This guide provides comprehensive information about the architecture, components, and development practices used in the Aula Frontend project.
 
 ## Table of Contents
 
-- [Project Structure](#project-structure)
-  - [Detailed Documentation](#detailed-documentation)
-- [Before You Start](#before-you-start)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Database Setup and Configuration](#database-setup-and-configuration)
-  - [Environment Configuration](#environment-configuration)
-  - [Available Scripts](#available-scripts)
-- [Deployment](#deployment)
-- [Development Process](#development-process)
-- [Code Style](#code-style)
-- [Submitting Changes](#submitting-changes)
-- [Questions or Need Help?](#questions-or-need-help)
+- [Getting Started](GETSTARTED.md)
+- [Project Structure](STRUCTURE.md)
+- [Components](COMPONENTS.md)
+- [Views](VIEWS.md)
+- [Layout](LAYOUT.md)
+- [Routes](ROUTES.md)
+- [Hooks](HOOKS.md)
+- [Store](STORE.md)
+- [Data](DATA.md)
+- [Services & Utilities](UTILS.md)
+- [Types](TYPES.md)
+- [Theme](THEME.md)
+- [Locale](LOCALE.md)
+
+## Recent Updates
+
+The documentation has been updated to reflect the current state of the codebase, with particular focus on:
+
+- **Service Architecture**: API communication now uses a dedicated services layer
+- **Component Structure**: Updated components documentation including DataForms and DataFields
+- **Permissions System**: Comprehensive documentation of the role-based permission system
+- **Alert System**: New documentation on the alert utilities
+- **Mobile Development**: Added information about Capacitor integration
+- **Type System**: Enhanced type documentation for requests and data tables
+
+## Quick Navigation
+
+### Development Setup
+- [Installation Instructions](GETSTARTED.md#installation)
+- [Available Scripts](GETSTARTED.md#available-scripts)
+- [Environment Configuration](GETSTARTED.md#environment-configuration)
+- [Mobile Development](GETSTARTED.md#mobile-development)
+- [Deployment Process](GETSTARTED.md#deployment)
+
+### Architecture
+- [Project Structure Overview](STRUCTURE.md)
+- [Data Architecture](DATA.md#data-architecture)
+- [Service Structure](UTILS.md#service-structure)
+- [Component Organization](COMPONENTS.md#usage-guidelines)
+
+### Core Features
+- [Component System](COMPONENTS.md)
+- [Data Forms & Fields](COMPONENTS.md#data-components)
+- [Permissions System](UTILS.md#permission-system)
+- [State Management](STORE.md#store-state)
+- [Notification System](STORE.md#popuptype)
+- [Routing System](ROUTES.md)
+
+### Reference
+- [Role Types & Permissions](UTILS.md#role-types)
+- [API Services](UTILS.md#service-structure)
+- [TypeScript Types](TYPES.md)
+- [Utility Functions](UTILS.md)
+- [Custom Hooks](HOOKS.md)
+- [Theming System](THEME.md)
+- [Internationalization](LOCALE.md)
 
 ## Project Structure
 
 ```
-├── src/
-│   ├── components/     # Reusable React components
-│   ├── hooks/         # Custom React hooks
-│   ├── layout/       # Layout components
-│   ├── locale/       # Language definitions
-│   ├── routes/       # Route definitions
-│   ├── store/        # State management
-│   ├── theme/        # Theme configuration
-│   ├── types/        # TypeScript type definitions
-│   ├── utils/        # Utility functions
-│   └── views/        # Page components
-├── public/            # Static assets
-└── android/          # Mobile platform specific code
+src/
+├── components/        # Reusable UI components
+├── hooks/             # Custom React hooks
+├── layout/            # Layout components
+├── locale/            # Language definitions
+├── routes/            # Route definitions
+├── services/          # API service modules
+├── store/             # State management
+├── theme/             # Theme configuration
+├── types/             # TypeScript type definitions
+├── utils/             # Utility functions
+└── views/             # Page components
 ```
 
-### Detailed Documentation
+## Documentation Files
 
-For detailed information about specific parts of the codebase, please refer to the following documentation:
+- [GETSTARTED.md](GETSTARTED.md) - Setup and development instructions
+- [COMPONENTS.md](COMPONENTS.md) - Reusable UI components
+- [DATA.md](DATA.md) - Data architecture and handling
+- [HOOKS.md](HOOKS.md) - Custom React hooks
+- [LAYOUT.md](LAYOUT.md) - Layout system and components
+- [LOCALE.md](LOCALE.md) - Internationalization
+- [ROUTES.md](ROUTES.md) - Routing system
+- [STORE.md](STORE.md) - State management
+- [STRUCTURE.md](STRUCTURE.md) - Project structure
+- [THEME.md](THEME.md) - Theming system
+- [TYPES.md](TYPES.md) - TypeScript types and interfaces
+- [UTILS.md](UTILS.md) - Utilities and services
+- [VIEWS.md](VIEWS.md) - Page components
 
-- [Data Structure](DATA.md) - Details about reusable React
+## Contributing
 
-For detailed information about specific parts of the Project Structure, please refer to the following documentation:
+For information about contributing to the Aula Frontend project, please refer to our developer guidelines. Key points include:
 
-- [Components Documentation](COMPONENTS.md) - Details about reusable React components
-- [Hooks Documentation](HOOKS.md) - Information about custom React hooks
-- [Layout Documentation](LAYOUT.md) - Layout system and components
-- [Locale Documentation](LOCALE.md) - Internationalization setup and usage
-- [Routes Documentation](ROUTES.md) - Routing system and configuration
-- [Store Documentation](STORE.md) - State management implementation
-- [Theme Documentation](THEME.md) - Theming system and customization
-- [Types Documentation](TYPES.md) - TypeScript types and interfaces
-- [Utils Documentation](UTILS.md) - Utility functions and helpers
-- [Views Documentation](VIEWS.md) - Page components and views
+### Development Process
 
-## Before You Start
-
-1. Check existing issues and pull requests
-2. For major changes, open an issue first to discuss your proposal
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js (version 16 or higher recommended)
-- npm (version 7 or higher recommended)
-
-### Installation
-
-1. Clone the repository:
-
-   ```
-   git clone https://github.com/aula-app/aula-frontend.git
-   ```
-
-2. Navigate to the project directory:
-
-   ```
-   cd aula-frontend
-   ```
-
-3. Install dependencies:
-   ```
-   npm install
-   ```
-
-### Database Setup and Configuration
-
-4. Set up aula's API Back End based on the [Aula's Backend Repository](https://github.com/aula-app/playground).
-
-### Environment Configuration
-
-5. Create a `.env` file based on the `.env.sample` file:
-
-   ```
-   cp .env.sample .env
-   ```
-
-6. Update the values in the `.env` file with your configuration:
-
-   ```
-   VITE_APP_VERSION = $npm_package_version
-   VITE_APP_API_URL = http://localhost/
-   VITE_APP_MULTI_AULA = https://m.aula.de/instances
-   VITE_APP_MULTI = false
-   ```
-
-7. Start the development server:
-
-   ```
-   npm run dev
-   ```
-
-   The application will start in development mode. Open your browser to the URL shown in the terminal to view the app.
-
-### Available Scripts
-
-The following npm scripts are available:
-
-- `npm run dev`: Starts the development server
-- `npm run build`: Builds the production-ready application
-- `npm run build-devel`: Builds the application in development mode
-- `npm run build-test`: Builds the application in test mode
-- `npm run preview`: Preview the production build locally
-- `npm run format`: Format source files using Prettier
-- `npm run lint`: Lint source files using ESLint
-- `npm run check`: Type check TypeScript files
-- `npm run type`: Alias for TypeScript checking
-
-## Deployment
-
-To deploy the application:
-
-1. Build the production-ready application:
-
-   ```
-   npm run build
-   ```
-
-2. The build output will be generated in the `dist/` directory. Deploy these files to your web server.
-
-3. For proper routing to work, ensure your web server is configured to redirect all requests to `index.html`, as this is a single-page application.
-
-   If using Nginx, you might add this to your server configuration:
-
-   ```nginx
-   location / {
-     try_files $uri $uri/ /index.html;
-   }
-   ```
-
-## Development Process
-
-1. Create a new branch:
-
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-2. Make your changes
-3. Write or update tests if necessary
-4. Ensure all tests pass:
-   ```bash
-   npm run test
-   ```
-5. Format your code:
-   ```bash
-   npm run format
-   ```
-6. Run linting:
-   ```bash
-   npm run lint
-   ```
-
-## Code Style
-
-We use ESLint and Prettier to maintain code quality. Our style guide is enforced through `.eslintrc.js` and `.prettierrc.js`.
-
-Key points:
-
+- Follow the established code style and patterns
 - Use TypeScript for all new code
-- Follow the existing component structure
-- Write meaningful commit messages
-- Document new features or changes
+- Ensure proper documentation of components and functions
+- Run tests and linting before submitting changes
 
-## Submitting Changes
+### Code Style
 
-1. Push to your fork
-2. Submit a Pull Request (PR)
-3. In your PR description:
-   - Reference any related issues
-   - Describe your changes
-   - Mention any breaking changes
-4. Wait for review and address any feedback
+The project follows specific code style guidelines:
+- TypeScript with strict type checking
+- PascalCase for components and component folders
+- camelCase for variables, functions, and hooks
+- Component files structure: ComponentName/ComponentName.tsx
 
-## Questions or Need Help?
+### Permissions System
 
-Feel free to open an issue for:
+When implementing features that require permissions:
+- Use the `checkPermissions` utility from utils/permissions.ts
+- Follow the established pattern for permission checks
+- Refer to the [Role Types documentation](UTILS.md#role-types) for details
 
-- Bug reports
-- Feature requests
-- Documentation improvements
-- General questions
+## Contact
 
-Thank you for contributing to Aula Frontend! 🎉
+For questions or assistance, please contact the Aula development team or open an issue in the project repository.
+
+Thank you for using Aula Frontend documentation! 🎉

@@ -1,5 +1,3 @@
-import '@fontsource-variable/nunito';
-import '@fontsource-variable/open-sans';
 import { ThemeOptions } from '@mui/material';
 
 /**
@@ -8,21 +6,21 @@ import { ThemeOptions } from '@mui/material';
 const THEME_FONTS: ThemeOptions = {
   typography: {
     allVariants: {
-      fontFamily: 'Nunito Variable',
+      fontFamily: 'Vision',
     },
     body1: {
-      fontFamily: 'Open Sans Variable',
+      fontFamily: 'Vision',
     },
     body2: {
-      fontFamily: 'Open Sans Variable',
+      fontFamily: 'Vision',
       fontWeight: 300,
     },
-    h1: { fontWeight: 700 },
-    h2: { fontWeight: 700 },
-    h3: { fontWeight: 700 },
-    h4: { fontWeight: 700 },
-    h5: { fontWeight: 700 },
-    h6: { fontWeight: 700 },
+    h1: { fontFamily: 'tahoma', fontWeight: 700 },
+    h2: { fontFamily: 'tahoma', fontWeight: 700 },
+    h3: { fontFamily: 'tahoma', fontWeight: 700 },
+    h4: { fontFamily: 'tahoma', fontWeight: 700 },
+    h5: { fontFamily: 'tahoma', fontWeight: 700 },
+    h6: { fontFamily: 'tahoma', fontWeight: 700 },
   },
 };
 

@@ -82,10 +82,10 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h4">
               {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
-                var: t(`scopes.comments.name`).toLowerCase(),
+                var: t(`scopes.comments.name`),
               })}
             </Typography>
-            {checkPermissions(40) && <StatusField control={control} />}
+            {checkPermissions('comments', 'status') && <StatusField control={control} />}
           </Stack>
           <Stack gap={2}>
             {/* content */}

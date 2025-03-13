@@ -24,7 +24,7 @@ interface RouteParams extends Record<string, string | undefined> {
  */
 const Comments = () => {
   const { t } = useTranslation();
-  const { idea_id, phase } = useParams<RouteParams>();
+  const { idea_id, phase, room_id } = useParams<RouteParams>();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [comments, setComments] = useState<CommentType[]>([]);
@@ -76,27 +76,23 @@ const Comments = () => {
             disabled={Number(phase) >= 20}
           />
         ))}
-      {checkPermissions(20) && idea_id && (
-        <>
-          {Number(phase) < 20 && (
-            <Fab
-              aria-label="add comment"
-              color="primary"
-              sx={{
-                position: 'fixed',
-                bottom: 40,
-                zIndex: 1000,
-              }}
-              onClick={() => setEdit(true)}
-            >
-              <AppIcon icon="comment" />
-            </Fab>
-          )}
-          <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-            <CommentForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
-          </Drawer>
-        </>
+      {checkPermissions('comments', 'create') && idea_id && Number(phase) < 20 && (
+        <Fab
+          aria-label="add comment"
+          color="primary"
+          sx={{
+            position: 'fixed',
+            bottom: 40,
+            zIndex: 1000,
+          }}
+          onClick={() => setEdit(true)}
+        >
+          <AppIcon icon="comment" />
+        </Fab>
       )}
+      <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
+        <CommentForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
+      </Drawer>
     </Stack>
   );
 };

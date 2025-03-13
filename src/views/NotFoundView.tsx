@@ -9,7 +9,7 @@ const NotFoundView = (): JSX.Element => {
   const { t } = useTranslation();
   return (
     <Stack flex={1} alignItems="center" justifyContent="center">
-      <img src="/img/aula_happy.png" alt="Not found" loading="lazy" width={150} />
+      <img src="/img/Paula_schlafend.svg" alt="Not found" loading="lazy" width={150} />
       <Typography variant="h6" mt={2}>
         {t('errors.notFound')}
       </Typography>

@@ -14,7 +14,7 @@ const App: React.FC = () => {
     <ErrorBoundary name="App">
       <AppStore>
         <AppThemeProvider>
-          <BrowserRouter>
+          <BrowserRouter basename={import.meta.env.VITE_APP_BASENAME}>
             <Layout>
               <Routes />
             </Layout>

@@ -3,19 +3,13 @@ import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
-import {
-  addAnnouncement,
-  AnnouncementArguments,
-  deleteAnnouncement,
-  editAnnouncement,
-  EditAnnouncementArguments,
-  getAnnouncements,
-} from '@/services/announcements';
+import { deleteAnnouncement, getAnnouncements } from '@/services/announcements';
+import { useAppStore } from '@/store/AppStore';
 import { StatusTypes } from '@/types/Generics';
 import { AnnouncementType } from '@/types/Scopes';
 import { getDataLimit } from '@/utils';
-import { useAppStore } from '@/store/AppStore';
-import { Drawer, Typography } from '@mui/material';
+import { CONSENT_OPTIONS } from '@/utils/scopes';
+import { Drawer, MenuItem, TextField, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -44,6 +38,7 @@ const AnnouncementsView: React.FC = () => {
   const [totalAnnouncements, setTotalAnnouncements] = useState(0);
 
   const [status, setStatus] = useState<StatusTypes>(1);
+  const [user_needs_to_consent, setConsentType] = useState<StatusTypes>(-1);
   const [search_field, setSearchField] = useState('');
   const [search_text, setSearchText] = useState('');
 
@@ -64,6 +59,7 @@ const AnnouncementsView: React.FC = () => {
       search_field,
       search_text,
       status,
+      user_needs_to_consent,
     });
     if (response.error) setError(response.error);
     else {
@@ -71,7 +67,7 @@ const AnnouncementsView: React.FC = () => {
       setTotalAnnouncements(response.count as number);
     }
     setLoading(false);
-  }, [search_field, search_text, status, asc, limit, offset, orderby]);
+  }, [search_field, search_text, status, asc, limit, offset, orderby, user_needs_to_consent]);
 
   const deleteAnnouncements = (items: Array<string>) =>
     items.map(async (announcement) => {
@@ -85,7 +81,7 @@ const AnnouncementsView: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.announcements'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.announcements'), '']] });
     fetchAnnouncements();
   }, [fetchAnnouncements]);
 
@@ -100,7 +96,24 @@ const AnnouncementsView: React.FC = () => {
             setSearchField(field);
             setSearchText(text);
           }}
-        />
+        >
+          <TextField
+            label={t(`settings.columns.user_needs_to_consent`)}
+            select
+            variant="filled"
+            size="small"
+            onChange={(e) => setConsentType(Number(e.target.value) as StatusTypes)}
+            value={user_needs_to_consent}
+            sx={{ minWidth: 200 }}
+          >
+            <MenuItem value={-1}>&nbsp;</MenuItem>
+            {CONSENT_OPTIONS.map((option) => (
+              <MenuItem value={option.value} key={option.value}>
+                {t(option.label)}
+              </MenuItem>
+            ))}
+          </TextField>
+        </FilterBar>
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
         <DataTable

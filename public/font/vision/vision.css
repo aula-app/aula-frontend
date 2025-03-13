@@ -1,0 +1,95 @@
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-thin-webfont.woff2') format('woff2'),
+         url('./woff/vision-thin-webfont.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-thin_italic-webfont.woff2') format('woff2'),
+         url('./woff/vision-thin_italic-webfont.woff') format('woff');
+    font-weight: 100;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-light-webfont.woff2') format('woff2'),
+         url('./woff/vision-light-webfont.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-lightitalic-webfont.woff2') format('woff2'),
+         url('./woff/vision-lightitalic-webfont.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-webfont.woff2') format('woff2'),
+         url('./woff/vision-webfont.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-regular_italic-webfont.woff2') format('woff2'),
+         url('./woff/vision-regular_italic-webfont.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-bold-webfont.woff2') format('woff2'),
+         url('./woff/vision-bold-webfont.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-bolditalic-webfont.woff2') format('woff2'),
+         url('./woff/vision-bolditalic-webfont.woff') format('woff');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-heavy-webfont.woff2') format('woff2'),
+         url('./woff/vision-heavy-webfont.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-heavyitalic-webfont.woff2') format('woff2'),
+         url('./woff/vision-heavyitalic-webfont.woff') format('woff');
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-black-webfont.woff2') format('woff2'),
+         url('./woff/vision-black-webfont.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Vision';
+    src: url('./woff2/vision-black_italic-webfont.woff2') format('woff2'),
+         url('./woff/vision-black_italic-webfont.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+}

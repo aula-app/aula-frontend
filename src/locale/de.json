@@ -79,8 +79,9 @@
   "delegation": {
     "confirm": "Bist du sicher, dass du das Stimmrecht für diese Ideenbox der folgenden Person {{var}} willst?",
     "delegate": "Stimme übertragen",
+    "delegated": "{{var}} kann für dich abstimmen",
     "label": "Delegation abstimmen",
-    "revoke": "entziehen",
+    "revoke": "Delegation widerrufen",
     "status": {
       "delegated": "{{var}} delegierte Ideen",
       "revoked": "Die Stimmrechtsübertragung für dieses Feld wurde widerrufen.",
@@ -152,7 +153,8 @@
     "error": "Der Instanzcode ist ungültig",
     "headline": "Geben Sie den Instanzcode ein",
     "label": "Instanzcode",
-    "status": "Instanzstatus"
+    "status": "Instanzstatus",
+    "chip": "Code"
   },
   "patterns": {
     "on": "{{a}} zur {{b}}"
@@ -209,6 +211,10 @@
       "validation": "Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden."
     }
   },
+  "results": {
+    "approveConfirm": "Bist du sicher, dass du diese Idee genehmigen möchtest?",
+    "rejectConfirm": "Bist du sicher, dass du diese Idee nicht genehmigen möchtest?"
+  },
   "roles": {
     "10": "Gast",
     "20": "Nutzer*in",
@@ -221,7 +227,8 @@
     "50": "Admin",
     "60": "Tech-Admin",
     "title": "Benutzerrollen",
-    "roomRoles": "Raumrollen"
+    "roomRoles": "Raumrollen",
+    "empty": "Nicht in diesem Raum"
   },
   "scopes": {
     "announcements": {
@@ -254,11 +261,17 @@
       "plural": "Gruppen"
     },
     "ideas": {
-      "approved": "Diese Idee wurde angenommen",
+      "approve": "Genehmigen",
+      "approved": "Diese Idee wurde angenommen.",
+      "marked_winner": "Diese Idee wird als Gewinner ausgewählt.",
+      "marked_not_winner": "Diese Idee wird nicht als Gewinner ausgewählt.",
+      "not_marked_yet": "Noch nicht als Gewinner markiert.",
       "name": "Idee",
       "plural": "Ideen",
+      "reject": "Ablehnen",
       "rejected": "Diese Idee wurde nicht angenommen",
-      "waiting": "Diese Idee wartet auf Genehmigung von der Schulleitung/Prüfer*innen"
+      "waiting": "Diese Idee wartet auf Genehmigung",
+      "winner": "Diese Idee hat gewonnen von der Schulleitung/Prüfer*innen."
     },
     "messages": {
       "name": "Nachricht",
@@ -350,7 +363,7 @@
       "infinite_votes": "Unendliche Stimmen",
       "info": "Info",
       "internal_info": "Interne Info",
-      "is_winner": "Gewinner einstellen",
+      "is_winner": "Als Gewinner markieren",
       "language_id": "Sprache",
       "last_login": "Letzte Anmeldung",
       "last_update": "Letzte Aktualisierung",

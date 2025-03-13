@@ -9,6 +9,7 @@ import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
 import KnowMore from '@/components/KnowMore';
 import { deleteBox, getBox } from '@/services/boxes';
 import { getIdeasByBox } from '@/services/ideas';
+import { getQuorum } from '@/services/vote';
 import { getDelegations } from '@/services/users';
 import { getRoom } from '@/services/rooms';
 import { useAppStore } from '@/store/AppStore';
@@ -18,7 +19,7 @@ import { checkPermissions } from '@/utils';
 import { Button, Drawer, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 /** * Renders "IdeasBox" view
@@ -27,9 +28,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 const IdeasBoxView = () => {
   const { t } = useTranslation();
   const [appState, dispatch] = useAppStore();
-
   const navigate = useNavigate();
   const { room_id, box_id, phase } = useParams();
+  const [quorum, setQuorum] = useState<number>(0);
+
+  async function fetchQuorum() {
+    getQuorum().then((response) => {
+      if (response.error || !response.data) return;
+      setQuorum(
+        !!phase && Number(phase) >= 30 ? Number(response.data.quorum_votes) : Number(response.data.quorum_wild_ideas)
+      );
+    });
+  }
 
   /**
    * Box data
@@ -39,7 +49,8 @@ const IdeasBoxView = () => {
   const [boxError, setBoxError] = useState<string | null>(null);
   const [box, setBox] = useState<BoxType>();
   const [edit, setEdit] = useState<BoxType>(); // undefined = closed;
-  
+  const [boxPhase, setBoxPhase] = useState<string | null>(phase ? phase : '');
+
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
       if (response.error || !response.data) return '';
@@ -56,13 +67,34 @@ const IdeasBoxView = () => {
     if (!response.error && response.data) setBox(response.data);
     setBoxLoading(false);
 
-    
-    let roomName = 'aula' 
-    if (room_id)
-      roomName = await getRoomName(room_id);
+    await fetchQuorum();
 
-    if (response.data && response.data.name)
-      dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`], [response.data.name, '']]});
+    let roomName = 'aula';
+    if (room_id) roomName = await getRoomName(room_id);
+
+    const currentBoxPhase = response.data ? response.data.phase_id : '';
+    if (currentBoxPhase != boxPhase && response.data) {
+      setBoxPhase(currentBoxPhase);
+      dispatch({
+        action: 'SET_BREADCRUMB',
+        breadcrumb: [
+          [roomName, `/room/${room_id}/phase/0`],
+          [t(`phases.name-${currentBoxPhase}`), `/room/${room_id}/phase/${currentBoxPhase}`],
+          [response.data.name, ''],
+        ],
+      });
+      navigate(`/room/${room_id}/phase/${currentBoxPhase}/idea-box/${box_id}`, { replace: true });
+    } else {
+      if (response.data && response.data.name)
+        dispatch({
+          action: 'SET_BREADCRUMB',
+          breadcrumb: [
+            [roomName, `/room/${room_id}/phase/0`],
+            [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
+            [response.data.name, ''],
+          ],
+        });
+    }
   }, [box_id]);
 
   const boxEdit = (box: BoxType) => {
@@ -78,7 +110,6 @@ const IdeasBoxView = () => {
   const boxClose = () => {
     setEdit(undefined);
     fetchBox();
-
   };
 
   /**
@@ -103,14 +134,17 @@ const IdeasBoxView = () => {
    */
 
   const [delegating, setDelegating] = useState(false);
-  const [delegates, setDelegates] = useState<DelegationType[]>([]);
+  const [delegate, setDelegate] = useState<DelegationType>();
 
   const fetchDelegation = useCallback(async () => {
     if (!box_id) return;
+
     setIdeasLoading(true);
+
     const response = await getDelegations(box_id);
     setIdeasError(response.error);
-    if (!response.error && response.data) setDelegates(response.data);
+    if (!response.error && response.data) setDelegate(response.data[0]);
+
     setIdeasLoading(false);
   }, [box_id]);
 
@@ -146,14 +180,20 @@ const IdeasBoxView = () => {
               var: ideas.length,
             })}
         </Typography>
-        {checkPermissions(30) && Number(phase) < 20 && <></> /* add ideas */}
-        {Number(phase) === 30 && (
+        {Number(phase) === 30 && checkPermissions('ideas', 'vote') && (
           <Stack direction="row" position="relative" alignItems="center" sx={{ ml: 'auto', pr: 3 }}>
             <Typography variant="caption">
-              {t('votes.vote').toUpperCase()} {t('ui.common.or')}
+              <Trans
+                i18nKey={
+                  delegate
+                    ? t('delegation.delegated', { var: delegate.delegate_displayname })
+                    : t('votes.vote').toUpperCase()
+                }
+              />{' '}
+              {t('ui.common.or')}
             </Typography>
             <Button size="small" sx={{ bgcolor: '#fff' }} onClick={() => setDelegating(true)}>
-              {delegates && delegates.length > 0 ? t('delegation.revoke') : t('delegation.delegate')}
+              {delegate ? t('delegation.revoke') : t('delegation.delegate')}
             </Button>
             <KnowMore title={t('tooltips.delegate')}>
               <AppIcon icon="delegate" size="small" />
@@ -168,16 +208,14 @@ const IdeasBoxView = () => {
           </Grid>
         )}
         {ideasError && <Typography>{t(ideasError)}</Typography>}
-        {!isIdeasLoading && (
+        {!isIdeasLoading && box && (
           <>
-            {ideas.map((idea, key) => (
-              <Grid key={key} size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }} order={-idea.approved}>
-                <AppLink to={`idea/${idea.hash_id}`}>
-                  <IdeaCard idea={idea} phase={Number(phase) as RoomPhases} />
-                </AppLink>
-              </Grid>
-            ))}
-            {checkPermissions(30) && Number(phase) < 20 && (
+            {ideas
+              .filter((idea) => (Number(phase) >= 30 ? idea.approved > 0 : true))
+              .map((idea, key) => (
+                <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={key} />
+              ))}
+            {checkPermissions('boxes', 'addIdea') && Number(phase) < 20 && (
               <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
                 <AddIdeasButton ideas={ideas} onClose={fetchIdeas} />
               </Grid>
@@ -190,7 +228,7 @@ const IdeasBoxView = () => {
       </Drawer>
       <DelegateVote
         open={delegating}
-        delegate={delegates[0] ? delegates[0].user_id_target : undefined}
+        delegate={delegate ? delegate.user_id_target : undefined}
         onClose={closeDeletion}
       />
     </Stack>

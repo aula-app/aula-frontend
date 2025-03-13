@@ -1,16 +1,15 @@
 import AppIconButton from '@/components/AppIconButton';
 import AppLink from '@/components/AppLink';
 import ChatBubble from '@/components/ChatBubble';
+import MarkdownReader from '@/components/MarkdownReader';
 import MoreOptions from '@/components/MoreOptions';
 import { IdeaType } from '@/types/Scopes';
-import { checkPermissions, checkSelf } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
-import CategoryList from '../CategoryList';
+import { useLocation, useParams } from 'react-router-dom';
 import LikeButton from '../../Buttons/LikeButton';
+import CategoryList from '../CategoryList';
 import UserBar from '../UserBar';
-import MarkdownReader from '@/components/MarkdownReader';
-import { useParams } from 'react-router-dom';
 
 interface Props {
   idea: IdeaType;
@@ -23,11 +22,16 @@ interface Props {
 
 const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onDelete, onEdit }) => {
   const { idea_id } = useParams();
+  const location = useLocation();
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center' }}>
       <ChatBubble disabled={disabled}>
         <AppLink to={to} disabled={!to || disabled}>
-          <Stack gap={1}>
+          <Stack
+            gap={1}
+            overflow="clip"
+            sx={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+          >
             <span>
               <Typography variant="h6" display="inline">
                 {idea.title}
@@ -56,7 +60,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
             scope="ideas"
             onDelete={onDelete}
             onEdit={onEdit}
-            canEdit={checkPermissions(30) || (checkPermissions(20) && checkSelf(idea.user_id) && !disabled)}
+            link={`${location.pathname}/${to}`}
           >
             <Stack direction="row" alignItems="center">
               <LikeButton disabled={disabled} item={idea} />

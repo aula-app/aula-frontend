@@ -1,5 +1,5 @@
 import AppIcon from '@/components/AppIcon';
-import { getRooms } from '@/services/rooms';
+import { getAllRooms } from '@/services/rooms';
 import { RoomType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
 import {
@@ -18,41 +18,41 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SelectRole from '../SelectRole';
-import { setSpecialRoles } from '@/services/users';
 
 /**
  * Interface that will be exposed to the parent component.
  */
 
 interface Props extends ButtonProps {
-  user: UserType;
-  onClose: () => void;
+  user?: UserType;
+  rooms: string[];
+  defaultLevel: RoleTypes;
+  onUpdate: (updates: { room: string; role: RoleTypes | 0 }[]) => void;
 }
 
-const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, ...restOfProps }) => {
+const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled = false, onUpdate, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [rooms, setRooms] = useState<RoomType[]>([]);
-  const [userRoles, setUserRoles] = useState<{ room: string; role: RoleTypes }[]>(JSON.parse(user.roles || '[]'));
-  const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes }[]>([]);
+  const [schoolRooms, setRooms] = useState<RoomType[]>([]);
+
+  const [userRoles, setUserRoles] = useState<{ room: string; role: RoleTypes }[]>(JSON.parse(user?.roles || '[]'));
+  const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes | 0 }[]>([]);
 
   const fetchRooms = async () => {
     setLoading(true);
-    const response = await getRooms();
+    const response = await getAllRooms();
     setLoading(false);
     if (response.error) setError(response.error);
     if (!response.data) return;
     setRooms(response.data);
   };
 
-  const handleUpdate = async (room: string, role?: RoleTypes | 0) => {
-    if (!role) return;
-
+  const handleUpdate = async (room: string, role: RoleTypes | 0) => {
     // delete existing role if it is the same as the new role
-    const existingRole = userRoles.find((r) => r.room === room)?.role || user.userlevel;
+    const existingRole = userRoles.find((r) => r.room === room)?.role;
     if (existingRole === role) {
       setUpdateRoles(updateRoles.filter((r) => r.room !== room));
       return;
@@ -72,23 +72,18 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, .
   };
 
   const onSubmit = async () => {
-    setLoading(true);
-    const response = await setSpecialRoles(user.hash_id, updateRoles);
-    setLoading(false);
-    console.log(response);
-    if (response.error) setError(response.error);
-    else setOpen(false);
-    onClose();
+    onUpdate(updateRoles);
+    setOpen(false);
   };
 
   const handleClose = () => {
-    setUpdateRoles([]);
+    setUserRoles(JSON.parse(user?.roles || '[]'));
     setOpen(false);
   };
 
   useEffect(() => {
     fetchRooms();
-    setUserRoles(JSON.parse(user.roles || '[]'));
+    setUserRoles(JSON.parse(user?.roles || '[]'));
   }, [user]);
 
   return (
@@ -107,14 +102,15 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, .
         </DialogTitle>
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        <List sx={{ maxHeight: 300, overflow: 'auto' }}>
-          {rooms.map((room) => {
+        <List sx={{ maxHeight: 300, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+          {schoolRooms.map((room) => {
             const currentRole =
               updateRoles.find((role) => role.room === room.hash_id)?.role ||
               userRoles.find((role) => role.room === room.hash_id)?.role ||
-              user.userlevel;
+              (room.type === 1 && defaultLevel) ||
+              0;
             return (
-              <ListItemButton key={room.hash_id} sx={{ py: 0 }}>
+              <ListItemButton key={room.hash_id} sx={{ py: 0, order: room.type === 1 ? 0 : 1 }}>
                 <ListItem
                   secondaryAction={
                     <SelectRole
@@ -122,10 +118,11 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, .
                       setRole={(role) => handleUpdate(room.hash_id, role)}
                       size="small"
                       noAdmin
+                      noRoom={room.type !== 1}
                     />
                   }
                 >
-                  <ListItemText primary={room.room_name} />
+                  <ListItemText primary={room.room_name || 'Aula'} />
                 </ListItem>
               </ListItemButton>
             );
@@ -144,4 +141,4 @@ const SpecialRolesField: React.FC<Props> = ({ user, disabled = false, onClose, .
   );
 };
 
-export default SpecialRolesField;
+export default RoomRolesField;

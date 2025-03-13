@@ -72,7 +72,6 @@ const SurveyForms: React.FC<SurveyFormsProps> = ({ onClose }) => {
   };
 
   useEffect(() => {
-    console.log(defaultDuration);
     setValue('phase_duration_3', defaultDuration);
   }, [defaultDuration]);
 

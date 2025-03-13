@@ -97,7 +97,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
                 var: t(`scopes.categories.name`).toLowerCase(),
               })}
             </Typography>
-            {checkPermissions(40) && <StatusField control={control} />}
+            {checkPermissions('groups', 'status') && <StatusField control={control} />}
           </Stack>
           <Stack gap={2}>
             {/* name */}

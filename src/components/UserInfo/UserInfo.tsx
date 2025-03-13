@@ -22,7 +22,7 @@ const UserInfo = () => {
   return (
     <>
       {user && (
-        <Stack alignItems="center" minHeight="fit-content" marginBottom={2}>
+        <Stack alignItems="center" minHeight="fit-content" my={2}>
           <UserAvatar id={user.hash_id} size={80} />
           <Typography sx={{ mt: 1 }} variant="h6">
             {user.username}

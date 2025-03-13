@@ -3,8 +3,6 @@ import { useAppStore } from '@/store';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const OFFLINE_IMAGE = '/img/aula_happy.png';
-
 interface OfflineViewProps {
   className?: string;
 }

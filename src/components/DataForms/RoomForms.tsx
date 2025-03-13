@@ -134,7 +134,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
                   var: t(`scopes.rooms.name`).toLowerCase(),
                 })}
               </Typography>
-              {checkPermissions(40) && <StatusField control={control} />}
+              {checkPermissions('rooms', 'status') && <StatusField control={control} />}
             </Stack>
           )}
           <Stack gap={2} direction="row" flexWrap="wrap">
@@ -170,7 +170,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
                 sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
               />
               {!isDefault && <PhaseDurationFields control={control} required disabled={isLoading} />}
-              {checkPermissions(40) && !isDefault && (
+              {checkPermissions('rooms', 'addUser') && !isDefault && (
                 <UserField defaultValues={users} onChange={(updates) => setUpdateUsers(updates)} disabled={isLoading} />
               )}
             </Stack>

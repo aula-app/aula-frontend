@@ -79,8 +79,9 @@
   "delegation": {
     "confirm": "Are you sure you want to {{var}} the voting rights on this box to the following person?",
     "delegate": "delegate",
+    "delegated": "<strong>{{var}}</strong> can vote for you",
     "label": "Vote delegation",
-    "revoke": "revoke",
+    "revoke": "revoke delegation",
     "status": {
       "delegated": "{{var}} delegated ideas",
       "revoked": "Vote delegation revoked",
@@ -152,7 +153,8 @@
     "error": "The instance code is invalid",
     "headline": "Enter the instance code",
     "label": "Instance code",
-    "status": "Instance status"
+    "status": "Instance status",
+    "chip": "Code"
   },
   "patterns": {
     "on": "{{a}} on {{b}}"
@@ -161,9 +163,11 @@
     "approval": "Approval",
     "discussion": "Discussion",
     "phase": "{{var}} phase",
+    "name-0": "Wild Ideas",
     "name-10": "Discussion",
     "name-20": "Approval",
-    "name-30": "Results",
+    "name-30": "Voting",
+    "name-40": "Results",
     "results": "Results",
     "status": {
       "end": "Phase ends in {{var}} days",
@@ -207,6 +211,10 @@
       "validation": "This action should be validated by an Admin to take place."
     }
   },
+  "results": {
+    "approveConfirm": "Are you sure you want to approve this idea?",
+    "rejectConfirm": "Are you sure you want to not approve this idea?"
+  },
   "roles": {
     "10": "Guest",
     "20": "Student",
@@ -219,7 +227,8 @@
     "50": "Admin",
     "60": "Tech admin",
     "title": "User Roles",
-    "roomRoles": "Room Roles"
+    "roomRoles": "Room Roles",
+    "empty": "Not in this room"
   },
   "scopes": {
     "announcements": {
@@ -252,11 +261,17 @@
       "plural": "Groups"
     },
     "ideas": {
+      "approve": "Approve",
       "approved": "This idea was approved.",
+      "marked_winner": "This idea is selected as a winner.",
+      "marked_not_winner": "This idea is not selected as a winner.",
+      "not_marked_yet": "This idea is still not marked as a winner.",
       "name": "Idea",
       "plural": "Ideas",
+      "reject": "Reject",
       "rejected": "This idea was not approved.",
-      "waiting": "This idea is waiting for approval."
+      "waiting": "This idea is waiting for approval.",
+      "winner": "This idea has won."
     },
     "messages": {
       "name": "Message",
@@ -348,7 +363,7 @@
       "infinite_votes": "Infinite Votes",
       "info": "Info",
       "internal_info": "Internal Info",
-      "is_winner": "Winner",
+      "is_winner": "Mark as Winner",
       "language_id": "Language",
       "last_login": "Last Login",
       "last_update": "Last Update",

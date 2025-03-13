@@ -1,4 +1,5 @@
 import { RoomType } from '@/types/Scopes';
+import { RoleTypes } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 import { checkPermissions } from '@/utils';
 
@@ -40,7 +41,7 @@ export const getRooms = async (
   }
 ): Promise<GetRoomsResponse> => {
   // Check if room has Super Moderator (40) access to view all rooms
-  const hasSuperModAccess = checkPermissions(40);
+  const hasSuperModAccess = checkPermissions('rooms', 'viewAll');
 
   if (!hasSuperModAccess) delete args.type;
 
@@ -52,6 +53,40 @@ export const getRooms = async (
     },
     hasSuperModAccess ? [] : ['user_id']
   );
+
+  return response as GetRoomsResponse;
+};
+
+export const getAllRooms = async (
+  args: RoomListRequest = {
+    offset: 0,
+    limit: 0,
+    orderby: 0,
+    asc: 0,
+  }
+): Promise<GetRoomsResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Room',
+      method: 'getRooms',
+      arguments: args,
+    },
+    []
+  );
+
+  return response as GetRoomsResponse;
+};
+
+/**
+ * Get a list of the rooms of a user from the database.
+ */
+
+export const getRoomsByUser = async (user_id: string): Promise<GetRoomsResponse> => {
+  const response = await databaseRequest({
+    model: 'Room',
+    method: 'getRoomsByUser',
+    arguments: { user_id },
+  });
 
   return response as GetRoomsResponse;
 };

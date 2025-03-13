@@ -40,7 +40,7 @@ const PrivateRoutes = () => {
     if (location.pathname.includes('password')) clearAuth(dispatch);
   }, [location.pathname, dispatch]);
 
-  return checkPermissions(60) ? (
+  return checkPermissions('system', 'hide') ? (
     <Routes>
       <Route path="/" element={<ConfigView />} />
       <Route path="*" element={<NotFoundView />} />

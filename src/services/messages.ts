@@ -35,8 +35,7 @@ interface GetMessagesResponse extends GenericResponse {
 }
 
 export const getMessages = async (): Promise<GetMessagesResponse> => {
-  // Check if user has Super Moderator (40) access to view all rooms
-  const hasSuperModAccess = checkPermissions(40);
+  const hasSuperModAccess = checkPermissions('messages', 'viewAll');
 
   const response = await databaseRequest(
     {
@@ -55,9 +54,6 @@ export const getMessages = async (): Promise<GetMessagesResponse> => {
  */
 
 export const getPersonalMessages = async (): Promise<GetMessagesResponse> => {
-  // Check if user has Super Moderator (40) access to view all rooms
-  const hasSuperModAccess = checkPermissions(40);
-
   const response = await databaseRequest(
     {
       model: 'Message',

@@ -240,7 +240,7 @@ export async function removeIdeaLike(idea_id: string): Promise<void> {
  */
 
 interface GetIdeaBoxesResponse extends GenericResponse {
-  data: { hash_id: string }[] | null;
+  data: { hash_id: string, name: string }[] | null;
 }
 
 export async function getIdeaBoxes(idea_id: string): Promise<GetIdeaBoxesResponse> {
@@ -280,6 +280,42 @@ export async function removeIdeaBox(idea_id: string, topic_id: string): Promise<
     method: 'removeIdeaFromTopic',
     arguments: { idea_id, topic_id },
   });
+
+  return response as GenericResponse;
+}
+
+/**
+ * Approve an idea
+ */
+
+interface ApproveIdeaArguments {
+  idea_id: string;
+  approved: number;
+  approval_comment: string;
+}
+
+export async function setApprovalStatus(args: ApproveIdeaArguments): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'setApprovalStatus',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+export async function setWinning(winnig_status: boolean, idea_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: winnig_status ? 'setToWinning' : 'setToLosing',
+      arguments: { idea_id },
+    },
+    ['updater_id']
+  );
 
   return response as GenericResponse;
 }
