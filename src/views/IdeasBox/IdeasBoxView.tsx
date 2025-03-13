@@ -5,6 +5,7 @@ import DelegateButton from '@/components/Buttons/DelegateButton';
 import { BoxForms } from '@/components/DataForms';
 import { IdeaCard } from '@/components/Idea';
 import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
+import KnowMore from '@/components/KnowMore';
 import { deleteBox, getBox } from '@/services/boxes';
 import { getIdeasByBox } from '@/services/ideas';
 import { getRoom } from '@/services/rooms';
@@ -152,7 +153,11 @@ const IdeasBoxView = () => {
               var: ideas.length,
             })}
         </Typography>
-        {Number(phase) === 30 && checkPermissions('ideas', 'vote') && <DelegateButton sx={{ ml: 'auto' }} />}
+        {Number(phase) === 30 && checkPermissions('ideas', 'vote') && (
+          <KnowMore title={t('tooltips.delegate')} sx={{ ml: 'auto' }}>
+            <DelegateButton />
+          </KnowMore>
+        )}
       </Stack>
       <Grid container spacing={1} pt={1} pb={2}>
         {isIdeasLoading && (

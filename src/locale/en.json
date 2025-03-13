@@ -81,7 +81,7 @@
     "delegate": "delegate",
     "delegated": "<strong>{{var}}</strong> can vote for you",
     "label": "Vote delegation",
-    "represent": "Your vote represents more <strong>{{var}}</strong> people",
+    "represent": "Your vote represents <strong>{{var}}</strong> additional people",
     "revoke": "revoke delegation",
     "status": {
       "delegated": "{{var}} delegated ideas",
