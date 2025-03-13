@@ -55,52 +55,54 @@ const DelegateButton: React.FC<Props> = ({ disabled = false, ...restOfProps }) =
 
   return (
     <>
-      <Stack
-        direction="row"
-        position="relative"
-        justifyContent="center"
-        alignItems="center"
-        border={1}
-        borderColor="disabled.main"
-        p={1}
-        borderRadius={3}
-        {...restOfProps}
-      >
-        <Stack alignItems="end" mr={1}>
-          {representing.length > 0 && (
-            <Typography variant="caption" lineHeight={1}>
-              <Trans i18nKey={t('delegation.represent', { var: representing.length })} />
-            </Typography>
-          )}
-          {((disabled && delegate) || !disabled) && (
-            <Box lineHeight={1}>
-              <Typography variant="caption" lineHeight={1} borderRadius={1}>
-                <Trans
-                  i18nKey={
-                    delegate
-                      ? `${t('delegation.delegated', { var: delegate.delegate_displayname })}. `
-                      : `${t('votes.vote').toUpperCase()} ${t('ui.common.or')} `
-                  }
-                />
+      {(!disabled || representing.length > 0 || delegate) && (
+        <Stack
+          direction="row"
+          position="relative"
+          justifyContent="center"
+          alignItems="center"
+          border={1}
+          borderColor="disabled.main"
+          p={1}
+          borderRadius={3}
+          {...restOfProps}
+        >
+          <Stack alignItems="end" mr={1}>
+            {representing.length > 0 && (
+              <Typography variant="caption" lineHeight={1}>
+                <Trans i18nKey={t('delegation.represent', { var: representing.length })} />
               </Typography>
+            )}
+            {((disabled && delegate) || !disabled) && (
+              <Box lineHeight={1}>
+                <Typography variant="caption" lineHeight={1} borderRadius={1}>
+                  <Trans
+                    i18nKey={
+                      delegate
+                        ? `${t('delegation.delegated', { var: delegate.delegate_displayname })}`
+                        : `${t('votes.vote').toUpperCase()} ${t('ui.common.or')}`
+                    }
+                  />
+                </Typography>
 
-              {!disabled && (
-                <Button
-                  size="small"
-                  sx={{ bgcolor: 'inherit', p: 0, m: 0, minWidth: 0, lineHeight: 1 }}
-                  onClick={() => setDelegating(true)}
-                  color={delegate ? 'error' : 'primary'}
-                >
-                  <Typography variant="caption" lineHeight={1}>
-                    {delegate ? t('delegation.revoke') : t('delegation.delegate')}
-                  </Typography>
-                </Button>
-              )}
-            </Box>
-          )}
+                {!disabled && (
+                  <Button
+                    size="small"
+                    sx={{ bgcolor: 'inherit', p: 0, m: 0, minWidth: 0, lineHeight: 1, ml: 0.5 }}
+                    onClick={() => setDelegating(true)}
+                    color={delegate ? 'error' : 'primary'}
+                  >
+                    <Typography variant="caption" lineHeight={1}>
+                      {delegate ? t('delegation.revoke') : t('delegation.delegate')}
+                    </Typography>
+                  </Button>
+                )}
+              </Box>
+            )}
+          </Stack>
+          <AppIcon icon="delegate" />
         </Stack>
-        <AppIcon icon="delegate" />
-      </Stack>
+      )}
       <DelegateVote
         open={delegating}
         delegate={delegate ? delegate.user_id_target : undefined}
