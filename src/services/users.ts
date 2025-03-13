@@ -324,6 +324,40 @@ export async function removeUserGroup(user_id: string, group_id: string): Promis
 }
 
 /**
+ * Gets a list of possible delegates, filtering non voting roles, and including availability status from delegation
+ */
+
+export type DelegateType = {
+  hash_id: string;
+  username: string;
+  displayname: string;
+  realname: string;
+  is_delegate: number;
+};
+
+interface PossibleDelegateResponse extends GenericResponse {
+  data: DelegateType[];
+}
+
+interface PossibleDelegationsRequest {
+  room_id: string;
+  topic_id: string;
+}
+
+export async function getPossibleDelegations(args: PossibleDelegationsRequest): Promise<PossibleDelegateResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'getPossibleDelegations',
+      arguments: args,
+    },
+    ['user_id']
+  );
+
+  return response as PossibleDelegateResponse;
+}
+
+/**
  * Gets an box delegation status from the database
  */
 
@@ -344,6 +378,29 @@ export const getDelegations = async (box_id: string): Promise<GetDelegationRespo
   );
 
   return response as GetDelegationResponse;
+};
+
+/**
+ * Gets an box delegation status from the database
+ */
+
+interface GetReceivedDelegationsResponse extends GenericResponse {
+  data: UserType[] | null;
+}
+
+export const getReceivedDelegations = async (box_id: string): Promise<GetReceivedDelegationsResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'getReceivedDelegations',
+      arguments: {
+        topic_id: box_id,
+      },
+    },
+    ['user_id']
+  );
+
+  return response as GetReceivedDelegationsResponse;
 };
 
 /**

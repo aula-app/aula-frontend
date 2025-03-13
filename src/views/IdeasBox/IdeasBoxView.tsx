@@ -1,25 +1,23 @@
-import { AppIcon, AppLink } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import AddIdeasButton from '@/components/Buttons/AddIdeas';
+import DelegateButton from '@/components/Buttons/DelegateButton';
 import { BoxForms } from '@/components/DataForms';
-import DelegateVote from '@/components/DelegateVote';
 import { IdeaCard } from '@/components/Idea';
 import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
 import KnowMore from '@/components/KnowMore';
 import { deleteBox, getBox } from '@/services/boxes';
 import { getIdeasByBox } from '@/services/ideas';
-import { getQuorum } from '@/services/vote';
-import { getDelegations } from '@/services/users';
 import { getRoom } from '@/services/rooms';
+import { getQuorum } from '@/services/vote';
 import { useAppStore } from '@/store/AppStore';
-import { BoxType, DelegationType, IdeaType } from '@/types/Scopes';
+import { BoxType, IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
-import { Button, Drawer, Stack, Typography } from '@mui/material';
+import { Drawer, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 /** * Renders "IdeasBox" view
@@ -129,34 +127,9 @@ const IdeasBoxView = () => {
     setIdeasLoading(false);
   }, [box_id]);
 
-  /**
-   * Delegation data
-   */
-
-  const [delegating, setDelegating] = useState(false);
-  const [delegate, setDelegate] = useState<DelegationType>();
-
-  const fetchDelegation = useCallback(async () => {
-    if (!box_id) return;
-
-    setIdeasLoading(true);
-
-    const response = await getDelegations(box_id);
-    setIdeasError(response.error);
-    if (!response.error && response.data) setDelegate(response.data[0]);
-
-    setIdeasLoading(false);
-  }, [box_id]);
-
-  const closeDeletion = () => {
-    fetchDelegation();
-    setDelegating(false);
-  };
-
   useEffect(() => {
     fetchIdeas();
     fetchBox();
-    fetchDelegation();
   }, []);
 
   return (
@@ -181,24 +154,9 @@ const IdeasBoxView = () => {
             })}
         </Typography>
         {Number(phase) === 30 && checkPermissions('ideas', 'vote') && (
-          <Stack direction="row" position="relative" alignItems="center" sx={{ ml: 'auto', pr: 3 }}>
-            <Typography variant="caption">
-              <Trans
-                i18nKey={
-                  delegate
-                    ? t('delegation.delegated', { var: delegate.delegate_displayname })
-                    : t('votes.vote').toUpperCase()
-                }
-              />{' '}
-              {t('ui.common.or')}
-            </Typography>
-            <Button size="small" sx={{ bgcolor: '#fff' }} onClick={() => setDelegating(true)}>
-              {delegate ? t('delegation.revoke') : t('delegation.delegate')}
-            </Button>
-            <KnowMore title={t('tooltips.delegate')}>
-              <AppIcon icon="delegate" size="small" />
-            </KnowMore>
-          </Stack>
+          <KnowMore title={t('tooltips.delegate')} sx={{ ml: 'auto' }}>
+            <DelegateButton />
+          </KnowMore>
         )}
       </Stack>
       <Grid container spacing={1} pt={1} pb={2}>
@@ -226,11 +184,6 @@ const IdeasBoxView = () => {
       <Drawer anchor="bottom" open={!!edit} onClose={boxClose} sx={{ overflowY: 'auto' }}>
         <BoxForms onClose={boxClose} defaultValues={edit} />
       </Drawer>
-      <DelegateVote
-        open={delegating}
-        delegate={delegate ? delegate.user_id_target : undefined}
-        onClose={closeDeletion}
-      />
     </Stack>
   );
 };

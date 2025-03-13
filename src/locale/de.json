@@ -81,6 +81,7 @@
     "delegate": "Stimme übertragen",
     "delegated": "{{var}} kann für dich abstimmen",
     "label": "Delegation abstimmen",
+    "represent": "Deine Stimme repräsentiert mehr als <strong>{{var}}</strong> Personen",
     "revoke": "Delegation widerrufen",
     "status": {
       "delegated": "{{var}} delegierte Ideen",
