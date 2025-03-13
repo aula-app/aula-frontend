@@ -105,7 +105,7 @@ const DelegateButton: React.FC<Props> = ({ disabled = false, ...restOfProps }) =
       )}
       <DelegateVote
         open={delegating}
-        delegate={delegate ? delegate.user_id_target : undefined}
+        delegate={delegate ? delegate.delegate_hash_id : undefined}
         onClose={closeDeletion}
       />
     </>

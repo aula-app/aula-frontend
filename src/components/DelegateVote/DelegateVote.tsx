@@ -1,7 +1,6 @@
 import { AppIcon, AppIconButton } from '@/components';
-import { delegateVote, getUser, getUsers, revokeDelegation } from '@/services/users';
+import { DelegateType, delegateVote, getPossibleDelegations, revokeDelegation } from '@/services/users';
 import { useAppStore } from '@/store';
-import { UserType } from '@/types/Scopes';
 import { GenericListRequest } from '@/utils';
 import {
   Button,
@@ -33,14 +32,16 @@ interface Props {
 
 const DelegateVote = ({ open, delegate, onClose }: Props) => {
   const { t } = useTranslation();
-  const params = useParams();
+  const { room_id, box_id } = useParams();
   const [, dispatch] = useAppStore();
 
-  const [users, setUsers] = useState<UserType[]>([]);
-  const [selected, setSelected] = useState<UserType>();
+  const [users, setUsers] = useState<DelegateType[]>([]);
+  const [selected, setSelected] = useState<DelegateType>();
   const [filter, setFilter] = useState('');
 
   const usersFetch = async () => {
+    if (!box_id || !room_id) return;
+
     const requestData = {
       offset: 0,
       limit: 0,
@@ -52,22 +53,23 @@ const DelegateVote = ({ open, delegate, onClose }: Props) => {
       requestData['both_names'] = filter;
     }
 
-    const response = await getUsers(requestData);
+    const response = await getPossibleDelegations({
+      room_id,
+      topic_id: box_id,
+    });
 
     if (response.error || !response.data) return;
     setUsers(response.data);
-  };
-
-  const delegateFetch = async () => {
-    if (!delegate) return;
-    const response = await getUser(delegate);
-    if (response.error || !response.data) return;
-    setSelected(response.data);
+    setSelected(response.data.find((user) => user.hash_id === delegate));
+    console.log(
+      delegate,
+      response.data.find((user) => user.hash_id === delegate)
+    );
   };
 
   const setDelegate = async () => {
-    if (!selected || !params.box_id) return;
-    const response = await delegateVote(selected.hash_id, params.box_id);
+    if (!selected || !box_id) return;
+    const response = await delegateVote(selected.hash_id, box_id);
 
     if (response.error) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
@@ -78,8 +80,8 @@ const DelegateVote = ({ open, delegate, onClose }: Props) => {
   };
 
   const removeDelegate = async () => {
-    if (!params.box_id) return;
-    const response = await revokeDelegation(params.box_id);
+    if (!box_id) return;
+    const response = await revokeDelegation(box_id);
 
     if (response.error) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
@@ -104,8 +106,8 @@ const DelegateVote = ({ open, delegate, onClose }: Props) => {
   };
 
   useEffect(() => {
-    !delegate ? usersFetch() : delegateFetch();
-  }, [filter, delegate]);
+    usersFetch();
+  }, [filter]);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
@@ -129,7 +131,7 @@ const DelegateVote = ({ open, delegate, onClose }: Props) => {
                       component={Button}
                       direction="row"
                       mt={1}
-                      key={user.id}
+                      key={user.hash_id}
                       bgcolor={selected && selected.hash_id === user.hash_id ? grey[200] : 'transparent'}
                       borderRadius={30}
                       sx={{
