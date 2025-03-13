@@ -22,7 +22,7 @@ const TimedCommands = () => {
 
   async function fetchCommands() {
     const response = await getCommands(LIST_LIMIT, page * LIST_LIMIT);
-    if (!response.data) return;
+    if (response.error) return;
     if (Array.isArray(response.data))
       response.data.map((r: ObjectPropByName) => (r.parameters = JSON.parse(r.parameters)));
     setTable(response);
@@ -30,7 +30,7 @@ const TimedCommands = () => {
 
   async function removeCommand(id: number) {
     const response = await deleteCommand(id);
-    if (response.data) fetchCommands();
+    if (!response.error) fetchCommands();
   }
 
   const setTable = (response: CommandResponse) => {
