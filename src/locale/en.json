@@ -449,6 +449,7 @@
     },
     "time": {
       "actions": "Scheduled actions",
+      "deleteMessage": "Are you sure you want to delete this scheduled action?",
       "endDate": "End Date",
       "endDay": "Ending day",
       "endTime": "Ending time",

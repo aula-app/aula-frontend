@@ -3,7 +3,21 @@ import { CommandResponse, deleteCommand, getCommands } from '@/services/config';
 import { ObjectPropByName } from '@/types/Generics';
 import { CommandType } from '@/types/Scopes';
 import { Commands } from '@/utils/commands';
-import { Pagination, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Pagination,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import TimedCommandInput from './TimedCommandInput';
@@ -19,6 +33,7 @@ const TimedCommands = () => {
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
   const [commands, setCommands] = useState<CommandType[]>();
+  const [deleteId, setDeleteId] = useState<number>();
 
   async function fetchCommands() {
     const response = await getCommands(LIST_LIMIT, page * LIST_LIMIT);
@@ -68,7 +83,7 @@ const TimedCommands = () => {
                       <TableCell>{command.parameters}</TableCell>
                       <TableCell>{command.date_start}</TableCell>
                       <TableCell align="right">
-                        <AppIconButton icon="delete" onClick={() => removeCommand(command.id)} />
+                        <AppIconButton icon="delete" onClick={() => setDeleteId(command.id)} />
                       </TableCell>
                     </TableRow>
                   );
@@ -83,6 +98,20 @@ const TimedCommands = () => {
           </TableContainer>
         </Stack>
       )}
+      <Dialog open={!!deleteId}>
+        <DialogTitle>
+          <Typography variant="h3">{t('actions.remove', { var: t('scopes.commands.name') })}</Typography>
+        </DialogTitle>
+        <DialogContent>{t('settings.time.deleteMessage')}</DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteId(undefined)} color="secondary" autoFocus>
+            {t('actions.cancel')}
+          </Button>
+          <Button onClick={() => removeCommand(deleteId || 0)} variant="contained">
+            {t('actions.confirm')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Stack>
   );
 };

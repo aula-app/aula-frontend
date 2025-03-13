@@ -449,6 +449,7 @@
     },
     "time": {
       "actions": "Geplante Aktionen",
+      "deleteMessage": "Bist du sicher, dass du diese geplante Aktion löschen möchtest?",
       "endDate": "Enddatum",
       "endDay": "Endtag",
       "endTime": "Endzeit",
