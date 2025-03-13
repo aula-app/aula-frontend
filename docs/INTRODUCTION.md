@@ -59,6 +59,7 @@ Ideas assigned to a Box progress through four sequential phases:
 4. **Result**
    - Winning Ideas are displayed
    - Results are considered collectively within Boxes
+   - Moderators can mark specific ideas as winners
    - Voting can be configured to:
      - Approve multiple Ideas in a Box
      - Select a single winning Idea from the Box
@@ -67,20 +68,21 @@ Ideas assigned to a Box progress through four sequential phases:
 
 The system defines six permission levels:
 
-| Role            | Capabilities                           |
-| --------------- | -------------------------------------- |
-| Guest           | Read-only access                       |
-| Student         | Can comment and interact with content  |
-| Moderator       | Can moderate assigned Rooms            |
-| Super Moderator | Can moderate all school Rooms          |
-| School Admin    | Full access to administrative settings |
-| Tech Admin      | Access to technical configuration only |
+| Role            | Capabilities                                 |
+| --------------- | -------------------------------------------- |
+| Guest           | Read-only access                             |
+| Student         | Can comment and interact with content        |
+| Moderator       | Can moderate assigned Rooms and mark winners |
+| Super Moderator | Can moderate all school Rooms                |
+| School Admin    | Full access to administrative settings       |
+| Tech Admin      | Access to technical configuration only       |
 
 ## Additional features
 
-Alongside with _Aula_'s voting system, there are other functions that support School's interaction with the Students:
+Alongside _Aula_'s voting system, there are other functions that support School's interaction with the Students:
 
-- _Announcements_ - Read only messages that may or may not require student agreement;
-- _Messages_ - A simple messaging system that can send messages to `Users`, be it of individual students, `Groups` or `Rooms`.
+- _Announcements_ - Read-only messages that may or may not require student agreement
+- _Messages_ - A simple messaging system that can send messages to `Users`, be it individual students, `Groups` or `Rooms`
 - _Reports_ - A system where `Users` can report inappropriate behavior or bugs
-- _Vote Delegation_ - An advanced interaction system, scoped within `Boxes`, where `Users` can delegate their votes to other `Users`, that will become their representatives on the voting phase.
+- _Vote Delegation_ - An advanced interaction system, scoped within `Boxes`, where `Users` can delegate their votes to other `Users`, who will become their representatives during the voting phase
+- _Winner Selection_ - Moderators can manually mark specific ideas as winners after the voting phase

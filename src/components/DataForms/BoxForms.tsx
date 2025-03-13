@@ -33,6 +33,8 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   const [updateIdeas, setUpdateIdeas] = useState<UpdateType>({ add: [], remove: [] });
   const [isLoading, setIsLoading] = useState(false);
 
+  const [options, setOptions] = useState<{ label: string; value: number; disabled: boolean }[]>(phaseOptions);
+
   const schema = yup.object({
     name: yup.string().required(t('forms.validation.required')),
     description_public: yup.string().required(t('forms.validation.required')),
@@ -50,6 +52,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     formState: { errors },
     handleSubmit,
     register,
+    setValue,
     reset,
     watch,
   } = useForm({
@@ -65,6 +68,26 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     const response = await getIdeasByBox({ topic_id: defaultValues.hash_id });
     if (!response.data) return;
     setIdeas(response.data);
+  };
+
+  const validatePhaseTransition = () => {
+    let ideasWithApprovalStatus = 0;
+    for (let idea of ideas) {
+      if (idea.approved) ideasWithApprovalStatus += 1;
+    }
+
+    setOptions((prevOptions) =>
+      prevOptions.map((option, index) => {
+        // Prevent moving to Voting phase if there is still ideas waiting for approval
+        if (index === 2) return { ...option, disabled: ideasWithApprovalStatus < ideas.length };
+
+        // A Box can only change to results if it passed Voting phase
+        if (index === 3 && defaultValues && Number(defaultValues['phase_id']) < 30)
+          return { ...option, disabled: true };
+
+        return phaseOptions[index];
+      })
+    );
   };
 
   const onSubmit = async (data: SchemaType) => {
@@ -124,12 +147,15 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   };
 
   useEffect(() => {
+    validatePhaseTransition();
+  }, [ideas]);
+
+  useEffect(() => {
     setRoom(watch('room_hash_id'));
   }, [watch('room_hash_id')]);
 
   useEffect(() => {
     reset({ ...defaultValues });
-    fetchBoxIdeas();
     fetchBoxIdeas();
   }, [JSON.stringify(defaultValues)]);
 
@@ -141,7 +167,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
             <Typography variant="h4">
               {t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.boxes.name`).toLowerCase() })}
             </Typography>
-            {checkPermissions(40) && <StatusField control={control} />}
+            {checkPermissions('boxes', 'status') && <StatusField control={control} />}
           </Stack>
 
           <Stack gap={2}>
@@ -155,28 +181,30 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
               disabled={isLoading}
             />
             <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
-            {checkPermissions(40) && (
-              <>
-                <Stack direction="row" flexWrap="wrap" alignItems="center" gap={2}>
-                  <SelectRoomField control={control} disabled={isLoading} />
-                  <SelectField
-                    control={control}
-                    name="phase_id"
-                    options={phaseOptions}
-                    defaultValue={10}
-                    disabled={isLoading}
-                  />
-                  <PhaseDurationFields control={control} room={defaultValues?.room_hash_id} disabled={isLoading} />
-                </Stack>
-                {room && (
-                  <IdeaField
-                    room={room}
-                    defaultValues={ideas}
-                    onChange={(updates) => setUpdateIdeas(updates)}
-                    disabled={isLoading}
-                  />
-                )}
-              </>
+            <Stack direction="row" flexWrap="wrap" alignItems="center" gap={2}>
+              {checkPermissions('rooms', 'addBox') && (
+                <SelectRoomField control={control} setValue={setValue} disabled={isLoading} />
+              )}
+              {checkPermissions('boxes', 'changePhase') && (
+                <SelectField
+                  control={control}
+                  name="phase_id"
+                  options={options}
+                  defaultValue={10}
+                  disabled={isLoading}
+                />
+              )}
+              {checkPermissions('boxes', 'changePhaseDuration') && (
+                <PhaseDurationFields control={control} room={defaultValues?.room_hash_id} disabled={isLoading} />
+              )}
+            </Stack>
+            {room && (
+              <IdeaField
+                room={room}
+                defaultValues={ideas}
+                onChange={(updates) => setUpdateIdeas(updates)}
+                disabled={isLoading}
+              />
             )}
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>

@@ -7,32 +7,26 @@ import AppIconButton from '../AppIconButton';
 import DeleteButton from '../Buttons/DeleteButton';
 import EditButton from '../Buttons/EditButton';
 import ReportButton from '../Buttons/ReportButton';
+import { checkPermissions } from '@/utils';
+import { useParams } from 'react-router-dom';
 
 interface Props extends IconButtonOwnProps {
   item: ScopeType;
   scope: SettingNamesType;
   onDelete: () => void;
   onEdit: () => void;
-  canEdit?: boolean;
   children?: React.ReactNode;
+  link?: string;
 }
 
 /**
  * Renders question mark badge that triggers a tooltip on hover
  * @component MoreOptions
  */
-const MoreOptions: React.FC<Props> = ({
-  item,
-  scope,
-  children,
-  onDelete,
-  onEdit,
-  color,
-  canEdit = false,
-  ...restOfProps
-}) => {
+const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit, color, link, ...restOfProps }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const { phase } = useParams();
 
   const toggleOptions = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -44,6 +38,9 @@ const MoreOptions: React.FC<Props> = ({
     if (open) setOpen(false);
   };
 
+  const targetName =
+    'title' in item ? item.title : 'name' in item ? item.name : 'content' in item ? item.content : item.id;
+
   return (
     <ClickAwayListener onClickAway={closeOptions}>
       <Stack direction="row">
@@ -54,16 +51,20 @@ const MoreOptions: React.FC<Props> = ({
         )}
         <Collapse orientation="horizontal" in={open}>
           <Stack direction="row" position="relative">
-            <ReportButton color={color || 'error'} target={`${t(`scopes.${scope}.name`)}: ${item.id}`} />
-            {canEdit && (
+            <ReportButton color={color || 'error'} target={`${t(`scopes.${scope}.name`)}: ${targetName}`} link={link} />
+            {phase && (
               <>
-                <EditButton color={color || 'secondary'} onEdit={onEdit} />
-                <DeleteButton color={color || 'error'} scope={scope} onDelete={onDelete} />
+                {checkPermissions(scope, 'edit', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
+                  <EditButton color={color || 'secondary'} onEdit={onEdit} />
+                )}
+                {checkPermissions(scope, 'delete', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
+                  <DeleteButton color={color || 'error'} scope={scope} onDelete={onDelete} />
+                )}
               </>
             )}
           </Stack>
         </Collapse>
-        <AppIconButton icon={open ? 'close' : 'more'} onClick={toggleOptions} />
+        <AppIconButton icon={open ? 'close' : 'more'} onClick={toggleOptions} {...restOfProps} />
       </Stack>
     </ClickAwayListener>
   );

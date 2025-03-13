@@ -49,7 +49,7 @@ const SelectField: React.FC<Props> = ({
             slotProps={{ inputLabel: { shrink: true } }}
           >
             {options.map((option) => (
-              <MenuItem value={option.value} key={option.value}>
+              <MenuItem value={option.value} key={option.value} disabled={(option.disabled)?option.disabled:false}>
                 {t(option.label)}
               </MenuItem>
             ))}

@@ -21,8 +21,22 @@ interface AppStoreState {
   hasConsent: boolean; // User consent status
   currentUser?: object; // Current user data
   messages: PopupType[]; // System notifications
+  breadcrumb: [string, string][]; // Navigation breadcrumb path
 }
 ```
+
+### PopupType
+
+Notifications in the system are managed through the `PopupType` interface:
+
+```typescript
+export interface PopupType {
+  message: string; // The text message to display
+  type: 'error' | 'success'; // The visual styling of the notification
+}
+```
+
+These notifications are rendered by the `PopupMessages` component and can be triggered through utility functions in `alerts.ts` or directly through store dispatches.
 
 ## Usage Methods
 

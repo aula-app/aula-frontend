@@ -6,13 +6,14 @@ import AppLink from '../AppLink';
 
 const MUI_ICON_BUTTON_COLORS = ['inherit', 'default', 'primary', 'secondary', 'success', 'error', 'info', 'warning'];
 
-interface Props extends Omit<IconButtonProps, 'color'> {
+interface Props extends Omit<IconButtonProps, 'size' | 'color'> {
   color?: string; // Not only 'inherit' | 'default' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
   icon: AllIconsType;
   component?: ElementType; // Could be RouterLink, AppLink, <a>, etc.
   to?: string; // Link prop
   href?: string; // Link prop
   openInNewTab?: boolean; // Link prop
+  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
 }
 
 /**

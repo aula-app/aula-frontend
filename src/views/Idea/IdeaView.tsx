@@ -1,18 +1,18 @@
-import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
 import { IdeaForms } from '@/components/DataForms';
 import { ApprovalCard, IdeaBubble, VotingCard, VotingResults } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import VotingQuorum from '@/components/Idea/VotingQuorum';
-import { deleteIdea, getIdea } from '@/services/ideas';
-import { useAppStore } from '@/store/AppStore';
+import { deleteIdea, getIdea, getIdeaBoxes } from '@/services/ideas';
 import { getRoom } from '@/services/rooms';
+import { useAppStore } from '@/store/AppStore';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { Drawer, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
-import CommentView from './Comment';
+import CommentView from '../Comment';
+import { getQuorum } from '@/services/vote';
 
 /**
  * Renders "Idea" view
@@ -24,13 +24,13 @@ const IdeaView = () => {
   const navigate = useNavigate();
   const { idea_id, room_id, phase } = useParams();
 
-  const addCategory = useRef<AddCategoryRefProps>(null);
   const [appState, dispatch] = useAppStore();
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [idea, setIdea] = useState<IdeaType>();
   const [edit, setEdit] = useState<IdeaType>(); // undefined = update dialog closed; EditFormData = edit idea;
+  const [quorum, setQuorum] = useState<number>(0);
 
   // const [comments, setComments] = useState<CommentType[]>([]);
   // const [vote, setVote] = useState<Vote>(0);
@@ -43,29 +43,61 @@ const IdeaView = () => {
     });
   };
 
-  const fetchIdea = useCallback(async () => {
+  const fetchIdea = async () => {
     if (!idea_id) return;
-    setLoading(true);
+    if (typeof idea === 'undefined') setLoading(true);
     const response = await getIdea(idea_id);
 
-    let roomName = 'aula'
+    let roomName = 'aula';
     if (room_id) {
       let nameResponse = await getRoomName(room_id);
-      if (nameResponse)
-        roomName = nameResponse
+      if (nameResponse) roomName = nameResponse;
     }
 
-    if (response.data && response.data.title)
-      dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`], [response.data.title, '']]});
+    const topic = (await getIdeaBoxes(idea_id)).data?.[0];
+
+    let topicName = '';
+    let topicId = '';
+    if (topic) {
+      if (topic.name) topicName = topic.name;
+
+      if (topic.hash_id) topicId = topic.hash_id;
+    }
+
+    if (response.data && response.data.title) {
+      let breadCrumbs = [
+        [roomName, `/room/${room_id}/phase/0`],
+        [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
+      ];
+
+      if (phase && phase != '0') {
+        // Add Topic Name to breadcrumb
+        breadCrumbs.push([topicName, `/room/${room_id}/phase/${phase}/idea-box/${topicId}`]);
+      }
+
+      // Add Idea Title to breadcrumb
+      breadCrumbs.push([response.data.title, '']);
+      dispatch({
+        action: 'SET_BREADCRUMB',
+        breadcrumb: breadCrumbs,
+      });
+    }
 
     if (response.error) setError(response.error);
     if (!response.error && response.data) setIdea(response.data);
-    setLoading(false);
-  }, [idea_id]);
+    if (isLoading) setLoading(false);
+  };
+
+  async function fetchQuorum() {
+    getQuorum().then((response) => {
+      if (response.error || !response.data) return;
+      setQuorum(Number(phase) >= 30 ? Number(response.data.quorum_votes) : Number(response.data.quorum_wild_ideas));
+    });
+  }
 
   useEffect(() => {
-
     fetchIdea();
+    fetchQuorum();
   }, [idea_id]);
 
   const ideaDelete = async (id: string) => {
@@ -81,9 +113,8 @@ const IdeaView = () => {
 
   return !isLoading && idea ? (
     <Stack width="100%" height="100%" overflow="auto" gap={2}>
-      {phase === '20' && <ApprovalCard idea={idea} disabled={Number(phase) > 20} />}
       {phase === '30' && <VotingCard onReload={fetchIdea} />}
-      {phase === '40' && <VotingResults idea={idea} />}
+      {phase === '40' && <VotingResults idea={idea} onReload={fetchIdea} quorum={quorum} />}
       <IdeaBubble
         idea={idea}
         onEdit={() => setEdit(idea)}
@@ -91,11 +122,13 @@ const IdeaView = () => {
         disabled={Number(phase) >= 20}
       >
         <VotingQuorum
+          quorum={quorum}
           phase={Number(phase) as RoomPhases}
           votes={Number(phase) >= 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
           users={Number(idea.number_of_users)}
         />
       </IdeaBubble>
+      {Number(phase) === 20 && <ApprovalCard idea={idea} onReload={fetchIdea} />}
       <Stack px={2}>
         <CommentView />
       </Stack>

@@ -1,4 +1,4 @@
-# Getting Started to Aula
+# Getting Started with Aula
 
 This document provides an overview of the Aula application, including setup instructions and information about the development environment.
 
@@ -6,8 +6,8 @@ This document provides an overview of the Aula application, including setup inst
 
 ### Prerequisites
 
-- Node.js (version 16 or higher recommended)
-- npm (version 7 or higher recommended)
+- Node.js (version 18 or higher recommended)
+- Yarn (preferred) or npm
 
 ### Installation
 
@@ -25,12 +25,12 @@ This document provides an overview of the Aula application, including setup inst
 
 3. Install dependencies:
    ```
-   npm install
+   yarn
    ```
 
 ### Database Setup and Configuration
 
-4. Set up aula's API Back End based on the [Aula's Backend Repository](https://github.com/aula-app/playground).
+4. Set up Aula's API Back End based on the [Aula's Backend Repository](https://github.com/aula-app/playground).
 
 ### Environment Configuration
 
@@ -52,24 +52,27 @@ This document provides an overview of the Aula application, including setup inst
 7. Start the development server:
 
    ```
-   npm run dev
+   yarn dev
    ```
 
    The application will start in development mode. Open your browser to the URL shown in the terminal to view the app.
 
 ### Available Scripts
 
-The following npm scripts are available:
+The following yarn scripts are available:
 
-- `npm run dev`: Starts the development server
-- `npm run build`: Builds the production-ready application
-- `npm run build-devel`: Builds the application in development mode
-- `npm run build-test`: Builds the application in test mode
-- `npm run preview`: Preview the production build locally
-- `npm run format`: Format source files using Prettier
-- `npm run lint`: Lint source files using ESLint
-- `npm run check`: Type check TypeScript files
-- `npm run type`: Alias for TypeScript checking
+- `yarn dev` or `yarn start`: Starts the development server
+- `yarn build`: Builds the production-ready application
+- `yarn build-devel`: Builds the application in development mode
+- `yarn build-staging`: Builds the application in staging mode
+- `yarn build-test`: Builds the application in test mode
+- `yarn build-bw`: Builds the application with BW configuration
+- `yarn build-single`: Builds the application in single-instance mode
+- `yarn preview`: Preview the production build locally
+- `yarn format`: Format src files using Prettier
+- `yarn format:all`: Format all files using Prettier
+- `yarn lint`: Lint source files using ESLint
+- `yarn check-type` or `yarn type`: Type check TypeScript files
 
 ## Deployment
 
@@ -78,17 +81,34 @@ To deploy the application:
 1. Build the production-ready application:
 
    ```
-   npm run build
+   yarn build
    ```
 
 2. The build output will be generated in the `dist/` directory. Deploy these files to your web server.
 
 3. For proper routing to work, ensure your web server is configured to redirect all requests to `index.html`, as this is a single-page application.
 
-   If using Nginx, you might add this to your server configuration:
+   A `_redirects` file is included in the public directory for services like Netlify:
 
-   ```nginx
-   location / {
-     try_files $uri $uri/ /index.html;
-   }
+   ```
+   /*    /index.html   200
+   ```
+
+## Mobile Development
+
+The application includes Capacitor integration for building mobile apps. To start Android development:
+
+1. Build the web app first:
+   ```
+   yarn build
+   ```
+
+2. Sync the build with Capacitor:
+   ```
+   npx cap sync
+   ```
+
+3. Open the Android project:
+   ```
+   npx cap open android
    ```

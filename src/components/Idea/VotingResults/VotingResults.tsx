@@ -1,24 +1,26 @@
 import AppIcon from '@/components/AppIcon';
-import { getVote, getVoteResults } from '@/services/vote';
+import { getQuorum, getVote, getVoteResults, ResultResponse, setToLosing, setToWinning } from '@/services/vote';
 import { IdeaType } from '@/types/Scopes';
-import { Vote, votingOptions } from '@/utils';
-import { Card, Stack, Typography } from '@mui/material';
+import { checkPermissions, Vote, votingOptions } from '@/utils';
+import { Card, FormControlLabel, Stack, Switch, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface VotingResultsProps {
+interface Props {
   idea: IdeaType;
+  quorum: number;
+  onReload: () => void;
 }
 
 /**
  * Renders "VotingResults" component
  */
-const VotingResults = ({ idea }: VotingResultsProps) => {
+const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
   const { t } = useTranslation();
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [vote, setVote] = useState<Vote>(0);
+  const [vote, setVote] = useState<Vote | null>();
 
   const fetchVote = useCallback(async () => {
     setLoading(true);
@@ -28,32 +30,41 @@ const VotingResults = ({ idea }: VotingResultsProps) => {
     setLoading(false);
   }, [idea.hash_id]);
 
-  const [numVotes, setNumVotes] = useState<Array<-1 | 0 | 1>>([0, 0, 0]);
+  const [numVotes, setNumVotes] = useState<ResultResponse>({
+    total_votes: 0,
+    votes_negative: 0,
+    votes_neutral: 0,
+    votes_positive: 0,
+  });
 
   const getResults = () => {
     getVoteResults(idea.hash_id).then((response) => {
       if (!response.data) return;
-      setNumVotes([
-        response.data.votes_negative as Vote,
-        response.data.votes_neutral as Vote,
-        response.data.votes_positive as Vote,
-      ]);
+      setNumVotes(response.data);
     });
   };
 
+  const handleSetWinner = async (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    const response = checked ? await setToWinning(idea.hash_id) : await setToLosing(idea.hash_id);
+    if (!response.error) onReload();
+  };
+
+  const quorumPassed = () =>
+    quorum / 100 <= (numVotes.votes_positive + numVotes.votes_negative + numVotes.votes_neutral) / numVotes.total_votes;
+
   useEffect(() => {
-    fetchVote();
+    if (checkPermissions('ideas', 'vote')) fetchVote();
     getResults();
   }, []);
 
   return (
-    <Stack mt={2}>
+    <Stack>
       <Card
         sx={{
           borderRadius: '25px',
           overflow: 'hidden',
           scrollSnapAlign: 'center',
-          bgcolor: idea.is_winner ? 'for.main' : 'against.main',
+          bgcolor: idea.is_winner ? 'for.main' : 'disabled.main',
         }}
         variant="outlined"
       >
@@ -67,17 +78,26 @@ const VotingResults = ({ idea }: VotingResultsProps) => {
               aspectRatio: 1,
             }}
           >
-            {idea.is_winner ? <AppIcon icon="for" size="xl" /> : <AppIcon icon="against" size="xl" />}
+            <AppIcon icon={idea.is_winner ? 'winner' : quorumPassed() ? 'for' : 'against'} size="xl" />
           </Stack>
           <Stack flexGrow={1} pr={2}>
-            <Typography variant="h6">{t(`scopes.ideas.${idea.is_winner ? 'approved' : 'rejected'}`)}</Typography>
-            <Typography variant="caption">
-              {t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`).toLowerCase() })}
+            <Typography variant="h6">
+              {idea.is_winner === 1
+                ? t(`scopes.ideas.winner`)
+                : quorumPassed()
+                  ? t(`scopes.ideas.approved`)
+                  : t(`scopes.ideas.rejected`)}
             </Typography>
+            {checkPermissions('ideas', 'vote') && !!vote && (
+              <Typography variant="caption">
+                {t('votes.yourVote', { var: t(`votes.${votingOptions[vote + 1]}`).toLowerCase() })}
+              </Typography>
+            )}
           </Stack>
-          <Stack>
+          <Stack direction="column-reverse">
             {votingOptions.map((option, i) => (
               <Stack
+                order={-i}
                 direction="row"
                 alignItems="center"
                 fontSize="small"
@@ -85,12 +105,19 @@ const VotingResults = ({ idea }: VotingResultsProps) => {
                 mr={1.5}
                 sx={{ whiteSpace: 'nowrap' }}
               >
-                <AppIcon icon={option} size="small" sx={{ mr: 0.5 }} /> {numVotes[i]}
+                <AppIcon icon={option} size="small" sx={{ mr: 0.5 }} /> {Object.values(numVotes)[i + 1]}
               </Stack>
             ))}
           </Stack>
         </Stack>
       </Card>
+      {checkPermissions('ideas', 'setWinner') && (
+        <FormControlLabel
+          control={<Switch onChange={handleSetWinner} checked={Boolean(idea.is_winner)} sx={{ ml: 3 }} />}
+          label={t('settings.columns.is_winner')}
+          sx={{ mt: 2 }}
+        />
+      )}
     </Stack>
   );
 };

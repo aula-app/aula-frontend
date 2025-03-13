@@ -4,6 +4,7 @@ export * from './form';
 export * from './jwt';
 export * from './localStorage';
 export * from './navigation';
+export * from './permissions';
 export * from './phases';
 export * from '../services/requests';
 export * from './roles';

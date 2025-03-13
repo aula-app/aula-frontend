@@ -36,19 +36,21 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
         background: getBackground(),
         cursor: 'pointer',
         textDecorationLine: status !== 1 ? 'line-through' : 'none',
-        maxHeight: '55px',
+        height: '55px',
         ...sx,
       }}
       {...restOfProps}
     >
       <TableCell sx={{ position: 'sticky', left: 0, zIndex: 2, pl: 1, pr: 0, background: 'inherit' }}>
-        <Checkbox
-          checked={selected}
-          onChange={() => {
-            if (!isFixed()) toggleRow(String(item.hash_id));
-          }}
-          disabled={isFixed()}
-        />
+        {!('userlevel' in item && item.userlevel >= 50) && (
+          <Checkbox
+            checked={selected}
+            onChange={() => {
+              if (!isFixed()) toggleRow(String(item.hash_id));
+            }}
+            disabled={isFixed()}
+          />
+        )}
       </TableCell>
       {children}
     </TableRow>

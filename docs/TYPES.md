@@ -34,6 +34,27 @@ Defines types for API communication:
 - Configuration request formats
 - Error handling types
 
+Key types include:
+
+```typescript
+// Base response structure from API
+export interface ResponseType<T = any> {
+  data?: T;
+  error?: string;
+  message?: string;
+  statusCode?: number;
+}
+
+// Request configuration
+export interface RequestConfigType {
+  model: string;
+  method: string;
+  arguments: Record<string, any>;
+}
+```
+
+These types are used throughout the service layer to ensure type safety in API communication.
+
 ### Scopes.ts
 
 Contains core data structure types, including the socpe specific return types, for main features:
@@ -61,6 +82,34 @@ Contains types for data table implementations:
 - Table configuration options
 - Row and column definitions
 - Response formats for tabular data
+
+Important table-related types include:
+
+```typescript
+// Column definition for data tables
+export interface ColumnType {
+  field: string;
+  headerName: string;
+  flex?: number;
+  minWidth?: number;
+  align?: 'left' | 'right' | 'center';
+  renderCell?: (params: any) => React.ReactNode;
+  sortable?: boolean;
+  filterable?: boolean;
+}
+
+// Data table props
+export interface DataTableProps {
+  columns: ColumnType[];
+  rows: any[];
+  loading?: boolean;
+  pagination?: boolean;
+  pageSize?: number;
+  onRowClick?: (params: any) => void;
+}
+```
+
+These types support the DataTable component and its various implementations throughout the application.
 
 ## Usage Guidelines
 

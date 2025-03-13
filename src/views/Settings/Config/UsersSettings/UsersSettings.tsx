@@ -31,6 +31,7 @@ const DataSettings = ({ onReload }: Props) => {
   const [users, setUsers] = useState<Array<string>>([]);
   const [role, setRole] = useState<RoleTypes>(10);
   const [rooms, setRooms] = useState<UpdateType>({ add: [], remove: [] });
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +81,6 @@ const DataSettings = ({ onReload }: Props) => {
           !items[2] ||
           (i === 0 && !line.includes('realname;displayname;username;email;about_me'))
         ) {
-          console.log(i, line);
           setError(t('forms.csv.invalid'));
           return;
         }
@@ -92,8 +92,9 @@ const DataSettings = ({ onReload }: Props) => {
   };
 
   const uploadCSV = async (csv: string) => {
+    setLoading(true);
     const responses = await Promise.all(rooms.add.map((room) => addCSV(csv, room, role)));
-
+    setLoading(false);
     responses.forEach((response) => {
       if (!response.data) {
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
@@ -163,7 +164,7 @@ const DataSettings = ({ onReload }: Props) => {
         </Stack>
         <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
       </Stack>
-      <Button variant="contained" component="label" onClick={onSubmit}>
+      <Button variant="contained" component="label" onClick={onSubmit} disabled={loading}>
         {t('actions.confirm')}
       </Button>
     </Stack>

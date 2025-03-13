@@ -39,6 +39,7 @@ const COLUMNS = [
 const UsersView: React.FC = () => {
   const { t } = useTranslation();
 
+  const [appState, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [users, setUsers] = useState<UserType[]>([]);
@@ -53,8 +54,7 @@ const UsersView: React.FC = () => {
   const [offset, setOffset] = useState(0);
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
   const [room_id, setRoom] = useState<string>('');
-  const [userlevel, setRole] = useState<RoleTypes | 0>();
-  const [appState, dispatch] = useAppStore();
+  const [userlevel, setRole] = useState<RoleTypes | 0>(0);
 
   const [edit, setEdit] = useState<UserType | boolean>(false); // false = update dialog closed ;true = new idea; UserType = user to edit;
 
@@ -66,7 +66,7 @@ const UsersView: React.FC = () => {
       offset,
       orderby,
       room_id,
-      userlevel,
+      userlevel: userlevel === 0 ? undefined : userlevel,
       search_field,
       search_text,
       status,
@@ -91,7 +91,7 @@ const UsersView: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.users'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.users'), '']] });
     fetchUsers();
   }, [fetchUsers]);
 

@@ -27,7 +27,7 @@ const WildIdeas = () => {
   const { t } = useTranslation();
   const { phase, room_id } = useParams<RouteParams>();
   const [appState, dispatch] = useAppStore();
- 
+
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
@@ -40,7 +40,7 @@ const WildIdeas = () => {
       return roomName;
     });
   };
-  
+
   const fetchIdeas = useCallback(async () => {
     if (!room_id) return;
     setLoading(true);
@@ -51,11 +51,16 @@ const WildIdeas = () => {
 
     let roomName = await getRoomName(room_id);
     roomName = roomName ? roomName : 'aula';
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[roomName, `/room/${room_id}/phase/0`], [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`]]});
+    dispatch({
+      action: 'SET_BREADCRUMB',
+      breadcrumb: [
+        [roomName, `/room/${room_id}/phase/0`],
+        [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
+      ],
+    });
   }, [room_id]);
 
   useEffect(() => {
-
     fetchIdeas();
   }, []);
 
@@ -87,21 +92,19 @@ const WildIdeas = () => {
             onDelete={() => onDelete(idea.hash_id)}
           />
         ))}
-      {checkPermissions(20) && room_id && (
-        <>
-          <Fab
-            aria-label="add idea"
-            color="primary"
-            sx={{
-              position: 'fixed',
-              bottom: 40,
-              zIndex: 1000,
-            }}
-            onClick={() => setEdit(true)}
-          >
-            <AppIcon icon="idea" />
-          </Fab>
-        </>
+      {checkPermissions('ideas', 'create') && room_id && (
+        <Fab
+          aria-label="add idea"
+          color="primary"
+          sx={{
+            position: 'fixed',
+            bottom: 40,
+            zIndex: 1000,
+          }}
+          onClick={() => setEdit(true)}
+        >
+          <AppIcon icon="idea" />
+        </Fab>
       )}
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <IdeaForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />

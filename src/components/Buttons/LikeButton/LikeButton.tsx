@@ -39,7 +39,7 @@ const LikeButton: React.FC<Props> = ({ item, disabled }) => {
     <AppIconButton
       icon={likeStatus ? 'heartFull' : 'heart'}
       onClick={toggleLike}
-      disabled={disabled || !checkPermissions(20)}
+      disabled={disabled || !checkPermissions('ideas', 'like')}
     >
       {`${item.sum_likes + Number(likeStatus) - Number(liked)}`}
     </AppIconButton>

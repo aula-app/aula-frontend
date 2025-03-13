@@ -2,12 +2,13 @@ import { AppIconButton } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import UserInfo from '@/components/UserInfo';
 import { useIsAuthenticated, useOnMobile } from '@/hooks';
-import { Divider, Drawer, Stack } from '@mui/material';
+import { Chip, Divider, Drawer, Stack } from '@mui/material';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { drawerPaperStyles } from './styles';
 import { DrawerSideBarProps } from './types';
 import SideBarContent from './SideBarContent';
+import { localStorageGet } from '@/utils';
 
 /**
  * Renders SideBar with Menu and User details for authenticated users in Private Layout
@@ -23,6 +24,7 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
   const { t } = useTranslation();
   const onMobile = useOnMobile();
   const isAuthenticated = useIsAuthenticated();
+  const code = localStorageGet('code');
 
   return (
     <Drawer
@@ -36,8 +38,15 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
       onClose={onClose}
       {...restOfProps}
     >
-      <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" px={2} pt={0}>
         <LocaleSwitch />
+        {import.meta.env.VITE_APP_MULTI !== 'false' && (
+          <Chip
+            label={`${t('instance.chip')}: ${code}`}
+            onClick={() => navigator.clipboard.writeText(code)}
+            clickable
+          />
+        )}
         <AppIconButton
           color="secondary"
           onClick={(evt) => onClose(evt, 'backdropClick')}
@@ -46,6 +55,7 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
           sx={{ px: 0 }}
         />
       </Stack>
+      <Divider />
       {isAuthenticated && <UserInfo />}
       <Divider />
       <SideBarContent onClose={onClose} />

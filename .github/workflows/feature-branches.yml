@@ -2,11 +2,13 @@ name: Feature Branch Deployment
 
 on:
   push:
-    branches:
-      - 'feature-**'
-      - 'feat-**'
-      - 'feature/**'
-      - 'feat/**'
+    branches-ignore:
+      - main
+      - master
+      - production
+      - test
+      - dev
+
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -26,25 +28,36 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Get branch name
         id: branch-name
         run: |
           if [[ $GITHUB_EVENT_NAME == 'pull_request' ]]; then
-            echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
+            BRANCH_NAME="${{ github.head_ref }}"
           else
-            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+            BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           fi
+          echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
           # Convert branch name to URL-safe format
           SAFE_BRANCH_NAME=$(echo $BRANCH_NAME | sed 's/[^a-zA-Z0-9]/-/g')
           echo "SAFE_BRANCH_NAME=$SAFE_BRANCH_NAME" >> $GITHUB_ENV
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn
+
+      - name: Update environment variables
+        run: |
+          # Replace or add environment variables
+          if [ -f ".env.branch" ]; then
+            # Update existing variables
+            sed -i 's#^VITE_APP_BASENAME.*=.*#VITE_APP_BASENAME = /${{ env.SAFE_BRANCH_NAME }}/#g' .env.branch
+            sed -i 's#^VITE_APP_MULTI.*=.*#VITE_APP_MULTI = false#g' .env.branch
+          fi
+          cp .env.branch .env
 
       - name: Build application
-        run: npm run build
+        run: yarn run build-branch
         env:
           # Add any environment variables needed for your build
           PUBLIC_URL: /${{ env.SAFE_BRANCH_NAME }}
@@ -54,16 +67,12 @@ jobs:
           DEPLOY_PATH="${{ env.DEPLOY_BASE_PATH }}/${{ env.SAFE_BRANCH_NAME }}"
           
           # Create the directory if it doesn't exist
-          sudo mkdir -p $DEPLOY_PATH
+          mkdir -p $DEPLOY_PATH
           
           # Copy the built files
-          sudo rm -rf $DEPLOY_PATH/*
-          sudo cp -r ./build/* $DEPLOY_PATH/
+          rm -rf $DEPLOY_PATH/*
+          cp -r ./build/* $DEPLOY_PATH/
           
-          # Ensure proper permissions
-          sudo chown -R www-data:www-data $DEPLOY_PATH
-          sudo chmod -R 755 $DEPLOY_PATH
-
           # - name: Comment on PR
           #   if: github.event_name == 'pull_request'
           #   uses: actions/github-script@v7

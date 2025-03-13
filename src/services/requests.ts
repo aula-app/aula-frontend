@@ -32,6 +32,7 @@ export interface GenericListRequest {
   search_text?: string;
   both_names?: string;
   status?: StatusTypes;
+  user_needs_to_consent?: StatusTypes;
 }
 
 /**
@@ -106,6 +107,20 @@ export const baseRequest = async (
 
     const response = await request.json();
 
+    if ('success' in response && response.error === 'refresh_token') {
+      const requestData = {
+        method: 'GET',
+        headers: headers,
+      };
+
+      const request = await fetch(`${api_url}/api/controllers/refresh_token.php`, requestData);
+      const new_jwt = await request.json();
+
+      localStorage.setItem('token', new_jwt['JWT']);
+      window.location.reload();
+      // TODO: Make reload the page
+    }
+
     if ('online_mode' in response && response.online_mode === 0) {
       if (window.location.pathname !== '/offline') window.location.href = '/offline';
     }
@@ -127,7 +142,7 @@ export const baseRequest = async (
     }
 
     return {
-      data: response.data || response.JWT,
+      data: response.JWT ? response.JWT : response.data,
       count: response.count,
       error: null,
     };

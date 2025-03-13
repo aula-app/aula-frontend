@@ -37,7 +37,7 @@ const StatusField: React.FC<Props> = ({ control, disabled = false, ...restOfProp
             slotProps={{ inputLabel: { shrink: true } }}
           >
             {STATUS.map((status) => (
-              <MenuItem value={status.value}>
+              <MenuItem value={status.value} key={status.value}>
                 <Typography sx={{ color: colors[status.value], display: 'inline' }}>&#x25CF;</Typography>&nbsp;&nbsp;
                 {t(status.label)}
               </MenuItem>

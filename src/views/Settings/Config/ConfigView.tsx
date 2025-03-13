@@ -2,19 +2,16 @@ import { AppIcon } from '@/components';
 import { getGlobalConfigs, getInstanceSettings } from '@/services/config';
 import { useAppStore } from '@/store/AppStore';
 import { ConfigResponse, InstanceResponse } from '@/types/Generics';
-import { checkPermissions } from '@/utils';
 import { Accordion, AccordionDetails, AccordionSummary, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Groups from './Groups';
 import IdeaSettings from './IdeaSettings';
 import QuorumSettings from './IdeaSettings/QuorumSettings';
-import LoginSettings from './LoginSettings';
 import SchoolDelete from './SchoolDelete';
 import SchoolInfo from './SchoolInfo';
 import SystemSettings from './SystemSettings';
 import TimedCommands from './TimedCommands';
-import TimeSettings from './TimeSettings';
 import UsersSettings from './UsersSettings';
 
 /** * Renders "Config" view
@@ -57,19 +54,17 @@ const ConfigView = () => {
     loadData();
   }, []);
 
-  const SETTINGS_PANELS = [
-    { name: 'idea', role: 50, component: <IdeaSettings onReload={getConfig} /> },
-    { name: 'vote', role: 50, component: <QuorumSettings onReload={closePanels} /> },
-    { name: 'user', role: 50, component: <UsersSettings onReload={closePanels} /> },
-    { name: 'group', role: 50, component: <Groups /> },
-    // { name: 'time', role: 50, component: <TimeSettings config={config} onReload={getConfig} /> },
-    // { name: 'login', role: 50, component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
-    { name: 'action', role: 50, component: <TimedCommands /> },
-    { name: 'system', role: 50, component: <SystemSettings settings={settings} onReload={getSettings} /> },
-    { name: 'danger', role: 50, component: <SchoolDelete /> },
+  const panels = [
+    { name: 'idea', component: <IdeaSettings onReload={getConfig} /> },
+    { name: 'vote', component: <QuorumSettings onReload={closePanels} /> },
+    { name: 'user', component: <UsersSettings onReload={closePanels} /> },
+    { name: 'group', component: <Groups /> },
+    // { name: 'time', component: <TimeSettings config={config} onReload={getConfig} /> },
+    // { name: 'login', component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
+    { name: 'action', component: <TimedCommands /> },
+    { name: 'system', component: <SystemSettings settings={settings} onReload={getSettings} /> },
+    { name: 'danger', component: <SchoolDelete /> },
   ];
-
-  const panels = SETTINGS_PANELS.filter((panel) => checkPermissions(panel.role));
 
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
