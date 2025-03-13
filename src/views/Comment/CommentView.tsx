@@ -58,7 +58,7 @@ const Comments = () => {
       {comments.length > 0 && (
         <Box pl={1} width="100%">
           <KnowMore title={t('tooltips.comment')}>
-            <Typography variant="h6">
+            <Typography variant="h3">
               {String(comments.length)} {t('scopes.comments.plural')}
             </Typography>
           </KnowMore>

@@ -84,7 +84,7 @@ const SurveyForms: React.FC<SurveyFormsProps> = ({ onClose }) => {
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.surveys.name`).toLowerCase() })}</Typography>
+            <Typography variant="h1">{t(`actions.add`, { var: t(`scopes.surveys.name`).toLowerCase() })}</Typography>
           </Stack>
 
           <Stack gap={2}>

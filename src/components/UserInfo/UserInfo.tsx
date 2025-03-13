@@ -24,7 +24,7 @@ const UserInfo = () => {
       {user && (
         <Stack alignItems="center" minHeight="fit-content" my={2}>
           <UserAvatar id={user.hash_id} size={80} />
-          <Typography sx={{ mt: 1 }} variant="h6">
+          <Typography sx={{ mt: 1 }} variant="h3">
             {user.username}
           </Typography>
           <Typography variant="body2">{user.displayname}</Typography>

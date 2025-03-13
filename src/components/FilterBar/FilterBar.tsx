@@ -35,7 +35,7 @@ const FilterBar: React.FC<Props> = ({ children, fields, scope, onStatusChange, o
   return (
     <>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="h4">{t(`scopes.${scope}.plural`)}</Typography>
+        <Typography variant="h1">{t(`scopes.${scope}.plural`)}</Typography>
         {fields && (
           <Stack direction="row" px={2}>
             <AppIconButton icon="filter" onClick={() => setOpen(!isOpen)} />

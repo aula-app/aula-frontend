@@ -92,7 +92,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h4">
+            <Typography variant="h1">
               {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
                 var: t(`scopes.categories.name`).toLowerCase(),
               })}

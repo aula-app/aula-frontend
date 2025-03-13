@@ -100,7 +100,7 @@ const fields = schema.fields;
   return (
     <FormContainer>
       <Stack gap={2}>
-        <Typography variant="h5">{t('auth.password.set')}</Typography>
+        <Typography variant="h2">{t('auth.password.set')}</Typography>
         <Collapse in={!isValid}>
           <Alert variant="outlined" severity="error" onClose={() => setValid(true)}>
             {t('errors.invalidCode')}

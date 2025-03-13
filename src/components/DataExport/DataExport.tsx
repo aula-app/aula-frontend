@@ -44,7 +44,7 @@ ${t('requests.exportData.body', { var: user.displayname })}`,
 
   return (
     <Stack gap={2}>
-      <Typography variant="h6">
+      <Typography variant="h3">
         <KnowMore title={t('requests.exportData.info')}>{t('settings.account.export')}</KnowMore>
       </Typography>
 

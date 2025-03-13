@@ -14,12 +14,12 @@ const MessagesView = () => {
   const [appState, dispatch] = useAppStore();
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.messages'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.messages'), '']] });
   }, []);
 
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
-      <Typography variant="h5" py={2}>
+      <Typography variant="h2" py={2}>
         {t('scopes.messages.plural')}
       </Typography>
       <MessageCard type="messages" />

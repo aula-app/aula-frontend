@@ -80,9 +80,9 @@ const QuorumSettings: React.FC<Props> = ({ onReload, ...restOfProps }) => {
 
   return (
     <Stack gap={2}>
-      <Typography variant="h6">{t(`settings.labels.quorum`)}</Typography>
-      <Typography variant="subtitle2" color="secondary">
-        {t(`scopes.ideas.plural`).replace(/^./, (char) => char.toUpperCase())}
+      <Typography variant="h3">{t(`settings.labels.quorum`)}</Typography>
+      <Typography variant="h4" color="secondary">
+        {t('phases.phase', { var: t(`phases.wild`).replace(/^./, (char) => char.toUpperCase()) })}
       </Typography>
       <Controller
         name="quorum_wild_ideas"
@@ -103,8 +103,8 @@ const QuorumSettings: React.FC<Props> = ({ onReload, ...restOfProps }) => {
           />
         )}
       />
-      <Typography variant="subtitle2" color="secondary">
-        {t(`ui.units.votes`).replace(/^./, (char) => char.toUpperCase())}
+      <Typography variant="h4" color="secondary">
+        {t('phases.phase', { var: t(`phases.voting`).replace(/^./, (char) => char.toUpperCase()) })}
       </Typography>
       <Controller
         name="quorum_votes"

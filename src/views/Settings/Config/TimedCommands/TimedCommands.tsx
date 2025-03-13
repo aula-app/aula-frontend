@@ -51,7 +51,7 @@ const TimedCommands = () => {
       <TimedCommandInput onReload={fetchCommands} />
       {commands && (
         <Stack>
-          <Typography variant="h6">{t('settings.time.actions')}</Typography>
+          <Typography variant="h3">{t('settings.time.actions')}</Typography>
           <TableContainer>
             <Table aria-label="simple table">
               <TableBody>

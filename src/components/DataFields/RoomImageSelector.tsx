@@ -65,7 +65,7 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
       </Button>
       <Dialog open={editImage} onClose={() => setEditImage(false)} fullWidth>
         <Stack p={2}>
-          <Typography variant="h6">Change color</Typography>
+          <Typography variant="h3">Change color</Typography>
           <Stack direction="row" width="100%" justifyContent="space-between" py={2}>
             {[...Array(8)].map((item, key) => (
               <Button
@@ -82,7 +82,7 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
               ></Button>
             ))}
           </Stack>
-          <Typography variant="h6">Select image</Typography>
+          <Typography variant="h3">Select image</Typography>
           <Grid container spacing={2}>
             {[...Array(8)].map((item, key) => (
               <Grid size={{ xs: 6, sm: 3 }} key={`img_${key}`}>

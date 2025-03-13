@@ -130,7 +130,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
               )}
             </Stack>
             <Stack flexGrow={1} px={2} overflow="hidden">
-              <Typography variant="h6" noWrap textOverflow="ellipsis">
+              <Typography variant="h3" noWrap textOverflow="ellipsis">
                 {idea.title}
               </Typography>
               {phase === 40 && !!vote && (

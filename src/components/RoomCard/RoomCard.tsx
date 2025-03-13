@@ -49,7 +49,7 @@ const RoomCard = ({ room, className }: RoomCardProps) => {
               p: 2,
             }}
           >
-            <Typography variant="h6" noWrap title={room.room_name}>
+            <Typography variant="h3" noWrap title={room.room_name}>
               {room.room_name || 'AULA'}
             </Typography>
             {/* {isDefaultImage ? ( */}

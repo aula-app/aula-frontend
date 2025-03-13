@@ -94,7 +94,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h4">
+            <Typography variant="h1">
               {t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.announcements.name`).toLowerCase() })}
             </Typography>
             {checkPermissions('announcements', 'status') && <StatusField control={control} />}

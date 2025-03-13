@@ -148,7 +148,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h4">
+            <Typography variant="h1">
               {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
                 var: t(`scopes.users.name`).toLowerCase(),
               })}

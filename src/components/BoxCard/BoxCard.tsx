@@ -55,7 +55,7 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
       </Stack>
       <AppLink to={to} mb={2} key={box.hash_id} disabled={disabled}>
         <CardContent>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h3" noWrap>
             {box.name}
           </Typography>
           <Typography component={Box} variant="body2">

@@ -33,7 +33,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
             sx={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
           >
             <span>
-              <Typography variant="h6" display="inline">
+              <Typography variant="h3" display="inline">
                 {idea.title}
               </Typography>
               <CategoryList idea={idea} />

@@ -20,16 +20,8 @@ import UsersSettings from './UsersSettings';
 const ConfigView = () => {
   const { t } = useTranslation();
   const [appState, dispatch] = useAppStore();
-  const [config, setConfig] = useState<ConfigResponse>();
   const [settings, setSettings] = useState<InstanceResponse>();
   const [expanded, setExpanded] = useState<string>();
-
-  const getConfig = async () => {
-    const response = await getGlobalConfigs();
-    if (!response.data) return;
-    setConfig(response.data);
-    setExpanded(undefined);
-  };
 
   const getSettings = async () => {
     const response = await getInstanceSettings();
@@ -39,7 +31,6 @@ const ConfigView = () => {
   };
 
   const loadData = () => {
-    getConfig();
     getSettings();
   };
 
@@ -55,7 +46,7 @@ const ConfigView = () => {
   }, []);
 
   const panels = [
-    { name: 'idea', component: <IdeaSettings onReload={getConfig} /> },
+    { name: 'idea', component: <IdeaSettings onReload={closePanels} /> },
     { name: 'vote', component: <QuorumSettings onReload={closePanels} /> },
     { name: 'user', component: <UsersSettings onReload={closePanels} /> },
     { name: 'group', component: <Groups /> },
@@ -68,14 +59,14 @@ const ConfigView = () => {
 
   return (
     <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
-      <Typography variant="h4" pb={2}>
+      <Typography variant="h1" pb={2}>
         {t('settings.labels.configuration')}
       </Typography>
       <SchoolInfo />
       {panels.map((panel, i) => (
         <Accordion key={i} expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)}>
           <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
-            <Typography variant="h5" py={1}>
+            <Typography variant="h2" py={1}>
               {t(`settings.panels.${panel.name}`)}
             </Typography>
           </AccordionSummary>

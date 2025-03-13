@@ -31,14 +31,14 @@ const UpdatesView = () => {
   }, []);
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.units.updates'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.units.updates'), '']] });
     fetchUpdates();
   }, []);
 
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
+        <Typography variant="h1" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
           {t('ui.units.updates')}
         </Typography>
         <IconButton>
@@ -49,7 +49,7 @@ const UpdatesView = () => {
         (Object.keys(updates) as Array<keyof UpdateResponse>).map((update) => {
           return updates[update].length === 0 ? null : (
             <>
-              <Typography variant="h4" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
+              <Typography variant="h1" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
                 {updates[update].length} {t('actions.add', { var: t(`scopes.${update}.name`) })}
               </Typography>
 

@@ -53,7 +53,7 @@ const WelcomeView = () => {
         }}
       >
         <Typography
-          variant="h4"
+          variant="h1"
           className="noSpace"
           sx={{
             pt: 2,

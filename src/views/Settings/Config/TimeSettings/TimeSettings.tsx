@@ -60,7 +60,7 @@ const SystemSettings = ({ config, onReload }: Props) => {
 
   return (
     <Stack gap={2}>
-      <Typography variant="h6" py={1}>
+      <Typography variant="h3" py={1}>
         {t(`settings.time.workdays`)}
       </Typography>
       <Stack direction="row" flexWrap={'wrap'} gap={2}>

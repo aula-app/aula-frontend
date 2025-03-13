@@ -90,7 +90,7 @@ const AnnouncementView = () => {
           </CardActions>
         </Card>
       )}
-      {error && <Typography variant="h5">{error}</Typography>}
+      {error && <Typography variant="h2">{error}</Typography>}
       {!isLoading && announcement && (
         <Card variant="outlined">
           <CardHeader

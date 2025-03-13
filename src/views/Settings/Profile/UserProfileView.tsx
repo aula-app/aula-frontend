@@ -32,7 +32,7 @@ const UserView = () => {
   }, []);
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.profile'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.profile'), '']] });
     fetchUser();
   }, []);
 
@@ -42,7 +42,7 @@ const UserView = () => {
       {error && <Typography>{t(error)}</Typography>}
       {user && !isLoading && (
         <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
-          <Typography variant="h4">{t('ui.navigation.profile')}</Typography>
+          <Typography variant="h1">{t('ui.navigation.profile')}</Typography>
           <ProfileEditor user={user} onReload={fetchUser} />
           <Accordion>
             <AccordionSummary
@@ -50,7 +50,7 @@ const UserView = () => {
               aria-controls="panel2-content"
               id="panel2-header"
             >
-              <Typography variant="h4">{t('ui.navigation.security')}</Typography>
+              <Typography variant="h2">{t('ui.navigation.security')}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <ChangePassword />
@@ -62,7 +62,7 @@ const UserView = () => {
               aria-controls="panel2-content"
               id="panel2-header"
             >
-              <Typography variant="h4">{t('ui.navigation.privacy')}</Typography>
+              <Typography variant="h2">{t('ui.navigation.privacy')}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <DataExport user={user} onReload={fetchUser} />
@@ -77,7 +77,7 @@ const UserView = () => {
                 backgroundColor: red[100],
               }}
             >
-              <Typography variant="h4">{t('settings.panels.danger')}</Typography>
+              <Typography variant="h2">{t('settings.panels.danger')}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <DataDelete user={user} onReload={fetchUser} />

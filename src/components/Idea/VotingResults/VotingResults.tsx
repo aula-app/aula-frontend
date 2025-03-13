@@ -81,7 +81,7 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
             <AppIcon icon={idea.is_winner ? 'winner' : quorumPassed() ? 'for' : 'against'} size="xl" />
           </Stack>
           <Stack flexGrow={1} pr={2}>
-            <Typography variant="h6">
+            <Typography variant="h3">
               {idea.is_winner === 1
                 ? t(`scopes.ideas.winner`)
                 : quorumPassed()

@@ -66,7 +66,7 @@ const MessageCard: React.FC<Props> = ({ type }) => {
       {messages.length > 0 && (
         <Stack>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Typography variant="h6" py={2} display="flex" alignItems="center">
+            <Typography variant="h3" py={2} display="flex" alignItems="center">
               <AppIcon icon={type} sx={{ mr: 1 }} /> {t(`scopes.${type}.plural`)}
             </Typography>
             <AppIconButton icon="filter" onClick={() => setOpenMessagesFilter(!openMessagesFilter)} />

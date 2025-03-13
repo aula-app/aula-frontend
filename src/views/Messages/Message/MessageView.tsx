@@ -70,7 +70,7 @@ const MessageView = () => {
           </CardActions>
         </Card>
       )}
-      {error && <Typography variant="h5">{error}</Typography>}
+      {error && <Typography variant="h2">{error}</Typography>}
       {!isLoading && message && (
         <Card variant="outlined">
           <CardHeader

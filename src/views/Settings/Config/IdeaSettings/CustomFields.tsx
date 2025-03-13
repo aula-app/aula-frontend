@@ -80,7 +80,7 @@ const CustomFields = ({ onReload }: Props) => {
 
   return (
     <Stack gap={2}>
-      <Typography variant="h6">{t(`settings.customFields.label`)}</Typography>
+      <Typography variant="h3">{t(`settings.customFields.label`)}</Typography>
       <TextField
         label={t(`settings.customFields.form`, { var: 1 })}
         {...register('custom_field1_name')}

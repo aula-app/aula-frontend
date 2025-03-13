@@ -22,10 +22,10 @@ const TimeCommandInput = ({ onReload }: Props) => {
   const { t } = useTranslation();
 
   const [scope, setScope] = useState<number>(0);
-  const [target, setTarget] = useState<string>();
+  const [target, setTarget] = useState<string | undefined>();
   const [action, setAction] = useState<number>(0);
   const [value, setValue] = useState<number>(1);
-  const [startTime, setStartTime] = useState<dayjs.ConfigType>(dayjs(new Date()).format(FORMAT_DATE_TIME));
+  const [startTime, setStartTime] = useState<dayjs.ConfigType>(dayjs().format(FORMAT_DATE_TIME));
   const [options, setOptions] = useState<{ users: SelectOptionsType; groups: SelectOptionsType }>({
     users: [],
     groups: [],
@@ -40,7 +40,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
       parameters: value,
       date_start: dayjs(startTime).format(FORMAT_DATE_TIME),
     });
-    if (response.error) onReload();
+    if (!response.error) onReload();
   }
 
   const changeScope = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -73,7 +73,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
     if (response.error || !response.data) return;
 
     const users = response.data.map((user) => ({ label: user.displayname, value: user.hash_id }));
-    setOptions({ ...options, users });
+    setOptions((prevOptions) => ({ ...prevOptions, users }));
   };
 
   const fetchGroups = async () => {
@@ -81,7 +81,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
     if (response.error || !response.data) return;
 
     const groups = response.data.map((group) => ({ label: group.group_name, value: group.hash_id }));
-    setOptions({ ...options, groups });
+    setOptions((prevOptions) => ({ ...prevOptions, groups }));
   };
 
   useEffect(() => {
@@ -91,7 +91,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
   return (
     <Stack gap={2}>
       <Stack direction="row" alignItems="center" flexWrap="wrap" gap={2}>
-        <Typography variant="h6">
+        <Typography variant="h3">
           {t('actions.add', { var: t('settings.columns.command').toLocaleLowerCase() })}:
         </Typography>
         <TextField
@@ -138,9 +138,9 @@ const TimeCommandInput = ({ onReload }: Props) => {
             sx={{ minWidth: 180 }}
             size="small"
             required
-            disabled={Commands[scope].label !== 'system' && typeof target !== 'number'}
+            disabled={Commands[scope].label !== 'system' && !target}
           >
-            {typeof target === 'number' || Commands[scope].label === 'system' ? (
+            {target || Commands[scope].label === 'system' ? (
               Commands[scope].actions.map((commandActions, i) => (
                 <MenuItem value={i} key={commandActions.value}>
                   {t(commandActions.label)}
@@ -163,7 +163,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
             required
             disabled={typeof action !== 'number'}
           >
-            {typeof target === 'number' || Commands[scope].label === 'system' ? (
+            {target || Commands[scope].label === 'system' ? (
               Commands[scope].actions[action].options.map((actionOptions) => (
                 <MenuItem value={actionOptions.value} key={actionOptions.value}>
                   {t(actionOptions.label)}

@@ -33,7 +33,7 @@ const BugForms: React.FC<BugFormsProps> = ({ onClose, onSubmit }) => {
 
   return (
     <Stack overflow="auto" p={2} gap={2}>
-      <Typography variant="h4">{t(`actions.add`, { var: t(`scopes.bugs.name`).toLowerCase() })}</Typography>
+      <Typography variant="h1">{t(`actions.add`, { var: t(`scopes.bugs.name`).toLowerCase() })}</Typography>
       <form noValidate>
         <Stack gap={2}>
           {/* content */}

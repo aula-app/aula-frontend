@@ -49,7 +49,7 @@ const CatView: React.FC = () => {
 
   return (
     <Stack gap={2}>
-      <Typography variant="h6">{t('scopes.categories.plural')}</Typography>
+      <Typography variant="h3">{t('scopes.categories.plural')}</Typography>
       <Stack direction="row" flexWrap="wrap" gap={1}>
         <Chip
           label={t('actions.add', { var: t('scopes.categories.name').toLowerCase() })}

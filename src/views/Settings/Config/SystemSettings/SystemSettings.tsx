@@ -105,7 +105,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
   return (
     <Stack gap={2}>
       <Stack direction="row" alignItems="end" p={2} pt={0} gap={2}>
-        <Typography variant="h6">{t('instance.status')}:</Typography>
+        <Typography variant="h3">{t('instance.status')}:</Typography>
         <TextField
           select
           label={t('settings.columns.status')}
@@ -137,7 +137,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
       >
         <AppBar sx={{ position: 'relative' }} color="secondary">
           <Toolbar>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h3" component="div">
               {t('settings.backup.headline')}
             </Typography>
             <AppIconButton icon="close" autoFocus onClick={() => setRestoreDialog(false)} />

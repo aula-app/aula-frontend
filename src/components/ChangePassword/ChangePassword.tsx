@@ -100,7 +100,7 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
             {messageSuccess ? t('auth.password.success') : t('errors.invalidPassword')}
           </Alert>
         </Collapse>
-        <Typography variant="h6">{t('auth.password.change')}</Typography>
+        <Typography variant="h3">{t('auth.password.change')}</Typography>
         <Stack gap={1} direction="row" flexWrap="wrap">
           {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
             <TextField

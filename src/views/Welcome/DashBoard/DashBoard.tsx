@@ -63,7 +63,7 @@ const DashBoard = ({ show = true }) => {
       >
         <Stack direction="row" width="100%" pr={1} gap={1} sx={{ alignItems: 'center' }}>
           <Button onClick={() => setShowing(!isShowing)} sx={{ mr: 'auto', color: 'inherit', textTransform: 'none' }}>
-            <Typography variant="h5" sx={{ flexWrap: 'wrap', transition: 'opacity .5s ease-in-out' }}>
+            <Typography variant="h2" sx={{ flexWrap: 'wrap', transition: 'opacity .5s ease-in-out' }}>
               {t('ui.navigation.dashboard')}
             </Typography>
             <AppIcon

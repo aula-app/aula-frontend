@@ -42,7 +42,7 @@ const SchoolInfo: React.FC = () => {
 
   return (
     <Stack gap={2} mb={1.5}>
-      <Typography variant="h5" py={1}>
+      <Typography variant="h2" py={1}>
         {t(`settings.labels.school`)}
       </Typography>
       {!isLoading && room ? <RoomForms onClose={onClose} defaultValues={room} isDefault /> : <SchoolInfoSkeleton />}

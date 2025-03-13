@@ -163,7 +163,7 @@ const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded =
   return (
     <Dialog open={isOpen} onClose={onClose}>
       <Stack p={2} gap={2}>
-        <Typography variant="h5">{t('actions.edit', { var: t('ui.files.image.label') })}</Typography>
+        <Typography variant="h2">{t('actions.edit', { var: t('ui.files.image.label') })}</Typography>
         <Stack direction="row" justifyContent="center">
           {!image ? (
             <Paper

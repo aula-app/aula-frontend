@@ -54,12 +54,12 @@ const WildIdeaPhaseView = () => {
   };
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.dashboard')]]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.dashboard')]] });
     fetchIdeas();
   }, [phase]);
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
-      <Typography variant="h5" py={2}>
+      <Typography variant="h2" py={2}>
         {t(`phases.wild`)}
       </Typography>
       <Grid container spacing={2} p={1}>

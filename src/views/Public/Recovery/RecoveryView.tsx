@@ -61,7 +61,7 @@ const RecoveryPasswordView = () => {
   return (
     <FormContainer onSuccess={onSubmit}>
       <Stack spacing={3}>
-        <Typography variant="h5">{t('auth.forgotPassword.recovery')}</Typography>
+        <Typography variant="h2">{t('auth.forgotPassword.recovery')}</Typography>
         <TextField
           required
           disabled={isLoading}

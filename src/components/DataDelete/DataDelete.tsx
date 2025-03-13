@@ -55,7 +55,7 @@ ${t('requests.deleteAccount.body', { var: user.displayname })}`,
 
   return (
     <Stack gap={2}>
-      <Typography variant="h6">{t('settings.account.delete')}</Typography>
+      <Typography variant="h3">{t('settings.account.delete')}</Typography>
       <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} fullWidth>
         {t('requests.deleteAccount.button')}
       </Button>
