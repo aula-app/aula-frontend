@@ -347,6 +347,29 @@ export const getDelegations = async (box_id: string): Promise<GetDelegationRespo
 };
 
 /**
+ * Gets an box delegation status from the database
+ */
+
+interface GetReceivedDelegationsResponse extends GenericResponse {
+  data: UserType[] | null;
+}
+
+export const getReceivedDelegations = async (box_id: string): Promise<GetReceivedDelegationsResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'getReceivedDelegations',
+      arguments: {
+        topic_id: box_id,
+      },
+    },
+    ['user_id']
+  );
+
+  return response as GetReceivedDelegationsResponse;
+};
+
+/**
  * Add delegation
  */
 

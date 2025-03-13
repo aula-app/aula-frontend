@@ -1,9 +1,9 @@
-import { Box } from '@mui/material';
+import { Box, BoxProps } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ReactNode } from 'react';
 import AppIconButton from '../AppIconButton';
 
-interface Props {
+interface Props extends BoxProps {
   title: string; // Icon's name
   children: ReactNode;
 }
@@ -12,9 +12,9 @@ interface Props {
  * Renders question mark badge that triggers a tooltip on hover
  * @component KnowMore
  */
-const KnowMore = ({ title, children }: Props) => {
+const KnowMore: React.FC<Props> = ({ title, children, ...restOfProps }) => {
   return (
-    <Box position="relative" display="inline-block">
+    <Box position="relative" display="inline-block" {...restOfProps}>
       <AppIconButton
         icon="help"
         title={title}
@@ -22,7 +22,7 @@ const KnowMore = ({ title, children }: Props) => {
           position: 'absolute',
           top: 0,
           right: 0,
-          transform: 'translate3d(75%,-50%,0)',
+          transform: 'translate3d(50%,-50%,0)',
           color: grey[500],
           zIndex: 5,
         }}
