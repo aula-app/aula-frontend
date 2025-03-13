@@ -13,7 +13,11 @@ import { useParams } from 'react-router-dom';
  * @component ConsentDialog
  */
 
-const DelegateButton: React.FC<BoxProps> = ({ ...restOfProps }) => {
+interface Props extends BoxProps {
+  disabled?: boolean;
+}
+
+const DelegateButton: React.FC<Props> = ({ disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
   const { box_id } = useParams();
 
@@ -56,10 +60,10 @@ const DelegateButton: React.FC<BoxProps> = ({ ...restOfProps }) => {
           direction="row"
           position="relative"
           justifyContent="center"
+          alignItems="center"
           border={1}
           borderColor="disabled.main"
           p={1}
-          pb={0}
           borderRadius={3}
         >
           <Stack alignItems="end" mr={1}>
@@ -68,26 +72,32 @@ const DelegateButton: React.FC<BoxProps> = ({ ...restOfProps }) => {
                 <Trans i18nKey={t('delegation.represent', { var: representing.length })} />
               </Typography>
             )}
-            <Box>
-              <Typography variant="caption" lineHeight={1} borderRadius={1}>
-                <Trans
-                  i18nKey={
-                    delegate
-                      ? t('delegation.delegated', { var: delegate.delegate_displayname })
-                      : t('votes.vote').toUpperCase()
-                  }
-                />
-                {` ${t('ui.common.or')} `}
-              </Typography>
-              <Button
-                size="small"
-                sx={{ bgcolor: 'inherit', p: 0 }}
-                onClick={() => setDelegating(true)}
-                color={delegate ? 'error' : 'primary'}
-              >
-                {delegate ? t('delegation.revoke') : t('delegation.delegate')}
-              </Button>
-            </Box>
+            {((disabled && delegate) || !disabled) && (
+              <Box lineHeight={1}>
+                <Typography variant="caption" lineHeight={1} borderRadius={1}>
+                  <Trans
+                    i18nKey={
+                      delegate
+                        ? `${t('delegation.delegated', { var: delegate.delegate_displayname })}. `
+                        : `${t('votes.vote').toUpperCase()} ${t('ui.common.or')} `
+                    }
+                  />
+                </Typography>
+
+                {!disabled && (
+                  <Button
+                    size="small"
+                    sx={{ bgcolor: 'inherit', p: 0, m: 0, minWidth: 0, lineHeight: 1 }}
+                    onClick={() => setDelegating(true)}
+                    color={delegate ? 'error' : 'primary'}
+                  >
+                    <Typography variant="caption" lineHeight={1}>
+                      {delegate ? t('delegation.revoke') : t('delegation.delegate')}
+                    </Typography>
+                  </Button>
+                )}
+              </Box>
+            )}
           </Stack>
           <AppIcon icon="delegate" />
         </Stack>

@@ -77,7 +77,9 @@ const VotingCard = ({ onReload }: Props) => {
           ))}
         </Stack>
       </Stack>
-      <DelegateButton />
+      <Stack direction="row" justifyContent="center">
+        <DelegateButton disabled />
+      </Stack>
     </Stack>
   );
 };
