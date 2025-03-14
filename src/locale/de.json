@@ -190,6 +190,8 @@
       "title": "Datenänderungsanfrage für {{var}}"
     },
     "confirm": "Datenänderungsanfrage bestätigt",
+    "confirmation": "Bist du sicher, dass du diese Anfrage bestätigen möchtest?",
+    "confirmationTitle": "Anfrage bestätigen",
     "deleteAccount": {
       "body": "Eine Datenlöschungsprozedur wurde für den Benutzer {{var}} angefordert",
       "button": "Kontolöschen anfordern",

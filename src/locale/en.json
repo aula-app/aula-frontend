@@ -190,6 +190,8 @@
       "title": "Data change request for {{var}}"
     },
     "confirm": "Data request change confirmed",
+    "confirmation": "Are you sure you want to confirm this request?",
+    "confirmationTitle": "Confirm request",
     "deleteAccount": {
       "body": "A data deletion procedure was requested for user {{var}}",
       "button": "Request account deletion",

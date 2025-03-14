@@ -3,13 +3,27 @@ import { deleteUser, editSelfRestricted, exportSelfData } from '@/services/users
 import { useAppStore } from '@/store';
 import { MessageType } from '@/types/Scopes';
 import { errorAlert, successAlert } from '@/utils';
-import { Button, Card, CardActions, CardContent, CardHeader, Divider, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { blueGrey } from '@mui/material/colors';
 import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
 import AppLink from '../AppLink';
 import MarkdownReader from '../MarkdownReader';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 
 /**
  * Renders "ReportCard" component
@@ -46,6 +60,7 @@ interface UpdateRequest {
 const ReportCard = ({ report, onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
+  const [confirm, setConfirm] = useState(false);
 
   const YAML = report.body.split('---')[1];
   const content = report.body.replace(`---${YAML}---`, '');
@@ -190,16 +205,32 @@ ${message}`,
       <CardContent>
         <MarkdownReader>{content}</MarkdownReader>
         {metadata && !!metadata.type && (
-          <CardActions>
-            <Stack direction="row" mt={0.5} flex={1} gap={1} justifyContent="space-between">
-              <Button variant="contained" color="error" onClick={cancelRequest}>
-                {t('actions.cancel')}
-              </Button>
-              <Button variant="contained" onClick={confirmRequest}>
-                {t('actions.confirm')}
-              </Button>
-            </Stack>
-          </CardActions>
+          <>
+            <CardActions>
+              <Stack direction="row" mt={0.5} flex={1} gap={1} justifyContent="space-between">
+                <Button variant="contained" color="error" onClick={cancelRequest}>
+                  {t('actions.cancel')}
+                </Button>
+                <Button variant="contained" onClick={() => setConfirm(true)}>
+                  {t('actions.confirm')}
+                </Button>
+              </Stack>
+            </CardActions>
+            <Dialog open={confirm} onClose={() => setConfirm(false)}>
+              <DialogTitle>{t('requests.confirmationTitle')}</DialogTitle>
+              <DialogContent>
+                <Typography>{t('requests.confirmation')}</Typography>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setConfirm(false)} color="secondary" autoFocus>
+                  {t('actions.cancel')}
+                </Button>
+                <Button onClick={confirmRequest} variant="contained">
+                  {t('actions.confirm')}
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </>
         )}
         {metadata && metadata.responseTo === 'requestData' && (
           <CardActions>
