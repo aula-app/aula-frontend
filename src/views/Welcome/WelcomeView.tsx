@@ -46,6 +46,7 @@ const WelcomeView = () => {
         flexGrow={1}
         position="relative"
         onScroll={handleScroll}
+        gap={2}
         sx={{
           px: 2,
           overflowY: 'auto',
