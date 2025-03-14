@@ -49,7 +49,7 @@ export const formHasError = (formState: FormState, fieldName: string): boolean =
  * Returns null if there is no Error.
  */
 export const formGetError = (formState: FormState, fieldName: string): string => {
-  return formHasError(formState, fieldName) ? (formState.errors as ObjectPropByName)[fieldName]?.[0] : null;
+  return formHasError(formState, fieldName) ? (formState.errors as ObjectPropByName)[fieldName]?.[0] : '';
 };
 
 // Params for useAppForm() hook
