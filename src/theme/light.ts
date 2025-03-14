@@ -48,14 +48,14 @@ const BASE_COLORS = {
   },
   themeGreen: {
     light: 'hsl(134, 72%, 94%)',
-    main: 'hsl(134, 72%, 88%)',
+    main: 'hsl(134, 72%, 83%)',
     dark: 'hsl(134, 72%, 67%)',
     darker: 'hsl(134, 28%, 49%)',
   },
   themeGrey: {
-    light: 'hsl(0, 0%, 98%)',
-    main: 'hsl(0, 0%, 90%)',
-    dark: 'hsl(0, 0%, 78%)',
+    light: 'hsl(0, 0%, 95%)',
+    main: 'hsl(0, 0%, 88%)',
+    dark: 'hsl(0, 0%, 75%)',
     darker: 'hsl(0, 0%, 59%)',
   },
 };

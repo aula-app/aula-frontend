@@ -21,7 +21,7 @@ const DefaultImage: React.FC<Props> = ({ image, shift, ...restOfProps }) => {
   };
 
   const COLORS = {
-    bg: shiftHslHue(theme.palette.themePurple.main),
+    bg: shiftHslHue(theme.palette.themeGreen.main),
     yellow_bright: shiftHslHue(theme.palette.themeYellow.light),
     yellow_base: shiftHslHue(theme.palette.themeYellow.main),
     yellow_shade: shiftHslHue(theme.palette.themeYellow.dark),
@@ -35,6 +35,7 @@ const DefaultImage: React.FC<Props> = ({ image, shift, ...restOfProps }) => {
     green_base: shiftHslHue(theme.palette.themeGreen.main),
     green_shade: shiftHslHue(theme.palette.themeGreen.dark),
     white: shiftHslHue(theme.palette.themeGrey.light),
+    light_bright: shiftHslHue(theme.palette.themeGrey.light),
     light_base: shiftHslHue(theme.palette.themeGrey.main),
     light_shade: shiftHslHue(theme.palette.themeGrey.dark),
     noFill: 'none',
