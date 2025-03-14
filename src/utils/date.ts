@@ -13,7 +13,7 @@ export const FORMAT_TIME_ONLY = 'HH:mm:ss';
 
 export function getDisplayDate(date: string): string {
   const displayDate = new Date(date);
-  return `${displayDate.getFullYear()}/${displayDate.getMonth()}/${displayDate.getDate()}`;
+  return `${displayDate.getFullYear()}/${displayDate.getMonth() + 1}/${displayDate.getDate()}`;
 }
 
 export function dateToString(dateOrString: string | Date, dateFormat = FORMAT_DATE_TIME, fallbackValue = ''): string {
