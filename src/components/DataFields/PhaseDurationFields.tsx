@@ -118,7 +118,7 @@ const PhaseDurationFields: React.FC<Props> = ({
                     {...restOfProps}
                     slotProps={{
                       input: { endAdornment: <InputAdornment position="end">{t('ui.units.days')}</InputAdornment> },
-                      inputLabel: { shrink: !!field.value },
+                      inputLabel: { shrink: typeof field.value === 'number' },
                     }}
                   />
                 </FormControl>
