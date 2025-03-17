@@ -1,7 +1,7 @@
 import { AppIcon, AppIconButton } from '@/components';
 import { DelegateType, delegateVote, getPossibleDelegations, revokeDelegation } from '@/services/users';
 import { useAppStore } from '@/store';
-import { GenericListRequest } from '@/utils';
+import { GenericListRequest, localStorageGet, parseJwt } from '@/utils';
 import {
   Button,
   Dialog,
@@ -33,6 +33,8 @@ interface Props {
 const DelegateVote = ({ open, delegate, onClose }: Props) => {
   const { t } = useTranslation();
   const { room_id, box_id } = useParams();
+  const jwt_token = localStorageGet('token');
+  const jwt_payload = parseJwt(jwt_token);
   const [, dispatch] = useAppStore();
 
   const [users, setUsers] = useState<DelegateType[]>([]);
@@ -59,7 +61,8 @@ const DelegateVote = ({ open, delegate, onClose }: Props) => {
     });
 
     if (response.error || !response.data) return;
-    setUsers(response.data);
+    setUsers(response.data.filter((user) => user.hash_id !== jwt_payload?.user_hash)); // remove self from list
+    if (delegate) setSelected(response.data.find((user) => user.hash_id === delegate));
   };
 
   const setDelegate = async () => {
@@ -129,6 +132,7 @@ const DelegateVote = ({ open, delegate, onClose }: Props) => {
                       key={user.hash_id}
                       bgcolor={selected && selected.hash_id === user.hash_id ? grey[200] : 'transparent'}
                       borderRadius={30}
+                      disabled={user.is_delegate === 1}
                       sx={{
                         textTransform: 'none',
                         textAlign: 'left',
