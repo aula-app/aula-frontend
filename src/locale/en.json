@@ -77,6 +77,7 @@
     "message": "No consent required"
   },
   "delegation": {
+    "already": "Their vote is already delegated to you",
     "confirm": "Are you sure you want to {{var}} the voting rights on this box to the following person?",
     "delegate": "delegate",
     "delegated": "<strong>{{var}}</strong> can vote for you",
