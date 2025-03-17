@@ -476,7 +476,7 @@ const AppIcon: React.FC<Props> = ({ icon, size = 'medium', sx, ...restOfProps })
       }}
       {...restOfProps}
     >
-      {React.createElement(ALL_ICONS[icon] || ALL_ICONS['bug'])}
+      {icon in ALL_ICONS ? React.createElement(ALL_ICONS[icon]) : <></>}
     </Stack>
   );
 };
