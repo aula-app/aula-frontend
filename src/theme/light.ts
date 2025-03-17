@@ -74,10 +74,10 @@ const PHASE_COLORS = {
     darker: 'hsl(270, 25%, 47%)',
   },
   approval: {
-    light: 'hsl(20, 100%, 94%)',
-    main: 'hsl(20, 84%, 76%)',
-    dark: 'hsl(20, 84%, 58%)',
-    darker: 'hsl(20, 56%, 39%)',
+    light: 'hsl(25, 100%, 94%)',
+    main: 'hsl(25, 84%, 76%)',
+    dark: 'hsl(25, 84%, 58%)',
+    darker: 'hsl(25, 56%, 39%)',
   },
   voting: {
     light: 'hsl(45, 100%, 90%)',

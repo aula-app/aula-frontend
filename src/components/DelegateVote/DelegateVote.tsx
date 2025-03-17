@@ -60,11 +60,6 @@ const DelegateVote = ({ open, delegate, onClose }: Props) => {
 
     if (response.error || !response.data) return;
     setUsers(response.data);
-    setSelected(response.data.find((user) => user.hash_id === delegate));
-    console.log(
-      delegate,
-      response.data.find((user) => user.hash_id === delegate)
-    );
   };
 
   const setDelegate = async () => {
@@ -107,7 +102,7 @@ const DelegateVote = ({ open, delegate, onClose }: Props) => {
 
   useEffect(() => {
     usersFetch();
-  }, [filter]);
+  }, [delegate, filter]);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
