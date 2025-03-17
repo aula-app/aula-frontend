@@ -54,7 +54,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       email: defaultValues ? ' ' : '',
       realname: defaultValues ? ' ' : '',
       username: defaultValues ? ' ' : '',
-      userlevel: defaultValues ? ' ' : 10,
+      userlevel: defaultValues ? ' ' : 20,
     },
   });
 
