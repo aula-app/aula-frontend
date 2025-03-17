@@ -17,7 +17,7 @@ interface Props {
  */
 const VotingCard = ({ onReload }: Props) => {
   const { t } = useTranslation();
-  const { idea_id, box_id } = useParams();
+  const { idea_id } = useParams();
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

@@ -70,6 +70,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
         if (idea.approved === -1) return 'against';
         return 'disabled;';
       case 30:
+        if (vote === 0) return phases[phase];
         if (vote === 1) return 'for';
         if (vote === -1) return 'against';
         if (!vote) return 'disabled';
@@ -142,7 +143,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
               )}
             </Stack>
             <Stack
-              p={1}
+              p={0.5}
               pl={2}
               borderLeft="1px solid currentColor"
               justifyContent="space-around"
@@ -174,8 +175,8 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
                     <AppIcon icon={phases[phase]} />
                   )}
                 </>
-              ) : phase === 30 && !!vote ? (
-                <AppIcon icon={votingOptions[vote + 1]} />
+              ) : phase === 30 ? (
+                <>{typeof vote === 'number' && <AppIcon size="large" icon={votingOptions[vote + 1]} />}</>
               ) : (
                 <>
                   {votingOptions.map((vote, i) => {
