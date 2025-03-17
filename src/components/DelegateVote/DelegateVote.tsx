@@ -130,9 +130,15 @@ const DelegateVote = ({ open, delegate, onClose }: Props) => {
                       direction="row"
                       mt={1}
                       key={user.hash_id}
-                      bgcolor={selected && selected.hash_id === user.hash_id ? grey[200] : 'transparent'}
+                      bgcolor={
+                        Boolean(user.is_delegate)
+                          ? grey[100]
+                          : selected && selected.hash_id === user.hash_id
+                            ? grey[200]
+                            : 'transparent'
+                      }
                       borderRadius={30}
-                      disabled={user.is_delegate === 1}
+                      disabled={Boolean(user.is_delegate)}
                       sx={{
                         textTransform: 'none',
                         textAlign: 'left',
