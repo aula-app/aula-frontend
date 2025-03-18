@@ -1,4 +1,7 @@
 import { addRoom, editRoom, getRoomUsers, RoomArguments } from '@/services/rooms';
+import { addUserRoom, removeUserRoom } from '@/services/users';
+import { RoomType } from '@/types/Scopes';
+import { UpdateType } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
@@ -8,10 +11,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, PhaseDurationFields, StatusField } from '../DataFields';
 import RoomImageSelector from '../DataFields/RoomImageSelector';
-import { RoomType } from '@/types/Scopes';
-import { addUserRoom, getUserRooms, removeUserRoom } from '@/services/users';
-import { UpdateType } from '@/types/SettingsTypes';
-import UserField from '../DataFields/UserFIeld';
+import UserField from '../DataFields/UsersField';
 
 /**
  * RoomForms component is used to create or edit an room.

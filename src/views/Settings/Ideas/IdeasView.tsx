@@ -1,5 +1,4 @@
-import AddBoxesButton from '@/components/Buttons/AddBoxes';
-import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
+import UserField from '@/components/DataFields/UserField';
 import { IdeaForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
@@ -12,7 +11,7 @@ import { IdeaType } from '@/types/Scopes';
 import { getDataLimit } from '@/utils';
 import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /** * Renders "Ideas" view
@@ -37,8 +36,6 @@ const COLUMNS = [
 
 const IdeasView: React.FC = () => {
   const { t } = useTranslation();
-
-  const addCategory = useRef<AddCategoryRefProps>(null);
 
   const [appState, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(true);
@@ -126,7 +123,9 @@ const IdeasView: React.FC = () => {
             setSearchField(field);
             setSearchText(text);
           }}
-        />
+        >
+          <UserField onChange={() => {}} />
+        </FilterBar>
       </Stack>
       <Stack flex={1} sx={{ overflowY: 'auto' }}>
         <DataTable

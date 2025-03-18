@@ -33,7 +33,7 @@ const FilterBar: React.FC<Props> = ({ children, fields, scope, onStatusChange, o
   };
 
   return (
-    <>
+    <Stack gap={1}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h1">{t(`scopes.${scope}.plural`)}</Typography>
         {fields && (
@@ -57,7 +57,7 @@ const FilterBar: React.FC<Props> = ({ children, fields, scope, onStatusChange, o
           </Stack>
         </Collapse>
       )}
-    </>
+    </Stack>
   );
 };
 
