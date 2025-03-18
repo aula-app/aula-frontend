@@ -1,5 +1,6 @@
 import AddGroupButton from '@/components/Buttons/AddGroups/AddGroupsButton';
 import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
+import PrintUsers from '@/components/PrintUsers/PrintUsers';
 import { UserForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
@@ -97,6 +98,7 @@ const UsersView: React.FC = () => {
 
   const extraTools = ({ items }: { items: Array<string> }) => (
     <>
+      <PrintUsers />
       <AddRoomButton users={items} disabled={items.length === 0} />
       <AddGroupButton users={items} />
     </>
@@ -114,8 +116,10 @@ const UsersView: React.FC = () => {
             setSearchText(text);
           }}
         >
+
           <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
           <SelectRole userRole={userlevel} setRole={(role) => setRole(role)} variant="filled" size="small" />
+
         </FilterBar>
       </Stack>
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>

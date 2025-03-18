@@ -10,7 +10,7 @@ jobs:
     runs-on: self-hosted
     env:
       CI: false
-      LOCAL: test
+      LOCAL: dev
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
