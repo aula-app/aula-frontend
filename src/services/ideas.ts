@@ -26,6 +26,7 @@ export async function getIdea(idea_id: string): Promise<GetIdeaResponse> {
 
 interface IdeasListRequest extends GenericListRequest {
   room_id?: string;
+  user_id?: string | 0;
 }
 
 export interface GetIdeasResponse extends GenericResponse {
@@ -78,6 +79,29 @@ export async function getIdeasByBox(args: BoxIdeasListRequest): Promise<GetIdeas
   const response = await databaseRequest({
     model: 'Idea',
     method: 'getIdeasByTopic',
+    arguments: args,
+  });
+
+  return response as GetIdeasResponse;
+}
+
+interface UserIdeasListRequest {
+  offset?: number;
+  limit?: number;
+  orderby?: number;
+  asc?: 0 | 1;
+  search_field?: string;
+  search_text?: string;
+  both_names?: string;
+  status?: StatusTypes;
+  room_id?: string;
+  user_id?: string;
+}
+
+export async function getIdeasByUser(args: UserIdeasListRequest): Promise<GetIdeasResponse> {
+  const response = await databaseRequest({
+    model: 'Idea',
+    method: 'getIdeasByUser',
     arguments: args,
   });
 
@@ -240,7 +264,7 @@ export async function removeIdeaLike(idea_id: string): Promise<void> {
  */
 
 interface GetIdeaBoxesResponse extends GenericResponse {
-  data: { hash_id: string, name: string }[] | null;
+  data: { hash_id: string; name: string }[] | null;
 }
 
 export async function getIdeaBoxes(idea_id: string): Promise<GetIdeaBoxesResponse> {

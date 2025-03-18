@@ -1,10 +1,9 @@
-import UserField from '@/components/DataFields/UserField';
 import { IdeaForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
-import { deleteIdea, getIdeas, getIdeasByBox } from '@/services/ideas';
+import { deleteIdea, getIdeas } from '@/services/ideas';
 import { useAppStore } from '@/store/AppStore';
 import { StatusTypes } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
@@ -18,7 +17,7 @@ import { useTranslation } from 'react-i18next';
  * url: /settings/ideas
  */
 
-const FILTER = ['title', 'content'] as Array<keyof IdeaType>;
+const FILTER = ['title', 'content', 'displayname'] as Array<keyof IdeaType>;
 
 const COLUMNS = [
   { name: 'title', orderId: 5 },
@@ -51,46 +50,27 @@ const IdeasView: React.FC = () => {
   const [limit, setLimit] = useState(getDataLimit());
   const [offset, setOffset] = useState(0);
   const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
-  const [room_id, setRoom] = useState<string>('all');
-  const [box_id, setBox] = useState<string>('all');
 
   const [edit, setEdit] = useState<IdeaType | boolean>(false); // false = update dialog closed ;true = new idea; IdeaType = item to edit;
 
   const fetchIdeas = useCallback(async () => {
     setLoading(true);
-    const response = box_id === 'all' ? await fetchAllIdeas() : await fetchIdeasByBox();
+    const response = await getIdeas({
+      asc: Number(asc) as 0 | 1,
+      limit,
+      offset,
+      orderby,
+      search_field: search_field === 'displayname' ? 'au_users_basedata.displayname' : search_field,
+      search_text,
+      status,
+    });
     if (response.error) setError(response.error);
     else {
       setIdeas(response.data || []);
       setTotalIdeas(response.count as number);
     }
     setLoading(false);
-  }, [asc, limit, offset, orderby, search_field, search_text, status, room_id, box_id]);
-
-  const fetchAllIdeas = async () =>
-    await getIdeas({
-      asc: Number(asc) as 0 | 1,
-      limit,
-      offset,
-      orderby,
-      search_field,
-      search_text,
-      status,
-      room_id,
-    });
-
-  const fetchIdeasByBox = async () =>
-    await getIdeasByBox({
-      asc: Number(asc) as 0 | 1,
-      limit,
-      offset,
-      orderby,
-      search_field,
-      search_text,
-      status,
-      room_id,
-      topic_id: box_id,
-    });
+  }, [asc, limit, offset, orderby, search_field, search_text, status]);
 
   const deleteIdeas = (items: Array<string>) =>
     items.map(async (idea) => {
@@ -123,9 +103,7 @@ const IdeasView: React.FC = () => {
             setSearchField(field);
             setSearchText(text);
           }}
-        >
-          <UserField onChange={() => {}} />
-        </FilterBar>
+        />
       </Stack>
       <Stack flex={1} sx={{ overflowY: 'auto' }}>
         <DataTable
