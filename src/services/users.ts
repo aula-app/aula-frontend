@@ -332,7 +332,7 @@ export type DelegateType = {
   username: string;
   displayname: string;
   realname: string;
-  is_delegate: number;
+  is_delegate: 0 | 1;
 };
 
 interface PossibleDelegateResponse extends GenericResponse {

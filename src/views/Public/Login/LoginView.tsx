@@ -113,7 +113,7 @@ const LoginView = () => {
   };
 
   useEffect(() => {
-    setApiUrl(localStorageGet('api_url'));
+    if(localStorageGet('api_url')) setApiUrl(localStorageGet('api_url'));
   }, []);
 
   return (
