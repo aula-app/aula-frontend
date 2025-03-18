@@ -308,6 +308,14 @@
     }
   },
   "settings": {
+    "users": {
+      "printTitle": "Passwortlist",
+      "passwordChanged": "Passwort zurückgesetzt",
+      "onlyTemporaryPasswords": "nur temporäres Passwort",
+      "no_users": "keine Benutzer",
+      "temp_pass": "mit temporärem Passwort",
+      "no_users_in_room": "keine Benutzer in diesem Raum"
+    },
     "account": {
       "delete": "Konto löschen",
       "deleteRequest": "Datenlöschung angefordert",

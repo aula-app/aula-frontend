@@ -308,6 +308,14 @@
     }
   },
   "settings": {
+    "users": {
+      "printTitle": "Passwords list",
+      "passwordChanged": "Password changed",
+      "onlyTemporaryPasswords": "Only temporary passwords",
+      "no_users": "No users",
+      "temp_pass": "with temporary password",
+      "no_users_in_room": "No users in this room"
+    },
     "account": {
       "delete": "Delete account",
       "deleteRequest": "Data deletion requested",
