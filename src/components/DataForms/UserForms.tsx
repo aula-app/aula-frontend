@@ -119,7 +119,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       email: data.email,
       realname: data.realname,
       status: data.status,
-      userlevel: data.userlevel,
+      userlevel: data.userlevel || defaultValues.userlevel,
       username: data.username,
       user_id: defaultValues.hash_id,
     });
@@ -198,22 +198,26 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 helperText={`${errors.email?.message || ''}`}
                 {...register('email')}
               />
-              {checkPermissions('users', 'addRole') && (
-                <RoleField
-                  control={control}
-                  disabled={isLoading}
-                  sx={{ flex: 1 }}
-                  noAdmin={!checkPermissions('users', 'createAdmin')}
-                />
-              )}
-              {checkPermissions('rooms', 'addUser') && currentLevel < 40 && (
-                <RoomRolesField
-                  rooms={rooms}
-                  user={defaultValues}
-                  onUpdate={(data) => onUpdate(data)}
-                  disabled={isLoading}
-                  defaultLevel={currentLevel}
-                />
+              {defaultValues?.userlevel !== 60 && (
+                <>
+                  {checkPermissions('users', 'addRole') && (
+                    <RoleField
+                      control={control}
+                      disabled={isLoading}
+                      sx={{ flex: 1 }}
+                      noAdmin={!checkPermissions('users', 'createAdmin')}
+                    />
+                  )}
+                  {checkPermissions('rooms', 'addUser') && currentLevel < 40 && (
+                    <RoomRolesField
+                      rooms={rooms}
+                      user={defaultValues}
+                      onUpdate={(data) => onUpdate(data)}
+                      disabled={isLoading}
+                      defaultLevel={currentLevel}
+                    />
+                  )}
+                </>
               )}
             </Stack>
             <MarkdownEditor
