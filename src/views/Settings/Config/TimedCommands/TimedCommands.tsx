@@ -46,6 +46,7 @@ const TimedCommands = () => {
   async function removeCommand(id: number) {
     const response = await deleteCommand(id);
     if (!response.error) fetchCommands();
+    setDeleteId(undefined);
   }
 
   const setTable = (response: CommandResponse) => {
