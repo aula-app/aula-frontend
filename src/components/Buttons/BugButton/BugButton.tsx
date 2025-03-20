@@ -33,7 +33,13 @@ ${data.content || ''}
 
   return (
     <>
-      <AppIconButton icon="bug" disabled={disabled} {...restOfProps} onClick={() => setOpen(true)} />
+      <AppIconButton
+        icon="bug"
+        disabled={disabled}
+        {...restOfProps}
+        onClick={() => setOpen(true)}
+        title={t('actions.bugReport')}
+      />
       <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <BugForms onClose={onClose} onSubmit={onSubmit} />
       </Drawer>

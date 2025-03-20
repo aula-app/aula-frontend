@@ -85,7 +85,7 @@ const DataTable: React.FC<Props> = ({
   }, []);
 
   return (
-    <Stack sx={{ overflowX: 'auto' }} {...restOfProps}>
+    <Stack flex={1} {...restOfProps}>
       <ToolBar
         scope={scope}
         selected={selected}
@@ -118,7 +118,7 @@ const DataTable: React.FC<Props> = ({
             <TableCell sx={{ position: 'sticky', right: 0, zIndex: 2, px: 0 }}></TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody component={Stack} flex={1} sx={{ overflowY: 'auto' }}>
           {rows.map((row) => (
             <DataRow
               key={row.id}

@@ -105,7 +105,7 @@ const UsersView: React.FC = () => {
   );
 
   return (
-    <Stack width="100%" height="100%" py={2}>
+    <Stack flex={1} py={2}>
       <Stack pl={2}>
         <FilterBar
           fields={FILTER}
@@ -116,13 +116,11 @@ const UsersView: React.FC = () => {
             setSearchText(text);
           }}
         >
-
           <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
           <SelectRole userRole={userlevel} setRole={(role) => setRole(role)} variant="filled" size="small" />
-
         </FilterBar>
       </Stack>
-      <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
+      <Stack flex={1}>
         <DataTable
           scope="users"
           columns={COLUMNS}
