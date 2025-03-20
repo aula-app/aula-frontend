@@ -85,7 +85,7 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
                 var: t(`scopes.comments.name`),
               })}
             </Typography>
-            {checkPermissions('comments', 'status') && <StatusField control={control} />}
+            {/* {checkPermissions('comments', 'status') && <StatusField control={control} />} */}
           </Stack>
           <Stack gap={2}>
             {/* content */}
