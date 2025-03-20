@@ -1,8 +1,9 @@
+import { AppIcon } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import AddIdeasButton from '@/components/Buttons/AddIdeas';
 import DelegateButton from '@/components/Buttons/DelegateButton';
-import { BoxForms } from '@/components/DataForms';
+import { BoxForms, IdeaForms } from '@/components/DataForms';
 import { IdeaCard } from '@/components/Idea';
 import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
 import KnowMore from '@/components/KnowMore';
@@ -14,7 +15,7 @@ import { useAppStore } from '@/store/AppStore';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
-import { Drawer, Stack, Typography } from '@mui/material';
+import { Drawer, Fab, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -48,6 +49,7 @@ const IdeasBoxView = () => {
   const [box, setBox] = useState<BoxType>();
   const [edit, setEdit] = useState<BoxType>(); // undefined = closed;
   const [boxPhase, setBoxPhase] = useState<string | null>(phase ? phase : '');
+  const [createIdea, setCreateIdea] = useState(false);
 
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
@@ -128,6 +130,11 @@ const IdeasBoxView = () => {
     setIdeasLoading(false);
   }, [box_id]);
 
+  const ideaClose = () => {
+    setCreateIdea(false);
+    fetchIdeas();
+  };
+
   useEffect(() => {
     fetchIdeas();
     fetchBox();
@@ -180,6 +187,26 @@ const IdeasBoxView = () => {
           </>
         )}
       </Grid>
+      {checkPermissions('ideas', 'create') && Number(phase) < 20 && (
+        <>
+          <Fab
+            aria-label="add idea"
+            color="primary"
+            sx={{
+              position: 'fixed',
+              bottom: 40,
+              zIndex: 1000,
+              alignSelf: 'center',
+            }}
+            onClick={() => setCreateIdea(true)}
+          >
+            <AppIcon icon="idea" />
+          </Fab>
+          <Drawer anchor="bottom" open={!!createIdea} onClose={ideaClose} sx={{ overflowY: 'auto' }}>
+            <IdeaForms onClose={ideaClose} />
+          </Drawer>
+        </>
+      )}
       <Drawer anchor="bottom" open={!!edit} onClose={boxClose} sx={{ overflowY: 'auto' }}>
         <BoxForms onClose={boxClose} defaultValues={edit} />
       </Drawer>

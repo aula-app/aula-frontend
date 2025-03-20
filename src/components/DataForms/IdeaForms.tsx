@@ -26,9 +26,9 @@ interface IdeaFormsProps {
 
 const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
-  const { room_id } = useParams();
+  const { room_id, box_id } = useParams();
 
-  const [box, setBox] = useState<string>('');
+  const [box, setBox] = useState<string>(box_id || '');
   const [category, setCategory] = useState(0);
   const [startingBox, setStartingBox] = useState<string>('');
   const [startingCategory, setStartingCategory] = useState(0);
