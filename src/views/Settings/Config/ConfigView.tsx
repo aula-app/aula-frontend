@@ -1,7 +1,7 @@
 import { AppIcon } from '@/components';
-import { getGlobalConfigs, getInstanceSettings } from '@/services/config';
+import { getInstanceSettings } from '@/services/config';
 import { useAppStore } from '@/store/AppStore';
-import { ConfigResponse, InstanceResponse } from '@/types/Generics';
+import { InstanceResponse } from '@/types/Generics';
 import { Accordion, AccordionDetails, AccordionSummary, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import SchoolInfo from './SchoolInfo';
 import SystemSettings from './SystemSettings';
 import TimedCommands from './TimedCommands';
 import UsersSettings from './UsersSettings';
+import { checkPermissions } from '@/utils';
 
 /** * Renders "Config" view
  * url: /settings/config
@@ -63,16 +64,19 @@ const ConfigView = () => {
         {t('settings.labels.configuration')}
       </Typography>
       <SchoolInfo />
-      {panels.map((panel, i) => (
-        <Accordion key={i} expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)}>
-          <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
-            <Typography variant="h2" py={1}>
-              {t(`settings.panels.${panel.name}`)}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>{panel.component}</AccordionDetails>
-        </Accordion>
-      ))}
+      {panels.map(
+        (panel, i) =>
+          checkPermissions('configs', panel.name) && (
+            <Accordion key={i} expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)}>
+              <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
+                <Typography variant="h2" py={1}>
+                  {t(`settings.panels.${panel.name}`)}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>{panel.component}</AccordionDetails>
+            </Accordion>
+          )
+      )}
       {/* <Skeleton variant="rectangular" width="100%" height={45} sx={{ mt: 3 }} /> */}
     </Stack>
   );

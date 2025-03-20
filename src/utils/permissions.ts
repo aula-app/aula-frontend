@@ -37,6 +37,15 @@ const permissions = {
     delete: { role: 30, self: true },
     status: { role: 40 },
   },
+  configs: {
+    idea: { role: 40 },
+    vote: { role: 40 },
+    user: { role: 50 },
+    group: { role: 40 },
+    action: { role: 50 },
+    system: { role: 50 },
+    danger: { role: 50 },
+  },
   groups: {
     addIdea: { role: 40 },
     create: { role: 50 },
