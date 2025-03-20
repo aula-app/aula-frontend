@@ -143,6 +143,9 @@ const DARK_THEME: ThemeOptions = {
       paper: 'hsl(200, 19%, 25%)',
       default: 'hsl(200, 19%, 20%)',
     },
+    text: {
+      primary: 'hsl(0, 0%, 100%)',
+    },
     ...BASE_COLORS,
     ...PALETTE_COLORS,
     ...PHASE_COLORS,

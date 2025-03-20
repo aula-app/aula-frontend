@@ -141,6 +141,9 @@ const LIGHT_THEME: ThemeOptions = {
     background: {
       default: '#FFFFFF',
     },
+    text: {
+      primary: 'hsl(236.17, 42%, 22%)',
+    },
     ...BASE_COLORS,
     ...PALETTE_COLORS,
     ...PHASE_COLORS,
