@@ -1,4 +1,5 @@
 import { addAnnouncement, AnnouncementArguments, editAnnouncement } from '@/services/announcements';
+import { addMessage, editMessage } from '@/services/messages';
 import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,10 +8,8 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import UsersField from '../DataFields/UsersField';
 import { ConsentField, MarkdownEditor, StatusField } from '../DataFields';
 import GroupField from '../DataFields/GroupField';
-import { addMessage, editMessage } from '@/services/messages';
 import UserField from '../DataFields/UserField';
 
 /**
