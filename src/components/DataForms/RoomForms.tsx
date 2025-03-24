@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, PhaseDurationFields, StatusField } from '../DataFields';
 import RoomImageSelector from '../DataFields/RoomImageSelector';
-import UserField from '../DataFields/UsersField';
+import UsersField from '../DataFields/UsersField';
 
 /**
  * RoomForms component is used to create or edit an room.
@@ -171,7 +171,11 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
               />
               {!isDefault && <PhaseDurationFields control={control} required disabled={isLoading} />}
               {checkPermissions('rooms', 'addUser') && !isDefault && (
-                <UserField defaultValues={users} onChange={(updates) => setUpdateUsers(updates)} disabled={isLoading} />
+                <UsersField
+                  defaultValues={users}
+                  onChange={(updates) => setUpdateUsers(updates)}
+                  disabled={isLoading}
+                />
               )}
             </Stack>
           </Stack>

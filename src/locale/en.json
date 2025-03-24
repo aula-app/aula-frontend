@@ -447,12 +447,7 @@
       "notUpdated": "{{var}} not updated",
       "update": "Update {{var}}",
       "updated": "{{var}} updated",
-      "to": {
-        "label": "To",
-        "all": "All",
-        "group": "Group",
-        "users": "Users"
-      }
+      "to": "To"
     },
     "panels": {
       "action": "Scheduled actions",

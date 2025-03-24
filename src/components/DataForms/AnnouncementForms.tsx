@@ -1,5 +1,5 @@
 import { addAnnouncement, AnnouncementArguments, editAnnouncement } from '@/services/announcements';
-import { AnnouncementType } from '@/types/Scopes';
+import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
@@ -10,6 +10,8 @@ import * as yup from 'yup';
 import UsersField from '../DataFields/UsersField';
 import { ConsentField, MarkdownEditor, StatusField } from '../DataFields';
 import GroupField from '../DataFields/GroupField';
+import { addMessage, editMessage } from '@/services/messages';
+import UserField from '../DataFields/UserField';
 
 /**
  * AnnouncementForms component is used to create or edit an idea.
@@ -19,22 +21,22 @@ import GroupField from '../DataFields/GroupField';
 
 interface AnnouncementFormsProps {
   onClose: () => void;
-  defaultValues?: AnnouncementType;
+  defaultValues?: AnnouncementType | MessageType;
 }
 
 const toOptions = [
-  { name: 'all', label: 'settings.messages.to.all' },
-  { name: 'target_id', label: 'settings.messages.to.users' },
-  { name: 'target_group', label: 'settings.messages.to.group' },
+  { name: 'all', label: 'ui.common.all' },
+  { name: 'target_id', label: 'scopes.users.name' },
+  { name: 'target_group', label: 'scopes.groups.name' },
 ] as const;
 
-type MessageType = 0 | 1 | 2; // Corresponds to the indices of `toOptions`
+type MessageToType = 0 | 1 | 2; // Corresponds to the indices of `toOptions`
 
 const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [messageType, setMessageType] = useState<MessageType>(0);
+  const [messageType, setMessageType] = useState<MessageToType>(0);
 
   const schema = yup.object().shape({
     headline: yup.string().required(t('forms.validation.required')),
@@ -64,9 +66,9 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     try {
       setIsLoading(true);
       if (!defaultValues) {
-        await newAnnouncement(data);
+        messageType === 0 ? await newAnnouncement(data) : await newMessage(data);
       } else {
-        await updateAnnouncement(data);
+        'user_needs_to_consent' in defaultValues ? await updateAnnouncement(data) : await updateMessage(data);
       }
       onClose();
     } finally {
@@ -98,6 +100,28 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     if (!request.error) onClose();
   };
 
+  const newMessage = async (data: SchemaType) => {
+    const request = await addMessage({
+      headline: data.headline,
+      body: data.body,
+      status: data.status,
+      msg_type: 2,
+    });
+    if (!request.error) onClose();
+  };
+
+  const updateMessage = async (data: SchemaType) => {
+    if (!defaultValues || 'user_needs_to_consent' in defaultValues || !defaultValues?.hash_id) return;
+    const request = await editMessage({
+      message_id: defaultValues.id,
+      headline: data.headline,
+      body: data.body,
+      status: data.status,
+      msg_type: defaultValues.msg_type,
+    });
+    if (!request.error) onClose();
+  };
+
   useEffect(() => {
     reset({ ...defaultValues });
   }, [JSON.stringify(defaultValues)]);
@@ -119,9 +143,9 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
             <Stack direction="row" gap={2}>
               <TextField
                 select
-                label={t('settings.messages.to.label')}
+                label={t('settings.messages.to')}
                 value={messageType}
-                onChange={(e) => setMessageType(Number(e.target.value) as MessageType)}
+                onChange={(e) => setMessageType(Number(e.target.value) as MessageToType)}
                 sx={{ minWidth: 150 }}
               >
                 {toOptions.map((option, index) => (
@@ -135,9 +159,23 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
                   case 0:
                     return <ConsentField control={control} required />;
                   case 1:
-                    return <UsersField defaultValues={[]} onChange={() => {}} required />;
+                    return (
+                      <UserField
+                        defaultValue={(defaultValues && 'target_id' in defaultValues && defaultValues.target_id) || 0}
+                        onChange={() => {}}
+                        required
+                      />
+                    );
                   case 2:
-                    return <GroupField defaultValue={0} onChange={() => {}} required />;
+                    return (
+                      <GroupField
+                        defaultValue={
+                          (defaultValues && 'target_group' in defaultValues && defaultValues.target_group) || 0
+                        }
+                        onChange={() => {}}
+                        required
+                      />
+                    );
                   default:
                     return null;
                 }
@@ -157,7 +195,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
             <Button onClick={onClose} color="error">
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="contained" disabled={isLoading}>
               {t('actions.confirm')}
             </Button>
           </Stack>

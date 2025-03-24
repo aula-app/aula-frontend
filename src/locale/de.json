@@ -447,12 +447,7 @@
       "notUpdated": "{{var}} nicht aktualisiert",
       "update": "{{var}} aktualisieren",
       "updated": "{{var}} aktualisiert",
-      "to": {
-        "label": "An",
-        "all": "Alle",
-        "group": "Gruppe",
-        "users": "Benutzer"
-      }
+      "to": "An"
     },
     "panels": {
       "action": "Geplante Aktionen",

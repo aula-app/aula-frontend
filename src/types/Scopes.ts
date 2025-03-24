@@ -119,7 +119,7 @@ export interface MessageType {
   target_id: number;
   only_on_dashboard: number;
   level_of_detail: number;
-  msg_type: number;
+  msg_type: 0 | 1 | 2 | 3 | 4 | 5;
   room_id: number;
   pin_to_top: number;
 }

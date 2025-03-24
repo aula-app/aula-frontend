@@ -104,6 +104,23 @@ export const addMessage = async (args: AddMessageArguments): Promise<GenericResp
   return response as GenericResponse;
 };
 
+interface EditMessageArguments extends AddMessageArguments {
+  message_id: number;
+}
+
+export const editMessage = async (args: EditMessageArguments): Promise<GenericResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: 'editMessage',
+      arguments: { ...args },
+    },
+    ['creator_id', 'updater_id']
+  );
+
+  return response as GenericResponse;
+};
+
 /**
  * Sets message Status.
  */
