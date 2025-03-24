@@ -2,12 +2,14 @@ import { addAnnouncement, AnnouncementArguments, editAnnouncement } from '@/serv
 import { AnnouncementType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Stack, TextField, Typography } from '@mui/material';
+import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+import UsersField from '../DataFields/UsersField';
 import { ConsentField, MarkdownEditor, StatusField } from '../DataFields';
+import GroupField from '../DataFields/GroupField';
 
 /**
  * AnnouncementForms component is used to create or edit an idea.
@@ -20,10 +22,19 @@ interface AnnouncementFormsProps {
   defaultValues?: AnnouncementType;
 }
 
+const toOptions = [
+  { name: 'all', label: 'settings.messages.to.all' },
+  { name: 'target_id', label: 'settings.messages.to.users' },
+  { name: 'target_group', label: 'settings.messages.to.group' },
+] as const;
+
+type MessageType = 0 | 1 | 2; // Corresponds to the indices of `toOptions`
+
 const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [messageType, setMessageType] = useState<MessageType>(0);
 
   const schema = yup.object().shape({
     headline: yup.string().required(t('forms.validation.required')),
@@ -31,6 +42,8 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     user_needs_to_consent: yup.number(),
     consent_text: yup.string(),
     status: yup.number(),
+    target_group: yup.number(),
+    target_id: yup.number(),
   } as Record<keyof AnnouncementArguments, any>);
 
   const {
@@ -89,6 +102,8 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     reset({ ...defaultValues });
   }, [JSON.stringify(defaultValues)]);
 
+  type TargetType = 'target_group' | 'target_id';
+
   return (
     <Stack p={2} overflow="auto">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -101,6 +116,33 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
           </Stack>
 
           <Stack gap={2}>
+            <Stack direction="row" gap={2}>
+              <TextField
+                select
+                label={t('settings.messages.to.label')}
+                value={messageType}
+                onChange={(e) => setMessageType(Number(e.target.value) as MessageType)}
+                sx={{ minWidth: 150 }}
+              >
+                {toOptions.map((option, index) => (
+                  <MenuItem value={index} key={index}>
+                    {t(option.label)}
+                  </MenuItem>
+                ))}
+              </TextField>
+              {(() => {
+                switch (messageType) {
+                  case 0:
+                    return <ConsentField control={control} required />;
+                  case 1:
+                    return <UsersField defaultValues={[]} onChange={() => {}} required />;
+                  case 2:
+                    return <GroupField defaultValue={0} onChange={() => {}} required />;
+                  default:
+                    return null;
+                }
+              })()}
+            </Stack>
             <TextField
               required
               label={t('settings.columns.headline')}
@@ -110,7 +152,6 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
               {...register('headline')}
             />
             <MarkdownEditor name="body" control={control} required />
-            <ConsentField control={control} required />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error">

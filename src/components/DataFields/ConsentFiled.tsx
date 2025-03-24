@@ -33,7 +33,7 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
               options={CONSENT_OPTIONS}
               defaultValue={0}
               required
-              sx={{ minWidth: 300, flex: 0 }}
+              sx={{ minWidth: 200, flex: 0 }}
             />
             {field.value > 0 && (
               <Controller
