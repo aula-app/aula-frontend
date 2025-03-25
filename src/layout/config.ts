@@ -49,12 +49,12 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
     icon: 'idea',
     permission: () => checkPermissions('ideas', 'viewAll'),
   },
-  // {
-  //   title: 'messages',
-  //   path: '/settings/messages',
-  //   icon: 'message',
-  //   permission: 50,
-  // },
+  {
+    title: 'messages',
+    path: '/settings/messages',
+    icon: 'message',
+    permission: () => checkPermissions('messages', 'viewAll'),
+  },
   {
     title: 'announcements',
     path: '/settings/announcements',

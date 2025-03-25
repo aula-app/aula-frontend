@@ -1,7 +1,7 @@
 import { FilterOptionsType } from '@/components/FilterBar/FilterBar';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType, PossibleFields } from '@/types/Scopes';
-import { databaseRequest, GenericResponse, RequestObject } from '@/utils';
+import { databaseRequest, GenericListRequest, GenericResponse, RequestObject } from '@/utils';
 import { checkPermissions } from '@/utils';
 
 /**
@@ -49,6 +49,19 @@ export const getMessages = async (): Promise<GetMessagesResponse> => {
   return response as GetMessagesResponse;
 };
 
+export const getAllMessages = async (args: GenericListRequest): Promise<GetMessagesResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: 'getMessages',
+      arguments: args,
+    },
+    []
+  );
+
+  return response as GetMessagesResponse;
+};
+
 /**
  * Get a list of messages from the database.
  */
@@ -82,13 +95,15 @@ export interface BugArguments {
   content?: string;
   status?: StatusTypes;
 }
+
 /**
  * Create a message messages on the database.
  */
 
 interface AddMessageArguments extends MessageArguments {
-  msg_type: 0 | 1 | 2 | 3 | 4 | 5; // 1=system message, 2= message from admin, 3=message from user, 4=report, 5= requests
-  target_id?: string | number;
+  msg_type?: 0 | 1 | 2 | 3 | 4 | 5;
+  target_id?: string | number | null;
+  target_group?: string | number | null;
 }
 
 export const addMessage = async (args: AddMessageArguments): Promise<GenericResponse> => {
@@ -142,6 +157,25 @@ export const setMessageStatus = async (args: MessageStatusArguments): Promise<Ge
 
   return response as GenericResponse;
 };
+
+/**
+ * Removes a message from the database
+ */
+
+export async function deleteMessage(id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: 'deleteMessage',
+      arguments: {
+        message_id: id,
+      },
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
 
 /**
  * Get a list of reports from the database.

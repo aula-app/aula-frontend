@@ -1,25 +1,24 @@
 import { getUsers } from '@/services/users';
-import { SelectOptionsType, SelectOptionType, UpdateType } from '@/types/SettingsTypes';
+import { SelectOptionsType } from '@/types/SettingsTypes';
 import { Autocomplete, BaseTextFieldProps, CircularProgress, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends BaseTextFieldProps {
-  defaultValue: string | number; // Changed from defaultValues to defaultValue
   disabled?: boolean;
-  onChange: (user_id: string | null) => void;
+  control: Control<any, any>;
 }
 
 /**
  * Renders "UserField" component
  */
 
-const UserField: React.FC<Props> = ({ defaultValue, onChange, disabled = false, ...restOfProps }) => {
+const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<SelectOptionsType>([]); // Ensure options is an array of SelectOptionsType
-  const [selectedOption, setSelectedOption] = useState<SelectOptionType | null>(null); // Ensure selectedOption is nullable
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -30,55 +29,61 @@ const UserField: React.FC<Props> = ({ defaultValue, onChange, disabled = false, 
     setOptions(users);
   };
 
-  const handleChange = (selected: SelectOptionType | null) => {
-    setSelectedOption(selected);
-    const selectedValue = selected ? String(selected.value) : null;
-    onChange(selectedValue);
-  };
-
-  useEffect(() => {
-    if (options.length > 0 && defaultValue) {
-      const filtered = options.find((option) => String(option.value) === defaultValue);
-      setSelectedOption(filtered || null);
-    }
-  }, [options, defaultValue]);
-
   useEffect(() => {
     fetchUsers();
-  }, [defaultValue]);
+  }, []);
 
   return (
-    <Autocomplete
-      fullWidth
-      open={open}
-      onOpen={() => setOpen(true)}
-      onClose={() => setOpen(false)}
-      onChange={(_, value) => handleChange(value as SelectOptionType | null)} // Ensure proper type casting
-      value={selectedOption}
-      isOptionEqualToValue={(option, value) => option.value === value?.value}
-      getOptionLabel={(option) => option.label}
-      options={options}
-      loading={loading}
-      disabled={disabled}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={t('scopes.users.name')}
-          disabled={disabled}
-          slotProps={{
-            input: {
-              ...params.InputProps,
-              endAdornment: (
-                <>
-                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                  {params.InputProps.endAdornment}
-                </>
-              ),
-            },
-          }}
-          {...restOfProps}
-        />
-      )}
+    <Controller
+      name="target_id"
+      control={control}
+      render={({ field, fieldState }) => {
+        // Find the option object that matches the current field value
+        const selectedOption =
+          field.value !== undefined && field.value !== null
+            ? options.find((option) => option.value === field.value) || null
+            : null;
+
+        return (
+          <Autocomplete
+            fullWidth
+            open={open}
+            onOpen={() => setOpen(true)}
+            onClose={() => setOpen(false)}
+            options={options}
+            loading={loading}
+            disabled={disabled}
+            isOptionEqualToValue={(option, value) => option?.value === value?.value}
+            getOptionLabel={(option) => option?.label || ''}
+            value={selectedOption}
+            onChange={(_, newValue) => {
+              // Pass just the ID value to the form
+              field.onChange(newValue ? newValue.value : null);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('scopes.users.name')}
+                disabled={disabled}
+                error={!!fieldState.error}
+                helperText={t(`${fieldState.error?.message || ''}`)}
+                slotProps={{
+                  input: {
+                    ...params.InputProps,
+                    endAdornment: (
+                      <>
+                        {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  },
+                }}
+                {...restOfProps}
+              />
+            )}
+          />
+        );
+      }}
     />
   );
 };
