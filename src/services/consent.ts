@@ -40,6 +40,7 @@ export interface MessageConsentType {
   body: string;
   consent_text: string;
   consent?: number;
+  user_needs_to_consent: 0 | 1 | 2;
 }
 
 export const getNecessaryConsents = async () => {

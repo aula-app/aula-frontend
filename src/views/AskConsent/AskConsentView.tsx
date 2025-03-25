@@ -7,11 +7,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
   MobileStepper,
   Stack,
   Typography,
 } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 /**
@@ -19,6 +21,7 @@ import { useLocation } from 'react-router-dom';
  * url: /
  */
 const AskConsent = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const [data, setData] = useState<MessageConsentType[]>([]);
   const [activeStep, setActiveStep] = useState(0);
@@ -62,7 +65,7 @@ const AskConsent = () => {
         },
       }}
     >
-      <Stack direction="row" p={2} pb={0} height={64} alignItems="center" justifyContent="center">
+      <Stack direction="row" height={52} alignItems="center" justifyContent="center">
         <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Icon.svg`} alt="aula" height="100%" />
         <Stack flexGrow={1} alignItems="center" justifyContent="center" mr={2}>
           <Typography fontWeight={700} textTransform="uppercase" color="secondary">
@@ -70,6 +73,7 @@ const AskConsent = () => {
           </Typography>
         </Stack>
       </Stack>
+      <Divider />
       {data.length > 0 &&
         data.map((text: MessageConsentType, i: number) => (
           <Fragment key={i}>
@@ -79,10 +83,36 @@ const AskConsent = () => {
                 <DialogContent>
                   <DialogContentText>{text.body}</DialogContentText>
                 </DialogContent>
+                <Divider />
                 <DialogActions>
-                  <Button color="secondary" sx={{ ml: 2 }}>
-                    Cancel
-                  </Button>
+                  {data.length > 1 && (
+                    <>
+                      <MobileStepper
+                        variant="text"
+                        steps={data.length}
+                        position="static"
+                        activeStep={activeStep}
+                        sx={{ bgcolor: 'transparent', p: 1, mr: 'auto', width: '50%' }}
+                        nextButton={
+                          <Button size="small" onClick={handleNext} disabled={activeStep === data.length - 1}>
+                            {t('ui.common.next')}
+                            <AppIcon icon="arrowright" />
+                          </Button>
+                        }
+                        backButton={
+                          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                            <AppIcon icon="arrowleft" />
+                            {t('ui.common.back')}
+                          </Button>
+                        }
+                      />
+                    </>
+                  )}
+                  {text.user_needs_to_consent === 1 && (
+                    <Button color="secondary" sx={{ ml: 2 }}>
+                      {t('ui.common.dismiss')}
+                    </Button>
+                  )}
                   <Button variant="contained" onClick={() => consent(text.id)}>
                     {text.consent_text}
                   </Button>
@@ -91,27 +121,6 @@ const AskConsent = () => {
             )}
           </Fragment>
         ))}
-      {data.length > 1 && (
-        <MobileStepper
-          variant="text"
-          steps={data.length}
-          position="static"
-          activeStep={activeStep}
-          sx={{ bgcolor: 'transparent', p: 1 }}
-          nextButton={
-            <Button size="small" onClick={handleNext} disabled={activeStep === data.length - 1}>
-              Next
-              <AppIcon icon="arrowright" />
-            </Button>
-          }
-          backButton={
-            <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-              <AppIcon icon="arrowleft" />
-              Back
-            </Button>
-          }
-        />
-      )}
     </Dialog>
   );
 };
