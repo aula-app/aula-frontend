@@ -35,7 +35,7 @@ const WildIdeaPhaseView = () => {
     setLoading(true);
     const response = await getWildIdeasByUser();
     if (response.error) setError(response.error);
-    if (!response.error && response.data) setIdeas(response.data);
+    if (!response.error) setIdeas(response.data || []);
     setLoading(false);
   }, [phase]);
 
