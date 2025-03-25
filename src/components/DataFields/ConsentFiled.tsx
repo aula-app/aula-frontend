@@ -15,47 +15,44 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
   const { t } = useTranslation();
 
   const CONSENT_OPTIONS = [
-    { label: t('consent.message'), value: 0 },
     { label: t('consent.announcement'), value: 1 },
     { label: t('consent.alert'), value: 2 },
   ];
 
   return (
-    <Controller
-      name="user_needs_to_consent"
-      control={control}
-      render={({ field }) => (
-        <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)', ...sx }}>
-          <Stack direction="row" gap={2}>
+    <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)', ...sx }}>
+      <Stack direction="row" gap={2}>
+        <Controller
+          name="user_needs_to_consent"
+          control={control}
+          render={({ field }) => (
             <SelectField
-              name="user_needs_to_consent"
+              {...field}
               control={control}
               options={CONSENT_OPTIONS}
-              defaultValue={0}
+              defaultValue={1}
               required
               sx={{ minWidth: 200, flex: 0 }}
             />
-            {field.value > 0 && (
-              <Controller
-                name="consent_text"
-                control={control}
-                defaultValue={t('actions.agree')}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    label={t('settings.columns.consent_text')}
-                    error={!!fieldState.error}
-                    helperText={`${fieldState.error?.message || ''}`}
-                    required
-                    sx={{ flex: 1 }}
-                    {...field}
-                  />
-                )}
-              />
-            )}
-          </Stack>
-        </FormControl>
-      )}
-    />
+          )}
+        />
+        <Controller
+          name="consent_text"
+          control={control}
+          defaultValue={t('actions.agree')}
+          render={({ field, fieldState }) => (
+            <TextField
+              label={t('settings.columns.consent_text')}
+              error={!!fieldState.error}
+              helperText={`${fieldState.error?.message || ''}`}
+              required
+              sx={{ flex: 1 }}
+              {...field}
+            />
+          )}
+        />
+      </Stack>
+    </FormControl>
   );
 };
 
