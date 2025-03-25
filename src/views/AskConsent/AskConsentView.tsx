@@ -108,14 +108,16 @@ const AskConsent = () => {
                       />
                     </>
                   )}
-                  {text.user_needs_to_consent === 1 && (
+                  {text.user_needs_to_consent < 2 && (
                     <Button color="secondary" sx={{ ml: 2 }}>
                       {t('ui.common.dismiss')}
                     </Button>
                   )}
-                  <Button variant="contained" onClick={() => consent(text.id)}>
-                    {text.consent_text}
-                  </Button>
+                  {text.user_needs_to_consent > 0 && (
+                    <Button variant="contained" onClick={() => consent(text.id)}>
+                      {text.consent_text}
+                    </Button>
+                  )}
                 </DialogActions>
               </Fragment>
             )}
