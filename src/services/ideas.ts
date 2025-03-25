@@ -128,6 +128,7 @@ export interface AddIdeaArguments extends IdeaArguments {
 export interface EditIdeaArguments extends IdeaArguments {
   idea_id: string;
   room_id?: string;
+  approved?: -1 | 0 | 1;
 }
 
 /**
