@@ -3,6 +3,7 @@ import { Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import MessageCard from '@/components/MessageCard';
 import { useEffect } from 'react';
+import { checkPermissions } from '@/utils';
 
 /**
  * Renders "Messages" view
@@ -24,8 +25,8 @@ const MessagesView = () => {
       </Typography>
       <MessageCard type="messages" />
       <MessageCard type="announcements" />
-      <MessageCard type="requests" />
-      <MessageCard type="reports" />
+      {checkPermissions('requests', 'viewAll') && <MessageCard type="requests" />}
+      {checkPermissions('reports', 'viewAll') && <MessageCard type="reports" />}
     </Stack>
   );
 };
