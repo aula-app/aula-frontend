@@ -67,8 +67,9 @@ const DataSettings = ({ onReload }: Props) => {
         return;
       }
       const lines = String(reader.result)
+        .normalize('NFC') // Normalize text to handle diacritical marks
         .split('\n')
-        .filter((l) => l != '');
+        .filter((l) => l.trim() !== ''); // Ensure no empty lines
       if (lines.length < 2) {
         setError(t('forms.csv.empty'));
         return;
@@ -85,7 +86,7 @@ const DataSettings = ({ onReload }: Props) => {
           return;
         }
       });
-      lines.splice(0, 1);
+      lines.splice(0, 1); // Remove the header row
       setUsers(lines);
     };
     reader.readAsText(file);
@@ -129,7 +130,9 @@ const DataSettings = ({ onReload }: Props) => {
               rel="noreferrer"
             >
               <AppIcon icon="download" size="small" sx={{ mr: 1, ml: -0.5 }} />
-              {t('ui.files.download')}
+              <Typography sx={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                {t('ui.files.download')}
+              </Typography>
             </Button>
           </Stack>
         </Stack>
