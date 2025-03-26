@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends BaseTextFieldProps {
-  defaultValues?: string[];
+  selected: UpdateType;
   disabled?: boolean;
   onChange: (updates: UpdateType) => void;
 }
@@ -14,7 +14,7 @@ interface Props extends BaseTextFieldProps {
  * Renders "RoomField" component
  */
 
-const RoomField: React.FC<Props> = ({ defaultValues, onChange, disabled = false, ...restOfProps }) => {
+const RoomField: React.FC<Props> = ({ selected, onChange, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,27 +30,36 @@ const RoomField: React.FC<Props> = ({ defaultValues, onChange, disabled = false,
     setOptions(rooms);
   };
 
-  const handleChange = (selected: SelectOptionsType) => {
-    setSelectedOptions(selected);
-    const selectedValues = selected.map((option) => String(option.value));
-    if (!defaultValues) onChange({ add: selectedValues, remove: [] });
-    else
+  const handleChange = (selectedOptions: SelectOptionsType) => {
+    setSelectedOptions(selectedOptions);
+    const selectedValues = selectedOptions.map((option) => String(option.value));
+
+    // If selected.add is empty, we're initializing or resetting
+    if (selected.add.length === 0 && selected.remove.length === 0) {
+      onChange({ add: selectedValues, remove: [] });
+    } else {
       onChange({
-        add: selectedValues.filter((value) => !defaultValues.includes(value)),
-        remove: defaultValues.filter((value) => !selectedValues.includes(value)),
+        add: selectedValues.filter((value) => !selected.add.includes(value)),
+        remove: selected.add.filter((value) => !selectedValues.includes(value)),
       });
+    }
   };
 
   useEffect(() => {
     if (options.length > 0) {
-      const filtered = options.filter((option) => defaultValues?.includes(String(option.value)));
-      setSelectedOptions(filtered);
+      // If selected.add is empty, clear the selection
+      if (selected.add.length === 0 && selected.remove.length === 0) {
+        setSelectedOptions([]);
+      } else {
+        const filtered = options.filter((option) => selected.add.includes(String(option.value)));
+        setSelectedOptions(filtered);
+      }
     }
-  }, [options, defaultValues]);
+  }, [options, selected]);
 
   useEffect(() => {
     fetchRooms();
-  }, [defaultValues]);
+  }, []);
 
   return (
     <Autocomplete

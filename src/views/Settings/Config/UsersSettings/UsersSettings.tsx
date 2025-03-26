@@ -148,12 +148,12 @@ const DataSettings = ({ onReload }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.map((user) => {
+          {users.map((user, userIndex) => {
             const keys = user.split(';');
             return (
-              <TableRow>
-                {keys.map((key) => (
-                  <TableCell>{key}</TableCell>
+              <TableRow key={`user-${userIndex}`}>
+                {keys.map((key, keyIndex) => (
+                  <TableCell key={`cell-${userIndex}-${keyIndex}`}>{key}</TableCell>
                 ))}
               </TableRow>
             );
@@ -162,8 +162,8 @@ const DataSettings = ({ onReload }: Props) => {
       </Table>
       <Stack>
         <Stack direction="row" alignItems="center" gap={3}>
-          <SelectRole userRole={role || 10} setRole={(role) => setRole(role as RoleTypes)} variant="filled" noAdmin />
-          <RoomField onChange={(updates) => setRooms(updates)} />
+          <SelectRole userRole={role || 10} onChange={(role) => setRole(role as RoleTypes)} variant="filled" noAdmin />
+          <RoomField selected={rooms} onChange={(updates) => setRooms(updates)} />
         </Stack>
         <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
       </Stack>

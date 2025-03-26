@@ -115,7 +115,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
                   secondaryAction={
                     <SelectRole
                       userRole={currentRole}
-                      setRole={(role) => handleUpdate(room.hash_id, role)}
+                      onChange={(role) => handleUpdate(room.hash_id, role)}
                       size="small"
                       noAdmin
                       noRoom={room.type !== 1}

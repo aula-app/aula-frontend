@@ -7,10 +7,10 @@ interface Props extends BaseTextFieldProps {
   userRole: RoleTypes | 0;
   noAdmin?: boolean;
   noRoom?: boolean;
-  setRole: (role: RoleTypes | 0) => void;
+  onChange: (role: RoleTypes | 0) => void;
 }
 
-const SelectRole: React.FC<Props> = ({ userRole, noAdmin = false, noRoom = false, setRole, ...restOfProps }) => {
+const SelectRole: React.FC<Props> = ({ userRole, noAdmin = false, noRoom = false, onChange, ...restOfProps }) => {
   const { t } = useTranslation();
 
   return (
@@ -18,7 +18,7 @@ const SelectRole: React.FC<Props> = ({ userRole, noAdmin = false, noRoom = false
       select
       label={t('settings.columns.userlevel')}
       value={userRole || 0}
-      onChange={(event) => setRole(typeof event.target.value === 'number' ? (event.target.value as RoleTypes) : 0)}
+      onChange={(event) => onChange(typeof event.target.value === 'number' ? (event.target.value as RoleTypes) : 0)}
       sx={{ minWidth: 200 }}
       {...restOfProps}
     >

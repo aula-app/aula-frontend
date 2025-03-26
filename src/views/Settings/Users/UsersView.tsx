@@ -117,7 +117,7 @@ const UsersView: React.FC = () => {
           }}
         >
           <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
-          <SelectRole userRole={userlevel} setRole={(role) => setRole(role)} variant="filled" size="small" />
+          <SelectRole userRole={userlevel} onChange={(role) => setRole(role)} variant="filled" size="small" />
         </FilterBar>
       </Stack>
       <Stack flex={1}>
