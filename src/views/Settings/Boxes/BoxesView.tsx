@@ -84,12 +84,12 @@ const BoxesView: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.boxes'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.boxes'), '']] });
     fetchBoxes();
   }, [fetchBoxes]);
 
   return (
-    <Stack width="100%" height="100%" py={2}>
+    <Stack width="100%" height="100%" pt={2}>
       <Stack pl={2}>
         <FilterBar
           fields={FILTER}

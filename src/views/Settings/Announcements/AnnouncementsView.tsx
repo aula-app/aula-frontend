@@ -86,7 +86,7 @@ const AnnouncementsView: React.FC = () => {
   }, [fetchAnnouncements]);
 
   return (
-    <Stack width="100%" height="100%" py={2}>
+    <Stack width="100%" height="100%" pt={2}>
       <Stack pl={2}>
         <FilterBar
           fields={FILTER}
