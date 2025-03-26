@@ -29,7 +29,7 @@ const DataSettings = ({ onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [users, setUsers] = useState<Array<string>>([]);
-  const [role, setRole] = useState<RoleTypes>(10);
+  const [role, setRole] = useState<RoleTypes>(20);
   const [rooms, setRooms] = useState<UpdateType>({ add: [], remove: [] });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -162,7 +162,7 @@ const DataSettings = ({ onReload }: Props) => {
       </Table>
       <Stack>
         <Stack direction="row" alignItems="center" gap={3}>
-          <SelectRole userRole={role || 10} onChange={(role) => setRole(role as RoleTypes)} variant="filled" noAdmin />
+          <SelectRole userRole={role} onChange={(role) => setRole(role as RoleTypes)} variant="filled" noAdmin />
           <RoomField selected={rooms} onChange={(updates) => setRooms(updates)} />
         </Stack>
         <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
