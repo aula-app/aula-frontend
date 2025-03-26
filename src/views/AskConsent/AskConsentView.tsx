@@ -1,5 +1,5 @@
 import { AppIcon } from '@/components';
-import { getNecessaryConsents, giveConsent, MessageConsentType } from '@/services/consent';
+import { getConsents, giveConsent, MessageConsentType } from '@/services/consent';
 import {
   Button,
   Dialog,
@@ -23,17 +23,24 @@ import { useLocation } from 'react-router-dom';
 const AskConsent = () => {
   const { t } = useTranslation();
   const location = useLocation();
-  const [data, setData] = useState<MessageConsentType[]>([]);
+  const [announcements, setAnnouncements] = useState<MessageConsentType[]>([]);
   const [activeStep, setActiveStep] = useState(0);
 
   const getData = async () => {
-    const data = await getNecessaryConsents();
-
-    setData(data ? data : []);
+    const response = await getConsents();
+    if (response.error) return;
+    setAnnouncements(response.data || []);
   };
 
   const consent = async (text_id: number) => {
-    giveConsent(text_id).then(() => {
+    giveConsent(text_id, 1).then(() => {
+      getData();
+      setActiveStep(0);
+    });
+  };
+
+  const dismiss = async (text_id: number) => {
+    giveConsent(text_id, -1).then(() => {
       getData();
       setActiveStep(0);
     });
@@ -52,7 +59,7 @@ const AskConsent = () => {
   }, [location]);
   return (
     <Dialog
-      open={data.length > 0}
+      open={announcements.length > 0}
       fullWidth={true}
       maxWidth="sm"
       scroll="paper"
@@ -74,8 +81,8 @@ const AskConsent = () => {
         </Stack>
       </Stack>
       <Divider />
-      {data.length > 0 &&
-        data.map((text: MessageConsentType, i: number) => (
+      {announcements.length > 0 &&
+        announcements.map((text: MessageConsentType, i: number) => (
           <Fragment key={i}>
             {i === activeStep && (
               <Fragment>
@@ -85,16 +92,16 @@ const AskConsent = () => {
                 </DialogContent>
                 <Divider />
                 <DialogActions>
-                  {data.length > 1 && (
+                  {announcements.length > 1 && (
                     <>
                       <MobileStepper
                         variant="text"
-                        steps={data.length}
+                        steps={announcements.length}
                         position="static"
                         activeStep={activeStep}
                         sx={{ bgcolor: 'transparent', p: 1, mr: 'auto', width: '50%' }}
                         nextButton={
-                          <Button size="small" onClick={handleNext} disabled={activeStep === data.length - 1}>
+                          <Button size="small" onClick={handleNext} disabled={activeStep === announcements.length - 1}>
                             {t('ui.common.next')}
                             <AppIcon icon="arrowright" />
                           </Button>
@@ -109,7 +116,7 @@ const AskConsent = () => {
                     </>
                   )}
                   {text.user_needs_to_consent < 2 && (
-                    <Button color="secondary" sx={{ ml: 2 }}>
+                    <Button color="secondary" sx={{ ml: 2 }} onClick={() => dismiss(text.id)}>
                       {t('ui.common.dismiss')}
                     </Button>
                   )}

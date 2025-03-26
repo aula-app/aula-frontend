@@ -1,5 +1,5 @@
 import { ConsentResponse } from '@/types/LoginTypes';
-import { localStorageGet, parseJwt } from '@/utils';
+import { databaseRequest, GenericResponse, localStorageGet, parseJwt } from '@/utils';
 const api_url = localStorageGet('api_url');
 const jwt_token = localStorageGet('token');
 const jwt_payload = parseJwt(jwt_token);
@@ -43,32 +43,32 @@ export interface MessageConsentType {
   user_needs_to_consent: 0 | 1 | 2;
 }
 
-export const getNecessaryConsents = async () => {
-  const response = await (
-    await fetch(api_url + '/api/controllers/get_necessary_consents.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwt_token,
-      },
-    })
-  ).json();
+export interface MessageConsentResponse extends GenericResponse {
+  data: MessageConsentType[];
+}
 
-  return response.data as MessageConsentType[];
-};
+export async function getConsents(): Promise<MessageConsentResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'getMissingConsents',
+      arguments: {},
+    },
+    ['user_id']
+  );
 
-export const giveConsent = async (text_id: number) => {
-  if (!jwt_payload) return;
-  const response = await (
-    await fetch(api_url + '/api/controllers/give_consent.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwt_token,
-      },
-      body: JSON.stringify({ text_id, user_id: jwt_payload.user_id }),
-    })
-  ).json();
+  return response as MessageConsentResponse;
+}
 
-  return response.data;
-};
+export async function giveConsent(text_id: number, consent_value: number): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'giveConsent',
+      arguments: { text_id, consent_value },
+    },
+    ['user_id', 'updater_id']
+  );
+
+  return response as GenericResponse;
+}
