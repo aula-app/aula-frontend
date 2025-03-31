@@ -21,7 +21,7 @@ const RoleField: React.FC<Props> = ({ control, disabled = false, noAdmin = false
     <Controller
       name="userlevel"
       control={control}
-      defaultValue={control._defaultValues.status || 0}
+      defaultValue={control._defaultValues.userlevel || 0}
       render={({ field }) => {
         return (
           <TextField
