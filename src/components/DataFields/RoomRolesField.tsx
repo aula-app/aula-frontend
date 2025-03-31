@@ -107,7 +107,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
             const currentRole =
               updateRoles.find((role) => role.room === room.hash_id)?.role ||
               userRoles.find((role) => role.room === room.hash_id)?.role ||
-              (room.type === 1 && defaultLevel) ||
+              defaultLevel ||
               0;
             return (
               <ListItemButton key={room.hash_id} sx={{ py: 0, order: room.type === 1 ? 0 : 1 }}>
