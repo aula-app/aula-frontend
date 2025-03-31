@@ -36,7 +36,7 @@ const RoleField: React.FC<Props> = ({ control, disabled = false, noAdmin = false
           >
             <MenuItem value="0">{t(`roles.empty`)}</MenuItem>
             {roles
-              .filter((role) => (noAdmin ? role < 50 : role < 60))
+              .filter((role) => (noAdmin ? role < 40 : role < 60))
               .map((role) => (
                 <MenuItem value={role}>{t(`roles.${role}`)}</MenuItem>
               ))}
