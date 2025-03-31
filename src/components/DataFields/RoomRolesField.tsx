@@ -100,15 +100,15 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
             var: t('roles.roomRoles'),
           })}
         </DialogTitle>
+        {JSON.stringify(updateRoles)}
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
         <List sx={{ maxHeight: 300, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
           {schoolRooms.map((room) => {
             const currentRole =
-              updateRoles.find((role) => role.room === room.hash_id)?.role ||
-              userRoles.find((role) => role.room === room.hash_id)?.role ||
-              defaultLevel ||
-              0;
+              typeof updateRoles.find((role) => role.room === room.hash_id)?.role === 'number'
+                ? (updateRoles.find((role) => role.room === room.hash_id)?.role as RoleTypes)
+                : userRoles.find((role) => role.room === room.hash_id)?.role || defaultLevel || 0;
             return (
               <ListItemButton key={room.hash_id} sx={{ py: 0, order: room.type === 1 ? 0 : 1 }}>
                 <ListItem

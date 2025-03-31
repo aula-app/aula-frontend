@@ -78,7 +78,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     const remove = updates
       .filter((update) => update.role === 0 && rooms.includes(update.room))
       .map((update) => update.room);
-    setUpdateRooms({ add, remove });
+    console.log({ add, remove });
     setUpdateRoles(updates.filter((update) => update.role !== 0) as { room: string; role: RoleTypes }[]);
   };
 
@@ -129,6 +129,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   };
 
   const setUserRooms = async (user_id: string) => {
+    console.log('updateRooms', updateRooms);
     const addPromises = updateRooms.add.map((room_id) => addUserRoom(user_id, room_id));
     const removePromises = updateRooms.remove.map((room_id) => removeUserRoom(user_id, room_id));
     await Promise.all([...addPromises, ...removePromises]);
