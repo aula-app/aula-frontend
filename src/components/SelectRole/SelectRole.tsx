@@ -22,9 +22,9 @@ const SelectRole: React.FC<Props> = ({ userRole, noAdmin = false, noRoom = false
       sx={{ minWidth: 200 }}
       {...restOfProps}
     >
-      {noRoom && <MenuItem value={0}>{t(`roles.empty`)}</MenuItem>}
+      {noRoom && <MenuItem value={0} key={0}>{t(`roles.empty`)}</MenuItem>}
       {roles
-        .filter((role) => (noAdmin ? role < 30 : true))
+        .filter((role) => (noAdmin ? role != 60 : true))
         .map((role) => (
           <MenuItem value={role} key={role}>
             {t(`roles.${role}`)}

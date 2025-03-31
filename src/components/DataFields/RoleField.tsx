@@ -21,7 +21,7 @@ const RoleField: React.FC<Props> = ({ control, disabled = false, noAdmin = false
     <Controller
       name="userlevel"
       control={control}
-      defaultValue={control._defaultValues.status || 20}
+      defaultValue={control._defaultValues.status || 0}
       render={({ field }) => {
         return (
           <TextField
@@ -34,6 +34,7 @@ const RoleField: React.FC<Props> = ({ control, disabled = false, noAdmin = false
             {...restOfProps}
             slotProps={{ inputLabel: { shrink: true } }}
           >
+            <MenuItem value="0">{t(`roles.empty`)}</MenuItem>
             {roles
               .filter((role) => (noAdmin ? role < 50 : role < 60))
               .map((role) => (
