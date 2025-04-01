@@ -233,11 +233,11 @@ interface GetUserRoomsResponse extends GenericResponse {
   data: { hash_id: string }[] | null;
 }
 
-export async function getUserRooms(user_id: string, type?: 0 | 1): Promise<GetUserRoomsResponse> {
+export async function getUserRooms(user_id: string): Promise<GetUserRoomsResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'getUserRooms',
-    arguments: { user_id, type },
+    arguments: { user_id },
   });
 
   return response as GetUserRoomsResponse;

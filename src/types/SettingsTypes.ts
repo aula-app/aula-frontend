@@ -82,6 +82,7 @@ export type SelectOptionsType = Array<SelectOptionType>;
 export type UpdateType = {
   add: string[];
   remove: string[];
+  update?: string[];
 };
 
 export type UpdtesObject = { add: string[]; remove: string[] };

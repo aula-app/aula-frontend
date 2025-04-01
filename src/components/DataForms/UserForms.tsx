@@ -61,11 +61,9 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
-  const currentLevel = watch('userlevel') || 10;
-
   const fetchUserRooms = async () => {
     if (!defaultValues?.hash_id) return;
-    const response = await getUserRooms(defaultValues.hash_id, 0);
+    const response = await getUserRooms(defaultValues.hash_id);
     if (!response.data) return;
     const rooms = response.data.map((room) => room.hash_id);
     setRooms(rooms);
@@ -78,7 +76,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     const remove = updates
       .filter((update) => update.role === 0 && rooms.includes(update.room))
       .map((update) => update.room);
-    console.log({ add, remove });
+    setUpdateRooms({ add, remove });
     setUpdateRoles(updates.filter((update) => update.role !== 0) as { room: string; role: RoleTypes }[]);
   };
 
@@ -129,7 +127,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   };
 
   const setUserRooms = async (user_id: string) => {
-    console.log('updateRooms', updateRooms);
     const addPromises = updateRooms.add.map((room_id) => addUserRoom(user_id, room_id));
     const removePromises = updateRooms.remove.map((room_id) => removeUserRoom(user_id, room_id));
     await Promise.all([...addPromises, ...removePromises]);
@@ -209,13 +206,12 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                       noAdmin={!checkPermissions('users', 'createAdmin')}
                     />
                   )}
-                  {checkPermissions('rooms', 'addUser') && currentLevel < 40 && (
+                  {checkPermissions('rooms', 'addUser') && (
                     <RoomRolesField
                       rooms={rooms}
                       user={defaultValues}
                       onUpdate={(data) => onUpdate(data)}
                       disabled={isLoading}
-                      defaultLevel={currentLevel}
                     />
                   )}
                 </>
