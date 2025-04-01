@@ -24,7 +24,7 @@ const COLUMNS = [
   { name: 'body', orderId: 6 },
   { name: 'creator_id', orderId: 3 },
   { name: 'created', orderId: 4 },
-  { name: 'target_id', orderId: 9 },
+  { name: 'user_hash_id', orderId: 9 },
   { name: 'target_group', orderId: 10 },
   { name: 'last_update', orderId: 0 },
 ] as Array<{ name: keyof MessageType; orderId: number }>;

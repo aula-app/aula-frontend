@@ -67,7 +67,7 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
     resolver: yupResolver(schema),
     defaultValues: {
       headline: defaultValues ? ' ' : '',
-      target_id: defaultValues?.target_id,
+      target_id: defaultValues?.user_hash_id,
       target_group: defaultValues?.target_group,
       status: defaultValues?.status,
       body: defaultValues?.body || '',
@@ -127,13 +127,13 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
 
   useEffect(() => {
     if (defaultValues) {
-      const initialMessageType = 'target_id' in defaultValues && defaultValues.target_id ? 0 : 1;
+      const initialMessageType = 'target_id' in defaultValues && defaultValues.user_hash_id ? 0 : 1;
       setMessageType(initialMessageType);
       reset({
         headline: defaultValues.headline || '',
         body: defaultValues.body || '',
         status: defaultValues.status,
-        target_id: 'target_id' in defaultValues ? defaultValues.target_id : null,
+        target_id: 'target_id' in defaultValues ? defaultValues.user_hash_id : null,
         target_group: 'target_group' in defaultValues ? defaultValues.target_group : null,
       });
     }
@@ -141,7 +141,6 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
 
   return (
     <Stack p={2} overflow="auto">
-      {messageType}
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">

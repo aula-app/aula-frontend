@@ -59,6 +59,7 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
     switch (column) {
       case 'creator_id':
       case 'user_id':
+      case 'user_hash_id':
         getUserName(value as string);
         break;
       case 'room_hash_id':
@@ -90,6 +91,7 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
 
     // IDs that require name lookup
     case 'creator_id':
+    case 'user_hash_id':
     case 'user_id':
     case 'room_hash_id':
     case 'target_group':

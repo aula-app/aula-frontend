@@ -421,6 +421,7 @@
       "type": "Typ",
       "updater_id": "Zuletzt aktualisiert von",
       "user_id": "Benutzer",
+      "user_hash_id": "Zielbenutzer",
       "user_needs_to_consent": "Zustimmung erforderlich",
       "userlevel": "Benutzer-Rolle",
       "username": "Benutzername",

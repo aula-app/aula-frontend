@@ -421,6 +421,7 @@
       "type": "Type",
       "updater_id": "Last Updated By",
       "user_id": "User",
+      "user_hash_id": "Target User",
       "user_needs_to_consent": "Consent Required",
       "userlevel": "User level",
       "username": "User name",

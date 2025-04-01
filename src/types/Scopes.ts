@@ -105,6 +105,7 @@ export interface IdeaType {
 export interface MessageType {
   id: number;
   hash_id: string;
+  user_hash_id: string;
   creator_id: number;
   headline: string;
   body: string;
