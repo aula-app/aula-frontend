@@ -108,6 +108,19 @@ export async function getIdeasByUser(args: UserIdeasListRequest): Promise<GetIde
   return response as GetIdeasResponse;
 }
 
+export async function getUserIdeasByPhase(phase_id: number): Promise<GetIdeasResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'Idea',
+      method: 'getUserIdeasByPhase',
+      arguments: { phase_id },
+    },
+    ['user_id']
+  );
+
+  return response as GetIdeasResponse;
+}
+
 /**
  * Sets Idea update types
  */
