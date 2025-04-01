@@ -210,6 +210,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                     <RoomRolesField
                       rooms={rooms}
                       user={defaultValues}
+                      defaultLevel={watch('userlevel')}
                       onUpdate={(data) => onUpdate(data)}
                       disabled={isLoading}
                     />

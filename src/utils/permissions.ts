@@ -147,6 +147,4 @@ export function checkPermissions(model: keyof typeof permissions, action: string
   } else {
     return permissions[model][action].role.includes(user.user_level);
   }
-
-  return false;
 }

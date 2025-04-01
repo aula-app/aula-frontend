@@ -26,18 +26,11 @@ import SelectRole from '../SelectRole';
 interface Props extends ButtonProps {
   user?: UserType;
   rooms: string[];
-  defaultLevel?: RoleTypes;
+  defaultLevel: RoleTypes;
   onUpdate: (updates: { room: string; role: RoleTypes | 0 }[]) => void;
 }
 
-const RoomRolesField: React.FC<Props> = ({
-  user,
-  rooms,
-  defaultLevel = 0,
-  disabled = false,
-  onUpdate,
-  ...restOfProps
-}) => {
+const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled = false, onUpdate, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
@@ -115,7 +108,9 @@ const RoomRolesField: React.FC<Props> = ({
               ? updateRoles.find((role) => role.room === room.hash_id)?.role
               : !!userRoles.find((role) => role.room === room.hash_id)
                 ? userRoles.find((role) => role.room === room.hash_id)?.role
-                : defaultLevel;
+                : room.type === 1
+                  ? defaultLevel
+                  : 0;
             return (
               <ListItemButton key={room.hash_id} sx={{ py: 0, order: room.type === 1 ? 0 : 1 }}>
                 <ListItem
