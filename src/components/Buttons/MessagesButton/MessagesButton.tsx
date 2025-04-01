@@ -5,11 +5,7 @@ import { Badge, IconButtonProps, Skeleton } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-interface Props extends IconButtonProps {
-  target: string;
-}
-
-const MessagesButton: React.FC<Props> = ({ target, disabled = false, ...restOfProps }) => {
+const MessagesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
   const { pathname } = useLocation();
   const [messages, setMessages] = useState<number>();
   const [reports, setReports] = useState<number>();
@@ -33,8 +29,17 @@ const MessagesButton: React.FC<Props> = ({ target, disabled = false, ...restOfPr
   }, [pathname]);
 
   return typeof messages === 'number' && typeof reports === 'number' ? (
-    <Badge badgeContent={messages + reports} color="primary">
-      <AppIconButton icon="message" to="/messages" sx={{ p: 0 }} {...restOfProps} />
+    <Badge
+      badgeContent={messages + reports}
+      sx={{
+        '& .MuiBadge-badge': {
+          backgroundColor: 'background.paper',
+          top: 5,
+          right: 5,
+        },
+      }}
+    >
+      <AppIconButton icon="message" to="/messages" {...restOfProps} />
     </Badge>
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />

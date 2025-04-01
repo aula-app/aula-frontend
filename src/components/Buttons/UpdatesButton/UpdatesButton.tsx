@@ -4,11 +4,7 @@ import { Badge, IconButtonProps, Skeleton } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-interface Props extends IconButtonProps {
-  target: string;
-}
-
-const UpdatesButton: React.FC<Props> = ({ target, disabled = false, ...restOfProps }) => {
+const UpdatesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
   const { pathname } = useLocation();
   const [updates, setUpdates] = useState<number>();
 
@@ -22,8 +18,18 @@ const UpdatesButton: React.FC<Props> = ({ target, disabled = false, ...restOfPro
   }, [pathname]);
 
   return typeof updates === 'number' ? (
-    <Badge badgeContent={updates} color="primary" sx={{ mx: 1 }}>
-      <AppIconButton icon="heart" to="/updates" sx={{ p: 0 }} {...restOfProps} />
+    <Badge
+      badgeContent={updates}
+      color="primary"
+      sx={{
+        '& .MuiBadge-badge': {
+          backgroundColor: 'background.paper',
+          top: 5,
+          right: 5,
+        },
+      }}
+    >
+      <AppIconButton icon="heart" to="/updates" {...restOfProps} />
     </Badge>
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />

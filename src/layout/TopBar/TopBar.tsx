@@ -8,6 +8,8 @@ import { ReactNode, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../config';
+import MessagesButton from '@/components/Buttons/MessagesButton';
+import UpdatesButton from '@/components/Buttons/UpdatesButton';
 
 // Paths that should be excluded from breadcrumbs
 const EXCLUDED_PATHS = ['welcome', 'phase', 'settings'];
@@ -91,7 +93,11 @@ const TopBar: React.FC = () => {
             <AppIconButton icon="logout" onClick={onLogout} />
           </Stack>
         ) : (
-          <AppIconButton icon="menu" onClick={menuToggle} sx={{ display: { xs: 'block', md: 'none' } }} />
+          <Stack direction="row" spacing={0.5} sx={{ ml: 'auto' }}>
+            <MessagesButton />
+            <UpdatesButton />
+            <AppIconButton icon="menu" onClick={menuToggle} sx={{ display: { xs: 'block', md: 'none' } }} />
+          </Stack>
         )}
         <SideBar
           anchor={SIDEBAR_DESKTOP_ANCHOR}
