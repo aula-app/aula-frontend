@@ -3,12 +3,14 @@ import { getAnnouncements } from '@/services/announcements';
 import { getMessages } from '@/services/messages';
 import { Badge, IconButtonProps, Skeleton } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface Props extends IconButtonProps {
   target: string;
 }
 
 const MessagesButton: React.FC<Props> = ({ target, disabled = false, ...restOfProps }) => {
+  const { pathname } = useLocation();
   const [messages, setMessages] = useState<number>();
   const [reports, setReports] = useState<number>();
 
@@ -28,7 +30,7 @@ const MessagesButton: React.FC<Props> = ({ target, disabled = false, ...restOfPr
   useEffect(() => {
     fetchMessages();
     fetchReports();
-  }, []);
+  }, [pathname]);
 
   return typeof messages === 'number' && typeof reports === 'number' ? (
     <Badge badgeContent={messages + reports} color="primary">

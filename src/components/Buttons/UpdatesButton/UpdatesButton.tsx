@@ -2,12 +2,14 @@ import AppIconButton from '@/components/AppIconButton';
 import { getUpdates } from '@/services/dashboard';
 import { Badge, IconButtonProps, Skeleton } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface Props extends IconButtonProps {
   target: string;
 }
 
 const UpdatesButton: React.FC<Props> = ({ target, disabled = false, ...restOfProps }) => {
+  const { pathname } = useLocation();
   const [updates, setUpdates] = useState<number>();
 
   const fetchUpdates = async () => {
@@ -17,7 +19,7 @@ const UpdatesButton: React.FC<Props> = ({ target, disabled = false, ...restOfPro
 
   useEffect(() => {
     fetchUpdates();
-  }, []);
+  }, [pathname]);
 
   return typeof updates === 'number' ? (
     <Badge badgeContent={updates} color="primary" sx={{ mx: 1 }}>
