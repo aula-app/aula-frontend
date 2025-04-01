@@ -7,32 +7,33 @@ interface Props extends BaseTextFieldProps {
   userRole: RoleTypes | 0;
   noAdmin?: boolean;
   noRoom?: boolean;
-  setRole: (role: RoleTypes | 0) => void;
+  onChange: (role: RoleTypes | 0) => void;
 }
 
-const SelectRole: React.FC<Props> = ({ userRole, noAdmin = false, noRoom = false, setRole, ...restOfProps }) => {
+const SelectRole: React.FC<Props> = ({ userRole, noAdmin = false, noRoom = false, onChange, ...restOfProps }) => {
   const { t } = useTranslation();
 
   return (
     <TextField
       select
       label={t('settings.columns.userlevel')}
-      value={userRole || 0}
-      onChange={(event) => setRole(typeof event.target.value === 'number' ? (event.target.value as RoleTypes) : 0)}
+      value={userRole || 0} // Ensure default value is applied
+      onChange={(event) => onChange(Number(event.target.value) as RoleTypes | 0)} // Ensure value is cast to number
       sx={{ minWidth: 200 }}
       {...restOfProps}
     >
-      {noRoom && <MenuItem value={0}>{t(`roles.empty`)}</MenuItem>}
+      {noRoom && (
+        <MenuItem value={0} key={0}>
+          {t(`roles.empty`)}
+        </MenuItem>
+      )}
       {roles
         .filter((role) => (noAdmin ? role < 40 : true))
-        .map((role) => {
-          const userRoleOption = role;
-          return (
-            <MenuItem value={userRoleOption} key={userRoleOption}>
-              {t(`roles.${userRoleOption}`)}
-            </MenuItem>
-          );
-        })}
+        .map((role) => (
+          <MenuItem value={role} key={role}>
+            {t(`roles.${role}`)}
+          </MenuItem>
+        ))}
     </TextField>
   );
 };

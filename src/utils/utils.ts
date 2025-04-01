@@ -26,5 +26,5 @@ export function getCurrentEnvironment(): string {
 }
 
 export function getDataLimit(): number {
-  return Math.floor((window.innerHeight - 285) / 55);
+  return Math.floor((window.innerHeight - 285) / 55 - 1);
 }

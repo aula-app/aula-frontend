@@ -100,13 +100,13 @@ const UsersView: React.FC = () => {
     <>
       <PrintUsers />
       <AddRoomButton users={items} disabled={items.length === 0} />
-      <AddGroupButton users={items} />
+      {/* <AddGroupButton users={items} /> */}
     </>
   );
 
   return (
-    <Stack flex={1} py={2}>
-      <Stack pl={2}>
+    <Stack flex={1} overflow="hidden" pt={2}>
+      <Stack px={2}>
         <FilterBar
           fields={FILTER}
           scope="users"
@@ -117,10 +117,10 @@ const UsersView: React.FC = () => {
           }}
         >
           <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
-          <SelectRole userRole={userlevel} setRole={(role) => setRole(role)} variant="filled" size="small" />
+          <SelectRole userRole={userlevel} onChange={(role) => setRole(role)} variant="filled" size="small" />
         </FilterBar>
       </Stack>
-      <Stack flex={1}>
+      <Stack flex={1} overflow="hidden">
         <DataTable
           scope="users"
           columns={COLUMNS}
@@ -136,9 +136,8 @@ const UsersView: React.FC = () => {
         />
         {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
-
-        <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
+      <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <UserForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
       </Drawer>

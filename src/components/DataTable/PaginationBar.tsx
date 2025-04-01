@@ -11,11 +11,11 @@ const PaginationBar: React.FC<Props> = ({ pages, setPage }) => {
     setPage(newPage - 1);
   };
 
-  return (
+  return pages > 1 ? (
     <Stack direction="row" alignItems="center" justifyContent="center" bottom={0} height={48}>
-      {pages > 1 && <Pagination count={pages} onChange={changePage} sx={{ py: 1 }} />}
+      <Pagination count={pages} onChange={changePage} sx={{ py: 1 }} />
     </Stack>
-  );
+  ) : null;
 };
 
 export default PaginationBar;

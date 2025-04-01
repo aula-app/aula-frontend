@@ -61,11 +61,9 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
-  const currentLevel = watch('userlevel') || 10;
-
   const fetchUserRooms = async () => {
     if (!defaultValues?.hash_id) return;
-    const response = await getUserRooms(defaultValues.hash_id, 0);
+    const response = await getUserRooms(defaultValues.hash_id);
     if (!response.data) return;
     const rooms = response.data.map((room) => room.hash_id);
     setRooms(rooms);
@@ -208,13 +206,13 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                       noAdmin={!checkPermissions('users', 'createAdmin')}
                     />
                   )}
-                  {checkPermissions('rooms', 'addUser') && currentLevel < 40 && (
+                  {checkPermissions('rooms', 'addUser') && (
                     <RoomRolesField
                       rooms={rooms}
                       user={defaultValues}
+                      defaultLevel={watch('userlevel')}
                       onUpdate={(data) => onUpdate(data)}
                       disabled={isLoading}
-                      defaultLevel={currentLevel}
                     />
                   )}
                 </>

@@ -29,7 +29,7 @@ const DataSettings = ({ onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [users, setUsers] = useState<Array<string>>([]);
-  const [role, setRole] = useState<RoleTypes>(10);
+  const [role, setRole] = useState<RoleTypes>(20);
   const [rooms, setRooms] = useState<UpdateType>({ add: [], remove: [] });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -67,8 +67,9 @@ const DataSettings = ({ onReload }: Props) => {
         return;
       }
       const lines = String(reader.result)
+        .normalize('NFC') // Normalize text to handle diacritical marks
         .split('\n')
-        .filter((l) => l != '');
+        .filter((l) => l.trim() !== ''); // Ensure no empty lines
       if (lines.length < 2) {
         setError(t('forms.csv.empty'));
         return;
@@ -85,7 +86,7 @@ const DataSettings = ({ onReload }: Props) => {
           return;
         }
       });
-      lines.splice(0, 1);
+      lines.splice(0, 1); // Remove the header row
       setUsers(lines);
     };
     reader.readAsText(file);
@@ -129,7 +130,9 @@ const DataSettings = ({ onReload }: Props) => {
               rel="noreferrer"
             >
               <AppIcon icon="download" size="small" sx={{ mr: 1, ml: -0.5 }} />
-              {t('ui.files.download')}
+              <Typography sx={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                {t('ui.files.download')}
+              </Typography>
             </Button>
           </Stack>
         </Stack>
@@ -145,12 +148,12 @@ const DataSettings = ({ onReload }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.map((user) => {
+          {users.map((user, userIndex) => {
             const keys = user.split(';');
             return (
-              <TableRow>
-                {keys.map((key) => (
-                  <TableCell>{key}</TableCell>
+              <TableRow key={`user-${userIndex}`}>
+                {keys.map((key, keyIndex) => (
+                  <TableCell key={`cell-${userIndex}-${keyIndex}`}>{key}</TableCell>
                 ))}
               </TableRow>
             );
@@ -159,8 +162,8 @@ const DataSettings = ({ onReload }: Props) => {
       </Table>
       <Stack>
         <Stack direction="row" alignItems="center" gap={3}>
-          <SelectRole userRole={role || 10} setRole={(role) => setRole(role as RoleTypes)} variant="filled" noAdmin />
-          <RoomField onChange={(updates) => setRooms(updates)} />
+          <SelectRole userRole={role} onChange={(role) => setRole(role as RoleTypes)} variant="filled" noAdmin />
+          <RoomField selected={rooms} onChange={(updates) => setRooms(updates)} />
         </Stack>
         <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
       </Stack>

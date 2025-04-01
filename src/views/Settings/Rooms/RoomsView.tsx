@@ -80,12 +80,12 @@ const RoomsView: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.rooms'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.rooms'), '']] });
     fetchRooms();
   }, [fetchRooms]);
 
   return (
-    <Stack width="100%" height="100%" py={2}>
+    <Stack width="100%" height="100%" pt={2}>
       <Stack pl={2}>
         <FilterBar
           fields={FILTER}

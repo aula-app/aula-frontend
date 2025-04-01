@@ -60,7 +60,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
 
     // update existing role if it exists
     const existingIndex = updateRoles.findIndex((r) => r.room === room);
-    if (existingIndex !== -1) {
+    if (existingIndex > -1) {
       const updatedRoles = [...updateRoles];
       updatedRoles[existingIndex].role = role;
       setUpdateRoles(updatedRoles);
@@ -104,18 +104,20 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
         {error && <Typography>{t(error)}</Typography>}
         <List sx={{ maxHeight: 300, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
           {schoolRooms.map((room) => {
-            const currentRole =
-              updateRoles.find((role) => role.room === room.hash_id)?.role ||
-              userRoles.find((role) => role.room === room.hash_id)?.role ||
-              (room.type === 1 && defaultLevel) ||
-              10;
+            const currentRole = !!updateRoles.find((role) => role.room === room.hash_id)
+              ? updateRoles.find((role) => role.room === room.hash_id)?.role
+              : !!userRoles.find((role) => role.room === room.hash_id)
+                ? userRoles.find((role) => role.room === room.hash_id)?.role
+                : room.type === 1
+                  ? defaultLevel
+                  : 0;
             return (
               <ListItemButton key={room.hash_id} sx={{ py: 0, order: room.type === 1 ? 0 : 1 }}>
                 <ListItem
                   secondaryAction={
                     <SelectRole
-                      userRole={currentRole}
-                      setRole={(role) => handleUpdate(room.hash_id, role)}
+                      userRole={currentRole as RoleTypes | 0}
+                      onChange={(role) => handleUpdate(room.hash_id, role)}
                       size="small"
                       noAdmin
                       noRoom={room.type !== 1}
