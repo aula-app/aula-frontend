@@ -414,13 +414,14 @@
       "sum_likes": "Gesamtanzahl der Likes",
       "sum_votes": "Gesamtanzahl der Stimmen",
       "target_group": "Zielgruppe",
-      "target_id": "Ziel",
+      "target_id": "Zielbenutzer",
       "temp_pw": "Temporäres Passwort",
       "title": "Titel",
       "trustee_id": "Treuhänder",
       "type": "Typ",
       "updater_id": "Zuletzt aktualisiert von",
       "user_id": "Benutzer",
+      "user_hash_id": "Zielbenutzer",
       "user_needs_to_consent": "Zustimmung erforderlich",
       "userlevel": "Benutzer-Rolle",
       "username": "Benutzername",
@@ -446,7 +447,8 @@
       "create": "{{var}} erstellt",
       "notUpdated": "{{var}} nicht aktualisiert",
       "update": "{{var}} aktualisieren",
-      "updated": "{{var}} aktualisiert"
+      "updated": "{{var}} aktualisiert",
+      "to": "An"
     },
     "panels": {
       "action": "Geplante Aktionen",
@@ -500,6 +502,7 @@
       "all": "Alle",
       "and": "und",
       "back": "Zurück",
+      "dismiss": "Schließen",
       "from": "von",
       "next": "nächste",
       "no": "Nein",

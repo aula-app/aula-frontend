@@ -13,7 +13,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-svg {
+.app-icon svg {
   stroke: currentColor;
 }
 

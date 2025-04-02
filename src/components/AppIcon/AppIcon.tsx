@@ -467,6 +467,7 @@ const AppIcon: React.FC<Props> = ({ icon, size = 'medium', sx, ...restOfProps })
     <Stack
       alignItems="center"
       justifyContent="center"
+      className="app-icon"
       sx={{
         fontSize: currentSize,
         minWidth: currentSize,

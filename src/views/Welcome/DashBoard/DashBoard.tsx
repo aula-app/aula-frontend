@@ -1,10 +1,7 @@
 import AppIcon from '@/components/AppIcon';
-import AppIconButton from '@/components/AppIconButton';
-import { getDashboard, getUpdates } from '@/services/dashboard';
-import { getMessages } from '@/services/messages';
-import { getAnnouncements } from '@/services/announcements';
+import { getDashboard } from '@/services/dashboard';
 import { dashboardPhases } from '@/utils';
-import { Badge, Box, Button, Collapse, Skeleton, Stack, Typography } from '@mui/material';
+import { Box, Button, Collapse, Skeleton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,29 +13,11 @@ const DashBoard = ({ show = true }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [count, setCount] = useState<Record<number, number>>();
-  const [reports, setReports] = useState<number>();
-  const [messages, setMessages] = useState<number>();
-  const [likes, setLikes] = useState<number>();
   const [isShowing, setShowing] = useState(show);
 
   const fetchDashboard = async () => {
     const response = await getDashboard();
     if (!response.error && response.data) setCount(response.data.phase_counts);
-  };
-  const fetchUpdates = async () => {
-    const response = await getUpdates();
-    if (!response.error && typeof response.count === 'number') setLikes(response.count);
-  };
-  const fetchMessages = async () => {
-    const response = await getMessages();
-    if (!response.error) setMessages(response.data?.length || 0);
-  };
-  const fetchTexts = async () => {
-    const response = await getAnnouncements({
-      offset: 0,
-      limit: 0,
-    });
-    if (!response.error) setReports(response.data?.length || 0);
   };
 
   useEffect(() => {
@@ -47,9 +26,6 @@ const DashBoard = ({ show = true }) => {
 
   useEffect(() => {
     fetchDashboard();
-    fetchUpdates();
-    fetchMessages();
-    fetchTexts();
   }, []);
 
   return (
@@ -75,20 +51,6 @@ const DashBoard = ({ show = true }) => {
               }}
             />
           </Button>
-          {typeof messages === 'number' && typeof reports === 'number' ? (
-            <Badge badgeContent={messages + reports} color="primary">
-              <AppIconButton icon="message" to="/messages" sx={{ p: 0 }} />
-            </Badge>
-          ) : (
-            <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />
-          )}
-          {typeof likes === 'number' ? (
-            <Badge badgeContent={likes} color="primary" sx={{ mx: 1 }}>
-              <AppIconButton icon="heart" to="/updates" sx={{ p: 0 }} />
-            </Badge>
-          ) : (
-            <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />
-          )}
         </Stack>
         <Collapse in={isShowing} sx={{ width: '100%' }}>
           <Grid container spacing={1} p={1}>

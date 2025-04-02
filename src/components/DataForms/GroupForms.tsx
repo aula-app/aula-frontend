@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { MarkdownEditor, StatusField } from '../DataFields';
+import UsersField from '../DataFields/UsersField';
 
 /**
  * GroupForms component is used to create or edit an idea.
@@ -94,7 +95,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h1">
               {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
-                var: t(`scopes.categories.name`).toLowerCase(),
+                var: t(`scopes.groups.name`).toLowerCase(),
               })}
             </Typography>
             {checkPermissions('groups', 'status') && <StatusField control={control} />}
@@ -111,6 +112,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
               disabled={isLoading}
             />
             {/* content */}
+            <UsersField defaultValues={[]} onChange={() => {}} disabled={isLoading} />
             <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>

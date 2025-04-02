@@ -1,7 +1,6 @@
 import { getCategories } from '@/services/categories';
-import { SelectOptionsType, UpdateType } from '@/types/SettingsTypes';
-import { Autocomplete, BaseTextFieldProps, Box, Chip, CircularProgress, TextField } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { Autocomplete, BaseTextFieldProps, CircularProgress, TextField } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIcon from '../AppIcon';
 import { IconType } from '../AppIcon/AppIcon';

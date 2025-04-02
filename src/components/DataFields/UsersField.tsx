@@ -14,7 +14,7 @@ interface Props extends BaseTextFieldProps {
  * Renders "UserField" component
  */
 
-const UserField: React.FC<Props> = ({ defaultValues, onChange, disabled = false, ...restOfProps }) => {
+const UsersField: React.FC<Props> = ({ defaultValues, onChange, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -87,4 +87,4 @@ const UserField: React.FC<Props> = ({ defaultValues, onChange, disabled = false,
   );
 };
 
-export default UserField;
+export default UsersField;
