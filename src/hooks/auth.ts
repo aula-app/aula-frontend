@@ -54,47 +54,28 @@ export function useIsAuthenticated() {
   // Verify token exists and is valid
   const token = localStorageGet('token');
 
-  useEffect(() => {
-    if (!token) {
-      // No token, user should be logged out
-      logout();
-      return;
-    }
+  if (!token) return false;
 
-    const payload = parseJwt(token);
-    // Check if token is valid and not expired
-    if (payload && payload.exp) {
-      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+  const payload = parseJwt(token);
+  console.log(payload);
+  // Check if token is valid and not expired
+  if (payload && typeof payload.exp === 'number') {
+    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
 
-      // If token is expired, try to refresh it
-      if (payload.exp !== 0 && payload.exp <= currentTime) {
-        refreshToken().then((success) => {
-          if (!success) {
-            // If refresh failed, log out the user
-            logout();
-          }
-        });
-      }
-    } else {
-      // Invalid token payload, log out
-      logout();
+    // If token is expired, try to refresh it
+    if (payload.exp !== 0 && payload.exp <= currentTime) {
+      refreshToken().then((success) => {
+        if (!success) {
+          // If refresh failed, log out the user
+          return false;
+        }
+      });
     }
-  }, [token, logout]);
-
-  if (token) {
-    const payload = parseJwt(token);
-    // Check if token is valid and not expired
-    if (payload && payload.exp) {
-      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-      result = payload.exp === 0 || payload.exp > currentTime;
-    } else {
-      result = false;
-    }
+    return true;
   } else {
-    result = false;
+    // Invalid token payload, log out
+    return false;
   }
-
-  return result;
 }
 
 export async function useIsOnline(): Promise<boolean> {
