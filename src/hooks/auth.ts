@@ -18,9 +18,9 @@ export function useIsAuthenticated() {
   if (token) {
     const payload = parseJwt(token);
     // Check if token is valid and not expired
-    if (payload && payload.exp) {
+    if (payload && typeof payload.exp === 'number') {
       const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-      result = payload.exp > currentTime;
+      result = payload.exp === 0 || payload.exp > currentTime;
     } else {
       result = false;
     }
