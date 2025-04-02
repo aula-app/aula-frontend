@@ -17,8 +17,8 @@ export interface RequestObject {
   arguments: ObjectPropByName;
 }
 
-export interface GenericResponse {
-  data: any;
+export interface GenericResponse<T = unknown> {
+  data: T | null;
   count: number | null;
   error: string | null;
 }
@@ -68,12 +68,12 @@ export interface GenericListRequest {
  *   - The response indicates failure (success: false)
  */
 
-export const baseRequest = async (
+export const baseRequest = async <T = unknown>(
   url: string,
   data: ObjectPropByName,
   isJson: boolean = true,
   tmp_token?: string
-): Promise<GenericResponse> => {
+): Promise<GenericResponse<T>> => {
   const api_url = localStorageGet('api_url');
   const jwt_token = tmp_token || localStorageGet('token');
   const headers = {} as { 'Content-Type': string; Authorization?: string };
@@ -102,8 +102,7 @@ export const baseRequest = async (
       body: requestBody,
     };
 
-    /* @ts-ignore */
-    const request = await fetch(`${api_url}${url}`, requestData);
+    const request = await fetch(`${api_url}${url}`, requestData as RequestInit);
 
     const response = await request.json();
 
@@ -117,12 +116,20 @@ export const baseRequest = async (
       const new_jwt = await request.json();
 
       localStorage.setItem('token', new_jwt['JWT']);
-      window.location.reload();
-      // TODO: Make reload the page
+
+      // Dispatch a custom event that React components can listen to
+      const tokenRefreshEvent = new CustomEvent('token-refreshed', {
+        detail: { token: new_jwt['JWT'] },
+      });
+      window.dispatchEvent(tokenRefreshEvent);
+
+      // Retry the original request with the new token
+      return baseRequest<T>(url, data, isJson, new_jwt['JWT']);
     }
 
+    // Handle offline mode
     if ('online_mode' in response && response.online_mode === 0) {
-      if (window.location.pathname !== '/offline') window.location.href = '/offline';
+      redirectToOfflinePage();
     }
 
     if (response.error) {
@@ -142,11 +149,12 @@ export const baseRequest = async (
     }
 
     return {
-      data: response.JWT ? response.JWT : response.data,
+      data: (response.JWT ? response.JWT : response.data) as T,
       count: response.count,
       error: null,
     };
   } catch (e) {
+    console.error('API request error:', e);
     return {
       data: null,
       count: null,
@@ -155,7 +163,19 @@ export const baseRequest = async (
   }
 };
 
-export const databaseRequest = async (data: RequestObject, userId = [] as string[]) => {
+/**
+ * Redirects to the offline page if not already there
+ */
+const redirectToOfflinePage = (): void => {
+  if (window.location.pathname !== '/offline') {
+    window.location.href = '/offline';
+  }
+};
+
+export const databaseRequest = async <T = unknown>(
+  data: RequestObject,
+  userId = [] as string[]
+): Promise<GenericResponse<T>> => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
 
@@ -165,5 +185,5 @@ export const databaseRequest = async (data: RequestObject, userId = [] as string
     });
   }
 
-  return baseRequest(`/api/controllers/model.php?${data.method}`, data);
+  return baseRequest<T>(`/api/controllers/model.php?${data.method}`, data);
 };

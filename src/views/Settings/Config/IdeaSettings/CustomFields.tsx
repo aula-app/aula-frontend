@@ -42,7 +42,7 @@ const CustomFields = ({ onReload }: Props) => {
       method: 'getCustomfields',
       arguments: {},
     }).then((response) => {
-      if (response.data) setFields(response.data);
+      if (response.data) setFields(response.data as CustomFieldsNameType);
     });
   }
 
