@@ -1,6 +1,6 @@
 import AppIconButton from '@/components/AppIconButton';
 import { getAnnouncements } from '@/services/announcements';
-import { getMessages } from '@/services/messages';
+import { getPersonalMessages } from '@/services/messages';
 import { Badge, IconButtonProps, Skeleton } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -11,7 +11,7 @@ const MessagesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
   const [reports, setReports] = useState<number>();
 
   const fetchMessages = async () => {
-    const response = await getMessages();
+    const response = await getPersonalMessages();
     if (!response.error) setMessages(response.data?.length || 0);
   };
 
