@@ -24,7 +24,7 @@ const UpdatesView = () => {
 
   const fetchUpdates = useCallback(async () => {
     setLoading(true);
-    const response = await getUpdates();
+    const response = await getUpdates(false);
     if (response.error) setError(response.error);
     if (!response.error && response.data) setUpdates(response.data);
     setLoading(false);
