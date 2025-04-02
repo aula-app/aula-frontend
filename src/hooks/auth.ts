@@ -47,10 +47,6 @@ export async function refreshToken(): Promise<boolean> {
  * @returns {boolean} true if user is authenticated, false otherwise
  */
 export function useIsAuthenticated() {
-  const [state] = useAppStore();
-  const logout = useEventLogout();
-  let result = state.isAuthenticated;
-
   // Verify token exists and is valid
   const token = localStorageGet('token');
 
