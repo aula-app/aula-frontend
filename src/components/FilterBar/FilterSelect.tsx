@@ -40,6 +40,7 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
     <Stack direction="row" alignItems="center" gap={1}>
       <TextField
         select
+        id="filter-select-1"
         label={t('actions.filter')}
         value={key}
         onChange={handleKeyChange}
@@ -54,8 +55,10 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
           </MenuItem>
         ))}
       </TextField>
+
       <FilledInput
         size="small"
+        id="filter-select-2"
         onChange={handleFilterChange}
         value={filterValue}
         disabled={key === ''}

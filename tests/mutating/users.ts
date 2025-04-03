@@ -1,6 +1,7 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../shared';
 import * as users from '../fixtures/users';
+import { sleep } from '../utils';
 
 const host = shared.getHost();
 
@@ -26,12 +27,23 @@ export const create = async (page: Page, data: users.UserData): Promise<TempPass
   // submit the form
   await page.getByRole('button', { name: 'Bestätigen' }).click();
 
-  // ok so this is hilariously how we get the filter button.  will break some day.  hope you got aria-roles by then
-  const FilterButton = page.locator('h1 + div > button');
+  // now we need to copy the temporary password out so the new user
+  //  can log in with it.
+  //  because users are hidden behind pagination, we use the admin
+  //  filters to search for the user on the user page.
 
+  // open the filter menu:
+  const FilterButton = page.locator('[aria-label="button-open-filters"]');
   await expect(FilterButton).toBeVisible();
-
   await FilterButton.click();
+
+  // select "username" from the "filter by" dropdown
+
+  await page.locator('#filter-select-1').click();
+  await page.getByRole('option', { name: 'Benutzername' }).click();
+
+  // filter by our user name
+  await page.fill('#filter-select-2', data.username);
 
   // find the new user in the user table
   const row = page.locator('table tr').filter({ hasText: data.username });
