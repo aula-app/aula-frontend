@@ -8,6 +8,7 @@ import { ReactNode, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../config';
+import UserInfo from '@/components/UserInfo';
 
 // Paths that should be excluded from breadcrumbs
 const EXCLUDED_PATHS = ['welcome', 'phase', 'settings'];
@@ -73,6 +74,8 @@ const TopBar: React.FC = () => {
             <AppIconButton icon="back" onClick={() => goto(getReturnPath())} />
           )}
         </Box>
+
+        <UserInfo />
 
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs aria-label="breadcrumb" sx={{ flexGrow: 1, textAlign: 'center' }}>
