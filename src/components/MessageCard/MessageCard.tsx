@@ -64,7 +64,7 @@ const MessageCard: React.FC<Props> = ({ type }) => {
   ) : (
     <>
       {messages.length > 0 && (
-        <Stack>
+        <Stack gap={2}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="h3" py={2} display="flex" alignItems="center">
               <AppIcon icon={type} sx={{ mr: 1 }} /> {t(`scopes.${type}.plural`)}
