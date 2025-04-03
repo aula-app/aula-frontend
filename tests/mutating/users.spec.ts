@@ -23,6 +23,7 @@ test.describe('Multi-user test with separate browser contexts', () => {
     // Admin should create the new users of varying permission levels
     console.info('creating alice...');
     const alicesTempPass = await users.create(browsers.admin, fixtures.alice);
+
     console.info('creating bob...');
     const bobsTempPass = await users.create(browsers.admin, fixtures.bob);
     console.info('creating mallory...');
