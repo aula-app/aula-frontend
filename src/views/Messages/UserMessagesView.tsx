@@ -24,7 +24,6 @@ const UserMessagesView = () => {
         {t('scopes.messages.plural')}
       </Typography>
       <MessageCard type="messages" />
-      <MessageCard type="announcements" />
       {checkPermissions('requests', 'viewAll') && <MessageCard type="requests" />}
       {checkPermissions('reports', 'viewAll') && <MessageCard type="reports" />}
     </Stack>
