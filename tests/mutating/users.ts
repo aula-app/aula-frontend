@@ -69,11 +69,24 @@ export const remove = async (page: Page, data: users.UserData) => {
   // navigate to the users page:
   await page.locator('a[href="/settings/users"]').click();
 
+  // open the filter menu:
+  const FilterButton = page.locator('[aria-label="button-open-filters"]');
+  await expect(FilterButton).toBeVisible();
+  await FilterButton.click();
+
+  // select "username" from the "filter by" dropdown
+
+  await page.locator('#filter-select-1').click();
+  await page.getByRole('option', { name: 'Benutzername' }).click();
+
+  // filter by our user name
+  await page.fill('#filter-select-2', data.username);
+
   const row = page.locator('table tr').filter({ hasText: data.username });
 
   const checkbox = row.locator('input');
 
-  expect(checkbox).toBeDefined();
+  await expect(checkbox).toBeVisible();
 
   await checkbox.check();
 
