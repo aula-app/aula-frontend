@@ -1,7 +1,7 @@
 import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
 import { sleep } from '../utils';
 import * as shared from '../shared';
-import * as users from './users';
+import * as users from './page_interactions/users';
 import * as fixtures from '../fixtures/users';
 import * as browsers from './browsers';
 
@@ -23,7 +23,6 @@ test.describe('Multi-user test with separate browser contexts', () => {
     // Admin should create the new users of varying permission levels
     console.info('creating alice...');
     const alicesTempPass = await users.create(browsers.admin, fixtures.alice);
-
     console.info('creating bob...');
     const bobsTempPass = await users.create(browsers.admin, fixtures.bob);
     console.info('creating mallory...');
