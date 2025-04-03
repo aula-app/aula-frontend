@@ -1,5 +1,13 @@
-import { addGroup, editGroup, GroupArguments } from '@/services/groups';
+import {
+  addGroup,
+  addUserToGroup,
+  editGroup,
+  getGroupUsers,
+  GroupArguments,
+  removeUserFromGroup,
+} from '@/services/groups';
 import { GroupType } from '@/types/Scopes';
+import { UpdateType } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
@@ -25,6 +33,8 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [userUpdates, setUserUpdates] = useState<UpdateType>({ add: [], remove: [] });
+  const [existingUsers, setExistingUsers] = useState<string[]>([]);
 
   const schema = yup.object({
     group_name: yup.string().required(t('forms.validation.required')),
@@ -69,6 +79,11 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
       status: data.status,
     });
     if (request.error || !request.data) return;
+
+    // Add selected users to the newly created group
+    const groupId = request.data.id;
+    await Promise.all(userUpdates.add.map((userId) => addUserToGroup({ user_id: userId, group_id: groupId })));
+
     onClose();
   };
 
@@ -81,10 +96,39 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
       status: data.status,
     });
     if (request.error) return;
+
+    // Update users in the group
+    const groupId = defaultValues.id;
+
+    // Remove users
+    await Promise.all(userUpdates.remove.map((userId) => removeUserFromGroup({ user_id: userId, group_id: groupId })));
+
+    // Add users
+    await Promise.all(userUpdates.add.map((userId) => addUserToGroup({ user_id: userId, group_id: groupId })));
+
     onClose();
   };
 
+  // Fetch existing users when editing a group
   useEffect(() => {
+    const fetchGroupUsers = async () => {
+      if (defaultValues?.id) {
+        try {
+          setIsLoading(true);
+          const response = await getGroupUsers(defaultValues.id);
+          if (response.data) {
+            const userIds = response.data.map((user) => user.hash_id);
+            setExistingUsers(userIds);
+          }
+        } catch (error) {
+          console.error('Error fetching group users:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchGroupUsers();
     reset({ ...defaultValues });
   }, [JSON.stringify(defaultValues)]);
 
@@ -112,7 +156,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
               disabled={isLoading}
             />
             {/* content */}
-            <UsersField defaultValues={[]} onChange={() => {}} disabled={isLoading} />
+            <UsersField defaultValues={existingUsers} onChange={setUserUpdates} disabled={isLoading} />
             <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>

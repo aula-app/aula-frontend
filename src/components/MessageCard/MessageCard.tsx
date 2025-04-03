@@ -64,13 +64,13 @@ const MessageCard: React.FC<Props> = ({ type }) => {
   ) : (
     <>
       {messages.length > 0 && (
-        <Stack gap={2}>
+        <Stack gap={1}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="h3" py={2} display="flex" alignItems="center">
               <AppIcon icon={type} sx={{ mr: 1 }} /> {t(`scopes.${type}.plural`)}
             </Typography>
-            <AppIconButton icon="filter" onClick={() => setOpenMessagesFilter(!openMessagesFilter)} />
           </Stack>
+          {/* <AppIconButton icon="filter" onClick={() => setOpenMessagesFilter(!openMessagesFilter)} />
           <FilterBar
             scope={type}
             onStatusChange={(newStatus) => setStatus(newStatus)}
@@ -78,7 +78,7 @@ const MessageCard: React.FC<Props> = ({ type }) => {
               setSearchField(field);
               setSearchText(text);
             }}
-          />
+          /> */}
           {messages.map((message) => {
             const variant = message.headline.substring(0, 3) === 'Bug' ? 'bugs' : type;
             return (
@@ -90,7 +90,6 @@ const MessageCard: React.FC<Props> = ({ type }) => {
                 borderRadius={5}
                 p={1}
                 pl={2}
-                mb={1}
                 to={`/${type}/${message.hash_id}`}
                 bgcolor={`${variant}.main`}
               >

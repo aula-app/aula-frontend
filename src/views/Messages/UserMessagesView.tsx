@@ -20,9 +20,6 @@ const UserMessagesView = () => {
 
   return (
     <Stack p={2} sx={{ overflowY: 'auto' }}>
-      <Typography variant="h2" py={2}>
-        {t('scopes.messages.plural')}
-      </Typography>
       <MessageCard type="messages" />
       {checkPermissions('requests', 'viewAll') && <MessageCard type="requests" />}
       {checkPermissions('reports', 'viewAll') && <MessageCard type="reports" />}

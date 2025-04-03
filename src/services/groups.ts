@@ -1,4 +1,4 @@
-import { GroupType } from '@/types/Scopes';
+import { GroupType, UserType } from '@/types/Scopes';
 import { databaseRequest, GenericListRequest, GenericResponse } from './requests';
 
 /**
@@ -108,4 +108,52 @@ export async function deleteGroup(group_id: number): Promise<GenericResponse> {
   );
 
   return response as GenericResponse;
+}
+
+/**
+ * Adds a user to a group
+ */
+export interface AddUserToGroupArguments {
+  user_id: string;
+  group_id: number;
+}
+
+export async function addUserToGroup(args: AddUserToGroupArguments): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'addUserToGroup',
+      arguments: args,
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
+
+export async function removeUserFromGroup(args: AddUserToGroupArguments): Promise<GenericResponse> {
+  const response = await databaseRequest({
+    model: 'User',
+    method: 'removeUserFromGroup',
+    arguments: args,
+  });
+
+  return response as GenericResponse;
+}
+
+/**
+ * Get users in a group
+ */
+interface GetGroupUsersResponse extends GenericResponse {
+  data: UserType[] | null;
+}
+
+export async function getGroupUsers(group_id: number): Promise<GetGroupUsersResponse> {
+  const response = await databaseRequest({
+    model: 'Group',
+    method: 'getUsersInGroup',
+    arguments: { group_id },
+  });
+
+  return response as GetGroupUsersResponse;
 }
