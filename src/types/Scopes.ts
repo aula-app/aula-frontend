@@ -105,6 +105,7 @@ export interface IdeaType {
 export interface MessageType {
   id: number;
   hash_id: string;
+  user_hash_id: string;
   creator_id: number;
   headline: string;
   body: string;
@@ -115,11 +116,11 @@ export interface MessageType {
   last_update: string;
   updater_id: number;
   status: StatusTypes;
-  target_group: number;
-  target_id: number;
+  target_group: number | null;
+  target_id: string | null;
   only_on_dashboard: number;
   level_of_detail: number;
-  msg_type: number;
+  msg_type: 0 | 1 | 2 | 3 | 4 | 5;
   room_id: number;
   pin_to_top: number;
 }

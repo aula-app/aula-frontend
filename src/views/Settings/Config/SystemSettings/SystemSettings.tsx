@@ -16,7 +16,7 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { TransitionProps } from 'notistack';
+import { SlideProps } from '@mui/material/Slide';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -33,7 +33,7 @@ const languageMarkdownMap = {
 
 // Dialog trasition
 const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
+  props: SlideProps & {
     children: React.ReactElement<unknown>;
   },
   ref: React.Ref<unknown>
@@ -65,8 +65,8 @@ const SystemSettings = ({ settings, onReload }: Props) => {
 
   const getBackup = async () => {
     const response = await createBackup();
-    if (!response.data || !response.data) return;
-    triggerSqlDumpDownload(response.data);
+    if (!response.data) return;
+    triggerSqlDumpDownload(response.data as string[]);
   };
 
   const triggerSqlDumpDownload = (sqlDumpLines: string[]) => {
@@ -99,7 +99,10 @@ const SystemSettings = ({ settings, onReload }: Props) => {
   }, [settings?.online_mode]);
 
   useEffect(() => {
-    setOnlineMode();
+    const updateOnlineMode = async () => {
+      await setOnlineMode();
+    };
+    updateOnlineMode();
   }, [status]);
 
   return (

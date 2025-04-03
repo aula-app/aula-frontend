@@ -10,7 +10,7 @@ import { checkPermissions } from '@/utils';
  * url: /messages
  */
 
-const MessagesView = () => {
+const UserMessagesView = () => {
   const { t } = useTranslation();
   const [appState, dispatch] = useAppStore();
 
@@ -31,4 +31,4 @@ const MessagesView = () => {
   );
 };
 
-export default MessagesView;
+export default UserMessagesView;

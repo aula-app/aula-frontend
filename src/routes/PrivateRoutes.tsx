@@ -5,7 +5,7 @@ import { NotFoundView } from '@/views';
 import AboutView from '@/views/About';
 import IdeaView from '@/views/Idea';
 import IdeasBoxView from '@/views/IdeasBox';
-import MessagesView from '@/views/Messages';
+import UserMessagesView from '@/views/Messages';
 import AnnouncementView from '@/views/Messages/Announcement';
 import MessageView from '@/views/Messages/Message';
 import ReportView from '@/views/Messages/Report';
@@ -17,6 +17,7 @@ import AnnouncementsView from '@/views/Settings/Announcements';
 import BoxesView from '@/views/Settings/Boxes';
 import ConfigView from '@/views/Settings/Config';
 import IdeasView from '@/views/Settings/Ideas';
+import MessagesView from '@/views/Settings/Messages';
 import { UserProfileView } from '@/views/Settings/Profile';
 import ReportsView from '@/views/Settings/Reports';
 import RequestsView from '@/views/Settings/Requests';
@@ -49,13 +50,13 @@ const PrivateRoutes = () => {
     <Routes>
       <Route path="/" element={<WelcomeView />} />
       <Route path="about" element={<AboutView />} />
-      <Route path="announcements" element={<MessagesView />} />
+      <Route path="announcements" element={<UserMessagesView />} />
       <Route path="announcements/:announcement_id" element={<AnnouncementView />} />
-      <Route path="messages" element={<MessagesView />} />
+      <Route path="messages" element={<UserMessagesView />} />
       <Route path="messages/:message_id" element={<MessageView />} />
-      <Route path="reports" element={<MessagesView />} />
+      <Route path="reports" element={<UserMessagesView />} />
       <Route path="reports/:report_id" element={<ReportView />} />
-      <Route path="requests" element={<MessagesView />} />
+      <Route path="requests" element={<UserMessagesView />} />
       <Route path="requests/:report_id" element={<ReportView />} />
       <Route path="phase/:phase" element={<PhasesView />} />
       <Route path="room/:room_id/phase/:phase" element={<RoomView />}>
@@ -68,6 +69,7 @@ const PrivateRoutes = () => {
       <Route path="settings/boxes" element={<BoxesView />} />
       <Route path="settings/configuration" element={<ConfigView />} />
       <Route path="settings/ideas" element={<IdeasView />} />
+      <Route path="settings/messages" element={<MessagesView />} />
       <Route path="settings/profile" element={<UserProfileView />} />
       <Route path="settings/reports" element={<ReportsView />} />
       <Route path="settings/requests" element={<RequestsView />} />

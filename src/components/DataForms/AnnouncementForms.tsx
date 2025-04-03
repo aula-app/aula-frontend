@@ -1,5 +1,5 @@
 import { addAnnouncement, AnnouncementArguments, editAnnouncement } from '@/services/announcements';
-import { AnnouncementType } from '@/types/Scopes';
+import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
@@ -17,7 +17,7 @@ import { ConsentField, MarkdownEditor, StatusField } from '../DataFields';
 
 interface AnnouncementFormsProps {
   onClose: () => void;
-  defaultValues?: AnnouncementType;
+  defaultValues?: AnnouncementType | MessageType;
 }
 
 const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, onClose }) => {
@@ -31,6 +31,8 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     user_needs_to_consent: yup.number(),
     consent_text: yup.string(),
     status: yup.number(),
+    target_group: yup.number(),
+    target_id: yup.number(),
   } as Record<keyof AnnouncementArguments, any>);
 
   const {
@@ -116,7 +118,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
             <Button onClick={onClose} color="error">
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="contained" disabled={isLoading}>
               {t('actions.confirm')}
             </Button>
           </Stack>

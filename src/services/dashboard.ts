@@ -1,7 +1,6 @@
-import { CommentType, VoteType } from '@/types/Scopes';
-import { databaseRequest, GenericResponse } from './requests';
 import { DefaultUpdate } from '@/types/Generics';
 import { GetIdeasResponse } from './ideas';
+import { databaseRequest, GenericResponse } from './requests';
 
 /**
  * Fetches dashboard data for the current user
@@ -48,12 +47,14 @@ interface GetUpdatesResponse extends GenericResponse {
   data: UpdateResponse | null;
 }
 
-export const getUpdates = async (): Promise<GetUpdatesResponse> => {
+export const getUpdates = async (just_count = true): Promise<GetUpdatesResponse> => {
   const response = await databaseRequest(
     {
       model: 'Idea',
       method: 'getUpdatesByUser',
-      arguments: {},
+      arguments: {
+        just_count,
+      },
     },
     ['user_id']
   );

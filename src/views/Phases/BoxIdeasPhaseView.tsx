@@ -4,7 +4,14 @@ import { IdeaForms } from '@/components/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { getBoxesByPhase } from '@/services/boxes';
-import { deleteIdea, editIdea, EditIdeaArguments, getIdeasByBox, IdeaArguments } from '@/services/ideas';
+import {
+  deleteIdea,
+  editIdea,
+  EditIdeaArguments,
+  getIdeasByBox,
+  getUserIdeasByPhase,
+  IdeaArguments,
+} from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { useAppStore } from '@/store/AppStore';
 import { Drawer, Stack, Typography } from '@mui/material';
@@ -34,15 +41,8 @@ const BoxIdeasPhaseView = () => {
   const fetchIdeas = useCallback(async () => {
     if (!phase) return;
     setLoading(true);
-    const boxes = await getBoxesByPhase(Number(phase));
+    const response = await getUserIdeasByPhase(Number(phase));
 
-    if (!boxes.data) {
-      setLoading(false);
-      return;
-    }
-
-    const responses = await Promise.all(boxes.data.map((box) => getIdeasByBox({ topic_id: box.hash_id })));
-    const response = responses.flat()[0];
     if (response.error) setError(response.error);
     if (!response.error) setIdeas(response.data || []);
     setLoading(false);

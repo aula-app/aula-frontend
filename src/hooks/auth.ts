@@ -1,5 +1,7 @@
 import { useAppStore } from '@/store';
 import { checkPermissions, databaseRequest, localStorageDelete, localStorageGet } from '@/utils';
+import { InstanceResponse } from '@/types/Generics';
+import { parseJwt } from '@/utils/jwt';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,25 +13,35 @@ export function useIsAuthenticated() {
   const [state] = useAppStore();
   let result = state.isAuthenticated;
 
-  // TODO: AUTH: add access token verification or other authentication check here
-  result = Boolean(localStorageGet('token'));
+  // Verify token exists and is valid
+  const token = localStorageGet('token');
+  if (token) {
+    const payload = parseJwt(token);
+
+    // Check if token is valid and not expired
+    if (payload && typeof payload.exp === 'number') {
+      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+      result = payload.exp === 0 || payload.exp > currentTime;
+    } else {
+      result = false;
+    }
+  } else {
+    result = false;
+  }
 
   return result;
 }
 
 export async function useIsOnline(): Promise<boolean> {
-  let isOnline = true;
-  await databaseRequest({
+  const response = await databaseRequest<InstanceResponse>({
     model: 'Settings',
     method: 'getInstanceSettings',
     arguments: {},
-  }).then((response) => {
-    if (!response.data) return false;
-    isOnline =
-      response.data['online_mode'] === 1 ||
-      (checkPermissions('system', 'access') && response.data['online_mode'] !== 5);
   });
-  return isOnline;
+
+  if (!response.data) return false;
+
+  return response.data.online_mode === 1 || (checkPermissions('system', 'access') && response.data.online_mode !== 5);
 }
 
 /**

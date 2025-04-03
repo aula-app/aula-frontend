@@ -72,9 +72,9 @@
     }
   },
   "consent": {
-    "alert": "Mandatory consent required",
-    "announcement": "Optional consent available",
-    "message": "No consent required"
+    "alert": "Mandatory consent",
+    "announcement": "Optional consent",
+    "message": "No consent"
   },
   "delegation": {
     "already": "Their vote is already delegated to you",
@@ -414,13 +414,14 @@
       "sum_likes": "Total Likes",
       "sum_votes": "Total Votes",
       "target_group": "Target Group",
-      "target_id": "Target",
+      "target_id": "Target User",
       "temp_pw": "Temporary Password",
       "title": "Title",
       "trustee_id": "Trustee",
       "type": "Type",
       "updater_id": "Last Updated By",
       "user_id": "User",
+      "user_hash_id": "Target User",
       "user_needs_to_consent": "Consent Required",
       "userlevel": "User level",
       "username": "User name",
@@ -446,7 +447,8 @@
       "create": "{{var}} created",
       "notUpdated": "{{var}} not updated",
       "update": "Update {{var}}",
-      "updated": "{{var}} updated"
+      "updated": "{{var}} updated",
+      "to": "To"
     },
     "panels": {
       "action": "Scheduled actions",
@@ -500,6 +502,7 @@
       "all": "All",
       "and": "and",
       "back": "Back",
+      "dismiss": "Dismiss",
       "from": "from",
       "next": "Next",
       "no": "No",
