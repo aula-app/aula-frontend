@@ -1,7 +1,6 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../shared';
 import * as users from '../fixtures/users';
-import { sleep } from '../utils';
 
 const host = shared.getHost();
 
@@ -82,16 +81,15 @@ export const remove = async (page: Page, data: users.UserData) => {
   // filter by our user name
   await page.fill('#filter-select-2', data.username);
 
+  // find the user's row in the table and select the checkbox for actions
+
   const row = page.locator('table tr').filter({ hasText: data.username });
-
   const checkbox = row.locator('input');
-
   await expect(checkbox).toBeVisible();
-
   await checkbox.check();
 
+  // click the remove use button
   const ButtonRemoveUser = page.getByRole('button', { name: 'Benutzer Entfernen' });
-
   expect(ButtonRemoveUser).toBeDefined();
 
   await ButtonRemoveUser.click();
@@ -102,7 +100,7 @@ export const remove = async (page: Page, data: users.UserData) => {
 
   await ButtonConfirmDelete.click();
 
-  // confirm the user does not show up
+  // confirm the user does not show up in the table list
   await expect(page.locator('table tr').filter({ hasText: data.username })).toHaveCount(0);
 };
 
