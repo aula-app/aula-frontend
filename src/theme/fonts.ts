@@ -7,6 +7,7 @@ const THEME_FONTS: ThemeOptions = {
   typography: {
     allVariants: {
       fontFamily: 'Vision',
+      color: 'hsl(236.17, 42%, 22%)',
     },
     body1: {
       fontFamily: 'Vision',
