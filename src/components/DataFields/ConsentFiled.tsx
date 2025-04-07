@@ -15,7 +15,7 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
   const { t } = useTranslation();
 
   const CONSENT_OPTIONS = [
-    { label: t('consent.message'), value: 0 },
+    // { label: t('consent.message'), value: 0 },
     { label: t('consent.announcement'), value: 1 },
     { label: t('consent.alert'), value: 2 },
   ];
@@ -31,7 +31,7 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
               name="user_needs_to_consent"
               control={control}
               options={CONSENT_OPTIONS}
-              defaultValue={0}
+              defaultValue={1}
               required
               sx={{ minWidth: 200, flex: 0 }}
             />
