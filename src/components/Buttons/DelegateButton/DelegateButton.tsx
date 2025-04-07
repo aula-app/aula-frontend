@@ -69,7 +69,7 @@ const DelegateButton: React.FC<Props> = ({ disabled = false, ...restOfProps }) =
           <Stack alignItems="end" mr={1}>
             {representing.length > 0 && (
               <Typography variant="caption" lineHeight={1}>
-                <Trans i18nKey={t('delegation.represent', { var: representing.length })} />
+                <Trans i18nKey={t('delegation.represent')} />
               </Typography>
             )}
             {((disabled && delegate) || !disabled) && (
