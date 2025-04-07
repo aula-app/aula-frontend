@@ -113,7 +113,7 @@ const IdeaView = () => {
 
   return !isLoading && idea ? (
     <Stack width="100%" height="100%" overflow="auto" gap={2}>
-      {phase === '30' && <VotingCard onReload={fetchIdea} />}
+      {phase === '30' && idea.approved > 0 && <VotingCard onReload={fetchIdea} />}
       {phase === '40' && <VotingResults idea={idea} onReload={fetchIdea} quorum={quorum} />}
       <IdeaBubble
         idea={idea}
@@ -121,14 +121,16 @@ const IdeaView = () => {
         onDelete={() => ideaDelete(idea.hash_id)}
         disabled={Number(phase) >= 20}
       >
-        <VotingQuorum
-          quorum={quorum}
-          phase={Number(phase) as RoomPhases}
-          votes={Number(phase) >= 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
-          users={Number(idea.number_of_users)}
-        />
+        {idea.approved > 0 && (
+          <VotingQuorum
+            quorum={quorum}
+            phase={Number(phase) as RoomPhases}
+            votes={Number(phase) >= 30 ? Number(idea.number_of_votes) : Number(idea.sum_likes)}
+            users={Number(idea.number_of_users)}
+          />
+        )}
       </IdeaBubble>
-      {Number(phase) === 20 && <ApprovalCard idea={idea} onReload={fetchIdea} />}
+      {Number(phase) >= 20 && <ApprovalCard idea={idea} onReload={fetchIdea} />}
       <Stack px={2}>
         <CommentView />
       </Stack>

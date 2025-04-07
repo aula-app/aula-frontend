@@ -164,23 +164,22 @@
   "phases": {
     "approval": "Prüfung",
     "discussion": "Diskussion",
-    "phase": "{{var}}-Phase",
+    "end": "Phase endet in {{var}} Tagen",
+    "ended": "Phase beendet",
+    "id-10": "{{var}} Ideen zur Diskussion",
+    "id-20": "{{var}} Ideen zur Prüfung",
+    "id-30": "{{var}} Ideen zur Abstimmung",
+    "id-40": "{{var}} Ideen in Ergebnisse",
     "name-0": "Wilde Ideen",
     "name-10": "Diskussion",
     "name-20": "Prüfung",
     "name-30": "Abstimmung",
     "name-40": "Ergebnisse",
+    "phase": "{{var}}-Phase",
+    "rejected": "{{var}} Ideen nicht genehmigt",
     "results": "Ergebnisse",
-    "status": {
-      "end": "Phase endet in {{var}} Tagen",
-      "ended": "Phase beendet"
-    },
     "voting": "Abstimmung",
-    "wild": "Wilde Ideen",
-    "id-10": "{{var}} Ideen zur Diskussion",
-    "id-20": "{{var}} Ideen zur Prüfung",
-    "id-30": "{{var}} Ideen zur Abstimmung",
-    "id-40": "{{var}} Ideen in Ergebnisse"
+    "wild": "Wilde Ideen"
   },
   "requests": {
     "accepted": "Deine Datenänderungsanfrage wurde akzeptiert.",

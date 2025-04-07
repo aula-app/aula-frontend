@@ -25,7 +25,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
   const location = useLocation();
   return (
     <Stack width="100%" sx={{ scrollSnapAlign: 'center' }}>
-      <ChatBubble disabled={disabled}>
+      <ChatBubble disabled={disabled} comment={idea.approved < 0}>
         <AppLink to={to} disabled={!to || disabled}>
           <Stack
             gap={1}
