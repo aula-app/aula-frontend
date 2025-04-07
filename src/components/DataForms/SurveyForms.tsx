@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { MarkdownEditor } from '../DataFields';
+import { getDefaultDurations } from '@/services/config';
 
 /**
  * SurveyForms component is used to create or edit an idea.
@@ -51,8 +52,14 @@ const SurveyForms: React.FC<SurveyFormsProps> = ({ onClose }) => {
   const getDefaultDuration = async () => {
     if (!room_id) return;
     const response = await getRoom(room_id);
-    if (!response.data) return;
-    setDefaultDuration(response.data.phase_duration_3);
+    if (response.data?.phase_duration_3) {
+      setDefaultDuration(response.data.phase_duration_3);
+      return;
+    }
+
+    getDefaultDurations().then((response) => {
+      if (response.data.length > 0) setDefaultDuration(response.data[3]);
+    });
   };
 
   const onSubmit = async (data: SchemaType) => {
