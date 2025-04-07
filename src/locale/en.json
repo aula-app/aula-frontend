@@ -554,7 +554,11 @@
     "for": "For",
     "neutral": "Neutral",
     "vote": "Vote",
-    "yourVote": "You voted {{var}}"
+    "yourVote": "You voted {{var}}",
+    "delegatedVoteWarning": {
+      "title": "Delegated Vote Warning",
+      "message": "If you vote on this idea, your vote will override your delegate's vote, but they can still vote for you on other ideas in this box."
+    }
   },
   "weekDays": {
     "friday": "Friday",

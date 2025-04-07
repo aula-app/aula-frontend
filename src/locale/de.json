@@ -554,7 +554,11 @@
     "for": "Dafür",
     "neutral": "Neutral",
     "vote": "Abstimmen",
-    "yourVote": "Sie haben gewählt {{var}}"
+    "yourVote": "Sie haben {{var}} abgestimmt",
+    "delegatedVoteWarning": {
+      "title": "Warnung zur delegierten Abstimmung",
+      "message": "Wenn Sie für diese Idee abstimmen, wird Ihre Stimme die Stimme Ihres Delegierten überschreiben, aber sie können weiterhin für Sie bei anderen Ideen in dieser Box abstimmen."
+    }
   },
   "weekDays": {
     "friday": "Freitag",
