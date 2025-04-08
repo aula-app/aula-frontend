@@ -8,7 +8,7 @@ import { deleteIdea, getIdeasByRoom } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -78,8 +78,34 @@ const WildIdeas = () => {
     fetchIdeas();
   };
 
+  const saveScroll = (evt: SyntheticEvent) => {
+    dispatch({ 
+      action: 'SAVE_SCROLL',
+      lastScroll: (evt.target as HTMLElement).scrollTop,
+      lastIdeaList: 'wild-ideas'
+    })
+  }
+
+  useEffect(() => {
+    let ideasList = document.getElementById("wild-ideas-list")
+    if (!!ideasList) {
+      console.log(appState)
+      if (appState.lastIdeaList == 'wild-ideas') {
+       ideasList.scrollTop = appState.lastScroll
+       console.log("SRCOCOO", ideasList, ideas)
+      }
+      else
+        dispatch({ 
+          action: 'SAVE_SCROLL',
+          lastScroll: 0,
+          lastIdeaList: 'wild-ideas'
+        })
+    }
+  }, [ideas])
+
+
   return (
-    <Stack alignItems="center" width="100%" spacing={2}>
+    <Stack id="wild-ideas-list" style={{overflowY: "scroll"}} onScroll={saveScroll} alignItems="center" width="100%" spacing={2} >
       {isLoading && <IdeaBubbleSkeleton />}
       {error && <Typography>{t(error)}</Typography>}
       {!isLoading &&
