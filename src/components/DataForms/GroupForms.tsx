@@ -78,11 +78,11 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
       description_public: data.description_public,
       status: data.status,
     });
-    if (request.error || !request.data) return;
+    if (request.error || typeof request.data !== 'number') return;
 
     // Add selected users to the newly created group
-    const groupId = request.data.id;
-    await Promise.all(userUpdates.add.map((userId) => addUserToGroup({ user_id: userId, group_id: groupId })));
+    const group_id = request.data;
+    await Promise.all(userUpdates.add.map((userId) => addUserToGroup({ user_id: userId, group_id: group_id })));
 
     onClose();
   };

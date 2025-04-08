@@ -58,7 +58,7 @@ export interface EditGroupArguments extends GroupArguments {
  */
 
 export interface AddResponse extends GenericResponse {
-  data: { id: number } | null;
+  data: number | null;
 }
 
 export async function addGroup(args: GroupArguments): Promise<AddResponse> {
