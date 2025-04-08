@@ -121,7 +121,7 @@ const IdeaView = () => {
         onDelete={() => ideaDelete(idea.hash_id)}
         disabled={Number(phase) >= 20}
       >
-        {idea.approved > 0 && (
+        {idea.approved >= 0 && (
           <VotingQuorum
             quorum={quorum}
             phase={Number(phase) as RoomPhases}
