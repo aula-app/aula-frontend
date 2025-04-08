@@ -43,7 +43,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { headline: defaultValues ? ' ' : '' },
+    defaultValues: { headline: defaultValues ? ' ' : '', user_needs_to_consent: 1 },
   });
 
   // Infer TypeScript type from the Yup schema

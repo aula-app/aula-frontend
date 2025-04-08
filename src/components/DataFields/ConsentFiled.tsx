@@ -28,30 +28,28 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
         <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)', ...sx }}>
           <Stack direction="row" gap={2}>
             <SelectField
-              name="user_needs_to_consent"
               control={control}
               options={CONSENT_OPTIONS}
               defaultValue={1}
               required
               sx={{ minWidth: 200, flex: 0 }}
+              {...field}
             />
-            {field.value > 0 && (
-              <Controller
-                name="consent_text"
-                control={control}
-                defaultValue={t('actions.agree')}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    label={t('settings.columns.consent_text')}
-                    error={!!fieldState.error}
-                    helperText={`${fieldState.error?.message || ''}`}
-                    required
-                    sx={{ flex: 1 }}
-                    {...field}
-                  />
-                )}
-              />
-            )}
+            <Controller
+              name="consent_text"
+              control={control}
+              defaultValue={t('actions.agree')}
+              render={({ field, fieldState }) => (
+                <TextField
+                  label={t('settings.columns.consent_text')}
+                  error={!!fieldState.error}
+                  helperText={`${fieldState.error?.message || ''}`}
+                  required
+                  sx={{ flex: 1 }}
+                  {...field}
+                />
+              )}
+            />
           </Stack>
         </FormControl>
       )}
