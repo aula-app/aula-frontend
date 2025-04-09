@@ -15,6 +15,7 @@ import RoomView from '@/views/Room';
 import RoomPhaseView from '@/views/Room/RoomPhaseView';
 import AnnouncementsView from '@/views/Settings/Announcements';
 import BoxesView from '@/views/Settings/Boxes';
+import BugsView from '@/views/Settings/Bugs';
 import ConfigView from '@/views/Settings/Config';
 import IdeasView from '@/views/Settings/Ideas';
 import MessagesView from '@/views/Settings/Messages';
@@ -54,9 +55,8 @@ const PrivateRoutes = () => {
       <Route path="announcements/:announcement_id" element={<AnnouncementView />} />
       <Route path="messages" element={<UserMessagesView />} />
       <Route path="messages/:message_id" element={<MessageView />} />
-      <Route path="reports" element={<UserMessagesView />} />
       <Route path="reports/:report_id" element={<ReportView />} />
-      <Route path="requests" element={<UserMessagesView />} />
+      <Route path="bugs/:report_id" element={<ReportView />} />
       <Route path="requests/:report_id" element={<ReportView />} />
       <Route path="phase/:phase" element={<PhasesView />} />
       <Route path="room/:room_id/phase/:phase" element={<RoomView />}>
@@ -72,6 +72,7 @@ const PrivateRoutes = () => {
       <Route path="settings/messages" element={<MessagesView />} />
       <Route path="settings/profile" element={<UserProfileView />} />
       <Route path="settings/reports" element={<ReportsView />} />
+      <Route path="settings/bugs" element={<BugsView />} />
       <Route path="settings/requests" element={<RequestsView />} />
       <Route path="settings/rooms" element={<RoomsView />} />
       <Route path="settings/users" element={<UsersView />} />

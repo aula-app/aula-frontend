@@ -34,7 +34,8 @@ const UserMessagesView = () => {
   }, []);
 
   return (
-    <Stack gap={1} mb={2} p={2} sx={{ overflowY: 'auto' }}>
+    <Stack gap={1} p={2} sx={{ overflowY: 'auto' }}>
+      <Typography variant="h1">{t('scopes.messages.plural')}</Typography>
       {
         <>
           {messages.map((message) => {
@@ -55,7 +56,7 @@ const UserMessagesView = () => {
                 borderRadius={5}
                 p={1}
                 pl={2}
-                to={`/messages/${message.hash_id}`}
+                to={`/${variant}/${message.hash_id}`}
                 bgcolor={`${variant}.main`}
               >
                 <AppIcon icon={variant} />

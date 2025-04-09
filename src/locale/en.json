@@ -298,6 +298,10 @@
       "name": "Survey",
       "plural": "Surveys"
     },
+    "updates": {
+      "name": "Update",
+      "plural": "Updates"
+    },
     "users": {
       "name": "User",
       "plural": "Users"
@@ -526,6 +530,7 @@
       "about": "About",
       "announcements": "Announcements",
       "boxes": "Boxes",
+      "bugs": "Bugs",
       "configuration": "Configuration",
       "dashboard": "Dashboard",
       "home": "Home",

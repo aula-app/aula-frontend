@@ -194,7 +194,7 @@ export async function deleteMessage(id: string): Promise<GenericResponse> {
  * Get a list of reports from the database.
  */
 
-const getSpecialMessages = async (args: FilterOptionsType, msg_type: 4 | 5): Promise<GetMessagesResponse> => {
+const getSpecialMessages = async (args: FilterOptionsType, msg_type: 4 | 5 | 6): Promise<GetMessagesResponse> => {
   const requestData = {
     msg_type,
     status: typeof args.status === 'number' ? args.status : 1,
@@ -211,6 +211,10 @@ const getSpecialMessages = async (args: FilterOptionsType, msg_type: 4 | 5): Pro
 
 export const getReports = async (args: FilterOptionsType): Promise<GetMessagesResponse> => {
   return getSpecialMessages(args, 4);
+};
+
+export const getBugs = async (args: FilterOptionsType): Promise<GetMessagesResponse> => {
+  return getSpecialMessages(args, 5);
 };
 
 /**
@@ -254,5 +258,5 @@ export const addBug = async (args: MessageArguments): Promise<GetMessagesRespons
  */
 
 export const getRequests = async (args: FilterOptionsType): Promise<GetMessagesResponse> => {
-  return getSpecialMessages(args, 5);
+  return getSpecialMessages(args, 6);
 };

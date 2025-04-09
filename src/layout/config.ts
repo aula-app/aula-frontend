@@ -68,6 +68,12 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
     permission: () => checkPermissions('reports', 'viewAll'),
   },
   {
+    title: 'bugs',
+    path: '/settings/bugs',
+    icon: 'bug',
+    permission: () => checkPermissions('reports', 'viewAll'),
+  },
+  {
     title: 'requests',
     path: '/settings/requests',
     icon: 'request',
