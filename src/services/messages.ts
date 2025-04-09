@@ -79,6 +79,19 @@ export const getPersonalMessages = async (): Promise<GetMessagesResponse> => {
   return response as GetMessagesResponse;
 };
 
+export const getAdminMessages = async (): Promise<GetMessagesResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: 'getAdminMessages',
+      arguments: {},
+    },
+    ['user_id']
+  );
+
+  return response as GetMessagesResponse;
+};
+
 export interface MessageArguments {
   headline?: string;
   body?: string;
@@ -101,7 +114,7 @@ export interface BugArguments {
  */
 
 interface AddMessageArguments extends MessageArguments {
-  msg_type?: 0 | 1 | 2 | 3 | 4 | 5;
+  msg_type?: number;
   target_id?: string | number | null;
   target_group?: string | number | null;
 }
@@ -211,6 +224,22 @@ export const addReport = async (args: MessageArguments): Promise<GetMessagesResp
       method: 'addMessage',
       arguments: {
         msg_type: 4,
+        ...args,
+      },
+    },
+    ['creator_id']
+  );
+
+  return response as GetMessagesResponse;
+};
+
+export const addBug = async (args: MessageArguments): Promise<GetMessagesResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: 'addMessage',
+      arguments: {
+        msg_type: 5,
         ...args,
       },
     },

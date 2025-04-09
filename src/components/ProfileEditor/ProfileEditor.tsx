@@ -76,6 +76,7 @@ const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
 
   const sendMessage = async (field: fieldOptions) => {
     await addMessage({
+      msg_type: 6,
       headline: `${t('requests.changeName.title', { var: user.realname })}: ${field.field}`,
       body: `
 ---
@@ -85,7 +86,6 @@ property: ${field.field}
 value: ${field.value}
 ---
 ${t('requests.changeName.body', { var: user.realname, old: user[field.field], new: field.value })}`,
-      msg_type: 5,
     }).then((response) => {
       if (response.error) {
         errorAlert(t(response.error), dispatch);

@@ -169,6 +169,7 @@ const ReportCard = ({ report, onReload }: Props) => {
 
   const sendMessage = async (message: string) =>
     await addMessage({
+      msg_type: 6,
       headline: report.headline,
       body: `
 ---
@@ -176,7 +177,6 @@ ${YAML.replace('type:', 'responseTo:')}
 ---
 ${message}`,
       target_id: report.creator_id,
-      msg_type: 5,
     });
 
   return (
