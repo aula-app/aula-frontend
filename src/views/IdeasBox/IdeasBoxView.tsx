@@ -209,22 +209,32 @@ const IdeasBoxView = () => {
               </Grid>
             )}
           </Grid>
-          {/* Render not approved ideas as inactive */}
-          <Stack direction="row" pt={3} px={1} alignItems="center">
-            <Typography variant="h3">
-              {box &&
-                t(`phases.rejected`, {
-                  var: ideas.filter((idea) => idea.approved < 0).length,
-                })}
-            </Typography>
-          </Stack>
-          <Grid container spacing={1} pt={1} pb={2}>
-            {ideas
-              .filter((idea) => idea.approved < 0)
-              .map((idea, key) => (
-                <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={key} disabled />
-              ))}
-          </Grid>
+          {ideas.filter((idea) => idea.approved < 0).length > 0 && (
+            <>
+              {/* Render not approved ideas as inactive */}
+              <Stack direction="row" pt={3} px={1} alignItems="center">
+                <Typography variant="h3">
+                  {box &&
+                    t(`phases.rejected`, {
+                      var: ideas.filter((idea) => idea.approved < 0).length,
+                    })}
+                </Typography>
+              </Stack>
+              <Grid container spacing={1} pt={1} pb={2}>
+                {ideas
+                  .filter((idea) => idea.approved < 0)
+                  .map((idea, key) => (
+                    <IdeaCard
+                      idea={idea}
+                      quorum={quorum}
+                      phase={Number(box.phase_id) as RoomPhases}
+                      key={key}
+                      disabled
+                    />
+                  ))}
+              </Grid>
+            </>
+          )}
         </>
       )}
       {checkPermissions('ideas', 'create') && Number(phase) < 20 && (
