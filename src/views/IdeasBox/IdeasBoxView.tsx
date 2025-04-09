@@ -140,27 +140,27 @@ const IdeasBoxView = () => {
   }, []);
 
   const saveScroll = (evt: SyntheticEvent) => {
-    dispatch({ 
+    dispatch({
       action: 'SAVE_SCROLL',
       lastScroll: (evt.target as HTMLElement).scrollTop,
-      lastIdeaList: 'box-ideas-' + phase
-    })
-  }
+      lastIdeaList: 'box-ideas-' + phase,
+    });
+  };
 
   useEffect(() => {
-    let ideasList = document.getElementById("box-ideas")
+    let ideasList = document.getElementById('box-ideas');
     if (!!ideasList) {
       if (appState.lastIdeaList == 'box-ideas-' + phase) {
-        ideasList.scrollTop = appState.lastScroll
+        ideasList.scrollTop = appState.lastScroll;
       }
     }
-  }, [box])
+  }, [box]);
 
   return (
     <Stack
       id="box-ideas"
-      style={{overflowY: "scroll"}}
-      onScroll={saveScroll} 
+      style={{ overflowY: 'scroll' }}
+      onScroll={saveScroll}
       height="100%"
       flexGrow={1}
       position="relative"
@@ -188,7 +188,7 @@ const IdeasBoxView = () => {
             <Typography variant="h3">
               {box &&
                 t(`phases.id-${box.phase_id}`, {
-                  var: ideas.filter((idea) => idea.approved > 0).length,
+                  var: ideas.filter((idea) => idea.approved >= 0).length,
                 })}
             </Typography>
             {Number(phase) === 30 && checkPermissions('ideas', 'vote') && (
@@ -199,7 +199,7 @@ const IdeasBoxView = () => {
           </Stack>
           <Grid container spacing={1} pt={1} pb={2}>
             {ideas
-              .filter((idea) => idea.approved > 0)
+              .filter((idea) => idea.approved >= 0)
               .map((idea, key) => (
                 <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={key} />
               ))}
