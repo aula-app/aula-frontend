@@ -33,7 +33,7 @@ const permissions = {
   },
   comments: {
     create: { role: USER_ROLES },
-    edit: { role: USER_ROLES, self: true },
+    edit: { role: 30, self: true },
     delete: { role: 30, self: true },
     status: { role: 40 },
   },
