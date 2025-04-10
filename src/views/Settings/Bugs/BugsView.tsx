@@ -23,7 +23,7 @@ const BugsView = () => {
   const [status, setStatus] = useState<StatusTypes>(1);
   const [filter, setFilter] = useState<[keyof PossibleFields, string]>(['', '']);
 
-  const filterOptions = ['headline', 'body', 'creator_id'] as Array<keyof MessageType>;
+  const filterOptions = ['headline', 'body'] as Array<keyof MessageType>;
 
   const fetchBugs = useCallback(async () => {
     setLoading(true);

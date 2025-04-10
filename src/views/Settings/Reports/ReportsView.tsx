@@ -23,7 +23,7 @@ const ReportsView = () => {
   const [status, setStatus] = useState<StatusTypes>(1);
   const [filter, setFilter] = useState<[keyof PossibleFields, string]>(['', '']);
 
-  const filterOptions = ['headline', 'body', 'creator_id'] as Array<keyof MessageType>;
+  const filterOptions = ['headline', 'body'] as Array<keyof MessageType>;
 
   const fetchReports = useCallback(async () => {
     setLoading(true);
@@ -34,7 +34,7 @@ const ReportsView = () => {
   }, [JSON.stringify(filter), status]);
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.reports'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.reports'), '']] });
     fetchReports();
   }, [JSON.stringify(filter), status]);
 
