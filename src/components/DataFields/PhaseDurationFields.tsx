@@ -94,7 +94,7 @@ const PhaseDurationFields: React.FC<Props> = ({
             key={field.name}
             name={field.name}
             control={control}
-            defaultValue={control._defaultValues[field.name] || durations[i] || 5}
+            defaultValue={control._defaultValues[field.name] || durations[i] || 14}
             render={({ field, fieldState }) => {
               if (!!fieldState.error) setError(fieldState.error.message);
               return (
