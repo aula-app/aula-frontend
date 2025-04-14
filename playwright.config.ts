@@ -32,22 +32,13 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
-
+  globalSetup: './tests/mutating/setup-auth.ts',
+  globalTeardown: './tests/mutating/teardown-auth.ts',
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'setup',
-      testMatch: '**/*.setup.ts',
-    },
-    {
       name: 'mutations',
       use: { ...devices['Desktop Chrome'] },
-      dependencies: ['setup'],
-    },
-    {
-      name: 'teardown',
-      testMatch: '**/*.teardown.ts',
-      dependencies: ['mutations'],
     },
 
     /*     {

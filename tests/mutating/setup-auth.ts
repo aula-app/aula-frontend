@@ -1,33 +1,36 @@
+// called from playwright.config
 import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
-import { sleep } from '../utils';
-import * as shared from '../shared';
+import fs from 'fs';
+import path from 'path';
+
 import * as users from './page_interactions/users';
-import * as rooms from './page_interactions/rooms';
 import * as fixtures from '../fixtures/users';
 import * as browsers from './browsers';
 
-const host = shared.getHost();
+export default async function globalSetup() {
+  // first we make a run id, this will be helpful in the mutating tests
+  const now = new Date();
+  const timestring = now.toISOString();
+  const timestamp = now.getTime().toString();
+  fs.writeFileSync('run-id.txt', timestamp);
 
-//
-test('set up browsers', async ({ browser }) => {
-  console.log('setting up browsers...');
+  fixtures.init();
 
-  // Create a context for each user
+  //
   await browsers.init();
-
   // Log in each user
   await users.login(browsers.admin, fixtures.admin);
 
   // Admin should create the new users of varying permission levels
-  console.info('creating alice...');
+  console.info('creating...', fixtures.alice.username);
   const alicesTempPass = await users.create(browsers.admin, fixtures.alice);
-  console.info('creating bob...');
+  console.info('creating...', fixtures.bob.username);
   const bobsTempPass = await users.create(browsers.admin, fixtures.bob);
-  console.info('creating mallory...');
+  console.info('creating...', fixtures.mallory.username);
   const mallorysTempPass = await users.create(browsers.admin, fixtures.mallory);
-  console.info('creating burt...');
+  console.info('creating...', fixtures.burt.username);
   const burtsTempPass = await users.create(browsers.admin, fixtures.burt);
-  console.info('creating rainer...');
+  console.info('creating...', fixtures.rainer.username);
   const rainersTempPass = await users.create(browsers.admin, fixtures.rainer);
 
   // mallory should _not_ be able to log in with bob's temporary password.
@@ -45,9 +48,12 @@ test('set up browsers', async ({ browser }) => {
     users.firstLoginFlow(browsers.rainer, fixtures.rainer, rainersTempPass),
   ]);
 
-  console.log('done setup!');
-});
+  await browsers.admin.context().storageState({ path: 'admin-context.json' });
+  await browsers.alice.context().storageState({ path: 'alice-context.json' });
+  await browsers.bob.context().storageState({ path: 'bob-context.json' });
+  await browsers.mallory.context().storageState({ path: 'mallory-context.json' });
+  await browsers.burt.context().storageState({ path: 'burt-context.json' });
+  await browsers.rainer.context().storageState({ path: 'rainer-context.json' });
 
-test('ooooo setup', async ({ page }) => {
-  expect(1).toBe(1);
-});
+  await browsers.shutdown();
+}
