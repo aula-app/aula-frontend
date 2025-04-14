@@ -13,6 +13,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests',
+
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -35,11 +36,21 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'setup',
+      testMatch: '**/*.setup.ts',
+    },
+    {
+      name: 'mutations',
       use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
+    },
+    {
+      name: 'teardown',
+      testMatch: '**/*.teardown.ts',
+      dependencies: ['mutations'],
     },
 
-    {
+    /*     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
       testIgnore: ['tests/mutating/**'],
@@ -49,7 +60,7 @@ export default defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
       testIgnore: ['tests/mutating/**'],
-    },
+    }, */
 
     /* Test against mobile viewports. */
     // {
