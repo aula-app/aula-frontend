@@ -27,13 +27,17 @@ export interface AppStoreState {
   currentUser?: object | undefined;
   messages: PopupType[];
   breadcrumb: [string, string][];
+  lastScroll: number;
+  lastIdeaList: string;
 }
 const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
   isAuthenticated: false, // Overridden in AppStore by checking auth token
   hasConsent: false,
   messages: [],
-  breadcrumb: []
+  breadcrumb: [],
+  lastScroll: 0,
+  lastIdeaList: ''
 };
 
 /**

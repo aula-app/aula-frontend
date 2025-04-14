@@ -79,6 +79,19 @@ export const getPersonalMessages = async (): Promise<GetMessagesResponse> => {
   return response as GetMessagesResponse;
 };
 
+export const getAdminMessages = async (): Promise<GetMessagesResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: 'getAdminMessages',
+      arguments: {},
+    },
+    ['user_id']
+  );
+
+  return response as GetMessagesResponse;
+};
+
 export interface MessageArguments {
   headline?: string;
   body?: string;
@@ -101,7 +114,7 @@ export interface BugArguments {
  */
 
 interface AddMessageArguments extends MessageArguments {
-  msg_type?: 0 | 1 | 2 | 3 | 4 | 5;
+  msg_type?: number;
   target_id?: string | number | null;
   target_group?: string | number | null;
 }
@@ -181,7 +194,7 @@ export async function deleteMessage(id: string): Promise<GenericResponse> {
  * Get a list of reports from the database.
  */
 
-const getSpecialMessages = async (args: FilterOptionsType, msg_type: 4 | 5): Promise<GetMessagesResponse> => {
+const getSpecialMessages = async (args: FilterOptionsType, msg_type: 4 | 5 | 6): Promise<GetMessagesResponse> => {
   const requestData = {
     msg_type,
     status: typeof args.status === 'number' ? args.status : 1,
@@ -198,6 +211,10 @@ const getSpecialMessages = async (args: FilterOptionsType, msg_type: 4 | 5): Pro
 
 export const getReports = async (args: FilterOptionsType): Promise<GetMessagesResponse> => {
   return getSpecialMessages(args, 4);
+};
+
+export const getBugs = async (args: FilterOptionsType): Promise<GetMessagesResponse> => {
+  return getSpecialMessages(args, 5);
 };
 
 /**
@@ -220,10 +237,26 @@ export const addReport = async (args: MessageArguments): Promise<GetMessagesResp
   return response as GetMessagesResponse;
 };
 
+export const addBug = async (args: MessageArguments): Promise<GetMessagesResponse> => {
+  const response = await databaseRequest(
+    {
+      model: 'Message',
+      method: 'addMessage',
+      arguments: {
+        msg_type: 5,
+        ...args,
+      },
+    },
+    ['creator_id']
+  );
+
+  return response as GetMessagesResponse;
+};
+
 /**
  * Get a list of reports from the database.
  */
 
 export const getRequests = async (args: FilterOptionsType): Promise<GetMessagesResponse> => {
-  return getSpecialMessages(args, 5);
+  return getSpecialMessages(args, 6);
 };

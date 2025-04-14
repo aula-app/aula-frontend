@@ -50,17 +50,25 @@ const TopBar: React.FC = () => {
 
   let crumbs: ReactNode[] = [];
   if (appState.breadcrumb.length > 1) {
-    let index = 0;
-    for (let i = 0; i < appState.breadcrumb.length - 1; ++i) {
-      let b = appState.breadcrumb[i];
+    appState.breadcrumb.forEach((b, i) => {
       crumbs.push(
-        <AppLink underline="hover" color="inherit" to={b[1]} key={i}>
+        <AppLink
+          underline="hover"
+          color="inherit"
+          to={b[1]}
+          key={i}
+          sx={{
+            display: 'inline-block',
+            maxWidth: '100%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
+        >
           {b[0]}
         </AppLink>
       );
-      index++;
-    }
-    crumbs.push(<b key={appState.breadcrumb.length}>{appState.breadcrumb[appState.breadcrumb.length - 1][0]}</b>);
+    });
   } else {
     if (appState.breadcrumb.length == 1) crumbs = [<b key="0">{appState.breadcrumb[0][0]}</b>];
   }
@@ -80,13 +88,40 @@ const TopBar: React.FC = () => {
         <UserInfo />
 
         {/* Navigation Breadcrumbs */}
-        <Breadcrumbs aria-label="breadcrumb" sx={{ flexGrow: 1, textAlign: 'center' }}>
-          <AppLink underline="hover" color="inherit" to="/">
+        <Breadcrumbs
+          aria-label="breadcrumb"
+          sx={{
+            overflow: 'hidden',
+            flexGrow: 1,
+            textAlign: 'center',
+            '& .MuiBreadcrumbs-ol': {
+              flexWrap: 'nowrap',
+              width: '100%',
+            },
+            '& .MuiBreadcrumbs-li': {
+              minWidth: 0,
+              maxWidth: '100%',
+              display: 'flex',
+              alignItems: 'center',
+            },
+          }}
+        >
+          <AppLink
+            underline="hover"
+            color="inherit"
+            to="/"
+            sx={{
+              display: 'inline-block',
+              maxWidth: '100%',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             aula
           </AppLink>
-          {crumbs.map((b) => {
-            return b;
-          })}
+          {crumbs.length > 2 && <span>...</span>}
+          {crumbs.slice(-2).map((crumb) => crumb)}
         </Breadcrumbs>
 
         {/* User Controls */}

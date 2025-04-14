@@ -82,7 +82,7 @@
     "delegate": "delegate",
     "delegated": "<strong>{{var}}</strong> can vote for you",
     "label": "Vote delegation",
-    "represent": "Your vote represents <strong>{{var}}</strong> additional people",
+    "represent": "You are voting for multiple people",
     "revoke": "revoke delegation",
     "status": {
       "delegated": "{{var}} delegated ideas",
@@ -164,23 +164,22 @@
   "phases": {
     "approval": "Approval",
     "discussion": "Discussion",
-    "phase": "{{var}} phase",
+    "end": "Phase ends in {{var}} days",
+    "ended": "Phase ended",
+    "id-10": "{{var}} ideas in discussion",
+    "id-20": "{{var}} ideas in approval",
+    "id-30": "{{var}} ideas in voting",
+    "id-40": "{{var}} ideas in results",
     "name-0": "Wild Ideas",
     "name-10": "Discussion",
     "name-20": "Approval",
     "name-30": "Voting",
     "name-40": "Results",
+    "phase": "{{var}} phase",
+    "rejected": "{{var}} ideas not approved",
     "results": "Results",
-    "status": {
-      "end": "Phase ends in {{var}} days",
-      "ended": "Phase ended"
-    },
     "voting": "Voting",
-    "wild": "Wild Ideas",
-    "id-10": "{{var}} ideas in discussion",
-    "id-20": "{{var}} ideas in approval",
-    "id-30": "{{var}} ideas in voting",
-    "id-40": "{{var}} ideas in results"
+    "wild": "Wild Ideas"
   },
   "requests": {
     "accepted": "Your data change request has been accepted.",
@@ -298,6 +297,10 @@
     "surveys": {
       "name": "Survey",
       "plural": "Surveys"
+    },
+    "updates": {
+      "name": "Update",
+      "plural": "Updates"
     },
     "users": {
       "name": "User",
@@ -527,6 +530,7 @@
       "about": "About",
       "announcements": "Announcements",
       "boxes": "Boxes",
+      "bugs": "Bugs",
       "configuration": "Configuration",
       "dashboard": "Dashboard",
       "home": "Home",
@@ -555,7 +559,11 @@
     "for": "For",
     "neutral": "Neutral",
     "vote": "Vote",
-    "yourVote": "You voted {{var}}"
+    "yourVote": "You voted {{var}}",
+    "delegatedVoteWarning": {
+      "title": "Delegated Vote Warning",
+      "message": "If you vote on this idea, your vote will override your delegate's vote, but they can still vote for you on other ideas in this box."
+    }
   },
   "weekDays": {
     "friday": "Friday",

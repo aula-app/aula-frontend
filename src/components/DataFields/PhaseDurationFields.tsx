@@ -1,15 +1,7 @@
 import { getDefaultDurations } from '@/services/config';
 import { getRoom } from '@/services/rooms';
-import {
-  FormControl,
-  FormControlProps,
-  FormHelperText,
-  FormLabel,
-  InputAdornment,
-  Stack,
-  TextField,
-  useTheme,
-} from '@mui/material';
+import { PhaseType, RoomPhases } from '@/types/SettingsTypes';
+import { FormControl, FormHelperText, FormLabel, InputAdornment, Stack, TextField, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
@@ -41,9 +33,10 @@ const PhaseDurationFields: React.FC<Props> = ({
   const [error, setError] = useState<string>();
   const [durations, setDurations] = useState<number[]>([]);
 
-  const fields = ['phase_duration_1', 'phase_duration_2', 'phase_duration_3', 'phase_duration_4'] as Array<
-    'phase_duration_1' | 'phase_duration_2' | 'phase_duration_3' | 'phase_duration_4'
-  >;
+  const fields = [
+    { name: 'phase_duration_1', phase: 10 },
+    { name: 'phase_duration_3', phase: 30 },
+  ] as Array<{ name: 'phase_duration_1' | 'phase_duration_3'; phase: RoomPhases }>;
 
   const getDurations = () => {
     const id = room || room_id;
@@ -51,8 +44,8 @@ const PhaseDurationFields: React.FC<Props> = ({
       getRoom(id).then((response) => {
         setDurations(
           fields.map((field) => {
-            if (!response.data || !(field in response.data)) return 0;
-            return response.data[field];
+            if (!response.data || !(field.name in response.data)) return 0;
+            return response.data[field.name];
           })
         );
       });
@@ -96,18 +89,18 @@ const PhaseDurationFields: React.FC<Props> = ({
         >
           {t('settings.time.phase')}
         </FormLabel>
-        {fields.map((name, i) => (
+        {fields.map((field, i) => (
           <Controller
-            key={name}
-            name={name}
+            key={field.name}
+            name={field.name}
             control={control}
-            defaultValue={control._defaultValues[name] || durations[i] || 5}
+            defaultValue={control._defaultValues[field.name] || durations[i] || 14}
             render={({ field, fieldState }) => {
               if (!!fieldState.error) setError(fieldState.error.message);
               return (
                 <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)' }}>
                   <TextField
-                    label={t(`settings.columns.${name}`)}
+                    label={t(`settings.columns.${field.name}`)}
                     type="number"
                     size="small"
                     variant="standard"

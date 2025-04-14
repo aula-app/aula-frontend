@@ -27,6 +27,12 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
         isAuthenticated: false,
         currentUser: undefined, // Also reset previous user data
       };
+    case 'SAVE_SCROLL':
+      return {
+        ...state,
+        lastScroll: action.lastScroll,
+        lastIdeaList: action.lastIdeaList
+      };
     case 'HAS_CONSENT':
       return {
         ...state,

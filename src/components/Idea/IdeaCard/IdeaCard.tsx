@@ -6,7 +6,7 @@ import { ObjectPropByName } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions, phases, votingOptions } from '@/utils';
-import { Card, Stack, Typography } from '@mui/material';
+import { Card, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,13 +16,15 @@ interface IdeaCardProps {
   phase: RoomPhases;
   sx?: ObjectPropByName;
   quorum?: number;
+  disabled?: boolean;
 }
 
 /**
  * Renders "IdeaCard" component
  */
-const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) => {
+const IdeaCard = ({ idea, phase, sx, quorum, disabled = false, ...restOfProps }: IdeaCardProps) => {
   const { t } = useTranslation();
+  const theme = useTheme();
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -70,10 +72,11 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
         if (idea.approved === -1) return 'against';
         return 'disabled;';
       case 30:
+        if (idea.approved < 0) return 'disabled';
         if (vote === 0) return phases[phase];
         if (vote === 1) return 'for';
         if (vote === -1) return 'against';
-        if (!vote) return 'disabled';
+        if (!vote) return '';
       default:
         return phases[phase];
     }
@@ -120,7 +123,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
           variant="outlined"
           {...restOfProps}
         >
-          <Stack direction="row" height={68} alignItems="center">
+          <Stack direction="row" height={68} alignItems="center" color={disabled ? 'secondary.main' : ''}>
             <Stack pl={2}>
               {phase >= 40 ? (
                 <AppIcon icon={Number(idea.is_winner) > 0 ? 'winner' : passedQuorum() ? 'for' : 'against'} size="xl" />
@@ -131,7 +134,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
               )}
             </Stack>
             <Stack flexGrow={1} px={2} overflow="hidden">
-              <Typography variant="h3" noWrap textOverflow="ellipsis">
+              <Typography variant="h3" noWrap textOverflow="ellipsis" color="inherit">
                 {idea.title}
               </Typography>
               {phase === 40 && !!vote && (
@@ -145,12 +148,14 @@ const IdeaCard = ({ idea, phase, sx, quorum, ...restOfProps }: IdeaCardProps) =>
             <Stack
               p={0.5}
               pl={2}
-              borderLeft="1px solid currentColor"
+              borderLeft={`1px solid ${theme.palette.secondary.main}`}
               justifyContent="space-around"
               height="100%"
               sx={{ aspectRatio: 1 }}
             >
-              {phase === 10 ? (
+              {disabled ? (
+                <AppIcon icon="rejected" />
+              ) : phase === 10 ? (
                 <>
                   <Stack direction="row" alignItems="center">
                     <AppIcon icon="heart" size="small" />{' '}

@@ -1,9 +1,8 @@
 import { AppIcon } from '@/components';
 import DelegateVote from '@/components/DelegateVote';
-import KnowMore from '@/components/KnowMore';
 import { getDelegations, getReceivedDelegations } from '@/services/users';
 import { DelegationType, UserType } from '@/types/Scopes';
-import { Box, BoxProps, Button, Stack, StackProps, Typography } from '@mui/material';
+import { Box, Button, Stack, StackProps, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -70,7 +69,7 @@ const DelegateButton: React.FC<Props> = ({ disabled = false, ...restOfProps }) =
           <Stack alignItems="end" mr={1}>
             {representing.length > 0 && (
               <Typography variant="caption" lineHeight={1}>
-                <Trans i18nKey={t('delegation.represent', { var: representing.length })} />
+                <Trans i18nKey={t('delegation.represent')} />
               </Typography>
             )}
             {((disabled && delegate) || !disabled) && (

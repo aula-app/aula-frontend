@@ -1,6 +1,6 @@
 import AppIconButton from '@/components/AppIconButton';
 import { BugForms } from '@/components/DataForms';
-import { addReport, BugArguments } from '@/services/messages';
+import { addBug, BugArguments } from '@/services/messages';
 import { Drawer, IconButtonProps } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ userAgent: ${window.navigator.userAgent}
 ${data.content || ''}
     `;
 
-    const request = await addReport({
+    const request = await addBug({
       headline: t('scopes.bugs.headline', { var: target }),
       body,
     });

@@ -8,29 +8,19 @@ import { useLocation } from 'react-router-dom';
 const MessagesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
   const { pathname } = useLocation();
   const [messages, setMessages] = useState<number>();
-  const [reports, setReports] = useState<number>();
 
   const fetchMessages = async () => {
     const response = await getPersonalMessages();
     if (!response.error) setMessages(response.data?.length || 0);
   };
 
-  const fetchReports = async () => {
-    const response = await getAnnouncements({
-      offset: 0,
-      limit: 0,
-    });
-    if (!response.error) setReports(response.data?.length || 0);
-  };
-
   useEffect(() => {
     fetchMessages();
-    fetchReports();
   }, [pathname]);
 
-  return typeof messages === 'number' && typeof reports === 'number' ? (
+  return typeof messages === 'number' ? (
     <Badge
-      badgeContent={messages + reports}
+      badgeContent={messages}
       sx={{
         '& .MuiBadge-badge': {
           backgroundColor: 'background.paper',

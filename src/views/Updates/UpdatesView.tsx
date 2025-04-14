@@ -36,11 +36,9 @@ const UpdatesView = () => {
   }, []);
 
   return (
-    <Stack p={2} sx={{ overflowY: 'auto' }}>
+    <Stack gap={1} p={2} sx={{ overflowY: 'auto' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="h1" sx={{ p: 2, pb: 1.75, textTransform: 'capitalize', flex: 1 }}>
-          {t('ui.units.updates')}
-        </Typography>
+        <Typography variant="h1">{t('scopes.updates.plural')}</Typography>
         <IconButton>
           <AppIcon icon="filter" />
         </IconButton>

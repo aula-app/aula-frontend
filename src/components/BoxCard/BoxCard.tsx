@@ -74,7 +74,7 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
             <Stack direction="row" position="absolute" left={0} height="100%" width="100%" alignItems="center">
               <AppIcon icon="clock" size="small" sx={{ mx: 0.5 }} />
               <Typography variant="caption">
-                {daysRemaining() > 0 ? t('phases.status.end', { var: daysRemaining() }) : t('phases.status.ended')}
+                {daysRemaining() > 0 ? t('phases.end', { var: daysRemaining() }) : t('phases.ended')}
               </Typography>
             </Stack>
           </Box>
