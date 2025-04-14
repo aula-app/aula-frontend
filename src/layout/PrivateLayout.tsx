@@ -40,7 +40,7 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   ) : (
     <Stack
       sx={{
-        height: '100vh',
+        height: '100%',
         paddingTop: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT,
         paddingLeft: 0,
         paddingRight: 0,
