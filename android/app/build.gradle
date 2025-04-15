@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     namespace "de.aula"
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "de.aula.neu"
         minSdkVersion rootProject.ext.minSdkVersion

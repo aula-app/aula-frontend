@@ -5,8 +5,16 @@ const config: CapacitorConfig = {
   appName: 'aula',
   webDir: 'build',
   server: {
-    androidScheme: 'https'
-  }
+    androidScheme: 'https',
+  },
+  ios: {
+    contentInset: 'always',
+  },
+  plugins: {
+    Keyboard: {
+      resizeOnFullScreen: true,
+    },
+  },
 };
 
 export default config;
