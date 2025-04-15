@@ -63,6 +63,8 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   };
 
   const onSubmit = async (data: SchemaType) => {
+    console.log('oooOOOoooo');
+    console.log(data);
     try {
       setIsLoading(true);
       if (!defaultValues) {
@@ -86,6 +88,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
       phase_duration_3: data.phase_duration_3,
       status: data.status,
     });
+    console.log(response);
     if (response.error || !response.data) return;
     await setUserRooms(response.data.hash_id);
   };
@@ -102,6 +105,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
       status: data.status,
       room_id: defaultValues.hash_id,
     });
+    console.log(response);
     if (response.error) return;
     await setUserRooms(defaultValues.hash_id);
   };

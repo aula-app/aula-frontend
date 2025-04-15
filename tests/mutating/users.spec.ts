@@ -3,25 +3,68 @@ import { sleep } from '../utils';
 import * as shared from '../shared';
 import * as users from './page_interactions/users';
 import * as rooms from './page_interactions/rooms';
+import * as ideas from './page_interactions/ideas';
 import * as fixtures from '../fixtures/users';
 import * as browsers from './browsers';
 
-const host = shared.getHost();
+let room;
 
-test('create room', async ({ page }) => {
-  fixtures.init();
+test.describe('Room behaviours - creating rooms', () => {
+  test.beforeAll(async () => {
+    fixtures.init();
+    await browsers.recall();
+    room = {
+      name: shared.getRunId(),
+      description: 'created during automated testing',
+      users: [
+        //
+        fixtures.rainer, //
+        fixtures.alice,
+        fixtures.bob,
+        fixtures.mallory, //
+      ],
+    };
+  });
 
-  console.log('test creating room!');
-  // Expect a title "to contain" a substring.
-  await browsers.recall();
+  //
+  test('Admin can create a room, with 4 users', async () => {
+    await rooms.create(browsers.admin, room);
+  });
 
-  console.log('hellooo');
+  // TODO: Burt _should_ be able to make a room
+  test('Burt can create a room, with 4 users', async () => {
+    await rooms.create(browsers.burt, room);
+  });
 
-  await rooms.create(browsers.admin, 'tesssttt', [
-    //
-    fixtures.rainer, //
-    fixtures.alice,
-    fixtures.bob,
-    fixtures.mallory, //
-  ]);
+  test('Alice can NOT make a room', async () => {
+    // we expect this to fail - alice should _not_ be able to create
+    // a room
+    await expect(async () => {
+      await rooms.create(browsers.alice, room);
+    }).rejects.toThrow();
+  });
+
+  test('Mallory can NOT make a room', async () => {
+    // we expect this to fail - alice should _not_ be able to create
+    // a room
+    await expect(async () => {
+      await rooms.create(browsers.mallory, room);
+    }).rejects.toThrow();
+  });
+
+  test('Admin can create an Idea', async () => {
+    const adminsIdea = {
+      name: 'admins-test-idea' + shared.getRunId(),
+      description: 'generated during testing data',
+    };
+    await ideas.create(browsers.admin, room, adminsIdea);
+  });
+
+  test('Alice can create an Idea', async () => {
+    const alices = {
+      name: 'alices-test-idea' + shared.getRunId(),
+      description: 'generated during testing data',
+    };
+    await ideas.create(browsers.alice, room, alices);
+  });
 });
