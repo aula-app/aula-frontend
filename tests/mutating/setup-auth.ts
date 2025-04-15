@@ -1,7 +1,7 @@
 // called from playwright.config
 import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
-import fs from 'fs';
-import path from 'path';
+
+import * as shared from '../shared';
 
 import * as users from './page_interactions/users';
 import * as fixtures from '../fixtures/users';
@@ -9,10 +9,8 @@ import * as browsers from './browsers';
 
 export default async function globalSetup() {
   // first we make a run id, this will be helpful in the mutating tests
-  const now = new Date();
-  const timestring = now.toISOString();
-  const timestamp = now.getTime().toString();
-  fs.writeFileSync('run-id.txt', timestamp);
+
+  shared.setRunId();
 
   fixtures.init();
 

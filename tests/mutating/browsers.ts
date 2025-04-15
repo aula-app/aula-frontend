@@ -1,4 +1,7 @@
-import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
+import { BrowserContext, Page, chromium } from '@playwright/test';
+
+// this namespace stores the playwright browsers and pages in
+// a singleton state.  Must be init()ed or recall()ed before use.
 
 export let admins_browser: BrowserContext;
 export let alices_browser: BrowserContext;
@@ -54,6 +57,10 @@ export const shutdown = async () => {
   await rainer_browser.close();
 };
 
+// This function exists to recall the logged in browser states
+//  which were initialized in setup-auth.ts
+// tests should call it to initialize the singleton browsers in
+// this namespace
 export const recall = async () => {
   const browser = await chromium.launch();
 

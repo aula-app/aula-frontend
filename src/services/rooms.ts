@@ -127,7 +127,10 @@ export async function addRoom(args: RoomArguments): Promise<addResponse> {
       arguments: args,
     },
     ['updater_id']
-  );
+  ).catch((e) => {
+    console.error(e);
+    console.log('ahahahahahahahahahahah');
+  });
 
   return response as addResponse;
 }
