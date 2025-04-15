@@ -1,9 +1,9 @@
 import { getDefaultDurations } from '@/services/config';
 import { getRoom } from '@/services/rooms';
-import { PhaseType, RoomPhases } from '@/types/SettingsTypes';
+import { RoomPhases } from '@/types/SettingsTypes';
 import { FormControl, FormHelperText, FormLabel, InputAdornment, Stack, TextField, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Control, Controller } from 'react-hook-form-mui';
+import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ interface Props {
   control: Control<any, any>;
   disabled?: boolean;
   required?: boolean;
+  setValue: UseFormSetValue<any>;
   onChange?: (...event: any[]) => void;
 }
 
@@ -24,6 +25,7 @@ const PhaseDurationFields: React.FC<Props> = ({
   disabled = false,
   required = false,
   room,
+  setValue,
   ...restOfProps
 }) => {
   const { t } = useTranslation();
@@ -31,7 +33,6 @@ const PhaseDurationFields: React.FC<Props> = ({
   const { room_id } = useParams();
 
   const [error, setError] = useState<string>();
-  const [durations, setDurations] = useState<number[]>([]);
 
   const fields = [
     { name: 'phase_duration_1', phase: 10 },
@@ -42,16 +43,17 @@ const PhaseDurationFields: React.FC<Props> = ({
     const id = room || room_id;
     if (id)
       getRoom(id).then((response) => {
-        setDurations(
-          fields.map((field) => {
-            if (!response.data || !(field.name in response.data)) return 0;
-            return response.data[field.name];
-          })
-        );
+        fields.forEach((field) => {
+          const value = response.data && field.name in response.data ? response.data[field.name] : 14;
+          setValue(field.name, value);
+        });
       });
     else
       getDefaultDurations().then((response) => {
-        if (response.data.length > 0) setDurations(response.data.slice(1, 4));
+        const defaultValues = response.data.length > 0 ? response.data.slice(1, 4) : [14, 14];
+        fields.forEach((field, index) => {
+          setValue(field.name, defaultValues[index]);
+        });
       });
   };
 
@@ -94,7 +96,7 @@ const PhaseDurationFields: React.FC<Props> = ({
             key={field.name}
             name={field.name}
             control={control}
-            defaultValue={control._defaultValues[field.name] || durations[i] || 14}
+            defaultValue={control._defaultValues[field.name] || '14'}
             render={({ field, fieldState }) => {
               if (!!fieldState.error) setError(fieldState.error.message);
               return (
@@ -111,7 +113,7 @@ const PhaseDurationFields: React.FC<Props> = ({
                     {...restOfProps}
                     slotProps={{
                       input: { endAdornment: <InputAdornment position="end">{t('ui.units.days')}</InputAdornment> },
-                      inputLabel: { shrink: typeof field.value === 'number' },
+                      inputLabel: { shrink: true },
                     }}
                   />
                 </FormControl>

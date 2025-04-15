@@ -83,9 +83,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
       description_public: data.description_public,
       internal_info: data.internal_info,
       phase_duration_1: data.phase_duration_1,
-      phase_duration_2: data.phase_duration_2,
       phase_duration_3: data.phase_duration_3,
-      phase_duration_4: data.phase_duration_4,
       status: data.status,
     });
     if (response.error || !response.data) return;
@@ -100,9 +98,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
       description_public: data.description_public,
       internal_info: data.internal_info,
       phase_duration_1: data.phase_duration_1,
-      phase_duration_2: data.phase_duration_2,
       phase_duration_3: data.phase_duration_3,
-      phase_duration_4: data.phase_duration_4,
       status: data.status,
       room_id: defaultValues.hash_id,
     });
@@ -167,7 +163,9 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
                 control={control}
                 sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
               />
-              {!isDefault && <PhaseDurationFields control={control} required disabled={isLoading} />}
+              {!isDefault && (
+                <PhaseDurationFields control={control} required disabled={isLoading} setValue={setValue} />
+              )}
               {checkPermissions('rooms', 'addUser') && !isDefault && (
                 <UsersField
                   defaultValues={users}
