@@ -38,6 +38,9 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   // submit the room form
   await page.locator('button[type="submit"]').click();
 
+  // OMG
+  await sleep(3);
+
   // ensure the room exists by filtering the admin list for the name
 
   await page.goto(host + '/settings/rooms');
