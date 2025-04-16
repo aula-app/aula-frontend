@@ -11,7 +11,6 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await page.goto(host);
 
   // use the menu to navigate to the rooms admin page
-  console.log('click!!');
   const RoomsMenuItem = page.locator('a[href="/settings/rooms"]');
   await expect(RoomsMenuItem).toBeVisible();
   await RoomsMenuItem.click();
@@ -27,7 +26,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await page.fill('input[name="room_name"]', room.name);
   await page.locator('div[contenteditable="true"]').fill('generated during automated tests');
 
-  const UserSelector = page.locator('[data-testing-id="usersfield"]');
+  const UserSelector = page.locator('[data-testing-id="usersfield"] input');
   await expect(UserSelector).toBeVisible({ timeout: 500 });
 
   await UserSelector.click();
