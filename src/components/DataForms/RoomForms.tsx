@@ -90,7 +90,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
       phase_duration_4: data.phase_duration_4,
       status: data.status,
     });
-    console.log(response);
     if (response.error || !response.data) return;
     await setUserRooms(response.data.hash_id);
   };

@@ -14,7 +14,7 @@ test.describe('Room behaviours - creating rooms', () => {
     fixtures.init();
     await browsers.recall();
     room = {
-      name: shared.getRunId(),
+      name: 'room-' + shared.getRunId(),
       description: 'created during automated testing',
       users: [
         //
@@ -26,14 +26,27 @@ test.describe('Room behaviours - creating rooms', () => {
     };
   });
 
+  /*   test('Admin can create a supermoderator', async () => {
+    await users.create(browsers.admin, {
+      username: 'burt-supermoderator_v-' + Date.now().toString(),
+      password: 'aula',
+      displayName: 'burt-',
+      realName: 'burt Testing',
+      role: 41,
+      about: 'generated on ' + 'in automated testing framework. should be deleted.',
+    });
+  }); */
+
   //
   test('Admin can create a room, with 4 users', async () => {
     await rooms.create(browsers.admin, room);
   });
 
   // TODO: Burt _should_ be able to make a room
-  test('Burt can create a room, with 4 users', async () => {
-    await rooms.create(browsers.burt, room);
+  test('Burt can NOT create a room', async () => {
+    await expect(async () => {
+      await rooms.create(browsers.burt, room);
+    }).rejects.toThrow();
   });
 
   test('Alice can NOT make a room', async () => {
@@ -67,4 +80,16 @@ test.describe('Room behaviours - creating rooms', () => {
     };
     await ideas.create(browsers.alice, room, alices);
   });
+
+  test('Bob can create an Idea', async () => {
+    const bobs = {
+      name: 'bobs-test-idea' + shared.getRunId(),
+      description: 'generated during testing data',
+    };
+    await ideas.create(browsers.bob, room, bobs);
+  });
+
+  ////
+  ///
+  //
 });
