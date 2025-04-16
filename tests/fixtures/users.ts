@@ -70,7 +70,7 @@ export const init = () => {
     password: 'aula',
     displayName: 'mallory-' + runId,
     realName: 'mallory Testing',
-    role: 31,
+    role: 40,
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };
 

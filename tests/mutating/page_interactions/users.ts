@@ -19,7 +19,12 @@ export const create = async (page: Page, data: users.UserData): Promise<TempPass
   await page.fill('input[name="displayname"]', data.displayName);
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="realname"]', data.realName);
-  await page.fill('input[name="userlevel"]', data.role.toString());
+
+  //await page.fill('input[name="userlevel"]', data.role.toString());
+
+  await page.locator('[data-testing-id="rolefield"]').click();
+
+  await page.locator(`li[data-value="${data.role}"]`).click();
 
   await page.locator('div[contenteditable="true"]').fill(data.about);
 

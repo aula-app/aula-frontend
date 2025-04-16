@@ -1,19 +1,17 @@
 import { expect, Page } from '@playwright/test';
-import fs from 'fs';
-import path from 'path';
+
 import * as shared from '../../shared';
 import { sleep } from '../../utils';
 import * as roomFixtures from '../../fixtures/rooms';
 
 const host = shared.getHost();
 
-const runId = shared.getRunId();
-
 export const create = async (page: Page, room: roomFixtures.RoomData) => {
   // start at home
   await page.goto(host);
 
   // use the menu to navigate to the rooms admin page
+  console.log('click!!');
   const RoomsMenuItem = page.locator('a[href="/settings/rooms"]');
   await expect(RoomsMenuItem).toBeVisible();
   await RoomsMenuItem.click();
@@ -23,16 +21,22 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await expect(AddRoomButton).toBeVisible();
   await AddRoomButton.click();
 
+  await page.waitForSelector('input[name="room_name"]', { state: 'visible', timeout: 500 });
+
   // fill in the necessary information
   await page.fill('input[name="room_name"]', room.name);
   await page.locator('div[contenteditable="true"]').fill('generated during automated tests');
 
-  await page.locator('input[role="combobox"]').click();
+  const UserSelector = page.locator('[data-testing-id="usersfield"]');
+  await expect(UserSelector).toBeVisible({ timeout: 500 });
+
+  await UserSelector.click();
 
   // click and add each desired user to the room
   for (const u of room.users) {
+    console.info(u);
     await page.getByRole('option', { name: u.displayName }).click();
-    await page.locator('input[role="combobox"]').click();
+    await UserSelector.click();
   }
 
   // submit the room form
@@ -62,5 +66,5 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   const row = page.locator('table tr').filter({ hasText: room.name });
 
   // make sure that row actually exists
-  await expect(row).toHaveCount(1);
+  await expect(row).toHaveCount(1, { timeout: 500 });
 };
