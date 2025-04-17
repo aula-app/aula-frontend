@@ -24,7 +24,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
   const { idea_id } = useParams();
   const location = useLocation();
   return (
-    <Stack width="100%" sx={{ scrollSnapAlign: 'center' }}>
+    <Stack data-testing-id={`idea-${idea.title}`} width="100%" sx={{ scrollSnapAlign: 'center' }}>
       <ChatBubble disabled={disabled} comment={idea.approved < 0}>
         <AppLink to={to} disabled={!to || disabled}>
           <Stack
@@ -59,6 +59,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
             item={idea}
             scope="ideas"
             onDelete={onDelete}
+            data-testing-id="idea-more-menu"
             onEdit={onEdit}
             link={`${location.pathname}/${to}`}
           >
