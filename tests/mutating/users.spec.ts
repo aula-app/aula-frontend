@@ -38,7 +38,7 @@ test.describe('Room behaviours - creating rooms', () => {
   }); */
 
   //
-  test('Admin can create a room, with 4 users', async () => {
+  test('Admin can create a room, adding 4 users', async () => {
     await rooms.create(browsers.admin, room);
   });
 
@@ -87,6 +87,14 @@ test.describe('Room behaviours - creating rooms', () => {
       description: 'generated during testing data',
     };
     await ideas.create(browsers.bob, room, bobs);
+  });
+
+  test('Alice can comment on bobs idea', async () => {
+    const bobs = {
+      name: 'bobs-test-idea' + shared.getRunId(),
+      description: 'generated during testing data',
+    };
+    await ideas.comment(browsers.alice, room, bobs);
   });
 
   ////
