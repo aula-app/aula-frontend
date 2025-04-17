@@ -9,8 +9,11 @@ import * as browsers from './browsers';
 
 let room;
 
+// force these tests to run sqeuentially
+test.describe.configure({ mode: 'serial' });
+
 test.describe('Room behaviours - creating rooms', () => {
-  test.beforeAll(async () => {
+  test.beforeEach(async () => {
     fixtures.init();
     await browsers.recall();
     room = {
@@ -24,6 +27,10 @@ test.describe('Room behaviours - creating rooms', () => {
         fixtures.mallory, //
       ],
     };
+  });
+
+  test.afterEach(async () => {
+    await browsers.pickle();
   });
 
   /*   test('Admin can create a supermoderator', async () => {
@@ -73,28 +80,40 @@ test.describe('Room behaviours - creating rooms', () => {
     await ideas.create(browsers.admin, room, adminsIdea);
   });
 
-  test('Alice can create an Idea', async () => {
-    const alices = {
-      name: 'alices-test-idea' + shared.getRunId(),
+  test('Alice can create and delete an Idea', async () => {
+    const alicesIdea = {
+      name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
       description: 'generated during testing data',
     };
-    await ideas.create(browsers.alice, room, alices);
+    await ideas.create(browsers.alice, room, alicesIdea);
+    await ideas.remove(browsers.alice, room, alicesIdea);
   });
 
-  test('Bob can create an Idea', async () => {
-    const bobs = {
+  test('Bob can create an Idea, alice can comment on it, both delete their resources', async () => {
+    const bobsIdea = {
       name: 'bobs-test-idea' + shared.getRunId(),
       description: 'generated during testing data',
     };
-    await ideas.create(browsers.bob, room, bobs);
+    await ideas.create(browsers.bob, room, bobsIdea);
+    await ideas.comment(browsers.alice, room, bobsIdea, "alice's comment generated in testing");
+    await ideas.removeComment(browsers.alice, room, bobsIdea, "alice's comment generated in testing");
+    await ideas.remove(browsers.bob, room, bobsIdea);
   });
 
-  test('Alice can comment on bobs idea', async () => {
-    const bobs = {
-      name: 'bobs-test-idea' + shared.getRunId(),
+  test('Bob can not remove alices idea', async () => {
+    const alicesIdea = {
+      name: 'alices-test-idea' + shared.getRunId() + '-scope-4',
       description: 'generated during testing data',
     };
-    await ideas.comment(browsers.alice, room, bobs);
+    await ideas.create(browsers.alice, room, alicesIdea);
+    // note we use bobs browser
+
+    await expect(async () => {
+      await ideas.remove(browsers.bob, room, alicesIdea);
+    }).rejects.toThrow();
+
+    // now alice should remove her own idea
+    await ideas.remove(browsers.alice, room, alicesIdea);
   });
 
   ////

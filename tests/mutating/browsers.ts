@@ -57,6 +57,15 @@ export const shutdown = async () => {
   await rainer_browser.close();
 };
 
+export const pickle = async () => {
+  await admin.context().storageState({ path: 'admin-context.json' });
+  await alice.context().storageState({ path: 'alice-context.json' });
+  await bob.context().storageState({ path: 'bob-context.json' });
+  await mallory.context().storageState({ path: 'mallory-context.json' });
+  await burt.context().storageState({ path: 'burt-context.json' });
+  await rainer.context().storageState({ path: 'rainer-context.json' });
+};
+
 // This function exists to recall the logged in browser states
 //  which were initialized in setup-auth.ts
 // tests should call it to initialize the singleton browsers in
