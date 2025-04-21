@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import SideBarFixed from './SideBar/SideBarFixed';
 import TopBar from './TopBar';
+import SkipToContent from '@/components/SkipToContent';
 
 const TITLE_PRIVATE = 'aula';
 
@@ -46,10 +47,25 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         paddingRight: 0,
       }}
     >
+      {/* Skip to content link for keyboard users */}
+      <SkipToContent />
+      
+      {/* TopBar with navigation landmark */}
       <TopBar />
 
-      <Stack direction="row" component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
-        {!checkPermissions('system', 'hide') && <SideBarFixed />}
+      <Stack 
+        direction="row" 
+        component="main" 
+        id="main-content" 
+        sx={{ flexGrow: 1, overflow: 'hidden' }}
+        role="main"
+        aria-label="Main content"
+      >
+        {!checkPermissions('system', 'hide') && (
+          <nav aria-label="Main navigation">
+            <SideBarFixed />
+          </nav>
+        )}
         <Stack flex={1} overflow="hidden">
           <ErrorBoundary name="Content">{children}</ErrorBoundary>
         </Stack>

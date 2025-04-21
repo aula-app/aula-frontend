@@ -35,27 +35,51 @@ const SelectField: React.FC<Props> = ({
       name={name}
       control={control}
       defaultValue={control._defaultValues[name] || defaultValue}
-      render={({ field, fieldState }) => (
-        <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)', ...sx }}>
-          <TextField
-            label={t(`settings.columns.${name}`)}
-            required={required}
-            disabled={disabled}
-            select
-            {...field}
-            error={!!fieldState.error}
-            helperText={t(`${fieldState.error?.message || ''}`)}
-            {...restOfProps}
-            slotProps={{ inputLabel: { shrink: true } }}
-          >
-            {options.map((option) => (
-              <MenuItem value={option.value} key={option.value} disabled={(option.disabled)?option.disabled:false}>
-                {t(option.label)}
-              </MenuItem>
-            ))}
-          </TextField>
-        </FormControl>
-      )}
+      render={({ field, fieldState }) => {
+        // Generate unique IDs for accessibility
+        const inputId = `select-${name}`;
+        const helperId = `helper-text-${name}`;
+        const errorId = fieldState.error ? `error-${name}` : undefined;
+
+        return (
+          <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)', ...sx }}>
+            <TextField
+              id={inputId}
+              label={t(`settings.columns.${name}`)}
+              required={required}
+              disabled={disabled}
+              select
+              {...field}
+              error={!!fieldState.error}
+              helperText={t(`${fieldState.error?.message || ''}`)}
+              {...restOfProps}
+              slotProps={{ 
+                inputLabel: { shrink: true },
+                input: { 
+                  'aria-required': required,
+                  'aria-invalid': !!fieldState.error,
+                  'aria-describedby': fieldState.error ? `${helperId} ${errorId}` : helperId
+                }
+              }}
+              FormHelperTextProps={{
+                id: fieldState.error ? errorId : helperId,
+                role: fieldState.error ? 'alert' : undefined
+              }}
+            >
+              {options.map((option) => (
+                <MenuItem 
+                  value={option.value} 
+                  key={option.value} 
+                  disabled={(option.disabled) ? option.disabled : false}
+                  aria-disabled={(option.disabled) ? option.disabled : false}
+                >
+                  {t(option.label)}
+                </MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
+        );
+      }}
     />
   );
 };

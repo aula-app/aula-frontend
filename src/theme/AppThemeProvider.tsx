@@ -33,6 +33,47 @@ const AppThemeProvider: FunctionComponent<Props> = ({ children, emotionCache = C
   const theme = createTheme({
     ...THEME_FONTS,
     ...useMemo(() => (state.darkMode ? DARK_THEME : LIGHT_THEME), [state.darkMode]),
+    // Add accessibility-focused theme options
+    components: {
+      MuiButtonBase: {
+        defaultProps: {
+          // Ensures consistent keyboard navigation behavior
+          disableRipple: false,
+        },
+        styleOverrides: {
+          root: {
+            // Ensure focus styles are visible for keyboard navigation
+            '&:focus-visible': {
+              outline: '2px solid',
+              outlineOffset: 2,
+              outlineColor: state.darkMode ? '#90caf9' : '#1976d2',
+            },
+          },
+        },
+      },
+      MuiLink: {
+        defaultProps: {
+          underline: 'hover',
+        },
+        styleOverrides: {
+          root: {
+            '&:focus-visible': {
+              outline: '2px solid',
+              outlineOffset: 2,
+              outlineColor: state.darkMode ? '#90caf9' : '#1976d2',
+            },
+          },
+        },
+      },
+      MuiFormLabel: {
+        styleOverrides: {
+          root: {
+            // Increase label contrast for better readability
+            color: state.darkMode ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+          },
+        },
+      },
+    },
   });
 
   return (

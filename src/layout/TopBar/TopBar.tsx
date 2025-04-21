@@ -73,20 +73,30 @@ const TopBar: React.FC = () => {
   }
 
   return (
-    <AppBar elevation={0} sx={{ height: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT }}>
+    <AppBar 
+      position="fixed"
+      elevation={0} 
+      sx={{ height: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT }}
+      component="header"
+      role="banner"
+    >
       <Toolbar>
         <Box width={56}>
           {/* Logo or Back Button */}
           {location[1] === '' ? (
-            <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Icon.svg`} alt="aula" />
+            <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Icon.svg`} alt="Aula home" />
           ) : (
-            <AppIconButton icon="back" onClick={() => goto(getReturnPath())} />
+            <AppIconButton 
+              icon="back" 
+              onClick={() => goto(getReturnPath())} 
+              aria-label="Go back"
+            />
           )}
         </Box>
 
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs
-          aria-label="breadcrumb"
+          aria-label="Breadcrumb navigation"
           sx={{
             overflow: 'hidden',
             flexGrow: 1,
@@ -114,24 +124,42 @@ const TopBar: React.FC = () => {
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
             }}
+            aria-label="Home"
           >
             aula
           </AppLink>
-          {crumbs.length > 2 && <span>...</span>}
+          {crumbs.length > 2 && <span aria-hidden="true">...</span>}
           {crumbs.slice(-2).map((crumb) => crumb)}
         </Breadcrumbs>
 
         {/* User Controls */}
         {checkPermissions('system', 'hide') ? (
-          <Stack direction="row">
+          <Stack direction="row" component="nav" aria-label="User controls">
             <LocaleSwitch />
-            <AppIconButton icon="logout" onClick={onLogout} />
+            <AppIconButton 
+              icon="logout" 
+              onClick={onLogout} 
+              aria-label="Logout"
+            />
           </Stack>
         ) : (
-          <Stack direction="row" spacing={0.5} sx={{ ml: 'auto' }}>
-            <MessagesButton />
-            <UpdatesButton />
-            <AppIconButton icon="menu" onClick={menuToggle} sx={{ display: { xs: 'block', md: 'none' } }} />
+          <Stack 
+            direction="row" 
+            spacing={0.5} 
+            sx={{ ml: 'auto' }}
+            component="nav" 
+            aria-label="User controls"
+          >
+            <MessagesButton aria-label="Messages" />
+            <UpdatesButton aria-label="Updates" />
+            <AppIconButton 
+              icon="menu" 
+              onClick={menuToggle} 
+              sx={{ display: { xs: 'block', md: 'none' } }}
+              aria-label="Open menu"
+              aria-expanded={openSideBar}
+              aria-controls="sidebar-menu"
+            />
           </Stack>
         )}
         <SideBar
@@ -139,6 +167,8 @@ const TopBar: React.FC = () => {
           open={openSideBar}
           variant="temporary"
           onClose={() => setSidebar(false)}
+          id="sidebar-menu"
+          aria-label="Main navigation menu"
         />
       </Toolbar>
     </AppBar>

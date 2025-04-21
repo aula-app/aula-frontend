@@ -33,6 +33,14 @@ For detailed setup instructions, see our [Getting Started Guide](docs/GETSTARTED
 - **Styling Solution**: Material UI components with emotion
 - **File Handling**: Upload capabilities with react-dropzone
 - **Content Rendering**: Markdown support with react-markdown
+- **Accessibility**: 
+  - WCAG 2.1 AA compliant design
+  - Keyboard navigation support
+  - Screen reader friendly components
+  - Focus management
+  - Semantic HTML structure
+  - High contrast mode
+  - Skip navigation links
 - **Mobile Support**:
   - Responsive design
   - Touch gestures support

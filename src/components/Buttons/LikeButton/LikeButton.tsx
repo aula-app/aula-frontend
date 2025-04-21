@@ -4,6 +4,7 @@ import { addIdeaLike, getIdeaLike, removeIdeaLike } from '@/services/ideas';
 import { CommentType, IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   item: IdeaType | CommentType;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const LikeButton: React.FC<Props> = ({ item, disabled }) => {
+  const { t } = useTranslation();
   const [liked, setLiked] = useState(false);
   const [likeStatus, setLikeStatus] = useState(false);
 
@@ -35,13 +37,28 @@ const LikeButton: React.FC<Props> = ({ item, disabled }) => {
     getLikeState();
   }, []);
 
+  // Calculate the total number of likes for display and screen readers
+  const totalLikes = item.sum_likes + Number(likeStatus) - Number(liked);
+  
+  // Prepare translated labels for accessibility
+  const itemType = isIdea ? 'idea' : 'comment';
+  const likeActionLabel = likeStatus 
+    ? t('accessibility.aria.unlikeItem', { item: t(`scopes.${itemType}.name`) }) 
+    : t('accessibility.aria.likeItem', { item: t(`scopes.${itemType}.name`) });
+  const likesCountLabel = t('accessibility.aria.likesCount', { count: totalLikes });
+  
   return (
     <AppIconButton
       icon={likeStatus ? 'heartFull' : 'heart'}
       onClick={toggleLike}
       disabled={disabled || !checkPermissions('ideas', 'like')}
+      aria-label={likeActionLabel}
+      aria-pressed={likeStatus}
+      title={likeActionLabel}
     >
-      {`${item.sum_likes + Number(likeStatus) - Number(liked)}`}
+      <span aria-live="polite" aria-atomic="true">
+        {`${totalLikes}`}
+      </span>
     </AppIconButton>
   );
 };

@@ -1,6 +1,23 @@
 @import url('/font/vision/vision.css');
 @import url('https://fonts.cdnfonts.com/css/tahoma');
 
+/* Global Accessibility Styles */
+:root {
+  /* Minimum touch target size for interactive elements */
+  --min-touch-target: 44px;
+  
+  /* Focus outline styles for keyboard navigation */
+  --focus-outline-color: #1976d2;
+  --focus-outline-width: 2px;
+  --focus-outline-offset: 2px;
+}
+
+/* Set reasonable defaults */
+html {
+  font-size: 100%; /* Makes 1rem = 16px in most browsers */
+  line-height: 1.5; /* Improved readability */
+}
+
 html, body, #root {
   height: 100%;
 }
@@ -11,6 +28,69 @@ body {
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Ensure sufficient text contrast */
+  color: rgba(0, 0, 0, 0.87);
+}
+
+/* Improve focus visibility for keyboard navigation */
+:focus-visible {
+  outline: var(--focus-outline-width) solid var(--focus-outline-color);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Ensure buttons have sufficient touch targets */
+button, 
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  min-height: var(--min-touch-target);
+  min-width: var(--min-touch-target);
+}
+
+/* Remove focus outlines for mouse users but keep for keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Add underline to links for better visibility */
+a {
+  text-decoration: underline;
+}
+
+/* But not for navigation links that are obvious */
+nav a {
+  text-decoration: none;
+}
+
+/* Skip link styles */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Visually hidden but screen reader accessible */
+.sr-only,
+.screen-reader-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 code {

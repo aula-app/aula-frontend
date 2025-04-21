@@ -58,56 +58,154 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
   useEffect(() => {
     onReset();
   }, [image]);
+  // Generate unique IDs for accessibility
+  const dialogId = "room-image-selector-dialog";
+  const dialogTitleId = "room-image-selector-dialog-title";
+  const colorSectionId = "room-image-color-section";
+  const imageSectionId = "room-image-section";
+  
+  // Color names for accessibility
+  const getColorName = (index: number) => {
+    const colorNames = [
+      t('accessibility.colors.green'),
+      t('accessibility.colors.teal'),
+      t('accessibility.colors.blue'),
+      t('accessibility.colors.purple'),
+      t('accessibility.colors.magenta'),
+      t('accessibility.colors.red'),
+      t('accessibility.colors.orange'),
+      t('accessibility.colors.yellow')
+    ];
+    return colorNames[index % colorNames.length];
+  };
+  
+  // Image names for accessibility
+  const getImageName = (index: number) => {
+    const imageNames = [
+      t('accessibility.images.airplane'),
+      t('accessibility.images.beaker'),
+      t('accessibility.images.cat'),
+      t('accessibility.images.chair'),
+      t('accessibility.images.clothing'),
+      t('accessibility.images.computer'),
+      t('accessibility.images.door'),
+      t('accessibility.images.globe')
+    ];
+    return imageNames[index % imageNames.length];
+  };
+
   return (
     <>
-      <Button sx={{ minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }} onClick={() => setEditImage(true)}>
+      <Button 
+        sx={{ minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }} 
+        onClick={() => setEditImage(true)}
+        aria-label={t('roomImage.changeImage')}
+        aria-haspopup="dialog"
+      >
         <DefaultImage image={selected} shift={shift} />
       </Button>
-      <Dialog open={editImage} onClose={() => setEditImage(false)} fullWidth>
+      
+      <Dialog 
+        id={dialogId}
+        open={editImage} 
+        onClose={() => setEditImage(false)} 
+        fullWidth
+        aria-labelledby={dialogTitleId}
+        role="dialog"
+      >
         <Stack p={2}>
-          <Typography variant="h3">Change color</Typography>
-          <Stack direction="row" width="100%" justifyContent="space-between" py={2}>
-            {[...Array(8)].map((item, key) => (
-              <Button
-                key={key}
-                sx={{
-                  width: 50,
-                  aspectRatio: 1,
-                  minWidth: 'auto',
-                  maxWidth: '10%',
-                  borderRadius: 999,
-                  bgcolor: `hsl(${122 - key * 45}, 50%, 75%)`,
-                }}
-                onClick={() => setShift(key * 45)}
-              ></Button>
-            ))}
-          </Stack>
-          <Typography variant="h3">Select image</Typography>
-          <Grid container spacing={2}>
-            {[...Array(8)].map((item, key) => (
-              <Grid size={{ xs: 6, sm: 3 }} key={`img_${key}`}>
+          <Typography variant="h3" id={dialogTitleId}>{t('roomImage.selectImageAndColor')}</Typography>
+          
+          {/* Color Selection Section */}
+          <Typography variant="h4" id={colorSectionId}>{t('roomImage.changeColor')}</Typography>
+          <Stack 
+            direction="row" 
+            width="100%" 
+            justifyContent="space-between" 
+            py={2}
+            role="radiogroup"
+            aria-labelledby={colorSectionId}
+          >
+            {[...Array(8)].map((item, key) => {
+              const isSelected = shift === key * 45;
+              const colorName = getColorName(key);
+              
+              return (
                 <Button
+                  key={key}
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    height: '100%',
-                    border: selected === key ? 2 : 0,
-                    borderRadius: 6,
-                    // maxWidth: 200,
-                    mx: 'auto',
+                    width: 50,
+                    aspectRatio: 1,
+                    minWidth: 'auto',
+                    maxWidth: '10%',
+                    borderRadius: 999,
+                    bgcolor: `hsl(${122 - key * 45}, 50%, 75%)`,
+                    border: isSelected ? '3px solid black' : 'none',
                   }}
-                  onClick={() => setSelected(key)}
+                  onClick={() => setShift(key * 45)}
+                  aria-label={colorName}
+                  aria-pressed={isSelected}
+                  role="radio"
+                  aria-checked={isSelected}
                 >
-                  <DefaultImage image={key} shift={shift} />
+                  <span className="sr-only">{colorName}</span>
                 </Button>
-              </Grid>
-            ))}
+              );
+            })}
+          </Stack>
+          
+          {/* Image Selection Section */}
+          <Typography variant="h4" id={imageSectionId}>{t('roomImage.selectImage')}</Typography>
+          <Grid 
+            container 
+            spacing={2}
+            role="radiogroup"
+            aria-labelledby={imageSectionId}
+          >
+            {[...Array(8)].map((item, key) => {
+              const isSelected = selected === key;
+              const imageName = getImageName(key);
+              
+              return (
+                <Grid size={{ xs: 6, sm: 3 }} key={`img_${key}`}>
+                  <Button
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      height: '100%',
+                      border: isSelected ? '2px solid black' : 'none',
+                      borderRadius: 6,
+                      mx: 'auto',
+                    }}
+                    onClick={() => setSelected(key)}
+                    aria-label={imageName}
+                    aria-pressed={isSelected}
+                    role="radio"
+                    aria-checked={isSelected}
+                  >
+                    <DefaultImage image={key} shift={shift} />
+                    <span className="sr-only">{imageName}</span>
+                  </Button>
+                </Grid>
+              );
+            })}
           </Grid>
+          
+          {/* Action Buttons */}
           <Stack direction="row" width="100%" justifyContent="end" py={2}>
-            <Button color="error" sx={{ mr: 2 }} onClick={handleClose}>
+            <Button 
+              color="error" 
+              sx={{ mr: 2 }} 
+              onClick={handleClose}
+              aria-label={t('actions.cancel')}
+            >
               {t('actions.cancel')}
             </Button>
-            <Button variant="contained" onClick={handleSubmit}>
+            <Button 
+              variant="contained" 
+              onClick={handleSubmit}
+              aria-label={t('actions.confirm')}
+            >
               {t('actions.confirm')}
             </Button>
           </Stack>

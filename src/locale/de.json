@@ -1,4 +1,56 @@
 {
+  "accessibility": {
+    "skipToContent": "Zum Hauptinhalt springen",
+    "moreInfo": "Mehr Informationen",
+    "closeDialog": "Dialog schließen",
+    "expandSection": "Abschnitt erweitern",
+    "collapseSection": "Abschnitt einklappen",
+    "selectOption": "Option auswählen",
+    "required": "Pflichtfeld",
+    "optional": "Optionales Feld",
+    "errorInField": "Fehler im Feld",
+    "loading": "Wird geladen, bitte warten",
+    "toggleMenu": "Menü umschalten",
+    "navigationMenu": "Navigationsmenü",
+    "formSection": "Formularabschnitt",
+    "goBack": "Zurück",
+    "colors": {
+      "green": "Grün",
+      "teal": "Türkis",
+      "blue": "Blau",
+      "purple": "Lila",
+      "magenta": "Magenta",
+      "red": "Rot",
+      "orange": "Orange",
+      "yellow": "Gelb"
+    },
+    "images": {
+      "airplane": "Flugzeug",
+      "beaker": "Messbecher",
+      "cat": "Katze",
+      "chair": "Stuhl",
+      "clothing": "Kleidung",
+      "computer": "Computer",
+      "door": "Tür",
+      "globe": "Globus"
+    },
+    "aria": {
+      "deleteItem": "{{item}} löschen",
+      "editItem": "{{item}} bearbeiten",
+      "likeItem": "Gefällt mir für {{item}}",
+      "unlikeItem": "Gefällt mir nicht mehr für {{item}}",
+      "likesCount": "{{count}} Likes",
+      "requiredField": "Dies ist ein Pflichtfeld",
+      "optionalField": "Dieses Feld ist optional",
+      "errorMessage": "Fehler: {{message}}",
+      "selectImage": "Bild auswählen",
+      "changeImage": "Bild ändern",
+      "selectColor": "Farbe auswählen",
+      "submitForm": "Formular absenden",
+      "cancelAction": "Abbrechen",
+      "confirmAction": "Bestätigen"
+    }
+  },
   "actions": {
     "activate": "{{var}} aktivieren",
     "add": "{{var}} hinzufügen",
@@ -115,6 +167,11 @@
     "unauthorized": "Diese Seite erfordert eine Authentifizierung"
   },
   "forms": {
+    "user": {
+      "title": "Benutzerformular",
+      "personalInfo": "Persönliche Informationen",
+      "roleSettings": "Rolleneinstellungen"
+    },
     "csv": {
       "empty": "Ihre Datei enthält keine Daten. Bitte stellen Sie eine gültige CSV-Datei bereit",
       "invalid": "Ihre Datei scheint nicht gültig zu sein. Bitte stellen Sie eine gültige CSV-Datei bereit",
@@ -573,5 +630,11 @@
     "thursday": "Donnerstag",
     "tuesday": "Dienstag",
     "wednesday": "Mittwoch"
+  },
+  "roomImage": {
+    "changeImage": "Raumbild ändern",
+    "selectImageAndColor": "Bild und Farbe auswählen",
+    "changeColor": "Farbe ändern",
+    "selectImage": "Bild auswählen"
   }
 }

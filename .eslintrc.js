@@ -1,3 +1,16 @@
 module.exports = {
-  extends: ['react-app', 'react-app/jest'],
+  extends: [
+    'react-app',
+    'react-app/jest',
+    'plugin:jsx-a11y/recommended'
+  ],
+  plugins: [
+    'jsx-a11y'
+  ],
+  rules: {
+    'jsx-a11y/anchor-is-valid': 'warn',
+    'jsx-a11y/click-events-have-key-events': 'warn',
+    'jsx-a11y/no-static-element-interactions': 'warn',
+    'jsx-a11y/no-noninteractive-element-interactions': 'warn'
+  }
 };

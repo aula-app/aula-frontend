@@ -1,23 +1,42 @@
 import { PaletteOptions, ThemeOptions } from '@mui/material';
 
+// Updated colors for better contrast ratios (WCAG AA compliance)
 const PALETTE_COLORS: Partial<PaletteOptions> = {
   primary: {
-    main: 'hsl(134, 72%, 67%)',
+    main: 'hsl(134, 72%, 40%)', // Darkened for better contrast
+    light: 'hsl(134, 72%, 67%)',
+    dark: 'hsl(134, 72%, 30%)',
+    contrastText: '#ffffff',
   },
   secondary: {
-    main: 'hsl(0, 0%, 59%)',
+    main: 'hsl(0, 0%, 45%)', // Darkened for better contrast
+    light: 'hsl(0, 0%, 59%)',
+    dark: 'hsl(0, 0%, 35%)',
+    contrastText: '#ffffff',
   },
   error: {
-    main: 'hsl(0, 84%, 76%)',
+    main: 'hsl(0, 84%, 60%)', // Darkened for better contrast
+    light: 'hsl(0, 84%, 76%)',
+    dark: 'hsl(0, 84%, 50%)',
+    contrastText: '#ffffff',
   },
   warning: {
-    main: 'hsl(45, 100%, 79%)',
+    main: 'hsl(45, 100%, 50%)', // Darkened for better contrast
+    light: 'hsl(45, 100%, 79%)',
+    dark: 'hsl(45, 100%, 40%)',
+    contrastText: '#000000',
   },
   info: {
-    main: 'hsl(204, 82%, 86%)',
+    main: 'hsl(204, 82%, 60%)', // Darkened for better contrast
+    light: 'hsl(204, 82%, 86%)',
+    dark: 'hsl(204, 82%, 40%)',
+    contrastText: '#ffffff',
   },
   success: {
-    main: 'hsl(134, 72%, 67%)',
+    main: 'hsl(134, 72%, 40%)', // Darkened for better contrast
+    light: 'hsl(134, 72%, 67%)',
+    dark: 'hsl(134, 72%, 30%)',
+    contrastText: '#ffffff',
   },
 };
 

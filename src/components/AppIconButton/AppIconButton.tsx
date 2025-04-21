@@ -13,7 +13,24 @@ interface Props extends Omit<IconButtonProps, 'size' | 'color'> {
   to?: string; // Link prop
   href?: string; // Link prop
   openInNewTab?: boolean; // Link prop
-  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
+  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop
+  /**
+   * Accessibility label for the button
+   * Important for screen readers when there's only an icon
+   */
+  'aria-label'?: string;
+  /**
+   * Indicates whether the element, or another grouping element it controls, is currently expanded or collapsed
+   */
+  'aria-expanded'?: boolean;
+  /**
+   * Identifies the element (or elements) whose contents or presence are controlled by this button
+   */
+  'aria-controls'?: string;
+  /**
+   * Indicates the current "pressed" state of toggle buttons
+   */
+  'aria-pressed'?: boolean;
 }
 
 /**
@@ -49,6 +66,15 @@ const AppIconButton: React.FC<Props> = ({
             },
           }),
     };
+    
+    // If there's no aria-label but there's a title, use the title as the aria-label
+    const ariaProps = {
+      'aria-label': restOfProps['aria-label'] || title,
+      'aria-expanded': restOfProps['aria-expanded'],
+      'aria-controls': restOfProps['aria-controls'],
+      'aria-pressed': restOfProps['aria-pressed'],
+    };
+    
     return (
       <IconButton
         component={componentToRender}
@@ -56,12 +82,14 @@ const AppIconButton: React.FC<Props> = ({
         disabled={disabled}
         sx={sxToRender}
         {...restOfProps}
+        {...ariaProps}
       >
-        <AppIcon icon={icon} size={size} />
-        <Typography pl={0.3}>{children}</Typography>
+        {/* If the icon is meaningful, it should be associated with the button's accessible name */}
+        <AppIcon icon={icon} size={size} aria-hidden="true" />
+        {children && <Typography pl={0.3}>{children}</Typography>}
       </IconButton>
     );
-  }, [color, componentToRender, children, disabled, icon, isMuiColor, sx, restOfProps]);
+  }, [color, componentToRender, children, disabled, icon, isMuiColor, sx, title, restOfProps]);
 
   // When title is set, wrap the IconButton with Tooltip.
   // Note: when IconButton is disabled the Tooltip is not working, so we don't need it

@@ -1,4 +1,56 @@
 {
+  "accessibility": {
+    "skipToContent": "Skip to main content",
+    "moreInfo": "More information",
+    "closeDialog": "Close dialog",
+    "expandSection": "Expand section",
+    "collapseSection": "Collapse section",
+    "selectOption": "Select option",
+    "required": "Required field",
+    "optional": "Optional field",
+    "errorInField": "Error in field",
+    "loading": "Loading, please wait",
+    "toggleMenu": "Toggle menu",
+    "navigationMenu": "Navigation menu",
+    "formSection": "Form section",
+    "goBack": "Go back",
+    "colors": {
+      "green": "Green",
+      "teal": "Teal",
+      "blue": "Blue",
+      "purple": "Purple",
+      "magenta": "Magenta",
+      "red": "Red",
+      "orange": "Orange",
+      "yellow": "Yellow"
+    },
+    "images": {
+      "airplane": "Airplane",
+      "beaker": "Beaker",
+      "cat": "Cat",
+      "chair": "Chair",
+      "clothing": "Clothing",
+      "computer": "Computer",
+      "door": "Door",
+      "globe": "Globe"
+    },
+    "aria": {
+      "deleteItem": "Delete {{item}}",
+      "editItem": "Edit {{item}}",
+      "likeItem": "Like this {{item}}",
+      "unlikeItem": "Unlike this {{item}}",
+      "likesCount": "{{count}} likes",
+      "requiredField": "This field is required",
+      "optionalField": "This field is optional",
+      "errorMessage": "Error: {{message}}",
+      "selectImage": "Select image",
+      "changeImage": "Change image",
+      "selectColor": "Select color",
+      "submitForm": "Submit form",
+      "cancelAction": "Cancel",
+      "confirmAction": "Confirm"
+    }
+  },
   "actions": {
     "activate": "Activate {{var}}",
     "add": "New {{var}}",
@@ -115,6 +167,11 @@
     "unauthorized": "This page requires authentication"
   },
   "forms": {
+    "user": {
+      "title": "User Form",
+      "personalInfo": "Personal Information",
+      "roleSettings": "Role Settings"
+    },
     "csv": {
       "empty": "Your file doesn't contain any data. Please provide a valid CSV file",
       "invalid": "Your file doesn't seem to be valid. Please provide a valid CSV file",
@@ -573,5 +630,11 @@
     "thursday": "Thursday",
     "tuesday": "Tuesday",
     "wednesday": "Wednesday"
+  },
+  "roomImage": {
+    "changeImage": "Change room image",
+    "selectImageAndColor": "Select image and color",
+    "changeColor": "Change color",
+    "selectImage": "Select image"
   }
 }
