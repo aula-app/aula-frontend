@@ -2,6 +2,7 @@
  * Axe-core integration for accessibility testing
  * This only runs in development mode and logs accessibility issues to the console
  */
+import React from 'react';
 
 // We'll dynamically import axe-core to avoid bundling it in production
 const initAxe = async () => {
@@ -9,7 +10,7 @@ const initAxe = async () => {
     try {
       const ReactDOM = await import('react-dom');
       const axe = await import('@axe-core/react');
-      
+
       // Initialize axe with React and ReactDOM
       axe.default(React, ReactDOM, 1000, {
         // Optional axe-core configuration
@@ -18,7 +19,7 @@ const initAxe = async () => {
           { id: 'color-contrast', enabled: true },
         ],
       });
-      
+
       console.log('Axe-core accessibility testing initialized');
     } catch (error) {
       console.error('Error initializing axe-core:', error);
