@@ -79,33 +79,38 @@ const WildIdeas = () => {
   };
 
   const saveScroll = (evt: SyntheticEvent) => {
-    dispatch({ 
+    dispatch({
       action: 'SAVE_SCROLL',
       lastScroll: (evt.target as HTMLElement).scrollTop,
-      lastIdeaList: 'wild-ideas'
-    })
-  }
+      lastIdeaList: 'wild-ideas',
+    });
+  };
 
   useEffect(() => {
-    let ideasList = document.getElementById("wild-ideas-list")
+    let ideasList = document.getElementById('wild-ideas-list');
     if (!!ideasList) {
-      console.log(appState)
+      console.log(appState);
       if (appState.lastIdeaList == 'wild-ideas') {
-       ideasList.scrollTop = appState.lastScroll
-       console.log("SRCOCOO", ideasList, ideas)
-      }
-      else
-        dispatch({ 
+        ideasList.scrollTop = appState.lastScroll;
+        console.log('SRCOCOO', ideasList, ideas);
+      } else
+        dispatch({
           action: 'SAVE_SCROLL',
           lastScroll: 0,
-          lastIdeaList: 'wild-ideas'
-        })
+          lastIdeaList: 'wild-ideas',
+        });
     }
-  }, [ideas])
-
+  }, [ideas]);
 
   return (
-    <Stack id="wild-ideas-list" style={{overflowY: "scroll"}} onScroll={saveScroll} alignItems="center" width="100%" spacing={2} >
+    <Stack
+      id="wild-ideas-list"
+      style={{ overflowY: 'scroll' }}
+      onScroll={saveScroll}
+      alignItems="center"
+      width="100%"
+      spacing={2}
+    >
       {isLoading && <IdeaBubbleSkeleton />}
       {error && <Typography>{t(error)}</Typography>}
       {!isLoading &&

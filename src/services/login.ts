@@ -56,23 +56,22 @@ export const checkPasswordKey = async (secret: string) => {
     }
     throw new Error('Unknown error occurred');
   }
-
 };
 
 export const setPassword = async (password: string, secret: string) => {
   const api_url = localStorageGet('api_url');
 
   const formData = {
-    "secret": secret,
-    "password": password
-  }
+    secret: secret,
+    password: password,
+  };
   try {
     const response = await fetch(`${api_url}/api/controllers/set_password.php`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     });
 
     if (!response.ok) {

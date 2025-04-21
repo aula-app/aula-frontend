@@ -53,25 +53,25 @@ const SelectField: React.FC<Props> = ({
               error={!!fieldState.error}
               helperText={t(`${fieldState.error?.message || ''}`)}
               {...restOfProps}
-              slotProps={{ 
+              slotProps={{
                 inputLabel: { shrink: true },
-                input: { 
+                input: {
                   'aria-required': required,
                   'aria-invalid': !!fieldState.error,
-                  'aria-describedby': fieldState.error ? `${helperId} ${errorId}` : helperId
-                }
+                  'aria-describedby': fieldState.error ? `${helperId} ${errorId}` : helperId,
+                },
               }}
               FormHelperTextProps={{
                 id: fieldState.error ? errorId : helperId,
-                role: fieldState.error ? 'alert' : undefined
+                role: fieldState.error ? 'alert' : undefined,
               }}
             >
               {options.map((option) => (
-                <MenuItem 
-                  value={option.value} 
-                  key={option.value} 
-                  disabled={(option.disabled) ? option.disabled : false}
-                  aria-disabled={(option.disabled) ? option.disabled : false}
+                <MenuItem
+                  value={option.value}
+                  key={option.value}
+                  disabled={option.disabled ? option.disabled : false}
+                  aria-disabled={option.disabled ? option.disabled : false}
                 >
                   {t(option.label)}
                 </MenuItem>

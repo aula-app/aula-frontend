@@ -5,6 +5,8 @@ export interface DrawerSideBarProps {
   open: boolean;
   variant: 'permanent' | 'persistent' | 'temporary';
   onClose: (event: React.MouseEvent<HTMLButtonElement> | {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
+  id?: string;
+  'aria-label'?: string;
 }
 
 export interface SideBarContentProps {

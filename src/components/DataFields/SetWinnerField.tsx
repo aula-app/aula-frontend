@@ -53,7 +53,7 @@ const SetWinnerField: React.FC<Props> = ({ control, disabled = false, ...restOfP
           <Typography color={fieldState.error ? 'error' : ''}>
             {fieldState.error
               ? fieldState.error.message
-              : t(`scopes.ideas.${winnerMessages[(field.value == null)?2:field.value]}`)}
+              : t(`scopes.ideas.${winnerMessages[field.value == null ? 2 : field.value]}`)}
           </Typography>
         </Stack>
       )}

@@ -444,22 +444,22 @@ export type AllIconsType = keyof typeof ALL_ICONS;
 interface Props extends StackProps {
   /** Icon's name */
   icon: AllIconsType;
-  
+
   /** Size of the icon */
   size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl';
-  
-  /** 
+
+  /**
    * Indicates whether the element is exposed to an accessibility API
    * Set to true when the icon is purely decorative
    */
   'aria-hidden'?: boolean;
-  
+
   /**
    * A textual alternative for the icon
    * Only use this when the icon conveys meaning on its own
    */
   'aria-label'?: string;
-  
+
   /**
    * References the ID of another element that labels this element
    */
@@ -470,14 +470,14 @@ interface Props extends StackProps {
  * Renders SVG icon by given Icon name
  * @component AppIcon
  */
-const AppIcon: React.FC<Props> = ({ 
-  icon, 
-  size = 'medium', 
-  sx, 
-  'aria-hidden': ariaHidden = true, 
+const AppIcon: React.FC<Props> = ({
+  icon,
+  size = 'medium',
+  sx,
+  'aria-hidden': ariaHidden = true,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledby,
-  ...restOfProps 
+  ...restOfProps
 }) => {
   const currentSize =
     size === 'xs'
@@ -491,15 +491,15 @@ const AppIcon: React.FC<Props> = ({
             : size === 'xxl'
               ? '80px'
               : '24px'; // no size === md
-              
+
   // Set up accessibility attributes
   const accessibilityProps = {
-    'role': (ariaLabel || ariaLabelledby) ? 'img' : undefined,
+    role: ariaLabel || ariaLabelledby ? 'img' : undefined,
     'aria-hidden': ariaHidden,
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledby,
   };
-              
+
   return (
     <Stack
       alignItems="center"

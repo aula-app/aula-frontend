@@ -19,7 +19,7 @@ interface VisuallyHiddenProps {
    * The content to be visually hidden but still available to screen readers
    */
   children: React.ReactNode;
-  
+
   /**
    * If true, the component will be a span instead of a div
    */
@@ -28,10 +28,10 @@ interface VisuallyHiddenProps {
 
 /**
  * VisuallyHidden component - hides content visually but keeps it available to screen readers
- * 
+ *
  * This is useful for providing additional context to screen reader users without
  * affecting the visual layout.
- * 
+ *
  * Example:
  * <button>
  *   <Icon />
@@ -40,12 +40,8 @@ interface VisuallyHiddenProps {
  */
 const VisuallyHidden: React.FC<VisuallyHiddenProps> = ({ children, inline = false }) => {
   const Component = inline ? 'span' : 'div';
-  
-  return (
-    <StyledVisuallyHidden as={Component}>
-      {children}
-    </StyledVisuallyHidden>
-  );
+
+  return <StyledVisuallyHidden as={Component}>{children}</StyledVisuallyHidden>;
 };
 
 export default VisuallyHidden;

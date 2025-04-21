@@ -31,7 +31,7 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
       return {
         ...state,
         lastScroll: action.lastScroll,
-        lastIdeaList: action.lastIdeaList
+        lastIdeaList: action.lastIdeaList,
       };
     case 'HAS_CONSENT':
       return {

@@ -5,7 +5,7 @@
 :root {
   /* Minimum touch target size for interactive elements */
   --min-touch-target: 44px;
-  
+
   /* Focus outline styles for keyboard navigation */
   --focus-outline-color: #1976d2;
   --focus-outline-width: 2px;
@@ -18,14 +18,27 @@ html {
   line-height: 1.5; /* Improved readability */
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }
 
 body {
   margin: 0;
-  font-family: 'vision', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-    'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    'vision',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* Ensure sufficient text contrast */
@@ -39,11 +52,11 @@ body {
 }
 
 /* Ensure buttons have sufficient touch targets */
-button, 
-[role="button"],
-input[type="button"],
-input[type="submit"],
-input[type="reset"] {
+button,
+[role='button'],
+input[type='button'],
+input[type='submit'],
+input[type='reset'] {
   min-height: var(--min-touch-target);
   min-width: var(--min-touch-target);
 }
@@ -102,10 +115,12 @@ code {
 }
 
 .point {
-  clip-path: polygon(20% 0%, 0% 100%, 100% 0%)
+  clip-path: polygon(20% 0%, 0% 100%, 100% 0%);
 }
 
-.printOnly { display: none; }
+.printOnly {
+  display: none;
+}
 
 .editor-toolbar {
   background-color: transparent !important;

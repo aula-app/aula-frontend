@@ -49,14 +49,14 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     >
       {/* Skip to content link for keyboard users */}
       <SkipToContent />
-      
+
       {/* TopBar with navigation landmark */}
       <TopBar />
 
-      <Stack 
-        direction="row" 
-        component="main" 
-        id="main-content" 
+      <Stack
+        direction="row"
+        component="main"
+        id="main-content"
         sx={{ flexGrow: 1, overflow: 'hidden' }}
         role="main"
         aria-label="Main content"

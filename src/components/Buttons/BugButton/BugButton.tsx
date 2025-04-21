@@ -39,6 +39,7 @@ ${data.content || ''}
         {...restOfProps}
         onClick={() => setOpen(true)}
         title={t('actions.bugReport')}
+        aria-expanded={isOpen}
       />
       <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <BugForms onClose={onClose} onSubmit={onSubmit} />

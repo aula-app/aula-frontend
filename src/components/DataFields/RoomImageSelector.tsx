@@ -59,11 +59,11 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
     onReset();
   }, [image]);
   // Generate unique IDs for accessibility
-  const dialogId = "room-image-selector-dialog";
-  const dialogTitleId = "room-image-selector-dialog-title";
-  const colorSectionId = "room-image-color-section";
-  const imageSectionId = "room-image-section";
-  
+  const dialogId = 'room-image-selector-dialog';
+  const dialogTitleId = 'room-image-selector-dialog-title';
+  const colorSectionId = 'room-image-color-section';
+  const imageSectionId = 'room-image-section';
+
   // Color names for accessibility
   const getColorName = (index: number) => {
     const colorNames = [
@@ -74,11 +74,11 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
       t('accessibility.colors.magenta'),
       t('accessibility.colors.red'),
       t('accessibility.colors.orange'),
-      t('accessibility.colors.yellow')
+      t('accessibility.colors.yellow'),
     ];
     return colorNames[index % colorNames.length];
   };
-  
+
   // Image names for accessibility
   const getImageName = (index: number) => {
     const imageNames = [
@@ -89,39 +89,43 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
       t('accessibility.images.clothing'),
       t('accessibility.images.computer'),
       t('accessibility.images.door'),
-      t('accessibility.images.globe')
+      t('accessibility.images.globe'),
     ];
     return imageNames[index % imageNames.length];
   };
 
   return (
     <>
-      <Button 
-        sx={{ minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }} 
+      <Button
+        sx={{ minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }}
         onClick={() => setEditImage(true)}
         aria-label={t('roomImage.changeImage')}
         aria-haspopup="dialog"
       >
         <DefaultImage image={selected} shift={shift} />
       </Button>
-      
-      <Dialog 
+
+      <Dialog
         id={dialogId}
-        open={editImage} 
-        onClose={() => setEditImage(false)} 
+        open={editImage}
+        onClose={() => setEditImage(false)}
         fullWidth
         aria-labelledby={dialogTitleId}
         role="dialog"
       >
         <Stack p={2}>
-          <Typography variant="h3" id={dialogTitleId}>{t('roomImage.selectImageAndColor')}</Typography>
-          
+          <Typography variant="h3" id={dialogTitleId}>
+            {t('roomImage.selectImageAndColor')}
+          </Typography>
+
           {/* Color Selection Section */}
-          <Typography variant="h4" id={colorSectionId}>{t('roomImage.changeColor')}</Typography>
-          <Stack 
-            direction="row" 
-            width="100%" 
-            justifyContent="space-between" 
+          <Typography variant="h4" id={colorSectionId}>
+            {t('roomImage.changeColor')}
+          </Typography>
+          <Stack
+            direction="row"
+            width="100%"
+            justifyContent="space-between"
             py={2}
             role="radiogroup"
             aria-labelledby={colorSectionId}
@@ -129,7 +133,7 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
             {[...Array(8)].map((item, key) => {
               const isSelected = shift === key * 45;
               const colorName = getColorName(key);
-              
+
               return (
                 <Button
                   key={key}
@@ -153,19 +157,16 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
               );
             })}
           </Stack>
-          
+
           {/* Image Selection Section */}
-          <Typography variant="h4" id={imageSectionId}>{t('roomImage.selectImage')}</Typography>
-          <Grid 
-            container 
-            spacing={2}
-            role="radiogroup"
-            aria-labelledby={imageSectionId}
-          >
+          <Typography variant="h4" id={imageSectionId}>
+            {t('roomImage.selectImage')}
+          </Typography>
+          <Grid container spacing={2} role="radiogroup" aria-labelledby={imageSectionId}>
             {[...Array(8)].map((item, key) => {
               const isSelected = selected === key;
               const imageName = getImageName(key);
-              
+
               return (
                 <Grid size={{ xs: 6, sm: 3 }} key={`img_${key}`}>
                   <Button
@@ -190,22 +191,13 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
               );
             })}
           </Grid>
-          
+
           {/* Action Buttons */}
           <Stack direction="row" width="100%" justifyContent="end" py={2}>
-            <Button 
-              color="error" 
-              sx={{ mr: 2 }} 
-              onClick={handleClose}
-              aria-label={t('actions.cancel')}
-            >
+            <Button color="error" sx={{ mr: 2 }} onClick={handleClose} aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button 
-              variant="contained" 
-              onClick={handleSubmit}
-              aria-label={t('actions.confirm')}
-            >
+            <Button variant="contained" onClick={handleSubmit} aria-label={t('actions.confirm')}>
               {t('actions.confirm')}
             </Button>
           </Stack>

@@ -18,7 +18,7 @@ const RoomView = () => {
   const { t } = useTranslation();
   const { room_id } = useParams<{ room_id: string }>();
   const [appState, dispatch] = useAppStore();
-  
+
   // Redirect to root if no room_id is provided
   if (!room_id) {
     return <Navigate to="/" replace />;

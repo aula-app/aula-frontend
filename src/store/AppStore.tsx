@@ -37,7 +37,7 @@ const INITIAL_APP_STATE: AppStoreState = {
   messages: [],
   breadcrumb: [],
   lastScroll: 0,
-  lastIdeaList: ''
+  lastIdeaList: '',
 };
 
 /**

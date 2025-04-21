@@ -6,7 +6,7 @@ import AppLink from '../AppLink';
 
 const MUI_ICON_BUTTON_COLORS = ['inherit', 'default', 'primary', 'secondary', 'success', 'error', 'info', 'warning'];
 
-interface Props extends Omit<IconButtonProps, 'size' | 'color'> {
+interface Props {
   color?: string; // Not only 'inherit' | 'default' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
   icon: AllIconsType;
   component?: ElementType; // Could be RouterLink, AppLink, <a>, etc.
@@ -14,6 +14,21 @@ interface Props extends Omit<IconButtonProps, 'size' | 'color'> {
   href?: string; // Link prop
   openInNewTab?: boolean; // Link prop
   size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop
+  title?: string; // Used for tooltip and accessibility
+  autoFocus?: boolean;
+
+  // Extend with IconButtonProps except for size and color which we override
+  children?: React.ReactNode;
+  className?: string;
+  disabled?: boolean;
+  disableFocusRipple?: boolean;
+  disableRipple?: boolean;
+  edge?: 'start' | 'end' | false;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onMouseDown?: React.MouseEventHandler<HTMLButtonElement>;
+  sx?: any;
+
+  // Accessibility props
   /**
    * Accessibility label for the button
    * Important for screen readers when there's only an icon
@@ -22,7 +37,7 @@ interface Props extends Omit<IconButtonProps, 'size' | 'color'> {
   /**
    * Indicates whether the element, or another grouping element it controls, is currently expanded or collapsed
    */
-  'aria-expanded'?: boolean;
+  'aria-expanded'?: boolean | 'true' | 'false';
   /**
    * Identifies the element (or elements) whose contents or presence are controlled by this button
    */
@@ -30,7 +45,15 @@ interface Props extends Omit<IconButtonProps, 'size' | 'color'> {
   /**
    * Indicates the current "pressed" state of toggle buttons
    */
-  'aria-pressed'?: boolean;
+  'aria-pressed'?: boolean | 'true' | 'false' | 'mixed';
+  /**
+   * Indicates that the element has a popup context menu or sub-level menu
+   */
+  'aria-haspopup'?: React.AriaAttributes['aria-haspopup'];
+  /**
+   * Other aria attributes
+   */
+  [key: `aria-${string}`]: any;
 }
 
 /**
@@ -66,7 +89,7 @@ const AppIconButton: React.FC<Props> = ({
             },
           }),
     };
-    
+
     // If there's no aria-label but there's a title, use the title as the aria-label
     const ariaProps = {
       'aria-label': restOfProps['aria-label'] || title,
@@ -74,7 +97,7 @@ const AppIconButton: React.FC<Props> = ({
       'aria-controls': restOfProps['aria-controls'],
       'aria-pressed': restOfProps['aria-pressed'],
     };
-    
+
     return (
       <IconButton
         component={componentToRender}
@@ -85,7 +108,7 @@ const AppIconButton: React.FC<Props> = ({
         {...ariaProps}
       >
         {/* If the icon is meaningful, it should be associated with the button's accessible name */}
-        <AppIcon icon={icon} size={size} aria-hidden="true" />
+        <AppIcon icon={icon} size={size} aria-hidden={true} />
         {children && <Typography pl={0.3}>{children}</Typography>}
       </IconButton>
     );

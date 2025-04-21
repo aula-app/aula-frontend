@@ -11,25 +11,20 @@ interface Props extends IconButtonProps {
   itemType?: string;
 }
 
-const EditButton: React.FC<Props> = ({ 
-  disabled = false, 
-  onEdit, 
-  itemType = 'item',
-  ...restOfProps 
-}) => {
+const EditButton: React.FC<Props> = ({ disabled = false, onEdit, itemType = 'item', ...restOfProps }) => {
   const { t } = useTranslation();
-  
+
   // Create descriptive accessibility label
   const ariaLabel = t('accessibility.aria.editItem', { item: t(`scopes.${itemType}.name`, itemType) });
-  
+
   return (
-    <AppIconButton 
-      icon="edit" 
-      disabled={disabled} 
-      onClick={onEdit} 
+    <AppIconButton
+      icon="edit"
+      disabled={disabled}
+      onClick={onEdit}
       aria-label={ariaLabel}
       title={ariaLabel}
-      {...restOfProps} 
+      {...restOfProps}
     />
   );
 };

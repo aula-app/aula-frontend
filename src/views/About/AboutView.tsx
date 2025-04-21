@@ -12,7 +12,7 @@ const AboutView = () => {
   const [appState, dispatch] = useAppStore();
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.about'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.about'), '']] });
   }, []);
 
   return (

@@ -34,16 +34,16 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
   const dialogId = `delete-dialog-${scope}`;
   const titleId = `delete-dialog-title-${scope}`;
   const descriptionId = `delete-dialog-description-${scope}`;
-  
+
   // Prepare translated label for delete button
   const deleteButtonLabel = t('accessibility.aria.deleteItem', { item: t(`scopes.${scope}.name`) });
 
   return (
     <>
-      <AppIconButton 
-        icon="delete" 
-        disabled={disabled} 
-        {...restOfProps} 
+      <AppIconButton
+        icon="delete"
+        disabled={disabled}
+        {...restOfProps}
         onClick={() => setOpen(true)}
         aria-label={deleteButtonLabel}
         aria-haspopup="dialog"
@@ -59,7 +59,7 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
       >
         <DialogTitle id={titleId}>
           <Stack direction="row" alignItems="center">
-            <WarningAmber sx={{ mr: 1 }} color="error" aria-hidden="true" /> 
+            <WarningAmber sx={{ mr: 1 }} color="error" aria-hidden="true" />
             {t('deletion.headline', { var: t(`scopes.${scope}.name`) })}
           </Stack>
         </DialogTitle>
@@ -69,17 +69,12 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button 
-            onClick={onClose} 
-            color="secondary" 
-            autoFocus
-            aria-label={t('accessibility.aria.cancelAction')}
-          >
+          <Button onClick={onClose} color="secondary" autoFocus aria-label={t('accessibility.aria.cancelAction')}>
             {t('actions.cancel')}
           </Button>
-          <Button 
-            onClick={handleDelete} 
-            color="error" 
+          <Button
+            onClick={handleDelete}
+            color="error"
             variant="contained"
             aria-label={t('accessibility.aria.deleteItem', { item: t(`scopes.${scope}.name`) })}
           >

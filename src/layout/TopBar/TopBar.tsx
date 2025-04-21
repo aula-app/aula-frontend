@@ -73,9 +73,9 @@ const TopBar: React.FC = () => {
   }
 
   return (
-    <AppBar 
+    <AppBar
       position="fixed"
-      elevation={0} 
+      elevation={0}
       sx={{ height: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT }}
       component="header"
       role="banner"
@@ -86,11 +86,7 @@ const TopBar: React.FC = () => {
           {location[1] === '' ? (
             <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Icon.svg`} alt="Aula home" />
           ) : (
-            <AppIconButton 
-              icon="back" 
-              onClick={() => goto(getReturnPath())} 
-              aria-label="Go back"
-            />
+            <AppIconButton icon="back" onClick={() => goto(getReturnPath())} aria-label="Go back" />
           )}
         </Box>
 
@@ -136,25 +132,15 @@ const TopBar: React.FC = () => {
         {checkPermissions('system', 'hide') ? (
           <Stack direction="row" component="nav" aria-label="User controls">
             <LocaleSwitch />
-            <AppIconButton 
-              icon="logout" 
-              onClick={onLogout} 
-              aria-label="Logout"
-            />
+            <AppIconButton icon="logout" onClick={onLogout} aria-label="Logout" />
           </Stack>
         ) : (
-          <Stack 
-            direction="row" 
-            spacing={0.5} 
-            sx={{ ml: 'auto' }}
-            component="nav" 
-            aria-label="User controls"
-          >
+          <Stack direction="row" spacing={0.5} sx={{ ml: 'auto' }} component="nav" aria-label="User controls">
             <MessagesButton aria-label="Messages" />
             <UpdatesButton aria-label="Updates" />
-            <AppIconButton 
-              icon="menu" 
-              onClick={menuToggle} 
+            <AppIconButton
+              icon="menu"
+              onClick={menuToggle}
               sx={{ display: { xs: 'block', md: 'none' } }}
               aria-label="Open menu"
               aria-expanded={openSideBar}

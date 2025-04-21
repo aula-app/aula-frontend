@@ -7,18 +7,33 @@
   }
 
   .separateBottom,
-  .MuiToolbar-root{ border-bottom: 1px solid black !important; }
+  .MuiToolbar-root {
+    border-bottom: 1px solid black !important;
+  }
 
   .noPrint,
   .MuiFab-root,
   .MuiTabs-root,
   .MuiToolbar-root svg,
   .MuiToolbar-root button,
-  .MuiCardContent-root img { display: none; }
+  .MuiCardContent-root img {
+    display: none;
+  }
 
-  .printOnly { display: block; }
+  .printOnly {
+    display: block;
+  }
 
-  .noVolume { width: auto !important; height: auto !important; }
-  .noRepeat { position: relative !important; }
-  .noSpace { margin: 0 !important; padding: 0 !important; top: 0; }
+  .noVolume {
+    width: auto !important;
+    height: auto !important;
+  }
+  .noRepeat {
+    position: relative !important;
+  }
+  .noSpace {
+    margin: 0 !important;
+    padding: 0 !important;
+    top: 0;
+  }
 }

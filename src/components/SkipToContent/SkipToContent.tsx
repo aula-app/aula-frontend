@@ -26,12 +26,8 @@ const SkipLink = styled('a')(({ theme }) => ({
  */
 const SkipToContent: React.FC = () => {
   const { t } = useTranslation();
-  
-  return (
-    <SkipLink href="#main-content">
-      {t('accessibility.skipToContent')}
-    </SkipLink>
-  );
+
+  return <SkipLink href="#main-content">{t('accessibility.skipToContent')}</SkipLink>;
 };
 
 export default SkipToContent;

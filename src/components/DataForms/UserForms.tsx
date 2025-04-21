@@ -142,7 +142,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   }, [JSON.stringify(defaultValues)]);
 
   // Generate unique IDs for form fields
-  const formId = "user-form";
+  const formId = 'user-form';
   const generateFieldId = (fieldName: string) => `${formId}-${fieldName}`;
   const generateErrorId = (fieldName: string) => `${formId}-${fieldName}-error`;
 
@@ -160,7 +160,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               {checkPermissions('users', 'status') && <StatusField control={control} disabled={isLoading} />}
             </Stack>
           </Stack>
-          
+
           {/* Use fieldset and legend for grouped inputs */}
           <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
             <legend className="sr-only">{t('forms.user.personalInfo')}</legend>
@@ -180,14 +180,14 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                   inputProps={{
                     'aria-required': 'true',
                     'aria-invalid': !!errors.displayname,
-                    'aria-describedby': errors.displayname ? generateErrorId('displayname') : undefined
+                    'aria-describedby': errors.displayname ? generateErrorId('displayname') : undefined,
                   }}
                   FormHelperTextProps={{
                     id: generateErrorId('displayname'),
-                    role: errors.displayname ? 'alert' : undefined
+                    role: errors.displayname ? 'alert' : undefined,
                   }}
                 />
-                
+
                 {/* Username Field */}
                 <TextField
                   id={generateFieldId('username')}
@@ -202,14 +202,14 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                   inputProps={{
                     'aria-required': 'true',
                     'aria-invalid': !!errors.username,
-                    'aria-describedby': errors.username ? generateErrorId('username') : undefined
+                    'aria-describedby': errors.username ? generateErrorId('username') : undefined,
                   }}
                   FormHelperTextProps={{
                     id: generateErrorId('username'),
-                    role: errors.username ? 'alert' : undefined
+                    role: errors.username ? 'alert' : undefined,
                   }}
                 />
-                
+
                 {/* Real Name Field */}
                 <TextField
                   id={generateFieldId('realname')}
@@ -224,14 +224,14 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                   inputProps={{
                     'aria-required': 'true',
                     'aria-invalid': !!errors.realname,
-                    'aria-describedby': errors.realname ? generateErrorId('realname') : undefined
+                    'aria-describedby': errors.realname ? generateErrorId('realname') : undefined,
                   }}
                   FormHelperTextProps={{
                     id: generateErrorId('realname'),
-                    role: errors.realname ? 'alert' : undefined
+                    role: errors.realname ? 'alert' : undefined,
                   }}
                 />
-                
+
                 {/* Email Field */}
                 <TextField
                   id={generateFieldId('email')}
@@ -244,14 +244,14 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                   {...register('email')}
                   inputProps={{
                     'aria-invalid': !!errors.email,
-                    'aria-describedby': errors.email ? generateErrorId('email') : undefined
+                    'aria-describedby': errors.email ? generateErrorId('email') : undefined,
                   }}
                   FormHelperTextProps={{
                     id: generateErrorId('email'),
-                    role: errors.email ? 'alert' : undefined
+                    role: errors.email ? 'alert' : undefined,
                   }}
                 />
-                
+
                 {/* Role and Room Settings */}
                 {defaultValues?.userlevel !== 60 && (
                   <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
@@ -276,7 +276,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                   </fieldset>
                 )}
               </Stack>
-              
+
               {/* About Me Editor */}
               <div role="group" aria-labelledby={generateFieldId('about-me-label')}>
                 <Typography id={generateFieldId('about-me-label')} variant="caption" className="sr-only">
@@ -287,24 +287,19 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                   control={control}
                   disabled={isLoading}
                   sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
-                  label={t('settings.columns.about_me')}
                 />
               </div>
             </Stack>
           </fieldset>
-          
+
           {/* Action Buttons */}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button 
-              onClick={onClose} 
-              color="error"
-              aria-label={t('actions.cancel')}
-            >
+            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={isLoading}
               aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
             >

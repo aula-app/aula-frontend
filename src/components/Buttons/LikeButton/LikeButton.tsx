@@ -39,14 +39,14 @@ const LikeButton: React.FC<Props> = ({ item, disabled }) => {
 
   // Calculate the total number of likes for display and screen readers
   const totalLikes = item.sum_likes + Number(likeStatus) - Number(liked);
-  
+
   // Prepare translated labels for accessibility
   const itemType = isIdea ? 'idea' : 'comment';
-  const likeActionLabel = likeStatus 
-    ? t('accessibility.aria.unlikeItem', { item: t(`scopes.${itemType}.name`) }) 
+  const likeActionLabel = likeStatus
+    ? t('accessibility.aria.unlikeItem', { item: t(`scopes.${itemType}.name`) })
     : t('accessibility.aria.likeItem', { item: t(`scopes.${itemType}.name`) });
   const likesCountLabel = t('accessibility.aria.likesCount', { count: totalLikes });
-  
+
   return (
     <AppIconButton
       icon={likeStatus ? 'heartFull' : 'heart'}
