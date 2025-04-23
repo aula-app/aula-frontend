@@ -4,8 +4,11 @@ import * as shared from '../shared';
 import * as users from './page_interactions/users';
 import * as rooms from './page_interactions/rooms';
 import * as ideas from './page_interactions/ideas';
+import * as boxes from './page_interactions/boxes';
+
 import * as fixtures from '../fixtures/users';
 import * as browsers from './browsers';
+import { BoxData } from '../fixtures/ideas';
 
 let room;
 
@@ -104,6 +107,55 @@ test.describe('Room behaviours - creating rooms', () => {
 
     // now alice should remove her own idea
     await ideas.remove(browsers.alice, room, alicesIdea);
+  });
+
+  test('Admin can create a box with alice and bobs ideas', async () => {
+    const tempScope = shared.gensym();
+
+    const alicesIdea = {
+      name: 'alices-test-idea' + shared.getRunId() + '-scope-' + tempScope,
+      description: 'generated during testing data',
+    };
+    const bobsIdea = {
+      name: 'bobs-test-idea' + shared.getRunId() + '-scope-' + tempScope,
+      description: 'generated during testing data',
+    };
+
+    const box: BoxData = {
+      name: 'admins-test-box' + shared.getRunId() + '-scope-' + tempScope,
+      description: 'generated during automated testing',
+      ideas: [alicesIdea, bobsIdea],
+      discussionDays: 6,
+      votingDays: 10,
+      phase: 10,
+    };
+
+    await ideas.create(browsers.alice, room, alicesIdea);
+    await ideas.create(browsers.bob, room, bobsIdea);
+
+    await boxes.create(browsers.admin, room, box);
+
+    await boxes.remove(browsers.admin, room, box);
+
+    await ideas.remove(browsers.alice, room, alicesIdea);
+    await ideas.remove(browsers.bob, room, bobsIdea);
+  });
+
+  test('Alice cannot create a box', async () => {
+    const tempScope = shared.gensym();
+
+    const box: BoxData = {
+      name: 'admins-test-box' + shared.getRunId() + '-scope-' + tempScope,
+      description: 'generated during automated testing',
+      ideas: [],
+      discussionDays: 6,
+      votingDays: 10,
+      phase: 10,
+    };
+
+    await expect(async () => {
+      await boxes.create(browsers.alice, room, box);
+    }).rejects.toThrow();
   });
 
   ////

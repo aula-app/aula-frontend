@@ -1,14 +1,11 @@
 import { expect, Page } from '@playwright/test';
-import fs from 'fs';
-import path from 'path';
+
 import * as shared from '../../shared';
 import { sleep } from '../../utils';
 import * as roomFixtures from '../../fixtures/rooms';
 import * as ideaFixtures from '../../fixtures/ideas';
 
 const host = shared.getHost();
-
-const runId = shared.getRunId();
 
 export const create = async (
   page: Page, //
