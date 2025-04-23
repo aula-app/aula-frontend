@@ -26,6 +26,8 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await page.fill('input[name="room_name"]', room.name);
   await page.locator('div[contenteditable="true"]').fill('generated during automated tests');
 
+  // how to fill in one of those MUI multiselectors:
+
   const UserSelector = page.locator('[data-testing-id="usersfield"] input');
   await expect(UserSelector).toBeVisible({ timeout: 500 });
 

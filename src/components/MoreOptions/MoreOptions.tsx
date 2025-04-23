@@ -64,7 +64,12 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
             )}
           </Stack>
         </Collapse>
-        <AppIconButton icon={open ? 'close' : 'more'} onClick={toggleOptions} {...restOfProps} />
+        <AppIconButton
+          data-testing-id="more-options"
+          icon={open ? 'close' : 'more'}
+          onClick={toggleOptions}
+          {...restOfProps}
+        />
       </Stack>
     </ClickAwayListener>
   );

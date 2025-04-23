@@ -34,3 +34,15 @@ export const getHost = () => process.env.APP_FRONTEND_HOST;
 export const getRunId = () => fs.readFileSync('run-id.txt', 'utf-8');
 
 export const setRunId = () => fs.writeFileSync('run-id.txt', 'run-id-' + timestamp);
+
+export function gensym(prefix = 'G__') {
+  // tests will fail on collision.. very rare
+  const rand = Math.random().toString(36).slice(2, 10); // letters + digits
+  return `${prefix}${rand}`;
+}
+
+export function cssEscape(str) {
+  return str.replace(/[^a-zA-Z0-9_\u00A0-\u10FFFF-]/g, (c) => {
+    return '\\' + c.charCodeAt(0).toString(16) + ' ';
+  });
+}
