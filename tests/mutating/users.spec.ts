@@ -33,17 +33,6 @@ test.describe('Room behaviours - creating rooms', () => {
     await browsers.pickle();
   });
 
-  /*   test('Admin can create a supermoderator', async () => {
-    await users.create(browsers.admin, {
-      username: 'burt-supermoderator_v-' + Date.now().toString(),
-      password: 'aula',
-      displayName: 'burt-',
-      realName: 'burt Testing',
-      role: 41,
-      about: 'generated on ' + 'in automated testing framework. should be deleted.',
-    });
-  }); */
-
   //
   test('Admin can create a room, adding 4 users', async () => {
     await rooms.create(browsers.admin, room);
@@ -72,12 +61,13 @@ test.describe('Room behaviours - creating rooms', () => {
     }).rejects.toThrow();
   });
 
-  test('Admin can create an Idea', async () => {
+  test('Admin can create and remove an Idea', async () => {
     const adminsIdea = {
       name: 'admins-test-idea' + shared.getRunId(),
       description: 'generated during testing data',
     };
     await ideas.create(browsers.admin, room, adminsIdea);
+    await ideas.remove(browsers.admin, room, adminsIdea);
   });
 
   test('Alice can create and delete an Idea', async () => {
