@@ -19,7 +19,7 @@ export const create = async (
   await expect(RoomDiv).toBeVisible({ timeout: 2000 });
   await RoomDiv.click();
 
-  const GoToDiscussionPhaseButton = page.locator('[data-testing-id="link-to-phase-10"]');
+  const GoToDiscussionPhaseButton = page.locator(`[data-testing-id="link-to-phase-${box.phase}"]`);
   await expect(GoToDiscussionPhaseButton).toBeVisible({ timeout: 2000 });
   await GoToDiscussionPhaseButton.click();
 
@@ -101,4 +101,52 @@ export const remove = async (
 
   const NoExistBoxDiv = page.locator('h3').filter({ hasText: room.name });
   await expect(NoExistBoxDiv).toHaveCount(0);
+};
+
+export const move = async (
+  page: Page, //
+  room: roomFixtures.RoomData,
+  box: ideaFixtures.BoxData,
+  fromPhase: number,
+  toPhase: number
+) => {
+  await page.goto(host);
+
+  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
+  await expect(RoomDiv).toBeVisible();
+  await RoomDiv.click();
+
+  const GoToPhaseButton1 = page.locator(`[data-testing-id="link-to-phase-${fromPhase}"]`);
+  await expect(GoToPhaseButton1).toBeVisible({ timeout: 2000 });
+  await GoToPhaseButton1.click();
+
+  const BoxDiv = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
+  await expect(BoxDiv).toBeVisible({ timeout: 2000 });
+
+  const MoreOptions = BoxDiv.locator('[data-testing-id="more-options"]');
+  await expect(MoreOptions).toBeVisible({ timeout: 2000 });
+
+  await MoreOptions.click();
+
+  const EditButton = BoxDiv.locator('[data-testing-id="edit-button"]');
+  await expect(EditButton).toBeVisible({ timeout: 2000 });
+
+  await EditButton.click();
+
+  // select the correct phase for the box
+  const phaseComboboxId = await page.getAttribute('label:text("Phase")', 'for');
+  const PhaseCombobox = page.locator(`#${shared.cssEscape(phaseComboboxId)}`);
+  await expect(PhaseCombobox).toBeVisible({ timeout: 2000 });
+  await PhaseCombobox.click();
+  const Selection = page.locator(`[data-value="${toPhase}"]`);
+  await Selection.click();
+
+  await page.locator('button[type="submit"]').click();
+
+  const GoToDiscussionPhaseButton2 = page.locator(`[data-testing-id="link-to-phase-${toPhase}"]`);
+  await expect(GoToDiscussionPhaseButton2).toBeVisible({ timeout: 2000 });
+  await GoToDiscussionPhaseButton2.click();
+
+  const BoxDiv2 = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
+  await expect(BoxDiv2).toBeVisible({ timeout: 2000 });
 };

@@ -133,3 +133,41 @@ export const removeComment = async (
   const NoComment = page.locator('[data-testing-id="comment-bubble"]').filter({ hasText: commentText });
   await expect(NoComment).toHaveCount(0);
 };
+
+export const approve = async (
+  page: Page, //
+  room: roomFixtures.RoomData,
+  box: ideaFixtures.BoxData,
+  idea: ideaFixtures.IdeaData
+) => {
+  await page.goto(host);
+
+  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
+  await expect(RoomDiv).toBeVisible();
+  await RoomDiv.click();
+
+  const GoToApprovalPhaseButton = page.locator('[data-testing-id="link-to-phase-20"]');
+  await expect(GoToApprovalPhaseButton).toBeVisible({ timeout: 2000 });
+  await GoToApprovalPhaseButton.click();
+
+  const BoxDiv = await page.locator('h3').filter({ hasText: box.name });
+  await expect(BoxDiv).toBeVisible({ timeout: 2000 });
+  await BoxDiv.click();
+
+  const IdeaDiv = page.locator(`h3`).filter({ hasText: idea.name });
+  await expect(IdeaDiv).toBeVisible();
+
+  await IdeaDiv.click();
+
+  await page.locator('div[contenteditable="true"]').fill('approved in automated testing');
+
+  const ApptoveButton = page.locator(`[data-testing-id="approve-button"]`);
+  await expect(ApptoveButton).toBeVisible({ timeout: 2000 });
+
+  await ApptoveButton.click();
+
+  const ConfirmButton = page.locator(`button`).filter({ hasText: 'Bestätigen' });
+  await expect(ConfirmButton).toBeVisible({ timeout: 2000 });
+
+  await ConfirmButton.click();
+};

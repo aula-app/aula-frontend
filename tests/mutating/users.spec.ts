@@ -158,6 +158,43 @@ test.describe('Room behaviours - creating rooms', () => {
     }).rejects.toThrow();
   });
 
+  test('Rainer can approve ideas in prüfung phase', async () => {
+    const tempScope = shared.gensym();
+
+    const alicesIdea = {
+      name: 'alices-test-idea' + shared.getRunId() + '-scope-' + tempScope,
+      description: 'generated during testing data',
+    };
+    const bobsIdea = {
+      name: 'bobs-test-idea' + shared.getRunId() + '-scope-' + tempScope,
+      description: 'generated during testing data',
+    };
+
+    const box: BoxData = {
+      name: 'admins-test-box' + shared.getRunId() + '-scope-' + tempScope,
+      description: 'generated during automated testing',
+      ideas: [alicesIdea, bobsIdea],
+      discussionDays: 6,
+      votingDays: 10,
+      phase: 10,
+    };
+
+    await ideas.create(browsers.alice, room, alicesIdea);
+    await ideas.create(browsers.bob, room, bobsIdea);
+
+    await boxes.create(browsers.admin, room, box);
+
+    await boxes.move(browsers.admin, room, box, 10, 20);
+
+    await ideas.approve(browsers.rainer, room, box, alicesIdea);
+    await ideas.approve(browsers.rainer, room, box, bobsIdea);
+
+    //await boxes.remove(browsers.admin, room, box);
+
+    //await ideas.remove(browsers.alice, room, alicesIdea);
+    //await ideas.remove(browsers.bob, room, bobsIdea);
+  });
+
   ////
   ///
   //
