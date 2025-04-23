@@ -9,6 +9,11 @@ const config: CapacitorConfig = {
   },
   ios: {
     contentInset: 'always',
+    preferredContentMode: 'mobile',
+    backgroundColor: '#ffffff',
+    allowsLinkPreview: true,
+    scheme: 'aula',
+    limitsNavigationsToAppBoundDomains: true,
   },
   plugins: {
     Keyboard: {

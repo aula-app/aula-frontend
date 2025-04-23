@@ -167,7 +167,13 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
                 sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
               />
               {!isDefault && (
-                <PhaseDurationFields control={control} required disabled={isLoading} setValue={setValue} />
+                <PhaseDurationFields
+                  control={control}
+                  required
+                  disabled={isLoading}
+                  room={defaultValues?.hash_id}
+                  setValue={setValue}
+                />
               )}
               {checkPermissions('rooms', 'addUser') && !isDefault && (
                 <UsersField
