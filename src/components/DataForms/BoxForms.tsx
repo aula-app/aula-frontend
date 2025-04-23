@@ -41,9 +41,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     room_hash_id: yup.string(),
     phase_id: yup.string(),
     phase_duration_1: yup.number(),
-    phase_duration_2: yup.number(),
     phase_duration_3: yup.number(),
-    phase_duration_4: yup.number(),
     status: yup.number(),
   } as Record<keyof BoxType, any>);
 
@@ -112,9 +110,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
       room_id: data.room_hash_id || room_id,
       phase_id: data.phase_id || 10,
       phase_duration_1: data.phase_duration_1,
-      phase_duration_2: data.phase_duration_2,
       phase_duration_3: data.phase_duration_3,
-      phase_duration_4: data.phase_duration_4,
       status: data.status,
     });
     if (response.error || !response.data) return;
@@ -130,9 +126,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
       room_id: data.room_hash_id,
       phase_id: data.phase_id,
       phase_duration_1: data.phase_duration_1,
-      phase_duration_2: data.phase_duration_2,
       phase_duration_3: data.phase_duration_3,
-      phase_duration_4: data.phase_duration_4,
       status: data.status,
       topic_id: defaultValues.hash_id,
     });
@@ -195,7 +189,12 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
                 />
               )}
               {checkPermissions('boxes', 'changePhaseDuration') && (
-                <PhaseDurationFields control={control} room={defaultValues?.room_hash_id} disabled={isLoading} />
+                <PhaseDurationFields
+                  control={control}
+                  room={defaultValues?.room_hash_id}
+                  disabled={isLoading}
+                  setValue={setValue}
+                />
               )}
             </Stack>
             {room && (
