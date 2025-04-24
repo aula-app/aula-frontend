@@ -158,7 +158,7 @@ test.describe('Room behaviours - creating rooms', () => {
     }).rejects.toThrow();
   });
 
-  test('Rainer can approve ideas in prüfung phase', async () => {
+  test('Rainer can approve ideas in prüfung phase, moving it to abstimmungs phase', async () => {
     const tempScope = shared.gensym();
 
     const alicesIdea = {
@@ -188,6 +188,8 @@ test.describe('Room behaviours - creating rooms', () => {
 
     await ideas.approve(browsers.rainer, room, box, alicesIdea);
     await ideas.approve(browsers.rainer, room, box, bobsIdea);
+
+    await boxes.move(browsers.rainer, room, box, 20, 30);
 
     //await boxes.remove(browsers.admin, room, box);
 
