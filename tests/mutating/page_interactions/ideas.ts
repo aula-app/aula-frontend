@@ -185,8 +185,6 @@ export const approve = async (
   await expect(ConfirmButton).toBeVisible({ timeout: 2000 });
 
   await ConfirmButton.click();
-
-  await sleep(1);
 };
 
 export const vote = async (
@@ -198,29 +196,15 @@ export const vote = async (
 ) => {
   await page.goto(host);
 
-  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
-  await expect(RoomDiv).toBeVisible();
-  await RoomDiv.click();
+  await goToRoom(page, room);
 
-  const GoToApprovalPhaseButton = page.locator('[data-testing-id="link-to-phase-30"]');
-  await expect(GoToApprovalPhaseButton).toBeVisible({ timeout: 2000 });
-  await GoToApprovalPhaseButton.click();
+  await goToPhase(page, 30);
 
   await goToBox(page, box);
 
   await goToidea(page, idea);
 
-  await page.locator('div[contenteditable="true"]').fill('approved in automated testing');
-
-  const ApptoveButton = page.locator(`[data-testing-id="approve-button"]`);
-  await expect(ApptoveButton).toBeVisible({ timeout: 2000 });
-
-  await ApptoveButton.click();
-
-  const ConfirmButton = page.locator(`button`).filter({ hasText: 'Bestätigen' });
-  await expect(ConfirmButton).toBeVisible({ timeout: 2000 });
-
-  await ConfirmButton.click();
-
-  await sleep(1);
+  const VoteButton = page.locator(`[data-testing-id="${vote}"]`);
+  await expect(VoteButton).toBeVisible({ timeout: 2000 });
+  await VoteButton.click();
 };
