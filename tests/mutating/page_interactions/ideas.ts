@@ -7,6 +7,43 @@ import * as ideaFixtures from '../../fixtures/ideas';
 
 const host = shared.getHost();
 
+export const goToRoom = async (
+  page: Page, //
+  room: roomFixtures.RoomData
+) => {
+  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
+  await expect(RoomDiv).toBeVisible();
+  await RoomDiv.click();
+};
+
+export const goToidea = async (
+  page: Page, //
+  idea: ideaFixtures.IdeaData
+) => {
+  const IdeaDiv = page.locator('h3').filter({ hasText: idea.name });
+  await expect(IdeaDiv).toBeVisible();
+  await IdeaDiv.click();
+};
+
+// goes to a specific box found on the current page
+export const goToBox = async (
+  page: Page, //
+  box: ideaFixtures.BoxData
+) => {
+  const BoxDiv = await page.locator('h3').filter({ hasText: box.name });
+  await expect(BoxDiv).toBeVisible({ timeout: 2000 });
+  await BoxDiv.click();
+};
+
+export const goToPhase = async (
+  page: Page, //
+  phase: number
+) => {
+  const GoToApprovalPhaseButton = page.locator(`[data-testing-id="link-to-phase-${phase}"]`);
+  await expect(GoToApprovalPhaseButton).toBeVisible({ timeout: 2000 });
+  await GoToApprovalPhaseButton.click();
+};
+
 export const create = async (
   page: Page, //
   room: roomFixtures.RoomData,
@@ -15,9 +52,7 @@ export const create = async (
   // start at home
   await page.goto(host);
 
-  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
-  await expect(RoomDiv).toBeVisible();
-  await RoomDiv.click();
+  await goToRoom(page, room);
 
   const AddIdeaButton = page.locator('[aria-label="add idea"]');
   await expect(AddIdeaButton).toBeVisible({ timeout: 5000 });
@@ -42,9 +77,7 @@ export const remove = async (
   // start at home
   await page.goto(host);
 
-  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
-  await expect(RoomDiv).toBeVisible();
-  await RoomDiv.click();
+  await goToRoom(page, room);
 
   const IdeaDiv = page.locator(`[data-testing-id="idea-${idea.name}"]`);
   await expect(IdeaDiv).toBeVisible();
@@ -74,13 +107,9 @@ export const comment = async (
   // start at home
   await page.goto(host);
 
-  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
-  await expect(RoomDiv).toBeVisible();
-  await RoomDiv.click();
+  await goToRoom(page, room);
 
-  const IdeaDiv = page.locator('h3').filter({ hasText: idea.name });
-  await expect(IdeaDiv).toBeVisible();
-  await IdeaDiv.click();
+  await goToidea(page, idea);
 
   const AddCommentButton = page.locator('[aria-label="add comment"]');
   await expect(AddCommentButton).toBeVisible();
@@ -107,13 +136,9 @@ export const removeComment = async (
   // start at home
   await page.goto(host);
 
-  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
-  await expect(RoomDiv).toBeVisible();
-  await RoomDiv.click();
+  await goToRoom(page, room);
 
-  const IdeaDiv = page.locator('h3').filter({ hasText: idea.name });
-  await expect(IdeaDiv).toBeVisible();
-  await IdeaDiv.click();
+  await goToidea(page, idea);
 
   const Comment = page.locator('[data-testing-id="comment-bubble"]').filter({ hasText: commentText });
   await expect(Comment).toBeVisible();
@@ -142,22 +167,12 @@ export const approve = async (
 ) => {
   await page.goto(host);
 
-  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
-  await expect(RoomDiv).toBeVisible();
-  await RoomDiv.click();
+  await goToRoom(page, room);
 
-  const GoToApprovalPhaseButton = page.locator('[data-testing-id="link-to-phase-20"]');
-  await expect(GoToApprovalPhaseButton).toBeVisible({ timeout: 2000 });
-  await GoToApprovalPhaseButton.click();
+  await goToPhase(page, 20);
+  await goToBox(page, box);
 
-  const BoxDiv = await page.locator('h3').filter({ hasText: box.name });
-  await expect(BoxDiv).toBeVisible({ timeout: 2000 });
-  await BoxDiv.click();
-
-  const IdeaDiv = page.locator(`h3`).filter({ hasText: idea.name });
-  await expect(IdeaDiv).toBeVisible();
-
-  await IdeaDiv.click();
+  await goToidea(page, idea);
 
   await page.locator('div[contenteditable="true"]').fill('approved in automated testing');
 
@@ -170,4 +185,42 @@ export const approve = async (
   await expect(ConfirmButton).toBeVisible({ timeout: 2000 });
 
   await ConfirmButton.click();
+
+  await sleep(1);
+};
+
+export const vote = async (
+  page: Page, //
+  room: roomFixtures.RoomData,
+  box: ideaFixtures.BoxData,
+  idea: ideaFixtures.IdeaData,
+  vote: 'neutral' | 'for' | 'against'
+) => {
+  await page.goto(host);
+
+  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
+  await expect(RoomDiv).toBeVisible();
+  await RoomDiv.click();
+
+  const GoToApprovalPhaseButton = page.locator('[data-testing-id="link-to-phase-30"]');
+  await expect(GoToApprovalPhaseButton).toBeVisible({ timeout: 2000 });
+  await GoToApprovalPhaseButton.click();
+
+  await goToBox(page, box);
+
+  await goToidea(page, idea);
+
+  await page.locator('div[contenteditable="true"]').fill('approved in automated testing');
+
+  const ApptoveButton = page.locator(`[data-testing-id="approve-button"]`);
+  await expect(ApptoveButton).toBeVisible({ timeout: 2000 });
+
+  await ApptoveButton.click();
+
+  const ConfirmButton = page.locator(`button`).filter({ hasText: 'Bestätigen' });
+  await expect(ConfirmButton).toBeVisible({ timeout: 2000 });
+
+  await ConfirmButton.click();
+
+  await sleep(1);
 };
