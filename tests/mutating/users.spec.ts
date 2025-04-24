@@ -159,6 +159,7 @@ test.describe('Room behaviours - creating rooms', () => {
   });
 
   test('Rainer can approve ideas in prüfung phase, moving it to abstimmungs phase', async () => {
+    test.setTimeout(800000);
     const tempScope = shared.gensym();
 
     const alicesIdea = {
@@ -190,6 +191,15 @@ test.describe('Room behaviours - creating rooms', () => {
     await ideas.approve(browsers.rainer, room, box, bobsIdea);
 
     await boxes.move(browsers.rainer, room, box, 20, 30);
+
+    await ideas.vote(browsers.alice, room, box, alicesIdea, 'for');
+    await ideas.vote(browsers.alice, room, box, bobsIdea, 'against');
+    await ideas.vote(browsers.bob, room, box, alicesIdea, 'for');
+    await ideas.vote(browsers.bob, room, box, bobsIdea, 'for');
+    await ideas.vote(browsers.mallory, room, box, alicesIdea, 'for');
+    await ideas.vote(browsers.mallory, room, box, bobsIdea, 'against');
+    await ideas.vote(browsers.rainer, room, box, alicesIdea, 'for');
+    await ideas.vote(browsers.rainer, room, box, bobsIdea, 'against');
 
     //await boxes.remove(browsers.admin, room, box);
 
