@@ -1,5 +1,4 @@
 import AppIconButton from '@/components/AppIconButton';
-import { getAnnouncements } from '@/services/announcements';
 import { getPersonalMessages } from '@/services/messages';
 import { Badge, IconButtonProps, Skeleton } from '@mui/material';
 import { useEffect, useState } from 'react';
