@@ -82,7 +82,11 @@ const VotingCard = ({ onReload }: Props) => {
             <Button
               sx={{
                 color: 'inherit',
-                bgcolor: typeof vote === 'number' && vote + 1 === i ? `${option}.main` : 'transparent',
+                bgcolor:
+                  typeof vote === 'number' &&
+                  ((vote < 0 && i === 0) || (vote === 0 && i === 1) || (vote > 0 && i === 2))
+                    ? `${option}.main`
+                    : 'transparent',
                 borderRadius: 8,
                 '&:hover': {
                   bgcolor: `${option}.main`,
