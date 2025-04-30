@@ -63,8 +63,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   };
 
   const onSubmit = async (data: SchemaType) => {
-    console.log('oooOOOoooo');
-    console.log(data);
     try {
       setIsLoading(true);
       if (!defaultValues) {
