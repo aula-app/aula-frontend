@@ -32,12 +32,13 @@ const PublicRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/code" element={<InstanceCodeView />} />
+      <Route path="code" element={<InstanceCodeView />} />
       <Route path="login/*" element={<Login />} />
       <Route path="oauth-login/:jwt_token" element={<OAuthLogin />} />
       <Route path="password/" element={<UpdatePasswordView />} />
       <Route path="password/:key" element={<SetPassword />} />
       <Route path="recovery/*" element={<Recovery />} />
+      <Route path="/:code/:key" element={<SetPassword />} />
       <Route path="*" element={<PublicNotFoundView />} />
     </Routes>
   );
