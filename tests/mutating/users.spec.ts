@@ -215,12 +215,12 @@ test.describe('Room behaviours - creating rooms', () => {
     test('Mallory Received those votes and can vote with them.', async () => {
       await boxes.hasDelegatedVotes(browsers.mallory, room, data.box);
 
-      const beforeCount = await ideas.voteCount(browsers.mallory, room, data.box, data.alicesIdea);
+      const beforeCount = await ideas.totalVoteCount(browsers.mallory, room, data.box, data.alicesIdea);
       expect(beforeCount).toBe(2);
 
       await ideas.vote(browsers.mallory, room, data.box, data.alicesIdea, 'for');
 
-      const afterCount = await ideas.voteCount(browsers.mallory, room, data.box, data.alicesIdea);
+      const afterCount = await ideas.totalVoteCount(browsers.mallory, room, data.box, data.alicesIdea);
 
       expect(afterCount).toBe(beforeCount + 2);
     });
@@ -229,14 +229,30 @@ test.describe('Room behaviours - creating rooms', () => {
       await boxes.unDelegateVotes(browsers.rainer, room, data.box);
     });
 
-    test('Mallory can no longer vote for rainer', async () => {
+    test('Mallory can no longer vote for rainer, and vote count was diminished', async () => {
       await expect(async () => {
         await boxes.hasDelegatedVotes(browsers.mallory, room, data.box);
       }).rejects.toThrow();
 
-      const afterCount = await ideas.voteCount(browsers.mallory, room, data.box, data.alicesIdea);
+      const afterCount = await ideas.totalVoteCount(browsers.mallory, room, data.box, data.alicesIdea);
 
       expect(afterCount).toBe(3);
+    });
+
+    test('Rainer can vote against an idea', async () => {
+      await ideas.vote(browsers.rainer, room, data.box, data.alicesIdea, 'against');
+    });
+
+    test('Rainer can move box to results phase', async () => {
+      await boxes.move(browsers.rainer, room, data.box, 30, 40);
+    });
+
+    test('counts exist, and are as expected', async () => {
+      const [forc, againstc, neutralc] = await ideas.voteCounts(browsers.rainer, room, data.box, data.alicesIdea);
+
+      expect(forc).toBe(3);
+      expect(againstc).toBe(1);
+      expect(neutralc).toBe(0);
     });
 
     test('cleanup', async () => {
