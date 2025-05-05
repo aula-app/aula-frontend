@@ -12,6 +12,8 @@ import { BoxData } from '../fixtures/ideas';
 
 let room;
 
+let data: { [k: string]: any } = {};
+
 // force these tests to run sqeuentially
 test.describe.configure({ mode: 'serial' });
 
@@ -158,53 +160,77 @@ test.describe('Room behaviours - creating rooms', () => {
     }).rejects.toThrow();
   });
 
-  test('Rainer can approve ideas in prüfung phase, moving it to abstimmungs phase', async () => {
-    test.setTimeout(800000);
-    const tempScope = shared.gensym();
+  test.describe('full voting workflow', async () => {
+    test.beforeAll(async () => {
+      data.tempScope = 'fullflow'; // shared.gensym();
 
-    const alicesIdea = {
-      name: 'alices-test-idea' + shared.getRunId() + '-scope-' + tempScope,
-      description: 'generated during testing data',
-    };
-    const bobsIdea = {
-      name: 'bobs-test-idea' + shared.getRunId() + '-scope-' + tempScope,
-      description: 'generated during testing data',
-    };
+      data.alicesIdea = {
+        name: 'alices-test-idea' + shared.getRunId() + '-scope-' + data.tempScope,
+        description: 'generated during testing data',
+      };
+      data.bobsIdea = {
+        name: 'bobs-test-idea' + shared.getRunId() + '-scope-' + data.tempScope,
+        description: 'generated during testing data',
+      };
 
-    const box: BoxData = {
-      name: 'admins-test-box' + shared.getRunId() + '-scope-' + tempScope,
-      description: 'generated during automated testing',
-      ideas: [alicesIdea, bobsIdea],
-      discussionDays: 6,
-      votingDays: 10,
-      phase: 10,
-    };
+      data.box = {
+        name: 'admins-test-box' + shared.getRunId() + '-scope-' + data.tempScope,
+        description: 'generated during automated testing',
+        ideas: [data.alicesIdea, data.bobsIdea],
+        discussionDays: 6,
+        votingDays: 10,
+        phase: 10,
+      };
+    });
 
-    await ideas.create(browsers.alice, room, alicesIdea);
-    await ideas.create(browsers.bob, room, bobsIdea);
+    test('Rainer can approve ideas in prüfung phase, moving it to abstimmungs phase', async () => {
+      test.setTimeout(800000);
 
-    await boxes.create(browsers.admin, room, box);
+      await ideas.create(browsers.alice, room, data.alicesIdea);
+      await ideas.create(browsers.bob, room, data.bobsIdea);
 
-    await boxes.move(browsers.admin, room, box, 10, 20);
+      await boxes.create(browsers.admin, room, data.box);
 
-    await ideas.approve(browsers.rainer, room, box, alicesIdea);
-    await ideas.approve(browsers.rainer, room, box, bobsIdea);
+      await boxes.move(browsers.admin, room, data.box, 10, 20);
 
-    await boxes.move(browsers.rainer, room, box, 20, 30);
+      await ideas.approve(browsers.rainer, room, data.box, data.alicesIdea);
+      await ideas.approve(browsers.rainer, room, data.box, data.bobsIdea);
+    });
 
-    await ideas.vote(browsers.alice, room, box, alicesIdea, 'for');
-    await ideas.vote(browsers.alice, room, box, bobsIdea, 'against');
-    await ideas.vote(browsers.bob, room, box, alicesIdea, 'for');
-    await ideas.vote(browsers.bob, room, box, bobsIdea, 'for');
-    await ideas.vote(browsers.mallory, room, box, alicesIdea, 'for');
-    await ideas.vote(browsers.mallory, room, box, bobsIdea, 'against');
-    await ideas.vote(browsers.rainer, room, box, alicesIdea, 'for');
-    await ideas.vote(browsers.rainer, room, box, bobsIdea, 'against');
+    test('rainer can move the box to abstimmung', async () => {
+      await boxes.move(browsers.rainer, room, data.box, 20, 30);
+    });
 
-    //await boxes.remove(browsers.admin, room, box);
+    test('users can vote on ideas', async () => {
+      await ideas.vote(browsers.alice, room, data.box, data.alicesIdea, 'for');
+      await ideas.vote(browsers.alice, room, data.box, data.bobsIdea, 'against');
+      await ideas.vote(browsers.bob, room, data.box, data.alicesIdea, 'for');
+      await ideas.vote(browsers.bob, room, data.box, data.bobsIdea, 'for');
+    });
 
-    //await ideas.remove(browsers.alice, room, alicesIdea);
-    //await ideas.remove(browsers.bob, room, bobsIdea);
+    test('Rainer can delegate votes to Mallory', async () => {
+      await boxes.delegateVotes(browsers.rainer, room, data.box, fixtures.mallory);
+    });
+
+    test('Mallory Received those votes', async () => {
+      await boxes.hasDelegatedVotes(browsers.mallory, room, data.box);
+    });
+
+    test('Rainer can undelegate votes ', async () => {
+      await boxes.unDelegateVotes(browsers.rainer, room, data.box);
+    });
+
+    test('Mallory can no longer vote for rainer', async () => {
+      await expect(async () => {
+        await boxes.hasDelegatedVotes(browsers.mallory, room, data.box);
+      }).rejects.toThrow();
+    });
+
+    test('cleanup', async () => {
+      //await boxes.remove(browsers.admin, room, box);
+      //await ideas.remove(browsers.alice, room, alicesIdea);
+      //await ideas.remove(browsers.bob, room, bobsIdea);
+    });
   });
 
   ////
