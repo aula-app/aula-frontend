@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "de.aula"
+    namespace "de.aula.neu"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "de.aula.neu"

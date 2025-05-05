@@ -67,6 +67,7 @@ const permissions = {
   },
   messages: {
     viewAll: { role: 40 },
+    delete: { role: 50 },
     status: { role: 50 },
   },
   reports: {

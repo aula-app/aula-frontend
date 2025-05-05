@@ -1,4 +1,4 @@
-package de.aula;
+package de.aula.neu;
 
 import com.getcapacitor.BridgeActivity;
 
