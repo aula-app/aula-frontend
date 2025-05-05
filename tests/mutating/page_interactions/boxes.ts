@@ -4,6 +4,8 @@ import * as shared from '../../shared';
 import { sleep } from '../../utils';
 import * as roomFixtures from '../../fixtures/rooms';
 import * as ideaFixtures from '../../fixtures/ideas';
+import * as userFixtures from '../../fixtures/users';
+import { goToBox, goToPhase, goToRoom } from './ideas';
 
 const host = shared.getHost();
 
@@ -149,4 +151,81 @@ export const move = async (
 
   const BoxDiv2 = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
   await expect(BoxDiv2).toBeVisible({ timeout: 2000 });
+};
+
+export const delegateVotes = async (
+  page: Page, //
+  room: roomFixtures.RoomData,
+  box: ideaFixtures.BoxData,
+  toUser: userFixtures.UserData
+) => {
+  await page.goto(host);
+
+  await goToRoom(page, room);
+
+  await goToPhase(page, 30);
+
+  await goToBox(page, box);
+
+  const DelegateButton = page.locator('button').filter({ hasText: 'Stimme übertragen' });
+  await expect(DelegateButton).toBeVisible();
+
+  await DelegateButton.click();
+
+  const ToUserButton = page.locator('button').filter({ hasText: toUser.realName });
+  await expect(ToUserButton).toBeVisible();
+
+  await ToUserButton.click();
+
+  const ConfirmButton = page.locator('[data-testing-id="submit-delegation"]');
+  await expect(ConfirmButton).toBeVisible();
+
+  await ConfirmButton.click();
+
+  const delegationtext = `${toUser.displayName} kann für dich abstimmen`;
+  const DelegationFlag = page.locator('span').filter({ hasText: delegationtext });
+  await expect(DelegationFlag).toBeVisible();
+};
+
+export const unDelegateVotes = async (
+  page: Page, //
+  room: roomFixtures.RoomData,
+  box: ideaFixtures.BoxData
+) => {
+  await page.goto(host);
+
+  await goToRoom(page, room);
+
+  await goToPhase(page, 30);
+
+  await goToBox(page, box);
+
+  const UnDelegateButton = page.locator('button').filter({ hasText: 'Delegation widerrufen' });
+  await expect(UnDelegateButton).toBeVisible();
+
+  await UnDelegateButton.click();
+
+  const ConfirmButton = page.locator('[data-testing-id="revoke-delegation"]');
+  await expect(ConfirmButton).toBeVisible();
+  await ConfirmButton.click();
+
+  const DelegateButton = page.locator('button').filter({ hasText: 'Stimme übertragen' });
+  await expect(DelegateButton).toBeVisible();
+};
+
+export const hasDelegatedVotes = async (
+  page: Page, //
+  room: roomFixtures.RoomData,
+  box: ideaFixtures.BoxData
+) => {
+  await page.goto(host);
+
+  await goToRoom(page, room);
+
+  await goToPhase(page, 30);
+
+  await goToBox(page, box);
+
+  const MultipleVoteFlag = page.locator('span').filter({ hasText: 'Du stimmst für mehrere Personen hier ab' });
+  await expect(MultipleVoteFlag).toBeVisible();
 };
