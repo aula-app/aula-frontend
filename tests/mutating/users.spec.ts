@@ -212,8 +212,17 @@ test.describe('Room behaviours - creating rooms', () => {
       await boxes.delegateVotes(browsers.rainer, room, data.box, fixtures.mallory);
     });
 
-    test('Mallory Received those votes', async () => {
+    test('Mallory Received those votes and can vote with them.', async () => {
       await boxes.hasDelegatedVotes(browsers.mallory, room, data.box);
+
+      const beforeCount = await ideas.voteCount(browsers.mallory, room, data.box, data.alicesIdea);
+      expect(beforeCount).toBe(2);
+
+      await ideas.vote(browsers.mallory, room, data.box, data.alicesIdea, 'for');
+
+      const afterCount = await ideas.voteCount(browsers.mallory, room, data.box, data.alicesIdea);
+
+      expect(afterCount).toBe(beforeCount + 2);
     });
 
     test('Rainer can undelegate votes ', async () => {
@@ -224,6 +233,10 @@ test.describe('Room behaviours - creating rooms', () => {
       await expect(async () => {
         await boxes.hasDelegatedVotes(browsers.mallory, room, data.box);
       }).rejects.toThrow();
+
+      const afterCount = await ideas.voteCount(browsers.mallory, room, data.box, data.alicesIdea);
+
+      expect(afterCount).toBe(3);
     });
 
     test('cleanup', async () => {
