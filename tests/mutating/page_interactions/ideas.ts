@@ -209,7 +209,7 @@ export const vote = async (
   await VoteButton.click();
 };
 
-export const voteCount = async (
+export const totalVoteCount = async (
   page: Page, //
   room: roomFixtures.RoomData,
   box: ideaFixtures.BoxData,
@@ -234,4 +234,45 @@ export const voteCount = async (
   const count = parseInt(countS);
 
   return count;
+};
+
+type ForCount = number;
+type AgainstCount = number;
+type NeutralCount = number;
+
+export const voteCounts = async (
+  page: Page, //
+  room: roomFixtures.RoomData,
+  box: ideaFixtures.BoxData,
+  idea: ideaFixtures.IdeaData
+): Promise<[ForCount, AgainstCount, NeutralCount]> => {
+  await page.goto(host);
+
+  await goToRoom(page, room);
+
+  await goToPhase(page, 40);
+
+  await goToBox(page, box);
+
+  await goToidea(page, idea);
+
+  const ForVoteCount = page.locator(`[data-testing-id="total-votes-for"]`);
+  await expect(ForVoteCount).toBeVisible({ timeout: 2000 });
+  const forcountS = await ForVoteCount.textContent();
+  await expect(forcountS).toBeTruthy();
+  const forcount = parseInt(forcountS);
+
+  const AgainstVoteCount = page.locator(`[data-testing-id="total-votes-against"]`);
+  await expect(AgainstVoteCount).toBeVisible({ timeout: 2000 });
+  const AgainstcountS = await AgainstVoteCount.textContent();
+  await expect(AgainstcountS).toBeTruthy();
+  const Againstcount = parseInt(AgainstcountS);
+
+  const NeutralVoteCount = page.locator(`[data-testing-id="total-votes-neutral"]`);
+  await expect(NeutralVoteCount).toBeVisible({ timeout: 2000 });
+  const NeutralcountS = await NeutralVoteCount.textContent();
+  await expect(NeutralcountS).toBeTruthy();
+  const Neutralcount = parseInt(NeutralcountS);
+
+  return [forcount, Againstcount, Neutralcount];
 };
