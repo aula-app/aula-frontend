@@ -208,3 +208,30 @@ export const vote = async (
   await expect(VoteButton).toBeVisible({ timeout: 2000 });
   await VoteButton.click();
 };
+
+export const voteCount = async (
+  page: Page, //
+  room: roomFixtures.RoomData,
+  box: ideaFixtures.BoxData,
+  idea: ideaFixtures.IdeaData
+): Promise<number> => {
+  await page.goto(host);
+
+  await goToRoom(page, room);
+
+  await goToPhase(page, 30);
+
+  await goToBox(page, box);
+
+  await goToidea(page, idea);
+
+  const VoteCount = page.locator(`[data-testing-id="total-votes"]`);
+  await expect(VoteCount).toBeVisible({ timeout: 2000 });
+  const countS = await VoteCount.textContent();
+
+  await expect(countS).toBeTruthy();
+
+  const count = parseInt(countS);
+
+  return count;
+};
