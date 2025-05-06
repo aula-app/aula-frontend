@@ -17,13 +17,9 @@ export const create = async (
   // start at home
   await page.goto(host);
 
-  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
-  await expect(RoomDiv).toBeVisible({ timeout: 2000 });
-  await RoomDiv.click();
+  await goToRoom(page, room);
 
-  const GoToDiscussionPhaseButton = page.locator(`[data-testing-id="link-to-phase-${box.phase}"]`);
-  await expect(GoToDiscussionPhaseButton).toBeVisible({ timeout: 2000 });
-  await GoToDiscussionPhaseButton.click();
+  await goToPhase(page, box.phase);
 
   const AddBoxButton = page.locator('[aria-label="add idea"]'); // aria label should
   //  probably be add box
@@ -76,9 +72,7 @@ export const remove = async (
 ) => {
   await page.goto(host);
 
-  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
-  await expect(RoomDiv).toBeVisible();
-  await RoomDiv.click();
+  await goToRoom(page, room);
 
   const GoToDiscussionPhaseButton = page.locator('[data-testing-id="link-to-phase-10"]');
   await expect(GoToDiscussionPhaseButton).toBeVisible({ timeout: 2000 });
@@ -114,13 +108,9 @@ export const move = async (
 ) => {
   await page.goto(host);
 
-  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
-  await expect(RoomDiv).toBeVisible();
-  await RoomDiv.click();
+  await goToRoom(page, room);
 
-  const GoToPhaseButton1 = page.locator(`[data-testing-id="link-to-phase-${fromPhase}"]`);
-  await expect(GoToPhaseButton1).toBeVisible({ timeout: 2000 });
-  await GoToPhaseButton1.click();
+  await goToPhase(page, fromPhase);
 
   const BoxDiv = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
   await expect(BoxDiv).toBeVisible({ timeout: 2000 });

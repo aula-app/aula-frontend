@@ -46,78 +46,116 @@ test.describe('Room behaviours - creating rooms', () => {
     const admin = await browsers.newPage(browsers.admins_browser);
 
     await rooms.create(admin, room);
+
+    await admin.close();
   });
 
   // TODO: Burt _should_ be able to make a room
   test('Burt can NOT create a room', async () => {
+    const burt = await browsers.newPage(browsers.burt_browser);
+
     await expect(async () => {
-      await rooms.create(browsers.burt, room);
+      await rooms.create(burt, room);
     }).rejects.toThrow();
+
+    await burt.close();
   });
 
   test('Alice can NOT make a room', async () => {
+    const alice = await browsers.newPage(browsers.alices_browser);
+
     // we expect this to fail - alice should _not_ be able to create
     // a room
     await expect(async () => {
-      await rooms.create(browsers.alice, room);
+      await rooms.create(alice, room);
     }).rejects.toThrow();
+
+    await alice.close();
   });
 
   test('Mallory can NOT make a room', async () => {
+    const mallory = await browsers.newPage(browsers.mallorys_browser);
+
     // we expect this to fail - alice should _not_ be able to create
     // a room
     await expect(async () => {
-      await rooms.create(browsers.mallory, room);
+      await rooms.create(mallory, room);
     }).rejects.toThrow();
+
+    await mallory.close();
   });
 
   test('Admin can create and remove an Idea', async () => {
+    const admin = await browsers.newPage(browsers.admins_browser);
+
     const adminsIdea = {
       name: 'admins-test-idea' + shared.getRunId(),
       description: 'generated during testing data',
     };
-    await ideas.create(browsers.admin, room, adminsIdea);
-    await ideas.remove(browsers.admin, room, adminsIdea);
+    await ideas.create(admin, room, adminsIdea);
+    await ideas.remove(admin, room, adminsIdea);
+
+    await admin.close();
   });
 
   test('Alice can create and delete an Idea', async () => {
+    const alice = await browsers.newPage(browsers.alices_browser);
+
     const alicesIdea = {
       name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
       description: 'generated during testing data',
     };
-    await ideas.create(browsers.alice, room, alicesIdea);
-    await ideas.remove(browsers.alice, room, alicesIdea);
+    await ideas.create(alice, room, alicesIdea);
+    await ideas.remove(alice, room, alicesIdea);
+
+    await alice.close();
   });
 
   test('Bob can create an Idea, alice can comment on it, both delete their resources', async () => {
+    const bob = await browsers.newPage(browsers.bobs_browser);
+    const alice = await browsers.newPage(browsers.alices_browser);
+
     const bobsIdea = {
       name: 'bobs-test-idea' + shared.getRunId(),
       description: 'generated during testing data',
     };
-    await ideas.create(browsers.bob, room, bobsIdea);
-    await ideas.comment(browsers.alice, room, bobsIdea, "alice's comment generated in testing");
-    await ideas.removeComment(browsers.alice, room, bobsIdea, "alice's comment generated in testing");
-    await ideas.remove(browsers.bob, room, bobsIdea);
+    await ideas.create(bob, room, bobsIdea);
+    await ideas.comment(alice, room, bobsIdea, "alice's comment generated in testing");
+    await ideas.removeComment(alice, room, bobsIdea, "alice's comment generated in testing");
+    await ideas.remove(bob, room, bobsIdea);
+
+    await bob.close();
+    await alice.close();
   });
 
   test('Bob can not remove alices idea', async () => {
+    const bob = await browsers.newPage(browsers.bobs_browser);
+    const alice = await browsers.newPage(browsers.alices_browser);
+
     const alicesIdea = {
       name: 'alices-test-idea' + shared.getRunId() + '-scope-4',
       description: 'generated during testing data',
     };
-    await ideas.create(browsers.alice, room, alicesIdea);
+    await ideas.create(alice, room, alicesIdea);
     // note we use bobs browser
 
     await expect(async () => {
-      await ideas.remove(browsers.bob, room, alicesIdea);
+      await ideas.remove(bob, room, alicesIdea);
     }).rejects.toThrow();
 
     // now alice should remove her own idea
-    await ideas.remove(browsers.alice, room, alicesIdea);
+    await ideas.remove(alice, room, alicesIdea);
+
+    await alice.close();
+    await bob.close();
   });
 
   test('Admin can create a box with alice and bobs ideas', async () => {
     const tempScope = shared.gensym();
+
+    const bob = await browsers.newPage(browsers.bobs_browser);
+    const alice = await browsers.newPage(browsers.alices_browser);
+    const admin = await browsers.newPage(browsers.admins_browser);
 
     const alicesIdea = {
       name: 'alices-test-idea' + shared.getRunId() + '-scope-' + tempScope,
@@ -137,19 +175,25 @@ test.describe('Room behaviours - creating rooms', () => {
       phase: 10,
     };
 
-    await ideas.create(browsers.alice, room, alicesIdea);
-    await ideas.create(browsers.bob, room, bobsIdea);
+    await ideas.create(alice, room, alicesIdea);
+    await ideas.create(bob, room, bobsIdea);
 
-    await boxes.create(browsers.admin, room, box);
+    await boxes.create(admin, room, box);
 
-    await boxes.remove(browsers.admin, room, box);
+    await boxes.remove(admin, room, box);
 
-    await ideas.remove(browsers.alice, room, alicesIdea);
-    await ideas.remove(browsers.bob, room, bobsIdea);
+    await ideas.remove(alice, room, alicesIdea);
+    await ideas.remove(bob, room, bobsIdea);
+
+    await admin.close();
+    await alice.close();
+    await bob.close();
   });
 
   test('Alice cannot create a box', async () => {
     const tempScope = shared.gensym();
+
+    const alice = await browsers.newPage(browsers.alices_browser);
 
     const box: BoxData = {
       name: 'admins-test-box' + shared.getRunId() + '-scope-' + tempScope,
@@ -161,8 +205,10 @@ test.describe('Room behaviours - creating rooms', () => {
     };
 
     await expect(async () => {
-      await boxes.create(browsers.alice, room, box);
+      await boxes.create(alice, room, box);
     }).rejects.toThrow();
+
+    await alice.close();
   });
 
   test.describe('full voting workflow', async () => {
