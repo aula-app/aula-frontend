@@ -11,7 +11,7 @@ export const goToRoom = async (
   page: Page, //
   room: roomFixtures.RoomData
 ) => {
-  const RoomDiv = page.locator('h3').filter({ hasText: room.name });
+  const RoomDiv = page.getByText(room.name, { exact: true });
   await expect(RoomDiv).toBeVisible();
   await RoomDiv.click();
 };
@@ -30,7 +30,7 @@ export const goToBox = async (
   page: Page, //
   box: ideaFixtures.BoxData
 ) => {
-  const BoxDiv = await page.locator('h3').filter({ hasText: box.name });
+  const BoxDiv = await page.getByText(box.name, { exact: true });
   await expect(BoxDiv).toBeVisible({ timeout: 2000 });
   await BoxDiv.click();
 };
@@ -65,7 +65,7 @@ export const create = async (
   // submit the idea form
   await page.locator('button[type="submit"]').click();
 
-  const IdeaTitle = page.locator('h3').filter({ hasText: idea.name });
+  const IdeaTitle = page.getByText(idea.name, { exact: true });
   await expect(IdeaTitle).toBeVisible();
 };
 

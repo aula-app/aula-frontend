@@ -18,9 +18,8 @@ let data: { [k: string]: any } = {};
 test.describe.configure({ mode: 'serial' });
 
 test.describe('Room behaviours - creating rooms', () => {
-  test.beforeEach(async () => {
+  test.beforeAll(async () => {
     fixtures.init();
-    await browsers.recall();
     room = {
       name: 'room-' + shared.getRunId(),
       description: 'created during automated testing',
@@ -34,13 +33,19 @@ test.describe('Room behaviours - creating rooms', () => {
     };
   });
 
+  test.beforeEach(async () => {
+    await browsers.recall();
+  });
+
   test.afterEach(async () => {
     await browsers.pickle();
   });
 
   //
   test('Admin can create a room, adding 4 users', async () => {
-    await rooms.create(browsers.admin, room);
+    const admin = await browsers.newPage(browsers.admins_browser);
+
+    await rooms.create(admin, room);
   });
 
   // TODO: Burt _should_ be able to make a room
