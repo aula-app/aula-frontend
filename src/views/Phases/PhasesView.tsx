@@ -12,7 +12,7 @@ import WildIdeaPhaseView from './WildIdeaPhaseView';
 const PhasesView = () => {
   const { phase } = useParams();
   return (
-    <Stack>
+    <Stack overflow="hidden" flex={1}>
       <DashBoard show={true} />
       {phase === '0' ? <WildIdeaPhaseView /> : <BoxIdeasPhaseView />}
     </Stack>
