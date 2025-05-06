@@ -9,6 +9,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  CardProps,
   Dialog,
   DialogActions,
   DialogContent,
@@ -29,7 +30,7 @@ import { useState } from 'react';
  * Renders "ReportCard" component
  */
 
-interface Props {
+interface Props extends CardProps {
   report: MessageType;
   onReload: () => void;
 }
@@ -57,7 +58,7 @@ interface UpdateRequest {
   value: string;
 }
 
-const ReportCard = ({ report, onReload }: Props) => {
+const ReportCard = ({ report, onReload, ...restofProps }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [confirm, setConfirm] = useState(false);
@@ -180,7 +181,7 @@ ${message}`,
     });
 
   return (
-    <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }}>
+    <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }} {...restofProps}>
       <CardHeader
         title={report.headline}
         action={<AppIconButton icon={report.status === 1 ? 'archive' : 'unarchive'} onClick={toggleArchive} />}
@@ -188,9 +189,9 @@ ${message}`,
       <Divider />
       <CardContent sx={{ bgcolor: blueGrey[50] }}>
         {metadata &&
-          (Object.keys(metadata) as Array<keyof typeof metadata>).map((entry) =>
+          (Object.keys(metadata) as Array<keyof typeof metadata>).map((entry, i) =>
             entry !== 'id' ? (
-              <Typography color="secondary">
+              <Typography color="secondary" key={i}>
                 <b>{entry}</b>:{' '}
                 <AppLink to={metadata[entry]} disabled={entry !== 'location'}>
                   {metadata[entry]}

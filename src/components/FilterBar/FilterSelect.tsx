@@ -34,7 +34,7 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
 
   useEffect(() => {
     onChange([key, filterValue || '']);
-  }, [key, filterValue, onChange]);
+  }, [key, filterValue]);
 
   return (
     <Stack direction="row" alignItems="center" gap={1}>
