@@ -58,7 +58,7 @@ interface UpdateRequest {
   value: string;
 }
 
-const ReportCard = ({ report, onReload, ...restofProps }: Props) => {
+const ReportCard = ({ report, onReload, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [confirm, setConfirm] = useState(false);
@@ -181,7 +181,7 @@ ${message}`,
     });
 
   return (
-    <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }} {...restofProps}>
+    <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }} {...restOfProps}>
       <CardHeader
         title={report.headline}
         action={<AppIconButton icon={report.status === 1 ? 'archive' : 'unarchive'} onClick={toggleArchive} />}
@@ -189,16 +189,16 @@ ${message}`,
       <Divider />
       <CardContent sx={{ bgcolor: blueGrey[50] }}>
         {metadata &&
-          (Object.keys(metadata) as Array<keyof typeof metadata>).map((entry, i) =>
+          (Object.keys(metadata) as Array<keyof typeof metadata>).map((entry) =>
             entry !== 'id' ? (
-              <Typography color="secondary" key={i}>
+              <Typography color="secondary" key={entry}>
                 <b>{entry}</b>:{' '}
                 <AppLink to={metadata[entry]} disabled={entry !== 'location'}>
                   {metadata[entry]}
                 </AppLink>
               </Typography>
             ) : (
-              <></>
+              <Typography key={entry} />
             )
           )}
       </CardContent>

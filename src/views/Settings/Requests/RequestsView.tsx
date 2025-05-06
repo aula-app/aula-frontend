@@ -50,7 +50,7 @@ const RequestsView = () => {
         {isLoading && <ReportCardSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
         {requests.length > 0 &&
-          requests.map((report) => <ReportCard report={report} onReload={fetchRequests} key={report.id} />)}
+          requests.map((report) => <ReportCard report={report} onReload={fetchRequests} key={report.hash_id} />)}
       </Stack>
     </Stack>
   );
