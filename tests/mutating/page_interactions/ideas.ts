@@ -312,3 +312,14 @@ export const report = async (
   // submit the idea form
   await page.locator('button[type="submit"]').click();
 };
+
+export const checkReport = async (
+  page: Page, //
+  idea: ideaFixtures.IdeaData
+) => {
+  await page.goto(host + '/settings/reports');
+
+  const Report = page.locator('span').filter({ hasText: idea.name });
+  const reportCount = await Report.count();
+  await expect(reportCount).toBeGreaterThan(0);
+};

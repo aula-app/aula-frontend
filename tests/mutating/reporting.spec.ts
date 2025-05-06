@@ -57,13 +57,16 @@ test.describe('Reporting flow', () => {
   });
 
   test('Bob reports that idea', async () => {
-    const page = await browsers.newPage(browsers.bobs_browser);
+    const bob = await browsers.newPage(browsers.bobs_browser);
+    const admin = await browsers.newPage(browsers.admins_browser);
 
     const alicesIdea = {
       name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
       description: 'generated during testing data',
     };
 
-    await ideas.report(page, room, alicesIdea, 'misinformation');
+    await ideas.report(bob, room, alicesIdea, 'misinformation');
+
+    await ideas.checkReport(admin, alicesIdea);
   });
 });
