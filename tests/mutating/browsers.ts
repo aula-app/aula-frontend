@@ -17,6 +17,8 @@ export let mallory: Page;
 export let burt: Page;
 export let rainer: Page;
 
+export const newPage = (browser: BrowserContext): Promise<Page> => browser.newPage();
+
 export const init = async () => {
   const browser = await chromium.launch();
 
