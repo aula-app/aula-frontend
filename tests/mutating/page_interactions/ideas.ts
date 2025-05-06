@@ -309,7 +309,7 @@ export const report = async (
   await Reason.click();
 
   await page.locator('div[contenteditable="true"]').fill('reported during automated testing');
-  // submit the idea form
+  // submit the report form
   await page.locator('button[type="submit"]').click();
 };
 
@@ -322,4 +322,56 @@ export const checkReport = async (
   const Report = page.locator('span').filter({ hasText: idea.name });
   const reportCount = await Report.count();
   await expect(reportCount).toBeGreaterThan(0);
+};
+
+export const checkCommentReport = async (
+  page: Page, //
+  comment: string
+) => {
+  await page.goto(host + '/settings/reports');
+
+  const Report = page.locator('span').filter({ hasText: comment });
+  const reportCount = await Report.count();
+  await expect(reportCount).toBeGreaterThan(0);
+};
+
+export const reportComment = async (
+  page: Page, //
+  room: roomFixtures.RoomData,
+  idea: ideaFixtures.IdeaData,
+  commentText: string,
+  reason: string
+) => {
+  // start at home
+  await page.goto(host);
+
+  await goToRoom(page, room);
+
+  await goToidea(page, idea);
+
+  const Comment = page.locator('[data-testing-id="comment-bubble"]').filter({ hasText: commentText });
+  await expect(Comment).toBeVisible();
+
+  const MoreOptionsButton = Comment.locator('[data-testing-id="comment-more-options"]');
+  await expect(MoreOptionsButton).toBeVisible();
+  await MoreOptionsButton.click();
+
+  const ReportButton = Comment.locator('[data-testing-id="report-button"]');
+  await expect(ReportButton).toBeVisible({ timeout: 500 });
+  await ReportButton.click();
+
+  // how to fill in one of those MUI multiselectors:
+  const SelectorId = await page.getAttribute('label:text("Berichtskategorie")', 'for');
+  const ReasonSelector = page.locator(`#${shared.cssEscape(SelectorId)}`);
+  await expect(ReasonSelector).toBeVisible({ timeout: 2000 });
+
+  await ReasonSelector.click();
+
+  const Reason = await page.locator(`li[data-value="${reason}"]`);
+  await expect(Reason).toBeVisible({ timeout: 2000 });
+  await Reason.click();
+
+  await page.locator('div[contenteditable="true"]').fill('reported during automated testing');
+  // submit the report form
+  await page.locator('button[type="submit"]').click();
 };
