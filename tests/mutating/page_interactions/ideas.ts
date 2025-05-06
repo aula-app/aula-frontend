@@ -276,3 +276,39 @@ export const voteCounts = async (
 
   return [forcount, Againstcount, Neutralcount];
 };
+
+export const report = async (
+  page: Page, //
+  room: roomFixtures.RoomData,
+  idea: ideaFixtures.IdeaData,
+  reason: string
+) => {
+  await page.goto(host);
+
+  await goToRoom(page, room);
+
+  const IdeaDiv = page.locator(`[data-testing-id="idea-${idea.name}"]`);
+  await expect(IdeaDiv).toBeVisible();
+  const DotMenuDiv = IdeaDiv.locator('[data-testing-id="idea-more-menu"]');
+  await expect(DotMenuDiv).toBeVisible();
+  await DotMenuDiv.click();
+
+  const ReportButton = IdeaDiv.locator('[data-testing-id="report-button"]');
+  await expect(ReportButton).toBeVisible({ timeout: 500 });
+  await ReportButton.click();
+
+  // how to fill in one of those MUI multiselectors:
+  const SelectorId = await page.getAttribute('label:text("Berichtskategorie")', 'for');
+  const ReasonSelector = page.locator(`#${shared.cssEscape(SelectorId)}`);
+  await expect(ReasonSelector).toBeVisible({ timeout: 2000 });
+
+  await ReasonSelector.click();
+
+  const Reason = await page.locator(`li[data-value="${reason}"]`);
+  await expect(Reason).toBeVisible({ timeout: 2000 });
+  await Reason.click();
+
+  await page.locator('div[contenteditable="true"]').fill('reported during automated testing');
+  // submit the idea form
+  await page.locator('button[type="submit"]').click();
+};

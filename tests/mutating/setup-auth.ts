@@ -10,6 +10,8 @@ import * as browsers from './browsers';
 export default async function globalSetup() {
   // first we make a run id, this will be helpful in the mutating tests
 
+  console.log('Setting up!');
+
   shared.setRunId();
 
   fixtures.init();
