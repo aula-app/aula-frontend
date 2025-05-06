@@ -4,13 +4,12 @@ import * as shared from '../shared';
 import * as users from './page_interactions/users';
 import * as rooms from './page_interactions/rooms';
 import * as ideas from './page_interactions/ideas';
+import * as ui from './page_interactions/interface';
 import * as boxes from './page_interactions/boxes';
 
 import * as fixtures from '../fixtures/users';
 import * as browsers from './browsers';
 import { BoxData } from '../fixtures/ideas';
-
-import { ReportOptions } from '../../src/components/DataForms/ReportForms';
 
 let room;
 
@@ -49,25 +48,20 @@ test.describe('Reporting flow', () => {
   });
 
   test('Alice creates an idea', async () => {
-    const alicesIdea = {
+    data.alicesIdea = {
       name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
       description: 'generated during testing data',
     };
-    await ideas.create(browsers.alice, room, alicesIdea);
+    await ideas.create(browsers.alice, room, data.alicesIdea);
   });
 
   test('Bob reports that idea', async () => {
     const bob = await browsers.newPage(browsers.bobs_browser);
     const admin = await browsers.newPage(browsers.admins_browser);
 
-    const alicesIdea = {
-      name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
-      description: 'generated during testing data',
-    };
+    await ideas.report(bob, room, data.alicesIdea, 'misinformation');
 
-    await ideas.report(bob, room, alicesIdea, 'misinformation');
-
-    await ideas.checkReport(admin, alicesIdea);
+    await ideas.checkReport(admin, data.alicesIdea);
     await bob.close();
     await admin.close();
   });
@@ -75,12 +69,7 @@ test.describe('Reporting flow', () => {
   test('Bob Comments on Alices Idea', async () => {
     const bob = await browsers.newPage(browsers.bobs_browser);
 
-    const alicesIdea = {
-      name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
-      description: 'generated during testing data',
-    };
-
-    await ideas.comment(bob, room, alicesIdea, 'You posted misinformation!');
+    await ideas.comment(bob, room, data.alicesIdea, 'You posted misinformation!');
 
     await bob.close();
   });
@@ -89,14 +78,21 @@ test.describe('Reporting flow', () => {
     const alice = await browsers.newPage(browsers.alices_browser);
     const admin = await browsers.newPage(browsers.admins_browser);
 
-    const alicesIdea = {
-      name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
-      description: 'generated during testing data',
-    };
-
-    await ideas.reportComment(alice, room, alicesIdea, 'You posted misinformation!', 'misinformation');
+    await ideas.reportComment(alice, room, data.alicesIdea, 'You posted misinformation!', 'misinformation');
 
     await ideas.checkCommentReport(admin, 'You posted misinformation!');
+
+    await alice.close();
+    await admin.close();
+  });
+
+  test('Alice reports a bug', async () => {
+    const alice = await browsers.newPage(browsers.alices_browser);
+    const admin = await browsers.newPage(browsers.admins_browser);
+
+    await ui.reportBug(alice, 'This does not work');
+
+    await ui.checkReport(admin, 'This does not work');
 
     await alice.close();
     await admin.close();
