@@ -68,5 +68,37 @@ test.describe('Reporting flow', () => {
     await ideas.report(bob, room, alicesIdea, 'misinformation');
 
     await ideas.checkReport(admin, alicesIdea);
+    await bob.close();
+    await admin.close();
+  });
+
+  test('Bob Comments on Alices Idea', async () => {
+    const bob = await browsers.newPage(browsers.bobs_browser);
+
+    const alicesIdea = {
+      name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
+      description: 'generated during testing data',
+    };
+
+    await ideas.comment(bob, room, alicesIdea, 'You posted misinformation!');
+
+    await bob.close();
+  });
+
+  test('Alice reports bobs comment', async () => {
+    const alice = await browsers.newPage(browsers.alices_browser);
+    const admin = await browsers.newPage(browsers.admins_browser);
+
+    const alicesIdea = {
+      name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
+      description: 'generated during testing data',
+    };
+
+    await ideas.reportComment(alice, room, alicesIdea, 'You posted misinformation!', 'misinformation');
+
+    await ideas.checkCommentReport(admin, 'You posted misinformation!');
+
+    await alice.close();
+    await admin.close();
   });
 });
