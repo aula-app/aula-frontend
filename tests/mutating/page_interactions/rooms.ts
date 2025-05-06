@@ -64,8 +64,8 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await page.fill('#filter-select-2', room.name);
 
   // find the new user in the user table
-  const row = page.locator('table tr').filter({ hasText: room.name });
+  const row = page.getByText(room.name, { exact: true });
 
   // make sure that row actually exists
-  await expect(row).toHaveCount(1, { timeout: 500 });
+  await expect(row).toBeVisible();
 };

@@ -44,15 +44,19 @@ test.describe('Reporting flow', () => {
 
   //
   test('Admin can create a room, adding 4 users', async () => {
-    await rooms.create(browsers.admin, room);
+    const admin = await browsers.newPage(browsers.admins_browser);
+    await rooms.create(admin, room);
+    await admin.close();
   });
 
   test('Alice creates an idea', async () => {
+    const alice = await browsers.newPage(browsers.alices_browser);
+
     data.alicesIdea = {
       name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
       description: 'generated during testing data',
     };
-    await ideas.create(browsers.alice, room, data.alicesIdea);
+    await ideas.create(alice, room, data.alicesIdea);
   });
 
   test('Bob reports that idea', async () => {
