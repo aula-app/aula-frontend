@@ -4,6 +4,7 @@ import { fixedSideBarStyles } from './styles';
 import SideBarContent from './SideBarContent';
 import { localStorageGet } from '@/utils';
 import { useTranslation } from 'react-i18next';
+import UserInfo from '@/components/UserInfo';
 
 /**
  * Renders fixed SideBar with Menu and User details for desktop view
@@ -15,7 +16,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
   const code = localStorageGet('code');
 
   return (
-    <Stack className="noPrint" sx={fixedSideBarStyles} {...restOfProps}>
+    <Stack className="noPrint" pt={1} sx={fixedSideBarStyles} {...restOfProps}>
       {import.meta.env.VITE_APP_MULTI !== 'false' && (
         <>
           <Button onClick={() => navigator.clipboard.writeText(code)} color="secondary">
@@ -24,6 +25,8 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
           <Divider />
         </>
       )}
+      <UserInfo />
+      <Divider />
       <SideBarContent isFixed />
     </Stack>
   );

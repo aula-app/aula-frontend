@@ -192,11 +192,11 @@ const DelegateVote = ({ open, delegate, onClose }: Props) => {
         {selected && (
           <>
             {!delegate ? (
-              <Button variant="contained" onClick={setDelegate}>
+              <Button data-testing-id="submit-delegation" variant="contained" onClick={setDelegate}>
                 {t('delegation.delegate')}
               </Button>
             ) : (
-              <Button variant="contained" onClick={removeDelegate}>
+              <Button data-testing-id="revoke-delegation" variant="contained" onClick={removeDelegate}>
                 {t('delegation.revoke')}
               </Button>
             )}

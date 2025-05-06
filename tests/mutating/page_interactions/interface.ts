@@ -1,0 +1,32 @@
+import { expect, Page } from '@playwright/test';
+
+import * as shared from '../../shared';
+import { sleep } from '../../utils';
+import * as roomFixtures from '../../fixtures/rooms';
+import * as ideaFixtures from '../../fixtures/ideas';
+
+export const reportBug = async (
+  page: Page, //
+  reason: string
+) => {
+  await page.goto(shared.getHost());
+
+  const ReportButton = page.locator('[aria-label="Fehler melden"]');
+  await expect(ReportButton).toBeVisible({ timeout: 5000 });
+  await ReportButton.click();
+
+  await page.locator('div[contenteditable="true"]').fill(reason);
+  // submit the report form
+  await page.locator('button').filter({ hasText: 'Bestätigen' }).click();
+};
+
+export const checkReport = async (
+  page: Page, //
+  reason: string
+) => {
+  await page.goto(shared.getHost() + '/settings/bugs');
+
+  const Report = page.locator('p').filter({ hasText: reason });
+  const reportCount = await Report.count();
+  await expect(reportCount).toBeGreaterThan(0);
+};
