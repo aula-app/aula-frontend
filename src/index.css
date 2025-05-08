@@ -1,5 +1,5 @@
 @import url('/font/vision/vision.css');
-@import url('https://fonts.cdnfonts.com/css/tahoma');
+@import url('/font/tahoma/tahoma.css');
 
 html, body, #root {
   height: 100%;
