@@ -1,6 +1,6 @@
 import { getUsers } from '@/services/users';
-import { SelectOptionsType } from '@/types/SettingsTypes';
-import { Autocomplete, BaseTextFieldProps, CircularProgress, TextField } from '@mui/material';
+import { UserOptionsType } from '@/types/SettingsTypes';
+import { Autocomplete, BaseTextFieldProps, CircularProgress, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -18,14 +18,18 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [options, setOptions] = useState<SelectOptionsType>([]); // Ensure options is an array of SelectOptionsType
+  const [options, setOptions] = useState<UserOptionsType>([]); // Ensure options is an array of SelectOptionsType
 
   const fetchUsers = async () => {
     setLoading(true);
     const response = await getUsers();
     setLoading(false);
     if (!response.data) return;
-    const users = response.data.map((user) => ({ label: user.displayname, value: user.hash_id }));
+    const users = response.data.map((user) => ({
+      label: user.realname,
+      value: user.hash_id,
+      displayname: user.displayname,
+    }));
     setOptions(users);
   };
 
@@ -60,6 +64,14 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
               // Pass just the ID value to the form
               field.onChange(newValue ? newValue.value : null);
             }}
+            renderOption={(props, option) => (
+              <li {...props} key={option.value}>
+                {option.label}{' '}
+                <Typography ml={2} variant="body2" color="text.secondary">
+                  ({option.displayname})
+                </Typography>
+              </li>
+            )}
             renderInput={(params) => (
               <TextField
                 {...params}
