@@ -1,0 +1,17 @@
+{
+    "NSPrivacyTracking": false,
+    "NSPrivacyTrackingDomains": [],
+    "NSPrivacyCollectedDataTypes": [],
+    "NSPrivacyAccessedAPITypes": [
+        {
+            "type": "NSPrivacyAccessedAPICategoryUserDefaults",
+            "purpose": "Basic app functionality",
+            "details": "Store app preferences and settings"
+        },
+        {
+            "type": "NSPrivacyAccessedAPICategoryFileTimestamp",
+            "purpose": "Basic app functionality",
+            "details": "Access and manage local files"
+        }
+    ]
+}
