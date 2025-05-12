@@ -105,7 +105,7 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
 
     // Date fields that need to be converted to local timezone
     case 'created':
-    case 'last_updated':
+    case 'last_update':
     case 'last_login':
       return <>{dayjs.utc(value).tz(dayjs.tz.guess()).format(FORMAT_DATE_TIME)}</>;
 
