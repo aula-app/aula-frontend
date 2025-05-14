@@ -148,7 +148,8 @@
       "passwordMatch": "Passwords must match",
       "phone": "Please enter a valid phone number",
       "recipient": "Please select a recipient",
-      "required": "This field is required"
+      "required": "This field is required",
+      "nonUniqueUsername": "This username is already taken. Please choose a different one."
     }
   },
   "instance": {

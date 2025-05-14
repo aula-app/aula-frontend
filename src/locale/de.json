@@ -148,7 +148,8 @@
       "passwordMatch": "Passwörter müssen übereinstimmen",
       "phone": "Muss eine gültige Telefonnummer sein",
       "recipient": "Sie müssen einen Empfänger für Ihre Nachricht auswählen",
-      "required": "Dieses Feld darf nicht leer sein"
+      "required": "Dieses Feld darf nicht leer sein",
+      "nonUniqueUsername": "Dieser Benutzername ist bereits vergeben. Bitte wähle einen anderen."
     }
   },
   "instance": {
