@@ -46,7 +46,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     handleSubmit,
     register,
     reset,
-    setError,
     watch,
   } = useForm({
     resolver: yupResolver(schema),
@@ -89,6 +88,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       } else {
         await updateUser(data);
       }
+      onClose();
     } finally {
       setIsLoading(false);
     }
@@ -104,14 +104,9 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       userlevel: data.userlevel || 20,
       username: data.username,
     });
-    if ('error_code' in response && response.error_code === 2) {
-      setError('username', { type: 'manual', message: t('forms.validation.nonUniqueUsername') });
-      return;
-    }
     if (response.error || !response.data) return;
     await setUserRooms(response.data.hash_id);
     await setRoomRoles(response.data.hash_id);
-    onClose();
   };
 
   const updateUser = async (data: SchemaType) => {
@@ -129,7 +124,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     if (response.error) return;
     await setUserRooms(defaultValues.hash_id);
     await setRoomRoles(defaultValues.hash_id);
-    onClose();
   };
 
   const setUserRooms = async (user_id: string) => {
