@@ -159,7 +159,7 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
         </Stack>
         <MarkdownEditor name="about_me" control={control} sx={{ flex: 2, minWidth: `min(300px, 100%)` }} />
       </Stack>
-      <Stack direction="row" justifyContent="end" gap={2}>
+      <Stack direction="row" justifyContent="end" gap={2} mb={2}>
         <Button color="error" onClick={resetFields}>
           {t('actions.cancel')}
         </Button>
