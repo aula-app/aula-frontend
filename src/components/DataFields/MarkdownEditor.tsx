@@ -10,6 +10,7 @@ import {
   UndoRedo,
 } from '@mdxeditor/editor';
 import { FormControl, FormControlProps, FormHelperText, FormLabel as MuiFormLabel, Stack, styled } from '@mui/material';
+import VisuallyHidden from '@/components/VisuallyHidden';
 import React, { useEffect } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -149,18 +150,34 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
         }, [control._defaultValues[name], field.value]);
         return (
           <FormControl fullWidth {...restOfProps}>
+            {/* Create a unique ID for the editor for proper labeling */}
+            <StyledFormLabel htmlFor={`markdown-editor-${name}`}>
+              {t(`settings.columns.${name}`)}
+              {required ? '*' : ''}
+              {required && <VisuallyHidden inline>{t('accessibility.required')}</VisuallyHidden>}
+            </StyledFormLabel>
             <Editor
               className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}
               markdown={''}
               toMarkdownOptions={{}}
               sx={{ height: '100%' }}
+              aria-required={required}
+              aria-invalid={!!fieldState.error}
+              aria-describedby={fieldState.error ? `${name}-helper-text` : undefined}
+              aria-label={`${t(`settings.columns.${name}`)} ${required ? t('accessibility.required') : t('accessibility.optional')}`}
               plugins={[
                 headingsPlugin(),
                 listsPlugin(),
                 toolbarPlugin({
                   toolbarClassName: 'editor-toolbar',
                   toolbarContents: () => (
-                    <Stack direction="row" justifyContent="space-between" width="100%">
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      width="100%"
+                      aria-label={t('accessibility.aria.editorToolbar')}
+                      role="toolbar"
+                    >
                       <Stack direction="row">
                         <BoldItalicUnderlineToggles />
                         <Separator />
@@ -174,12 +191,10 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
               {...field}
               ref={mdxEditorRef}
             />
-            <StyledFormLabel>
-              {t(`settings.columns.${name}`)}
-              {required ? '*' : ''}
-            </StyledFormLabel>
             {!!fieldState.error && (
-              <FormHelperText error={!!fieldState.error}>{t(`${fieldState.error?.message || ''}`)}</FormHelperText>
+              <FormHelperText id={`${name}-helper-text`} error={!!fieldState.error}>
+                {t(`${fieldState.error?.message || ''}`)}
+              </FormHelperText>
             )}
           </FormControl>
         );

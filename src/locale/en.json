@@ -57,7 +57,8 @@
       "sortBy": "Sort by {{column}} in {{direction}} order",
       "ascending": "ascending",
       "descending": "descending",
-      "dataTable": "Table of {{type}}"
+      "dataTable": "Table of {{type}}",
+      "editorToolbar": "Text formatting toolbar"
     }
   },
   "actions": {
