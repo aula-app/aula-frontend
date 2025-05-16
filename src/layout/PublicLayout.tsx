@@ -1,5 +1,6 @@
 import { AppLink, ErrorBoundary } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
+import SkipToContent from '@/components/SkipToContent';
 import { useOnMobile } from '@/hooks';
 import { Box, Button, Stack } from '@mui/material/';
 import { FunctionComponent, PropsWithChildren } from 'react';
@@ -26,6 +27,8 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         paddingRight: 0,
       }}
     >
+      {/* Skip to content link for keyboard users */}
+      <SkipToContent />
       <Stack>
         <Stack direction="row" alignItems="start" justifyContent="space-between" sx={{ pb: 2 }}>
           {toggleBackToSignIn()}
