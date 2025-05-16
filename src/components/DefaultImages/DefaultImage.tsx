@@ -1,13 +1,16 @@
 import { useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import DinamicImages from './DinamicImages';
 
 interface Props {
   image: number;
   shift: number;
+  'aria-hidden'?: boolean;
 }
 
 const DefaultImage: React.FC<Props> = ({ image, shift, ...restOfProps }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const shiftHslHue = (hslColor: string): string => {
     if (hslColor === 'none') return hslColor;
@@ -42,7 +45,25 @@ const DefaultImage: React.FC<Props> = ({ image, shift, ...restOfProps }) => {
   };
 
   const ComponentToRender = DinamicImages[image];
+  const imageNames = ['airplane', 'beaker', 'cat', 'chair', 'clothing', 'computer', 'door', 'globe'];
+  const imageName = imageNames[image] || 'image';
+  const ariaHidden = 'aria-hidden' in restOfProps ? restOfProps['aria-hidden'] : false;
 
+  // Set ARIA attributes on the wrapper element if needed
+  if (!ariaHidden) {
+    return (
+      <div 
+        aria-label={t(`accessibility.images.${imageName}`)}
+        role="img"
+      >
+        <ComponentToRender 
+          colors={COLORS} 
+          {...restOfProps} 
+        />
+      </div>
+    );
+  }
+  
   return <ComponentToRender colors={COLORS} {...restOfProps} />;
 };
 

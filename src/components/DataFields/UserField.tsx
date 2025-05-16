@@ -88,11 +88,21 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
                         {params.InputProps.endAdornment}
                       </>
                     ),
+                    'aria-required': true,
+                    'aria-invalid': !!fieldState.error,
+                    'aria-describedby': fieldState.error ? `user-field-error` : undefined,
                   },
                 }}
+                FormHelperTextProps={{
+                  id: fieldState.error ? 'user-field-error' : undefined,
+                  role: fieldState.error ? 'alert' : undefined,
+                }}
+                aria-label={t('settings.messages.to')}
                 {...restOfProps}
               />
             )}
+            aria-label={t('scopes.users.name')}
+            loadingText={t('status.loading')}
           />
         );
       }}

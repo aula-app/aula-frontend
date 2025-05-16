@@ -36,8 +36,21 @@ ${data.content || ''}
 
   return (
     <>
-      <AppIconButton icon="report" disabled={disabled} {...restOfProps} onClick={() => setOpen(true)} />
-      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }}>
+      <AppIconButton 
+        icon="report" 
+        disabled={disabled} 
+        aria-label={t('accessibility.aria.report')}
+        title={t('actions.contentReport')}
+        {...restOfProps} 
+        onClick={() => setOpen(true)} 
+      />
+      <Drawer 
+        anchor="bottom" 
+        open={isOpen} 
+        onClose={onClose} 
+        sx={{ overflowY: 'auto' }}
+        aria-label={t('scopes.reports.headline', { var: target })}
+      >
         <ReportForms onClose={onClose} onSubmit={onSubmit} />
       </Drawer>
     </>

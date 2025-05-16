@@ -58,7 +58,25 @@
       "ascending": "ascending",
       "descending": "descending",
       "dataTable": "Table of {{type}}",
-      "editorToolbar": "Text formatting toolbar"
+      "editorToolbar": "Text formatting toolbar",
+      "linkWithContext": "{{context}}: {{content}}",
+      "opensInNewTab": "{{label}} (opens in new tab)",
+      "boldText": "Bold text",
+      "italicText": "Italic text",
+      "underlineText": "Underline text",
+      "bulletList": "Bulleted list",
+      "numberedList": "Numbered list",
+      "undo": "Undo",
+      "redo": "Redo",
+      "view_box": "View box: {{name}}",
+      "enter_room": "Enter room: {{name}}",
+      "more_options": "More options",
+      "close_menu": "Close menu",
+      "open_menu": "Open menu",
+      "report": "Report",
+      "delete": "Delete",
+      "edit": "Edit",
+      "options_menu": "Options menu"
     }
   },
   "actions": {
