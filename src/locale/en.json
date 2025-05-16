@@ -48,7 +48,9 @@
       "selectColor": "Select color",
       "submitForm": "Submit form",
       "cancelAction": "Cancel",
-      "confirmAction": "Confirm"
+      "confirmAction": "Confirm",
+      "userAvatar": "Profile picture of {{name}}",
+      "genericUserAvatar": "User profile picture"
     }
   },
   "actions": {

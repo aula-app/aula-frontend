@@ -48,7 +48,9 @@
       "selectColor": "Farbe auswählen",
       "submitForm": "Formular absenden",
       "cancelAction": "Abbrechen",
-      "confirmAction": "Bestätigen"
+      "confirmAction": "Bestätigen",
+      "userAvatar": "Profilbild von {{name}}",
+      "genericUserAvatar": "Benutzerprofilbild"
     }
   },
   "actions": {
