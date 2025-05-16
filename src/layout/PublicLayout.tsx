@@ -43,6 +43,9 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
           padding: 1,
           justifyContent: 'center',
         }}
+        role="main"
+        aria-label="Main content"
+        id="main-content"
       >
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
       </Stack>
