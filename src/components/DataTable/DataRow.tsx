@@ -39,6 +39,16 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
         height: '55px',
         ...sx,
       }}
+      role="row"
+      aria-selected={selected}
+      onKeyDown={(e) => {
+        // Allow selecting/deselecting rows with keyboard
+        if ((e.key === 'Enter' || e.key === ' ') && !('userlevel' in item && item.userlevel >= 50) && !isFixed()) {
+          e.preventDefault();
+          toggleRow(String(item.hash_id));
+        }
+      }}
+      tabIndex={-1}
       {...restOfProps}
     >
       <TableCell sx={{ position: 'sticky', left: 0, zIndex: 2, pl: 1, pr: 0, background: 'inherit' }}>
@@ -47,6 +57,11 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
             checked={selected}
             onChange={() => {
               if (!isFixed()) toggleRow(String(item.hash_id));
+            }}
+            inputProps={{
+              'aria-label': selected 
+                ? `Deselect ${item.name || item.title || item.headline || item.username || item.hash_id}` 
+                : `Select ${item.name || item.title || item.headline || item.username || item.hash_id}`,
             }}
             disabled={isFixed()}
           />

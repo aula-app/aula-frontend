@@ -50,7 +50,14 @@
       "cancelAction": "Cancel",
       "confirmAction": "Confirm",
       "userAvatar": "Profile picture of {{name}}",
-      "genericUserAvatar": "User profile picture"
+      "genericUserAvatar": "User profile picture",
+      "viewDetails": "View details for {{item}}",
+      "selectAll": "Select all items",
+      "deselectAll": "Deselect all items",
+      "sortBy": "Sort by {{column}} in {{direction}} order",
+      "ascending": "ascending",
+      "descending": "descending",
+      "dataTable": "Table of {{type}}"
     }
   },
   "actions": {

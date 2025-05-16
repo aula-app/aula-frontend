@@ -103,7 +103,12 @@ const DataTable: React.FC<Props> = ({
           position: 'relative',
         }}
       >
-        <Table stickyHeader size="small" sx={{ width: 'auto', minWidth: '100%' }}>
+        <Table 
+          stickyHeader 
+          size="small" 
+          sx={{ width: 'auto', minWidth: '100%' }}
+          aria-label={t('accessibility.aria.dataTable', { type: t(`scopes.${scope}.plural`) })}
+        >
           <TableHead>
             <TableRow sx={{ maxHeight: '55px' }}>
               <TableCell
@@ -114,6 +119,9 @@ const DataTable: React.FC<Props> = ({
                   checked={selected.length === rows.length && selected.length > 0}
                   indeterminate={selected.length > 0 && selected.length < rows.length}
                   color="secondary"
+                  inputProps={{
+                    'aria-label': selected.length > 0 ? t('accessibility.aria.deselectAll') : t('accessibility.aria.selectAll')
+                  }}
                 />
               </TableCell>
               {columns.map((column) => (
@@ -122,6 +130,10 @@ const DataTable: React.FC<Props> = ({
                     active={column.orderId === orderBy}
                     direction={orderAsc ? 'asc' : 'desc'}
                     onClick={() => toggleColumn(column.orderId)}
+                    aria-label={t('accessibility.aria.sortBy', { 
+                      column: t(`settings.columns.${column.name}`), 
+                      direction: orderAsc ? t('accessibility.aria.ascending') : t('accessibility.aria.descending')
+                    })}
                   >
                     {t(`settings.columns.${column.name}`)}
                   </TableSortLabel>
@@ -151,6 +163,17 @@ const DataTable: React.FC<Props> = ({
                       background: 'inherit',
                     }}
                     onClick={() => setEdit(row)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setEdit(row);
+                      }
+                    }}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={t('accessibility.aria.viewDetails', { 
+                      item: row.name || row.title || row.headline || row.username || row.hash_id 
+                    })}
                     key={`${column.name}-${row.hash_id}`}
                   >
                     {column.name in row && <DataItem row={row} column={column.name} />}
