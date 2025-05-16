@@ -38,13 +38,14 @@ const permissions = {
     status: { role: 40 },
   },
   configs: {
-    idea: { role: 40 },
-    vote: { role: 40 },
-    user: { role: 50 },
-    group: { role: 40 },
     action: { role: 50 },
-    system: { role: 50 },
     danger: { role: 50 },
+    group: { role: 40 },
+    idea: { role: 40 },
+    system: { role: 50 },
+    user: { role: 50 },
+    viewAll: { role: 40 },
+    vote: { role: 40 },
   },
   groups: {
     addIdea: { role: 40 },
@@ -67,6 +68,7 @@ const permissions = {
   },
   messages: {
     viewAll: { role: 40 },
+    delete: { role: 50 },
     status: { role: 50 },
   },
   reports: {

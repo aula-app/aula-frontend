@@ -87,7 +87,7 @@ const QuorumSettings: React.FC<Props> = ({ onReload, ...restOfProps }) => {
       <Controller
         name="quorum_wild_ideas"
         control={control}
-        defaultValue={0}
+        defaultValue={10}
         render={({ field: { value, ...field } }) => (
           <Slider
             {...field}
@@ -109,7 +109,7 @@ const QuorumSettings: React.FC<Props> = ({ onReload, ...restOfProps }) => {
       <Controller
         name="quorum_votes"
         control={control}
-        defaultValue={0}
+        defaultValue={25}
         render={({ field: { value, ...field } }) => (
           <Slider
             {...field}

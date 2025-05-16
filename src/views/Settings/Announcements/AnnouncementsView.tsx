@@ -83,7 +83,7 @@ const AnnouncementsView: React.FC = () => {
   useEffect(() => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.announcements'), '']] });
     fetchAnnouncements();
-  }, [fetchAnnouncements]);
+  }, []);
 
   return (
     <Stack width="100%" height="100%" pt={2}>

@@ -23,8 +23,6 @@ const WildIdeaPhaseView = () => {
 
   const { phase } = useParams();
 
-  const addCategory = useRef<AddCategoryRefProps>(null);
-
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);

@@ -12,6 +12,7 @@ import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 
 interface ApprovalCardProps {
@@ -27,6 +28,7 @@ interface ApprovalCardProps {
 
 const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) => {
   const { t } = useTranslation();
+  const { phase } = useParams();
 
   const approvalMessages = ['rejected', 'waiting', 'approved'] as IconType[];
   const approvalColors = ['against.main', 'disabled.main', 'for.main'];
@@ -76,7 +78,7 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
     reset({ approved: idea.approved || 0, approval_comment: idea.approval_comment || '' });
   }, [idea]);
 
-  return (
+  return Number(phase) == 20 || (Number(phase) > 20 && idea.approved !== 1) ? (
     <Card
       sx={{
         borderRadius: '25px',
@@ -123,6 +125,8 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
         )}
       </CardContent>
     </Card>
+  ) : (
+    <></>
   );
 };
 

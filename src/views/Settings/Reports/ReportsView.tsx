@@ -31,12 +31,15 @@ const ReportsView = () => {
     if (response.error) setError(response.error);
     if (!response.error && response.data) setReports(response.data);
     setLoading(false);
-  }, [JSON.stringify(filter), status]);
+  }, [status, filter[0], filter[1]]);
 
   useEffect(() => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.reports'), '']] });
+  }, []);
+
+  useEffect(() => {
     fetchReports();
-  }, [JSON.stringify(filter), status]);
+  }, [fetchReports]);
 
   return (
     <Stack width="100%" height="100%" p={2} gap={2}>
