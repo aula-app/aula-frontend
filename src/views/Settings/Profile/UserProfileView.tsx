@@ -41,49 +41,51 @@ const UserView = () => {
       {isLoading && <ProfileEditorSkeleton />}
       {error && <Typography>{t(error)}</Typography>}
       {user && !isLoading && (
-        <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
+        <Stack sx={{ overflowY: 'auto' }} p={2} gap={2}>
           <Typography variant="h1">{t('ui.navigation.profile')}</Typography>
           <ProfileEditor user={user} onReload={fetchUser} />
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<AppIcon icon="arrowdown" />}
-              aria-controls="panel2-content"
-              id="panel2-header"
+          <Stack>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<AppIcon icon="arrowdown" />}
+                aria-controls="panel2-content"
+                id="panel2-header"
+              >
+                <Typography variant="h2">{t('ui.navigation.security')}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <ChangePassword />
+              </AccordionDetails>
+            </Accordion>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<AppIcon icon="arrowdown" />}
+                aria-controls="panel2-content"
+                id="panel2-header"
+              >
+                <Typography variant="h2">{t('ui.navigation.privacy')}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <DataExport user={user} onReload={fetchUser} />
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              sx={{
+                backgroundColor: 'themeRed.light',
+              }}
             >
-              <Typography variant="h2">{t('ui.navigation.security')}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ChangePassword />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<AppIcon icon="arrowdown" />}
-              aria-controls="panel2-content"
-              id="panel2-header"
-            >
-              <Typography variant="h2">{t('ui.navigation.privacy')}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <DataExport user={user} onReload={fetchUser} />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            sx={{
-              backgroundColor: 'themeRed.light',
-            }}
-          >
-            <AccordionSummary
-              expandIcon={<AppIcon icon="arrowdown" />}
-              aria-controls="panel2-content"
-              id="panel2-header"
-            >
-              <Typography variant="h2">{t('settings.panels.danger')}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <DataDelete user={user} onReload={fetchUser} />
-            </AccordionDetails>
-          </Accordion>
+              <AccordionSummary
+                expandIcon={<AppIcon icon="arrowdown" />}
+                aria-controls="panel2-content"
+                id="panel2-header"
+              >
+                <Typography variant="h2">{t('settings.panels.danger')}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <DataDelete user={user} onReload={fetchUser} />
+              </AccordionDetails>
+            </Accordion>
+          </Stack>
         </Stack>
       )}
     </>
