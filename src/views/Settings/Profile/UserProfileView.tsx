@@ -68,14 +68,15 @@ const UserView = () => {
               <DataExport user={user} onReload={fetchUser} />
             </AccordionDetails>
           </Accordion>
-          <Accordion>
+          <Accordion
+            sx={{
+              backgroundColor: 'themeRed.light',
+            }}
+          >
             <AccordionSummary
               expandIcon={<AppIcon icon="arrowdown" />}
               aria-controls="panel2-content"
               id="panel2-header"
-              sx={{
-                backgroundColor: red[100],
-              }}
             >
               <Typography variant="h2">{t('settings.panels.danger')}</Typography>
             </AccordionSummary>

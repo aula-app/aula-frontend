@@ -67,7 +67,12 @@ const ConfigView = () => {
       {panels.map(
         (panel, i) =>
           checkPermissions('configs', panel.name) && (
-            <Accordion key={i} expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)}>
+            <Accordion
+              key={i}
+              expanded={expanded === `panel${i}`}
+              onChange={() => toggleExpanded(`panel${i}`)}
+              sx={panel.name === 'danger' ? { backgroundColor: 'themeRed.light' } : {}}
+            >
               <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
                 <Typography variant="h2" py={1}>
                   {t(`settings.panels.${panel.name}`)}
