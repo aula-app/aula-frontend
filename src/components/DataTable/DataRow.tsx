@@ -29,6 +29,21 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
     }
   };
 
+  // Helper to check if item is an object with userlevel property
+  const hasUserlevel = (obj: unknown): obj is { userlevel: number } => {
+    return typeof obj === 'object' && obj !== null && 'userlevel' in obj && typeof (obj as any).userlevel === 'number';
+  };
+
+  // Helper to get a label for the row for aria-label
+  const getRowLabel = (item: SettingType) => {
+    if ('name' in item && typeof item.name === 'string') return item.name;
+    if ('title' in item && typeof item.title === 'string') return item.title;
+    if ('headline' in item && typeof item.headline === 'string') return item.headline;
+    if ('username' in item && typeof item.username === 'string') return item.username;
+    if ('hash_id' in item && typeof item.hash_id === 'string') return item.hash_id;
+    return '';
+  };
+
   return (
     <TableRow
       hover
@@ -43,7 +58,7 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
       aria-selected={selected}
       onKeyDown={(e) => {
         // Allow selecting/deselecting rows with keyboard
-        if ((e.key === 'Enter' || e.key === ' ') && !('userlevel' in item && item.userlevel >= 50) && !isFixed()) {
+        if ((e.key === 'Enter' || e.key === ' ') && !(hasUserlevel(item) && item.userlevel >= 50) && !isFixed()) {
           e.preventDefault();
           toggleRow(String(item.hash_id));
         }
@@ -52,16 +67,16 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
       {...restOfProps}
     >
       <TableCell sx={{ position: 'sticky', left: 0, zIndex: 2, pl: 1, pr: 0, background: 'inherit' }}>
-        {!('userlevel' in item && item.userlevel >= 50) && (
+        {!(hasUserlevel(item) && item.userlevel >= 50) && (
           <Checkbox
             checked={selected}
             onChange={() => {
               if (!isFixed()) toggleRow(String(item.hash_id));
             }}
-            inputProps={{
-              'aria-label': selected 
-                ? `Deselect ${item.name || item.title || item.headline || item.username || item.hash_id}` 
-                : `Select ${item.name || item.title || item.headline || item.username || item.hash_id}`,
+            slotProps={{
+              input: {
+                'aria-label': selected ? `Deselect ${getRowLabel(item)}` : `Select ${getRowLabel(item)}`,
+              },
             }}
             disabled={isFixed()}
           />
