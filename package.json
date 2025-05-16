@@ -48,7 +48,7 @@
     "@fontsource-variable/nunito": "^5.0.6",
     "@fontsource-variable/open-sans": "^5.0.6",
     "@hookform/resolvers": "^3.3.4",
-    "@mdxeditor/editor": "^3.21.1",
+    "@mdxeditor/editor": "^3.32.3",
     "@mui/base": "^5.0.0-beta.4",
     "@mui/icons-material": "^6.0.2",
     "@mui/joy": "^5.0.0-alpha.84",
