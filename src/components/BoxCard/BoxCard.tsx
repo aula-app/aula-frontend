@@ -3,6 +3,7 @@ import AppLink from '@/components/AppLink';
 import MoreOptions from '@/components/MoreOptions';
 import { BoxType } from '@/types/Scopes';
 import { phases } from '@/utils';
+import { withKeyboardSupport } from '@/utils/accessibility';
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import MarkdownReader from '../MarkdownReader';
@@ -37,8 +38,21 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
 
   const to = `/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`;
 
+  // Handle keyboard navigation to the card content
+  const handleCardKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      window.location.href = to;
+    }
+  };
+
   return (
-    <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
+    <Card 
+      sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} 
+      variant="outlined"
+      {...(disabled ? {} : { tabIndex: 0, role: 'link', 'aria-label': box.name })}
+      onKeyDown={disabled ? undefined : handleCardKeyDown}
+    >
       <Stack
         width="100%"
         height="3rem"
@@ -47,15 +61,29 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
         bgcolor={`${phases[box.phase_id]}.main`}
         p={1}
       >
-        <AppIcon icon={phases[box.phase_id]} sx={{ mx: 1 }} />
+        <AppIcon icon={phases[box.phase_id]} sx={{ mx: 1 }} aria-hidden={true} />
         <Typography variant="caption" mr="auto" noWrap>
           {t(`phases.id-${box.phase_id}`, { var: box.ideas_num })}
         </Typography>
-        <MoreOptions item={box} scope="boxes" color="default" onDelete={onDelete} onEdit={onEdit} link={to} />
+        <MoreOptions 
+          item={box} 
+          scope="boxes" 
+          color="default" 
+          onDelete={onDelete} 
+          onEdit={onEdit} 
+          link={to}
+          aria-label={t('actions.more_options')}
+        />
       </Stack>
-      <AppLink to={to} mb={2} key={box.hash_id} disabled={disabled}>
+      <AppLink 
+        to={to} 
+        mb={2} 
+        key={box.hash_id} 
+        disabled={disabled}
+        aria-label={t('actions.view_box', { name: box.name })}
+      >
         <CardContent>
-          <Typography variant="h3" noWrap>
+          <Typography variant="h3" noWrap id={`box-title-${box.hash_id}`}>
             {box.name}
           </Typography>
           <Typography component={Box} variant="body2">
@@ -69,10 +97,11 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
             height="1.5rem"
             bgcolor={`${phases[box.phase_id]}.main`}
             overflow="clip"
+            aria-label={daysRemaining() > 0 ? t('phases.end', { var: daysRemaining() }) : t('phases.ended')}
           >
             <Box bgcolor={`${phases[box.phase_id]}.main`} position="absolute" left={0} height="100%" width="50%" />
             <Stack direction="row" position="absolute" left={0} height="100%" width="100%" alignItems="center">
-              <AppIcon icon="clock" size="small" sx={{ mx: 0.5 }} />
+              <AppIcon icon="clock" size="small" sx={{ mx: 0.5 }} aria-hidden={true} />
               <Typography variant="caption">
                 {daysRemaining() > 0 ? t('phases.end', { var: daysRemaining() }) : t('phases.ended')}
               </Typography>

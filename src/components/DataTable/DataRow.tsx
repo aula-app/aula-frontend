@@ -52,6 +52,10 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
         cursor: 'pointer',
         textDecorationLine: status !== 1 ? 'line-through' : 'none',
         height: '55px',
+        '&:focus': {
+          outline: `2px solid ${theme.palette.primary.main}`,
+          outlineOffset: '-2px'
+        },
         ...sx,
       }}
       role="row"
@@ -63,7 +67,13 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
           toggleRow(String(item.hash_id));
         }
       }}
-      tabIndex={-1}
+      tabIndex={0}
+      aria-label={`${getRowLabel(item)}${status !== 1 ? ', inactive' : ''}`}
+      onClick={() => {
+        if (!(hasUserlevel(item) && item.userlevel >= 50) && !isFixed()) {
+          toggleRow(String(item.hash_id));
+        }
+      }}
       {...restOfProps}
     >
       <TableCell sx={{ position: 'sticky', left: 0, zIndex: 2, pl: 1, pr: 0, background: 'inherit' }}>

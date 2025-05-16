@@ -1,7 +1,9 @@
 import PhaseBar from '@/layout/PhaseBar';
 import { RoomType } from '@/types/Scopes';
+import { withKeyboardSupport } from '@/utils/accessibility';
 import { Card, CardMedia, Stack, Typography, capitalize } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { useTranslation } from 'react-i18next';
 import AppLink from '../AppLink';
 import DefaultImage from '../DefaultImages';
 
@@ -33,7 +35,17 @@ const parseDescription = (description: string) => {
  * @param className - Optional CSS class name
  */
 const RoomCard = ({ room, className }: RoomCardProps) => {
+  const { t } = useTranslation();
   const { imageNumber, imageShift } = parseDescription(room.description_internal);
+  const roomUrl = `/room/${room.hash_id}/phase/0`;
+
+  // Handle keyboard navigation
+  const handleCardKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      window.location.href = roomUrl;
+    }
+  };
 
   return (
     <Grid
@@ -41,19 +53,38 @@ const RoomCard = ({ room, className }: RoomCardProps) => {
       className={className}
       sx={{ scrollSnapAlign: 'center', order: -room.type }}
     >
-      <Card sx={{ borderRadius: '25px', width: '100%' }} variant="outlined">
-        <AppLink to={`/room/${room.hash_id}/phase/0`}>
+      <Card 
+        sx={{ borderRadius: '25px', width: '100%' }} 
+        variant="outlined"
+        tabIndex={0}
+        role="link"
+        aria-label={t('actions.enter_room', { name: room.room_name || 'AULA' })}
+        onKeyDown={handleCardKeyDown}
+      >
+        <AppLink 
+          to={roomUrl}
+          aria-labelledby={`room-title-${room.hash_id}`}
+        >
           <Stack
             sx={{
               flex: 1,
               p: 2,
             }}
           >
-            <Typography variant="h3" noWrap title={room.room_name}>
+            <Typography 
+              variant="h3" 
+              noWrap 
+              title={room.room_name}
+              id={`room-title-${room.hash_id}`}
+            >
               {room.room_name || 'AULA'}
             </Typography>
             {/* {isDefaultImage ? ( */}
-            <DefaultImage image={imageNumber || 0} shift={imageShift || 0} />
+            <DefaultImage 
+              image={imageNumber || 0} 
+              shift={imageShift || 0} 
+              aria-hidden={true}
+            />
             {/* ) : (
               <CardMedia
                 component="img"

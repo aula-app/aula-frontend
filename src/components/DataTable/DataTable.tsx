@@ -103,9 +103,9 @@ const DataTable: React.FC<Props> = ({
           position: 'relative',
         }}
       >
-        <Table 
-          stickyHeader 
-          size="small" 
+        <Table
+          stickyHeader
+          size="small"
           sx={{ width: 'auto', minWidth: '100%' }}
           aria-label={t('accessibility.aria.dataTable', { type: t(`scopes.${scope}.plural`) })}
         >
@@ -120,7 +120,8 @@ const DataTable: React.FC<Props> = ({
                   indeterminate={selected.length > 0 && selected.length < rows.length}
                   color="secondary"
                   inputProps={{
-                    'aria-label': selected.length > 0 ? t('accessibility.aria.deselectAll') : t('accessibility.aria.selectAll')
+                    'aria-label':
+                      selected.length > 0 ? t('accessibility.aria.deselectAll') : t('accessibility.aria.selectAll'),
                   }}
                 />
               </TableCell>
@@ -130,9 +131,9 @@ const DataTable: React.FC<Props> = ({
                     active={column.orderId === orderBy}
                     direction={orderAsc ? 'asc' : 'desc'}
                     onClick={() => toggleColumn(column.orderId)}
-                    aria-label={t('accessibility.aria.sortBy', { 
-                      column: t(`settings.columns.${column.name}`), 
-                      direction: orderAsc ? t('accessibility.aria.ascending') : t('accessibility.aria.descending')
+                    aria-label={t('accessibility.aria.sortBy', {
+                      column: t(`settings.columns.${column.name}`),
+                      direction: orderAsc ? t('accessibility.aria.ascending') : t('accessibility.aria.descending'),
                     })}
                   >
                     {t(`settings.columns.${column.name}`)}
@@ -171,8 +172,17 @@ const DataTable: React.FC<Props> = ({
                     }}
                     tabIndex={0}
                     role="button"
-                    aria-label={t('accessibility.aria.viewDetails', { 
-                      item: row.name || row.title || row.headline || row.username || row.hash_id 
+                    aria-label={t('accessibility.aria.viewDetails', {
+                      item:
+                        'name' in row && typeof row.name === 'string'
+                          ? row.name
+                          : 'title' in row && typeof row.title === 'string'
+                            ? row.title
+                            : 'headline' in row && typeof row.headline === 'string'
+                              ? row.headline
+                              : 'username' in row && typeof row.username === 'string'
+                                ? row.username
+                                : row.hash_id,
                     })}
                     key={`${column.name}-${row.hash_id}`}
                   >

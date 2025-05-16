@@ -92,6 +92,11 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
         backgroundColor: theme.palette.action.hover,
       },
 
+      '&:focus': {
+        outline: `2px solid ${theme.palette.primary.main}`,
+        outlineOffset: '2px',
+      },
+
       '&[data-active=true]': {
         color: theme.palette.primary.main,
         backgroundColor: theme.palette.action.selected,
@@ -139,6 +144,7 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
 const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
+  const editorId = `markdown-editor-${name}`;
 
   return (
     <Controller
@@ -151,7 +157,7 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
         return (
           <FormControl fullWidth {...restOfProps}>
             {/* Create a unique ID for the editor for proper labeling */}
-            <StyledFormLabel htmlFor={`markdown-editor-${name}`}>
+            <StyledFormLabel htmlFor={editorId}>
               {t(`settings.columns.${name}`)}
               {required ? '*' : ''}
               {required && <VisuallyHidden inline>{t('accessibility.required')}</VisuallyHidden>}
@@ -164,7 +170,6 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
               aria-required={required}
               aria-invalid={!!fieldState.error}
               aria-describedby={fieldState.error ? `${name}-helper-text` : undefined}
-              aria-label={`${t(`settings.columns.${name}`)} ${required ? t('accessibility.required') : t('accessibility.optional')}`}
               plugins={[
                 headingsPlugin(),
                 listsPlugin(),
@@ -177,13 +182,17 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
                       width="100%"
                       aria-label={t('accessibility.aria.editorToolbar')}
                       role="toolbar"
+                      tabIndex={-1}
                     >
                       <Stack direction="row">
-                        <BoldItalicUnderlineToggles />
+                        <BoldItalicUnderlineToggles
+                        />
                         <Separator />
-                        <ListsToggle />
+                        <ListsToggle
+                        />
                       </Stack>
-                      <UndoRedo />
+                      <UndoRedo
+                      />
                     </Stack>
                   ),
                 }),
