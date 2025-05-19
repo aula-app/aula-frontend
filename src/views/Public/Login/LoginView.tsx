@@ -139,6 +139,8 @@ const LoginView = () => {
           id="login-username"
           inputProps={{ 
             "aria-labelledby": "login-username-label",
+            "aria-invalid": !!errors.username,
+            "aria-errormessage": errors.username ? "username-error-message" : undefined,
             autoCapitalize: "none" 
           }}
           InputLabelProps={{ 
@@ -149,7 +151,7 @@ const LoginView = () => {
             shouldUnregister: false
           })}
           error={!!errors.username}
-          helperText={`${errors.username?.message || ''}`}
+          helperText={<span id="username-error-message">{errors.username?.message || ''}</span>}
           sx={{ mt: 0 }}
         />
         <TextField
@@ -159,7 +161,9 @@ const LoginView = () => {
           label={t("auth.password.label")}
           id="login-password"
           inputProps={{
-            "aria-labelledby": "login-password-label"
+            "aria-labelledby": "login-password-label",
+            "aria-invalid": !!errors.password,
+            "aria-errormessage": errors.password ? "password-error-message" : undefined
           }}
           InputLabelProps={{ 
             id: "login-password-label", 
@@ -169,7 +173,7 @@ const LoginView = () => {
             shouldUnregister: false
           })}
           error={!!errors.password}
-          helperText={`${errors.password?.message || ''}`}
+          helperText={<span id="password-error-message">{errors.password?.message || ''}</span>}
           sx={{ mt: 0 }}
           slotProps={{
             input: {

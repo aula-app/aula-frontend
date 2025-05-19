@@ -162,39 +162,79 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.displayname`)}
+                id="user-displayname"
                 size="small"
                 error={!!errors.displayname}
-                helperText={`${errors.displayname?.message || ''}`}
+                helperText={<span id="displayname-error-message">{errors.displayname?.message || ''}</span>}
                 {...register('displayname')}
+                inputProps={{
+                  'aria-labelledby': 'user-displayname-label',
+                  'aria-invalid': !!errors.displayname,
+                  'aria-errormessage': errors.displayname ? 'displayname-error-message' : undefined
+                }}
+                InputLabelProps={{
+                  id: 'user-displayname-label',
+                  htmlFor: 'user-displayname'
+                }}
               />
               <TextField
                 fullWidth
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.username`)}
+                id="user-username"
                 size="small"
                 error={!!errors.username}
-                helperText={`${errors.username?.message || ''}`}
+                helperText={<span id="username-error-message">{errors.username?.message || ''}</span>}
                 {...register('username')}
+                inputProps={{
+                  'aria-labelledby': 'user-username-label',
+                  'aria-invalid': !!errors.username,
+                  'aria-errormessage': errors.username ? 'username-error-message' : undefined
+                }}
+                InputLabelProps={{
+                  id: 'user-username-label',
+                  htmlFor: 'user-username'
+                }}
               />
               <TextField
                 fullWidth
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.realname`)}
+                id="user-realname"
                 size="small"
                 error={!!errors.realname}
-                helperText={`${errors.realname?.message || ''}`}
+                helperText={<span id="realname-error-message">{errors.realname?.message || ''}</span>}
                 {...register('realname')}
+                inputProps={{
+                  'aria-labelledby': 'user-realname-label',
+                  'aria-invalid': !!errors.realname,
+                  'aria-errormessage': errors.realname ? 'realname-error-message' : undefined
+                }}
+                InputLabelProps={{
+                  id: 'user-realname-label',
+                  htmlFor: 'user-realname'
+                }}
               />
               <TextField
                 fullWidth
                 disabled={isLoading}
                 label={t(`settings.columns.email`)}
+                id="user-email"
                 size="small"
                 error={!!errors.email}
-                helperText={`${errors.email?.message || ''}`}
+                helperText={<span id="email-error-message">{errors.email?.message || ''}</span>}
                 {...register('email')}
+                inputProps={{
+                  'aria-labelledby': 'user-email-label',
+                  'aria-invalid': !!errors.email,
+                  'aria-errormessage': errors.email ? 'email-error-message' : undefined
+                }}
+                InputLabelProps={{
+                  id: 'user-email-label',
+                  htmlFor: 'user-email'
+                }}
               />
               {defaultValues?.userlevel !== 60 && (
                 <>

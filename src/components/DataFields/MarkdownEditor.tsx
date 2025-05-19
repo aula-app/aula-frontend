@@ -173,13 +173,19 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
               ]}
               {...field}
               ref={mdxEditorRef}
+              aria-invalid={!!fieldState.error}
+              aria-errormessage={fieldState.error ? `${name}-error-message` : undefined}
+              aria-labelledby={`editor-${name}-label`}
+              id={`editor-${name}`}
             />
-            <StyledFormLabel>
+            <StyledFormLabel id={`editor-${name}-label`} htmlFor={`editor-${name}`}>
               {t(`settings.columns.${name}`)}
               {required ? '*' : ''}
             </StyledFormLabel>
             {!!fieldState.error && (
-              <FormHelperText error={!!fieldState.error}>{t(`${fieldState.error?.message || ''}`)}</FormHelperText>
+              <FormHelperText id={`${name}-error-message`} error={!!fieldState.error}>
+                {t(`${fieldState.error?.message || ''}`)}
+              </FormHelperText>
             )}
           </FormControl>
         );

@@ -155,11 +155,21 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             <TextField
               {...register('title')}
               label={t('settings.columns.title')}
+              id="idea-title"
               error={!!errors.title}
-              helperText={`${errors.title?.message || ''}`}
+              helperText={<span id="title-error-message">{errors.title?.message || ''}</span>}
               fullWidth
               required
               disabled={isLoading}
+              inputProps={{
+                'aria-invalid': !!errors.title,
+                'aria-errormessage': errors.title ? 'title-error-message' : undefined,
+                'aria-labelledby': 'idea-title-label'
+              }}
+              InputLabelProps={{
+                id: 'idea-title-label',
+                htmlFor: 'idea-title'
+              }}
             />
             {/* content */}
             <MarkdownEditor name="content" control={control} required disabled={isLoading} />

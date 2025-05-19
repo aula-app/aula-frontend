@@ -119,11 +119,13 @@ const fields = schema.fields;
               sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
               {...register(field)}
               error={!!errors[field]}
-              helperText={`${errors[field]?.message || ''}`}
-              slotProps={{
-                htmlInput: {
+              helperText={<span id={`${field}-error-message`}>{errors[field]?.message || ''}</span>}
+              inputProps={{
                   'aria-labelledby': `set-password-${field}-label`,
-                },
+                  'aria-invalid': !!errors[field],
+                  'aria-errormessage': errors[field] ? `${field}-error-message` : undefined
+                }}
+              slotProps{{
                 input: {
                   endAdornment: (
                     <InputAdornment position="end">

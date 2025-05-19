@@ -113,11 +113,17 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
               sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
               {...register(field)}
               error={!!errors[field]}
-              helperText={`${errors[field]?.message || ''}`}
+              helperText={<span id={`${field}-error-message`}>{errors[field]?.message || ''}</span>}
+              inputProps={{
+                'aria-labelledby': `change-password-${field}-label`,
+                'aria-invalid': !!errors[field],
+                'aria-errormessage': errors[field] ? `${field}-error-message` : undefined
+              }}
+              InputLabelProps={{
+                id: `change-password-${field}-label`,
+                htmlFor: `change-password-${field}`,
+              }}
               slotProps={{
-                htmlInput: {
-                  'aria-labelledby': `change-password-${field}-label`,
-                },
                 input: {
                   endAdornment: (
                     <InputAdornment position="end">
@@ -129,11 +135,7 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
                       />
                     </InputAdornment>
                   ),
-                },
-                inputLabel: {
-                  id: `change-password-${field}-label`,
-                  htmlFor: `change-password-${field}`,
-                },
+                }
               }}
             />
           ))}
