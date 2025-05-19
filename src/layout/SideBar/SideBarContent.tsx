@@ -44,7 +44,12 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
       {...restOfProps}
       onClick={handleAfterLinkClick}
     >
-      <List component="nav" {...restOfProps} sx={{ flex: 1, px: 1, overflow: 'auto' }}>
+      <List 
+        component="nav" 
+        {...restOfProps} 
+        sx={{ flex: 1, px: 1, overflow: 'auto' }}
+        aria-label={t('ui.navigation.mainMenu')}
+      >
         {SIDEBAR_ITEMS.map(({ icon, path, title, permission }) => (
           <Fragment key={`${title}-${path}`}>
             {permission() && (
@@ -53,6 +58,8 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
                 to={path}
                 href="" // Hard reset for .href property, otherwise links are always opened in new tab :(
                 openInNewTab={false}
+                role="menuitem"
+                aria-label={t(`ui.navigation.${title}`)}
               >
                 <ListItemIcon>{icon && <AppIcon icon={icon} />}</ListItemIcon>
                 <ListItemText primary={t(`ui.navigation.${title}`)} />
@@ -82,7 +89,11 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
         }}
       >
         {isAuthenticated && (
-          <Button onClick={onLogout} sx={{ py: 1, width: '100%', color: 'inherit' }}>
+          <Button 
+            onClick={onLogout} 
+            sx={{ py: 1, width: '100%', color: 'inherit' }}
+            aria-label={t('auth.logout')}
+          >
             {t('auth.logout')}&nbsp;
             <AppIcon icon="logout" />
           </Button>

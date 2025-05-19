@@ -39,6 +39,9 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
         height: '55px',
         ...sx,
       }}
+      role="row"
+      aria-selected={selected}
+      aria-disabled={isFixed()}
       {...restOfProps}
     >
       <TableCell sx={{ position: 'sticky', left: 0, zIndex: 2, pl: 1, pr: 0, background: 'inherit' }}>
@@ -49,6 +52,7 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
               if (!isFixed()) toggleRow(String(item.hash_id));
             }}
             disabled={isFixed()}
+            aria-label={`Select ${item.name || item.displayname || item.title || item.hash_id}`}
           />
         )}
       </TableCell>

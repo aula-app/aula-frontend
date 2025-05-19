@@ -103,7 +103,12 @@ const DataTable: React.FC<Props> = ({
           position: 'relative',
         }}
       >
-        <Table stickyHeader size="small" sx={{ width: 'auto', minWidth: '100%' }}>
+        <Table 
+          stickyHeader 
+          size="small" 
+          sx={{ width: 'auto', minWidth: '100%' }}
+          aria-label={t(`scopes.${scope}.name`)}
+        >
           <TableHead>
             <TableRow sx={{ maxHeight: '55px' }}>
               <TableCell
@@ -117,7 +122,12 @@ const DataTable: React.FC<Props> = ({
                 />
               </TableCell>
               {columns.map((column) => (
-                <TableCell sx={{ whiteSpace: 'nowrap' }} key={column.name}>
+                <TableCell 
+                  sx={{ whiteSpace: 'nowrap' }} 
+                  key={column.name}
+                  scope="col"
+                  aria-sort={column.orderId === orderBy ? (orderAsc ? 'ascending' : 'descending') : 'none'}
+                >
                   <TableSortLabel
                     active={column.orderId === orderBy}
                     direction={orderAsc ? 'asc' : 'desc'}
