@@ -40,8 +40,8 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@capacitor/android": "^7.0.0",
-    "@capacitor/core": "^7.0.0",
-    "@capacitor/ios": "^7.0.0",
+    "@capacitor/core": "^7.2.0",
+    "@capacitor/ios": "^7.2.0",
     "@capacitor/keyboard": "^7.0.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -89,7 +89,7 @@
   },
   "devDependencies": {
     "@capacitor/assets": "^2.0.4",
-    "@capacitor/cli": "^7.0.0",
+    "@capacitor/cli": "^7.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "latest",

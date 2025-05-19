@@ -76,7 +76,7 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
                   minWidth: 'auto',
                   maxWidth: '10%',
                   borderRadius: 999,
-                  bgcolor: `hsl(${122 - key * 45}, 50%, 75%)`,
+                  bgcolor: `hsl(${122 + key * 45}, 50%, 75%)`,
                 }}
                 onClick={() => setShift(key * 45)}
               ></Button>
