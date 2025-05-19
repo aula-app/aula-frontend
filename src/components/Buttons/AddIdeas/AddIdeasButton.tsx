@@ -110,6 +110,7 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
         color="secondary"
         sx={{ height: 68, width: '100%', borderRadius: 6, borderStyle: 'dashed' }}
         onClick={() => setOpen(true)}
+        aria-label={t('actions.add', { var: t('scopes.ideas.name') })}
         {...restOfProps}
       >
         <AppIcon icon="add" mr={1} />
@@ -139,10 +140,19 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
           })}
         </List>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary" autoFocus>
+          <Button 
+            onClick={handleClose} 
+            color="secondary" 
+            autoFocus
+            aria-label={t('actions.cancel')}
+          >
             {t('actions.cancel')}
           </Button>
-          <Button onClick={onSubmit} variant="contained">
+          <Button 
+            onClick={onSubmit} 
+            variant="contained"
+            aria-label={t('actions.confirm')}
+          >
             {t('actions.confirm')}
           </Button>
         </DialogActions>

@@ -156,7 +156,14 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
 
   return (
     <>
-      <Button variant="outlined" color="secondary" onClick={() => setOpen(true)} disabled={disabled} {...restOfProps}>
+      <Button 
+        variant="outlined" 
+        color="secondary" 
+        onClick={() => setOpen(true)} 
+        disabled={disabled} 
+        aria-label={t('actions.addToParent', { var: t('scopes.boxes.name') })}
+        {...restOfProps}
+      >
         <AppIcon icon="box" pr={2} />
         {t('actions.addToParent', {
           var: t('scopes.boxes.name'),
@@ -186,10 +193,19 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
           ))}
         </List>
         <DialogActions>
-          <Button onClick={onClose} color="secondary" autoFocus>
+          <Button 
+            onClick={onClose} 
+            color="secondary" 
+            autoFocus
+            aria-label={t('actions.cancel')}
+          >
             {t('actions.cancel')}
           </Button>
-          <Button onClick={onSubmit} variant="contained">
+          <Button 
+            onClick={onSubmit} 
+            variant="contained"
+            aria-label={t('actions.confirm')}
+          >
             {t('actions.confirm')}
           </Button>
         </DialogActions>

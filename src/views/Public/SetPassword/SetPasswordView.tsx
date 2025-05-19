@@ -147,10 +147,18 @@ const fields = schema.fields;
               {!error ? t('auth.password.success') : t('errors.invalidPassword')}
             </Alert>
           </Collapse>
-          <Button color="error" onClick={resetFields}>
+          <Button 
+            color="error" 
+            onClick={resetFields}
+            aria-label={t('actions.cancel')}
+          >
             {t('actions.cancel')}
           </Button>
-          <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+          <Button 
+            variant="contained" 
+            onClick={handleSubmit(onSubmit)}
+            aria-label={t('actions.save')}
+          >
             {t('actions.save')}
           </Button>
         </Stack>

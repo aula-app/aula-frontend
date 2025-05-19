@@ -111,10 +111,10 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
             <IconField name="description_internal" control={control} disabled={isLoading} />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error">
+            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading}>
+            <Button type="submit" variant="contained" disabled={isLoading} aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}>
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>

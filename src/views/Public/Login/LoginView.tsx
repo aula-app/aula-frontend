@@ -168,7 +168,14 @@ const LoginView = () => {
           }}
         />
         </Stack>
-        <Button variant="contained" disabled={isLoading} onClick={handleSubmit(onSubmit)}>{t("auth.login.button")}</Button>
+        <Button 
+          variant="contained" 
+          disabled={isLoading} 
+          onClick={handleSubmit(onSubmit)}
+          aria-label={t("auth.login.button")}
+        >
+          {t("auth.login.button")}
+        </Button>
 
         <Grid container justifyContent="end" alignItems="center">
           <Button
@@ -176,6 +183,7 @@ const LoginView = () => {
             color="secondary"
             component={AppLink}
             to="/recovery/password"
+            aria-label={t('auth.forgotPassword.link')}
           >
             {t('auth.forgotPassword.link')}
           </Button>

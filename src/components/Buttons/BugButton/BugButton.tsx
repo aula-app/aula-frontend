@@ -36,6 +36,7 @@ ${data.content || ''}
       <AppIconButton
         icon="bug"
         disabled={disabled}
+        aria-label={t('actions.bugReport')}
         {...restOfProps}
         onClick={() => setOpen(true)}
         title={t('actions.bugReport')}

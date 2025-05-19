@@ -32,7 +32,13 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
 
   return (
     <>
-      <AppIconButton icon="delete" disabled={disabled} {...restOfProps} onClick={() => setOpen(true)} />
+      <AppIconButton 
+        icon="delete" 
+        disabled={disabled} 
+        aria-label={t('actions.delete', { var: t(`scopes.${scope}.name`) })}
+        {...restOfProps} 
+        onClick={() => setOpen(true)} 
+      />
       <Dialog
         open={isOpen}
         onClose={onClose}
@@ -50,10 +56,20 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="secondary" autoFocus>
+          <Button 
+            onClick={onClose} 
+            color="secondary" 
+            autoFocus
+            aria-label={t('actions.cancel')}
+          >
             {t('actions.cancel')}
           </Button>
-          <Button onClick={handleDelete} color="error" variant="contained">
+          <Button 
+            onClick={handleDelete} 
+            color="error" 
+            variant="contained"
+            aria-label={t('actions.delete')}
+          >
             {t('actions.delete')}
           </Button>
         </DialogActions>
