@@ -108,17 +108,23 @@ const DataTable: React.FC<Props> = ({
           size="small" 
           sx={{ width: 'auto', minWidth: '100%' }}
           aria-label={t(`scopes.${scope}.name`)}
+          role="table"
+          aria-rowcount={rows.length}
+          aria-colcount={columns.length + 2}
         >
-          <TableHead>
-            <TableRow sx={{ maxHeight: '55px' }}>
+          <TableHead role="rowgroup">
+            <TableRow sx={{ maxHeight: '55px' }} role="row">
               <TableCell
                 sx={{ position: 'sticky', left: 0, zIndex: 3, pl: 1, pr: 0, backgroundColor: 'background.paper' }}
+                role="columnheader"
+                aria-label={t('ui.select.all')}
               >
                 <Checkbox
                   onChange={toggleAllRows}
                   checked={selected.length === rows.length && selected.length > 0}
                   indeterminate={selected.length > 0 && selected.length < rows.length}
                   color="secondary"
+                  aria-label={t('ui.select.all')}
                 />
               </TableCell>
               {columns.map((column) => (
@@ -142,7 +148,7 @@ const DataTable: React.FC<Props> = ({
               ></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody role="rowgroup">
             {rows.map((row) => (
               <DataRow
                 key={row.id}
@@ -162,6 +168,7 @@ const DataTable: React.FC<Props> = ({
                     }}
                     onClick={() => setEdit(row)}
                     key={`${column.name}-${row.hash_id}`}
+                    role="cell"
                   >
                     {column.name in row && <DataItem row={row} column={column.name} />}
                   </TableCell>
