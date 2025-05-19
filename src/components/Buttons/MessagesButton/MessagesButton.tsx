@@ -1,5 +1,4 @@
 import AppIconButton from '@/components/AppIconButton';
-import { getAnnouncements } from '@/services/announcements';
 import { getPersonalMessages } from '@/services/messages';
 import { Badge, IconButtonProps, Skeleton } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -29,7 +28,7 @@ const MessagesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
         },
       }}
     >
-      <AppIconButton icon="message" to="/messages" {...restOfProps} />
+      <AppIconButton icon="message" to="/settings/messages" {...restOfProps} />
     </Badge>
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />

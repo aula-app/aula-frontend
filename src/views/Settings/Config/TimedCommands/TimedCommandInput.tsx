@@ -38,7 +38,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
       command: '',
       target_id: target,
       parameters: value,
-      date_start: dayjs(startTime).format(FORMAT_DATE_TIME),
+      date_start: dayjs(startTime).utc().format(FORMAT_DATE_TIME),
     });
     if (!response.error) onReload();
   }

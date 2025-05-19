@@ -34,15 +34,8 @@ const RoomField: React.FC<Props> = ({ selected, onChange, disabled = false, ...r
     setSelectedOptions(selectedOptions);
     const selectedValues = selectedOptions.map((option) => String(option.value));
 
-    // If selected.add is empty, we're initializing or resetting
-    if (selected.add.length === 0 && selected.remove.length === 0) {
-      onChange({ add: selectedValues, remove: [] });
-    } else {
-      onChange({
-        add: selectedValues.filter((value) => !selected.add.includes(value)),
-        remove: selected.add.filter((value) => !selectedValues.includes(value)),
-      });
-    }
+    // Always update with the complete list of selected values
+    onChange({ add: selectedValues, remove: [] });
   };
 
   useEffect(() => {
