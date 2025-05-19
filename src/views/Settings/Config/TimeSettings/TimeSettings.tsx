@@ -22,8 +22,8 @@ const SystemSettings = ({ config, onReload }: Props) => {
 
   const [startDay, setStartDay] = useState<number>(config?.first_workday_week || 1);
   const [endDay, setEndDay] = useState<number>(config?.last_workday_week || 5);
-  const [startTime, setStartTime] = useState<dayjs.ConfigType>(config?.start_time || new Date('2025-01-01T08:30:00'));
-  const [endTime, setEndTime] = useState<dayjs.ConfigType>(config?.daily_end_time || new Date('2025-01-01T17:00:00'));
+  const [startTime, setStartTime] = useState<dayjs.ConfigType>(config?.start_time || new Date());
+  const [endTime, setEndTime] = useState<dayjs.ConfigType>(config?.daily_end_time || new Date());
 
   var week = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
@@ -42,8 +42,8 @@ const SystemSettings = ({ config, onReload }: Props) => {
 
   const onSubmit = () => {
     setConfig({ method: 'setWorkdays', args: { first_day: startDay, last_day: endDay } });
-    setConfig({ method: 'setDailyStartTime', args: { time: startTime } });
-    setConfig({ method: 'setDailyEndTime', args: { time: endTime } });
+    setConfig({ method: 'setDailyStartTime', args: { time: dayjs(startTime).utc().format(FORMAT_DATE_TIME) } });
+    setConfig({ method: 'setDailyEndTime', args: { time: dayjs(endTime).utc().format(FORMAT_DATE_TIME) } });
   };
 
   const onCancel = () => {
@@ -54,8 +54,8 @@ const SystemSettings = ({ config, onReload }: Props) => {
   useEffect(() => {
     setStartDay(config?.first_workday_week || 1);
     setEndDay(config?.last_workday_week || 5);
-    setStartTime(config?.start_time || new Date('2025-01-01T08:30:00'));
-    setEndTime(config?.daily_end_time || new Date('2025-01-01T17:00:00'));
+    setStartTime(config?.start_time || new Date());
+    setEndTime(config?.daily_end_time || new Date());
   }, [JSON.stringify(config)]);
 
   return (
