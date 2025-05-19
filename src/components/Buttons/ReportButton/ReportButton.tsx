@@ -36,7 +36,15 @@ ${data.content || ''}
 
   return (
     <>
-      <AppIconButton icon="report" disabled={disabled} {...restOfProps} onClick={() => setOpen(true)} />
+      <AppIconButton 
+        icon="report" 
+        disabled={disabled} 
+        aria-label={t('actions.contentReport')}
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
+        {...restOfProps} 
+        onClick={() => setOpen(true)} 
+      />
       <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <ReportForms onClose={onClose} onSubmit={onSubmit} />
       </Drawer>

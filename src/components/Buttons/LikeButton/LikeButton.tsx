@@ -43,6 +43,7 @@ const LikeButton: React.FC<Props> = ({ item, disabled }) => {
       onClick={toggleLike}
       disabled={disabled || !checkPermissions('ideas', 'like')}
       aria-label={likeStatus ? t('actions.unlike') : t('actions.like')}
+      aria-pressed={likeStatus}
     >
       {`${item.sum_likes + Number(likeStatus) - Number(liked)}`}
     </AppIconButton>

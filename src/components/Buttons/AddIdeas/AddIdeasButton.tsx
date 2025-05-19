@@ -111,6 +111,8 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
         sx={{ height: 68, width: '100%', borderRadius: 6, borderStyle: 'dashed' }}
         onClick={() => setOpen(true)}
         aria-label={t('actions.add', { var: t('scopes.ideas.name') })}
+        aria-expanded={open}
+        aria-haspopup="dialog"
         {...restOfProps}
       >
         <AppIcon icon="add" mr={1} />

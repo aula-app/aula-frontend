@@ -36,6 +36,8 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
         icon="delete" 
         disabled={disabled} 
         aria-label={t('actions.delete', { var: t(`scopes.${scope}.name`) })}
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
         {...restOfProps} 
         onClick={() => setOpen(true)} 
       />

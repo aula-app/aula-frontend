@@ -64,7 +64,13 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
             )}
           </Stack>
         </Collapse>
-        <AppIconButton icon={open ? 'close' : 'more'} onClick={toggleOptions} {...restOfProps} />
+        <AppIconButton 
+          icon={open ? 'close' : 'more'} 
+          onClick={toggleOptions}
+          aria-expanded={open}
+          aria-label={open ? t('actions.close') : t('actions.more')}
+          {...restOfProps} 
+        />
       </Stack>
     </ClickAwayListener>
   );

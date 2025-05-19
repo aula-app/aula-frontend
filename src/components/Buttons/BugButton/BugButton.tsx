@@ -37,6 +37,8 @@ ${data.content || ''}
         icon="bug"
         disabled={disabled}
         aria-label={t('actions.bugReport')}
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
         {...restOfProps}
         onClick={() => setOpen(true)}
         title={t('actions.bugReport')}

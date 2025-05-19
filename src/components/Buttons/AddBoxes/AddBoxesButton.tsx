@@ -162,6 +162,8 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
         onClick={() => setOpen(true)} 
         disabled={disabled} 
         aria-label={t('actions.addToParent', { var: t('scopes.boxes.name') })}
+        aria-expanded={open}
+        aria-haspopup="dialog"
         {...restOfProps}
       >
         <AppIcon icon="box" pr={2} />
