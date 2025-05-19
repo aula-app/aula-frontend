@@ -535,6 +535,7 @@
       "dashboard": "My Ideas",
       "home": "Home",
       "ideas": "Ideas",
+      "mainMenu": "Main navigation",
       "messages": "Messages",
       "privacy": "Privacy",
       "profile": "Profile",
@@ -543,6 +544,7 @@
       "rooms": "Rooms",
       "security": "Security",
       "settings": "Settings",
+      "skipToContent": "Skip to main content",
       "system": "System",
       "users": "Users"
     },
