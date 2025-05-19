@@ -66,6 +66,16 @@ const RecoveryPasswordView = () => {
           required
           disabled={isLoading}
           label="Email"
+          id="recovery-email"
+          slotProps={{
+            htmlInput: {
+              "aria-labelledby": "recovery-email-label" 
+            },
+            inputLabel: { 
+              id: "recovery-email-label", 
+              htmlFor: "recovery-email" 
+            }
+          }}
           {...register('email')}
           error={!!errors.email}
           helperText={`${errors.email?.message || ''}`}

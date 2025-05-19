@@ -115,11 +115,15 @@ const fields = schema.fields;
               required
               type={showPassword[field] ? 'text' : 'password'}
               label={t(`auth.password.${field}`)}
+              id={`set-password-${field}`}
               sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
               {...register(field)}
               error={!!errors[field]}
               helperText={`${errors[field]?.message || ''}`}
               slotProps={{
+                htmlInput: {
+                  'aria-labelledby': `set-password-${field}-label`,
+                },
                 input: {
                   endAdornment: (
                     <InputAdornment position="end">
@@ -132,6 +136,10 @@ const fields = schema.fields;
                     </InputAdornment>
                   ),
                 },
+                inputLabel: {
+                  id: `set-password-${field}-label`,
+                  htmlFor: `set-password-${field}`
+                }
               }}
             />
           ))}

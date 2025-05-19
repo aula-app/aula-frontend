@@ -136,8 +136,18 @@ const LoginView = () => {
           required
           disabled={isLoading}
           label={t("auth.login.label")}
-          slotProps={{ input: { autoCapitalize: "none" } }}
-          {...register("username")}
+          id="login-username"
+          inputProps={{ 
+            "aria-labelledby": "login-username-label",
+            autoCapitalize: "none" 
+          }}
+          InputLabelProps={{ 
+            id: "login-username-label", 
+            htmlFor: "login-username" 
+          }}
+          {...register("username", {
+            shouldUnregister: false
+          })}
           error={!!errors.username}
           helperText={`${errors.username?.message || ''}`}
           sx={{ mt: 0 }}
@@ -147,7 +157,17 @@ const LoginView = () => {
           disabled={isLoading}
           type={showPassword ? "text" : "password"}
           label={t("auth.password.label")}
-          {...register("password")}
+          id="login-password"
+          inputProps={{
+            "aria-labelledby": "login-password-label"
+          }}
+          InputLabelProps={{ 
+            id: "login-password-label", 
+            htmlFor: "login-password" 
+          }}
+          {...register("password", {
+            shouldUnregister: false
+          })}
           error={!!errors.password}
           helperText={`${errors.password?.message || ''}`}
           sx={{ mt: 0 }}

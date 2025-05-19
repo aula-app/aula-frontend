@@ -157,7 +157,22 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
             name="displayname"
             control={control}
             render={({ field }) => (
-              <TextField fullWidth label={t(`settings.columns.displayname`)} size="small" {...field} />
+              <TextField
+                fullWidth
+                label={t(`settings.columns.displayname`)}
+                id="profile-displayname"
+                slotProps={{
+                  htmlInput: {
+                    'aria-labelledby': 'profile-displayname-label',
+                  },
+                  inputLabel: {
+                    id: 'profile-displayname-label',
+                    htmlFor: 'profile-displayname',
+                  },
+                }}
+                size="small"
+                {...field}
+              />
             )}
           />
           {userFields.slice(0, -2).map((name, i) => (
