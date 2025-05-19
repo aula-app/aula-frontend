@@ -13,6 +13,7 @@ import SchoolDelete from './SchoolDelete';
 import SchoolInfo from './SchoolInfo';
 import TimedCommands from './TimedCommands';
 import UsersSettings from './UsersSettings';
+import SystemSettings from './SystemSettings';
 
 /** * Renders "Config" view
  * url: /settings/config
@@ -53,6 +54,7 @@ const ConfigView = () => {
     // { name: 'time', component: <TimeSettings config={config} onReload={getConfig} /> },
     // { name: 'login', component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
     { name: 'action', component: <TimedCommands /> },
+    { name: 'system', component: <SystemSettings settings={settings} onReload={getSettings} /> },
     { name: 'danger', component: <SchoolDelete /> },
   ];
 

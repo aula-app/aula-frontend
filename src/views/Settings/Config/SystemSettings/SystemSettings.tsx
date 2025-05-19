@@ -1,30 +1,11 @@
 import { InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { InstanceStatusOptions } from '@/utils';
-import { MenuItem, Slide, Stack, TextField, Typography } from '@mui/material';
-import { SlideProps } from '@mui/material/Slide';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import { MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // Import markdown files for different languages
 import { setInstanceOnlineMode } from '@/services/config';
-import markdownDE from './RestoreBackup/restore_backup.de.md';
-import markdownEN from './RestoreBackup/restore_backup.en.md';
-
-// Mapping of language codes to markdown files
-const languageMarkdownMap = {
-  en: markdownEN,
-  de: markdownDE,
-};
-
-// Dialog trasition
-const Transition = React.forwardRef(function Transition(
-  props: SlideProps & {
-    children: React.ReactElement<unknown>;
-  },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 /** * Renders "SystemSettings" component
  */
