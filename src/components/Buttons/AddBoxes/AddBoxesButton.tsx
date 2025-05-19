@@ -171,18 +171,37 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
           var: t('scopes.boxes.name'),
         })}
       </Button>
-      <Dialog onClose={onClose} open={open}>
-        <DialogTitle>
+      <Dialog 
+        onClose={onClose} 
+        open={open}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="add-boxes-dialog-title"
+      >
+        <DialogTitle id="add-boxes-dialog-title">
           {t('actions.addToParent', {
             var: t('scopes.boxes.name'),
           })}
         </DialogTitle>
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        <List sx={{ pt: 0 }}>
+        <List 
+          sx={{ pt: 0 }} 
+          role="radiogroup" 
+          aria-label={t('scopes.boxes.name')}
+        >
           {boxes.map((box) => (
-            <ListItem disablePadding key={box.hash_id}>
-              <ListItemButton onClick={() => toggleBox(box.hash_id)}>
+            <ListItem 
+              disablePadding 
+              key={box.hash_id} 
+              role="radio" 
+              aria-checked={selectedBox === box.hash_id}
+            >
+              <ListItemButton 
+                onClick={() => toggleBox(box.hash_id)}
+                role="checkbox"
+                aria-checked={selectedBox === box.hash_id}
+              >
                 <ListItemAvatar>
                   <Checkbox
                     checked={selectedBox === box.hash_id}
@@ -194,7 +213,7 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
             </ListItem>
           ))}
         </List>
-        <DialogActions>
+        <DialogActions role="group" aria-label={t('actions.dialog.actions')}>
           <Button 
             onClick={onClose} 
             color="secondary" 

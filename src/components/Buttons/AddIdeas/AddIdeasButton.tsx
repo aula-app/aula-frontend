@@ -118,20 +118,35 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
         <AppIcon icon="add" mr={1} />
         {t('actions.add', { var: t('scopes.ideas.name') })}
       </Button>
-      <Dialog onClose={handleClose} open={open}>
-        <DialogTitle>
+      <Dialog 
+        onClose={handleClose} 
+        open={open}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="add-ideas-dialog-title"
+      >
+        <DialogTitle id="add-ideas-dialog-title">
           {t('actions.add', {
             var: t('scopes.ideas.name'),
           })}
         </DialogTitle>
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        <List sx={{ pt: 0 }}>
+        <List 
+          sx={{ pt: 0 }} 
+          role="listbox" 
+          aria-label={t('scopes.ideas.name')}
+          aria-multiselectable="true"
+        >
           {roomIdeas.map((idea) => {
             const selectedIdea = selectedIdeas.find((selected) => selected.hash_id === idea.hash_id);
             return (
-              <ListItem disablePadding key={idea.hash_id}>
-                <ListItemButton onClick={() => toggleIdea(idea)}>
+              <ListItem disablePadding key={idea.hash_id} role="option" aria-selected={!!selectedIdea}>
+                <ListItemButton 
+                  onClick={() => toggleIdea(idea)}
+                  role="checkbox"
+                  aria-checked={!!selectedIdea}
+                >
                   <ListItemAvatar>
                     <Checkbox checked={!!selectedIdea} />
                   </ListItemAvatar>
@@ -141,7 +156,7 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
             );
           })}
         </List>
-        <DialogActions>
+        <DialogActions role="group" aria-label={t('actions.dialog.actions')}>
           <Button 
             onClick={handleClose} 
             color="secondary" 

@@ -43,7 +43,15 @@ ${data.content || ''}
         onClick={() => setOpen(true)}
         title={t('actions.bugReport')}
       />
-      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }}>
+      <Drawer 
+        anchor="bottom" 
+        open={isOpen} 
+        onClose={onClose} 
+        sx={{ overflowY: 'auto' }}
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('actions.bugReport')}
+      >
         <BugForms onClose={onClose} onSubmit={onSubmit} />
       </Drawer>
     </>

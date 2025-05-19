@@ -46,6 +46,8 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
         onClose={onClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        role="alertdialog"
+        aria-modal="true"
       >
         <DialogTitle id="alert-dialog-title">
           <Stack direction="row" alignItems="center">
@@ -57,7 +59,7 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
             {t('deletion.confirm', { var: t(`scopes.${scope}.name`) })}
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions role="group" aria-label={t('actions.dialog.actions')}>
           <Button 
             onClick={onClose} 
             color="secondary" 
