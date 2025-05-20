@@ -10,6 +10,7 @@ import SideBar from '../SideBar';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../config';
 import MessagesButton from '@/components/Buttons/MessagesButton';
 import UpdatesButton from '@/components/Buttons/UpdatesButton';
+import UserInfo from '@/components/UserInfo';
 
 // Paths that should be excluded from breadcrumbs
 const EXCLUDED_PATHS = ['welcome', 'phase', 'settings'];
@@ -83,6 +84,8 @@ const TopBar: React.FC = () => {
             <AppIconButton icon="back" onClick={() => goto(getReturnPath())} />
           )}
         </Box>
+
+        <UserInfo />
 
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs
