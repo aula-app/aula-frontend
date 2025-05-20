@@ -34,6 +34,7 @@
     "format:all": "prettier . --write",
     "lint": "eslint ./src --ext .js,.ts,.tsx",
     "check": "tsc",
+    "test": "playwright test",
     "type": "tsc",
     "knip": "knip"
   },
@@ -90,6 +91,7 @@
   "devDependencies": {
     "@capacitor/assets": "^2.0.4",
     "@capacitor/cli": "^7.2.0",
+    "@playwright/test": "^1.51.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "latest",

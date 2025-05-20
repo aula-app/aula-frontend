@@ -83,7 +83,6 @@ const TopBar: React.FC = () => {
             <AppIconButton icon="back" onClick={() => goto(getReturnPath())} />
           )}
         </Box>
-
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs
           aria-label="breadcrumb"

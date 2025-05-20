@@ -6,7 +6,9 @@ interface Props extends IconButtonProps {
 }
 
 const EditButton: React.FC<Props> = ({ disabled = false, onEdit, ...restOfProps }) => {
-  return <AppIconButton icon="edit" disabled={disabled} {...restOfProps} onClick={onEdit} />;
+  return (
+    <AppIconButton data-testing-id="edit-button" icon="edit" disabled={disabled} {...restOfProps} onClick={onEdit} />
+  );
 };
 
 export default EditButton;
