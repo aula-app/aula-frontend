@@ -44,7 +44,7 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
     >
       <Stack direction="row" alignItems="center" justifyContent="space-between" p={1} pl={2.5}>
         <LocaleSwitch />
-        <AppIconButton icon="close" onClick={onClose} title={t('actions.close')} />
+        <AppIconButton icon="close" onClick={(e) => onClose(e, 'backdropClick')} title={t('actions.close')} />
       </Stack>
       <Divider />
       {isAuthenticated && <UserInfo />}
