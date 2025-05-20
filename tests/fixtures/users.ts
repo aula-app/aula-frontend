@@ -1,5 +1,7 @@
 import * as shared from '../shared';
 import * as SettingsTypes from '../../src/types/SettingsTypes.ts';
+import fs from 'fs';
+import path from 'path';
 
 /*
  * 10 => "guest",
@@ -22,49 +24,15 @@ export type UserData = {
   about: string;
 };
 
-export const alice: UserData = {
-  username: 'alice-user-' + shared.timestamp,
-  password: 'aula',
-  displayName: 'alice-' + shared.timestamp,
-  realName: 'Alice Testing',
-  role: 20,
-  about: 'generated on ' + shared.timestring + 'in automated testing framework. should be deleted.',
-};
-export const bob: UserData = {
-  username: 'bob-user-' + shared.timestamp,
-  password: 'aula',
-  displayName: 'bob-' + shared.timestamp,
-  realName: 'Bob Testing',
-  role: 20,
-  about: 'generated on ' + shared.timestring + 'in automated testing framework. should be deleted.',
-};
+export let alice: UserData;
 
-export const mallory: UserData = {
-  username: 'mallory-moderator_v-' + shared.timestamp,
-  password: 'aula',
-  displayName: 'mallory-' + shared.timestamp,
-  realName: 'mallory Testing',
-  role: 31,
-  about: 'generated on ' + shared.timestring + 'in automated testing framework. should be deleted.',
-};
+export let bob: UserData;
 
-export const burt: UserData = {
-  username: 'burt-supermoderator_v-' + shared.timestamp,
-  password: 'aula',
-  displayName: 'burt-' + shared.timestamp,
-  realName: 'burt Testing',
-  role: 41,
-  about: 'generated on ' + shared.timestring + 'in automated testing framework. should be deleted.',
-};
+export let mallory: UserData;
 
-export const rainer: UserData = {
-  username: 'rainer-principal_v-' + shared.timestamp,
-  password: 'aula',
-  displayName: 'rainer-' + shared.timestamp,
-  realName: 'rainer Testing',
-  role: 45,
-  about: 'generated on ' + shared.timestring + 'in automated testing framework. should be deleted.',
-};
+export let burt: UserData;
+
+export let rainer: UserData;
 
 export const admin: UserData = {
   username: 'admin',
@@ -73,4 +41,54 @@ export const admin: UserData = {
   realName: 'Admin User',
   role: 50,
   about: '',
+};
+
+export const init = () => {
+  const runId = fs.readFileSync('run-id.txt', 'utf-8');
+  console.log('Run ID for fixtures:', runId);
+
+  alice = {
+    username: 'alice-user-' + runId,
+    password: 'aula',
+    displayName: 'alice-' + runId,
+    realName: 'Alice Testing',
+    role: 20,
+    about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
+  };
+
+  bob = {
+    username: 'bob-user-' + runId,
+    password: 'aula',
+    displayName: 'bob-' + runId,
+    realName: 'Bob Testing',
+    role: 20,
+    about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
+  };
+
+  mallory = {
+    username: 'mallory-moderator_v-' + runId,
+    password: 'aula',
+    displayName: 'mallory-' + runId,
+    realName: 'mallory Testing',
+    role: 31,
+    about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
+  };
+
+  burt = {
+    username: 'burt-supermoderator_v-' + runId,
+    password: 'aula',
+    displayName: 'burt-' + runId,
+    realName: 'burt Testing',
+    role: 41,
+    about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
+  };
+
+  rainer = {
+    username: 'rainer-principal_v-' + runId,
+    password: 'aula',
+    displayName: 'rainer-' + runId,
+    realName: 'rainer Testing',
+    role: 45,
+    about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
+  };
 };

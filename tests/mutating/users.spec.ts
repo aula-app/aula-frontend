@@ -9,11 +9,13 @@ import * as browsers from './browsers';
 const host = shared.getHost();
 
 test('create room', async ({ page }) => {
+  fixtures.init();
+
   console.log('test creating room!');
   // Expect a title "to contain" a substring.
+  await browsers.recall();
 
   console.log('hellooo');
-  console.log(browsers.b);
 
   await rooms.create(browsers.admin, 'tesssttt', [
     //

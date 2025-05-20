@@ -1,0 +1,22 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "api_url",
+          "value": "http://localhost:8080"
+        },
+        {
+          "name": "token",
+          "value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjAsInVzZXJfaWQiOjEsInVzZXJfaGFzaCI6IjNjYTJhOTNmNWYzMDk0MzFmNjVjNjc3MDE5NGQxZGM2IiwidXNlcl9sZXZlbCI6NTAsInJvbGVzIjpbeyJyb2xlIjo1MCwicm9vbSI6IjBhZWVmNjc0ZWYxZDhhZjA1M2IyOWI1OGQ3NDVlODNjIn1dLCJ0ZW1wX3B3IjpmYWxzZX0.vwXTRf9-SnRiSEHZbOAe_4Rj5-cR-4pExpVVaZ2rbZ3S58T_x0kJ0YZhuq9vn5JTl0hDdHhH3c1r3YziEZevYA"
+        },
+        {
+          "name": "code",
+          "value": "SINGLE"
+        }
+      ]
+    }
+  ]
+}
