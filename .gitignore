@@ -1,4 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+.env
 
 # lock files
 package-lock.json
@@ -29,3 +30,10 @@ yarn-error.log*
 *.bak
 
 .vscode
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
