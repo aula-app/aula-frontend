@@ -464,12 +464,17 @@ const AppIcon: React.FC<Props> = ({ icon, size = 'medium', decorative = true, sx
             : size === 'xxl'
               ? '80px'
               : '24px'; // no size === md
+  // Determine if this icon should get role="img" attribute
+  const shouldHaveImgRole = !decorative && icon in ALL_ICONS;
+  
   return (
     <Stack
       alignItems="center"
       justifyContent="center"
       className="app-icon"
       aria-hidden={decorative}
+      role={shouldHaveImgRole ? "img" : undefined}
+      aria-label={shouldHaveImgRole ? `${icon} icon` : undefined}
       sx={{
         fontSize: currentSize,
         minWidth: currentSize,

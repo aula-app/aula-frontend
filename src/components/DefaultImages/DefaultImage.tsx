@@ -4,9 +4,10 @@ import DinamicImages from './DinamicImages';
 interface Props {
   image: number;
   shift: number;
+  alt?: string; // Optional alt text for the image
 }
 
-const DefaultImage: React.FC<Props> = ({ image, shift, ...restOfProps }) => {
+const DefaultImage: React.FC<Props> = ({ image, shift, alt, ...restOfProps }) => {
   const theme = useTheme();
 
   const shiftHslHue = (hslColor: string): string => {
@@ -42,8 +43,11 @@ const DefaultImage: React.FC<Props> = ({ image, shift, ...restOfProps }) => {
   };
 
   const ComponentToRender = DinamicImages[image];
-
-  return <ComponentToRender colors={COLORS} aria-hidden="true" {...restOfProps} />;
+  
+  // If alt text is provided, use role="img" and aria-label, otherwise use aria-hidden="true"
+  return alt ? 
+    <ComponentToRender colors={COLORS} role="img" aria-label={alt} {...restOfProps} /> :
+    <ComponentToRender colors={COLORS} aria-hidden="true" {...restOfProps} />;
 };
 
 export default DefaultImage;

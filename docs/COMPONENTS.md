@@ -293,14 +293,22 @@ The Aula Frontend is committed to making the application accessible to all users
    - Purely decorative images should be marked with `aria-hidden="true"`
    - Example: `<img src="decorative.jpg" alt="" aria-hidden="true" />`
    - Use the `decorative` prop when available (e.g., `<AppIcon icon="star" decorative={true} />`)
-   - In DefaultImage components, all SVG illustrations are marked as `aria-hidden="true"` by default
+   - In DefaultImage components, SVG illustrations are marked as `aria-hidden="true"` by default unless `alt` prop is provided
 
-3. **Icon Components**
+3. **SVG Images**
+   - SVGs that convey meaning should have the `role="img"` attribute and an appropriate `aria-label`
+   - Example: `<svg role="img" aria-label="Description of the image">...</svg>`
+   - For DefaultImage components, provide an `alt` prop to make them accessible: `<DefaultImage image={2} alt="Cat illustration" />`
+   - For inline SVGs, always include the `role="img"` and `aria-label` attributes if they're not decorative
+   - Never use SVGs with meaningful content without proper accessibility attributes
+
+4. **Icon Components**
    - The AppIcon component accepts a `decorative` prop (default: true)
    - Set `decorative={false}` only when the icon conveys information not available elsewhere
    - When icons are used for visual enhancement only, keep `decorative={true}`
+   - When using `decorative={false}`, the component will automatically add `role="img"` and an appropriate `aria-label`
 
-4. **Button Content**
+5. **Button Content**
    - When a button contains only an icon, ensure it has an accessible name via `aria-label`
    - Example: `<Button aria-label={t('action.delete')}><AppIcon icon="trash" /></Button>`
    - When using AppIconButton, provide a title prop for tooltip and accessibility
