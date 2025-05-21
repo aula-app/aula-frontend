@@ -33,16 +33,17 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
           <Divider />
         </>
       )}
-      <SideBarContent isFixed />
+      <SideBarContent />
       <Divider />
       <Stack direction="row" alignItems="center" justifyContent="space-between" p={1} pl={2.5}>
         <LocaleSwitch />
         <BugButton target={location.pathname} />
-        <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} />
+        <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} aria-label={t('actions.print')} />
         <AppIconButton
           onClick={onSwitchDarkMode}
           icon={state.darkMode ? 'day' : 'night'}
           title={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
+          aria-label={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
         />
       </Stack>
       <Divider />
@@ -54,7 +55,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
           alignItems: 'center',
         }}
       >
-        <Button onClick={onLogout} sx={{ py: 1, width: '100%', color: 'inherit' }}>
+        <Button onClick={onLogout} sx={{ py: 1, width: '100%', color: 'inherit' }} aria-label={t('auth.logout')}>
           {t('auth.logout')}&nbsp;
           <AppIcon icon="logout" />
         </Button>

@@ -20,7 +20,13 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
   const { t } = useTranslation();
 
   return (
-    <List component="nav" {...restOfProps} sx={{ flex: 1, px: 1, overflow: 'auto' }}>
+    <List
+      component="nav"
+      aria-label={t('ui.navigation.sidebar')}
+      role="menu"
+      {...restOfProps}
+      sx={{ flex: 1, px: 1, overflow: 'auto' }}
+    >
       {SIDEBAR_ITEMS.map(({ icon, path, title, permission }) => (
         <Fragment key={`${title}-${path}`}>
           {permission() && (
@@ -29,6 +35,10 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
               to={path}
               href="" // Hard reset for .href property, otherwise links are always opened in new tab :(
               openInNewTab={false}
+              role="menuitem"
+              aria-label={t(`ui.navigation.${title}`)}
+              tabIndex={0}
+              aria-current={window.location.pathname === path ? 'page' : undefined}
             >
               <ListItemIcon>{icon && <AppIcon icon={icon} />}</ListItemIcon>
               <ListItemText primary={t(`ui.navigation.${title}`)} />
