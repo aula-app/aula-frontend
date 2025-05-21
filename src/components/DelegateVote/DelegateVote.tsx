@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
@@ -20,6 +20,7 @@ interface Props {
   open: boolean;
   onClose: () => void;
   delegate?: string;
+  triggerRef?: React.RefObject<HTMLElement>; // Optional reference to the trigger element
 }
 
 /**
@@ -27,12 +28,13 @@ interface Props {
  * @component ConsentDialog
  */
 
-const DelegateVote = ({ open, delegate, onClose }: Props) => {
+const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
   const { t } = useTranslation();
   const { room_id, box_id } = useParams();
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [, dispatch] = useAppStore();
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const [users, setUsers] = useState<DelegateType[]>([]);
   const [selected, setSelected] = useState<DelegateType>();
@@ -133,6 +135,7 @@ const DelegateVote = ({ open, delegate, onClose }: Props) => {
       actions={dialogActions}
       maxWidth="xs"
       testId="delegate-vote-dialog"
+      finalFocusRef={triggerRef}
     >
       <Stack height={350} position="relative" overflow="hidden">
         <Slide direction="right" in={!selected && !delegate} mountOnEnter unmountOnExit>

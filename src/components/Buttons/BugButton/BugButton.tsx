@@ -3,7 +3,7 @@ import { BugForms } from '@/components/DataForms';
 import { AccessibleModal } from '@/components/AccessibleDialog';
 import { addBug, BugArguments } from '@/services/messages';
 import { IconButtonProps } from '@mui/material';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ const BugButton: React.FC<Props> = ({ target, disabled = false, ...restOfProps }
   const { t } = useTranslation();
   const location = useLocation();
   const [isOpen, setOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const onSubmit = async (data: BugArguments) => {
     const body = `
@@ -37,6 +38,7 @@ ${data.content || ''}
   return (
     <>
       <AppIconButton
+        ref={buttonRef}
         icon="bug"
         disabled={disabled}
         aria-label={t('actions.bugReport')}
@@ -53,6 +55,7 @@ ${data.content || ''}
         showCloseButton={true}
         maxWidth="100%"
         testId="bug-dialog"
+        finalFocusRef={buttonRef}
       >
         <BugForms onClose={onClose} onSubmit={onSubmit} />
       </AccessibleModal>

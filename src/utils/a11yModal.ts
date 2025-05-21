@@ -22,12 +22,22 @@ export const useFocusTrap = (
 ) => {
   // Store the element that had focus before opening the modal
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  // Remember if this modal has been open before (for focus return)
+  const wasOpen = useRef(false);
+
+  // Get all focusable elements within the modal
+  const getFocusableElements = useCallback(() => {
+    if (!modalRef.current) return [];
+    return Array.from(modalRef.current.querySelectorAll(FOCUSABLE_ELEMENTS));
+  }, [modalRef]);
 
   // Handle keyboard events to trap focus
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (!modalRef.current || e.key !== 'Tab') return;
 
-    const focusableElements = modalRef.current.querySelectorAll(FOCUSABLE_ELEMENTS);
+    const focusableElements = getFocusableElements();
+    if (focusableElements.length === 0) return;
+
     const firstElement = focusableElements[0] as HTMLElement;
     const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
@@ -41,41 +51,134 @@ export const useFocusTrap = (
       e.preventDefault();
       firstElement?.focus();
     }
-  }, [modalRef]);
+  }, [modalRef, getFocusableElements]);
 
-  // Set up focus trap when modal opens
+  // Set initial focus
+  const setInitialFocus = useCallback(() => {
+    if (initialFocusRef?.current) {
+      initialFocusRef.current.focus();
+    } else if (modalRef.current) {
+      const focusableElements = getFocusableElements();
+      if (focusableElements.length > 0) {
+        (focusableElements[0] as HTMLElement).focus();
+      } else {
+        // If no focusable elements, focus the modal itself to keep focus trapped
+        modalRef.current.setAttribute('tabindex', '-1');
+        modalRef.current.focus();
+      }
+    }
+  }, [modalRef, initialFocusRef, getFocusableElements]);
+
+  // Save the element that had focus before opening the modal
+  useEffect(() => {
+    if (isOpen && !wasOpen.current) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
+      wasOpen.current = true;
+    } else if (!isOpen) {
+      wasOpen.current = false;
+    }
+  }, [isOpen]);
+
+  // Handle focus when the modal content changes
   useEffect(() => {
     if (isOpen) {
-      // Store the currently focused element to restore focus later
-      previousFocusRef.current = document.activeElement as HTMLElement;
+      // Delay focus slightly to allow any dynamic content to render
+      const focusTimer = setTimeout(() => {
+        setInitialFocus();
+      }, 50);
       
-      // Set focus on the initial element or the first focusable element
-      if (initialFocusRef?.current) {
-        initialFocusRef.current.focus();
-      } else if (modalRef.current) {
-        const focusableElements = modalRef.current.querySelectorAll(FOCUSABLE_ELEMENTS);
-        (focusableElements[0] as HTMLElement)?.focus();
-      }
-      
+      return () => clearTimeout(focusTimer);
+    }
+  }, [isOpen, setInitialFocus]);
+
+  // Set up focus trap when modal opens and restore focus when it closes
+  useEffect(() => {
+    if (isOpen) {
       // Add event listener for keyboard navigation
       document.addEventListener('keydown', handleKeyDown);
-    } else {
-      // Restore focus when the modal closes
-      if (finalFocusRef?.current) {
-        finalFocusRef.current.focus();
-      } else if (previousFocusRef.current) {
-        previousFocusRef.current.focus();
-      }
+    } else if (wasOpen.current) {
+      // Need to delay focus return slightly to allow animations to complete
+      // and ensure the proper focus order when multiple modals are in play
+      const returnFocusTimer = setTimeout(() => {
+        // First try the specified final focus element
+        if (finalFocusRef?.current && finalFocusRef.current.isConnected) {
+          finalFocusRef.current.focus();
+        } 
+        // Then try the element that had focus before opening
+        else if (previousFocusRef.current && previousFocusRef.current.isConnected) {
+          previousFocusRef.current.focus();
+        }
+        // If neither is available, try to find a sensible fallback
+        else {
+          // Look for a main content area
+          const mainContent = document.querySelector('main');
+          if (mainContent) {
+            // If main content has focusable elements, focus the first one
+            const mainFocusable = mainContent.querySelector(FOCUSABLE_ELEMENTS) as HTMLElement;
+            if (mainFocusable) {
+              mainFocusable.focus();
+            } else {
+              // Otherwise, make the main content focusable and focus it
+              mainContent.setAttribute('tabindex', '-1');
+              (mainContent as HTMLElement).focus();
+              // Remove the tabindex after focus to avoid confusing screen readers
+              setTimeout(() => mainContent.removeAttribute('tabindex'), 100);
+            }
+          } else {
+            // Last resort: focus the body
+            document.body.setAttribute('tabindex', '-1');
+            document.body.focus();
+            // Remove the tabindex after focus
+            setTimeout(() => document.body.removeAttribute('tabindex'), 100);
+          }
+        }
+      }, 100); // 100ms delay seems to work well with most animations
       
       // Remove event listener
       document.removeEventListener('keydown', handleKeyDown);
+      
+      return () => clearTimeout(returnFocusTimer);
     }
     
     // Clean up on unmount
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, modalRef, initialFocusRef, finalFocusRef, handleKeyDown]);
+  }, [isOpen, modalRef, initialFocusRef, finalFocusRef, handleKeyDown, setInitialFocus]);
+
+  // Prevent screen readers from accessing content outside the modal
+  useEffect(() => {
+    if (!isOpen || !modalRef.current) return;
+
+    // Get all elements in the document that should be hidden from screen readers when modal is open
+    const rootNodes = document.querySelectorAll('body > *');
+    const modalNode = modalRef.current.closest('[role="dialog"], [role="alertdialog"]') || modalRef.current;
+    
+    // Store the original aria-hidden values
+    const originalValues = new Map<Element, string | null>();
+    
+    // Hide all other root nodes from screen readers
+    rootNodes.forEach(node => {
+      if (node.contains(modalNode) || modalNode.contains(node)) return;
+      
+      originalValues.set(node, node.getAttribute('aria-hidden'));
+      node.setAttribute('aria-hidden', 'true');
+    });
+    
+    return () => {
+      // Restore original aria-hidden values
+      rootNodes.forEach(node => {
+        if (node.contains(modalNode) || modalNode.contains(node)) return;
+        
+        const originalValue = originalValues.get(node);
+        if (originalValue === null) {
+          node.removeAttribute('aria-hidden');
+        } else if (originalValue !== undefined) {
+          node.setAttribute('aria-hidden', originalValue);
+        }
+      });
+    };
+  }, [isOpen, modalRef]);
 };
 
 /**
@@ -89,13 +192,25 @@ export const useModalAnnouncement = (
   title: string,
   translationFunction: (key: string, options?: any) => string
 ) => {
+  // Track previous open state to detect changes
+  const wasOpen = useRef(false);
+  
   useEffect(() => {
-    if (isOpen) {
+    // Only announce when state changes
+    if (isOpen && !wasOpen.current) {
       // Announce modal opening
       announceToScreenReader(
         translationFunction('ui.accessibility.modalOpened', { title }), 
         'assertive'
       );
+      wasOpen.current = true;
+    } else if (!isOpen && wasOpen.current) {
+      // Announce modal closing
+      announceToScreenReader(
+        translationFunction('ui.accessibility.modalClosed'), 
+        'polite'
+      );
+      wasOpen.current = false;
     }
   }, [isOpen, title, translationFunction]);
 };

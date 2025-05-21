@@ -325,52 +325,124 @@ All dialog components include these accessibility enhancements:
 
 - **Focus Management**: Automatically moves focus into the dialog when opened and returns focus to the trigger element when closed
 - **Focus Trapping**: Prevents keyboard focus from leaving the dialog while it's open
+- **Focus Return**: Carefully manages focus return to ensure a smooth user experience when dialogs close
 - **Screen Reader Announcements**: Announces dialog opening and closing to screen readers
 - **Keyboard Controls**: Supports Escape key to close the dialog
 - **Proper ARIA Attributes**: Sets appropriate ARIA roles, labels, and descriptions
+- **Content Isolation**: Hides all other content from screen readers while dialog is open using aria-hidden
 
 ### Using Accessible Dialog Components
 
 ```tsx
 // Import the components
 import { AccessibleDialog, AccessibleModal, ConfirmDialog } from '@/components/AccessibleDialog';
+import { useRef } from 'react';
 
-// Using AccessibleDialog
-<AccessibleDialog
-  open={isOpen}
-  onClose={handleClose}
-  title={t('dialog.title')}
-  description={t('dialog.description')}
-  actions={dialogActions}
-  testId="my-dialog"
->
-  <DialogContent>Dialog content goes here</DialogContent>
-</AccessibleDialog>
+// Example component with proper focus management
+const MyDialogComponent = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  // Create a ref for the button that opens the dialog
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  
+  const handleClose = () => setIsOpen(false);
+  
+  const dialogActions = (
+    <>
+      <Button onClick={handleClose} color="secondary">
+        {t('actions.cancel')}
+      </Button>
+      <Button onClick={handleSave} variant="contained">
+        {t('actions.save')}
+      </Button>
+    </>
+  );
+  
+  return (
+    <>
+      {/* Button that triggers the dialog */}
+      <Button 
+        ref={buttonRef}
+        onClick={() => setIsOpen(true)}
+        variant="contained"
+        aria-haspopup="dialog"
+      >
+        {t('actions.openDialog')}
+      </Button>
+    
+      {/* Accessible dialog with focus return */}
+      <AccessibleDialog
+        open={isOpen}
+        onClose={handleClose}
+        title={t('dialog.title')}
+        description={t('dialog.description')}
+        actions={dialogActions}
+        testId="my-dialog"
+        // Set the finalFocusRef to return focus to the trigger button
+        finalFocusRef={buttonRef}
+      >
+        <DialogContent>Dialog content goes here</DialogContent>
+      </AccessibleDialog>
+    </>
+  );
+};
 
-// Using AccessibleModal
-<AccessibleModal
-  open={isOpen}
-  onClose={handleClose}
-  title={t('modal.title')}
-  showCloseButton={true}
-  maxWidth="600px"
-  testId="my-modal"
->
-  <ModalContent>Modal content goes here</ModalContent>
-</AccessibleModal>
+// Using AccessibleModal with focus management
+const MyModalComponent = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  
+  return (
+    <>
+      <Button ref={buttonRef} onClick={() => setIsOpen(true)}>
+        Open Modal
+      </Button>
+      
+      <AccessibleModal
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        title={t('modal.title')}
+        showCloseButton={true}
+        maxWidth="600px"
+        testId="my-modal"
+        finalFocusRef={buttonRef}
+      >
+        <ModalContent>Modal content goes here</ModalContent>
+      </AccessibleModal>
+    </>
+  );
+};
 
-// Using ConfirmDialog for simple confirmations
-<ConfirmDialog
-  open={isOpen}
-  title={t('confirm.title')}
-  message={t('confirm.message')}
-  confirmText={t('actions.delete')}
-  cancelText={t('actions.cancel')}
-  confirmColor="error"
-  onConfirm={handleConfirm}
-  onCancel={handleCancel}
-  testId="confirm-dialog"
-/>
+// Using ConfirmDialog with focus management
+const MyConfirmComponent = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const deleteButtonRef = useRef<HTMLButtonElement>(null);
+  
+  return (
+    <>
+      <Button 
+        ref={deleteButtonRef} 
+        color="error" 
+        onClick={() => setIsOpen(true)}
+      >
+        Delete Item
+      </Button>
+      
+      <ConfirmDialog
+        open={isOpen}
+        title={t('confirm.title')}
+        message={t('confirm.message')}
+        confirmText={t('actions.delete')}
+        cancelText={t('actions.cancel')}
+        confirmColor="error"
+        onConfirm={handleDeleteItem}
+        onCancel={() => setIsOpen(false)}
+        testId="confirm-dialog"
+        // The ConfirmDialog component will handle passing this to AccessibleDialog
+        finalFocusRef={deleteButtonRef}
+      />
+    </>
+  );
+};
 ```
 
 ### Dialog Migration Status

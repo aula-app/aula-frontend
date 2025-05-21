@@ -3,7 +3,7 @@ import { ReportForms } from '@/components/DataForms';
 import { AccessibleModal } from '@/components/AccessibleDialog';
 import { addReport, ReportArguments } from '@/services/messages';
 import { IconButtonProps } from '@mui/material';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ const ReportButton: React.FC<Props> = ({ target, link, disabled = false, ...rest
   const { t } = useTranslation();
   const location = useLocation();
   const [isOpen, setOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const onSubmit = async (data: ReportArguments) => {
     const body = `
@@ -38,6 +39,7 @@ ${data.content || ''}
   return (
     <>
       <AppIconButton 
+        ref={buttonRef}
         icon="report" 
         disabled={disabled} 
         aria-label={t('actions.contentReport')}
@@ -53,6 +55,7 @@ ${data.content || ''}
         showCloseButton={true}
         maxWidth="100%"
         testId="report-dialog"
+        finalFocusRef={buttonRef}
       >
         <ReportForms onClose={onClose} onSubmit={onSubmit} />
       </AccessibleModal>

@@ -56,6 +56,12 @@ export interface ConfirmDialogProps {
    * Optional test ID for testing
    */
   testId?: string;
+  
+  /**
+   * Reference to the element that should receive focus when the dialog is closed
+   * Typically the button or element that opened the dialog
+   */
+  finalFocusRef?: React.RefObject<HTMLElement>;
 }
 
 /**
@@ -72,6 +78,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onConfirm,
   onCancel,
   testId,
+  finalFocusRef,
 }) => {
   const { t } = useTranslation();
   const [internalIsLoading, setInternalIsLoading] = useState(false);
@@ -101,7 +108,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       title={title}
       onClose={onCancel}
       initialFocusRef={cancelButtonRef}
-      finalFocusRef={confirmButtonRef}
+      finalFocusRef={finalFocusRef || confirmButtonRef}
       maxWidth="xs"
       testId={testId}
       description={t('ui.accessibility.pressToContinue')}

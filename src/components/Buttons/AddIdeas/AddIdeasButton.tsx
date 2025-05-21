@@ -14,7 +14,7 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material';
-import { forwardRef, useCallback, useEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -33,6 +33,7 @@ export interface AddIdeaRefProps {
 const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose, ...restOfProps }, ref) => {
   const { t } = useTranslation();
   const { room_id, box_id } = useParams();
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
@@ -101,6 +102,13 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
     if (open) onReset();
   }, [open, ideas]);
 
+  // Expose methods via ref
+  useImperativeHandle(ref, () => ({
+    setNewIdeaIdeas: (id: string) => {
+      // Implementation of setNewIdeaIdeas if needed
+    }
+  }));
+
   const dialogActions = (
     <>
       <Button 
@@ -124,6 +132,7 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
   return (
     <>
       <Button
+        ref={buttonRef}
         variant="outlined"
         color="secondary"
         sx={{ height: 68, width: '100%', borderRadius: 6, borderStyle: 'dashed' }}
@@ -142,6 +151,7 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
         title={t('actions.add', { var: t('scopes.ideas.name') })}
         actions={dialogActions}
         testId="add-ideas-dialog"
+        finalFocusRef={buttonRef}
       >
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
