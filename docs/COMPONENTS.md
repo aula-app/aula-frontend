@@ -10,6 +10,7 @@ This document provides an overview of all components used in the Aula Frontend p
 - [Data Components](#data-components)
 - [User Interface Components](#user-interface-components)
 - [Feature Components](#feature-components)
+- [Accessibility Guidelines](#accessibility-guidelines)
 
 ## Usage Guidelines
 
@@ -275,3 +276,64 @@ A component for displaying user information:
 - Displays user status
 
 For more information on contributing, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## Accessibility Guidelines
+
+The Aula Frontend is committed to making the application accessible to all users, including those with disabilities. Follow these guidelines when working with components:
+
+### Images and Icons
+
+1. **Meaningful Alt Text**
+   - All informative images must have descriptive `alt` text (`alt="Description of image"`)
+   - Use translation keys (e.g., `alt={t('image.description')}`) to support multiple languages
+   - Alt text should be concise but descriptive of the image's purpose
+   - For logos, include the name of the organization (e.g., `alt="Aula Education Platform Logo"`)
+
+2. **Decorative Images**
+   - Purely decorative images should be marked with `aria-hidden="true"`
+   - Example: `<img src="decorative.jpg" alt="" aria-hidden="true" />`
+   - Use the `decorative` prop when available (e.g., `<AppIcon icon="star" decorative={true} />`)
+   - In DefaultImage components, all SVG illustrations are marked as `aria-hidden="true"` by default
+
+3. **Icon Components**
+   - The AppIcon component accepts a `decorative` prop (default: true)
+   - Set `decorative={false}` only when the icon conveys information not available elsewhere
+   - When icons are used for visual enhancement only, keep `decorative={true}`
+
+4. **Button Content**
+   - When a button contains only an icon, ensure it has an accessible name via `aria-label`
+   - Example: `<Button aria-label={t('action.delete')}><AppIcon icon="trash" /></Button>`
+   - When using AppIconButton, provide a title prop for tooltip and accessibility
+
+### Interactive Elements
+
+1. **Focus Management**
+   - Ensure all interactive elements are keyboard accessible
+   - Maintain visible focus indicators for keyboard navigation
+
+2. **Form Components**
+   - All form controls must have associated labels
+   - Error messages should be linked to their respective inputs
+   - Use aria-invalid to indicate validation errors
+
+### Roles and ARIA Attributes
+
+1. **Landmark Roles**
+   - Use appropriate semantic HTML elements (`<main>`, `<nav>`, `<header>`, etc.)
+   - Add ARIA roles when semantic HTML isn't available
+
+2. **Dynamic Content**
+   - Use aria-live regions for content that updates dynamically
+   - Ensure screen readers are notified of important changes
+
+### Testing
+
+1. **Keyboard Navigation**
+   - Verify all functionality is accessible via keyboard
+   - Test tab order for logical navigation flow
+
+2. **Screen Reader Testing**
+   - Test components with screen readers (NVDA, VoiceOver, JAWS)
+   - Ensure all content is properly announced
+
+For more detailed accessibility guidelines, refer to [WCAG 2.1 AA standards](https://www.w3.org/WAI/WCAG21/quickref/).

@@ -43,7 +43,7 @@ const DefaultImage: React.FC<Props> = ({ image, shift, ...restOfProps }) => {
 
   const ComponentToRender = DinamicImages[image];
 
-  return <ComponentToRender colors={COLORS} {...restOfProps} />;
+  return <ComponentToRender colors={COLORS} aria-hidden="true" {...restOfProps} />;
 };
 
 export default DefaultImage;

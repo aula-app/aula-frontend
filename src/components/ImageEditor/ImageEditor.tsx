@@ -215,6 +215,7 @@ const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded =
                     pointerEvents: 'none',
                   }}
                   alt={t('profile.avatar.preview')}
+                  role="img"
                 />
               </Box>
               <Stack

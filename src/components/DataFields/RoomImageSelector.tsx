@@ -80,7 +80,9 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
                 }}
                 onClick={() => setShift(key * 45)}
                 aria-label={t('room.image.color', { number: key + 1 })}
-              ></Button>
+              >
+                <span aria-hidden="true"></span>
+              </Button>
             ))}
           </Stack>
           <Typography variant="h3">Select image</Typography>

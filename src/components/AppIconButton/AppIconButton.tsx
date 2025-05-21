@@ -57,7 +57,7 @@ const AppIconButton: React.FC<Props> = ({
         sx={sxToRender}
         {...restOfProps}
       >
-        <AppIcon icon={icon} size={size} />
+        <AppIcon icon={icon} size={size} decorative={true} />
         <Typography pl={0.3}>{children}</Typography>
       </IconButton>
     );
