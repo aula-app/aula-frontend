@@ -25,14 +25,21 @@
     "filter": "Filter",
     "hide": "Hide",
     "loading": "Loading",
+    "loadingComplete": "Loading complete",
+    "loadingFailed": "Loading failed",
     "move": "Move selected {{var}} to",
     "print": "Print",
+    "processing": "Processing",
     "remove": "Delete {{var}}",
     "save": "Save",
+    "saving": "Saving",
+    "savingComplete": "Saving complete",
     "select": "Select {{var}}",
     "set": "Set {{var}}",
     "show": "Show",
-    "unarchive": "Unarchive"
+    "submitting": "Submitting",
+    "unarchive": "Unarchive",
+    "updating": "Updating"
   },
   "auth": {
     "forgotPassword": {
@@ -522,6 +529,17 @@
     "avatar": "User avatar for {{id}}"
   },
   "ui": {
+    "accessibility": {
+      "contentChanged": "Content has changed",
+      "contentLoaded": "Content loaded",
+      "errorOccurred": "An error occurred",
+      "formSubmitted": "Form submitted successfully",
+      "formError": "Form submission failed",
+      "loadingContent": "Loading content",
+      "newContent": "New content available",
+      "processingRequest": "Processing your request",
+      "updatingContent": "Updating content"
+    },
     "common": {
       "all": "All",
       "and": "and",

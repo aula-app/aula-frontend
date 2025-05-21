@@ -24,15 +24,22 @@
     "edit": "{{var}} bearbeiten",
     "filter": "Filtern",
     "hide": "Ausblenden",
-    "loading": "Wird geladen...",
+    "loading": "Wird geladen",
+    "loadingComplete": "Laden abgeschlossen",
+    "loadingFailed": "Laden fehlgeschlagen",
     "move": "{{var}} verschieben",
     "print": "Drucken",
+    "processing": "Verarbeitung",
     "remove": "{{var}} entfernen",
     "save": "Speichern",
+    "saving": "Speichern",
+    "savingComplete": "Speichern abgeschlossen",
     "select": "{{var}} auswählen",
     "set": "{{var}} setzen",
     "show": "Anzeigen",
-    "unarchive": "Aus Archiv holen"
+    "submitting": "Wird übermittelt",
+    "unarchive": "Aus Archiv holen",
+    "updating": "Aktualisierung"
   },
   "auth": {
     "forgotPassword": {
@@ -522,6 +529,17 @@
     "avatar": "Benutzeravatar für {{id}}"
   },
   "ui": {
+    "accessibility": {
+      "contentChanged": "Inhalt wurde geändert",
+      "contentLoaded": "Inhalt geladen",
+      "errorOccurred": "Ein Fehler ist aufgetreten",
+      "formSubmitted": "Formular erfolgreich übermittelt",
+      "formError": "Formularübermittlung fehlgeschlagen",
+      "loadingContent": "Inhalt wird geladen",
+      "newContent": "Neuer Inhalt verfügbar",
+      "processingRequest": "Ihre Anfrage wird verarbeitet",
+      "updatingContent": "Inhalt wird aktualisiert"
+    },
     "common": {
       "all": "Alle",
       "and": "und",

@@ -333,6 +333,9 @@ The Aula Frontend is committed to making the application accessible to all users
 2. **Dynamic Content**
    - Use aria-live regions for content that updates dynamically
    - Ensure screen readers are notified of important changes
+   - Use the `announceToScreenReader` utility for dynamic announcements
+   - Implement `LoadingIndicator` component for loading states with proper announcements
+   - Use live regions for form submissions, loading states, and content updates
 
 ### Testing
 
