@@ -79,6 +79,7 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
                   bgcolor: `hsl(${122 + key * 45}, 50%, 75%)`,
                 }}
                 onClick={() => setShift(key * 45)}
+                aria-label={t('room.image.color', { number: key + 1 })}
               ></Button>
             ))}
           </Stack>
@@ -97,6 +98,7 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
                     mx: 'auto',
                   }}
                   onClick={() => setSelected(key)}
+                  aria-label={t('room.image.pattern', { number: key + 1 })}
                 >
                   <DefaultImage image={key} shift={shift} />
                 </Button>

@@ -1,4 +1,10 @@
 {
+  "app": {
+    "name": {
+      "logo": "Aula Bildungsplattform Logo",
+      "icon": "Aula Bildungsplattform Symbol"
+    }
+  },
   "actions": {
     "activate": "{{var}} aktivieren",
     "add": "{{var}} hinzufügen",
@@ -110,6 +116,7 @@
     "noData": "Keine Daten verfügbar",
     "noServer": "Server ist nicht verfügbar",
     "notFound": "Hier gibt es keine Neuigkeiten",
+    "notFoundImage": "Schlafende Charakterillustration für Seite nicht gefunden",
     "offline": "Der Zugang zu dieser Schule ist gesperrt. Bitte versuchen Sie es später wieder",
     "timeout": "Zeitüberschreitung der Anfrage",
     "unauthorized": "Diese Seite erfordert eine Authentifizierung"
@@ -160,6 +167,11 @@
   },
   "patterns": {
     "on": "{{a}} zur {{b}}"
+  },
+  "profile": {
+    "avatar": {
+      "preview": "Avatarbild-Vorschau"
+    }
   },
   "phases": {
     "approval": "Prüfung",
@@ -232,6 +244,12 @@
     "title": "Benutzerrollen",
     "roomRoles": "Raumrollen",
     "empty": "Nicht in diesem Raum"
+  },
+  "room": {
+    "image": {
+      "color": "Farboption {{number}}",
+      "pattern": "Bildmuster {{number}}"
+    }
   },
   "scopes": {
     "announcements": {
@@ -499,6 +517,9 @@
     "results": "Abstimmungsergebnisse und genehmigte Ideen zur Umsetzung anzeigen",
     "voting": "Stimme für genehmigte Ideen abgeben",
     "wild": "Hier kannst du erste Ideen und Vorschläge posten"
+  },
+  "user": {
+    "avatar": "Benutzeravatar für {{id}}"
   },
   "ui": {
     "common": {

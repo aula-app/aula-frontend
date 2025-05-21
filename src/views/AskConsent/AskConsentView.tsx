@@ -73,7 +73,7 @@ const AskConsent = () => {
       }}
     >
       <Stack direction="row" height={52} alignItems="center" justifyContent="center">
-        <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Icon.svg`} alt="aula" height="100%" />
+        <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Icon.svg`} alt={t('app.name.logo')} height="100%" />
         <Stack flexGrow={1} alignItems="center" justifyContent="center" mr={2}>
           <Typography fontWeight={700} textTransform="uppercase" color="secondary">
             Acknowledgement

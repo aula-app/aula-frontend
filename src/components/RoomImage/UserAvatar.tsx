@@ -33,7 +33,7 @@ const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
         fontSize: '3rem',
         ...sx,
       }}
-      alt="User avatar"
+      alt={t('user.avatar', { id: id })}
       src={`/files/${userAvatar}` || ''}
     >
       {!userAvatar && <AppIcon icon="avatar" />}

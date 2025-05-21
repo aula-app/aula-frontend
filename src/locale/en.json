@@ -1,4 +1,10 @@
 {
+  "app": {
+    "name": {
+      "logo": "Aula Education Platform Logo",
+      "icon": "Aula Education Platform Icon"
+    }
+  },
   "actions": {
     "activate": "Activate {{var}}",
     "add": "New {{var}}",
@@ -110,6 +116,7 @@
     "noData": "No data available",
     "noServer": "Server is not available",
     "notFound": "There are no news here",
+    "notFoundImage": "Sleeping character illustration for not found page",
     "offline": "The access to this school is suspended. Please try again later",
     "timeout": "The request timed out",
     "unauthorized": "This page requires authentication"
@@ -160,6 +167,11 @@
   },
   "patterns": {
     "on": "{{a}} on {{b}}"
+  },
+  "profile": {
+    "avatar": {
+      "preview": "Avatar image preview"
+    }
   },
   "phases": {
     "approval": "Approval",
@@ -232,6 +244,12 @@
     "title": "User Roles",
     "roomRoles": "Room Roles",
     "empty": "Not in this room"
+  },
+  "room": {
+    "image": {
+      "color": "Color option {{number}}",
+      "pattern": "Image pattern {{number}}"
+    }
   },
   "scopes": {
     "announcements": {
@@ -499,6 +517,9 @@
     "results": "View voting results and approved ideas for implementation",
     "voting": "Cast your vote on approved ideas",
     "wild": "Share and like initial ideas and suggestions"
+  },
+  "user": {
+    "avatar": "User avatar for {{id}}"
   },
   "ui": {
     "common": {

@@ -34,7 +34,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
           <LocaleSwitch />
         </Stack>
         <Box sx={{ width: '100%', mb: 2 }}>
-          <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Logo.svg`} alt="aula" />
+          <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Logo.svg`} alt={t('app.name.logo')} />
         </Box>
       </Stack>
       <Stack
