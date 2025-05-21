@@ -119,14 +119,12 @@ const fields = schema.fields;
               sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
               {...register(field)}
               error={!!errors[field]}
-              helperText={<span id={`${field}-error-message`}>{errors[field]?.message || ''}</span>}
-              inputProps={{
+              helperText={<span id={`${field}-error-message`}>{typeof errors[field]?.message === 'string' ? errors[field]?.message : ''}</span>}
+              slotProps={{
+                input: {
                   'aria-labelledby': `set-password-${field}-label`,
                   'aria-invalid': !!errors[field],
-                  'aria-errormessage': errors[field] ? `${field}-error-message` : undefined
-                }}
-              slotProps{{
-                input: {
+                  'aria-errormessage': errors[field] ? `${field}-error-message` : undefined,
                   endAdornment: (
                     <InputAdornment position="end">
                       <AppIconButton
@@ -140,8 +138,8 @@ const fields = schema.fields;
                 },
                 inputLabel: {
                   id: `set-password-${field}-label`,
-                  htmlFor: `set-password-${field}`
-                }
+                  htmlFor: `set-password-${field}`,
+                },
               }}
             />
           ))}
