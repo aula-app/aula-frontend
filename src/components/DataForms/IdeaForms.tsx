@@ -157,18 +157,24 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               label={t('settings.columns.title')}
               id="idea-title"
               error={!!errors.title}
-              helperText={<span id="title-error-message">{errors.title?.message || ''}</span>}
+              helperText={
+                <span id="title-error-message">
+                  {typeof errors.title?.message === 'string' ? errors.title.message : ''}
+                </span>
+              }
               fullWidth
               required
               disabled={isLoading}
-              inputProps={{
-                'aria-invalid': !!errors.title,
-                'aria-errormessage': errors.title ? 'title-error-message' : undefined,
-                'aria-labelledby': 'idea-title-label'
-              }}
-              InputLabelProps={{
-                id: 'idea-title-label',
-                htmlFor: 'idea-title'
+              slotProps={{
+                input: {
+                  'aria-invalid': !!errors.title,
+                  'aria-errormessage': errors.title ? 'title-error-message' : undefined,
+                  'aria-labelledby': 'idea-title-label',
+                },
+                inputLabel: {
+                  id: 'idea-title-label',
+                  htmlFor: 'idea-title',
+                },
               }}
             />
             {/* content */}
@@ -190,7 +196,12 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading} aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading}
+              aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+            >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>
