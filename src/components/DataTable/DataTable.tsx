@@ -125,9 +125,16 @@ const DataTable: React.FC<Props> = ({
                   indeterminate={selected.length > 0 && selected.length < rows.length}
                   color="secondary"
                   aria-label={t('ui.select.all')}
+                  inputProps={{
+                    'tabIndex': 0, // Ensure the checkbox is always tabbable
+                    'aria-labelledby': 'select-all-checkbox-label'
+                  }}
                 />
+                <span id="select-all-checkbox-label" className="visually-hidden">
+                  {t('ui.select.all')}
+                </span>
               </TableCell>
-              {columns.map((column) => (
+              {columns.map((column, index) => (
                 <TableCell 
                   sx={{ whiteSpace: 'nowrap' }} 
                   key={column.name}
@@ -138,6 +145,12 @@ const DataTable: React.FC<Props> = ({
                     active={column.orderId === orderBy}
                     direction={orderAsc ? 'asc' : 'desc'}
                     onClick={() => toggleColumn(column.orderId)}
+                    tabIndex={0} // Make sort labels keyboard accessible
+                    id={`column-sort-${column.name}`}
+                    aria-label={t('ui.accessibility.sortColumn', { 
+                      column: t(`settings.columns.${column.name}`),
+                      direction: column.orderId === orderBy ? (orderAsc ? 'ascending' : 'descending') : 'none'
+                    })}
                   >
                     {t(`settings.columns.${column.name}`)}
                   </TableSortLabel>
@@ -145,19 +158,22 @@ const DataTable: React.FC<Props> = ({
               ))}
               <TableCell
                 sx={{ position: 'sticky', right: 0, zIndex: 2, px: 0, backgroundColor: 'background.paper' }}
+                aria-hidden="true"
               ></TableCell>
             </TableRow>
           </TableHead>
           <TableBody role="rowgroup">
-            {rows.map((row) => (
+            {rows.map((row, rowIndex) => (
               <DataRow
                 key={row.id}
                 item={row}
                 selected={selected.includes(row.hash_id)}
                 status={Number(row.status) as StatusTypes}
                 toggleRow={toggleRow}
+                tabIndex={rowIndex === 0 ? 0 : -1} // Make first row tabbable
+                aria-rowindex={rowIndex + 1}
               >
-                {columns.map((column) => (
+                {columns.map((column, colIndex) => (
                   <TableCell
                     sx={{
                       whiteSpace: 'nowrap',
@@ -169,6 +185,8 @@ const DataTable: React.FC<Props> = ({
                     onClick={() => setEdit(row)}
                     key={`${column.name}-${row.hash_id}`}
                     role="cell"
+                    aria-colindex={colIndex + 2} // +2 because of the checkbox column and row header
+                    tabIndex={-1} // Not directly tabbable to avoid too many tab stops
                   >
                     {column.name in row && <DataItem row={row} column={column.name} />}
                   </TableCell>

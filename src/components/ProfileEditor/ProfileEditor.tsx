@@ -132,9 +132,15 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
   }, [user]);
 
   return (
-    <FormContainer>
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <Stack direction="row" flexWrap="wrap" py={2} gap={2}>
-        <Button color="secondary" onClick={() => setEditImage(true)} sx={{ position: 'relative' }}>
+        <Button 
+          color="secondary" 
+          onClick={() => setEditImage(true)} 
+          sx={{ position: 'relative' }}
+          aria-label={t('ui.accessibility.editUserAvatar')}
+          tabIndex={0} // First focusable element in the form
+        >
           <AppIcon
             icon="edit"
             sx={{
@@ -148,22 +154,44 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
               bgcolor: 'background.paper',
               zIndex: 999,
             }}
+            aria-hidden="true" // Hide from screen readers as we have a proper label on the button
           />
           <UserAvatar id={user.hash_id} size={180} sx={{ mx: 'auto' }} />
         </Button>
         {user && <ImageEditor isOpen={editImage} onClose={onClose} id={user.hash_id} />}
         <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
           {userFields.slice(0, -1).map((name, i) => (
-            <RestrictedField key={i} name={name} control={control} />
+            <RestrictedField 
+              key={i} 
+              name={name} 
+              control={control}
+              tabIndex={i + 1} // Sequential tabbing through form fields
+            />
           ))}
         </Stack>
-        <MarkdownEditor name="about_me" control={control} sx={{ flex: 2, minWidth: `min(300px, 100%)` }} />
+        <MarkdownEditor 
+          name="about_me" 
+          control={control} 
+          sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
+          // The MarkdownEditor will manage tab order internally
+        />
       </Stack>
       <Stack direction="row" justifyContent="end" gap={2} mb={2}>
-        <Button color="error" onClick={resetFields}>
+        <Button 
+          color="error" 
+          onClick={resetFields}
+          type="button"
+          tabIndex={0}
+          aria-label={t('actions.cancel')}
+        >
           {t('actions.cancel')}
         </Button>
-        <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+        <Button 
+          variant="contained" 
+          type="submit"
+          tabIndex={0}
+          aria-label={t('actions.save')}
+        >
           {t('actions.save')}
         </Button>
       </Stack>
@@ -172,16 +200,22 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
         onClose={closeDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        aria-modal="true"
       >
         <DialogTitle id="alert-dialog-title" color="error" sx={{ display: 'flex', alignItems: 'center' }}>
-          <AppIcon icon="alert" sx={{ mr: 1 }} /> {t('requests.updateData.headline')}
+          <AppIcon icon="alert" sx={{ mr: 1 }} aria-hidden="true" /> {t('requests.updateData.headline')}
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
           <DialogContentText id="alert-dialog-description">
             {t('requests.updateData.confirm')}
-            <Stack my={1}>
-              {updateRequests.map((update) => (
-                <Stack direction="row">
+            <Stack my={1} role="list" aria-label={t('ui.accessibility.requestedChanges')}>
+              {updateRequests.map((update, index) => (
+                <Stack 
+                  direction="row" 
+                  key={`update-${index}`} 
+                  role="listitem"
+                  sx={{ mb: 1 }}
+                >
                   <b>{t(`settings.columns.${update.field}`)}</b>
                   <Typography mx={1}>{t('ui.common.from')}</Typography>
                   <b>{user[update.field]}</b>
@@ -194,10 +228,22 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog} color="secondary" autoFocus>
+          <Button 
+            onClick={closeDialog} 
+            color="secondary" 
+            autoFocus
+            tabIndex={0}
+            aria-label={t('actions.cancel')}
+          >
             {t('actions.cancel')}
           </Button>
-          <Button onClick={approveUpdates} color="error" variant="contained">
+          <Button 
+            onClick={approveUpdates} 
+            color="error" 
+            variant="contained"
+            tabIndex={0}
+            aria-label={t('actions.confirm')}
+          >
             {t('actions.confirm')}
           </Button>
         </DialogActions>
