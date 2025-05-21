@@ -31,6 +31,35 @@ When creating new components:
 
 ## Core UI Components
 
+### AccessibleDialog
+
+An accessible dialog component that:
+
+- Implements WAI-ARIA dialog practices
+- Manages focus properly when opened and closed
+- Traps focus within the dialog when open
+- Provides screen reader announcements
+- Supports keyboard navigation
+- Has proper ARIA roles and attributes
+
+### AccessibleModal
+
+A modal component that:
+
+- Provides a consistent modal interface with proper accessibility
+- Manages focus and keyboard navigation
+- Announces modal state to screen readers
+- Implements proper ARIA attributes and keyboard interactions
+
+### ConfirmDialog
+
+A confirmation dialog component that:
+
+- Extends AccessibleDialog for confirmation interactions
+- Provides confirm and cancel actions
+- Manages loading states
+- Implements accessible button focus
+
 ### AppIcon
 
 An icon component that:

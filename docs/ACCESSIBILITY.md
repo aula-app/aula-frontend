@@ -12,6 +12,7 @@ This document provides comprehensive guidelines for ensuring accessibility in th
 - [Keyboard Navigation](#keyboard-navigation)
 - [Color and Contrast](#color-and-contrast)
 - [Screen Readers](#screen-readers)
+- [Dialogs and Modals](#dialogs-and-modals)
 - [Testing](#testing)
 - [Utilities and Components](#utilities-and-components)
 
@@ -218,11 +219,50 @@ Use the `SkipNavigation` component to allow keyboard users to bypass navigation:
 
 ### Focus Trapping
 
-Implement focus trapping in modal dialogs:
+Use the accessible dialog components to manage focus in modals and dialogs:
 
-- Focus should be moved to the dialog when it opens
-- Focus should remain within the dialog while it's open
-- Focus should return to the triggering element when the dialog closes
+```tsx
+import { AccessibleDialog, AccessibleModal, ConfirmDialog } from '@/components';
+
+// For a standard dialog
+<AccessibleDialog
+  open={isOpen}
+  title="Dialog Title"
+  onClose={handleClose}
+  initialFocusRef={initialRef}
+  finalFocusRef={finalRef}
+>
+  Dialog content
+</AccessibleDialog>
+
+// For a modal
+<AccessibleModal
+  open={isOpen}
+  title="Modal Title"
+  onClose={handleClose}
+  actions={<Button onClick={handleSave}>Save</Button>}
+>
+  Modal content
+</AccessibleModal>
+
+// For a confirmation dialog
+<ConfirmDialog
+  open={isOpen}
+  title="Confirm Action"
+  message="Are you sure you want to proceed?"
+  onConfirm={handleConfirm}
+  onCancel={handleCancel}
+/>
+```
+
+These components implement best practices for dialog accessibility:
+
+- Focus is moved to the dialog when it opens
+- Focus is trapped within the dialog while it's open
+- Focus returns to the triggering element when the dialog closes
+- Dialog state is announced to screen readers
+- Keyboard navigation (Escape to close) is supported
+- Dialog has proper ARIA attributes (role, aria-labelledby, aria-describedby)
 
 ## Color and Contrast
 
@@ -269,6 +309,86 @@ Use ARIA attributes to enhance accessibility when needed:
 - `aria-expanded`: Indicates whether a control is expanded or collapsed
 - `aria-controls`: Identifies the element whose contents are controlled by the current element
 
+## Dialogs and Modals
+
+### Accessible Dialog Components
+
+Our application provides three accessible dialog components:
+
+1. **AccessibleDialog**: A wrapper around MUI Dialog with enhanced accessibility
+2. **AccessibleModal**: A custom modal built on MUI Modal with accessibility features
+3. **ConfirmDialog**: A specialized dialog for confirmation actions
+
+### Dialog Accessibility Features
+
+All dialog components include these accessibility enhancements:
+
+- **Focus Management**: Automatically moves focus into the dialog when opened and returns focus to the trigger element when closed
+- **Focus Trapping**: Prevents keyboard focus from leaving the dialog while it's open
+- **Screen Reader Announcements**: Announces dialog opening and closing to screen readers
+- **Keyboard Controls**: Supports Escape key to close the dialog
+- **Proper ARIA Attributes**: Sets appropriate ARIA roles, labels, and descriptions
+
+### Using Accessible Dialog Components
+
+```tsx
+// Import the components
+import { AccessibleDialog, AccessibleModal, ConfirmDialog } from '@/components/AccessibleDialog';
+
+// Using AccessibleDialog
+<AccessibleDialog
+  open={isOpen}
+  onClose={handleClose}
+  title={t('dialog.title')}
+  description={t('dialog.description')}
+  actions={dialogActions}
+  testId="my-dialog"
+>
+  <DialogContent>Dialog content goes here</DialogContent>
+</AccessibleDialog>
+
+// Using AccessibleModal
+<AccessibleModal
+  open={isOpen}
+  onClose={handleClose}
+  title={t('modal.title')}
+  showCloseButton={true}
+  maxWidth="600px"
+  testId="my-modal"
+>
+  <ModalContent>Modal content goes here</ModalContent>
+</AccessibleModal>
+
+// Using ConfirmDialog for simple confirmations
+<ConfirmDialog
+  open={isOpen}
+  title={t('confirm.title')}
+  message={t('confirm.message')}
+  confirmText={t('actions.delete')}
+  cancelText={t('actions.cancel')}
+  confirmColor="error"
+  onConfirm={handleConfirm}
+  onCancel={handleCancel}
+  testId="confirm-dialog"
+/>
+```
+
+### Dialog Migration Status
+
+We're in the process of migrating all dialog and modal components to use our accessible dialog components. The following components have been updated:
+
+- `DeleteButton`: Now uses the `ConfirmDialog` component
+- `ReportButton`: Now uses the `AccessibleModal` component
+- `BugButton`: Now uses the `AccessibleModal` component
+- `AddIdeasButton`: Now uses the `AccessibleDialog` component
+- `DelegateVote`: Now uses the `AccessibleDialog` component
+
+Components still needing migration include:
+
+- Other button components in the `Buttons` directory
+- Dialogs in the `DataFields` directory
+- Dialogs in various view components
+
 ## Testing
 
 ### Automated Testing
@@ -293,12 +413,18 @@ Perform manual testing with assistive technologies:
 
 - `announceToScreenReader`: Announces messages to screen readers
 - `announceLoadingState`: Announces loading state changes
+- `useFocusTrap`: Manages focus within a modal dialog
+- `useModalAnnouncement`: Announces modal state to screen readers
+- `useEscapeKey`: Handles escape key press to close dialogs
 
 ### Accessible Components
 
 - `LoadingIndicator`: Displays loading states with proper announcements
 - `SkipNavigation`: Allows keyboard users to bypass navigation
 - `PopupMessages`: Provides screen reader announcements for notifications
+- `AccessibleDialog`: A fully accessible dialog component
+- `AccessibleModal`: A fully accessible modal component
+- `ConfirmDialog`: An accessible confirmation dialog
 
 ## Resources
 

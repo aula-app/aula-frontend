@@ -1,3 +1,5 @@
+export * from './a11yForm';
+export * from './a11yModal';
 export * from './accessibility';
 export * from './alerts';
 export * from './commands';

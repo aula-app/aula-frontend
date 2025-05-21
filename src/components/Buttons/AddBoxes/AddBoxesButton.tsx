@@ -156,11 +156,11 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
 
   return (
     <>
-      <Button 
-        variant="outlined" 
-        color="secondary" 
-        onClick={() => setOpen(true)} 
-        disabled={disabled} 
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={() => setOpen(true)}
+        disabled={disabled}
         aria-label={t('actions.addToParent', { var: t('scopes.boxes.name') })}
         aria-expanded={open}
         aria-haspopup="dialog"
@@ -171,13 +171,7 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
           var: t('scopes.boxes.name'),
         })}
       </Button>
-      <Dialog 
-        onClose={onClose} 
-        open={open}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="add-boxes-dialog-title"
-      >
+      <Dialog onClose={onClose} open={open} role="dialog" aria-modal="true" aria-labelledby="add-boxes-dialog-title">
         <DialogTitle id="add-boxes-dialog-title">
           {t('actions.addToParent', {
             var: t('scopes.boxes.name'),
@@ -185,19 +179,10 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
         </DialogTitle>
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        <List 
-          sx={{ pt: 0 }} 
-          role="radiogroup" 
-          aria-label={t('scopes.boxes.name')}
-        >
+        <List sx={{ pt: 0 }} role="radiogroup" aria-label={t('scopes.boxes.name')}>
           {boxes.map((box) => (
-            <ListItem 
-              disablePadding 
-              key={box.hash_id} 
-              role="radio" 
-              aria-checked={selectedBox === box.hash_id}
-            >
-              <ListItemButton 
+            <ListItem disablePadding key={box.hash_id} role="radio" aria-checked={selectedBox === box.hash_id}>
+              <ListItemButton
                 onClick={() => toggleBox(box.hash_id)}
                 role="checkbox"
                 aria-checked={selectedBox === box.hash_id}
@@ -214,19 +199,10 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
           ))}
         </List>
         <DialogActions role="group" aria-label={t('actions.dialog.actions')}>
-          <Button 
-            onClick={onClose} 
-            color="secondary" 
-            autoFocus
-            aria-label={t('actions.cancel')}
-          >
+          <Button onClick={onClose} color="secondary" autoFocus aria-label={t('actions.cancel')}>
             {t('actions.cancel')}
           </Button>
-          <Button 
-            onClick={onSubmit} 
-            variant="contained"
-            aria-label={t('actions.confirm')}
-          >
+          <Button onClick={onSubmit} variant="contained" aria-label={t('actions.confirm')}>
             {t('actions.confirm')}
           </Button>
         </DialogActions>

@@ -1,27 +1,29 @@
+import { ConfirmDialog } from '@/components';
 import AppIconButton from '@/components/AppIconButton';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { WarningAmber } from '@mui/icons-material';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButtonProps,
-  Stack,
-} from '@mui/material';
-import { useState } from 'react';
+import { IconButtonProps, Stack, Typography } from '@mui/material';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends IconButtonProps {
   scope: SettingNamesType;
   onDelete: () => void;
+  /**
+   * Whether the delete operation is currently loading
+   */
+  isLoading?: boolean;
 }
 
-const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...restOfProps }) => {
+/**
+ * Accessible delete button with confirmation dialog
+ */
+const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, isLoading = false, ...restOfProps }) => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
+
+  // Create ref for button to return focus to
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const handleDelete = () => {
     onDelete();
@@ -30,54 +32,36 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, ...r
 
   const onClose = () => setOpen(false);
 
+  // Create confirmation message with icon
+  const confirmationMessage = (
+    <Stack spacing={2}>
+      <Typography variant="body1">{t('deletion.confirm', { var: t(`scopes.${scope}.name`) })}</Typography>
+    </Stack>
+  );
+
   return (
     <>
-      <AppIconButton 
-        icon="delete" 
-        disabled={disabled} 
+      <AppIconButton
+        ref={buttonRef}
+        icon="delete"
+        disabled={disabled || isLoading}
         aria-label={t('actions.delete', { var: t(`scopes.${scope}.name`) })}
         aria-expanded={isOpen}
         aria-haspopup="dialog"
-        {...restOfProps} 
-        onClick={() => setOpen(true)} 
+        {...restOfProps}
+        onClick={() => setOpen(true)}
       />
-      <Dialog
+      <ConfirmDialog
         open={isOpen}
-        onClose={onClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        role="alertdialog"
-        aria-modal="true"
-      >
-        <DialogTitle id="alert-dialog-title">
-          <Stack direction="row" alignItems="center">
-            <WarningAmber sx={{ mr: 1 }} color="error" /> {t('deletion.headline', { var: t(`scopes.${scope}.name`) })}
-          </Stack>
-        </DialogTitle>
-        <DialogContent sx={{ overflowY: 'auto' }}>
-          <DialogContentText id="alert-dialog-description">
-            {t('deletion.confirm', { var: t(`scopes.${scope}.name`) })}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions role="group" aria-label={t('actions.dialog.actions')}>
-          <Button 
-            onClick={onClose} 
-            color="secondary" 
-            autoFocus
-            aria-label={t('actions.cancel')}
-          >
-            {t('actions.cancel')}
-          </Button>
-          <Button 
-            onClick={handleDelete} 
-            color="error" 
-            variant="contained"
-            aria-label={t('actions.delete')}
-          >
-            {t('actions.delete')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        title={t('deletion.headline', { var: t(`scopes.${scope}.name`) })}
+        message={confirmationMessage}
+        confirmText={t('actions.delete')}
+        confirmColor="error"
+        onConfirm={handleDelete}
+        onCancel={onClose}
+        isLoading={isLoading}
+        testId="delete-confirmation-dialog"
+      />
     </>
   );
 };

@@ -532,11 +532,16 @@
     "accessibility": {
       "contentChanged": "Inhalt wurde geändert",
       "contentLoaded": "Inhalt geladen",
+      "dialogClosed": "Dialog geschlossen",
       "errorOccurred": "Ein Fehler ist aufgetreten",
       "formSubmitted": "Formular erfolgreich übermittelt",
       "formError": "Formularübermittlung fehlgeschlagen",
       "loadingContent": "Inhalt wird geladen",
+      "modalOpened": "{{title}} Dialog geöffnet",
+      "modalClosed": "Dialog geschlossen",
       "newContent": "Neuer Inhalt verfügbar",
+      "pressToContinue": "Drücken Sie Enter zum Fortfahren, Escape zum Abbrechen",
+      "pressToClose": "Drücken Sie Escape zum Schließen",
       "processingRequest": "Ihre Anfrage wird verarbeitet",
       "updatingContent": "Inhalt wird aktualisiert"
     },

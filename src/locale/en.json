@@ -532,11 +532,16 @@
     "accessibility": {
       "contentChanged": "Content has changed",
       "contentLoaded": "Content loaded",
+      "dialogClosed": "Dialog closed",
       "errorOccurred": "An error occurred",
       "formSubmitted": "Form submitted successfully",
       "formError": "Form submission failed",
       "loadingContent": "Loading content",
+      "modalOpened": "{{title}} dialog opened",
+      "modalClosed": "Dialog closed",
       "newContent": "New content available",
+      "pressToContinue": "Press Enter to continue, Escape to cancel",
+      "pressToClose": "Press Escape to close",
       "processingRequest": "Processing your request",
       "updatingContent": "Updating content"
     },

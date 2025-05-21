@@ -1,13 +1,11 @@
 import AppIcon from '@/components/AppIcon';
+import { AccessibleDialog } from '@/components/AccessibleDialog';
 import { addIdeaBox, getIdeasByRoom, removeIdeaBox } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import {
   Button,
   ButtonProps,
   Checkbox,
-  Dialog,
-  DialogActions,
-  DialogTitle,
   List,
   ListItem,
   ListItemAvatar,
@@ -103,6 +101,26 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
     if (open) onReset();
   }, [open, ideas]);
 
+  const dialogActions = (
+    <>
+      <Button 
+        onClick={handleClose} 
+        color="secondary" 
+        autoFocus
+        aria-label={t('actions.cancel')}
+      >
+        {t('actions.cancel')}
+      </Button>
+      <Button 
+        onClick={onSubmit} 
+        variant="contained"
+        aria-label={t('actions.confirm')}
+      >
+        {t('actions.confirm')}
+      </Button>
+    </>
+  );
+
   return (
     <>
       <Button
@@ -118,18 +136,13 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
         <AppIcon icon="add" mr={1} />
         {t('actions.add', { var: t('scopes.ideas.name') })}
       </Button>
-      <Dialog 
-        onClose={handleClose} 
+      <AccessibleDialog 
         open={open}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="add-ideas-dialog-title"
+        onClose={handleClose}
+        title={t('actions.add', { var: t('scopes.ideas.name') })}
+        actions={dialogActions}
+        testId="add-ideas-dialog"
       >
-        <DialogTitle id="add-ideas-dialog-title">
-          {t('actions.add', {
-            var: t('scopes.ideas.name'),
-          })}
-        </DialogTitle>
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
         <List 
@@ -156,24 +169,7 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
             );
           })}
         </List>
-        <DialogActions role="group" aria-label={t('actions.dialog.actions')}>
-          <Button 
-            onClick={handleClose} 
-            color="secondary" 
-            autoFocus
-            aria-label={t('actions.cancel')}
-          >
-            {t('actions.cancel')}
-          </Button>
-          <Button 
-            onClick={onSubmit} 
-            variant="contained"
-            aria-label={t('actions.confirm')}
-          >
-            {t('actions.confirm')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      </AccessibleDialog>
     </>
   );
 });
