@@ -165,16 +165,22 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 id="user-displayname"
                 size="small"
                 error={!!errors.displayname}
-                helperText={<span id="displayname-error-message">{errors.displayname?.message || ''}</span>}
+                helperText={
+                  <span id="displayname-error-message">
+                    {typeof errors.displayname?.message === 'string' ? errors.displayname.message : ''}
+                  </span>
+                }
                 {...register('displayname')}
-                inputProps={{
-                  'aria-labelledby': 'user-displayname-label',
-                  'aria-invalid': !!errors.displayname,
-                  'aria-errormessage': errors.displayname ? 'displayname-error-message' : undefined
-                }}
-                InputLabelProps={{
-                  id: 'user-displayname-label',
-                  htmlFor: 'user-displayname'
+                slotProps={{
+                  input: {
+                    'aria-labelledby': 'user-displayname-label',
+                    'aria-invalid': !!errors.displayname,
+                    'aria-errormessage': errors.displayname ? 'displayname-error-message' : undefined,
+                  },
+                  inputLabel: {
+                    id: 'user-displayname-label',
+                    htmlFor: 'user-displayname',
+                  },
                 }}
               />
               <TextField
@@ -185,16 +191,22 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 id="user-username"
                 size="small"
                 error={!!errors.username}
-                helperText={<span id="username-error-message">{errors.username?.message || ''}</span>}
+                helperText={
+                  <span id="username-error-message">
+                    {typeof errors.username?.message === 'string' ? errors.username.message : ''}
+                  </span>
+                }
                 {...register('username')}
-                inputProps={{
-                  'aria-labelledby': 'user-username-label',
-                  'aria-invalid': !!errors.username,
-                  'aria-errormessage': errors.username ? 'username-error-message' : undefined
-                }}
-                InputLabelProps={{
-                  id: 'user-username-label',
-                  htmlFor: 'user-username'
+                slotProps={{
+                  input: {
+                    'aria-labelledby': 'user-username-label',
+                    'aria-invalid': !!errors.username,
+                    'aria-errormessage': errors.username ? 'username-error-message' : undefined,
+                  },
+                  inputLabel: {
+                    id: 'user-username-label',
+                    htmlFor: 'user-username',
+                  },
                 }}
               />
               <TextField
@@ -205,16 +217,22 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 id="user-realname"
                 size="small"
                 error={!!errors.realname}
-                helperText={<span id="realname-error-message">{errors.realname?.message || ''}</span>}
+                helperText={
+                  <span id="realname-error-message">
+                    {typeof errors.realname?.message === 'string' ? errors.realname.message : ''}
+                  </span>
+                }
                 {...register('realname')}
-                inputProps={{
-                  'aria-labelledby': 'user-realname-label',
-                  'aria-invalid': !!errors.realname,
-                  'aria-errormessage': errors.realname ? 'realname-error-message' : undefined
-                }}
-                InputLabelProps={{
-                  id: 'user-realname-label',
-                  htmlFor: 'user-realname'
+                slotProps={{
+                  input: {
+                    'aria-labelledby': 'user-realname-label',
+                    'aria-invalid': !!errors.realname,
+                    'aria-errormessage': errors.realname ? 'realname-error-message' : undefined,
+                  },
+                  inputLabel: {
+                    id: 'user-realname-label',
+                    htmlFor: 'user-realname',
+                  },
                 }}
               />
               <TextField
@@ -224,16 +242,22 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 id="user-email"
                 size="small"
                 error={!!errors.email}
-                helperText={<span id="email-error-message">{errors.email?.message || ''}</span>}
+                helperText={
+                  <span id="email-error-message">
+                    {typeof errors.email?.message === 'string' ? errors.email.message : ''}
+                  </span>
+                }
                 {...register('email')}
-                inputProps={{
-                  'aria-labelledby': 'user-email-label',
-                  'aria-invalid': !!errors.email,
-                  'aria-errormessage': errors.email ? 'email-error-message' : undefined
-                }}
-                InputLabelProps={{
-                  id: 'user-email-label',
-                  htmlFor: 'user-email'
+                slotProps={{
+                  input: {
+                    'aria-labelledby': 'user-email-label',
+                    'aria-invalid': !!errors.email,
+                    'aria-errormessage': errors.email ? 'email-error-message' : undefined,
+                  },
+                  inputLabel: {
+                    id: 'user-email-label',
+                    htmlFor: 'user-email',
+                  },
                 }}
               />
               {defaultValues?.userlevel !== 60 && (
@@ -266,16 +290,12 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
             />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button 
-              onClick={onClose} 
-              color="error"
-              aria-label={t('actions.cancel')}
-            >
+            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={isLoading}
               aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
             >
