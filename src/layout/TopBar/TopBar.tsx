@@ -10,6 +10,7 @@ import SideBar from '../SideBar';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../config';
 import MessagesButton from '@/components/Buttons/MessagesButton';
 import UpdatesButton from '@/components/Buttons/UpdatesButton';
+import { useTranslation } from 'react-i18next';
 
 // Paths that should be excluded from breadcrumbs
 const EXCLUDED_PATHS = ['welcome', 'phase', 'settings'];
@@ -24,6 +25,7 @@ interface Props {
  * @component TopBar
  */
 const TopBar: React.FC = () => {
+  const { t } = useTranslation();
   const [openSideBar, setSidebar] = useState(false);
   const [appState] = useAppStore();
 

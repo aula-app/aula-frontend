@@ -2,6 +2,7 @@ import { getAvatar } from '@/services/media';
 import { Avatar, AvatarProps } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '../AppIcon';
+import { useTranslation } from 'react-i18next';
 
 interface Props extends AvatarProps {
   id: string;
@@ -13,6 +14,7 @@ interface Props extends AvatarProps {
  * @component UserInfo
  */
 const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
+  const { t } = useTranslation();
   const [userAvatar, setUserAvatar] = useState<string>('');
   const downloadUserAvatar = async () => {
     const response = await getAvatar(id);
