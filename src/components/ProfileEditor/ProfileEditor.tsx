@@ -1,9 +1,10 @@
-import { AppIcon, AppIconButton } from '@/components';
+import { AppIcon } from '@/components';
 import { MarkdownEditor } from '@/components/DataFields';
 import UserAvatar from '@/components/UserAvatar';
 import { addMessage } from '@/services/messages';
 import { editSelf } from '@/services/users';
 import { useAppStore } from '@/store';
+import { UserType } from '@/types/Scopes';
 import { errorAlert, successAlert } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -14,16 +15,14 @@ import {
   DialogContentText,
   DialogTitle,
   Stack,
-  TextField,
   Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Controller, FormContainer, useForm } from 'react-hook-form-mui';
+import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import RestrictedField from './RestrictedField';
-import { UserType } from '@/types/Scopes';
 import ImageEditor from '../ImageEditor';
+import RestrictedField from './RestrictedField';
 
 interface Props {
   user: UserType;
@@ -132,11 +131,11 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
   }, [user]);
 
   return (
-    <FormContainer onSubmit={handleSubmit(onSubmit)}>
+    <FormContainer onSuccess={() => handleSubmit(onSubmit)}>
       <Stack direction="row" flexWrap="wrap" py={2} gap={2}>
-        <Button 
-          color="secondary" 
-          onClick={() => setEditImage(true)} 
+        <Button
+          color="secondary"
+          onClick={() => setEditImage(true)}
           sx={{ position: 'relative' }}
           aria-label={t('ui.accessibility.editUserAvatar')}
           tabIndex={0} // First focusable element in the form
@@ -161,37 +160,26 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
         {user && <ImageEditor isOpen={editImage} onClose={onClose} id={user.hash_id} />}
         <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
           {userFields.slice(0, -1).map((name, i) => (
-            <RestrictedField 
-              key={i} 
-              name={name} 
+            <RestrictedField
+              key={i}
+              name={name}
               control={control}
               tabIndex={i + 1} // Sequential tabbing through form fields
             />
           ))}
         </Stack>
-        <MarkdownEditor 
-          name="about_me" 
-          control={control} 
+        <MarkdownEditor
+          name="about_me"
+          control={control}
           sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
           // The MarkdownEditor will manage tab order internally
         />
       </Stack>
       <Stack direction="row" justifyContent="end" gap={2} mb={2}>
-        <Button 
-          color="error" 
-          onClick={resetFields}
-          type="button"
-          tabIndex={0}
-          aria-label={t('actions.cancel')}
-        >
+        <Button color="error" onClick={resetFields} type="button" tabIndex={0} aria-label={t('actions.cancel')}>
           {t('actions.cancel')}
         </Button>
-        <Button 
-          variant="contained" 
-          type="submit"
-          tabIndex={0}
-          aria-label={t('actions.save')}
-        >
+        <Button variant="contained" type="submit" tabIndex={0} aria-label={t('actions.save')}>
           {t('actions.save')}
         </Button>
       </Stack>
@@ -210,12 +198,7 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
             {t('requests.updateData.confirm')}
             <Stack my={1} role="list" aria-label={t('ui.accessibility.requestedChanges')}>
               {updateRequests.map((update, index) => (
-                <Stack 
-                  direction="row" 
-                  key={`update-${index}`} 
-                  role="listitem"
-                  sx={{ mb: 1 }}
-                >
+                <Stack direction="row" key={`update-${index}`} role="listitem" sx={{ mb: 1 }}>
                   <b>{t(`settings.columns.${update.field}`)}</b>
                   <Typography mx={1}>{t('ui.common.from')}</Typography>
                   <b>{user[update.field]}</b>
@@ -228,18 +211,12 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button 
-            onClick={closeDialog} 
-            color="secondary" 
-            autoFocus
-            tabIndex={0}
-            aria-label={t('actions.cancel')}
-          >
+          <Button onClick={closeDialog} color="secondary" autoFocus tabIndex={0} aria-label={t('actions.cancel')}>
             {t('actions.cancel')}
           </Button>
-          <Button 
-            onClick={approveUpdates} 
-            color="error" 
+          <Button
+            onClick={approveUpdates}
+            color="error"
             variant="contained"
             tabIndex={0}
             aria-label={t('actions.confirm')}
