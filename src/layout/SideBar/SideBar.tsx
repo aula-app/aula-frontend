@@ -38,10 +38,19 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
       anchor={anchor}
       open={open}
       variant={variant}
-      slotProps={{ paper: { sx: drawerPaperStyles(onMobile, variant), 'aria-label': t('ui.navigation.sidebar') } }}
+      slotProps={{ 
+        paper: { 
+          sx: drawerPaperStyles(onMobile, variant), 
+          'aria-label': t('ui.navigation.sidebar'),
+          role: 'region'
+        },
+        backdrop: {
+          'aria-hidden': 'true' // Hide backdrop from screen readers
+        } 
+      }}
       onClose={onClose}
-      role="navigation"
-      aria-label={t('ui.navigation.sidebar')}
+      id="main-navigation-drawer"
+      aria-modal={variant === 'temporary' ? true : undefined}
       {...restOfProps}
     >
       <Stack direction="row" alignItems="center" justifyContent="space-between" p={1} pl={2.5}>
@@ -51,31 +60,62 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
           onClick={(e) => onClose(e, 'backdropClick')}
           title={t('actions.close')}
           aria-label={t('actions.close')}
+          autoFocus={onMobile} // Immediately focus the close button on mobile
+          sx={{
+            '&:focus-visible': {
+              outline: theme => `2px solid ${theme.palette.primary.main}`,
+            },
+          }}
         />
       </Stack>
-      <Divider />
+      <Divider role="presentation" />
       {isAuthenticated && <UserInfo />}
-      <Divider />
+      <Divider role="presentation" />
       <SideBarContent onClose={onClose} />
-      <Divider />
+      <Divider role="presentation" />
       {import.meta.env.VITE_APP_MULTI !== 'false' && (
         <>
-          <Button onClick={() => navigator.clipboard.writeText(code)} color="secondary">
+          <Button 
+            onClick={() => {
+              navigator.clipboard.writeText(code);
+              // Announce copy success to screen readers
+              announceToScreenReader(t('ui.accessibility.codeCopied'), 'polite');
+            }} 
+            color="secondary"
+            aria-label={t('ui.accessibility.copyInstanceCode', { code })}
+          >
             {`${t('instance.chip')}: ${code}`}
           </Button>
-          <Divider />
+          <Divider role="presentation" />
         </>
       )}
-      <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
+      <Stack 
+        direction="row" 
+        justifyContent="space-between" 
+        px={2} 
+        pt={0}
+        role="toolbar"
+        aria-label={t('ui.accessibility.sidebarActions')}
+      >
         <BugButton target={location.pathname} />
-        <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} aria-label={t('actions.print')} />
+        <AppIconButton 
+          onClick={window.print} 
+          icon="print" 
+          title={t('actions.print')} 
+          aria-label={t('actions.print')} 
+        />
         <AppIconButton
           onClick={onSwitchDarkMode}
           icon={state.darkMode ? 'day' : 'night'}
           title={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
           aria-label={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
         />
-        <AppIconButton onClick={onLogout} icon="logout" title={t('auth.logout')} aria-label={t('auth.logout')} />
+        <AppIconButton 
+          onClick={onLogout} 
+          icon="logout" 
+          title={t('auth.logout')} 
+          aria-label={t('auth.logout')} 
+        />
       </Stack>
     </Drawer>
   );

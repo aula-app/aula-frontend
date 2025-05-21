@@ -24,21 +24,49 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
   const onLogout = useEventLogout();
 
   return (
-    <Stack className="noPrint" sx={fixedSideBarStyles} {...restOfProps}>
+    <Stack 
+      className="noPrint" 
+      sx={fixedSideBarStyles} 
+      role="navigation"
+      aria-label={t('ui.navigation.sidebar')}
+      id="fixed-sidebar"
+      {...restOfProps}
+    >
       {import.meta.env.VITE_APP_MULTI !== 'false' && (
         <>
-          <Button onClick={() => navigator.clipboard.writeText(code)} color="secondary">
+          <Button 
+            onClick={() => {
+              navigator.clipboard.writeText(code);
+              // Announce copy success to screen readers
+              announceToScreenReader(t('ui.accessibility.codeCopied'), 'polite');
+            }} 
+            color="secondary"
+            aria-label={t('ui.accessibility.copyInstanceCode', { code })}
+          >
             {`${t('instance.chip')}: ${code}`}
           </Button>
-          <Divider />
+          <Divider role="presentation" />
         </>
       )}
-      <SideBarContent />
-      <Divider />
-      <Stack direction="row" alignItems="center" justifyContent="space-between" p={1} pl={2.5}>
+      <SideBarContent isFixed={true} />
+      <Divider role="presentation" />
+      <Stack 
+        direction="row" 
+        alignItems="center" 
+        justifyContent="space-between" 
+        p={1} 
+        pl={2.5}
+        role="toolbar"
+        aria-label={t('ui.accessibility.sidebarActions')}
+      >
         <LocaleSwitch />
         <BugButton target={location.pathname} />
-        <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} aria-label={t('actions.print')} />
+        <AppIconButton 
+          onClick={window.print} 
+          icon="print" 
+          title={t('actions.print')} 
+          aria-label={t('actions.print')} 
+        />
         <AppIconButton
           onClick={onSwitchDarkMode}
           icon={state.darkMode ? 'day' : 'night'}
@@ -46,20 +74,23 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
           aria-label={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
         />
       </Stack>
-      <Divider />
-      <Stack
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
+      <Divider role="presentation" />
+      <Button 
+        onClick={onLogout} 
+        sx={{ 
+          py: 1, 
+          width: '100%', 
+          color: 'inherit',
           justifyContent: 'center',
-          alignItems: 'center',
-        }}
+          '&:focus-visible': {
+            outline: theme => `2px solid ${theme.palette.primary.main}`,
+          },
+        }} 
+        aria-label={t('auth.logout')}
       >
-        <Button onClick={onLogout} sx={{ py: 1, width: '100%', color: 'inherit' }} aria-label={t('auth.logout')}>
-          {t('auth.logout')}&nbsp;
-          <AppIcon icon="logout" />
-        </Button>
-      </Stack>
+        {t('auth.logout')}&nbsp;
+        <AppIcon icon="logout" aria-hidden="true" />
+      </Button>
     </Stack>
   );
 };
