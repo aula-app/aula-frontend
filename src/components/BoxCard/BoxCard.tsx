@@ -37,11 +37,7 @@ const BoxCard: FC<BoxCardProps> = ({ box, disabled = false, onDelete, onEdit, ..
   const to = `/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`;
 
   return (
-    <Card 
-      sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} 
-      variant="outlined"
-      {...restOfProps}
-    >
+    <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined" {...restOfProps}>
       <Stack
         width="100%"
         height="3rem"
@@ -64,23 +60,25 @@ const BoxCard: FC<BoxCardProps> = ({ box, disabled = false, onDelete, onEdit, ..
           <Typography component={Box} variant="body2">
             <MarkdownReader>{box.description_public}</MarkdownReader>
           </Typography>
-          <Box
-            mt={2}
-            position="relative"
-            borderRadius={999}
-            width="100%"
-            height="1.5rem"
-            bgcolor={`${phases[box.phase_id]}.main`}
-            overflow="clip"
-          >
-            <Box bgcolor={`${phases[box.phase_id]}.main`} position="absolute" left={0} height="100%" width="50%" />
-            <Stack direction="row" position="absolute" left={0} height="100%" width="100%" alignItems="center">
-              <AppIcon icon="clock" size="small" sx={{ mx: 0.5 }} />
-              <Typography variant="caption">
-                {daysRemaining() > 0 ? t('phases.end', { var: daysRemaining() }) : t('phases.ended')}
-              </Typography>
-            </Stack>
-          </Box>
+          {[10, 30].includes(Number(box.phase_id)) && (
+            <Box
+              mt={2}
+              position="relative"
+              borderRadius={999}
+              width="100%"
+              height="1.5rem"
+              bgcolor={`${phases[box.phase_id]}.main`}
+              overflow="clip"
+            >
+              <Box bgcolor={`${phases[box.phase_id]}.main`} position="absolute" left={0} height="100%" width="50%" />
+              <Stack direction="row" position="absolute" left={0} height="100%" width="100%" alignItems="center">
+                <AppIcon icon="clock" size="small" sx={{ mx: 0.5 }} />
+                <Typography variant="caption">
+                  {daysRemaining() > 0 ? t('phases.end', { var: daysRemaining() }) : t('phases.ended')}
+                </Typography>
+              </Stack>
+            </Box>
+          )}
         </CardContent>
       </AppLink>
     </Card>
