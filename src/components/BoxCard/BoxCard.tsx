@@ -3,21 +3,20 @@ import AppLink from '@/components/AppLink';
 import MoreOptions from '@/components/MoreOptions';
 import { BoxType } from '@/types/Scopes';
 import { phases } from '@/utils';
-import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardProps, Stack, Typography } from '@mui/material';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import MarkdownReader from '../MarkdownReader';
 
-interface BoxCardProps {
+interface BoxCardProps extends Omit<CardProps, 'children'> {
   box: BoxType;
   onDelete: () => void;
   onEdit: () => void;
   disabled?: boolean;
 }
 
-const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
+const BoxCard: FC<BoxCardProps> = ({ box, disabled = false, onDelete, onEdit, ...restOfProps }) => {
   const { t } = useTranslation();
-
-  // const [remaining, setRemaining] = useState(0);
 
   const daysRemaining = (): number => {
     let remaining = 0;
@@ -38,7 +37,11 @@ const BoxCard = ({ box, disabled = false, onDelete, onEdit }: BoxCardProps) => {
   const to = `/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`;
 
   return (
-    <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined">
+    <Card 
+      sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} 
+      variant="outlined"
+      {...restOfProps}
+    >
       <Stack
         width="100%"
         height="3rem"

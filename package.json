@@ -64,7 +64,6 @@
     "@tiptap/react": "^2.11.3",
     "@tiptap/starter-kit": "^2.11.3",
     "@use-gesture/react": "^10.3.1",
-    "date-fns": "^2.30.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "i18next": "^23.11.5",
