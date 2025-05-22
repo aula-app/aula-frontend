@@ -34,7 +34,7 @@ const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
         ...sx,
       }}
       alt="User avatar"
-      src={`/files/${userAvatar}` || ''}
+      src={userAvatar ? `/files/${userAvatar}` : ''}
     >
       {!userAvatar && <AppIcon icon="avatar" />}
     </Avatar>

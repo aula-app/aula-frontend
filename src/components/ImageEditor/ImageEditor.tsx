@@ -44,7 +44,8 @@ const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded =
 
   const downloadUserAvatar = async () => {
     const response = await getAvatar(id);
-    if (response.data && response.data.length > 0) setImage(`${api_url}/files/${response.data[0].filename}`);
+    if (response.data && response.data.length > 0 && response.data[0].filename)
+      setImage(`${api_url}/files/${response.data[0].filename}`);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
