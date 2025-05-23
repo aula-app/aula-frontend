@@ -64,9 +64,19 @@ const GroupField: React.FC<Props> = ({ control, disabled = false, ...restOfProps
               <TextField
                 {...params}
                 label={t('scopes.groups.name')}
+                id="group-field-target"
                 disabled={disabled}
                 error={!!fieldState.error}
-                helperText={t(`${fieldState.error?.message || ''}`)}
+                helperText={<span id="group-error-message">{t(`${fieldState.error?.message || ''}`)}</span>}
+                inputProps={{
+                  'aria-labelledby': 'group-field-target-label',
+                  'aria-invalid': !!fieldState.error,
+                  'aria-errormessage': fieldState.error ? 'group-error-message' : undefined
+                }}
+                InputLabelProps={{
+                  id: 'group-field-target-label',
+                  htmlFor: 'group-field-target'
+                }}
                 slotProps={{
                   input: {
                     ...params.InputProps,

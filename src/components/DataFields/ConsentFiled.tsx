@@ -42,10 +42,20 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
               render={({ field, fieldState }) => (
                 <TextField
                   label={t('settings.columns.consent_text')}
+                  id="consent-text-field"
                   error={!!fieldState.error}
-                  helperText={`${fieldState.error?.message || ''}`}
+                  helperText={<span id="consent-text-error-message">{fieldState.error?.message || ''}</span>}
                   required
                   sx={{ flex: 1 }}
+                  inputProps={{
+                    'aria-labelledby': 'consent-text-field-label',
+                    'aria-invalid': !!fieldState.error,
+                    'aria-errormessage': fieldState.error ? 'consent-text-error-message' : undefined
+                  }}
+                  InputLabelProps={{
+                    id: 'consent-text-field-label',
+                    htmlFor: 'consent-text-field'
+                  }}
                   {...field}
                 />
               )}

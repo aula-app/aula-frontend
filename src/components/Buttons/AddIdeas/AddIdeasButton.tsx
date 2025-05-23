@@ -1,13 +1,11 @@
 import AppIcon from '@/components/AppIcon';
+import { AccessibleDialog } from '@/components/AccessibleDialog';
 import { addIdeaBox, getIdeasByRoom, removeIdeaBox } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import {
   Button,
   ButtonProps,
   Checkbox,
-  Dialog,
-  DialogActions,
-  DialogTitle,
   List,
   ListItem,
   ListItemAvatar,
@@ -16,7 +14,7 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material';
-import { forwardRef, useCallback, useEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -35,6 +33,7 @@ export interface AddIdeaRefProps {
 const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose, ...restOfProps }, ref) => {
   const { t } = useTranslation();
   const { room_id, box_id } = useParams();
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
@@ -103,32 +102,74 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
     if (open) onReset();
   }, [open, ideas]);
 
+  // Expose methods via ref
+  useImperativeHandle(ref, () => ({
+    setNewIdeaIdeas: (id: string) => {
+      // Implementation of setNewIdeaIdeas if needed
+    }
+  }));
+
+  const dialogActions = (
+    <>
+      <Button 
+        onClick={handleClose} 
+        color="secondary" 
+        autoFocus
+        aria-label={t('actions.cancel')}
+      >
+        {t('actions.cancel')}
+      </Button>
+      <Button 
+        onClick={onSubmit} 
+        variant="contained"
+        aria-label={t('actions.confirm')}
+      >
+        {t('actions.confirm')}
+      </Button>
+    </>
+  );
+
   return (
     <>
       <Button
+        ref={buttonRef}
         variant="outlined"
         color="secondary"
         sx={{ height: 68, width: '100%', borderRadius: 6, borderStyle: 'dashed' }}
         onClick={() => setOpen(true)}
+        aria-label={t('actions.add', { var: t('scopes.ideas.name') })}
+        aria-expanded={open}
+        aria-haspopup="dialog"
         {...restOfProps}
       >
         <AppIcon icon="add" mr={1} />
         {t('actions.add', { var: t('scopes.ideas.name') })}
       </Button>
-      <Dialog onClose={handleClose} open={open}>
-        <DialogTitle>
-          {t('actions.add', {
-            var: t('scopes.ideas.name'),
-          })}
-        </DialogTitle>
+      <AccessibleDialog 
+        open={open}
+        onClose={handleClose}
+        title={t('actions.add', { var: t('scopes.ideas.name') })}
+        actions={dialogActions}
+        testId="add-ideas-dialog"
+        finalFocusRef={buttonRef}
+      >
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        <List sx={{ pt: 0 }}>
+        <List 
+          sx={{ pt: 0 }} 
+          role="listbox" 
+          aria-label={t('scopes.ideas.name')}
+          aria-multiselectable="true"
+        >
           {roomIdeas.map((idea) => {
             const selectedIdea = selectedIdeas.find((selected) => selected.hash_id === idea.hash_id);
             return (
-              <ListItem disablePadding key={idea.hash_id}>
-                <ListItemButton onClick={() => toggleIdea(idea)}>
+              <ListItem disablePadding key={idea.hash_id} role="option" aria-selected={!!selectedIdea}>
+                <ListItemButton 
+                  onClick={() => toggleIdea(idea)}
+                  role="checkbox"
+                  aria-checked={!!selectedIdea}
+                >
                   <ListItemAvatar>
                     <Checkbox checked={!!selectedIdea} />
                   </ListItemAvatar>
@@ -138,15 +179,7 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
             );
           })}
         </List>
-        <DialogActions>
-          <Button onClick={handleClose} color="secondary" autoFocus>
-            {t('actions.cancel')}
-          </Button>
-          <Button onClick={onSubmit} variant="contained">
-            {t('actions.confirm')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      </AccessibleDialog>
     </>
   );
 });
