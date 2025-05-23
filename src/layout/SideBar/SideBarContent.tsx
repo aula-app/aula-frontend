@@ -1,14 +1,14 @@
 import { AppIcon, AppLink } from '@/components';
 import { announceToScreenReader } from '@/utils';
 import { List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import { Fragment, KeyboardEvent, memo, useCallback, useEffect, useRef } from 'react';
+import { KeyboardEvent, memo, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { SIDEBAR_ITEMS } from '../config';
 
 type Props = {
   isFixed?: boolean;
-  onClose?: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
+  onClose?: (event: Record<string, never>, reason: 'backdropClick' | 'escapeKeyDown') => void;
 };
 
 /**
@@ -18,6 +18,8 @@ type Props = {
  * @param {function} [props.onClose] - Optional callback when drawer closes
  * @returns {JSX.Element} Rendered SideBarContent component
  */
+const emptyEvent: Record<string, never> = Object.freeze({});
+
 const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }: Props): JSX.Element => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -32,7 +34,7 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
   );
 
   // Ref to store the item that should receive initial focus
-  const initialFocusItemRef = useRef<HTMLLIElement | null>(null);
+  const initialFocusItemRef = useRef<HTMLElement | null>(null);
 
   // Handle keyboard navigation within the sidebar
   const handleKeyDown = useCallback(
@@ -62,7 +64,7 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
           event.preventDefault();
           // The link will handle navigation naturally
           if (onClose && !isFixed) {
-            onClose({}, 'escapeKeyDown');
+            onClose(emptyEvent, 'escapeKeyDown');
             announceToScreenReader(
               t('ui.accessibility.menuItemSelected', {
                 item: t(`ui.navigation.${visibleItems[index].title}`),
@@ -74,7 +76,7 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
         case 'Escape':
           if (onClose && !isFixed) {
             event.preventDefault();
-            onClose({}, 'escapeKeyDown');
+            onClose(emptyEvent, 'escapeKeyDown');
             announceToScreenReader(t('ui.accessibility.menuClosed'), 'polite');
           }
           break;
@@ -115,7 +117,7 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
   }, [currentPageIndex, isFixed]);
 
   // Handler to update ref for the current item
-  const setItemRef = (index: number) => (element: HTMLLIElement) => {
+  const setItemRef = (index: number) => (element: HTMLElement | null) => {
     if (index === currentPageIndex) {
       initialFocusItemRef.current = element;
     }
@@ -171,7 +173,7 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
             aria-current={location.pathname === path ? 'page' : undefined}
             onClick={() => {
               if (onClose && !isFixed) {
-                onClose({}, 'backdropClick');
+                onClose(emptyEvent, 'backdropClick');
               }
             }}
             onKeyDown={(e) => handleKeyDown(e, index)}
@@ -191,12 +193,11 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
           >
             <ListItemIcon aria-hidden="true">{icon && <AppIcon icon={icon} />}</ListItemIcon>
             <ListItemText
-              primary={t(`ui.navigation.${title}`)}
-              slotProps={{
-                primary: {
-                  fontSize: '0.95rem',
-                },
-              }}
+              primary={
+                <Typography variant="body2" sx={{ fontSize: '0.95rem' }}>
+                  {t(`ui.navigation.${title}`)}
+                </Typography>
+              }
             />
           </ListItemButton>
         ))}

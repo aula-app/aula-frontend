@@ -1,7 +1,7 @@
 import DefaultImage from '@/components/DefaultImages';
-import { Button, Dialog, DialogProps, Stack, Typography } from '@mui/material';
+import { Button, Dialog, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface RoomImageSelectorProps {
