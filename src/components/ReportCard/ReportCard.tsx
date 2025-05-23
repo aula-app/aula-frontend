@@ -54,7 +54,7 @@ interface UpdateRequest {
   type?: 'changeName';
   responseTo?: 'changeName';
   id: string;
-  property: 'realname' | 'username' | 'email';
+  property: 'displayname' | 'realname' | 'username' | 'email';
   value: string;
 }
 
@@ -96,7 +96,7 @@ const ReportCard = ({ report, onReload, ...restOfProps }: Props) => {
 
   const changeName = async () => {
     const request = await editSelfRestricted({
-      field: metadata.property as 'realname' | 'username' | 'email',
+      field: metadata.property as 'displayname' | 'realname' | 'username' | 'email',
       id: metadata.id,
       value: metadata.value,
     });
