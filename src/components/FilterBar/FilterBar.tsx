@@ -1,28 +1,35 @@
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { Collapse, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { STATUS } from '@/utils';
+import { Collapse, Stack, StackProps, Typography } from '@mui/material';
+import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
 import FilterSelect from './FilterSelect';
 import FilterStatus from './FilterStatus';
-import { STATUS } from '@/utils';
 
 export interface FilterOptionsType {
   status: StatusTypes;
   filter: [keyof PossibleFields, string];
 }
 
-type Props = {
+interface FilterBarProps extends Omit<StackProps, 'onStatusChange' | 'onFilterChange'> {
   children?: React.ReactNode;
   scope: SettingNamesType;
   fields?: Array<keyof PossibleFields>;
   onStatusChange: (status: StatusTypes) => void;
   onFilterChange: (filter: [keyof PossibleFields, string]) => void;
-};
+}
 
-const FilterBar: React.FC<Props> = ({ children, fields, scope, onStatusChange, onFilterChange }) => {
+const FilterBar: FC<FilterBarProps> = ({ 
+  children, 
+  fields, 
+  scope, 
+  onStatusChange, 
+  onFilterChange,
+  ...restOfProps
+}) => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
   const [status, setStatus] = useState<StatusTypes>(1);
@@ -33,7 +40,7 @@ const FilterBar: React.FC<Props> = ({ children, fields, scope, onStatusChange, o
   };
 
   return (
-    <Stack gap={1}>
+    <Stack gap={1} {...restOfProps}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h1">{t(`scopes.${scope}.plural`)}</Typography>
         {fields && (

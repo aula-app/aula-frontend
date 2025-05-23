@@ -17,10 +17,9 @@ export function getDisplayDate(date: string): string {
 }
 
 export function dateToString(dateOrString: string | Date, dateFormat = FORMAT_DATE_TIME, fallbackValue = ''): string {
-  let date = typeof dateOrString === 'object' ? dayjs(dateOrString) : dayjs(dateOrString);
   let result;
   try {
-    result = date.format(dateFormat);
+    result = dayjs(dateOrString).format(dateFormat);
   } catch (error) {
     result = fallbackValue;
   }
