@@ -1,9 +1,9 @@
 import MuiLink, { LinkProps as MuiLinkProps } from '@mui/material/Link';
-import { forwardRef, ReactNode } from 'react';
+import { forwardRef, ForwardRefRenderFunction, ReactNode } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { APP_LINK_COLOR, APP_LINK_UNDERLINE } from '../config';
 
-interface Props extends MuiLinkProps {
+interface AppLinkProps extends MuiLinkProps {
   children: ReactNode;
   to?: string;
   href?: string;
@@ -19,38 +19,39 @@ interface Props extends MuiLinkProps {
  * @param {string} [href] - external link URI
  * @param {boolean} [openInNewTab] - link will be opened in new tab when true
  */
-const AppLink = forwardRef<any, Props>(
-  (
-    {
-      children,
-      color = APP_LINK_COLOR,
-      underline = APP_LINK_UNDERLINE,
-      to = '',
-      href,
-      openInNewTab = Boolean(href), // Open external links in new Tab by default,
-      disabled = false,
-      ...restOfProps
-    },
-    ref
-  ) => {
-    const propsToRender = {
-      color,
-      underline,
-      ...(openInNewTab ? { target: '_blank', rel: 'noreferrer noopener' } : {}),
-      ...restOfProps,
-    };
-    return disabled ? (
-      <>{children}</>
-    ) : href ? (
-      <MuiLink ref={ref} href={href} {...propsToRender}>
-        {children}
-      </MuiLink>
-    ) : (
-      <MuiLink ref={ref} component={RouterLink} to={to as string} {...propsToRender}>
-        {children}
-      </MuiLink>
-    );
-  }
-);
+const AppLinkComponent: ForwardRefRenderFunction<HTMLAnchorElement, AppLinkProps> = (
+  {
+    children,
+    color = APP_LINK_COLOR,
+    underline = APP_LINK_UNDERLINE,
+    to = '',
+    href,
+    openInNewTab = Boolean(href), // Open external links in new Tab by default,
+    disabled = false,
+    ...restOfProps
+  },
+  ref
+) => {
+  const propsToRender = {
+    color,
+    underline,
+    ...(openInNewTab ? { target: '_blank', rel: 'noreferrer noopener' } : {}),
+    ...restOfProps,
+  };
+  
+  return disabled ? (
+    <>{children}</>
+  ) : href ? (
+    <MuiLink ref={ref} href={href} {...propsToRender}>
+      {children}
+    </MuiLink>
+  ) : (
+    <MuiLink ref={ref} component={RouterLink} to={to as string} {...propsToRender}>
+      {children}
+    </MuiLink>
+  );
+};
+
+const AppLink = forwardRef(AppLinkComponent);
 
 export default AppLink;

@@ -1,29 +1,28 @@
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { announceToScreenReader } from '@/utils';
-import { Collapse, Stack, Typography, Tooltip } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import { announceToScreenReader, STATUS } from '@/utils';
+import { Collapse, Stack, Typography, Tooltip, StackProps } from '@mui/material';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
 import FilterSelect from './FilterSelect';
 import FilterStatus from './FilterStatus';
-import { STATUS } from '@/utils';
 
 export interface FilterOptionsType {
   status: StatusTypes;
   filter: [keyof PossibleFields, string];
 }
 
-type Props = {
+interface FilterBarProps extends StackProps {
   children?: React.ReactNode;
   scope: SettingNamesType;
   fields?: Array<keyof PossibleFields>;
   onStatusChange: (status: StatusTypes) => void;
   onFilterChange: (filter: [keyof PossibleFields, string]) => void;
-};
+}
 
-const FilterBar: React.FC<Props> = ({ children, fields, scope, onStatusChange, onFilterChange }) => {
+const FilterBar: FC<FilterBarProps> = ({ children, fields, scope, onStatusChange, onFilterChange, ...restOfProps }) => {
   const { t } = useTranslation();
   const [isOpen, setOpen] = useState(false);
   const [status, setStatus] = useState<StatusTypes>(1);
@@ -37,7 +36,7 @@ const FilterBar: React.FC<Props> = ({ children, fields, scope, onStatusChange, o
   const toggleFilters = () => {
     const newIsOpen = !isOpen;
     setOpen(newIsOpen);
-    
+
     // Announce to screen readers that filters have been toggled
     if (newIsOpen) {
       announceToScreenReader(t('ui.accessibility.filtersOpened'), 'polite');
@@ -56,7 +55,7 @@ const FilterBar: React.FC<Props> = ({ children, fields, scope, onStatusChange, o
           firstInput.focus();
         }
       }, 300); // Adjust based on your collapse animation duration
-      
+
       return () => clearTimeout(timeoutId);
     }
   }, [isOpen]);
@@ -74,15 +73,15 @@ const FilterBar: React.FC<Props> = ({ children, fields, scope, onStatusChange, o
   };
 
   return (
-    <Stack gap={1} onKeyDown={handleKeyDown}>
+    <Stack gap={1} onKeyDown={handleKeyDown} {...restOfProps}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h1">{t(`scopes.${scope}.plural`)}</Typography>
         {fields && (
           <Stack direction="row" px={2}>
             <Tooltip title={isOpen ? t('actions.hideFilters') : t('actions.showFilters')}>
-              <AppIconButton 
-                icon="filter" 
-                onClick={toggleFilters} 
+              <AppIconButton
+                icon="filter"
+                onClick={toggleFilters}
                 id="filter-toggle-button"
                 aria-expanded={isOpen}
                 aria-controls="filter-panel"
@@ -94,11 +93,11 @@ const FilterBar: React.FC<Props> = ({ children, fields, scope, onStatusChange, o
       </Stack>
       {fields && (
         <Collapse in={isOpen} id="filter-panel" role="region" aria-label={t('actions.filter')}>
-          <Stack 
-            direction="row" 
-            alignItems="center" 
-            flexWrap="wrap" 
-            gap={1} 
+          <Stack
+            direction="row"
+            alignItems="center"
+            flexWrap="wrap"
+            gap={1}
             ref={filterSelectRef}
             tabIndex={-1} // Makes the container focusable for screen readers but not in tab order
           >

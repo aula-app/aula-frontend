@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 /**
  * Main Data and Time conversion utility to keep formats the same across entire Application
  * @param {string|object} dateOrString - date to show as UTC string or Date object instance
- * @param {string} [dateFormat] - time conversion template in dayjs format, `FORMAT_DATE_TIME` by default
+ * @param {string} [dateFormat] - time conversion template in 'dayjs' format, `FORMAT_DATE_TIME` by default
  * @param {string} [fallbackValue] - optional fallback value if data conversion is not possible
  */
 
