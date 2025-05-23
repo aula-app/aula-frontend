@@ -183,7 +183,7 @@ export async function editSelf(args: UserArguments): Promise<GenericResponse> {
 }
 
 interface RestrictedUpdateArgs {
-  field: 'realname' | 'username' | 'email';
+  field: 'displayname' | 'realname' | 'username' | 'email';
   id: string;
   value: string;
 }
@@ -193,6 +193,7 @@ export async function editSelfRestricted(args: RestrictedUpdateArgs) {
     email: 'setUserEmail',
     realname: 'setUserRealname',
     username: 'setUserUsername',
+    displayname: 'setUserDisplayname'
   };
   const request = await databaseRequest(
     {
