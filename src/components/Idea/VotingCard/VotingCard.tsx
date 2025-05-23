@@ -4,6 +4,7 @@ import { getDelegations } from '@/services/users';
 import { addVote, getVote } from '@/services/vote';
 import { checkPermissions, Vote, votingOptions } from '@/utils';
 import { Button, Stack, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
