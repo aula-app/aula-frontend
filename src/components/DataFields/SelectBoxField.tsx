@@ -57,6 +57,24 @@ const SelectBoxField: React.FC<Props> = ({ defaultValue, room_id, onChange, disa
       id="controllable-states-demo"
       loading={loading}
       options={boxes}
+      slotProps={{
+        popper: {
+          sx: {
+            height: '40vh',
+            display: 'flex',
+            alignItems: 'flex-start',
+            '&[data-popper-placement="top"]': {
+              alignItems: 'flex-end',
+            },
+            '& .MuiAutocomplete-paper': {
+              flexGrow: 1,
+            },
+            '& .MuiAutocomplete-listbox': {
+              maxHeight: 'auto',
+            },
+          },
+        },
+      }}
       renderInput={(params) => (
         <TextField
           {...params}
