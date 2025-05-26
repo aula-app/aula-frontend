@@ -60,7 +60,7 @@ const SelectBoxField: React.FC<Props> = ({ defaultValue, room_id, onChange, disa
       slotProps={{
         popper: {
           sx: {
-            height: '40vh',
+            maxHeight: '40vh',
             display: 'flex',
             alignItems: 'flex-start',
             '&[data-popper-placement="top"]': {
