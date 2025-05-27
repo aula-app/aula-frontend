@@ -20,7 +20,7 @@ export interface RequestObject {
 export interface GenericResponse<T = unknown> {
   data: T | null;
   count: number | null;
-  error: string | number | null;
+  error: string | null;
 }
 
 export interface GenericListRequest {
@@ -144,7 +144,7 @@ export const baseRequest = async <T = unknown>(
       return {
         data: null,
         count: null,
-        error: response.error_code,
+        error: `${response.error_code}`,
       };
     }
 
