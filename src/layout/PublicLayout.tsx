@@ -1,5 +1,6 @@
 import { AppLink, ErrorBoundary } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
+import SkipNavigation from '@/components/SkipNavigation';
 import { useOnMobile } from '@/hooks';
 import { Box, Button, Stack } from '@mui/material/';
 import { FunctionComponent, PropsWithChildren } from 'react';
@@ -26,23 +27,26 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         paddingRight: 0,
       }}
     >
+      <SkipNavigation mainContentId="public-content" />
       <Stack>
         <Stack direction="row" alignItems="start" justifyContent="space-between" sx={{ pb: 2 }}>
           {toggleBackToSignIn()}
           <LocaleSwitch />
         </Stack>
         <Box sx={{ width: '100%', mb: 2 }}>
-          <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Logo.svg`} alt="aula" />
+          <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Logo.svg`} alt={t('app.name.logo')} role="img" />
         </Box>
       </Stack>
       <Stack
         flex={1}
         component="main"
+        id="public-content"
         width="100%"
         sx={{
           padding: 1,
           justifyContent: 'center',
         }}
+        tabIndex={-1}
       >
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
       </Stack>
