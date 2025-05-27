@@ -1,11 +1,10 @@
-import AddGroupButton from '@/components/Buttons/AddGroups/AddGroupsButton';
 import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
-import PrintUsers from '@/components/PrintUsers/PrintUsers';
 import { UserForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
 import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
+import PrintUsers from '@/components/PrintUsers/PrintUsers';
 import SelectRole from '@/components/SelectRole';
 import SelectRoom from '@/components/SelectRoom';
 import { deleteUser, getUsers } from '@/services/users';
@@ -117,7 +116,7 @@ const UsersView: React.FC = () => {
           }}
         >
           <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
-          <SelectRole userRole={userlevel} onChange={(role) => setRole(role)} variant="filled" size="small" />
+          <SelectRole userRole={userlevel} onChange={(role) => setRole(role)} allowAll variant="filled" size="small" />
         </FilterBar>
       </Stack>
       <Stack flex={1} overflow="hidden">
