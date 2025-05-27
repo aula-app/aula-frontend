@@ -125,7 +125,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       username: data.username,
       user_id: defaultValues.hash_id,
     });
-    if (response.error === 2) {
+    if (response.error === '2') {
       setError('username', { type: 'manual', message: t('forms.validation.usernameExists') });
     }
     if (response.error) return;
