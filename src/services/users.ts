@@ -73,6 +73,7 @@ export interface EditUserArguments extends UserArguments {
  */
 
 interface addResponse extends GenericResponse {
+  error_code?: number;
   data: { insert_id: string; hash_id: string; temp_pw: string } | null;
 }
 
@@ -193,7 +194,7 @@ export async function editSelfRestricted(args: RestrictedUpdateArgs) {
     email: 'setUserEmail',
     realname: 'setUserRealname',
     username: 'setUserUsername',
-    displayname: 'setUserDisplayname'
+    displayname: 'setUserDisplayname',
   };
   const request = await databaseRequest(
     {
