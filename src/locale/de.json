@@ -509,11 +509,54 @@
       "from": "von",
       "next": "nächste",
       "no": "Nein",
+      "noContent": "Kein Inhalt verfügbar",
       "on": "an",
       "or": "oder",
       "success": "Erfolg",
       "to": "zu",
       "yes": "Ja"
+    },
+    "empty": {
+      "boxes": {
+        "title": "Keine Boxen in dieser Phase",
+        "description": "Boxen werden hier angezeigt, wenn sie diese Phase erreichen"
+      },
+      "dashboard": {
+        "title": "Keine Ideen in dieser Phase",
+        "description": "Ideen werden hier angezeigt, wenn sie diese Phase erreichen"
+      },
+      "ideas": {
+        "title": "Noch keine Ideen",
+        "description": "Sei der Erste, der eine Idee teilt"
+      },
+      "messages": {
+        "title": "Keine Nachrichten",
+        "description": "Du hast im Moment keine Nachrichten"
+      },
+      "updates": {
+        "title": "Keine Updates",
+        "description": "Es gibt keine aktuellen Updates anzuzeigen"
+      },
+      "general": {
+        "title": "Hier ist noch nichts",
+        "description": "Komm später wieder, wenn es mehr Inhalte gibt"
+      },
+      "table": {
+        "title": "Keine Daten verfügbar",
+        "description": "Es gibt keine Einträge in dieser Tabelle anzuzeigen"
+      },
+      "reports": {
+        "title": "Keine Berichte",
+        "description": "Es gibt derzeit keine Berichte zu überprüfen"
+      },
+      "bugs": {
+        "title": "Keine Fehlerberichte",
+        "description": "Es wurden noch keine Fehler gemeldet"
+      },
+      "requests": {
+        "title": "Keine Anfragen",
+        "description": "Es gibt keine ausstehenden Anfragen"
+      }
     },
     "darkMode": "Dunkelmodus",
     "files": {
