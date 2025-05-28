@@ -1,5 +1,5 @@
 import { addMessage, setMessageStatus } from '@/services/messages';
-import { deleteUser, editSelfRestricted, exportSelfData } from '@/services/users';
+import { deleteUser, editSelfRestricted, exportSelfData, getUser } from '@/services/users';
 import { useAppStore } from '@/store';
 import { MessageType } from '@/types/Scopes';
 import { errorAlert, successAlert } from '@/utils';
@@ -24,7 +24,7 @@ import AppIconButton from '../AppIconButton';
 import AppLink from '../AppLink';
 import MarkdownReader from '../MarkdownReader';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 /**
  * Renders "ReportCard" component
@@ -62,6 +62,7 @@ const ReportCard = ({ report, onReload, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [confirm, setConfirm] = useState(false);
+  const [creatorName, setCreatorName] = useState<string>('');
 
   const YAML = report.body.split('---')[1];
   const content = report.body.replace(`---${YAML}---`, '');
@@ -75,6 +76,19 @@ const ReportCard = ({ report, onReload, ...restOfProps }: Props) => {
       },
       {} as Record<keyof DataRequest | keyof UpdateRequest | keyof Report, string>
     );
+
+  const fetchCreatorName = async () => {
+    if (report.creator_id) {
+      const response = await getUser(report.creator_id.toString());
+      console.log(response);
+      if (response.error || !response.data) return;
+      setCreatorName(response.data.displayname || response.data.username || '');
+    }
+  };
+
+  useEffect(() => {
+    fetchCreatorName();
+  }, []);
 
   const archiveMessage = async () => {
     setMessageStatus({
@@ -188,11 +202,15 @@ ${message}`,
       />
       <Divider />
       <CardContent sx={{ bgcolor: blueGrey[50] }}>
+        <Typography color="secondary">
+          <b>{t('settings.columns.creator_id')}: </b>
+          {creatorName}
+        </Typography>
         {metadata &&
           (Object.keys(metadata) as Array<keyof typeof metadata>).map((entry) =>
             entry !== 'id' ? (
               <Typography color="secondary" key={entry}>
-                <b>{entry}</b>:{' '}
+                <b>{t(`settings.columns.${entry}`)}</b>:{' '}
                 <AppLink to={metadata[entry]} disabled={entry !== 'location'}>
                   {metadata[entry]}
                 </AppLink>
