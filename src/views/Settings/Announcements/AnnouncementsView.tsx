@@ -85,6 +85,11 @@ const AnnouncementsView: React.FC = () => {
     fetchAnnouncements();
   }, []);
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setOffset(0);
+  }, [search_field, search_text, status, user_needs_to_consent]);
+
   return (
     <Stack width="100%" height="100%" pt={2}>
       <Stack pl={2}>

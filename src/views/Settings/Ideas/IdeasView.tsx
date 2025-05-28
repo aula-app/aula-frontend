@@ -83,6 +83,11 @@ const IdeasView: React.FC = () => {
     fetchIdeas();
   };
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setOffset(0);
+  }, [search_field, search_text, status]);
+
   useEffect(() => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.ideas'), '/']] });
     fetchIdeas();
