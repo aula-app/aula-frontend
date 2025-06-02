@@ -8,6 +8,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataItem from './DataItem';
 import DataRow from './DataRow';
+import AppIconButton from '../AppIconButton';
 
 type Props = {
   scope: SettingNamesType;
@@ -43,6 +44,41 @@ const DataTable: React.FC<Props> = ({
   const { t } = useTranslation();
 
   const [selected, setSelected] = useState<Array<string>>([]);
+
+  /**
+   * Generate scope-specific navigation routes
+   * @param scope - The current scope (rooms, boxes, ideas, etc.)
+   * @param row - The data row containing the item's properties
+   * @returns The appropriate navigation path for the scope
+   */
+  const getScopeSpecificRoute = (scope: SettingNamesType, row: SettingType): string => {
+    switch (scope) {
+      case 'rooms':
+        // Rooms navigate to phase 0 (wild ideas)
+        return `/room/${row.hash_id}/phase/0`;
+
+      case 'boxes':
+        // Boxes need room_hash_id and phase_id to construct proper routes
+        if ('room_hash_id' in row && 'phase_id' in row) {
+          return `/room/${row.room_hash_id}/phase/${row.phase_id}/idea-box/${row.hash_id}`;
+        }
+
+      case 'ideas':
+        // Ideas need room_hash_id, and we'll use phase 0 as default since we don't have phase context here
+        if ('room_hash_id' in row) {
+          return `/room/${row.room_hash_id}/phase/${row.phase_id || 0}/idea/${row.hash_id}`;
+        }
+
+      case 'messages':
+        if ('hash_id' in row) {
+          return `/messages/${row.hash_id}`;
+        }
+
+      // All other scopes (users, messages, announcements, etc.) go to settings
+      default:
+        return `/settings/${scope}`;
+    }
+  };
 
   const toggleColumn = (order_id: number) => {
     orderBy === order_id ? setAsc(!orderAsc) : setOrderby(order_id);
@@ -116,6 +152,7 @@ const DataTable: React.FC<Props> = ({
                   color="secondary"
                 />
               </TableCell>
+              {scope !== 'users' && <TableCell sx={{ whiteSpace: 'nowrap' }}>{t(`settings.columns.link`)}</TableCell>}
               {columns.map((column) => (
                 <TableCell sx={{ whiteSpace: 'nowrap' }} key={column.name}>
                   <TableSortLabel
@@ -141,6 +178,19 @@ const DataTable: React.FC<Props> = ({
                 status={Number(row.status) as StatusTypes}
                 toggleRow={toggleRow}
               >
+                {scope !== 'users' && (
+                  <TableCell
+                    sx={{
+                      whiteSpace: 'nowrap',
+                      maxWidth: '200px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      background: 'inherit',
+                    }}
+                  >
+                    <AppIconButton icon="link" size="small" to={getScopeSpecificRoute(scope, row)} />
+                  </TableCell>
+                )}
                 {columns.map((column) => (
                   <TableCell
                     sx={{
