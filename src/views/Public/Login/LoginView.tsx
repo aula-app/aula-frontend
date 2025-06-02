@@ -137,16 +137,16 @@ const LoginView = () => {
           disabled={isLoading}
           label={t("auth.login.label")}
           id="login-username"
-          inputProps={{ 
+          slotProps={{ input: { 
             "aria-labelledby": "login-username-label",
             "aria-invalid": !!errors.username,
             "aria-errormessage": errors.username ? "username-error-message" : undefined,
             autoCapitalize: "none" 
-          }}
-          InputLabelProps={{ 
+          },
+          inputLabel: { 
             id: "login-username-label", 
             htmlFor: "login-username" 
-          }}
+          }}}
           {...register("username", {
             shouldUnregister: false
           })}
@@ -160,15 +160,6 @@ const LoginView = () => {
           type={showPassword ? "text" : "password"}
           label={t("auth.password.label")}
           id="login-password"
-          inputProps={{
-            "aria-labelledby": "login-password-label",
-            "aria-invalid": !!errors.password,
-            "aria-errormessage": errors.password ? "password-error-message" : undefined
-          }}
-          InputLabelProps={{ 
-            id: "login-password-label", 
-            htmlFor: "login-password" 
-          }}
           {...register("password", {
             shouldUnregister: false
           })}
@@ -177,6 +168,9 @@ const LoginView = () => {
           sx={{ mt: 0 }}
           slotProps={{
             input: {
+              "aria-labelledby": "login-password-label",
+              "aria-invalid": !!errors.password,
+              "aria-errormessage": errors.password ? "password-error-message" : undefined,
               endAdornment: (
                 <InputAdornment position="end">
                   <AppIconButton
@@ -188,25 +182,15 @@ const LoginView = () => {
                   />
                 </InputAdornment>
               ),
+            },
+            inputLabel: {
+              id: "login-password-label", 
+              htmlFor: "login-password" 
             }
           }}
         />
         </Stack>
-<<<<<<< HEAD
-        <Button 
-          variant="contained" 
-          disabled={isLoading} 
-          onClick={handleSubmit(onSubmit)}
-          aria-label={t("auth.login.button")}
-=======
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={isLoading}
->>>>>>> dev
-        >
-          {t("auth.login.button")}
-        </Button>
+        <Button type="submit" variant="contained" disabled={isLoading}>{t("auth.login.button")}</Button>
 
         <Grid container justifyContent="end" alignItems="center">
           <Button

@@ -98,79 +98,6 @@ const fields = schema.fields;
   }, [key, dispatch, t]);
 
   return (
-<<<<<<< HEAD
-    <FormContainer>
-      <Stack gap={2}>
-        <Typography variant="h2">{t('auth.password.set')}</Typography>
-        <Collapse in={!isValid}>
-          <Alert variant="outlined" severity="error" onClose={() => setValid(true)}>
-            {t('errors.invalidCode')}
-          </Alert>
-        </Collapse>
-        <FormContainer>
-      <Stack gap={2}>
-        <Stack gap={1} direction="row" flexWrap="wrap">
-          {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
-            <TextField
-              key={field}
-              required
-              type={showPassword[field] ? 'text' : 'password'}
-              label={t(`auth.password.${field}`)}
-              id={`set-password-${field}`}
-              sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
-              {...register(field)}
-              error={!!errors[field]}
-              helperText={<span id={`${field}-error-message`}>{typeof errors[field]?.message === 'string' ? errors[field]?.message : ''}</span>}
-              slotProps={{
-                input: {
-                  'aria-labelledby': `set-password-${field}-label`,
-                  'aria-invalid': !!errors[field],
-                  'aria-errormessage': errors[field] ? `${field}-error-message` : undefined,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <AppIconButton
-                        aria-label="toggle password visibility"
-                        icon={showPassword[field] ? 'visibilityOn' : 'visibilityOff'}
-                        title={showPassword[field] ? t('actions.hide') : t('actions.show')}
-                        onClick={() => setShowPassword({ ...showPassword, [field]: !showPassword[field] })}
-                      />
-                    </InputAdornment>
-                  ),
-                },
-                inputLabel: {
-                  id: `set-password-${field}-label`,
-                  htmlFor: `set-password-${field}`,
-                },
-              }}
-            />
-          ))}
-        </Stack>
-
-        <Stack direction="row" justifyContent="end" gap={2}>
-          <Collapse in={showMessage}>
-            <Alert
-              variant="outlined"
-              severity={!error ? 'success' : 'error'}
-              onClose={() => setShowMessage(false)}
-            >
-              {!error ? t('auth.password.success') : t('errors.invalidPassword')}
-            </Alert>
-          </Collapse>
-          <Button 
-            color="error" 
-            onClick={resetFields}
-            aria-label={t('actions.cancel')}
-          >
-            {t('actions.cancel')}
-          </Button>
-          <Button 
-            variant="contained" 
-            onClick={handleSubmit(onSubmit)}
-            aria-label={t('actions.save')}
-          >
-            {t('actions.save')}
-          </Button>
-=======
     <Stack gap={2}>
       <Typography variant="h2">{t('auth.password.set')}</Typography>
       <Collapse in={!isValid}>
@@ -226,7 +153,6 @@ const fields = schema.fields;
               {t('actions.save')}
             </Button>
           </Stack>
->>>>>>> dev
         </Stack>
       </form>
     </Stack>
