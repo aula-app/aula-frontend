@@ -4,7 +4,7 @@ import { useAppStore } from '@/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
@@ -98,66 +98,64 @@ const fields = schema.fields;
   }, [key, dispatch, t]);
 
   return (
-    <FormContainer>
-      <Stack gap={2}>
-        <Typography variant="h2">{t('auth.password.set')}</Typography>
-        <Collapse in={!isValid}>
-          <Alert variant="outlined" severity="error" onClose={() => setValid(true)}>
-            {t('errors.invalidCode')}
-          </Alert>
-        </Collapse>
-        <FormContainer>
-      <Stack gap={2}>
-        <Stack gap={1} direction="row" flexWrap="wrap">
-          {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
-            <TextField
-              key={field}
-              required
-              type={showPassword[field] ? 'text' : 'password'}
-              label={t(`auth.password.${field}`)}
-              sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
-              {...register(field)}
-              error={!!errors[field]}
-              helperText={`${errors[field]?.message || ''}`}
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <AppIconButton
-                        aria-label="toggle password visibility"
-                        icon={showPassword[field] ? 'visibilityOn' : 'visibilityOff'}
-                        title={showPassword[field] ? t('actions.hide') : t('actions.show')}
-                        onClick={() => setShowPassword({ ...showPassword, [field]: !showPassword[field] })}
-                      />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-          ))}
-        </Stack>
+    <Stack gap={2}>
+      <Typography variant="h2">{t('auth.password.set')}</Typography>
+      <Collapse in={!isValid}>
+        <Alert variant="outlined" severity="error" onClose={() => setValid(true)}>
+          {t('errors.invalidCode')}
+        </Alert>
+      </Collapse>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Stack gap={2}>
+          <Stack gap={1} direction="row" flexWrap="wrap">
+            {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
+              <TextField
+                key={field}
+                required
+                type={showPassword[field] ? 'text' : 'password'}
+                label={t(`auth.password.${field}`)}
+                sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
+                {...register(field)}
+                error={!!errors[field]}
+                helperText={`${errors[field]?.message || ''}`}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <AppIconButton
+                          aria-label="toggle password visibility"
+                          icon={showPassword[field] ? 'visibilityOn' : 'visibilityOff'}
+                          title={showPassword[field] ? t('actions.hide') : t('actions.show')}
+                          onClick={() => setShowPassword({ ...showPassword, [field]: !showPassword[field] })}
+                        />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            ))}
+          </Stack>
 
-        <Stack direction="row" justifyContent="end" gap={2}>
-          <Collapse in={showMessage}>
-            <Alert
-              variant="outlined"
-              severity={!error ? 'success' : 'error'}
-              onClose={() => setShowMessage(false)}
-            >
-              {!error ? t('auth.password.success') : t('errors.invalidPassword')}
-            </Alert>
-          </Collapse>
-          <Button color="error" onClick={resetFields}>
-            {t('actions.cancel')}
-          </Button>
-          <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-            {t('actions.save')}
-          </Button>
+          <Stack direction="row" justifyContent="end" gap={2}>
+            <Collapse in={showMessage}>
+              <Alert
+                variant="outlined"
+                severity={!error ? 'success' : 'error'}
+                onClose={() => setShowMessage(false)}
+              >
+                {!error ? t('auth.password.success') : t('errors.invalidPassword')}
+              </Alert>
+            </Collapse>
+            <Button color="error" onClick={resetFields}>
+              {t('actions.cancel')}
+            </Button>
+            <Button type="submit" variant="contained">
+              {t('actions.save')}
+            </Button>
+          </Stack>
         </Stack>
-      </Stack>
-    </FormContainer>
-      </Stack>
-    </FormContainer>
+      </form>
+    </Stack>
   );
 };
 
