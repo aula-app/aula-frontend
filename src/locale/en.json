@@ -530,12 +530,12 @@
         "description": "Be the first to share an idea"
       },
       "messages": {
-        "title": "No messages",
-        "description": "You have no messages at the moment"
+        "title": "There are currently no new messages",
+        "description": "You have no messages at the moment. Come back later!"
       },
       "updates": {
-        "title": "No updates",
-        "description": "There are no recent updates to display"
+        "title": "There are currently no new updates",
+        "description": "Come back later!"
       },
       "general": {
         "title": "Nothing here yet",

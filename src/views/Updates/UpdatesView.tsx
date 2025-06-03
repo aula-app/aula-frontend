@@ -44,7 +44,7 @@ const UpdatesView = () => {
         </IconButton>
       </Stack>
       {!isLoading && updates.votes.length === 0 && updates.comments.length === 0 && (
-        <EmptyState title={t('ui.empty.table.title')} description={t('ui.empty.table.description')} />
+        <EmptyState title={t('ui.empty.updates.title')} description={t('ui.empty.updates.description')} />
       )}
       {updates &&
         (Object.keys(updates) as Array<keyof UpdateResponse>).map((update) => {

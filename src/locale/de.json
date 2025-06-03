@@ -1,7 +1,7 @@
 {
   "actions": {
     "activate": "{{var}} aktivieren",
-    "add": "{{var}} hinzufügen",
+    "add": "Neue {{var}}",
     "addToParent": "Zu {{var}} hinzufügen",
     "agree": "Zustimmen",
     "archive": "Archivieren",
@@ -18,8 +18,8 @@
     "edit": "{{var}} bearbeiten",
     "filter": "Filtern",
     "hide": "Ausblenden",
-    "loading": "Wird geladen...",
-    "move": "{{var}} verschieben",
+    "loading": "Laden",
+    "move": "Ausgewählte {{var}} verschieben nach",
     "print": "Drucken",
     "remove": "{{var}} entfernen",
     "save": "Speichern",
@@ -54,7 +54,7 @@
       "button": "OAuth-Authentifizierung"
     },
     "password": {
-      "change": "Passwort geändert",
+      "change": "Passwort ändern",
       "confirmPassword": "Passwort bestätigen",
       "copied": "Passwort in die Zwischenablage kopiert",
       "current": "Aktuelles Passwort",
@@ -137,8 +137,8 @@
     "validation": {
       "agreement": "Du musst zustimmen, um dich anzumelden",
       "duration": "Eine der Phasen muss mindestens einen Tag lang verfügbar sein",
-      "email": "Muss eine gültige E-Mail sein",
-      "integer": "Die Dauer muss eine ganze Zahl sein",
+      "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "integer": "Bitte geben Sie eine ganze Zahl ein",
       "maxLength": "Muss kleiner sein als {{var}} Zeichen",
       "minLength": "Muss größer sein als {{var}} Zeichen",
       "name": "Die Namen sollten nur Buchstaben enthalten",
@@ -146,8 +146,8 @@
       "noOptions": "Keine Optionen verfügbar",
       "optional": "Optional",
       "passwordMatch": "Passwörter müssen übereinstimmen",
-      "phone": "Muss eine gültige Telefonnummer sein",
-      "recipient": "Sie müssen einen Empfänger für Ihre Nachricht auswählen",
+      "phone": "Bitte geben Sie eine gültige Telefonnummer ein",
+      "recipient": "Bitte wählen Sie einen Empfänger aus",
       "required": "Dieses Feld darf nicht leer sein"
     }
   },
@@ -299,8 +299,8 @@
       "plural": "Umfragen"
     },
     "updates": {
-      "name": "Aktualisierung",
-      "plural": "Aktualisierungen"
+      "name": "Update",
+      "plural": "Updates"
     },
     "users": {
       "name": "Benutzer",
@@ -484,7 +484,7 @@
     "archived": "Archiviert",
     "holiday": "Urlaub",
     "inactive": "Inaktiv",
-    "loading": "Laden",
+    "loading": "Wird geladen...",
     "suspended": "Gesperrt",
     "vacation": "Ferien",
     "waiting": "Warten",
@@ -530,12 +530,12 @@
         "description": "Sei der Erste, der eine Idee teilt"
       },
       "messages": {
-        "title": "Keine Nachrichten",
-        "description": "Du hast im Moment keine Nachrichten"
+        "title": "Es gibt derzeit keine neuen Nachrichten",
+        "description": "Du hast im Moment keine Nachrichten. Komm später wieder!"
       },
       "updates": {
-        "title": "Keine Updates",
-        "description": "Es gibt keine aktuellen Updates anzuzeigen"
+        "title": "Es gibt derzeit keine neuen Updates",
+        "description": "Komm später wieder!"
       },
       "general": {
         "title": "Hier ist noch nichts",
@@ -593,7 +593,7 @@
       "days": "Tage",
       "ideas": "Ideen",
       "likes": "Likes",
-      "updates": "Aktualisierungen",
+      "updates": "Updates",
       "votes": "Stimmen"
     }
   },
