@@ -82,6 +82,11 @@ const BoxesView: React.FC = () => {
     fetchBoxes();
   };
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setOffset(0);
+  }, [search_field, search_text, status, room_id]);
+
   useEffect(() => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.boxes'), '']] });
     fetchBoxes();
