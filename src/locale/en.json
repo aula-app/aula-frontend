@@ -382,6 +382,7 @@
       "language_id": "Language",
       "last_login": "Last Login",
       "last_update": "Last Update",
+      "link": "Link",
       "level_of_detail": "Detail Level",
       "location": "Location",
       "msg_type": "Message Type",
