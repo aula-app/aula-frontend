@@ -1,7 +1,6 @@
 import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
 import { UserForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
-import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import PrintUsers from '@/components/PrintUsers/PrintUsers';
@@ -132,8 +131,8 @@ const UsersView: React.FC = () => {
           setEdit={(user) => setEdit(user as UserType | boolean)}
           setDelete={deleteUsers}
           extraTools={extraTools}
+          isLoading={isLoading}
         />
-        {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
       </Stack>
       <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />

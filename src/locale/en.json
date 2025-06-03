@@ -509,11 +509,54 @@
       "from": "from",
       "next": "Next",
       "no": "No",
+      "noContent": "No content available",
       "on": "on",
       "or": "or",
       "success": "Success",
       "to": "to",
       "yes": "Yes"
+    },
+    "empty": {
+      "boxes": {
+        "title": "No boxes in this phase",
+        "description": "Boxes will appear here when they reach this phase"
+      },
+      "dashboard": {
+        "title": "No ideas in this phase",
+        "description": "Ideas will appear here when they reach this phase"
+      },
+      "ideas": {
+        "title": "No ideas yet",
+        "description": "Be the first to share an idea"
+      },
+      "messages": {
+        "title": "There are currently no new messages",
+        "description": "You have no messages at the moment. Come back later!"
+      },
+      "updates": {
+        "title": "There are currently no new updates",
+        "description": "Come back later!"
+      },
+      "general": {
+        "title": "Nothing here yet",
+        "description": "Come back later when there's more content"
+      },
+      "table": {
+        "title": "No data available",
+        "description": "There are no items to display in this table"
+      },
+      "reports": {
+        "title": "No reports",
+        "description": "There are no reports to review at this time"
+      },
+      "bugs": {
+        "title": "No bug reports",
+        "description": "No bugs have been reported yet"
+      },
+      "requests": {
+        "title": "No requests",
+        "description": "There are no pending requests"
+      }
     },
     "darkMode": "Dark mode",
     "files": {

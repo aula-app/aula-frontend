@@ -1,6 +1,5 @@
 import { AnnouncementForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
-import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import { deleteAnnouncement, getAnnouncements } from '@/services/announcements';
@@ -127,8 +126,8 @@ const AnnouncementsView: React.FC = () => {
           setOrderby={setOrderby}
           setEdit={(text) => setEdit(text as AnnouncementType)}
           setDelete={deleteAnnouncements}
+          isLoading={isLoading}
         />
-        {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
         <PaginationBar pages={Math.ceil(totalAnnouncements / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
