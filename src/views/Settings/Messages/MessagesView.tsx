@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
  * url: /settings/messages
  */
 
-const FILTER = ['headline', 'body', 'creator_id'] as Array<keyof MessageType>;
+const FILTER = ['headline', 'body'] as Array<keyof MessageType>;
 
 const COLUMNS = [
   { name: 'headline', orderId: 5 },
