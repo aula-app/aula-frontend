@@ -25,8 +25,6 @@ export const checkReport = async (
   reason: string
 ) => {
   await page.goto(shared.getHost() + '/settings/bugs');
-
   const Report = page.locator('p').filter({ hasText: reason });
-  const reportCount = await Report.count();
-  await expect(reportCount).toBeGreaterThan(0);
+  await expect(Report).toHaveCount(1, { timeout: 2000 });
 };

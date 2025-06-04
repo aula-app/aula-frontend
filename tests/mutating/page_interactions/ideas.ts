@@ -320,8 +320,7 @@ export const checkReport = async (
   await page.goto(host + '/settings/reports');
 
   const Report = page.locator('span').filter({ hasText: idea.name });
-  const reportCount = await Report.count();
-  await expect(reportCount).toBeGreaterThan(0);
+  await expect(Report).toHaveCount(1);
 };
 
 export const checkCommentReport = async (
@@ -331,8 +330,7 @@ export const checkCommentReport = async (
   await page.goto(host + '/settings/reports');
 
   const Report = page.locator('span').filter({ hasText: comment });
-  const reportCount = await Report.count();
-  await expect(reportCount).toBeGreaterThan(0);
+  await expect(Report).toHaveCount(1);
 };
 
 export const reportComment = async (

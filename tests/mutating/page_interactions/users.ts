@@ -13,7 +13,7 @@ export const create = async (page: Page, data: users.UserData): Promise<TempPass
   await page.locator('a[href="/settings/users"]').click();
 
   // click the add user button:
-  await page.getByRole('button', { name: 'Benutzer hinzufügen' }).click();
+  await page.getByRole('button', { name: 'Neue Benutzer' }).click();
 
   // fill in the necessary information
   await page.fill('input[name="displayname"]', data.displayName);
@@ -116,7 +116,7 @@ export const login = async (page: Page, data: users.UserData) => {
   await page.fill('input[name="password"]', data.password);
   await page.getByRole('button', { name: 'Login' }).click();
 
-  await expect(page.locator('h2')).toHaveText('Dashboard');
+  await expect(page.locator('h1')).toHaveText('Räume');
 };
 
 export const firstLoginFlow = async (page: Page, data: users.UserData, tempPass: string) => {

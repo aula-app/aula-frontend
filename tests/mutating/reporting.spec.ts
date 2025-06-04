@@ -9,16 +9,14 @@ import * as boxes from './page_interactions/boxes';
 
 import * as fixtures from '../fixtures/users';
 import * as browsers from './browsers';
-import { BoxData } from '../fixtures/ideas';
-
-let room;
-
-let data: { [k: string]: any } = {};
 
 // force these tests to run sqeuentially
 test.describe.configure({ mode: 'serial' });
 
 test.describe('Reporting flow', () => {
+  let room;
+
+  let data: { [k: string]: any } = {};
   test.beforeAll(async () => {
     fixtures.init();
 
@@ -53,7 +51,7 @@ test.describe('Reporting flow', () => {
     const alice = await browsers.newPage(browsers.alices_browser);
 
     data.alicesIdea = {
-      name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
+      name: 'alices-test-idea' + shared.getRunId() + '-scope-3-' + shared.gensym(),
       description: 'generated during testing data',
     };
     await ideas.create(alice, room, data.alicesIdea);
@@ -62,6 +60,8 @@ test.describe('Reporting flow', () => {
   test('Bob reports that idea', async () => {
     const bob = await browsers.newPage(browsers.bobs_browser);
     const admin = await browsers.newPage(browsers.admins_browser);
+
+    expect(data.alicesIdea).toBeDefined();
 
     await ideas.report(bob, room, data.alicesIdea, 'misinformation');
 
@@ -73,7 +73,9 @@ test.describe('Reporting flow', () => {
   test('Bob Comments on Alices Idea', async () => {
     const bob = await browsers.newPage(browsers.bobs_browser);
 
-    await ideas.comment(bob, room, data.alicesIdea, 'You posted misinformation!');
+    data.bobsComment = 'You posted misinformation' + shared.gensym();
+
+    await ideas.comment(bob, room, data.alicesIdea, data.bobsComment);
 
     await bob.close();
   });
@@ -82,9 +84,9 @@ test.describe('Reporting flow', () => {
     const alice = await browsers.newPage(browsers.alices_browser);
     const admin = await browsers.newPage(browsers.admins_browser);
 
-    await ideas.reportComment(alice, room, data.alicesIdea, 'You posted misinformation!', 'misinformation');
+    await ideas.reportComment(alice, room, data.alicesIdea, data.bobsComment, 'misinformation');
 
-    await ideas.checkCommentReport(admin, 'You posted misinformation!');
+    await ideas.checkCommentReport(admin, data.bobsComment);
 
     await alice.close();
     await admin.close();
@@ -94,9 +96,11 @@ test.describe('Reporting flow', () => {
     const alice = await browsers.newPage(browsers.alices_browser);
     const admin = await browsers.newPage(browsers.admins_browser);
 
-    await ui.reportBug(alice, 'This does not work');
+    data.bugreport = 'This does not work' + shared.gensym();
 
-    await ui.checkReport(admin, 'This does not work');
+    await ui.reportBug(alice, data.bugreport);
+
+    await ui.checkReport(admin, data.bugreport);
 
     await alice.close();
     await admin.close();

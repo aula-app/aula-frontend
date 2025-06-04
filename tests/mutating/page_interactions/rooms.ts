@@ -16,7 +16,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await RoomsMenuItem.click();
 
   // use a button to open the modal for adding a room
-  const AddRoomButton = page.getByRole('button', { name: 'Raum hinzufügen' });
+  const AddRoomButton = page.getByRole('button', { name: 'Neue Raum' });
   await expect(AddRoomButton).toBeVisible();
   await AddRoomButton.click();
 
