@@ -154,11 +154,10 @@ const DataTable: React.FC<Props> = ({
                 <TableCell
                   sx={{
                     position: 'sticky',
-                    width: 25,
+                    width: 30,
                     left: 0,
                     zIndex: 3,
-                    pl: 1,
-                    pr: 0,
+                    px: 1,
                     backgroundColor: 'background.paper',
                   }}
                 >
@@ -170,7 +169,7 @@ const DataTable: React.FC<Props> = ({
                   />
                 </TableCell>
                 {scope !== 'users' && (
-                  <TableCell sx={{ whiteSpace: 'nowrap', width: 35, pl: 3 }}>{t(`settings.columns.link`)}</TableCell>
+                  <TableCell sx={{ whiteSpace: 'nowrap', width: 35 }}>{t(`settings.columns.link`)}</TableCell>
                 )}
                 {columns.map((column) => (
                   <TableCell sx={{ whiteSpace: 'nowrap' }} key={column.name}>
@@ -205,6 +204,7 @@ const DataTable: React.FC<Props> = ({
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         background: 'inherit',
+                        px: 1,
                       }}
                     >
                       <AppIconButton icon="link" size="small" to={getScopeSpecificRoute(scope, row)} />
