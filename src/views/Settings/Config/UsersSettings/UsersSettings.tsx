@@ -7,6 +7,7 @@ import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
 import {
   Button,
   FormHelperText,
+  LinearProgress,
   Stack,
   Table,
   TableBody,
@@ -109,15 +110,16 @@ const DataSettings = ({ onReload }: Props) => {
 
   return (
     <Stack gap={2}>
+      {loading && <LinearProgress color="secondary" />}
       <Stack direction="row" alignItems="center" gap={3} flexWrap="wrap">
         <Typography flex={1}>{t('forms.csv.template')}</Typography>
         <Stack flex={1} gap={2}>
-          <Button variant="contained" component="label" fullWidth>
+          <Button variant="contained" component="label" fullWidth disabled={loading}>
             {t('ui.files.upload')}
             <input type="file" name="my_files" multiple hidden onChange={handleFileChange} />
           </Button>
           <Stack direction="row" alignItems="center" gap={2}>
-            <Button variant="contained" component="label" color="error" fullWidth onClick={onReset}>
+            <Button variant="contained" component="label" color="error" fullWidth onClick={onReset} disabled={loading}>
               {t('actions.cancel')}
             </Button>
             <Button
@@ -128,6 +130,7 @@ const DataSettings = ({ onReload }: Props) => {
               download
               target="_blank"
               rel="noreferrer"
+              disabled={loading}
             >
               <AppIcon icon="download" size="small" sx={{ mr: 1, ml: -0.5 }} />
               <Typography sx={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
@@ -160,15 +163,22 @@ const DataSettings = ({ onReload }: Props) => {
           })}
         </TableBody>
       </Table>
+
       <Stack>
         <Stack direction="row" alignItems="center" gap={3}>
-          <SelectRole userRole={role} onChange={(role) => setRole(role as RoleTypes)} variant="filled" noAdmin />
-          <RoomField selected={rooms} onChange={(updates) => setRooms(updates)} />
+          <SelectRole
+            userRole={role}
+            onChange={(role) => setRole(role as RoleTypes)}
+            variant="filled"
+            noAdmin
+            disabled={loading}
+          />
+          <RoomField selected={rooms} onChange={(updates) => setRooms(updates)} disabled={loading} />
         </Stack>
         <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
       </Stack>
       <Button variant="contained" component="label" onClick={onSubmit} disabled={loading}>
-        {t('actions.confirm')}
+        {loading ? t('status.waiting') : t('actions.confirm')}
       </Button>
     </Stack>
   );
