@@ -17,6 +17,7 @@ test.describe('Reporting flow', () => {
   let room;
 
   let data: { [k: string]: any } = {};
+
   test.beforeAll(async () => {
     fixtures.init();
 
