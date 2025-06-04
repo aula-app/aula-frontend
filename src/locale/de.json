@@ -47,6 +47,10 @@
     "linkCopied": "Link in die Zwischenablage kopiert",
     "linkCopyFailed": "Fehler beim Kopieren des Links in die Zwischenablage"
   },
+  "clipboard": {
+    "linkCopied": "Link in die Zwischenablage kopiert",
+    "linkCopyFailed": "Link konnte nicht in die Zwischenablage kopiert werden"
+  },
   "auth": {
     "forgotPassword": {
       "button": "Passwort zurücksetzen",

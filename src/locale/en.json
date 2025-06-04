@@ -47,6 +47,10 @@
     "linkCopied": "Link copied to clipboard",
     "linkCopyFailed": "Failed to copy link to clipboard"
   },
+  "clipboard": {
+    "linkCopied": "Link copied to clipboard",
+    "linkCopyFailed": "Failed to copy link to clipboard"
+  },
   "auth": {
     "forgotPassword": {
       "button": "Reset password",
