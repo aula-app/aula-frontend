@@ -152,7 +152,15 @@ const DataTable: React.FC<Props> = ({
             <TableHead>
               <TableRow sx={{ maxHeight: '55px' }}>
                 <TableCell
-                  sx={{ position: 'sticky', left: 0, zIndex: 3, pl: 1, pr: 0, backgroundColor: 'background.paper' }}
+                  sx={{
+                    position: 'sticky',
+                    width: 25,
+                    left: 0,
+                    zIndex: 3,
+                    pl: 1,
+                    pr: 0,
+                    backgroundColor: 'background.paper',
+                  }}
                 >
                   <Checkbox
                     onChange={toggleAllRows}
@@ -161,7 +169,9 @@ const DataTable: React.FC<Props> = ({
                     color="secondary"
                   />
                 </TableCell>
-                {scope !== 'users' && <TableCell sx={{ whiteSpace: 'nowrap' }}>{t(`settings.columns.link`)}</TableCell>}
+                {scope !== 'users' && (
+                  <TableCell sx={{ whiteSpace: 'nowrap', width: 35, pl: 3 }}>{t(`settings.columns.link`)}</TableCell>
+                )}
                 {columns.map((column) => (
                   <TableCell sx={{ whiteSpace: 'nowrap' }} key={column.name}>
                     <TableSortLabel
@@ -191,7 +201,7 @@ const DataTable: React.FC<Props> = ({
                     <TableCell
                       sx={{
                         whiteSpace: 'nowrap',
-                        maxWidth: '200px',
+                        width: 35,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         background: 'inherit',
