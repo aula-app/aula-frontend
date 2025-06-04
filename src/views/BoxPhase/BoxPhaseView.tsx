@@ -1,16 +1,15 @@
-import { AppIcon } from '@/components';
+import { AppIcon, EmptyState } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import { BoxForms } from '@/components/DataForms';
 import SurveyForms from '@/components/DataForms/SurveyForms';
 import { deleteBox, getBoxesByPhase } from '@/services/boxes';
 import { getRoom } from '@/services/rooms';
+import { useAppStore } from '@/store/AppStore';
 import { BoxType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
-import { useAppStore } from '@/store/AppStore';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { set } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -75,7 +74,10 @@ const BoxPhaseView = () => {
   };
 
   return (
-    <Stack alignItems="center">
+    <Stack alignItems="center" flex={1}>
+      {!isLoading && !error && boxes.length === 0 && (
+        <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
+      )}
       <Grid container spacing={2} p={1} width="100%">
         {isLoading && (
           <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>

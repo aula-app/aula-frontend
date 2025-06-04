@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: ''
+labels: bug
 assignees: ''
 
 ---
@@ -20,4 +20,5 @@ Steps to reproduce the behavior:
 Username:
 Role:
 Environment used:
+Instance code
 Browser:

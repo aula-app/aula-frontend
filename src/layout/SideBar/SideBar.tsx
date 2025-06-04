@@ -1,14 +1,16 @@
-import { AppIconButton } from '@/components';
+import { AppIcon, AppIconButton } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import UserInfo from '@/components/UserInfo';
-import { useIsAuthenticated, useOnMobile } from '@/hooks';
-import { Chip, Divider, Drawer, Stack } from '@mui/material';
-import { memo } from 'react';
+import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
+import { Button, Chip, Divider, Drawer, Stack } from '@mui/material';
+import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { drawerPaperStyles } from './styles';
 import { DrawerSideBarProps } from './types';
 import SideBarContent from './SideBarContent';
 import { localStorageGet } from '@/utils';
+import { useAppStore } from '@/store';
+import BugButton from '@/components/Buttons/BugButton';
 
 /**
  * Renders SideBar with Menu and User details for authenticated users in Private Layout
@@ -22,9 +24,13 @@ import { localStorageGet } from '@/utils';
  */
 const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideBarProps): JSX.Element => {
   const { t } = useTranslation();
-  const onMobile = useOnMobile();
-  const isAuthenticated = useIsAuthenticated();
+  const [state] = useAppStore();
   const code = localStorageGet('code');
+  const isAuthenticated = useIsAuthenticated();
+  const onMobile = useOnMobile();
+
+  const onSwitchDarkMode = useEventSwitchDarkMode();
+  const onLogout = useEventLogout();
 
   return (
     <Drawer
@@ -32,33 +38,29 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
       anchor={anchor}
       open={open}
       variant={variant}
-      PaperProps={{
-        sx: drawerPaperStyles(onMobile, variant),
-      }}
+      slotProps={{ paper: { sx: drawerPaperStyles(onMobile, variant) } }}
       onClose={onClose}
       {...restOfProps}
     >
-      <Stack direction="row" justifyContent="space-between" alignItems="center" px={2} pt={0}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" p={1} pl={2.5}>
         <LocaleSwitch />
-        {import.meta.env.VITE_APP_MULTI !== 'false' && (
-          <Chip
-            label={`${t('instance.chip')}: ${code}`}
-            onClick={() => navigator.clipboard.writeText(code)}
-            clickable
-          />
-        )}
-        <AppIconButton
-          color="secondary"
-          onClick={(evt) => onClose(evt, 'backdropClick')}
-          icon="close"
-          title={t('actions.close')}
-          sx={{ px: 0 }}
-        />
+        <AppIconButton icon="close" onClick={(e) => onClose(e, 'backdropClick')} title={t('actions.close')} />
       </Stack>
       <Divider />
       {isAuthenticated && <UserInfo />}
       <Divider />
       <SideBarContent onClose={onClose} />
+      <Divider />
+      <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
+        <BugButton target={location.pathname} />
+        <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} />
+        <AppIconButton
+          onClick={onSwitchDarkMode}
+          icon={state.darkMode ? 'day' : 'night'}
+          title={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
+        />
+        <AppIconButton onClick={onLogout} icon="logout" title={t('auth.logout')} />
+      </Stack>
     </Drawer>
   );
 };

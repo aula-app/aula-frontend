@@ -45,7 +45,7 @@ This document provides an overview of the Aula application, including setup inst
    ```
    VITE_APP_VERSION = $npm_package_version
    VITE_APP_API_URL = http://localhost/
-   VITE_APP_MULTI_AULA = https://m.aula.de/instances
+   VITE_APP_MULTI_AULA = https://neu.aula.de/instances
    VITE_APP_MULTI = false
    ```
 
@@ -99,11 +99,13 @@ To deploy the application:
 The application includes Capacitor integration for building mobile apps. To start Android development:
 
 1. Build the web app first:
+
    ```
    yarn build
    ```
 
 2. Sync the build with Capacitor:
+
    ```
    npx cap sync
    ```

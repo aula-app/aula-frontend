@@ -77,7 +77,12 @@ export type SelectOptionType = {
   disabled?: boolean;
 };
 
+interface UserOptionType extends SelectOptionType {
+  displayname: string;
+}
+
 export type SelectOptionsType = Array<SelectOptionType>;
+export type UserOptionsType = Array<UserOptionType>;
 
 export type UpdateType = {
   add: string[];

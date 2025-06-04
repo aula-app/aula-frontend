@@ -1,12 +1,11 @@
 import { RoomForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
-import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import { deleteRoom, getRooms } from '@/services/rooms';
+import { useAppStore } from '@/store/AppStore';
 import { StatusTypes } from '@/types/Generics';
 import { RoomType } from '@/types/Scopes';
-import { useAppStore } from '@/store/AppStore';
 import { getDataLimit } from '@/utils';
 import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
@@ -79,6 +78,11 @@ const RoomsView: React.FC = () => {
     fetchRooms();
   };
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setOffset(0);
+  }, [search_field, search_text, status]);
+
   useEffect(() => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.rooms'), '']] });
     fetchRooms();
@@ -109,8 +113,8 @@ const RoomsView: React.FC = () => {
           setOrderby={setOrderby}
           setEdit={(room) => setEdit(room as RoomType | boolean)}
           setDelete={deleteRooms}
+          isLoading={isLoading}
         />
-        {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
         <PaginationBar pages={Math.ceil(totalRooms / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>

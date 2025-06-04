@@ -31,6 +31,10 @@ const PhaseDurationFields: React.FC<Props> = ({
   const { t } = useTranslation();
   const theme = useTheme();
   const { room_id } = useParams();
+  const [defaultDurations, setDefaultDurations] = useState<{ phase_duration_1: number; phase_duration_3: number }>({
+    phase_duration_1: 14,
+    phase_duration_3: 14,
+  });
 
   const [error, setError] = useState<string>();
 
@@ -41,20 +45,27 @@ const PhaseDurationFields: React.FC<Props> = ({
 
   const getDurations = () => {
     const id = room || room_id;
-    if (id)
+    if (id) {
       getRoom(id).then((response) => {
+        const updated: { phase_duration_1: number; phase_duration_3: number } = { ...defaultDurations };
         fields.forEach((field) => {
-          const value = response.data && field.name in response.data ? response.data[field.name] : 14;
-          setValue(field.name, value);
+          if (response.data && field.name in response.data) {
+            updated[field.name] = response.data[field.name];
+          }
         });
+        setDefaultDurations(updated);
       });
-    else
+    } else {
       getDefaultDurations().then((response) => {
-        const defaultValues = response.data.length > 0 ? response.data.slice(1, 4) : [14, 14];
+        const updated: { phase_duration_1: number; phase_duration_3: number } = { ...defaultDurations };
         fields.forEach((field, index) => {
-          setValue(field.name, defaultValues[index]);
+          if (response.data.length > 0) {
+            updated[field.name] = response.data[index];
+          }
         });
+        setDefaultDurations(updated);
       });
+    }
   };
 
   useEffect(() => {
@@ -96,7 +107,7 @@ const PhaseDurationFields: React.FC<Props> = ({
             key={field.name}
             name={field.name}
             control={control}
-            defaultValue={control._defaultValues[field.name] || '14'}
+            defaultValue={control._defaultValues[field.name] || defaultDurations[field.name]}
             render={({ field, fieldState }) => {
               if (!!fieldState.error) setError(fieldState.error.message);
               return (

@@ -3,6 +3,7 @@ import { UserType } from '@/types/Scopes';
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import UserAvatar from '../UserAvatar';
+import LocaleSwitch from '../LocaleSwitch';
 
 /**
  * Renders User info with Avatar
@@ -20,17 +21,21 @@ const UserInfo = () => {
     getUserInfo();
   }, []);
   return (
-    <>
+    <Stack m={2}>
       {user && (
-        <Stack alignItems="center" minHeight="fit-content" my={2}>
-          <UserAvatar id={user.hash_id} size={80} />
-          <Typography sx={{ mt: 1 }} variant="h3">
-            {user.username}
-          </Typography>
-          <Typography variant="body2">{user.displayname}</Typography>
+        <Stack direction="row" alignItems="center" minHeight="fit-content" gap={2}>
+          <UserAvatar id={user.hash_id} size={52} />
+          <Stack flex={1}>
+            <Typography sx={{ mt: 1 }} variant="h3" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
+              {user.username}
+            </Typography>
+            <Typography variant="body2" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
+              {user.displayname}
+            </Typography>
+          </Stack>
         </Stack>
       )}
-    </>
+    </Stack>
   );
 };
 

@@ -68,7 +68,7 @@ const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
     resolver: yupResolver(schema),
   });
 
-  const userFields = ['username', 'realname', 'email', 'displayname', 'about_me'] as Array<keyof SchemaType>;
+  const userFields = ['displayname', 'username', 'realname', 'email', 'about_me'] as Array<keyof SchemaType>;
 
   const approveUpdates = () => {
     updateRequests.map((update) => sendMessage(update));
@@ -153,20 +153,13 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
         </Button>
         {user && <ImageEditor isOpen={editImage} onClose={onClose} id={user.hash_id} />}
         <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
-          <Controller
-            name="displayname"
-            control={control}
-            render={({ field }) => (
-              <TextField fullWidth label={t(`settings.columns.displayname`)} size="small" {...field} />
-            )}
-          />
-          {userFields.slice(0, -2).map((name, i) => (
+          {userFields.slice(0, -1).map((name, i) => (
             <RestrictedField key={i} name={name} control={control} />
           ))}
         </Stack>
         <MarkdownEditor name="about_me" control={control} sx={{ flex: 2, minWidth: `min(300px, 100%)` }} />
       </Stack>
-      <Stack direction="row" justifyContent="end" gap={2}>
+      <Stack direction="row" justifyContent="end" gap={2} mb={2}>
         <Button color="error" onClick={resetFields}>
           {t('actions.cancel')}
         </Button>

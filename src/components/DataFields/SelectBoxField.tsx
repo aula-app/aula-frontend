@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 interface Props {
   onChange: (value: string) => void;
   defaultValue: string;
+  room_id?: string;
   disabled?: boolean;
 }
 
@@ -15,7 +16,7 @@ interface Props {
  * Renders "SelectInput" component
  */
 
-const SelectBoxField: React.FC<Props> = ({ defaultValue, onChange, disabled = false, ...restOfProps }) => {
+const SelectBoxField: React.FC<Props> = ({ defaultValue, room_id, onChange, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
   const { box_id } = useParams();
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ const SelectBoxField: React.FC<Props> = ({ defaultValue, onChange, disabled = fa
 
   const fetchBoxes = async () => {
     setLoading(true);
-    const response = await getBoxes();
+    const response = await getBoxes({ room_id: room_id, offset: 0, limit: 0 });
     setLoading(false);
     if (!response.error && response.data) createOptions(response.data as BoxType[]);
   };

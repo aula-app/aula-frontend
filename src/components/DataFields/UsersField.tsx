@@ -1,6 +1,6 @@
 import { getUsers } from '@/services/users';
-import { SelectOptionsType, UpdateType } from '@/types/SettingsTypes';
-import { Autocomplete, BaseTextFieldProps, CircularProgress, TextField } from '@mui/material';
+import { UpdateType, UserOptionsType } from '@/types/SettingsTypes';
+import { Autocomplete, BaseTextFieldProps, CircularProgress, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -18,19 +18,23 @@ const UsersField: React.FC<Props> = ({ defaultValues, onChange, disabled = false
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [options, setOptions] = useState<SelectOptionsType>([]);
-  const [selectedOptions, setSelectedOptions] = useState<SelectOptionsType>([]);
+  const [options, setOptions] = useState<UserOptionsType>([]);
+  const [selectedOptions, setSelectedOptions] = useState<UserOptionsType>([]);
 
   const fetchUsers = async () => {
     setLoading(true);
     const response = await getUsers();
     setLoading(false);
     if (!response.data) return;
-    const users = response.data.map((user) => ({ label: user.displayname, value: user.hash_id }));
+    const users = response.data.map((user) => ({
+      label: user.realname,
+      value: user.hash_id,
+      displayname: user.displayname,
+    }));
     setOptions(users);
   };
 
-  const handleChange = (selected: SelectOptionsType) => {
+  const handleChange = (selected: UserOptionsType) => {
     setSelectedOptions(selected);
     const selectedValues = selected.map((option) => String(option.value));
     onChange({
@@ -65,6 +69,14 @@ const UsersField: React.FC<Props> = ({ defaultValues, onChange, disabled = false
       options={options}
       loading={loading}
       disabled={disabled}
+      renderOption={(props, option) => (
+        <li {...props} key={option.value}>
+          {option.label}{' '}
+          <Typography ml={2} variant="body2" color="text.secondary">
+            ({option.displayname})
+          </Typography>
+        </li>
+      )}
       renderInput={(params) => (
         <TextField
           {...params}

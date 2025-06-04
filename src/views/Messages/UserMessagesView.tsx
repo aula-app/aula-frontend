@@ -1,4 +1,4 @@
-import { AppIcon, AppIconButton, AppLink } from '@/components';
+import { AppIcon, AppIconButton, AppLink, EmptyState } from '@/components';
 import { getAdminMessages, getPersonalMessages } from '@/services/messages';
 import { useAppStore } from '@/store/AppStore';
 import { MessageType } from '@/types/Scopes';
@@ -36,6 +36,12 @@ const UserMessagesView = () => {
   return (
     <Stack gap={1} p={2} sx={{ overflowY: 'auto' }}>
       <Typography variant="h1">{t('scopes.messages.plural')}</Typography>
+      {!isLoading && !error && messages.length === 0 && (
+        <EmptyState 
+          title={t('ui.empty.messages.title')} 
+          description={t('ui.empty.messages.description')} 
+        />
+      )}
       {
         <>
           {messages.map((message) => {

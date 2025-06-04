@@ -1,11 +1,11 @@
 import DefaultImage from '@/components/DefaultImages';
-import { Button, Dialog, Stack, Typography } from '@mui/material';
+import { Button, Dialog, DialogProps, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { set } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
 
-interface Props {
+interface RoomImageSelectorProps {
   image: string;
   onClose: () => void;
   onSubmit: (image: string) => void;
@@ -27,7 +27,7 @@ const parseDescription = (description: string) => {
   };
 };
 
-const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
+const RoomImageSelector: FC<RoomImageSelectorProps> = ({ image, onClose, onSubmit }) => {
   const { t } = useTranslation();
 
   const [currentImage, setCurrentImage] = useState(parseDescription(image));
@@ -58,6 +58,7 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
   useEffect(() => {
     onReset();
   }, [image]);
+  
   return (
     <>
       <Button sx={{ minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }} onClick={() => setEditImage(true)}>
@@ -67,7 +68,7 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
         <Stack p={2}>
           <Typography variant="h3">Change color</Typography>
           <Stack direction="row" width="100%" justifyContent="space-between" py={2}>
-            {[...Array(8)].map((item, key) => (
+            {[...Array(8)].map((_, key) => (
               <Button
                 key={key}
                 sx={{
@@ -76,7 +77,7 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
                   minWidth: 'auto',
                   maxWidth: '10%',
                   borderRadius: 999,
-                  bgcolor: `hsl(${122 - key * 45}, 50%, 75%)`,
+                  bgcolor: `hsl(${122 + key * 45}, 50%, 75%)`,
                 }}
                 onClick={() => setShift(key * 45)}
               ></Button>
@@ -84,7 +85,7 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
           </Stack>
           <Typography variant="h3">Select image</Typography>
           <Grid container spacing={2}>
-            {[...Array(8)].map((item, key) => (
+            {[...Array(8)].map((_, key) => (
               <Grid size={{ xs: 6, sm: 3 }} key={`img_${key}`}>
                 <Button
                   sx={{
@@ -93,7 +94,6 @@ const RoomImageSelector = ({ image, onClose, onSubmit }: Props) => {
                     height: '100%',
                     border: selected === key ? 2 : 0,
                     borderRadius: 6,
-                    // maxWidth: 200,
                     mx: 'auto',
                   }}
                   onClick={() => setSelected(key)}

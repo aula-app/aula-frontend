@@ -100,16 +100,6 @@ export async function addCSV(csv: string, room_id: string, user_level: RoleTypes
   return response as GenericResponse;
 }
 
-export async function createBackup(): Promise<GenericResponse> {
-  const response = await databaseRequest({
-    model: 'Converters',
-    method: 'createDBDump',
-    arguments: {},
-  });
-
-  return response as GenericResponse;
-}
-
 export interface CommandResponse extends GenericResponse {
   data: CommandType[];
 }
