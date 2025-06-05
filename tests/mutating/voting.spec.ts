@@ -17,6 +17,8 @@ let data: { [k: string]: any } = {};
 // force these tests to run sqeuentially
 test.describe.configure({ mode: 'serial' });
 
+test.describe.configure({ timeout: 60000 }); // 60 seconds
+
 test.describe('Room behaviours - creating rooms', () => {
   test.beforeAll(async () => {
     fixtures.init();

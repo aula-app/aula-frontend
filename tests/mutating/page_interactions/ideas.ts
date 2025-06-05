@@ -82,6 +82,9 @@ export const remove = async (
   const IdeaDiv = page.locator(`[data-testing-id="idea-${idea.name}"]`);
   await expect(IdeaDiv).toBeVisible();
 
+  // so that any triggered tooltips dissappear
+  await page.mouse.move(0, 0);
+
   const DotMenuDiv = IdeaDiv.locator('[data-testing-id="idea-more-menu"]');
   await expect(DotMenuDiv).toBeVisible();
   await DotMenuDiv.click();
