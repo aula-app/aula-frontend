@@ -9,8 +9,6 @@ import * as browsers from './browsers';
 test.describe.configure({ mode: 'serial' });
 
 test.describe('Request user data flow', () => {
-  let data: { [k: string]: any } = {};
-
   test.beforeAll(async () => {
     fixtures.init();
   });
