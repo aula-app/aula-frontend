@@ -46,5 +46,10 @@ For detailed setup instructions, see our [Getting Started Guide](docs/GETSTARTED
   - Winner selection and marking
   - Reporting system
 
-
 For more information about the project, visit [aula.de](https://aula.de).
+
+### Testing
+
+```sh
+npx playwright test --headed
+```

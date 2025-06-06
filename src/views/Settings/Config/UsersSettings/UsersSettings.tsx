@@ -163,11 +163,17 @@ const DataSettings = ({ onReload }: Props) => {
       <Stack>
         <Stack direction="row" alignItems="center" gap={3}>
           <SelectRole userRole={role} onChange={(role) => setRole(role as RoleTypes)} variant="filled" noAdmin />
-          <RoomField selected={rooms} onChange={(updates) => setRooms(updates)} />
+          <RoomField data-testing-id="user-room-select" selected={rooms} onChange={(updates) => setRooms(updates)} />
         </Stack>
         <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
       </Stack>
-      <Button variant="contained" component="label" onClick={onSubmit} disabled={loading}>
+      <Button
+        data-testing-id="confirm_upload"
+        variant="contained"
+        component="label"
+        onClick={onSubmit}
+        disabled={loading}
+      >
         {t('actions.confirm')}
       </Button>
     </Stack>

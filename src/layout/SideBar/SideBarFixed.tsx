@@ -6,6 +6,7 @@ import { localStorageGet } from '@/utils';
 import { Button, Divider, Stack } from '@mui/material';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import UserInfo from '@/components/UserInfo';
 import SideBarContent from './SideBarContent';
 import { fixedSideBarStyles } from './styles';
 import LocaleSwitch from '@/components/LocaleSwitch';
@@ -24,7 +25,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
   const onLogout = useEventLogout();
 
   return (
-    <Stack className="noPrint" sx={fixedSideBarStyles} {...restOfProps}>
+    <Stack className="noPrint" pt={1} sx={fixedSideBarStyles} {...restOfProps}>
       {import.meta.env.VITE_APP_MULTI !== 'false' && (
         <>
           <Button onClick={() => navigator.clipboard.writeText(code)} color="secondary">
@@ -33,6 +34,8 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
           <Divider />
         </>
       )}
+      <UserInfo />
+      <Divider />
       <SideBarContent isFixed />
       <Divider />
       <Stack direction="row" alignItems="center" justifyContent="space-between" p={1} pl={2.5}>
