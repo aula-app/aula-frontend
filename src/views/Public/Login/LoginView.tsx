@@ -190,8 +190,13 @@ const LoginView = () => {
           }}
         />
         </Stack>
-        <Button type="submit" variant="contained" disabled={isLoading}>{t("auth.login.button")}</Button>
-
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={isLoading}
+        >
+          {t("auth.login.button")}
+        </Button>
         <Grid container justifyContent="end" alignItems="center">
           <Button
             variant="text"
