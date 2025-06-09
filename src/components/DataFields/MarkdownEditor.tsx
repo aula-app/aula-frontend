@@ -177,7 +177,7 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
               aria-errormessage={fieldState.error ? `${name}-error-message` : undefined}
               aria-labelledby={`editor-${name}-label`}
             />
-            <StyledFormLabel id={`editor-${name}-label`} htmlFor={`editor-${name}`}>
+            <StyledFormLabel id={`editor-${name}-label`}>
               {t(`settings.columns.${name}`)}
               {required ? '*' : ''}
             </StyledFormLabel>
