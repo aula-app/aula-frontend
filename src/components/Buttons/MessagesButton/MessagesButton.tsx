@@ -28,7 +28,7 @@ const MessagesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
         },
       }}
     >
-      <AppIconButton icon="message" to="/settings/messages" {...restOfProps} />
+      <AppIconButton icon="message" to="/messages" {...restOfProps} />
     </Badge>
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />

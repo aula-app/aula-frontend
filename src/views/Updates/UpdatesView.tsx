@@ -1,4 +1,4 @@
-import { AppIcon } from '@/components';
+import { AppIcon, EmptyState } from '@/components';
 import { useAppStore } from '@/store/AppStore';
 import { getUpdates, UpdateResponse } from '@/services/dashboard';
 import { IconButton, Stack, Typography } from '@mui/material';
@@ -36,13 +36,16 @@ const UpdatesView = () => {
   }, []);
 
   return (
-    <Stack gap={1} p={2} sx={{ overflowY: 'auto' }}>
+    <Stack flex={1} gap={1} p={2} sx={{ overflowY: 'auto' }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h1">{t('scopes.updates.plural')}</Typography>
         <IconButton>
           <AppIcon icon="filter" />
         </IconButton>
       </Stack>
+      {!isLoading && updates.votes.length === 0 && updates.comments.length === 0 && (
+        <EmptyState title={t('ui.empty.updates.title')} description={t('ui.empty.updates.description')} />
+      )}
       {updates &&
         (Object.keys(updates) as Array<keyof UpdateResponse>).map((update) => {
           return updates[update].length === 0 ? null : (

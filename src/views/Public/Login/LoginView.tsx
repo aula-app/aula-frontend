@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from "react";
-import { FormContainer, useForm } from "react-hook-form-mui";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
@@ -117,7 +117,7 @@ const LoginView = () => {
   }, []);
 
   return (
-    <FormContainer>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Stack gap={2}>
         <Typography variant="h2">
           {t("auth.messages.welcome")}
@@ -192,11 +192,18 @@ const LoginView = () => {
           }}
         />
         </Stack>
+<<<<<<< HEAD
         <Button 
           variant="contained" 
           disabled={isLoading} 
           onClick={handleSubmit(onSubmit)}
           aria-label={t("auth.login.button")}
+=======
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={isLoading}
+>>>>>>> dev
         >
           {t("auth.login.button")}
         </Button>
@@ -212,27 +219,28 @@ const LoginView = () => {
             {t('auth.forgotPassword.link')}
           </Button>
         </Grid>
-      </Stack>
-      { oauthEnabled === "true" ? (<>
-         <Stack direction='row' mb={2} alignItems='center'>
-          <Divider sx={{flex: 1}} />
-          <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
-          <Divider sx={{flex: 1}} />
-        </Stack>
-        <Stack direction='column' mb={2} alignItems='center'>
-         <Button
-           variant="outlined"
-           color="secondary"
-           onClick={() => window.location.href="/api/controllers/login_oauth.php"}
-           disabled={isLoading}
-           aria-label={t('auth.oauth.arialabel')}
-         >{t('auth.oauth.button')}</Button>
-        </Stack>
-         </>)
-         : ''}
 
-    </FormContainer>
-    );
+        { oauthEnabled === "true" && (
+          <>
+            <Stack direction='row' mb={2} alignItems='center'>
+              <Divider sx={{flex: 1}} />
+              <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
+              <Divider sx={{flex: 1}} />
+            </Stack>
+            <Stack direction='column' mb={2} alignItems='center'>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => window.location.href="/api/controllers/login_oauth.php"}
+                disabled={isLoading}
+                aria-label={t('auth.oauth.arialabel')}
+              >{t('auth.oauth.button')}</Button>
+            </Stack>
+          </>
+        )}
+      </Stack>
+    </form>
+  );
 };
 
 export default LoginView;

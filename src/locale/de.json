@@ -7,7 +7,7 @@
   },
   "actions": {
     "activate": "{{var}} aktivieren",
-    "add": "{{var}} hinzufügen",
+    "add": "Neue {{var}}",
     "addToParent": "Zu {{var}} hinzufügen",
     "agree": "Zustimmen",
     "archive": "Archivieren",
@@ -43,6 +43,10 @@
     "unarchive": "Aus Archiv holen",
     "updating": "Aktualisierung"
   },
+  "clipboard": {
+    "linkCopied": "Link in die Zwischenablage kopiert",
+    "linkCopyFailed": "Fehler beim Kopieren des Links in die Zwischenablage"
+  },
   "auth": {
     "forgotPassword": {
       "button": "Passwort zurücksetzen",
@@ -69,7 +73,7 @@
       "button": "OAuth-Authentifizierung"
     },
     "password": {
-      "change": "Passwort geändert",
+      "change": "Passwort ändern",
       "confirmPassword": "Passwort bestätigen",
       "copied": "Passwort in die Zwischenablage kopiert",
       "current": "Aktuelles Passwort",
@@ -153,8 +157,8 @@
     "validation": {
       "agreement": "Du musst zustimmen, um dich anzumelden",
       "duration": "Eine der Phasen muss mindestens einen Tag lang verfügbar sein",
-      "email": "Muss eine gültige E-Mail sein",
-      "integer": "Die Dauer muss eine ganze Zahl sein",
+      "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "integer": "Bitte geben Sie eine ganze Zahl ein",
       "maxLength": "Muss kleiner sein als {{var}} Zeichen",
       "minLength": "Muss größer sein als {{var}} Zeichen",
       "name": "Die Namen sollten nur Buchstaben enthalten",
@@ -162,8 +166,8 @@
       "noOptions": "Keine Optionen verfügbar",
       "optional": "Optional",
       "passwordMatch": "Passwörter müssen übereinstimmen",
-      "phone": "Muss eine gültige Telefonnummer sein",
-      "recipient": "Sie müssen einen Empfänger für Ihre Nachricht auswählen",
+      "phone": "Bitte geben Sie eine gültige Telefonnummer ein",
+      "recipient": "Bitte wählen Sie einen Empfänger aus",
       "required": "Dieses Feld darf nicht leer sein"
     }
   },
@@ -326,8 +330,8 @@
       "plural": "Umfragen"
     },
     "updates": {
-      "name": "Aktualisierung",
-      "plural": "Aktualisierungen"
+      "name": "Update",
+      "plural": "Updates"
     },
     "users": {
       "name": "Benutzer",
@@ -356,6 +360,7 @@
       "exportGranted": "Kontodatenexport gewährt",
       "exportRequest": "Datenexport angefordert",
       "update": "Daten aktualisieren",
+      "updateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer Felder: {{var}} anfordern möchten? Diese Aktion sollte von einem Admin validiert werden, um durchgeführt zu werden",
       "dataUpdateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer {{var}} anfordern möchten? Diese Aktion muss von einem Admin bestätigt werden, damit sie durchgeführt werden kann."
     },
     "advanced": {
@@ -409,6 +414,7 @@
       "language_id": "Sprache",
       "last_login": "Letzte Anmeldung",
       "last_update": "Letzte Aktualisierung",
+      "link": "Link",
       "level_of_detail": "Detailgrad",
       "location": "Standort",
       "msg_type": "Nachrichtentyp",
@@ -511,7 +517,7 @@
     "archived": "Archiviert",
     "holiday": "Urlaub",
     "inactive": "Inaktiv",
-    "loading": "Laden",
+    "loading": "Wird geladen...",
     "suspended": "Gesperrt",
     "vacation": "Ferien",
     "waiting": "Warten",
@@ -547,7 +553,7 @@
       "filterCleared": "Filter gelöscht",
       "filterFieldSelected": "Filterfeld {{field}} ausgewählt",
       "filtersOpened": "Filter geöffnet",
-      "filtersClosed": "Filter geschlossen", 
+      "filtersClosed": "Filter geschlossen",
       "filterValueCleared": "Filterwert gelöscht",
       "filterValueFor": "Filterwert für {{field}}",
       "filterValueHelp": "Tippen, um nach diesem Feld zu filtern, Escape drücken, um zu löschen",
@@ -581,11 +587,54 @@
       "from": "von",
       "next": "nächste",
       "no": "Nein",
+      "noContent": "Kein Inhalt verfügbar",
       "on": "an",
       "or": "oder",
       "success": "Erfolg",
       "to": "zu",
       "yes": "Ja"
+    },
+    "empty": {
+      "boxes": {
+        "title": "Keine Boxen in dieser Phase",
+        "description": "Boxen werden hier angezeigt, wenn sie diese Phase erreichen"
+      },
+      "dashboard": {
+        "title": "Keine Ideen in dieser Phase",
+        "description": "Ideen werden hier angezeigt, wenn sie diese Phase erreichen"
+      },
+      "ideas": {
+        "title": "Noch keine Ideen",
+        "description": "Sei der Erste, der eine Idee teilt"
+      },
+      "messages": {
+        "title": "Es gibt derzeit keine neuen Nachrichten",
+        "description": "Du hast im Moment keine Nachrichten. Komm später wieder!"
+      },
+      "updates": {
+        "title": "Es gibt derzeit keine neuen Updates",
+        "description": "Komm später wieder!"
+      },
+      "general": {
+        "title": "Hier ist noch nichts",
+        "description": "Komm später wieder, wenn es mehr Inhalte gibt"
+      },
+      "table": {
+        "title": "Keine Daten verfügbar",
+        "description": "Es gibt keine Einträge in dieser Tabelle anzuzeigen"
+      },
+      "reports": {
+        "title": "Keine Berichte",
+        "description": "Es gibt derzeit keine Berichte zu überprüfen"
+      },
+      "bugs": {
+        "title": "Keine Fehlerberichte",
+        "description": "Es wurden noch keine Fehler gemeldet"
+      },
+      "requests": {
+        "title": "Keine Anfragen",
+        "description": "Es gibt keine ausstehenden Anfragen"
+      }
     },
     "darkMode": "Dunkelmodus",
     "files": {
@@ -624,7 +673,7 @@
       "days": "Tage",
       "ideas": "Ideen",
       "likes": "Likes",
-      "updates": "Aktualisierungen",
+      "updates": "Updates",
       "votes": "Stimmen"
     }
   },

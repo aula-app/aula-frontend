@@ -93,13 +93,25 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
   };
 
   const newMessage = async (data: SchemaType) => {
+    let target_id: string | null = null;
+    let target_group: number | null = null;
+
+    switch (messageType) {
+      case 0:
+        target_id = data.target_id as string | null;
+        break;
+      case 1:
+        target_group = data.target_group as number | null;
+        break;
+    }
+
     const msgBody = {
       headline: data.headline,
       body: data.body,
       status: data.status as StatusTypes,
       msg_type: 2 as 2,
-      target_id: messageType === 0 ? (data.target_id as string | null) : null,
-      target_group: messageType === 1 ? (data.target_group as number | null) : null,
+      target_id,
+      target_group,
     };
 
     const request = await addMessage(msgBody);
@@ -108,14 +120,27 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
 
   const updateMessage = async (data: SchemaType) => {
     if (!defaultValues || 'user_needs_to_consent' in defaultValues || !defaultValues?.hash_id) return;
+
+    let target_id: string | null = null;
+    let target_group: number | null = null;
+
+    switch (messageType) {
+      case 0:
+        target_id = data.target_id as string | null;
+        break;
+      case 1:
+        target_group = data.target_group as number | null;
+        break;
+    }
+
     const request = await editMessage({
       message_id: defaultValues.id,
       headline: data.headline,
       body: data.body,
       status: data.status as StatusTypes,
       msg_type: defaultValues.msg_type,
-      target_id: messageType === 0 ? (data.target_id as string | null) : null,
-      target_group: messageType === 1 ? (data.target_group as number | null) : null,
+      target_id,
+      target_group,
     });
     if (!request.error) onClose();
   };
@@ -165,7 +190,16 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
                   </MenuItem>
                 ))}
               </TextField>
-              {messageType === 0 ? <UserField control={control} /> : <GroupField control={control} />}
+              {(() => {
+                switch (messageType) {
+                  case 0:
+                    return <UserField control={control} />;
+                  case 1:
+                    return <GroupField control={control} />;
+                  default:
+                    return null;
+                }
+              })()}
             </Stack>
             <TextField
               required

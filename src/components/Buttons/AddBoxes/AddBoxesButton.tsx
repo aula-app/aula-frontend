@@ -198,7 +198,7 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
             </ListItem>
           ))}
         </List>
-        <DialogActions role="group" aria-label={t('actions.dialog.actions')}>
+        <DialogActions role="group">
           <Button onClick={onClose} color="secondary" autoFocus aria-label={t('actions.cancel')}>
             {t('actions.cancel')}
           </Button>

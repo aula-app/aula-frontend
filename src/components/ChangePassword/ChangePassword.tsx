@@ -2,7 +2,7 @@ import { changePassword } from '@/services/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import AppIconButton from '../AppIconButton';
@@ -89,7 +89,7 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
   };
 
   return (
-    <FormContainer>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Stack gap={2} mt={2}>
         <Collapse in={showMessage}>
           <Alert
@@ -145,12 +145,12 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
           <Button color="error" disabled={disabled} onClick={resetFields}>
             {t('actions.cancel')}
           </Button>
-          <Button variant="contained" disabled={disabled} onClick={handleSubmit(onSubmit)}>
+          <Button type="submit" variant="contained" disabled={disabled}>
             {t('actions.save')}
           </Button>
         </Stack>
       </Stack>
-    </FormContainer>
+    </form>
   );
 };
 

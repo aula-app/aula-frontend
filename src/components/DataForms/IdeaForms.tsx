@@ -195,7 +195,12 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             <MarkdownEditor name="content" control={control} required disabled={isLoading} />
             <Stack direction="row" gap={2}>
               {checkPermissions('boxes', 'addIdea') && (
-                <SelectBoxField defaultValue={box} onChange={setBox} disabled={isLoading} />
+                <SelectBoxField
+                  defaultValue={box}
+                  room_id={defaultValues?.room_hash_id || room_id}
+                  onChange={setBox}
+                  disabled={isLoading}
+                />
               )}
               {checkPermissions('ideas', 'addCategory') && (
                 <CategoryField

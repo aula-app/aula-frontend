@@ -1,6 +1,5 @@
 import { AnnouncementForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
-import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import { deleteAnnouncement, getAnnouncements } from '@/services/announcements';
@@ -85,6 +84,11 @@ const AnnouncementsView: React.FC = () => {
     fetchAnnouncements();
   }, []);
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setOffset(0);
+  }, [search_field, search_text, status, user_needs_to_consent]);
+
   return (
     <Stack width="100%" height="100%" pt={2}>
       <Stack pl={2}>
@@ -127,8 +131,8 @@ const AnnouncementsView: React.FC = () => {
           setOrderby={setOrderby}
           setEdit={(text) => setEdit(text as AnnouncementType)}
           setDelete={deleteAnnouncements}
+          isLoading={isLoading}
         />
-        {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
         <PaginationBar pages={Math.ceil(totalAnnouncements / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>

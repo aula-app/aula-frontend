@@ -5,13 +5,13 @@ import AppLink from './AppLink';
 import ErrorBoundary from './ErrorBoundary';
 import LoadingIndicator from './LoadingIndicator';
 
-export { 
+export {
   AccessibleDialog,
   AccessibleModal,
-  AppIcon, 
-  AppIconButton, 
-  AppLink, 
+  AppIcon,
+  AppIconButton,
+  AppLink,
   ConfirmDialog,
-  ErrorBoundary, 
-  LoadingIndicator 
+  ErrorBoundary,
+  LoadingIndicator,
 };

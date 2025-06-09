@@ -4,7 +4,7 @@ import { localStorageGet } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
@@ -59,7 +59,7 @@ const RecoveryPasswordView = () => {
   };
 
   return (
-    <FormContainer onSuccess={onSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Stack spacing={3}>
         <Typography variant="h2">{t('auth.forgotPassword.recovery')}</Typography>
         <TextField
@@ -80,6 +80,7 @@ const RecoveryPasswordView = () => {
           error={!!errors.email}
           helperText={<span id="email-error-message">{errors.email?.message || ''}</span>}
         />
+<<<<<<< HEAD
         <Button 
           variant="contained" 
           disabled={isLoading} 
@@ -88,8 +89,11 @@ const RecoveryPasswordView = () => {
         >
           {t('auth.forgotPassword.recover')}
         </Button>
+=======
+        <Button type="submit" variant="contained" disabled={isLoading}>{t('auth.forgotPassword.recover')}</Button>
+>>>>>>> dev
       </Stack>
-    </FormContainer>
+    </form>
   );
 };
 
