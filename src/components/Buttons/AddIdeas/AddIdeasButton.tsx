@@ -137,7 +137,7 @@ const AddIdeasButton: FC<Props> = ({ ideas = [], onClose, ...restOfProps }) => {
             const selectedIdea = selectedIdeas.find((selected) => selected.hash_id === idea.hash_id);
             return (
               <ListItem disablePadding key={idea.hash_id} role="option" aria-selected={!!selectedIdea}>
-                <ListItemButton onClick={() => toggleIdea(idea)} role="checkbox" aria-checked={!!selectedIdea}>
+                <ListItemButton onClick={() => toggleIdea(idea)}>
                   <ListItemAvatar>
                     <Checkbox checked={!!selectedIdea} />
                   </ListItemAvatar>
