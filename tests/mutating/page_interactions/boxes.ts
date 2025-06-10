@@ -118,6 +118,9 @@ export const move = async (
   const BoxDiv = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
   await expect(BoxDiv).toBeVisible({ timeout: 2000 });
 
+  // so that any triggered tooltips dissappear
+  await page.mouse.move(0, 0);
+
   const MoreOptions = BoxDiv.locator('[data-testing-id="more-options"]');
   await expect(MoreOptions).toBeVisible({ timeout: 2000 });
 
