@@ -62,6 +62,17 @@ export const create = async (
   await page.fill('input[name="title"]', idea.name);
   await page.locator('div[contenteditable="true"]').fill(idea.description);
 
+  if (idea.category) {
+    // how to fill in one of those MUI multiselectors:
+    const SelectorId = await page.getAttribute('label:text("Kategorie")', 'for');
+    const CategorySelector = page.locator(`#${shared.cssEscape(SelectorId)}`);
+    await expect(CategorySelector).toBeVisible({ timeout: 2000 });
+
+    await CategorySelector.click();
+    // click and add each desired user to the room
+    await page.getByRole('option', { name: idea.category }).first().click();
+  }
+
   // submit the idea form
   await page.locator('button[type="submit"]').click();
 

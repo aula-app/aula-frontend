@@ -42,11 +42,13 @@ test.describe('Categories flow', () => {
   });
 
   //
-  test('Admin can create a category', async () => {
+  test('Admin can create a category and add it to an idea', async () => {
     const admin = await browsers.newPage(browsers.admins_browser);
     const host = shared.getHost();
 
     await admin.goto(host);
+
+    data.categoryName = 'TESTING' + shared.gensym();
 
     // navigate to the setting page:
     const SettingsButton = admin.locator('a[href="/settings/configuration"]');
@@ -68,7 +70,7 @@ test.describe('Categories flow', () => {
 
     const CategoryNameField = admin.locator('input[name="name"]');
     await expect(CategoryNameField).toBeVisible({ timeout: 7000 });
-    await CategoryNameField.fill('TESTING CATEGORY');
+    await CategoryNameField.fill(data.categoryName);
 
     const Icon = admin.locator('[data-testing-id="icon-field-icon"]').first();
     await expect(Icon).toBeVisible({ timeout: 7000 });
@@ -78,10 +80,35 @@ test.describe('Categories flow', () => {
     await expect(SubmitButton).toBeVisible({ timeout: 7000 });
     await SubmitButton.click();
 
-    const NewCategoryPill = admin.getByRole('button', { name: 'TESTING CATEGORY' }).first();
+    const NewCategoryPill = admin.getByRole('button', { name: data.categoryName }).first();
     await expect(NewCategoryPill).toBeVisible({ timeout: 3000 });
 
     await expect(1).toBeDefined();
+
+    const someIdea = {
+      name: 'someIdea-test-idea' + shared.getRunId() + '-' + shared.gensym(),
+      description: 'generated during testing data',
+      category: data.categoryName,
+    };
+
+    data.catidea = someIdea;
+
+    const room = {
+      name: 'room-' + shared.getRunId() + shared.gensym(),
+      description: 'created during automated testing',
+      users: [fixtures.alice, fixtures.bob],
+    };
+
+    data.room = room;
+
+    await rooms.create(admin, data.room);
+
+    await ideas.create(admin, room, data.catidea);
+
+    await ideas.goToRoom(admin, data.room);
+
+    const IdeaCategory = admin.locator('div').filter({ hasText: data.catidea.category }).first();
+    await expect(IdeaCategory).toBeVisible({ timeout: 1000 });
 
     await admin.close();
   });
@@ -103,7 +130,7 @@ test.describe('Categories flow', () => {
     await expect(IdeeAccordeon).toBeVisible({ timeout: 1000 });
     await IdeeAccordeon.click({ timeout: 1000 });
 
-    const NewCategoryPill = admin.getByRole('button', { name: 'TESTING CATEGORY' }).first();
+    const NewCategoryPill = admin.getByRole('button', { name: data.categoryName }).first();
     await expect(NewCategoryPill).toBeVisible({ timeout: 3000 });
 
     const RemoveButton = NewCategoryPill.locator('[data-testid="CancelIcon"]');
@@ -118,6 +145,10 @@ test.describe('Categories flow', () => {
     await ConfirmButton.click();
 
     await expect(1).toBeDefined();
+
+    await ideas.remove(admin, data.room, data.catidea);
+
+    await rooms.remove(admin, data.room);
 
     await admin.close();
   });

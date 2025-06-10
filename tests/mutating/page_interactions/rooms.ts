@@ -70,3 +70,48 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   // make sure that row actually exists
   await expect(row).toBeVisible();
 };
+
+export const remove = async (page: Page, room: roomFixtures.RoomData) => {
+  // start at home
+  await page.goto(host);
+
+  // use the menu to navigate to the rooms admin page
+  const RoomsMenuItem = page.locator('a[href="/settings/rooms"]');
+  await expect(RoomsMenuItem).toBeVisible();
+  await RoomsMenuItem.click();
+
+  // open the filter menu:
+  const FilterButton = page.locator('[aria-label="button-open-filters"]');
+  await expect(FilterButton).toBeVisible();
+  await FilterButton.click();
+
+  // select "username" from the "filter by" dropdown
+
+  await page.locator('#filter-select-1').click();
+  await page.getByRole('option', { name: 'Raum Name' }).click();
+
+  // filter by our user name
+  await page.fill('#filter-select-2', room.name);
+
+  // find the new user in the user table
+  const row = page.locator('table tr').filter({ hasText: room.name });
+
+  // make sure that row actually exists
+  await expect(row).toHaveCount(1, { timeout: 1000 });
+
+  const DeleteCheckbox = row.locator('input[type="checkbox"]');
+  await expect(DeleteCheckbox).toBeVisible({ timeout: 1000 });
+  DeleteCheckbox.click();
+
+  // press delete button
+  const DeleteButton = page.getByRole('button', { name: 'Räume entfernen' });
+  await expect(DeleteButton).toBeVisible({ timeout: 1000 });
+  await DeleteButton.click({ timeout: 1000 });
+
+  const Dialog = page.getByRole('dialog');
+  await expect(Dialog).toBeVisible({ timeout: 3000 });
+
+  const ConfirmButton = Dialog.getByRole('button', { name: 'Löschen' });
+  await expect(ConfirmButton).toBeVisible({ timeout: 3000 });
+  await ConfirmButton.click();
+};

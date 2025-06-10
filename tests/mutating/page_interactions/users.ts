@@ -6,6 +6,30 @@ const host = shared.getHost();
 
 type TempPass = string;
 
+export const exists = async (page: Page, data: users.UserData) => {
+  await page.goto(host);
+  // navigate to the users page:
+  await page.locator('a[href="/settings/users"]').click();
+  // open the filter menu:
+  const FilterButton = page.locator('[aria-label="button-open-filters"]');
+  await expect(FilterButton).toBeVisible();
+  await FilterButton.click();
+
+  // select "username" from the "filter by" dropdown
+
+  await page.locator('#filter-select-1').click();
+  await page.getByRole('option', { name: 'Benutzername' }).click();
+
+  // filter by our user name
+  await page.fill('#filter-select-2', data.username);
+
+  // find the new user in the user table
+  const row = page.locator('table tr').filter({ hasText: data.username });
+
+  // make sure that row actually exists
+  await expect(row).toHaveCount(1, { timeout: 1000 });
+};
+
 export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   await page.goto(host);
   // navigate to the users page:
@@ -27,7 +51,7 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   const row = page.locator('table tr').filter({ hasText: data.username });
 
   // make sure that row actually exists
-  await expect(row).toHaveCount(1);
+  await expect(row).toHaveCount(1, { timeout: 1000 });
 
   // get the temporary password for the user to return and use later
   const viewPassButton = row.locator('button');

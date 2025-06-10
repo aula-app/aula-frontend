@@ -20,7 +20,7 @@ const jannikaData: fixtures.UserData = {
   about: 'jannika',
 };
 
-test.describe('Upload user csv', () => {
+test.describe('Upload user csv, delete that user', () => {
   test.beforeAll(async () => {
     fixtures.init();
   });
@@ -80,6 +80,8 @@ jannika;jannika;jannika;;generated_testing`;
 
     await sleep(1);
 
+    await users.exists(admin, jannikaData);
+
     await expect(1).toBeDefined();
   });
 
@@ -97,11 +99,64 @@ jannika;jannika;jannika;;generated_testing`;
     await jannika.close();
   });
 
-  test('Admin deletes new user', async () => {
+  test('New user requests deletion, and admin deletes.', async () => {
+    const host = shared.getHost();
+
     const admin = await browsers.newPage(browsers.admins_browser);
 
-    await users.remove(admin, jannikaData);
+    await admin.goto(host);
+    const browser = await (await chromium.launch()).newContext();
+    const jannika = await browsers.newPage(browser);
 
-    await admin.close();
+    await users.login(jannika, jannikaData);
+
+    const ProfileButton = jannika.locator('a[href="/settings/profile"]');
+    await expect(ProfileButton).toBeVisible({ timeout: 1000 });
+    await ProfileButton.click({ timeout: 1000 });
+
+    // open benutzer accordeon
+    const BenutzerAccordeon = jannika.getByRole('button', { name: 'Gefahrenzone' });
+    await expect(BenutzerAccordeon).toBeVisible({ timeout: 1000 });
+    await BenutzerAccordeon.click({ timeout: 1000 });
+
+    const RequestDeletionButton = jannika.getByRole('button', { name: 'Kontolöschen anfordern' });
+    await expect(RequestDeletionButton).toBeVisible({ timeout: 1000 });
+    await RequestDeletionButton.click({ timeout: 1000 });
+
+    const ModalDiv = jannika.locator('div[role="dialog"]');
+    await expect(ModalDiv).toBeVisible({ timeout: 1000 });
+
+    const SecondApproveButton = ModalDiv.getByRole('button', { name: 'Löschen' }).first();
+    await expect(SecondApproveButton).toBeVisible({ timeout: 1000 });
+    await SecondApproveButton.click();
+
+    // admin actions
+
+    // navigate to the anfragen page:
+    const Requestsbutton = admin.locator('a[href="/settings/requests"]');
+    await expect(Requestsbutton).toBeVisible({ timeout: 1000 });
+    await Requestsbutton.click({ timeout: 1000 });
+
+    const AnfrageDiv = admin
+      .locator('div')
+      .filter({ hasText: `Kontolöschungsanfrage für ${jannikaData.displayName}` })
+      .first();
+    await expect(AnfrageDiv).toBeVisible({ timeout: 1000 });
+
+    const ApproveButton = AnfrageDiv.getByRole('button', { name: 'Bestätigen' }).first();
+    await expect(ApproveButton).toBeVisible({ timeout: 1000 });
+    await ApproveButton.click();
+
+    const ModalDiv2 = admin.locator('div[role="dialog"]');
+    await expect(ModalDiv2).toBeVisible({ timeout: 1000 });
+
+    const SecondApproveButton2 = ModalDiv2.getByRole('button', { name: 'Bestätigen' }).first();
+    await expect(SecondApproveButton2).toBeVisible({ timeout: 1000 });
+    await SecondApproveButton2.click();
+
+    // expect the user to not exist any more
+    await expect(async () => {
+      await users.exists(admin, jannikaData);
+    }).rejects.toThrow();
   });
 });
