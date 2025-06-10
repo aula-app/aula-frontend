@@ -100,6 +100,7 @@ export interface IdeaType {
   custom_field2: string | null;
   number_of_votes: number;
   number_of_users: number;
+  phase_id: `${RoomPhases}`;
 }
 
 export interface MessageType {

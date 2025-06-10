@@ -41,7 +41,7 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
       }}
       {...restOfProps}
     >
-      <TableCell sx={{ position: 'sticky', left: 0, zIndex: 2, pl: 1, pr: 0, background: 'inherit' }}>
+      <TableCell sx={{ position: 'sticky', width: 25, left: 0, zIndex: 2, px: 1, background: 'inherit' }}>
         {!('userlevel' in item && item.userlevel >= 50) && (
           <Checkbox
             checked={selected}

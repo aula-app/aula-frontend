@@ -7,10 +7,18 @@ interface Props extends BaseTextFieldProps {
   userRole: RoleTypes | 0;
   noAdmin?: boolean;
   noRoom?: boolean;
+  allowAll?: boolean;
   onChange: (role: RoleTypes | 0) => void;
 }
 
-const SelectRole: React.FC<Props> = ({ userRole, noAdmin = false, noRoom = false, onChange, ...restOfProps }) => {
+const SelectRole: React.FC<Props> = ({
+  userRole,
+  noAdmin = false,
+  noRoom = false,
+  allowAll = false,
+  onChange,
+  ...restOfProps
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -25,6 +33,11 @@ const SelectRole: React.FC<Props> = ({ userRole, noAdmin = false, noRoom = false
       {noRoom && (
         <MenuItem value={0} key={0}>
           {t(`roles.empty`)}
+        </MenuItem>
+      )}
+      {allowAll && (
+        <MenuItem value={0} key={-1}>
+          {t('ui.common.all')}
         </MenuItem>
       )}
       {roles

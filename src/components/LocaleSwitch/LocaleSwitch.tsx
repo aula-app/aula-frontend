@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -15,16 +15,18 @@ const LocaleSwitch = ({ ...restOfProps }) => {
   };
 
   return (
-    <FormControl>
-      <Select variant="standard" value={i18n.language} onChange={handleChange} {...restOfProps}>
-        {i18n &&
-          Object.keys(i18n.services.resourceStore.data).map((lng) => (
-            <MenuItem value={lng} key={lng}>
-              {lng}
-            </MenuItem>
-          ))}
-      </Select>
-    </FormControl>
+    <Box {...restOfProps}>
+      <FormControl>
+        <Select variant="standard" size="small" value={i18n.language} onChange={handleChange} {...restOfProps}>
+          {i18n &&
+            Object.keys(i18n.services.resourceStore.data).map((lng) => (
+              <MenuItem value={lng} key={lng}>
+                {lng}
+              </MenuItem>
+            ))}
+        </Select>
+      </FormControl>
+    </Box>
   );
 };
 

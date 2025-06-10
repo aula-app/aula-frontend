@@ -4,10 +4,16 @@ import { getRoom } from '@/services/rooms';
 import { getUser } from '@/services/users';
 import { useAppStore } from '@/store';
 import { PossibleFields, SettingType } from '@/types/Scopes';
-import { phases, STATUS } from '@/utils';
+import { FORMAT_DATE_TIME, phases, STATUS } from '@/utils';
 import { Chip, Stack } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 /**
  * Props for the DataItem component
@@ -96,6 +102,12 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
     case 'room_hash_id':
     case 'target_group':
       return <>{responseName}</>;
+
+    // Date fields that need to be converted to local timezone
+    case 'created':
+    case 'last_update':
+    case 'last_login':
+      return <>{dayjs.utc(value).tz(dayjs.tz.guess()).format(FORMAT_DATE_TIME)}</>;
 
     // Enum/Status fields
     case 'phase_id':

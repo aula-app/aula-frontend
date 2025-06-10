@@ -1,3 +1,4 @@
+import { EmptyState } from '@/components';
 import FilterBar from '@/components/FilterBar';
 import ReportCard from '@/components/ReportCard';
 import ReportCardSkeleton from '@/components/ReportCard/ReportCardSkeleton';
@@ -31,12 +32,15 @@ const ReportsView = () => {
     if (response.error) setError(response.error);
     if (!response.error && response.data) setReports(response.data);
     setLoading(false);
-  }, [JSON.stringify(filter), status]);
+  }, [status, filter[0], filter[1]]);
 
   useEffect(() => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.reports'), '']] });
+  }, []);
+
+  useEffect(() => {
     fetchReports();
-  }, [JSON.stringify(filter), status]);
+  }, [fetchReports]);
 
   return (
     <Stack width="100%" height="100%" p={2} gap={2}>
@@ -49,6 +53,12 @@ const ReportsView = () => {
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
         {isLoading && <ReportCardSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
+        {!isLoading && !error && reports.length === 0 && (
+          <EmptyState 
+            title={t('ui.empty.reports.title')} 
+            description={t('ui.empty.reports.description')} 
+          />
+        )}
         {reports.length > 0 &&
           reports.map((report) => <ReportCard report={report} onReload={fetchReports} key={report.id} />)}
       </Stack>

@@ -2,6 +2,7 @@ import { AppIcon } from '@/components';
 import { getInstanceSettings } from '@/services/config';
 import { useAppStore } from '@/store/AppStore';
 import { InstanceResponse } from '@/types/Generics';
+import { checkPermissions } from '@/utils';
 import { Accordion, AccordionDetails, AccordionSummary, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,10 +11,9 @@ import IdeaSettings from './IdeaSettings';
 import QuorumSettings from './IdeaSettings/QuorumSettings';
 import SchoolDelete from './SchoolDelete';
 import SchoolInfo from './SchoolInfo';
-import SystemSettings from './SystemSettings';
 import TimedCommands from './TimedCommands';
 import UsersSettings from './UsersSettings';
-import { checkPermissions } from '@/utils';
+import SystemSettings from './SystemSettings';
 
 /** * Renders "Config" view
  * url: /settings/config

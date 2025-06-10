@@ -1,4 +1,4 @@
-import { AppIcon } from '@/components';
+import { AppIcon, EmptyState } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import AddIdeasButton from '@/components/Buttons/AddIdeas';
@@ -197,6 +197,9 @@ const IdeasBoxView = () => {
               </KnowMore>
             )}
           </Stack>
+          {ideas.filter((idea) => idea.approved >= 0).length === 0 && (
+            <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
+          )}
           <Grid container spacing={1} pt={1} pb={2}>
             {ideas
               .filter((idea) => idea.approved >= 0)

@@ -4,7 +4,7 @@ import { getDelegations } from '@/services/users';
 import { addVote, getVote } from '@/services/vote';
 import { checkPermissions, Vote, votingOptions } from '@/utils';
 import { Button, Stack, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import { id } from 'date-fns/locale';
+
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -82,7 +82,11 @@ const VotingCard = ({ onReload }: Props) => {
             <Button
               sx={{
                 color: 'inherit',
-                bgcolor: typeof vote === 'number' && vote + 1 === i ? `${option}.main` : 'transparent',
+                bgcolor:
+                  typeof vote === 'number' &&
+                  ((vote < 0 && i === 0) || (vote === 0 && i === 1) || (vote > 0 && i === 2))
+                    ? `${option}.main`
+                    : 'transparent',
                 borderRadius: 8,
                 '&:hover': {
                   bgcolor: `${option}.main`,

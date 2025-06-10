@@ -2,6 +2,7 @@ import AppIcon from '@/components/AppIcon';
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
+import { checkPermissions } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
 import {
   Button,
@@ -13,7 +14,7 @@ import {
   Stack,
   useTheme,
 } from '@mui/material';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export interface FilterOptionsType {
@@ -59,12 +60,14 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
           </Button>
         )}
         {extraTools && extraTools({ items: selected })}
-        <Button variant="outlined" color="error" onClick={() => setOpen(true)} disabled={selected.length === 0}>
-          <AppIcon icon="delete" pr={2} />
-          {t('actions.remove', {
-            var: t(`scopes.${scope}.${selected.length === 1 ? 'name' : 'plural'}`),
-          })}
-        </Button>
+        {checkPermissions(scope, 'delete') && (
+          <Button variant="outlined" color="error" onClick={() => setOpen(true)} disabled={selected.length === 0}>
+            <AppIcon icon="delete" pr={2} />
+            {t('actions.remove', {
+              var: t(`scopes.${scope}.${selected.length === 1 ? 'name' : 'plural'}`),
+            })}
+          </Button>
+        )}
       </Stack>
       <Dialog
         open={isOpen}

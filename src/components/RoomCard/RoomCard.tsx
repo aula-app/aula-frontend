@@ -1,7 +1,8 @@
 import PhaseBar from '@/layout/PhaseBar';
 import { RoomType } from '@/types/Scopes';
-import { Card, CardMedia, Stack, Typography, capitalize } from '@mui/material';
+import { Card, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { FC } from 'react';
 import AppLink from '../AppLink';
 import DefaultImage from '../DefaultImages';
 
@@ -32,7 +33,7 @@ const parseDescription = (description: string) => {
  * @param room - The room object containing details to display
  * @param className - Optional CSS class name
  */
-const RoomCard = ({ room, className }: RoomCardProps) => {
+const RoomCard: FC<RoomCardProps> = ({ room, className }) => {
   const { imageNumber, imageShift } = parseDescription(room.description_internal);
 
   return (
@@ -52,16 +53,7 @@ const RoomCard = ({ room, className }: RoomCardProps) => {
             <Typography variant="h3" noWrap title={room.room_name}>
               {room.room_name || 'AULA'}
             </Typography>
-            {/* {isDefaultImage ? ( */}
             <DefaultImage image={imageNumber || 0} shift={imageShift || 0} />
-            {/* ) : (
-              <CardMedia
-                component="img"
-                image={room.description_internal}
-                alt={`${room.room_name} background`}
-                sx={{ borderRadius: '10px', objectFit: 'cover', flex: 1, aspectRatio: '1.33', width: '100%' }}
-              />
-            )} */}
           </Stack>
         </AppLink>
         <PhaseBar room={room.hash_id} />

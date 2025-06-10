@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 
-interface Props {
+interface MarkdownLoaderProps {
   src: string;
+  [key: string]: any;
 }
 
-const MarkdownLoader = ({ src }: Props) => {
+const MarkdownLoader: FC<MarkdownLoaderProps> = ({ src, ...restOfProps }) => {
   const [markdown, setMarkdown] = useState('');
   const { i18n } = useTranslation();
 
@@ -34,7 +35,7 @@ const MarkdownLoader = ({ src }: Props) => {
     loadMarkdown();
   }, [src, i18n.language]);
 
-  return <ReactMarkdown>{markdown}</ReactMarkdown>;
+  return <ReactMarkdown {...restOfProps}>{markdown}</ReactMarkdown>;
 };
 
 export default MarkdownLoader;

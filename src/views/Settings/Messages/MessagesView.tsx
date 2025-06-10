@@ -1,6 +1,5 @@
 import { MessageForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
-import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import { deleteMessage, getAllMessages } from '@/services/messages';
@@ -78,6 +77,11 @@ const MessagesView: React.FC = () => {
     fetchMessages();
   };
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setOffset(0);
+  }, [search_field, search_text, status]);
+
   useEffect(() => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.messages'), '']] });
     fetchMessages();
@@ -108,8 +112,8 @@ const MessagesView: React.FC = () => {
           setOrderby={setOrderby}
           setEdit={(text) => setEdit(text as MessageType)}
           setDelete={deleteMessages}
+          isLoading={isLoading}
         />
-        {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
         <PaginationBar pages={Math.ceil(totalMessages / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>

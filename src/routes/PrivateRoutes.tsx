@@ -65,17 +65,19 @@ const PrivateRoutes = () => {
         <Route path="idea-box/:box_id" element={<IdeasBoxView />} />
         <Route path="idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
       </Route>
-      <Route path="settings/announcements" element={<AnnouncementsView />} />
-      <Route path="settings/boxes" element={<BoxesView />} />
-      <Route path="settings/configuration" element={<ConfigView />} />
-      <Route path="settings/ideas" element={<IdeasView />} />
-      <Route path="settings/messages" element={<MessagesView />} />
       <Route path="settings/profile" element={<UserProfileView />} />
-      <Route path="settings/reports" element={<ReportsView />} />
-      <Route path="settings/bugs" element={<BugsView />} />
-      <Route path="settings/requests" element={<RequestsView />} />
-      <Route path="settings/rooms" element={<RoomsView />} />
-      <Route path="settings/users" element={<UsersView />} />
+      {checkPermissions('announcements', 'viewAll') && (
+        <Route path="settings/announcements" element={<AnnouncementsView />} />
+      )}
+      {checkPermissions('boxes', 'viewAll') && <Route path="settings/boxes" element={<BoxesView />} />}
+      {checkPermissions('configs', 'viewAll') && <Route path="settings/configuration" element={<ConfigView />} />}
+      {checkPermissions('ideas', 'viewAll') && <Route path="settings/ideas" element={<IdeasView />} />}
+      {checkPermissions('messages', 'viewAll') && <Route path="settings/messages" element={<MessagesView />} />}
+      {checkPermissions('reports', 'viewAll') && <Route path="settings/reports" element={<ReportsView />} />}
+      {checkPermissions('reports', 'viewAll') && <Route path="settings/bugs" element={<BugsView />} />}
+      {checkPermissions('requests', 'viewAll') && <Route path="settings/requests" element={<RequestsView />} />}
+      {checkPermissions('rooms', 'viewAll') && <Route path="settings/rooms" element={<RoomsView />} />}
+      {checkPermissions('users', 'viewAll') && <Route path="settings/users" element={<UsersView />} />}
       <Route path="updates" element={<UpdatesView />} />
       <Route path="offline" element={<OfflineView />} />
       <Route path="*" element={<NotFoundView />} />

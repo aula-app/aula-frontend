@@ -1,3 +1,4 @@
+import { EmptyState } from '@/components';
 import FilterBar from '@/components/FilterBar';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType, PossibleFields } from '@/types/Scopes';
@@ -49,6 +50,12 @@ const BugsView = () => {
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
         {isLoading && <ReportCardSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
+        {!isLoading && !error && bugs.length === 0 && (
+          <EmptyState 
+            title={t('ui.empty.bugs.title')} 
+            description={t('ui.empty.bugs.description')} 
+          />
+        )}
         {bugs.length > 0 && bugs.map((bug) => <ReportCard report={bug} onReload={fetchBugs} key={bug.id} />)}
       </Stack>
     </Stack>
