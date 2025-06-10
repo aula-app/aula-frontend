@@ -10,6 +10,9 @@ import { useLocation, useParams } from 'react-router-dom';
 import LikeButton from '../../Buttons/LikeButton';
 import CategoryList from '../CategoryList';
 import UserBar from '../UserBar';
+import { successAlert } from '@/utils';
+import { useAppStore } from '@/store';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   idea: IdeaType;
@@ -23,8 +26,11 @@ interface Props {
 const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onDelete, onEdit }) => {
   const { idea_id } = useParams();
   const location = useLocation();
+  const [, dispatch] = useAppStore();
+  const { t } = useTranslation();
+
   return (
-    <Stack width="100%" sx={{ scrollSnapAlign: 'center' }}>
+    <Stack data-testing-id={`idea-${idea.title}`} width="100%" sx={{ scrollSnapAlign: 'center' }}>
       <ChatBubble disabled={disabled} comment={idea.approved < 0}>
         <AppLink to={to} disabled={!to || disabled}>
           <Stack
@@ -59,10 +65,28 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
             item={idea}
             scope="ideas"
             onDelete={onDelete}
+            data-testing-id="idea-more-menu"
             onEdit={onEdit}
             link={`${location.pathname}/${to}`}
           >
             <Stack direction="row" alignItems="center">
+              {to && !disabled && (
+                <AppIconButton
+                  icon="link"
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({
+                        title: idea.title,
+                        url: window.location.origin + to,
+                      });
+                    } else {
+                      navigator.clipboard.writeText(window.location.origin + to).then(() => {
+                        successAlert(t('clipboard.linkCopied'), dispatch);
+                      });
+                    }
+                  }}
+                />
+              )}
               <LikeButton disabled={disabled} item={idea} />
               {idea.sum_comments > 0 && !idea_id && (
                 <AppIconButton icon="chat" to={to} disabled={disabled}>

@@ -1,13 +1,10 @@
 import { expect, Page } from '@playwright/test';
-import fs from 'fs';
-import path from 'path';
+
 import * as shared from '../../shared';
 import { sleep } from '../../utils';
 import * as roomFixtures from '../../fixtures/rooms';
 
 const host = shared.getHost();
-
-const runId = shared.getRunId();
 
 export const create = async (page: Page, room: roomFixtures.RoomData) => {
   // start at home
@@ -19,24 +16,36 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await RoomsMenuItem.click();
 
   // use a button to open the modal for adding a room
-  const AddRoomButton = page.getByRole('button', { name: 'Raum hinzufügen' });
+  const AddRoomButton = page.getByRole('button', { name: 'Neue Raum' });
+
   await expect(AddRoomButton).toBeVisible();
   await AddRoomButton.click();
+
+  await page.waitForSelector('input[name="room_name"]', { state: 'visible', timeout: 500 });
 
   // fill in the necessary information
   await page.fill('input[name="room_name"]', room.name);
   await page.locator('div[contenteditable="true"]').fill('generated during automated tests');
 
-  await page.locator('input[role="combobox"]').click();
+  // how to fill in one of those MUI multiselectors:
+
+  const UserSelector = page.locator('[data-testing-id="usersfield"] input');
+  await expect(UserSelector).toBeVisible({ timeout: 500 });
+
+  await UserSelector.click();
 
   // click and add each desired user to the room
   for (const u of room.users) {
+    console.info(u);
     await page.getByRole('option', { name: u.displayName }).click();
-    await page.locator('input[role="combobox"]').click();
+    await UserSelector.click();
   }
 
   // submit the room form
   await page.locator('button[type="submit"]').click();
+
+  // OMG
+  await sleep(3);
 
   // ensure the room exists by filtering the admin list for the name
 
@@ -56,8 +65,53 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await page.fill('#filter-select-2', room.name);
 
   // find the new user in the user table
+  const row = page.getByText(room.name, { exact: true });
+
+  // make sure that row actually exists
+  await expect(row).toBeVisible();
+};
+
+export const remove = async (page: Page, room: roomFixtures.RoomData) => {
+  // start at home
+  await page.goto(host);
+
+  // use the menu to navigate to the rooms admin page
+  const RoomsMenuItem = page.locator('a[href="/settings/rooms"]');
+  await expect(RoomsMenuItem).toBeVisible();
+  await RoomsMenuItem.click();
+
+  // open the filter menu:
+  const FilterButton = page.locator('[aria-label="button-open-filters"]');
+  await expect(FilterButton).toBeVisible();
+  await FilterButton.click();
+
+  // select "username" from the "filter by" dropdown
+
+  await page.locator('#filter-select-1').click();
+  await page.getByRole('option', { name: 'Raum Name' }).click();
+
+  // filter by our user name
+  await page.fill('#filter-select-2', room.name);
+
+  // find the new user in the user table
   const row = page.locator('table tr').filter({ hasText: room.name });
 
   // make sure that row actually exists
-  await expect(row).toHaveCount(1);
+  await expect(row).toHaveCount(1, { timeout: 1000 });
+
+  const DeleteCheckbox = row.locator('input[type="checkbox"]');
+  await expect(DeleteCheckbox).toBeVisible({ timeout: 1000 });
+  DeleteCheckbox.click();
+
+  // press delete button
+  const DeleteButton = page.getByRole('button', { name: 'Räume entfernen' });
+  await expect(DeleteButton).toBeVisible({ timeout: 1000 });
+  await DeleteButton.click({ timeout: 1000 });
+
+  const Dialog = page.getByRole('dialog');
+  await expect(Dialog).toBeVisible({ timeout: 3000 });
+
+  const ConfirmButton = Dialog.getByRole('button', { name: 'Löschen' });
+  await expect(ConfirmButton).toBeVisible({ timeout: 3000 });
+  await ConfirmButton.click();
 };

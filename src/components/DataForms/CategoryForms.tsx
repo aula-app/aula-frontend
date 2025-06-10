@@ -86,7 +86,7 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
 
   return (
     <Stack p={2} overflow="auto">
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form data-testing-id="category-forms" onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h1">

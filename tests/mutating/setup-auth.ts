@@ -10,6 +10,8 @@ import * as browsers from './browsers';
 export default async function globalSetup() {
   // first we make a run id, this will be helpful in the mutating tests
 
+  console.log('Setting up!');
+
   shared.setRunId();
 
   fixtures.init();
@@ -46,12 +48,7 @@ export default async function globalSetup() {
     users.firstLoginFlow(browsers.rainer, fixtures.rainer, rainersTempPass),
   ]);
 
-  await browsers.admin.context().storageState({ path: 'admin-context.json' });
-  await browsers.alice.context().storageState({ path: 'alice-context.json' });
-  await browsers.bob.context().storageState({ path: 'bob-context.json' });
-  await browsers.mallory.context().storageState({ path: 'mallory-context.json' });
-  await browsers.burt.context().storageState({ path: 'burt-context.json' });
-  await browsers.rainer.context().storageState({ path: 'rainer-context.json' });
+  await browsers.pickle();
 
   await browsers.shutdown();
 }

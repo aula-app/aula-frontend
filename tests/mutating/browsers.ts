@@ -17,6 +17,8 @@ export let mallory: Page;
 export let burt: Page;
 export let rainer: Page;
 
+export const newPage = (browser: BrowserContext): Promise<Page> => browser.newPage();
+
 export const init = async () => {
   const browser = await chromium.launch();
 
@@ -55,6 +57,15 @@ export const shutdown = async () => {
   await mallorys_browser.close();
   await burt_browser.close();
   await rainer_browser.close();
+};
+
+export const pickle = async () => {
+  await admin.context().storageState({ path: 'admin-context.json' });
+  await alice.context().storageState({ path: 'alice-context.json' });
+  await bob.context().storageState({ path: 'bob-context.json' });
+  await mallory.context().storageState({ path: 'mallory-context.json' });
+  await burt.context().storageState({ path: 'burt-context.json' });
+  await rainer.context().storageState({ path: 'rainer-context.json' });
 };
 
 // This function exists to recall the logged in browser states
