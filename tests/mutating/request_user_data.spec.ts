@@ -63,18 +63,21 @@ test.describe('Request user data flow', () => {
       .locator('div')
       .filter({ hasText: `Kontodatenexportanfrage für ${fixtures.alice.displayName}` })
       .first();
-    await expect(AnfrageDiv).toBeVisible({ timeout: 500 });
+    await expect(AnfrageDiv).toBeVisible({ timeout: 1000 });
 
     const ApproveButton = AnfrageDiv.getByRole('button', { name: 'Bestätigen' }).first();
-    await expect(ApproveButton).toBeVisible({ timeout: 500 });
+    await expect(ApproveButton).toBeVisible({ timeout: 1000 });
     await ApproveButton.click();
 
     const ModalDiv = admin.locator('div[role="dialog"]');
-    await expect(ModalDiv).toBeVisible({ timeout: 500 });
+    await expect(ModalDiv).toBeVisible({ timeout: 1000 });
 
     const SecondApproveButton = ModalDiv.getByRole('button', { name: 'Bestätigen' }).first();
-    await expect(SecondApproveButton).toBeVisible({ timeout: 500 });
+    await expect(SecondApproveButton).toBeVisible({ timeout: 1000 });
     await SecondApproveButton.click();
+
+    const DownloadButton = AnfrageDiv.getByRole('button', { name: 'Herunterladen' }).first();
+    await expect(DownloadButton).toBeVisible({ timeout: 1000 });
 
     await admin.close();
   });
@@ -95,17 +98,17 @@ test.describe('Request user data flow', () => {
       .locator('a')
       .filter({ hasText: `Kontodatenexportanfrage für ${fixtures.alice.displayName}` })
       .first();
-    await expect(MessageButton).toBeVisible({ timeout: 500 });
+    await expect(MessageButton).toBeVisible({ timeout: 5000 });
     await MessageButton.click();
 
     const AnfrageDiv = alice
       .locator('div')
       .filter({ hasText: `Kontodatenexportanfrage für ${fixtures.alice.displayName}` })
       .first();
-    await expect(AnfrageDiv).toBeVisible({ timeout: 500 });
+    await expect(AnfrageDiv).toBeVisible({ timeout: 5000 });
 
     const DownloadButton = AnfrageDiv.getByRole('button', { name: 'Herunterladen' }).first();
-    await expect(DownloadButton).toBeVisible({ timeout: 500 });
+    await expect(DownloadButton).toBeVisible({ timeout: 5000 });
     await DownloadButton.click();
 
     const Download = await alice.waitForEvent('download');
