@@ -22,15 +22,15 @@ export default async function globalSetup() {
   await users.login(browsers.admin, fixtures.admin);
 
   // Admin should create the new users of varying permission levels
-  console.info('creating...', fixtures.alice.username);
+  console.log('creating...', fixtures.alice.username);
   const alicesTempPass = await users.create(browsers.admin, fixtures.alice);
-  console.info('creating...', fixtures.bob.username);
+  console.log('creating...', fixtures.bob.username);
   const bobsTempPass = await users.create(browsers.admin, fixtures.bob);
-  console.info('creating...', fixtures.mallory.username);
+  console.log('creating...', fixtures.mallory.username);
   const mallorysTempPass = await users.create(browsers.admin, fixtures.mallory);
-  console.info('creating...', fixtures.burt.username);
+  console.log('creating...', fixtures.burt.username);
   const burtsTempPass = await users.create(browsers.admin, fixtures.burt);
-  console.info('creating...', fixtures.rainer.username);
+  console.log('creating...', fixtures.rainer.username);
   const rainersTempPass = await users.create(browsers.admin, fixtures.rainer);
 
   // mallory should _not_ be able to log in with bob's temporary password.

@@ -17,7 +17,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   const AddRoomButton = page.getByRole('button', { name: 'Neue Raum' });
 
   await expect(AddRoomButton).toBeVisible();
-  await AddRoomButton.click();
+  await AddRoomButton.click({ timeout: 1000 });
 
   await page.waitForSelector('input[name="room_name"]', { state: 'visible', timeout: 500 });
 
@@ -30,17 +30,16 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   const UserSelector = page.locator('[data-testing-id="usersfield"] input');
   await expect(UserSelector).toBeVisible({ timeout: 500 });
 
-  await UserSelector.click();
+  await UserSelector.click({ timeout: 1000 });
 
   // click and add each desired user to the room
   for (const u of room.users) {
-    console.info(u);
-    await page.getByRole('option', { name: u.displayName }).click();
-    await UserSelector.click();
+    await page.getByRole('option', { name: u.displayName }).click({ timeout: 1000 });
+    await UserSelector.click({ timeout: 1000 });
   }
 
   // submit the room form
-  await page.locator('button[type="submit"]').click();
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
   // OMG
   await sleep(3);
@@ -52,12 +51,12 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   // open the filter menu:
   const FilterButton = page.locator('[aria-label="button-open-filters"]');
   await expect(FilterButton).toBeVisible();
-  await FilterButton.click();
+  await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
 
-  await page.locator('#filter-select-1').click();
-  await page.getByRole('option', { name: 'Raum Name' }).click();
+  await page.locator('#filter-select-1').click({ timeout: 1000 });
+  await page.getByRole('option', { name: 'Raum Name' }).click({ timeout: 1000 });
 
   // filter by our user name
   await page.fill('#filter-select-2', room.name);
@@ -78,12 +77,12 @@ export const remove = async (page: Page, room: roomFixtures.RoomData) => {
   // open the filter menu:
   const FilterButton = page.locator('[aria-label="button-open-filters"]');
   await expect(FilterButton).toBeVisible();
-  await FilterButton.click();
+  await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
 
-  await page.locator('#filter-select-1').click();
-  await page.getByRole('option', { name: 'Raum Name' }).click();
+  await page.locator('#filter-select-1').click({ timeout: 1000 });
+  await page.getByRole('option', { name: 'Raum Name' }).click({ timeout: 1000 });
 
   // filter by our user name
   await page.fill('#filter-select-2', room.name);
@@ -96,7 +95,7 @@ export const remove = async (page: Page, room: roomFixtures.RoomData) => {
 
   const DeleteCheckbox = row.locator('input[type="checkbox"]');
   await expect(DeleteCheckbox).toBeVisible({ timeout: 1000 });
-  DeleteCheckbox.click();
+  DeleteCheckbox.click({ timeout: 1000 });
 
   // press delete button
   const DeleteButton = page.getByRole('button', { name: 'Räume entfernen' });
@@ -108,5 +107,5 @@ export const remove = async (page: Page, room: roomFixtures.RoomData) => {
 
   const ConfirmButton = Dialog.getByRole('button', { name: 'Löschen' });
   await expect(ConfirmButton).toBeVisible({ timeout: 3000 });
-  await ConfirmButton.click();
+  await ConfirmButton.click({ timeout: 1000 });
 };

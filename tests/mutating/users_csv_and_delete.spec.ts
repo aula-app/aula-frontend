@@ -12,15 +12,6 @@ import * as rooms from './page_interactions/rooms';
 // force these tests to run sqeuentially
 test.describe.configure({ mode: 'serial' });
 
-const jannikaData: fixtures.UserData = {
-  username: 'jannika',
-  realName: 'jannika',
-  displayName: 'jannika',
-  role: 20,
-  password: 'aula',
-  about: 'jannika',
-};
-
 test.describe('Upload user csv, delete that user', () => {
   let data: { [k: string]: any } = {};
 
@@ -37,9 +28,18 @@ test.describe('Upload user csv, delete that user', () => {
 
   //
   test('Admin can upload a user csv', async () => {
+    const sym = shared.gensym();
+    data.jannikaData = {
+      username: 'jannika' + sym,
+      realName: 'jannika' + sym,
+      displayName: 'jannika' + sym,
+      role: 20,
+      password: 'aula',
+      about: 'jannika',
+    };
     //
     const csv_str = `realname;displayname;username;email;about_me
-jannika;jannika;jannika;;generated_testing`;
+${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.username};;generated_testing`;
 
     data.room = {
       name: 'room-' + shared.getRunId() + '-csv' + shared.gensym(),
@@ -75,10 +75,10 @@ jannika;jannika;jannika;;generated_testing`;
     const RoomSelector = admin.locator('[data-testing-id="user-room-select"] input');
     await expect(RoomSelector).toBeVisible({ timeout: 500 });
 
-    await RoomSelector.click();
+    await RoomSelector.click({ timeout: 1000 });
 
     // just select the first room
-    await admin.getByRole('option').first().click();
+    await admin.getByRole('option').first().click({ timeout: 1000 });
 
     const ApproveButton = admin.locator('[data-testing-id="confirm_upload"]');
     await expect(ApproveButton).toBeVisible({ timeout: 1000 });
@@ -88,7 +88,7 @@ jannika;jannika;jannika;;generated_testing`;
 
     await sleep(1);
 
-    await users.exists(admin, jannikaData);
+    await users.exists(admin, data.jannikaData);
 
     await expect(1).toBeDefined();
 
@@ -101,9 +101,9 @@ jannika;jannika;jannika;;generated_testing`;
     const browser = await (await chromium.launch()).newContext();
     const jannika = await browsers.newPage(browser);
 
-    const janikasTempPass = await users.getTemporaryPass(admin, jannikaData);
+    const janikasTempPass = await users.getTemporaryPass(admin, data.jannikaData);
 
-    await users.firstLoginFlow(jannika, jannikaData, janikasTempPass);
+    await users.firstLoginFlow(jannika, data.jannikaData, janikasTempPass);
 
     await admin.close();
     await jannika.close();
@@ -119,7 +119,7 @@ jannika;jannika;jannika;;generated_testing`;
     const browser = await (await chromium.launch()).newContext();
     const jannika = await browsers.newPage(browser);
 
-    await users.login(jannika, jannikaData);
+    await users.login(jannika, data.jannikaData);
 
     await users.goToProfile(jannika);
 
@@ -137,7 +137,7 @@ jannika;jannika;jannika;;generated_testing`;
 
     const SecondApproveButton = ModalDiv.getByRole('button', { name: 'Löschen' }).first();
     await expect(SecondApproveButton).toBeVisible({ timeout: 1000 });
-    await SecondApproveButton.click();
+    await SecondApproveButton.click({ timeout: 1000 });
 
     // admin actions
 
@@ -145,24 +145,24 @@ jannika;jannika;jannika;;generated_testing`;
 
     const AnfrageDiv = admin
       .locator('div')
-      .filter({ hasText: `Kontolöschungsanfrage für ${jannikaData.displayName}` })
+      .filter({ hasText: `Kontolöschungsanfrage für ${data.jannikaData.displayName}` })
       .first();
     await expect(AnfrageDiv).toBeVisible({ timeout: 1000 });
 
     const ApproveButton = AnfrageDiv.getByRole('button', { name: 'Bestätigen' }).first();
     await expect(ApproveButton).toBeVisible({ timeout: 1000 });
-    await ApproveButton.click();
+    await ApproveButton.click({ timeout: 1000 });
 
     const ModalDiv2 = admin.locator('div[role="dialog"]');
     await expect(ModalDiv2).toBeVisible({ timeout: 1000 });
 
     const SecondApproveButton2 = ModalDiv2.getByRole('button', { name: 'Bestätigen' }).first();
     await expect(SecondApproveButton2).toBeVisible({ timeout: 1000 });
-    await SecondApproveButton2.click();
+    await SecondApproveButton2.click({ timeout: 1000 });
 
     // expect the user to not exist any more
     await expect(async () => {
-      await users.exists(admin, jannikaData);
+      await users.exists(admin, data.jannikaData);
     }).rejects.toThrow();
 
     await rooms.remove(admin, data.room);

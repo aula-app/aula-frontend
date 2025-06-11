@@ -51,7 +51,7 @@ export const init = () => {
     username: 'alice-user-' + runId,
     password: 'aula',
     displayName: 'alice-' + runId,
-    realName: 'Alice Testing',
+    realName: 'Alice Testing' + runId,
     role: 20,
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };
@@ -60,7 +60,7 @@ export const init = () => {
     username: 'bob-user-' + runId,
     password: 'aula',
     displayName: 'bob-' + runId,
-    realName: 'Bob Testing',
+    realName: 'Bob Testing' + runId,
     role: 20,
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };
@@ -69,7 +69,7 @@ export const init = () => {
     username: 'mallory-moderator_v-' + runId,
     password: 'aula',
     displayName: 'mallory-' + runId,
-    realName: 'mallory Testing',
+    realName: 'mallory Testing' + runId,
     role: 41,
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };
@@ -78,7 +78,7 @@ export const init = () => {
     username: 'burt-supermoderator_v-' + runId,
     password: 'aula',
     displayName: 'burt-' + runId,
-    realName: 'burt Testing',
+    realName: 'burt Testing' + runId,
     role: 41,
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };
@@ -87,7 +87,7 @@ export const init = () => {
     username: 'rainer-principal_v-' + runId,
     password: 'aula',
     displayName: 'rainer-' + runId,
-    realName: 'rainer Testing',
+    realName: 'rainer Testing' + runId,
     role: 45,
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };

@@ -24,7 +24,7 @@ export const create = async (
   const AddBoxButton = page.locator('[aria-label="add idea"]'); // aria label should
   //  probably be add box
   await expect(AddBoxButton).toBeVisible({ timeout: 2000 });
-  await AddBoxButton.click();
+  await AddBoxButton.click({ timeout: 1000 });
 
   // fill in the necessary information
   await page.fill('input[name="name"]', box.name);
@@ -34,9 +34,9 @@ export const create = async (
   const phaseComboboxId = await page.getAttribute('label:text("Phase")', 'for');
   const PhaseCombobox = page.locator(`#${shared.cssEscape(phaseComboboxId)}`);
   await expect(PhaseCombobox).toBeVisible({ timeout: 2000 });
-  await PhaseCombobox.click();
+  await PhaseCombobox.click({ timeout: 1000 });
   const Selection = page.locator(`[data-value="${box.phase}"]`);
-  await Selection.click();
+  await Selection.click({ timeout: 1000 });
 
   await page.fill('input[name="phase_duration_1"]', box.discussionDays.toString());
   await page.fill('input[name="phase_duration_3"]', box.discussionDays.toString());
@@ -46,16 +46,16 @@ export const create = async (
   const IdeaSelector = page.locator(`#${shared.cssEscape(SelectorId)}`);
   await expect(IdeaSelector).toBeVisible({ timeout: 2000 });
 
-  await IdeaSelector.click();
+  await IdeaSelector.click({ timeout: 1000 });
 
   // click and add each desired user to the room
   for (const i of box.ideas) {
-    await page.getByRole('option', { name: i.name }).click();
-    await IdeaSelector.click();
+    await page.getByRole('option', { name: i.name }).click({ timeout: 1000 });
+    await IdeaSelector.click({ timeout: 1000 });
   }
 
   // submit the room form
-  await page.locator('button[type="submit"]').click();
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
   // OMG
   await sleep(3);
@@ -76,7 +76,7 @@ export const remove = async (
 
   const GoToDiscussionPhaseButton = page.locator('[data-testing-id="link-to-phase-10"]');
   await expect(GoToDiscussionPhaseButton).toBeVisible({ timeout: 2000 });
-  await GoToDiscussionPhaseButton.click();
+  await GoToDiscussionPhaseButton.click({ timeout: 1000 });
 
   const BoxDiv = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
   await expect(BoxDiv).toBeVisible({ timeout: 2000 });
@@ -87,16 +87,16 @@ export const remove = async (
   const MoreOptions = BoxDiv.locator('[data-testing-id="more-options"]');
   await expect(MoreOptions).toBeVisible({ timeout: 2000 });
 
-  await MoreOptions.click();
+  await MoreOptions.click({ timeout: 1000 });
 
   const DeleteButton = BoxDiv.locator('[data-testing-id="delete-button"]');
   await expect(DeleteButton).toBeVisible({ timeout: 2000 });
 
-  await DeleteButton.click();
+  await DeleteButton.click({ timeout: 1000 });
 
   const ConfirmDeleteButton = page.locator('[data-testing-id="confirm-delete"]');
   await expect(ConfirmDeleteButton).toBeVisible();
-  await ConfirmDeleteButton.click();
+  await ConfirmDeleteButton.click({ timeout: 1000 });
 
   const NoExistBoxDiv = page.locator('h3').filter({ hasText: room.name });
   await expect(NoExistBoxDiv).toHaveCount(0);
@@ -124,26 +124,31 @@ export const move = async (
   const MoreOptions = BoxDiv.locator('[data-testing-id="more-options"]');
   await expect(MoreOptions).toBeVisible({ timeout: 2000 });
 
-  await MoreOptions.click();
+  await MoreOptions.click({ timeout: 1000 });
 
   const EditButton = BoxDiv.locator('[data-testing-id="edit-button"]');
   await expect(EditButton).toBeVisible({ timeout: 2000 });
 
-  await EditButton.click();
+  await page.mouse.move(0, 0);
+
+  await EditButton.click({ timeout: 1000 });
 
   // select the correct phase for the box
   const phaseComboboxId = await page.getAttribute('label:text("Phase")', 'for');
   const PhaseCombobox = page.locator(`#${shared.cssEscape(phaseComboboxId)}`);
   await expect(PhaseCombobox).toBeVisible({ timeout: 2000 });
-  await PhaseCombobox.click();
+  await PhaseCombobox.click({ timeout: 1000 });
   const Selection = page.locator(`[data-value="${toPhase}"]`);
-  await Selection.click();
 
-  await page.locator('button[type="submit"]').click();
+  await page.mouse.move(0, 0);
+
+  await Selection.click({ timeout: 1000 });
+
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
   const GoToDiscussionPhaseButton2 = page.locator(`[data-testing-id="link-to-phase-${toPhase}"]`);
   await expect(GoToDiscussionPhaseButton2).toBeVisible({ timeout: 2000 });
-  await GoToDiscussionPhaseButton2.click();
+  await GoToDiscussionPhaseButton2.click({ timeout: 1000 });
 
   const BoxDiv2 = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
   await expect(BoxDiv2).toBeVisible({ timeout: 2000 });
@@ -166,17 +171,17 @@ export const delegateVotes = async (
   const DelegateButton = page.locator('button').filter({ hasText: 'Stimme übertragen' });
   await expect(DelegateButton).toBeVisible();
 
-  await DelegateButton.click();
+  await DelegateButton.click({ timeout: 1000 });
 
   const ToUserButton = page.locator('button').filter({ hasText: toUser.realName });
   await expect(ToUserButton).toBeVisible();
 
-  await ToUserButton.click();
+  await ToUserButton.click({ timeout: 1000 });
 
   const ConfirmButton = page.locator('[data-testing-id="submit-delegation"]');
   await expect(ConfirmButton).toBeVisible();
 
-  await ConfirmButton.click();
+  await ConfirmButton.click({ timeout: 1000 });
 
   const delegationtext = `${toUser.displayName} kann für dich abstimmen`;
   const DelegationFlag = page.locator('span').filter({ hasText: delegationtext });
@@ -199,11 +204,11 @@ export const unDelegateVotes = async (
   const UnDelegateButton = page.locator('button').filter({ hasText: 'Delegation widerrufen' });
   await expect(UnDelegateButton).toBeVisible();
 
-  await UnDelegateButton.click();
+  await UnDelegateButton.click({ timeout: 1000 });
 
   const ConfirmButton = page.locator('[data-testing-id="revoke-delegation"]');
   await expect(ConfirmButton).toBeVisible();
-  await ConfirmButton.click();
+  await ConfirmButton.click({ timeout: 1000 });
 
   const DelegateButton = page.locator('button').filter({ hasText: 'Stimme übertragen' });
   await expect(DelegateButton).toBeVisible();

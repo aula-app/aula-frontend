@@ -13,7 +13,7 @@ export const goToRoom = async (
 ) => {
   const RoomDiv = page.getByText(room.name, { exact: true });
   await expect(RoomDiv).toBeVisible();
-  await RoomDiv.click();
+  await RoomDiv.click({ timeout: 1000 });
 };
 
 export const goToidea = async (
@@ -22,7 +22,7 @@ export const goToidea = async (
 ) => {
   const IdeaDiv = page.locator('h3').filter({ hasText: idea.name });
   await expect(IdeaDiv).toBeVisible();
-  await IdeaDiv.click();
+  await IdeaDiv.click({ timeout: 1000 });
 };
 
 // goes to a specific box found on the current page
@@ -32,7 +32,7 @@ export const goToBox = async (
 ) => {
   const BoxDiv = await page.getByText(box.name, { exact: true });
   await expect(BoxDiv).toBeVisible({ timeout: 2000 });
-  await BoxDiv.click();
+  await BoxDiv.click({ timeout: 1000 });
 };
 
 export const goToPhase = async (
@@ -41,7 +41,7 @@ export const goToPhase = async (
 ) => {
   const GoToApprovalPhaseButton = page.locator(`[data-testing-id="link-to-phase-${phase}"]`);
   await expect(GoToApprovalPhaseButton).toBeVisible({ timeout: 2000 });
-  await GoToApprovalPhaseButton.click();
+  await GoToApprovalPhaseButton.click({ timeout: 1000 });
 };
 
 export const create = async (
@@ -56,7 +56,7 @@ export const create = async (
 
   const AddIdeaButton = page.locator('[aria-label="add idea"]');
   await expect(AddIdeaButton).toBeVisible({ timeout: 5000 });
-  await AddIdeaButton.click();
+  await AddIdeaButton.click({ timeout: 1000 });
 
   // fill in the necessary information
   await page.fill('input[name="title"]', idea.name);
@@ -68,13 +68,13 @@ export const create = async (
     const CategorySelector = page.locator(`#${shared.cssEscape(SelectorId)}`);
     await expect(CategorySelector).toBeVisible({ timeout: 2000 });
 
-    await CategorySelector.click();
-    // click and add each desired user to the room
-    await page.getByRole('option', { name: idea.category }).first().click();
+    await CategorySelector.click({ timeout: 1000 });
+    // click a category to the idea
+    await page.getByRole('option', { name: idea.category }).first().click({ timeout: 1000 });
   }
 
   // submit the idea form
-  await page.locator('button[type="submit"]').click();
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
   const IdeaTitle = page.getByText(idea.name, { exact: true });
   await expect(IdeaTitle).toBeVisible();
@@ -98,15 +98,15 @@ export const remove = async (
 
   const DotMenuDiv = IdeaDiv.locator('[data-testing-id="idea-more-menu"]');
   await expect(DotMenuDiv).toBeVisible();
-  await DotMenuDiv.click();
+  await DotMenuDiv.click({ timeout: 1000 });
 
   const DeleteButton = IdeaDiv.locator('[data-testing-id="delete-button"]');
   await expect(DeleteButton).toBeVisible({ timeout: 500 });
-  await DeleteButton.click();
+  await DeleteButton.click({ timeout: 1000 });
 
   const ConfirmDeleteButton = page.locator('[data-testing-id="confirm-delete"]');
   await expect(ConfirmDeleteButton).toBeVisible();
-  await ConfirmDeleteButton.click();
+  await ConfirmDeleteButton.click({ timeout: 1000 });
 
   const NoExistIdeaDiv = page.locator(`[data-testing-id="idea-${idea.name}"]`);
   await expect(NoExistIdeaDiv).toHaveCount(0);
@@ -127,12 +127,12 @@ export const comment = async (
 
   const AddCommentButton = page.locator('[aria-label="add comment"]');
   await expect(AddCommentButton).toBeVisible();
-  await AddCommentButton.click();
+  await AddCommentButton.click({ timeout: 1000 });
 
   await page.locator('div[contenteditable="true"]').fill(commentText);
 
   // submit the comment form
-  await page.locator('button[type="submit"]').click();
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
   await sleep(2);
 
@@ -159,15 +159,15 @@ export const removeComment = async (
 
   const MoreOptionsButton = Comment.locator('[data-testing-id="comment-more-options"]');
   await expect(MoreOptionsButton).toBeVisible();
-  await MoreOptionsButton.click();
+  await MoreOptionsButton.click({ timeout: 1000 });
 
   const DeleteButton = Comment.locator('[data-testing-id="delete-button"]');
   await expect(DeleteButton).toBeVisible({ timeout: 500 });
-  await DeleteButton.click();
+  await DeleteButton.click({ timeout: 1000 });
 
   const ConfirmDeleteButton = page.locator('[data-testing-id="confirm-delete"]');
   await expect(ConfirmDeleteButton).toBeVisible();
-  await ConfirmDeleteButton.click();
+  await ConfirmDeleteButton.click({ timeout: 1000 });
 
   const NoComment = page.locator('[data-testing-id="comment-bubble"]').filter({ hasText: commentText });
   await expect(NoComment).toHaveCount(0);
@@ -193,12 +193,12 @@ export const approve = async (
   const ApptoveButton = page.locator(`[data-testing-id="approve-button"]`);
   await expect(ApptoveButton).toBeVisible({ timeout: 2000 });
 
-  await ApptoveButton.click();
+  await ApptoveButton.click({ timeout: 1000 });
 
   const ConfirmButton = page.locator(`button`).filter({ hasText: 'Bestätigen' });
   await expect(ConfirmButton).toBeVisible({ timeout: 2000 });
 
-  await ConfirmButton.click();
+  await ConfirmButton.click({ timeout: 1000 });
 };
 
 export const vote = async (
@@ -220,7 +220,7 @@ export const vote = async (
 
   const VoteButton = page.locator(`[data-testing-id="${vote}"]`);
   await expect(VoteButton).toBeVisible({ timeout: 2000 });
-  await VoteButton.click();
+  await VoteButton.click({ timeout: 1000 });
 };
 
 export const totalVoteCount = async (
@@ -305,26 +305,26 @@ export const report = async (
   await expect(IdeaDiv).toBeVisible();
   const DotMenuDiv = IdeaDiv.locator('[data-testing-id="idea-more-menu"]');
   await expect(DotMenuDiv).toBeVisible();
-  await DotMenuDiv.click();
+  await DotMenuDiv.click({ timeout: 1000 });
 
   const ReportButton = IdeaDiv.locator('[data-testing-id="report-button"]');
   await expect(ReportButton).toBeVisible({ timeout: 500 });
-  await ReportButton.click();
+  await ReportButton.click({ timeout: 1000 });
 
   // how to fill in one of those MUI multiselectors:
   const SelectorId = await page.getAttribute('label:text("Berichtskategorie")', 'for');
   const ReasonSelector = page.locator(`#${shared.cssEscape(SelectorId)}`);
   await expect(ReasonSelector).toBeVisible({ timeout: 2000 });
 
-  await ReasonSelector.click();
+  await ReasonSelector.click({ timeout: 1000 });
 
   const Reason = await page.locator(`li[data-value="${reason}"]`);
   await expect(Reason).toBeVisible({ timeout: 2000 });
-  await Reason.click();
+  await Reason.click({ timeout: 1000 });
 
   await page.locator('div[contenteditable="true"]').fill('reported during automated testing');
   // submit the report form
-  await page.locator('button[type="submit"]').click();
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
 };
 
 export const checkReport = async (
@@ -366,24 +366,24 @@ export const reportComment = async (
 
   const MoreOptionsButton = Comment.locator('[data-testing-id="comment-more-options"]');
   await expect(MoreOptionsButton).toBeVisible();
-  await MoreOptionsButton.click();
+  await MoreOptionsButton.click({ timeout: 1000 });
 
   const ReportButton = Comment.locator('[data-testing-id="report-button"]');
   await expect(ReportButton).toBeVisible({ timeout: 500 });
-  await ReportButton.click();
+  await ReportButton.click({ timeout: 1000 });
 
   // how to fill in one of those MUI multiselectors:
   const SelectorId = await page.getAttribute('label:text("Berichtskategorie")', 'for');
   const ReasonSelector = page.locator(`#${shared.cssEscape(SelectorId)}`);
   await expect(ReasonSelector).toBeVisible({ timeout: 2000 });
 
-  await ReasonSelector.click();
+  await ReasonSelector.click({ timeout: 1000 });
 
   const Reason = await page.locator(`li[data-value="${reason}"]`);
   await expect(Reason).toBeVisible({ timeout: 2000 });
-  await Reason.click();
+  await Reason.click({ timeout: 1000 });
 
   await page.locator('div[contenteditable="true"]').fill('reported during automated testing');
   // submit the report form
-  await page.locator('button[type="submit"]').click();
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
 };

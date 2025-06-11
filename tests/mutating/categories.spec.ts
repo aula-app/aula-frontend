@@ -75,7 +75,7 @@ test.describe('Categories flow', () => {
 
     const SubmitButton = Form.getByRole('button', { name: 'Bestätigen' });
     await expect(SubmitButton).toBeVisible({ timeout: 7000 });
-    await SubmitButton.click();
+    await SubmitButton.click({ timeout: 1000 });
 
     const NewCategoryPill = admin.getByRole('button', { name: data.categoryName }).first();
     await expect(NewCategoryPill).toBeVisible({ timeout: 3000 });
@@ -129,14 +129,14 @@ test.describe('Categories flow', () => {
 
     const RemoveButton = NewCategoryPill.locator('[data-testid="CancelIcon"]');
     await expect(RemoveButton).toBeVisible({ timeout: 3000 });
-    await RemoveButton.click();
+    await RemoveButton.click({ timeout: 1000 });
 
     const Dialog = admin.getByRole('dialog');
     await expect(Dialog).toBeVisible({ timeout: 3000 });
 
     const ConfirmButton = Dialog.getByRole('button', { name: 'Löschen' });
     await expect(ConfirmButton).toBeVisible({ timeout: 3000 });
-    await ConfirmButton.click();
+    await ConfirmButton.click({ timeout: 1000 });
 
     await expect(1).toBeDefined();
 
