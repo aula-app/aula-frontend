@@ -7,6 +7,7 @@ const path = require('path');
 import * as fixtures from '../fixtures/users';
 import * as browsers from './browsers';
 import * as users from './page_interactions/users';
+import * as rooms from './page_interactions/rooms';
 
 // force these tests to run sqeuentially
 test.describe.configure({ mode: 'serial' });
@@ -21,6 +22,8 @@ const jannikaData: fixtures.UserData = {
 };
 
 test.describe('Upload user csv, delete that user', () => {
+  let data: { [k: string]: any } = {};
+
   test.beforeAll(async () => {
     fixtures.init();
   });
@@ -38,16 +41,21 @@ test.describe('Upload user csv, delete that user', () => {
     const csv_str = `realname;displayname;username;email;about_me
 jannika;jannika;jannika;;generated_testing`;
 
+    data.room = {
+      name: 'room-' + shared.getRunId() + '-csv' + shared.gensym(),
+      description: 'created during automated testing',
+      users: [],
+    };
+
     const host = shared.getHost();
 
     const admin = await browsers.newPage(browsers.admins_browser);
 
     await admin.goto(host);
 
-    // navigate to the setting page:
-    const SettingsButton = admin.locator('a[href="/settings/configuration"]');
-    await expect(SettingsButton).toBeVisible({ timeout: 1000 });
-    await SettingsButton.click({ timeout: 1000 });
+    await rooms.create(admin, data.room);
+
+    await users.goToSettings(admin);
 
     // open benutzer accordeon
     const BenutzerAccordeon = admin.getByRole('button', { name: 'Benutzer' });
@@ -83,6 +91,8 @@ jannika;jannika;jannika;;generated_testing`;
     await users.exists(admin, jannikaData);
 
     await expect(1).toBeDefined();
+
+    admin.close();
   });
 
   test('New User can log in using admin temp pass', async () => {
@@ -105,14 +115,13 @@ jannika;jannika;jannika;;generated_testing`;
     const admin = await browsers.newPage(browsers.admins_browser);
 
     await admin.goto(host);
+
     const browser = await (await chromium.launch()).newContext();
     const jannika = await browsers.newPage(browser);
 
     await users.login(jannika, jannikaData);
 
-    const ProfileButton = jannika.locator('a[href="/settings/profile"]');
-    await expect(ProfileButton).toBeVisible({ timeout: 1000 });
-    await ProfileButton.click({ timeout: 1000 });
+    await users.goToProfile(jannika);
 
     // open benutzer accordeon
     const BenutzerAccordeon = jannika.getByRole('button', { name: 'Gefahrenzone' });
@@ -132,10 +141,7 @@ jannika;jannika;jannika;;generated_testing`;
 
     // admin actions
 
-    // navigate to the anfragen page:
-    const Requestsbutton = admin.locator('a[href="/settings/requests"]');
-    await expect(Requestsbutton).toBeVisible({ timeout: 1000 });
-    await Requestsbutton.click({ timeout: 1000 });
+    await users.goToRequests(admin);
 
     const AnfrageDiv = admin
       .locator('div')
@@ -158,5 +164,10 @@ jannika;jannika;jannika;;generated_testing`;
     await expect(async () => {
       await users.exists(admin, jannikaData);
     }).rejects.toThrow();
+
+    await rooms.remove(admin, data.room);
+
+    admin.close();
+    jannika.close();
   });
 });

@@ -6,6 +6,32 @@ const host = shared.getHost();
 
 type TempPass = string;
 
+export const goToProfile = async (page: Page) => {
+  await page.goto(host);
+
+  const ProfileButton = page.locator('a[href="/settings/profile"]');
+  await expect(ProfileButton).toBeVisible({ timeout: 1000 });
+  await ProfileButton.click({ timeout: 1000 });
+};
+
+export const goToSettings = async (page: Page) => {
+  const SettingsButton = page.locator('a[href="/settings/configuration"]');
+  await expect(SettingsButton).toBeVisible({ timeout: 1000 });
+  await SettingsButton.click({ timeout: 1000 });
+};
+
+export const goToRequests = async (page: Page) => {
+  const SettingsButton = page.locator('a[href="/settings/requests"]');
+  await expect(SettingsButton).toBeVisible({ timeout: 1000 });
+  await SettingsButton.click({ timeout: 1000 });
+};
+
+export const goToRoomSettings = async (page: Page) => {
+  const SettingsButton = page.locator('a[href="/settings/rooms"]');
+  await expect(SettingsButton).toBeVisible({ timeout: 1000 });
+  await SettingsButton.click({ timeout: 1000 });
+};
+
 export const exists = async (page: Page, data: users.UserData) => {
   await page.goto(host);
   // navigate to the users page:

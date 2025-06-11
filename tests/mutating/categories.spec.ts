@@ -50,10 +50,7 @@ test.describe('Categories flow', () => {
 
     data.categoryName = 'TESTING' + shared.gensym();
 
-    // navigate to the setting page:
-    const SettingsButton = admin.locator('a[href="/settings/configuration"]');
-    await expect(SettingsButton).toBeVisible({ timeout: 1000 });
-    await SettingsButton.click({ timeout: 1000 });
+    await users.goToSettings(admin);
 
     // open ideas accordeon
     const IdeeAccordeon = admin.getByRole('button', { name: 'Idee' });
@@ -120,10 +117,7 @@ test.describe('Categories flow', () => {
 
     await admin.goto(host);
 
-    // navigate to the setting page:
-    const SettingsButton = admin.locator('a[href="/settings/configuration"]');
-    await expect(SettingsButton).toBeVisible({ timeout: 1000 });
-    await SettingsButton.click({ timeout: 1000 });
+    await users.goToSettings(admin);
 
     // open ideas accordeon
     const IdeeAccordeon = admin.getByRole('button', { name: 'Idee' });

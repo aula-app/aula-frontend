@@ -3,6 +3,7 @@ import { expect, Page } from '@playwright/test';
 import * as shared from '../../shared';
 import { sleep } from '../../utils';
 import * as roomFixtures from '../../fixtures/rooms';
+import { goToRoomSettings } from './users';
 
 const host = shared.getHost();
 
@@ -10,10 +11,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   // start at home
   await page.goto(host);
 
-  // use the menu to navigate to the rooms admin page
-  const RoomsMenuItem = page.locator('a[href="/settings/rooms"]');
-  await expect(RoomsMenuItem).toBeVisible();
-  await RoomsMenuItem.click();
+  await goToRoomSettings(page);
 
   // use a button to open the modal for adding a room
   const AddRoomButton = page.getByRole('button', { name: 'Neue Raum' });
@@ -75,10 +73,7 @@ export const remove = async (page: Page, room: roomFixtures.RoomData) => {
   // start at home
   await page.goto(host);
 
-  // use the menu to navigate to the rooms admin page
-  const RoomsMenuItem = page.locator('a[href="/settings/rooms"]');
-  await expect(RoomsMenuItem).toBeVisible();
-  await RoomsMenuItem.click();
+  await goToRoomSettings(page);
 
   // open the filter menu:
   const FilterButton = page.locator('[aria-label="button-open-filters"]');

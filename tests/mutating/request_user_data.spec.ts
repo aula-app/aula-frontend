@@ -4,6 +4,7 @@ import * as shared from '../shared';
 
 import * as fixtures from '../fixtures/users';
 import * as browsers from './browsers';
+import { goToProfile, goToRequests } from './page_interactions/users';
 
 // force these tests to run sqeuentially
 test.describe.configure({ mode: 'serial' });
@@ -28,10 +29,7 @@ test.describe('Request user data flow', () => {
 
     await alice.goto(host);
 
-    // navigate to the user setting page:
-    const ProfileButton = alice.locator('a[href="/settings/profile"]');
-    await expect(ProfileButton).toBeVisible({ timeout: 1000 });
-    await ProfileButton.click({ timeout: 1000 });
+    await goToProfile(alice);
 
     // open datenschutz accordeon
     const DatenschutzAccordeon = alice.getByRole('button', { name: 'Datenschutz' });
@@ -54,10 +52,7 @@ test.describe('Request user data flow', () => {
 
     await admin.goto(host);
 
-    // navigate to the anfragen page:
-    const ProfileButton = admin.locator('a[href="/settings/requests"]');
-    await expect(ProfileButton).toBeVisible({ timeout: 1000 });
-    await ProfileButton.click({ timeout: 1000 });
+    await goToRequests(admin);
 
     const AnfrageDiv = admin
       .locator('div')

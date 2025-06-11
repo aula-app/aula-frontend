@@ -135,7 +135,7 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
           <Button color="error" disabled={disabled} onClick={resetFields}>
             {t('actions.cancel')}
           </Button>
-          <Button type="submit" variant="contained" disabled={disabled}>
+          <Button type="submit" data-testing-id="submit-new-password" variant="contained" disabled={disabled}>
             {t('actions.save')}
           </Button>
         </Stack>
