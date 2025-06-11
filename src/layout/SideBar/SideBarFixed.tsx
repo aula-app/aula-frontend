@@ -6,7 +6,6 @@ import { localStorageGet } from '@/utils';
 import { Button, Divider, Stack } from '@mui/material';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import UserInfo from '@/components/UserInfo';
 import SideBarContent from './SideBarContent';
 import { fixedSideBarStyles } from './styles';
 import LocaleSwitch from '@/components/LocaleSwitch';
@@ -34,7 +33,6 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
           <Divider />
         </>
       )}
-      <UserInfo />
       <Divider />
       <SideBarContent isFixed />
       <Divider />
