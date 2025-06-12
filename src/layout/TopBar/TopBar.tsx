@@ -8,6 +8,7 @@ import { ReactNode, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../config';
+import { getConfig } from '../../config';
 import MessagesButton from '@/components/Buttons/MessagesButton';
 import UpdatesButton from '@/components/Buttons/UpdatesButton';
 
@@ -78,7 +79,7 @@ const TopBar: React.FC = () => {
         <Box width={56}>
           {/* Logo or Back Button */}
           {location[1] === '' ? (
-            <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Icon.svg`} alt="aula" />
+            <img src={`${getConfig().BASENAME}img/Aula_Icon.svg`} alt="aula" />
           ) : (
             <AppIconButton icon="back" onClick={() => goto(getReturnPath())} />
           )}
