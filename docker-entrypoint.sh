@@ -26,7 +26,6 @@ env | grep "^${APP_PREFIX}" | while IFS='=' read -r key value; do
     # Display the variable being replaced
     echo "  • Replacing ${key} → ${value}"
 
-    # Use find and sed to replace the variable in all files within the directory
-    find "$ASSET_DIR" -type f -name '*.js' \
-        -exec sed -i "s|${key}|${value}|g" {} +
+    # Replace only in the runtime config JSON file
+    sed -i "s|${key}|${value}|g" "$ASSET_DIR/config.json"
 done
