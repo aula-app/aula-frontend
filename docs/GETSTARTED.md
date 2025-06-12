@@ -85,6 +85,8 @@ To build and publish your local version of the repo:
 ```bash
 docker build -t YOUR_ORG/aula-frontend:latest
 docker push YOUR_ORG/aula-frontend:latest
+# Adapt the .env.docker file if necessary
+docker run --env-file .env.docker YOUR_ORG/aula-frontend:latest
 ```
 
 <!-- To run it TODO TODO @TODO: -->
