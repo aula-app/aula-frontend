@@ -1,3 +1,6 @@
+## Even though we don't send all files to the resulting image,
+##   .dockerignore is used to reduce the build context so the 
+##   builds happen faster
 .git
 .github
 githooks/
