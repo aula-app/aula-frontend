@@ -111,6 +111,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
       status: data.status,
       room_id: defaultValues.hash_id,
     });
+
     if (response.error) return;
     await setUserRooms(defaultValues.hash_id);
   };

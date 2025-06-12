@@ -36,7 +36,13 @@ ${data.content || ''}
 
   return (
     <>
-      <AppIconButton icon="report" disabled={disabled} {...restOfProps} onClick={() => setOpen(true)} />
+      <AppIconButton
+        data-testing-id="report-button"
+        icon="report"
+        disabled={disabled}
+        {...restOfProps}
+        onClick={() => setOpen(true)}
+      />
       <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <ReportForms onClose={onClose} onSubmit={onSubmit} />
       </Drawer>
