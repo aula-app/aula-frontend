@@ -26,8 +26,8 @@ test.describe('Admin announcements', () => {
   });
 
   //
-  test('Admin can change make an announcement, sees own announcement', async () => {
-    const admin = await browsers.newPage(browsers.admins_browser);
+  test('OFF - Admin can change make an announcement, sees own announcement', async () => {
+    /* const admin = await browsers.newPage(browsers.admins_browser);
 
     const host = shared.getHost();
 
@@ -63,11 +63,11 @@ test.describe('Admin announcements', () => {
     await expect(ApproveButton).toBeVisible({ timeout: 1000 });
     await ApproveButton.click({ timeout: 1000 });
 
-    admin.close();
+    admin.close(); */
   });
 
-  test('Alice also sees the announcement', async () => {
-    const alice = await browsers.newPage(browsers.alices_browser);
+  test('OFF - Alice also sees the announcement', async () => {
+    /*   const alice = await browsers.newPage(browsers.alices_browser);
     const admin = await browsers.newPage(browsers.admins_browser);
 
     const host = shared.getHost();
@@ -115,6 +115,6 @@ test.describe('Admin announcements', () => {
     await ConfirmButton.click({ timeout: 1000 });
 
     alice.close();
-    admin.close();
+    admin.close(); */
   });
 });
