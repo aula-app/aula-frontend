@@ -19,6 +19,8 @@ import UsersField from '../DataFields/UsersField';
  * @component
  */
 
+const DEFAULT_PHASE_DURATION = 14; // Default duration in days
+
 interface RoomFormsProps {
   isDefault?: boolean;
   onClose: () => void;
@@ -48,7 +50,14 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { room_name: defaultValues ? ' ' : '' },
+    defaultValues: {
+      room_name: defaultValues ? ' ' : '',
+      phase_duration_1: defaultValues?.phase_duration_1 || DEFAULT_PHASE_DURATION,
+      phase_duration_3: defaultValues?.phase_duration_3 || DEFAULT_PHASE_DURATION,
+      description_public: defaultValues?.description_public || '',
+      description_internal: defaultValues?.description_internal || null,
+      status: defaultValues?.status,
+    },
   });
 
   // Infer TypeScript type from the Yup schema
