@@ -1,13 +1,13 @@
 import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
-import { sleep } from '../utils';
-import * as shared from '../shared';
+import { sleep } from '../../shared/utils';
+import * as shared from '../../shared/shared';
 const fs = require('fs');
 const path = require('path');
 
-import * as fixtures from '../fixtures/users';
-import * as browsers from './browsers';
-import * as users from './page_interactions/users';
-import * as rooms from './page_interactions/rooms';
+import * as fixtures from '../../fixtures/users';
+import * as browsers from '../../shared/page_interactions/browsers';
+import * as users from '../../shared/page_interactions/users';
+import * as rooms from '../../shared/page_interactions/rooms';
 
 // force these tests to run sqeuentially
 test.describe.configure({ mode: 'serial' });
@@ -142,6 +142,8 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     // admin actions
 
     await users.goToRequests(admin);
+
+    await sleep(1);
 
     const AnfrageDiv = admin
       .locator('div')

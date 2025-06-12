@@ -1,10 +1,10 @@
 import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
-import { sleep } from '../utils';
-import * as shared from '../shared';
+import { sleep } from '../../shared/utils';
+import * as shared from '../../shared/shared';
 
-import * as fixtures from '../fixtures/users';
-import * as browsers from './browsers';
-import { goToProfile, goToRequests } from './page_interactions/users';
+import * as fixtures from '../../fixtures/users';
+import * as browsers from '../../shared/page_interactions/browsers';
+import { goToProfile, goToRequests } from '../../shared/page_interactions/users';
 
 // force these tests to run sqeuentially
 test.describe.configure({ mode: 'serial' });

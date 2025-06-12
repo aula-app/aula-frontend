@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test';
-import * as shared from '../../shared';
+import * as shared from '../shared';
 import * as users from '../../fixtures/users';
 
 const host = shared.getHost();

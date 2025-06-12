@@ -1,11 +1,11 @@
 // called from playwright.config
 import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
-import { sleep } from '../utils';
-import * as shared from '../shared';
-import * as users from './page_interactions/users';
-import * as rooms from './page_interactions/rooms';
+import { sleep } from '../shared/utils';
+import * as shared from '../shared/shared';
+import * as users from '../shared/page_interactions/users';
+import * as rooms from '../shared/page_interactions/rooms';
 import * as fixtures from '../fixtures/users';
-import * as browsers from './browsers';
+import * as browsers from '../shared/page_interactions/browsers';
 
 export default async function globalTeardown() {
   await browsers.recall();

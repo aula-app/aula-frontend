@@ -1,4 +1,4 @@
-import * as shared from '../shared';
+import * as shared from '../shared/shared.ts';
 import * as SettingsTypes from '../../src/types/SettingsTypes.ts';
 import fs from 'fs';
 import path from 'path';

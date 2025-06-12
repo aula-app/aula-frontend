@@ -89,7 +89,7 @@
   },
   "devDependencies": {
     "@capacitor/assets": "^2.0.4",
-    "@playwright/test": "^1.51.1",
+    "@playwright/test": "^1.53.0",
     "@capacitor/cli": "^7.2.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",

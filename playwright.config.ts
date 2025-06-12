@@ -15,13 +15,12 @@ export default defineConfig({
   testDir: './tests',
 
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: true, // this is disablef below
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  // retries are off because this messes with mutations in the tests
+  //retries: process.env.CI ? 2 : 0,
+
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -30,15 +29,26 @@ export default defineConfig({
     // baseURL: 'http://127.0.0.1:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'on',
   },
   globalSetup: './tests/mutating/setup-auth.ts',
   globalTeardown: './tests/mutating/teardown-auth.ts',
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'mutations',
+      name: 'main',
+      testDir: './tests/mutating/main',
       use: { ...devices['Desktop Chrome'] },
+      workers: 1, // note - someday these can be run in parallel after https://github.com/aula-app/aula-frontend/issues/604
+    },
+    // these tests must run at the end because they interfere
+    // with the previous tests:
+    {
+      name: 'after',
+      testDir: './tests/mutating/after',
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['main'],
+      workers: 1,
     },
 
     /*     {
