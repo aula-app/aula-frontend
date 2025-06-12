@@ -4,6 +4,7 @@ import { addIdeaLike, getIdeaLike, removeIdeaLike } from '@/services/ideas';
 import { CommentType, IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   item: IdeaType | CommentType;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const LikeButton: React.FC<Props> = ({ item, disabled }) => {
+  const { t } = useTranslation();
   const [liked, setLiked] = useState(false);
   const [likeStatus, setLikeStatus] = useState(false);
 
@@ -40,6 +42,8 @@ const LikeButton: React.FC<Props> = ({ item, disabled }) => {
       icon={likeStatus ? 'heartFull' : 'heart'}
       onClick={toggleLike}
       disabled={disabled || !checkPermissions('ideas', 'like')}
+      aria-label={likeStatus ? t('actions.unlike') : t('actions.like')}
+      aria-pressed={likeStatus}
     >
       {`${item.sum_likes + Number(likeStatus) - Number(liked)}`}
     </AppIconButton>

@@ -1,6 +1,10 @@
 import { ObjectPropByName } from '@/types/Generics';
 
-export default ({ colors }: { colors: ObjectPropByName }) => {
+interface DIProps extends React.SVGProps<SVGSVGElement> {
+  colors: ObjectPropByName;
+}
+
+export default ({ colors, ...restOfProps }: DIProps) => {
   return (
     <svg
       width="100%"
@@ -11,6 +15,7 @@ export default ({ colors }: { colors: ObjectPropByName }) => {
       x="0px"
       y="0px"
       viewBox="0 0 1024 768"
+      {...restOfProps}
     >
       <path
         fill={colors.bg}

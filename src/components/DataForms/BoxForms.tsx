@@ -207,10 +207,10 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
             )}
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error">
+            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading}>
+            <Button type="submit" variant="contained" disabled={isLoading} aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}>
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>

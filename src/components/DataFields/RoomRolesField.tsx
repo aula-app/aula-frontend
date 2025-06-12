@@ -88,22 +88,42 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
 
   return (
     <>
-      <Button variant="outlined" color="secondary" onClick={() => setOpen(true)} disabled={disabled} {...restOfProps}>
-        <AppIcon icon="key" pr={2} />
+      <Button 
+        variant="outlined" 
+        color="secondary" 
+        onClick={() => setOpen(true)} 
+        disabled={disabled} 
+        aria-label={t('actions.set', { var: t('roles.roomRoles') })}
+        {...restOfProps}
+      >
+        <AppIcon icon="key" pr={2} aria-hidden="true" />
         {t('actions.set', {
           var: t('roles.roomRoles'),
         })}
       </Button>
-      <Dialog onClose={() => setOpen(false)} open={open} fullWidth maxWidth="sm">
-        <DialogTitle>
+      <Dialog 
+        onClose={() => setOpen(false)} 
+        open={open} 
+        fullWidth 
+        maxWidth="sm"
+        aria-labelledby="room-roles-dialog-title"
+        aria-describedby="room-roles-dialog-description"
+        aria-modal="true"
+      >
+        <DialogTitle id="room-roles-dialog-title">
           {t('actions.set', {
             var: t('roles.roomRoles'),
           })}
         </DialogTitle>
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        <List sx={{ maxHeight: 300, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
-          {schoolRooms.map((room) => {
+        <List 
+          sx={{ maxHeight: 300, overflow: 'auto', display: 'flex', flexDirection: 'column' }} 
+          role="group"
+          aria-label={t('ui.accessibility.roomRolesList')}
+          id="room-roles-dialog-description"
+        >
+          {schoolRooms.map((room, index) => {
             const currentRole = !!updateRoles.find((role) => role.room === room.hash_id)
               ? updateRoles.find((role) => role.room === room.hash_id)?.role
               : !!userRoles.find((role) => role.room === room.hash_id)
@@ -112,7 +132,14 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
                   ? defaultLevel
                   : 0;
             return (
-              <ListItemButton key={room.hash_id} sx={{ py: 0, order: room.type === 1 ? 0 : 1 }}>
+              <ListItemButton 
+                key={room.hash_id} 
+                sx={{ py: 0, order: room.type === 1 ? 0 : 1 }}
+                tabIndex={index === 0 ? 0 : -1} // Make first item tabbable, others reachable with arrow keys
+                role="listitem"
+                aria-label={room.room_name || 'Aula'}
+                id={`room-role-item-${room.hash_id}`}
+              >
                 <ListItem
                   secondaryAction={
                     <SelectRole
@@ -121,20 +148,37 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
                       size="small"
                       noAdmin
                       noRoom={room.type !== 1}
+                      aria-labelledby={`room-role-item-${room.hash_id}`}
                     />
                   }
                 >
-                  <ListItemText primary={room.room_name || 'Aula'} />
+                  <ListItemText 
+                    primary={room.room_name || 'Aula'} 
+                    primaryTypographyProps={{
+                      id: `room-name-${room.hash_id}`
+                    }}
+                  />
                 </ListItem>
               </ListItemButton>
             );
           })}
         </List>
         <DialogActions sx={{ p: 3, pt: 2 }}>
-          <Button onClick={handleClose} color="secondary" autoFocus>
+          <Button 
+            onClick={handleClose} 
+            color="secondary" 
+            autoFocus
+            tabIndex={0}
+            aria-label={t('actions.cancel')}
+          >
             {t('actions.cancel')}
           </Button>
-          <Button onClick={onSubmit} variant="contained">
+          <Button 
+            onClick={onSubmit} 
+            variant="contained"
+            tabIndex={0}
+            aria-label={t('actions.confirm')}
+          >
             {t('actions.confirm')}
           </Button>
         </DialogActions>

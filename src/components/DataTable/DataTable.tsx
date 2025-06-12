@@ -148,9 +148,17 @@ const DataTable: React.FC<Props> = ({
         ) : rows.length === 0 ? (
           <EmptyState title={t('ui.empty.table.title')} description={t('ui.empty.table.description')} />
         ) : (
-          <Table stickyHeader size="small" sx={{ width: 'auto', minWidth: '100%' }}>
-            <TableHead>
-              <TableRow sx={{ maxHeight: '55px' }}>
+          <Table
+            stickyHeader
+            size="small"
+            sx={{ width: 'auto', minWidth: '100%' }}
+            aria-label={t(`scopes.${scope}.name`)}
+            role="table"
+            aria-rowcount={rows.length}
+            aria-colcount={columns.length + 2}
+          >
+            <TableHead role="rowgroup">
+              <TableRow sx={{ maxHeight: '55px' }} role="columnheader" aria-label={t('ui.select.all')}>
                 <TableCell
                   sx={{
                     position: 'sticky',
@@ -166,13 +174,25 @@ const DataTable: React.FC<Props> = ({
                     checked={selected.length === rows.length && selected.length > 0}
                     indeterminate={selected.length > 0 && selected.length < rows.length}
                     color="secondary"
+                    aria-label={t('ui.select.all')}
+                    slotProps={{
+                      input: {
+                        tabIndex: 0, // Ensure the checkbox is always tabbable
+                        'aria-labelledby': 'select-all-checkbox-label',
+                      },
+                    }}
                   />
                 </TableCell>
                 {scope !== 'users' && (
                   <TableCell sx={{ whiteSpace: 'nowrap', width: 35 }}>{t(`settings.columns.link`)}</TableCell>
                 )}
                 {columns.map((column) => (
-                  <TableCell sx={{ whiteSpace: 'nowrap' }} key={column.name}>
+                  <TableCell
+                    sx={{ whiteSpace: 'nowrap' }}
+                    key={column.name}
+                    scope="col"
+                    aria-sort={column.orderId === orderBy ? (orderAsc ? 'ascending' : 'descending') : 'none'}
+                  >
                     <TableSortLabel
                       active={column.orderId === orderBy}
                       direction={orderAsc ? 'asc' : 'desc'}
@@ -184,17 +204,20 @@ const DataTable: React.FC<Props> = ({
                 ))}
                 <TableCell
                   sx={{ position: 'sticky', right: 0, zIndex: 2, px: 0, backgroundColor: 'background.paper' }}
+                  aria-hidden="true"
                 ></TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {rows.map((row) => (
+            <TableBody role="rowgroup">
+              {rows.map((row, rowIndex) => (
                 <DataRow
                   key={row.id}
                   item={row}
                   selected={selected.includes(row.hash_id)}
                   status={Number(row.status) as StatusTypes}
                   toggleRow={toggleRow}
+                  tabIndex={rowIndex === 0 ? 0 : -1} // Make first row tabbable
+                  aria-rowindex={rowIndex + 1}
                 >
                   {scope !== 'users' && (
                     <TableCell
@@ -210,7 +233,7 @@ const DataTable: React.FC<Props> = ({
                       <AppIconButton icon="link" size="small" to={getScopeSpecificRoute(scope, row)} />
                     </TableCell>
                   )}
-                  {columns.map((column) => (
+                  {columns.map((column, colIndex) => (
                     <TableCell
                       sx={{
                         whiteSpace: 'nowrap',
@@ -221,6 +244,9 @@ const DataTable: React.FC<Props> = ({
                       }}
                       onClick={() => setEdit(row)}
                       key={`${column.name}-${row.hash_id}`}
+                      role="cell"
+                      aria-colindex={colIndex + 2} // +2 because of the checkbox column and row header
+                      tabIndex={-1}
                     >
                       {column.name in row && <DataItem row={row} column={column.name} />}
                     </TableCell>

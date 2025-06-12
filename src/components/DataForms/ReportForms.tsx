@@ -54,10 +54,10 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
           {/* content */}
           <MarkdownEditor name="content" control={control} />
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error">
+            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="contained" aria-label={t('actions.confirm')}>
               {t('actions.confirm')}
             </Button>
           </Stack>

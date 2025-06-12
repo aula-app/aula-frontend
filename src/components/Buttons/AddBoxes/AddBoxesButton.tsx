@@ -156,24 +156,37 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
 
   return (
     <>
-      <Button variant="outlined" color="secondary" onClick={() => setOpen(true)} disabled={disabled} {...restOfProps}>
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={() => setOpen(true)}
+        disabled={disabled}
+        aria-label={t('actions.addToParent', { var: t('scopes.boxes.name') })}
+        aria-expanded={open}
+        aria-haspopup="dialog"
+        {...restOfProps}
+      >
         <AppIcon icon="box" pr={2} />
         {t('actions.addToParent', {
           var: t('scopes.boxes.name'),
         })}
       </Button>
-      <Dialog onClose={onClose} open={open}>
-        <DialogTitle>
+      <Dialog onClose={onClose} open={open} aria-labelledby="add-boxes-dialog-title">
+        <DialogTitle id="add-boxes-dialog-title">
           {t('actions.addToParent', {
             var: t('scopes.boxes.name'),
           })}
         </DialogTitle>
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        <List sx={{ pt: 0 }}>
+        <List sx={{ pt: 0 }} role="radiogroup" aria-label={t('scopes.boxes.name')}>
           {boxes.map((box) => (
             <ListItem disablePadding key={box.hash_id}>
-              <ListItemButton onClick={() => toggleBox(box.hash_id)}>
+              <ListItemButton
+                onClick={() => toggleBox(box.hash_id)}
+                role="radio"
+                aria-checked={selectedBox === box.hash_id}
+              >
                 <ListItemAvatar>
                   <Checkbox
                     checked={selectedBox === box.hash_id}
@@ -185,11 +198,11 @@ const AddBoxButton = forwardRef<AddBoxRefProps, Props>(({ ideas = [], disabled =
             </ListItem>
           ))}
         </List>
-        <DialogActions>
-          <Button onClick={onClose} color="secondary" autoFocus>
+        <DialogActions role="group">
+          <Button onClick={onClose} color="secondary" autoFocus aria-label={t('actions.cancel')}>
             {t('actions.cancel')}
           </Button>
-          <Button onClick={onSubmit} variant="contained">
+          <Button onClick={onSubmit} variant="contained" aria-label={t('actions.confirm')}>
             {t('actions.confirm')}
           </Button>
         </DialogActions>
