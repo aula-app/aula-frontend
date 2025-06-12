@@ -9,8 +9,10 @@ COPY public ./public
 COPY index.html vite.*.mts tsconfig.json ./
 COPY src ./src
 
-# build-docker will use .env.docker with placeholders that should be replaced by the docker-entrypoint.sh
-RUN yarn build-docker
+# @TODO: nikola - these svg's inside these dirs are unused?
+#  COPY ./resources ./assets ./
+
+RUN yarn build
 
 
 

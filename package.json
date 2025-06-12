@@ -29,7 +29,6 @@
     "build-single": "vite build --mode single",
     "build-test": "tsc && vite build --mode test",
     "build-bw": "tsc && vite build --mode bw",
-    "build-docker": "tsc && vite build --mode docker",
     "preview": "vite preview",
     "format": "prettier ./src --write",
     "format:all": "prettier . --write",
