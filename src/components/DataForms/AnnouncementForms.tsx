@@ -29,7 +29,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     headline: yup.string().required(t('forms.validation.required')),
     body: yup.string().required(t('forms.validation.required')),
     user_needs_to_consent: yup.number(),
-    consent_text: yup.string(),
+    consent_text: yup.string().required(t('forms.validation.required')),
     status: yup.number(),
     target_group: yup.number(),
     target_id: yup.number(),
@@ -43,7 +43,13 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { headline: defaultValues ? ' ' : '', user_needs_to_consent: 1 },
+    defaultValues: {
+      headline: defaultValues?.headline || '',
+      body: defaultValues?.body || '',
+      user_needs_to_consent: 1,
+      consent_text: t('actions.agree'),
+      status: defaultValues?.status || 1,
+    },
   });
 
   // Infer TypeScript type from the Yup schema
