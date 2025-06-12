@@ -2,6 +2,24 @@
 
 This document provides an overview of the Aula application, including setup instructions and information about the development environment.
 
+## Run aula frontend using Docker
+
+### Local testing
+
+Assuming you installed Docker, you can test the frontend which with the default `.env.docker` points to devel.aula.de backend with the following:
+
+```bash
+docker run --env-file .env.docker -p 3000:80 aulaapp/aula-frontend:latest
+```
+
+You can copy and edit the `.env.docker` to change the configuration.
+
+### Production self-hosting setup
+
+For production setup, configure your own envfile and make sure that you configure SSL either by adapting aula-frontend image, or by putting a reverse proxy with SSL in front of it.
+
+Reach out to `dev [at] aula.de` for more information. <!-- @TODO: we should add link to docs when ready -->
+
 ## Getting Started
 
 ### Prerequisites
@@ -78,18 +96,14 @@ The following yarn scripts are available:
 
 Please reach out to `dev [at] aula.de` for instructions on self-hosting in production environment.
 
-### Deploy using Docker
+### Build and publish using Docker
 
 To build and publish your local version of the repo:
 
 ```bash
 docker build -t YOUR_ORG/aula-frontend:latest
 docker push YOUR_ORG/aula-frontend:latest
-# Adapt the .env.docker file if necessary
-docker run --env-file .env.docker YOUR_ORG/aula-frontend:latest
 ```
-
-<!-- To run it TODO TODO @TODO: -->
 
 ### Deploy to web server
 
