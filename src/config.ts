@@ -28,7 +28,7 @@ export async function loadConfig() {
       BASENAME: import.meta.env.VITE_APP_BASENAME,
     };
   } else {
-    const res = await fetch('/config.json');
+    const res = await fetch('/public-config.json');
     const json = await res.json();
     config = { ...defaultConfig, ...json };
   }

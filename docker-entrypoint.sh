@@ -27,5 +27,5 @@ env | grep "^${APP_PREFIX}" | while IFS='=' read -r key value; do
     echo "  • Replacing ${key} → ${value}"
 
     # Replace only in the runtime config JSON file
-    sed -i "s|${key}|${value}|g" "$ASSET_DIR/config.json"
+    sed -i "s|${key}|${value}|g" "$ASSET_DIR/public-config.json"
 done
