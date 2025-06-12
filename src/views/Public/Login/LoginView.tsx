@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
+import { getConfig } from "../../../config";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -29,13 +30,13 @@ import { LoginFormValues } from "@/types/LoginTypes";
 
 const LoginView = () => {
   const { t } = useTranslation();
-  const oauthEnabled = import.meta.env.VITE_APP_OAUTH;
+  const oauthEnabled = getConfig().OAUTH_ENABLED;
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const [loginError, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [api_url, setApiUrl] = useState(import.meta.env.VITE_APP_API_URL);
+  const [api_url, setApiUrl] = useState(getConfig().API_URL);
 
   const schema = yup
     .object({
@@ -82,7 +83,7 @@ const LoginView = () => {
           'user_status' in response && response.user_status !== null
             ? response.user_status === 0
               ? t('errors.accountInactive')
-              : t('errors.accountSuspended', {var: response.data ? t('errors.accountSuspendDate', {var: response.data}) : ''})
+              : t('errors.accountSuspended', { var: response.data ? t('errors.accountSuspendDate', { var: response.data }) : '' })
             : t('errors.invalidCredentials')
         );
         return;
@@ -90,7 +91,7 @@ const LoginView = () => {
 
       const responseJWT = parseJwt(response.JWT || '');
 
-      if(responseJWT?.temp_pw) {
+      if (responseJWT?.temp_pw) {
         navigate(`/password`, { replace: true, state: { tmp_jwt: response.JWT } });
         return;
       }
@@ -113,7 +114,7 @@ const LoginView = () => {
   };
 
   useEffect(() => {
-    if(localStorageGet('api_url')) setApiUrl(localStorageGet('api_url'));
+    if (localStorageGet('api_url')) setApiUrl(localStorageGet('api_url'));
   }, []);
 
   return (
@@ -132,67 +133,69 @@ const LoginView = () => {
           </Alert>
         </Collapse>
         <Stack gap={1}>
-        <TextField
-          required
-          disabled={isLoading}
-          label={t("auth.login.label")}
-          id="login-username"
-          slotProps={{ input: { 
-            "aria-labelledby": "login-username-label",
-            "aria-invalid": !!errors.username,
-            "aria-errormessage": errors.username ? "username-error-message" : undefined,
-            autoCapitalize: "none" 
-          },
-          inputLabel: { 
-            id: "login-username-label", 
-            htmlFor: "login-username" 
-          }}}
-          {...register("username", {
-            shouldUnregister: false
-          })}
-          error={!!errors.username}
-          helperText={<span id="username-error-message">{errors.username?.message || ''}</span>}
-          sx={{ mt: 0 }}
-        />
-        <TextField
-          required
-          disabled={isLoading}
-          type={showPassword ? "text" : "password"}
-          label={t("auth.password.label")}
-          id="login-password"
-          {...register("password", {
-            shouldUnregister: false
-          })}
-          error={!!errors.password}
-          helperText={<span id="password-error-message">{errors.password?.message || ''}</span>}
-          sx={{ mt: 0 }}
-          slotProps={{
-            input: {
-              "aria-labelledby": "login-password-label",
-              "aria-invalid": !!errors.password,
-              "aria-errormessage": errors.password ? "password-error-message" : undefined,
-              endAdornment: (
-                <InputAdornment position="end">
-                  <AppIconButton
-                    aria-label="toggle password visibility"
-                    icon={showPassword ? "visibilityOn" : "visibilityOff"}
-                    title={showPassword ? t("actions.hide") : t("actions.show")}
-                    onClick={handleShowPasswordClick}
-                    onMouseDown={(e) => e.preventDefault()}
-                  />
-                </InputAdornment>
-              ),
-            },
-            inputLabel: {
-              id: "login-password-label", 
-              htmlFor: "login-password" 
-            }
-          }}
-        />
+          <TextField
+            required
+            disabled={isLoading}
+            label={t("auth.login.label")}
+            id="login-username"
+            slotProps={{
+              input: {
+                "aria-labelledby": "login-username-label",
+                "aria-invalid": !!errors.username,
+                "aria-errormessage": errors.username ? "username-error-message" : undefined,
+                autoCapitalize: "none"
+              },
+              inputLabel: {
+                id: "login-username-label",
+                htmlFor: "login-username"
+              }
+            }}
+            {...register("username", {
+              shouldUnregister: false
+            })}
+            error={!!errors.username}
+            helperText={<span id="username-error-message">{errors.username?.message || ''}</span>}
+            sx={{ mt: 0 }}
+          />
+          <TextField
+            required
+            disabled={isLoading}
+            type={showPassword ? "text" : "password"}
+            label={t("auth.password.label")}
+            id="login-password"
+            {...register("password", {
+              shouldUnregister: false
+            })}
+            error={!!errors.password}
+            helperText={<span id="password-error-message">{errors.password?.message || ''}</span>}
+            sx={{ mt: 0 }}
+            slotProps={{
+              input: {
+                "aria-labelledby": "login-password-label",
+                "aria-invalid": !!errors.password,
+                "aria-errormessage": errors.password ? "password-error-message" : undefined,
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <AppIconButton
+                      aria-label="toggle password visibility"
+                      icon={showPassword ? "visibilityOn" : "visibilityOff"}
+                      title={showPassword ? t("actions.hide") : t("actions.show")}
+                      onClick={handleShowPasswordClick}
+                      onMouseDown={(e) => e.preventDefault()}
+                    />
+                  </InputAdornment>
+                ),
+              },
+              inputLabel: {
+                id: "login-password-label",
+                htmlFor: "login-password"
+              }
+            }}
+          />
         </Stack>
-        <Button 
-          variant="contained" 
-          disabled={isLoading} 
+        <Button
+          variant="contained"
+          disabled={isLoading}
           onClick={handleSubmit(onSubmit)}
           aria-label={t("auth.login.button")}
         >
@@ -210,18 +213,18 @@ const LoginView = () => {
           </Button>
         </Grid>
 
-        { oauthEnabled === "true" && (
+        {oauthEnabled && (
           <>
             <Stack direction='row' mb={2} alignItems='center'>
-              <Divider sx={{flex: 1}} />
+              <Divider sx={{ flex: 1 }} />
               <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
-              <Divider sx={{flex: 1}} />
+              <Divider sx={{ flex: 1 }} />
             </Stack>
             <Stack direction='column' mb={2} alignItems='center'>
               <Button
                 variant="outlined"
                 color="secondary"
-                onClick={() => window.location.href="/api/controllers/login_oauth.php"}
+                onClick={() => window.location.href = "/api/controllers/login_oauth.php"}
                 disabled={isLoading}
                 aria-label={t('auth.oauth.arialabel')}
               >{t('auth.oauth.button')}</Button>
