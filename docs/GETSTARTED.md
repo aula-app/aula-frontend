@@ -30,7 +30,7 @@ This document provides an overview of the Aula application, including setup inst
 
 ### Database Setup and Configuration
 
-4. Set up Aula's API Back End based on the [Aula's Backend Repository](https://github.com/aula-app/playground).
+4. Set up Aula's API Back End based on the [Aula's Backend Repository](https://github.com/aula-app/aula-backend).
 
 ### Environment Configuration
 
@@ -75,6 +75,21 @@ The following yarn scripts are available:
 - `yarn check-type` or `yarn type`: Type check TypeScript files
 
 ## Deployment
+
+Please reach out to `dev [at] aula.de` for instructions on self-hosting in production environment.
+
+### Deploy using Docker
+
+To build and publish your local version of the repo:
+
+```bash
+docker build -t YOUR_ORG/aula-frontend:latest
+docker push YOUR_ORG/aula-frontend:latest
+```
+
+<!-- To run it TODO TODO @TODO: -->
+
+### Deploy to web server
 
 To deploy the application:
 
