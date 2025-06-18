@@ -17,6 +17,7 @@ const PublicRoutes = () => {
 
     if (isMultiInstance) {
       if (!instance_token && location.pathname !== '/code') {
+        localStorageSet('api_url', import.meta.env.VITE_APP_API_URL);
         navigate('/code');
       }
     } else {

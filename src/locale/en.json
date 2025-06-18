@@ -45,7 +45,8 @@
       "button": "Login",
       "label": "Username",
       "noAccount": "Need an account?",
-      "title": "Sign in"
+      "title": "Sign in",
+      "reset_code": "New code"
     },
     "logout": "Sign out",
     "messages": {
