@@ -61,9 +61,9 @@ const LoginView = () => {
   };
 
   const resetCode = async () => {
-    localStorageSet('code', '');
-    // navigate('/code');
-    window.location.href= '/code'
+    localStorageSet('code', '').then(() => {;
+      navigate('/code');
+    });
   }
 
   const onSubmit = async (formData: LoginFormValues) => {

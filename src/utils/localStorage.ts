@@ -28,7 +28,7 @@ export function localStorageGet(name: string, defaultValue: any = ''): any {
 /**
  * Smartly writes value into localStorage
  */
-export function localStorageSet(name: string, value: any) {
+export async function localStorageSet(name: string, value: any) {
   if (IS_SERVER) {
     return; // Do nothing on server side
   }
@@ -42,7 +42,7 @@ export function localStorageSet(name: string, value: any) {
     valueAsString = String(value);
   }
 
-  localStorage.setItem(name, valueAsString);
+  await localStorage.setItem(name, valueAsString);
 }
 
 /* eslint-enable @typescript-eslint/no-explicit-any */

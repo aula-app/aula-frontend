@@ -5,7 +5,7 @@ interface InstanceResponse {
 }
 
 export const validateInstanceCode = async (code: string): Promise<boolean> => {
-  const requestBody = JSON.stringify({code: code});
+  const requestBody = JSON.stringify({ code: code });
   const requestData = {
     method: 'POST',
     body: requestBody,
@@ -17,7 +17,6 @@ export const validateInstanceCode = async (code: string): Promise<boolean> => {
   const response = (await request.json()) as InstanceResponse;
 
   if (response.status) {
-    console.log(response)
     localStorageSet('code', code);
     return true;
   }
