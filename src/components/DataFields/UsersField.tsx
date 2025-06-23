@@ -58,6 +58,7 @@ const UsersField: React.FC<Props> = ({ defaultValues, onChange, disabled = false
     <Autocomplete
       multiple
       fullWidth
+      data-testing-id="usersfield"
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}

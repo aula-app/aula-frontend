@@ -24,7 +24,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
   const onLogout = useEventLogout();
 
   return (
-    <Stack className="noPrint" sx={fixedSideBarStyles} {...restOfProps}>
+    <Stack className="noPrint" pt={1} sx={fixedSideBarStyles} {...restOfProps}>
       {import.meta.env.VITE_APP_MULTI !== 'false' && (
         <>
           <Button onClick={() => navigator.clipboard.writeText(code)} color="secondary">
@@ -33,6 +33,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
           <Divider />
         </>
       )}
+      <Divider />
       <SideBarContent isFixed />
       <Divider />
       <Stack direction="row" alignItems="center" justifyContent="space-between" p={1} pl={2.5}>

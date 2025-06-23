@@ -173,11 +173,22 @@ const DataSettings = ({ onReload }: Props) => {
             noAdmin
             disabled={loading}
           />
-          <RoomField selected={rooms} onChange={(updates) => setRooms(updates)} disabled={loading} />
+          <RoomField
+            data-testing-id="user-room-select"
+            selected={rooms}
+            onChange={(updates) => setRooms(updates)}
+            disabled={loading}
+          />
         </Stack>
         <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
       </Stack>
-      <Button variant="contained" component="label" onClick={onSubmit} disabled={loading}>
+      <Button
+        data-testing-id="confirm_upload"
+        variant="contained"
+        component="label"
+        onClick={onSubmit}
+        disabled={loading}
+      >
         {loading ? t('status.waiting') : t('actions.confirm')}
       </Button>
     </Stack>

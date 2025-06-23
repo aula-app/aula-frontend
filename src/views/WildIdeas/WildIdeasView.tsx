@@ -89,10 +89,8 @@ const WildIdeas = () => {
   useEffect(() => {
     let ideasList = document.getElementById('wild-ideas-list');
     if (!!ideasList) {
-      console.log(appState);
       if (appState.lastIdeaList == 'wild-ideas') {
         ideasList.scrollTop = appState.lastScroll;
-        console.log('SRCOCOO', ideasList, ideas);
       } else
         dispatch({
           action: 'SAVE_SCROLL',
