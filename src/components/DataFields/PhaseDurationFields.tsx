@@ -116,7 +116,7 @@ const PhaseDurationFields: React.FC<Props> = ({
                       input: { endAdornment: <InputAdornment position="end">{t('ui.units.days')}</InputAdornment> },
                       inputLabel: { shrink: true },
                       htmlInput: {
-                        min: 0,
+                        min: 1,
                         max: 365,
                         step: 1,
                       },
