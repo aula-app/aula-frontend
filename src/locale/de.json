@@ -356,6 +356,7 @@
       "exportGranted": "Kontodatenexport gewährt",
       "exportRequest": "Datenexport angefordert",
       "update": "Daten aktualisieren",
+      "updateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer Felder: {{var}} anfordern möchten? Diese Aktion sollte von einem Admin validiert werden, um durchgeführt zu werden",
       "dataUpdateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer {{var}} anfordern möchten? Diese Aktion muss von einem Admin bestätigt werden, damit sie durchgeführt werden kann."
     },
     "advanced": {
@@ -548,6 +549,7 @@
       "filterCleared": "Filter gelöscht",
       "filterFieldSelected": "Filterfeld {{field}} ausgewählt",
       "filtersOpened": "Filter geöffnet",
+      "filtersClosed": "Filter geschlossen",
       "filtersClosed": "Filter geschlossen",
       "filterValueCleared": "Filterwert gelöscht",
       "filterValueFor": "Filterwert für {{field}}",

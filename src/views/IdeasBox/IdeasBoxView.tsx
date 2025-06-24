@@ -1,4 +1,4 @@
-import { AppIcon, LoadingIndicator } from '@/components';
+import { AppIcon } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import AddIdeasButton from '@/components/Buttons/AddIdeas';
@@ -185,7 +185,6 @@ const IdeasBoxView = () => {
       {isBoxLoading && (
         <>
           <BoxCardSkeleton />
-          <LoadingIndicator isLoading={isBoxLoading} resourceName={t('scopes.boxes.name')} />
         </>
       )}
       {boxError && <Typography>{t(boxError)}</Typography>}
@@ -197,7 +196,6 @@ const IdeasBoxView = () => {
               <IdeaCardSkeleton />
             </Grid>
           </Grid>
-          <LoadingIndicator isLoading={isIdeasLoading} resourceName={t('scopes.ideas.plural')} />
         </>
       )}
       {ideasError && <Typography>{t(ideasError)}</Typography>}

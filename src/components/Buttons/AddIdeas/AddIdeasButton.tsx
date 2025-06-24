@@ -1,5 +1,5 @@
-import AppIcon from '@/components/AppIcon';
 import { AccessibleDialog } from '@/components/AccessibleDialog';
+import AppIcon from '@/components/AppIcon';
 import { addIdeaBox, getIdeasByRoom, removeIdeaBox } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import {
@@ -14,7 +14,7 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -23,14 +23,7 @@ interface Props extends ButtonProps {
   onClose: () => void;
 }
 
-/**
- * Interface that will be exposed to the parent component.
- */
-export interface AddIdeaRefProps {
-  setNewIdeaIdeas: (id: string) => void;
-}
-
-const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose, ...restOfProps }, ref) => {
+const AddIdeasButton: FC<Props> = ({ ideas = [], onClose, ...restOfProps }) => {
   const { t } = useTranslation();
   const { room_id, box_id } = useParams();
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -102,28 +95,12 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
     if (open) onReset();
   }, [open, ideas]);
 
-  // Expose methods via ref
-  useImperativeHandle(ref, () => ({
-    setNewIdeaIdeas: (id: string) => {
-      // Implementation of setNewIdeaIdeas if needed
-    }
-  }));
-
   const dialogActions = (
     <>
-      <Button 
-        onClick={handleClose} 
-        color="secondary" 
-        autoFocus
-        aria-label={t('actions.cancel')}
-      >
+      <Button onClick={handleClose} color="secondary" autoFocus aria-label={t('actions.cancel')}>
         {t('actions.cancel')}
       </Button>
-      <Button 
-        onClick={onSubmit} 
-        variant="contained"
-        aria-label={t('actions.confirm')}
-      >
+      <Button onClick={onSubmit} variant="contained" aria-label={t('actions.confirm')}>
         {t('actions.confirm')}
       </Button>
     </>
@@ -145,7 +122,7 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
         <AppIcon icon="add" mr={1} />
         {t('actions.add', { var: t('scopes.ideas.name') })}
       </Button>
-      <AccessibleDialog 
+      <AccessibleDialog
         open={open}
         onClose={handleClose}
         title={t('actions.add', { var: t('scopes.ideas.name') })}
@@ -155,21 +132,12 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
       >
         {isLoading && <Skeleton />}
         {error && <Typography>{t(error)}</Typography>}
-        <List 
-          sx={{ pt: 0 }} 
-          role="listbox" 
-          aria-label={t('scopes.ideas.name')}
-          aria-multiselectable="true"
-        >
+        <List sx={{ pt: 0 }} role="listbox" aria-label={t('scopes.ideas.name')} aria-multiselectable="true">
           {roomIdeas.map((idea) => {
             const selectedIdea = selectedIdeas.find((selected) => selected.hash_id === idea.hash_id);
             return (
               <ListItem disablePadding key={idea.hash_id} role="option" aria-selected={!!selectedIdea}>
-                <ListItemButton 
-                  onClick={() => toggleIdea(idea)}
-                  role="checkbox"
-                  aria-checked={!!selectedIdea}
-                >
+                <ListItemButton onClick={() => toggleIdea(idea)}>
                   <ListItemAvatar>
                     <Checkbox checked={!!selectedIdea} />
                   </ListItemAvatar>
@@ -182,6 +150,6 @@ const AddIdeasButton = forwardRef<AddIdeaRefProps, Props>(({ ideas = [], onClose
       </AccessibleDialog>
     </>
   );
-});
+};
 
 export default AddIdeasButton;

@@ -47,6 +47,14 @@
     "linkCopied": "Link copied to clipboard",
     "linkCopyFailed": "Failed to copy link to clipboard"
   },
+  "clipboard": {
+    "linkCopied": "Link copied to clipboard",
+    "linkCopyFailed": "Failed to copy link to clipboard"
+  },
+  "clipboard": {
+    "linkCopied": "Link copied to clipboard",
+    "linkCopyFailed": "Failed to copy link to clipboard"
+  },
   "auth": {
     "forgotPassword": {
       "button": "Reset password",
@@ -360,7 +368,8 @@
       "exportGranted": "Account data export granted",
       "exportRequest": "Data export requested",
       "update": "Update data",
-      "updateText": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place"
+      "updateText": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place",
+      "dataUpdateText": "Are you sure you want to request the update of your {{var}}? This action must be confirmed by an Admin to take place."
     },
     "advanced": {
       "headline": "Advanced options",
@@ -552,7 +561,7 @@
       "filterCleared": "Filter cleared",
       "filterFieldSelected": "Filter field {{field}} selected",
       "filtersOpened": "Filters opened",
-      "filtersClosed": "Filters closed", 
+      "filtersClosed": "Filters closed",
       "filterValueCleared": "Filter value cleared",
       "filterValueFor": "Filter value for {{field}}",
       "filterValueHelp": "Type to filter by this field, press Escape to clear",
