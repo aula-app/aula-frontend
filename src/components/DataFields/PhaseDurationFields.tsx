@@ -2,7 +2,6 @@ import { getDefaultDurations } from '@/services/config';
 import { getRoom } from '@/services/rooms';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { FormControl, FormHelperText, FormLabel, InputAdornment, Stack, TextField, useTheme } from '@mui/material';
-import { get } from 'http';
 import { useEffect, useState } from 'react';
 import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
