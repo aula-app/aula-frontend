@@ -62,7 +62,7 @@ ${t('requests.deleteAccount.body', { var: user.displayname })}`,
         color="error"
         onClick={() => setOpenDelete(true)}
         fullWidth
-        data-testid="request-account-deletion-button"
+        data-testid="delete-account-button"
         aria-label={t('requests.deleteAccount.button')}
       >
         {t('requests.deleteAccount.button')}
@@ -86,7 +86,7 @@ ${t('requests.deleteAccount.body', { var: user.displayname })}`,
             onClick={() => setOpenDelete(false)}
             color="secondary"
             autoFocus
-            data-testid="cancel-account-deletion-button"
+            data-testid="cancel-button"
             aria-label={t('actions.cancel')}
           >
             {t('actions.cancel')}
@@ -95,7 +95,7 @@ ${t('requests.deleteAccount.body', { var: user.displayname })}`,
             onClick={requestDelete}
             color="error"
             variant="contained"
-            data-testid="confirm-account-deletion-button"
+            data-testid="confirm-button"
             aria-label={t('actions.delete')}
           >
             {t('actions.delete')}

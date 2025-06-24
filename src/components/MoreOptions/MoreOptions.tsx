@@ -86,7 +86,7 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
           onClick={toggleOptions}
           aria-expanded={open}
           aria-label={open ? t('actions.close') : t('actions.more')}
-          data-testid={`more-options-close-button`}
+          data-testid={`more-options`}
           {...restOfProps}
         />
       </Stack>

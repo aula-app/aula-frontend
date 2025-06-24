@@ -209,10 +209,10 @@ ${message}`,
           <>
             <CardActions>
               <Stack direction="row" mt={0.5} flex={1} gap={1} justifyContent="space-between">
-                <Button variant="contained" color="error" onClick={cancelRequest}>
+                <Button variant="contained" color="error" onClick={cancelRequest} data-testid="cancel-request">
                   {t('actions.cancel')}
                 </Button>
-                <Button variant="contained" onClick={() => setConfirm(true)}>
+                <Button variant="contained" onClick={() => setConfirm(true)} data-testid="confirm-request">
                   {t('actions.confirm')}
                 </Button>
               </Stack>
@@ -223,10 +223,15 @@ ${message}`,
                 <Typography>{t('requests.confirmation')}</Typography>
               </DialogContent>
               <DialogActions>
-                <Button onClick={() => setConfirm(false)} color="secondary" autoFocus>
+                <Button
+                  onClick={() => setConfirm(false)}
+                  color="secondary"
+                  autoFocus
+                  data-testid="cancel-request-action"
+                >
                   {t('actions.cancel')}
                 </Button>
-                <Button onClick={confirmRequest} variant="contained">
+                <Button onClick={confirmRequest} variant="contained" data-testid="confirm-request-action">
                   {t('actions.confirm')}
                 </Button>
               </DialogActions>
@@ -236,7 +241,7 @@ ${message}`,
         {metadata && metadata.responseTo === 'requestData' && (
           <CardActions>
             <Stack direction="row" mt={0.5} flex={1} gap={1} justifyContent="end">
-              <Button variant="contained" color="info" onClick={downloadData}>
+              <Button variant="contained" color="info" onClick={downloadData} data-testid="download-data">
                 {t('actions.download')}
               </Button>
             </Stack>

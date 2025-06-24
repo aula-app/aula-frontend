@@ -130,7 +130,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             color={confirmColor}
             variant="contained"
             disabled={isLoading}
-            data-testid="confitm-button"
+            data-testid="confirm-button"
             aria-label={isLoading ? t('actions.processing') : confirmButtonText}
           >
             {isLoading ? t('actions.processing') : confirmButtonText}

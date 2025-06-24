@@ -104,7 +104,7 @@ export const remove = async (
   await expect(DeleteButton).toBeVisible({ timeout: 500 });
   await DeleteButton.click({ timeout: 1000 });
 
-  const ConfirmDeleteButton = page.getByTestId('confirm-delete');
+  const ConfirmDeleteButton = page.getByTestId('confirm-button');
   await expect(ConfirmDeleteButton).toBeVisible();
   await ConfirmDeleteButton.click({ timeout: 1000 });
 
@@ -165,7 +165,7 @@ export const removeComment = async (
   await expect(DeleteButton).toBeVisible({ timeout: 500 });
   await DeleteButton.click({ timeout: 1000 });
 
-  const ConfirmDeleteButton = page.getByTestId('confirm-delete');
+  const ConfirmDeleteButton = page.getByTestId('confirm-button');
   await expect(ConfirmDeleteButton).toBeVisible();
   await ConfirmDeleteButton.click({ timeout: 1000 });
 
