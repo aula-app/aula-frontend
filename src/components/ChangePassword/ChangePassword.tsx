@@ -117,7 +117,7 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
               inputProps={{
                 'aria-labelledby': `change-password-${field}-label`,
                 'aria-invalid': !!errors[field],
-                'aria-errormessage': errors[field] ? `${field}-error-message` : undefined
+                'aria-errormessage': errors[field] ? `${field}-error-message` : undefined,
               }}
               InputLabelProps={{
                 id: `change-password-${field}-label`,
@@ -135,7 +135,7 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
                       />
                     </InputAdornment>
                   ),
-                }
+                },
               }}
             />
           ))}
@@ -145,7 +145,7 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
           <Button color="error" disabled={disabled} onClick={resetFields}>
             {t('actions.cancel')}
           </Button>
-          <Button type="submit" data-testing-id="submit-new-password" variant="contained" disabled={disabled}>
+          <Button type="submit" data-testid="submit-new-password" variant="contained" disabled={disabled}>
             {t('actions.save')}
           </Button>
         </Stack>

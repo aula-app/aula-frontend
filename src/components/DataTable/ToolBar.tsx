@@ -34,7 +34,7 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
   const { t } = useTranslation();
   const theme = useTheme();
   const [isOpen, setOpen] = useState(false);
-  
+
   // References to buttons for focus management
   const addButtonRef = useRef<HTMLButtonElement>(null);
   const deleteButtonRef = useRef<HTMLButtonElement>(null);
@@ -44,16 +44,16 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
   const onDelete = () => {
     setDelete(selected);
     setOpen(false);
-    
+
     // Announce the deletion action to screen readers
     announceToScreenReader(
-      t('ui.accessibility.itemsDeleted', { 
-        count: selected.length, 
-        type: t(`scopes.${scope}.${selected.length === 1 ? 'name' : 'plural'}`) 
+      t('ui.accessibility.itemsDeleted', {
+        count: selected.length,
+        type: t(`scopes.${scope}.${selected.length === 1 ? 'name' : 'plural'}`),
       }),
       'assertive'
     );
-    
+
     // Return focus to the delete button
     setTimeout(() => {
       if (deleteButtonRef.current) {
@@ -61,23 +61,23 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
       }
     }, 100);
   };
-  
+
   const handleOpenDialog = () => {
     setOpen(true);
-    
+
     // Announce dialog opening to screen readers
     announceToScreenReader(
-      t('ui.accessibility.confirmDeletion', { 
-        count: selected.length, 
-        type: t(`scopes.${scope}.${selected.length === 1 ? 'name' : 'plural'}`) 
+      t('ui.accessibility.confirmDeletion', {
+        count: selected.length,
+        type: t(`scopes.${scope}.${selected.length === 1 ? 'name' : 'plural'}`),
       }),
       'assertive'
     );
   };
-  
+
   const handleCloseDialog = () => {
     setOpen(false);
-    
+
     // Return focus to the delete button
     setTimeout(() => {
       if (deleteButtonRef.current) {
@@ -85,14 +85,14 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
       }
     }, 100);
   };
-  
+
   const handleEdit = () => {
     setEdit(true);
-    
+
     // Announce editing mode to screen readers
     announceToScreenReader(
-      t('ui.accessibility.editingStarted', { 
-        type: t(`scopes.${scope}.name`) 
+      t('ui.accessibility.editingStarted', {
+        type: t(`scopes.${scope}.name`),
       }),
       'polite'
     );
@@ -101,20 +101,18 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
   // Handle keyboard navigation within the toolbar
   const handleToolbarKeyDown = (e: React.KeyboardEvent) => {
     // When Delete button is focused and Enter or Space is pressed, open confirmation dialog
-    if (document.activeElement === deleteButtonRef.current && 
-        (e.key === 'Enter' || e.key === ' ')) {
+    if (document.activeElement === deleteButtonRef.current && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
       handleOpenDialog();
     }
-    
+
     // When Add button is focused and Enter or Space is pressed, enter edit mode
-    if (document.activeElement === addButtonRef.current && 
-        (e.key === 'Enter' || e.key === ' ')) {
+    if (document.activeElement === addButtonRef.current && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
       handleEdit();
     }
   };
-  
+
   // Focus first button in dialog when it opens
   useEffect(() => {
     if (isOpen && cancelButtonRef.current) {
@@ -140,8 +138,8 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
     >
       <Stack direction="row" gap={1} alignItems="center" width="100%" flexWrap="wrap">
         {scope !== 'ideas' && (
-          <Button 
-            variant="outlined" 
+          <Button
+            variant="outlined"
             onClick={handleEdit}
             ref={addButtonRef}
             data-testid={`add-${scope}-button`}
@@ -153,10 +151,10 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
         )}
         {extraTools && extraTools({ items: selected })}
         {checkPermissions(scope, 'delete') && (
-          <Button 
-            variant="outlined" 
-            color="error" 
-            onClick={handleOpenDialog} 
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={handleOpenDialog}
             disabled={selected.length === 0}
             ref={deleteButtonRef}
             data-testid={`remove-${scope}-button`}
@@ -191,17 +189,12 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button 
-            onClick={handleCloseDialog} 
-            color="secondary" 
-            ref={cancelButtonRef}
-            aria-label={t('actions.cancel')}
-          >
+          <Button onClick={handleCloseDialog} color="secondary" ref={cancelButtonRef} aria-label={t('actions.cancel')}>
             {t('actions.cancel')}
           </Button>
-          <Button 
-            color="error" 
-            variant="contained" 
+          <Button
+            color="error"
+            variant="contained"
             onClick={onDelete}
             ref={confirmDeleteButtonRef}
             data-testid={`confirm-delete-${scope}-button`}

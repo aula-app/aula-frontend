@@ -28,7 +28,9 @@
     "loading": "Loading",
     "loadingComplete": "Loading complete",
     "loadingFailed": "Loading failed",
+    "more": "More",
     "move": "Move selected {{var}} to",
+    "options": "Options",
     "print": "Print",
     "processing": "Processing",
     "remove": "Delete {{var}}",
@@ -42,14 +44,6 @@
     "submitting": "Submitting",
     "unarchive": "Unarchive",
     "updating": "Updating"
-  },
-  "clipboard": {
-    "linkCopied": "Link copied to clipboard",
-    "linkCopyFailed": "Failed to copy link to clipboard"
-  },
-  "clipboard": {
-    "linkCopied": "Link copied to clipboard",
-    "linkCopyFailed": "Failed to copy link to clipboard"
   },
   "clipboard": {
     "linkCopied": "Link copied to clipboard",
@@ -473,7 +467,8 @@
     },
     "customFields": {
       "form": "Custom field {{var}}",
-      "label": "Custom fields"
+      "label": "Custom fields",
+      "updated": "Custom fields updated"
     },
     "general": {
       "description": "Description",

@@ -27,7 +27,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
 
   // how to fill in one of those MUI multiselectors:
 
-  const UserSelector = page.locator('[data-testing-id="usersfield"] input');
+  const UserSelector = page.locator('[data-testid="usersfield"] input');
   await expect(UserSelector).toBeVisible({ timeout: 500 });
 
   await UserSelector.click({ timeout: 1000 });
@@ -50,10 +50,10 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
 
   // Wait for page to load completely
   await page.waitForLoadState('networkidle');
-  
+
   // Wait for the rooms table/content to load first
   await expect(page.locator('h1')).toContainText('Räume');
-  
+
   // open the filter menu:
   const FilterButton = page.locator('#filter-toggle-button');
   await expect(FilterButton).toBeVisible({ timeout: 10000 });

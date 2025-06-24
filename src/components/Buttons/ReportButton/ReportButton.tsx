@@ -39,7 +39,7 @@ ${data.content || ''}
   return (
     <>
       <AppIconButton
-        data-testing-id="report-button"
+        data-testid="report-button"
         ref={buttonRef}
         icon="report"
         disabled={disabled}

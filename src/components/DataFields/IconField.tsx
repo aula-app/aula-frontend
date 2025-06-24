@@ -34,7 +34,7 @@ const IconField: React.FC<Props> = ({ name, control, disabled = false, ...restOf
           <Stack direction="row" flexWrap="wrap" justifyContent="center">
             {icons.map((icon) => (
               <AppIconButton
-                data-testing-id="icon-field-icon"
+                data-testid="icon-field-icon"
                 key={icon}
                 icon={icon}
                 onClick={() => field.onChange(icon)}

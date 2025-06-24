@@ -76,13 +76,13 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       setIsLoading(true);
       // Announce form submission to screen readers
       announceToScreenReader(t('ui.accessibility.processingRequest'), 'assertive');
-      
+
       if (!defaultValues) {
         await newIdea(data);
       } else {
         await updateIdea(data);
       }
-      
+
       // Announce successful form submission to screen readers
       announceToScreenReader(t('ui.accessibility.formSubmitted'), 'assertive');
       onClose();
@@ -148,8 +148,8 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
 
   return (
     <Stack p={2} overflow="auto">
-      <form 
-        onSubmit={handleSubmit(onSubmit)} 
+      <form
+        onSubmit={handleSubmit(onSubmit)}
         noValidate
         data-testid={`${defaultValues ? 'edit' : 'add'}-idea-form`}
         aria-label={t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.ideas.name`) })}
@@ -214,12 +214,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             </Stack>
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button 
-              onClick={onClose} 
-              color="error" 
-              data-testid="cancel-idea-form"
-              aria-label={t('actions.cancel')}
-            >
+            <Button onClick={onClose} color="error" data-testid="cancel-idea-form" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button
@@ -233,11 +228,11 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             </Button>
           </Stack>
         </Stack>
-        
+
         {/* Hidden status announcer for screen readers */}
         {isLoading && (
-          <span 
-            aria-live="assertive" 
+          <span
+            aria-live="assertive"
             className="visually-hidden"
             style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden' }}
           >

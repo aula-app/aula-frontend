@@ -39,7 +39,7 @@ export const goToPhase = async (
   page: Page, //
   phase: number
 ) => {
-  const GoToApprovalPhaseButton = page.locator(`[data-testing-id="link-to-phase-${phase}"]`);
+  const GoToApprovalPhaseButton = page.getByTestId(`link-to-phase-${phase}`);
   await expect(GoToApprovalPhaseButton).toBeVisible({ timeout: 2000 });
   await GoToApprovalPhaseButton.click({ timeout: 1000 });
 };
@@ -90,25 +90,25 @@ export const remove = async (
 
   await goToRoom(page, room);
 
-  const IdeaDiv = page.locator(`[data-testing-id="idea-${idea.name}"]`);
+  const IdeaDiv = page.getByTestId(`idea-${idea.name}`);
   await expect(IdeaDiv).toBeVisible();
 
   // so that any triggered tooltips dissappear
   await page.mouse.move(0, 0);
 
-  const DotMenuDiv = IdeaDiv.locator('[data-testing-id="idea-more-menu"]');
+  const DotMenuDiv = IdeaDiv.getByTestId('idea-more-menu');
   await expect(DotMenuDiv).toBeVisible();
   await DotMenuDiv.click({ timeout: 1000 });
 
-  const DeleteButton = IdeaDiv.locator('[data-testing-id="delete-button"]');
+  const DeleteButton = IdeaDiv.getByTestId('delete-button');
   await expect(DeleteButton).toBeVisible({ timeout: 500 });
   await DeleteButton.click({ timeout: 1000 });
 
-  const ConfirmDeleteButton = page.locator('[data-testing-id="confirm-delete"]');
+  const ConfirmDeleteButton = page.getByTestId('confirm-delete');
   await expect(ConfirmDeleteButton).toBeVisible();
   await ConfirmDeleteButton.click({ timeout: 1000 });
 
-  const NoExistIdeaDiv = page.locator(`[data-testing-id="idea-${idea.name}"]`);
+  const NoExistIdeaDiv = page.getByTestId(`idea-${idea.name}`);
   await expect(NoExistIdeaDiv).toHaveCount(0);
 };
 
@@ -136,7 +136,7 @@ export const comment = async (
 
   await sleep(2);
 
-  const Comment = page.locator('[data-testing-id="comment-bubble"]').filter({ hasText: commentText });
+  const Comment = page.getByTestId('comment-bubble').filter({ hasText: commentText });
   const commentCount = await Comment.count();
   await expect(commentCount).toBeGreaterThan(0);
 };
@@ -154,22 +154,22 @@ export const removeComment = async (
 
   await goToidea(page, idea);
 
-  const Comment = page.locator('[data-testing-id="comment-bubble"]').filter({ hasText: commentText });
+  const Comment = page.getByTestId('comment-bubble').filter({ hasText: commentText });
   await expect(Comment).toBeVisible();
 
-  const MoreOptionsButton = Comment.locator('[data-testing-id="comment-more-options"]');
+  const MoreOptionsButton = Comment.getByTestId('comment-more-options');
   await expect(MoreOptionsButton).toBeVisible();
   await MoreOptionsButton.click({ timeout: 1000 });
 
-  const DeleteButton = Comment.locator('[data-testing-id="delete-button"]');
+  const DeleteButton = Comment.getByTestId('delete-button');
   await expect(DeleteButton).toBeVisible({ timeout: 500 });
   await DeleteButton.click({ timeout: 1000 });
 
-  const ConfirmDeleteButton = page.locator('[data-testing-id="confirm-delete"]');
+  const ConfirmDeleteButton = page.getByTestId('confirm-delete');
   await expect(ConfirmDeleteButton).toBeVisible();
   await ConfirmDeleteButton.click({ timeout: 1000 });
 
-  const NoComment = page.locator('[data-testing-id="comment-bubble"]').filter({ hasText: commentText });
+  const NoComment = page.getByTestId('comment-bubble').filter({ hasText: commentText });
   await expect(NoComment).toHaveCount(0);
 };
 
@@ -190,7 +190,7 @@ export const approve = async (
 
   await page.locator('div[contenteditable="true"]').fill('approved in automated testing');
 
-  const ApptoveButton = page.locator(`[data-testing-id="approve-button"]`);
+  const ApptoveButton = page.getByTestId(`approve-button`);
   await expect(ApptoveButton).toBeVisible({ timeout: 2000 });
 
   await ApptoveButton.click({ timeout: 1000 });
@@ -218,7 +218,7 @@ export const vote = async (
 
   await goToidea(page, idea);
 
-  const VoteButton = page.locator(`[data-testing-id="${vote}"]`);
+  const VoteButton = page.getByTestId(`${vote}`);
   await expect(VoteButton).toBeVisible({ timeout: 2000 });
   await VoteButton.click({ timeout: 1000 });
 };
@@ -239,7 +239,7 @@ export const totalVoteCount = async (
 
   await goToidea(page, idea);
 
-  const VoteCount = page.locator(`[data-testing-id="total-votes"]`);
+  const VoteCount = page.getByTestId(`total-votes`);
   await expect(VoteCount).toBeVisible({ timeout: 2000 });
   const countS = await VoteCount.textContent();
 
@@ -270,19 +270,19 @@ export const voteCounts = async (
 
   await goToidea(page, idea);
 
-  const ForVoteCount = page.locator(`[data-testing-id="total-votes-for"]`);
+  const ForVoteCount = page.getByTestId(`total-votes-for`);
   await expect(ForVoteCount).toBeVisible({ timeout: 2000 });
   const forcountS = await ForVoteCount.textContent();
   await expect(forcountS).toBeTruthy();
   const forcount = parseInt(forcountS);
 
-  const AgainstVoteCount = page.locator(`[data-testing-id="total-votes-against"]`);
+  const AgainstVoteCount = page.getByTestId(`total-votes-against`);
   await expect(AgainstVoteCount).toBeVisible({ timeout: 2000 });
   const AgainstcountS = await AgainstVoteCount.textContent();
   await expect(AgainstcountS).toBeTruthy();
   const Againstcount = parseInt(AgainstcountS);
 
-  const NeutralVoteCount = page.locator(`[data-testing-id="total-votes-neutral"]`);
+  const NeutralVoteCount = page.getByTestId(`total-votes-neutral`);
   await expect(NeutralVoteCount).toBeVisible({ timeout: 2000 });
   const NeutralcountS = await NeutralVoteCount.textContent();
   await expect(NeutralcountS).toBeTruthy();
@@ -301,13 +301,13 @@ export const report = async (
 
   await goToRoom(page, room);
 
-  const IdeaDiv = page.locator(`[data-testing-id="idea-${idea.name}"]`);
+  const IdeaDiv = page.getByTestId(`idea-${idea.name}`);
   await expect(IdeaDiv).toBeVisible();
-  const DotMenuDiv = IdeaDiv.locator('[data-testing-id="idea-more-menu"]');
+  const DotMenuDiv = IdeaDiv.getByTestId('idea-more-menu');
   await expect(DotMenuDiv).toBeVisible();
   await DotMenuDiv.click({ timeout: 1000 });
 
-  const ReportButton = IdeaDiv.locator('[data-testing-id="report-button"]');
+  const ReportButton = IdeaDiv.getByTestId('report-button');
   await expect(ReportButton).toBeVisible({ timeout: 500 });
   await ReportButton.click({ timeout: 1000 });
 
@@ -361,14 +361,14 @@ export const reportComment = async (
 
   await goToidea(page, idea);
 
-  const Comment = page.locator('[data-testing-id="comment-bubble"]').filter({ hasText: commentText });
+  const Comment = page.getByTestId('comment-bubble').filter({ hasText: commentText });
   await expect(Comment).toBeVisible();
 
-  const MoreOptionsButton = Comment.locator('[data-testing-id="comment-more-options"]');
+  const MoreOptionsButton = Comment.getByTestId('comment-more-options');
   await expect(MoreOptionsButton).toBeVisible();
   await MoreOptionsButton.click({ timeout: 1000 });
 
-  const ReportButton = Comment.locator('[data-testing-id="report-button"]');
+  const ReportButton = Comment.getByTestId('report-button');
   await expect(ReportButton).toBeVisible({ timeout: 500 });
   await ReportButton.click({ timeout: 1000 });
 

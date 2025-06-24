@@ -56,14 +56,26 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
               target={`${t(`scopes.${scope}.name`)}: ${targetName}`}
               link={link}
               role="menuitem"
+              data-testid={`report-button`}
             />
             {phase && (
               <>
                 {checkPermissions(scope, 'edit', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
-                  <EditButton color={color || 'secondary'} onEdit={onEdit} role="menuitem" />
+                  <EditButton
+                    color={color || 'secondary'}
+                    onEdit={onEdit}
+                    role="menuitem"
+                    data-testid={`edit-button`}
+                  />
                 )}
                 {checkPermissions(scope, 'delete', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
-                  <DeleteButton color={color || 'error'} scope={scope} onDelete={onDelete} role="menuitem" />
+                  <DeleteButton
+                    color={color || 'error'}
+                    scope={scope}
+                    onDelete={onDelete}
+                    role="menuitem"
+                    data-testid={`delete-button`}
+                  />
                 )}
               </>
             )}
@@ -74,6 +86,7 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
           onClick={toggleOptions}
           aria-expanded={open}
           aria-label={open ? t('actions.close') : t('actions.more')}
+          data-testid={`more-options-close-button`}
           {...restOfProps}
         />
       </Stack>

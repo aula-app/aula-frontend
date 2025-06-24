@@ -117,7 +117,7 @@ export const create = async (page: Page, data: users.UserData): Promise<TempPass
 
   //await page.fill('input[name="userlevel"]', data.role.toString());
 
-  await page.locator('[data-testing-id="rolefield"]').click({ timeout: 1000 });
+  await page.getByTestId('rolefield').click({ timeout: 1000 });
 
   await page.locator(`li[data-value="${data.role}"]`).click({ timeout: 1000 });
 

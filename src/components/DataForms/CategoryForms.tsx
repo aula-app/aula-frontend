@@ -86,7 +86,7 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
 
   return (
     <Stack p={2} overflow="auto">
-      <form data-testing-id="category-forms" onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form data-testid="category-forms" onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h1">
@@ -114,7 +114,12 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading} aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading}
+              aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+            >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>

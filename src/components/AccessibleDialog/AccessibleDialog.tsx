@@ -1,6 +1,16 @@
 import { announceToScreenReader, useEscapeKey, useFocusTrap, useModalAnnouncement } from '@/utils';
 import { Close } from '@mui/icons-material';
-import { Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, IconButton, Theme, Tooltip, useMediaQuery } from '@mui/material';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogProps,
+  DialogTitle,
+  IconButton,
+  Theme,
+  Tooltip,
+  useMediaQuery,
+} from '@mui/material';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,53 +19,53 @@ export interface AccessibleDialogProps extends Omit<DialogProps, 'title'> {
    * The title of the dialog
    */
   title: string;
-  
+
   /**
    * Description of the dialog for screen readers
    */
   description?: string;
-  
+
   /**
    * Whether to show a close button in the dialog title
    * @default true
    */
   showCloseButton?: boolean;
-  
+
   /**
    * The content of the dialog
    */
   children: React.ReactNode;
-  
+
   /**
    * Actions to display at the bottom of the dialog
    */
   actions?: React.ReactNode;
-  
+
   /**
    * Function to close the dialog
    */
   onClose: () => void;
-  
+
   /**
    * Whether the dialog is open
    */
   open: boolean;
-  
+
   /**
    * Element that should receive focus when the dialog is opened
    */
   initialFocusRef?: React.RefObject<HTMLElement>;
-  
+
   /**
    * Element that should receive focus when the dialog is closed
    */
   finalFocusRef?: React.RefObject<HTMLElement>;
-  
+
   /**
    * Additional aria attributes
    */
   ariaProps?: React.AriaAttributes;
-  
+
   /**
    * Optional test ID for testing
    */
@@ -67,7 +77,7 @@ export interface AccessibleDialogHandle {
    * Focus the dialog or a specific element within it
    */
   focus: () => void;
-  
+
   /**
    * Get the dialog element
    */
@@ -82,24 +92,27 @@ export interface AccessibleDialogHandle {
  * - Screen reader announcements
  */
 const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProps>(
-  ({ 
-    title,
-    description,
-    showCloseButton = true,
-    children,
-    actions,
-    onClose,
-    open,
-    initialFocusRef,
-    finalFocusRef,
-    ariaProps,
-    testId,
-    ...dialogProps
-  }, ref) => {
+  (
+    {
+      title,
+      description,
+      showCloseButton = true,
+      children,
+      actions,
+      onClose,
+      open,
+      initialFocusRef,
+      finalFocusRef,
+      ariaProps,
+      testId,
+      ...dialogProps
+    },
+    ref
+  ) => {
     const { t } = useTranslation();
     const dialogRef = useRef<HTMLDivElement>(null);
     const fullScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-    
+
     // Implement handle for external control
     useImperativeHandle(ref, () => ({
       focus: () => {
@@ -115,16 +128,16 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
       },
       getDialogElement: () => dialogRef.current,
     }));
-    
+
     // Set up focus trap
     useFocusTrap(open, dialogRef, initialFocusRef, finalFocusRef);
-    
+
     // Handle escape key
     useEscapeKey(open, onClose);
-    
+
     // Announce dialog to screen readers
     useModalAnnouncement(open, title, t);
-    
+
     // Announce dialog closure
     useEffect(() => {
       if (!open) {
@@ -134,10 +147,10 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
 
     // Define dialog ID for aria-labelledby and aria-describedby
     const dialogTitleId = `${title.toLowerCase().replace(/\s+/g, '-')}-dialog-title`;
-    const dialogDescriptionId = description 
-      ? `${title.toLowerCase().replace(/\s+/g, '-')}-dialog-description` 
+    const dialogDescriptionId = description
+      ? `${title.toLowerCase().replace(/\s+/g, '-')}-dialog-description`
       : undefined;
-    
+
     return (
       <Dialog
         ref={dialogRef}
@@ -150,7 +163,7 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
         {...ariaProps}
         {...dialogProps}
       >
-        <DialogTitle 
+        <DialogTitle
           id={dialogTitleId}
           sx={{
             display: 'flex',
@@ -174,7 +187,7 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
             </Tooltip>
           )}
         </DialogTitle>
-        
+
         <DialogContent>
           {description && (
             <span
@@ -186,7 +199,7 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
           )}
           {children}
         </DialogContent>
-        
+
         {actions && <DialogActions>{actions}</DialogActions>}
       </Dialog>
     );

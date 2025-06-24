@@ -143,7 +143,12 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
 
   return (
     <Stack p={2} overflow="auto">
-      <form onSubmit={handleSubmit(onSubmit)} noValidate data-testid={`${defaultValues ? 'edit' : 'add'}-user-form`} aria-label={t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.users.name`) })}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        data-testid={`${defaultValues ? 'edit' : 'add'}-user-form`}
+        aria-label={t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.users.name`) })}
+      >
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h1">

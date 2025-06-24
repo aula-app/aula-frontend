@@ -28,7 +28,9 @@
     "loading": "Wird geladen",
     "loadingComplete": "Laden abgeschlossen",
     "loadingFailed": "Laden fehlgeschlagen",
+    "more": "Mehr",
     "move": "{{var}} verschieben",
+    "options": "Optionen",
     "print": "Drucken",
     "processing": "Verarbeitung",
     "remove": "{{var}} entfernen",
@@ -42,6 +44,10 @@
     "submitting": "Wird übermittelt",
     "unarchive": "Aus Archiv holen",
     "updating": "Aktualisierung"
+  },
+  "clipboard": {
+    "linkCopied": "Link in die Zwischenablage kopiert",
+    "linkCopyFailed": "Link konnte nicht in die Zwischenablage kopiert werden"
   },
   "auth": {
     "forgotPassword": {
@@ -461,7 +467,8 @@
     },
     "customFields": {
       "form": "Benutzerdefiniertes Feld {{var}}",
-      "label": "Benutzerdefinierte Felder"
+      "label": "Benutzerdefinierte Felder",
+      "updated": "Benutzerdefinierte Felder aktualisiert"
     },
     "general": {
       "description": "Beschreibung",
@@ -549,7 +556,6 @@
       "filterCleared": "Filter gelöscht",
       "filterFieldSelected": "Filterfeld {{field}} ausgewählt",
       "filtersOpened": "Filter geöffnet",
-      "filtersClosed": "Filter geschlossen",
       "filtersClosed": "Filter geschlossen",
       "filterValueCleared": "Filterwert gelöscht",
       "filterValueFor": "Filterwert für {{field}}",

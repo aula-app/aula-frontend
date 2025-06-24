@@ -1,11 +1,8 @@
-import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
-import { sleep } from '../../shared/utils';
-import * as shared from '../../shared/shared';
-import * as users from '../../shared/page_interactions/users';
-import * as rooms from '../../shared/page_interactions/rooms';
+import { expect, test } from '@playwright/test';
 import * as ideas from '../../shared/page_interactions/ideas';
-import * as ui from '../../shared/page_interactions/interface';
-import * as boxes from '../../shared/page_interactions/boxes';
+import * as rooms from '../../shared/page_interactions/rooms';
+import * as users from '../../shared/page_interactions/users';
+import * as shared from '../../shared/shared';
 
 import * as fixtures from '../../fixtures/users';
 import * as browsers from '../../shared/page_interactions/browsers';
@@ -56,7 +53,6 @@ test.describe('Categories flow', () => {
     await admin.waitForLoadState('networkidle');
 
     // open ideas accordion - it's an accordion summary, not a button
-    // Improved: Use data-testid for more reliable selection
     const IdeeAccordeon = admin.getByTestId('config-accordion-idea');
     await expect(IdeeAccordeon).toBeVisible({ timeout: 10000 });
     await IdeeAccordeon.click();
@@ -65,7 +61,6 @@ test.describe('Categories flow', () => {
     await admin.waitForTimeout(1000);
 
     // add category button - look for the add button in German
-    // Improved: Use data-testid for more reliable selection
     const AddCategoryButton = admin.getByTestId('add-new-category-chip');
     await expect(AddCategoryButton).toBeVisible({ timeout: 10000 });
     await AddCategoryButton.click();
@@ -74,7 +69,7 @@ test.describe('Categories flow', () => {
     await admin.waitForTimeout(1000);
 
     // Look for the form specifically
-    const Form = admin.locator('[data-testing-id="category-forms"]');
+    const Form = admin.getByTestId('category-forms');
     await expect(Form).toBeVisible({ timeout: 10000 });
 
     const CategoryNameField = admin.locator('input[name="name"]');
@@ -83,7 +78,7 @@ test.describe('Categories flow', () => {
 
     // Select an icon - try different selectors
     const Icon = admin
-      .locator('[data-testing-id="icon-field-icon"]')
+      .getByTestId('icon-field-icon')
       .first()
       .or(admin.locator('[data-testid*="icon"]').first())
       .or(admin.locator('button').filter({ hasText: /icon/i }).first());
@@ -91,7 +86,7 @@ test.describe('Categories flow', () => {
     await Icon.click();
 
     // Confirm button - target the submit button within the category form
-    const SubmitButton = admin.locator('[data-testing-id="category-forms"] button[type="submit"]');
+    const SubmitButton = admin.locator('[data-testid="category-forms"] button[type="submit"]');
     await expect(SubmitButton).toBeVisible({ timeout: 10000 });
     await SubmitButton.click();
 
@@ -99,7 +94,6 @@ test.describe('Categories flow', () => {
     await admin.waitForTimeout(2000);
 
     // Look for the new category pill/chip
-    // Improved: Use data-testid for more reliable selection
     const NewCategoryPill = admin.getByTestId(`category-chip-${data.categoryName.toLowerCase().replace(/\s+/g, '-')}`);
     await expect(NewCategoryPill).toBeVisible({ timeout: 10000 });
 
@@ -146,7 +140,6 @@ test.describe('Categories flow', () => {
     await admin.waitForLoadState('networkidle');
 
     // open ideas accordion - it's an accordion summary, not a button
-    // Improved: Use data-testid for more reliable selection
     const IdeeAccordeon = admin.getByTestId('config-accordion-idea');
     await expect(IdeeAccordeon).toBeVisible({ timeout: 10000 });
     await IdeeAccordeon.click();
@@ -156,12 +149,11 @@ test.describe('Categories flow', () => {
 
     // Look for the category pill/chip
     const categoryName = data.categoryName!; // We know it exists from the first test
-    // Improved: Use data-testid for more reliable selection
     const NewCategoryPill = admin.getByTestId(`category-chip-${categoryName.toLowerCase().replace(/\s+/g, '-')}`);
     await expect(NewCategoryPill).toBeVisible({ timeout: 10000 });
 
     // Look for the remove/delete button on the chip
-    const RemoveButton = NewCategoryPill.locator('[data-testid="CancelIcon"]')
+    const RemoveButton = NewCategoryPill.getByTestId('CancelIcon')
       .or(NewCategoryPill.locator('svg[data-testid*="Cancel"]'))
       .or(NewCategoryPill.locator('.MuiChip-deleteIcon'));
     await expect(RemoveButton).toBeVisible({ timeout: 10000 });
@@ -172,8 +164,7 @@ test.describe('Categories flow', () => {
     await expect(Dialog).toBeVisible({ timeout: 10000 });
 
     // Look for delete confirmation button
-    // Improved: Use data-testid for more reliable selection
-    const ConfirmButton = Dialog.getByTestId('confirm-dialog-confirm');
+    const ConfirmButton = Dialog.getByTestId('confirm-button');
     await expect(ConfirmButton).toBeVisible({ timeout: 10000 });
     await ConfirmButton.click();
 

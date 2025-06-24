@@ -91,7 +91,7 @@ const VotingCard = ({ onReload }: Props) => {
                   bgcolor: `${option}.main`,
                 },
               }}
-              data-testing-id={option}
+              data-testid={option}
               disabled={!checkPermissions('ideas', 'vote') || isLoading}
               key={i}
               onClick={() => handleVoteClick((i - 1) as Vote)}

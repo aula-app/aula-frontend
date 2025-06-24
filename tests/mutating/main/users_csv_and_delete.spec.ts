@@ -72,7 +72,7 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     await admin.setInputFiles('input[type="file"]', filePath);
 
     //
-    const RoomSelector = admin.locator('[data-testing-id="user-room-select"] input');
+    const RoomSelector = admin.locator('[data-testid="user-room-select"] input');
     await expect(RoomSelector).toBeVisible({ timeout: 500 });
 
     await RoomSelector.click({ timeout: 1000 });
@@ -80,7 +80,7 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     // just select the first room
     await admin.getByRole('option').first().click({ timeout: 1000 });
 
-    const ApproveButton = admin.locator('[data-testing-id="confirm_upload"]');
+    const ApproveButton = admin.locator('[data-testid="confirm_upload"]');
     await expect(ApproveButton).toBeVisible({ timeout: 1000 });
     await ApproveButton.click({ timeout: 1000 });
 
