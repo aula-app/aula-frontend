@@ -1,6 +1,5 @@
 import { IdeaForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
-import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import { deleteIdea, getIdeas } from '@/services/ideas';
@@ -83,6 +82,11 @@ const IdeasView: React.FC = () => {
     fetchIdeas();
   };
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setOffset(0);
+  }, [search_field, search_text, status]);
+
   useEffect(() => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.ideas'), '/']] });
     fetchIdeas();
@@ -118,8 +122,8 @@ const IdeasView: React.FC = () => {
           setEdit={(idea) => setEdit(idea as IdeaType)}
           setDelete={deleteIdeas}
           extraTools={extraTools}
+          isLoading={isLoading}
         />
-        {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
         <PaginationBar pages={Math.ceil(totalIdeas / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>

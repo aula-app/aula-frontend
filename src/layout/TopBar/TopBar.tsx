@@ -8,6 +8,7 @@ import { ReactNode, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../config';
+import UserInfo from '@/components/UserInfo';
 import MessagesButton from '@/components/Buttons/MessagesButton';
 import UpdatesButton from '@/components/Buttons/UpdatesButton';
 import { useTranslation } from 'react-i18next';
@@ -85,7 +86,6 @@ const TopBar: React.FC = () => {
             <AppIconButton icon="back" onClick={() => goto(getReturnPath())} />
           )}
         </Box>
-
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs
           aria-label="breadcrumb"

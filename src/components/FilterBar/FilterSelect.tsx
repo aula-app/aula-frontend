@@ -1,14 +1,6 @@
 import { PossibleFields } from '@/types/Scopes';
 import { announceToScreenReader } from '@/utils';
-import { 
-  FilledInput, 
-  FormHelperText, 
-  InputLabel, 
-  MenuItem, 
-  Stack, 
-  TextField, 
-  Tooltip 
-} from '@mui/material';
+import { FilledInput, FormHelperText, InputLabel, MenuItem, Stack, TextField, Tooltip } from '@mui/material';
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
@@ -40,7 +32,7 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
         t('ui.accessibility.filterFieldSelected', { field: t(`settings.columns.${selectedKey}`) }),
         'polite'
       );
-      
+
       // Focus the filter input field after a field is selected
       setTimeout(() => {
         if (filterInputRef.current) {
@@ -57,7 +49,7 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
   const handleClearFilter = () => {
     setFilterValue('');
     announceToScreenReader(t('ui.accessibility.filterValueCleared'), 'polite');
-    
+
     // Return focus to the input field after clearing
     setTimeout(() => {
       if (filterInputRef.current) {
@@ -73,7 +65,7 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
       event.preventDefault();
       handleClearFilter();
     }
-    
+
     // If Backspace is pressed in an empty filter input, move focus back to the select
     if (event.key === 'Backspace' && filterValue === '') {
       filterSelectRef.current?.focus();
@@ -82,13 +74,13 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
 
   useEffect(() => {
     onChange([key, filterValue || '']);
-    
+
     // Announce filter changes to screen readers if both key and value are set
     if (key && filterValue) {
       announceToScreenReader(
-        t('ui.accessibility.filterApplied', { 
-          field: t(`settings.columns.${key}`), 
-          value: filterValue 
+        t('ui.accessibility.filterApplied', {
+          field: t(`settings.columns.${key}`),
+          value: filterValue,
         }),
         'polite'
       );
@@ -99,6 +91,7 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
     <Stack direction="row" alignItems="center" gap={1} role="search">
       <TextField
         select
+        id="filter-select-1"
         label={t('actions.filter')}
         value={key}
         onChange={handleKeyChange}
@@ -111,17 +104,12 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
       >
         <MenuItem value="">&nbsp;</MenuItem>
         {fields.map((column) => (
-          <MenuItem 
-            value={column} 
-            key={column}
-            role="option"
-            aria-selected={key === column}
-          >
+          <MenuItem value={column} key={column} role="option" aria-selected={key === column}>
             {t(`settings.columns.${column}`)}
           </MenuItem>
         ))}
       </TextField>
-      
+
       <div>
         <FilledInput
           size="small"
@@ -131,16 +119,20 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
           disabled={key === ''}
           inputRef={filterInputRef}
           placeholder={key ? t('ui.accessibility.enterFilterValue') : ''}
-          aria-label={key ? t('ui.accessibility.filterValueFor', { field: t(`settings.columns.${key}`) }) : t('ui.accessibility.selectFieldFirst')}
+          aria-label={
+            key
+              ? t('ui.accessibility.filterValueFor', { field: t(`settings.columns.${key}`) })
+              : t('ui.accessibility.selectFieldFirst')
+          }
           id="filter-value-input"
           aria-describedby="filter-input-helper"
           endAdornment={
             filterValue && (
               <Tooltip title={t('ui.accessibility.clearFilter')}>
-                <AppIconButton 
-                  icon="close" 
-                  onClick={handleClearFilter} 
-                  disabled={key === ''} 
+                <AppIconButton
+                  icon="close"
+                  onClick={handleClearFilter}
+                  disabled={key === ''}
                   ref={clearButtonRef}
                   aria-label={t('ui.accessibility.clearFilter')}
                 />
@@ -148,14 +140,11 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
             )
           }
         />
-        <FormHelperText 
-          id="filter-input-helper" 
+        <FormHelperText
+          id="filter-input-helper"
           sx={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden' }}
         >
-          {key 
-            ? t('ui.accessibility.filterValueHelp')
-            : t('ui.accessibility.selectFieldFirst')
-          }
+          {key ? t('ui.accessibility.filterValueHelp') : t('ui.accessibility.selectFieldFirst')}
         </FormHelperText>
       </div>
     </Stack>

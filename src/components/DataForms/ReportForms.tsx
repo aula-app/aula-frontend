@@ -19,7 +19,7 @@ interface ReportFormsProps {
   onSubmit: (data: ReportArguments) => Promise<void>;
 }
 
-const ReportOptions = [
+export const ReportOptions = [
   { value: 'language', label: 'forms.report.language' },
   { value: 'harassment', label: 'forms.report.harassment' },
   { value: 'hate', label: 'forms.report.hate' },

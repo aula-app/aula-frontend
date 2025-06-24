@@ -32,8 +32,8 @@ const PhaseDurationFields: React.FC<Props> = ({
   const theme = useTheme();
   const { room_id } = useParams();
   const [defaultDurations, setDefaultDurations] = useState<{ phase_duration_1: number; phase_duration_3: number }>({
-    phase_duration_1: 14,
-    phase_duration_3: 14,
+    phase_duration_1: control._defaultValues.phase_duration_1,
+    phase_duration_3: control._defaultValues.phase_duration_3,
   });
 
   const [error, setError] = useState<string>();
@@ -51,6 +51,8 @@ const PhaseDurationFields: React.FC<Props> = ({
         fields.forEach((field) => {
           if (response.data && field.name in response.data) {
             updated[field.name] = response.data[field.name];
+            // Set the form value to ensure React Hook Form recognizes it as the default
+            setValue(field.name, response.data[field.name]);
           }
         });
         setDefaultDurations(updated);
@@ -61,6 +63,8 @@ const PhaseDurationFields: React.FC<Props> = ({
         fields.forEach((field, index) => {
           if (response.data.length > 0) {
             updated[field.name] = response.data[index];
+            // Set the form value to ensure React Hook Form recognizes it as the default
+            setValue(field.name, response.data[index]);
           }
         });
         setDefaultDurations(updated);
@@ -70,7 +74,7 @@ const PhaseDurationFields: React.FC<Props> = ({
 
   useEffect(() => {
     getDurations();
-  }, []);
+  }, [room, room_id]);
 
   return (
     <Stack>
@@ -108,7 +112,7 @@ const PhaseDurationFields: React.FC<Props> = ({
             name={field.name}
             control={control}
             defaultValue={control._defaultValues[field.name] || defaultDurations[field.name]}
-            render={({ field, fieldState }) => {
+            render={({ field: fieldProps, fieldState }) => {
               if (!!fieldState.error) setError(fieldState.error.message);
               return (
                 <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)' }}>
@@ -119,7 +123,8 @@ const PhaseDurationFields: React.FC<Props> = ({
                     variant="standard"
                     required={required}
                     disabled={disabled}
-                    {...field}
+                    {...fieldProps}
+                    value={fieldProps.value || defaultDurations[field.name]}
                     error={!!fieldState.error}
                     {...restOfProps}
                     slotProps={{

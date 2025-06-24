@@ -1,10 +1,9 @@
 import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
-import PrintUsers from '@/components/PrintUsers/PrintUsers';
 import { UserForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
-import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
+import PrintUsers from '@/components/PrintUsers/PrintUsers';
 import SelectRole from '@/components/SelectRole';
 import SelectRoom from '@/components/SelectRoom';
 import { deleteUser, getUsers } from '@/services/users';
@@ -90,6 +89,11 @@ const UsersView: React.FC = () => {
     fetchUsers();
   };
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setOffset(0);
+  }, [search_field, search_text, status, userlevel, room_id]);
+
   useEffect(() => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.users'), '']] });
     fetchUsers();
@@ -116,7 +120,7 @@ const UsersView: React.FC = () => {
           }}
         >
           <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
-          <SelectRole userRole={userlevel} onChange={(role) => setRole(role)} variant="filled" size="small" />
+          <SelectRole userRole={userlevel} onChange={(role) => setRole(role)} allowAll variant="filled" size="small" />
         </FilterBar>
       </Stack>
       <Stack flex={1} overflow="hidden">
@@ -132,8 +136,8 @@ const UsersView: React.FC = () => {
           setEdit={(user) => setEdit(user as UserType | boolean)}
           setDelete={deleteUsers}
           extraTools={extraTools}
+          isLoading={isLoading}
         />
-        {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
       </Stack>
       <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />

@@ -1,13 +1,12 @@
 import { BoxForms } from '@/components/DataForms';
 import DataTable from '@/components/DataTable';
-import DataTableSkeleton from '@/components/DataTable/DataTableSkeleton';
 import PaginationBar from '@/components/DataTable/PaginationBar';
 import FilterBar from '@/components/FilterBar';
 import SelectRoom from '@/components/SelectRoom';
 import { BoxArguments, deleteBox, getBoxes } from '@/services/boxes';
+import { useAppStore } from '@/store/AppStore';
 import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
-import { useAppStore } from '@/store/AppStore';
 import { getDataLimit } from '@/utils';
 import { Drawer, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
@@ -83,6 +82,11 @@ const BoxesView: React.FC = () => {
     fetchBoxes();
   };
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setOffset(0);
+  }, [search_field, search_text, status, room_id]);
+
   useEffect(() => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.boxes'), '']] });
     fetchBoxes();
@@ -115,8 +119,8 @@ const BoxesView: React.FC = () => {
           setOrderby={setOrderby}
           setEdit={(box) => setEdit(box as BoxType | boolean)}
           setDelete={deleteBoxes}
+          isLoading={isLoading}
         />
-        {isLoading && <DataTableSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
         <PaginationBar pages={Math.ceil(totalBoxes / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>

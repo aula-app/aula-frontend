@@ -3,13 +3,7 @@ import { AccessibleDialog } from '@/components/AccessibleDialog';
 import { DelegateType, delegateVote, getPossibleDelegations, revokeDelegation } from '@/services/users';
 import { useAppStore } from '@/store';
 import { GenericListRequest, localStorageGet, parseJwt } from '@/utils';
-import {
-  Button,
-  FilledInput,
-  Slide,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Button, FilledInput, Slide, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -128,9 +122,9 @@ const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
   );
 
   return (
-    <AccessibleDialog 
-      open={open} 
-      onClose={handleClose} 
+    <AccessibleDialog
+      open={open}
+      onClose={handleClose}
       title={t('delegation.label')}
       actions={dialogActions}
       maxWidth="xs"

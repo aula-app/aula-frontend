@@ -49,51 +49,32 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
             {children}
           </Collapse>
         )}
-        <Collapse 
-          orientation="horizontal" 
-          in={open}
-          role="menu"
-          aria-label={t('actions.options')}
-        >
-          <Stack 
-            direction="row" 
-            position="relative"
-            role="menubar"
-            aria-orientation="horizontal"
-          >
-            <ReportButton 
-              color={color || 'error'} 
-              target={`${t(`scopes.${scope}.name`)}: ${targetName}`} 
+        <Collapse orientation="horizontal" in={open} role="menu" aria-label={t('actions.options')}>
+          <Stack direction="row" position="relative" role="menubar" aria-orientation="horizontal">
+            <ReportButton
+              color={color || 'error'}
+              target={`${t(`scopes.${scope}.name`)}: ${targetName}`}
               link={link}
-              role="menuitem" 
+              role="menuitem"
             />
             {phase && (
               <>
                 {checkPermissions(scope, 'edit', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
-                  <EditButton 
-                    color={color || 'secondary'} 
-                    onEdit={onEdit}
-                    role="menuitem"
-                  />
+                  <EditButton color={color || 'secondary'} onEdit={onEdit} role="menuitem" />
                 )}
                 {checkPermissions(scope, 'delete', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
-                  <DeleteButton 
-                    color={color || 'error'} 
-                    scope={scope} 
-                    onDelete={onDelete}
-                    role="menuitem"
-                  />
+                  <DeleteButton color={color || 'error'} scope={scope} onDelete={onDelete} role="menuitem" />
                 )}
               </>
             )}
           </Stack>
         </Collapse>
-        <AppIconButton 
-          icon={open ? 'close' : 'more'} 
+        <AppIconButton
+          icon={open ? 'close' : 'more'}
           onClick={toggleOptions}
           aria-expanded={open}
           aria-label={open ? t('actions.close') : t('actions.more')}
-          {...restOfProps} 
+          {...restOfProps}
         />
       </Stack>
     </ClickAwayListener>

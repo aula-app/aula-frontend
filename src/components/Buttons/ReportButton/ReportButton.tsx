@@ -38,15 +38,16 @@ ${data.content || ''}
 
   return (
     <>
-      <AppIconButton 
+      <AppIconButton
+        data-testing-id="report-button"
         ref={buttonRef}
-        icon="report" 
-        disabled={disabled} 
+        icon="report"
+        disabled={disabled}
         aria-label={t('actions.contentReport')}
         aria-expanded={isOpen}
         aria-haspopup="dialog"
-        {...restOfProps} 
-        onClick={() => setOpen(true)} 
+        {...restOfProps}
+        onClick={() => setOpen(true)}
       />
       <AccessibleModal
         open={isOpen}

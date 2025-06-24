@@ -59,7 +59,7 @@ const permissions = {
     create: { role: USERS_ADMIN },
     edit: { role: 30, self: true },
     delete: { role: 30, self: true },
-    like: { role: USERS_ADMIN },
+    like: { role: VOTING_ROLES },
     vote: { role: VOTING_ROLES },
     approve: { role: 44 },
     setWinner: { role: 30 },

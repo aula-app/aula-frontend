@@ -1,4 +1,4 @@
-import { AppIcon } from '@/components';
+import { AppIcon, EmptyState } from '@/components';
 import { IdeaForms } from '@/components/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
@@ -79,35 +79,41 @@ const WildIdeas = () => {
   };
 
   const saveScroll = (evt: SyntheticEvent) => {
-    dispatch({ 
+    dispatch({
       action: 'SAVE_SCROLL',
       lastScroll: (evt.target as HTMLElement).scrollTop,
-      lastIdeaList: 'wild-ideas'
-    })
-  }
+      lastIdeaList: 'wild-ideas',
+    });
+  };
 
   useEffect(() => {
-    let ideasList = document.getElementById("wild-ideas-list")
+    let ideasList = document.getElementById('wild-ideas-list');
     if (!!ideasList) {
-      console.log(appState)
       if (appState.lastIdeaList == 'wild-ideas') {
-       ideasList.scrollTop = appState.lastScroll
-       console.log("SRCOCOO", ideasList, ideas)
-      }
-      else
-        dispatch({ 
+        ideasList.scrollTop = appState.lastScroll;
+      } else
+        dispatch({
           action: 'SAVE_SCROLL',
           lastScroll: 0,
-          lastIdeaList: 'wild-ideas'
-        })
+          lastIdeaList: 'wild-ideas',
+        });
     }
-  }, [ideas])
-
+  }, [ideas]);
 
   return (
-    <Stack id="wild-ideas-list" style={{overflowY: "scroll"}} onScroll={saveScroll} alignItems="center" width="100%" spacing={2} >
+    <Stack
+      id="wild-ideas-list"
+      style={{ overflowY: 'scroll' }}
+      onScroll={saveScroll}
+      alignItems="center"
+      flex={1}
+      spacing={2}
+    >
       {isLoading && <IdeaBubbleSkeleton />}
       {error && <Typography>{t(error)}</Typography>}
+      {!isLoading && !error && ideas.length === 0 && (
+        <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
+      )}
       {!isLoading &&
         ideas.map((idea) => (
           <IdeaBubble

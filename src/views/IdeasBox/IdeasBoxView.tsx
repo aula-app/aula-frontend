@@ -64,12 +64,12 @@ const IdeasBoxView = () => {
     setBoxLoading(true);
     // Announce loading state to screen readers
     announceLoadingState(true, t('scopes.boxes.name'));
-    
+
     const response = await getBox(box_id);
     setBoxError(response.error);
     if (!response.error && response.data) setBox(response.data);
     setBoxLoading(false);
-    
+
     // Announce completion to screen readers
     announceLoadingState(false, t('scopes.boxes.name'));
 
@@ -131,12 +131,12 @@ const IdeasBoxView = () => {
     setIdeasLoading(true);
     // Announce loading state to screen readers
     announceLoadingState(true, t('scopes.ideas.plural'));
-    
+
     const response = await getIdeasByBox({ topic_id: box_id });
     setIdeasError(response.error);
     if (!response.error) setIdeas(response.data || []); // Filter approved ideas only if phase is 30
     setIdeasLoading(false);
-    
+
     // Announce completion to screen readers
     announceLoadingState(false, t('scopes.ideas.plural'));
   }, [box_id]);
@@ -217,6 +217,9 @@ const IdeasBoxView = () => {
               </KnowMore>
             )}
           </Stack>
+          {ideas.filter((idea) => idea.approved >= 0).length === 0 && (
+            <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
+          )}
           <Grid container spacing={1} pt={1} pb={2}>
             {ideas
               .filter((idea) => idea.approved >= 0)

@@ -18,19 +18,23 @@ const UpdatesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
   }, [pathname]);
 
   return typeof updates === 'number' ? (
-    <Badge
-      badgeContent={updates}
-      color="primary"
-      sx={{
-        '& .MuiBadge-badge': {
-          backgroundColor: 'background.paper',
-          top: 5,
-          right: 5,
-        },
-      }}
-    >
+    updates !== 0 ? (
+      <Badge
+        badgeContent={updates}
+        color="primary"
+        sx={{
+          '& .MuiBadge-badge': {
+            backgroundColor: 'background.paper',
+            top: 5,
+            right: 5,
+          },
+        }}
+      >
+        <AppIconButton icon="heart" to="/updates" {...restOfProps} />
+      </Badge>
+    ) : (
       <AppIconButton icon="heart" to="/updates" {...restOfProps} />
-    </Badge>
+    )
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />
   );

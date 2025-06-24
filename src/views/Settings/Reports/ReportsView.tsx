@@ -1,3 +1,4 @@
+import { EmptyState } from '@/components';
 import FilterBar from '@/components/FilterBar';
 import ReportCard from '@/components/ReportCard';
 import ReportCardSkeleton from '@/components/ReportCard/ReportCardSkeleton';
@@ -52,6 +53,12 @@ const ReportsView = () => {
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
         {isLoading && <ReportCardSkeleton />}
         {error && <Typography>{t(error)}</Typography>}
+        {!isLoading && !error && reports.length === 0 && (
+          <EmptyState 
+            title={t('ui.empty.reports.title')} 
+            description={t('ui.empty.reports.description')} 
+          />
+        )}
         {reports.length > 0 &&
           reports.map((report) => <ReportCard report={report} onReload={fetchReports} key={report.id} />)}
       </Stack>

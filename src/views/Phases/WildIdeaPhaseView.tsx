@@ -1,3 +1,4 @@
+import { EmptyState } from '@/components';
 import { AddCategoryRefProps } from '@/components/Buttons/AddCategories/AddCategoriesButton';
 import { IdeaForms } from '@/components/DataForms';
 import { IdeaBubble } from '@/components/Idea';
@@ -56,10 +57,13 @@ const WildIdeaPhaseView = () => {
     fetchIdeas();
   }, [phase]);
   return (
-    <Stack p={2} sx={{ overflowY: 'auto' }}>
+    <Stack flex={1} p={2} sx={{ overflowY: 'auto' }}>
       <Typography variant="h2" py={2}>
         {t(`phases.wild`)}
       </Typography>
+      {!isLoading && !error && ideas.length === 0 && (
+        <EmptyState title={t('ui.empty.dashboard.title')} description={t('ui.empty.dashboard.description')} />
+      )}
       <Grid container spacing={2} p={1}>
         {isLoading && (
           <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>

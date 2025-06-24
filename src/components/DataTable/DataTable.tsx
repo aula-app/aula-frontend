@@ -1,3 +1,4 @@
+import { EmptyState } from '@/components';
 import ToolBar from '@/components/DataTable/ToolBar';
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields, SettingsType, SettingType } from '@/types/Scopes';
@@ -8,6 +9,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataItem from './DataItem';
 import DataRow from './DataRow';
+import AppIconButton from '../AppIconButton';
+import DataTableSkeleton from './DataTableSkeleton';
 
 type Props = {
   scope: SettingNamesType;
@@ -15,6 +18,7 @@ type Props = {
   rows: SettingsType;
   orderAsc: boolean;
   orderBy: number;
+  isLoading?: boolean;
   extraTools?: ({ items }: { items: Array<string> }) => JSX.Element;
   setAsc: Dispatch<SetStateAction<boolean>>;
   setLimit: Dispatch<SetStateAction<number>>;
@@ -32,6 +36,7 @@ const DataTable: React.FC<Props> = ({
   rows,
   orderAsc,
   orderBy,
+  isLoading,
   extraTools,
   setAsc,
   setLimit,
@@ -43,6 +48,41 @@ const DataTable: React.FC<Props> = ({
   const { t } = useTranslation();
 
   const [selected, setSelected] = useState<Array<string>>([]);
+
+  /**
+   * Generate scope-specific navigation routes
+   * @param scope - The current scope (rooms, boxes, ideas, etc.)
+   * @param row - The data row containing the item's properties
+   * @returns The appropriate navigation path for the scope
+   */
+  const getScopeSpecificRoute = (scope: SettingNamesType, row: SettingType): string => {
+    switch (scope) {
+      case 'rooms':
+        // Rooms navigate to phase 0 (wild ideas)
+        return `/room/${row.hash_id}/phase/0`;
+
+      case 'boxes':
+        // Boxes need room_hash_id and phase_id to construct proper routes
+        if ('room_hash_id' in row && 'phase_id' in row) {
+          return `/room/${row.room_hash_id}/phase/${row.phase_id}/idea-box/${row.hash_id}`;
+        }
+
+      case 'ideas':
+        // Ideas need room_hash_id, and we'll use phase 0 as default since we don't have phase context here
+        if ('room_hash_id' in row) {
+          return `/room/${row.room_hash_id}/phase/${row.phase_id || 0}/idea/${row.hash_id}`;
+        }
+
+      case 'messages':
+        if ('hash_id' in row) {
+          return `/messages/${row.hash_id}`;
+        }
+
+      // All other scopes (users, messages, announcements, etc.) go to settings
+      default:
+        return `/settings/${scope}`;
+    }
+  };
 
   const toggleColumn = (order_id: number) => {
     orderBy === order_id ? setAsc(!orderAsc) : setOrderby(order_id);
@@ -103,9 +143,9 @@ const DataTable: React.FC<Props> = ({
           position: 'relative',
         }}
       >
-        <Table 
-          stickyHeader 
-          size="small" 
+        <Table
+          stickyHeader
+          size="small"
           sx={{ width: 'auto', minWidth: '100%' }}
           aria-label={t(`scopes.${scope}.name`)}
           role="table"
@@ -126,8 +166,8 @@ const DataTable: React.FC<Props> = ({
                   color="secondary"
                   aria-label={t('ui.select.all')}
                   inputProps={{
-                    'tabIndex': 0, // Ensure the checkbox is always tabbable
-                    'aria-labelledby': 'select-all-checkbox-label'
+                    tabIndex: 0, // Ensure the checkbox is always tabbable
+                    'aria-labelledby': 'select-all-checkbox-label',
                   }}
                 />
                 <span id="select-all-checkbox-label" className="visually-hidden">
@@ -135,8 +175,8 @@ const DataTable: React.FC<Props> = ({
                 </span>
               </TableCell>
               {columns.map((column, index) => (
-                <TableCell 
-                  sx={{ whiteSpace: 'nowrap' }} 
+                <TableCell
+                  sx={{ whiteSpace: 'nowrap' }}
                   key={column.name}
                   scope="col"
                   aria-sort={column.orderId === orderBy ? (orderAsc ? 'ascending' : 'descending') : 'none'}
@@ -147,9 +187,9 @@ const DataTable: React.FC<Props> = ({
                     onClick={() => toggleColumn(column.orderId)}
                     tabIndex={0} // Make sort labels keyboard accessible
                     id={`column-sort-${column.name}`}
-                    aria-label={t('ui.accessibility.sortColumn', { 
+                    aria-label={t('ui.accessibility.sortColumn', {
                       column: t(`settings.columns.${column.name}`),
-                      direction: column.orderId === orderBy ? (orderAsc ? 'ascending' : 'descending') : 'none'
+                      direction: column.orderId === orderBy ? (orderAsc ? 'ascending' : 'descending') : 'none',
                     })}
                   >
                     {t(`settings.columns.${column.name}`)}
