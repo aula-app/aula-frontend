@@ -102,17 +102,32 @@ const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
 
   const dialogActions = (
     <>
-      <Button color="secondary" onClick={handleClose} aria-label={t('actions.cancel')}>
+      <Button
+        color="secondary"
+        onClick={handleClose}
+        aria-label={t('actions.cancel')}
+        data-testid="cancel-delegate-vote-button"
+      >
         {t('actions.cancel')}
       </Button>
       {selected && (
         <>
           {!delegate ? (
-            <Button variant="contained" onClick={setDelegate} aria-label={t('delegation.delegate')}>
+            <Button
+              variant="contained"
+              onClick={setDelegate}
+              aria-label={t('delegation.delegate')}
+              data-testid="delegate-vote-button"
+            >
               {t('delegation.delegate')}
             </Button>
           ) : (
-            <Button variant="contained" onClick={removeDelegate} aria-label={t('delegation.revoke')}>
+            <Button
+              variant="contained"
+              onClick={removeDelegate}
+              aria-label={t('delegation.revoke')}
+              data-testid="revoke-delegation-button"
+            >
               {t('delegation.revoke')}
             </Button>
           )}

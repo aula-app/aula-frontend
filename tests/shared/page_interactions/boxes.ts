@@ -178,7 +178,7 @@ export const delegateVotes = async (
 
   await ToUserButton.click({ timeout: 1000 });
 
-  const ConfirmButton = page.getByTestId('submit-delegation');
+  const ConfirmButton = page.getByTestId('delegate-vote-button');
   await expect(ConfirmButton).toBeVisible();
 
   await ConfirmButton.click({ timeout: 1000 });
@@ -206,7 +206,7 @@ export const unDelegateVotes = async (
 
   await UnDelegateButton.click({ timeout: 1000 });
 
-  const ConfirmButton = page.getByTestId('revoke-delegation');
+  const ConfirmButton = page.getByTestId('revoke-delegation-button');
   await expect(ConfirmButton).toBeVisible();
   await ConfirmButton.click({ timeout: 1000 });
 
