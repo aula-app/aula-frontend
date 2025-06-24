@@ -107,8 +107,8 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
 export const create = async (page: Page, data: users.UserData): Promise<TempPass> => {
   await goToUserSettings(page);
 
-  // click the add user button:
-  await page.getByRole('button', { name: 'Neue Benutzer' }).click({ timeout: 1000 });
+  // click the add user button - using reliable selector:
+  await page.getByTestId('add-users-button').click({ timeout: 1000 });
 
   // fill in the necessary information
   await page.fill('input[name="displayname"]', data.displayName);
@@ -123,8 +123,8 @@ export const create = async (page: Page, data: users.UserData): Promise<TempPass
 
   await page.locator('div[contenteditable="true"]').fill(data.about);
 
-  // submit the form
-  await page.getByRole('button', { name: 'Bestätigen' }).click({ timeout: 1000 });
+  // submit the form - using reliable selector:
+  await page.getByTestId('submit-user-form').click({ timeout: 1000 });
 
   // now we need to copy the temporary password out so the new user
   //  can log in with it.
@@ -160,12 +160,12 @@ export const remove = async (page: Page, data: users.UserData) => {
   await checkbox.check();
 
   // click the remove use button
-  const ButtonRemoveUser = page.getByRole('button', { name: 'Benutzer Entfernen' });
+  const ButtonRemoveUser = page.getByTestId('remove-users-button');
   expect(ButtonRemoveUser).toBeDefined();
 
   await ButtonRemoveUser.click({ timeout: 1000 });
 
-  const ButtonConfirmDelete = page.getByRole('button', { name: 'Löschen' });
+  const ButtonConfirmDelete = page.getByTestId('confirm-delete-users-button');
 
   expect(ButtonConfirmDelete).toBeDefined();
 

@@ -143,7 +143,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
 
   return (
     <Stack p={2} overflow="auto">
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate data-testid={`${defaultValues ? 'edit' : 'add'}-user-form`} aria-label={t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.users.name`) })}>
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h1">
@@ -163,6 +163,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 disabled={isLoading}
                 label={t(`settings.columns.displayname`)}
                 id="user-displayname"
+                data-testid="user-displayname-input"
                 size="small"
                 error={!!errors.displayname}
                 helperText={
@@ -189,6 +190,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 disabled={isLoading}
                 label={t(`settings.columns.username`)}
                 id="user-username"
+                data-testid="user-username-input"
                 size="small"
                 error={!!errors.username}
                 helperText={
@@ -290,13 +292,14 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
             />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button onClick={onClose} color="error" data-testid="cancel-user-form" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button
               type="submit"
               variant="contained"
               disabled={isLoading}
+              data-testid="submit-user-form"
               aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
             >
               {isLoading ? t('actions.loading') : t('actions.confirm')}

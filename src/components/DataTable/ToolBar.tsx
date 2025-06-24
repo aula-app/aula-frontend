@@ -144,6 +144,7 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
             variant="outlined" 
             onClick={handleEdit}
             ref={addButtonRef}
+            data-testid={`add-${scope}-button`}
             aria-label={t('actions.add', { var: t(`scopes.${scope}.name`) })}
           >
             <AppIcon icon="add" pr={2} />
@@ -158,6 +159,7 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
             onClick={handleOpenDialog} 
             disabled={selected.length === 0}
             ref={deleteButtonRef}
+            data-testid={`remove-${scope}-button`}
             aria-label={t('actions.remove', {
               var: t(`scopes.${scope}.${selected.length === 1 ? 'name' : 'plural'}`),
             })}
@@ -202,6 +204,7 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
             variant="contained" 
             onClick={onDelete}
             ref={confirmDeleteButtonRef}
+            data-testid={`confirm-delete-${scope}-button`}
             aria-label={t('actions.delete')}
           >
             {t('actions.delete')}

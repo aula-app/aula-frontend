@@ -14,6 +14,7 @@ interface Props extends Omit<IconButtonProps, 'size' | 'color'> {
   to?: string; // Link prop
   href?: string; // Link prop
   openInNewTab?: boolean; // Link prop
+  'data-testid'?: string; // Test identifier for accessibility
 }
 
 /**

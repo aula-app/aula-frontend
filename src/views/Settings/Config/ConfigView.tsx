@@ -77,6 +77,7 @@ const ConfigView = () => {
                   expandIcon={<AppIcon icon="arrowdown" />}
                   role="tab"
                   id={`tab-${panel.name}`}
+                  data-testid={`config-accordion-${panel.name}`}
                   aria-controls={`panel-${panel.name}`}
                   aria-expanded={expanded === `panel${i}`}
                 >

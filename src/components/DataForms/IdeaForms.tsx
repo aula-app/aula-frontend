@@ -151,6 +151,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       <form 
         onSubmit={handleSubmit(onSubmit)} 
         noValidate
+        data-testid={`${defaultValues ? 'edit' : 'add'}-idea-form`}
         aria-label={t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.ideas.name`) })}
       >
         <Stack gap={2}>
@@ -170,6 +171,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               {...register('title')}
               label={t('settings.columns.title')}
               id="idea-title"
+              data-testid="idea-title-input"
               error={!!errors.title}
               helperText={
                 <span id="title-error-message">
@@ -212,13 +214,19 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             </Stack>
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button 
+              onClick={onClose} 
+              color="error" 
+              data-testid="cancel-idea-form"
+              aria-label={t('actions.cancel')}
+            >
               {t('actions.cancel')}
             </Button>
             <Button
               type="submit"
               variant="contained"
               disabled={isLoading}
+              data-testid="submit-idea-form"
               aria-label={isLoading ? t('actions.submitting') : t('actions.confirm')}
             >
               {isLoading ? t('actions.submitting') : t('actions.confirm')}

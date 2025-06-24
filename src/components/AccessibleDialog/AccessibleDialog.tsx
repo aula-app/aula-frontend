@@ -166,6 +166,7 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
                 color="inherit"
                 onClick={onClose}
                 aria-label={t('actions.close')}
+                data-testid={testId ? `${testId}-close` : 'dialog-close'}
                 size="small"
               >
                 <Close />

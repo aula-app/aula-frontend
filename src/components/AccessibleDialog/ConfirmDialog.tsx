@@ -119,6 +119,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             onClick={onCancel}
             color="inherit"
             disabled={isLoading}
+            data-testid={testId ? `${testId}-cancel` : 'confirm-dialog-cancel'}
             aria-label={cancelButtonText}
           >
             {cancelButtonText}
@@ -129,6 +130,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             color={confirmColor}
             variant="contained"
             disabled={isLoading}
+            data-testid={testId ? `${testId}-confirm` : 'confirm-dialog-confirm'}
             aria-label={isLoading ? t('actions.processing') : confirmButtonText}
           >
             {isLoading ? t('actions.processing') : confirmButtonText}
