@@ -99,14 +99,15 @@ const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
 
     return (
       <>
-        <Button 
-          variant="outlined" 
-          color="secondary" 
-          onClick={() => setOpen(true)} 
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => setOpen(true)}
           data-testid="add-category-button"
-          aria-label={selectedCategory 
-            ? t('actions.change', { var: selectedCategory.name })
-            : t('actions.addToParent', { var: t('scopes.categories.name') })
+          aria-label={
+            selectedCategory
+              ? t('actions.change', { var: selectedCategory.name })
+              : t('actions.addToParent', { var: t('scopes.categories.name') })
           }
           aria-expanded={open}
           aria-haspopup="dialog"
@@ -144,17 +145,17 @@ const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
             ))}
           </List>
           <DialogActions>
-            <Button 
-              onClick={onClose} 
-              color="secondary" 
+            <Button
+              onClick={onClose}
+              color="secondary"
               autoFocus
               data-testid="cancel-category-button"
               aria-label={t('actions.cancel')}
             >
               {t('actions.cancel')}
             </Button>
-            <Button 
-              onClick={onSubmit} 
+            <Button
+              onClick={onSubmit}
               variant="contained"
               data-testid="confirm-category-button"
               aria-label={t('actions.confirm')}
