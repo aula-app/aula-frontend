@@ -9,7 +9,7 @@ const host = shared.getHost();
 
 export const create = async (page: Page, room: roomFixtures.RoomData) => {
   // start at home
-  await page.goto(host);
+  await page.goto(host || 'http://localhost:3000');
 
   await goToRoomSettings(page);
 
@@ -48,9 +48,15 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
 
   await page.goto(host + '/settings/rooms');
 
+  // Wait for page to load completely
+  await page.waitForLoadState('networkidle');
+  
+  // Wait for the rooms table/content to load first
+  await expect(page.locator('h1')).toContainText('Räume');
+  
   // open the filter menu:
   const FilterButton = page.locator('#filter-toggle-button');
-  await expect(FilterButton).toBeVisible();
+  await expect(FilterButton).toBeVisible({ timeout: 10000 });
   await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
@@ -70,7 +76,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
 
 export const remove = async (page: Page, room: roomFixtures.RoomData) => {
   // start at home
-  await page.goto(host);
+  await page.goto(host || 'http://localhost:3000');
 
   await goToRoomSettings(page);
 

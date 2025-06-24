@@ -46,7 +46,7 @@ test.describe('Categories flow', () => {
     const admin = await browsers.newPage(browsers.admins_browser);
     const host = shared.getHost();
 
-    await admin.goto(host);
+    await admin.goto(host || 'http://localhost:3000');
 
     data.categoryName = 'TESTING' + shared.gensym();
 
@@ -73,11 +73,8 @@ test.describe('Categories flow', () => {
     // Wait for drawer/form to appear
     await admin.waitForTimeout(1000);
 
-    // Look for form container or drawer
-    const Form = admin
-      .locator('[data-testing-id="category-forms"]')
-      .or(admin.locator('[role="dialog"]'))
-      .or(admin.locator('.MuiDrawer-root'));
+    // Look for the form specifically
+    const Form = admin.locator('[data-testing-id="category-forms"]');
     await expect(Form).toBeVisible({ timeout: 10000 });
 
     const CategoryNameField = admin.locator('input[name="name"]');
@@ -93,9 +90,8 @@ test.describe('Categories flow', () => {
     await expect(Icon).toBeVisible({ timeout: 10000 });
     await Icon.click();
 
-    // Confirm button
-    // Improved: Use data-testid for more reliable selection
-    const SubmitButton = admin.getByTestId('confirm-category-button');
+    // Confirm button - target the submit button within the category form
+    const SubmitButton = admin.locator('[data-testing-id="category-forms"] button[type="submit"]');
     await expect(SubmitButton).toBeVisible({ timeout: 10000 });
     await SubmitButton.click();
 
@@ -142,7 +138,7 @@ test.describe('Categories flow', () => {
     const admin = await browsers.newPage(browsers.admins_browser);
     const host = shared.getHost();
 
-    await admin.goto(host);
+    await admin.goto(host || 'http://localhost:3000');
 
     await users.goToSettings(admin);
 
