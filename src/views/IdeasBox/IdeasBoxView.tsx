@@ -1,4 +1,4 @@
-import { AppIcon } from '@/components';
+import { AppIcon, EmptyState } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import AddIdeasButton from '@/components/Buttons/AddIdeas';

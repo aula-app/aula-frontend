@@ -1,4 +1,3 @@
-import { EmptyState } from '@/components';
 import ToolBar from '@/components/DataTable/ToolBar';
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields, SettingsType, SettingType } from '@/types/Scopes';
@@ -9,8 +8,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataItem from './DataItem';
 import DataRow from './DataRow';
-import AppIconButton from '../AppIconButton';
-import DataTableSkeleton from './DataTableSkeleton';
 
 type Props = {
   scope: SettingNamesType;

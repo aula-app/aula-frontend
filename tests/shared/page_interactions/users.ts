@@ -50,17 +50,17 @@ export const exists = async (page: Page, data: users.UserData) => {
   await goToUserSettings(page);
 
   // open the filter menu:
-  const FilterButton = page.locator('[aria-label="button-open-filters"]');
+  const FilterButton = page.locator('#filter-toggle-button');
   await expect(FilterButton).toBeVisible();
   await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
 
-  await page.locator('#filter-select-1').click({ timeout: 1000 });
+  await page.locator('#filter-field-select').click({ timeout: 1000 });
   await page.getByRole('option', { name: 'Benutzername' }).click({ timeout: 1000 });
 
   // filter by our user name
-  await page.fill('#filter-select-2', data.username);
+  await page.fill('#filter-value-input', data.username);
 
   // find the new user in the user table
   const row = page.locator('table tr').filter({ hasText: data.username });
@@ -74,17 +74,17 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   await goToUserSettings(page);
 
   // open the filter menu:
-  const FilterButton = page.locator('[aria-label="button-open-filters"]');
+  const FilterButton = page.locator('#filter-toggle-button');
   await expect(FilterButton).toBeVisible();
   await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
 
-  await page.locator('#filter-select-1').click({ timeout: 1000 });
+  await page.locator('#filter-field-select').click({ timeout: 1000 });
   await page.getByRole('option', { name: 'Benutzername' }).click({ timeout: 1000 });
 
   // filter by our user name
-  await page.fill('#filter-select-2', data.username);
+  await page.fill('#filter-value-input', data.username);
 
   // find the new user in the user table
   const row = page.locator('table tr').filter({ hasText: data.username });
@@ -140,17 +140,17 @@ export const remove = async (page: Page, data: users.UserData) => {
   await goToUserSettings(page);
 
   // open the filter menu:
-  const FilterButton = page.locator('[aria-label="button-open-filters"]');
+  const FilterButton = page.locator('#filter-toggle-button');
   await expect(FilterButton).toBeVisible();
   await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
 
-  await page.locator('#filter-select-1').click({ timeout: 1000 });
+  await page.locator('#filter-field-select').click({ timeout: 1000 });
   await page.getByRole('option', { name: 'Benutzername' }).click({ timeout: 1000 });
 
   // filter by our user name
-  await page.fill('#filter-select-2', data.username);
+  await page.fill('#filter-value-input', data.username);
 
   // find the user's row in the table and select the checkbox for actions
 

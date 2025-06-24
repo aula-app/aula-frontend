@@ -91,7 +91,7 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
     <Stack direction="row" alignItems="center" gap={1} role="search">
       <TextField
         select
-        id="filter-select-1"
+        id="filter-field-select"
         label={t('actions.filter')}
         value={key}
         onChange={handleKeyChange}
@@ -100,7 +100,6 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
         inputRef={filterSelectRef}
         sx={{ minWidth: 130 }}
         aria-label={t('ui.accessibility.selectFilterField')}
-        id="filter-field-select"
       >
         <MenuItem value="">&nbsp;</MenuItem>
         {fields.map((column) => (
