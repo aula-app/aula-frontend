@@ -162,14 +162,13 @@ const DataTable: React.FC<Props> = ({
                   indeterminate={selected.length > 0 && selected.length < rows.length}
                   color="secondary"
                   aria-label={t('ui.select.all')}
-                  inputProps={{
-                    tabIndex: 0, // Ensure the checkbox is always tabbable
-                    'aria-labelledby': 'select-all-checkbox-label',
+                  slotProps={{
+                    input: {
+                      tabIndex: 0, // Ensure the checkbox is always tabbable
+                      'aria-labelledby': 'select-all-checkbox-label',
+                    },
                   }}
                 />
-                <span id="select-all-checkbox-label" className="visually-hidden">
-                  {t('ui.select.all')}
-                </span>
               </TableCell>
               {columns.map((column, index) => (
                 <TableCell
