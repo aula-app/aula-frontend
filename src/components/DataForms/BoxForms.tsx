@@ -55,7 +55,11 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     watch,
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { name: defaultValues ? ' ' : '' },
+    defaultValues: {
+      name: defaultValues ? ' ' : '',
+      phase_duration_1: 0,
+      phase_duration_3: 0,
+    },
   });
 
   // Infer TypeScript type from the Yup schema
