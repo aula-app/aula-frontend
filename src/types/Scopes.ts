@@ -40,7 +40,6 @@ export interface BoxType {
   status: StatusTypes;
 }
 
-export interface BugType extends MessageType {}
 
 export interface CommentType {
   id: number;
@@ -126,7 +125,6 @@ export interface MessageType {
   pin_to_top: number;
 }
 
-export interface ReportType extends MessageType {}
 
 export interface RoomType {
   access_code: string;
@@ -214,30 +212,15 @@ export interface CommandType {
 export type ScopeType =
   | AnnouncementType
   | BoxType
-  | BugType
   | CommentType
   | GroupType
   | IdeaType
   | MessageType
-  | ReportType
   | RoomType
   | UserType
   | CategoryType
   | CommandType;
 
-export type ScopeListType =
-  | AnnouncementType[]
-  | BoxType[]
-  | BugType[]
-  | CommentType[]
-  | GroupType[]
-  | IdeaType[]
-  | MessageType[]
-  | ReportType[]
-  | RoomType[]
-  | UserType[]
-  | CategoryType[]
-  | CommandType[];
 
 export type SettingType = AnnouncementType | BoxType | IdeaType | MessageType | RoomType | UserType;
 export type SettingsType = AnnouncementType[] | BoxType[] | IdeaType[] | MessageType[] | RoomType[] | UserType[];
@@ -248,59 +231,12 @@ export type CommonFormFields = 'id' | 'created';
 // Type for form data
 export type PossibleFields = Record<string, string>;
 
-// Helper type to convert a specific type's values to strings
-export type ToFormData<T> = Record<string, string>;
 
-export interface ReportBodyType {
-  data: ReportMetadataType;
-  content: string;
-}
 
-export interface ReportMetadataType {
-  type: 'bugs' | 'reports';
-  location: string;
-  user: number;
-  userAgent?: string;
-}
 
-export type UserRequestTypes = 'changeName' | 'deleteAccount' | 'exportData' | 'requestData';
 
-export interface RequestBodyType {
-  data: RequestMetadataType;
-  content: string;
-}
 
-export interface RequestMetadataType {
-  type: UserRequestTypes;
-  id: number;
-  username: string;
-  email?: string;
-  property?: 'email' | 'realname' | 'username';
-  from?: string;
-  to?: string;
-}
 
-export interface VoteType {
-  idea_id: number;
-  title: string;
-  room_id: number;
-  topic_id: number;
-  phase_id: number;
-  id: string;
-  vote_value: number;
-  vote_weight: number;
-  number_of_delegations: number;
-}
-
-// Helper function to convert data to form format
-export const toFormData = <T extends object>(data: T): Record<string, string> => {
-  const result: Record<string, string> = {};
-  for (const key in data) {
-    const value = data[key];
-    result[key] = value === null || value === undefined ? '' : String(value);
-  }
-  return result;
-};
 
 export interface DelegationType {
   user_id_original: string;

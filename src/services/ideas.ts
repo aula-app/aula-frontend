@@ -98,7 +98,7 @@ interface UserIdeasListRequest {
   user_id?: string;
 }
 
-export async function getIdeasByUser(args: UserIdeasListRequest): Promise<GetIdeasResponse> {
+async function getIdeasByUser(args: UserIdeasListRequest): Promise<GetIdeasResponse> {
   const response = await databaseRequest({
     model: 'Idea',
     method: 'getIdeasByUser',
@@ -134,7 +134,7 @@ export interface IdeaArguments {
   room_hash_id?: string;
 }
 
-export interface AddIdeaArguments extends IdeaArguments {
+interface AddIdeaArguments extends IdeaArguments {
   room_id: string;
 }
 
@@ -148,7 +148,7 @@ export interface EditIdeaArguments extends IdeaArguments {
  * Adds a new idea to the database
  */
 
-export interface AddIdeaResponse extends GenericResponse {
+interface AddIdeaResponse extends GenericResponse {
   data: { hash_id: string } | null;
 }
 
@@ -345,7 +345,7 @@ export async function setApprovalStatus(args: ApproveIdeaArguments): Promise<Gen
   return response as GenericResponse;
 }
 
-export async function setWinning(winnig_status: boolean, idea_id: string): Promise<GenericResponse> {
+async function setWinning(winnig_status: boolean, idea_id: string): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
       model: 'Idea',

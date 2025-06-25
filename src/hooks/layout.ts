@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
  * Hook to detect onMobile vs. onDesktop using "resize" event listener
  * @returns {boolean} true when on onMobile, false when on onDesktop
  */
-export function useOnMobileByTrackingWindowsResize() {
+function useOnMobileByTrackingWindowsResize() {
   const theme = useTheme();
   const [onMobile, setOnMobile] = useState(false);
 
@@ -40,7 +40,7 @@ export const useOnMobile = useOnMobileByMediaQuery;
  * Hook to detect Wide Screen (lg, xl) using Media Query
  * @returns {boolean} true when on screen is wide enough
  */
-export function useOnWideScreen() {
+function useOnWideScreen() {
   const theme = useTheme();
   return useMediaQuery(theme.breakpoints.up('md'));
 }

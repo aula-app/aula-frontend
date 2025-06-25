@@ -1,3 +1,3 @@
 import CommentBubble from './CommentBubble';
 
-export { CommentBubble as default, CommentBubble };
+export { CommentBubble as default,  };

@@ -9,19 +9,9 @@ import dayjs from 'dayjs';
 
 export const FORMAT_DATE_TIME = 'YYYY-MM-DD HH:mm:ss';
 export const FORMAT_DATE_ONLY = 'YYYY-MM-DD';
-export const FORMAT_TIME_ONLY = 'HH:mm:ss';
 
 export function getDisplayDate(date: string): string {
   const displayDate = dayjs(date);
   return `${displayDate.year()}/${displayDate.month() + 1}/${displayDate.date()}`;
 }
 
-export function dateToString(dateOrString: string | Date, dateFormat = FORMAT_DATE_TIME, fallbackValue = ''): string {
-  let result;
-  try {
-    result = dayjs(dateOrString).format(dateFormat);
-  } catch (error) {
-    result = fallbackValue;
-  }
-  return result;
-}

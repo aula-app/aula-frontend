@@ -21,7 +21,7 @@ interface DefaultConfigResponse extends GenericResponse {
   data: ConfigResponse;
 }
 
-export async function getGlobalConfigs(): Promise<DefaultConfigResponse> {
+async function getGlobalConfigs(): Promise<DefaultConfigResponse> {
   const response = await databaseRequest({
     model: 'Settings',
     method: 'getGlobalConfig',
@@ -60,7 +60,7 @@ export async function setInstanceOnlineMode(status: OnlineOptions): Promise<Defa
   return response as DefaultSettingsResponse;
 }
 
-export async function setOauthStatus(status: boolean): Promise<DefaultSettingsResponse> {
+async function setOauthStatus(status: boolean): Promise<DefaultSettingsResponse> {
   const response = await databaseRequest(
     {
       model: 'Settings',
@@ -73,7 +73,7 @@ export async function setOauthStatus(status: boolean): Promise<DefaultSettingsRe
   return response as DefaultSettingsResponse;
 }
 
-export async function setAllowRegistration(status: boolean): Promise<DefaultSettingsResponse> {
+async function setAllowRegistration(status: boolean): Promise<DefaultSettingsResponse> {
   const response = await databaseRequest(
     {
       model: 'Settings',

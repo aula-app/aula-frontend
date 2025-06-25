@@ -14,7 +14,7 @@ interface Props {
   disabled?: boolean;
 }
 
-export interface ChangePasswordMethods {
+interface ChangePasswordMethods {
   displayMessage: (isSuccess: boolean) => void;
 }
 

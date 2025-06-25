@@ -50,7 +50,7 @@ export async function getUser(user_id: string): Promise<GetUserResponse> {
  * Sets User update types
  */
 
-export interface UserArguments {
+interface UserArguments {
   realname?: string;
   username?: string;
   displayname?: string;
@@ -59,11 +59,11 @@ export interface UserArguments {
   status?: StatusTypes;
 }
 
-export interface AddUserArguments extends UserArguments {
+interface AddUserArguments extends UserArguments {
   userlevel: RoleTypes;
 }
 
-export interface EditUserArguments extends UserArguments {
+interface EditUserArguments extends UserArguments {
   user_id?: string;
   userlevel?: RoleTypes;
 }
@@ -283,7 +283,7 @@ interface GetUserGroupsResponse extends GenericResponse {
   data: { hash_id: string }[] | null;
 }
 
-export async function getUserGroups(user_id: string): Promise<GetUserGroupsResponse> {
+async function getUserGroups(user_id: string): Promise<GetUserGroupsResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'getUserGroups',
@@ -297,7 +297,7 @@ export async function getUserGroups(user_id: string): Promise<GetUserGroupsRespo
  * Add user group
  */
 
-export async function addUserGroup(user_id: string, group_id: string): Promise<GenericResponse> {
+async function addUserGroup(user_id: string, group_id: string): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
       model: 'User',
@@ -314,7 +314,7 @@ export async function addUserGroup(user_id: string, group_id: string): Promise<G
  * Remove user group
  */
 
-export async function removeUserGroup(user_id: string, group_id: string): Promise<GenericResponse> {
+async function removeUserGroup(user_id: string, group_id: string): Promise<GenericResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'removeUserFromGroup',

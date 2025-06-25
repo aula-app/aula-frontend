@@ -1,3 +1,3 @@
 import ProfileEditor from './ProfileEditor';
 
-export { ProfileEditor as default, ProfileEditor };
+export { ProfileEditor as default,  };

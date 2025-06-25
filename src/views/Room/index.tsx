@@ -1,3 +1,3 @@
 import RoomView from './RoomView';
 
-export { RoomView as default, RoomView };
+export { RoomView as default,  };

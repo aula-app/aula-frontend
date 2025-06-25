@@ -31,11 +31,11 @@ export interface CommentArguments {
   status?: StatusTypes;
 }
 
-export interface AddCommentArguments extends CommentArguments {
+interface AddCommentArguments extends CommentArguments {
   idea_id: string;
 }
 
-export interface EditCommentArguments extends CommentArguments {
+interface EditCommentArguments extends CommentArguments {
   comment_id: string;
   idea_id?: string;
 }

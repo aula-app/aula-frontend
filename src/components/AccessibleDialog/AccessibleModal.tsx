@@ -4,7 +4,7 @@ import { Backdrop, Box, Fade, IconButton, Modal, ModalProps, Tooltip, Typography
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export interface AccessibleModalProps extends Omit<ModalProps, 'children'> {
+interface AccessibleModalProps extends Omit<ModalProps, 'children'> {
   /**
    * The title of the modal
    */
@@ -63,7 +63,7 @@ export interface AccessibleModalProps extends Omit<ModalProps, 'children'> {
   testId?: string;
 }
 
-export interface AccessibleModalHandle {
+interface AccessibleModalHandle {
   /**
    * Focus the modal or a specific element within it
    */

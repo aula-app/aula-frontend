@@ -1,4 +1,4 @@
-import DinamicImages from './DinamicImages';
+import DynamicImages from './DynamicImages';
 
 interface Props {
   image: number;
@@ -26,7 +26,7 @@ const DefaultImage = ({ image, shift, ...restOfProps }: Props) => {
     noFill: 'none',
   };
 
-  const ComponentToRender = DinamicImages[image];
+  const ComponentToRender = DynamicImages[image];
 
   return <ComponentToRender colors={COLORS} {...restOfProps} />;
 };

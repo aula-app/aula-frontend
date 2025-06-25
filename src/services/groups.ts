@@ -49,7 +49,7 @@ export interface GroupArguments {
   status?: string;
 }
 
-export interface EditGroupArguments extends GroupArguments {
+interface EditGroupArguments extends GroupArguments {
   group_id: number;
 }
 
@@ -57,7 +57,7 @@ export interface EditGroupArguments extends GroupArguments {
  * Adds a new group to the database
  */
 
-export interface AddResponse extends GenericResponse {
+interface AddResponse extends GenericResponse {
   data: number | null;
 }
 
@@ -113,7 +113,7 @@ export async function deleteGroup(group_id: number): Promise<GenericResponse> {
 /**
  * Adds a user to a group
  */
-export interface AddUserToGroupArguments {
+interface AddUserToGroupArguments {
   user_id: string;
   group_id: number;
 }
