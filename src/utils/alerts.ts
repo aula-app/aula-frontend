@@ -31,32 +31,3 @@ export const errorAlert = (message: string, dispatch: Dispatch<any>) => {
   });
 };
 
-/**
- * Dispatches an info alert to the AppStore
- * @param message The info message to display
- * @param dispatch The dispatch function from useAppStore
- */
-export const infoAlert = (message: string, dispatch: Dispatch<any>) => {
-  dispatch({
-    type: 'ADD_POPUP',
-    message: {
-      message,
-      type: 'success', // Note: AppStore only supports 'success' and 'error' types
-    } as PopupType,
-  });
-};
-
-/**
- * Dispatches a warning alert to the AppStore
- * @param message The warning message to display
- * @param dispatch The dispatch function from useAppStore
- */
-export const warningAlert = (message: string, dispatch: Dispatch<any>) => {
-  dispatch({
-    type: 'ADD_POPUP',
-    message: {
-      message,
-      type: 'error', // Note: AppStore only supports 'success' and 'error' types
-    } as PopupType,
-  });
-};
