@@ -39,17 +39,27 @@ const SelectField: React.FC<Props> = ({
         <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)', ...sx }}>
           <TextField
             label={t(`settings.columns.${name}`)}
+            id={`select-field-${name}`}
             required={required}
             disabled={disabled}
             select
             {...field}
             error={!!fieldState.error}
-            helperText={t(`${fieldState.error?.message || ''}`)}
+            helperText={<span id={`${name}-error-message`}>{t(`${fieldState.error?.message || ''}`)}</span>}
             {...restOfProps}
-            slotProps={{ inputLabel: { shrink: true } }}
+            inputProps={{
+              'aria-labelledby': `select-field-${name}-label`,
+              'aria-invalid': !!fieldState.error,
+              'aria-errormessage': fieldState.error ? `${name}-error-message` : undefined
+            }}
+            InputLabelProps={{ 
+              shrink: true, 
+              id: `select-field-${name}-label`, 
+              htmlFor: `select-field-${name}` 
+            }}
           >
             {options.map((option) => (
-              <MenuItem value={option.value} key={option.value} disabled={(option.disabled)?option.disabled:false}>
+              <MenuItem value={option.value} key={option.value} disabled={option.disabled ? option.disabled : false}>
                 {t(option.label)}
               </MenuItem>
             ))}

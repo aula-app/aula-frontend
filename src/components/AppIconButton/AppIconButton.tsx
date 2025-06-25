@@ -7,13 +7,14 @@ import AppLink from '../AppLink';
 const MUI_ICON_BUTTON_COLORS = ['inherit', 'default', 'primary', 'secondary', 'success', 'error', 'info', 'warning'];
 
 interface Props extends Omit<IconButtonProps, 'size' | 'color'> {
+  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
   color?: string; // Not only 'inherit' | 'default' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
   icon: AllIconsType;
   component?: ElementType; // Could be RouterLink, AppLink, <a>, etc.
   to?: string; // Link prop
   href?: string; // Link prop
   openInNewTab?: boolean; // Link prop
-  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
+  'data-testid'?: string; // Test identifier for accessibility
 }
 
 /**
@@ -57,7 +58,7 @@ const AppIconButton: React.FC<Props> = ({
         sx={sxToRender}
         {...restOfProps}
       >
-        <AppIcon icon={icon} size={size} />
+        <AppIcon icon={icon} size={size} decorative={true} />
         <Typography pl={0.3}>{children}</Typography>
       </IconButton>
     );

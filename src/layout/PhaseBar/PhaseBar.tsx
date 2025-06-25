@@ -42,7 +42,7 @@ const PhaseBar: React.FC<PhaseBarProps> = ({ room }) => {
       {displayPhases.map((displayPhase) => (
         <AppLink
           key={displayPhase}
-          data-testing-id={`link-to-phase-${displayPhase}`}
+          data-testid={`link-to-phase-${displayPhase}`}
           to={`/room/${room}/phase/${displayPhase}`}
           sx={{
             color: 'inherit',

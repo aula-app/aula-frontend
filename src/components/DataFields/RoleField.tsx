@@ -26,7 +26,7 @@ const RoleField: React.FC<Props> = ({ control, disabled = false, noAdmin = false
         return (
           <TextField
             label={t('settings.columns.userlevel')}
-            data-testing-id="rolefield"
+            data-testid="rolefield"
             required
             disabled={disabled}
             select

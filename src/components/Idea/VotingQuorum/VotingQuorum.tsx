@@ -34,7 +34,7 @@ const VotingQuorum: React.FC<Props> = ({ phase, users, votes, quorum }) => {
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
         <Typography variant="caption">
-          <span data-testing-id="total-votes">{votes}</span> {t(`ui.units.${phase >= 30 ? 'votes' : 'likes'}`)}
+          <span data-testid="total-votes">{votes}</span> {t(`ui.units.${phase >= 30 ? 'votes' : 'likes'}`)}
         </Typography>
         <Typography variant="caption">
           {users} {t('scopes.users.plural')}

@@ -1,3 +1,6 @@
+export * from './a11yModal';
+export * from './accessibility';
+export * from './alerts';
 export * from './commands';
 export * from './date';
 export * from './form';
@@ -12,4 +15,3 @@ export * from './sessionStorage';
 export * from './style';
 export * from './utils';
 export * from './votes';
-export * from './alerts';

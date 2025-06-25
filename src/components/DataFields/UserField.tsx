@@ -76,9 +76,15 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
               <TextField
                 {...params}
                 label={t('scopes.users.name')}
+                id="user-field-target"
                 disabled={disabled}
                 error={!!fieldState.error}
-                helperText={t(`${fieldState.error?.message || ''}`)}
+                helperText={<span id="user-error-message">{t(`${fieldState.error?.message || ''}`)}</span>}
+                inputProps={{
+                  'aria-labelledby': 'user-field-target-label',
+                  'aria-invalid': !!fieldState.error,
+                  'aria-errormessage': fieldState.error ? 'user-error-message' : undefined
+                }}
                 slotProps={{
                   input: {
                     ...params.InputProps,
@@ -88,6 +94,10 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
                         {params.InputProps.endAdornment}
                       </>
                     ),
+                  },
+                  inputLabel: {
+                    id: 'user-field-target-label',
+                    htmlFor: 'user-field-target',
                   },
                 }}
                 {...restOfProps}

@@ -1,8 +1,9 @@
 import AppIconButton from '@/components/AppIconButton';
 import { ReportForms } from '@/components/DataForms';
+import { AccessibleModal } from '@/components/AccessibleDialog';
 import { addReport, ReportArguments } from '@/services/messages';
-import { Drawer, IconButtonProps } from '@mui/material';
-import { useState } from 'react';
+import { IconButtonProps } from '@mui/material';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -15,6 +16,7 @@ const ReportButton: React.FC<Props> = ({ target, link, disabled = false, ...rest
   const { t } = useTranslation();
   const location = useLocation();
   const [isOpen, setOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const onSubmit = async (data: ReportArguments) => {
     const body = `
@@ -37,15 +39,27 @@ ${data.content || ''}
   return (
     <>
       <AppIconButton
-        data-testing-id="report-button"
+        data-testid="report-button"
+        ref={buttonRef}
         icon="report"
         disabled={disabled}
+        aria-label={t('actions.contentReport')}
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
         {...restOfProps}
         onClick={() => setOpen(true)}
       />
-      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }}>
+      <AccessibleModal
+        open={isOpen}
+        onClose={onClose}
+        title={t('actions.contentReport')}
+        showCloseButton={true}
+        maxWidth="100%"
+        testId="report-dialog"
+        finalFocusRef={buttonRef}
+      >
         <ReportForms onClose={onClose} onSubmit={onSubmit} />
-      </Drawer>
+      </AccessibleModal>
     </>
   );
 };

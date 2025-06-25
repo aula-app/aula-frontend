@@ -1,8 +1,7 @@
 import DefaultImage from '@/components/DefaultImages';
-import { Button, Dialog, DialogProps, Stack, Typography } from '@mui/material';
+import { Button, Dialog, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { FC, useEffect, useState } from 'react';
-
 import { useTranslation } from 'react-i18next';
 
 interface RoomImageSelectorProps {
@@ -58,7 +57,7 @@ const RoomImageSelector: FC<RoomImageSelectorProps> = ({ image, onClose, onSubmi
   useEffect(() => {
     onReset();
   }, [image]);
-  
+
   return (
     <>
       <Button sx={{ minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }} onClick={() => setEditImage(true)}>
@@ -80,7 +79,10 @@ const RoomImageSelector: FC<RoomImageSelectorProps> = ({ image, onClose, onSubmi
                   bgcolor: `hsl(${122 + key * 45}, 50%, 75%)`,
                 }}
                 onClick={() => setShift(key * 45)}
-              ></Button>
+                aria-label={t('room.image.color', { number: key + 1 })}
+              >
+                <span aria-hidden="true"></span>
+              </Button>
             ))}
           </Stack>
           <Typography variant="h3">Select image</Typography>
@@ -97,6 +99,7 @@ const RoomImageSelector: FC<RoomImageSelectorProps> = ({ image, onClose, onSubmi
                     mx: 'auto',
                   }}
                   onClick={() => setSelected(key)}
+                  aria-label={t('room.image.pattern', { number: key + 1 })}
                 >
                   <DefaultImage image={key} shift={shift} />
                 </Button>

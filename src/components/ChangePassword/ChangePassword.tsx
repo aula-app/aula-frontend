@@ -109,10 +109,20 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
               disabled={disabled}
               type={showPassword[field] ? 'text' : 'password'}
               label={t(`auth.password.${field}`)}
+              id={`change-password-${field}`}
               sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
               {...register(field)}
               error={!!errors[field]}
-              helperText={`${errors[field]?.message || ''}`}
+              helperText={<span id={`${field}-error-message`}>{errors[field]?.message || ''}</span>}
+              inputProps={{
+                'aria-labelledby': `change-password-${field}-label`,
+                'aria-invalid': !!errors[field],
+                'aria-errormessage': errors[field] ? `${field}-error-message` : undefined,
+              }}
+              InputLabelProps={{
+                id: `change-password-${field}-label`,
+                htmlFor: `change-password-${field}`,
+              }}
               slotProps={{
                 input: {
                   endAdornment: (
@@ -135,7 +145,7 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
           <Button color="error" disabled={disabled} onClick={resetFields}>
             {t('actions.cancel')}
           </Button>
-          <Button type="submit" data-testing-id="submit-new-password" variant="contained" disabled={disabled}>
+          <Button type="submit" data-testid="submit-new-password" variant="contained" disabled={disabled}>
             {t('actions.save')}
           </Button>
         </Stack>

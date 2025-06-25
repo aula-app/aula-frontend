@@ -214,7 +214,8 @@ const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded =
                     maxWidth: 'none',
                     pointerEvents: 'none',
                   }}
-                  alt="Avatar preview"
+                  alt={t('profile.avatar.preview')}
+                  role="img"
                 />
               </Box>
               <Stack

@@ -47,8 +47,9 @@ const UserView = () => {
           <Accordion>
             <AccordionSummary
               expandIcon={<AppIcon icon="arrowdown" />}
-              aria-controls="panel2-content"
-              id="panel2-header"
+              aria-controls="panel2-content-security"
+              id="panel2-header-security"
+              data-testid="security-panel-button"
             >
               <Typography variant="h2">{t('ui.navigation.security')}</Typography>
             </AccordionSummary>
@@ -61,6 +62,7 @@ const UserView = () => {
               expandIcon={<AppIcon icon="arrowdown" />}
               aria-controls="panel2-content"
               id="panel2-header"
+              data-testid="privacy-panel-button"
             >
               <Typography variant="h2">{t('ui.navigation.privacy')}</Typography>
             </AccordionSummary>
@@ -73,6 +75,7 @@ const UserView = () => {
               expandIcon={<AppIcon icon="arrowdown" />}
               aria-controls="panel2-content"
               id="panel2-header"
+              data-testid="danger-panel-button"
               sx={{
                 backgroundColor: red[100],
               }}

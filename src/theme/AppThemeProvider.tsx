@@ -6,6 +6,7 @@ import { FunctionComponent, PropsWithChildren, useMemo } from 'react';
 import DARK_THEME from './dark';
 import THEME_FONTS from './fonts';
 import LIGHT_THEME from './light';
+import getFocusStyles from './focusStyles';
 
 // Setting .prepend: true moves MUI styles to the top of the <head> so they're loaded first.
 // It allows developers to easily override MUI styles with other styling solutions, like CSS modules.
@@ -33,6 +34,56 @@ const AppThemeProvider: FunctionComponent<Props> = ({ children, emotionCache = C
   const theme = createTheme({
     ...THEME_FONTS,
     ...useMemo(() => (state.darkMode ? DARK_THEME : LIGHT_THEME), [state.darkMode]),
+    components: {
+      MuiButtonBase: {
+        styleOverrides: {
+          root: {
+            '&.Mui-focusVisible': getFocusStyles(state.darkMode),
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            '&.Mui-focusVisible': getFocusStyles(state.darkMode),
+          },
+        },
+      },
+      MuiIconButton: {
+        styleOverrides: {
+          root: {
+            '&.Mui-focusVisible': getFocusStyles(state.darkMode),
+          },
+        },
+      },
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            '&.Mui-focusVisible': getFocusStyles(state.darkMode),
+          },
+        },
+      },
+      MuiTableRow: {
+        styleOverrides: {
+          root: {
+            '&.Mui-selected.Mui-focusVisible': {
+              ...getFocusStyles(state.darkMode),
+              outlineOffset: 0,
+            },
+          },
+        },
+      },
+      MuiLink: {
+        styleOverrides: {
+          root: {
+            '&.Mui-focusVisible': {
+              ...getFocusStyles(state.darkMode),
+              textDecoration: 'underline',
+            },
+          },
+        },
+      },
+    },
   });
 
   return (

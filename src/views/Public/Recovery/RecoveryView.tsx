@@ -66,11 +66,27 @@ const RecoveryPasswordView = () => {
           required
           disabled={isLoading}
           label="Email"
+          id="recovery-email"
+          slotProps={{ input: {
+            "aria-labelledby": "recovery-email-label",
+            "aria-invalid": !!errors.email,
+            "aria-errormessage": errors.email ? "email-error-message" : undefined
+          }, inputLabel: {
+            id: "recovery-email-label",
+            htmlFor: "recovery-email"
+          }}}
           {...register('email')}
           error={!!errors.email}
-          helperText={`${errors.email?.message || ''}`}
+          helperText={<span id="email-error-message">{errors.email?.message || ''}</span>}
         />
-        <Button type="submit" variant="contained" disabled={isLoading}>{t('auth.forgotPassword.recover')}</Button>
+        <Button 
+          variant="contained" 
+          disabled={isLoading} 
+          onClick={handleSubmit(onSubmit)}
+          aria-label={t('auth.forgotPassword.recover')}
+        >
+          {t('auth.forgotPassword.recover')}
+        </Button>
       </Stack>
     </form>
   );

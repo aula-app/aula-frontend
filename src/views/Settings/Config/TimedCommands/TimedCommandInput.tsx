@@ -186,7 +186,12 @@ const TimeCommandInput = ({ onReload }: Props) => {
             slotProps={{ textField: { size: 'small' } }}
           />
         </LocalizationProvider>
-        <Button variant="contained" onClick={addField} sx={{ py: 0.9, alignSelf: 'start' }}>
+        <Button 
+          variant="contained" 
+          onClick={addField} 
+          sx={{ py: 0.9, alignSelf: 'start' }}
+          aria-label={t('actions.confirm')}
+        >
           {t('actions.confirm')}
         </Button>
       </Stack>

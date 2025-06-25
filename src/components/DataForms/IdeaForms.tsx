@@ -1,7 +1,7 @@
 import { addIdeaCategory, getCategories, removeIdeaCategory } from '@/services/categories';
 import { addIdea, addIdeaBox, editIdea, getIdeaBoxes, removeIdeaBox } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
-import { checkPermissions } from '@/utils';
+import { announceToScreenReader, checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -74,12 +74,22 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
   const onSubmit = async (data: SchemaType) => {
     try {
       setIsLoading(true);
+      // Announce form submission to screen readers
+      announceToScreenReader(t('ui.accessibility.processingRequest'), 'assertive');
+
       if (!defaultValues) {
         await newIdea(data);
       } else {
         await updateIdea(data);
       }
+
+      // Announce successful form submission to screen readers
+      announceToScreenReader(t('ui.accessibility.formSubmitted'), 'assertive');
       onClose();
+    } catch (error) {
+      // Announce form submission failure to screen readers
+      announceToScreenReader(t('ui.accessibility.formError'), 'assertive');
+      console.error('Form submission error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -138,7 +148,12 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
 
   return (
     <Stack p={2} overflow="auto">
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        data-testid={`${defaultValues ? 'edit' : 'add'}-idea-form`}
+        aria-label={t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.ideas.name`) })}
+      >
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h1">
@@ -155,11 +170,28 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             <TextField
               {...register('title')}
               label={t('settings.columns.title')}
+              id="idea-title"
+              data-testid="idea-title-input"
               error={!!errors.title}
-              helperText={`${errors.title?.message || ''}`}
+              helperText={
+                <span id="title-error-message">
+                  {typeof errors.title?.message === 'string' ? errors.title.message : ''}
+                </span>
+              }
               fullWidth
               required
               disabled={isLoading}
+              slotProps={{
+                input: {
+                  'aria-invalid': !!errors.title,
+                  'aria-errormessage': errors.title ? 'title-error-message' : undefined,
+                  'aria-labelledby': 'idea-title-label',
+                },
+                inputLabel: {
+                  id: 'idea-title-label',
+                  htmlFor: 'idea-title',
+                },
+              }}
             />
             {/* content */}
             <MarkdownEditor name="content" control={control} required disabled={isLoading} />
@@ -182,14 +214,31 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             </Stack>
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error">
+            <Button onClick={onClose} color="error" data-testid="cancel-idea-form" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading}>
-              {isLoading ? t('actions.loading') : t('actions.confirm')}
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading}
+              data-testid="submit-idea-form"
+              aria-label={isLoading ? t('actions.submitting') : t('actions.confirm')}
+            >
+              {isLoading ? t('actions.submitting') : t('actions.confirm')}
             </Button>
           </Stack>
         </Stack>
+
+        {/* Hidden status announcer for screen readers */}
+        {isLoading && (
+          <span
+            aria-live="assertive"
+            className="visually-hidden"
+            style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden' }}
+          >
+            {t('actions.submitting')}
+          </span>
+        )}
       </form>
     </Stack>
   );

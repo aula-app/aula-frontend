@@ -136,10 +136,22 @@ const LoginView = () => {
           required
           disabled={isLoading}
           label={t("auth.login.label")}
-          slotProps={{ input: { autoCapitalize: "none" } }}
-          {...register("username")}
+          id="login-username"
+          slotProps={{ input: { 
+            "aria-labelledby": "login-username-label",
+            "aria-invalid": !!errors.username,
+            "aria-errormessage": errors.username ? "username-error-message" : undefined,
+            autoCapitalize: "none" 
+          },
+          inputLabel: { 
+            id: "login-username-label", 
+            htmlFor: "login-username" 
+          }}}
+          {...register("username", {
+            shouldUnregister: false
+          })}
           error={!!errors.username}
-          helperText={`${errors.username?.message || ''}`}
+          helperText={<span id="username-error-message">{errors.username?.message || ''}</span>}
           sx={{ mt: 0 }}
         />
         <TextField
@@ -147,12 +159,18 @@ const LoginView = () => {
           disabled={isLoading}
           type={showPassword ? "text" : "password"}
           label={t("auth.password.label")}
-          {...register("password")}
+          id="login-password"
+          {...register("password", {
+            shouldUnregister: false
+          })}
           error={!!errors.password}
-          helperText={`${errors.password?.message || ''}`}
+          helperText={<span id="password-error-message">{errors.password?.message || ''}</span>}
           sx={{ mt: 0 }}
           slotProps={{
             input: {
+              "aria-labelledby": "login-password-label",
+              "aria-invalid": !!errors.password,
+              "aria-errormessage": errors.password ? "password-error-message" : undefined,
               endAdornment: (
                 <InputAdornment position="end">
                   <AppIconButton
@@ -164,24 +182,29 @@ const LoginView = () => {
                   />
                 </InputAdornment>
               ),
+            },
+            inputLabel: {
+              id: "login-password-label", 
+              htmlFor: "login-password" 
             }
           }}
         />
         </Stack>
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={isLoading}
+        <Button 
+          variant="contained" 
+          disabled={isLoading} 
+          onClick={handleSubmit(onSubmit)}
+          aria-label={t("auth.login.button")}
         >
           {t("auth.login.button")}
         </Button>
-
         <Grid container justifyContent="end" alignItems="center">
           <Button
             variant="text"
             color="secondary"
             component={AppLink}
             to="/recovery/password"
+            aria-label={t('auth.forgotPassword.link')}
           >
             {t('auth.forgotPassword.link')}
           </Button>

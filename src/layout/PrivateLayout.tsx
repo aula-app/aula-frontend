@@ -1,4 +1,5 @@
 import { ErrorBoundary } from '@/components';
+import SkipNavigation from '@/components/SkipNavigation';
 import { useIsOnline } from '@/hooks';
 import { useOnMobile } from '@/hooks/layout';
 import { checkPermissions } from '@/utils';
@@ -46,9 +47,16 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         paddingRight: 0,
       }}
     >
+      <SkipNavigation mainContentId="main-content" />
       <TopBar />
 
-      <Stack direction="row" component="main" sx={{ flexGrow: 1, overflow: 'hidden' }}>
+      <Stack 
+        direction="row" 
+        component="main"
+        id="main-content" 
+        sx={{ flexGrow: 1, overflow: 'hidden' }}
+        tabIndex={-1} // Makes the element focusable via skip nav but doesn't add it to normal tab order
+      >
         {!checkPermissions('system', 'hide') && <SideBarFixed />}
         <Stack flex={1} overflow="hidden">
           <ErrorBoundary name="Content">{children}</ErrorBoundary>
