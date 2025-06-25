@@ -1,3 +1,3 @@
 import IdeaCard from './IdeaCard';
 
-export { IdeaCard as default, IdeaCard };
+export { IdeaCard as default,  };

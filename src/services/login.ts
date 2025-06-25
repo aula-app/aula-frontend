@@ -88,7 +88,7 @@ export const setPassword = async (password: string, secret: string) => {
   }
 };
 
-export const logout = () => {
+const logout = () => {
   // Perform any cleanup needed for logout
   localStorage.clear();
   sessionStorage.clear();

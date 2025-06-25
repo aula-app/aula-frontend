@@ -1,3 +1,3 @@
 import AskConsentView from './AskConsentView';
 
-export { AskConsentView as default, AskConsentView };
+export { AskConsentView as default,  };

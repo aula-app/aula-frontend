@@ -14,7 +14,7 @@ import {
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export interface AccessibleDialogProps extends Omit<DialogProps, 'title'> {
+interface AccessibleDialogProps extends Omit<DialogProps, 'title'> {
   /**
    * The title of the dialog
    */
@@ -72,7 +72,7 @@ export interface AccessibleDialogProps extends Omit<DialogProps, 'title'> {
   testId?: string;
 }
 
-export interface AccessibleDialogHandle {
+interface AccessibleDialogHandle {
   /**
    * Focus the dialog or a specific element within it
    */

@@ -43,7 +43,7 @@ export interface MessageConsentType {
   user_needs_to_consent: 0 | 1 | 2;
 }
 
-export interface MessageConsentResponse extends GenericResponse {
+interface MessageConsentResponse extends GenericResponse {
   data: MessageConsentType[];
 }
 

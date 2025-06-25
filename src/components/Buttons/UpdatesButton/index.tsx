@@ -1,3 +1,3 @@
 import UpdatesButton from './UpdatesButton';
 
-export { UpdatesButton as default, UpdatesButton };
+export { UpdatesButton as default,  };

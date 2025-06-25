@@ -31,7 +31,7 @@ export interface CategoryArguments {
   status?: string;
 }
 
-export interface EditCategoryArguments extends CategoryArguments {
+interface EditCategoryArguments extends CategoryArguments {
   category_id: number;
 }
 
@@ -39,7 +39,7 @@ export interface EditCategoryArguments extends CategoryArguments {
  * Adds a new category to the database
  */
 
-export interface AddResponse extends GenericResponse {
+interface AddResponse extends GenericResponse {
   data: { id: number } | null;
 }
 

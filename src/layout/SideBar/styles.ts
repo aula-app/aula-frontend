@@ -7,11 +7,11 @@ export const drawerPaperStyles = (onMobile: boolean, variant: 'permanent' | 'per
   height: onMobile ? '100%' : variant === 'temporary' ? '100%' : `calc(100% - ${TOPBAR_DESKTOP_HEIGHT})`,
 });
 
-export const contentStackStyles = {
+const contentStackStyles = {
   height: '100%',
 };
 
-export const actionStackStyles = {
+const actionStackStyles = {
   display: 'flex',
   flexDirection: 'row' as const,
   justifyContent: 'center',
@@ -25,7 +25,7 @@ export const fixedSideBarStyles = {
   display: { xs: 'none', md: 'flex' },
 };
 
-export const navListStyles = {
+const navListStyles = {
   flex: 1,
   px: 1,
 };

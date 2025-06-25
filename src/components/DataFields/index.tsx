@@ -1,4 +1,4 @@
-import ConsentField from './ConsentFiled';
+import ConsentField from './ConsentField';
 import MarkdownEditor from './MarkdownEditor';
 import PhaseDurationFields from './PhaseDurationFields';
 import RoleField from './RoleField';

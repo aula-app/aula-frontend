@@ -30,11 +30,11 @@ export let bob: UserData;
 
 export let mallory: UserData;
 
-export let burt: UserData;
+let burt: UserData;
 
 export let rainer: UserData;
 
-export const admin: UserData = {
+const admin: UserData = {
   username: 'admin',
   password: 'aula',
   displayName: 'Admin',

@@ -1,3 +1,3 @@
 import CommentView from './CommentView';
 
-export { CommentView as default, CommentView };
+export { CommentView as default,  };

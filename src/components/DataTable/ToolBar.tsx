@@ -17,7 +17,7 @@ import {
 import React, { useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export interface FilterOptionsType {
+interface FilterOptionsType {
   status: StatusTypes;
   filter: [keyof PossibleFields, string];
 }

@@ -1,3 +1,3 @@
 import BugsView from './BugsView';
 
-export { BugsView as default, BugsView };
+export { BugsView as default,  };

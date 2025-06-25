@@ -1,3 +1,3 @@
 import DataDelete from './DataDelete';
 
-export { DataDelete as default, DataDelete };
+export { DataDelete as default,  };

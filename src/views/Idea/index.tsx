@@ -1,3 +1,3 @@
 import IdeaView from './IdeaView';
 
-export { IdeaView as default, IdeaView };
+export { IdeaView as default,  };

@@ -1,3 +1,3 @@
 import KnowMore from './KnowMore';
 
-export { KnowMore as default, KnowMore };
+export { KnowMore as default,  };

@@ -1,3 +1,3 @@
 import UpdatePasswordView from './UpdatePasswordView';
 
-export { UpdatePasswordView as default, UpdatePasswordView };
+export { UpdatePasswordView as default,  };

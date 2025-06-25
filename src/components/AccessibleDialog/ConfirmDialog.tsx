@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AccessibleDialog from './AccessibleDialog';
 
-export interface ConfirmDialogProps {
+interface ConfirmDialogProps {
   /**
    * The title of the confirmation dialog
    */

@@ -1,3 +1,3 @@
 import UserMessagesView from './UserMessagesView';
 
-export { UserMessagesView as default, UserMessagesView };
+export { UserMessagesView as default,  };

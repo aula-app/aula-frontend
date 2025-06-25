@@ -8,7 +8,7 @@ import { checkPermissions } from '@/utils';
 /**
  * SideBar configuration
  */
-export const SIDEBAR_MOBILE_ANCHOR = 'right'; // 'left';
+const SIDEBAR_MOBILE_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_DESKTOP_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_WIDTH = '240px';
 
@@ -102,4 +102,4 @@ export const TOPBAR_DESKTOP_HEIGHT = '64px';
 /**
  * BottomBar configuration
  */
-export const BOTTOMBAR_DESKTOP_VISIBLE = false; // true;
+const BOTTOMBAR_DESKTOP_VISIBLE = false; // true;

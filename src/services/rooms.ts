@@ -3,7 +3,7 @@ import { RoleTypes } from '@/types/SettingsTypes';
 import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 import { checkPermissions } from '@/utils';
 
-export interface GetRoomResponse extends GenericResponse {
+interface GetRoomResponse extends GenericResponse {
   data: RoomType | null;
 }
 
@@ -23,7 +23,7 @@ export const getRoom = async function (room_id: string): Promise<GetRoomResponse
  * Get a list of rooms from the database.
  */
 
-export interface GetRoomsResponse extends GenericResponse {
+interface GetRoomsResponse extends GenericResponse {
   data: RoomType[] | null;
 }
 
@@ -81,7 +81,7 @@ export const getAllRooms = async (
  * Get a list of the rooms of a user from the database.
  */
 
-export const getRoomsByUser = async (user_id: string): Promise<GetRoomsResponse> => {
+const getRoomsByUser = async (user_id: string): Promise<GetRoomsResponse> => {
   const response = await databaseRequest({
     model: 'Room',
     method: 'getRoomsByUser',
@@ -107,7 +107,7 @@ export interface RoomArguments {
   status?: number;
 }
 
-export interface EditRoomArguments extends RoomArguments {
+interface EditRoomArguments extends RoomArguments {
   room_id: string;
 }
 

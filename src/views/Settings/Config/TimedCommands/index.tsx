@@ -1,3 +1,3 @@
 import TimedCommands from './TimedCommands';
 
-export { TimedCommands as default, TimedCommands };
+export { TimedCommands as default,  };
