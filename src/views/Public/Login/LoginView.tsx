@@ -30,7 +30,7 @@ import { LoginFormValues } from "@/types/LoginTypes";
 
 const LoginView = () => {
   const { t } = useTranslation();
-  const oauthEnabled = getConfig().OAUTH_ENABLED;
+  const oauthEnabled = getConfig().IS_OAUTH_ENABLED;
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const [loginError, setError] = useState<string>('');

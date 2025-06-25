@@ -14,7 +14,7 @@ const PublicRoutes = () => {
 
   const useInstanceCheck = () => {
     const instance_token = localStorageGet('code', false);
-    const isMultiInstance = getConfig().IS_MULTI !== false;
+    const isMultiInstance = getConfig().IS_MULTI;
 
     if (isMultiInstance) {
       if (!instance_token && location.pathname !== '/code') {

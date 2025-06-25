@@ -6,7 +6,7 @@ interface InstanceResponse {
 }
 
 export const validateInstanceCode = async (code: string): Promise<boolean> => {
-  const request = await fetch(`${getConfig().MULTI_URL}/instance/${code}`);
+  const request = await fetch(`${getConfig().MULTI_INSTANCES_URL}/instance/${code}`);
   const response = (await request.json()) as InstanceResponse[];
 
   if (response.length > 0) {
