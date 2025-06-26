@@ -9,7 +9,7 @@ const host = shared.getHost();
 
 export const create = async (page: Page, room: roomFixtures.RoomData) => {
   // start at home
-  await page.goto(host);
+  await page.goto(host || 'http://localhost:3000');
 
   await goToRoomSettings(page);
 
@@ -27,7 +27,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
 
   // how to fill in one of those MUI multiselectors:
 
-  const UserSelector = page.locator('[data-testing-id="usersfield"] input');
+  const UserSelector = page.locator('[data-testid="usersfield"] input');
   await expect(UserSelector).toBeVisible({ timeout: 500 });
 
   await UserSelector.click({ timeout: 1000 });
@@ -48,18 +48,24 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
 
   await page.goto(host + '/settings/rooms');
 
+  // Wait for page to load completely
+  await page.waitForLoadState('networkidle');
+
+  // Wait for the rooms table/content to load first
+  await expect(page.locator('h1')).toContainText('Räume');
+
   // open the filter menu:
-  const FilterButton = page.locator('[aria-label="button-open-filters"]');
-  await expect(FilterButton).toBeVisible();
+  const FilterButton = page.locator('#filter-toggle-button');
+  await expect(FilterButton).toBeVisible({ timeout: 10000 });
   await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
 
-  await page.locator('#filter-select-1').click({ timeout: 1000 });
+  await page.locator('#filter-field-select').click({ timeout: 1000 });
   await page.getByRole('option', { name: 'Raum Name' }).click({ timeout: 1000 });
 
   // filter by our user name
-  await page.fill('#filter-select-2', room.name);
+  await page.fill('#filter-value-input', room.name);
 
   // find the new user in the user table
   const row = page.getByText(room.name, { exact: true });
@@ -70,22 +76,22 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
 
 export const remove = async (page: Page, room: roomFixtures.RoomData) => {
   // start at home
-  await page.goto(host);
+  await page.goto(host || 'http://localhost:3000');
 
   await goToRoomSettings(page);
 
   // open the filter menu:
-  const FilterButton = page.locator('[aria-label="button-open-filters"]');
+  const FilterButton = page.locator('#filter-toggle-button');
   await expect(FilterButton).toBeVisible();
   await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
 
-  await page.locator('#filter-select-1').click({ timeout: 1000 });
+  await page.locator('#filter-field-select').click({ timeout: 1000 });
   await page.getByRole('option', { name: 'Raum Name' }).click({ timeout: 1000 });
 
   // filter by our user name
-  await page.fill('#filter-select-2', room.name);
+  await page.fill('#filter-value-input', room.name);
 
   // find the new user in the user table
   const row = page.locator('table tr').filter({ hasText: room.name });
