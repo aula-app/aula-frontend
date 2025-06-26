@@ -80,6 +80,19 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
       color: theme.palette.text.primary,
     },
 
+    // Ensure CodeMirror content is focusable
+    '.cm-content': {
+      outline: 'none',
+    },
+
+    '.cm-editor': {
+      outline: 'none',
+    },
+
+    '.cm-focused': {
+      outline: 'none',
+    },
+
     // Toolbar button styles
     '.mdxeditor-toolbar button': {
       backgroundColor: 'transparent',
@@ -89,12 +102,29 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
       margin: theme.spacing(0.25),
       cursor: 'pointer',
       transition: theme.transitions.create(['background-color', 'color']),
+      color: theme.palette.text.primary,
 
       '&:hover': {
         backgroundColor: theme.palette.action.hover,
       },
 
-      '&[data-active=true]': {
+      // Multiple selectors for active state to ensure compatibility
+      '&[data-active="true"]': {
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.action.selected,
+      },
+
+      '&[aria-pressed="true"]': {
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.action.selected,
+      },
+
+      '&.active': {
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.action.selected,
+      },
+
+      '&[data-state="on"]': {
         color: theme.palette.primary.main,
         backgroundColor: theme.palette.action.selected,
       },
@@ -209,16 +239,48 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
     }
   }, []);
 
+  // Handle focus on the editor container to focus the text area
+  const handleContainerFocus = useCallback(() => {
+    // Use the MDXEditor ref to focus the editor properly
+    if (mdxEditorRef.current) {
+      try {
+        mdxEditorRef.current.focus();
+      } catch (error) {
+        // Fallback: try to find and focus the content area directly
+        const contentArea = containerRef.current?.querySelector(
+          '.cm-content, .mdxeditor-root-contenteditable, [contenteditable="true"]'
+        );
+        if (contentArea instanceof HTMLElement) {
+          contentArea.focus();
+        }
+      }
+    }
+  }, []);
+
   // Set up DOM event listener for Tab handling
   useEffect(() => {
     const container = containerRef.current;
     if (container) {
       container.addEventListener('keydown', handleKeyDown, true);
+
+      // Add focus handler to automatically focus editor when container gets focus
+      const handleFocus = (event: FocusEvent) => {
+        // Only handle if focus is coming from outside
+        if (!container.contains(event.relatedTarget as Node)) {
+          setTimeout(() => {
+            handleContainerFocus();
+          }, 0);
+        }
+      };
+
+      container.addEventListener('focus', handleFocus);
+
       return () => {
         container.removeEventListener('keydown', handleKeyDown, true);
+        container.removeEventListener('focus', handleFocus);
       };
     }
-  }, [handleKeyDown]);
+  }, [handleKeyDown, handleContainerFocus]);
 
   return (
     <Controller
@@ -230,7 +292,20 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
         }, [control._defaultValues[name], field.value]);
         return (
           <FormControl fullWidth {...restOfProps}>
-            <div ref={containerRef}>
+            <div
+              ref={containerRef}
+              onClick={handleContainerFocus}
+              onKeyDown={(e) => {
+                // Handle Enter and Space to focus the editor
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleContainerFocus();
+                }
+              }}
+              tabIndex={0}
+              role="textbox"
+              aria-label={t(`settings.columns.${name}`)}
+            >
               <Editor
                 className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}
                 markdown={''}
