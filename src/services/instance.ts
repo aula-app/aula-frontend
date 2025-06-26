@@ -1,16 +1,23 @@
-import { localStorageSet } from '@/utils';
+import { localStorageSet, localStorageGet } from '@/utils';
 
 interface InstanceResponse {
-  api: string;
+  status: string;
 }
 
 export const validateInstanceCode = async (code: string): Promise<boolean> => {
-  const request = await fetch(`${import.meta.env.VITE_APP_MULTI_AULA}/instance/${code}`);
-  const response = (await request.json()) as InstanceResponse[];
+  const requestBody = JSON.stringify({ code: code });
+  const requestData = {
+    method: 'POST',
+    body: requestBody,
+  };
 
-  if (response.length > 0) {
+  const api_url = localStorageGet('api_url');
+  const request = await fetch(`${api_url}/api/controllers/instance.php`, requestData);
+
+  const response = (await request.json()) as InstanceResponse;
+
+  if (response.status) {
     localStorageSet('code', code);
-    localStorageSet('api_url', response[0].api);
     return true;
   }
   return false;
