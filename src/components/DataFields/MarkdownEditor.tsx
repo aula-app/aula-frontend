@@ -8,9 +8,12 @@ import {
   Separator,
   toolbarPlugin,
   UndoRedo,
+  codeMirrorPlugin,
 } from '@mdxeditor/editor';
+import { keymap } from '@codemirror/view';
+import { Prec } from '@codemirror/state';
 import { FormControl, FormControlProps, FormHelperText, FormLabel as MuiFormLabel, Stack, styled } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -138,6 +141,84 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
 const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Custom keymap to completely disable Tab indentation
+  const disableTabKeymap = Prec.highest(
+    keymap.of([
+      {
+        key: 'Tab',
+        preventDefault: true,
+        stopPropagation: true,
+        run: () => {
+          // Do nothing - this completely blocks Tab from doing anything in the editor
+          return true;
+        },
+      },
+      {
+        key: 'Shift-Tab',
+        preventDefault: true,
+        stopPropagation: true,
+        run: () => {
+          // Do nothing - this completely blocks Shift+Tab from doing anything in the editor
+          return true;
+        },
+      },
+    ])
+  );
+
+  // Handle Tab navigation at the DOM level as a fallback
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const focusableElements = document.querySelectorAll(
+        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]), a[href]'
+      );
+      const focusableArray = Array.from(focusableElements) as HTMLElement[];
+      const container = containerRef.current;
+
+      if (container) {
+        const currentIndex = focusableArray.findIndex((el) => container.contains(el));
+
+        if (event.shiftKey) {
+          // Shift+Tab: go to previous element
+          if (currentIndex > 0) {
+            let prevIndex = currentIndex - 1;
+            while (prevIndex >= 0 && container.contains(focusableArray[prevIndex])) {
+              prevIndex--;
+            }
+            if (prevIndex >= 0) {
+              focusableArray[prevIndex].focus();
+            }
+          }
+        } else {
+          // Tab: go to next element
+          if (currentIndex !== -1) {
+            let nextIndex = currentIndex + 1;
+            while (nextIndex < focusableArray.length && container.contains(focusableArray[nextIndex])) {
+              nextIndex++;
+            }
+            if (nextIndex < focusableArray.length) {
+              focusableArray[nextIndex].focus();
+            }
+          }
+        }
+      }
+    }
+  }, []);
+
+  // Set up DOM event listener for Tab handling
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('keydown', handleKeyDown, true);
+      return () => {
+        container.removeEventListener('keydown', handleKeyDown, true);
+      };
+    }
+  }, [handleKeyDown]);
 
   return (
     <Controller
@@ -149,34 +230,45 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
         }, [control._defaultValues[name], field.value]);
         return (
           <FormControl fullWidth {...restOfProps}>
-            <Editor
-              className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}
-              markdown={''}
-              toMarkdownOptions={{}}
-              sx={{ height: '100%' }}
-              plugins={[
-                headingsPlugin(),
-                listsPlugin(),
-                toolbarPlugin({
-                  toolbarClassName: 'editor-toolbar',
-                  toolbarContents: () => (
-                    <Stack direction="row" justifyContent="space-between" width="100%">
-                      <Stack direction="row">
-                        <BoldItalicUnderlineToggles />
-                        <Separator />
-                        <ListsToggle />
+            <div ref={containerRef}>
+              <Editor
+                className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}
+                markdown={''}
+                toMarkdownOptions={{}}
+                sx={{ height: '100%' }}
+                plugins={[
+                  headingsPlugin(),
+                  listsPlugin(),
+                  codeMirrorPlugin({
+                    codeBlockLanguages: {
+                      js: 'JavaScript',
+                      ts: 'TypeScript',
+                      jsx: 'React JSX',
+                      tsx: 'React TSX',
+                    },
+                    codeMirrorExtensions: [disableTabKeymap],
+                  }),
+                  toolbarPlugin({
+                    toolbarClassName: 'editor-toolbar',
+                    toolbarContents: () => (
+                      <Stack direction="row" justifyContent="space-between" width="100%">
+                        <Stack direction="row">
+                          <BoldItalicUnderlineToggles />
+                          <Separator />
+                          <ListsToggle />
+                        </Stack>
+                        <UndoRedo />
                       </Stack>
-                      <UndoRedo />
-                    </Stack>
-                  ),
-                }),
-              ]}
-              {...field}
-              ref={mdxEditorRef}
-              aria-invalid={!!fieldState.error}
-              aria-errormessage={fieldState.error ? `${name}-error-message` : undefined}
-              aria-labelledby={`editor-${name}-label`}
-            />
+                    ),
+                  }),
+                ]}
+                {...field}
+                ref={mdxEditorRef}
+                aria-invalid={!!fieldState.error}
+                aria-errormessage={fieldState.error ? `${name}-error-message` : undefined}
+                aria-labelledby={`editor-${name}-label`}
+              />
+            </div>
             <StyledFormLabel id={`editor-${name}-label`}>
               {t(`settings.columns.${name}`)}
               {required ? '*' : ''}
