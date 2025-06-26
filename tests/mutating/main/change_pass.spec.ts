@@ -44,7 +44,7 @@ test.describe('Change pass flow', () => {
     await alice.fill('input[name="newPassword"]', 'TEMPPASS!!!');
     await alice.fill('input[name="confirmPassword"]', 'TEMPPASS!!!');
 
-    const SubmitButton = alice.locator('[data-testing-id="submit-new-password"]');
+    const SubmitButton = alice.getByTestId('submit-new-password');
     await SubmitButton.click({ timeout: 1000 });
 
     const SuccessDiv = alice.locator('div').filter({ hasText: `Passwort erfolgreich geändert` }).first();
@@ -71,7 +71,7 @@ test.describe('Change pass flow', () => {
     await alice.fill('input[name="newPassword"]', fixtures.alice.password);
     await alice.fill('input[name="confirmPassword"]', fixtures.alice.password);
 
-    const SubmitButton = alice.locator('[data-testing-id="submit-new-password"]');
+    const SubmitButton = alice.getByTestId('submit-new-password');
     await SubmitButton.click({ timeout: 1000 });
 
     const SuccessDiv = alice.locator('div').filter({ hasText: `Passwort erfolgreich geändert` }).first();
