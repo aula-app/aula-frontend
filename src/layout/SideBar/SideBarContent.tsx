@@ -3,7 +3,7 @@ import { announceToScreenReader } from '@/utils';
 import { List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { KeyboardEvent, memo, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SIDEBAR_ITEMS } from '../config';
 
 type Props = {
@@ -23,10 +23,11 @@ const emptyEvent: Record<string, never> = Object.freeze({});
 const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }: Props): JSX.Element => {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const navRef = useRef<HTMLUListElement>(null);
 
-  // Filter out items the user doesn't have permission to see
-  const visibleItems = SIDEBAR_ITEMS.filter((item) => item.permission());
+  // Filter out items the user doesn't have permission to see and have a path
+  const visibleItems = SIDEBAR_ITEMS.filter((item) => item.permission() && item.path);
 
   // Find the index of the current page in the menu items
   const currentPageIndex = visibleItems.findIndex(
@@ -62,16 +63,20 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
         case 'Enter':
         case ' ':
           event.preventDefault();
-          // The link will handle navigation naturally
+          // Navigate to the selected item
+          const targetPath = visibleItems[index].path;
+          if (targetPath) {
+            navigate(targetPath);
+          }
           if (onClose && !isFixed) {
             onClose(emptyEvent, 'escapeKeyDown');
-            announceToScreenReader(
-              t('ui.accessibility.menuItemSelected', {
-                item: t(`ui.navigation.${visibleItems[index].title}`),
-              }),
-              'polite'
-            );
           }
+          announceToScreenReader(
+            t('ui.accessibility.menuItemSelected', {
+              item: t(`ui.navigation.${visibleItems[index].title}`),
+            }),
+            'polite'
+          );
           break;
         case 'Escape':
           if (onClose && !isFixed) {
@@ -92,7 +97,7 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
         }
       }
     },
-    [visibleItems, onClose, isFixed, t]
+    [visibleItems, onClose, isFixed, t, navigate]
   );
 
   // Focus the current page's nav item on first render
