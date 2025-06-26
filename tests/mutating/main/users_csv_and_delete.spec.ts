@@ -58,11 +58,11 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     await users.goToSettings(admin);
 
     // open benutzer accordeon
-    const BenutzerAccordeon = admin.getByTestId('config-accordion-user');
+    const BenutzerAccordeon = admin.getByRole('button', { name: 'Benutzer' });
     await expect(BenutzerAccordeon).toBeVisible({ timeout: 1000 });
     await BenutzerAccordeon.click({ timeout: 1000 });
 
-    const UploadButton = admin.getByTestId('upload-users-csv-button');
+    const UploadButton = admin.getByRole('button', { name: 'Datei Hochladen' });
     await expect(UploadButton).toBeVisible({ timeout: 1000 });
     await UploadButton.click({ timeout: 1000 });
 
@@ -72,7 +72,7 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     await admin.setInputFiles('input[type="file"]', filePath);
 
     //
-    const RoomSelector = admin.locator('[data-testid="user-room-select"] input');
+    const RoomSelector = admin.locator('[data-testing-id="user-room-select"] input');
     await expect(RoomSelector).toBeVisible({ timeout: 500 });
 
     await RoomSelector.click({ timeout: 1000 });
@@ -80,7 +80,7 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     // just select the first room
     await admin.getByRole('option').first().click({ timeout: 1000 });
 
-    const ApproveButton = admin.locator('[data-testid="confirm_upload"]');
+    const ApproveButton = admin.locator('[data-testing-id="confirm_upload"]');
     await expect(ApproveButton).toBeVisible({ timeout: 1000 });
     await ApproveButton.click({ timeout: 1000 });
 
@@ -124,18 +124,18 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     await users.goToProfile(jannika);
 
     // open benutzer accordeon
-    const BenutzerAccordeon = jannika.getByTestId('danger-panel-button');
+    const BenutzerAccordeon = jannika.getByRole('button', { name: 'Gefahrenzone' });
     await expect(BenutzerAccordeon).toBeVisible({ timeout: 1000 });
     await BenutzerAccordeon.click({ timeout: 1000 });
 
-    const RequestDeletionButton = jannika.getByTestId('delete-account-button');
+    const RequestDeletionButton = jannika.getByRole('button', { name: 'Kontolöschen anfordern' });
     await expect(RequestDeletionButton).toBeVisible({ timeout: 1000 });
     await RequestDeletionButton.click({ timeout: 1000 });
 
     const ModalDiv = jannika.locator('div[role="dialog"]');
     await expect(ModalDiv).toBeVisible({ timeout: 1000 });
 
-    const SecondApproveButton = ModalDiv.getByTestId('confirm-button').first();
+    const SecondApproveButton = ModalDiv.getByRole('button', { name: 'Löschen' }).first();
     await expect(SecondApproveButton).toBeVisible({ timeout: 1000 });
     await SecondApproveButton.click({ timeout: 1000 });
 
@@ -151,14 +151,14 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
       .first();
     await expect(AnfrageDiv).toBeVisible({ timeout: 1000 });
 
-    const ApproveButton = AnfrageDiv.getByTestId('confirm-request').first();
+    const ApproveButton = AnfrageDiv.getByRole('button', { name: 'Bestätigen' }).first();
     await expect(ApproveButton).toBeVisible({ timeout: 1000 });
     await ApproveButton.click({ timeout: 1000 });
 
     const ModalDiv2 = admin.locator('div[role="dialog"]');
     await expect(ModalDiv2).toBeVisible({ timeout: 1000 });
 
-    const SecondApproveButton2 = ModalDiv2.getByTestId('confirm-request-action').first();
+    const SecondApproveButton2 = ModalDiv2.getByRole('button', { name: 'Bestätigen' }).first();
     await expect(SecondApproveButton2).toBeVisible({ timeout: 1000 });
     await SecondApproveButton2.click({ timeout: 1000 });
 
