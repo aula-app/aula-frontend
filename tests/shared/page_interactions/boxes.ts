@@ -74,7 +74,7 @@ export const remove = async (
 
   await goToRoom(page, room);
 
-  const GoToDiscussionPhaseButton = page.locator('[data-testing-id="link-to-phase-10"]');
+  const GoToDiscussionPhaseButton = page.getByTestId('link-to-phase-10');
   await expect(GoToDiscussionPhaseButton).toBeVisible({ timeout: 2000 });
   await GoToDiscussionPhaseButton.click({ timeout: 1000 });
 
@@ -84,17 +84,17 @@ export const remove = async (
   // so that any triggered tooltips dissappear
   await page.mouse.move(0, 0);
 
-  const MoreOptions = BoxDiv.locator('[data-testing-id="more-options"]');
+  const MoreOptions = BoxDiv.getByTestId('more-options');
   await expect(MoreOptions).toBeVisible({ timeout: 2000 });
 
   await MoreOptions.click({ timeout: 1000 });
 
-  const DeleteButton = BoxDiv.locator('[data-testing-id="delete-button"]');
+  const DeleteButton = BoxDiv.getByTestId('delete-button');
   await expect(DeleteButton).toBeVisible({ timeout: 2000 });
 
   await DeleteButton.click({ timeout: 1000 });
 
-  const ConfirmDeleteButton = page.locator('[data-testing-id="confirm-delete"]');
+  const ConfirmDeleteButton = page.getByTestId('confirm-button');
   await expect(ConfirmDeleteButton).toBeVisible();
   await ConfirmDeleteButton.click({ timeout: 1000 });
 
@@ -121,12 +121,12 @@ export const move = async (
   // so that any triggered tooltips dissappear
   await page.mouse.move(0, 0);
 
-  const MoreOptions = BoxDiv.locator('[data-testing-id="more-options"]');
+  const MoreOptions = BoxDiv.getByTestId('more-options');
   await expect(MoreOptions).toBeVisible({ timeout: 2000 });
 
   await MoreOptions.click({ timeout: 1000 });
 
-  const EditButton = BoxDiv.locator('[data-testing-id="edit-button"]');
+  const EditButton = BoxDiv.getByTestId('edit-button');
   await expect(EditButton).toBeVisible({ timeout: 2000 });
 
   await page.mouse.move(0, 0);
@@ -146,7 +146,7 @@ export const move = async (
 
   await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
-  const GoToDiscussionPhaseButton2 = page.locator(`[data-testing-id="link-to-phase-${toPhase}"]`);
+  const GoToDiscussionPhaseButton2 = page.getByTestId(`link-to-phase-${toPhase}`);
   await expect(GoToDiscussionPhaseButton2).toBeVisible({ timeout: 2000 });
   await GoToDiscussionPhaseButton2.click({ timeout: 1000 });
 
@@ -178,7 +178,7 @@ export const delegateVotes = async (
 
   await ToUserButton.click({ timeout: 1000 });
 
-  const ConfirmButton = page.locator('[data-testing-id="submit-delegation"]');
+  const ConfirmButton = page.getByTestId('delegate-vote-button');
   await expect(ConfirmButton).toBeVisible();
 
   await ConfirmButton.click({ timeout: 1000 });
@@ -206,7 +206,7 @@ export const unDelegateVotes = async (
 
   await UnDelegateButton.click({ timeout: 1000 });
 
-  const ConfirmButton = page.locator('[data-testing-id="revoke-delegation"]');
+  const ConfirmButton = page.getByTestId('revoke-delegation-button');
   await expect(ConfirmButton).toBeVisible();
   await ConfirmButton.click({ timeout: 1000 });
 
