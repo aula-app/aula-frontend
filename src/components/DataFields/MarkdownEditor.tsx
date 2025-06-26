@@ -89,86 +89,35 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
       margin: theme.spacing(0.25),
       cursor: 'pointer',
       transition: theme.transitions.create(['background-color', 'color']),
-      color: theme.palette.text.primary,
 
       '&:hover': {
         backgroundColor: theme.palette.action.hover,
       },
 
-      '&:focus': {
-        backgroundColor: theme.palette.action.hover,
-        outline: `2px solid ${theme.palette.primary.main}`,
-        outlineOffset: '1px',
-      },
-
-      // Multiple selectors for active state to ensure compatibility
-      '&[data-active="true"]': {
-        backgroundColor: theme.palette.action.selected,
-      },
-
-      '&[aria-pressed="true"]': {
-        backgroundColor: theme.palette.action.selected,
-      },
-
-      '&.active': {
-        backgroundColor: theme.palette.action.selected,
-      },
-
-      '&[data-state="on"]': {
+      '&[data-active=true]': {
+        color: theme.palette.primary.main,
         backgroundColor: theme.palette.action.selected,
       },
 
       '&:disabled': {
         color: theme.palette.action.disabled,
         cursor: 'not-allowed',
-        backgroundColor: 'transparent',
-      },
-
-      // Style the SVG icons inside buttons
-      '& svg': {
-        color: 'inherit',
-        transition: theme.transitions.create('color'),
-      },
-    },
-
-    // Additional specific styling for toolbar elements
-    '.mdxeditor-toolbar [role="button"]': {
-      backgroundColor: 'transparent',
-      border: 'none',
-      borderRadius: theme.shape.borderRadius,
-      padding: theme.spacing(0.5),
-      margin: theme.spacing(0.25),
-      cursor: 'pointer',
-      transition: theme.transitions.create(['background-color', 'color']),
-      color: theme.palette.text.primary,
-
-      '&:hover': {
-        backgroundColor: theme.palette.action.hover,
-      },
-
-      '&[aria-pressed="true"]': {
-        color: theme.palette.primary.main,
-        backgroundColor: theme.palette.action.selected,
       },
     },
 
     // Separator style
-    '.mdxeditor-toolbar .separator': {
+    '.separator': {
       width: '1px',
       margin: theme.spacing(0, 1),
       backgroundColor: theme.palette.input.border,
-      alignSelf: 'stretch',
-      opacity: 0.6,
     },
 
-    '&:hover .mdxeditor-toolbar .separator': {
+    '&:hover .separator': {
       backgroundColor: theme.palette.input.borderHover,
-      opacity: 0.8,
     },
 
-    '&:focus-within .mdxeditor-toolbar .separator': {
+    '&:focus-within .separator': {
       backgroundColor: theme.palette.primary.main,
-      opacity: 1,
     },
 
     // Toolbar container
