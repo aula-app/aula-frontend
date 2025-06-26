@@ -8,18 +8,18 @@ export let alices_browser: BrowserContext;
 export let bobs_browser: BrowserContext;
 export let mallorys_browser: BrowserContext;
 export let burt_browser: BrowserContext;
-let rainer_browser: BrowserContext;
+export let rainer_browser: BrowserContext;
 
 export let admin: Page;
 export let alice: Page;
 export let bob: Page;
 export let mallory: Page;
-let burt: Page;
+export let burt: Page;
 export let rainer: Page;
 
 export const newPage = (browser: BrowserContext): Promise<Page> => browser.newPage();
 
-const init = async () => {
+export const init = async () => {
   const browser = await chromium.launch();
 
   await Promise.all([
@@ -50,7 +50,7 @@ const init = async () => {
   ]);
 };
 
-const shutdown = async () => {
+export const shutdown = async () => {
   await admins_browser.close();
   await alices_browser.close();
   await bobs_browser.close();

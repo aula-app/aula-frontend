@@ -1,8 +1,11 @@
-import { expect, test } from '@playwright/test';
-import * as ideas from '../../shared/page_interactions/ideas';
-import * as rooms from '../../shared/page_interactions/rooms';
-import * as users from '../../shared/page_interactions/users';
+import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
+import { sleep } from '../../shared/utils';
 import * as shared from '../../shared/shared';
+import * as users from '../../shared/page_interactions/users';
+import * as rooms from '../../shared/page_interactions/rooms';
+import * as ideas from '../../shared/page_interactions/ideas';
+import * as ui from '../../shared/page_interactions/interface';
+import * as boxes from '../../shared/page_interactions/boxes';
 
 import * as fixtures from '../../fixtures/users';
 import * as browsers from '../../shared/page_interactions/browsers';
@@ -43,59 +46,39 @@ test.describe('Categories flow', () => {
     const admin = await browsers.newPage(browsers.admins_browser);
     const host = shared.getHost();
 
-    await admin.goto(host || 'http://localhost:3000');
+    await admin.goto(host);
 
     data.categoryName = 'TESTING' + shared.gensym();
 
     await users.goToSettings(admin);
 
-    // Wait for the settings page to load completely
-    await admin.waitForLoadState('networkidle');
+    // open ideas accordeon
+    const IdeeAccordeon = admin.getByRole('button', { name: 'Idee' });
+    await expect(IdeeAccordeon).toBeVisible({ timeout: 1000 });
+    await IdeeAccordeon.click({ timeout: 1000 });
 
-    // open ideas accordion - it's an accordion summary, not a button
-    const IdeeAccordeon = admin.getByTestId('config-accordion-idea');
-    await expect(IdeeAccordeon).toBeVisible({ timeout: 10000 });
-    await IdeeAccordeon.click();
+    // add category button
+    const AddCategoryButton = admin.getByRole('button', { name: 'Neue kategorie' });
+    await expect(AddCategoryButton).toBeVisible({ timeout: 6000 });
+    await AddCategoryButton.click({ timeout: 6000 });
 
-    // Wait for ideas section to expand
-    await admin.waitForTimeout(1000);
-
-    // add category button - look for the add button in German
-    const AddCategoryButton = admin.getByTestId('add-new-category-chip');
-    await expect(AddCategoryButton).toBeVisible({ timeout: 10000 });
-    await AddCategoryButton.click();
-
-    // Wait for drawer/form to appear
-    await admin.waitForTimeout(1000);
-
-    // Look for the form specifically
-    const Form = admin.getByTestId('category-forms');
-    await expect(Form).toBeVisible({ timeout: 10000 });
+    const Form = admin.locator('[data-testing-id="category-forms"]');
+    await expect(Form).toBeVisible({ timeout: 7000 });
 
     const CategoryNameField = admin.locator('input[name="name"]');
-    await expect(CategoryNameField).toBeVisible({ timeout: 10000 });
+    await expect(CategoryNameField).toBeVisible({ timeout: 7000 });
     await CategoryNameField.fill(data.categoryName);
 
-    // Select an icon - try different selectors
-    const Icon = admin
-      .getByTestId('icon-field-icon')
-      .first()
-      .or(admin.locator('[data-testid*="icon"]').first())
-      .or(admin.locator('button').filter({ hasText: /icon/i }).first());
-    await expect(Icon).toBeVisible({ timeout: 10000 });
-    await Icon.click();
+    const Icon = admin.locator('[data-testing-id="icon-field-icon"]').first();
+    await expect(Icon).toBeVisible({ timeout: 7000 });
+    await Icon.click({ timeout: 5000 });
 
-    // Confirm button - target the submit button within the category form
-    const SubmitButton = admin.locator('[data-testid="category-forms"] button[type="submit"]');
-    await expect(SubmitButton).toBeVisible({ timeout: 10000 });
-    await SubmitButton.click();
+    const SubmitButton = Form.getByRole('button', { name: 'Bestätigen' });
+    await expect(SubmitButton).toBeVisible({ timeout: 7000 });
+    await SubmitButton.click({ timeout: 1000 });
 
-    // Wait for form to close and category to appear
-    await admin.waitForTimeout(2000);
-
-    // Look for the new category pill/chip
-    const NewCategoryPill = admin.getByTestId(`category-chip-${data.categoryName.toLowerCase().replace(/\s+/g, '-')}`);
-    await expect(NewCategoryPill).toBeVisible({ timeout: 10000 });
+    const NewCategoryPill = admin.getByRole('button', { name: data.categoryName }).first();
+    await expect(NewCategoryPill).toBeVisible({ timeout: 3000 });
 
     await expect(1).toBeDefined();
 
@@ -132,41 +115,28 @@ test.describe('Categories flow', () => {
     const admin = await browsers.newPage(browsers.admins_browser);
     const host = shared.getHost();
 
-    await admin.goto(host || 'http://localhost:3000');
+    await admin.goto(host);
 
     await users.goToSettings(admin);
 
-    // Wait for the settings page to load completely
-    await admin.waitForLoadState('networkidle');
+    // open ideas accordeon
+    const IdeeAccordeon = admin.getByRole('button', { name: 'Idee' });
+    await expect(IdeeAccordeon).toBeVisible({ timeout: 1000 });
+    await IdeeAccordeon.click({ timeout: 1000 });
 
-    // open ideas accordion - it's an accordion summary, not a button
-    const IdeeAccordeon = admin.getByTestId('config-accordion-idea');
-    await expect(IdeeAccordeon).toBeVisible({ timeout: 10000 });
-    await IdeeAccordeon.click();
+    const NewCategoryPill = admin.getByRole('button', { name: data.categoryName }).first();
+    await expect(NewCategoryPill).toBeVisible({ timeout: 3000 });
 
-    // Wait for accordion to expand
-    await admin.waitForTimeout(1000);
+    const RemoveButton = NewCategoryPill.locator('[data-testid="CancelIcon"]');
+    await expect(RemoveButton).toBeVisible({ timeout: 3000 });
+    await RemoveButton.click({ timeout: 1000 });
 
-    // Look for the category pill/chip
-    const categoryName = data.categoryName!; // We know it exists from the first test
-    const NewCategoryPill = admin.getByTestId(`category-chip-${categoryName.toLowerCase().replace(/\s+/g, '-')}`);
-    await expect(NewCategoryPill).toBeVisible({ timeout: 10000 });
-
-    // Look for the remove/delete button on the chip
-    const RemoveButton = NewCategoryPill.getByTestId('CancelIcon')
-      .or(NewCategoryPill.locator('svg[data-testid*="Cancel"]'))
-      .or(NewCategoryPill.locator('.MuiChip-deleteIcon'));
-    await expect(RemoveButton).toBeVisible({ timeout: 10000 });
-    await RemoveButton.click();
-
-    // Wait for confirmation dialog
     const Dialog = admin.getByRole('dialog');
-    await expect(Dialog).toBeVisible({ timeout: 10000 });
+    await expect(Dialog).toBeVisible({ timeout: 3000 });
 
-    // Look for delete confirmation button
-    const ConfirmButton = Dialog.getByTestId('confirm-button');
-    await expect(ConfirmButton).toBeVisible({ timeout: 10000 });
-    await ConfirmButton.click();
+    const ConfirmButton = Dialog.getByRole('button', { name: 'Löschen' });
+    await expect(ConfirmButton).toBeVisible({ timeout: 3000 });
+    await ConfirmButton.click({ timeout: 1000 });
 
     await expect(1).toBeDefined();
 

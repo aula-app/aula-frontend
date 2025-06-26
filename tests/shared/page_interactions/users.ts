@@ -38,7 +38,7 @@ export const goToRoomSettings = async (page: Page) => {
   await SettingsButton.click({ timeout: 1000 });
 };
 
-const goToUserSettings = async (page: Page) => {
+export const goToUserSettings = async (page: Page) => {
   await page.goto(host);
 
   const SettingsButton = page.locator('a[href="/settings/users"]');
@@ -50,17 +50,17 @@ export const exists = async (page: Page, data: users.UserData) => {
   await goToUserSettings(page);
 
   // open the filter menu:
-  const FilterButton = page.locator('#filter-toggle-button');
+  const FilterButton = page.locator('[aria-label="button-open-filters"]');
   await expect(FilterButton).toBeVisible();
   await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
 
-  await page.locator('#filter-field-select').click({ timeout: 1000 });
+  await page.locator('#filter-select-1').click({ timeout: 1000 });
   await page.getByRole('option', { name: 'Benutzername' }).click({ timeout: 1000 });
 
   // filter by our user name
-  await page.fill('#filter-value-input', data.username);
+  await page.fill('#filter-select-2', data.username);
 
   // find the new user in the user table
   const row = page.locator('table tr').filter({ hasText: data.username });
@@ -74,17 +74,17 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   await goToUserSettings(page);
 
   // open the filter menu:
-  const FilterButton = page.locator('#filter-toggle-button');
+  const FilterButton = page.locator('[aria-label="button-open-filters"]');
   await expect(FilterButton).toBeVisible();
   await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
 
-  await page.locator('#filter-field-select').click({ timeout: 1000 });
+  await page.locator('#filter-select-1').click({ timeout: 1000 });
   await page.getByRole('option', { name: 'Benutzername' }).click({ timeout: 1000 });
 
   // filter by our user name
-  await page.fill('#filter-value-input', data.username);
+  await page.fill('#filter-select-2', data.username);
 
   // find the new user in the user table
   const row = page.locator('table tr').filter({ hasText: data.username });
@@ -104,11 +104,11 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   return pass;
 };
 
-const create = async (page: Page, data: users.UserData): Promise<TempPass> => {
+export const create = async (page: Page, data: users.UserData): Promise<TempPass> => {
   await goToUserSettings(page);
 
-  // click the add user button - using reliable selector:
-  await page.getByTestId('add-users-button').click({ timeout: 1000 });
+  // click the add user button:
+  await page.getByRole('button', { name: 'Neue Benutzer' }).click({ timeout: 1000 });
 
   // fill in the necessary information
   await page.fill('input[name="displayname"]', data.displayName);
@@ -117,14 +117,14 @@ const create = async (page: Page, data: users.UserData): Promise<TempPass> => {
 
   //await page.fill('input[name="userlevel"]', data.role.toString());
 
-  await page.getByTestId('rolefield').click({ timeout: 1000 });
+  await page.locator('[data-testid="rolefield"]').click({ timeout: 1000 });
 
   await page.locator(`li[data-value="${data.role}"]`).click({ timeout: 1000 });
 
   await page.locator('div[contenteditable="true"]').fill(data.about);
 
-  // submit the form - using reliable selector:
-  await page.getByTestId('submit-user-form').click({ timeout: 1000 });
+  // submit the form
+  await page.getByRole('button', { name: 'Bestätigen' }).click({ timeout: 1000 });
 
   // now we need to copy the temporary password out so the new user
   //  can log in with it.
@@ -136,21 +136,21 @@ const create = async (page: Page, data: users.UserData): Promise<TempPass> => {
   return pass;
 };
 
-const remove = async (page: Page, data: users.UserData) => {
+export const remove = async (page: Page, data: users.UserData) => {
   await goToUserSettings(page);
 
   // open the filter menu:
-  const FilterButton = page.locator('#filter-toggle-button');
+  const FilterButton = page.locator('[aria-label="button-open-filters"]');
   await expect(FilterButton).toBeVisible();
   await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
 
-  await page.locator('#filter-field-select').click({ timeout: 1000 });
+  await page.locator('#filter-select-1').click({ timeout: 1000 });
   await page.getByRole('option', { name: 'Benutzername' }).click({ timeout: 1000 });
 
   // filter by our user name
-  await page.fill('#filter-value-input', data.username);
+  await page.fill('#filter-select-2', data.username);
 
   // find the user's row in the table and select the checkbox for actions
 
@@ -160,12 +160,12 @@ const remove = async (page: Page, data: users.UserData) => {
   await checkbox.check();
 
   // click the remove use button
-  const ButtonRemoveUser = page.getByTestId('remove-users-button');
+  const ButtonRemoveUser = page.getByRole('button', { name: 'Benutzer Entfernen' });
   expect(ButtonRemoveUser).toBeDefined();
 
   await ButtonRemoveUser.click({ timeout: 1000 });
 
-  const ButtonConfirmDelete = page.getByTestId('confirm-delete-users-button');
+  const ButtonConfirmDelete = page.getByRole('button', { name: 'Löschen' });
 
   expect(ButtonConfirmDelete).toBeDefined();
 
