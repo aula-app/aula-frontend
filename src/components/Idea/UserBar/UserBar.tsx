@@ -1,6 +1,6 @@
 import UserAvatar from '@/components/UserAvatar';
 import { CommentType, IdeaType } from '@/types/Scopes';
-import { getDisplayDate } from '@/utils';
+import { useDateFormatters } from '@/utils';
 import { Stack, Typography } from '@mui/material';
 
 interface Props {
@@ -9,12 +9,13 @@ interface Props {
 }
 
 const UserBar: React.FC<Props> = ({ info, disabled = false }) => {
+  const { formatDateTime } = useDateFormatters();
   return (
     <Stack direction="row" alignItems="center">
       <UserAvatar id={String(info.user_hash_id)} />
       <Stack maxWidth="100%" overflow="hidden" ml={1} mr="auto">
         <Typography variant="caption" lineHeight={1.5}>
-          {getDisplayDate(info.created)}
+          {formatDateTime(info.created)}
         </Typography>
         <Typography
           variant="overline"
