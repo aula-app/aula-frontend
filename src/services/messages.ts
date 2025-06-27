@@ -1,7 +1,7 @@
 import { FilterOptionsType } from '@/components/FilterBar/FilterBar';
+import { databaseRequest, GenericListRequest, GenericResponse } from '@/services/requests';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType, PossibleFields } from '@/types/Scopes';
-import { databaseRequest, GenericListRequest, GenericResponse, RequestObject } from '@/utils';
 import { checkPermissions } from '@/utils';
 
 /**

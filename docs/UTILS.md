@@ -6,7 +6,6 @@ This document provides an overview of all utility functions used in the Aula Fro
 
 - [Authentication](#authentication)
 - [Storage Management](#storage-management)
-- [Date Handling](#date-handling)
 - [Phase Management](#phase-management)
 - [API Requests](#api-requests)
 - [Role Management](#role-management)
@@ -54,19 +53,29 @@ Located in `src/utils/localStorage.ts`, provides utilities for browser's localSt
 - Deletes specific key from localStorage
 - Can clear entire localStorage if no key specified
 
-## Date Handling
+### Language-Specific Functions
 
-Located in `src/utils/date.ts`, provides date formatting utilities:
+For formatting with explicit language control:
 
-### getDisplayDate
-
-- Converts date strings to formatted display format
-- Returns formatted string in YYYY/M/D format
+- `getDisplayDateForLanguage(date, language)`: Format datetime for specific language
+- `getDisplayDateOnlyForLanguage(date, language)`: Format date-only for specific language
+- `getDateFormatForLanguage(language, type)`: Get format string for specific language
+- `getDisplayDateOnly(date)`: Format date-only using current language
 
 ### Date Format Constants
 
-- FORMAT_DATE_TIME: 'YYYY-MM-DD HH:mm:ss'
-- FORMAT_DATE_ONLY: 'YYYY-MM-DD'
+- `DEFAULT_FORMAT_DATE_TIME`: 'YYYY-MM-DD HH:mm:ss' (fallback format)
+- `DEFAULT_FORMAT_DATE_ONLY`: 'YYYY-MM-DD' (fallback format)
+
+### Locale Format Examples
+
+| Language     | DateTime Input       | DateTime Output        | Date Only Output |
+| ------------ | -------------------- | ---------------------- | ---------------- |
+| English (en) | 2025-06-27T14:30:00Z | 06/27/2025 02:30:00 PM | 06/27/2025       |
+| German (de)  | 2025-06-27T14:30:00Z | 27.06.2025 14:30:00    | 27.06.2025       |
+| Default      | 2025-06-27T14:30:00Z | 2025-06-27 14:30:00    | 2025-06-27       |
+
+**Note:** For React components, use the `useDateFormatters` hook documented in [HOOKS.md](./HOOKS.md) for reactive date formatting.
 
 ## Phase Management
 
@@ -281,12 +290,14 @@ Located in `src/utils/accessibility.ts`, provides general accessibility helpers.
 The following utilities were removed during recent cleanup to simplify the codebase:
 
 ### Removed Files
+
 - `form.ts`: Form validation utilities (replaced by react-hook-form)
 - `navigation.ts`: Navigation helpers (not actively used)
 - `sessionStorage.ts`: Session storage utilities (not actively used)
 - `style.ts`: Material-UI styling helpers (not actively used)
 
 ### Removed Functions
+
 - Form validation helpers (formHasError, formGetError, useAppForm)
 - Navigation utilities (disableBackNavigation, navigateTo)
 - Session storage functions (sessionStorageGet, sessionStorageSet, sessionStorageDelete)
@@ -297,6 +308,7 @@ The following utilities were removed during recent cleanup to simplify the codeb
 - Version utilities (getCurrentVersion, getCurrentEnvironment)
 
 ### Dependencies Removed
+
 - `validate.js`: Form validation library (replaced by yup + react-hook-form)
 
 ## Usage Guidelines

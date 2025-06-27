@@ -1,7 +1,7 @@
+import { databaseRequest, GenericListRequest, GenericResponse } from '@/services/requests';
 import { StatusTypes } from '@/types/Generics';
 import { DelegationType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
-import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 
 interface GetUserResponse extends GenericResponse {
   data: UserType | null;
@@ -193,7 +193,7 @@ export async function editSelfRestricted(args: RestrictedUpdateArgs) {
     email: 'setUserEmail',
     realname: 'setUserRealname',
     username: 'setUserUsername',
-    displayname: 'setUserDisplayname'
+    displayname: 'setUserDisplayname',
   };
   const request = await databaseRequest(
     {

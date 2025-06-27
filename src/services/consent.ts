@@ -1,5 +1,6 @@
+import { databaseRequest, GenericResponse } from '@/services/requests';
 import { ConsentResponse } from '@/types/LoginTypes';
-import { databaseRequest, GenericResponse, localStorageGet, parseJwt } from '@/utils';
+import { localStorageGet, parseJwt } from '@/utils';
 const api_url = localStorageGet('api_url');
 const jwt_token = localStorageGet('token');
 const jwt_payload = parseJwt(jwt_token);

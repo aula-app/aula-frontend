@@ -1,6 +1,6 @@
+import { databaseRequest, GenericResponse } from '@/services/requests';
 import { StatusTypes } from '@/types/Generics';
 import { CommentType } from '@/types/Scopes';
-import { databaseRequest, GenericResponse } from '@/utils';
 
 /**
  * Fetches comments for a specific idea

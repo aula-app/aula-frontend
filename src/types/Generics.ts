@@ -3,8 +3,6 @@ import { RoleTypes } from './SettingsTypes';
 // Helper to read object's properties as obj['name']
 export type ObjectPropByName = Record<string, any>;
 
-
-
 export type StatusTypes = -1 | 0 | 1 | 2 | 3;
 
 export interface DefaultUpdate {
@@ -15,7 +13,6 @@ export interface DefaultUpdate {
   room_id: string;
   title: string;
 }
-
 
 export type ConfigResponse = {
   allow_registration: 0 | 1;

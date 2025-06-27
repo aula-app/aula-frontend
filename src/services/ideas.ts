@@ -1,6 +1,6 @@
+import { databaseRequest, GenericListRequest, GenericResponse } from '@/services/requests';
 import { StatusTypes } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
-import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 
 /**
  * Fetches idea

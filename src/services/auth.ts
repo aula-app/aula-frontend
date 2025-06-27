@@ -1,5 +1,6 @@
-import { baseRequest, localStorageDelete, localStorageSet } from '@/utils';
+import { localStorageDelete, localStorageSet } from '@/utils';
 import { Dispatch } from 'react';
+import { baseRequest } from './requests';
 
 export const clearAuth = (dispatch: Dispatch<{ type: string }>) => {
   localStorageDelete('token');

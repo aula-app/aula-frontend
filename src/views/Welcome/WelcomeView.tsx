@@ -1,8 +1,8 @@
 import { RoomCard } from '@/components/RoomCard';
 import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
-import { RoomType } from '@/types/Scopes';
 import { getRooms } from '@/services/rooms';
 import { useAppStore } from '@/store/AppStore';
+import { RoomType } from '@/types/Scopes';
 import { Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
