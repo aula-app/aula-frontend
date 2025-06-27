@@ -79,10 +79,10 @@ const RecoveryPasswordView = () => {
           error={!!errors.email}
           helperText={<span id="email-error-message">{errors.email?.message || ''}</span>}
         />
-        <Button 
-          variant="contained" 
-          disabled={isLoading} 
-          onClick={handleSubmit(onSubmit)}
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={isLoading}
           aria-label={t('auth.forgotPassword.recover')}
         >
           {t('auth.forgotPassword.recover')}
