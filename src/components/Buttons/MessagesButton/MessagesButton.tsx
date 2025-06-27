@@ -3,6 +3,7 @@ import { getPersonalMessages } from '@/services/messages';
 import { Badge, IconButtonProps, Skeleton } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import {t} from "i18next";
 
 const MessagesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
   const { pathname } = useLocation();
@@ -28,7 +29,7 @@ const MessagesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
         },
       }}
     >
-      <AppIconButton icon="message" to="/messages" {...restOfProps} />
+      <AppIconButton icon="message" title={t('tooltips.message')} to="/messages" {...restOfProps} />
     </Badge>
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />

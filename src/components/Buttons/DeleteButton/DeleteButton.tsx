@@ -44,6 +44,7 @@ const DeleteButton: React.FC<Props> = ({ scope, disabled = false, onDelete, isLo
       <AppIconButton
         ref={buttonRef}
         icon="delete"
+        title={t('tooltips.delete')}
         disabled={disabled || isLoading}
         aria-label={t('actions.delete', { var: t(`scopes.${scope}.name`) })}
         aria-expanded={isOpen}

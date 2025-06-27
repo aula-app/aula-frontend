@@ -155,7 +155,7 @@ const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
               value={filter}
               fullWidth
               startAdornment={<AppIcon icon="search" size="small" sx={{ mr: 1 }} />}
-              endAdornment={<AppIconButton icon="close" size="small" onClick={() => setFilter('')} />}
+              endAdornment={<AppIconButton icon="close" title={t('tooltips.close')} size="small" onClick={() => setFilter('')} />}
               aria-label={t('actions.search')}
             />
             <Stack my={1} overflow="auto" role="listbox" aria-label={t('delegation.userList')}>
