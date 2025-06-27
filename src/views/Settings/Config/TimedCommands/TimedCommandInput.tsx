@@ -3,6 +3,7 @@ import { addCommand } from '@/services/config';
 import { getGroups } from '@/services/groups';
 import { getUsers } from '@/services/users';
 import { SelectOptionsType } from '@/types/SettingsTypes';
+import { LanguageTypes } from '@/types/Translation';
 import { Commands } from '@/utils/commands';
 import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
@@ -184,7 +185,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
             label={t(`settings.time.startDate`)}
             value={dayjs(startTime)}
             disabled={typeof action !== 'number'}
-            format={DATE_FORMATS[i18next.languages[0] as 'en' | 'de'].dateOnly}
+            format={DATE_FORMATS[i18next.languages[0] as LanguageTypes].dateOnly}
             onChange={(date) => {
               if (date) setStartTime(dayjs(date).format(DEFAULT_FORMAT_DATE_TIME));
             }}
