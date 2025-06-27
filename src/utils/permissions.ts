@@ -127,43 +127,61 @@ const permissions = {
  * Checks if the current user has sufficient permissions for a given role level
  */
 export function checkPermissions(model: keyof typeof permissions, action: string, user_id?: string): boolean {
-  // Check user permissions
-  const jwt = localStorageGet('token');
-  if (!jwt) return false;
+  try {
+    // Check user permissions
+    const jwt = localStorageGet('token');
+    if (!jwt) return false;
 
-  const user = parseJwt(jwt);
-  if (!user || !('user_level' in user)) return false;
+    const user = parseJwt(jwt);
+    if (!user || !('user_level' in user)) return false;
 
-  // Check if the model and action exist in permissions
-  if (!(action in permissions[model])) return false;
+    // Check if the model and action exist in permissions
+    if (!(action in permissions[model])) return false;
 
-  // Get room ID
-  const location = window.location.pathname;
-  const roomMatch = location.match(/\/room\/([^\/]+)/);
-  const room_id = roomMatch ? roomMatch[1] : '';
+    // Get room ID
+    const location = window.location.pathname;
+    const roomMatch = location.match(/\/room\/([^\/]+)/);
+    const room_id = roomMatch ? roomMatch[1] : '';
 
-  const permissionRole = permissions[model][action].role;
+    const permissionRule = permissions[model][action];
+    const permissionRole = permissionRule.role;
 
-  // Room-based permissions for users below super_moderator level
-  if (!!room_id && user.user_level < 40) {
-    const rooms = user.roles.filter((r) => r.room == room_id);
-    if (rooms.length < 1) return false;
+    // Helper function to check self permissions
+    const checkSelfPermission = (hasRolePermission: boolean): boolean => {
+      if (permissionRule.self === undefined) {
+        return hasRolePermission;
+      }
 
-    const roleInRoom = rooms[0].role;
+      const isOwner = user_id === user.user_hash;
 
-    const hasRolePermission =
-      typeof permissionRole === 'number' ? roleInRoom >= permissionRole : permissionRole.includes(roleInRoom);
+      if (permissionRule.self === true) {
+        // User must be the owner AND have role permission
+        return isOwner && hasRolePermission;
+      } else {
+        // self: false - User must NOT be the owner AND have role permission
+        return !isOwner && hasRolePermission;
+      }
+    };
 
-    // Handle self permissions properly
-    if (permissions[model][action].self !== undefined) {
-      return user_id === user.user_hash ? hasRolePermission : permissions[model][action].self;
+    // Room-based permissions for users below super_moderator level
+    if (!!room_id && user.user_level < 40) {
+      const rooms = user.roles.filter((r) => r.room == room_id);
+      if (rooms.length < 1) return false;
+
+      const roleInRoom = rooms[0].role;
+      const hasRolePermission =
+        typeof permissionRole === 'number' ? roleInRoom >= permissionRole : permissionRole.includes(roleInRoom);
+
+      return checkSelfPermission(hasRolePermission);
     }
 
-    return hasRolePermission;
-  }
+    // Global permissions
+    const hasGlobalRolePermission =
+      typeof permissionRole === 'number' ? user.user_level >= permissionRole : permissionRole.includes(user.user_level);
 
-  // Global permissions
-  return typeof permissionRole === 'number'
-    ? user.user_level >= permissionRole
-    : permissionRole.includes(user.user_level);
+    return checkSelfPermission(hasGlobalRolePermission);
+  } catch (error) {
+    console.error('Permission check failed:', error);
+    return false;
+  }
 }
