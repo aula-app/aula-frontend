@@ -6,7 +6,6 @@ This document provides an overview of all utility functions used in the Aula Fro
 
 - [Authentication](#authentication)
 - [Storage Management](#storage-management)
-- [Date Handling](#date-handling)
 - [Phase Management](#phase-management)
 - [API Requests](#api-requests)
 - [Role Management](#role-management)
@@ -54,19 +53,6 @@ Located in `src/utils/localStorage.ts`, provides utilities for browser's localSt
 - Deletes specific key from localStorage
 - Can clear entire localStorage if no key specified
 
-## Date Handling
-
-Located in `src/utils/date.ts`, provides locale-aware date formatting utilities:
-
-### getDisplayDate
-
-- Converts date strings to formatted display format
-- **Now automatically formats based on user's selected language**
-- Returns formatted string using locale-specific format:
-  - English (en): MM/DD/YYYY hh:mm:ss A (US format with AM/PM)
-  - German (de): DD.MM.YYYY HH:mm:ss (German format with 24-hour time)
-  - Default: YYYY-MM-DD HH:mm:ss (ISO format)
-
 ### Language-Specific Functions
 
 For formatting with explicit language control:
@@ -80,8 +66,6 @@ For formatting with explicit language control:
 
 - `DEFAULT_FORMAT_DATE_TIME`: 'YYYY-MM-DD HH:mm:ss' (fallback format)
 - `DEFAULT_FORMAT_DATE_ONLY`: 'YYYY-MM-DD' (fallback format)
-- `FORMAT_DATE_TIME`: Legacy constant (now defaults to ISO format)
-- `FORMAT_DATE_ONLY`: Legacy constant (now defaults to ISO format)
 
 ### Locale Format Examples
 

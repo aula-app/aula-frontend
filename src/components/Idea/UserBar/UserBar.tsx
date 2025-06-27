@@ -1,6 +1,6 @@
 import UserAvatar from '@/components/UserAvatar';
 import { CommentType, IdeaType } from '@/types/Scopes';
-import { useDateFormatters } from '@/utils';
+import { useDateFormatters } from '@/hooks';
 import { Stack, Typography } from '@mui/material';
 
 interface Props {

@@ -1,3 +1,4 @@
+import { DATE_FORMATS, DEFAULT_FORMAT_DATE_ONLY, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -8,23 +9,6 @@ import { useTranslation } from 'react-i18next';
  * @param {string} [fallbackValue] - optional fallback value if data conversion is not possible
  */
 
-// Default formats (fallback)
-export const DEFAULT_FORMAT_DATE_TIME = 'YYYY-MM-DD HH:mm:ss';
-export const DEFAULT_FORMAT_DATE_ONLY = 'YYYY-MM-DD';
-
-// Locale-specific date formats
-const DATE_FORMATS = {
-  en: {
-    dateTime: 'MM/DD/YYYY hh:mm:ss A', // US format with AM/PM
-    dateOnly: 'MM/DD/YYYY',
-  },
-  de: {
-    dateTime: 'DD.MM.YYYY HH:mm:ss', // German format
-    dateOnly: 'DD.MM.YYYY',
-  },
-  // Add more locales as needed
-} as const;
-
 /**
  * Get date format based on current language
  */
@@ -32,7 +16,7 @@ export function getDateFormat(type: 'dateTime' | 'dateOnly' = 'dateTime'): strin
   try {
     // This will only work inside React components
     const { i18n } = useTranslation();
-    const language = i18n.language.split('-')[0] as keyof typeof DATE_FORMATS; // Get base language (en from en-US)
+    const language = i18n.languages[0] as keyof typeof DATE_FORMATS; // Get base language (en from en-US)
 
     if (language in DATE_FORMATS) {
       return DATE_FORMATS[language][type];

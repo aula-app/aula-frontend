@@ -1,13 +1,15 @@
+import { useDateFormatters } from '@/hooks';
 import { addCommand } from '@/services/config';
 import { getGroups } from '@/services/groups';
 import { getUsers } from '@/services/users';
 import { SelectOptionsType } from '@/types/SettingsTypes';
-import { FORMAT_DATE_ONLY, FORMAT_DATE_TIME } from '@/utils';
 import { Commands } from '@/utils/commands';
+import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import i18next from 'i18next';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -20,12 +22,15 @@ interface Props {
 
 const TimeCommandInput = ({ onReload }: Props) => {
   const { t } = useTranslation();
+  const { formatDateTime, formatDateOnly } = useDateFormatters();
 
   const [scope, setScope] = useState<number>(0);
   const [target, setTarget] = useState<string | undefined>();
   const [action, setAction] = useState<number>(0);
   const [value, setValue] = useState<number>(1);
-  const [startTime, setStartTime] = useState<dayjs.ConfigType>(dayjs().format(FORMAT_DATE_TIME));
+  const [startTime, setStartTime] = useState<dayjs.ConfigType>(
+    formatDateTime(dayjs().utc().format(DEFAULT_FORMAT_DATE_TIME))
+  );
   const [options, setOptions] = useState<{ users: SelectOptionsType; groups: SelectOptionsType }>({
     users: [],
     groups: [],
@@ -38,7 +43,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
       command: '',
       target_id: target,
       parameters: value,
-      date_start: dayjs(startTime).utc().format(FORMAT_DATE_TIME),
+      date_start: dayjs(startTime).utc().format(DEFAULT_FORMAT_DATE_TIME),
     });
     if (!response.error) onReload();
   }
@@ -179,16 +184,16 @@ const TimeCommandInput = ({ onReload }: Props) => {
             label={t(`settings.time.startDate`)}
             value={dayjs(startTime)}
             disabled={typeof action !== 'number'}
-            format={FORMAT_DATE_ONLY}
+            format={DATE_FORMATS[i18next.languages[0] as 'en' | 'de'].dateOnly}
             onChange={(date) => {
-              if (date) setStartTime(dayjs(date).format(FORMAT_DATE_TIME));
+              if (date) setStartTime(dayjs(date).format(DEFAULT_FORMAT_DATE_TIME));
             }}
             slotProps={{ textField: { size: 'small' } }}
           />
         </LocalizationProvider>
-        <Button 
-          variant="contained" 
-          onClick={addField} 
+        <Button
+          variant="contained"
+          onClick={addField}
           sx={{ py: 0.9, alignSelf: 'start' }}
           aria-label={t('actions.confirm')}
         >

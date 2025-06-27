@@ -1,8 +1,9 @@
 import { AppIcon, AppIconButton } from '@/components';
 import { AccessibleDialog } from '@/components/AccessibleDialog';
+import { GenericListRequest } from '@/services/requests';
 import { DelegateType, delegateVote, getPossibleDelegations, revokeDelegation } from '@/services/users';
 import { useAppStore } from '@/store';
-import { GenericListRequest, localStorageGet, parseJwt } from '@/utils';
+import { localStorageGet, parseJwt } from '@/utils';
 import { Button, FilledInput, Slide, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
