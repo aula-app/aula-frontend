@@ -8,9 +8,12 @@ import {
   Separator,
   toolbarPlugin,
   UndoRedo,
+  codeMirrorPlugin,
 } from '@mdxeditor/editor';
+import { keymap } from '@codemirror/view';
+import { Prec } from '@codemirror/state';
 import { FormControl, FormControlProps, FormHelperText, FormLabel as MuiFormLabel, Stack, styled } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -77,6 +80,19 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
       color: theme.palette.text.primary,
     },
 
+    // Ensure CodeMirror content is focusable
+    '.cm-content': {
+      outline: 'none',
+    },
+
+    '.cm-editor': {
+      outline: 'none',
+    },
+
+    '.cm-focused': {
+      outline: 'none',
+    },
+
     // Toolbar button styles
     '.mdxeditor-toolbar button': {
       backgroundColor: 'transparent',
@@ -86,12 +102,29 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
       margin: theme.spacing(0.25),
       cursor: 'pointer',
       transition: theme.transitions.create(['background-color', 'color']),
+      color: theme.palette.text.primary,
 
       '&:hover': {
         backgroundColor: theme.palette.action.hover,
       },
 
-      '&[data-active=true]': {
+      // Multiple selectors for active state to ensure compatibility
+      '&[data-active="true"]': {
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.action.selected,
+      },
+
+      '&[aria-pressed="true"]': {
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.action.selected,
+      },
+
+      '&.active': {
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.action.selected,
+      },
+
+      '&[data-state="on"]': {
         color: theme.palette.primary.main,
         backgroundColor: theme.palette.action.selected,
       },
@@ -138,6 +171,116 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
 const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Custom keymap to completely disable Tab indentation
+  const disableTabKeymap = Prec.highest(
+    keymap.of([
+      {
+        key: 'Tab',
+        preventDefault: true,
+        stopPropagation: true,
+        run: () => {
+          // Do nothing - this completely blocks Tab from doing anything in the editor
+          return true;
+        },
+      },
+      {
+        key: 'Shift-Tab',
+        preventDefault: true,
+        stopPropagation: true,
+        run: () => {
+          // Do nothing - this completely blocks Shift+Tab from doing anything in the editor
+          return true;
+        },
+      },
+    ])
+  );
+
+  // Handle Tab navigation at the DOM level as a fallback
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const focusableElements = document.querySelectorAll(
+        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]), a[href]'
+      );
+      const focusableArray = Array.from(focusableElements) as HTMLElement[];
+      const container = containerRef.current;
+
+      if (container) {
+        const currentIndex = focusableArray.findIndex((el) => container.contains(el));
+
+        if (event.shiftKey) {
+          // Shift+Tab: go to previous element
+          if (currentIndex > 0) {
+            let prevIndex = currentIndex - 1;
+            while (prevIndex >= 0 && container.contains(focusableArray[prevIndex])) {
+              prevIndex--;
+            }
+            if (prevIndex >= 0) {
+              focusableArray[prevIndex].focus();
+            }
+          }
+        } else {
+          // Tab: go to next element
+          if (currentIndex !== -1) {
+            let nextIndex = currentIndex + 1;
+            while (nextIndex < focusableArray.length && container.contains(focusableArray[nextIndex])) {
+              nextIndex++;
+            }
+            if (nextIndex < focusableArray.length) {
+              focusableArray[nextIndex].focus();
+            }
+          }
+        }
+      }
+    }
+  }, []);
+
+  // Handle focus on the editor container to focus the text area
+  const handleContainerFocus = useCallback(() => {
+    // Use the MDXEditor ref to focus the editor properly
+    if (mdxEditorRef.current) {
+      try {
+        mdxEditorRef.current.focus();
+      } catch (error) {
+        // Fallback: try to find and focus the content area directly
+        const contentArea = containerRef.current?.querySelector(
+          '.cm-content, .mdxeditor-root-contenteditable, [contenteditable="true"]'
+        );
+        if (contentArea instanceof HTMLElement) {
+          contentArea.focus();
+        }
+      }
+    }
+  }, []);
+
+  // Set up DOM event listener for Tab handling
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('keydown', handleKeyDown, true);
+
+      // Add focus handler to automatically focus editor when container gets focus
+      const handleFocus = (event: FocusEvent) => {
+        // Only handle if focus is coming from outside
+        if (!container.contains(event.relatedTarget as Node)) {
+          setTimeout(() => {
+            handleContainerFocus();
+          }, 0);
+        }
+      };
+
+      container.addEventListener('focus', handleFocus);
+
+      return () => {
+        container.removeEventListener('keydown', handleKeyDown, true);
+        container.removeEventListener('focus', handleFocus);
+      };
+    }
+  }, [handleKeyDown, handleContainerFocus]);
 
   return (
     <Controller
@@ -149,34 +292,58 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
         }, [control._defaultValues[name], field.value]);
         return (
           <FormControl fullWidth {...restOfProps}>
-            <Editor
-              className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}
-              markdown={''}
-              toMarkdownOptions={{}}
-              sx={{ height: '100%' }}
-              plugins={[
-                headingsPlugin(),
-                listsPlugin(),
-                toolbarPlugin({
-                  toolbarClassName: 'editor-toolbar',
-                  toolbarContents: () => (
-                    <Stack direction="row" justifyContent="space-between" width="100%">
-                      <Stack direction="row">
-                        <BoldItalicUnderlineToggles />
-                        <Separator />
-                        <ListsToggle />
+            <div
+              ref={containerRef}
+              onClick={handleContainerFocus}
+              onKeyDown={(e) => {
+                // Handle Enter and Space to focus the editor
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleContainerFocus();
+                }
+              }}
+              tabIndex={0}
+              role="textbox"
+              aria-label={t(`settings.columns.${name}`)}
+            >
+              <Editor
+                className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}
+                markdown={''}
+                toMarkdownOptions={{}}
+                sx={{ height: '100%' }}
+                plugins={[
+                  headingsPlugin(),
+                  listsPlugin(),
+                  codeMirrorPlugin({
+                    codeBlockLanguages: {
+                      js: 'JavaScript',
+                      ts: 'TypeScript',
+                      jsx: 'React JSX',
+                      tsx: 'React TSX',
+                    },
+                    codeMirrorExtensions: [disableTabKeymap],
+                  }),
+                  toolbarPlugin({
+                    toolbarClassName: 'editor-toolbar',
+                    toolbarContents: () => (
+                      <Stack direction="row" justifyContent="space-between" width="100%">
+                        <Stack direction="row">
+                          <BoldItalicUnderlineToggles />
+                          <Separator />
+                          <ListsToggle />
+                        </Stack>
+                        <UndoRedo />
                       </Stack>
-                      <UndoRedo />
-                    </Stack>
-                  ),
-                }),
-              ]}
-              {...field}
-              ref={mdxEditorRef}
-              aria-invalid={!!fieldState.error}
-              aria-errormessage={fieldState.error ? `${name}-error-message` : undefined}
-              aria-labelledby={`editor-${name}-label`}
-            />
+                    ),
+                  }),
+                ]}
+                {...field}
+                ref={mdxEditorRef}
+                aria-invalid={!!fieldState.error}
+                aria-errormessage={fieldState.error ? `${name}-error-message` : undefined}
+                aria-labelledby={`editor-${name}-label`}
+              />
+            </div>
             <StyledFormLabel id={`editor-${name}-label`}>
               {t(`settings.columns.${name}`)}
               {required ? '*' : ''}
