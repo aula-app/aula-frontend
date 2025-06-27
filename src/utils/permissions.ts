@@ -71,11 +71,11 @@ const permissions = {
   },
   ideas: {
     addCategory: { role: 20 },
-    create: { role: USERS_ADMIN },
+    create: { role: VOTING_ROLES },
     edit: { role: 30, self: true },
     delete: { role: 30, self: true },
-    like: { role: VOTING_ROLES },
-    vote: { role: VOTING_ROLES },
+    like: { role: VOTING_ROLES, self: false },
+    vote: { role: VOTING_ROLES, self: false },
     approve: { role: 44 },
     setWinner: { role: 30 },
     viewAll: { role: 40 },
@@ -127,41 +127,43 @@ const permissions = {
  * Checks if the current user has sufficient permissions for a given role level
  */
 export function checkPermissions(model: keyof typeof permissions, action: string, user_id?: string): boolean {
+  // Check user permissions
   const jwt = localStorageGet('token');
-  const user = !!jwt ? parseJwt(jwt) : false;
-  const location = window.location.pathname.split('/');
-  const roomIndex = location.findIndex((l) => l.includes('room')) + 1;
-  const room_id = roomIndex === 0 ? '' : location[roomIndex];
+  if (!jwt) return false;
 
+  const user = parseJwt(jwt);
+  if (!user || !('user_level' in user)) return false;
+
+  // Check if the model and action exist in permissions
   if (!(action in permissions[model])) return false;
-  if (!user) return false;
 
+  // Get room ID
+  const location = window.location.pathname;
+  const roomMatch = location.match(/\/room\/([^\/]+)/);
+  const room_id = roomMatch ? roomMatch[1] : '';
+
+  const permissionRole = permissions[model][action].role;
+
+  // Room-based permissions for users below super_moderator level
   if (!!room_id && user.user_level < 40) {
-    let rooms = user.roles.filter((r) => r.room == room_id);
-
+    const rooms = user.roles.filter((r) => r.room == room_id);
     if (rooms.length < 1) return false;
 
     const roleInRoom = rooms[0].role;
-    let hasRolePermission = false;
 
-    if (
-      typeof permissions[model][action].role === 'number'
-        ? roleInRoom >= permissions[model][action].role
-        : permissions[model][action].role.includes(roleInRoom)
-    ) {
-      hasRolePermission = true;
-    }
+    const hasRolePermission =
+      typeof permissionRole === 'number' ? roleInRoom >= permissionRole : permissionRole.includes(roleInRoom);
 
-    if (permissions[model][action].self) {
-      return hasRolePermission || user_id === user.user_hash;
+    // Handle self permissions properly
+    if (permissions[model][action].self !== undefined) {
+      return user_id === user.user_hash ? hasRolePermission : permissions[model][action].self;
     }
 
     return hasRolePermission;
   }
 
-  if (typeof permissions[model][action].role === 'number') {
-    return user.user_level >= permissions[model][action].role;
-  } else {
-    return permissions[model][action].role.includes(user.user_level);
-  }
+  // Global permissions
+  return typeof permissionRole === 'number'
+    ? user.user_level >= permissionRole
+    : permissionRole.includes(user.user_level);
 }
