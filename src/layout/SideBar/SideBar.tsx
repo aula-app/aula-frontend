@@ -98,7 +98,7 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
         aria-label={t('ui.accessibility.sidebarActions')}
       >
         <BugButton target={location.pathname} />
-        <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} aria-label={t('actions.print')} />
+        <AppIconButton onClick={window.print} icon="print"  title={t('actions.print')} aria-label={t('actions.print')} />
         <AppIconButton
           onClick={onSwitchDarkMode}
           icon={state.darkMode ? 'day' : 'night'}

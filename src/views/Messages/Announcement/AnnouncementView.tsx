@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import {t} from "i18next";
 
 /**
  * Renders "Announcement" view
@@ -96,7 +97,7 @@ const AnnouncementView = () => {
           <CardHeader
             title={announcement.headline}
             action={
-              <AppIconButton icon={announcement.status === 1 ? 'archive' : 'unarchive'} onClick={toggleArchive} />
+              <AppIconButton icon={announcement.status === 1 ? 'archive' : 'unarchive'} title={t(`tooltips.${announcement.status === 1 ? 'archive' : 'unarchive'}`)} onClick={toggleArchive} />
             }
           />
           <CardContent>

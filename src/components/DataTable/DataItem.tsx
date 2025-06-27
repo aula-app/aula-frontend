@@ -136,6 +136,7 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
             className="noPrint"
             size="small"
             icon={hidden ? 'visibilityOn' : 'visibilityOff'}
+            title={t(`tooltips.${hidden ? 'visibilityOn' : 'visibilityOff'}`)}
             onClick={(e) => {
               e.stopPropagation();
               setHidden(!hidden);

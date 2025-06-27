@@ -184,7 +184,7 @@ ${message}`,
     <Card variant="outlined" sx={{ borderRadius: 5, overflow: 'visible' }} {...restOfProps}>
       <CardHeader
         title={report.headline}
-        action={<AppIconButton icon={report.status === 1 ? 'archive' : 'unarchive'} onClick={toggleArchive} />}
+        action={<AppIconButton icon={report.status === 1 ? 'archive' : 'unarchive'} title={t(`tooltips.${report.status === 1 ? 'archive' : 'unarchive'}`)} onClick={toggleArchive} />}
       />
       <Divider />
       <CardContent sx={{ bgcolor: blueGrey[50] }}>
