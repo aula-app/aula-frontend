@@ -71,7 +71,7 @@ const permissions = {
   },
   ideas: {
     addCategory: { role: 20 },
-    create: { role: VOTING_ROLES },
+    create: { role: USERS_ADMIN },
     edit: { role: 30, self: true },
     delete: { role: 30, self: true },
     like: { role: VOTING_ROLES, self: false },
