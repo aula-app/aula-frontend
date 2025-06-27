@@ -75,7 +75,7 @@ const permissions = {
     edit: { role: 30, self: true },
     delete: { role: 30, self: true },
     like: { role: VOTING_ROLES, self: false },
-    vote: { role: VOTING_ROLES, self: false },
+    vote: { role: VOTING_ROLES },
     approve: { role: 44 },
     setWinner: { role: 30 },
     viewAll: { role: 40 },
