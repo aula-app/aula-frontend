@@ -155,11 +155,11 @@ export function checkPermissions(model: keyof typeof permissions, action: string
       const isOwner = user_id === user.user_hash;
 
       if (permissionRule.self === true) {
-        // User must be the owner AND have role permission
+        // User must be the owner OR have role permission
         return isOwner || hasRolePermission;
       } else {
-        // self: false - User must NOT be the owner AND have role permission
-        return false;
+        // User must NOT be the owner AND have role permission
+        return !isOwner && hasRolePermission;
       }
     };
 
