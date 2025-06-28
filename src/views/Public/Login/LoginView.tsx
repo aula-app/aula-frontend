@@ -30,6 +30,7 @@ import { LoginFormValues } from "@/types/LoginTypes";
 const LoginView = () => {
   const { t } = useTranslation();
   const oauthEnabled = import.meta.env.VITE_APP_OAUTH;
+  const isMultiInstance = import.meta.env.VITE_APP_MULTI !== 'false';
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const [loginError, setError] = useState<string>('');
@@ -214,14 +215,14 @@ const LoginView = () => {
           >
             {t('auth.forgotPassword.link')}
           </Button>
-          <Button
+          {isMultiInstance && (<Button
             variant="text"
             color="secondary"
             component={AppLink}
             onClick={resetCode}
           >
             {t('auth.login.reset_code')}
-          </Button>
+          </Button>)}
  
         </Grid>
 
