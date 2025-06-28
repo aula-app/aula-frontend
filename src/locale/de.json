@@ -62,7 +62,8 @@
       "button": "Login",
       "label": "Nutzername",
       "noAccount": "Du hast noch kein Konto?",
-      "title": "Anmelden"
+      "title": "Anmelden",
+      "reset_code": "neuer Code"
     },
     "logout": "Logout",
     "messages": {

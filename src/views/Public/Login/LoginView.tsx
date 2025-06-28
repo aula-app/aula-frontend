@@ -60,6 +60,12 @@ const LoginView = () => {
     setShowPassword((oldValue) => !oldValue);
   };
 
+  const resetCode = async () => {
+    localStorageSet('code', '').then(() => {;
+      navigate('/code');
+    });
+  }
+
   const onSubmit = async (formData: LoginFormValues) => {
     if (!api_url) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
@@ -208,6 +214,15 @@ const LoginView = () => {
           >
             {t('auth.forgotPassword.link')}
           </Button>
+          <Button
+            variant="text"
+            color="secondary"
+            component={AppLink}
+            onClick={resetCode}
+          >
+            {t('auth.login.reset_code')}
+          </Button>
+ 
         </Grid>
 
         { oauthEnabled === "true" && (

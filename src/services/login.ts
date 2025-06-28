@@ -9,11 +9,13 @@ export const loginUser = async (
   signal: AbortSignal
 ): Promise<LoginResponseType> => {
   const api_url = localStorageGet('api_url');
+  const api_code = localStorageGet('code');
 
   try {
     const response = await fetch(`${apiUrl}/api/controllers/login.php`, {
       method: 'POST',
       headers: {
+        'aula-instance-code': api_code,
         'Content-Type': 'application/json',
         Authorization: token ? `Bearer ${token}` : '',
       },
@@ -36,12 +38,14 @@ export const loginUser = async (
 
 export const checkPasswordKey = async (secret: string) => {
   const api_url = localStorageGet('api_url');
+  const api_code = localStorageGet('code');
 
   try {
     const response = await fetch(`${api_url}/api/controllers/set_password.php?secret=${secret}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'aula-instance-code': api_code,
       },
     });
 
@@ -56,23 +60,24 @@ export const checkPasswordKey = async (secret: string) => {
     }
     throw new Error('Unknown error occurred');
   }
-
 };
 
 export const setPassword = async (password: string, secret: string) => {
   const api_url = localStorageGet('api_url');
+  const api_code = localStorageGet('code');
 
   const formData = {
-    "secret": secret,
-    "password": password
-  }
+    secret: secret,
+    password: password,
+  };
   try {
     const response = await fetch(`${api_url}/api/controllers/set_password.php`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'aula-instance-code': api_code,
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     });
 
     if (!response.ok) {
@@ -100,12 +105,15 @@ export const recoverPassword = async (
   token: string | null,
   signal: AbortSignal
 ): Promise<{ success: boolean }> => {
+  const api_code = localStorageGet('code');
+
   try {
     const response = await fetch(`${apiUrl}/api/controllers/forgot_password.php?email=${email}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: token ? `Bearer ${token}` : '',
+        'aula-instance-code': api_code,
       },
       signal,
     });

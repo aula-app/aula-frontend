@@ -75,12 +75,15 @@ export const baseRequest = async <T = unknown>(
   tmp_token?: string
 ): Promise<GenericResponse<T>> => {
   const api_url = localStorageGet('api_url');
+  const api_code = localStorageGet('code');
   const jwt_token = tmp_token || localStorageGet('token');
-  const headers = {} as { 'Content-Type': string; Authorization?: string };
+  const headers = {} as { 'Content-Type': string; Authorization?: string; 'aula-instance-code': string };
 
   if (isJson) {
     headers['Content-Type'] = 'application/json';
   }
+
+  headers['aula-instance-code'] = api_code;
 
   if (!api_url || !jwt_token) {
     return {
