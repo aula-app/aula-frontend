@@ -10,11 +10,11 @@ export function localStorageGet(name: string, defaultValue: any = ''): any {
     return defaultValue; // We don't have access to localStorage on the server
   }
 
-  const valueFromStore = localStorage.getItem(name);
+  let valueFromStore = localStorage.getItem(name);
   if (valueFromStore === null) return defaultValue; // No value in store, return default one
 
   if (name === 'api_url') {
-    valueFromStore.replace(/aula\.de\/.*/g, 'aula.de');
+    valueFromStore = valueFromStore.replace(/aula\.de\/.*/g, 'aula.de');
   }
 
   try {
