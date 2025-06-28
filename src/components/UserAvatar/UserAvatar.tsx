@@ -17,6 +17,7 @@ interface Props extends AvatarProps {
 const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
   const { t } = useTranslation();
   const api_url = localStorageGet('api_url');
+  const code = localStorageGet('code');
   const [userAvatar, setUserAvatar] = useState<string>('');
   const downloadUserAvatar = async () => {
     const response = await getAvatar(id);
@@ -37,7 +38,7 @@ const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
         ...sx,
       }}
       alt={t('user.avatar', { id: id })}
-      src={`${api_url}/files/${userAvatar}` || ''}
+      src={`${api_url}/files/${code}/${userAvatar}` || ''}
       {...restOfProps}
     >
       {!userAvatar && <AppIcon icon="avatar" />}
