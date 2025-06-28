@@ -1,7 +1,6 @@
 import { RoomType } from '@/types/Scopes';
-import { RoleTypes } from '@/types/SettingsTypes';
-import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 import { checkPermissions } from '@/utils';
+import { databaseRequest, GenericListRequest, GenericResponse } from './requests';
 
 interface GetRoomResponse extends GenericResponse {
   data: RoomType | null;

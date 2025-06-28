@@ -3,6 +3,7 @@ import { getUpdates } from '@/services/dashboard';
 import { Badge, IconButtonProps, Skeleton } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import {t} from "i18next";
 
 const UpdatesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
   const { pathname } = useLocation();
@@ -30,10 +31,10 @@ const UpdatesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
           },
         }}
       >
-        <AppIconButton icon="heart" to="/updates" {...restOfProps} />
+        <AppIconButton icon="heart" title={t('tooltips.heart')} to="/updates" {...restOfProps} />
       </Badge>
     ) : (
-      <AppIconButton icon="heart" to="/updates" {...restOfProps} />
+      <AppIconButton icon="heart" title={t('tooltips.heart')} to="/updates" {...restOfProps} />
     )
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />

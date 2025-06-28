@@ -1,8 +1,9 @@
 import { AppIcon, AppIconButton } from '@/components';
 import { AccessibleDialog } from '@/components/AccessibleDialog';
+import { GenericListRequest } from '@/services/requests';
 import { DelegateType, delegateVote, getPossibleDelegations, revokeDelegation } from '@/services/users';
 import { useAppStore } from '@/store';
-import { GenericListRequest, localStorageGet, parseJwt } from '@/utils';
+import { localStorageGet, parseJwt } from '@/utils';
 import { Button, FilledInput, Slide, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
@@ -155,7 +156,7 @@ const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
               value={filter}
               fullWidth
               startAdornment={<AppIcon icon="search" size="small" sx={{ mr: 1 }} />}
-              endAdornment={<AppIconButton icon="close" size="small" onClick={() => setFilter('')} />}
+              endAdornment={<AppIconButton icon="close" title={t('tooltips.close')} size="small" onClick={() => setFilter('')} />}
               aria-label={t('actions.search')}
             />
             <Stack my={1} overflow="auto" role="listbox" aria-label={t('delegation.userList')}>

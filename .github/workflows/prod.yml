@@ -1,25 +1,22 @@
-name: Update development environment
+name: Update prod instance
 
 on:
   push:
     branches:
-      - dev
+      - prod
 
 jobs:
   build:
     runs-on: self-hosted
     env:
       CI: false
-      LOCAL: dev
+      LOCAL: test
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Build frontend
         run: |
           npm i
-          npm run build-devel
-          cp -vr build/* /var/www-aula-dev/
-          # git checkout test
-          # npm run build
-          # cp -vr build/* /var/www-test/
+          npm run build-prod
+          cp -vr build/* /var/www-aula-prod/
         shell: bash

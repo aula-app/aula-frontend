@@ -224,9 +224,9 @@ const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded =
                 justifyContent="center"
                 sx={{ mt: 2, display: 'flex', gap: 2, justifyContent: 'center' }}
               >
-                <AppIconButton icon="zoomOut" onClick={() => handleZoom(-0.1)} />
-                <AppIconButton icon="cancel" onClick={handleReset} />
-                <AppIconButton icon="zoomIn" onClick={() => handleZoom(0.1)} />
+                <AppIconButton icon="zoomOut" title={t('tooltips.zoomOut')} onClick={() => handleZoom(-0.1)} />
+                <AppIconButton icon="cancel" title={t('tooltips.cancel')} onClick={handleReset} />
+                <AppIconButton icon="zoomIn" title={t('tooltips.zoomIn')} onClick={() => handleZoom(0.1)} />
               </Stack>
             </Box>
           )}

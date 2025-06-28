@@ -1,16 +1,17 @@
 import { AppIcon, AppIconButton } from '@/components';
+import { useDateFormatters } from '@/hooks';
 import { getGroup } from '@/services/groups';
 import { getRoom } from '@/services/rooms';
 import { getUser } from '@/services/users';
 import { useAppStore } from '@/store';
 import { PossibleFields, SettingType } from '@/types/Scopes';
-import { FORMAT_DATE_TIME, phases, STATUS } from '@/utils';
+import { phases, STATUS } from '@/utils';
 import { Chip, Stack } from '@mui/material';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -35,6 +36,7 @@ const messageConsentValues = ['message', 'announcement', 'alert'] as MessageCons
 const DataItem: React.FC<Props> = ({ row, column }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
+  const { formatDateTime } = useDateFormatters();
   const [responseName, setName] = useState<string>('');
   const [hidden, setHidden] = useState(true);
 
@@ -107,7 +109,7 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
     case 'created':
     case 'last_update':
     case 'last_login':
-      return <>{dayjs.utc(value).tz(dayjs.tz.guess()).format(FORMAT_DATE_TIME)}</>;
+      return <>{formatDateTime(String(value))}</>;
 
     // Enum/Status fields
     case 'phase_id':
@@ -134,6 +136,7 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
             className="noPrint"
             size="small"
             icon={hidden ? 'visibilityOn' : 'visibilityOff'}
+            title={t(`tooltips.${hidden ? 'visibilityOn' : 'visibilityOff'}`)}
             onClick={(e) => {
               e.stopPropagation();
               setHidden(!hidden);

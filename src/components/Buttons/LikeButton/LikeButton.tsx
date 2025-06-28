@@ -40,6 +40,7 @@ const LikeButton: React.FC<Props> = ({ item, disabled }) => {
   return (
     <AppIconButton
       icon={likeStatus ? 'heartFull' : 'heart'}
+      title={t(`tooltips.${likeStatus ? 'heartFull' : 'heart'}`)}
       onClick={toggleLike}
       disabled={disabled || !checkPermissions('ideas', 'like')}
       aria-label={likeStatus ? t('actions.unlike') : t('actions.like')}

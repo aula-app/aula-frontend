@@ -83,6 +83,7 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
         </Collapse>
         <AppIconButton
           icon={open ? 'close' : 'more'}
+          title={t(`tooltips.${open ? 'close' : 'more'}`)}
           onClick={toggleOptions}
           aria-expanded={open}
           aria-label={open ? t('actions.close') : t('actions.more')}

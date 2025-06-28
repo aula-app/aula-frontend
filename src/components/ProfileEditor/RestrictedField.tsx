@@ -41,6 +41,7 @@ const RestrictedField = ({ name, control, ...restOfProps }: Props) => {
                   <AppIconButton
                     size="small"
                     icon={disabled ? 'lockOpen' : 'lockClosed'}
+                    title={t(`actions.${disabled ? 'edit' : 'lock'}`)}
                     aria-label={disabled ? t('actions.edit') : t('actions.lock')}
                     aria-pressed={!disabled}
                     sx={{ mr: -1.5 }}

@@ -1,4 +1,3 @@
-
 export type RoomPhases = 0 | 10 | 20 | 30 | 40;
 export type PhaseType = 'wild' | 'discussion' | 'approval' | 'voting' | 'results';
 
@@ -15,7 +14,6 @@ export type PhaseType = 'wild' | 'discussion' | 'approval' | 'voting' | 'results
  * 60 => "tech_admin"
  */
 export type RoleTypes = 10 | 20 | 30 | 31 | 40 | 41 | 44 | 45 | 50 | 60;
-
 
 export type SettingNamesType =
   | 'announcements'
@@ -37,11 +35,6 @@ export type SelectOptionType = {
   value: string | number;
   disabled?: boolean;
 };
-
-
-
-
-
 
 interface UserOptionType extends SelectOptionType {
   displayname: string;

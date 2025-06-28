@@ -143,15 +143,15 @@ const LoginView = () => {
           disabled={isLoading}
           label={t("auth.login.label")}
           id="login-username"
-          slotProps={{ input: { 
+          slotProps={{ input: {
             "aria-labelledby": "login-username-label",
             "aria-invalid": !!errors.username,
             "aria-errormessage": errors.username ? "username-error-message" : undefined,
-            autoCapitalize: "none" 
+            autoCapitalize: "none"
           },
-          inputLabel: { 
-            id: "login-username-label", 
-            htmlFor: "login-username" 
+          inputLabel: {
+            id: "login-username-label",
+            htmlFor: "login-username"
           }}}
           {...register("username", {
             shouldUnregister: false
@@ -190,16 +190,16 @@ const LoginView = () => {
               ),
             },
             inputLabel: {
-              id: "login-password-label", 
-              htmlFor: "login-password" 
+              id: "login-password-label",
+              htmlFor: "login-password"
             }
           }}
         />
         </Stack>
-        <Button 
-          variant="contained" 
-          disabled={isLoading} 
-          onClick={handleSubmit(onSubmit)}
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={isLoading}
           aria-label={t("auth.login.button")}
         >
           {t("auth.login.button")}

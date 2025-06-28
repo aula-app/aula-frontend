@@ -42,6 +42,7 @@ ${data.content || ''}
         data-testid="report-button"
         ref={buttonRef}
         icon="report"
+        title={t('tooltips.report')}
         disabled={disabled}
         aria-label={t('actions.contentReport')}
         aria-expanded={isOpen}

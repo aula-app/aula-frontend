@@ -6,13 +6,13 @@ const dotenv = require('dotenv');
 dotenv.config({ path: '.env.local' });
 dotenv.config();
 
-// we want to make sure we are only running tests on local frontents and
+// we want to make sure we are only running tests on local frontends and
 // backends, as to not pollute any remote databases
 if (
   !process.env.APP_FRONTEND_HOST ||
   !process.env.VITE_APP_API_URL ||
-  !process.env.APP_FRONTEND_HOST.toString().includes('localhost') ||
-  !process.env.VITE_APP_API_URL.toString().includes('localhost')
+  !process.env.APP_FRONTEND_HOST.toString().includes('local') ||
+  !process.env.VITE_APP_API_URL.toString().includes('local')
 ) {
   throw new Error('APP_FRONTEND_HOST and VITE_APP_API_URL must be configured, and local');
 }
