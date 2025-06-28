@@ -12,7 +12,7 @@ export const getUserConsent = async (token: string, signal?: AbortSignal): Promi
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Aula-Instance-Code': code,
+        'aula-instance-code': code,
         Authorization: `Bearer ${token}`,
       },
       signal,
