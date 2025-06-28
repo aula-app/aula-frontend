@@ -13,6 +13,10 @@ export function localStorageGet(name: string, defaultValue: any = ''): any {
   const valueFromStore = localStorage.getItem(name);
   if (valueFromStore === null) return defaultValue; // No value in store, return default one
 
+  if (name === 'api_url') {
+    valueFromStore.replace(/aula\.de\/.*/g, 'aula.de');
+  }
+
   try {
     const jsonParsed: unknown = JSON.parse(valueFromStore);
     if (['boolean', 'number', 'bigint', 'string', 'object'].includes(typeof jsonParsed)) {
