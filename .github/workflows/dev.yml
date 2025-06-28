@@ -18,7 +18,7 @@ jobs:
         run: |
           npm i
           npm run build-devel
-          cp -vr build/* /var/www/
+          cp -vr build/* /var/www-aula-dev/
           # git checkout test
           # npm run build
           # cp -vr build/* /var/www-test/
