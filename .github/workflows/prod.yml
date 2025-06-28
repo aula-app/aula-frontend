@@ -1,0 +1,22 @@
+name: Update prod instance
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      CI: false
+      LOCAL: test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Build frontend
+        run: |
+          npm i
+          npm run build-prod
+          cp -vr build/* /var/www-aula-prod/
+        shell: bash

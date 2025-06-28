@@ -6,8 +6,11 @@ on:
       - main
       - master
       - production
+      - prod
       - test
       - dev
+      - staging
+      - stage
 
   pull_request:
     types: [opened, synchronize, reopened]
@@ -19,7 +22,7 @@ env:
 jobs:
   deploy:
     runs-on: self-hosted
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -65,14 +68,14 @@ jobs:
       - name: Deploy to Apache directory
         run: |
           DEPLOY_PATH="${{ env.DEPLOY_BASE_PATH }}/${{ env.SAFE_BRANCH_NAME }}"
-          
+
           # Create the directory if it doesn't exist
           mkdir -p $DEPLOY_PATH
-          
+
           # Copy the built files
           rm -rf $DEPLOY_PATH/*
           cp -r ./build/* $DEPLOY_PATH/
-          
+
           # - name: Comment on PR
           #   if: github.event_name == 'pull_request'
           #   uses: actions/github-script@v7
