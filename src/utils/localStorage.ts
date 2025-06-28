@@ -15,6 +15,7 @@ export function localStorageGet(name: string, defaultValue: any = ''): any {
 
   if (name === 'api_url') {
     valueFromStore = valueFromStore.replace(/aula\.de\/.*/g, 'aula.de');
+    localStorage.setItem('api_url', valueFromStore);
   }
 
   try {
