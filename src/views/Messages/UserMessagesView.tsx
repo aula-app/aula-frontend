@@ -69,7 +69,7 @@ const UserMessagesView = () => {
                 <Typography flex={1} px={2}>
                   {message.headline}
                 </Typography>
-                <AppIconButton size="small" icon="close" />
+                <AppIconButton size="small" icon="close" title={t('tooltips.close')} />
               </Stack>
             );
           })}

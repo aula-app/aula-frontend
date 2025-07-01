@@ -83,7 +83,7 @@ const TopBar: React.FC = () => {
           {location[1] === '' ? (
             <img src={`${getConfig().BASENAME}img/Aula_Icon.svg`} alt={t('app.name.icon')} />
           ) : (
-            <AppIconButton icon="back" onClick={() => goto(getReturnPath())} />
+            <AppIconButton icon="back" title={t('tooltips.back')} onClick={() => goto(getReturnPath())} />
           )}
         </Box>
         {/* Navigation Breadcrumbs */}
@@ -127,13 +127,13 @@ const TopBar: React.FC = () => {
         {checkPermissions('system', 'hide') ? (
           <Stack direction="row">
             <LocaleSwitch />
-            <AppIconButton icon="logout" onClick={onLogout} />
+            <AppIconButton icon="logout" title={t('tooltips.logout')} onClick={onLogout} />
           </Stack>
         ) : (
           <Stack direction="row" spacing={0.5} sx={{ ml: 'auto' }}>
             <MessagesButton />
             <UpdatesButton />
-            <AppIconButton icon="menu" onClick={menuToggle} sx={{ display: { xs: 'block', md: 'none' } }} />
+            <AppIconButton icon="menu" title={t('tooltips.menu')} onClick={menuToggle} sx={{ display: { xs: 'block', md: 'none' } }} />
           </Stack>
         )}
         <SideBar

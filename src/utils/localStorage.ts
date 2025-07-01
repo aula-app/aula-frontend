@@ -10,8 +10,13 @@ export function localStorageGet(name: string, defaultValue: any = ''): any {
     return defaultValue; // We don't have access to localStorage on the server
   }
 
-  const valueFromStore = localStorage.getItem(name);
+  let valueFromStore = localStorage.getItem(name);
   if (valueFromStore === null) return defaultValue; // No value in store, return default one
+
+  if (name === 'api_url') {
+    valueFromStore = valueFromStore.replace(/aula\.de\/.*/g, 'aula.de');
+    localStorage.setItem('api_url', valueFromStore);
+  }
 
   try {
     const jsonParsed: unknown = JSON.parse(valueFromStore);
@@ -28,7 +33,7 @@ export function localStorageGet(name: string, defaultValue: any = ''): any {
 /**
  * Smartly writes value into localStorage
  */
-export function localStorageSet(name: string, value: any) {
+export async function localStorageSet(name: string, value: any) {
   if (IS_SERVER) {
     return; // Do nothing on server side
   }
@@ -42,7 +47,7 @@ export function localStorageSet(name: string, value: any) {
     valueAsString = String(value);
   }
 
-  localStorage.setItem(name, valueAsString);
+  await localStorage.setItem(name, valueAsString);
 }
 
 /* eslint-enable @typescript-eslint/no-explicit-any */

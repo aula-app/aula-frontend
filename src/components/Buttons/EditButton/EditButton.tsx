@@ -9,7 +9,7 @@ interface Props extends IconButtonProps {
 const EditButton: React.FC<Props> = ({ disabled = false, onEdit, ...restOfProps }) => {
   const { t } = useTranslation();
   return (
-    <AppIconButton icon="edit" disabled={disabled} aria-label={t('actions.edit')} {...restOfProps} onClick={onEdit} />
+    <AppIconButton icon="edit" title={t('tooltips.edit')} disabled={disabled} aria-label={t('actions.edit')} {...restOfProps} onClick={onEdit} />
   );
 };
 

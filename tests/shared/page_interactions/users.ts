@@ -38,7 +38,7 @@ export const goToRoomSettings = async (page: Page) => {
   await SettingsButton.click({ timeout: 1000 });
 };
 
-const goToUserSettings = async (page: Page) => {
+export const goToUserSettings = async (page: Page) => {
   await page.goto(host);
 
   const SettingsButton = page.locator('a[href="/settings/users"]');
@@ -104,7 +104,7 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   return pass;
 };
 
-const create = async (page: Page, data: users.UserData): Promise<TempPass> => {
+export const create = async (page: Page, data: users.UserData): Promise<TempPass> => {
   await goToUserSettings(page);
 
   // click the add user button - using reliable selector:
@@ -136,7 +136,7 @@ const create = async (page: Page, data: users.UserData): Promise<TempPass> => {
   return pass;
 };
 
-const remove = async (page: Page, data: users.UserData) => {
+export const remove = async (page: Page, data: users.UserData) => {
   await goToUserSettings(page);
 
   // open the filter menu:

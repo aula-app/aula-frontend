@@ -62,7 +62,8 @@
       "button": "Login",
       "label": "Username",
       "noAccount": "Need an account?",
-      "title": "Sign in"
+      "title": "Sign in",
+      "reset_code": "New code"
     },
     "logout": "Sign out",
     "messages": {
@@ -528,13 +529,32 @@
   },
   "tooltips": {
     "approval": "The approval team reviews ideas for feasibility before voting",
+    "archive": "Archive",
+    "back": "Go back",
+    "cancel": "Cancel",
+    "chat": "Open chat",
+    "close": "Close",
     "comment": "Comments help improve ideas through constructive feedback",
     "delegate": "You can delegate your vote to another person and revoke it at any time",
+    "delete": "Delete",
     "discussion": "Ideas are refined into project plans through collaboration",
+    "edit": "Edit",
+    "heart": "Like",
+    "heartFull": "Unlike",
+    "link": "Copy Link",
+    "logout": "Log out",
+    "menu": "Menu",
+    "message": "Send a message",
+    "more": "More",
+    "print": "Print",
     "quorum": "Required likes to advance to discussion phase",
+    "report": "Report",
     "results": "View voting results and approved ideas for implementation",
+    "unarchive": "Unarchive",
     "voting": "Cast your vote on approved ideas",
-    "wild": "Share and like initial ideas and suggestions"
+    "wild": "Share and like initial ideas and suggestions",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out"
   },
   "user": {
     "avatar": "User avatar for {{id}}"

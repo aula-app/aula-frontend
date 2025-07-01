@@ -84,7 +84,7 @@ const TimedCommands = () => {
                       <TableCell>{command.parameters}</TableCell>
                       <TableCell>{command.date_start}</TableCell>
                       <TableCell align="right">
-                        <AppIconButton icon="delete" onClick={() => setDeleteId(command.id)} />
+                        <AppIconButton icon="delete" title={t('tooltips.delete')} onClick={() => setDeleteId(command.id)} />
                       </TableCell>
                     </TableRow>
                   );

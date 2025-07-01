@@ -16,7 +16,7 @@ export const goToRoom = async (
   await RoomDiv.click({ timeout: 1000 });
 };
 
-const goToidea = async (
+export const goToidea = async (
   page: Page, //
   idea: ideaFixtures.IdeaData
 ) => {
@@ -254,7 +254,7 @@ type ForCount = number;
 type AgainstCount = number;
 type NeutralCount = number;
 
-const voteCounts = async (
+export const voteCounts = async (
   page: Page, //
   room: roomFixtures.RoomData,
   box: ideaFixtures.BoxData,

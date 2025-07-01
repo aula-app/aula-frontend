@@ -1,6 +1,7 @@
+import { databaseRequest } from '@/services/requests';
 import { useAppStore } from '@/store';
-import { checkPermissions, databaseRequest, localStorageDelete, localStorageGet } from '@/utils';
 import { InstanceResponse } from '@/types/Generics';
+import { checkPermissions, localStorageDelete, localStorageGet } from '@/utils';
 import { parseJwt } from '@/utils/jwt';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';

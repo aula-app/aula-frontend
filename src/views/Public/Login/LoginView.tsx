@@ -31,6 +31,7 @@ import { LoginFormValues } from "@/types/LoginTypes";
 const LoginView = () => {
   const { t } = useTranslation();
   const oauthEnabled = getConfig().IS_OAUTH_ENABLED;
+  const isMultiInstance = getConfig().IS_MULTI;
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const [loginError, setError] = useState<string>('');
@@ -60,6 +61,13 @@ const LoginView = () => {
   const handleShowPasswordClick = () => {
     setShowPassword((oldValue) => !oldValue);
   };
+
+  const resetCode = async () => {
+    localStorageSet('code', '').then(() => {
+      ;
+      navigate('/code');
+    });
+  }
 
   const onSubmit = async (formData: LoginFormValues) => {
     if (!api_url) {
@@ -194,9 +202,9 @@ const LoginView = () => {
           />
         </Stack>
         <Button
+          type="submit"
           variant="contained"
           disabled={isLoading}
-          onClick={handleSubmit(onSubmit)}
           aria-label={t("auth.login.button")}
         >
           {t("auth.login.button")}
@@ -211,6 +219,15 @@ const LoginView = () => {
           >
             {t('auth.forgotPassword.link')}
           </Button>
+          {isMultiInstance && (<Button
+            variant="text"
+            color="secondary"
+            component={AppLink}
+            onClick={resetCode}
+          >
+            {t('auth.login.reset_code')}
+          </Button>)}
+
         </Grid>
 
         {oauthEnabled && (

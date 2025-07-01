@@ -119,7 +119,7 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
               </Typography>
             </Stack>
             {checkPermissions('ideas', 'approve') && (
-              <AppIconButton icon="edit" onClick={() => setEditing(true)} sx={{ m: -1 }} />
+              <AppIconButton icon="edit" title={t('tooltips.edit')} onClick={() => setEditing(true)} sx={{ m: -1 }} />
             )}
           </Stack>
         )}

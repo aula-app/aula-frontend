@@ -62,7 +62,8 @@
       "button": "Login",
       "label": "Nutzername",
       "noAccount": "Du hast noch kein Konto?",
-      "title": "Anmelden"
+      "title": "Anmelden",
+      "reset_code": "neuer Code"
     },
     "logout": "Logout",
     "messages": {
@@ -528,13 +529,32 @@
   },
   "tooltips": {
     "approval": "Das Prüfungsteam überprüft Ideen auf Machbarkeit vor der Abstimmung",
+    "archive": "Archivieren",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "chat": "Chat öffnen",
+    "close": "Schließen",
     "comment": "Kommentare helfen, Ideen durch konstruktives Feedback zu verbessern",
     "delegate": "Du kannst deine Stimme an eine andere Person übertragen und sie jederzeit zurücknehmen",
+    "delete": "Löschen",
     "discussion": "Hier werden Ideen durch Zusammenarbeit in Projektpläne verwandelt",
+    "edit": "Bearbeiten",
+    "heart": "Gefällt mir",
+    "heartFull": "Gefällt mir nicht mehr",
+    "link": "Link kopieren",
+    "logout": "Abmelden",
+    "menu": "Menü",
+    "message": "Nachricht senden",
+    "more": "Mehr",
+    "print": "Drucken",
     "quorum": "Erforderliche Likes, um in die Diskussionsphase zu gelangen",
+    "report": "Melden",
     "results": "Abstimmungsergebnisse und genehmigte Ideen zur Umsetzung anzeigen",
+    "unarchive": "Wiederherstellen",
     "voting": "Stimme für genehmigte Ideen abgeben",
-    "wild": "Hier kannst du erste Ideen und Vorschläge posten"
+    "wild": "Hier kannst du erste Ideen und Vorschläge posten",
+    "zoomIn": "Vergrößern",
+    "zoomOut": "Verkleinern"
   },
   "user": {
     "avatar": "Benutzeravatar für {{id}}"

@@ -24,16 +24,16 @@ console.info('[info] connected to backend:', process.env.VITE_APP_API_URL);
 // note, playwright runs each test in different threads, therefore
 // these values can't be relied upon being the same.
 // rely on setRunId during setup, then getRunId during tests.
-const now = new Date();
-const timestring = now.toISOString();
-const timestamp = now.getTime().toString();
+export const now = new Date();
+export const timestring = now.toISOString();
+export const timestamp = now.getTime().toString();
 
 // TODO get from env
 export const getHost = () => process.env.APP_FRONTEND_HOST;
 
 export const getRunId = () => fs.readFileSync('run-id.txt', 'utf-8');
 
-const setRunId = () => fs.writeFileSync('run-id.txt', 'run-id-' + timestamp);
+export const setRunId = () => fs.writeFileSync('run-id.txt', 'run-id-' + timestamp);
 
 export function gensym(prefix = 'GG') {
   // tests will fail on collision.. very rare

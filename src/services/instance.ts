@@ -1,17 +1,22 @@
-import { localStorageSet } from '@/utils';
-import { getConfig } from '../config';
+import { localStorageSet, localStorageGet } from '@/utils';
 
 interface InstanceResponse {
-  api: string;
+  status: boolean;
 }
 
 export const validateInstanceCode = async (code: string): Promise<boolean> => {
-  const request = await fetch(`${getConfig().MULTI_INSTANCES_URL}/instance/${code}`);
-  const response = (await request.json()) as InstanceResponse[];
+  const requestData = {
+    method: 'POST',
+    body: JSON.stringify({ code: code }),
+  };
 
-  if (response.length > 0) {
+  const api_url = localStorageGet('api_url');
+  const request = await fetch(`${api_url}/api/controllers/instance.php`, requestData);
+
+  const response = (await request.json()) as InstanceResponse;
+
+  if (response.status === true) {
     localStorageSet('code', code);
-    localStorageSet('api_url', response[0].api);
     return true;
   }
   return false;
