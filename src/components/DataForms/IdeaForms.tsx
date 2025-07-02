@@ -20,6 +20,7 @@ import SelectBoxField from '../DataFields/SelectBoxField';
  */
 
 const MAX_CHAR_COUNT = 1000; // Maximum character count for content
+const MAX_TITLE_LENGTH = 200; // Maximum length for title
 
 interface IdeaFormsProps {
   onClose: () => void;
@@ -41,8 +42,8 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       .string()
       .test(
         'len',
-        t('forms.validation.titleTooLong', { scope: t('scopes.ideas.name'), max: 200 }),
-        (val) => String(val).length <= 200
+        t('forms.validation.titleTooLong', { scope: t('scopes.ideas.name'), MAX_TITLE_LENGTH }),
+        (val) => String(val).length <= MAX_TITLE_LENGTH
       )
       .required(t('forms.validation.required')),
     content: yup
