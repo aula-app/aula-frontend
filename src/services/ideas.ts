@@ -6,6 +6,8 @@ import { IdeaType } from '@/types/Scopes';
  * Fetches idea
  */
 
+const ORDER_BY_CREATION_DATE = 4;
+
 interface GetIdeaResponse extends GenericResponse {
   data: IdeaType | null;
 }
@@ -79,7 +81,7 @@ export async function getIdeasByBox(args: BoxIdeasListRequest): Promise<GetIdeas
   const response = await databaseRequest({
     model: 'Idea',
     method: 'getIdeasByTopic',
-    arguments: { orderBy: 4, ...args },
+    arguments: { orderBy: ORDER_BY_CREATION_DATE, ...args },
   });
 
   return response as GetIdeasResponse;
