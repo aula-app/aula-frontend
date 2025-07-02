@@ -19,6 +19,8 @@ import SelectBoxField from '../DataFields/SelectBoxField';
  * @component
  */
 
+const MAX_CHAR_COUNT = 1000; // Maximum character count for content
+
 interface IdeaFormsProps {
   onClose: () => void;
   defaultValues?: IdeaType;
@@ -47,8 +49,8 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       .string()
       .test(
         'len',
-        t('forms.validation.contentTooLong', { scope: t('scopes.ideas.name'), max: 1000 }),
-        (val) => String(val).length <= 1000
+        t('forms.validation.contentTooLong', { scope: t('scopes.ideas.name'), max: MAX_CHAR_COUNT }),
+        (val) => String(val).length <= MAX_CHAR_COUNT
       )
       .required(t('forms.validation.required')),
   } as Record<keyof IdeaType, any>);
@@ -208,7 +210,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               }}
             />
             {/* content */}
-            <MarkdownEditor name="content" control={control} required disabled={isLoading} />
+            <MarkdownEditor name="content" control={control} required disabled={isLoading} max={MAX_CHAR_COUNT} />
             <Stack direction="row" gap={2}>
               {checkPermissions('boxes', 'addIdea') && (
                 <SelectBoxField

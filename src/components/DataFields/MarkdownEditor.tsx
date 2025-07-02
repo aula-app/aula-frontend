@@ -12,7 +12,15 @@ import {
   toolbarPlugin,
   UndoRedo,
 } from '@mdxeditor/editor';
-import { FormControl, FormControlProps, FormHelperText, FormLabel as MuiFormLabel, Stack, styled } from '@mui/material';
+import {
+  FormControl,
+  FormControlProps,
+  FormHelperText,
+  FormLabel as MuiFormLabel,
+  Stack,
+  styled,
+  Typography,
+} from '@mui/material';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +30,7 @@ interface Props extends FormControlProps {
   control: Control<any, any>;
   required?: boolean;
   disabled?: boolean;
+  max?: number;
 }
 
 const StyledFormLabel = styled(MuiFormLabel)(({ theme }) => ({
@@ -36,12 +45,26 @@ const StyledFormLabel = styled(MuiFormLabel)(({ theme }) => ({
   backdropFilter: 'blur(100px)',
   transition: theme.transitions.create('color'),
 
-  // Focus state - we need to use container focus-within since label comes before editor
   '.markdown-editor-container:focus-within &': {
     color: theme.palette.primary.main,
   },
 
-  // Error state
+  '&.error': {
+    color: theme.palette.error.main,
+  },
+}));
+
+const CharacterCount = styled(Typography)(({ theme }) => ({
+  position: 'absolute',
+  bottom: theme.spacing(1),
+  right: theme.spacing(1),
+  fontSize: '0.75rem',
+  color: theme.palette.text.secondary,
+  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(0.25, 0.5),
+  borderRadius: theme.shape.borderRadius,
+  zIndex: 1000,
+
   '&.error': {
     color: theme.palette.error.main,
   },
@@ -171,13 +194,34 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
       borderBottomColor: theme.palette.primary.main,
       borderBottomWidth: '2px',
     },
+
+    // Ensure character count doesn't interfere with content
+    '&.has-char-count': {
+      paddingBottom: theme.spacing(4),
+    },
   },
 }));
 
-const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disabled = false, ...restOfProps }) => {
+const MarkdownEditor: React.FC<Props> = ({
+  name,
+  control,
+  required = false,
+  disabled = false,
+  max,
+  ...restOfProps
+}) => {
   const { t } = useTranslation();
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [characterCount, setCharacterCount] = React.useState(0);
+
+  // Get character count display class based on limit
+  const getCharCountClass = useCallback(() => {
+    if (!max) return '';
+    const percentage = characterCount / max;
+    if (percentage >= 1) return 'error';
+    return '';
+  }, [characterCount, max]);
 
   // Custom keymap to completely disable Tab indentation
   const disableTabKeymap = Prec.highest(
@@ -294,8 +338,23 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
       control={control}
       render={({ field, fieldState }) => {
         useEffect(() => {
-          if (field.value) mdxEditorRef.current?.setMarkdown(field.value || control._defaultValues[name]);
+          const initialValue = field.value || control._defaultValues[name] || '';
+          if (initialValue) {
+            mdxEditorRef.current?.setMarkdown(initialValue);
+          }
+          // Update character count when field value changes
+          setCharacterCount(initialValue?.length || 0);
         }, [control._defaultValues[name], field.value]);
+
+        // Handle field changes to update character count
+        const handleFieldChange = useCallback(
+          (value: string) => {
+            field.onChange(value);
+            setCharacterCount(value?.length || 0);
+          },
+          [field]
+        );
+
         return (
           <FormControl fullWidth {...restOfProps}>
             <div
@@ -313,12 +372,15 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
               role="textbox"
               aria-label={t(`settings.columns.${name}`)}
             >
-              <StyledFormLabel id={`editor-${name}-label`} className={!!fieldState.error ? 'error' : ''}>
+              <StyledFormLabel
+                id={`editor-${name}-label`}
+                className={!!fieldState.error ? 'error' : getCharCountClass()}
+              >
                 {t(`settings.columns.${name}`)}
                 {required ? '*' : ''}
               </StyledFormLabel>
               <Editor
-                className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}
+                className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''} ${max ? 'has-char-count' : ''} ${getCharCountClass()}`}
                 markdown={''}
                 toMarkdownOptions={{}}
                 sx={{ height: '100%' }}
@@ -349,11 +411,17 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
                   }),
                 ]}
                 {...field}
+                onChange={handleFieldChange}
                 ref={mdxEditorRef}
                 aria-invalid={!!fieldState.error}
                 aria-errormessage={fieldState.error ? `${name}-error-message` : undefined}
                 aria-labelledby={`editor-${name}-label`}
               />
+              {max && (
+                <CharacterCount className={getCharCountClass()} variant="caption">
+                  {characterCount}/{max}
+                </CharacterCount>
+              )}
             </div>
             {!!fieldState.error && (
               <FormHelperText id={`${name}-error-message`} error={!!fieldState.error}>
