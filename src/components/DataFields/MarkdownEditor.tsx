@@ -36,11 +36,13 @@ const StyledFormLabel = styled(MuiFormLabel)(({ theme }) => ({
   backdropFilter: 'blur(100px)',
   transition: theme.transitions.create('color'),
 
-  '.md-editor:focus-within + &': {
+  // Focus state - we need to use container focus-within since label comes before editor
+  '.markdown-editor-container:focus-within &': {
     color: theme.palette.primary.main,
   },
 
-  '.error': {
+  // Error state
+  '&.error': {
     color: theme.palette.error.main,
   },
 }));
@@ -298,6 +300,7 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
           <FormControl fullWidth {...restOfProps}>
             <div
               ref={containerRef}
+              className="markdown-editor-container"
               onClick={handleContainerFocus}
               onKeyDown={(e) => {
                 // Handle Enter and Space to focus the editor
