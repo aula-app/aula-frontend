@@ -27,7 +27,14 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
   const { idea_id } = useParams();
 
   const schema = yup.object({
-    content: yup.string().required(t('forms.validation.required')),
+    content: yup
+      .string()
+      .test(
+        'len',
+        t('forms.validation.contentTooLong', { scope: t('scopes.comments.name'), max: 1000 }),
+        (val) => String(val).length <= 1000
+      )
+      .required(t('forms.validation.required')),
   } as Record<keyof CommentArguments, any>);
 
   const { reset, control, handleSubmit } = useForm({
@@ -95,7 +102,12 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading} aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading}
+              aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+            >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>

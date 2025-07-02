@@ -35,8 +35,22 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object({
-    title: yup.string().required(t('forms.validation.required')),
-    content: yup.string().required(t('forms.validation.required')),
+    title: yup
+      .string()
+      .test(
+        'len',
+        t('forms.validation.titleTooLong', { scope: t('scopes.ideas.name'), max: 200 }),
+        (val) => String(val).length <= 200
+      )
+      .required(t('forms.validation.required')),
+    content: yup
+      .string()
+      .test(
+        'len',
+        t('forms.validation.contentTooLong', { scope: t('scopes.ideas.name'), max: 1000 }),
+        (val) => String(val).length <= 1000
+      )
+      .required(t('forms.validation.required')),
   } as Record<keyof IdeaType, any>);
 
   const {

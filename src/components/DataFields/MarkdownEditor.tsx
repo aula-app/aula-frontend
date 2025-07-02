@@ -1,5 +1,8 @@
+import { Prec } from '@codemirror/state';
+import { keymap } from '@codemirror/view';
 import {
   BoldItalicUnderlineToggles,
+  codeMirrorPlugin,
   headingsPlugin,
   listsPlugin,
   ListsToggle,
@@ -8,12 +11,9 @@ import {
   Separator,
   toolbarPlugin,
   UndoRedo,
-  codeMirrorPlugin,
 } from '@mdxeditor/editor';
-import { keymap } from '@codemirror/view';
-import { Prec } from '@codemirror/state';
 import { FormControl, FormControlProps, FormHelperText, FormLabel as MuiFormLabel, Stack, styled } from '@mui/material';
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -38,6 +38,10 @@ const StyledFormLabel = styled(MuiFormLabel)(({ theme }) => ({
 
   '.md-editor:focus-within + &': {
     color: theme.palette.primary.main,
+  },
+
+  '.error': {
+    color: theme.palette.error.main,
   },
 }));
 
@@ -306,6 +310,10 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
               role="textbox"
               aria-label={t(`settings.columns.${name}`)}
             >
+              <StyledFormLabel id={`editor-${name}-label`} className={!!fieldState.error ? 'error' : ''}>
+                {t(`settings.columns.${name}`)}
+                {required ? '*' : ''}
+              </StyledFormLabel>
               <Editor
                 className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}
                 markdown={''}
@@ -344,10 +352,6 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
                 aria-labelledby={`editor-${name}-label`}
               />
             </div>
-            <StyledFormLabel id={`editor-${name}-label`}>
-              {t(`settings.columns.${name}`)}
-              {required ? '*' : ''}
-            </StyledFormLabel>
             {!!fieldState.error && (
               <FormHelperText id={`${name}-error-message`} error={!!fieldState.error}>
                 {t(`${fieldState.error?.message || ''}`)}
