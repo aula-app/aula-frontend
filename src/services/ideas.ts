@@ -79,7 +79,7 @@ export async function getIdeasByBox(args: BoxIdeasListRequest): Promise<GetIdeas
   const response = await databaseRequest({
     model: 'Idea',
     method: 'getIdeasByTopic',
-    arguments: args,
+    arguments: { orderBy: 4, ...args },
   });
 
   return response as GetIdeasResponse;
@@ -96,16 +96,6 @@ interface UserIdeasListRequest {
   status?: StatusTypes;
   room_id?: string;
   user_id?: string;
-}
-
-async function getIdeasByUser(args: UserIdeasListRequest): Promise<GetIdeasResponse> {
-  const response = await databaseRequest({
-    model: 'Idea',
-    method: 'getIdeasByUser',
-    arguments: args,
-  });
-
-  return response as GetIdeasResponse;
 }
 
 export async function getUserIdeasByPhase(phase_id: number): Promise<GetIdeasResponse> {

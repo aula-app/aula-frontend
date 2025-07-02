@@ -16,7 +16,7 @@ export async function getCommentsByIdea(idea_id: string): Promise<GetCommentsRes
   const response = await databaseRequest({
     model: 'Comment',
     method: 'getCommentsByIdeaId',
-    arguments: { idea_id },
+    arguments: { idea_id, orderby: 4 },
   });
 
   return response as GetCommentsResponse;
