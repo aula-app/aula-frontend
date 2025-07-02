@@ -81,7 +81,7 @@ export async function getIdeasByBox(args: BoxIdeasListRequest): Promise<GetIdeas
   const response = await databaseRequest({
     model: 'Idea',
     method: 'getIdeasByTopic',
-    arguments: { orderBy: ORDER_BY_CREATION_DATE, ...args },
+    arguments: { orderby: ORDER_BY_CREATION_DATE, ...args },
   });
 
   return response as GetIdeasResponse;
