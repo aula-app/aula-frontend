@@ -3,7 +3,7 @@ import DelegateVote from '@/components/DelegateVote';
 import { getDelegations, getReceivedDelegations } from '@/services/users';
 import { DelegationType, UserType } from '@/types/Scopes';
 import { Box, Button, Stack, StackProps, Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ interface Props extends StackProps {
   disabled?: boolean;
 }
 
-const DelegateButton: React.FC<Props> = ({ disabled = false, ...restOfProps }) => {
+const DelegateButton = forwardRef<HTMLDivElement, Props>(({ disabled = false, ...restOfProps }, ref) => {
   const { t } = useTranslation();
   const { box_id } = useParams();
 
@@ -56,6 +56,7 @@ const DelegateButton: React.FC<Props> = ({ disabled = false, ...restOfProps }) =
     <>
       {(!disabled || representing.length > 0 || delegate) && (
         <Stack
+          ref={ref}
           direction="row"
           position="relative"
           justifyContent="center"
@@ -109,6 +110,6 @@ const DelegateButton: React.FC<Props> = ({ disabled = false, ...restOfProps }) =
       />
     </>
   );
-};
+});
 
 export default DelegateButton;
