@@ -112,4 +112,6 @@ const DelegateButton = forwardRef<HTMLDivElement, Props>(({ disabled = false, ..
   );
 });
 
+DelegateButton.displayName = 'DelegateButton';
+
 export default DelegateButton;

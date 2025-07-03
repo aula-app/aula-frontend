@@ -66,4 +66,6 @@ const DeleteButton = forwardRef<HTMLButtonElement, Props>(
   }
 );
 
+DeleteButton.displayName = 'DeleteButton';
+
 export default DeleteButton;

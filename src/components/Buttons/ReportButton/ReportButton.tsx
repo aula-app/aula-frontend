@@ -78,4 +78,6 @@ ${data.content || ''}
   );
 });
 
+ReportButton.displayName = 'ReportButton';
+
 export default ReportButton;

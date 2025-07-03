@@ -52,4 +52,6 @@ const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled }, ref
   );
 });
 
+LikeButton.displayName = 'LikeButton';
+
 export default LikeButton;

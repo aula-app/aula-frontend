@@ -169,4 +169,6 @@ const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
   }
 );
 
+AddCategoryButton.displayName = 'AddCategoryButton';
+
 export default AddCategoryButton;

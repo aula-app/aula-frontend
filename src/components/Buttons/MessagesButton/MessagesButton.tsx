@@ -36,4 +36,6 @@ const MessagesButton = forwardRef<HTMLButtonElement, IconButtonProps>(({ ...rest
   );
 });
 
+MessagesButton.displayName = 'MessagesButton';
+
 export default MessagesButton;

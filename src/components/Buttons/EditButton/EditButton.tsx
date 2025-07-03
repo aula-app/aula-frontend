@@ -7,21 +7,21 @@ interface Props extends IconButtonProps {
   onEdit: () => void;
 }
 
-const EditButton = forwardRef<HTMLButtonElement, Props>(
-  ({ disabled = false, onEdit, ...restOfProps }, ref) => {
-    const { t } = useTranslation();
-    return (
-      <AppIconButton
-        ref={ref}
-        icon="edit"
-        title={t('tooltips.edit')}
-        disabled={disabled}
-        aria-label={t('actions.edit')}
-        {...restOfProps}
-        onClick={onEdit}
-      />
-    );
-  }
-);
+const EditButton = forwardRef<HTMLButtonElement, Props>(({ disabled = false, onEdit, ...restOfProps }, ref) => {
+  const { t } = useTranslation();
+  return (
+    <AppIconButton
+      ref={ref}
+      icon="edit"
+      title={t('tooltips.edit')}
+      disabled={disabled}
+      aria-label={t('actions.edit')}
+      {...restOfProps}
+      onClick={onEdit}
+    />
+  );
+});
+
+EditButton.displayName = 'EditButton';
 
 export default EditButton;
