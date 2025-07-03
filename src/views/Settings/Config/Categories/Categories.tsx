@@ -62,7 +62,7 @@ const CatView: React.FC = () => {
           const currentIcon = category.description_internal as keyof typeof CAT_ICONS;
           return (
             <Chip
-              key={key}
+              key={category.id}
               label={category.name}
               avatar={<AppIcon icon={currentIcon} />}
               onClick={() => setEditCat(category)}
