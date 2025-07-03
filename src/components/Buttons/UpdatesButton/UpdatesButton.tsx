@@ -41,4 +41,6 @@ const UpdatesButton = forwardRef<HTMLButtonElement, IconButtonProps>(({ ...restO
   );
 });
 
+UpdatesButton.displayName = 'UpdatesButton';
+
 export default UpdatesButton;
