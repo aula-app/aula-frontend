@@ -6,7 +6,7 @@ This document provides an overview of the Aula application, including setup inst
 
 ### Local testing
 
-Assuming you installed Docker, you can test the frontend which with the default `.env.docker` points to devel.aula.de backend with the following:
+Assuming you installed Docker, you can test the frontend with the default `.env.docker` which points to devel.aula.de backend with the following:
 
 ```bash
 docker run --env-file .env.docker -p 3000:80 aulaapp/aula-frontend:latest

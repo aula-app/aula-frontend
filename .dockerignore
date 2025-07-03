@@ -22,4 +22,5 @@ playwright-report/
 
 .env.*
 !.env.docker
+!.env.playwright
 Dockerfile
