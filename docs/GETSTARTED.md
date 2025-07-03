@@ -24,8 +24,9 @@ Reach out to `dev [at] aula.de` for more information. <!-- @TODO: we should add 
 
 ### Prerequisites
 
-- Node.js (version 18 or higher recommended)
-- Yarn (preferred) or npm
+- Node.js (version 18 or higher recommended; we test and deploy on version found in `.nvmrc`)
+- Yarn (we use `yarn`, you could theoretically use `npm`)
+- Docker (if you want to build/publish/deploy using Docker)
 
 ### Installation
 
@@ -52,18 +53,17 @@ Reach out to `dev [at] aula.de` for more information. <!-- @TODO: we should add 
 
 ### Environment Configuration
 
-5. Create a `.env` file based on the `.env.sample` file:
+5. Create a `.env` file based on the `.env.local` file:
 
    ```
-   cp .env.sample .env
+   cp .env.local .env
    ```
 
 6. Update the values in the `.env` file with your configuration:
 
    ```
    VITE_APP_VERSION = $npm_package_version
-   VITE_APP_API_URL = http://localhost/
-   VITE_APP_MULTI_AULA = https://neu.aula.de/instances
+   VITE_APP_API_URL = http://localhost:8080/
    VITE_APP_MULTI = false
    ```
 
@@ -75,22 +75,16 @@ Reach out to `dev [at] aula.de` for more information. <!-- @TODO: we should add 
 
    The application will start in development mode. Open your browser to the URL shown in the terminal to view the app.
 
-### Available Scripts
+## Mobile Development
 
-The following yarn scripts are available:
+The application includes Capacitor integration for building mobile apps. To start Android development:
 
-- `yarn dev` or `yarn start`: Starts the development server
-- `yarn build`: Builds the production-ready application
-- `yarn build-devel`: Builds the application in development mode
-- `yarn build-staging`: Builds the application in staging mode
-- `yarn build-test`: Builds the application in test mode
-- `yarn build-bw`: Builds the application with BW configuration
-- `yarn build-single`: Builds the application in single-instance mode
-- `yarn preview`: Preview the production build locally
-- `yarn format`: Format src files using Prettier
-- `yarn format:all`: Format all files using Prettier
-- `yarn lint`: Lint source files using ESLint
-- `yarn check-type` or `yarn type`: Type check TypeScript files
+```bash
+# Make sure to have local tooling for Android/iOS development installed
+#   eg. export CAPACITOR_ANDROID_STUDIO_PATH=/opt/android-studio/bin/studio
+yarn build && npx cap sync && \
+   npx cap open android
+```
 
 ## Deployment
 
@@ -104,44 +98,3 @@ To build and publish your local version of the repo:
 docker build -t YOUR_ORG/aula-frontend:latest
 docker push YOUR_ORG/aula-frontend:latest
 ```
-
-### Deploy to web server
-
-To deploy the application:
-
-1. Build the production-ready application:
-
-   ```
-   yarn build
-   ```
-
-2. The build output will be generated in the `dist/` directory. Deploy these files to your web server.
-
-3. For proper routing to work, ensure your web server is configured to redirect all requests to `index.html`, as this is a single-page application.
-
-   A `_redirects` file is included in the public directory for services like Netlify:
-
-   ```
-   /*    /index.html   200
-   ```
-
-## Mobile Development
-
-The application includes Capacitor integration for building mobile apps. To start Android development:
-
-1. Build the web app first:
-
-   ```
-   yarn build
-   ```
-
-2. Sync the build with Capacitor:
-
-   ```
-   npx cap sync
-   ```
-
-3. Open the Android project:
-   ```
-   npx cap open android
-   ```
