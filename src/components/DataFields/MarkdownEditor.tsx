@@ -298,7 +298,8 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
               onKeyDown={(e) => {
                 // Handle Enter and Space to focus the editor
                 if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
+                  // TODO: Why???
+                  //e.preventDefault();
                   handleContainerFocus();
                 }
               }}
