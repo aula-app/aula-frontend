@@ -11,6 +11,9 @@ env:
 
 jobs:
   deploy:
+    # skip deploying dev,staging,prod branches when they're the PR source branch
+    if: ${{ !contains(fromJSON('["dev", "staging", "prod"]'), github.head_ref) }}
+
     runs-on: self-hosted
 
     steps:
