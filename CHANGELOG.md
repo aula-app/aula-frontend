@@ -16,6 +16,7 @@
   - Switched re-exports to only default exports in view and component index files
   - Cleaned up translation files and synchronized German/English translations
   - Added missing translation keys and removed duplicates
+  - Dockerized for easier self-hosting.
 
 - **Bug fixes:**
 

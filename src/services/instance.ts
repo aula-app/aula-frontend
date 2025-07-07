@@ -5,10 +5,9 @@ interface InstanceResponse {
 }
 
 export const validateInstanceCode = async (code: string): Promise<boolean> => {
-  const requestBody = JSON.stringify({ code: code });
   const requestData = {
     method: 'POST',
-    body: requestBody,
+    body: JSON.stringify({ code: code }),
   };
 
   const api_url = localStorageGet('api_url');

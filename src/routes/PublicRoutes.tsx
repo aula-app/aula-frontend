@@ -2,6 +2,7 @@ import { localStorageGet, localStorageSet } from '@/utils';
 import { InstanceCodeView, Login, OAuthLogin, PublicNotFoundView, Recovery, SetPassword } from '@/views/Public';
 import UpdatePasswordView from '@/views/Public/UpdatePassword';
 import { useEffect } from 'react';
+import { getConfig } from '../config';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 /**
@@ -13,17 +14,17 @@ const PublicRoutes = () => {
 
   const useInstanceCheck = () => {
     const instance_token = localStorageGet('code', false);
-    const isMultiInstance = import.meta.env.VITE_APP_MULTI !== 'false';
+    const isMultiInstance = getConfig().IS_MULTI;
 
     if (isMultiInstance) {
       if (!instance_token && location.pathname !== '/code') {
-        localStorageSet('api_url', import.meta.env.VITE_APP_API_URL).then(() => {
+        localStorageSet('api_url', getConfig().API_URL).then(() => {
           navigate('/code');
         });
       }
     } else {
       localStorageSet('code', 'SINGLE');
-      localStorageSet('api_url', import.meta.env.VITE_APP_API_URL);
+      localStorageSet('api_url', getConfig().API_URL);
     }
   };
 
