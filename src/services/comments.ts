@@ -11,12 +11,13 @@ import { CommentType } from '@/types/Scopes';
 interface GetCommentsResponse extends GenericResponse {
   data: CommentType[] | null;
 }
+const ORDER_BY_CREATION_DATE = 4;
 
 export async function getCommentsByIdea(idea_id: string): Promise<GetCommentsResponse> {
   const response = await databaseRequest({
     model: 'Comment',
     method: 'getCommentsByIdeaId',
-    arguments: { idea_id },
+    arguments: { idea_id, orderby: ORDER_BY_CREATION_DATE },
   });
 
   return response as GetCommentsResponse;

@@ -1,18 +1,8 @@
 name: Feature Branch Deployment
 
 on:
-  push:
-    branches-ignore:
-      - main
-      - master
-      - production
-      - prod
-      - test
-      - dev
-      - staging
-      - stage
-
   pull_request:
+    # branches: [dev, staging, prod, main]  # filter according to the PR target branch
     types: [opened, synchronize, reopened]
 
 env:
@@ -21,6 +11,9 @@ env:
 
 jobs:
   deploy:
+    # skip deploying dev,staging,prod branches when they're the PR source branch
+    if: ${{ !contains(fromJSON('["dev", "staging", "prod"]'), github.head_ref) }}
+
     runs-on: self-hosted
 
     steps:

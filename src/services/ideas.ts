@@ -6,6 +6,8 @@ import { IdeaType } from '@/types/Scopes';
  * Fetches idea
  */
 
+const ORDER_BY_CREATION_DATE = 4;
+
 interface GetIdeaResponse extends GenericResponse {
   data: IdeaType | null;
 }
@@ -79,7 +81,7 @@ export async function getIdeasByBox(args: BoxIdeasListRequest): Promise<GetIdeas
   const response = await databaseRequest({
     model: 'Idea',
     method: 'getIdeasByTopic',
-    arguments: args,
+    arguments: { orderby: ORDER_BY_CREATION_DATE, ...args },
   });
 
   return response as GetIdeasResponse;
@@ -96,16 +98,6 @@ interface UserIdeasListRequest {
   status?: StatusTypes;
   room_id?: string;
   user_id?: string;
-}
-
-async function getIdeasByUser(args: UserIdeasListRequest): Promise<GetIdeasResponse> {
-  const response = await databaseRequest({
-    model: 'Idea',
-    method: 'getIdeasByUser',
-    arguments: args,
-  });
-
-  return response as GetIdeasResponse;
 }
 
 export async function getUserIdeasByPhase(phase_id: number): Promise<GetIdeasResponse> {

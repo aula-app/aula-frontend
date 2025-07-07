@@ -12,6 +12,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { getConfig } from '../../config';
 import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -73,7 +74,7 @@ const AskConsent = () => {
       }}
     >
       <Stack direction="row" height={52} alignItems="center" justifyContent="center">
-        <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Icon.svg`} alt={t('app.name.logo')} role="img" height="100%" />
+        <img src={`${getConfig().BASENAME}img/Aula_Icon.svg`} alt={t('app.name.logo')} role="img" height="100%" />
         <Stack flexGrow={1} alignItems="center" justifyContent="center" mr={2}>
           <Typography fontWeight={700} textTransform="uppercase" color="secondary">
             Acknowledgement
