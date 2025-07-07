@@ -1,0 +1,24 @@
+name: Update dev/staging/prod instances on push to corresponding branch
+
+on:
+  push:
+    branches:
+      - dev
+      - staging
+      - prod
+
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      CI: false
+      LOCAL: test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Build and deploy frontend to ${{ github.ref_name }}
+        run: |
+          npm i
+          npm run build-${{ github.ref_name }}
+          cp -vr build/* /var/www-aula-${{ github.ref_name }}/
+        shell: bash

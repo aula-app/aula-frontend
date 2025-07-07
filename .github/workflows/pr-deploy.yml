@@ -1,18 +1,8 @@
 name: Feature Branch Deployment
 
 on:
-  push:
-    branches-ignore:
-      - main
-      - master
-      - production
-      - prod
-      - test
-      - dev
-      - staging
-      - stage
-
   pull_request:
+    # branches: [dev, staging, prod, main]  # filter according to the PR target branch
     types: [opened, synchronize, reopened]
 
 env:
