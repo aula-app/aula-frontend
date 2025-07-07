@@ -1,25 +1,17 @@
 import fs from 'fs';
-
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 
 // configure the environment to get the running dev server
-dotenv.config({ path: '.env.local' });
+dotenv.config({ path: '.env.playwright' });
 dotenv.config();
 
-// we want to make sure we are only running tests on local frontends and
-// backends, as to not pollute any remote databases
-if (
-  !process.env.APP_FRONTEND_HOST ||
-  !process.env.VITE_APP_API_URL ||
-  !process.env.APP_FRONTEND_HOST.toString().includes('local') ||
-  !process.env.VITE_APP_API_URL.toString().includes('local')
-) {
-  throw new Error('APP_FRONTEND_HOST and VITE_APP_API_URL must be configured, and local');
+// we want to make sure we are only running tests on non-prod frontends
+if (!process.env.APP_FRONTEND_HOST || process.env.APP_FRONTEND_HOST.toString().match(/(?:prod|neu)\.aula\.de/)) {
+  throw new Error('APP_FRONTEND_HOST must be configured, and non-production');
 }
 
 // success - log
 console.info('[info] using frontend:', process.env.APP_FRONTEND_HOST);
-console.info('[info] connected to backend:', process.env.VITE_APP_API_URL);
 
 // note, playwright runs each test in different threads, therefore
 // these values can't be relied upon being the same.
@@ -41,7 +33,7 @@ export function gensym(prefix = 'GG') {
   return `${prefix}${rand}`;
 }
 
-export function cssEscape(str) {
+export function cssEscape(str: string) {
   return str.replace(/[^a-zA-Z0-9_\u00A0-\u10FFFF-]/g, (c) => {
     return '\\' + c.charCodeAt(0).toString(16) + ' ';
   });
