@@ -49,6 +49,7 @@ const SortButton: React.FC<Props> = ({ options, onSelect, onReorder, disabled = 
   return (
     <Stack>
       <AppIconButton
+        id="sort-button"
         icon={asc ? 'sortUp' : 'sort'}
         title={t('actions.sort')}
         onClick={handleSortToggle}

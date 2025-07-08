@@ -89,17 +89,28 @@ const Comments = () => {
               }}
             />
           </Stack>
-          <Stack width="100%" direction={asc ? 'column-reverse' : 'column'} gap={2}>
-            {comments.map((comment, creationOrder) => (
-              <CommentBubble
-                order={typeof comment[orderby] === 'number' ? -1 * comment[orderby] : creationOrder}
-                key={comment.id}
-                comment={comment}
-                onEdit={() => setEdit(comment)}
-                onDelete={() => onDelete(comment.id)}
-                disabled={Number(phase) >= 20}
-              />
-            ))}
+          <Stack width="100%" gap={2}>
+            {comments
+              .slice()
+              .sort((a, b) => {
+                const valueA = a[orderby];
+                const valueB = b[orderby];
+                if (typeof valueA === 'number' && typeof valueB === 'number') {
+                  return asc ? valueA - valueB : valueB - valueA;
+                }
+                return asc
+                  ? String(valueA).localeCompare(String(valueB))
+                  : String(valueB).localeCompare(String(valueA));
+              })
+              .map((comment) => (
+                <CommentBubble
+                  key={comment.id}
+                  comment={comment}
+                  onEdit={() => setEdit(comment)}
+                  onDelete={() => onDelete(comment.id)}
+                  disabled={Number(phase) >= 20}
+                />
+              ))}
           </Stack>
         </>
       ) : null}

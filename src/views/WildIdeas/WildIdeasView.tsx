@@ -142,17 +142,28 @@ const WildIdeas = () => {
                 }}
               ></SortButton>
             </Stack>
-            <Stack width="100%" direction={asc ? 'column-reverse' : 'column'} gap={2}>
-              {ideas.map((idea, creationOrder) => (
-                <IdeaBubble
-                  order={typeof idea[orderby] === 'number' ? -1 * idea[orderby] : creationOrder}
-                  key={idea.id}
-                  idea={idea}
-                  to={`idea/${idea.hash_id}`}
-                  onEdit={() => onEdit(idea)}
-                  onDelete={() => onDelete(idea.hash_id)}
-                />
-              ))}
+            <Stack width="100%" gap={2}>
+              {ideas
+                .slice()
+                .sort((a, b) => {
+                  const valueA = a[orderby];
+                  const valueB = b[orderby];
+                  if (typeof valueA === 'number' && typeof valueB === 'number') {
+                    return asc ? valueA - valueB : valueB - valueA;
+                  }
+                  return asc
+                    ? String(valueA).localeCompare(String(valueB))
+                    : String(valueB).localeCompare(String(valueA));
+                })
+                .map((idea) => (
+                  <IdeaBubble
+                    key={idea.id}
+                    idea={idea}
+                    to={`idea/${idea.hash_id}`}
+                    onEdit={() => onEdit(idea)}
+                    onDelete={() => onDelete(idea.hash_id)}
+                  />
+                ))}
             </Stack>
           </Stack>
         ))}
