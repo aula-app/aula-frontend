@@ -1,4 +1,5 @@
 import { AppIcon } from '@/components';
+import SortButton from '@/components/Buttons/SortButton';
 import { CommentForms } from '@/components/DataForms';
 import CommentBubble from '@/components/Idea/CommentBubble';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
@@ -6,7 +7,7 @@ import KnowMore from '@/components/KnowMore';
 import { deleteComment, getCommentsByIdea } from '@/services/comments';
 import { CommentType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
-import { Box, Drawer, Fab, Stack, Typography } from '@mui/material';
+import { Drawer, Fab, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -24,11 +25,20 @@ interface RouteParams extends Record<string, string | undefined> {
  */
 const Comments = () => {
   const { t } = useTranslation();
-  const { idea_id, phase, room_id } = useParams<RouteParams>();
+  const { idea_id, phase } = useParams<RouteParams>();
+
+  const COMMENT_SORT_OPTIONS = [
+    { label: t('settings.columns.created'), value: 'created' },
+    { label: t('settings.columns.sum_likes'), value: 'sum_likes' },
+  ] as Array<{ label: string; value: keyof CommentType }>;
+
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [edit, setEdit] = useState<CommentType | boolean>(false); // false = update dialog closed ;true = new idea; CommentFormData = edit idea;
+
+  const [orderby, setOrderby] = useState<keyof CommentType>(COMMENT_SORT_OPTIONS[0].value);
+  const [asc, setAsc] = useState(false);
 
   const fetchComments = useCallback(async () => {
     if (!idea_id) return;
@@ -55,27 +65,44 @@ const Comments = () => {
 
   return (
     <Stack alignItems="center" width="100%" spacing={2} pt={2}>
-      {comments.length > 0 && (
-        <Box pl={1} width="100%">
-          <KnowMore title={t('tooltips.comment')}>
-            <Typography variant="h3">
-              {String(comments.length)} {t('scopes.comments.plural')}
-            </Typography>
-          </KnowMore>
-        </Box>
-      )}
-      {isLoading && <IdeaBubbleSkeleton />}
       {error && <Typography>{t(error)}</Typography>}
-      {!isLoading &&
-        comments.map((comment) => (
-          <CommentBubble
-            key={comment.id}
-            comment={comment}
-            onEdit={() => setEdit(comment)}
-            onDelete={() => onDelete(comment.id)}
-            disabled={Number(phase) >= 20}
-          />
-        ))}
+      {isLoading ? (
+        <IdeaBubbleSkeleton />
+      ) : comments.length > 0 ? (
+        <>
+          <Stack direction="row" justifyContent="space-between" pl={1} width="100%">
+            <KnowMore title={t('tooltips.comment')}>
+              <Stack direction="row" alignItems="center" gap={1}>
+                <AppIcon icon="comment" />
+                <Typography variant="h3">
+                  {String(comments.length)} {t('scopes.comments.plural')}
+                </Typography>
+              </Stack>
+            </KnowMore>
+            <SortButton
+              options={COMMENT_SORT_OPTIONS}
+              onSelect={(orderby: string) => {
+                setOrderby(orderby as keyof CommentType);
+              }}
+              onReorder={(asc: boolean) => {
+                setAsc(asc);
+              }}
+            />
+          </Stack>
+          <Stack width="100%" direction={asc ? 'column-reverse' : 'column'} gap={2}>
+            {comments.map((comment, creationOrder) => (
+              <CommentBubble
+                order={typeof comment[orderby] === 'number' ? -1 * comment[orderby] : creationOrder}
+                key={comment.id}
+                comment={comment}
+                onEdit={() => setEdit(comment)}
+                onDelete={() => onDelete(comment.id)}
+                disabled={Number(phase) >= 20}
+              />
+            ))}
+          </Stack>
+        </>
+      ) : null}
       {checkPermissions('comments', 'create') && idea_id && Number(phase) < 20 && (
         <Fab
           aria-label="add comment"

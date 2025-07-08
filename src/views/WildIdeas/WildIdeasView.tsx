@@ -135,11 +135,9 @@ const WildIdeas = () => {
               <SortButton
                 options={IDEAS_SORT_OPTIONS}
                 onSelect={(orderby: string) => {
-                  console.log('orderby', orderby);
                   setOrderby(orderby as keyof IdeaType);
                 }}
                 onReorder={(asc: boolean) => {
-                  console.log('asc', asc);
                   setAsc(asc);
                 }}
               ></SortButton>
