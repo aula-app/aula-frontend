@@ -85,7 +85,12 @@ const BoxPhaseView = () => {
           <AppIcon icon="idea" />
           <Typography variant="h2">{t('ui.navigation.ideas')}</Typography>
         </Stack>
-        <AppIconButton icon={asc ? 'sortUp' : 'sort'} onClick={() => setAsc(!asc)} />
+        <AppIconButton
+          icon={asc ? 'sortUp' : 'sort'}
+          onClick={() => setAsc(!asc)}
+          title={t('actions.sort')}
+          aria-label={`${t('actions.sort')} ${asc ? t('ui.sort.ascending') : t('ui.sort.descending')}`}
+        />
       </Stack>
       <Grid container spacing={2} p={1} width="100%">
         {error && <Typography>{t(error)}</Typography>}
