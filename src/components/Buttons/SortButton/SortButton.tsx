@@ -52,7 +52,7 @@ const SortButton: React.FC<Props> = ({ options, onSelect, onReorder, disabled = 
         icon={asc ? 'sortUp' : 'sort'}
         title={t('actions.sort')}
         onClick={handleSortToggle}
-        aria-label={`Sort ${asc ? 'ascending' : 'descending'}`}
+        aria-label={`${t('actions.sort')} ${asc ? t('ui.sort.ascending') : t('ui.sort.descending')}`}
         aria-haspopup="true"
         aria-expanded={Boolean(openOptions)}
         {...restOfProps}

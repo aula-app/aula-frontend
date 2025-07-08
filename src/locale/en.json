@@ -692,6 +692,10 @@
       "system": "System",
       "users": "Users"
     },
+    "sort": {
+      "ascending": "ascending",
+      "descending": "descending"
+    },
     "units": {
       "days": "days",
       "ideas": "ideas",
