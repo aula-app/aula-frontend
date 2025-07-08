@@ -1,6 +1,7 @@
-import { AppIcon, EmptyState } from '@/components';
+import { AppIcon, AppIconButton, EmptyState } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
+import SortButton from '@/components/Buttons/SortButton';
 import { BoxForms } from '@/components/DataForms';
 import SurveyForms from '@/components/DataForms/SurveyForms';
 import { deleteBox, getBoxesByPhase } from '@/services/boxes';
@@ -24,6 +25,7 @@ const BoxPhaseView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
+  const [asc, setAsc] = useState(false);
 
   const [edit, setEdit] = useState<BoxType | boolean>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
   const [appState, dispatch] = useAppStore();
@@ -78,16 +80,29 @@ const BoxPhaseView = () => {
       {!isLoading && !error && boxes.length === 0 && (
         <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
       )}
+      <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%" pb={2}>
+        <Stack direction="row" alignItems="center" gap={1}>
+          <AppIcon icon="idea" />
+          <Typography variant="h2">{t('ui.navigation.ideas')}</Typography>
+        </Stack>
+        <AppIconButton icon={asc ? 'sortUp' : 'sort'} onClick={() => setAsc(!asc)} />
+      </Stack>
       <Grid container spacing={2} p={1} width="100%">
-        {isLoading && (
+        {error && <Typography>{t(error)}</Typography>}
+        {isLoading ? (
           <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
             <BoxCardSkeleton />
           </Grid>
-        )}
-        {error && <Typography>{t(error)}</Typography>}
-        {!isLoading &&
-          boxes.map((box) => (
-            <Grid key={box.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
+        ) : boxes.length === 0 ? (
+          <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
+        ) : (
+          boxes.map((box, creationOrder) => (
+            <Grid
+              key={box.hash_id}
+              size={{ xs: 12, sm: 6, lg: 4, xl: 3 }}
+              sx={{ scrollSnapAlign: 'center' }}
+              order={asc ? -1 * creationOrder : creationOrder}
+            >
               <BoxCard
                 box={box}
                 onEdit={() => {
@@ -96,7 +111,8 @@ const BoxPhaseView = () => {
                 onDelete={() => boxDelete(box.hash_id)}
               />
             </Grid>
-          ))}
+          ))
+        )}
       </Grid>
       <Stack
         direction="row"

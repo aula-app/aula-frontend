@@ -30,9 +30,9 @@ const WildIdeas = () => {
   const [appState, dispatch] = useAppStore();
 
   const IDEAS_SORT_OPTIONS = [
-    { label: 'Creation date', value: 'created' },
-    { label: 'Likes', value: 'sum_likes' },
-    { label: 'Number of comments', value: 'sum_comments' },
+    { label: t('settings.columns.created'), value: 'created' },
+    { label: t('settings.columns.sum_likes'), value: 'sum_likes' },
+    { label: t('settings.columns.sum_comments'), value: 'sum_comments' },
   ] as Array<{ label: string; value: keyof IdeaType }>;
 
   const [isLoading, setLoading] = useState(true);
