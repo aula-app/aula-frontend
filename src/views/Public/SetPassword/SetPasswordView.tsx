@@ -23,8 +23,6 @@ const SetPasswordView = () => {
     localStorageSet('code', searchParams.get('code'))
   }
 
-  console.log(searchParams);
-
   const [error, setError] = useState<string>('');
   const [showMessage, setShowMessage] = useState(false);
   const [showPassword, setShowPassword] = useState<Record<keyof typeof fields, boolean>>({
