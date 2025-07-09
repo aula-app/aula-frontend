@@ -1,12 +1,12 @@
 import { recoverPassword } from '@/services/login';
 import { useAppStore } from '@/store';
-import { localStorageGet } from '@/utils';
+import { localStorageGet, localStorageSet } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
 
 interface FormData {
@@ -18,10 +18,15 @@ const RecoveryPasswordView = () => {
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const schema = yup.object().shape({
     email: yup.string().email(t('forms.validation.email')).required(t('forms.validation.required')),
   });
+
+  if (searchParams.has('code')) {
+    localStorageSet('code', searchParams.get('code'))
+  }
 
   const {
     register,

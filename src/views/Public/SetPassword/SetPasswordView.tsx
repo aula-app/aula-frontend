@@ -1,4 +1,5 @@
 import { AppIconButton } from '@/components';
+import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
 import { checkPasswordKey, setPassword } from '@/services/login';
 import { useAppStore } from '@/store';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FormContainer } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
 
 const SetPasswordView = () => {
@@ -15,6 +16,12 @@ const SetPasswordView = () => {
   const { key } = useParams();
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  if (searchParams.has('code')) {
+    localStorageSet('code', searchParams.get('code'))
+  }
 
   const [error, setError] = useState<string>('');
   const [showMessage, setShowMessage] = useState(false);
