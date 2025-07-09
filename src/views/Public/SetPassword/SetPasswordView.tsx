@@ -6,7 +6,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FormContainer } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
@@ -78,7 +77,9 @@ const fields = schema.fields;
     }
   };
 
-    const onSubmit = async (data: SchemaType) => {
+    const onSubmit = async (data: SchemaType, event?: React.BaseSyntheticEvent) => {
+      event?.preventDefault();
+      
       if (!key)
         return
 
@@ -106,8 +107,8 @@ const fields = schema.fields;
   }, [key, dispatch, t]);
 
   return (
-    <FormContainer>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+    <Stack gap={2}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate method="POST">
         <Stack gap={2}>
         <Typography variant="h2">{t('auth.password.set')}</Typography>
         <Collapse in={!isValid}>
@@ -181,7 +182,7 @@ const fields = schema.fields;
         </Stack>
       </Stack>
       </form>
-    </FormContainer>
+    </Stack>
   );
 };
 
