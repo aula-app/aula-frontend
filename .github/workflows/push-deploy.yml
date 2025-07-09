@@ -20,5 +20,5 @@ jobs:
         run: |
           npm i
           npm run build-${{ github.ref_name }}
-          rsync -av --delete --exclude public-config.json build/ /var/www-aula-${{ github.ref_name }}
+          rsync -av --delete --exclude public-config.json --exclude api build/ /var/www-aula-${{ github.ref_name }}
         shell: bash
