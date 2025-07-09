@@ -179,7 +179,8 @@ const fields = schema.fields;
               {t('actions.save')}
             </Button>
           </Stack>
-        </Stack>        </Stack>
+        </Stack>
+      </Stack>
       </form>
     </Stack>
   );
