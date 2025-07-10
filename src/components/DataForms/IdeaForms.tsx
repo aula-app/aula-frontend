@@ -211,7 +211,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               }}
             />
             {/* content */}
-            <MarkdownEditor name="content" control={control} required disabled={isLoading} max={MAX_CHAR_COUNT} />
+            <MarkdownEditor name="content" control={control} required disabled={isLoading} maxLength={MAX_CHAR_COUNT} />
             <Stack direction="row" gap={2}>
               {checkPermissions('boxes', 'addIdea') && (
                 <SelectBoxField

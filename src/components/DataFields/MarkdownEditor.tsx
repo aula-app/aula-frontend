@@ -30,7 +30,7 @@ interface Props extends FormControlProps {
   control: Control<any, any>;
   required?: boolean;
   disabled?: boolean;
-  max?: number;
+  maxLength?: number;
 }
 
 const StyledFormLabel = styled(MuiFormLabel)(({ theme }) => ({
@@ -207,7 +207,7 @@ const MarkdownEditor: React.FC<Props> = ({
   control,
   required = false,
   disabled = false,
-  max,
+  maxLength,
   ...restOfProps
 }) => {
   const { t } = useTranslation();
@@ -217,11 +217,11 @@ const MarkdownEditor: React.FC<Props> = ({
 
   // Get character count display class based on limit
   const getCharCountClass = useCallback(() => {
-    if (!max) return '';
-    const percentage = characterCount / max;
+    if (!maxLength) return '';
+    const percentage = characterCount / maxLength;
     if (percentage >= 1) return 'error';
     return '';
-  }, [characterCount, max]);
+  }, [characterCount, maxLength]);
 
   // Custom keymap to completely disable Tab indentation
   const disableTabKeymap = Prec.highest(
@@ -380,7 +380,7 @@ const MarkdownEditor: React.FC<Props> = ({
                 {required ? '*' : ''}
               </StyledFormLabel>
               <Editor
-                className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''} ${max ? 'has-char-count' : ''} ${getCharCountClass()}`}
+                className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''} ${maxLength ? 'has-char-count' : ''} ${getCharCountClass()}`}
                 markdown={''}
                 toMarkdownOptions={{}}
                 sx={{ height: '100%' }}
@@ -417,9 +417,9 @@ const MarkdownEditor: React.FC<Props> = ({
                 aria-errormessage={fieldState.error ? `${name}-error-message` : undefined}
                 aria-labelledby={`editor-${name}-label`}
               />
-              {max && (
+              {maxLength && (
                 <CharacterCount className={getCharCountClass()} variant="caption">
-                  {characterCount}/{max}
+                  {characterCount}/{maxLength}
                 </CharacterCount>
               )}
             </div>

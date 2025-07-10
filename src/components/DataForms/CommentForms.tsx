@@ -97,7 +97,7 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
           </Stack>
           <Stack gap={2}>
             {/* content */}
-            <MarkdownEditor name="content" control={control} required disabled={isLoading} max={MAX_CHAR_COUNT} />
+            <MarkdownEditor name="content" control={control} required disabled={isLoading} maxLength={MAX_CHAR_COUNT} />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
