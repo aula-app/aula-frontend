@@ -136,7 +136,7 @@ Returns an object with the following methods:
 
 **Locale Support:**
 
-- **English (en)**: MM/DD/YYYY hh:mm:ss A (US format with AM/PM)
+- **English (en)**: DD MMMM YYYY HH:mm:ss (e.g. 27 June 2025 14:30:00)
 - **German (de)**: DD.MM.YYYY HH:mm:ss (German format with 24-hour time)
 - **Default**: YYYY-MM-DD HH:mm:ss (ISO format)
 
@@ -162,7 +162,7 @@ function EventCard({ event }) {
 
 | Language     | Input: 2025-06-27T14:30:00Z | DateTime Output        | Date Only Output |
 | ------------ | --------------------------- | ---------------------- | ---------------- |
-| English (en) | 2025-06-27T14:30:00Z        | 06/27/2025 02:30:00 PM | 06/27/2025       |
+| English (en) | 2025-06-27T14:30:00Z        | 27 June 2025 14:30:00  | 27 June 2025     |
 | German (de)  | 2025-06-27T14:30:00Z        | 27.06.2025 14:30:00    | 27.06.2025       |
 | Default      | 2025-06-27T14:30:00Z        | 2025-06-27 14:30:00    | 2025-06-27       |
 
