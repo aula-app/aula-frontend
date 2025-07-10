@@ -192,4 +192,6 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
   );
 });
 
+AddRoomButton.displayName = 'AddRoomButton';
+
 export default AddRoomButton;

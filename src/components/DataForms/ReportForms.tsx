@@ -35,14 +35,17 @@ const ReportOptions = [
 const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
   const { t } = useTranslation();
 
-  const schema = yup
-    .object({
-      report: yup.string().required(t('forms.validation.required')),
-    })
-    .required(t('forms.validation.required'));
+  const schema = yup.object({
+    report: yup.string().required(t('forms.validation.required')),
+    content: yup.string().required(t('forms.validation.required')),
+  });
 
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      report: '',
+      content: '',
+    },
   });
 
   return (

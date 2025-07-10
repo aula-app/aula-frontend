@@ -1,11 +1,11 @@
 import AppIconButton from '@/components/AppIconButton';
 import { getUpdates } from '@/services/dashboard';
 import { Badge, IconButtonProps, Skeleton } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import {t} from "i18next";
+import { t } from 'i18next';
 
-const UpdatesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
+const UpdatesButton = forwardRef<HTMLButtonElement, IconButtonProps>(({ ...restOfProps }, ref) => {
   const { pathname } = useLocation();
   const [updates, setUpdates] = useState<number>();
 
@@ -31,14 +31,16 @@ const UpdatesButton: React.FC<IconButtonProps> = ({ ...restOfProps }) => {
           },
         }}
       >
-        <AppIconButton icon="heart" title={t('tooltips.heart')} to="/updates" {...restOfProps} />
+        <AppIconButton ref={ref} icon="heart" title={t('tooltips.heart')} to="/updates" {...restOfProps} />
       </Badge>
     ) : (
-      <AppIconButton icon="heart" title={t('tooltips.heart')} to="/updates" {...restOfProps} />
+      <AppIconButton ref={ref} icon="heart" title={t('tooltips.heart')} to="/updates" {...restOfProps} />
     )
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />
   );
-};
+});
+
+UpdatesButton.displayName = 'UpdatesButton';
 
 export default UpdatesButton;
