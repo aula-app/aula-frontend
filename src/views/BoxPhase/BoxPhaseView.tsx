@@ -118,13 +118,8 @@ const BoxPhaseView = () => {
               }
               return asc ? String(valueA).localeCompare(String(valueB)) : String(valueB).localeCompare(String(valueA));
             })
-            .map((box, creationOrder) => (
-              <Grid
-                key={box.hash_id}
-                size={{ xs: 12, sm: 6, lg: 4, xl: 3 }}
-                sx={{ scrollSnapAlign: 'center' }}
-                order={asc ? -1 * creationOrder : creationOrder}
-              >
+            .map((box) => (
+              <Grid key={box.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
                 <BoxCard
                   box={box}
                   onEdit={() => {
