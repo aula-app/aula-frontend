@@ -1,5 +1,6 @@
 import AppIcon from '@/components/AppIcon';
 import { getDashboard } from '@/services/dashboard';
+import { RoomPhases } from '@/types/SettingsTypes';
 import { dashboardPhases } from '@/utils';
 import { Box, Button, Collapse, Skeleton, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -7,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboardPhases>;
+const displayPhases = Object.keys(dashboardPhases) as Array<`${RoomPhases}`>;
 
 const DashBoard = ({ show = true }) => {
   const { t } = useTranslation();

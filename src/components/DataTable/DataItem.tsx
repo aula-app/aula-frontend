@@ -113,7 +113,8 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
 
     // Enum/Status fields
     case 'phase_id':
-      return <>{phases[Number()] ? t(`phases.${phases[Number(value)]}`) : ''}</>;
+      const currentPhase = value as `${keyof typeof phases}`;
+      return <>{phases[currentPhase] ? t(`phases.${phases[currentPhase]}`) : ''}</>;
     case 'status':
       return <>{t(STATUS[Number(value)].label)}</>;
     case 'userlevel':
