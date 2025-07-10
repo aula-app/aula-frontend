@@ -42,7 +42,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       .string()
       .test(
         'len',
-        t('forms.validation.titleTooLong', { scope: t('scopes.ideas.name'), MAX_TITLE_LENGTH }),
+        t('forms.validation.titleTooLong', { scope: t('scopes.ideas.name'), max: MAX_TITLE_LENGTH }),
         (val) => String(val).length <= MAX_TITLE_LENGTH
       )
       .required(t('forms.validation.required')),
