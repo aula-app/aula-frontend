@@ -81,7 +81,7 @@ const TopBar: React.FC = () => {
         <Box width={56}>
           {/* Logo or Back Button */}
           {location[1] === '' ? (
-            <img src={`${getConfig().BASENAME}img/Aula_Icon.svg`} alt={t('app.name.icon')} />
+            <img src={`${getConfig("BASENAME")}img/Aula_Icon.svg`} alt={t('app.name.icon')} />
           ) : (
             <AppIconButton icon="back" title={t('tooltips.back')} onClick={() => goto(getReturnPath())} />
           )}

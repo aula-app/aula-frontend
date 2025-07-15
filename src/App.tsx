@@ -15,7 +15,7 @@ const App: React.FC = () => {
     <ErrorBoundary name="App">
       <AppStore>
         <AppThemeProvider>
-          <BrowserRouter basename={getConfig().BASENAME}>
+          <BrowserRouter basename={getConfig('BASENAME') as string}>
             <Layout>
               <Routes />
             </Layout>

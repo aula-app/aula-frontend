@@ -5,6 +5,8 @@ import React, { KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { validateInstanceCode } from '@/services/instance';
+import { getConfig } from '@/config';
+import { localStorageSet } from '@/utils';
 
 const InstanceCodeView = () => {
   const { t } = useTranslation();
@@ -27,6 +29,8 @@ const InstanceCodeView = () => {
       const isValid = await validateInstanceCode(code.trim());
       if (isValid) {
         navigate('/');
+        // localStorageSet('api_url', ,...);
+        // getConfig().update;
       } else {
         setError(t('errors.default'));
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });

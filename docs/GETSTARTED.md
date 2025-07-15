@@ -82,7 +82,7 @@ The application includes Capacitor integration for building mobile apps. To star
 ```bash
 # Make sure to have local tooling for Android/iOS development installed
 #   eg. export CAPACITOR_ANDROID_STUDIO_PATH=/opt/android-studio/bin/studio
-yarn build && npx cap sync && \
+yarn build-app && npx cap sync && \
    npx cap open android
 ```
 

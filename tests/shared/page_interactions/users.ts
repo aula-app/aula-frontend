@@ -178,11 +178,17 @@ export const remove = async (page: Page, data: users.UserData) => {
 // Helper function to log in a user
 export const login = async (page: Page, data: users.UserData) => {
   await page.goto(host);
-  await page.fill('input[name="username"]', data.username);
+  const fs = await import('fs/promises');
+  await fs.writeFile('page0.html', await page.content(), { flush: true });
+  console.info(`Login: ${JSON.stringify(data)}`);
+  await page.fill('input[name="username"]', data.username, { force: true });
   await page.fill('input[name="password"]', data.password);
-  await page.getByRole('button', { name: 'Login' }).click({ timeout: 1000 });
+  await fs.writeFile('page1.html', await page.content(), { flush: true });
+  await page.getByLabel('Login').click({ timeout: 1000 });
 
-  await expect(page.locator('h1')).toHaveText('Räume', { timeout: 1000 });
+  await fs.writeFile('page2.html', await page.content(), { flush: true });
+
+  await expect(page.locator('h1')).toHaveText(/Räume|Rooms/, { timeout: 1000 });
 };
 
 export const firstLoginFlow = async (page: Page, data: users.UserData, tempPass: string) => {

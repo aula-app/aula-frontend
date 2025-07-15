@@ -1,25 +1,28 @@
+import { localStorageGet, localStorageSet } from './utils';
+
 const isDev = import.meta.env.DEV;
+const isMobile = import.meta.env.MODE === 'app';
 
 export interface RuntimeConfig {
-  API_URL: string;
+  CENTRAL_API_URL: string;
   IS_MULTI: boolean;
   IS_OAUTH_ENABLED: boolean;
   BASENAME: string;
 }
 
 const defaultConfig: RuntimeConfig = {
-  API_URL: 'https://neu.aula.de/',
-  IS_MULTI: false,
+  CENTRAL_API_URL: 'https://neu.aula.de/',
+  IS_MULTI: true,
   IS_OAUTH_ENABLED: false,
   BASENAME: '/',
 };
 
-let config: RuntimeConfig;
+export async function loadConfig(): Promise<RuntimeConfig> {
+  let config: RuntimeConfig;
 
-export async function loadConfig() {
-  if (isDev) {
+  if (isDev || isMobile) {
     config = {
-      API_URL: import.meta.env.VITE_APP_API_URL,
+      CENTRAL_API_URL: import.meta.env.VITE_APP_API_URL,
       IS_MULTI: import.meta.env.VITE_APP_MULTI !== 'false' && import.meta.env.VITE_APP_MULTI !== false,
       IS_OAUTH_ENABLED: import.meta.env.VITE_APP_OAUTH != 'false' && import.meta.env.VITE_APP_OAUTH !== false,
       BASENAME: import.meta.env.VITE_APP_BASENAME,
@@ -30,9 +33,12 @@ export async function loadConfig() {
     config = { ...defaultConfig, ...json };
   }
 
+  for (let key of Object.keys(config)) {
+    localStorageSet(`config.${key}`, config[key as keyof RuntimeConfig]);
+  }
   return config;
 }
 
-export function getConfig(): RuntimeConfig {
-  return config ?? loadConfig();
+export function getConfig(key: keyof RuntimeConfig): string | boolean {
+  return localStorageGet(`config.${key}`);
 }

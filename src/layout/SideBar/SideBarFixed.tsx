@@ -33,7 +33,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
       id="fixed-sidebar"
       {...restOfProps}
     >
-      {getConfig().IS_MULTI !== false && (
+      {getConfig("IS_MULTI") !== false && (
         <>
           <Button
             onClick={() => {
