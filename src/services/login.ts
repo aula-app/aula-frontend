@@ -1,6 +1,5 @@
 import { LoginFormValues, LoginResponseType } from '@/types/LoginTypes';
 import { localStorageGet } from '../utils/localStorage';
-import { baseRequest, GenericResponse } from './requests';
 
 export const loginUser = async (
   apiUrl: string,
@@ -8,7 +7,6 @@ export const loginUser = async (
   token: string | null,
   signal: AbortSignal
 ): Promise<LoginResponseType> => {
-  const api_url = localStorageGet('api_url');
   const api_code = localStorageGet('code');
 
   try {

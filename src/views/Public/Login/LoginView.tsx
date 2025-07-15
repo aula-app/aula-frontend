@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
 import { LoginFormValues } from "@/types/LoginTypes";
-import { validateInstanceCode } from "@/services/instance";
+import { validateAndSaveInstanceCode } from "@/services/instance";
 
 /**
  * Renders "Login" view for Login flow
@@ -71,13 +71,8 @@ const LoginView = () => {
 
   const onSubmit = async (formData: LoginFormValues) => {
     if (!instanceApiUrl) {
-      await validateInstanceCode(localStorageGet('code'));
-      setInstanceApiUrl(localStorageGet('api_url'));
-
-      if (!instanceApiUrl) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
-        return;
-      }
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
+      return;
     }
 
     try {
@@ -128,8 +123,22 @@ const LoginView = () => {
 
   useEffect(() => {
     (async () => {
-      if (!localStorageGet('config.api_url')) {
+      // if any of the configs is missing
+      if (typeof getConfig("CENTRAL_API_URL") !== 'string') {
+        // load config from envvars or from //public-config.json
         await loadConfig();
+      }
+
+      // if this instance's BE api url is not defined
+      if (!instanceApiUrl) {
+        if (isMultiInstance) {
+          // get the instance api url based on the instance code
+          await validateAndSaveInstanceCode(localStorageGet('code'));
+          setInstanceApiUrl(localStorageGet('api_url'));
+        } else {
+          // if SINGLE, reuse the "CENTRAL_API_URL" as this instance's BE api url
+          setInstanceApiUrl(getConfig("CENTRAL_API_URL") as string);
+        }
       }
     })()
   }, []);

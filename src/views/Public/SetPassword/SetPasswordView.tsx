@@ -1,7 +1,7 @@
 import { AppIconButton } from '@/components';
-import { loadConfig } from '@/config';
+import { getConfig, loadConfig } from '@/config';
 import { localStorageGet, localStorageSet } from "@/utils";
-import { validateInstanceCode } from '@/services/instance';
+import { validateAndSaveInstanceCode } from '@/services/instance';
 import { checkPasswordKey, setPassword } from '@/services/login';
 import { useAppStore } from '@/store';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -65,8 +65,21 @@ const SetPasswordView = () => {
       return;
     }
 
+    // if any of the configs is missing
+    if (typeof getConfig("CENTRAL_API_URL") !== 'string') {
+      // load config from envvars or from //public-config.json
+      await loadConfig();
+    }
+
+    // if this instance's BE api url is not defined
     if (!localStorageGet('api_url')) {
-      await validateInstanceCode((await loadConfig()).CENTRAL_API_URL)
+      if (getConfig("IS_MULTI")) {
+        // get the instance api url based on the instance code
+        await validateAndSaveInstanceCode(localStorageGet('code'));
+      } else {
+        // if SINGLE, reuse the "CENTRAL_API_URL" as this instance's BE api url
+        localStorageSet('api_url', getConfig("CENTRAL_API_URL") as string);
+      }
     }
 
     try {

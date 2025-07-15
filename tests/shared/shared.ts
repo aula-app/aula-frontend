@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 
 // configure the environment to get the running dev server
 dotenv.config({ path: '.env.playwright' });
-dotenv.config();
 
 // we want to make sure we are only running tests on non-prod frontends
 if (!process.env.APP_FRONTEND_HOST || process.env.APP_FRONTEND_HOST.toString().match(/(?:prod|neu)\.aula\.de/)) {
