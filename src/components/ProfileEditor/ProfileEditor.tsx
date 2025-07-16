@@ -160,20 +160,10 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
         {user && <ImageEditor isOpen={editImage} onClose={onClose} id={user.hash_id} />}
         <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
           {userFields.slice(0, -1).map((name, i) => (
-            <RestrictedField
-              key={i}
-              name={name}
-              control={control}
-              tabIndex={i + 1} // Sequential tabbing through form fields
-            />
+            <RestrictedField key={i} name={name} control={control} tabIndex={i + 1} />
           ))}
         </Stack>
-        <MarkdownEditor
-          name="about_me"
-          control={control}
-          sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
-          // The MarkdownEditor will manage tab order internally
-        />
+        <MarkdownEditor name="about_me" control={control} sx={{ flex: 2, minWidth: `min(300px, 100%)` }} />
       </Stack>
       <Stack direction="row" justifyContent="end" gap={2} mb={2}>
         <Button color="error" onClick={resetFields} type="button" tabIndex={0} aria-label={t('actions.cancel')}>
