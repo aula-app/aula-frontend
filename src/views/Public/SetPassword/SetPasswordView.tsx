@@ -1,5 +1,5 @@
 import { AppIconButton } from '@/components';
-import { getConfig, loadConfig } from '@/config';
+import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig, RuntimeConfigNotFoundError } from '@/config';
 import { localStorageGet, localStorageSet } from "@/utils";
 import { validateAndSaveInstanceCode } from '@/services/instance';
 import { checkPasswordKey, setPassword } from '@/services/login';
@@ -65,20 +65,23 @@ const SetPasswordView = () => {
       return;
     }
 
-    // if any of the configs is missing
-    if (typeof getConfig("CENTRAL_API_URL") !== 'string') {
+    let runtimeConfig: RuntimeConfig;
+    try {
+      // load config from localStorage (cache)
+      runtimeConfig = getRuntimeConfig();
+    } catch (err) {
       // load config from envvars or from //public-config.json
-      await loadConfig();
+      runtimeConfig = await loadRuntimeConfig();
     }
 
     // if this instance's BE api url is not defined
     if (!localStorageGet('api_url')) {
-      if (getConfig("IS_MULTI")) {
+      if (runtimeConfig.IS_MULTI) {
         // get the instance api url based on the instance code
         await validateAndSaveInstanceCode(localStorageGet('code'));
       } else {
         // if SINGLE, reuse the "CENTRAL_API_URL" as this instance's BE api url
-        localStorageSet('api_url', getConfig("CENTRAL_API_URL") as string);
+        localStorageSet('api_url', runtimeConfig.CENTRAL_API_URL);
       }
     }
 

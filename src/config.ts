@@ -1,5 +1,3 @@
-import { localStorageGet, localStorageSet } from './utils';
-
 const isDev = import.meta.env.DEV;
 const isMobile = import.meta.env.MODE === 'app';
 
@@ -10,14 +8,14 @@ export interface RuntimeConfig {
   BASENAME: string;
 }
 
-const defaultConfig: RuntimeConfig = {
+export const defaultConfig: RuntimeConfig = {
   CENTRAL_API_URL: 'https://neu.aula.de/',
   IS_MULTI: true,
   IS_OAUTH_ENABLED: false,
   BASENAME: '/',
 };
 
-export async function loadConfig(): Promise<RuntimeConfig> {
+export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
   let config: RuntimeConfig;
 
   if (isDev || isMobile) {
@@ -33,12 +31,14 @@ export async function loadConfig(): Promise<RuntimeConfig> {
     config = { ...defaultConfig, ...json };
   }
 
-  for (let key of Object.keys(config)) {
-    localStorageSet(`config.${key}`, config[key as keyof RuntimeConfig]);
-  }
+  localStorage.setItem('config', JSON.stringify(config));
   return config;
 }
 
-export function getConfig(key: keyof RuntimeConfig): string | boolean {
-  return localStorageGet(`config.${key}`);
+export class RuntimeConfigNotFoundError extends Error { }
+
+export function getRuntimeConfig(): RuntimeConfig {
+  const config = localStorage.getItem('config');
+  if (config === null) throw new RuntimeConfigNotFoundError();
+  return JSON.parse(config);
 }

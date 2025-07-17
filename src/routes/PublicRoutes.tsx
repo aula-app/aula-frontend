@@ -2,7 +2,7 @@ import { localStorageGet, localStorageSet } from '@/utils';
 import { InstanceCodeView, Login, OAuthLogin, PublicNotFoundView, Recovery, SetPassword } from '@/views/Public';
 import UpdatePasswordView from '@/views/Public/UpdatePassword';
 import { useEffect } from 'react';
-import { getConfig } from '../config';
+import { getRuntimeConfig } from '../config';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 /**
@@ -14,7 +14,7 @@ const PublicRoutes = () => {
 
   const useInstanceCheck = () => {
     const instanceCode = localStorageGet('code', false);
-    const isMultiInstance = getConfig('IS_MULTI');
+    const isMultiInstance = getRuntimeConfig().IS_MULTI;
 
     if (isMultiInstance) {
       // aula-frontend should have its own instanceCode so its aula-backend would
@@ -26,7 +26,7 @@ const PublicRoutes = () => {
       localStorageSet('code', 'SINGLE');
       // SINGLE instance aula-frontend that is not connected to the aula network
       //   will only use its own aula-backend
-      localStorageSet('api_url', getConfig('CENTRAL_API_URL'));
+      localStorageSet('api_url', getRuntimeConfig().CENTRAL_API_URL);
     }
   };
 

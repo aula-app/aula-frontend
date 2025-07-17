@@ -1,5 +1,5 @@
-import { getConfig, loadConfig } from '@/config';
-import { localStorageSet, localStorageGet } from '@/utils';
+import { getRuntimeConfig, loadRuntimeConfig } from '@/config';
+import { localStorageSet } from '@/utils';
 
 interface InstanceResponse {
   status: boolean;
@@ -12,10 +12,9 @@ export const validateAndSaveInstanceCode = async (code: string): Promise<boolean
     body: JSON.stringify({ code: code }),
   };
 
-  let api_url = getConfig('CENTRAL_API_URL');
+  let api_url = getRuntimeConfig().CENTRAL_API_URL;
   if (api_url === null || api_url === '') {
-    await loadConfig();
-    api_url = getConfig('CENTRAL_API_URL');
+    api_url = (await loadRuntimeConfig()).CENTRAL_API_URL;
   }
 
   const request = await fetch(`${api_url}/api/controllers/instance.php`, requestData);
@@ -24,7 +23,7 @@ export const validateAndSaveInstanceCode = async (code: string): Promise<boolean
 
   if (response.status === true) {
     localStorageSet('code', code);
-    localStorageSet('api_url', response.instanceApiUrl ?? getConfig('CENTRAL_API_URL'));
+    localStorageSet('api_url', response.instanceApiUrl ?? getRuntimeConfig().CENTRAL_API_URL);
     return true;
   }
   return false;

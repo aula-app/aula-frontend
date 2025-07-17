@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { getConfig, loadConfig } from "../../../config";
+import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "../../../config";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -31,9 +31,8 @@ import { validateAndSaveInstanceCode } from "@/services/instance";
 
 const LoginView = () => {
   const { t } = useTranslation();
-  const oauthEnabled = getConfig("IS_OAUTH_ENABLED");
-  const isMultiInstance = getConfig("IS_MULTI");
   const [instanceApiUrl, setInstanceApiUrl] = useState<string>(localStorageGet("api_url"));
+  const [config, setConfig] = useState<RuntimeConfig>(defaultConfig);
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const [loginError, setError] = useState<string>('');
@@ -123,21 +122,25 @@ const LoginView = () => {
 
   useEffect(() => {
     (async () => {
-      // if any of the configs is missing
-      if (typeof getConfig("CENTRAL_API_URL") !== 'string') {
+      let runtimeConfig: RuntimeConfig;
+      try {
+        // load config from localStorage (cache)
+        runtimeConfig = getRuntimeConfig();
+      } catch (err) {
         // load config from envvars or from //public-config.json
-        await loadConfig();
+        runtimeConfig = await loadRuntimeConfig();
       }
+      setConfig(runtimeConfig);
 
       // if this instance's BE api url is not defined
       if (!instanceApiUrl) {
-        if (isMultiInstance) {
+        if (config.IS_MULTI) {
           // get the instance api url based on the instance code
           await validateAndSaveInstanceCode(localStorageGet('code'));
           setInstanceApiUrl(localStorageGet('api_url'));
         } else {
           // if SINGLE, reuse the "CENTRAL_API_URL" as this instance's BE api url
-          setInstanceApiUrl(getConfig("CENTRAL_API_URL") as string);
+          setInstanceApiUrl(config.CENTRAL_API_URL);
         }
       }
     })()
@@ -237,7 +240,7 @@ const LoginView = () => {
           >
             {t('auth.forgotPassword.link')}
           </Button>
-          {isMultiInstance && (<Button
+          {config.IS_MULTI && (<Button
             variant="text"
             color="secondary"
             component={AppLink}
@@ -248,7 +251,7 @@ const LoginView = () => {
 
         </Grid>
 
-        {oauthEnabled && (
+        {config.IS_OAUTH_ENABLED && (
           <>
             <Stack direction='row' mb={2} alignItems='center'>
               <Divider sx={{ flex: 1 }} />

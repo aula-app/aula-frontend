@@ -1,6 +1,6 @@
 import { BrowserRouter } from 'react-router-dom';
 import { ErrorBoundary } from './components';
-import { getConfig } from './config';
+import { getRuntimeConfig } from './config';
 import Layout from './layout';
 import Routes from './routes';
 import { AppStore } from './store';
@@ -15,7 +15,7 @@ const App: React.FC = () => {
     <ErrorBoundary name="App">
       <AppStore>
         <AppThemeProvider>
-          <BrowserRouter basename={getConfig('BASENAME') as string}>
+          <BrowserRouter basename={getRuntimeConfig().BASENAME}>
             <Layout>
               <Routes />
             </Layout>
