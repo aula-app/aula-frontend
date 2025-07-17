@@ -96,7 +96,7 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   const viewPassButton = row.locator('button');
   await viewPassButton.click({ timeout: 1000 });
 
-  const pass = await row.locator('div[role="button"] span').textContent();
+  const pass: string = (await row.locator('div[role="button"] span').textContent())!;
 
   // temporary password must exist and be pulled out of the page.
   expect(pass).toBeTruthy();
