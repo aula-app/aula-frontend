@@ -178,10 +178,10 @@ export const remove = async (page: Page, data: users.UserData) => {
 // Helper function to log in a user
 export const login = async (page: Page, data: users.UserData) => {
   await page.goto(host);
-  await page.fill('input[name="username"]', data.username, { force: true });
+  await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
 
-  await page.getByLabel('Login').click({ timeout: 1000 });
+  await page.getByRole('button', { name: 'Login' }).click({ timeout: 1000 });
 
   await expect(page.locator('h1')).toHaveText('Räume', { timeout: 1000 });
 };
