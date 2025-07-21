@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { getConfig } from "../../../config";
+import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "../../../config";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
 import { LoginFormValues } from "@/types/LoginTypes";
+import { validateAndSaveInstanceCode } from "@/services/instance";
 
 /**
  * Renders "Login" view for Login flow
@@ -30,14 +31,13 @@ import { LoginFormValues } from "@/types/LoginTypes";
 
 const LoginView = () => {
   const { t } = useTranslation();
-  const oauthEnabled = getConfig().IS_OAUTH_ENABLED;
-  const isMultiInstance = getConfig().IS_MULTI;
+  const [instanceApiUrl, setInstanceApiUrl] = useState<string>(localStorageGet("api_url"));
+  const [config, setConfig] = useState<RuntimeConfig>(defaultConfig);
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const [loginError, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [api_url, setApiUrl] = useState(getConfig().API_URL);
 
   const schema = yup
     .object({
@@ -64,13 +64,12 @@ const LoginView = () => {
 
   const resetCode = async () => {
     localStorageSet('code', '').then(() => {
-      ;
       navigate('/code');
     });
   }
 
   const onSubmit = async (formData: LoginFormValues) => {
-    if (!api_url) {
+    if (!instanceApiUrl) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
       return;
     }
@@ -82,7 +81,7 @@ const LoginView = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const response = await loginUser(api_url, formData, jwt_token, controller.signal);
+      const response = await loginUser(instanceApiUrl, formData, jwt_token, controller.signal);
       clearTimeout(timeoutId);
       setLoading(false);
 
@@ -122,7 +121,29 @@ const LoginView = () => {
   };
 
   useEffect(() => {
-    if (localStorageGet('api_url')) setApiUrl(localStorageGet('api_url'));
+    (async () => {
+      let runtimeConfig: RuntimeConfig;
+      try {
+        // load config from localStorage (cache)
+        runtimeConfig = getRuntimeConfig();
+      } catch (err) {
+        // load config from envvars or from //public-config.json
+        runtimeConfig = await loadRuntimeConfig();
+      }
+      setConfig(runtimeConfig);
+
+      // if this instance's BE api url is not defined
+      if (!instanceApiUrl) {
+        if (config.IS_MULTI) {
+          // get the instance api url based on the instance code
+          await validateAndSaveInstanceCode(localStorageGet('code'));
+          setInstanceApiUrl(localStorageGet('api_url'));
+        } else {
+          // if SINGLE, reuse the "CENTRAL_API_URL" as this instance's BE api url
+          setInstanceApiUrl(config.CENTRAL_API_URL);
+        }
+      }
+    })()
   }, []);
 
   return (
@@ -219,7 +240,7 @@ const LoginView = () => {
           >
             {t('auth.forgotPassword.link')}
           </Button>
-          {isMultiInstance && (<Button
+          {config.IS_MULTI && (<Button
             variant="text"
             color="secondary"
             component={AppLink}
@@ -230,7 +251,7 @@ const LoginView = () => {
 
         </Grid>
 
-        {oauthEnabled && (
+        {config.IS_OAUTH_ENABLED && (
           <>
             <Stack direction='row' mb={2} alignItems='center'>
               <Divider sx={{ flex: 1 }} />

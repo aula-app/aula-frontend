@@ -1,13 +1,15 @@
 import { AppIconButton } from '@/components';
+import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig, RuntimeConfigNotFoundError } from '@/config';
+import { localStorageGet, localStorageSet } from "@/utils";
+import { validateAndSaveInstanceCode } from '@/services/instance';
 import { checkPasswordKey, setPassword } from '@/services/login';
 import { useAppStore } from '@/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FormContainer } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
 
 const SetPasswordView = () => {
@@ -15,6 +17,11 @@ const SetPasswordView = () => {
   const { key } = useParams();
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
+
+  const [searchParams] = useSearchParams();
+  if (searchParams.has('code')) {
+    localStorageSet('code', searchParams.get('code'))
+  }
 
   const [error, setError] = useState<string>('');
   const [showMessage, setShowMessage] = useState(false);
@@ -39,18 +46,18 @@ const SetPasswordView = () => {
   })
   .required(t('forms.validation.required'));
 
-const {
-  register,
-  handleSubmit,
-  reset,
-  formState: { errors },
-} = useForm({
-  resolver: yupResolver(schema),
-});
-
-// Infer TypeScript type from the Yup schema
-type SchemaType = yup.InferType<typeof schema>;
-const fields = schema.fields;
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+  
+  // Infer TypeScript type from the Yup schema
+  type SchemaType = yup.InferType<typeof schema>;
+  const fields = schema.fields;
 
   const validateKey = async () => {
     if (!key) {
@@ -58,10 +65,28 @@ const fields = schema.fields;
       return;
     }
 
+    let runtimeConfig: RuntimeConfig;
     try {
-      const response = await checkPasswordKey(
-        key,
-      );
+      // load config from localStorage (cache)
+      runtimeConfig = getRuntimeConfig();
+    } catch (err) {
+      // load config from envvars or from //public-config.json
+      runtimeConfig = await loadRuntimeConfig();
+    }
+
+    // if this instance's BE api url is not defined
+    if (!localStorageGet('api_url')) {
+      if (runtimeConfig.IS_MULTI) {
+        // get the instance api url based on the instance code
+        await validateAndSaveInstanceCode(localStorageGet('code'));
+      } else {
+        // if SINGLE, reuse the "CENTRAL_API_URL" as this instance's BE api url
+        localStorageSet('api_url', runtimeConfig.CENTRAL_API_URL);
+      }
+    }
+
+    try {
+      const response = await checkPasswordKey(key);
       if (response.error) {
         setValid(false);
       }
@@ -71,36 +96,38 @@ const fields = schema.fields;
     }
   };
 
-    const onSubmit = async (data: SchemaType) => {
-      if (!key)
-        return
+  const onSubmit = async (data: SchemaType, event?: React.BaseSyntheticEvent) => {
+    event?.preventDefault();
+    
+    if (!key)
+      return
 
-      const result = await setPassword(data.newPassword, key)
+    const result = await setPassword(data.newPassword, key)
 
-      if (result.error) {
-        setError(t(result.error));
-        return;
-      }
+    if (result.error) {
+      setError(t(result.error));
+      return;
+    }
 
-      dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.success'), type: 'success' } });
-      navigate("/", { replace: true });
-    };
+    dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.success'), type: 'success' } });
+    navigate("/", { replace: true });
+  };
 
-    const resetFields = () => {
-      reset();
-      setShowPassword({
-        confirmPassword: false,
-        newPassword: false,
-      });
-    };
+  const resetFields = () => {
+    reset();
+    setShowPassword({
+      confirmPassword: false,
+      newPassword: false,
+    });
+  };
 
   useEffect(() => {
     validateKey();
   }, [key, dispatch, t]);
 
   return (
-    <FormContainer>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+    <Stack gap={2}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate method="POST">
         <Stack gap={2}>
         <Typography variant="h2">{t('auth.password.set')}</Typography>
         <Collapse in={!isValid}>
@@ -174,7 +201,7 @@ const fields = schema.fields;
         </Stack>
       </Stack>
       </form>
-    </FormContainer>
+    </Stack>
   );
 };
 

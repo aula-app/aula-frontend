@@ -104,7 +104,7 @@ const DataTable: React.FC<Props> = ({
     setLimit(getDataLimit());
   };
 
-  const hendleDelete = () => {
+  const handleDelete = () => {
     setDelete(selected);
     setSelected([]);
   };
@@ -127,7 +127,7 @@ const DataTable: React.FC<Props> = ({
         scope={scope}
         selected={selected}
         setEdit={handleEdit}
-        setDelete={hendleDelete}
+        setDelete={handleDelete}
         extraTools={extraTools}
       />
       <Box

@@ -164,6 +164,8 @@
       "integer": "Bitte geben Sie eine ganze Zahl ein",
       "maxLength": "Muss kleiner sein als {{var}} Zeichen",
       "minLength": "Muss größer sein als {{var}} Zeichen",
+      "contentTooLong": "Ihr {{scope}} ist zu lang (maximal {{max}} Zeichen)",
+      "titleTooLong": "Ihr {{scope}}-Titel ist zu lang (maximal {{max}} Zeichen)",
       "name": "Die Namen sollten nur Buchstaben enthalten",
       "nonNegative": "Kann keine negative Zahl sein",
       "noOptions": "Keine Optionen verfügbar",

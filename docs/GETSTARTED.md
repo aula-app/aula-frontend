@@ -63,8 +63,9 @@ Reach out to `dev [at] aula.de` for more information. <!-- @TODO: we should add 
 
    ```
    VITE_APP_VERSION = $npm_package_version
-   VITE_APP_API_URL = http://localhost:8080/
+   VITE_APP_CENTRAL_API_URL = http://localhost:8080
    VITE_APP_MULTI = false
+   VITE_APP_OAUTH = false
    ```
 
 7. Start the development server:
@@ -82,7 +83,7 @@ The application includes Capacitor integration for building mobile apps. To star
 ```bash
 # Make sure to have local tooling for Android/iOS development installed
 #   eg. export CAPACITOR_ANDROID_STUDIO_PATH=/opt/android-studio/bin/studio
-yarn build && npx cap sync && \
+yarn build-app && npx cap sync && \
    npx cap open android
 ```
 

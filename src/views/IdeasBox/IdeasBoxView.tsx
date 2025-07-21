@@ -221,8 +221,8 @@ const IdeasBoxView = () => {
           <Grid container spacing={1} pt={1} pb={2}>
             {ideas
               .filter((idea) => idea.approved >= 0)
-              .map((idea, key) => (
-                <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={key} />
+              .map((idea) => (
+                <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={idea.hash_id} />
               ))}
             {checkPermissions('boxes', 'addIdea') && Number(phase) < 20 && (
               <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
@@ -244,12 +244,12 @@ const IdeasBoxView = () => {
               <Grid container spacing={1} pt={1} pb={2}>
                 {ideas
                   .filter((idea) => idea.approved < 0)
-                  .map((idea, key) => (
+                  .map((idea) => (
                     <IdeaCard
                       idea={idea}
                       quorum={quorum}
                       phase={Number(box.phase_id) as RoomPhases}
-                      key={key}
+                      key={idea.hash_id}
                       disabled
                     />
                   ))}

@@ -54,8 +54,8 @@ const UpdatesView = () => {
                 {updates[update].length} {t('actions.add', { var: t(`scopes.${update}.name`) })}
               </Typography>
 
-              {updates[update].map((item, key) => (
-                <UpdateCard item={item} icon="voting" variant={update} key={key} />
+              {updates[update].map((item) => (
+                <UpdateCard item={item} icon="voting" variant={update} key={item.id} />
               ))}
             </>
           );

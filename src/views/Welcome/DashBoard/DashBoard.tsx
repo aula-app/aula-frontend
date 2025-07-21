@@ -55,8 +55,8 @@ const DashBoard = ({ show = true }) => {
         </Stack>
         <Collapse in={isShowing} sx={{ width: '100%' }}>
           <Grid container spacing={1} p={1}>
-            {displayPhases.map((phase, key) => (
-              <Grid size={{ xs: 6, sm: 3 }} key={key}>
+            {displayPhases.map((phase) => (
+              <Grid size={{ xs: 6, sm: 3 }} key={phase}>
                 {count && dashboardPhases[phase] ? (
                   <Button
                     fullWidth

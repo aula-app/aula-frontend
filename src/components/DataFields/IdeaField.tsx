@@ -36,7 +36,9 @@ const IdeaField: React.FC<Props> = ({
     setLoading(true);
     const response = await getIdeasByRoom(room);
     setLoading(false);
-    const wildIdeas = response.data?.map((idea) => ({ label: idea.title, value: idea.hash_id })) || [];
+    const wildIdeas = Array.isArray(response.data)
+      ? response.data.map((idea) => ({ label: idea.title, value: idea.hash_id }))
+      : [];
     const boxIdeas = defaultValues.map((idea) => ({ label: idea.title, value: idea.hash_id }));
     const options = wildIdeas.concat(boxIdeas);
     setOptions(options);

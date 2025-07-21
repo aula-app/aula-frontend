@@ -8,7 +8,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SideBarContent from './SideBarContent';
 import { fixedSideBarStyles } from './styles';
-import { getConfig } from '../../config';
+import { getRuntimeConfig } from '../../config';
 import LocaleSwitch from '@/components/LocaleSwitch';
 
 /**
@@ -33,7 +33,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
       id="fixed-sidebar"
       {...restOfProps}
     >
-      {getConfig().IS_MULTI !== false && (
+      {getRuntimeConfig().IS_MULTI && (
         <>
           <Button
             onClick={() => {
