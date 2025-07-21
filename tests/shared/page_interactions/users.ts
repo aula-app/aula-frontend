@@ -96,7 +96,7 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   const viewPassButton = row.locator('button');
   await viewPassButton.click({ timeout: 1000 });
 
-  const pass = await row.locator('div[role="button"] span').textContent();
+  const pass: string = (await row.locator('div[role="button"] span').textContent())!;
 
   // temporary password must exist and be pulled out of the page.
   expect(pass).toBeTruthy();
@@ -180,6 +180,7 @@ export const login = async (page: Page, data: users.UserData) => {
   await page.goto(host);
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
+
   await page.getByRole('button', { name: 'Login' }).click({ timeout: 1000 });
 
   await expect(page.locator('h1')).toHaveText('Räume', { timeout: 1000 });

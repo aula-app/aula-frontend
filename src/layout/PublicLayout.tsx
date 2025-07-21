@@ -1,17 +1,15 @@
 import { AppLink, ErrorBoundary } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import SkipNavigation from '@/components/SkipNavigation';
-import { useOnMobile } from '@/hooks';
 import { Box, Button, Stack } from '@mui/material/';
 import { FunctionComponent, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { getConfig } from '../config';
+import { getRuntimeConfig } from '../config';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const onMobile = useOnMobile();
 
   document.title = 'aula'; // Also Update Tab Title
 
@@ -34,7 +32,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
           <LocaleSwitch />
         </Stack>
         <Box sx={{ width: '100%', mb: 2 }}>
-          <img src={`${getConfig().BASENAME}img/Aula_Logo.svg`} alt={t('app.name.logo')} role="img" />
+          <img src={`${getRuntimeConfig().BASENAME}img/Aula_Logo.svg`} alt={t('app.name.logo')} role="img" />
         </Box>
       </Stack>
       <Stack
