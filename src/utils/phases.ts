@@ -14,7 +14,7 @@ export const phases = {
   '20': 'approval',
   '30': 'voting',
   '40': 'results',
-} as Record<RoomPhases, PhaseType>;
+} as Record<`${RoomPhases}`, PhaseType>;
 
 export const phaseOptions = [
   { label: 'phases.discussion', value: 10, disabled: false },

@@ -1,3 +1,4 @@
+import { PhaseType, RoomPhases } from '@/types/SettingsTypes';
 import { phases } from '@/utils';
 import { Box, Stack, StackProps } from '@mui/material';
 import { FC } from 'react';
@@ -11,7 +12,7 @@ interface ChatBubbleProps extends StackProps {
 
 const ChatBubble: FC<ChatBubbleProps> = ({ children, comment = false, disabled = false, ...restOfProps }) => {
   const { phase } = useParams();
-  const currentPhase = phase as `${keyof typeof phases}`;
+  const currentPhase = phase ? (phases[phase as `${RoomPhases}`] as PhaseType) : 'wild';
   const color = comment ? 'comments.main' : `${currentPhase}.main`;
   return (
     <Stack
