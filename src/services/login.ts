@@ -1,6 +1,5 @@
 import { LoginFormValues, LoginResponseType } from '@/types/LoginTypes';
 import { localStorageGet } from '../utils/localStorage';
-import { baseRequest, GenericResponse } from './requests';
 
 export const loginUser = async (
   apiUrl: string,
@@ -8,7 +7,6 @@ export const loginUser = async (
   token: string | null,
   signal: AbortSignal
 ): Promise<LoginResponseType> => {
-  const api_url = localStorageGet('api_url');
   const api_code = localStorageGet('code');
 
   try {
@@ -37,15 +35,15 @@ export const loginUser = async (
 };
 
 export const checkPasswordKey = async (secret: string) => {
-  const api_url = localStorageGet('api_url');
-  const api_code = localStorageGet('code');
+  const instanceApiUrl = localStorageGet('api_url');
+  const code = localStorageGet('code');
 
   try {
-    const response = await fetch(`${api_url}/api/controllers/set_password.php?secret=${secret}`, {
+    const response = await fetch(`${instanceApiUrl}/api/controllers/set_password.php?secret=${secret}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'aula-instance-code': api_code,
+        'aula-instance-code': code,
       },
     });
 

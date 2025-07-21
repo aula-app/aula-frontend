@@ -1,5 +1,7 @@
 import { AppIconButton } from '@/components';
-import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
+import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig, RuntimeConfigNotFoundError } from '@/config';
+import { localStorageGet, localStorageSet } from "@/utils";
+import { validateAndSaveInstanceCode } from '@/services/instance';
 import { checkPasswordKey, setPassword } from '@/services/login';
 import { useAppStore } from '@/store';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,8 +18,7 @@ const SetPasswordView = () => {
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-
+  const [searchParams] = useSearchParams();
   if (searchParams.has('code')) {
     localStorageSet('code', searchParams.get('code'))
   }
@@ -45,18 +46,18 @@ const SetPasswordView = () => {
   })
   .required(t('forms.validation.required'));
 
-const {
-  register,
-  handleSubmit,
-  reset,
-  formState: { errors },
-} = useForm({
-  resolver: yupResolver(schema),
-});
-
-// Infer TypeScript type from the Yup schema
-type SchemaType = yup.InferType<typeof schema>;
-const fields = schema.fields;
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+  
+  // Infer TypeScript type from the Yup schema
+  type SchemaType = yup.InferType<typeof schema>;
+  const fields = schema.fields;
 
   const validateKey = async () => {
     if (!key) {
@@ -64,10 +65,28 @@ const fields = schema.fields;
       return;
     }
 
+    let runtimeConfig: RuntimeConfig;
     try {
-      const response = await checkPasswordKey(
-        key,
-      );
+      // load config from localStorage (cache)
+      runtimeConfig = getRuntimeConfig();
+    } catch (err) {
+      // load config from envvars or from //public-config.json
+      runtimeConfig = await loadRuntimeConfig();
+    }
+
+    // if this instance's BE api url is not defined
+    if (!localStorageGet('api_url')) {
+      if (runtimeConfig.IS_MULTI) {
+        // get the instance api url based on the instance code
+        await validateAndSaveInstanceCode(localStorageGet('code'));
+      } else {
+        // if SINGLE, reuse the "CENTRAL_API_URL" as this instance's BE api url
+        localStorageSet('api_url', runtimeConfig.CENTRAL_API_URL);
+      }
+    }
+
+    try {
+      const response = await checkPasswordKey(key);
       if (response.error) {
         setValid(false);
       }
@@ -77,30 +96,30 @@ const fields = schema.fields;
     }
   };
 
-    const onSubmit = async (data: SchemaType, event?: React.BaseSyntheticEvent) => {
-      event?.preventDefault();
-      
-      if (!key)
-        return
+  const onSubmit = async (data: SchemaType, event?: React.BaseSyntheticEvent) => {
+    event?.preventDefault();
+    
+    if (!key)
+      return
 
-      const result = await setPassword(data.newPassword, key)
+    const result = await setPassword(data.newPassword, key)
 
-      if (result.error) {
-        setError(t(result.error));
-        return;
-      }
+    if (result.error) {
+      setError(t(result.error));
+      return;
+    }
 
-      dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.success'), type: 'success' } });
-      navigate("/", { replace: true });
-    };
+    dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.success'), type: 'success' } });
+    navigate("/", { replace: true });
+  };
 
-    const resetFields = () => {
-      reset();
-      setShowPassword({
-        confirmPassword: false,
-        newPassword: false,
-      });
-    };
+  const resetFields = () => {
+    reset();
+    setShowPassword({
+      confirmPassword: false,
+      newPassword: false,
+    });
+  };
 
   useEffect(() => {
     validateKey();

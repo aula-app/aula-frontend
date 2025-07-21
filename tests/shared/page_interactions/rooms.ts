@@ -43,6 +43,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
 
   // OMG
   await sleep(3);
+  await page.waitForLoadState('networkidle');
 
   // ensure the room exists by filtering the admin list for the name
 
@@ -59,16 +60,15 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await expect(FilterButton).toBeVisible({ timeout: 10000 });
   await FilterButton.click({ timeout: 1000 });
 
-  // select "username" from the "filter by" dropdown
-
+  // select "room name" from the "filter by" dropdown
   await page.locator('#filter-field-select').click({ timeout: 1000 });
   await page.getByRole('option', { name: 'Raum Name' }).click({ timeout: 1000 });
 
-  // filter by our user name
+  // filter by our room name
   await page.fill('#filter-value-input', room.name);
 
-  // find the new user in the user table
-  const row = page.getByText(room.name, { exact: true });
+  // find the new room in the room table
+  const row = page.getByText(room.name, { exact: true }).first();
 
   // make sure that row actually exists
   await expect(row).toBeVisible();

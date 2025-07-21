@@ -69,23 +69,23 @@ export interface GenericListRequest {
  */
 
 export const baseRequest = async <T = unknown>(
-  url: string,
+  path: string,
   data: ObjectPropByName,
   isJson: boolean = true,
-  tmp_token?: string
+  tmpJwtToken?: string
 ): Promise<GenericResponse<T>> => {
-  const api_url = localStorageGet('api_url');
-  const api_code = localStorageGet('code');
-  const jwt_token = tmp_token || localStorageGet('token');
+  const instanceApiUrl = localStorageGet('api_url');
+  const instanceCode = localStorageGet('code');
+  const jwtToken = tmpJwtToken || localStorageGet('token');
   const headers = {} as { 'Content-Type': string; Authorization?: string; 'aula-instance-code': string };
 
   if (isJson) {
     headers['Content-Type'] = 'application/json';
   }
 
-  headers['aula-instance-code'] = api_code;
+  headers['aula-instance-code'] = instanceCode;
 
-  if (!api_url || !jwt_token) {
+  if (!instanceApiUrl || !jwtToken) {
     return {
       data: null,
       count: null,
@@ -94,7 +94,7 @@ export const baseRequest = async <T = unknown>(
   }
 
   if (data.method !== 'checkLogin') {
-    headers['Authorization'] = `Bearer ${jwt_token}`;
+    headers['Authorization'] = `Bearer ${jwtToken}`;
   }
 
   try {
@@ -105,7 +105,7 @@ export const baseRequest = async <T = unknown>(
       body: requestBody,
     };
 
-    const request = await fetch(`${api_url}${url}`, requestData as RequestInit);
+    const request = await fetch(`${instanceApiUrl}${path}`, requestData as RequestInit);
 
     const response = await request.json();
 
@@ -115,7 +115,7 @@ export const baseRequest = async <T = unknown>(
         headers: headers,
       };
 
-      const request = await fetch(`${api_url}/api/controllers/refresh_token.php`, requestData);
+      const request = await fetch(`${instanceApiUrl}/api/controllers/refresh_token.php`, requestData);
       const new_jwt = await request.json();
 
       localStorage.setItem('token', new_jwt['JWT']);
@@ -127,7 +127,7 @@ export const baseRequest = async <T = unknown>(
       window.dispatchEvent(tokenRefreshEvent);
 
       // Retry the original request with the new token
-      return baseRequest<T>(url, data, isJson, new_jwt['JWT']);
+      return baseRequest<T>(path, data, isJson, new_jwt['JWT']);
     }
 
     // Handle offline mode

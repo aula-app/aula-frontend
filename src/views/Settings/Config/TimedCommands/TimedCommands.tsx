@@ -77,7 +77,7 @@ const TimedCommands = () => {
                     (action) => action.value === Number(String(command.cmd_id).slice(-1))
                   );
                   return (
-                    <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableRow key={command.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell>{t(Commands[scope].label)}</TableCell>
                       <TableCell>{command.target_id || ''}</TableCell>
                       <TableCell>{t(action?.label || '')}</TableCell>

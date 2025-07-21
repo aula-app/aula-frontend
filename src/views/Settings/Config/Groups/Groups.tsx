@@ -56,7 +56,7 @@ const View: React.FC = () => {
         />
         {groups.map((group, key) => {
           return (
-            <Chip key={key} label={group.group_name} onClick={() => setEdit(group)} onDelete={() => setDel(group)} />
+            <Chip key={group.id} label={group.group_name} onClick={() => setEdit(group)} onDelete={() => setDel(group)} />
           );
         })}
       </Stack>

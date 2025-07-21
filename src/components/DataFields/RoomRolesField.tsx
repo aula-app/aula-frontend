@@ -141,6 +141,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
                 id={`room-role-item-${room.hash_id}`}
               >
                 <ListItem
+                  key={room.hash_id}
                   secondaryAction={
                     <SelectRole
                       userRole={currentRole as RoleTypes | 0}
