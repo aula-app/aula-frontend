@@ -8,8 +8,10 @@ import { ReactNode, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../config';
+import { getRuntimeConfig } from '../../config';
 import MessagesButton from '@/components/Buttons/MessagesButton';
 import UpdatesButton from '@/components/Buttons/UpdatesButton';
+import { useTranslation } from 'react-i18next';
 
 // Paths that should be excluded from breadcrumbs
 const EXCLUDED_PATHS = ['welcome', 'phase', 'settings'];
@@ -24,6 +26,7 @@ interface Props {
  * @component TopBar
  */
 const TopBar: React.FC = () => {
+  const { t } = useTranslation();
   const [openSideBar, setSidebar] = useState(false);
   const [appState] = useAppStore();
 
@@ -78,12 +81,11 @@ const TopBar: React.FC = () => {
         <Box width={56}>
           {/* Logo or Back Button */}
           {location[1] === '' ? (
-            <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Icon.svg`} alt="aula" />
+            <img src={`${getRuntimeConfig().BASENAME}img/Aula_Icon.svg`} alt={t('app.name.icon')} />
           ) : (
-            <AppIconButton icon="back" onClick={() => goto(getReturnPath())} />
+            <AppIconButton icon="back" title={t('tooltips.back')} onClick={() => goto(getReturnPath())} />
           )}
         </Box>
-
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs
           aria-label="breadcrumb"
@@ -125,13 +127,13 @@ const TopBar: React.FC = () => {
         {checkPermissions('system', 'hide') ? (
           <Stack direction="row">
             <LocaleSwitch />
-            <AppIconButton icon="logout" onClick={onLogout} />
+            <AppIconButton icon="logout" title={t('tooltips.logout')} onClick={onLogout} />
           </Stack>
         ) : (
           <Stack direction="row" spacing={0.5} sx={{ ml: 'auto' }}>
             <MessagesButton />
             <UpdatesButton />
-            <AppIconButton icon="menu" onClick={menuToggle} sx={{ display: { xs: 'block', md: 'none' } }} />
+            <AppIconButton icon="menu" title={t('tooltips.menu')} onClick={menuToggle} sx={{ display: { xs: 'block', md: 'none' } }} />
           </Stack>
         )}
         <SideBar

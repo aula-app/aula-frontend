@@ -20,7 +20,13 @@ const SchoolDelete = () => {
 
   return (
     <>
-      <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} fullWidth>
+      <Button
+        variant="contained"
+        color="error"
+        onClick={() => setOpenDelete(true)}
+        fullWidth
+        data-testid="delete-account-button"
+      >
         {t('settings.account.delete')}
       </Button>
       <Dialog
@@ -36,10 +42,10 @@ const SchoolDelete = () => {
           <DialogContentText id="alert-dialog-description">{t('settings.account.deleteText')}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDelete(false)} color="secondary" autoFocus>
+          <Button onClick={() => setOpenDelete(false)} color="secondary" autoFocus data-testid="cancel-button">
             {t('actions.cancel')}
           </Button>
-          <Button onClick={lockInstance} color="error" variant="contained">
+          <Button onClick={lockInstance} color="error" variant="contained" data-testid="confirm-button">
             {t('actions.delete')}
           </Button>
         </DialogActions>

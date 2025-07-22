@@ -1,3 +1,3 @@
 import ApprovalCard from './ApprovalCard';
 
-export { ApprovalCard as default, ApprovalCard };
+export { ApprovalCard as default,  };

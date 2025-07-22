@@ -1,7 +1,7 @@
+import { databaseRequest, GenericListRequest, GenericResponse } from '@/services/requests';
 import { StatusTypes } from '@/types/Generics';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { databaseRequest, GenericListRequest, GenericResponse } from '@/utils';
 
 /**
  * Fetches box
@@ -71,13 +71,13 @@ export interface BoxArguments {
   status?: StatusTypes;
 }
 
-export interface AddBoxArguments extends BoxArguments {
+interface AddBoxArguments extends BoxArguments {
   room_id: string;
   phase_id: RoomPhases;
   room_hash_id?: string;
 }
 
-export interface EditBoxArguments extends BoxArguments {
+interface EditBoxArguments extends BoxArguments {
   topic_id?: string;
   room_id?: number | string;
   phase_id?: number | string;
@@ -148,7 +148,7 @@ export async function deleteBox(box_id: string): Promise<GenericResponse> {
  * Adds a new Survey to the database
  */
 
-export interface AddSurveyArguments extends BoxArguments {
+interface AddSurveyArguments extends BoxArguments {
   room_id: string;
   idea_headline: string;
   idea_content: string;

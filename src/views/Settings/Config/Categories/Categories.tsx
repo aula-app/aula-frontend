@@ -55,16 +55,20 @@ const CatView: React.FC = () => {
           label={t('actions.add', { var: t('scopes.categories.name').toLowerCase() })}
           avatar={<AppIcon icon="add" />}
           onClick={() => setEditCat(true)}
+          data-testid="add-new-category-chip"
+          aria-label={t('actions.add', { var: t('scopes.categories.name') })}
         />
         {categories.map((category, key) => {
           const currentIcon = category.description_internal as keyof typeof CAT_ICONS;
           return (
             <Chip
-              key={key}
+              key={category.id}
               label={category.name}
               avatar={<AppIcon icon={currentIcon} />}
               onClick={() => setEditCat(category)}
               onDelete={() => setDeleteCat(category)}
+              data-testid={`category-chip-${category.name.toLowerCase().replace(/\s+/g, '-')}`}
+              aria-label={t('actions.edit', { var: category.name })}
             />
           );
         })}
@@ -89,10 +93,15 @@ const CatView: React.FC = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteCat(undefined)} color="secondary" autoFocus>
+          <Button
+            onClick={() => setDeleteCat(undefined)}
+            color="secondary"
+            autoFocus
+            data-testid="cancel-delete-button"
+          >
             {t('actions.cancel')}
           </Button>
-          <Button onClick={onDelete} color="error" variant="contained">
+          <Button onClick={onDelete} color="error" variant="contained" data-testid="confirm-button">
             {t('actions.delete')}
           </Button>
         </DialogActions>

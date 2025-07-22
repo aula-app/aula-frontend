@@ -143,7 +143,12 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
 
   return (
     <Stack p={2} overflow="auto">
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        data-testid={`${defaultValues ? 'edit' : 'add'}-user-form`}
+        aria-label={t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.users.name`) })}
+      >
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h1">
@@ -162,39 +167,105 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.displayname`)}
+                id="user-displayname"
+                data-testid="user-displayname-input"
                 size="small"
                 error={!!errors.displayname}
-                helperText={`${errors.displayname?.message || ''}`}
+                helperText={
+                  <span id="displayname-error-message">
+                    {typeof errors.displayname?.message === 'string' ? errors.displayname.message : ''}
+                  </span>
+                }
                 {...register('displayname')}
+                slotProps={{
+                  input: {
+                    'aria-labelledby': 'user-displayname-label',
+                    'aria-invalid': !!errors.displayname,
+                    'aria-errormessage': errors.displayname ? 'displayname-error-message' : undefined,
+                  },
+                  inputLabel: {
+                    id: 'user-displayname-label',
+                    htmlFor: 'user-displayname',
+                  },
+                }}
               />
               <TextField
                 fullWidth
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.username`)}
+                id="user-username"
+                data-testid="user-username-input"
                 size="small"
                 error={!!errors.username}
-                helperText={`${errors.username?.message || ''}`}
+                helperText={
+                  <span id="username-error-message">
+                    {typeof errors.username?.message === 'string' ? errors.username.message : ''}
+                  </span>
+                }
                 {...register('username')}
+                slotProps={{
+                  input: {
+                    'aria-labelledby': 'user-username-label',
+                    'aria-invalid': !!errors.username,
+                    'aria-errormessage': errors.username ? 'username-error-message' : undefined,
+                  },
+                  inputLabel: {
+                    id: 'user-username-label',
+                    htmlFor: 'user-username',
+                  },
+                }}
               />
               <TextField
                 fullWidth
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.realname`)}
+                id="user-realname"
                 size="small"
                 error={!!errors.realname}
-                helperText={`${errors.realname?.message || ''}`}
+                helperText={
+                  <span id="realname-error-message">
+                    {typeof errors.realname?.message === 'string' ? errors.realname.message : ''}
+                  </span>
+                }
                 {...register('realname')}
+                slotProps={{
+                  input: {
+                    'aria-labelledby': 'user-realname-label',
+                    'aria-invalid': !!errors.realname,
+                    'aria-errormessage': errors.realname ? 'realname-error-message' : undefined,
+                  },
+                  inputLabel: {
+                    id: 'user-realname-label',
+                    htmlFor: 'user-realname',
+                  },
+                }}
               />
               <TextField
                 fullWidth
                 disabled={isLoading}
                 label={t(`settings.columns.email`)}
+                id="user-email"
                 size="small"
                 error={!!errors.email}
-                helperText={`${errors.email?.message || ''}`}
+                helperText={
+                  <span id="email-error-message">
+                    {typeof errors.email?.message === 'string' ? errors.email.message : ''}
+                  </span>
+                }
                 {...register('email')}
+                slotProps={{
+                  input: {
+                    'aria-labelledby': 'user-email-label',
+                    'aria-invalid': !!errors.email,
+                    'aria-errormessage': errors.email ? 'email-error-message' : undefined,
+                  },
+                  inputLabel: {
+                    id: 'user-email-label',
+                    htmlFor: 'user-email',
+                  },
+                }}
               />
               {defaultValues?.userlevel !== 60 && (
                 <>
@@ -226,10 +297,16 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
             />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error">
+            <Button onClick={onClose} color="error" data-testid="cancel-user-form" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading}
+              data-testid="submit-user-form"
+              aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+            >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>

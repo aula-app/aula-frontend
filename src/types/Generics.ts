@@ -1,24 +1,8 @@
-import { PossibleFields } from './Scopes';
-import { RoleTypes, SettingNamesType } from './SettingsTypes';
+import { RoleTypes } from './SettingsTypes';
 
 // Helper to read object's properties as obj['name']
 export type ObjectPropByName = Record<string, any>;
-export type DatabaseResponseData = PossibleFields;
 
-export interface SingleResponseType {
-  success: boolean;
-  count: number;
-  data: DatabaseResponseData;
-}
-
-export interface DatabaseResponseType {
-  success: boolean;
-  count: number;
-  data: DatabaseResponseData[];
-}
-
-export type ColorTypes = 'secondary' | 'warning' | 'error' | 'inherit' | 'primary' | 'success' | 'info';
-export type AlterTypes = 'add' | 'edit' | 'delete' | 'reports' | 'bugs';
 export type StatusTypes = -1 | 0 | 1 | 2 | 3;
 
 export interface DefaultUpdate {
@@ -29,12 +13,6 @@ export interface DefaultUpdate {
   room_id: string;
   title: string;
 }
-
-export type PassResponse = {
-  oldPassword?: string;
-  newPassword: string;
-  confirmPassword: string;
-};
 
 export type ConfigResponse = {
   allow_registration: 0 | 1;

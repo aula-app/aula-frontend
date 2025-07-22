@@ -1,6 +1,6 @@
+import { databaseRequest, GenericResponse } from '@/services/requests';
 import { StatusTypes } from '@/types/Generics';
 import { CommentType } from '@/types/Scopes';
-import { databaseRequest, GenericResponse } from '@/utils';
 
 /**
  * Fetches comments for a specific idea
@@ -11,12 +11,13 @@ import { databaseRequest, GenericResponse } from '@/utils';
 interface GetCommentsResponse extends GenericResponse {
   data: CommentType[] | null;
 }
+const ORDER_BY_CREATION_DATE = 4;
 
 export async function getCommentsByIdea(idea_id: string): Promise<GetCommentsResponse> {
   const response = await databaseRequest({
     model: 'Comment',
     method: 'getCommentsByIdeaId',
-    arguments: { idea_id },
+    arguments: { idea_id, orderby: ORDER_BY_CREATION_DATE },
   });
 
   return response as GetCommentsResponse;
@@ -31,11 +32,11 @@ export interface CommentArguments {
   status?: StatusTypes;
 }
 
-export interface AddCommentArguments extends CommentArguments {
+interface AddCommentArguments extends CommentArguments {
   idea_id: string;
 }
 
-export interface EditCommentArguments extends CommentArguments {
+interface EditCommentArguments extends CommentArguments {
   comment_id: string;
   idea_id?: string;
 }

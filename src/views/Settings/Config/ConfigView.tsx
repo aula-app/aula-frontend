@@ -64,19 +64,30 @@ const ConfigView = () => {
         {t('settings.labels.configuration')}
       </Typography>
       <SchoolInfo />
-      {panels.map(
-        (panel, i) =>
-          checkPermissions('configs', panel.name) && (
-            <Accordion key={i} expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)}>
-              <AccordionSummary expandIcon={<AppIcon icon="arrowdown" />}>
-                <Typography variant="h2" py={1}>
-                  {t(`settings.panels.${panel.name}`)}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>{panel.component}</AccordionDetails>
-            </Accordion>
-          )
-      )}
+      <div role="tablist" aria-label={t('settings.labels.configuration')}>
+        {panels.map(
+          (panel, i) =>
+            checkPermissions('configs', panel.name) && (
+              <Accordion key={panel.name} expanded={expanded === `panel${i}`} onChange={() => toggleExpanded(`panel${i}`)}>
+                <AccordionSummary
+                  expandIcon={<AppIcon icon="arrowdown" />}
+                  role="tab"
+                  id={`tab-${panel.name}`}
+                  data-testid={`config-accordion-${panel.name}`}
+                  aria-controls={`panel-${panel.name}`}
+                  aria-expanded={expanded === `panel${i}`}
+                >
+                  <Typography variant="h2" py={1}>
+                    {t(`settings.panels.${panel.name}`)}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails role="tabpanel" id={`panel-${panel.name}`} aria-labelledby={`tab-${panel.name}`}>
+                  {panel.component}
+                </AccordionDetails>
+              </Accordion>
+            )
+        )}
+      </div>
       {/* <Skeleton variant="rectangular" width="100%" height={45} sx={{ mt: 3 }} /> */}
     </Stack>
   );

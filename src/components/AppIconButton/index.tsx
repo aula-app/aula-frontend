@@ -1,3 +1,3 @@
 import AppIconButton from './AppIconButton';
 
-export { AppIconButton as default, AppIconButton };
+export { AppIconButton as default,  };

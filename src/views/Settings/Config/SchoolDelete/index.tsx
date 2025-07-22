@@ -1,3 +1,3 @@
 import SchoolDelete from './SchoolDelete';
 
-export { SchoolDelete as default, SchoolDelete };
+export { SchoolDelete as default,  };

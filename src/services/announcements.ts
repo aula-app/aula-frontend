@@ -55,7 +55,7 @@ export interface AnnouncementArguments {
   status?: StatusTypes;
 }
 
-export interface EditAnnouncementArguments extends AnnouncementArguments {
+interface EditAnnouncementArguments extends AnnouncementArguments {
   text_id: string;
 }
 

@@ -5,7 +5,7 @@ import { RoomType } from '@/types/Scopes';
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import SchoolInfoSkeleton from './SchooInfoSkeleton';
+import SchoolInfoSkeleton from './SchoolInfoSkeleton';
 
 const SchoolInfo: React.FC = () => {
   const { t } = useTranslation();

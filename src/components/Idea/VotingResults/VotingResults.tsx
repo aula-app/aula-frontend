@@ -105,7 +105,8 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
                 mr={1.5}
                 sx={{ whiteSpace: 'nowrap' }}
               >
-                <AppIcon icon={option} size="small" sx={{ mr: 0.5 }} /> {Object.values(numVotes)[i + 1]}
+                <AppIcon icon={option} size="small" sx={{ mr: 0.5 }} />
+                <span data-testid={`total-votes-${option}`}>{Object.values(numVotes)[i + 1]}</span>
               </Stack>
             ))}
           </Stack>

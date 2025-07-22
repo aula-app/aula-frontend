@@ -1,47 +1,32 @@
-import { useTheme } from '@mui/material';
-import DinamicImages from './DinamicImages';
+import DynamicImages from './DynamicImages';
 
 interface Props {
   image: number;
   shift: number;
 }
 
-const DefaultImage: React.FC<Props> = ({ image, shift, ...restOfProps }) => {
-  const theme = useTheme();
-
-  const shiftHslHue = (hslColor: string): string => {
-    if (hslColor === 'none') return hslColor;
-
-    const match = hslColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
-    if (!match) return hslColor;
-
-    const [, h, s, l] = match;
-    const newHue = (parseInt(h) + shift) % 360;
-    return `hsl(${newHue}, ${s}%, ${l}%)`;
-  };
-
+const DefaultImage = ({ image, shift, ...restOfProps }: Props) => {
   const COLORS = {
-    bg: shiftHslHue(theme.palette.themeGreen.main),
-    yellow_bright: shiftHslHue(theme.palette.themeYellow.light),
-    yellow_base: shiftHslHue(theme.palette.themeYellow.main),
-    yellow_shade: shiftHslHue(theme.palette.themeYellow.dark),
-    red_bright: shiftHslHue(theme.palette.themeRed.light),
-    red_base: shiftHslHue(theme.palette.themeRed.main),
-    red_shade: shiftHslHue(theme.palette.themeRed.dark),
-    blue_bright: shiftHslHue(theme.palette.themeBlue.light),
-    blue_base: shiftHslHue(theme.palette.themeBlue.main),
-    blue_shade: shiftHslHue(theme.palette.themeBlue.dark),
-    green_bright: shiftHslHue(theme.palette.themeGreen.light),
-    green_base: shiftHslHue(theme.palette.themeGreen.main),
-    green_shade: shiftHslHue(theme.palette.themeGreen.dark),
-    white: shiftHslHue(theme.palette.themeGrey.light),
-    light_bright: shiftHslHue(theme.palette.themeGrey.light),
-    light_base: shiftHslHue(theme.palette.themeGrey.main),
-    light_shade: shiftHslHue(theme.palette.themeGrey.dark),
+    bg: `hsl(${132 - shift}, 50%, 75%)`,
+    yellow_base: `hsl(${shift + 45}, 100%, 60%)`,
+    yellow_bright: `hsl(${shift + 45}, 100%, 85%)`,
+    yellow_shade: `hsl(${shift + 45}, 100%, 50%)`,
+    red_bright: `hsl(${shift}, 75%, 80%)`,
+    red_base: `hsl(${shift}, 75%, 70%)`,
+    red_shade: `hsl(${shift}, 75%, 50%)`,
+    blue_base: `hsl(${shift + 207}, 50%, 55%)`,
+    blue_bright: `hsl(${shift + 207}, 50%, 70%)`,
+    blue_shade: `hsl(${shift + 207}, 50%, 15%)`,
+    green_base: `hsl(${shift + 122}, 37.5%, 60%)`,
+    green_bright: `hsl(${shift + 122}, 37.5%, 85%)`,
+    green_shade: `hsl(${shift + 122}, 37.5%, 50%)`,
+    light_base: `hsl(${shift + 39}, 50%, 90%)`,
+    light_shade: `hsl(${shift + 39}, 50%, 80%)`,
+    white: `hsl(${shift + 0}, 0%, 100%)`,
     noFill: 'none',
   };
 
-  const ComponentToRender = DinamicImages[image];
+  const ComponentToRender = DynamicImages[image];
 
   return <ComponentToRender colors={COLORS} {...restOfProps} />;
 };

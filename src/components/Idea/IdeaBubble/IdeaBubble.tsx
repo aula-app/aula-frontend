@@ -30,7 +30,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
   const { t } = useTranslation();
 
   return (
-    <Stack width="100%" sx={{ scrollSnapAlign: 'center' }}>
+    <Stack data-testid={`idea-${idea.title}`} width="100%" sx={{ scrollSnapAlign: 'center' }}>
       <ChatBubble disabled={disabled} comment={idea.approved < 0}>
         <AppLink to={to} disabled={!to || disabled}>
           <Stack
@@ -65,6 +65,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
             item={idea}
             scope="ideas"
             onDelete={onDelete}
+            data-testid="idea-more-menu"
             onEdit={onEdit}
             link={`${location.pathname}/${to}`}
           >
@@ -72,6 +73,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
               {to && !disabled && (
                 <AppIconButton
                   icon="link"
+                  title={t('tooltips.link')}
                   onClick={() => {
                     if (navigator.share) {
                       navigator.share({
@@ -88,7 +90,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
               )}
               <LikeButton disabled={disabled} item={idea} />
               {idea.sum_comments > 0 && !idea_id && (
-                <AppIconButton icon="chat" to={to} disabled={disabled}>
+                <AppIconButton icon="chat" title={t('tooltips.chat')} to={to} disabled={disabled}>
                   {idea.sum_comments}
                 </AppIconButton>
               )}

@@ -1,5 +1,8 @@
+import { Prec } from '@codemirror/state';
+import { keymap } from '@codemirror/view';
 import {
   BoldItalicUnderlineToggles,
+  codeMirrorPlugin,
   headingsPlugin,
   listsPlugin,
   ListsToggle,
@@ -9,8 +12,16 @@ import {
   toolbarPlugin,
   UndoRedo,
 } from '@mdxeditor/editor';
-import { FormControl, FormControlProps, FormHelperText, FormLabel as MuiFormLabel, Stack, styled } from '@mui/material';
-import React, { useEffect } from 'react';
+import {
+  FormControl,
+  FormControlProps,
+  FormHelperText,
+  FormLabel as MuiFormLabel,
+  Stack,
+  styled,
+  Typography,
+} from '@mui/material';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -19,6 +30,7 @@ interface Props extends FormControlProps {
   control: Control<any, any>;
   required?: boolean;
   disabled?: boolean;
+  maxLength?: number;
 }
 
 const StyledFormLabel = styled(MuiFormLabel)(({ theme }) => ({
@@ -33,8 +45,28 @@ const StyledFormLabel = styled(MuiFormLabel)(({ theme }) => ({
   backdropFilter: 'blur(100px)',
   transition: theme.transitions.create('color'),
 
-  '.md-editor:focus-within + &': {
+  '.markdown-editor-container:focus-within &': {
     color: theme.palette.primary.main,
+  },
+
+  '&.error': {
+    color: theme.palette.error.main,
+  },
+}));
+
+const CharacterCount = styled(Typography)(({ theme }) => ({
+  position: 'absolute',
+  bottom: theme.spacing(1),
+  right: theme.spacing(1),
+  fontSize: '0.75rem',
+  color: theme.palette.text.secondary,
+  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(0.25, 0.5),
+  borderRadius: theme.shape.borderRadius,
+  zIndex: 1000,
+
+  '&.error': {
+    color: theme.palette.error.main,
   },
 }));
 
@@ -77,6 +109,19 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
       color: theme.palette.text.primary,
     },
 
+    // Ensure CodeMirror content is focusable
+    '.cm-content': {
+      outline: 'none',
+    },
+
+    '.cm-editor': {
+      outline: 'none',
+    },
+
+    '.cm-focused': {
+      outline: 'none',
+    },
+
     // Toolbar button styles
     '.mdxeditor-toolbar button': {
       backgroundColor: 'transparent',
@@ -86,12 +131,29 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
       margin: theme.spacing(0.25),
       cursor: 'pointer',
       transition: theme.transitions.create(['background-color', 'color']),
+      color: theme.palette.text.primary,
 
       '&:hover': {
         backgroundColor: theme.palette.action.hover,
       },
 
-      '&[data-active=true]': {
+      // Multiple selectors for active state to ensure compatibility
+      '&[data-active="true"]': {
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.action.selected,
+      },
+
+      '&[aria-pressed="true"]': {
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.action.selected,
+      },
+
+      '&.active': {
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.action.selected,
+      },
+
+      '&[data-state="on"]': {
         color: theme.palette.primary.main,
         backgroundColor: theme.palette.action.selected,
       },
@@ -132,12 +194,143 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
       borderBottomColor: theme.palette.primary.main,
       borderBottomWidth: '2px',
     },
+
+    // Ensure character count doesn't interfere with content
+    '&.has-char-count': {
+      paddingBottom: theme.spacing(4),
+    },
   },
 }));
 
-const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disabled = false, ...restOfProps }) => {
+const MarkdownEditor: React.FC<Props> = ({
+  name,
+  control,
+  required = false,
+  disabled = false,
+  maxLength,
+  ...restOfProps
+}) => {
   const { t } = useTranslation();
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [characterCount, setCharacterCount] = React.useState(0);
+
+  // Get character count display class based on limit
+  const getCharCountClass = useCallback(() => {
+    if (!maxLength) return '';
+    const percentage = characterCount / maxLength;
+    if (percentage >= 1) return 'error';
+    return '';
+  }, [characterCount, maxLength]);
+
+  // Custom keymap to completely disable Tab indentation
+  const disableTabKeymap = Prec.highest(
+    keymap.of([
+      {
+        key: 'Tab',
+        preventDefault: true,
+        stopPropagation: true,
+        run: () => {
+          // Do nothing - this completely blocks Tab from doing anything in the editor
+          return true;
+        },
+      },
+      {
+        key: 'Shift-Tab',
+        preventDefault: true,
+        stopPropagation: true,
+        run: () => {
+          // Do nothing - this completely blocks Shift+Tab from doing anything in the editor
+          return true;
+        },
+      },
+    ])
+  );
+
+  // Handle Tab navigation at the DOM level as a fallback
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const focusableElements = document.querySelectorAll(
+        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]), a[href]'
+      );
+      const focusableArray = Array.from(focusableElements) as HTMLElement[];
+      const container = containerRef.current;
+
+      if (container) {
+        const currentIndex = focusableArray.findIndex((el) => container.contains(el));
+
+        if (event.shiftKey) {
+          // Shift+Tab: go to previous element
+          if (currentIndex > 0) {
+            let prevIndex = currentIndex - 1;
+            while (prevIndex >= 0 && container.contains(focusableArray[prevIndex])) {
+              prevIndex--;
+            }
+            if (prevIndex >= 0) {
+              focusableArray[prevIndex].focus();
+            }
+          }
+        } else {
+          // Tab: go to next element
+          if (currentIndex !== -1) {
+            let nextIndex = currentIndex + 1;
+            while (nextIndex < focusableArray.length && container.contains(focusableArray[nextIndex])) {
+              nextIndex++;
+            }
+            if (nextIndex < focusableArray.length) {
+              focusableArray[nextIndex].focus();
+            }
+          }
+        }
+      }
+    }
+  }, []);
+
+  // Handle focus on the editor container to focus the text area
+  const handleContainerFocus = useCallback(() => {
+    // Use the MDXEditor ref to focus the editor properly
+    if (mdxEditorRef.current) {
+      try {
+        mdxEditorRef.current.focus();
+      } catch (error) {
+        // Fallback: try to find and focus the content area directly
+        const contentArea = containerRef.current?.querySelector(
+          '.cm-content, .mdxeditor-root-contenteditable, [contenteditable="true"]'
+        );
+        if (contentArea instanceof HTMLElement) {
+          contentArea.focus();
+        }
+      }
+    }
+  }, []);
+
+  // Set up DOM event listener for Tab handling
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('keydown', handleKeyDown, true);
+
+      // Add focus handler to automatically focus editor when container gets focus
+      const handleFocus = (event: FocusEvent) => {
+        // Only handle if focus is coming from outside
+        if (!container.contains(event.relatedTarget as Node)) {
+          setTimeout(() => {
+            handleContainerFocus();
+          }, 0);
+        }
+      };
+
+      container.addEventListener('focus', handleFocus);
+
+      return () => {
+        container.removeEventListener('keydown', handleKeyDown, true);
+        container.removeEventListener('focus', handleFocus);
+      };
+    }
+  }, [handleKeyDown, handleContainerFocus]);
 
   return (
     <Controller
@@ -145,41 +338,95 @@ const MarkdownEditor: React.FC<Props> = ({ name, control, required = false, disa
       control={control}
       render={({ field, fieldState }) => {
         useEffect(() => {
-          if (field.value) mdxEditorRef.current?.setMarkdown(field.value || control._defaultValues[name]);
+          const initialValue = field.value || control._defaultValues[name] || '';
+          if (initialValue) {
+            mdxEditorRef.current?.setMarkdown(initialValue);
+          }
+          // Update character count when field value changes
+          setCharacterCount(initialValue?.length || 0);
         }, [control._defaultValues[name], field.value]);
+
+        // Handle field changes to update character count
+        const handleFieldChange = useCallback(
+          (value: string) => {
+            field.onChange(value);
+            setCharacterCount(value?.length || 0);
+          },
+          [field]
+        );
+
         return (
           <FormControl fullWidth {...restOfProps}>
-            <Editor
-              className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''}`}
-              markdown={''}
-              toMarkdownOptions={{}}
-              sx={{ height: '100%' }}
-              plugins={[
-                headingsPlugin(),
-                listsPlugin(),
-                toolbarPlugin({
-                  toolbarClassName: 'editor-toolbar',
-                  toolbarContents: () => (
-                    <Stack direction="row" justifyContent="space-between" width="100%">
-                      <Stack direction="row">
-                        <BoldItalicUnderlineToggles />
-                        <Separator />
-                        <ListsToggle />
+            <div
+              ref={containerRef}
+              className="markdown-editor-container"
+              onClick={handleContainerFocus}
+              onKeyDown={(e) => {
+                // Handle Enter and Space to focus the editor
+                if (e.key === 'Enter' || e.key === ' ') {
+                  //e.preventDefault();
+                  // handleContainerFocus();
+                }
+              }}
+              tabIndex={0}
+              role="textbox"
+              aria-label={t(`settings.columns.${name}`)}
+            >
+              <StyledFormLabel
+                id={`editor-${name}-label`}
+                className={!!fieldState.error ? 'error' : getCharCountClass()}
+              >
+                {t(`settings.columns.${name}`)}
+                {required ? '*' : ''}
+              </StyledFormLabel>
+              <Editor
+                className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''} ${maxLength ? 'has-char-count' : ''} ${getCharCountClass()}`}
+                markdown={''}
+                toMarkdownOptions={{}}
+                sx={{ height: '100%' }}
+                plugins={[
+                  headingsPlugin(),
+                  listsPlugin(),
+                  codeMirrorPlugin({
+                    codeBlockLanguages: {
+                      js: 'JavaScript',
+                      ts: 'TypeScript',
+                      jsx: 'React JSX',
+                      tsx: 'React TSX',
+                    },
+                    codeMirrorExtensions: [disableTabKeymap],
+                  }),
+                  toolbarPlugin({
+                    toolbarClassName: 'editor-toolbar',
+                    toolbarContents: () => (
+                      <Stack direction="row" justifyContent="space-between" width="100%">
+                        <Stack direction="row">
+                          <BoldItalicUnderlineToggles />
+                          <Separator />
+                          <ListsToggle />
+                        </Stack>
+                        <UndoRedo />
                       </Stack>
-                      <UndoRedo />
-                    </Stack>
-                  ),
-                }),
-              ]}
-              {...field}
-              ref={mdxEditorRef}
-            />
-            <StyledFormLabel>
-              {t(`settings.columns.${name}`)}
-              {required ? '*' : ''}
-            </StyledFormLabel>
+                    ),
+                  }),
+                ]}
+                {...field}
+                onChange={handleFieldChange}
+                ref={mdxEditorRef}
+                aria-invalid={!!fieldState.error}
+                aria-errormessage={fieldState.error ? `${name}-error-message` : undefined}
+                aria-labelledby={`editor-${name}-label`}
+              />
+              {maxLength && (
+                <CharacterCount className={getCharCountClass()} variant="caption">
+                  {characterCount}/{maxLength}
+                </CharacterCount>
+              )}
+            </div>
             {!!fieldState.error && (
-              <FormHelperText error={!!fieldState.error}>{t(`${fieldState.error?.message || ''}`)}</FormHelperText>
+              <FormHelperText id={`${name}-error-message`} error={!!fieldState.error}>
+                {t(`${fieldState.error?.message || ''}`)}
+              </FormHelperText>
             )}
           </FormControl>
         );

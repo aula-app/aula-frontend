@@ -20,6 +20,7 @@ interface Props {
 const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded = false, isOpen, onClose }) => {
   const { t } = useTranslation();
   const api_url = localStorageGet('api_url');
+  const code = localStorageGet('code');
 
   const [image, setImage] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -44,7 +45,8 @@ const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded =
 
   const downloadUserAvatar = async () => {
     const response = await getAvatar(id);
-    if (response.data && response.data.length > 0) setImage(`${api_url}/files/${response.data[0].filename}`);
+    if (response.data && response.data.length > 0)
+      setImage(`${api_url}/api/files/${code}/${response.data[0].filename}`);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -214,7 +216,8 @@ const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded =
                     maxWidth: 'none',
                     pointerEvents: 'none',
                   }}
-                  alt="Avatar preview"
+                  alt={t('profile.avatar.preview')}
+                  role="img"
                 />
               </Box>
               <Stack
@@ -223,9 +226,9 @@ const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded =
                 justifyContent="center"
                 sx={{ mt: 2, display: 'flex', gap: 2, justifyContent: 'center' }}
               >
-                <AppIconButton icon="zoomOut" onClick={() => handleZoom(-0.1)} />
-                <AppIconButton icon="cancel" onClick={handleReset} />
-                <AppIconButton icon="zoomIn" onClick={() => handleZoom(0.1)} />
+                <AppIconButton icon="zoomOut" title={t('tooltips.zoomOut')} onClick={() => handleZoom(-0.1)} />
+                <AppIconButton icon="cancel" title={t('tooltips.cancel')} onClick={handleReset} />
+                <AppIconButton icon="zoomIn" title={t('tooltips.zoomIn')} onClick={() => handleZoom(0.1)} />
               </Stack>
             </Box>
           )}

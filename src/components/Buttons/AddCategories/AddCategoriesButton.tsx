@@ -99,7 +99,20 @@ const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
 
     return (
       <>
-        <Button variant="outlined" color="secondary" onClick={() => setOpen(true)} {...restOfProps}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => setOpen(true)}
+          data-testid="add-category-button"
+          aria-label={
+            selectedCategory
+              ? t('actions.change', { var: selectedCategory.name })
+              : t('actions.addToParent', { var: t('scopes.categories.name') })
+          }
+          aria-expanded={open}
+          aria-haspopup="dialog"
+          {...restOfProps}
+        >
           <AppIcon icon={selectedCategory?.description_internal || 'add'} pr={2} />
           {selectedCategory
             ? selectedCategory.name
@@ -107,7 +120,7 @@ const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
                 var: t('scopes.categories.name'),
               })}
         </Button>
-        <Dialog onClose={onClose} open={open}>
+        <Dialog onClose={onClose} open={open} data-testid="add-category-dialog">
           <DialogTitle>
             {t(selectedCategory ? 'actions.change' : 'actions.addToParent', {
               var: t('scopes.categories.name'),
@@ -132,10 +145,21 @@ const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
             ))}
           </List>
           <DialogActions>
-            <Button onClick={onClose} color="secondary" autoFocus>
+            <Button
+              onClick={onClose}
+              color="secondary"
+              autoFocus
+              data-testid="cancel-category-button"
+              aria-label={t('actions.cancel')}
+            >
               {t('actions.cancel')}
             </Button>
-            <Button onClick={onSubmit} variant="contained">
+            <Button
+              onClick={onSubmit}
+              variant="contained"
+              data-testid="confirm-category-button"
+              aria-label={t('actions.confirm')}
+            >
               {t('actions.confirm')}
             </Button>
           </DialogActions>
@@ -144,5 +168,7 @@ const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
     );
   }
 );
+
+AddCategoryButton.displayName = 'AddCategoryButton';
 
 export default AddCategoryButton;

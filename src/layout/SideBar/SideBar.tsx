@@ -1,16 +1,16 @@
-import { AppIcon, AppIconButton } from '@/components';
+import { AppIconButton } from '@/components';
+import BugButton from '@/components/Buttons/BugButton';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import UserInfo from '@/components/UserInfo';
 import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
-import { Button, Chip, Divider, Drawer, Stack } from '@mui/material';
-import { memo, useCallback } from 'react';
+import { useAppStore } from '@/store';
+import { announceToScreenReader, localStorageGet } from '@/utils';
+import { Button, Divider, Drawer, Stack } from '@mui/material';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import SideBarContent from './SideBarContent';
 import { drawerPaperStyles } from './styles';
 import { DrawerSideBarProps } from './types';
-import SideBarContent from './SideBarContent';
-import { localStorageGet } from '@/utils';
-import { useAppStore } from '@/store';
-import BugButton from '@/components/Buttons/BugButton';
 
 /**
  * Renders SideBar with Menu and User details for authenticated users in Private Layout
@@ -38,28 +38,74 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
       anchor={anchor}
       open={open}
       variant={variant}
-      slotProps={{ paper: { sx: drawerPaperStyles(onMobile, variant) } }}
+      slotProps={{
+        paper: {
+          sx: drawerPaperStyles(onMobile, variant),
+          'aria-label': t('ui.navigation.sidebar'),
+          role: 'region',
+        },
+        backdrop: {
+          'aria-hidden': 'true', // Hide backdrop from screen readers
+        },
+      }}
       onClose={onClose}
+      id="main-navigation-drawer"
+      aria-modal={variant === 'temporary' ? true : undefined}
       {...restOfProps}
     >
       <Stack direction="row" alignItems="center" justifyContent="space-between" p={1} pl={2.5}>
         <LocaleSwitch />
-        <AppIconButton icon="close" onClick={(e) => onClose(e, 'backdropClick')} title={t('actions.close')} />
+        <AppIconButton
+          icon="close"
+          onClick={(e) => onClose(e, 'backdropClick')}
+          title={t('actions.close')}
+          aria-label={t('actions.close')}
+          autoFocus={onMobile} // Immediately focus the close button on mobile
+          sx={{
+            '&:focus-visible': {
+              outline: (theme) => `2px solid ${theme.palette.primary.main}`,
+            },
+          }}
+        />
       </Stack>
-      <Divider />
+      <Divider role="presentation" />
       {isAuthenticated && <UserInfo />}
-      <Divider />
+      <Divider role="presentation" />
       <SideBarContent onClose={onClose} />
-      <Divider />
-      <Stack direction="row" justifyContent="space-between" px={2} pt={0}>
+      <Divider role="presentation" />
+      {import.meta.env.VITE_APP_MULTI !== 'false' && (
+        <>
+          <Button
+            onClick={() => {
+              navigator.clipboard.writeText(code);
+              // Announce copy success to screen readers
+              announceToScreenReader(t('ui.accessibility.codeCopied'), 'polite');
+            }}
+            color="secondary"
+            aria-label={t('ui.accessibility.copyInstanceCode', { code })}
+          >
+            {`${t('instance.chip')}: ${code}`}
+          </Button>
+          <Divider role="presentation" />
+        </>
+      )}
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        px={2}
+        pt={0}
+        role="toolbar"
+        aria-label={t('ui.accessibility.sidebarActions')}
+      >
         <BugButton target={location.pathname} />
-        <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} />
+        <AppIconButton onClick={window.print} icon="print"  title={t('actions.print')} aria-label={t('actions.print')} />
         <AppIconButton
           onClick={onSwitchDarkMode}
           icon={state.darkMode ? 'day' : 'night'}
           title={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
+          aria-label={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
         />
-        <AppIconButton onClick={onLogout} icon="logout" title={t('auth.logout')} />
+        <AppIconButton onClick={onLogout} icon="logout" title={t('auth.logout')} aria-label={t('auth.logout')} />
       </Stack>
     </Drawer>
   );

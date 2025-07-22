@@ -49,22 +49,47 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
             {children}
           </Collapse>
         )}
-        <Collapse orientation="horizontal" in={open}>
-          <Stack direction="row" position="relative">
-            <ReportButton color={color || 'error'} target={`${t(`scopes.${scope}.name`)}: ${targetName}`} link={link} />
+        <Collapse orientation="horizontal" in={open} role="menu" aria-label={t('actions.options')}>
+          <Stack direction="row" position="relative" role="menubar" aria-orientation="horizontal">
+            <ReportButton
+              color={color || 'error'}
+              target={`${t(`scopes.${scope}.name`)}: ${targetName}`}
+              link={link}
+              role="menuitem"
+              data-testid={`report-button`}
+            />
             {phase && (
               <>
                 {checkPermissions(scope, 'edit', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
-                  <EditButton color={color || 'secondary'} onEdit={onEdit} />
+                  <EditButton
+                    color={color || 'secondary'}
+                    onEdit={onEdit}
+                    role="menuitem"
+                    data-testid={`edit-button`}
+                  />
                 )}
                 {checkPermissions(scope, 'delete', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
-                  <DeleteButton color={color || 'error'} scope={scope} onDelete={onDelete} />
+                  <DeleteButton
+                    color={color || 'error'}
+                    scope={scope}
+                    onDelete={onDelete}
+                    role="menuitem"
+                    data-testid={`delete-button`}
+                  />
                 )}
               </>
             )}
           </Stack>
         </Collapse>
-        <AppIconButton icon={open ? 'close' : 'more'} onClick={toggleOptions} {...restOfProps} />
+        <AppIconButton
+          icon={open ? 'close' : 'more'}
+          title={t(`tooltips.${open ? 'close' : 'more'}`)}
+          onClick={toggleOptions}
+          aria-expanded={open}
+          aria-label={open ? t('actions.close') : t('actions.more')}
+          data-testid={`more-options`}
+          {...restOfProps}
+        />
       </Stack>
     </ClickAwayListener>
   );

@@ -1,20 +1,21 @@
-import { checkPermissions } from '@/utils';
+import { addComment, CommentArguments, editComment } from '@/services/comments';
+import { CommentType } from '@/types/Scopes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
-import { MarkdownEditor, StatusField } from '../DataFields';
-import { addComment, CommentArguments, editComment } from '@/services/comments';
-import { CommentType } from '@/types/Scopes';
 import { useParams } from 'react-router-dom';
+import * as yup from 'yup';
+import { MarkdownEditor } from '../DataFields';
 
 /**
  * CommentForms component is used to create or edit an idea.
  *
  * @component
  */
+
+const MAX_CHAR_COUNT = 1000; // Maximum character count for content
 
 interface CommentFormsProps {
   onClose: () => void;
@@ -27,7 +28,14 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
   const { idea_id } = useParams();
 
   const schema = yup.object({
-    content: yup.string().required(t('forms.validation.required')),
+    content: yup
+      .string()
+      .test(
+        'len',
+        t('forms.validation.contentTooLong', { scope: t('scopes.comments.name'), max: MAX_CHAR_COUNT }),
+        (val) => String(val).length <= MAX_CHAR_COUNT
+      )
+      .required(t('forms.validation.required')),
   } as Record<keyof CommentArguments, any>);
 
   const { reset, control, handleSubmit } = useForm({
@@ -89,13 +97,18 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
           </Stack>
           <Stack gap={2}>
             {/* content */}
-            <MarkdownEditor name="content" control={control} required disabled={isLoading} />
+            <MarkdownEditor name="content" control={control} required disabled={isLoading} maxLength={MAX_CHAR_COUNT} />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error">
+            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading}
+              aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+            >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>

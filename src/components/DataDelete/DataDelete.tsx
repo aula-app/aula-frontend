@@ -57,7 +57,14 @@ ${t('requests.deleteAccount.body', { var: user.displayname })}`,
   return (
     <Stack gap={2}>
       <Typography variant="h3">{t('settings.account.delete')}</Typography>
-      <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} fullWidth>
+      <Button
+        variant="contained"
+        color="error"
+        onClick={() => setOpenDelete(true)}
+        fullWidth
+        data-testid="delete-account-button"
+        aria-label={t('requests.deleteAccount.button')}
+      >
         {t('requests.deleteAccount.button')}
       </Button>
       <Dialog
@@ -75,10 +82,22 @@ ${t('requests.deleteAccount.body', { var: user.displayname })}`,
           <DialogContentText id="alert-dialog-description">{t('requests.deleteAccount.confirm')}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDelete(false)} color="secondary" autoFocus>
+          <Button
+            onClick={() => setOpenDelete(false)}
+            color="secondary"
+            autoFocus
+            data-testid="cancel-button"
+            aria-label={t('actions.cancel')}
+          >
             {t('actions.cancel')}
           </Button>
-          <Button onClick={requestDelete} color="error" variant="contained">
+          <Button
+            onClick={requestDelete}
+            color="error"
+            variant="contained"
+            data-testid="confirm-button"
+            aria-label={t('actions.delete')}
+          >
             {t('actions.delete')}
           </Button>
         </DialogActions>

@@ -28,7 +28,7 @@ interface Props extends ButtonProps {
 /**
  * Interface that will be exposed to the parent component.
  */
-export interface AddRoomRefProps {
+interface AddRoomRefProps {
   setNewUserRooms: (id: string) => void;
 }
 
@@ -191,5 +191,7 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
     </>
   );
 });
+
+AddRoomButton.displayName = 'AddRoomButton';
 
 export default AddRoomButton;

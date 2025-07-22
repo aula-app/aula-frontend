@@ -1,3 +1,3 @@
 import DashBoard from './DashBoard';
 
-export { DashBoard as default, DashBoard };
+export { DashBoard as default,  };

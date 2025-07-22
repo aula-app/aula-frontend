@@ -1,3 +1,3 @@
 import AppIcon from './AppIcon';
 
-export { AppIcon as default, AppIcon };
+export { AppIcon as default,  };

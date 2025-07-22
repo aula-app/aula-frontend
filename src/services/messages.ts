@@ -1,7 +1,7 @@
 import { FilterOptionsType } from '@/components/FilterBar/FilterBar';
+import { databaseRequest, GenericListRequest, GenericResponse } from '@/services/requests';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType, PossibleFields } from '@/types/Scopes';
-import { databaseRequest, GenericListRequest, GenericResponse, RequestObject } from '@/utils';
 import { checkPermissions } from '@/utils';
 
 /**
@@ -34,7 +34,7 @@ interface GetMessagesResponse extends GenericResponse {
   data: MessageType[] | null;
 }
 
-export const getMessages = async (): Promise<GetMessagesResponse> => {
+const getMessages = async (): Promise<GetMessagesResponse> => {
   const hasSuperModAccess = checkPermissions('messages', 'viewAll');
 
   const response = await databaseRequest(
@@ -92,7 +92,7 @@ export const getAdminMessages = async (): Promise<GetMessagesResponse> => {
   return response as GetMessagesResponse;
 };
 
-export interface MessageArguments {
+interface MessageArguments {
   headline?: string;
   body?: string;
   status?: StatusTypes;

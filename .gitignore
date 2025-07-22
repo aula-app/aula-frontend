@@ -1,4 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+.env
+ 
+# Ignore plawright saved browser contexts
+*-context.json
+# Ignore playwright run IDs
+run-id.txt
 
 # lock files
 package-lock.json
@@ -29,3 +35,10 @@ yarn-error.log*
 *.bak
 
 .vscode
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

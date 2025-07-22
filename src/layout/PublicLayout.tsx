@@ -1,16 +1,15 @@
 import { AppLink, ErrorBoundary } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
-import { useOnMobile } from '@/hooks';
+import SkipNavigation from '@/components/SkipNavigation';
 import { Box, Button, Stack } from '@mui/material/';
 import { FunctionComponent, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
+import { getRuntimeConfig } from '../config';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const onMobile = useOnMobile();
 
   document.title = 'aula'; // Also Update Tab Title
 
@@ -26,23 +25,26 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         paddingRight: 0,
       }}
     >
+      <SkipNavigation mainContentId="public-content" />
       <Stack>
         <Stack direction="row" alignItems="start" justifyContent="space-between" sx={{ pb: 2 }}>
           {toggleBackToSignIn()}
           <LocaleSwitch />
         </Stack>
         <Box sx={{ width: '100%', mb: 2 }}>
-          <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Logo.svg`} alt="aula" />
+          <img src={`${getRuntimeConfig().BASENAME}img/Aula_Logo.svg`} alt={t('app.name.logo')} role="img" />
         </Box>
       </Stack>
       <Stack
         flex={1}
         component="main"
+        id="public-content"
         width="100%"
         sx={{
           padding: 1,
           justifyContent: 'center',
         }}
+        tabIndex={-1}
       >
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
       </Stack>

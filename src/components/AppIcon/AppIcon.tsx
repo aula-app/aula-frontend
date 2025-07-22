@@ -444,13 +444,14 @@ export type AllIconsType = keyof typeof ALL_ICONS;
 interface Props extends StackProps {
   icon: AllIconsType; // Icon's name alternate prop
   size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
+  decorative?: boolean; // Whether the icon is purely decorative (default: true)
 }
 
 /**
  * Renders SVG icon by given Icon name
  * @component AppIcon
  */
-const AppIcon: React.FC<Props> = ({ icon, size = 'medium', sx, ...restOfProps }) => {
+const AppIcon: React.FC<Props> = ({ icon, size = 'medium', decorative = true, sx, ...restOfProps }) => {
   const currentSize =
     size === 'xs'
       ? '16px'
@@ -463,11 +464,17 @@ const AppIcon: React.FC<Props> = ({ icon, size = 'medium', sx, ...restOfProps })
             : size === 'xxl'
               ? '80px'
               : '24px'; // no size === md
+  // Determine if this icon should get role="img" attribute
+  const shouldHaveImgRole = !decorative && icon in ALL_ICONS;
+  
   return (
     <Stack
       alignItems="center"
       justifyContent="center"
       className="app-icon"
+      aria-hidden={decorative}
+      role={shouldHaveImgRole ? "img" : undefined}
+      aria-label={shouldHaveImgRole ? `${icon} icon` : undefined}
       sx={{
         fontSize: currentSize,
         minWidth: currentSize,

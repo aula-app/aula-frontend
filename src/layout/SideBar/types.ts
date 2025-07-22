@@ -1,4 +1,4 @@
-export type ReportType = 'bugs' | 'reports' | undefined;
+type ReportType = 'bugs' | 'reports' | undefined;
 
 export interface DrawerSideBarProps {
   anchor: 'left' | 'right';
@@ -7,7 +7,7 @@ export interface DrawerSideBarProps {
   onClose: (event: React.MouseEvent<HTMLButtonElement> | {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 }
 
-export interface SideBarContentProps {
+interface SideBarContentProps {
   isFixed?: boolean;
   onClose?: DrawerSideBarProps['onClose'];
 }

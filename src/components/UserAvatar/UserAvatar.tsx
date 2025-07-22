@@ -3,6 +3,7 @@ import { Avatar, AvatarProps } from '@mui/material';
 import { useEffect, useState } from 'react';
 import AppIcon from '../AppIcon';
 import { localStorageGet } from '@/utils';
+import { useTranslation } from 'react-i18next';
 
 interface Props extends AvatarProps {
   id: string;
@@ -14,7 +15,9 @@ interface Props extends AvatarProps {
  * @component UserInfo
  */
 const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
+  const { t } = useTranslation();
   const api_url = localStorageGet('api_url');
+  const code = localStorageGet('code');
   const [userAvatar, setUserAvatar] = useState<string>('');
   const downloadUserAvatar = async () => {
     const response = await getAvatar(id);
@@ -34,8 +37,8 @@ const UserAvatar = ({ id, size = 32, sx, ...restOfProps }: Props) => {
         fontSize: '3rem',
         ...sx,
       }}
-      alt="User avatar"
-      src={`${api_url}/files/${userAvatar}` || ''}
+      alt={t('user.avatar', { id: id })}
+      src={`${api_url}/api/files/${code}/${userAvatar}` || ''}
       {...restOfProps}
     >
       {!userAvatar && <AppIcon icon="avatar" />}

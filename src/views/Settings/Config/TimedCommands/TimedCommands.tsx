@@ -77,14 +77,14 @@ const TimedCommands = () => {
                     (action) => action.value === Number(String(command.cmd_id).slice(-1))
                   );
                   return (
-                    <TableRow key={i} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableRow key={command.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <TableCell>{t(Commands[scope].label)}</TableCell>
                       <TableCell>{command.target_id || ''}</TableCell>
                       <TableCell>{t(action?.label || '')}</TableCell>
                       <TableCell>{command.parameters}</TableCell>
                       <TableCell>{command.date_start}</TableCell>
                       <TableCell align="right">
-                        <AppIconButton icon="delete" onClick={() => setDeleteId(command.id)} />
+                        <AppIconButton icon="delete" title={t('tooltips.delete')} onClick={() => setDeleteId(command.id)} />
                       </TableCell>
                     </TableRow>
                   );

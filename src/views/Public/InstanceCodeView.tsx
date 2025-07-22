@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import React, { KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { validateInstanceCode } from '@/services/instance';
+import { validateAndSaveInstanceCode } from '@/services/instance';
 
 const InstanceCodeView = () => {
   const { t } = useTranslation();
@@ -24,7 +24,7 @@ const InstanceCodeView = () => {
     setError('');
 
     try {
-      const isValid = await validateInstanceCode(code.trim());
+      const isValid = await validateAndSaveInstanceCode(code.trim());
       if (isValid) {
         navigate('/');
       } else {

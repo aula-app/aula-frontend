@@ -8,6 +8,7 @@ This document provides an overview of all custom hooks used in the Aula Frontend
 - [Layout Hooks](#layout-hooks)
 - [Event Hooks](#event-hooks)
 - [Form Hooks](#form-hooks)
+- [Date Hooks](#date-hooks)
 - [Store Hooks](#store-hooks)
 
 ## Authentication Hooks
@@ -115,6 +116,55 @@ Returns:
 - `onFieldChange`: Event handler for form field changes
 - `fieldGetError`: Function to get error message for a specific field
 - `fieldHasError`: Function to check if a field has an error
+
+## Date Hooks
+
+### useDateFormatters
+
+A hook that provides locale-aware date formatting functions based on the user's selected language.
+
+```typescript
+const { formatDateTime, formatDateOnly, getDateTimeFormat, getDateOnlyFormat } = useDateFormatters();
+```
+
+Returns an object with the following methods:
+
+- `formatDateTime(date)`: Format full date and time in user's current locale
+- `formatDateOnly(date)`: Format date only in user's current locale
+- `getDateTimeFormat()`: Get current locale's datetime format string
+- `getDateOnlyFormat()`: Get current locale's date-only format string
+
+**Locale Support:**
+
+- **English (en)**: DD MMMM YYYY HH:mm:ss (e.g. 27 June 2025 14:30:00)
+- **German (de)**: DD.MM.YYYY HH:mm:ss (German format with 24-hour time)
+- **Default**: YYYY-MM-DD HH:mm:ss (ISO format)
+
+**Usage Example:**
+
+```typescript
+import { useDateFormatters } from '@/utils/date';
+
+function EventCard({ event }) {
+  const { formatDateTime, formatDateOnly } = useDateFormatters();
+
+  return (
+    <div>
+      <h3>{event.title}</h3>
+      <p>Start: {formatDateTime(event.startDate)}</p>
+      <p>Date: {formatDateOnly(event.startDate)}</p>
+    </div>
+  );
+}
+```
+
+**Format Examples:**
+
+| Language     | Input: 2025-06-27T14:30:00Z | DateTime Output        | Date Only Output |
+| ------------ | --------------------------- | ---------------------- | ---------------- |
+| English (en) | 2025-06-27T14:30:00Z        | 27 June 2025 14:30:00  | 27 June 2025     |
+| German (de)  | 2025-06-27T14:30:00Z        | 27.06.2025 14:30:00    | 27.06.2025       |
+| Default      | 2025-06-27T14:30:00Z        | 2025-06-27 14:30:00    | 2025-06-27       |
 
 ## Store Hooks
 

@@ -1,3 +1,3 @@
 import PhaseBar from './PhaseBar';
 
-export { PhaseBar as default, PhaseBar };
+export { PhaseBar as default,  };

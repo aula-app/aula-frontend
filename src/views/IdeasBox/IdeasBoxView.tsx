@@ -14,7 +14,7 @@ import { getQuorum } from '@/services/vote';
 import { useAppStore } from '@/store/AppStore';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { checkPermissions } from '@/utils';
+import { announceLoadingState, checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
@@ -62,10 +62,16 @@ const IdeasBoxView = () => {
   const fetchBox = useCallback(async () => {
     if (!box_id) return;
     setBoxLoading(true);
+    // Announce loading state to screen readers
+    announceLoadingState(true, t('scopes.boxes.name'));
+
     const response = await getBox(box_id);
     setBoxError(response.error);
     if (!response.error && response.data) setBox(response.data);
     setBoxLoading(false);
+
+    // Announce completion to screen readers
+    announceLoadingState(false, t('scopes.boxes.name'));
 
     await fetchQuorum();
 
@@ -123,10 +129,16 @@ const IdeasBoxView = () => {
   const fetchIdeas = useCallback(async () => {
     if (!box_id) return;
     setIdeasLoading(true);
+    // Announce loading state to screen readers
+    announceLoadingState(true, t('scopes.ideas.plural'));
+
     const response = await getIdeasByBox({ topic_id: box_id });
     setIdeasError(response.error);
     if (!response.error) setIdeas(response.data || []); // Filter approved ideas only if phase is 30
     setIdeasLoading(false);
+
+    // Announce completion to screen readers
+    announceLoadingState(false, t('scopes.ideas.plural'));
   }, [box_id]);
 
   const ideaClose = () => {
@@ -170,15 +182,21 @@ const IdeasBoxView = () => {
         scrollSnapType: 'y mandatory',
       }}
     >
-      {isBoxLoading && <BoxCardSkeleton />}
+      {isBoxLoading && (
+        <>
+          <BoxCardSkeleton />
+        </>
+      )}
       {boxError && <Typography>{t(boxError)}</Typography>}
       {!isBoxLoading && box && <BoxCard box={box} onDelete={() => boxDelete()} onEdit={() => boxEdit(box)} disabled />}
       {isIdeasLoading && (
-        <Grid container spacing={1} pt={1} pb={2}>
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
-            <IdeaCardSkeleton />
+        <>
+          <Grid container spacing={1} pt={1} pb={2}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
+              <IdeaCardSkeleton />
+            </Grid>
           </Grid>
-        </Grid>
+        </>
       )}
       {ideasError && <Typography>{t(ideasError)}</Typography>}
       {!isIdeasLoading && box && (
@@ -203,8 +221,8 @@ const IdeasBoxView = () => {
           <Grid container spacing={1} pt={1} pb={2}>
             {ideas
               .filter((idea) => idea.approved >= 0)
-              .map((idea, key) => (
-                <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={key} />
+              .map((idea) => (
+                <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={idea.hash_id} />
               ))}
             {checkPermissions('boxes', 'addIdea') && Number(phase) < 20 && (
               <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
@@ -226,12 +244,12 @@ const IdeasBoxView = () => {
               <Grid container spacing={1} pt={1} pb={2}>
                 {ideas
                   .filter((idea) => idea.approved < 0)
-                  .map((idea, key) => (
+                  .map((idea) => (
                     <IdeaCard
                       idea={idea}
                       quorum={quorum}
                       phase={Number(box.phase_id) as RoomPhases}
-                      key={key}
+                      key={idea.hash_id}
                       disabled
                     />
                   ))}

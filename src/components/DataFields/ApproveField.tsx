@@ -45,6 +45,7 @@ const ApproveField: React.FC<Props> = ({ control, disabled = false, ...restOfPro
               onClick={() => field.onChange(1)}
               variant="contained"
               size="small"
+              data-testid="approve-button"
               disabled={disabled}
             >
               <AppIcon icon="approved" />

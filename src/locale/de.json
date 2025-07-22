@@ -1,4 +1,10 @@
 {
+  "app": {
+    "name": {
+      "logo": "Aula Bildungsplattform Logo",
+      "icon": "Aula Bildungsplattform Symbol"
+    }
+  },
   "actions": {
     "activate": "{{var}} aktivieren",
     "add": "Neue {{var}}",
@@ -17,16 +23,27 @@
     "download": "Herunterladen",
     "edit": "{{var}} bearbeiten",
     "filter": "Filtern",
+    "hideFilters": "Filter ausblenden",
     "hide": "Ausblenden",
-    "loading": "Laden",
-    "move": "Ausgewählte {{var}} verschieben nach",
+    "loading": "Wird geladen",
+    "loadingComplete": "Laden abgeschlossen",
+    "loadingFailed": "Laden fehlgeschlagen",
+    "more": "Mehr",
+    "move": "{{var}} verschieben",
+    "options": "Optionen",
     "print": "Drucken",
+    "processing": "Verarbeitung",
     "remove": "{{var}} entfernen",
     "save": "Speichern",
+    "saving": "Speichern",
+    "savingComplete": "Speichern abgeschlossen",
     "select": "{{var}} auswählen",
     "set": "{{var}} setzen",
     "show": "Anzeigen",
-    "unarchive": "Aus Archiv holen"
+    "showFilters": "Filter anzeigen",
+    "submitting": "Wird übermittelt",
+    "unarchive": "Aus Archiv holen",
+    "updating": "Aktualisierung"
   },
   "clipboard": {
     "linkCopied": "Link in die Zwischenablage kopiert",
@@ -45,7 +62,8 @@
       "button": "Login",
       "label": "Nutzername",
       "noAccount": "Du hast noch kein Konto?",
-      "title": "Anmelden"
+      "title": "Anmelden",
+      "reset_code": "neuer Code"
     },
     "logout": "Logout",
     "messages": {
@@ -114,6 +132,7 @@
     "noData": "Keine Daten verfügbar",
     "noServer": "Server ist nicht verfügbar",
     "notFound": "Hier gibt es keine Neuigkeiten",
+    "notFoundImage": "Schlafende Charakterillustration für Seite nicht gefunden",
     "offline": "Der Zugang zu dieser Schule ist gesperrt. Bitte versuchen Sie es später wieder",
     "timeout": "Zeitüberschreitung der Anfrage",
     "unauthorized": "Diese Seite erfordert eine Authentifizierung"
@@ -145,6 +164,8 @@
       "integer": "Bitte geben Sie eine ganze Zahl ein",
       "maxLength": "Muss kleiner sein als {{var}} Zeichen",
       "minLength": "Muss größer sein als {{var}} Zeichen",
+      "contentTooLong": "Ihr {{scope}} ist zu lang (maximal {{max}} Zeichen)",
+      "titleTooLong": "Ihr {{scope}}-Titel ist zu lang (maximal {{max}} Zeichen)",
       "name": "Die Namen sollten nur Buchstaben enthalten",
       "nonNegative": "Kann keine negative Zahl sein",
       "noOptions": "Keine Optionen verfügbar",
@@ -164,6 +185,11 @@
   },
   "patterns": {
     "on": "{{a}} zur {{b}}"
+  },
+  "profile": {
+    "avatar": {
+      "preview": "Avatarbild-Vorschau"
+    }
   },
   "phases": {
     "approval": "Prüfung",
@@ -236,6 +262,12 @@
     "title": "Benutzerrollen",
     "roomRoles": "Raumrollen",
     "empty": "Nicht in diesem Raum"
+  },
+  "room": {
+    "image": {
+      "color": "Farboption {{number}}",
+      "pattern": "Bildmuster {{number}}"
+    }
   },
   "scopes": {
     "announcements": {
@@ -333,6 +365,7 @@
       "exportGranted": "Kontodatenexport gewährt",
       "exportRequest": "Datenexport angefordert",
       "update": "Daten aktualisieren",
+      "updateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer Felder: {{var}} anfordern möchten? Diese Aktion sollte von einem Admin validiert werden, um durchgeführt zu werden",
       "dataUpdateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer {{var}} anfordern möchten? Diese Aktion muss von einem Admin bestätigt werden, damit sie durchgeführt werden kann."
     },
     "advanced": {
@@ -437,7 +470,8 @@
     },
     "customFields": {
       "form": "Benutzerdefiniertes Feld {{var}}",
-      "label": "Benutzerdefinierte Felder"
+      "label": "Benutzerdefinierte Felder",
+      "updated": "Benutzerdefinierte Felder aktualisiert"
     },
     "general": {
       "description": "Beschreibung",
@@ -497,15 +531,79 @@
   },
   "tooltips": {
     "approval": "Das Prüfungsteam überprüft Ideen auf Machbarkeit vor der Abstimmung",
+    "archive": "Archivieren",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "chat": "Verbesserungsvorschläge sehen",
+    "close": "Schließen",
     "comment": "Kommentare helfen, Ideen durch konstruktives Feedback zu verbessern",
     "delegate": "Du kannst deine Stimme an eine andere Person übertragen und sie jederzeit zurücknehmen",
+    "delete": "Löschen",
     "discussion": "Hier werden Ideen durch Zusammenarbeit in Projektpläne verwandelt",
+    "edit": "Bearbeiten",
+    "heart": "Gefällt mir",
+    "heartFull": "Gefällt mir nicht mehr",
+    "link": "Link kopieren",
+    "logout": "Abmelden",
+    "menu": "Menü",
+    "message": "Nachricht senden",
+    "more": "Mehr",
+    "print": "Drucken",
     "quorum": "Erforderliche Likes, um in die Diskussionsphase zu gelangen",
+    "report": "Melden",
     "results": "Abstimmungsergebnisse und genehmigte Ideen zur Umsetzung anzeigen",
+    "unarchive": "Wiederherstellen",
     "voting": "Stimme für genehmigte Ideen abgeben",
-    "wild": "Hier kannst du erste Ideen und Vorschläge posten"
+    "wild": "Hier kannst du erste Ideen und Vorschläge posten",
+    "zoomIn": "Vergrößern",
+    "zoomOut": "Verkleinern"
+  },
+  "user": {
+    "avatar": "Benutzeravatar für {{id}}"
   },
   "ui": {
+    "accessibility": {
+      "actionToolbar": "Aktionsleiste",
+      "clearFilter": "Filter löschen",
+      "codeCopied": "Instanzcode in die Zwischenablage kopiert",
+      "confirmDeletion": "Bestätige das Löschen von {{count}} {{type}}",
+      "contentChanged": "Inhalt wurde geändert",
+      "contentLoaded": "Inhalt geladen",
+      "copyInstanceCode": "Instanzcode {{code}} in die Zwischenablage kopieren",
+      "dialogClosed": "Dialog geschlossen",
+      "editingStarted": "Erstelle neue {{type}}",
+      "enterFilterValue": "Filterwert eingeben",
+      "errorOccurred": "Ein Fehler ist aufgetreten",
+      "filterApplied": "Filter angewendet: {{field}} enthält {{value}}",
+      "filterCleared": "Filter gelöscht",
+      "filterFieldSelected": "Filterfeld {{field}} ausgewählt",
+      "filtersOpened": "Filter geöffnet",
+      "filtersClosed": "Filter geschlossen",
+      "filterValueCleared": "Filterwert gelöscht",
+      "filterValueFor": "Filterwert für {{field}}",
+      "filterValueHelp": "Tippen, um nach diesem Feld zu filtern, Escape drücken, um zu löschen",
+      "formSubmitted": "Formular erfolgreich übermittelt",
+      "formError": "Formularübermittlung fehlgeschlagen",
+      "itemsDeleted": "{{count}} {{type}} gelöscht",
+      "loadingContent": "Inhalt wird geladen",
+      "menuClosed": "Navigationsmenü geschlossen",
+      "menuItemSelected": "{{item}} aus dem Navigationsmenü ausgewählt",
+      "modalOpened": "{{title}} Dialog geöffnet",
+      "modalClosed": "Dialog geschlossen",
+      "navigationDescription": "Verwenden Sie die Pfeiltasten zur Navigation zwischen den Menüpunkten, Enter zum Auswählen und Escape zum Schließen des Menüs",
+      "newContent": "Neuer Inhalt verfügbar",
+      "requestedChanges": "Angeforderte Änderungen",
+      "roomRolesList": "Raumrollen Liste",
+      "selectFieldFirst": "Wähle zuerst ein Feld zum Filtern aus",
+      "selectFilterField": "Wähle ein Feld zum Filtern aus",
+      "sidebarActions": "Seitenleistenaktionen",
+      "sortColumn": "Sortieren nach {{column}}, aktuell {{direction}}",
+      "editUserAvatar": "Benutzeravatar bearbeiten",
+      "pressToContinue": "Drücken Sie Enter zum Fortfahren, Escape zum Abbrechen",
+      "pressToClose": "Drücken Sie Escape zum Schließen",
+      "processingRequest": "Ihre Anfrage wird verarbeitet",
+      "updatingContent": "Inhalt wird aktualisiert"
+    },
     "common": {
       "all": "Alle",
       "and": "und",
@@ -583,6 +681,7 @@
       "dashboard": "Meine Ideen",
       "home": "Startseite",
       "ideas": "Ideen",
+      "mainMenu": "Hauptnavigation",
       "messages": "Nachrichten",
       "privacy": "Datenschutz",
       "profile": "Profil",
@@ -591,6 +690,7 @@
       "rooms": "Räume",
       "security": "Sicherheit",
       "settings": "Einstellungen",
+      "skipToContent": "Zum Hauptinhalt springen",
       "system": "System",
       "users": "Benutzer"
     },

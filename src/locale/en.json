@@ -1,4 +1,10 @@
 {
+  "app": {
+    "name": {
+      "logo": "Aula Education Platform Logo",
+      "icon": "Aula Education Platform Icon"
+    }
+  },
   "actions": {
     "activate": "Activate {{var}}",
     "add": "New {{var}}",
@@ -17,16 +23,27 @@
     "download": "Download",
     "edit": "Edit {{var}}",
     "filter": "Filter",
+    "hideFilters": "Hide filters",
     "hide": "Hide",
     "loading": "Loading",
+    "loadingComplete": "Loading complete",
+    "loadingFailed": "Loading failed",
+    "more": "More",
     "move": "Move selected {{var}} to",
+    "options": "Options",
     "print": "Print",
+    "processing": "Processing",
     "remove": "Delete {{var}}",
     "save": "Save",
+    "saving": "Saving",
+    "savingComplete": "Saving complete",
     "select": "Select {{var}}",
     "set": "Set {{var}}",
     "show": "Show",
-    "unarchive": "Unarchive"
+    "showFilters": "Show filters",
+    "submitting": "Submitting",
+    "unarchive": "Unarchive",
+    "updating": "Updating"
   },
   "clipboard": {
     "linkCopied": "Link copied to clipboard",
@@ -45,7 +62,8 @@
       "button": "Login",
       "label": "Username",
       "noAccount": "Need an account?",
-      "title": "Sign in"
+      "title": "Sign in",
+      "reset_code": "New code"
     },
     "logout": "Sign out",
     "messages": {
@@ -114,6 +132,7 @@
     "noData": "No data available",
     "noServer": "Server is not available",
     "notFound": "There are no news here",
+    "notFoundImage": "Sleeping character illustration for not found page",
     "offline": "The access to this school is suspended. Please try again later",
     "timeout": "The request timed out",
     "unauthorized": "This page requires authentication"
@@ -145,6 +164,8 @@
       "integer": "Please enter a whole number",
       "maxLength": "Must be less than {{var}} characters",
       "minLength": "Must be at least {{var}} characters",
+      "contentTooLong": "Your {{scope}} is too long (maximum {{max}} characters)",
+      "titleTooLong": "Your {{scope}} title is too long (maximum {{max}} characters)",
       "name": "Name can only contain letters",
       "nonNegative": "Number cannot be negative",
       "noOptions": "No options available",
@@ -164,6 +185,11 @@
   },
   "patterns": {
     "on": "{{a}} on {{b}}"
+  },
+  "profile": {
+    "avatar": {
+      "preview": "Avatar image preview"
+    }
   },
   "phases": {
     "approval": "Approval",
@@ -236,6 +262,12 @@
     "title": "User Roles",
     "roomRoles": "Room Roles",
     "empty": "Not in this room"
+  },
+  "room": {
+    "image": {
+      "color": "Color option {{number}}",
+      "pattern": "Image pattern {{number}}"
+    }
   },
   "scopes": {
     "announcements": {
@@ -333,7 +365,8 @@
       "exportGranted": "Account data export granted",
       "exportRequest": "Data export requested",
       "update": "Update data",
-      "updateText": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place"
+      "updateText": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place",
+      "dataUpdateText": "Are you sure you want to request the update of your {{var}}? This action must be confirmed by an Admin to take place."
     },
     "advanced": {
       "headline": "Advanced options",
@@ -437,7 +470,8 @@
     },
     "customFields": {
       "form": "Custom field {{var}}",
-      "label": "Custom fields"
+      "label": "Custom fields",
+      "updated": "Custom fields updated"
     },
     "general": {
       "description": "Description",
@@ -497,15 +531,79 @@
   },
   "tooltips": {
     "approval": "The approval team reviews ideas for feasibility before voting",
+    "archive": "Archive",
+    "back": "Go back",
+    "cancel": "Cancel",
+    "chat": "Open chat",
+    "close": "Close",
     "comment": "Comments help improve ideas through constructive feedback",
     "delegate": "You can delegate your vote to another person and revoke it at any time",
+    "delete": "Delete",
     "discussion": "Ideas are refined into project plans through collaboration",
+    "edit": "Edit",
+    "heart": "Like",
+    "heartFull": "Unlike",
+    "link": "Copy Link",
+    "logout": "Log out",
+    "menu": "Menu",
+    "message": "Send a message",
+    "more": "More",
+    "print": "Print",
     "quorum": "Required likes to advance to discussion phase",
+    "report": "Report",
     "results": "View voting results and approved ideas for implementation",
+    "unarchive": "Unarchive",
     "voting": "Cast your vote on approved ideas",
-    "wild": "Share and like initial ideas and suggestions"
+    "wild": "Share and like initial ideas and suggestions",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out"
+  },
+  "user": {
+    "avatar": "User avatar for {{id}}"
   },
   "ui": {
+    "accessibility": {
+      "actionToolbar": "Action toolbar",
+      "clearFilter": "Clear filter",
+      "codeCopied": "Instance code copied to clipboard",
+      "confirmDeletion": "Confirm deletion of {{count}} {{type}}",
+      "contentChanged": "Content has changed",
+      "contentLoaded": "Content loaded",
+      "copyInstanceCode": "Copy instance code {{code}} to clipboard",
+      "dialogClosed": "Dialog closed",
+      "editingStarted": "Creating new {{type}}",
+      "enterFilterValue": "Enter filter value",
+      "errorOccurred": "An error occurred",
+      "filterApplied": "Filter applied: {{field}} contains {{value}}",
+      "filterCleared": "Filter cleared",
+      "filterFieldSelected": "Filter field {{field}} selected",
+      "filtersOpened": "Filters opened",
+      "filtersClosed": "Filters closed",
+      "filterValueCleared": "Filter value cleared",
+      "filterValueFor": "Filter value for {{field}}",
+      "filterValueHelp": "Type to filter by this field, press Escape to clear",
+      "formSubmitted": "Form submitted successfully",
+      "formError": "Form submission failed",
+      "itemsDeleted": "{{count}} {{type}} deleted",
+      "loadingContent": "Loading content",
+      "menuClosed": "Navigation menu closed",
+      "menuItemSelected": "Selected {{item}} from navigation menu",
+      "modalOpened": "{{title}} dialog opened",
+      "modalClosed": "Dialog closed",
+      "navigationDescription": "Use arrow keys to navigate between menu items, Enter to select, and Escape to close the menu",
+      "newContent": "New content available",
+      "requestedChanges": "Requested changes",
+      "roomRolesList": "Room roles list",
+      "selectFieldFirst": "Select a field to filter by first",
+      "selectFilterField": "Select field to filter by",
+      "sidebarActions": "Sidebar actions",
+      "sortColumn": "Sort by {{column}}, currently {{direction}}",
+      "editUserAvatar": "Edit user avatar",
+      "pressToContinue": "Press Enter to continue, Escape to cancel",
+      "pressToClose": "Press Escape to close",
+      "processingRequest": "Processing your request",
+      "updatingContent": "Updating content"
+    },
     "common": {
       "all": "All",
       "and": "and",
@@ -583,6 +681,7 @@
       "dashboard": "My Ideas",
       "home": "Home",
       "ideas": "Ideas",
+      "mainMenu": "Main navigation",
       "messages": "Messages",
       "privacy": "Privacy",
       "profile": "Profile",
@@ -591,6 +690,7 @@
       "rooms": "Rooms",
       "security": "Security",
       "settings": "Settings",
+      "skipToContent": "Skip to main content",
       "system": "System",
       "users": "Users"
     },

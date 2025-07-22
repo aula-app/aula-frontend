@@ -1,0 +1,88 @@
+name: Feature Branch Deployment
+
+on:
+  pull_request:
+    # branches: [dev, staging, prod, main]  # filter according to the PR target branch
+    types: [opened, synchronize, reopened]
+
+env:
+  NODE_VERSION: '22'
+  DEPLOY_BASE_PATH: '/var/www-branch'
+
+jobs:
+  deploy:
+    # skip deploying dev,staging,prod branches when they're the PR source branch
+    if: ${{ !contains(fromJSON('["dev", "staging", "prod"]'), github.head_ref) }}
+
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Get branch name
+        id: branch-name
+        run: |
+          if [[ $GITHUB_EVENT_NAME == 'pull_request' ]]; then
+            BRANCH_NAME="${{ github.head_ref }}"
+          else
+            BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          fi
+          echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
+          # Convert branch name to URL-safe format
+          SAFE_BRANCH_NAME=$(echo $BRANCH_NAME | sed 's/[^a-zA-Z0-9]/-/g')
+          echo "SAFE_BRANCH_NAME=$SAFE_BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Update environment variables
+        run: |
+          # Replace or add environment variables
+          if [ -f ".env.branch" ]; then
+            # Update existing variables
+            sed -i 's#^VITE_APP_BASENAME.*=.*#VITE_APP_BASENAME = /${{ env.SAFE_BRANCH_NAME }}/#g' .env.branch
+            sed -i 's#^VITE_APP_MULTI.*=.*#VITE_APP_MULTI = false#g' .env.branch
+          fi
+          cp .env.branch .env
+
+      - name: Build application
+        run: yarn run build-branch
+        env:
+          # Add any environment variables needed for your build
+          PUBLIC_URL: /${{ env.SAFE_BRANCH_NAME }}
+
+      - name: Deploy to Apache directory
+        run: |
+          DEPLOY_PATH="${{ env.DEPLOY_BASE_PATH }}/${{ env.SAFE_BRANCH_NAME }}"
+
+          # Create the directory if it doesn't exist
+          mkdir -p $DEPLOY_PATH
+
+          # Copy the built files
+          rm -rf $DEPLOY_PATH/*
+          cp -r ./build/* $DEPLOY_PATH/
+
+          # - name: Comment on PR
+          #   if: github.event_name == 'pull_request'
+          #   uses: actions/github-script@v7
+          #   with:
+          #     script: |
+          #       const branch = process.env.SAFE_BRANCH_NAME;
+          #       const baseUrl = process.env.SITE_BASE_URL || `http://${process.env.HOSTNAME}`;
+          #       const deployUrl = `${baseUrl}/previews/${branch}/`;
+          #       
+          #       github.rest.issues.createComment({
+          #         issue_number: context.issue.number,
+          #         owner: context.repo.owner,
+          #         repo: context.repo.name,
+          #         body: `✨ Preview deployment is ready!\n\nYou can view this branch at: ${deployUrl}`
+          #       })
+          #   env:
+          #     SITE_BASE_URL: ${{ secrets.SITE_BASE_URL }}

@@ -114,7 +114,14 @@ const DataSettings = ({ onReload }: Props) => {
       <Stack direction="row" alignItems="center" gap={3} flexWrap="wrap">
         <Typography flex={1}>{t('forms.csv.template')}</Typography>
         <Stack flex={1} gap={2}>
-          <Button variant="contained" component="label" fullWidth disabled={loading}>
+          <Button
+            variant="contained"
+            component="label"
+            fullWidth
+            disabled={loading}
+            data-testid="upload-users-csv-button"
+            aria-label={t('ui.files.upload')}
+          >
             {t('ui.files.upload')}
             <input type="file" name="my_files" multiple hidden onChange={handleFileChange} />
           </Button>
@@ -173,11 +180,16 @@ const DataSettings = ({ onReload }: Props) => {
             noAdmin
             disabled={loading}
           />
-          <RoomField selected={rooms} onChange={(updates) => setRooms(updates)} disabled={loading} />
+          <RoomField
+            data-testid="user-room-select"
+            selected={rooms}
+            onChange={(updates) => setRooms(updates)}
+            disabled={loading}
+          />
         </Stack>
         <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
       </Stack>
-      <Button variant="contained" component="label" onClick={onSubmit} disabled={loading}>
+      <Button data-testid="confirm_upload" variant="contained" component="label" onClick={onSubmit} disabled={loading}>
         {loading ? t('status.waiting') : t('actions.confirm')}
       </Button>
     </Stack>
