@@ -10,7 +10,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import LikeButton from '../../Buttons/LikeButton';
 import CategoryList from '../CategoryList';
 import UserBar from '../UserBar';
-import { successAlert } from '@/utils';
+import { checkPermissions, successAlert } from '@/utils';
 import { useAppStore } from '@/store';
 import { useTranslation } from 'react-i18next';
 
@@ -88,7 +88,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
                   }}
                 />
               )}
-              <LikeButton disabled={disabled} item={idea} />
+              <LikeButton disabled={disabled || !checkPermissions('ideas', 'like', idea.user_hash_id)} item={idea} />
               {idea.sum_comments > 0 && !idea_id && (
                 <AppIconButton icon="chat" title={t('tooltips.chat')} to={to} disabled={disabled}>
                   {idea.sum_comments}

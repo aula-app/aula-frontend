@@ -43,7 +43,7 @@ const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled }, ref
       icon={likeStatus ? 'heartFull' : 'heart'}
       title={t(`tooltips.${likeStatus ? 'heartFull' : 'heart'}`)}
       onClick={toggleLike}
-      disabled={disabled || !checkPermissions('ideas', 'like')}
+      disabled={disabled}
       aria-label={likeStatus ? t('actions.unlike') : t('actions.like')}
       aria-pressed={likeStatus}
     >
