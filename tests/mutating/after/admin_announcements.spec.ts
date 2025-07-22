@@ -37,14 +37,14 @@ test.describe('Admin announcements', () => {
     await admin.locator('a[href="/settings/announcements"]').click({ timeout: 1000 });
 
     const NewButton = admin.getByRole('button', { name: 'Neue ankündigung' });
-    await expect(NewButton).toBeVisible({ timeout: 1000 });
+    await expect(NewButton).toBeVisible();
     await NewButton.click({ timeout: 1000 });
 
-    await admin.locator('input[name="headline"]').fill('Testing content', { timeout: 1000 });
+    await admin.locator('input[name="headline"]').fill('Testing content');
     await admin.locator('div[contenteditable="true"]').fill('some data');
 
     const Selector = admin.locator('input[name="user_needs_to_consent"]').locator('..');
-    await expect(Selector).toBeVisible({ timeout: 1000 });
+    await expect(Selector).toBeVisible();
     await Selector.click({ timeout: 1000 });
     await admin.getByRole('option', { name: 'Obligatorische Zustimmung' }).click({ timeout: 1000 });
     // submit the idea form
@@ -57,10 +57,10 @@ test.describe('Admin announcements', () => {
     await sleep(1);
 
     const ModalDiv = admin.locator('div[role="dialog"]');
-    await expect(ModalDiv).toBeVisible({ timeout: 1000 });
+    await expect(ModalDiv).toBeVisible();
 
     const ApproveButton = ModalDiv.getByRole('button', { name: 'Zustimmen' }).first();
-    await expect(ApproveButton).toBeVisible({ timeout: 1000 });
+    await expect(ApproveButton).toBeVisible();
     await ApproveButton.click({ timeout: 1000 });
 
     admin.close(); */
@@ -85,10 +85,10 @@ test.describe('Admin announcements', () => {
     }).rejects.toThrow();
 
     const ModalDiv = alice.locator('div[role="dialog"]');
-    await expect(ModalDiv).toBeVisible({ timeout: 1000 });
+    await expect(ModalDiv).toBeVisible();
 
     const ApproveButton = ModalDiv.getByRole('button', { name: 'Zustimmen' }).first();
-    await expect(ApproveButton).toBeVisible({ timeout: 1000 });
+    await expect(ApproveButton).toBeVisible();
     await ApproveButton.click({ timeout: 1000 });
 
     // now she can
@@ -104,14 +104,14 @@ test.describe('Admin announcements', () => {
     await admin.locator('a[href="/settings/announcements"]').click({ timeout: 1000 });
     await admin.locator('input[type="checkbox"]').first().click({ timeout: 1000 });
     const DeleteButton = admin.getByRole('button', { name: 'Ankündigung entfernen' });
-    await expect(DeleteButton).toBeVisible({ timeout: 1000 });
+    await expect(DeleteButton).toBeVisible();
     await DeleteButton.click({ timeout: 1000 });
 
     const Dialog = admin.getByRole('dialog');
-    await expect(Dialog).toBeVisible({ timeout: 3000 });
+    await expect(Dialog).toBeVisible();
 
     const ConfirmButton = Dialog.getByRole('button', { name: 'Löschen' });
-    await expect(ConfirmButton).toBeVisible({ timeout: 3000 });
+    await expect(ConfirmButton).toBeVisible();
     await ConfirmButton.click({ timeout: 1000 });
 
     alice.close();

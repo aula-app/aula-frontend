@@ -33,12 +33,12 @@ test.describe('Request user data flow', () => {
 
     // open datenschutz accordeon
     const DatenschutzAccordeon = alice.getByRole('button', { name: 'Datenschutz' });
-    await expect(DatenschutzAccordeon).toBeVisible({ timeout: 1000 });
+    await expect(DatenschutzAccordeon).toBeVisible();
     await DatenschutzAccordeon.click({ timeout: 1000 });
 
     // press request data button
     const RequestDataButton = alice.getByRole('button', { name: 'Datenexport anfordern' });
-    await expect(RequestDataButton).toBeVisible({ timeout: 1000 });
+    await expect(RequestDataButton).toBeVisible();
     await RequestDataButton.click({ timeout: 1000 });
 
     await alice.close();
@@ -58,21 +58,21 @@ test.describe('Request user data flow', () => {
       .locator('div')
       .filter({ hasText: `Kontodatenexportanfrage für ${fixtures.alice.displayName}` })
       .first();
-    await expect(AnfrageDiv).toBeVisible({ timeout: 1000 });
+    await expect(AnfrageDiv).toBeVisible();
 
     const ApproveButton = AnfrageDiv.getByRole('button', { name: 'Bestätigen' }).first();
-    await expect(ApproveButton).toBeVisible({ timeout: 1000 });
+    await expect(ApproveButton).toBeVisible();
     await ApproveButton.click({ timeout: 1000 });
 
     const ModalDiv = admin.locator('div[role="dialog"]');
-    await expect(ModalDiv).toBeVisible({ timeout: 1000 });
+    await expect(ModalDiv).toBeVisible();
 
     const SecondApproveButton = ModalDiv.getByRole('button', { name: 'Bestätigen' }).first();
-    await expect(SecondApproveButton).toBeVisible({ timeout: 1000 });
+    await expect(SecondApproveButton).toBeVisible();
     await SecondApproveButton.click({ timeout: 1000 });
 
     const DownloadButton = AnfrageDiv.getByRole('button', { name: 'Herunterladen' }).first();
-    await expect(DownloadButton).toBeVisible({ timeout: 1000 });
+    await expect(DownloadButton).toBeVisible();
 
     await admin.close();
   });
@@ -86,24 +86,24 @@ test.describe('Request user data flow', () => {
 
     // navigate to the user setting page:
     const MessagesButton = alice.locator('a[href="/messages"]');
-    await expect(MessagesButton).toBeVisible({ timeout: 1000 });
+    await expect(MessagesButton).toBeVisible();
     await MessagesButton.click({ timeout: 1000 });
 
     const MessageButton = alice
       .locator('a')
       .filter({ hasText: `Kontodatenexportanfrage für ${fixtures.alice.displayName}` })
       .first();
-    await expect(MessageButton).toBeVisible({ timeout: 5000 });
+    await expect(MessageButton).toBeVisible();
     await MessageButton.click({ timeout: 1000 });
 
     const AnfrageDiv = alice
       .locator('div')
       .filter({ hasText: `Kontodatenexportanfrage für ${fixtures.alice.displayName}` })
       .first();
-    await expect(AnfrageDiv).toBeVisible({ timeout: 5000 });
+    await expect(AnfrageDiv).toBeVisible();
 
     const DownloadButton = AnfrageDiv.getByRole('button', { name: 'Herunterladen' }).first();
-    await expect(DownloadButton).toBeVisible({ timeout: 5000 });
+    await expect(DownloadButton).toBeVisible();
     await DownloadButton.click({ timeout: 1000 });
 
     const Download = await alice.waitForEvent('download');

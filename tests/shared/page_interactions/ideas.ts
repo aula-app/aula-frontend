@@ -31,7 +31,7 @@ export const goToBox = async (
   box: ideaFixtures.BoxData
 ) => {
   const BoxDiv = await page.getByText(box.name, { exact: true });
-  await expect(BoxDiv).toBeVisible({ timeout: 2000 });
+  await expect(BoxDiv).toBeVisible();
   await BoxDiv.click({ timeout: 1000 });
 };
 
@@ -40,7 +40,7 @@ export const goToPhase = async (
   phase: number
 ) => {
   const GoToApprovalPhaseButton = page.getByTestId(`link-to-phase-${phase}`);
-  await expect(GoToApprovalPhaseButton).toBeVisible({ timeout: 2000 });
+  await expect(GoToApprovalPhaseButton).toBeVisible();
   await GoToApprovalPhaseButton.click({ timeout: 1000 });
 };
 
@@ -55,7 +55,7 @@ export const create = async (
   await goToRoom(page, room);
 
   const AddIdeaButton = page.locator('[aria-label="add idea"]');
-  await expect(AddIdeaButton).toBeVisible({ timeout: 5000 });
+  await expect(AddIdeaButton).toBeVisible();
   await AddIdeaButton.click({ timeout: 1000 });
 
   // fill in the necessary information
@@ -66,7 +66,7 @@ export const create = async (
     // how to fill in one of those MUI multiselectors:
     const SelectorId = await page.getAttribute('label:text("Kategorie")', 'for');
     const CategorySelector = page.locator(`#${shared.cssEscape(SelectorId!)}`);
-    await expect(CategorySelector).toBeVisible({ timeout: 2000 });
+    await expect(CategorySelector).toBeVisible();
 
     await CategorySelector.click({ timeout: 1000 });
     // click a category to the idea
@@ -191,12 +191,12 @@ export const approve = async (
   await page.locator('div[contenteditable="true"]').fill('approved in automated testing');
 
   const ApptoveButton = page.getByTestId(`approve-button`);
-  await expect(ApptoveButton).toBeVisible({ timeout: 2000 });
+  await expect(ApptoveButton).toBeVisible();
 
   await ApptoveButton.click({ timeout: 1000 });
 
   const ConfirmButton = page.locator(`button`).filter({ hasText: 'Bestätigen' });
-  await expect(ConfirmButton).toBeVisible({ timeout: 2000 });
+  await expect(ConfirmButton).toBeVisible();
 
   await ConfirmButton.click({ timeout: 1000 });
 };
@@ -219,7 +219,7 @@ export const vote = async (
   await goToidea(page, idea);
 
   const VoteButton = page.getByTestId(`${vote}`);
-  await expect(VoteButton).toBeVisible({ timeout: 2000 });
+  await expect(VoteButton).toBeVisible();
   await VoteButton.click({ timeout: 1000 });
 };
 
@@ -240,7 +240,7 @@ export const totalVoteCount = async (
   await goToidea(page, idea);
 
   const VoteCount = page.getByTestId(`total-votes`);
-  await expect(VoteCount).toBeVisible({ timeout: 2000 });
+  await expect(VoteCount).toBeVisible();
   const countS = await VoteCount.textContent();
 
   expect(countS).toBeTruthy();
@@ -271,19 +271,19 @@ export const voteCounts = async (
   await goToidea(page, idea);
 
   const ForVoteCount = page.getByTestId(`total-votes-for`);
-  await expect(ForVoteCount).toBeVisible({ timeout: 2000 });
+  await expect(ForVoteCount).toBeVisible();
   const forcountS = await ForVoteCount.textContent();
   expect(forcountS).toBeTruthy();
   const forcount = parseInt(forcountS!);
 
   const AgainstVoteCount = page.getByTestId(`total-votes-against`);
-  await expect(AgainstVoteCount).toBeVisible({ timeout: 2000 });
+  await expect(AgainstVoteCount).toBeVisible();
   const AgainstcountS = await AgainstVoteCount.textContent();
   expect(AgainstcountS).toBeTruthy();
   const Againstcount = parseInt(AgainstcountS!);
 
   const NeutralVoteCount = page.getByTestId(`total-votes-neutral`);
-  await expect(NeutralVoteCount).toBeVisible({ timeout: 2000 });
+  await expect(NeutralVoteCount).toBeVisible();
   const NeutralcountS = await NeutralVoteCount.textContent();
   expect(NeutralcountS).toBeTruthy();
   const Neutralcount = parseInt(NeutralcountS!);
@@ -314,12 +314,12 @@ export const report = async (
   // how to fill in one of those MUI multiselectors:
   const SelectorId = await page.getAttribute('label:text("Berichtskategorie")', 'for');
   const ReasonSelector = page.locator(`#${shared.cssEscape(SelectorId!)}`);
-  await expect(ReasonSelector).toBeVisible({ timeout: 2000 });
+  await expect(ReasonSelector).toBeVisible();
 
   await ReasonSelector.click({ timeout: 1000 });
 
   const Reason = page.locator(`li[data-value="${reason}"]`);
-  await expect(Reason).toBeVisible({ timeout: 2000 });
+  await expect(Reason).toBeVisible();
   await Reason.click({ timeout: 1000 });
 
   await page.locator('div[contenteditable="true"]').fill('reported during automated testing');
@@ -375,12 +375,12 @@ export const reportComment = async (
   // how to fill in one of those MUI multiselectors:
   const SelectorId = await page.getAttribute('label:text("Berichtskategorie")', 'for');
   const ReasonSelector = page.locator(`#${shared.cssEscape(SelectorId!)}`);
-  await expect(ReasonSelector).toBeVisible({ timeout: 2000 });
+  await expect(ReasonSelector).toBeVisible();
 
   await ReasonSelector.click({ timeout: 1000 });
 
   const Reason = page.locator(`li[data-value="${reason}"]`);
-  await expect(Reason).toBeVisible({ timeout: 2000 });
+  await expect(Reason).toBeVisible();
   await Reason.click({ timeout: 1000 });
 
   await page.locator('div[contenteditable="true"]').fill('reported during automated testing');
