@@ -50,6 +50,7 @@ const permissions = {
     create: { role: USER_ROLES },
     edit: { role: 30, self: true },
     delete: { role: 30, self: true },
+    like: { role: VOTING_ROLES, self: false },
     status: { role: 40 },
   },
   configs: {

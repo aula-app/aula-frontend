@@ -6,6 +6,7 @@ import { Stack, StackProps } from '@mui/material';
 import LikeButton from '../../Buttons/LikeButton';
 import UserBar from '../UserBar';
 import { useLocation } from 'react-router-dom';
+import { checkPermissions } from '@/utils';
 
 interface Props extends Omit<StackProps, 'children'> {
   comment: CommentType;
@@ -34,7 +35,10 @@ const CommentBubble: React.FC<Props> = ({ comment, disabled = false, onDelete, o
           onEdit={onEdit}
           link={location.pathname}
         >
-          <LikeButton disabled={disabled} item={comment} />
+          <LikeButton
+            disabled={disabled || !checkPermissions('comments', 'like', comment.user_hash_id)}
+            item={comment}
+          />
         </MoreOptions>
       </Stack>
     </Stack>
