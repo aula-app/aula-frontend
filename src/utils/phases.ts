@@ -1,4 +1,4 @@
-import { PhaseType } from '@/types/SettingsTypes';
+import { PhaseType, RoomPhases } from '@/types/SettingsTypes';
 
 /** Voting phases:
  * 0 - Wild Ideas
@@ -14,7 +14,7 @@ export const phases = {
   '20': 'approval',
   '30': 'voting',
   '40': 'results',
-} as Record<string, PhaseType>;
+} as Record<`${RoomPhases}`, PhaseType>;
 
 export const phaseOptions = [
   { label: 'phases.discussion', value: 10, disabled: false },

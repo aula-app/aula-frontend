@@ -17,13 +17,14 @@ import WildIdeasView from '@/views/WildIdeas';
  */
 const RoomPhaseView = () => {
   const { phase } = useParams();
+  const currentPhase = phase as `${keyof typeof phases}`;
 
-  if (!phase || !phases[phase]) {
+  if (!phase || !phases[currentPhase]) {
     return null;
   }
 
-  const currentPhase = phases[phase] as PhaseType;
-  return currentPhase === 'wild' ? <WildIdeasView /> : <BoxPhaseView />;
+  const activePhase = phases[currentPhase] as PhaseType;
+  return activePhase === 'wild' ? <WildIdeasView /> : <BoxPhaseView />;
 };
 
 export default RoomPhaseView;
