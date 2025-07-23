@@ -123,7 +123,7 @@ const AskConsent = () => {
                   )}
                   {text.user_needs_to_consent > 0 && (
                     <Button variant="contained" onClick={() => consent(text.id)}>
-                      {text.consent_text ?? t('actions.agree')}
+                      {text.consent_text || t('actions.agree')}
                     </Button>
                   )}
                 </DialogActions>

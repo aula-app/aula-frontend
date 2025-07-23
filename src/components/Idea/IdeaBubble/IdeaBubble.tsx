@@ -4,17 +4,17 @@ import ChatBubble from '@/components/ChatBubble';
 import MarkdownReader from '@/components/MarkdownReader';
 import MoreOptions from '@/components/MoreOptions';
 import { IdeaType } from '@/types/Scopes';
-import { Stack, Typography } from '@mui/material';
+import { Stack, StackProps, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import LikeButton from '../../Buttons/LikeButton';
 import CategoryList from '../CategoryList';
 import UserBar from '../UserBar';
-import { successAlert } from '@/utils';
+import { checkPermissions, successAlert } from '@/utils';
 import { useAppStore } from '@/store';
 import { useTranslation } from 'react-i18next';
 
-interface Props {
+interface Props extends Omit<StackProps, 'children'> {
   idea: IdeaType;
   to?: string;
   onDelete: () => void;
@@ -23,14 +23,14 @@ interface Props {
   children?: ReactNode;
 }
 
-const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onDelete, onEdit }) => {
+const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onDelete, onEdit, ...restOfProps }) => {
   const { idea_id } = useParams();
   const location = useLocation();
   const [, dispatch] = useAppStore();
   const { t } = useTranslation();
 
   return (
-    <Stack data-testid={`idea-${idea.title}`} width="100%" sx={{ scrollSnapAlign: 'center' }}>
+    <Stack data-testid={`idea-${idea.title}`} width="100%" sx={{ scrollSnapAlign: 'center' }} {...restOfProps}>
       <ChatBubble disabled={disabled} comment={idea.approved < 0}>
         <AppLink to={to} disabled={!to || disabled}>
           <Stack
@@ -88,7 +88,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
                   }}
                 />
               )}
-              <LikeButton disabled={disabled} item={idea} />
+              <LikeButton disabled={disabled || !checkPermissions('ideas', 'like', idea.user_hash_id)} item={idea} />
               {idea.sum_comments > 0 && !idea_id && (
                 <AppIconButton icon="chat" title={t('tooltips.chat')} to={to} disabled={disabled}>
                   {idea.sum_comments}

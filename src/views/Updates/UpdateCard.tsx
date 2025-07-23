@@ -1,6 +1,7 @@
 import { AppLink } from '@/components';
 import AppIcon, { AllIconsType } from '@/components/AppIcon/AppIcon';
 import { DefaultUpdate } from '@/types/Generics';
+import { RoomPhases } from '@/types/SettingsTypes';
 import { phases } from '@/utils';
 import { Card, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +26,7 @@ const UpdateCard = ({ item, icon, variant, ...restOfProps }: Props) => {
         scrollSnapAlign: 'center',
         px: 3,
         mb: 1,
-        bgcolor: `${phases[item.phase_id || 0]}.main`,
+        bgcolor: `${phases[(item.phase_id as `${RoomPhases}`) || '0']}.main`,
       }}
       variant="outlined"
       {...restOfProps}

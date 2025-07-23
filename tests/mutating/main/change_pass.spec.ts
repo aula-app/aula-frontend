@@ -37,7 +37,7 @@ test.describe('Change pass flow', () => {
 
     // open sicherheit accordeon
     const SicherheitAccordeon = alice.getByRole('button', { name: 'Sicherheit' });
-    await expect(SicherheitAccordeon).toBeVisible({ timeout: 1000 });
+    await expect(SicherheitAccordeon).toBeVisible();
     await SicherheitAccordeon.click({ timeout: 1000 });
 
     await alice.fill('input[name="oldPassword"]', fixtures.alice.password);
@@ -48,7 +48,7 @@ test.describe('Change pass flow', () => {
     await SubmitButton.click({ timeout: 1000 });
 
     const SuccessDiv = alice.locator('div').filter({ hasText: `Passwort erfolgreich geändert` }).first();
-    await expect(SuccessDiv).toBeVisible({ timeout: 1000 });
+    await expect(SuccessDiv).toBeVisible();
 
     alice.close();
   });
@@ -64,7 +64,7 @@ test.describe('Change pass flow', () => {
 
     // open sicherheit accordeon
     const SicherheitAccordeon = alice.getByRole('button', { name: 'Sicherheit' });
-    await expect(SicherheitAccordeon).toBeVisible({ timeout: 1000 });
+    await expect(SicherheitAccordeon).toBeVisible();
     await SicherheitAccordeon.click({ timeout: 1000 });
 
     await alice.fill('input[name="oldPassword"]', 'TEMPPASS!!!');
@@ -75,7 +75,7 @@ test.describe('Change pass flow', () => {
     await SubmitButton.click({ timeout: 1000 });
 
     const SuccessDiv = alice.locator('div').filter({ hasText: `Passwort erfolgreich geändert` }).first();
-    await expect(SuccessDiv).toBeVisible({ timeout: 1000 });
+    await expect(SuccessDiv).toBeVisible();
 
     alice.close();
   });

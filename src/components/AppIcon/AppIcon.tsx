@@ -30,7 +30,7 @@ import {
   BiShocked,
   BiSmile,
 } from 'react-icons/bi';
-import { BsGenderTrans, BsTree } from 'react-icons/bs';
+import { BsGenderTrans, BsSortDown, BsSortUp, BsTree } from 'react-icons/bs';
 import {
   HiHeart,
   HiLink,
@@ -285,6 +285,8 @@ export const ICONS = {
   search: HiOutlineMagnifyingGlass,
   settings: HiOutlineCog6Tooth,
   signup: HiOutlineUserPlus,
+  sort: BsSortDown,
+  sortUp: BsSortUp,
   survey: HiOutlineQuestionMarkCircle,
   text: HiOutlineDocumentText,
   unarchive: BiArchiveOut,
@@ -466,14 +468,14 @@ const AppIcon: React.FC<Props> = ({ icon, size = 'medium', decorative = true, sx
               : '24px'; // no size === md
   // Determine if this icon should get role="img" attribute
   const shouldHaveImgRole = !decorative && icon in ALL_ICONS;
-  
+
   return (
     <Stack
       alignItems="center"
       justifyContent="center"
       className="app-icon"
       aria-hidden={decorative}
-      role={shouldHaveImgRole ? "img" : undefined}
+      role={shouldHaveImgRole ? 'img' : undefined}
       aria-label={shouldHaveImgRole ? `${icon} icon` : undefined}
       sx={{
         fontSize: currentSize,

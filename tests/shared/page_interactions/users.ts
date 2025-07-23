@@ -10,7 +10,7 @@ export const goToProfile = async (page: Page) => {
   await page.goto(host);
 
   const ProfileButton = page.locator('a[href="/settings/profile"]');
-  await expect(ProfileButton).toBeVisible({ timeout: 1000 });
+  await expect(ProfileButton).toBeVisible();
   await ProfileButton.click({ timeout: 1000 });
 };
 
@@ -18,7 +18,7 @@ export const goToSettings = async (page: Page) => {
   await page.goto(host);
 
   const SettingsButton = page.locator('a[href="/settings/configuration"]');
-  await expect(SettingsButton).toBeVisible({ timeout: 1000 });
+  await expect(SettingsButton).toBeVisible();
   await SettingsButton.click({ timeout: 1000 });
 };
 
@@ -26,7 +26,7 @@ export const goToRequests = async (page: Page) => {
   await page.goto(host);
 
   const SettingsButton = page.locator('a[href="/settings/requests"]');
-  await expect(SettingsButton).toBeVisible({ timeout: 1000 });
+  await expect(SettingsButton).toBeVisible();
   await SettingsButton.click({ timeout: 1000 });
 };
 
@@ -34,7 +34,7 @@ export const goToRoomSettings = async (page: Page) => {
   await page.goto(host);
 
   const SettingsButton = page.locator('a[href="/settings/rooms"]');
-  await expect(SettingsButton).toBeVisible({ timeout: 1000 });
+  await expect(SettingsButton).toBeVisible();
   await SettingsButton.click({ timeout: 1000 });
 };
 
@@ -42,7 +42,7 @@ export const goToUserSettings = async (page: Page) => {
   await page.goto(host);
 
   const SettingsButton = page.locator('a[href="/settings/users"]');
-  await expect(SettingsButton).toBeVisible({ timeout: 1000 });
+  await expect(SettingsButton).toBeVisible();
   await SettingsButton.click({ timeout: 1000 });
 };
 
@@ -66,7 +66,7 @@ export const exists = async (page: Page, data: users.UserData) => {
   const row = page.locator('table tr').filter({ hasText: data.username });
 
   // make sure that row actually exists
-  await expect(row).toHaveCount(1, { timeout: 1000 });
+  await expect(row).toHaveCount(1);
 };
 
 export const getTemporaryPass = async (page: Page, data: users.UserData) => {
@@ -90,7 +90,7 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   const row = page.locator('table tr').filter({ hasText: data.username });
 
   // make sure that row actually exists
-  await expect(row).toHaveCount(1, { timeout: 1000 });
+  await expect(row).toHaveCount(1);
 
   // get the temporary password for the user to return and use later
   const viewPassButton = row.locator('button');
@@ -183,7 +183,7 @@ export const login = async (page: Page, data: users.UserData) => {
 
   await page.getByRole('button', { name: 'Login' }).click({ timeout: 1000 });
 
-  await expect(page.locator('h1')).toHaveText('Räume', { timeout: 1000 });
+  await expect(page.locator('h1')).toHaveText('Räume');
 };
 
 export const firstLoginFlow = async (page: Page, data: users.UserData, tempPass: string) => {

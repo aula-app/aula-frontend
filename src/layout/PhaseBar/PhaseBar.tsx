@@ -51,7 +51,7 @@ const PhaseBar: React.FC<PhaseBarProps> = ({ room }) => {
             position: 'relative',
           }}
         >
-          <Tooltip arrow title={t(`tooltips.${phases[displayPhase]}`)}>
+          <Tooltip arrow title={t(`tooltips.${phases[displayPhase as `${RoomPhases}`]}`)}>
             <Stack
               direction="row"
               alignItems="center"
@@ -62,13 +62,13 @@ const PhaseBar: React.FC<PhaseBarProps> = ({ room }) => {
               mx={`-${phaseStyles.spacing}px`}
               height={phaseStyles.height}
               sx={{
-                bgcolor: `${phases[displayPhase]}.main`,
+                bgcolor: `${phases[displayPhase as `${RoomPhases}`]}.main`,
                 clipPath: PHASE_CLIP_PATH,
               }}
             >
-              <AppIcon icon={phases[displayPhase]} />
+              <AppIcon icon={phases[displayPhase as `${RoomPhases}`]} />
               <Typography noWrap overflow="ellipsis" pl={1} fontSize="small">
-                {currentPhase === `${displayPhase}` ? t(`phases.${phases[displayPhase]}`) : ''}
+                {currentPhase === `${displayPhase}` ? t(`phases.${phases[displayPhase as `${RoomPhases}`]}`) : ''}
               </Typography>
             </Stack>
           </Tooltip>

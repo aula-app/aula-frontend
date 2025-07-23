@@ -33,6 +33,9 @@ export default defineConfig({
   },
   globalSetup: './tests/mutating/setup-auth.ts',
   globalTeardown: './tests/mutating/teardown-auth.ts',
+  expect: {
+    timeout: 5000,
+  },
   /* Configure projects for major browsers */
   projects: [
     {

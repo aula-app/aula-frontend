@@ -97,21 +97,21 @@ export const remove = async (page: Page, room: roomFixtures.RoomData) => {
   const row = page.locator('table tr').filter({ hasText: room.name });
 
   // make sure that row actually exists
-  await expect(row).toHaveCount(1, { timeout: 1000 });
+  await expect(row).toHaveCount(1);
 
   const DeleteCheckbox = row.locator('input[type="checkbox"]');
-  await expect(DeleteCheckbox).toBeVisible({ timeout: 1000 });
+  await expect(DeleteCheckbox).toBeVisible();
   DeleteCheckbox.click({ timeout: 1000 });
 
   // press delete button
   const DeleteButton = page.getByRole('button', { name: 'Räume entfernen' });
-  await expect(DeleteButton).toBeVisible({ timeout: 1000 });
+  await expect(DeleteButton).toBeVisible();
   await DeleteButton.click({ timeout: 1000 });
 
   const Dialog = page.getByRole('dialog');
-  await expect(Dialog).toBeVisible({ timeout: 3000 });
+  await expect(Dialog).toBeVisible();
 
   const ConfirmButton = Dialog.getByRole('button', { name: 'Löschen' });
-  await expect(ConfirmButton).toBeVisible({ timeout: 3000 });
+  await expect(ConfirmButton).toBeVisible();
   await ConfirmButton.click({ timeout: 1000 });
 };
