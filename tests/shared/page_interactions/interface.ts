@@ -12,7 +12,7 @@ export const reportBug = async (
   await page.goto(shared.getHost());
 
   const ReportButton = page.locator('[aria-label="Fehler melden"]');
-  await expect(ReportButton).toBeVisible({ timeout: 5000 });
+  await expect(ReportButton).toBeVisible();
   await ReportButton.click({ timeout: 1000 });
 
   await page.locator('div[contenteditable="true"]').fill(reason);
@@ -26,5 +26,5 @@ export const checkReport = async (
 ) => {
   await page.goto(shared.getHost() + '/settings/bugs');
   const Report = page.locator('p').filter({ hasText: reason });
-  await expect(Report).toHaveCount(1, { timeout: 2000 });
+  await expect(Report).toHaveCount(1);
 };

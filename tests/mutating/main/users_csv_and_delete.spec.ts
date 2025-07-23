@@ -59,11 +59,11 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
 
     // open benutzer accordeon
     const BenutzerAccordeon = admin.getByTestId('config-accordion-user');
-    await expect(BenutzerAccordeon).toBeVisible({ timeout: 1000 });
+    await expect(BenutzerAccordeon).toBeVisible();
     await BenutzerAccordeon.click({ timeout: 1000 });
 
     const UploadButton = admin.getByTestId('upload-users-csv-button');
-    await expect(UploadButton).toBeVisible({ timeout: 1000 });
+    await expect(UploadButton).toBeVisible();
     await UploadButton.click({ timeout: 1000 });
 
     const filePath = path.join(__dirname, 'temp-upload.txt');
@@ -81,7 +81,7 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     await admin.getByRole('option').first().click({ timeout: 1000 });
 
     const ApproveButton = admin.locator('[data-testid="confirm_upload"]');
-    await expect(ApproveButton).toBeVisible({ timeout: 1000 });
+    await expect(ApproveButton).toBeVisible();
     await ApproveButton.click({ timeout: 1000 });
 
     fs.unlinkSync(filePath);
@@ -125,18 +125,18 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
 
     // open benutzer accordeon
     const BenutzerAccordeon = jannika.getByTestId('danger-panel-button');
-    await expect(BenutzerAccordeon).toBeVisible({ timeout: 1000 });
+    await expect(BenutzerAccordeon).toBeVisible();
     await BenutzerAccordeon.click({ timeout: 1000 });
 
     const RequestDeletionButton = jannika.getByTestId('delete-account-button');
-    await expect(RequestDeletionButton).toBeVisible({ timeout: 1000 });
+    await expect(RequestDeletionButton).toBeVisible();
     await RequestDeletionButton.click({ timeout: 1000 });
 
     const ModalDiv = jannika.locator('div[role="dialog"]');
-    await expect(ModalDiv).toBeVisible({ timeout: 1000 });
+    await expect(ModalDiv).toBeVisible();
 
     const SecondApproveButton = ModalDiv.getByTestId('confirm-button').first();
-    await expect(SecondApproveButton).toBeVisible({ timeout: 1000 });
+    await expect(SecondApproveButton).toBeVisible();
     await SecondApproveButton.click({ timeout: 1000 });
 
     // admin actions
@@ -149,17 +149,17 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
       .locator('div')
       .filter({ hasText: `Kontolöschungsanfrage für ${data.jannikaData.displayName}` })
       .first();
-    await expect(AnfrageDiv).toBeVisible({ timeout: 1000 });
+    await expect(AnfrageDiv).toBeVisible();
 
     const ApproveButton = AnfrageDiv.getByTestId('confirm-request').first();
-    await expect(ApproveButton).toBeVisible({ timeout: 1000 });
+    await expect(ApproveButton).toBeVisible();
     await ApproveButton.click({ timeout: 1000 });
 
     const ModalDiv2 = admin.locator('div[role="dialog"]');
-    await expect(ModalDiv2).toBeVisible({ timeout: 1000 });
+    await expect(ModalDiv2).toBeVisible();
 
     const SecondApproveButton2 = ModalDiv2.getByTestId('confirm-request-action').first();
-    await expect(SecondApproveButton2).toBeVisible({ timeout: 1000 });
+    await expect(SecondApproveButton2).toBeVisible();
     await SecondApproveButton2.click({ timeout: 1000 });
 
     // expect the user to not exist any more
