@@ -21,7 +21,7 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
   if (isDev || isMobile) {
     config = {
       CENTRAL_API_URL: import.meta.env.VITE_APP_API_URL,
-      IS_MULTI: import.meta.env.VITE_APP_MULTI !== 'false' && import.meta.env.VITE_APP_IS_MULTI !== false,
+      IS_MULTI: import.meta.env.VITE_APP_MULTI !== 'false' && import.meta.env.VITE_APP_MULTI !== false,
       IS_OAUTH_ENABLED: import.meta.env.VITE_APP_OAUTH !== 'false' && import.meta.env.VITE_APP_OAUTH !== false,
       BASENAME: import.meta.env.VITE_APP_BASENAME || '/',
     };
