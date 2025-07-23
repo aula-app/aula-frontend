@@ -3,7 +3,7 @@ import { ReportForms } from '@/components/DataForms';
 import { AccessibleModal } from '@/components/AccessibleDialog';
 import { addReport, ReportArguments } from '@/services/messages';
 import { IconButtonProps } from '@mui/material';
-import { useRef, useState } from 'react';
+import { forwardRef, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -12,11 +12,11 @@ interface Props extends IconButtonProps {
   link?: string;
 }
 
-const ReportButton: React.FC<Props> = ({ target, link, disabled = false, ...restOfProps }) => {
+const ReportButton = forwardRef<HTMLButtonElement, Props>(({ target, link, disabled = false, ...restOfProps }, ref) => {
   const { t } = useTranslation();
   const location = useLocation();
   const [isOpen, setOpen] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const internalRef = useRef<HTMLButtonElement>(null);
 
   const onSubmit = async (data: ReportArguments) => {
     const body = `
@@ -36,11 +36,24 @@ ${data.content || ''}
 
   const onClose = () => setOpen(false);
 
+  // Helper function to handle both forwarded ref and internal ref
+  const setButtonRef = (node: HTMLButtonElement | null) => {
+    // Set internal ref
+    (internalRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
+
+    // Forward the ref to parent
+    if (typeof ref === 'function') {
+      ref(node);
+    } else if (ref) {
+      (ref as React.MutableRefObject<HTMLButtonElement | null>).current = node;
+    }
+  };
+
   return (
     <>
       <AppIconButton
         data-testid="report-button"
-        ref={buttonRef}
+        ref={setButtonRef}
         icon="report"
         title={t('tooltips.report')}
         disabled={disabled}
@@ -57,12 +70,14 @@ ${data.content || ''}
         showCloseButton={true}
         maxWidth="100%"
         testId="report-dialog"
-        finalFocusRef={buttonRef}
+        finalFocusRef={internalRef}
       >
         <ReportForms onClose={onClose} onSubmit={onSubmit} />
       </AccessibleModal>
     </>
   );
-};
+});
+
+ReportButton.displayName = 'ReportButton';
 
 export default ReportButton;

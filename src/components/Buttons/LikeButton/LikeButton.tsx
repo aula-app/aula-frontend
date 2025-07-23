@@ -3,7 +3,7 @@ import { addCommentLike, getCommentLike, removeCommentLike } from '@/services/co
 import { addIdeaLike, getIdeaLike, removeIdeaLike } from '@/services/ideas';
 import { CommentType, IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
   disabled?: boolean;
 }
 
-const LikeButton: React.FC<Props> = ({ item, disabled }) => {
+const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled }, ref) => {
   const { t } = useTranslation();
   const [liked, setLiked] = useState(false);
   const [likeStatus, setLikeStatus] = useState(false);
@@ -39,16 +39,19 @@ const LikeButton: React.FC<Props> = ({ item, disabled }) => {
 
   return (
     <AppIconButton
+      ref={ref}
       icon={likeStatus ? 'heartFull' : 'heart'}
       title={t(`tooltips.${likeStatus ? 'heartFull' : 'heart'}`)}
       onClick={toggleLike}
-      disabled={disabled || !checkPermissions('ideas', 'like')}
+      disabled={disabled}
       aria-label={likeStatus ? t('actions.unlike') : t('actions.like')}
       aria-pressed={likeStatus}
     >
       {`${item.sum_likes + Number(likeStatus) - Number(liked)}`}
     </AppIconButton>
   );
-};
+});
+
+LikeButton.displayName = 'LikeButton';
 
 export default LikeButton;

@@ -1,3 +1,17 @@
+## 1.3.0
+
+- **UX improvements:**
+
+  - Added ideas and boxes filters
+
+- **Bug fixes:**
+
+  - Prevent duplicate user creation
+  - Prevent likes on own ideas and comments
+  - Remove google font calls
+  - Fixed missing favicon
+  - Fixed Announcements agree button missing text
+
 ## 1.2.0
 
 - **Accessibility improvements:**
@@ -16,6 +30,7 @@
   - Switched re-exports to only default exports in view and component index files
   - Cleaned up translation files and synchronized German/English translations
   - Added missing translation keys and removed duplicates
+  - Dockerized for easier self-hosting.
 
 - **Bug fixes:**
 

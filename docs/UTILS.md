@@ -71,7 +71,7 @@ For formatting with explicit language control:
 
 | Language     | DateTime Input       | DateTime Output        | Date Only Output |
 | ------------ | -------------------- | ---------------------- | ---------------- |
-| English (en) | 2025-06-27T14:30:00Z | 06/27/2025 02:30:00 PM | 06/27/2025       |
+| English (en) | 2025-06-27T14:30:00Z | 27 June 2025 14:30:00  | 27 June 2025     |
 | German (de)  | 2025-06-27T14:30:00Z | 27.06.2025 14:30:00    | 27.06.2025       |
 | Default      | 2025-06-27T14:30:00Z | 2025-06-27 14:30:00    | 2025-06-27       |
 

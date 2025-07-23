@@ -23,7 +23,7 @@ export const create = async (
 
   const AddBoxButton = page.locator('[aria-label="add idea"]'); // aria label should
   //  probably be add box
-  await expect(AddBoxButton).toBeVisible({ timeout: 2000 });
+  await expect(AddBoxButton).toBeVisible();
   await AddBoxButton.click({ timeout: 1000 });
 
   // fill in the necessary information
@@ -33,7 +33,7 @@ export const create = async (
   // select the correct phase for the box
   const phaseComboboxId = await page.getAttribute('label:text("Phase")', 'for');
   const PhaseCombobox = page.locator(`#${shared.cssEscape(phaseComboboxId)}`);
-  await expect(PhaseCombobox).toBeVisible({ timeout: 2000 });
+  await expect(PhaseCombobox).toBeVisible();
   await PhaseCombobox.click({ timeout: 1000 });
   const Selection = page.locator(`[data-value="${box.phase}"]`);
   await Selection.click({ timeout: 1000 });
@@ -44,7 +44,7 @@ export const create = async (
   // how to fill in one of those MUI multiselectors:
   const SelectorId = await page.getAttribute('label:text("Ideen")', 'for');
   const IdeaSelector = page.locator(`#${shared.cssEscape(SelectorId)}`);
-  await expect(IdeaSelector).toBeVisible({ timeout: 2000 });
+  await expect(IdeaSelector).toBeVisible();
 
   await IdeaSelector.click({ timeout: 1000 });
 
@@ -62,7 +62,7 @@ export const create = async (
 
   // was the box created?
   const BoxDiv = page.locator('h3').filter({ hasText: box.name });
-  await expect(BoxDiv).toBeVisible({ timeout: 2000 });
+  await expect(BoxDiv).toBeVisible();
 };
 
 export const remove = async (
@@ -75,22 +75,22 @@ export const remove = async (
   await goToRoom(page, room);
 
   const GoToDiscussionPhaseButton = page.getByTestId('link-to-phase-10');
-  await expect(GoToDiscussionPhaseButton).toBeVisible({ timeout: 2000 });
+  await expect(GoToDiscussionPhaseButton).toBeVisible();
   await GoToDiscussionPhaseButton.click({ timeout: 1000 });
 
   const BoxDiv = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
-  await expect(BoxDiv).toBeVisible({ timeout: 2000 });
+  await expect(BoxDiv).toBeVisible();
 
   // so that any triggered tooltips dissappear
   await page.mouse.move(0, 0);
 
   const MoreOptions = BoxDiv.getByTestId('more-options');
-  await expect(MoreOptions).toBeVisible({ timeout: 2000 });
+  await expect(MoreOptions).toBeVisible();
 
   await MoreOptions.click({ timeout: 1000 });
 
   const DeleteButton = BoxDiv.getByTestId('delete-button');
-  await expect(DeleteButton).toBeVisible({ timeout: 2000 });
+  await expect(DeleteButton).toBeVisible();
 
   await DeleteButton.click({ timeout: 1000 });
 
@@ -116,18 +116,18 @@ export const move = async (
   await goToPhase(page, fromPhase);
 
   const BoxDiv = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
-  await expect(BoxDiv).toBeVisible({ timeout: 2000 });
+  await expect(BoxDiv).toBeVisible();
 
   // so that any triggered tooltips dissappear
   await page.mouse.move(0, 0);
 
   const MoreOptions = BoxDiv.getByTestId('more-options');
-  await expect(MoreOptions).toBeVisible({ timeout: 2000 });
+  await expect(MoreOptions).toBeVisible();
 
   await MoreOptions.click({ timeout: 1000 });
 
   const EditButton = BoxDiv.getByTestId('edit-button');
-  await expect(EditButton).toBeVisible({ timeout: 2000 });
+  await expect(EditButton).toBeVisible();
 
   await page.mouse.move(0, 0);
 
@@ -136,7 +136,7 @@ export const move = async (
   // select the correct phase for the box
   const phaseComboboxId = await page.getAttribute('label:text("Phase")', 'for');
   const PhaseCombobox = page.locator(`#${shared.cssEscape(phaseComboboxId)}`);
-  await expect(PhaseCombobox).toBeVisible({ timeout: 2000 });
+  await expect(PhaseCombobox).toBeVisible();
   await PhaseCombobox.click({ timeout: 1000 });
   const Selection = page.locator(`[data-value="${toPhase}"]`);
 
@@ -147,11 +147,11 @@ export const move = async (
   await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
   const GoToDiscussionPhaseButton2 = page.getByTestId(`link-to-phase-${toPhase}`);
-  await expect(GoToDiscussionPhaseButton2).toBeVisible({ timeout: 2000 });
+  await expect(GoToDiscussionPhaseButton2).toBeVisible();
   await GoToDiscussionPhaseButton2.click({ timeout: 1000 });
 
   const BoxDiv2 = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
-  await expect(BoxDiv2).toBeVisible({ timeout: 2000 });
+  await expect(BoxDiv2).toBeVisible();
 };
 
 export const delegateVotes = async (

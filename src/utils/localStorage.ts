@@ -41,7 +41,7 @@ export async function localStorageSet(name: string, value: any) {
     return; // Do not store undefined values
   }
   let valueAsString: string;
-  if (typeof value === 'object') {
+  if (typeof value !== 'string') {
     valueAsString = JSON.stringify(value);
   } else {
     valueAsString = String(value);

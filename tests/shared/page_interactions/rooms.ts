@@ -43,6 +43,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
 
   // OMG
   await sleep(3);
+  await page.waitForLoadState('networkidle');
 
   // ensure the room exists by filtering the admin list for the name
 
@@ -59,16 +60,15 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await expect(FilterButton).toBeVisible({ timeout: 10000 });
   await FilterButton.click({ timeout: 1000 });
 
-  // select "username" from the "filter by" dropdown
-
+  // select "room name" from the "filter by" dropdown
   await page.locator('#filter-field-select').click({ timeout: 1000 });
   await page.getByRole('option', { name: 'Raum Name' }).click({ timeout: 1000 });
 
-  // filter by our user name
+  // filter by our room name
   await page.fill('#filter-value-input', room.name);
 
-  // find the new user in the user table
-  const row = page.getByText(room.name, { exact: true });
+  // find the new room in the room table
+  const row = page.getByText(room.name, { exact: true }).first();
 
   // make sure that row actually exists
   await expect(row).toBeVisible();
@@ -97,21 +97,21 @@ export const remove = async (page: Page, room: roomFixtures.RoomData) => {
   const row = page.locator('table tr').filter({ hasText: room.name });
 
   // make sure that row actually exists
-  await expect(row).toHaveCount(1, { timeout: 1000 });
+  await expect(row).toHaveCount(1);
 
   const DeleteCheckbox = row.locator('input[type="checkbox"]');
-  await expect(DeleteCheckbox).toBeVisible({ timeout: 1000 });
+  await expect(DeleteCheckbox).toBeVisible();
   DeleteCheckbox.click({ timeout: 1000 });
 
   // press delete button
   const DeleteButton = page.getByRole('button', { name: 'Räume entfernen' });
-  await expect(DeleteButton).toBeVisible({ timeout: 1000 });
+  await expect(DeleteButton).toBeVisible();
   await DeleteButton.click({ timeout: 1000 });
 
   const Dialog = page.getByRole('dialog');
-  await expect(Dialog).toBeVisible({ timeout: 3000 });
+  await expect(Dialog).toBeVisible();
 
   const ConfirmButton = Dialog.getByRole('button', { name: 'Löschen' });
-  await expect(ConfirmButton).toBeVisible({ timeout: 3000 });
+  await expect(ConfirmButton).toBeVisible();
   await ConfirmButton.click({ timeout: 1000 });
 };

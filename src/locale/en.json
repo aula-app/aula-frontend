@@ -164,6 +164,8 @@
       "integer": "Please enter a whole number",
       "maxLength": "Must be less than {{var}} characters",
       "minLength": "Must be at least {{var}} characters",
+      "contentTooLong": "Your {{scope}} is too long (maximum {{max}} characters)",
+      "titleTooLong": "Your {{scope}} title is too long (maximum {{max}} characters)",
       "name": "Name can only contain letters",
       "nonNegative": "Number cannot be negative",
       "noOptions": "No options available",
@@ -393,7 +395,7 @@
       "consents_given": "Consents Given",
       "consents_needed": "Consents Required",
       "content": "Content",
-      "created": "Created",
+      "created": "Created At",
       "creator_id": "Creator",
       "custom_field1": "Custom Field 1",
       "custom_field2": "Custom Field 2",
@@ -691,6 +693,10 @@
       "skipToContent": "Skip to main content",
       "system": "System",
       "users": "Users"
+    },
+    "sort": {
+      "ascending": "ascending",
+      "descending": "descending"
     },
     "units": {
       "days": "days",

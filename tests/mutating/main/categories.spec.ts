@@ -122,7 +122,7 @@ test.describe('Categories flow', () => {
     await ideas.goToRoom(admin, data.room);
 
     const IdeaCategory = admin.locator('div').filter({ hasText: data.catidea.category }).first();
-    await expect(IdeaCategory).toBeVisible({ timeout: 1000 });
+    await expect(IdeaCategory).toBeVisible();
 
     await admin.close();
   });

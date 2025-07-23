@@ -2,6 +2,7 @@ import { localStorageGet, localStorageSet } from '@/utils';
 import { InstanceCodeView, Login, OAuthLogin, PublicNotFoundView, Recovery, SetPassword } from '@/views/Public';
 import UpdatePasswordView from '@/views/Public/UpdatePassword';
 import { useEffect } from 'react';
+import { getRuntimeConfig } from '../config';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 /**
@@ -12,18 +13,20 @@ const PublicRoutes = () => {
   const location = useLocation();
 
   const useInstanceCheck = () => {
-    const instance_token = localStorageGet('code', false);
-    const isMultiInstance = import.meta.env.VITE_APP_MULTI !== 'false';
+    const instanceCode = localStorageGet('code', false);
+    const isMultiInstance = getRuntimeConfig().IS_MULTI;
 
     if (isMultiInstance) {
-      if (!instance_token && location.pathname !== '/code') {
-        localStorageSet('api_url', import.meta.env.VITE_APP_API_URL).then(() => {
-          navigate('/code');
-        });
+      // aula-frontend should have its own instanceCode so its aula-backend would
+      //   know which database to use
+      if (!instanceCode && location.pathname !== '/code') {
+        navigate('/code');
       }
     } else {
       localStorageSet('code', 'SINGLE');
-      localStorageSet('api_url', import.meta.env.VITE_APP_API_URL);
+      // SINGLE instance aula-frontend that is not connected to the aula network
+      //   will only use its own aula-backend
+      localStorageSet('api_url', getRuntimeConfig().CENTRAL_API_URL);
     }
   };
 

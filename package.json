@@ -1,6 +1,6 @@
 {
   "name": "aula",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "aula: gemeinsam gestalten",
   "author": {
     "name": "Aula App",
@@ -25,6 +25,7 @@
     "build": "tsc && vite build",
     "build-branch": "tsc && vite --config vite.branch.config.mts --mode branch build",
     "build-dev": "tsc && vite build --mode dev",
+    "build-app": "tsc && vite build --mode app",
     "build-staging": "tsc && vite build --mode staging",
     "build-prod": "tsc && vite build --mode prod",
     "build-single": "vite build --mode single",

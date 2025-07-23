@@ -1,6 +1,6 @@
 import { AppIcon, AppIconButton } from '@/components';
 import BugButton from '@/components/Buttons/BugButton';
-import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated } from '@/hooks';
+import { useEventLogout, useEventSwitchDarkMode } from '@/hooks';
 import { useAppStore } from '@/store';
 import { announceToScreenReader, localStorageGet } from '@/utils';
 import { Button, Divider, Stack } from '@mui/material';
@@ -8,6 +8,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SideBarContent from './SideBarContent';
 import { fixedSideBarStyles } from './styles';
+import { getRuntimeConfig } from '../../config';
 import LocaleSwitch from '@/components/LocaleSwitch';
 
 /**
@@ -32,7 +33,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
       id="fixed-sidebar"
       {...restOfProps}
     >
-      {import.meta.env.VITE_APP_MULTI !== 'false' && (
+      {getRuntimeConfig().IS_MULTI && (
         <>
           <Button
             onClick={() => {

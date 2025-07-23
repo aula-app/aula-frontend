@@ -164,6 +164,8 @@
       "integer": "Bitte geben Sie eine ganze Zahl ein",
       "maxLength": "Muss kleiner sein als {{var}} Zeichen",
       "minLength": "Muss größer sein als {{var}} Zeichen",
+      "contentTooLong": "Ihr {{scope}} ist zu lang (maximal {{max}} Zeichen)",
+      "titleTooLong": "Ihr {{scope}}-Titel ist zu lang (maximal {{max}} Zeichen)",
       "name": "Die Namen sollten nur Buchstaben enthalten",
       "nonNegative": "Kann keine negative Zahl sein",
       "noOptions": "Keine Optionen verfügbar",
@@ -393,7 +395,7 @@
       "consents_given": "Gegebene Zustimmungen",
       "consents_needed": "Erforderliche Zustimmungen",
       "content": "Inhalt",
-      "created": "Erstellt",
+      "created": "Erstellt am",
       "creator_id": "Ersteller",
       "custom_field1": "Benutzerdefiniertes Feld 1",
       "custom_field2": "Benutzerdefiniertes Feld 2",
@@ -532,7 +534,7 @@
     "archive": "Archivieren",
     "back": "Zurück",
     "cancel": "Abbrechen",
-    "chat": "Chat öffnen",
+    "chat": "Verbesserungsvorschläge sehen",
     "close": "Schließen",
     "comment": "Kommentare helfen, Ideen durch konstruktives Feedback zu verbessern",
     "delegate": "Du kannst deine Stimme an eine andere Person übertragen und sie jederzeit zurücknehmen",
@@ -691,6 +693,10 @@
       "skipToContent": "Zum Hauptinhalt springen",
       "system": "System",
       "users": "Benutzer"
+    },
+    "sort": {
+      "ascending": "aufsteigend",
+      "descending": "absteigend"
     },
     "units": {
       "days": "Tage",

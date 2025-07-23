@@ -19,6 +19,9 @@ import SelectBoxField from '../DataFields/SelectBoxField';
  * @component
  */
 
+const MAX_CHAR_COUNT = 1000; // Maximum character count for content
+const MAX_TITLE_LENGTH = 200; // Maximum length for title
+
 interface IdeaFormsProps {
   onClose: () => void;
   defaultValues?: IdeaType;
@@ -35,8 +38,22 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = yup.object({
-    title: yup.string().required(t('forms.validation.required')),
-    content: yup.string().required(t('forms.validation.required')),
+    title: yup
+      .string()
+      .test(
+        'len',
+        t('forms.validation.titleTooLong', { scope: t('scopes.ideas.name'), max: MAX_TITLE_LENGTH }),
+        (val) => String(val).length <= MAX_TITLE_LENGTH
+      )
+      .required(t('forms.validation.required')),
+    content: yup
+      .string()
+      .test(
+        'len',
+        t('forms.validation.contentTooLong', { scope: t('scopes.ideas.name'), max: MAX_CHAR_COUNT }),
+        (val) => String(val).length <= MAX_CHAR_COUNT
+      )
+      .required(t('forms.validation.required')),
   } as Record<keyof IdeaType, any>);
 
   const {
@@ -194,7 +211,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               }}
             />
             {/* content */}
-            <MarkdownEditor name="content" control={control} required disabled={isLoading} />
+            <MarkdownEditor name="content" control={control} required disabled={isLoading} maxLength={MAX_CHAR_COUNT} />
             <Stack direction="row" gap={2}>
               {checkPermissions('boxes', 'addIdea') && (
                 <SelectBoxField

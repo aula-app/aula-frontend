@@ -7,6 +7,7 @@ After the last update it became apparent that we did fetch the new results, but 
 ## Checklist
 
 - [ ] Tested manually <!-- you can strikethrough this option in case you haven't tested manually -->
+- [ ] Passed automatic tests <!-- you can strikethrough this option in case you haven't run the automatic tests for some reason -->
 - [ ] GitHub issue linked <!-- Use the "Development" field of the Issue, or add a link if it's outside this Repo -->
 - [ ] Changelist updated
 - [ ] Backward and forward compatible with BE <!-- If not, please describe in detail and include other PR links -->

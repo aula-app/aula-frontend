@@ -8,7 +8,7 @@ import { ReactNode, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../config';
-import UserInfo from '@/components/UserInfo';
+import { getRuntimeConfig } from '../../config';
 import MessagesButton from '@/components/Buttons/MessagesButton';
 import UpdatesButton from '@/components/Buttons/UpdatesButton';
 import { useTranslation } from 'react-i18next';
@@ -81,7 +81,7 @@ const TopBar: React.FC = () => {
         <Box width={56}>
           {/* Logo or Back Button */}
           {location[1] === '' ? (
-            <img src={`${import.meta.env.VITE_APP_BASENAME}img/Aula_Icon.svg`} alt={t('app.name.icon')} />
+            <img src={`${getRuntimeConfig().BASENAME}img/Aula_Icon.svg`} alt={t('app.name.icon')} />
           ) : (
             <AppIconButton icon="back" title={t('tooltips.back')} onClick={() => goto(getReturnPath())} />
           )}
