@@ -1,3 +1,4 @@
+import { AppLink } from '@/components';
 import { useEventLogout } from '@/hooks';
 import { useAppStore } from '@/store';
 import { Stack, Typography } from '@mui/material';
@@ -17,9 +18,12 @@ const PublicOfflineView: React.FC<OfflineViewProps> = () => {
   return (
     <Stack flex={1} alignItems="center" justifyContent="center">
       <img src="/img/Paula_schlafend.svg" alt={t('errors.schoolClosedImage')} role="img" loading="lazy" width={150} />
-      <Typography variant="h3" mt={2}>
+      <Typography mt={6}>
         {t('errors.schoolClosed')}
       </Typography>
+      <AppLink color="success" to="/">
+        {t('auth.login.button')}
+      </AppLink>
     </Stack>
   );
 };
