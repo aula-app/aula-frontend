@@ -76,12 +76,29 @@ const TopBar: React.FC = () => {
   }
 
   return (
-    <AppBar elevation={0} sx={{ height: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT }}>
+    <AppBar
+      elevation={0}
+      sx={{
+        height: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT,
+        top: 'var(--safe-area-inset-top, 0px)',
+        left: 'var(--safe-area-inset-left, 0px)',
+        right: 'var(--safe-area-inset-right, 0px)',
+      }}
+    >
       <Toolbar>
         <Box width={56}>
           {/* Logo or Back Button */}
           {location[1] === '' ? (
-            <img src={`${getRuntimeConfig().BASENAME}img/Aula_Icon.svg`} alt={t('app.name.icon')} />
+            <img
+              src={`${getRuntimeConfig().BASENAME}img/Aula_Icon.svg`}
+              alt={t('app.name.icon')}
+              style={{
+                width: '100%',
+                height: 'auto',
+                maxHeight: '40px',
+                objectFit: 'contain',
+              }}
+            />
           ) : (
             <AppIconButton icon="back" title={t('tooltips.back')} onClick={() => goto(getReturnPath())} />
           )}
@@ -133,7 +150,12 @@ const TopBar: React.FC = () => {
           <Stack direction="row" spacing={0.5} sx={{ ml: 'auto' }}>
             <MessagesButton />
             <UpdatesButton />
-            <AppIconButton icon="menu" title={t('tooltips.menu')} onClick={menuToggle} sx={{ display: { xs: 'block', md: 'none' } }} />
+            <AppIconButton
+              icon="menu"
+              title={t('tooltips.menu')}
+              onClick={menuToggle}
+              sx={{ display: { xs: 'block', md: 'none' } }}
+            />
           </Stack>
         )}
         <SideBar

@@ -21,8 +21,10 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       maxWidth="20rem"
       sx={{
         height: '100%',
-        paddingLeft: 0,
-        paddingRight: 0,
+        paddingTop: `calc(2 * 8px + var(--safe-area-inset-top, 0px))`,
+        paddingLeft: `calc(0px + var(--safe-area-inset-left, 0px))`,
+        paddingRight: `calc(0px + var(--safe-area-inset-right, 0px))`,
+        paddingBottom: `calc(2 * 8px + var(--safe-area-inset-bottom, 0px))`,
       }}
     >
       <SkipNavigation mainContentId="public-content" />

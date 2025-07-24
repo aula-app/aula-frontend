@@ -1,14 +1,12 @@
 import { ErrorBoundary } from '@/components';
 import SkipNavigation from '@/components/SkipNavigation';
 import { useIsOnline } from '@/hooks';
-import { useOnMobile } from '@/hooks/layout';
 import { checkPermissions } from '@/utils';
 import AskConsent from '@/views/AskConsent';
 import OfflineView from '@/views/OfflineView';
 import { Stack } from '@mui/material';
 import { FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from './config';
 import SideBarFixed from './SideBar/SideBarFixed';
 import TopBar from './TopBar';
 
@@ -22,8 +20,6 @@ const TITLE_PRIVATE = 'aula';
 const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const location = useLocation();
   const [online, setOnline] = useState(true);
-
-  const onMobile = useOnMobile();
 
   const title = TITLE_PRIVATE;
   document.title = title; // Also Update Tab Title
@@ -42,18 +38,19 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     <Stack
       sx={{
         height: '100%',
-        paddingTop: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT,
-        paddingLeft: 0,
-        paddingRight: 0,
+        paddingTop: 'var(--safe-area-inset-top, 0px)',
+        paddingLeft: 'var(--safe-area-inset-left, 0px)',
+        paddingRight: 'var(--safe-area-inset-right, 0px)',
+        paddingBottom: 'var(--safe-area-inset-bottom, 0px)',
       }}
     >
       <SkipNavigation mainContentId="main-content" />
       <TopBar />
 
-      <Stack 
-        direction="row" 
+      <Stack
+        direction="row"
         component="main"
-        id="main-content" 
+        id="main-content"
         sx={{ flexGrow: 1, overflow: 'hidden' }}
         tabIndex={-1} // Makes the element focusable via skip nav but doesn't add it to normal tab order
       >
