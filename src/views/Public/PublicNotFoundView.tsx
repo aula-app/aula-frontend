@@ -7,6 +7,7 @@ const PublicNotFoundView = () => {
 
   return (
     <Stack spacing={2} alignItems="center" sx={{ p: 2 }}>
+      <img src="/img/Paula_schlafend.svg" alt={t('errors.schoolClosedImage')} role="img" loading="lazy" width={150} />
       <Typography>{t('errors.unauthorized')}</Typography>
       <AppLink color="success" to="/">
         {t('auth.login.button')}

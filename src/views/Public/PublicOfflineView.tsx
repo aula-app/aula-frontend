@@ -1,20 +1,27 @@
+import { useEventLogout } from '@/hooks';
+import { useAppStore } from '@/store';
 import { Stack, Typography } from '@mui/material';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+interface OfflineViewProps {
+  className?: string;
+}
+
 /**
- * "Not Found" aka "Error 404" view component
- * @returns React component displaying 404 error page
+ * View displayed when school is closed (online_mode !== 1)
  */
-const NotFoundView = (): JSX.Element => {
+const PublicOfflineView: React.FC<OfflineViewProps> = () => {
   const { t } = useTranslation();
+
   return (
     <Stack flex={1} alignItems="center" justifyContent="center">
       <img src="/img/Paula_schlafend.svg" alt={t('errors.schoolClosedImage')} role="img" loading="lazy" width={150} />
       <Typography variant="h3" mt={2}>
-        {t('errors.notFound')}
+        {t('errors.schoolClosed')}
       </Typography>
     </Stack>
   );
 };
 
-export default NotFoundView;
+export default PublicOfflineView;

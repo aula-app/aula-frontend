@@ -50,10 +50,10 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       <SkipNavigation mainContentId="main-content" />
       <TopBar />
 
-      <Stack 
-        direction="row" 
+      <Stack
+        direction="row"
         component="main"
-        id="main-content" 
+        id="main-content"
         sx={{ flexGrow: 1, overflow: 'hidden' }}
         tabIndex={-1} // Makes the element focusable via skip nav but doesn't add it to normal tab order
       >
