@@ -86,23 +86,23 @@ const TopBar: React.FC = () => {
       }}
     >
       <Toolbar>
-        <Box width={56}>
+        <Stack height="100%" direction="row" alignItems="center" pl={0.5} pr={onMobile ? 2 : 3.5}>
           {/* Logo or Back Button */}
           {location[1] === '' ? (
             <img
               src={`${getRuntimeConfig().BASENAME}img/Aula_Icon.svg`}
               alt={t('app.name.icon')}
               style={{
-                width: '100%',
-                height: 'auto',
-                maxHeight: '40px',
+                height: '100%',
                 objectFit: 'contain',
+                paddingTop: 16,
+                paddingBottom: 16,
               }}
             />
           ) : (
             <AppIconButton icon="back" title={t('tooltips.back')} onClick={() => goto(getReturnPath())} />
           )}
-        </Box>
+        </Stack>
         {/* Navigation Breadcrumbs */}
         <Breadcrumbs
           aria-label="breadcrumb"
@@ -147,7 +147,7 @@ const TopBar: React.FC = () => {
             <AppIconButton icon="logout" title={t('tooltips.logout')} onClick={onLogout} />
           </Stack>
         ) : (
-          <Stack direction="row" spacing={0.5} sx={{ ml: 'auto' }}>
+          <Stack direction="row" sx={{ ml: 'auto' }}>
             <MessagesButton />
             <UpdatesButton />
             <AppIconButton
