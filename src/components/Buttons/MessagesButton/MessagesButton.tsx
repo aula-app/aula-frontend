@@ -11,7 +11,7 @@ const MessagesButton = forwardRef<HTMLButtonElement, IconButtonProps>(({ ...rest
 
   const fetchMessages = async () => {
     const response = await getPersonalMessages();
-    if (!response.error) setMessages(response.data?.length || 0);
+    setMessages(response.data?.length || 0);
   };
 
   useEffect(() => {

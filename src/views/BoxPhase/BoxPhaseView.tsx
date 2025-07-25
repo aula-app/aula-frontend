@@ -87,8 +87,10 @@ const BoxPhaseView = () => {
   return (
     <Stack alignItems="center" flex={1}>
       {isLoading ? (
-        <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-          <BoxCardSkeleton />
+        <Grid container spacing={2} p={1} width="100%">
+          <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
+            <BoxCardSkeleton />
+          </Grid>
         </Grid>
       ) : boxes.length === 0 ? (
         <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
