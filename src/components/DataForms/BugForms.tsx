@@ -15,7 +15,7 @@ import { BugArguments } from '@/services/messages';
 
 interface BugFormsProps {
   onClose: () => void;
-  onSubmit: (data: BugArguments) => Promise<{ error?: string }>;
+  onSubmit: (data: BugArguments) => Promise<void>;
 }
 
 const BugForms: React.FC<BugFormsProps> = ({ onClose, onSubmit }) => {
@@ -27,24 +27,9 @@ const BugForms: React.FC<BugFormsProps> = ({ onClose, onSubmit }) => {
     })
     .required(t('forms.validation.required'));
 
-  const { control, handleSubmit, setError, formState: { errors } } = useForm({
+  const { control, handleSubmit } = useForm({
     resolver: yupResolver(schema),
   });
-
-  type SchemaType = yup.InferType<typeof schema>;
-
-  const handleFormSubmit = async (data: SchemaType) => {
-    setError('root', {});
-    
-    const response = await onSubmit(data);
-    if (response.error) {
-      setError('root', {
-        type: 'manual',
-        message: response.error || t('errors.default'),
-      });
-      return;
-    }
-  };
 
   return (
     <Stack overflow="auto" p={2} gap={2}>
@@ -53,16 +38,11 @@ const BugForms: React.FC<BugFormsProps> = ({ onClose, onSubmit }) => {
         <Stack gap={2}>
           {/* content */}
           <MarkdownEditor name="content" control={control} required />
-          {errors.root && (
-            <Typography color="error" variant="body2">
-              {errors.root.message}
-            </Typography>
-          )}
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button variant="contained" onClick={handleSubmit(handleFormSubmit)} aria-label={t('actions.confirm')}>
+            <Button variant="contained" onClick={handleSubmit(onSubmit)} aria-label={t('actions.confirm')}>
               {t('actions.confirm')}
             </Button>
           </Stack>
