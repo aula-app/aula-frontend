@@ -120,9 +120,7 @@ const WildIdeas = () => {
       spacing={2}
     >
       {isLoading && <IdeaBubbleSkeleton />}
-      {error && <Typography>{t(error)}</Typography>}
       {!isLoading &&
-        !error &&
         (ideas.length === 0 ? (
           <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
         ) : (

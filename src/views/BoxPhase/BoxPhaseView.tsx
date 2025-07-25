@@ -86,29 +86,28 @@ const BoxPhaseView = () => {
 
   return (
     <Stack alignItems="center" flex={1}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%" pb={2}>
-        <Stack direction="row" alignItems="center" gap={1}>
-          <AppIcon icon={phases[(phase as `${RoomPhases}`) || '0']} />
-          <Typography variant="h2">{t(`phases.name-${phase}`)}</Typography>
-        </Stack>
-        <SortButton
-          options={BOXES_SORT_OPTIONS}
-          onSelect={(orderby: string) => {
-            setOrderby(orderby as keyof BoxType);
-          }}
-          onReorder={(asc) => setAsc(asc)}
-        />
-      </Stack>
-      <Grid container spacing={2} p={1} width="100%">
-        {error && <Typography>{t(error)}</Typography>}
-        {isLoading ? (
-          <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-            <BoxCardSkeleton />
-          </Grid>
-        ) : boxes.length === 0 ? (
-          <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
-        ) : (
-          boxes
+      {isLoading ? (
+        <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
+          <BoxCardSkeleton />
+        </Grid>
+      ) : boxes.length === 0 ? (
+        <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
+      ) : (
+        <Grid container spacing={2} p={1} width="100%">
+          <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%" pb={2}>
+            <Stack direction="row" alignItems="center" gap={1}>
+              <AppIcon icon={phases[(phase as `${RoomPhases}`) || '0']} />
+              <Typography variant="h2">{t(`phases.name-${phase}`)}</Typography>
+            </Stack>
+            <SortButton
+              options={BOXES_SORT_OPTIONS}
+              onSelect={(orderby: string) => {
+                setOrderby(orderby as keyof BoxType);
+              }}
+              onReorder={(asc) => setAsc(asc)}
+            />
+          </Stack>
+          {boxes
             .slice()
             .sort((a, b) => {
               const valueA = a[orderby];
@@ -128,9 +127,9 @@ const BoxPhaseView = () => {
                   onDelete={() => boxDelete(box.hash_id)}
                 />
               </Grid>
-            ))
-        )}
-      </Grid>
+            ))}
+        </Grid>
+      )}
       <Stack
         direction="row"
         spacing={2}
