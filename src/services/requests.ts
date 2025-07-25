@@ -21,6 +21,7 @@ export interface GenericResponse<T = unknown> {
   data: T | null;
   count: number | null;
   error: string | null;
+  error_code?: number | null;
 }
 
 export interface GenericListRequest {
@@ -140,6 +141,20 @@ export const baseRequest = async <T = unknown>(
         data: null,
         count: null,
         error: t(`errors.noData`),
+      };
+    }
+
+    if (response.error_code) {
+      let errorKey = 'errors.default';
+      if (response.error_code === 2) {
+        errorKey = 'errors.existingUser';
+      }
+
+      return {
+        data: null,
+        count: null,
+        error: t(errorKey),
+        error_code: response.error_code,
       };
     }
 

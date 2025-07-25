@@ -86,7 +86,6 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
       } else {
         'user_needs_to_consent' in defaultValues ? await updateMessage(data) : await updateMessage(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }
@@ -115,7 +114,7 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
     };
 
     const request = await addMessage(msgBody);
-    if (!request.error) onClose();
+    if (!request.error && !request.error_code) onClose();
   };
 
   const updateMessage = async (data: SchemaType) => {
@@ -142,7 +141,7 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
       target_id,
       target_group,
     });
-    if (!request.error) onClose();
+    if (!request.error && !request.error_code) onClose();
   };
 
   const changeTarget = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -212,19 +211,10 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
             <MarkdownEditor name="body" control={control} required />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button 
-              onClick={onClose} 
-              color="error"
-              aria-label={t('actions.cancel')}
-            >
+            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
-              disabled={isLoading}
-              aria-label={t('actions.confirm')}
-            >
+            <Button type="submit" variant="contained" disabled={isLoading} aria-label={t('actions.confirm')}>
               {t('actions.confirm')}
             </Button>
           </Stack>

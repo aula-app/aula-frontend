@@ -100,7 +100,6 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
       } else {
         await updateBox(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }
@@ -119,6 +118,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     });
     if (response.error || !response.data) return;
     await setBoxIdeas(response.data.hash_id);
+    onClose();
   };
 
   const updateBox = async (data: SchemaType) => {
@@ -136,6 +136,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     });
     if (response.error) return;
     await setBoxIdeas(defaultValues.hash_id);
+    onClose();
   };
 
   const setBoxIdeas = async (box_id: string) => {
@@ -214,7 +215,12 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading} aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading}
+              aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+            >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>

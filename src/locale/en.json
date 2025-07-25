@@ -135,7 +135,8 @@
     "notFoundImage": "Sleeping character illustration for not found page",
     "offline": "The access to this school is suspended. Please try again later",
     "timeout": "The request timed out",
-    "unauthorized": "This page requires authentication"
+    "unauthorized": "This page requires authentication",
+    "existingUser": "Username and/or email already in use"
   },
   "forms": {
     "csv": {

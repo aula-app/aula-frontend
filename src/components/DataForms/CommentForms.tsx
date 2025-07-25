@@ -54,7 +54,6 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
       } else {
         await updateComment(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }
@@ -66,7 +65,7 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
       idea_id: idea_id,
       content: data.content,
     });
-    if (!request.error) onClose();
+    if (!request.error && !request.error_code) onClose();
   };
 
   const updateComment = async (data: SchemaType) => {
@@ -76,7 +75,7 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
       content: data.content,
       status: data.status,
     });
-    if (!request.error) onClose();
+    if (!request.error && !request.error_code) onClose();
   };
 
   useEffect(() => {

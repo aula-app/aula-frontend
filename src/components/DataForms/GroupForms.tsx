@@ -66,7 +66,6 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
       } else {
         await updateGroup(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }
@@ -163,7 +162,12 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading} aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading}
+              aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+            >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>

@@ -63,7 +63,6 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
       } else {
         await updateAnnouncement(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }
@@ -77,7 +76,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
       consent_text: data.consent_text,
       status: data.status,
     });
-    if (!request.error) onClose();
+    if (!request.error && !request.error_code) onClose();
   };
 
   const updateAnnouncement = async (data: SchemaType) => {
@@ -90,7 +89,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
       consent_text: data.consent_text,
       status: data.status,
     });
-    if (!request.error) onClose();
+    if (!request.error && !request.error_code) onClose();
   };
 
   useEffect(() => {
@@ -124,7 +123,12 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading} aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading}
+              aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+            >
               {t('actions.confirm')}
             </Button>
           </Stack>

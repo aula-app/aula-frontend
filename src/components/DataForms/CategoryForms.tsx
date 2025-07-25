@@ -52,7 +52,6 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
       } else {
         await updateCategory(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }

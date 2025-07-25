@@ -79,7 +79,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
       } else {
         await updateRoom(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }
@@ -97,6 +96,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     });
     if (response.error || !response.data) return;
     await setUserRooms(response.data.hash_id);
+    onClose();
   };
 
   const updateRoom = async (data: SchemaType) => {
@@ -114,6 +114,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
 
     if (response.error) return;
     await setUserRooms(defaultValues.hash_id);
+    onClose();
   };
 
   const setUserRooms = async (room_id: string) => {
@@ -192,16 +193,12 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
             </Stack>
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button 
-              onClick={onClose} 
-              color="error"
-              aria-label={t('actions.cancel')}
-            >
+            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
+            <Button
+              type="submit"
+              variant="contained"
               disabled={isLoading}
               aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
             >
