@@ -41,6 +41,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -57,6 +58,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
 
   const onSubmit = async (data: SchemaType) => {
     try {
+      setError('root', {});
       setIsLoading(true);
       if (!defaultValues) {
         await newAnnouncement(data);
@@ -76,7 +78,14 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
       consent_text: data.consent_text,
       status: data.status,
     });
-    if (!request.error && !request.error_code) onClose();
+    if (request.error) {
+      setError('root', {
+        type: 'manual',
+        message: request.error || t('errors.default'),
+      });
+      return;
+    }
+    if (!request.error_code) onClose();
   };
 
   const updateAnnouncement = async (data: SchemaType) => {
@@ -89,7 +98,14 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
       consent_text: data.consent_text,
       status: data.status,
     });
-    if (!request.error && !request.error_code) onClose();
+    if (request.error) {
+      setError('root', {
+        type: 'manual',
+        message: request.error || t('errors.default'),
+      });
+      return;
+    }
+    if (!request.error_code) onClose();
   };
 
   useEffect(() => {
@@ -119,6 +135,11 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
             <MarkdownEditor name="body" control={control} required />
             <ConsentField control={control} required />
           </Stack>
+          {errors.root && (
+            <Typography color="error" variant="body2">
+              {errors.root.message}
+            </Typography>
+          )}
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}

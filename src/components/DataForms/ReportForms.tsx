@@ -16,7 +16,7 @@ import { SelectOptionsType } from '@/types/SettingsTypes';
 
 interface ReportFormsProps {
   onClose: () => void;
-  onSubmit: (data: ReportArguments) => Promise<void>;
+  onSubmit: (data: ReportArguments) => Promise<{ error?: string }>;
 }
 
 const ReportOptions = [
@@ -40,7 +40,7 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
     content: yup.string().required(t('forms.validation.required')),
   });
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, setError, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       report: '',
@@ -48,14 +48,34 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
     },
   });
 
+  type SchemaType = yup.InferType<typeof schema>;
+
+  const handleFormSubmit = async (data: SchemaType) => {
+    setError('root', {});
+    
+    const response = await onSubmit(data);
+    if (response.error) {
+      setError('root', {
+        type: 'manual',
+        message: response.error || t('errors.default'),
+      });
+      return;
+    }
+  };
+
   return (
     <Stack p={2} overflow="auto" gap={2}>
       <Typography variant="h1">{t(`actions.add`, { var: t(`scopes.reports.name`).toLowerCase() })}</Typography>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
         <Stack gap={2}>
           <SelectField name="report" options={ReportOptions} control={control} />
           {/* content */}
           <MarkdownEditor name="content" control={control} />
+          {errors.root && (
+            <Typography color="error" variant="body2">
+              {errors.root.message}
+            </Typography>
+          )}
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}

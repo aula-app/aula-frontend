@@ -53,6 +53,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     setValue,
     reset,
     watch,
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -94,6 +95,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
 
   const onSubmit = async (data: SchemaType) => {
     try {
+      setError('root', {});
       setIsLoading(true);
       if (!defaultValues) {
         await newBox(data);
@@ -116,7 +118,14 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
       phase_duration_3: data.phase_duration_3,
       status: data.status,
     });
-    if (response.error || !response.data) return;
+    if (response.error) {
+      setError('root', {
+        type: 'manual',
+        message: response.error || t('errors.default'),
+      });
+      return;
+    }
+    if (!response.data) return;
     await setBoxIdeas(response.data.hash_id);
     onClose();
   };
@@ -134,7 +143,13 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
       status: data.status,
       topic_id: defaultValues.hash_id,
     });
-    if (response.error) return;
+    if (response.error) {
+      setError('root', {
+        type: 'manual',
+        message: response.error || t('errors.default'),
+      });
+      return;
+    }
     await setBoxIdeas(defaultValues.hash_id);
     onClose();
   };
@@ -211,6 +226,11 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
               />
             )}
           </Stack>
+          {errors.root && (
+            <Typography color="error" variant="body2">
+              {errors.root.message}
+            </Typography>
+          )}
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}

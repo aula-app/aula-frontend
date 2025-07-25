@@ -41,6 +41,7 @@ const SurveyForms: React.FC<SurveyFormsProps> = ({ onClose }) => {
     formState: { errors },
     handleSubmit,
     register,
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: { name: '' },
@@ -64,7 +65,10 @@ const SurveyForms: React.FC<SurveyFormsProps> = ({ onClose }) => {
 
   const onSubmit = async (data: SchemaType) => {
     if (!room_id) return;
+    
+    setError('root', {});
     setIsLoading(true);
+    
     const response = await addSurvey({
       name: data.name,
       description_public: data.description_public,
@@ -73,8 +77,18 @@ const SurveyForms: React.FC<SurveyFormsProps> = ({ onClose }) => {
       phase_duration_3: data.phase_duration_3,
       room_id: room_id,
     });
+    
     setIsLoading(false);
-    if (response.error || !response.data) return;
+    
+    if (response.error) {
+      setError('root', {
+        type: 'manual',
+        message: response.error || t('errors.default'),
+      });
+      return;
+    }
+    
+    if (!response.data) return;
     onClose();
   };
 
@@ -128,6 +142,11 @@ const SurveyForms: React.FC<SurveyFormsProps> = ({ onClose }) => {
               }}
             />
           </Stack>
+          {errors.root && (
+            <Typography color="error" variant="body2">
+              {errors.root.message}
+            </Typography>
+          )}
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}

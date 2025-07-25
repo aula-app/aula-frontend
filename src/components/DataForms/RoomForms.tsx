@@ -48,6 +48,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -73,6 +74,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
 
   const onSubmit = async (data: SchemaType) => {
     try {
+      setError('root', {});
       setIsLoading(true);
       if (!defaultValues) {
         await newRoom(data);
@@ -94,7 +96,14 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
       phase_duration_3: data.phase_duration_3,
       status: data.status,
     });
-    if (response.error || !response.data) return;
+    if (response.error) {
+      setError('root', {
+        type: 'manual',
+        message: response.error || t('errors.default'),
+      });
+      return;
+    }
+    if (!response.data) return;
     await setUserRooms(response.data.hash_id);
     onClose();
   };
@@ -112,7 +121,13 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
       room_id: defaultValues.hash_id,
     });
 
-    if (response.error) return;
+    if (response.error) {
+      setError('root', {
+        type: 'manual',
+        message: response.error || t('errors.default'),
+      });
+      return;
+    }
     await setUserRooms(defaultValues.hash_id);
     onClose();
   };
@@ -192,6 +207,11 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
               )}
             </Stack>
           </Stack>
+          {errors.root && (
+            <Typography color="error" variant="body2">
+              {errors.root.message}
+            </Typography>
+          )}
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}

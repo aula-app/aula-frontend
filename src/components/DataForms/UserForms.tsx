@@ -141,23 +141,10 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       user_id: defaultValues.hash_id,
     });
     if (response.error) {
-      // Check if it's a duplicate username/email error (error_code 2)
-      if (response.error_code === 2) {
-        setError('username', {
-          type: 'manual',
-          message: t('errors.existingUsername'),
-        });
-        setError('email', {
-          type: 'manual',
-          message: t('errors.existingUsername'),
-        });
-      } else {
-        // For other errors, show a general error message
-        setError('root', {
-          type: 'manual',
-          message: response.error || t('errors.default'),
-        });
-      }
+      setError('root', {
+        type: 'manual',
+        message: response.error || t('errors.default'),
+      });
       return;
     }
     await setUserRooms(defaultValues.hash_id);
