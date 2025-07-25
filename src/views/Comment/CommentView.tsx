@@ -45,7 +45,7 @@ const Comments = () => {
     setLoading(true);
     const response = await getCommentsByIdea(idea_id);
     if (response.error) setError(response.error);
-    if (!response.error) setComments(response.data || []);
+    setComments(response.data || []);
     setLoading(false);
   }, [idea_id]);
 
@@ -65,7 +65,6 @@ const Comments = () => {
 
   return (
     <Stack alignItems="center" width="100%" spacing={2} pt={2}>
-      {error && <Typography>{t(error)}</Typography>}
       {isLoading ? (
         <IdeaBubbleSkeleton />
       ) : comments.length > 0 ? (
