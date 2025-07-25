@@ -56,7 +56,7 @@ const WildIdeas = () => {
     setLoading(true);
     const response = await getIdeasByRoom(room_id);
     if (response.error) setError(response.error);
-    if (!response.error) setIdeas(response.data || []);
+    setIdeas(response.data || []);
     setLoading(false);
 
     let roomName = await getRoomName(room_id);
