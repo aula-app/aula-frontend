@@ -39,7 +39,7 @@ code {
 }
 
 /* Alternative approach: ensure popup containers don't interfere with page scrolling */
-.mdxeditor-popup-container * {
+.mdxeditor-popup-container > div, .mdxeditor-popup-container > span {
   overflow: visible !important;
 }
 
