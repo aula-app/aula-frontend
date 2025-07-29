@@ -3,7 +3,7 @@ import LocaleSwitch from '@/components/LocaleSwitch';
 import { useEventLogout, useOnMobile } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
 import { checkPermissions } from '@/utils';
-import { AppBar, Box, Breadcrumbs, Stack, Toolbar } from '@mui/material';
+import { AppBar, Box, Breadcrumbs, Stack, Toolbar, useTheme } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
@@ -27,6 +27,7 @@ interface Props {
  */
 const TopBar: React.FC = () => {
   const { t } = useTranslation();
+  const theme = useTheme();
   const [openSideBar, setSidebar] = useState(false);
   const [appState] = useAppStore();
 
