@@ -51,7 +51,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
       let username = user['username'];
       let realname = user['realname'];
       let password = `<i>${t('settings.users.passwordChanged')}</i>`;
-      if (!!user['temp_pw']) {
+      if (user['temp_pw']) {
         password = user['temp_pw'];
       } else {
         if (onlyTempPass) continue;
