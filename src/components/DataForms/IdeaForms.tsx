@@ -114,7 +114,6 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       console.error('Form submission error:', error);
     } finally {
       setIsLoading(false);
-      onClose();
     }
   };
 
