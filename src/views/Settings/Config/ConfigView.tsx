@@ -59,7 +59,7 @@ const ConfigView = () => {
   ];
 
   return (
-    <Stack width="100%" height="100%" sx={{ overflowY: 'auto' }} p={2}>
+    <Stack width="100%" height="100%" sx={{ overflowY: 'auto', overscrollBehavior: 'contain' }} p={2}>
       <Typography variant="h1" pb={2}>
         {t('settings.labels.configuration')}
       </Typography>
