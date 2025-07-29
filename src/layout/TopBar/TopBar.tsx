@@ -95,8 +95,8 @@ const TopBar: React.FC = () => {
               style={{
                 height: '100%',
                 objectFit: 'contain',
-                paddingTop: 16,
-                paddingBottom: 16,
+                paddingTop: theme.spacing(2),
+                paddingBottom: theme.spacing(2),
               }}
             />
           ) : (
