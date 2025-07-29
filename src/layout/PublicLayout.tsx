@@ -1,7 +1,7 @@
 import { AppLink, ErrorBoundary } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import SkipNavigation from '@/components/SkipNavigation';
-import { Box, Button, Stack } from '@mui/material/';
+import { Box, Button, Stack, useTheme } from '@mui/material/';
 import { FunctionComponent, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { getRuntimeConfig } from '../config';
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const theme = useTheme();
 
   document.title = 'aula'; // Also Update Tab Title
 
@@ -21,10 +22,10 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       maxWidth="20rem"
       sx={{
         height: '100%',
-        paddingTop: `calc(2 * 8px + var(--safe-area-inset-top, 0px))`,
+        paddingTop: `calc(${theme.spacing(2)} + var(--safe-area-inset-top, 0px))`,
         paddingLeft: `calc(0px + var(--safe-area-inset-left, 0px))`,
         paddingRight: `calc(0px + var(--safe-area-inset-right, 0px))`,
-        paddingBottom: `calc(2 * 8px + var(--safe-area-inset-bottom, 0px))`,
+        paddingBottom: `calc(${theme.spacing(2)} + var(--safe-area-inset-bottom, 0px))`,
       }}
     >
       <SkipNavigation mainContentId="public-content" />
