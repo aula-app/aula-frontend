@@ -134,13 +134,14 @@ const LoginView = () => {
 
       // if this instance's BE api url is not defined
       if (!instanceApiUrl) {
-        if (config.IS_MULTI) {
+        if (runtimeConfig.IS_MULTI) {
           // get the instance api url based on the instance code
           await validateAndSaveInstanceCode(localStorageGet('code'));
           setInstanceApiUrl(localStorageGet('api_url'));
         } else {
           // if SINGLE, reuse the "CENTRAL_API_URL" as this instance's BE api url
-          setInstanceApiUrl(config.CENTRAL_API_URL);
+          localStorageSet('api_url', runtimeConfig.CENTRAL_API_URL);
+          setInstanceApiUrl(runtimeConfig.CENTRAL_API_URL);
         }
       }
     })()
