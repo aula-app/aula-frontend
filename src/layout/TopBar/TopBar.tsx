@@ -13,14 +13,6 @@ import MessagesButton from '@/components/Buttons/MessagesButton';
 import UpdatesButton from '@/components/Buttons/UpdatesButton';
 import { useTranslation } from 'react-i18next';
 
-// Paths that should be excluded from breadcrumbs
-const EXCLUDED_PATHS = ['welcome', 'phase', 'settings'];
-
-interface Props {
-  /** Home path for navigation */
-  home: string;
-}
-
 /**
  * TopBar component that provides navigation, breadcrumbs, and user controls
  * @component TopBar
@@ -133,7 +125,12 @@ const TopBar: React.FC = () => {
           <Stack direction="row" spacing={0.5} sx={{ ml: 'auto' }}>
             <MessagesButton />
             <UpdatesButton />
-            <AppIconButton icon="menu" title={t('tooltips.menu')} onClick={menuToggle} sx={{ display: { xs: 'block', md: 'none' } }} />
+            <AppIconButton
+              icon="menu"
+              title={t('tooltips.menu')}
+              onClick={menuToggle}
+              sx={{ display: { xs: 'block', md: 'none' } }}
+            />
           </Stack>
         )}
         <SideBar
