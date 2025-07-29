@@ -140,8 +140,9 @@ const LoginView = () => {
           setInstanceApiUrl(localStorageGet('api_url'));
         } else {
           // if SINGLE, reuse the "CENTRAL_API_URL" as this instance's BE api url
-          localStorageSet('api_url', runtimeConfig.CENTRAL_API_URL);
-          setInstanceApiUrl(runtimeConfig.CENTRAL_API_URL);
+          const centralApiUrl = runtimeConfig.CENTRAL_API_URL;
+          localStorageSet('api_url', centralApiUrl);
+          setInstanceApiUrl(centralApiUrl);
         }
       }
     })()
