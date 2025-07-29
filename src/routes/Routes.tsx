@@ -34,11 +34,11 @@ const Routes = () => {
     } catch (error) {
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
-          console.error('Consent request timeout');
+          // Consent request timeout
         } else if (error.name === 'NetworkError') {
-          console.error('Network error while fetching consent');
+          // Network error while fetching consent
         } else {
-          console.error('Failed to fetch consent:', error.message);
+          // Failed to fetch consent
         }
       }
       dispatch({

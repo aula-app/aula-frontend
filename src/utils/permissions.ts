@@ -182,7 +182,6 @@ export function checkPermissions(model: keyof typeof permissions, action: string
 
     return checkSelfPermission(hasGlobalRolePermission);
   } catch (error) {
-    console.error('Permission check failed:', error);
     return false;
   }
 }
