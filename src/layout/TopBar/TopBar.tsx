@@ -148,7 +148,7 @@ const TopBar: React.FC = () => {
             <AppIconButton icon="logout" title={t('tooltips.logout')} onClick={onLogout} />
           </Stack>
         ) : (
-          <Stack direction="row" sx={{ ml: 'auto' }}>
+          <Stack direction="row" sx={{ ml: 'auto', gap: 0.5 }}>
             <MessagesButton />
             <UpdatesButton />
             <AppIconButton
