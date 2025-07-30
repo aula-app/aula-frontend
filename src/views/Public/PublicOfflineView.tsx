@@ -2,14 +2,10 @@ import { AppLink } from '@/components';
 import { Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-interface OfflineViewProps {
-  className?: string;
-}
-
 /**
  * View displayed when school is closed (online_mode !== 1)
  */
-const PublicOfflineView: React.FC<OfflineViewProps> = () => {
+const PublicOfflineView: React.FC = () => {
   const { t } = useTranslation();
 
   return (
