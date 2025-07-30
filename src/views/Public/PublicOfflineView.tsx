@@ -1,5 +1,4 @@
 import { AppLink } from '@/components';
-import { useEventLogout } from '@/hooks';
 import { useAppStore } from '@/store';
 import { Stack, Typography } from '@mui/material';
 import { useEffect } from 'react';
