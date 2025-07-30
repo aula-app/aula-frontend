@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build and deploy frontend to ${{ github.ref_name }}
         run: |
-          npm i
-          npm run build-${{ github.ref_name }}
+          yarn
+          yarn build
           rsync -av --delete --exclude public-config.json --exclude api build/ /var/www-aula-${{ github.ref_name }}
         shell: bash
