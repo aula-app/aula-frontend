@@ -1,6 +1,5 @@
 import { AppLink } from '@/components';
 import { Stack, Typography } from '@mui/material';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface OfflineViewProps {
