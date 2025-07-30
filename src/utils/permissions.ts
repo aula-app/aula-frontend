@@ -1,6 +1,7 @@
 import { RoleTypes } from '@/types/SettingsTypes';
 import { parseJwt } from './jwt';
 import { localStorageGet } from './localStorage';
+
 /** User roles:
  * 10 => "guest",
  * 20 => "user",
