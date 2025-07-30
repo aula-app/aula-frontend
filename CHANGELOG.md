@@ -1,11 +1,14 @@
+## 1.3.1
+
+- **Bug fixes:**
+  - Fixed name change requests
+
 ## 1.3.0
 
 - **UX improvements:**
-
   - Added ideas and boxes filters
 
 - **Bug fixes:**
-
   - Prevent duplicate user creation
   - Prevent likes on own ideas and comments
   - Remove google font calls
@@ -15,7 +18,6 @@
 ## 1.2.0
 
 - **Accessibility improvements:**
-
   - Added comprehensive ARIA attributes, data-testid properties, and focus management across forms, dialogs, accordions, and navigational components
   - Enhanced keyboard navigation support and screen reader announcements using new accessibility utilities
   - Implemented skip navigation components for better accessibility compliance
@@ -23,7 +25,6 @@
   - Refined error and helper text for improved user experience
 
 - **Code cleanup and refactoring:**
-
   - Removed legacy and unused code to simplify codebase and improve maintainability
   - Converted exported constants and functions to local ones where unused externally
   - Deleted obsolete modules and functions
@@ -33,7 +34,6 @@
   - Dockerized for easier self-hosting.
 
 - **Bug fixes:**
-
   - Fixed announcement consent button display issues by making consent_text field required
   - Added fallback text (t('actions.agree')) when consent_text is missing
   - Updated Yup schema validation for announcement forms with proper defaults
