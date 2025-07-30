@@ -106,7 +106,6 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     } catch (error) {
       // Announce form submission failure to screen readers
       announceToScreenReader(t('ui.accessibility.formError'), 'assertive');
-      console.error('Form submission error:', error);
     } finally {
       setIsLoading(false);
     }

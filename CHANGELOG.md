@@ -6,6 +6,7 @@
 ## 1.3.0
 
 - **UX improvements:**
+
   - Added ideas and boxes filters
 
 - **Bug fixes:**
@@ -14,6 +15,7 @@
   - Remove google font calls
   - Fixed missing favicon
   - Fixed Announcements agree button missing text
+  - Fixed name change requests
 
 ## 1.2.0
 

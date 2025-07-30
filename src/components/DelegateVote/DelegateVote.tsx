@@ -168,7 +168,7 @@ const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
                     mt={1}
                     key={user.hash_id}
                     bgcolor={
-                      Boolean(user.is_delegate)
+                      user.is_delegate
                         ? grey[100]
                         : selected && selected.hash_id === user.hash_id
                           ? grey[200]
@@ -188,8 +188,8 @@ const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
                   >
                     <UserAvatar id={user.hash_id} />
                     <Stack ml={2}>
-                      <Typography color={Boolean(user.is_delegate) ? 'secondary' : ''}>{user.realname}</Typography>
-                      {Boolean(user.is_delegate) ? (
+                      <Typography color={user.is_delegate ? 'secondary' : ''}>{user.realname}</Typography>
+                      {user.is_delegate ? (
                         <Typography color="secondary" fontSize="small">
                           {t('delegation.already')}
                         </Typography>
