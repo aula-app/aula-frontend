@@ -150,11 +150,12 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
         <Stack className="printOnly">{t('auth.messages.email')}</Stack>
       );
 
-    case 'description':
+    // Markdown fields that need to be rendered as HTML (without line breaks for table display)
+    case 'description_public':
     case 'body':
     case 'content':
     case 'about_me':
-      return <MarkdownReader>{String(value)}</MarkdownReader>;
+      return <MarkdownReader>{String(value).replace(/\n/g, ' ')}</MarkdownReader>;
 
     // Default case for all other fields
     default:
