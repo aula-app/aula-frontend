@@ -18,7 +18,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import ImageEditor from '../ImageEditor';
@@ -69,12 +69,18 @@ const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
 
   const userFields = ['displayname', 'username', 'realname', 'email', 'about_me'] as Array<keyof SchemaType>;
 
-  const approveUpdates = () => {
-    updateRequests.map((update) => sendMessage(update));
+  const approveUpdates = async () => {
+    try {
+      await Promise.all(updateRequests.map((update) => sendMessage(update)));
+      closeDialog();
+      onReload();
+    } catch (error) {
+      console.error('Error sending update requests:', error);
+    }
   };
 
   const sendMessage = async (field: fieldOptions) => {
-    await addMessage({
+    const response = await addMessage({
       msg_type: 6,
       headline: `${t('requests.changeName.title', { var: user.realname })}: ${field.field}`,
       body: `
@@ -85,25 +91,37 @@ property: ${field.field}
 value: ${field.value}
 ---
 ${t('requests.changeName.body', { var: user.realname, old: user[field.field], new: field.value })}`,
-    }).then((response) => {
-      if (response.error) {
-        errorAlert(t(response.error), dispatch);
-        return;
-      }
-      successAlert(t('requests.changeName.request'), dispatch);
-      onReload();
     });
+
+    if (response.error) {
+      errorAlert(t(response.error), dispatch);
+      throw new Error(response.error);
+    }
+
+    successAlert(t('requests.changeName.request'), dispatch);
+    return response;
   };
 
   const onSubmit = (data: SchemaType) => {
     if (!user) return;
-    let updates = 0;
-    userFields.slice(0, -2).map((field) => {
-      if (data[field] === user[field]) return;
-      setUpdateRequests((prev) => [...prev, { field: field, value: data[field] }]);
-      updates++;
+
+    const updates: fieldOptions[] = [];
+
+    // Check fields that require approval (excluding about_me which can be updated directly)
+    const fieldsRequiringApproval = userFields.slice(0, -1); // All fields except about_me
+
+    fieldsRequiringApproval.forEach((field) => {
+      if (data[field] !== user[field]) {
+        updates.push({ field: field, value: data[field] });
+      }
     });
-    if (updates > 0) return;
+
+    if (updates.length > 0) {
+      setUpdateRequests(updates);
+      return;
+    }
+
+    // If no approval needed, update profile directly
     updateProfile(data);
   };
 
@@ -131,7 +149,7 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
   }, [user]);
 
   return (
-    <FormContainer onSuccess={() => handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Stack direction="row" flexWrap="wrap" py={2} gap={2}>
         <Button
           color="secondary"
@@ -215,7 +233,7 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
           </Button>
         </DialogActions>
       </Dialog>
-    </FormContainer>
+    </form>
   );
 };
 
