@@ -161,7 +161,7 @@ const IdeasBoxView = () => {
 
   useEffect(() => {
     let ideasList = document.getElementById('box-ideas');
-    if (!!ideasList) {
+    if (ideasList) {
       if (appState.lastIdeaList == 'box-ideas-' + phase) {
         ideasList.scrollTop = appState.lastScroll;
       }

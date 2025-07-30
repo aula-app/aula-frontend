@@ -124,9 +124,9 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
           id="room-roles-dialog-description"
         >
           {schoolRooms.map((room, index) => {
-            const currentRole = !!updateRoles.find((role) => role.room === room.hash_id)
+            const currentRole = updateRoles.find((role) => role.room === room.hash_id)
               ? updateRoles.find((role) => role.room === room.hash_id)?.role
-              : !!userRoles.find((role) => role.room === room.hash_id)
+              : userRoles.find((role) => role.room === room.hash_id)
                 ? userRoles.find((role) => role.room === room.hash_id)?.role
                 : room.type === 1
                   ? defaultLevel

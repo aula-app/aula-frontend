@@ -121,7 +121,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
             setExistingUsers(userIds);
           }
         } catch (error) {
-          console.error('Error fetching group users:', error);
+          // Error fetching group users
         } finally {
           setIsLoading(false);
         }
