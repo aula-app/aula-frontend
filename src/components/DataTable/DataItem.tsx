@@ -95,7 +95,7 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
   switch (column) {
     // Boolean fields
     case 'approved':
-      return <>{t(Boolean(value) ? 'ui.common.yes' : 'ui.common.no')}</>;
+      return <>{t(value ? 'ui.common.yes' : 'ui.common.no')}</>;
 
     // IDs that require name lookup
     case 'creator_id':
@@ -124,7 +124,7 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
 
     // Special fields
     case 'temp_pw':
-      return !!value ? (
+      return value ? (
         <Stack direction="row" alignItems="center">
           <Chip
             className="noPrint"
