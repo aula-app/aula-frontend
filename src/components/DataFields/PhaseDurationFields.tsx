@@ -99,7 +99,7 @@ const PhaseDurationFields: React.FC<Props> = ({
             name={field.name}
             control={control}
             render={({ field: fieldProps, fieldState }) => {
-              if (!!fieldState.error) setError(fieldState.error.message);
+              if (fieldState.error) setError(fieldState.error.message);
               return (
                 <FormControl sx={{ flex: 1, minWidth: '100px' }}>
                   <TextField

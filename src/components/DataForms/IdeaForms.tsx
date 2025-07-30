@@ -111,7 +111,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
         type: 'manual',
         message: t('errors.default'),
       });
-      console.error('Form submission error:', error);
+
     } finally {
       setIsLoading(false);
     }

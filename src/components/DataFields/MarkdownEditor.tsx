@@ -374,13 +374,13 @@ const MarkdownEditor: React.FC<Props> = ({
             >
               <StyledFormLabel
                 id={`editor-${name}-label`}
-                className={!!fieldState.error ? 'error' : getCharCountClass()}
+                className={fieldState.error ? 'error' : getCharCountClass()}
               >
                 {t(`settings.columns.${name}`)}
                 {required ? '*' : ''}
               </StyledFormLabel>
               <Editor
-                className={`md-editor ${!!fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''} ${maxLength ? 'has-char-count' : ''} ${getCharCountClass()}`}
+                className={`md-editor ${fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''} ${maxLength ? 'has-char-count' : ''} ${getCharCountClass()}`}
                 markdown={''}
                 toMarkdownOptions={{}}
                 sx={{ height: '100%' }}

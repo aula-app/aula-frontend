@@ -1,9 +1,9 @@
 ## 1.3.1
 
 - **Bug fixes:**
-
-- display creation and edition errors
-- prevent dialogs from closing on unsuccessful requests
+  - Display error message in case creation and edition unsuccessful requests
+  - Prevent dialogs from closing on unsuccessful requests
+  - Fixed name change requests
 
 ## 1.3.0
 

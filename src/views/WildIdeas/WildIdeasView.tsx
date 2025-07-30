@@ -98,7 +98,7 @@ const WildIdeas = () => {
 
   useEffect(() => {
     let ideasList = document.getElementById('wild-ideas-list');
-    if (!!ideasList) {
+    if (ideasList) {
       if (appState.lastIdeaList == 'wild-ideas') {
         ideasList.scrollTop = appState.lastScroll;
       } else

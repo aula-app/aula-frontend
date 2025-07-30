@@ -172,7 +172,6 @@ export const baseRequest = async <T = unknown>(
       error: null,
     };
   } catch (e) {
-    console.error('API request error:', e);
     return {
       data: null,
       count: null,
