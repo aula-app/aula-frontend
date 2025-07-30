@@ -1,6 +1,7 @@
 import { RoleTypes } from '@/types/SettingsTypes';
 import { parseJwt } from './jwt';
 import { localStorageGet } from './localStorage';
+import { create } from 'domain';
 
 /** User roles:
  * 10 => "guest",
@@ -84,6 +85,7 @@ const permissions = {
   },
   messages: {
     viewAll: { role: 40 },
+    create: { role: 50 },
     delete: { role: 50 },
     status: { role: 50 },
   },
