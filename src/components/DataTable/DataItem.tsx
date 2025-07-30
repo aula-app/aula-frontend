@@ -6,12 +6,13 @@ import { getUser } from '@/services/users';
 import { useAppStore } from '@/store';
 import { PossibleFields, SettingType } from '@/types/Scopes';
 import { phases, STATUS } from '@/utils';
-import { Chip, Stack } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import MarkdownReader from '../MarkdownReader';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -149,9 +150,15 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
         <Stack className="printOnly">{t('auth.messages.email')}</Stack>
       );
 
+    case 'description':
+    case 'body':
+    case 'content':
+    case 'about_me':
+      return <MarkdownReader>{String(value)}</MarkdownReader>;
+
     // Default case for all other fields
     default:
-      return <>{value}</>;
+      return <Typography>{value}</Typography>;
   }
 };
 
