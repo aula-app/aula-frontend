@@ -46,6 +46,14 @@ export const goToUserSettings = async (page: Page) => {
   await SettingsButton.click({ timeout: 1000 });
 };
 
+export const goToSystemConfig = async (page: Page) => {
+  await page.goto(host);
+
+  const ConfigButton = page.locator('a[href="/settings/configuration"]');
+  await expect(ConfigButton).toBeVisible();
+  await ConfigButton.click({ timeout: 1000 });
+};
+
 export const exists = async (page: Page, data: users.UserData) => {
   await goToUserSettings(page);
 

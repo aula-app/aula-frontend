@@ -18,7 +18,7 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
-        project: ['./tsconfig.json'],
+        project: ['./tsconfig.eslint.json'],
       },
       globals: {
         window: 'readonly',
@@ -85,8 +85,20 @@ export default [
   },
   {
     files: ['tests/**/*', '**/*.test.*', '**/*.spec.*'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: ['./tsconfig.eslint.json'],
+      },
+      globals: {
+        test: 'readonly',
+        expect: 'readonly',
+        page: 'readonly',
+        browser: 'readonly',
+        context: 'readonly',
+      },
+    },
     rules: {
-      'no-console': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
