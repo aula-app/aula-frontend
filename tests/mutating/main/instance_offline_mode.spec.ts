@@ -53,7 +53,7 @@ test.describe('Instance Offline Mode', () => {
   });
 
   test('Admin can set instance online again', async () => {
-    // Admin logs in and sets instance offline
+    // Admin logs in and sets instance online again
     const admin = await browsers.newPage(browsers.admins_browser);
     await users.goToSystemConfig(admin);
     await expect(admin.getByLabel('Konfigurationen')).toBeVisible();
