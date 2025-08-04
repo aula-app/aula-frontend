@@ -23,13 +23,15 @@ const EmptyState = ({
   title,
   description,
   imageWidth = 150,
-  imageAlt = 'Empty state',
+  imageAlt,
 }: EmptyStateProps): JSX.Element => {
   const { t } = useTranslation();
 
+  const defaultAlt = image === '/img/Paula_schlafend.svg' ? t('errors.schoolClosedImage') : 'Empty state';
+
   return (
     <Stack flex={1} alignItems="center" justifyContent="center" spacing={2}>
-      <img src={image} alt={imageAlt} loading="lazy" width={imageWidth} />
+      <img src={image} alt={imageAlt || defaultAlt} loading="lazy" width={imageWidth} />
       <Typography variant="h3" textAlign="center">
         {title || t('common.noContent')}
       </Typography>

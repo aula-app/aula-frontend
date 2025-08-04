@@ -85,6 +85,11 @@ const LoginView = () => {
       clearTimeout(timeoutId);
       setLoading(false);
 
+      if (response.online_mode !== undefined && response.online_mode !== 1) {
+        navigate("/offline", { replace: true });
+        return;
+      }
+
       if (response.data || !('JWT' in response)) {
         setError(
           'user_status' in response && response.user_status !== null

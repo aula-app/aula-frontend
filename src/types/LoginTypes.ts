@@ -20,4 +20,5 @@ export interface LoginResponseType {
   user_id?: number | null;
   data?: string | null;
   count?: number;
+  online_mode?: number;
 }
