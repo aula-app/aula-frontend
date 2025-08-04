@@ -42,18 +42,19 @@ const PrivateLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     <Stack
       sx={{
         height: '100%',
-        paddingTop: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT,
-        paddingLeft: 0,
-        paddingRight: 0,
+        paddingTop: `calc(${onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT} + var(--safe-area-inset-top, 0px))`,
+        paddingLeft: 'var(--safe-area-inset-left, 0px)',
+        paddingRight: 'var(--safe-area-inset-right, 0px)',
+        paddingBottom: 'var(--safe-area-inset-bottom, 0px)',
       }}
     >
       <SkipNavigation mainContentId="main-content" />
       <TopBar />
 
-      <Stack 
-        direction="row" 
+      <Stack
+        direction="row"
         component="main"
-        id="main-content" 
+        id="main-content"
         sx={{ flexGrow: 1, overflow: 'hidden' }}
         tabIndex={-1} // Makes the element focusable via skip nav but doesn't add it to normal tab order
       >

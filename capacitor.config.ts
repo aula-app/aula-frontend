@@ -8,9 +8,9 @@ const config: CapacitorConfig = {
     androidScheme: 'https',
   },
   ios: {
-    contentInset: 'always',
+    contentInset: 'never',
     preferredContentMode: 'mobile',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#000000',
     allowsLinkPreview: true,
     scheme: 'aula',
     limitsNavigationsToAppBoundDomains: true,
@@ -18,6 +18,14 @@ const config: CapacitorConfig = {
   plugins: {
     Keyboard: {
       resizeOnFullScreen: true,
+    },
+    SafeArea: {
+      enabled: true,
+      customColorsForSystemBars: false,
+      statusBarBackgroundColor: '#000000',
+      statusBarStyle: 'dark',
+      navigationBarBackgroundColor: '#000000',
+      navigationBarStyle: 'dark',
     },
   },
 };
