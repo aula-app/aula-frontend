@@ -134,6 +134,8 @@
     "notFound": "Hier gibt es keine Neuigkeiten",
     "notFoundImage": "Schlafende Charakterillustration für Seite nicht gefunden",
     "offline": "Der Zugang zu dieser Schule ist gesperrt. Bitte versuchen Sie es später wieder",
+    "schoolClosed": "Die Schule ist derzeit geschlossen. Bitte versuchen Sie es später noch einmal.",
+    "schoolClosedImage": "Schlafende Charakterillustration für Schule-geschlossen-Seite",
     "timeout": "Zeitüberschreitung der Anfrage",
     "unauthorized": "Diese Seite erfordert eine Authentifizierung",
     "existingUser": "Benutzername und/oder E-Mail sind bereits vergeben"

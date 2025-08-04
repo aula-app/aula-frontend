@@ -4,6 +4,8 @@
   - Display error message in case creation and edition unsuccessful requests
   - Prevent dialogs from closing on unsuccessful requests
   - Fixed name change requests
+- **UX improvements:**
+  - Added an offline page to inform instance offline status to users
 
 ## 1.3.0
 
@@ -16,6 +18,7 @@
   - Remove google font calls
   - Fixed missing favicon
   - Fixed Announcements agree button missing text
+  - Fixed name change requests
 
 ## 1.2.0
 

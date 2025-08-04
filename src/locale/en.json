@@ -134,6 +134,8 @@
     "notFound": "There are no news here",
     "notFoundImage": "Sleeping character illustration for not found page",
     "offline": "The access to this school is suspended. Please try again later",
+    "schoolClosed": "The school is currently closed. Please try again later.",
+    "schoolClosedImage": "Sleeping character illustration for school closed page",
     "timeout": "The request timed out",
     "unauthorized": "This page requires authentication",
     "existingUser": "Username and/or email already in use"

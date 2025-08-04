@@ -2,13 +2,18 @@ import { AppLink } from '@/components';
 import { Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-const PublicNotFoundView = () => {
+/**
+ * View displayed when school is closed (online_mode !== 1)
+ */
+const PublicOfflineView: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <Stack spacing={2} alignItems="center" sx={{ p: 2 }}>
+    <Stack flex={1} alignItems="center" justifyContent="center">
       <img src="/img/Paula_schlafend.svg" alt={t('errors.schoolClosedImage')} role="img" loading="lazy" width={150} />
-      <Typography mt={6}>{t('errors.unauthorized')}</Typography>
+      <Typography mt={6}>
+        {t('errors.schoolClosed')}
+      </Typography>
       <AppLink color="success" to="/">
         {t('auth.login.button')}
       </AppLink>
@@ -16,4 +21,4 @@ const PublicNotFoundView = () => {
   );
 };
 
-export default PublicNotFoundView;
+export default PublicOfflineView;

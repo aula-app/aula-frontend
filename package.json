@@ -39,6 +39,7 @@
     "knip": "knip"
   },
   "dependencies": {
+    "@capacitor-community/safe-area": "^7.0.0-alpha.1",
     "@capacitor/android": "^7.0.0",
     "@capacitor/core": "^7.2.0",
     "@capacitor/ios": "^7.2.0",
