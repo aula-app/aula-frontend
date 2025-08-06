@@ -2,8 +2,8 @@ services:
   frontend:
     image: aulaapp/aula-frontend:pr-${PR_NUMBER}
     container_name: aula-frontend_pr-${PR_NUMBER}
-    ports:
-      - '${PORT}:${PORT}'
+    env:
+      - DOCKER_AULA_BASENAME='"${PR_NUMBER}"'
     networks:
       - aula_aula_external
 

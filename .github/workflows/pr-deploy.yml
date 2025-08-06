@@ -8,7 +8,6 @@ on:
 env:
   IMAGE_TAG: 'aulaapp/aula-frontend:pr-${{ github.event.number }}'
   PR_NUMBER: ${{ github.event.number }}
-  PORT: '3${{ github.event.number }}' # assign a port based on PR number 3xxx
 
 jobs:
   build:
