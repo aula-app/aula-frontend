@@ -5,11 +5,12 @@ on:
     # branches: [dev, staging, prod, main]  # filter according to the PR target branch
     types: [opened, synchronize, reopened]
 
+env:
+  IMAGE_TAG: 'aulaapp/aula-frontend:pr-${{ github.event.number }}'
+
 jobs:
   build:
     runs-on: [self-hosted, cicd]
-    env:
-      IMAGE_TAG: 'aulaapp/aula-frontend:pr-${{ github.event.number }}'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,15 +25,12 @@ jobs:
         run: docker push $IMAGE_TAG
   deploy:
     # skip deploying dev,staging,prod branches when they're the PR source branch
-    if: ${{ !contains(fromJSON('["dev", "staging", "prod"]'), github.head_ref) }}
+    if: ${{ !contains(fromJSON('["main", "dev", "staging", "prod"]'), github.head_ref) }}
     runs-on: [self-hosted, branch]
     needs: build
     env:
       PR_NUMBER: ${{ github.event.number }} # PR Number
       PORT: ${{ github.event.number }} + 30000 # Example: Assigning a port based on PR number
     steps:
-      - name: Deploy to Testing Environment
-        run: |
-          IMAGE_TAG="aulaapp/aula-frontend:pr-$PR_NUMBER"
-          # Use docker-compose to run the service on a specific port
-          docker-compose -f ./docker-compose.pr.yml up -d --build
+      - name: Deploy to Branch Testing Environment
+        run: docker compose -f ./docker-compose.pr.yml up -d --build
