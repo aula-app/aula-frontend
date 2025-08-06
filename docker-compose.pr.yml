@@ -1,0 +1,6 @@
+services:
+  frontend:
+    image: aulaapp/aula-frontend:pr-${PR_NUMBER}
+    container_name: aula-frontend_pr-${PR_NUMBER}
+    ports:
+      - '${PORT}:${PORT}'

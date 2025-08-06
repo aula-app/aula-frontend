@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: [self-hosted, cicd]
     env:
-      IMAGE_TAG: 'aula-frontend:pr-${{ github.event.number }}'
+      IMAGE_TAG: 'aulaapp/aula-frontend:pr-${{ github.event.number }}'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,6 +33,6 @@ jobs:
     steps:
       - name: Deploy to Testing Environment
         run: |
-          IMAGE_TAG="aula-frontend:pr-$PR_NUMBER"
+          IMAGE_TAG="aulaapp/aula-frontend:pr-$PR_NUMBER"
           # Use docker-compose to run the service on a specific port
           docker-compose -f ./docker-compose.pr.yml up -d --build
