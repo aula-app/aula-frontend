@@ -26,6 +26,8 @@ For more information about the project, visit [aula.de](https://www.aula.de).
 
 ### Running and testing locally
 
+Check if your NodeJS version matches ours from `.nvmrc` file.
+
 ```sh
 # Run the aula-frontend in development mode locally
 npm run dev
@@ -43,7 +45,7 @@ docker run --env-file .env.docker -p 3000:80 aulaapp/aula-frontend:latest
 # In another terminal, run the tests against the local aula-frontend
 docker run -p 4000:4000 --network host --rm --init \
   --add-host=hostmachine:host-gateway -v $(pwd):/home/pwuser \
-  -it mcr.microsoft.com/playwright:v1.53.0-jammy \
+  -it mcr.microsoft.com/playwright:v1.54.1-jammy \
   /bin/sh -c "cd /home/pwuser && npx playwright install && npx playwright test"
 ```
 
