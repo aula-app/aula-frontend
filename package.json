@@ -23,7 +23,6 @@
     "dev": "vite",
     "check-type": "tsc --noEmit",
     "build": "tsc && NODE_OPTIONS=--max-old-space-size=3072 vite build",
-    "build-branch": "tsc && vite --config vite.branch.config.mts --mode branch build",
     "build-app": "tsc && vite build --mode app",
     "build-single": "vite build --mode single",
     "build-test": "tsc && vite build --mode test",
