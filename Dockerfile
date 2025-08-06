@@ -18,6 +18,7 @@ RUN yarn build
 
 # Stage 2: Serve the app (as built assets) using Nginx
 FROM nginx:stable-alpine-slim AS runtime
+ENV VITE_APP_BASENAME=/
 
 COPY --from=assets /app/build /usr/share/nginx/html
 
