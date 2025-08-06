@@ -26,7 +26,8 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
       BASENAME: import.meta.env.VITE_APP_BASENAME || '/',
     };
   } else {
-    const res = await fetch('/public-config.json');
+    const branchBasename = process.env.VITE_APP_BASENAME || '/';
+    const res = await fetch(`${branchBasename}public-config.json`);
     const json = await res.json();
     config = { ...defaultConfig, ...json };
   }
@@ -35,7 +36,7 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
   return config;
 }
 
-export class RuntimeConfigNotFoundError extends Error {}
+export class RuntimeConfigNotFoundError extends Error { }
 
 export function getRuntimeConfig(): RuntimeConfig {
   const config = localStorage.getItem('config');
