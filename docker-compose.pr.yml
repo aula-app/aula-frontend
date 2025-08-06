@@ -5,9 +5,9 @@ services:
     ports:
       - '${PORT}:${PORT}'
     networks:
-      - aula_aula_internal
+      - aula_aula_external
 
 networks:
-  aula_aula_internal:
+  aula_aula_external:
     driver: bridge
     external: true
