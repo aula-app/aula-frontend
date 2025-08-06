@@ -30,7 +30,7 @@ jobs:
     needs: build
     env:
       PR_NUMBER: ${{ github.event.number }} # PR Number
-      PORT: ${{ github.event.number }} + 30000 # Example: Assigning a port based on PR number
+      PORT: '3${{ github.event.number }}' # Example: Assigning a port based on PR number
     steps:
       - name: Deploy to Branch Testing Environment
         run: docker compose -f ./docker-compose.pr.yml up -d --build
