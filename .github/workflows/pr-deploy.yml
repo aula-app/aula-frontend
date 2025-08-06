@@ -36,6 +36,9 @@ jobs:
             docker-compose.pr.yml
           sparse-checkout-cone-mode: false
 
+      - name: Pull the latest version
+        run: docker compose -f ./docker-compose.pr.yml pull
+
       - name: Deploy to Branch Testing Environment
         run: docker compose -f ./docker-compose.pr.yml up -d --build
 
@@ -49,6 +52,9 @@ jobs:
           sparse-checkout: |
             docker-compose.pr.yml
           sparse-checkout-cone-mode: false
+
+      - name: Pull the latest version
+        run: docker compose -f ./docker-compose.pr.yml pull
 
       - name: Deploy to Branch Testing Environment
         run: docker compose -f ./docker-compose.pr.yml up -d --build
