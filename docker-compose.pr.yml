@@ -5,7 +5,7 @@ services:
     env_file:
       - /opt/aula/aula-frontend/.env
     environment:
-      - DOCKER_AULA_BASENAME='"${PR_NUMBER}"'
+      - DOCKER_AULA_BASENAME='"/${PR_NUMBER}/"'
     networks:
       - aula_aula_external
 
