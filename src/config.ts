@@ -26,7 +26,7 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
       BASENAME: import.meta.env.VITE_APP_BASENAME || '/',
     };
   } else {
-    const branchBasename = process.env.VITE_APP_BASENAME || '/';
+    const branchBasename = import.meta.env.VITE_APP_BASENAME || '/';
     const res = await fetch(`${branchBasename}public-config.json`);
     const json = await res.json();
     config = { ...defaultConfig, ...json };
