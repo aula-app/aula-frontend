@@ -7,6 +7,8 @@ on:
 
 env:
   IMAGE_TAG: 'aulaapp/aula-frontend:pr-${{ github.event.number }}'
+  PR_NUMBER: ${{ github.event.number }}
+  PORT: '3${{ github.event.number }}' # assign a port based on PR number 3xxx
 
 jobs:
   build:
@@ -23,14 +25,17 @@ jobs:
 
       - name: Push Docker image
         run: docker push $IMAGE_TAG
-  deploy:
-    # skip deploying dev,staging,prod branches when they're the PR source branch
+  deploy-dev:
     if: ${{ !contains(fromJSON('["main", "dev", "staging", "prod"]'), github.head_ref) }}
-    runs-on: [self-hosted, branch]
+    runs-on: [self-hosted, dev]
     needs: build
-    env:
-      PR_NUMBER: ${{ github.event.number }} # PR Number
-      PORT: '3${{ github.event.number }}' # Example: Assigning a port based on PR number
+    steps:
+      - name: Deploy to Branch Testing Environment
+        run: docker compose -f ./docker-compose.pr.yml up -d --build
+  deploy-staging:
+    if: ${{ !contains(fromJSON('["main", "dev", "staging", "prod"]'), github.head_ref) }}
+    runs-on: [self-hosted, staging]
+    needs: deploy-dev
     steps:
       - name: Deploy to Branch Testing Environment
         run: docker compose -f ./docker-compose.pr.yml up -d --build

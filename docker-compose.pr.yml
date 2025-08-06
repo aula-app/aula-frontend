@@ -4,3 +4,10 @@ services:
     container_name: aula-frontend_pr-${PR_NUMBER}
     ports:
       - '${PORT}:${PORT}'
+    networks:
+      - aula_aula_internal
+
+networks:
+  aula_aula_internal:
+    driver: bridge
+    external: true
