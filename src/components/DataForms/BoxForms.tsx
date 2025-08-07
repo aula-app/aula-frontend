@@ -38,22 +38,41 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   const saveIdeaSelections = useCallback((updates?: UpdateType) => {
     if (!defaultValues) { // Only for new boxes
       try {
-        const ideaIdsToSave = updates ? updates.add : updateIdeas.add;
-        sessionStorage.setItem('boxform-ideas-draft', JSON.stringify(ideaIdsToSave));
+        // Calculate the current total selection
+        const currentUpdates = updates || updateIdeas;
+        const baselineIds = ideas.map(idea => idea.hash_id);
+        const currentSelection = baselineIds
+          .filter(id => !currentUpdates.remove.includes(id))
+          .concat(currentUpdates.add);
+        
+        sessionStorage.setItem('boxform-ideas-draft', JSON.stringify(currentSelection));
       } catch (error) {
         console.warn('Failed to save idea selections:', error);
       }
     }
-  }, [defaultValues, updateIdeas.add]);
+  }, [defaultValues, updateIdeas, ideas]);
 
   // Load idea selections from sessionStorage (only for new boxes)
-  const loadIdeaSelections = useCallback(() => {
+  const loadIdeaSelections = useCallback(async () => {
     if (!defaultValues) { // Only for new boxes
       try {
         const saved = sessionStorage.getItem('boxform-ideas-draft');
         if (saved) {
           const savedIdeaIds = JSON.parse(saved);
-          setUpdateIdeas({ add: savedIdeaIds, remove: [] });
+          
+          // For new boxes, populate ideas with restored selections so they show up
+          if (savedIdeaIds.length > 0) {
+            try {
+              const ideaPromises = savedIdeaIds.map((id: string) => getIdea(id));
+              const ideaResponses = await Promise.all(ideaPromises);
+              const validIdeas = ideaResponses
+                .filter(response => response.data)
+                .map(response => response.data!);
+              setIdeas(validIdeas);
+            } catch (error) {
+              console.warn('Failed to fetch idea objects:', error);
+            }
+          }
         }
       } catch (error) {
         console.warn('Failed to load idea selections:', error);
@@ -219,15 +238,19 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   }, [watch('room_hash_id')]);
 
   useEffect(() => {
-    reset({ ...defaultValues });
-    fetchBoxIdeas();
+    const initializeForm = async () => {
+      reset({ ...defaultValues });
+      fetchBoxIdeas();
+      
+      // Load idea selections for new boxes, clear for edit boxes
+      if (!defaultValues) {
+        await loadIdeaSelections();
+      } else {
+        clearIdeaSelections();
+      }
+    };
     
-    // Load idea selections for new boxes, clear for edit boxes
-    if (!defaultValues) {
-      loadIdeaSelections();
-    } else {
-      clearIdeaSelections();
-    }
+    initializeForm();
   }, [JSON.stringify(defaultValues), loadIdeaSelections, clearIdeaSelections]);
 
   return (
