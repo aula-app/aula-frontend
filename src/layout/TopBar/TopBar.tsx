@@ -13,14 +13,6 @@ import MessagesButton from '@/components/Buttons/MessagesButton';
 import UpdatesButton from '@/components/Buttons/UpdatesButton';
 import { useTranslation } from 'react-i18next';
 
-// Paths that should be excluded from breadcrumbs
-const EXCLUDED_PATHS = ['welcome', 'phase', 'settings'];
-
-interface Props {
-  /** Home path for navigation */
-  home: string;
-}
-
 /**
  * TopBar component that provides navigation, breadcrumbs, and user controls
  * @component TopBar

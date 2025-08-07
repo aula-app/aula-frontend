@@ -46,6 +46,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     handleSubmit,
     register,
     reset,
+    setError,
     watch,
   } = useForm({
     resolver: yupResolver(schema),
@@ -88,13 +89,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       } else {
         await updateUser(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }
   };
 
   const newUser = async (data: SchemaType) => {
+    // Clear any previous errors
+    setError('username', {});
+    setError('email', {});
+    setError('root', {});
+
     const response = await addUser({
       about_me: data.about_me,
       displayname: data.displayname,
@@ -104,13 +109,27 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       userlevel: data.userlevel || 20,
       username: data.username,
     });
-    if (response.error || !response.data) return;
+    if (response.error || !response.data) {
+      // Check if it's a duplicate username/email error (error_code 2)
+      setError('root', {
+        type: 'manual',
+        message: response.error || t('errors.default'),
+      });
+      return;
+    }
     await setUserRooms(response.data.hash_id);
     await setRoomRoles(response.data.hash_id);
+    onClose();
   };
 
   const updateUser = async (data: SchemaType) => {
     if (!defaultValues?.hash_id) return;
+
+    // Clear any previous errors
+    setError('username', {});
+    setError('email', {});
+    setError('root', {});
+
     const response = await editUser({
       about_me: data.about_me,
       displayname: data.displayname,
@@ -121,9 +140,16 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       username: data.username,
       user_id: defaultValues.hash_id,
     });
-    if (response.error) return;
+    if (response.error) {
+      setError('root', {
+        type: 'manual',
+        message: response.error || t('errors.default'),
+      });
+      return;
+    }
     await setUserRooms(defaultValues.hash_id);
     await setRoomRoles(defaultValues.hash_id);
+    onClose();
   };
 
   const setUserRooms = async (user_id: string) => {
@@ -160,6 +186,11 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               {checkPermissions('users', 'status') && <StatusField control={control} disabled={isLoading} />}
             </Stack>
           </Stack>
+          {errors.root && (
+            <Typography color="error" variant="body2">
+              {errors.root.message}
+            </Typography>
+          )}
           <Stack direction="row" flexWrap="wrap" gap={2}>
             <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
               <TextField

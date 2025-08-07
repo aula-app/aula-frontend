@@ -11,7 +11,7 @@ const UpdatesButton = forwardRef<HTMLButtonElement, IconButtonProps>(({ ...restO
 
   const fetchUpdates = async () => {
     const response = await getUpdates();
-    if (!response.error && typeof response.count === 'number') setUpdates(response.count);
+    setUpdates(response.count || 0);
   };
 
   useEffect(() => {

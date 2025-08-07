@@ -63,6 +63,7 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
     handleSubmit,
     setValue,
     formState: { errors },
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -80,13 +81,13 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
 
   const onSubmit = async (data: SchemaType) => {
     try {
+      setError('root', {});
       setIsLoading(true);
       if (!defaultValues) {
         messageType === 0 ? await newMessage(data) : await newMessage(data);
       } else {
         'user_needs_to_consent' in defaultValues ? await updateMessage(data) : await updateMessage(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }
@@ -115,7 +116,14 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
     };
 
     const request = await addMessage(msgBody);
-    if (!request.error) onClose();
+    if (request.error) {
+      setError('root', {
+        type: 'manual',
+        message: request.error || t('errors.default'),
+      });
+      return;
+    }
+    if (!request.error_code) onClose();
   };
 
   const updateMessage = async (data: SchemaType) => {
@@ -142,7 +150,14 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
       target_id,
       target_group,
     });
-    if (!request.error) onClose();
+    if (request.error) {
+      setError('root', {
+        type: 'manual',
+        message: request.error || t('errors.default'),
+      });
+      return;
+    }
+    if (!request.error_code) onClose();
   };
 
   const changeTarget = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -211,20 +226,16 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
             />
             <MarkdownEditor name="body" control={control} required />
           </Stack>
+          {errors.root && (
+            <Typography color="error" variant="body2">
+              {errors.root.message}
+            </Typography>
+          )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button 
-              onClick={onClose} 
-              color="error"
-              aria-label={t('actions.cancel')}
-            >
+            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button 
-              type="submit" 
-              variant="contained" 
-              disabled={isLoading}
-              aria-label={t('actions.confirm')}
-            >
+            <Button type="submit" variant="contained" disabled={isLoading} aria-label={t('actions.confirm')}>
               {t('actions.confirm')}
             </Button>
           </Stack>

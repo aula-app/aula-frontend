@@ -137,7 +137,8 @@
     "schoolClosed": "Die Schule ist derzeit geschlossen. Bitte versuchen Sie es später noch einmal.",
     "schoolClosedImage": "Schlafende Charakterillustration für Schule-geschlossen-Seite",
     "timeout": "Zeitüberschreitung der Anfrage",
-    "unauthorized": "Diese Seite erfordert eine Authentifizierung"
+    "unauthorized": "Diese Seite erfordert eine Authentifizierung",
+    "existingUser": "Benutzername und/oder E-Mail sind bereits vergeben"
   },
   "forms": {
     "csv": {
