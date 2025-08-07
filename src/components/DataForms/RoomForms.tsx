@@ -6,7 +6,7 @@ import { checkPermissions } from '@/utils';
 import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -33,6 +33,42 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   const [users, setUsers] = useState<string[]>([]);
   const [updateUsers, setUpdateUsers] = useState<UpdateType>({ add: [], remove: [] });
   const [isLoading, setIsLoading] = useState(false);
+
+  // Save user selections to sessionStorage (only for new rooms)
+  const saveUserSelections = useCallback((updates?: UpdateType) => {
+    if (!defaultValues) { // Only for new rooms
+      try {
+        const userIdsToSave = updates ? updates.add : updateUsers.add;
+        sessionStorage.setItem('roomform-users-draft', JSON.stringify(userIdsToSave));
+      } catch (error) {
+        console.warn('Failed to save user selections:', error);
+      }
+    }
+  }, [defaultValues, updateUsers.add]);
+
+  // Load user selections from sessionStorage (only for new rooms)
+  const loadUserSelections = useCallback(() => {
+    if (!defaultValues) { // Only for new rooms
+      try {
+        const saved = sessionStorage.getItem('roomform-users-draft');
+        if (saved) {
+          const savedUserIds = JSON.parse(saved);
+          setUpdateUsers({ add: savedUserIds, remove: [] });
+        }
+      } catch (error) {
+        console.warn('Failed to load user selections:', error);
+      }
+    }
+  }, [defaultValues]);
+
+  // Clear user selections from sessionStorage
+  const clearUserSelections = useCallback(() => {
+    try {
+      sessionStorage.removeItem('roomform-users-draft');
+    } catch (error) {
+      console.warn('Failed to clear user selections:', error);
+    }
+  }, []);
 
   const schema = yup.object({
     room_name: yup.string().required(t('forms.validation.required')),
@@ -70,7 +106,10 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
     storageKey: 'roomform-draft-new',
     isNewRecord: !defaultValues,
-    onCancel: onClose,
+    onCancel: () => {
+      clearUserSelections();
+      onClose();
+    },
   });
 
   const fetchRoomUsers = async () => {
@@ -90,6 +129,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
       } else {
         await updateRoom(data);
       }
+      clearUserSelections();
       handleDraftSubmit();
     } finally {
       setIsLoading(false);
@@ -151,7 +191,14 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   useEffect(() => {
     reset({ ...defaultValues });
     fetchRoomUsers();
-  }, [JSON.stringify(defaultValues)]);
+    
+    // Load user selections for new rooms, clear for edit rooms
+    if (!defaultValues) {
+      loadUserSelections();
+    } else {
+      clearUserSelections();
+    }
+  }, [JSON.stringify(defaultValues), loadUserSelections, clearUserSelections]);
 
   return (
     <Stack p={2} overflow="auto">
@@ -210,8 +257,12 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
               )}
               {checkPermissions('rooms', 'addUser') && !isDefault && (
                 <UsersField
-                  defaultValues={users}
-                  onChange={(updates) => setUpdateUsers(updates)}
+                  defaultValues={defaultValues ? users : updateUsers.add}
+                  onChange={(updates) => {
+                    setUpdateUsers(updates);
+                    // Save immediately with the new updates
+                    saveUserSelections(updates);
+                  }}
                   disabled={isLoading}
                 />
               )}
