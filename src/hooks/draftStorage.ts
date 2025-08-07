@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 export interface UseDraftStorageOptions {
@@ -12,8 +12,11 @@ export const useDraftStorage = <T extends Record<string, any>>(
   form: UseFormReturn<T>,
   options: UseDraftStorageOptions
 ) => {
-  const { storageKey, isNewRecord, onSubmit, onCancel } = options;
+  const { storageKey, onSubmit, onCancel } = options;
   const { watch, reset, getValues } = form;
+  
+  // Capture the initial isNewRecord state and don't let it change
+  const [initialIsNewRecord] = useState(options.isNewRecord);
 
   const clearDraft = useCallback(() => {
     try {
@@ -24,7 +27,7 @@ export const useDraftStorage = <T extends Record<string, any>>(
   }, [storageKey]);
 
   const loadDraft = useCallback(() => {
-    if (!isNewRecord) {
+    if (!initialIsNewRecord) {
       // Clear draft for existing records
       clearDraft();
       return;
@@ -39,18 +42,22 @@ export const useDraftStorage = <T extends Record<string, any>>(
     } catch (error) {
       console.warn('Failed to load draft from sessionStorage:', error);
     }
-  }, [storageKey, isNewRecord, reset, clearDraft]);
+  }, [storageKey, initialIsNewRecord, reset, clearDraft]);
 
   const saveDraft = useCallback(() => {
-    if (!isNewRecord) return;
+    if (!initialIsNewRecord) {
+      console.log('Skipping draft save - not a new record');
+      return;
+    }
 
     try {
       const currentValues = getValues();
       sessionStorage.setItem(storageKey, JSON.stringify(currentValues));
+      console.log('Draft saved for key:', storageKey);
     } catch (error) {
       console.warn('Failed to save draft to sessionStorage:', error);
     }
-  }, [storageKey, isNewRecord, getValues]);
+  }, [storageKey, initialIsNewRecord, getValues]);
 
   const handleSubmit = useCallback(() => {
     clearDraft();
@@ -67,18 +74,21 @@ export const useDraftStorage = <T extends Record<string, any>>(
   }, [loadDraft]);
 
   useEffect(() => {
-    if (!isNewRecord) {
+    if (!initialIsNewRecord) {
       // Ensure no draft watching for existing records
       clearDraft();
       return;
     }
 
     const subscription = watch(() => {
-      saveDraft();
+      // Double-check initialIsNewRecord before saving
+      if (initialIsNewRecord) {
+        saveDraft();
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, [watch, isNewRecord, saveDraft, clearDraft]);
+  }, [watch, initialIsNewRecord, saveDraft, clearDraft]);
 
   return {
     clearDraft,

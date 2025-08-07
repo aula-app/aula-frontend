@@ -66,7 +66,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   type SchemaType = yup.InferType<typeof schema>;
 
   const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
-    storageKey: defaultValues ? `userform-edit-${defaultValues.hash_id}` : 'userform-draft-new',
+    storageKey: 'userform-draft-new',
     isNewRecord: !defaultValues,
     onCancel: onClose,
   });
@@ -338,7 +338,12 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
             />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={handleCancel} color="error" data-testid="cancel-user-form" aria-label={t('actions.cancel')}>
+            <Button
+              onClick={handleCancel}
+              color="error"
+              data-testid="cancel-user-form"
+              aria-label={t('actions.cancel')}
+            >
               {t('actions.cancel')}
             </Button>
             <Button
