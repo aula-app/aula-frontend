@@ -1,5 +1,6 @@
 import { addSurvey } from '@/services/boxes';
 import { getRoom } from '@/services/rooms';
+import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -35,6 +36,17 @@ const SurveyForms: React.FC<SurveyFormsProps> = ({ onClose }) => {
     idea_content: yup.string().required(t('forms.validation.required')),
   });
 
+  const form = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: '',
+      description_public: '',
+      phase_duration_3: 5,
+      idea_headline: '',
+      idea_content: '',
+    },
+  });
+
   const {
     setValue,
     control,
@@ -42,13 +54,17 @@ const SurveyForms: React.FC<SurveyFormsProps> = ({ onClose }) => {
     handleSubmit,
     register,
     setError,
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: { name: '' },
-  });
+    watch,
+  } = form;
 
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
+
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+    storageKey: `survey-form-draft-${room_id || 'unknown'}`,
+    isNewRecord: true, // Surveys are always new (no edit mode)
+    onCancel: onClose,
+  });
 
   const getDefaultDuration = async () => {
     if (!room_id) return;
@@ -89,12 +105,18 @@ const SurveyForms: React.FC<SurveyFormsProps> = ({ onClose }) => {
     }
     
     if (!response.data) return;
+    handleDraftSubmit();
     onClose();
   };
 
   useEffect(() => {
-    setValue('phase_duration_3', defaultDuration);
-  }, [defaultDuration]);
+    const currentValue = watch('phase_duration_3');
+    // Only set the default duration if the field has the initial default value (5) or is falsy
+    // This prevents overwriting draft values
+    if (!currentValue || currentValue === 5) {
+      setValue('phase_duration_3', defaultDuration);
+    }
+  }, [defaultDuration, setValue, watch]);
 
   useEffect(() => {
     getDefaultDuration();
@@ -148,7 +170,7 @@ const SurveyForms: React.FC<SurveyFormsProps> = ({ onClose }) => {
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button type="submit" variant="contained" disabled={isLoading} aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}>
