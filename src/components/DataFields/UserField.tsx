@@ -21,21 +21,31 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
   const [options, setOptions] = useState<UserOptionsType>([]); // Ensure options is an array of SelectOptionsType
 
   const fetchUsers = async () => {
+    if (loading) return; // Prevent multiple simultaneous requests
+
     setLoading(true);
-    const response = await getUsers();
-    setLoading(false);
-    if (!response.data) return;
-    const users = response.data.map((user) => ({
-      label: user.realname,
-      value: user.hash_id,
-      displayname: user.displayname,
-    }));
-    setOptions(users);
+    try {
+      const response = await getUsers();
+      if (response.data) {
+        const users = response.data.map((user) => ({
+          label: user.realname,
+          value: user.hash_id,
+          displayname: user.displayname,
+        }));
+        setOptions(users);
+      }
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    if (open && options.length === 0) {
+      fetchUsers();
+    }
+  }, [open]);
 
   return (
     <Controller
@@ -52,13 +62,21 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
           <Autocomplete
             fullWidth
             open={open}
-            onOpen={() => setOpen(true)}
+            onOpen={() => {
+              setOpen(true);
+            }}
             onClose={() => setOpen(false)}
             options={options}
             loading={loading}
             disabled={disabled}
-            isOptionEqualToValue={(option, value) => option?.value === value?.value}
-            getOptionLabel={(option) => option?.label || ''}
+            isOptionEqualToValue={(option, value) => {
+              if (!option || !value) return false;
+              return option.value === value.value;
+            }}
+            getOptionLabel={(option) => {
+              if (typeof option === 'string') return option;
+              return option?.label || '';
+            }}
             value={selectedOption}
             onChange={(_, newValue) => {
               // Pass just the ID value to the form
@@ -66,35 +84,25 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
             }}
             renderOption={(props, option) => (
               <li {...props} key={option.value}>
-                {option.label}{' '}
-                <Typography ml={2} variant="body2" color="text.secondary">
-                  ({option.displayname})
-                </Typography>
+                <span>
+                  {option.label}
+                  {option.displayname && (
+                    <Typography component="span" ml={2} variant="body2" color="text.secondary">
+                      ({option.displayname})
+                    </Typography>
+                  )}
+                </span>
               </li>
             )}
+            noOptionsText={loading ? 'Loading users...' : 'No users found'}
             renderInput={(params) => (
               <TextField
                 {...params}
                 label={t('scopes.users.name')}
-                id="user-field-target"
-                disabled={disabled}
+                disabled={loading || disabled}
                 error={!!fieldState.error}
-                helperText={<span id="user-error-message">{t(`${fieldState.error?.message || ''}`)}</span>}
-                inputProps={{
-                  'aria-labelledby': 'user-field-target-label',
-                  'aria-invalid': !!fieldState.error,
-                  'aria-errormessage': fieldState.error ? 'user-error-message' : undefined
-                }}
+                helperText={t(`${fieldState.error?.message || ''}`)}
                 slotProps={{
-                  input: {
-                    ...params.InputProps,
-                    endAdornment: (
-                      <>
-                        {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                        {params.InputProps.endAdornment}
-                      </>
-                    ),
-                  },
                   inputLabel: {
                     id: 'user-field-target-label',
                     htmlFor: 'user-field-target',
