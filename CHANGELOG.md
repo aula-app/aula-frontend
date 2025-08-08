@@ -1,6 +1,7 @@
 ## 1.3.1
 
 - **Bug fixes:**
+  - Fixed broken message form
   - Display error message in case creation and edition unsuccessful requests
   - Prevent dialogs from closing on unsuccessful requests
   - Fixed name change requests
