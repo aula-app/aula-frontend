@@ -45,7 +45,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
     if (open && options.length === 0) {
       fetchUsers();
     }
-  }, [open]);
+  }, [open, options.length]);
 
   return (
     <Controller
