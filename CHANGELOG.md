@@ -1,12 +1,16 @@
 ## 1.3.1
 
 - **Bug fixes:**
-  - Fixed broken message form
-  - Display error message in case creation and edition unsuccessful requests
-  - Prevent dialogs from closing on unsuccessful requests
-  - Fixed name change requests
+  - Fixed broken message forms that were preventing proper submission
+  - Display error messages when creation and edit requests fail
+  - Prevent dialogs from closing on unsuccessful requests to allow error correction
+  - Fixed name change requests not working properly
+  - Fixed UserField component accessibility issues with label-input associations
+  - Resolved draft storage saving data incorrectly for existing records during edits
 - **UX improvements:**
-  - Added an offline page to inform instance offline status to users
+  - Added offline page to inform users when the instance is unavailable
+  - Implemented form data persistence using sessionStorage to prevent data loss during page navigation
+  - Enhanced form validation and error handling across all data forms
 
 ## 1.3.0
 

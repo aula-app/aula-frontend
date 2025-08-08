@@ -8,6 +8,9 @@ export interface UseDraftStorageOptions {
   onCancel?: () => void;
 }
 
+// In-memory storage that gets cleared on page refresh
+const inMemoryDraftStorage = new Map<string, any>();
+
 export const useDraftStorage = <T extends Record<string, any>>(
   form: UseFormReturn<T>,
   options: UseDraftStorageOptions
