@@ -4,6 +4,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+import { useDraftStorage } from '@/hooks';
 import { MarkdownEditor, SelectField } from '../DataFields';
 import { ReportArguments } from '@/services/messages';
 import { SelectOptionsType } from '@/types/SettingsTypes';
@@ -40,7 +41,7 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
     content: yup.string().required(t('forms.validation.required')),
   });
 
-  const { control, handleSubmit } = useForm({
+  const form = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       report: '',
@@ -48,16 +49,29 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
     },
   });
 
+  const { control, handleSubmit } = form;
+
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+    storageKey: 'report-form-draft-new',
+    isNewRecord: true, // Reports are always new (no edit mode)
+    onCancel: onClose,
+  });
+
+  const handleFormSubmit = async (data: ReportArguments) => {
+    await onSubmit(data);
+    handleDraftSubmit();
+  };
+
   return (
     <Stack p={2} overflow="auto" gap={2}>
       <Typography variant="h1">{t(`actions.add`, { var: t(`scopes.reports.name`).toLowerCase() })}</Typography>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
         <Stack gap={2}>
           <SelectField name="report" options={ReportOptions} control={control} />
           {/* content */}
           <MarkdownEditor name="content" control={control} />
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button type="submit" variant="contained" aria-label={t('actions.confirm')}>

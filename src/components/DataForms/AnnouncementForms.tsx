@@ -1,6 +1,7 @@
 import { addAnnouncement, AnnouncementArguments, editAnnouncement } from '@/services/announcements';
 import { AnnouncementType, MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
+import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -35,14 +36,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     target_id: yup.number(),
   } as Record<keyof AnnouncementArguments, any>);
 
-  const {
-    register,
-    reset,
-    control,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm({
+  const form = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       headline: defaultValues?.headline || '',
@@ -53,8 +47,23 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     },
   });
 
+  const {
+    register,
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = form;
+
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
+
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+    storageKey: 'announcement-form-draft-new',
+    isNewRecord: !defaultValues,
+    onCancel: onClose,
+  });
 
   const onSubmit = async (data: SchemaType) => {
     try {
@@ -65,6 +74,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
       } else {
         await updateAnnouncement(data);
       }
+      handleDraftSubmit();
     } finally {
       setIsLoading(false);
     }
@@ -141,7 +151,7 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button
