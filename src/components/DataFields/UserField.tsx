@@ -45,7 +45,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
     if (open && options.length === 0) {
       fetchUsers();
     }
-  }, [open]);
+  }, [open, options.length]);
 
   return (
     <Controller
@@ -102,12 +102,6 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
                 disabled={loading || disabled}
                 error={!!fieldState.error}
                 helperText={t(`${fieldState.error?.message || ''}`)}
-                slotProps={{
-                  inputLabel: {
-                    id: 'user-field-target-label',
-                    htmlFor: 'user-field-target',
-                  },
-                }}
                 {...restOfProps}
               />
             )}

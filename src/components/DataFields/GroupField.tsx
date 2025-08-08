@@ -68,12 +68,6 @@ const GroupField: React.FC<Props> = ({ control, disabled = false, ...restOfProps
                 disabled={loading || disabled}
                 error={!!fieldState.error}
                 helperText={<span id="group-error-message">{t(`${fieldState.error?.message || ''}`)}</span>}
-                slotProps={{
-                  inputLabel: {
-                    id: 'group-field-target-label',
-                    htmlFor: 'group-field-target',
-                  },
-                }}
                 {...restOfProps}
               />
             )}
