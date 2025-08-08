@@ -1,5 +1,6 @@
 import { addComment, CommentArguments, editComment } from '@/services/comments';
 import { CommentType } from '@/types/Scopes';
+import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
@@ -38,13 +39,23 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
       .required(t('forms.validation.required')),
   } as Record<keyof CommentArguments, any>);
 
-  const { reset, control, handleSubmit, setError, formState: { errors } } = useForm({
+  const form = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {},
+    defaultValues: {
+      content: '',
+    },
   });
+
+  const { reset, control, handleSubmit, setError, formState: { errors } } = form;
 
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
+
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+    storageKey: `comment-form-draft-${idea_id || 'unknown'}`,
+    isNewRecord: !defaultValues,
+    onCancel: onClose,
+  });
 
   const onSubmit = async (data: SchemaType) => {
     try {
@@ -55,6 +66,7 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
       } else {
         await updateComment(data);
       }
+      handleDraftSubmit();
     } finally {
       setIsLoading(false);
     }
@@ -119,7 +131,7 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button
