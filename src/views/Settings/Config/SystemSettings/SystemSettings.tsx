@@ -1,6 +1,6 @@
 import { InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { InstanceStatusOptions } from '@/utils';
-import { MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -18,39 +18,52 @@ interface Props {
 const SystemSettings = ({ settings, onReload }: Props) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState<OnlineOptions>(settings?.online_mode || 1);
+  const [pendingStatus, setPendingStatus] = useState<OnlineOptions>(settings?.online_mode || 1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setStatus(Number(event.target.value) as OnlineOptions);
+    setPendingStatus(Number(event.target.value) as OnlineOptions);
   };
 
-  const setOnlineMode = async () => {
-    const response = await setInstanceOnlineMode(status);
-    if (response.data) onReload();
+  const confirmStatusChange = async () => {
+    setIsLoading(true);
+    try {
+      const response = await setInstanceOnlineMode(pendingStatus);
+      if (response.data) {
+        setStatus(pendingStatus);
+        onReload();
+      }
+    } catch (error) {
+      console.error('Failed to update instance status:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const cancelStatusChange = () => {
+    setPendingStatus(status);
   };
 
   useEffect(() => {
-    if (settings && settings.online_mode !== status) setStatus(settings.online_mode);
+    if (settings && settings.online_mode !== status) {
+      setStatus(settings.online_mode);
+      setPendingStatus(settings.online_mode);
+    }
   }, [settings?.online_mode]);
-
-  useEffect(() => {
-    const updateOnlineMode = async () => {
-      await setOnlineMode();
-    };
-    updateOnlineMode();
-  }, [status]);
 
   return (
     <Stack gap={2}>
-      <Stack direction="row" alignItems="end" p={2} pt={0} gap={2}>
-        <Typography variant="h3">{t('instance.status')}:</Typography>
+      <Typography variant="h3">{t('instance.status')}</Typography>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
         <TextField
           select
           label={t('settings.columns.status')}
-          value={status}
+          value={pendingStatus}
           onChange={changeStatus}
           variant="filled"
           size="small"
           sx={{ minWidth: 200 }}
+          disabled={isLoading}
         >
           {InstanceStatusOptions.map((column) => (
             <MenuItem value={column.value} key={column.label}>
@@ -58,6 +71,14 @@ const SystemSettings = ({ settings, onReload }: Props) => {
             </MenuItem>
           ))}
         </TextField>
+        <Stack direction="row" gap={1}>
+          <Button variant="text" color="error" onClick={cancelStatusChange} disabled={isLoading}>
+            {t('actions.cancel')}
+          </Button>
+          <Button variant="contained" onClick={confirmStatusChange} disabled={isLoading}>
+            {isLoading ? t('actions.loading') : t('actions.confirm')}
+          </Button>
+        </Stack>
       </Stack>
     </Stack>
   );
