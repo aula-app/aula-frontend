@@ -1,6 +1,7 @@
 # Stage 1: Build the app into static assets using NodeJS base image
-FROM node:22.14-alpine AS assets
+FROM node:22.17-alpine AS assets
 WORKDIR /app
+ARG VITE_APP_BASENAME=/
 
 # Copy package.json and package-lock.json/yarn.lock to install dependencies
 COPY package.json yarn.lock ./
@@ -17,6 +18,7 @@ RUN yarn build
 
 # Stage 2: Serve the app (as built assets) using Nginx
 FROM nginx:stable-alpine-slim AS runtime
+ENV VITE_APP_BASENAME=/
 
 COPY --from=assets /app/build /usr/share/nginx/html
 
