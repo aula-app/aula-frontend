@@ -18,8 +18,8 @@ interface Props {
 
 const SystemSettings = ({ settings, onReload }: Props) => {
   const { t } = useTranslation();
-  const [status, setStatus] = useState<OnlineOptions>(settings?.online_mode || 1);
-  const [pendingStatus, setPendingStatus] = useState<OnlineOptions>(settings?.online_mode || 1);
+const [status, setStatus] = useState<OnlineOptions>(settings?.online_mode ?? 1);
+  const [pendingStatus, setPendingStatus] = useState<OnlineOptions>(settings?.online_mode ?? 1);
   const [isLoading, setIsLoading] = useState(false);
   const [, dispatch] = useAppStore();
 
