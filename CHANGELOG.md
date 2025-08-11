@@ -1,11 +1,23 @@
 ## 1.3.1
 
 - **Bug fixes:**
-  - Display error message in case creation and edition unsuccessful requests
-  - Prevent dialogs from closing on unsuccessful requests
-  - Fixed name change requests
+  - Fixed broken message forms that were preventing proper submission
+  - Display error messages when creation and edit requests fail
+  - Prevent dialogs from closing on unsuccessful requests to allow error correction
+  - Fixed name change requests not working properly
+  - Fixed UserField component accessibility issues with label-input associations
+  - Resolved draft storage incorrectly saving data for existing records during edits
+  - Fixed Playwright test import errors and ESLint configuration issues
+  - Fixed markdown rendering in data tables by removing line breaks for proper display
 - **UX improvements:**
-  - Added an offline page to inform instance offline status to users
+  - Added offline page to inform users when the instance is unavailable
+  - Added confirmation button for instance status changes to prevent accidental offline mode
+  - Implemented form data persistence using sessionStorage to prevent data loss during navigation
+  - Enhanced form validation and error handling across all data forms
+- **Technical improvements:**
+  - Improved ESLint configuration with separate TypeScript config for test files
+  - Enhanced Playwright test structure with proper assertions and dynamic user handling
+  - Better error handling and loading states in UserField component
 
 ## 1.3.0
 
