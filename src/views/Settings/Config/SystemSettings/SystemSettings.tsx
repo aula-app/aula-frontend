@@ -56,14 +56,13 @@ const SystemSettings = ({ settings, onReload }: Props) => {
 
   return (
     <Stack gap={2}>
-      <Typography variant="h3">{t('instance.status')}</Typography>
       <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
         <TextField
           select
-          label={t('settings.columns.status')}
+          label={t('instance.status')}
           value={pendingStatus}
           onChange={changeStatus}
-          variant="filled"
+          variant="outlined"
           size="small"
           sx={{ minWidth: 200 }}
           disabled={isLoading}
@@ -75,20 +74,22 @@ const SystemSettings = ({ settings, onReload }: Props) => {
           ))}
         </TextField>
         <Stack direction="row" gap={1}>
-          <Button
-            variant="text"
-            color="error"
-            onClick={cancelStatusChange}
-            disabled={isLoading}
-            aria-label={t('actions.cancel')}
-            data-testid="system-settings-cancel-button"
-          >
-            {t('actions.cancel')}
-          </Button>
+          {pendingStatus !== status && (
+            <Button
+              variant="text"
+              color="error"
+              onClick={cancelStatusChange}
+              disabled={isLoading}
+              aria-label={t('actions.revert')}
+              data-testid="system-settings-cancel-button"
+            >
+              {t('actions.revert')}
+            </Button>
+          )}
           <Button
             variant="contained"
             onClick={confirmStatusChange}
-            disabled={isLoading}
+            disabled={isLoading || pendingStatus === status}
             aria-label={t('actions.confirm')}
             data-testid="system-settings-confirm-button"
           >
