@@ -25,7 +25,12 @@ test.describe('Instance Offline Mode', () => {
     await users.goToSystemConfig(admin);
     await expect(admin.getByLabel('Konfigurationen')).toBeVisible();
     await admin.getByTestId('config-accordion-system').click();
-    await admin.getByRole('combobox', { name: 'Status' }).click();
+
+    // Verify current status is inactive before changing it
+    const statusCombobox = admin.getByRole('combobox', { name: 'Status' });
+    await expect(statusCombobox).toHaveText(/Aktiv|Active/);
+
+    await statusCombobox.click();
     await admin.getByTestId('status-option-status.inactive').click();
     await admin.getByTestId('system-settings-confirm-button').click();
 
@@ -60,7 +65,12 @@ test.describe('Instance Offline Mode', () => {
     await expect(admin.getByLabel('Konfigurationen')).toBeVisible();
     await admin.getByTestId('config-accordion-system').click();
     await expect(admin.getByRole('combobox', { name: 'Status' })).toBeVisible();
-    await admin.getByRole('combobox', { name: 'Status' }).click();
+
+    // Verify current status is inactive before changing it
+    const statusCombobox = admin.getByRole('combobox', { name: 'Status' });
+    await expect(statusCombobox).toHaveText(/Inaktiv|Inactive/);
+
+    await statusCombobox.click();
     await admin.getByTestId('status-option-status.active').click();
     await admin.getByTestId('system-settings-confirm-button').click();
 
