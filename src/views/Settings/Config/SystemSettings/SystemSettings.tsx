@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 // Import markdown files for different languages
 import { setInstanceOnlineMode } from '@/services/config';
+import { useAppStore } from '@/store';
 
 /** * Renders "SystemSettings" component
  */
@@ -20,6 +21,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
   const [status, setStatus] = useState<OnlineOptions>(settings?.online_mode || 1);
   const [pendingStatus, setPendingStatus] = useState<OnlineOptions>(settings?.online_mode || 1);
   const [isLoading, setIsLoading] = useState(false);
+  const [, dispatch] = useAppStore();
 
   const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setPendingStatus(Number(event.target.value) as OnlineOptions);
@@ -34,7 +36,8 @@ const SystemSettings = ({ settings, onReload }: Props) => {
         onReload();
       }
     } catch (error) {
-      console.error('Failed to update instance status:', error);
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+      cancelStatusChange();
     } finally {
       setIsLoading(false);
     }
