@@ -66,16 +66,29 @@ const SystemSettings = ({ settings, onReload }: Props) => {
           disabled={isLoading}
         >
           {InstanceStatusOptions.map((column) => (
-            <MenuItem value={column.value} key={column.label}>
+            <MenuItem value={column.value} key={column.label} data-testid={`status-option-${column.label}`}>
               {t(column.label)}
             </MenuItem>
           ))}
         </TextField>
         <Stack direction="row" gap={1}>
-          <Button variant="text" color="error" onClick={cancelStatusChange} disabled={isLoading}>
+          <Button
+            variant="text"
+            color="error"
+            onClick={cancelStatusChange}
+            disabled={isLoading}
+            aria-label={t('actions.cancel')}
+            data-testid="system-settings-cancel-button"
+          >
             {t('actions.cancel')}
           </Button>
-          <Button variant="contained" onClick={confirmStatusChange} disabled={isLoading}>
+          <Button
+            variant="contained"
+            onClick={confirmStatusChange}
+            disabled={isLoading}
+            aria-label={t('actions.confirm')}
+            data-testid="system-settings-confirm-button"
+          >
             {isLoading ? t('actions.loading') : t('actions.confirm')}
           </Button>
         </Stack>
