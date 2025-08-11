@@ -18,16 +18,26 @@ interface Props {
 
 const SystemSettings = ({ settings, onReload }: Props) => {
   const { t } = useTranslation();
-const [status, setStatus] = useState<OnlineOptions>(settings?.online_mode ?? 1);
-  const [pendingStatus, setPendingStatus] = useState<OnlineOptions>(settings?.online_mode ?? 1);
+  const [status, setStatus] = useState<OnlineOptions | null>(settings?.online_mode ?? null);
+  const [pendingStatus, setPendingStatus] = useState<OnlineOptions | null | -1>(settings?.online_mode ?? null);
   const [isLoading, setIsLoading] = useState(false);
   const [, dispatch] = useAppStore();
 
   const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setPendingStatus(Number(event.target.value) as OnlineOptions);
+    const value = Number(event.target.value);
+    if (value === -1) {
+      setPendingStatus(-1);
+    } else {
+      setPendingStatus(value as OnlineOptions);
+    }
   };
 
   const confirmStatusChange = async () => {
+    if (pendingStatus === null || pendingStatus === -1) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      return;
+    }
+
     setIsLoading(true);
     try {
       const response = await setInstanceOnlineMode(pendingStatus);
@@ -52,7 +62,7 @@ const [status, setStatus] = useState<OnlineOptions>(settings?.online_mode ?? 1);
       setStatus(settings.online_mode);
       setPendingStatus(settings.online_mode);
     }
-  }, [settings?.online_mode]);
+  }, [settings?.online_mode, status]);
 
   return (
     <Stack gap={2}>
@@ -60,13 +70,21 @@ const [status, setStatus] = useState<OnlineOptions>(settings?.online_mode ?? 1);
         <TextField
           select
           label={t('instance.status')}
-          value={pendingStatus}
+          value={pendingStatus ?? -1}
           onChange={changeStatus}
           variant="outlined"
           size="small"
           sx={{ minWidth: 200 }}
           disabled={isLoading}
+          error={pendingStatus === null}
         >
+          {pendingStatus === null && (
+            <MenuItem value={-1} disabled data-testid="status-option-error">
+              <Typography color="error">
+                {t('errors.default')} - {t('errors.noData')}
+              </Typography>
+            </MenuItem>
+          )}
           {InstanceStatusOptions.map((column) => (
             <MenuItem value={column.value} key={column.label} data-testid={`status-option-${column.label}`}>
               {t(column.label)}
@@ -89,7 +107,12 @@ const [status, setStatus] = useState<OnlineOptions>(settings?.online_mode ?? 1);
           <Button
             variant="contained"
             onClick={confirmStatusChange}
-            disabled={isLoading || pendingStatus === status}
+            disabled={
+              isLoading ||
+              pendingStatus === null ||
+              pendingStatus === -1 ||
+              (status !== null && pendingStatus === status)
+            }
             aria-label={t('actions.confirm')}
             data-testid="system-settings-confirm-button"
           >
