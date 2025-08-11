@@ -36,6 +36,7 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
     handleSubmit,
     register,
     reset,
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {},
@@ -46,13 +47,13 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
 
   const onSubmit = async (data: SchemaType) => {
     try {
+      setError('root', {});
       setIsLoading(true);
       if (!defaultValues) {
         await newCategory(data);
       } else {
         await updateCategory(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }
@@ -64,7 +65,14 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
       description_internal: data.description_internal,
       status: data.status,
     });
-    if (request.error || !request.data) return;
+    if (request.error) {
+      setError('root', {
+        type: 'manual',
+        message: request.error || t('errors.default'),
+      });
+      return;
+    }
+    if (!request.data) return;
     onClose();
   };
 
@@ -76,7 +84,13 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
       description_internal: data.description_internal,
       status: data.status,
     });
-    if (request.error) return;
+    if (request.error) {
+      setError('root', {
+        type: 'manual',
+        message: request.error || t('errors.default'),
+      });
+      return;
+    }
     onClose();
   };
 
@@ -110,6 +124,11 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
             {/* content */}
             <IconField name="description_internal" control={control} disabled={isLoading} />
           </Stack>
+          {errors.root && (
+            <Typography color="error" variant="body2">
+              {errors.root.message}
+            </Typography>
+          )}
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}

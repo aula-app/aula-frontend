@@ -37,3 +37,20 @@ code {
   background-color: transparent !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
+
+/* Fix overscrolling issues with MDXEditor popups */
+.mdxeditor-popup-container {
+  overflow: visible !important;
+  position: fixed !important;
+  z-index: 9999 !important;
+}
+
+/* Alternative approach: ensure popup containers don't interfere with page scrolling */
+.mdxeditor-popup-container > div, .mdxeditor-popup-container > span {
+  overflow: visible !important;
+}
+
+/* Prevent overscrolling on containers that contain MDX editors */
+div:has(.md-editor) {
+  overscroll-behavior: contain;
+}

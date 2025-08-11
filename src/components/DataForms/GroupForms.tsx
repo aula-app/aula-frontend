@@ -47,6 +47,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
     handleSubmit,
     register,
     reset,
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -60,13 +61,13 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
 
   const onSubmit = async (data: SchemaType) => {
     try {
+      setError('root', {});
       setIsLoading(true);
       if (!defaultValues) {
         await newGroup(data);
       } else {
         await updateGroup(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +79,14 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
       description_public: data.description_public,
       status: data.status,
     });
-    if (request.error || typeof request.data !== 'number') return;
+    if (request.error) {
+      setError('root', {
+        type: 'manual',
+        message: request.error || t('errors.default'),
+      });
+      return;
+    }
+    if (typeof request.data !== 'number') return;
 
     // Add selected users to the newly created group
     const group_id = request.data;
@@ -95,7 +103,13 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
       description_public: data.description_public,
       status: data.status,
     });
-    if (request.error) return;
+    if (request.error) {
+      setError('root', {
+        type: 'manual',
+        message: request.error || t('errors.default'),
+      });
+      return;
+    }
 
     // Update users in the group
     const groupId = defaultValues.id;
@@ -159,11 +173,21 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
             <UsersField defaultValues={existingUsers} onChange={setUserUpdates} disabled={isLoading} />
             <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
           </Stack>
+          {errors.root && (
+            <Typography color="error" variant="body2">
+              {errors.root.message}
+            </Typography>
+          )}
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading} aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading}
+              aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+            >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
           </Stack>

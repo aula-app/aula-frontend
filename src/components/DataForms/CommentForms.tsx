@@ -38,7 +38,7 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
       .required(t('forms.validation.required')),
   } as Record<keyof CommentArguments, any>);
 
-  const { reset, control, handleSubmit } = useForm({
+  const { reset, control, handleSubmit, setError, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {},
   });
@@ -48,13 +48,13 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
 
   const onSubmit = async (data: SchemaType) => {
     try {
+      setError('root', {});
       setIsLoading(true);
       if (!defaultValues) {
         await newComment(data);
       } else {
         await updateComment(data);
       }
-      onClose();
     } finally {
       setIsLoading(false);
     }
@@ -66,7 +66,14 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
       idea_id: idea_id,
       content: data.content,
     });
-    if (!request.error) onClose();
+    if (request.error) {
+      setError('root', {
+        type: 'manual',
+        message: request.error || t('errors.default'),
+      });
+      return;
+    }
+    if (!request.error_code) onClose();
   };
 
   const updateComment = async (data: SchemaType) => {
@@ -76,7 +83,14 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
       content: data.content,
       status: data.status,
     });
-    if (!request.error) onClose();
+    if (request.error) {
+      setError('root', {
+        type: 'manual',
+        message: request.error || t('errors.default'),
+      });
+      return;
+    }
+    if (!request.error_code) onClose();
   };
 
   useEffect(() => {
@@ -99,6 +113,11 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
             {/* content */}
             <MarkdownEditor name="content" control={control} required disabled={isLoading} maxLength={MAX_CHAR_COUNT} />
           </Stack>
+          {errors.root && (
+            <Typography color="error" variant="body2">
+              {errors.root.message}
+            </Typography>
+          )}
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}

@@ -62,6 +62,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: { title: defaultValues ? ' ' : '' },
@@ -106,6 +107,11 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     } catch (error) {
       // Announce form submission failure to screen readers
       announceToScreenReader(t('ui.accessibility.formError'), 'assertive');
+      setError('root', {
+        type: 'manual',
+        message: t('errors.default'),
+      });
+
     } finally {
       setIsLoading(false);
     }
@@ -119,7 +125,14 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       custom_field1: data.custom_field1,
       custom_field2: data.custom_field2,
     });
-    if (response.error || !response.data) return;
+    if (response.error) {
+      setError('root', {
+        type: 'manual',
+        message: response.error || t('errors.default'),
+      });
+      return;
+    }
+    if (!response.data) return;
     setIdeaBox(response.data.hash_id);
     setIdeaCategory(response.data.hash_id);
     onClose();
@@ -136,7 +149,14 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       idea_id: defaultValues.hash_id,
       approved: defaultValues.approved,
     });
-    if (response.error || !response.data) return;
+    if (response.error) {
+      setError('root', {
+        type: 'manual',
+        message: response.error || t('errors.default'),
+      });
+      return;
+    }
+    if (!response.data) return;
     setIdeaBox(defaultValues?.hash_id);
     setIdeaCategory(defaultValues?.hash_id);
     onClose();
@@ -229,6 +249,11 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               )}
             </Stack>
           </Stack>
+          {errors.root && (
+            <Typography color="error" variant="body2">
+              {errors.root.message}
+            </Typography>
+          )}
           <Stack direction="row" justifyContent="end" gap={2}>
             <Button onClick={onClose} color="error" data-testid="cancel-idea-form" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
