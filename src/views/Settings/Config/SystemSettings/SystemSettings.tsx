@@ -4,12 +4,10 @@ import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-// Import markdown files for different languages
 import { setInstanceOnlineMode } from '@/services/config';
 import { useAppStore } from '@/store';
 
-/** * Renders "SystemSettings" component
- */
+/** Renders "SystemSettings" component **/
 
 interface Props {
   settings?: InstanceResponse;
@@ -57,7 +55,6 @@ const SystemSettings = ({ settings, onReload }: Props) => {
 
   useEffect(() => {
     if (!settings) {
-      // Settings not loaded yet, just wait
       return;
     }
 
