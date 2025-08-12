@@ -9,7 +9,12 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const theme = useTheme();
 
   useEffect(() => {
-    document.title = 'aula';
+import { APP_TITLE } from '@/config';
+const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
+  const theme = useTheme();
+
+  useEffect(() => {
+    document.title = APP_TITLE;
   }, []);
 
   return (
