@@ -8,9 +8,8 @@ export const useCodeManagement = () => {
   const [code, setCode] = useState<string>(localStorageGet('code'));
 
   const resetCode = async () => {
-    localStorageSet('code', '').then(() => {
-      navigate('/code');
-    });
+    await localStorageSet('code', '');
+    navigate('/code');
   };
 
   useEffect(() => {
