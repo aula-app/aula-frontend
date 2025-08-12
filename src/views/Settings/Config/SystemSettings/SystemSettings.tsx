@@ -11,6 +11,9 @@ import { useAppStore } from '@/store';
 /** * Renders "SystemSettings" component
  */
 
+// Constants for better type safety
+const ERROR_VALUE = -1 as const;
+
 interface Props {
   settings?: InstanceResponse;
   onReload: () => void;
@@ -19,21 +22,24 @@ interface Props {
 const SystemSettings = ({ settings, onReload }: Props) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState<OnlineOptions | null>(settings?.online_mode ?? null);
-  const [pendingStatus, setPendingStatus] = useState<OnlineOptions | null | -1>(settings?.online_mode ?? null);
+  const [pendingStatus, setPendingStatus] = useState<OnlineOptions | null>(settings?.online_mode ?? null);
+  const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [, dispatch] = useAppStore();
 
   const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const value = Number(event.target.value);
-    if (value === -1) {
-      setPendingStatus(-1);
+    if (value === ERROR_VALUE) {
+      setHasError(true);
+      setPendingStatus(null);
     } else {
+      setHasError(false);
       setPendingStatus(value as OnlineOptions);
     }
   };
 
   const confirmStatusChange = async () => {
-    if (pendingStatus === null || pendingStatus === -1) {
+    if (hasError || pendingStatus === null) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
       return;
     }
@@ -58,11 +64,18 @@ const SystemSettings = ({ settings, onReload }: Props) => {
   };
 
   useEffect(() => {
-    if (settings && settings.online_mode !== status) {
+    if (settings && settings.online_mode !== undefined) {
       setStatus(settings.online_mode);
       setPendingStatus(settings.online_mode);
+      setHasError(false);
+    } else if (settings && settings.online_mode === undefined) {
+      // Settings exist but online_mode is missing - this is an error
+      setStatus(null);
+      setPendingStatus(null);
+      setHasError(true);
     }
-  }, [settings?.online_mode, status]);
+    // If settings is undefined, we just wait for it to load
+  }, [settings]);
 
   return (
     <Stack gap={2}>
@@ -70,16 +83,16 @@ const SystemSettings = ({ settings, onReload }: Props) => {
         <TextField
           select
           label={t('instance.status')}
-          value={pendingStatus ?? -1}
+          value={hasError ? ERROR_VALUE : (pendingStatus ?? ERROR_VALUE)}
           onChange={changeStatus}
           variant="outlined"
           size="small"
           sx={{ minWidth: 200 }}
           disabled={isLoading}
-          error={pendingStatus === null}
+          error={hasError}
         >
-          {pendingStatus === null && (
-            <MenuItem value={-1} disabled data-testid="status-option-error">
+          {hasError && (
+            <MenuItem value={ERROR_VALUE} disabled data-testid="status-option-error">
               <Typography color="error">
                 {t('errors.default')} - {t('errors.noData')}
               </Typography>
@@ -107,12 +120,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
           <Button
             variant="contained"
             onClick={confirmStatusChange}
-            disabled={
-              isLoading ||
-              pendingStatus === null ||
-              pendingStatus === -1 ||
-              (status !== null && pendingStatus === status)
-            }
+            disabled={isLoading || hasError || pendingStatus === status}
             aria-label={t('actions.confirm')}
             data-testid="system-settings-confirm-button"
           >
