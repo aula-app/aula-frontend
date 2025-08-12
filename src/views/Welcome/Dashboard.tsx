@@ -123,7 +123,7 @@ const Dashboard = ({ show = true }: DashboardProps) => {
                       >
                         {t(`phases.${dashboardPhases[phase]}`)}
                       </Typography>
-                      <Typography component="span" aria-label={`${count[Number(phase)]} ideas`}>
+                      <Typography component="span">
                         {count[Number(phase)]}
                       </Typography>
                     </Stack>
