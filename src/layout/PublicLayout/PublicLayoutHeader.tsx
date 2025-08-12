@@ -33,7 +33,7 @@ const PublicLayoutHeader: FunctionComponent = () => {
               label={code}
               onClick={resetCode}
               onDelete={resetCode}
-              aria-label={t('auth.login.instance_code_chip_aria', { code })}
+              aria-label={t('auth.login.instanceCode', { var: code })}
             />
           ) : (
             <Chip label={t('auth.login.reset_code')} role="status" aria-label={t('auth.login.reset_code')} />

@@ -60,6 +60,7 @@
     },
     "login": {
       "button": "Login",
+      "instanceCode": "Instanzcode: {{var}}",
       "label": "Nutzername",
       "noAccount": "Du hast noch kein Konto?",
       "title": "Anmelden",
