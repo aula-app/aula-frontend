@@ -1,18 +1,31 @@
-import { AppLink, ErrorBoundary } from '@/components';
+import { AppIconButton, AppLink, ErrorBoundary } from '@/components';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import SkipNavigation from '@/components/SkipNavigation';
-import { Box, Button, Stack, useTheme } from '@mui/material/';
-import { FunctionComponent, PropsWithChildren } from 'react';
+import { localStorageGet, localStorageSet } from '@/utils';
+import { Box, Button, Chip, Stack, useTheme } from '@mui/material/';
+import { FunctionComponent, PropsWithChildren, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
-import { getRuntimeConfig } from '../config';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { defaultConfig, getRuntimeConfig } from '../config';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const theme = useTheme();
+  const [code, setCode] = useState<string>(localStorageGet('code'));
+
+  const resetCode = async () => {
+    localStorageSet('code', '').then(() => {
+      navigate('/code');
+    });
+  };
 
   document.title = 'aula'; // Also Update Tab Title
+
+  useEffect(() => {
+    setCode(localStorageGet('code'));
+  }, [location.pathname]);
 
   return (
     <Stack
@@ -30,9 +43,20 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     >
       <SkipNavigation mainContentId="public-content" />
       <Stack>
-        <Stack direction="row" alignItems="start" justifyContent="space-between" sx={{ pb: 2 }}>
-          {toggleBackToSignIn()}
-          <LocaleSwitch />
+        <Stack direction="row" alignItems="center" sx={{ pb: 2 }}>
+          <Box flex={1}>{toggleBackToSignIn()}</Box>
+          {defaultConfig.IS_MULTI && (
+            <Stack direction="row" flex={1} justifyContent="center">
+              {code ? (
+                <Chip label={code} onClick={resetCode} onDelete={resetCode} />
+              ) : (
+                <Chip label={t('auth.login.reset_code')} />
+              )}
+            </Stack>
+          )}
+          <Stack direction="row" flex={1} justifyContent="end">
+            <LocaleSwitch />
+          </Stack>
         </Stack>
         <Box sx={{ width: '100%', mb: 2 }}>
           <img src={`${getRuntimeConfig().BASENAME}img/Aula_Logo.svg`} alt={t('app.name.logo')} role="img" />

@@ -445,7 +445,7 @@ export type AllIconsType = keyof typeof ALL_ICONS;
 
 interface Props extends StackProps {
   icon: AllIconsType; // Icon's name alternate prop
-  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
+  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl' | number; // Icon's name alternate prop,
   decorative?: boolean; // Whether the icon is purely decorative (default: true)
 }
 
@@ -459,13 +459,15 @@ const AppIcon: React.FC<Props> = ({ icon, size = 'medium', decorative = true, sx
       ? '16px'
       : size === 'small'
         ? '18px'
-        : size === 'large'
-          ? '32px'
-          : size === 'xl'
-            ? '40px'
-            : size === 'xxl'
-              ? '80px'
-              : '24px'; // no size === md
+        : size === 'medium'
+          ? '24px'
+          : size === 'large'
+            ? '32px'
+            : size === 'xl'
+              ? '40px'
+              : size === 'xxl'
+                ? '80px'
+                : `${size}px`; // no size === md
   // Determine if this icon should get role="img" attribute
   const shouldHaveImgRole = !decorative && icon in ALL_ICONS;
 
