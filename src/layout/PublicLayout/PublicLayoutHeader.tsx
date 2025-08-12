@@ -15,7 +15,7 @@ const PublicLayoutHeader: FunctionComponent = () => {
   const renderBackToSignIn = () => {
     if (location.pathname !== '/') {
       return (
-        <AppLink color="primary" component={AppLink} to="/">
+        <AppLink color="primary" to="/">
           &lt; {t('auth.login.button')}
         </AppLink>
       );
