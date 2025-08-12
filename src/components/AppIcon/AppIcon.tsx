@@ -467,7 +467,7 @@ const AppIcon: React.FC<Props> = ({ icon, size = 'medium', decorative = true, sx
               ? '40px'
               : size === 'xxl'
                 ? '80px'
-                : `${size}px`; // no size === md
+                : `${size}px`; // number
   // Determine if this icon should get role="img" attribute
   const shouldHaveImgRole = !decorative && icon in ALL_ICONS;
 
