@@ -16,12 +16,12 @@ const WelcomeView = () => {
   const [error, setError] = useState<string | null>(null);
   const [rooms, setRooms] = useState<RoomType[]>([]);
 
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
 
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+  const handleScroll = useCallback((event: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop } = event.currentTarget;
     setShowDashboard(scrollTop === 0);
-  };
+  }, []);
 
   const fetchRooms = useCallback(async () => {
     const response = await getRooms({
@@ -35,12 +35,12 @@ const WelcomeView = () => {
   }, []);
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [] });
     fetchRooms();
-  }, []);
+  }, [dispatch, fetchRooms]);
 
   return (
-    <Stack height="100%" sx={{ p: { md: 1 } }}>
+    <Stack height="100%" sx={{ p: { md: 1 } }} role="main" aria-label={t('ui.navigation.home')}>
       <Dashboard show={showDashboard} />
       <Stack
         flexGrow={1}
@@ -52,6 +52,9 @@ const WelcomeView = () => {
           overflowY: 'auto',
           scrollSnapType: 'y mandatory',
         }}
+        role="region"
+        aria-label={t('scopes.rooms.plural')}
+        tabIndex={0}
       >
         <Typography
           variant="h1"
@@ -61,14 +64,23 @@ const WelcomeView = () => {
             scrollSnapAlign: 'start',
             transition: 'all .5s ease-in-out',
           }}
+          component="h1"
+          id="rooms-heading"
         >
           {t('scopes.rooms.plural')}
         </Typography>
-        <Grid container spacing={2}>
+        <Grid
+          container
+          spacing={2}
+          role="list"
+          aria-labelledby="rooms-heading"
+          aria-live="polite"
+          aria-busy={isLoading}
+        >
           {isLoading && <RoomCardSkeleton />}
-          {error && <Typography>{t(error)}</Typography>}
+          {error && <Typography color="error">{t('errors.default')}</Typography>}
           {rooms.map((room) => (
-            <RoomCard room={room} key={room.hash_id} />
+            <RoomCard room={room} />
           ))}
         </Grid>
       </Stack>
