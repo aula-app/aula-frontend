@@ -36,7 +36,7 @@ const PublicLayoutHeader: FunctionComponent = () => {
               aria-label={t('auth.login.instance_code_chip_aria', { code })}
             />
           ) : (
-            <Chip label={t('auth.login.reset_code')} />
+            <Chip label={t('auth.login.reset_code')} role="status" aria-label={t('auth.login.reset_code')} />
           )}
         </Stack>
       )}
