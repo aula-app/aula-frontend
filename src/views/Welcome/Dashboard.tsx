@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboardPhases>;
 
-const DashBoard = ({ show = true }) => {
+const Dashboard = ({ show = true }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [count, setCount] = useState<Record<number, number>>();
@@ -99,4 +99,4 @@ const DashBoard = ({ show = true }) => {
   );
 };
 
-export default DashBoard;
+export default Dashboard;

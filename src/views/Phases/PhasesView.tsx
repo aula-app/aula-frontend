@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import DashBoard from '../Welcome/DashBoard';
+import DashBoard from '../Welcome/Dashboard';
 import BoxIdeasPhaseView from './BoxIdeasPhaseView';
 import WildIdeaPhaseView from './WildIdeaPhaseView';
 

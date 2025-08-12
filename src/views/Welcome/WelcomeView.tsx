@@ -7,7 +7,7 @@ import { Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import DashBoard from './DashBoard';
+import Dashboard from './Dashboard';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
@@ -41,7 +41,7 @@ const WelcomeView = () => {
 
   return (
     <Stack height="100%" sx={{ p: { md: 1 } }}>
-      <DashBoard show={showDashboard} />
+      <Dashboard show={showDashboard} />
       <Stack
         flexGrow={1}
         position="relative"
