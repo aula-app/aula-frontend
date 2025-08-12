@@ -8,15 +8,6 @@ import PublicLayoutHeader from './PublicLayoutHeader';
 const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const theme = useTheme();
 
-  useEffect(() => {
-import { APP_TITLE } from '@/config';
-const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
-  const theme = useTheme();
-
-  useEffect(() => {
-    document.title = APP_TITLE;
-  }, []);
-
   return (
     <Stack
       mx="auto"

@@ -9,8 +9,6 @@ import { checkPermissions } from '@/utils';
  * SideBar configuration
  */
 
-export const APP_TITLE = 'aula';
-
 const SIDEBAR_MOBILE_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_DESKTOP_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_WIDTH = '240px';
