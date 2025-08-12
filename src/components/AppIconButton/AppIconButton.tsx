@@ -8,7 +8,7 @@ import { checkPermissions } from '@/utils';
 const MUI_ICON_BUTTON_COLORS = ['inherit', 'default', 'primary', 'secondary', 'success', 'error', 'info', 'warning'];
 
 interface Props extends Omit<IconButtonProps, 'size' | 'color'> {
-  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl' | number; // Icon's name alternate prop,
+  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl'; // Icon's name alternate prop,
   color?: string; // Not only 'inherit' | 'default' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
   icon: AllIconsType;
   component?: ElementType; // Could be RouterLink, AppLink, <a>, etc.
