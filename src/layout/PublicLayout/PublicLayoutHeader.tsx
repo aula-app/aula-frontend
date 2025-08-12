@@ -4,7 +4,7 @@ import { Box, Chip, Stack } from '@mui/material';
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { defaultConfig } from '@/config';
+import { getRuntimeConfig } from '@/config';
 import { useCodeManagement } from '@/hooks/instance';
 
 const PublicLayoutHeader: FunctionComponent = () => {
@@ -26,7 +26,7 @@ const PublicLayoutHeader: FunctionComponent = () => {
   return (
     <Stack direction="row" alignItems="center" sx={{ pb: 2 }}>
       <Box flex={1}>{renderBackToSignIn()}</Box>
-      {defaultConfig.IS_MULTI && (
+      {getRuntimeConfig().IS_MULTI && (
         <Stack direction="row" flex={1} justifyContent="center">
           {code ? (
             <Chip label={code} onClick={resetCode} onDelete={resetCode} />
