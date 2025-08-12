@@ -5,7 +5,7 @@ import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { defaultConfig } from '@/config';
-import { useCodeManagement } from '@/hooks/instanceCode';
+import { useCodeManagement } from '@/hooks/instance';
 
 const PublicLayoutHeader: FunctionComponent = () => {
   const { t } = useTranslation();

@@ -1,5 +1,7 @@
 import { AppIcon, AppIconButton } from '@/components';
 import BugButton from '@/components/Buttons/BugButton';
+import LocaleSwitch from '@/components/LocaleSwitch';
+import { getRuntimeConfig } from '@/config';
 import { useEventLogout, useEventSwitchDarkMode } from '@/hooks';
 import { useAppStore } from '@/store';
 import { announceToScreenReader, localStorageGet } from '@/utils';
@@ -8,8 +10,6 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SideBarContent from './SideBarContent';
 import { fixedSideBarStyles } from './styles';
-import { getRuntimeConfig } from '../../config';
-import LocaleSwitch from '@/components/LocaleSwitch';
 
 /**
  * Renders fixed SideBar with Menu and User details for desktop view

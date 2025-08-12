@@ -1,4 +1,4 @@
-import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../config';
+import { SIDEBAR_WIDTH, TOPBAR_DESKTOP_HEIGHT } from '../../config';
 import { grey } from '@mui/material/colors';
 
 export const drawerPaperStyles = (onMobile: boolean, variant: 'permanent' | 'persistent' | 'temporary') => ({
