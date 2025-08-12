@@ -29,7 +29,8 @@ export const useIsOnlineState = () => {
   const [online, setOnline] = useState(true);
 
   const checkOnlineStatus = async () => {
-    setOnline(await useIsOnline());
+    const isOnlineResult = await useIsOnline();
+    setOnline(isOnlineResult);
   };
 
   useEffect(() => {
