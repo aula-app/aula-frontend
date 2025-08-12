@@ -80,7 +80,7 @@ const WelcomeView = () => {
           {isLoading && <RoomCardSkeleton />}
           {error && <Typography color="error">{t('errors.default')}</Typography>}
           {rooms.map((room) => (
-            <RoomCard room={room} />
+            <RoomCard room={room} key={room.hash_id} />
           ))}
         </Grid>
       </Stack>
