@@ -29,7 +29,12 @@ const PublicLayoutHeader: FunctionComponent = () => {
       {getRuntimeConfig().IS_MULTI && (
         <Stack direction="row" flex={1} justifyContent="center">
           {code ? (
-            <Chip label={code} onClick={resetCode} onDelete={resetCode} />
+            <Chip
+              label={code}
+              onClick={resetCode}
+              onDelete={resetCode}
+              aria-label={t('auth.login.instance_code_chip_aria', { code })}
+            />
           ) : (
             <Chip label={t('auth.login.reset_code')} />
           )}
