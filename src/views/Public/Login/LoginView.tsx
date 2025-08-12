@@ -1,6 +1,9 @@
 import { AppIconButton, AppLink } from "@/components";
+import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
+import { validateAndSaveInstanceCode } from "@/services/instance";
 import { loginUser } from "@/services/login";
 import { useAppStore } from "@/store";
+import { LoginFormValues } from "@/types/LoginTypes";
 import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -14,15 +17,11 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "../../../config";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-
-import { LoginFormValues } from "@/types/LoginTypes";
-import { validateAndSaveInstanceCode } from "@/services/instance";
 
 /**
  * Renders "Login" view for Login flow
@@ -61,12 +60,6 @@ const LoginView = () => {
   const handleShowPasswordClick = () => {
     setShowPassword((oldValue) => !oldValue);
   };
-
-  const resetCode = async () => {
-    localStorageSet('code', '').then(() => {
-      navigate('/code');
-    });
-  }
 
   const onSubmit = async (formData: LoginFormValues) => {
     if (!instanceApiUrl) {
@@ -245,15 +238,6 @@ const LoginView = () => {
           >
             {t('auth.forgotPassword.link')}
           </Button>
-          {config.IS_MULTI && (<Button
-            variant="text"
-            color="secondary"
-            component={AppLink}
-            onClick={resetCode}
-          >
-            {t('auth.login.reset_code')}
-          </Button>)}
-
         </Grid>
 
         {config.IS_OAUTH_ENABLED && (

@@ -60,6 +60,7 @@
     },
     "login": {
       "button": "Login",
+      "instanceCode": "Instance code: {{var}}",
       "label": "Username",
       "noAccount": "Need an account?",
       "title": "Sign in",
