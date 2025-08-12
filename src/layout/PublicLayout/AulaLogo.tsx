@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getRuntimeConfig } from '../../config';
+import { getRuntimeConfig } from '@/config';
 
 const AulaLogo: FunctionComponent = () => {
   const { t } = useTranslation();
