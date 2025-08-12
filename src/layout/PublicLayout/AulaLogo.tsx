@@ -8,10 +8,11 @@ const AulaLogo: FunctionComponent = () => {
 
   return (
     <Box sx={{ width: '100%', mb: 2 }}>
-      <img 
-        src={`${getRuntimeConfig().BASENAME}img/Aula_Logo.svg`} 
-        alt={t('app.name.logo')} 
-        role="img" 
+      <img
+        src={`${getRuntimeConfig().BASENAME}img/Aula_Logo.svg`}
+        alt={t('app.name.logo')}
+        role="img"
+        style={{ width: '100%', height: 'auto' }}
       />
     </Box>
   );
