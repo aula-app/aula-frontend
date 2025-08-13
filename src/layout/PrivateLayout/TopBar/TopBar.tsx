@@ -7,8 +7,8 @@ import { AppBar, Box, Breadcrumbs, Stack, Toolbar, useTheme } from '@mui/materia
 import { ReactNode, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SideBar from '../SideBar';
-import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../config';
-import { getRuntimeConfig } from '../../config';
+import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../../config';
+import { getRuntimeConfig } from '@/config';
 import MessagesButton from '@/components/Buttons/MessagesButton';
 import UpdatesButton from '@/components/Buttons/UpdatesButton';
 import { useTranslation } from 'react-i18next';

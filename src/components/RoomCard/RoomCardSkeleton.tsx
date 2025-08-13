@@ -1,4 +1,4 @@
-import PhaseBarSkeleton from '@/layout/PhaseBar/PhaseBarSkeleton';
+import PhaseBarSkeleton from '@/components/PhaseBar/PhaseBarSkeleton';
 import { Card, Skeleton, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 

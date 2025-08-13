@@ -8,6 +8,7 @@ import { checkPermissions } from '@/utils';
 /**
  * SideBar configuration
  */
+
 const SIDEBAR_MOBILE_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_DESKTOP_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_WIDTH = '240px';
