@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  IMAGE_TAG_SHA: 'aulaapp/aula-frontend:${{ github.sha }}'
+  IMAGE_TAG_SHA: 'aulaapp/aula-frontend:${GITHUB_SHA::7}'
 
 jobs:
   build:

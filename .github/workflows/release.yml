@@ -5,7 +5,7 @@ on:
     types: [published]
 
 env:
-  IMAGE_TAG_SHA: 'aulaapp/aula-frontend:${{ github.sha }}'
+  IMAGE_TAG_SHA: 'aulaapp/aula-frontend:${GITHUB_SHA::7}'
   IMAGE_TAG_LATEST: 'aulaapp/aula-frontend:latest'
   IMAGE_TAG_VERSION: 'aulaapp/aula-frontend:${{ github.event.release.tag_name }}'
 
