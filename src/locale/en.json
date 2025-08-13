@@ -34,6 +34,7 @@
     "print": "Print",
     "processing": "Processing",
     "remove": "Delete {{var}}",
+    "revert": "Revert",
     "save": "Save",
     "saving": "Saving",
     "savingComplete": "Saving complete",
