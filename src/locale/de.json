@@ -1,10 +1,4 @@
 {
-  "app": {
-    "name": {
-      "logo": "Aula Bildungsplattform Logo",
-      "icon": "Aula Bildungsplattform Symbol"
-    }
-  },
   "actions": {
     "activate": "{{var}} aktivieren",
     "add": "Neue {{var}}",
@@ -23,8 +17,8 @@
     "download": "Herunterladen",
     "edit": "{{var}} bearbeiten",
     "filter": "Filtern",
-    "hideFilters": "Filter ausblenden",
     "hide": "Ausblenden",
+    "hideFilters": "Filter ausblenden",
     "loading": "Wird geladen",
     "loadingComplete": "Laden abgeschlossen",
     "loadingFailed": "Laden fehlgeschlagen",
@@ -46,9 +40,11 @@
     "unarchive": "Aus Archiv holen",
     "updating": "Aktualisierung"
   },
-  "clipboard": {
-    "linkCopied": "Link in die Zwischenablage kopiert",
-    "linkCopyFailed": "Link konnte nicht in die Zwischenablage kopiert werden"
+  "app": {
+    "name": {
+      "icon": "Aula Bildungsplattform Symbol",
+      "logo": "Aula Bildungsplattform Logo"
+    }
   },
   "auth": {
     "forgotPassword": {
@@ -64,8 +60,8 @@
       "instanceCode": "Instanzcode: {{var}}",
       "label": "Nutzername",
       "noAccount": "Du hast noch kein Konto?",
-      "title": "Anmelden",
-      "reset_code": "neuer Code"
+      "reset_code": "neuer Code",
+      "title": "Anmelden"
     },
     "logout": "Logout",
     "messages": {
@@ -94,6 +90,10 @@
       "title": "Konto erstellen",
       "username": "Benutzername wählen"
     }
+  },
+  "clipboard": {
+    "linkCopied": "Link in die Zwischenablage kopiert",
+    "linkCopyFailed": "Link konnte nicht in die Zwischenablage kopiert werden"
   },
   "consent": {
     "alert": "Obligatorische Zustimmung",
@@ -125,6 +125,7 @@
     "accountSuspended": "Dein Account wurde{{var}} gesperrt. Bitte kontaktiere deinen Administrator",
     "databaseError": "Daten konnten nicht abgerufen werden",
     "default": "Etwas ist schief gelaufen",
+    "existingUser": "Benutzername und/oder E-Mail sind bereits vergeben",
     "failed": "Anfrage fehlgeschlagen",
     "invalidCode": "Ungültiger Benutzercode",
     "invalidCredentials": "Ungültiger Benutzername oder Passwort",
@@ -139,8 +140,7 @@
     "schoolClosed": "Die Schule ist derzeit geschlossen. Bitte versuchen Sie es später wieder.",
     "schoolClosedImage": "Schlafende Charakterillustration für Seite 'Schule geschlossen'",
     "timeout": "Zeitüberschreitung der Anfrage",
-    "unauthorized": "Diese Seite erfordert eine Authentifizierung",
-    "existingUser": "Benutzername und/oder E-Mail sind bereits vergeben"
+    "unauthorized": "Diese Seite erfordert eine Authentifizierung"
   },
   "forms": {
     "csv": {
@@ -164,13 +164,12 @@
     },
     "validation": {
       "agreement": "Du musst zustimmen, um dich anzumelden",
+      "contentTooLong": "Ihr {{scope}} ist zu lang (maximal {{max}} Zeichen)",
       "duration": "Eine der Phasen muss mindestens einen Tag lang verfügbar sein",
       "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
       "integer": "Bitte geben Sie eine ganze Zahl ein",
       "maxLength": "Muss kleiner sein als {{var}} Zeichen",
       "minLength": "Muss größer sein als {{var}} Zeichen",
-      "contentTooLong": "Ihr {{scope}} ist zu lang (maximal {{max}} Zeichen)",
-      "titleTooLong": "Ihr {{scope}}-Titel ist zu lang (maximal {{max}} Zeichen)",
       "name": "Die Namen sollten nur Buchstaben enthalten",
       "nonNegative": "Kann keine negative Zahl sein",
       "noOptions": "Keine Optionen verfügbar",
@@ -178,23 +177,19 @@
       "passwordMatch": "Passwörter müssen übereinstimmen",
       "phone": "Bitte geben Sie eine gültige Telefonnummer ein",
       "recipient": "Bitte wählen Sie einen Empfänger aus",
-      "required": "Dieses Feld darf nicht leer sein"
+      "required": "Dieses Feld darf nicht leer sein",
+      "titleTooLong": "Ihr {{scope}}-Titel ist zu lang (maximal {{max}} Zeichen)"
     }
   },
   "instance": {
+    "chip": "Code",
     "error": "Der Instanzcode ist ungültig",
     "headline": "Geben Sie den Instanzcode ein",
     "label": "Instanzcode",
-    "status": "Instanzstatus",
-    "chip": "Code"
+    "status": "Instanzstatus"
   },
   "patterns": {
     "on": "{{a}} zur {{b}}"
-  },
-  "profile": {
-    "avatar": {
-      "preview": "Avatarbild-Vorschau"
-    }
   },
   "phases": {
     "approval": "Prüfung",
@@ -215,6 +210,11 @@
     "results": "Ergebnisse",
     "voting": "Abstimmung",
     "wild": "Wilde Ideen"
+  },
+  "profile": {
+    "avatar": {
+      "preview": "Avatarbild-Vorschau"
+    }
   },
   "requests": {
     "accepted": "Deine Datenänderungsanfrage wurde akzeptiert.",
@@ -237,8 +237,8 @@
     "exportData": {
       "body": "Eine Datenexportprozedur wurde für den Benutzer {{var}} angefordert",
       "button": "Datenexport anfordern",
-      "title": "Kontodatenexportanfrage für {{var}}",
-      "info": "Nach Datenschutzanforderungen (DSGVO) müssen Online-Dienste ihren Nutzer auf Anfrage alle gespeicherten Daten zur Verfügung stellen."
+      "info": "Nach Datenschutzanforderungen (DSGVO) müssen Online-Dienste ihren Nutzer auf Anfrage alle gespeicherten Daten zur Verfügung stellen.",
+      "title": "Kontodatenexportanfrage für {{var}}"
     },
     "label": "Anfragen",
     "updateData": {
@@ -264,9 +264,9 @@
     "45": "Prüfer*in mit Stimmrecht",
     "50": "Admin",
     "60": "Tech-Admin",
-    "title": "Benutzerrollen",
+    "empty": "Nicht in diesem Raum",
     "roomRoles": "Raumrollen",
-    "empty": "Nicht in diesem Raum"
+    "title": "Benutzerrollen"
   },
   "room": {
     "image": {
@@ -307,10 +307,10 @@
     "ideas": {
       "approve": "Genehmigen",
       "approved": "Diese Idee wurde angenommen.",
-      "marked_winner": "Diese Idee wird als Gewinner ausgewählt.",
       "marked_not_winner": "Diese Idee wird nicht als Gewinner ausgewählt.",
-      "not_marked_yet": "Noch nicht als Gewinner markiert.",
+      "marked_winner": "Diese Idee wird als Gewinner ausgewählt.",
       "name": "Idee",
+      "not_marked_yet": "Noch nicht als Gewinner markiert.",
       "plural": "Ideen",
       "reject": "Ablehnen",
       "rejected": "Diese Idee wurde nicht angenommen",
@@ -353,15 +353,8 @@
     }
   },
   "settings": {
-    "users": {
-      "printTitle": "Passwortlist",
-      "passwordChanged": "Passwort zurückgesetzt",
-      "onlyTemporaryPasswords": "nur temporäres Passwort",
-      "no_users": "keine Benutzer",
-      "temp_pass": "mit temporärem Passwort",
-      "no_users_in_room": "keine Benutzer in diesem Raum"
-    },
     "account": {
+      "dataUpdateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer {{var}} anfordern möchten? Diese Aktion muss von einem Admin bestätigt werden, damit sie durchgeführt werden kann.",
       "delete": "Konto löschen",
       "deleteRequest": "Datenlöschung angefordert",
       "deleteText": "Bist du sicher, dass du die Löschung deines Kontos anfordern möchtest? Alle deine Daten werden verloren gehen. Diese Aktion kann nicht rückgängig gemacht werden",
@@ -370,8 +363,7 @@
       "exportGranted": "Kontodatenexport gewährt",
       "exportRequest": "Datenexport angefordert",
       "update": "Daten aktualisieren",
-      "updateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer Felder: {{var}} anfordern möchten? Diese Aktion sollte von einem Admin validiert werden, um durchgeführt zu werden",
-      "dataUpdateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer {{var}} anfordern möchten? Diese Aktion muss von einem Admin bestätigt werden, damit sie durchgeführt werden kann."
+      "updateText": "Sind Sie sicher, dass Sie die Aktualisierung Ihrer Felder: {{var}} anfordern möchten? Diese Aktion sollte von einem Admin validiert werden, um durchgeführt zu werden"
     },
     "advanced": {
       "headline": "Erweiterte Optionen",
@@ -414,8 +406,8 @@
       "hash_id": "Hash-ID",
       "headline": "Titel",
       "id": "ID",
-      "idea_headline": "Ideenüberschrift",
       "idea_content": "Ideeninhalt",
+      "idea_headline": "Ideenüberschrift",
       "ideas_num": "Anzahl der Ideen",
       "infinite_votes": "Unendliche Stimmen",
       "info": "Info",
@@ -424,8 +416,8 @@
       "language_id": "Sprache",
       "last_login": "Letzte Anmeldung",
       "last_update": "Letzte Aktualisierung",
-      "link": "Link",
       "level_of_detail": "Detailgrad",
+      "link": "Link",
       "location": "Standort",
       "msg_type": "Nachrichtentyp",
       "name": "Name",
@@ -466,8 +458,8 @@
       "trustee_id": "Treuhänder",
       "type": "Typ",
       "updater_id": "Zuletzt aktualisiert von",
-      "user_id": "Benutzer",
       "user_hash_id": "Zielbenutzer",
+      "user_id": "Benutzer",
       "user_needs_to_consent": "Zustimmung erforderlich",
       "userlevel": "Benutzer-Rolle",
       "username": "Benutzername",
@@ -493,9 +485,9 @@
     "messages": {
       "create": "{{var}} erstellt",
       "notUpdated": "{{var}} nicht aktualisiert",
+      "to": "An",
       "update": "{{var}} aktualisieren",
-      "updated": "{{var}} aktualisiert",
-      "to": "An"
+      "updated": "{{var}} aktualisiert"
     },
     "panels": {
       "action": "Geplante Aktionen",
@@ -518,8 +510,16 @@
       "startDate": "Startdatum",
       "startDay": "Starttag",
       "startTime": "Startzeit",
-      "workHours": "Arbeitszeiten",
-      "workdays": "Arbeitstage"
+      "workdays": "Arbeitstage",
+      "workHours": "Arbeitszeiten"
+    },
+    "users": {
+      "no_users": "keine Benutzer",
+      "no_users_in_room": "keine Benutzer in diesem Raum",
+      "onlyTemporaryPasswords": "nur temporäres Passwort",
+      "passwordChanged": "Passwort zurückgesetzt",
+      "printTitle": "Passwortlist",
+      "temp_pass": "mit temporärem Passwort"
     }
   },
   "status": {
@@ -563,9 +563,6 @@
     "zoomIn": "Vergrößern",
     "zoomOut": "Verkleinern"
   },
-  "user": {
-    "avatar": "Benutzeravatar für {{id}}"
-  },
   "ui": {
     "accessibility": {
       "actionToolbar": "Aktionsleiste",
@@ -577,36 +574,36 @@
       "copyInstanceCode": "Instanzcode {{code}} in die Zwischenablage kopieren",
       "dialogClosed": "Dialog geschlossen",
       "editingStarted": "Erstelle neue {{type}}",
+      "editUserAvatar": "Benutzeravatar bearbeiten",
       "enterFilterValue": "Filterwert eingeben",
       "errorOccurred": "Ein Fehler ist aufgetreten",
       "filterApplied": "Filter angewendet: {{field}} enthält {{value}}",
       "filterCleared": "Filter gelöscht",
       "filterFieldSelected": "Filterfeld {{field}} ausgewählt",
-      "filtersOpened": "Filter geöffnet",
       "filtersClosed": "Filter geschlossen",
+      "filtersOpened": "Filter geöffnet",
       "filterValueCleared": "Filterwert gelöscht",
       "filterValueFor": "Filterwert für {{field}}",
       "filterValueHelp": "Tippen, um nach diesem Feld zu filtern, Escape drücken, um zu löschen",
-      "formSubmitted": "Formular erfolgreich übermittelt",
       "formError": "Formularübermittlung fehlgeschlagen",
+      "formSubmitted": "Formular erfolgreich übermittelt",
       "itemsDeleted": "{{count}} {{type}} gelöscht",
       "loadingContent": "Inhalt wird geladen",
       "menuClosed": "Navigationsmenü geschlossen",
       "menuItemSelected": "{{item}} aus dem Navigationsmenü ausgewählt",
-      "modalOpened": "{{title}} Dialog geöffnet",
       "modalClosed": "Dialog geschlossen",
+      "modalOpened": "{{title}} Dialog geöffnet",
       "navigationDescription": "Verwenden Sie die Pfeiltasten zur Navigation zwischen den Menüpunkten, Enter zum Auswählen und Escape zum Schließen des Menüs",
       "newContent": "Neuer Inhalt verfügbar",
+      "pressToClose": "Drücken Sie Escape zum Schließen",
+      "pressToContinue": "Drücken Sie Enter zum Fortfahren, Escape zum Abbrechen",
+      "processingRequest": "Ihre Anfrage wird verarbeitet",
       "requestedChanges": "Angeforderte Änderungen",
       "roomRolesList": "Raumrollen Liste",
       "selectFieldFirst": "Wähle zuerst ein Feld zum Filtern aus",
       "selectFilterField": "Wähle ein Feld zum Filtern aus",
       "sidebarActions": "Seitenleistenaktionen",
       "sortColumn": "Sortieren nach {{column}}, aktuell {{direction}}",
-      "editUserAvatar": "Benutzeravatar bearbeiten",
-      "pressToContinue": "Drücken Sie Enter zum Fortfahren, Escape zum Abbrechen",
-      "pressToClose": "Drücken Sie Escape zum Schließen",
-      "processingRequest": "Ihre Anfrage wird verarbeitet",
       "updatingContent": "Inhalt wird aktualisiert"
     },
     "common": {
@@ -624,49 +621,53 @@
       "to": "zu",
       "yes": "Ja"
     },
+    "darkMode": "Dunkelmodus",
     "empty": {
       "boxes": {
-        "title": "Keine Boxen in dieser Phase",
-        "description": "Boxen werden hier angezeigt, wenn sie diese Phase erreichen"
-      },
-      "dashboard": {
-        "title": "Keine Ideen in dieser Phase",
-        "description": "Ideen werden hier angezeigt, wenn sie diese Phase erreichen"
-      },
-      "ideas": {
-        "title": "Noch keine Ideen",
-        "description": "Sei der Erste, der eine Idee teilt"
-      },
-      "messages": {
-        "title": "Es gibt derzeit keine neuen Nachrichten",
-        "description": "Du hast im Moment keine Nachrichten. Komm später wieder!"
-      },
-      "updates": {
-        "title": "Es gibt derzeit keine neuen Updates",
-        "description": "Komm später wieder!"
-      },
-      "general": {
-        "title": "Hier ist noch nichts",
-        "description": "Komm später wieder, wenn es mehr Inhalte gibt"
-      },
-      "table": {
-        "title": "Keine Daten verfügbar",
-        "description": "Es gibt keine Einträge in dieser Tabelle anzuzeigen"
-      },
-      "reports": {
-        "title": "Keine Berichte",
-        "description": "Es gibt derzeit keine Berichte zu überprüfen"
+        "description": "Boxen werden hier angezeigt, wenn sie diese Phase erreichen",
+        "title": "Keine Boxen in dieser Phase"
       },
       "bugs": {
-        "title": "Keine Fehlerberichte",
-        "description": "Es wurden noch keine Fehler gemeldet"
+        "description": "Es wurden noch keine Fehler gemeldet",
+        "title": "Keine Fehlerberichte"
+      },
+      "dashboard": {
+        "description": "Ideen werden hier angezeigt, wenn sie diese Phase erreichen",
+        "title": "Keine Ideen in dieser Phase"
+      },
+      "general": {
+        "description": "Komm später wieder, wenn es mehr Inhalte gibt",
+        "title": "Hier ist noch nichts"
+      },
+      "ideas": {
+        "description": "Sei der Erste, der eine Idee teilt",
+        "title": "Noch keine Ideen"
+      },
+      "messages": {
+        "description": "Du hast im Moment keine Nachrichten. Komm später wieder!",
+        "title": "Es gibt derzeit keine neuen Nachrichten"
+      },
+      "reports": {
+        "description": "Es gibt derzeit keine Berichte zu überprüfen",
+        "title": "Keine Berichte"
       },
       "requests": {
-        "title": "Keine Anfragen",
-        "description": "Es gibt keine ausstehenden Anfragen"
+        "description": "Es gibt keine ausstehenden Anfragen",
+        "title": "Keine Anfragen"
+      },
+      "rooms": {
+        "description": "Es sind keine Räume verfügbar",
+        "title": "Keine Räume"
+      },
+      "table": {
+        "description": "Es gibt keine Einträge in dieser Tabelle anzuzeigen",
+        "title": "Keine Daten verfügbar"
+      },
+      "updates": {
+        "description": "Komm später wieder!",
+        "title": "Es gibt derzeit keine neuen Updates"
       }
     },
-    "darkMode": "Dunkelmodus",
     "files": {
       "download": "Beispieldatei herunterladen",
       "image": {
@@ -711,16 +712,19 @@
       "votes": "Stimmen"
     }
   },
+  "user": {
+    "avatar": "Benutzeravatar für {{id}}"
+  },
   "votes": {
     "against": "Dagegen",
+    "delegatedVoteWarning": {
+      "message": "Wenn Sie für diese Idee abstimmen, wird Ihre Stimme die Stimme Ihres Delegierten überschreiben, aber sie können weiterhin für Sie bei anderen Ideen in dieser Box abstimmen.",
+      "title": "Warnung zur delegierten Abstimmung"
+    },
     "for": "Dafür",
     "neutral": "Neutral",
     "vote": "Abstimmen",
-    "yourVote": "Sie haben {{var}} abgestimmt",
-    "delegatedVoteWarning": {
-      "title": "Warnung zur delegierten Abstimmung",
-      "message": "Wenn Sie für diese Idee abstimmen, wird Ihre Stimme die Stimme Ihres Delegierten überschreiben, aber sie können weiterhin für Sie bei anderen Ideen in dieser Box abstimmen."
-    }
+    "yourVote": "Sie haben {{var}} abgestimmt"
   },
   "weekDays": {
     "friday": "Freitag",
