@@ -1,9 +1,9 @@
-import { EmptyState } from '@/components';
+import { EmptyState, ErrorState } from '@/components';
 import { RoomCard } from '@/components/RoomCard';
 import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
 import { getRooms } from '@/services/rooms';
 import { RoomType } from '@/types/Scopes';
-import { Button, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -75,12 +75,7 @@ const RoomsView = () => {
         {t('scopes.rooms.plural')}
       </Typography>
       {error ? (
-        <Stack spacing={2} alignItems="center" justifyContent="center">
-          <Typography color="error">{t('errors.default')}</Typography>
-          <Button variant="outlined" onClick={fetchRooms} size="small">
-            {t('actions.retry')}
-          </Button>
-        </Stack>
+        <ErrorState onClick={fetchRooms} />
       ) : (
         <Grid
           container
@@ -100,7 +95,7 @@ const RoomsView = () => {
             </Grid>
           ) : (
             rooms.map((room) => (
-              <Grid size={ROOM_GRID_SIZE} sx={{ scrollSnapAlign: 'center', order: -room.type }}>
+              <Grid size={ROOM_GRID_SIZE} sx={{ scrollSnapAlign: 'center', order: -room.type }} key={room.hash_id}>
                 <RoomCard room={room} />
               </Grid>
             ))
