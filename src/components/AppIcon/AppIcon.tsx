@@ -287,6 +287,7 @@ export const ICONS = {
   signup: HiOutlineUserPlus,
   sort: BsSortDown,
   sortUp: BsSortUp,
+  sortDown: BsSortDown,
   survey: HiOutlineQuestionMarkCircle,
   text: HiOutlineDocumentText,
   unarchive: BiArchiveOut,
