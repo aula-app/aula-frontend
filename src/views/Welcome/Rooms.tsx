@@ -27,13 +27,6 @@ const RoomsView = () => {
   const ROOM_GRID_SIZE = { xs: 12, sm: 6, lg: 4, xl: 3 };
   const FULL_GRID_SIZE = 12;
 
-  const handleClearFilters = () => {
-    setSearchQuery('');
-    setRoomTypeFilter('');
-    setSortKey('');
-    setSortDirection('asc');
-  };
-
   const handleSortKeyChange = (value: string) => {
     setSortKey(value as keyof import('@/types/Scopes').RoomType | '');
   };
@@ -44,7 +37,7 @@ const RoomsView = () => {
       position="relative"
       gap={2}
       sx={{
-        px: 2,
+        p: 2,
         overflowY: 'auto',
         scrollSnapType: 'y mandatory',
       }}

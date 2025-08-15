@@ -1,7 +1,7 @@
-import { TextField, FormControl, InputLabel, Select, MenuItem, Stack, Box, Typography, Collapse } from '@mui/material';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { AppIconButton } from '@/components';
+import { Box, Collapse, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface ScopeHeaderProps {
   title: string;
@@ -37,6 +37,8 @@ export function ScopeHeader({
   const { t } = useTranslation();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const sortRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const handleSearchToggle = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -48,82 +50,109 @@ export function ScopeHeader({
     if (isSearchOpen) setIsSearchOpen(false); // Close search when opening sort
   };
 
+  // Close sort panel when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
+        setIsSortOpen(false);
+      }
+    };
+
+    if (isSortOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSortOpen]);
+
+  // Close search panel when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    if (isSearchOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSearchOpen]);
+
   return (
-    <Stack spacing={2} sx={{ mb: 2 }}>
-      {/* Header Row - Title, Count, and Action Buttons */}
-      <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ pt: 2 }}>
-        <Box display="flex" alignItems="center" gap={2}>
-          <Typography
-            variant="h1"
-            className="noSpace"
-            sx={{
-              scrollSnapAlign: 'start',
-              transition: 'all .5s ease-in-out',
-            }}
-            component="h1"
-            id={`${scopeKey}-heading`}
-          >
-            {totalCount} {title}
-          </Typography>
-        </Box>
+    <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ pb: 2 }}>
+      <Typography
+        variant="h1"
+        className="noSpace"
+        sx={{
+          scrollSnapAlign: 'start',
+          transition: 'all .5s ease-in-out',
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+        }}
+        component="h1"
+        id={`${scopeKey}-heading`}
+      >
+        {totalCount} {title}
+      </Typography>
 
-        <Box display="flex" alignItems="center" gap={1}>
-          <AppIconButton
-            icon="search"
-            onClick={handleSearchToggle}
-            color={isSearchOpen ? 'primary' : 'default'}
-            aria-label={t('ui.common.search')}
-          />
-          <AppIconButton
-            icon="sort"
-            onClick={handleSortToggle}
-            color={isSortOpen ? 'primary' : 'default'}
-            aria-label={t('ui.sort.by')}
-          />
-        </Box>
-      </Box>
-
-      {/* Collapsible Search Field */}
-      <Collapse in={isSearchOpen}>
-        <TextField
-          fullWidth
-          label={t('ui.common.search')}
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder={t(`scopes.${scopeKey}.search.placeholder`)}
-          size="small"
-          autoFocus
-        />
-      </Collapse>
-
-      {/* Collapsible Sort Controls */}
-      <Collapse in={isSortOpen}>
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <FormControl size="small" sx={{ flex: 1 }}>
-            <InputLabel>{t('ui.sort.by')}</InputLabel>
-            <Select value={sortKey} onChange={(e) => onSortKeyChange(e.target.value)} label={t('ui.sort.by')}>
-              <MenuItem value="">{t('ui.sort.default')}</MenuItem>
-              {sortOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {t(option.labelKey)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>{t('ui.sort.direction')}</InputLabel>
-            <Select
-              value={sortDirection}
-              onChange={(e) => onSortDirectionChange(e.target.value as 'asc' | 'desc')}
-              label={t('ui.sort.direction')}
-            >
-              <MenuItem value="asc">{t('ui.sort.asc')}</MenuItem>
-              <MenuItem value="desc">{t('ui.sort.desc')}</MenuItem>
-            </Select>
-          </FormControl>
+      <Stack direction="row" alignItems="center" sx={{ flexShrink: 0 }}>
+        <Stack direction="row" alignItems="center" sx={{ flexShrink: 0 }}>
+          <Stack direction="row" alignItems="center" gap={1} ref={searchRef}>
+            <Collapse orientation="horizontal" in={isSearchOpen}>
+              <TextField
+                label={t('ui.common.search')}
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                placeholder={t(`scopes.${scopeKey}.search.placeholder`)}
+                size="small"
+                variant="standard"
+                autoFocus
+                sx={{ width: 250, minWidth: 150 }}
+              />
+            </Collapse>
+            <AppIconButton
+              icon="search"
+              onClick={handleSearchToggle}
+              color={isSearchOpen ? 'primary' : 'default'}
+              aria-label={t('ui.common.search')}
+            />
+          </Stack>
+          <Stack direction="row" alignItems="center" ref={sortRef}>
+            <Collapse orientation="horizontal" in={isSortOpen}>
+              <FormControl size="small" sx={{ width: 250, minWidth: 150 }}>
+                <InputLabel>{t('ui.sort.by')}</InputLabel>
+                <Select
+                  value={sortKey}
+                  variant="standard"
+                  size="small"
+                  onChange={(e) => onSortKeyChange(e.target.value)}
+                  label={t('ui.sort.by')}
+                >
+                  <MenuItem value="">{t('ui.sort.default')}</MenuItem>
+                  {sortOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {t(option.labelKey)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Collapse>
+            <AppIconButton
+              icon={sortDirection === 'asc' ? 'sortUp' : 'sortDown'}
+              onClick={handleSortToggle}
+              color={isSortOpen ? 'primary' : 'default'}
+              aria-label={t('ui.sort.by')}
+            />
+          </Stack>
         </Stack>
-      </Collapse>
+      </Stack>
     </Stack>
   );
 }

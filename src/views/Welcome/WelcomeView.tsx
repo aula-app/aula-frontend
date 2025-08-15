@@ -14,7 +14,7 @@ const WelcomeView = () => {
   }, [dispatch]);
 
   return (
-    <Stack height="100%" sx={{ p: { md: 1 } }} role="main" aria-label={t('ui.navigation.home')}>
+    <Stack flex={1} role="main" aria-label={t('ui.navigation.home')}>
       <Dashboard />
       <RoomsView />
     </Stack>
