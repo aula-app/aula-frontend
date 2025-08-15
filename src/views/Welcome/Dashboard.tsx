@@ -5,39 +5,21 @@ import { Box, Button, Collapse, Skeleton, Stack, Typography } from '@mui/materia
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboardPhases>;
 
 interface DashboardProps {
   show?: boolean;
-  autoCollapseOnNavigation?: boolean;
 }
 
-const Dashboard = ({ show = true, autoCollapseOnNavigation = true }: DashboardProps) => {
+const Dashboard = ({ show = true }: DashboardProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
   const [count, setCount] = useState<Record<number, number>>();
   const [isShowing, setShowing] = useState(show);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [userToggled, setUserToggled] = useState(false);
-
-  const handleToggle = useCallback(() => {
-    setUserToggled(true);
-    setShowing(!isShowing);
-  }, [isShowing]);
-
-  const handlePhaseNavigation = useCallback(
-    (phase: string) => {
-      if (autoCollapseOnNavigation) {
-        setShowing(false);
-      }
-      navigate(`/phase/${phase}`);
-    },
-    [navigate, autoCollapseOnNavigation]
-  );
 
   const fetchDashboard = useCallback(async () => {
     try {
