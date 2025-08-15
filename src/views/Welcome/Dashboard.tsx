@@ -29,12 +29,15 @@ const Dashboard = ({ show = true, autoCollapseOnNavigation = true }: DashboardPr
     setShowing(!isShowing);
   }, [isShowing]);
 
-  const handlePhaseNavigation = useCallback((phase: string) => {
-    if (autoCollapseOnNavigation) {
-      setShowing(false);
-    }
-    navigate(`/phase/${phase}`);
-  }, [navigate, autoCollapseOnNavigation]);
+  const handlePhaseNavigation = useCallback(
+    (phase: string) => {
+      if (autoCollapseOnNavigation) {
+        setShowing(false);
+      }
+      navigate(`/phase/${phase}`);
+    },
+    [navigate, autoCollapseOnNavigation]
+  );
 
   const fetchDashboard = useCallback(async () => {
     try {
@@ -79,7 +82,7 @@ const Dashboard = ({ show = true, autoCollapseOnNavigation = true }: DashboardPr
             aria-label={isShowing ? t('actions.hide') : t('actions.show')}
           >
             <Typography
-              variant="h2"
+              variant="h1"
               sx={{ flexWrap: 'wrap', transition: 'opacity .5s ease-in-out' }}
               id="dashboard-heading"
               component="h2"
@@ -138,9 +141,7 @@ const Dashboard = ({ show = true, autoCollapseOnNavigation = true }: DashboardPr
                       >
                         {t(`phases.${dashboardPhases[phase]}`)}
                       </Typography>
-                      <Typography component="span">
-                        {count[Number(phase)]}
-                      </Typography>
+                      <Typography component="span">{count[Number(phase)]}</Typography>
                     </Stack>
                   </Button>
                 ) : (
