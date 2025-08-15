@@ -8,6 +8,9 @@
     "bugReport": "Report bug",
     "cancel": "Cancel",
     "change": "Change {{var}}",
+    "clear": {
+      "filters": "Clear filters"
+    },
     "close": "Close",
     "confirm": "Confirm",
     "contentReport": "Report content",
@@ -333,8 +336,21 @@
       "plural": "Requests"
     },
     "rooms": {
+      "fields": {
+        "name": "Room name"
+      },
+      "filter": {
+        "type": "Room type"
+      },
       "name": "Room",
-      "plural": "Rooms"
+      "plural": "Rooms",
+      "search": {
+        "placeholder": "Search rooms..."
+      },
+      "type": {
+        "0": "Type 0",
+        "1": "Type 1"
+      }
     },
     "surveys": {
       "name": "Survey",
@@ -618,6 +634,7 @@
       "noContent": "No content available",
       "on": "on",
       "or": "or",
+      "search": "Search",
       "success": "Success",
       "to": "to",
       "yes": "Yes"
@@ -702,8 +719,16 @@
       "users": "Users"
     },
     "sort": {
+      "asc": "Ascending",
       "ascending": "ascending",
-      "descending": "descending"
+      "by": "Sort by",
+      "created": "Created date",
+      "default": "Default order",
+      "desc": "Descending",
+      "descending": "descending",
+      "direction": "Sort direction",
+      "importance": "Importance",
+      "updated": "Updated date"
     },
     "units": {
       "days": "days",

@@ -7,11 +7,11 @@ interface ErrorStateProps {
   [key: string]: any; // For rest props
 }
 
-const ErrorState = ({ onClick, message, ...restProps }: ErrorStateProps) => {
+const ErrorState = ({ onClick, message, ...restOfProps }: ErrorStateProps) => {
   const { t } = useTranslation();
 
   return (
-    <Stack spacing={2} alignItems="center" justifyContent="center" {...restProps}>
+    <Stack spacing={2} alignItems="center" justifyContent="center" {...restOfProps}>
       <Typography color="error">{message || t('errors.default')}</Typography>
       <Button variant="outlined" onClick={onClick} size="small">
         {t('actions.retry')}

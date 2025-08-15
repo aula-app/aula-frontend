@@ -1,51 +1,42 @@
-import { EmptyState, ErrorState } from '@/components';
+import { EmptyState, ErrorState, ScopeHeader } from '@/components';
 import { RoomCard } from '@/components/RoomCard';
 import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
-import { getRooms } from '@/services/rooms';
-import { RoomType } from '@/types/Scopes';
-import { Stack, Typography } from '@mui/material';
+import { useRoomsWithFilters } from '@/hooks';
+import { Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const RoomsView = () => {
   const { t } = useTranslation();
 
-  const [rooms, setRooms] = useState<RoomType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Filter and sort state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [roomTypeFilter, setRoomTypeFilter] = useState('');
+  const [sortKey, setSortKey] = useState<keyof import('@/types/Scopes').RoomType | ''>('');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  // Using the new hook with filtering and sorting capabilities
+  const { rooms, isLoading, error, refetch, totalCount } = useRoomsWithFilters({
+    searchQuery,
+    roomTypeFilter,
+    sortKey: (sortKey as keyof import('@/types/Scopes').RoomType) || null,
+    sortDirection,
+  });
 
   const ROOM_GRID_SIZE = { xs: 12, sm: 6, lg: 4, xl: 3 };
   const FULL_GRID_SIZE = 12;
 
-  const fetchRooms = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const response = await getRooms({
-        offset: 0,
-        limit: 0,
-        type: -1,
-      });
+  const handleClearFilters = () => {
+    setSearchQuery('');
+    setRoomTypeFilter('');
+    setSortKey('');
+    setSortDirection('asc');
+  };
 
-      if (response.error) {
-        setError(response.error);
-        setRooms([]);
-      } else if (response.data) {
-        setRooms(response.data);
-        setError(null);
-      }
-    } catch (err) {
-      setError('Failed to load rooms');
-      setRooms([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchRooms();
-  }, [fetchRooms]);
+  const handleSortKeyChange = (value: string) => {
+    setSortKey(value as keyof import('@/types/Scopes').RoomType | '');
+  };
 
   return (
     <Stack
@@ -61,21 +52,26 @@ const RoomsView = () => {
       aria-label={t('scopes.rooms.plural')}
       tabIndex={0}
     >
-      <Typography
-        variant="h1"
-        className="noSpace"
-        sx={{
-          pt: 2,
-          scrollSnapAlign: 'start',
-          transition: 'all .5s ease-in-out',
-        }}
-        component="h1"
-        id="rooms-heading"
-      >
-        {t('scopes.rooms.plural')}
-      </Typography>
+      <ScopeHeader
+        title={t('scopes.rooms.plural')}
+        scopeKey="rooms"
+        totalCount={totalCount}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        sortKey={sortKey}
+        onSortKeyChange={handleSortKeyChange}
+        sortDirection={sortDirection}
+        onSortDirectionChange={setSortDirection}
+        sortOptions={[
+          { value: 'room_name', labelKey: 'scopes.rooms.fields.name' },
+          { value: 'created', labelKey: 'ui.sort.created' },
+          { value: 'last_update', labelKey: 'ui.sort.updated' },
+          { value: 'order_importance', labelKey: 'ui.sort.importance' },
+        ]}
+      />
+
       {error ? (
-        <ErrorState onClick={fetchRooms} />
+        <ErrorState onClick={refetch} />
       ) : (
         <Grid
           container

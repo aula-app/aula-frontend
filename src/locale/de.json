@@ -8,6 +8,9 @@
     "bugReport": "Fehler melden",
     "cancel": "Abbrechen",
     "change": "{{var}} ändern",
+    "clear": {
+      "filters": "Filter löschen"
+    },
     "close": "Schließen",
     "confirm": "Bestätigen",
     "contentReport": "Inhalt melden",
@@ -333,8 +336,21 @@
       "plural": "Anfragen"
     },
     "rooms": {
+      "fields": {
+        "name": "Raumname"
+      },
+      "filter": {
+        "type": "Raumtyp"
+      },
       "name": "Raum",
-      "plural": "Räume"
+      "plural": "Räume",
+      "search": {
+        "placeholder": "Räume suchen..."
+      },
+      "type": {
+        "0": "Typ 0",
+        "1": "Typ 1"
+      }
     },
     "surveys": {
       "name": "Umfrage",
@@ -618,6 +634,7 @@
       "noContent": "Kein Inhalt verfügbar",
       "on": "an",
       "or": "oder",
+      "search": "Suchen",
       "success": "Erfolg",
       "to": "zu",
       "yes": "Ja"
@@ -702,8 +719,16 @@
       "users": "Benutzer"
     },
     "sort": {
+      "asc": "Aufsteigend",
       "ascending": "aufsteigend",
-      "descending": "absteigend"
+      "by": "Sortieren nach",
+      "created": "Erstelldatum",
+      "default": "Standardsortierung",
+      "desc": "Absteigend",
+      "descending": "absteigend",
+      "direction": "Sortierrichtung",
+      "importance": "Wichtigkeit",
+      "updated": "Aktualisiert am"
     },
     "units": {
       "days": "Tage",
