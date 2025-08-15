@@ -122,7 +122,7 @@ export function ScopeHeader({
         alignItems="center"
         sx={{ flexShrink: 0 }}
         role="toolbar"
-        aria-label={t('ui.scope.controls', { scope: title })}
+        aria-label={t('ui.accessibility.actionToolbar')}
       >
         <Stack direction="row" alignItems="center" sx={{ flexShrink: 0 }}>
           <Stack

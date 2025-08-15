@@ -12,14 +12,12 @@ const RoomsView = () => {
 
   // Filter and sort state
   const [searchQuery, setSearchQuery] = useState('');
-  const [roomTypeFilter, setRoomTypeFilter] = useState('');
   const [sortKey, setSortKey] = useState<keyof import('@/types/Scopes').RoomType | ''>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   // Using the new hook with filtering and sorting capabilities
   const { rooms, isLoading, error, refetch, totalCount } = useRoomsWithFilters({
     searchQuery,
-    roomTypeFilter,
     sortKey: (sortKey as keyof import('@/types/Scopes').RoomType) || null,
     sortDirection,
   });
