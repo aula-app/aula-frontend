@@ -15,6 +15,9 @@ const RoomsView = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const ROOM_GRID_SIZE = { xs: 12, sm: 6, lg: 4, xl: 3 };
+  const FULL_GRID_SIZE = 12;
+
   const fetchRooms = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -71,32 +74,39 @@ const RoomsView = () => {
       >
         {t('scopes.rooms.plural')}
       </Typography>
-      <Grid container spacing={2} role="list" aria-labelledby="rooms-heading" aria-live="polite" aria-busy={isLoading}>
-        {isLoading ? (
-          <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }}>
-            <RoomCardSkeleton />
-          </Grid>
-        ) : error ? (
-          <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} role="alert" aria-live="assertive">
-            <Stack spacing={2} alignItems="center">
-              <Typography color="error">{t('errors.default')}</Typography>
-              <Button variant="outlined" onClick={fetchRooms} size="small">
-                Try again
-              </Button>
-            </Stack>
-          </Grid>
-        ) : rooms.length === 0 ? (
-          <Grid size={12}>
-            <EmptyState title={t('ui.empty.rooms.title')} description={t('ui.empty.rooms.description')} />
-          </Grid>
-        ) : (
-          rooms.map((room) => (
-            <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center', order: -room.type }}>
-              <RoomCard room={room} />
+      {error ? (
+        <Stack spacing={2} alignItems="center" justifyContent="center">
+          <Typography color="error">{t('errors.default')}</Typography>
+          <Button variant="outlined" onClick={fetchRooms} size="small">
+            {t('actions.retry')}
+          </Button>
+        </Stack>
+      ) : (
+        <Grid
+          container
+          spacing={2}
+          role="list"
+          aria-labelledby="rooms-heading"
+          aria-live="polite"
+          aria-busy={isLoading}
+        >
+          {isLoading ? (
+            <Grid size={ROOM_GRID_SIZE}>
+              <RoomCardSkeleton />
             </Grid>
-          ))
-        )}
-      </Grid>
+          ) : rooms.length === 0 ? (
+            <Grid size={FULL_GRID_SIZE}>
+              <EmptyState title={t('ui.empty.rooms.title')} description={t('ui.empty.rooms.description')} />
+            </Grid>
+          ) : (
+            rooms.map((room) => (
+              <Grid size={ROOM_GRID_SIZE} sx={{ scrollSnapAlign: 'center', order: -room.type }}>
+                <RoomCard room={room} />
+              </Grid>
+            ))
+          )}
+        </Grid>
+      )}
     </Stack>
   );
 };

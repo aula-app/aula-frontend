@@ -29,6 +29,7 @@
     "processing": "Processing",
     "remove": "Delete {{var}}",
     "revert": "Revert",
+    "retry": "Try again",
     "save": "Save",
     "saving": "Saving",
     "savingComplete": "Saving complete",
