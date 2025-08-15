@@ -46,8 +46,14 @@ export function ScopeHeader({
   };
 
   const handleSortToggle = () => {
-    setIsSortOpen(!isSortOpen);
-    if (isSearchOpen) setIsSearchOpen(false); // Close search when opening sort
+    // Always toggle the sort direction
+    onSortDirectionChange(sortDirection === 'asc' ? 'desc' : 'asc');
+
+    // Only open the sort panel if it's currently closed
+    if (!isSortOpen) {
+      setIsSortOpen(true);
+      if (isSearchOpen) setIsSearchOpen(false); // Close search when opening sort
+    }
   };
 
   // Close sort panel when clicking outside
@@ -85,7 +91,14 @@ export function ScopeHeader({
   }, [isSearchOpen]);
 
   return (
-    <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ pb: 2 }}>
+    <Stack
+      direction="row"
+      alignItems="center"
+      justifyContent="space-between"
+      sx={{ pb: 2 }}
+      role="banner"
+      aria-labelledby={`${scopeKey}-heading`}
+    >
       <Typography
         variant="h1"
         className="noSpace"
@@ -98,14 +111,35 @@ export function ScopeHeader({
         }}
         component="h1"
         id={`${scopeKey}-heading`}
+        aria-live="polite"
+        aria-atomic="true"
       >
         {totalCount} {title}
       </Typography>
 
-      <Stack direction="row" alignItems="center" sx={{ flexShrink: 0 }}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        sx={{ flexShrink: 0 }}
+        role="toolbar"
+        aria-label={t('ui.scope.controls', { scope: title })}
+      >
         <Stack direction="row" alignItems="center" sx={{ flexShrink: 0 }}>
-          <Stack direction="row" alignItems="center" gap={1} ref={searchRef}>
-            <Collapse orientation="horizontal" in={isSearchOpen}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            gap={1}
+            ref={searchRef}
+            role="search"
+            aria-label={t('ui.common.search')}
+          >
+            <Collapse
+              orientation="horizontal"
+              in={isSearchOpen}
+              aria-expanded={isSearchOpen}
+              role="region"
+              aria-labelledby="search-button"
+            >
               <TextField
                 label={t('ui.common.search')}
                 value={searchQuery}
@@ -115,29 +149,59 @@ export function ScopeHeader({
                 variant="standard"
                 autoFocus
                 sx={{ width: 250, minWidth: 150 }}
+                aria-describedby={`search-description-${scopeKey}`}
+                slotProps={{
+                  htmlInput: {
+                    'aria-label': t('ui.common.search') + ' ' + title,
+                    role: 'searchbox',
+                  },
+                }}
               />
             </Collapse>
             <AppIconButton
-              icon="search"
+              id="search-button"
+              icon={isSearchOpen ? 'close' : 'search'}
               onClick={handleSearchToggle}
               color={isSearchOpen ? 'primary' : 'default'}
               aria-label={t('ui.common.search')}
+              aria-expanded={isSearchOpen}
+              aria-controls={isSearchOpen ? `search-field-${scopeKey}` : undefined}
+              aria-describedby={`search-description-${scopeKey}`}
+              title={isSearchOpen ? t('actions.close') : t('ui.common.search')}
             />
           </Stack>
-          <Stack direction="row" alignItems="center" ref={sortRef}>
-            <Collapse orientation="horizontal" in={isSortOpen}>
-              <FormControl size="small" sx={{ width: 250, minWidth: 150 }}>
-                <InputLabel>{t('ui.sort.by')}</InputLabel>
+          <Stack direction="row" alignItems="center" ref={sortRef} role="group" aria-label={t('ui.sort.controls')}>
+            <Collapse
+              orientation="horizontal"
+              in={isSortOpen}
+              aria-expanded={isSortOpen}
+              role="region"
+              aria-labelledby="sort-button"
+            >
+              <FormControl
+                size="small"
+                sx={{ width: 250, minWidth: 150 }}
+                aria-describedby={`sort-description-${scopeKey}`}
+              >
+                <InputLabel id={`sort-label-${scopeKey}`}>{t('ui.sort.by')}</InputLabel>
                 <Select
                   value={sortKey}
                   variant="standard"
                   size="small"
                   onChange={(e) => onSortKeyChange(e.target.value)}
                   label={t('ui.sort.by')}
+                  labelId={`sort-label-${scopeKey}`}
+                  id={`sort-select-${scopeKey}`}
+                  aria-describedby={`sort-description-${scopeKey}`}
+                  inputProps={{
+                    'aria-label': t('ui.sort.by') + ' ' + title,
+                  }}
                 >
-                  <MenuItem value="">{t('ui.sort.default')}</MenuItem>
+                  <MenuItem value="" aria-label={t('ui.sort.default')}>
+                    {t('ui.sort.default')}
+                  </MenuItem>
                   {sortOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
+                    <MenuItem key={option.value} value={option.value} aria-label={t(option.labelKey)}>
                       {t(option.labelKey)}
                     </MenuItem>
                   ))}
@@ -145,10 +209,16 @@ export function ScopeHeader({
               </FormControl>
             </Collapse>
             <AppIconButton
+              id="sort-button"
               icon={sortDirection === 'asc' ? 'sortUp' : 'sortDown'}
               onClick={handleSortToggle}
               color={isSortOpen ? 'primary' : 'default'}
-              aria-label={t('ui.sort.by')}
+              aria-label={isSortOpen ? t(`ui.sort.${sortDirection}`) : t('ui.sort.by')}
+              aria-expanded={isSortOpen}
+              aria-controls={isSortOpen ? `sort-select-${scopeKey}` : undefined}
+              aria-describedby={`sort-description-${scopeKey}`}
+              aria-pressed={sortKey !== ''}
+              title={isSortOpen ? t(`ui.sort.${sortDirection}`) : t('ui.sort.by')}
             />
           </Stack>
         </Stack>
