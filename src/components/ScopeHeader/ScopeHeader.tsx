@@ -197,9 +197,6 @@ export function ScopeHeader({
                     'aria-label': t('ui.sort.by') + ' ' + title,
                   }}
                 >
-                  <MenuItem value="" aria-label={t('ui.sort.default')}>
-                    {t('ui.sort.default')}
-                  </MenuItem>
                   {sortOptions.map((option) => (
                     <MenuItem key={option.value} value={option.value} aria-label={t(option.labelKey)}>
                       {t(option.labelKey)}

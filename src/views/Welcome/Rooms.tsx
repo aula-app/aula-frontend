@@ -1,19 +1,23 @@
 import { EmptyState, ErrorState, ScopeHeader } from '@/components';
 import { RoomCard } from '@/components/RoomCard';
 import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
-import { useRoomsWithFilters } from '@/hooks';
+import { useRoomsWithFilters, useSearchAndSort } from '@/hooks';
 import { Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const RoomsView = () => {
   const { t } = useTranslation();
 
-  // Filter and sort state
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortKey, setSortKey] = useState<keyof import('@/types/Scopes').RoomType | ''>('');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  // Manage search and sort state for the rooms view
+  const { searchQuery, sortKey, sortDirection, scopeHeaderProps } = useSearchAndSort({
+    sortOptions: [
+      { value: 'room_name', labelKey: 'scopes.rooms.fields.name' },
+      { value: 'created', labelKey: 'ui.sort.created' },
+      { value: 'last_update', labelKey: 'ui.sort.updated' },
+      { value: 'order_importance', labelKey: 'ui.sort.importance' },
+    ],
+  });
 
   // Using the new hook with filtering and sorting capabilities
   const { rooms, isLoading, error, refetch, totalCount } = useRoomsWithFilters({
@@ -24,10 +28,6 @@ const RoomsView = () => {
 
   const ROOM_GRID_SIZE = { xs: 12, sm: 6, lg: 4, xl: 3 };
   const FULL_GRID_SIZE = 12;
-
-  const handleSortKeyChange = (value: string) => {
-    setSortKey(value as keyof import('@/types/Scopes').RoomType | '');
-  };
 
   return (
     <Stack
@@ -43,23 +43,7 @@ const RoomsView = () => {
       aria-label={t('scopes.rooms.plural')}
       tabIndex={0}
     >
-      <ScopeHeader
-        title={t('scopes.rooms.plural')}
-        scopeKey="rooms"
-        totalCount={totalCount}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        sortKey={sortKey}
-        onSortKeyChange={handleSortKeyChange}
-        sortDirection={sortDirection}
-        onSortDirectionChange={setSortDirection}
-        sortOptions={[
-          { value: 'room_name', labelKey: 'scopes.rooms.fields.name' },
-          { value: 'created', labelKey: 'ui.sort.created' },
-          { value: 'last_update', labelKey: 'ui.sort.updated' },
-          { value: 'order_importance', labelKey: 'ui.sort.importance' },
-        ]}
-      />
+      <ScopeHeader title={t('scopes.rooms.plural')} scopeKey="rooms" totalCount={totalCount} {...scopeHeaderProps} />
 
       {error ? (
         <ErrorState onClick={refetch} />
@@ -82,7 +66,7 @@ const RoomsView = () => {
             </Grid>
           ) : (
             rooms.map((room) => (
-              <Grid size={ROOM_GRID_SIZE} sx={{ scrollSnapAlign: 'center', order: -room.type }} key={room.hash_id}>
+              <Grid size={ROOM_GRID_SIZE} sx={{ scrollSnapAlign: 'center' }} key={room.hash_id}>
                 <RoomCard room={room} />
               </Grid>
             ))
