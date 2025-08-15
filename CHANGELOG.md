@@ -1,3 +1,21 @@
+## 1.4.0
+
+- **New features:**
+  - Added comprehensive ScopeHeader component with search and sort functionality for improved data navigation
+  - Implemented unified filtering system with `useSearchAndSort` and `useFilteredData` hooks for consistent UI patterns
+  - Added smart default sort selection that automatically uses the first available sort option
+  - Enhanced rooms view with sortable columns including room name, creation date, last update, and importance
+- **UX improvements:**
+  - Improved accessibility with proper ARIA roles, labels, and keyboard navigation for search and sort controls
+  - Added horizontal collapse animations for search and sort panels with click-outside detection
+  - Implemented proper focus management and screen reader support for filtering interfaces
+  - Enhanced visual feedback with dynamic button states and proper loading indicators
+- **Technical improvements:**
+  - Created reusable filter functions (`createTextFilter`, `createStatusFilter`, `createRoomTypeFilter`) for common filtering patterns
+  - Consolidated filtering, searching, and sorting logic into well-organized, type-safe hooks
+  - Added comprehensive TypeScript interfaces and documentation for better developer experience
+  - Optimized hook architecture for better performance and code reusability
+
 ## 1.3.1
 
 - **Bug fixes:**
