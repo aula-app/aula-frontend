@@ -59,9 +59,19 @@ export function ScopeHeader({
   // Close sort panel when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
-        setIsSortOpen(false);
+      const target = event.target as Element;
+
+      // Don't close if clicking within the sort container
+      if (sortRef.current && sortRef.current.contains(target)) {
+        return;
       }
+
+      // Don't close if clicking on MUI Select dropdown items (they're rendered in portals)
+      if (target.closest('[role="listbox"]') || target.closest('[role="option"]') || target.closest('.MuiPaper-root')) {
+        return;
+      }
+
+      setIsSortOpen(false);
     };
 
     if (isSortOpen) {
