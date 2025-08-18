@@ -1,6 +1,8 @@
 const isDev = import.meta.env.DEV;
 const isMobile = import.meta.env.MODE === 'app';
 
+export const APP_TITLE = 'aula';
+
 export interface RuntimeConfig {
   CENTRAL_API_URL: string;
   IS_MULTI: boolean;
@@ -26,7 +28,8 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
       BASENAME: import.meta.env.VITE_APP_BASENAME || '/',
     };
   } else {
-    const res = await fetch('/public-config.json');
+    const branchBasename = import.meta.env.VITE_APP_BASENAME || '/';
+    const res = await fetch(`${branchBasename}public-config.json`);
     const json = await res.json();
     config = { ...defaultConfig, ...json };
   }

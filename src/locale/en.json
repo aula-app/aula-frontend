@@ -34,6 +34,7 @@
     "print": "Print",
     "processing": "Processing",
     "remove": "Delete {{var}}",
+    "revert": "Revert",
     "save": "Save",
     "saving": "Saving",
     "savingComplete": "Saving complete",
@@ -60,6 +61,7 @@
     },
     "login": {
       "button": "Login",
+      "instanceCode": "Instance code: {{var}}",
       "label": "Username",
       "noAccount": "Need an account?",
       "title": "Sign in",

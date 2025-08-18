@@ -1,4 +1,4 @@
-import PhaseBar from '@/layout/PhaseBar';
+import PhaseBar from '@/components/PhaseBar';
 import { RoomType } from '@/types/Scopes';
 import { Card, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';

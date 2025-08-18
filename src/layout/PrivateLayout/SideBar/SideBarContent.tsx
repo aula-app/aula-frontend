@@ -4,7 +4,7 @@ import { List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@m
 import { KeyboardEvent, memo, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { SIDEBAR_ITEMS } from '../config';
+import { SIDEBAR_ITEMS } from '../../config';
 
 type Props = {
   isFixed?: boolean;
