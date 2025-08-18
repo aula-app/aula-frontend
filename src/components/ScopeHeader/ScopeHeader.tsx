@@ -1,5 +1,15 @@
-import { AppIconButton } from '@/components';
-import { Box, Collapse, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
+import { AppIcon, AppIconButton } from '@/components';
+import {
+  Collapse,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -181,6 +191,13 @@ export function ScopeHeader({
                 sx={{ width: 250, minWidth: 150 }}
                 aria-describedby={`search-description-${scopeKey}`}
                 slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <AppIcon icon="search" />
+                      </InputAdornment>
+                    ),
+                  },
                   htmlInput: {
                     'aria-label': t('ui.common.search') + ' ' + title,
                     role: 'searchbox',
