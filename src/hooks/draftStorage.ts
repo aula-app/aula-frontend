@@ -54,7 +54,6 @@ export const useDraftStorage = <T extends Record<string, any>>(
     try {
       const currentValues = getValues();
       sessionStorage.setItem(storageKey, JSON.stringify(currentValues));
-      console.log('Draft saved for key:', storageKey);
     } catch (error) {
       console.warn('Failed to save draft to sessionStorage:', error);
     }
