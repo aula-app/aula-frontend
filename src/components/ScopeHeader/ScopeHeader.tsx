@@ -66,6 +66,11 @@ export function ScopeHeader({
         return;
       }
 
+      // Don't close if clicking on the search button (let search handle its own logic)
+      if (target.closest('#search-button')) {
+        return;
+      }
+
       // Don't close if clicking on MUI Select dropdown items (they're rendered in portals)
       if (target.closest('[role="listbox"]') || target.closest('[role="option"]') || target.closest('.MuiPaper-root')) {
         return;
@@ -86,9 +91,24 @@ export function ScopeHeader({
   // Close search panel when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setIsSearchOpen(false);
+      const target = event.target as Element;
+
+      // Don't close if clicking within the search container
+      if (searchRef.current && searchRef.current.contains(target)) {
+        return;
       }
+
+      // Don't close if clicking on the sort button (let sort handle its own logic)
+      if (target.closest('#sort-button')) {
+        return;
+      }
+
+      // Don't close if clicking on MUI components that might be rendered in portals
+      if (target.closest('[role="listbox"]') || target.closest('[role="option"]') || target.closest('.MuiPaper-root')) {
+        return;
+      }
+
+      setIsSearchOpen(false);
     };
 
     if (isSearchOpen) {
