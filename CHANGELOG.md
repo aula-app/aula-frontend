@@ -1,12 +1,6 @@
 ## 1.3.1
 
 - **Bug fixes:**
-  - Fixed broken message forms that were preventing proper submission
-  - Display error messages when creation and edit requests fail
-  - Prevent dialogs from closing on unsuccessful requests to allow error correction
-  - Fixed name change requests not working properly
-  - Fixed UserField component accessibility issues with label-input associations
-  - Resolved draft storage incorrectly saving data for existing records during edits
   - Fixed Playwright test import errors and ESLint configuration issues
   - Fixed markdown rendering in data tables by removing line breaks for proper display
   - Fixed broken message forms that were preventing proper submission
