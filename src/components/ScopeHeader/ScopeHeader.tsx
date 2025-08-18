@@ -226,7 +226,7 @@ export function ScopeHeader({
               <Stack direction="row" alignItems="center" gap={1}>
                 <FormControl
                   size="small"
-                  sx={{ width: 200, minWidth: 120 }}
+                  sx={{ width: 200, minWidth: 120, ml: 2 }}
                   aria-describedby={`sort-description-${scopeKey}`}
                 >
                   <InputLabel id={`sort-label-${scopeKey}`}>{t('ui.sort.by')}</InputLabel>
