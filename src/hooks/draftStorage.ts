@@ -48,7 +48,6 @@ export const useDraftStorage = <T extends Record<string, any>>(
 
   const saveDraft = useCallback(() => {
     if (!initialIsNewRecord) {
-      console.log('Skipping draft save - not a new record');
       return;
     }
 
