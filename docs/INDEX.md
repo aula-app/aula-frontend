@@ -32,6 +32,7 @@ The documentation has been updated to reflect the current state of the codebase,
 ## Quick Navigation
 
 ### Development Setup
+
 - [Installation Instructions](GETSTARTED.md#installation)
 - [Available Scripts](GETSTARTED.md#available-scripts)
 - [Environment Configuration](GETSTARTED.md#environment-configuration)
@@ -39,13 +40,16 @@ The documentation has been updated to reflect the current state of the codebase,
 - [Deployment Process](GETSTARTED.md#deployment)
 
 ### Architecture
+
 - [Project Structure Overview](STRUCTURE.md)
 - [Data Architecture](DATA.md#data-architecture)
 - [Service Structure](UTILS.md#service-structure)
 - [Component Organization](COMPONENTS.md#usage-guidelines)
 
 ### Core Features
+
 - [Component System](COMPONENTS.md)
+- [ScopeHeader Component](SCOPE-HEADER.md)
 - [Data Forms & Fields](COMPONENTS.md#data-components)
 - [Permissions System](UTILS.md#permission-system)
 - [State Management](STORE.md#store-state)
@@ -53,6 +57,7 @@ The documentation has been updated to reflect the current state of the codebase,
 - [Routing System](ROUTES.md)
 
 ### Reference
+
 - [Role Types & Permissions](UTILS.md#role-types)
 - [API Services](UTILS.md#service-structure)
 - [TypeScript Types](TYPES.md)
@@ -82,6 +87,7 @@ src/
 
 - [GETSTARTED.md](GETSTARTED.md) - Setup and development instructions
 - [COMPONENTS.md](COMPONENTS.md) - Reusable UI components
+- [SCOPE-HEADER.md](SCOPE-HEADER.md) - ScopeHeader component documentation
 - [DATA.md](DATA.md) - Data architecture and handling
 - [HOOKS.md](HOOKS.md) - Custom React hooks
 - [LAYOUT.md](LAYOUT.md) - Layout system and components
@@ -108,6 +114,7 @@ For information about contributing to the Aula Frontend project, please refer to
 ### Code Style
 
 The project follows specific code style guidelines:
+
 - TypeScript with strict type checking
 - PascalCase for components and component folders
 - camelCase for variables, functions, and hooks
@@ -116,6 +123,7 @@ The project follows specific code style guidelines:
 ### Permissions System
 
 When implementing features that require permissions:
+
 - Use the `checkPermissions` utility from utils/permissions.ts
 - Follow the established pattern for permission checks
 - Refer to the [Role Types documentation](UTILS.md#role-types) for details

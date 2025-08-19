@@ -1,10 +1,4 @@
 {
-  "app": {
-    "name": {
-      "logo": "Aula Education Platform Logo",
-      "icon": "Aula Education Platform Icon"
-    }
-  },
   "actions": {
     "activate": "Activate {{var}}",
     "add": "New {{var}}",
@@ -14,6 +8,9 @@
     "bugReport": "Report bug",
     "cancel": "Cancel",
     "change": "Change {{var}}",
+    "clear": {
+      "filters": "Clear filters"
+    },
     "close": "Close",
     "confirm": "Confirm",
     "contentReport": "Report content",
@@ -23,8 +20,8 @@
     "download": "Download",
     "edit": "Edit {{var}}",
     "filter": "Filter",
-    "hideFilters": "Hide filters",
     "hide": "Hide",
+    "hideFilters": "Hide filters",
     "loading": "Loading",
     "loadingComplete": "Loading complete",
     "loadingFailed": "Loading failed",
@@ -35,6 +32,7 @@
     "processing": "Processing",
     "remove": "Delete {{var}}",
     "revert": "Revert",
+    "retry": "Try again",
     "save": "Save",
     "saving": "Saving",
     "savingComplete": "Saving complete",
@@ -46,9 +44,11 @@
     "unarchive": "Unarchive",
     "updating": "Updating"
   },
-  "clipboard": {
-    "linkCopied": "Link copied to clipboard",
-    "linkCopyFailed": "Failed to copy link to clipboard"
+  "app": {
+    "name": {
+      "icon": "Aula Education Platform Icon",
+      "logo": "Aula Education Platform Logo"
+    }
   },
   "auth": {
     "forgotPassword": {
@@ -64,8 +64,8 @@
       "instanceCode": "Instance code: {{var}}",
       "label": "Username",
       "noAccount": "Need an account?",
-      "title": "Sign in",
-      "reset_code": "New code"
+      "reset_code": "New code",
+      "title": "Sign in"
     },
     "logout": "Sign out",
     "messages": {
@@ -94,6 +94,10 @@
       "title": "Create account",
       "username": "Choose username"
     }
+  },
+  "clipboard": {
+    "linkCopied": "Link copied to clipboard",
+    "linkCopyFailed": "Failed to copy link to clipboard"
   },
   "consent": {
     "alert": "Mandatory consent",
@@ -125,6 +129,7 @@
     "accountSuspended": "Your account has been suspended{{var}}. Please contact your administrator",
     "databaseError": "Failed to fetch data",
     "default": "Something went wrong",
+    "existingUser": "Username and/or email already in use",
     "failed": "Request failed",
     "invalidCode": "Invalid user code",
     "invalidCredentials": "Invalid username or password",
@@ -139,8 +144,7 @@
     "schoolClosed": "The school is currently closed. Please try again later.",
     "schoolClosedImage": "Sleeping character illustration for school closed page",
     "timeout": "The request timed out",
-    "unauthorized": "This page requires authentication",
-    "existingUser": "Username and/or email already in use"
+    "unauthorized": "This page requires authentication"
   },
   "forms": {
     "csv": {
@@ -164,13 +168,12 @@
     },
     "validation": {
       "agreement": "You must accept the terms to continue",
+      "contentTooLong": "Your {{scope}} is too long (maximum {{max}} characters)",
       "duration": "One of the phases must be available for at least one day.",
       "email": "Please enter a valid email address",
       "integer": "Please enter a whole number",
       "maxLength": "Must be less than {{var}} characters",
       "minLength": "Must be at least {{var}} characters",
-      "contentTooLong": "Your {{scope}} is too long (maximum {{max}} characters)",
-      "titleTooLong": "Your {{scope}} title is too long (maximum {{max}} characters)",
       "name": "Name can only contain letters",
       "nonNegative": "Number cannot be negative",
       "noOptions": "No options available",
@@ -178,23 +181,19 @@
       "passwordMatch": "Passwords must match",
       "phone": "Please enter a valid phone number",
       "recipient": "Please select a recipient",
-      "required": "This field is required"
+      "required": "This field is required",
+      "titleTooLong": "Your {{scope}} title is too long (maximum {{max}} characters)"
     }
   },
   "instance": {
+    "chip": "Code",
     "error": "The instance code is invalid",
     "headline": "Enter the instance code",
     "label": "Instance code",
-    "status": "Instance status",
-    "chip": "Code"
+    "status": "Instance status"
   },
   "patterns": {
     "on": "{{a}} on {{b}}"
-  },
-  "profile": {
-    "avatar": {
-      "preview": "Avatar image preview"
-    }
   },
   "phases": {
     "approval": "Approval",
@@ -215,6 +214,11 @@
     "results": "Results",
     "voting": "Voting",
     "wild": "Wild Ideas"
+  },
+  "profile": {
+    "avatar": {
+      "preview": "Avatar image preview"
+    }
   },
   "requests": {
     "accepted": "Your data change request has been accepted.",
@@ -237,8 +241,8 @@
     "exportData": {
       "body": "A data export procedure was requested for user {{var}}",
       "button": "Request data export",
-      "title": "Account data export request for {{var}}",
-      "info": "According to data protection requirements (GDPR), online services must provide their users with all stored data upon request."
+      "info": "According to data protection requirements (GDPR), online services must provide their users with all stored data upon request.",
+      "title": "Account data export request for {{var}}"
     },
     "label": "Requests",
     "updateData": {
@@ -264,9 +268,9 @@
     "45": "Auditor with voting rights",
     "50": "Admin",
     "60": "Tech admin",
-    "title": "User Roles",
+    "empty": "Not in this room",
     "roomRoles": "Room Roles",
-    "empty": "Not in this room"
+    "title": "User Roles"
   },
   "room": {
     "image": {
@@ -307,10 +311,10 @@
     "ideas": {
       "approve": "Approve",
       "approved": "This idea was approved.",
-      "marked_winner": "This idea is selected as a winner.",
       "marked_not_winner": "This idea is not selected as a winner.",
-      "not_marked_yet": "This idea is still not marked as a winner.",
+      "marked_winner": "This idea is selected as a winner.",
       "name": "Idea",
+      "not_marked_yet": "This idea is still not marked as a winner.",
       "plural": "Ideas",
       "reject": "Reject",
       "rejected": "This idea was not approved.",
@@ -332,8 +336,21 @@
       "plural": "Requests"
     },
     "rooms": {
+      "fields": {
+        "name": "Room name"
+      },
+      "filter": {
+        "type": "Room type"
+      },
       "name": "Room",
-      "plural": "Rooms"
+      "plural": "Rooms",
+      "search": {
+        "placeholder": "Search rooms..."
+      },
+      "type": {
+        "0": "Type 0",
+        "1": "Type 1"
+      }
     },
     "surveys": {
       "name": "Survey",
@@ -353,15 +370,8 @@
     }
   },
   "settings": {
-    "users": {
-      "printTitle": "Passwords list",
-      "passwordChanged": "Password changed",
-      "onlyTemporaryPasswords": "Only temporary passwords",
-      "no_users": "No users",
-      "temp_pass": "with temporary password",
-      "no_users_in_room": "No users in this room"
-    },
     "account": {
+      "dataUpdateText": "Are you sure you want to request the update of your {{var}}? This action must be confirmed by an Admin to take place.",
       "delete": "Delete account",
       "deleteRequest": "Data deletion requested",
       "deleteText": "Are you sure you want to request the deletion of your account? All your data will be lost. This action cannot be undone",
@@ -370,8 +380,7 @@
       "exportGranted": "Account data export granted",
       "exportRequest": "Data export requested",
       "update": "Update data",
-      "updateText": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place",
-      "dataUpdateText": "Are you sure you want to request the update of your {{var}}? This action must be confirmed by an Admin to take place."
+      "updateText": "Are you sure you want to request the update of your fields: {{var}}? This action should be validated by an Admin to take place"
     },
     "advanced": {
       "headline": "Advanced options",
@@ -414,8 +423,8 @@
       "hash_id": "Hash ID",
       "headline": "Title",
       "id": "ID",
-      "idea_headline": "Idea Title",
       "idea_content": "Idea Content",
+      "idea_headline": "Idea Title",
       "ideas_num": "Number of Ideas",
       "infinite_votes": "Infinite Votes",
       "info": "Info",
@@ -424,8 +433,8 @@
       "language_id": "Language",
       "last_login": "Last Login",
       "last_update": "Last Update",
-      "link": "Link",
       "level_of_detail": "Detail Level",
+      "link": "Link",
       "location": "Location",
       "msg_type": "Message Type",
       "name": "Name",
@@ -466,8 +475,8 @@
       "trustee_id": "Trustee",
       "type": "Type",
       "updater_id": "Last Updated By",
-      "user_id": "User",
       "user_hash_id": "Target User",
+      "user_id": "User",
       "user_needs_to_consent": "Consent Required",
       "userlevel": "User level",
       "username": "User name",
@@ -493,9 +502,9 @@
     "messages": {
       "create": "{{var}} created",
       "notUpdated": "{{var}} not updated",
+      "to": "To",
       "update": "Update {{var}}",
-      "updated": "{{var}} updated",
-      "to": "To"
+      "updated": "{{var}} updated"
     },
     "panels": {
       "action": "Scheduled actions",
@@ -518,8 +527,16 @@
       "startDate": "Start Date",
       "startDay": "Starting day",
       "startTime": "Starting time",
-      "workHours": "Work Hours",
-      "workdays": "Work Days"
+      "workdays": "Work Days",
+      "workHours": "Work Hours"
+    },
+    "users": {
+      "no_users": "No users",
+      "no_users_in_room": "No users in this room",
+      "onlyTemporaryPasswords": "Only temporary passwords",
+      "passwordChanged": "Password changed",
+      "printTitle": "Passwords list",
+      "temp_pass": "with temporary password"
     }
   },
   "status": {
@@ -563,9 +580,6 @@
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out"
   },
-  "user": {
-    "avatar": "User avatar for {{id}}"
-  },
   "ui": {
     "accessibility": {
       "actionToolbar": "Action toolbar",
@@ -577,36 +591,36 @@
       "copyInstanceCode": "Copy instance code {{code}} to clipboard",
       "dialogClosed": "Dialog closed",
       "editingStarted": "Creating new {{type}}",
+      "editUserAvatar": "Edit user avatar",
       "enterFilterValue": "Enter filter value",
       "errorOccurred": "An error occurred",
       "filterApplied": "Filter applied: {{field}} contains {{value}}",
       "filterCleared": "Filter cleared",
       "filterFieldSelected": "Filter field {{field}} selected",
-      "filtersOpened": "Filters opened",
       "filtersClosed": "Filters closed",
+      "filtersOpened": "Filters opened",
       "filterValueCleared": "Filter value cleared",
       "filterValueFor": "Filter value for {{field}}",
       "filterValueHelp": "Type to filter by this field, press Escape to clear",
-      "formSubmitted": "Form submitted successfully",
       "formError": "Form submission failed",
+      "formSubmitted": "Form submitted successfully",
       "itemsDeleted": "{{count}} {{type}} deleted",
       "loadingContent": "Loading content",
       "menuClosed": "Navigation menu closed",
       "menuItemSelected": "Selected {{item}} from navigation menu",
-      "modalOpened": "{{title}} dialog opened",
       "modalClosed": "Dialog closed",
+      "modalOpened": "{{title}} dialog opened",
       "navigationDescription": "Use arrow keys to navigate between menu items, Enter to select, and Escape to close the menu",
       "newContent": "New content available",
+      "pressToClose": "Press Escape to close",
+      "pressToContinue": "Press Enter to continue, Escape to cancel",
+      "processingRequest": "Processing your request",
       "requestedChanges": "Requested changes",
       "roomRolesList": "Room roles list",
       "selectFieldFirst": "Select a field to filter by first",
       "selectFilterField": "Select field to filter by",
       "sidebarActions": "Sidebar actions",
       "sortColumn": "Sort by {{column}}, currently {{direction}}",
-      "editUserAvatar": "Edit user avatar",
-      "pressToContinue": "Press Enter to continue, Escape to cancel",
-      "pressToClose": "Press Escape to close",
-      "processingRequest": "Processing your request",
       "updatingContent": "Updating content"
     },
     "common": {
@@ -620,53 +634,58 @@
       "noContent": "No content available",
       "on": "on",
       "or": "or",
+      "search": "Search",
       "success": "Success",
       "to": "to",
       "yes": "Yes"
     },
+    "darkMode": "Dark mode",
     "empty": {
       "boxes": {
-        "title": "No boxes in this phase",
-        "description": "Boxes will appear here when they reach this phase"
-      },
-      "dashboard": {
-        "title": "No ideas in this phase",
-        "description": "Ideas will appear here when they reach this phase"
-      },
-      "ideas": {
-        "title": "No ideas yet",
-        "description": "Be the first to share an idea"
-      },
-      "messages": {
-        "title": "There are currently no new messages",
-        "description": "You have no messages at the moment. Come back later!"
-      },
-      "updates": {
-        "title": "There are currently no new updates",
-        "description": "Come back later!"
-      },
-      "general": {
-        "title": "Nothing here yet",
-        "description": "Come back later when there's more content"
-      },
-      "table": {
-        "title": "No data available",
-        "description": "There are no items to display in this table"
-      },
-      "reports": {
-        "title": "No reports",
-        "description": "There are no reports to review at this time"
+        "description": "Boxes will appear here when they reach this phase",
+        "title": "No boxes in this phase"
       },
       "bugs": {
-        "title": "No bug reports",
-        "description": "No bugs have been reported yet"
+        "description": "No bugs have been reported yet",
+        "title": "No bug reports"
+      },
+      "dashboard": {
+        "description": "Ideas will appear here when they reach this phase",
+        "title": "No ideas in this phase"
+      },
+      "general": {
+        "description": "Come back later when there's more content",
+        "title": "Nothing here yet"
+      },
+      "ideas": {
+        "description": "Be the first to share an idea",
+        "title": "No ideas yet"
+      },
+      "messages": {
+        "description": "You have no messages at the moment. Come back later!",
+        "title": "There are currently no new messages"
+      },
+      "reports": {
+        "description": "There are no reports to review at this time",
+        "title": "No reports"
       },
       "requests": {
-        "title": "No requests",
-        "description": "There are no pending requests"
+        "description": "There are no pending requests",
+        "title": "No requests"
+      },
+      "rooms": {
+        "description": "There are no rooms available",
+        "title": "No rooms"
+      },
+      "table": {
+        "description": "There are no items to display in this table",
+        "title": "No data available"
+      },
+      "updates": {
+        "description": "Come back later!",
+        "title": "There are currently no new updates"
       }
     },
-    "darkMode": "Dark mode",
     "files": {
       "download": "Download sample file",
       "image": {
@@ -700,8 +719,16 @@
       "users": "Users"
     },
     "sort": {
+      "asc": "Ascending",
       "ascending": "ascending",
-      "descending": "descending"
+      "by": "Sort by",
+      "created": "Created date",
+      "default": "Default order",
+      "desc": "Descending",
+      "descending": "descending",
+      "direction": "Sort direction",
+      "importance": "Importance",
+      "updated": "Updated date"
     },
     "units": {
       "days": "days",
@@ -711,16 +738,19 @@
       "votes": "votes"
     }
   },
+  "user": {
+    "avatar": "User avatar for {{id}}"
+  },
   "votes": {
     "against": "Against",
+    "delegatedVoteWarning": {
+      "message": "If you vote on this idea, your vote will override your delegate's vote, but they can still vote for you on other ideas in this box.",
+      "title": "Delegated Vote Warning"
+    },
     "for": "For",
     "neutral": "Neutral",
     "vote": "Vote",
-    "yourVote": "You voted {{var}}",
-    "delegatedVoteWarning": {
-      "title": "Delegated Vote Warning",
-      "message": "If you vote on this idea, your vote will override your delegate's vote, but they can still vote for you on other ideas in this box."
-    }
+    "yourVote": "You voted {{var}}"
   },
   "weekDays": {
     "friday": "Friday",

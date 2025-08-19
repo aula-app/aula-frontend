@@ -1,5 +1,27 @@
-## 1.3.1
+## 1.4.0
 
+- **New features:**
+  - Added comprehensive ScopeHeader component with search and sort functionality for improved data navigation
+  - Implemented unified filtering system with `useSearchAndSort` and `useFilteredData` hooks for consistent UI patterns
+  - Added smart default sort selection that automatically uses the first available sort option
+  - Enhanced rooms view with sortable columns including room name, creation date, last update, and importance
+- **UX improvements:**
+  - Improved accessibility with proper ARIA roles, labels, and keyboard navigation for search and sort controls
+  - Added horizontal collapse animations for search and sort panels with click-outside detection
+  - Implemented proper focus management and screen reader support for filtering interfaces
+  - Enhanced visual feedback with dynamic button states and proper loading indicators
+  - Added offline page to inform users when the instance is unavailable
+  - Added confirmation button for instance status changes to prevent accidental offline mode
+  - Implemented form data persistence using sessionStorage to prevent data loss during navigation
+  - Enhanced form validation and error handling across all data forms
+- **Technical improvements:**
+  - Created reusable filter functions (`createTextFilter`, `createStatusFilter`, `createRoomTypeFilter`) for common filtering patterns
+  - Consolidated filtering, searching, and sorting logic into well-organized, type-safe hooks
+  - Added comprehensive TypeScript interfaces and documentation for better developer experience
+  - Optimized hook architecture for better performance and code reusability
+  - Improved ESLint configuration with separate TypeScript config for test files
+  - Enhanced Playwright test structure with proper assertions and dynamic user handling
+  - Better error handling and loading states in UserField component
 - **Bug fixes:**
   - Fixed broken message forms that were preventing proper submission
   - Display error messages when creation and edit requests fail
@@ -9,15 +31,6 @@
   - Resolved draft storage incorrectly saving data for existing records during edits
   - Fixed Playwright test import errors and ESLint configuration issues
   - Fixed markdown rendering in data tables by removing line breaks for proper display
-- **UX improvements:**
-  - Added offline page to inform users when the instance is unavailable
-  - Added confirmation button for instance status changes to prevent accidental offline mode
-  - Implemented form data persistence using sessionStorage to prevent data loss during navigation
-  - Enhanced form validation and error handling across all data forms
-- **Technical improvements:**
-  - Improved ESLint configuration with separate TypeScript config for test files
-  - Enhanced Playwright test structure with proper assertions and dynamic user handling
-  - Better error handling and loading states in UserField component
 
 ## 1.3.0
 
