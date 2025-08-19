@@ -64,7 +64,7 @@ const Dashboard = ({ show = true }: DashboardProps) => {
             aria-label={isShowing ? t('actions.hide') : t('actions.show')}
           >
             <Typography
-              variant="h2"
+              variant="h1"
               sx={{ flexWrap: 'wrap', transition: 'opacity .5s ease-in-out' }}
               id="dashboard-heading"
               component="h2"
@@ -123,9 +123,7 @@ const Dashboard = ({ show = true }: DashboardProps) => {
                       >
                         {t(`phases.${dashboardPhases[phase]}`)}
                       </Typography>
-                      <Typography component="span">
-                        {count[Number(phase)]}
-                      </Typography>
+                      <Typography component="span">{count[Number(phase)]}</Typography>
                     </Stack>
                   </Button>
                 ) : (

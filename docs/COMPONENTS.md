@@ -31,6 +31,17 @@ When creating new components:
 
 ## Core UI Components
 
+### ScopeHeader
+
+A unified header component for scope-based views that provides search and sorting functionality:
+
+- Displays scope title and item count
+- Expandable search functionality with text input
+- Expandable sort functionality with direction control
+- Progressive disclosure UI pattern
+- Integrates with filtering and sorting hooks
+- See [ScopeHeader Component Documentation](SCOPE-HEADER.md) for detailed usage
+
 ### AccessibleDialog
 
 An accessible dialog component that:
@@ -253,6 +264,7 @@ Located in `src/components/DataForms/`, these components provide specialized for
 - `UserForms`: Manage user accounts and profiles
 
 Each form component follows a consistent pattern:
+
 - Uses React Hook Form for form state management
 - Implements Yup validation schemas
 - Provides loading states during submission

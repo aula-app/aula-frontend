@@ -3,7 +3,6 @@ import { ElementType, forwardRef, useMemo } from 'react';
 import AppIcon from '../AppIcon';
 import { AllIconsType } from '../AppIcon/AppIcon';
 import AppLink from '../AppLink';
-import { checkPermissions } from '@/utils';
 
 const MUI_ICON_BUTTON_COLORS = ['inherit', 'default', 'primary', 'secondary', 'success', 'error', 'info', 'warning'];
 

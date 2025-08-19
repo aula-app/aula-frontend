@@ -40,7 +40,7 @@ jobs:
         run: docker compose -f ./docker-compose.pr.yml pull
 
       - name: Deploy to Branch Testing Environment
-        run: docker compose -f ./docker-compose.pr.yml up -d --build
+        run: docker compose -f ./docker-compose.pr.yml up -d
 
   deploy-staging:
     if: ${{ !contains(fromJSON('["main", "dev", "staging", "prod"]'), github.head_ref) }}
@@ -57,4 +57,4 @@ jobs:
         run: docker compose -f ./docker-compose.pr.yml pull
 
       - name: Deploy to Branch Testing Environment
-        run: docker compose -f ./docker-compose.pr.yml up -d --build
+        run: docker compose -f ./docker-compose.pr.yml up -d
