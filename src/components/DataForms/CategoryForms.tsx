@@ -85,7 +85,7 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
       return;
     }
     if (!request.data) return;
-    
+
     // Clear draft storage
     handleDraftSubmit();
     onClose();
@@ -106,7 +106,7 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
       });
       return;
     }
-    
+
     // Clear draft storage
     handleDraftSubmit();
     onClose();

@@ -23,7 +23,7 @@ export const useDraftStorage = <T extends Record<string, any>>(
     try {
       sessionStorage.removeItem(storageKey);
     } catch (error) {
-      console.warn('Failed to clear draft from sessionStorage:', error);
+      // Silently handle sessionStorage errors
     }
   }, [storageKey]);
 
@@ -44,7 +44,7 @@ export const useDraftStorage = <T extends Record<string, any>>(
         return draftData.selections || null;
       }
     } catch (error) {
-      console.warn('Failed to load draft from sessionStorage:', error);
+      // Silently handle sessionStorage errors
     }
     return null;
   }, [storageKey, initialIsNewRecord, reset, clearDraft]);
@@ -61,9 +61,8 @@ export const useDraftStorage = <T extends Record<string, any>>(
         selections: selections || {},
       };
       sessionStorage.setItem(storageKey, JSON.stringify(draftData));
-      console.log('Draft saved for key:', storageKey);
     } catch (error) {
-      console.warn('Failed to save draft to sessionStorage:', error);
+      // Silently handle sessionStorage errors
     }
   }, [storageKey, initialIsNewRecord, getValues, selections]);
 

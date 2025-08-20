@@ -50,6 +50,41 @@ export function ScopeHeader({
   const sortRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
+  // Load saved preferences on mount
+  useEffect(() => {
+    try {
+      const savedPreferences = localStorage.getItem(`scope-preferences-${scopeKey}`);
+      if (savedPreferences) {
+        const preferences = JSON.parse(savedPreferences);
+        if (preferences.searchQuery !== undefined && preferences.searchQuery !== searchQuery) {
+          onSearchChange(preferences.searchQuery);
+        }
+        if (preferences.sortKey !== undefined && preferences.sortKey !== sortKey) {
+          onSortKeyChange(preferences.sortKey);
+        }
+        if (preferences.sortDirection !== undefined && preferences.sortDirection !== sortDirection) {
+          onSortDirectionChange(preferences.sortDirection);
+        }
+      }
+    } catch (error) {
+      // Silently handle localStorage errors
+    }
+  }, [scopeKey]); // Only run when scopeKey changes
+
+  // Save preferences when they change
+  useEffect(() => {
+    try {
+      const preferences = {
+        searchQuery,
+        sortKey,
+        sortDirection,
+      };
+      localStorage.setItem(`scope-preferences-${scopeKey}`, JSON.stringify(preferences));
+    } catch (error) {
+      // Silently handle localStorage errors
+    }
+  }, [scopeKey, searchQuery, sortKey, sortDirection]);
+
   const handleSearchToggle = () => {
     setIsSearchOpen(!isSearchOpen);
     if (isSortOpen) setIsSortOpen(false); // Close sort when opening search
