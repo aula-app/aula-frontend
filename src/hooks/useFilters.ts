@@ -15,7 +15,7 @@ export interface UseRoomsWithFiltersOptions {
 /**
  * Hook that combines room data fetching with filtering and sorting capabilities
  */
-export function useRoomsWithFilters({
+export function useRoomFilters({
   searchQuery = '',
   roomTypeFilter = '',
   sortKey = null,
