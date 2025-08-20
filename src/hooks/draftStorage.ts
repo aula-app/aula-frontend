@@ -10,7 +10,6 @@ export interface UseDraftStorageOptions {
 }
 
 // In-memory storage that gets cleared on page refresh
-const inMemoryDraftStorage = new Map<string, any>();
 
 export const useDraftStorage = <T extends Record<string, any>>(
   form: UseFormReturn<T>,
@@ -54,7 +53,6 @@ export const useDraftStorage = <T extends Record<string, any>>(
 
   const saveDraft = useCallback(() => {
     if (!initialIsNewRecord) {
-      console.log('Skipping draft save - not a new record');
       return;
     }
 
