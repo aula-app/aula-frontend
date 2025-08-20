@@ -1,7 +1,7 @@
 import { EmptyState, ErrorState, ScopeHeader } from '@/components';
 import { RoomCard } from '@/components/RoomCard';
 import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
-import { useRoomsWithFilters, useSearchAndSort } from '@/hooks';
+import { useFilters, useSearchAndSort } from '@/hooks';
 import { Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,7 @@ const RoomsView = () => {
   });
 
   // Using the new hook with filtering and sorting capabilities
-  const { rooms, isLoading, error, refetch, totalCount } = useRoomsWithFilters({
+  const { rooms, isLoading, error, refetch, totalCount } = useFilters({
     searchQuery,
     sortKey: (sortKey as keyof import('@/types/Scopes').RoomType) || null,
     sortDirection,
