@@ -38,52 +38,6 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
   const [startingCategory, setStartingCategory] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Save box and category selections to sessionStorage (only for new ideas)
-  const saveSelections = useCallback((currentBox?: string, currentCategory?: number) => {
-    if (!defaultValues) { // Only for new ideas
-      try {
-        const boxToSave = currentBox ?? box;
-        const categoryToSave = currentCategory ?? category;
-        const selections = {
-          box: boxToSave !== box_id ? boxToSave : '', // Only save if different from URL box_id
-          category: categoryToSave !== 0 ? categoryToSave : 0,
-        };
-        sessionStorage.setItem('ideaform-selections-draft', JSON.stringify(selections));
-      } catch {
-        // Silently fail for storage operations
-      }
-    }
-  }, [defaultValues, box, category, box_id]);
-
-  // Load box and category selections from sessionStorage (only for new ideas)
-  const loadSelections = useCallback(() => {
-    if (!defaultValues) { // Only for new ideas
-      try {
-        const saved = sessionStorage.getItem('ideaform-selections-draft');
-        if (saved) {
-          const savedSelections = JSON.parse(saved);
-          if (savedSelections.box) {
-            setBox(savedSelections.box);
-          }
-          if (savedSelections.category) {
-            setCategory(savedSelections.category);
-          }
-        }
-      } catch {
-        // Silently fail for storage operations
-      }
-    }
-  }, [defaultValues]);
-
-  // Clear box and category selections from sessionStorage
-  const clearSelections = useCallback(() => {
-    try {
-      sessionStorage.removeItem('ideaform-selections-draft');
-    } catch {
-      // Silently fail for storage operations
-    }
-  }, []);
-
   const schema = yup.object({
     title: yup
       .string()
@@ -120,13 +74,15 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
-  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+  const {
+    handleSubmit: handleDraftSubmit,
+    handleCancel,
+    loadDraft,
+  } = useDraftStorage(form, {
     storageKey: 'ideaform-draft-new',
     isNewRecord: !defaultValues,
-    onCancel: () => {
-      clearSelections();
-      onClose();
-    },
+    selections: { box, category },
+    onCancel: onClose,
   });
 
   const fetchIdeaBox = useCallback(async () => {
@@ -159,10 +115,9 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
         await updateIdea(data);
       }
 
-      // Clear selections and draft storage
-      clearSelections();
+      // Clear draft storage
       handleDraftSubmit();
-      
+
       // Announce successful form submission to screen readers
       announceToScreenReader(t('ui.accessibility.formSubmitted'), 'assertive');
       onClose();
@@ -173,7 +128,6 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
         type: 'manual',
         message: t('errors.default'),
       });
-
     } finally {
       setIsLoading(false);
     }
@@ -241,17 +195,23 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       reset({ ...defaultValues });
       fetchIdeaBox();
       fetchIdeaCategories();
-      
-      // Load selections for new ideas, clear for edit ideas
+
+      // Load selections for new ideas only
       if (!defaultValues) {
-        loadSelections();
-      } else {
-        clearSelections();
+        const savedSelections = loadDraft();
+        if (savedSelections) {
+          if (savedSelections.box) {
+            setBox(savedSelections.box);
+          }
+          if (savedSelections.category) {
+            setCategory(savedSelections.category);
+          }
+        }
       }
     };
-    
+
     initializeForm();
-  }, [defaultValues, loadSelections, clearSelections, reset, fetchIdeaBox, fetchIdeaCategories]);
+  }, [defaultValues, loadDraft, reset, fetchIdeaBox, fetchIdeaCategories]);
 
   return (
     <Stack p={2} overflow="auto">
@@ -309,8 +269,6 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
                   room_id={defaultValues?.room_hash_id || room_id}
                   onChange={(newBox) => {
                     setBox(newBox);
-                    // Save selection immediately with the new value
-                    saveSelections(newBox, category);
                   }}
                   disabled={isLoading}
                 />
@@ -320,8 +278,6 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
                   defaultValue={category}
                   onChange={(newCategory) => {
                     setCategory(newCategory);
-                    // Save selection immediately with the new value
-                    saveSelections(box, newCategory);
                   }}
                   disabled={isLoading}
                 />
@@ -334,7 +290,12 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={handleCancel} color="error" data-testid="cancel-idea-form" aria-label={t('actions.cancel')}>
+            <Button
+              onClick={handleCancel}
+              color="error"
+              data-testid="cancel-idea-form"
+              aria-label={t('actions.cancel')}
+            >
               {t('actions.cancel')}
             </Button>
             <Button

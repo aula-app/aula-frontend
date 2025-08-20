@@ -4,6 +4,7 @@ import { UseFormReturn } from 'react-hook-form';
 export interface UseDraftStorageOptions {
   storageKey: string;
   isNewRecord: boolean;
+  selections?: Record<string, any>;
   onSubmit?: () => void;
   onCancel?: () => void;
 }
@@ -15,9 +16,9 @@ export const useDraftStorage = <T extends Record<string, any>>(
   form: UseFormReturn<T>,
   options: UseDraftStorageOptions
 ) => {
-  const { storageKey, onSubmit, onCancel } = options;
+  const { storageKey, selections, onSubmit, onCancel } = options;
   const { watch, reset, getValues } = form;
-  
+
   // Capture the initial isNewRecord state and don't let it change
   const [initialIsNewRecord] = useState(options.isNewRecord);
 
@@ -33,18 +34,22 @@ export const useDraftStorage = <T extends Record<string, any>>(
     if (!initialIsNewRecord) {
       // Clear draft for existing records
       clearDraft();
-      return;
+      return null;
     }
 
     try {
       const savedDraft = sessionStorage.getItem(storageKey);
       if (savedDraft) {
         const draftData = JSON.parse(savedDraft);
-        reset(draftData);
+        if (draftData.formData) {
+          reset(draftData.formData);
+        }
+        return draftData.selections || null;
       }
     } catch (error) {
       console.warn('Failed to load draft from sessionStorage:', error);
     }
+    return null;
   }, [storageKey, initialIsNewRecord, reset, clearDraft]);
 
   const saveDraft = useCallback(() => {
@@ -55,12 +60,16 @@ export const useDraftStorage = <T extends Record<string, any>>(
 
     try {
       const currentValues = getValues();
-      sessionStorage.setItem(storageKey, JSON.stringify(currentValues));
+      const draftData = {
+        formData: currentValues,
+        selections: selections || {},
+      };
+      sessionStorage.setItem(storageKey, JSON.stringify(draftData));
       console.log('Draft saved for key:', storageKey);
     } catch (error) {
       console.warn('Failed to save draft to sessionStorage:', error);
     }
-  }, [storageKey, initialIsNewRecord, getValues]);
+  }, [storageKey, initialIsNewRecord, getValues, selections]);
 
   const handleSubmit = useCallback(() => {
     clearDraft();
@@ -73,7 +82,8 @@ export const useDraftStorage = <T extends Record<string, any>>(
   }, [clearDraft, onCancel]);
 
   useEffect(() => {
-    loadDraft();
+    const savedSelections = loadDraft();
+    return savedSelections;
   }, [loadDraft]);
 
   useEffect(() => {
@@ -91,10 +101,11 @@ export const useDraftStorage = <T extends Record<string, any>>(
     });
 
     return () => subscription.unsubscribe();
-  }, [watch, initialIsNewRecord, saveDraft, clearDraft]);
+  }, [watch, initialIsNewRecord, saveDraft, clearDraft, selections]);
 
   return {
     clearDraft,
+    loadDraft,
     handleSubmit,
     handleCancel,
   };
