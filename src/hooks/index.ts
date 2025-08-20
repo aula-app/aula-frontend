@@ -4,5 +4,6 @@ export * from './draftStorage';
 export * from './event';
 export * from './layout';
 export * from './useFilter';
+export * from './useFilters';
 export * from './useSort';
-export * from './useRoomsWithFilters';
+export * from './useFilters';

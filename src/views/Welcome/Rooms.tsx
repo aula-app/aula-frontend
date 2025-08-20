@@ -1,7 +1,7 @@
 import { EmptyState, ErrorState, ScopeHeader } from '@/components';
 import { RoomCard } from '@/components/RoomCard';
 import RoomCardSkeleton from '@/components/RoomCard/RoomCardSkeleton';
-import { useRoomsWithFilters, useSearchAndSort } from '@/hooks';
+import { useRoomFilters, useSearchAndSort } from '@/hooks';
 import { Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useTranslation } from 'react-i18next';
@@ -12,15 +12,15 @@ const RoomsView = () => {
   // Manage search and sort state for the rooms view
   const { searchQuery, sortKey, sortDirection, scopeHeaderProps } = useSearchAndSort({
     sortOptions: [
+      { value: 'order_importance', labelKey: 'ui.sort.default' },
       { value: 'room_name', labelKey: 'scopes.rooms.fields.name' },
       { value: 'created', labelKey: 'ui.sort.created' },
       { value: 'last_update', labelKey: 'ui.sort.updated' },
-      { value: 'order_importance', labelKey: 'ui.sort.importance' },
     ],
   });
 
   // Using the new hook with filtering and sorting capabilities
-  const { rooms, isLoading, error, refetch, totalCount } = useRoomsWithFilters({
+  const { rooms, isLoading, error, refetch, totalCount } = useRoomFilters({
     searchQuery,
     sortKey: (sortKey as keyof import('@/types/Scopes').RoomType) || null,
     sortDirection,
@@ -35,9 +35,7 @@ const RoomsView = () => {
       position="relative"
       gap={2}
       sx={{
-        p: 2,
-        overflowY: 'auto',
-        scrollSnapType: 'y mandatory',
+        minHeight: 0,
       }}
       role="region"
       aria-label={t('scopes.rooms.plural')}
@@ -52,6 +50,7 @@ const RoomsView = () => {
           container
           spacing={2}
           role="list"
+          sx={{ p: 2, overflowY: 'auto', scrollBehavior: 'smooth' }}
           aria-labelledby="rooms-heading"
           aria-live="polite"
           aria-busy={isLoading}
@@ -66,7 +65,7 @@ const RoomsView = () => {
             </Grid>
           ) : (
             rooms.map((room) => (
-              <Grid size={ROOM_GRID_SIZE} sx={{ scrollSnapAlign: 'center' }} key={room.hash_id}>
+              <Grid size={ROOM_GRID_SIZE} key={room.hash_id} sx={{ scrollSnapAlign: 'center' }}>
                 <RoomCard room={room} />
               </Grid>
             ))
