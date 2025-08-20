@@ -133,7 +133,7 @@ export function ScopeHeader({
       direction="row"
       alignItems="center"
       justifyContent="space-between"
-      sx={{ pb: 2 }}
+      sx={{ pb: 2, minWidth: 0 }}
       role="banner"
       aria-labelledby={`${scopeKey}-heading`}
     >
@@ -146,6 +146,8 @@ export function ScopeHeader({
           textOverflow: 'ellipsis',
           overflow: 'hidden',
           whiteSpace: 'nowrap',
+          flexShrink: isSearchOpen || isSortOpen ? 1 : 0,
+          minWidth: 0,
         }}
         component="h1"
         id={`${scopeKey}-heading`}
@@ -186,7 +188,7 @@ export function ScopeHeader({
                 size="small"
                 variant="outlined"
                 autoFocus
-                sx={{ width: 250, minWidth: 150 }}
+                sx={{ width: 250, minWidth: 150, ml: 2 }}
                 aria-describedby={`search-description-${scopeKey}`}
                 slotProps={{
                   input: {
