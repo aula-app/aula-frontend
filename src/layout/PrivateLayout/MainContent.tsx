@@ -8,7 +8,7 @@ const MainContent: FunctionComponent<PropsWithChildren> = ({ children }) => {
   return (
     <Stack direction="row" component="main" id="main-content" sx={{ flexGrow: 1, overflow: 'hidden' }} tabIndex={-1}>
       {!checkPermissions('system', 'hide') && <SideBarFixed />}
-      <Stack flex={1} overflow="hidden">
+      <Stack flex={1} sx={{ minHeight: 0 }}>
         <ErrorBoundary name="Content">{children}</ErrorBoundary>
       </Stack>
     </Stack>

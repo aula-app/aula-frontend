@@ -38,6 +38,7 @@ const RoomsView = () => {
         p: 2,
         overflowY: 'auto',
         scrollSnapType: 'y mandatory',
+        minHeight: 0, // Allow flex child to shrink below content size
       }}
       role="region"
       aria-label={t('scopes.rooms.plural')}
