@@ -133,7 +133,7 @@ export function ScopeHeader({
       direction="row"
       alignItems="center"
       justifyContent="space-between"
-      sx={{ pb: 2, minWidth: 0 }}
+      sx={{ pb: 2, minWidth: 0, width: '100%' }}
       role="banner"
       aria-labelledby={`${scopeKey}-heading`}
     >
