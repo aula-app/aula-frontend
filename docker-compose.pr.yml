@@ -1,3 +1,5 @@
+name: ${PR_NUMBER}
+
 services:
   frontend:
     image: aulaapp/aula-frontend:pr-${PR_NUMBER}
