@@ -6,6 +6,7 @@ import {
   GroupArguments,
   removeUserFromGroup,
 } from '@/services/groups';
+import { useDraftStorage } from '@/hooks';
 import { GroupType } from '@/types/Scopes';
 import { UpdateType } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
@@ -56,6 +57,18 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
     },
   });
 
+  // Draft storage for form persistence
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(
+    { control, formState: { errors }, handleSubmit, register, reset, setError, watch: () => ({}) } as any,
+    {
+      storageKey: 'groupform-draft',
+      isNewRecord: !defaultValues,
+      selections: { userUpdates },
+      onSubmit: () => onClose(),
+      onCancel: () => onClose(),
+    }
+  );
+
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
@@ -92,6 +105,8 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
     const group_id = request.data;
     await Promise.all(userUpdates.add.map((userId) => addUserToGroup({ user_id: userId, group_id: group_id })));
 
+    // Clear draft storage
+    handleDraftSubmit();
     onClose();
   };
 
@@ -120,6 +135,8 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
     // Add users
     await Promise.all(userUpdates.add.map((userId) => addUserToGroup({ user_id: userId, group_id: groupId })));
 
+    // Clear draft storage
+    handleDraftSubmit();
     onClose();
   };
 
@@ -179,7 +196,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button

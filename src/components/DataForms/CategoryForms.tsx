@@ -1,4 +1,5 @@
 import { addCategory, CategoryArguments, editCategory } from '@/services/categories';
+import { useDraftStorage } from '@/hooks';
 import { CategoryType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -42,6 +43,17 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
     defaultValues: {},
   });
 
+  // Draft storage for form persistence
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(
+    { control, formState: { errors }, handleSubmit, register, reset, setError, watch: () => ({}) } as any,
+    {
+      storageKey: 'categoryform-draft',
+      isNewRecord: !defaultValues,
+      onSubmit: () => onClose(),
+      onCancel: () => onClose(),
+    }
+  );
+
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
@@ -73,6 +85,9 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
       return;
     }
     if (!request.data) return;
+    
+    // Clear draft storage
+    handleDraftSubmit();
     onClose();
   };
 
@@ -91,6 +106,9 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
       });
       return;
     }
+    
+    // Clear draft storage
+    handleDraftSubmit();
     onClose();
   };
 
@@ -130,7 +148,7 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button

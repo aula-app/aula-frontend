@@ -65,7 +65,7 @@ const RoomsView = () => {
             </Grid>
           ) : (
             rooms.map((room) => (
-              <Grid size={ROOM_GRID_SIZE} key={room.hash_id} sx={{ scrollSnapAlign: 'center' }}>
+              <Grid size={ROOM_GRID_SIZE} key={room.hash_id}>
                 <RoomCard room={room} />
               </Grid>
             ))
