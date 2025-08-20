@@ -35,39 +35,42 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Save idea selections to sessionStorage (only for new boxes)
-  const saveIdeaSelections = useCallback((updates?: UpdateType) => {
-    if (!defaultValues) { // Only for new boxes
-      try {
-        // Calculate the current total selection
-        const currentUpdates = updates || updateIdeas;
-        const baselineIds = ideas.map(idea => idea.hash_id);
-        const currentSelection = baselineIds
-          .filter(id => !currentUpdates.remove.includes(id))
-          .concat(currentUpdates.add);
-        
-        sessionStorage.setItem('boxform-ideas-draft', JSON.stringify(currentSelection));
-      } catch (error) {
-        console.warn('Failed to save idea selections:', error);
+  const saveIdeaSelections = useCallback(
+    (updates?: UpdateType) => {
+      if (!defaultValues) {
+        // Only for new boxes
+        try {
+          // Calculate the current total selection
+          const currentUpdates = updates || updateIdeas;
+          const baselineIds = ideas.map((idea) => idea.hash_id);
+          const currentSelection = baselineIds
+            .filter((id) => !currentUpdates.remove.includes(id))
+            .concat(currentUpdates.add);
+
+          sessionStorage.setItem('boxform-ideas-draft', JSON.stringify(currentSelection));
+        } catch (error) {
+          console.warn('Failed to save idea selections:', error);
+        }
       }
-    }
-  }, [defaultValues, updateIdeas, ideas]);
+    },
+    [defaultValues, updateIdeas, ideas]
+  );
 
   // Load idea selections from sessionStorage (only for new boxes)
   const loadIdeaSelections = useCallback(async () => {
-    if (!defaultValues) { // Only for new boxes
+    if (!defaultValues) {
+      // Only for new boxes
       try {
         const saved = sessionStorage.getItem('boxform-ideas-draft');
         if (saved) {
           const savedIdeaIds = JSON.parse(saved);
-          
+
           // For new boxes, populate ideas with restored selections so they show up
           if (savedIdeaIds.length > 0) {
             try {
               const ideaPromises = savedIdeaIds.map((id: string) => getIdea(id));
               const ideaResponses = await Promise.all(ideaPromises);
-              const validIdeas = ideaResponses
-                .filter(response => response.data)
-                .map(response => response.data!);
+              const validIdeas = ideaResponses.filter((response) => response.data).map((response) => response.data!);
               setIdeas(validIdeas);
             } catch (error) {
               console.warn('Failed to fetch idea objects:', error);
@@ -257,7 +260,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     const initializeForm = async () => {
       reset({ ...defaultValues });
       fetchBoxIdeas();
-      
+
       // Load idea selections for new boxes, clear for edit boxes
       if (!defaultValues) {
         await loadIdeaSelections();
@@ -265,7 +268,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
         clearIdeaSelections();
       }
     };
-    
+
     initializeForm();
   }, [defaultValuesKey, loadIdeaSelections, clearIdeaSelections, reset]);
 
