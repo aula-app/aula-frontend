@@ -31,6 +31,11 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
     description_internal: yup.string().required(t('forms.validation.required')),
   } as Record<keyof CategoryArguments, any>);
 
+  const form = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {},
+  });
+
   const {
     control,
     formState: { errors },
@@ -38,21 +43,15 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
     register,
     reset,
     setError,
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {},
-  });
+  } = form;
 
   // Draft storage for form persistence
-  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(
-    { control, formState: { errors }, handleSubmit, register, reset, setError, watch: () => ({}) } as any,
-    {
-      storageKey: 'categoryform-draft',
-      isNewRecord: !defaultValues,
-      onSubmit: () => onClose(),
-      onCancel: () => onClose(),
-    }
-  );
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+    storageKey: 'categoryform-draft',
+    isNewRecord: !defaultValues,
+    onSubmit: () => onClose(),
+    onCancel: () => onClose(),
+  });
 
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;

@@ -42,14 +42,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
     description_public: yup.string(),
   } as Record<keyof GroupArguments, any>);
 
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    register,
-    reset,
-    setError,
-  } = useForm({
+  const form = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       group_name: defaultValues ? ' ' : '',
@@ -57,17 +50,25 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
     },
   });
 
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    register,
+    reset,
+    setError,
+    watch,
+    getValues,
+  } = form;
+
   // Draft storage for form persistence
-  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(
-    { control, formState: { errors }, handleSubmit, register, reset, setError, watch: () => ({}) } as any,
-    {
-      storageKey: 'groupform-draft',
-      isNewRecord: !defaultValues,
-      selections: { userUpdates },
-      onSubmit: () => onClose(),
-      onCancel: () => onClose(),
-    }
-  );
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+    storageKey: 'groupform-draft',
+    isNewRecord: !defaultValues,
+    selections: { userUpdates },
+    onSubmit: () => onClose(),
+    onCancel: () => onClose(),
+  });
 
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
