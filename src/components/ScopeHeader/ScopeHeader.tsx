@@ -133,7 +133,7 @@ export function ScopeHeader({
       direction="row"
       alignItems="center"
       justifyContent="space-between"
-      sx={{ pb: 2, minWidth: 0, width: '100%' }}
+      sx={{ px: 2, minWidth: 0, width: '100%', scrollSnapAlign: 'start' }}
       role="banner"
       aria-labelledby={`${scopeKey}-heading`}
     >
@@ -141,7 +141,6 @@ export function ScopeHeader({
         variant="h1"
         className="noSpace"
         sx={{
-          scrollSnapAlign: 'start',
           transition: 'all .5s ease-in-out',
           textOverflow: 'ellipsis',
           overflow: 'hidden',
