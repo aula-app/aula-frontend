@@ -6,7 +6,7 @@ import { checkPermissions, phaseOptions } from '@/utils';
 import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -237,6 +237,22 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     setRoom(watch('room_hash_id'));
   }, [watch('room_hash_id')]);
 
+  // Memoize the key properties of defaultValues to avoid unnecessary re-renders
+  const defaultValuesKey = useMemo(() => {
+    if (!defaultValues) return null;
+    return {
+      hash_id: defaultValues.hash_id,
+      name: defaultValues.name,
+      description_public: defaultValues.description_public,
+      description_internal: defaultValues.description_internal,
+      room_hash_id: defaultValues.room_hash_id,
+      phase_id: defaultValues.phase_id,
+      phase_duration_1: defaultValues.phase_duration_1,
+      phase_duration_3: defaultValues.phase_duration_3,
+      status: defaultValues.status,
+    };
+  }, [defaultValues]);
+
   useEffect(() => {
     const initializeForm = async () => {
       reset({ ...defaultValues });
@@ -251,7 +267,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     };
     
     initializeForm();
-  }, [JSON.stringify(defaultValues), loadIdeaSelections, clearIdeaSelections]);
+  }, [defaultValuesKey, loadIdeaSelections, clearIdeaSelections, reset]);
 
   return (
     <Stack p={2} overflow="auto">

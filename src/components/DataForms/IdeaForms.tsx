@@ -5,7 +5,7 @@ import { announceToScreenReader, checkPermissions } from '@/utils';
 import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -190,6 +190,20 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     else await removeIdeaCategory(idea_id, startingCategory);
   };
 
+  // Memoize the key properties of defaultValues to avoid unnecessary re-renders
+  const defaultValuesKey = useMemo(() => {
+    if (!defaultValues) return null;
+    return {
+      hash_id: defaultValues.hash_id,
+      title: defaultValues.title,
+      content: defaultValues.content,
+      room_hash_id: defaultValues.room_hash_id,
+      custom_field1: defaultValues.custom_field1,
+      custom_field2: defaultValues.custom_field2,
+      approved: defaultValues.approved,
+    };
+  }, [defaultValues]);
+
   useEffect(() => {
     const initializeForm = async () => {
       reset({ ...defaultValues });
@@ -211,7 +225,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     };
 
     initializeForm();
-  }, [defaultValues, loadDraft, reset, fetchIdeaBox, fetchIdeaCategories]);
+  }, [defaultValuesKey, loadDraft, reset, fetchIdeaBox, fetchIdeaCategories]);
 
   return (
     <Stack p={2} overflow="auto">

@@ -6,7 +6,7 @@ import { checkPermissions } from '@/utils';
 import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -35,20 +35,25 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   const [isLoading, setIsLoading] = useState(false);
 
   // Save user selections to sessionStorage (only for new rooms)
-  const saveUserSelections = useCallback((updates?: UpdateType) => {
-    if (!defaultValues) { // Only for new rooms
-      try {
-        const userIdsToSave = updates ? updates.add : updateUsers.add;
-        sessionStorage.setItem('roomform-users-draft', JSON.stringify(userIdsToSave));
-      } catch (error) {
-        console.warn('Failed to save user selections:', error);
+  const saveUserSelections = useCallback(
+    (updates?: UpdateType) => {
+      if (!defaultValues) {
+        // Only for new rooms
+        try {
+          const userIdsToSave = updates ? updates.add : updateUsers.add;
+          sessionStorage.setItem('roomform-users-draft', JSON.stringify(userIdsToSave));
+        } catch (error) {
+          console.warn('Failed to save user selections:', error);
+        }
       }
-    }
-  }, [defaultValues, updateUsers.add]);
+    },
+    [defaultValues, updateUsers.add]
+  );
 
   // Load user selections from sessionStorage (only for new rooms)
   const loadUserSelections = useCallback(() => {
-    if (!defaultValues) { // Only for new rooms
+    if (!defaultValues) {
+      // Only for new rooms
       try {
         const saved = sessionStorage.getItem('roomform-users-draft');
         if (saved) {
@@ -188,17 +193,31 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     await Promise.all([...addPromises, ...removePromises]);
   };
 
+  // Memoize the key properties of defaultValues to avoid unnecessary re-renders
+  const defaultValuesKey = useMemo(() => {
+    if (!defaultValues) return null;
+    return {
+      hash_id: defaultValues.hash_id,
+      room_name: defaultValues.room_name,
+      description_public: defaultValues.description_public,
+      description_internal: defaultValues.description_internal,
+      phase_duration_1: defaultValues.phase_duration_1,
+      phase_duration_3: defaultValues.phase_duration_3,
+      status: defaultValues.status,
+    };
+  }, [defaultValues]);
+
   useEffect(() => {
     reset({ ...defaultValues });
     fetchRoomUsers();
-    
+
     // Load user selections for new rooms, clear for edit rooms
     if (!defaultValues) {
       loadUserSelections();
     } else {
       clearUserSelections();
     }
-  }, [JSON.stringify(defaultValues), loadUserSelections, clearUserSelections]);
+  }, [defaultValuesKey, loadUserSelections, clearUserSelections, reset]);
 
   return (
     <Stack p={2} overflow="auto">
