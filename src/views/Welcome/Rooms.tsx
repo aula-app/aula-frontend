@@ -15,7 +15,6 @@ const RoomsView = () => {
       { value: 'room_name', labelKey: 'scopes.rooms.fields.name' },
       { value: 'created', labelKey: 'ui.sort.created' },
       { value: 'last_update', labelKey: 'ui.sort.updated' },
-      { value: 'order_importance', labelKey: 'ui.sort.importance' },
     ],
   });
 
