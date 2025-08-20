@@ -13,11 +13,11 @@ export const useDraftStorage = <T extends Record<string, any>>(
   form: UseFormReturn<T>,
   options: UseDraftStorageOptions
 ) => {
-  const { storageKey, selections, onSubmit, onCancel } = options;
+  const { storageKey, isNewRecord, selections, onSubmit, onCancel } = options;
   const { watch, reset, getValues } = form;
 
   // Capture the initial isNewRecord state and don't let it change
-  const [initialIsNewRecord] = useState(options.isNewRecord);
+  const [initialIsNewRecord] = useState(isNewRecord);
 
   const clearDraft = useCallback(() => {
     try {

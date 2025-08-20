@@ -69,7 +69,7 @@ export function ScopeHeader({
     } catch (error) {
       // Silently handle localStorage errors
     }
-  }, [scopeKey]); // Only run when scopeKey changes
+  }, [scopeKey, onSearchChange, onSortKeyChange, onSortDirectionChange]);
 
   // Save preferences when they change
   useEffect(() => {
