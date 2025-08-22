@@ -49,13 +49,19 @@ export function ScopeHeader({
   const [isSortOpen, setIsSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const isLoadingPreferences = useRef(false);
+  const sortDirectionDebounceRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load saved preferences on mount
   useEffect(() => {
+    if (isLoadingPreferences.current) return;
+
     try {
       const savedPreferences = localStorage.getItem(`scope-preferences-${scopeKey}`);
       if (savedPreferences) {
         const preferences = JSON.parse(savedPreferences);
+        isLoadingPreferences.current = true;
+
         if (preferences.searchQuery !== undefined && preferences.searchQuery !== searchQuery) {
           onSearchChange(preferences.searchQuery);
         }
@@ -65,14 +71,22 @@ export function ScopeHeader({
         if (preferences.sortDirection !== undefined && preferences.sortDirection !== sortDirection) {
           onSortDirectionChange(preferences.sortDirection);
         }
+
+        // Reset flag after a short delay to allow the updates to complete
+        setTimeout(() => {
+          isLoadingPreferences.current = false;
+        }, 100);
       }
     } catch (error) {
       // Silently handle localStorage errors
+      isLoadingPreferences.current = false;
     }
-  }, [scopeKey, onSearchChange, onSortKeyChange, onSortDirectionChange]);
+  }, [scopeKey]); // Only depend on scopeKey
 
-  // Save preferences when they change
+  // Save preferences when they change (but not while loading)
   useEffect(() => {
+    if (isLoadingPreferences.current) return;
+
     try {
       const preferences = {
         searchQuery,
@@ -96,7 +110,15 @@ export function ScopeHeader({
   };
 
   const handleSortDirectionToggle = () => {
-    onSortDirectionChange(sortDirection === 'asc' ? 'desc' : 'asc');
+    // Clear any existing debounce timeout
+    if (sortDirectionDebounceRef.current) {
+      clearTimeout(sortDirectionDebounceRef.current);
+    }
+
+    // Debounce rapid clicks to prevent state race conditions
+    sortDirectionDebounceRef.current = setTimeout(() => {
+      onSortDirectionChange(sortDirection === 'asc' ? 'desc' : 'asc');
+    }, 150); // 150ms debounce
   };
 
   // Close sort panel when clicking outside
@@ -162,6 +184,15 @@ export function ScopeHeader({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isSearchOpen]);
+
+  // Cleanup debounce timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (sortDirectionDebounceRef.current) {
+        clearTimeout(sortDirectionDebounceRef.current);
+      }
+    };
+  }, []);
 
   return (
     <Stack
