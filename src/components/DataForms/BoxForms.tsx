@@ -1,11 +1,12 @@
 import { addBox, editBox } from '@/services/boxes';
-import { addIdeaBox, getIdeasByBox, removeIdeaBox } from '@/services/ideas';
+import { addIdeaBox, getIdea, getIdeasByBox, removeIdeaBox } from '@/services/ideas';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import { UpdateType } from '@/types/SettingsTypes';
 import { checkPermissions, phaseOptions } from '@/utils';
+import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -33,6 +34,64 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   const [updateIdeas, setUpdateIdeas] = useState<UpdateType>({ add: [], remove: [] });
   const [isLoading, setIsLoading] = useState(false);
 
+  // Save idea selections to sessionStorage (only for new boxes)
+  const saveIdeaSelections = useCallback(
+    (updates?: UpdateType) => {
+      if (!defaultValues) {
+        // Only for new boxes
+        try {
+          // Calculate the current total selection
+          const currentUpdates = updates || updateIdeas;
+          const baselineIds = ideas.map((idea) => idea.hash_id);
+          const currentSelection = baselineIds
+            .filter((id) => !currentUpdates.remove.includes(id))
+            .concat(currentUpdates.add);
+
+          sessionStorage.setItem('boxform-ideas-draft', JSON.stringify(currentSelection));
+        } catch (error) {
+          console.warn('Failed to save idea selections:', error);
+        }
+      }
+    },
+    [defaultValues, updateIdeas, ideas]
+  );
+
+  // Load idea selections from sessionStorage (only for new boxes)
+  const loadIdeaSelections = useCallback(async () => {
+    if (!defaultValues) {
+      // Only for new boxes
+      try {
+        const saved = sessionStorage.getItem('boxform-ideas-draft');
+        if (saved) {
+          const savedIdeaIds = JSON.parse(saved);
+
+          // For new boxes, populate ideas with restored selections so they show up
+          if (savedIdeaIds.length > 0) {
+            try {
+              const ideaPromises = savedIdeaIds.map((id: string) => getIdea(id));
+              const ideaResponses = await Promise.all(ideaPromises);
+              const validIdeas = ideaResponses.filter((response) => response.data).map((response) => response.data!);
+              setIdeas(validIdeas);
+            } catch (error) {
+              console.warn('Failed to fetch idea objects:', error);
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load idea selections:', error);
+      }
+    }
+  }, [defaultValues]);
+
+  // Clear idea selections from sessionStorage
+  const clearIdeaSelections = useCallback(() => {
+    try {
+      sessionStorage.removeItem('boxform-ideas-draft');
+    } catch (error) {
+      console.warn('Failed to clear idea selections:', error);
+    }
+  }, []);
+
   const [options, setOptions] = useState<{ label: string; value: number; disabled: boolean }[]>(phaseOptions);
 
   const schema = yup.object({
@@ -45,6 +104,15 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     status: yup.number(),
   } as Record<keyof BoxType, any>);
 
+  const form = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: defaultValues ? ' ' : '',
+      phase_duration_1: 0,
+      phase_duration_3: 0,
+    },
+  });
+
   const {
     control,
     formState: { errors },
@@ -54,17 +122,19 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     reset,
     watch,
     setError,
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      name: defaultValues ? ' ' : '',
-      phase_duration_1: 0,
-      phase_duration_3: 0,
-    },
-  });
+  } = form;
 
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
+
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+    storageKey: 'boxform-draft-new',
+    isNewRecord: !defaultValues,
+    onCancel: () => {
+      clearIdeaSelections();
+      onClose();
+    },
+  });
 
   const fetchBoxIdeas = async () => {
     if (!defaultValues?.hash_id) return;
@@ -102,6 +172,8 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
       } else {
         await updateBox(data);
       }
+      clearIdeaSelections();
+      handleDraftSubmit();
     } finally {
       setIsLoading(false);
     }
@@ -168,10 +240,37 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     setRoom(watch('room_hash_id'));
   }, [watch('room_hash_id')]);
 
+  // Memoize the key properties of defaultValues to avoid unnecessary re-renders
+  const defaultValuesKey = useMemo(() => {
+    if (!defaultValues) return null;
+    return {
+      hash_id: defaultValues.hash_id,
+      name: defaultValues.name,
+      description_public: defaultValues.description_public,
+      description_internal: defaultValues.description_internal,
+      room_hash_id: defaultValues.room_hash_id,
+      phase_id: defaultValues.phase_id,
+      phase_duration_1: defaultValues.phase_duration_1,
+      phase_duration_3: defaultValues.phase_duration_3,
+      status: defaultValues.status,
+    };
+  }, [defaultValues]);
+
   useEffect(() => {
-    reset({ ...defaultValues });
-    fetchBoxIdeas();
-  }, [JSON.stringify(defaultValues)]);
+    const initializeForm = async () => {
+      reset({ ...defaultValues });
+      fetchBoxIdeas();
+
+      // Load idea selections for new boxes, clear for edit boxes
+      if (!defaultValues) {
+        await loadIdeaSelections();
+      } else {
+        clearIdeaSelections();
+      }
+    };
+
+    initializeForm();
+  }, [defaultValuesKey, loadIdeaSelections, clearIdeaSelections, reset]);
 
   return (
     <Stack p={2} overflow="auto">
@@ -221,7 +320,11 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
               <IdeaField
                 room={room}
                 defaultValues={ideas}
-                onChange={(updates) => setUpdateIdeas(updates)}
+                onChange={(updates) => {
+                  setUpdateIdeas(updates);
+                  // Save immediately with the new updates
+                  saveIdeaSelections(updates);
+                }}
                 disabled={isLoading}
               />
             )}
@@ -232,7 +335,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button

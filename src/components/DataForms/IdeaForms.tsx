@@ -2,9 +2,10 @@ import { addIdeaCategory, getCategories, removeIdeaCategory } from '@/services/c
 import { addIdea, addIdeaBox, editIdea, getIdeaBoxes, removeIdeaBox } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { announceToScreenReader, checkPermissions } from '@/utils';
+import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -56,6 +57,11 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       .required(t('forms.validation.required')),
   } as Record<keyof IdeaType, any>);
 
+  const form = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: { title: defaultValues ? ' ' : '' },
+  });
+
   const {
     register,
     reset,
@@ -63,31 +69,39 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: { title: defaultValues ? ' ' : '' },
-  });
+  } = form;
 
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
-  const fetchIdeaBox = async () => {
+  const {
+    handleSubmit: handleDraftSubmit,
+    handleCancel,
+    loadDraft,
+  } = useDraftStorage(form, {
+    storageKey: 'ideaform-draft-new',
+    isNewRecord: !defaultValues,
+    selections: { box, category },
+    onCancel: onClose,
+  });
+
+  const fetchIdeaBox = useCallback(async () => {
     if (!defaultValues?.hash_id) return;
     const response = await getIdeaBoxes(defaultValues.hash_id);
     if (!response.data) return;
     const responseBox = response.data.map((box) => box.hash_id)[0];
     setBox(responseBox);
     setStartingBox(responseBox);
-  };
+  }, [defaultValues?.hash_id]);
 
-  const fetchIdeaCategories = async () => {
+  const fetchIdeaCategories = useCallback(async () => {
     if (!defaultValues?.hash_id) return;
     const response = await getCategories(defaultValues.hash_id);
     if (!response.data) return;
     const responseCategory = response.data.map((category) => category.id)[0];
     setCategory(responseCategory);
     setStartingCategory(responseCategory);
-  };
+  }, [defaultValues?.hash_id]);
 
   const onSubmit = async (data: SchemaType) => {
     try {
@@ -101,17 +115,19 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
         await updateIdea(data);
       }
 
+      // Clear draft storage
+      handleDraftSubmit();
+
       // Announce successful form submission to screen readers
       announceToScreenReader(t('ui.accessibility.formSubmitted'), 'assertive');
       onClose();
-    } catch (error) {
+    } catch {
       // Announce form submission failure to screen readers
       announceToScreenReader(t('ui.accessibility.formError'), 'assertive');
       setError('root', {
         type: 'manual',
         message: t('errors.default'),
       });
-
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +151,6 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     if (!response.data) return;
     setIdeaBox(response.data.hash_id);
     setIdeaCategory(response.data.hash_id);
-    onClose();
   };
 
   const updateIdea = async (data: SchemaType) => {
@@ -159,7 +174,6 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     if (!response.data) return;
     setIdeaBox(defaultValues?.hash_id);
     setIdeaCategory(defaultValues?.hash_id);
-    onClose();
   };
 
   const setIdeaBox = async (idea_id: string) => {
@@ -176,11 +190,42 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     else await removeIdeaCategory(idea_id, startingCategory);
   };
 
+  // Memoize the key properties of defaultValues to avoid unnecessary re-renders
+  const defaultValuesKey = useMemo(() => {
+    if (!defaultValues) return null;
+    return {
+      hash_id: defaultValues.hash_id,
+      title: defaultValues.title,
+      content: defaultValues.content,
+      room_hash_id: defaultValues.room_hash_id,
+      custom_field1: defaultValues.custom_field1,
+      custom_field2: defaultValues.custom_field2,
+      approved: defaultValues.approved,
+    };
+  }, [defaultValues]);
+
   useEffect(() => {
-    reset({ ...defaultValues });
-    fetchIdeaBox();
-    fetchIdeaCategories();
-  }, [JSON.stringify(defaultValues)]);
+    const initializeForm = async () => {
+      reset({ ...defaultValues });
+      fetchIdeaBox();
+      fetchIdeaCategories();
+
+      // Load selections for new ideas only
+      if (!defaultValues) {
+        const savedSelections = loadDraft();
+        if (savedSelections) {
+          if (savedSelections.box) {
+            setBox(savedSelections.box);
+          }
+          if (savedSelections.category) {
+            setCategory(savedSelections.category);
+          }
+        }
+      }
+    };
+
+    initializeForm();
+  }, [defaultValuesKey, loadDraft, reset, fetchIdeaBox, fetchIdeaCategories]);
 
   return (
     <Stack p={2} overflow="auto">
@@ -236,14 +281,18 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
                 <SelectBoxField
                   defaultValue={box}
                   room_id={defaultValues?.room_hash_id || room_id}
-                  onChange={setBox}
+                  onChange={(newBox) => {
+                    setBox(newBox);
+                  }}
                   disabled={isLoading}
                 />
               )}
               {checkPermissions('ideas', 'addCategory') && (
                 <CategoryField
                   defaultValue={category}
-                  onChange={(updates) => setCategory(updates)}
+                  onChange={(newCategory) => {
+                    setCategory(newCategory);
+                  }}
                   disabled={isLoading}
                 />
               )}
@@ -255,7 +304,12 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" data-testid="cancel-idea-form" aria-label={t('actions.cancel')}>
+            <Button
+              onClick={handleCancel}
+              color="error"
+              data-testid="cancel-idea-form"
+              aria-label={t('actions.cancel')}
+            >
               {t('actions.cancel')}
             </Button>
             <Button

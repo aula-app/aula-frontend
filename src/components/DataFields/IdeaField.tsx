@@ -40,8 +40,14 @@ const IdeaField: React.FC<Props> = ({
       ? response.data.map((idea) => ({ label: idea.title, value: idea.hash_id }))
       : [];
     const boxIdeas = defaultValues.map((idea) => ({ label: idea.title, value: idea.hash_id }));
-    const options = wildIdeas.concat(boxIdeas);
-    setOptions(options);
+    
+    // Combine and deduplicate by value
+    const allOptions = wildIdeas.concat(boxIdeas);
+    const uniqueOptions = allOptions.filter((option, index, array) => 
+      array.findIndex(item => item.value === option.value) === index
+    );
+    
+    setOptions(uniqueOptions);
   };
 
   const handleChange = (selected: SelectOptionsType) => {

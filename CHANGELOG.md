@@ -1,5 +1,14 @@
 ## 1.4.0
 
+- **Bug fixes:**
+  - Fixed Playwright test import errors and ESLint configuration issues
+  - Fixed markdown rendering in data tables by removing line breaks for proper display
+  - Fixed broken message forms that were preventing proper submission
+  - Display error messages when creation and edit requests fail
+  - Prevent dialogs from closing on unsuccessful requests to allow error correction
+  - Fixed name change requests not working properly
+  - Fixed UserField component accessibility issues with label-input associations
+  - Resolved draft storage saving data incorrectly for existing records during edits
 - **New features:**
   - Added comprehensive ScopeHeader component with search and sort functionality for improved data navigation
   - Implemented unified filtering system with `useSearchAndSort` and `useFilteredData` hooks for consistent UI patterns
@@ -22,15 +31,9 @@
   - Improved ESLint configuration with separate TypeScript config for test files
   - Enhanced Playwright test structure with proper assertions and dynamic user handling
   - Better error handling and loading states in UserField component
-- **Bug fixes:**
-  - Fixed broken message forms that were preventing proper submission
-  - Display error messages when creation and edit requests fail
-  - Prevent dialogs from closing on unsuccessful requests to allow error correction
-  - Fixed name change requests not working properly
-  - Fixed UserField component accessibility issues with label-input associations
-  - Resolved draft storage incorrectly saving data for existing records during edits
-  - Fixed Playwright test import errors and ESLint configuration issues
-  - Fixed markdown rendering in data tables by removing line breaks for proper display
+  - Added offline page to inform users when the instance is unavailable
+  - Implemented form data persistence using sessionStorage to prevent data loss during page navigation
+  - Enhanced form validation and error handling across all data forms
 
 ## 1.3.0
 

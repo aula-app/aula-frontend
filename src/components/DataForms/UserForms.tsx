@@ -2,6 +2,7 @@ import { addSpecialRoles, addUser, addUserRoom, editUser, getUserRooms, removeUs
 import { UserType } from '@/types/Scopes';
 import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
+import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -40,15 +41,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     username: yup.string().required(t('forms.validation.required')),
   } as Record<keyof UserType, any>);
 
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    register,
-    reset,
-    setError,
-    watch,
-  } = useForm({
+  const form = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       displayname: defaultValues ? ' ' : '',
@@ -59,8 +52,24 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     },
   });
 
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    register,
+    reset,
+    setError,
+    watch,
+  } = form;
+
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
+
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+    storageKey: 'userform-draft-new',
+    isNewRecord: !defaultValues,
+    onCancel: onClose,
+  });
 
   const fetchUserRooms = async () => {
     if (!defaultValues?.hash_id) return;
@@ -89,6 +98,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       } else {
         await updateUser(data);
       }
+      handleDraftSubmit();
     } finally {
       setIsLoading(false);
     }
@@ -328,7 +338,12 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
             />
           </Stack>
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" data-testid="cancel-user-form" aria-label={t('actions.cancel')}>
+            <Button
+              onClick={handleCancel}
+              color="error"
+              data-testid="cancel-user-form"
+              aria-label={t('actions.cancel')}
+            >
               {t('actions.cancel')}
             </Button>
             <Button

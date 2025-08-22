@@ -2,6 +2,7 @@ import { addMessage, editMessage } from '@/services/messages';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
+import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -56,15 +57,7 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
     }),
   });
 
-  const {
-    register,
-    reset,
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-    setError,
-  } = useForm({
+  const form = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       headline: defaultValues ? ' ' : '',
@@ -76,8 +69,25 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
     mode: 'onChange',
   });
 
+  const {
+    register,
+    reset,
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    setError,
+    watch,
+  } = form;
+
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
+
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+    storageKey: 'message-form-draft-new',
+    isNewRecord: !defaultValues,
+    onCancel: onClose,
+  });
 
   const onSubmit = async (data: SchemaType) => {
     try {
@@ -88,6 +98,7 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
       } else {
         'user_needs_to_consent' in defaultValues ? await updateMessage(data) : await updateMessage(data);
       }
+      handleDraftSubmit();
     } finally {
       setIsLoading(false);
     }
@@ -165,6 +176,19 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
     setMessageType(newType);
   };
 
+  // Watch for target_id and target_group to update messageType
+  const watchedTargetId = watch('target_id');
+  const watchedTargetGroup = watch('target_group');
+
+  useEffect(() => {
+    // Set messageType based on which target field has a value
+    if (watchedTargetId && !watchedTargetGroup) {
+      setMessageType(0); // User target
+    } else if (watchedTargetGroup && !watchedTargetId) {
+      setMessageType(1); // Group target
+    }
+  }, [watchedTargetId, watchedTargetGroup]);
+
   useEffect(() => {
     if (defaultValues) {
       const initialMessageType = 'target_id' in defaultValues && defaultValues.user_hash_id ? 0 : 1;
@@ -232,7 +256,7 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button type="submit" variant="contained" disabled={isLoading} aria-label={t('actions.confirm')}>

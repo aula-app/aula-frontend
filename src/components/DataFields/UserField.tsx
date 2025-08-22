@@ -47,6 +47,14 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
     }
   }, [open, options.length]);
 
+  // Load options on mount if there's a value to ensure proper display of selected option
+  useEffect(() => {
+    // Only fetch if we have no options and no loading is in progress
+    if (options.length === 0 && !loading) {
+      fetchUsers();
+    }
+  }, [options.length, loading]);
+
   return (
     <Controller
       name="target_id"

@@ -1,4 +1,5 @@
 import { addCategory, CategoryArguments, editCategory } from '@/services/categories';
+import { useDraftStorage } from '@/hooks';
 import { CategoryType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -30,6 +31,11 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
     description_internal: yup.string().required(t('forms.validation.required')),
   } as Record<keyof CategoryArguments, any>);
 
+  const form = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {},
+  });
+
   const {
     control,
     formState: { errors },
@@ -37,9 +43,14 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
     register,
     reset,
     setError,
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {},
+  } = form;
+
+  // Draft storage for form persistence
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+    storageKey: 'categoryform-draft',
+    isNewRecord: !defaultValues,
+    onSubmit: () => onClose(),
+    onCancel: () => onClose(),
   });
 
   // Infer TypeScript type from the Yup schema
@@ -73,6 +84,9 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
       return;
     }
     if (!request.data) return;
+
+    // Clear draft storage
+    handleDraftSubmit();
     onClose();
   };
 
@@ -91,6 +105,9 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
       });
       return;
     }
+
+    // Clear draft storage
+    handleDraftSubmit();
     onClose();
   };
 
@@ -130,7 +147,7 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button

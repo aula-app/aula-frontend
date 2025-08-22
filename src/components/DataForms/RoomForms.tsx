@@ -3,9 +3,10 @@ import { addUserRoom, removeUserRoom } from '@/services/users';
 import { RoomType } from '@/types/Scopes';
 import { UpdateType } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
+import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -33,6 +34,47 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   const [updateUsers, setUpdateUsers] = useState<UpdateType>({ add: [], remove: [] });
   const [isLoading, setIsLoading] = useState(false);
 
+  // Save user selections to sessionStorage (only for new rooms)
+  const saveUserSelections = useCallback(
+    (updates?: UpdateType) => {
+      if (!defaultValues) {
+        // Only for new rooms
+        try {
+          const userIdsToSave = updates ? updates.add : updateUsers.add;
+          sessionStorage.setItem('roomform-users-draft', JSON.stringify(userIdsToSave));
+        } catch (error) {
+          console.warn('Failed to save user selections:', error);
+        }
+      }
+    },
+    [defaultValues, updateUsers.add]
+  );
+
+  // Load user selections from sessionStorage (only for new rooms)
+  const loadUserSelections = useCallback(() => {
+    if (!defaultValues) {
+      // Only for new rooms
+      try {
+        const saved = sessionStorage.getItem('roomform-users-draft');
+        if (saved) {
+          const savedUserIds = JSON.parse(saved);
+          setUpdateUsers({ add: savedUserIds, remove: [] });
+        }
+      } catch (error) {
+        console.warn('Failed to load user selections:', error);
+      }
+    }
+  }, [defaultValues]);
+
+  // Clear user selections from sessionStorage
+  const clearUserSelections = useCallback(() => {
+    try {
+      sessionStorage.removeItem('roomform-users-draft');
+    } catch (error) {
+      console.warn('Failed to clear user selections:', error);
+    }
+  }, []);
+
   const schema = yup.object({
     room_name: yup.string().required(t('forms.validation.required')),
     description_public: yup.string().required(t('forms.validation.required')),
@@ -41,15 +83,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     phase_duration_3: yup.number().required(t('forms.validation.required')),
   } as Record<keyof RoomArguments, any>);
 
-  const {
-    setValue,
-    register,
-    reset,
-    control,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm({
+  const form = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       room_name: defaultValues ? ' ' : '',
@@ -61,8 +95,27 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     },
   });
 
+  const {
+    setValue,
+    register,
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = form;
+
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
+
+  const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
+    storageKey: 'roomform-draft-new',
+    isNewRecord: !defaultValues,
+    onCancel: () => {
+      clearUserSelections();
+      onClose();
+    },
+  });
 
   const fetchRoomUsers = async () => {
     if (!defaultValues?.hash_id || isDefault) return;
@@ -81,6 +134,8 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
       } else {
         await updateRoom(data);
       }
+      clearUserSelections();
+      handleDraftSubmit();
     } finally {
       setIsLoading(false);
     }
@@ -138,10 +193,31 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     await Promise.all([...addPromises, ...removePromises]);
   };
 
+  // Memoize the key properties of defaultValues to avoid unnecessary re-renders
+  const defaultValuesKey = useMemo(() => {
+    if (!defaultValues) return null;
+    return {
+      hash_id: defaultValues.hash_id,
+      room_name: defaultValues.room_name,
+      description_public: defaultValues.description_public,
+      description_internal: defaultValues.description_internal,
+      phase_duration_1: defaultValues.phase_duration_1,
+      phase_duration_3: defaultValues.phase_duration_3,
+      status: defaultValues.status,
+    };
+  }, [defaultValues]);
+
   useEffect(() => {
     reset({ ...defaultValues });
     fetchRoomUsers();
-  }, [JSON.stringify(defaultValues)]);
+
+    // Load user selections for new rooms, clear for edit rooms
+    if (!defaultValues) {
+      loadUserSelections();
+    } else {
+      clearUserSelections();
+    }
+  }, [defaultValuesKey, loadUserSelections, clearUserSelections, reset]);
 
   return (
     <Stack p={2} overflow="auto">
@@ -200,8 +276,12 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
               )}
               {checkPermissions('rooms', 'addUser') && !isDefault && (
                 <UsersField
-                  defaultValues={users}
-                  onChange={(updates) => setUpdateUsers(updates)}
+                  defaultValues={defaultValues ? users : updateUsers.add}
+                  onChange={(updates) => {
+                    setUpdateUsers(updates);
+                    // Save immediately with the new updates
+                    saveUserSelections(updates);
+                  }}
                   disabled={isLoading}
                 />
               )}
@@ -213,7 +293,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={onClose} color="error" aria-label={t('actions.cancel')}>
+            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
             <Button
