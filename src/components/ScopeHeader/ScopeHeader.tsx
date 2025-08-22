@@ -199,7 +199,13 @@ export function ScopeHeader({
       direction="row"
       alignItems="center"
       justifyContent="space-between"
-      sx={{ px: 2, minWidth: 0, width: '100%', scrollSnapAlign: 'start' }}
+      sx={{
+        px: 2,
+        minWidth: 0,
+        width: '100%',
+        maxWidth: '100vw', // Prevent viewport overflow
+        scrollSnapAlign: 'start',
+      }}
       role="banner"
       aria-labelledby={`${scopeKey}-heading`}
     >
@@ -225,7 +231,11 @@ export function ScopeHeader({
       <Stack
         direction="row"
         alignItems="center"
-        sx={{ flexShrink: 0 }}
+        sx={{
+          flexShrink: 0,
+          maxWidth: '70vw',
+          minWidth: 0, // Allow shrinking if needed
+        }}
         role="toolbar"
         aria-label={t('ui.accessibility.actionToolbar')}
       >
@@ -244,6 +254,11 @@ export function ScopeHeader({
               aria-expanded={isSearchOpen}
               role="region"
               aria-labelledby="search-button"
+              timeout={300}
+              easing={{
+                enter: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                exit: 'cubic-bezier(0.4, 0, 0.6, 1)',
+              }}
             >
               <TextField
                 label={t('ui.common.search')}
@@ -253,7 +268,14 @@ export function ScopeHeader({
                 size="small"
                 variant="outlined"
                 autoFocus
-                sx={{ width: 250, minWidth: 150, ml: 2 }}
+                sx={{
+                  width: { xs: 180, sm: 200 },
+                  minWidth: { xs: 120, sm: 150 },
+                  ml: 2,
+                  '& .MuiOutlinedInput-root': {
+                    transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+                  },
+                }}
                 aria-describedby={`search-description-${scopeKey}`}
                 slotProps={{
                   input: {
@@ -289,11 +311,23 @@ export function ScopeHeader({
               aria-expanded={isSortOpen}
               role="region"
               aria-labelledby="sort-button"
+              timeout={300}
+              easing={{
+                enter: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                exit: 'cubic-bezier(0.4, 0, 0.6, 1)',
+              }}
             >
               <Stack direction="row" alignItems="center" gap={1}>
                 <FormControl
                   size="small"
-                  sx={{ width: 200, minWidth: 120, ml: 2 }}
+                  sx={{
+                    width: { xs: 140, sm: 160, md: 180 },
+                    minWidth: { xs: 100, sm: 120 },
+                    ml: 2,
+                    '& .MuiOutlinedInput-root': {
+                      transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+                    },
+                  }}
                   aria-describedby={`sort-description-${scopeKey}`}
                 >
                   <InputLabel id={`sort-label-${scopeKey}`}>{t('ui.sort.by')}</InputLabel>
