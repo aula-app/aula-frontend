@@ -49,12 +49,8 @@ const RequestsView = () => {
       />
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
         {isLoading && <ReportCardSkeleton />}
-        {error && <Typography>{t(error)}</Typography>}
         {!isLoading && !error && requests.length === 0 && (
-          <EmptyState 
-            title={t('ui.empty.requests.title')} 
-            description={t('ui.empty.requests.description')} 
-          />
+          <EmptyState title={t('ui.empty.requests.title')} description={t('ui.empty.requests.description')} />
         )}
         {requests.length > 0 &&
           requests.map((report) => <ReportCard report={report} onReload={fetchRequests} key={report.hash_id} />)}

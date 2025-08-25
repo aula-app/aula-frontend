@@ -138,7 +138,6 @@ const UsersView: React.FC = () => {
           extraTools={extraTools}
           isLoading={isLoading}
         />
-        {error && <Typography>{t(error)}</Typography>}
       </Stack>
       <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>

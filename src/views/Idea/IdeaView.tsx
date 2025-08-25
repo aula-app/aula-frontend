@@ -141,7 +141,6 @@ const IdeaView = () => {
   ) : (
     <Stack width="100%" height="100%" overflow="auto">
       {isLoading && <IdeaBubbleSkeleton />}
-      {error && <Typography>{t(error)}</Typography>}
     </Stack>
   );
 };
