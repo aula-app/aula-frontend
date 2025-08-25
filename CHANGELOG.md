@@ -1,6 +1,7 @@
 ## 1.4.1
 
 - **Bug fixes:**
+  - Resolved draft storage being kept after submit
   - Remove error message from empty boxes and settings pages
 
 ## 1.4.0

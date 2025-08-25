@@ -79,7 +79,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     handleCancel,
     loadDraft,
   } = useDraftStorage(form, {
-    storageKey: 'ideaform-draft-new',
+    storageKey: `ideaform-draft-${room_id || 'unknown'}`,
     isNewRecord: !defaultValues,
     selections: { box, category },
     onCancel: onClose,
@@ -109,18 +109,20 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       // Announce form submission to screen readers
       announceToScreenReader(t('ui.accessibility.processingRequest'), 'assertive');
 
+      let success = false;
       if (!defaultValues) {
-        await newIdea(data);
+        success = await newIdea(data);
       } else {
-        await updateIdea(data);
+        success = await updateIdea(data);
       }
 
-      // Clear draft storage
-      handleDraftSubmit();
-
-      // Announce successful form submission to screen readers
-      announceToScreenReader(t('ui.accessibility.formSubmitted'), 'assertive');
-      onClose();
+      if (success) {
+        // Clear draft storage
+        handleDraftSubmit();
+        // Announce successful form submission to screen readers
+        announceToScreenReader(t('ui.accessibility.formSubmitted'), 'assertive');
+        onClose();
+      }
     } catch {
       // Announce form submission failure to screen readers
       announceToScreenReader(t('ui.accessibility.formError'), 'assertive');
@@ -133,7 +135,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     }
   };
 
-  const newIdea = async (data: SchemaType) => {
+  const newIdea = async (data: SchemaType): Promise<boolean> => {
     const response = await addIdea({
       room_id: data.room_hash_id || room_id,
       title: data.title,
@@ -146,15 +148,25 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
         type: 'manual',
         message: response.error || t('errors.default'),
       });
-      return;
+      return false;
     }
-    if (!response.data) return;
-    setIdeaBox(response.data.hash_id);
-    setIdeaCategory(response.data.hash_id);
+    if (!response.data) return false;
+    
+    try {
+      await setIdeaBox(response.data.hash_id);
+      await setIdeaCategory(response.data.hash_id);
+      return true;
+    } catch (error) {
+      setError('root', {
+        type: 'manual',
+        message: t('errors.default'),
+      });
+      return false;
+    }
   };
 
-  const updateIdea = async (data: SchemaType) => {
-    if (!defaultValues?.hash_id) return;
+  const updateIdea = async (data: SchemaType): Promise<boolean> => {
+    if (!defaultValues?.hash_id) return false;
     const response = await editIdea({
       room_id: data.room_hash_id,
       title: data.title,
@@ -169,11 +181,21 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
         type: 'manual',
         message: response.error || t('errors.default'),
       });
-      return;
+      return false;
     }
-    if (!response.data) return;
-    setIdeaBox(defaultValues?.hash_id);
-    setIdeaCategory(defaultValues?.hash_id);
+    if (!response.data) return false;
+    
+    try {
+      await setIdeaBox(defaultValues?.hash_id);
+      await setIdeaCategory(defaultValues?.hash_id);
+      return true;
+    } catch (error) {
+      setError('root', {
+        type: 'manual',
+        message: t('errors.default'),
+      });
+      return false;
+    }
   };
 
   const setIdeaBox = async (idea_id: string) => {

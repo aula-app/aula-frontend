@@ -74,7 +74,6 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
     reset,
     control,
     handleSubmit,
-    setValue,
     formState: { errors },
     setError,
     watch,
@@ -93,18 +92,21 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
     try {
       setError('root', {});
       setIsLoading(true);
+      let success = false;
       if (!defaultValues) {
-        messageType === 0 ? await newMessage(data) : await newMessage(data);
+        success = await newMessage(data);
       } else {
-        'user_needs_to_consent' in defaultValues ? await updateMessage(data) : await updateMessage(data);
+        success = await updateMessage(data);
       }
-      handleDraftSubmit();
+      if (success) {
+        handleDraftSubmit();
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  const newMessage = async (data: SchemaType) => {
+  const newMessage = async (data: SchemaType): Promise<boolean> => {
     let target_id: string | null = null;
     let target_group: number | null = null;
 
@@ -132,13 +134,17 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
         type: 'manual',
         message: request.error || t('errors.default'),
       });
-      return;
+      return false;
     }
-    if (!request.error_code) onClose();
+    if (!request.error_code) {
+      onClose();
+      return true;
+    }
+    return false;
   };
 
-  const updateMessage = async (data: SchemaType) => {
-    if (!defaultValues || 'user_needs_to_consent' in defaultValues || !defaultValues?.hash_id) return;
+  const updateMessage = async (data: SchemaType): Promise<boolean> => {
+    if (!defaultValues || 'user_needs_to_consent' in defaultValues || !defaultValues?.hash_id) return false;
 
     let target_id: string | null = null;
     let target_group: number | null = null;
@@ -166,9 +172,13 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
         type: 'manual',
         message: request.error || t('errors.default'),
       });
-      return;
+      return false;
     }
-    if (!request.error_code) onClose();
+    if (!request.error_code) {
+      onClose();
+      return true;
+    }
+    return false;
   };
 
   const changeTarget = (event: React.ChangeEvent<HTMLInputElement>) => {
