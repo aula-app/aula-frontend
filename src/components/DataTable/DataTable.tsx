@@ -3,12 +3,24 @@ import { StatusTypes } from '@/types/Generics';
 import { PossibleFields, SettingsType, SettingType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { getDataLimit } from '@/utils';
-import { Box, Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  Skeleton,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+} from '@mui/material';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataItem from './DataItem';
 import DataRow from './DataRow';
 import EmptyState from '../EmptyState';
+import TableSkeleton from './TableSkeleton';
 
 type Props = {
   scope: SettingNamesType;
@@ -106,7 +118,9 @@ const DataTable: React.FC<Props> = ({
           position: 'relative',
         }}
       >
-        {rows.length === 0 ? (
+        {isLoading ? (
+          <TableSkeleton />
+        ) : rows.length === 0 ? (
           <EmptyState title={t(`ui.empty.${scope}.title`)} description={t(`ui.empty.${scope}.description`)} />
         ) : (
           <Table
