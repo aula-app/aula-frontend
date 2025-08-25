@@ -121,7 +121,6 @@ const BoxesView: React.FC = () => {
           setDelete={deleteBoxes}
           isLoading={isLoading}
         />
-        {error && <Typography>{t(error)}</Typography>}
         <PaginationBar pages={Math.ceil(totalBoxes / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>

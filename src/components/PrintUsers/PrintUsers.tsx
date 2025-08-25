@@ -182,7 +182,6 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
         <DialogTitle>{t('settings.users.printTitle')}</DialogTitle>
         <DialogContent>
           {isLoading && <Skeleton />}
-          {error && <Typography>{t(error)}</Typography>}
           <SelectRoom room={roomId} setRoom={setRoomId} />
           <FormGroup>
             <FormControlLabel

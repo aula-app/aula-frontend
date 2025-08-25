@@ -114,7 +114,6 @@ const MessagesView: React.FC = () => {
           setDelete={deleteMessages}
           isLoading={isLoading}
         />
-        {error && <Typography>{t(error)}</Typography>}
         <PaginationBar pages={Math.ceil(totalMessages / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>

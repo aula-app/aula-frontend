@@ -163,7 +163,6 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
           })}
         </DialogTitle>
         {isLoading && <Skeleton />}
-        {error && <Typography>{t(error)}</Typography>}
         <List sx={{ pt: 0 }}>
           {rooms.map((room) => (
             <ListItem disablePadding key={room.hash_id}>

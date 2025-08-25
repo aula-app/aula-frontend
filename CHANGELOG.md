@@ -1,3 +1,8 @@
+## 1.4.1
+
+- **Bug fixes:**
+  - Remove error message from empty boxes and settings pages
+
 ## 1.4.0
 
 - **Bug fixes:**

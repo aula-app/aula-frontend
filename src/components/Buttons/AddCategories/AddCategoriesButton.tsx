@@ -127,7 +127,6 @@ const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
             })}
           </DialogTitle>
           {isLoading && <Skeleton />}
-          {error && <Typography>{t(error)}</Typography>}
           <List sx={{ pt: 0 }}>
             {categories.map((category) => (
               <ListItem

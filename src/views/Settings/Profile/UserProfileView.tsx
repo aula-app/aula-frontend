@@ -39,7 +39,6 @@ const UserView = () => {
   return (
     <>
       {isLoading && <ProfileEditorSkeleton />}
-      {error && <Typography>{t(error)}</Typography>}
       {user && !isLoading && (
         <Stack width="100%" height="100%" sx={{ overflowY: 'auto', overscrollBehavior: 'contain' }} p={2}>
           <Typography variant="h1">{t('ui.navigation.profile')}</Typography>
