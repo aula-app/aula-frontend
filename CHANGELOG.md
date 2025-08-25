@@ -1,3 +1,8 @@
+## 1.4.1
+
+- **Bug fixes:**
+  - Resolved draft storage being kept after submit
+
 ## 1.4.0
 
 - **Bug fixes:**
