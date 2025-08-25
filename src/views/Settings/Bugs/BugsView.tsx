@@ -49,12 +49,8 @@ const BugsView = () => {
       />
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
         {isLoading && <ReportCardSkeleton />}
-        {error && <Typography>{t(error)}</Typography>}
         {!isLoading && !error && bugs.length === 0 && (
-          <EmptyState 
-            title={t('ui.empty.bugs.title')} 
-            description={t('ui.empty.bugs.description')} 
-          />
+          <EmptyState title={t('ui.empty.bugs.title')} description={t('ui.empty.bugs.description')} />
         )}
         {bugs.length > 0 && bugs.map((bug) => <ReportCard report={bug} onReload={fetchBugs} key={bug.id} />)}
       </Stack>

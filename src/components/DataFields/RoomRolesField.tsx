@@ -88,11 +88,11 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
 
   return (
     <>
-      <Button 
-        variant="outlined" 
-        color="secondary" 
-        onClick={() => setOpen(true)} 
-        disabled={disabled} 
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={() => setOpen(true)}
+        disabled={disabled}
         aria-label={t('actions.set', { var: t('roles.roomRoles') })}
         {...restOfProps}
       >
@@ -101,10 +101,10 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
           var: t('roles.roomRoles'),
         })}
       </Button>
-      <Dialog 
-        onClose={() => setOpen(false)} 
-        open={open} 
-        fullWidth 
+      <Dialog
+        onClose={() => setOpen(false)}
+        open={open}
+        fullWidth
         maxWidth="sm"
         aria-labelledby="room-roles-dialog-title"
         aria-describedby="room-roles-dialog-description"
@@ -116,9 +116,8 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
           })}
         </DialogTitle>
         {isLoading && <Skeleton />}
-        {error && <Typography>{t(error)}</Typography>}
-        <List 
-          sx={{ maxHeight: 300, overflow: 'auto', display: 'flex', flexDirection: 'column' }} 
+        <List
+          sx={{ maxHeight: 300, overflow: 'auto', display: 'flex', flexDirection: 'column' }}
           role="group"
           aria-label={t('ui.accessibility.roomRolesList')}
           id="room-roles-dialog-description"
@@ -132,8 +131,8 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
                   ? defaultLevel
                   : 0;
             return (
-              <ListItemButton 
-                key={room.hash_id} 
+              <ListItemButton
+                key={room.hash_id}
                 sx={{ py: 0, order: room.type === 1 ? 0 : 1 }}
                 tabIndex={index === 0 ? 0 : -1} // Make first item tabbable, others reachable with arrow keys
                 role="listitem"
@@ -153,10 +152,10 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
                     />
                   }
                 >
-                  <ListItemText 
-                    primary={room.room_name || 'Aula'} 
+                  <ListItemText
+                    primary={room.room_name || 'Aula'}
                     primaryTypographyProps={{
-                      id: `room-name-${room.hash_id}`
+                      id: `room-name-${room.hash_id}`,
                     }}
                   />
                 </ListItem>
@@ -165,21 +164,10 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
           })}
         </List>
         <DialogActions sx={{ p: 3, pt: 2 }}>
-          <Button 
-            onClick={handleClose} 
-            color="secondary" 
-            autoFocus
-            tabIndex={0}
-            aria-label={t('actions.cancel')}
-          >
+          <Button onClick={handleClose} color="secondary" autoFocus tabIndex={0} aria-label={t('actions.cancel')}>
             {t('actions.cancel')}
           </Button>
-          <Button 
-            onClick={onSubmit} 
-            variant="contained"
-            tabIndex={0}
-            aria-label={t('actions.confirm')}
-          >
+          <Button onClick={onSubmit} variant="contained" tabIndex={0} aria-label={t('actions.confirm')}>
             {t('actions.confirm')}
           </Button>
         </DialogActions>

@@ -119,52 +119,52 @@ const WildIdeas = () => {
       flex={1}
       spacing={2}
     >
-      {isLoading && <IdeaBubbleSkeleton />}
-      {!isLoading &&
-        (ideas.length === 0 ? (
-          <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
-        ) : (
-          <Stack width="100%">
-            <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%" pb={2}>
-              <Stack direction="row" alignItems="center" gap={1}>
-                <AppIcon icon="idea" />
-                <Typography variant="h2">{t('ui.navigation.ideas')}</Typography>
-              </Stack>
-              <SortButton
-                options={IDEAS_SORT_OPTIONS}
-                onSelect={(orderby: string) => {
-                  setOrderby(orderby as keyof IdeaType);
-                }}
-                onReorder={(asc: boolean) => {
-                  setAsc(asc);
-                }}
-              ></SortButton>
+      {isLoading ? (
+        <IdeaBubbleSkeleton />
+      ) : ideas.length === 0 ? (
+        <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
+      ) : (
+        <Stack width="100%">
+          <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%" pb={2}>
+            <Stack direction="row" alignItems="center" gap={1}>
+              <AppIcon icon="idea" />
+              <Typography variant="h2">{t('ui.navigation.ideas')}</Typography>
             </Stack>
-            <Stack width="100%" gap={2}>
-              {ideas
-                .slice()
-                .sort((a, b) => {
-                  const valueA = a[orderby];
-                  const valueB = b[orderby];
-                  if (typeof valueA === 'number' && typeof valueB === 'number') {
-                    return asc ? valueA - valueB : valueB - valueA;
-                  }
-                  return asc
-                    ? String(valueA).localeCompare(String(valueB))
-                    : String(valueB).localeCompare(String(valueA));
-                })
-                .map((idea) => (
-                  <IdeaBubble
-                    key={idea.id}
-                    idea={idea}
-                    to={`idea/${idea.hash_id}`}
-                    onEdit={() => onEdit(idea)}
-                    onDelete={() => onDelete(idea.hash_id)}
-                  />
-                ))}
-            </Stack>
+            <SortButton
+              options={IDEAS_SORT_OPTIONS}
+              onSelect={(orderby: string) => {
+                setOrderby(orderby as keyof IdeaType);
+              }}
+              onReorder={(asc: boolean) => {
+                setAsc(asc);
+              }}
+            ></SortButton>
           </Stack>
-        ))}
+          <Stack width="100%" gap={2}>
+            {ideas
+              .slice()
+              .sort((a, b) => {
+                const valueA = a[orderby];
+                const valueB = b[orderby];
+                if (typeof valueA === 'number' && typeof valueB === 'number') {
+                  return asc ? valueA - valueB : valueB - valueA;
+                }
+                return asc
+                  ? String(valueA).localeCompare(String(valueB))
+                  : String(valueB).localeCompare(String(valueA));
+              })
+              .map((idea) => (
+                <IdeaBubble
+                  key={idea.id}
+                  idea={idea}
+                  to={`idea/${idea.hash_id}`}
+                  onEdit={() => onEdit(idea)}
+                  onDelete={() => onDelete(idea.hash_id)}
+                />
+              ))}
+          </Stack>
+        </Stack>
+      )}
       {checkPermissions('ideas', 'create') && room_id && (
         <Fab
           aria-label="add idea"

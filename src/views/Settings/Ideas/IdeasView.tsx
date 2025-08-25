@@ -124,7 +124,6 @@ const IdeasView: React.FC = () => {
           extraTools={extraTools}
           isLoading={isLoading}
         />
-        {error && <Typography>{t(error)}</Typography>}
         <PaginationBar pages={Math.ceil(totalIdeas / limit)} setPage={(page) => setOffset(page * limit)} />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>

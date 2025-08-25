@@ -182,14 +182,12 @@ const IdeasBoxView = () => {
         scrollSnapType: 'y mandatory',
       }}
     >
-      {isBoxLoading && (
-        <>
-          <BoxCardSkeleton />
-        </>
+      {isBoxLoading ? (
+        <BoxCardSkeleton />
+      ) : (
+        box && <BoxCard box={box} onDelete={() => boxDelete()} onEdit={() => boxEdit(box)} disabled />
       )}
-      {boxError && <Typography>{t(boxError)}</Typography>}
-      {!isBoxLoading && box && <BoxCard box={box} onDelete={() => boxDelete()} onEdit={() => boxEdit(box)} disabled />}
-      {isIdeasLoading && (
+      {isIdeasLoading ? (
         <>
           <Grid container spacing={1} pt={1} pb={2}>
             <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
@@ -197,66 +195,66 @@ const IdeasBoxView = () => {
             </Grid>
           </Grid>
         </>
-      )}
-      {ideasError && <Typography>{t(ideasError)}</Typography>}
-      {!isIdeasLoading && box && (
-        <>
-          {/* Render approved ideas first */}
-          <Stack direction="row" pt={3} px={1} alignItems="center">
-            <Typography variant="h3">
-              {box &&
-                t(`phases.id-${box.phase_id}`, {
-                  var: ideas.filter((idea) => idea.approved >= 0).length,
-                })}
-            </Typography>
-            {Number(phase) === 30 && checkPermissions('ideas', 'vote') && (
-              <KnowMore title={t('tooltips.delegate')} sx={{ ml: 'auto' }}>
-                <DelegateButton />
-              </KnowMore>
+      ) : (
+        box && (
+          <>
+            {/* Render approved ideas first */}
+            <Stack direction="row" pt={3} px={1} alignItems="center">
+              <Typography variant="h3">
+                {box &&
+                  t(`phases.id-${box.phase_id}`, {
+                    var: ideas.filter((idea) => idea.approved >= 0).length,
+                  })}
+              </Typography>
+              {Number(phase) === 30 && checkPermissions('ideas', 'vote') && (
+                <KnowMore title={t('tooltips.delegate')} sx={{ ml: 'auto' }}>
+                  <DelegateButton />
+                </KnowMore>
+              )}
+            </Stack>
+            <Grid container spacing={1} pt={1} pb={2}>
+              {ideas
+                .filter((idea) => idea.approved >= 0)
+                .map((idea) => (
+                  <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={idea.hash_id} />
+                ))}
+              {checkPermissions('boxes', 'addIdea') && Number(phase) < 20 && (
+                <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
+                  <AddIdeasButton ideas={ideas} onClose={fetchIdeas} />
+                </Grid>
+              )}
+            </Grid>
+            {ideas.filter((idea) => idea.approved < 0).length > 0 && (
+              <>
+                {/* Render not approved ideas as inactive */}
+                <Stack direction="row" pt={3} px={1} alignItems="center">
+                  <Typography variant="h3">
+                    {box &&
+                      t(`phases.rejected`, {
+                        var: ideas.filter((idea) => idea.approved < 0).length,
+                      })}
+                  </Typography>
+                </Stack>
+                <Grid container spacing={1} pt={1} pb={2}>
+                  {ideas
+                    .filter((idea) => idea.approved < 0)
+                    .map((idea) => (
+                      <IdeaCard
+                        idea={idea}
+                        quorum={quorum}
+                        phase={Number(box.phase_id) as RoomPhases}
+                        key={idea.hash_id}
+                        disabled
+                      />
+                    ))}
+                </Grid>
+              </>
             )}
-          </Stack>
-          {ideas.filter((idea) => idea.approved >= 0).length === 0 && (
-            <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
-          )}
-          <Grid container spacing={1} pt={1} pb={2}>
-            {ideas
-              .filter((idea) => idea.approved >= 0)
-              .map((idea) => (
-                <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={idea.hash_id} />
-              ))}
-            {checkPermissions('boxes', 'addIdea') && Number(phase) < 20 && (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
-                <AddIdeasButton ideas={ideas} onClose={fetchIdeas} />
-              </Grid>
+            {ideas.filter((idea) => idea.approved >= 0).length === 0 && (
+              <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
             )}
-          </Grid>
-          {ideas.filter((idea) => idea.approved < 0).length > 0 && (
-            <>
-              {/* Render not approved ideas as inactive */}
-              <Stack direction="row" pt={3} px={1} alignItems="center">
-                <Typography variant="h3">
-                  {box &&
-                    t(`phases.rejected`, {
-                      var: ideas.filter((idea) => idea.approved < 0).length,
-                    })}
-                </Typography>
-              </Stack>
-              <Grid container spacing={1} pt={1} pb={2}>
-                {ideas
-                  .filter((idea) => idea.approved < 0)
-                  .map((idea) => (
-                    <IdeaCard
-                      idea={idea}
-                      quorum={quorum}
-                      phase={Number(box.phase_id) as RoomPhases}
-                      key={idea.hash_id}
-                      disabled
-                    />
-                  ))}
-              </Grid>
-            </>
-          )}
-        </>
+          </>
+        )
       )}
       {checkPermissions('ideas', 'create') && Number(phase) < 20 && (
         <>

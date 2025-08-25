@@ -52,12 +52,8 @@ const ReportsView = () => {
       />
       <Stack flex={1} gap={2} sx={{ overflowY: 'auto' }}>
         {isLoading && <ReportCardSkeleton />}
-        {error && <Typography>{t(error)}</Typography>}
         {!isLoading && !error && reports.length === 0 && (
-          <EmptyState 
-            title={t('ui.empty.reports.title')} 
-            description={t('ui.empty.reports.description')} 
-          />
+          <EmptyState title={t('ui.empty.reports.title')} description={t('ui.empty.reports.description')} />
         )}
         {reports.length > 0 &&
           reports.map((report) => <ReportCard report={report} onReload={fetchReports} key={report.id} />)}
