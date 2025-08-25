@@ -128,7 +128,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   type SchemaType = yup.InferType<typeof schema>;
 
   const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
-    storageKey: 'boxform-draft-new',
+    storageKey: `boxform-draft-${room_id || 'unknown'}`,
     isNewRecord: !defaultValues,
     onCancel: () => {
       clearIdeaSelections();

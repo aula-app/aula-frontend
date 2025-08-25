@@ -61,19 +61,22 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
     try {
       setError('root', {});
       setIsLoading(true);
+      let success = false;
       if (!defaultValues) {
-        await newComment(data);
+        success = await newComment(data);
       } else {
-        await updateComment(data);
+        success = await updateComment(data);
       }
-      handleDraftSubmit();
+      if (success) {
+        handleDraftSubmit();
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  const newComment = async (data: SchemaType) => {
-    if (!idea_id) return;
+  const newComment = async (data: SchemaType): Promise<boolean> => {
+    if (!idea_id) return false;
     const request = await addComment({
       idea_id: idea_id,
       content: data.content,
@@ -83,13 +86,17 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
         type: 'manual',
         message: request.error || t('errors.default'),
       });
-      return;
+      return false;
     }
-    if (!request.error_code) onClose();
+    if (!request.error_code) {
+      onClose();
+      return true;
+    }
+    return false;
   };
 
-  const updateComment = async (data: SchemaType) => {
-    if (!defaultValues?.hash_id) return;
+  const updateComment = async (data: SchemaType): Promise<boolean> => {
+    if (!defaultValues?.hash_id) return false;
     const request = await editComment({
       comment_id: defaultValues.hash_id,
       content: data.content,
@@ -100,9 +107,13 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
         type: 'manual',
         message: request.error || t('errors.default'),
       });
-      return;
+      return false;
     }
-    if (!request.error_code) onClose();
+    if (!request.error_code) {
+      onClose();
+      return true;
+    }
+    return false;
   };
 
   useEffect(() => {
