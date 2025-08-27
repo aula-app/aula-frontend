@@ -7,7 +7,7 @@ import { useAppStore } from '@/store/AppStore';
 import { StatusTypes } from '@/types/Generics';
 import { RoomType } from '@/types/Scopes';
 import { getDataLimit } from '@/utils';
-import { Drawer, Typography } from '@mui/material';
+import { Drawer } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

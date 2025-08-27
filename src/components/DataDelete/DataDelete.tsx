@@ -95,7 +95,7 @@ ${t('requests.deleteAccount.body', { var: user.displayname })}`,
             onClick={requestDelete}
             color="error"
             variant="contained"
-            data-testid="confirm-button"
+            data-testid="delete-button"
             aria-label={t('actions.delete')}
           >
             {t('actions.delete')}

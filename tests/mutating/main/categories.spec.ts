@@ -77,11 +77,7 @@ test.describe('Categories flow', () => {
     await CategoryNameField.fill(data.categoryName);
 
     // Select an icon - try different selectors
-    const Icon = admin
-      .getByTestId('icon-field-icon')
-      .first()
-      .or(admin.locator('[data-testid*="icon"]').first())
-      .or(admin.locator('button').filter({ hasText: /icon/i }).first());
+    const Icon = admin.getByTestId('icon-field-1');
     await expect(Icon).toBeVisible({ timeout: 10000 });
     await Icon.click();
 
@@ -164,7 +160,7 @@ test.describe('Categories flow', () => {
     await expect(Dialog).toBeVisible({ timeout: 10000 });
 
     // Look for delete confirmation button
-    const ConfirmButton = Dialog.getByTestId('confirm-button');
+    const ConfirmButton = Dialog.getByTestId('delete-cat-button');
     await expect(ConfirmButton).toBeVisible({ timeout: 10000 });
     await ConfirmButton.click();
 

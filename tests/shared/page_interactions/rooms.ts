@@ -53,7 +53,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await page.waitForLoadState('networkidle');
 
   // Wait for the rooms table/content to load first
-  await expect(page.locator('#rooms-heading')).toBeVisible();
+  await expect(page.locator('[data-testid="add-rooms-button"]')).toBeVisible();
 
   // open the filter menu:
   const FilterButton = page.locator('#filter-toggle-button');
@@ -67,8 +67,11 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   // filter by our room name
   await page.fill('#filter-value-input', room.name);
 
+  // Wait for the filter to take effect
+  await page.waitForTimeout(1000);
+
   // find the new room in the room table
-  const row = page.getByText(room.name, { exact: true }).first();
+  const row = page.locator('table tr').filter({ hasText: room.name }).first();
 
   // make sure that row actually exists
   await expect(row).toBeVisible();
@@ -111,7 +114,7 @@ export const remove = async (page: Page, room: roomFixtures.RoomData) => {
   const Dialog = page.getByRole('dialog');
   await expect(Dialog).toBeVisible();
 
-  const ConfirmButton = Dialog.locator('button[color="error"]');
+  const ConfirmButton = Dialog.locator('[data-testid="confirm-delete-rooms-button"]');
   await expect(ConfirmButton).toBeVisible();
   await ConfirmButton.click({ timeout: 1000 });
 };

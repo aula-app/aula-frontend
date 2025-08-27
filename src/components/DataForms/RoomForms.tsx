@@ -278,9 +278,27 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
                 <UsersField
                   defaultValues={defaultValues ? users : updateUsers.add}
                   onChange={(updates) => {
-                    setUpdateUsers(updates);
-                    // Save immediately with the new updates
-                    saveUserSelections(updates);
+                    // For new rooms, we need to accumulate users properly
+                    if (!defaultValues) {
+                      // Accumulate all selected users (existing + new additions - removals)
+                      const currentUsers = updateUsers.add;
+                      const newSelectedUsers = [
+                        ...currentUsers,
+                        ...updates.add.filter((userId) => !currentUsers.includes(userId)),
+                      ].filter((userId) => !updates.remove.includes(userId));
+
+                      setUpdateUsers({
+                        add: newSelectedUsers,
+                        remove: [],
+                      });
+
+                      // Save the accumulated list
+                      saveUserSelections({ add: newSelectedUsers, remove: [] });
+                    } else {
+                      // For editing existing rooms, use the updates as-is
+                      setUpdateUsers(updates);
+                      saveUserSelections(updates);
+                    }
                   }}
                   disabled={isLoading}
                 />

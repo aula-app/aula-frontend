@@ -135,7 +135,7 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     const ModalDiv = jannika.locator('div[role="dialog"]');
     await expect(ModalDiv).toBeVisible();
 
-    const SecondApproveButton = ModalDiv.getByTestId('confirm-button').first();
+    const SecondApproveButton = ModalDiv.getByTestId('delete-button').first();
     await expect(SecondApproveButton).toBeVisible();
     await SecondApproveButton.click({ timeout: 1000 });
 

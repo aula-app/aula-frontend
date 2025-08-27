@@ -142,15 +142,13 @@ const BoxPhaseView = () => {
         }}
       >
         {checkPermissions('boxes', 'create') && Number(phase) === 10 && (
-          <>
-            <Fab aria-label="add idea" color="primary" onClick={() => setEdit(true)}>
-              <AppIcon icon="box" />
-            </Fab>
-            <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-              <BoxForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
-            </Drawer>
-          </>
+          <Fab aria-label="add idea" color="primary" onClick={() => setEdit(true)}>
+            <AppIcon icon="box" />
+          </Fab>
         )}
+        <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
+          <BoxForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
+        </Drawer>
         {checkPermissions('surveys', 'create') && Number(phase) === 30 && (
           <>
             <Fab aria-label="add" color="primary" onClick={() => setAddSurvey(true)}>
