@@ -14,7 +14,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await goToRoomSettings(page);
 
   // use a button to open the modal for adding a room
-  const AddRoomButton = page.getByRole('button', { name: 'Neue Raum' });
+  const AddRoomButton = page.locator('[data-testid="add-rooms-button"]');
 
   await expect(AddRoomButton).toBeVisible();
   await AddRoomButton.click({ timeout: 1000 });
@@ -53,7 +53,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
   await page.waitForLoadState('networkidle');
 
   // Wait for the rooms table/content to load first
-  await expect(page.locator('h1')).toContainText('Räume');
+  await expect(page.locator('#rooms-heading')).toBeVisible();
 
   // open the filter menu:
   const FilterButton = page.locator('#filter-toggle-button');
@@ -62,7 +62,7 @@ export const create = async (page: Page, room: roomFixtures.RoomData) => {
 
   // select "room name" from the "filter by" dropdown
   await page.locator('#filter-field-select').click({ timeout: 1000 });
-  await page.getByRole('option', { name: 'Raum Name' }).click({ timeout: 1000 });
+  await page.locator('li[data-value="room_name"]').click({ timeout: 1000 });
 
   // filter by our room name
   await page.fill('#filter-value-input', room.name);
@@ -85,10 +85,10 @@ export const remove = async (page: Page, room: roomFixtures.RoomData) => {
   await expect(FilterButton).toBeVisible();
   await FilterButton.click({ timeout: 1000 });
 
-  // select "username" from the "filter by" dropdown
+  // select "room name" from the "filter by" dropdown
 
   await page.locator('#filter-field-select').click({ timeout: 1000 });
-  await page.getByRole('option', { name: 'Raum Name' }).click({ timeout: 1000 });
+  await page.locator('li[data-value="room_name"]').click({ timeout: 1000 });
 
   // filter by our user name
   await page.fill('#filter-value-input', room.name);
@@ -104,14 +104,14 @@ export const remove = async (page: Page, room: roomFixtures.RoomData) => {
   DeleteCheckbox.click({ timeout: 1000 });
 
   // press delete button
-  const DeleteButton = page.getByRole('button', { name: 'Räume entfernen' });
+  const DeleteButton = page.locator('[data-testid="remove-rooms-button"]');
   await expect(DeleteButton).toBeVisible();
   await DeleteButton.click({ timeout: 1000 });
 
   const Dialog = page.getByRole('dialog');
   await expect(Dialog).toBeVisible();
 
-  const ConfirmButton = Dialog.getByRole('button', { name: 'Löschen' });
+  const ConfirmButton = Dialog.locator('button[color="error"]');
   await expect(ConfirmButton).toBeVisible();
   await ConfirmButton.click({ timeout: 1000 });
 };

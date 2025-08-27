@@ -60,14 +60,14 @@ test.describe('Request user data flow', () => {
       .first();
     await expect(AnfrageDiv).toBeVisible();
 
-    const ApproveButton = AnfrageDiv.getByRole('button', { name: 'Bestätigen' }).first();
+    const ApproveButton = AnfrageDiv.locator('button[type="submit"]').first();
     await expect(ApproveButton).toBeVisible();
     await ApproveButton.click({ timeout: 1000 });
 
     const ModalDiv = admin.locator('div[role="dialog"]');
     await expect(ModalDiv).toBeVisible();
 
-    const SecondApproveButton = ModalDiv.getByRole('button', { name: 'Bestätigen' }).first();
+    const SecondApproveButton = ModalDiv.locator('button[type="submit"]').first();
     await expect(SecondApproveButton).toBeVisible();
     await SecondApproveButton.click({ timeout: 1000 });
 

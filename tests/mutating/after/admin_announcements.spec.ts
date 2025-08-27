@@ -36,7 +36,7 @@ test.describe('Admin announcements', () => {
     // navigate to the announcements page:
     await admin.locator('a[href="/settings/announcements"]').click({ timeout: 1000 });
 
-    const NewButton = admin.getByRole('button', { name: 'Neue ankündigung' });
+    const NewButton = admin.locator('[data-testid="add-announcements-button"]');
     await expect(NewButton).toBeVisible();
     await NewButton.click({ timeout: 1000 });
 
@@ -46,7 +46,7 @@ test.describe('Admin announcements', () => {
     const Selector = admin.locator('input[name="user_needs_to_consent"]').locator('..');
     await expect(Selector).toBeVisible();
     await Selector.click({ timeout: 1000 });
-    await admin.getByRole('option', { name: 'Obligatorische Zustimmung' }).click({ timeout: 1000 });
+    await admin.locator('li[data-value="obligatory"]').click({ timeout: 1000 });
     // submit the idea form
     await admin.locator('button[type="submit"]').click({ timeout: 1000 });
     await expect(1).toBeDefined();
@@ -103,14 +103,14 @@ test.describe('Admin announcements', () => {
     // admin deletes all announcements
     await admin.locator('a[href="/settings/announcements"]').click({ timeout: 1000 });
     await admin.locator('input[type="checkbox"]').first().click({ timeout: 1000 });
-    const DeleteButton = admin.getByRole('button', { name: 'Ankündigung entfernen' });
+    const DeleteButton = admin.locator('[data-testid="remove-announcements-button"]');
     await expect(DeleteButton).toBeVisible();
     await DeleteButton.click({ timeout: 1000 });
 
     const Dialog = admin.getByRole('dialog');
     await expect(Dialog).toBeVisible();
 
-    const ConfirmButton = Dialog.getByRole('button', { name: 'Löschen' });
+    const ConfirmButton = Dialog.locator('button[color="error"]');
     await expect(ConfirmButton).toBeVisible();
     await ConfirmButton.click({ timeout: 1000 });
 
