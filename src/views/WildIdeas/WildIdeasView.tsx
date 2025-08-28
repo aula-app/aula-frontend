@@ -47,7 +47,7 @@ const WildIdeas = () => {
 
   // Create text filter for ideas
   const textFilter = useMemo(() => createTextFilter<IdeaType>(['title', 'content']), []);
-  
+
   // Apply filtering to ideas
   const filteredIdeas = useFilter({
     data: ideas,
@@ -137,13 +137,13 @@ const WildIdeas = () => {
         <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
       ) : (
         <Stack width="100%">
-          <ScopeHeader 
+          <ScopeHeader
             title={t('ui.navigation.ideas')}
             scopeKey="ideas"
             totalCount={filteredIdeas.length}
             {...scopeHeaderProps}
           />
-          <Stack width="100%" gap={2}>
+          <Stack width="100%" gap={2} px={1}>
             {filteredIdeas
               .slice()
               .sort((a, b) => {
