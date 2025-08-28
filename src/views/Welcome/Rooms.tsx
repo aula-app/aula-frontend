@@ -50,7 +50,7 @@ const RoomsView = () => {
           container
           spacing={2}
           role="list"
-          sx={{ p: 2, overflowY: 'auto', scrollBehavior: 'smooth' }}
+          sx={{ p: 2, pt: 0, overflowY: 'auto', scrollBehavior: 'smooth' }}
           aria-labelledby="rooms-heading"
           aria-live="polite"
           aria-busy={isLoading}

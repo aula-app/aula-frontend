@@ -2,6 +2,8 @@ import { CategoryIconType } from '@/components/AppIcon/AppIcon';
 import { RoleTypes, RoomPhases } from './SettingsTypes';
 import { StatusTypes } from './Generics';
 
+export type ScopeKeyType = 'rooms' | 'boxes' | 'ideas' | 'comments';
+
 export interface AnnouncementType {
   id: number;
   hash_id: string;
@@ -39,7 +41,6 @@ export interface BoxType {
   phase_duration_4: number;
   status: StatusTypes;
 }
-
 
 export interface CommentType {
   id: number;
@@ -124,7 +125,6 @@ export interface MessageType {
   room_id: number;
   pin_to_top: number;
 }
-
 
 export interface RoomType {
   access_code: string;
@@ -221,7 +221,6 @@ export type ScopeType =
   | CategoryType
   | CommandType;
 
-
 export type SettingType = AnnouncementType | BoxType | IdeaType | MessageType | RoomType | UserType;
 export type SettingsType = AnnouncementType[] | BoxType[] | IdeaType[] | MessageType[] | RoomType[] | UserType[];
 
@@ -230,13 +229,6 @@ export type CommonFormFields = 'id' | 'created';
 
 // Type for form data
 export type PossibleFields = Record<string, string>;
-
-
-
-
-
-
-
 
 export interface DelegationType {
   user_id_original: string;

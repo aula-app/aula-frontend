@@ -1,4 +1,5 @@
 import { AppIcon, AppIconButton } from '@/components';
+import { ScopeKeyType } from '@/types/Scopes';
 import {
   Collapse,
   FormControl,
@@ -15,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 export interface ScopeHeaderProps {
   title: string;
-  scopeKey: string; // For translation keys like 'rooms', 'ideas', etc.
+  scopeKey: ScopeKeyType; // For translation keys like 'rooms', 'ideas', etc.
   totalCount: number;
   searchQuery: string;
   onSearchChange: (value: string) => void;
@@ -200,7 +201,8 @@ export function ScopeHeader({
       alignItems="center"
       justifyContent="space-between"
       sx={{
-        px: 2,
+        p: 2,
+        pt: 1,
         minWidth: 0,
         width: '100%',
         maxWidth: '100vw', // Prevent viewport overflow
@@ -209,24 +211,27 @@ export function ScopeHeader({
       role="banner"
       aria-labelledby={`${scopeKey}-heading`}
     >
-      <Typography
-        variant="h1"
-        className="noSpace"
-        sx={{
-          transition: 'all .5s ease-in-out',
-          textOverflow: 'ellipsis',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          flexShrink: isSearchOpen || isSortOpen ? 1 : 0,
-          minWidth: 0,
-        }}
-        component="h1"
-        id={`${scopeKey}-heading`}
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        {totalCount} {title}
-      </Typography>
+      <Stack direction="row" alignItems="center" gap={1}>
+        <AppIcon icon={scopeKey} size="large" />
+        <Typography
+          variant="h1"
+          className="noSpace"
+          sx={{
+            transition: 'all .5s ease-in-out',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            flexShrink: isSearchOpen || isSortOpen ? 1 : 0,
+            minWidth: 0,
+          }}
+          component="h1"
+          id={`${scopeKey}-heading`}
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {totalCount} {title}
+        </Typography>
+      </Stack>
 
       <Stack
         direction="row"
