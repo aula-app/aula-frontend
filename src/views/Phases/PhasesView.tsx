@@ -15,32 +15,6 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import DashBoard from '../Welcome/Dashboard';
 
-// Configuration interfaces
-interface PhaseConfig<T> {
-  title: string;
-  phaseIcon: string;
-  fetchData: () => Promise<{ data?: T[] | null; error?: string | null }>;
-  searchableFields: string[];
-  sortOptions: Array<{ value: string; labelKey: string }>;
-  ItemComponent: React.ComponentType<{
-    item: T;
-    onEdit: () => void;
-    onDelete: () => void;
-    to?: string;
-  }>;
-  SkeletonComponent: React.ComponentType;
-  FormComponent: React.ComponentType<{
-    onClose: () => void;
-    defaultValues?: T;
-  }>;
-  canCreate: boolean;
-  createButtonConfig: { icon: string; label: string };
-  deleteItem: (id: string) => Promise<{ error?: string | null }>;
-  getItemRoute?: (item: T, phase?: string) => string;
-  emptyStateConfig: { title: string; description: string };
-  scopeKey: string;
-}
-
 /**
  * Unified PhaseView component that handles all phase types consistently
  * url: /Phase/:phase
@@ -56,75 +30,38 @@ const PhasesView = () => {
   const [data, setData] = useState<IdeaType[]>([]);
   const [edit, setEdit] = useState<IdeaType | boolean>();
 
-  // Get phase configuration
-  const getPhaseConfig = useCallback((): PhaseConfig<IdeaType> => {
+  // Get phase-specific data source and title
+  const phaseData = useMemo(() => {
     const phaseNum = Number(phase);
 
     if (phaseNum === 0) {
-      // Wild Ideas Phase
       return {
         title: t('phases.wild'),
         phaseIcon: 'wild',
         fetchData: getWildIdeasByUser,
-        searchableFields: ['title', 'content', 'displayname'],
-        sortOptions: [
-          { value: 'created', labelKey: 'settings.columns.created' },
-          { value: 'sum_likes', labelKey: 'settings.columns.sum_likes' },
-          { value: 'sum_comments', labelKey: 'settings.columns.sum_comments' },
-        ],
-        ItemComponent: ({ item, onEdit, onDelete, to }) => (
-          <IdeaBubble idea={item} to={to} onEdit={onEdit} onDelete={onDelete} />
-        ),
-        SkeletonComponent: IdeaBubbleSkeleton,
-        FormComponent: IdeaForms,
-        canCreate: checkPermissions('ideas', 'create'),
-        createButtonConfig: { icon: 'idea', label: 'add idea' },
-        deleteItem: deleteIdea,
-        getItemRoute: (item, phase) => `/room/${item.room_hash_id}/phase/${phase}/idea/${item.hash_id}`,
-        emptyStateConfig: { title: t('ui.empty.dashboard.title'), description: t('ui.empty.dashboard.description') },
-        scopeKey: 'ideas',
       };
     } else {
-      // Box Ideas Phase
       return {
         title: t(`phases.name-${phase}`),
         phaseIcon: (phases[phase as keyof typeof phases] || 'box') as string,
         fetchData: () => getUserIdeasByPhase(phaseNum),
-        searchableFields: ['title', 'content', 'displayname'],
-        sortOptions: [
-          { value: 'created', labelKey: 'settings.columns.created' },
-          { value: 'sum_likes', labelKey: 'settings.columns.sum_likes' },
-          { value: 'sum_comments', labelKey: 'settings.columns.sum_comments' },
-        ],
-        ItemComponent: ({ item, onEdit, onDelete, to }) => (
-          <IdeaBubble idea={item} to={to} onEdit={onEdit} onDelete={onDelete} />
-        ),
-        SkeletonComponent: IdeaBubbleSkeleton,
-        FormComponent: IdeaForms,
-        canCreate: checkPermissions('ideas', 'create'),
-        createButtonConfig: { icon: 'idea', label: 'add idea' },
-        deleteItem: deleteIdea,
-        getItemRoute: (item, phase) => `/room/${item.room_hash_id}/phase/${phase}/idea/${item.hash_id}`,
-        emptyStateConfig: { title: t('ui.empty.dashboard.title'), description: t('ui.empty.dashboard.description') },
-        scopeKey: 'ideas',
       };
     }
-  }, [phase]);
-
-  const config = getPhaseConfig();
+  }, [phase, t]);
 
   // Search and sort functionality
   const { searchQuery, sortKey, sortDirection, scopeHeaderProps } = useSearchAndSort({
-    sortOptions: config.sortOptions.map((opt) => ({
-      value: opt.value as string,
-      labelKey: opt.labelKey,
-    })),
+    sortOptions: [
+      { value: 'created', labelKey: 'settings.columns.created' },
+      { value: 'sum_likes', labelKey: 'settings.columns.sum_likes' },
+      { value: 'sum_comments', labelKey: 'settings.columns.sum_comments' },
+    ],
   });
 
   // Create filter function
   const filterFunction = useMemo(
-    () => createTextFilter<IdeaType>(config.searchableFields as (keyof IdeaType)[]),
-    [config.searchableFields]
+    () => createTextFilter<IdeaType>(['title', 'content', 'displayname']),
+    []
   );
 
   // Apply filtering
@@ -155,18 +92,18 @@ const PhasesView = () => {
     setError(null);
 
     try {
-      const response = await config.fetchData();
+      const response = await phaseData.fetchData();
       if (response.error) {
         setError(response.error);
       } else {
         setData(response.data || []);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to load data');
     } finally {
       setLoading(false);
     }
-  }, [config.fetchData]);
+  }, [phaseData]);
 
   // Effect to fetch data and set breadcrumb
   useEffect(() => {
@@ -183,7 +120,7 @@ const PhasesView = () => {
   };
 
   const onDelete = async (id: string) => {
-    const request = await config.deleteItem(id);
+    const request = await deleteIdea(id);
     if (!request.error) onClose();
   };
 
@@ -191,10 +128,6 @@ const PhasesView = () => {
     setEdit(undefined);
     fetchData();
   };
-
-  const ItemComponent = config.ItemComponent;
-  const SkeletonComponent = config.SkeletonComponent;
-  const FormComponent = config.FormComponent;
 
   return (
     <Stack overflow="hidden" flex={1}>
@@ -204,9 +137,9 @@ const PhasesView = () => {
         <ScopeHeader
           title={t('scopes.ideas.inPhase', {
             var: data.length === 1 ? t('scopes.ideas.name') : t('scopes.ideas.plural'),
-            phase: config.title,
+            phase: phaseData.title,
           })}
-          scopeKey={config.scopeKey}
+          scopeKey="ideas"
           totalCount={data.length}
           {...scopeHeaderProps}
         />
@@ -216,7 +149,7 @@ const PhasesView = () => {
 
         {/* Empty state */}
         {!isLoading && !error && sortedData.length === 0 && (
-          <EmptyState title={config.emptyStateConfig.title} description={config.emptyStateConfig.description} />
+          <EmptyState title={t('ui.empty.dashboard.title')} description={t('ui.empty.dashboard.description')} />
         )}
 
         {/* Grid content */}
@@ -224,7 +157,7 @@ const PhasesView = () => {
           {/* Loading skeleton */}
           {isLoading && (
             <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-              <SkeletonComponent />
+              <IdeaBubbleSkeleton />
             </Grid>
           )}
 
@@ -232,20 +165,20 @@ const PhasesView = () => {
           {!isLoading &&
             sortedData.map((item) => (
               <Grid key={item.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-                <ItemComponent
-                  item={item}
+                <IdeaBubble
+                  idea={item}
                   onEdit={() => onEdit(item)}
                   onDelete={() => onDelete(item.hash_id)}
-                  to={config.getItemRoute ? config.getItemRoute(item, phase) : undefined}
+                  to={`/room/${item.room_hash_id}/phase/${phase}/idea/${item.hash_id}`}
                 />
               </Grid>
             ))}
         </Grid>
 
         {/* Create button */}
-        {config.canCreate && (
+        {checkPermissions('ideas', 'create') && (
           <Fab
-            aria-label={config.createButtonConfig.label}
+            aria-label="add idea"
             color="primary"
             sx={{
               position: 'fixed',
@@ -255,13 +188,13 @@ const PhasesView = () => {
             }}
             onClick={() => setEdit(true)}
           >
-            <AppIcon icon={config.createButtonConfig.icon as any} />
+            <AppIcon icon="idea" />
           </Fab>
         )}
 
         {/* Edit/Create drawer */}
         <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-          <FormComponent onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
+          <IdeaForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
         </Drawer>
       </Stack>
     </Stack>
