@@ -212,6 +212,7 @@ export function ScopeHeader({
       aria-labelledby={`${scopeKey}-heading`}
     >
       <Stack direction="row" alignItems="center" gap={1}>
+        <AppIcon icon={scopeKey} size="large" />
         <Typography
           variant="h1"
           className="noSpace"
@@ -228,26 +229,7 @@ export function ScopeHeader({
           aria-live="polite"
           aria-atomic="true"
         >
-          {totalCount}
-        </Typography>
-        <AppIcon icon={scopeKey} />
-        <Typography
-          variant="h1"
-          className="noSpace"
-          sx={{
-            transition: 'all .5s ease-in-out',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            flexShrink: isSearchOpen || isSortOpen ? 1 : 0,
-            minWidth: 0,
-          }}
-          component="h1"
-          id={`${scopeKey}-heading`}
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          {title}
+          {totalCount} {title}
         </Typography>
       </Stack>
 
