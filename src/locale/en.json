@@ -302,7 +302,10 @@
     },
     "comments": {
       "name": "Comment",
-      "plural": "Comments"
+      "plural": "Comments",
+      "search": {
+        "placeholder": "Search comments..."
+      }
     },
     "groups": {
       "name": "Group",
