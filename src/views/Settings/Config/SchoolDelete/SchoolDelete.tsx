@@ -45,7 +45,7 @@ const SchoolDelete = () => {
           <Button onClick={() => setOpenDelete(false)} color="secondary" autoFocus data-testid="cancel-button">
             {t('actions.cancel')}
           </Button>
-          <Button onClick={lockInstance} color="error" variant="contained" data-testid="confirm-button">
+          <Button onClick={lockInstance} color="error" variant="contained" data-testid="lock-button">
             {t('actions.delete')}
           </Button>
         </DialogActions>

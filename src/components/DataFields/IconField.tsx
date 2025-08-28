@@ -32,9 +32,9 @@ const IconField: React.FC<Props> = ({ name, control, disabled = false, ...restOf
           </Typography>
           <TextField {...field} {...restOfProps} sx={{ visibility: 'hidden', height: 0 }} />
           <Stack direction="row" flexWrap="wrap" justifyContent="center">
-            {icons.map((icon) => (
+            {icons.map((icon, i) => (
               <AppIconButton
-                data-testid="icon-field-icon"
+                data-testid={`icon-field-${i}`}
                 key={icon}
                 icon={icon}
                 onClick={() => field.onChange(icon)}

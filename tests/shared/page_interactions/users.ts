@@ -65,7 +65,7 @@ export const exists = async (page: Page, data: users.UserData) => {
   // select "username" from the "filter by" dropdown
 
   await page.locator('#filter-field-select').click({ timeout: 1000 });
-  await page.getByRole('option', { name: 'Benutzername' }).click({ timeout: 1000 });
+  await page.locator('li[data-value="username"]').click({ timeout: 1000 });
 
   // filter by our user name
   await page.fill('#filter-value-input', data.username);
@@ -89,7 +89,7 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   // select "username" from the "filter by" dropdown
 
   await page.locator('#filter-field-select').click({ timeout: 1000 });
-  await page.getByRole('option', { name: 'Benutzername' }).click({ timeout: 1000 });
+  await page.locator('li[data-value="username"]').click({ timeout: 1000 });
 
   // filter by our user name
   await page.fill('#filter-value-input', data.username);
@@ -155,7 +155,7 @@ export const remove = async (page: Page, data: users.UserData) => {
   // select "username" from the "filter by" dropdown
 
   await page.locator('#filter-field-select').click({ timeout: 1000 });
-  await page.getByRole('option', { name: 'Benutzername' }).click({ timeout: 1000 });
+  await page.locator('li[data-value="username"]').click({ timeout: 1000 });
 
   // filter by our user name
   await page.fill('#filter-value-input', data.username);
@@ -189,9 +189,10 @@ export const login = async (page: Page, data: users.UserData) => {
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
 
-  await page.getByRole('button', { name: 'Login' }).click({ timeout: 1000 });
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
-  await expect(page.locator('h1')).toHaveText('Räume');
+  // Wait for successful login by checking for the rooms page heading
+  await expect(page.locator('#rooms-heading')).toBeVisible();
 };
 
 export const firstLoginFlow = async (page: Page, data: users.UserData, tempPass: string) => {
@@ -199,7 +200,7 @@ export const firstLoginFlow = async (page: Page, data: users.UserData, tempPass:
 
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', tempPass);
-  await page.getByRole('button', { name: 'Login' }).click({ timeout: 1000 });
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
   const oldPasswordButton = page.locator('input[name="oldPassword"]');
   await expect(oldPasswordButton).toBeVisible();
@@ -207,7 +208,7 @@ export const firstLoginFlow = async (page: Page, data: users.UserData, tempPass:
   await page.fill('input[name="oldPassword"]', tempPass);
   await page.fill('input[name="newPassword"]', data.password);
   await page.fill('input[name="confirmPassword"]', data.password);
-  await page.getByRole('button', { name: 'Speichern' }).click({ timeout: 1000 });
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
   await login(page, data);
 };

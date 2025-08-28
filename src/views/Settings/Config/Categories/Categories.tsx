@@ -101,7 +101,7 @@ const CatView: React.FC = () => {
           >
             {t('actions.cancel')}
           </Button>
-          <Button onClick={onDelete} color="error" variant="contained" data-testid="confirm-button">
+          <Button onClick={onDelete} color="error" variant="contained" data-testid="delete-cat-button">
             {t('actions.delete')}
           </Button>
         </DialogActions>
