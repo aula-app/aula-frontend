@@ -1,4 +1,4 @@
-import { AppIcon, EmptyState } from '@/components';
+import { AppIcon, EmptyState, ScopeHeader } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import AddIdeasButton from '@/components/Buttons/AddIdeas';
@@ -7,6 +7,7 @@ import { BoxForms, IdeaForms } from '@/components/DataForms';
 import { IdeaCard } from '@/components/Idea';
 import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
 import KnowMore from '@/components/KnowMore';
+import { useSearchAndSort, createTextFilter, useFilter } from '@/hooks';
 import { deleteBox, getBox } from '@/services/boxes';
 import { getIdeasByBox } from '@/services/ideas';
 import { getRoom } from '@/services/rooms';
@@ -17,7 +18,7 @@ import { RoomPhases } from '@/types/SettingsTypes';
 import { announceLoadingState, checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -50,6 +51,19 @@ const IdeasBoxView = () => {
   const [edit, setEdit] = useState<BoxType>(); // undefined = closed;
   const [boxPhase, setBoxPhase] = useState<string | null>(phase ? phase : '');
   const [createIdea, setCreateIdea] = useState(false);
+
+  // Manage search and sort state for ideas
+  const { searchQuery, sortKey, sortDirection, scopeHeaderProps } = useSearchAndSort({
+    sortOptions: [
+      { value: 'created', labelKey: 'settings.columns.created' },
+      { value: 'sum_votes', labelKey: 'settings.columns.sum_votes' },
+      { value: 'displayname', labelKey: 'settings.columns.displayname' },
+      { value: 'title', labelKey: 'scopes.ideas.fields.title' },
+    ],
+  });
+
+  // Create filter function for ideas (searches in title, content, and displayname)
+  const ideaFilterFunction = useMemo(() => createTextFilter<IdeaType>(['title', 'content', 'displayname']), []);
 
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
@@ -126,6 +140,49 @@ const IdeasBoxView = () => {
   const [ideasError, setIdeasError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
 
+  // Apply filtering to approved ideas
+  const filteredApprovedIdeas = useFilter({
+    data: useMemo(() => ideas.filter((idea) => idea.approved >= 0), [ideas]),
+    filterValue: searchQuery,
+    filterFunction: ideaFilterFunction,
+  });
+
+  // Apply filtering to rejected ideas
+  const filteredRejectedIdeas = useFilter({
+    data: useMemo(() => ideas.filter((idea) => idea.approved < 0), [ideas]),
+    filterValue: searchQuery,
+    filterFunction: ideaFilterFunction,
+  });
+
+  // Sort the filtered ideas
+  const sortedApprovedIdeas = useMemo(() => {
+    return filteredApprovedIdeas.slice().sort((a, b) => {
+      const valueA = a[sortKey as keyof IdeaType];
+      const valueB = b[sortKey as keyof IdeaType];
+
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+      }
+
+      const comparison = String(valueA).localeCompare(String(valueB));
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+  }, [filteredApprovedIdeas, sortKey, sortDirection]);
+
+  const sortedRejectedIdeas = useMemo(() => {
+    return filteredRejectedIdeas.slice().sort((a, b) => {
+      const valueA = a[sortKey as keyof IdeaType];
+      const valueB = b[sortKey as keyof IdeaType];
+
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+      }
+
+      const comparison = String(valueA).localeCompare(String(valueB));
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+  }, [filteredRejectedIdeas, sortKey, sortDirection]);
+
   const fetchIdeas = useCallback(async () => {
     if (!box_id) return;
     setIdeasLoading(true);
@@ -199,58 +256,59 @@ const IdeasBoxView = () => {
         box && (
           <>
             {/* Render approved ideas first */}
-            <Stack direction="row" pt={3} px={1} alignItems="center">
-              <Typography variant="h3">
-                {box &&
-                  t(`phases.id-${box.phase_id}`, {
-                    var: ideas.filter((idea) => idea.approved >= 0).length,
-                  })}
-              </Typography>
+            <Stack direction="row" alignItems="center" gap={2} width="100%">
+              <ScopeHeader
+                title={t(`phases.id-${box.phase_id}`, {
+                  var:
+                    ideas.filter((idea) => idea.approved >= 0).length === 1
+                      ? t('scopes.ideas.name')
+                      : t('scopes.ideas.plural'),
+                })}
+                scopeKey="ideas"
+                totalCount={ideas.filter((idea) => idea.approved >= 0).length}
+                {...scopeHeaderProps}
+              />
               {Number(phase) === 30 && checkPermissions('ideas', 'vote') && (
-                <KnowMore title={t('tooltips.delegate')} sx={{ ml: 'auto' }}>
+                <KnowMore title={t('tooltips.delegate')}>
                   <DelegateButton />
                 </KnowMore>
               )}
             </Stack>
             <Grid container spacing={1} pt={1} pb={2}>
-              {ideas
-                .filter((idea) => idea.approved >= 0)
-                .map((idea) => (
-                  <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={idea.hash_id} />
-                ))}
+              {sortedApprovedIdeas.map((idea) => (
+                <IdeaCard idea={idea} quorum={quorum} phase={Number(box.phase_id) as RoomPhases} key={idea.hash_id} />
+              ))}
               {checkPermissions('boxes', 'addIdea') && Number(phase) < 20 && (
                 <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ scrollSnapAlign: 'center' }}>
                   <AddIdeasButton ideas={ideas} onClose={fetchIdeas} />
                 </Grid>
               )}
             </Grid>
-            {ideas.filter((idea) => idea.approved < 0).length > 0 && (
+            {filteredRejectedIdeas.length > 0 && (
               <>
                 {/* Render not approved ideas as inactive */}
                 <Stack direction="row" pt={3} px={1} alignItems="center">
                   <Typography variant="h3">
                     {box &&
                       t(`phases.rejected`, {
-                        var: ideas.filter((idea) => idea.approved < 0).length,
+                        var: filteredRejectedIdeas.length,
                       })}
                   </Typography>
                 </Stack>
                 <Grid container spacing={1} pt={1} pb={2}>
-                  {ideas
-                    .filter((idea) => idea.approved < 0)
-                    .map((idea) => (
-                      <IdeaCard
-                        idea={idea}
-                        quorum={quorum}
-                        phase={Number(box.phase_id) as RoomPhases}
-                        key={idea.hash_id}
-                        disabled
-                      />
-                    ))}
+                  {sortedRejectedIdeas.map((idea) => (
+                    <IdeaCard
+                      idea={idea}
+                      quorum={quorum}
+                      phase={Number(box.phase_id) as RoomPhases}
+                      key={idea.hash_id}
+                      disabled
+                    />
+                  ))}
                 </Grid>
               </>
             )}
-            {ideas.filter((idea) => idea.approved >= 0).length === 0 && (
+            {sortedApprovedIdeas.length === 0 && (
               <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
             )}
           </>
