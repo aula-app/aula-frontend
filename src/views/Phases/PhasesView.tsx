@@ -109,7 +109,7 @@ const PhasesView = () => {
         scopeKey: 'ideas',
       };
     }
-  }, [phase, t]);
+  }, [phase]);
 
   const config = getPhaseConfig();
 
