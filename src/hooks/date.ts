@@ -11,11 +11,6 @@ dayjs.extend(timezone);
 /**
  * Main Data and Time conversion utility to keep formats the same across entire Application
  * 
- * TIMEZONE HANDLING:
- * - Backend stores all dates in UTC (GMT+0)
- * - Display functions convert UTC dates to user's local timezone for display
- * - Use .utc() when sending dates to backend to ensure proper storage
- * 
  * @param {string|object} dateOrString - UTC date string or Date object from backend
  * @param {string} [dateFormat] - time conversion template in 'dayjs' format, `FORMAT_DATE_TIME` by default
  * @param {string} [fallbackValue] - optional fallback value if data conversion is not possible
