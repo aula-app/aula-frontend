@@ -84,6 +84,7 @@ import {
   HiOutlinePlus,
   HiOutlinePrinter,
   HiOutlineQuestionMarkCircle,
+  HiOutlineShare,
   HiOutlineSun,
   HiOutlineTrash,
   HiOutlineUser,
@@ -202,7 +203,7 @@ import {
   LiaTshirtSolid,
 } from 'react-icons/lia';
 import { LuSigma } from 'react-icons/lu';
-import { PiCookingPotLight } from 'react-icons/pi';
+import { PiCookingPotLight, PiShareNetwork } from 'react-icons/pi';
 import CircleIcon from './circle.svg?react';
 import VotingIcon from './voting.svg?react';
 
@@ -284,6 +285,7 @@ export const ICONS = {
   room: HiOutlineAcademicCap,
   search: HiOutlineMagnifyingGlass,
   settings: HiOutlineCog6Tooth,
+  share: PiShareNetwork,
   signup: HiOutlineUserPlus,
   sort: BsSortDown,
   sortUp: BsSortUp,
