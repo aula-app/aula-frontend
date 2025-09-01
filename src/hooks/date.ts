@@ -1,10 +1,22 @@
 import { DATE_FORMATS, DEFAULT_FORMAT_DATE_ONLY, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { useTranslation } from 'react-i18next';
+
+// Extend dayjs with timezone and UTC plugins
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 /**
  * Main Data and Time conversion utility to keep formats the same across entire Application
- * @param {string|object} dateOrString - date to show as UTC string or Date object instance
+ * 
+ * TIMEZONE HANDLING:
+ * - Backend stores all dates in UTC (GMT+0)
+ * - Display functions convert UTC dates to user's local timezone for display
+ * - Use .utc() when sending dates to backend to ensure proper storage
+ * 
+ * @param {string|object} dateOrString - UTC date string or Date object from backend
  * @param {string} [dateFormat] - time conversion template in 'dayjs' format, `FORMAT_DATE_TIME` by default
  * @param {string} [fallbackValue] - optional fallback value if data conversion is not possible
  */
@@ -48,7 +60,7 @@ export const FORMAT_DATE_TIME = DEFAULT_FORMAT_DATE_TIME;
 export const FORMAT_DATE_ONLY = DEFAULT_FORMAT_DATE_ONLY;
 
 export function getDisplayDate(date: string): string {
-  const displayDate = dayjs(date);
+  const displayDate = dayjs.utc(date).local();
   return displayDate.format(getDateFormat('dateTime'));
 }
 
@@ -56,7 +68,7 @@ export function getDisplayDate(date: string): string {
  * Get display date with specific language
  */
 export function getDisplayDateForLanguage(date: string, language: string): string {
-  const displayDate = dayjs(date);
+  const displayDate = dayjs.utc(date).local();
   return displayDate.format(getDateFormatForLanguage(language, 'dateTime'));
 }
 
@@ -64,7 +76,7 @@ export function getDisplayDateForLanguage(date: string, language: string): strin
  * Get display date (date only) with current language
  */
 export function getDisplayDateOnly(date: string): string {
-  const displayDate = dayjs(date);
+  const displayDate = dayjs.utc(date).local();
   return displayDate.format(getDateFormat('dateOnly'));
 }
 
@@ -72,7 +84,7 @@ export function getDisplayDateOnly(date: string): string {
  * Get display date (date only) with specific language
  */
 export function getDisplayDateOnlyForLanguage(date: string, language: string): string {
-  const displayDate = dayjs(date);
+  const displayDate = dayjs.utc(date).local();
   return displayDate.format(getDateFormatForLanguage(language, 'dateOnly'));
 }
 
