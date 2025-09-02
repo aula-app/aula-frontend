@@ -59,10 +59,7 @@ const PhasesView = () => {
   });
 
   // Create filter function
-  const filterFunction = useMemo(
-    () => createTextFilter<IdeaType>(['title', 'content', 'displayname']),
-    []
-  );
+  const filterFunction = useMemo(() => createTextFilter<IdeaType>(['title', 'content', 'displayname']), []);
 
   // Apply filtering
   const filteredData = useFilter({
@@ -76,6 +73,11 @@ const PhasesView = () => {
     return filteredData.slice().sort((a, b) => {
       const valueA = a[sortKey as keyof IdeaType];
       const valueB = b[sortKey as keyof IdeaType];
+
+      // Handle null/undefined values - sort them to the end
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return 1;
+      if (valueB == null) return -1;
 
       if (typeof valueA === 'number' && typeof valueB === 'number') {
         return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
