@@ -30,7 +30,7 @@ const ReportsView = () => {
     setLoading(true);
     const response = await getReports({ status, filter });
     if (response.error) setError(response.error);
-    if (!response.error && response.data) setReports(response.data);
+    setReports(response.data || []);
     setLoading(false);
   }, [status, filter[0], filter[1]]);
 

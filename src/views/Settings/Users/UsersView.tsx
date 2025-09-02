@@ -71,10 +71,8 @@ const UsersView: React.FC = () => {
       status,
     });
     if (response.error) setError(response.error);
-    else {
-      setUsers(response.data || []);
-      setTotalUsers(response.count as number);
-    }
+    setUsers(response.data || []);
+    setTotalUsers(response.count as number);
     setLoading(false);
   }, [search_field, search_text, status, asc, limit, offset, orderby, room_id, userlevel]);
 

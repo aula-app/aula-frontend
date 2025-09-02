@@ -61,10 +61,8 @@ const AnnouncementsView: React.FC = () => {
       user_needs_to_consent,
     });
     if (response.error) setError(response.error);
-    else {
-      setAnnouncements(response.data || []);
-      setTotalAnnouncements(response.count as number);
-    }
+    setAnnouncements(response.data || []);
+    setTotalAnnouncements(response.count as number);
     setLoading(false);
   }, [search_field, search_text, status, asc, limit, offset, orderby, user_needs_to_consent]);
 

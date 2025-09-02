@@ -64,10 +64,8 @@ const IdeasView: React.FC = () => {
       status,
     });
     if (response.error) setError(response.error);
-    else {
-      setIdeas(response.data || []);
-      setTotalIdeas(response.count as number);
-    }
+    setIdeas(response.data || []);
+    setTotalIdeas(response.count as number);
     setLoading(false);
   }, [asc, limit, offset, orderby, search_field, search_text, status]);
 
