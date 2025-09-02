@@ -44,7 +44,7 @@ test.describe('Instance Offline Mode', () => {
     const userContext = await userBrowser.newContext();
     const user = await userContext.newPage();
 
-    // User tries to login and should be redirected to error page
+    // User tries to login
     await user.goto(host);
     await user.fill('input[name="username"]', fixtures.alice.username);
     await user.fill('input[name="password"]', fixtures.alice.password);

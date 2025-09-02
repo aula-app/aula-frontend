@@ -1,8 +1,8 @@
-import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 import { sleep } from '../../shared/utils';
 import * as shared from '../../shared/shared';
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 import * as fixtures from '../../fixtures/users';
 import * as browsers from '../../shared/page_interactions/browsers';
@@ -34,7 +34,7 @@ test.describe('Upload user csv, delete that user', () => {
       realName: 'jannika' + sym,
       displayName: 'jannika' + sym,
       role: 20,
-      password: 'aula',
+      password: 'aula-jannika' + sym,
       about: 'jannika',
     };
     //
@@ -89,8 +89,6 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     await sleep(1);
 
     await users.exists(admin, data.jannikaData);
-
-    await expect(1).toBeDefined();
 
     admin.close();
   });

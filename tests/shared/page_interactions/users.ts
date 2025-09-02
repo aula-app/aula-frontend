@@ -1,6 +1,7 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../shared';
 import * as users from '../../fixtures/users';
+import { sleep } from '../utils';
 
 const host = shared.getHost();
 
@@ -69,6 +70,7 @@ export const exists = async (page: Page, data: users.UserData) => {
 
   // filter by our user name
   await page.fill('#filter-value-input', data.username);
+  await sleep(1);
 
   // find the new user in the user table
   const row = page.locator('table tr').filter({ hasText: data.username });
@@ -153,7 +155,6 @@ export const remove = async (page: Page, data: users.UserData) => {
   await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
-
   await page.locator('#filter-field-select').click({ timeout: 1000 });
   await page.locator('li[data-value="username"]').click({ timeout: 1000 });
 
@@ -161,7 +162,6 @@ export const remove = async (page: Page, data: users.UserData) => {
   await page.fill('#filter-value-input', data.username);
 
   // find the user's row in the table and select the checkbox for actions
-
   const row = page.locator('table tr').filter({ hasText: data.username });
   const checkbox = row.locator('input');
   await expect(checkbox).toBeVisible();
@@ -170,16 +170,15 @@ export const remove = async (page: Page, data: users.UserData) => {
   // click the remove use button
   const ButtonRemoveUser = page.getByTestId('remove-users-button');
   expect(ButtonRemoveUser).toBeDefined();
-
   await ButtonRemoveUser.click({ timeout: 1000 });
 
+  // confirm deletion
   const ButtonConfirmDelete = page.getByTestId('confirm-delete-users-button');
-
   expect(ButtonConfirmDelete).toBeDefined();
-
   await ButtonConfirmDelete.click({ timeout: 1000 });
 
   // confirm the user does not show up in the table list
+  await sleep(1);
   await expect(page.locator('table tr').filter({ hasText: data.username })).toHaveCount(0);
 };
 
@@ -188,8 +187,7 @@ export const login = async (page: Page, data: users.UserData) => {
   await page.goto(host);
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
-
-  await page.locator('button[type="submit"]').click({ timeout: 1000 });
+  await page.getByRole('button', { name: 'Login' }).click({ timeout: 1000 });
 
   // Wait for successful login by checking for the rooms page heading
   await expect(page.locator('#rooms-heading')).toBeVisible();
