@@ -17,8 +17,6 @@ const ShareButton = forwardRef<HTMLButtonElement, Props>(({ idea, disabled }, re
   const sharePath = window.location.href.includes('/idea/') ? '' : `/idea/${idea.hash_id}`;
   const absoluteUrl = `${window.location.href}${sharePath}`;
 
-  console.log(absoluteUrl);
-
   return (
     <AppIconButton
       ref={ref}
