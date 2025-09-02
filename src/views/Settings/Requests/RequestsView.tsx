@@ -30,7 +30,7 @@ const RequestsView = () => {
     setLoading(true);
     const response = await getRequests({ status, filter });
     if (response.error) setError(response.error);
-    if (!response.error && response.data) setRequests(response.data);
+    setRequests(response.data || []);
     setLoading(false);
   }, [JSON.stringify(filter), status]);
 

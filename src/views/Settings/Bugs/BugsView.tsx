@@ -30,7 +30,7 @@ const BugsView = () => {
     setLoading(true);
     const response = await getBugs({ status, filter });
     if (response.error) setError(response.error);
-    if (!response.error && response.data) setBugs(response.data);
+    setBugs(response.data || []);
     setLoading(false);
   }, [JSON.stringify(filter), status]);
 

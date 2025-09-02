@@ -60,10 +60,8 @@ const RoomsView: React.FC = () => {
       type: 0,
     });
     if (response.error) setError(response.error);
-    else {
-      setRooms(response.data || []);
-      setTotalRooms(response.count as number);
-    }
+    setRooms(response.data || []);
+    setTotalRooms(response.count as number);
     setLoading(false);
   }, [search_field, search_text, status, asc, limit, offset, orderby]);
 

@@ -59,10 +59,8 @@ const MessagesView: React.FC = () => {
       status,
     });
     if (response.error) setError(response.error);
-    else {
-      setMessages(response.data || []);
-      setTotalMessages(response.count as number);
-    }
+    setMessages(response.data || []);
+    setTotalMessages(response.count as number);
     setLoading(false);
   }, [search_field, search_text, status, asc, limit, offset, orderby]);
 

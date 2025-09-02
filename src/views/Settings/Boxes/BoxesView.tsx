@@ -64,10 +64,8 @@ const BoxesView: React.FC = () => {
       room_id,
     });
     if (response.error) setError(response.error);
-    else {
-      setBoxes(response.data || []);
-      setTotalBoxes(response.count as number);
-    }
+    setBoxes(response.data || []);
+    setTotalBoxes(response.count as number);
     setLoading(false);
   }, [search_field, search_text, status, asc, limit, offset, orderby, room_id]);
 
