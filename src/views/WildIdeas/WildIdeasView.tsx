@@ -1,4 +1,4 @@
-import { AppIcon, EmptyState } from '@/components';
+import { AppIcon, EmptyState, ScopeHeader } from '@/components';
 import { IdeaForms } from '@/components/DataForms';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
@@ -7,11 +7,11 @@ import { getRoom } from '@/services/rooms';
 import { deleteIdea, getIdeasByRoom } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
-import { Drawer, Fab, Stack, Typography } from '@mui/material';
-import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
+import { useSearchAndSort, createTextFilter, useFilter } from '@/hooks';
+import { Drawer, Fab, Stack } from '@mui/material';
+import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import SortButton from '@/components/Buttons/SortButton';
 
 interface RouteParams extends Record<string, string | undefined> {
   room_id: string;
@@ -30,18 +30,30 @@ const WildIdeas = () => {
   const [appState, dispatch] = useAppStore();
 
   const IDEAS_SORT_OPTIONS = [
-    { label: t('settings.columns.created'), value: 'created' },
-    { label: t('settings.columns.sum_likes'), value: 'sum_likes' },
-    { label: t('settings.columns.sum_comments'), value: 'sum_comments' },
-  ] as Array<{ label: string; value: keyof IdeaType }>;
+    { value: 'created', labelKey: 'settings.columns.created' },
+    { value: 'sum_likes', labelKey: 'settings.columns.sum_likes' },
+    { value: 'sum_comments', labelKey: 'settings.columns.sum_comments' },
+  ];
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
   const [edit, setEdit] = useState<IdeaType | boolean>(false); // false = update dialog closed ;true = new idea; IdeaType = edit idea;
 
-  const [orderby, setOrderby] = useState<keyof IdeaType>(IDEAS_SORT_OPTIONS[0].value);
-  const [asc, setAsc] = useState(false);
+  // Use the search and sort hook
+  const { searchQuery, sortKey, sortDirection, scopeHeaderProps } = useSearchAndSort({
+    sortOptions: IDEAS_SORT_OPTIONS,
+  });
+
+  // Create text filter for ideas
+  const textFilter = useMemo(() => createTextFilter<IdeaType>(['title', 'content']), []);
+
+  // Apply filtering to ideas
+  const filteredIdeas = useFilter({
+    data: ideas,
+    filterValue: searchQuery,
+    filterFunction: textFilter,
+  });
 
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
@@ -121,35 +133,26 @@ const WildIdeas = () => {
     >
       {isLoading ? (
         <IdeaBubbleSkeleton />
-      ) : ideas.length === 0 ? (
+      ) : filteredIdeas.length === 0 ? (
         <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
       ) : (
         <Stack width="100%">
-          <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%" pb={2}>
-            <Stack direction="row" alignItems="center" gap={1}>
-              <AppIcon icon="idea" />
-              <Typography variant="h2">{t('ui.navigation.ideas')}</Typography>
-            </Stack>
-            <SortButton
-              options={IDEAS_SORT_OPTIONS}
-              onSelect={(orderby: string) => {
-                setOrderby(orderby as keyof IdeaType);
-              }}
-              onReorder={(asc: boolean) => {
-                setAsc(asc);
-              }}
-            ></SortButton>
-          </Stack>
-          <Stack width="100%" gap={2}>
-            {ideas
+          <ScopeHeader
+            title={t('ui.navigation.ideas')}
+            scopeKey="ideas"
+            totalCount={filteredIdeas.length}
+            {...scopeHeaderProps}
+          />
+          <Stack width="100%" gap={2} px={1}>
+            {filteredIdeas
               .slice()
               .sort((a, b) => {
-                const valueA = a[orderby];
-                const valueB = b[orderby];
+                const valueA = a[sortKey as keyof IdeaType];
+                const valueB = b[sortKey as keyof IdeaType];
                 if (typeof valueA === 'number' && typeof valueB === 'number') {
-                  return asc ? valueA - valueB : valueB - valueA;
+                  return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
                 }
-                return asc
+                return sortDirection === 'asc'
                   ? String(valueA).localeCompare(String(valueB))
                   : String(valueB).localeCompare(String(valueA));
               })
