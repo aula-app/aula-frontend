@@ -158,34 +158,26 @@ const IdeasBoxView = () => {
     filterFunction: ideaFilterFunction,
   });
 
-  // Sort the filtered ideas
-  const sortedApprovedIdeas = useMemo(() => {
-    return filteredApprovedIdeas.slice().sort((a, b) => {
-      const valueA = a[sortKey as keyof IdeaType];
-      const valueB = b[sortKey as keyof IdeaType];
+  // Reusable sorting logic (kept stable across renders unless sort inputs change)
+  const sortIdeas = useCallback(
+    (items: IdeaType[]) => {
+      return items.slice().sort((a, b) => {
+        const valueA = a[sortKey as keyof IdeaType] as unknown;
+        const valueB = b[sortKey as keyof IdeaType] as unknown;
 
-      if (typeof valueA === 'number' && typeof valueB === 'number') {
-        return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
-      }
+        if (typeof valueA === 'number' && typeof valueB === 'number') {
+          return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+        }
 
-      const comparison = String(valueA).localeCompare(String(valueB));
-      return sortDirection === 'asc' ? comparison : -comparison;
-    });
-  }, [filteredApprovedIdeas, sortKey, sortDirection]);
+        const comparison = String(valueA ?? '').localeCompare(String(valueB ?? ''));
+        return sortDirection === 'asc' ? comparison : -comparison;
+      });
+    },
+    [sortKey, sortDirection]
+  );
 
-  const sortedRejectedIdeas = useMemo(() => {
-    return filteredRejectedIdeas.slice().sort((a, b) => {
-      const valueA = a[sortKey as keyof IdeaType];
-      const valueB = b[sortKey as keyof IdeaType];
-
-      if (typeof valueA === 'number' && typeof valueB === 'number') {
-        return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
-      }
-
-      const comparison = String(valueA).localeCompare(String(valueB));
-      return sortDirection === 'asc' ? comparison : -comparison;
-    });
-  }, [filteredRejectedIdeas, sortKey, sortDirection]);
+  const sortedApprovedIdeas = useMemo(() => sortIdeas(filteredApprovedIdeas), [filteredApprovedIdeas, sortIdeas]);
+  const sortedRejectedIdeas = useMemo(() => sortIdeas(filteredRejectedIdeas), [filteredRejectedIdeas, sortIdeas]);
 
   const fetchIdeas = useCallback(async () => {
     if (!box_id) return;
