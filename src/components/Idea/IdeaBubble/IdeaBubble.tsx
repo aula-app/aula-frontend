@@ -1,18 +1,18 @@
 import AppIconButton from '@/components/AppIconButton';
 import AppLink from '@/components/AppLink';
+import ShareButton from '@/components/Buttons/ShareButton';
 import ChatBubble from '@/components/ChatBubble';
 import MarkdownReader from '@/components/MarkdownReader';
 import MoreOptions from '@/components/MoreOptions';
 import { IdeaType } from '@/types/Scopes';
+import { checkPermissions } from '@/utils';
 import { Stack, StackProps, Typography } from '@mui/material';
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router-dom';
 import LikeButton from '../../Buttons/LikeButton';
 import CategoryList from '../CategoryList';
 import UserBar from '../UserBar';
-import { checkPermissions, successAlert } from '@/utils';
-import { useAppStore } from '@/store';
-import { useTranslation } from 'react-i18next';
 
 interface Props extends Omit<StackProps, 'children'> {
   idea: IdeaType;
@@ -26,7 +26,6 @@ interface Props extends Omit<StackProps, 'children'> {
 const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onDelete, onEdit, ...restOfProps }) => {
   const { idea_id } = useParams();
   const location = useLocation();
-  const [, dispatch] = useAppStore();
   const { t } = useTranslation();
 
   return (
@@ -70,24 +69,7 @@ const IdeaBubble: React.FC<Props> = ({ children, idea, to, disabled = false, onD
             link={`${location.pathname}/${to}`}
           >
             <Stack direction="row" alignItems="center">
-              {to && !disabled && (
-                <AppIconButton
-                  icon="link"
-                  title={t('tooltips.link')}
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: idea.title,
-                        url: window.location.origin + to,
-                      });
-                    } else {
-                      navigator.clipboard.writeText(window.location.origin + to).then(() => {
-                        successAlert(t('clipboard.linkCopied'), dispatch);
-                      });
-                    }
-                  }}
-                />
-              )}
+              <ShareButton idea={idea} />
               <LikeButton disabled={disabled || !checkPermissions('ideas', 'like', idea.user_hash_id)} item={idea} />
               {idea.sum_comments > 0 && !idea_id && (
                 <AppIconButton icon="chat" title={t('tooltips.chat')} to={to} disabled={disabled}>
