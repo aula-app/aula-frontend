@@ -1,20 +1,202 @@
-import { Stack } from '@mui/material';
+import { AppIcon, EmptyState, ScopeHeader } from '@/components';
+import { IdeaForms } from '@/components/DataForms';
+import { IdeaBubble } from '@/components/Idea';
+import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
+import { useSearchAndSort, createTextFilter, useFilter } from '@/hooks';
+import { getWildIdeasByUser } from '@/services/dashboard';
+import { deleteIdea, getUserIdeasByPhase } from '@/services/ideas';
+import { useAppStore } from '@/store/AppStore';
+import { IdeaType } from '@/types/Scopes';
+import { checkPermissions, phases } from '@/utils';
+import { Drawer, Fab, Stack } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import DashBoard from '../Welcome/Dashboard';
-import BoxIdeasPhaseView from './BoxIdeasPhaseView';
-import WildIdeaPhaseView from './WildIdeaPhaseView';
 
 /**
- * Renders "Phase" view
+ * Unified PhaseView component that handles all phase types consistently
  * url: /Phase/:phase
  */
-
 const PhasesView = () => {
+  const { t } = useTranslation();
   const { phase } = useParams();
+  const [, dispatch] = useAppStore();
+
+  // Generic state management
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<IdeaType[]>([]);
+  const [edit, setEdit] = useState<IdeaType | boolean>();
+
+  // Get phase-specific data source and title
+  const phaseData = useMemo(() => {
+    const phaseNum = Number(phase);
+
+    if (phaseNum === 0) {
+      return {
+        title: t('phases.wild'),
+        phaseIcon: 'wild',
+        fetchData: getWildIdeasByUser,
+      };
+    } else {
+      return {
+        title: t(`phases.name-${phase}`),
+        phaseIcon: (phases[phase as keyof typeof phases] || 'box') as string,
+        fetchData: () => getUserIdeasByPhase(phaseNum),
+      };
+    }
+  }, [phase, t]);
+
+  // Search and sort functionality
+  const { searchQuery, sortKey, sortDirection, scopeHeaderProps } = useSearchAndSort({
+    sortOptions: [
+      { value: 'created', labelKey: 'settings.columns.created' },
+      { value: 'sum_likes', labelKey: 'settings.columns.sum_likes' },
+      { value: 'sum_comments', labelKey: 'settings.columns.sum_comments' },
+    ],
+  });
+
+  // Create filter function
+  const filterFunction = useMemo(() => createTextFilter<IdeaType>(['title', 'content', 'displayname']), []);
+
+  // Apply filtering
+  const filteredData = useFilter({
+    data,
+    filterValue: searchQuery,
+    filterFunction,
+  });
+
+  // Sort the filtered data
+  const sortedData = useMemo(() => {
+    return filteredData.slice().sort((a, b) => {
+      const valueA = a[sortKey as keyof IdeaType];
+      const valueB = b[sortKey as keyof IdeaType];
+
+      // Handle null/undefined values - sort them to the end
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return 1;
+      if (valueB == null) return -1;
+
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+      }
+
+      const comparison = String(valueA).localeCompare(String(valueB));
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+  }, [filteredData, sortKey, sortDirection]);
+
+  // Data fetching
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await phaseData.fetchData();
+      if (response.error) {
+        setError(response.error);
+      } else {
+        setData(response.data || []);
+      }
+    } catch {
+      setError(t('errors.failed'));
+    } finally {
+      setLoading(false);
+    }
+  }, [phaseData]);
+
+  // Effect to fetch data and set breadcrumb
+  useEffect(() => {
+    dispatch({
+      action: 'SET_BREADCRUMB',
+      breadcrumb: [[t('ui.navigation.dashboard')]],
+    });
+    fetchData();
+  }, [phase, dispatch, fetchData, t]);
+
+  // Event handlers
+  const onEdit = (item: IdeaType) => {
+    setEdit(item);
+  };
+
+  const onDelete = async (id: string) => {
+    const request = await deleteIdea(id);
+    if (!request.error) onClose();
+  };
+
+  const onClose = () => {
+    setEdit(undefined);
+    fetchData();
+  };
+
+  // Memoize the title translation to avoid unnecessary re-computation
+  const scopeHeaderTitle = useMemo(() => {
+    return t('scopes.ideas.inPhase', {
+      var: data.length === 1 ? t('scopes.ideas.name') : t('scopes.ideas.plural'),
+      phase: phaseData.title,
+    });
+  }, [t, data.length, phaseData.title]);
+
   return (
     <Stack overflow="hidden" flex={1}>
       <DashBoard show={true} />
-      {phase === '0' ? <WildIdeaPhaseView /> : <BoxIdeasPhaseView />}
+      <Stack flex={1} p={2} sx={{ overflowY: 'auto' }}>
+        <ScopeHeader title={scopeHeaderTitle} scopeKey="ideas" totalCount={data.length} {...scopeHeaderProps} />
+
+        {error && <EmptyState title="Error" description={error} />}
+
+        {/* Empty state */}
+        {!isLoading && !error && sortedData.length === 0 && (
+          <EmptyState title={t('ui.empty.dashboard.title')} description={t('ui.empty.dashboard.description')} />
+        )}
+
+        {/* Grid content */}
+        <Grid container spacing={2} p={1}>
+          {/* Loading skeleton */}
+          {isLoading && (
+            <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
+              <IdeaBubbleSkeleton />
+            </Grid>
+          )}
+
+          {/* Data items */}
+          {!isLoading &&
+            sortedData.map((item) => (
+              <Grid key={item.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
+                <IdeaBubble
+                  idea={item}
+                  onEdit={() => onEdit(item)}
+                  onDelete={() => onDelete(item.hash_id)}
+                  to={`/room/${item.room_hash_id}/phase/${phase}/idea/${item.hash_id}`}
+                />
+              </Grid>
+            ))}
+        </Grid>
+
+        {/* Create button */}
+        {checkPermissions('ideas', 'create') && (
+          <Fab
+            aria-label="add idea"
+            color="primary"
+            sx={{
+              position: 'fixed',
+              bottom: 40,
+              right: 40,
+              zIndex: 1000,
+            }}
+            onClick={() => setEdit(true)}
+          >
+            <AppIcon icon="idea" />
+          </Fab>
+        )}
+
+        {/* Edit/Create drawer */}
+        <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
+          <IdeaForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
+        </Drawer>
+      </Stack>
     </Stack>
   );
 };

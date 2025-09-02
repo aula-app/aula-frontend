@@ -318,6 +318,7 @@
     "ideas": {
       "approve": "Approve",
       "approved": "This idea was approved.",
+      "inPhase": "{{var}} in {{phase}} phase",
       "marked_not_winner": "This idea is not selected as a winner.",
       "marked_winner": "This idea is selected as a winner.",
       "name": "Idea",

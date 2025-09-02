@@ -314,6 +314,7 @@
     "ideas": {
       "approve": "Genehmigen",
       "approved": "Diese Idee wurde angenommen.",
+      "inPhase": "{{var}} in {{phase}} Phase",
       "marked_not_winner": "Diese Idee wird nicht als Gewinner ausgewählt.",
       "marked_winner": "Diese Idee wird als Gewinner ausgewählt.",
       "name": "Idee",
