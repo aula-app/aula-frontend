@@ -140,16 +140,20 @@ const IdeasBoxView = () => {
   const [ideasError, setIdeasError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
 
-  // Apply filtering to approved ideas
+  // Separate approved and rejected ideas (avoid repeating filter logic in multiple places)
+  const approvedIdeas = useMemo(() => ideas.filter((idea) => idea.approved >= 0), [ideas]);
+  const rejectedIdeas = useMemo(() => ideas.filter((idea) => idea.approved < 0), [ideas]);
+
+  // Apply search filtering to approved ideas
   const filteredApprovedIdeas = useFilter({
-    data: useMemo(() => ideas.filter((idea) => idea.approved >= 0), [ideas]),
+    data: approvedIdeas,
     filterValue: searchQuery,
     filterFunction: ideaFilterFunction,
   });
 
-  // Apply filtering to rejected ideas
+  // Apply search filtering to rejected ideas
   const filteredRejectedIdeas = useFilter({
-    data: useMemo(() => ideas.filter((idea) => idea.approved < 0), [ideas]),
+    data: rejectedIdeas,
     filterValue: searchQuery,
     filterFunction: ideaFilterFunction,
   });
@@ -259,13 +263,10 @@ const IdeasBoxView = () => {
             <Stack direction="row" alignItems="center" gap={2} width="100%">
               <ScopeHeader
                 title={t(`phases.id-${box.phase_id}`, {
-                  var:
-                    ideas.filter((idea) => idea.approved >= 0).length === 1
-                      ? t('scopes.ideas.name')
-                      : t('scopes.ideas.plural'),
+                  var: approvedIdeas.length === 1 ? t('scopes.ideas.name') : t('scopes.ideas.plural'),
                 })}
                 scopeKey="ideas"
-                totalCount={ideas.filter((idea) => idea.approved >= 0).length}
+                totalCount={approvedIdeas.length}
                 {...scopeHeaderProps}
               />
               {Number(phase) === 30 && checkPermissions('ideas', 'vote') && (
