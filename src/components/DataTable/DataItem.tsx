@@ -7,15 +7,9 @@ import { useAppStore } from '@/store';
 import { PossibleFields, SettingType } from '@/types/Scopes';
 import { phases, STATUS } from '@/utils';
 import { Chip, Stack, Typography } from '@mui/material';
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MarkdownReader from '../MarkdownReader';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 /**
  * Props for the DataItem component
