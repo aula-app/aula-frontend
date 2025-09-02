@@ -1,7 +1,6 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../shared';
 import * as users from '../../fixtures/users';
-import { sleep } from '../utils';
 
 const host = shared.getHost();
 
@@ -69,7 +68,6 @@ export const exists = async (page: Page, data: users.UserData) => {
 
   // filter by our user name
   await page.fill('#filter-value-input', data.username);
-  await sleep(1);
 
   // find the new user in the user table
   const row = page.locator('table tr').filter({ hasText: data.username });
@@ -177,7 +175,6 @@ export const remove = async (page: Page, data: users.UserData) => {
   await ButtonConfirmDelete.click({ timeout: 1000 });
 
   // confirm the user does not show up in the table list
-  await sleep(1);
   await expect(page.locator('table tr').filter({ hasText: data.username })).toHaveCount(0);
 };
 
