@@ -24,7 +24,7 @@ const ShareButton = forwardRef<HTMLButtonElement, Props>(({ idea, disabled }, re
       title={t(`tooltips.share`)}
       data-testid="share-idea-button"
       onClick={async () => {
-        if (!sharePath) return; // nothing to share
+        if (!idea || !idea.hash_id) return; // nothing to share if idea is invalid
         try {
           if (navigator.share) {
             await navigator.share({
