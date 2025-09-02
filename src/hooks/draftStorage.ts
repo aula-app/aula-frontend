@@ -68,7 +68,6 @@ export const useDraftStorage = <T extends Record<string, any>>(
 
   const handleSubmit = useCallback(() => {
     clearDraft();
-    // Reset form to empty values so watch doesn't save them back as draft
     reset();
     onSubmit?.();
   }, [clearDraft, onSubmit, reset]);
