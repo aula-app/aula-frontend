@@ -1,8 +1,16 @@
+## 1.4.2
+
+- **Bug fixes:**
+  - Display time considering correct local timezones
+
 ## 1.4.1
 
 - **Bug fixes:**
   - Resolved draft storage being kept after submit
   - Remove error message from empty boxes and settings pages
+  - Fixed warnings and errors
+- **New features:**
+  - Added search and sort to rooms
 
 ## 1.4.0
 

@@ -31,8 +31,8 @@
     "print": "Print",
     "processing": "Processing",
     "remove": "Delete {{var}}",
-    "revert": "Revert",
     "retry": "Try again",
+    "revert": "Revert",
     "save": "Save",
     "saving": "Saving",
     "savingComplete": "Saving complete",
@@ -197,13 +197,17 @@
   },
   "phases": {
     "approval": "Approval",
+    "box-10": "{{var}} in discussion",
+    "box-20": "{{var}} in approval",
+    "box-30": "{{var}} in voting",
+    "box-40": "{{var}} in results",
     "discussion": "Discussion",
     "end": "Phase ends in {{var}} days",
     "ended": "Phase ended",
-    "id-10": "{{var}} ideas in discussion",
-    "id-20": "{{var}} ideas in approval",
-    "id-30": "{{var}} ideas in voting",
-    "id-40": "{{var}} ideas in results",
+    "id-10": "{{var}} in discussion",
+    "id-20": "{{var}} in approval",
+    "id-30": "{{var}} in voting",
+    "id-40": "{{var}} in results",
     "name-0": "Wild Ideas",
     "name-10": "Discussion",
     "name-20": "Approval",
@@ -302,7 +306,10 @@
     },
     "comments": {
       "name": "Comment",
-      "plural": "Comments"
+      "plural": "Comments",
+      "search": {
+        "placeholder": "Search comments..."
+      }
     },
     "groups": {
       "name": "Group",
@@ -575,6 +582,7 @@
     "quorum": "Required likes to advance to discussion phase",
     "report": "Report",
     "results": "View voting results and approved ideas for implementation",
+    "share": "Share this idea",
     "unarchive": "Unarchive",
     "voting": "Cast your vote on approved ideas",
     "wild": "Share and like initial ideas and suggestions",
@@ -586,7 +594,9 @@
       "actionToolbar": "Action toolbar",
       "clearFilter": "Clear filter",
       "codeCopied": "Instance code copied to clipboard",
+      "columnHeader": "column header",
       "confirmDeletion": "Confirm deletion of {{count}} {{type}}",
+      "content": "content",
       "contentChanged": "Content has changed",
       "contentLoaded": "Content loaded",
       "copyInstanceCode": "Copy instance code {{code}} to clipboard",
@@ -606,7 +616,7 @@
       "formError": "Form submission failed",
       "formSubmitted": "Form submitted successfully",
       "itemsDeleted": "{{count}} {{type}} deleted",
-      "loadingContent": "Loading content",
+      "loading": "Loading {{var}}",
       "menuClosed": "Navigation menu closed",
       "menuItemSelected": "Selected {{item}} from navigation menu",
       "modalClosed": "Dialog closed",
@@ -622,6 +632,8 @@
       "selectFilterField": "Select field to filter by",
       "sidebarActions": "Sidebar actions",
       "sortColumn": "Sort by {{column}}, currently {{direction}}",
+      "tableCell": "table cell",
+      "tableData": "table data",
       "updatingContent": "Updating content"
     },
     "common": {

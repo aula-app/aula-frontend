@@ -193,6 +193,29 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     await Promise.all([...addPromises, ...removePromises]);
   };
 
+  // Helper function to handle user selection accumulation for new rooms
+  const handleUserSelectionChange = useCallback(
+    (updates: UpdateType) => {
+      if (!defaultValues) {
+        // For new rooms: accumulate selections (add new, remove deselected)
+        const currentUsers = updateUsers.add;
+        const newSelectedUsers = [
+          ...currentUsers,
+          ...updates.add.filter((userId) => !currentUsers.includes(userId)),
+        ].filter((userId) => !updates.remove.includes(userId));
+
+        const accumulatedUpdates = { add: newSelectedUsers, remove: [] };
+        setUpdateUsers(accumulatedUpdates);
+        saveUserSelections(accumulatedUpdates);
+      } else {
+        // For existing rooms: use updates directly
+        setUpdateUsers(updates);
+        saveUserSelections(updates);
+      }
+    },
+    [defaultValues, updateUsers.add, saveUserSelections]
+  );
+
   // Memoize the key properties of defaultValues to avoid unnecessary re-renders
   const defaultValuesKey = useMemo(() => {
     if (!defaultValues) return null;
@@ -277,29 +300,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
               {checkPermissions('rooms', 'addUser') && !isDefault && (
                 <UsersField
                   defaultValues={defaultValues ? users : updateUsers.add}
-                  onChange={(updates) => {
-                    // For new rooms, we need to accumulate users properly
-                    if (!defaultValues) {
-                      // Accumulate all selected users (existing + new additions - removals)
-                      const currentUsers = updateUsers.add;
-                      const newSelectedUsers = [
-                        ...currentUsers,
-                        ...updates.add.filter((userId) => !currentUsers.includes(userId)),
-                      ].filter((userId) => !updates.remove.includes(userId));
-
-                      setUpdateUsers({
-                        add: newSelectedUsers,
-                        remove: [],
-                      });
-
-                      // Save the accumulated list
-                      saveUserSelections({ add: newSelectedUsers, remove: [] });
-                    } else {
-                      // For editing existing rooms, use the updates as-is
-                      setUpdateUsers(updates);
-                      saveUserSelections(updates);
-                    }
-                  }}
+                  onChange={handleUserSelectionChange}
                   disabled={isLoading}
                 />
               )}

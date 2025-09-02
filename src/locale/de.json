@@ -31,8 +31,8 @@
     "print": "Drucken",
     "processing": "Verarbeitung",
     "remove": "{{var}} löschen",
-    "revert": "Zurücksetzen",
     "retry": "Erneut versuchen",
+    "revert": "Zurücksetzen",
     "save": "Speichern",
     "saving": "Speichern",
     "savingComplete": "Speichern abgeschlossen",
@@ -200,10 +200,10 @@
     "discussion": "Diskussion",
     "end": "Phase endet in {{var}} Tagen",
     "ended": "Phase beendet",
-    "id-10": "{{var}} Ideen zur Diskussion",
-    "id-20": "{{var}} Ideen zur Prüfung",
-    "id-30": "{{var}} Ideen zur Abstimmung",
-    "id-40": "{{var}} Ideen in Ergebnisse",
+    "id-10": "{{var}} zur Diskussion",
+    "id-20": "{{var}} zur Prüfung",
+    "id-30": "{{var}} zur Abstimmung",
+    "id-40": "{{var}} in Ergebnisse",
     "name-0": "Wilde Ideen",
     "name-10": "Diskussion",
     "name-20": "Prüfung",
@@ -302,7 +302,10 @@
     },
     "comments": {
       "name": "Verbesserungsvorschlag",
-      "plural": "Verbesserungsvorschläge"
+      "plural": "Verbesserungsvorschläge",
+      "search": {
+        "placeholder": "Kommentare durchsuchen..."
+      }
     },
     "groups": {
       "name": "Gruppe",
@@ -575,6 +578,7 @@
     "quorum": "Erforderliche Likes, um in die Diskussionsphase zu gelangen",
     "report": "Melden",
     "results": "Abstimmungsergebnisse und genehmigte Ideen zur Umsetzung anzeigen",
+    "share": "Diese Idee teilen",
     "unarchive": "Wiederherstellen",
     "voting": "Stimme für genehmigte Ideen abgeben",
     "wild": "Hier kannst du erste Ideen und Vorschläge posten",
@@ -586,7 +590,9 @@
       "actionToolbar": "Aktionsleiste",
       "clearFilter": "Filter löschen",
       "codeCopied": "Instanzcode in die Zwischenablage kopiert",
+      "columnHeader": "Spaltenkopf",
       "confirmDeletion": "Bestätige das Löschen von {{count}} {{type}}",
+      "content": "Inhalt",
       "contentChanged": "Inhalt wurde geändert",
       "contentLoaded": "Inhalt geladen",
       "copyInstanceCode": "Instanzcode {{code}} in die Zwischenablage kopieren",
@@ -606,7 +612,7 @@
       "formError": "Formularübermittlung fehlgeschlagen",
       "formSubmitted": "Formular erfolgreich übermittelt",
       "itemsDeleted": "{{count}} {{type}} gelöscht",
-      "loadingContent": "Inhalt wird geladen",
+      "loading": "{{var}} wird geladen",
       "menuClosed": "Navigationsmenü geschlossen",
       "menuItemSelected": "{{item}} aus dem Navigationsmenü ausgewählt",
       "modalClosed": "Dialog geschlossen",
@@ -622,6 +628,8 @@
       "selectFilterField": "Wähle ein Feld zum Filtern aus",
       "sidebarActions": "Seitenleistenaktionen",
       "sortColumn": "Sortieren nach {{column}}, aktuell {{direction}}",
+      "tableCell": "Tabellenzelle",
+      "tableData": "Tabellendaten",
       "updatingContent": "Inhalt wird aktualisiert"
     },
     "common": {

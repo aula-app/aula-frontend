@@ -1,7 +1,6 @@
-import { AppIcon, EmptyState } from '@/components';
+import { AppIcon, EmptyState, ScopeHeader } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
-import SortButton from '@/components/Buttons/SortButton';
 import { BoxForms } from '@/components/DataForms';
 import SurveyForms from '@/components/DataForms/SurveyForms';
 import { deleteBox, getBoxesByPhase } from '@/services/boxes';
@@ -10,10 +9,11 @@ import { useAppStore } from '@/store/AppStore';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions, phases } from '@/utils';
-import { Drawer, Fab, Stack, Typography } from '@mui/material';
+import { Drawer, Fab, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchAndSort, createTextFilter, useFilter } from '@/hooks';
 import { useParams } from 'react-router-dom';
 
 /** * Renders "IdeaBoxes" view
@@ -24,17 +24,43 @@ const BoxPhaseView = () => {
   const { t } = useTranslation();
   const { room_id, phase } = useParams();
 
-  const BOXES_SORT_OPTIONS = [
-    { label: t('settings.columns.created'), value: 'created' },
-    { label: t('settings.columns.title'), value: 'name' },
-  ] as Array<{ label: string; value: keyof BoxType }>;
+  // Manage search and sort state for boxes
+  const { searchQuery, sortKey, sortDirection, scopeHeaderProps } = useSearchAndSort({
+    sortOptions: [
+      { value: 'created', labelKey: 'settings.columns.created' },
+      { value: 'name', labelKey: 'settings.columns.title' },
+      { value: 'ideas_num', labelKey: 'settings.columns.ideas_num' },
+    ],
+  });
+
+  // Create filter function for boxes (searches in name and description)
+  const boxFilterFunction = useMemo(() => createTextFilter<BoxType>(['name', 'description_public']), []);
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
 
-  const [orderby, setOrderby] = useState<keyof BoxType>(BOXES_SORT_OPTIONS[0].value);
-  const [asc, setAsc] = useState(false);
+  // Apply filtering to boxes
+  const filteredBoxes = useFilter({
+    data: boxes,
+    filterValue: searchQuery,
+    filterFunction: boxFilterFunction,
+  });
+
+  // Sort the filtered boxes
+  const sortedBoxes = useMemo(() => {
+    return filteredBoxes.slice().sort((a, b) => {
+      const valueA = a[sortKey as keyof BoxType];
+      const valueB = b[sortKey as keyof BoxType];
+
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+      }
+
+      const comparison = String(valueA).localeCompare(String(valueB));
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+  }, [filteredBoxes, sortKey, sortDirection]);
 
   const [edit, setEdit] = useState<BoxType | boolean>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
   const [appState, dispatch] = useAppStore();
@@ -92,34 +118,20 @@ const BoxPhaseView = () => {
             <BoxCardSkeleton />
           </Grid>
         </Grid>
-      ) : boxes.length === 0 ? (
+      ) : sortedBoxes.length === 0 ? (
         <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
       ) : (
-        <Grid container spacing={2} p={1} width="100%">
-          <Stack direction="row" justifyContent="space-between" alignItems="center" width="100%" pb={2}>
-            <Stack direction="row" alignItems="center" gap={1}>
-              <AppIcon icon={phases[(phase as `${RoomPhases}`) || '0']} />
-              <Typography variant="h2">{t(`phases.name-${phase}`)}</Typography>
-            </Stack>
-            <SortButton
-              options={BOXES_SORT_OPTIONS}
-              onSelect={(orderby: string) => {
-                setOrderby(orderby as keyof BoxType);
-              }}
-              onReorder={(asc) => setAsc(asc)}
-            />
-          </Stack>
-          {boxes
-            .slice()
-            .sort((a, b) => {
-              const valueA = a[orderby];
-              const valueB = b[orderby];
-              if (typeof valueA === 'number' && typeof valueB === 'number') {
-                return asc ? valueA - valueB : valueB - valueA;
-              }
-              return asc ? String(valueA).localeCompare(String(valueB)) : String(valueB).localeCompare(String(valueA));
-            })
-            .map((box) => (
+        <Stack width="100%">
+          <ScopeHeader
+            title={t(`phases.box-${phase}`, {
+              var: boxes.length === 1 ? t('scopes.boxes.name') : t('scopes.boxes.plural'),
+            })}
+            scopeKey="boxes"
+            totalCount={boxes.length}
+            {...scopeHeaderProps}
+          />
+          <Grid container spacing={2} p={2} pt={0}>
+            {sortedBoxes.map((box) => (
               <Grid key={box.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
                 <BoxCard
                   box={box}
@@ -130,7 +142,8 @@ const BoxPhaseView = () => {
                 />
               </Grid>
             ))}
-        </Grid>
+          </Grid>
+        </Stack>
       )}
       <Stack
         direction="row"
