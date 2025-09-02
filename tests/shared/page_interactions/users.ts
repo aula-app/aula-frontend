@@ -64,7 +64,6 @@ export const exists = async (page: Page, data: users.UserData) => {
   await FilterButton.click({ timeout: 1000 });
 
   // select "username" from the "filter by" dropdown
-
   await page.locator('#filter-field-select').click({ timeout: 1000 });
   await page.locator('li[data-value="username"]').click({ timeout: 1000 });
 
