@@ -153,7 +153,7 @@ const DataTable: React.FC<Props> = ({
                     }}
                   />
                 </TableCell>
-                {columns.map((column, index) => (
+                {columns.map((column) => (
                   <TableCell
                     sx={{ whiteSpace: 'nowrap' }}
                     key={column.name}
@@ -184,7 +184,7 @@ const DataTable: React.FC<Props> = ({
             <TableBody role="rowgroup">
               {rows.map((row, rowIndex) => (
                 <DataRow
-                  key={row.id}
+                  key={`${row.hash_id}-${row.id}`}
                   item={row}
                   selected={selected.includes(row.hash_id)}
                   status={Number(row.status) as StatusTypes}
@@ -202,7 +202,7 @@ const DataTable: React.FC<Props> = ({
                         background: 'inherit',
                       }}
                       onClick={() => setEdit(row)}
-                      key={`${column.name}-${row.hash_id}`}
+                      key={`${row.hash_id}-${row.id}-${column.name}-${colIndex}`}
                       role="cell"
                       aria-colindex={colIndex + 2} // +2 because of the checkbox column and row header
                       tabIndex={-1} // Not directly tabbable to avoid too many tab stops
