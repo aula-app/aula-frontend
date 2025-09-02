@@ -84,6 +84,8 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     await expect(ApproveButton).toBeVisible();
     await ApproveButton.click({ timeout: 1000 });
 
+    // @TODO: nikola - capture HTTP traffic and assert Response is 200 OK, not 409
+
     fs.unlinkSync(filePath);
 
     // verify user is added
@@ -164,9 +166,7 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     await SecondApproveButton2.click({ timeout: 1000 });
 
     // expect the user to not exist any more
-    await expect(async () => {
-      await users.exists(admin, data.jannikaData);
-    }).rejects.toThrow();
+    await expect(users.exists(admin, data.jannikaData)).rejects.toThrow();
 
     await rooms.remove(admin, data.room);
 
