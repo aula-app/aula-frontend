@@ -131,22 +131,20 @@ const PhasesView = () => {
     fetchData();
   };
 
+  // Memoize the title translation to avoid unnecessary re-computation
+  const scopeHeaderTitle = useMemo(() => {
+    return t('scopes.ideas.inPhase', {
+      var: data.length === 1 ? t('scopes.ideas.name') : t('scopes.ideas.plural'),
+      phase: phaseData.title,
+    });
+  }, [t, data.length, phaseData.title]);
+
   return (
     <Stack overflow="hidden" flex={1}>
       <DashBoard show={true} />
       <Stack flex={1} p={2} sx={{ overflowY: 'auto' }}>
-        {/* Header with search and sort */}
-        <ScopeHeader
-          title={t('scopes.ideas.inPhase', {
-            var: data.length === 1 ? t('scopes.ideas.name') : t('scopes.ideas.plural'),
-            phase: phaseData.title,
-          })}
-          scopeKey="ideas"
-          totalCount={data.length}
-          {...scopeHeaderProps}
-        />
+        <ScopeHeader title={scopeHeaderTitle} scopeKey="ideas" totalCount={data.length} {...scopeHeaderProps} />
 
-        {/* Error state */}
         {error && <EmptyState title="Error" description={error} />}
 
         {/* Empty state */}
