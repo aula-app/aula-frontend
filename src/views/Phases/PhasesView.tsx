@@ -101,7 +101,7 @@ const PhasesView = () => {
         setData(response.data || []);
       }
     } catch {
-      setError('Failed to load data');
+      setError(t('errors.failed'));
     } finally {
       setLoading(false);
     }
