@@ -186,7 +186,7 @@ export const login = async (page: Page, data: users.UserData) => {
   await page.goto(host);
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
-  await page.getByRole('button', { name: 'Login' }).click({ timeout: 1000 });
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
   // Wait for successful login by checking for the rooms page heading
   await expect(page.locator('#rooms-heading')).toBeVisible();
