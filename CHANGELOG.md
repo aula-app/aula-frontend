@@ -2,6 +2,7 @@
 
 - **Bug fixes:**
   - Display time considering correct local timezones
+  - Importing CSV to multiple Rooms works correctly resolving duplicated Users
 
 ## 1.4.1
 
