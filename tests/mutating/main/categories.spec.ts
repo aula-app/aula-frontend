@@ -43,7 +43,7 @@ test.describe('Categories flow', () => {
     const admin = await browsers.newPage(browsers.admins_browser);
     const host = shared.getHost();
 
-    await admin.goto(host || 'http://localhost:3000');
+    await admin.goto(host);
 
     data.categoryName = 'TESTING' + shared.gensym();
 

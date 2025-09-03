@@ -1,9 +1,5 @@
 // called from playwright.config
-import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
-import { sleep } from '../shared/utils';
-import * as shared from '../shared/shared';
 import * as users from '../shared/page_interactions/users';
-import * as rooms from '../shared/page_interactions/rooms';
 import * as fixtures from '../fixtures/users';
 import * as browsers from '../shared/page_interactions/browsers';
 

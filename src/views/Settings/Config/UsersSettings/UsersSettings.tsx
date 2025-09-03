@@ -1,7 +1,7 @@
 import { AppIcon } from '@/components';
 import RoomField from '@/components/DataFields/RoomField';
 import SelectRole from '@/components/SelectRole';
-import { addCSV } from '@/services/config';
+import { addAllCSV } from '@/services/config';
 import { useAppStore } from '@/store';
 import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
 import {
@@ -95,14 +95,12 @@ const DataSettings = ({ onReload }: Props) => {
 
   const uploadCSV = async (csv: string) => {
     setLoading(true);
-    const responses = await Promise.all(rooms.add.map((room) => addCSV(csv, room, role)));
+    const response = await addAllCSV(csv, rooms.add, role);
     setLoading(false);
-    responses.forEach((response) => {
-      if (!response.data) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
-        return;
-      }
-    });
+    if (!response.data) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      return;
+    }
     dispatch({ type: 'ADD_POPUP', message: { message: t('forms.csv.success'), type: 'success' } });
     onReload();
     onReset();
