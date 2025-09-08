@@ -95,11 +95,7 @@ const PhasesView = () => {
 
     try {
       const response = await phaseData.fetchData();
-      if (response.error) {
-        setError(response.error);
-      } else {
-        setData(response.data || []);
-      }
+      setData(response.data || []);
     } catch {
       setError(t('errors.failed'));
     } finally {
@@ -142,7 +138,7 @@ const PhasesView = () => {
   return (
     <Stack overflow="hidden" flex={1}>
       <DashBoard show={true} />
-      <Stack flex={1} p={2} sx={{ overflowY: 'auto' }}>
+      <Stack flex={1} p={2} alignItems="center" sx={{ overflowY: 'auto' }}>
         <ScopeHeader title={scopeHeaderTitle} scopeKey="ideas" totalCount={data.length} {...scopeHeaderProps} />
 
         {error && <EmptyState title="Error" description={error} />}
@@ -153,7 +149,7 @@ const PhasesView = () => {
         )}
 
         {/* Grid content */}
-        <Grid container spacing={2} p={1}>
+        <Grid container spacing={2} p={1} width="100%">
           {/* Loading skeleton */}
           {isLoading && (
             <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
@@ -183,7 +179,6 @@ const PhasesView = () => {
             sx={{
               position: 'fixed',
               bottom: 40,
-              right: 40,
               zIndex: 1000,
             }}
             onClick={() => setEdit(true)}

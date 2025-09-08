@@ -197,6 +197,10 @@
   },
   "phases": {
     "approval": "Prüfung",
+    "box-10": "{{var}} in Diskussion",
+    "box-20": "{{var}} in Prüfung",
+    "box-30": "{{var}} in Abstimmung",
+    "box-40": "{{var}} in Ergebnisse",
     "discussion": "Diskussion",
     "end": "Phase endet in {{var}} Tagen",
     "ended": "Phase beendet",
@@ -657,6 +661,10 @@
       "bugs": {
         "description": "Es wurden noch keine Fehler gemeldet",
         "title": "Keine Fehlerberichte"
+      },
+      "comments": {
+        "description": "Es wurden noch keine Kommentare abgegeben",
+        "title": "Keine Kommentare"
       },
       "dashboard": {
         "description": "Ideen werden hier angezeigt, wenn sie diese Phase erreichen",

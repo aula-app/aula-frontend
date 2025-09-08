@@ -118,10 +118,8 @@ const BoxPhaseView = () => {
             <BoxCardSkeleton />
           </Grid>
         </Grid>
-      ) : sortedBoxes.length === 0 ? (
-        <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
       ) : (
-        <Stack width="100%">
+        <Stack width="100%" flex={1}>
           <ScopeHeader
             title={t(`phases.box-${phase}`, {
               var: boxes.length === 1 ? t('scopes.boxes.name') : t('scopes.boxes.plural'),
@@ -130,18 +128,22 @@ const BoxPhaseView = () => {
             totalCount={boxes.length}
             {...scopeHeaderProps}
           />
-          <Grid container spacing={2} p={2} pt={0}>
-            {sortedBoxes.map((box) => (
-              <Grid key={box.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-                <BoxCard
-                  box={box}
-                  onEdit={() => {
-                    setEdit(box);
-                  }}
-                  onDelete={() => boxDelete(box.hash_id)}
-                />
-              </Grid>
-            ))}
+          <Grid container spacing={2} p={2} pt={0} flex={1}>
+            {sortedBoxes.length === 0 ? (
+              <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
+            ) : (
+              sortedBoxes.map((box) => (
+                <Grid key={box.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
+                  <BoxCard
+                    box={box}
+                    onEdit={() => {
+                      setEdit(box);
+                    }}
+                    onDelete={() => boxDelete(box.hash_id)}
+                  />
+                </Grid>
+              ))
+            )}
           </Grid>
         </Stack>
       )}

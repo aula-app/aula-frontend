@@ -131,7 +131,7 @@ const IdeaView = () => {
         )}
       </IdeaBubble>
       {Number(phase) >= 20 && <ApprovalCard idea={idea} onReload={fetchIdea} />}
-      <Stack px={2}>
+      <Stack px={2} flex={1}>
         <CommentView />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
