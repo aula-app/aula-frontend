@@ -1,12 +1,8 @@
-## 1.4.4
+## 1.4.3
 
 - **Bug fixes:**
   - Importing CSV to multiple Rooms works correctly resolving duplicated Users
   - Fix rendering empty results in Wild Ideas and Discussions view of Room's Phases
-
-## 1.4.3
-
-- **Bug fixes:**
   - Fix rendering empty lists in settings
   - Fix missing key props
   - Fix correct share link path
