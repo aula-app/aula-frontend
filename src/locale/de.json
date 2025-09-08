@@ -197,6 +197,10 @@
   },
   "phases": {
     "approval": "Prüfung",
+    "box-10": "{{var}} in Diskussion",
+    "box-20": "{{var}} in Prüfung",
+    "box-30": "{{var}} in Abstimmung",
+    "box-40": "{{var}} in Ergebnisse",
     "discussion": "Diskussion",
     "end": "Phase endet in {{var}} Tagen",
     "ended": "Phase beendet",
