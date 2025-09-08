@@ -7,8 +7,7 @@ import { deleteBox, getBoxesByPhase } from '@/services/boxes';
 import { getRoom } from '@/services/rooms';
 import { useAppStore } from '@/store/AppStore';
 import { BoxType } from '@/types/Scopes';
-import { RoomPhases } from '@/types/SettingsTypes';
-import { checkPermissions, phases } from '@/utils';
+import { checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState, useMemo } from 'react';
@@ -16,10 +15,11 @@ import { useTranslation } from 'react-i18next';
 import { useSearchAndSort, createTextFilter, useFilter } from '@/hooks';
 import { useParams } from 'react-router-dom';
 
-/** * Renders "IdeaBoxes" view
- * url: /room/:room_id/:phase
+/**
+ * Renders "IdeaBoxes" view as the second view in the Room Phases
+ *
+ * @url /room/:room_id/phase/10
  */
-
 const BoxPhaseView = () => {
   const { t } = useTranslation();
   const { room_id, phase } = useParams();
@@ -118,10 +118,8 @@ const BoxPhaseView = () => {
             <BoxCardSkeleton />
           </Grid>
         </Grid>
-      ) : sortedBoxes.length === 0 ? (
-        <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
       ) : (
-        <Stack width="100%">
+        <Stack width="100%" flex={1}>
           <ScopeHeader
             title={t(`phases.box-${phase}`, {
               var: boxes.length === 1 ? t('scopes.boxes.name') : t('scopes.boxes.plural'),
@@ -130,18 +128,22 @@ const BoxPhaseView = () => {
             totalCount={boxes.length}
             {...scopeHeaderProps}
           />
-          <Grid container spacing={2} p={2} pt={0}>
-            {sortedBoxes.map((box) => (
-              <Grid key={box.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
-                <BoxCard
-                  box={box}
-                  onEdit={() => {
-                    setEdit(box);
-                  }}
-                  onDelete={() => boxDelete(box.hash_id)}
-                />
-              </Grid>
-            ))}
+          <Grid container spacing={2} p={2} pt={0} flex={1}>
+            {sortedBoxes.length === 0 ? (
+              <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
+            ) : (
+              sortedBoxes.map((box) => (
+                <Grid key={box.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
+                  <BoxCard
+                    box={box}
+                    onEdit={() => {
+                      setEdit(box);
+                    }}
+                    onDelete={() => boxDelete(box.hash_id)}
+                  />
+                </Grid>
+              ))
+            )}
           </Grid>
         </Stack>
       )}

@@ -662,6 +662,10 @@
         "description": "No bugs have been reported yet",
         "title": "No bug reports"
       },
+      "comments": {
+        "description": "No comments have been made yet",
+        "title": "No comments"
+      },
       "dashboard": {
         "description": "Ideas will appear here when they reach this phase",
         "title": "No ideas in this phase"

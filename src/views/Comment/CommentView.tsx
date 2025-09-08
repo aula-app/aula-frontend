@@ -1,4 +1,4 @@
-import { AppIcon, ScopeHeader } from '@/components';
+import { AppIcon, EmptyState, ScopeHeader } from '@/components';
 import { CommentForms } from '@/components/DataForms';
 import CommentBubble from '@/components/Idea/CommentBubble';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
@@ -41,10 +41,7 @@ const Comments = () => {
   const [edit, setEdit] = useState<CommentType | boolean>(false);
 
   // Create filter function for comments (searches in content and displayname)
-  const commentFilterFunction = useMemo(
-    () => createTextFilter<CommentType>(['content', 'displayname']),
-    []
-  );
+  const commentFilterFunction = useMemo(() => createTextFilter<CommentType>(['content', 'displayname']), []);
 
   // Apply filtering to comments
   const filteredComments = useFilter({
@@ -81,21 +78,21 @@ const Comments = () => {
     return filteredComments.slice().sort((a, b) => {
       const valueA = a[sortKey as keyof CommentType];
       const valueB = b[sortKey as keyof CommentType];
-      
+
       if (typeof valueA === 'number' && typeof valueB === 'number') {
         return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
       }
-      
+
       const comparison = String(valueA).localeCompare(String(valueB));
       return sortDirection === 'asc' ? comparison : -comparison;
     });
   }, [filteredComments, sortKey, sortDirection]);
 
   return (
-    <Stack alignItems="center" width="100%" spacing={2} pt={2}>
+    <Stack alignItems="center" width="100%" spacing={2} pt={2} flex={1}>
       {isLoading ? (
         <IdeaBubbleSkeleton />
-      ) : comments.length > 0 ? (
+      ) : (
         <>
           <ScopeHeader
             title={t('scopes.comments.plural')}
@@ -103,19 +100,23 @@ const Comments = () => {
             totalCount={comments.length}
             {...scopeHeaderProps}
           />
-          <Stack width="100%" gap={2}>
-            {sortedComments.map((comment) => (
-              <CommentBubble
-                key={comment.id}
-                comment={comment}
-                onEdit={() => setEdit(comment)}
-                onDelete={() => onDelete(comment.id)}
-                disabled={Number(phase) >= 20}
-              />
-            ))}
+          <Stack width="100%" gap={2} flex={1}>
+            {sortedComments.length === 0 ? (
+              <EmptyState title={t('ui.empty.comments.title')} description={t('ui.empty.comments.description')} />
+            ) : (
+              sortedComments.map((comment) => (
+                <CommentBubble
+                  key={comment.id}
+                  comment={comment}
+                  onEdit={() => setEdit(comment)}
+                  onDelete={() => onDelete(comment.id)}
+                  disabled={Number(phase) >= 20}
+                />
+              ))
+            )}
           </Stack>
         </>
-      ) : null}
+      )}
       {checkPermissions('comments', 'create') && idea_id && Number(phase) < 20 && (
         <Fab
           aria-label="add comment"
