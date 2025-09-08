@@ -133,38 +133,40 @@ const WildIdeas = () => {
     >
       {isLoading ? (
         <IdeaBubbleSkeleton />
-      ) : filteredIdeas.length === 0 ? (
-        <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
       ) : (
-        <Stack width="100%">
+        <Stack flex={1} width="100%">
           <ScopeHeader
             title={t('ui.navigation.ideas')}
             scopeKey="ideas"
             totalCount={filteredIdeas.length}
             {...scopeHeaderProps}
           />
-          <Stack width="100%" gap={2} px={1}>
-            {filteredIdeas
-              .slice()
-              .sort((a, b) => {
-                const valueA = a[sortKey as keyof IdeaType];
-                const valueB = b[sortKey as keyof IdeaType];
-                if (typeof valueA === 'number' && typeof valueB === 'number') {
-                  return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
-                }
-                return sortDirection === 'asc'
-                  ? String(valueA).localeCompare(String(valueB))
-                  : String(valueB).localeCompare(String(valueA));
-              })
-              .map((idea) => (
-                <IdeaBubble
-                  key={idea.id}
-                  idea={idea}
-                  to={`idea/${idea.hash_id}`}
-                  onEdit={() => onEdit(idea)}
-                  onDelete={() => onDelete(idea.hash_id)}
-                />
-              ))}
+          <Stack flex={1} gap={2} px={1}>
+            {filteredIdeas.length === 0 ? (
+              <EmptyState title={t('ui.empty.ideas.title')} description={t('ui.empty.ideas.description')} />
+            ) : (
+              filteredIdeas
+                .slice()
+                .sort((a, b) => {
+                  const valueA = a[sortKey as keyof IdeaType];
+                  const valueB = b[sortKey as keyof IdeaType];
+                  if (typeof valueA === 'number' && typeof valueB === 'number') {
+                    return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+                  }
+                  return sortDirection === 'asc'
+                    ? String(valueA).localeCompare(String(valueB))
+                    : String(valueB).localeCompare(String(valueA));
+                })
+                .map((idea) => (
+                  <IdeaBubble
+                    key={idea.id}
+                    idea={idea}
+                    to={`idea/${idea.hash_id}`}
+                    onEdit={() => onEdit(idea)}
+                    onDelete={() => onDelete(idea.hash_id)}
+                  />
+                ))
+            )}
           </Stack>
         </Stack>
       )}
