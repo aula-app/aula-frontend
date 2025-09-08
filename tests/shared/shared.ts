@@ -27,7 +27,7 @@ export const setRunId = () => fs.writeFileSync('run-id.txt', 'run-id-' + timesta
 
 export function gensym(prefix = 'GG') {
   // tests will fail on collision.. very rare
-  const rand = Math.random().toString(36).slice(2, 10); // letters + digits
+  const rand = Math.random().toString(36).slice(2, 18); // letters + digits
   return `${prefix}${rand}`;
 }
 
