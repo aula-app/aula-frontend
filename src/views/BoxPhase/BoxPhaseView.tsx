@@ -7,8 +7,7 @@ import { deleteBox, getBoxesByPhase } from '@/services/boxes';
 import { getRoom } from '@/services/rooms';
 import { useAppStore } from '@/store/AppStore';
 import { BoxType } from '@/types/Scopes';
-import { RoomPhases } from '@/types/SettingsTypes';
-import { checkPermissions, phases } from '@/utils';
+import { checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState, useMemo } from 'react';
@@ -16,10 +15,11 @@ import { useTranslation } from 'react-i18next';
 import { useSearchAndSort, createTextFilter, useFilter } from '@/hooks';
 import { useParams } from 'react-router-dom';
 
-/** * Renders "IdeaBoxes" view
- * url: /room/:room_id/:phase
+/**
+ * Renders "IdeaBoxes" view as the second view in the Room Phases
+ *
+ * @url /room/:room_id/phase/10
  */
-
 const BoxPhaseView = () => {
   const { t } = useTranslation();
   const { room_id, phase } = useParams();
