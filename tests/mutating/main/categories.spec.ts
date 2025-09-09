@@ -1,46 +1,23 @@
 import { expect, test } from '@playwright/test';
+import { describeWithSetup, TestDataBuilder } from '../../shared/base-test';
+import { BrowserHelpers } from '../../shared/common-actions';
 import * as ideas from '../../shared/page_interactions/ideas';
 import * as rooms from '../../shared/page_interactions/rooms';
 import * as users from '../../shared/page_interactions/users';
 import * as shared from '../../shared/shared';
-
 import * as fixtures from '../../fixtures/users';
-import * as browsers from '../../shared/page_interactions/browsers';
 
-// force these tests to run sqeuentially
-test.describe.configure({ mode: 'serial' });
-
-test.describe('Categories flow', () => {
-  let room;
-
+describeWithSetup('Categories flow', () => {
+  let room: any;
   let data: { [k: string]: any } = {};
 
   test.beforeAll(async () => {
-    fixtures.init();
-
-    room = {
-      name: 'room-' + shared.getRunId() + '-reporting',
-      description: 'created during automated testing',
-      users: [
-        //
-        fixtures.rainer, //
-        fixtures.alice,
-        fixtures.bob,
-        fixtures.mallory, //
-      ],
-    };
-  });
-  test.beforeEach(async () => {
-    await browsers.recall();
-  });
-
-  test.afterEach(async () => {
-    await browsers.pickle();
+    room = TestDataBuilder.createRoom('categories');
   });
 
   //
   test('Admin can create a category and add it to an idea', async () => {
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const admin = await BrowserHelpers.openPageForUser('admin');
     const host = shared.getHost();
 
     await admin.goto(host);
@@ -95,37 +72,36 @@ test.describe('Categories flow', () => {
 
     await expect(1).toBeDefined();
 
-    const someIdea = {
-      name: 'someIdea-test-idea' + shared.getRunId() + '-' + shared.gensym(),
-      description: 'generated during testing data',
-      category: data.categoryName,
-    };
+    // Create test idea with the new category
+    data.catidea = TestDataBuilder.createIdea('with-category');
+    data.catidea.category = data.categoryName;
 
-    data.catidea = someIdea;
-
-    const room = {
-      name: 'room-' + shared.getRunId() + shared.gensym(),
-      description: 'created during automated testing',
-      users: [fixtures.alice, fixtures.bob],
-    };
-
-    data.room = room;
+    // Create test room for the idea
+    data.room = TestDataBuilder.createRoom('category-test', [fixtures.alice, fixtures.bob]);
 
     await rooms.create(admin, data.room);
 
-    await ideas.create(admin, room, data.catidea);
+    await ideas.create(admin, data.room, data.catidea);
 
     await ideas.goToRoom(admin, data.room);
 
-    const IdeaCategory = admin.locator('div').filter({ hasText: data.catidea.category }).first();
+    // Look for the category within the specific idea card using a more specific selector
+    const IdeaDiv = admin.getByTestId(`idea-${data.catidea.name}`);
+    await expect(IdeaDiv).toBeVisible();
+
+    // Use more specific selector for category - look for category chip or badge
+    const IdeaCategory = IdeaDiv.getByTestId(`category-${data.categoryName}`)
+      .or(IdeaDiv.locator('[data-testid*="category"]').filter({ hasText: data.categoryName }))
+      .or(IdeaDiv.locator('.MuiChip-root').filter({ hasText: data.categoryName }))
+      .first();
     await expect(IdeaCategory).toBeVisible();
 
-    await admin.close();
+    await BrowserHelpers.closePage(admin);
   });
 
   //
   test('Admin can delete a category', async () => {
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const admin = await BrowserHelpers.openPageForUser('admin');
     const host = shared.getHost();
 
     await admin.goto(host || 'http://localhost:3000');
@@ -164,12 +140,12 @@ test.describe('Categories flow', () => {
     await expect(ConfirmButton).toBeVisible({ timeout: 10000 });
     await ConfirmButton.click();
 
-    await expect(1).toBeDefined();
+    // Verify category was deleted - it should no longer be visible
+    await expect(NewCategoryPill).not.toBeVisible();
 
+    // Clean up test data
     await ideas.remove(admin, data.room, data.catidea);
 
-    await rooms.remove(admin, data.room);
-
-    await admin.close();
+    await BrowserHelpers.closePage(admin);
   });
 });

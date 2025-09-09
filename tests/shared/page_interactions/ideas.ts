@@ -347,6 +347,53 @@ export const checkCommentReport = async (
   await expect(Report).toHaveCount(1);
 };
 
+export const addCategory = async (
+  page: Page, //
+  room: roomFixtures.RoomData,
+  idea: ideaFixtures.IdeaData,
+  categoryName: string
+) => {
+  // start at home
+  await page.goto(host);
+
+  await goToRoom(page, room);
+
+  // Find and click on the idea
+  const IdeaDiv = page.getByTestId(`idea-${idea.name}`);
+  await expect(IdeaDiv).toBeVisible();
+
+  // Click on the more menu
+  const DotMenuDiv = IdeaDiv.getByTestId('idea-more-menu');
+  await expect(DotMenuDiv).toBeVisible();
+  await DotMenuDiv.click({ timeout: 1000 });
+
+  // Click edit button
+  const EditButton = IdeaDiv.getByTestId('edit-button');
+  await expect(EditButton).toBeVisible({ timeout: 500 });
+  await EditButton.click({ timeout: 1000 });
+
+  // Add category to the idea
+  const SelectorId = await page.getAttribute('label:text("Kategorie")', 'for');
+  const CategorySelector = page.locator(`#${shared.cssEscape(SelectorId!)}`);
+  await expect(CategorySelector).toBeVisible();
+
+  await CategorySelector.click({ timeout: 1000 });
+  // click a category to add to the idea
+  await page.getByRole('option', { name: categoryName }).first().click({ timeout: 1000 });
+
+  // submit the idea form
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
+
+  // Verify the category was added using more specific selectors
+  await sleep(1);
+  const IdeaWithCategory = page.getByTestId(`category-${categoryName}`)
+    .or(page.locator('[data-testid*="category"]').filter({ hasText: categoryName }))
+    .or(page.locator('.MuiChip-root').filter({ hasText: categoryName }))
+    .or(page.locator('[class*="category"]').filter({ hasText: categoryName }))
+    .first();
+  await expect(IdeaWithCategory).toBeVisible();
+};
+
 export const reportComment = async (
   page: Page, //
   room: roomFixtures.RoomData,

@@ -1,27 +1,15 @@
 import { chromium, expect, test } from '@playwright/test';
-import * as fixtures from '../../fixtures/users';
-import * as browsers from '../../shared/page_interactions/browsers';
+import { describeWithSetup } from '../../shared/base-test';
+import { BrowserHelpers } from '../../shared/common-actions';
 import * as users from '../../shared/page_interactions/users';
 import * as shared from '../../shared/shared';
+import * as fixtures from '../../fixtures/users';
 
-test.describe.configure({ mode: 'serial' });
-
-test.describe('Instance Offline Mode', () => {
-  test.beforeAll(async () => {
-    fixtures.init();
-  });
-
-  test.beforeEach(async () => {
-    await browsers.recall();
-  });
-
-  test.afterEach(async () => {
-    await browsers.pickle();
-  });
+describeWithSetup('Instance Offline Mode', () => {
 
   test('Admin can set instance offline', async () => {
     // Admin logs in and sets instance offline
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const admin = await BrowserHelpers.openPageForUser('admin');
     await users.goToSystemConfig(admin);
     await expect(admin.getByLabel('Konfigurationen')).toBeVisible();
     await admin.getByTestId('config-accordion-system').click();
@@ -35,7 +23,7 @@ test.describe('Instance Offline Mode', () => {
     await admin.getByTestId('system-settings-confirm-button').click();
 
     // Admin logs out by clearing context and creating new browser
-    await admin.close();
+    await BrowserHelpers.closePage(admin);
   });
 
   test("User can't login and receives instance offline message", async () => {
@@ -60,7 +48,7 @@ test.describe('Instance Offline Mode', () => {
 
   test('Admin can set instance online again', async () => {
     // Admin logs in and sets instance online again
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const admin = await BrowserHelpers.openPageForUser('admin');
     await users.goToSystemConfig(admin);
     await expect(admin.getByLabel('Konfigurationen')).toBeVisible();
     await admin.getByTestId('config-accordion-system').click();
@@ -75,6 +63,6 @@ test.describe('Instance Offline Mode', () => {
     await admin.getByTestId('system-settings-confirm-button').click();
 
     // Admin logs out by clearing context and creating new browser
-    await admin.close();
+    await BrowserHelpers.closePage(admin);
   });
 });

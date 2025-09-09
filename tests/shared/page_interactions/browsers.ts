@@ -60,12 +60,12 @@ export const shutdown = async () => {
 };
 
 export const pickle = async () => {
-  await admin.context().storageState({ path: 'admin-context.json' });
-  await alice.context().storageState({ path: 'alice-context.json' });
-  await bob.context().storageState({ path: 'bob-context.json' });
-  await mallory.context().storageState({ path: 'mallory-context.json' });
-  await burt.context().storageState({ path: 'burt-context.json' });
-  await rainer.context().storageState({ path: 'rainer-context.json' });
+  await admin.context().storageState({ path: 'tests/temp/admin-context.json' });
+  await alice.context().storageState({ path: 'tests/temp/alice-context.json' });
+  await bob.context().storageState({ path: 'tests/temp/bob-context.json' });
+  await mallory.context().storageState({ path: 'tests/temp/mallory-context.json' });
+  await burt.context().storageState({ path: 'tests/temp/burt-context.json' });
+  await rainer.context().storageState({ path: 'tests/temp/rainer-context.json' });
 };
 
 // This function exists to recall the logged in browser states
@@ -76,27 +76,27 @@ export const recall = async () => {
   const browser = await chromium.launch();
 
   await Promise.all([
-    browser.newContext({ storageState: 'admin-context.json' }).then(async (b) => {
+    browser.newContext({ storageState: 'tests/temp/admin-context.json' }).then(async (b) => {
       admins_browser = b;
       admin = await admins_browser.newPage();
     }),
-    browser.newContext({ storageState: 'alice-context.json' }).then(async (b) => {
+    browser.newContext({ storageState: 'tests/temp/alice-context.json' }).then(async (b) => {
       alices_browser = b;
       alice = await alices_browser.newPage();
     }),
-    browser.newContext({ storageState: 'bob-context.json' }).then(async (b) => {
+    browser.newContext({ storageState: 'tests/temp/bob-context.json' }).then(async (b) => {
       bobs_browser = b;
       bob = await bobs_browser.newPage();
     }),
-    browser.newContext({ storageState: 'mallory-context.json' }).then(async (b) => {
+    browser.newContext({ storageState: 'tests/temp/mallory-context.json' }).then(async (b) => {
       mallorys_browser = b;
       mallory = await mallorys_browser.newPage();
     }),
-    browser.newContext({ storageState: 'burt-context.json' }).then(async (b) => {
+    browser.newContext({ storageState: 'tests/temp/burt-context.json' }).then(async (b) => {
       burt_browser = b;
       burt = await burt_browser.newPage();
     }),
-    browser.newContext({ storageState: 'rainer-context.json' }).then(async (b) => {
+    browser.newContext({ storageState: 'tests/temp/rainer-context.json' }).then(async (b) => {
       rainer_browser = b;
       rainer = await rainer_browser.newPage();
     }),

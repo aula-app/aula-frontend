@@ -1,53 +1,27 @@
 import { test, expect, chromium } from '@playwright/test';
+import { describeWithSetup, TestDataBuilder } from '../../shared/base-test';
+import { BrowserHelpers } from '../../shared/common-actions';
 import { sleep } from '../../shared/utils';
 import * as shared from '../../shared/shared';
 import fs from 'fs';
 import path from 'path';
-
-import * as fixtures from '../../fixtures/users';
-import * as browsers from '../../shared/page_interactions/browsers';
 import * as users from '../../shared/page_interactions/users';
 import * as rooms from '../../shared/page_interactions/rooms';
+import * as browsers from '../../shared/page_interactions/browsers';
 
-// force these tests to run sequentially
-test.describe.configure({ mode: 'serial' });
-
-test.describe('Upload user csv, delete that user', () => {
+describeWithSetup('Upload user csv, delete that user', () => {
   let data: { [k: string]: any } = {};
 
-  test.beforeAll(async () => {
-    fixtures.init();
-  });
-  test.beforeEach(async () => {
-    await browsers.recall();
-  });
-
-  test.afterEach(async () => {
-    await browsers.pickle();
-  });
-
   test('Admin can upload a user csv', async () => {
-    const sym = shared.gensym();
-    data.jannikaData = {
-      username: 'jannika' + sym,
-      realName: 'jannika' + sym,
-      displayName: 'jannika' + sym,
-      role: 20,
-      password: 'aula-jannika' + sym,
-      about: 'generated in e2e tests',
-    };
+    data.jannikaData = TestDataBuilder.createUserData('jannika');
 
     const csv_str = `realname;displayname;username;email;about_me
 ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.username};;${data.jannikaData.about}`;
 
-    data.room = {
-      name: 'room-' + shared.getRunId() + '-csv' + shared.gensym(),
-      description: 'created during automated testing',
-      users: [],
-    };
+    data.room = TestDataBuilder.createRoom('csv', []);
 
     const host = shared.getHost();
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const admin = await BrowserHelpers.openPageForUser('admin');
     await admin.goto(host);
 
     // create a room for CSV import placement
@@ -67,7 +41,7 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     await UploadButton.click({ timeout: 1000 });
 
     // create and choose the file
-    const filePath = path.join(__dirname, 'temp-upload.txt');
+    const filePath = path.join(__dirname, '../../temp/temp-upload.txt');
     fs.writeFileSync(filePath, csv_str);
     await admin.setInputFiles('input[type="file"]', filePath);
 
@@ -92,11 +66,11 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     await sleep(1);
     await users.exists(admin, data.jannikaData);
 
-    admin.close();
+    BrowserHelpers.closePage(admin);
   });
 
   test('New User can log in using admin temp pass', async () => {
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const admin = await BrowserHelpers.openPageForUser('admin');
 
     const browser = await (await chromium.launch()).newContext();
     const jannika = await browsers.newPage(browser);
@@ -105,14 +79,14 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
 
     await users.firstLoginFlow(jannika, data.jannikaData, janikasTempPass);
 
-    await admin.close();
+    await BrowserHelpers.closePage(admin);
     await jannika.close();
   });
 
   test('New user requests deletion, and admin deletes.', async () => {
     const host = shared.getHost();
 
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const admin = await BrowserHelpers.openPageForUser('admin');
 
     await admin.goto(host);
 
@@ -170,7 +144,7 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
 
     await rooms.remove(admin, data.room);
 
-    admin.close();
+    BrowserHelpers.closePage(admin);
     jannika.close();
   });
 });

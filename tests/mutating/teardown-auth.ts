@@ -22,15 +22,15 @@ export default async function globalTeardown() {
   // await sleep(5);
 
   await browsers.shutdown();
-  // Do any cleanup here
+  // Comprehensive cleanup of test artifacts
   console.log('Cleaning up after all tests...');
 
-  // Example: delete saved auth files
-  const fs = await import('fs/promises');
-  await fs.rm('admin-context.json', { force: true });
-  await fs.rm('alice-context.json', { force: true });
-  await fs.rm('bob-context.json', { force: true });
-  await fs.rm('mallory-context.json', { force: true });
-  await fs.rm('burt-context.json', { force: true });
-  await fs.rm('rainer-context.json', { force: true });
+  const { TestCleanup } = await import('../shared/cleanup');
+  
+  try {
+    await TestCleanup.cleanupAll();
+    console.log('✅ Test artifacts cleaned up successfully');
+  } catch (error) {
+    console.warn('⚠️ Some cleanup operations failed:', error);
+  }
 }

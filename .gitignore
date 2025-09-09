@@ -1,10 +1,17 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 .env
  
-# Ignore plawright saved browser contexts
+# Ignore plawright saved browser contexts (moved to tests/temp)
 *-context.json
-# Ignore playwright run IDs
+# Ignore playwright run IDs (moved to tests/temp)
 run-id.txt
+
+# Test directories
+/tests/temp/
+/tests/reports/
+/tests/results/
+/test-results/
+/playwright-report/
 
 # lock files
 package-lock.json
