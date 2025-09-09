@@ -30,28 +30,97 @@ export class ChangePasswordTestHelpers {
     await page.goto(host);
     await users.goToProfile(page);
 
-    // Open security accordion
-    const securityAccordion = page.getByRole('button', { name: 'Sicherheit' });
+    // Open security accordion using data-testid for better reliability
+    const securityAccordion = page.getByTestId('security-panel-button');
     await securityAccordion.waitFor({ state: 'visible' });
     await securityAccordion.click();
   }
 
   static async changePassword(page: Page, oldPassword: string, newPassword: string): Promise<void> {
-    await page.fill('input[name="oldPassword"]', oldPassword);
-    await page.fill('input[name="newPassword"]', newPassword);
-    await page.fill('input[name="confirmPassword"]', newPassword);
+    // Use more specific selectors based on the component structure
+    const oldPasswordField = page.locator('#change-password-oldPassword').or(page.locator('input[name="oldPassword"]'));
+    const newPasswordField = page.locator('#change-password-newPassword').or(page.locator('input[name="newPassword"]'));
+    const confirmPasswordField = page
+      .locator('#change-password-confirmPassword')
+      .or(page.locator('input[name="confirmPassword"]'));
+
+    await oldPasswordField.fill(oldPassword);
+    await newPasswordField.fill(newPassword);
+    await confirmPasswordField.fill(newPassword);
 
     const submitButton = page.getByTestId('submit-new-password');
     await submitButton.click();
 
-    // Wait for success message
-    const successDiv = page.getByTestId('success-message')
-      .or(page.locator('[data-testid*="success"]'))
-      .or(page.locator('.MuiAlert-root').filter({ hasText: 'Passwort erfolgreich geändert' }))
-      .or(page.locator('[class*="success"]').filter({ hasText: 'Passwort erfolgreich geändert' }))
+    // Wait for success message - look for MUI Alert with success severity or role=alert
+    const successDiv = page
+      .locator('.MuiAlert-standardSuccess')
+      .or(page.locator('.MuiAlert-outlinedSuccess'))
+      .or(page.locator('.MuiAlert-filledSuccess'))
+      .or(
+        page.locator(
+          '[role="alert"]:not(.MuiAlert-standardError):not(.MuiAlert-outlinedError):not(.MuiAlert-filledError)'
+        )
+      )
       .first();
-    
+
     await successDiv.waitFor({ state: 'visible' });
+  }
+
+  static async waitForErrorMessage(page: Page): Promise<void> {
+    // Wait for error message - look for MUI Alert with error severity
+    const errorDiv = page
+      .locator('.MuiAlert-standardError')
+      .or(page.locator('.MuiAlert-outlinedError'))
+      .or(page.locator('.MuiAlert-filledError'))
+      .or(page.locator('[role="alert"][class*="error" i]'))
+      .first();
+
+    await errorDiv.waitFor({ state: 'visible' });
+  }
+
+  static async attemptPasswordChangeWithWrongCurrent(page: Page, wrongPassword: string, newPassword: string): Promise<void> {
+    const oldPasswordField = page.locator('#change-password-oldPassword')
+      .or(page.locator('input[name="oldPassword"]'));
+    const newPasswordField = page.locator('#change-password-newPassword')
+      .or(page.locator('input[name="newPassword"]'));
+    const confirmPasswordField = page.locator('#change-password-confirmPassword')
+      .or(page.locator('input[name="confirmPassword"]'));
+
+    await oldPasswordField.fill(wrongPassword);
+    await newPasswordField.fill(newPassword);
+    await confirmPasswordField.fill(newPassword);
+
+    const submitButton = page.getByTestId('submit-new-password');
+    await submitButton.click();
+  }
+
+  static async attemptPasswordChangeWithMismatchedConfirmation(
+    page: Page, 
+    currentPassword: string, 
+    newPassword: string, 
+    wrongConfirmation: string
+  ): Promise<void> {
+    const oldPasswordField = page.locator('#change-password-oldPassword')
+      .or(page.locator('input[name="oldPassword"]'));
+    const newPasswordField = page.locator('#change-password-newPassword')
+      .or(page.locator('input[name="newPassword"]'));
+    const confirmPasswordField = page.locator('#change-password-confirmPassword')
+      .or(page.locator('input[name="confirmPassword"]'));
+
+    await oldPasswordField.fill(currentPassword);
+    await newPasswordField.fill(newPassword);
+    await confirmPasswordField.fill(wrongConfirmation);
+
+    const submitButton = page.getByTestId('submit-new-password');
+    await submitButton.click();
+  }
+
+  static async waitForFieldValidationError(page: Page, fieldName: 'oldPassword' | 'newPassword' | 'confirmPassword'): Promise<void> {
+    const fieldError = page.locator(`#${fieldName}-error-message`)
+      .or(page.locator(`[id*="${fieldName}"][id*="error"]`))
+      .or(page.locator(`input[name="${fieldName}"] + * [role="alert"], input[name="${fieldName}"] ~ * [role="alert"]`));
+    
+    await fieldError.waitFor({ state: 'visible' });
   }
 
   static async restorePassword(page: Page, context: ChangePasswordTestContext): Promise<void> {
@@ -114,7 +183,7 @@ export class ChangePasswordTestHelpers {
     try {
       const originalPassword = fixtures[userType].password;
       const tempPasswords = ['TEMPPASS!!!', this.generateTemporaryPassword()];
-      
+
       for (const tempPassword of tempPasswords) {
         try {
           await this.navigateToSecuritySettings(page);

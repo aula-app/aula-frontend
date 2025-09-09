@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { describeWithSetup } from '../../shared/base-test';
 import { BrowserHelpers } from '../../shared/common-actions';
 import { ChangePasswordTestHelpers, ChangePasswordTestContext } from '../../shared/helpers/change-password';
@@ -19,7 +19,7 @@ describeWithSetup('Change pass flow', () => {
     }
   });
 
-  test('Alice can change her password', async () => {
+  test('User can successfully change password with valid inputs', async () => {
     const alice = await BrowserHelpers.openPageForUser('alice');
 
     try {
@@ -30,7 +30,7 @@ describeWithSetup('Change pass flow', () => {
 
           await ChangePasswordTestHelpers.navigateToSecuritySettings(alice);
           await ChangePasswordTestHelpers.changePassword(alice, context.currentPassword, temporaryPassword);
-          
+
           // Update context to reflect password change
           context.currentPassword = temporaryPassword;
         },
@@ -42,7 +42,7 @@ describeWithSetup('Change pass flow', () => {
     }
   });
 
-  test('Alice can change her password back', async () => {
+  test('User can change password multiple times in sequence', async () => {
     const alice = await BrowserHelpers.openPageForUser('alice');
 
     try {
@@ -50,33 +50,30 @@ describeWithSetup('Change pass flow', () => {
         alice,
         async (context) => {
           const { temporaryPassword } = context;
+          const secondPassword = ChangePasswordTestHelpers.generateTemporaryPassword();
 
-          // First change to temporary password
+          // First password change
           await ChangePasswordTestHelpers.navigateToSecuritySettings(alice);
           await ChangePasswordTestHelpers.changePassword(alice, context.currentPassword, temporaryPassword);
-          
-          // Update context
           context.currentPassword = temporaryPassword;
 
-          // Then change back to original password
+          // Second password change
           await ChangePasswordTestHelpers.navigateToSecuritySettings(alice);
-          await ChangePasswordTestHelpers.changePassword(alice, temporaryPassword, context.originalPassword);
-          
-          // Update context
-          context.currentPassword = context.originalPassword;
+          await ChangePasswordTestHelpers.changePassword(alice, temporaryPassword, secondPassword);
+          context.currentPassword = secondPassword;
         },
         'alice',
         cleanupQueue
       );
     } catch (error) {
-      console.error('Test "Alice can change her password back" failed:', error);
+      console.error('Test "User can change password multiple times in sequence" failed:', error);
       throw error;
     } finally {
       await BrowserHelpers.closePage(alice);
     }
   });
 
-  test('User cannot change password with invalid current password', async () => {
+  test('User cannot change password with incorrect current password', async () => {
     const alice = await BrowserHelpers.openPageForUser('alice');
 
     try {
@@ -86,29 +83,71 @@ describeWithSetup('Change pass flow', () => {
           const { temporaryPassword } = context;
 
           await ChangePasswordTestHelpers.navigateToSecuritySettings(alice);
-          
-          // Try to change password with wrong current password
-          await alice.fill('input[name="oldPassword"]', 'WRONGPASSWORD');
-          await alice.fill('input[name="newPassword"]', temporaryPassword);
-          await alice.fill('input[name="confirmPassword"]', temporaryPassword);
 
-          const submitButton = alice.getByTestId('submit-new-password');
-          await submitButton.click();
-
-          // Should see an error message instead of success
-          const errorDiv = alice.getByTestId('error-message')
-            .or(alice.locator('[data-testid*="error"]'))
-            .or(alice.locator('.MuiAlert-root').filter({ hasText: /fehler|error|ungültig|invalid/i }))
-            .or(alice.locator('[class*="error"]'))
-            .first();
-          
-          await expect(errorDiv).toBeVisible();
+          await ChangePasswordTestHelpers.attemptPasswordChangeWithWrongCurrent(alice, 'WRONGPASSWORD', temporaryPassword);
+          await ChangePasswordTestHelpers.waitForErrorMessage(alice);
         },
         'alice',
         cleanupQueue
       );
     } catch (error) {
-      console.error('Test "User cannot change password with invalid current password" failed:', error);
+      console.error('Test "User cannot change password with incorrect current password" failed:', error);
+      throw error;
+    } finally {
+      await BrowserHelpers.closePage(alice);
+    }
+  });
+
+  test('User cannot change password when new password and confirmation do not match', async () => {
+    const alice = await BrowserHelpers.openPageForUser('alice');
+
+    try {
+      await ChangePasswordTestHelpers.executeWithCleanup(
+        alice,
+        async (context) => {
+          const { temporaryPassword } = context;
+
+          await ChangePasswordTestHelpers.navigateToSecuritySettings(alice);
+
+          await ChangePasswordTestHelpers.attemptPasswordChangeWithMismatchedConfirmation(
+            alice,
+            context.currentPassword,
+            temporaryPassword,
+            temporaryPassword + 'DIFFERENT'
+          );
+
+          await ChangePasswordTestHelpers.waitForFieldValidationError(alice, 'confirmPassword');
+        },
+        'alice',
+        cleanupQueue
+      );
+    } catch (error) {
+      console.error('Test "User cannot change password when passwords do not match" failed:', error);
+      throw error;
+    } finally {
+      await BrowserHelpers.closePage(alice);
+    }
+  });
+
+  test('User cannot submit form with empty password fields', async () => {
+    const alice = await BrowserHelpers.openPageForUser('alice');
+
+    try {
+      await ChangePasswordTestHelpers.executeWithCleanup(
+        alice,
+        async () => {
+          await ChangePasswordTestHelpers.navigateToSecuritySettings(alice);
+
+          const submitButton = alice.getByTestId('submit-new-password');
+          await submitButton.click();
+
+          await ChangePasswordTestHelpers.waitForFieldValidationError(alice, 'oldPassword');
+        },
+        'alice',
+        cleanupQueue
+      );
+    } catch (error) {
+      console.error('Test "User cannot submit form with empty fields" failed:', error);
       throw error;
     } finally {
       await BrowserHelpers.closePage(alice);
