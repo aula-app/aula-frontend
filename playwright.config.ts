@@ -15,7 +15,7 @@ export default defineConfig({
   testDir: './tests',
 
   /* Run tests in files in parallel */
-  fullyParallel: true, // this is disablef below
+  fullyParallel: true, // this is disabled below
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   // retries are off because this messes with mutations in the tests

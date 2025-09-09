@@ -384,9 +384,13 @@ export const addCategory = async (
   // submit the idea form
   await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
-  // Verify the category was added
+  // Verify the category was added using more specific selectors
   await sleep(1);
-  const IdeaWithCategory = page.locator('div').filter({ hasText: categoryName });
+  const IdeaWithCategory = page.getByTestId(`category-${categoryName}`)
+    .or(page.locator('[data-testid*="category"]').filter({ hasText: categoryName }))
+    .or(page.locator('.MuiChip-root').filter({ hasText: categoryName }))
+    .or(page.locator('[class*="category"]').filter({ hasText: categoryName }))
+    .first();
   await expect(IdeaWithCategory).toBeVisible();
 };
 

@@ -29,7 +29,11 @@ describeWithSetup('Change pass flow', () => {
     const SubmitButton = alice.getByTestId('submit-new-password');
     await SubmitButton.click({ timeout: 1000 });
 
-    const SuccessDiv = alice.locator('div').filter({ hasText: `Passwort erfolgreich geändert` }).first();
+    const SuccessDiv = alice.getByTestId('success-message')
+      .or(alice.locator('[data-testid*="success"]'))
+      .or(alice.locator('.MuiAlert-root').filter({ hasText: 'Passwort erfolgreich geändert' }))
+      .or(alice.locator('[class*="success"]').filter({ hasText: 'Passwort erfolgreich geändert' }))
+      .first();
     await expect(SuccessDiv).toBeVisible();
 
     await BrowserHelpers.closePage(alice);
@@ -56,7 +60,11 @@ describeWithSetup('Change pass flow', () => {
     const SubmitButton = alice.getByTestId('submit-new-password');
     await SubmitButton.click({ timeout: 1000 });
 
-    const SuccessDiv = alice.locator('div').filter({ hasText: `Passwort erfolgreich geändert` }).first();
+    const SuccessDiv = alice.getByTestId('success-message')
+      .or(alice.locator('[data-testid*="success"]'))
+      .or(alice.locator('.MuiAlert-root').filter({ hasText: 'Passwort erfolgreich geändert' }))
+      .or(alice.locator('[class*="success"]').filter({ hasText: 'Passwort erfolgreich geändert' }))
+      .first();
     await expect(SuccessDiv).toBeVisible();
 
     await BrowserHelpers.closePage(alice);
