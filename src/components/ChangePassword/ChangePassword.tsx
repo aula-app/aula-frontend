@@ -96,6 +96,8 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
             variant="outlined"
             severity={messageSuccess ? 'success' : 'error'}
             onClose={() => setShowMessage(false)}
+            data-testid={messageSuccess ? 'password-change-success' : 'password-change-error'}
+            data-success={messageSuccess}
           >
             {messageSuccess ? t('auth.password.success') : t('errors.invalidPassword')}
           </Alert>
