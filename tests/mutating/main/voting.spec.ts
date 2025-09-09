@@ -8,6 +8,7 @@ import * as ideas from '../../shared/page_interactions/ideas';
 import * as boxes from '../../shared/page_interactions/boxes';
 import * as fixtures from '../../fixtures/users';
 import { BoxData } from '../../fixtures/ideas';
+import { admin, alice, bob, rainer, mallory } from '../../shared/page_interactions/browsers';
 
 let room: any;
 let data: { [k: string]: any } = {};
@@ -213,75 +214,75 @@ describeWithSetup('Room behaviours - creating rooms', () => {
     test('Rainer can approve ideas in prüfung phase, moving it to abstimmungs phase', async () => {
       test.setTimeout(800000);
 
-      await ideas.create(browsers.alice, room, data.alicesIdea);
-      await ideas.create(browsers.bob, room, data.bobsIdea);
+      await ideas.create(alice, room, data.alicesIdea);
+      await ideas.create(bob, room, data.bobsIdea);
 
-      await boxes.create(browsers.admin, room, data.box);
+      await boxes.create(admin, room, data.box);
 
-      await boxes.move(browsers.admin, room, data.box, 10, 20);
+      await boxes.move(admin, room, data.box, 10, 20);
 
-      await ideas.approve(browsers.rainer, room, data.box, data.alicesIdea);
-      await ideas.approve(browsers.rainer, room, data.box, data.bobsIdea);
+      await ideas.approve(rainer, room, data.box, data.alicesIdea);
+      await ideas.approve(rainer, room, data.box, data.bobsIdea);
     });
 
     test('rainer can move the box to abstimmung', async () => {
-      await boxes.move(browsers.rainer, room, data.box, 20, 30);
+      await boxes.move(rainer, room, data.box, 20, 30);
     });
 
     test('users can vote on ideas', async () => {
-      await ideas.vote(browsers.alice, room, data.box, data.alicesIdea, 'for');
-      await ideas.vote(browsers.alice, room, data.box, data.bobsIdea, 'against');
-      await ideas.vote(browsers.bob, room, data.box, data.alicesIdea, 'for');
-      await ideas.vote(browsers.bob, room, data.box, data.bobsIdea, 'for');
+      await ideas.vote(alice, room, data.box, data.alicesIdea, 'for');
+      await ideas.vote(alice, room, data.box, data.bobsIdea, 'against');
+      await ideas.vote(bob, room, data.box, data.alicesIdea, 'for');
+      await ideas.vote(bob, room, data.box, data.bobsIdea, 'for');
     });
 
     test('Rainer can delegate votes to Mallory', async () => {
-      await boxes.delegateVotes(browsers.rainer, room, data.box, fixtures.mallory);
+      await boxes.delegateVotes(rainer, room, data.box, fixtures.mallory);
     });
 
     test('Mallory Received those votes and can vote with them.', async () => {
-      await boxes.hasDelegatedVotes(browsers.mallory, room, data.box);
+      await boxes.hasDelegatedVotes(mallory, room, data.box);
 
-      const beforeCount = await ideas.totalVoteCount(browsers.mallory, room, data.box, data.alicesIdea);
+      const beforeCount = await ideas.totalVoteCount(mallory, room, data.box, data.alicesIdea);
       expect(beforeCount).toBe(2);
 
-      await ideas.vote(browsers.mallory, room, data.box, data.alicesIdea, 'for');
+      await ideas.vote(mallory, room, data.box, data.alicesIdea, 'for');
 
-      const afterCount = await ideas.totalVoteCount(browsers.mallory, room, data.box, data.alicesIdea);
+      const afterCount = await ideas.totalVoteCount(mallory, room, data.box, data.alicesIdea);
 
       expect(afterCount).toBe(beforeCount + 2);
     });
 
     test('Rainer can undelegate votes ', async () => {
-      await boxes.unDelegateVotes(browsers.rainer, room, data.box);
+      await boxes.unDelegateVotes(rainer, room, data.box);
     });
 
     test('OFF - Mallory can no longer vote for rainer, and vote count was diminished', async () => {
       // test is off until https://github.com/aula-app/aula-frontend/issues/604
       // has been dealt with
       /*   await expect(async () => {
-        await boxes.hasDelegatedVotes(browsers.mallory, room, data.box);
+        await boxes.hasDelegatedVotes(mallory, room, data.box);
       }).rejects.toThrow();
 
-      const afterCount = await ideas.totalVoteCount(browsers.mallory, room, data.box, data.alicesIdea);
+      const afterCount = await ideas.totalVoteCount(mallory, room, data.box, data.alicesIdea);
 
       expect(afterCount).toBe(3); */
       expect(1).toBeDefined();
     });
 
     test('Rainer can vote against an idea', async () => {
-      await ideas.vote(browsers.rainer, room, data.box, data.alicesIdea, 'against');
+      await ideas.vote(rainer, room, data.box, data.alicesIdea, 'against');
     });
 
     test('Rainer can move box to results phase', async () => {
-      await boxes.move(browsers.rainer, room, data.box, 30, 40);
+      await boxes.move(rainer, room, data.box, 30, 40);
     });
 
     test('OFF - counts exist, and are as expected', async () => {
       // test is off until https://github.com/aula-app/aula-frontend/issues/604
       // has been dealt with
       /* 
-      const [forc, againstc, neutralc] = await ideas.voteCounts(browsers.rainer, room, data.box, data.alicesIdea);
+      const [forc, againstc, neutralc] = await ideas.voteCounts(rainer, room, data.box, data.alicesIdea);
 
       expect(forc).toBe(3);
       expect(againstc).toBe(1);
@@ -289,9 +290,9 @@ describeWithSetup('Room behaviours - creating rooms', () => {
     });
 
     test('cleanup', async () => {
-      //await boxes.remove(browsers.admin, room, box);
-      //await ideas.remove(browsers.alice, room, alicesIdea);
-      //await ideas.remove(browsers.bob, room, bobsIdea);
+      //await boxes.remove(admin, room, box);
+      //await ideas.remove(alice, room, alicesIdea);
+      //await ideas.remove(bob, room, bobsIdea);
     });
   });
 
