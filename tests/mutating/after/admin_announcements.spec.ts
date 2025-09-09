@@ -1,33 +1,15 @@
-import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
+import { test, expect } from '@playwright/test';
+import { describeWithSetup } from '../../shared/base-test';
+import { BrowserHelpers } from '../../shared/common-actions';
 import { sleep } from '../../shared/utils';
 import * as shared from '../../shared/shared';
 import * as users from '../../shared/page_interactions/users';
-import * as rooms from '../../shared/page_interactions/rooms';
-import * as ideas from '../../shared/page_interactions/ideas';
-import * as ui from '../../shared/page_interactions/interface';
-import * as boxes from '../../shared/page_interactions/boxes';
 
-import * as fixtures from '../../fixtures/users';
-import * as browsers from '../../shared/page_interactions/browsers';
-
-// force these tests to run sqeuentially
-test.describe.configure({ mode: 'serial' });
-
-test.describe('Admin announcements', () => {
-  test.beforeAll(async () => {
-    fixtures.init();
-  });
-  test.beforeEach(async () => {
-    await browsers.recall();
-  });
-
-  test.afterEach(async () => {
-    await browsers.pickle();
-  });
+describeWithSetup('Admin announcements', () => {
 
   //
   test('OFF - Admin can change make an announcement, sees own announcement', async () => {
-    /* const admin = await browsers.newPage(browsers.admins_browser);
+    /* const admin = await BrowserHelpers.openPageForUser('admin');
 
     const host = shared.getHost();
 
@@ -63,12 +45,12 @@ test.describe('Admin announcements', () => {
     await expect(ApproveButton).toBeVisible();
     await ApproveButton.click({ timeout: 1000 });
 
-    admin.close(); */
+    BrowserHelpers.closePage(admin); */
   });
 
   test('OFF - Alice also sees the announcement', async () => {
-    /*   const alice = await browsers.newPage(browsers.alices_browser);
-    const admin = await browsers.newPage(browsers.admins_browser);
+    /*   const alice = await BrowserHelpers.openPageForUser('alice');
+    const admin = await BrowserHelpers.openPageForUser('admin');
 
     const host = shared.getHost();
 
@@ -114,7 +96,7 @@ test.describe('Admin announcements', () => {
     await expect(ConfirmButton).toBeVisible();
     await ConfirmButton.click({ timeout: 1000 });
 
-    alice.close();
-    admin.close(); */
+    BrowserHelpers.closePage(alice);
+    BrowserHelpers.closePage(admin); */
   });
 });

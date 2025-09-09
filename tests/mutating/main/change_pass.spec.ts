@@ -1,33 +1,15 @@
-import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
-import { sleep } from '../../shared/utils';
+import { test, expect } from '@playwright/test';
+import { describeWithSetup } from '../../shared/base-test';
+import { BrowserHelpers } from '../../shared/common-actions';
 import * as shared from '../../shared/shared';
 import * as users from '../../shared/page_interactions/users';
-import * as rooms from '../../shared/page_interactions/rooms';
-import * as ideas from '../../shared/page_interactions/ideas';
-import * as ui from '../../shared/page_interactions/interface';
-import * as boxes from '../../shared/page_interactions/boxes';
-
 import * as fixtures from '../../fixtures/users';
-import * as browsers from '../../shared/page_interactions/browsers';
 
-// force these tests to run sqeuentially
-test.describe.configure({ mode: 'serial' });
-
-test.describe('Change pass flow', () => {
-  test.beforeAll(async () => {
-    fixtures.init();
-  });
-  test.beforeEach(async () => {
-    await browsers.recall();
-  });
-
-  test.afterEach(async () => {
-    await browsers.pickle();
-  });
+describeWithSetup('Change pass flow', () => {
 
   //
   test('Alice can change her password', async () => {
-    const alice = await browsers.newPage(browsers.alices_browser);
+    const alice = await BrowserHelpers.openPageForUser('alice');
 
     const host = shared.getHost();
 
@@ -50,11 +32,11 @@ test.describe('Change pass flow', () => {
     const SuccessDiv = alice.locator('div').filter({ hasText: `Passwort erfolgreich geändert` }).first();
     await expect(SuccessDiv).toBeVisible();
 
-    alice.close();
+    await BrowserHelpers.closePage(alice);
   });
 
   test('Alice can change her password back', async () => {
-    const alice = await browsers.newPage(browsers.alices_browser);
+    const alice = await BrowserHelpers.openPageForUser('alice');
 
     const host = shared.getHost();
 
@@ -77,6 +59,6 @@ test.describe('Change pass flow', () => {
     const SuccessDiv = alice.locator('div').filter({ hasText: `Passwort erfolgreich geändert` }).first();
     await expect(SuccessDiv).toBeVisible();
 
-    alice.close();
+    await BrowserHelpers.closePage(alice);
   });
 });

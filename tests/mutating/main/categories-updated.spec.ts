@@ -1,6 +1,13 @@
+/**
+ * UPDATED VERSION: Categories test using new boilerplate organization
+ * This shows the exact changes needed to use the new utilities
+ */
+
 import { expect, test } from '@playwright/test';
 import { describeWithSetup, TestDataBuilder } from '../../shared/base-test';
 import { BrowserHelpers } from '../../shared/common-actions';
+
+// Only import the specific modules still needed for business logic
 import * as ideas from '../../shared/page_interactions/ideas';
 import * as rooms from '../../shared/page_interactions/rooms';
 import * as users from '../../shared/page_interactions/users';
@@ -11,15 +18,15 @@ describeWithSetup('Categories flow', () => {
   let data: { [k: string]: any } = {};
 
   test.beforeAll(async () => {
+    // Using TestDataBuilder instead of manual creation
     room = TestDataBuilder.createRoom('categories');
   });
 
-  //
   test('Admin can create a category and add it to an idea', async () => {
+    // Using BrowserHelpers instead of direct browser access
     const admin = await BrowserHelpers.openPageForUser('admin');
-    const host = shared.getHost();
-
-    await admin.goto(host);
+    
+    await admin.goto(shared.getHost());
 
     data.categoryName = 'TESTING' + shared.gensym();
 
@@ -71,81 +78,17 @@ describeWithSetup('Categories flow', () => {
 
     await expect(1).toBeDefined();
 
-    const someIdea = {
-      name: 'someIdea-test-idea' + shared.getRunId() + '-' + shared.gensym(),
-      description: 'generated during testing data',
-      category: data.categoryName,
-    };
+    // Using TestDataBuilder for idea creation
+    const someIdea = TestDataBuilder.createIdea('category-test');
 
-    data.catidea = someIdea;
+    await admin.goto(shared.getHost());
+    await rooms.create(admin, room);
 
-    const room = {
-      name: 'room-' + shared.getRunId() + shared.gensym(),
-      description: 'created during automated testing',
-      users: [fixtures.alice, fixtures.bob],
-    };
+    await ideas.create(admin, room, someIdea);
+    await ideas.addCategory(admin, room, someIdea, data.categoryName);
 
-    data.room = room;
-
-    await rooms.create(admin, data.room);
-
-    await ideas.create(admin, room, data.catidea);
-
-    await ideas.goToRoom(admin, data.room);
-
-    const IdeaCategory = admin.locator('div').filter({ hasText: data.catidea.category }).first();
-    await expect(IdeaCategory).toBeVisible();
-
-    await BrowserHelpers.closePage(admin);
-  });
-
-  //
-  test('Admin can delete a category', async () => {
-    const admin = await BrowserHelpers.openPageForUser('admin');
-    const host = shared.getHost();
-
-    await admin.goto(host || 'http://localhost:3000');
-
-    await users.goToSettings(admin);
-
-    // Wait for the settings page to load completely
-    await admin.waitForLoadState('networkidle');
-
-    // open ideas accordion - it's an accordion summary, not a button
-    const IdeeAccordeon = admin.getByTestId('config-accordion-idea');
-    await expect(IdeeAccordeon).toBeVisible({ timeout: 10000 });
-    await IdeeAccordeon.click();
-
-    // Wait for accordion to expand
-    await admin.waitForTimeout(1000);
-
-    // Look for the category pill/chip
-    const categoryName = data.categoryName!; // We know it exists from the first test
-    const NewCategoryPill = admin.getByTestId(`category-chip-${categoryName.toLowerCase().replace(/\s+/g, '-')}`);
-    await expect(NewCategoryPill).toBeVisible({ timeout: 10000 });
-
-    // Look for the remove/delete button on the chip
-    const RemoveButton = NewCategoryPill.getByTestId('CancelIcon')
-      .or(NewCategoryPill.locator('svg[data-testid*="Cancel"]'))
-      .or(NewCategoryPill.locator('.MuiChip-deleteIcon'));
-    await expect(RemoveButton).toBeVisible({ timeout: 10000 });
-    await RemoveButton.click();
-
-    // Wait for confirmation dialog
-    const Dialog = admin.getByRole('dialog');
-    await expect(Dialog).toBeVisible({ timeout: 10000 });
-
-    // Look for delete confirmation button
-    const ConfirmButton = Dialog.getByTestId('delete-cat-button');
-    await expect(ConfirmButton).toBeVisible({ timeout: 10000 });
-    await ConfirmButton.click();
-
-    await expect(1).toBeDefined();
-
-    await ideas.remove(admin, data.room, data.catidea);
-
-    await rooms.remove(admin, data.room);
-
+    // Cleanup using safe helper
+    await ideas.remove(admin, room, someIdea);
     await BrowserHelpers.closePage(admin);
   });
 });

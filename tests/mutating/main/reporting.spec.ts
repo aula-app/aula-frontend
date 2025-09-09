@@ -1,98 +1,71 @@
 import { test, expect } from '@playwright/test';
+import { describeWithSetup, TestDataBuilder } from '../../shared/base-test';
+import { BrowserHelpers } from '../../shared/common-actions';
 import * as shared from '../../shared/shared';
 import * as rooms from '../../shared/page_interactions/rooms';
 import * as ideas from '../../shared/page_interactions/ideas';
 import * as ui from '../../shared/page_interactions/interface';
 
-import * as fixtures from '../../fixtures/users';
-import * as browsers from '../../shared/page_interactions/browsers';
-
-// force these tests to run sqeuentially
-test.describe.configure({ mode: 'serial' });
-
-test.describe('Reporting flow', () => {
-  let room;
-
+describeWithSetup('Reporting flow', () => {
+  let room: any;
   let data: { [k: string]: any } = {};
 
   test.beforeAll(async () => {
-    fixtures.init();
-
-    room = {
-      name: 'room-' + shared.getRunId() + '-reporting',
-      description: 'created during automated testing',
-      users: [
-        //
-        fixtures.rainer, //
-        fixtures.alice,
-        fixtures.bob,
-        fixtures.mallory, //
-      ],
-    };
-  });
-  test.beforeEach(async () => {
-    await browsers.recall();
-  });
-
-  test.afterEach(async () => {
-    await browsers.pickle();
+    room = TestDataBuilder.createRoom('reporting');
   });
 
   //
   test('Admin can create a room, adding 4 users', async () => {
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const admin = await BrowserHelpers.openPageForUser('admin');
     await rooms.create(admin, room);
-    await admin.close();
+    await BrowserHelpers.closePage(admin);
   });
 
   test('Alice creates an idea', async () => {
-    const alice = await browsers.newPage(browsers.alices_browser);
+    const alice = await BrowserHelpers.openPageForUser('alice');
 
-    data.alicesIdea = {
-      name: 'alices-test-idea' + shared.getRunId() + '-scope-3-' + shared.gensym(),
-      description: 'generated during testing data',
-    };
+    data.alicesIdea = TestDataBuilder.createIdea('reporting-scope-3');
     await ideas.create(alice, room, data.alicesIdea);
   });
 
   test('Bob reports that idea', async () => {
-    const bob = await browsers.newPage(browsers.bobs_browser);
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const bob = await BrowserHelpers.openPageForUser('bob');
+    const admin = await BrowserHelpers.openPageForUser('admin');
 
     expect(data.alicesIdea).toBeDefined();
 
     await ideas.report(bob, room, data.alicesIdea, 'misinformation');
 
     await ideas.checkReport(admin, data.alicesIdea);
-    await bob.close();
-    await admin.close();
+    await BrowserHelpers.closePage(bob);
+    await BrowserHelpers.closePage(admin);
   });
 
   test('Bob Comments on Alices Idea', async () => {
-    const bob = await browsers.newPage(browsers.bobs_browser);
+    const bob = await BrowserHelpers.openPageForUser('bob');
 
     data.bobsComment = 'You posted misinformation' + shared.gensym();
 
     await ideas.comment(bob, room, data.alicesIdea, data.bobsComment);
 
-    await bob.close();
+    await BrowserHelpers.closePage(bob);
   });
 
   test('Alice reports bobs comment', async () => {
-    const alice = await browsers.newPage(browsers.alices_browser);
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const alice = await BrowserHelpers.openPageForUser('alice');
+    const admin = await BrowserHelpers.openPageForUser('admin');
 
     await ideas.reportComment(alice, room, data.alicesIdea, data.bobsComment, 'misinformation');
 
     await ideas.checkCommentReport(admin, data.bobsComment);
 
-    await alice.close();
-    await admin.close();
+    await BrowserHelpers.closePage(alice);
+    await BrowserHelpers.closePage(admin);
   });
 
   test('Alice reports a bug', async () => {
-    const alice = await browsers.newPage(browsers.alices_browser);
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const alice = await BrowserHelpers.openPageForUser('alice');
+    const admin = await BrowserHelpers.openPageForUser('admin');
 
     data.bugreport = 'This does not work' + shared.gensym();
 
@@ -100,7 +73,7 @@ test.describe('Reporting flow', () => {
 
     await ui.checkReport(admin, data.bugreport);
 
-    await alice.close();
-    await admin.close();
+    await BrowserHelpers.closePage(alice);
+    await BrowserHelpers.closePage(admin);
   });
 });

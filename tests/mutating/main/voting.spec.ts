@@ -1,60 +1,34 @@
-import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
-import { sleep } from '../../shared/utils';
+import { test, expect } from '@playwright/test';
+import { describeWithSetup, TestDataBuilder } from '../../shared/base-test';
+import { BrowserHelpers } from '../../shared/common-actions';
 import * as shared from '../../shared/shared';
 import * as users from '../../shared/page_interactions/users';
 import * as rooms from '../../shared/page_interactions/rooms';
 import * as ideas from '../../shared/page_interactions/ideas';
 import * as boxes from '../../shared/page_interactions/boxes';
-
 import * as fixtures from '../../fixtures/users';
-import * as browsers from '../../shared/page_interactions/browsers';
 import { BoxData } from '../../fixtures/ideas';
 
-let room;
-
+let room: any;
 let data: { [k: string]: any } = {};
 
-// force these tests to run sqeuentially
-test.describe.configure({ mode: 'serial' });
-
-test.describe.configure({ timeout: 60000 }); // 60 seconds
-
-test.describe('Room behaviours - creating rooms', () => {
+describeWithSetup('Room behaviours - creating rooms', () => {
   test.beforeAll(async () => {
-    fixtures.init();
-    room = {
-      name: 'room-' + shared.getRunId(),
-      description: 'created during automated testing',
-      users: [
-        //
-        fixtures.rainer, //
-        fixtures.alice,
-        fixtures.bob,
-        fixtures.mallory, //
-      ],
-    };
-  });
-
-  test.beforeEach(async () => {
-    await browsers.recall();
-  });
-
-  test.afterEach(async () => {
-    await browsers.pickle();
+    room = TestDataBuilder.createRoom();
   });
 
   //
   test('Admin can create a room, adding 4 users', async () => {
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const admin = await BrowserHelpers.openPageForUser('admin');
 
     await rooms.create(admin, room);
 
-    await admin.close();
+    await BrowserHelpers.closePage(admin);
   });
 
   // TODO: Burt _should_ be able to make a room
   test('Burt can NOT create a room', async () => {
-    const burt = await browsers.newPage(browsers.burt_browser);
+    const burt = await BrowserHelpers.openPageForUser('burt');
 
     await expect(async () => {
       await rooms.create(burt, room);
@@ -64,7 +38,7 @@ test.describe('Room behaviours - creating rooms', () => {
   });
 
   test('Alice can NOT make a room', async () => {
-    const alice = await browsers.newPage(browsers.alices_browser);
+    const alice = await BrowserHelpers.openPageForUser('alice');
 
     // we expect this to fail - alice should _not_ be able to create
     // a room
@@ -72,11 +46,11 @@ test.describe('Room behaviours - creating rooms', () => {
       await rooms.create(alice, room);
     }).rejects.toThrow();
 
-    await alice.close();
+    await BrowserHelpers.closePage(alice);
   });
 
   test('Mallory can NOT make a room', async () => {
-    const mallory = await browsers.newPage(browsers.mallorys_browser);
+    const mallory = await BrowserHelpers.openPageForUser('mallory');
 
     // we expect this to fail - alice should _not_ be able to create
     // a room
@@ -84,11 +58,11 @@ test.describe('Room behaviours - creating rooms', () => {
       await rooms.create(mallory, room);
     }).rejects.toThrow();
 
-    await mallory.close();
+    await BrowserHelpers.closePage(mallory);
   });
 
   test('Admin can create and remove an Idea', async () => {
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const admin = await BrowserHelpers.openPageForUser('admin');
 
     const adminsIdea = {
       name: 'admins-test-idea' + shared.getRunId(),
@@ -97,11 +71,11 @@ test.describe('Room behaviours - creating rooms', () => {
     await ideas.create(admin, room, adminsIdea);
     await ideas.remove(admin, room, adminsIdea);
 
-    await admin.close();
+    await BrowserHelpers.closePage(admin);
   });
 
   test('Alice can create and delete an Idea', async () => {
-    const alice = await browsers.newPage(browsers.alices_browser);
+    const alice = await BrowserHelpers.openPageForUser('alice');
 
     const alicesIdea = {
       name: 'alices-test-idea' + shared.getRunId() + '-scope-3',
@@ -110,12 +84,12 @@ test.describe('Room behaviours - creating rooms', () => {
     await ideas.create(alice, room, alicesIdea);
     await ideas.remove(alice, room, alicesIdea);
 
-    await alice.close();
+    await BrowserHelpers.closePage(alice);
   });
 
   test('Bob can create an Idea, alice can comment on it, both delete their resources', async () => {
-    const bob = await browsers.newPage(browsers.bobs_browser);
-    const alice = await browsers.newPage(browsers.alices_browser);
+    const bob = await BrowserHelpers.openPageForUser('bob');
+    const alice = await BrowserHelpers.openPageForUser('alice');
 
     const bobsIdea = {
       name: 'bobs-test-idea' + shared.getRunId(),
@@ -126,13 +100,13 @@ test.describe('Room behaviours - creating rooms', () => {
     await ideas.removeComment(alice, room, bobsIdea, "alice's comment generated in testing");
     await ideas.remove(bob, room, bobsIdea);
 
-    await bob.close();
-    await alice.close();
+    await BrowserHelpers.closePage(bob);
+    await BrowserHelpers.closePage(alice);
   });
 
   test('Bob can not remove alices idea', async () => {
-    const bob = await browsers.newPage(browsers.bobs_browser);
-    const alice = await browsers.newPage(browsers.alices_browser);
+    const bob = await BrowserHelpers.openPageForUser('bob');
+    const alice = await BrowserHelpers.openPageForUser('alice');
 
     const alicesIdea = {
       name: 'alices-test-idea' + shared.getRunId() + '-scope-4',
@@ -148,16 +122,16 @@ test.describe('Room behaviours - creating rooms', () => {
     // now alice should remove her own idea
     await ideas.remove(alice, room, alicesIdea);
 
-    await alice.close();
-    await bob.close();
+    await BrowserHelpers.closePage(alice);
+    await BrowserHelpers.closePage(bob);
   });
 
   test('Admin can create a box with alice and bobs ideas', async () => {
     const tempScope = shared.gensym();
 
-    const bob = await browsers.newPage(browsers.bobs_browser);
-    const alice = await browsers.newPage(browsers.alices_browser);
-    const admin = await browsers.newPage(browsers.admins_browser);
+    const bob = await BrowserHelpers.openPageForUser('bob');
+    const alice = await BrowserHelpers.openPageForUser('alice');
+    const admin = await BrowserHelpers.openPageForUser('admin');
 
     const alicesIdea = {
       name: 'alices-test-idea' + shared.getRunId() + '-scope-' + tempScope,
@@ -187,15 +161,15 @@ test.describe('Room behaviours - creating rooms', () => {
     await ideas.remove(alice, room, alicesIdea);
     await ideas.remove(bob, room, bobsIdea);
 
-    await admin.close();
-    await alice.close();
-    await bob.close();
+    await BrowserHelpers.closePage(admin);
+    await BrowserHelpers.closePage(alice);
+    await BrowserHelpers.closePage(bob);
   });
 
   test('Alice cannot create a box', async () => {
     const tempScope = shared.gensym();
 
-    const alice = await browsers.newPage(browsers.alices_browser);
+    const alice = await BrowserHelpers.openPageForUser('alice');
 
     const box: BoxData = {
       name: 'admins-test-box' + shared.getRunId() + '-scope-' + tempScope,
@@ -210,7 +184,7 @@ test.describe('Room behaviours - creating rooms', () => {
       await boxes.create(alice, room, box);
     }).rejects.toThrow();
 
-    await alice.close();
+    await BrowserHelpers.closePage(alice);
   });
 
   test.describe('full voting workflow', async () => {
