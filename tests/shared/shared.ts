@@ -21,9 +21,9 @@ export const timestamp = now.getTime().toString();
 
 export const getHost = () => process.env.APP_FRONTEND_HOST!!;
 
-export const getRunId = () => fs.readFileSync('run-id.txt', 'utf-8');
+export const getRunId = () => fs.readFileSync('tests/temp/run-id.txt', 'utf-8');
 
-export const setRunId = () => fs.writeFileSync('run-id.txt', 'run-id-' + timestamp);
+export const setRunId = () => fs.writeFileSync('tests/temp/run-id.txt', 'run-id-' + timestamp);
 
 export function gensym(prefix = 'GG') {
   // tests will fail on collision.. very rare

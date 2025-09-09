@@ -1,17 +1,18 @@
 import { test, expect, chromium } from '@playwright/test';
 import { describeWithSetup, TestDataBuilder } from '../../shared/base-test';
 import { BrowserHelpers } from '../../shared/common-actions';
+import { sleep } from '../../shared/utils';
 import * as shared from '../../shared/shared';
 import fs from 'fs';
 import path from 'path';
 import * as users from '../../shared/page_interactions/users';
 import * as rooms from '../../shared/page_interactions/rooms';
+import * as browsers from '../../shared/page_interactions/browsers';
 
 describeWithSetup('Upload user csv, delete that user', () => {
   let data: { [k: string]: any } = {};
 
   test('Admin can upload a user csv', async () => {
-    const sym = shared.gensym();
     data.jannikaData = TestDataBuilder.createUserData('jannika');
 
     const csv_str = `realname;displayname;username;email;about_me
@@ -40,7 +41,7 @@ ${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.
     await UploadButton.click({ timeout: 1000 });
 
     // create and choose the file
-    const filePath = path.join(__dirname, 'temp-upload.txt');
+    const filePath = path.join(__dirname, '../../temp/temp-upload.txt');
     fs.writeFileSync(filePath, csv_str);
     await admin.setInputFiles('input[type="file"]', filePath);
 

@@ -1,7 +1,5 @@
-import * as shared from '../shared/shared.ts';
-import * as SettingsTypes from '../../src/types/SettingsTypes.ts';
 import fs from 'fs';
-import path from 'path';
+import * as SettingsTypes from '../../src/types/SettingsTypes.ts';
 
 /*
  * 10 => "guest",
@@ -44,7 +42,7 @@ export const admin: UserData = {
 };
 
 export const init = () => {
-  const runId = fs.readFileSync('run-id.txt', 'utf-8');
+  const runId = fs.readFileSync('tests/temp/run-id.txt', 'utf-8');
   console.log('Run ID for fixtures:', runId);
 
   alice = {

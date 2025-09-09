@@ -1,5 +1,4 @@
 import { RoomPhases } from '../../src/types/SettingsTypes';
-import * as userFixtures from './users';
 
 export type IdeaData = {
   name: string;
