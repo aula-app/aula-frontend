@@ -38,7 +38,7 @@ export class InstanceOfflineTestHelpers {
     await statusSelector.waitFor({ state: 'visible' });
 
     await statusSelector.click();
-
+    
     const optionTestId = status === 'active' ? 'status-option-status.active' : 'status-option-status.inactive';
     await page.getByTestId(optionTestId).click();
 
@@ -140,7 +140,8 @@ export class InstanceOfflineTestHelpers {
   static async executeWithCleanup<T>(
     page: Page,
     testLogic: (context: InstanceOfflineTestContext) => Promise<T>,
-    emergencyCleanupQueue?: Array<{ page: any; context: InstanceOfflineTestContext }>
+    emergencyCleanupQueue?: Array<{ page: any; context: InstanceOfflineTestContext }>,
+    skipCleanup: boolean = false
   ): Promise<T> {
     const context = await this.setupInstanceOfflineTest();
 
@@ -160,7 +161,10 @@ export class InstanceOfflineTestHelpers {
         }
       }
 
-      await this.cleanupTestData(page, context);
+      // Only cleanup if not explicitly skipped (useful for sequential tests)
+      if (!skipCleanup) {
+        await this.cleanupTestData(page, context);
+      }
     }
   }
 

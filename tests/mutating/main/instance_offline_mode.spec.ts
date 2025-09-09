@@ -8,7 +8,18 @@ describeWithSetup('Instance Offline Mode', () => {
   // Track cleanup contexts for emergency cleanup
   const cleanupQueue: Array<{ page: any; context: InstanceOfflineTestContext }> = [];
 
-  test.afterEach(async () => {
+  test.afterAll(async () => {
+    // Final cleanup to ensure instance is restored to active state
+    const admin = await BrowserHelpers.openPageForUser('admin');
+    try {
+      await InstanceOfflineTestHelpers.navigateToSystemSettings(admin);
+      await InstanceOfflineTestHelpers.setInstanceStatus(admin, 'active');
+    } catch (e) {
+      console.warn('Final cleanup failed:', e);
+    } finally {
+      await BrowserHelpers.closePage(admin);
+    }
+
     // Emergency cleanup for any leftover contexts
     while (cleanupQueue.length > 0) {
       const { page, context } = cleanupQueue.pop()!;
@@ -20,7 +31,7 @@ describeWithSetup('Instance Offline Mode', () => {
     }
   });
 
-  test('Complete instance offline workflow', async () => {
+  test('Instance offline workflow: Admin controls access and users experience proper offline/online states', async () => {
     const admin = await BrowserHelpers.openPageForUser('admin');
     let userBrowser: any = null;
     let userContext: any = null;
@@ -30,7 +41,7 @@ describeWithSetup('Instance Offline Mode', () => {
       await InstanceOfflineTestHelpers.executeWithCleanup(
         admin,
         async (context) => {
-          // Step 1: Admin sets instance offline
+          // ===== STEP 1: Admin sets instance offline =====
           await InstanceOfflineTestHelpers.navigateToSystemSettings(admin);
           
           const currentStatus = await InstanceOfflineTestHelpers.getCurrentInstanceStatus(admin);
@@ -40,7 +51,7 @@ describeWithSetup('Instance Offline Mode', () => {
           await InstanceOfflineTestHelpers.setInstanceStatus(admin, 'inactive');
           context.currentStatus = 'inactive';
 
-          // Step 2: User can't login and sees offline message
+          // ===== STEP 2: User cannot login when instance is offline =====
           userBrowser = await chromium.launch();
           userContext = await userBrowser.newContext();
           user = await userContext.newPage();
@@ -54,12 +65,12 @@ describeWithSetup('Instance Offline Mode', () => {
           await userBrowser.close();
           userBrowser = null;
 
-          // Step 3: Admin sets instance back online
+          // ===== STEP 3: Admin sets instance back online =====
           await InstanceOfflineTestHelpers.navigateToSystemSettings(admin);
           await InstanceOfflineTestHelpers.setInstanceStatus(admin, 'active');
           context.currentStatus = 'active';
 
-          // Step 4: Verify user can login again after instance is back online
+          // ===== STEP 4: User can login again after instance is restored =====
           userBrowser = await chromium.launch();
           userContext = await userBrowser.newContext();
           user = await userContext.newPage();
