@@ -9,17 +9,6 @@ describeWithSetup('Instance Offline Mode', () => {
   const cleanupQueue: Array<{ page: any; context: InstanceOfflineTestContext }> = [];
 
   test.afterAll(async () => {
-    // Final cleanup to ensure instance is restored to active state
-    const admin = await BrowserHelpers.openPageForUser('admin');
-    try {
-      await InstanceOfflineTestHelpers.navigateToSystemSettings(admin);
-      await InstanceOfflineTestHelpers.setInstanceStatus(admin, 'active');
-    } catch (e) {
-      console.warn('Final cleanup failed:', e);
-    } finally {
-      await BrowserHelpers.closePage(admin);
-    }
-
     // Emergency cleanup for any leftover contexts
     while (cleanupQueue.length > 0) {
       const { page, context } = cleanupQueue.pop()!;
@@ -43,7 +32,7 @@ describeWithSetup('Instance Offline Mode', () => {
         async (context) => {
           // ===== STEP 1: Admin sets instance offline =====
           await InstanceOfflineTestHelpers.navigateToSystemSettings(admin);
-          
+
           const currentStatus = await InstanceOfflineTestHelpers.getCurrentInstanceStatus(admin);
           context.originalStatus = currentStatus;
           context.currentStatus = currentStatus;
@@ -93,7 +82,7 @@ describeWithSetup('Instance Offline Mode', () => {
       if (user) await user.close();
       if (userContext) await userContext.close();
       if (userBrowser) await userBrowser.close();
-      
+
       await BrowserHelpers.closePage(admin);
     }
   });
