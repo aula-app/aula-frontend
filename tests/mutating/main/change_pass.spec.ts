@@ -60,7 +60,7 @@ describeWithSetup('Change pass flow', () => {
           // Manually dismiss the success message before proceeding with the second password change
           const successDiv = alice.getByTestId('password-change-success');
           await successDiv.waitFor({ state: 'visible' });
-          
+
           const closeButton = successDiv.locator('button[aria-label*="Close"], button[title*="close"]').first();
           if (await closeButton.isVisible()) {
             await closeButton.click();
@@ -97,7 +97,11 @@ describeWithSetup('Change pass flow', () => {
 
           await ChangePasswordTestHelpers.navigateToSecuritySettings(alice);
 
-          await ChangePasswordTestHelpers.attemptPasswordChangeWithWrongCurrent(alice, 'WRONGPASSWORD', temporaryPassword);
+          await ChangePasswordTestHelpers.attemptPasswordChangeWithWrongCurrent(
+            alice,
+            'WRONGPASSWORD',
+            temporaryPassword
+          );
           await ChangePasswordTestHelpers.waitForErrorMessage(alice);
         },
         'alice',

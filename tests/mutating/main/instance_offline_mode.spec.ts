@@ -1,68 +1,100 @@
-import { chromium, expect, test } from '@playwright/test';
+import { chromium, test } from '@playwright/test';
 import { describeWithSetup } from '../../shared/base-test';
 import { BrowserHelpers } from '../../shared/common-actions';
-import * as users from '../../shared/page_interactions/users';
-import * as shared from '../../shared/shared';
+import { InstanceOfflineTestHelpers, InstanceOfflineTestContext } from '../../shared/helpers/instance-offline';
 import * as fixtures from '../../fixtures/users';
 
 describeWithSetup('Instance Offline Mode', () => {
+  // Track cleanup contexts for emergency cleanup
+  const cleanupQueue: Array<{ page: any; context: InstanceOfflineTestContext }> = [];
 
-  test('Admin can set instance offline', async () => {
-    // Admin logs in and sets instance offline
+  test.afterAll(async () => {
+    // Final cleanup to ensure instance is restored to active state
     const admin = await BrowserHelpers.openPageForUser('admin');
-    await users.goToSystemConfig(admin);
-    await expect(admin.getByLabel('Konfigurationen')).toBeVisible();
-    await admin.getByTestId('config-accordion-system').click();
+    try {
+      await InstanceOfflineTestHelpers.navigateToSystemSettings(admin);
+      await InstanceOfflineTestHelpers.setInstanceStatus(admin, 'active');
+    } catch (e) {
+      console.warn('Final cleanup failed:', e);
+    } finally {
+      await BrowserHelpers.closePage(admin);
+    }
 
-    // Verify current status is inactive before changing it
-    const statusCombobox = admin.getByRole('combobox', { name: 'Status' });
-    await expect(statusCombobox).toHaveText(/Aktiv|Active/);
-
-    await statusCombobox.click();
-    await admin.getByTestId('status-option-status.inactive').click();
-    await admin.getByTestId('system-settings-confirm-button').click();
-
-    // Admin logs out by clearing context and creating new browser
-    await BrowserHelpers.closePage(admin);
+    // Emergency cleanup for any leftover contexts
+    while (cleanupQueue.length > 0) {
+      const { page, context } = cleanupQueue.pop()!;
+      try {
+        await InstanceOfflineTestHelpers.cleanupTestData(page, context);
+      } catch (e) {
+        console.warn('Emergency cleanup failed:', e);
+      }
+    }
   });
 
-  test("User can't login and receives instance offline message", async () => {
-    const host = shared.getHost();
-    const userBrowser = await chromium.launch();
-    const userContext = await userBrowser.newContext();
-    const user = await userContext.newPage();
-
-    // User tries to login
-    await user.goto(host);
-    await user.fill('input[name="username"]', fixtures.alice.username);
-    await user.fill('input[name="password"]', fixtures.alice.password);
-    await user.getByRole('button', { name: 'Login' }).click({ timeout: 1000 });
-
-    // Verify user cannot access overview page
-    await expect(user.getByRole('img', { name: 'Schlafende' })).toBeVisible();
-    await expect(user.getByText('Die Schule ist derzeit')).toBeVisible();
-
-    // User logs out by clearing context and creating new browser
-    await user.close();
-  });
-
-  test('Admin can set instance online again', async () => {
-    // Admin logs in and sets instance online again
+  test('Instance offline workflow: Admin controls access and users experience proper offline/online states', async () => {
     const admin = await BrowserHelpers.openPageForUser('admin');
-    await users.goToSystemConfig(admin);
-    await expect(admin.getByLabel('Konfigurationen')).toBeVisible();
-    await admin.getByTestId('config-accordion-system').click();
-    await expect(admin.getByRole('combobox', { name: 'Status' })).toBeVisible();
+    let userBrowser: any = null;
+    let userContext: any = null;
+    let user: any = null;
 
-    // Verify current status is inactive before changing it
-    const statusCombobox = admin.getByRole('combobox', { name: 'Status' });
-    await expect(statusCombobox).toHaveText(/Inaktiv|Inactive/);
+    try {
+      await InstanceOfflineTestHelpers.executeWithCleanup(
+        admin,
+        async (context) => {
+          // ===== STEP 1: Admin sets instance offline =====
+          await InstanceOfflineTestHelpers.navigateToSystemSettings(admin);
+          
+          const currentStatus = await InstanceOfflineTestHelpers.getCurrentInstanceStatus(admin);
+          context.originalStatus = currentStatus;
+          context.currentStatus = currentStatus;
 
-    await statusCombobox.click();
-    await admin.getByTestId('status-option-status.active').click();
-    await admin.getByTestId('system-settings-confirm-button').click();
+          await InstanceOfflineTestHelpers.setInstanceStatus(admin, 'inactive');
+          context.currentStatus = 'inactive';
 
-    // Admin logs out by clearing context and creating new browser
-    await BrowserHelpers.closePage(admin);
+          // ===== STEP 2: User cannot login when instance is offline =====
+          userBrowser = await chromium.launch();
+          userContext = await userBrowser.newContext();
+          user = await userContext.newPage();
+
+          await InstanceOfflineTestHelpers.attemptUserLogin(user, fixtures.alice.username, fixtures.alice.password);
+          await InstanceOfflineTestHelpers.verifyOfflineView(user);
+
+          // Cleanup user browser
+          await user.close();
+          await userContext.close();
+          await userBrowser.close();
+          userBrowser = null;
+
+          // ===== STEP 3: Admin sets instance back online =====
+          await InstanceOfflineTestHelpers.navigateToSystemSettings(admin);
+          await InstanceOfflineTestHelpers.setInstanceStatus(admin, 'active');
+          context.currentStatus = 'active';
+
+          // ===== STEP 4: User can login again after instance is restored =====
+          userBrowser = await chromium.launch();
+          userContext = await userBrowser.newContext();
+          user = await userContext.newPage();
+
+          await InstanceOfflineTestHelpers.verifyUserCanLogin(user, fixtures.alice.username, fixtures.alice.password);
+
+          // Cleanup user browser
+          await user.close();
+          await userContext.close();
+          await userBrowser.close();
+          userBrowser = null;
+        },
+        cleanupQueue
+      );
+    } catch (error) {
+      console.error('Instance offline workflow test failed:', error);
+      throw error;
+    } finally {
+      // Cleanup user browser if it wasn't cleaned up properly
+      if (user) await user.close();
+      if (userContext) await userContext.close();
+      if (userBrowser) await userBrowser.close();
+      
+      await BrowserHelpers.closePage(admin);
+    }
   });
 });
