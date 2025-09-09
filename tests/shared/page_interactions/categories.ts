@@ -14,13 +14,19 @@ export class CategoriesPage {
       configAccordionIdea: 'config-accordion-idea',
       addCategoryButton: 'add-new-category-chip',
       categoryForm: 'category-forms',
-      categoryNameInput: 'input[name="name"]',
+      categoryNameInput: 'category-name-field',
+      iconFieldContainer: 'icon-field-container',
+      iconFieldButtons: 'icon-field-buttons',
       iconField: 'icon-field-1',
-      submitButton: '[data-testid="category-forms"] button[type="submit"]',
-      deleteDialog: '[role="dialog"]',
+      submitButton: 'category-form-submit-button',
+      deleteDialog: 'delete-category-dialog',
       deleteConfirmButton: 'delete-cat-button',
+      cancelButton: 'category-form-cancel-button',
+      categoriesContainer: 'categories-container',
+      chipsContainer: 'categories-chips-container',
+      formDrawer: 'category-form-drawer',
       cancelIcon: 'CancelIcon',
-      deleteIcon: '.MuiChip-deleteIcon'
+      deleteIcon: '.MuiChip-deleteIcon',
     };
   }
 
@@ -29,7 +35,7 @@ export class CategoriesPage {
       default: 10000,
       short: 5000,
       wait: 1000,
-      create: 2000
+      create: 2000,
     };
   }
 
@@ -53,21 +59,25 @@ export class CategoriesPage {
     await this.page.waitForTimeout(this.timeouts.wait);
   }
 
-  async fillCategoryForm(categoryName: string): Promise<void> {
+  async fillCategoryForm(categoryName: string, iconIndex: number = 1): Promise<void> {
     const form = this.page.getByTestId(this.selectors.categoryForm);
     await expect(form).toBeVisible({ timeout: this.timeouts.default });
 
-    const nameField = this.page.locator(this.selectors.categoryNameInput);
+    const nameField = this.page.getByTestId(this.selectors.categoryNameInput);
     await expect(nameField).toBeVisible({ timeout: this.timeouts.default });
     await nameField.fill(categoryName);
 
-    const iconField = this.page.getByTestId(this.selectors.iconField);
-    await expect(iconField).toBeVisible({ timeout: this.timeouts.default });
-    await iconField.click();
+    // Use more specific icon selection
+    const iconFieldContainer = this.page.getByTestId(this.selectors.iconFieldContainer);
+    await expect(iconFieldContainer).toBeVisible({ timeout: this.timeouts.default });
+
+    const iconButton = this.page.getByTestId(`icon-field-${iconIndex}`);
+    await expect(iconButton).toBeVisible({ timeout: this.timeouts.default });
+    await iconButton.click();
   }
 
   async submitCategoryForm(): Promise<void> {
-    const submitButton = this.page.locator(this.selectors.submitButton);
+    const submitButton = this.page.getByTestId(this.selectors.submitButton);
     await expect(submitButton).toBeVisible({ timeout: this.timeouts.default });
     await submitButton.click();
     await this.page.waitForTimeout(this.timeouts.create);
@@ -88,7 +98,8 @@ export class CategoriesPage {
   }
 
   async findDeleteButton(categoryChip: any) {
-    return categoryChip.getByTestId(this.selectors.cancelIcon)
+    return categoryChip
+      .getByTestId(this.selectors.cancelIcon)
       .or(categoryChip.locator('svg[data-testid*="Cancel"]'))
       .or(categoryChip.locator(this.selectors.deleteIcon));
   }
@@ -96,14 +107,14 @@ export class CategoriesPage {
   async deleteCategory(categoryName: string): Promise<void> {
     const categoryChip = await this.findCategoryChip(categoryName);
     const deleteButton = await this.findDeleteButton(categoryChip);
-    
+
     await expect(deleteButton).toBeVisible({ timeout: this.timeouts.default });
     await deleteButton.click();
 
-    const dialog = this.page.getByRole('dialog');
+    const dialog = this.page.getByTestId(this.selectors.deleteDialog);
     await expect(dialog).toBeVisible({ timeout: this.timeouts.default });
 
-    const confirmButton = dialog.getByTestId(this.selectors.deleteConfirmButton);
+    const confirmButton = this.page.getByTestId(this.selectors.deleteConfirmButton);
     await expect(confirmButton).toBeVisible({ timeout: this.timeouts.default });
     await confirmButton.click();
 
@@ -123,7 +134,7 @@ export class CategoriesPage {
     try {
       await this.navigateToSettings();
       await this.openIdeasAccordion();
-      
+
       const categoryChip = await this.findCategoryChip(categoryName);
       if (await categoryChip.isVisible()) {
         await this.deleteCategory(categoryName);
@@ -134,15 +145,89 @@ export class CategoriesPage {
   }
 
   async verifyCategoryOnIdea(ideaName: string, categoryName: string): Promise<void> {
-    const ideaDiv = this.page.getByTestId(`idea-${ideaName}`).first();
+    // Use more specific selector to target the exact idea
+    const ideaDiv = this.page.getByTestId(`idea-${ideaName}`);
     await expect(ideaDiv).toBeVisible();
 
-    const categoryElement = ideaDiv.getByTestId(`category-${categoryName}`)
+    // Look for category chip within the specific idea using multiple fallback strategies
+    const categoryElement = ideaDiv
+      .getByTestId(`category-${categoryName}`)
+      .or(ideaDiv.locator(`[data-category-name="${categoryName}"]`))
       .or(ideaDiv.locator('[data-testid*="category"]').filter({ hasText: categoryName }))
-      .or(ideaDiv.locator('.MuiChip-root').filter({ hasText: categoryName }))
-      .first();
-    
-    await expect(categoryElement).toBeVisible();
+      .or(ideaDiv.locator('.MuiChip-root').filter({ hasText: categoryName }));
+
+    await expect(categoryElement.first()).toBeVisible();
+  }
+
+  /**
+   * Verifies that the categories container is visible
+   */
+  async verifyCategoriesContainer(): Promise<void> {
+    const container = this.page.getByTestId(this.selectors.categoriesContainer);
+    await expect(container).toBeVisible({ timeout: this.timeouts.default });
+  }
+
+  /**
+   * Waits for the form drawer to be visible
+   */
+  async waitForFormDrawer(): Promise<void> {
+    const drawer = this.page.getByTestId(this.selectors.formDrawer);
+    await expect(drawer).toBeVisible({ timeout: this.timeouts.default });
+  }
+
+  /**
+   * Waits for the form drawer to be hidden
+   */
+  async waitForFormDrawerToClose(): Promise<void> {
+    const drawer = this.page.getByTestId(this.selectors.formDrawer);
+    await expect(drawer).not.toBeVisible({ timeout: this.timeouts.default });
+  }
+
+  /**
+   * Cancels the category form
+   */
+  async cancelCategoryForm(): Promise<void> {
+    const cancelButton = this.page.getByTestId(this.selectors.cancelButton);
+    await expect(cancelButton).toBeVisible({ timeout: this.timeouts.default });
+    await cancelButton.click();
+  }
+
+  /**
+   * Gets a category chip by its ID (more reliable than name-based)
+   */
+  async findCategoryChipById(categoryId: string) {
+    return this.page.locator(`[data-category-id="${categoryId}"]`);
+  }
+
+  /**
+   * Verifies that a specific number of category chips are visible
+   */
+  async verifyCategoryCount(expectedCount: number): Promise<void> {
+    const chips = this.page.getByTestId(this.selectors.chipsContainer).locator('[data-testid^="category-chip-"]');
+    await expect(chips).toHaveCount(expectedCount);
+  }
+
+  /**
+   * Selects an icon by its name (more reliable than index)
+   */
+  async selectIconByName(iconName: string): Promise<void> {
+    const iconButton = this.page.locator(`[data-testid^="icon-field-"][data-icon-name="${iconName}"]`);
+    await expect(iconButton).toBeVisible({ timeout: this.timeouts.default });
+    await iconButton.click();
+  }
+
+  /**
+   * Fills category form with icon selection by name
+   */
+  async fillCategoryFormWithIcon(categoryName: string, iconName: string): Promise<void> {
+    const form = this.page.getByTestId(this.selectors.categoryForm);
+    await expect(form).toBeVisible({ timeout: this.timeouts.default });
+
+    const nameField = this.page.getByTestId(this.selectors.categoryNameInput);
+    await expect(nameField).toBeVisible({ timeout: this.timeouts.default });
+    await nameField.fill(categoryName);
+
+    await this.selectIconByName(iconName);
   }
 }
 

@@ -137,17 +137,31 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
               {...register('name')}
               required
               disabled={isLoading}
+              data-testid="category-name-input"
+              inputProps={{
+                'data-testid': 'category-name-field',
+              }}
             />
             {/* content */}
-            <IconField name="description_internal" control={control} disabled={isLoading} />
+            <IconField
+              name="description_internal"
+              control={control}
+              disabled={isLoading}
+              data-testid="category-icon-field"
+            />
           </Stack>
           {errors.root && (
             <Typography color="error" variant="body2">
               {errors.root.message}
             </Typography>
           )}
-          <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
+          <Stack direction="row" justifyContent="end" gap={2} data-testid="category-form-actions">
+            <Button
+              onClick={handleCancel}
+              color="error"
+              aria-label={t('actions.cancel')}
+              data-testid="category-form-cancel-button"
+            >
               {t('actions.cancel')}
             </Button>
             <Button
@@ -155,6 +169,8 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
               variant="contained"
               disabled={isLoading}
               aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+              data-testid="category-form-submit-button"
+              data-loading={isLoading}
             >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>

@@ -48,9 +48,11 @@ const CatView: React.FC = () => {
   }, []);
 
   return (
-    <Stack gap={2}>
-      <Typography variant="h3">{t('scopes.categories.plural')}</Typography>
-      <Stack direction="row" flexWrap="wrap" gap={1}>
+    <Stack gap={2} data-testid="categories-container">
+      <Typography variant="h3" data-testid="categories-title">
+        {t('scopes.categories.plural')}
+      </Typography>
+      <Stack direction="row" flexWrap="wrap" gap={1} data-testid="categories-chips-container">
         <Chip
           label={t('actions.add', { var: t('scopes.categories.name').toLowerCase() })}
           avatar={<AppIcon icon="add" />}
@@ -64,16 +66,26 @@ const CatView: React.FC = () => {
             <Chip
               key={category.id}
               label={category.name}
-              avatar={<AppIcon icon={currentIcon} />}
+              avatar={<AppIcon icon={currentIcon} data-testid={`category-chip-icon-${category.id}`} />}
               onClick={() => setEditCat(category)}
               onDelete={() => setDeleteCat(category)}
               data-testid={`category-chip-${category.name.toLowerCase().replace(/\s+/g, '-')}`}
+              data-category-id={category.id}
+              data-category-name={category.name}
               aria-label={t('actions.edit', { var: category.name })}
             />
           );
         })}
       </Stack>
-      <Drawer anchor="bottom" open={!!editCat} onClose={onClose} sx={{ overflowY: 'auto' }}>
+      <Drawer
+        anchor="bottom"
+        open={!!editCat}
+        onClose={onClose}
+        sx={{ overflowY: 'auto' }}
+        data-testid="category-form-drawer"
+        data-mode={typeof editCat !== 'boolean' ? 'edit' : 'create'}
+        data-category-id={typeof editCat !== 'boolean' ? editCat.id : undefined}
+      >
         <CategoryForms onClose={onClose} defaultValues={typeof editCat !== 'boolean' ? editCat : undefined} />
       </Drawer>
       <Dialog
@@ -81,18 +93,27 @@ const CatView: React.FC = () => {
         onClose={onClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        data-testid="delete-category-dialog"
+        data-category-id={deleteCat?.id}
+        data-category-name={deleteCat?.name}
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle id="alert-dialog-title" data-testid="delete-dialog-title">
           <Stack direction="row" alignItems="center">
-            <WarningAmber sx={{ mr: 1 }} color="error" /> {t('deletion.headline', { var: t(`scopes.categories.name`) })}
+            <WarningAmber sx={{ mr: 1 }} color="error" data-testid="warning-icon" />
+            {t('deletion.headline', { var: t(`scopes.categories.name`) })}
           </Stack>
         </DialogTitle>
-        <DialogContent sx={{ overflowY: 'auto' }}>
-          <DialogContentText id="alert-dialog-description">
+        <DialogContent sx={{ overflowY: 'auto' }} data-testid="delete-dialog-content">
+          <DialogContentText id="alert-dialog-description" data-testid="delete-dialog-description">
             {t('deletion.confirm', { var: t(`scopes.categories.name`) })}
+            {deleteCat && (
+              <Typography component="span" fontWeight="bold" sx={{ ml: 1 }}>
+                "{deleteCat.name}"
+              </Typography>
+            )}
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions data-testid="delete-dialog-actions">
           <Button
             onClick={() => setDeleteCat(undefined)}
             color="secondary"
@@ -101,7 +122,13 @@ const CatView: React.FC = () => {
           >
             {t('actions.cancel')}
           </Button>
-          <Button onClick={onDelete} color="error" variant="contained" data-testid="delete-cat-button">
+          <Button
+            onClick={onDelete}
+            color="error"
+            variant="contained"
+            data-testid="delete-cat-button"
+            data-category-id={deleteCat?.id}
+          >
             {t('actions.delete')}
           </Button>
         </DialogActions>
