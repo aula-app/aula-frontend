@@ -39,6 +39,8 @@ export function ScopeHeader({
   const [isSortOpen, setIsSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const sortSelectRef = useRef<HTMLInputElement>(null);
   const sortDirectionDebounceRef = useRef<NodeJS.Timeout | null>(null);
 
   const clearSearch = () => {
@@ -127,6 +129,48 @@ export function ScopeHeader({
     };
   }, [isSearchOpen, searchQuery]);
 
+  // Focus management for search input
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      // Delay to allow Collapse animation to complete (300ms timeout + small buffer)
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 350);
+    }
+  }, [isSearchOpen]);
+
+  // Focus management for sort select
+  useEffect(() => {
+    if (isSortOpen && sortSelectRef.current) {
+      // Small delay to ensure the element is rendered
+      setTimeout(() => {
+        sortSelectRef.current?.focus();
+      }, 100);
+    }
+  }, [isSortOpen]);
+
+  // Handle Escape key to close search and sort panels
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        if (isSearchOpen) {
+          setIsSearchOpen(false);
+          if (searchQuery.trim() === '') {
+            clearSearch();
+          }
+        }
+        if (isSortOpen) {
+          setIsSortOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isSearchOpen, isSortOpen, searchQuery]);
+
   // Cleanup debounce timeout on unmount
   useEffect(() => {
     return () => {
@@ -213,7 +257,8 @@ export function ScopeHeader({
                 placeholder={t(`scopes.${scopeKey}.search.placeholder`)}
                 size="small"
                 variant="outlined"
-                autoFocus
+                inputRef={searchInputRef}
+                data-testid="search-field"
                 sx={{
                   width: { xs: 180, sm: 200 },
                   minWidth: { xs: 120, sm: 150 },
@@ -233,6 +278,8 @@ export function ScopeHeader({
             </Collapse>
             <AppIconButton
               id="search-button"
+              data-testid="search-button"
+              data-state={isSearchOpen ? 'open' : 'closed'}
               icon={isSearchOpen ? 'close' : 'search'}
               onClick={handleSearchToggle}
               aria-label={t('ui.common.search')}
@@ -277,19 +324,28 @@ export function ScopeHeader({
                     label={t('ui.sort.by')}
                     labelId={`sort-label-${scopeKey}`}
                     id={`sort-select-${scopeKey}`}
+                    data-testid="sort-select"
                     aria-describedby={`sort-description-${scopeKey}`}
+                    inputRef={sortSelectRef}
                     inputProps={{
                       'aria-label': t('ui.sort.by') + ' ' + title,
                     }}
                   >
                     {sortOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value} aria-label={t(option.labelKey)}>
+                      <MenuItem
+                        key={option.value}
+                        value={option.value}
+                        data-testid={`sort-option-${option.value}`}
+                        aria-label={t(option.labelKey)}
+                      >
                         {t(option.labelKey)}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
                 <AppIconButton
+                  data-testid="sort-direction-button"
+                  data-sort-direction={sortDirection}
                   icon={sortDirection === 'asc' ? 'sortUp' : 'sortDown'}
                   onClick={handleSortDirectionToggle}
                   aria-label={t(`ui.sort.${sortDirection}`)}
@@ -299,6 +355,9 @@ export function ScopeHeader({
             </Collapse>
             <AppIconButton
               id="sort-button"
+              data-testid="sort-button"
+              data-state={isSortOpen ? 'open' : 'closed'}
+              data-sort-direction={sortDirection}
               icon={isSortOpen ? 'close' : sortDirection === 'asc' ? 'sortUp' : 'sortDown'}
               onClick={handleSortToggle}
               aria-label={t('ui.sort.by')}

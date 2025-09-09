@@ -26,8 +26,8 @@ export function useRoomFilters({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Default filter function that searches in room_name and description_public
-  const defaultFilterFunction = createTextFilter<RoomType>(['room_name', 'description_public']);
+  // Default filter function that searches in room_name
+  const defaultFilterFunction = createTextFilter<RoomType>(['room_name']);
 
   // Apply text search filter
   const searchFilteredRooms = useFilter({
