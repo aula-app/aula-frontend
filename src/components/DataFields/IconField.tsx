@@ -26,15 +26,17 @@ const IconField: React.FC<Props> = ({ name, control, disabled = false, ...restOf
       // @ts-ignore
       defaultValue={control._defaultValues[name]}
       render={({ field, fieldState }) => (
-        <FormControl fullWidth>
-          <Typography variant="caption" pl={2}>
+        <FormControl fullWidth data-testid="icon-field-container">
+          <Typography variant="caption" pl={2} data-testid="icon-field-label">
             {t('ui.files.image.label')}
           </Typography>
           <TextField {...field} {...restOfProps} sx={{ visibility: 'hidden', height: 0 }} />
-          <Stack direction="row" flexWrap="wrap" justifyContent="center">
+          <Stack direction="row" flexWrap="wrap" justifyContent="center" data-testid="icon-field-buttons">
             {icons.map((icon, i) => (
               <AppIconButton
                 data-testid={`icon-field-${i}`}
+                data-icon-name={icon}
+                data-selected={field.value === icon}
                 key={icon}
                 icon={icon}
                 onClick={() => field.onChange(icon)}
@@ -44,7 +46,9 @@ const IconField: React.FC<Props> = ({ name, control, disabled = false, ...restOf
               />
             ))}
           </Stack>
-          <FormHelperText error={!!fieldState.error}>{t(fieldState.error?.message || ' ')}</FormHelperText>
+          <FormHelperText error={!!fieldState.error} data-testid="icon-field-error">
+            {t(fieldState.error?.message || ' ')}
+          </FormHelperText>
         </FormControl>
       )}
     />

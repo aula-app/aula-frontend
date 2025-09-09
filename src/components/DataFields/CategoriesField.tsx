@@ -71,10 +71,11 @@ const CategoryField: React.FC<Props> = ({ defaultValue, onChange, disabled = fal
       options={options}
       loading={loading}
       disabled={disabled}
+      data-testid="category-field-autocomplete"
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
         return (
-          <li key={key} {...optionProps}>
+          <li key={key} {...optionProps} data-testid={`category-option-${option.value}`}>
             <AppIcon icon={option.icon as IconType} mr={1} />
             {option.label}
           </li>
@@ -85,6 +86,11 @@ const CategoryField: React.FC<Props> = ({ defaultValue, onChange, disabled = fal
           {...params}
           label={t('scopes.categories.name')}
           disabled={disabled}
+          data-testid="category-field-input"
+          inputProps={{
+            ...params.inputProps,
+            'data-testid': 'category-field-textfield',
+          }}
           slotProps={{
             input: {
               ...params.InputProps,
