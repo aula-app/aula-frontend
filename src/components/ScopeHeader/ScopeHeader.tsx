@@ -1,22 +1,12 @@
 import { AppIcon, AppIconButton } from '@/components';
 import { ScopeKeyType } from '@/types/Scopes';
-import {
-  Collapse,
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Collapse, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export interface ScopeHeaderProps {
   title: string;
-  scopeKey: ScopeKeyType; // For translation keys like 'rooms', 'ideas', etc.
+  scopeKey: ScopeKeyType;
   totalCount: number;
   searchQuery: string;
   onSearchChange: (value: string) => void;
@@ -24,7 +14,6 @@ export interface ScopeHeaderProps {
   onSortKeyChange: (value: string) => void;
   sortDirection: 'asc' | 'desc';
   onSortDirectionChange: (value: 'asc' | 'desc') => void;
-  // Sort options specific to the scope
   sortOptions?: Array<{
     value: string;
     labelKey: string;
@@ -50,64 +39,21 @@ export function ScopeHeader({
   const [isSortOpen, setIsSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
-  const isLoadingPreferences = useRef(false);
   const sortDirectionDebounceRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load saved preferences on mount
-  useEffect(() => {
-    if (isLoadingPreferences.current) return;
-
-    try {
-      const savedPreferences = localStorage.getItem(`scope-preferences-${scopeKey}`);
-      if (savedPreferences) {
-        const preferences = JSON.parse(savedPreferences);
-        isLoadingPreferences.current = true;
-
-        if (preferences.searchQuery !== undefined && preferences.searchQuery !== searchQuery) {
-          onSearchChange(preferences.searchQuery);
-        }
-        if (preferences.sortKey !== undefined && preferences.sortKey !== sortKey) {
-          onSortKeyChange(preferences.sortKey);
-        }
-        if (preferences.sortDirection !== undefined && preferences.sortDirection !== sortDirection) {
-          onSortDirectionChange(preferences.sortDirection);
-        }
-
-        // Reset flag after a short delay to allow the updates to complete
-        setTimeout(() => {
-          isLoadingPreferences.current = false;
-        }, 100);
-      }
-    } catch (error) {
-      // Silently handle localStorage errors
-      isLoadingPreferences.current = false;
-    }
-  }, [scopeKey]); // Only depend on scopeKey
-
-  // Save preferences when they change (but not while loading)
-  useEffect(() => {
-    if (isLoadingPreferences.current) return;
-
-    try {
-      const preferences = {
-        searchQuery,
-        sortKey,
-        sortDirection,
-      };
-      localStorage.setItem(`scope-preferences-${scopeKey}`, JSON.stringify(preferences));
-    } catch (error) {
-      // Silently handle localStorage errors
-    }
-  }, [scopeKey, searchQuery, sortKey, sortDirection]);
+  const clearSearch = () => {
+    onSearchChange('');
+  };
 
   const handleSearchToggle = () => {
+    if (isSearchOpen) clearSearch();
     setIsSearchOpen(!isSearchOpen);
-    if (isSortOpen) setIsSortOpen(false); // Close sort when opening search
+    if (isSortOpen) setIsSortOpen(false);
   };
 
   const handleSortToggle = () => {
     setIsSortOpen(!isSortOpen);
-    if (isSearchOpen) setIsSearchOpen(false); // Close search when opening sort
+    if (isSearchOpen && searchQuery.trim() === '') setIsSearchOpen(false);
   };
 
   const handleSortDirectionToggle = () => {
@@ -127,18 +73,15 @@ export function ScopeHeader({
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
 
-      // Don't close if clicking within the sort container
-      if (sortRef.current && sortRef.current.contains(target)) {
-        return;
-      }
+      // Don't close if clicking: within the sort container, on the search button, or on MUI Select dropdown items (they're rendered in portals)
+      const conditions =
+        (sortRef.current && sortRef.current.contains(target)) ||
+        target.closest('#search-button') ||
+        target.closest('[role="listbox"]') ||
+        target.closest('[role="option"]') ||
+        target.closest('.MuiPaper-root');
 
-      // Don't close if clicking on the search button (let search handle its own logic)
-      if (target.closest('#search-button')) {
-        return;
-      }
-
-      // Don't close if clicking on MUI Select dropdown items (they're rendered in portals)
-      if (target.closest('[role="listbox"]') || target.closest('[role="option"]') || target.closest('.MuiPaper-root')) {
+      if (conditions) {
         return;
       }
 
@@ -159,18 +102,16 @@ export function ScopeHeader({
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
 
-      // Don't close if clicking within the search container
-      if (searchRef.current && searchRef.current.contains(target)) {
-        return;
-      }
+      // Don't close if clicking: within the search container, on the sort button, or on MUI Select dropdown items (they're rendered in portals); or if the search query is not empty (to prevent accidental closure while typing)
+      const conditions =
+        searchQuery.trim() !== '' ||
+        (searchRef.current && searchRef.current.contains(target)) ||
+        target.closest('#sort-button') ||
+        target.closest('[role="listbox"]') ||
+        target.closest('[role="option"]') ||
+        target.closest('.MuiPaper-root');
 
-      // Don't close if clicking on the sort button (let sort handle its own logic)
-      if (target.closest('#sort-button')) {
-        return;
-      }
-
-      // Don't close if clicking on MUI components that might be rendered in portals
-      if (target.closest('[role="listbox"]') || target.closest('[role="option"]') || target.closest('.MuiPaper-root')) {
+      if (conditions) {
         return;
       }
 
@@ -184,7 +125,7 @@ export function ScopeHeader({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isSearchOpen]);
+  }, [isSearchOpen, searchQuery]);
 
   // Cleanup debounce timeout on unmount
   useEffect(() => {
@@ -283,13 +224,6 @@ export function ScopeHeader({
                 }}
                 aria-describedby={`search-description-${scopeKey}`}
                 slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <AppIcon icon="search" />
-                      </InputAdornment>
-                    ),
-                  },
                   htmlInput: {
                     'aria-label': t('ui.common.search') + ' ' + title,
                     role: 'searchbox',
@@ -301,7 +235,6 @@ export function ScopeHeader({
               id="search-button"
               icon={isSearchOpen ? 'close' : 'search'}
               onClick={handleSearchToggle}
-              color={isSearchOpen ? 'primary' : 'default'}
               aria-label={t('ui.common.search')}
               aria-expanded={isSearchOpen}
               aria-controls={isSearchOpen ? `search-field-${scopeKey}` : undefined}
@@ -309,7 +242,7 @@ export function ScopeHeader({
               title={isSearchOpen ? t('actions.close') : t('ui.common.search')}
             />
           </Stack>
-          <Stack direction="row" alignItems="center" ref={sortRef} role="group" aria-label={t('ui.sort.controls')}>
+          <Stack direction="row" alignItems="center" ref={sortRef} role="group" aria-label={t('ui.sort.by')}>
             <Collapse
               orientation="horizontal"
               in={isSortOpen}
@@ -368,7 +301,6 @@ export function ScopeHeader({
               id="sort-button"
               icon={isSortOpen ? 'close' : sortDirection === 'asc' ? 'sortUp' : 'sortDown'}
               onClick={handleSortToggle}
-              color={isSortOpen ? 'primary' : 'default'}
               aria-label={t('ui.sort.by')}
               aria-expanded={isSortOpen}
               aria-controls={isSortOpen ? `sort-select-${scopeKey}` : undefined}
