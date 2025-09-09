@@ -84,6 +84,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
           sx={{ minWidth: 200 }}
           disabled={isLoading}
           error={hasError}
+          data-testid="system-status-selector"
         >
           {hasError && (
             <MenuItem value="" disabled data-testid="status-option-error">
