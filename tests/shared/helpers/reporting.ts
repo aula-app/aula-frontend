@@ -7,7 +7,13 @@ import * as ui from '../page_interactions/interface';
 
 export interface ReportingTestContext {
   room: any;
-  data: { [k: string]: any };
+  data: { 
+    [k: string]: any;
+    isIdeaReported?: boolean;
+    isCommentCreated?: boolean;
+    isCommentReported?: boolean;
+    isBugReported?: boolean;
+  };
 }
 
 export class ReportingTestHelpers {
