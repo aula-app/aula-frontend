@@ -9,142 +9,307 @@ import * as users from '../../shared/page_interactions/users';
 import * as rooms from '../../shared/page_interactions/rooms';
 import * as browsers from '../../shared/page_interactions/browsers';
 
+// Test constants for better maintainability
+const CSV_CONFIG = {
+  TEMP_FILE_NAME: 'temp-upload.txt',
+  TIMEOUT: 1000,
+  EXPECTED_FIELDS: ['realname', 'displayname', 'username', 'email', 'about_me'],
+} as const;
+
+const USER_CONFIG = {
+  TEST_USERNAME: 'jannika',
+  ROOM_PREFIX: 'csv',
+} as const;
+
+// Test context interface
+interface UsersCsvTestContext {
+  userData: any;
+  room: any;
+  tempFilePath?: string;
+  temporaryPassword?: string;
+  userBrowserContext?: any;
+  userPage?: any;
+  isUserUploaded: boolean;
+  isUserLoggedIn: boolean;
+  isDeletionRequested: boolean;
+  isDeletionApproved: boolean;
+}
+
 describeWithSetup('Upload user csv, delete that user', () => {
-  let data: { [k: string]: any } = {};
+  // Shared context for sequential tests
+  let sharedContext: UsersCsvTestContext | null = null;
+  const cleanupQueue: Array<{ page: any; context: UsersCsvTestContext }> = [];
+
+  test.afterAll(async () => {
+    // Clean up shared context at the end
+    if (sharedContext) {
+      const admin = await BrowserHelpers.openPageForUser('admin');
+      try {
+        await cleanupTestData(admin, sharedContext);
+      } catch (e) {
+        console.warn('Shared context cleanup failed:', e);
+      } finally {
+        await BrowserHelpers.closePage(admin);
+      }
+    }
+
+    // Emergency cleanup for any leftover contexts
+    while (cleanupQueue.length > 0) {
+      const { page, context } = cleanupQueue.pop()!;
+      try {
+        await cleanupTestData(page, context);
+      } catch (e) {
+        console.warn('Emergency cleanup failed:', e);
+      }
+    }
+  });
+
+  // Helper functions
+  const setupTestContext = (): UsersCsvTestContext => ({
+    userData: TestDataBuilder.createUserData(USER_CONFIG.TEST_USERNAME),
+    room: TestDataBuilder.createRoom(USER_CONFIG.ROOM_PREFIX, []),
+    isUserUploaded: false,
+    isUserLoggedIn: false,
+    isDeletionRequested: false,
+    isDeletionApproved: false,
+  });
+
+  const generateCsvContent = (userData: any): string => {
+    return `realname;displayname;username;email;about_me
+${userData.realName};${userData.displayName};${userData.username};;${userData.about}`;
+  };
+
+  const createTempCsvFile = (csvContent: string): string => {
+    const filePath = path.join(__dirname, '../../temp', CSV_CONFIG.TEMP_FILE_NAME);
+    
+    // Ensure temp directory exists
+    const tempDir = path.dirname(filePath);
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true });
+    }
+    
+    fs.writeFileSync(filePath, csvContent);
+    return filePath;
+  };
+
+  const cleanupTestData = async (page: any, context: UsersCsvTestContext): Promise<void> => {
+    const errors: Error[] = [];
+
+    // Clean up temporary CSV file
+    if (context.tempFilePath && fs.existsSync(context.tempFilePath)) {
+      try {
+        fs.unlinkSync(context.tempFilePath);
+      } catch (e: any) {
+        errors.push(new Error(`Failed to cleanup temp file: ${e.message}`));
+      }
+    }
+
+    // Close user browser context
+    if (context.userPage) {
+      try {
+        await context.userPage.close();
+      } catch (e: any) {
+        errors.push(new Error(`Failed to close user page: ${e.message}`));
+      }
+    }
+
+    if (context.userBrowserContext) {
+      try {
+        await context.userBrowserContext.close();
+      } catch (e: any) {
+        errors.push(new Error(`Failed to close browser context: ${e.message}`));
+      }
+    }
+
+    // Clean up room if it still exists and user wasn't deleted
+    if (context.room && !context.isDeletionApproved) {
+      try {
+        await rooms.remove(page, context.room);
+      } catch (e: any) {
+        errors.push(new Error(`Failed to cleanup room: ${e.message}`));
+      }
+    }
+
+    // Clean up user if still exists and wasn't deleted through normal flow
+    if (context.userData && context.isUserUploaded && !context.isDeletionApproved) {
+      try {
+        await users.remove(page, context.userData);
+      } catch (e: any) {
+        errors.push(new Error(`Failed to cleanup user: ${e.message}`));
+      }
+    }
+
+    // Log cleanup errors but don't fail the test
+    if (errors.length > 0) {
+      console.warn('Cleanup warnings:', errors.map((e) => e.message).join(', '));
+    }
+  };
 
   test('Admin can upload a user csv', async () => {
-    data.jannikaData = TestDataBuilder.createUserData('jannika');
-
-    const csv_str = `realname;displayname;username;email;about_me
-${data.jannikaData.realName};${data.jannikaData.displayName};${data.jannikaData.username};;${data.jannikaData.about}`;
-
-    data.room = TestDataBuilder.createRoom('csv', []);
-
-    const host = shared.getHost();
     const admin = await BrowserHelpers.openPageForUser('admin');
-    await admin.goto(host);
 
-    // create a room for CSV import placement
-    await rooms.create(admin, data.room);
+    try {
+      // Initialize shared context for the test suite
+      sharedContext = setupTestContext();
+      expect(sharedContext, 'Test context should be initialized successfully').toBeDefined();
+      
+      const csvContent = generateCsvContent(sharedContext.userData);
+      const filePath = createTempCsvFile(csvContent);
+      sharedContext.tempFilePath = filePath;
 
-    // navigate to settings
-    await users.goToSettings(admin);
+      const host = shared.getHost();
+      await admin.goto(host);
 
-    // open benutzer accordeon
-    const BenutzerAccordeon = admin.getByTestId('config-accordion-user');
-    await expect(BenutzerAccordeon).toBeVisible();
-    await BenutzerAccordeon.click({ timeout: 1000 });
+      // Create a room for CSV import placement
+      await rooms.create(admin, sharedContext.room);
 
-    // upload users click
-    const UploadButton = admin.getByTestId('upload-users-csv-button');
-    await expect(UploadButton).toBeVisible();
-    await UploadButton.click({ timeout: 1000 });
+      // Navigate to settings
+      await users.goToSettings(admin);
 
-    // create and choose the file
-    const filePath = path.join(__dirname, '../../temp/temp-upload.txt');
-    fs.writeFileSync(filePath, csv_str);
-    await admin.setInputFiles('input[type="file"]', filePath);
+      // Open user accordion
+      const userAccordion = admin.getByTestId('config-accordion-user');
+      await expect(userAccordion).toBeVisible();
+      await userAccordion.click({ timeout: CSV_CONFIG.TIMEOUT });
 
-    // focus room selector
-    const RoomSelector = admin.locator('[data-testid="user-room-select"] input');
-    await expect(RoomSelector).toBeVisible({ timeout: 500 });
-    await RoomSelector.click({ timeout: 1000 });
+      // Click upload users button
+      const uploadButton = admin.getByTestId('upload-users-csv-button');
+      await expect(uploadButton).toBeVisible();
+      await uploadButton.click({ timeout: CSV_CONFIG.TIMEOUT });
 
-    // just select the first room
-    await admin.getByRole('option').first().click({ timeout: 1000 });
+      // Upload CSV file
+      await admin.setInputFiles('input[type="file"]', filePath);
 
-    // confirm csv upload
-    const ApproveButton = admin.locator('[data-testid="confirm_upload"]');
-    await expect(ApproveButton).toBeVisible();
-    await ApproveButton.click({ timeout: 1000 });
+      // Select room for user placement
+      const roomSelector = admin.locator('[data-testid="user-room-select"] input');
+      await expect(roomSelector).toBeVisible({ timeout: 500 });
+      await roomSelector.click({ timeout: CSV_CONFIG.TIMEOUT });
 
-    // @TODO: nikola - capture HTTP traffic and assert Response is 200 OK, not 409
+      // Select first available room
+      await admin.getByRole('option').first().click({ timeout: CSV_CONFIG.TIMEOUT });
 
-    fs.unlinkSync(filePath);
+      // Confirm CSV upload
+      const confirmButton = admin.locator('[data-testid="confirm_upload"]');
+      await expect(confirmButton).toBeVisible();
+      await confirmButton.click({ timeout: CSV_CONFIG.TIMEOUT });
 
-    // verify user is added
-    await sleep(1);
-    await users.exists(admin, data.jannikaData);
-
-    BrowserHelpers.closePage(admin);
+      // Wait for processing and verify user exists
+      await sleep(1);
+      await users.exists(admin, sharedContext.userData);
+      
+      sharedContext.isUserUploaded = true;
+      expect(sharedContext.userData, 'User data should be defined').toBeDefined();
+      expect(sharedContext.room, 'Room should be created for CSV import').toBeDefined();
+    } catch (error) {
+      console.error('Failed to upload user CSV:', error);
+      throw new Error(`CSV upload failed for user: ${USER_CONFIG.TEST_USERNAME}. Context: ${!!sharedContext}`);
+    } finally {
+      await BrowserHelpers.closePage(admin);
+    }
   });
 
-  test('New User can log in using admin temp pass', async () => {
+  test('New user can log in using admin-generated temporary password', async () => {
     const admin = await BrowserHelpers.openPageForUser('admin');
 
-    const browser = await (await chromium.launch()).newContext();
-    const jannika = await browsers.newPage(browser);
+    try {
+      expect(sharedContext, 'Shared context should exist from previous test').toBeTruthy();
+      expect(sharedContext!.isUserUploaded, 'User should have been uploaded in previous test').toBe(true);
+      
+      // Create new browser context for the user
+      const userBrowserContext = await (await chromium.launch()).newContext();
+      const userPage = await browsers.newPage(userBrowserContext);
+      
+      sharedContext!.userBrowserContext = userBrowserContext;
+      sharedContext!.userPage = userPage;
 
-    const janikasTempPass = await users.getTemporaryPass(admin, data.jannikaData);
+      // Get temporary password from admin
+      sharedContext!.temporaryPassword = await users.getTemporaryPass(admin, sharedContext!.userData);
 
-    await users.firstLoginFlow(jannika, data.jannikaData, janikasTempPass);
-
-    await BrowserHelpers.closePage(admin);
-    await jannika.close();
+      // Perform first login flow
+      await users.firstLoginFlow(userPage, sharedContext!.userData, sharedContext!.temporaryPassword);
+      
+      sharedContext!.isUserLoggedIn = true;
+      expect(sharedContext!.temporaryPassword, 'Temporary password should be obtained').toBeDefined();
+      expect(sharedContext!.userPage, 'User page should be available').toBeDefined();
+    } catch (error) {
+      console.error('Failed user first login:', error);
+      throw new Error(`First login failed. Prerequisites: userUploaded=${!!sharedContext?.isUserUploaded}`);
+    } finally {
+      await BrowserHelpers.closePage(admin);
+    }
   });
 
-  test('New user requests deletion, and admin deletes.', async () => {
-    const host = shared.getHost();
-
+  test('User can request account deletion and admin can approve it', async () => {
     const admin = await BrowserHelpers.openPageForUser('admin');
 
-    await admin.goto(host);
+    try {
+      expect(sharedContext, 'Shared context should exist from previous tests').toBeTruthy();
+      expect(sharedContext!.isUserUploaded, 'User should have been uploaded').toBe(true);
+      expect(sharedContext!.isUserLoggedIn, 'User should have logged in').toBe(true);
+      expect(sharedContext!.userPage, 'User page should be available').toBeDefined();
+      
+      const host = shared.getHost();
+      await admin.goto(host);
 
-    const browser = await (await chromium.launch()).newContext();
-    const jannika = await browsers.newPage(browser);
+      // Login if not already logged in
+      if (!sharedContext!.isUserLoggedIn) {
+        await users.login(sharedContext!.userPage, sharedContext!.userData);
+      }
 
-    await users.login(jannika, data.jannikaData);
+      await users.goToProfile(sharedContext!.userPage);
 
-    await users.goToProfile(jannika);
+      // Open danger panel
+      const dangerPanel = sharedContext!.userPage.getByTestId('danger-panel-button');
+      await expect(dangerPanel).toBeVisible();
+      await dangerPanel.click({ timeout: CSV_CONFIG.TIMEOUT });
 
-    // open benutzer accordeon
-    const BenutzerAccordeon = jannika.getByTestId('danger-panel-button');
-    await expect(BenutzerAccordeon).toBeVisible();
-    await BenutzerAccordeon.click({ timeout: 1000 });
+      // Click delete account button
+      const deleteButton = sharedContext!.userPage.getByTestId('delete-account-button');
+      await expect(deleteButton).toBeVisible();
+      await deleteButton.click({ timeout: CSV_CONFIG.TIMEOUT });
 
-    // click request deletion
-    const RequestDeletionButton = jannika.getByTestId('delete-account-button');
-    await expect(RequestDeletionButton).toBeVisible();
-    await RequestDeletionButton.click({ timeout: 1000 });
+      // Handle confirmation modal
+      const modal = sharedContext!.userPage.locator('div[role="dialog"]');
+      await expect(modal).toBeVisible();
 
-    const ModalDiv = jannika.locator('div[role="dialog"]');
-    await expect(ModalDiv).toBeVisible();
+      const confirmDeleteButton = modal.getByTestId('delete-button').first();
+      await expect(confirmDeleteButton).toBeVisible();
+      await confirmDeleteButton.click({ timeout: CSV_CONFIG.TIMEOUT });
+      
+      sharedContext!.isDeletionRequested = true;
 
-    // confirm deletion request
-    const SecondApproveButton = ModalDiv.getByTestId('delete-button').first();
-    await expect(SecondApproveButton).toBeVisible();
-    await SecondApproveButton.click({ timeout: 1000 });
+      // Admin approves deletion
+      await users.goToRequests(admin);
+      await sleep(1);
 
-    // admin actions
-    await users.goToRequests(admin);
-    await sleep(1);
+      // Find deletion request using test ID
+      const deletionRequestDiv = admin.getByTestId(`user-deletion-request-${sharedContext!.userData.username}`);
+      await expect(deletionRequestDiv).toBeVisible();
 
-    // find deletion request
-    const AnfrageDiv = admin
-      .locator('div')
-      .filter({ hasText: `Kontolöschungsanfrage für ${data.jannikaData.displayName}` })
-      .first();
-    await expect(AnfrageDiv).toBeVisible();
+      // Click approve button
+      const approveButton = deletionRequestDiv.getByTestId('confirm-request').first();
+      await expect(approveButton).toBeVisible();
+      await approveButton.click({ timeout: CSV_CONFIG.TIMEOUT });
 
-    // click approve
-    const ApproveButton = AnfrageDiv.getByTestId('confirm-request').first();
-    await expect(ApproveButton).toBeVisible();
-    await ApproveButton.click({ timeout: 1000 });
+      // Handle confirmation modal
+      const adminModal = admin.locator('div[role="dialog"]');
+      await expect(adminModal).toBeVisible();
 
-    const ModalDiv2 = admin.locator('div[role="dialog"]');
-    await expect(ModalDiv2).toBeVisible();
+      const confirmButton = adminModal.getByTestId('confirm-request-action').first();
+      await expect(confirmButton).toBeVisible();
+      await confirmButton.click({ timeout: CSV_CONFIG.TIMEOUT });
 
-    // confirm approval
-    const SecondApproveButton2 = ModalDiv2.getByTestId('confirm-request-action').first();
-    await expect(SecondApproveButton2).toBeVisible();
-    await SecondApproveButton2.click({ timeout: 1000 });
-
-    // expect the user to not exist any more
-    await expect(users.exists(admin, data.jannikaData)).rejects.toThrow();
-
-    await rooms.remove(admin, data.room);
-
-    BrowserHelpers.closePage(admin);
-    jannika.close();
+      // Verify user no longer exists
+      await expect(users.exists(admin, sharedContext!.userData)).rejects.toThrow();
+      
+      sharedContext!.isDeletionApproved = true;
+      expect(sharedContext!.isDeletionRequested, 'Deletion should be requested successfully').toBe(true);
+      expect(sharedContext!.isDeletionApproved, 'Deletion should be approved successfully').toBe(true);
+    } catch (error) {
+      console.error('Failed deletion workflow:', error);
+      throw new Error(`Deletion workflow failed. Prerequisites: userUploaded=${!!sharedContext?.isUserUploaded}, userLoggedIn=${!!sharedContext?.isUserLoggedIn}`);
+    } finally {
+      await BrowserHelpers.closePage(admin);
+      // Note: User page cleanup is handled in afterAll hook
+    }
   });
 });

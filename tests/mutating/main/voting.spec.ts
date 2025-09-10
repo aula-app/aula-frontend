@@ -1,14 +1,13 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { BoxData } from '../../fixtures/ideas';
+import * as fixtures from '../../fixtures/users';
 import { describeWithSetup, TestDataBuilder } from '../../shared/base-test';
 import { BrowserHelpers } from '../../shared/common-actions';
-import * as shared from '../../shared/shared';
-import * as users from '../../shared/page_interactions/users';
-import * as rooms from '../../shared/page_interactions/rooms';
-import * as ideas from '../../shared/page_interactions/ideas';
 import * as boxes from '../../shared/page_interactions/boxes';
-import * as fixtures from '../../fixtures/users';
-import { BoxData } from '../../fixtures/ideas';
-import { admin, alice, bob, rainer, mallory } from '../../shared/page_interactions/browsers';
+import { admin, alice, bob, mallory, rainer } from '../../shared/page_interactions/browsers';
+import * as ideas from '../../shared/page_interactions/ideas';
+import * as rooms from '../../shared/page_interactions/rooms';
+import * as shared from '../../shared/shared';
 
 let room: any;
 let data: { [k: string]: any } = {};
