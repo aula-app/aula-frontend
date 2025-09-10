@@ -71,18 +71,7 @@ export class RequestUserDataTestHelpers {
     const userDisplayName = (fixtures as any)[username]?.displayName || username;
 
     // Find request using test ID instead of hardcoded German text
-    const requestDiv = page.getByTestId(`data-export-request-${username}`);
-    let requestElement;
-
-    if (await requestDiv.isVisible()) {
-      requestElement = requestDiv;
-    } else {
-      // Fallback to text-based selector if test ID not available
-      requestElement = page
-        .locator('div')
-        .filter({ hasText: `Kontodatenexportanfrage für ${userDisplayName}` })
-        .first();
-    }
+    const requestElement = page.getByTestId(`data-export-request-${username}`);
 
     await expect(requestElement).toBeVisible();
 
@@ -101,13 +90,7 @@ export class RequestUserDataTestHelpers {
 
     // Verify download button appears
     const downloadButton = requestElement.getByTestId('download-data-button').first();
-    if (await downloadButton.isVisible()) {
-      // Test ID available
-    } else {
-      // Fallback to role-based selector
-      const fallbackDownloadButton = requestElement.getByRole('button', { name: 'Herunterladen' }).first();
-      await expect(fallbackDownloadButton).toBeVisible();
-    }
+    await expect(downloadButton).toBeVisible();
 
     context.isRequestApproved = true;
     context.approvalTimestamp = new Date();
@@ -128,54 +111,26 @@ export class RequestUserDataTestHelpers {
     const userDisplayName = (fixtures as any)[username]?.displayName || username;
 
     // Find message using test ID instead of hardcoded German text
-    const messageLink = page.getByTestId(`data-export-message-${username}`);
-    let messageElement;
-
-    if (await messageLink.isVisible()) {
-      messageElement = messageLink;
-    } else {
-      // Fallback to text-based selector if test ID not available
-      messageElement = page
-        .locator('a')
-        .filter({ hasText: `Kontodatenexportanfrage für ${userDisplayName}` })
-        .first();
-    }
+    const messageElement = page.getByTestId(`data-export-message-${userDisplayName}`);
 
     await expect(messageElement).toBeVisible();
     await messageElement.click({ timeout: 1000 });
 
     // Find the request div in the message view
-    const requestDiv = page.getByTestId(`data-export-request-details-${username}`);
-    let requestElement;
-
-    if (await requestDiv.isVisible()) {
-      requestElement = requestDiv;
-    } else {
-      // Fallback to text-based selector if test ID not available
-      requestElement = page
-        .locator('div')
-        .filter({ hasText: `Kontodatenexportanfrage für ${userDisplayName}` })
-        .first();
-    }
+    const requestElement = page.getByTestId(`data-export-request-details-${username}`);
 
     await expect(requestElement).toBeVisible();
 
     // Download the data
     const downloadButton = requestElement.getByTestId('download-data-button').first();
-    if (await downloadButton.isVisible()) {
-      await downloadButton.click({ timeout: 1000 });
-    } else {
-      // Fallback to role-based selector
-      const fallbackDownloadButton = requestElement.getByRole('button', { name: 'Herunterladen' }).first();
-      await expect(fallbackDownloadButton).toBeVisible();
-      await fallbackDownloadButton.click({ timeout: 1000 });
-    }
+    await expect(downloadButton).toBeVisible();
+    await downloadButton.click({ timeout: 1000 });
 
     // Handle download
     const download = await page.waitForEvent('download');
-    const filename = await download.suggestedFilename();
+    const filename = download.suggestedFilename();
 
-    await expect(filename).toContain('data_export');
+    expect(filename).toContain('data_export');
     context.downloadFilename = filename;
     context.isDownloadCompleted = true;
 
@@ -191,7 +146,7 @@ export class RequestUserDataTestHelpers {
     }
   }
 
-  static async cleanupTestData(page: Page, context: RequestUserDataTestContext): Promise<void> {
+  static async cleanupTestData(_page: Page, context: RequestUserDataTestContext): Promise<void> {
     const errors: Error[] = [];
 
     if (context.isRequestCreated) {

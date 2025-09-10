@@ -64,6 +64,9 @@ const UserMessagesView = () => {
                 pl={2}
                 to={`/${variant}/${message.hash_id}`}
                 bgcolor={`${variant}.main`}
+                data-testid={variant === 'requests' && message.headline?.includes('Kontodatenexportanfrage') 
+                  ? `data-export-message-${message.headline.match(/für\s+(.+?)$/)?.[1] || 'unknown'}` 
+                  : `${variant}-message-${message.hash_id}`}
               >
                 <AppIcon icon={variant} />
                 <Typography flex={1} px={2}>
