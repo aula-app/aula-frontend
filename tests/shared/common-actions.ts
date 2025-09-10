@@ -4,9 +4,9 @@
  */
 
 import { Page } from '@playwright/test';
-import * as browsers from './page_interactions/browsers';
-import * as rooms from './page_interactions/rooms';
-import * as ideas from './page_interactions/ideas';
+import * as browsers from './interactions/browsers';
+import * as rooms from './interactions/rooms';
+import * as ideas from './interactions/ideas';
 import * as shared from './shared';
 
 /**
@@ -23,9 +23,9 @@ export class BrowserHelpers {
       bob: browsers.bobs_browser,
       mallory: browsers.mallorys_browser,
       rainer: browsers.rainer_browser,
-      burt: browsers.burt_browser
+      burt: browsers.burt_browser,
     };
-    
+
     return await browsers.newPage(browserMap[userType]);
   }
 
@@ -59,7 +59,7 @@ export class RoomWorkflows {
    */
   static async createRoomWithIdeas(page: Page, roomData: any, ideasData: any[]) {
     await this.setupAndNavigateToRoom(page, roomData);
-    
+
     for (const idea of ideasData) {
       await ideas.create(page, roomData, idea);
     }

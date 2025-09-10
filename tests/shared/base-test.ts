@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 import * as shared from './shared';
 import * as fixtures from '../fixtures/users';
-import * as browsers from './page_interactions/browsers';
+import * as browsers from './interactions/browsers';
 
 /**
  * Base test configuration for all e2e tests

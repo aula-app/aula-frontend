@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test';
 import * as shared from '../shared';
-import * as users from '../page_interactions/users';
+import * as users from '../interactions/users';
 import * as fixtures from '../../fixtures/users';
 
 export interface InstanceOfflineTestContext {
@@ -29,7 +29,7 @@ export class InstanceOfflineTestHelpers {
     // For TextField with select, we need to get the input element inside it
     const inputElement = statusSelector.locator('input');
     const selectedValue = await inputElement.getAttribute('value');
-    
+
     return selectedValue === '1' ? 'active' : 'inactive';
   }
 
@@ -38,7 +38,7 @@ export class InstanceOfflineTestHelpers {
     await statusSelector.waitFor({ state: 'visible' });
 
     await statusSelector.click();
-    
+
     const optionTestId = status === 'active' ? 'status-option-status.active' : 'status-option-status.inactive';
     await page.getByTestId(optionTestId).click();
 
@@ -59,10 +59,10 @@ export class InstanceOfflineTestHelpers {
 
   static async verifyUserCanLogin(page: Page, username: string, password: string): Promise<void> {
     await this.attemptUserLogin(page, username, password);
-    
+
     // Wait for page to fully load
     await page.waitForLoadState('networkidle');
-    
+
     // Verify user is NOT seeing the offline view
     const offlineView = page.getByTestId('school-offline-view');
     try {
@@ -81,7 +81,7 @@ export class InstanceOfflineTestHelpers {
       page.locator('main, [role="main"]').first(),
       page.locator('[data-testid*="navigation"], [data-testid*="nav"]').first(),
       page.locator('[data-testid*="user-menu"], [data-testid*="profile"]').first(),
-      page.locator('#root > div').first()
+      page.locator('#root > div').first(),
     ];
 
     let loginSuccessful = false;

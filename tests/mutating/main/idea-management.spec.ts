@@ -2,9 +2,9 @@ import { expect, test } from '@playwright/test';
 import { BoxData } from '../../fixtures/ideas';
 import { describeWithSetup, TestDataBuilder } from '../../shared/base-test';
 import { BrowserHelpers } from '../../shared/common-actions';
-import * as boxes from '../../shared/page_interactions/boxes';
-import * as ideas from '../../shared/page_interactions/ideas';
-import * as rooms from '../../shared/page_interactions/rooms';
+import * as boxes from '../../shared/interactions/boxes';
+import * as ideas from '../../shared/interactions/ideas';
+import * as rooms from '../../shared/interactions/rooms';
 import * as shared from '../../shared/shared';
 
 // Test constants for better maintainability

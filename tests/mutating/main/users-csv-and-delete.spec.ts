@@ -5,9 +5,9 @@ import { sleep } from '../../shared/utils';
 import * as shared from '../../shared/shared';
 import fs from 'fs';
 import path from 'path';
-import * as users from '../../shared/page_interactions/users';
-import * as rooms from '../../shared/page_interactions/rooms';
-import * as browsers from '../../shared/page_interactions/browsers';
+import * as users from '../../shared/interactions/users';
+import * as rooms from '../../shared/interactions/rooms';
+import * as browsers from '../../shared/interactions/browsers';
 
 // Test constants for better maintainability
 const CSV_CONFIG = {
@@ -81,13 +81,13 @@ ${userData.realName};${userData.displayName};${userData.username};;${userData.ab
 
   const createTempCsvFile = (csvContent: string): string => {
     const filePath = path.join(__dirname, '../../temp', CSV_CONFIG.TEMP_FILE_NAME);
-    
+
     // Ensure temp directory exists
     const tempDir = path.dirname(filePath);
     if (!fs.existsSync(tempDir)) {
       fs.mkdirSync(tempDir, { recursive: true });
     }
-    
+
     fs.writeFileSync(filePath, csvContent);
     return filePath;
   };
@@ -152,7 +152,7 @@ ${userData.realName};${userData.displayName};${userData.username};;${userData.ab
       // Initialize shared context for the test suite
       sharedContext = setupTestContext();
       expect(sharedContext, 'Test context should be initialized successfully').toBeDefined();
-      
+
       const csvContent = generateCsvContent(sharedContext.userData);
       const filePath = createTempCsvFile(csvContent);
       sharedContext.tempFilePath = filePath;
@@ -195,7 +195,7 @@ ${userData.realName};${userData.displayName};${userData.username};;${userData.ab
       // Wait for processing and verify user exists
       await sleep(1);
       await users.exists(admin, sharedContext.userData);
-      
+
       sharedContext.isUserUploaded = true;
       expect(sharedContext.userData, 'User data should be defined').toBeDefined();
       expect(sharedContext.room, 'Room should be created for CSV import').toBeDefined();
@@ -213,11 +213,11 @@ ${userData.realName};${userData.displayName};${userData.username};;${userData.ab
     try {
       expect(sharedContext, 'Shared context should exist from previous test').toBeTruthy();
       expect(sharedContext!.isUserUploaded, 'User should have been uploaded in previous test').toBe(true);
-      
+
       // Create new browser context for the user
       const userBrowserContext = await (await chromium.launch()).newContext();
       const userPage = await browsers.newPage(userBrowserContext);
-      
+
       sharedContext!.userBrowserContext = userBrowserContext;
       sharedContext!.userPage = userPage;
 
@@ -226,7 +226,7 @@ ${userData.realName};${userData.displayName};${userData.username};;${userData.ab
 
       // Perform first login flow
       await users.firstLoginFlow(userPage, sharedContext!.userData, sharedContext!.temporaryPassword);
-      
+
       sharedContext!.isUserLoggedIn = true;
       expect(sharedContext!.temporaryPassword, 'Temporary password should be obtained').toBeDefined();
       expect(sharedContext!.userPage, 'User page should be available').toBeDefined();
@@ -246,7 +246,7 @@ ${userData.realName};${userData.displayName};${userData.username};;${userData.ab
       expect(sharedContext!.isUserUploaded, 'User should have been uploaded').toBe(true);
       expect(sharedContext!.isUserLoggedIn, 'User should have logged in').toBe(true);
       expect(sharedContext!.userPage, 'User page should be available').toBeDefined();
-      
+
       const host = shared.getHost();
       await admin.goto(host);
 
@@ -274,7 +274,7 @@ ${userData.realName};${userData.displayName};${userData.username};;${userData.ab
       const confirmDeleteButton = modal.getByTestId('delete-button').first();
       await expect(confirmDeleteButton).toBeVisible();
       await confirmDeleteButton.click({ timeout: CSV_CONFIG.TIMEOUT });
-      
+
       sharedContext!.isDeletionRequested = true;
 
       // Admin approves deletion
@@ -300,13 +300,15 @@ ${userData.realName};${userData.displayName};${userData.username};;${userData.ab
 
       // Verify user no longer exists
       await expect(users.exists(admin, sharedContext!.userData)).rejects.toThrow();
-      
+
       sharedContext!.isDeletionApproved = true;
       expect(sharedContext!.isDeletionRequested, 'Deletion should be requested successfully').toBe(true);
       expect(sharedContext!.isDeletionApproved, 'Deletion should be approved successfully').toBe(true);
     } catch (error) {
       console.error('Failed deletion workflow:', error);
-      throw new Error(`Deletion workflow failed. Prerequisites: userUploaded=${!!sharedContext?.isUserUploaded}, userLoggedIn=${!!sharedContext?.isUserLoggedIn}`);
+      throw new Error(
+        `Deletion workflow failed. Prerequisites: userUploaded=${!!sharedContext?.isUserUploaded}, userLoggedIn=${!!sharedContext?.isUserLoggedIn}`
+      );
     } finally {
       await BrowserHelpers.closePage(admin);
       // Note: User page cleanup is handled in afterAll hook

@@ -75,7 +75,18 @@ describeWithSetup('Request user data flow', () => {
       expect(sharedContext!.isRequestApproved, 'Data export request should be approved successfully').toBe(true);
     } catch (error) {
       console.error('Failed to approve data export request:', error);
-      throw new Error(`Admin approval failed. Prerequisites: requestCreated=${!!sharedContext?.isRequestCreated}`);
+      console.error('Page URL:', admin.url());
+
+      // Take a screenshot for debugging
+      try {
+        await admin.screenshot({ path: 'debug-admin-approval-failure.png', fullPage: true });
+      } catch (screenshotError) {
+        console.error('Could not take screenshot:', screenshotError);
+      }
+
+      throw new Error(
+        `Admin approval failed. Prerequisites: requestCreated=${!!sharedContext?.isRequestCreated}. Original error: ${error}`
+      );
     } finally {
       await BrowserHelpers.closePage(admin);
     }

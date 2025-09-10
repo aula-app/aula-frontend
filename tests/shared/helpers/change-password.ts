@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test';
 import * as shared from '../shared';
-import * as users from '../page_interactions/users';
+import * as users from '../interactions/users';
 import * as fixtures from '../../fixtures/users';
 
 export interface ChangePasswordTestContext {
