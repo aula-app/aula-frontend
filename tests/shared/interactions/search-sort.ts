@@ -282,7 +282,7 @@ export class RoomSearchSortPage {
     const roomCards = await this.getRoomCards();
     const titles: string[] = [];
     const count = await roomCards.count();
-    
+
     for (let i = 0; i < count; i++) {
       const roomCard = roomCards.nth(i);
       const titleElement = roomCard.locator('h3'); // Typography variant="h3" contains room name
@@ -291,7 +291,7 @@ export class RoomSearchSortPage {
         titles.push(title);
       }
     }
-    
+
     return titles;
   }
 
