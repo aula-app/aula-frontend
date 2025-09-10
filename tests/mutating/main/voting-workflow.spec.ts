@@ -33,26 +33,61 @@ describeWithSetup('Voting Workflow - Complete Process from Creation to Results',
   const cleanupQueue: Array<{ page: any; context: VotingWorkflowTestContext }> = [];
 
   test.afterAll(async () => {
+    test.setTimeout(90000); // Set timeout to 90 seconds for cleanup
+    
+    // Helper function to add timeout to cleanup operations
+    const withTimeout = async <T>(promise: Promise<T>, timeoutMs: number): Promise<T | null> => {
+      try {
+        return await Promise.race([
+          promise,
+          new Promise<null>((_, reject) => 
+            setTimeout(() => reject(new Error(`Operation timed out after ${timeoutMs}ms`)), timeoutMs)
+          )
+        ]);
+      } catch (error) {
+        console.warn('Operation failed or timed out:', error);
+        return null;
+      }
+    };
+    
     // Clean up shared context at the end
     if (sharedContext) {
-      const admin = await BrowserHelpers.openPageForUser(TEST_USERS.ADMIN);
+      let admin: any;
       try {
-        await VotingWorkflowTestHelpers.cleanupTestData(admin, sharedContext);
+        admin = await withTimeout(BrowserHelpers.openPageForUser(TEST_USERS.ADMIN), 10000);
+        if (admin) {
+          await withTimeout(VotingWorkflowTestHelpers.cleanupTestData(admin, sharedContext), 30000);
+        }
       } catch (e) {
         console.warn('Shared context cleanup failed:', e);
       } finally {
-        await BrowserHelpers.closePage(admin);
+        if (admin) {
+          try {
+            await withTimeout(BrowserHelpers.closePage(admin), 5000);
+          } catch (e) {
+            console.warn('Failed to close admin page:', e);
+          }
+        }
       }
     }
 
-    // Emergency cleanup for any leftover contexts
-    while (cleanupQueue.length > 0) {
+    // Emergency cleanup for any leftover contexts with timeout protection
+    const maxCleanupAttempts = Math.min(cleanupQueue.length, 5); // Limit cleanup attempts
+    let attempts = 0;
+    while (cleanupQueue.length > 0 && attempts < maxCleanupAttempts) {
+      attempts++;
       const { page, context } = cleanupQueue.pop()!;
       try {
-        await VotingWorkflowTestHelpers.cleanupTestData(page, context);
+        await withTimeout(VotingWorkflowTestHelpers.cleanupTestData(page, context), 20000);
       } catch (e) {
-        console.warn('Emergency cleanup failed:', e);
+        console.warn(`Emergency cleanup attempt ${attempts} failed:`, e);
       }
+    }
+    
+    // Clear remaining items if any
+    if (cleanupQueue.length > 0) {
+      console.warn(`Skipping ${cleanupQueue.length} remaining cleanup items to prevent timeout`);
+      cleanupQueue.length = 0;
     }
   });
 
