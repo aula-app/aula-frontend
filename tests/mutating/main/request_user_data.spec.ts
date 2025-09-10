@@ -1,103 +1,115 @@
 import { test, expect } from '@playwright/test';
 import { describeWithSetup } from '../../shared/base-test';
 import { BrowserHelpers } from '../../shared/common-actions';
-import * as shared from '../../shared/shared';
-import * as fixtures from '../../fixtures/users';
-import { goToProfile, goToRequests } from '../../shared/page_interactions/users';
+import { RequestUserDataTestHelpers, RequestUserDataTestContext } from '../../shared/helpers/request-user-data';
+
+// Test constants for better maintainability
+const TEST_USERS = {
+  REQUESTER: 'alice',
+  ADMIN: 'admin',
+} as const;
+
+const EXPORT_CONFIG = {
+  FILE_PREFIX: 'data_export',
+  EXPECTED_MIME_TYPES: ['application/zip', 'application/json'],
+  MAX_DOWNLOAD_TIMEOUT: 30000,
+} as const;
 
 describeWithSetup('Request user data flow', () => {
+  // Shared context for sequential tests
+  let sharedContext: RequestUserDataTestContext | null = null;
+  const cleanupQueue: Array<{ page: any; context: RequestUserDataTestContext }> = [];
 
-  //
-  test('Alice can request user data', async () => {
-    const host = shared.getHost();
+  test.afterAll(async () => {
+    // Clean up shared context at the end
+    if (sharedContext) {
+      const admin = await BrowserHelpers.openPageForUser('admin');
+      try {
+        await RequestUserDataTestHelpers.cleanupTestData(admin, sharedContext);
+      } catch (e) {
+        console.warn('Shared context cleanup failed:', e);
+      } finally {
+        await BrowserHelpers.closePage(admin);
+      }
+    }
 
-    const alice = await BrowserHelpers.openPageForUser('alice');
-
-    await alice.goto(host);
-
-    await goToProfile(alice);
-
-    // open datenschutz accordeon
-    const DatenschutzAccordeon = alice.getByRole('button', { name: 'Datenschutz' });
-    await expect(DatenschutzAccordeon).toBeVisible();
-    await DatenschutzAccordeon.click({ timeout: 1000 });
-
-    // press request data button
-    const RequestDataButton = alice.getByRole('button', { name: 'Datenexport anfordern' });
-    await expect(RequestDataButton).toBeVisible();
-    await RequestDataButton.click({ timeout: 1000 });
-
-    await BrowserHelpers.closePage(alice);
+    // Emergency cleanup for any leftover contexts
+    while (cleanupQueue.length > 0) {
+      const { page, context } = cleanupQueue.pop()!;
+      try {
+        await RequestUserDataTestHelpers.cleanupTestData(page, context);
+      } catch (e) {
+        console.warn('Emergency cleanup failed:', e);
+      }
+    }
   });
 
-  //
-  test('Admin can approve the request', async () => {
-    const host = shared.getHost();
+  test('Alice can request user data export', async () => {
+    const alice = await BrowserHelpers.openPageForUser(TEST_USERS.REQUESTER);
 
-    const admin = await BrowserHelpers.openPageForUser('admin');
+    try {
+      // Initialize shared context for the test suite
+      sharedContext = await RequestUserDataTestHelpers.setupRequestUserDataTest();
+      expect(sharedContext, 'Test context should be initialized successfully').toBeDefined();
 
-    await admin.goto(host);
-
-    await goToRequests(admin);
-
-    const AnfrageDiv = admin
-      .locator('div')
-      .filter({ hasText: `Kontodatenexportanfrage für ${fixtures.alice.displayName}` })
-      .first();
-    await expect(AnfrageDiv).toBeVisible();
-
-    const ApproveButton = AnfrageDiv.getByTestId('confirm-request').first();
-    await expect(ApproveButton).toBeVisible();
-    await ApproveButton.click({ timeout: 1000 });
-
-    const ModalDiv = admin.locator('div[role="dialog"]');
-    await expect(ModalDiv).toBeVisible();
-
-    const SecondApproveButton = ModalDiv.getByTestId('confirm-request-action').first();
-    await expect(SecondApproveButton).toBeVisible();
-    await SecondApproveButton.click({ timeout: 1000 });
-
-    const DownloadButton = AnfrageDiv.getByRole('button', { name: 'Herunterladen' }).first();
-    await expect(DownloadButton).toBeVisible();
-
-    await BrowserHelpers.closePage(admin);
+      await RequestUserDataTestHelpers.requestDataExport(alice, sharedContext);
+      expect(sharedContext.isRequestCreated, 'Data export request should be created successfully').toBe(true);
+    } catch (error) {
+      console.error('Failed to create data export request:', error);
+      throw new Error(`Data export request creation failed for user: ${TEST_USERS.REQUESTER}`);
+    } finally {
+      await BrowserHelpers.closePage(alice);
+    }
   });
 
-  test('Alice see the approval and download her data', async () => {
-    const host = shared.getHost();
+  test('Admin can approve the data export request', async () => {
+    const admin = await BrowserHelpers.openPageForUser(TEST_USERS.ADMIN);
 
-    const alice = await BrowserHelpers.openPageForUser('alice');
+    try {
+      expect(sharedContext, 'Shared context should exist from previous test').toBeTruthy();
+      expect(sharedContext!.isRequestCreated, 'Data export request should have been created in previous test').toBe(
+        true
+      );
 
-    await alice.goto(host);
+      await RequestUserDataTestHelpers.approveDataExportRequest(admin, TEST_USERS.REQUESTER, sharedContext!);
+      expect(sharedContext!.isRequestApproved, 'Data export request should be approved successfully').toBe(true);
+    } catch (error) {
+      console.error('Failed to approve data export request:', error);
+      throw new Error(`Admin approval failed. Prerequisites: requestCreated=${!!sharedContext?.isRequestCreated}`);
+    } finally {
+      await BrowserHelpers.closePage(admin);
+    }
+  });
 
-    // navigate to the user setting page:
-    const MessagesButton = alice.locator('a[href="/messages"]');
-    await expect(MessagesButton).toBeVisible();
-    await MessagesButton.click({ timeout: 1000 });
+  test('Alice can see the approval and download her data', async () => {
+    const alice = await BrowserHelpers.openPageForUser(TEST_USERS.REQUESTER);
 
-    const MessageButton = alice
-      .locator('a')
-      .filter({ hasText: `Kontodatenexportanfrage für ${fixtures.alice.displayName}` })
-      .first();
-    await expect(MessageButton).toBeVisible();
-    await MessageButton.click({ timeout: 1000 });
+    try {
+      expect(sharedContext, 'Shared context should exist from previous tests').toBeTruthy();
+      expect(sharedContext!.isRequestCreated, 'Data export request should have been created').toBe(true);
+      expect(sharedContext!.isRequestApproved, 'Data export request should have been approved by admin').toBe(true);
 
-    const AnfrageDiv = alice
-      .locator('div')
-      .filter({ hasText: `Kontodatenexportanfrage für ${fixtures.alice.displayName}` })
-      .first();
-    await expect(AnfrageDiv).toBeVisible();
+      await RequestUserDataTestHelpers.downloadUserData(alice, TEST_USERS.REQUESTER, sharedContext!);
 
-    const DownloadButton = AnfrageDiv.getByRole('button', { name: 'Herunterladen' }).first();
-    await expect(DownloadButton).toBeVisible();
-    await DownloadButton.click({ timeout: 1000 });
+      expect(
+        sharedContext!.downloadFilename,
+        'Download filename should be set after successful download'
+      ).toBeDefined();
+      expect(
+        sharedContext!.downloadFilename,
+        `Downloaded file should contain expected prefix: ${EXPORT_CONFIG.FILE_PREFIX}`
+      ).toContain(EXPORT_CONFIG.FILE_PREFIX);
 
-    const Download = await alice.waitForEvent('download');
-
-    const Filename = await Download.suggestedFilename();
-
-    await expect(Filename).toContain('data_export');
-
-    await BrowserHelpers.closePage(alice);
+      // Additional validation that download was successful
+      expect(typeof sharedContext!.downloadFilename, 'Download filename should be a string').toBe('string');
+      expect(sharedContext!.downloadFilename!.length, 'Download filename should not be empty').toBeGreaterThan(0);
+    } catch (error) {
+      console.error('Failed to download user data:', error);
+      throw new Error(
+        `Data download failed. Prerequisites: requestCreated=${!!sharedContext?.isRequestCreated}, requestApproved=${!!sharedContext?.isRequestApproved}`
+      );
+    } finally {
+      await BrowserHelpers.closePage(alice);
+    }
   });
 });
