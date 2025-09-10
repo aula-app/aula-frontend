@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { describeWithSetup, TestDataBuilder } from '../../shared/base-test';
 import { BrowserHelpers } from '../../shared/common-actions';
-import * as rooms from '../../shared/page_interactions/rooms';
+import * as rooms from '../../shared/interactions/rooms';
 
 // Test constants for better maintainability
 const TEST_USERS = {

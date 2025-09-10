@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { describeWithSetup } from '../../shared/base-test';
 import { BrowserHelpers } from '../../shared/common-actions';
 import { VotingWorkflowTestHelpers, VotingWorkflowTestContext } from '../../shared/helpers/voting-workflow';
-import { alice, bob, mallory, rainer } from '../../shared/page_interactions/browsers';
+import { alice, bob, mallory, rainer } from '../../shared/interactions/browsers';
 
 // Test constants for better maintainability
 const TEST_USERS = {
@@ -26,8 +26,6 @@ const PHASE_CONFIG = {
   ABSTIMMUNG: 30,
   RESULTS: 40,
 } as const;
-
-
 
 describeWithSetup('Voting Workflow - Complete Process from Creation to Results', () => {
   // Shared context for sequential tests
@@ -57,7 +55,6 @@ describeWithSetup('Voting Workflow - Complete Process from Creation to Results',
       }
     }
   });
-
 
   test.describe('Setup and Approval Phase', () => {
     test('Create ideas and box for voting workflow', async () => {
@@ -174,7 +171,6 @@ describeWithSetup('Voting Workflow - Complete Process from Creation to Results',
         );
       }
     });
-
   });
 
   test.describe('Vote Delegation', () => {
@@ -256,7 +252,9 @@ describeWithSetup('Voting Workflow - Complete Process from Creation to Results',
     test('Rainer can move box to results phase', async () => {
       try {
         expect(sharedContext, 'Shared context should exist').toBeTruthy();
-        expect(sharedContext!.data.isInVotingPhase, 'Box should be in voting phase before moving to results').toBe(true);
+        expect(sharedContext!.data.isInVotingPhase, 'Box should be in voting phase before moving to results').toBe(
+          true
+        );
         expect(sharedContext!.data.isBoxCreated, 'Box should exist for phase transition').toBe(true);
         expect(sharedContext!.data.isRoomCreated, 'Room should exist for phase transition').toBe(true);
 

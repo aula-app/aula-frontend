@@ -67,7 +67,7 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
           admin,
           async (context) => {
             await RoomSearchSortTestHelpers.captureInitialState(context);
-            
+
             if (!context.initialRoomCount || context.initialRoomCount === 0) {
               return; // Skip if no rooms exist
             }
@@ -77,7 +77,7 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
 
             const searchTerm = firstRoomText.trim().substring(0, 3).toLowerCase();
             await RoomSearchSortTestHelpers.testBasicSearch(context, searchTerm);
-            
+
             const currentCount = await context.searchSortPage.getRoomCount();
             if (currentCount > 0 && context.initialRoomCount) {
               if (currentCount > context.initialRoomCount) {
@@ -119,10 +119,10 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
           async (context) => {
             await context.searchSortPage.searchRooms('test');
             const filteredCount = await context.searchSortPage.getRoomCount();
-            
+
             await context.searchSortPage.clearSearch();
             const allCount = await context.searchSortPage.getRoomCount();
-            
+
             if (allCount < filteredCount) {
               throw new Error('Clearing search should show more or equal rooms');
             }
@@ -222,7 +222,7 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
           async (context) => {
             await context.searchSortPage.openSort();
             await context.searchSortPage.selectSortOption('roomName');
-            
+
             const currentValue = await context.searchSortPage.getCurrentSortValue();
             if (currentValue !== 'room_name') {
               throw new Error(`Expected 'room_name', got '${currentValue}'`);
@@ -280,7 +280,7 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
           async (context) => {
             await context.searchSortPage.verifySortButtonState('closed');
             await context.searchSortPage.verifySortDirection('asc');
-            
+
             await context.searchSortPage.openSort();
             await context.searchSortPage.verifySortButtonState('open');
             await context.searchSortPage.verifySortDirection('asc');
@@ -374,7 +374,7 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
           admin,
           async (context) => {
             await RoomSearchSortTestHelpers.captureInitialState(context);
-            
+
             if (!context.initialRoomCount || context.initialRoomCount === 0) {
               return; // Skip if no rooms exist
             }
@@ -421,7 +421,7 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
           async (context) => {
             await context.searchSortPage.openSearch();
             await context.searchSortPage.pressEscapeOnSearch();
-            
+
             const isSearchOpen = await context.searchSortPage.isSearchOpen();
             if (isSearchOpen) {
               throw new Error('Search should close after pressing Escape');
@@ -519,13 +519,13 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
           async (context) => {
             await RoomSearchSortTestHelpers.captureInitialState(context);
             const searchTerm = 'test';
-            
+
             await context.searchSortPage.searchRooms(searchTerm);
             const filteredCount = await context.searchSortPage.getRoomCount();
-            
+
             await context.searchSortPage.clearSearch();
             const clearedCount = await context.searchSortPage.getRoomCount();
-            
+
             if (context.initialRoomCount && clearedCount < filteredCount) {
               throw new Error('Clearing search should restore more results');
             }
@@ -547,9 +547,9 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
           async (context) => {
             await context.searchSortPage.openSort();
             await context.searchSortPage.selectSortOption('roomName');
-            
+
             await context.searchSortPage.searchRooms('test');
-            
+
             const currentSortValue = await context.searchSortPage.getCurrentSortValue();
             if (currentSortValue !== 'room_name') {
               throw new Error('Sort selection should persist when search is applied');
@@ -573,7 +573,7 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
             await context.searchSortPage.openSort();
             await context.searchSortPage.toggleSortDirection();
             await context.searchSortPage.verifySortDirection('desc');
-            
+
             await context.searchSortPage.navigateToHomePage();
             await context.searchSortPage.verifySortDirection('asc');
           },
@@ -614,12 +614,12 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
           admin,
           async (context) => {
             await context.searchSortPage.openSort();
-            
+
             // Rapidly change sort options
             await context.searchSortPage.selectSortOption('roomName');
             await context.searchSortPage.selectSortOption('created');
             await context.searchSortPage.selectSortOption('orderImportance');
-            
+
             const finalValue = await context.searchSortPage.getCurrentSortValue();
             if (finalValue !== 'order_importance') {
               throw new Error(`Expected 'order_importance', got '${finalValue}'`);
@@ -641,13 +641,13 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
           admin,
           async (context) => {
             const specialChars = ['@', '#', '$', '%', '&'];
-            
+
             for (const char of specialChars) {
               await context.searchSortPage.searchRooms(char);
               // Should not crash and should show empty state or filtered results
               await context.searchSortPage.getRoomCount();
               // Test passes if no error is thrown
-              
+
               await context.searchSortPage.clearSearch();
             }
           },
@@ -668,13 +668,13 @@ describeWithSetup('Rooms View - Search and Sort Functionality', () => {
           async (context) => {
             const searchTerm = 'persistent';
             await context.searchSortPage.searchRooms(searchTerm);
-            
+
             // Open and close sort multiple times
             await context.searchSortPage.openSort();
             await context.searchSortPage.closeSort();
             await context.searchSortPage.openSort();
             await context.searchSortPage.closeSort();
-            
+
             const currentSearchValue = await context.searchSortPage.getSearchValue();
             if (currentSearchValue !== searchTerm) {
               throw new Error(`Search value should persist. Expected: ${searchTerm}, Got: ${currentSearchValue}`);
