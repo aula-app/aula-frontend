@@ -32,6 +32,7 @@ export const create = async (
 
   // select the correct phase for the box
   const phaseComboboxId = await page.getAttribute('label:text("Phase")', 'for');
+  if (!phaseComboboxId) throw new Error('Phase combobox ID not found');
   const PhaseCombobox = page.locator(`#${shared.cssEscape(phaseComboboxId)}`);
   await expect(PhaseCombobox).toBeVisible();
   await PhaseCombobox.click({ timeout: 1000 });
@@ -43,6 +44,7 @@ export const create = async (
 
   // how to fill in one of those MUI multiselectors:
   const SelectorId = await page.getAttribute('label:text("Ideen")', 'for');
+  if (!SelectorId) throw new Error('Ideas selector ID not found');
   const IdeaSelector = page.locator(`#${shared.cssEscape(SelectorId)}`);
   await expect(IdeaSelector).toBeVisible();
 
@@ -135,6 +137,7 @@ export const move = async (
 
   // select the correct phase for the box
   const phaseComboboxId = await page.getAttribute('label:text("Phase")', 'for');
+  if (!phaseComboboxId) throw new Error('Phase combobox ID not found');
   const PhaseCombobox = page.locator(`#${shared.cssEscape(phaseComboboxId)}`);
   await expect(PhaseCombobox).toBeVisible();
   await PhaseCombobox.click({ timeout: 1000 });
