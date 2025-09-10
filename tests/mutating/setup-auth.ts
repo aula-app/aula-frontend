@@ -3,9 +3,9 @@ import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwrig
 
 import * as shared from '../shared/shared';
 
-import * as users from '../shared/page_interactions/users';
+import * as users from '../shared/interactions/users';
 import * as fixtures from '../fixtures/users';
-import * as browsers from '../shared/page_interactions/browsers';
+import * as browsers from '../shared/interactions/browsers';
 
 export default async function globalSetup() {
   // first we make a run id, this will be helpful in the mutating tests

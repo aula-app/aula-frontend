@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 import { describeWithSetup } from '../../shared/base-test';
 import { BrowserHelpers } from '../../shared/common-actions';
 import { CategoryTestHelpers, CategoryTestContext } from '../../shared/helpers/categories';
-import * as ideas from '../../shared/page_interactions/ideas';
+import * as ideas from '../../shared/interactions/ideas';
 
 describeWithSetup('Categories flow', () => {
   // Track cleanup contexts for emergency cleanup

@@ -3,9 +3,9 @@ import { BoxData } from '../../fixtures/ideas';
 import * as fixtures from '../../fixtures/users';
 import { TestDataBuilder } from '../base-test';
 import * as shared from '../shared';
-import * as rooms from '../page_interactions/rooms';
-import * as ideas from '../page_interactions/ideas';
-import * as boxes from '../page_interactions/boxes';
+import * as rooms from '../interactions/rooms';
+import * as ideas from '../interactions/ideas';
+import * as boxes from '../interactions/boxes';
 
 export interface VotingWorkflowTestContext {
   room: any;
@@ -62,7 +62,12 @@ export class VotingWorkflowTestHelpers {
     };
   }
 
-  static async createRoomAndIdeas(page: Page, context: VotingWorkflowTestContext, alicePage: Page, bobPage: Page): Promise<void> {
+  static async createRoomAndIdeas(
+    page: Page,
+    context: VotingWorkflowTestContext,
+    alicePage: Page,
+    bobPage: Page
+  ): Promise<void> {
     await rooms.create(page, context.room);
     context.data.isRoomCreated = true;
 
@@ -75,12 +80,19 @@ export class VotingWorkflowTestHelpers {
     context.data.isBoxCreated = true;
   }
 
-  static async moveBoxToPhase(page: Page, context: VotingWorkflowTestContext, fromPhase: number, toPhase: number): Promise<void> {
+  static async moveBoxToPhase(
+    page: Page,
+    context: VotingWorkflowTestContext,
+    fromPhase: number,
+    toPhase: number
+  ): Promise<void> {
     await boxes.move(page, context.room, context.data.box, fromPhase, toPhase);
-    
-    if (toPhase === 30) { // ABSTIMMUNG phase
+
+    if (toPhase === 30) {
+      // ABSTIMMUNG phase
       context.data.isInVotingPhase = true;
-    } else if (toPhase === 40) { // RESULTS phase
+    } else if (toPhase === 40) {
+      // RESULTS phase
       context.data.isCompleted = true;
     }
   }
@@ -90,7 +102,12 @@ export class VotingWorkflowTestHelpers {
     await ideas.approve(page, context.room, context.data.box, context.data.bobsIdea);
   }
 
-  static async castVotes(alicePage: Page, bobPage: Page, rainerPage: Page, context: VotingWorkflowTestContext): Promise<void> {
+  static async castVotes(
+    alicePage: Page,
+    bobPage: Page,
+    rainerPage: Page,
+    context: VotingWorkflowTestContext
+  ): Promise<void> {
     await ideas.vote(alicePage, context.room, context.data.box, context.data.alicesIdea, 'for');
     await ideas.vote(alicePage, context.room, context.data.box, context.data.bobsIdea, 'against');
     await ideas.vote(bobPage, context.room, context.data.box, context.data.alicesIdea, 'for');
@@ -112,11 +129,14 @@ export class VotingWorkflowTestHelpers {
     await boxes.hasDelegatedVotes(page, context.room, context.data.box);
   }
 
-  static async voteWithDelegation(page: Page, context: VotingWorkflowTestContext): Promise<{ before: number; after: number }> {
+  static async voteWithDelegation(
+    page: Page,
+    context: VotingWorkflowTestContext
+  ): Promise<{ before: number; after: number }> {
     const beforeCount = await ideas.totalVoteCount(page, context.room, context.data.box, context.data.alicesIdea);
     await ideas.vote(page, context.room, context.data.box, context.data.alicesIdea, 'for');
     const afterCount = await ideas.totalVoteCount(page, context.room, context.data.box, context.data.alicesIdea);
-    
+
     return { before: beforeCount, after: afterCount };
   }
 
@@ -127,40 +147,36 @@ export class VotingWorkflowTestHelpers {
   static async cleanupTestData(page: Page, context: VotingWorkflowTestContext): Promise<void> {
     const errors: Error[] = [];
 
-    // Cleanup is commented out to preserve test data for debugging
-    // This matches the original test behavior
-    if (false) {
-      // Clean up in reverse order: box first, then ideas, then room
-      if (context.room && context.data.box && context.data.isBoxCreated) {
-        try {
-          await this.cleanupBox(page, context.room, context.data.box);
-        } catch (e: any) {
-          errors.push(new Error(`Failed to cleanup box: ${e.message}`));
-        }
+    // Clean up in reverse order: box first, then ideas, then room
+    if (context.room && context.data.box && context.data.isBoxCreated) {
+      try {
+        await this.cleanupBox(page, context.room, context.data.box);
+      } catch (e: any) {
+        errors.push(new Error(`Failed to cleanup box: ${e.message}`));
       }
+    }
 
-      if (context.room && context.data.alicesIdea) {
-        try {
-          await this.cleanupIdea(page, context.room, context.data.alicesIdea);
-        } catch (e: any) {
-          errors.push(new Error(`Failed to cleanup Alice's idea: ${e.message}`));
-        }
+    if (context.room && context.data.alicesIdea) {
+      try {
+        await this.cleanupIdea(page, context.room, context.data.alicesIdea);
+      } catch (e: any) {
+        errors.push(new Error(`Failed to cleanup Alice's idea: ${e.message}`));
       }
+    }
 
-      if (context.room && context.data.bobsIdea) {
-        try {
-          await this.cleanupIdea(page, context.room, context.data.bobsIdea);
-        } catch (e: any) {
-          errors.push(new Error(`Failed to cleanup Bob's idea: ${e.message}`));
-        }
+    if (context.room && context.data.bobsIdea) {
+      try {
+        await this.cleanupIdea(page, context.room, context.data.bobsIdea);
+      } catch (e: any) {
+        errors.push(new Error(`Failed to cleanup Bob's idea: ${e.message}`));
       }
+    }
 
-      if (context.room && context.data.isRoomCreated) {
-        try {
-          await this.cleanupRoom(page, context.room);
-        } catch (e: any) {
-          errors.push(new Error(`Failed to cleanup room: ${e.message}`));
-        }
+    if (context.room && context.data.isRoomCreated) {
+      try {
+        await this.cleanupRoom(page, context.room);
+      } catch (e: any) {
+        errors.push(new Error(`Failed to cleanup room: ${e.message}`));
       }
     }
 

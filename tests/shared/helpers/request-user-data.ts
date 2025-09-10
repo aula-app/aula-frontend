@@ -1,7 +1,7 @@
 import { Page, expect } from '@playwright/test';
 import * as shared from '../shared';
 import * as fixtures from '../../fixtures/users';
-import { goToProfile, goToRequests } from '../page_interactions/users';
+import { goToProfile, goToRequests } from '../interactions/users';
 
 export interface RequestUserDataTestContext {
   requestId?: string;

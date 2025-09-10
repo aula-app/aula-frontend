@@ -30,13 +30,13 @@ const EmptyState = ({
   const defaultAlt = image === '/img/Paula_schlafend.svg' ? t('errors.schoolClosedImage') : 'Empty state';
 
   return (
-    <Stack flex={1} alignItems="center" justifyContent="center" spacing={2}>
+    <Stack flex={1} alignItems="center" justifyContent="center" spacing={2} data-testid="empty-state">
       <img src={image} alt={imageAlt || defaultAlt} loading="lazy" width={imageWidth} />
-      <Typography variant="h3" textAlign="center">
+      <Typography variant="h3" textAlign="center" data-testid="empty-state-title">
         {title || t('common.noContent')}
       </Typography>
       {description && (
-        <Typography variant="body1" textAlign="center" color="text.secondary">
+        <Typography variant="body1" textAlign="center" color="text.secondary" data-testid="empty-state-description">
           {description}
         </Typography>
       )}

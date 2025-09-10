@@ -1,7 +1,7 @@
 // called from playwright.config
-import * as users from '../shared/page_interactions/users';
+import * as users from '../shared/interactions/users';
 import * as fixtures from '../fixtures/users';
-import * as browsers from '../shared/page_interactions/browsers';
+import * as browsers from '../shared/interactions/browsers';
 import { TestCleanup } from '../shared/cleanup';
 
 export default async function globalTeardown() {
@@ -25,7 +25,7 @@ export default async function globalTeardown() {
   await browsers.shutdown();
   // Comprehensive cleanup of test artifacts
   console.log('Cleaning up after all tests...');
-  
+
   try {
     await TestCleanup.cleanupAll();
     console.log('✅ Test artifacts cleaned up successfully');

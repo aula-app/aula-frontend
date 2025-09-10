@@ -1,13 +1,13 @@
 import { Page } from '@playwright/test';
 import { TestDataBuilder } from '../base-test';
 import * as shared from '../shared';
-import * as rooms from '../page_interactions/rooms';
-import * as ideas from '../page_interactions/ideas';
-import * as ui from '../page_interactions/interface';
+import * as rooms from '../interactions/rooms';
+import * as ideas from '../interactions/ideas';
+import * as ui from '../interactions/interface';
 
 export interface ReportingTestContext {
   room: any;
-  data: { 
+  data: {
     [k: string]: any;
     isIdeaReported?: boolean;
     isCommentCreated?: boolean;

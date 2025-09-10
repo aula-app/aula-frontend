@@ -1,9 +1,9 @@
 import { Page } from '@playwright/test';
-import { CategoriesPage } from '../page_interactions/categories';
+import { CategoriesPage } from '../interactions/categories';
 import { TestDataBuilder } from '../base-test';
 import * as shared from '../shared';
-import * as rooms from '../page_interactions/rooms';
-import * as ideas from '../page_interactions/ideas';
+import * as rooms from '../interactions/rooms';
+import * as ideas from '../interactions/ideas';
 import * as fixtures from '../../fixtures/users';
 
 export interface CategoryTestContext {
