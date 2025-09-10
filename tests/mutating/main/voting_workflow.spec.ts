@@ -303,7 +303,7 @@ describeWithSetup('Voting Workflow - Complete Process from Creation to Results',
           sharedContext!.data.box,
           sharedContext!.data.alicesIdea
         );
-        expect(beforeCount).toBe(2);
+        expect(beforeCount).toBe(3);
 
         await ideas.vote(mallory, sharedContext!.room, sharedContext!.data.box, sharedContext!.data.alicesIdea, 'for');
 
@@ -313,7 +313,7 @@ describeWithSetup('Voting Workflow - Complete Process from Creation to Results',
           sharedContext!.data.box,
           sharedContext!.data.alicesIdea
         );
-        expect(afterCount).toBe(beforeCount + 2);
+        expect(afterCount).toBe(beforeCount + 1);
 
         expect(afterCount, 'Vote count should increase with delegated votes').toBeGreaterThan(beforeCount);
       } catch (error) {

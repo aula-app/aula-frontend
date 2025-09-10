@@ -11,7 +11,7 @@ export class BaseTest {
   static configure() {
     // Force tests to run sequentially due to mutation dependencies
     test.describe.configure({ mode: 'serial' });
-    
+
     // Set default timeout for complex operations
     test.describe.configure({ timeout: 60000 });
   }
@@ -19,10 +19,21 @@ export class BaseTest {
   static setupHooks() {
     test.beforeAll(async () => {
       fixtures.init();
+      // Try to recall existing browser contexts, fall back to init if needed
+      try {
+        await browsers.recall();
+      } catch (error) {
+        console.log('Browser recall failed, initializing fresh browsers:', error);
+        await browsers.init();
+      }
     });
 
     test.beforeEach(async () => {
-      await browsers.recall();
+      // Ensure browsers are available for each test
+      if (!browsers.admins_browser) {
+        console.log('Browsers not available, initializing...');
+        await browsers.init();
+      }
     });
 
     test.afterEach(async () => {

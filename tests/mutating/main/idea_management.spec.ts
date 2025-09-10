@@ -105,10 +105,10 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
 
     // Clean up current test data
     const { currentTestData } = context;
-    
+
     if (currentTestData.box) {
       try {
-        await boxes.remove(page, currentTestData.box);
+        await boxes.remove(page, context.room, currentTestData.box);
       } catch (e: any) {
         errors.push(new Error(`Failed to cleanup box: ${e.message}`));
       }
@@ -136,8 +136,8 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
     }
   };
 
-  test.describe('Idea Creation and Deletion', () => {
-    test('Admin can create and remove an idea', async () => {
+  test.describe('Idea Creation', () => {
+    test('Admin can create an idea', async () => {
       const admin = await BrowserHelpers.openPageForUser(TEST_USERS.ADMIN);
 
       try {
@@ -146,22 +146,18 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
 
         const adminIdea = createTestIdea('admin');
         sharedContext!.currentTestData.idea = adminIdea;
-        
-        await ideas.create(admin, sharedContext!.room, adminIdea);
-        await ideas.remove(admin, sharedContext!.room, adminIdea);
 
-        // Clear test data after successful cleanup
-        sharedContext!.currentTestData.idea = undefined;
-        expect(adminIdea, 'Admin idea should be created and removed successfully').toBeDefined();
+        await ideas.create(admin, sharedContext!.room, adminIdea);
+        expect(adminIdea, 'Admin idea should be created successfully').toBeDefined();
       } catch (error) {
-        console.error('Failed admin idea CRUD:', error);
-        throw new Error(`Admin idea management failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
+        console.error('Failed admin idea creation:', error);
+        throw new Error(`Admin idea creation failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
       } finally {
         await BrowserHelpers.closePage(admin);
       }
     });
 
-    test('Alice can create and delete an idea', async () => {
+    test('Alice can create an idea', async () => {
       const alice = await BrowserHelpers.openPageForUser(TEST_USERS.ALICE);
 
       try {
@@ -170,22 +166,70 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
 
         const aliceIdea = createTestIdea('alice', '3');
         sharedContext!.currentTestData.idea = aliceIdea;
-        
+
+        await ideas.create(alice, sharedContext!.room, aliceIdea);
+        expect(aliceIdea, 'Alice idea should be created successfully').toBeDefined();
+      } catch (error) {
+        console.error('Failed Alice idea creation:', error);
+        throw new Error(`Alice idea creation failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
+      } finally {
+        await BrowserHelpers.closePage(alice);
+      }
+    });
+  });
+
+  test.describe('Idea Deletion', () => {
+    test('Admin can delete an idea', async () => {
+      const admin = await BrowserHelpers.openPageForUser(TEST_USERS.ADMIN);
+
+      try {
+        expect(sharedContext, 'Shared context should be initialized').toBeTruthy();
+        expect(sharedContext!.isRoomCreated, 'Room should be created in beforeAll').toBe(true);
+
+        const adminIdea = createTestIdea('admin-delete');
+        sharedContext!.currentTestData.idea = adminIdea;
+
+        await ideas.create(admin, sharedContext!.room, adminIdea);
+        await ideas.remove(admin, sharedContext!.room, adminIdea);
+
+        // Clear test data after successful cleanup
+        sharedContext!.currentTestData.idea = undefined;
+        expect(adminIdea, 'Admin idea should be deleted successfully').toBeDefined();
+      } catch (error) {
+        console.error('Failed admin idea deletion:', error);
+        throw new Error(`Admin idea deletion failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
+      } finally {
+        await BrowserHelpers.closePage(admin);
+      }
+    });
+
+    test('Alice can delete her own idea', async () => {
+      const alice = await BrowserHelpers.openPageForUser(TEST_USERS.ALICE);
+
+      try {
+        expect(sharedContext, 'Shared context should be initialized').toBeTruthy();
+        expect(sharedContext!.isRoomCreated, 'Room should be available for Alice').toBe(true);
+
+        const aliceIdea = createTestIdea('alice-delete', '5');
+        sharedContext!.currentTestData.idea = aliceIdea;
+
         await ideas.create(alice, sharedContext!.room, aliceIdea);
         await ideas.remove(alice, sharedContext!.room, aliceIdea);
 
         // Clear test data after successful cleanup
         sharedContext!.currentTestData.idea = undefined;
-        expect(aliceIdea, 'Alice idea should be created and removed successfully').toBeDefined();
+        expect(aliceIdea, 'Alice idea should be deleted successfully').toBeDefined();
       } catch (error) {
-        console.error('Failed Alice idea CRUD:', error);
-        throw new Error(`Alice idea management failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
+        console.error('Failed Alice idea deletion:', error);
+        throw new Error(`Alice idea deletion failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
       } finally {
         await BrowserHelpers.closePage(alice);
       }
     });
+  });
 
-    test('Users cannot remove other users ideas', async () => {
+  test.describe('Idea Permissions', () => {
+    test('Users cannot delete other users ideas', async () => {
       const bob = await BrowserHelpers.openPageForUser(TEST_USERS.BOB);
       const alice = await BrowserHelpers.openPageForUser(TEST_USERS.ALICE);
 
@@ -193,9 +237,9 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
         expect(sharedContext, 'Shared context should be initialized').toBeTruthy();
         expect(sharedContext!.isRoomCreated, 'Room should be available for permission test').toBe(true);
 
-        const aliceIdea = createTestIdea('alice', '4');
+        const aliceIdea = createTestIdea('alice-protected', '4');
         sharedContext!.currentTestData.idea = aliceIdea;
-        
+
         await ideas.create(alice, sharedContext!.room, aliceIdea);
 
         // Test permission restriction
@@ -203,12 +247,12 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
           await ideas.remove(bob, sharedContext!.room, aliceIdea);
         }).rejects.toThrow();
 
-        // Alice removes her own idea
+        // Alice removes her own idea for cleanup
         await ideas.remove(alice, sharedContext!.room, aliceIdea);
-        
+
         // Clear test data after successful cleanup
         sharedContext!.currentTestData.idea = undefined;
-        expect(aliceIdea, 'Permission restriction test should work correctly').toBeDefined();
+        expect(aliceIdea, 'Permission restriction should work correctly').toBeDefined();
       } catch (error) {
         console.error('Failed idea permission test:', error);
         throw new Error(`Idea permission test failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
@@ -220,7 +264,7 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
   });
 
   test.describe('Idea Comments', () => {
-    test('Users can comment on ideas and manage their own comments', async () => {
+    test('Users can add comments to ideas', async () => {
       const bob = await BrowserHelpers.openPageForUser(TEST_USERS.BOB);
       const alice = await BrowserHelpers.openPageForUser(TEST_USERS.ALICE);
 
@@ -228,12 +272,39 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
         expect(sharedContext, 'Shared context should be initialized').toBeTruthy();
         expect(sharedContext!.isRoomCreated, 'Room should be available for comment test').toBe(true);
 
-        const bobIdea = createTestIdea('bob');
+        const bobIdea = createTestIdea('bob-for-comments');
         const commentText = `alice's ${IDEA_CONFIG.COMMENT_TEXT}`;
-        
+
         sharedContext!.currentTestData.idea = bobIdea;
         sharedContext!.currentTestData.comment = commentText;
-        
+
+        await ideas.create(bob, sharedContext!.room, bobIdea);
+        await ideas.comment(alice, sharedContext!.room, bobIdea, commentText);
+
+        expect(commentText, 'Comment should be added successfully').toBeDefined();
+      } catch (error) {
+        console.error('Failed comment creation test:', error);
+        throw new Error(`Comment creation failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
+      } finally {
+        await BrowserHelpers.closePage(bob);
+        await BrowserHelpers.closePage(alice);
+      }
+    });
+
+    test('Users can delete their own comments', async () => {
+      const bob = await BrowserHelpers.openPageForUser(TEST_USERS.BOB);
+      const alice = await BrowserHelpers.openPageForUser(TEST_USERS.ALICE);
+
+      try {
+        expect(sharedContext, 'Shared context should be initialized').toBeTruthy();
+        expect(sharedContext!.isRoomCreated, 'Room should be available for comment deletion test').toBe(true);
+
+        const bobIdea = createTestIdea('bob-for-comment-deletion');
+        const commentText = `alice's ${IDEA_CONFIG.COMMENT_TEXT} for deletion`;
+
+        sharedContext!.currentTestData.idea = bobIdea;
+        sharedContext!.currentTestData.comment = commentText;
+
         await ideas.create(bob, sharedContext!.room, bobIdea);
         await ideas.comment(alice, sharedContext!.room, bobIdea, commentText);
         await ideas.removeComment(alice, sharedContext!.room, bobIdea, commentText);
@@ -242,10 +313,10 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
         // Clear test data after successful cleanup
         sharedContext!.currentTestData.idea = undefined;
         sharedContext!.currentTestData.comment = undefined;
-        expect(commentText, 'Comment management should work correctly').toBeDefined();
+        expect(commentText, 'Comment should be deleted successfully').toBeDefined();
       } catch (error) {
-        console.error('Failed comment management test:', error);
-        throw new Error(`Comment management failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
+        console.error('Failed comment deletion test:', error);
+        throw new Error(`Comment deletion failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
       } finally {
         await BrowserHelpers.closePage(bob);
         await BrowserHelpers.closePage(alice);
@@ -253,7 +324,7 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
     });
   });
 
-  test.describe('Box Management with Ideas', () => {
+  test.describe('Box Creation', () => {
     test('Admin can create a box with multiple ideas', async () => {
       const admin = await BrowserHelpers.openPageForUser(TEST_USERS.ADMIN);
       const bob = await BrowserHelpers.openPageForUser(TEST_USERS.BOB);
@@ -274,23 +345,59 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
         await ideas.create(alice, sharedContext!.room, aliceIdea);
         await ideas.create(bob, sharedContext!.room, bobIdea);
         await boxes.create(admin, sharedContext!.room, box);
-        await boxes.remove(admin, sharedContext!.room, box);
-        await ideas.remove(alice, sharedContext!.room, aliceIdea);
-        await ideas.remove(bob, sharedContext!.room, bobIdea);
 
-        // Clear test data after successful cleanup
-        sharedContext!.currentTestData.box = undefined;
-        expect(box, 'Box with multiple ideas should be managed successfully').toBeDefined();
+        expect(box, 'Box with multiple ideas should be created successfully').toBeDefined();
       } catch (error) {
-        console.error('Failed box management test:', error);
-        throw new Error(`Box management failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
+        console.error('Failed box creation test:', error);
+        throw new Error(`Box creation failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
       } finally {
         await BrowserHelpers.closePage(admin);
         await BrowserHelpers.closePage(alice);
         await BrowserHelpers.closePage(bob);
       }
     });
+  });
 
+  test.describe('Box Deletion', () => {
+    test('Admin can delete a box', async () => {
+      const admin = await BrowserHelpers.openPageForUser(TEST_USERS.ADMIN);
+      const bob = await BrowserHelpers.openPageForUser(TEST_USERS.BOB);
+      const alice = await BrowserHelpers.openPageForUser(TEST_USERS.ALICE);
+
+      try {
+        expect(sharedContext, 'Shared context should be initialized').toBeTruthy();
+        expect(sharedContext!.isRoomCreated, 'Room should be available for box deletion test').toBe(true);
+
+        const tempScope = shared.gensym();
+        const aliceIdea = createTestIdea('alice-box-delete', tempScope);
+        const bobIdea = createTestIdea('bob-box-delete', tempScope);
+        const box = createTestBox(tempScope, [aliceIdea, bobIdea]);
+
+        sharedContext!.currentTestData.tempScope = tempScope;
+        sharedContext!.currentTestData.box = box;
+
+        await ideas.create(alice, sharedContext!.room, aliceIdea);
+        await ideas.create(bob, sharedContext!.room, bobIdea);
+        await boxes.create(admin, sharedContext!.room, box);
+        await boxes.remove(admin, sharedContext!.room, box);
+        await ideas.remove(alice, sharedContext!.room, aliceIdea);
+        await ideas.remove(bob, sharedContext!.room, bobIdea);
+
+        // Clear test data after successful cleanup
+        sharedContext!.currentTestData.box = undefined;
+        expect(box, 'Box should be deleted successfully').toBeDefined();
+      } catch (error) {
+        console.error('Failed box deletion test:', error);
+        throw new Error(`Box deletion failed. Prerequisites: room=${!!sharedContext?.isRoomCreated}`);
+      } finally {
+        await BrowserHelpers.closePage(admin);
+        await BrowserHelpers.closePage(alice);
+        await BrowserHelpers.closePage(bob);
+      }
+    });
+  });
+
+  test.describe('Box Permissions', () => {
     test('Non-admin users cannot create boxes', async () => {
       const alice = await BrowserHelpers.openPageForUser(TEST_USERS.ALICE);
 
