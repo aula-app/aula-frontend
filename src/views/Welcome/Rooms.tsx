@@ -50,6 +50,7 @@ const RoomsView = () => {
           container
           spacing={2}
           role="list"
+          data-testid="rooms-list"
           sx={{ p: 2, pt: 0, overflowY: 'auto', scrollBehavior: 'smooth' }}
           aria-labelledby="rooms-heading"
           aria-live="polite"
@@ -65,7 +66,7 @@ const RoomsView = () => {
             </Grid>
           ) : (
             rooms.map((room) => (
-              <Grid size={ROOM_GRID_SIZE} key={room.hash_id}>
+              <Grid size={ROOM_GRID_SIZE} key={room.hash_id} data-testid="room-card-item">
                 <RoomCard room={room} />
               </Grid>
             ))
