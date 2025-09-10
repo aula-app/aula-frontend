@@ -1,79 +1,132 @@
 import { test, expect } from '@playwright/test';
-import { describeWithSetup, TestDataBuilder } from '../../shared/base-test';
+import { describeWithSetup } from '../../shared/base-test';
 import { BrowserHelpers } from '../../shared/common-actions';
+import { ReportingTestHelpers, ReportingTestContext } from '../../shared/helpers/reporting';
 import * as shared from '../../shared/shared';
-import * as rooms from '../../shared/page_interactions/rooms';
-import * as ideas from '../../shared/page_interactions/ideas';
-import * as ui from '../../shared/page_interactions/interface';
 
 describeWithSetup('Reporting flow', () => {
-  let room: any;
-  let data: { [k: string]: any } = {};
+  // Shared context for sequential tests
+  let sharedContext: ReportingTestContext | null = null;
+  const cleanupQueue: Array<{ page: any; context: ReportingTestContext }> = [];
 
-  test.beforeAll(async () => {
-    room = TestDataBuilder.createRoom('reporting');
+  test.afterAll(async () => {
+    // Clean up shared context at the end
+    if (sharedContext) {
+      const admin = await BrowserHelpers.openPageForUser('admin');
+      try {
+        await ReportingTestHelpers.cleanupTestData(admin, sharedContext);
+      } catch (e) {
+        console.warn('Shared context cleanup failed:', e);
+      } finally {
+        await BrowserHelpers.closePage(admin);
+      }
+    }
+
+    // Emergency cleanup for any leftover contexts
+    while (cleanupQueue.length > 0) {
+      const { page, context } = cleanupQueue.pop()!;
+      try {
+        await ReportingTestHelpers.cleanupTestData(page, context);
+      } catch (e) {
+        console.warn('Emergency cleanup failed:', e);
+      }
+    }
   });
 
-  //
-  test('Admin can create a room, adding 4 users', async () => {
+  test('Admin can create a room with users', async () => {
     const admin = await BrowserHelpers.openPageForUser('admin');
-    await rooms.create(admin, room);
-    await BrowserHelpers.closePage(admin);
+
+    try {
+      // Initialize shared context for the test suite
+      sharedContext = await ReportingTestHelpers.setupReportingTest();
+      
+      const { room } = sharedContext;
+      await ReportingTestHelpers.createRoomWithUsers(admin, room);
+    } finally {
+      await BrowserHelpers.closePage(admin);
+    }
   });
 
   test('Alice creates an idea', async () => {
     const alice = await BrowserHelpers.openPageForUser('alice');
 
-    data.alicesIdea = TestDataBuilder.createIdea('reporting-scope-3');
-    await ideas.create(alice, room, data.alicesIdea);
+    try {
+      expect(sharedContext).toBeTruthy();
+      const { room, data } = sharedContext!;
+      
+      await ReportingTestHelpers.createIdeaForTesting(alice, room, data);
+      expect(data.alicesIdea).toBeDefined();
+    } finally {
+      await BrowserHelpers.closePage(alice);
+    }
   });
 
-  test('Bob reports that idea', async () => {
+  test('Bob reports Alice\'s idea', async () => {
     const bob = await BrowserHelpers.openPageForUser('bob');
     const admin = await BrowserHelpers.openPageForUser('admin');
 
-    expect(data.alicesIdea).toBeDefined();
-
-    await ideas.report(bob, room, data.alicesIdea, 'misinformation');
-
-    await ideas.checkReport(admin, data.alicesIdea);
-    await BrowserHelpers.closePage(bob);
-    await BrowserHelpers.closePage(admin);
+    try {
+      expect(sharedContext).toBeTruthy();
+      const { room, data } = sharedContext!;
+      expect(data.alicesIdea).toBeDefined();
+      
+      await ReportingTestHelpers.reportIdea(bob, room, data.alicesIdea, 'misinformation');
+      await ReportingTestHelpers.checkIdeaReport(admin, data.alicesIdea);
+    } finally {
+      await BrowserHelpers.closePage(bob);
+      await BrowserHelpers.closePage(admin);
+    }
   });
 
-  test('Bob Comments on Alices Idea', async () => {
+  test('Bob comments on Alice\'s idea', async () => {
     const bob = await BrowserHelpers.openPageForUser('bob');
 
-    data.bobsComment = 'You posted misinformation' + shared.gensym();
-
-    await ideas.comment(bob, room, data.alicesIdea, data.bobsComment);
-
-    await BrowserHelpers.closePage(bob);
+    try {
+      expect(sharedContext).toBeTruthy();
+      const { room, data } = sharedContext!;
+      expect(data.alicesIdea).toBeDefined();
+      
+      data.bobsComment = 'You posted misinformation' + shared.gensym();
+      await ReportingTestHelpers.addComment(bob, room, data.alicesIdea, data.bobsComment);
+      expect(data.bobsComment).toBeDefined();
+    } finally {
+      await BrowserHelpers.closePage(bob);
+    }
   });
 
-  test('Alice reports bobs comment', async () => {
+  test('Alice reports Bob\'s comment', async () => {
     const alice = await BrowserHelpers.openPageForUser('alice');
     const admin = await BrowserHelpers.openPageForUser('admin');
 
-    await ideas.reportComment(alice, room, data.alicesIdea, data.bobsComment, 'misinformation');
-
-    await ideas.checkCommentReport(admin, data.bobsComment);
-
-    await BrowserHelpers.closePage(alice);
-    await BrowserHelpers.closePage(admin);
+    try {
+      expect(sharedContext).toBeTruthy();
+      const { room, data } = sharedContext!;
+      expect(data.alicesIdea).toBeDefined();
+      expect(data.bobsComment).toBeDefined();
+      
+      await ReportingTestHelpers.reportComment(alice, room, data.alicesIdea, data.bobsComment, 'misinformation');
+      await ReportingTestHelpers.checkCommentReport(admin, data.bobsComment);
+    } finally {
+      await BrowserHelpers.closePage(alice);
+      await BrowserHelpers.closePage(admin);
+    }
   });
 
   test('Alice reports a bug', async () => {
     const alice = await BrowserHelpers.openPageForUser('alice');
     const admin = await BrowserHelpers.openPageForUser('admin');
 
-    data.bugreport = 'This does not work' + shared.gensym();
-
-    await ui.reportBug(alice, data.bugreport);
-
-    await ui.checkReport(admin, data.bugreport);
-
-    await BrowserHelpers.closePage(alice);
-    await BrowserHelpers.closePage(admin);
+    try {
+      expect(sharedContext).toBeTruthy();
+      const { data } = sharedContext!;
+      
+      data.bugreport = 'This does not work' + shared.gensym();
+      await ReportingTestHelpers.reportBug(alice, data.bugreport);
+      await ReportingTestHelpers.checkBugReport(admin, data.bugreport);
+      expect(data.bugreport).toBeDefined();
+    } finally {
+      await BrowserHelpers.closePage(alice);
+      await BrowserHelpers.closePage(admin);
+    }
   });
 });
