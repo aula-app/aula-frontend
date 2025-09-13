@@ -6,7 +6,6 @@ on:
       - closed
 
 env:
-  IMAGE_TAG: 'aulaapp/aula-frontend:pr-${{ github.event.number }}'
   PR_NUMBER: ${{ github.event.number }}
 
 jobs:
@@ -14,12 +13,12 @@ jobs:
     if: ${{ !contains(fromJSON('["main", "dev", "staging", "prod"]'), github.head_ref) }}
     runs-on: [self-hosted, dev]
     steps:
-      - name: Deploy to Branch Testing Environment
+      - name: un-Deploy dev Branch Testing Environment
         run: docker compose -f ./docker-compose.pr.yml down
 
   undeploy-staging:
     if: ${{ !contains(fromJSON('["main", "dev", "staging", "prod"]'), github.head_ref) }}
     runs-on: [self-hosted, staging]
     steps:
-      - name: Deploy to Branch Testing Environment
+      - name: un-Deploy staging Branch Testing Environment
         run: docker compose -f ./docker-compose.pr.yml down
