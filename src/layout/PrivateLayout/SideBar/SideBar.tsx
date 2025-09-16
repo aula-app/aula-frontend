@@ -1,18 +1,17 @@
 import { AppIconButton } from '@/components';
 import BugButton from '@/components/Buttons/BugButton';
+import CodeButton from '@/components/Buttons/CodeButton';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import UserInfo from '@/components/UserInfo';
 import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
 import { useAppStore } from '@/store';
-import { announceToScreenReader, localStorageGet } from '@/utils';
-import { Button, Divider, Drawer, Stack } from '@mui/material';
+import { localStorageGet } from '@/utils';
+import { Divider, Drawer, Stack } from '@mui/material';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SideBarContent from './SideBarContent';
 import { drawerPaperStyles } from './styles';
 import { DrawerSideBarProps } from './types';
-import { getRuntimeConfig } from '@/config';
-import CodeButton from '@/components/Buttons/CodeButton';
 
 /**
  * Renders SideBar with Menu and User details for authenticated users in Private Layout
@@ -75,7 +74,7 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
       <Divider role="presentation" />
       <SideBarContent onClose={onClose} />
       <Divider role="presentation" />
-      {getRuntimeConfig().IS_MULTI && <CodeButton />}
+      <CodeButton />
       <Stack
         direction="row"
         justifyContent="space-between"

@@ -1,16 +1,14 @@
 import { AppIcon, AppIconButton } from '@/components';
 import BugButton from '@/components/Buttons/BugButton';
+import CodeButton from '@/components/Buttons/CodeButton';
 import LocaleSwitch from '@/components/LocaleSwitch';
-import { getRuntimeConfig } from '@/config';
 import { useEventLogout, useEventSwitchDarkMode } from '@/hooks';
 import { useAppStore } from '@/store';
-import { announceToScreenReader, localStorageGet } from '@/utils';
 import { Button, Divider, Stack } from '@mui/material';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SideBarContent from './SideBarContent';
 import { fixedSideBarStyles } from './styles';
-import CodeButton from '@/components/Buttons/CodeButton';
 
 /**
  * Renders fixed SideBar with Menu and User details for desktop view
@@ -33,7 +31,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
       id="fixed-sidebar"
       {...restOfProps}
     >
-      {getRuntimeConfig().IS_MULTI && <CodeButton />}
+      <CodeButton />
       <SideBarContent isFixed={true} />
       <Divider role="presentation" />
       <Stack
