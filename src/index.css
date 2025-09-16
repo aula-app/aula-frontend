@@ -1,5 +1,6 @@
 @import url('/font/vision/vision.css');
 @import url('/font/tahoma/tahoma.css');
+@import url('/font/inconsolata/inconsolata.css');
 
 :root {
   --safe-area-inset-top: env(safe-area-inset-top);
@@ -21,6 +22,10 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.app-code {
+  font-family: 'inconsolata', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 .app-icon svg {
