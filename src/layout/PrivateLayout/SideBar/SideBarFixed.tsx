@@ -10,6 +10,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SideBarContent from './SideBarContent';
 import { fixedSideBarStyles } from './styles';
+import CodeButton from '@/components/Buttons/CodeButton';
 
 /**
  * Renders fixed SideBar with Menu and User details for desktop view
@@ -19,7 +20,6 @@ import { fixedSideBarStyles } from './styles';
 const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
   const { t } = useTranslation();
   const [state] = useAppStore();
-  const code = localStorageGet('code');
 
   const onSwitchDarkMode = useEventSwitchDarkMode();
   const onLogout = useEventLogout();
@@ -33,22 +33,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
       id="fixed-sidebar"
       {...restOfProps}
     >
-      {getRuntimeConfig().IS_MULTI && (
-        <>
-          <Button
-            onClick={() => {
-              navigator.clipboard.writeText(code);
-              // Announce copy success to screen readers
-              announceToScreenReader(t('ui.accessibility.codeCopied'), 'polite');
-            }}
-            color="secondary"
-            aria-label={t('ui.accessibility.copyInstanceCode', { code })}
-          >
-            {`${t('instance.chip')}: ${code}`}
-          </Button>
-          <Divider role="presentation" />
-        </>
-      )}
+      {getRuntimeConfig().IS_MULTI && <CodeButton />}
       <SideBarContent isFixed={true} />
       <Divider role="presentation" />
       <Stack

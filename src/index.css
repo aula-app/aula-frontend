@@ -26,6 +26,7 @@ code {
 
 .app-code {
   font-family: 'inconsolata', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  text-transform: unset;
 }
 
 .app-icon svg {
