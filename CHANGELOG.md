@@ -1,3 +1,8 @@
+## 1.4.4
+
+- **Bug fixes:**
+  - Improve instance code readability
+
 ## 1.4.3
 
 - **Bug fixes:**

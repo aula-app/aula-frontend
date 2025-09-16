@@ -1,3 +1,4 @@
+import AppIcon from '@/components/AppIcon';
 import { useAppStore } from '@/store';
 import { announceToScreenReader, localStorageGet } from '@/utils';
 import { Button, Divider } from '@mui/material';
@@ -27,6 +28,7 @@ const CodeButton = forwardRef<HTMLButtonElement>(({ ...restOfProps }) => {
         {...restOfProps}
       >
         {`${t('instance.chip')}: ${code}`}
+        <AppIcon icon="copy" size="small" sx={{ ml: 1 }} />
       </Button>
       <Divider role="presentation" />
     </>
