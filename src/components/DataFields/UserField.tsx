@@ -1,6 +1,6 @@
 import { getUsers } from '@/services/users';
 import { UserOptionsType } from '@/types/SettingsTypes';
-import { Autocomplete, BaseTextFieldProps, CircularProgress, TextField, Typography } from '@mui/material';
+import { Autocomplete, BaseTextFieldProps, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -77,6 +77,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
             options={options}
             loading={loading}
             disabled={disabled}
+            data-testid="user-field-autocomplete"
             isOptionEqualToValue={(option, value) => {
               if (!option || !value) return false;
               return option.value === value.value;
@@ -91,7 +92,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
               field.onChange(newValue ? newValue.value : null);
             }}
             renderOption={(props, option) => (
-              <li {...props} key={option.value}>
+              <li {...props} key={option.value} data-testid={`user-option-${option.value}`}>
                 <span>
                   {option.label}
                   {option.displayname && (

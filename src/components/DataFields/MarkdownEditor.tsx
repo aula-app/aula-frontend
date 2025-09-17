@@ -360,6 +360,7 @@ const MarkdownEditor: React.FC<Props> = ({
             <div
               ref={containerRef}
               className="markdown-editor-container"
+              data-testid={`markdown-editor-${name}`}
               onClick={handleContainerFocus}
               onKeyDown={(e) => {
                 // Handle Enter and Space to focus the editor
@@ -372,10 +373,7 @@ const MarkdownEditor: React.FC<Props> = ({
               role="textbox"
               aria-label={t(`settings.columns.${name}`)}
             >
-              <StyledFormLabel
-                id={`editor-${name}-label`}
-                className={fieldState.error ? 'error' : getCharCountClass()}
-              >
+              <StyledFormLabel id={`editor-${name}-label`} className={fieldState.error ? 'error' : getCharCountClass()}>
                 {t(`settings.columns.${name}`)}
                 {required ? '*' : ''}
               </StyledFormLabel>

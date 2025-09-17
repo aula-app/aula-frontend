@@ -265,4 +265,13 @@ export class MessageTestHelpers {
     }
     return user?.displayName || user?.username || username;
   }
+
+  // Helper method to get unique user identifier for UI selection
+  static getUserRealName(username: keyof typeof fixtures): string {
+    const user = fixtures[username];
+    if (typeof user === 'function') {
+      return username;
+    }
+    return user?.realName || user?.displayName || user?.username || username;
+  }
 }
