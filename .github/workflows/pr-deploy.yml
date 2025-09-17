@@ -30,6 +30,17 @@ jobs:
     runs-on: [self-hosted, dev]
     needs: build
     steps:
+      - name: Check if branch still exists (PR can be closed if the build takes long time)
+        id: check_branch
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ github.head_ref }}")
+          if [ "$RESPONSE" -ne 200 ]; then
+            echo "Branch does not exist. Exiting."
+            exit 0
+          fi
+
       - uses: actions/checkout@v4
         with:
           sparse-checkout: |
@@ -39,7 +50,7 @@ jobs:
       - name: Pull the latest version
         run: docker compose -f ./docker-compose.pr.yml pull
 
-      - name: Deploy to Branch Testing Environment
+      - name: Deploy to dev Branch Testing Environment
         run: docker compose -f ./docker-compose.pr.yml up -d
 
   deploy-staging:
@@ -47,6 +58,17 @@ jobs:
     runs-on: [self-hosted, staging]
     needs: build
     steps:
+      - name: Check if branch still exists (PR can be closed if the build takes long time)
+        id: check_branch
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ github.head_ref }}")
+          if [ "$RESPONSE" -ne 200 ]; then
+            echo "Branch does not exist. Exiting."
+            exit 0
+          fi
+
       - uses: actions/checkout@v4
         with:
           sparse-checkout: |
@@ -56,5 +78,5 @@ jobs:
       - name: Pull the latest version
         run: docker compose -f ./docker-compose.pr.yml pull
 
-      - name: Deploy to Branch Testing Environment
+      - name: Deploy to staging Branch Testing Environment
         run: docker compose -f ./docker-compose.pr.yml up -d
