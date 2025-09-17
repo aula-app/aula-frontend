@@ -12,6 +12,7 @@ export default async function globalSetup() {
 
   console.log('Setting up!');
 
+  shared.getRunId();
   shared.setRunId();
 
   fixtures.init();

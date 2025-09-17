@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import dotenv from 'dotenv';
 
 // configure the environment to get the running dev server
@@ -19,11 +20,32 @@ export const now = new Date();
 export const timestring = now.toISOString();
 export const timestamp = now.getTime().toString();
 
+const runIdFilePath = 'tests/temp/run-id.txt';
+
 export const getHost = () => process.env.APP_FRONTEND_HOST!!;
 
-export const getRunId = () => fs.readFileSync('tests/temp/run-id.txt', 'utf-8');
+export const getRunId = () => {
+  const runIdDir = path.dirname(runIdFilePath);
 
-export const setRunId = () => fs.writeFileSync('tests/temp/run-id.txt', 'run-id-' + timestamp);
+  try {
+    // Check if directory exists, create if it doesn't
+    if (!fs.existsSync(runIdDir)) {
+      fs.mkdirSync(runIdDir, { recursive: true });
+    }
+
+    // Check if file exists, create if it doesn't
+    if (!fs.existsSync(runIdFilePath)) {
+      fs.writeFileSync(runIdFilePath, 'run-id-' + timestamp, 'utf-8');
+      return 'run-id-' + timestamp;
+    } else {
+      return fs.readFileSync(runIdFilePath, 'utf-8').trim();
+    }
+  } catch (error) {
+    console.error('Error handling run-id file:', error);
+  }
+};
+
+export const setRunId = () => fs.writeFileSync(runIdFilePath, 'run-id-' + timestamp);
 
 export function gensym(prefix = 'GG') {
   // tests will fail on collision.. very rare
