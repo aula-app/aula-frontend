@@ -1,10 +1,9 @@
 import { AppIcon, AppIconButton } from '@/components';
 import BugButton from '@/components/Buttons/BugButton';
+import CodeButton from '@/components/Buttons/CodeButton';
 import LocaleSwitch from '@/components/LocaleSwitch';
-import { getRuntimeConfig } from '@/config';
 import { useEventLogout, useEventSwitchDarkMode } from '@/hooks';
 import { useAppStore } from '@/store';
-import { announceToScreenReader, localStorageGet } from '@/utils';
 import { Button, Divider, Stack } from '@mui/material';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +18,6 @@ import { fixedSideBarStyles } from './styles';
 const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
   const { t } = useTranslation();
   const [state] = useAppStore();
-  const code = localStorageGet('code');
 
   const onSwitchDarkMode = useEventSwitchDarkMode();
   const onLogout = useEventLogout();
@@ -33,22 +31,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
       id="fixed-sidebar"
       {...restOfProps}
     >
-      {getRuntimeConfig().IS_MULTI && (
-        <>
-          <Button
-            onClick={() => {
-              navigator.clipboard.writeText(code);
-              // Announce copy success to screen readers
-              announceToScreenReader(t('ui.accessibility.codeCopied'), 'polite');
-            }}
-            color="secondary"
-            aria-label={t('ui.accessibility.copyInstanceCode', { code })}
-          >
-            {`${t('instance.chip')}: ${code}`}
-          </Button>
-          <Divider role="presentation" />
-        </>
-      )}
+      <CodeButton />
       <SideBarContent isFixed={true} />
       <Divider role="presentation" />
       <Stack

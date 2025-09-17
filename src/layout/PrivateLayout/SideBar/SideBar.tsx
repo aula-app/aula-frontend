@@ -1,11 +1,12 @@
 import { AppIconButton } from '@/components';
 import BugButton from '@/components/Buttons/BugButton';
+import CodeButton from '@/components/Buttons/CodeButton';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import UserInfo from '@/components/UserInfo';
 import { useEventLogout, useEventSwitchDarkMode, useIsAuthenticated, useOnMobile } from '@/hooks';
 import { useAppStore } from '@/store';
-import { announceToScreenReader, localStorageGet } from '@/utils';
-import { Button, Divider, Drawer, Stack } from '@mui/material';
+import { localStorageGet } from '@/utils';
+import { Divider, Drawer, Stack } from '@mui/material';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SideBarContent from './SideBarContent';
@@ -73,22 +74,7 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
       <Divider role="presentation" />
       <SideBarContent onClose={onClose} />
       <Divider role="presentation" />
-      {import.meta.env.VITE_APP_MULTI !== 'false' && (
-        <>
-          <Button
-            onClick={() => {
-              navigator.clipboard.writeText(code);
-              // Announce copy success to screen readers
-              announceToScreenReader(t('ui.accessibility.codeCopied'), 'polite');
-            }}
-            color="secondary"
-            aria-label={t('ui.accessibility.copyInstanceCode', { code })}
-          >
-            {`${t('instance.chip')}: ${code}`}
-          </Button>
-          <Divider role="presentation" />
-        </>
-      )}
+      <CodeButton />
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -98,7 +84,7 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
         aria-label={t('ui.accessibility.sidebarActions')}
       >
         <BugButton target={location.pathname} />
-        <AppIconButton onClick={window.print} icon="print"  title={t('actions.print')} aria-label={t('actions.print')} />
+        <AppIconButton onClick={window.print} icon="print" title={t('actions.print')} aria-label={t('actions.print')} />
         <AppIconButton
           onClick={onSwitchDarkMode}
           icon={state.darkMode ? 'day' : 'night'}
