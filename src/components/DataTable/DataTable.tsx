@@ -19,6 +19,7 @@ type Props = {
   orderBy: number;
   isLoading?: boolean;
   extraTools?: ({ items }: { items: Array<string> }) => JSX.Element;
+  onReload?: () => void;
   setAsc: Dispatch<SetStateAction<boolean>>;
   setLimit: Dispatch<SetStateAction<number>>;
   setOrderby: Dispatch<SetStateAction<number>>;
@@ -37,6 +38,7 @@ const DataTable: React.FC<Props> = ({
   orderBy,
   isLoading,
   extraTools,
+  onReload,
   setAsc,
   setLimit,
   setOrderby,
@@ -196,7 +198,7 @@ const DataTable: React.FC<Props> = ({
                       aria-colindex={colIndex + 2} // +2 because of the checkbox column and row header
                       tabIndex={-1} // Not directly tabbable to avoid too many tab stops
                     >
-                      {column.name in row && <DataItem row={row} column={column.name} />}
+                      {column.name in row && <DataItem row={row} column={column.name} onReload={onReload} />}
                     </TableCell>
                   ))}
                 </DataRow>

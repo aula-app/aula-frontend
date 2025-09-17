@@ -1,4 +1,5 @@
 import AppIcon from '@/components/AppIcon';
+import { resetUserPassword } from '@/services/users';
 import { useAppStore } from '@/store';
 import { UserType } from '@/types/Scopes';
 import {
@@ -10,16 +11,16 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButtonProps,
 } from '@mui/material';
 import { FC, SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends ChipProps {
   target: UserType;
+  onSuccess?: () => void;
 }
 
-const ResetPasswordButton: FC<Props> = ({ target, ...restOfProps }) => {
+const ResetPasswordButton: FC<Props> = ({ target, onSuccess, ...restOfProps }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [confirm, setConfirm] = useState(false);
@@ -34,17 +35,30 @@ const ResetPasswordButton: FC<Props> = ({ target, ...restOfProps }) => {
     setConfirm(false);
   };
 
-  const handleReset = (event: SyntheticEvent) => {
+  const handleReset = async (event: SyntheticEvent) => {
     event.stopPropagation();
     if (!target.hash_id) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
       return;
     }
-    console.log('Reset password confirmed for user:', target.hash_id); // Placeholder for actual reset logic
-    dispatch({
-      type: 'ADD_POPUP',
-      message: { message: t('auth.forgotPassword.success', { email: target.email }), type: 'success' },
-    });
+
+    try {
+      // This request does not work yet – waiting for backend implementation
+      const response = await resetUserPassword(target.hash_id);
+
+      if (response.error) {
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+      } else {
+        dispatch({
+          type: 'ADD_POPUP',
+          message: { message: t('auth.forgotPassword.success'), type: 'success' },
+        });
+        onSuccess?.();
+      }
+    } catch {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+    }
+
     setConfirm(false);
   };
 

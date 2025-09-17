@@ -18,6 +18,7 @@ import ResetPasswordButton from '../Buttons/ResetPasswordButton';
 type Props = {
   row: SettingType;
   column: keyof PossibleFields;
+  onReload?: () => void;
 };
 
 /**
@@ -29,7 +30,7 @@ const messageConsentValues = ['message', 'announcement', 'alert'] as MessageCons
 /**
  * Component that renders a table cell's content with specialized formatting based on the column type.
  */
-const DataItem: React.FC<Props> = ({ row, column }) => {
+const DataItem: React.FC<Props> = ({ row, column, onReload }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const { formatDateTime } = useDateFormatters();
@@ -152,7 +153,7 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
         </Stack>
       ) : (
         <Stack direction="row" alignItems="center">
-          <ResetPasswordButton target={row as UserType} disabled={!row} />
+          <ResetPasswordButton target={row as UserType} disabled={!row} onSuccess={onReload} />
           <Stack className="printOnly">{t('auth.messages.email')}</Stack>
         </Stack>
       );
