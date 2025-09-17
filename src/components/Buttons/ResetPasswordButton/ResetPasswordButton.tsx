@@ -1,4 +1,5 @@
 import AppIcon from '@/components/AppIcon';
+import { useAppStore } from '@/store';
 import { UserType } from '@/types/Scopes';
 import {
   Button,
@@ -20,16 +21,33 @@ interface Props extends ChipProps {
 
 const ResetPasswordButton: FC<Props> = ({ target, ...restOfProps }) => {
   const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
   const [confirm, setConfirm] = useState(false);
 
   const openDialog = (event: SyntheticEvent) => {
     event.stopPropagation();
     setConfirm(true);
   };
+
   const closeDialog = (event: SyntheticEvent) => {
     event.stopPropagation();
     setConfirm(false);
   };
+
+  const handleReset = (event: SyntheticEvent) => {
+    event.stopPropagation();
+    if (!target.hash_id) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+      return;
+    }
+    console.log('Reset password confirmed for user:', target.hash_id); // Placeholder for actual reset logic
+    dispatch({
+      type: 'ADD_POPUP',
+      message: { message: t('auth.forgotPassword.success', { email: target.email }), type: 'success' },
+    });
+    setConfirm(false);
+  };
+
   return (
     <>
       <Chip
@@ -57,12 +75,7 @@ const ResetPasswordButton: FC<Props> = ({ target, ...restOfProps }) => {
           <Button onClick={closeDialog} color="secondary" autoFocus tabIndex={0} aria-label={t('actions.cancel')}>
             {t('actions.cancel')}
           </Button>
-          <Button
-            onClick={() => console.log('Reset password confirmed')} // Placeholder for actual reset function
-            variant="contained"
-            tabIndex={0}
-            aria-label={t('actions.confirm')}
-          >
+          <Button onClick={handleReset} variant="contained" tabIndex={0} aria-label={t('actions.confirm')}>
             {t('actions.confirm')}
           </Button>
         </DialogActions>

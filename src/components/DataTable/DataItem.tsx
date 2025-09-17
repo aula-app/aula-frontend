@@ -4,22 +4,13 @@ import { getGroup } from '@/services/groups';
 import { getRoom } from '@/services/rooms';
 import { getUser } from '@/services/users';
 import { useAppStore } from '@/store';
-import { PossibleFields, SettingType } from '@/types/Scopes';
+import { PossibleFields, SettingType, UserType } from '@/types/Scopes';
 import { phases, STATUS } from '@/utils';
-import {
-  Button,
-  Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MarkdownReader from '../MarkdownReader';
+import ResetPasswordButton from '../Buttons/ResetPasswordButton';
 
 /**
  * Props for the DataItem component
@@ -136,19 +127,11 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
 
     // Special fields
     case 'temp_pw':
-      const [confirm, setConfirm] = useState(false);
       const toggleHidden = (event: SyntheticEvent) => {
         event.stopPropagation();
         setHidden(!hidden);
       };
-      const openDialog = (event: SyntheticEvent) => {
-        event.stopPropagation();
-        setConfirm(true);
-      };
-      const closeDialog = (event: SyntheticEvent) => {
-        event.stopPropagation();
-        setConfirm(false);
-      };
+
       return value ? (
         <Stack direction="row" alignItems="center">
           <Chip
@@ -169,40 +152,7 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
         </Stack>
       ) : (
         <Stack direction="row" alignItems="center">
-          <Chip
-            className="noPrint"
-            sx={{ width: '100%', justifyContent: 'space-between', px: 1 }}
-            label={t('auth.forgotPassword.button')}
-            onClick={openDialog}
-            icon={<AppIcon icon="resetPassword" size="small" />}
-          />
-          <Dialog
-            open={confirm}
-            onClose={closeDialog}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            aria-modal="true"
-          >
-            <DialogTitle id="alert-dialog-title" color="error" sx={{ display: 'flex', alignItems: 'center' }}>
-              <AppIcon icon="alert" sx={{ mr: 1 }} aria-hidden="true" /> {t('auth.forgotPassword.button')}
-            </DialogTitle>
-            <DialogContent sx={{ overflowY: 'auto' }}>
-              <DialogContentText id="alert-dialog-description">{t('auth.forgotPassword.message')}</DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={closeDialog} color="secondary" autoFocus tabIndex={0} aria-label={t('actions.cancel')}>
-                {t('actions.cancel')}
-              </Button>
-              <Button
-                onClick={() => console.log('Reset password confirmed')} // Placeholder for actual reset function
-                variant="contained"
-                tabIndex={0}
-                aria-label={t('actions.confirm')}
-              >
-                {t('actions.confirm')}
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <ResetPasswordButton target={row as UserType} disabled={!row} />
           <Stack className="printOnly">{t('auth.messages.email')}</Stack>
         </Stack>
       );
