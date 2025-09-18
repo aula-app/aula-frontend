@@ -86,7 +86,7 @@ const permissions = {
     create: { role: 50 },
     delete: { role: 50 },
     status: { role: 50 },
-    viewAll: { role: 40 },
+    viewAll: { role: ADMIN },
   },
   reports: {
     status: { role: 50 },
