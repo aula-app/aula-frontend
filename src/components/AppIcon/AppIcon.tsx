@@ -84,7 +84,6 @@ import {
   HiOutlinePlus,
   HiOutlinePrinter,
   HiOutlineQuestionMarkCircle,
-  HiOutlineShare,
   HiOutlineSun,
   HiOutlineTrash,
   HiOutlineUser,
@@ -202,6 +201,7 @@ import {
   LiaPiggyBankSolid,
   LiaTshirtSolid,
 } from 'react-icons/lia';
+import { MdOutlineLockReset } from 'react-icons/md';
 import { LuSigma } from 'react-icons/lu';
 import { PiCookingPotLight, PiShareNetwork } from 'react-icons/pi';
 import CircleIcon from './circle.svg?react';
@@ -285,6 +285,7 @@ export const ICONS = {
   reports: HiOutlineFlag,
   request: HiOutlineExclamationTriangle,
   requests: HiOutlineExclamationTriangle,
+  resetPassword: MdOutlineLockReset,
   room: HiOutlineAcademicCap,
   rooms: HiOutlineAcademicCap,
   search: HiOutlineMagnifyingGlass,
