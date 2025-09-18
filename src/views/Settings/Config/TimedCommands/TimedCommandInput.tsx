@@ -97,7 +97,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
   return (
     <Stack gap={2}>
       <Stack direction="row" alignItems="center" flexWrap="wrap" gap={2}>
-        <Typography variant="h3">
+        <Typography variant="h6">
           {t('actions.add', { var: t('settings.columns.command').toLocaleLowerCase() })}:
         </Typography>
         <TextField
@@ -134,7 +134,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
             ))}
           </TextField>
         )}
-        {Commands[scope].actions && (
+        {Commands[scope]?.actions && (
           <TextField
             select
             label={t('settings.columns.command')}
@@ -144,10 +144,10 @@ const TimeCommandInput = ({ onReload }: Props) => {
             sx={{ minWidth: 180 }}
             size="small"
             required
-            disabled={Commands[scope].label !== 'system' && !target}
+            disabled={Commands[scope]?.label !== 'system' && !target}
           >
-            {target || Commands[scope].label === 'system' ? (
-              Commands[scope].actions.map((commandActions, i) => (
+            {target || Commands[scope]?.label === 'system' ? (
+              Commands[scope]?.actions?.map((commandActions, i) => (
                 <MenuItem value={i} key={commandActions.value}>
                   {t(commandActions.label)}
                 </MenuItem>
@@ -157,10 +157,10 @@ const TimeCommandInput = ({ onReload }: Props) => {
             )}
           </TextField>
         )}
-        {typeof action === 'number' && Commands[scope].actions[action].options && (
+        {typeof action === 'number' && Commands[scope]?.actions?.[action]?.options && (
           <TextField
             select
-            label={t(Commands[scope].actions[action].label)}
+            label={t(Commands[scope]?.actions?.[action]?.label || '')}
             value={value}
             onChange={changeValue}
             variant="outlined"
@@ -169,8 +169,8 @@ const TimeCommandInput = ({ onReload }: Props) => {
             required
             disabled={typeof action !== 'number'}
           >
-            {target || Commands[scope].label === 'system' ? (
-              Commands[scope].actions[action].options.map((actionOptions) => (
+            {target || Commands[scope]?.label === 'system' ? (
+              Commands[scope]?.actions?.[action]?.options?.map((actionOptions) => (
                 <MenuItem value={actionOptions.value} key={actionOptions.value}>
                   {t(actionOptions.label)}
                 </MenuItem>
