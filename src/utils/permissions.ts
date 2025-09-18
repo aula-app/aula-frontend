@@ -83,18 +83,18 @@ const permissions = {
     status: { role: 40 },
   },
   messages: {
-    viewAll: { role: 40 },
     create: { role: 50 },
     delete: { role: 50 },
     status: { role: 50 },
+    viewAll: { role: ADMIN },
   },
   reports: {
-    viewAll: { role: [40, 41, 44, 45, 50] },
     status: { role: 50 },
+    viewAll: { role: [40, 41, 44, 45, 50] },
   },
   requests: {
-    viewAll: { role: ADMIN },
     status: { role: 50 },
+    viewAll: { role: ADMIN },
   },
   rooms: {
     addUser: { role: 50 },
