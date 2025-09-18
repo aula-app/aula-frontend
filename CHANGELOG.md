@@ -2,6 +2,8 @@
 
 - **Bug fixes:**
   - Improve instance code readability
+  - Fix multiple room importing CSV
+  - Fix sidebar misbehavior
 
 ## 1.4.3
 
