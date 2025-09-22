@@ -17,10 +17,11 @@ import { useTranslation } from 'react-i18next';
 
 interface Props extends ChipProps {
   target: UserType;
+  hasEmail?: boolean;
   onSuccess?: () => void;
 }
 
-const ResetPasswordButton: FC<Props> = ({ target, onSuccess, ...restOfProps }) => {
+const ResetPasswordButton: FC<Props> = ({ target, hasEmail = false, onSuccess, ...restOfProps }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [confirm, setConfirm] = useState(false);
@@ -52,7 +53,9 @@ const ResetPasswordButton: FC<Props> = ({ target, onSuccess, ...restOfProps }) =
         dispatch({
           type: 'ADD_POPUP',
           message: {
-            message: t('auth.forgotPassword.success', { var: t('auth.forgotPassword.successfulEmail') }),
+            message: t('auth.forgotPassword.success', {
+              var: hasEmail ? t('auth.forgotPassword.successfulEmail') : t('auth.forgotPassword.successfulNoEmail'),
+            }),
             type: 'success',
           },
         });
@@ -87,7 +90,9 @@ const ResetPasswordButton: FC<Props> = ({ target, onSuccess, ...restOfProps }) =
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
           <DialogContentText id="alert-dialog-description">
-            {t('auth.forgotPassword.message', { var: t('auth.forgotPassword.messageSelf') })}
+            {t('auth.forgotPassword.message', {
+              var: hasEmail ? t('auth.forgotPassword.messageEmail') : t('auth.forgotPassword.messageNoEmail'),
+            })}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

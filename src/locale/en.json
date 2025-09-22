@@ -57,7 +57,6 @@
       "message": "Are you sure you want to request a new password for this user? {{var}}",
       "messageEmail": "We will log them out, erase their old password and send them an email with instructions to create a new password.",
       "messageNoEmail": "We will log them out and erase their old password. A new temporary password for them.",
-      "messageSelf": "Your old password will be erased and you will receive an email with instructions to create a new password.",
       "recover": "Recover password",
       "recovery": "Password Recovery",
       "success": "The password was reset. {{var}}",

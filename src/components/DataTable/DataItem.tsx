@@ -132,6 +132,7 @@ const DataItem: React.FC<Props> = ({ row, column, onReload }) => {
         event.stopPropagation();
         setHidden(!hidden);
       };
+      const user = 'username' in row ? (row as UserType) : null;
 
       return value ? (
         <Stack direction="row" alignItems="center">
@@ -151,12 +152,12 @@ const DataItem: React.FC<Props> = ({ row, column, onReload }) => {
           />
           <Stack className="printOnly">{value}</Stack>
         </Stack>
-      ) : (
+      ) : user ? (
         <Stack direction="row" alignItems="center">
-          <ResetPasswordButton target={row as UserType} disabled={!row} onSuccess={onReload} />
+          <ResetPasswordButton target={user} hasEmail={!!user.email} disabled={!user} onSuccess={onReload} />
           <Stack className="printOnly">{t('auth.messages.email')}</Stack>
         </Stack>
-      );
+      ) : null;
 
     // Default case for all other fields
     default:

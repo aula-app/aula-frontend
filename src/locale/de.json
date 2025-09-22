@@ -57,7 +57,6 @@
       "message": "Möchtest du wirklich ein neues Passwort für diesen Benutzer anfordern? {{var}}",
       "messageEmail": "Wir werden sie abmelden, ihr altes Passwort löschen und ihnen eine E-Mail mit Anweisungen zum Erstellen eines neuen Passworts senden.",
       "messageNoEmail": "Wir werden sie abmelden und ihr altes Passwort löschen. Ein neues temporäres Passwort für sie.",
-      "messageSelf": "Ihr altes Passwort wird gelöscht und Sie erhalten eine E-Mail mit Anweisungen zum Erstellen eines neuen Passworts.",
       "recover": "Passwort wiederherstellen",
       "recovery": "Passwort-Wiederherstellung",
       "success": "Das Passwort wurde zurückgesetzt. {{var}}",
