@@ -51,7 +51,10 @@ const ResetPasswordButton: FC<Props> = ({ target, onSuccess, ...restOfProps }) =
       } else {
         dispatch({
           type: 'ADD_POPUP',
-          message: { message: t('auth.forgotPassword.success'), type: 'success' },
+          message: {
+            message: t('auth.forgotPassword.success', { var: t('auth.forgotPassword.successfulEmail') }),
+            type: 'success',
+          },
         });
         onSuccess?.();
       }
@@ -83,7 +86,9 @@ const ResetPasswordButton: FC<Props> = ({ target, onSuccess, ...restOfProps }) =
           <AppIcon icon="alert" sx={{ mr: 1 }} aria-hidden="true" /> {t('auth.forgotPassword.button')}
         </DialogTitle>
         <DialogContent sx={{ overflowY: 'auto' }}>
-          <DialogContentText id="alert-dialog-description">{t('auth.forgotPassword.message')}</DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            {t('auth.forgotPassword.message', { var: t('auth.forgotPassword.messageSelf') })}
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog} color="secondary" autoFocus tabIndex={0} aria-label={t('actions.cancel')}>

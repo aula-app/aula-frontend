@@ -54,10 +54,15 @@
     "forgotPassword": {
       "button": "Passwort zurücksetzen",
       "link": "Passwort vergessen?",
-      "message": "Möchtest du wirklich ein neues Passwort für diesen Benutzer anfordern?",
+      "message": "Möchtest du wirklich ein neues Passwort für diesen Benutzer anfordern? {{var}}",
+      "messageEmail": "Wir werden sie abmelden, ihr altes Passwort löschen und ihnen eine E-Mail mit Anweisungen zum Erstellen eines neuen Passworts senden.",
+      "messageNoEmail": "Wir werden sie abmelden und ihr altes Passwort löschen. Ein neues temporäres Passwort für sie.",
+      "messageSelf": "Ihr altes Passwort wird gelöscht und Sie erhalten eine E-Mail mit Anweisungen zum Erstellen eines neuen Passworts.",
       "recover": "Passwort wiederherstellen",
       "recovery": "Passwort-Wiederherstellung",
-      "success": "Das Passwort für das Konto wurde zurückgesetzt. Registrierte Benutzer erhalten einen Link zum Zurücksetzen in ihrer E-Mail."
+      "success": "Das Passwort wurde zurückgesetzt. {{var}}",
+      "successfulEmail": "Eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts wurde an Ihre E-Mail-Adresse gesendet",
+      "successfulNoEmail": "Ein neues temporäres Passwort wurde für diesen Benutzer generiert."
     },
     "login": {
       "button": "Login",
