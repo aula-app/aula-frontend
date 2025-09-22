@@ -2,6 +2,9 @@
 
 - **Bug fixes:**
   - Improve instance code readability
+  - Fix multiple room importing CSV
+  - Fix sidebar misbehavior
+  - Remove unavailable timed command options
 
 ## 1.4.3
 
