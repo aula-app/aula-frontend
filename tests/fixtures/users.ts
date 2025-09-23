@@ -1,7 +1,7 @@
-import fs from 'fs';
 import * as SettingsTypes from '../../src/types/SettingsTypes.ts';
+import * as shared from '../shared/shared.ts';
 
-/*
+/* User roles
  * 10 => "guest",
  * 20 => "user",
  * 30 => "moderator",
@@ -13,6 +13,7 @@ import * as SettingsTypes from '../../src/types/SettingsTypes.ts';
  * 50 => "admin",
  * 60 => "tech_admin"
  */
+
 export type UserData = {
   username: string;
   password: string;
@@ -23,15 +24,10 @@ export type UserData = {
 };
 
 export let alice: UserData;
-
 export let bob: UserData;
-
 export let mallory: UserData;
-
 export let burt: UserData;
-
 export let rainer: UserData;
-
 export const admin: UserData = {
   username: 'admin',
   password: 'aula',
@@ -42,7 +38,7 @@ export const admin: UserData = {
 };
 
 export const init = () => {
-  const runId = fs.readFileSync('tests/temp/run-id.txt', 'utf-8');
+  const runId = shared.getRunId();
   console.log('Run ID for fixtures:', runId);
 
   alice = {
@@ -90,3 +86,5 @@ export const init = () => {
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };
 };
+
+export let temporaryPasswords: Record<string, string> = {};
