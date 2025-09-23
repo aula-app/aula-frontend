@@ -19,12 +19,20 @@ export class BaseTest {
   static setupHooks() {
     test.beforeAll(async () => {
       fixtures.init();
-      // Try to recall existing browser contexts, fall back to init if needed
+      // Always initialize fresh browsers for setup tests,
+      // try to recall auth states for other tests
       try {
-        await browsers.recall();
+        await browsers.recallFromAuthStates();
+        console.log('✅ Successfully loaded authentication states');
       } catch (error) {
-        console.log('Browser recall failed, initializing fresh browsers:', error);
-        await browsers.init();
+        console.log('Auth states not available, trying temp states...');
+        try {
+          await browsers.recall();
+          console.log('✅ Successfully loaded temp states');
+        } catch (tempError) {
+          console.log('No existing states found, initializing fresh browsers...');
+          await browsers.init();
+        }
       }
     });
 

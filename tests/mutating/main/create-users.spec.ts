@@ -4,7 +4,19 @@ import * as userData from '../../fixtures/users';
 import * as browsers from '../../shared/interactions/browsers';
 import * as users from '../../shared/interactions/users';
 
-describeWithSetup('Authentication and User Management', () => {
+// Configure this test to run in serial mode to ensure proper order
+test.describe.configure({ mode: 'serial' });
+
+test.describe('Authentication and User Management', () => {
+  // Override the base setup for this specific test since we need fresh browsers
+  test.beforeAll(async () => {
+    userData.init();
+    await browsers.init();
+  });
+
+  test.afterEach(async () => {
+    await browsers.pickle();
+  });
   test('Admin can create multiple users with different permission levels', async () => {
     // Admin login
     await users.login(browsers.admin, userData.admin);
@@ -71,5 +83,33 @@ describeWithSetup('Authentication and User Management', () => {
       users.login(browsers.burt, userData.burt),
       users.login(browsers.rainer, userData.rainer),
     ]);
+  });
+
+  test('Save authentication states for other tests', async () => {
+    // Save authentication states so other tests can use them
+    console.log('Saving authentication states...');
+
+    await Promise.all([
+      browsers.alice.context().storageState({
+        path: 'tests/auth-states/alice.json',
+      }),
+      browsers.bob.context().storageState({
+        path: 'tests/auth-states/bob.json',
+      }),
+      browsers.mallory.context().storageState({
+        path: 'tests/auth-states/mallory.json',
+      }),
+      browsers.burt.context().storageState({
+        path: 'tests/auth-states/burt.json',
+      }),
+      browsers.rainer.context().storageState({
+        path: 'tests/auth-states/rainer.json',
+      }),
+      browsers.admin.context().storageState({
+        path: 'tests/auth-states/admin.json',
+      }),
+    ]);
+
+    console.log('✅ Authentication states saved successfully');
   });
 });

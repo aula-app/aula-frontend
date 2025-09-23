@@ -66,6 +66,14 @@ export const pickle = async () => {
   await mallory.context().storageState({ path: 'tests/temp/mallory-context.json' });
   await burt.context().storageState({ path: 'tests/temp/burt-context.json' });
   await rainer.context().storageState({ path: 'tests/temp/rainer-context.json' });
+
+  // Also save to auth-states for other tests to use
+  await admin.context().storageState({ path: 'tests/auth-states/admin.json' });
+  await alice.context().storageState({ path: 'tests/auth-states/alice.json' });
+  await bob.context().storageState({ path: 'tests/auth-states/bob.json' });
+  await mallory.context().storageState({ path: 'tests/auth-states/mallory.json' });
+  await burt.context().storageState({ path: 'tests/auth-states/burt.json' });
+  await rainer.context().storageState({ path: 'tests/auth-states/rainer.json' });
 };
 
 // This function exists to recall the logged in browser states
@@ -97,6 +105,38 @@ export const recall = async () => {
       burt = await burt_browser.newPage();
     }),
     browser.newContext({ storageState: 'tests/temp/rainer-context.json' }).then(async (b) => {
+      rainer_browser = b;
+      rainer = await rainer_browser.newPage();
+    }),
+  ]);
+};
+
+// Recall from auth-states directory (for tests that depend on user creation)
+export const recallFromAuthStates = async () => {
+  const browser = await chromium.launch();
+
+  await Promise.all([
+    browser.newContext({ storageState: 'tests/auth-states/admin.json' }).then(async (b) => {
+      admins_browser = b;
+      admin = await admins_browser.newPage();
+    }),
+    browser.newContext({ storageState: 'tests/auth-states/alice.json' }).then(async (b) => {
+      alices_browser = b;
+      alice = await alices_browser.newPage();
+    }),
+    browser.newContext({ storageState: 'tests/auth-states/bob.json' }).then(async (b) => {
+      bobs_browser = b;
+      bob = await bobs_browser.newPage();
+    }),
+    browser.newContext({ storageState: 'tests/auth-states/mallory.json' }).then(async (b) => {
+      mallorys_browser = b;
+      mallory = await mallorys_browser.newPage();
+    }),
+    browser.newContext({ storageState: 'tests/auth-states/burt.json' }).then(async (b) => {
+      burt_browser = b;
+      burt = await burt_browser.newPage();
+    }),
+    browser.newContext({ storageState: 'tests/auth-states/rainer.json' }).then(async (b) => {
       rainer_browser = b;
       rainer = await rainer_browser.newPage();
     }),

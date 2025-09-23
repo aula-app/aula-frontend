@@ -23,10 +23,10 @@ export default defineConfig({
 
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [['html', { outputFolder: 'tests/reports/playwright-report' }]],
-  
+
   /* Configure output directories */
   outputDir: 'tests/results',
-  
+
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -42,10 +42,20 @@ export default defineConfig({
   },
   /* Configure projects for major browsers */
   projects: [
+    // Setup project - runs user creation and auth setup first
+    {
+      name: 'setup',
+      testMatch: '**/create-users.spec.ts',
+      use: { ...devices['Desktop Chrome'] },
+      workers: 1,
+    },
+    // Main tests - depend on setup being completed
     {
       name: 'main',
       testDir: './tests/mutating/main',
+      testIgnore: '**/create-users.spec.ts', // Exclude from main since it's in setup
       use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
       workers: 1, // note - someday these can be run in parallel after https://github.com/aula-app/aula-frontend/issues/604
     },
     // these tests must run at the end because they interfere
