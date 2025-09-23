@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test';
-import { describeWithSetup } from '../../shared/base-test';
+import { expect, test, chromium } from '@playwright/test';
 import * as userData from '../../fixtures/users';
 import * as browsers from '../../shared/interactions/browsers';
 import * as users from '../../shared/interactions/users';
@@ -43,6 +42,8 @@ test.describe('Authentication and User Management', () => {
     expect(userData.temporaryPasswords.mallory).toBeTruthy();
     expect(userData.temporaryPasswords.burt).toBeTruthy();
     expect(userData.temporaryPasswords.rainer).toBeTruthy();
+
+    console.log('✅ Users created successfully');
   });
 
   test('User cannot login with another users temporary password', async () => {
@@ -64,7 +65,7 @@ test.describe('Authentication and User Management', () => {
     expect(userData.temporaryPasswords.burt).toBeTruthy();
     expect(userData.temporaryPasswords.rainer).toBeTruthy();
 
-    // All first login flows should work with correct passwords
+    // All first login flows should work with correct passwords using existing browser contexts
     await Promise.all([
       users.firstLoginFlow(browsers.alice, userData.alice, userData.temporaryPasswords.alice),
       users.firstLoginFlow(browsers.bob, userData.bob, userData.temporaryPasswords.bob),
@@ -75,6 +76,15 @@ test.describe('Authentication and User Management', () => {
   });
 
   test('Users can login with their new passwords after first login flow', async () => {
+    // First logout all users to ensure clean state
+    await Promise.all([
+      users.logout(browsers.alice),
+      users.logout(browsers.bob),
+      users.logout(browsers.mallory),
+      users.logout(browsers.burt),
+      users.logout(browsers.rainer),
+    ]);
+
     // Test that users can now login with their permanent passwords
     await Promise.all([
       users.login(browsers.alice, userData.alice),

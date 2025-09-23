@@ -91,7 +91,13 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
           title={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
           aria-label={state.darkMode ? t('ui.lightMode') : t('ui.darkMode')}
         />
-        <AppIconButton onClick={onLogout} icon="logout" title={t('auth.logout')} aria-label={t('auth.logout')} />
+        <AppIconButton
+          onClick={onLogout}
+          icon="logout"
+          title={t('auth.logout')}
+          aria-label={t('auth.logout')}
+          data-testId="logout-button"
+        />
       </Stack>
     </Drawer>
   );

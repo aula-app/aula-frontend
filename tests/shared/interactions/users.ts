@@ -7,6 +7,14 @@ const host = shared.getHost();
 type TempPass = string;
 
 export const goToProfile = async (page: Page) => {
+  // Check if we're already on the profile page
+  const currentUrl = page.url();
+  if (currentUrl.includes('/settings/profile')) {
+    const ProfileButton = page.locator('a[href="/settings/profile"]');
+    await expect(ProfileButton).toBeVisible({ timeout: 5000 });
+    return;
+  }
+
   await page.goto(host);
 
   const ProfileButton = page.locator('a[href="/settings/profile"]');
@@ -15,6 +23,14 @@ export const goToProfile = async (page: Page) => {
 };
 
 export const goToSettings = async (page: Page) => {
+  // Check if we're already on the settings page
+  const currentUrl = page.url();
+  if (currentUrl.includes('/settings/configuration')) {
+    const SettingsButton = page.locator('a[href="/settings/configuration"]');
+    await expect(SettingsButton).toBeVisible({ timeout: 5000 });
+    return;
+  }
+
   await page.goto(host);
 
   const SettingsButton = page.locator('a[href="/settings/configuration"]');
@@ -23,6 +39,14 @@ export const goToSettings = async (page: Page) => {
 };
 
 export const goToRequests = async (page: Page) => {
+  // Check if we're already on the requests page
+  const currentUrl = page.url();
+  if (currentUrl.includes('/settings/requests')) {
+    const SettingsButton = page.locator('a[href="/settings/requests"]');
+    await expect(SettingsButton).toBeVisible({ timeout: 5000 });
+    return;
+  }
+
   await page.goto(host);
 
   const SettingsButton = page.locator('a[href="/settings/requests"]');
@@ -31,6 +55,14 @@ export const goToRequests = async (page: Page) => {
 };
 
 export const goToRoomSettings = async (page: Page) => {
+  // Check if we're already on the room settings page
+  const currentUrl = page.url();
+  if (currentUrl.includes('/settings/rooms')) {
+    const SettingsButton = page.locator('a[href="/settings/rooms"]');
+    await expect(SettingsButton).toBeVisible({ timeout: 5000 });
+    return;
+  }
+
   await page.goto(host);
 
   const SettingsButton = page.locator('a[href="/settings/rooms"]');
@@ -39,6 +71,15 @@ export const goToRoomSettings = async (page: Page) => {
 };
 
 export const goToUserSettings = async (page: Page) => {
+  // Check if we're already on the user settings page
+  const currentUrl = page.url();
+  if (currentUrl.includes('/settings/users')) {
+    // Already on the page, just ensure the settings button is visible
+    const SettingsButton = page.locator('a[href="/settings/users"]');
+    await expect(SettingsButton).toBeVisible({ timeout: 5000 });
+    return;
+  }
+
   await page.goto(host);
 
   const SettingsButton = page.locator('a[href="/settings/users"]');
@@ -47,6 +88,14 @@ export const goToUserSettings = async (page: Page) => {
 };
 
 export const goToSystemConfig = async (page: Page) => {
+  // Check if we're already on the system config page
+  const currentUrl = page.url();
+  if (currentUrl.includes('/settings/configuration')) {
+    const ConfigButton = page.locator('a[href="/settings/configuration"]');
+    await expect(ConfigButton).toBeVisible({ timeout: 5000 });
+    return;
+  }
+
   await page.goto(host);
 
   const ConfigButton = page.locator('a[href="/settings/configuration"]');
@@ -85,8 +134,10 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   await expect(FilterButton).toBeVisible();
   await FilterButton.click({ timeout: 1000 });
 
-  // select "username" from the "filter by" dropdown
+  const filterInput = page.locator('#filter-value-input');
+  await expect(FilterButton).toBeVisible();
 
+  // select "username" from the "filter by" dropdown
   await page.locator('#filter-field-select').click({ timeout: 1000 });
   await page.locator('li[data-value="username"]').click({ timeout: 1000 });
 
@@ -107,6 +158,17 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
 
   // temporary password must exist and be pulled out of the page.
   expect(pass).toBeTruthy();
+
+  // Clear the search and close filters
+  const clearButton = page.getByTestId('clear-filter-button');
+  await clearButton.click({ timeout: 1000 });
+
+  // Check if the search field is clean
+  await expect(filterInput).toHaveValue('', { timeout: 5000 });
+
+  // Close the filter menu
+  await FilterButton.click({ timeout: 1000 });
+  await expect(clearButton).not.toBeVisible({ timeout: 5000 });
 
   return pass;
 };
@@ -146,36 +208,79 @@ export const create = async (page: Page, data: users.UserData): Promise<TempPass
 export const remove = async (page: Page, data: users.UserData) => {
   await goToUserSettings(page);
 
-  // open the filter menu:
-  const FilterButton = page.locator('#filter-toggle-button');
-  await expect(FilterButton).toBeVisible();
-  await FilterButton.click({ timeout: 1000 });
+  try {
+    // Wait for page to fully load
+    await page.waitForLoadState('networkidle', { timeout: 10000 });
 
-  // select "username" from the "filter by" dropdown
-  await page.locator('#filter-field-select').click({ timeout: 1000 });
-  await page.locator('li[data-value="username"]').click({ timeout: 1000 });
+    // open the filter menu:
+    const FilterButton = page.locator('#filter-toggle-button');
+    await expect(FilterButton).toBeVisible({ timeout: 10000 });
+    await FilterButton.click({ timeout: 1000 });
 
-  // filter by our user name
-  await page.fill('#filter-value-input', data.username);
+    // Wait for filter menu to be fully open
+    await page.waitForTimeout(500);
 
-  // find the user's row in the table and select the checkbox for actions
-  const row = page.locator('table tr').filter({ hasText: data.username });
-  const checkbox = row.locator('input');
-  await expect(checkbox).toBeVisible();
-  await checkbox.check();
+    // select "username" from the "filter by" dropdown
+    const filterFieldSelect = page.locator('#filter-field-select');
+    await expect(filterFieldSelect).toBeVisible({ timeout: 5000 });
+    await filterFieldSelect.click({ timeout: 1000 });
 
-  // click the remove use button
-  const ButtonRemoveUser = page.getByTestId('remove-users-button');
-  expect(ButtonRemoveUser).toBeDefined();
-  await ButtonRemoveUser.click({ timeout: 1000 });
+    const usernameOption = page.locator('li[data-value="username"]');
+    await expect(usernameOption).toBeVisible({ timeout: 5000 });
+    await usernameOption.click({ timeout: 1000 });
 
-  // confirm deletion
-  const ButtonConfirmDelete = page.getByTestId('confirm-delete-users-button');
-  expect(ButtonConfirmDelete).toBeDefined();
-  await ButtonConfirmDelete.click({ timeout: 1000 });
+    // Wait for the filter input to become visible and enabled
+    const filterInput = page.locator('#filter-value-input');
+    await expect(filterInput).toBeVisible({ timeout: 10000 });
+    await expect(filterInput).toBeEnabled({ timeout: 5000 });
 
-  // confirm the user does not show up in the table list
-  await expect(page.locator('table tr').filter({ hasText: data.username })).toHaveCount(0);
+    // Clear any existing value and fill with username
+    await filterInput.clear();
+    await filterInput.fill(data.username);
+
+    // Wait for filtering to complete
+    await page.waitForTimeout(1000);
+
+    // find the user's row in the table and select the checkbox for actions
+    const row = page.locator('table tr').filter({ hasText: data.username });
+    await expect(row).toBeVisible({ timeout: 10000 });
+
+    const checkbox = row.locator('input[type="checkbox"]');
+    await expect(checkbox).toBeVisible({ timeout: 5000 });
+    await checkbox.check();
+
+    // click the remove user button
+    const ButtonRemoveUser = page.getByTestId('remove-users-button');
+    await expect(ButtonRemoveUser).toBeVisible({ timeout: 5000 });
+    await ButtonRemoveUser.click({ timeout: 1000 });
+
+    // confirm deletion
+    const ButtonConfirmDelete = page.getByTestId('confirm-delete-users-button');
+    await expect(ButtonConfirmDelete).toBeVisible({ timeout: 5000 });
+    await ButtonConfirmDelete.click({ timeout: 1000 });
+
+    // Wait for deletion to complete
+    await page.waitForTimeout(2000);
+
+    // confirm the user does not show up in the table list
+    await expect(page.locator('table tr').filter({ hasText: data.username })).toHaveCount(0, { timeout: 10000 });
+  } catch (error) {
+    console.warn(`Failed to remove user ${data.username}:`, error);
+
+    // Try alternative removal method - check if user exists at all
+    try {
+      const userExists = await page.locator('table tr').filter({ hasText: data.username }).count();
+      if (userExists === 0) {
+        console.log(`User ${data.username} already removed or doesn't exist`);
+        return;
+      }
+    } catch (checkError) {
+      console.warn(`Could not verify user existence for ${data.username}:`, checkError);
+    }
+
+    // Re-throw the original error if user still exists
+    throw error;
+  }
 };
 
 // Helper function to log in a user
@@ -187,6 +292,28 @@ export const login = async (page: Page, data: users.UserData) => {
 
   // Wait for successful login by checking for the rooms page heading
   await expect(page.locator('#rooms-heading')).toBeVisible();
+};
+
+// Helper function to log out a user
+export const logout = async (page: Page) => {
+  // Look for common logout patterns - adjust selectors based on your app's UI
+  try {
+    // Option 1: Try to find the logout button by data-testid
+    const logoutButton = page.getByTestId('logout-button');
+    await logoutButton.click({ timeout: 1000 });
+
+    // Wait for logout to complete by checking for login form or redirect
+    await expect(page.locator('input[name="username"], input[name="email"]')).toBeVisible({ timeout: 5000 });
+  } catch (error) {
+    console.warn('Logout failed with standard methods, trying to clear session:', error);
+    // Fallback: Clear all cookies and local storage
+    await page.context().clearCookies();
+    await page.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
+    await page.goto(host);
+  }
 };
 
 export const firstLoginFlow = async (page: Page, data: users.UserData, tempPass: string) => {

@@ -134,6 +134,7 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
                   disabled={key === ''}
                   ref={clearButtonRef}
                   aria-label={t('ui.accessibility.clearFilter')}
+                  data-testid="clear-filter-button"
                 />
               </Tooltip>
             )
