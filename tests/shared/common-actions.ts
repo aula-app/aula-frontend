@@ -14,19 +14,18 @@ import * as shared from './shared';
  */
 export class BrowserHelpers {
   /**
-   * Opens a new page for a specific user role
+   * Opens a new page for a specific user role using stored authentication states
    */
   static async openPageForUser(userType: 'admin' | 'alice' | 'bob' | 'mallory' | 'rainer' | 'burt'): Promise<Page> {
-    const browserMap = {
-      admin: browsers.admins_browser,
-      alice: browsers.alices_browser,
-      bob: browsers.bobs_browser,
-      mallory: browsers.mallorys_browser,
-      rainer: browsers.rainer_browser,
-      burt: browsers.burt_browser,
-    };
+    // Import dynamically to avoid circular dependencies
+    const { AuthHelpers } = await import('./auth-helpers');
+    const { getHost } = await import('./shared');
+    const { page } = await AuthHelpers.createAuthenticatedPage(userType);
 
-    return await browsers.newPage(browserMap[userType]);
+    // Navigate to the homepage to ensure the user is properly logged in
+    await page.goto(getHost());
+
+    return page;
   }
 
   /**
@@ -34,7 +33,10 @@ export class BrowserHelpers {
    */
   static async closePage(page: Page) {
     try {
+      // Also close the context if this is an auth-state created page
+      const context = page.context();
       await page.close();
+      await context.close();
     } catch (error) {
       console.warn('Failed to close page:', error);
     }
