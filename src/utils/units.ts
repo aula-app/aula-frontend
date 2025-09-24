@@ -7,8 +7,8 @@ export const DEFAULT_FORMAT_DATE_ONLY = 'YYYY-MM-DD';
 // Locale-specific date formats
 export const DATE_FORMATS = {
   en: {
-    dateTime: 'MM/DD/YYYY HH:mm:ss', // 01  2025 14:30:00
-    dateOnly: 'MM/DD/YYYY', // 01 June 2025
+    dateTime: 'MM/DD/YYYY HH:mm:ss', // 06/01/2025 14:30:00
+    dateOnly: 'MM/DD/YYYY', // 06/01/2025
   },
   de: {
     dateTime: 'DD.MM.YYYY HH:mm:ss', // German format
