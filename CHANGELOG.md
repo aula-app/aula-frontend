@@ -1,3 +1,8 @@
+## 1.4.5
+
+- **Bug fixes:**
+  - Disable delegation system
+
 ## 1.4.4
 
 - **Bug fixes:**
