@@ -151,7 +151,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       return false;
     }
     if (!response.data) return false;
-    
+
     try {
       await setIdeaBox(response.data.hash_id);
       await setIdeaCategory(response.data.hash_id);
@@ -184,7 +184,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       return false;
     }
     if (!response.data) return false;
-    
+
     try {
       await setIdeaBox(defaultValues?.hash_id);
       await setIdeaCategory(defaultValues?.hash_id);

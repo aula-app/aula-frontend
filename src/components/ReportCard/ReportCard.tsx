@@ -181,18 +181,29 @@ ${message}`,
     });
 
   return (
-    <Card 
-      variant="outlined" 
-      sx={{ borderRadius: 5, overflow: 'visible' }} 
-      data-testid={metadata?.type === 'deleteAccount' ? `user-deletion-request-${metadata.username}` : 
-                   metadata?.type === 'requestData' ? `data-export-request-${metadata.username}` :
-                   metadata?.responseTo === 'requestData' ? `data-export-request-details-${metadata.username}` :
-                   `request-${report.hash_id}`}
+    <Card
+      variant="outlined"
+      sx={{ borderRadius: 5, overflow: 'visible' }}
+      data-testid={
+        metadata?.type === 'deleteAccount'
+          ? `user-deletion-request-${metadata.username}`
+          : metadata?.type === 'requestData'
+            ? `data-export-request-${metadata.username}`
+            : metadata?.responseTo === 'requestData'
+              ? `data-export-request-details-${metadata.username}`
+              : `request-${report.hash_id}`
+      }
       {...restOfProps}
     >
       <CardHeader
         title={report.headline}
-        action={<AppIconButton icon={report.status === 1 ? 'archive' : 'unarchive'} title={t(`tooltips.${report.status === 1 ? 'archive' : 'unarchive'}`)} onClick={toggleArchive} />}
+        action={
+          <AppIconButton
+            icon={report.status === 1 ? 'archive' : 'unarchive'}
+            title={t(`tooltips.${report.status === 1 ? 'archive' : 'unarchive'}`)}
+            onClick={toggleArchive}
+          />
+        }
       />
       <Divider />
       <CardContent sx={{ bgcolor: blueGrey[50] }}>

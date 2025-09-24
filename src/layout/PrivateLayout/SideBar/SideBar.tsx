@@ -96,7 +96,7 @@ const SideBar = ({ anchor, open, variant, onClose, ...restOfProps }: DrawerSideB
           icon="logout"
           title={t('auth.logout')}
           aria-label={t('auth.logout')}
-          data-testId="logout-button"
+          data-testid="logout-button"
         />
       </Stack>
     </Drawer>

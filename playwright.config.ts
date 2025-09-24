@@ -42,20 +42,11 @@ export default defineConfig({
   },
   /* Configure projects for major browsers */
   projects: [
-    // Setup project - runs user creation and auth setup first
-    {
-      name: 'setup',
-      testMatch: '**/create-users.spec.ts',
-      use: { ...devices['Desktop Chrome'] },
-      workers: 1,
-    },
-    // Main tests - depend on setup being completed
+    // Main tests - will conditionally run setup if needed
     {
       name: 'main',
       testDir: './tests/mutating/main',
-      testIgnore: '**/create-users.spec.ts', // Exclude from main since it's in setup
       use: { ...devices['Desktop Chrome'] },
-      dependencies: ['setup'],
       workers: 1, // note - someday these can be run in parallel after https://github.com/aula-app/aula-frontend/issues/604
     },
     // these tests must run at the end because they interfere

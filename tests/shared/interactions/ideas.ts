@@ -386,7 +386,8 @@ export const addCategory = async (
 
   // Verify the category was added using more specific selectors
   await sleep(1);
-  const IdeaWithCategory = page.getByTestId(`category-${categoryName}`)
+  const IdeaWithCategory = page
+    .getByTestId(`category-${categoryName}`)
     .or(page.locator('[data-testid*="category"]').filter({ hasText: categoryName }))
     .or(page.locator('.MuiChip-root').filter({ hasText: categoryName }))
     .or(page.locator('[class*="category"]').filter({ hasText: categoryName }))
