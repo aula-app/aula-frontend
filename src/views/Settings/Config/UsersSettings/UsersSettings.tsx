@@ -103,7 +103,6 @@ const DataSettings = ({ onReload }: Props) => {
   const uploadCSV = async (csv: string) => {
     setLoading(true);
     const send_emails_at = inviteDate === null || inviteDate <= dayjs() ? undefined : inviteDate.toISOString();
-    console.log(csv, rooms.add, role, `send_emails_at: ${send_emails_at}`);
     const response = await addAllCSV(csv, rooms.add, role, send_emails_at);
     setLoading(false);
     if (!response.data) {
