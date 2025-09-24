@@ -135,6 +135,7 @@ const UsersView: React.FC = () => {
           setDelete={deleteUsers}
           extraTools={extraTools}
           isLoading={isLoading}
+          onReload={fetchUsers}
         />
       </Stack>
       <PaginationBar pages={Math.ceil(totalUsers / limit)} setPage={(page) => setOffset(page * limit)} />
