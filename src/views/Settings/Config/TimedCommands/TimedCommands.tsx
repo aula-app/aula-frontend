@@ -50,8 +50,14 @@ const TimedCommands = () => {
   }
 
   const setTable = (response: CommandResponse) => {
-    setCommands(response.data);
-    setCount(Math.floor(response.count || 0 / LIST_LIMIT));
+    const filteredCommands = response.data?.filter((command) => {
+      const scope = command.cmd_id > 9 ? Math.floor(command.cmd_id / 10) : 0;
+      const actionValue = Number(String(command.cmd_id).slice(-1));
+      // Filter registered commands to allow only Commands[0].actions[0] (system scope, status action) while they are turned off
+      return scope === 0 && actionValue === 0;
+    });
+    setCommands(filteredCommands);
+    setCount(Math.floor((filteredCommands?.length || 0) / LIST_LIMIT));
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -73,6 +79,7 @@ const TimedCommands = () => {
               <TableBody>
                 {commands.map((command, i) => {
                   const scope = command.cmd_id > 9 ? Math.floor(command.cmd_id / 10) : 0;
+                  if (!Commands[scope] || Commands[scope].actions.length === 0) return null;
                   const action = Commands[scope].actions.find(
                     (action) => action.value === Number(String(command.cmd_id).slice(-1))
                   );
@@ -84,7 +91,11 @@ const TimedCommands = () => {
                       <TableCell>{command.parameters}</TableCell>
                       <TableCell>{command.date_start}</TableCell>
                       <TableCell align="right">
-                        <AppIconButton icon="delete" title={t('tooltips.delete')} onClick={() => setDeleteId(command.id)} />
+                        <AppIconButton
+                          icon="delete"
+                          title={t('tooltips.delete')}
+                          onClick={() => setDeleteId(command.id)}
+                        />
                       </TableCell>
                     </TableRow>
                   );
