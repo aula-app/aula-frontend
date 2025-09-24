@@ -1,3 +1,8 @@
+## 1.4.6
+
+- **New features:**
+  - Scheduled invite for users uploaded via CSV
+
 ## 1.4.5
 
 - **Bug fixes:**
