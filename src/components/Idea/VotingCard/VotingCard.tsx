@@ -104,7 +104,7 @@ const VotingCard = ({ onReload }: Props) => {
           ))}
         </Stack>
       </Stack>
-      <DelegateButton disabled />
+      {/* <DelegateButton disabled /> */}
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>{t('votes.delegatedVoteWarning.title')}</DialogTitle>
         <DialogContent>{t('votes.delegatedVoteWarning.message')}</DialogContent>
