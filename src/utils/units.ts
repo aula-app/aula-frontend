@@ -7,11 +7,11 @@ export const DEFAULT_FORMAT_DATE_ONLY = 'YYYY-MM-DD';
 // Locale-specific date formats
 export const DATE_FORMATS = {
   en: {
-    dateTime: 'MM/DD/YYYY HH:mm:ss', // 01  2025 14:30:00
-    dateOnly: 'MM/DD/YYYY', // 01 June 2025
+    dateTime: DEFAULT_FORMAT_DATE_TIME,
+    dateOnly: DEFAULT_FORMAT_DATE_ONLY,
   },
   de: {
-    dateTime: 'DD.MM.YYYY HH:mm:ss', // German format
+    dateTime: 'DD.MM.YYYY HH:mm:ss',
     dateOnly: 'DD.MM.YYYY',
   },
   // Add more locales as needed
