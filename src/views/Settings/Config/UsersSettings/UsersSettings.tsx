@@ -22,7 +22,7 @@ import dayjs from 'dayjs';
 import i18next from 'i18next';
 import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DATE_FORMATS } from '@/utils/units';
+import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
 import { LanguageTypes } from '@/types/Translation';
 
 interface Props {
@@ -102,7 +102,10 @@ const DataSettings = ({ onReload }: Props) => {
 
   const uploadCSV = async (csv: string) => {
     setLoading(true);
-    const send_emails_at = inviteDate === null || inviteDate <= dayjs() ? undefined : inviteDate.toISOString();
+    const send_emails_at =
+      inviteDate === null || inviteDate <= dayjs()
+        ? undefined
+        : dayjs(inviteDate).utc().format(DEFAULT_FORMAT_DATE_TIME);
     const response = await addAllCSV(csv, rooms.add, role, send_emails_at);
     setLoading(false);
     if (!response.data) {
