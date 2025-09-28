@@ -1,115 +1,50 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../shared';
 import * as users from '../../fixtures/users';
+import { clickToNavigate } from '../utils';
 
 const host = shared.getHost();
 
 type TempPass = string;
 
 export const goToProfile = async (page: Page) => {
-  // Check if we're already on the profile page
-  const currentUrl = page.url();
-  if (currentUrl.includes('/settings/profile')) {
-    const ProfileButton = page.locator('a[href="/settings/profile"]');
-    await expect(ProfileButton).toBeVisible({ timeout: 5000 });
-    return;
-  }
-
-  await page.goto(host);
-
-  const ProfileButton = page.locator('a[href="/settings/profile"]');
-  await expect(ProfileButton).toBeVisible();
-  await ProfileButton.click({ timeout: 1000 });
+  clickToNavigate(page, '/settings/profile');
 };
 
 export const goToSettings = async (page: Page) => {
-  // Check if we're already on the settings page
-  const currentUrl = page.url();
-  if (currentUrl.includes('/settings/configuration')) {
-    const SettingsButton = page.locator('a[href="/settings/configuration"]');
-    await expect(SettingsButton).toBeVisible({ timeout: 5000 });
-    return;
-  }
-
-  await page.goto(host);
-
-  const SettingsButton = page.locator('a[href="/settings/configuration"]');
-  await expect(SettingsButton).toBeVisible();
-  await SettingsButton.click({ timeout: 1000 });
+  clickToNavigate(page, '/settings/configuration');
 };
 
 export const goToRequests = async (page: Page) => {
-  // Check if we're already on the requests page
-  const currentUrl = page.url();
-  if (currentUrl.includes('/settings/requests')) {
-    const SettingsButton = page.locator('a[href="/settings/requests"]');
-    await expect(SettingsButton).toBeVisible({ timeout: 5000 });
-    return;
-  }
-
-  await page.goto(host);
-
-  const SettingsButton = page.locator('a[href="/settings/requests"]');
-  await expect(SettingsButton).toBeVisible();
-  await SettingsButton.click({ timeout: 1000 });
+  clickToNavigate(page, '/settings/requests');
 };
 
 export const goToRoomSettings = async (page: Page) => {
-  // Check if we're already on the room settings page
-  const currentUrl = page.url();
-  if (currentUrl.includes('/settings/rooms')) {
-    const SettingsButton = page.locator('a[href="/settings/rooms"]');
-    await expect(SettingsButton).toBeVisible({ timeout: 5000 });
-    return;
-  }
-
-  await page.goto(host);
-
-  const SettingsButton = page.locator('a[href="/settings/rooms"]');
-  await expect(SettingsButton).toBeVisible();
-  await SettingsButton.click({ timeout: 1000 });
+  clickToNavigate(page, '/settings/rooms');
 };
 
 export const goToUserSettings = async (page: Page) => {
-  // Check if we're already on the user settings page
-  const currentUrl = page.url();
-  if (currentUrl.includes('/settings/users')) {
-    // Already on the page, just ensure the settings button is visible
-    const SettingsButton = page.locator('a[href="/settings/users"]');
-    await expect(SettingsButton).toBeVisible({ timeout: 5000 });
-    return;
-  }
-
-  await page.goto(host);
-
-  const SettingsButton = page.locator('a[href="/settings/users"]');
-  await expect(SettingsButton).toBeVisible();
-  await SettingsButton.click({ timeout: 1000 });
+  clickToNavigate(page, '/settings/users');
 };
 
 export const goToSystemConfig = async (page: Page) => {
-  // Check if we're already on the system config page
-  const currentUrl = page.url();
-  if (currentUrl.includes('/settings/configuration')) {
-    const ConfigButton = page.locator('a[href="/settings/configuration"]');
-    await expect(ConfigButton).toBeVisible({ timeout: 5000 });
-    return;
-  }
-
-  await page.goto(host);
-
-  const ConfigButton = page.locator('a[href="/settings/configuration"]');
-  await expect(ConfigButton).toBeVisible();
-  await ConfigButton.click({ timeout: 1000 });
+  clickToNavigate(page, '/settings/configuration');
 };
 
 export const exists = async (page: Page, data: users.UserData) => {
   await goToUserSettings(page);
 
-  // open the filter menu:
+  // Check if filter menu is already open, if not, open it
   const FilterButton = page.locator('#filter-toggle-button');
   await expect(FilterButton).toBeVisible();
-  await FilterButton.click({ timeout: 1000 });
+
+  // Check if filter menu is already open by looking for the clear button
+  const existsClearButton = page.getByTestId('clear-filter-button');
+  const isFilterMenuOpen = await existsClearButton.isVisible();
+
+  if (!isFilterMenuOpen) {
+    await FilterButton.click({ timeout: 1000 });
+  }
 
   // select "username" from the "filter by" dropdown
   await page.locator('#filter-field-select').click({ timeout: 1000 });
@@ -129,10 +64,17 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   // navigate to the users page:
   await goToUserSettings(page);
 
-  // open the filter menu:
+  // Check if filter menu is already open, if not, open it
   const FilterButton = page.locator('#filter-toggle-button');
   await expect(FilterButton).toBeVisible();
-  await FilterButton.click({ timeout: 1000 });
+
+  // Check if filter menu is already open by looking for the clear button
+  const filterClearButton = page.getByTestId('clear-filter-button');
+  const isFilterMenuOpen = await filterClearButton.isVisible();
+
+  if (!isFilterMenuOpen) {
+    await FilterButton.click({ timeout: 1000 });
+  }
 
   const filterInput = page.locator('#filter-value-input');
   await expect(FilterButton).toBeVisible();
@@ -174,35 +116,35 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
 };
 
 export const create = async (page: Page, data: users.UserData): Promise<TempPass> => {
-  await goToUserSettings(page);
+  console.log('🔧 Starting user creation for:', data.username);
 
-  // click the add user button - using reliable selector:
-  await page.getByTestId('add-users-button').click({ timeout: 1000 });
+  try {
+    await goToUserSettings(page);
+    await page.waitForLoadState('networkidle');
 
-  // fill in the necessary information
-  await page.fill('input[name="displayname"]', data.displayName);
-  await page.fill('input[name="username"]', data.username);
-  await page.fill('input[name="realname"]', data.realName);
+    const addUsersButton = page.getByTestId('add-users-button');
+    await expect(addUsersButton).toBeVisible({ timeout: 10000 });
+    await addUsersButton.click({ timeout: 5000 });
 
-  //await page.fill('input[name="userlevel"]', data.role.toString());
+    await page.fill('input[name="displayname"]', data.displayName);
+    await page.fill('input[name="username"]', data.username);
+    await page.fill('input[name="realname"]', data.realName);
 
-  await page.getByTestId('rolefield').click({ timeout: 1000 });
+    await page.getByTestId('rolefield').click({ timeout: 1000 });
 
-  await page.locator(`li[data-value="${data.role}"]`).click({ timeout: 1000 });
+    await page.locator(`li[data-value="${data.role}"]`).click({ timeout: 1000 });
 
-  await page.locator('div[contenteditable="true"]').fill(data.about);
+    await page.locator('div[contenteditable="true"]').fill(data.about);
 
-  // submit the form - using reliable selector:
-  await page.getByTestId('submit-user-form').click({ timeout: 1000 });
+    await page.getByTestId('submit-user-form').click({ timeout: 1000 });
 
-  // now we need to copy the temporary password out so the new user
-  //  can log in with it.
-  //  because users are hidden behind pagination, we use the admin
-  //  filters to search for the user on the user page.
-
-  const pass = await getTemporaryPass(page, data);
-
-  return pass;
+    const pass = await getTemporaryPass(page, data);
+    console.log('✅ Successfully created user:', data.username);
+    return pass;
+  } catch (error) {
+    console.error('❌ Failed to create user:', data.username, error);
+    throw error;
+  }
 };
 
 export const remove = async (page: Page, data: users.UserData) => {
@@ -212,13 +154,22 @@ export const remove = async (page: Page, data: users.UserData) => {
     // Wait for page to fully load
     await page.waitForLoadState('networkidle', { timeout: 10000 });
 
-    // open the filter menu:
+    // Check if filter menu is already open, if not, open it
     const FilterButton = page.locator('#filter-toggle-button');
     await expect(FilterButton).toBeVisible({ timeout: 10000 });
-    await FilterButton.click({ timeout: 1000 });
 
-    // Wait for filter menu to be fully open
-    await page.waitForTimeout(500);
+    // Check if filter menu is already open by looking for the clear button
+    const filterClearButton = page.getByTestId('clear-filter-button');
+    const isFilterMenuOpen = await filterClearButton.isVisible();
+
+    if (!isFilterMenuOpen) {
+      console.log('🔧 Opening filter menu');
+      await FilterButton.click({ timeout: 1000 });
+      // Wait for filter menu to be fully open
+      await page.waitForTimeout(500);
+    } else {
+      console.log('🔧 Filter menu already open');
+    }
 
     // select "username" from the "filter by" dropdown
     const filterFieldSelect = page.locator('#filter-field-select');
@@ -264,6 +215,22 @@ export const remove = async (page: Page, data: users.UserData) => {
 
     // confirm the user does not show up in the table list
     await expect(page.locator('table tr').filter({ hasText: data.username })).toHaveCount(0, { timeout: 10000 });
+
+    // Clear the search and close filters to clean up for next operation
+    try {
+      const clearButton = page.getByTestId('clear-filter-button');
+      if (await clearButton.isVisible()) {
+        await clearButton.click({ timeout: 1000 });
+        console.log('🔧 Cleared filter after user removal');
+
+        // Close the filter menu
+        await FilterButton.click({ timeout: 1000 });
+        await expect(clearButton).not.toBeVisible({ timeout: 5000 });
+        console.log('🔧 Closed filter menu after user removal');
+      }
+    } catch (cleanupError) {
+      console.warn('Could not clean up filter menu:', cleanupError);
+    }
   } catch (error) {
     console.warn(`Failed to remove user ${data.username}:`, error);
 
