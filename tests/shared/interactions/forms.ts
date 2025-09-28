@@ -2,6 +2,7 @@ import { Page, expect } from '@playwright/test';
 
 export const fillForm = async (page: Page, testId: string, value: string) => {
   const field = page.getByTestId(testId);
+  await field.clear();
   await expect(field).toBeVisible();
   await field.fill(value);
 };

@@ -2,12 +2,12 @@ import { expect, test } from '@playwright/test';
 import * as userData from '../../fixtures/users';
 import { describeWithSetup } from '../../shared/base-test';
 import * as browsers from '../../shared/interactions/browsers';
-import * as shared from '../../shared/shared';
 import * as formInteractions from '../../shared/interactions/forms';
-import * as settingsInteractions from '../../shared/interactions/settings';
+import * as ideas from '../../shared/interactions/ideas';
 import * as navigation from '../../shared/interactions/navigation';
 import * as rooms from '../../shared/interactions/rooms';
-import * as ideas from '../../shared/interactions/ideas';
+import * as settingsInteractions from '../../shared/interactions/settings';
+import * as shared from '../../shared/shared';
 
 const getUsers = () => {
   // Ensure users are initialized when accessed
@@ -38,7 +38,7 @@ describeWithSetup('Category management', () => {
     category: '',
   };
 
-  let artifacts = {
+  const cleanupQueue = {
     category: false,
     room: false,
     idea: false,
@@ -61,15 +61,16 @@ describeWithSetup('Category management', () => {
 
   test.afterAll(async () => {
     await cleanup();
+    await admin.close();
   });
 
   const cleanup = async () => {
-    if (artifacts.idea) await ideas.remove(admin, room, idea);
-    artifacts.idea = false;
-    if (artifacts.room) await rooms.remove(admin, room);
-    artifacts.room = false;
-    if (artifacts.category) await removeCategory();
-    artifacts.category = false;
+    if (cleanupQueue.idea) await ideas.remove(admin, room, idea);
+    cleanupQueue.idea = false;
+    if (cleanupQueue.room) await rooms.remove(admin, room);
+    cleanupQueue.room = false;
+    if (cleanupQueue.category) await removeCategory();
+    cleanupQueue.category = false;
   };
 
   test('Admins should be able to create a new category', async () => {
@@ -94,15 +95,15 @@ describeWithSetup('Category management', () => {
     const categoryChip = admin.getByTestId(newCategorySelector);
     await expect(categoryChip).toBeVisible();
 
-    artifacts.category = true;
+    cleanupQueue.category = true;
   });
 
   test('Admin can add category to idea', async () => {
     await rooms.create(admin, room);
-    artifacts.room = true;
+    cleanupQueue.room = true;
 
     await ideas.create(admin, room, idea);
-    artifacts.idea = true;
+    cleanupQueue.idea = true;
 
     await rooms.goToRoom(admin, room.name);
 
@@ -127,7 +128,7 @@ describeWithSetup('Category management', () => {
   });
 
   test('Admin can delete a category', async () => {
-    artifacts.category = false; // reset to false to ensure cleanup does not try to delete again
+    cleanupQueue.category = false; // reset to false to ensure cleanup does not try to delete again
     await removeCategory();
   });
 

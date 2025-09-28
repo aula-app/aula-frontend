@@ -23,8 +23,12 @@ export const clickToNavigate = async (page: Page, path: string) => {
 export const openAccordion = async (page: Page, testId: string) => {
   const accordion = page.getByTestId(testId);
   await expect(accordion).toBeVisible({ timeout: 10000 });
-  await accordion.click();
-  await page.waitForTimeout(1000);
+
+  const isExpanded = await accordion.getAttribute('aria-expanded');
+  if (isExpanded !== 'true') {
+    await accordion.click();
+    await page.waitForTimeout(1000);
+  }
 };
 
 // Sidebar navigation
