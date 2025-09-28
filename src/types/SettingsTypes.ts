@@ -38,6 +38,7 @@ export type SelectOptionType = {
 
 interface UserOptionType extends SelectOptionType {
   displayname: string;
+  username: string;
 }
 
 export type SelectOptionsType = Array<SelectOptionType>;

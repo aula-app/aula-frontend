@@ -1,169 +1,152 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import * as userData from '../../fixtures/users';
 import { describeWithSetup } from '../../shared/base-test';
-import { BrowserHelpers } from '../../shared/common-actions';
-import { CategoryTestHelpers, CategoryTestContext } from '../../shared/helpers/categories';
+import * as browsers from '../../shared/interactions/browsers';
+import * as shared from '../../shared/shared';
+import * as formInteractions from '../../shared/interactions/forms';
+import * as settingsInteractions from '../../shared/interactions/settings';
+import * as navigation from '../../shared/interactions/navigation';
+import * as rooms from '../../shared/interactions/rooms';
 import * as ideas from '../../shared/interactions/ideas';
 
-describeWithSetup('Categories flow', () => {
-  // Track cleanup contexts for emergency cleanup
-  const cleanupQueue: Array<{ page: any; context: CategoryTestContext }> = [];
+const getUsers = () => {
+  // Ensure users are initialized when accessed
+  if (!userData.alice) userData.init();
+  return [
+    userData.testUsers.alice(),
+    userData.testUsers.bob(),
+    userData.testUsers.mallory(),
+    userData.testUsers.rainer(),
+  ];
+};
+
+// force these tests to run sqeuentially
+test.describe.configure({ mode: 'serial' });
+
+describeWithSetup('Category management', () => {
+  let admin: any;
+
+  const room = {
+    name: `room-${shared.getRunId()}-categories-tests`,
+    description: 'created during automated testing for categories.spec.ts',
+    users: getUsers(),
+  };
+
+  const idea = {
+    name: '',
+    description: 'Idea generated during category management tests',
+    category: '',
+  };
+
+  let artifacts = {
+    category: false,
+    room: false,
+    idea: false,
+  };
+
+  test.beforeAll(async () => {
+    admin = await browsers.newPage(browsers.admins_browser);
+
+    idea.name = shared.gensym('Test idea ');
+    idea.category = shared.gensym('Test Category ');
+  });
+
+  test.beforeEach(async () => {
+    await browsers.recall();
+  });
 
   test.afterEach(async () => {
-    // Emergency cleanup for any leftover contexts
-    while (cleanupQueue.length > 0) {
-      const { page, context } = cleanupQueue.pop()!;
-      try {
-        await CategoryTestHelpers.cleanupTestData(page, context);
-      } catch (e) {
-        console.warn('Emergency cleanup failed:', e);
-      }
-    }
+    await browsers.pickle();
   });
-  test('Admin can create a category', async () => {
-    const admin = await BrowserHelpers.openPageForUser('admin');
 
-    try {
-      await CategoryTestHelpers.executeWithCleanup(
-        admin,
-        async (context) => {
-          const { categoryName, categoriesPage } = context;
+  test.afterAll(async () => {
+    await cleanup();
+  });
 
-          await categoriesPage.createCategory(categoryName);
-          await categoriesPage.verifyCategoryExists(categoryName);
-        },
-        cleanupQueue
-      );
-    } finally {
-      await BrowserHelpers.closePage(admin);
-    }
+  const cleanup = async () => {
+    if (artifacts.idea) await ideas.remove(admin, room, idea);
+    artifacts.idea = false;
+    if (artifacts.room) await rooms.remove(admin, room);
+    artifacts.room = false;
+    if (artifacts.category) await removeCategory();
+    artifacts.category = false;
+  };
+
+  test('Admins should be able to create a new category', async () => {
+    navigation.goToSettings(admin);
+    navigation.openAccordion(admin, 'config-accordion-idea');
+    formInteractions.clickButton(admin, 'add-new-category-chip');
+
+    formInteractions.fillForm(admin, 'category-name-field', idea.category);
+
+    // Select category icon
+    const iconFieldContainer = admin.getByTestId('icon-field-container');
+    await expect(iconFieldContainer).toBeVisible();
+
+    const firstIconButton = iconFieldContainer.getByTestId('icon-cat-1');
+    await expect(firstIconButton).toBeVisible();
+    await firstIconButton.click();
+    formInteractions.clickButton(admin, 'category-form-submit-button');
+    await admin.waitForTimeout(2000); // wait for the form to process
+
+    // Verify that the new category appears in the list
+    const newCategorySelector = `category-chip-${idea.category.toLowerCase().replace(/\s+/g, '-')}`;
+    const categoryChip = admin.getByTestId(newCategorySelector);
+    await expect(categoryChip).toBeVisible();
+
+    artifacts.category = true;
   });
 
   test('Admin can add category to idea', async () => {
-    const admin = await BrowserHelpers.openPageForUser('admin');
+    await rooms.create(admin, room);
+    artifacts.room = true;
 
-    try {
-      await CategoryTestHelpers.executeWithCleanup(
-        admin,
-        async (context) => {
-          const { categoryName, categoriesPage } = context;
+    await ideas.create(admin, room, idea);
+    artifacts.idea = true;
 
-          await categoriesPage.createCategory(categoryName);
+    await rooms.goToRoom(admin, room.name);
 
-          const { testRoom, testIdea } = await CategoryTestHelpers.createCategoryWithIdea(admin, categoryName);
-
-          context.testRoom = testRoom;
-          context.testIdea = testIdea;
-
-          await ideas.goToRoom(admin, testRoom);
-          await categoriesPage.verifyCategoryOnIdea(testIdea.name, categoryName);
-        },
-        cleanupQueue
-      );
-    } finally {
-      await BrowserHelpers.closePage(admin);
-    }
+    const IdeaCategory = admin.locator('div').filter({ hasText: idea.category }).first();
+    await expect(IdeaCategory).toBeVisible();
   });
 
   test('Admin can remove category from idea', async () => {
-    const admin = await BrowserHelpers.openPageForUser('admin');
+    await navigation.goToIdeasSettings(admin);
+    await settingsInteractions.openEdit(admin, 'title', idea.name);
 
-    try {
-      await CategoryTestHelpers.executeWithCleanup(admin, async (context) => {
-        const { categoryName, categoriesPage } = context;
+    const ClearButton = admin.getByTestId('category-field-clear-button');
+    await expect(ClearButton).toBeVisible();
+    await ClearButton.click();
 
-        await categoriesPage.createCategory(categoryName);
+    formInteractions.clickButton(admin, 'submit-idea-form');
 
-        const { testRoom, testIdea } = await CategoryTestHelpers.createCategoryWithIdea(admin, categoryName);
+    await rooms.goToRoom(admin, room.name);
 
-        context.testRoom = testRoom;
-        context.testIdea = testIdea;
-
-        await ideas.goToRoom(admin, testRoom);
-        await categoriesPage.verifyCategoryOnIdea(testIdea.name, categoryName);
-
-        // Remove category from idea by editing the idea and clearing the category
-        const IdeaDiv = admin.getByTestId(`idea-${testIdea.name}`).first();
-        await IdeaDiv.waitFor({ state: 'visible' });
-
-        // Move mouse away to avoid tooltips
-        await admin.mouse.move(0, 0);
-
-        // Click on the more menu
-        const DotMenuDiv = IdeaDiv.getByTestId('idea-more-menu');
-        await DotMenuDiv.waitFor({ state: 'visible' });
-        await DotMenuDiv.click();
-
-        // Click edit button
-        const EditButton = IdeaDiv.getByTestId('edit-button');
-        await EditButton.waitFor({ state: 'visible' });
-        await EditButton.click();
-
-        // Clear the category from the idea using metadata instead of hardcoded text
-        const CategoryFieldInput = admin.getByTestId('category-field-input');
-        await CategoryFieldInput.waitFor({ state: 'visible' });
-        await CategoryFieldInput.click();
-
-        // Clear the selection by using the autocomplete clear functionality
-        const ClearButton = CategoryFieldInput.locator('+ div')
-          .getByRole('button', { name: /clear/i })
-          .or(CategoryFieldInput.locator('+ div').locator('[data-testid*="ClearIcon"], [aria-label*="clear" i]'));
-
-        if (await ClearButton.isVisible()) {
-          await ClearButton.click();
-        } else {
-          // Alternative: Select the field and clear with keyboard
-          await CategoryFieldInput.focus();
-          await admin.keyboard.press('Control+a'); // Select all
-          await admin.keyboard.press('Delete'); // Delete selection
-          await admin.keyboard.press('Escape'); // Close dropdown
-        }
-
-        // Submit the form
-        await admin.locator('button[type="submit"]').click();
-
-        // Wait a bit for the UI to update
-        await admin.waitForTimeout(1000);
-
-        // Verify the category was removed by checking that no category element exists
-        const CategoryElements = admin
-          .getByTestId(`category-${categoryName}`)
-          .or(admin.locator('[data-testid*="category"]').filter({ hasText: categoryName }))
-          .or(admin.locator('.MuiChip-root').filter({ hasText: categoryName }));
-
-        const count = await CategoryElements.count();
-        if (count > 0) {
-          // If there are still category elements, wait for them to disappear
-          await CategoryElements.first()
-            .waitFor({ state: 'hidden', timeout: 5000 })
-            .catch(() => {
-              // Expected - category should be removed
-            });
-        }
-      });
-    } catch (error) {
-      console.error('Test "Admin can remove category from idea" failed:', error);
-      throw error;
-    } finally {
-      await BrowserHelpers.closePage(admin);
-    }
+    const IdeaCategory = admin.locator('div').filter({ hasText: idea.category }).first();
+    await expect(IdeaCategory).not.toBeVisible();
   });
 
   test('Admin can delete a category', async () => {
-    const admin = await BrowserHelpers.openPageForUser('admin');
+    artifacts.category = false; // reset to false to ensure cleanup does not try to delete again
+    await removeCategory();
+  });
 
-    try {
-      await CategoryTestHelpers.executeWithCleanup(admin, async (context) => {
-        const { categoryName, categoriesPage } = context;
+  const removeCategory = async () => {
+    navigation.goToSettings(admin);
+    navigation.openAccordion(admin, 'config-accordion-idea');
 
-        await categoriesPage.createCategory(categoryName);
-        await categoriesPage.verifyCategoryExists(categoryName);
-        await categoriesPage.deleteCategory(categoryName);
-      });
-    } catch (error) {
-      console.error('Test "Admin can delete a category" failed:', error);
-      throw error;
-    } finally {
-      await BrowserHelpers.closePage(admin);
-    }
+    const CategoryChip = admin.getByTestId(`category-chip-${idea.category.toLowerCase().replace(/\s+/g, '-')}`);
+    await expect(CategoryChip).toBeVisible();
+    const DeleteButton = await CategoryChip.getByTestId('CancelIcon').first();
+    await DeleteButton.click();
+
+    formInteractions.clickButton(admin, 'delete-cat-button');
+    await admin.waitForTimeout(2000); // wait for the form to process
+
+    await expect(CategoryChip).not.toBeVisible();
+  };
+
+  test('Cleanup after tests', async () => {
+    await cleanup(); // ensure cleanup is called and can be debugged if needed
   });
 });

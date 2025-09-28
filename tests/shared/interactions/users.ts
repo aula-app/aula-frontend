@@ -1,35 +1,11 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../shared';
 import * as users from '../../fixtures/users';
-import { clickToNavigate } from '../utils';
+import { goToUsersSettings } from './navigation';
 
 const host = shared.getHost();
 
 type TempPass = string;
-
-export const goToProfile = async (page: Page) => {
-  clickToNavigate(page, '/settings/profile');
-};
-
-export const goToSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/configuration');
-};
-
-export const goToRequests = async (page: Page) => {
-  clickToNavigate(page, '/settings/requests');
-};
-
-export const goToRoomSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/rooms');
-};
-
-export const goToUserSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/users');
-};
-
-export const goToSystemConfig = async (page: Page) => {
-  clickToNavigate(page, '/settings/configuration');
-};
 
 export const exists = async (page: Page, data: users.UserData) => {
   await goToUserSettings(page);
@@ -62,7 +38,7 @@ export const exists = async (page: Page, data: users.UserData) => {
 
 export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   // navigate to the users page:
-  await goToUserSettings(page);
+  await goToUsersSettings(page);
 
   // Check if filter menu is already open, if not, open it
   const FilterButton = page.locator('#filter-toggle-button');
@@ -119,7 +95,7 @@ export const create = async (page: Page, data: users.UserData): Promise<TempPass
   console.log('🔧 Starting user creation for:', data.username);
 
   try {
-    await goToUserSettings(page);
+    await goToUsersSettings(page);
     await page.waitForLoadState('networkidle');
 
     const addUsersButton = page.getByTestId('add-users-button');
@@ -148,7 +124,7 @@ export const create = async (page: Page, data: users.UserData): Promise<TempPass
 };
 
 export const remove = async (page: Page, data: users.UserData) => {
-  await goToUserSettings(page);
+  await goToUsersSettings(page);
 
   try {
     // Wait for page to fully load

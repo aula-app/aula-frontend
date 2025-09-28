@@ -30,6 +30,7 @@ const UsersField: React.FC<Props> = ({ defaultValues, onChange, disabled = false
       label: user.realname,
       value: user.hash_id,
       displayname: user.displayname,
+      username: user.username,
     }));
     setOptions(users);
   };
@@ -58,7 +59,7 @@ const UsersField: React.FC<Props> = ({ defaultValues, onChange, disabled = false
     <Autocomplete
       multiple
       fullWidth
-      data-testid="usersfield"
+      data-testid="users-field"
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
@@ -70,7 +71,7 @@ const UsersField: React.FC<Props> = ({ defaultValues, onChange, disabled = false
       loading={loading}
       disabled={disabled}
       renderOption={(props, option) => (
-        <li {...props} key={option.value}>
+        <li {...props} key={option.value} data-testid={`user-option-${option.username}`}>
           {option.label}{' '}
           <Typography ml={2} variant="body2" color="text.secondary">
             ({option.displayname})

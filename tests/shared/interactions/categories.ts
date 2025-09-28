@@ -39,12 +39,6 @@ export class CategoriesPage {
     };
   }
 
-  async navigateToSettings(): Promise<void> {
-    await this.page.goto(shared.getHost());
-    await users.goToSettings(this.page);
-    await this.page.waitForLoadState('networkidle');
-  }
-
   async openIdeasAccordion(): Promise<void> {
     const accordion = this.page.getByTestId(this.selectors.configAccordionIdea);
     await expect(accordion).toBeVisible({ timeout: this.timeouts.default });

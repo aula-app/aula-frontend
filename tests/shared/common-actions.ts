@@ -4,9 +4,8 @@
  */
 
 import { Page } from '@playwright/test';
-import * as browsers from './interactions/browsers';
-import * as rooms from './interactions/rooms';
 import * as ideas from './interactions/ideas';
+import * as rooms from './interactions/rooms';
 import * as shared from './shared';
 
 /**

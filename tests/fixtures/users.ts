@@ -1,7 +1,7 @@
 import * as SettingsTypes from '../../src/types/SettingsTypes.ts';
 import * as shared from '../shared/shared.ts';
 import * as browsers from '../shared/interactions/browsers';
-import * as userInteractions from '../shared/interactions/users';
+import * as userInteractions from '../shared/interactions/users.ts';
 
 /* User roles
  * 10 => "guest",
