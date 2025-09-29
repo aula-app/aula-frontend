@@ -261,11 +261,11 @@ const IdeasBoxView = () => {
                 totalCount={approvedIdeas.length}
                 {...scopeHeaderProps}
               />
-              {Number(phase) === 30 && checkPermissions('ideas', 'vote') && (
+              {/* {Number(phase) === 30 && checkPermissions('ideas', 'vote') && (
                 <KnowMore title={t('tooltips.delegate')}>
                   <DelegateButton />
                 </KnowMore>
-              )}
+              )} */}
             </Stack>
             <Grid container spacing={1} pt={1} pb={2}>
               {sortedApprovedIdeas.map((idea) => (

@@ -16,8 +16,14 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import i18next from 'i18next';
 import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
+import { LanguageTypes } from '@/types/Translation';
 
 interface Props {
   onReload: () => void;
@@ -32,6 +38,7 @@ const DataSettings = ({ onReload }: Props) => {
   const [users, setUsers] = useState<Array<string>>([]);
   const [role, setRole] = useState<RoleTypes>(20);
   const [rooms, setRooms] = useState<UpdateType>({ add: [], remove: [] });
+  const [inviteDate, setInviteDate] = useState<dayjs.Dayjs | null>(dayjs());
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -95,7 +102,11 @@ const DataSettings = ({ onReload }: Props) => {
 
   const uploadCSV = async (csv: string) => {
     setLoading(true);
-    const response = await addAllCSV(csv, rooms.add, role);
+    const send_emails_at =
+      inviteDate === null || inviteDate <= dayjs()
+        ? undefined
+        : dayjs(inviteDate).utc().format(DEFAULT_FORMAT_DATE_TIME);
+    const response = await addAllCSV(csv, rooms.add, role, send_emails_at);
     setLoading(false);
     if (!response.data) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
@@ -169,7 +180,7 @@ const DataSettings = ({ onReload }: Props) => {
         </TableBody>
       </Table>
 
-      <Stack>
+      <Stack gap={2}>
         <Stack direction="row" alignItems="center" gap={3}>
           <SelectRole
             userRole={role}
@@ -184,8 +195,18 @@ const DataSettings = ({ onReload }: Props) => {
             onChange={(updates) => setRooms(updates)}
             disabled={loading}
           />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker
+              label={t('settings.time.inviteDate')}
+              value={inviteDate}
+              onChange={setInviteDate}
+              format={DATE_FORMATS[i18next.language as LanguageTypes].dateTime}
+              sx={{ minWidth: 200 }}
+              data-testid="user-invite-date-picker"
+            />
+          </LocalizationProvider>
         </Stack>
-        <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>
+        {error !== '' && <FormHelperText error={error !== ''}>{`${error || ''}`}</FormHelperText>}
       </Stack>
       <Button data-testid="confirm_upload" variant="contained" component="label" onClick={onSubmit} disabled={loading}>
         {loading ? t('status.waiting') : t('actions.confirm')}
