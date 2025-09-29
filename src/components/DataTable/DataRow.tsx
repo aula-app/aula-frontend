@@ -52,6 +52,7 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
               if (!isFixed()) toggleRow(String(item.hash_id));
             }}
             disabled={isFixed()}
+            data-testid={`check-${item.hash_id}`}
             aria-label={`Select ${'name' in item ? item.name : 'displayname' in item ? item.displayname : 'title' in item ? item.title : item.hash_id}`}
           />
         )}

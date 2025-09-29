@@ -285,7 +285,8 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               required
               disabled={isLoading}
               slotProps={{
-                input: {
+                htmlInput: {
+                  'data-testid': 'idea-title-input-field',
                   'aria-invalid': !!errors.title,
                   'aria-errormessage': errors.title ? 'title-error-message' : undefined,
                   'aria-labelledby': 'idea-title-label',

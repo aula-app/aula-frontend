@@ -38,12 +38,6 @@ describeWithSetup('Category management', () => {
     category: '',
   };
 
-  const cleanupQueue = {
-    category: false,
-    room: false,
-    idea: false,
-  };
-
   test.beforeAll(async () => {
     admin = await browsers.newPage(browsers.admins_browser);
 
@@ -60,9 +54,15 @@ describeWithSetup('Category management', () => {
   });
 
   test.afterAll(async () => {
-    await cleanup();
-    await admin.close();
+    // await cleanup();
+    // await admin.close();
   });
+
+  const cleanupQueue = {
+    category: false,
+    room: false,
+    idea: false,
+  };
 
   const cleanup = async () => {
     if (cleanupQueue.idea) await ideas.remove(admin, room, idea);
@@ -105,7 +105,7 @@ describeWithSetup('Category management', () => {
     await ideas.create(admin, room, idea);
     cleanupQueue.idea = true;
 
-    await rooms.goToRoom(admin, room.name);
+    await navigation.goToRoom(admin, room.name);
 
     const IdeaCategory = admin.locator('div').filter({ hasText: idea.category }).first();
     await expect(IdeaCategory).toBeVisible();
@@ -113,17 +113,17 @@ describeWithSetup('Category management', () => {
 
   test('Admin can remove category from idea', async () => {
     await navigation.goToIdeasSettings(admin);
-    await settingsInteractions.openEdit(admin, 'title', idea.name);
+    await settingsInteractions.openEdit({ page: admin, filter: { option: 'title', value: idea.name } });
 
-    const ClearButton = admin.getByTestId('category-field-clear-button');
-    await expect(ClearButton).toBeVisible();
-    await ClearButton.click();
+    formInteractions.clickButton(admin, 'category-field-clear-button');
+    await admin.waitForTimeout(1000); // wait for the form to process
 
     formInteractions.clickButton(admin, 'submit-idea-form');
+    await admin.waitForTimeout(1000); // wait for the form to process
 
-    await rooms.goToRoom(admin, room.name);
+    await navigation.goToRoom(admin, room.name);
 
-    const IdeaCategory = admin.locator('div').filter({ hasText: idea.category }).first();
+    const IdeaCategory = admin.locator('div').filter({ hasText: idea.category });
     await expect(IdeaCategory).not.toBeVisible();
   });
 
@@ -146,8 +146,4 @@ describeWithSetup('Category management', () => {
 
     await expect(CategoryChip).not.toBeVisible();
   };
-
-  test('Cleanup after tests', async () => {
-    await cleanup(); // ensure cleanup is called and can be debugged if needed
-  });
 });

@@ -1,5 +1,5 @@
-import * as SettingsTypes from '../../src/types/SettingsTypes.ts';
-import * as shared from '../shared/shared.ts';
+import * as types from './types';
+import * as shared from '../shared/shared';
 import * as browsers from '../shared/interactions/browsers';
 import * as userInteractions from '../shared/interactions/users.ts';
 
@@ -16,21 +16,12 @@ import * as userInteractions from '../shared/interactions/users.ts';
  * 60 => "tech_admin"
  */
 
-export type UserData = {
-  username: string;
-  password: string;
-  displayName: string;
-  realName: string;
-  role: SettingsTypes.RoleTypes;
-  about: string;
-};
-
-export let alice: UserData;
-export let bob: UserData;
-export let mallory: UserData;
-export let burt: UserData;
-export let rainer: UserData;
-export const admin: UserData = {
+export let alice: types.UserData;
+export let bob: types.UserData;
+export let mallory: types.UserData;
+export let burt: types.UserData;
+export let rainer: types.UserData;
+export const admin: types.UserData = {
   username: 'admin',
   password: 'aula',
   displayName: 'Admin',

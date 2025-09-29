@@ -31,6 +31,24 @@ export const openAccordion = async (page: Page, testId: string) => {
   }
 };
 
+export const goToRoom = async (page: Page, roomName: string) => {
+  await goToHome(page);
+
+  const RoomDiv = page.getByText(roomName, { exact: true });
+  await expect(RoomDiv).toBeVisible();
+  await RoomDiv.click();
+  await page.waitForLoadState('networkidle');
+};
+
+export const goToWildIdea = async (page: Page, roomName: string, ideaName: string) => {
+  await goToRoom(page, roomName);
+
+  const IdeaDiv = page.getByText(ideaName, { exact: true });
+  await expect(IdeaDiv).toBeVisible();
+  await IdeaDiv.click();
+  await page.waitForLoadState('networkidle');
+};
+
 // Sidebar navigation
 
 export const goToHome = async (page: Page) => {
@@ -39,45 +57,45 @@ export const goToHome = async (page: Page) => {
 };
 
 export const goToProfile = async (page: Page) => {
-  clickToNavigate(page, '/settings/profile');
+  await clickToNavigate(page, '/settings/profile');
 };
 
 export const goToSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/configuration');
+  await clickToNavigate(page, '/settings/configuration');
 };
 
 export const goToUsersSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/users');
+  await clickToNavigate(page, '/settings/users');
 };
 
 export const goToRoomsSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/rooms');
+  await clickToNavigate(page, '/settings/rooms');
 };
 
 export const goToBoxesSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/boxes');
+  await clickToNavigate(page, '/settings/boxes');
 };
 
 export const goToIdeasSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/ideas');
+  await clickToNavigate(page, '/settings/ideas');
 };
 
 export const goToMessagesSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/messages');
+  await clickToNavigate(page, '/settings/messages');
 };
 
 export const goToAnnouncementsSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/announcements');
+  await clickToNavigate(page, '/settings/announcements');
 };
 
 export const goToReportsSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/reports');
+  await clickToNavigate(page, '/settings/reports');
 };
 
 export const goToBugsSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/bugs');
+  await clickToNavigate(page, '/settings/bugs');
 };
 
 export const goToRequestsSettings = async (page: Page) => {
-  clickToNavigate(page, '/settings/requests');
+  await clickToNavigate(page, '/settings/requests');
 };

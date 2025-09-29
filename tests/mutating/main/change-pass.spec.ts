@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import * as userData from '../../fixtures/users';
 import { describeWithSetup } from '../../shared/base-test';
 import * as browsers from '../../shared/interactions/browsers';
