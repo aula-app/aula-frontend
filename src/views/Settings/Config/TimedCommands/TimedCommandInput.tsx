@@ -23,7 +23,7 @@ interface Props {
 
 const TimeCommandInput = ({ onReload }: Props) => {
   const { t } = useTranslation();
-  const { formatDateTime, formatDateOnly } = useDateFormatters();
+  const { formatDateTime } = useDateFormatters();
 
   const [scope, setScope] = useState<number>(0);
   const [target, setTarget] = useState<string | undefined>();
@@ -185,7 +185,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
             label={t(`settings.time.startDate`)}
             value={dayjs(startTime)}
             disabled={typeof action !== 'number'}
-            format={DATE_FORMATS[i18next.languages[0] as LanguageTypes].dateOnly}
+            format={DATE_FORMATS[i18next.language as LanguageTypes].dateOnly}
             onChange={(date) => {
               if (date) setStartTime(dayjs(date).format(DEFAULT_FORMAT_DATE_TIME));
             }}
