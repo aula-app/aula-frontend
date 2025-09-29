@@ -3,23 +3,12 @@ import { StatusTypes } from '@/types/Generics';
 import { PossibleFields, SettingsType, SettingType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { getDataLimit } from '@/utils';
-import {
-  Box,
-  Checkbox,
-  Skeleton,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-} from '@mui/material';
+import { Box, Checkbox, Stack, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import EmptyState from '../EmptyState';
 import DataItem from './DataItem';
 import DataRow from './DataRow';
-import EmptyState from '../EmptyState';
 import TableSkeleton from './TableSkeleton';
 
 type Props = {
@@ -30,6 +19,7 @@ type Props = {
   orderBy: number;
   isLoading?: boolean;
   extraTools?: ({ items }: { items: Array<string> }) => JSX.Element;
+  onReload?: () => void;
   setAsc: Dispatch<SetStateAction<boolean>>;
   setLimit: Dispatch<SetStateAction<number>>;
   setOrderby: Dispatch<SetStateAction<number>>;
@@ -48,6 +38,7 @@ const DataTable: React.FC<Props> = ({
   orderBy,
   isLoading,
   extraTools,
+  onReload,
   setAsc,
   setLimit,
   setOrderby,
@@ -207,7 +198,7 @@ const DataTable: React.FC<Props> = ({
                       aria-colindex={colIndex + 2} // +2 because of the checkbox column and row header
                       tabIndex={-1} // Not directly tabbable to avoid too many tab stops
                     >
-                      {column.name in row && <DataItem row={row} column={column.name} />}
+                      {column.name in row && <DataItem row={row} column={column.name} onReload={onReload} />}
                     </TableCell>
                   ))}
                 </DataRow>

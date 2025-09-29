@@ -460,3 +460,20 @@ export async function addSpecialRoles(user_id: string, role: RoleTypes, room_id:
 
   return response as GenericResponse;
 }
+
+/**
+ * Reset user password
+ */
+
+export async function resetUserPassword(user_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'resetPasswordForUser',
+      arguments: { user_id },
+    },
+    ['updater_id']
+  );
+
+  return response as GenericResponse;
+}
