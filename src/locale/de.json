@@ -61,7 +61,8 @@
       "recovery": "Passwort-Wiederherstellung",
       "success": "Das Passwort wurde zurückgesetzt. {{var}}",
       "successfulEmail": "Eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts wurde an Ihre E-Mail-Adresse gesendet",
-      "successfulNoEmail": "Ein neues temporäres Passwort wurde für diesen Benutzer generiert."
+      "successfulNoEmail": "Ein neues temporäres Passwort wurde für diesen Benutzer generiert.",
+      "successfulUser": "Das Passwort von {{user}} wurde zurückgesetzt. {{var}}"
     },
     "login": {
       "button": "Login",

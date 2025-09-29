@@ -53,7 +53,8 @@ const ResetPasswordButton: FC<Props> = ({ target, hasEmail = false, onSuccess, .
         dispatch({
           type: 'ADD_POPUP',
           message: {
-            message: t('auth.forgotPassword.success', {
+            message: t('auth.forgotPassword.successfulUser', {
+              user: target.realname || target.displayname,
               var: hasEmail ? t('auth.forgotPassword.successfulEmail') : t('auth.forgotPassword.successfulNoEmail'),
             }),
             type: 'success',
