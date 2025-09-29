@@ -31,6 +31,17 @@ export const openAccordion = async (page: Page, testId: string) => {
   }
 };
 
+export const closeAccordion = async (page: Page, testId: string) => {
+  const accordion = page.getByTestId(testId);
+  await expect(accordion).toBeVisible({ timeout: 10000 });
+
+  const isExpanded = await accordion.getAttribute('aria-expanded');
+  if (isExpanded === 'true') {
+    await accordion.click();
+    await page.waitForTimeout(1000);
+  }
+};
+
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
 

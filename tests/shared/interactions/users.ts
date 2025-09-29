@@ -1,14 +1,15 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../shared';
-import * as users from '../../fixtures/users';
-import { goToUsersSettings } from './navigation';
+import * as types from '../../fixtures/types';
+import * as formsInteractions from './forms';
+import * as navigation from './navigation';
 
 const host = shared.getHost();
 
 type TempPass = string;
 
-export const exists = async (page: Page, data: users.UserData) => {
-  await goToUserSettings(page);
+export const exists = async (page: Page, data: types.UserData) => {
+  await navigation.goToUsersSettings(page);
 
   // Check if filter menu is already open, if not, open it
   const FilterButton = page.locator('#filter-toggle-button');
@@ -36,9 +37,9 @@ export const exists = async (page: Page, data: users.UserData) => {
   await expect(row).toHaveCount(1);
 };
 
-export const getTemporaryPass = async (page: Page, data: users.UserData) => {
-  // navigate to the users page:
-  await goToUsersSettings(page);
+export const getTemporaryPass = async (page: Page, data: types.UserData) => {
+  // navigate to the users settings page:
+  await navigation.goToUsersSettings(page);
 
   // Check if filter menu is already open, if not, open it
   const FilterButton = page.locator('#filter-toggle-button');
@@ -91,11 +92,11 @@ export const getTemporaryPass = async (page: Page, data: users.UserData) => {
   return pass;
 };
 
-export const create = async (page: Page, data: users.UserData): Promise<TempPass> => {
+export const create = async (page: Page, data: types.UserData): Promise<TempPass> => {
   console.log('🔧 Starting user creation for:', data.username);
 
   try {
-    await goToUsersSettings(page);
+    await navigation.goToUsersSettings(page);
     await page.waitForLoadState('networkidle');
 
     const addUsersButton = page.getByTestId('add-users-button');
@@ -123,8 +124,8 @@ export const create = async (page: Page, data: users.UserData): Promise<TempPass
   }
 };
 
-export const remove = async (page: Page, data: users.UserData) => {
-  await goToUsersSettings(page);
+export const remove = async (page: Page, data: types.UserData) => {
+  await navigation.goToUsersSettings(page);
 
   try {
     // Wait for page to fully load
@@ -226,40 +227,27 @@ export const remove = async (page: Page, data: users.UserData) => {
   }
 };
 
-// Helper function to log in a user
-export const login = async (page: Page, data: users.UserData) => {
+export const loginAttempt = async (page: Page, data: types.UserData) => {
   await page.goto(host);
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
   await page.locator('button[type="submit"]').click({ timeout: 1000 });
+};
 
-  // Wait for successful login by checking for the rooms page heading
+// Helper function to log in a user
+export const login = async (page: Page, data: types.UserData) => {
+  await loginAttempt(page, data);
   await expect(page.locator('#rooms-heading')).toBeVisible();
 };
 
 // Helper function to log out a user
 export const logout = async (page: Page) => {
-  // Look for common logout patterns - adjust selectors based on your app's UI
-  try {
-    // Option 1: Try to find the logout button by data-testid
-    const logoutButton = page.getByTestId('logout-button');
-    await logoutButton.click({ timeout: 1000 });
-
-    // Wait for logout to complete by checking for login form or redirect
-    await expect(page.locator('input[name="username"], input[name="email"]')).toBeVisible({ timeout: 5000 });
-  } catch (error) {
-    console.warn('Logout failed with standard methods, trying to clear session:', error);
-    // Fallback: Clear all cookies and local storage
-    await page.context().clearCookies();
-    await page.evaluate(() => {
-      localStorage.clear();
-      sessionStorage.clear();
-    });
-    await page.goto(host);
-  }
+  await navigation.goToHome(page);
+  await formsInteractions.clickButton(page, 'logout-button');
+  await page.waitForLoadState('networkidle');
 };
 
-export const firstLoginFlow = async (page: Page, data: users.UserData, tempPass: string) => {
+export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {
   await page.goto(host);
 
   await page.fill('input[name="username"]', data.username);
