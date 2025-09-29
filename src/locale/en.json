@@ -60,7 +60,7 @@
       "recover": "Recover password",
       "recovery": "Password Recovery",
       "success": "The password was reset. {{var}}",
-      "successfulEmail": "An email with instructions to reset your password has been sent to your email",
+      "successfulEmail": "An email with instructions to reset the user's password has been sent to their email.",
       "successfulNoEmail": "A new temporary password has been generated for this user."
     },
     "login": {
