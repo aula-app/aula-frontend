@@ -469,7 +469,7 @@ export async function resetUserPassword(user_id: string): Promise<GenericRespons
   const response = await databaseRequest(
     {
       model: 'User',
-      method: 'resetUserPassword',
+      method: 'resetPasswordForUser',
       arguments: { user_id },
     },
     ['updater_id']
