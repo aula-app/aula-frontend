@@ -86,7 +86,12 @@ async function setAllowRegistration(status: boolean): Promise<DefaultSettingsRes
   return response as DefaultSettingsResponse;
 }
 
-export async function addAllCSV(csv: string, room_ids: Array<string>, user_level: RoleTypes): Promise<GenericResponse> {
+export async function addAllCSV(
+  csv: string,
+  room_ids: Array<string>,
+  user_level: RoleTypes,
+  send_emails_at?: string
+): Promise<GenericResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'addAllCSV',
@@ -94,6 +99,7 @@ export async function addAllCSV(csv: string, room_ids: Array<string>, user_level
       csv,
       room_ids,
       user_level,
+      send_emails_at,
     },
   });
 

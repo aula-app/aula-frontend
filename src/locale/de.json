@@ -537,6 +537,7 @@
       "endTime": "Endzeit",
       "phase": "Phasendauern",
       "startDate": "Startdatum",
+      "inviteDate": "Einladungsdatum für neue Benutzer",
       "startDay": "Starttag",
       "startTime": "Startzeit",
       "workdays": "Arbeitstage",
