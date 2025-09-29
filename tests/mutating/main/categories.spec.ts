@@ -54,8 +54,8 @@ describeWithSetup('Category management', () => {
   });
 
   test.afterAll(async () => {
-    // await cleanup();
-    // await admin.close();
+    await cleanup();
+    await admin.close();
   });
 
   const cleanupQueue = {
@@ -65,12 +65,18 @@ describeWithSetup('Category management', () => {
   };
 
   const cleanup = async () => {
-    if (cleanupQueue.idea) await ideas.remove(admin, room, idea);
-    cleanupQueue.idea = false;
-    if (cleanupQueue.room) await rooms.remove(admin, room);
-    cleanupQueue.room = false;
-    if (cleanupQueue.category) await removeCategory();
-    cleanupQueue.category = false;
+    if (cleanupQueue.idea) {
+      cleanupQueue.idea = false;
+      await ideas.remove(admin, room, idea);
+    }
+    if (cleanupQueue.room) {
+      cleanupQueue.room = false;
+      await rooms.remove(admin, room);
+    }
+    if (cleanupQueue.category) {
+      cleanupQueue.category = false;
+      await removeCategory();
+    }
   };
 
   test('Admins should be able to create a new category', async () => {
@@ -146,4 +152,8 @@ describeWithSetup('Category management', () => {
 
     await expect(CategoryChip).not.toBeVisible();
   };
+
+  test('Cleanup after tests', async () => {
+    await cleanup();
+  });
 });

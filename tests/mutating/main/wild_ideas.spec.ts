@@ -45,6 +45,13 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
     bob = await browsers.newPage(browsers.bobs_browser);
   });
 
+  test.afterAll(async () => {
+    await cleanup();
+    await admin.close();
+    await alice.close();
+    await bob.close();
+  });
+
   const cleanupQueue = {
     room: false,
     adminIdea: false,
@@ -52,22 +59,19 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
   };
 
   const cleanup = async () => {
-    if (cleanupQueue.adminIdea) await ideas.remove(admin, room, adminIdea);
-    cleanupQueue.adminIdea = false;
-
-    if (cleanupQueue.aliceIdea) await ideas.remove(alice, room, aliceIdea);
-    cleanupQueue.aliceIdea = false;
-
-    if (cleanupQueue.room) await rooms.remove(admin, room);
-    cleanupQueue.room = false;
+    if (cleanupQueue.adminIdea) {
+      cleanupQueue.adminIdea = false;
+      await ideas.remove(admin, room, adminIdea);
+    }
+    if (cleanupQueue.aliceIdea) {
+      cleanupQueue.aliceIdea = false;
+      await ideas.remove(alice, room, aliceIdea);
+    }
+    if (cleanupQueue.room) {
+      cleanupQueue.room = false;
+      await rooms.remove(admin, room);
+    }
   };
-
-  test.afterAll(async () => {
-    await cleanup();
-    await admin.close();
-    await alice.close();
-    await bob.close();
-  });
 
   test('Admin can create an idea', async () => {
     await rooms.create(admin, room);
@@ -116,5 +120,9 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
   test('Alice can delete her own idea', async () => {
     await ideas.remove(alice, room, aliceIdea);
     cleanupQueue.aliceIdea = false;
+  });
+
+  test('Cleanup after tests', async () => {
+    await cleanup();
   });
 });
