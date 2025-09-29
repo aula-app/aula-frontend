@@ -60,7 +60,7 @@
       "recover": "Passwort wiederherstellen",
       "recovery": "Passwort-Wiederherstellung",
       "success": "Das Passwort wurde zurückgesetzt. {{var}}",
-      "successfulEmail": "Eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts wurde an Ihre E-Mail-Adresse gesendet",
+      "successfulEmail": "Eine E-Mail mit Anweisungen zum Zurücksetzen des Passworts des Benutzers wurde an dessen E-Mail-Adresse gesendet.",
       "successfulNoEmail": "Ein neues temporäres Passwort wurde für diesen Benutzer generiert."
     },
     "login": {
