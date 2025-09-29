@@ -1,3 +1,13 @@
+## 1.4.6
+
+- **New features:**
+  - Scheduled invite for users uploaded via CSV
+
+## 1.4.5
+
+- **Bug fixes:**
+  - Disable delegation system
+
 ## 1.4.4
 
 - **Bug fixes:**
