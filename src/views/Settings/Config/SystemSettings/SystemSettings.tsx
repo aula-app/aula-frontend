@@ -85,6 +85,12 @@ const SystemSettings = ({ settings, onReload }: Props) => {
           disabled={isLoading}
           error={hasError}
           data-testid="system-status-selector"
+          slotProps={{
+            htmlInput: {
+              'aria-label': t('instance.status'),
+              'data-testid': 'system-status-selector-input',
+            },
+          }}
         >
           {hasError && (
             <MenuItem value="" disabled data-testid="status-option-error">

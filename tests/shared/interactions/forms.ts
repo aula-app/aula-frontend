@@ -19,3 +19,13 @@ export const openMoreOption = async (page: Page, parent: Locator) => {
   await moreButton.click({ timeout: 1000 });
   await page.waitForTimeout(500);
 };
+
+export const selectOption = async (page: Page, testId: string, optionId: string) => {
+  const input = page.getByTestId(testId);
+  await expect(input).toBeVisible();
+  input.click();
+  await page.waitForTimeout(500);
+  const option = page.getByTestId(optionId);
+  await expect(option).toBeVisible();
+  await option.click();
+};
