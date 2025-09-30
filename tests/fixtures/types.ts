@@ -30,3 +30,9 @@ export type UserData = {
   role: SettingsTypes.RoleTypes;
   about: string;
 };
+
+export type MessageData = {
+  user: UserData;
+  title: string;
+  content: string;
+};

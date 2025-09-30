@@ -31,6 +31,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
           label: user.realname,
           value: user.hash_id,
           displayname: user.displayname,
+          username: user.username,
         }));
         setOptions(users);
       }
@@ -92,7 +93,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
               field.onChange(newValue ? newValue.value : null);
             }}
             renderOption={(props, option) => (
-              <li {...props} key={option.value} data-testid={`user-option-${option.value}`}>
+              <li {...props} key={option.value} data-testid={`user-option-${option.username}`}>
                 <span>
                   {option.label}
                   {option.displayname && (
@@ -111,6 +112,12 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
                 disabled={loading || disabled}
                 error={!!fieldState.error}
                 helperText={t(`${fieldState.error?.message || ''}`)}
+                slotProps={{
+                  htmlInput: {
+                    ...params.inputProps,
+                    'data-testid': 'user-field-input',
+                  },
+                }}
                 {...restOfProps}
               />
             )}
@@ -120,5 +127,4 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
     />
   );
 };
-
 export default UserField;

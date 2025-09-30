@@ -27,7 +27,7 @@ export const openAccordion = async (page: Page, testId: string) => {
   const isExpanded = await accordion.getAttribute('aria-expanded');
   if (isExpanded !== 'true') {
     await accordion.click();
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(500);
   }
 };
 

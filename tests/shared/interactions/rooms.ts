@@ -12,10 +12,7 @@ export const create = async (page: Page, room: types.RoomData) => {
   await formInteractions.clickButton(page, 'add-rooms-button');
   await page.waitForSelector('input[name="room_name"]', { state: 'visible', timeout: 500 });
   await formInteractions.fillForm(page, 'room-name-input', room.name);
-  await page
-    .getByTestId('markdown-editor-description_public')
-    .locator('[contenteditable="true"]')
-    .fill(room.description);
+  await formInteractions.fillMarkdownForm(page, 'markdown-editor-description_public', room.description);
 
   const UserSelector = page.getByTestId('users-field');
   await expect(UserSelector).toBeVisible();
@@ -33,7 +30,7 @@ export const create = async (page: Page, room: types.RoomData) => {
 
   await navigation.goToRoomsSettings(page);
   await expect(page.getByTestId('add-rooms-button')).toBeVisible();
-  await settingsInteractions.addFilter({ page, filter: { option: 'room_name', value: room.name } });
+  await settingsInteractions.addFilter(page, { option: 'room_name', value: room.name });
   await settingsInteractions.clearFilter(page);
 };
 

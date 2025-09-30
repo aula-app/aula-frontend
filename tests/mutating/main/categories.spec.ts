@@ -8,35 +8,35 @@ import * as navigation from '../../shared/interactions/navigation';
 import * as rooms from '../../shared/interactions/rooms';
 import * as settingsInteractions from '../../shared/interactions/settings';
 import * as shared from '../../shared/shared';
+import * as types from '../../fixtures/types';
 
 // force these tests to run sqeuentially
 test.describe.configure({ mode: 'serial' });
 
 describeWithSetup('Category management', () => {
   let admin: any;
-
-  const room = {
-    name: `room-${shared.getRunId()}-categories-tests`,
-    description: 'created during automated testing for categories.spec.ts',
-    users: [
-      userData.testUsers.alice(),
-      userData.testUsers.bob(),
-      userData.testUsers.mallory(),
-      userData.testUsers.rainer(),
-    ],
-  };
-
-  const idea = {
-    name: '',
-    description: 'Idea generated during category management tests',
-    category: '',
-  };
+  let room: types.RoomData;
+  let idea: types.IdeaData;
 
   test.beforeAll(async () => {
     admin = await browsers.newPage(browsers.admins_browser);
 
-    idea.name = shared.gensym('Test idea ');
-    idea.category = shared.gensym('Test Category ');
+    idea = {
+      name: shared.gensym('Test idea '),
+      description: 'Idea generated during category management tests',
+      category: shared.gensym('Test Category '),
+    };
+
+    room = {
+      name: `room-${shared.getRunId()}-categories-tests`,
+      description: 'created during automated testing for categories.spec.ts',
+      users: [
+        userData.testUsers.alice(),
+        userData.testUsers.bob(),
+        userData.testUsers.mallory(),
+        userData.testUsers.rainer(),
+      ],
+    };
   });
 
   test.beforeEach(async () => {
@@ -78,7 +78,7 @@ describeWithSetup('Category management', () => {
     navigation.openAccordion(admin, 'config-accordion-idea');
     formInteractions.clickButton(admin, 'add-new-category-chip');
 
-    formInteractions.fillForm(admin, 'category-name-field', idea.category);
+    formInteractions.fillForm(admin, 'category-name-field', idea.category ? idea.category : '');
 
     // Select category icon
     const iconFieldContainer = admin.getByTestId('icon-field-container');
@@ -91,7 +91,7 @@ describeWithSetup('Category management', () => {
     await admin.waitForTimeout(2000); // wait for the form to process
 
     // Verify that the new category appears in the list
-    const newCategorySelector = `category-chip-${idea.category.toLowerCase().replace(/\s+/g, '-')}`;
+    const newCategorySelector = `category-chip-${idea.category?.toLowerCase().replace(/\s+/g, '-')}`;
     const categoryChip = admin.getByTestId(newCategorySelector);
     await expect(categoryChip).toBeVisible();
 
@@ -136,7 +136,7 @@ describeWithSetup('Category management', () => {
     navigation.goToSettings(admin);
     navigation.openAccordion(admin, 'config-accordion-idea');
 
-    const CategoryChip = admin.getByTestId(`category-chip-${idea.category.toLowerCase().replace(/\s+/g, '-')}`);
+    const CategoryChip = admin.getByTestId(`category-chip-${idea.category?.toLowerCase().replace(/\s+/g, '-')}`);
     await expect(CategoryChip).toBeVisible();
     const DeleteButton = await CategoryChip.getByTestId('CancelIcon').first();
     await DeleteButton.click();

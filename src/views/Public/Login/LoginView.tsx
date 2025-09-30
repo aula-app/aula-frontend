@@ -30,7 +30,6 @@ import * as yup from "yup";
 
 const LoginView = () => {
   const { t } = useTranslation();
-  const [instanceApiUrl, setInstanceApiUrl] = useState<string>(localStorageGet("api_url"));
   const [config, setConfig] = useState<RuntimeConfig>(defaultConfig);
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
@@ -62,6 +61,8 @@ const LoginView = () => {
   };
 
   const onSubmit = async (formData: LoginFormValues) => {
+    const instanceApiUrl = await localStorageGet("api_url");
+
     if (!instanceApiUrl) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
       return;
@@ -129,18 +130,6 @@ const LoginView = () => {
         runtimeConfig = await loadRuntimeConfig();
       }
       setConfig(runtimeConfig);
-
-      // if this instance's BE api url is not defined
-      if (!instanceApiUrl) {
-        if (config.IS_MULTI) {
-          // get the instance api url based on the instance code
-          await validateAndSaveInstanceCode(localStorageGet('code'));
-          setInstanceApiUrl(localStorageGet('api_url'));
-        } else {
-          // if SINGLE, reuse the "CENTRAL_API_URL" as this instance's BE api url
-          setInstanceApiUrl(config.CENTRAL_API_URL);
-        }
-      }
     })()
   }, []);
 

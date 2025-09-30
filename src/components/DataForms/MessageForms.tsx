@@ -257,7 +257,9 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
               error={!!errors.headline}
               helperText={`${errors.headline?.message || ''}`}
               fullWidth
-              data-testid="message-headline-input"
+              slotProps={{
+                htmlInput: { 'data-testid': 'message-headline-input' },
+              }}
               {...register('headline')}
             />
             <MarkdownEditor name="body" control={control} required />

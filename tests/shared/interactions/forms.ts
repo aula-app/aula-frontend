@@ -1,8 +1,15 @@
 import { Locator, Page, expect } from '@playwright/test';
+import { cp } from 'fs';
 
 export const fillForm = async (page: Page, testId: string, value: string) => {
   const field = page.getByTestId(testId);
   await field.clear();
+  await expect(field).toBeVisible();
+  await field.fill(value);
+};
+
+export const fillMarkdownForm = async (page: Page, testId: string, value: string) => {
+  const field = page.getByTestId(testId).locator('[contenteditable="true"]');
   await expect(field).toBeVisible();
   await field.fill(value);
 };

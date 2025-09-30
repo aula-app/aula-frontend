@@ -22,32 +22,39 @@ export const newPage = (browser: BrowserContext): Promise<Page> => browser.newPa
 export const init = async () => {
   const browser = await chromium.launch();
 
-  await Promise.all([
-    browser.newContext().then(async (b) => {
-      admins_browser = b;
-      admin = await admins_browser.newPage();
-    }),
-    browser.newContext().then(async (b) => {
-      alices_browser = b;
-      alice = await alices_browser.newPage();
-    }),
-    browser.newContext().then(async (b) => {
-      bobs_browser = b;
-      bob = await bobs_browser.newPage();
-    }),
-    browser.newContext().then(async (b) => {
-      mallorys_browser = b;
-      mallory = await mallorys_browser.newPage();
-    }),
-    browser.newContext().then(async (b) => {
-      burt_browser = b;
-      burt = await burt_browser.newPage();
-    }),
-    browser.newContext().then(async (b) => {
-      rainer_browser = b;
-      rainer = await rainer_browser.newPage();
-    }),
-  ]);
+  try {
+    await Promise.all([
+      browser.newContext().then(async (b) => {
+        admins_browser = b;
+        admin = await admins_browser.newPage();
+      }),
+      browser.newContext().then(async (b) => {
+        alices_browser = b;
+        alice = await alices_browser.newPage();
+      }),
+      browser.newContext().then(async (b) => {
+        bobs_browser = b;
+        bob = await bobs_browser.newPage();
+      }),
+      browser.newContext().then(async (b) => {
+        mallorys_browser = b;
+        mallory = await mallorys_browser.newPage();
+      }),
+      browser.newContext().then(async (b) => {
+        burt_browser = b;
+        burt = await burt_browser.newPage();
+      }),
+      browser.newContext().then(async (b) => {
+        rainer_browser = b;
+        rainer = await rainer_browser.newPage();
+      }),
+    ]);
+    console.info('✅ Browsers initialized');
+  } catch (error) {
+    console.error('❌ Error during browsers initialization:', error);
+    await shutdown();
+    throw error;
+  }
 };
 
 export const shutdown = async () => {

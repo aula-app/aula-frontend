@@ -47,15 +47,17 @@ const SelectField: React.FC<Props> = ({
             error={!!fieldState.error}
             helperText={<span id={`${name}-error-message`}>{t(`${fieldState.error?.message || ''}`)}</span>}
             {...restOfProps}
-            inputProps={{
-              'aria-labelledby': `select-field-${name}-label`,
-              'aria-invalid': !!fieldState.error,
-              'aria-errormessage': fieldState.error ? `${name}-error-message` : undefined
-            }}
-            InputLabelProps={{ 
-              shrink: true, 
-              id: `select-field-${name}-label`, 
-              htmlFor: `select-field-${name}` 
+            slotProps={{
+              htmlInput: {
+                'aria-labelledby': `select-field-${name}-label`,
+                'aria-invalid': !!fieldState.error,
+                'aria-errormessage': fieldState.error ? `${name}-error-message` : undefined,
+              },
+              inputLabel: {
+                shrink: true,
+                id: `select-field-${name}-label`,
+                htmlFor: `select-field-${name}`,
+              },
             }}
           >
             {options.map((option) => (

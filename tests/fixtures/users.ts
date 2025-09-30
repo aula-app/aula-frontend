@@ -94,10 +94,11 @@ export type TestUserKey = keyof typeof testUsers;
 const userKeys = Object.keys(testUsers) as Array<TestUserKey>;
 
 export const generateBaseUsers = async (): Promise<boolean> => {
-  if (!alice) init();
+  init();
 
   try {
     await browsers.init();
+
     await userInteractions.login(browsers.admin, admin);
 
     // Map user keys to their corresponding browser pages (after browsers are initialized)
