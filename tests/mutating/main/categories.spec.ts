@@ -9,17 +9,6 @@ import * as rooms from '../../shared/interactions/rooms';
 import * as settingsInteractions from '../../shared/interactions/settings';
 import * as shared from '../../shared/shared';
 
-const getUsers = () => {
-  // Ensure users are initialized when accessed
-  if (!userData.alice) userData.init();
-  return [
-    userData.testUsers.alice(),
-    userData.testUsers.bob(),
-    userData.testUsers.mallory(),
-    userData.testUsers.rainer(),
-  ];
-};
-
 // force these tests to run sqeuentially
 test.describe.configure({ mode: 'serial' });
 
@@ -29,7 +18,12 @@ describeWithSetup('Category management', () => {
   const room = {
     name: `room-${shared.getRunId()}-categories-tests`,
     description: 'created during automated testing for categories.spec.ts',
-    users: getUsers(),
+    users: [
+      userData.testUsers.alice(),
+      userData.testUsers.bob(),
+      userData.testUsers.mallory(),
+      userData.testUsers.rainer(),
+    ],
   };
 
   const idea = {
