@@ -31,50 +31,50 @@ export const admin: types.UserData = {
 };
 
 export const init = () => {
-  const runId = shared.getRunId();
+  const runId = fs.readFileSync('tests/temp/run-id.txt', 'utf-8');
   console.log('Run ID for fixtures:', runId);
 
   alice = {
-    username: 'alice-user-' + runId,
+    username: 'test-user-alice-' + runId,
     password: 'aula',
-    displayName: 'alice-' + runId,
-    realName: 'Alice Testing' + runId,
+    displayName: 'Alice User ' + runId,
+    realName: 'Alice Test ' + runId,
     role: 20,
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };
 
   bob = {
-    username: 'bob-user-' + runId,
+    username: 'test-user-bob-' + runId,
     password: 'aula',
-    displayName: 'bob-' + runId,
-    realName: 'Bob Testing' + runId,
+    displayName: 'Bob User ' + runId,
+    realName: 'Bob Test ' + runId,
     role: 20,
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };
 
   mallory = {
-    username: 'mallory-moderator_v-' + runId,
+    username: 'test-moderator-v-mallory-' + runId,
     password: 'aula',
-    displayName: 'mallory-' + runId,
-    realName: 'mallory Testing' + runId,
+    displayName: 'Mallory Moderator V ' + runId,
+    realName: 'Mallory Test ' + runId,
     role: 41,
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };
 
   burt = {
-    username: 'burt-supermoderator_v-' + runId,
+    username: 'test-supermoderator-v-burt-' + runId,
     password: 'aula',
-    displayName: 'burt-' + runId,
-    realName: 'burt Testing' + runId,
+    displayName: 'Burt Super Moderator v ' + runId,
+    realName: 'Burt Test ' + runId,
     role: 41,
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };
 
   rainer = {
-    username: 'rainer-principal_v-' + runId,
+    username: 'test-principal-v-rainer-' + runId,
     password: 'aula',
-    displayName: 'rainer-' + runId,
-    realName: 'rainer Testing' + runId,
+    displayName: 'Rainer Principal ' + runId,
+    realName: 'Rainer Test ' + runId,
     role: 45,
     about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
   };
