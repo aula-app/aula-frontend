@@ -660,6 +660,10 @@
     },
     "darkMode": "Dark mode",
     "empty": {
+      "announcements": {
+        "description": "There are no announcements created yet",
+        "title": "No announcements"
+      },
       "boxes": {
         "description": "Boxes will appear here when they reach this phase",
         "title": "No boxes in this phase"
