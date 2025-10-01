@@ -6,8 +6,10 @@ import * as browsers from '../shared/interactions/browsers';
 export default async function globalSetup() {
   console.log('Setting up!');
 
-  // await userData.generateBaseUsers();
-  // await browsers.pickle();
+  userData.init();
+  await browsers.init();
+  await userData.generateBaseUsers();
+  await browsers.pickle();
 
   console.info('Setup complete!');
 }

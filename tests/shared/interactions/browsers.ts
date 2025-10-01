@@ -17,6 +17,18 @@ export let mallory: Page;
 export let burt: Page;
 export let rainer: Page;
 
+// Mapping object for indexed access by user key
+export const getUserBrowser = (userKey: string): Page | undefined => {
+  switch (userKey) {
+    case 'alice': return alice;
+    case 'bob': return bob;
+    case 'mallory': return mallory;
+    case 'burt': return burt;
+    case 'rainer': return rainer;
+    default: return undefined;
+  }
+};
+
 export const newPage = (browser: BrowserContext): Promise<Page> => browser.newPage();
 
 export const init = async () => {

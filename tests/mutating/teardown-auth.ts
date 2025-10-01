@@ -7,7 +7,7 @@ export default async function globalTeardown() {
   // Comprehensive cleanup of test artifacts
   console.log('Cleaning up after all tests...');
 
-  await browsers.recall();
+  userData.init();
   await userData.clearBaseUsers();
   await browsers.shutdown();
 

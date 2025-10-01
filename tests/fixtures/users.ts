@@ -2,6 +2,7 @@ import * as types from './types';
 import * as shared from '../shared/shared';
 import * as browsers from '../shared/interactions/browsers';
 import * as userInteractions from '../shared/interactions/users.ts';
+import * as userData from './users';
 
 /* User roles
  * 10 => "guest",
@@ -93,22 +94,9 @@ export type TestUserKey = keyof typeof testUsers;
 
 const userKeys = Object.keys(testUsers) as Array<TestUserKey>;
 
-export const generateBaseUsers = async (): Promise<boolean> => {
-  init();
-
+export const generateBaseUsers = async () => {
   try {
-    await browsers.init();
-
     await userInteractions.login(browsers.admin, admin);
-
-    // Map user keys to their corresponding browser pages (after browsers are initialized)
-    const browserMap = {
-      alice: browsers.alice,
-      bob: browsers.bob,
-      mallory: browsers.mallory,
-      burt: browsers.burt,
-      rainer: browsers.rainer,
-    } as const;
 
     // Sequential user creation to avoid race conditions
     for (const userKey of userKeys) {
@@ -121,10 +109,10 @@ export const generateBaseUsers = async (): Promise<boolean> => {
       }
 
       // Run first login flow with the correct browser page
-      const userBrowser = browserMap[userKey];
+      const userBrowser = browsers.getUserBrowser(userKey);
       if (userBrowser) {
         await userInteractions.firstLoginFlow(userBrowser, user, tempPassword);
-        console.log('✅ Created user:', user.username);
+        console.log('✅ User password set for:', userKey);
       } else {
         console.error('❌ No browser found for user:', userKey);
         return false;
@@ -132,20 +120,16 @@ export const generateBaseUsers = async (): Promise<boolean> => {
     }
 
     console.log('✅ All users created successfully');
-    return true;
   } catch (error) {
     console.error('❌ Error generating base users:', error);
-    return false;
+    throw error;
   }
 };
 
 export const clearBaseUsers = async (): Promise<boolean> => {
-  if (!alice) return true;
+  await browsers.recall();
 
   try {
-    await browsers.init();
-    await userInteractions.login(browsers.admin, admin);
-
     let allRemoved = true;
 
     // Sequential user removal to avoid race conditions
@@ -158,7 +142,6 @@ export const clearBaseUsers = async (): Promise<boolean> => {
       } catch (error) {
         console.error('❌ Failed to remove user:', user.username, error);
         allRemoved = false;
-        // Continue with other users instead of failing completely
       }
     }
 

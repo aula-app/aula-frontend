@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 import * as shared from '../shared';
 import * as types from '../../fixtures/types';
 import * as formsInteractions from './forms';
@@ -9,9 +9,9 @@ const host = shared.getHost();
 
 type TempPass = string;
 
-export const exists = async (page: Page, data: types.UserData) => {
+export const exists = async (page: Page, data: types.UserData): Promise<Locator> => {
   await navigation.goToUsersSettings(page);
-  await settingsInteractions.checkRow(page, { option: 'username', value: data.username });
+  return await settingsInteractions.checkRow(page, { option: 'username', value: data.username });
 };
 
 export const getTemporaryPass = async (page: Page, data: types.UserData) => {
@@ -19,9 +19,7 @@ export const getTemporaryPass = async (page: Page, data: types.UserData) => {
   await navigation.goToUsersSettings(page);
   await page.waitForLoadState('networkidle');
 
-  await exists(page, data);
-
-  const row = page.locator('table tr').filter({ hasText: data.username }).first();
+  const row = await exists(page, data);
   const viewPassButton = row.locator('button');
   await viewPassButton.click({ timeout: 1000 });
 
@@ -39,7 +37,6 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
 
   try {
     await navigation.goToUsersSettings(page);
-    await page.waitForLoadState('networkidle');
 
     await formsInteractions.clickButton(page, 'add-users-button');
     await page.waitForTimeout(1000);
@@ -56,8 +53,7 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
     await page.waitForTimeout(500);
     await page.waitForLoadState('networkidle');
 
-    const row = page.locator('table tr').filter({ hasText: data.username });
-    await expect(row).toBeVisible();
+    await exists(page, data);
 
     const pass = await getTemporaryPass(page, data);
     console.log('✅ Successfully created user:', data.username);
@@ -70,13 +66,7 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
 
 export const remove = async (page: Page, data: types.UserData) => {
   try {
-    await navigation.goToUsersSettings(page);
-    await page.waitForLoadState('networkidle', { timeout: 10000 });
-
-    await settingsInteractions.addFilter(page, { option: 'username', value: data.username });
-    await exists(page, data);
-
-    const row = page.locator('table tr').filter({ hasText: data.username }).first();
+    const row = await exists(page, data);
     const checkbox = row.locator('input[type="checkbox"]');
     await expect(checkbox).toBeVisible({ timeout: 5000 });
     await checkbox.check();
@@ -100,6 +90,8 @@ export const remove = async (page: Page, data: types.UserData) => {
 
 export const loginAttempt = async (page: Page, data: types.UserData) => {
   await page.goto(host);
+  await page.waitForLoadState('networkidle');
+  await page.waitForSelector('input[name="username"]', { timeout: 10000 });
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
   await page.locator('button[type="submit"]').click({ timeout: 1000 });
@@ -121,7 +113,8 @@ export const logout = async (page: Page) => {
 };
 
 export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {
-  await page.goto(host);
+  console.log('🔧 Starting first login flow for:', data.username);
+  await navigation.goToHome(page);
 
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', tempPass);

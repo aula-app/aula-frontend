@@ -1,6 +1,5 @@
 import { AppIconButton, AppLink } from "@/components";
 import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
-import { validateAndSaveInstanceCode } from "@/services/instance";
 import { loginUser } from "@/services/login";
 import { useAppStore } from "@/store";
 import { LoginFormValues } from "@/types/LoginTypes";

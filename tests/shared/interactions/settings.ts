@@ -1,13 +1,14 @@
-import { Page, expect } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 import * as formInteractions from './forms';
 import { ScopeKeyType } from '../../../src/types/Scopes';
 
-export const checkRow = async (page: Page, filter: { option: string; value: string }) => {
+export const checkRow = async (page: Page, filter: { option: string; value: string }): Promise<Locator> => {
   const row = page.locator('table tr').filter({ hasText: filter.value }).first();
   if (!(await row.isVisible())) {
     await addFilter(page, filter);
   }
   await expect(row).toBeVisible();
+  return row;
 };
 
 export const addFilter = async (page: Page, filter: { option: string; value: string }) => {
