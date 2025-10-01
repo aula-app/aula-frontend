@@ -2,7 +2,6 @@ import * as types from './types';
 import * as shared from '../shared/shared';
 import * as browsers from '../shared/interactions/browsers';
 import * as userInteractions from '../shared/interactions/users.ts';
-import * as userData from './users';
 
 /* User roles
  * 10 => "guest",

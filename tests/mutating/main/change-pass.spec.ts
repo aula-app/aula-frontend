@@ -12,22 +12,26 @@ type PasswordChangeContext = {
 };
 
 describeWithSetup('Change pass flow', () => {
-  userData.init();
   let alice: any;
+  let defaultFields: PasswordChangeContext;
+
+  const clearQueue = {
+    currentPassword: null as string | null,
+  };
 
   test.beforeAll(async () => {
     alice = await browsers.newPage(browsers.alices_browser);
+    defaultFields = {
+      oldPassword: userData.testUsers.alice().password,
+      newPassword: 'newPassword0',
+      confirmPassword: 'newPassword0',
+    };
   });
 
   test.afterAll(async () => {
+    await revertPassword();
     await alice.close();
   });
-
-  const defaultFields = {
-    oldPassword: userData.alice.password,
-    newPassword: 'newPassword0',
-    confirmPassword: 'newPassword0',
-  };
 
   const changePassword = async (passFields: PasswordChangeContext) => {
     await navigation.goToProfile(alice);
@@ -38,6 +42,18 @@ describeWithSetup('Change pass flow', () => {
     }
 
     await formInteractions.clickButton(alice, 'submit-new-password');
+  };
+
+  const revertPassword = async () => {
+    if (!clearQueue.currentPassword) return;
+    const defaultPassword = userData.testUsers.alice().password;
+    const fields = {
+      oldPassword: clearQueue.currentPassword,
+      newPassword: defaultPassword, // revert to original on last change
+      confirmPassword: defaultPassword,
+    };
+    await changePassword(fields);
+    await checkSuccessDiv();
   };
 
   const checkSuccessDiv = async () => {
@@ -54,6 +70,7 @@ describeWithSetup('Change pass flow', () => {
   test('User can successfully change password with valid inputs', async () => {
     await changePassword(defaultFields);
     await checkSuccessDiv();
+    clearQueue.currentPassword = defaultFields.newPassword;
   });
 
   test('User cannot change password with incorrect current password', async () => {
@@ -90,11 +107,12 @@ describeWithSetup('Change pass flow', () => {
     for (let i = 0; i < 6; i++) {
       const fields = {
         oldPassword: `newPassword${i}`,
-        newPassword: `newPassword${i + 1}`,
+        newPassword: `newPassword${i + 1}`, // revert to original on last change
         confirmPassword: `newPassword${i + 1}`,
       };
       await changePassword(fields);
       await checkSuccessDiv();
+      clearQueue.currentPassword = fields.newPassword;
     }
   });
 });
