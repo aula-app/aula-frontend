@@ -4,6 +4,7 @@ import * as types from '../../fixtures/types';
 import * as formsInteractions from './forms';
 import * as settingsInteractions from './settings';
 import * as navigation from './navigation';
+import * as browsers from './browsers';
 
 const host = shared.getHost();
 
@@ -12,24 +13,6 @@ type TempPass = string;
 export const exists = async (page: Page, data: types.UserData): Promise<Locator> => {
   await navigation.goToUsersSettings(page);
   return await settingsInteractions.checkRow(page, { option: 'username', value: data.username });
-};
-
-export const getTemporaryPass = async (page: Page, data: types.UserData) => {
-  // navigate to the users settings page:
-  await navigation.goToUsersSettings(page);
-  await page.waitForLoadState('networkidle');
-
-  const row = await exists(page, data);
-  const viewPassButton = row.locator('button');
-  await viewPassButton.click({ timeout: 1000 });
-
-  // temporary password must exist and be pulled out of the page.
-  const pass: string = (await row.locator('div[role="button"] span').textContent())!;
-  expect(pass).toBeTruthy();
-
-  await settingsInteractions.clearFilter(page);
-
-  return pass;
 };
 
 export const create = async (page: Page, data: types.UserData): Promise<TempPass> => {
@@ -62,6 +45,24 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
     console.error('❌ Failed to create user:', data.username, error);
     throw error;
   }
+};
+
+export const getTemporaryPass = async (page: Page, data: types.UserData) => {
+  // navigate to the users settings page:
+  await navigation.goToUsersSettings(page);
+  await page.waitForLoadState('networkidle');
+
+  const row = await exists(page, data);
+  const viewPassButton = row.locator('button');
+  await viewPassButton.click({ timeout: 1000 });
+
+  // temporary password must exist and be pulled out of the page.
+  const pass: string = (await row.locator('div[role="button"] span').textContent())!;
+  expect(pass).toBeTruthy();
+
+  await settingsInteractions.clearFilter(page);
+
+  return pass;
 };
 
 export const remove = async (page: Page, data: types.UserData) => {
@@ -112,21 +113,38 @@ export const logout = async (page: Page) => {
   await page.waitForLoadState('networkidle');
 };
 
-export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {
-  console.log('🔧 Starting first login flow for:', data.username);
-  await navigation.goToHome(page);
+export const register = async (page: Page, data: types.UserData, tempPass: string) => {
+  console.log('🔧 Starting registration flow for:', data.username);
+  try {
+    await navigation.goToHome(page);
 
-  await page.fill('input[name="username"]', data.username);
-  await page.fill('input[name="password"]', tempPass);
-  await page.locator('button[type="submit"]').click({ timeout: 1000 });
+    await page.fill('input[name="username"]', data.username);
+    await page.fill('input[name="password"]', tempPass);
+    await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
-  const oldPasswordButton = page.locator('input[name="oldPassword"]');
-  await expect(oldPasswordButton).toBeVisible();
+    const oldPasswordButton = page.locator('input[name="oldPassword"]');
+    await expect(oldPasswordButton).toBeVisible();
 
-  await page.fill('input[name="oldPassword"]', tempPass);
-  await page.fill('input[name="newPassword"]', data.password);
-  await page.fill('input[name="confirmPassword"]', data.password);
-  await page.locator('button[type="submit"]').click({ timeout: 1000 });
+    await page.fill('input[name="oldPassword"]', tempPass);
+    await page.fill('input[name="newPassword"]', data.password);
+    await page.fill('input[name="confirmPassword"]', data.password);
+    await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
-  await login(page, data);
+    await login(page, data);
+    console.log('✅ Successfully registered user:', data.username);
+  } catch (error) {
+    console.error('❌ Failed to register user:', data.username, error);
+    throw error;
+  }
+};
+
+export const start = async (page: Page, data: types.UserData) => {
+  try {
+    const tempPassword = await create(page, data);
+    const newBrowser = await browsers.create(data.username);
+    await register(newBrowser, data, tempPassword);
+  } catch (error) {
+    console.error(`❌ Error generating user: ${data.username}. `, error);
+    throw error;
+  }
 };
