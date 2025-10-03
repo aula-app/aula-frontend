@@ -1,26 +1,32 @@
-import { expect, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import * as userData from '../../fixtures/users';
 import { describeWithSetup } from '../../shared/base-test';
 import * as browsers from '../../shared/interactions/browsers';
 import * as formInteractions from '../../shared/interactions/forms';
 import * as navigation from '../../shared/interactions/navigation';
 import * as users from '../../shared/interactions/users';
+import { UserData } from '../../fixtures/types';
 
 describeWithSetup('Instance Offline', () => {
-  let admin: any;
-  let alice: any;
+  let admin: Page;
+  let user: Page;
+  let userConfig: UserData;
 
   let instanceOnline = true;
 
   test.beforeAll(async () => {
-    admin = await browsers.newPage(browsers.admins_browser);
-    alice = await browsers.newPage(browsers.alices_browser);
+    admin = await browsers.getUserBrowser('admin');
+    user = await browsers.getUserBrowser('user');
+
+    const hasConfig = await userData.get('user');
+    if (!hasConfig) throw new Error('User config not found');
+    userConfig = hasConfig;
   });
 
   test.afterAll(async () => {
     if (!instanceOnline) await changeInstanceStatus(true);
     await admin.close();
-    await alice.close();
+    await user.close();
   });
 
   const changeInstanceStatus = async (online: boolean) => {
@@ -49,11 +55,11 @@ describeWithSetup('Instance Offline', () => {
   });
 
   test('User cannot login with Offline instance', async () => {
-    await navigation.goToHome(alice);
-    await users.loginAttempt(alice, userData.testUsers.alice());
-    await alice.waitForLoadState('networkidle');
+    await navigation.goToHome(user);
+    await users.loginAttempt(user, userConfig);
+    await user.waitForLoadState('networkidle');
 
-    const offlineDiv = alice.getByTestId('school-offline-view');
+    const offlineDiv = user.getByTestId('school-offline-view');
     await expect(offlineDiv).toBeVisible({ timeout: 5000 });
   });
 
@@ -62,7 +68,7 @@ describeWithSetup('Instance Offline', () => {
   });
 
   test('User can login with Online instance', async () => {
-    await navigation.goToHome(alice);
-    await users.login(alice, userData.alice);
+    await navigation.goToHome(user);
+    await users.login(user, userConfig);
   });
 });

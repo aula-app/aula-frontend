@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import * as userData from '../../fixtures/users';
 import { describeWithSetup } from '../../shared/base-test';
+import * as entities from '../../shared/helpers/entities';
 import * as browsers from '../../shared/interactions/browsers';
 import * as formInteractions from '../../shared/interactions/forms';
 import * as ideas from '../../shared/interactions/ideas';
@@ -8,35 +9,22 @@ import * as navigation from '../../shared/interactions/navigation';
 import * as rooms from '../../shared/interactions/rooms';
 import * as settingsInteractions from '../../shared/interactions/settings';
 import * as shared from '../../shared/shared';
-import * as types from '../../fixtures/types';
 
 // force these tests to run sqeuentially
 test.describe.configure({ mode: 'serial' });
 
 describeWithSetup('Category management', () => {
   let admin: any;
-  let room: types.RoomData;
-  let idea: types.IdeaData;
+  let room = entities.createRoom('category-tests');
+  let idea = entities.createIdea('category-tests', { category: shared.gensym('Test Category ') });
 
   test.beforeAll(async () => {
-    admin = await browsers.newPage(browsers.admins_browser);
+    admin = await browsers.getUserBrowser('admin');
 
-    idea = {
-      name: shared.gensym('Test idea '),
-      description: 'Idea generated during category management tests',
-      category: shared.gensym('Test Category '),
-    };
+    const user1Data = await userData.use('user');
+    const user2Data = await userData.use('other-user');
 
-    room = {
-      name: `room-${shared.getRunId()}-categories-tests`,
-      description: 'created during automated testing for categories.spec.ts',
-      users: [
-        userData.testUsers.alice(),
-        userData.testUsers.bob(),
-        userData.testUsers.mallory(),
-        userData.testUsers.rainer(),
-      ],
-    };
+    room.users = [user1Data, user2Data];
   });
 
   test.beforeEach(async () => {

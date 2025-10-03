@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import * as userData from '../../fixtures/users';
 import { describeWithSetup } from '../../shared/base-test';
 import * as browsers from '../../shared/interactions/browsers';
@@ -12,41 +12,36 @@ type PasswordChangeContext = {
 };
 
 describeWithSetup('Change pass flow', () => {
-  let alice: any;
-  let defaultFields: PasswordChangeContext;
+  let user: Page;
+  const defaultFields = {
+    oldPassword: 'aula',
+    newPassword: 'newPassword0',
+    confirmPassword: 'newPassword0',
+  };
 
   const clearQueue = {
     currentPassword: null as string | null,
   };
 
-  test.beforeAll(async () => {
-    alice = await browsers.newPage(browsers.alices_browser);
-    defaultFields = {
-      oldPassword: userData.testUsers.alice().password,
-      newPassword: 'newPassword0',
-      confirmPassword: 'newPassword0',
-    };
-  });
-
   test.afterAll(async () => {
     await revertPassword();
-    await alice.close();
+    await user.close();
   });
 
   const changePassword = async (passFields: PasswordChangeContext) => {
-    await navigation.goToProfile(alice);
-    await navigation.openAccordion(alice, 'security-panel-button');
+    await navigation.goToProfile(user);
+    await navigation.openAccordion(user, 'security-panel-button');
 
     for (const [form, value] of Object.entries(passFields)) {
-      await formInteractions.fillForm(alice, `${form}-input`, value);
+      await formInteractions.fillForm(user, `${form}-input`, value);
     }
 
-    await formInteractions.clickButton(alice, 'submit-new-password');
+    await formInteractions.clickButton(user, 'submit-new-password');
   };
 
   const revertPassword = async () => {
     if (!clearQueue.currentPassword) return;
-    const defaultPassword = userData.testUsers.alice().password;
+    const defaultPassword = userData.get('passwordUser')?.password || 'password';
     const fields = {
       oldPassword: clearQueue.currentPassword,
       newPassword: defaultPassword, // revert to original on last change
@@ -57,15 +52,20 @@ describeWithSetup('Change pass flow', () => {
   };
 
   const checkSuccessDiv = async () => {
-    const successDiv = alice.getByTestId('password-change-success');
+    const successDiv = user.getByTestId('password-change-success');
     await successDiv.waitFor({ state: 'visible', timeout: 5000 });
-    await alice.waitForTimeout(500);
+    await user.waitForTimeout(500);
 
     // Close the success div by clicking a close button or dismissing it
     const closeButton = successDiv.locator('button[aria-label="Close"]');
     await closeButton.click();
     await successDiv.waitFor({ state: 'hidden', timeout: 5000 });
   };
+
+  test('Setup dedicated user for password tests', async () => {
+    const passUserData = await userData.use('passwordUser');
+    user = await browsers.getUserBrowser(passUserData.username);
+  });
 
   test('User can successfully change password with valid inputs', async () => {
     await changePassword(defaultFields);
@@ -76,9 +76,9 @@ describeWithSetup('Change pass flow', () => {
   test('User cannot change password with incorrect current password', async () => {
     await changePassword(defaultFields);
 
-    const errorDiv = alice.getByTestId('password-change-error');
+    const errorDiv = user.getByTestId('password-change-error');
     await errorDiv.waitFor({ state: 'visible', timeout: 5000 });
-    await alice.waitForTimeout(500);
+    await user.waitForTimeout(500);
   });
 
   test('User cannot change password when new password and confirmation do not match', async () => {
@@ -88,7 +88,7 @@ describeWithSetup('Change pass flow', () => {
       confirmPassword: 'differentPassword',
     });
 
-    const errorLabel = alice.locator('#confirmPassword-error-message');
+    const errorLabel = user.locator('#confirmPassword-error-message');
     await expect(await errorLabel.textContent()).not.toHaveLength(0);
   });
 
@@ -99,7 +99,7 @@ describeWithSetup('Change pass flow', () => {
       confirmPassword: '',
     });
 
-    const errorLabel = alice.locator('#confirmPassword-error-message');
+    const errorLabel = user.locator('#confirmPassword-error-message');
     await expect(await errorLabel.textContent()).not.toHaveLength(0);
   });
 

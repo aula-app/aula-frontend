@@ -11,9 +11,9 @@ import * as rooms from '../../shared/interactions/rooms';
 test.describe.configure({ mode: 'serial' });
 
 describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
-  let adminPage: any;
-  let user1Page: any;
-  let user2Page: any;
+  let admin: any;
+  let user: any;
+  let user2: any;
 
   const room = entities.createRoom('idea-tests');
   const adminIdea = entities.createIdea('admin');
@@ -24,10 +24,10 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
   test.beforeAll(async () => {
     const user1Data = await userData.use('user');
     const user2Data = await userData.use('other-user');
-    // Cache browser pages for reuse
-    adminPage = await browsers.getUserBrowser('admin');
-    user1Page = await browsers.getUserBrowser(user1Data.username);
-    user2Page = await browsers.getUserBrowser(user2Data.username);
+
+    admin = await browsers.getUserBrowser('admin');
+    user = await browsers.getUserBrowser(user1Data.username);
+    user2 = await browsers.getUserBrowser(user2Data.username);
 
     room.users = [user1Data, user2Data];
   });
@@ -45,64 +45,64 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
   const cleanup = async () => {
     if (cleanupQueue.adminIdea) {
       cleanupQueue.adminIdea = false;
-      await ideas.remove(adminPage, room, adminIdea);
+      await ideas.remove(admin, room, adminIdea);
     }
     if (cleanupQueue.userIdea) {
       cleanupQueue.userIdea = false;
-      await ideas.remove(user1Page, room, userIdea);
+      await ideas.remove(user, room, userIdea);
     }
     if (cleanupQueue.room) {
       cleanupQueue.room = false;
-      await rooms.remove(adminPage, room);
+      await rooms.remove(admin, room);
     }
   };
 
   test('Admin can create an idea', async () => {
-    await rooms.create(adminPage, room);
+    await rooms.create(admin, room);
     cleanupQueue.room = true;
 
-    await ideas.create(adminPage, room, adminIdea);
+    await ideas.create(admin, room, adminIdea);
     cleanupQueue.adminIdea = true;
   });
 
   test('Users can create an idea', async () => {
-    await ideas.create(user1Page, room, userIdea);
+    await ideas.create(user, room, userIdea);
     cleanupQueue.userIdea = true;
   });
 
   test('Users cannot delete other users ideas', async () => {
     await expect(async () => {
-      await ideas.remove(user2Page, room, userIdea);
+      await ideas.remove(user2, room, userIdea);
     }).rejects.toThrow();
   });
 
   test('Users can add comments to ideas', async () => {
-    await navigation.goToWildIdea(user1Page, room.name, adminIdea.name);
-    await ideas.comment(user1Page, adminIdeaComment);
+    await navigation.goToWildIdea(user, room.name, adminIdea.name);
+    await ideas.comment(user, adminIdeaComment);
 
-    await navigation.goToWildIdea(user2Page, room.name, userIdea.name);
-    await ideas.comment(user2Page, userIdeaComment);
+    await navigation.goToWildIdea(user2, room.name, userIdea.name);
+    await ideas.comment(user2, userIdeaComment);
   });
 
   test('Users can delete their own comments', async () => {
-    await navigation.goToWildIdea(user1Page, room.name, adminIdea.name);
-    await ideas.removeComment(user1Page, adminIdeaComment);
+    await navigation.goToWildIdea(user, room.name, adminIdea.name);
+    await ideas.removeComment(user, adminIdeaComment);
   });
 
   test('Users cannot delete other users comments', async () => {
-    await navigation.goToWildIdea(user1Page, room.name, userIdea.name);
+    await navigation.goToWildIdea(user, room.name, userIdea.name);
     await expect(async () => {
-      await ideas.removeComment(user1Page, userIdeaComment);
+      await ideas.removeComment(user, userIdeaComment);
     }).rejects.toThrow();
   });
 
   test('Admin can delete an idea', async () => {
-    await ideas.remove(adminPage, room, adminIdea);
+    await ideas.remove(admin, room, adminIdea);
     cleanupQueue.adminIdea = false;
   });
 
   test('User can delete their own idea', async () => {
-    await ideas.remove(user1Page, room, userIdea);
+    await ideas.remove(user, room, userIdea);
     cleanupQueue.userIdea = false;
   });
 
