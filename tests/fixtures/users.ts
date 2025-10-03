@@ -1,7 +1,7 @@
 import { RoleTypes } from '../../src/types/SettingsTypes.ts';
 import { createUserData } from '../shared/helpers/entities.ts';
 import * as browsers from '../shared/interactions/browsers';
-import { start } from '../shared/interactions/users';
+import * as userInteractions from '../shared/interactions/users';
 import * as types from './types';
 
 const activeUsers: Record<string, types.UserData> = {};
@@ -37,8 +37,17 @@ export const use = async (name: string, role?: RoleTypes): Promise<types.UserDat
   let testUserData = get(name);
   if (!testUserData) {
     testUserData = create(name, role);
-    await start(await browsers.getUserBrowser('admin'), testUserData);
+    await userInteractions.start(await browsers.getUserBrowser('admin'), testUserData);
     await browsers.saveState(testUserData.username);
   }
   return testUserData;
+};
+
+export const clear = async (user: types.UserData): Promise<void> => {
+  await userInteractions.remove(await browsers.getUserBrowser('admin'), user);
+
+  if (activeUsers[user.username]) {
+    delete activeUsers[user.username];
+    (await browsers.getUserBrowserContext(user.username)).close();
+  }
 };

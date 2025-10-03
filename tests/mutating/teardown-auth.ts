@@ -30,13 +30,15 @@ export const clearBaseUsers = async (): Promise<boolean> => {
       throw new Error('Admin browser not available for user cleanup.');
     }
 
+    const users = userData.all();
+    console.log('👥 Users to remove:', Object.keys(users));
+
     // Sequential user removal to avoid race conditions
-    for (const [userKey, user] of Object.entries(userData.all())) {
+    for (const [userKey, user] of Object.entries(users)) {
       try {
+        console.log(`🗑️ Attempting to remove user: ${user.username} (key: ${userKey})`);
         await userInteractions.remove(adminPage, user);
-        console.log('✅ Removed user:', user.username);
       } catch (error) {
-        console.error('❌ Failed to remove user:', user.username, error);
         allRemoved = false;
       }
     }

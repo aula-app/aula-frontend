@@ -67,20 +67,30 @@ export const getTemporaryPass = async (page: Page, data: types.UserData) => {
 
 export const remove = async (page: Page, data: types.UserData) => {
   try {
+    await navigation.goToUsersSettings(page);
+
     const row = await exists(page, data);
     const checkbox = row.locator('input[type="checkbox"]');
     await expect(checkbox).toBeVisible({ timeout: 5000 });
+
+    // Ensure checkbox is unchecked first, then check it
+    if (await checkbox.isChecked()) {
+      await checkbox.uncheck();
+      await page.waitForTimeout(300);
+    }
     await checkbox.check();
+    await page.waitForTimeout(300);
 
     await formsInteractions.clickButton(page, 'remove-users-button');
     await page.waitForTimeout(500);
     await formsInteractions.clickButton(page, 'confirm-delete-users-button');
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
 
     // confirm the user does not show up in the table list
     await expect(page.locator('table tr').filter({ hasText: data.username })).toHaveCount(0, { timeout: 10000 });
 
     await settingsInteractions.clearFilter(page);
+    await page.waitForTimeout(500);
 
     console.log('✅ Successfully removed user:', data.username);
   } catch (error) {

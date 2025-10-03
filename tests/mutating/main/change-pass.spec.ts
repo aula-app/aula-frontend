@@ -23,11 +23,6 @@ describeWithSetup('Change pass flow', () => {
     currentPassword: null as string | null,
   };
 
-  test.afterAll(async () => {
-    await revertPassword();
-    await user.close();
-  });
-
   const changePassword = async (passFields: PasswordChangeContext) => {
     await navigation.goToProfile(user);
     await navigation.openAccordion(user, 'security-panel-button');
@@ -37,18 +32,6 @@ describeWithSetup('Change pass flow', () => {
     }
 
     await formInteractions.clickButton(user, 'submit-new-password');
-  };
-
-  const revertPassword = async () => {
-    if (!clearQueue.currentPassword) return;
-    const defaultPassword = userData.get('passwordUser')?.password || 'password';
-    const fields = {
-      oldPassword: clearQueue.currentPassword,
-      newPassword: defaultPassword, // revert to original on last change
-      confirmPassword: defaultPassword,
-    };
-    await changePassword(fields);
-    await checkSuccessDiv();
   };
 
   const checkSuccessDiv = async () => {
@@ -114,5 +97,11 @@ describeWithSetup('Change pass flow', () => {
       await checkSuccessDiv();
       clearQueue.currentPassword = fields.newPassword;
     }
+  });
+
+  test('Delete dedicated user for password tests', async () => {
+    const user = userData.get('passwordUser');
+    if (!user) throw new Error('User data for passwordUser not found');
+    await userData.clear(user);
   });
 });
