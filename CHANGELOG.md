@@ -1,5 +1,7 @@
 ## next_release
 
+- **New features:**
+  - Table number of rows selector
 - **Bug fixes**
   - Add translations for empty announcements page
 
