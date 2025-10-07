@@ -19,7 +19,7 @@ const PaginationBar: React.FC<Props> = ({ pages, setPage, limit, setLimit }) => 
   const changeLimit = (event: ChangeEvent<HTMLInputElement>) => {
     if (setLimit) {
       const value = Number(event.target.value);
-      if (value > 0) {
+      if (!!value && typeof value === 'number' && value > 0) {
         setLimit(value);
         setPage(0); // Reset to first page when limit changes
       }
