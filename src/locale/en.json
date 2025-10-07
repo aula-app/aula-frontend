@@ -723,6 +723,9 @@
       "upload": "File upload"
     },
     "lightMode": "Light mode",
+    "pagination": {
+      "rowsPerPage": "Rows per page:"
+    },
     "navigation": {
       "about": "About",
       "announcements": "Announcements",

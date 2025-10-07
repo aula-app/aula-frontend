@@ -723,6 +723,9 @@
       "upload": "Datei hochladen"
     },
     "lightMode": "Hellermodus",
+    "pagination": {
+      "rowsPerPage": "Zeilen pro Seite:"
+    },
     "navigation": {
       "about": "Über",
       "announcements": "Ankündigungen",

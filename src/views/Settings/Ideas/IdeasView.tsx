@@ -122,7 +122,12 @@ const IdeasView: React.FC = () => {
           extraTools={extraTools}
           isLoading={isLoading}
         />
-        <PaginationBar pages={Math.ceil(totalIdeas / limit)} setPage={(page) => setOffset(page * limit)} />
+        <PaginationBar
+          pages={Math.ceil(totalIdeas / limit)}
+          setPage={(page) => setOffset(page * limit)}
+          limit={limit}
+          setLimit={setLimit}
+        />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <IdeaForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />

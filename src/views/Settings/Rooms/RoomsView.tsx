@@ -113,7 +113,12 @@ const RoomsView: React.FC = () => {
           setDelete={deleteRooms}
           isLoading={isLoading}
         />
-        <PaginationBar pages={Math.ceil(totalRooms / limit)} setPage={(page) => setOffset(page * limit)} />
+        <PaginationBar
+          pages={Math.ceil(totalRooms / limit)}
+          setPage={(page) => setOffset(page * limit)}
+          limit={limit}
+          setLimit={setLimit}
+        />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <RoomForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
