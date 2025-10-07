@@ -1,11 +1,13 @@
 import { PossibleFields, SettingType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { getDataLimit } from '@/utils';
+import { getDataLimit, localStorageGet, localStorageSet } from '@/utils';
 import { Stack } from '@mui/material';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import PaginationBar from './PaginationBar';
 import Table from './Table';
 import ToolBar from './ToolBar';
+
+const MANUAL_LIMIT_KEY = 'dataTableManualLimit';
 
 type Props = {
   scope: SettingNamesType;
@@ -51,6 +53,7 @@ const DataTable: React.FC<Props> = ({
   setEdit,
 }) => {
   const [selected, setSelected] = useState<Array<string>>([]);
+  const isManualLimit = useRef(false);
 
   const toggleRow = (id: string) => {
     selected.includes(id) ? setSelected(selected.filter((value) => value !== id)) : setSelected([...selected, id]);
@@ -63,7 +66,19 @@ const DataTable: React.FC<Props> = ({
   };
 
   const getLimit = () => {
-    setLimit(getDataLimit());
+    const storedLimit = localStorageGet(MANUAL_LIMIT_KEY);
+    if (storedLimit && typeof storedLimit === 'number') {
+      isManualLimit.current = true;
+      setLimit(storedLimit);
+    } else {
+      setLimit(getDataLimit());
+    }
+  };
+
+  const handleLimitChange = (newLimit: number) => {
+    isManualLimit.current = true;
+    localStorageSet(MANUAL_LIMIT_KEY, newLimit);
+    setLimit(newLimit);
   };
 
   const handleDelete = () => {
@@ -77,6 +92,9 @@ const DataTable: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    // Initialize limit from localStorage if available
+    getLimit();
+
     window.addEventListener('resize', getLimit);
     return () => {
       window.removeEventListener('resize', getLimit);
@@ -110,7 +128,7 @@ const DataTable: React.FC<Props> = ({
           pages={pages}
           setPage={(page) => setOffset(page * limit)}
           limit={limit}
-          setLimit={setLimit}
+          setLimit={handleLimitChange}
         />
       )}
     </Stack>
