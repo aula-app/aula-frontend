@@ -1,28 +1,17 @@
 import { IdeaForms } from '@/components/DataForms';
-import DataTable from '@/components/DataTable';
-import PaginationBar from '@/components/DataTable/PaginationBar';
-import FilterBar from '@/components/FilterBar';
+import SettingsView from '@/components/SettingsView';
+import { useDataTableState } from '@/hooks';
 import { deleteIdea, getIdeas } from '@/services/ideas';
 import { useAppStore } from '@/store/AppStore';
-import { StatusTypes } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
-import { getDataLimit } from '@/utils';
-import { Drawer, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-
-/** * Renders "Ideas" view
- * url: /settings/ideas
- */
 
 const FILTER = ['title', 'content', 'displayname'] as Array<keyof IdeaType>;
 
 const COLUMNS = [
   { name: 'title', orderId: 5 },
   { name: 'content', orderId: 6 },
-  //{ name: 'custom_field1_name', orderId: 11 },
-  //{ name: 'custom_field2_name', orderId: 12 },
   { name: 'user_id', orderId: 8 },
   { name: 'room_hash_id', orderId: 7 },
   { name: 'approved', orderId: 13 },
@@ -34,105 +23,34 @@ const COLUMNS = [
 
 const IdeasView: React.FC = () => {
   const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
 
-  const [appState, dispatch] = useAppStore();
-  const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [ideas, setIdeas] = useState<IdeaType[]>([]);
-  const [totalIdeas, setTotalIdeas] = useState(0);
-
-  const [status, setStatus] = useState<StatusTypes>(1);
-  const [search_field, setSearchField] = useState('');
-  const [search_text, setSearchText] = useState('');
-
-  const [asc, setAsc] = useState(true);
-  const [limit, setLimit] = useState(getDataLimit());
-  const [offset, setOffset] = useState(0);
-  const [orderby, setOrderby] = useState(COLUMNS[0].orderId);
-
-  const [edit, setEdit] = useState<IdeaType | boolean>(false); // false = update dialog closed ;true = new idea; IdeaType = item to edit;
-
-  const fetchIdeas = useCallback(async () => {
-    setLoading(true);
-    const response = await getIdeas({
-      asc: Number(asc) as 0 | 1,
-      limit,
-      offset,
-      orderby,
-      search_field: search_field === 'displayname' ? 'au_users_basedata.displayname' : search_field,
-      search_text,
-      status,
+  const fetchFn = useCallback(async (params: Record<string, unknown>) => {
+    const { search_field, ...otherParams } = params;
+    return await getIdeas({
+      ...otherParams,
+      search_field: search_field === 'displayname' ? 'au_users_basedata.displayname' : (search_field as string),
     });
-    if (response.error) setError(response.error);
-    setIdeas(response.data || []);
-    setTotalIdeas(response.count as number);
-    setLoading(false);
-  }, [asc, limit, offset, orderby, search_field, search_text, status]);
+  }, []);
 
-  const deleteIdeas = (items: Array<string>) =>
-    items.map(async (idea) => {
-      const request = await deleteIdea(idea);
-      if (!request.error) onClose();
-    });
-
-  const onClose = () => {
-    setEdit(false);
-    fetchIdeas();
-  };
-
-  // Reset pagination when filters change
-  useEffect(() => {
-    setOffset(0);
-  }, [search_field, search_text, status]);
+  const dataTableState = useDataTableState<IdeaType>({
+    initialOrderBy: COLUMNS[0].orderId,
+    fetchFn,
+    deleteFn: deleteIdea,
+  });
 
   useEffect(() => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.ideas'), '/']] });
-    fetchIdeas();
-  }, [fetchIdeas]);
-
-  const extraTools = ({ items }: { items: Array<string> }) => (
-    <>{/* <AddBoxesButton ideas={items} disabled={items.length === 0} /> */}</>
-  );
+  }, [dispatch, t]);
 
   return (
-    <Stack width="100%" height="100%" pt={2}>
-      <Stack pl={2}>
-        <FilterBar
-          fields={FILTER}
-          scope="ideas"
-          onStatusChange={(newStatus) => setStatus(newStatus)}
-          onFilterChange={([field, text]) => {
-            setSearchField(field);
-            setSearchText(text);
-          }}
-        />
-      </Stack>
-      <Stack flex={1} sx={{ overflowY: 'auto' }}>
-        <DataTable
-          scope="ideas"
-          columns={COLUMNS}
-          rows={ideas}
-          orderAsc={asc}
-          orderBy={orderby}
-          setAsc={setAsc}
-          setLimit={setLimit}
-          setOrderby={setOrderby}
-          setEdit={(idea) => setEdit(idea as IdeaType)}
-          setDelete={deleteIdeas}
-          extraTools={extraTools}
-          isLoading={isLoading}
-        />
-        <PaginationBar
-          pages={Math.ceil(totalIdeas / limit)}
-          setPage={(page) => setOffset(page * limit)}
-          limit={limit}
-          setLimit={setLimit}
-        />
-      </Stack>
-      <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-        <IdeaForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
-      </Drawer>
-    </Stack>
+    <SettingsView
+      scope="ideas"
+      columns={COLUMNS}
+      filterFields={FILTER}
+      dataTableState={dataTableState}
+      FormComponent={IdeaForms as React.ComponentType<{ onClose: () => void; defaultValues?: unknown }>}
+    />
   );
 };
 

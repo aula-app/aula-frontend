@@ -30,7 +30,7 @@ const messageConsentValues = ['message', 'announcement', 'alert'] as MessageCons
 /**
  * Component that renders a table cell's content with specialized formatting based on the column type.
  */
-const DataItem: React.FC<Props> = ({ row, column, onReload }) => {
+const Item: React.FC<Props> = ({ row, column, onReload }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const { formatDateTime } = useDateFormatters();
@@ -165,4 +165,4 @@ const DataItem: React.FC<Props> = ({ row, column, onReload }) => {
   }
 };
 
-export default DataItem;
+export default Item;
