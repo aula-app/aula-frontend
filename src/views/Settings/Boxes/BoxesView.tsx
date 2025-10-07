@@ -119,7 +119,12 @@ const BoxesView: React.FC = () => {
           setDelete={deleteBoxes}
           isLoading={isLoading}
         />
-        <PaginationBar pages={Math.ceil(totalBoxes / limit)} setPage={(page) => setOffset(page * limit)} />
+        <PaginationBar
+          pages={Math.ceil(totalBoxes / limit)}
+          setPage={(page) => setOffset(page * limit)}
+          limit={limit}
+          setLimit={setLimit}
+        />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <BoxForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />

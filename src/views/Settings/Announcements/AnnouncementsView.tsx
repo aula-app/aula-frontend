@@ -131,7 +131,12 @@ const AnnouncementsView: React.FC = () => {
           setDelete={deleteAnnouncements}
           isLoading={isLoading}
         />
-        <PaginationBar pages={Math.ceil(totalAnnouncements / limit)} setPage={(page) => setOffset(page * limit)} />
+        <PaginationBar
+          pages={Math.ceil(totalAnnouncements / limit)}
+          setPage={(page) => setOffset(page * limit)}
+          limit={limit}
+          setLimit={setLimit}
+        />
       </Stack>
       <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
         <AnnouncementForms onClose={onClose} defaultValues={typeof edit !== 'boolean' ? edit : undefined} />
