@@ -49,6 +49,9 @@ docker run -p 4000:4000 --network host --rm --init \
   /bin/sh -c "cd /home/pwuser && npx playwright install && npx playwright test"
 ```
 
+## License
+See `LICENSE.txt`. Licensed under the EUPL-1.2 or later. You may obtain a copy of the license at https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12.
+
 ## Contributing
 
 Please read our [Contributing Guidelines](docs/INDEX.md) for details on our code of conduct and the process for submitting pull requests.
