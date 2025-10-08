@@ -75,7 +75,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
             <title>${t('settings.users.printTitle')}</title>
             <style>
               body {
-                font-family: Arial, sans-serif;
+                font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
                 font-size: 32px;
                 margin: 20px;
                 justify: center;
