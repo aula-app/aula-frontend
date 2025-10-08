@@ -56,7 +56,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
       } else {
         if (onlyTempPass) continue;
       }
-      usersPasswords += `<td><b>${realname}</b><p/><b>${t('settings.columns.username')}:</b> ${username}<br/><b>${t('settings.columns.pw')}:</b> ${password}</td>`;
+      usersPasswords += `<td><b>${realname}</b><p/><b>${t('settings.columns.username')}:</b> <mark>${username}</mark><br/><b>${t('settings.columns.pw')}:</b> <mark>${password}</mark></td>`;
       if (++i > columns) {
         usersPasswords += '</tr>';
         i = 1;
@@ -75,12 +75,13 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
             <title>${t('settings.users.printTitle')}</title>
             <style>
               body {
-                font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+                font-family: 'vision', 'Tahoma', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
                 font-size: 32px;
                 margin: 20px;
                 justify: center;
               }
               table {
+                font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
                 width: 1200px;
                 border-collapse: collapse;
                 margin-bottom: 20px;
@@ -97,6 +98,12 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
               th {
                 background-color: #f2f2f2;
                 font-weight: bold;
+              }
+              td b {
+                font-family: 'vision', 'Tahoma', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+              }
+              td mark {
+                background-color: rgba(0, 0, 0, 0.06);
               }
               .print-header {
                 display: flex;
