@@ -2,6 +2,7 @@
 
 - **New features:**
   - Table number of rows selector
+  - Use monospaced fonts for temporary password printout
 - **Bug fixes**
   - Add translations for empty announcements page
 
