@@ -12,7 +12,7 @@ interface Props extends TableRowProps {
   toggleRow: (id: string) => void;
 }
 
-const DataRow: React.FC<Props> = ({ children, item, selected = false, status, toggleRow, sx, ...restOfProps }) => {
+const Row: React.FC<Props> = ({ children, item, selected = false, status, toggleRow, sx, ...restOfProps }) => {
   const theme = useTheme();
   const isFixed = (): boolean => 'room_name' in item && 'type' in item && Number(item.type) === 1; // determine fixed rooms
 
@@ -61,4 +61,4 @@ const DataRow: React.FC<Props> = ({ children, item, selected = false, status, to
   );
 };
 
-export default DataRow;
+export default Row;
