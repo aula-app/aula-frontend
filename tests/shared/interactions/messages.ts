@@ -7,7 +7,6 @@ import * as navigation from './navigation';
 export const create = async (page: Page, data: types.MessageData) => {
   try {
     await navigation.goToMessagesSettings(page);
-    await page.waitForLoadState('networkidle');
 
     await formsInteractions.clickButton(page, 'add-messages-button');
     await page.waitForTimeout(1000);
@@ -38,7 +37,6 @@ export const create = async (page: Page, data: types.MessageData) => {
 export const remove = async (page: Page, data: types.MessageData) => {
   try {
     await navigation.goToMessagesSettings(page);
-    await page.waitForLoadState('networkidle');
 
     await settingsInteractions.addFilter(page, { option: 'headline', value: data.title });
     await settingsInteractions.checkRow(page, { option: 'headline', value: data.title });

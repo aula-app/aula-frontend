@@ -71,6 +71,10 @@ export const goToProfile = async (page: Page) => {
   await clickToNavigate(page, '/settings/profile');
 };
 
+export const goToMessages = async (page: Page) => {
+  await clickToNavigate(page, '/messages');
+};
+
 export const goToSettings = async (page: Page) => {
   await clickToNavigate(page, '/settings/configuration');
 };
