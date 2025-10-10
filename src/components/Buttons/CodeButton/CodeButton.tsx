@@ -2,11 +2,11 @@ import AppIcon from '@/components/AppIcon';
 import { getRuntimeConfig } from '@/config';
 import { useAppStore } from '@/store';
 import { announceToScreenReader, localStorageGet } from '@/utils';
-import { Button, Divider } from '@mui/material';
+import { Button, ButtonProps, Divider } from '@mui/material';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const CodeButton: FC = ({ ...restOfProps }) => {
+const CodeButton: FC<ButtonProps> = ({ ...restOfProps }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const code = localStorageGet('code');

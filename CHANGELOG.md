@@ -1,4 +1,12 @@
-## 1.4.6
+## next_release
+
+- **New features:**
+  - Table number of rows selector
+  - Use monospaced fonts for temporary password printout
+- **Bug fixes**
+  - Add translations for empty announcements page
+
+## 1.5.0
 
 - **New features:**
   - Scheduled invite for users uploaded via CSV

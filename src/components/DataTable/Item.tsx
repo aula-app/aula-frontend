@@ -4,12 +4,13 @@ import { getGroup } from '@/services/groups';
 import { getRoom } from '@/services/rooms';
 import { getUser } from '@/services/users';
 import { useAppStore } from '@/store';
-import { PossibleFields, SettingType } from '@/types/Scopes';
+import { PossibleFields, SettingType, UserType } from '@/types/Scopes';
 import { phases, STATUS } from '@/utils';
 import { Chip, Stack, Typography } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MarkdownReader from '../MarkdownReader';
+import ResetPasswordButton from '../Buttons/ResetPasswordButton';
 
 /**
  * Props for the DataItem component
@@ -17,6 +18,7 @@ import MarkdownReader from '../MarkdownReader';
 type Props = {
   row: SettingType;
   column: keyof PossibleFields;
+  onReload?: () => void;
 };
 
 /**
@@ -28,7 +30,7 @@ const messageConsentValues = ['message', 'announcement', 'alert'] as MessageCons
 /**
  * Component that renders a table cell's content with specialized formatting based on the column type.
  */
-const DataItem: React.FC<Props> = ({ row, column }) => {
+const Item: React.FC<Props> = ({ row, column, onReload }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const { formatDateTime } = useDateFormatters();
@@ -117,8 +119,21 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
     case 'user_needs_to_consent':
       return <>{t(`consent.${messageConsentValues[Number(value)]}` || '')}</>;
 
+    // Markdown fields that need to be rendered as HTML (without line breaks for table display)
+    case 'description_public':
+    case 'body':
+    case 'content':
+    case 'about_me':
+      return <MarkdownReader>{String(value).replace(/\n/g, ' ')}</MarkdownReader>;
+
     // Special fields
     case 'temp_pw':
+      const toggleHidden = (event: SyntheticEvent) => {
+        event.stopPropagation();
+        setHidden(!hidden);
+      };
+      const user = 'username' in row ? (row as UserType) : null;
+
       return value ? (
         <Stack direction="row" alignItems="center">
           <Chip
@@ -133,23 +148,16 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
             size="small"
             icon={hidden ? 'visibilityOn' : 'visibilityOff'}
             title={t(`tooltips.${hidden ? 'visibilityOn' : 'visibilityOff'}`)}
-            onClick={(e) => {
-              e.stopPropagation();
-              setHidden(!hidden);
-            }}
+            onClick={toggleHidden}
           />
           <Stack className="printOnly">{value}</Stack>
         </Stack>
-      ) : (
-        <Stack className="printOnly">{t('auth.messages.email')}</Stack>
-      );
-
-    // Markdown fields that need to be rendered as HTML (without line breaks for table display)
-    case 'description_public':
-    case 'body':
-    case 'content':
-    case 'about_me':
-      return <MarkdownReader>{String(value).replace(/\n/g, ' ')}</MarkdownReader>;
+      ) : user ? (
+        <Stack direction="row" alignItems="center">
+          <ResetPasswordButton target={user} hasEmail={!!user.email} disabled={!user} onSuccess={onReload} />
+          <Stack className="printOnly">{t('auth.messages.email')}</Stack>
+        </Stack>
+      ) : null;
 
     // Default case for all other fields
     default:
@@ -157,4 +165,4 @@ const DataItem: React.FC<Props> = ({ row, column }) => {
   }
 };
 
-export default DataItem;
+export default Item;

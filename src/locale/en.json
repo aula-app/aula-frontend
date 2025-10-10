@@ -54,10 +54,15 @@
     "forgotPassword": {
       "button": "Reset password",
       "link": "Forgot password?",
-      "message": "Are you sure you want to request a new password for this user?",
+      "message": "Are you sure you want to request a new password for this user? {{var}}",
+      "messageEmail": "We will log them out, erase their old password and send them an email with instructions to create a new password.",
+      "messageNoEmail": "We will log them out and erase their old password. A new temporary password for them.",
       "recover": "Recover password",
       "recovery": "Password Recovery",
-      "success": "The password was reset. Registered users will receive a reset link in their email."
+      "success": "Your password was reset. {{var}}",
+      "successfulEmail": "An email with instructions to reset your password has been sent to your email",
+      "successfulNoEmail": "A new temporary password has been generated for this user.",
+      "successfulUser": "The password of {{user}} was reset. {{var}}"
     },
     "login": {
       "button": "Login",
@@ -478,7 +483,7 @@
       "sum_votes": "Total Votes",
       "target_group": "Target Group",
       "target_id": "Target User",
-      "temp_pw": "Temporary Password",
+      "temp_pw": "Password",
       "title": "Title",
       "trustee_id": "Trustee",
       "type": "Type",
@@ -655,6 +660,10 @@
     },
     "darkMode": "Dark mode",
     "empty": {
+      "announcements": {
+        "description": "There are no announcements created yet",
+        "title": "No announcements"
+      },
       "boxes": {
         "description": "Boxes will appear here when they reach this phase",
         "title": "No boxes in this phase"
@@ -714,6 +723,9 @@
       "upload": "File upload"
     },
     "lightMode": "Light mode",
+    "pagination": {
+      "rowsPerPage": "Rows per page:"
+    },
     "navigation": {
       "about": "About",
       "announcements": "Announcements",
