@@ -1,5 +1,4 @@
 import { Locator, Page, expect } from '@playwright/test';
-import { cp } from 'fs';
 
 export const fillForm = async (page: Page, testId: string, value: string) => {
   const field = page.getByTestId(testId);

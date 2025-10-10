@@ -7,9 +7,6 @@ import * as ideas from '../../shared/interactions/ideas';
 import * as navigation from '../../shared/interactions/navigation';
 import * as rooms from '../../shared/interactions/rooms';
 
-// force these tests to run sqeuentially
-test.describe.configure({ mode: 'serial' });
-
 describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
   let admin: any;
   let user: any;

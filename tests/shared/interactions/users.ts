@@ -12,7 +12,7 @@ type TempPass = string;
 
 export const exists = async (page: Page, data: types.UserData): Promise<Locator> => {
   await navigation.goToUsersSettings(page);
-  return await settingsInteractions.checkRow(page, { option: 'username', value: data.username });
+  return await settingsInteractions.check(page, { option: 'username', value: data.username });
 };
 
 export const create = async (page: Page, data: types.UserData): Promise<TempPass> => {

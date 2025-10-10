@@ -2,16 +2,16 @@ import { Locator, Page, expect } from '@playwright/test';
 import * as formInteractions from './forms';
 import { ScopeKeyType } from '../../../src/types/Scopes';
 
-export const checkRow = async (page: Page, filter: { option: string; value: string }): Promise<Locator> => {
-  const row = page.locator('table tr').filter({ hasText: filter.value }).first();
+export const check = async (page: Page, filters: { option: string; value: string }): Promise<Locator> => {
+  const row = page.locator('table tr').filter({ hasText: filters.value }).first();
   if (!(await row.isVisible())) {
-    await addFilter(page, filter);
+    await filter(page, filters);
   }
   await expect(row).toBeVisible();
   return row;
 };
 
-export const addFilter = async (page: Page, filter: { option: string; value: string }) => {
+export const filter = async (page: Page, filter: { option: string; value: string }) => {
   const filterButton = page.getByTestId('filter-toggle-button');
   const filterInput = page.getByTestId('filter-input');
   await expect(filterButton).toBeVisible();
@@ -54,10 +54,10 @@ export const clearFilter = async (page: Page) => {
   await filterButton.click();
 };
 
-export const openEdit = async ({ page, filter }: { page: Page; filter: { option: string; value: string } }) => {
-  const row = page.locator('table tr').filter({ hasText: filter.value }).first();
+export const openEdit = async ({ page, filters }: { page: Page; filters: { option: string; value: string } }) => {
+  const row = page.locator('table tr').filter({ hasText: filters.value }).first();
   if (!(await row.isVisible())) {
-    await addFilter(page, filter);
+    await filter(page, filters);
   }
 
   await row.click();
@@ -67,15 +67,15 @@ export const openEdit = async ({ page, filter }: { page: Page; filter: { option:
 export const remove = async ({
   page,
   scope,
-  filter,
+  filters,
 }: {
   page: Page;
   scope: ScopeKeyType;
-  filter: { option: string; value: string };
+  filters: { option: string; value: string };
 }) => {
-  const row = page.locator('table tr').filter({ hasText: filter.value }).first();
+  const row = page.locator('table tr').filter({ hasText: filters.value }).first();
   if (!(await row.isVisible())) {
-    await addFilter(page, filter);
+    await filter(page, filters);
   }
 
   const DeleteCheckbox = row.locator('input[type="checkbox"]');

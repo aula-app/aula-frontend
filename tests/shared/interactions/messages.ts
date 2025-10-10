@@ -38,8 +38,8 @@ export const remove = async (page: Page, data: types.MessageData) => {
   try {
     await navigation.goToMessagesSettings(page);
 
-    await settingsInteractions.addFilter(page, { option: 'headline', value: data.title });
-    await settingsInteractions.checkRow(page, { option: 'headline', value: data.title });
+    await settingsInteractions.filter(page, { option: 'headline', value: data.title });
+    await settingsInteractions.check(page, { option: 'headline', value: data.title });
 
     const row = page.locator('table tr').filter({ hasText: data.title }).first();
     const checkbox = row.locator('input[type="checkbox"]');

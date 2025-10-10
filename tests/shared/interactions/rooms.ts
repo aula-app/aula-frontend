@@ -30,12 +30,12 @@ export const create = async (page: Page, room: types.RoomData) => {
 
   await navigation.goToRoomsSettings(page);
   await expect(page.getByTestId('add-rooms-button')).toBeVisible();
-  await settingsInteractions.addFilter(page, { option: 'room_name', value: room.name });
+  await settingsInteractions.filter(page, { option: 'room_name', value: room.name });
   await settingsInteractions.clearFilter(page);
 };
 
 export const remove = async (page: Page, room: types.RoomData) => {
   await navigation.goToRoomsSettings(page);
 
-  await settingsInteractions.remove({ page, scope: 'rooms', filter: { option: 'room_name', value: room.name } });
+  await settingsInteractions.remove({ page, scope: 'rooms', filters: { option: 'room_name', value: room.name } });
 };
