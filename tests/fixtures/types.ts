@@ -3,10 +3,11 @@ import * as SettingsTypes from '../../src/types/SettingsTypes';
 export type BoxData = {
   name: string;
   description: string;
-  phase: SettingsTypes.RoomPhases;
-  ideas: IdeaData[];
-  discussionDays: number;
-  votingDays: number;
+  room: RoomData;
+  ideas?: IdeaData[];
+  phase?: SettingsTypes.RoomPhases;
+  discussionDays?: number;
+  votingDays?: number;
 };
 
 export type IdeaData = {

@@ -90,7 +90,8 @@ describeWithSetup('Category management', () => {
     await rooms.create(admin, room);
     cleanupQueue.room = true;
 
-    await ideas.create(admin, room, idea);
+    await navigation.goToRoom(admin, room.name);
+    await ideas.create(admin, idea);
     cleanupQueue.idea = true;
 
     await navigation.goToRoom(admin, room.name);
@@ -101,7 +102,7 @@ describeWithSetup('Category management', () => {
 
   test('Admin can remove category from idea', async () => {
     await navigation.goToIdeasSettings(admin);
-    await settingsInteractions.openEdit({ page: admin, filter: { option: 'title', value: idea.name } });
+    await settingsInteractions.openEdit({ page: admin, filters: { option: 'title', value: idea.name } });
 
     formInteractions.clickButton(admin, 'category-field-clear-button');
     await admin.waitForTimeout(1000); // wait for the form to process

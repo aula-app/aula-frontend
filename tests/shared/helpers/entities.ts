@@ -18,7 +18,7 @@ export function createIdea(suffix = '', setup?: { box?: string; category?: strin
   } as types.IdeaData;
 }
 
-export function createBox(ideas = [], suffix = '') {
+export function createBox(suffix = '', room: types.RoomData, ideas = []) {
   return {
     name: 'test-box-' + shared.getRunId() + (suffix ? `-${suffix}` : ''),
     description: 'generated during automated testing',
@@ -26,6 +26,7 @@ export function createBox(ideas = [], suffix = '') {
     discussionDays: 6,
     votingDays: 10,
     phase: 10,
+    room: room,
   } as types.BoxData;
 }
 

@@ -10,7 +10,7 @@ import * as rooms from '../../shared/interactions/rooms';
 describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
   let admin: any;
   let user: any;
-  let user2: any;
+  let otherUser: any;
 
   const room = entities.createRoom('idea-tests');
   const adminIdea = entities.createIdea('admin');
@@ -24,7 +24,7 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
 
     admin = await browsers.getUserBrowser('admin');
     user = await browsers.getUserBrowser(user1Data.username);
-    user2 = await browsers.getUserBrowser(user2Data.username);
+    otherUser = await browsers.getUserBrowser(user2Data.username);
 
     room.users = [user1Data, user2Data];
   });
@@ -58,18 +58,20 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
     await rooms.create(admin, room);
     cleanupQueue.room = true;
 
-    await ideas.create(admin, room, adminIdea);
+    await navigation.goToRoom(admin, room.name);
+    await ideas.create(admin, adminIdea);
     cleanupQueue.adminIdea = true;
   });
 
   test('Users can create an idea', async () => {
-    await ideas.create(user, room, userIdea);
+    await navigation.goToRoom(user, room.name);
+    await ideas.create(user, userIdea);
     cleanupQueue.userIdea = true;
   });
 
   test('Users cannot delete other users ideas', async () => {
     await expect(async () => {
-      await ideas.remove(user2, room, userIdea);
+      await ideas.remove(otherUser, room, userIdea);
     }).rejects.toThrow();
   });
 
@@ -77,8 +79,8 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
     await navigation.goToWildIdea(user, room.name, adminIdea.name);
     await ideas.comment(user, adminIdeaComment);
 
-    await navigation.goToWildIdea(user2, room.name, userIdea.name);
-    await ideas.comment(user2, userIdeaComment);
+    await navigation.goToWildIdea(otherUser, room.name, userIdea.name);
+    await ideas.comment(otherUser, userIdeaComment);
   });
 
   test('Users can delete their own comments', async () => {

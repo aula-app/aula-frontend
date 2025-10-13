@@ -6,17 +6,15 @@ import * as navigation from './navigation';
 
 export const create = async (
   page: Page, //
-  room: types.RoomData,
   idea: types.IdeaData
 ) => {
   // start at home
-  await navigation.goToRoom(page, room.name);
   await formInteractions.clickButton(page, 'add-idea-button');
   await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'visible', timeout: 500 });
 
   // fill in the necessary information
   await formInteractions.fillForm(page, 'idea-title-input-field', idea.name);
-  await page.getByTestId('markdown-editor-content').locator('[contenteditable="true"]').fill(room.description);
+  await page.getByTestId('markdown-editor-content').locator('[contenteditable="true"]').fill(idea.description);
 
   if (idea.box) {
     // how to fill in one of those MUI multiselectors:
@@ -40,8 +38,8 @@ export const create = async (
 
   // submit the idea form
   await formInteractions.clickButton(page, 'submit-idea-form');
-
   await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(2000);
   await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'hidden', timeout: 500 });
 
   const IdeaTitle = page.getByText(idea.name, { exact: true });

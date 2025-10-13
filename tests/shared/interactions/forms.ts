@@ -26,12 +26,44 @@ export const openMoreOption = async (page: Page, parent: Locator) => {
   await page.waitForTimeout(500);
 };
 
-export const selectOption = async (page: Page, testId: string, optionId: string) => {
-  const input = page.getByTestId(testId);
-  await expect(input).toBeVisible();
-  input.click();
+const openSelectDropdown = async (page: Page, testId: string) => {
+  const field = page.getByTestId(testId);
+  await expect(field).toBeVisible({ timeout: 5000 });
+
+  const dropdownIcon = field.getByTestId('ArrowDropDownIcon');
+
+  // Check if the icon has a parent button and click the button instead
+  const parentButton = dropdownIcon.locator('xpath=ancestor::button[1]');
+  const buttonCount = await parentButton.count();
+
+  if (buttonCount > 0) {
+    await parentButton.click();
+  } else {
+    // Fallback: click the icon directly if no button parent
+    await dropdownIcon.click({ force: true });
+  }
+
   await page.waitForTimeout(500);
-  const option = page.getByTestId(optionId);
-  await expect(option).toBeVisible();
+
+  const dropdown = page.getByTestId(`${testId}-list`);
+  await expect(dropdown).toBeVisible({ timeout: 5000 });
+};
+
+export const selectOption = async (page: Page, testId: string, optionLabel: string) => {
+  await openSelectDropdown(page, testId);
+  const option = page.getByTestId(`${testId}-list`).getByRole('option', { name: optionLabel });
+  await expect(option).toBeVisible({ timeout: 5000 });
+  await option.click();
+  await page.waitForTimeout(500);
+
+  // Verify the option appears in the field (either as input value for Select or chip for Autocomplete)
+  const field = page.getByTestId(testId);
+  await expect(field).toContainText(optionLabel, { timeout: 5000 });
+};
+
+export const selectOptionByValue = async (page: Page, testId: string, value: string) => {
+  await openSelectDropdown(page, testId);
+  const option = page.getByTestId(`${testId}-list`).getByTestId(`select-option-${value}`);
+  await expect(option).toBeVisible({ timeout: 5000 });
   await option.click();
 };

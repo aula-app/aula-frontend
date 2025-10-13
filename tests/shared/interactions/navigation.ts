@@ -1,5 +1,6 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../shared';
+import { RoomPhases } from '../../../src/types/SettingsTypes';
 
 const host = shared.getHost();
 
@@ -42,22 +43,36 @@ export const closeAccordion = async (page: Page, testId: string) => {
   }
 };
 
+// Main navigation
+
+export const clickOnPageItem = async (page: Page, itemText: string) => {
+  const itemDiv = page.getByText(itemText);
+  await expect(itemDiv).toBeVisible();
+  await itemDiv.click();
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(500);
+};
+
+export const clickOnPageId = async (page: Page, itemId: string) => {
+  const itemDiv = page.getByTestId(itemId);
+  await expect(itemDiv).toBeVisible();
+  await itemDiv.click();
+  await page.waitForLoadState('networkidle');
+};
+
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
-
-  const RoomDiv = page.getByText(roomName, { exact: true });
-  await expect(RoomDiv).toBeVisible();
-  await RoomDiv.click();
-  await page.waitForLoadState('networkidle');
+  await clickOnPageItem(page, roomName);
 };
 
 export const goToWildIdea = async (page: Page, roomName: string, ideaName: string) => {
   await goToRoom(page, roomName);
+  await clickOnPageItem(page, ideaName);
+};
 
-  const IdeaDiv = page.getByText(ideaName, { exact: true });
-  await expect(IdeaDiv).toBeVisible();
-  await IdeaDiv.click();
-  await page.waitForLoadState('networkidle');
+export const goToPhase = async (page: Page, roomName: string, phase: RoomPhases) => {
+  await goToRoom(page, roomName);
+  await clickOnPageId(page, `link-to-phase-${phase}`);
 };
 
 // Sidebar navigation

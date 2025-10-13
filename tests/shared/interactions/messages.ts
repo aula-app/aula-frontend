@@ -11,7 +11,7 @@ export const create = async (page: Page, data: types.MessageData) => {
     await formsInteractions.clickButton(page, 'add-messages-button');
     await page.waitForTimeout(1000);
 
-    await formsInteractions.selectOption(page, 'user-field-autocomplete', `user-option-${data.user.username}`);
+    await formsInteractions.selectOption(page, 'user-field-autocomplete', data.user.username);
     await page.waitForTimeout(500);
     await expect(page.getByTestId(`user-field-input`)).toHaveValue(data.user.realName);
 

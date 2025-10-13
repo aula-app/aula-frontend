@@ -130,6 +130,7 @@ const IdeasBoxView = () => {
   const boxClose = () => {
     setEdit(undefined);
     fetchBox();
+    fetchIdeas();
   };
 
   /**
@@ -192,7 +193,7 @@ const IdeasBoxView = () => {
 
     // Announce completion to screen readers
     announceLoadingState(false, t('scopes.ideas.plural'));
-  }, [box_id]);
+  }, [box_id, t]);
 
   const ideaClose = () => {
     setCreateIdea(false);
@@ -319,6 +320,7 @@ const IdeasBoxView = () => {
               alignSelf: 'center',
             }}
             onClick={() => setCreateIdea(true)}
+            data-testid="add-idea-button"
           >
             <AppIcon icon="idea" />
           </Fab>

@@ -40,13 +40,13 @@ const IdeaField: React.FC<Props> = ({
       ? response.data.map((idea) => ({ label: idea.title, value: idea.hash_id }))
       : [];
     const boxIdeas = defaultValues.map((idea) => ({ label: idea.title, value: idea.hash_id }));
-    
+
     // Combine and deduplicate by value
     const allOptions = wildIdeas.concat(boxIdeas);
-    const uniqueOptions = allOptions.filter((option, index, array) => 
-      array.findIndex(item => item.value === option.value) === index
+    const uniqueOptions = allOptions.filter(
+      (option, index, array) => array.findIndex((item) => item.value === option.value) === index
     );
-    
+
     setOptions(uniqueOptions);
   };
 
@@ -87,12 +87,22 @@ const IdeaField: React.FC<Props> = ({
       options={options}
       loading={loading}
       disabled={disabled}
+      data-testid="ideas-autocomplete-field"
+      slotProps={{
+        paper: {
+          'data-testid': 'ideas-autocomplete-field-list',
+        } as any,
+      }}
       renderInput={(params) => (
         <TextField
           {...params}
           label={t('scopes.ideas.plural')}
           disabled={disabled || options.length === 0}
           slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              'data-testid': 'ideas-autocomplete-field-input',
+            },
             input: {
               ...params.InputProps,
               endAdornment: (
