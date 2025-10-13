@@ -4,6 +4,7 @@
   - Table number of rows selector
   - Use monospaced fonts for temporary password printout
 - **Bug fixes**
+  - Forgot Password not working for emails with special characters such as `+`
   - Add translations for empty announcements page
 
 ## 1.5.0
