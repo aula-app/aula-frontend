@@ -3,6 +3,7 @@
 - **New features:**
   - Table number of rows selector
   - Use monospaced fonts for temporary password printout
+  - Disable Reset Password button after a click
 - **Bug fixes**
   - Add translations for empty announcements page
 
