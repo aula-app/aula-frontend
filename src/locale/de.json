@@ -53,6 +53,7 @@
   "auth": {
     "forgotPassword": {
       "button": "Passwort zurücksetzen",
+      "buttonSent": "geschickt",
       "link": "Passwort vergessen?",
       "message": "Möchtest du wirklich ein neues Passwort für diesen Benutzer anfordern? {{var}}",
       "messageEmail": "Wir melden den Benutzer ab, löschen sein altes Passwort und senden ihm eine E-Mail mit Anweisungen zum Erstellen eines neuen Passworts.",
