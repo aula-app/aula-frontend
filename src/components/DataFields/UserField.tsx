@@ -79,6 +79,11 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
             loading={loading}
             disabled={disabled}
             data-testid="user-field-autocomplete"
+            slotProps={{
+              paper: {
+                'data-testid': 'user-field-autocomplete-list',
+              } as any,
+            }}
             isOptionEqualToValue={(option, value) => {
               if (!option || !value) return false;
               return option.value === value.value;
@@ -93,7 +98,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
               field.onChange(newValue ? newValue.value : null);
             }}
             renderOption={(props, option) => (
-              <li {...props} key={option.value} data-testid={`user-option-${option.username}`}>
+              <li {...props} key={option.value} data-testid={`user-option-${option.username}`} role="option">
                 <span>
                   {option.label}
                   {option.displayname && (
@@ -115,7 +120,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
                 slotProps={{
                   htmlInput: {
                     ...params.inputProps,
-                    'data-testid': 'user-field-input',
+                    'data-testid': 'user-field-autocomplete-input',
                   },
                 }}
                 {...restOfProps}

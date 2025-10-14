@@ -22,7 +22,7 @@ describeWithSetup('Category management', () => {
     admin = await browsers.getUserBrowser('admin');
 
     const user1Data = await userData.use('user');
-    const user2Data = await userData.use('other-user');
+    const user2Data = await userData.use('student');
 
     room.users = [user1Data, user2Data];
   });

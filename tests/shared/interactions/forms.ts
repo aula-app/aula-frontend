@@ -49,21 +49,22 @@ const openSelectDropdown = async (page: Page, testId: string) => {
   await expect(dropdown).toBeVisible({ timeout: 5000 });
 };
 
-export const selectOption = async (page: Page, testId: string, optionLabel: string) => {
+const select = async (page: Page, testId: string, option: Locator, optionLabel: string) => {
   await openSelectDropdown(page, testId);
-  const option = page.getByTestId(`${testId}-list`).getByRole('option', { name: optionLabel });
   await expect(option).toBeVisible({ timeout: 5000 });
   await option.click();
   await page.waitForTimeout(500);
 
-  // Verify the option appears in the field (either as input value for Select or chip for Autocomplete)
-  const field = page.getByTestId(testId);
-  await expect(field).toContainText(optionLabel, { timeout: 5000 });
+  const field = page.getByTestId(`${testId}-input`);
+  await expect(field).toHaveValue(optionLabel, { timeout: 5000 });
+};
+
+export const selectOption = async (page: Page, testId: string, optionLabel: string) => {
+  const option = page.getByTestId(`${testId}-list`).getByRole('option', { name: optionLabel });
+  await select(page, testId, option, optionLabel);
 };
 
 export const selectOptionByValue = async (page: Page, testId: string, value: string) => {
-  await openSelectDropdown(page, testId);
   const option = page.getByTestId(`${testId}-list`).getByTestId(`select-option-${value}`);
-  await expect(option).toBeVisible({ timeout: 5000 });
-  await option.click();
+  await select(page, testId, option, value);
 };

@@ -20,7 +20,7 @@ describeWithSetup('Box Management - Creation, phase changes and Permissions', ()
 
   test.beforeAll(async () => {
     const user1Data = await userData.use('user');
-    const user2Data = await userData.use('other-user');
+    const user2Data = await userData.use('student');
 
     admin = await browsers.getUserBrowser('admin');
     user = await browsers.getUserBrowser(user1Data.username);

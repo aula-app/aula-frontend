@@ -33,20 +33,16 @@ describeWithSetup('Instance Offline', () => {
     await navigation.goToSettings(admin);
     await navigation.openAccordion(admin, 'config-accordion-system');
 
-    await formInteractions.selectOption(
-      admin,
-      'system-status-selector',
-      online ? 'status-option-status.active' : 'status-option-status.inactive'
-    );
+    await formInteractions.selectOptionByValue(admin, 'select-field-status', online ? '1' : '0');
     await formInteractions.clickButton(admin, 'system-settings-confirm-button');
-    await admin.waitForTimeout(500);
     instanceOnline = online;
 
+    await admin.waitForTimeout(500);
     const isExpanded = await admin.getByTestId('config-accordion-system').getAttribute('aria-expanded');
     await expect(isExpanded).toBe('false');
 
     await navigation.openAccordion(admin, 'config-accordion-system');
-    const selectedStatus = await admin.getByTestId('system-status-selector-input').inputValue();
+    const selectedStatus = await admin.getByTestId('select-field-status-input').inputValue();
     await expect(selectedStatus).toBe(`${Number(online)}`);
   };
 

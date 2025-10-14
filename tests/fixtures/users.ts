@@ -17,7 +17,7 @@ export const admin: types.UserData = {
 
 export const init = () => {
   create('user');
-  create('other-user');
+  create('student');
 };
 
 export const all = () => activeUsers;
