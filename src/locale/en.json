@@ -53,6 +53,7 @@
   "auth": {
     "forgotPassword": {
       "button": "Reset password",
+      "buttonSent": "sent",
       "link": "Forgot password?",
       "message": "Are you sure you want to request a new password for this user? {{var}}",
       "messageEmail": "We will log them out, erase their old password and send them an email with instructions to create a new password.",
