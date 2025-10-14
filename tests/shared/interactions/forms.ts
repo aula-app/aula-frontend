@@ -54,17 +54,29 @@ const select = async (page: Page, testId: string, option: Locator, optionLabel: 
   await expect(option).toBeVisible({ timeout: 5000 });
   await option.click();
   await page.waitForTimeout(500);
-
-  const field = page.getByTestId(`${testId}-input`);
-  await expect(field).toHaveValue(optionLabel, { timeout: 5000 });
 };
 
 export const selectOption = async (page: Page, testId: string, optionLabel: string) => {
   const option = page.getByTestId(`${testId}-list`).getByRole('option', { name: optionLabel });
   await select(page, testId, option, optionLabel);
+
+  const displayedValue = page.getByTestId(testId);
+  await expect(displayedValue).toContainText(optionLabel, { timeout: 5000 });
+};
+
+export const selectAutocompleteOption = async (page: Page, testId: string, optionLabel: string) => {
+  const option = page.getByTestId(`${testId}-list`).getByRole('option', { name: optionLabel });
+  await select(page, testId, option, optionLabel);
+
+  // For Autocomplete, verify the input field contains the selected value
+  const input = page.getByTestId(`${testId}-input`);
+  await expect(input).toHaveValue(optionLabel, { timeout: 5000 });
 };
 
 export const selectOptionByValue = async (page: Page, testId: string, value: string) => {
   const option = page.getByTestId(`${testId}-list`).getByTestId(`select-option-${value}`);
   await select(page, testId, option, value);
+
+  const field = page.getByTestId(`${testId}-input`);
+  await expect(field).toHaveValue(value, { timeout: 5000 });
 };

@@ -57,7 +57,8 @@ const SelectField: React.FC<Props> = ({
                     } as any,
                   },
                 },
-              },
+                'data-testid': `select-field-${name}-value`,
+              } as any,
               htmlInput: {
                 'aria-labelledby': `select-field-${name}-label`,
                 'aria-invalid': !!fieldState.error,
