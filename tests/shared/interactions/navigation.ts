@@ -1,18 +1,15 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../shared';
-import { RoomPhases } from '../../../src/types/SettingsTypes';
 
 const host = shared.getHost();
 
-export const checkUrl = async (page: Page, path: string) => {
-  const currentUrl = page.url();
-  if (!currentUrl.includes(path)) {
-    await page.goto(host);
-  }
-};
-
 export const clickToNavigate = async (page: Page, path: string) => {
-  await checkUrl(page, path);
+  const currentUrl = page.url();
+  if (currentUrl.includes(path)) {
+    return;
+  }
+
+  await goToHome(page);
 
   const button = page.locator(`a[href="${path}"]`);
   await expect(button).toBeVisible();
@@ -24,55 +21,8 @@ export const clickToNavigate = async (page: Page, path: string) => {
 export const openAccordion = async (page: Page, testId: string) => {
   const accordion = page.getByTestId(testId);
   await expect(accordion).toBeVisible({ timeout: 10000 });
-
-  const isExpanded = await accordion.getAttribute('aria-expanded');
-  if (isExpanded !== 'true') {
-    await accordion.click();
-    await page.waitForTimeout(500);
-  }
-};
-
-export const closeAccordion = async (page: Page, testId: string) => {
-  const accordion = page.getByTestId(testId);
-  await expect(accordion).toBeVisible({ timeout: 10000 });
-
-  const isExpanded = await accordion.getAttribute('aria-expanded');
-  if (isExpanded === 'true') {
-    await accordion.click();
-    await page.waitForTimeout(1000);
-  }
-};
-
-// Main navigation
-
-export const clickOnPageItem = async (page: Page, itemText: string) => {
-  const itemDiv = page.getByText(itemText);
-  await expect(itemDiv).toBeVisible();
-  await itemDiv.click();
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(500);
-};
-
-export const clickOnPageId = async (page: Page, itemId: string) => {
-  const itemDiv = page.getByTestId(itemId);
-  await expect(itemDiv).toBeVisible();
-  await itemDiv.click();
-  await page.waitForLoadState('networkidle');
-};
-
-export const goToRoom = async (page: Page, roomName: string) => {
-  await goToHome(page);
-  await clickOnPageItem(page, roomName);
-};
-
-export const goToWildIdea = async (page: Page, roomName: string, ideaName: string) => {
-  await goToRoom(page, roomName);
-  await clickOnPageItem(page, ideaName);
-};
-
-export const goToPhase = async (page: Page, roomName: string, phase: RoomPhases) => {
-  await goToRoom(page, roomName);
-  await clickOnPageId(page, `link-to-phase-${phase}`);
+  await accordion.click();
+  await page.waitForTimeout(1000);
 };
 
 // Sidebar navigation
@@ -84,10 +34,6 @@ export const goToHome = async (page: Page) => {
 
 export const goToProfile = async (page: Page) => {
   await clickToNavigate(page, '/settings/profile');
-};
-
-export const goToMessages = async (page: Page) => {
-  await clickToNavigate(page, '/messages');
 };
 
 export const goToSettings = async (page: Page) => {

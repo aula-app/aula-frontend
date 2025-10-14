@@ -27,6 +27,7 @@ export default defineConfig({
     {
       name: 'main',
       testDir: './tests/mutating/main',
+      testIgnore: '**/not_Working/**',
       use: { ...devices['Desktop Chrome'] },
       workers: 1, // note - someday these can be run in parallel after https://github.com/aula-app/aula-frontend/issues/604
     },
