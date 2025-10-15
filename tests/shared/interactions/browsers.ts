@@ -1,104 +1,142 @@
-import { BrowserContext, Page, chromium } from '@playwright/test';
+import { BrowserContext, Page, chromium, Browser } from '@playwright/test';
 
-// this namespace stores the playwright browsers and pages in
-// a singleton state.  Must be init()ed or recall()ed before use.
+// Dynamic browser and page management
+export const contexts = {} as Record<string, BrowserContext>;
+export const pages = {} as Record<string, Page>;
 
-export let admins_browser: BrowserContext;
-export let alices_browser: BrowserContext;
-export let bobs_browser: BrowserContext;
-export let mallorys_browser: BrowserContext;
-export let burt_browser: BrowserContext;
-export let rainer_browser: BrowserContext;
+// Shared browser instance for efficiency
+let sharedBrowser: Browser | null = null;
 
-export let admin: Page;
-export let alice: Page;
-export let bob: Page;
-export let mallory: Page;
-export let burt: Page;
-export let rainer: Page;
+// Get or create shared browser instance
+const getSharedBrowser = async (): Promise<Browser> => {
+  if (!sharedBrowser) {
+    sharedBrowser = await chromium.launch();
+  }
+  return sharedBrowser;
+};
+
+export const getUserBrowserContext = async (userKey: string): Promise<BrowserContext> => {
+  if (!pages[userKey]) {
+    create(userKey);
+  }
+  return contexts[userKey];
+};
+
+export const getUserBrowser = async (userKey: string): Promise<Page> => {
+  if (!pages[userKey]) {
+    // Try to restore from auth-states first (has authentication)
+    try {
+      await create(userKey, `tests/auth-states/${userKey}.json`);
+    } catch {
+      // If no auth state, try temp states
+      try {
+        await create(userKey, `tests/temp/${userKey}-context.json`);
+      } catch {
+        // If no saved state, create fresh
+        await create(userKey);
+      }
+    }
+  }
+  return pages[userKey];
+};
+
+export const create = async (userKey: string, storageState?: string): Promise<Page> => {
+  if (contexts[userKey]) {
+    console.warn(`⚠️ Browser already exists for user: ${userKey}`);
+    return pages[userKey];
+  }
+
+  const browser = await getSharedBrowser();
+  const userBrowser = await browser.newContext(storageState ? { storageState } : {});
+  const page = await userBrowser.newPage();
+
+  contexts[userKey] = userBrowser;
+  pages[userKey] = page;
+
+  console.info(`✅ Browser created for user: ${userKey}`);
+  return page;
+};
+
+export const remove = async (userKey: string): Promise<void> => {
+  if (contexts[userKey]) {
+    await contexts[userKey].close();
+    delete contexts[userKey];
+  }
+  if (pages[userKey]) {
+    delete pages[userKey];
+  }
+  console.info(`✅ Browser removed for user: ${userKey}`);
+};
+
+export const saveState = async (userKey: string, path?: string): Promise<void> => {
+  if (pages[userKey]) {
+    const statePath = path || `tests/temp/${userKey}-context.json`;
+    await pages[userKey].context().storageState({ path: statePath });
+    console.info(`✅ State saved for user: ${userKey} at ${statePath}`);
+  }
+};
 
 export const newPage = (browser: BrowserContext): Promise<Page> => browser.newPage();
 
-export const init = async () => {
-  const browser = await chromium.launch();
-
-  await Promise.all([
-    browser.newContext().then(async (b) => {
-      admins_browser = b;
-      admin = await admins_browser.newPage();
-    }),
-    browser.newContext().then(async (b) => {
-      alices_browser = b;
-      alice = await alices_browser.newPage();
-    }),
-    browser.newContext().then(async (b) => {
-      bobs_browser = b;
-      bob = await bobs_browser.newPage();
-    }),
-    browser.newContext().then(async (b) => {
-      mallorys_browser = b;
-      mallory = await mallorys_browser.newPage();
-    }),
-    browser.newContext().then(async (b) => {
-      burt_browser = b;
-      burt = await burt_browser.newPage();
-    }),
-    browser.newContext().then(async (b) => {
-      rainer_browser = b;
-      rainer = await rainer_browser.newPage();
-    }),
-  ]);
+export const init = async (userKeys: string[] = ['admin', 'user']) => {
+  try {
+    await Promise.all(userKeys.map((userKey) => create(userKey)));
+    console.info('✅ contexts initialized');
+  } catch (error) {
+    console.error('❌ Error during contexts initialization:', error);
+    await shutdown();
+    throw error;
+  }
 };
 
 export const shutdown = async () => {
-  await admins_browser.close();
-  await alices_browser.close();
-  await bobs_browser.close();
-  await mallorys_browser.close();
-  await burt_browser.close();
-  await rainer_browser.close();
+  for (const [userKey, browser] of Object.entries(contexts)) {
+    console.info(`Shutting down browser for user: ${userKey}`);
+    if (browser) {
+      await browser.close();
+    }
+  }
+  // Clear all references
+  Object.keys(contexts).forEach((key) => delete contexts[key]);
+  Object.keys(pages).forEach((key) => delete pages[key]);
+
+  // Close shared browser
+  if (sharedBrowser) {
+    await sharedBrowser.close();
+    sharedBrowser = null;
+  }
 };
 
 export const pickle = async () => {
-  await admin.context().storageState({ path: 'tests/temp/admin-context.json' });
-  await alice.context().storageState({ path: 'tests/temp/alice-context.json' });
-  await bob.context().storageState({ path: 'tests/temp/bob-context.json' });
-  await mallory.context().storageState({ path: 'tests/temp/mallory-context.json' });
-  await burt.context().storageState({ path: 'tests/temp/burt-context.json' });
-  await rainer.context().storageState({ path: 'tests/temp/rainer-context.json' });
+  for (const [userKey, page] of Object.entries(pages)) {
+    if (page) {
+      await saveState(userKey, `tests/temp/${userKey}-context.json`);
+      await saveState(userKey, `tests/auth-states/${userKey}.json`);
+    }
+  }
 };
 
 // This function exists to recall the logged in browser states
 //  which were initialized in setup-auth.ts
-// tests should call it to initialize the singleton browsers in
+// tests should call it to initialize the singleton contexts in
 // this namespace
-export const recall = async () => {
-  const browser = await chromium.launch();
+export const recall = async (userKeys: Array<keyof typeof pages> = Object.keys(pages)) => {
+  try {
+    await Promise.all(userKeys.map((userKey) => create(userKey, `tests/temp/${userKey}-context.json`)));
+    console.info('✅ Successfully recalled browser states from temp');
+  } catch (error) {
+    console.error('❌ Error recalling browser states:', error);
+    throw error;
+  }
+};
 
-  await Promise.all([
-    browser.newContext({ storageState: 'tests/temp/admin-context.json' }).then(async (b) => {
-      admins_browser = b;
-      admin = await admins_browser.newPage();
-    }),
-    browser.newContext({ storageState: 'tests/temp/alice-context.json' }).then(async (b) => {
-      alices_browser = b;
-      alice = await alices_browser.newPage();
-    }),
-    browser.newContext({ storageState: 'tests/temp/bob-context.json' }).then(async (b) => {
-      bobs_browser = b;
-      bob = await bobs_browser.newPage();
-    }),
-    browser.newContext({ storageState: 'tests/temp/mallory-context.json' }).then(async (b) => {
-      mallorys_browser = b;
-      mallory = await mallorys_browser.newPage();
-    }),
-    browser.newContext({ storageState: 'tests/temp/burt-context.json' }).then(async (b) => {
-      burt_browser = b;
-      burt = await burt_browser.newPage();
-    }),
-    browser.newContext({ storageState: 'tests/temp/rainer-context.json' }).then(async (b) => {
-      rainer_browser = b;
-      rainer = await rainer_browser.newPage();
-    }),
-  ]);
+// Recall from auth-states directory (for tests that depend on user creation)
+export const recallFromAuthStates = async (userKeys: Array<keyof typeof pages> = Object.keys(pages)) => {
+  try {
+    await Promise.all(userKeys.map((userKey) => create(userKey, `tests/auth-states/${userKey}.json`)));
+    console.info('✅ Successfully recalled browser states from auth-states');
+  } catch (error) {
+    console.error('❌ Error recalling browser states from auth-states:', error);
+    throw error;
+  }
 };

@@ -3,9 +3,11 @@ import { InstanceStatusOptions } from '@/utils';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
 
 import { setInstanceOnlineMode } from '@/services/config';
 import { useAppStore } from '@/store';
+import { SelectField } from '@/components/DataFields';
 
 /** Renders "SystemSettings" component **/
 
@@ -17,16 +19,17 @@ interface Props {
 const SystemSettings = ({ settings, onReload }: Props) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState<OnlineOptions | null>(settings?.online_mode ?? null);
-  const [pendingStatus, setPendingStatus] = useState<OnlineOptions | null>(settings?.online_mode ?? null);
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [, dispatch] = useAppStore();
 
-  const changeStatus = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    const value = Number(event.target.value);
-    setHasError(false);
-    setPendingStatus(value as OnlineOptions);
-  };
+  const { control, watch, reset } = useForm({
+    defaultValues: {
+      status: settings?.online_mode ?? null,
+    },
+  });
+
+  const pendingStatus = watch('status');
 
   const confirmStatusChange = async () => {
     if (pendingStatus === null) {
@@ -50,7 +53,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
   };
 
   const cancelStatusChange = () => {
-    setPendingStatus(status);
+    reset({ status: status });
   };
 
   useEffect(() => {
@@ -61,44 +64,27 @@ const SystemSettings = ({ settings, onReload }: Props) => {
     if (settings.online_mode !== undefined) {
       // Valid settings with online_mode
       setStatus(settings.online_mode);
-      setPendingStatus(settings.online_mode);
+      reset({ status: settings.online_mode });
       setHasError(false);
     } else {
       // Settings exist but online_mode is missing - this is an error
       setStatus(null);
-      setPendingStatus(null);
+      reset({ status: null });
       setHasError(true);
     }
-  }, [settings]);
+  }, [settings, reset]);
 
   return (
     <Stack gap={2}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
-        <TextField
-          select
-          label={t('instance.status')}
-          value={pendingStatus ?? ''}
-          onChange={changeStatus}
-          variant="outlined"
-          size="small"
-          sx={{ minWidth: 200 }}
-          disabled={isLoading}
-          error={hasError}
-          data-testid="system-status-selector"
-        >
-          {hasError && (
-            <MenuItem value="" disabled data-testid="status-option-error">
-              <Typography color="error">
-                {t('errors.default')} - {t('errors.noData')}
-              </Typography>
-            </MenuItem>
-          )}
-          {InstanceStatusOptions.map((column) => (
-            <MenuItem value={column.value} key={column.label} data-testid={`status-option-${column.label}`}>
-              {t(column.label)}
-            </MenuItem>
-          ))}
-        </TextField>
+        <SelectField
+          name="status"
+          control={control}
+          options={InstanceStatusOptions}
+          required
+          sx={{ minWidth: 200, flex: 0 }}
+        />
+
         <Stack direction="row" gap={1}>
           {pendingStatus !== status && (
             <Button

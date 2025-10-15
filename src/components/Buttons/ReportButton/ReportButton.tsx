@@ -34,7 +34,6 @@ ${data.content || ''}
 
   const onClose = () => setOpen(false);
 
-
   return (
     <>
       <AppIconButton

@@ -176,6 +176,7 @@ const SideBarContent = ({ isFixed = false, onClose = () => {}, ...restOfProps }:
             aria-label={t(`ui.navigation.${title}`)}
             tabIndex={index === 0 ? 0 : -1} // Only the first item is in the tab order
             aria-current={location.pathname === path ? 'page' : undefined}
+            data-testid={`navigation-${title}`}
             onClick={() => {
               if (onClose && !isFixed) {
                 onClose(emptyEvent, 'backdropClick');

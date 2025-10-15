@@ -1,38 +1,12 @@
-import fs from 'fs';
-import * as SettingsTypes from '../../src/types/SettingsTypes.ts';
+import { RoleTypes } from '../../src/types/SettingsTypes.ts';
+import { createUserData } from '../shared/helpers/entities.ts';
+import * as browsers from '../shared/interactions/browsers';
+import * as userInteractions from '../shared/interactions/users';
+import * as types from './types';
 
-/*
- * 10 => "guest",
- * 20 => "user",
- * 30 => "moderator",
- * 31 => "moderator_v",
- * 40 => "super_moderator",
- * 41 => "super_moderator_v",
- * 44 => "principal",
- * 45 => "principal_v",
- * 50 => "admin",
- * 60 => "tech_admin"
- */
-export type UserData = {
-  username: string;
-  password: string;
-  displayName: string;
-  realName: string;
-  role: SettingsTypes.RoleTypes;
-  about: string;
-};
+const activeUsers: Record<string, types.UserData> = {};
 
-export let alice: UserData;
-
-export let bob: UserData;
-
-export let mallory: UserData;
-
-export let burt: UserData;
-
-export let rainer: UserData;
-
-export const admin: UserData = {
+export const admin: types.UserData = {
   username: 'admin',
   password: 'aula',
   displayName: 'Admin',
@@ -42,51 +16,38 @@ export const admin: UserData = {
 };
 
 export const init = () => {
-  const runId = fs.readFileSync('tests/temp/run-id.txt', 'utf-8');
-  console.log('Run ID for fixtures:', runId);
+  create('user');
+  create('student');
+};
 
-  alice = {
-    username: 'alice-user-' + runId,
-    password: 'aula',
-    displayName: 'alice-' + runId,
-    realName: 'Alice Testing' + runId,
-    role: 20,
-    about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
-  };
+export const all = () => activeUsers;
 
-  bob = {
-    username: 'bob-user-' + runId,
-    password: 'aula',
-    displayName: 'bob-' + runId,
-    realName: 'Bob Testing' + runId,
-    role: 20,
-    about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
-  };
+export const create = (name: string, role: RoleTypes = 20): types.UserData => {
+  console.log(`Creating user data for: ${name} with role ${role}`);
+  const neuUser = createUserData(name, role);
+  activeUsers[name] = neuUser;
+  return neuUser;
+};
 
-  mallory = {
-    username: 'mallory-moderator_v-' + runId,
-    password: 'aula',
-    displayName: 'mallory-' + runId,
-    realName: 'mallory Testing' + runId,
-    role: 41,
-    about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
-  };
+export const get = (name: string): types.UserData | undefined => {
+  return name === 'admin' ? admin : activeUsers[name];
+};
 
-  burt = {
-    username: 'burt-supermoderator_v-' + runId,
-    password: 'aula',
-    displayName: 'burt-' + runId,
-    realName: 'burt Testing' + runId,
-    role: 41,
-    about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
-  };
+export const use = async (name: string, role?: RoleTypes): Promise<types.UserData> => {
+  let testUserData = get(name);
+  if (!testUserData) {
+    testUserData = create(name, role);
+    await userInteractions.start(await browsers.getUserBrowser('admin'), testUserData);
+    await browsers.saveState(testUserData.username);
+  }
+  return testUserData;
+};
 
-  rainer = {
-    username: 'rainer-principal_v-' + runId,
-    password: 'aula',
-    displayName: 'rainer-' + runId,
-    realName: 'rainer Testing' + runId,
-    role: 45,
-    about: 'generated on ' + runId + 'in automated testing framework. should be deleted.',
-  };
+export const clear = async (user: types.UserData): Promise<void> => {
+  await userInteractions.remove(await browsers.getUserBrowser('admin'), user);
+
+  if (activeUsers[user.username]) {
+    delete activeUsers[user.username];
+    (await browsers.getUserBrowserContext(user.username)).close();
+  }
 };

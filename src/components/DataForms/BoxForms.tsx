@@ -292,6 +292,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
               fullWidth
               required
               disabled={isLoading}
+              slotProps={{ htmlInput: { 'data-testid': 'box-name-input' } }}
             />
             <MarkdownEditor name="description_public" control={control} required disabled={isLoading} />
             <Stack direction="row" flexWrap="wrap" alignItems="center" gap={2}>
@@ -343,6 +344,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
               variant="contained"
               disabled={isLoading}
               aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+              data-testid="box-form-submit-button"
             >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>

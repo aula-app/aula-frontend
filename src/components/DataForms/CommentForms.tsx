@@ -46,7 +46,13 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
     },
   });
 
-  const { reset, control, handleSubmit, setError, formState: { errors } } = form;
+  const {
+    reset,
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = form;
 
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
@@ -123,7 +129,7 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
   return (
     <Stack p={2} overflow="auto">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Stack gap={2}>
+        <Stack gap={2} data-testid="comment-form">
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h1">
               {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
@@ -150,6 +156,7 @@ const CommentForms: React.FC<CommentFormsProps> = ({ defaultValues, onClose }) =
               variant="contained"
               disabled={isLoading}
               aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+              data-testid="confirm-comment-button"
             >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>

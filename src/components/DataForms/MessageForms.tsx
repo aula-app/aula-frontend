@@ -231,6 +231,7 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
                 label={t('settings.messages.to')}
                 value={messageType}
                 onChange={changeTarget}
+                data-testid="message-to-select"
                 sx={{ minWidth: 150 }}
               >
                 {toOptions.map((option, index) => (
@@ -256,6 +257,9 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
               error={!!errors.headline}
               helperText={`${errors.headline?.message || ''}`}
               fullWidth
+              slotProps={{
+                htmlInput: { 'data-testid': 'message-headline-input' },
+              }}
               {...register('headline')}
             />
             <MarkdownEditor name="body" control={control} required />
@@ -266,10 +270,21 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
+            <Button
+              onClick={handleCancel}
+              color="error"
+              aria-label={t('actions.cancel')}
+              data-testid="cancel-message-form"
+            >
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" disabled={isLoading} aria-label={t('actions.confirm')}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading}
+              aria-label={t('actions.confirm')}
+              data-testid="submit-message-form"
+            >
               {t('actions.confirm')}
             </Button>
           </Stack>

@@ -126,6 +126,7 @@ const Comments = () => {
             bottom: 40,
             zIndex: 1000,
           }}
+          data-testid="add-comment-button"
           onClick={() => setEdit(true)}
         >
           <AppIcon icon="comment" />

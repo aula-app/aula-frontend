@@ -138,8 +138,10 @@ const CategoryForms: React.FC<CategoryFormsProps> = ({ defaultValues, onClose })
               required
               disabled={isLoading}
               data-testid="category-name-input"
-              inputProps={{
-                'data-testid': 'category-name-field',
+              slotProps={{
+                htmlInput: {
+                  'data-testid': 'category-name-field',
+                },
               }}
             />
             {/* content */}

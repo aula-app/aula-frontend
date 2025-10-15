@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIcon from '../AppIcon';
 import { IconType } from '../AppIcon/AppIcon';
+import AppIconButton from '../AppIconButton';
 
 interface Props extends BaseTextFieldProps {
   defaultValue: number;
@@ -87,17 +88,26 @@ const CategoryField: React.FC<Props> = ({ defaultValue, onChange, disabled = fal
           label={t('scopes.categories.name')}
           disabled={disabled}
           data-testid="category-field-input"
-          inputProps={{
-            ...params.inputProps,
-            'data-testid': 'category-field-textfield',
-          }}
           slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              'data-testid': 'category-field-text-input',
+            },
             input: {
               ...params.InputProps,
+              sx: { paddingRight: '8px !important' },
               endAdornment: (
                 <>
-                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                  {params.InputProps.endAdornment}
+                  {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : (
+                    <AppIconButton
+                      icon="close"
+                      size="small"
+                      onClick={() => handleChange(null)}
+                      data-testid="category-field-clear-button"
+                    />
+                  )}
                 </>
               ),
             },

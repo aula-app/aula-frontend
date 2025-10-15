@@ -1,89 +1,70 @@
-import { chromium, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
+import * as userData from '../../fixtures/users';
 import { describeWithSetup } from '../../shared/base-test';
-import { BrowserHelpers } from '../../shared/common-actions';
-import { InstanceOfflineTestHelpers, InstanceOfflineTestContext } from '../../shared/helpers/instance-offline';
-import * as fixtures from '../../fixtures/users';
+import * as browsers from '../../shared/interactions/browsers';
+import * as formInteractions from '../../shared/interactions/forms';
+import * as navigation from '../../shared/interactions/navigation';
+import * as users from '../../shared/interactions/users';
+import { UserData } from '../../fixtures/types';
 
-describeWithSetup('Instance Offline Mode', () => {
-  // Track cleanup contexts for emergency cleanup
-  const cleanupQueue: Array<{ page: any; context: InstanceOfflineTestContext }> = [];
+describeWithSetup('Instance Offline', () => {
+  let admin: Page;
+  let user: Page;
+  let userConfig: UserData;
 
-  test.afterAll(async () => {
-    // Emergency cleanup for any leftover contexts
-    while (cleanupQueue.length > 0) {
-      const { page, context } = cleanupQueue.pop()!;
-      try {
-        await InstanceOfflineTestHelpers.cleanupTestData(page, context);
-      } catch (e) {
-        console.warn('Emergency cleanup failed:', e);
-      }
-    }
+  let instanceOnline = true;
+
+  test.beforeAll(async () => {
+    admin = await browsers.getUserBrowser('admin');
+    user = await browsers.getUserBrowser('user');
+
+    const hasConfig = await userData.get('user');
+    if (!hasConfig) throw new Error('User config not found');
+    userConfig = hasConfig;
   });
 
-  test('Instance offline workflow: Admin controls access and users experience proper offline/online states', async () => {
-    const admin = await BrowserHelpers.openPageForUser('admin');
-    let userBrowser: any = null;
-    let userContext: any = null;
-    let user: any = null;
+  test.afterAll(async () => {
+    if (!instanceOnline) await changeInstanceStatus(true);
+    await admin.close();
+    await user.close();
+  });
 
-    try {
-      await InstanceOfflineTestHelpers.executeWithCleanup(
-        admin,
-        async (context) => {
-          // ===== STEP 1: Admin sets instance offline =====
-          await InstanceOfflineTestHelpers.navigateToSystemSettings(admin);
+  const changeInstanceStatus = async (online: boolean) => {
+    await navigation.goToSettings(admin);
+    await navigation.openAccordion(admin, 'config-accordion-system');
 
-          const currentStatus = await InstanceOfflineTestHelpers.getCurrentInstanceStatus(admin);
-          context.originalStatus = currentStatus;
-          context.currentStatus = currentStatus;
+    await formInteractions.selectOptionByValue(admin, 'select-field-status', online ? '1' : '0');
+    await formInteractions.clickButton(admin, 'system-settings-confirm-button');
+    instanceOnline = online;
 
-          await InstanceOfflineTestHelpers.setInstanceStatus(admin, 'inactive');
-          context.currentStatus = 'inactive';
+    await admin.waitForTimeout(500);
+    const isExpanded = await admin.getByTestId('config-accordion-system').getAttribute('aria-expanded');
+    await expect(isExpanded).toBe('false');
 
-          // ===== STEP 2: User cannot login when instance is offline =====
-          userBrowser = await chromium.launch();
-          userContext = await userBrowser.newContext();
-          user = await userContext.newPage();
+    await navigation.openAccordion(admin, 'config-accordion-system');
+    const selectedStatus = await admin.getByTestId('select-field-status-input').inputValue();
+    await expect(selectedStatus).toBe(`${Number(online)}`);
+  };
 
-          await InstanceOfflineTestHelpers.attemptUserLogin(user, fixtures.alice.username, fixtures.alice.password);
-          await InstanceOfflineTestHelpers.verifyOfflineView(user);
+  test('Admin can turn instance offline', async () => {
+    await changeInstanceStatus(false);
+  });
 
-          // Cleanup user browser
-          await user.close();
-          await userContext.close();
-          await userBrowser.close();
-          userBrowser = null;
+  test('User cannot login with Offline instance', async () => {
+    await navigation.goToHome(user);
+    await users.loginAttempt(user, userConfig);
+    await user.waitForLoadState('networkidle');
 
-          // ===== STEP 3: Admin sets instance back online =====
-          await InstanceOfflineTestHelpers.navigateToSystemSettings(admin);
-          await InstanceOfflineTestHelpers.setInstanceStatus(admin, 'active');
-          context.currentStatus = 'active';
+    const offlineDiv = user.getByTestId('school-offline-view');
+    await expect(offlineDiv).toBeVisible({ timeout: 5000 });
+  });
 
-          // ===== STEP 4: User can login again after instance is restored =====
-          userBrowser = await chromium.launch();
-          userContext = await userBrowser.newContext();
-          user = await userContext.newPage();
+  test('Admin can turn instance back online', async () => {
+    await changeInstanceStatus(true);
+  });
 
-          await InstanceOfflineTestHelpers.verifyUserCanLogin(user, fixtures.alice.username, fixtures.alice.password);
-
-          // Cleanup user browser
-          await user.close();
-          await userContext.close();
-          await userBrowser.close();
-          userBrowser = null;
-        },
-        cleanupQueue
-      );
-    } catch (error) {
-      console.error('Instance offline workflow test failed:', error);
-      throw error;
-    } finally {
-      // Cleanup user browser if it wasn't cleaned up properly
-      if (user) await user.close();
-      if (userContext) await userContext.close();
-      if (userBrowser) await userBrowser.close();
-
-      await BrowserHelpers.closePage(admin);
-    }
+  test('User can login with Online instance', async () => {
+    await navigation.goToHome(user);
+    await users.login(user, userConfig);
   });
 });

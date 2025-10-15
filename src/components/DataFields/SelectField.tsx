@@ -1,6 +1,6 @@
 import { PossibleFields } from '@/types/Scopes';
 import { SelectOptionsType } from '@/types/SettingsTypes';
-import { FormControl, FormHelperText, MenuItem, StandardTextFieldProps, TextField } from '@mui/material';
+import { FormControl, MenuItem, StandardTextFieldProps, TextField } from '@mui/material';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
@@ -40,6 +40,7 @@ const SelectField: React.FC<Props> = ({
           <TextField
             label={t(`settings.columns.${name}`)}
             id={`select-field-${name}`}
+            data-testid={`select-field-${name}`}
             required={required}
             disabled={disabled}
             select
@@ -47,19 +48,37 @@ const SelectField: React.FC<Props> = ({
             error={!!fieldState.error}
             helperText={<span id={`${name}-error-message`}>{t(`${fieldState.error?.message || ''}`)}</span>}
             {...restOfProps}
-            inputProps={{
-              'aria-labelledby': `select-field-${name}-label`,
-              'aria-invalid': !!fieldState.error,
-              'aria-errormessage': fieldState.error ? `${name}-error-message` : undefined
-            }}
-            InputLabelProps={{ 
-              shrink: true, 
-              id: `select-field-${name}-label`, 
-              htmlFor: `select-field-${name}` 
+            slotProps={{
+              select: {
+                MenuProps: {
+                  slotProps: {
+                    paper: {
+                      'data-testid': `select-field-${name}-list`,
+                    } as any,
+                  },
+                },
+                'data-testid': `select-field-${name}-value`,
+              } as any,
+              htmlInput: {
+                'aria-labelledby': `select-field-${name}-label`,
+                'aria-invalid': !!fieldState.error,
+                'aria-errormessage': fieldState.error ? `${name}-error-message` : undefined,
+                'data-testid': `select-field-${name}-input`,
+              },
+              inputLabel: {
+                shrink: true,
+                id: `select-field-${name}-label`,
+                htmlFor: `select-field-${name}`,
+              },
             }}
           >
             {options.map((option) => (
-              <MenuItem value={option.value} key={option.value} disabled={option.disabled ? option.disabled : false}>
+              <MenuItem
+                value={option.value}
+                key={option.value}
+                disabled={option.disabled ? option.disabled : false}
+                data-testid={`select-option-${option.value}`}
+              >
                 {t(option.label)}
               </MenuItem>
             ))}

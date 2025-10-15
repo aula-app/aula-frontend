@@ -33,7 +33,8 @@ export class ReportingTestHelpers {
 
   static async createIdeaForTesting(page: Page, room: any, data: any): Promise<void> {
     data.alicesIdea = TestDataBuilder.createIdea('reporting-scope-3');
-    await ideas.create(page, room, data.alicesIdea);
+    await navigation.goToRoom(page, room.name);
+    await ideas.create(page, data.alicesIdea);
   }
 
   static async reportIdea(page: Page, room: any, idea: any, reportType: string): Promise<void> {

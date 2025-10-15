@@ -1,235 +1,65 @@
 import { expect, Page } from '@playwright/test';
 
-import * as shared from '../shared';
-import { sleep } from '../utils';
-import * as roomFixtures from '../../fixtures/rooms';
-import * as ideaFixtures from '../../fixtures/ideas';
-import * as userFixtures from '../../fixtures/users';
-import { goToBox, goToPhase, goToRoom } from './ideas';
+import * as types from '../../fixtures/types';
+import * as formInteractions from './forms';
+import * as navigation from './navigation';
+import * as settingsInteractions from './settings';
 
-const host = shared.getHost();
+export const create = async (page: Page, box: types.BoxData) => {
+  await navigation.goToBoxesSettings(page);
 
-export const create = async (
-  page: Page, //
-  room: roomFixtures.RoomData,
-  box: ideaFixtures.BoxData
-) => {
-  // start at home
-  await page.goto(host);
+  await page.waitForSelector('[data-testid="add-boxes-button"]', { state: 'visible', timeout: 500 });
+  await formInteractions.clickButton(page, 'add-boxes-button');
+  await page.waitForTimeout(500);
 
-  await goToRoom(page, room);
+  await sendForm(page, box);
 
-  await goToPhase(page, box.phase);
+  await navigation.goToBoxesSettings(page);
+  await expect(page.getByTestId('add-boxes-button')).toBeVisible();
+  await settingsInteractions.check(page, { option: 'box_name', value: box.name });
+};
 
-  const AddBoxButton = page.locator('[aria-label="add idea"]'); // aria label should
-  //  probably be add box
-  await expect(AddBoxButton).toBeVisible();
-  await AddBoxButton.click({ timeout: 1000 });
+export const edit = async (page: Page, box: types.BoxData) => {
+  await navigation.goToBoxesSettings(page);
+  await settingsInteractions.openEdit({ page, filters: { option: 'box_name', value: box.name } });
+  await sendForm(page, box);
+};
 
-  // fill in the necessary information
-  await page.fill('input[name="name"]', box.name);
-  await page.locator('div[contenteditable="true"]').fill(box.description);
+export const fill = async (page: Page, box: types.BoxData) => {
+  await sendForm(page, box);
+};
 
-  // select the correct phase for the box
-  const phaseComboboxId = await page.getAttribute('label:text("Phase")', 'for');
-  if (!phaseComboboxId) throw new Error('Phase combobox ID not found');
-  const PhaseCombobox = page.locator(`#${shared.cssEscape(phaseComboboxId)}`);
-  await expect(PhaseCombobox).toBeVisible();
-  await PhaseCombobox.click({ timeout: 1000 });
-  const Selection = page.locator(`[data-value="${box.phase}"]`);
-  await Selection.click({ timeout: 1000 });
+export const remove = async (page: Page, box: types.BoxData) => {
+  await navigation.goToBoxesSettings(page);
 
-  await page.fill('input[name="phase_duration_1"]', box.discussionDays.toString());
-  await page.fill('input[name="phase_duration_3"]', box.discussionDays.toString());
+  await settingsInteractions.remove({ page, scope: 'boxes', filters: { option: 'box_name', value: box.name } });
+};
 
-  // how to fill in one of those MUI multiselectors:
-  const SelectorId = await page.getAttribute('label:text("Ideen")', 'for');
-  if (!SelectorId) throw new Error('Ideas selector ID not found');
-  const IdeaSelector = page.locator(`#${shared.cssEscape(SelectorId)}`);
-  await expect(IdeaSelector).toBeVisible();
+const sendForm = async (page: Page, box: types.BoxData) => {
+  await page.waitForSelector('[data-testid="box-name-input"]', { state: 'visible', timeout: 500 });
 
-  await IdeaSelector.click({ timeout: 1000 });
+  await formInteractions.fillForm(page, 'box-name-input', box.name);
+  await formInteractions.fillMarkdownForm(page, 'markdown-editor-description_public', box.description);
 
-  // click and add each desired user to the room
-  for (const i of box.ideas) {
-    await page.getByRole('option', { name: i.name }).click({ timeout: 1000 });
-    await IdeaSelector.click({ timeout: 1000 });
+  await formInteractions.selectOption(page, 'select-field-room_hash_id', box.room.name);
+
+  if (box.phase) {
+    await formInteractions.selectOptionByValue(page, 'select-field-phase_id', String(box.phase));
   }
 
-  // submit the room form
-  await page.locator('button[type="submit"]').click({ timeout: 1000 });
+  if (box.discussionDays) {
+    await formInteractions.fillForm(page, 'input-phase_duration_1', String(box.discussionDays));
+  }
 
-  // OMG
-  await sleep(3);
+  if (box.votingDays) {
+    await formInteractions.fillForm(page, 'input-phase_duration_3', String(box.votingDays));
+  }
 
-  // was the box created?
-  const BoxDiv = page.locator('h3').filter({ hasText: box.name });
-  await expect(BoxDiv).toBeVisible();
-};
+  for (const i of box.ideas || []) {
+    await formInteractions.selectOption(page, 'ideas-autocomplete-field', i.name);
+  }
 
-export const remove = async (
-  page: Page, //
-  room: roomFixtures.RoomData,
-  box: ideaFixtures.BoxData
-) => {
-  await page.goto(host);
-
-  await goToRoom(page, room);
-
-  const GoToDiscussionPhaseButton = page.getByTestId('link-to-phase-10');
-  await expect(GoToDiscussionPhaseButton).toBeVisible();
-  await GoToDiscussionPhaseButton.click({ timeout: 1000 });
-
-  const BoxDiv = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
-  await expect(BoxDiv).toBeVisible();
-
-  // so that any triggered tooltips dissappear
-  await page.mouse.move(0, 0);
-
-  const MoreOptions = BoxDiv.getByTestId('more-options');
-  await expect(MoreOptions).toBeVisible();
-
-  await MoreOptions.click({ timeout: 1000 });
-
-  const DeleteButton = BoxDiv.getByTestId('delete-button');
-  await expect(DeleteButton).toBeVisible();
-
-  await DeleteButton.click({ timeout: 1000 });
-
-  const ConfirmDeleteButton = page.getByTestId('confirm-button');
-  await expect(ConfirmDeleteButton).toBeVisible();
-  await ConfirmDeleteButton.click({ timeout: 1000 });
-
-  const NoExistBoxDiv = page.locator('h3').filter({ hasText: room.name });
-  await expect(NoExistBoxDiv).toHaveCount(0);
-};
-
-export const move = async (
-  page: Page, //
-  room: roomFixtures.RoomData,
-  box: ideaFixtures.BoxData,
-  fromPhase: number,
-  toPhase: number
-) => {
-  await page.goto(host);
-
-  await goToRoom(page, room);
-
-  await goToPhase(page, fromPhase);
-
-  const BoxDiv = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
-  await expect(BoxDiv).toBeVisible();
-
-  // so that any triggered tooltips dissappear
-  await page.mouse.move(0, 0);
-
-  const MoreOptions = BoxDiv.getByTestId('more-options');
-  await expect(MoreOptions).toBeVisible();
-
-  await MoreOptions.click({ timeout: 1000 });
-
-  const EditButton = BoxDiv.getByTestId('edit-button');
-  await expect(EditButton).toBeVisible();
-
-  await page.mouse.move(0, 0);
-
-  await EditButton.click({ timeout: 1000 });
-
-  // select the correct phase for the box
-  const phaseComboboxId = await page.getAttribute('label:text("Phase")', 'for');
-  if (!phaseComboboxId) throw new Error('Phase combobox ID not found');
-  const PhaseCombobox = page.locator(`#${shared.cssEscape(phaseComboboxId)}`);
-  await expect(PhaseCombobox).toBeVisible();
-  await PhaseCombobox.click({ timeout: 1000 });
-  const Selection = page.locator(`[data-value="${toPhase}"]`);
-
-  await page.mouse.move(0, 0);
-
-  await Selection.click({ timeout: 1000 });
-
-  await page.locator('button[type="submit"]').click({ timeout: 1000 });
-
-  const GoToDiscussionPhaseButton2 = page.getByTestId(`link-to-phase-${toPhase}`);
-  await expect(GoToDiscussionPhaseButton2).toBeVisible();
-  await GoToDiscussionPhaseButton2.click({ timeout: 1000 });
-
-  const BoxDiv2 = await page.locator('h3').filter({ hasText: box.name }).locator('xpath=ancestor::div[3]');
-  await expect(BoxDiv2).toBeVisible();
-};
-
-export const delegateVotes = async (
-  page: Page, //
-  room: roomFixtures.RoomData,
-  box: ideaFixtures.BoxData,
-  toUser: userFixtures.UserData
-) => {
-  await page.goto(host);
-
-  await goToRoom(page, room);
-
-  await goToPhase(page, 30);
-
-  await goToBox(page, box);
-
-  const DelegateButton = page.locator('button').filter({ hasText: 'Stimme übertragen' });
-  await expect(DelegateButton).toBeVisible();
-
-  await DelegateButton.click({ timeout: 1000 });
-
-  const ToUserButton = page.locator('button').filter({ hasText: toUser.realName });
-  await expect(ToUserButton).toBeVisible();
-
-  await ToUserButton.click({ timeout: 1000 });
-
-  const ConfirmButton = page.getByTestId('delegate-vote-button');
-  await expect(ConfirmButton).toBeVisible();
-
-  await ConfirmButton.click({ timeout: 1000 });
-
-  const delegationtext = `${toUser.displayName} kann für dich abstimmen`;
-  const DelegationFlag = page.locator('span').filter({ hasText: delegationtext });
-  await expect(DelegationFlag).toBeVisible();
-};
-
-export const unDelegateVotes = async (
-  page: Page, //
-  room: roomFixtures.RoomData,
-  box: ideaFixtures.BoxData
-) => {
-  await page.goto(host);
-
-  await goToRoom(page, room);
-
-  await goToPhase(page, 30);
-
-  await goToBox(page, box);
-
-  const UnDelegateButton = page.locator('button').filter({ hasText: 'Delegation widerrufen' });
-  await expect(UnDelegateButton).toBeVisible();
-
-  await UnDelegateButton.click({ timeout: 1000 });
-
-  const ConfirmButton = page.getByTestId('revoke-delegation-button');
-  await expect(ConfirmButton).toBeVisible();
-  await ConfirmButton.click({ timeout: 1000 });
-
-  const DelegateButton = page.locator('button').filter({ hasText: 'Stimme übertragen' });
-  await expect(DelegateButton).toBeVisible();
-};
-
-export const hasDelegatedVotes = async (
-  page: Page, //
-  room: roomFixtures.RoomData,
-  box: ideaFixtures.BoxData
-) => {
-  await page.goto(host);
-
-  await goToRoom(page, room);
-
-  await goToPhase(page, 30);
-
-  await goToBox(page, box);
-
-  const MultipleVoteFlag = page.locator('span').filter({ hasText: 'Du stimmst für mehrere Personen hier ab' });
-  await expect(MultipleVoteFlag).toBeVisible();
+  await formInteractions.clickButton(page, 'box-form-submit-button');
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(1000);
 };

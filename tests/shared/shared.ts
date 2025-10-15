@@ -10,15 +10,10 @@ if (!process.env.APP_FRONTEND_HOST || process.env.APP_FRONTEND_HOST.toString().m
   throw new Error('APP_FRONTEND_HOST must be configured, and non-production');
 }
 
-// success - log
 console.info('[info] using frontend:', process.env.APP_FRONTEND_HOST);
 
-// note, playwright runs each test in different threads, therefore
-// these values can't be relied upon being the same.
-// rely on setRunId during setup, then getRunId during tests.
-export const now = new Date();
-export const timestring = now.toISOString();
-export const timestamp = now.getTime().toString();
+const now = new Date();
+const timestamp = now.getTime().toString();
 
 const runIdFilePath = 'tests/temp/run-id.txt';
 
@@ -44,8 +39,6 @@ export const getRunId = () => {
     console.error('Error handling run-id file:', error);
   }
 };
-
-export const setRunId = () => fs.writeFileSync(runIdFilePath, 'run-id-' + timestamp);
 
 export function gensym(prefix = 'GG') {
   // tests will fail on collision.. very rare

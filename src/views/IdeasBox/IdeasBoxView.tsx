@@ -2,12 +2,10 @@ import { AppIcon, EmptyState, ScopeHeader } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import AddIdeasButton from '@/components/Buttons/AddIdeas';
-import DelegateButton from '@/components/Buttons/DelegateButton';
 import { BoxForms, IdeaForms } from '@/components/DataForms';
 import { IdeaCard } from '@/components/Idea';
 import IdeaCardSkeleton from '@/components/Idea/IdeaCard/IdeaCardSkeleton';
-import KnowMore from '@/components/KnowMore';
-import { useSearchAndSort, createTextFilter, useFilter } from '@/hooks';
+import { createTextFilter, useFilter, useSearchAndSort } from '@/hooks';
 import { deleteBox, getBox } from '@/services/boxes';
 import { getIdeasByBox } from '@/services/ideas';
 import { getRoom } from '@/services/rooms';
@@ -18,7 +16,7 @@ import { RoomPhases } from '@/types/SettingsTypes';
 import { announceLoadingState, checkPermissions } from '@/utils';
 import { Drawer, Fab, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { SyntheticEvent, useCallback, useEffect, useState, useMemo } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -130,6 +128,7 @@ const IdeasBoxView = () => {
   const boxClose = () => {
     setEdit(undefined);
     fetchBox();
+    fetchIdeas();
   };
 
   /**
@@ -192,7 +191,7 @@ const IdeasBoxView = () => {
 
     // Announce completion to screen readers
     announceLoadingState(false, t('scopes.ideas.plural'));
-  }, [box_id]);
+  }, [box_id, t]);
 
   const ideaClose = () => {
     setCreateIdea(false);
@@ -319,6 +318,7 @@ const IdeasBoxView = () => {
               alignSelf: 'center',
             }}
             onClick={() => setCreateIdea(true)}
+            data-testid="add-idea-button"
           >
             <AppIcon icon="idea" />
           </Fab>

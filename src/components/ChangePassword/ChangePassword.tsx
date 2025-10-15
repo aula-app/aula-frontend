@@ -98,6 +98,7 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
             onClose={() => setShowMessage(false)}
             data-testid={messageSuccess ? 'password-change-success' : 'password-change-error'}
             data-success={messageSuccess}
+            data-expanded={showMessage}
           >
             {messageSuccess ? t('auth.password.success') : t('errors.invalidPassword')}
           </Alert>
@@ -116,16 +117,15 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
               {...register(field)}
               error={!!errors[field]}
               helperText={<span id={`${field}-error-message`}>{errors[field]?.message || ''}</span>}
-              inputProps={{
-                'aria-labelledby': `change-password-${field}-label`,
-                'aria-invalid': !!errors[field],
-                'aria-errormessage': errors[field] ? `${field}-error-message` : undefined,
-              }}
-              InputLabelProps={{
-                id: `change-password-${field}-label`,
-                htmlFor: `change-password-${field}`,
-              }}
               slotProps={{
+                htmlInput: {
+                  'aria-labelledby': `change-password-${field}-label`,
+                  'aria-invalid': !!errors[field],
+                  'aria-errormessage': errors[field] ? `${field}-error-message` : undefined,
+                  id: `change-password-${field}-label`,
+                  htmlFor: `change-password-${field}`,
+                  'data-testid': `${field}-input`,
+                },
                 input: {
                   endAdornment: (
                     <InputAdornment position="end">
