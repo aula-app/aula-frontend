@@ -1,4 +1,4 @@
-## next_release
+1.6.0
 
 - **New features:**
   - Table number of rows selector
