@@ -142,7 +142,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       content: data.content,
       custom_field1: data.custom_field1,
       custom_field2: data.custom_field2,
-      topic_id: box || undefined,
+      topic_id: box,
     });
     if (response.error) {
       setError('root', {
