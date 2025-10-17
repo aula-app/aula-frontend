@@ -4,6 +4,18 @@ import * as browsers from '../shared/interactions/browsers';
 import * as userInteractions from '../shared/interactions/users';
 import * as types from './types';
 
+const BASE_USERS = [
+  // { name: 'guest', role: 10 },
+  { name: 'user', role: 20 },
+  { name: 'student', role: 20 },
+  // { name: 'moderator', role: 30 },
+  // { name: 'moderator_v', role: 31 },
+  // { name: 'super_moderator', role: 40 },
+  // { name: 'super_moderator_v', role: 41 },
+  // { name: 'principal', role: 44 },
+  // { name: 'principal_v', role: 45 },
+] as Array<{ name: string; role: RoleTypes }>;
+
 const activeUsers: Record<string, types.UserData> = {};
 
 export const admin: types.UserData = {
@@ -16,8 +28,7 @@ export const admin: types.UserData = {
 };
 
 export const init = () => {
-  create('user');
-  create('student');
+  BASE_USERS.forEach((user) => create(user.name, user.role));
 };
 
 export const all = () => activeUsers;
