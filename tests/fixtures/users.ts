@@ -23,6 +23,12 @@ export const init = () => {
 export const all = () => activeUsers;
 
 export const create = (name: string, role: RoleTypes = 20): types.UserData => {
+  // Return existing user if already created
+  if (activeUsers[name]) {
+    console.log(`User data already exists for: ${name}, reusing existing data`);
+    return activeUsers[name];
+  }
+
   console.log(`Creating user data for: ${name} with role ${role}`);
   const neuUser = createUserData(name, role);
   activeUsers[name] = neuUser;
@@ -38,7 +44,7 @@ export const use = async (name: string, role?: RoleTypes): Promise<types.UserDat
   if (!testUserData) {
     testUserData = create(name, role);
     await userInteractions.start(await browsers.getUserBrowser('admin'), testUserData);
-    await browsers.saveState(testUserData.username);
+    await browsers.saveState(name);
   }
   return testUserData;
 };
