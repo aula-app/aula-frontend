@@ -5,6 +5,8 @@
 *-context.json
 # Ignore playwright run IDs (moved to tests/temp)
 run-id.txt
+# Ignore test data file
+.test-data.json
 
 # Test directories
 /tests/temp/
