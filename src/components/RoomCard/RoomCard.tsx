@@ -34,7 +34,7 @@ const RoomCard: FC<RoomCardProps> = ({ room }) => {
   const { imageNumber, imageShift } = parseDescription(room.description_internal);
 
   return (
-    <Card sx={{ borderRadius: '25px', width: '100%' }} variant="outlined">
+    <Card sx={{ borderRadius: '25px', width: '100%' }} variant="outlined" data-testid="room-card">
       <AppLink to={`/room/${room.hash_id}/phase/0`}>
         <Stack
           sx={{
