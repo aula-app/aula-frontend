@@ -46,7 +46,7 @@ describeWithSetup('Change pass flow', () => {
   };
 
   test('Setup dedicated user for password tests', async () => {
-    const passUserData = await userData.use('passwordUser');
+    const passUserData = await userData.use('password');
     user = await browsers.getUserBrowser(passUserData.username);
   });
 
@@ -100,7 +100,7 @@ describeWithSetup('Change pass flow', () => {
   });
 
   test('Delete dedicated user for password tests', async () => {
-    const user = userData.get('passwordUser');
+    const user = userData.get('password');
     if (!user) throw new Error('User data for passwordUser not found');
     await userData.clear(user);
   });
