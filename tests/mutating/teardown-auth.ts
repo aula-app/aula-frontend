@@ -2,7 +2,7 @@
 import * as userData from '../fixtures/users';
 import { TestCleanup } from '../shared/cleanup';
 import * as browsers from '../shared/interactions/browsers';
-import * as userInteractions from '../shared/interactions/users';
+import { createTestApiClient } from '../shared/helpers/api-calls';
 
 export default async function globalTeardown() {
   // Comprehensive cleanup of test artifacts
@@ -24,21 +24,46 @@ export const clearBaseUsers = async (): Promise<boolean> => {
   await browsers.recall();
 
   try {
-    let allRemoved = true;
+    // Get admin browser (should have saved session from setup)
     const adminPage = await browsers.getUserBrowser('admin');
     if (!adminPage) {
-      throw new Error('Admin browser not available for user cleanup.');
+      console.warn('⚠️ Admin browser not available for cleanup');
+      return false;
     }
 
-    const users = userData.all();
-    console.log('👥 Users to remove:', Object.keys(users));
+    // Create API client with admin page context (uses authenticated session)
+    const apiClient = createTestApiClient(adminPage);
+    console.log('✅ Using admin session for cleanup');
 
-    // Sequential user removal to avoid race conditions
-    for (const [userKey, user] of Object.entries(users)) {
+    // Get the same users that were created in setup
+    const usersToRemove = userData.all();
+    console.log('👥 Users to remove:', Object.keys(usersToRemove));
+
+    if (Object.keys(usersToRemove).length === 0) {
+      console.log('ℹ️ No users found in userData.all() to remove');
+      return true;
+    }
+
+    // Get all users from the system to find their IDs
+    const allUsers = await apiClient.getUsers();
+    let allRemoved = true;
+
+    // Remove users that were created in setup
+    for (const [userKey, user] of Object.entries(usersToRemove)) {
       try {
         console.log(`🗑️ Attempting to remove user: ${user.username} (key: ${userKey})`);
-        await userInteractions.remove(adminPage, user);
+
+        // Find user ID from the system
+        const systemUser = (allUsers as any[]).find((u: any) => u.username === user.username);
+
+        if (systemUser?.hash_id) {
+          await apiClient.deleteUser(systemUser.hash_id);
+          console.log(`✅ Successfully removed user: ${user.username}`);
+        } else {
+          console.warn(`⚠️ User not found in system: ${user.username}`);
+        }
       } catch (error) {
+        console.error(`❌ Failed to remove user ${user.username}:`, error);
         allRemoved = false;
       }
     }

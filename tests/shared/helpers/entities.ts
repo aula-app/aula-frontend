@@ -32,10 +32,11 @@ export function createBox(suffix = '', room: types.RoomData, ideas = []) {
 
 export function createUserData(username: string, role = 20) {
   const runId = shared.getRunId();
+  const hash = shared.gensym();
   return {
-    username: `test-${username}-${runId}`,
+    username: `${username}-${hash}`,
     password: 'aula',
-    displayName: `Test ${username} ${runId}`,
+    displayName: `Test ${username} ${hash}`,
     realName: `${username} ${runId}`,
     role: role,
     about: 'generated in e2e tests',
