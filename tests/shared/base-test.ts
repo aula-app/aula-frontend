@@ -18,7 +18,10 @@ export class BaseTest {
 
   static setupHooks() {
     test.beforeAll(async () => {
-      fixtures.init();
+      // Only initialize fixtures if not already done
+      if (!fixtures.get('admin') && Object.keys(fixtures.all()).length === 0) {
+        fixtures.init();
+      }
 
       // Check if authentication states are available
       const authStatesExist = await AuthHelpers.authStatesExist();

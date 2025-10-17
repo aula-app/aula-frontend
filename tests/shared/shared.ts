@@ -30,13 +30,15 @@ export const getRunId = () => {
 
     // Check if file exists, create if it doesn't
     if (!fs.existsSync(runIdFilePath)) {
-      fs.writeFileSync(runIdFilePath, 'run-id-' + timestamp, 'utf-8');
-      return 'run-id-' + timestamp;
+      const newRunId = 'run-id-' + timestamp;
+      fs.writeFileSync(runIdFilePath, newRunId, 'utf-8');
+      return newRunId;
     } else {
       return fs.readFileSync(runIdFilePath, 'utf-8').trim();
     }
   } catch (error) {
     console.error('Error handling run-id file:', error);
+    return 'run-id-' + timestamp;
   }
 };
 
