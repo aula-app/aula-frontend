@@ -247,8 +247,8 @@ export class ApiClient {
     const headers = {
       'aula-instance-code': this.config.instanceCode,
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this.config.jwtToken || localStorage.getItem('token') || ''}`,
-      'Accept': 'application/json',
+      Authorization: `Bearer ${this.config.jwtToken || localStorage.getItem('token') || ''}`,
+      Accept: 'application/json',
     };
     const body = JSON.stringify({ arguments: args, model: 'Room', method: 'addRoom' });
 

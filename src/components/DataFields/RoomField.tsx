@@ -62,19 +62,28 @@ const RoomField: React.FC<Props> = ({ selected, onChange, disabled = false, ...r
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
       onChange={(_, value) => handleChange(value)}
-      data-testid="user-room-select"
+      data-testid="user-room-autocomplete"
       value={selectedOptions}
       isOptionEqualToValue={(option, value) => option.value === value.value}
       getOptionLabel={(option) => option.label}
       options={options}
       loading={loading}
       disabled={disabled}
+      slotProps={{
+        paper: {
+          'data-testid': 'user-room-autocomplete-list',
+        } as any,
+      }}
       renderInput={(params) => (
         <TextField
           {...params}
           label={t('scopes.rooms.plural')}
           disabled={disabled}
           slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              'data-testid': 'user-room-autocomplete-input',
+            },
             input: {
               ...params.InputProps,
               endAdornment: (

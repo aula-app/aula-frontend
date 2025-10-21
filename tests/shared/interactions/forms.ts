@@ -69,8 +69,8 @@ export const selectAutocompleteOption = async (page: Page, testId: string, optio
   await select(page, testId, option, optionLabel);
 
   // For Autocomplete, verify the input field contains the selected value
-  const input = page.getByTestId(`${testId}-input`);
-  await expect(input).toHaveValue(optionLabel, { timeout: 5000 });
+  const input = page.getByTestId(`${testId}`);
+  await expect(input).toContainText(optionLabel, { timeout: 5000 });
 };
 
 export const selectOptionByValue = async (page: Page, testId: string, value: string) => {
