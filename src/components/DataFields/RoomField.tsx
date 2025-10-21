@@ -62,6 +62,7 @@ const RoomField: React.FC<Props> = ({ selected, onChange, disabled = false, ...r
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
       onChange={(_, value) => handleChange(value)}
+      data-testid="user-room-select"
       value={selectedOptions}
       isOptionEqualToValue={(option, value) => option.value === value.value}
       getOptionLabel={(option) => option.label}
