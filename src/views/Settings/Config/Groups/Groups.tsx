@@ -53,10 +53,17 @@ const View: React.FC = () => {
           label={t('actions.add', { var: t('scopes.groups.name').toLowerCase() })}
           avatar={<AppIcon icon="add" />}
           onClick={() => setEdit(true)}
+          data-testid="add-group-chip"
         />
         {groups.map((group, key) => {
           return (
-            <Chip key={group.id} label={group.group_name} onClick={() => setEdit(group)} onDelete={() => setDel(group)} />
+            <Chip
+              key={group.id}
+              label={group.group_name}
+              onClick={() => setEdit(group)}
+              onDelete={() => setDel(group)}
+              data-testid={`group-chip-${group.id}`}
+            />
           );
         })}
       </Stack>

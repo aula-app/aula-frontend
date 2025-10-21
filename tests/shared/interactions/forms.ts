@@ -8,7 +8,7 @@ export const fillForm = async (page: Page, testId: string, value: string) => {
 };
 
 export const fillMarkdownForm = async (page: Page, testId: string, value: string) => {
-  const field = page.getByTestId(testId).locator('[contenteditable="true"]');
+  const field = page.getByTestId(testId).getByRole('textbox', { name: 'editable markdown' });
   await expect(field).toBeVisible();
   await field.fill(value);
 };

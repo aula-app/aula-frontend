@@ -183,6 +183,11 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
               error={!!errors.group_name}
               helperText={`${errors.group_name?.message || ''}`}
               fullWidth
+              slotProps={{
+                htmlInput: {
+                  'data-testid': 'group-name-field',
+                },
+              }}
               {...register('group_name')}
               required
               disabled={isLoading}

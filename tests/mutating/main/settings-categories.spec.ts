@@ -62,11 +62,11 @@ describeWithSetup('Category management', () => {
   };
 
   test('Admins should be able to create a new category', async () => {
-    navigation.goToSettings(admin);
-    navigation.openAccordion(admin, 'config-accordion-idea');
-    formInteractions.clickButton(admin, 'add-new-category-chip');
+    await navigation.goToSettings(admin);
+    await navigation.openAccordion(admin, 'config-accordion-idea');
+    await formInteractions.clickButton(admin, 'add-new-category-chip');
 
-    formInteractions.fillForm(admin, 'category-name-field', idea.category ? idea.category : '');
+    await formInteractions.fillForm(admin, 'category-name-field', idea.category ? idea.category : '');
 
     // Select category icon
     const iconFieldContainer = admin.getByTestId('icon-field-container');
@@ -122,8 +122,8 @@ describeWithSetup('Category management', () => {
   });
 
   const removeCategory = async () => {
-    navigation.goToSettings(admin);
-    navigation.openAccordion(admin, 'config-accordion-idea');
+    await navigation.goToSettings(admin);
+    await navigation.openAccordion(admin, 'config-accordion-idea');
 
     const CategoryChip = admin.getByTestId(`category-chip-${idea.category?.toLowerCase().replace(/\s+/g, '-')}`);
     await expect(CategoryChip).toBeVisible();

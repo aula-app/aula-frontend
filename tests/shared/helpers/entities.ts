@@ -30,7 +30,7 @@ export function createBox(suffix = '', room: types.RoomData, ideas = []) {
   } as types.BoxData;
 }
 
-export function createUserData(username: string, role = 20) {
+export function createUser(username: string, role = 20) {
   const runId = shared.getRunId();
   const hash = shared.gensym();
   return {

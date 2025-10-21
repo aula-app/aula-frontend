@@ -1,8 +1,10 @@
 import { RoleTypes } from '../../src/types/SettingsTypes.ts';
-import { createUserData } from '../shared/helpers/entities.ts';
+import { createUser } from '../shared/helpers/entities.ts';
 import * as browsers from '../shared/interactions/browsers';
 import * as userInteractions from '../shared/interactions/users';
 import * as types from './types';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const BASE_USERS = [
   // { name: 'guest', role: 10 },
@@ -41,9 +43,9 @@ export const create = (name: string, role: RoleTypes = 20): types.UserData => {
   }
 
   console.log(`Creating user data for: ${name} with role ${role}`);
-  const neuUser = createUserData(name, role);
-  activeUsers[name] = neuUser;
-  return neuUser;
+  const newUser = createUser(name, role);
+  activeUsers[name] = newUser;
+  return newUser;
 };
 
 export const get = (name: string): types.UserData | undefined => {
@@ -51,11 +53,25 @@ export const get = (name: string): types.UserData | undefined => {
 };
 
 export const use = async (name: string, role?: RoleTypes): Promise<types.UserData> => {
+  console.log(activeUsers);
   let testUserData = get(name);
+
+  // If not in memory, try loading from disk
+  if (!testUserData) {
+    const loadedData = loadUserData(name);
+    if (loadedData) {
+      console.log(`♻️  Reusing existing user from disk: ${name}`);
+      activeUsers[name] = loadedData;
+      testUserData = loadedData;
+    }
+  }
+
+  // If still not found, create new user
   if (!testUserData) {
     testUserData = create(name, role);
     await userInteractions.start(await browsers.getUserBrowser('admin'), testUserData);
     await browsers.saveState(name);
+    saveUserData(name, testUserData);
   }
   return testUserData;
 };
@@ -67,4 +83,42 @@ export const clear = async (user: types.UserData): Promise<void> => {
     delete activeUsers[user.username];
     (await browsers.getUserBrowserContext(user.username)).close();
   }
+};
+
+const USER_DATA_DIR = 'tests/temp/user-data';
+
+// Ensure the user data directory exists
+const ensureUserDataDir = (): void => {
+  if (!fs.existsSync(USER_DATA_DIR)) {
+    fs.mkdirSync(USER_DATA_DIR, { recursive: true });
+  }
+};
+
+// Save user metadata to disk
+export const saveUserData = (name: string, userData: types.UserData): void => {
+  ensureUserDataDir();
+  const filePath = path.join(USER_DATA_DIR, `${name}.json`);
+  fs.writeFileSync(filePath, JSON.stringify(userData, null, 2));
+  console.log(`💾 User data saved for: ${name}`);
+};
+
+// Load user metadata from disk
+export const loadUserData = (name: string): types.UserData | null => {
+  const filePath = path.join(USER_DATA_DIR, `${name}.json`);
+  if (fs.existsSync(filePath)) {
+    const data = fs.readFileSync(filePath, 'utf-8');
+    const userData = JSON.parse(data) as types.UserData;
+    console.log(`📂 User data loaded from disk for: ${name}`);
+    return userData;
+  }
+  return null;
+};
+
+// Save all active users to disk
+export const saveAllUserData = (): void => {
+  ensureUserDataDir();
+  Object.entries(activeUsers).forEach(([name, userData]) => {
+    saveUserData(name, userData);
+  });
+  console.log(`💾 All user data saved (${Object.keys(activeUsers).length} users)`);
 };

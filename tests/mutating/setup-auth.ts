@@ -11,6 +11,7 @@ export default async function globalSetup() {
   await browsers.init();
   await generateBaseUsers();
   await browsers.pickle();
+  userData.saveAllUserData();
 
   console.info('Setup complete!');
 }
