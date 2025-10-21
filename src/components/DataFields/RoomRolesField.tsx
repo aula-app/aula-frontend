@@ -94,6 +94,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
         onClick={() => setOpen(true)}
         disabled={disabled}
         aria-label={t('actions.set', { var: t('roles.roomRoles') })}
+        data-testid="room-roles-dialog-open-button"
         {...restOfProps}
       >
         <AppIcon icon="key" pr={2} aria-hidden="true" />
@@ -109,6 +110,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
         aria-labelledby="room-roles-dialog-title"
         aria-describedby="room-roles-dialog-description"
         aria-modal="true"
+        data-testid="room-roles-dialog"
       >
         <DialogTitle id="room-roles-dialog-title">
           {t('actions.set', {
@@ -138,9 +140,11 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
                 role="listitem"
                 aria-label={room.room_name || 'Aula'}
                 id={`room-role-item-${room.hash_id}`}
+                data-testid="room-role-list"
               >
                 <ListItem
                   key={room.hash_id}
+                  data-testid="room-role-list-item"
                   secondaryAction={
                     <SelectRole
                       userRole={currentRole as RoleTypes | 0}
@@ -164,7 +168,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
           })}
         </List>
         <DialogActions sx={{ p: 3, pt: 2 }}>
-          <Button onClick={handleClose} color="secondary" autoFocus tabIndex={0} aria-label={t('actions.cancel')}>
+          <Button onClick={handleClose} color="secondary" autoFocus tabIndex={0} aria-label={t('actions.cancel')} data-testid="room-roles-dialog-cancel-button">
             {t('actions.cancel')}
           </Button>
           <Button onClick={onSubmit} variant="contained" tabIndex={0} aria-label={t('actions.confirm')}>
