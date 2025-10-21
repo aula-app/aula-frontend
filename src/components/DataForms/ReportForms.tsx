@@ -64,7 +64,7 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
 
   return (
     <Stack p={2} overflow="auto" gap={2}>
-      <Typography variant="h1">{t(`actions.add`, { var: t(`scopes.reports.name`).toLowerCase() })}</Typography>
+      <Typography variant="h1">{t(`actions.add`, { var: t(`scopes.reports.name`) })}</Typography>
       <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
         <Stack gap={2}>
           <SelectField name="report" options={ReportOptions} control={control} />

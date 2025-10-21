@@ -278,7 +278,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h1">
-              {t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.boxes.name`).toLowerCase() })}
+              {t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.boxes.name`) })}
             </Typography>
             {checkPermissions('boxes', 'status') && <StatusField control={control} />}
           </Stack>
