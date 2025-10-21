@@ -10,9 +10,6 @@ import * as rooms from '../../shared/interactions/rooms';
 import * as settingsInteractions from '../../shared/interactions/settings';
 import * as shared from '../../shared/shared';
 
-// force these tests to run sqeuentially
-test.describe.configure({ mode: 'serial' });
-
 describeWithSetup('Category management', () => {
   let admin: any;
   let room = entities.createRoom('category-tests');
