@@ -189,7 +189,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h1">
               {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
-                var: t(`scopes.users.name`).toLowerCase(),
+                var: t(`scopes.users.name`),
               })}
             </Typography>
             <Stack direction="row" gap={2}>

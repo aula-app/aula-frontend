@@ -219,7 +219,7 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
         <Stack gap={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h1">
-              {t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.messages.name`).toLowerCase() })}
+              {t(`actions.${defaultValues ? 'edit' : 'add'}`, { var: t(`scopes.messages.name`) })}
             </Typography>
             {checkPermissions('messages', 'status') && <StatusField control={control} />}
           </Stack>
