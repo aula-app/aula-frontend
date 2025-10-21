@@ -98,7 +98,6 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
               field.onChange(newValue ? newValue.value : null);
             }}
             renderOption={(props, option) => (
-              <li {...props} key={option.value} data-testid={`user-option-${option.value}`}>
               <li {...props} key={option.value} data-testid={`user-option-${option.username}`} role="option">
                 <span>
                   {option.label}
