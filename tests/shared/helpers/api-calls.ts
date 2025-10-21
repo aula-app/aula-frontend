@@ -15,6 +15,7 @@ interface ApiClientConfig {
   apiUrl: string;
   instanceCode: string;
   requestContext?: APIRequestContext | Page;
+  jwtToken?: string;
 }
 
 export class ApiClient {
@@ -27,6 +28,7 @@ export class ApiClient {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('api_url', config.apiUrl);
       localStorage.setItem('code', config.instanceCode);
+      localStorage.setItem('token', config.jwtToken || '');
     } else {
       // Mock localStorage for Node.js environment
       const mockStorage = {
@@ -42,6 +44,7 @@ export class ApiClient {
       (global as any).localStorage = mockStorage;
       mockStorage.setItem('api_url', config.apiUrl);
       mockStorage.setItem('code', config.instanceCode);
+      mockStorage.setItem('token', config.jwtToken || '');
     }
   }
 
@@ -111,6 +114,8 @@ export class ApiClient {
       console.error('❌ Login failed:', response);
       throw new Error(`Login failed: ${response.error || 'Unknown error'}`);
     }
+
+    this.config.jwtToken = response.JWT;
 
     return response.JWT;
   }
@@ -231,14 +236,51 @@ export class ApiClient {
     room_name: string;
     description_internal?: string;
     description_public?: string;
+    internal_info?: string;
+    phase_duration_1?: number;
+    phase_duration_2?: number;
+    phase_duration_3?: number;
+    phase_duration_4?: number;
+    status?: number;
   }): Promise<{ insert_id: number; hash_id: string }> {
-    const response = await roomService.addRoom(args);
+    const url = `${this.config.apiUrl}/api/controllers/model.php?addRoom`;
+    const headers = {
+      'aula-instance-code': this.config.instanceCode,
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.config.jwtToken || localStorage.getItem('token') || ''}`,
+      'Accept': 'application/json',
+    };
+    const body = JSON.stringify({ arguments: args, model: 'Room', method: 'addRoom' });
 
-    if (!response.data) {
-      throw new Error('Failed to add room: No data returned');
+    console.log('📤 Request details:', { url, headers, body });
+    const fetchResponse = await fetch(url, { method: 'POST', headers, body });
+
+    if (!fetchResponse.ok) {
+      const errorBody = await fetchResponse.text();
+      console.error(`❌ Request failed: ${fetchResponse.status} ${fetchResponse.statusText}`);
+      console.error(`Response body: ${errorBody}`);
+      throw new Error(
+        `Request failed: ${fetchResponse.status} ${fetchResponse.statusText} - ${errorBody.substring(0, 200)}`
+      );
     }
 
-    return response.data;
+    try {
+      const response = await fetchResponse.json();
+
+      if (!response.success) {
+        console.error('❌ Request failed:', response);
+        throw new Error(`Request failed: ${response.error || 'Unknown error'}`);
+      }
+
+      if (!response.data) {
+        throw new Error('Failed to add room: No data returned');
+      }
+
+      return response.data;
+    } catch (exception) {
+      console.error('❌ Parsing response failed:', await fetchResponse.text());
+      throw new Error(`Parsing response failed`);
+    }
   }
 
   async deleteRoom(roomId: string): Promise<void> {
@@ -307,14 +349,15 @@ export class ApiClient {
  * Create an API client instance for tests
  * @param requestContext - Playwright Page or APIRequestContext to use for requests (uses Vite proxy)
  */
-export function createTestApiClient(requestContext?: APIRequestContext | Page): ApiClient {
-  // Use frontend host (localhost:3000) which goes through Vite proxy to backend
-  const apiUrl = process.env.APP_FRONTEND_HOST || 'http://localhost:3000';
-  const instanceCode = process.env.INSTANCE_CODE || 'aula';
+export function createTestApiClient(requestContext?: APIRequestContext | Page, jwtToken?: string): ApiClient {
+  // As a fallback, use frontend host (localhost:3000) which goes through Vite proxy to backend
+  const apiUrl = process.env.APP_BACKEND_HOST || process.env.APP_FRONTEND_HOST || 'http://localhost:3000';
+  const instanceCode = process.env.INSTANCE_CODE || 'SINGLE';
 
   return new ApiClient({
     apiUrl,
     instanceCode,
     requestContext,
+    jwtToken,
   });
 }
