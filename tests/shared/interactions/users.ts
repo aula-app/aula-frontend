@@ -10,7 +10,7 @@ const host = shared.getHost();
 
 type TempPass = string;
 
-export const exists = async (page: Page, data: types.UserData): Promise<Locator> => {
+export const existsByUsername = async (page: Page, data: types.UserData): Promise<Locator> => {
   await navigation.goToUsersSettings(page);
   return await settingsInteractions.check(page, { option: 'username', value: data.username });
 };
@@ -36,7 +36,7 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
     await page.waitForTimeout(500);
     await page.waitForLoadState('networkidle');
 
-    await exists(page, data);
+    await existsByUsername(page, data);
 
     const pass = await getTemporaryPass(page, data);
     console.log('✅ Successfully created user:', data.username);
@@ -52,7 +52,7 @@ export const getTemporaryPass = async (page: Page, data: types.UserData) => {
   await navigation.goToUsersSettings(page);
   await page.waitForLoadState('networkidle');
 
-  const row = await exists(page, data);
+  const row = await existsByUsername(page, data);
   const viewPassButton = row.locator('button');
   await viewPassButton.click({ timeout: 1000 });
 
@@ -69,28 +69,23 @@ export const remove = async (page: Page, data: types.UserData) => {
   try {
     await navigation.goToUsersSettings(page);
 
-    const row = await exists(page, data);
+    const row = await existsByUsername(page, data);
     const checkbox = row.locator('input[type="checkbox"]');
-    await expect(checkbox).toBeVisible({ timeout: 5000 });
+    await expect(checkbox).toBeVisible({ timeout: 2000 });
 
     // Ensure checkbox is unchecked first, then check it
     if (await checkbox.isChecked()) {
-      await checkbox.uncheck();
-      await page.waitForTimeout(300);
+      await checkbox.uncheck({ timeout: 300 });
     }
-    await checkbox.check();
-    await page.waitForTimeout(300);
+    await checkbox.check({ timeout: 300 });
 
     await formsInteractions.clickButton(page, 'remove-users-button');
-    await page.waitForTimeout(500);
     await formsInteractions.clickButton(page, 'confirm-delete-users-button');
-    await page.waitForTimeout(1000);
 
     // confirm the user does not show up in the table list
-    await expect(page.locator('table tr').filter({ hasText: data.username })).toHaveCount(0, { timeout: 10000 });
+    await expect(page.locator('table tr').filter({ hasText: data.username })).toHaveCount(0, { timeout: 5000 });
 
     await settingsInteractions.clearFilter(page);
-    await page.waitForTimeout(500);
 
     console.log('✅ Successfully removed user:', data.username);
   } catch (error) {

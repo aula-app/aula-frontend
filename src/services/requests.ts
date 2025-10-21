@@ -191,14 +191,13 @@ const redirectToOfflinePage = (): void => {
 
 export const databaseRequest = async <T = unknown>(
   data: RequestObject,
-  userId = [] as string[]
+  argumentsWithUserIdValue = [] as string[]
 ): Promise<GenericResponse<T>> => {
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
-
-  if (userId.length > 0) {
-    userId.forEach((field) => {
-      data.arguments[field] = jwt_payload?.user_id;
+  if (argumentsWithUserIdValue.length > 0) {
+    const jwt_token = localStorageGet('token');
+    const jwt_payload = parseJwt(jwt_token);
+    argumentsWithUserIdValue.forEach((argumentName) => {
+      data.arguments[argumentName] = jwt_payload?.user_id;
     });
   }
 

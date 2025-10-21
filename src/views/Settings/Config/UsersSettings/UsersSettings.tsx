@@ -190,7 +190,6 @@ const DataSettings = ({ onReload }: Props) => {
             disabled={loading}
           />
           <RoomField
-            data-testid="user-room-select"
             selected={rooms}
             onChange={(updates) => setRooms(updates)}
             disabled={loading}
