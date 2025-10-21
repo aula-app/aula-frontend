@@ -11,7 +11,7 @@ export const DATE_FORMATS = {
     dateOnly: 'DD MMMM YYYY',           // 01 June 2025
   },
   de: {
-    dateTime: 'DD.MM.YYYY HH:mm:ss', // German format
+    dateTime: 'DD.MM.YYYY HH:mm:ss',
     dateOnly: 'DD.MM.YYYY',
   },
   // Add more locales as needed

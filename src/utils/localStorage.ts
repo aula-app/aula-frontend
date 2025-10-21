@@ -55,13 +55,13 @@ export async function localStorageSet(name: string, value: any) {
 /**
  * Deletes value by name from localStorage, if specified name is empty entire localStorage is cleared.
  */
-export function localStorageDelete(name: string) {
+export async function localStorageDelete(name: string) {
   if (IS_SERVER) {
     return; // Do nothing on server side
   }
   if (name) {
-    localStorage.removeItem(name);
+    await localStorage.removeItem(name);
   } else {
-    localStorage.clear();
+    await localStorage.clear();
   }
 }

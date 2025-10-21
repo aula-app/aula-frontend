@@ -7,6 +7,7 @@ This document provides an overview of all custom hooks used in the Aula Frontend
 - [Authentication Hooks](#authentication-hooks)
 - [Layout Hooks](#layout-hooks)
 - [Event Hooks](#event-hooks)
+- [Data Management Hooks](#data-management-hooks)
 - [Form Hooks](#form-hooks)
 - [Date Hooks](#date-hooks)
 - [Store Hooks](#store-hooks)
@@ -90,6 +91,110 @@ const handleThemeSwitch = useEventSwitchDarkMode();
 ```
 
 When called, the handler toggles the darkMode state in the application store.
+
+## Data Management Hooks
+
+### useDataTableState
+
+A comprehensive hook for managing DataTable state and operations in Settings views. Encapsulates pagination, filtering, sorting, and CRUD operations.
+
+**Purpose:**
+Eliminates repetitive state management code across Settings views by providing a unified interface for data fetching, pagination, filtering, and editing.
+
+**Parameters:**
+```typescript
+interface UseDataTableStateOptions<T> {
+  initialOrderBy: number;           // Initial sort column order ID
+  fetchFn: (params) => Promise<{    // Function to fetch data
+    data?: T[] | null;
+    count?: number | null;
+    error?: string | null;
+  }>;
+  deleteFn: (id: string) => Promise<{ error?: string | null }>; // Function to delete items
+}
+```
+
+**Returns:**
+```typescript
+interface DataTableState<T> {
+  // Data state
+  items: T[];
+  totalItems: number;
+  isLoading: boolean;
+  error: string | null;
+
+  // Pagination state
+  asc: boolean;
+  limit: number;
+  offset: number;
+  orderby: number;
+
+  // Filter state
+  filters: DataTableFilters;
+
+  // Edit state
+  edit: T | boolean;
+
+  // Actions
+  setAsc: Dispatch<SetStateAction<boolean>>;
+  setLimit: Dispatch<SetStateAction<number>>;
+  setOffset: Dispatch<SetStateAction<number>>;
+  setOrderby: Dispatch<SetStateAction<number>>;
+  setFilters: (filters: Partial<DataTableFilters>) => void;
+  setEdit: (edit: T | boolean) => void;
+  fetchData: () => Promise<void>;
+  deleteItems: (items: Array<string>) => Promise<void>;
+  handleClose: () => void;
+}
+```
+
+**Usage Example:**
+```typescript
+const UsersView: React.FC = () => {
+  const [room_id, setRoom] = useState<string>('');
+
+  // IMPORTANT: Use useCallback to prevent infinite loops
+  const fetchFn = useCallback(
+    async (params: Record<string, unknown>) => {
+      return await getUsers({
+        ...params,
+        room_id,
+        userlevel: userlevel === 0 ? undefined : userlevel,
+      });
+    },
+    [room_id, userlevel] // Only recreate when filters change
+  );
+
+  const dataTableState = useDataTableState<UserType>({
+    initialOrderBy: COLUMNS[0].orderId,
+    fetchFn,
+    deleteFn: deleteUser,
+  });
+
+  return (
+    <SettingsView
+      scope="users"
+      columns={COLUMNS}
+      filterFields={FILTER}
+      dataTableState={dataTableState}
+      FormComponent={UserForms}
+    />
+  );
+};
+```
+
+**Key Features:**
+- **Auto-fetch**: Automatically fetches data when dependencies change
+- **State management**: Handles all pagination, filtering, and sorting state
+- **Edit modal**: Built-in state for create/edit drawer
+- **Pagination reset**: Automatically resets to page 1 when filters change
+- **Error handling**: Tracks and exposes loading and error states
+
+**Important Notes:**
+- Always wrap `fetchFn` with `useCallback` to prevent infinite loops
+- Include filter dependencies in the `useCallback` dependency array
+- The hook automatically calls `fetchData()` on mount and when dependencies change
+- Use with `SettingsView` component for complete Settings page functionality
 
 ## Form Hooks
 

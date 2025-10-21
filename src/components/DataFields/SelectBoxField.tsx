@@ -63,6 +63,10 @@ const SelectBoxField: React.FC<Props> = ({ defaultValue, room_id, onChange, disa
           label={t(`scopes.boxes.name`)}
           disabled={disabled}
           slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              'data-testid': 'box-field-select-input',
+            },
             input: {
               ...params.InputProps,
               endAdornment: (

@@ -123,7 +123,7 @@ const SetPasswordView = () => {
 
   useEffect(() => {
     validateKey();
-  }, [key, dispatch, t]);
+  }, [key]);
 
   return (
     <Stack gap={2}>

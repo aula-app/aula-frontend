@@ -23,23 +23,23 @@ export const Commands = [
     label: 'system',
     actions: [
       { label: 'settings.columns.status', value: 0, options: InstanceStatusOptions },
-      { label: 'actions.delete', value: 5 },
+      // { label: 'actions.delete', value: 5 },
     ],
   },
-  {
-    label: 'users',
-    actions: [
-      { label: 'settings.columns.status', value: 0, options: STATUS },
-      { label: 'actions.delete', value: 5 },
-    ],
-  },
-  {
-    label: 'groups',
-    actions: [
-      { label: 'settings.columns.status', value: 0, options: STATUS },
-      { label: 'actions.delete', value: 5 },
-    ],
-  },
+  // {
+  //   label: 'users',
+  //   actions: [
+  //     { label: 'settings.columns.status', value: 0, options: STATUS },
+  //     { label: 'actions.delete', value: 5 },
+  //   ],
+  // },
+  // {
+  //   label: 'groups',
+  //   actions: [
+  //     { label: 'settings.columns.status', value: 0, options: STATUS },
+  //     { label: 'actions.delete', value: 5 },
+  //   ],
+  // },
 ] as Array<{
   label: SettingNamesType | 'system';
   actions: { label: string; value: number; options?: { value: number; label: string }[] }[];

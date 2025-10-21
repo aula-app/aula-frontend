@@ -1,7 +1,30 @@
+## 1.6.0
+
+- **New features:**
+  - Table number of rows selector
+  - Use monospaced fonts for temporary password printout
+  - Disable Reset Password button after a click
+- **Bug fixes**
+  - Forgot Password not working for emails with special characters such as `+`
+  - Add translations for empty announcements page
+
+## 1.5.0
+
+- **New features:**
+  - Scheduled invite for users uploaded via CSV
+
+## 1.4.5
+
+- **Bug fixes:**
+  - Disable delegation system
+
 ## 1.4.4
 
 - **Bug fixes:**
   - Improve instance code readability
+  - Fix multiple room importing CSV
+  - Fix sidebar misbehavior
+  - Remove unavailable timed command options
 
 ## 1.4.3
 

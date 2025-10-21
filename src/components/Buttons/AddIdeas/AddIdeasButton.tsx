@@ -116,6 +116,7 @@ const AddIdeasButton = forwardRef<HTMLButtonElement, Props>(({ ideas = [], onClo
         aria-label={t('actions.add', { var: t('scopes.ideas.name') })}
         aria-expanded={open}
         aria-haspopup="dialog"
+        data-testid="add-idea-button"
         {...restOfProps}
       >
         <AppIcon icon="add" mr={1} />

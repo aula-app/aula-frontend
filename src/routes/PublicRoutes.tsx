@@ -13,7 +13,7 @@ const PublicRoutes = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const useInstanceCheck = () => {
+  const useInstanceCheck = async () => {
     const instanceCode = localStorageGet('code', false);
     const isMultiInstance = getRuntimeConfig().IS_MULTI;
 
@@ -27,7 +27,7 @@ const PublicRoutes = () => {
       localStorageSet('code', 'SINGLE');
       // SINGLE instance aula-frontend that is not connected to the aula network
       //   will only use its own aula-backend
-      localStorageSet('api_url', getRuntimeConfig().CENTRAL_API_URL);
+      await localStorageSet('api_url', getRuntimeConfig().CENTRAL_API_URL);
     }
   };
 

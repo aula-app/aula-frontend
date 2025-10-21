@@ -207,13 +207,73 @@ More information on this topic is provided in the [data documentation](DATA.md).
 
 ### DataTable
 
-A comprehensive table component that:
+A comprehensive table component system composed of multiple sub-components:
 
-- Supports pagination
-- Handles sorting and filtering
-- Provides row actions
-- Includes loading states
-- Displays data rows based on specified columns
+**Architecture:**
+- `DataTable`: Main orchestrator that combines ToolBar, Table, and PaginationBar
+- `Table`: Pure table rendering component with sorting and selection
+- `Row`: Individual table row with status-based styling
+- `Item`: Table cell renderer with type-specific formatting
+- `ToolBar`: Action bar with create, edit, and delete operations
+- `PaginationBar`: Pagination controls with customizable rows per page
+
+**Features:**
+- Integrated pagination with automatic page calculation
+- Column sorting with visual indicators
+- Row selection with bulk actions
+- Status-based row styling (active, deleted, archived)
+- Responsive layout with sticky headers
+- Loading and empty states
+- Accessibility support (ARIA labels, keyboard navigation)
+
+**Usage with SettingsView:**
+For Settings pages, use the `SettingsView` wrapper component which combines DataTable with FilterBar and edit Drawer. See the [SettingsView](#settingsview) section below.
+
+### SettingsView
+
+A wrapper component that provides a complete Settings page layout with minimal boilerplate.
+
+**Combines:**
+- `FilterBar`: Status and text filtering
+- `DataTable`: Data display with pagination
+- `Drawer`: Bottom drawer for create/edit forms
+
+**Usage Example:**
+```typescript
+const UsersView: React.FC = () => {
+  const [room_id, setRoom] = useState<string>('');
+
+  const fetchFn = useCallback(
+    async (params: Record<string, unknown>) => {
+      return await getUsers({ ...params, room_id });
+    },
+    [room_id]
+  );
+
+  const dataTableState = useDataTableState<UserType>({
+    initialOrderBy: 5,
+    fetchFn,
+    deleteFn: deleteUser,
+  });
+
+  return (
+    <SettingsView
+      scope="users"
+      columns={COLUMNS}
+      filterFields={['displayname', 'username', 'email']}
+      dataTableState={dataTableState}
+      FormComponent={UserForms}
+      extraFilters={<SelectRoom room={room_id} setRoom={setRoom} />}
+    />
+  );
+};
+```
+
+**Benefits:**
+- Reduces Settings view code by ~50%
+- Consistent UX across all Settings pages
+- Built-in state management via `useDataTableState` hook
+- Automatic data fetching on filter changes
 
 ### FilterBar
 

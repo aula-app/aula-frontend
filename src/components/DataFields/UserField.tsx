@@ -31,6 +31,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
           label: user.realname,
           value: user.hash_id,
           displayname: user.displayname,
+          username: user.username,
         }));
         setOptions(users);
       }
@@ -78,6 +79,11 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
             loading={loading}
             disabled={disabled}
             data-testid="user-field-autocomplete"
+            slotProps={{
+              paper: {
+                'data-testid': 'user-field-autocomplete-list',
+              } as any,
+            }}
             isOptionEqualToValue={(option, value) => {
               if (!option || !value) return false;
               return option.value === value.value;
@@ -93,6 +99,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
             }}
             renderOption={(props, option) => (
               <li {...props} key={option.value} data-testid={`user-option-${option.value}`}>
+              <li {...props} key={option.value} data-testid={`user-option-${option.username}`} role="option">
                 <span>
                   {option.label}
                   {option.displayname && (
@@ -111,6 +118,12 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
                 disabled={loading || disabled}
                 error={!!fieldState.error}
                 helperText={t(`${fieldState.error?.message || ''}`)}
+                slotProps={{
+                  htmlInput: {
+                    ...params.inputProps,
+                    'data-testid': 'user-field-autocomplete-input',
+                  },
+                }}
                 {...restOfProps}
               />
             )}
@@ -120,5 +133,4 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
     />
   );
 };
-
 export default UserField;

@@ -1,55 +1,90 @@
 // called from playwright.config
-import { test, expect, BrowserContext, Page, chromium, Browser } from '@playwright/test';
 
-import * as shared from '../shared/shared';
-
-import * as users from '../shared/interactions/users';
-import * as fixtures from '../fixtures/users';
+import * as userData from '../fixtures/users';
 import * as browsers from '../shared/interactions/browsers';
+import { createTestApiClient } from '../shared/helpers/api-calls';
 
 export default async function globalSetup() {
-  // first we make a run id, this will be helpful in the mutating tests
-
   console.log('Setting up!');
 
-  shared.getRunId();
-  shared.setRunId();
-
-  fixtures.init();
-
-  //
+  userData.init();
   await browsers.init();
-  // Log in each user
-  await users.login(browsers.admin, fixtures.admin);
-
-  // Admin should create the new users of varying permission levels
-  console.log('creating...', fixtures.alice.username);
-  const alicesTempPass = await users.create(browsers.admin, fixtures.alice);
-  console.log('creating...', fixtures.bob.username);
-  const bobsTempPass = await users.create(browsers.admin, fixtures.bob);
-  console.log('creating...', fixtures.mallory.username);
-  const mallorysTempPass = await users.create(browsers.admin, fixtures.mallory);
-  console.log('creating...', fixtures.burt.username);
-  const burtsTempPass = await users.create(browsers.admin, fixtures.burt);
-  console.log('creating...', fixtures.rainer.username);
-  const rainersTempPass = await users.create(browsers.admin, fixtures.rainer);
-
-  // mallory should _not_ be able to log in with bob's temporary password.
-  await expect(async () => {
-    await users.firstLoginFlow(browsers.mallory, fixtures.mallory, bobsTempPass);
-  }).rejects.toThrow();
-
-  // now we should correctly log in all of the users into their browsers.
-  // first login flow should work nicely!
-  await Promise.all([
-    users.firstLoginFlow(browsers.alice, fixtures.alice, alicesTempPass),
-    users.firstLoginFlow(browsers.bob, fixtures.bob, bobsTempPass),
-    users.firstLoginFlow(browsers.mallory, fixtures.mallory, mallorysTempPass),
-    users.firstLoginFlow(browsers.burt, fixtures.burt, burtsTempPass),
-    users.firstLoginFlow(browsers.rainer, fixtures.rainer, rainersTempPass),
-  ]);
-
+  await generateBaseUsers();
   await browsers.pickle();
 
-  await browsers.shutdown();
+  console.info('Setup complete!');
 }
+
+export const generateBaseUsers = async () => {
+  console.log('🔧 Generating base users via API...');
+  try {
+    // Get admin browser
+    const adminPage = await browsers.getUserBrowser('admin');
+    if (!adminPage) {
+      throw new Error('Admin browser not available.');
+    }
+
+    // Login admin via browser (this works and sets up the session properly)
+    await adminPage.goto(process.env.APP_FRONTEND_HOST || 'http://localhost:3000');
+    await adminPage.fill('input[name="username"]', userData.admin.username);
+    await adminPage.fill('input[name="password"]', userData.admin.password);
+    await adminPage.locator('button[type="submit"]').click();
+    await adminPage.waitForLoadState('networkidle');
+    await browsers.saveState('admin');
+    console.log('✅ Admin logged in successfully');
+
+    // Create API client with admin page context (now has authenticated session)
+    const apiClient = createTestApiClient(adminPage);
+
+    // Create users via API
+    for (const [userKey, user] of Object.entries(userData.all())) {
+      console.log(`🔧 Creating user via API: ${user.username}`);
+
+      // Create user via API
+      const result = await apiClient.addUser({
+        username: user.username,
+        realname: user.realName,
+        displayname: user.displayName,
+        userlevel: user.role,
+        email: '',
+        about_me: user.about,
+      });
+
+      if (!result.insert_id || !result.temp_pw) {
+        console.error('❌ Failed to create user:', user.username);
+        return false;
+      }
+
+      console.log(`✅ User created via API: ${user.username}`);
+
+      // Get user's own browser for their operations
+      const userBrowser = await browsers.getUserBrowser(user.username);
+      if (!userBrowser) {
+        console.error('❌ No browser found for user:', userKey);
+        return false;
+      }
+
+      // Navigate to app first (needed for API calls via page.evaluate)
+      await userBrowser.goto(process.env.APP_FRONTEND_HOST || 'http://localhost:3000');
+
+      // Create API client for this user using their own browser context (now loaded)
+      const userApiClient = createTestApiClient(userBrowser);
+
+      // Change password from temp to actual password via API (using user's browser)
+      const tempToken = await userApiClient.login(user.username, result.temp_pw);
+      await userApiClient.changePassword(result.temp_pw, user.password, tempToken);
+      // Login with actual password (this also stores token in localStorage)
+      await userApiClient.login(user.username, user.password);
+      console.log(`✅ Password changed and logged in for user: ${user.username}`);
+
+      // User is now logged in with token in localStorage, just save the browser state
+      await browsers.saveState(user.username);
+      console.log('✅ User browser state saved:', userKey);
+    }
+
+    console.log('✅ All users created successfully via API');
+  } catch (error) {
+    console.error('❌ Error generating base users:', error);
+    throw error;
+  }
+};

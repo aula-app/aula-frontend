@@ -39,7 +39,8 @@ export const checkPasswordKey = async (secret: string) => {
   const code = localStorageGet('code');
 
   try {
-    const response = await fetch(`${instanceApiUrl}/api/controllers/set_password.php?secret=${secret}`, {
+    const params = new URLSearchParams({ secret });
+    const response = await fetch(`${instanceApiUrl}/api/controllers/set_password.php?${params}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -106,7 +107,8 @@ export const recoverPassword = async (
   const api_code = localStorageGet('code');
 
   try {
-    const response = await fetch(`${apiUrl}/api/controllers/forgot_password.php?email=${email}`, {
+    const params = new URLSearchParams({ email });
+    const response = await fetch(`${apiUrl}/api/controllers/forgot_password.php?${params}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

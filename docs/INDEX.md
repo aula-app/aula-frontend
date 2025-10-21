@@ -102,7 +102,8 @@ src/
 
 ## Contributing
 
-For information about contributing to the Aula Frontend project, please refer to our developer guidelines. Key points include:
+### License
+By contributing to this project, you agree that your contributions will be licensed under the European Union Public License (EUPL) 1.2 or later. You can find the full text of the license [here](https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12).
 
 ### Development Process
 
@@ -130,6 +131,6 @@ When implementing features that require permissions:
 
 ## Contact
 
-For questions or assistance, please contact the Aula development team or open an issue in the project repository.
+For questions or assistance, please contact the Aula development team at `dev [at] aula.de` or open an issue in the project repository.
 
 Thank you for using Aula Frontend documentation! 🎉

@@ -157,7 +157,7 @@ const BoxPhaseView = () => {
         }}
       >
         {checkPermissions('boxes', 'create') && Number(phase) === 10 && (
-          <Fab aria-label="add idea" color="primary" onClick={() => setEdit(true)}>
+          <Fab aria-label="add idea" color="primary" onClick={() => setEdit(true)} data-testid="add-idea-button">
             <AppIcon icon="box" />
           </Fab>
         )}

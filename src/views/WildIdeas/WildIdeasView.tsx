@@ -179,6 +179,7 @@ const WildIdeas = () => {
             bottom: 40,
             zIndex: 1000,
           }}
+          data-testid="add-idea-button"
           onClick={() => setEdit(true)}
         >
           <AppIcon icon="idea" />

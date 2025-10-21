@@ -1,5 +1,5 @@
 import { addIdeaCategory, getCategories, removeIdeaCategory } from '@/services/categories';
-import { addIdea, addIdeaBox, editIdea, getIdeaBoxes, removeIdeaBox } from '@/services/ideas';
+import { addIdea, editIdea, getIdeaBoxes, addIdeaBox, removeIdeaBox } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { announceToScreenReader, checkPermissions } from '@/utils';
 import { useDraftStorage } from '@/hooks';
@@ -142,6 +142,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       content: data.content,
       custom_field1: data.custom_field1,
       custom_field2: data.custom_field2,
+      topic_id: box,
     });
     if (response.error) {
       setError('root', {
@@ -151,9 +152,8 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       return false;
     }
     if (!response.data) return false;
-    
+
     try {
-      await setIdeaBox(response.data.hash_id);
       await setIdeaCategory(response.data.hash_id);
       return true;
     } catch (error) {
@@ -184,7 +184,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       return false;
     }
     if (!response.data) return false;
-    
+
     try {
       await setIdeaBox(defaultValues?.hash_id);
       await setIdeaCategory(defaultValues?.hash_id);
@@ -285,7 +285,8 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               required
               disabled={isLoading}
               slotProps={{
-                input: {
+                htmlInput: {
+                  'data-testid': 'idea-title-input-field',
                   'aria-invalid': !!errors.title,
                   'aria-errormessage': errors.title ? 'title-error-message' : undefined,
                   'aria-labelledby': 'idea-title-label',

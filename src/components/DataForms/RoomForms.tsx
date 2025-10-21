@@ -279,6 +279,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
                 size="small"
                 error={!!errors.room_name}
                 helperText={`${errors.room_name?.message || ''}`}
+                slotProps={{ htmlInput: { 'data-testid': 'room-name-input' } }}
                 {...register('room_name')}
               />
               <MarkdownEditor
@@ -286,6 +287,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
                 disabled={isLoading}
                 name="description_public"
                 control={control}
+                data-testid="room-description-input"
                 sx={{ flex: 2, minWidth: `min(300px, 100%)` }}
               />
               {!isDefault && (
@@ -320,6 +322,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
               variant="contained"
               disabled={isLoading}
               aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+              data-testid="room-form-submit-button"
             >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>

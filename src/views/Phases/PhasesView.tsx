@@ -182,6 +182,7 @@ const PhasesView = () => {
               zIndex: 1000,
             }}
             onClick={() => setEdit(true)}
+            data-testid="add-idea-button"
           >
             <AppIcon icon="idea" />
           </Fab>

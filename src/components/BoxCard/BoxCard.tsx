@@ -37,7 +37,12 @@ const BoxCard: FC<BoxCardProps> = ({ box, disabled = false, onDelete, onEdit, ..
   const to = `/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`;
 
   return (
-    <Card sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }} variant="outlined" {...restOfProps}>
+    <Card
+      sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }}
+      variant="outlined"
+      data-testid="box-card"
+      {...restOfProps}
+    >
       <Stack
         width="100%"
         height="3rem"

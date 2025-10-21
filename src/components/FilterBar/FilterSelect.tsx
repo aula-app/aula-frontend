@@ -100,6 +100,7 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
         inputRef={filterSelectRef}
         sx={{ minWidth: 130 }}
         aria-label={t('ui.accessibility.selectFilterField')}
+        data-testid="filter-select"
       >
         <MenuItem value="">&nbsp;</MenuItem>
         {fields.map((column) => (
@@ -118,6 +119,7 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
           disabled={key === ''}
           inputRef={filterInputRef}
           placeholder={key ? t('ui.accessibility.enterFilterValue') : ''}
+          data-testid="filter-input"
           aria-label={
             key
               ? t('ui.accessibility.filterValueFor', { field: t(`settings.columns.${key}`) })
@@ -126,17 +128,16 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
           id="filter-value-input"
           aria-describedby="filter-input-helper"
           endAdornment={
-            filterValue && (
-              <Tooltip title={t('ui.accessibility.clearFilter')}>
-                <AppIconButton
-                  icon="close"
-                  onClick={handleClearFilter}
-                  disabled={key === ''}
-                  ref={clearButtonRef}
-                  aria-label={t('ui.accessibility.clearFilter')}
-                />
-              </Tooltip>
-            )
+            <Tooltip title={t('ui.accessibility.clearFilter')}>
+              <AppIconButton
+                icon="close"
+                onClick={handleClearFilter}
+                disabled={key === ''}
+                ref={clearButtonRef}
+                aria-label={t('ui.accessibility.clearFilter')}
+                data-testid="clear-filter-button"
+              />
+            </Tooltip>
           }
         />
         <FormHelperText

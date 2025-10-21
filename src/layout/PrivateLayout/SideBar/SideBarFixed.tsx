@@ -65,6 +65,7 @@ const SideBarFixed = ({ ...restOfProps }): JSX.Element => {
             outline: (theme) => `2px solid ${theme.palette.primary.main}`,
           },
         }}
+        data-testid="logout-button"
         aria-label={t('auth.logout')}
       >
         {t('auth.logout')}&nbsp;
