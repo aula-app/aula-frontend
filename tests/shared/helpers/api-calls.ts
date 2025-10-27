@@ -182,15 +182,7 @@ export class ApiClient {
   }
 
   async deleteUser(userId: string): Promise<void> {
-    if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
-      const page = this.config.requestContext as Page;
-      await page.evaluate(async (id) => {
-        const { deleteUser } = await import('../../../src/services/users');
-        await deleteUser(id);
-      }, userId);
-      return;
-    }
-    await userService.deleteUser(userId);
+    return this.request('User', 'deleteUser', { user_id: userId });
   }
 
   async setUserPassword(userId: string, _password: string): Promise<void> {
@@ -231,6 +223,12 @@ export class ApiClient {
     return response.data;
   }
 
+  async getUsersByUsername(username: string): Promise<{ username: string; hash_id: string }[]> {
+    return this.request('User', 'getUsers', {
+      "asc": 1, "limit": 500, "offset": 0, "orderby": 5, "status": 1, "room_id": "", search_field: 'username', search_text: username
+    });
+  }
+
   // Rooms
   async addRoom(args: {
     room_name: string;
@@ -243,44 +241,7 @@ export class ApiClient {
     phase_duration_4?: number;
     status?: number;
   }): Promise<{ insert_id: number; hash_id: string }> {
-    const url = `${this.config.apiUrl}/api/controllers/model.php?addRoom`;
-    const headers = {
-      'aula-instance-code': this.config.instanceCode,
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.config.jwtToken || localStorage.getItem('token') || ''}`,
-      Accept: 'application/json',
-    };
-    const body = JSON.stringify({ arguments: args, model: 'Room', method: 'addRoom' });
-
-    console.log('📤 Request details:', { url, headers, body });
-    const fetchResponse = await fetch(url, { method: 'POST', headers, body });
-
-    if (!fetchResponse.ok) {
-      const errorBody = await fetchResponse.text();
-      console.error(`❌ Request failed: ${fetchResponse.status} ${fetchResponse.statusText}`);
-      console.error(`Response body: ${errorBody}`);
-      throw new Error(
-        `Request failed: ${fetchResponse.status} ${fetchResponse.statusText} - ${errorBody.substring(0, 200)}`
-      );
-    }
-
-    try {
-      const response = await fetchResponse.json();
-
-      if (!response.success) {
-        console.error('❌ Request failed:', response);
-        throw new Error(`Request failed: ${response.error || 'Unknown error'}`);
-      }
-
-      if (!response.data) {
-        throw new Error('Failed to add room: No data returned');
-      }
-
-      return response.data;
-    } catch (exception) {
-      console.error('❌ Parsing response failed:', await fetchResponse.text());
-      throw new Error(`Parsing response failed`);
-    }
+    return this.request('Room', 'addRoom', args);
   }
 
   async deleteRoom(roomId: string): Promise<void> {
@@ -342,6 +303,48 @@ export class ApiClient {
 
   async addIdeaToBox(ideaId: string, boxId: string): Promise<void> {
     await ideaService.addIdeaBox(ideaId, boxId);
+  }
+
+  private async request(model: string, method: string, args: any): Promise<any> {
+    const url = `${this.config.apiUrl}/api/controllers/model.php?${method}`;
+    const headers = {
+      'aula-instance-code': this.config.instanceCode,
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.config.jwtToken || localStorage.getItem('token') || ''}`,
+      Accept: 'application/json',
+    };
+    const body = JSON.stringify({ arguments: args, model, method });
+
+    // console.log('📤 Request details:', { url, headers, body });
+    const fetchResponse = await fetch(url, { method: 'POST', headers, body });
+
+    if (!fetchResponse.ok) {
+      const errorBody = await fetchResponse.text();
+      console.error(`❌ Request failed: ${fetchResponse.status} ${fetchResponse.statusText}`);
+      console.error(`Response body: ${errorBody}`);
+      throw new Error(
+        `Request failed: ${fetchResponse.status} ${fetchResponse.statusText} - ${errorBody.substring(0, 200)}`
+      );
+    }
+
+    try {
+      const response = await fetchResponse.json();
+
+      if (!response.success) {
+        console.error('❌ Request failed:', response);
+        throw new Error(`Request failed: ${response.error || 'Unknown error'}`);
+      }
+
+      if (!response.data) {
+        throw new Error('Failed to add room: No data returned');
+      }
+
+      return response.data;
+    } catch (exception) {
+      console.error('❌ Parsing response exception:', exception);
+      console.error('❌ Parsing response body:', await fetchResponse.text());
+      throw new Error(`Parsing response failed`);
+    }
   }
 }
 

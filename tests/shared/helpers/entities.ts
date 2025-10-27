@@ -1,5 +1,6 @@
 import * as types from '../../fixtures/types';
 import * as shared from '../shared';
+import { TestConstants } from '../test-config';
 
 export function createRoom(suffix = '', users = []) {
   return {
@@ -35,7 +36,7 @@ export function createUserData(username: string, role = 20) {
   const hash = shared.gensym();
   return {
     username: `${username}-${hash}`,
-    password: 'aula',
+    password: TestConstants.DEFAULT_PASSWORD,
     displayName: `Test ${username} ${hash}`,
     realName: `${username} ${runId}`,
     role: role,

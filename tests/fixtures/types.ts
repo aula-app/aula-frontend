@@ -30,6 +30,9 @@ export type UserData = {
   realName: string;
   role: SettingsTypes.RoleTypes;
   about: string;
+  hashId?: string;
+  email?: string;
+  tempPass?: string;
 };
 
 export type MessageData = {
