@@ -28,6 +28,7 @@ const SelectRole: React.FC<Props> = ({
       value={userRole || 0} // Ensure default value is applied
       onChange={(event) => onChange(Number(event.target.value) as RoleTypes | 0)} // Ensure value is cast to number
       sx={{ minWidth: 200 }}
+      data-testid='select-role-text-item'
       {...restOfProps}
     >
       {noRoom && (

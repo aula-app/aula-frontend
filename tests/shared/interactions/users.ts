@@ -107,8 +107,7 @@ export const loginAttempt = async (page: Page, data: types.UserData) => {
 // Helper function to log in a user
 export const login = async (page: Page, data: types.UserData) => {
   await loginAttempt(page, data);
-  await page.waitForTimeout(1000);
-  await expect(page.locator('#rooms-heading')).toBeVisible();
+  await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: 1000 });
 };
 
 // Helper function to log out a user
@@ -152,4 +151,22 @@ export const start = async (page: Page, data: types.UserData) => {
     console.error(`❌ Error generating user: ${data.username}. `, error);
     throw error;
   }
+};
+
+export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {
+  await page.goto(host);
+
+  await page.fill('input[name="username"]', data.username);
+  await page.fill('input[name="password"]', tempPass);
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
+
+  const oldPasswordButton = page.locator('input[name="oldPassword"]');
+  await expect(oldPasswordButton).toBeVisible();
+
+  await page.fill('input[name="oldPassword"]', tempPass);
+  await page.fill('input[name="newPassword"]', data.password);
+  await page.fill('input[name="confirmPassword"]', data.password);
+  await page.locator('button[type="submit"]').click({ timeout: 1000 });
+
+  await login(page, data);
 };

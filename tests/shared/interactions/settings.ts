@@ -14,21 +14,22 @@ export const check = async (page: Page, filters: { option: string; value: string
 export const filter = async (page: Page, filter: { option: string; value: string }) => {
   const filterButton = page.getByTestId('filter-toggle-button');
   const filterInput = page.getByTestId('filter-input');
-  await expect(filterButton).toBeVisible();
+  await expect(filterButton).toBeVisible({ timeout: 1000 });
 
-  if (!(await filterInput.isVisible())) {
+  if (!(await filterInput.isVisible()) || (await (page.getByTestId('filter-panel')).getAttribute('style'))?.includes('; height: 0px')) {
     // open the filter menu if it's not already open
-    await filterButton.click();
+    await filterButton.click({ timeout: 1000 });
   }
-
   await expect(filterInput).toBeVisible();
+  await expect(page.locator('#filter-value-input')).toBeVisible();
+
   // select the correct filter option from the "filter by" dropdown
   await page.getByTestId('filter-select').click();
   await page.locator(`li[data-value="${filter.option}"]`).click();
   // filter by our filter
   await page.fill('#filter-value-input', filter.value);
 
-  await page.waitForTimeout(1000);
+  await page.waitForLoadState('networkidle');
 
   // check if value was filtered correctly
   const row = page.locator('table tr').filter({ hasText: filter.value }).first();

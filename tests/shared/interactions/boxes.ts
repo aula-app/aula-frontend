@@ -16,12 +16,12 @@ export const create = async (page: Page, box: types.BoxData) => {
 
   await navigation.goToBoxesSettings(page);
   await expect(page.getByTestId('add-boxes-button')).toBeVisible();
-  await settingsInteractions.check(page, { option: 'box_name', value: box.name });
+  await settingsInteractions.check(page, { option: 'name', value: box.name });
 };
 
 export const edit = async (page: Page, box: types.BoxData) => {
   await navigation.goToBoxesSettings(page);
-  await settingsInteractions.openEdit({ page, filters: { option: 'box_name', value: box.name } });
+  await settingsInteractions.openEdit({ page, filters: { option: 'name', value: box.name } });
   await sendForm(page, box);
 };
 
@@ -32,7 +32,7 @@ export const fill = async (page: Page, box: types.BoxData) => {
 export const remove = async (page: Page, box: types.BoxData) => {
   await navigation.goToBoxesSettings(page);
 
-  await settingsInteractions.remove({ page, scope: 'boxes', filters: { option: 'box_name', value: box.name } });
+  await settingsInteractions.remove({ page, scope: 'boxes', filters: { option: 'name', value: box.name } });
 };
 
 const sendForm = async (page: Page, box: types.BoxData) => {
