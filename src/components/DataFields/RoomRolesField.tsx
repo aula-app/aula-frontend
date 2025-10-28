@@ -154,10 +154,10 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
                 >
                   <ListItemText
                     primary={room.room_name || 'Aula'}
-                    sx={{ 'max-width': '18rem' }} // TODO: still not good enough for mobile view
+                    sx={{ maxWidth: '18rem' }} // TODO: still not good enough for mobile view
                     primaryTypographyProps={{
                       id: `room-name-${room.hash_id}`,
-                      sx: { display: 'block', overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' }
+                      sx: { display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }
                     }}
                   />
                 </ListItem>

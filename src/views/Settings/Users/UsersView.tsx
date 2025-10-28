@@ -63,7 +63,7 @@ const UsersView: React.FC = () => {
   const extraFilters = (
     <>
       <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
-      <SelectRole userRole={userlevel} onChange={(role) => setRole(role)} allowAll variant="filled" size="small" />
+      <SelectRole defaultValue={userlevel} onChange={(role) => setRole(role)} allowAll variant="filled" size="small" />
     </>
   );
 

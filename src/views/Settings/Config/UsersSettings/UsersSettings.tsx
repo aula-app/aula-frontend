@@ -191,10 +191,9 @@ const DataSettings = ({ onReload }: Props) => {
         <Stack direction="row" alignItems="center" gap={3}>
           <SelectRole
             control={userRoleSelectionControl}
-            userRole={role}
-            variant="filled"
             noAdmin
             disabled={loading}
+            variant="filled"
           />
           <RoomField
             selected={rooms}
