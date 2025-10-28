@@ -24,6 +24,7 @@ import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
 import { LanguageTypes } from '@/types/Translation';
+import { useForm } from 'react-hook-form';
 
 interface Props {
   onReload: () => void;
@@ -100,13 +101,19 @@ const DataSettings = ({ onReload }: Props) => {
     reader.readAsText(file);
   };
 
+  const { getValues: userRoleSelectionValue, control: userRoleSelectionControl } = useForm({
+    defaultValues: {
+      roles: role
+    }
+  });
+
   const uploadCSV = async (csv: string) => {
     setLoading(true);
     const send_emails_at =
       inviteDate === null || inviteDate <= dayjs()
         ? undefined
         : dayjs(inviteDate).utc().format(DEFAULT_FORMAT_DATE_TIME);
-    const response = await addAllCSV(csv, rooms.add, role, send_emails_at);
+    const response = await addAllCSV(csv, rooms.add, userRoleSelectionValue("roles"), send_emails_at);
     setLoading(false);
     if (!response.data) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
@@ -183,8 +190,8 @@ const DataSettings = ({ onReload }: Props) => {
       <Stack gap={2}>
         <Stack direction="row" alignItems="center" gap={3}>
           <SelectRole
+            control={userRoleSelectionControl}
             userRole={role}
-            onChange={(role) => setRole(role as RoleTypes)}
             variant="filled"
             noAdmin
             disabled={loading}

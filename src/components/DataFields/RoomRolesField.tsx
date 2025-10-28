@@ -12,8 +12,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Skeleton,
-  Typography,
+  Skeleton
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -125,13 +124,9 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
           id="room-roles-dialog-description"
         >
           {schoolRooms.map((room, index) => {
-            const currentRole = updateRoles.find((role) => role.room === room.hash_id)
-              ? updateRoles.find((role) => role.room === room.hash_id)?.role
-              : userRoles.find((role) => role.room === room.hash_id)
-                ? userRoles.find((role) => role.room === room.hash_id)?.role
-                : room.type === 1
-                  ? defaultLevel
-                  : 0;
+            const currentRole = updateRoles.find((role) => role.room === room.hash_id)?.role
+              ?? userRoles.find((role) => role.room === room.hash_id)?.role
+              ?? room.type === 1 ? defaultLevel : 0;
             return (
               <ListItemButton
                 key={room.hash_id}
@@ -147,19 +142,22 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
                   data-testid="room-role-list-item"
                   secondaryAction={
                     <SelectRole
-                      userRole={currentRole as RoleTypes | 0}
+                      defaultValue={currentRole}
                       onChange={(role) => handleUpdate(room.hash_id, role)}
-                      size="small"
-                      noAdmin
                       noRoom={room.type !== 1}
+                      noAdmin={!((user?.userlevel ?? 0) >= 50 && room.type === 1)} // Standard Room role is locked for Admins
+                      disabled={(user?.userlevel ?? 0) >= 50 && room.type === 1}
+                      size="small"
                       aria-labelledby={`room-role-item-${room.hash_id}`}
                     />
                   }
                 >
                   <ListItemText
                     primary={room.room_name || 'Aula'}
+                    sx={{ 'max-width': '18rem' }} // TODO: still not good enough for mobile view
                     primaryTypographyProps={{
                       id: `room-name-${room.hash_id}`,
+                      sx: { display: 'block', overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' }
                     }}
                   />
                 </ListItem>

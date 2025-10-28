@@ -1,18 +1,22 @@
+import SelectField from '@/components/DataFields/SelectField';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { roles } from '@/utils';
-import { BaseTextFieldProps, MenuItem, TextField } from '@mui/material';
+import { BaseTextFieldProps } from '@mui/material';
+import { Control, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends BaseTextFieldProps {
-  userRole: RoleTypes | 0;
+  control?: Control<any, any>,
+  defaultValue?: RoleTypes | 0;
   noAdmin?: boolean;
   noRoom?: boolean;
   allowAll?: boolean;
-  onChange: (role: RoleTypes | 0) => void;
+  onChange?: (newRole: RoleTypes | 0) => void;
 }
 
 const SelectRole: React.FC<Props> = ({
-  userRole,
+  control,
+  defaultValue,
   noAdmin = false,
   noRoom = false,
   allowAll = false,
@@ -21,34 +25,24 @@ const SelectRole: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation();
 
+  const RoleOptionTypes = [
+    noRoom ? { value: 0, label: t(`roles.empty`) } : null,
+    allowAll ? { value: 0, label: t(`ui.common.all`) } : null,
+    ...roles.filter((role) => (noAdmin ? role < 40 : role < 60)).map((r) => ({ value: r, label: t(`roles.${r}`) }))
+  ].filter((r) => r !== null);
+
   return (
-    <TextField
-      select
+    <SelectField
+      control={control ?? useForm({ defaultValues: { roles: defaultValue ?? RoleOptionTypes[0].value } }).control}
+      options={RoleOptionTypes}
+      name='roles'
       label={t('settings.columns.userlevel')}
-      value={userRole || 0} // Ensure default value is applied
-      onChange={(event) => onChange(Number(event.target.value) as RoleTypes | 0)} // Ensure value is cast to number
+      onChange={(event) => onChange !== undefined
+        ? onChange(Number(event.target.value) as RoleTypes | 0)
+        : undefined} // Ensure value is cast to number
       sx={{ minWidth: 200 }}
-      data-testid='select-role-text-item'
       {...restOfProps}
-    >
-      {noRoom && (
-        <MenuItem value={0} key={0}>
-          {t(`roles.empty`)}
-        </MenuItem>
-      )}
-      {allowAll && (
-        <MenuItem value={0} key={-1}>
-          {t('ui.common.all')}
-        </MenuItem>
-      )}
-      {roles
-        .filter((role) => (noAdmin ? role < 40 : true))
-        .map((role) => (
-          <MenuItem value={role} key={role}>
-            {t(`roles.${role}`)}
-          </MenuItem>
-        ))}
-    </TextField>
+    />
   );
 };
 

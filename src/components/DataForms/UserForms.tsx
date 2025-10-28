@@ -1,16 +1,17 @@
+import { useDraftStorage } from '@/hooks';
 import { addSpecialRoles, addUser, addUserRoom, editUser, getUserRooms, removeUserRoom } from '@/services/users';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
-import { useDraftStorage } from '@/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { MarkdownEditor, RoleField, StatusField } from '../DataFields';
+import { MarkdownEditor, StatusField } from '../DataFields';
 import RoomRolesField from '../DataFields/RoomRolesField';
+import SelectRole from '../SelectRole';
 
 /**
  * UserForms component is used to create or edit an user.
@@ -311,11 +312,13 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               {defaultValues?.userlevel !== 60 && (
                 <>
                   {checkPermissions('users', 'addRole') && (
-                    <RoleField
+                    <SelectRole
                       control={control}
-                      disabled={isLoading}
                       sx={{ flex: 1 }}
+                      disabled={isLoading}
                       noAdmin={!checkPermissions('users', 'createAdmin')}
+                      name='userlevel'
+                      size='small'
                     />
                   )}
                   {checkPermissions('rooms', 'addUser') && (
