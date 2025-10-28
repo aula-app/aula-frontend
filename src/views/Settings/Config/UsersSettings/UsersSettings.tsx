@@ -4,6 +4,8 @@ import SelectRole from '@/components/SelectRole';
 import { addAllCSV } from '@/services/config';
 import { useAppStore } from '@/store';
 import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
+import { LanguageTypes } from '@/types/Translation';
+import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
 import {
   Button,
   FormHelperText,
@@ -22,9 +24,6 @@ import dayjs from 'dayjs';
 import i18next from 'i18next';
 import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
-import { LanguageTypes } from '@/types/Translation';
-import { useForm } from 'react-hook-form';
 
 interface Props {
   onReload: () => void;
@@ -37,7 +36,7 @@ const DataSettings = ({ onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [users, setUsers] = useState<Array<string>>([]);
-  const [role, setRole] = useState<RoleTypes>(20);
+  const [role, setRole] = useState<RoleTypes | 0>(20);
   const [rooms, setRooms] = useState<UpdateType>({ add: [], remove: [] });
   const [inviteDate, setInviteDate] = useState<dayjs.Dayjs | null>(dayjs());
   const [loading, setLoading] = useState<boolean>(false);
@@ -101,19 +100,13 @@ const DataSettings = ({ onReload }: Props) => {
     reader.readAsText(file);
   };
 
-  const { getValues: userRoleSelectionValue, control: userRoleSelectionControl } = useForm({
-    defaultValues: {
-      roles: role
-    }
-  });
-
   const uploadCSV = async (csv: string) => {
     setLoading(true);
     const send_emails_at =
       inviteDate === null || inviteDate <= dayjs()
         ? undefined
         : dayjs(inviteDate).utc().format(DEFAULT_FORMAT_DATE_TIME);
-    const response = await addAllCSV(csv, rooms.add, userRoleSelectionValue("roles"), send_emails_at);
+    const response = await addAllCSV(csv, rooms.add, role as RoleTypes, send_emails_at);
     setLoading(false);
     if (!response.data) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
@@ -190,10 +183,12 @@ const DataSettings = ({ onReload }: Props) => {
       <Stack gap={2}>
         <Stack direction="row" alignItems="center" gap={3}>
           <SelectRole
-            control={userRoleSelectionControl}
+            defaultValue={20}
             noAdmin
             disabled={loading}
+            onChange={newRole => setRole(newRole)}
             variant="filled"
+            name="role"
           />
           <RoomField
             selected={rooms}
