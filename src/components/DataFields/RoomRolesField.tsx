@@ -2,21 +2,25 @@ import AppIcon from '@/components/AppIcon';
 import { getAllRooms } from '@/services/rooms';
 import { RoomType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
+import { roles } from '@/utils';
 import {
   Button,
   ButtonProps,
   Dialog,
   DialogActions,
   DialogTitle,
+  FormControl,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
-  Skeleton
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Skeleton,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import SelectRole from '../SelectRole';
 
 /**
  * Interface that will be exposed to the parent component.
@@ -39,6 +43,32 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
 
   const [userRoles, setUserRoles] = useState<{ room: string; role: RoleTypes }[]>(JSON.parse(user?.roles || '[]'));
   const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes | 0 }[]>([]);
+
+  // Create role options based on room type and user level
+  const getRoleOptions = (room: RoomType) => {
+    const isStandardRoom = room.type === 1;
+    const isAdmin = (user?.userlevel ?? 0) >= 50;
+
+    const options = [
+      { value: 0, label: isStandardRoom ? t('roles.empty') : t('roles.empty') },
+      ...roles
+        .filter((role) => {
+          // Filter based on room type and admin status
+          if (isAdmin && isStandardRoom) {
+            return role < 60; // Admins can see all roles except super admin for standard rooms
+          }
+          return role < 40; // Non-admins see only basic roles
+        })
+        .map((r) => ({ value: r, label: t(`roles.${r}`) })),
+    ];
+
+    return options;
+  };
+
+  const handleRoleChange = (roomId: string, event: SelectChangeEvent<unknown>) => {
+    const role = Number(event.target.value) as RoleTypes | 0;
+    handleUpdate(roomId, role);
+  };
 
   const fetchRooms = async () => {
     setLoading(true);
@@ -124,14 +154,19 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
           id="room-roles-dialog-description"
         >
           {schoolRooms.map((room, index) => {
-            const currentRole = updateRoles.find((role) => role.room === room.hash_id)?.role
-              ?? userRoles.find((role) => role.room === room.hash_id)?.role
-              ?? room.type === 1 ? defaultLevel : 0;
+            const currentRole =
+              updateRoles.find((role) => role.room === room.hash_id)?.role ??
+              userRoles.find((role) => role.room === room.hash_id)?.role ??
+              (room.type === 1 ? defaultLevel : 0);
+
+            const roleOptions = getRoleOptions(room);
+            const isAdminLocked = (user?.userlevel ?? 0) >= 50 && room.type === 1;
+
             return (
               <ListItemButton
                 key={room.hash_id}
                 sx={{ py: 0, order: room.type === 1 ? 0 : 1 }}
-                tabIndex={index === 0 ? 0 : -1} // Make first item tabbable, others reachable with arrow keys
+                tabIndex={index === 0 ? 0 : -1}
                 role="listitem"
                 aria-label={room.room_name || 'Aula'}
                 id={`room-role-item-${room.hash_id}`}
@@ -141,23 +176,35 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
                   key={room.hash_id}
                   data-testid="room-role-list-item"
                   secondaryAction={
-                    <SelectRole
-                      defaultValue={currentRole}
-                      onChange={(role) => handleUpdate(room.hash_id, role)}
-                      noRoom={room.type !== 1}
-                      noAdmin={!((user?.userlevel ?? 0) >= 50 && room.type === 1)} // Standard Room role is locked for Admins
-                      disabled={(user?.userlevel ?? 0) >= 50 && room.type === 1}
-                      size="small"
-                      aria-labelledby={`room-role-item-${room.hash_id}`}
-                    />
+                    <FormControl size="small" sx={{ minWidth: 200 }}>
+                      <Select
+                        value={currentRole}
+                        onChange={(event) => handleRoleChange(room.hash_id, event)}
+                        disabled={disabled || isAdminLocked}
+                        aria-labelledby={`room-name-${room.hash_id}`}
+                        data-testid={`room-role-select-${room.hash_id}`}
+                      >
+                        {roleOptions.map((option) => (
+                          <MenuItem
+                            key={option.value}
+                            value={option.value}
+                            data-testid={`room-role-option-${option.value}`}
+                          >
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   }
                 >
                   <ListItemText
                     primary={room.room_name || 'Aula'}
                     sx={{ maxWidth: '18rem' }} // TODO: still not good enough for mobile view
-                    primaryTypographyProps={{
-                      id: `room-name-${room.hash_id}`,
-                      sx: { display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }
+                    slotProps={{
+                      primary: {
+                        id: `room-name-${room.hash_id}`,
+                        sx: { display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+                      },
                     }}
                   />
                 </ListItem>
@@ -166,7 +213,14 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
           })}
         </List>
         <DialogActions sx={{ p: 3, pt: 2 }}>
-          <Button onClick={handleClose} color="secondary" autoFocus tabIndex={0} aria-label={t('actions.cancel')} data-testid="room-roles-dialog-cancel-button">
+          <Button
+            onClick={handleClose}
+            color="secondary"
+            autoFocus
+            tabIndex={0}
+            aria-label={t('actions.cancel')}
+            data-testid="room-roles-dialog-cancel-button"
+          >
             {t('actions.cancel')}
           </Button>
           <Button onClick={onSubmit} variant="contained" tabIndex={0} aria-label={t('actions.confirm')}>

@@ -2,16 +2,15 @@ import { useDraftStorage } from '@/hooks';
 import { addSpecialRoles, addUser, addUserRoom, editUser, getUserRooms, removeUserRoom } from '@/services/users';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
-import { checkPermissions } from '@/utils';
+import { checkPermissions, roles } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { MarkdownEditor, StatusField } from '../DataFields';
+import { MarkdownEditor, SelectField, StatusField } from '../DataFields';
 import RoomRolesField from '../DataFields/RoomRolesField';
-import SelectRole from '../SelectRole';
 
 /**
  * UserForms component is used to create or edit an user.
@@ -48,8 +47,9 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       displayname: defaultValues ? ' ' : '',
       email: defaultValues ? ' ' : '',
       realname: defaultValues ? ' ' : '',
-      username: defaultValues ? ' ' : '',
+      status: defaultValues?.status ?? 1,
       userlevel: defaultValues?.userlevel ?? 20,
+      username: defaultValues ? ' ' : '',
     },
   });
 
@@ -172,6 +172,12 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   const setRoomRoles = async (user_id: string) => {
     await Promise.all(updateRoles?.map((update) => addSpecialRoles(user_id, update.role, update.room)) || []);
   };
+
+  const RoleOptionTypes = [
+    ...roles
+      .filter((role) => role < 30 || (role >= 40 && role < 60))
+      .map((r) => ({ value: r, label: t(`roles.${r}`) })),
+  ];
 
   useEffect(() => {
     reset({ ...defaultValues });
@@ -312,16 +318,15 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               {defaultValues?.userlevel !== 60 && (
                 <>
                   {checkPermissions('users', 'addRole') && (
-                    <SelectRole
+                    <SelectField
+                      size="small"
                       control={control}
-                      sx={{ flex: 1 }}
-                      disabled={isLoading}
-                      noAdmin={!checkPermissions('users', 'createAdmin')}
-                      name='userlevel'
-                      size='small'
+                      options={RoleOptionTypes}
+                      name="userlevel"
+                      sx={{ minWidth: 200 }}
                     />
                   )}
-                  {checkPermissions('rooms', 'addUser') && (
+                  {checkPermissions('rooms', 'addUser') && watch('userlevel') < 30 && (
                     <RoomRolesField
                       rooms={rooms}
                       user={defaultValues}

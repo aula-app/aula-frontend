@@ -1,15 +1,20 @@
 import { AppIcon } from '@/components';
 import RoomField from '@/components/DataFields/RoomField';
-import SelectRole from '@/components/SelectRole';
 import { addAllCSV } from '@/services/config';
 import { useAppStore } from '@/store';
 import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
 import { LanguageTypes } from '@/types/Translation';
+import { roles } from '@/utils';
 import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
 import {
   Button,
+  FormControl,
   FormHelperText,
+  InputLabel,
   LinearProgress,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Stack,
   Table,
   TableBody,
@@ -41,6 +46,15 @@ const DataSettings = ({ onReload }: Props) => {
   const [inviteDate, setInviteDate] = useState<dayjs.Dayjs | null>(dayjs());
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+
+  // Create role options (excluding admin roles for CSV upload)
+  const roleOptions = roles
+    .filter((role) => role < 40) // Exclude admin roles
+    .map((r) => ({ value: r, label: t(`roles.${r}`) }));
+
+  const handleRoleChange = (event: SelectChangeEvent<unknown>) => {
+    setRole(Number(event.target.value) as RoleTypes);
+  };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     onReset();
@@ -182,19 +196,25 @@ const DataSettings = ({ onReload }: Props) => {
 
       <Stack gap={2}>
         <Stack direction="row" alignItems="center" gap={3}>
-          <SelectRole
-            defaultValue={20}
-            noAdmin
-            disabled={loading}
-            onChange={newRole => setRole(newRole)}
-            variant="filled"
-            name="role"
-          />
-          <RoomField
-            selected={rooms}
-            onChange={(updates) => setRooms(updates)}
-            disabled={loading}
-          />
+          <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel id="role-select-label">{t('settings.columns.userlevel')}</InputLabel>
+            <Select
+              labelId="role-select-label"
+              id="role-select"
+              value={role}
+              label={t('settings.columns.userlevel')}
+              onChange={handleRoleChange}
+              disabled={loading}
+              data-testid="role-select"
+            >
+              {roleOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value} data-testid={`role-option-${option.value}`}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <RoomField selected={rooms} onChange={(updates) => setRooms(updates)} disabled={loading} />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label={t('settings.time.inviteDate')}
