@@ -250,7 +250,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="h1">
                 {t(`actions.${defaultValues ? 'edit' : 'add'}`, {
-                  var: t(`scopes.rooms.name`).toLowerCase(),
+                  var: t(`scopes.rooms.name`),
                 })}
               </Typography>
               {checkPermissions('rooms', 'status') && <StatusField control={control} />}
