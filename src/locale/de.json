@@ -323,7 +323,7 @@
     },
     "ideas": {
       "approve": "Genehmigen",
-      "approved": "Diese Idee wurde angenommen.",
+      "approved": "Diese Idee wurde genehmigt.",
       "inPhase": "{{var}} in {{phase}} Phase",
       "marked_not_winner": "Diese Idee wird nicht als Gewinner ausgewählt.",
       "marked_winner": "Diese Idee wird als Gewinner ausgewählt.",
@@ -333,7 +333,7 @@
       "reject": "Ablehnen",
       "rejected": "Diese Idee wurde nicht angenommen",
       "waiting": "Diese Idee wartet auf Genehmigung",
-      "winner": "Diese Idee hat gewonnen von der Schulleitung/Prüfer*innen."
+      "winner": "Diese Idee wurde von der Schulleitung bzw. den Prüfer*innen als Abstimmungsgewinner bestätigt."
     },
     "messages": {
       "name": "Nachricht",
@@ -573,7 +573,7 @@
     "cancel": "Abbrechen",
     "chat": "Verbesserungsvorschläge sehen",
     "close": "Schließen",
-    "comment": "Kommentare helfen, Ideen durch konstruktives Feedback zu verbessern",
+    "comment": "Verbesserungsvorschläge helfen, Ideen durch konstruktives Feedback zu verbessern",
     "delegate": "Du kannst deine Stimme an eine andere Person übertragen und sie jederzeit zurücknehmen",
     "delete": "Löschen",
     "discussion": "Hier werden Ideen durch Zusammenarbeit in Projektpläne verwandelt",
@@ -674,8 +674,8 @@
         "title": "Keine Fehlerberichte"
       },
       "comments": {
-        "description": "Es wurden noch keine Kommentare abgegeben",
-        "title": "Keine Kommentare"
+        "description": "Es wurden noch keine Verbesserungsvorschläge abgegeben",
+        "title": "Keine Verbesserungsvorschläge"
       },
       "dashboard": {
         "description": "Ideen werden hier angezeigt, wenn sie diese Phase erreichen",
