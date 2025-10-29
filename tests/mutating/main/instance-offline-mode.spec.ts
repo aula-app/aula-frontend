@@ -18,9 +18,7 @@ describeWithSetup('Instance Offline', () => {
     admin = await browsers.getUserBrowser('admin');
     user = await browsers.getUserBrowser('user');
 
-    const hasConfig = await userData.get('user');
-    if (!hasConfig) throw new Error('User config not found');
-    userConfig = hasConfig;
+    userConfig = await userData.use('user');
   });
 
   test.afterAll(async () => {

@@ -55,9 +55,9 @@ export const selectOption = async (page: Page, testId: string, optionLabel: stri
   await expect(option).toBeVisible({ timeout: 5000 });
   await option.click({ timeout: 1000 });
 
-  const displayedValue = page.getByTestId(testId);
+  const displayedValue = page.getByTestId(`${testId}-input`);
   await expect(displayedValue).toBeVisible({ timeout: 5000 });
-  await expect(displayedValue).toContainText(optionLabel, { timeout: 5000 });
+  await expect(displayedValue).toHaveValue(optionLabel, { timeout: 5000 });
 };
 
 export const selectOptionByValue = async (page: Page, testId: string, value: string) => {
