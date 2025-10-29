@@ -336,7 +336,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                       sx={{ minWidth: 200 }}
                     />
                   )}
-                  {checkPermissions('rooms', 'addUser') && watch('userlevel') < 30 && (
+                  {checkPermissions('rooms', 'addUser') && watch('userlevel') < 40 && (
                     <RoomRolesField
                       rooms={rooms}
                       user={defaultValues}

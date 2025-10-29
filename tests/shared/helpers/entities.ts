@@ -3,16 +3,18 @@ import * as shared from '../shared';
 import { TestConstants } from '../test-config';
 
 export function createRoom(suffix = '', users = []) {
+  const hash = shared.gensym();
   return {
-    name: 'room-' + shared.getRunId() + (suffix ? `-${suffix}` : ''),
+    name: 'room-' + hash + (suffix ? `-${suffix}` : ''),
     description: 'created during automated testing',
     users: users,
   } as types.RoomData;
 }
 
 export function createIdea(suffix = '', setup?: { box?: string; category?: string; comments?: string[] }) {
+  const hash = shared.gensym();
   return {
-    name: 'test-idea-' + shared.getRunId() + (suffix ? `-${suffix}` : ''),
+    name: 'test-idea-' + hash + (suffix ? `-${suffix}` : ''),
     description: 'generated during testing data',
     box: setup?.box,
     category: setup?.category,

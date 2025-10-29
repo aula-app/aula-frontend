@@ -40,7 +40,6 @@ describeWithSetup('Messages flow', () => {
 
   test.afterAll(async () => {
     if (cleanupQueue.message) await messages.remove(admin, messageData);
-    await admin.close();
   });
 
   test('Admin can send a message to a user', async () => {

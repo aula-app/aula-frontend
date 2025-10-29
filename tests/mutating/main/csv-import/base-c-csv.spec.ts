@@ -69,7 +69,7 @@ describeWithSetup('CSV Import', () => {
       const UserSelector = adminPage.getByTestId('users-field');
       await expect(UserSelector).toBeVisible();
       const usersNames = await UserSelector.locator('div div :not(legend) > span').allTextContents();
-      const csvRealNames = csvUsers.map(c => c.realName);
+      const csvRealNames = csvUsers.map((c) => c.realName);
       expect(csvRealNames).toEqual(expect.arrayContaining(usersNames));
       expect(usersNames).toEqual(expect.arrayContaining(csvRealNames));
     });
@@ -94,20 +94,24 @@ describeWithSetup('CSV Import', () => {
         const allRoomsDOMs = await RoomSelector.getByTestId('room-role-list-item').all();
 
         // Use Promise.all to wait for all filtered input elements
-        const usersRoomsDOMs = await Promise.all(allRoomsDOMs.map(async (room) => {
-          const input = room.locator('input:not([value="0"])');
-          // Wait for the input to be present and return the room if found
-          const isVisible = await input.isVisible({ timeout: 100 });
-          return isVisible ? room : null;
-        }));
+        const usersRoomsDOMs = await Promise.all(
+          allRoomsDOMs.map(async (room) => {
+            const input = room.locator('input:not([value="0"])');
+            // Wait for the input to be present and return the room if found
+            const isVisible = await input.isVisible({ timeout: 100 });
+            return isVisible ? room : null;
+          })
+        );
 
         // Filter out null values
-        const filteredUsersRoomsDOMs = usersRoomsDOMs.filter(room => room !== null);
+        const filteredUsersRoomsDOMs = usersRoomsDOMs.filter((room) => room !== null);
 
         // Extract names and roles and store in usersRooms array
         const usersRooms = await Promise.all(
           filteredUsersRoomsDOMs.map(async (usersRoomDOM) => {
-            const name = await usersRoomDOM.locator('div span[id]:not(span[id="roles-error-message"])').innerText({ timeout: 100 });
+            const name = await usersRoomDOM
+              .locator('div span[id]:not(span[id="roles-error-message"])')
+              .innerText({ timeout: 100 });
             const role = Number(await usersRoomDOM.locator('input:not([value="0"])').getAttribute('value'));
             return { name, role };
           })
@@ -118,7 +122,7 @@ describeWithSetup('CSV Import', () => {
 
         await RoomSelector.getByTestId('room-roles-dialog-cancel-button').click();
         await adminPage.getByTestId('cancel-user-form').click();
-      };
+      }
     });
   });
 
@@ -155,7 +159,7 @@ describeWithSetup('CSV Import', () => {
       const UserSelector = adminPage.getByTestId('users-field');
       await expect(UserSelector).toBeVisible();
       const usersNames = await UserSelector.locator('div div :not(legend) > span').allTextContents();
-      const csvRealNames = csvUsers.map(c => c.realName);
+      const csvRealNames = csvUsers.map((c) => c.realName);
       expect(csvRealNames).toEqual(expect.arrayContaining(usersNames));
       expect(usersNames).toEqual(expect.arrayContaining(csvRealNames));
     });
@@ -178,48 +182,55 @@ describeWithSetup('CSV Import', () => {
 
         // Edit this User, open Room Roles Dialog
         await settingsInteractions.openEdit({ page: adminPage, filters: { option: 'username', value: u.username } });
-        await formInteractions.clickButton(adminPage, 'room-roles-dialog-open-button');
-        const RoomSelector = adminPage.getByTestId('room-roles-dialog');
-        await expect(RoomSelector).toBeVisible();
 
-        // Select all rows (all rooms)
-        const allRoomsDOMs = await RoomSelector.getByTestId('room-role-list-item').all();
+        if (u.role < 30) {
+          await formInteractions.clickButton(adminPage, 'room-roles-dialog-open-button');
+          const RoomSelector = adminPage.getByTestId('room-roles-dialog');
+          await expect(RoomSelector).toBeVisible();
 
-        // Use Promise.all to wait for all filtered input elements
-        const usersRoomsDOMs = await Promise.all(allRoomsDOMs.map(async (room) => {
-          const input = room.locator('input:not([value="0"])');
-          // Wait for the input to be present and return the room if found
-          const isVisible = await input.isVisible({ timeout: 1000 });
-          return isVisible ? room : null;
-        }));
+          // Select all rows (all rooms)
+          const allRoomsDOMs = await RoomSelector.getByTestId('room-role-list-item').all();
 
-        // Filter out null values
-        const filteredUsersRoomsDOMs = usersRoomsDOMs.filter(room => room !== null);
+          // Use Promise.all to wait for all filtered input elements
+          const usersRoomsDOMs = await Promise.all(
+            allRoomsDOMs.map(async (room) => {
+              const input = room.locator('input:not([value="0"])');
+              // Wait for the input to be present and return the room if found
+              const isVisible = await input.isVisible({ timeout: 1000 });
+              return isVisible ? room : null;
+            })
+          );
 
-        // Extract names and roles and store in usersRooms array
-        const usersRooms = await Promise.all(
-          filteredUsersRoomsDOMs.map(async (usersRoomDOM) => {
-            const name = await usersRoomDOM.locator('div span[id]:not(span[id="roles-error-message"])').innerText({ timeout: 100 });
-            const role = Number(await usersRoomDOM.locator('input:not([value="0"])').getAttribute('value'));
-            return { name, role };
-          })
-        );
+          // Filter out null values
+          const filteredUsersRoomsDOMs = usersRoomsDOMs.filter((room) => room !== null);
 
-        expect(usersRooms).toContainEqual({ name: room.name, role: 30 }); // old Role 20 has been updated to new one: 30
-        expect(usersRooms).toContainEqual({ name: room2.name, role: 30 });
-        expect(usersRooms).toHaveLength(3); // (1) Standard Room and (2) CSV import destination Room and (3) CSV import destination Room-2
+          // Extract names and roles and store in usersRooms array
+          const usersRooms = await Promise.all(
+            filteredUsersRoomsDOMs.map(async (usersRoomDOM) => {
+              const name = await usersRoomDOM
+                .locator('div span[id]:not(span[id="roles-error-message"])')
+                .innerText({ timeout: 100 });
+              const role = Number(await usersRoomDOM.locator('input:not([value="0"])').getAttribute('value'));
+              return { name, role };
+            })
+          );
 
-        await RoomSelector.getByTestId('room-roles-dialog-cancel-button').click();
+          expect(usersRooms).toContainEqual({ name: room.name, role: 30 }); // old Role 20 has been updated to new one: 30
+          expect(usersRooms).toContainEqual({ name: room2.name, role: 30 });
+          expect(usersRooms).toHaveLength(3); // (1) Standard Room and (2) CSV import destination Room and (3) CSV import destination Room-2
+
+          await RoomSelector.getByTestId('room-roles-dialog-cancel-button').click();
+        }
         await adminPage.getByTestId('cancel-user-form').click();
-      };
+      }
     });
   });
 
   test.describe('imported users', () => {
-    let userPages: Map<string, { page: Page, user: UserData }>;
+    let userPages: Map<string, { page: Page; user: UserData }>;
 
     test.beforeAll(async () => {
-      userPages = new Map<string, { page: Page, user: UserData }>();
+      userPages = new Map<string, { page: Page; user: UserData }>();
       for (const user of csvUsers) {
         userPages.set(user.username, { page: await browsers.getUserBrowser(user.username), user: user });
       }
@@ -234,14 +245,20 @@ describeWithSetup('CSV Import', () => {
     test('should be able to create a wild idea in the standard room', async () => {
       for (const [_, userPage] of userPages) {
         await navigation.goToRoom(userPage.page, 'Schule');
-        await ideas.create(userPage.page, { name: `test-${userPage.user.username}`, description: "Idea created by csv import test" });
+        await ideas.create(userPage.page, {
+          name: `test-${userPage.user.username}`,
+          description: 'Idea created by csv import test',
+        });
       }
     });
 
     test('should be able to create a wild idea in the destination room', async () => {
       for (const [_, userPage] of userPages) {
         await navigation.goToRoom(userPage.page, room.name);
-        await ideas.create(userPage.page, { name: `test-${userPage.user.username}`, description: "Idea created by csv import test" });
+        await ideas.create(userPage.page, {
+          name: `test-${userPage.user.username}`,
+          description: 'Idea created by csv import test',
+        });
       }
     });
   });

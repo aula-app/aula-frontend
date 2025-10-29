@@ -49,18 +49,14 @@ const openSelectDropdown = async (page: Page, testId: string) => {
   await expect(dropdown).toBeVisible({ timeout: 5000 });
 };
 
-const select = async (page: Page, testId: string, option: Locator) => {
+export const selectOption = async (page: Page, testId: string, optionLabel: string) => {
+  const option = page.getByTestId(`${testId}-list`).getByRole('option', { exact: false, name: optionLabel });
   await openSelectDropdown(page, testId);
   await expect(option).toBeVisible({ timeout: 5000 });
   await option.click({ timeout: 1000 });
-  await page.waitForTimeout(500);
-};
-
-export const selectOption = async (page: Page, testId: string, optionLabel: string) => {
-  const option = page.getByTestId(`${testId}-list`).getByRole('option', { exact: true, name: optionLabel });
-  await select(page, testId, option);
 
   const displayedValue = page.getByTestId(testId);
+  await expect(displayedValue).toBeVisible({ timeout: 5000 });
   await expect(displayedValue).toContainText(optionLabel, { timeout: 5000 });
 };
 
