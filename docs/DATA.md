@@ -40,7 +40,6 @@ Located in `src/components/DataFields/`, these components provide specialized fo
 - **Entity-specific Fields**:
   - `IdeaField`: Idea entry field
   - `MessageToField`: Message recipient selection
-  - `RoleField`: User role selection
   - `RoomField`: Room selection
   - `RoomImageSelector`: Room image selection
   - `UserField`: User selection

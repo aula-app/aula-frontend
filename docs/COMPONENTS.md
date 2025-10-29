@@ -296,7 +296,6 @@ Located in `src/components/DataFields/`, this set of components provides special
 - `MarkdownEditor`: Rich text editor with markdown support
 - `MessageToField`: Manages message recipient selection
 - `PhaseDurationFields`: Manages phase duration settings
-- `RoleField`: User role selection
 - `RoomField`: Room selection and management
 - `RoomImageSelector`: Image selection for rooms
 - `RoomRolesField`: Role management within rooms
