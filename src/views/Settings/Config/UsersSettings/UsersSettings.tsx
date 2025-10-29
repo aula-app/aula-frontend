@@ -205,10 +205,15 @@ const DataSettings = ({ onReload }: Props) => {
               label={t('settings.columns.userlevel')}
               onChange={handleRoleChange}
               disabled={loading}
-              data-testid="role-select"
+              data-testid="select-field-role"
+              MenuProps={{
+                PaperProps: {
+                  'data-testid': 'select-field-role-list',
+                },
+              }}
             >
               {roleOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value} data-testid={`role-option-${option.value}`}>
+                <MenuItem key={option.value} value={option.value} data-testid={`select-option-${option.value}`}>
                   {option.label}
                 </MenuItem>
               ))}
