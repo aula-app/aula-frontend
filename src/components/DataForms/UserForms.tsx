@@ -215,8 +215,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.displayname`)}
-                id="user-displayname"
-                data-testid="user-displayname-input"
+                id="displayname"
                 size="small"
                 error={!!errors.displayname}
                 helperText={
@@ -226,14 +225,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 }
                 {...register('displayname')}
                 slotProps={{
+                  htmlInput: {
+                    'data-testid': 'displayname-input',
+                  },
                   input: {
-                    'aria-labelledby': 'user-displayname-label',
+                    'aria-labelledby': 'displayname-label',
                     'aria-invalid': !!errors.displayname,
                     'aria-errormessage': errors.displayname ? 'displayname-error-message' : undefined,
                   },
                   inputLabel: {
-                    id: 'user-displayname-label',
-                    htmlFor: 'user-displayname',
+                    id: 'displayname-label',
+                    htmlFor: 'displayname',
                   },
                 }}
               />
@@ -242,8 +244,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.username`)}
-                id="user-username"
-                data-testid="user-username-input"
+                id="username"
                 size="small"
                 error={!!errors.username}
                 helperText={
@@ -253,14 +254,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 }
                 {...register('username')}
                 slotProps={{
+                  htmlInput: {
+                    'data-testid': 'username-input',
+                  },
                   input: {
-                    'aria-labelledby': 'user-username-label',
+                    'aria-labelledby': 'username-label',
                     'aria-invalid': !!errors.username,
                     'aria-errormessage': errors.username ? 'username-error-message' : undefined,
                   },
                   inputLabel: {
-                    id: 'user-username-label',
-                    htmlFor: 'user-username',
+                    id: 'username-label',
+                    htmlFor: 'username',
                   },
                 }}
               />
@@ -269,7 +273,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.realname`)}
-                id="user-realname"
+                id="realname"
                 size="small"
                 error={!!errors.realname}
                 helperText={
@@ -279,14 +283,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 }
                 {...register('realname')}
                 slotProps={{
+                  htmlInput: {
+                    'data-testid': 'realname-input',
+                  },
                   input: {
-                    'aria-labelledby': 'user-realname-label',
+                    'aria-labelledby': 'realname-label',
                     'aria-invalid': !!errors.realname,
                     'aria-errormessage': errors.realname ? 'realname-error-message' : undefined,
                   },
                   inputLabel: {
-                    id: 'user-realname-label',
-                    htmlFor: 'user-realname',
+                    id: 'realname-label',
+                    htmlFor: 'realname',
                   },
                 }}
               />
@@ -294,7 +301,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 fullWidth
                 disabled={isLoading}
                 label={t(`settings.columns.email`)}
-                id="user-email"
+                id="email"
                 size="small"
                 error={!!errors.email}
                 helperText={
@@ -304,14 +311,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 }
                 {...register('email')}
                 slotProps={{
+                  htmlInput: {
+                    'data-testid': 'email-input',
+                  },
                   input: {
-                    'aria-labelledby': 'user-email-label',
+                    'aria-labelledby': 'email-label',
                     'aria-invalid': !!errors.email,
                     'aria-errormessage': errors.email ? 'email-error-message' : undefined,
                   },
                   inputLabel: {
-                    id: 'user-email-label',
-                    htmlFor: 'user-email',
+                    id: 'email-label',
+                    htmlFor: 'email',
                   },
                 }}
               />

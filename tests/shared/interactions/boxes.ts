@@ -38,8 +38,8 @@ export const remove = async (page: Page, box: types.BoxData) => {
 const sendForm = async (page: Page, box: types.BoxData) => {
   await page.waitForSelector('[data-testid="box-name-input"]', { state: 'visible', timeout: 500 });
 
-  await formInteractions.fillForm(page, 'box-name-input', box.name);
-  await formInteractions.fillMarkdownForm(page, 'markdown-editor-description_public', box.description);
+  await formInteractions.fillForm(page, 'box-name', box.name);
+  await formInteractions.fillMarkdownForm(page, 'description_public', box.description);
 
   await formInteractions.selectOption(page, 'select-field-room_hash_id', box.room.name);
 
@@ -48,11 +48,11 @@ const sendForm = async (page: Page, box: types.BoxData) => {
   }
 
   if (box.discussionDays) {
-    await formInteractions.fillForm(page, 'input-phase_duration_1', String(box.discussionDays));
+    await formInteractions.fillForm(page, 'phase_duration_1', String(box.discussionDays));
   }
 
   if (box.votingDays) {
-    await formInteractions.fillForm(page, 'input-phase_duration_3', String(box.votingDays));
+    await formInteractions.fillForm(page, 'phase_duration_3', String(box.votingDays));
   }
 
   for (const i of box.ideas || []) {

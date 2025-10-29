@@ -24,14 +24,12 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
     await formsInteractions.clickButton(page, 'add-users-button');
     await page.waitForTimeout(1000);
 
-    await page.fill('input[name="displayname"]', data.displayName);
-    await page.fill('input[name="username"]', data.username);
-    await page.fill('input[name="realname"]', data.realName);
+    await formsInteractions.fillForm(page, 'displayname', data.displayName);
+    await formsInteractions.fillForm(page, 'username', data.username);
+    await formsInteractions.fillForm(page, 'realname', data.realName);
+    await formsInteractions.fillMarkdownForm(page, 'about_me', data.about);
 
-    // await page.getByTestId('rolefield').click({ timeout: 1000 });
-    await formsInteractions.selectOptionByValue(page, 'role', `${data.role}`);
-    // await page.locator(`li[data-value="${data.role}"]`).click({ timeout: 1000 });
-    await page.locator('div[contenteditable="true"]').fill(data.about);
+    await formsInteractions.selectOptionByValue(page, 'select-field-userlevel', `${data.role}`);
 
     await formsInteractions.clickButton(page, 'submit-user-form');
     await page.waitForTimeout(500);

@@ -13,8 +13,8 @@ export const create = async (page: Page, data: types.MessageData) => {
 
     await formsInteractions.selectAutocompleteOption(page, 'user-field-autocomplete', data.user.realName);
 
-    await formsInteractions.fillForm(page, 'message-headline-input', data.title);
-    await formsInteractions.fillMarkdownForm(page, 'markdown-editor-body', data.content);
+    await formsInteractions.fillForm(page, 'message-headline', data.title);
+    await formsInteractions.fillMarkdownForm(page, 'body', data.content);
 
     await formsInteractions.clickButton(page, 'submit-message-form');
     await page.waitForLoadState('networkidle');

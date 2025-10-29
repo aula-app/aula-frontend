@@ -28,7 +28,7 @@ describeWithSetup('Change pass flow', () => {
     await navigation.openAccordion(user, 'security-panel-button');
 
     for (const [form, value] of Object.entries(passFields)) {
-      await formInteractions.fillForm(user, `${form}-input`, value);
+      await formInteractions.fillForm(user, form, value);
     }
 
     await formInteractions.clickButton(user, 'submit-new-password');

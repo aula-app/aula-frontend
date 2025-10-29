@@ -274,7 +274,6 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               {...register('title')}
               label={t('settings.columns.title')}
               id="idea-title"
-              data-testid="idea-title-input"
               error={!!errors.title}
               helperText={
                 <span id="title-error-message">
@@ -286,7 +285,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
               disabled={isLoading}
               slotProps={{
                 htmlInput: {
-                  'data-testid': 'idea-title-input-field',
+                  'data-testid': 'idea-title-input',
                   'aria-invalid': !!errors.title,
                   'aria-errormessage': errors.title ? 'title-error-message' : undefined,
                   'aria-labelledby': 'idea-title-label',
