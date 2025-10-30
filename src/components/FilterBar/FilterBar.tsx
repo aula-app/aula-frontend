@@ -93,7 +93,7 @@ const FilterBar: FC<FilterBarProps> = ({ children, fields, scope, onStatusChange
         )}
       </Stack>
       {fields && (
-        <Collapse in={isOpen} id="filter-panel" role="region" aria-label={t('actions.filter')}>
+        <Collapse in={isOpen} id="filter-panel" role="region" aria-label={t('actions.filter')} data-testid="filter-panel">
           <Stack
             direction="row"
             alignItems="center"

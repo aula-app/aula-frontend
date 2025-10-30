@@ -1,15 +1,15 @@
+import { useDraftStorage } from '@/hooks';
 import { addSpecialRoles, addUser, addUserRoom, editUser, getUserRooms, removeUserRoom } from '@/services/users';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
-import { checkPermissions } from '@/utils';
-import { useDraftStorage } from '@/hooks';
+import { checkPermissions, roles } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { MarkdownEditor, RoleField, StatusField } from '../DataFields';
+import { MarkdownEditor, SelectField, StatusField } from '../DataFields';
 import RoomRolesField from '../DataFields/RoomRolesField';
 
 /**
@@ -47,8 +47,9 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       displayname: defaultValues ? ' ' : '',
       email: defaultValues ? ' ' : '',
       realname: defaultValues ? ' ' : '',
+      status: defaultValues?.status ?? 1,
+      userlevel: defaultValues?.userlevel ?? 20,
       username: defaultValues ? ' ' : '',
-      userlevel: defaultValues ? ' ' : 20,
     },
   });
 
@@ -172,6 +173,12 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     await Promise.all(updateRoles?.map((update) => addSpecialRoles(user_id, update.role, update.room)) || []);
   };
 
+  const RoleOptionTypes = [
+    ...roles
+      .filter((role) => role < 30 || (role >= 40 && role < 60))
+      .map((r) => ({ value: r, label: t(`roles.${r}`) })),
+  ];
+
   useEffect(() => {
     reset({ ...defaultValues });
     fetchUserRooms();
@@ -208,8 +215,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.displayname`)}
-                id="user-displayname"
-                data-testid="user-displayname-input"
+                id="displayname"
                 size="small"
                 error={!!errors.displayname}
                 helperText={
@@ -219,14 +225,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 }
                 {...register('displayname')}
                 slotProps={{
+                  htmlInput: {
+                    'data-testid': 'displayname-input',
+                  },
                   input: {
-                    'aria-labelledby': 'user-displayname-label',
+                    'aria-labelledby': 'displayname-label',
                     'aria-invalid': !!errors.displayname,
                     'aria-errormessage': errors.displayname ? 'displayname-error-message' : undefined,
                   },
                   inputLabel: {
-                    id: 'user-displayname-label',
-                    htmlFor: 'user-displayname',
+                    id: 'displayname-label',
+                    htmlFor: 'displayname',
                   },
                 }}
               />
@@ -235,8 +244,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.username`)}
-                id="user-username"
-                data-testid="user-username-input"
+                id="username"
                 size="small"
                 error={!!errors.username}
                 helperText={
@@ -246,14 +254,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 }
                 {...register('username')}
                 slotProps={{
+                  htmlInput: {
+                    'data-testid': 'username-input',
+                  },
                   input: {
-                    'aria-labelledby': 'user-username-label',
+                    'aria-labelledby': 'username-label',
                     'aria-invalid': !!errors.username,
                     'aria-errormessage': errors.username ? 'username-error-message' : undefined,
                   },
                   inputLabel: {
-                    id: 'user-username-label',
-                    htmlFor: 'user-username',
+                    id: 'username-label',
+                    htmlFor: 'username',
                   },
                 }}
               />
@@ -262,7 +273,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 required
                 disabled={isLoading}
                 label={t(`settings.columns.realname`)}
-                id="user-realname"
+                id="realname"
                 size="small"
                 error={!!errors.realname}
                 helperText={
@@ -272,14 +283,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 }
                 {...register('realname')}
                 slotProps={{
+                  htmlInput: {
+                    'data-testid': 'realname-input',
+                  },
                   input: {
-                    'aria-labelledby': 'user-realname-label',
+                    'aria-labelledby': 'realname-label',
                     'aria-invalid': !!errors.realname,
                     'aria-errormessage': errors.realname ? 'realname-error-message' : undefined,
                   },
                   inputLabel: {
-                    id: 'user-realname-label',
-                    htmlFor: 'user-realname',
+                    id: 'realname-label',
+                    htmlFor: 'realname',
                   },
                 }}
               />
@@ -287,7 +301,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 fullWidth
                 disabled={isLoading}
                 label={t(`settings.columns.email`)}
-                id="user-email"
+                id="email"
                 size="small"
                 error={!!errors.email}
                 helperText={
@@ -297,28 +311,32 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 }
                 {...register('email')}
                 slotProps={{
+                  htmlInput: {
+                    'data-testid': 'email-input',
+                  },
                   input: {
-                    'aria-labelledby': 'user-email-label',
+                    'aria-labelledby': 'email-label',
                     'aria-invalid': !!errors.email,
                     'aria-errormessage': errors.email ? 'email-error-message' : undefined,
                   },
                   inputLabel: {
-                    id: 'user-email-label',
-                    htmlFor: 'user-email',
+                    id: 'email-label',
+                    htmlFor: 'email',
                   },
                 }}
               />
               {defaultValues?.userlevel !== 60 && (
                 <>
                   {checkPermissions('users', 'addRole') && (
-                    <RoleField
+                    <SelectField
+                      size="small"
                       control={control}
-                      disabled={isLoading}
-                      sx={{ flex: 1 }}
-                      noAdmin={!checkPermissions('users', 'createAdmin')}
+                      options={RoleOptionTypes}
+                      name="userlevel"
+                      sx={{ minWidth: 200 }}
                     />
                   )}
-                  {checkPermissions('rooms', 'addUser') && (
+                  {checkPermissions('rooms', 'addUser') && watch('userlevel') < 40 && (
                     <RoomRolesField
                       rooms={rooms}
                       user={defaultValues}

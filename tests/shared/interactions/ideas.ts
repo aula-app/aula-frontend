@@ -13,8 +13,8 @@ export const create = async (
   await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'visible', timeout: 500 });
 
   // fill in the necessary information
-  await formInteractions.fillForm(page, 'idea-title-input-field', idea.name);
-  await page.getByTestId('markdown-editor-content').locator('[contenteditable="true"]').fill(idea.description);
+  await formInteractions.fillForm(page, 'idea-title', idea.name);
+  await formInteractions.fillMarkdownForm(page, 'content', idea.description);
 
   if (idea.box) {
     // how to fill in one of those MUI multiselectors:

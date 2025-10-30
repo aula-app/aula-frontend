@@ -84,7 +84,7 @@ describeWithSetup('Box Management - Creation, phase changes and Permissions', ()
     await navigation.clickOnPageItem(admin, box.name);
     const boxCard = admin.getByTestId('box-card');
     await expect(boxCard.getByText(box.name)).toBeVisible();
-    await boxCard.getByTestId('more-options').click();
+    await boxCard.getByTestId('more-options-button').click();
     await admin.waitForTimeout(500);
     await boxCard.getByTestId('edit-button').click();
     await boxes.fill(admin, boxNewPhaseObject);

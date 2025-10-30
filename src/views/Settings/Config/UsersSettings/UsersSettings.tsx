@@ -1,13 +1,20 @@
 import { AppIcon } from '@/components';
 import RoomField from '@/components/DataFields/RoomField';
-import SelectRole from '@/components/SelectRole';
 import { addAllCSV } from '@/services/config';
 import { useAppStore } from '@/store';
 import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
+import { LanguageTypes } from '@/types/Translation';
+import { roles } from '@/utils';
+import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
 import {
   Button,
+  FormControl,
   FormHelperText,
+  InputLabel,
   LinearProgress,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Stack,
   Table,
   TableBody,
@@ -22,8 +29,6 @@ import dayjs from 'dayjs';
 import i18next from 'i18next';
 import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
-import { LanguageTypes } from '@/types/Translation';
 
 interface Props {
   onReload: () => void;
@@ -36,11 +41,20 @@ const DataSettings = ({ onReload }: Props) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [users, setUsers] = useState<Array<string>>([]);
-  const [role, setRole] = useState<RoleTypes>(20);
+  const [role, setRole] = useState<RoleTypes | 0>(20);
   const [rooms, setRooms] = useState<UpdateType>({ add: [], remove: [] });
   const [inviteDate, setInviteDate] = useState<dayjs.Dayjs | null>(dayjs());
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+
+  // Create role options (excluding admin roles for CSV upload)
+  const roleOptions = roles
+    .filter((role) => role < 40) // Exclude admin roles
+    .map((r) => ({ value: r, label: t(`roles.${r}`) }));
+
+  const handleRoleChange = (event: SelectChangeEvent<unknown>) => {
+    setRole(Number(event.target.value) as RoleTypes);
+  };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     onReset();
@@ -106,7 +120,7 @@ const DataSettings = ({ onReload }: Props) => {
       inviteDate === null || inviteDate <= dayjs()
         ? undefined
         : dayjs(inviteDate).utc().format(DEFAULT_FORMAT_DATE_TIME);
-    const response = await addAllCSV(csv, rooms.add, role, send_emails_at);
+    const response = await addAllCSV(csv, rooms.add, role as RoleTypes, send_emails_at);
     setLoading(false);
     if (!response.data) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
@@ -182,19 +196,30 @@ const DataSettings = ({ onReload }: Props) => {
 
       <Stack gap={2}>
         <Stack direction="row" alignItems="center" gap={3}>
-          <SelectRole
-            userRole={role}
-            onChange={(role) => setRole(role as RoleTypes)}
-            variant="filled"
-            noAdmin
-            disabled={loading}
-          />
-          <RoomField
-            data-testid="user-room-select"
-            selected={rooms}
-            onChange={(updates) => setRooms(updates)}
-            disabled={loading}
-          />
+          <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel id="role-select-label">{t('settings.columns.userlevel')}</InputLabel>
+            <Select
+              labelId="role-select-label"
+              id="role-select"
+              value={role}
+              label={t('settings.columns.userlevel')}
+              onChange={handleRoleChange}
+              disabled={loading}
+              data-testid="select-field-role"
+              MenuProps={{
+                PaperProps: {
+                  'data-testid': 'select-field-role-list',
+                },
+              }}
+            >
+              {roleOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value} data-testid={`select-option-${option.value}`}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <RoomField selected={rooms} onChange={(updates) => setRooms(updates)} disabled={loading} />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label={t('settings.time.inviteDate')}

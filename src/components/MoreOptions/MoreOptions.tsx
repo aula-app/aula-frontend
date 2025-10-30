@@ -49,7 +49,13 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
             {children}
           </Collapse>
         )}
-        <Collapse orientation="horizontal" in={open} role="menu" aria-label={t('actions.options')}>
+        <Collapse
+          orientation="horizontal"
+          in={open}
+          role="menu"
+          aria-label={t('actions.options')}
+          data-testid="more-options"
+        >
           <Stack direction="row" position="relative" role="menubar" aria-orientation="horizontal">
             <ReportButton
               color={color || 'error'}
@@ -87,7 +93,7 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
           onClick={toggleOptions}
           aria-expanded={open}
           aria-label={open ? t('actions.close') : t('actions.more')}
-          data-testid={`more-options`}
+          data-testid={`more-options-button`}
           {...restOfProps}
         />
       </Stack>

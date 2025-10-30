@@ -1,7 +1,6 @@
 import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
 import { UserForms } from '@/components/DataForms';
 import PrintUsers from '@/components/PrintUsers/PrintUsers';
-import SelectRole from '@/components/SelectRole';
 import SelectRoom from '@/components/SelectRoom';
 import SettingsView from '@/components/SettingsView';
 import { useDataTableState } from '@/hooks';
@@ -9,6 +8,8 @@ import { deleteUser, getUsers } from '@/services/users';
 import { useAppStore } from '@/store/AppStore';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
+import { roles } from '@/utils';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -31,6 +32,16 @@ const UsersView: React.FC = () => {
   const [, dispatch] = useAppStore();
   const [room_id, setRoom] = useState<string>('');
   const [userlevel, setRole] = useState<RoleTypes | 0>(0);
+
+  // Create role options including "All" option
+  const roleOptions = [
+    { value: 0, label: t('ui.common.all') },
+    ...roles.filter((role) => role < 30 || role >= 40).map((r) => ({ value: r, label: t(`roles.${r}`) })),
+  ];
+
+  const handleRoleChange = (event: SelectChangeEvent<unknown>) => {
+    setRole(Number(event.target.value) as RoleTypes | 0);
+  };
 
   const fetchFn = useCallback(
     async (params: Record<string, unknown>) => {
@@ -63,7 +74,23 @@ const UsersView: React.FC = () => {
   const extraFilters = (
     <>
       <SelectRoom room={room_id || 'all'} setRoom={setRoom} />
-      <SelectRole userRole={userlevel} onChange={(role) => setRole(role)} allowAll variant="filled" size="small" />
+      <FormControl variant="filled" size="small" sx={{ minWidth: 200 }}>
+        <InputLabel id="role-filter-label">{t('settings.columns.userlevel')}</InputLabel>
+        <Select
+          labelId="role-filter-label"
+          id="role-filter"
+          value={userlevel}
+          label={t('settings.columns.userlevel')}
+          onChange={handleRoleChange}
+          data-testid="role-filter-select"
+        >
+          {roleOptions.map((option) => (
+            <MenuItem key={option.value} value={option.value} data-testid={`role-filter-option-${option.value}`}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </>
   );
 

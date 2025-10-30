@@ -1,14 +1,14 @@
 import { Locator, Page, expect } from '@playwright/test';
 
 export const fillForm = async (page: Page, testId: string, value: string) => {
-  const field = page.getByTestId(testId);
+  const field = page.getByTestId(`${testId}-input`);
   await field.clear();
   await expect(field).toBeVisible();
   await field.fill(value);
 };
 
 export const fillMarkdownForm = async (page: Page, testId: string, value: string) => {
-  const field = page.getByTestId(testId).locator('[contenteditable="true"]');
+  const field = page.getByTestId(`markdown-editor-${testId}`).locator('[contenteditable="true"]');
   await expect(field).toBeVisible();
   await field.fill(value);
 };
@@ -23,7 +23,7 @@ export const openMoreOption = async (page: Page, parent: Locator) => {
   const moreButton = parent.getByTestId('idea-more-menu');
   await expect(moreButton).toBeVisible();
   await moreButton.click({ timeout: 1000 });
-  await page.waitForTimeout(500);
+  await expect(parent.getByTestId('delete-button')).toBeVisible({ timeout: 5000 });
 };
 
 const openSelectDropdown = async (page: Page, testId: string) => {
@@ -49,34 +49,51 @@ const openSelectDropdown = async (page: Page, testId: string) => {
   await expect(dropdown).toBeVisible({ timeout: 5000 });
 };
 
-const select = async (page: Page, testId: string, option: Locator, optionLabel: string) => {
-  await openSelectDropdown(page, testId);
-  await expect(option).toBeVisible({ timeout: 5000 });
-  await option.click();
-  await page.waitForTimeout(500);
-};
-
 export const selectOption = async (page: Page, testId: string, optionLabel: string) => {
-  const option = page.getByTestId(`${testId}-list`).getByRole('option', { name: optionLabel });
-  await select(page, testId, option, optionLabel);
+  const field = page.getByTestId(testId);
+  await expect(field).toBeVisible({ timeout: 5000 });
+  await openSelectDropdown(page, testId);
+
+  const option = page.getByTestId(`${testId}-list`).getByRole('option', { exact: false, name: optionLabel });
+  await expect(option).toBeVisible({ timeout: 5000 });
+  await option.click({ timeout: 1000 });
 
   const displayedValue = page.getByTestId(testId);
+  await expect(displayedValue).toBeVisible({ timeout: 5000 });
   await expect(displayedValue).toContainText(optionLabel, { timeout: 5000 });
 };
 
 export const selectAutocompleteOption = async (page: Page, testId: string, optionLabel: string) => {
-  const option = page.getByTestId(`${testId}-list`).getByRole('option', { name: optionLabel });
-  await select(page, testId, option, optionLabel);
+  const option = page.getByTestId(`${testId}-list`).getByRole('option', { exact: false, name: optionLabel });
+  await openSelectDropdown(page, testId);
+  await expect(option).toBeVisible({ timeout: 5000 });
+  await option.click({ timeout: 1000 });
 
-  // For Autocomplete, verify the input field contains the selected value
-  const input = page.getByTestId(`${testId}-input`);
-  await expect(input).toHaveValue(optionLabel, { timeout: 5000 });
+  const displayedValue = page.getByTestId(`${testId}-input`);
+  await expect(displayedValue).toBeVisible({ timeout: 5000 });
+  await expect(displayedValue).toHaveValue(optionLabel, { timeout: 5000 });
 };
 
 export const selectOptionByValue = async (page: Page, testId: string, value: string) => {
-  const option = page.getByTestId(`${testId}-list`).getByTestId(`select-option-${value}`);
-  await select(page, testId, option, value);
+  // First, get the option element and read its text content
+  const field = page.getByTestId(testId);
+  await expect(field).toBeVisible({ timeout: 5000 });
+  await field.click();
 
-  const field = page.getByTestId(`${testId}-input`);
-  await expect(field).toHaveValue(value, { timeout: 5000 });
+  const option = page.getByTestId(`${testId}-list`).getByTestId(`select-option-${value}`);
+  await expect(option).toBeVisible({ timeout: 5000 });
+
+  // Read the text content of the option before selecting it
+  const optionText = await option.textContent();
+  if (!optionText) {
+    throw new Error(`Could not read text content for option with value ${value}`);
+  }
+
+  // Now select the option
+  await option.click({ timeout: 1000 });
+  await page.waitForTimeout(500);
+
+  // Verify the selection by checking if the field now contains the option text
+  const displayedValue = page.getByTestId(testId);
+  await expect(displayedValue).toContainText(optionText.trim(), { timeout: 5000 });
 };

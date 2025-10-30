@@ -10,9 +10,6 @@ import * as rooms from '../../shared/interactions/rooms';
 import * as settingsInteractions from '../../shared/interactions/settings';
 import * as shared from '../../shared/shared';
 
-// force these tests to run sqeuentially
-test.describe.configure({ mode: 'serial' });
-
 describeWithSetup('Category management', () => {
   let admin: any;
   let room = entities.createRoom('category-tests');
@@ -37,7 +34,6 @@ describeWithSetup('Category management', () => {
 
   test.afterAll(async () => {
     await cleanup();
-    await admin.close();
   });
 
   const cleanupQueue = {
@@ -62,11 +58,11 @@ describeWithSetup('Category management', () => {
   };
 
   test('Admins should be able to create a new category', async () => {
-    navigation.goToSettings(admin);
-    navigation.openAccordion(admin, 'config-accordion-idea');
-    formInteractions.clickButton(admin, 'add-new-category-chip');
+    await navigation.goToSettings(admin);
+    await navigation.openAccordion(admin, 'config-accordion-idea');
+    await formInteractions.clickButton(admin, 'add-new-category-chip');
 
-    formInteractions.fillForm(admin, 'category-name-field', idea.category ? idea.category : '');
+    await formInteractions.fillForm(admin, 'category-name', idea.category ? idea.category : '');
 
     // Select category icon
     const iconFieldContainer = admin.getByTestId('icon-field-container');
@@ -75,7 +71,7 @@ describeWithSetup('Category management', () => {
     const firstIconButton = iconFieldContainer.getByTestId('icon-cat-1');
     await expect(firstIconButton).toBeVisible();
     await firstIconButton.click();
-    formInteractions.clickButton(admin, 'category-form-submit-button');
+    await formInteractions.clickButton(admin, 'category-form-submit-button');
     await admin.waitForTimeout(2000); // wait for the form to process
 
     // Verify that the new category appears in the list

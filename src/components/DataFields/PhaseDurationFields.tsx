@@ -119,7 +119,7 @@ const PhaseDurationFields: React.FC<Props> = ({
                         min: 1,
                         max: 365,
                         step: 1,
-                        'data-testid': `input-${field.name}`,
+                        'data-testid': `${field.name}-input`,
                       },
                     }}
                   />

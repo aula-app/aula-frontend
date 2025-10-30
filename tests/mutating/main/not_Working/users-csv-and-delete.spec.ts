@@ -104,23 +104,6 @@ ${userData.realName};${userData.displayName};${userData.username};;${userData.ab
       }
     }
 
-    // Close user browser context
-    if (context.userPage) {
-      try {
-        await context.userPage.close();
-      } catch (e: any) {
-        errors.push(new Error(`Failed to close user page: ${e.message}`));
-      }
-    }
-
-    if (context.userBrowserContext) {
-      try {
-        await context.userBrowserContext.close();
-      } catch (e: any) {
-        errors.push(new Error(`Failed to close browser context: ${e.message}`));
-      }
-    }
-
     // Clean up room if it still exists and user wasn't deleted
     if (context.room && !context.isDeletionApproved) {
       try {

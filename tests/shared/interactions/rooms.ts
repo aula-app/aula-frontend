@@ -11,8 +11,8 @@ export const create = async (page: Page, room: types.RoomData) => {
   await page.waitForSelector('[data-testid="add-rooms-button"]', { state: 'visible', timeout: 500 });
   await formInteractions.clickButton(page, 'add-rooms-button');
   await page.waitForSelector('input[name="room_name"]', { state: 'visible', timeout: 500 });
-  await formInteractions.fillForm(page, 'room-name-input', room.name);
-  await formInteractions.fillMarkdownForm(page, 'markdown-editor-description_public', room.description);
+  await formInteractions.fillForm(page, 'room-name', room.name);
+  await formInteractions.fillMarkdownForm(page, 'description_public', room.description);
 
   const UserSelector = page.getByTestId('users-field');
   await expect(UserSelector).toBeVisible();

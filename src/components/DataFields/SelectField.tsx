@@ -1,10 +1,10 @@
 import { PossibleFields } from '@/types/Scopes';
 import { SelectOptionsType } from '@/types/SettingsTypes';
-import { FormControl, MenuItem, StandardTextFieldProps, TextField } from '@mui/material';
+import { FormControl, MenuItem, Paper, TextField } from '@mui/material';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
-interface Props extends StandardTextFieldProps {
+interface Props extends React.ComponentProps<typeof TextField> {
   name: keyof PossibleFields;
   options: SelectOptionsType;
   control: Control<any, any>;
@@ -51,11 +51,9 @@ const SelectField: React.FC<Props> = ({
             slotProps={{
               select: {
                 MenuProps: {
-                  slotProps: {
-                    paper: {
-                      'data-testid': `select-field-${name}-list`,
-                    } as any,
-                  },
+                  PaperProps: {
+                    'data-testid': `select-field-${name}-list`,
+                  } as any,
                 },
                 'data-testid': `select-field-${name}-value`,
               } as any,
