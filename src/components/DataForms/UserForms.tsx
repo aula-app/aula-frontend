@@ -94,12 +94,10 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   const onSubmit = async (data: SchemaType) => {
     try {
       setIsLoading(true);
-      if (!defaultValues) {
-        await newUser(data);
-      } else {
-        await updateUser(data);
+      const upsertSuccess = (!defaultValues) ? await newUser(data) : await updateUser(data);
+      if (upsertSuccess) {
+        handleDraftSubmit();
       }
-      handleDraftSubmit();
     } finally {
       setIsLoading(false);
     }
@@ -126,11 +124,12 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
         type: 'manual',
         message: response.error || t('errors.default'),
       });
-      return;
+      return false;
     }
     await setUserRooms(response.data.hash_id);
     await setRoomRoles(response.data.hash_id);
     onClose();
+    return true;
   };
 
   const updateUser = async (data: SchemaType) => {
@@ -156,19 +155,22 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
         type: 'manual',
         message: response.error || t('errors.default'),
       });
-      return;
+      return false;
     }
     await setUserRooms(defaultValues.hash_id);
     await setRoomRoles(defaultValues.hash_id);
     onClose();
+    return true;
   };
 
+  // @TODO: display errors
   const setUserRooms = async (user_id: string) => {
     const addPromises = updateRooms.add.map((room_id) => addUserRoom(user_id, room_id));
     const removePromises = updateRooms.remove.map((room_id) => removeUserRoom(user_id, room_id));
     await Promise.all([...addPromises, ...removePromises]);
   };
 
+  // @TODO: display errors
   const setRoomRoles = async (user_id: string) => {
     await Promise.all(updateRoles?.map((update) => addSpecialRoles(user_id, update.role, update.room)) || []);
   };
