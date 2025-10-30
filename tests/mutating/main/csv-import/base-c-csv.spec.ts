@@ -21,6 +21,9 @@ describeWithSetup('CSV Import', () => {
   let csvUsers: Array<UserData>;
   let csvFilePath: string;
 
+  // Track created resources for cleanup
+  const createdRoomIds: string[] = [];
+
   test.beforeAll(async () => {
     // prepare data locally
     room = entities.createRoom('csv-import-destination');
@@ -36,19 +39,63 @@ describeWithSetup('CSV Import', () => {
       description_public: room.description,
       description_internal: room.description,
     });
+    createdRoomIds.push(roomResponse.hash_id);
 
     // set-up browsers
     adminPage = await browsers.getUserBrowser('admin');
   });
 
   test.afterAll(async () => {
-    // const importedUsers = await apiClient.getUsersByUsername('csv-import-');
-    // for (const u of importedUsers) {
-    //   if (!!u.hash_id && csvUsers.some(csvUser => csvUser.username === u.username)) {
-    //     console.log(`Cleaning up user ${u.hash_id}: ${u.username}...`);
-    //     await apiClient.deleteUser(u.hash_id!!);
-    //   }
-    // }
+    console.log('🧹 Starting comprehensive cleanup...');
+
+    try {
+      // 1. Clean up created ideas first (need to do this before deleting users/rooms)
+      console.log('💡 Cleaning up ideas...');
+      for (const user of csvUsers) {
+        try {
+          // Ideas created in both standard room and destination room
+          const ideaName1 = `test-${user.username}`;
+          // Note: We can't easily get idea IDs without additional API methods
+          // The UI tests create ideas but we don't track their IDs
+          // In a real scenario, you'd want to track created idea IDs for cleanup
+          console.log(`  ⚠️ Ideas created by ${user.username} may need manual cleanup`);
+        } catch (error) {
+          console.warn(`  ⚠️ Failed to cleanup ideas for user ${user.username}:`, error);
+        }
+      }
+
+      // 2. Clean up all created users
+      console.log('👥 Cleaning up users...');
+      const importedUsers = await apiClient.getUsersByUsername('csv-import-');
+      for (const u of importedUsers) {
+        if (u.hash_id && csvUsers.some((csvUser) => csvUser.username === u.username)) {
+          console.log(`  🗑️ Deleting user ${u.hash_id}: ${u.username}...`);
+          await apiClient.deleteUser(u.hash_id);
+        }
+      }
+
+      // 3. Clean up created rooms
+      console.log('🏠 Cleaning up rooms...');
+      for (const roomId of createdRoomIds) {
+        try {
+          console.log(`  🗑️ Deleting room ${roomId}...`);
+          await apiClient.deleteRoom(roomId);
+        } catch (error) {
+          console.warn(`  ⚠️ Failed to delete room ${roomId}:`, error);
+        }
+      }
+
+      // 4. Clean up temporary CSV file
+      if (csvFilePath && require('fs').existsSync(csvFilePath)) {
+        console.log(`📄 Cleaning up CSV file: ${csvFilePath}...`);
+        require('fs').unlinkSync(csvFilePath);
+      }
+
+      console.log('✅ Cleanup completed successfully');
+    } catch (error) {
+      console.error('❌ Cleanup failed:', error);
+      // Don't throw - we don't want cleanup failures to fail the test
+    }
   });
 
   test.describe('Admin', () => {
@@ -128,13 +175,18 @@ describeWithSetup('CSV Import', () => {
 
   test.describe('Admin222 (same CSV, +1 user +1 room +1 role)', () => {
     let room2: RoomData;
+    let room2Response: { insert_id: number; hash_id: string };
+
     test.beforeAll(async () => {
       room2 = entities.createRoom('csv-import-destination-2');
-      roomResponse = await apiClient.addRoom({
+      room2Response = await apiClient.addRoom({
         room_name: room2.name,
         description_public: room2.description,
         description_internal: room2.description,
       });
+      // Track room2 for cleanup
+      createdRoomIds.push(room2Response.hash_id);
+
       csvUsers.push(entities.createUserData('csv-import-NEW-4'));
       const csvUsersFormatted = csvUsers.map((u) => `${u.realName};${u.displayName};${u.username};;${u.about}`);
       csvFilePath = createTempCsvFile(`any;header;name;should;work\n` + csvUsersFormatted.join('\n'));

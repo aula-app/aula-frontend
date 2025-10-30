@@ -23,8 +23,6 @@ describeWithSetup('Instance Offline', () => {
 
   test.afterAll(async () => {
     if (!instanceOnline) await changeInstanceStatus(true);
-    await admin.close();
-    await user.close();
   });
 
   const changeInstanceStatus = async (online: boolean) => {

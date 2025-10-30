@@ -23,6 +23,18 @@ describeWithSetup('Change pass flow', () => {
     currentPassword: null as string | null,
   };
 
+  test.beforeAll(async () => {
+    const passUserData = await userData.use('password');
+    user = await browsers.getUserBrowser(passUserData.username);
+  });
+
+  test.afterAll(async () => {
+    const passUser = userData.get('password');
+    if (passUser) {
+      await userData.clear(passUser);
+    }
+  });
+
   const changePassword = async (passFields: PasswordChangeContext) => {
     await navigation.goToProfile(user);
     await navigation.openAccordion(user, 'security-panel-button');
@@ -44,11 +56,6 @@ describeWithSetup('Change pass flow', () => {
     await closeButton.click();
     await successDiv.waitFor({ state: 'hidden', timeout: 5000 });
   };
-
-  test('Setup dedicated user for password tests', async () => {
-    const passUserData = await userData.use('password');
-    user = await browsers.getUserBrowser(passUserData.username);
-  });
 
   test('User can successfully change password with valid inputs', async () => {
     await changePassword(defaultFields);
@@ -97,11 +104,5 @@ describeWithSetup('Change pass flow', () => {
       await checkSuccessDiv();
       clearQueue.currentPassword = fields.newPassword;
     }
-  });
-
-  test('Delete dedicated user for password tests', async () => {
-    const user = userData.get('password');
-    if (!user) throw new Error('User data for passwordUser not found');
-    await userData.clear(user);
   });
 });

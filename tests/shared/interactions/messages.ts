@@ -10,7 +10,7 @@ export const create = async (page: Page, data: types.MessageData) => {
 
     await formsInteractions.clickButton(page, 'add-messages-button');
 
-    await formsInteractions.selectOption(page, 'user-field-autocomplete', data.user.realName);
+    await formsInteractions.selectAutocompleteOption(page, 'user-field-autocomplete', data.user.realName);
 
     await formsInteractions.fillForm(page, 'message-headline', data.title);
     await formsInteractions.fillMarkdownForm(page, 'body', data.content);

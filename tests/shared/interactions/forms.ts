@@ -43,13 +43,27 @@ const openSelectDropdown = async (page: Page, testId: string) => {
     await dropdownIcon.click({ force: true });
   }
 
-  // await expect(page.locator('.MuiAutocomplete-popupIndicator')).toBeVisible({ timeout: 500 });
+  await page.waitForTimeout(500);
 
   const dropdown = page.getByTestId(`${testId}-list`);
   await expect(dropdown).toBeVisible({ timeout: 5000 });
 };
 
 export const selectOption = async (page: Page, testId: string, optionLabel: string) => {
+  const field = page.getByTestId(testId);
+  await expect(field).toBeVisible({ timeout: 5000 });
+  await openSelectDropdown(page, testId);
+
+  const option = page.getByTestId(`${testId}-list`).getByRole('option', { exact: false, name: optionLabel });
+  await expect(option).toBeVisible({ timeout: 5000 });
+  await option.click({ timeout: 1000 });
+
+  const displayedValue = page.getByTestId(testId);
+  await expect(displayedValue).toBeVisible({ timeout: 5000 });
+  await expect(displayedValue).toContainText(optionLabel, { timeout: 5000 });
+};
+
+export const selectAutocompleteOption = async (page: Page, testId: string, optionLabel: string) => {
   const option = page.getByTestId(`${testId}-list`).getByRole('option', { exact: false, name: optionLabel });
   await openSelectDropdown(page, testId);
   await expect(option).toBeVisible({ timeout: 5000 });
@@ -62,7 +76,9 @@ export const selectOption = async (page: Page, testId: string, optionLabel: stri
 
 export const selectOptionByValue = async (page: Page, testId: string, value: string) => {
   // First, get the option element and read its text content
-  await openSelectDropdown(page, testId);
+  const field = page.getByTestId(testId);
+  await expect(field).toBeVisible({ timeout: 5000 });
+  await field.click();
 
   const option = page.getByTestId(`${testId}-list`).getByTestId(`select-option-${value}`);
   await expect(option).toBeVisible({ timeout: 5000 });
