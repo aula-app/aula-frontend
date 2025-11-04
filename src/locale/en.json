@@ -53,17 +53,11 @@
   "auth": {
     "forgotPassword": {
       "button": "Reset password",
-      "buttonSent": "sent",
       "link": "Forgot password?",
-      "message": "Are you sure you want to request a new password for this user? {{var}}",
-      "messageEmail": "We will log them out, erase their old password and send them an email with instructions to create a new password.",
-      "messageNoEmail": "We will log them out and erase their old password. A new temporary password for them.",
+      "message": "Are you sure you want to request a new password for this user?",
       "recover": "Recover password",
       "recovery": "Password Recovery",
-      "success": "Your password was reset. {{var}}",
-      "successfulEmail": "An email with instructions to reset your password has been sent to your email",
-      "successfulNoEmail": "A new temporary password has been generated for this user.",
-      "successfulUser": "The password of {{user}} was reset. {{var}}"
+      "success": "The password was reset. Registered users will receive a reset link in their email."
     },
     "login": {
       "button": "Login",
@@ -295,7 +289,8 @@
     },
     "boxes": {
       "name": "Box",
-      "plural": "Boxes"
+      "plural": "Boxes",
+      "placeholder": "Search boxes..."
     },
     "bugs": {
       "headline": "Bug report on '{{var}}'",
@@ -313,9 +308,7 @@
     "comments": {
       "name": "Comment",
       "plural": "Comments",
-      "search": {
-        "placeholder": "Search comments..."
-      }
+      "placeholder": "Search comments..."
     },
     "groups": {
       "name": "Group",
@@ -329,6 +322,7 @@
       "marked_winner": "This idea is selected as a winner.",
       "name": "Idea",
       "not_marked_yet": "This idea is still not marked as a winner.",
+      "placeholder": "Search ideas...",
       "plural": "Ideas",
       "reject": "Reject",
       "rejected": "This idea was not approved.",
@@ -357,10 +351,8 @@
         "type": "Room type"
       },
       "name": "Room",
+      "placeholder": "Search rooms...",
       "plural": "Rooms",
-      "search": {
-        "placeholder": "Search rooms..."
-      },
       "type": {
         "0": "Type 0",
         "1": "Type 1"

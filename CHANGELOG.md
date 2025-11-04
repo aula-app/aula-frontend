@@ -1,3 +1,8 @@
+## Current Version
+
+- **New features:**
+  - Search by text on rooms, boxes and wild ideas
+
 ## 1.6.0
 
 - **New features:**
