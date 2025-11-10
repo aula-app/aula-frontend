@@ -254,7 +254,7 @@ export function ScopeHeader({
                 label={t('ui.common.search')}
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder={t(`scopes.${scopeKey}.search.placeholder`)}
+                placeholder={t(`scopes.${scopeKey}.placeholder`)}
                 size="small"
                 variant="outlined"
                 inputRef={searchInputRef}

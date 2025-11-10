@@ -1,3 +1,9 @@
+## 1.6.1
+
+- **Bug fixes**
+  - Search by text on rooms, boxes and wild ideas placeholder text
+  - change IOS data collection information
+
 ## 1.6.0
 
 - **New features:**
