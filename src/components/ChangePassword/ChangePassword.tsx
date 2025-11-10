@@ -1,17 +1,29 @@
 import { changePassword } from '@/services/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography, Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import { useState, useEffect } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import AppIconButton from '../AppIconButton';
+import AppIcon from '../AppIcon';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store';
+
+// Password complexity configuration
+interface PasswordComplexity {
+  minLength: number;
+  requireUppercase: boolean;
+  requireNumber: boolean;
+  requireSymbol: boolean;
+}
 
 interface Props {
   tmp_token?: string;
   disabled?: boolean;
+  passwordComplexity?: PasswordComplexity;
 }
 
 interface ChangePasswordMethods {
@@ -22,7 +34,16 @@ interface ChangePasswordMethods {
  * Renders User info with Avatar
  * @component ChangePassword
  */
-const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
+const ChangePassword: React.FC<Props> = ({ 
+  tmp_token, 
+  disabled = false, 
+  passwordComplexity = {
+    minLength: 12,
+    requireUppercase: true,
+    requireNumber: true,
+    requireSymbol: true,
+  }
+}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
@@ -34,19 +55,42 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
     confirmPassword: false,
     newPassword: false,
   });
+  const [passwordRequirements, setPasswordRequirements] = useState({
+    length: false,
+    uppercase: false,
+    number: false,
+    symbol: false,
+  });
+
+  const createPasswordValidation = () => {
+    let validation = yup.string().required(t('forms.validation.required'));
+    
+    validation = validation.min(passwordComplexity.minLength, 
+      t('forms.validation.minLength', { var: passwordComplexity.minLength }));
+    
+    if (passwordComplexity.requireUppercase) {
+      validation = validation.matches(/[A-Z]/, 'Password must contain at least one uppercase letter');
+    }
+    
+    if (passwordComplexity.requireNumber) {
+      validation = validation.matches(/[0-9]/, 'Password must contain at least one number');
+    }
+    
+    if (passwordComplexity.requireSymbol) {
+      validation = validation.matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character');
+    }
+    
+    return validation.max(32, t('forms.validation.maxLength', { var: 32 }));
+  };
 
   const schema = yup
     .object({
       oldPassword: yup
         .string()
         .required(t('forms.validation.required'))
-        .min(4, t('forms.validation.minLength', { var: 4 }))
+        .min(passwordComplexity.minLength, t('forms.validation.minLength', { var: passwordComplexity.minLength }))
         .max(32, t('forms.validation.maxLength', { var: 32 })),
-      newPassword: yup
-        .string()
-        .required(t('forms.validation.required'))
-        .min(4, t('forms.validation.minLength', { var: 4 }))
-        .max(32, t('forms.validation.maxLength', { var: 32 })),
+      newPassword: createPasswordValidation(),
       confirmPassword: yup
         .string()
         .required(t('forms.validation.required'))
@@ -58,14 +102,90 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
+  const watchedNewPassword = useWatch({
+    control,
+    name: 'newPassword',
+    defaultValue: '',
+  });
+
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
   const fields = schema.fields;
+
+  // Check password requirements in real-time
+  useEffect(() => {
+    const password = watchedNewPassword || '';
+    setPasswordRequirements({
+      length: password.length >= passwordComplexity.minLength,
+      uppercase: passwordComplexity.requireUppercase ? /[A-Z]/.test(password) : true,
+      number: passwordComplexity.requireNumber ? /[0-9]/.test(password) : true,
+      symbol: passwordComplexity.requireSymbol ? /[^A-Za-z0-9]/.test(password) : true,
+    });
+  }, [watchedNewPassword, passwordComplexity]);
+
+  const getPasswordRequirementsText = () => {
+    return t('forms.validation.passwordRequirements');
+  };
+
+  const renderPasswordRequirements = () => {
+    const requirements = [
+      {
+        key: 'length',
+        text: t('forms.validation.passwordMinLength', { count: passwordComplexity.minLength }),
+        met: passwordRequirements.length,
+        enabled: true,
+      },
+      {
+        key: 'uppercase',
+        text: t('forms.validation.passwordRequireUppercase'),
+        met: passwordRequirements.uppercase,
+        enabled: passwordComplexity.requireUppercase,
+      },
+      {
+        key: 'number',
+        text: t('forms.validation.passwordRequireNumber'),
+        met: passwordRequirements.number,
+        enabled: passwordComplexity.requireNumber,
+      },
+      {
+        key: 'symbol',
+        text: t('forms.validation.passwordRequireSymbol'),
+        met: passwordRequirements.symbol,
+        enabled: passwordComplexity.requireSymbol,
+      },
+    ].filter(req => req.enabled);
+
+    return (
+      <Box sx={{ mt: 1 }}>
+        <List dense sx={{ py: 0 }}>
+          {requirements.map((requirement) => (
+            <ListItem key={requirement.key} sx={{ py: 0, px: 0 }}>
+              <ListItemIcon sx={{ minWidth: 32 }}>
+                {requirement.met ? (
+                  <CheckIcon sx={{ color: '#4caf50', fontSize: '1.25rem' }} />
+                ) : (
+                  <CloseIcon sx={{ color: '#9e9e9e', fontSize: '1.25rem' }} />
+                )}
+              </ListItemIcon>
+              <ListItemText
+                primary={requirement.text}
+                primaryTypographyProps={{
+                  variant: 'caption',
+                  color: requirement.met ? 'success.main' : 'text.secondary',
+                }}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+    );
+  };
 
   const onSubmit = async (data: SchemaType) => {
     const result = await changePassword(data.oldPassword, data.newPassword, tmp_token);
@@ -91,6 +211,7 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Stack gap={2} mt={2}>
+
         <Collapse in={showMessage}>
           <Alert
             variant="outlined"
@@ -106,40 +227,42 @@ const ChangePassword: React.FC<Props> = ({ tmp_token, disabled = false }) => {
         <Typography variant="h3">{t('auth.password.change')}</Typography>
         <Stack gap={1} direction="row" flexWrap="wrap">
           {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
-            <TextField
-              key={field}
-              required
-              disabled={disabled}
-              type={showPassword[field] ? 'text' : 'password'}
-              label={t(`auth.password.${field}`)}
-              id={`change-password-${field}`}
-              sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}
-              {...register(field)}
-              error={!!errors[field]}
-              helperText={<span id={`${field}-error-message`}>{errors[field]?.message || ''}</span>}
-              slotProps={{
-                htmlInput: {
-                  'aria-labelledby': `change-password-${field}-label`,
-                  'aria-invalid': !!errors[field],
-                  'aria-errormessage': errors[field] ? `${field}-error-message` : undefined,
-                  id: `change-password-${field}-label`,
-                  htmlFor: `change-password-${field}`,
-                  'data-testid': `${field}-input`,
-                },
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <AppIconButton
-                        aria-label="toggle password visibility"
-                        icon={showPassword[field] ? 'visibilityOn' : 'visibilityOff'}
-                        title={showPassword[field] ? t('actions.hide') : t('actions.show')}
-                        onClick={() => setShowPassword({ ...showPassword, [field]: !showPassword[field] })}
-                      />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
+            <Box key={field} sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}>
+              <TextField
+                required
+                disabled={disabled}
+                type={showPassword[field] ? 'text' : 'password'}
+                label={t(`auth.password.${field}`)}
+                id={`change-password-${field}`}
+                sx={{ width: '100%' }}
+                {...register(field)}
+                error={!!errors[field]}
+                helperText={<span id={`${field}-error-message`}>{errors[field]?.message || ''}</span>}
+                slotProps={{
+                  htmlInput: {
+                    'aria-labelledby': `change-password-${field}-label`,
+                    'aria-invalid': !!errors[field],
+                    'aria-errormessage': errors[field] ? `${field}-error-message` : undefined,
+                    id: `change-password-${field}-label`,
+                    htmlFor: `change-password-${field}`,
+                    'data-testid': `${field}-input`,
+                  },
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <AppIconButton
+                          aria-label="toggle password visibility"
+                          icon={showPassword[field] ? 'visibilityOn' : 'visibilityOff'}
+                          title={showPassword[field] ? t('actions.hide') : t('actions.show')}
+                          onClick={() => setShowPassword({ ...showPassword, [field]: !showPassword[field] })}
+                        />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+              {field === 'newPassword' && renderPasswordRequirements()}
+            </Box>
           ))}
         </Stack>
 
