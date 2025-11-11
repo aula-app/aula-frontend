@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store';
 
 // Password complexity configuration
-interface PasswordComplexity {
+export interface PasswordComplexity {
   minLength: number;
   requireUppercase: boolean;
   requireNumber: boolean;
@@ -54,12 +54,6 @@ const ChangePassword: React.FC<Props> = ({
     oldPassword: false,
     confirmPassword: false,
     newPassword: false,
-  });
-  const [passwordRequirements, setPasswordRequirements] = useState({
-    length: false,
-    uppercase: false,
-    number: false,
-    symbol: false,
   });
 
   const createPasswordValidation = () => {
@@ -118,74 +112,12 @@ const ChangePassword: React.FC<Props> = ({
   type SchemaType = yup.InferType<typeof schema>;
   const fields = schema.fields;
 
-  // Check password requirements in real-time
-  useEffect(() => {
-    const password = watchedNewPassword || '';
-    setPasswordRequirements({
-      length: password.length >= passwordComplexity.minLength,
-      uppercase: passwordComplexity.requireUppercase ? /[A-Z]/.test(password) : true,
-      number: passwordComplexity.requireNumber ? /[0-9]/.test(password) : true,
-      symbol: passwordComplexity.requireSymbol ? /[^A-Za-z0-9]/.test(password) : true,
-    });
-  }, [watchedNewPassword, passwordComplexity]);
-
-  const getPasswordRequirementsText = () => {
-    return t('forms.validation.passwordRequirements');
-  };
-
-  const renderPasswordRequirements = () => {
-    const requirements = [
-      {
-        key: 'length',
-        text: t('forms.validation.passwordMinLength', { count: passwordComplexity.minLength }),
-        met: passwordRequirements.length,
-        enabled: true,
-      },
-      {
-        key: 'uppercase',
-        text: t('forms.validation.passwordRequireUppercase'),
-        met: passwordRequirements.uppercase,
-        enabled: passwordComplexity.requireUppercase,
-      },
-      {
-        key: 'number',
-        text: t('forms.validation.passwordRequireNumber'),
-        met: passwordRequirements.number,
-        enabled: passwordComplexity.requireNumber,
-      },
-      {
-        key: 'symbol',
-        text: t('forms.validation.passwordRequireSymbol'),
-        met: passwordRequirements.symbol,
-        enabled: passwordComplexity.requireSymbol,
-      },
-    ].filter(req => req.enabled);
-
-    return (
-      <Box sx={{ mt: 1 }}>
-        <List dense sx={{ py: 0 }}>
-          {requirements.map((requirement) => (
-            <ListItem key={requirement.key} sx={{ py: 0, px: 0 }}>
-              <ListItemIcon sx={{ minWidth: 32 }}>
-                {requirement.met ? (
-                  <CheckIcon sx={{ color: '#4caf50', fontSize: '1.25rem' }} />
-                ) : (
-                  <CloseIcon sx={{ color: '#9e9e9e', fontSize: '1.25rem' }} />
-                )}
-              </ListItemIcon>
-              <ListItemText
-                primary={requirement.text}
-                primaryTypographyProps={{
-                  variant: 'caption',
-                  color: requirement.met ? 'success.main' : 'text.secondary',
-                }}
-              />
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    );
-  };
+  // Use shared password requirements function
+  const { renderPasswordRequirements } = usePasswordRequirements(
+    watchedNewPassword || '',
+    passwordComplexity,
+    t
+  );
 
   const onSubmit = async (data: SchemaType) => {
     const result = await changePassword(data.oldPassword, data.newPassword, tmp_token);
@@ -277,6 +209,85 @@ const ChangePassword: React.FC<Props> = ({
       </Stack>
     </form>
   );
+};
+
+// Export utility function for password requirements
+export const usePasswordRequirements = (
+  password: string,
+  passwordComplexity: PasswordComplexity,
+  t: (key: string, options?: any) => string
+) => {
+  const [passwordRequirements, setPasswordRequirements] = useState({
+    length: false,
+    uppercase: false,
+    number: false,
+    symbol: false,
+  });
+
+  useEffect(() => {
+    setPasswordRequirements({
+      length: password.length >= passwordComplexity.minLength,
+      uppercase: passwordComplexity.requireUppercase ? /[A-Z]/.test(password) : true,
+      number: passwordComplexity.requireNumber ? /[0-9]/.test(password) : true,
+      symbol: passwordComplexity.requireSymbol ? /[^A-Za-z0-9]/.test(password) : true,
+    });
+  }, [password, passwordComplexity]);
+
+  const renderPasswordRequirements = () => {
+    const requirements = [
+      {
+        key: 'length',
+        text: t('forms.validation.passwordMinLength', { count: passwordComplexity.minLength }),
+        met: passwordRequirements.length,
+        enabled: true,
+      },
+      {
+        key: 'uppercase',
+        text: t('forms.validation.passwordRequireUppercase'),
+        met: passwordRequirements.uppercase,
+        enabled: passwordComplexity.requireUppercase,
+      },
+      {
+        key: 'number',
+        text: t('forms.validation.passwordRequireNumber'),
+        met: passwordRequirements.number,
+        enabled: passwordComplexity.requireNumber,
+      },
+      {
+        key: 'symbol',
+        text: t('forms.validation.passwordRequireSymbol'),
+        met: passwordRequirements.symbol,
+        enabled: passwordComplexity.requireSymbol,
+      },
+    ].filter(req => req.enabled);
+
+    return (
+      <Box sx={{ mt: 1 }}>
+        <List dense sx={{ py: 0 }}>
+          {requirements.map((requirement) => (
+            <ListItem key={requirement.key} sx={{ py: 0, px: 0 }}>
+              <ListItemIcon sx={{ minWidth: 32 }}>
+                {requirement.met ? (
+                  <CheckIcon sx={{ color: '#4caf50', fontSize: '1.25rem' }} />
+                ) : (
+                  <CloseIcon sx={{ color: '#9e9e9e', fontSize: '1.25rem' }} />
+                )}
+              </ListItemIcon>
+              <ListItemText
+                primary={requirement.text}
+                primaryTypographyProps={{
+                  variant: 'caption',
+                  color: requirement.met ? 'success.main' : 'text.secondary',
+                }}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+    );
+  };
+
+  return { renderPasswordRequirements };
 };
 
 export default ChangePassword;

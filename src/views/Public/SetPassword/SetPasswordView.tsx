@@ -5,23 +5,15 @@ import { localStorageGet, localStorageSet } from "@/utils";
 import { validateAndSaveInstanceCode } from '@/services/instance';
 import { checkPasswordKey, setPassword } from '@/services/login';
 import { useAppStore } from '@/store';
+import { usePasswordRequirements, PasswordComplexity } from '@/components/ChangePassword/ChangePassword';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography, Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
+import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography, Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
 
-// Password complexity configuration
-interface PasswordComplexity {
-  minLength: number;
-  requireUppercase: boolean;
-  requireNumber: boolean;
-  requireSymbol: boolean;
-}
 
 const SetPasswordView = () => {
   const { t } = useTranslation();
@@ -50,12 +42,6 @@ const SetPasswordView = () => {
   });
 
   const [isValid, setValid] = useState(true);
-  const [passwordRequirements, setPasswordRequirements] = useState({
-    length: false,
-    uppercase: false,
-    number: false,
-    symbol: false,
-  });
 
   const createPasswordValidation = () => {
     let validation = yup.string().required(t('forms.validation.required'));
@@ -108,74 +94,12 @@ const SetPasswordView = () => {
   type SchemaType = yup.InferType<typeof schema>;
   const fields = schema.fields;
 
-  // Check password requirements in real-time
-  useEffect(() => {
-    const password = watchedNewPassword || '';
-    setPasswordRequirements({
-      length: password.length >= passwordComplexity.minLength,
-      uppercase: passwordComplexity.requireUppercase ? /[A-Z]/.test(password) : true,
-      number: passwordComplexity.requireNumber ? /[0-9]/.test(password) : true,
-      symbol: passwordComplexity.requireSymbol ? /[^A-Za-z0-9]/.test(password) : true,
-    });
-  }, [watchedNewPassword, passwordComplexity]);
-
-  const getPasswordRequirementsText = () => {
-    return t('forms.validation.passwordRequirements');
-  };
-
-  const renderPasswordRequirements = () => {
-    const requirements = [
-      {
-        key: 'length',
-        text: t('forms.validation.passwordMinLength', { count: passwordComplexity.minLength }),
-        met: passwordRequirements.length,
-        enabled: true,
-      },
-      {
-        key: 'uppercase',
-        text: t('forms.validation.passwordRequireUppercase'),
-        met: passwordRequirements.uppercase,
-        enabled: passwordComplexity.requireUppercase,
-      },
-      {
-        key: 'number',
-        text: t('forms.validation.passwordRequireNumber'),
-        met: passwordRequirements.number,
-        enabled: passwordComplexity.requireNumber,
-      },
-      {
-        key: 'symbol',
-        text: t('forms.validation.passwordRequireSymbol'),
-        met: passwordRequirements.symbol,
-        enabled: passwordComplexity.requireSymbol,
-      },
-    ].filter(req => req.enabled);
-
-    return (
-      <Box sx={{ mt: 1 }}>
-        <List dense sx={{ py: 0 }}>
-          {requirements.map((requirement) => (
-            <ListItem key={requirement.key} sx={{ py: 0, px: 0 }}>
-              <ListItemIcon sx={{ minWidth: 32 }}>
-                {requirement.met ? (
-                  <CheckIcon sx={{ color: '#4caf50', fontSize: '1.25rem' }} />
-                ) : (
-                  <CloseIcon sx={{ color: '#9e9e9e', fontSize: '1.25rem' }} />
-                )}
-              </ListItemIcon>
-              <ListItemText
-                primary={requirement.text}
-                primaryTypographyProps={{
-                  variant: 'caption',
-                  color: requirement.met ? 'success.main' : 'text.secondary',
-                }}
-              />
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    );
-  };
+  // Use shared password requirements function
+  const { renderPasswordRequirements } = usePasswordRequirements(
+    watchedNewPassword || '',
+    passwordComplexity,
+    t
+  );
 
   const validateKey = async () => {
     if (!key) {
