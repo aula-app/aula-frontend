@@ -24,9 +24,9 @@ const SetPasswordView = () => {
   // Password complexity settings
   const passwordComplexity: PasswordComplexity = {
     minLength: 12,
-    requireUppercase: true,
-    requireNumber: true,
-    requireSymbol: true,
+    requireUppercase: false,
+    requireNumber: false,
+    requireSymbol: false,
   };
 
   const [searchParams] = useSearchParams();

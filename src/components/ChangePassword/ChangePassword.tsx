@@ -39,9 +39,9 @@ const ChangePassword: React.FC<Props> = ({
   disabled = false, 
   passwordComplexity = {
     minLength: 12,
-    requireUppercase: true,
-    requireNumber: true,
-    requireSymbol: true,
+    requireUppercase: false,
+    requireNumber: false,
+    requireSymbol: false,
   }
 }) => {
   const { t } = useTranslation();
