@@ -316,7 +316,7 @@ describeWithSetup('CSV Import', () => {
   });
 
   const createTempCsvFile = (csvContent: string): string => {
-    const filePath = path.join(__dirname, '../../temp', 'csv-import-users.csv');
+    const filePath = path.join(__dirname, '../../../auth-states', 'csv-import-users.csv');
 
     // Ensure temp directory exists
     const tempDir = path.dirname(filePath);

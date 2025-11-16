@@ -100,13 +100,9 @@ async function cleanupAuthStates(): Promise<void> {
       const files = fs.readdirSync(authStatesDir);
 
       for (const file of files) {
-        // Only delete run-id.txt and test user context files (test-*)
-        // Keep admin-context.json for next test run
-        if (file === 'run-id.txt' || file.startsWith('test-')) {
-          const filePath = path.join(authStatesDir, file);
-          fs.unlinkSync(filePath);
-          console.info(`  ✅ Deleted: ${file}`);
-        }
+        const filePath = path.join(authStatesDir, file);
+        fs.unlinkSync(filePath);
+        console.info(`  ✅ Deleted: ${file}`);
       }
 
       console.info('🧹 Cleaned up auth-states directory');
