@@ -139,7 +139,7 @@ export const pickle = async () => {
 //  which were initialized in setup-auth.ts
 // tests should call it to initialize the singleton contexts in
 // this namespace
-export const recall = async (userKeys: Array<keyof typeof pages> = Object.keys(pages)) => {
+export const recall = async (userKeys: string[] = ['admin']) => {
   try {
     await Promise.all(userKeys.map((userKey) => create(userKey, `tests/auth-states/${userKey}-context.json`)));
     console.info('✅ Successfully recalled browser states from temp');
@@ -150,9 +150,9 @@ export const recall = async (userKeys: Array<keyof typeof pages> = Object.keys(p
 };
 
 // Recall from auth-states directory (for tests that depend on user creation)
-export const recallFromAuthStates = async (userKeys: Array<keyof typeof pages> = Object.keys(pages)) => {
+export const recallFromAuthStates = async (userKeys: string[] = ['admin']) => {
   try {
-    await Promise.all(userKeys.map((userKey) => create(userKey, `tests/auth-states/${userKey}.json`)));
+    await Promise.all(userKeys.map((userKey) => create(userKey, `tests/auth-states/${userKey}-context.json`)));
     console.info('✅ Successfully recalled browser states from auth-states');
   } catch (error) {
     console.error('❌ Error recalling browser states from auth-states:', error);
