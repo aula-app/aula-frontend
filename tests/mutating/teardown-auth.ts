@@ -1,4 +1,6 @@
 import { Page } from '@playwright/test';
+import * as fs from 'fs';
+import * as path from 'path';
 import * as browsers from '../shared/interactions/browsers';
 import * as shared from '../shared/shared';
 
@@ -83,6 +85,30 @@ export default async function globalTeardown() {
     console.error('❌ Error during cleanup:', error);
   } finally {
     await browsers.shutdown();
+    await cleanupAuthStates();
+  }
+}
+
+/**
+ * Clean up auth-states directory (context files and run-id)
+ */
+async function cleanupAuthStates(): Promise<void> {
+  const authStatesDir = path.join(process.cwd(), 'tests/auth-states');
+
+  try {
+    if (fs.existsSync(authStatesDir)) {
+      const files = fs.readdirSync(authStatesDir);
+
+      for (const file of files) {
+        const filePath = path.join(authStatesDir, file);
+        fs.unlinkSync(filePath);
+        console.info(`  ✅ Deleted: ${file}`);
+      }
+
+      console.info('🧹 Cleaned up auth-states directory');
+    }
+  } catch (error) {
+    console.error('❌ Error cleaning up auth-states:', error);
   }
 }
 
