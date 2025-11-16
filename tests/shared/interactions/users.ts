@@ -133,23 +133,38 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
     await page.fill('input[name="confirmPassword"]', data.password);
     await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
-    await login(page, data);
+    // Wait for navigation and check if we're logged in
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(2000);
+
+    // Check if we're on the home page (logged in) or need to login again
+    const isLoggedIn = await page.locator('#rooms-heading').isVisible();
+
+    if (!isLoggedIn) {
+      console.log('⚠️ User not automatically logged in after password change, attempting manual login');
+      // If not automatically logged in, do a manual login
+      await page.goto(host);
+      await page.waitForLoadState('networkidle');
+      await page.fill('input[name="username"]', data.username);
+      await page.fill('input[name="password"]', data.password);
+      await page.locator('button[type="submit"]').click({ timeout: 1000 });
+      await page.waitForLoadState('networkidle');
+      await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: 5000 });
+    }
+
     console.log('✅ Successfully registered user:', data.username);
   } catch (error) {
     console.error('❌ Failed to register user:', data.username, error);
+    console.error('Current URL:', page.url());
+    console.error('Page title:', await page.title());
     throw error;
   }
 };
 
-export const start = async (page: Page, data: types.UserData) => {
-  try {
-    const tempPassword = await create(page, data);
-    const newBrowser = await browsers.create(data.username);
-    await register(newBrowser, data, tempPassword);
-  } catch (error) {
-    console.error(`❌ Error generating user: ${data.username}. `, error);
-    throw error;
-  }
+export const start = async (adminPage: Page, data: types.UserData) => {
+  const tempPassword = await create(adminPage, data);
+  const newBrowser = await browsers.create(data.username);
+  await register(newBrowser, data, tempPassword);
 };
 
 export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {

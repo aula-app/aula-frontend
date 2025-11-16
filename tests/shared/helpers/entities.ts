@@ -5,7 +5,7 @@ import { TestConstants } from '../test-config';
 export function createRoom(suffix = '', users = []) {
   const hash = shared.gensym();
   return {
-    name: 'room-' + hash + (suffix ? `-${suffix}` : ''),
+    name: 'test-room-' + hash + (suffix ? `-${suffix}` : ''),
     description: 'created during automated testing',
     users: users,
   } as types.RoomData;
@@ -37,10 +37,10 @@ export function createUserData(username: string, role = 20) {
   const runId = shared.getRunId();
   const hash = shared.gensym();
   return {
-    username: `${username}-${hash}`,
+    username: `test-${username}-${hash}`,
     password: TestConstants.DEFAULT_PASSWORD,
-    displayName: `Test ${username} ${hash}`,
-    realName: `${username} ${runId}`,
+    displayName: `${username} ${hash}`,
+    realName: `${username} ${runId} Test User`,
     role: role,
     about: 'generated in e2e tests',
   } as types.UserData;

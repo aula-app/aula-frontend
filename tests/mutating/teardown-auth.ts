@@ -1,82 +1,145 @@
-// called from playwright.config
-import * as userData from '../fixtures/users';
-import { TestCleanup } from '../shared/cleanup';
+import { Page } from '@playwright/test';
 import * as browsers from '../shared/interactions/browsers';
-import { createTestApiClient } from '../shared/helpers/api-calls';
+import * as shared from '../shared/shared';
+
+interface CleanupConfig {
+  service: string;
+  method: string;
+  deleteMethod: string;
+  filterField: string;
+  filterPrefix: string;
+  idField: string;
+  nameField: string;
+  args?: any;
+}
+
+const CLEANUP_CONFIGS: CleanupConfig[] = [
+  {
+    service: 'ideas',
+    method: 'getIdeas',
+    deleteMethod: 'deleteIdea',
+    filterField: 'title',
+    filterPrefix: 'test-idea-',
+    idField: 'hash_id',
+    nameField: 'title',
+    args: undefined,
+  },
+  {
+    service: 'boxes',
+    method: 'getBoxes',
+    deleteMethod: 'deleteBox',
+    filterField: 'name',
+    filterPrefix: 'test-box-',
+    idField: 'hash_id',
+    nameField: 'name',
+    args: undefined,
+  },
+  {
+    service: 'rooms',
+    method: 'getRooms',
+    deleteMethod: 'deleteRoom',
+    filterField: 'room_name',
+    filterPrefix: 'test-room-',
+    idField: 'hash_id',
+    nameField: 'room_name',
+    args: { offset: 0, limit: 1000, orderby: 0, asc: 0, type: 0 },
+  },
+  {
+    service: 'users',
+    method: 'getUsers',
+    deleteMethod: 'deleteUser',
+    filterField: 'username',
+    filterPrefix: 'test-',
+    idField: 'hash_id',
+    nameField: 'username',
+    args: undefined,
+  },
+];
 
 export default async function globalTeardown() {
-  // Comprehensive cleanup of test artifacts
   console.log('Cleaning up after all tests...');
 
-  userData.init();
-  await clearBaseUsers();
-  await browsers.shutdown();
-
   try {
-    await TestCleanup.cleanupAll();
-    console.info('✅ Test artifacts cleaned up successfully');
+    await browsers.recall(['admin']);
+    const adminPage = await browsers.getUserBrowser('admin');
+
+    const currentUrl = adminPage.url();
+    if (!currentUrl || currentUrl === 'about:blank') {
+      await adminPage.goto(shared.getHost());
+      await adminPage.waitForLoadState('networkidle');
+    }
+
+    const token = await adminPage.evaluate(() => localStorage.getItem('token'));
+    if (!token) {
+      throw new Error('Admin not authenticated');
+    }
+
+    console.info('✅ Admin browser initialized');
+
+    for (const config of CLEANUP_CONFIGS) {
+      await cleanupTestItems(adminPage, config);
+    }
   } catch (error) {
-    console.warn('⚠️ Some cleanup operations failed:', error);
+    console.error('❌ Error during cleanup:', error);
+  } finally {
+    await browsers.shutdown();
   }
 }
 
-export const clearBaseUsers = async (): Promise<boolean> => {
-  await browsers.recall();
+async function cleanupTestItems(page: Page, config: CleanupConfig): Promise<void> {
+  const items = await fetchItems(page, config.service, config.method, config.args);
+  const testItems = items?.filter((item: any) => item[config.filterField]?.startsWith(config.filterPrefix)) || [];
 
-  try {
-    // Get admin browser (should have saved session from setup)
-    const adminPage = await browsers.getUserBrowser('admin');
-    if (!adminPage) {
-      console.warn('⚠️ Admin browser not available for cleanup');
-      return false;
+  console.info(`🧹 Found ${testItems.length} test ${config.service} to clean up`);
+
+  await deleteItems(page, testItems, config.service, config.deleteMethod, config.idField, config.nameField);
+}
+
+/**
+ * Generic function to fetch items from the database
+ */
+async function fetchItems(page: Page, serviceName: string, methodName: string, args: any): Promise<any[]> {
+  const result = await page.evaluate(
+    async ({ service, method, arguments: args }) => {
+      const module = await import(`../../src/services/${service}`);
+      const response = await module[method](args);
+      return {
+        data: response.data,
+        error: response.error,
+        count: response.count,
+      };
+    },
+    { service: serviceName, method: methodName, arguments: args }
+  );
+
+  return result.data || [];
+}
+
+/**
+ * Generic function to delete items from the database
+ */
+async function deleteItems(
+  page: Page,
+  items: any[],
+  serviceName: string,
+  methodName: string,
+  idField: string,
+  nameField: string
+): Promise<void> {
+  if (items.length === 0) return;
+
+  for (const item of items) {
+    try {
+      await page.evaluate(
+        async ({ service, method, id }) => {
+          const module = await import(`../../src/services/${service}`);
+          await module[method](id);
+        },
+        { service: serviceName, method: methodName, id: item[idField] }
+      );
+      console.info(`  ✅ Deleted: ${item[nameField]}`);
+    } catch (error) {
+      console.warn(`  ⚠️ Failed to delete: ${item[nameField]}`, error);
     }
-
-    // Create API client with admin page context (uses authenticated session)
-    const apiClient = createTestApiClient(adminPage);
-    console.log('✅ Using admin session for cleanup');
-
-    // Get the same users that were created in setup
-    const usersToRemove = userData.all();
-    console.log('👥 Users to remove:', Object.keys(usersToRemove));
-
-    if (Object.keys(usersToRemove).length === 0) {
-      console.log('ℹ️ No users found in userData.all() to remove');
-      return true;
-    }
-
-    // Get all users from the system to find their IDs
-    const allUsers = await apiClient.getUsers();
-    let allRemoved = true;
-
-    // Remove users that were created in setup
-    for (const [userKey, user] of Object.entries(usersToRemove)) {
-      try {
-        console.log(`🗑️ Attempting to remove user: ${user.username} (key: ${userKey})`);
-
-        // Find user ID from the system
-        const systemUser = (allUsers as any[]).find((u: any) => u.username === user.username);
-
-        if (systemUser?.hash_id) {
-          await apiClient.deleteUser(systemUser.hash_id);
-          console.log(`✅ Successfully removed user: ${user.username}`);
-        } else {
-          console.warn(`⚠️ User not found in system: ${user.username}`);
-        }
-      } catch (error) {
-        console.error(`❌ Failed to remove user ${user.username}:`, error);
-        allRemoved = false;
-      }
-    }
-
-    if (allRemoved) {
-      console.log('✅ All users removed successfully');
-    } else {
-      console.warn('⚠️ Some users could not be removed');
-    }
-
-    return allRemoved;
-  } catch (error) {
-    console.error('❌ Error cleaning base users:', error);
-    return false;
   }
-};
+}
