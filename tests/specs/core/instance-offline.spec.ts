@@ -1,0 +1,66 @@
+import { expect, Page, test } from '@playwright/test';
+import * as userData from '../../fixtures/data/users';
+import { describeWithSetup } from '../../lifecycle/base-test';
+import * as browsers from '../../interactions/browsers';
+import * as formInteractions from '../../interactions/forms';
+import * as navigation from '../../interactions/navigation';
+import * as users from '../../interactions/users';
+import { UserData } from "../../support/types";
+
+describeWithSetup('Instance Offline', () => {
+  let admin: Page;
+  let user: Page;
+  let userConfig: UserData;
+
+  let instanceOnline = true;
+
+  test.beforeAll(async () => {
+    admin = await browsers.getUserBrowser('admin');
+    user = await browsers.getUserBrowser('user');
+
+    userConfig = await userData.use('user');
+  });
+
+  test.afterAll(async () => {
+    if (!instanceOnline) await changeInstanceStatus(true);
+  });
+
+  const changeInstanceStatus = async (online: boolean) => {
+    await navigation.goToSettings(admin);
+    await navigation.openAccordion(admin, 'config-accordion-system');
+
+    await formInteractions.selectOptionByValue(admin, 'select-field-status', online ? '1' : '0');
+    await formInteractions.clickButton(admin, 'system-settings-confirm-button');
+    instanceOnline = online;
+
+    await admin.waitForTimeout(500);
+    const isExpanded = await admin.getByTestId('config-accordion-system').getAttribute('aria-expanded');
+    await expect(isExpanded).toBe('false');
+
+    await navigation.openAccordion(admin, 'config-accordion-system');
+    const selectedStatus = await admin.getByTestId('select-field-status-input').inputValue();
+    await expect(selectedStatus).toBe(`${Number(online)}`);
+  };
+
+  test('Admin can turn instance offline', async () => {
+    await changeInstanceStatus(false);
+  });
+
+  test('User cannot login with Offline instance', async () => {
+    await navigation.goToHome(user);
+    await users.loginAttempt(user, userConfig);
+    await user.waitForLoadState('networkidle');
+
+    const offlineDiv = user.getByTestId('school-offline-view');
+    await expect(offlineDiv).toBeVisible({ timeout: 5000 });
+  });
+
+  test('Admin can turn instance back online', async () => {
+    await changeInstanceStatus(true);
+  });
+
+  test('User can login with Online instance', async () => {
+    await navigation.goToHome(user);
+    await users.login(user, userConfig);
+  });
+});

@@ -19,25 +19,25 @@ export default defineConfig({
     // baseURL: 'http://127.0.0.1:3000',
     trace: 'on',
   },
-  globalSetup: './tests/mutating/setup-auth.ts',
-  globalTeardown: './tests/mutating/teardown-auth.ts',
+  globalSetup: './tests/lifecycle/setup-auth.ts',
+  globalTeardown: './tests/lifecycle/teardown-auth.ts',
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'main',
-      testDir: './tests/mutating/main',
-      testIgnore: '**/not_Working/**',
+      name: 'core',
+      testDir: './tests/specs/core',
+      testIgnore: '**/disabled/**',
       use: { ...devices['Desktop Chrome'] },
       workers: 1, // note - someday these can be run in parallel after https://github.com/aula-app/aula-frontend/issues/604
     },
     // these tests must run at the end because they interfere
     // with the previous tests:
     {
-      name: 'after',
-      testDir: './tests/mutating/after',
+      name: 'admin',
+      testDir: './tests/specs/admin',
       use: { ...devices['Desktop Chrome'] },
-      dependencies: ['main'],
+      dependencies: ['core'],
       workers: 1,
     },
   ],
