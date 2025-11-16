@@ -56,7 +56,9 @@ export const getTemporaryPass = async (page: Page, data: types.UserData) => {
   await viewPassButton.click({ timeout: 1000 });
 
   // temporary password must exist and be pulled out of the page.
-  const pass: string = (await row.locator('div[role="button"] span').textContent())!;
+  const passLocator = row.locator('div[role="button"] span');
+  await passLocator.waitFor({ state: 'visible', timeout: 5000 });
+  const pass: string = (await passLocator.textContent())!;
   expect(pass).toBeTruthy();
 
   await settingsInteractions.clearFilter(page);

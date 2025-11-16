@@ -30,38 +30,14 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
     roomContext = await rooms.setupRoomContext(admin, [user1Data, user2Data], 'idea-tests');
   });
 
-  test.afterAll(async () => {
-    await cleanup();
-  });
-
-  const cleanupQueue = {
-    adminIdea: false,
-    userIdea: false,
-  };
-
-  const cleanup = async () => {
-    if (cleanupQueue.adminIdea) {
-      cleanupQueue.adminIdea = false;
-      await ideas.remove(admin, roomContext.room, adminIdea);
-    }
-    if (cleanupQueue.userIdea) {
-      cleanupQueue.userIdea = false;
-      await ideas.remove(user, roomContext.room, userIdea);
-    }
-    // Cleanup room context
-    await roomContext.cleanup();
-  };
-
   test('Admin can create an idea', async () => {
     await navigation.goToRoom(admin, roomContext.room.name);
     await ideas.create(admin, adminIdea);
-    cleanupQueue.adminIdea = true;
   });
 
   test('Users can create an idea', async () => {
     await navigation.goToRoom(user, roomContext.room.name);
     await ideas.create(user, userIdea);
-    cleanupQueue.userIdea = true;
   });
 
   test('Users cannot delete other users ideas', async () => {
@@ -92,11 +68,9 @@ describeWithSetup('Idea Management - CRUD Operations and Permissions', () => {
 
   test('Admin can delete an idea', async () => {
     await ideas.remove(admin, roomContext.room, adminIdea);
-    cleanupQueue.adminIdea = false;
   });
 
   test('User can delete their own idea', async () => {
     await ideas.remove(user, roomContext.room, userIdea);
-    cleanupQueue.userIdea = false;
   });
 });

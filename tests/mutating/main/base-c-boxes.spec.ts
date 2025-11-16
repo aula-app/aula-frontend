@@ -33,26 +33,8 @@ describeWithSetup('Box Management - Creation, phase changes and Permissions', ()
     box = entities.createBox('box-in-room', roomContext.room);
   });
 
-  test.afterAll(async () => {
-    await cleanup();
-  });
-
-  const cleanupQueue = {
-    box: false,
-  };
-
-  const cleanup = async () => {
-    if (cleanupQueue.box) {
-      cleanupQueue.box = false;
-      await boxes.remove(admin, box);
-    }
-    // Cleanup room context
-    await roomContext.cleanup();
-  };
-
   test('Admin can create a box inside a room', async () => {
     await boxes.create(admin, box);
-    cleanupQueue.box = true;
   });
 
   test('User cannot create a box', async () => {
@@ -104,7 +86,6 @@ describeWithSetup('Box Management - Creation, phase changes and Permissions', ()
 
   test('Admin can delete a box', async () => {
     await boxes.remove(admin, box);
-    cleanupQueue.box = false;
   });
 
   test('User cannot access deleted box', async () => {
