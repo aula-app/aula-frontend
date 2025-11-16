@@ -90,7 +90,7 @@ export default async function globalTeardown() {
 }
 
 /**
- * Clean up auth-states directory (context files and run-id)
+ * Clean up auth-states directory (run-id and test user context files)
  */
 async function cleanupAuthStates(): Promise<void> {
   const authStatesDir = path.join(process.cwd(), 'tests/auth-states');
@@ -100,9 +100,13 @@ async function cleanupAuthStates(): Promise<void> {
       const files = fs.readdirSync(authStatesDir);
 
       for (const file of files) {
-        const filePath = path.join(authStatesDir, file);
-        fs.unlinkSync(filePath);
-        console.info(`  ✅ Deleted: ${file}`);
+        // Only delete run-id.txt and test user context files (test-*)
+        // Keep admin-context.json for next test run
+        if (file === 'run-id.txt' || file.startsWith('test-')) {
+          const filePath = path.join(authStatesDir, file);
+          fs.unlinkSync(filePath);
+          console.info(`  ✅ Deleted: ${file}`);
+        }
       }
 
       console.info('🧹 Cleaned up auth-states directory');
