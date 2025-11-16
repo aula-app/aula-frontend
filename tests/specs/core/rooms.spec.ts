@@ -12,23 +12,40 @@ describeWithSetup('Room Management - Creation and Permissions', () => {
   });
 
   test('Admin can create a room with users', async ({ adminPage }) => {
-    await rooms.create(adminPage, room);
+    await test.step('Create room via UI', async () => {
+      await rooms.create(adminPage, room);
+    });
   });
 
   test('User can access the new room', async ({ userPage }) => {
-    await navigation.goToRoom(userPage, room.name);
+    await test.step('Navigate to created room', async () => {
+      await navigation.goToRoom(userPage, room.name);
+    });
+
+    await test.step('Verify room is accessible', async () => {
+      await expect(userPage.getByText(room.name)).toBeVisible();
+    });
   });
 
   test('User cannot create a room', async ({ userPage }) => {
-    await expect(rooms.create(userPage, entities.createRoom('unauthorized-room'))).rejects.toThrow();
+    await test.step('Attempt to create room as non-admin', async () => {
+      await expect(rooms.create(userPage, entities.createRoom('unauthorized-room'))).rejects.toThrow();
+    });
   });
 
   test('Admin can delete a room with users', async ({ adminPage }) => {
-    await rooms.remove(adminPage, room);
+    await test.step('Delete room via settings', async () => {
+      await rooms.remove(adminPage, room);
+    });
   });
 
   test('User cannot access deleted room', async ({ userPage }) => {
-    await navigation.goToHome(userPage);
-    await expect(navigation.goToRoom(userPage, room.name)).rejects.toThrow();
+    await test.step('Return to home page', async () => {
+      await navigation.goToHome(userPage);
+    });
+
+    await test.step('Verify room is no longer accessible', async () => {
+      await expect(navigation.goToRoom(userPage, room.name)).rejects.toThrow();
+    });
   });
 });

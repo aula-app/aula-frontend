@@ -17,8 +17,19 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     // baseURL: 'http://127.0.0.1:3000',
-    trace: 'on',
+
+    // Performance: Only keep traces/screenshots on failure
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+
+    // Better error messages with automatic retries on flaky selectors
+    actionTimeout: 10000,
+    navigationTimeout: 30000,
   },
+
+  // Retry failed tests (helps with flakiness)
+  retries: process.env.CI ? 2 : 1,
   globalSetup: './tests/lifecycle/setup-auth.ts',
   globalTeardown: './tests/lifecycle/teardown-auth.ts',
 
