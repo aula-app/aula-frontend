@@ -24,18 +24,7 @@ export const getUserBrowserContext = async (userKey: string): Promise<BrowserCon
 
 export const getUserBrowser = async (userKey: string): Promise<Page> => {
   if (!pages[userKey]) {
-    // Try to restore from auth-states first (has authentication)
-    try {
-      await create(userKey, `tests/auth-states/${userKey}.json`);
-    } catch {
-      // If no auth state, try temp states
-      try {
-        await create(userKey, `tests/temp/${userKey}-context.json`);
-      } catch {
-        // If no saved state, create fresh
-        await create(userKey);
-      }
-    }
+    await create(userKey);
   }
   return pages[userKey];
 };
@@ -70,18 +59,49 @@ export const remove = async (userKey: string): Promise<void> => {
 
 export const saveState = async (userKey: string, path?: string): Promise<void> => {
   if (pages[userKey]) {
-    const statePath = path || `tests/temp/${userKey}-context.json`;
+    const statePath = path || `tests/auth-states/${userKey}-context.json`;
     await pages[userKey].context().storageState({ path: statePath });
-    console.info(`✅ State saved for user: ${userKey} at ${statePath}`);
+
+    console.info(`✅ State saved for user: ${userKey} at ${statePath} `);
+  }
+};
+
+/**
+ * Get the JWT token from a user's browser storageState
+ * @param userKey - The user identifier
+ * @returns The JWT token or null if not found
+ */
+export const getJWT = async (userKey: string): Promise<string | null> => {
+  if (!pages[userKey]) {
+    console.warn(`⚠️ No browser found for user: ${userKey}`);
+    return null;
+  }
+
+  try {
+    // Get storageState from the browser context (doesn't require page navigation)
+    const state = await pages[userKey].context().storageState();
+
+    // Find token in localStorage
+    for (const origin of state.origins || []) {
+      const tokenItem = origin.localStorage?.find((item) => item.name === 'token');
+      if (tokenItem) {
+        return tokenItem.value;
+      }
+    }
+
+    return null;
+  } catch (error) {
+    console.error(`❌ Error getting JWT for ${userKey}:`, error);
+    return null;
   }
 };
 
 export const newPage = (browser: BrowserContext): Promise<Page> => browser.newPage();
 
-export const init = async (userKeys: string[] = ['admin', 'user']) => {
+export const init = async () => {
   try {
-    await Promise.all(userKeys.map((userKey) => create(userKey)));
-    console.info('✅ contexts initialized');
+    await create('admin');
+    console.info('✅ Admin Browser initialized');
   } catch (error) {
     console.error('❌ Error during contexts initialization:', error);
     await shutdown();
@@ -110,8 +130,7 @@ export const shutdown = async () => {
 export const pickle = async () => {
   for (const [userKey, page] of Object.entries(pages)) {
     if (page) {
-      await saveState(userKey, `tests/temp/${userKey}-context.json`);
-      await saveState(userKey, `tests/auth-states/${userKey}.json`);
+      await saveState(userKey);
     }
   }
 };
@@ -122,7 +141,7 @@ export const pickle = async () => {
 // this namespace
 export const recall = async (userKeys: Array<keyof typeof pages> = Object.keys(pages)) => {
   try {
-    await Promise.all(userKeys.map((userKey) => create(userKey, `tests/temp/${userKey}-context.json`)));
+    await Promise.all(userKeys.map((userKey) => create(userKey, `tests/auth-states/${userKey}-context.json`)));
     console.info('✅ Successfully recalled browser states from temp');
   } catch (error) {
     console.error('❌ Error recalling browser states:', error);
