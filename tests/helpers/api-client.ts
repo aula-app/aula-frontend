@@ -3,12 +3,12 @@
  * Sets up localStorage to work with existing service layer
  */
 
-import { RoleTypes } from '../../../src/types/SettingsTypes';
-import * as userService from '../../../src/services/users';
-import * as roomService from '../../../src/services/rooms';
-import * as ideaService from '../../../src/services/ideas';
-import * as boxService from '../../../src/services/boxes';
-import { changePassword as changePasswordService } from '../../../src/services/auth';
+import { RoleTypes } from '../../src/types/SettingsTypes';
+import * as userService from '../../src/services/users';
+import * as roomService from '../../src/services/rooms';
+import * as ideaService from '../../src/services/ideas';
+import * as boxService from '../../src/services/boxes';
+import { changePassword as changePasswordService } from '../../src/services/auth';
 import type { Page, APIRequestContext } from '@playwright/test';
 
 interface ApiClientConfig {
@@ -55,7 +55,7 @@ export class ApiClient {
       const page = this.config.requestContext as Page;
       const result = await page.evaluate(
         async ({ user, pass, apiUrl }) => {
-          const { loginUser } = await import('../../../src/services/login');
+          const { loginUser } = await import('../../src/services/login');
           const response = await loginUser(
             apiUrl,
             { username: user, password: pass },
@@ -125,7 +125,7 @@ export class ApiClient {
       const page = this.config.requestContext as Page;
       const result = await page.evaluate(
         async ({ oldPw, newPw, token }) => {
-          const { changePassword } = await import('../../../src/services/auth');
+          const { changePassword } = await import('../../src/services/auth');
           const response = await changePassword(oldPw, newPw, token);
           return response;
         },
@@ -159,7 +159,7 @@ export class ApiClient {
       const page = this.config.requestContext as Page;
       const result = await page.evaluate(async (userArgs) => {
         // @ts-ignore - accessing window services in browser context
-        const { addUser } = await import('../../../src/services/users');
+        const { addUser } = await import('../../src/services/users');
         const response = await addUser(userArgs);
         return response;
       }, args);
@@ -189,7 +189,7 @@ export class ApiClient {
     if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
       const page = this.config.requestContext as Page;
       await page.evaluate(async (id) => {
-        const { resetUserPassword } = await import('../../../src/services/users');
+        const { resetUserPassword } = await import('../../src/services/users');
         await resetUserPassword(id);
       }, userId);
       return;
@@ -202,7 +202,7 @@ export class ApiClient {
     if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
       const page = this.config.requestContext as Page;
       const result = await page.evaluate(async (userArgs) => {
-        const { getUsers } = await import('../../../src/services/users');
+        const { getUsers } = await import('../../src/services/users');
         const response = await getUsers(userArgs);
         return response;
       }, args);
@@ -225,7 +225,14 @@ export class ApiClient {
 
   async getUsersByUsername(username: string): Promise<{ username: string; hash_id: string }[]> {
     return this.request('User', 'getUsers', {
-      "asc": 1, "limit": 500, "offset": 0, "orderby": 5, "status": 1, "room_id": "", search_field: 'username', search_text: username
+      asc: 1,
+      limit: 500,
+      offset: 0,
+      orderby: 5,
+      status: 1,
+      room_id: '',
+      search_field: 'username',
+      search_text: username,
     });
   }
 

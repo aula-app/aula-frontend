@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { describeWithSetup } from '../../lifecycle/base-test';
+import { describeWithSetup } from '../../../lifecycle/base-test';
 
 describeWithSetup('Admin announcements', () => {
   //
