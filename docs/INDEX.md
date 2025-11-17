@@ -17,6 +17,7 @@ Welcome to the Aula Frontend documentation. This guide provides comprehensive in
 - [Types](TYPES.md)
 - [Theme](THEME.md)
 - [Locale](LOCALE.md)
+- [Testing](TESTING.md)
 
 ## Recent Updates
 
@@ -95,6 +96,7 @@ src/
 - [ROUTES.md](ROUTES.md) - Routing system
 - [STORE.md](STORE.md) - State management
 - [STRUCTURE.md](STRUCTURE.md) - Project structure
+- [TESTING.md](TESTING.md) - E2E testing with Playwright
 - [THEME.md](THEME.md) - Theming system
 - [TYPES.md](TYPES.md) - TypeScript types and interfaces
 - [UTILS.md](UTILS.md) - Utilities and services
@@ -103,6 +105,7 @@ src/
 ## Contributing
 
 ### License
+
 By contributing to this project, you agree that your contributions will be licensed under the European Union Public License (EUPL) 1.2 or later. You can find the full text of the license [here](https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12).
 
 ### Development Process
