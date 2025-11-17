@@ -57,6 +57,9 @@ export const getTemporaryPass = async (page: Page, data: types.UserData) => {
   const passLocator = row.locator('div[role="button"] span');
   await passLocator.waitFor({ state: 'visible', timeout: 5000 });
   const pass: string = (await passLocator.textContent())!;
+  const passLocator = row.locator('div[role="button"] span');
+  await passLocator.waitFor({ state: 'visible', timeout: 5000 });
+  const pass: string = (await passLocator.textContent())!;
   expect(pass).toBeTruthy();
 
   await settingsInteractions.clearFilter(page);
@@ -132,6 +135,25 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
     await page.fill('input[name="newPassword"]', data.password);
     await page.fill('input[name="confirmPassword"]', data.password);
     await page.locator('button[type="submit"]').click({ timeout: 1000 });
+
+    // Wait for navigation and check if we're logged in
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(2000);
+
+    // Check if we're on the home page (logged in) or need to login again
+    const isLoggedIn = await page.locator('#rooms-heading').isVisible();
+
+    if (!isLoggedIn) {
+      console.log('⚠️ User not automatically logged in after password change, attempting manual login');
+      // If not automatically logged in, do a manual login
+      await page.goto(host);
+      await page.waitForLoadState('networkidle');
+      await page.fill('input[name="username"]', data.username);
+      await page.fill('input[name="password"]', data.password);
+      await page.locator('button[type="submit"]').click({ timeout: 1000 });
+      await page.waitForLoadState('networkidle');
+      await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: 5000 });
+    }
 
     // Wait for navigation and check if we're logged in
     await page.waitForLoadState('networkidle');
