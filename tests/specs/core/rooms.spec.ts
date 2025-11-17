@@ -1,10 +1,17 @@
 import { test, expect } from '../../fixtures/test-fixtures';
-import { describeWithSetup } from '../../lifecycle/base-test';
 import * as entities from '../../helpers/entities';
 import * as rooms from '../../interactions/rooms';
 import * as navigation from '../../interactions/navigation';
 
-describeWithSetup('Room Management - Creation and Permissions', () => {
+/**
+ * Room Management Tests
+ * Tests room creation, access control, and deletion
+ * Uses pure Playwright fixtures for setup/teardown
+ *
+ * NOTE: Tests run serially because they form a sequential workflow:
+ * 1. Create room → 2. Access room → 3. Delete room → 4. Verify deletion
+ */
+test.describe.serial('Room Management - Creation and Permissions', () => {
   const room = entities.createRoom('room-tests');
 
   test.beforeAll(async ({ userConfig }) => {

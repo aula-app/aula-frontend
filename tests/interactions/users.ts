@@ -4,8 +4,6 @@ import * as types from '../support/types';
 import * as formsInteractions from './forms';
 import * as settingsInteractions from './settings';
 import * as navigation from './navigation';
-import * as browsers from './browsers';
-
 const host = shared.getHost();
 
 type TempPass = string;
@@ -161,12 +159,6 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
     console.error('Page title:', await page.title());
     throw error;
   }
-};
-
-export const start = async (adminPage: Page, data: types.UserData) => {
-  const tempPassword = await create(adminPage, data);
-  const newBrowser = await browsers.create(data.username);
-  await register(newBrowser, data, tempPassword);
 };
 
 export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {

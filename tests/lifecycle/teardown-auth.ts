@@ -1,7 +1,6 @@
-import { Page } from '@playwright/test';
+import { chromium, Browser, BrowserContext, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as browsers from '../interactions/browsers';
 import * as shared from '../support/utils';
 
 interface CleanupConfig {
@@ -59,18 +58,34 @@ const CLEANUP_CONFIGS: CleanupConfig[] = [
 ];
 
 export default async function globalTeardown() {
-  console.log('Cleaning up after all tests...');
+  console.log('🧹 Starting global teardown...');
+
+  let browser: Browser | null = null;
+  let context: BrowserContext | null = null;
+  let adminPage: Page | null = null;
 
   try {
-    await browsers.recall(['admin']);
-    const adminPage = await browsers.getUserBrowser('admin');
+    // Launch browser with admin authentication
+    const authStatesDir = path.join(process.cwd(), 'tests/auth-states');
+    const adminStatePath = path.join(authStatesDir, 'admin-context.json');
 
+    if (!fs.existsSync(adminStatePath)) {
+      console.warn('⚠️ Admin state not found, skipping cleanup');
+      return;
+    }
+
+    browser = await chromium.launch();
+    context = await browser.newContext({ storageState: adminStatePath });
+    adminPage = await context.newPage();
+
+    // Navigate to app if needed
     const currentUrl = adminPage.url();
     if (!currentUrl || currentUrl === 'about:blank') {
       await adminPage.goto(shared.getHost());
       await adminPage.waitForLoadState('networkidle');
     }
 
+    // Verify admin is authenticated
     const token = await adminPage.evaluate(() => localStorage.getItem('token'));
     if (!token) {
       throw new Error('Admin not authenticated');
@@ -78,13 +93,19 @@ export default async function globalTeardown() {
 
     console.info('✅ Admin browser initialized');
 
+    // Clean up all test items
     for (const config of CLEANUP_CONFIGS) {
       await cleanupTestItems(adminPage, config);
     }
   } catch (error) {
     console.error('❌ Error during cleanup:', error);
   } finally {
-    await browsers.shutdown();
+    // Clean up browser resources
+    if (adminPage) await adminPage.close();
+    if (context) await context.close();
+    if (browser) await browser.close();
+
+    // Clean up auth states
     await cleanupAuthStates();
   }
 }

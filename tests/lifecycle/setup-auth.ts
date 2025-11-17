@@ -1,33 +1,60 @@
-// called from playwright.config
+// Global setup for Playwright tests
+// Called once before all tests run
 
 import * as fs from 'fs';
 import * as path from 'path';
-import * as browsers from '../interactions/browsers';
+import { chromium, Browser, BrowserContext, Page } from '@playwright/test';
 import * as userInteractions from '../interactions/users';
-import { admin } from '../fixtures/data/users';
+import { admin } from '../fixtures/user.fixture';
 
 export default async function globalSetup() {
-  console.log('Setting up!');
+  console.log('🚀 Starting global setup...');
 
   // Create a new run-id for this test run
   createNewRunId();
 
-  await browsers.init();
-
-  const adminPage = await browsers.getUserBrowser('admin');
-  await userInteractions.login(adminPage, admin);
-
-  // Verify token exists before saving
-  const token = await adminPage.evaluate(() => localStorage.getItem('token'));
-  if (!token) {
-    throw new Error('❌ Setup failed: Admin login did not save token to localStorage');
+  // Create auth-states directory if it doesn't exist
+  const authStatesDir = path.join(process.cwd(), 'tests/auth-states');
+  if (!fs.existsSync(authStatesDir)) {
+    fs.mkdirSync(authStatesDir, { recursive: true });
   }
 
-  console.log('✅ Admin logged in with token');
+  // Launch browser and authenticate admin
+  let browser: Browser | null = null;
+  let context: BrowserContext | null = null;
+  let page: Page | null = null;
 
-  await browsers.pickle();
+  try {
+    browser = await chromium.launch();
+    context = await browser.newContext();
+    page = await context.newPage();
 
-  console.log('✅ Setup complete');
+    // Log in admin
+    await userInteractions.login(page, admin);
+
+    // Verify token exists before saving
+    const token = await page.evaluate(() => localStorage.getItem('token'));
+    if (!token) {
+      throw new Error('❌ Setup failed: Admin login did not save token to localStorage');
+    }
+
+    console.log('✅ Admin logged in with token');
+
+    // Save admin authentication state
+    const adminStatePath = path.join(authStatesDir, 'admin-context.json');
+    await context.storageState({ path: adminStatePath });
+    console.log(`✅ Admin state saved to ${adminStatePath}`);
+
+    console.log('✅ Global setup complete');
+  } catch (error) {
+    console.error('❌ Global setup failed:', error);
+    throw error;
+  } finally {
+    // Cleanup
+    if (page) await page.close();
+    if (context) await context.close();
+    if (browser) await browser.close();
+  }
 }
 
 /**

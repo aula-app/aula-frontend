@@ -1,8 +1,6 @@
-import { expect, test } from '@playwright/test';
-import * as userData from '../../fixtures/data/users';
-import { describeWithSetup } from '../../lifecycle/base-test';
+import { expect, Page } from '@playwright/test';
+import { test } from '../../fixtures/test-fixtures';
 import * as entities from '../../helpers/entities';
-import * as browsers from '../../interactions/browsers';
 import * as formInteractions from '../../interactions/forms';
 import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
@@ -10,129 +8,106 @@ import * as rooms from '../../interactions/rooms';
 import * as settingsInteractions from '../../interactions/settings';
 import * as shared from '../../support/utils';
 
-describeWithSetup('Category management', () => {
-  let admin: any;
+/**
+ * Category Management Tests
+ * Tests category creation, assignment to ideas, and deletion
+ * Uses pure Playwright fixtures for setup/teardown
+ *
+ * NOTE: Tests run serially because they form a sequential workflow:
+ * Create category → Assign to idea → Remove from idea → Delete category
+ */
+test.describe.serial('Category management', () => {
   let room = entities.createRoom('category-tests');
   let idea = entities.createIdea('category-tests', { category: shared.gensym('Test Category ') });
 
-  test.beforeAll(async () => {
-    admin = await browsers.getUserBrowser('admin');
-
-    const user1Data = await userData.use('user');
-    const user2Data = await userData.use('student');
-
-    room.users = [user1Data, user2Data];
+  test.beforeAll(async ({ userConfig, studentConfig }) => {
+    room.users = [userConfig, studentConfig];
   });
 
-  test.beforeEach(async () => {
-    await browsers.recall();
-  });
+  const removeCategory = async (adminPage: Page) => {
+    await navigation.goToSettings(adminPage);
+    await navigation.openAccordion(adminPage, 'config-accordion-idea');
 
-  test.afterEach(async () => {
-    await browsers.pickle();
-  });
-
-  test.afterAll(async () => {
-    await cleanup();
-  });
-
-  const cleanupQueue = {
-    category: false,
-    room: false,
-    idea: false,
-  };
-
-  const cleanup = async () => {
-    if (cleanupQueue.idea) {
-      cleanupQueue.idea = false;
-      await ideas.remove(admin, room, idea);
-    }
-    if (cleanupQueue.room) {
-      cleanupQueue.room = false;
-      await rooms.remove(admin, room);
-    }
-    if (cleanupQueue.category) {
-      cleanupQueue.category = false;
-      await removeCategory();
-    }
-  };
-
-  test('Admins should be able to create a new category', async () => {
-    await navigation.goToSettings(admin);
-    await navigation.openAccordion(admin, 'config-accordion-idea');
-    await formInteractions.clickButton(admin, 'add-new-category-chip');
-
-    await formInteractions.fillForm(admin, 'category-name', idea.category ? idea.category : '');
-
-    // Select category icon
-    const iconFieldContainer = admin.getByTestId('icon-field-container');
-    await expect(iconFieldContainer).toBeVisible();
-
-    const firstIconButton = iconFieldContainer.getByTestId('icon-cat-1');
-    await expect(firstIconButton).toBeVisible();
-    await firstIconButton.click();
-    await formInteractions.clickButton(admin, 'category-form-submit-button');
-    await admin.waitForTimeout(2000); // wait for the form to process
-
-    // Verify that the new category appears in the list
-    const newCategorySelector = `category-chip-${idea.category?.toLowerCase().replace(/\s+/g, '-')}`;
-    const categoryChip = admin.getByTestId(newCategorySelector);
-    await expect(categoryChip).toBeVisible();
-
-    cleanupQueue.category = true;
-  });
-
-  test('Admin can add category to idea', async () => {
-    await rooms.create(admin, room);
-    cleanupQueue.room = true;
-
-    await navigation.goToRoom(admin, room.name);
-    await ideas.create(admin, idea);
-    cleanupQueue.idea = true;
-
-    await navigation.goToRoom(admin, room.name);
-
-    const IdeaCategory = admin.locator('div').filter({ hasText: idea.category }).first();
-    await expect(IdeaCategory).toBeVisible();
-  });
-
-  test('Admin can remove category from idea', async () => {
-    await navigation.goToIdeasSettings(admin);
-    await settingsInteractions.openEdit({ page: admin, filters: { option: 'title', value: idea.name } });
-
-    formInteractions.clickButton(admin, 'category-field-clear-button');
-    await admin.waitForTimeout(1000); // wait for the form to process
-
-    formInteractions.clickButton(admin, 'submit-idea-form');
-    await admin.waitForTimeout(1000); // wait for the form to process
-
-    await navigation.goToRoom(admin, room.name);
-
-    const IdeaCategory = admin.locator('div').filter({ hasText: idea.category });
-    await expect(IdeaCategory).not.toBeVisible();
-  });
-
-  test('Admin can delete a category', async () => {
-    cleanupQueue.category = false; // reset to false to ensure cleanup does not try to delete again
-    await removeCategory();
-  });
-
-  const removeCategory = async () => {
-    navigation.goToSettings(admin);
-    navigation.openAccordion(admin, 'config-accordion-idea');
-
-    const CategoryChip = admin.getByTestId(`category-chip-${idea.category?.toLowerCase().replace(/\s+/g, '-')}`);
+    const CategoryChip = adminPage.getByTestId(`category-chip-${idea.category?.toLowerCase().replace(/\s+/g, '-')}`);
     await expect(CategoryChip).toBeVisible();
     const DeleteButton = await CategoryChip.getByTestId('CancelIcon').first();
     await DeleteButton.click();
 
-    formInteractions.clickButton(admin, 'delete-cat-button');
-    await admin.waitForTimeout(2000); // wait for the form to process
+    await formInteractions.clickButton(adminPage, 'delete-cat-button');
+    await adminPage.waitForTimeout(2000); // wait for the form to process
 
     await expect(CategoryChip).not.toBeVisible();
   };
 
-  test('Cleanup after tests', async () => {
-    await cleanup();
+  test('Admins should be able to create a new category', async ({ adminPage }) => {
+    await test.step('Navigate to category settings', async () => {
+      await navigation.goToSettings(adminPage);
+      await navigation.openAccordion(adminPage, 'config-accordion-idea');
+      await formInteractions.clickButton(adminPage, 'add-new-category-chip');
+    });
+
+    await test.step('Create new category', async () => {
+      await formInteractions.fillForm(adminPage, 'category-name', idea.category ? idea.category : '');
+
+      // Select category icon
+      const iconFieldContainer = adminPage.getByTestId('icon-field-container');
+      await expect(iconFieldContainer).toBeVisible();
+
+      const firstIconButton = iconFieldContainer.getByTestId('icon-cat-1');
+      await expect(firstIconButton).toBeVisible();
+      await firstIconButton.click();
+      await formInteractions.clickButton(adminPage, 'category-form-submit-button');
+      await adminPage.waitForTimeout(2000); // wait for the form to process
+    });
+
+    await test.step('Verify category was created', async () => {
+      const newCategorySelector = `category-chip-${idea.category?.toLowerCase().replace(/\s+/g, '-')}`;
+      const categoryChip = adminPage.getByTestId(newCategorySelector);
+      await expect(categoryChip).toBeVisible();
+    });
+  });
+
+  test('Admin can add category to idea', async ({ adminPage }) => {
+    await test.step('Create room with category', async () => {
+      await rooms.create(adminPage, room);
+    });
+
+    await test.step('Create idea with category', async () => {
+      await navigation.goToRoom(adminPage, room.name);
+      await ideas.create(adminPage, idea);
+    });
+
+    await test.step('Verify category appears on idea', async () => {
+      await navigation.goToRoom(adminPage, room.name);
+      const IdeaCategory = adminPage.locator('div').filter({ hasText: idea.category }).first();
+      await expect(IdeaCategory).toBeVisible();
+    });
+  });
+
+  test('Admin can remove category from idea', async ({ adminPage }) => {
+    await test.step('Navigate to idea settings', async () => {
+      await navigation.goToIdeasSettings(adminPage);
+      await settingsInteractions.openEdit({ page: adminPage, filters: { option: 'title', value: idea.name } });
+    });
+
+    await test.step('Clear category from idea', async () => {
+      await formInteractions.clickButton(adminPage, 'category-field-clear-button');
+      await adminPage.waitForTimeout(1000); // wait for the form to process
+
+      await formInteractions.clickButton(adminPage, 'submit-idea-form');
+      await adminPage.waitForTimeout(1000); // wait for the form to process
+    });
+
+    await test.step('Verify category is removed', async () => {
+      await navigation.goToRoom(adminPage, room.name);
+      const IdeaCategory = adminPage.locator('div').filter({ hasText: idea.category });
+      await expect(IdeaCategory).not.toBeVisible();
+    });
+  });
+
+  test('Admin can delete a category', async ({ adminPage }) => {
+    await test.step('Delete category', async () => {
+      await removeCategory(adminPage);
+    });
   });
 });
