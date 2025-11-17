@@ -21,24 +21,8 @@ describeWithSetup('Room Management - Creation and Permissions', () => {
     room.users = [user1Data];
   });
 
-  test.afterAll(async () => {
-    await cleanup();
-  });
-
-  const cleanupQueue = {
-    room: false,
-  };
-
-  const cleanup = async () => {
-    if (cleanupQueue.room) {
-      cleanupQueue.room = false;
-      await rooms.remove(admin, room);
-    }
-  };
-
   test('Admin can create a room with users', async () => {
     await rooms.create(admin, room);
-    cleanupQueue.room = true;
   });
 
   test('User can access the new room', async () => {
@@ -51,7 +35,6 @@ describeWithSetup('Room Management - Creation and Permissions', () => {
 
   test('Admin can delete a room with users', async () => {
     await rooms.remove(admin, room);
-    cleanupQueue.room = false;
   });
 
   test('User cannot access deleted room', async () => {

@@ -26,10 +26,10 @@ export class TestCleanup {
   }
 
   /**
-   * Clean up the tests/temp directory
+   * Clean up the tests/auth-states directory
    */
   static async cleanupTempDirectory(): Promise<void> {
-    const tempDir = 'tests/temp';
+    const tempDir = 'tests/auth-states';
 
     try {
       const files = await fs.readdir(tempDir);
@@ -41,7 +41,7 @@ export class TestCleanup {
         }
       }
 
-      console.log(`✅ Cleaned up ${files.filter(f => !f.startsWith('.')).length} files from ${tempDir}`);
+      console.log(`✅ Cleaned up ${files.filter((f) => !f.startsWith('.')).length} files from ${tempDir}`);
     } catch (error) {
       // Directory might not exist, ignore
       console.log(`ℹ️ ${tempDir} directory does not exist or is already clean`);
@@ -64,7 +64,7 @@ export class TestCleanup {
         }
       }
 
-      console.log(`✅ Cleaned up ${files.filter(f => !f.startsWith('.')).length} files from ${authStatesDir}`);
+      console.log(`✅ Cleaned up ${files.filter((f) => !f.startsWith('.')).length} files from ${authStatesDir}`);
     } catch (error) {
       // Directory might not exist, ignore
       console.log(`ℹ️ ${authStatesDir} directory does not exist or is already clean`);
@@ -76,15 +76,12 @@ export class TestCleanup {
    */
   static async cleanupOldRootFiles(): Promise<void> {
     // Pattern to match old test artifacts in root
-    const patterns = [
-      '*-context.json',
-      'run-id.txt',
-    ];
+    const patterns = ['*-context.json', 'run-id.txt'];
 
     for (const pattern of patterns) {
       try {
         const files = await fs.readdir('.');
-        const matchedFiles = files.filter(file => {
+        const matchedFiles = files.filter((file) => {
           if (pattern.includes('*')) {
             const regex = new RegExp('^' + pattern.replace('*', '.*') + '$');
             return regex.test(file);
@@ -105,10 +102,7 @@ export class TestCleanup {
    * Clean up old test result directories from root (if they exist)
    */
   static async cleanupTestReports(): Promise<void> {
-    const dirsToClean = [
-      'playwright-report',
-      'test-results',
-    ];
+    const dirsToClean = ['playwright-report', 'test-results'];
 
     for (const dir of dirsToClean) {
       try {
@@ -124,7 +118,7 @@ export class TestCleanup {
    */
   static async ensureTempDirectory(): Promise<void> {
     try {
-      await fs.mkdir('tests/temp', { recursive: true });
+      await fs.mkdir('tests/auth-states', { recursive: true });
     } catch (error) {
       // Directory might already exist, ignore error
     }
