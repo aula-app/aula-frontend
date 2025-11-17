@@ -41,9 +41,9 @@ export const create = (name: string, role: RoleTypes = 20): types.UserData => {
   }
 
   console.log(`Creating user data for: ${name} with role ${role}`);
-  const neuUser = createUserData(name, role);
-  activeUsers[name] = neuUser;
-  return neuUser;
+  const newUser = createUserData(name, role);
+  activeUsers[name] = newUser;
+  return newUser;
 };
 
 export const get = (name: string): types.UserData | undefined => {
@@ -54,6 +54,10 @@ export const use = async (name: string, role?: RoleTypes): Promise<types.UserDat
   let testUserData = get(name);
   if (!testUserData) {
     testUserData = create(name, role);
+
+    // Ensure admin browser is recalled with saved state
+    await browsers.recall(['admin']);
+
     await userInteractions.start(await browsers.getUserBrowser('admin'), testUserData);
     await browsers.saveState(name);
   }

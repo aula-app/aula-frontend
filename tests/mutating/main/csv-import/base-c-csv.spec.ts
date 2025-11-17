@@ -17,12 +17,8 @@ describeWithSetup('CSV Import', () => {
   const apiClient = createTestApiClient();
   let adminPage: Page;
   let room: RoomData;
-  let roomResponse: { insert_id: number; hash_id: string };
   let csvUsers: Array<UserData>;
   let csvFilePath: string;
-
-  // Track created resources for cleanup
-  const createdRoomIds: string[] = [];
 
   test.beforeAll(async () => {
     // prepare data locally
@@ -34,67 +30,20 @@ describeWithSetup('CSV Import', () => {
 
     // issue API requests to setup environment
     await apiClient.login(userData.admin.username, userData.admin.password);
-    roomResponse = await apiClient.addRoom({
+    await apiClient.addRoom({
       room_name: room.name,
       description_public: room.description,
       description_internal: room.description,
     });
-    createdRoomIds.push(roomResponse.hash_id);
 
     // set-up browsers
     adminPage = await browsers.getUserBrowser('admin');
   });
 
   test.afterAll(async () => {
-    console.log('🧹 Starting comprehensive cleanup...');
-
-    try {
-      // 1. Clean up created ideas first (need to do this before deleting users/rooms)
-      console.log('💡 Cleaning up ideas...');
-      for (const user of csvUsers) {
-        try {
-          // Ideas created in both standard room and destination room
-          const ideaName1 = `test-${user.username}`;
-          // Note: We can't easily get idea IDs without additional API methods
-          // The UI tests create ideas but we don't track their IDs
-          // In a real scenario, you'd want to track created idea IDs for cleanup
-          console.log(`  ⚠️ Ideas created by ${user.username} may need manual cleanup`);
-        } catch (error) {
-          console.warn(`  ⚠️ Failed to cleanup ideas for user ${user.username}:`, error);
-        }
-      }
-
-      // 2. Clean up all created users
-      console.log('👥 Cleaning up users...');
-      const importedUsers = await apiClient.getUsersByUsername('csv-import-');
-      for (const u of importedUsers) {
-        if (u.hash_id && csvUsers.some((csvUser) => csvUser.username === u.username)) {
-          console.log(`  🗑️ Deleting user ${u.hash_id}: ${u.username}...`);
-          await apiClient.deleteUser(u.hash_id);
-        }
-      }
-
-      // 3. Clean up created rooms
-      console.log('🏠 Cleaning up rooms...');
-      for (const roomId of createdRoomIds) {
-        try {
-          console.log(`  🗑️ Deleting room ${roomId}...`);
-          await apiClient.deleteRoom(roomId);
-        } catch (error) {
-          console.warn(`  ⚠️ Failed to delete room ${roomId}:`, error);
-        }
-      }
-
-      // 4. Clean up temporary CSV file
-      if (csvFilePath && require('fs').existsSync(csvFilePath)) {
-        console.log(`📄 Cleaning up CSV file: ${csvFilePath}...`);
-        require('fs').unlinkSync(csvFilePath);
-      }
-
-      console.log('✅ Cleanup completed successfully');
-    } catch (error) {
-      console.error('❌ Cleanup failed:', error);
-      // Don't throw - we don't want cleanup failures to fail the test
+    // Clean up temporary CSV file only (teardown handles rooms/users/ideas)
+    if (csvFilePath && fs.existsSync(csvFilePath)) {
+      fs.unlinkSync(csvFilePath);
     }
   });
 
@@ -175,17 +124,14 @@ describeWithSetup('CSV Import', () => {
 
   test.describe('Admin222 (same CSV, +1 user +1 room +1 role)', () => {
     let room2: RoomData;
-    let room2Response: { insert_id: number; hash_id: string };
 
     test.beforeAll(async () => {
       room2 = entities.createRoom('csv-import-destination-2');
-      room2Response = await apiClient.addRoom({
+      await apiClient.addRoom({
         room_name: room2.name,
         description_public: room2.description,
         description_internal: room2.description,
       });
-      // Track room2 for cleanup
-      createdRoomIds.push(room2Response.hash_id);
 
       csvUsers.push(entities.createUserData('csv-import-NEW-4'));
       const csvUsersFormatted = csvUsers.map((u) => `${u.realName};${u.displayName};${u.username};;${u.about}`);
@@ -199,7 +145,9 @@ describeWithSetup('CSV Import', () => {
       await formInteractions.clickButton(adminPage, 'upload-users-csv-button');
       await adminPage.locator('input[type="file"]').setInputFiles(csvFilePath);
       await formInteractions.selectOption(adminPage, 'user-room-autocomplete', room.name);
+      await adminPage.waitForTimeout(500); // Wait for UI to update after first selection
       await formInteractions.selectOption(adminPage, 'user-room-autocomplete', room2.name);
+      await adminPage.waitForTimeout(500); // Wait for UI to update after second selection
       await formInteractions.selectOptionByValue(adminPage, 'select-field-role', '30');
       await formInteractions.clickButton(adminPage, 'confirm_upload');
     });
@@ -220,10 +168,15 @@ describeWithSetup('CSV Import', () => {
       for (const u of csvUsers) {
         // this will also inherently verify that no duplicate users were created because it checks
         // locator('...').textContent()! which will fail if there's multiple DOMs matched by the locator
-        if (!u.username.startsWith('csv-import-NEW-4')) {
-          expect(u.tempPass).toEqual(await users.getTemporaryPass(adminPage, u));
+        const currentPass = await users.getTemporaryPass(adminPage, u);
+
+        if (!u.username.startsWith('test-csv-import-NEW-4')) {
+          // For existing users, verify password hasn't changed
+          expect(u.tempPass).toBeDefined();
+          expect(u.tempPass).toEqual(currentPass);
         } else {
-          u.tempPass = await users.getTemporaryPass(adminPage, u);
+          // For new users, capture their temp password
+          u.tempPass = currentPass;
         }
       }
     });
@@ -316,7 +269,7 @@ describeWithSetup('CSV Import', () => {
   });
 
   const createTempCsvFile = (csvContent: string): string => {
-    const filePath = path.join(__dirname, '../../temp', 'csv-import-users.csv');
+    const filePath = path.join(__dirname, '../../../auth-states', 'csv-import-users.csv');
 
     // Ensure temp directory exists
     const tempDir = path.dirname(filePath);

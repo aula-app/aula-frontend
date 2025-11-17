@@ -13,10 +13,6 @@ describeWithSetup('Messages flow', () => {
 
   let messageData: types.MessageData;
 
-  const cleanupQueue = {
-    message: false,
-  };
-
   test.beforeAll(async () => {
     const user1Data = await userData.use('user');
 
@@ -30,20 +26,7 @@ describeWithSetup('Messages flow', () => {
     };
   });
 
-  test.beforeEach(async () => {
-    await browsers.recall();
-  });
-
-  test.afterEach(async () => {
-    await browsers.pickle();
-  });
-
-  test.afterAll(async () => {
-    if (cleanupQueue.message) await messages.remove(admin, messageData);
-  });
-
   test('Admin can send a message to a user', async () => {
-    cleanupQueue.message = true;
     await messages.create(admin, messageData);
   });
 
@@ -55,7 +38,6 @@ describeWithSetup('Messages flow', () => {
   });
 
   test('Admin can delete a message', async () => {
-    cleanupQueue.message = false;
     await messages.remove(admin, messageData);
   });
 

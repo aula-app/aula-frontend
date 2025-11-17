@@ -15,7 +15,7 @@ console.info('[info] using frontend:', process.env.APP_FRONTEND_HOST);
 const now = new Date();
 const timestamp = now.getTime().toString();
 
-const runIdFilePath = 'tests/temp/run-id.txt';
+const runIdFilePath = 'tests/auth-states/run-id.txt';
 
 export const getHost = () => process.env.APP_FRONTEND_HOST!!;
 
