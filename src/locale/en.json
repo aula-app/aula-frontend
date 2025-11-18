@@ -697,6 +697,10 @@
         "description": "There are no rooms available",
         "title": "No rooms"
       },
+      "users": {
+        "description": "No User found matching the criteria",
+        "title": "No User"
+      },
       "table": {
         "description": "There are no items to display in this table",
         "title": "No data available"

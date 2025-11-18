@@ -697,6 +697,10 @@
         "description": "Es sind keine Räume verfügbar",
         "title": "Keine Räume"
       },
+      "users": {
+        "description": "Es wurde keine Nutzer*innen gefunden, die diesen Kriterien entsprechen.",
+        "title": "Kein Benutzer"
+      },
       "table": {
         "description": "Es gibt keine Einträge in dieser Tabelle anzuzeigen",
         "title": "Keine Daten verfügbar"
