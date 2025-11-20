@@ -1,7 +1,8 @@
 import { useAppStore } from '@/store/AppStore';
 import { useTranslation } from 'react-i18next';
 import { Stack } from '@mui/material';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { versionsRequest, VersionsResponse } from '@/services/requests-v2';
 
 /**
  * Renders "About" view
@@ -9,15 +10,29 @@ import { useEffect } from 'react';
  */
 const AboutView = () => {
   const { t } = useTranslation();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
+  const [versions, setVersions] = useState<VersionsResponse>();
+
+  const fetchVersions = useCallback(async () => {
+    setVersions(await versionsRequest());
+  }, []);
 
   useEffect(() => {
-    dispatch({'action': 'SET_BREADCRUMB', "breadcrumb": [[t('ui.navigation.about'), '']]});
+    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.about'), '']] });
+    fetchVersions();
   }, []);
 
   return (
     <Stack sx={{ padding: '20px 20px', overflow: 'auto' }}>
-      <h2>Herausgeber:</h2>
+      <h2>aula-Software</h2>
+      <code>
+        aula-frontend: v{import.meta.env.VITE_APP_VERSION}
+        <br />
+        aula-backend: &nbsp;{versions?.['aula-backend']?.running ?? 'unknown'}
+      </code>
+      <br />
+      <hr />
+      <h2>Herausgeber</h2>
       aula gGmbH
       <br />
       Alte Schönhauser Straße 23/24
