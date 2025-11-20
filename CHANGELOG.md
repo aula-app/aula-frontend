@@ -1,3 +1,8 @@
+## 1.7.0
+
+- **New features**
+  - Display aula-Software versions in the About page
+
 ## 1.6.1
 
 - **Bug fixes**
