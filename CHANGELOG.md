@@ -1,3 +1,9 @@
+## 1.7.0
+
+- **New features**
+  - Display aula-Software versions in the About page
+  - Fix message on Admin view of User settings when no User to display
+
 ## 1.6.1
 
 - **Bug fixes**
