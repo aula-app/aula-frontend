@@ -50,6 +50,7 @@ const ChangePassword: React.FC<Props> = ({
 
   const [showMessage, setShowMessage] = useState(false);
   const [messageSuccess, setSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [showPassword, setShowPassword] = useState<Record<keyof typeof fields, boolean>>({
     oldPassword: false,
     confirmPassword: false,
@@ -82,9 +83,13 @@ const ChangePassword: React.FC<Props> = ({
       oldPassword: yup
         .string()
         .required(t('forms.validation.required'))
-        .min(passwordComplexity.minLength, t('forms.validation.minLength', { var: passwordComplexity.minLength }))
+        .min(4, t('forms.validation.minLength', { var: 4 }))
         .max(32, t('forms.validation.maxLength', { var: 32 })),
-      newPassword: createPasswordValidation(),
+      newPassword: yup
+        .string()
+        .required(t('forms.validation.required'))
+        .min(12, t('forms.validation.minLength', { var: 12 }))
+        .max(32, t('forms.validation.maxLength', { var: 32 })),
       confirmPassword: yup
         .string()
         .required(t('forms.validation.required'))
@@ -124,6 +129,19 @@ const ChangePassword: React.FC<Props> = ({
 
     setShowMessage(true);
     setSuccess(!result.error);
+    
+    if (result.error) {
+      // Check if we get the generic "no data" error during password change
+      // This likely means the password validation failed
+      if (result.error === t('errors.noData')) {
+        // For password changes, this generic error usually means password doesn't meet requirements
+        setErrorMessage(t('forms.validation.minLength', { var: 12 }));
+      } else if (result.error.includes('Password must be at least') && result.error.includes('characters long')) {
+        setErrorMessage(t('forms.validation.minLength', { var: 12 }));
+      } else {
+        setErrorMessage(result.error);
+      }
+    }
 
     if (tmp_token && !result.error) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.success'), type: 'success' } });
@@ -138,6 +156,8 @@ const ChangePassword: React.FC<Props> = ({
       confirmPassword: false,
       newPassword: false,
     });
+    setShowMessage(false);
+    setErrorMessage('');
   };
 
   return (
@@ -153,10 +173,32 @@ const ChangePassword: React.FC<Props> = ({
             data-success={messageSuccess}
             data-expanded={showMessage}
           >
-            {messageSuccess ? t('auth.password.success') : t('errors.invalidPassword')}
+            {messageSuccess ? t('auth.password.success') : (errorMessage || t('errors.invalidPassword'))}
           </Alert>
         </Collapse>
         <Typography variant="h3">{t('auth.password.change')}</Typography>
+        
+        <Box
+          sx={{
+            backgroundColor: 'background.default',
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 1,
+            p: 2,
+            mb: 1,
+          }}
+        >
+          <Typography variant="body2" sx={{ fontWeight: 'medium', mb: 1 }}>
+            {t('auth.password.guidelines.title')}
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 1 }}>
+            • {t('auth.password.guidelines.minLength')}
+          </Typography>
+          <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+            {t('auth.password.guidelines.hint')}
+          </Typography>
+        </Box>
+        
         <Stack gap={1} direction="row" flexWrap="wrap">
           {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
             <Box key={field} sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}>

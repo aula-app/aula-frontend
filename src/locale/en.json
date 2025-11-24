@@ -82,6 +82,11 @@
       "confirmPassword": "Confirm new password",
       "copied": "Password copied to the clipboard",
       "current": "Current password",
+      "guidelines": {
+        "title": "Password Guidelines:",
+        "minLength": "Minimum 12 characters, maximum 32 characters",
+        "hint": "Come up with a sentence that doesn't really mean anything, but you can still remember it easily."
+      },
       "label": "Password",
       "newPassword": "New password",
       "oldPassword": "Password",
