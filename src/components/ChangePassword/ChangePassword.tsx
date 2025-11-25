@@ -84,12 +84,12 @@ const ChangePassword: React.FC<Props> = ({
         .string()
         .required(t('forms.validation.required'))
         .min(4, t('forms.validation.minLength', { var: 4 }))
-        .max(32, t('forms.validation.maxLength', { var: 32 })),
+        .max(64, t('forms.validation.maxLength', { var: 64 })),
       newPassword: yup
         .string()
         .required(t('forms.validation.required'))
         .min(12, t('forms.validation.minLength', { var: 12 }))
-        .max(32, t('forms.validation.maxLength', { var: 32 })),
+        .max(64, t('forms.validation.maxLength', { var: 64 })),
       confirmPassword: yup
         .string()
         .required(t('forms.validation.required'))
