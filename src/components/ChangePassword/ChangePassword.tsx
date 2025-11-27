@@ -75,7 +75,7 @@ const ChangePassword: React.FC<Props> = ({
       validation = validation.matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character');
     }
     
-    return validation.max(32, t('forms.validation.maxLength', { var: 32 }));
+    return validation.max(64, t('forms.validation.maxLength', { var: 64 }));
   };
 
   const schema = yup
