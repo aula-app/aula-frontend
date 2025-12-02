@@ -1,3 +1,8 @@
+## 1.6.2
+
+- **Bug fixes**
+  - Set password minimal size to 12 characters and add error feedback
+
 ## 1.6.1
 
 - **Bug fixes**
