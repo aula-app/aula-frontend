@@ -82,6 +82,11 @@
       "confirmPassword": "Passwort bestätigen",
       "copied": "Passwort in die Zwischenablage kopiert",
       "current": "Aktuelles Passwort",
+      "guidelines": {
+        "title": "Passwort-Richtlinien:",
+        "minLength": "Mindestens 12 Zeichen, maximal 64 Zeichen",
+        "hint": "Überleg dir einen Satz, der nichts aussagen muss, den du dir aber leicht merken kannst. Füge die Wörter zusammen, und schon hast du ein starkes Passwort."
+      },
       "label": "Passwort",
       "newPassword": "Neues Passwort",
       "oldPassword": "Aktuelles Passwort",
@@ -179,6 +184,11 @@
       "noOptions": "Keine Optionen verfügbar",
       "optional": "Optional",
       "passwordMatch": "Passwörter müssen übereinstimmen",
+      "passwordRequirements": "Passwort Anforderungen",
+      "passwordMinLength": "Mindestens {{count}} Zeichen",
+      "passwordRequireUppercase": "Mindestens ein Großbuchstabe",
+      "passwordRequireNumber": "Mindestens eine Zahl",
+      "passwordRequireSymbol": "Mindestens ein Sonderzeichen",
       "phone": "Bitte geben Sie eine gültige Telefonnummer ein",
       "recipient": "Bitte wählen Sie einen Empfänger aus",
       "required": "Dieses Feld darf nicht leer sein",

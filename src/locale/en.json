@@ -82,6 +82,11 @@
       "confirmPassword": "Confirm new password",
       "copied": "Password copied to the clipboard",
       "current": "Current password",
+      "guidelines": {
+        "title": "Password Guidelines:",
+        "minLength": "Minimum 12 characters, maximum 64 characters",
+        "hint": "Come up with a sentence that doesn't really mean anything, but you can still remember it easily."
+      },
       "label": "Password",
       "newPassword": "New password",
       "oldPassword": "Password",
@@ -179,6 +184,11 @@
       "noOptions": "No options available",
       "optional": "Optional",
       "passwordMatch": "Passwords must match",
+      "passwordRequirements": "Password requirements",
+      "passwordMinLength": "At least {{count}} characters",
+      "passwordRequireUppercase": "At least one uppercase letter",
+      "passwordRequireNumber": "At least one number",
+      "passwordRequireSymbol": "At least one special character",
       "phone": "Please enter a valid phone number",
       "recipient": "Please select a recipient",
       "required": "This field is required",
