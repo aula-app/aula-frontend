@@ -2,6 +2,7 @@ import { expect, Page } from '@playwright/test';
 import { test } from '../../fixtures/test-fixtures';
 import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
+import { TestConstants } from '../../support/config';
 
 type PasswordChangeContext = {
   oldPassword: string;
@@ -19,7 +20,7 @@ type PasswordChangeContext = {
  */
 test.describe.serial('Change pass flow', () => {
   const defaultFields = {
-    oldPassword: 'aula',
+    oldPassword: TestConstants.DEFAULT_PASSWORD,
     newPassword: 'newPassword0',
     confirmPassword: 'newPassword0',
   };
