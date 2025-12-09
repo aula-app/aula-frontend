@@ -1,3 +1,8 @@
+## NEXT - 1.6.3
+
+- **Bug fixes**
+  - Some planned actions could not be deleted
+
 ## 1.6.2
 
 - **Bug fixes**
