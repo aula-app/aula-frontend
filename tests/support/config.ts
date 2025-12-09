@@ -9,7 +9,7 @@ export const TestConstants = {
   NAVIGATION_TIMEOUT: 5000,
 
   // Test data
-  DEFAULT_PASSWORD: 'aula',
+  DEFAULT_PASSWORD: 'aulapassword123',
   TEST_DESCRIPTION: 'created during automated testing',
 
   // Box settings
