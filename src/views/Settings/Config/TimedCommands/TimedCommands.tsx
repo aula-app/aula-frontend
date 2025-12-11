@@ -37,7 +37,7 @@ const TimedCommands = () => {
 
   async function fetchCommands() {
     const response = await getCommands(LIST_LIMIT, page * LIST_LIMIT);
-    if (response.error) return;
+    if (response.error_code && response.error_code !== 2) return;
     if (Array.isArray(response.data))
       response.data.map((r: ObjectPropByName) => (r.parameters = JSON.parse(r.parameters)));
     setTable(response);
