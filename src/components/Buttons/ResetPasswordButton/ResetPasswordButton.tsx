@@ -61,7 +61,9 @@ const ResetPasswordButton: FC<Props> = ({ target, hasEmail = false, onSuccess, .
             type: 'success',
           },
         });
-        if (hasEmail) { setPasswordResetSent(true); }
+        if (hasEmail) {
+          setPasswordResetSent(true);
+        }
         onSuccess?.();
       }
     } catch {
@@ -76,9 +78,9 @@ const ResetPasswordButton: FC<Props> = ({ target, hasEmail = false, onSuccess, .
       <Chip
         className="noPrint"
         sx={{ width: '100%', justifyContent: 'space-between', px: 1 }}
-        label={!passwordResetSent ? t('auth.forgotPassword.button') : "…" + t('auth.forgotPassword.buttonSent')}
+        label={!passwordResetSent ? t('auth.forgotPassword.button') : '…' + t('auth.forgotPassword.buttonSent')}
         onClick={openDialog}
-        icon={<AppIcon icon={!passwordResetSent ? "resetPassword" : "check"} size="small" />}
+        icon={<AppIcon icon={!passwordResetSent ? 'resetPassword' : 'check'} size="small" />}
         disabled={passwordResetSent}
         {...restOfProps}
       />

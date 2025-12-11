@@ -154,7 +154,7 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
         </Stack>
       ) : user ? (
         <Stack direction="row" alignItems="center">
-          <ResetPasswordButton target={user} hasEmail={!!user?.email} />
+          <ResetPasswordButton target={user} hasEmail={!!user?.email} onSuccess={onReload} />
           <Stack className="printOnly">{t('auth.messages.email')}</Stack>
         </Stack>
       ) : null;
