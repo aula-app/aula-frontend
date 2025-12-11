@@ -156,10 +156,7 @@ Import from `support/constants.ts` for timeouts and selectors:
 ```typescript
 import { TIMEOUTS, TEST_IDS } from '../../support/constants';
 
-await page.waitForSelector(
-  TEST_IDS.ROOMS.ADD_BUTTON,
-  { timeout: TIMEOUTS.MEDIUM }
-);
+await page.waitForSelector(TEST_IDS.ROOMS.ADD_BUTTON, { timeout: TIMEOUTS.MEDIUM });
 ```
 
 ## 🏗️ Best Practices
@@ -194,10 +191,10 @@ test('idea test', async ({ userPage }) => {
 
 ```typescript
 // ✅ Good
-test('Admin can delete room and user loses access')
+test('Admin can delete room and user loses access');
 
 // ❌ Bad
-test('delete room')
+test('delete room');
 ```
 
 ### 3. Leverage Fixtures
@@ -291,6 +288,7 @@ yarn playwright show-report tests/reports/playwright-report
 ```
 
 Includes:
+
 - Test results with pass/fail status
 - Execution time
 - Screenshots on failure
@@ -303,6 +301,7 @@ Includes:
 ### Setup (`lifecycle/setup-auth.ts`)
 
 Runs once before all tests:
+
 1. Creates new run-id
 2. Initializes admin browser
 3. Logs in admin user
@@ -311,6 +310,7 @@ Runs once before all tests:
 ### Teardown (`lifecycle/teardown-auth.ts`)
 
 Runs once after all tests:
+
 1. Cleans up test data (rooms, ideas, users, boxes)
 2. Closes all browsers
 3. Cleans up auth states
@@ -338,6 +338,7 @@ When adding new tests:
 ### Tests failing with "storageState not found"
 
 Run setup first:
+
 ```bash
 yarn playwright test --project=core
 ```
