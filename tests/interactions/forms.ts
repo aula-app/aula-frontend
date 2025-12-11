@@ -23,7 +23,7 @@ export const openMoreOption = async (page: Page, parent: Locator) => {
   const moreButton = parent.getByTestId('idea-more-menu');
   await expect(moreButton).toBeVisible();
   await moreButton.click({ timeout: 1000 });
-  await expect(parent.getByTestId('delete-button')).toBeVisible({ timeout: 5000 });
+  await expect(parent.getByTestId('report-button')).toBeVisible({ timeout: 5000 });
 };
 
 const openSelectDropdown = async (page: Page, testId: string) => {

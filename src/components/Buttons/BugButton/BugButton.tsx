@@ -39,13 +39,14 @@ ${data.content || ''}
         ref={ref}
         icon="bug"
         disabled={disabled}
+        data-testid="report-bug-button"
         aria-label={t('actions.bugReport')}
         aria-expanded={isOpen}
         {...restOfProps}
         onClick={() => setOpen(true)}
         title={t('actions.bugReport')}
       />
-      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }}>
+      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} data-testid="bug-dialog">
         <BugForms onClose={onClose} onSubmit={onSubmit} />
       </Drawer>
     </>
