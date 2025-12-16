@@ -74,7 +74,12 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
             <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
               {t('actions.cancel')}
             </Button>
-            <Button type="submit" variant="contained" aria-label={t('actions.confirm')}>
+            <Button
+              type="submit"
+              variant="contained"
+              aria-label={t('actions.confirm')}
+              data-testid="report-form-submit-button"
+            >
               {t('actions.confirm')}
             </Button>
           </Stack>

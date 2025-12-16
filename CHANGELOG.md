@@ -1,7 +1,13 @@
+## NEXT - 1.6.3
+
+- **Bug fixes**
+  - Some planned actions could not be deleted
+
 ## 1.6.2
 
 - **Bug fixes**
   - Set password minimal size to 12 characters and add error feedback
+  - Display password after Reset password for temp password
 
 ## 1.6.1
 
