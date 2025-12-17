@@ -42,30 +42,38 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
 
   const onSubmit = () => {
     const printWindow = window.open('', '_blank');
+    const columns = 2;
 
-    let usersPasswords = '<tr>';
-    let columns = 2;
-    let i = 1;
-    for (let user of users) {
-      if (i == 1) usersPasswords += '<tr>';
-      let username = user['username'];
-      let realname = user['realname'];
-      let password = `<i>${t('settings.users.passwordChanged')}</i>`;
-      if (user['temp_pw']) {
-        password = user['temp_pw'];
-      } else {
-        if (onlyTempPass) continue;
+    function chunkArray(array: Array<UserType>, size: number) {
+      const chunks = [];
+      for (let i = 0; i < array.length; i += size) {
+        chunks.push(array.slice(i, i + size));
       }
-      usersPasswords += `<td><b>${realname}</b><p/><b>${t('settings.columns.username')}:</b> <mark>${username}</mark><br/><b>${t('settings.columns.pw')}:</b> <mark>${password}</mark></td>`;
-      if (++i > columns) {
-        usersPasswords += '</tr>';
-        i = 1;
-      }
+      return chunks;
     }
 
-    if (i <= columns) {
-      usersPasswords += '</tr>';
-    }
+    // Optionally filter users when only showing temporary passwords
+    const filteredUsers = onlyTempPass ? users.filter((u) => Boolean(u.temp_pw)) : users;
+
+    const rows = chunkArray(filteredUsers, columns);
+
+    let usersPasswords = rows
+      .map((row) => {
+        const cells = row
+          .map((user) => {
+            const passwordText = user.temp_pw
+              ? `<b>${t('settings.columns.pw')}:</b> <mark>${user.temp_pw}</mark>`
+              : `<b><i>${t('settings.users.passwordChanged')}</i></b>`;
+            return `<td>
+                      <b>${user.realname}</b><p/>
+                      <b>${t('settings.columns.username')}:</b> <mark>${user.username}</mark><br/>
+                      ${passwordText}
+                    </td>`.trim();
+          })
+          .join('');
+        return `<tr>${cells}</tr>`;
+      })
+      .join('');
 
     // Generate HTML content for the new window
     const htmlContent = `
