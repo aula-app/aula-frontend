@@ -21,11 +21,9 @@ interface UserListRequest extends GenericListRequest {
 }
 
 export async function getUsers(args?: UserListRequest): Promise<GetUsersResponse> {
-  if (args?.room_id === 'all') delete args.room_id;
-  const method = args?.room_id ? 'getUsersByRoom' : 'getUsers';
   const response = await databaseRequest({
     model: 'User',
-    method: method,
+    method: 'getUsers',
     arguments: args || { offset: 0, limit: 0 },
   });
 
