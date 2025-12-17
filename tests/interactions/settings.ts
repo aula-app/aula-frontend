@@ -1,6 +1,6 @@
 import { Locator, Page, expect } from '@playwright/test';
 import * as formInteractions from './forms';
-import { ScopeKeyType } from '../../../src/types/Scopes';
+import { ScopeKeyType } from '../../src/types/Scopes';
 
 export const check = async (page: Page, filters: { option: string; value: string }): Promise<Locator> => {
   const row = page.locator('table tr').filter({ hasText: filters.value }).first();
@@ -16,7 +16,10 @@ export const filter = async (page: Page, filter: { option: string; value: string
   const filterInput = page.getByTestId('filter-input');
   await expect(filterButton).toBeVisible({ timeout: 1000 });
 
-  if (!(await filterInput.isVisible()) || (await (page.getByTestId('filter-panel')).getAttribute('style'))?.includes('; height: 0px')) {
+  if (
+    !(await filterInput.isVisible()) ||
+    (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')
+  ) {
     // open the filter menu if it's not already open
     await filterButton.click({ timeout: 1000 });
   }

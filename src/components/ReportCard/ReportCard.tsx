@@ -236,7 +236,7 @@ ${message}`,
                 </Button>
               </Stack>
             </CardActions>
-            <Dialog open={confirm} onClose={() => setConfirm(false)}>
+            <Dialog open={confirm} onClose={() => setConfirm(false)} data-testid="confirm-request-dialog">
               <DialogTitle>{t('requests.confirmationTitle')}</DialogTitle>
               <DialogContent>
                 <Typography>{t('requests.confirmation')}</Typography>

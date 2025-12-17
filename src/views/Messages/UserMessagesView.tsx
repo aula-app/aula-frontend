@@ -63,7 +63,7 @@ const UserMessagesView = () => {
                 bgcolor={`${variant}.main`}
                 data-testid={
                   variant === 'requests' && message.headline?.includes('Kontodatenexportanfrage')
-                    ? `data-export-message-${message.headline.match(/für\s+(.+?)$/)?.[1] || 'unknown'}`
+                    ? `data-export-message-${message.headline.match(/für\s+(.+?)$/)?.[1]?.replace(/\s+/g, '-') || 'unknown'}`
                     : `${variant}-message-${message.hash_id}`
                 }
               >
