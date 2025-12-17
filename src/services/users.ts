@@ -24,7 +24,7 @@ export async function getUsers(args?: UserListRequest): Promise<GetUsersResponse
   const response = await databaseRequest({
     model: 'User',
     method: 'getUsers',
-    arguments: args || { offset: 0, limit: 0 },
+    arguments: { offset: 0, limit: 0, ...args },
   });
 
   return response as GetUsersResponse;
