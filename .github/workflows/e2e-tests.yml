@@ -18,6 +18,11 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v7
 
+      - name: Install Ansible
+        run: |
+          uv tool install ansible
+          uv tool update-shell
+
       - name: Install aula role
         run: uvx ansible-galaxy install --force \
           git+https://github.com/aula-app/ansible-role-aula.git \
@@ -90,11 +95,11 @@ jobs:
 
       - name: Validate Ansible playbook
         run: |
-          uvx ansible-playbook playbook.yml --syntax-check
+          ansible-playbook playbook.yml --syntax-check
 
       - name: Run Ansible playbook locally
         run: |
-          uvx ansible-playbook playbook.yml --connection=local -vv
+          ansible-playbook playbook.yml --connection=local -vv
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
