@@ -171,27 +171,6 @@ const PhasesView = () => {
             ))}
         </Grid>
 
-        {/* Create button */}
-        {checkPermissions('ideas', 'create') && (
-          <Fab
-            aria-label="add idea"
-            color="primary"
-            sx={{
-              position: 'fixed',
-              bottom: 40,
-              zIndex: 1000,
-            }}
-            onClick={() => setEdit(true)}
-            data-testid="add-idea-button"
-          >
-            <AppIcon icon="idea" />
-          </Fab>
-        )}
-
-        {/* Edit/Create drawer */}
-        <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
-          <IdeaForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
-        </Drawer>
       </Stack>
     </Stack>
   );
