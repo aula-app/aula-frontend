@@ -20,11 +20,11 @@ jobs:
 
       - name: Install Ansible
         run: |
-          uv tool install ansible
+          uv tool install --with-executables-from ansible-core,ansible-lint ansible
           uv tool update-shell
 
       - name: Install aula role
-        run: uvx ansible-galaxy install --force \
+        run: ansible-galaxy install --force \
           git+https://github.com/aula-app/ansible-role-aula.git \
           --roles-path ./roles
 
