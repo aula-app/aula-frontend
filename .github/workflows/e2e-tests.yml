@@ -1,0 +1,122 @@
+name: E2E Tests
+
+on:
+  # schedule:
+  #   - cron: "15 5 * * *"
+  workflow_dispatch:
+
+jobs:
+  e2e-tests:
+    runs-on: [self-hosted, cicd]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: |
+          if ! command -v ansible &> /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y ansible
+          fi
+          ansible --version
+
+      - name: Install aula role
+        run: ansible-galaxy install --force \
+          git+https://github.com/aula-app/ansible-role-aula.git \
+          --roles-path ./roles
+
+      - name: Create Ansible configuration
+        run: |
+          cat << 'EOF' > ansible.cfg
+          [defaults]
+          roles_path = ./roles
+          retry_files_enabled = False
+          EOF
+
+      - name: Setup aula.local domain
+        run: |
+          echo "127.0.0.1 aula.local" | sudo tee -a /etc/hosts
+          ping -c 5 aula.local
+
+      - name: Create Ansible playbook
+        run: |
+          cat << 'EOF' > playbook.yml
+          ---
+          - name: Install aula backend locally for E2E testing
+            hosts: localhost
+            connection: local
+            gather_facts: yes
+            become: yes
+            vars:
+              ansible_python_interpreter: /usr/bin/python3
+            roles:
+              - role: ansible-role-aula
+                network:
+                  floating_ip: "127.0.0.1"
+                  base_domain: "aula.local"
+                email:
+                  relay:
+                    smtp: "smtp.example.com"
+                    username: "smtp-username"
+                    password: "smtp-password"
+                    port: "587"
+                aula:
+                  compose_name: aula-e2e-${{ github.sha }}
+                  environment: dev
+                  base_url: "http://aula.local"
+                  superkey: "hunter2"
+                  is_pr_deployment_enabled: false
+                  multi_instance_enabled: false
+                  db:
+                    name: "aula_dbname"
+                    user: "aula_user"
+                    pass: "hunter2"
+                    root_password: "hunter2"
+                  email:
+                    from: admin@aula.local
+                    support: support@aula.local
+                  manager:
+                    db:
+                      user: "aula_manager_user"
+                      pass: "hunter2"
+                  backup:
+                    enabled: false
+                auth0:
+                  domain: "AUTH0-DOMAIN"
+                  client_id: "AUTH0-CLIENT-ID"
+                  client_secret: auth0-secret
+                  cookie_secret: hunter2
+                  redirect_uri: "http://aula.local/api/controllers/auth0.php"
+                  frontend_redirect: "http://aula.local/oauth-login/"
+          EOF
+
+      - name: Validate Ansible playbook
+        run: |
+          ansible-playbook playbook.yml --syntax-check
+
+      - name: Run Ansible playbook locally
+        run: |
+          ansible-playbook playbook.yml --connection=local -vv
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run E2E tests
+        env:
+          APP_FRONTEND_HOST: http://aula.local
+          APP_BACKEND_HOST: http://aula.local
+        run: yarn test
+
+      - name: Cleanup services
+        if: always()
+        run: |
+          docker compose down --volumes 2>/dev/null || true
+          docker ps -a
+          rm -f ansible.cfg playbook.yml
+          rm -rf ./roles/
