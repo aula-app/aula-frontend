@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test';
 import { test } from '../../fixtures/test-fixtures';
 import * as requestUserData from '../../interactions/request-user-data';
 
