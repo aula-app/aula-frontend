@@ -49,7 +49,13 @@ ${t('requests.exportData.body', { var: user.displayname })}`,
         <KnowMore title={t('requests.exportData.info')}>{t('settings.account.export')}</KnowMore>
       </Typography>
 
-      <Button variant="contained" color="info" onClick={requestDataExport} fullWidth>
+      <Button
+        variant="contained"
+        color="info"
+        onClick={requestDataExport}
+        fullWidth
+        data-testid="request-data-export-button"
+      >
         {t('requests.exportData.button')}
       </Button>
     </Stack>
