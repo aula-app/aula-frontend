@@ -48,6 +48,9 @@ const InstanceCodeView = () => {
         variant="outlined"
         error={!!error}
         helperText={error || t('instance.headline')}
+        slotProps={{
+          htmlInput: { autoCapitalize: "off" }
+        }}
         onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
           if (event.key === 'Enter') handleSubmit();
         }}

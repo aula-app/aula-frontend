@@ -154,11 +154,11 @@ const LoginView = () => {
             label={t("auth.login.label")}
             id="login-username"
             slotProps={{
+              htmlInput: { autoCapitalize: "off" },
               input: {
                 "aria-labelledby": "login-username-label",
                 "aria-invalid": !!errors.username,
                 "aria-errormessage": errors.username ? "username-error-message" : undefined,
-                autoCapitalize: "none"
               },
               inputLabel: {
                 id: "login-username-label",
@@ -185,6 +185,7 @@ const LoginView = () => {
             helperText={<span id="password-error-message">{errors.password?.message || ''}</span>}
             sx={{ mt: 0 }}
             slotProps={{
+              htmlInput: { autoCapitalize: "off" },
               input: {
                 "aria-labelledby": "login-password-label",
                 "aria-invalid": !!errors.password,
