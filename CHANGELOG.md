@@ -2,6 +2,8 @@
 
 - **Bug fixes**
   - Some planned actions could not be deleted
+- **Technical improvements**
+  - Minimize data exposure by using appropriate API endpoint when fetching Users
 
 ## 1.6.2
 

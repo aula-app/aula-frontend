@@ -13,7 +13,6 @@ import {
   FormControlLabel,
   FormGroup,
   Skeleton,
-  Typography,
 } from '@mui/material';
 import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -29,12 +28,11 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
 
   const fetchUsers = useCallback(async (roomId: string) => {
     setLoading(true);
-    let response;
-    if (roomId !== 'all') response = await getUsers({ room_id: roomId });
-    else response = await getUsers();
+    const response = await getUsers(roomId ? { room_id: roomId } : {});
 
-    if (response.error) setError(response.error);
-    else {
+    if (response.error) {
+      setError(response.error);
+    } else {
       setUsers(response.data || []);
     }
     setLoading(false);
