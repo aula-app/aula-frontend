@@ -1,10 +1,8 @@
 import { databaseRequest, GenericResponse } from '@/services/requests';
 import { ConsentResponse } from '@/types/LoginTypes';
-import { localStorageGet, parseJwt } from '@/utils';
+import { localStorageGet } from '@/utils';
 const api_url = localStorageGet('api_url');
-const jwt_token = localStorageGet('token');
 const code = localStorageGet('code');
-const jwt_payload = parseJwt(jwt_token);
 
 export const getUserConsent = async (token: string, signal?: AbortSignal): Promise<ConsentResponse> => {
   try {
