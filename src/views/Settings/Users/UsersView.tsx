@@ -47,7 +47,7 @@ const UsersView: React.FC = () => {
     async (params: Record<string, unknown>) => {
       return await getUsers({
         ...params,
-        room_id,
+        room_id: room_id != 'all' ? room_id : undefined,
         userlevel: userlevel === 0 ? undefined : userlevel,
       });
     },

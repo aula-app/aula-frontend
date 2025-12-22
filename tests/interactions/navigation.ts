@@ -44,12 +44,17 @@ export const openAccordion = async (page: Page, testId: string) => {
 // Page navigation
 
 export const goToHome = async (page: Page) => {
+  const currentUrl = page.url();
+  if (currentUrl === host || currentUrl === `${host}/`) {
+    return;
+  }
+
   await page.goto(host);
   await page.waitForLoadState('networkidle');
 };
 
 export const goToRoom = async (page: Page, roomName: string) => {
-  await page.goto(host);
+  await goToHome(page);
   await page.waitForLoadState('networkidle');
 
   const roomCard = page.getByTestId('room-card').filter({ hasText: roomName });

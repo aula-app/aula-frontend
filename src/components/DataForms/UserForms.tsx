@@ -94,7 +94,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   const onSubmit = async (data: SchemaType) => {
     try {
       setIsLoading(true);
-      const upsertSuccess = (!defaultValues) ? await newUser(data) : await updateUser(data);
+      const upsertSuccess = !defaultValues ? await newUser(data) : await updateUser(data);
       if (upsertSuccess) {
         handleDraftSubmit();
       }
