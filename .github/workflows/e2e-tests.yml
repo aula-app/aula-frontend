@@ -4,6 +4,9 @@ on:
   # schedule:
   #   - cron: "15 5 * * *"
   workflow_dispatch:
+  # WARN: Remove when ready `pull_request_target` is bad juju
+  pull_request_target:
+    types: [opened, synchronize]
 
 jobs:
   e2e-tests:
@@ -12,13 +15,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
       - name: Install Ansible
         run: |
-          if ! command -v ansible &> /dev/null; then
-            sudo apt-get update
-            sudo apt-get install -y ansible
-          fi
-          ansible --version
+          uv tool install --with-executables-from ansible-core,ansible-lint ansible
+          uv tool update-shell
 
       - name: Install aula role
         run: ansible-galaxy install --force \
