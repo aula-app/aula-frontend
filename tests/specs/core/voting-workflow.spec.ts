@@ -9,11 +9,11 @@ import { BoxData, IdeaData } from '../../support/types';
 
 /**
  * Voting Workflow Tests
- * Tests complete voting workflow from creation to results including delegation
+ * Tests complete voting workflow from creation to results (without delegation)
  * Uses pure Playwright fixtures for setup/teardown
  *
  * NOTE: Tests run serially because they form a sequential workflow:
- * 1. Setup room and box → 2. Move through phases → 3. Vote → 4. Delegate → 5. Results
+ * 1. Setup room and box → 2. Move through phases → 3. Vote → 4. Results
  */
 test.describe.serial('Voting Workflow - Complete Process from Creation to Results', () => {
   let roomContext: roomsFixture.RoomContext;
