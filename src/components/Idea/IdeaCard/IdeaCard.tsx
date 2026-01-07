@@ -110,6 +110,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, disabled = false, ...restOfProps }:
             : 0,
       }}
       order={-idea.approved}
+      data-testid={`idea-${idea.title}`}
     >
       <AppLink to={`idea/${idea.hash_id}`}>
         <Card
