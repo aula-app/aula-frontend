@@ -156,7 +156,9 @@ const DataSettings = ({ onReload }: Props) => {
               ? error.collision_keys
               : Object.values(error.collision_keys);
 
-            const collisionMessage = collisionKeys.map((key) => t(`settings.columns.${key}`) || key).join(', ');
+            const collisionMessage = collisionKeys
+              .map((key) => t(`settings.columns.${key}`, { defaultValue: key }))
+              .join(', ');
             errorMap.set(error.line_number, {
               lineNumber: error.line_number,
               message: `${detail.error} (${collisionMessage})`,
