@@ -235,7 +235,7 @@ const DataSettings = ({ onReload }: Props) => {
               <>
                 {hasError && (
                   <TableRow key={`error-${userIndex}`}>
-                    <TableCell colSpan={6} sx={{ p: 0, borderBottom: 'none' }}>
+                    <TableCell colSpan={7} sx={{ p: 0, borderBottom: 'none' }}>
                       <Alert severity="error" sx={{ py: 0 }}>
                         <Typography variant="body2">
                           <strong>
