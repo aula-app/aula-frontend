@@ -53,8 +53,7 @@ interface LineError {
   collisionKeys: string[];
 }
 
-/** * Renders "SystemSettings" component
- */
+/** Renders "DataSettings" component */
 
 const DataSettings = ({ onReload }: Props) => {
   const { t } = useTranslation();
