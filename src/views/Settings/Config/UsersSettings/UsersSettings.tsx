@@ -7,6 +7,7 @@ import { LanguageTypes } from '@/types/Translation';
 import { roles } from '@/utils';
 import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
 import {
+  Alert,
   Button,
   FormControl,
   FormHelperText,
@@ -34,6 +35,24 @@ interface Props {
   onReload: () => void;
 }
 
+interface CSVErrorDetail {
+  collision_keys: Record<string, string> | string[];
+  line_number: number;
+}
+
+interface CSVErrorResponse {
+  success: false;
+  error_code: number;
+  error: string;
+  errors: CSVErrorDetail[];
+}
+
+interface LineError {
+  lineNumber: number;
+  message: string;
+  collisionKeys: string[];
+}
+
 /** * Renders "SystemSettings" component
  */
 
@@ -46,6 +65,7 @@ const DataSettings = ({ onReload }: Props) => {
   const [inviteDate, setInviteDate] = useState<dayjs.Dayjs | null>(dayjs());
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [lineErrors, setLineErrors] = useState<Map<number, LineError>>(new Map());
 
   // Create role options (excluding admin roles for CSV upload)
   const roleOptions = roles
@@ -79,6 +99,7 @@ const DataSettings = ({ onReload }: Props) => {
     setUsers([]);
     setRooms({ add: [], remove: [] });
     setError('');
+    setLineErrors(new Map());
   };
 
   const readCSV = (file: File) => {
@@ -116,6 +137,7 @@ const DataSettings = ({ onReload }: Props) => {
 
   const uploadCSV = async (csv: string) => {
     setLoading(true);
+    setLineErrors(new Map());
     const send_emails_at =
       inviteDate === null || inviteDate <= dayjs()
         ? undefined
@@ -123,6 +145,30 @@ const DataSettings = ({ onReload }: Props) => {
     const response = await addAllCSV(csv, rooms.add, role as RoleTypes, send_emails_at);
     setLoading(false);
     if (!response.data) {
+      // Check if we have detailed CSV error information
+      if (response.detail && typeof response.detail === 'object') {
+        const detail = response.detail as CSVErrorResponse;
+        if (detail.errors && Array.isArray(detail.errors)) {
+          // Parse the detailed errors and map them to line numbers
+          const errorMap = new Map<number, LineError>();
+          detail.errors.forEach((error: CSVErrorDetail) => {
+            // Handle collision_keys as either an object or array
+            const collisionKeys = Array.isArray(error.collision_keys)
+              ? error.collision_keys
+              : Object.values(error.collision_keys);
+
+            const collisionMessage = collisionKeys.map((key) => t(`settings.columns.${key}`) || key).join(', ');
+            errorMap.set(error.line_number, {
+              lineNumber: error.line_number,
+              message: `${detail.error} (${collisionMessage})`,
+              collisionKeys: collisionKeys,
+            });
+          });
+          setLineErrors(errorMap);
+          setError(t('forms.csv.lineErrors', { count: detail.errors.length }));
+          return;
+        }
+      }
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
       return;
     }
@@ -173,6 +219,7 @@ const DataSettings = ({ onReload }: Props) => {
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell></TableCell>
             <TableCell>{t('settings.columns.realname')}*</TableCell>
             <TableCell>{t('settings.columns.displayname')}*</TableCell>
             <TableCell>{t('settings.columns.username')}*</TableCell>
@@ -183,12 +230,53 @@ const DataSettings = ({ onReload }: Props) => {
         <TableBody>
           {users.map((user, userIndex) => {
             const keys = user.split(';');
+            const lineError = lineErrors.get(userIndex);
+            const hasError = !!lineError;
             return (
-              <TableRow key={`user-${userIndex}`}>
-                {keys.map((key, keyIndex) => (
-                  <TableCell key={`cell-${userIndex}-${keyIndex}`}>{key}</TableCell>
-                ))}
-              </TableRow>
+              <>
+                {hasError && (
+                  <TableRow key={`error-${userIndex}`}>
+                    <TableCell colSpan={6} sx={{ p: 0, borderBottom: 'none' }}>
+                      <Alert severity="error" sx={{ py: 0 }}>
+                        <Typography variant="body2">
+                          <strong>
+                            {t('forms.csv.line')} {userIndex + 1}:
+                          </strong>{' '}
+                          {lineError.message}
+                        </Typography>
+                      </Alert>
+                    </TableCell>
+                  </TableRow>
+                )}
+                <TableRow
+                  key={`user-${userIndex}`}
+                  sx={{
+                    backgroundColor: hasError ? 'error.light' : 'inherit',
+                    '&:hover': {
+                      backgroundColor: hasError ? 'error.light' : 'action.hover',
+                    },
+                  }}
+                >
+                  <TableCell
+                    key={`cell-index-${userIndex}`}
+                    sx={{
+                      color: hasError ? 'error.contrastText' : 'inherit',
+                    }}
+                  >
+                    {userIndex + 1}
+                  </TableCell>
+                  {keys.map((key, keyIndex) => (
+                    <TableCell
+                      key={`cell-${userIndex}-${keyIndex}`}
+                      sx={{
+                        color: hasError ? 'error.contrastText' : 'inherit',
+                      }}
+                    >
+                      {key}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </>
             );
           })}
         </TableBody>
