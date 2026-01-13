@@ -42,10 +42,6 @@ jobs:
           retry_files_enabled = False
           EOF
 
-      - name: Setup aula.local domain
-        run: |
-          echo "127.0.0.1 aula.local" | tee -a /etc/hosts
-
       - name: Create Ansible playbook
         run: |
           cat << 'EOF' > playbook.yml
@@ -61,13 +57,13 @@ jobs:
               - role: ansible-role-aula
                 network:
                   floating_ip: "127.0.0.1"
-                  base_domain: "aula.local"
+                  base_domain: "127.0.0.1"
                 email:
                   backend: log
                 aula:
                   compose_name: aula-e2e-${{ github.sha }}
                   environment: dev
-                  base_url: "http://aula.local"
+                  base_url: "http://127.0.0.1"
                   superkey: "hunter2"
                   is_pr_deployment_enabled: false
                   multi_instance_enabled: false
@@ -90,8 +86,8 @@ jobs:
                   client_id: "AUTH0-CLIENT-ID"
                   client_secret: auth0-secret
                   cookie_secret: hunter2
-                  redirect_uri: "http://aula.local/api/controllers/auth0.php"
-                  frontend_redirect: "http://aula.local/oauth-login/"
+                  redirect_uri: "http://127.0.0.1/api/controllers/auth0.php"
+                  frontend_redirect: "http://127.0.0.1/oauth-login/"
           EOF
 
       - name: Validate Ansible playbook
