@@ -101,6 +101,11 @@ jobs:
         run: |
           ansible-playbook playbook.yml --connection=local -vv
 
+      - name: Setup aula.local domain
+        run: |
+          echo "127.0.0.1 aula.local" | tee -a /etc/hosts
+          ping -c 5 aula.local
+
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
