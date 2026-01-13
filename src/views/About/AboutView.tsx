@@ -1,5 +1,6 @@
 import { useAppStore } from '@/store/AppStore';
 import { useTranslation } from 'react-i18next';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { versionsRequest, VersionsResponse } from '@/services/requests-v2';
@@ -12,6 +13,7 @@ const AboutView = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [versions, setVersions] = useState<VersionsResponse>();
+  usePageTitle('pageTitles.about');
 
   const fetchVersions = useCallback(async () => {
     setVersions(await versionsRequest());

@@ -2,12 +2,14 @@ import { useAppStore } from '@/store';
 import { Stack } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import Dashboard from './Dashboard';
 import RoomsView from './Rooms';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
+  usePageTitle('pageTitles.welcome');
 
   useEffect(() => {
     dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [] });
