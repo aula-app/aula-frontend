@@ -13,7 +13,7 @@ jobs:
     runs-on: [self-hosted, cicd]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -23,10 +23,17 @@ jobs:
           uv tool install --with-executables-from ansible-core,ansible-lint ansible
           uv tool update-shell
 
-      - name: Install aula role
-        run: ansible-galaxy install --force \
-          git+https://github.com/aula-app/ansible-role-aula.git \
-          --roles-path ./roles
+      - name: Start SSH agent
+        run: |
+          eval "$(ssh-agent -s)"
+          ssh-add - <<< "${{ secrets.ANSIBLE_DEPLOY_KEY }}"
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $GITHUB_ENV
+
+      - name: Checkout aula role
+        uses: actions/checkout@v6
+        with:
+          repository: aula-app/ansible-role-aula
+          path: ./roles/ansible-role-aula
 
       - name: Create Ansible configuration
         run: |
@@ -58,11 +65,7 @@ jobs:
                   floating_ip: "127.0.0.1"
                   base_domain: "aula.local"
                 email:
-                  relay:
-                    smtp: "smtp.example.com"
-                    username: "smtp-username"
-                    password: "smtp-password"
-                    port: "587"
+                  backend: log
                 aula:
                   compose_name: aula-e2e-${{ github.sha }}
                   environment: dev
