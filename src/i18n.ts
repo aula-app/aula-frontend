@@ -27,3 +27,11 @@ i18n
       escapeValue: false, // react already safes from xss
     },
   });
+
+// Update HTML lang attribute when language changes (WCAG 3.1.1)
+i18n.on('languageChanged', (lng) => {
+  document.documentElement.setAttribute('lang', lng);
+});
+
+// Set initial lang attribute
+document.documentElement.setAttribute('lang', i18n.language);

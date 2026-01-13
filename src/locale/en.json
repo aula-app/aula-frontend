@@ -789,6 +789,36 @@
     "vote": "Vote",
     "yourVote": "You voted {{var}}"
   },
+  "pageTitles": {
+    "welcome": "Welcome",
+    "about": "About aula",
+    "messages": "Messages",
+    "announcements": "Announcements",
+    "announcement": "Announcement",
+    "message": "Message",
+    "report": "Report",
+    "phase": "Phase {{phase}}",
+    "room": "Room",
+    "roomPhase": "{{room}} - Phase {{phase}}",
+    "idea": "Idea",
+    "ideaBox": "Idea Box",
+    "updates": "Updates",
+    "offline": "Offline",
+    "notFound": "Page Not Found",
+    "settings": {
+      "profile": "My Profile",
+      "announcements": "Manage Announcements",
+      "boxes": "Manage Boxes",
+      "configuration": "Configuration",
+      "ideas": "Manage Ideas",
+      "messages": "Manage Messages",
+      "reports": "Manage Reports",
+      "bugs": "Manage Bugs",
+      "requests": "Manage Requests",
+      "rooms": "Manage Rooms",
+      "users": "Manage Users"
+    }
+  },
   "weekDays": {
     "friday": "Friday",
     "monday": "Monday",

@@ -3,6 +3,7 @@ import { getAdminMessages, getPersonalMessages } from '@/services/messages';
 import { useAppStore } from '@/store/AppStore';
 import { MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 const UserMessagesView = () => {
   const { t } = useTranslation();
   const [appState, dispatch] = useAppStore();
+  usePageTitle('pageTitles.messages');
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
