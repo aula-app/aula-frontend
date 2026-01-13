@@ -23,16 +23,15 @@ jobs:
           uv tool install --with-executables-from ansible-core,ansible-lint ansible
           uv tool update-shell
 
-      - name: Start SSH agent
+      - name: Create roles folder
         run: |
-          eval "$(ssh-agent -s)"
-          ssh-add - <<< "${{ secrets.ANSIBLE_DEPLOY_KEY }}"
-          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $GITHUB_ENV
-
+          mkdir -p ./roles
+          
       - name: Checkout aula role
         uses: actions/checkout@v6
         with:
-          repository: git@github.com:aula-app/ansible-role-aula.git
+          repository: aula-app/ansible-role-aula
+          ssh-key: "${{ secrets.ANSIBLE_DEPLOY_KEY }}"
           path: ./roles/ansible-role-aula
 
       - name: Create Ansible configuration
