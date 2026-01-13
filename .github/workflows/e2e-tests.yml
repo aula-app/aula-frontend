@@ -32,7 +32,7 @@ jobs:
       - name: Checkout aula role
         uses: actions/checkout@v6
         with:
-          repository: aula-app/ansible-role-aula
+          repository: git@github.com:aula-app/ansible-role-aula.git
           path: ./roles/ansible-role-aula
 
       - name: Create Ansible configuration
