@@ -42,6 +42,10 @@ jobs:
           retry_files_enabled = False
           EOF
 
+      - name: Setup aula.local domain
+        run: |
+          echo "127.0.0.1 aula.local" | tee -a /etc/hosts
+
       - name: Create Ansible playbook
         run: |
           cat << 'EOF' > playbook.yml
@@ -49,8 +53,8 @@ jobs:
           - name: Install aula backend locally for E2E testing
             hosts: localhost
             connection: local
-            gather_facts: yes
-            become: yes
+            gather_facts: true
+            become: false
             vars:
               ansible_python_interpreter: /usr/bin/python3
             roles:
@@ -97,11 +101,6 @@ jobs:
       - name: Run Ansible playbook locally
         run: |
           ansible-playbook playbook.yml --connection=local -vv
-
-      - name: Setup aula.local domain
-        run: |
-          echo "127.0.0.1 aula.local" | tee -a /etc/hosts
-          ping -c 5 aula.local
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
