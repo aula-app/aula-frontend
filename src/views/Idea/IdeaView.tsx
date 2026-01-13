@@ -98,7 +98,7 @@ const IdeaView = () => {
   useEffect(() => {
     fetchIdea();
     fetchQuorum();
-  }, [idea_id]);
+  }, [idea_id, phase]);
 
   const ideaDelete = async (id: string) => {
     const request = await deleteIdea(id);

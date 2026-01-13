@@ -30,14 +30,14 @@ const IdeasBoxView = () => {
   const { room_id, box_id, phase } = useParams();
   const [quorum, setQuorum] = useState<number>(0);
 
-  async function fetchQuorum() {
+  const fetchQuorum = useCallback(() => {
     getQuorum().then((response) => {
       if (response.error || !response.data) return;
       setQuorum(
         !!phase && Number(phase) >= 30 ? Number(response.data.quorum_votes) : Number(response.data.quorum_wild_ideas)
       );
     });
-  }
+  }, [phase]);
 
   /**
    * Box data
@@ -113,7 +113,7 @@ const IdeasBoxView = () => {
           ],
         });
     }
-  }, [box_id]);
+  }, [box_id, room_id, phase, t, dispatch, navigate, boxPhase, fetchQuorum]);
 
   const boxEdit = (box: BoxType) => {
     setEdit(box);
