@@ -3,6 +3,9 @@
 - **New features**
   - Display aula-Software versions in the About page
   - Fix message on Admin view of User settings when no User to display
+- **Technical improvements**
+  - Add default language as de (matching the app's default)
+  - Add comprehensive page titles
 
 ## 1.6.3
 
