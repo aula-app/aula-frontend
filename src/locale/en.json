@@ -155,6 +155,8 @@
     "csv": {
       "empty": "Your file doesn't contain any data. Please provide a valid CSV file",
       "invalid": "Your file doesn't seem to be valid. Please provide a valid CSV file",
+      "line": "Line",
+      "lineErrors": "{{count}} line(s) contain errors. Please review the highlighted rows below",
       "noRoom": "Please, select the destination room for the users",
       "success": "New users created",
       "template": "New users can be created from a table here. The file must be uploaded as a CSV file and have the following columns: 'realname', 'displayname', 'username', 'email', 'about_me'. Not all fields must be filled in, e.g. if a student does not have an email, the column can remain empty"
