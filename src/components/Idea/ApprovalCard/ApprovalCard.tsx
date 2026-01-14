@@ -94,10 +94,10 @@ const ApprovalCard = ({ idea, disabled = false, onReload }: ApprovalCardProps) =
             <Stack gap={2}>
               <Stack direction="row" alignItems="center" justifyContent="space-between" gap={1}>
                 <ApproveField control={control} disabled={isLoading} />
-                <Button onClick={onClose} color="error" sx={{ ml: 'auto' }}>
+                <Button onClick={onClose} color="error" sx={{ ml: 'auto' }} data-testid="cancel-button">
                   {t('actions.cancel')}
                 </Button>
-                <Button type="submit" variant="contained">
+                <Button type="submit" variant="contained" data-testid="confirm-button" disabled={isLoading}>
                   {isLoading ? t('actions.loading') : t('actions.confirm')}
                 </Button>
               </Stack>

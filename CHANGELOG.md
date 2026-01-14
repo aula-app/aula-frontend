@@ -5,6 +5,7 @@
   - Fix message on Admin view of User settings when no User to display
 - **Bug fixes**
   - Quorum could not be set in some devices
+  - Improved CSV import error messages
 
 ## 1.6.3
 
