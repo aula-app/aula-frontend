@@ -6,7 +6,7 @@ use_frameworks!
 # workaround to avoid Xcode caching of Pods that requires
 # Product -> Clean Build Folder after new Cordova plugins installed
 # Requires CocoaPods 1.6 or newer
-install! 'cocoapods', :disable_input_output_paths => true
+install! 'cocoapods', :disable_input_output_paths => false
 
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
@@ -47,5 +47,14 @@ post_install do |installer|
   # Fix script permissions after installation
   Dir.glob(File.join(installer.sandbox.root, "**/*.sh")).each do |script|
     system('chmod', 'u+rx', script) if File.file?(script)
+  end
+
+  # Fix "[CP] Embed Pods Frameworks" warning by disabling dependency analysis
+  installer.pods_project.targets.each do |target|
+    target.build_phases.each do |phase|
+      if phase.respond_to?(:name) && phase.name&.start_with?('[CP]')
+        phase.always_out_of_date = '1'
+      end
+    end
   end
 end
