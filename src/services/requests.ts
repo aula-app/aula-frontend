@@ -22,6 +22,7 @@ export interface GenericResponse<T = unknown> {
   count: number | null;
   error: string | null;
   error_code?: number | null;
+  detail?: unknown;
 }
 
 export interface GenericListRequest {
@@ -141,6 +142,8 @@ export const baseRequest = async <T = unknown>(
         data: null,
         count: null,
         error: t(`errors.noData`),
+        error_code: response.error_code,
+        detail: response.detail,
       };
     }
 
@@ -155,6 +158,7 @@ export const baseRequest = async <T = unknown>(
         count: null,
         error: t(errorKey),
         error_code: response.error_code,
+        detail: response.detail,
       };
     }
 
@@ -163,6 +167,8 @@ export const baseRequest = async <T = unknown>(
         data: null,
         count: null,
         error: t(`errors.failed`),
+        error_code: response.error_code,
+        detail: response.detail,
       };
     }
 

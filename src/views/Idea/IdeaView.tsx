@@ -4,15 +4,15 @@ import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton'
 import VotingQuorum from '@/components/Idea/VotingQuorum';
 import { deleteIdea, getIdea, getIdeaBoxes } from '@/services/ideas';
 import { getRoom } from '@/services/rooms';
+import { getQuorum } from '@/services/vote';
 import { useAppStore } from '@/store/AppStore';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { Drawer, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Drawer, Stack } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import CommentView from '../Comment';
-import { getQuorum } from '@/services/vote';
 
 /**
  * Renders "Idea" view
@@ -24,10 +24,10 @@ const IdeaView = () => {
   const navigate = useNavigate();
   const { idea_id, room_id, phase } = useParams();
 
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
 
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [idea, setIdea] = useState<IdeaType>();
   const [edit, setEdit] = useState<IdeaType>(); // undefined = update dialog closed; EditFormData = edit idea;
   const [quorum, setQuorum] = useState<number>(0);
@@ -43,7 +43,7 @@ const IdeaView = () => {
     });
   };
 
-  const fetchIdea = async () => {
+  const fetchIdea = useCallback(async () => {
     if (!idea_id) return;
     if (typeof idea === 'undefined') setLoading(true);
     const response = await getIdea(idea_id);
@@ -86,19 +86,19 @@ const IdeaView = () => {
     if (response.error) setError(response.error);
     if (!response.error && response.data) setIdea(response.data);
     if (isLoading) setLoading(false);
-  };
+  }, [idea_id, room_id, phase, idea, isLoading, dispatch, t]);
 
-  async function fetchQuorum() {
+  const fetchQuorum = useCallback(() => {
     getQuorum().then((response) => {
       if (response.error || !response.data) return;
       setQuorum(Number(phase) >= 30 ? Number(response.data.quorum_votes) : Number(response.data.quorum_wild_ideas));
     });
-  }
+  }, [phase]);
 
   useEffect(() => {
     fetchIdea();
     fetchQuorum();
-  }, [idea_id]);
+  }, [idea_id, phase]);
 
   const ideaDelete = async (id: string) => {
     const request = await deleteIdea(id);
