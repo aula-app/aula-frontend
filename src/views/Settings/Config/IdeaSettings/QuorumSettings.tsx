@@ -18,7 +18,7 @@ const QuorumSettings: React.FC<Props> = ({ onReload, ...restOfProps }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
 
-  const { setValue, handleSubmit, control, formState } = useForm({
+  const { setValue, handleSubmit, control } = useForm({
     resolver: yupResolver(
       yup.object().shape({
         quorum_wild_ideas: yup.number().required(t('forms.validation.required')),
