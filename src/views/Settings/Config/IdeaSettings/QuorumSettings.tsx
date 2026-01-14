@@ -25,6 +25,7 @@ const QuorumSettings: React.FC<Props> = ({ onReload, ...restOfProps }) => {
         quorum_votes: yup.number().required(t('forms.validation.required')),
       })
     ),
+    mode: 'onChange',
   });
 
   async function getQuorumValues() {
