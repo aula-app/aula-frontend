@@ -38,7 +38,7 @@ test.describe.serial('Message Management - User Messages', () => {
 
     await test.step('Select user as message target', async () => {
       // Select the user from the autocomplete
-      await forms.selectMultiAutocompleteOption(adminPage, 'user-field-autocomplete-input', messageData.recipient);
+      await forms.selectOptionByValue(adminPage, 'user-field-autocomplete-input', messageData.recipient);
     });
 
     await test.step('Fill message form', async () => {
