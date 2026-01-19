@@ -95,7 +95,6 @@ test.describe.serial('Message Management - User Messages', () => {
       await forms.clickButton(adminPage, 'remove-messages-button');
       await forms.clickButton(adminPage, 'confirm-delete-messages-button');
       await adminPage.waitForLoadState('networkidle');
-      await adminPage.waitForTimeout(500);
     });
 
     await test.step('Verify message is no longer in the list', async () => {
