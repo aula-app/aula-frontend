@@ -40,6 +40,9 @@ export default async function globalSetup() {
 
     console.log('✅ Admin logged in with token');
 
+    // Ensure instance is online
+    await ensureInstanceOnline(page);
+
     // Save admin authentication state
     const adminStatePath = path.join(authStatesDir, 'admin-context.json');
     await context.storageState({ path: adminStatePath });
@@ -75,4 +78,70 @@ function createNewRunId(): void {
   fs.writeFileSync(runIdFilePath, newRunId, 'utf-8');
 
   console.log(`✅ Created new run-id: ${newRunId}`);
+}
+
+/**
+ * Ensure instance is online before running tests
+ */
+async function ensureInstanceOnline(page: Page): Promise<void> {
+  try {
+    // Check if instance is online using the API
+    const isOnline = await page.evaluate(async () => {
+      const response = await fetch('/api/controllers/model.php?getInstanceSettings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'aula-instance-code': localStorage.getItem('code') || '',
+        },
+        body: JSON.stringify({
+          model: 'Settings',
+          method: 'getInstanceSettings',
+          arguments: {},
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch instance settings: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.data?.online_mode === 1;
+    });
+
+    if (isOnline) {
+      console.log('✅ Instance is already online');
+      return;
+    }
+
+    console.log('⚠️ Instance is offline, setting it to online...');
+
+    // Set instance to online
+    await page.evaluate(async () => {
+      const response = await fetch('/api/controllers/model.php?setInstanceOnlineMode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'aula-instance-code': localStorage.getItem('code') || '',
+        },
+        body: JSON.stringify({
+          model: 'Settings',
+          method: 'setInstanceOnlineMode',
+          arguments: {
+            status: 1,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to set instance online: ${response.status}`);
+      }
+    });
+
+    console.log('✅ Instance set to online');
+  } catch (error) {
+    console.error('❌ Failed to ensure instance is online:', error);
+    throw error;
+  }
 }

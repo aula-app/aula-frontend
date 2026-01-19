@@ -19,7 +19,7 @@ export const create = async (page: Page, room: types.RoomData) => {
 
   for (const u of room.users) {
     await UserSelector.locator('.MuiAutocomplete-popupIndicator').click();
-    const currentUser = page.getByTestId(`user-option-${u.username}`);
+    const currentUser = page.getByTestId(`select-option-${u.username}`);
     await expect(currentUser).toBeVisible();
     await currentUser.click();
   }
@@ -111,6 +111,12 @@ export const toggleSortDirection = async (page: Page) => {
 
 export const getRoomCount = async (page: Page): Promise<number> => {
   await navigation.goToHome(page);
+
+  // Wait for the rooms container to finish loading
+  // This ensures the page has fully rendered before counting
+  await page.waitForLoadState('domcontentloaded');
+  await page.waitForTimeout(500); // Allow time for dynamic content to render
+
   const roomCards = page.getByTestId('room-card');
   return await roomCards.count();
 };
