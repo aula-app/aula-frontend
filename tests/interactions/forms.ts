@@ -7,8 +7,9 @@ export const fillForm = async (page: Page, testId: string, value: string) => {
   await field.fill(value);
 };
 
-export const fillMarkdownForm = async (page: Page, testId: string, value: string) => {
-  const field = page.getByTestId(`markdown-editor-${testId}`).locator('[contenteditable="true"]');
+export const fillMarkdownForm = async (page: Page, testId: string, value: string, parent?: Locator) => {
+  const container = parent || page;
+  const field = container.getByTestId(`markdown-editor-${testId}`).locator('[contenteditable="true"]');
   await expect(field).toBeVisible();
   await field.fill(value);
 };
@@ -96,4 +97,16 @@ export const selectOptionByValue = async (page: Page, testId: string, value: str
   // Verify the selection by checking if the field now contains the option text
   const displayedValue = page.getByTestId(testId);
   await expect(displayedValue).toContainText(optionText.trim(), { timeout: 5000 });
+};
+
+export const selectMultiAutocompleteOption = async (page: Page, testId: string, optionId: string) => {
+  const field = page.getByTestId(testId);
+  await expect(field).toBeVisible({ timeout: 5000 });
+  await field.click();
+  await page.waitForTimeout(300);
+
+  const option = page.getByTestId(`${testId}-option-${optionId}`);
+  await expect(option).toBeVisible({ timeout: 5000 });
+  await option.click({ timeout: 1000 });
+  await page.waitForTimeout(300);
 };

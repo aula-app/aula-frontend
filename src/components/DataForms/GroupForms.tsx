@@ -186,6 +186,11 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
               {...register('group_name')}
               required
               disabled={isLoading}
+              slotProps={{
+                htmlInput: {
+                  'data-testid': 'group-name-field-input',
+                },
+              }}
             />
             {/* content */}
             <UsersField defaultValues={existingUsers} onChange={setUserUpdates} disabled={isLoading} />
@@ -197,7 +202,12 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
             </Typography>
           )}
           <Stack direction="row" justifyContent="end" gap={2}>
-            <Button onClick={handleCancel} color="error" aria-label={t('actions.cancel')}>
+            <Button
+              onClick={handleCancel}
+              color="error"
+              aria-label={t('actions.cancel')}
+              data-testid="cancel-group-button"
+            >
               {t('actions.cancel')}
             </Button>
             <Button
@@ -205,6 +215,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
               variant="contained"
               disabled={isLoading}
               aria-label={isLoading ? t('actions.loading') : t('actions.confirm')}
+              data-testid="save-group-button"
             >
               {isLoading ? t('actions.loading') : t('actions.confirm')}
             </Button>
