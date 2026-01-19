@@ -8,8 +8,8 @@ import { APP_TITLE } from '@/config';
  * @param params - Optional parameters for title interpolation
  *
  * @example
- * usePageTitle('views.messages.title'); // "Nachrichten - aula"
- * usePageTitle('views.userProfile.title', { name: 'Max' }); // "Profil: Max - aula"
+ * usePageTitle('pageTitles.messages'); // "Nachrichten - aula"
+ * usePageTitle('pageTitles.settings.profile', { name: 'Max' }); // "Profil: Max - aula"
  */
 export const usePageTitle = (titleKey?: string, params?: Record<string, string | number>) => {
   const { t } = useTranslation();
