@@ -105,7 +105,7 @@ export const selectMultiAutocompleteOption = async (page: Page, testId: string, 
   await field.click();
   await page.waitForTimeout(300);
 
-  const option = page.getByTestId(`${testId}-option-${optionId}`);
+  const option = page.getByTestId(`select-option-${optionId}`);
   await expect(option).toBeVisible({ timeout: 5000 });
   await option.click({ timeout: 1000 });
   await page.waitForTimeout(300);

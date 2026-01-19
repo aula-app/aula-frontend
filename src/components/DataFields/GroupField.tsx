@@ -67,12 +67,7 @@ const GroupField: React.FC<Props> = ({ control, disabled = false, ...restOfProps
               field.onChange(newValue ? newValue.value : null);
             }}
             renderOption={(props, option) => (
-              <li
-                {...props}
-                key={option.value}
-                data-testid={`group-field-autocomplete-input-option-${option.label}`}
-                role="option"
-              >
+              <li {...props} key={option.value} data-testid={`select-option-${option.label}`} role="option">
                 {option.label}
               </li>
             )}

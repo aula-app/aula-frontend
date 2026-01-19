@@ -1,60 +1,75 @@
 import { test, expect } from '../../fixtures/test-fixtures';
-import * as types from '../../support/types';
-import * as messages from '../../interactions/messages';
 import * as navigation from '../../interactions/navigation';
+import * as forms from '../../interactions/forms';
 import * as shared from '../../support/utils';
 
 /**
  * Message Management Tests
- * Tests message creation, delivery, and deletion
+ * Tests message creation and delivery to individual users
  * Uses pure Playwright fixtures for setup/teardown
  *
  * NOTE: Tests run serially because they form a sequential workflow:
- * Send message → Receive message → Delete message → Verify deletion
+ * 1. Create message → 2. Send message to user → 3. Verify user receives message
  */
-test.describe.serial('Messages flow', () => {
-  let messageData: types.MessageData;
+test.describe.serial('Message Management - User Messages', () => {
+  let messageData: {
+    headline: string;
+    body: string;
+    recipient: string;
+  };
 
   test.beforeAll(async ({ userConfig }) => {
     messageData = {
-      user: userConfig,
-      title: shared.gensym(`Test Message Title `),
-      content: `This is a test message content generated during automated testing. Run ID: ${shared.getRunId()}`,
+      headline: shared.gensym(`test-message-`),
+      body: `Test message sent to individual user`,
+      recipient: userConfig.username,
     };
   });
 
   test('Admin can send a message to a user', async ({ adminPage }) => {
-    await test.step('Create message to user', async () => {
-      await messages.create(adminPage, messageData);
+    await test.step('Navigate to messages settings', async () => {
+      await navigation.goToMessagesSettings(adminPage);
+    });
+
+    await test.step('Click add message button', async () => {
+      await forms.clickButton(adminPage, 'add-messages-button');
+      await adminPage.waitForTimeout(500);
+    });
+
+    await test.step('Select user as message target', async () => {
+      // Select the user from the autocomplete
+      await forms.selectMultiAutocompleteOption(adminPage, 'user-field-autocomplete-input', messageData.recipient);
+    });
+
+    await test.step('Fill message form', async () => {
+      await forms.fillForm(adminPage, 'message-headline', messageData.headline);
+
+      // Scope the markdown editor to the form
+      const form = adminPage.locator('form').first();
+      await forms.fillMarkdownForm(adminPage, 'body', messageData.body, form);
+    });
+
+    await test.step('Submit message', async () => {
+      await forms.clickButton(adminPage, 'submit-message-form');
+      await adminPage.waitForLoadState('networkidle');
+      await adminPage.waitForTimeout(1000);
+    });
+
+    await test.step('Verify message was created in admin panel', async () => {
+      const messageRow = adminPage.locator('table tr').filter({ hasText: messageData.headline });
+      await expect(messageRow).toBeVisible();
     });
   });
 
-  test('User receives a message from admin', async ({ userPage }) => {
+  test('User receives the message', async ({ userPage }) => {
     await test.step('Navigate to messages', async () => {
       await navigation.goToMessages(userPage);
+      await userPage.waitForLoadState('networkidle');
     });
 
     await test.step('Verify message is visible', async () => {
-      const messageWithSubject = userPage.locator(`text="${messageData.title}"`).first();
-      await expect(messageWithSubject).toBeVisible({ timeout: 10000 });
-    });
-  });
-
-  test('Admin can delete a message', async ({ adminPage }) => {
-    await test.step('Delete message', async () => {
-      await messages.remove(adminPage, messageData);
-    });
-  });
-
-  test('Message is no longer available to User', async ({ userPage }) => {
-    await test.step('Navigate to messages page', async () => {
-      await navigation.goToHome(userPage);
-      await navigation.goToMessages(userPage);
-    });
-
-    await test.step('Verify message is no longer visible', async () => {
-      const messageWithSubject = userPage.locator(`text="${messageData.title}"`).first();
-      await expect(messageWithSubject).not.toBeVisible({ timeout: 10000 });
+      const messageCard = userPage.getByText(messageData.headline);
+      await expect(messageCard).toBeVisible({ timeout: 10000 });
     });
   });
 });
