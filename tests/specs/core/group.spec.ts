@@ -9,7 +9,7 @@ import * as shared from '../../support/utils';
  * Uses pure Playwright fixtures for setup/teardown
  *
  * NOTE: Tests run serially because they form a sequential workflow:
- * 1. Create group → 2. Verify group → 3. Delete group
+ * 1. Create group → 2. Send message to group → 3. Verify users receive the message
  */
 test.describe.serial('Group Management - Creation and User Assignment', () => {
   let groupData: {
