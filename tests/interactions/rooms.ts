@@ -19,7 +19,7 @@ export const create = async (page: Page, room: types.RoomData) => {
 
   for (const u of room.users) {
     await UserSelector.locator('.MuiAutocomplete-popupIndicator').click();
-    const currentUser = page.getByTestId(`user-option-${u.username}`);
+    const currentUser = page.getByTestId(`select-option-${u.username}`);
     await expect(currentUser).toBeVisible();
     await currentUser.click();
   }
