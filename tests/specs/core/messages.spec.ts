@@ -33,7 +33,7 @@ test.describe.serial('Message Management - User Messages', () => {
 
     await test.step('Click add message button', async () => {
       await forms.clickButton(adminPage, 'add-messages-button');
-      await adminPage.waitForTimeout(500);
+      await adminPage.getByTestId('user-field-autocomplete-input').waitFor({ state: 'visible' });
     });
 
     await test.step('Select user as message target', async () => {
@@ -52,7 +52,6 @@ test.describe.serial('Message Management - User Messages', () => {
     await test.step('Submit message', async () => {
       await forms.clickButton(adminPage, 'submit-message-form');
       await adminPage.waitForLoadState('networkidle');
-      await adminPage.waitForTimeout(1000);
     });
 
     await test.step('Verify message was created in admin panel', async () => {
