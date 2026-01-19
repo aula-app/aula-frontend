@@ -1,11 +1,17 @@
+## Next
+
+- **Technical improvements**
+  - Add default language as de (matching the app's default)
+  - Add comprehensive page titles
+
 ## 1.7.0
 
 - **New features**
   - Display aula-Software versions in the About page
   - Fix message on Admin view of User settings when no User to display
-- **Technical improvements**
-  - Add default language as de (matching the app's default)
-  - Add comprehensive page titles
+- **Bug fixes**
+  - Quorum could not be set in some devices
+  - Improved CSV import error messages
 
 ## 1.6.3
 

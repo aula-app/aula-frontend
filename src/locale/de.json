@@ -155,6 +155,8 @@
     "csv": {
       "empty": "Ihre Datei enthält keine Daten. Bitte stellen Sie eine gültige CSV-Datei bereit",
       "invalid": "Ihre Datei scheint nicht gültig zu sein. Bitte stellen Sie eine gültige CSV-Datei bereit",
+      "line": "Zeile",
+      "lineErrors": "{{count}} Zeile(n) enthalten Fehler. Bitte überprüfen Sie die markierten Zeilen unten",
       "noRoom": "Bitte wählen Sie den Zielraum für die Benutzer",
       "success": "Neue Benutzer erstellt",
       "template": "Hier können neue Nutzer*innen von einer Tabelle angelegt werden. Die Datei muss als CSV-Datei hochgeladen sein und die folgenden Spalten besitzen: 'realname', 'displayname', 'username', 'email', 'about_me'. Nicht alle Felder müssen ausgefüllt sein, wenn bspw. ein*e Schüler*in nicht über eine Email verfügt, kann die Spalte leer bleiben"
