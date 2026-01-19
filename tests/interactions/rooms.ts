@@ -112,6 +112,13 @@ export const toggleSortDirection = async (page: Page) => {
 export const getRoomCount = async (page: Page): Promise<number> => {
   await navigation.goToHome(page);
   const roomCards = page.getByTestId('room-card');
+
+  // Wait for at least one room card to be present or timeout
+  // This ensures the page has finished loading rooms before counting
+  await roomCards.first().waitFor({ state: 'attached', timeout: 5000 }).catch(() => {
+    // If no rooms exist, that's ok - count will be 0
+  });
+
   return await roomCards.count();
 };
 

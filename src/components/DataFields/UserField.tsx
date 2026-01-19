@@ -81,7 +81,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
             data-testid="user-field-autocomplete"
             slotProps={{
               paper: {
-                'data-testid': 'user-field-autocomplete-list',
+                'data-testid': 'user-field-autocomplete-input-list',
               } as any,
             }}
             isOptionEqualToValue={(option, value) => {
