@@ -22,5 +22,5 @@ export const usePageTitle = (titleKey?: string, params?: Record<string, string |
       // Fallback to just app name if no titleKey provided
       document.title = APP_TITLE;
     }
-  }, [titleKey, t, params]);
+  }, [titleKey, t, JSON.stringify(params)]);
 };
