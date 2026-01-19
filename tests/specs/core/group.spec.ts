@@ -16,6 +16,10 @@ test.describe.serial('Group Management - Creation and User Assignment', () => {
     group_name: string;
     description_public: string;
     users: string[];
+    messageData: {
+      headline: string;
+      body: string;
+    };
   };
 
   test.beforeAll(async ({ userConfig, studentConfig }) => {
@@ -23,6 +27,10 @@ test.describe.serial('Group Management - Creation and User Assignment', () => {
       group_name: shared.gensym(`test-group-`),
       description_public: `test group created in e2e tests`,
       users: [userConfig.username, studentConfig.username],
+      messageData: {
+        headline: shared.gensym(`test-message-`),
+        body: `Test message sent to the group`,
+      },
     };
   });
 
@@ -60,6 +68,63 @@ test.describe.serial('Group Management - Creation and User Assignment', () => {
     await test.step('Verify that the new group appears in the list', async () => {
       const groupChip = adminPage.getByTestId('groups-chips-stack').getByText(groupData.group_name).first();
       await expect(groupChip).toBeVisible();
+    });
+  });
+
+  test('Admin can send a message to the group', async ({ adminPage }) => {
+    await test.step('Navigate to messages settings', async () => {
+      await navigation.goToMessagesSettings(adminPage);
+    });
+
+    await test.step('Click add message button', async () => {
+      await forms.clickButton(adminPage, 'add-messages-button');
+      await adminPage.waitForTimeout(500);
+    });
+
+    await test.step('Select group as message target', async () => {
+      // Change message type from user to group
+      await forms.selectOptionByValue(adminPage, 'message-type-select', 'target_group');
+    });
+
+    await test.step('Select the group', async () => {
+      await forms.selectMultiAutocompleteOption(adminPage, 'group-field-autocomplete-input', groupData.group_name);
+    });
+
+    await test.step('Fill message form', async () => {
+      await forms.fillForm(adminPage, 'message-headline', groupData.messageData.headline);
+
+      // Scope the markdown editor to the form
+      const form = adminPage.locator('form').first();
+      await forms.fillMarkdownForm(adminPage, 'body', groupData.messageData.body, form);
+    });
+
+    await test.step('Submit message', async () => {
+      await forms.clickButton(adminPage, 'submit-message-form');
+      await adminPage.waitForLoadState('networkidle');
+      await adminPage.waitForTimeout(1000);
+    });
+
+    await test.step('Verify message was created in admin panel', async () => {
+      const messageRow = adminPage.locator('table tr').filter({ hasText: groupData.messageData.headline });
+      await expect(messageRow).toBeVisible();
+    });
+  });
+
+  test('Users in group receive the message', async ({ userPage, studentPage }) => {
+    await test.step('Verify user received the message', async () => {
+      await navigation.goToMessages(userPage);
+      await userPage.waitForLoadState('networkidle');
+
+      const messageCard = userPage.getByText(groupData.messageData.headline);
+      await expect(messageCard).toBeVisible({ timeout: 10000 });
+    });
+
+    await test.step('Verify student received the message', async () => {
+      await navigation.goToMessages(studentPage);
+      await studentPage.waitForLoadState('networkidle');
+
+      const messageCard = studentPage.getByText(groupData.messageData.headline);
+      await expect(messageCard).toBeVisible({ timeout: 10000 });
     });
   });
 });

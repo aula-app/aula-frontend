@@ -53,6 +53,12 @@ const GroupField: React.FC<Props> = ({ control, disabled = false, ...restOfProps
             options={options}
             loading={loading}
             disabled={disabled}
+            data-testid="group-field-autocomplete"
+            slotProps={{
+              paper: {
+                'data-testid': 'group-field-autocomplete-list',
+              } as any,
+            }}
             isOptionEqualToValue={(option, value) => option?.value === value?.value}
             getOptionLabel={(option) => option?.label || ''}
             value={selectedOption}
@@ -60,6 +66,16 @@ const GroupField: React.FC<Props> = ({ control, disabled = false, ...restOfProps
               // Pass just the ID value to the form
               field.onChange(newValue ? newValue.value : null);
             }}
+            renderOption={(props, option) => (
+              <li
+                {...props}
+                key={option.value}
+                data-testid={`group-field-autocomplete-input-option-${option.label}`}
+                role="option"
+              >
+                {option.label}
+              </li>
+            )}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -68,6 +84,12 @@ const GroupField: React.FC<Props> = ({ control, disabled = false, ...restOfProps
                 disabled={loading || disabled}
                 error={!!fieldState.error}
                 helperText={<span id="group-error-message">{t(`${fieldState.error?.message || ''}`)}</span>}
+                slotProps={{
+                  htmlInput: {
+                    ...params.inputProps,
+                    'data-testid': 'group-field-autocomplete-input',
+                  },
+                }}
                 {...restOfProps}
               />
             )}

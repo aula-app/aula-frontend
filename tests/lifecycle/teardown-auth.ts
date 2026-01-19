@@ -8,7 +8,7 @@ interface CleanupConfig {
   method: string;
   deleteMethod: string;
   filterField: string;
-  filterPrefix: string;
+  filterPrefix: string | string[];
   idField: string;
   nameField: string;
   args?: any;
@@ -44,6 +44,26 @@ const CLEANUP_CONFIGS: CleanupConfig[] = [
     idField: 'hash_id',
     nameField: 'room_name',
     args: { offset: 0, limit: 1000, orderby: 0, asc: 0, type: 0 },
+  },
+  {
+    service: 'groups',
+    method: 'getGroups',
+    deleteMethod: 'deleteGroup',
+    filterField: 'group_name',
+    filterPrefix: 'test-group-',
+    idField: 'id',
+    nameField: 'group_name',
+    args: undefined,
+  },
+  {
+    service: 'messages',
+    method: 'getAllMessages',
+    deleteMethod: 'deleteMessage',
+    filterField: 'headline',
+    filterPrefix: ['test-message-', 'Test Message', 'Test bug', 'Test comment'],
+    idField: 'hash_id',
+    nameField: 'headline',
+    args: {},
   },
   {
     service: 'users',
@@ -135,7 +155,12 @@ async function cleanupAuthStates(): Promise<void> {
 
 async function cleanupTestItems(page: Page, config: CleanupConfig): Promise<void> {
   const items = await fetchItems(page, config.service, config.method, config.args);
-  const testItems = items?.filter((item: any) => item[config.filterField]?.startsWith(config.filterPrefix)) || [];
+
+  const prefixes = Array.isArray(config.filterPrefix) ? config.filterPrefix : [config.filterPrefix];
+  const testItems = items?.filter((item: any) => {
+    const fieldValue = item[config.filterField];
+    return fieldValue && prefixes.some(prefix => fieldValue.startsWith(prefix));
+  }) || [];
 
   console.info(`🧹 Found ${testItems.length} test ${config.service} to clean up`);
 
