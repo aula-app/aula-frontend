@@ -48,15 +48,22 @@ const View: React.FC = () => {
   return (
     <Stack gap={2}>
       {/* <Typography variant="h3">{t('scopes.groups.plural')}</Typography> */}
-      <Stack direction="row" flexWrap="wrap" gap={1}>
+      <Stack direction="row" flexWrap="wrap" gap={1} data-testid="groups-chips-stack">
         <Chip
           label={t('actions.add', { var: t('scopes.groups.name').toLowerCase() })}
           avatar={<AppIcon icon="add" />}
+          data-testid="add-group-chip"
           onClick={() => setEdit(true)}
         />
         {groups.map((group, key) => {
           return (
-            <Chip key={group.id} label={group.group_name} onClick={() => setEdit(group)} onDelete={() => setDel(group)} />
+            <Chip
+              key={group.id}
+              label={group.group_name}
+              data-testid={`group-chip-${key}`}
+              onClick={() => setEdit(group)}
+              onDelete={() => setDel(group)}
+            />
           );
         })}
       </Stack>

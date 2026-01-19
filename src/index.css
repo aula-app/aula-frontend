@@ -44,6 +44,12 @@ code {
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
+/* Fix for MDXEditor toolbar groups when CSS modules hash changes */
+[class*="toolbarGroupOfGroups"] {
+  display: flex !important;
+  margin: 0 var(--spacing-1);
+}
+
 /* Fix overscrolling issues with MDXEditor popups */
 .mdxeditor-popup-container {
   overflow: visible !important;

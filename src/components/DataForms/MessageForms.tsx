@@ -231,11 +231,20 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
                 label={t('settings.messages.to')}
                 value={messageType}
                 onChange={changeTarget}
-                data-testid="message-to-select"
+                data-testid="message-type-select"
+                slotProps={{
+                  select: {
+                    MenuProps: {
+                      PaperProps: {
+                        'data-testid': `message-type-select-list`,
+                      } as any,
+                    },
+                  },
+                }}
                 sx={{ minWidth: 150 }}
               >
                 {toOptions.map((option, index) => (
-                  <MenuItem value={index} key={index}>
+                  <MenuItem value={index} key={index} data-testid={`select-option-${option.name}`}>
                     {t(option.label)}
                   </MenuItem>
                 ))}

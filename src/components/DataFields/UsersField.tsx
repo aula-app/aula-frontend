@@ -71,7 +71,7 @@ const UsersField: React.FC<Props> = ({ defaultValues, onChange, disabled = false
       loading={loading}
       disabled={disabled}
       renderOption={(props, option) => (
-        <li {...props} key={option.value} data-testid={`user-option-${option.username}`}>
+        <li {...props} key={option.value} data-testid={`users-field-option-${option.username}`}>
           {option.label}{' '}
           <Typography ml={2} variant="body2" color="text.secondary">
             ({option.displayname})
