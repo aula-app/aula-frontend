@@ -10,13 +10,14 @@
   .MuiToolbar-root{ border-bottom: 1px solid black !important; }
 
   .noPrint,
+  .no-print,
   .MuiFab-root,
   .MuiTabs-root,
   .MuiToolbar-root svg,
   .MuiToolbar-root button,
   .MuiCardContent-root img { display: none; }
 
-  .printOnly { display: block; }
+  .printOnly, .print-only { display: block; }
 
   .noVolume { width: auto !important; height: auto !important; }
   .noRepeat { position: relative !important; }

@@ -101,7 +101,7 @@ const SideBar = (): JSX.Element => {
             <Link
               to={path as string}
               className={`my-1 p-3 flex items-center gap-3 rounded-lg transition-colors w-full text-left ${
-                location.pathname === path ? 'bg-theme-grey dark:bg-gray-700 font-semibold' : 'hover:bg-theme-grey'
+                location.pathname === path ? 'bg-theme-grey font-semibold' : 'hover:bg-theme-grey-light'
               } focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500`}
               role="menuitem"
               aria-label={t(`ui.navigation.${title}`)}

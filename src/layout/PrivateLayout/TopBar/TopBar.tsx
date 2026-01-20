@@ -35,7 +35,7 @@ const TopBar: React.FC = () => {
   };
 
   return (
-    <header className="relative z-10 bg-primary h-14 flex items-center px-2 py-1 shadow-sm">
+    <header className="relative z-10 bg-primary h-14 shrink-0 flex items-center px-2 py-1 shadow-sm">
       <div className="flex-1 flex items-center justify-start h-full">
         {location[1] === '' ? (
           <IconButton to="/" className="h-full">
@@ -63,14 +63,17 @@ const TopBar: React.FC = () => {
         >
           <Icon type={mobileMenuOpen ? 'close' : 'menu'} size="1.5rem" />
         </button>
-        {mobileMenuOpen && (
-          <div
-            className="fixed overflow-auto top-12 right-0 left-0 bottom-0 bg-paper non-print"
-            onClick={() => setMobileMenuOpen(false)}
-          >
+        <div
+          className={
+            'fixed -z-10 top-14 right-0 left-0 overflow-hidden bg-paper no-print transition-all duration-300 ease-in-out' +
+            (mobileMenuOpen ? ' max-h-[calc(100vh-3.5rem)] opacity-100' : ' max-h-0 opacity-0')
+          }
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          <div className="overflow-auto h-[calc(100vh-3.5rem)]">
             <SideBarContent />
           </div>
-        )}
+        </div>
       </div>
       <div className="flex-1 h-full items-center justify-end hidden sm:flex pr-1">
         <UpdatesButton />
