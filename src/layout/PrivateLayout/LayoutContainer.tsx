@@ -13,7 +13,7 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
     <div className="flex flex-col h-screen w-screen overflow-hidden">
       <SkipNavigation mainContentId="main-content" />
       <TopBar />
-      <main id="main-content" className="flex-1 overflow-auto" tabIndex={-1}>
+      <main id="main-content" className="flex-1" tabIndex={-1}>
         {children}
       </main>
       <AskConsent />

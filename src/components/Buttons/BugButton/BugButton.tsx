@@ -1,16 +1,13 @@
-import AppIconButton from '@/components/AppIconButton';
 import { BugForms } from '@/components/DataForms';
+import Icon from '@/components/new/Icon';
+import IconButton from '@/components/new/IconButton';
 import { addBug, BugArguments } from '@/services/messages';
-import { IconButtonProps, Drawer } from '@mui/material';
-import { forwardRef, useState } from 'react';
+import { Drawer, IconButtonProps } from '@mui/material';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-interface Props extends IconButtonProps {
-  target: string;
-}
-
-const BugButton = forwardRef<HTMLButtonElement, Props>(({ target, disabled = false, ...restOfProps }, ref) => {
+const BugButton = ({ disabled = false, ...restOfProps }: IconButtonProps) => {
   const { t } = useTranslation();
   const location = useLocation();
   const [isOpen, setOpen] = useState(false);
@@ -25,7 +22,7 @@ ${data.content || ''}
     `;
 
     const request = await addBug({
-      headline: t('scopes.bugs.headline', { var: target }),
+      headline: t('scopes.bugs.headline', { var: location.pathname }),
       body,
     });
     if (!request.error) onClose();
@@ -35,9 +32,7 @@ ${data.content || ''}
 
   return (
     <>
-      <AppIconButton
-        ref={ref}
-        icon="bug"
+      <IconButton
         disabled={disabled}
         data-testid="report-bug-button"
         aria-label={t('actions.bugReport')}
@@ -45,13 +40,15 @@ ${data.content || ''}
         {...restOfProps}
         onClick={() => setOpen(true)}
         title={t('actions.bugReport')}
-      />
+      >
+        <Icon type="bug" size="1.5rem" />
+      </IconButton>
       <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} data-testid="bug-dialog">
         <BugForms onClose={onClose} onSubmit={onSubmit} />
       </Drawer>
     </>
   );
-});
+};
 
 BugButton.displayName = 'BugButton';
 

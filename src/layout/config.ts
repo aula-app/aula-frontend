@@ -9,23 +9,10 @@ import { checkPermissions } from '@/utils';
  * SideBar configuration
  */
 
-const SIDEBAR_MOBILE_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_DESKTOP_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_WIDTH = '240px';
 
 export const SIDEBAR_ITEMS: Array<LinkToPage> = [
-  {
-    title: 'home',
-    path: '/',
-    icon: 'home',
-    permission: () => true,
-  },
-  {
-    title: 'profile',
-    path: '/settings/profile',
-    icon: 'account',
-    permission: () => true,
-  },
   {
     title: 'users',
     path: '/settings/users',

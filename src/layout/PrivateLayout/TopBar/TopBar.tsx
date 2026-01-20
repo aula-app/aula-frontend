@@ -1,20 +1,14 @@
-import { Link } from 'react-router-dom';
-import { AppIconButton, AppLink, Breadcrumb } from '@/components';
+import { Breadcrumb } from '@/components';
 import MessagesButton from '@/components/Buttons/MessagesButton';
 import UpdatesButton from '@/components/Buttons/UpdatesButton';
-import LocaleSwitch from '@/components/LocaleSwitch';
-import { getRuntimeConfig } from '@/config';
-import { useEventLogout, useOnMobile } from '@/hooks';
-import { useAppStore } from '@/store/AppStore';
-import { checkPermissions } from '@/utils';
-import { AppBar, Breadcrumbs, Stack, Toolbar, useTheme } from '@mui/material';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../../config';
-import SideBar from '../SideBar';
 import Icon from '@/components/new/Icon';
 import IconButton from '@/components/new/IconButton';
+import { getRuntimeConfig } from '@/config';
+import { useAppStore } from '@/store/AppStore';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+import SideBarContent from '../SideBar/SideBar';
 
 /**
  * TopBar component that provides navigation, breadcrumbs, and user controls
@@ -22,16 +16,10 @@ import IconButton from '@/components/new/IconButton';
  */
 const TopBar: React.FC = () => {
   const { t } = useTranslation();
-  const theme = useTheme();
-  const [openSideBar, setSidebar] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [appState] = useAppStore();
 
   const location = useLocation().pathname.split('/');
-  const onLogout = useEventLogout();
-  const onMobile = useOnMobile();
-  const goto = useNavigate();
-
-  const menuToggle = () => setSidebar(!openSideBar);
 
   // Calculate return path based on current location
   const getReturnPath = () => {
@@ -47,7 +35,7 @@ const TopBar: React.FC = () => {
   };
 
   return (
-    <header className="bg-primary h-14 flex items-center px-2 py-1 shadow-sm">
+    <header className="relative z-10 bg-primary h-14 flex items-center px-2 py-1 shadow-sm">
       <div className="flex-1 flex items-center justify-start h-full">
         {location[1] === '' ? (
           <IconButton to="/" className="h-full">
@@ -66,98 +54,29 @@ const TopBar: React.FC = () => {
       <div className="flex-1 h-full flex items-center justify-center text-lg">
         <Breadcrumb />
       </div>
-      <div className="flex-1 h-full flex items-center justify-end"></div>
+      <div className="flex-1 h-full items-center justify-end flex sm:hidden">
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="relative overflow-hidden flex items-center justify-center h-full aspect-square p-2 rounded-full hover:bg-black/10 transition-colors"
+          aria-expanded={mobileMenuOpen}
+          aria-label="Toggle mobile menu"
+        >
+          <Icon type={mobileMenuOpen ? 'close' : 'menu'} size="1.5rem" />
+        </button>
+        {mobileMenuOpen && (
+          <div
+            className="fixed overflow-auto top-12 right-0 left-0 bottom-0 bg-paper non-print"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <SideBarContent />
+          </div>
+        )}
+      </div>
+      <div className="flex-1 h-full items-center justify-end hidden sm:flex pr-1">
+        <UpdatesButton />
+        <MessagesButton />
+      </div>
     </header>
-    // <AppBar
-    //   elevation={0}
-    //   sx={{
-    //     height: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT,
-    //     top: 'var(--safe-area-inset-top, 0px)',
-    //     left: 'var(--safe-area-inset-left, 0px)',
-    //     right: 'var(--safe-area-inset-right, 0px)',
-    //   }}
-    // >
-    //   <Toolbar>
-    //     <Stack height="100%" direction="row" alignItems="center" pl={0.5} pr={onMobile ? 2 : 3.5}>
-    //       {/* Logo or Back Button */}
-    //       {location[1] === '' ? (
-    //         <img
-    //           src={`${getRuntimeConfig().BASENAME}img/Aula_Icon.svg`}
-    //           alt={t('app.name.icon')}
-    //           style={{
-    //             height: '100%',
-    //             objectFit: 'contain',
-    //             paddingTop: theme.spacing(2),
-    //             paddingBottom: theme.spacing(2),
-    //           }}
-    //         />
-    //       ) : (
-    //         <AppIconButton icon="back" title={t('tooltips.back')} onClick={() => goto(getReturnPath())} />
-    //       )}
-    //     </Stack>
-    //     {/* Navigation Breadcrumbs */}
-    //     <Breadcrumbs
-    //       aria-label="breadcrumb"
-    //       sx={{
-    //         overflow: 'hidden',
-    //         flexGrow: 1,
-    //         textAlign: 'center',
-    //         '& .MuiBreadcrumbs-ol': {
-    //           flexWrap: 'nowrap',
-    //           width: '100%',
-    //         },
-    //         '& .MuiBreadcrumbs-li': {
-    //           minWidth: 0,
-    //           maxWidth: '100%',
-    //           display: 'flex',
-    //           alignItems: 'center',
-    //         },
-    //       }}
-    //     >
-    //       <AppLink
-    //         underline="hover"
-    //         color="inherit"
-    //         to="/"
-    //         sx={{
-    //           display: 'inline-block',
-    //           maxWidth: '100%',
-    //           overflow: 'hidden',
-    //           textOverflow: 'ellipsis',
-    //           whiteSpace: 'nowrap',
-    //         }}
-    //       >
-    //         aula
-    //       </AppLink>
-    //       {crumbs.length > 2 && <span>...</span>}
-    //       {crumbs.slice(-2).map((crumb) => crumb)}
-    //     </Breadcrumbs>
-
-    //     {/* User Controls */}
-    //     {checkPermissions('system', 'hide') ? (
-    //       <Stack direction="row">
-    //         <LocaleSwitch />
-    //         <AppIconButton icon="logout" title={t('tooltips.logout')} onClick={onLogout} />
-    //       </Stack>
-    //     ) : (
-    //       <Stack direction="row" sx={{ ml: 'auto', gap: 0.5 }}>
-    //         <MessagesButton />
-    //         <UpdatesButton />
-    //         <AppIconButton
-    //           icon="menu"
-    //           title={t('tooltips.menu')}
-    //           onClick={menuToggle}
-    //           sx={{ display: { xs: 'block', md: 'none' } }}
-    //         />
-    //       </Stack>
-    //     )}
-    //     <SideBar
-    //       anchor={SIDEBAR_DESKTOP_ANCHOR}
-    //       open={openSideBar}
-    //       variant="temporary"
-    //       onClose={() => setSidebar(false)}
-    //     />
-    //   </Toolbar>
-    // </AppBar>
   );
 };
 

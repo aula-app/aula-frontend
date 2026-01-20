@@ -1,41 +1,60 @@
-import { Link, LinkProps } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
+import { ReactNode, ButtonHTMLAttributes } from 'react';
 import { useRipple } from '@/hooks/useRipple';
 
-interface IconButtonLinkProps extends Omit<LinkProps, 'className'> {
+interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
   children: ReactNode;
   title?: string;
   className?: string;
   disabled?: boolean;
   testId?: string;
+  to?: string; // If provided, renders as a Link
 }
 
 /**
- * A react-router-dom Link styled like MUI's IconButton with ripple effect
- * @component IconButtonLink
+ * Flexible icon button that renders as a Link (if 'to' prop) or as a button
+ * Styled like MUI's IconButton with ripple effect
+ * @component IconButton
  */
-const IconButtonLink: React.FC<IconButtonLinkProps> = ({
+const IconButton: React.FC<IconButtonProps> = ({
   children,
   title,
   className = '',
   disabled = false,
   testId,
   to,
+  onClick,
   ...restOfProps
 }) => {
   const { createRipple, RipplesContainer } = useRipple();
 
-  // Generate a comprehensive testId from the 'to' path if not provided
-  const resolvedTestId = testId ?? `icon-button-link-${String(to).replace(/\//g, '-').replace(/^-/, '')}`;
+  const baseClassName = `
+    relative overflow-hidden aspect-square p-2
+    inline-flex items-center justify-center rounded-full
+    text-current cursor-pointer select-none
+    transition-[background-color] duration-150 ease-in-out
+    hover:bg-black/[0.04] dark:hover:bg-white/[0.08]
+    focus:outline-none focus-visible:bg-black/[0.12] dark:focus-visible:bg-white/[0.12]
+    active:bg-black/[0.12] dark:active:bg-white/[0.12]
+    ${className}
+  `;
+
+  const disabledClassName = `
+    inline-flex items-center justify-center rounded-full p-2
+    text-gray-400 cursor-not-allowed opacity-40
+    ${className}
+  `;
+
+  const resolvedTestId =
+    testId ??
+    `icon-button-${String(to || 'button')
+      .replace(/\//g, '-')
+      .replace(/^-/, '')}`;
 
   if (disabled) {
     return (
       <span
-        className={`
-          inline-flex items-center justify-center rounded-full p-2
-          text-gray-400 cursor-not-allowed opacity-40
-          ${className}
-        `}
+        className={disabledClassName}
         title={title}
         aria-label={title}
         aria-disabled="true"
@@ -46,29 +65,40 @@ const IconButtonLink: React.FC<IconButtonLinkProps> = ({
     );
   }
 
+  // Render as Link if 'to' prop is provided
+  if (to) {
+    const { to: _to, ...linkProps } = restOfProps as any;
+    return (
+      <Link
+        to={to}
+        className={baseClassName}
+        title={title}
+        aria-label={title}
+        data-testid={resolvedTestId}
+        onMouseDown={createRipple}
+        {...linkProps}
+      >
+        {children}
+        <RipplesContainer />
+      </Link>
+    );
+  }
+
+  // Render as button otherwise
   return (
-    <Link
-      to={to}
-      className={`
-        relative overflow-hidden max-h-full aspect-square p-2
-        inline-flex items-center justify-center rounded-full
-        text-current cursor-pointer select-none
-        transition-[background-color] duration-150 ease-in-out
-        hover:bg-black/[0.04] dark:hover:bg-white/[0.08]
-        focus:outline-none focus-visible:bg-black/[0.12] dark:focus-visible:bg-white/[0.12]
-        active:bg-black/[0.12] dark:active:bg-white/[0.12]
-        ${className}
-      `}
+    <button
+      className={baseClassName}
       title={title}
       aria-label={title}
       data-testid={resolvedTestId}
       onMouseDown={createRipple}
-      {...restOfProps}
+      onClick={onClick}
+      {...(restOfProps as ButtonHTMLAttributes<HTMLButtonElement>)}
     >
       {children}
       <RipplesContainer />
-    </Link>
+    </button>
   );
 };
 
-export default IconButtonLink;
+export default IconButton;
