@@ -603,6 +603,8 @@
   "ui": {
     "accessibility": {
       "actionToolbar": "Action toolbar",
+      "breadcrumb": "Breadcrumb navigation",
+      "breadcrumbMenu": "Navigate from {{page}}",
       "clearFilter": "Clear filter",
       "codeCopied": "Instance code copied to clipboard",
       "columnHeader": "column header",
@@ -631,6 +633,7 @@
       "menuClosed": "Navigation menu closed",
       "menuItemSelected": "Selected {{item}} from navigation menu",
       "modalClosed": "Dialog closed",
+      "navigationMenu": "Parent pages navigation",
       "modalOpened": "{{title}} dialog opened",
       "navigationDescription": "Use arrow keys to navigate between menu items, Enter to select, and Escape to close the menu",
       "newContent": "New content available",

@@ -5,5 +5,6 @@ export * from './event';
 export * from './layout';
 export * from './useFilter';
 export * from './useFilters';
+export * from './useRipple';
 export * from './useSort';
 export * from './useDataTableState';

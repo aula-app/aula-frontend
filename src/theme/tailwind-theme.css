@@ -1,0 +1,90 @@
+/* Tailwind Theme Configuration - synced with MUI theme */
+@theme {
+  /* MUI Palette Colors */
+  --color-primary: hsl(134, 72%, 67%);
+  --color-secondary: hsl(0, 0%, 59%);
+  --color-error: hsl(0, 84%, 76%);
+  --color-warning: hsl(45, 100%, 79%);
+  --color-info: hsl(204, 82%, 86%);
+  --color-success: hsl(134, 72%, 67%);
+
+  /* Base Colors */
+  --color-theme-blue-light: hsl(210, 100%, 94%);
+  --color-theme-blue: hsl(210, 100%, 86%);
+  --color-theme-blue-dark: hsl(210, 88%, 67%);
+  --color-theme-blue-darker: hsl(210, 61%, 63%);
+
+  --color-theme-purple-light: hsl(270, 50%, 94%);
+  --color-theme-purple: hsl(270, 50%, 82%);
+  --color-theme-purple-dark: hsl(270, 50%, 70%);
+  --color-theme-purple-darker: hsl(270, 25%, 47%);
+
+  --color-theme-red-light: hsl(0, 100%, 94%);
+  --color-theme-red: hsl(0, 84%, 76%);
+  --color-theme-red-dark: hsl(0, 84%, 58%);
+  --color-theme-red-darker: hsl(0, 56%, 39%);
+
+  --color-theme-yellow-light: hsl(45, 100%, 90%);
+  --color-theme-yellow: hsl(45, 100%, 79%);
+  --color-theme-yellow-dark: hsl(45, 100%, 68%);
+  --color-theme-yellow-darker: hsl(45, 100%, 56%);
+
+  --color-theme-green-light: hsl(134, 72%, 94%);
+  --color-theme-green: hsl(134, 72%, 83%);
+  --color-theme-green-dark: hsl(134, 72%, 67%);
+  --color-theme-green-darker: hsl(134, 28%, 49%);
+
+  --color-theme-grey-light: hsl(0, 0%, 95%);
+  --color-theme-grey: hsl(0, 0%, 88%);
+  --color-theme-grey-dark: hsl(0, 0%, 75%);
+  --color-theme-grey-darker: hsl(0, 0%, 59%);
+
+  /* Phase Colors */
+  --color-wild-light: hsl(210, 100%, 94%);
+  --color-wild: hsl(210, 100%, 86%);
+  --color-wild-dark: hsl(210, 88%, 67%);
+  --color-wild-darker: hsl(210, 61%, 63%);
+
+  --color-discussion-light: hsl(270, 50%, 94%);
+  --color-discussion: hsl(270, 50%, 82%);
+  --color-discussion-dark: hsl(270, 50%, 70%);
+  --color-discussion-darker: hsl(270, 25%, 47%);
+
+  --color-approval-light: hsl(25, 100%, 94%);
+  --color-approval: hsl(25, 84%, 76%);
+  --color-approval-dark: hsl(25, 84%, 58%);
+  --color-approval-darker: hsl(25, 56%, 39%);
+
+  --color-voting-light: hsl(45, 100%, 90%);
+  --color-voting: hsl(45, 100%, 79%);
+  --color-voting-dark: hsl(45, 100%, 68%);
+  --color-voting-darker: hsl(45, 100%, 56%);
+
+  --color-results-light: hsl(134, 72%, 94%);
+  --color-results: hsl(134, 72%, 88%);
+  --color-results-dark: hsl(134, 72%, 67%);
+  --color-results-darker: hsl(134, 28%, 49%);
+
+  /* Other Colors */
+  --color-against: hsl(0, 84%, 76%);
+  --color-alert: hsl(0, 84%, 76%);
+  --color-announcements: hsl(270, 50%, 82%);
+  --color-bugs: hsl(0, 0%, 90%);
+  --color-comments: hsl(0, 0%, 90%);
+  --color-disabled: hsl(0, 0%, 90%);
+  --color-for: hsl(134, 72%, 88%);
+  --color-reports: hsl(45, 100%, 79%);
+  --color-messages: hsl(210, 100%, 86%);
+  --color-neutral: hsl(45, 100%, 79%);
+  --color-requests: hsl(0, 0%, 90%);
+
+  /* Text Colors */
+  --color-text-primary: hsl(236.17, 42%, 22%);
+
+  /* Background Colors */
+  --color-background: #FFFFFF;
+
+  /* Input Border Colors */
+  --color-input-border: rgba(0, 0, 0, 0.23);
+  --color-input-border-hover: rgba(0, 0, 0, 0.87);
+}
