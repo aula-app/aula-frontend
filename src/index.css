@@ -1,9 +1,10 @@
-@import "tailwindcss";
-@import "./theme/tailwind-theme.css";
-
 @import url('/font/vision/vision.css');
 @import url('/font/tahoma/tahoma.css');
 @import url('/font/inconsolata/inconsolata.css');
+
+@import "tailwindcss";
+@import "./theme/tailwind-theme.css";
+
 
 /* MUI-like ripple animation */
 @keyframes ripple {

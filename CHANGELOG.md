@@ -1,3 +1,8 @@
+## Next
+
+- **New features**
+  - Better breadcrumb navigation for mobile
+
 ## 1.7.0
 
 - **New features**
