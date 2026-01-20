@@ -13,8 +13,8 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SIDEBAR_DESKTOP_ANCHOR, TOPBAR_DESKTOP_HEIGHT, TOPBAR_MOBILE_HEIGHT } from '../../config';
 import SideBar from '../SideBar';
-import Icon from '@/components/Icon';
-import IconButton from '@/components/IconButton';
+import Icon from '@/components/new/Icon';
+import IconButton from '@/components/new/IconButton';
 
 /**
  * TopBar component that provides navigation, breadcrumbs, and user controls
@@ -63,7 +63,7 @@ const TopBar: React.FC = () => {
           </IconButton>
         )}
       </div>
-      <div className="flex-1 h-full flex items-center justify-center">
+      <div className="flex-1 h-full flex items-center justify-center text-lg">
         <Breadcrumb />
       </div>
       <div className="flex-1 h-full flex items-center justify-end"></div>

@@ -605,6 +605,7 @@
       "actionToolbar": "Aktionsleiste",
       "breadcrumb": "Brotkrümel-Navigation",
       "breadcrumbMenu": "Von {{page}} navigieren",
+      "schoolName": "Schulname",
       "clearFilter": "Filter löschen",
       "codeCopied": "Instanzcode in die Zwischenablage kopiert",
       "columnHeader": "Spaltenkopf",

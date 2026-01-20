@@ -605,6 +605,7 @@
       "actionToolbar": "Action toolbar",
       "breadcrumb": "Breadcrumb navigation",
       "breadcrumbMenu": "Navigate from {{page}}",
+      "schoolName": "School name",
       "clearFilter": "Clear filter",
       "codeCopied": "Instance code copied to clipboard",
       "columnHeader": "column header",
