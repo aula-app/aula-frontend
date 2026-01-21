@@ -35,7 +35,10 @@ const TopBar: React.FC = () => {
   };
 
   return (
-    <header className="relative z-10 bg-primary h-14 shrink-0 flex items-center px-2 py-1 shadow-sm">
+    <header
+      className="relative z-50 bg-primary h-14 shrink-0 flex items-center px-2 py-1 shadow-sm"
+      onClick={() => setMobileMenuOpen(false)}
+    >
       <div className="flex-1 flex items-center justify-start h-full">
         {location[1] === '' ? (
           <IconButton to="/" className="h-full">
@@ -56,7 +59,10 @@ const TopBar: React.FC = () => {
       </div>
       <div className="flex-1 h-full items-center justify-end flex sm:hidden">
         <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setMobileMenuOpen(!mobileMenuOpen);
+          }}
           className="relative overflow-hidden flex items-center justify-center h-full aspect-square p-2 rounded-full hover:bg-black/10 transition-colors"
           aria-expanded={mobileMenuOpen}
           aria-label="Toggle mobile menu"

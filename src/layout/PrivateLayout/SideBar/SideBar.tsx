@@ -93,9 +93,26 @@ const SideBar = (): JSX.Element => {
             {isAuthenticated && <UserInfo />}
           </Link>
         </li>
+
         <li className="my-1 px-3">
           <div className="border-t border-theme-grey" />
         </li>
+
+        <li className="flex items-center justify-around px-2 my-2">
+          <ThemeToggleButton />
+          <BugButton />
+          <IconButton onClick={() => window.print()} aria-label={t('actions.print')} title={t('actions.print')}>
+            <Icon type="print" aria-hidden="true" size="1.5rem" />
+          </IconButton>
+          <IconButton>
+            <Icon type="settings" aria-hidden="true" size="1.5rem" />
+          </IconButton>
+        </li>
+
+        <li className="my-1 px-3">
+          <div className="border-t border-theme-grey" />
+        </li>
+
         {visibleItems.map(({ icon, path, title }, index) => (
           <li key={`${title}-${path}`}>
             <Link
@@ -116,19 +133,6 @@ const SideBar = (): JSX.Element => {
             </Link>
           </li>
         ))}
-
-        <li className="my-1 px-3">
-          <div className="border-t border-theme-grey" />
-        </li>
-
-        <li className="flex items-center justify-around px-2 my-2">
-          <LocaleSwitch />
-          <ThemeToggleButton />
-          <BugButton />
-          <IconButton onClick={() => window.print()} aria-label={t('actions.print')} title={t('actions.print')}>
-            <Icon type="print" aria-hidden="true" size="1.5rem" />
-          </IconButton>
-        </li>
 
         <li className="my-1 px-3">
           <div className="border-t border-theme-grey" />
