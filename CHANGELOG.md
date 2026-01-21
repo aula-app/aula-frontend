@@ -1,3 +1,9 @@
+## Next
+
+- **Technical improvements**
+  - Add default language as de (matching the app's default)
+  - Add comprehensive page titles
+
 ## 1.7.0
 
 - **New features**
