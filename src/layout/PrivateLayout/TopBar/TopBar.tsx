@@ -57,33 +57,33 @@ const TopBar: React.FC = () => {
       <div className="flex-1 h-full flex items-center justify-center text-lg">
         <Breadcrumb />
       </div>
-      <div className="flex-1 h-full items-center justify-end flex sm:hidden">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setMobileMenuOpen(!mobileMenuOpen);
-          }}
-          className="relative overflow-hidden flex items-center justify-center h-full aspect-square p-2 rounded-full hover:bg-black/10 transition-colors"
-          aria-expanded={mobileMenuOpen}
-          aria-label="Toggle mobile menu"
-        >
-          <Icon type={mobileMenuOpen ? 'close' : 'menu'} size="1.5rem" />
-        </button>
-        <div
-          className={
-            'fixed -z-10 top-14 right-0 left-0 overflow-hidden bg-paper no-print transition-all duration-300 ease-in-out' +
-            (mobileMenuOpen ? ' max-h-[calc(100vh-3.5rem)] opacity-100' : ' max-h-0 opacity-0')
-          }
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          <div className="overflow-auto h-[calc(100vh-3.5rem)]">
-            <SideBarContent />
-          </div>
-        </div>
-      </div>
-      <div className="flex-1 h-full items-center justify-end hidden sm:flex pr-1">
+      <div className="flex-1 h-full items-center justify-end flex">
         <UpdatesButton />
         <MessagesButton />
+        <div className="sm:hidden">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setMobileMenuOpen(!mobileMenuOpen);
+            }}
+            className="relative overflow-hidden flex items-center justify-center h-full aspect-square p-2 rounded-full hover:bg-black/10 transition-colors"
+            aria-expanded={mobileMenuOpen}
+            aria-label="Toggle mobile menu"
+          >
+            <Icon type={mobileMenuOpen ? 'close' : 'menu'} size="1.5rem" />
+          </button>
+          <div
+            className={
+              'fixed -z-10 top-14 right-0 left-0 overflow-hidden bg-paper no-print transition-all duration-300 ease-in-out' +
+              (mobileMenuOpen ? ' max-h-[calc(100vh-3.5rem)] opacity-100' : ' max-h-0 opacity-0')
+            }
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <div className="overflow-auto h-[calc(100vh-3.5rem)]">
+              <SideBarContent />
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );

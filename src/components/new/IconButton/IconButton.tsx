@@ -32,8 +32,8 @@ const IconButton: React.FC<IconButtonProps> = ({
     relative overflow-hidden aspect-square p-2
     inline-flex items-center justify-center rounded-full
     text-current cursor-pointer select-none
-    transition-[background-color] duration-150 ease-in-out
-    hover:bg-black/[0.04] dark:hover:bg-white/[0.08]
+    transition-[background-color] duration-200 ease-in-out
+    hover:bg-shadow
     focus:outline-none focus-visible:bg-black/[0.12] dark:focus-visible:bg-white/[0.12]
     active:bg-black/[0.12] dark:active:bg-white/[0.12]
     ${className}

@@ -85,7 +85,7 @@ const Breadcrumb: React.FC = () => {
       </button>
 
       <div
-        className={`absolute top-full left-1/2 -translate-x-1/2 bg-white rounded-lg shadow-sm p-1 w-full z-50 transition-all duration-300 ease-out ${
+        className={`absolute flex flex-col-reverse top-full left-1/2 -translate-x-1/2 bg-white rounded-lg shadow-sm p-1 w-full z-50 transition-all duration-300 ease-out ${
           isOpen ? 'opacity-100 mt-1' : 'opacity-0 -mt-2 pointer-events-none'
         }`}
         aria-label={t('ui.accessibility.navigationMenu')}

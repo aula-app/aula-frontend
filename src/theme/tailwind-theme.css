@@ -17,6 +17,8 @@
   --color-info: hsl(204, 82%, 86%);
   --color-success: hsl(134, 72%, 67%);
 
+  --color-shadow: rgba(0, 0, 0, 0.05);
+
   --color-theme-blue-light: hsl(210, 100%, 94%);
   --color-theme-blue: hsl(210, 100%, 86%);
   --color-theme-blue-dark: hsl(210, 88%, 67%);
@@ -100,6 +102,8 @@
   --color-info: hsl(205, 30%, 50%);
   --color-success: hsl(134, 20%, 40%);
 
+    --color-shadow: rgba(255, 255, 255, 0.05);
+
   --color-theme-blue-light: hsl(205, 30%, 40%);
   --color-theme-blue: hsl(205, 30%, 30%);
   --color-theme-blue-dark: hsl(205, 30%, 20%);
@@ -182,6 +186,8 @@
   --color-warning: var(--color-warning);
   --color-info: var(--color-info);
   --color-success: var(--color-success);
+
+  --color-shadow: var(--color-shadow);
 
   --color-theme-blue-light: var(--color-theme-blue-light);
   --color-theme-blue: var(--color-theme-blue);
