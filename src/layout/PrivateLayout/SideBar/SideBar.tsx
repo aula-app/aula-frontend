@@ -110,10 +110,24 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
         <div className="border-t border-theme-grey" />
       </li>
 
-      {visibleItems.map(({ icon, path, title, component }, index) => {
-        // Add 1 to index because profile is at index 0
-        const menuItemIndex = index + 1;
-        return (
+        <li className="my-1 px-3">
+          <div className="border-t border-theme-grey" />
+        </li>
+
+        <li className="flex items-center justify-around px-2 my-2">
+          <ThemeToggleButton />
+          <BugButton />
+          <IconButton onClick={() => window.print()} aria-label={t('actions.print')} title={t('actions.print')}>
+            <Icon type="print" aria-hidden="true" size="1.5rem" />
+          </IconButton>
+          <LocaleSwitch />
+        </li>
+
+        <li className="my-1 px-3">
+          <div className="border-t border-theme-grey" />
+        </li>
+
+        {visibleItems.map(({ icon, path, title }, index) => (
           <li key={`${title}-${path}`}>
             <RippleLink
               to={path as string}
