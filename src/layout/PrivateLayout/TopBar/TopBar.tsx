@@ -1,6 +1,6 @@
 import { Breadcrumb } from '@/components';
-import MessagesButton from '@/components/Buttons/MessagesButton';
-import UpdatesButton from '@/components/Buttons/UpdatesButton';
+import MessagesButton from '@/components/new/MessagesButton';
+import UpdatesButton from '@/components/new/UpdatesButton';
 import Icon from '@/components/new/Icon';
 import IconButton from '@/components/new/IconButton';
 import { getRuntimeConfig } from '@/config';
@@ -36,7 +36,7 @@ const TopBar: React.FC = () => {
 
   return (
     <header
-      className="relative z-50 bg-primary h-14 shrink-0 flex items-center px-2 py-1 shadow-sm"
+      className="relative z-[9999] bg-primary h-14 shrink-0 flex items-center px-2 py-1 shadow-sm"
       onClick={() => setMobileMenuOpen(false)}
     >
       <div className="flex-1 flex items-center justify-start h-full">
@@ -58,8 +58,10 @@ const TopBar: React.FC = () => {
         <Breadcrumb />
       </div>
       <div className="flex-1 h-full items-center justify-end flex">
-        <UpdatesButton />
-        <MessagesButton />
+        <div className="hidden sm:block">
+          <UpdatesButton />
+          <MessagesButton />
+        </div>
         <div className="sm:hidden">
           <button
             onClick={(e) => {

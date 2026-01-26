@@ -1,9 +1,10 @@
-import AppIconButton from '@/components/AppIconButton';
+import Icon from '@/components/new/Icon';
+import IconButton from '@/components/new/IconButton';
 import { getUpdates } from '@/services/dashboard';
 import { Badge, IconButtonProps, Skeleton } from '@mui/material';
+import { t } from 'i18next';
 import { forwardRef, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { t } from 'i18next';
 
 const UpdatesButton = forwardRef<HTMLButtonElement, IconButtonProps>(({ ...restOfProps }, ref) => {
   const { pathname } = useLocation();
@@ -31,10 +32,14 @@ const UpdatesButton = forwardRef<HTMLButtonElement, IconButtonProps>(({ ...restO
           },
         }}
       >
-        <AppIconButton ref={ref} icon="heart" title={t('tooltips.heart')} to="/updates" {...restOfProps} />
+        <IconButton title={t('tooltips.heart')} to="/updates" {...restOfProps}>
+          <Icon type="heart" size="1.5rem" />
+        </IconButton>
       </Badge>
     ) : (
-      <AppIconButton ref={ref} icon="heart" title={t('tooltips.heart')} to="/updates" {...restOfProps} />
+      <IconButton title={t('tooltips.heart')} to="/updates" {...restOfProps}>
+        <Icon type="heart" size="1.5rem" />
+      </IconButton>
     )
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />

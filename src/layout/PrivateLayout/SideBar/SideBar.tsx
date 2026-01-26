@@ -10,6 +10,8 @@ import BugButton from '@/components/Buttons/BugButton';
 import IconButton from '@/components/new/IconButton';
 import LocaleSwitch from '@/components/LocaleSwitch';
 import ThemeToggleButton from '@/components/ThemeToggleButton';
+import UpdatesButton from '@/components/new/UpdatesButton';
+import MessagesButton from '@/components/new/MessagesButton';
 
 /**
  * Renders SideBar content including navigation, actions and user controls
@@ -99,14 +101,14 @@ const SideBar = (): JSX.Element => {
         </li>
 
         <li className="flex items-center justify-around px-2 my-2">
+          <UpdatesButton className="sm:hidden" />
+          <MessagesButton className="sm:hidden" />
           <ThemeToggleButton />
           <BugButton />
           <IconButton onClick={() => window.print()} aria-label={t('actions.print')} title={t('actions.print')}>
             <Icon type="print" aria-hidden="true" size="1.5rem" />
           </IconButton>
-          <IconButton>
-            <Icon type="settings" aria-hidden="true" size="1.5rem" />
-          </IconButton>
+          <LocaleSwitch />
         </li>
 
         <li className="my-1 px-3">

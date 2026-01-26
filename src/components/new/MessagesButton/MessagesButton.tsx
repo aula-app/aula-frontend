@@ -1,9 +1,10 @@
-import AppIconButton from '@/components/AppIconButton';
+import Icon from '@/components/new/Icon';
+import IconButton from '@/components/new/IconButton';
 import { getPersonalMessages } from '@/services/messages';
 import { Badge, IconButtonProps, Skeleton } from '@mui/material';
+import { t } from 'i18next';
 import { forwardRef, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { t } from 'i18next';
 
 const MessagesButton = forwardRef<HTMLButtonElement, IconButtonProps>(({ ...restOfProps }, ref) => {
   const { pathname } = useLocation();
@@ -19,18 +20,26 @@ const MessagesButton = forwardRef<HTMLButtonElement, IconButtonProps>(({ ...rest
   }, [pathname]);
 
   return typeof messages === 'number' ? (
-    <Badge
-      badgeContent={messages}
-      sx={{
-        '& .MuiBadge-badge': {
-          backgroundColor: 'background.paper',
-          top: 5,
-          right: 5,
-        },
-      }}
-    >
-      <AppIconButton ref={ref} icon="message" title={t('tooltips.message')} to="/messages" {...restOfProps} />
-    </Badge>
+    messages !== 0 ? (
+      <Badge
+        badgeContent={messages}
+        sx={{
+          '& .MuiBadge-badge': {
+            backgroundColor: 'background.paper',
+            top: 5,
+            right: 5,
+          },
+        }}
+      >
+        <IconButton title={t('tooltips.message')} to="/messages" {...restOfProps}>
+          <Icon type="message" size="1.5rem" />
+        </IconButton>
+      </Badge>
+    ) : (
+      <IconButton title={t('tooltips.message')} to="/messages" {...restOfProps}>
+        <Icon type="message" size="1.5rem" />
+      </IconButton>
+    )
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />
   );
