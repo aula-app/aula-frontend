@@ -4,7 +4,7 @@
   - Add default language as de (matching the app's default)
   - Add comprehensive page titles
 - **Bug fixes**
-  - Ensure users are assigned the correct default role when joining a room
+  - Ensure users are assigned the correct role in the default room
 
 ## 1.7.0
 
