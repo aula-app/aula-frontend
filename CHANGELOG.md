@@ -1,8 +1,10 @@
-## Next
+## 1.7.1
 
 - **Technical improvements**
   - Add default language as de (matching the app's default)
   - Add comprehensive page titles
+- **Bug fixes**
+  - Ensure users are assigned the correct default role when joining a room
 
 ## 1.7.0
 
