@@ -156,7 +156,8 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
           {schoolRooms.map((room, index) => {
             const currentRole =
               updateRoles.find((role) => role.room === room.hash_id)?.role ??
-              userRoles.find((role) => role.room === room.hash_id)?.role;
+              userRoles.find((role) => role.room === room.hash_id)?.role ??
+              0;
 
             const roleOptions = getRoleOptions(room);
             const isAdminLocked = (user?.userlevel ?? 0) >= 50 && room.type === 1;
