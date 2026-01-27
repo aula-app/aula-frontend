@@ -50,7 +50,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
     const isAdmin = (user?.userlevel ?? 0) >= 50;
 
     const options = [
-      { value: 0, label: isStandardRoom ? t('roles.empty') : t('roles.empty') },
+      { value: 0, label: t('roles.empty') },
       ...roles
         .filter((role) => {
           // Filter based on room type and admin status
@@ -157,7 +157,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
             const currentRole =
               updateRoles.find((role) => role.room === room.hash_id)?.role ??
               userRoles.find((role) => role.room === room.hash_id)?.role ??
-              (room.type === 1 ? defaultLevel : 0);
+              0;
 
             const roleOptions = getRoleOptions(room);
             const isAdminLocked = (user?.userlevel ?? 0) >= 50 && room.type === 1;
