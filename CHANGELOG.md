@@ -1,3 +1,8 @@
+## 1.7.3
+
+- **Bug fixes**
+  - some buttons from sidebar where not clickable on mobile
+
 ## 1.7.2
 
 - **Bug fixes**

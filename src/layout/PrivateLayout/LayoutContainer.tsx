@@ -13,11 +13,12 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
   return (
     <Stack
       sx={{
-        height: '100%',
+        height: '100vh',
         paddingTop: `calc(${onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT} + var(--safe-area-inset-top, 0px))`,
         paddingLeft: 'var(--safe-area-inset-left, 0px)',
         paddingRight: 'var(--safe-area-inset-right, 0px)',
         paddingBottom: 'var(--safe-area-inset-bottom, 0px)',
+        boxSizing: 'border-box',
       }}
     >
       <SkipNavigation mainContentId="main-content" />
