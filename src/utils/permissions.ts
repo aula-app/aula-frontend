@@ -170,9 +170,15 @@ export function checkPermissions(model: keyof typeof permissions, action: string
       const rooms = user.roles.filter((r) => r.room == room_id);
       if (rooms.length < 1) return false;
 
+
       const roleInRoom = rooms[0].role;
+      // In some cases we are saving the user roles as a string instead of a number in the JWT.
+      // We need to parse it in these cases. TODO: check in the backend why this happens. The
+      // issue appears for users created with CSV import
+      const roleInRoomNumber = ((typeof roleInRoom === 'string') ? parseInt(roleInRoom, 10): roleInRoom) as RoleTypes;
+
       const hasRolePermission =
-        typeof permissionRole === 'number' ? roleInRoom >= permissionRole : permissionRole.includes(roleInRoom);
+        typeof permissionRole === 'number' ? roleInRoomNumber >= permissionRole : permissionRole.includes(roleInRoomNumber);
 
       return checkSelfPermission(hasRolePermission);
     }
