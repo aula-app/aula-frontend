@@ -1,3 +1,8 @@
+## 1.7.2
+
+- **Bug fixes**
+  - Parse user roles correctly from JWT when they are strings
+
 ## 1.7.1
 
 - **Technical improvements**
