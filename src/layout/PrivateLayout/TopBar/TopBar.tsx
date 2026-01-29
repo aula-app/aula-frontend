@@ -72,8 +72,8 @@ const TopBar: React.FC = () => {
     <AppBar
       elevation={0}
       sx={{
-        height: onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT,
-        top: 'var(--safe-area-inset-top, 0px)',
+        height: `calc(${onMobile ? TOPBAR_MOBILE_HEIGHT : TOPBAR_DESKTOP_HEIGHT} + var(--safe-area-inset-top, 0px))`,
+        paddingTop: 'var(--safe-area-inset-top, 0px)',
         left: 'var(--safe-area-inset-left, 0px)',
         right: 'var(--safe-area-inset-right, 0px)',
       }}
