@@ -3,6 +3,19 @@
 - **New features**
   - Better breadcrumb navigation for mobile
 
+## 1.7.2
+
+- **Bug fixes**
+  - Parse user roles correctly from JWT when they are strings
+
+## 1.7.1
+
+- **Technical improvements**
+  - Add default language as de (matching the app's default)
+  - Add comprehensive page titles
+- **Bug fixes**
+  - Ensure users are assigned the correct role in the default room
+
 ## 1.7.0
 
 - **New features**

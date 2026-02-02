@@ -7,6 +7,7 @@ import ProfileEditorSkeleton from '@/components/ProfileEditor/ProfileEditorSkele
 import { getSelf } from '@/services/users';
 import { useAppStore } from '@/store/AppStore';
 import { UserType } from '@/types/Scopes';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { Stack } from '@mui/system';
@@ -18,6 +19,7 @@ import { useTranslation } from 'react-i18next';
  */
 const UserView = () => {
   const { t } = useTranslation();
+  usePageTitle('pageTitles.settings.profile');
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<UserType>();

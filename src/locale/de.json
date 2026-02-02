@@ -795,6 +795,36 @@
     "vote": "Abstimmen",
     "yourVote": "Sie haben {{var}} abgestimmt"
   },
+  "pageTitles": {
+    "welcome": "Willkommen",
+    "about": "Über aula",
+    "messages": "Nachrichten",
+    "announcements": "Ankündigungen",
+    "announcement": "Ankündigung",
+    "message": "Nachricht",
+    "report": "Meldung",
+    "phase": "Phase {{phase}}",
+    "room": "Raum",
+    "roomPhase": "{{room}} - Phase {{phase}}",
+    "idea": "Idee",
+    "ideaBox": "Ideenbox",
+    "updates": "Aktualisierungen",
+    "offline": "Offline",
+    "notFound": "Seite nicht gefunden",
+    "settings": {
+      "profile": "Mein Profil",
+      "announcements": "Ankündigungen verwalten",
+      "boxes": "Boxen verwalten",
+      "configuration": "Konfiguration",
+      "ideas": "Ideen verwalten",
+      "messages": "Nachrichten verwalten",
+      "reports": "Meldungen verwalten",
+      "bugs": "Fehler verwalten",
+      "requests": "Anfragen verwalten",
+      "rooms": "Räume verwalten",
+      "users": "Benutzer verwalten"
+    }
+  },
   "weekDays": {
     "friday": "Freitag",
     "monday": "Montag",
