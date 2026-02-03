@@ -1,0 +1,28 @@
+PODS:
+  - Capacitor (7.4.5):
+    - CapacitorCordova
+  - CapacitorCommunitySafeArea (7.0.0-alpha.1):
+    - Capacitor
+  - CapacitorCordova (7.4.5)
+
+DEPENDENCIES:
+  - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorCommunitySafeArea (from `../../node_modules/@capacitor-community/safe-area`)"
+  - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorCommunitySafeArea:
+    :path: "../../node_modules/@capacitor-community/safe-area"
+  CapacitorCordova:
+    :path: "../../node_modules/@capacitor/ios"
+
+SPEC CHECKSUMS:
+  Capacitor: a5bf59e09f9dd82694fdcca4d107b4d215ac470f
+  CapacitorCommunitySafeArea: cc370b4f8d4aa340e4616acef9b73eda41ba0914
+  CapacitorCordova: 31bbe4466000c6b86d9b7f1181ee286cff0205aa
+
+PODFILE CHECKSUM: fac870e2ec2f1dca5d1c492fd8a3720b8a93fe4a
+
+COCOAPODS: 1.16.2

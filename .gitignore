@@ -30,8 +30,6 @@ package-lock.json
 
 # production
 /build
-/android
-/ios
 
 # misc
 .DS_Store

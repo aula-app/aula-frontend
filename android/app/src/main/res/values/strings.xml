@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">aula</string>
+    <string name="title_activity_main">aula</string>
+    <string name="package_name">de.aula.neu</string>
+    <string name="custom_url_scheme">de.aula.neu</string>
+</resources>
