@@ -1,9 +1,15 @@
 import { localStorageGet } from '../utils/localStorage';
 
 export interface VersionsResponse {
-  'aula-backend.v1': { running: string; latest: string };
-  'aula-backend.v2': { running: string; latest: string };
-  'aula-frontend'?: { minimum: string; recommended: string };
+  'aula-backend.v1': {
+    'aula-backend': { running: string; latest: string };
+    'aula-frontend': { minimum: string; recommended: string };
+  };
+  'aula-backend.v2': {
+    'aula-backend': { running: string; latest: string };
+    'aula-frontend': { minimum: string; recommended: string };
+  };
+  'aula-frontend': string;
 }
 
 const DEFAULT_VERSIONS_RESPONSE = {
@@ -21,7 +27,11 @@ export const versionsRequest = async (): Promise<VersionsResponse> => {
   const instanceApiUrl = localStorageGet('api_url');
   const v1 = await baseVersionsRequest(`${instanceApiUrl}/api/controllers/versions.php`, 'v1');
   const v2 = await baseVersionsRequest(`${instanceApiUrl}/public/versions`, 'v2');
-  return { 'aula-backend.v1': v1['aula-backend'], 'aula-backend.v2': v2['aula-backend'] } as VersionsResponse;
+  return {
+    'aula-backend.v1': v1,
+    'aula-backend.v2': v2,
+    'aula-frontend': import.meta.env.VITE_APP_VERSION,
+  } as VersionsResponse;
 };
 
 const baseVersionsRequest = async (versionsUrl: string, version: string) => {
