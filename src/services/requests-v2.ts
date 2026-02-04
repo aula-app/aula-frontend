@@ -19,25 +19,22 @@ const DEFAULT_VERSIONS_RESPONSE = {
 
 export const versionsRequest = async (): Promise<VersionsResponse> => {
   const instanceApiUrl = localStorageGet('api_url');
-  const v1 = await v1Request(instanceApiUrl);
-  const v2 = await v2Request(instanceApiUrl);
+  const v1 = await baseVersionsRequest(`${instanceApiUrl}/api/controllers/versions.php`, 'v1');
+  const v2 = await baseVersionsRequest(`${instanceApiUrl}/public/versions`, 'v2');
   return { 'aula-backend.v1': v1['aula-backend'], 'aula-backend.v2': v2['aula-backend'] } as VersionsResponse;
 };
 
-const v1Request = async (instanceApiUrl: string) => {
+const baseVersionsRequest = async (versionsUrl: string, version: string) => {
   try {
-    return (await fetch(`${instanceApiUrl}/api/controllers/versions.php`)).json();
+    const response = await fetch(versionsUrl);
+    if (response && response.ok) {
+      return response.json();
+    } else {
+      console.error(`Error fetching version ${version}. Status: ${response.status}`);
+      return DEFAULT_VERSIONS_RESPONSE;
+    }
   } catch (e) {
-    console.error('Error fetching v1 versions', e);
-    return DEFAULT_VERSIONS_RESPONSE;
-  }
-};
-
-const v2Request = async (instanceApiUrl: string) => {
-  try {
-    return (await fetch(`${instanceApiUrl}/public/versions`)).json();
-  } catch (e) {
-    console.error('Error fetching v2 versions', e);
+    console.error(`Error fetching version ${version}`, e);
     return DEFAULT_VERSIONS_RESPONSE;
   }
 };
