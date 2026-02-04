@@ -1,9 +1,11 @@
 import Icon from '@/components/new/Icon';
 import RippleLink from '@/components/new/RippleLink';
 import { useAppStore } from '@/store/AppStore';
-import { useRipple } from '@/hooks/useRipple';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
+import IconButton from '../IconButton';
+import { getRuntimeConfig } from '@/config';
 
 /**
  * Breadcrumb component that displays navigation path as a dropdown
@@ -15,7 +17,7 @@ const Breadcrumb: React.FC = () => {
   const { breadcrumb } = appState;
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { createRipple: createButtonRipple, RipplesContainer: ButtonRipplesContainer } = useRipple();
+  const goto = useNavigate();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -34,29 +36,35 @@ const Breadcrumb: React.FC = () => {
     };
   }, [isOpen]);
 
-  // No breadcrumbs - show just "aula"
-  if (breadcrumb.length === 0) {
+  const isPhaseUrl = (url: string) => /\/phase\/\d+$/.test(url);
+  const filteredBreadcrumbs = breadcrumb.filter((item, index) => index === 0 || !isPhaseUrl(item[1]));
+
+  // Early return if no breadcrumbs
+  if (filteredBreadcrumbs.length === 0) {
     return (
-      <h1 aria-label={t('ui.accessibility.schoolName')} className="flex items-center justify-center h-full">
-        aula
-      </h1>
+      <div className="p-2 h-full">
+        <img
+          src={`${getRuntimeConfig().BASENAME}img/Aula_Icon.svg`}
+          alt={t('app.name.icon')}
+          className="h-full object-contain"
+        />
+      </div>
     );
   }
 
-  // Check if a breadcrumb is a phase-only item (not the room entry point)
-  // Room entry is the first breadcrumb with a phase URL - we keep it
-  // Other phase URLs are hidden
-  const isPhaseUrl = (url: string) => /\/phase\/\d+$/.test(url);
-
-  // The first breadcrumb is always the room (keep it even if it has a phase URL)
-  // Filter out other phase-only breadcrumbs
-  const filteredBreadcrumbs = breadcrumb.filter((item, index) => index === 0 || !isPhaseUrl(item[1]));
-
-  // Current page is the last filtered breadcrumb
   const currentPage = filteredBreadcrumbs[filteredBreadcrumbs.length - 1][0];
 
   // Navigation items: aula + all filtered breadcrumbs except the current one
   const navItems: [string, string][] = [['aula', '/'], ...filteredBreadcrumbs.slice(0, -1)];
+
+  const backNavigation = (e: React.MouseEvent) => {
+    if (navItems.length <= 1) {
+      goto('/');
+      return;
+    }
+
+    setIsOpen(!isOpen);
+  };
 
   return (
     <nav
@@ -64,28 +72,18 @@ const Breadcrumb: React.FC = () => {
       className="relative flex items-center justify-center h-full"
       ref={dropdownRef}
     >
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        onMouseDown={createButtonRipple}
+      <IconButton
+        onClick={backNavigation}
         className="relative overflow-hidden flex items-center gap-1 font-medium hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 rounded px-2 py-1"
         aria-expanded={isOpen}
         aria-haspopup="menu"
         aria-label={t('ui.accessibility.breadcrumbMenu', { page: currentPage })}
       >
-        <span className="truncate max-w-64" aria-hidden="true">
-          {currentPage}
-        </span>
-        <Icon
-          type="arrowdown"
-          size="1rem"
-          className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-          aria-hidden="true"
-        />
-        <ButtonRipplesContainer />
-      </button>
+        <Icon type="back" size="1.25rem" />
+      </IconButton>
 
       <div
-        className={`absolute flex flex-col-reverse top-full left-1/2 -translate-x-1/2 bg-white rounded-lg shadow-sm p-1 w-full z-50 transition-all duration-300 ease-out ${
+        className={`absolute flex flex-col-reverse top-full left-0 bg-white rounded-lg max-w-sm shadow-sm p-1 z-50 transition-all duration-300 ease-out ${
           isOpen ? 'opacity-100 mt-1' : 'opacity-0 -mt-2 pointer-events-none'
         }`}
         aria-label={t('ui.accessibility.navigationMenu')}

@@ -1,9 +1,7 @@
 import { Breadcrumb } from '@/components';
+import Icon from '@/components/new/Icon';
 import MessagesButton from '@/components/new/MessagesButton';
 import UpdatesButton from '@/components/new/UpdatesButton';
-import Icon from '@/components/new/Icon';
-import IconButton from '@/components/new/IconButton';
-import { getRuntimeConfig } from '@/config';
 import { useAppStore } from '@/store/AppStore';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +18,14 @@ const TopBar: React.FC = () => {
   const [appState] = useAppStore();
 
   const location = useLocation().pathname.split('/');
+
+  // Get the current context name: room name from breadcrumb if available, or "aula"
+  const getCurrentContextName = () => {
+    if (appState.breadcrumb.length > 0 && appState.breadcrumb[0][0]) {
+      return appState.breadcrumb[0][0];
+    }
+    return 'aula';
+  };
 
   // Calculate return path based on current location
   const getReturnPath = () => {
@@ -40,23 +46,9 @@ const TopBar: React.FC = () => {
       onClick={() => setMobileMenuOpen(false)}
     >
       <div className="flex-1 flex items-center justify-start h-full">
-        {location[1] === '' ? (
-          <IconButton to="/" className="h-full">
-            <img
-              src={`${getRuntimeConfig().BASENAME}img/Aula_Icon.svg`}
-              alt={t('app.name.icon')}
-              className="h-full object-contain"
-            />
-          </IconButton>
-        ) : (
-          <IconButton to={getReturnPath()} className="h-full">
-            <Icon type="back" size="1.5rem" />
-          </IconButton>
-        )}
-      </div>
-      <div className="flex-1 h-full flex items-center justify-center text-lg">
         <Breadcrumb />
       </div>
+      <div className="flex-1 h-full flex items-center justify-center text-lg">{getCurrentContextName()}</div>
       <div className="flex-1 h-full items-center justify-end flex">
         <div className="hidden sm:block">
           <UpdatesButton />
