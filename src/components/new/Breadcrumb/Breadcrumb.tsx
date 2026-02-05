@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import IconButton from '../IconButton';
 import { getRuntimeConfig } from '@/config';
+import { ICON_TYPE } from '../Icon/Icon';
 
 /**
  * Breadcrumb component that displays navigation path as a dropdown
