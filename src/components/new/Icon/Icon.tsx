@@ -60,8 +60,10 @@ export const ICONS = {
 
 const ALL_ICONS: Record<string, React.ComponentType<IconBaseProps>> = { ...ICONS };
 
+export type ICON_TYPE = keyof typeof ICONS;
+
 interface Props extends React.SVGAttributes<SVGElement> {
-  type: keyof typeof ICONS;
+  type: ICON_TYPE;
   size?: string | number;
 }
 

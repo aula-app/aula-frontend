@@ -110,7 +110,7 @@ const Breadcrumb: React.FC = () => {
         role="menu"
       >
         {navItems.map((item, index) => {
-          const iconType = getIconForBreadcrumb(item[0], item[1]);
+          const iconType = getIconForBreadcrumb(item[0], item[1]) as ICON_TYPE | null;
           return (
             <RippleLink
               key={index}
