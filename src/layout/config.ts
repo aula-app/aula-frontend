@@ -73,12 +73,6 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
     icon: 'settings',
     permission: () => checkPermissions('system', 'edit'),
   },
-  {
-    title: 'about',
-    path: '/about',
-    icon: 'info',
-    permission: () => true,
-  },
 ];
 
 /**

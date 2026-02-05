@@ -102,7 +102,7 @@
   --color-info: hsl(205, 30%, 50%);
   --color-success: hsl(134, 20%, 40%);
 
-    --color-shadow: rgba(255, 255, 255, 0.05);
+  --color-shadow: rgba(255, 255, 255, 0.05);
 
   --color-theme-blue-light: hsl(205, 30%, 40%);
   --color-theme-blue: hsl(205, 30%, 30%);

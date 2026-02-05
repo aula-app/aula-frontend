@@ -25,7 +25,7 @@ const UserInfo = () => {
           <UserAvatar id={user.hash_id} size={52} />
           <div className="flex-1">
             <h3 className="mt-1 text-2xl font-bold truncate">{user.username}</h3>
-            <p className="text-sm truncate">{user.displayname}</p>
+            <p className="text-sm font-light truncate">{user.displayname}</p>
           </div>
         </div>
       )}

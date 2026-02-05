@@ -11,6 +11,15 @@ export default {
         'safe-bottom': 'var(--safe-area-inset-bottom)',
         'safe-left': 'var(--safe-area-inset-left)',
       },
+      keyframes: {
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+      },
+      animation: {
+        'fade-in': 'fade-in 200ms ease-out',
+      },
     },
   },
   plugins: [],

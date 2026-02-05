@@ -69,91 +69,83 @@ const SideBar = (): JSX.Element => {
   }, [currentPageIndex]);
 
   return (
-    <>
-      <span id="sidebar-nav-description" className="sr-only" aria-hidden="true">
-        {t('ui.accessibility.navigationDescription')}
-      </span>
+    <ul
+      className="flex flex-col flex-1 overflow-auto px-1 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+      aria-label={t('ui.navigation.mainMenu')}
+      role="menu"
+      ref={navRef}
+      tabIndex={-1}
+      aria-describedby="sidebar-nav-description"
+    >
+      <li>
+        <Link
+          to="/settings/profile"
+          role="menuitem"
+          aria-label={t('ui.navigation.profile')}
+          tabIndex={-1}
+          onKeyDown={(e) => handleKeyDown(e as any, 0)}
+          ref={setItemRef(0, currentPageIndex)}
+          className="block mt-1 py-1 rounded-lg transition-colors hover:bg-theme-grey focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+        >
+          {isAuthenticated && <UserInfo />}
+        </Link>
+      </li>
 
-      <ul
-        className="flex-1 overflow-auto px-1 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-        aria-label={t('ui.navigation.mainMenu')}
-        role="menu"
-        ref={navRef}
-        tabIndex={-1}
-        aria-describedby="sidebar-nav-description"
-      >
-        <li>
+      <li className="my-1 px-3">
+        <div className="border-t border-theme-grey" />
+      </li>
+
+      {visibleItems.map(({ icon, path, title }, index) => (
+        <li key={`${title}-${path}`}>
           <Link
-            to="/settings/profile"
+            to={path as string}
+            className={`my-1 p-3 flex items-center gap-3 rounded-lg transition-colors w-full text-left ${
+              location.pathname === path ? 'bg-theme-grey font-semibold' : 'hover:bg-theme-grey-light'
+            } focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500`}
             role="menuitem"
-            aria-label={t('ui.navigation.profile')}
-            tabIndex={-1}
-            onKeyDown={(e) => handleKeyDown(e as any, 0)}
-            ref={setItemRef(0, currentPageIndex)}
-            className="block mt-1 py-1 rounded-lg transition-colors hover:bg-theme-grey focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            aria-label={t(`ui.navigation.${title}`)}
+            tabIndex={index === 0 ? 0 : -1}
+            aria-current={location.pathname === path ? 'page' : undefined}
+            data-testid={`navigation-${title}`}
+            onKeyDown={(e) => handleKeyDown(e as any, index)}
+            ref={setItemRef(index, currentPageIndex) as any}
           >
-            {isAuthenticated && <UserInfo />}
+            {icon && <Icon type={icon} aria-hidden="true" size="1.5rem" />}
+            <span className="font-light">{t(`ui.navigation.${title}`)}</span>
           </Link>
         </li>
+      ))}
 
-        <li className="my-1 px-3">
-          <div className="border-t border-theme-grey" />
-        </li>
+      <li className="mt-auto my-1 px-3">
+        <div className="border-t border-theme-grey" />
+      </li>
 
-        <li className="flex items-center justify-around px-2 my-2">
-          <UpdatesButton className="sm:hidden" />
-          <MessagesButton className="sm:hidden" />
-          <ThemeToggleButton />
-          <BugButton />
-          <IconButton onClick={() => window.print()} aria-label={t('actions.print')} title={t('actions.print')}>
-            <Icon type="print" aria-hidden="true" size="1.5rem" />
-          </IconButton>
-          <LocaleSwitch />
-        </li>
+      <li className="flex items-center justify-around px-2">
+        <ThemeToggleButton />
+        <BugButton />
+        <IconButton onClick={() => window.print()} aria-label={t('actions.print')} title={t('actions.print')}>
+          <Icon type="print" aria-hidden="true" size="1.5rem" />
+        </IconButton>
+        <LocaleSwitch />
+      </li>
 
-        <li className="my-1 px-3">
-          <div className="border-t border-theme-grey" />
-        </li>
+      <li className="my-1 px-3">
+        <div className="border-t border-theme-grey" />
+      </li>
 
-        {visibleItems.map(({ icon, path, title }, index) => (
-          <li key={`${title}-${path}`}>
-            <Link
-              to={path as string}
-              className={`my-1 p-3 flex items-center gap-3 rounded-lg transition-colors w-full text-left ${
-                location.pathname === path ? 'bg-theme-grey font-semibold' : 'hover:bg-theme-grey-light'
-              } focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500`}
-              role="menuitem"
-              aria-label={t(`ui.navigation.${title}`)}
-              tabIndex={index === 0 ? 0 : -1}
-              aria-current={location.pathname === path ? 'page' : undefined}
-              data-testid={`navigation-${title}`}
-              onKeyDown={(e) => handleKeyDown(e as any, index)}
-              ref={setItemRef(index, currentPageIndex) as any}
-            >
-              {icon && <Icon type={icon} aria-hidden="true" size="1.5rem" />}
-              <span className="text-sm">{t(`ui.navigation.${title}`)}</span>
-            </Link>
-          </li>
-        ))}
-
-        <li className="my-1 px-3">
-          <div className="border-t border-theme-grey" />
-        </li>
-
-        <li>
-          <button
-            className="w-full p-3 flex items-center gap-3 rounded-lg transition-colors hover:bg-theme-grey focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-            role="menuitem"
-            aria-label={t('auth.logout')}
-            tabIndex={-1}
-            onClick={onLogout}
-          >
-            <Icon type="logout" aria-hidden="true" size="1.5rem" />
-            <span className="text-sm">{t('auth.logout')}</span>
-          </button>
-        </li>
-      </ul>
-    </>
+      <li>
+        <button
+          className="w-full p-3 flex items-center gap-3 rounded-lg transition-colors hover:bg-theme-grey focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          role="menuitem"
+          aria-label={t('auth.logout')}
+          tabIndex={-1}
+          onClick={onLogout}
+        >
+          <Icon type="logout" aria-hidden="true" size="1.5rem" />
+          <span className="font-light">{t('auth.logout')}</span>
+        </button>
+      </li>
+    </ul>
   );
 };
 

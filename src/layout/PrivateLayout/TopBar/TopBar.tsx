@@ -3,21 +3,18 @@ import Icon from '@/components/new/Icon';
 import MessagesButton from '@/components/new/MessagesButton';
 import UpdatesButton from '@/components/new/UpdatesButton';
 import { useAppStore } from '@/store/AppStore';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
-import SideBarContent from '../SideBar/SideBar';
+
+interface TopBarProps {
+  mobileMenuOpen: boolean;
+  onToggleMobileMenu: () => void;
+}
 
 /**
  * TopBar component that provides navigation, breadcrumbs, and user controls
  * @component TopBar
  */
-const TopBar: React.FC = () => {
-  const { t } = useTranslation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const TopBar: React.FC<TopBarProps> = ({ mobileMenuOpen, onToggleMobileMenu }) => {
   const [appState] = useAppStore();
-
-  const location = useLocation().pathname.split('/');
 
   // Get the current context name: room name from breadcrumb if available, or "aula"
   const getCurrentContextName = () => {
@@ -27,30 +24,17 @@ const TopBar: React.FC = () => {
     return 'aula';
   };
 
-  // Calculate return path based on current location
-  const getReturnPath = () => {
-    if (appState.breadcrumb.length >= 2) {
-      if (
-        appState.breadcrumb[appState.breadcrumb.length - 1][1] != undefined &&
-        !appState.breadcrumb[appState.breadcrumb.length - 1][1].endsWith('/phase/0')
-      ) {
-        return appState.breadcrumb[appState.breadcrumb.length - 2][1];
-      }
-    }
-    return '/';
-  };
-
   return (
     <header
       className="relative z-[9999] bg-primary h-14 shrink-0 flex items-center px-2 py-1 shadow-sm"
-      onClick={() => setMobileMenuOpen(false)}
+      onClick={() => mobileMenuOpen && onToggleMobileMenu()}
     >
       <div className="flex-1 flex items-center justify-start h-full">
         <Breadcrumb />
       </div>
       <div className="flex-1 h-full flex items-center justify-center text-lg">{getCurrentContextName()}</div>
       <div className="flex-1 h-full items-center justify-end flex">
-        <div className="hidden sm:block">
+        <div className="hidden sm:flex items-center">
           <UpdatesButton />
           <MessagesButton />
         </div>
@@ -58,7 +42,7 @@ const TopBar: React.FC = () => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setMobileMenuOpen(!mobileMenuOpen);
+              onToggleMobileMenu();
             }}
             className="relative overflow-hidden flex items-center justify-center h-full aspect-square p-2 rounded-full hover:bg-black/10 transition-colors"
             aria-expanded={mobileMenuOpen}
@@ -66,17 +50,6 @@ const TopBar: React.FC = () => {
           >
             <Icon type={mobileMenuOpen ? 'close' : 'menu'} size="1.5rem" />
           </button>
-          <div
-            className={
-              'fixed -z-10 top-14 right-0 left-0 overflow-hidden bg-paper no-print transition-all duration-300 ease-in-out' +
-              (mobileMenuOpen ? ' max-h-[calc(100vh-3.5rem)] opacity-100' : ' max-h-0 opacity-0')
-            }
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            <div className="overflow-auto h-[calc(100vh-3.5rem)]">
-              <SideBarContent />
-            </div>
-          </div>
         </div>
       </div>
     </header>
