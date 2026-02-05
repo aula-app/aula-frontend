@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { IconBaseProps } from 'react-icons';
 import {
   HiOutlineAcademicCap,
@@ -63,22 +63,33 @@ export type ICON_TYPE = keyof typeof ICONS;
 interface Props extends React.SVGAttributes<SVGElement> {
   type: ICON_TYPE;
   size?: string | number;
+  isDecorative?: boolean;
+  'aria-label'?: string;
 }
 
 /**
  * Renders SVG icon by given icon name
+ * Optimized for SVG rendering with proper accessibility support
  * @component Icon
  */
-const Icon: React.FC<Props> = ({ type, size = '100%', className, ...restOfProps }) => {
-  if (!(type in ICONS)) return null;
+const Icon: React.FC<Props> = React.forwardRef<SVGSVGElement, Props>(
+  ({ type, size = '1em', className, isDecorative = true, 'aria-label': ariaLabel, ...restOfProps }, ref) => {
+    if (!(type in ICONS)) return null;
 
-  return React.createElement(ICONS[type], {
-    size,
-    className: `app-icon ${className ?? ''}`,
-    role: 'img',
-    'aria-label': `${type} icon`,
-    ...restOfProps,
-  });
-};
+    const isAccessibleIcon = !isDecorative && !restOfProps['aria-hidden'];
 
-export default Icon;
+    return React.createElement(ICONS[type], {
+      ref,
+      size,
+      className: `app-icon ${className ?? ''}`,
+      role: isAccessibleIcon ? 'img' : undefined,
+      'aria-hidden': isDecorative ? 'true' : undefined,
+      'aria-label': isAccessibleIcon ? (ariaLabel ?? `${type} icon`) : undefined,
+      ...restOfProps,
+    } as IconBaseProps);
+  }
+);
+
+Icon.displayName = 'Icon';
+
+export default memo(Icon);
