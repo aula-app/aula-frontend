@@ -58,8 +58,6 @@ export const ICONS = {
   users: HiOutlineUserGroup,
 };
 
-const ALL_ICONS: Record<string, React.ComponentType<IconBaseProps>> = { ...ICONS };
-
 export type ICON_TYPE = keyof typeof ICONS;
 
 interface Props extends React.SVGAttributes<SVGElement> {
@@ -72,9 +70,9 @@ interface Props extends React.SVGAttributes<SVGElement> {
  * @component Icon
  */
 const Icon: React.FC<Props> = ({ type, size = '100%', className, ...restOfProps }) => {
-  if (!(type in ALL_ICONS)) return null;
+  if (!(type in ICONS)) return null;
 
-  return React.createElement(ALL_ICONS[type], {
+  return React.createElement(ICONS[type], {
     size,
     className: `app-icon ${className ?? ''}`,
     role: 'img',
