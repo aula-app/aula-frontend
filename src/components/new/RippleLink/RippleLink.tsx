@@ -1,5 +1,5 @@
 import { Link, LinkProps } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { ReactNode, forwardRef } from 'react';
 import { useRipple } from '@/hooks/useRipple';
 
 interface RippleLinkProps extends Omit<LinkProps, 'className'> {
@@ -11,15 +11,22 @@ interface RippleLinkProps extends Omit<LinkProps, 'className'> {
  * A react-router-dom Link styled with a ripple effect
  * @component RippleLink
  */
-const RippleLink: React.FC<RippleLinkProps> = ({ children, className = '', ...props }) => {
+const RippleLink = forwardRef<HTMLAnchorElement, RippleLinkProps>(({ children, className = '', ...props }, ref) => {
   const { createRipple, RipplesContainer } = useRipple();
 
   return (
-    <Link onMouseDown={createRipple} className={`relative overflow-hidden transition-colors ${className}`} {...props}>
+    <Link
+      ref={ref}
+      onMouseDown={createRipple}
+      className={`relative overflow-hidden transition-colors ${className}`}
+      {...props}
+    >
       {children}
       <RipplesContainer />
     </Link>
   );
-};
+});
+
+RippleLink.displayName = 'RippleLink';
 
 export default RippleLink;

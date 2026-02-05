@@ -2,6 +2,8 @@
  * Layout configuration
  */
 
+import MessageBadge from '@/components/new/UpdateBadges/MessageBadge';
+import UpdateBadge from '@/components/new/UpdateBadges/UpdateBadge';
 import { LinkToPage } from '@/types/PageLinks';
 import { checkPermissions } from '@/utils';
 
@@ -13,6 +15,20 @@ export const SIDEBAR_DESKTOP_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_WIDTH = '240px';
 
 export const SIDEBAR_ITEMS: Array<LinkToPage> = [
+  {
+    title: 'updates',
+    path: '/updates',
+    icon: 'heart',
+    component: UpdateBadge,
+    permission: () => true,
+  },
+  {
+    title: 'inbox',
+    path: '/messages',
+    icon: 'message',
+    component: MessageBadge,
+    permission: () => true,
+  },
   {
     title: 'users',
     path: '/settings/users',
@@ -40,7 +56,7 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
   {
     title: 'messages',
     path: '/settings/messages',
-    icon: 'message',
+    icon: 'messages',
     permission: () => checkPermissions('messages', 'viewAll'),
   },
   {

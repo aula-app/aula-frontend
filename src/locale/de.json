@@ -748,6 +748,7 @@
       "dashboard": "Meine Ideen",
       "home": "Startseite",
       "ideas": "Ideen",
+      "inbox": "Meine Nachrichten",
       "mainMenu": "Hauptnavigation",
       "messages": "Nachrichten",
       "privacy": "Datenschutz",
@@ -759,6 +760,7 @@
       "settings": "Einstellungen",
       "skipToContent": "Zum Hauptinhalt springen",
       "system": "System",
+      "updates": "Meine Aktualisierungen",
       "users": "Benutzer"
     },
     "sort": {

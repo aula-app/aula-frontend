@@ -1,29 +1,74 @@
 import SkipNavigation from '@/components/SkipNavigation';
 import AskConsent from '@/views/AskConsent';
-import { FunctionComponent, PropsWithChildren, useState } from 'react';
+import { FunctionComponent, PropsWithChildren, useEffect, useRef, useState } from 'react';
 import TopBar from './TopBar';
 import { checkPermissions } from '@/utils';
 import SideBar from './SideBar';
 
 const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const sidebarRef = useRef<HTMLElement>(null);
 
   const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
+
+  // Focus management: Move focus into menu when opened, return to button when closed
+  useEffect(() => {
+    if (mobileMenuOpen && sidebarRef.current) {
+      // Focus the first menu item when menu opens
+      const firstMenuItem = sidebarRef.current.querySelector('[role="menuitem"]') as HTMLElement;
+      if (firstMenuItem) {
+        firstMenuItem.focus();
+      }
+    } else if (!mobileMenuOpen && menuButtonRef.current && document.activeElement?.closest('#mobile-sidebar-menu')) {
+      // Return focus to menu button when closing (only if focus was inside menu)
+      menuButtonRef.current.focus();
+    }
+  }, [mobileMenuOpen]);
+
+  // Close menu when focus leaves the menu context
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const handleFocusChange = () => {
+      // Check if focus has moved outside the sidebar
+      if (sidebarRef.current && !sidebarRef.current.contains(document.activeElement)) {
+        toggleMobileMenu();
+      }
+    };
+
+    // Use a small delay to allow focus to settle
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('focusin', handleFocusChange);
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener('focusin', handleFocusChange);
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <div className="flex flex-col h-dvh w-full overflow-hidden">
       <SkipNavigation mainContentId="main-content" />
-      <TopBar mobileMenuOpen={mobileMenuOpen} onToggleMobileMenu={toggleMobileMenu} />
+      <TopBar
+        mobileMenuOpen={mobileMenuOpen}
+        onToggleMobileMenu={toggleMobileMenu}
+        menuButtonRef={menuButtonRef}
+      />
       <div className="flex min-h-0 flex-1">
         {!checkPermissions('system', 'hide') && (
           <nav
+            id="mobile-sidebar-menu"
+            ref={sidebarRef}
+            aria-label="Main navigation"
             className={
               'flex w-64 h-full max-h-[calc(100vh-3.5rem)] border-r absolute bg-paper border-gray-200 no-print overflow-y-auto transition-all z-[9998] ' +
               (mobileMenuOpen ? 'left-0' : '-left-64') +
-              ' sm:relative'
+              ' sm:relative sm:left-0'
             }
           >
-            <SideBar />
+            <SideBar onClose={toggleMobileMenu} />
           </nav>
         )}
         <div

@@ -25,6 +25,16 @@ export const useMenuKeyboardNavigation = <T>({
   const { t } = useTranslation();
   const initialFocusRef = useRef<HTMLElement | null>(null);
 
+  const focusMenuItem = useCallback(
+    (index: number) => {
+      const menuItems = containerRef.current?.querySelectorAll('[role="menuitem"]');
+      if (menuItems && menuItems[index]) {
+        (menuItems[index] as HTMLElement).focus();
+      }
+    },
+    [containerRef]
+  );
+
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLElement>, index: number) => {
       const itemCount = items.length;
@@ -57,25 +67,22 @@ export const useMenuKeyboardNavigation = <T>({
             }),
             'polite'
           );
-          break;
+          return;
         case 'Escape':
           event.preventDefault();
           onClose?.();
           announceToScreenReader(t('ui.accessibility.menuClosed'), 'polite');
-          break;
+          return;
         default:
-          break;
+          return;
       }
 
       // If the index changed, focus the new item
       if (nextIndex !== index) {
-        const menuItems = containerRef.current?.querySelectorAll('[role="menuitem"]');
-        if (menuItems && menuItems[nextIndex]) {
-          (menuItems[nextIndex] as HTMLElement).focus();
-        }
+        focusMenuItem(nextIndex);
       }
     },
-    [items, onItemSelect, onClose, t, containerRef, getItemLabel]
+    [items, onItemSelect, onClose, t, getItemLabel, focusMenuItem]
   );
 
   const setItemRef = (index: number, currentIndex: number) => (element: HTMLElement | null) => {

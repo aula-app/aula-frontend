@@ -202,7 +202,7 @@ import {
   LiaTshirtSolid,
 } from 'react-icons/lia';
 import { MdOutlineLockReset } from 'react-icons/md';
-import { LuSigma } from 'react-icons/lu';
+import { LuSigma, LuMails } from 'react-icons/lu';
 import { PiCookingPotLight, PiShareNetwork } from 'react-icons/pi';
 import CircleIcon from './circle.svg?react';
 import VotingIcon from './voting.svg?react';
@@ -274,7 +274,7 @@ export const ICONS = {
   menu: HiOutlineBars3,
   more: HiOutlineEllipsisVertical,
   message: HiOutlineEnvelope,
-  messages: HiOutlineEnvelope,
+  messages: LuMails,
   neutral: HiOutlineMinusCircle,
   night: HiOutlineMoon,
   notifications: HiOutlineBell,
