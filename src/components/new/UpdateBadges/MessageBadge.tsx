@@ -19,7 +19,7 @@ const MessageBadge = () => {
 
   return typeof updates === 'number' ? (
     updates !== 0 ? (
-      <Chip className="bg-emerald-200">{updates}</Chip>
+      <Chip className="bg-theme-emerald-light">{updates}</Chip>
     ) : null
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />

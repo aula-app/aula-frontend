@@ -19,7 +19,7 @@ const UpdateBadge = () => {
 
   return typeof updates === 'number' ? (
     updates !== 0 ? (
-      <Chip className="bg-pink-200">{updates}</Chip>
+      <Chip className="bg-theme-pink-light">{updates}</Chip>
     ) : null
   ) : (
     <Skeleton variant="circular" sx={{ width: 20, aspectRatio: 1, mx: 1 }} />

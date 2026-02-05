@@ -44,6 +44,16 @@
   --color-theme-green-dark: hsl(134, 72%, 67%);
   --color-theme-green-darker: hsl(134, 28%, 49%);
 
+  --color-theme-pink-light: hsl(320, 84%, 94%);
+  --color-theme-pink: hsl(320, 84%, 82%);
+  --color-theme-pink-dark: hsl(320, 80%, 65%);
+  --color-theme-pink-darker: hsl(320, 50%, 45%);
+
+  --color-theme-emerald-light: hsl(160, 72%, 94%);
+  --color-theme-emerald: hsl(160, 72%, 82%);
+  --color-theme-emerald-dark: hsl(160, 72%, 65%);
+  --color-theme-emerald-darker: hsl(160, 30%, 45%);
+
   --color-theme-grey-light: hsl(0, 0%, 95%);
   --color-theme-grey: hsl(0, 0%, 88%);
   --color-theme-grey-dark: hsl(0, 0%, 75%);
@@ -129,6 +139,16 @@
   --color-theme-green-dark: hsl(134, 20%, 20%);
   --color-theme-green-darker: hsl(134, 20%, 10%);
 
+  --color-theme-pink-light: hsl(320, 40%, 50%);
+  --color-theme-pink: hsl(320, 40%, 40%);
+  --color-theme-pink-dark: hsl(320, 40%, 25%);
+  --color-theme-pink-darker: hsl(320, 40%, 15%);
+
+  --color-theme-emerald-light: hsl(160, 30%, 45%);
+  --color-theme-emerald: hsl(160, 30%, 35%);
+  --color-theme-emerald-dark: hsl(160, 30%, 22%);
+  --color-theme-emerald-darker: hsl(160, 30%, 12%);
+
   --color-theme-grey-light: hsl(200, 19%, 50%);
   --color-theme-grey: hsl(200, 19%, 40%);
   --color-theme-grey-dark: hsl(200, 19%, 20%);
@@ -213,6 +233,16 @@
   --color-theme-green: var(--color-theme-green);
   --color-theme-green-dark: var(--color-theme-green-dark);
   --color-theme-green-darker: var(--color-theme-green-darker);
+
+  --color-theme-pink-light: var(--color-theme-pink-light);
+  --color-theme-pink: var(--color-theme-pink);
+  --color-theme-pink-dark: var(--color-theme-pink-dark);
+  --color-theme-pink-darker: var(--color-theme-pink-darker);
+
+  --color-theme-emerald-light: var(--color-theme-emerald-light);
+  --color-theme-emerald: var(--color-theme-emerald);
+  --color-theme-emerald-dark: var(--color-theme-emerald-dark);
+  --color-theme-emerald-darker: var(--color-theme-emerald-darker);
 
   --color-theme-grey-light: var(--color-theme-grey-light);
   --color-theme-grey: var(--color-theme-grey);
