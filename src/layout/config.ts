@@ -100,14 +100,3 @@ export const SIDEBAR_ITEMS: Array<PageLink> = [
     permission: () => checkPermissions('system', 'edit'),
   },
 ];
-
-/**
- * TopBar configuration
- */
-export const TOPBAR_MOBILE_HEIGHT = '56px';
-export const TOPBAR_DESKTOP_HEIGHT = '64px';
-
-/**
- * BottomBar configuration
- */
-const BOTTOMBAR_DESKTOP_VISIBLE = false; // true;
