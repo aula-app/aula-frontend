@@ -39,6 +39,26 @@ const Breadcrumb: React.FC = () => {
   const isPhaseUrl = (url: string) => /\/phase\/\d+$/.test(url);
   const filteredBreadcrumbs = breadcrumb.filter((item, index) => index === 0 || !isPhaseUrl(item[1]));
 
+  /**
+   * Maps a breadcrumb label and URL to an appropriate icon type
+   */
+  const getIconForBreadcrumb = (label: string, url: string): string | null => {
+    const lowerLabel = label.toLowerCase();
+
+    if (lowerLabel === 'aula' || url === '/') return 'home';
+    // Check for specific combinations first (more specific before less specific)
+    if (lowerLabel.includes('idea-box') || url.includes('/idea-box')) return 'box';
+    if (lowerLabel.includes('idea') || url.includes('/idea')) return 'idea';
+    if (lowerLabel.includes('announcement') || url.includes('/announcement')) return 'announcement';
+    if (lowerLabel.includes('message') || url.includes('/message')) return 'message';
+    if (lowerLabel.includes('report') || url.includes('/report')) return 'report';
+    if (lowerLabel.includes('request') || url.includes('/request')) return 'request';
+    if (lowerLabel.includes('room') || url.includes('/room')) return 'room';
+    if (lowerLabel.includes('box') || url.includes('/box')) return 'box';
+
+    return null;
+  };
+
   // Early return if no breadcrumbs
   if (filteredBreadcrumbs.length === 0) {
     return (
@@ -83,23 +103,27 @@ const Breadcrumb: React.FC = () => {
       </IconButton>
 
       <div
-        className={`absolute flex flex-col-reverse top-full left-0 bg-white rounded-lg max-w-sm shadow-sm p-1 z-50 transition-all duration-300 ease-out ${
+        className={`absolute flex flex-col-reverse top-full left-0 bg-white font-light rounded-lg max-w-sm shadow-sm p-1 z-50 transition-all duration-300 ease-out ${
           isOpen ? 'opacity-100 mt-1' : 'opacity-0 -mt-2 pointer-events-none'
         }`}
         aria-label={t('ui.accessibility.navigationMenu')}
         role="menu"
       >
-        {navItems.map((item, index) => (
-          <RippleLink
-            key={index}
-            to={item[1]}
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-theme-grey  truncate transition-colors rounded-sm"
-            role="menuitem"
-          >
-            <span className="truncate">{item[0]}</span>
-          </RippleLink>
-        ))}
+        {navItems.map((item, index) => {
+          const iconType = getIconForBreadcrumb(item[0], item[1]);
+          return (
+            <RippleLink
+              key={index}
+              to={item[1]}
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-shadow truncate transition-colors rounded-sm"
+              role="menuitem"
+            >
+              {iconType && <Icon type={iconType} size="1.2rem" />}
+              <span className="truncate">{item[0]}</span>
+            </RippleLink>
+          );
+        })}
       </div>
     </nav>
   );
