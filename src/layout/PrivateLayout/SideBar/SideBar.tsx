@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SIDEBAR_ITEMS } from '../../config';
 import { ICON_TYPE } from '@/components/new/Icon/Icon';
+import CodeButton from '@/components/Buttons/CodeButton';
 
 interface SideBarProps {
   onClose?: () => void;
@@ -90,6 +91,7 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
       tabIndex={-1}
       aria-describedby="sidebar-nav-description"
     >
+      <CodeButton />
       <li>
         <RippleLink
           to="/settings/profile"
