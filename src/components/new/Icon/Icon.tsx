@@ -5,7 +5,6 @@ import {
   HiOutlineArchiveBox,
   HiOutlineArrowRightEndOnRectangle,
   HiOutlineBars3,
-  HiOutlineBugAnt,
   HiOutlineChevronLeft,
   HiOutlineCog6Tooth,
   HiOutlineEnvelope,
@@ -22,6 +21,7 @@ import {
   HiOutlineUsers,
   HiOutlineXMark,
 } from 'react-icons/hi2';
+import { IoBugOutline } from 'react-icons/io5';
 import { LuMails } from 'react-icons/lu';
 
 /**
@@ -34,7 +34,7 @@ export const ICONS = {
   back: HiOutlineChevronLeft,
   box: HiOutlineArchiveBox,
   boxes: HiOutlineArchiveBox,
-  bug: HiOutlineBugAnt,
+  bug: IoBugOutline,
   close: HiOutlineXMark,
   day: HiOutlineSun,
   group: HiOutlineUsers,
