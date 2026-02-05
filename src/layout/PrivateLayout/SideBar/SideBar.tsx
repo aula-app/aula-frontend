@@ -90,7 +90,7 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
       aria-describedby="sidebar-nav-description"
     >
       <li>
-        <Link
+        <RippleLink
           to="/settings/profile"
           role="menuitem"
           aria-label={t('ui.navigation.profile')}
@@ -100,7 +100,7 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
           className="block mt-1 py-1 rounded-lg transition-colors hover:bg-theme-grey focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           {isAuthenticated && <UserInfo />}
-        </Link>
+        </RippleLink>
       </li>
 
       <li className="my-1 px-3">
@@ -115,7 +115,7 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
             <RippleLink
               to={path as string}
               className={`my-1 p-3 flex items-center gap-3 rounded-lg transition-colors w-full text-left ${
-                location.pathname === path ? 'bg-theme-grey font-semibold' : 'hover:bg-theme-grey-light'
+                location.pathname === path ? 'bg-theme-grey font-semibold' : 'hover:bg-shadow'
               } focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500`}
               role="menuitem"
               tabIndex={menuItemIndex === currentPageIndex ? 0 : -1}
@@ -154,9 +154,9 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
         <div className="border-t border-theme-grey" />
       </li>
 
-      <li>
-        <button
-          className="w-full p-3 flex items-center gap-3 rounded-lg transition-colors hover:bg-theme-grey focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+      <li className="pb-1">
+        <RippleLink
+          className="w-full p-3 flex items-center gap-3 rounded-lg transition-colors hover:bg-shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           role="menuitem"
           aria-label={t('auth.logout')}
           tabIndex={allMenuItems.length - 1 === currentPageIndex ? 0 : -1}
@@ -166,7 +166,7 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
         >
           <Icon type="logout" aria-hidden="true" size="1.5rem" />
           <span className="font-light">{t('auth.logout')}</span>
-        </button>
+        </RippleLink>
       </li>
     </ul>
   );

@@ -274,7 +274,7 @@ export const ICONS = {
   menu: HiOutlineBars3,
   more: HiOutlineEllipsisVertical,
   message: HiOutlineEnvelope,
-  messages: LuMails,
+  messages: HiOutlineEnvelope,
   neutral: HiOutlineMinusCircle,
   night: HiOutlineMoon,
   notifications: HiOutlineBell,

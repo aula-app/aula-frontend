@@ -31,10 +31,21 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
     if (!mobileMenuOpen) return;
 
     const handleFocusChange = () => {
-      // Check if focus has moved outside the sidebar
-      if (sidebarRef.current && !sidebarRef.current.contains(document.activeElement)) {
-        toggleMobileMenu();
+      const focusedElement = document.activeElement;
+
+      // Don't close if focus is still in the sidebar
+      if (sidebarRef.current?.contains(focusedElement)) {
+        return;
       }
+
+      // Don't close if a MUI Select menu is open (check for MuiList-root which is used by Select)
+      const selectMenuOpen = document.querySelector('.MuiList-root[role="listbox"]');
+      if (selectMenuOpen) {
+        return;
+      }
+
+      // Close the sidebar if focus has genuinely left
+      toggleMobileMenu();
     };
 
     // Use a small delay to allow focus to settle
@@ -63,7 +74,7 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
             ref={sidebarRef}
             aria-label="Main navigation"
             className={
-              'flex w-64 h-full max-h-[calc(100vh-3.5rem)] border-r absolute bg-paper border-gray-200 no-print overflow-y-auto transition-all z-[9998] ' +
+              'flex w-64 h-full max-h-[calc(100vh-3.5rem)] border-r absolute bg-paper border-gray-200 no-print overflow-y-auto transition-all z-1100 ' +
               (mobileMenuOpen ? 'left-0' : '-left-64') +
               ' sm:relative sm:left-0'
             }
@@ -73,7 +84,7 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
         )}
         <div
           className={
-            'fixed inset-0 bg-black/50 z-[9997] transition-opacity ' +
+            'fixed inset-0 bg-black/50 z-1050 transition-opacity ' +
             (mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none')
           }
           onClick={toggleMobileMenu}

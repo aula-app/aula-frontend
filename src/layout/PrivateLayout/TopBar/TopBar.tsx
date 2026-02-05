@@ -25,7 +25,7 @@ const TopBar: React.FC<TopBarProps> = ({ mobileMenuOpen, onToggleMobileMenu, men
 
   return (
     <header
-      className="relative z-[9999] bg-primary h-14 shrink-0 flex items-center px-2 py-1 shadow-sm"
+      className="relative z-1200 bg-primary h-14 shrink-0 flex items-center px-2 py-1 shadow-sm"
       onClick={() => mobileMenuOpen && onToggleMobileMenu()}
     >
       <div className="flex-1 flex items-center justify-start h-full">
