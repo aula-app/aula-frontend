@@ -2,9 +2,9 @@
  * Layout configuration
  */
 
+import { ICON_TYPE } from '@/components/new/Icon/Icon';
 import MessageBadge from '@/components/new/UpdateBadges/MessageBadge';
 import UpdateBadge from '@/components/new/UpdateBadges/UpdateBadge';
-import { LinkToPage } from '@/types/PageLinks';
 import { checkPermissions } from '@/utils';
 
 /**
@@ -14,7 +14,17 @@ import { checkPermissions } from '@/utils';
 export const SIDEBAR_DESKTOP_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_WIDTH = '240px';
 
-export const SIDEBAR_ITEMS: Array<LinkToPage> = [
+type PageLink = {
+  icon?: ICON_TYPE; // Icon name to use as <AppIcon icon={icon} />
+  component?: React.ComponentType; // Custom component to render instead of link
+  path?: string; // URL to navigate to
+  title?: string; // Title or primary text to display
+  subtitle?: string; // Sub-title or secondary text to display
+  restricted?: boolean;
+  permission: () => boolean;
+};
+
+export const SIDEBAR_ITEMS: Array<PageLink> = [
   {
     title: 'updates',
     path: '/updates',

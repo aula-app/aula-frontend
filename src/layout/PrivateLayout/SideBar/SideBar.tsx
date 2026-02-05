@@ -9,8 +9,9 @@ import { useEventLogout, useIsAuthenticated } from '@/hooks';
 import { useMenuKeyboardNavigation } from '@/hooks/useMenuKeyboardNavigation';
 import { memo, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SIDEBAR_ITEMS } from '../../config';
+import { ICON_TYPE } from '@/components/new/Icon/Icon';
 
 interface SideBarProps {
   onClose?: () => void;
