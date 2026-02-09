@@ -76,7 +76,7 @@ const Breadcrumb: React.FC = () => {
   const currentPage = filteredBreadcrumbs[filteredBreadcrumbs.length - 1][0];
 
   // Navigation items: aula + all filtered breadcrumbs except the current one
-  const navItems: [string, string][] = [['aula', '/'], ...filteredBreadcrumbs.slice(0, -1)];
+  const navItems: [string, string][] = [[t('ui.navigation.home'), '/'], ...filteredBreadcrumbs.slice(0, -1)];
 
   const backNavigation = (e: React.MouseEvent) => {
     if (navItems.length <= 1) {
