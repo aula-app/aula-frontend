@@ -64,7 +64,7 @@ export const SIDEBAR_ITEMS: Array<PageLink> = [
     permission: () => checkPermissions('ideas', 'viewAll'),
   },
   {
-    title: 'messages',
+    title: 'schoolMessages',
     path: '/settings/messages',
     icon: 'messages',
     permission: () => checkPermissions('messages', 'viewAll'),
