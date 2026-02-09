@@ -36,7 +36,9 @@ export const versionsRequest = async (): Promise<VersionsResponse> => {
 
 const baseVersionsRequest = async (versionsUrl: string, version: string) => {
   try {
-    const response = await fetch(versionsUrl);
+    const response = await fetch(versionsUrl, {
+      headers: { 'aula-frontend-version': import.meta.env.VITE_APP_VERSION },
+    });
     if (response && response.ok) {
       return response.json();
     } else {

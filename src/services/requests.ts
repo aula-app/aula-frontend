@@ -79,13 +79,19 @@ export const baseRequest = async <T = unknown>(
   const instanceApiUrl = localStorageGet('api_url');
   const instanceCode = localStorageGet('code');
   const jwtToken = tmpJwtToken || localStorageGet('token');
-  const headers = {} as { 'Content-Type': string; Authorization?: string; 'aula-instance-code': string };
+  const headers = {} as {
+    'Content-Type': string;
+    Authorization?: string;
+    'aula-instance-code': string;
+    'aula-frontend-version': string;
+  };
 
   if (isJson) {
     headers['Content-Type'] = 'application/json';
   }
 
   headers['aula-instance-code'] = instanceCode;
+  headers['aula-frontend-version'] = import.meta.env.VITE_APP_VERSION;
 
   if (!instanceApiUrl || !jwtToken) {
     return {
