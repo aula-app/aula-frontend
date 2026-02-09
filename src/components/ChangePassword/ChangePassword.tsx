@@ -1,6 +1,19 @@
 import { changePassword } from '@/services/auth';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Alert, Button, Collapse, InputAdornment, Stack, TextField, Typography, Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  Alert,
+  Button,
+  Collapse,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+  Box,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState, useEffect } from 'react';
@@ -34,15 +47,15 @@ interface ChangePasswordMethods {
  * Renders User info with Avatar
  * @component ChangePassword
  */
-const ChangePassword: React.FC<Props> = ({ 
-  tmp_token, 
-  disabled = false, 
+const ChangePassword: React.FC<Props> = ({
+  tmp_token,
+  disabled = false,
   passwordComplexity = {
     minLength: 12,
     requireUppercase: false,
     requireNumber: false,
     requireSymbol: false,
-  }
+  },
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -59,22 +72,24 @@ const ChangePassword: React.FC<Props> = ({
 
   const createPasswordValidation = () => {
     let validation = yup.string().required(t('forms.validation.required'));
-    
-    validation = validation.min(passwordComplexity.minLength, 
-      t('forms.validation.minLength', { var: passwordComplexity.minLength }));
-    
+
+    validation = validation.min(
+      passwordComplexity.minLength,
+      t('forms.validation.minLength', { var: passwordComplexity.minLength })
+    );
+
     if (passwordComplexity.requireUppercase) {
       validation = validation.matches(/[A-Z]/, 'Password must contain at least one uppercase letter');
     }
-    
+
     if (passwordComplexity.requireNumber) {
       validation = validation.matches(/[0-9]/, 'Password must contain at least one number');
     }
-    
+
     if (passwordComplexity.requireSymbol) {
       validation = validation.matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character');
     }
-    
+
     return validation.max(64, t('forms.validation.maxLength', { var: 64 }));
   };
 
@@ -118,18 +133,14 @@ const ChangePassword: React.FC<Props> = ({
   const fields = schema.fields;
 
   // Use shared password requirements function
-  const { renderPasswordRequirements } = usePasswordRequirements(
-    watchedNewPassword || '',
-    passwordComplexity,
-    t
-  );
+  const { renderPasswordRequirements } = usePasswordRequirements(watchedNewPassword || '', passwordComplexity, t);
 
   const onSubmit = async (data: SchemaType) => {
     const result = await changePassword(data.oldPassword, data.newPassword, tmp_token);
 
     setShowMessage(true);
     setSuccess(!result.error);
-    
+
     if (result.error) {
       // Check if we get the generic "no data" error during password change
       // This likely means the password validation failed
@@ -163,7 +174,6 @@ const ChangePassword: React.FC<Props> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Stack gap={2} mt={2}>
-
         <Collapse in={showMessage}>
           <Alert
             variant="outlined"
@@ -173,11 +183,11 @@ const ChangePassword: React.FC<Props> = ({
             data-success={messageSuccess}
             data-expanded={showMessage}
           >
-            {messageSuccess ? t('auth.password.success') : (errorMessage || t('errors.invalidPassword'))}
+            {messageSuccess ? t('auth.password.success') : errorMessage || t('errors.invalidPassword')}
           </Alert>
         </Collapse>
         <Typography variant="h3">{t('auth.password.change')}</Typography>
-        
+
         <Box
           sx={{
             backgroundColor: 'background.default',
@@ -198,7 +208,7 @@ const ChangePassword: React.FC<Props> = ({
             {t('auth.password.guidelines.hint')}
           </Typography>
         </Box>
-        
+
         <Stack gap={1} direction="row" flexWrap="wrap">
           {(Object.keys(fields) as Array<keyof typeof fields>).map((field) => (
             <Box key={field} sx={{ flex: 1, minWidth: 'min(100%, 200px)' }}>
@@ -273,7 +283,13 @@ export const usePasswordRequirements = (
       number: passwordComplexity.requireNumber ? /[0-9]/.test(password) : true,
       symbol: passwordComplexity.requireSymbol ? /[^A-Za-z0-9]/.test(password) : true,
     });
-  }, [password, passwordComplexity]);
+  }, [
+    password,
+    passwordComplexity.minLength,
+    passwordComplexity.requireUppercase,
+    passwordComplexity.requireNumber,
+    passwordComplexity.requireSymbol,
+  ]);
 
   const renderPasswordRequirements = () => {
     const requirements = [
@@ -301,7 +317,7 @@ export const usePasswordRequirements = (
         met: passwordRequirements.symbol,
         enabled: passwordComplexity.requireSymbol,
       },
-    ].filter(req => req.enabled);
+    ].filter((req) => req.enabled);
 
     return (
       <Box sx={{ mt: 1 }}>
