@@ -2,7 +2,7 @@ import { useAppStore } from '@/store';
 import createCache from '@emotion/cache';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
-import { FunctionComponent, PropsWithChildren, useMemo } from 'react';
+import { FunctionComponent, PropsWithChildren, useEffect, useMemo } from 'react';
 import DARK_THEME from './dark';
 import THEME_FONTS from './fonts';
 import LIGHT_THEME from './light';
@@ -28,6 +28,18 @@ interface Props extends PropsWithChildren {
  */
 const AppThemeProvider: FunctionComponent<Props> = ({ children, emotionCache = CLIENT_SIDE_EMOTION_CACHE }) => {
   const [state] = useAppStore();
+
+  // Sync Tailwind dark mode class with MUI dark mode state
+  // The tailwind-theme.css file uses @variant dark to automatically switch colors
+  useEffect(() => {
+    const html = document.documentElement;
+    if (state.darkMode) {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+  }, [state.darkMode]);
+
   // TODO: Make theme changes after full app loading.
   // Maybe we need to use https://github.com/pacocoursey/next-themes npm
   // Also take a look on this tutorial https://medium.com/@luca_79189/how-to-get-a-flickerless-persistent-dark-mode-in-your-next-js-app-example-with-mui-9581ea898314

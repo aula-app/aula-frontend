@@ -9,6 +9,7 @@ const LocaleSwitch = ({ ...restOfProps }) => {
   const { t, i18n } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent) => {
+    event.stopPropagation();
     if (!Object.keys(i18n.services.resourceStore.data).includes(event.target.value)) return;
     localStorage.setItem('lang', event.target.value);
     i18n.changeLanguage(event.target.value);

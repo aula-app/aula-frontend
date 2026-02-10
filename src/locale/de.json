@@ -603,6 +603,9 @@
   "ui": {
     "accessibility": {
       "actionToolbar": "Aktionsleiste",
+      "breadcrumb": "Brotkrümel-Navigation",
+      "breadcrumbMenu": "Von {{page}} navigieren",
+      "schoolName": "Schulname",
       "clearFilter": "Filter löschen",
       "codeCopied": "Instanzcode in die Zwischenablage kopiert",
       "columnHeader": "Spaltenkopf",
@@ -631,6 +634,7 @@
       "menuClosed": "Navigationsmenü geschlossen",
       "menuItemSelected": "{{item}} aus dem Navigationsmenü ausgewählt",
       "modalClosed": "Dialog geschlossen",
+      "navigationMenu": "Navigation zu übergeordneten Seiten",
       "modalOpened": "{{title}} Dialog geöffnet",
       "navigationDescription": "Verwenden Sie die Pfeiltasten zur Navigation zwischen den Menüpunkten, Enter zum Auswählen und Escape zum Schließen des Menüs",
       "newContent": "Neuer Inhalt verfügbar",
@@ -744,6 +748,7 @@
       "dashboard": "Meine Ideen",
       "home": "Startseite",
       "ideas": "Ideen",
+      "inbox": "Meine Nachrichten",
       "mainMenu": "Hauptnavigation",
       "messages": "Nachrichten",
       "privacy": "Datenschutz",
@@ -751,10 +756,12 @@
       "reports": "Berichte",
       "requests": "Anfragen",
       "rooms": "Räume",
+      "schoolMessages": "Schulmitteilungen",
       "security": "Sicherheit",
       "settings": "Einstellungen",
       "skipToContent": "Zum Hauptinhalt springen",
       "system": "System",
+      "updates": "Meine Aktualisierungen",
       "users": "Benutzer"
     },
     "sort": {

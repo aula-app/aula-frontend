@@ -1,0 +1,294 @@
+/* Tailwind Theme Configuration - synced with MUI theme */
+/* 
+ * How this works:
+ * 1. Light mode values defined in :root
+ * 2. Dark mode values override in .dark (class added by AppThemeProvider)
+ * 3. @theme tells Tailwind to use these CSS variables for utility classes
+ * 
+ * Usage: bg-primary, text-primary, etc. will automatically switch colors
+ */
+
+/* ========== LIGHT MODE (default) ========== */
+:root {
+  --color-primary: hsl(134, 72%, 67%);
+  --color-secondary: hsl(0, 0%, 59%);
+  --color-error: hsl(0, 84%, 76%);
+  --color-warning: hsl(45, 100%, 79%);
+  --color-info: hsl(204, 82%, 86%);
+  --color-success: hsl(134, 72%, 67%);
+
+  --color-shadow: rgba(0, 0, 0, 0.05);
+
+  --color-theme-blue-light: hsl(210, 100%, 94%);
+  --color-theme-blue: hsl(210, 100%, 86%);
+  --color-theme-blue-dark: hsl(210, 88%, 67%);
+  --color-theme-blue-darker: hsl(210, 61%, 63%);
+
+  --color-theme-purple-light: hsl(270, 50%, 94%);
+  --color-theme-purple: hsl(270, 50%, 82%);
+  --color-theme-purple-dark: hsl(270, 50%, 70%);
+  --color-theme-purple-darker: hsl(270, 25%, 47%);
+
+  --color-theme-red-light: hsl(0, 100%, 94%);
+  --color-theme-red: hsl(0, 84%, 76%);
+  --color-theme-red-dark: hsl(0, 84%, 58%);
+  --color-theme-red-darker: hsl(0, 56%, 39%);
+
+  --color-theme-yellow-light: hsl(45, 100%, 90%);
+  --color-theme-yellow: hsl(45, 100%, 79%);
+  --color-theme-yellow-dark: hsl(45, 100%, 68%);
+  --color-theme-yellow-darker: hsl(45, 100%, 56%);
+
+  --color-theme-green-light: hsl(134, 72%, 94%);
+  --color-theme-green: hsl(134, 72%, 83%);
+  --color-theme-green-dark: hsl(134, 72%, 67%);
+  --color-theme-green-darker: hsl(134, 28%, 49%);
+
+  --color-theme-pink-light: hsl(320, 84%, 94%);
+  --color-theme-pink: hsl(320, 84%, 82%);
+  --color-theme-pink-dark: hsl(320, 80%, 65%);
+  --color-theme-pink-darker: hsl(320, 50%, 45%);
+
+  --color-theme-emerald-light: hsl(160, 72%, 94%);
+  --color-theme-emerald: hsl(160, 72%, 82%);
+  --color-theme-emerald-dark: hsl(160, 72%, 65%);
+  --color-theme-emerald-darker: hsl(160, 30%, 45%);
+
+  --color-theme-grey-light: hsl(0, 0%, 95%);
+  --color-theme-grey: hsl(0, 0%, 88%);
+  --color-theme-grey-dark: hsl(0, 0%, 75%);
+  --color-theme-grey-darker: hsl(0, 0%, 59%);
+
+  --color-wild-light: hsl(210, 100%, 94%);
+  --color-wild: hsl(210, 100%, 86%);
+  --color-wild-dark: hsl(210, 88%, 67%);
+  --color-wild-darker: hsl(210, 61%, 63%);
+
+  --color-discussion-light: hsl(270, 50%, 94%);
+  --color-discussion: hsl(270, 50%, 82%);
+  --color-discussion-dark: hsl(270, 50%, 70%);
+  --color-discussion-darker: hsl(270, 25%, 47%);
+
+  --color-approval-light: hsl(25, 100%, 94%);
+  --color-approval: hsl(25, 84%, 76%);
+  --color-approval-dark: hsl(25, 84%, 58%);
+  --color-approval-darker: hsl(25, 56%, 39%);
+
+  --color-voting-light: hsl(45, 100%, 90%);
+  --color-voting: hsl(45, 100%, 79%);
+  --color-voting-dark: hsl(45, 100%, 68%);
+  --color-voting-darker: hsl(45, 100%, 56%);
+
+  --color-results-light: hsl(134, 72%, 94%);
+  --color-results: hsl(134, 72%, 88%);
+  --color-results-dark: hsl(134, 72%, 67%);
+  --color-results-darker: hsl(134, 28%, 49%);
+
+  --color-against: hsl(0, 84%, 76%);
+  --color-alert: hsl(0, 84%, 76%);
+  --color-announcements: hsl(270, 50%, 82%);
+  --color-bugs: hsl(0, 0%, 90%);
+  --color-comments: hsl(0, 0%, 90%);
+  --color-disabled: hsl(0, 0%, 90%);
+  --color-for: hsl(134, 72%, 88%);
+  --color-reports: hsl(45, 100%, 79%);
+  --color-messages: hsl(210, 100%, 86%);
+  --color-neutral: hsl(45, 100%, 79%);
+  --color-requests: hsl(0, 0%, 90%);
+
+  --color-text-primary: hsl(236.17, 42%, 22%);
+  --color-background: #FFFFFF;
+  --color-paper: #FFFFFF;
+  --color-input-border: rgba(0, 0, 0, 0.23);
+  --color-input-border-hover: rgba(0, 0, 0, 0.87);
+}
+
+/* ========== DARK MODE (activated by .dark class on html) ========== */
+.dark {
+  --color-primary: hsl(134, 20%, 40%);
+  --color-secondary: hsl(200, 19%, 40%);
+  --color-error: hsl(358, 40%, 50%);
+  --color-warning: hsl(45, 45%, 50%);
+  --color-info: hsl(205, 30%, 50%);
+  --color-success: hsl(134, 20%, 40%);
+
+  --color-shadow: rgba(255, 255, 255, 0.05);
+
+  --color-theme-blue-light: hsl(205, 30%, 40%);
+  --color-theme-blue: hsl(205, 30%, 30%);
+  --color-theme-blue-dark: hsl(205, 30%, 20%);
+  --color-theme-blue-darker: hsl(205, 30%, 10%);
+
+  --color-theme-purple-light: hsl(275, 25%, 40%);
+  --color-theme-purple: hsl(275, 25%, 30%);
+  --color-theme-purple-dark: hsl(275, 25%, 20%);
+  --color-theme-purple-darker: hsl(275, 25%, 10%);
+
+  --color-theme-red-light: hsl(358, 35%, 40%);
+  --color-theme-red: hsl(358, 35%, 30%);
+  --color-theme-red-dark: hsl(358, 35%, 20%);
+  --color-theme-red-darker: hsl(358, 35%, 10%);
+
+  --color-theme-yellow-light: hsl(45, 45%, 40%);
+  --color-theme-yellow: hsl(45, 45%, 30%);
+  --color-theme-yellow-dark: hsl(45, 45%, 20%);
+  --color-theme-yellow-darker: hsl(45, 45%, 10%);
+
+  --color-theme-green-light: hsl(134, 20%, 40%);
+  --color-theme-green: hsl(134, 20%, 30%);
+  --color-theme-green-dark: hsl(134, 20%, 20%);
+  --color-theme-green-darker: hsl(134, 20%, 10%);
+
+  --color-theme-pink-light: hsl(320, 40%, 50%);
+  --color-theme-pink: hsl(320, 40%, 40%);
+  --color-theme-pink-dark: hsl(320, 40%, 25%);
+  --color-theme-pink-darker: hsl(320, 40%, 15%);
+
+  --color-theme-emerald-light: hsl(160, 30%, 45%);
+  --color-theme-emerald: hsl(160, 30%, 35%);
+  --color-theme-emerald-dark: hsl(160, 30%, 22%);
+  --color-theme-emerald-darker: hsl(160, 30%, 12%);
+
+  --color-theme-grey-light: hsl(200, 19%, 50%);
+  --color-theme-grey: hsl(200, 19%, 40%);
+  --color-theme-grey-dark: hsl(200, 19%, 20%);
+  --color-theme-grey-darker: hsl(200, 19%, 10%);
+
+  --color-wild-light: hsl(205, 30%, 40%);
+  --color-wild: hsl(205, 30%, 30%);
+  --color-wild-dark: hsl(205, 30%, 20%);
+  --color-wild-darker: hsl(205, 30%, 10%);
+
+  --color-discussion-light: hsl(275, 25%, 40%);
+  --color-discussion: hsl(275, 25%, 30%);
+  --color-discussion-dark: hsl(275, 25%, 20%);
+  --color-discussion-darker: hsl(275, 25%, 10%);
+
+  --color-approval-light: hsl(358, 35%, 40%);
+  --color-approval: hsl(358, 35%, 30%);
+  --color-approval-dark: hsl(358, 35%, 20%);
+  --color-approval-darker: hsl(358, 35%, 10%);
+
+  --color-voting-light: hsl(45, 45%, 40%);
+  --color-voting: hsl(45, 45%, 30%);
+  --color-voting-dark: hsl(45, 45%, 20%);
+  --color-voting-darker: hsl(45, 45%, 10%);
+
+  --color-results-light: hsl(134, 20%, 40%);
+  --color-results: hsl(134, 20%, 30%);
+  --color-results-dark: hsl(134, 20%, 20%);
+  --color-results-darker: hsl(134, 20%, 10%);
+
+  --color-against: hsl(358, 35%, 30%);
+  --color-alert: hsl(358, 35%, 30%);
+  --color-announcements: hsl(275, 25%, 30%);
+  --color-bugs: hsl(200, 19%, 30%);
+  --color-comments: hsl(200, 19%, 30%);
+  --color-disabled: hsl(200, 19%, 30%);
+  --color-for: hsl(134, 20%, 30%);
+  --color-reports: hsl(45, 45%, 30%);
+  --color-messages: hsl(175, 30%, 30%);
+  --color-neutral: hsl(45, 45%, 30%);
+  --color-requests: hsl(200, 19%, 30%);
+
+  --color-text-primary: hsl(0, 0%, 100%);
+  --color-background: hsl(200, 19%, 20%);
+  --color-paper: hsl(200, 19%, 25%);
+  --color-input-border: rgba(255, 255, 255, 0.23);
+  --color-input-border-hover: rgba(255, 255, 255, 0.87);
+}
+
+/* ========== TAILWIND THEME (references the CSS variables above) ========== */
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-error: var(--color-error);
+  --color-warning: var(--color-warning);
+  --color-info: var(--color-info);
+  --color-success: var(--color-success);
+
+  --color-shadow: var(--color-shadow);
+
+  --color-theme-blue-light: var(--color-theme-blue-light);
+  --color-theme-blue: var(--color-theme-blue);
+  --color-theme-blue-dark: var(--color-theme-blue-dark);
+  --color-theme-blue-darker: var(--color-theme-blue-darker);
+
+  --color-theme-purple-light: var(--color-theme-purple-light);
+  --color-theme-purple: var(--color-theme-purple);
+  --color-theme-purple-dark: var(--color-theme-purple-dark);
+  --color-theme-purple-darker: var(--color-theme-purple-darker);
+
+  --color-theme-red-light: var(--color-theme-red-light);
+  --color-theme-red: var(--color-theme-red);
+  --color-theme-red-dark: var(--color-theme-red-dark);
+  --color-theme-red-darker: var(--color-theme-red-darker);
+
+  --color-theme-yellow-light: var(--color-theme-yellow-light);
+  --color-theme-yellow: var(--color-theme-yellow);
+  --color-theme-yellow-dark: var(--color-theme-yellow-dark);
+  --color-theme-yellow-darker: var(--color-theme-yellow-darker);
+
+  --color-theme-green-light: var(--color-theme-green-light);
+  --color-theme-green: var(--color-theme-green);
+  --color-theme-green-dark: var(--color-theme-green-dark);
+  --color-theme-green-darker: var(--color-theme-green-darker);
+
+  --color-theme-pink-light: var(--color-theme-pink-light);
+  --color-theme-pink: var(--color-theme-pink);
+  --color-theme-pink-dark: var(--color-theme-pink-dark);
+  --color-theme-pink-darker: var(--color-theme-pink-darker);
+
+  --color-theme-emerald-light: var(--color-theme-emerald-light);
+  --color-theme-emerald: var(--color-theme-emerald);
+  --color-theme-emerald-dark: var(--color-theme-emerald-dark);
+  --color-theme-emerald-darker: var(--color-theme-emerald-darker);
+
+  --color-theme-grey-light: var(--color-theme-grey-light);
+  --color-theme-grey: var(--color-theme-grey);
+  --color-theme-grey-dark: var(--color-theme-grey-dark);
+  --color-theme-grey-darker: var(--color-theme-grey-darker);
+
+  --color-wild-light: var(--color-wild-light);
+  --color-wild: var(--color-wild);
+  --color-wild-dark: var(--color-wild-dark);
+  --color-wild-darker: var(--color-wild-darker);
+
+  --color-discussion-light: var(--color-discussion-light);
+  --color-discussion: var(--color-discussion);
+  --color-discussion-dark: var(--color-discussion-dark);
+  --color-discussion-darker: var(--color-discussion-darker);
+
+  --color-approval-light: var(--color-approval-light);
+  --color-approval: var(--color-approval);
+  --color-approval-dark: var(--color-approval-dark);
+  --color-approval-darker: var(--color-approval-darker);
+
+  --color-voting-light: var(--color-voting-light);
+  --color-voting: var(--color-voting);
+  --color-voting-dark: var(--color-voting-dark);
+  --color-voting-darker: var(--color-voting-darker);
+
+  --color-results-light: var(--color-results-light);
+  --color-results: var(--color-results);
+  --color-results-dark: var(--color-results-dark);
+  --color-results-darker: var(--color-results-darker);
+
+  --color-against: var(--color-against);
+  --color-alert: var(--color-alert);
+  --color-announcements: var(--color-announcements);
+  --color-bugs: var(--color-bugs);
+  --color-comments: var(--color-comments);
+  --color-disabled: var(--color-disabled);
+  --color-for: var(--color-for);
+  --color-reports: var(--color-reports);
+  --color-messages: var(--color-messages);
+  --color-neutral: var(--color-neutral);
+  --color-requests: var(--color-requests);
+
+  --color-text-primary: var(--color-text-primary);
+  --color-background: var(--color-background);
+  --color-paper: var(--color-paper);
+  --color-input-border: var(--color-input-border);
+  --color-input-border-hover: var(--color-input-border-hover);
+}

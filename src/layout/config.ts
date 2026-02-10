@@ -2,28 +2,41 @@
  * Layout configuration
  */
 
-import { LinkToPage } from '@/types/PageLinks';
+import { ICON_TYPE } from '@/components/new/Icon/Icon';
+import MessageBadge from '@/components/new/UpdateBadges/MessageBadge';
+import UpdateBadge from '@/components/new/UpdateBadges/UpdateBadge';
 import { checkPermissions } from '@/utils';
 
 /**
  * SideBar configuration
  */
 
-const SIDEBAR_MOBILE_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_DESKTOP_ANCHOR = 'right'; // 'left';
 export const SIDEBAR_WIDTH = '240px';
 
-export const SIDEBAR_ITEMS: Array<LinkToPage> = [
+type PageLink = {
+  icon?: ICON_TYPE; // Icon name to use as <AppIcon icon={icon} />
+  component?: React.ComponentType; // Custom component to render instead of link
+  path?: string; // URL to navigate to
+  title?: string; // Title or primary text to display
+  subtitle?: string; // Sub-title or secondary text to display
+  restricted?: boolean;
+  permission: () => boolean;
+};
+
+export const SIDEBAR_ITEMS: Array<PageLink> = [
   {
-    title: 'home',
-    path: '/',
-    icon: 'home',
+    title: 'updates',
+    path: '/updates',
+    icon: 'heart',
+    component: UpdateBadge,
     permission: () => true,
   },
   {
-    title: 'profile',
-    path: '/settings/profile',
-    icon: 'account',
+    title: 'inbox',
+    path: '/messages',
+    icon: 'message',
+    component: MessageBadge,
     permission: () => true,
   },
   {
@@ -51,9 +64,9 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
     permission: () => checkPermissions('ideas', 'viewAll'),
   },
   {
-    title: 'messages',
+    title: 'schoolMessages',
     path: '/settings/messages',
-    icon: 'message',
+    icon: 'messages',
     permission: () => checkPermissions('messages', 'viewAll'),
   },
   {
@@ -86,21 +99,4 @@ export const SIDEBAR_ITEMS: Array<LinkToPage> = [
     icon: 'settings',
     permission: () => checkPermissions('system', 'edit'),
   },
-  {
-    title: 'about',
-    path: '/about',
-    icon: 'info',
-    permission: () => true,
-  },
 ];
-
-/**
- * TopBar configuration
- */
-export const TOPBAR_MOBILE_HEIGHT = '56px';
-export const TOPBAR_DESKTOP_HEIGHT = '64px';
-
-/**
- * BottomBar configuration
- */
-const BOTTOMBAR_DESKTOP_VISIBLE = false; // true;
