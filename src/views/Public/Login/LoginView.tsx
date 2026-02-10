@@ -43,7 +43,7 @@ const LoginView = () => {
         .string()
         .required(t("forms.validation.required"))
         .min(4, t("forms.validation.minLength", { var: 4 }))
-        .max(32, t("forms.validation.maxLength", { var: 32 }))
+        .max(64, t("forms.validation.maxLength", { var: 64 }))
     })
     .required(t('forms.validation.required'));
 
