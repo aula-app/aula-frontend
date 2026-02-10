@@ -3,6 +3,7 @@
 - **Bug fixes**
   - some buttons from sidebar where not clickable on mobile
   - Fix Versions of aula-Software shown in the About page
+  - Max password length on login page should be the same like in set/change password forms
 - **Technical improvements**
   - Send app/web version to aula backend API for feature toggling
 
