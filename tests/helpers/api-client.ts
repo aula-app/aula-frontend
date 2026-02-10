@@ -360,6 +360,7 @@ export class ApiClient {
  * @param requestContext - Playwright Page or APIRequestContext to use for requests (uses Vite proxy)
  */
 export function createTestApiClient(requestContext?: APIRequestContext | Page, jwtToken?: string): ApiClient {
+  // See /.env.playwright for which BE and FE are being hit
   // As a fallback, use frontend host (localhost:3000) which goes through Vite proxy to backend
   const apiUrl = process.env.APP_BACKEND_HOST || process.env.APP_FRONTEND_HOST || 'http://localhost:3000';
   const instanceCode = process.env.INSTANCE_CODE || 'SINGLE';

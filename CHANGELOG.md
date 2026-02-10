@@ -2,6 +2,7 @@
 
 - **Bug fixes**
   - Parse user roles correctly from JWT when they are strings
+  - Fix Versions of aula-Software shown in the About page
 
 ## 1.7.1
 

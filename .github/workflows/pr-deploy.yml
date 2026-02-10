@@ -20,7 +20,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
-        run: docker build --build-arg "VITE_APP_BASENAME=/$PR_NUMBER/" -t $IMAGE_TAG .
+        run: docker build --build-arg DOCKER_TAG=$IMAGE_TAG_VERSION --build-arg "VITE_APP_BASENAME=/$PR_NUMBER/" -t $IMAGE_TAG .
 
       - name: Push Docker image
         run: docker push $IMAGE_TAG

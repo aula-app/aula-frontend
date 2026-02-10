@@ -2,6 +2,8 @@
 FROM node:22.17-alpine AS assets
 WORKDIR /app
 ARG VITE_APP_BASENAME=/
+ARG DOCKER_TAG
+ENV VITE_APP_VERSION=$DOCKER_TAG
 
 # Copy package.json and package-lock.json/yarn.lock to install dependencies
 COPY package.json yarn.lock ./

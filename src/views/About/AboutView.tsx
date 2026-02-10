@@ -30,9 +30,9 @@ const AboutView = () => {
       <code>
         aula-frontend: v{import.meta.env.VITE_APP_VERSION}
         <br />
-        aula-backend.v1: &nbsp;{versions?.['aula-backend.v1']?.running ?? 'unknown'}
+        aula-backend.v1: &nbsp;{versions?.['aula-backend.v1']?.['aula-backend']?.running ?? 'unknown'}
         <br />
-        aula-backend.v2: &nbsp;{versions?.['aula-backend.v2']?.running ?? 'unknown'}
+        aula-backend.v2: &nbsp;{versions?.['aula-backend.v2']?.['aula-backend']?.running ?? 'unknown'}
       </code>
       <br />
       <hr />
