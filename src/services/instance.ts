@@ -10,6 +10,9 @@ export const validateAndSaveInstanceCode = async (code: string): Promise<boolean
   const requestData = {
     method: 'POST',
     body: JSON.stringify({ code: code }),
+    headers: {
+      'aula-frontend-version': import.meta.env.VITE_APP_VERSION,
+    },
   };
 
   let api_url = getRuntimeConfig().CENTRAL_API_URL;
