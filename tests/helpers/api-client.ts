@@ -1,14 +1,13 @@
 /**
  * Test API client that uses frontend services
  * Sets up localStorage to work with existing service layer
+ *
+ * IMPORTANT: This client requires a Playwright Page context to execute service calls.
+ * Services cannot be imported directly in Node.js as they use import.meta.env (Vite-specific).
+ * All service calls are executed via page.evaluate() in the browser context.
  */
 
 import { RoleTypes } from '../../src/types/SettingsTypes';
-import * as userService from '../../src/services/users';
-import * as roomService from '../../src/services/rooms';
-import * as ideaService from '../../src/services/ideas';
-import * as boxService from '../../src/services/boxes';
-import { changePassword as changePasswordService } from '../../src/services/auth';
 import type { Page, APIRequestContext } from '@playwright/test';
 
 interface ApiClientConfig {
@@ -171,14 +170,10 @@ export class ApiClient {
       return result.data;
     }
 
-    // Fallback to direct service call (won't work in Node.js but kept for compatibility)
-    const response = await userService.addUser(args);
-
-    if (!response.data) {
-      throw new Error('Failed to add user: No data returned');
-    }
-
-    return response.data;
+    throw new Error(
+      'addUser requires a Page context. Services use import.meta.env and cannot run in Node.js. ' +
+        'Pass a Page object when creating ApiClient.'
+    );
   }
 
   async deleteUser(userId: string): Promise<void> {
@@ -194,8 +189,11 @@ export class ApiClient {
       }, userId);
       return;
     }
-    // Note: resetUserPassword generates a new temp password, doesn't set a specific one
-    await userService.resetUserPassword(userId);
+
+    throw new Error(
+      'setUserPassword requires a Page context. Services use import.meta.env and cannot run in Node.js. ' +
+        'Pass a Page object when creating ApiClient.'
+    );
   }
 
   async getUsers(args?: { offset?: number; limit?: number; room_id?: string }): Promise<unknown[]> {
@@ -214,13 +212,10 @@ export class ApiClient {
       return result.data;
     }
 
-    const response = await userService.getUsers(args);
-
-    if (!response.data) {
-      throw new Error('Failed to get users: No data returned');
-    }
-
-    return response.data;
+    throw new Error(
+      'getUsers requires a Page context. Services use import.meta.env and cannot run in Node.js. ' +
+        'Pass a Page object when creating ApiClient.'
+    );
   }
 
   async getUsersByUsername(username: string): Promise<{ username: string; hash_id: string }[]> {
@@ -252,11 +247,38 @@ export class ApiClient {
   }
 
   async deleteRoom(roomId: string): Promise<void> {
-    await roomService.deleteRoom(roomId);
+    if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
+      const page = this.config.requestContext as Page;
+      await page.evaluate(async (id) => {
+        const { deleteRoom } = await import('../../src/services/rooms');
+        await deleteRoom(id);
+      }, roomId);
+      return;
+    }
+
+    throw new Error(
+      'deleteRoom requires a Page context. Services use import.meta.env and cannot run in Node.js. ' +
+        'Pass a Page object when creating ApiClient.'
+    );
   }
 
   async addUserToRoom(userId: string, roomId: string): Promise<void> {
-    await userService.addUserRoom(userId, roomId);
+    if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
+      const page = this.config.requestContext as Page;
+      await page.evaluate(
+        async ({ uId, rId }) => {
+          const { addUserRoom } = await import('../../src/services/users');
+          await addUserRoom(uId, rId);
+        },
+        { uId: userId, rId: roomId }
+      );
+      return;
+    }
+
+    throw new Error(
+      'addUserToRoom requires a Page context. Services use import.meta.env and cannot run in Node.js. ' +
+        'Pass a Page object when creating ApiClient.'
+    );
   }
 
   // Boxes
@@ -271,17 +293,41 @@ export class ApiClient {
     phase_duration_3?: number;
     phase_duration_4?: number;
   }): Promise<{ insert_id: number; hash_id: string }> {
-    const response = await boxService.addBox(args);
+    if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
+      const page = this.config.requestContext as Page;
+      const result = await page.evaluate(async (boxArgs) => {
+        const { addBox } = await import('../../src/services/boxes');
+        const response = await addBox(boxArgs);
+        return response;
+      }, args);
 
-    if (!response.data) {
-      throw new Error('Failed to add box: No data returned');
+      if (!result.data) {
+        throw new Error('Failed to add box: No data returned');
+      }
+
+      return result.data;
     }
 
-    return response.data;
+    throw new Error(
+      'addBox requires a Page context. Services use import.meta.env and cannot run in Node.js. ' +
+        'Pass a Page object when creating ApiClient.'
+    );
   }
 
   async deleteBox(boxId: string): Promise<void> {
-    await boxService.deleteBox(boxId);
+    if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
+      const page = this.config.requestContext as Page;
+      await page.evaluate(async (id) => {
+        const { deleteBox } = await import('../../src/services/boxes');
+        await deleteBox(id);
+      }, boxId);
+      return;
+    }
+
+    throw new Error(
+      'deleteBox requires a Page context. Services use import.meta.env and cannot run in Node.js. ' +
+        'Pass a Page object when creating ApiClient.'
+    );
   }
 
   // Ideas
@@ -294,22 +340,60 @@ export class ApiClient {
     },
     _userId: string
   ): Promise<{ hash_id: string }> {
-    // Note: user_id is automatically injected by databaseRequest from JWT token
-    const response = await ideaService.addIdea(args);
+    if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
+      const page = this.config.requestContext as Page;
+      const result = await page.evaluate(async (ideaArgs) => {
+        const { addIdea } = await import('../../src/services/ideas');
+        const response = await addIdea(ideaArgs);
+        return response;
+      }, args);
 
-    if (!response.data) {
-      throw new Error('Failed to add idea: No data returned');
+      if (!result.data) {
+        throw new Error('Failed to add idea: No data returned');
+      }
+
+      return result.data;
     }
 
-    return response.data;
+    throw new Error(
+      'addIdea requires a Page context. Services use import.meta.env and cannot run in Node.js. ' +
+        'Pass a Page object when creating ApiClient.'
+    );
   }
 
   async deleteIdea(ideaId: string): Promise<void> {
-    await ideaService.deleteIdea(ideaId);
+    if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
+      const page = this.config.requestContext as Page;
+      await page.evaluate(async (id) => {
+        const { deleteIdea } = await import('../../src/services/ideas');
+        await deleteIdea(id);
+      }, ideaId);
+      return;
+    }
+
+    throw new Error(
+      'deleteIdea requires a Page context. Services use import.meta.env and cannot run in Node.js. ' +
+        'Pass a Page object when creating ApiClient.'
+    );
   }
 
   async addIdeaToBox(ideaId: string, boxId: string): Promise<void> {
-    await ideaService.addIdeaBox(ideaId, boxId);
+    if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
+      const page = this.config.requestContext as Page;
+      await page.evaluate(
+        async ({ iId, bId }) => {
+          const { addIdeaBox } = await import('../../src/services/ideas');
+          await addIdeaBox(iId, bId);
+        },
+        { iId: ideaId, bId: boxId }
+      );
+      return;
+    }
+
+    throw new Error(
+      'addIdeaToBox requires a Page context. Services use import.meta.env and cannot run in Node.js. ' +
+        'Pass a Page object when creating ApiClient.'
+    );
   }
 
   private async request(model: string, method: string, args: any): Promise<any> {

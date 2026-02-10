@@ -40,7 +40,7 @@ const baseVersionsRequest = async (versionsUrl: string, version: string) => {
       headers: { 'aula-frontend-version': import.meta.env.VITE_APP_VERSION },
     });
     if (response && response.ok) {
-      return response.json();
+      return response;
     } else {
       console.error(`Error fetching version ${version}. Status: ${response.status}`);
       return DEFAULT_VERSIONS_RESPONSE;

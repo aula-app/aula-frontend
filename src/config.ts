@@ -40,7 +40,7 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
   return config;
 }
 
-export class RuntimeConfigNotFoundError extends Error { }
+export class RuntimeConfigNotFoundError extends Error {}
 
 export function getRuntimeConfig(): RuntimeConfig {
   const config = localStorage.getItem('config');
