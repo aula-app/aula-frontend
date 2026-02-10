@@ -19,14 +19,6 @@ const config: CapacitorConfig = {
     Keyboard: {
       resizeOnFullScreen: true,
     },
-    SafeArea: {
-      enabled: true,
-      customColorsForSystemBars: false,
-      statusBarBackgroundColor: '#000000',
-      statusBarStyle: 'dark',
-      navigationBarBackgroundColor: '#000000',
-      navigationBarStyle: 'dark',
-    },
   },
 };
 

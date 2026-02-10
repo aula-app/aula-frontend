@@ -15,11 +15,12 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       p={2}
       maxWidth="20rem"
       sx={{
-        height: '100%',
+        height: '100vh',
         paddingTop: `calc(${theme.spacing(2)} + var(--safe-area-inset-top, 0px))`,
         paddingLeft: `calc(0px + var(--safe-area-inset-left, 0px))`,
         paddingRight: `calc(0px + var(--safe-area-inset-right, 0px))`,
         paddingBottom: `calc(${theme.spacing(2)} + var(--safe-area-inset-bottom, 0px))`,
+        boxSizing: 'border-box',
       }}
     >
       <SkipNavigation mainContentId="public-content" />

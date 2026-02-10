@@ -1,10 +1,15 @@
+## 1.7.3
+
+- **Bug fixes**
+  - some buttons from sidebar where not clickable on mobile
+  - Fix Versions of aula-Software shown in the About page
+- **Technical improvements**
+  - Send app/web version to aula backend API for feature toggling
+
 ## 1.7.2
 
 - **Bug fixes**
   - Parse user roles correctly from JWT when they are strings
-  - Fix Versions of aula-Software shown in the About page
-- **Technical improvements**
-  - Send app/web version to aula backend API for feature toggling
 
 ## 1.7.1
 
