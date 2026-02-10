@@ -11,6 +11,7 @@ export const getUserConsent = async (token: string, signal?: AbortSignal): Promi
       headers: {
         'Content-Type': 'application/json',
         'aula-instance-code': code,
+        'aula-frontend-version': import.meta.env.VITE_APP_VERSION,
         Authorization: `Bearer ${token}`,
       },
       signal,

@@ -5,6 +5,7 @@ import { IconButtonProps, Drawer } from '@mui/material';
 import { forwardRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import { versionsRequest } from '@/services/requests-v2';
 
 interface Props extends IconButtonProps {
   target: string;
@@ -16,10 +17,12 @@ const BugButton = forwardRef<HTMLButtonElement, Props>(({ target, disabled = fal
   const [isOpen, setOpen] = useState(false);
 
   const onSubmit = async (data: BugArguments) => {
+    const versions = await versionsRequest();
     const body = `
 ---
 location: ${location.pathname}
 userAgent: ${window.navigator.userAgent}
+versions: ${JSON.stringify(versions)}
 ---
 ${data.content || ''}
     `;

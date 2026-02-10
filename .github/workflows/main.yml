@@ -19,7 +19,7 @@ jobs:
         run: echo "IMAGE_TAG_SHORT_SHA=aulaapp/aula-frontend:$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Build and tag Docker image
-        run: docker build -t $IMAGE_TAG_SHORT_SHA .
+        run: docker build --build-arg DOCKER_TAG=$IMAGE_TAG_SHORT_SHA -t $IMAGE_TAG_SHORT_SHA .
 
       - name: Push Docker image tag
         run: docker push $IMAGE_TAG_SHORT_SHA
