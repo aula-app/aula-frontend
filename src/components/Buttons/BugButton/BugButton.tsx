@@ -17,7 +17,6 @@ const BugButton = forwardRef<HTMLButtonElement, Props>(({ target, disabled = fal
   const [isOpen, setOpen] = useState(false);
 
   const onSubmit = async (data: BugArguments) => {
-    console.log('Submitting bug report with data:', data);
     const versions = await versionsRequest();
     const body = `
 ---
