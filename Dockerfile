@@ -1,5 +1,5 @@
 # Stage 1: Build the app into static assets using NodeJS base image
-FROM node:22.17-alpine AS assets
+FROM node:22.22-alpine AS assets
 WORKDIR /app
 ARG VITE_APP_BASENAME=/
 ARG DOCKER_TAG
