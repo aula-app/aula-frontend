@@ -24,7 +24,8 @@ ENV VITE_APP_BASENAME=/
 
 COPY --from=assets /app/build /usr/share/nginx/html
 
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx.default.conf /etc/nginx/conf.d/default.conf
 
 # Replace placeholders for dynamic configuration in served files
 COPY ./docker-entrypoint.sh /docker-entrypoint.d/env.sh
