@@ -176,5 +176,20 @@ export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass:
   await page.fill('input[name="confirmPassword"]', data.password);
   await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
-  await login(page, data);
+  // Wait for navigation after password change
+  try {
+    await page.waitForLoadState('networkidle', { timeout: 5000 });
+    await page.waitForTimeout(1000);
+
+    // Check if we're logged in, if not, perform login
+    const isLoggedIn = await page.locator('#rooms-heading').isVisible().catch(() => false);
+    if (!isLoggedIn) {
+      await login(page, data);
+    }
+  } catch (error) {
+    // If page was closed/redirected, perform fresh login
+    if (!page.isClosed()) {
+      await login(page, data);
+    }
+  }
 };

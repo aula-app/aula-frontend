@@ -36,6 +36,14 @@ test.describe.serial('Instance Offline', () => {
     await expect(selectedStatus).toBe(`${Number(online)}`);
   };
 
+  test('Setup: Ensure test user exists', async ({ userConfig }) => {
+    // This test ensures the user is created before we turn the instance offline
+    // The userConfig fixture will create the user if it doesn't exist
+    await test.step('Verify user is created', async () => {
+      expect(userConfig.username).toBeTruthy();
+    });
+  });
+
   test('Admin can turn instance offline', async ({ adminPage }) => {
     await test.step('Change instance status to offline', async () => {
       await changeInstanceStatus(adminPage, false);
