@@ -14,7 +14,7 @@ export const loginUser = async (
       method: 'POST',
       headers: {
         'aula-instance-code': api_code,
-        'aula-frontend-version': import.meta.env.VITE_APP_VERSION,
+        'aula-frontend-version': import.meta?.env?.VITE_APP_VERSION ?? process?.env?.VITE_APP_VERSION,
         'Content-Type': 'application/json',
         Authorization: token ? `Bearer ${token}` : '',
       },
@@ -46,7 +46,7 @@ export const checkPasswordKey = async (secret: string) => {
       headers: {
         'Content-Type': 'application/json',
         'aula-instance-code': code,
-        'aula-frontend-version': import.meta.env.VITE_APP_VERSION,
+        'aula-frontend-version': import.meta?.env?.VITE_APP_VERSION ?? process?.env?.VITE_APP_VERSION,
       },
     });
 
@@ -77,7 +77,7 @@ export const setPassword = async (password: string, secret: string) => {
       headers: {
         'Content-Type': 'application/json',
         'aula-instance-code': api_code,
-        'aula-frontend-version': import.meta.env.VITE_APP_VERSION,
+        'aula-frontend-version': import.meta?.env?.VITE_APP_VERSION ?? process?.env?.VITE_APP_VERSION,
       },
       body: JSON.stringify(formData),
     });
@@ -117,7 +117,7 @@ export const recoverPassword = async (
         'Content-Type': 'application/json',
         Authorization: token ? `Bearer ${token}` : '',
         'aula-instance-code': api_code,
-        'aula-frontend-version': import.meta.env.VITE_APP_VERSION,
+        'aula-frontend-version': import.meta?.env?.VITE_APP_VERSION ?? process?.env?.VITE_APP_VERSION,
       },
       signal,
     });

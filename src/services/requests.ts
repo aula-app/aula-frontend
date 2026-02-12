@@ -91,7 +91,7 @@ export const baseRequest = async <T = unknown>(
   }
 
   headers['aula-instance-code'] = instanceCode;
-  headers['aula-frontend-version'] = import.meta.env.VITE_APP_VERSION;
+  headers['aula-frontend-version'] = import.meta?.env?.VITE_APP_VERSION ?? process?.env?.VITE_APP_VERSION;
 
   if (!instanceApiUrl || !jwtToken) {
     return {

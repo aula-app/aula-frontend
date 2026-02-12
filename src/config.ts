@@ -30,7 +30,7 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
   } else {
     const branchBasename = import.meta.env.VITE_APP_BASENAME || '/';
     const res = await fetch(`${branchBasename}public-config.json`, {
-      headers: { 'aula-frontend-version': import.meta.env.VITE_APP_VERSION },
+      headers: { 'aula-frontend-version': import.meta?.env?.VITE_APP_VERSION ?? process?.env?.VITE_APP_VERSION },
     });
     const json = await res.json();
     config = { ...defaultConfig, ...json };

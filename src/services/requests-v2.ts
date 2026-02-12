@@ -30,14 +30,14 @@ export const versionsRequest = async (): Promise<VersionsResponse> => {
   return {
     'aula-backend.v1': v1,
     'aula-backend.v2': v2,
-    'aula-frontend': import.meta.env.VITE_APP_VERSION,
+    'aula-frontend': import.meta?.env?.VITE_APP_VERSION ?? process?.env?.VITE_APP_VERSION,
   } as VersionsResponse;
 };
 
 const baseVersionsRequest = async (versionsUrl: string, version: string) => {
   try {
     const response = await fetch(versionsUrl, {
-      headers: { 'aula-frontend-version': import.meta.env.VITE_APP_VERSION },
+      headers: { 'aula-frontend-version': import.meta?.env?.VITE_APP_VERSION ?? process?.env?.VITE_APP_VERSION },
     });
     if (response && response.ok) {
       return response.json();
