@@ -5,9 +5,6 @@ import path from 'path';
 
 export default defineConfig({
   base: process.env.VITE_APP_BASENAME || '/',
-  define: {
-    'process.env.VITE_APP_VERSION': process.env.VITE_APP_VERSION,
-  },
   plugins: [
     react({
       jsxImportSource: '@emotion/react',
