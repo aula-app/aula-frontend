@@ -11,7 +11,7 @@ export const validateAndSaveInstanceCode = async (code: string): Promise<boolean
     method: 'POST',
     body: JSON.stringify({ code: code }),
     headers: {
-      'aula-frontend-version': import.meta.env.VITE_APP_VERSION,
+      'aula-frontend-version': process.env.VITE_APP_VERSION ?? 'unknown',
     },
   };
 
