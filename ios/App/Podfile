@@ -11,7 +11,7 @@ install! 'cocoapods', :disable_input_output_paths => false
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
-  pod 'CapacitorCommunitySafeArea', :path => '../../node_modules/@capacitor-community/safe-area'
+  pod 'CapacitorApp', :path => '../../node_modules/@capacitor/app'
 end
 
 pre_install do |installer|
@@ -28,19 +28,24 @@ end
 
 post_install do |installer|
   assertDeploymentTarget(installer)
-  
+
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       # Disable sandbox restrictions
       config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
       config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-      
+
       # Additional sandbox-related settings
       config.build_settings['SYSTEM_FRAMEWORK_SEARCH_PATHS'] = '$(inherited) $(PLATFORM_DIR)/Developer/Library/Frameworks'
       config.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'
-      
+
       # Fix for Xcode 15
       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'COCOAPODS=1', 'DISABLE_SANDBOXING=1']
+
+      # Suppress WKProcessPool deprecation warning in CapacitorCordova
+      if target.name == 'CapacitorCordova'
+        config.build_settings['GCC_WARN_DEPRECATED_DECLARATIONS'] = 'NO'
+      end
     end
   end
   
