@@ -91,7 +91,7 @@ export const baseRequest = async <T = unknown>(
   }
 
   headers['aula-instance-code'] = instanceCode;
-  headers['aula-frontend-version'] = localStorageGet('aula-frontend-version');
+  headers['aula-frontend-version'] = import.meta?.env?.VITE_APP_VERSION ?? 'unknown';
 
   if (!instanceApiUrl || !jwtToken) {
     return {
