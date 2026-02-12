@@ -1,4 +1,9 @@
-## 1.7.3
+## 1.8.1
+
+- **Technical improvements**
+  - Fix failing tests due to playwright not working with import.meta of vite
+
+## 1.8.0
 
 - **Bug fixes**
   - some buttons from sidebar where not clickable on mobile
