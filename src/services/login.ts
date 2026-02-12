@@ -14,7 +14,7 @@ export const loginUser = async (
       method: 'POST',
       headers: {
         'aula-instance-code': api_code,
-        'aula-frontend-version': import.meta?.env?.VITE_APP_VERSION ?? process?.env?.VITE_APP_VERSION,
+        'aula-frontend-version': import.meta?.env?.VITE_APP_VERSION ?? 'unknown',
         'Content-Type': 'application/json',
         Authorization: token ? `Bearer ${token}` : '',
       },
