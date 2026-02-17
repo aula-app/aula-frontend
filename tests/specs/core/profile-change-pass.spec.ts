@@ -3,6 +3,7 @@ import { test } from '../../fixtures/test-fixtures';
 import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 import { TestConstants } from '../../support/config';
+import { login, logout } from '../../interactions/users';
 
 type PasswordChangeContext = {
   oldPassword: string;
@@ -21,8 +22,8 @@ type PasswordChangeContext = {
 test.describe.serial('Change pass flow', () => {
   const defaultFields = {
     oldPassword: TestConstants.DEFAULT_PASSWORD,
-    newPassword: 'newPassword0',
-    confirmPassword: 'newPassword0',
+    newPassword: 'newPass#veryLongIndeed, one must login with 60 char long pass',
+    confirmPassword: 'newPass#veryLongIndeed, one must login with 60 char long pass',
   };
 
   const changePassword = async (user: Page, passFields: PasswordChangeContext) => {
@@ -59,6 +60,11 @@ test.describe.serial('Change pass flow', () => {
       await changePassword(user, defaultFields);
       await checkSuccessDiv(user);
     });
+
+    await test.step('Verify user can login with new password', async () => {
+      await logout(user);
+      await login(user, { ...passwordUser, password: defaultFields.newPassword });
+    });
   });
 
   test('User cannot change password with incorrect current password', async ({ ensureUser, createUserPage }) => {
@@ -76,7 +82,10 @@ test.describe.serial('Change pass flow', () => {
     });
   });
 
-  test('User cannot change password when new password and confirmation do not match', async ({ ensureUser, createUserPage }) => {
+  test('User cannot change password when new password and confirmation do not match', async ({
+    ensureUser,
+    createUserPage,
+  }) => {
     const passwordUser = await ensureUser('password');
     const user = await createUserPage(passwordUser.username);
 
@@ -90,7 +99,7 @@ test.describe.serial('Change pass flow', () => {
 
     await test.step('Verify validation error', async () => {
       const errorLabel = user.locator('#confirmPassword-error-message');
-      await expect(await errorLabel.textContent()).not.toHaveLength(0);
+      expect(await errorLabel.textContent()).not.toHaveLength(0);
     });
   });
 
@@ -108,7 +117,7 @@ test.describe.serial('Change pass flow', () => {
 
     await test.step('Verify validation error', async () => {
       const errorLabel = user.locator('#confirmPassword-error-message');
-      await expect(await errorLabel.textContent()).not.toHaveLength(0);
+      expect(await errorLabel.textContent()).not.toHaveLength(0);
     });
   });
 
@@ -119,7 +128,7 @@ test.describe.serial('Change pass flow', () => {
     await test.step('Change password 6 times in sequence', async () => {
       for (let i = 0; i < 6; i++) {
         const fields = {
-          oldPassword: `newPassword${i}`,
+          oldPassword: i == 0 ? defaultFields.newPassword : `newPassword${i}`,
           newPassword: `newPassword${i + 1}`,
           confirmPassword: `newPassword${i + 1}`,
         };
