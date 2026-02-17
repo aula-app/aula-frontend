@@ -40,7 +40,8 @@ npx playwright test --headed
 
 ```sh
 # Run the aula-frontend in docker container locally
-docker run --env-file .env.docker --build-arg DOCKER_TAG=local-test -p 3000:80 aulaapp/aula-frontend:latest
+docker build --build-arg DOCKER_TAG=local-test -t aulaapp/aula-frontend:local-test . \
+  && docker run --env-file .env.docker -p 3000:80 aulaapp/aula-frontend:local-test
 
 # In another terminal, run the tests against the local aula-frontend
 docker run -p 4000:4000 --network host --rm --init \
