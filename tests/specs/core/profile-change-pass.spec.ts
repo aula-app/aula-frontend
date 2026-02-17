@@ -128,7 +128,7 @@ test.describe.serial('Change pass flow', () => {
     await test.step('Change password 6 times in sequence', async () => {
       for (let i = 0; i < 6; i++) {
         const fields = {
-          oldPassword: `newPassword${i}`,
+          oldPassword: i == 0 ? defaultFields.newPassword : `newPassword${i}`,
           newPassword: `newPassword${i + 1}`,
           confirmPassword: `newPassword${i + 1}`,
         };
