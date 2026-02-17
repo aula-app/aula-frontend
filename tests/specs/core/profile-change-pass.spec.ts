@@ -3,7 +3,7 @@ import { test } from '../../fixtures/test-fixtures';
 import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 import { TestConstants } from '../../support/config';
-import { login } from '../../interactions/users';
+import { login, logout } from '../../interactions/users';
 
 type PasswordChangeContext = {
   oldPassword: string;
@@ -62,6 +62,7 @@ test.describe.serial('Change pass flow', () => {
     });
 
     await test.step('Verify user can login with new password', async () => {
+      await logout(user);
       await login(user, { ...passwordUser, password: defaultFields.newPassword });
     });
   });
