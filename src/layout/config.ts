@@ -33,7 +33,7 @@ export const SIDEBAR_ITEMS: Array<PageLink> = [
     permission: () => true,
   },
   {
-    title: 'inbox',
+    title: 'messages',
     path: '/messages',
     icon: 'message',
     component: MessageBadge,
