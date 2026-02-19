@@ -40,7 +40,8 @@ npx playwright test --headed
 
 ```sh
 # Run the aula-frontend in docker container locally
-docker run --env-file .env.docker -p 3000:80 aulaapp/aula-frontend:latest
+docker build --build-arg DOCKER_TAG=local-test -t aulaapp/aula-frontend:local-test . \
+  && docker run --env-file .env.docker -p 3000:80 aulaapp/aula-frontend:local-test
 
 # In another terminal, run the tests against the local aula-frontend
 docker run -p 4000:4000 --network host --rm --init \
@@ -50,6 +51,7 @@ docker run -p 4000:4000 --network host --rm --init \
 ```
 
 ## License
+
 See `LICENSE.txt`. Licensed under the EUPL-1.2 or later. You may obtain a copy of the license at https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12.
 
 ## Contributing

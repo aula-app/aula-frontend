@@ -6,6 +6,9 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   base: process.env.VITE_APP_BASENAME || '/',
+  define: {
+    'process.env.VITE_APP_VERSION': JSON.stringify(process.env.VITE_APP_VERSION),
+  },
   plugins: [
     tailwindcss(),
     react({

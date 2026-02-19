@@ -6,6 +6,7 @@ import { Drawer, IconButtonProps } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import { versionsRequest } from '@/services/requests-v2';
 
 const BugButton = ({ disabled = false, ...restOfProps }: IconButtonProps) => {
   const { t } = useTranslation();
@@ -13,10 +14,12 @@ const BugButton = ({ disabled = false, ...restOfProps }: IconButtonProps) => {
   const [isOpen, setOpen] = useState(false);
 
   const onSubmit = async (data: BugArguments) => {
+    const versions = await versionsRequest();
     const body = `
 ---
 location: ${location.pathname}
 userAgent: ${window.navigator.userAgent}
+versions: ${JSON.stringify(versions)}
 ---
 ${data.content || ''}
     `;

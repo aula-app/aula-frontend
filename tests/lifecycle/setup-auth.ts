@@ -87,12 +87,12 @@ async function ensureInstanceOnline(page: Page): Promise<void> {
   try {
     // Check if instance is online using the API
     const isOnline = await page.evaluate(async () => {
-      const response = await fetch('/api/controllers/model.php?getInstanceSettings', {
+      const response = await fetch(`${localStorage.getItem('api_url')}/api/controllers/model.php?getInstanceSettings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'aula-instance-code': localStorage.getItem('code') || '',
+          'aula-instance-code': localStorage.getItem('code') as string,
         },
         body: JSON.stringify({
           model: 'Settings',
@@ -118,21 +118,24 @@ async function ensureInstanceOnline(page: Page): Promise<void> {
 
     // Set instance to online
     await page.evaluate(async () => {
-      const response = await fetch('/api/controllers/model.php?setInstanceOnlineMode', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'aula-instance-code': localStorage.getItem('code') || '',
-        },
-        body: JSON.stringify({
-          model: 'Settings',
-          method: 'setInstanceOnlineMode',
-          arguments: {
-            status: 1,
+      const response = await fetch(
+        `${localStorage.getItem('api_url')}/api/controllers/model.php?setInstanceOnlineMode`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'aula-instance-code': localStorage.getItem('code') as string,
           },
-        }),
-      });
+          body: JSON.stringify({
+            model: 'Settings',
+            method: 'setInstanceOnlineMode',
+            arguments: {
+              status: 1,
+            },
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Failed to set instance online: ${response.status}`);
