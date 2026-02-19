@@ -28,11 +28,13 @@ const TopBar: React.FC<TopBarProps> = ({ mobileMenuOpen, onToggleMobileMenu, men
       className="relative z-1200 bg-primary h-14 shrink-0 flex items-center px-2 py-1 shadow-sm"
       onClick={() => mobileMenuOpen && onToggleMobileMenu()}
     >
-      <div className="flex-1 flex items-center justify-start h-full">
+      <div className="mr-3 flex h-full items-center justify-start">
         <Breadcrumb />
       </div>
-      <div className="flex-1 h-full flex items-center justify-center text-lg">{getCurrentContextName()}</div>
-      <div className="flex-1 h-full items-center justify-end flex">
+      <div className="flex-1 flex items-center justify-center h-full overflow-hidden">
+        <div className="truncate">{getCurrentContextName()}</div>
+      </div>
+      <div className="ml-3 flex h-full items-center justify-end">
         <div className="sm:hidden">
           <button
             ref={menuButtonRef}
