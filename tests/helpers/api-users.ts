@@ -7,6 +7,8 @@ export async function createUserViaAPI(adminPage: Page, userData: UserData): Pro
     code: localStorage.getItem('code'),
   }));
 
+  console.log(`↪️ In createUserViaAPI, recovered instance code "${code}"`);
+  console.log(`↪️ In createUserViaAPI, recovered api_url "${apiUrl}"`);
   if (!apiUrl || !code) {
     throw new Error('API URL or instance code not found in admin page');
   }
@@ -63,16 +65,14 @@ export async function createUserViaAPI(adminPage: Page, userData: UserData): Pro
   return result;
 }
 
-export async function registerUserViaAPI(
-  page: Page,
-  userData: UserData,
-  tempPassword: string
-): Promise<string> {
+export async function registerUserViaAPI(page: Page, userData: UserData, tempPassword: string): Promise<string> {
   const { code, apiUrl } = await page.evaluate(() => ({
     code: localStorage.getItem('code'),
     apiUrl: localStorage.getItem('api_url'),
   }));
 
+  console.log(`↪️ In registerUserViaAPI, recovered instance code "${code}"`);
+  console.log(`↪️ In registerUserViaAPI, recovered api_url "${apiUrl}"`);
   if (!code || !apiUrl) {
     throw new Error('Instance code or API URL not found in page context');
   }
@@ -162,11 +162,7 @@ export async function registerUserViaAPI(
   return finalToken;
 }
 
-export async function saveAuthenticationState(
-  page: Page,
-  token: string,
-  storageStatePath: string
-): Promise<void> {
+export async function saveAuthenticationState(page: Page, token: string, storageStatePath: string): Promise<void> {
   await page.evaluate((token) => {
     localStorage.setItem('token', token);
     if (!localStorage.getItem('code')) throw new Error('code not found in localStorage');

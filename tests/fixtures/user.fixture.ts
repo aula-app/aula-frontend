@@ -28,6 +28,10 @@ export const test = browserTest.extend<UserFixtures>({
     const adminPage = await adminContext.newPage();
     await adminPage.goto(shared.getHost());
     await adminPage.waitForLoadState('networkidle');
+    const code = await adminPage.evaluate(() => {
+      return localStorage.getItem('code');
+    });
+    console.log(`↪️ Restored admin-context, recovered instance code "${code}"`);
 
     const factory = async (name: string, role: RoleTypes = 20): Promise<UserData> => {
       if (userCache[name]) {
@@ -49,6 +53,8 @@ export const test = browserTest.extend<UserFixtures>({
 
         await userPage.goto(shared.getHost());
         await userPage.waitForLoadState('networkidle');
+
+        // @TODO: nikola - why don't we get localStorage in userPage populated with code and api_url
 
         const token = await apiUsers.registerUserViaAPI(userPage, userData, tempPassword);
         const storageStatePath = `tests/auth-states/${userData.username}-context.json`;
