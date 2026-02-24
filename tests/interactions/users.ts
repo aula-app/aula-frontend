@@ -93,8 +93,30 @@ export const remove = async (page: Page, data: types.UserData) => {
   }
 };
 
+export const ensureInstanceEntered = async (page: Page) => {
+  const instance = process.env.INSTANCE_CODE || 'SINGLE';
+  console.log(`ℹ️ Will be testing "${instance}" instance.`);
+
+  const instanceCodeInputDiv = page.getByTestId('input-instance-code');
+  if ((await instanceCodeInputDiv.count()) === 0) {
+    console.log(`${instance === 'SINGLE' ? '✅' : '⚠️'} No instance selector input found on the page.`);
+    if (instance !== 'SINGLE') {
+      throw new Error('Instance selector input not found on the page, but we are testing a multi-instance FE.');
+    }
+
+    // if there's no instance code input, then we must be on single-instance FE, right? 😏
+    return true;
+  } else {
+    console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"...`);
+    await instanceCodeInputDiv.locator(page.locator('input[name="instance-code"]')).fill(instance);
+    await page.getByTestId('submit-instance-code').click();
+  }
+};
+
 export const loginAttempt = async (page: Page, data: types.UserData) => {
   await page.goto(host);
+  await page.waitForLoadState('networkidle');
+  await ensureInstanceEntered(page);
   await page.waitForLoadState('networkidle');
   await page.waitForSelector('input[name="username"]', { timeout: 10000 });
   await page.fill('input[name="username"]', data.username);

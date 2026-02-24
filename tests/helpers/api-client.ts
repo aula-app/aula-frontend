@@ -26,6 +26,7 @@ export class ApiClient {
 
     // Set up localStorage for services to work (mock if not available in Node.js)
     if (typeof localStorage !== 'undefined') {
+      console.log(`🎛️ Setting config to localStorage: ${JSON.stringify(config)}`);
       localStorage.setItem('api_url', config.apiUrl);
       localStorage.setItem('code', config.instanceCode);
       localStorage.setItem('token', config.jwtToken || '');
@@ -42,9 +43,13 @@ export class ApiClient {
         },
       };
       (global as any).localStorage = mockStorage;
+      console.log(`🎛️ Setting config to mockStorage: ${JSON.stringify(config)}`);
       mockStorage.setItem('api_url', config.apiUrl);
       mockStorage.setItem('code', config.instanceCode);
       mockStorage.setItem('token', config.jwtToken || '');
+      console.log(
+        `✅ Verified fetching item from mockStorage: {"code": "${(global as any).localStorage.getItem('code')}"}`
+      );
     }
   }
 
@@ -364,6 +369,7 @@ export function createTestApiClient(requestContext?: APIRequestContext | Page, j
   // As a fallback, use frontend host (localhost:3000) which goes through Vite proxy to backend
   const apiUrl = process.env.APP_BACKEND_HOST || process.env.APP_FRONTEND_HOST || 'http://localhost:3000';
   const instanceCode = process.env.INSTANCE_CODE || 'SINGLE';
+  console.log(`🚀 Creating API client for [${instanceCode}] at ${apiUrl}`);
 
   return new ApiClient({
     apiUrl,

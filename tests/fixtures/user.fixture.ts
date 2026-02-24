@@ -1,4 +1,3 @@
-import { Page } from '@playwright/test';
 import { UserData } from '../support/types';
 import { createUserData } from '../helpers/entities';
 import * as apiUsers from '../helpers/api-users';
