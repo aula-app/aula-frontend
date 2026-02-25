@@ -1,6 +1,7 @@
-## Next
+## 1.8.2
 
-- **New features**
+- **Technical improvements**
+  - Make tests work in a multi-instance environment (specify instance with envvar INSTANCE_CODE)
   - Better breadcrumb navigation for mobile
 
 ## 1.8.1

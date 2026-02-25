@@ -1,10 +1,10 @@
-import { Page } from '@playwright/test';
 import { UserData } from '../support/types';
 import { createUserData } from '../helpers/entities';
 import * as apiUsers from '../helpers/api-users';
 import { test as browserTest } from './browser.fixture';
 import { RoleTypes } from '../../src/types/SettingsTypes';
 import * as shared from '../support/utils';
+import { ensureInstanceEntered } from '../interactions/users';
 
 interface UserFixtures {
   ensureUser: (name: string, role?: RoleTypes) => Promise<UserData>;
@@ -13,8 +13,8 @@ interface UserFixtures {
 const userCache: Record<string, UserData> = {};
 
 export const admin: UserData = {
-  username: 'admin',
-  password: 'aula',
+  username: process.env.ADMIN_USERNAME || 'admin',
+  password: process.env.ADMIN_PASSWORD || 'aula',
   displayName: 'Admin',
   realName: 'Admin User',
   role: 50,
@@ -29,6 +29,7 @@ export const test = browserTest.extend<UserFixtures>({
     const adminPage = await adminContext.newPage();
     await adminPage.goto(shared.getHost());
     await adminPage.waitForLoadState('networkidle');
+    await ensureInstanceEntered(adminPage);
 
     const factory = async (name: string, role: RoleTypes = 20): Promise<UserData> => {
       if (userCache[name]) {
@@ -50,6 +51,7 @@ export const test = browserTest.extend<UserFixtures>({
 
         await userPage.goto(shared.getHost());
         await userPage.waitForLoadState('networkidle');
+        await ensureInstanceEntered(userPage);
 
         const token = await apiUsers.registerUserViaAPI(userPage, userData, tempPassword);
         const storageStatePath = `tests/auth-states/${userData.username}-context.json`;

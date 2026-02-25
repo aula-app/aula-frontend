@@ -44,6 +44,8 @@ const InstanceCodeView = () => {
       <TextField
         disabled={isLoading}
         id="instance-code"
+        data-testid="input-instance-code"
+        name="instance-code"
         label={t('instance.label')}
         variant="outlined"
         error={!!error}
@@ -57,6 +59,8 @@ const InstanceCodeView = () => {
         }}
       />
       <Button
+        data-testid="submit-instance-code"
+        name="submit-instance-code"
         disabled={isLoading}
         variant="contained"
         onClick={handleSubmit}

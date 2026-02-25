@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { test } from '../../fixtures/test-fixtures';
 import fs from 'fs';
 import path from 'path';
@@ -183,7 +183,9 @@ test.describe.serial('CSV Import', () => {
       });
     });
 
-    test('should verify users are not duplicated or recreated (their temp password is unchanged)', async ({ adminPage }) => {
+    test('should verify users are not duplicated or recreated (their temp password is unchanged)', async ({
+      adminPage,
+    }) => {
       await test.step('Check temp passwords for duplication', async () => {
         for (const u of csvUsers) {
           // this will also inherently verify that no duplicate users were created because it checks
@@ -202,7 +204,9 @@ test.describe.serial('CSV Import', () => {
       });
     });
 
-    test('should be able to confirm that imported users are assigned to old and new rooms only', async ({ adminPage }) => {
+    test('should be able to confirm that imported users are assigned to old and new rooms only', async ({
+      adminPage,
+    }) => {
       await test.step('Verify room assignments for all users', async () => {
         for (const u of csvUsers) {
           await navigation.goToUsersSettings(adminPage);

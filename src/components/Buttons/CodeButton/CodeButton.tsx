@@ -27,6 +27,7 @@ const CodeButton: FC<ButtonProps> = ({ ...restOfProps }) => {
           }}
           color="secondary"
           className="app-code"
+          data-testid="current-instance-code"
           aria-label={t('ui.accessibility.copyInstanceCode', { code })}
           {...restOfProps}
         >

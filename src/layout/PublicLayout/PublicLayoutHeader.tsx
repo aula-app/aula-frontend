@@ -34,6 +34,7 @@ const PublicLayoutHeader: FunctionComponent = () => {
               onClick={resetCode}
               onDelete={resetCode}
               className="app-code"
+              data-testid="current-instance-code"
               aria-label={t('auth.login.instanceCode', { var: code })}
             />
           ) : (
