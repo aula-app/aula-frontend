@@ -1,9 +1,7 @@
 import { getSelf } from '@/services/users';
 import { UserType } from '@/types/Scopes';
-import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import UserAvatar from '../UserAvatar';
-import LocaleSwitch from '../LocaleSwitch';
 
 /**
  * Renders User info with Avatar
@@ -21,21 +19,17 @@ const UserInfo = () => {
     getUserInfo();
   }, []);
   return (
-    <Stack m={2}>
+    <div className="m-2">
       {user && (
-        <Stack direction="row" alignItems="center" minHeight="fit-content" gap={2}>
+        <div className="flex flex-row items-center min-h-fit gap-2">
           <UserAvatar id={user.hash_id} size={52} />
-          <Stack flex={1}>
-            <Typography sx={{ mt: 1 }} variant="h3" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
-              {user.username}
-            </Typography>
-            <Typography variant="body2" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
-              {user.displayname}
-            </Typography>
-          </Stack>
-        </Stack>
+          <div className="flex-1">
+            <h3 className="mt-1 text-2xl font-bold truncate">{user.username}</h3>
+            <p className="text-sm font-light truncate">{user.displayname}</p>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 };
 

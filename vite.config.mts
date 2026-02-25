@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 import path from 'path';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   base: process.env.VITE_APP_BASENAME || '/',
@@ -9,6 +10,7 @@ export default defineConfig({
     'process.env.VITE_APP_VERSION': JSON.stringify(process.env.VITE_APP_VERSION),
   },
   plugins: [
+    tailwindcss(),
     react({
       jsxImportSource: '@emotion/react',
       babel: {

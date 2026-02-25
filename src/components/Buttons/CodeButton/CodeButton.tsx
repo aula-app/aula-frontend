@@ -34,7 +34,7 @@ const CodeButton: FC<ButtonProps> = ({ ...restOfProps }) => {
           {`${t('instance.chip')}: ${code}`}
           <AppIcon icon="copy" size="small" sx={{ ml: 1 }} />
         </Button>
-        <Divider role="presentation" />
+        <div className="border-t border-theme-grey mx-3" />
       </>
     )
   );
