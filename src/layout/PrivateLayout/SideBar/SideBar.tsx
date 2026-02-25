@@ -134,11 +134,10 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
                 })()}
             </RippleLink>
           </li>
-        )
+        );
       })}
 
       <hr className="my-1 border-theme-grey" />
-
 
       <li className="flex items-center justify-around px-2">
         <ThemeToggleButton />
@@ -156,6 +155,7 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
           className="w-full p-3 flex items-center gap-3 rounded-lg transition-colors hover:bg-shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           role="menuitem"
           aria-label={t('auth.logout')}
+          data-testid="logout-button"
           tabIndex={allMenuItems.length - 1 === currentPageIndex ? 0 : -1}
           onClick={onLogout}
           onKeyDown={(e) => handleKeyDown(e as any, allMenuItems.length - 1)}
