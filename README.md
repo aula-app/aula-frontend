@@ -46,7 +46,7 @@ docker build --build-arg DOCKER_TAG=local-test -t aulaapp/aula-frontend:local-te
 # In another terminal, run the tests against the local aula-frontend
 docker run -p 4000:4000 --network host --rm --init \
   --add-host=hostmachine:host-gateway -v $(pwd):/home/pwuser \
-  -it mcr.microsoft.com/playwright:v1.54.1-jammy \
+  -it mcr.microsoft.com/playwright:v1.58.2-jammy \
   /bin/sh -c "cd /home/pwuser && npx playwright install && npx playwright test"
 ```
 
