@@ -1,7 +1,6 @@
-import { test as base, Browser, BrowserContext, Page } from '@playwright/test';
+import { test as base, BrowserContext, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as shared from '../support/utils';
 
 interface BrowserWorkerFixtures {
   adminContext: BrowserContext;
@@ -64,9 +63,9 @@ export const test = base.extend<BrowserTestFixtures, BrowserWorkerFixtures>({
 
     for (const { context, username } of createdContexts) {
       try {
-        const storageStatePath = getStorageStatePath(username);
-        await context.storageState({ path: storageStatePath });
+        await context.storageState({ path: getStorageStatePath(username) });
         await context.close();
+        console.info(`⚠️ Saved&Closed context for ${username}`);
       } catch (error) {
         console.warn(`⚠️ Could not save/close context for ${username}:`, error);
       }
@@ -76,40 +75,26 @@ export const test = base.extend<BrowserTestFixtures, BrowserWorkerFixtures>({
   createUserPage: async ({ browser }, use) => {
     const createdPages: { page: Page; username: string; context: BrowserContext }[] = [];
 
-    const factory = async (username: string): Promise<Page> => {
-      const storageStatePath = getStorageStatePath(username);
-      console.log(`📖 Loading storage state for ${username} from ${storageStatePath}`);
-      console.log(`   Storage state exists: ${hasStorageState(username)}`);
+    const userPageFactory = async (username: string): Promise<Page> => {
+      console.log(`📖 Loading storage state for ${username}...`);
 
       const context = await browser.newContext({
-        storageState: hasStorageState(username) ? storageStatePath : undefined,
+        storageState: hasStorageState(username) ? getStorageStatePath(username) : undefined,
       });
       const page = await context.newPage();
-
-      // Navigate to app so the user is actually logged in
-      await page.goto(shared.getHost());
-      await page.waitForLoadState('networkidle');
-
-      // Debug: Check if token is actually in localStorage
-      const token = await page.evaluate(() => localStorage.getItem('token'));
-      console.log(`   Token in localStorage: ${token ? 'YES' : 'NO'}`);
-
-      // Debug: Check if user is logged in by looking for rooms-heading
-      const isLoggedIn = await page.locator('#rooms-heading').isVisible().catch(() => false);
-      console.log(`   User appears logged in: ${isLoggedIn ? 'YES' : 'NO'}`);
 
       createdPages.push({ page, username, context });
       return page;
     };
 
-    await use(factory);
+    await use(userPageFactory);
 
     for (const { page, username, context } of createdPages) {
       try {
-        const storageStatePath = getStorageStatePath(username);
-        await context.storageState({ path: storageStatePath });
+        await context.storageState({ path: getStorageStatePath(username) });
         await page.close();
         await context.close();
+        console.info(`⚠️ Saved&Closed page/context for ${username}`);
       } catch (error) {
         console.warn(`⚠️ Could not save/close page/context for ${username}:`, error);
       }

@@ -21,10 +21,7 @@ test.describe.serial('Request User Data - Export Request and Download Flow', () 
 
       // Click the request data export button
       await formInteractions.clickButton(userPage, 'request-data-export-button');
-      await userPage.waitForLoadState('networkidle');
-
-      const confirmationMessage = userPage.getByRole('alert').getByTestId('SuccessOutlinedIcon');
-      await expect(confirmationMessage).toBeVisible({ timeout: 5000 });
+      await expect(userPage.getByTestId('success-alert')).toBeVisible();
     });
   });
 
