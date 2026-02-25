@@ -12,8 +12,8 @@ interface UserFixtures {
 const userCache: Record<string, UserData> = {};
 
 export const admin: UserData = {
-  username: 'admin',
-  password: 'aula',
+  username: process.env.ADMIN_USERNAME || 'admin',
+  password: process.env.ADMIN_PASSWORD || 'aula',
   displayName: 'Admin',
   realName: 'Admin User',
   role: 50,
