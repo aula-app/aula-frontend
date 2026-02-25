@@ -34,10 +34,10 @@ const PopupMessages = () => {
       if (liveRegion) {
         liveRegion.textContent = message.message;
       }
-      
-      return enqueueSnackbar(message.message, { 
-        variant: message.type, 
-        onClose: () => handleClose(i) 
+
+      return enqueueSnackbar(message.message, {
+        variant: message.type,
+        onClose: () => handleClose(i),
       });
     });
     currentStack = [...currentStack, ...newMessages];
@@ -45,13 +45,20 @@ const PopupMessages = () => {
 
   // Create components for different alert types
   const ErrorSnackbar = forwardRef((props: SnackbarProps, ref: ForwardedRef<HTMLDivElement>) => (
-    <Alert ref={ref} severity="error" variant="filled" sx={{ width: '100%' }} role="alert">
+    <Alert ref={ref} severity="error" variant="filled" sx={{ width: '100%' }} role="alert" data-testid="error-alert">
       {props.message}
     </Alert>
   ));
 
   const SuccessSnackbar = forwardRef((props: SnackbarProps, ref: ForwardedRef<HTMLDivElement>) => (
-    <Alert ref={ref} severity="success" variant="filled" sx={{ width: '100%' }} role="alert">
+    <Alert
+      ref={ref}
+      severity="success"
+      variant="filled"
+      sx={{ width: '100%' }}
+      role="alert"
+      data-testid="success-alert"
+    >
       {props.message}
     </Alert>
   ));
@@ -76,7 +83,7 @@ const PopupMessages = () => {
         aria-atomic="true"
         sx={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}
       />
-      
+
       {/* Status announcer for loading states */}
       <Box
         id="a11y-status-announcer"
