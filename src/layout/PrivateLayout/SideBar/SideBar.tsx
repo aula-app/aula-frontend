@@ -105,9 +105,7 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
         </RippleLink>
       </li>
 
-      <li className="my-1 px-3">
-        <div className="border-t border-theme-grey" />
-      </li>
+      <hr className="my-1 border-theme-grey" />
 
       {visibleItems.map(({ icon, path, title, component }, index) => {
         // Add 1 to index because profile is at index 0
@@ -139,9 +137,8 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
         )
       })}
 
-      <li className="mt-auto my-1 px-3">
-        <div className="border-t border-theme-grey" />
-      </li>
+      <hr className="my-1 border-theme-grey" />
+
 
       <li className="flex items-center justify-around px-2">
         <ThemeToggleButton />
@@ -152,9 +149,7 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
         <LocaleSwitch />
       </li>
 
-      <li className="my-1 px-3">
-        <div className="border-t border-theme-grey" />
-      </li>
+      <hr className="my-1 border-theme-grey" />
 
       <li className="pb-1">
         <RippleLink
