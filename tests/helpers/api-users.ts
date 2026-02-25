@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import { UserData } from '../support/types';
 
 export async function createUserViaAPI(adminPage: Page, userData: UserData): Promise<string> {
@@ -8,7 +8,6 @@ export async function createUserViaAPI(adminPage: Page, userData: UserData): Pro
   }));
 
   console.log(`↪️ In createUserViaAPI, recovered instance code "${code}"`);
-  console.log(`↪️ In createUserViaAPI, recovered api_url "${apiUrl}"`);
   if (!apiUrl || !code) {
     throw new Error('API URL or instance code not found in admin page');
   }
@@ -72,7 +71,6 @@ export async function registerUserViaAPI(page: Page, userData: UserData, tempPas
   }));
 
   console.log(`↪️ In registerUserViaAPI, recovered instance code "${code}"`);
-  console.log(`↪️ In registerUserViaAPI, recovered api_url "${apiUrl}"`);
   if (!code || !apiUrl) {
     throw new Error('Instance code or API URL not found in page context');
   }
@@ -169,17 +167,7 @@ export async function saveAuthenticationState(page: Page, token: string, storage
     if (!localStorage.getItem('api_url')) throw new Error('api_url not found in localStorage');
     if (!localStorage.getItem('config')) throw new Error('config not found in localStorage');
   }, token);
+  expect(await page.evaluate(() => localStorage.getItem('token'))).toEqual(token);
 
-  // Verify token was set
-  const savedToken = await page.evaluate(() => localStorage.getItem('token'));
-  console.log(`   Token set in localStorage: ${savedToken ? 'YES' : 'NO'}`);
-
-  await page.waitForTimeout(100);
   await page.context().storageState({ path: storageStatePath });
-  console.log(`💾 Saved authentication state to ${storageStatePath}`);
-
-  // Verify file was created
-  const fs = await import('fs');
-  const exists = fs.existsSync(storageStatePath);
-  console.log(`   Storage state file exists: ${exists ? 'YES' : 'NO'}`);
 }
