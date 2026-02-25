@@ -4,6 +4,7 @@ import * as apiUsers from '../helpers/api-users';
 import { test as browserTest } from './browser.fixture';
 import { RoleTypes } from '../../src/types/SettingsTypes';
 import * as shared from '../support/utils';
+import { ensureInstanceEntered } from '../interactions/users';
 
 interface UserFixtures {
   ensureUser: (name: string, role?: RoleTypes) => Promise<UserData>;
@@ -28,10 +29,7 @@ export const test = browserTest.extend<UserFixtures>({
     const adminPage = await adminContext.newPage();
     await adminPage.goto(shared.getHost());
     await adminPage.waitForLoadState('networkidle');
-    const code = await adminPage.evaluate(() => {
-      return localStorage.getItem('code');
-    });
-    console.log(`↪️ Restored admin-context, recovered instance code "${code}"`);
+    await ensureInstanceEntered(adminPage);
 
     const factory = async (name: string, role: RoleTypes = 20): Promise<UserData> => {
       if (userCache[name]) {
@@ -53,8 +51,7 @@ export const test = browserTest.extend<UserFixtures>({
 
         await userPage.goto(shared.getHost());
         await userPage.waitForLoadState('networkidle');
-
-        // @TODO: nikola - why don't we get localStorage in userPage populated with code and api_url
+        await ensureInstanceEntered(userPage);
 
         const token = await apiUsers.registerUserViaAPI(userPage, userData, tempPassword);
         const storageStatePath = `tests/auth-states/${userData.username}-context.json`;
