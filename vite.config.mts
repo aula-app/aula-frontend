@@ -23,6 +23,7 @@ export default defineConfig({
   server: {
     open: true,
     port: 3000,
+    watch: { ignored: ['**/tests/**'] },
   },
   build: {
     outDir: 'build',
