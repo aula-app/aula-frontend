@@ -8,6 +8,7 @@ import {
   HiOutlineChevronLeft,
   HiOutlineCog6Tooth,
   HiOutlineEnvelope,
+  HiOutlineEnvelopeOpen,
   HiOutlineExclamationTriangle,
   HiOutlineFlag,
   HiOutlineHeart,
@@ -22,7 +23,6 @@ import {
   HiOutlineXMark,
 } from 'react-icons/hi2';
 import { IoBugOutline } from 'react-icons/io5';
-import { LuMails } from 'react-icons/lu';
 
 /**
  * Icon component for the application
@@ -45,7 +45,7 @@ export const ICONS = {
   logout: HiOutlineArrowRightEndOnRectangle,
   menu: HiOutlineBars3,
   message: HiOutlineEnvelope,
-  messages: LuMails,
+  messages: HiOutlineEnvelopeOpen,
   night: HiOutlineMoon,
   print: HiOutlinePrinter,
   report: HiOutlineFlag,
