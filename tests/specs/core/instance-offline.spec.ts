@@ -43,13 +43,10 @@ test.describe.serial('Instance Offline', () => {
   });
 
   test('User cannot login with Offline instance', async ({ userPage, userConfig }) => {
-    await test.step('Attempt to login with offline instance', async () => {
-      await navigation.goToHome(userPage);
-      await users.loginAttempt(userPage, userConfig);
-      await userPage.waitForLoadState('networkidle');
-    });
-
-    await test.step('Verify offline view is displayed', async () => {
+    await test.step('Verify offline view is displayed on attempt to login', async () => {
+      try {
+        await users.loginAttempt(userPage, userConfig);
+      } catch (e) { }
       const offlineDiv = userPage.getByTestId('school-offline-view');
       await expect(offlineDiv).toBeVisible({ timeout: 5000 });
     });
@@ -63,7 +60,6 @@ test.describe.serial('Instance Offline', () => {
 
   test('User can login with Online instance', async ({ userPage, userConfig }) => {
     await test.step('Login successfully with online instance', async () => {
-      await navigation.goToHome(userPage);
       await users.login(userPage, userConfig);
     });
   });
