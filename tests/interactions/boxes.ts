@@ -60,6 +60,6 @@ const sendForm = async (page: Page, box: types.BoxData) => {
   }
 
   await formInteractions.clickButton(page, 'box-form-submit-button');
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
   await page.waitForTimeout(1000);
 };

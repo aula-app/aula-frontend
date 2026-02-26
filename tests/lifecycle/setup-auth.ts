@@ -3,9 +3,10 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { chromium, Browser, BrowserContext, Page } from '@playwright/test';
+import { chromium, Browser, BrowserContext, Page, Route } from '@playwright/test';
 import * as userInteractions from '../interactions/users';
 import { admin } from '../fixtures/user.fixture';
+import { FILTER_EXCLUDED_RESOURCES } from '../fixtures/browser.fixture';
 
 export default async function globalSetup() {
   console.log('🚀 Starting global setup...');
@@ -28,6 +29,7 @@ export default async function globalSetup() {
     browser = await chromium.launch();
     context = await browser.newContext();
     page = await context.newPage();
+    await page.route('**/*', FILTER_EXCLUDED_RESOURCES);
 
     // Log in admin
     await userInteractions.login(page, admin);

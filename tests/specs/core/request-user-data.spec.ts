@@ -49,7 +49,7 @@ test.describe.serial('Request User Data - Export Request and Download Flow', () 
 
       // Click confirm button in the dialog
       await formInteractions.clickButton(adminPage, 'confirm-request-action');
-      await adminPage.waitForLoadState('networkidle');
+      await adminPage.waitForLoadState('domcontentloaded');
     });
   });
 
@@ -63,7 +63,7 @@ test.describe.serial('Request User Data - Export Request and Download Flow', () 
       const exportMessage = messagesView.getByText(userConfig.displayName).first();
       await expect(exportMessage).toBeVisible({ timeout: 5000 });
       await exportMessage.click();
-      await userPage.waitForLoadState('networkidle');
+      await userPage.waitForLoadState('domcontentloaded');
 
       // // Verify download button is available
       const downloadButton = userPage.getByTestId('download-data-button');

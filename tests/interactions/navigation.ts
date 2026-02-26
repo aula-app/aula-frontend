@@ -7,7 +7,7 @@ export const clickOnPageItem = async (page: Page, text: string) => {
   const item = page.getByText(text);
   await expect(item).toBeVisible();
   await item.click({ timeout: 1000 });
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
 };
 
 export const clickOnLink = async (page: Page, path: string) => {
@@ -15,12 +15,12 @@ export const clickOnLink = async (page: Page, path: string) => {
   await expect(button).toBeVisible();
   await button.click({ timeout: 1000 });
   await page.waitForURL((url) => url.pathname.includes(path), { timeout: 5000 });
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
 };
 
 export const clickToNavigate = async (page: Page, path: string) => {
   const currentUrl = page.url();
-  if (currentUrl.includes(path)) {
+  if (currentUrl === path) {
     return;
   }
 
@@ -49,19 +49,17 @@ export const goToHome = async (page: Page) => {
     return;
   }
 
-  await page.goto(host);
-  await page.waitForLoadState('networkidle');
+  await page.goto(host, { waitUntil: 'domcontentloaded' });
 };
 
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
-  await page.waitForLoadState('networkidle');
 
   const roomCard = page.getByTestId('room-card').filter({ hasText: roomName });
   await expect(roomCard).toBeVisible({ timeout: 10000 });
   await roomCard.click();
-  await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'), { timeout: 5000 });
-  await page.waitForLoadState('networkidle');
+  await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'));
+  await page.waitForLoadState('domcontentloaded');
 };
 
 export const goToWildIdea = async (page: Page, roomName: string, ideaName: string) => {
@@ -71,7 +69,7 @@ export const goToWildIdea = async (page: Page, roomName: string, ideaName: strin
   await expect(ideaCard).toBeVisible({ timeout: 10000 });
   await ideaCard.click();
   await page.waitForURL((url) => url.pathname.includes('/idea'), { timeout: 5000 });
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
 };
 
 export const goToPhase = async (page: Page, roomName: string, phaseNumber: number) => {

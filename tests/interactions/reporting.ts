@@ -51,7 +51,7 @@ export const reportIdea = async (
 
   // Submit report
   await formInteractions.clickButton(page, 'report-form-submit-button');
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
 };
 
 /**
@@ -94,7 +94,7 @@ export const reportComment = async (
 
   // Submit report
   await formInteractions.clickButton(page, 'report-form-submit-button');
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
 };
 
 /**
@@ -140,7 +140,7 @@ export const reportBug = async (page: Page, description: string) => {
 
   // Submit bug report
   await formInteractions.clickButton(page, 'bug-form-submit-button');
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
 };
 
 /**

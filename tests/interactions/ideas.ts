@@ -38,7 +38,7 @@ export const create = async (
 
   // submit the idea form
   await formInteractions.clickButton(page, 'submit-idea-form');
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
   await page.waitForTimeout(2000);
   await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'hidden', timeout: 500 });
 

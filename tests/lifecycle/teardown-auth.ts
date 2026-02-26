@@ -1,6 +1,7 @@
-import { chromium, Browser, BrowserContext, Page } from '@playwright/test';
+import { Browser, BrowserContext, chromium, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
+import { FILTER_EXCLUDED_RESOURCES } from '../fixtures/browser.fixture';
 import * as shared from '../support/utils';
 
 interface CleanupConfig {
@@ -97,12 +98,13 @@ export default async function globalTeardown() {
     browser = await chromium.launch();
     context = await browser.newContext({ storageState: adminStatePath });
     adminPage = await context.newPage();
+    await adminPage.route('**/*', FILTER_EXCLUDED_RESOURCES);
 
     // Navigate to app if needed
     const currentUrl = adminPage.url();
     if (!currentUrl || currentUrl === 'about:blank') {
       await adminPage.goto(shared.getHost());
-      await adminPage.waitForLoadState('networkidle');
+      await adminPage.waitForLoadState('domcontentloaded');
     }
 
     // Verify admin is authenticated
@@ -157,10 +159,11 @@ async function cleanupTestItems(page: Page, config: CleanupConfig): Promise<void
   const items = await fetchItems(page, config.service, config.method, config.args);
 
   const prefixes = Array.isArray(config.filterPrefix) ? config.filterPrefix : [config.filterPrefix];
-  const testItems = items?.filter((item: any) => {
-    const fieldValue = item[config.filterField];
-    return fieldValue && prefixes.some(prefix => fieldValue.startsWith(prefix));
-  }) || [];
+  const testItems =
+    items?.filter((item: any) => {
+      const fieldValue = item[config.filterField];
+      return fieldValue && prefixes.some((prefix) => fieldValue.startsWith(prefix));
+    }) || [];
 
   console.info(`🧹 Found ${testItems.length} test ${config.service} to clean up`);
 

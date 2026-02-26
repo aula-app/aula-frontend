@@ -5,6 +5,7 @@ import { test as browserTest } from './browser.fixture';
 import { RoleTypes } from '../../src/types/SettingsTypes';
 import * as shared from '../support/utils';
 import { ensureInstanceEntered } from '../interactions/users';
+import { FILTER_EXCLUDED_RESOURCES } from '../fixtures/browser.fixture';
 
 interface UserFixtures {
   ensureUser: (name: string, role?: RoleTypes) => Promise<UserData>;
@@ -27,8 +28,8 @@ export const test = browserTest.extend<UserFixtures>({
       storageState: 'tests/auth-states/admin-context.json',
     });
     const adminPage = await adminContext.newPage();
-    await adminPage.goto(shared.getHost());
-    await adminPage.waitForLoadState('networkidle');
+    await adminPage.route('**/*', FILTER_EXCLUDED_RESOURCES);
+    await adminPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
     await ensureInstanceEntered(adminPage);
 
     const factory = async (name: string, role: RoleTypes = 20): Promise<UserData> => {
@@ -48,9 +49,9 @@ export const test = browserTest.extend<UserFixtures>({
         console.log(`🔐 Registering ${name} and changing password via API`);
         const userContext = await browser.newContext();
         const userPage = await userContext.newPage();
+        await userPage.route('**/*', FILTER_EXCLUDED_RESOURCES);
 
-        await userPage.goto(shared.getHost());
-        await userPage.waitForLoadState('networkidle');
+        await userPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
         await ensureInstanceEntered(userPage);
 
         const token = await apiUsers.registerUserViaAPI(userPage, userData, tempPassword);

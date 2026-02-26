@@ -32,7 +32,7 @@ export const filter = async (page: Page, filter: { option: string; value: string
   // filter by our filter
   await page.fill('#filter-value-input', filter.value);
 
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
 
   // check if value was filtered correctly
   const row = page.locator('table tr').filter({ hasText: filter.value }).first();
@@ -52,7 +52,7 @@ export const clearFilter = async (page: Page) => {
   await expect(clearFilterButton).toBeVisible();
   if (!(await clearFilterButton.isDisabled())) {
     await clearFilterButton.click();
-    await page.waitForTimeout(1000);
+    await page.waitForLoadState('domcontentloaded');
   }
 
   await filterButton.click();
@@ -65,7 +65,7 @@ export const openEdit = async ({ page, filters }: { page: Page; filters: { optio
   }
 
   await row.click();
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
 };
 
 export const remove = async ({
@@ -95,7 +95,7 @@ export const remove = async ({
   await expect(Dialog).toBeVisible();
 
   formInteractions.clickButton(page, `confirm-delete-${scope}-button`);
-  await page.waitForTimeout(2000); // wait for the form to process
+  await page.waitForLoadState('domcontentloaded');
 
   // check if the row is gone
   await expect(row).toHaveCount(0);
