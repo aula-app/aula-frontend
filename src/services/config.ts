@@ -1,4 +1,4 @@
-import { ConfigResponse, InstanceResponse, OnlineOptions } from '@/types/Generics';
+import { InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { databaseRequest, GenericResponse } from './requests';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { CommandType } from '@/types/Scopes';
@@ -15,20 +15,6 @@ export async function getDefaultDurations(): Promise<DefaultDurationsResponse> {
   });
 
   return response as DefaultDurationsResponse;
-}
-
-interface DefaultConfigResponse extends GenericResponse {
-  data: ConfigResponse;
-}
-
-async function getGlobalConfigs(): Promise<DefaultConfigResponse> {
-  const response = await databaseRequest({
-    model: 'Settings',
-    method: 'getGlobalConfig',
-    arguments: {},
-  });
-
-  return response as DefaultConfigResponse;
 }
 
 interface DefaultSettingsResponse extends GenericResponse {
@@ -53,32 +39,6 @@ export async function setInstanceOnlineMode(status: OnlineOptions): Promise<Defa
       model: 'Settings',
       method: 'setInstanceOnlineMode',
       arguments: { status },
-    },
-    ['updater_id']
-  );
-
-  return response as DefaultSettingsResponse;
-}
-
-async function setOauthStatus(status: boolean): Promise<DefaultSettingsResponse> {
-  const response = await databaseRequest(
-    {
-      model: 'Settings',
-      method: 'setOauthStatus',
-      arguments: { status: status ? 1 : 0 },
-    },
-    ['updater_id']
-  );
-
-  return response as DefaultSettingsResponse;
-}
-
-async function setAllowRegistration(status: boolean): Promise<DefaultSettingsResponse> {
-  const response = await databaseRequest(
-    {
-      model: 'Settings',
-      method: 'setAllowRegistration',
-      arguments: { status: status ? 1 : 0 },
     },
     ['updater_id']
   );
