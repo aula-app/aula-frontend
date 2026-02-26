@@ -272,25 +272,6 @@ export async function removeUserRoom(user_id: string, room_id: string): Promise<
 
   return response as GenericResponse;
 }
-
-/**
- * Get user rooms
- */
-
-interface GetUserGroupsResponse extends GenericResponse {
-  data: { hash_id: string }[] | null;
-}
-
-async function getUserGroups(user_id: string): Promise<GetUserGroupsResponse> {
-  const response = await databaseRequest({
-    model: 'User',
-    method: 'getUserGroups',
-    arguments: { user_id },
-  });
-
-  return response as GetUserGroupsResponse;
-}
-
 /**
  * Gets a list of possible delegates, filtering non voting roles, and including availability status from delegation
  */
