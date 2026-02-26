@@ -32,12 +32,12 @@ export const clickToNavigate = async (page: Page, path: string) => {
 
 export const openAccordion = async (page: Page, testId: string) => {
   const accordion = page.getByTestId(testId);
-  await expect(accordion).toBeVisible({ timeout: 10000 });
+  await expect(accordion).toBeVisible({ timeout: 1000 });
 
   const isExpanded = await accordion.getAttribute('aria-expanded');
   if (isExpanded !== 'true') {
     await accordion.click();
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(200);
   }
 };
 
@@ -56,7 +56,7 @@ export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
 
   const roomCard = page.getByTestId('room-card').filter({ hasText: roomName });
-  await expect(roomCard).toBeVisible({ timeout: 10000 });
+  await expect(roomCard).toBeVisible();
   await roomCard.click();
   await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'));
   await page.waitForLoadState('domcontentloaded');
