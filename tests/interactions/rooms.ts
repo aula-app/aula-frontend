@@ -123,7 +123,7 @@ export const getRoomCount = async (page: Page): Promise<number> => {
 
 export const getFirstRoomName = async (page: Page): Promise<string | null> => {
   await navigation.goToHome(page);
-  const firstRoom = page.getByTestId('room-card').first();
+  const firstRoom = page.getByTestId('room-card').locator(page.locator('h3')).first();
   const isVisible = await firstRoom.isVisible().catch(() => false);
   if (!isVisible) return null;
 
