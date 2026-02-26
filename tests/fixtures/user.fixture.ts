@@ -42,8 +42,7 @@ export const test = browserTest.extend<UserFixtures>({
       const userData = createUserData(name, role);
 
       try {
-        const tempPassword = await apiUsers.createUserViaAPI(adminPage, userData);
-        userData.tempPass = tempPassword;
+        userData.tempPass = await apiUsers.createUserViaAPI(adminPage, userData);
         console.log(`✅ User ${name} created via API`);
 
         console.log(`🔐 Registering ${name} and changing password via API`);
@@ -54,7 +53,7 @@ export const test = browserTest.extend<UserFixtures>({
         await userPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
         await ensureInstanceEntered(userPage);
 
-        const token = await apiUsers.registerUserViaAPI(userPage, userData, tempPassword);
+        const token = await apiUsers.registerUserViaAPI(userPage, userData);
         const storageStatePath = `tests/auth-states/${userData.username}-context.json`;
         await apiUsers.saveAuthenticationState(userPage, token, storageStatePath);
         console.log(`✅ User ${name} (${userData.username}) registered and authenticated via API`);
