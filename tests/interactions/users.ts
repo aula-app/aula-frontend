@@ -102,9 +102,7 @@ export const ensureInstanceEntered = async (page: Page, username?: string) => {
   const instance = process.env.INSTANCE_CODE || 'SINGLE';
   const instanceCodeInputDiv = page.getByTestId('input-instance-code');
   if ((await instanceCodeInputDiv.count()) === 0) {
-    console.log(
-      `${instance === 'SINGLE' ? '✅' : '⚠️'} No instance selector input found on the page. User: ${username}`
-    );
+    console.log(`${instance === 'SINGLE' ? '✅' : '⚠️'} No instance selector input found. User: "${username}"`);
     if (instance !== 'SINGLE') {
       throw new Error('Instance selector input not found on the page, but we are testing a multi-instance FE.');
     }
@@ -112,16 +110,16 @@ export const ensureInstanceEntered = async (page: Page, username?: string) => {
     // if there's no instance code input, then we must be on single-instance FE, right? 😏
     return true;
   } else {
-    console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: ${username}`);
+    console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: "${username}"`);
     await instanceCodeInputDiv.locator(page.locator('input[name="instance-code"]')).fill(instance);
     await page.getByTestId('submit-instance-code').click();
-    await page.waitForLoadState('domcontentloaded');
+    await page.waitForURL((url) => url.pathname === '/', { timeout: 1000, waitUntil: 'domcontentloaded' });
     return true;
   }
 };
 
 export const loginAttempt = async (page: Page, data: types.UserData) => {
-  await page.goto(host, { waitUntil: 'domcontentloaded' });
+  await page.goto(host, { waitUntil: 'networkidle' });
   await ensureInstanceEntered(page, data.username);
   await page.waitForSelector('input[name="username"]', { timeout: 3000 });
   await page.fill('input[name="username"]', data.username);
@@ -189,7 +187,7 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
 };
 
 export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {
-  await page.goto(host);
+  await page.goto(host, { waitUntil: 'networkidle' });
   await ensureInstanceEntered(page, data.username);
 
   await page.fill('input[name="username"]', data.username);
