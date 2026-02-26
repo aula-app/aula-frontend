@@ -12,10 +12,10 @@ export const clickOnPageItem = async (page: Page, text: string) => {
 
 export const clickOnLink = async (page: Page, path: string) => {
   const button = page.locator(`a[href="${path}"]`);
-  await expect(button).toBeVisible();
+  await expect(button).toBeVisible({ timeout: 1000 });
   await button.click({ timeout: 1000 });
-  await page.waitForURL((url) => url.pathname.includes(path), { timeout: 5000 });
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForURL((url) => url.pathname.includes(path), { timeout: 1000 });
+  await page.waitForLoadState('networkidle');
 };
 
 export const clickToNavigate = async (page: Page, path: string) => {
