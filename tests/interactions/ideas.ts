@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test';
 
-import * as types from "../support/types";
+import * as types from '../support/types';
 import * as formInteractions from './forms';
 import * as navigation from './navigation';
 
@@ -38,9 +38,9 @@ export const create = async (
 
   // submit the idea form
   await formInteractions.clickButton(page, 'submit-idea-form');
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
   await page.waitForTimeout(2000);
-  await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'hidden', timeout: 500 });
+  await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'hidden', timeout: 1000 });
 
   const IdeaTitle = page.getByText(idea.name, { exact: true });
   await expect(IdeaTitle).toBeVisible();
@@ -68,7 +68,7 @@ export const remove = async (
 
 export const comment = async (page: Page, commentText: string) => {
   formInteractions.clickButton(page, 'add-comment-button');
-  await page.waitForSelector('[data-testid="comment-form"]', { state: 'visible', timeout: 500 });
+  await page.waitForSelector('[data-testid="comment-form"]', { state: 'visible', timeout: 1000 });
 
   await page.getByTestId('comment-form').locator('div[contenteditable="true"]').fill(commentText);
 
@@ -78,7 +78,7 @@ export const comment = async (page: Page, commentText: string) => {
 
   const Comment = page.getByTestId('comment-bubble').filter({ hasText: commentText });
   const commentCount = await Comment.count();
-  await expect(commentCount).toBeGreaterThan(0);
+  expect(commentCount).toBeGreaterThan(0);
 };
 
 export const removeComment = async (

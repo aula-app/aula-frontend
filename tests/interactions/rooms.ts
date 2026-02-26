@@ -47,14 +47,14 @@ export const openSearch = async (page: Page) => {
   const searchButton = page.getByTestId('search-button');
   await expect(searchButton).toBeVisible();
   await searchButton.click();
-  await page.waitForTimeout(400); // Wait for collapse animation
+  await page.waitForTimeout(300); // Wait for collapse animation
 };
 
 export const closeSearch = async (page: Page) => {
   const searchButton = page.getByTestId('search-button');
   await expect(searchButton).toBeVisible();
   await searchButton.click();
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(300);
 };
 
 export const searchRooms = async (page: Page, query: string) => {
@@ -67,13 +67,13 @@ export const searchRooms = async (page: Page, query: string) => {
   }
 
   await searchField.fill(query);
-  await page.waitForTimeout(500); // Wait for search to filter results
+  await page.waitForTimeout(100); // Wait for search to filter results
 };
 
 export const clearSearch = async (page: Page) => {
   const searchField = page.getByTestId('search-field').locator('input');
   await searchField.clear();
-  await page.waitForTimeout(500);
+  await page.waitForLoadState('domcontentloaded');
 };
 
 export const openSort = async (page: Page) => {
@@ -81,14 +81,14 @@ export const openSort = async (page: Page) => {
   const sortButton = page.getByTestId('sort-button');
   await expect(sortButton).toBeVisible();
   await sortButton.click();
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(300);
 };
 
 export const closeSort = async (page: Page) => {
   const sortButton = page.getByTestId('sort-button');
   await expect(sortButton).toBeVisible();
   await sortButton.click();
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(300);
 };
 
 export const selectSortOption = async (page: Page, sortValue: string) => {
@@ -99,7 +99,7 @@ export const selectSortOption = async (page: Page, sortValue: string) => {
   const sortOption = page.getByTestId(`sort-option-${sortValue}`);
   await expect(sortOption).toBeVisible();
   await sortOption.click();
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(300);
 };
 
 export const toggleSortDirection = async (page: Page) => {
@@ -115,7 +115,7 @@ export const getRoomCount = async (page: Page): Promise<number> => {
   // Wait for the rooms container to finish loading
   // This ensures the page has fully rendered before counting
   await page.waitForLoadState('domcontentloaded');
-  await page.waitForTimeout(500); // Allow time for dynamic content to render
+  await page.waitForTimeout(100); // Allow time for dynamic content to render
 
   const roomCards = page.getByTestId('room-card');
   return await roomCards.count();
@@ -123,7 +123,7 @@ export const getRoomCount = async (page: Page): Promise<number> => {
 
 export const getFirstRoomName = async (page: Page): Promise<string | null> => {
   await navigation.goToHome(page);
-  const firstRoom = page.getByTestId('room-card').first();
+  const firstRoom = page.getByTestId('room-card').locator(page.locator('h3')).first();
   const isVisible = await firstRoom.isVisible().catch(() => false);
   if (!isVisible) return null;
 

@@ -29,39 +29,40 @@ export const test = browserTest.extend<UserFixtures>({
     });
     const adminPage = await adminContext.newPage();
     await adminPage.route('**/*', FILTER_EXCLUDED_RESOURCES);
-    await adminPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
+    await adminPage.goto(shared.getHost(), { waitUntil: 'networkidle' });
     await ensureInstanceEntered(adminPage);
 
     const factory = async (name: string, role: RoleTypes = 20): Promise<UserData> => {
       if (userCache[name]) {
-        console.log(`✓ User ${name} already exists (cached)`);
+        console.log(`✓ User "${name}" already exists (cached)`);
         return userCache[name];
       }
 
-      console.log(`📝 Creating user: ${name} with role ${role}`);
+      console.log(`📝 Creating user: "${name}" with role ${role}`);
       const userData = createUserData(name, role);
 
       try {
         userData.tempPass = await apiUsers.createUserViaAPI(adminPage, userData);
-        console.log(`✅ User ${name} created via API`);
+        console.log(`✅ User "${name}" created via API`);
 
-        console.log(`🔐 Registering ${name} and changing password via API`);
         const userContext = await browser.newContext();
         const userPage = await userContext.newPage();
         await userPage.route('**/*', FILTER_EXCLUDED_RESOURCES);
 
-        await userPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
+        console.log(`↔️ Accessing tested instance in user's browser using instance code.`);
+        await userPage.goto(shared.getHost(), { waitUntil: 'networkidle' });
         await ensureInstanceEntered(userPage);
 
+        console.log(`🔐 Registering "${name}" and changing password via API (through user's browser page)`);
         const token = await apiUsers.registerUserViaAPI(userPage, userData);
         const storageStatePath = `tests/auth-states/${userData.username}-context.json`;
         await apiUsers.saveAuthenticationState(userPage, token, storageStatePath);
-        console.log(`✅ User ${name} (${userData.username}) registered and authenticated via API`);
+        console.log(`✅ User "${name}" (${userData.username}) registered and authenticated via API`);
 
         await userPage.close();
         await userContext.close();
       } catch (error) {
-        console.error(`❌ Failed to create user ${name}:`, error);
+        console.error(`❌ Failed to create user "${name}":`, error);
         throw error;
       }
 

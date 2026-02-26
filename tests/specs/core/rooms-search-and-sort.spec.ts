@@ -37,17 +37,18 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
 
       await test.step('Get first room name and search for it', async () => {
         const firstRoomName = await rooms.getFirstRoomName(adminPage);
-        if (!firstRoomName) return; // Skip if no rooms
 
-        // Extract first 3 characters for search
-        const searchTerm = firstRoomName.trim().substring(0, 3).toLowerCase();
+        const searchTerm = firstRoomName!
+          .trim()
+          .substring(0, firstRoomName!.length - 3)
+          .toLowerCase();
+        console.log(`Search term: ${searchTerm}`);
         await rooms.searchRooms(adminPage, searchTerm);
       });
 
-      await test.step('Verify filtered results', async () => {
+      await test.step('Verify filtered results contain exactly searched room', async () => {
         const filteredCount = await rooms.getRoomCount(adminPage);
-        // Should have at least one result
-        expect(filteredCount).toBeGreaterThan(0);
+        expect(filteredCount).toEqual(1);
       });
     });
 
@@ -60,6 +61,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
         await rooms.clearSearch(adminPage);
       });
 
+      // @FIXME: nikola - if we want to verify "all" rooms are visible, we can't use greaterThan(0)
       await test.step('Verify all rooms are visible again', async () => {
         const allCount = await rooms.getRoomCount(adminPage);
         expect(allCount).toBeGreaterThan(0);

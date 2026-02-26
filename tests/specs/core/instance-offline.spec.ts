@@ -25,7 +25,6 @@ test.describe.serial('Instance Offline', () => {
 
     await formInteractions.selectOptionByValue(adminPage, 'select-field-status', online ? '1' : '0');
     await formInteractions.clickButton(adminPage, 'system-settings-confirm-button');
-    instanceOnline = online;
 
     await adminPage.waitForTimeout(500);
     const isExpanded = await adminPage.getByTestId('config-accordion-system').getAttribute('aria-expanded');
@@ -34,6 +33,7 @@ test.describe.serial('Instance Offline', () => {
     await navigation.openAccordion(adminPage, 'config-accordion-system');
     const selectedStatus = await adminPage.getByTestId('select-field-status-input').inputValue();
     expect(selectedStatus).toBe(`${Number(online)}`);
+    instanceOnline = online;
   };
 
   test('Admin can turn instance offline', async ({ adminPage }) => {
