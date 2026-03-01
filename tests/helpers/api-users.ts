@@ -2,6 +2,7 @@ import { Page } from '@playwright/test';
 import { UserData } from '../support/types';
 
 export async function createUserViaAPI(adminPage: Page, userData: UserData): Promise<string> {
+  await adminPage.waitForFunction(() => localStorage.getItem('code'));
   const { apiUrl, code, token } = await adminPage.evaluate(() => ({
     apiUrl: localStorage.getItem('api_url'),
     code: localStorage.getItem('code'),
@@ -18,7 +19,9 @@ export async function createUserViaAPI(adminPage: Page, userData: UserData): Pro
 
   return await postUserAddUser(apiUrl, code, token, userData);
 }
+
 export async function registerUserViaAPI(page: Page, userData: UserData): Promise<string> {
+  await page.waitForFunction(() => localStorage.getItem('code'));
   const { code, apiUrl } = await page.evaluate(() => ({
     code: localStorage.getItem('code'),
     apiUrl: localStorage.getItem('api_url'),
