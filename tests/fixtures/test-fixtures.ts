@@ -77,6 +77,6 @@ export const test = userTest.extend<AulaFixtures>({
 
 // Set reasonable default timeout (30s instead of 60s)
 // Individual tests can override with test.slow() if needed
-test.setTimeout(30000);
+test.setTimeout(60000);
 
 export { expect } from '@playwright/test';

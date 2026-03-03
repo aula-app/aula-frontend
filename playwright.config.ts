@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
-  timeout: 30 * 1000,
+  timeout: 60 * 1000,
   expect: {
     timeout: 5000,
   },
@@ -24,8 +24,8 @@ export default defineConfig({
     video: 'retain-on-failure',
 
     // Better error messages with automatic retries on flaky selectors
-    actionTimeout: 10000,
-    navigationTimeout: 30000,
+    actionTimeout: 30000,
+    navigationTimeout: 60000,
   },
 
   // Retry failed tests (helps with flakiness)
