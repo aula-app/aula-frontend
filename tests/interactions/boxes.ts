@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test';
 
-import * as types from "../support/types";
+import * as types from '../support/types';
 import * as formInteractions from './forms';
 import * as navigation from './navigation';
 import * as settingsInteractions from './settings';
@@ -10,11 +10,9 @@ export const create = async (page: Page, box: types.BoxData) => {
 
   await page.waitForSelector('[data-testid="add-boxes-button"]', { state: 'visible', timeout: 500 });
   await formInteractions.clickButton(page, 'add-boxes-button');
-  await page.waitForTimeout(500);
 
   await sendForm(page, box);
 
-  await navigation.goToBoxesSettings(page);
   await expect(page.getByTestId('add-boxes-button')).toBeVisible();
   await settingsInteractions.check(page, { option: 'name', value: box.name });
 };
@@ -60,6 +58,5 @@ const sendForm = async (page: Page, box: types.BoxData) => {
   }
 
   await formInteractions.clickButton(page, 'box-form-submit-button');
-  await page.waitForLoadState('domcontentloaded');
-  await page.waitForTimeout(1000);
+  await page.waitForLoadState('networkidle');
 };
