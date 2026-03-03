@@ -7,7 +7,7 @@ export const clickOnPageItem = async (page: Page, text: string) => {
   const item = page.getByText(text);
   await expect(item).toBeVisible();
   await item.click({ timeout: 1000 });
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
 };
 
 export const clickOnLink = async (page: Page, path: string) => {
@@ -37,7 +37,7 @@ export const openAccordion = async (page: Page, testId: string) => {
   const isExpanded = await accordion.getAttribute('aria-expanded');
   if (isExpanded !== 'true') {
     await accordion.click();
-    await page.waitForTimeout(200);
+    await expect(accordion).toHaveAttribute('aria-expanded', 'true');
   }
 };
 
@@ -49,7 +49,7 @@ export const goToHome = async (page: Page) => {
     return;
   }
 
-  await page.goto(host, { waitUntil: 'domcontentloaded' });
+  await page.goto(host, { waitUntil: 'networkidle' });
 };
 
 export const goToRoom = async (page: Page, roomName: string) => {
@@ -59,7 +59,7 @@ export const goToRoom = async (page: Page, roomName: string) => {
   await expect(roomCard).toBeVisible();
   await roomCard.click();
   await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'));
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
 };
 
 export const goToWildIdea = async (page: Page, roomName: string, ideaName: string) => {
@@ -69,7 +69,7 @@ export const goToWildIdea = async (page: Page, roomName: string, ideaName: strin
   await expect(ideaCard).toBeVisible({ timeout: 10000 });
   await ideaCard.click();
   await page.waitForURL((url) => url.pathname.includes('/idea'), { timeout: 5000 });
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
 };
 
 export const goToPhase = async (page: Page, roomName: string, phaseNumber: number) => {
@@ -78,7 +78,7 @@ export const goToPhase = async (page: Page, roomName: string, phaseNumber: numbe
   const phaseTab = page.getByTestId(`link-to-phase-${phaseNumber}`);
   await expect(phaseTab).toBeVisible({ timeout: 10000 });
   await phaseTab.click();
-  await page.waitForTimeout(1000);
+  await page.waitForLoadState('networkidle');
 };
 
 export const goToMessages = async (page: Page) => {
