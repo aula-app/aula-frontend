@@ -16,14 +16,14 @@ export const fillMarkdownForm = async (page: Page, testId: string, value: string
 
 export const clickButton = async (page: Page, testId: string) => {
   const button = page.getByTestId(testId);
-  await expect(button).toBeVisible({ timeout: 5000 });
-  await button.click({ timeout: 5000 });
+  await expect(button).toBeVisible();
+  await button.click();
 };
 
 export const openMoreOption = async (page: Page, parent: Locator) => {
   const moreButton = parent.getByTestId('idea-more-menu');
   await expect(moreButton).toBeVisible();
-  await moreButton.click({ timeout: 1000 });
+  await moreButton.click();
   await expect(parent.getByTestId('report-button')).toBeVisible({ timeout: 5000 });
 };
 
@@ -43,8 +43,6 @@ const openSelectDropdown = async (page: Page, testId: string) => {
     // Fallback: click the icon directly if no button parent
     await dropdownIcon.click({ force: true });
   }
-
-  await page.waitForTimeout(500);
 
   const dropdown = page.getByTestId(`${testId}-list`);
   await expect(dropdown).toBeVisible({ timeout: 5000 });
@@ -92,7 +90,6 @@ export const selectOptionByValue = async (page: Page, testId: string, value: str
 
   // Now select the option
   await option.click({ timeout: 1000 });
-  await page.waitForTimeout(500);
 
   // Verify the selection by checking if the field now contains the option text
   const displayedValue = page.getByTestId(testId);
@@ -103,10 +100,8 @@ export const selectMultiAutocompleteOption = async (page: Page, testId: string, 
   const field = page.getByTestId(testId);
   await expect(field).toBeVisible({ timeout: 5000 });
   await field.click();
-  await page.waitForTimeout(300);
 
   const option = page.getByTestId(`select-option-${optionId}`);
   await expect(option).toBeVisible({ timeout: 5000 });
   await option.click({ timeout: 1000 });
-  await page.waitForTimeout(300);
 };
