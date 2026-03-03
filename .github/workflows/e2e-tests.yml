@@ -39,7 +39,7 @@ jobs:
 
       - name: Create Ansible configuration
         run: |
-          cat << 'EOF' > ansible.cfg
+          cat <<- 'EOF' > ansible.cfg
           [defaults]
           # Role path configuration
           # This allows the playbook to find the aula role in the current directory
@@ -55,7 +55,7 @@ jobs:
 
       - name: Create Ansible playbook
         run: |
-          cat << 'EOF' > playbook.yml
+          cat <<- 'EOF' > playbook.yml
           - name: Install aula backend locally for E2E testing
             hosts: localhost
             become_method: su
@@ -66,51 +66,51 @@ jobs:
 
       - name: Create inventory file
         run: |
-          cat << 'EOF' > inventory.yml
-            ---
-            all:
-              hosts:
-                localhost:
-                  ansible_connection: local
-                  ansible_python_interpreter: /usr/local/bin/python3
-                  ansible_user: ansible
-                  apache2_user: www
-                  network:
-                    ssl_enabled: false
-                    floating_ip: "127.0.0.1"
-                    base_domain: "127.0.0.1"
-                    httpPort: "8000"
+          cat <<- 'EOF' > inventory.yml
+          ---
+          all:
+            hosts:
+              localhost:
+                ansible_connection: local
+                ansible_python_interpreter: /usr/local/bin/python3
+                ansible_user: ansible
+                apache2_user: www
+                network:
+                  ssl_enabled: false
+                  floating_ip: "127.0.0.1"
+                  base_domain: "127.0.0.1"
+                  httpPort: "8000"
+                email:
+                  backend: log
+                aula:
+                  compose_name: ${{ env.COMPOSE_NAME }}
+                  environment: dev
+                  base_url: "http://127.0.0.1:8000"
+                  superkey: "hunter2"
+                  is_pr_deployment_enabled: false
+                  multi_instance_enabled: false
+                  db:
+                    name: "aula_dbname"
+                    user: "aula_user"
+                    pass: "hunter2"
+                    root_password: "hunter2"
                   email:
-                    backend: log
-                  aula:
-                    compose_name: ${{ env.COMPOSE_NAME }}
-                    environment: dev
-                    base_url: "http://127.0.0.1:8000"
-                    superkey: "hunter2"
-                    is_pr_deployment_enabled: false
-                    multi_instance_enabled: false
+                    from: admin@aula.local
+                    support: support@aula.local
+                  manager:
                     db:
-                      name: "aula_dbname"
-                      user: "aula_user"
+                      name: "aula_manager"
+                      user: "aula_manager_user"
                       pass: "hunter2"
-                      root_password: "hunter2"
-                    email:
-                      from: admin@aula.local
-                      support: support@aula.local
-                    manager:
-                      db:
-                        name: "aula_manager"
-                        user: "aula_manager_user"
-                        pass: "hunter2"
-                    backup:
-                      enabled: false
-                  auth0:
-                    domain: "AUTH0-DOMAIN"
-                    client_id: "AUTH0-CLIENT-ID"
-                    client_secret: auth0-secret
-                    cookie_secret: hunter2
-                    redirect_uri: "http://127.0.0.1:8000/api/controllers/auth0.php"
-                    frontend_redirect: "http://127.0.0.1:8000/oauth-login/"
+                  backup:
+                    enabled: false
+                auth0:
+                  domain: "AUTH0-DOMAIN"
+                  client_id: "AUTH0-CLIENT-ID"
+                  client_secret: auth0-secret
+                  cookie_secret: hunter2
+                  redirect_uri: "http://127.0.0.1:8000/api/controllers/auth0.php"
+                  frontend_redirect: "http://127.0.0.1:8000/oauth-login/"
           EOF
 
       - name: Run ansible
@@ -146,6 +146,5 @@ jobs:
           done
           docker ps -a
           echo "Cleanup files"
-          rm -rf /opt/aula
           rm -f ansible.cfg playbook.yml inventory.yml
           rm -rf ./roles/
