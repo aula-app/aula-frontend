@@ -42,7 +42,7 @@ jobs:
 
       - name: Build ansible container image
         run: |
-          docker build -f ./roles/ansible-role-aula/.docker/Dockerfile -t ansible-aula-ci:latest .
+          docker build -f ./roles/ansible-role-aula/.docker/Dockerfile -t ansible-aula-ci:latest ./roles/ansible-role-aula/
 
       - name: Create Ansible configuration
         run: |
