@@ -40,6 +40,35 @@ export const filter = async (page: Page, filter: { option: string; value: string
   await expect(row).toBeVisible();
 };
 
+/**
+ * Apply filter on any page with FilterBar component (works for both table and card views)
+ * @param page - Page object
+ * @param filter - Filter configuration with option (field name) and value
+ */
+export const applyFilter = async (page: Page, filter: { option: string; value: string }) => {
+  const filterButton = page.getByTestId('filter-toggle-button');
+  const filterInput = page.getByTestId('filter-input');
+  await expect(filterButton).toBeVisible({ timeout: TIMEOUTS.DEFAULT });
+
+  if (
+    !(await filterInput.isVisible()) ||
+    (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')
+  ) {
+    // open the filter menu if it's not already open
+    await filterButton.click({ timeout: TIMEOUTS.DEFAULT });
+  }
+  await expect(filterInput).toBeVisible();
+  await expect(page.locator('#filter-value-input')).toBeVisible();
+
+  // select the correct filter option from the "filter by" dropdown
+  await page.getByTestId('filter-select').click();
+  await page.locator(`li[data-value="${filter.option}"]`).click();
+  // filter by our filter
+  await page.fill('#filter-value-input', filter.value);
+
+  await page.waitForLoadState('networkidle');
+};
+
 export const clearFilter = async (page: Page) => {
   const filterButton = page.getByTestId('filter-toggle-button');
   const clearFilterButton = page.getByTestId('clear-filter-button');

@@ -3,6 +3,7 @@ import { expect, Page } from '@playwright/test';
 import * as types from '../support/types';
 import * as formInteractions from './forms';
 import * as navigation from './navigation';
+import * as settingsInteractions from './settings';
 import { TIMEOUTS } from '../support/timeouts';
 
 /**
@@ -106,8 +107,11 @@ export const reportComment = async (
 export const verifyIdeaReported = async (adminPage: Page, ideaName: string) => {
   await navigation.goToReportsSettings(adminPage);
 
-  const ReportedIdea = adminPage.getByText(ideaName);
-  await expect(ReportedIdea).toBeVisible({ timeout: TIMEOUTS.LONG });
+  // Apply filter to find the specific report by body (idea name appears in the body/location)
+  await settingsInteractions.applyFilter(adminPage, { option: 'body', value: ideaName });
+
+  // Wait for the page to show filtered results - look for the idea name anywhere on the page
+  await expect(adminPage.locator('text=' + ideaName).first()).toBeVisible({ timeout: TIMEOUTS.LONG });
 };
 
 /**
@@ -118,8 +122,11 @@ export const verifyIdeaReported = async (adminPage: Page, ideaName: string) => {
 export const verifyCommentReported = async (adminPage: Page, commentText: string) => {
   await navigation.goToReportsSettings(adminPage);
 
-  const ReportedComment = adminPage.getByText(commentText);
-  await expect(ReportedComment).toBeVisible({ timeout: TIMEOUTS.LONG });
+  // Apply filter to find the specific report by body text
+  await settingsInteractions.applyFilter(adminPage, { option: 'body', value: commentText });
+
+  // Wait for the page to show filtered results - look for the comment text anywhere on the page
+  await expect(adminPage.locator('text=' + commentText).first()).toBeVisible({ timeout: TIMEOUTS.LONG });
 };
 
 /**
@@ -152,6 +159,9 @@ export const reportBug = async (page: Page, description: string) => {
 export const verifyBugReported = async (adminPage: Page, description: string) => {
   await navigation.goToBugsSettings(adminPage);
 
-  const BugReport = adminPage.getByText(description);
-  await expect(BugReport).toBeVisible({ timeout: TIMEOUTS.LONG });
+  // Apply filter to find the specific bug report by body text
+  await settingsInteractions.applyFilter(adminPage, { option: 'body', value: description });
+
+  // Wait for the page to show filtered results - look for the description anywhere on the page
+  await expect(adminPage.locator('text=' + description).first()).toBeVisible({ timeout: TIMEOUTS.LONG });
 };
