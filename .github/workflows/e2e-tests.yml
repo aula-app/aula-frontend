@@ -117,11 +117,11 @@ jobs:
         run: |
           docker run --rm \
             -v /var/run/docker.sock:/var/run/docker.sock \
-            -v /opt/aula:/opt/aula ${{ env.IMAGE_NAME }}:latest \
+            -v /opt/aula:/opt/aula \
             -v "$(pwd)/ansible.cfg":/usr/local/share/aula/ansible/ansible.cfg \
             -v "$(pwd)/playbook.yml":/usr/local/share/aula/ansible/playbook.yml \
             -v "$(pwd)/inventory.yml":/usr/local/share/aula/ansible/inventory.yml \
-            ansible-playbook playbook.yml -i inventory.yml
+            ${{ env.IMAGE_NAME }}:latest ansible-playbook playbook.yml -i inventory.yml
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
