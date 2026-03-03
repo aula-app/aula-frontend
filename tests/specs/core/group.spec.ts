@@ -61,7 +61,7 @@ test.describe.serial('Group Management - Creation and User Assignment', () => {
 
     await test.step('Save group', async () => {
       await forms.clickButton(adminPage, 'save-group-button');
-      await adminPage.waitForLoadState('domcontentloaded');
+      await adminPage.waitForLoadState('networkidle');
     });
 
     await test.step('Verify that the new group appears in the list', async () => {
@@ -99,7 +99,7 @@ test.describe.serial('Group Management - Creation and User Assignment', () => {
 
     await test.step('Submit message', async () => {
       await forms.clickButton(adminPage, 'submit-message-form');
-      await adminPage.waitForLoadState('domcontentloaded');
+      await adminPage.waitForLoadState('networkidle');
       await adminPage.waitForTimeout(1000);
     });
 
@@ -112,7 +112,7 @@ test.describe.serial('Group Management - Creation and User Assignment', () => {
   test('Users in group receive the message', async ({ userPage, studentPage }) => {
     await test.step('Verify user received the message', async () => {
       await navigation.goToMessages(userPage);
-      await userPage.waitForLoadState('domcontentloaded');
+      await userPage.waitForLoadState('networkidle');
 
       const messageCard = userPage.getByText(groupData.messageData.headline);
       await expect(messageCard).toBeVisible({ timeout: 10000 });
@@ -120,7 +120,7 @@ test.describe.serial('Group Management - Creation and User Assignment', () => {
 
     await test.step('Verify student received the message', async () => {
       await navigation.goToMessages(studentPage);
-      await studentPage.waitForLoadState('domcontentloaded');
+      await studentPage.waitForLoadState('networkidle');
 
       const messageCard = studentPage.getByText(groupData.messageData.headline);
       await expect(messageCard).toBeVisible({ timeout: 10000 });

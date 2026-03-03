@@ -3,6 +3,7 @@ import { expect, Page } from '@playwright/test';
 import * as types from '../support/types';
 import * as formInteractions from './forms';
 import * as navigation from './navigation';
+import { TIMEOUTS } from '../support/timeouts';
 
 /**
  * Report Types - maps to backend reporting categories
@@ -38,10 +39,10 @@ export const reportIdea = async (
   await formInteractions.openMoreOption(page, IdeaDiv);
 
   // Click report button
-  await IdeaDiv.getByTestId('report-button').click({ timeout: 1000 });
+  await IdeaDiv.getByTestId('report-button').click({ timeout: TIMEOUTS.DEFAULT });
 
   // Wait for report dialog
-  await page.getByTestId('report-dialog').waitFor({ state: 'visible', timeout: 1000 });
+  await page.getByTestId('report-dialog').waitFor({ state: 'visible', timeout: TIMEOUTS.DEFAULT });
 
   // Select report type from dropdown
   await formInteractions.selectOptionByValue(page, 'select-field-report', reportType);
@@ -51,7 +52,7 @@ export const reportIdea = async (
 
   // Submit report
   await formInteractions.clickButton(page, 'report-form-submit-button');
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
 };
 
 /**
@@ -81,10 +82,10 @@ export const reportComment = async (
 
   // Click report button in the comment menu
   const comment = page.getByTestId('comment-bubble').filter({ hasText: commentText });
-  await comment.getByTestId('report-button').click({ timeout: 1000 });
+  await comment.getByTestId('report-button').click({ timeout: TIMEOUTS.DEFAULT });
 
   // Wait for report dialog
-  await page.waitForSelector('[data-testid="report-dialog"]', { state: 'visible', timeout: 1000 });
+  await page.waitForSelector('[data-testid="report-dialog"]', { state: 'visible', timeout: TIMEOUTS.DEFAULT });
 
   // Select report type from dropdown
   await formInteractions.selectOptionByValue(page, 'select-field-report', reportType);
@@ -94,7 +95,7 @@ export const reportComment = async (
 
   // Submit report
   await formInteractions.clickButton(page, 'report-form-submit-button');
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
 };
 
 /**
@@ -106,7 +107,7 @@ export const verifyIdeaReported = async (adminPage: Page, ideaName: string) => {
   await navigation.goToReportsSettings(adminPage);
 
   const ReportedIdea = adminPage.getByText(ideaName);
-  await expect(ReportedIdea).toBeVisible({ timeout: 5000 });
+  await expect(ReportedIdea).toBeVisible({ timeout: TIMEOUTS.LONG });
 };
 
 /**
@@ -118,7 +119,7 @@ export const verifyCommentReported = async (adminPage: Page, commentText: string
   await navigation.goToReportsSettings(adminPage);
 
   const ReportedComment = adminPage.getByText(commentText);
-  await expect(ReportedComment).toBeVisible({ timeout: 5000 });
+  await expect(ReportedComment).toBeVisible({ timeout: TIMEOUTS.LONG });
 };
 
 /**
@@ -133,14 +134,14 @@ export const reportBug = async (page: Page, description: string) => {
   await formInteractions.clickButton(page, 'report-bug-button');
 
   // Wait for bug report dialog
-  await page.getByTestId('bug-dialog').waitFor({ state: 'visible', timeout: 1000 });
+  await page.getByTestId('bug-dialog').waitFor({ state: 'visible', timeout: TIMEOUTS.DEFAULT });
 
   // Fill in bug description using markdown editor
   await formInteractions.fillMarkdownForm(page, 'content', description);
 
   // Submit bug report
   await formInteractions.clickButton(page, 'bug-form-submit-button');
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
 };
 
 /**
@@ -152,5 +153,5 @@ export const verifyBugReported = async (adminPage: Page, description: string) =>
   await navigation.goToBugsSettings(adminPage);
 
   const BugReport = adminPage.getByText(description);
-  await expect(BugReport).toBeVisible({ timeout: 5000 });
+  await expect(BugReport).toBeVisible({ timeout: TIMEOUTS.LONG });
 };

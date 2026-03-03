@@ -3,6 +3,7 @@ import * as types from '../support/types';
 import * as formsInteractions from './forms';
 import * as settingsInteractions from './settings';
 import * as navigation from './navigation';
+import { TIMEOUTS } from '../support/timeouts';
 
 export const create = async (page: Page, data: types.MessageData) => {
   try {
@@ -39,14 +40,14 @@ export const remove = async (page: Page, data: types.MessageData) => {
 
     const row = page.locator('table tr').filter({ hasText: data.title }).first();
     const checkbox = row.locator('input[type="checkbox"]');
-    await expect(checkbox).toBeVisible({ timeout: 5000 });
+    await expect(checkbox).toBeVisible({ timeout: TIMEOUTS.LONG });
     await checkbox.check();
 
     await formsInteractions.clickButton(page, 'remove-messages-button');
     await formsInteractions.clickButton(page, 'confirm-delete-messages-button');
 
     // confirm the user does not show up in the table list
-    await expect(page.locator('table tr').filter({ hasText: data.title })).toHaveCount(0, { timeout: 10000 });
+    await expect(page.locator('table tr').filter({ hasText: data.title })).toHaveCount(0, { timeout: TIMEOUTS.VERY_LONG });
 
     await settingsInteractions.clearFilter(page);
 

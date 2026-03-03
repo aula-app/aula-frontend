@@ -110,7 +110,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
 
       // Submit the form
       await adminPage.getByTestId('box-form-submit-button').click();
-      await adminPage.waitForLoadState('domcontentloaded');
+      await adminPage.waitForLoadState('networkidle');
       await adminPage.waitForTimeout(100);
     });
 
@@ -151,7 +151,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(idea1Card).toBeVisible();
       await idea1Card.click();
       await adminPage.waitForURL((url) => url.pathname.includes('/idea'));
-      await adminPage.waitForLoadState('domcontentloaded');
+      await adminPage.waitForLoadState('networkidle');
 
       // Click approve button
       const approveButton = adminPage.getByTestId('approve-button');
@@ -176,7 +176,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(idea2Card).toBeVisible();
       await idea2Card.click();
       await adminPage.waitForURL((url) => url.pathname.includes('/idea'));
-      await adminPage.waitForLoadState('domcontentloaded');
+      await adminPage.waitForLoadState('networkidle');
 
       // Click reject button
       const rejectButton = adminPage.getByTestId('reject-button');
@@ -221,7 +221,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(idea1Card).toBeVisible();
       await idea1Card.click();
       await userPage.waitForURL((url) => url.pathname.includes('/idea'));
-      await userPage.waitForLoadState('domcontentloaded');
+      await userPage.waitForLoadState('networkidle');
 
       // Click the "for" vote button
       const forButton = userPage.getByTestId('for');
@@ -240,7 +240,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(idea1Card).toBeVisible();
       await idea1Card.click();
       await studentPage.waitForURL((url) => url.pathname.includes('/idea'));
-      await studentPage.waitForLoadState('domcontentloaded');
+      await studentPage.waitForLoadState('networkidle');
 
       // Click the "against" vote button
       const againstButton = studentPage.getByTestId('against');
@@ -275,7 +275,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(idea1Card).toBeVisible();
       await idea1Card.click();
       await userPage.waitForURL((url) => url.pathname.includes('/idea'));
-      await userPage.waitForLoadState('domcontentloaded');
+      await userPage.waitForLoadState('networkidle');
     });
 
     await test.step('Verify results section is displayed', async () => {

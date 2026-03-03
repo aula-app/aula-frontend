@@ -1,20 +1,21 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../support/utils';
+import { TIMEOUTS } from '../support/timeouts';
 
 const host = shared.getHost();
 
 export const clickOnPageItem = async (page: Page, text: string) => {
   const item = page.getByText(text);
   await expect(item).toBeVisible();
-  await item.click({ timeout: 1000 });
+  await item.click({ timeout: TIMEOUTS.DEFAULT });
   await page.waitForLoadState('networkidle');
 };
 
 export const clickOnLink = async (page: Page, path: string) => {
   const button = page.locator(`a[href="${path}"]`);
-  await expect(button).toBeVisible({ timeout: 1000 });
-  await button.click({ timeout: 1000 });
-  await page.waitForURL((url) => url.pathname.includes(path), { timeout: 1000 });
+  await expect(button).toBeVisible({ timeout: TIMEOUTS.DEFAULT });
+  await button.click({ timeout: TIMEOUTS.DEFAULT });
+  await page.waitForURL((url) => url.pathname.includes(path), { timeout: TIMEOUTS.DEFAULT });
   await page.waitForLoadState('networkidle');
 };
 
@@ -32,7 +33,7 @@ export const clickToNavigate = async (page: Page, path: string) => {
 
 export const openAccordion = async (page: Page, testId: string) => {
   const accordion = page.getByTestId(testId);
-  await expect(accordion).toBeVisible({ timeout: 1000 });
+  await expect(accordion).toBeVisible({ timeout: TIMEOUTS.DEFAULT });
 
   const isExpanded = await accordion.getAttribute('aria-expanded');
   if (isExpanded !== 'true') {
@@ -66,7 +67,7 @@ export const goToWildIdea = async (page: Page, roomName: string, ideaName: strin
   await goToRoom(page, roomName);
 
   const ideaCard = page.getByTestId(`idea-${ideaName}`);
-  await expect(ideaCard).toBeVisible({ timeout: 10000 });
+  await expect(ideaCard).toBeVisible({ timeout: TIMEOUTS.VERY_LONG });
   await ideaCard.click();
   await page.waitForURL((url) => url.pathname.includes('/idea'), { timeout: 5000 });
   await page.waitForLoadState('networkidle');
@@ -76,7 +77,7 @@ export const goToPhase = async (page: Page, roomName: string, phaseNumber: numbe
   await goToRoom(page, roomName);
 
   const phaseTab = page.getByTestId(`link-to-phase-${phaseNumber}`);
-  await expect(phaseTab).toBeVisible({ timeout: 10000 });
+  await expect(phaseTab).toBeVisible({ timeout: TIMEOUTS.VERY_LONG });
   await phaseTab.click();
   await page.waitForLoadState('networkidle');
 };

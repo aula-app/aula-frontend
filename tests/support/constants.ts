@@ -52,7 +52,7 @@ export const TEST_IDS = {
 
 export const WAIT_STATES = {
   NETWORK_IDLE: 'networkidle',
-  DOM_CONTENT_LOADED: 'domcontentloaded',
+  DOM_CONTENT_LOADED: 'networkidle',
   LOAD: 'load',
 } as const;
 
