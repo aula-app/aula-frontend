@@ -69,7 +69,7 @@ export const goToWildIdea = async (page: Page, roomName: string, ideaName: strin
   const ideaCard = page.getByTestId(`idea-${ideaName}`);
   await expect(ideaCard).toBeVisible({ timeout: TIMEOUTS.VERY_LONG });
   await ideaCard.click();
-  await page.waitForURL((url) => url.pathname.includes('/idea'), { timeout: 5000 });
+  await page.waitForURL((url) => url.pathname.includes('/idea'), { timeout: TIMEOUTS.LONG });
   await page.waitForLoadState('networkidle');
 };
 

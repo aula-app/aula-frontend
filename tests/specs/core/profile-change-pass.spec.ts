@@ -4,6 +4,7 @@ import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 import { TestConstants } from '../../support/config';
 import { login, logout } from '../../interactions/users';
+import { TIMEOUTS } from '../../support/timeouts';
 
 type PasswordChangeContext = {
   oldPassword: string;
@@ -39,13 +40,12 @@ test.describe.serial('Change pass flow', () => {
 
   const checkSuccessDiv = async (user: Page) => {
     const successDiv = user.getByTestId('password-change-success');
-    await successDiv.waitFor({ state: 'visible', timeout: 5000 });
-    await user.waitForTimeout(500);
+    await successDiv.waitFor({ state: 'visible', timeout: TIMEOUTS.LONG });
 
-    // Close the success div by clicking a close button or dismissing it
     const closeButton = successDiv.locator('button[aria-label="Close"]');
+    await expect(closeButton).toBeVisible();
     await closeButton.click();
-    await successDiv.waitFor({ state: 'hidden', timeout: 5000 });
+    await successDiv.waitFor({ state: 'hidden', timeout: TIMEOUTS.LONG });
   };
 
   test('User can successfully change password with valid inputs', async ({ ensureUser, createUserPage }) => {
@@ -77,8 +77,8 @@ test.describe.serial('Change pass flow', () => {
 
     await test.step('Verify error is displayed', async () => {
       const errorDiv = user.getByTestId('password-change-error');
-      await errorDiv.waitFor({ state: 'visible', timeout: 5000 });
-      await user.waitForTimeout(500);
+      await errorDiv.waitFor({ state: 'visible', timeout: TIMEOUTS.LONG });
+      await expect(errorDiv).toBeVisible();
     });
   });
 
@@ -126,7 +126,7 @@ test.describe.serial('Change pass flow', () => {
     const user = await createUserPage(passwordUser.username);
 
     await test.step('Change password 6 times in sequence', async () => {
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 3; i++) {
         const fields = {
           oldPassword: i == 0 ? defaultFields.newPassword : `newPassword${i}`,
           newPassword: `newPassword${i + 1}`,

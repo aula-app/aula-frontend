@@ -11,7 +11,7 @@ export const create = async (
 ) => {
   // start at home
   await formInteractions.clickButton(page, 'add-idea-button');
-  await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'visible', timeout: 500 });
+  await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'visible', timeout: TIMEOUTS.QUICK });
 
   // fill in the necessary information
   await formInteractions.fillForm(page, 'idea-title', idea.name);
