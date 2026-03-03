@@ -37,8 +37,10 @@ jobs:
           ssh-key: '${{ secrets.ANSIBLE_DEPLOY_KEY }}'
           path: ./roles/ansible-role-aula
 
-      - name: Build ansible container image
+      - name: Setup docker builder
         uses: docker/setup-buildx-action@v3
+
+      - name: Build ansible container image
         run: |
           docker build -f ./roles/ansible-role-aula/.docker/Dockerfile -t ansible-aula-ci:latest .
 
