@@ -39,7 +39,6 @@ export const create = async (
   // submit the idea form
   await formInteractions.clickButton(page, 'submit-idea-form');
   await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(2000);
   await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'hidden', timeout: 1000 });
 
   const IdeaTitle = page.getByText(idea.name, { exact: true });
@@ -74,9 +73,9 @@ export const comment = async (page: Page, commentText: string) => {
 
   // submit the comment form
   formInteractions.clickButton(page, 'confirm-comment-button');
-  await page.waitForTimeout(2000);
 
   const Comment = page.getByTestId('comment-bubble').filter({ hasText: commentText });
+  await expect(Comment).toBeVisible({ timeout: 5000 });
   const commentCount = await Comment.count();
   expect(commentCount).toBeGreaterThan(0);
 };
