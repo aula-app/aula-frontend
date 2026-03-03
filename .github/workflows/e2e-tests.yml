@@ -118,7 +118,7 @@ jobs:
           docker run --rm \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v /opt/aula:/opt/aula ${{ env.IMAGE_NAME }}:latest \
-            ansible-playbook playbook.yml -i inventory_ci.yml
+            ansible-playbook playbook.yml -i inventory.yml
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -140,9 +140,12 @@ jobs:
         run: |
           for name in $(docker ps --format '{{ .Names }}'); do
             if [[ "$name" == ${{ env.COMPOSE_NAME }}* ]]; then
+              echo "Removing: $name"
               docker rm -f "$name"
             fi
           done
           docker ps -a
+          echo "Cleanup files"
+          rm -rf /opt/aula
           rm -f ansible.cfg playbook.yml inventory.yml
           rm -rf ./roles/
