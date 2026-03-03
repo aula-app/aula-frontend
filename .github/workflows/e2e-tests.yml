@@ -129,6 +129,9 @@ jobs:
           node-version: 24
           cache: yarn
 
+      - name: Install yarn
+        run: npm install --global yarn
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
