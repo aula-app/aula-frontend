@@ -32,7 +32,6 @@ export const filter = async (page: Page, filter: { option: string; value: string
   // filter by our filter
   await page.fill('#filter-value-input', filter.value);
 
-  await page.waitForTimeout(100);
   await page.waitForLoadState('networkidle');
 
   // check if value was filtered correctly
