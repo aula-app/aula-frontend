@@ -28,7 +28,6 @@ export const create = async (page: Page, room: types.RoomData) => {
 
   await page.waitForLoadState('networkidle');
 
-  await navigation.goToRoomsSettings(page);
   await expect(page.getByTestId('add-rooms-button')).toBeVisible();
   await settingsInteractions.filter(page, { option: 'room_name', value: room.name });
   await settingsInteractions.clearFilter(page);
@@ -47,14 +46,16 @@ export const openSearch = async (page: Page) => {
   const searchButton = page.getByTestId('search-button');
   await expect(searchButton).toBeVisible();
   await searchButton.click();
-  await page.waitForTimeout(300); // Wait for collapse animation
+  const searchField = page.getByTestId('search-field').locator('input');
+  await expect(searchField).toBeVisible();
 };
 
 export const closeSearch = async (page: Page) => {
   const searchButton = page.getByTestId('search-button');
   await expect(searchButton).toBeVisible();
   await searchButton.click();
-  await page.waitForTimeout(300);
+  const searchField = page.getByTestId('search-field').locator('input');
+  await expect(searchField).not.toBeVisible();
 };
 
 export const searchRooms = async (page: Page, query: string) => {
@@ -67,13 +68,12 @@ export const searchRooms = async (page: Page, query: string) => {
   }
 
   await searchField.fill(query);
-  await page.waitForTimeout(100); // Wait for search to filter results
 };
 
 export const clearSearch = async (page: Page) => {
   const searchField = page.getByTestId('search-field').locator('input');
   await searchField.clear();
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
 };
 
 export const openSort = async (page: Page) => {
@@ -81,14 +81,16 @@ export const openSort = async (page: Page) => {
   const sortButton = page.getByTestId('sort-button');
   await expect(sortButton).toBeVisible();
   await sortButton.click();
-  await page.waitForTimeout(300);
+  const sortSelect = page.getByTestId('sort-select');
+  await expect(sortSelect).toBeVisible();
 };
 
 export const closeSort = async (page: Page) => {
   const sortButton = page.getByTestId('sort-button');
   await expect(sortButton).toBeVisible();
   await sortButton.click();
-  await page.waitForTimeout(300);
+  const sortSelect = page.getByTestId('sort-select');
+  await expect(sortSelect).not.toBeVisible();
 };
 
 export const selectSortOption = async (page: Page, sortValue: string) => {
@@ -99,14 +101,12 @@ export const selectSortOption = async (page: Page, sortValue: string) => {
   const sortOption = page.getByTestId(`sort-option-${sortValue}`);
   await expect(sortOption).toBeVisible();
   await sortOption.click();
-  await page.waitForTimeout(300);
 };
 
 export const toggleSortDirection = async (page: Page) => {
   const sortDirectionButton = page.getByTestId('sort-direction-button');
   await expect(sortDirectionButton).toBeVisible();
   await sortDirectionButton.click();
-  await page.waitForTimeout(300); // Wait for debounce
 };
 
 export const getRoomCount = async (page: Page): Promise<number> => {
@@ -114,8 +114,7 @@ export const getRoomCount = async (page: Page): Promise<number> => {
 
   // Wait for the rooms container to finish loading
   // This ensures the page has fully rendered before counting
-  await page.waitForLoadState('domcontentloaded');
-  await page.waitForTimeout(100); // Allow time for dynamic content to render
+  await page.waitForLoadState('networkidle');
 
   const roomCards = page.getByTestId('room-card');
   return await roomCards.count();
