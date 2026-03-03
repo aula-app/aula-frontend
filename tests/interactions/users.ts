@@ -20,7 +20,7 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
     await navigation.goToUsersSettings(page);
 
     await formsInteractions.clickButton(page, 'add-users-button');
-    await page.waitForTimeout(1000);
+    await page.waitForSelector('[data-testid="displayname-input"]', { state: 'visible', timeout: 5000 });
 
     await formsInteractions.fillForm(page, 'displayname', data.displayName);
     await formsInteractions.fillForm(page, 'username', data.username);
@@ -30,8 +30,7 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
     await formsInteractions.selectOptionByValue(page, 'select-field-userlevel', `${data.role}`);
 
     await formsInteractions.clickButton(page, 'submit-user-form');
-    await page.waitForTimeout(500);
-    await page.waitForLoadState('domcontentloaded');
+    await page.waitForLoadState('networkidle');
 
     await existsByUsername(page, data);
 
@@ -47,7 +46,7 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
 export const getTemporaryPass = async (page: Page, data: types.UserData) => {
   // navigate to the users settings page:
   await navigation.goToUsersSettings(page);
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
 
   const row = await existsByUsername(page, data);
   const viewPassButton = row.locator('button');
@@ -113,7 +112,7 @@ export const ensureInstanceEntered = async (page: Page, username?: string) => {
     console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: "${username}"`);
     await instanceCodeInputDiv.locator(page.locator('input[name="instance-code"]')).fill(instance);
     await page.getByTestId('submit-instance-code').click();
-    await page.waitForURL((url) => url.pathname === '/', { timeout: 1000, waitUntil: 'domcontentloaded' });
+    await page.waitForURL((url) => url.pathname === '/', { timeout: 1000, waitUntil: 'networkidle' });
     return true;
   }
 };
@@ -125,7 +124,7 @@ export const loginAttempt = async (page: Page, data: types.UserData) => {
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
   await page.locator('button[type="submit"]').click({ timeout: 1000 });
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
 };
 
 // Helper function to log in a user
@@ -138,7 +137,7 @@ export const login = async (page: Page, data: types.UserData) => {
 export const logout = async (page: Page) => {
   await navigation.goToHome(page);
   await formsInteractions.clickButton(page, 'logout-button');
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
 };
 
 export const register = async (page: Page, data: types.UserData, tempPass: string) => {
@@ -159,8 +158,7 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
     await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
     // Wait for navigation and check if we're logged in
-    await page.waitForLoadState('domcontentloaded');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('networkidle');
 
     // Check if we're on the home page (logged in) or need to login again
     const isLoggedIn = await page.locator('#rooms-heading').isVisible();
@@ -169,11 +167,11 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
       console.log('⚠️ User not automatically logged in after password change, attempting manual login');
       // If not automatically logged in, do a manual login
       await page.goto(host);
-      await page.waitForLoadState('domcontentloaded');
+      await page.waitForLoadState('networkidle');
       await page.fill('input[name="username"]', data.username);
       await page.fill('input[name="password"]', data.password);
       await page.locator('button[type="submit"]').click({ timeout: 1000 });
-      await page.waitForLoadState('domcontentloaded');
+      await page.waitForLoadState('networkidle');
       await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: 5000 });
     }
 
