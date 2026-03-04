@@ -9,9 +9,8 @@ on:
     types: [opened, synchronize]
 
 env:
-  AULA_HOST: "127.0.0.1"
+  AULA_HOST: "host.docker.internal"
   AULA_PORT: "8000"
-  PLAYWRIGHT_IMAGE: aula-playwright:${{ github.sha }}
 
 jobs:
   run-aula:
@@ -109,47 +108,26 @@ jobs:
             -v "$(pwd)/inventory.yml":/usr/local/share/aula/ansible/inventory.yml \
             ${{ env.AULA_IMAGE }} ansible-playbook playbook.yml -i inventory.yml
 
-  playwright-image:
-    runs-on: [self-hosted, cicd]
-    env:
-      PLAYWRIGHT_VERSION: v1.58.2-jammy
-    steps:
-      - name: Setup docker builder
-        uses: docker/setup-buildx-action@v3
-
-      - name: Create custom playwright dockerfile
-        run: |
-          cat <<- 'EOF' > Playwright.dockerfile
-          # syntax=docker/dockerfile:1
-          FROM mcr.microsoft.com/playwright:${{ env.PLAYWRIGHT_VERSION }}
-
-          ENV PORT="3000"
-          ENV HOST="0.0.0.0"
-
-          COPY <<-EOT /entrypoint.sh
-          #!/bin/sh
-          npx -y playwright@1.58.2 run-server --port $PORT --host $HOST
-          EOT
-
-          RUN chmod +x /entrypoint.sh
-
-          ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
-          EOF
-
-      - name: Build custom playwright image
-        run: |
-          docker build -f Playwright.dockerfile -t ${{ env.PLAYWRIGHT_IMAGE }} .
-
   e2e-tests:
     runs-on: [self-hosted, cicd]
     continue-on-error: true # allow failing e2e tests while testing
-    needs: [run-aula, playwright-image]
-    services:
-      playwright:
-        image: $PLAYWRIGHT_IMAGE
-        ports:
-          - 3000/tcp
+    needs: run-aula
+    env:
+      PLAYWRIGHT_SERVICE_NAME: playwright-svc-${{ github.sha }}
     steps:
+      - name: Random playwright service host port
+        run: |
+          echo "PLAYWRIGHT_PORT=$(shuf -i 3000-5000 -n 1)" >> $GITHUB_ENV
+
+      - name: Start playwright image
+        run: |
+          docker run --rm \
+            --name ${{ env.PLAYWRIGHT_SERVICE_NAME }} \
+            -p ${{ env.PLAYWRIGHT_PORT }}:3000 \
+            --add-host host.docker.internal=host-gateway \
+            --detach \
+            mcr.microsoft.com/playwright:v1.58.2-jammy /bin/sh -c "npx -y playwright@1.58.2 run-server --port 3000 --host 0.0.0.0"
+
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
@@ -163,10 +141,15 @@ jobs:
 
       - name: Run E2E tests
         env:
-          PW_TEST_CONNECT_WS_ENDPOINT: ws://playwright:${{ job.services.redis.ports['3000'] }}/
+          PW_TEST_CONNECT_WS_ENDPOINT: ws://127.0.0.1:${{ env.PLAYWRIGHT_PORT }}/
           APP_FRONTEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
           APP_BACKEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
-        run: yarn test
+        run: npx playwright test
+
+      - name: Stop playwright service
+        if: ${{ always() }}
+        run: |
+          docker rm -f ${{ env.PLAYWRIGHT_SERVICE_NAME }}
 
   cleanup:
     runs-on: [self-hosted, cicd]
