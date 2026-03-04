@@ -11,13 +11,14 @@ on:
 env:
   AULA_HOST: "127.0.0.1"
   AULA_PORT: "8000"
+  PLAYWRIGHT_IMAGE: aula-playwright:${{ github.sha }}
 
 jobs:
   run-aula:
     runs-on: [self-hosted, cicd]
     env:
       COMPOSE_NAME: aula-e2e-${{ github.sha }}
-      IMAGE_NAME: aula-ansible-${{ github.sha }}
+      AULA_IMAGE: aula-ansible:${{ github.sha }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -38,7 +39,7 @@ jobs:
 
       - name: Build ansible container image
         run: |
-          docker build -f ./roles/ansible-role-aula/.docker/Dockerfile -t ${{ env.IMAGE_NAME }}:latest ./roles/ansible-role-aula/
+          docker build -f ./roles/ansible-role-aula/.docker/Dockerfile -t ${{ env.AULA_IMAGE }} ./roles/ansible-role-aula/
 
       - name: Create Ansible playbook
         run: |
@@ -106,15 +107,46 @@ jobs:
             -v /opt/aula:/opt/aula \
             -v "$(pwd)/playbook.yml":/usr/local/share/aula/ansible/playbook.yml \
             -v "$(pwd)/inventory.yml":/usr/local/share/aula/ansible/inventory.yml \
-            ${{ env.IMAGE_NAME }}:latest ansible-playbook playbook.yml -i inventory.yml
+            ${{ env.AULA_IMAGE }} ansible-playbook playbook.yml -i inventory.yml
+
+  playwright-image:
+    runs-on: [self-hosted, cicd]
+    env:
+      PLAYWRIGHT_VERSION: v1.58.2-jammy
+    steps:
+      - name: Setup docker builder
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create custom playwright dockerfile
+        run: |
+          cat <<- 'EOF' > Playwright.dockerfile
+          # syntax=docker/dockerfile:1
+          FROM mcr.microsoft.com/playwright:${{ env.PLAYWRIGHT_VERSION }}
+
+          ENV PORT="3000"
+          ENV HOST="0.0.0.0"
+
+          COPY <<-EOT /entrypoint.sh
+          #!/bin/sh
+          npx -y playwright@1.58.2 run-server --port $PORT --host $HOST
+          EOT
+
+          RUN chmod +x /entrypoint.sh
+
+          ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
+          EOF
+
+      - name: Build custom playwright image
+        run: |
+          docker build -f Playwright.dockerfile -t ${{ env.PLAYWRIGHT_IMAGE }} .
 
   e2e-tests:
     runs-on: [self-hosted, cicd]
     continue-on-error: true # allow failing e2e tests while testing
-    needs: run-aula
+    needs: [run-aula, playwright-image]
     services:
       playwright:
-        image: mcr.microsoft.com/playwright:v1.58.2-jammy
+        image: ${{ env.PLAYWRIGHT_IMAGE }}
         ports:
           - 3000/tcp
     steps:
