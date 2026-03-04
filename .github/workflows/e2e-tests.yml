@@ -37,22 +37,6 @@ jobs:
         run: |
           docker build -f ./roles/ansible-role-aula/.docker/Dockerfile -t ${{ env.IMAGE_NAME }}:latest ./roles/ansible-role-aula/
 
-      - name: Create Ansible configuration
-        run: |
-          cat <<- 'EOF' > ansible.cfg
-          [defaults]
-          # Role path configuration
-          # This allows the playbook to find the aula role in the current directory
-          roles_path = .:./roles:~/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
-
-          # Disable host key checking for CI/CD
-          host_key_checking = False
-
-          [ssh_connection]
-          # SSH connection settings
-          pipelining = True
-          EOF
-
       - name: Create Ansible playbook
         run: |
           cat <<- 'EOF' > playbook.yml
@@ -118,7 +102,6 @@ jobs:
           docker run --rm \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v /opt/aula:/opt/aula \
-            -v "$(pwd)/ansible.cfg":/usr/local/share/aula/ansible/ansible.cfg \
             -v "$(pwd)/playbook.yml":/usr/local/share/aula/ansible/playbook.yml \
             -v "$(pwd)/inventory.yml":/usr/local/share/aula/ansible/inventory.yml \
             ${{ env.IMAGE_NAME }}:latest ansible-playbook playbook.yml -i inventory.yml
@@ -153,6 +136,3 @@ jobs:
             fi
           done
           docker ps -a
-          echo "Cleanup files"
-          rm -f ansible.cfg playbook.yml inventory.yml
-          rm -rf ./roles/
