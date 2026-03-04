@@ -9,8 +9,8 @@ on:
     types: [opened, synchronize]
 
 env:
-  AULA_HOST: host.docker.internal
-  AULA_PORT: '8000'
+  AULA_HOST: "127.0.0.1"
+  AULA_PORT: "8000"
 
 jobs:
   run-aula:
@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: aula-app/ansible-role-aula
-          ssh-key: '${{ secrets.ANSIBLE_DEPLOY_KEY }}'
+          ssh-key: "${{ secrets.ANSIBLE_DEPLOY_KEY }}"
           path: ./roles/ansible-role-aula
 
       - name: Setup docker builder
@@ -111,6 +111,7 @@ jobs:
   e2e-tests:
     runs-on: [self-hosted, cicd]
     continue-on-error: true # allow failing e2e tests while testing
+    needs: run-aula
     container:
       image: mcr.microsoft.com/playwright:v1.58.2-jammy
     steps:
@@ -139,9 +140,11 @@ jobs:
 
   cleanup:
     runs-on: [self-hosted, cicd]
+    needs: [run-aula, e2e-tests]
+    # Run cleanup job regardless of previous jobs state
+    if: ${{ always() }}
     steps:
       - name: Cleanup running services and files
-        if: ${{ always() }}
         run: |
           for name in $(docker ps --format '{{ .Names }}'); do
             if [[ "$name" == ${{ env.COMPOSE_NAME }}* ]]; then
