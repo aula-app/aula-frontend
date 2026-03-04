@@ -62,7 +62,6 @@ test.describe.serial('Group Management - Creation and User Assignment', () => {
     await test.step('Save group', async () => {
       await forms.clickButton(adminPage, 'save-group-button');
       await adminPage.waitForLoadState('networkidle');
-      await adminPage.waitForTimeout(1000);
     });
 
     await test.step('Verify that the new group appears in the list', async () => {

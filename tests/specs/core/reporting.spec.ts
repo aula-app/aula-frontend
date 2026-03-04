@@ -24,10 +24,7 @@ test.describe.serial('Reporting - Content Reports and Bug Reports', () => {
 
   test('Admin can create a room with users', async ({ adminPage, userConfig, studentConfig }) => {
     await test.step('Setup room context', async () => {
-      // Setup shared room context on first test
-      if (!roomContext) {
-        roomContext = await roomsFixture.setupRoomContext(adminPage, [userConfig, studentConfig], 'reporting-tests');
-      }
+      roomContext = await roomsFixture.setupRoomContext(adminPage, [userConfig, studentConfig], 'reporting-tests');
     });
 
     await test.step('Navigate to room', async () => {

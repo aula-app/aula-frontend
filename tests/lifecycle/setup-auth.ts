@@ -6,6 +6,7 @@ import * as path from 'path';
 import { chromium, Browser, BrowserContext, Page } from '@playwright/test';
 import * as userInteractions from '../interactions/users';
 import { admin } from '../fixtures/user.fixture';
+import { FILTER_EXCLUDED_RESOURCES } from '../fixtures/browser.fixture';
 
 export default async function globalSetup() {
   console.log('🚀 Starting global setup...');
@@ -25,9 +26,20 @@ export default async function globalSetup() {
   let page: Page | null = null;
 
   try {
-    browser = await chromium.launch();
+    browser = await chromium.launch({
+      args: [
+        '--disable-dev-shm-usage',
+        '--disable-extensions',
+        '--disable-plugins',
+        '--disable-accelerated-2d-canvas',
+        '--disable-renderer-backgrounding',
+        '--memory-pressure-off',
+        // '--max-old-space-size=12000',
+      ],
+    });
     context = await browser.newContext();
     page = await context.newPage();
+    await page.route('**/*', FILTER_EXCLUDED_RESOURCES);
 
     // Log in admin
     await userInteractions.login(page, admin);

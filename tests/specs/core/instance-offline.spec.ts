@@ -25,7 +25,6 @@ test.describe.serial('Instance Offline', () => {
 
     await formInteractions.selectOptionByValue(adminPage, 'select-field-status', online ? '1' : '0');
     await formInteractions.clickButton(adminPage, 'system-settings-confirm-button');
-    instanceOnline = online;
 
     await adminPage.waitForTimeout(500);
     const isExpanded = await adminPage.getByTestId('config-accordion-system').getAttribute('aria-expanded');
@@ -34,6 +33,7 @@ test.describe.serial('Instance Offline', () => {
     await navigation.openAccordion(adminPage, 'config-accordion-system');
     const selectedStatus = await adminPage.getByTestId('select-field-status-input').inputValue();
     expect(selectedStatus).toBe(`${Number(online)}`);
+    instanceOnline = online;
   };
 
   test('Admin can turn instance offline', async ({ adminPage }) => {
@@ -43,13 +43,10 @@ test.describe.serial('Instance Offline', () => {
   });
 
   test('User cannot login with Offline instance', async ({ userPage, userConfig }) => {
-    await test.step('Attempt to login with offline instance', async () => {
-      await navigation.goToHome(userPage);
-      await users.loginAttempt(userPage, userConfig);
-      await userPage.waitForLoadState('networkidle');
-    });
-
-    await test.step('Verify offline view is displayed', async () => {
+    await test.step('Verify offline view is displayed on attempt to login', async () => {
+      try {
+        await users.loginAttempt(userPage, userConfig);
+      } catch (e) { }
       const offlineDiv = userPage.getByTestId('school-offline-view');
       await expect(offlineDiv).toBeVisible({ timeout: 5000 });
     });
@@ -63,7 +60,6 @@ test.describe.serial('Instance Offline', () => {
 
   test('User can login with Online instance', async ({ userPage, userConfig }) => {
     await test.step('Login successfully with online instance', async () => {
-      await navigation.goToHome(userPage);
       await users.login(userPage, userConfig);
     });
   });

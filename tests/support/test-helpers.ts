@@ -1,5 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { TIMEOUTS, WAIT_STATES } from './constants';
+import { TIMEOUTS } from './constants';
 
 /**
  * Test helper utilities for common operations
@@ -11,8 +11,8 @@ import { TIMEOUTS, WAIT_STATES } from './constants';
  * @param page - Playwright Page object
  * @param timeout - Optional custom timeout
  */
-export async function waitForNetworkIdle(page: Page, timeout = TIMEOUTS.NETWORK) {
-  await page.waitForLoadState(WAIT_STATES.NETWORK_IDLE as any, { timeout });
+export async function waitForNetworkIdle(page: Page, timeout = TIMEOUTS.FIVE_SECONDS) {
+  await page.waitForLoadState('networkidle', { timeout });
 }
 
 /**
@@ -20,8 +20,8 @@ export async function waitForNetworkIdle(page: Page, timeout = TIMEOUTS.NETWORK)
  * @param page - Playwright Page object
  * @param timeout - Optional custom timeout
  */
-export async function waitForPageLoad(page: Page, timeout = TIMEOUTS.MEDIUM) {
-  await page.waitForLoadState(WAIT_STATES.LOAD as any, { timeout });
+export async function waitForPageLoad(page: Page, timeout = TIMEOUTS.ONE_SECOND) {
+  await page.waitForLoadState('load', { timeout });
 }
 
 /**
@@ -40,7 +40,7 @@ export async function fillByLabel(page: Page, label: string, value: string) {
  * @param testId - data-testid value
  * @param timeout - Optional custom timeout
  */
-export async function clickByTestId(page: Page, testId: string, timeout = TIMEOUTS.SHORT) {
+export async function clickByTestId(page: Page, testId: string, timeout = TIMEOUTS.HALF_SECOND) {
   await page.getByTestId(testId).click({ timeout });
 }
 
@@ -50,7 +50,7 @@ export async function clickByTestId(page: Page, testId: string, timeout = TIMEOU
  * @param testId - data-testid value
  * @param timeout - Optional custom timeout
  */
-export async function waitForTestId(page: Page, testId: string, timeout = TIMEOUTS.SHORT) {
+export async function waitForTestId(page: Page, testId: string, timeout = TIMEOUTS.HALF_SECOND) {
   await page.getByTestId(testId).waitFor({ state: 'visible', timeout });
 }
 
@@ -68,7 +68,7 @@ export async function expectElementCount(locator: Locator, count: number) {
  * @param locator - Playwright Locator
  * @param timeout - Optional custom timeout
  */
-export async function expectVisible(locator: Locator, timeout = TIMEOUTS.SHORT) {
+export async function expectVisible(locator: Locator, timeout = TIMEOUTS.HALF_SECOND) {
   await expect(locator).toBeVisible({ timeout });
 }
 
@@ -77,7 +77,7 @@ export async function expectVisible(locator: Locator, timeout = TIMEOUTS.SHORT) 
  * @param locator - Playwright Locator
  * @param timeout - Optional custom timeout
  */
-export async function expectHidden(locator: Locator, timeout = TIMEOUTS.SHORT) {
+export async function expectHidden(locator: Locator, timeout = TIMEOUTS.HALF_SECOND) {
   await expect(locator).toBeHidden({ timeout });
 }
 
@@ -87,11 +87,7 @@ export async function expectHidden(locator: Locator, timeout = TIMEOUTS.SHORT) {
  * @param maxRetries - Maximum number of retries
  * @param delay - Initial delay in ms (doubles each retry)
  */
-export async function retryOperation<T>(
-  operation: () => Promise<T>,
-  maxRetries = 3,
-  delay = 1000
-): Promise<T> {
+export async function retryOperation<T>(operation: () => Promise<T>, maxRetries = 3, delay = 1000): Promise<T> {
   let lastError: Error | undefined;
 
   for (let i = 0; i < maxRetries; i++) {

@@ -4,17 +4,10 @@
  */
 
 export const TIMEOUTS = {
-  /** Short timeout for fast operations (5s) */
-  SHORT: 5000,
-
-  /** Medium timeout for standard operations (10s) */
-  MEDIUM: 10000,
-
-  /** Long timeout for complex operations (30s) */
-  LONG: 30000,
-
-  /** Network operations (loading states, API calls) */
-  NETWORK: 15000,
+  HALF_SECOND: 500,
+  ONE_SECOND: 1000,
+  THREE_SECONDS: 3000,
+  FIVE_SECONDS: 5000,
 } as const;
 
 export const SELECTORS = {
@@ -48,12 +41,6 @@ export const TEST_IDS = {
     TABLE: 'users-table',
     FIELD: 'users-field',
   },
-} as const;
-
-export const WAIT_STATES = {
-  NETWORK_IDLE: 'networkidle',
-  DOM_CONTENT_LOADED: 'domcontentloaded',
-  LOAD: 'load',
 } as const;
 
 export const RETRY_CONFIG = {

@@ -1,6 +1,7 @@
 import { test, expect } from '../../fixtures/test-fixtures';
 import * as rooms from '../../interactions/rooms';
 import * as navigation from '../../interactions/navigation';
+import { TIMEOUTS } from '../../support/constants';
 
 /**
  * Room Search and Sort Tests
@@ -37,17 +38,18 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
 
       await test.step('Get first room name and search for it', async () => {
         const firstRoomName = await rooms.getFirstRoomName(adminPage);
-        if (!firstRoomName) return; // Skip if no rooms
 
-        // Extract first 3 characters for search
-        const searchTerm = firstRoomName.trim().substring(0, 3).toLowerCase();
+        const searchTerm = firstRoomName!
+          .trim()
+          .substring(0, firstRoomName!.length - 3)
+          .toLowerCase();
+        console.log(`Search term: ${searchTerm}`);
         await rooms.searchRooms(adminPage, searchTerm);
       });
 
-      await test.step('Verify filtered results', async () => {
+      await test.step('Verify filtered results contain exactly searched room', async () => {
         const filteredCount = await rooms.getRoomCount(adminPage);
-        // Should have at least one result
-        expect(filteredCount).toBeGreaterThan(0);
+        expect(filteredCount).toEqual(1);
       });
     });
 
@@ -60,6 +62,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
         await rooms.clearSearch(adminPage);
       });
 
+      // @FIXME: nikola - if we want to verify "all" rooms are visible, we can't use greaterThan(0)
       await test.step('Verify all rooms are visible again', async () => {
         const allCount = await rooms.getRoomCount(adminPage);
         expect(allCount).toBeGreaterThan(0);
@@ -126,6 +129,9 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
         const initialIcon = await sortDirectionButton.getAttribute('aria-label');
 
         await rooms.toggleSortDirection(adminPage);
+
+        // Wait for the debounce (150ms in ScopeHeader) to complete
+        await adminPage.waitForTimeout(TIMEOUTS.HALF_SECOND);
 
         const newIcon = await sortDirectionButton.getAttribute('aria-label');
         expect(newIcon).not.toBe(initialIcon);

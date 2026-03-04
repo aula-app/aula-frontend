@@ -1,26 +1,27 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../support/utils';
+import { TIMEOUTS } from '../support/constants';
 
 const host = shared.getHost();
 
 export const clickOnPageItem = async (page: Page, text: string) => {
   const item = page.getByText(text);
   await expect(item).toBeVisible();
-  await item.click({ timeout: 1000 });
+  await item.click({ timeout: TIMEOUTS.ONE_SECOND });
   await page.waitForLoadState('networkidle');
 };
 
 export const clickOnLink = async (page: Page, path: string) => {
   const button = page.locator(`a[href="${path}"]`);
-  await expect(button).toBeVisible();
-  await button.click({ timeout: 1000 });
-  await page.waitForURL((url) => url.pathname.includes(path), { timeout: 5000 });
+  await expect(button).toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
+  await button.click({ timeout: TIMEOUTS.ONE_SECOND });
+  await page.waitForURL((url) => url.pathname.includes(path), { timeout: TIMEOUTS.ONE_SECOND });
   await page.waitForLoadState('networkidle');
 };
 
 export const clickToNavigate = async (page: Page, path: string) => {
   const currentUrl = page.url();
-  if (currentUrl.includes(path)) {
+  if (currentUrl === path) {
     return;
   }
 
@@ -32,12 +33,12 @@ export const clickToNavigate = async (page: Page, path: string) => {
 
 export const openAccordion = async (page: Page, testId: string) => {
   const accordion = page.getByTestId(testId);
-  await expect(accordion).toBeVisible({ timeout: 10000 });
+  await expect(accordion).toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
 
   const isExpanded = await accordion.getAttribute('aria-expanded');
   if (isExpanded !== 'true') {
     await accordion.click();
-    await page.waitForTimeout(1000);
+    await expect(accordion).toHaveAttribute('aria-expanded', 'true');
   }
 };
 
@@ -49,18 +50,16 @@ export const goToHome = async (page: Page) => {
     return;
   }
 
-  await page.goto(host);
-  await page.waitForLoadState('networkidle');
+  await page.goto(host, { waitUntil: 'networkidle' });
 };
 
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
-  await page.waitForLoadState('networkidle');
 
   const roomCard = page.getByTestId('room-card').filter({ hasText: roomName });
-  await expect(roomCard).toBeVisible({ timeout: 10000 });
+  await expect(roomCard).toBeVisible();
   await roomCard.click();
-  await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'), { timeout: 5000 });
+  await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'));
   await page.waitForLoadState('networkidle');
 };
 
@@ -68,9 +67,9 @@ export const goToWildIdea = async (page: Page, roomName: string, ideaName: strin
   await goToRoom(page, roomName);
 
   const ideaCard = page.getByTestId(`idea-${ideaName}`);
-  await expect(ideaCard).toBeVisible({ timeout: 10000 });
+  await expect(ideaCard).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
   await ideaCard.click();
-  await page.waitForURL((url) => url.pathname.includes('/idea'), { timeout: 5000 });
+  await page.waitForURL((url) => url.pathname.includes('/idea'), { timeout: TIMEOUTS.THREE_SECONDS });
   await page.waitForLoadState('networkidle');
 };
 
@@ -78,9 +77,9 @@ export const goToPhase = async (page: Page, roomName: string, phaseNumber: numbe
   await goToRoom(page, roomName);
 
   const phaseTab = page.getByTestId(`link-to-phase-${phaseNumber}`);
-  await expect(phaseTab).toBeVisible({ timeout: 10000 });
+  await expect(phaseTab).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
   await phaseTab.click();
-  await page.waitForTimeout(1000);
+  await page.waitForLoadState('networkidle');
 };
 
 export const goToMessages = async (page: Page) => {
