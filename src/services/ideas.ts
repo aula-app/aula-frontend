@@ -87,19 +87,6 @@ export async function getIdeasByBox(args: BoxIdeasListRequest): Promise<GetIdeas
   return response as GetIdeasResponse;
 }
 
-interface UserIdeasListRequest {
-  offset?: number;
-  limit?: number;
-  orderby?: number;
-  asc?: 0 | 1;
-  search_field?: string;
-  search_text?: string;
-  both_names?: string;
-  status?: StatusTypes;
-  room_id?: string;
-  user_id?: string;
-}
-
 export async function getUserIdeasByPhase(phase_id: number): Promise<GetIdeasResponse> {
   const response = await databaseRequest(
     {
@@ -331,19 +318,6 @@ export async function setApprovalStatus(args: ApproveIdeaArguments): Promise<Gen
       model: 'Idea',
       method: 'setApprovalStatus',
       arguments: args,
-    },
-    ['updater_id']
-  );
-
-  return response as GenericResponse;
-}
-
-async function setWinning(winnig_status: boolean, idea_id: string): Promise<GenericResponse> {
-  const response = await databaseRequest(
-    {
-      model: 'Idea',
-      method: winnig_status ? 'setToWinning' : 'setToLosing',
-      arguments: { idea_id },
     },
     ['updater_id']
   );
