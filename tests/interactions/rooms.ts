@@ -4,14 +4,14 @@ import * as types from '../support/types';
 import * as formInteractions from './forms';
 import * as navigation from './navigation';
 import * as settingsInteractions from './settings';
-import { TIMEOUTS } from '../support/timeouts';
+import { TIMEOUTS } from '../support/constants';
 
 export const create = async (page: Page, room: types.RoomData) => {
   await navigation.goToRoomsSettings(page);
 
-  await page.waitForSelector('[data-testid="add-rooms-button"]', { state: 'visible', timeout: TIMEOUTS.QUICK });
+  await page.waitForSelector('[data-testid="add-rooms-button"]', { state: 'visible', timeout: TIMEOUTS.HALF_SECOND });
   await formInteractions.clickButton(page, 'add-rooms-button');
-  await page.waitForSelector('input[name="room_name"]', { state: 'visible', timeout: TIMEOUTS.QUICK });
+  await page.waitForSelector('input[name="room_name"]', { state: 'visible', timeout: TIMEOUTS.HALF_SECOND });
   await formInteractions.fillForm(page, 'room-name', room.name);
   await formInteractions.fillMarkdownForm(page, 'description_public', room.description);
 

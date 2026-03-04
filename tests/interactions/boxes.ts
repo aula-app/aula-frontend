@@ -9,7 +9,7 @@ import { TIMEOUTS } from '../support/timeouts';
 export const create = async (page: Page, box: types.BoxData) => {
   await navigation.goToBoxesSettings(page);
 
-  await page.waitForSelector('[data-testid="add-boxes-button"]', { state: 'visible', timeout: TIMEOUTS.QUICK });
+  await page.waitForSelector('[data-testid="add-boxes-button"]', { state: 'visible', timeout: TIMEOUTS.HALF_SECOND });
   await formInteractions.clickButton(page, 'add-boxes-button');
 
   await sendForm(page, box);
@@ -35,7 +35,7 @@ export const remove = async (page: Page, box: types.BoxData) => {
 };
 
 const sendForm = async (page: Page, box: types.BoxData) => {
-  await page.waitForSelector('[data-testid="box-name-input"]', { state: 'visible', timeout: TIMEOUTS.QUICK });
+  await page.waitForSelector('[data-testid="box-name-input"]', { state: 'visible', timeout: TIMEOUTS.HALF_SECOND });
 
   await formInteractions.fillForm(page, 'box-name', box.name);
   await formInteractions.fillMarkdownForm(page, 'description_public', box.description);

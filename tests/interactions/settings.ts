@@ -1,14 +1,14 @@
 import { Locator, Page, expect } from '@playwright/test';
 import * as formInteractions from './forms';
 import { ScopeKeyType } from '../../src/types/Scopes';
-import { TIMEOUTS } from '../support/timeouts';
+import { TIMEOUTS } from '../support/constants';
 
 export const check = async (page: Page, filters: { option: string; value: string }): Promise<Locator> => {
   const row = page.locator('table tr').filter({ hasText: filters.value }).first();
 
   // Try to find the row with a very short timeout first
   try {
-    await expect(row).toBeVisible({ timeout: TIMEOUTS.VERY_SHORT });
+    await expect(row).toBeVisible({ timeout: TIMEOUTS.HALF_SECOND });
   } catch {
     // If not found quickly (e.g., due to pagination), apply filter
     await filter(page, filters);
@@ -21,14 +21,14 @@ export const check = async (page: Page, filters: { option: string; value: string
 export const filter = async (page: Page, filter: { option: string; value: string }) => {
   const filterButton = page.getByTestId('filter-toggle-button');
   const filterInput = page.getByTestId('filter-input');
-  await expect(filterButton).toBeVisible({ timeout: TIMEOUTS.DEFAULT });
+  await expect(filterButton).toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
 
   if (
     !(await filterInput.isVisible()) ||
     (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')
   ) {
     // open the filter menu if it's not already open
-    await filterButton.click({ timeout: TIMEOUTS.DEFAULT });
+    await filterButton.click({ timeout: TIMEOUTS.ONE_SECOND });
   }
   await expect(filterInput).toBeVisible();
   await expect(page.locator('#filter-value-input')).toBeVisible();
@@ -54,14 +54,14 @@ export const filter = async (page: Page, filter: { option: string; value: string
 export const applyFilter = async (page: Page, filter: { option: string; value: string }) => {
   const filterButton = page.getByTestId('filter-toggle-button');
   const filterInput = page.getByTestId('filter-input');
-  await expect(filterButton).toBeVisible({ timeout: TIMEOUTS.DEFAULT });
+  await expect(filterButton).toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
 
   if (
     !(await filterInput.isVisible()) ||
     (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')
   ) {
     // open the filter menu if it's not already open
-    await filterButton.click({ timeout: TIMEOUTS.DEFAULT });
+    await filterButton.click({ timeout: TIMEOUTS.ONE_SECOND });
   }
   await expect(filterInput).toBeVisible();
   await expect(page.locator('#filter-value-input')).toBeVisible();
@@ -99,7 +99,7 @@ export const openEdit = async ({ page, filters }: { page: Page; filters: { optio
 
   // Try to find the row with a very short timeout first
   try {
-    await expect(row).toBeVisible({ timeout: TIMEOUTS.VERY_SHORT });
+    await expect(row).toBeVisible({ timeout: TIMEOUTS.HALF_SECOND });
   } catch {
     // If not found quickly (e.g., due to pagination), apply filter
     await filter(page, filters);
@@ -122,7 +122,7 @@ export const remove = async ({
 
   // Try to find the row with a very short timeout first
   try {
-    await expect(row).toBeVisible({ timeout: TIMEOUTS.VERY_SHORT });
+    await expect(row).toBeVisible({ timeout: TIMEOUTS.HALF_SECOND });
   } catch {
     // If not found quickly (e.g., due to pagination), apply filter
     await filter(page, filters);
@@ -131,7 +131,7 @@ export const remove = async ({
   const DeleteCheckbox = row.locator('input[type="checkbox"]');
   await expect(DeleteCheckbox).toBeVisible();
   if (!(await DeleteCheckbox.isChecked())) {
-    await DeleteCheckbox.click({ timeout: TIMEOUTS.DEFAULT });
+    await DeleteCheckbox.click({ timeout: TIMEOUTS.ONE_SECOND });
   }
   await expect(DeleteCheckbox).toBeChecked();
 

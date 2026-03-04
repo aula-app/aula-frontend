@@ -156,7 +156,7 @@ Import from `support/constants.ts` for timeouts and selectors:
 ```typescript
 import { TIMEOUTS, TEST_IDS } from '../../support/constants';
 
-await page.waitForSelector(TEST_IDS.ROOMS.ADD_BUTTON, { timeout: TIMEOUTS.MEDIUM });
+await page.waitForSelector(TEST_IDS.ROOMS.ADD_BUTTON, { timeout: TIMEOUTS.ONE_SECOND });
 ```
 
 ## 🏗️ Best Practices
@@ -218,7 +218,7 @@ test('test name', async () => {
 ```typescript
 // ✅ Good
 import { TIMEOUTS } from '../../support/constants';
-await page.waitForTimeout(TIMEOUTS.SHORT);
+await page.waitForTimeout(TIMEOUTS.HALF_SECOND);
 
 // ❌ Bad: Magic numbers
 await page.waitForTimeout(5000);
@@ -251,10 +251,10 @@ Key settings in `playwright.config.ts`:
 
 Defined in `support/constants.ts`:
 
-- `TIMEOUTS.SHORT` - 5s for fast operations
-- `TIMEOUTS.MEDIUM` - 10s for standard operations
-- `TIMEOUTS.LONG` - 30s for complex operations
-- `TIMEOUTS.NETWORK` - 15s for network operations
+- `TIMEOUTS.HALF_SECOND` - 5s for fast operations
+- `TIMEOUTS.ONE_SECOND` - 10s for standard operations
+- `TIMEOUTS.THREE_SECONDS` - 30s for complex operations
+- `TIMEOUTS.FIVE_SECONDS` - 15s for network operations
 
 ## 🐛 Debugging
 

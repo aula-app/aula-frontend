@@ -4,7 +4,7 @@ import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 import { TestConstants } from '../../support/config';
 import { login, logout } from '../../interactions/users';
-import { TIMEOUTS } from '../../support/timeouts';
+import { TIMEOUTS } from '../../support/constants';
 
 type PasswordChangeContext = {
   oldPassword: string;
@@ -40,12 +40,12 @@ test.describe.serial('Change pass flow', () => {
 
   const checkSuccessDiv = async (user: Page) => {
     const successDiv = user.getByTestId('password-change-success');
-    await successDiv.waitFor({ state: 'visible', timeout: TIMEOUTS.LONG });
+    await successDiv.waitFor({ state: 'visible', timeout: TIMEOUTS.THREE_SECONDS });
 
     const closeButton = successDiv.locator('button[aria-label="Close"]');
     await expect(closeButton).toBeVisible();
     await closeButton.click();
-    await successDiv.waitFor({ state: 'hidden', timeout: TIMEOUTS.LONG });
+    await successDiv.waitFor({ state: 'hidden', timeout: TIMEOUTS.THREE_SECONDS });
   };
 
   test('User can successfully change password with valid inputs', async ({ ensureUser, createUserPage }) => {
@@ -77,7 +77,7 @@ test.describe.serial('Change pass flow', () => {
 
     await test.step('Verify error is displayed', async () => {
       const errorDiv = user.getByTestId('password-change-error');
-      await errorDiv.waitFor({ state: 'visible', timeout: TIMEOUTS.LONG });
+      await errorDiv.waitFor({ state: 'visible', timeout: TIMEOUTS.THREE_SECONDS });
       await expect(errorDiv).toBeVisible();
     });
   });
