@@ -146,7 +146,7 @@ jobs:
     needs: [run-aula, playwright-image]
     services:
       playwright:
-        image: ${{ env.PLAYWRIGHT_IMAGE }}
+        image: $PLAYWRIGHT_IMAGE
         ports:
           - 3000/tcp
     steps:
