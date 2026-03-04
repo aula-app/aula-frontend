@@ -104,7 +104,7 @@ export default async function globalTeardown() {
     const currentUrl = adminPage.url();
     if (!currentUrl || currentUrl === 'about:blank') {
       await adminPage.goto(shared.getHost());
-      await adminPage.waitForLoadState('domcontentloaded');
+      await adminPage.waitForLoadState('networkidle');
     }
 
     // Verify admin is authenticated
