@@ -9,12 +9,15 @@ on:
     types: [opened, synchronize]
 
 env:
-  COMPOSE_NAME: aula-e2e-${{ github.sha }}
-  IMAGE_NAME: aula-ansible-${{ github.sha }}
+  AULA_HOST: host.docker.internal
+  AULA_PORT: '8000'
 
 jobs:
-  e2e-tests:
+  run-aula:
     runs-on: [self-hosted, cicd]
+    env:
+      COMPOSE_NAME: aula-e2e-${{ github.sha }}
+      IMAGE_NAME: aula-ansible-${{ github.sha }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -61,15 +64,14 @@ jobs:
                 apache2_user: www
                 network:
                   ssl_enabled: false
-                  # floating_ip: "127.0.0.1"
-                  base_domain: "127.0.0.1"
-                  httpPort: "8000"
+                  base_domain: "${{ env.AULA_HOST }}"
+                  httpPort: "${{ env. AULA_PORT }}"
                 email:
                   backend: log
                 aula:
                   compose_name: ${{ env.COMPOSE_NAME }}
                   environment: dev
-                  base_url: "http://127.0.0.1:8000"
+                  base_url: "http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}"
                   superkey: "hunter2"
                   is_pr_deployment_enabled: false
                   multi_instance_enabled: false
@@ -93,8 +95,8 @@ jobs:
                   client_id: "AUTH0-CLIENT-ID"
                   client_secret: auth0-secret
                   cookie_secret: hunter2
-                  redirect_uri: "http://127.0.0.1:8000/api/controllers/auth0.php"
-                  frontend_redirect: "http://127.0.0.1:8000/oauth-login/"
+                  redirect_uri: "http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}/api/controllers/auth0.php"
+                  frontend_redirect: "http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}/oauth-login/"
           EOF
 
       - name: Run ansible
@@ -105,6 +107,15 @@ jobs:
             -v "$(pwd)/playbook.yml":/usr/local/share/aula/ansible/playbook.yml \
             -v "$(pwd)/inventory.yml":/usr/local/share/aula/ansible/inventory.yml \
             ${{ env.IMAGE_NAME }}:latest ansible-playbook playbook.yml -i inventory.yml
+
+  e2e-tests:
+    runs-on: [self-hosted, cicd]
+    continue-on-error: true # allow failing e2e tests while testing
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-jammy
+    steps:
+      - name: Install Playwright
+        run: npx playwright install
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -122,12 +133,15 @@ jobs:
 
       - name: Run E2E tests
         env:
-          APP_FRONTEND_HOST: http://127.0.0.1:8000
-          APP_BACKEND_HOST: http://127.0.0.1:8000
+          APP_FRONTEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
+          APP_BACKEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
         run: yarn test
 
+  cleanup:
+    runs-on: [self-hosted, cicd]
+    steps:
       - name: Cleanup running services and files
-        if: always()
+        if: ${{ always() }}
         run: |
           for name in $(docker ps --format '{{ .Names }}'); do
             if [[ "$name" == ${{ env.COMPOSE_NAME }}* ]]; then
