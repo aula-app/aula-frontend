@@ -94,7 +94,11 @@ export default async function globalTeardown() {
       return;
     }
 
-    browser = await chromium.launch();
+    if (process.env.REMOTE_BROWSER === "1") {
+      browser = await chromium.connect(process.env.PW_TEST_CONNECT_WS_ENDPOINT);
+    } else {
+      browser = await chromium.launch();
+    }
     context = await browser.newContext({ storageState: adminStatePath });
     adminPage = await context.newPage();
 

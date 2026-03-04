@@ -25,7 +25,11 @@ export default async function globalSetup() {
   let page: Page | null = null;
 
   try {
-    browser = await chromium.launch();
+    if (process.env.REMOTE_BROWSER === "1") {
+      browser = await chromium.connect(process.env.PW_TEST_CONNECT_WS_ENDPOINT);
+    } else {
+      browser = await chromium.launch();
+    }
     context = await browser.newContext();
     page = await context.newPage();
 
