@@ -5,9 +5,15 @@ import { TIMEOUTS } from '../support/timeouts';
 
 export const check = async (page: Page, filters: { option: string; value: string }): Promise<Locator> => {
   const row = page.locator('table tr').filter({ hasText: filters.value }).first();
-  if (!(await row.isVisible())) {
+
+  // Try to find the row with a very short timeout first
+  try {
+    await expect(row).toBeVisible({ timeout: TIMEOUTS.VERY_SHORT });
+  } catch {
+    // If not found quickly (e.g., due to pagination), apply filter
     await filter(page, filters);
   }
+
   await expect(row).toBeVisible();
   return row;
 };
@@ -90,7 +96,12 @@ export const clearFilter = async (page: Page) => {
 
 export const openEdit = async ({ page, filters }: { page: Page; filters: { option: string; value: string } }) => {
   const row = page.locator('table tr').filter({ hasText: filters.value }).first();
-  if (!(await row.isVisible())) {
+
+  // Try to find the row with a very short timeout first
+  try {
+    await expect(row).toBeVisible({ timeout: TIMEOUTS.VERY_SHORT });
+  } catch {
+    // If not found quickly (e.g., due to pagination), apply filter
     await filter(page, filters);
   }
 
@@ -108,7 +119,12 @@ export const remove = async ({
   filters: { option: string; value: string };
 }) => {
   const row = page.locator('table tr').filter({ hasText: filters.value }).first();
-  if (!(await row.isVisible())) {
+
+  // Try to find the row with a very short timeout first
+  try {
+    await expect(row).toBeVisible({ timeout: TIMEOUTS.VERY_SHORT });
+  } catch {
+    // If not found quickly (e.g., due to pagination), apply filter
     await filter(page, filters);
   }
 
