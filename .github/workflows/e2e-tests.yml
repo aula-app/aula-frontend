@@ -111,14 +111,14 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
       - name: Install yarn
         run: npm install --global yarn
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
 
       - name: Run E2E tests
         env:
