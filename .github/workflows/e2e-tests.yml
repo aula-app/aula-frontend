@@ -144,7 +144,8 @@ jobs:
           PW_TEST_CONNECT_WS_ENDPOINT: ws://127.0.0.1:${{ env.PLAYWRIGHT_PORT }}/
           APP_FRONTEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
           APP_BACKEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
-        run: npx playwright test
+          REMOTE_BROWSER: 1
+        run: yarn test
 
       - name: Stop playwright service
         if: ${{ always() }}
