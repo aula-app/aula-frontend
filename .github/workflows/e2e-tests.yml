@@ -112,12 +112,12 @@ jobs:
     runs-on: [self-hosted, cicd]
     continue-on-error: true # allow failing e2e tests while testing
     needs: run-aula
-    container:
-      image: mcr.microsoft.com/playwright:v1.58.2-jammy
+    services:
+      playwright:
+        image: mcr.microsoft.com/playwright:v1.58.2-jammy
+        ports:
+          - 3000/tcp
     steps:
-      - name: Install Playwright
-        run: npx playwright install
-
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
@@ -129,11 +129,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
       - name: Run E2E tests
         env:
+          PW_TEST_CONNECT_WS_ENDPOINT: ws://playwright:${{ job.services.redis.ports['3000'] }}/
           APP_FRONTEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
           APP_BACKEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
         run: yarn test
