@@ -126,7 +126,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: 22
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
 
       - name: Install yarn
         run: npm install --global yarn
