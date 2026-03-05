@@ -86,7 +86,12 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
           onClick={toggleMobileMenu}
           aria-hidden="true"
         />
-        <main id="main-content" className="flex-1 overflow-y-auto" tabIndex={-1}>
+        <main
+          id="main-content"
+          className="flex-1 overflow-y-auto"
+          style={{ paddingBottom: 'var(--safe-area-inset-bottom, 0px)' }}
+          tabIndex={-1}
+        >
           {children}
         </main>
         <AskConsent />
