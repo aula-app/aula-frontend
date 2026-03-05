@@ -64,14 +64,6 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
       <SkipNavigation mainContentId="main-content" />
       <TopBar mobileMenuOpen={mobileMenuOpen} onToggleMobileMenu={toggleMobileMenu} menuButtonRef={menuButtonRef} />
       <div className="flex min-h-0 flex-1 overflow-hidden relative">
-        <main
-          id="main-content"
-          className="flex-1 overflow-y-auto relative"
-          style={{ paddingBottom: 'var(--safe-area-inset-bottom, 0px)' }}
-          tabIndex={-1}
-        >
-          {children}
-        </main>
         {!checkPermissions('system', 'hide') && (
           <nav
             id="mobile-sidebar-menu"
@@ -94,6 +86,14 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
           onClick={toggleMobileMenu}
           aria-hidden="true"
         />
+        <main
+          id="main-content"
+          className="flex-1 overflow-y-auto relative"
+          style={{ paddingBottom: 'var(--safe-area-inset-bottom, 0px)' }}
+          tabIndex={-1}
+        >
+          {children}
+        </main>
         <AskConsent />
       </div>
     </div>
