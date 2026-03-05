@@ -60,6 +60,7 @@ export function useRoomFilters({
         offset: 0,
         limit: 0,
         type: -1,
+        status: 1,
       });
 
       if (response.error) {
