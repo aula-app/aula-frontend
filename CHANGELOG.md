@@ -1,8 +1,20 @@
-## 1.7.3
+## 1.8.2
+
+- **Technical improvements**
+  - Make tests work in a multi-instance environment (specify instance with envvar INSTANCE_CODE)
+  - Better breadcrumb navigation for mobile
+
+## 1.8.1
+
+- **Technical improvements**
+  - Fix failing tests due to playwright not working with import.meta of vite
+
+## 1.8.0
 
 - **Bug fixes**
   - some buttons from sidebar where not clickable on mobile
   - Fix Versions of aula-Software shown in the About page
+  - Max password length on login page should be the same like in set/change password forms
 - **Technical improvements**
   - Send app/web version to aula backend API for feature toggling
 

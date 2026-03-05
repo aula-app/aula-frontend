@@ -21,10 +21,7 @@ test.describe.serial('Request User Data - Export Request and Download Flow', () 
 
       // Click the request data export button
       await formInteractions.clickButton(userPage, 'request-data-export-button');
-      await userPage.waitForLoadState('networkidle');
-
-      const confirmationMessage = userPage.getByRole('alert').getByTestId('SuccessOutlinedIcon');
-      await expect(confirmationMessage).toBeVisible({ timeout: 5000 });
+      await expect(userPage.getByTestId('success-alert')).toBeVisible();
     });
   });
 
@@ -59,9 +56,11 @@ test.describe.serial('Request User Data - Export Request and Download Flow', () 
   test('User can see the approval and download their data', async ({ userPage, userConfig }) => {
     await test.step('Download user data', async () => {
       await navigation.goToMessages(userPage);
+      const messagesView = userPage.getByTestId('user-messages-view');
+      await expect(messagesView).toBeVisible({ timeout: 5000 });
 
       // Click on the data export message (find by headline text)
-      const exportMessage = userPage.getByText(userConfig.displayName).first();
+      const exportMessage = messagesView.getByText(userConfig.displayName).first();
       await expect(exportMessage).toBeVisible({ timeout: 5000 });
       await exportMessage.click();
       await userPage.waitForLoadState('networkidle');

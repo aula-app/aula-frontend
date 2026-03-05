@@ -25,7 +25,8 @@ export class ApiClient {
     this.config = config;
 
     // Set up localStorage for services to work (mock if not available in Node.js)
-    if (typeof localStorage !== 'undefined') {
+    if (typeof localStorage !== 'undefined' && localStorage.setItem) {
+      console.log(`🎛️ Setting config to localStorage: ${JSON.stringify(config)}`);
       localStorage.setItem('api_url', config.apiUrl);
       localStorage.setItem('code', config.instanceCode);
       localStorage.setItem('token', config.jwtToken || '');
@@ -40,8 +41,14 @@ export class ApiClient {
         removeItem: (key: string) => {
           if ((global as any).localStorageData) delete (global as any).localStorageData[key];
         },
+        clear: () => {
+          (global as any).localStorageData = {};
+        },
+        length: 0,
+        key: (_index: number) => null,
       };
       (global as any).localStorage = mockStorage;
+      console.log(`🎛️ Setting config to mockStorage: ${JSON.stringify(config)}`);
       mockStorage.setItem('api_url', config.apiUrl);
       mockStorage.setItem('code', config.instanceCode);
       mockStorage.setItem('token', config.jwtToken || '');

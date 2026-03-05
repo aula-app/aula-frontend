@@ -93,8 +93,35 @@ export const remove = async (page: Page, data: types.UserData) => {
   }
 };
 
+export const ensureInstanceEntered = async (page: Page, username?: string) => {
+  const instanceCodeAlreadySet = await page.getByTestId('current-instance-code').isVisible();
+  if (instanceCodeAlreadySet) {
+    return true;
+  }
+
+  const instance = process.env.INSTANCE_CODE || 'SINGLE';
+  const instanceCodeInputDiv = page.getByTestId('input-instance-code');
+  if ((await instanceCodeInputDiv.count()) === 0) {
+    console.log(
+      `${instance === 'SINGLE' ? '✅' : '⚠️'} No instance selector input found on the page. User: ${username}`
+    );
+    if (instance !== 'SINGLE') {
+      throw new Error('Instance selector input not found on the page, but we are testing a multi-instance FE.');
+    }
+
+    // if there's no instance code input, then we must be on single-instance FE, right? 😏
+    return true;
+  } else {
+    console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: ${username}`);
+    await instanceCodeInputDiv.locator(page.locator('input[name="instance-code"]')).fill(instance);
+    await page.getByTestId('submit-instance-code').click();
+    return true;
+  }
+};
+
 export const loginAttempt = async (page: Page, data: types.UserData) => {
   await page.goto(host);
+  await ensureInstanceEntered(page, data.username);
   await page.waitForLoadState('networkidle');
   await page.waitForSelector('input[name="username"]', { timeout: 10000 });
   await page.fill('input[name="username"]', data.username);
@@ -163,15 +190,16 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
 
 export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {
   await page.goto(host);
+  await ensureInstanceEntered(page, data.username);
 
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', tempPass);
   await page.locator('button[type="submit"]').click({ timeout: 1000 });
 
-  const oldPasswordButton = page.locator('input[name="oldPassword"]');
-  await expect(oldPasswordButton).toBeVisible();
+  const oldPasswordInput = page.locator('input[name="oldPassword"]');
+  await expect(oldPasswordInput).toBeVisible();
+  await oldPasswordInput.fill(tempPass);
 
-  await page.fill('input[name="oldPassword"]', tempPass);
   await page.fill('input[name="newPassword"]', data.password);
   await page.fill('input[name="confirmPassword"]', data.password);
   await page.locator('button[type="submit"]').click({ timeout: 1000 });

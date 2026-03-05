@@ -28,7 +28,7 @@ const AboutView = () => {
     <Stack sx={{ padding: '20px 20px', overflow: 'auto' }}>
       <h2>aula-Software</h2>
       <code>
-        aula-frontend: &nbsp;{import.meta.env.VITE_APP_VERSION}
+        aula-frontend: &nbsp;{import.meta.env?.VITE_APP_VERSION ?? 'unknown'}
         <br />
         aula-backend.v1: &nbsp;{versions?.['aula-backend.v1']?.['aula-backend']?.running ?? 'unknown'}
         <br />

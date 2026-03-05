@@ -36,7 +36,7 @@ const UserMessagesView = () => {
   }, []);
 
   return (
-    <Stack gap={1} p={2} sx={{ overflowY: 'auto' }}>
+    <Stack gap={1} p={2} sx={{ overflowY: 'auto' }} data-testid="user-messages-view">
       <Typography variant="h1">{t('scopes.messages.plural')}</Typography>
       {!isLoading && !error && messages.length === 0 && (
         <EmptyState title={t('ui.empty.users.title')} description={t('ui.empty.users.description')} />
