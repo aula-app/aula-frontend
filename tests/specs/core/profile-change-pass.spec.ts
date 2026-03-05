@@ -31,15 +31,15 @@ test.describe.serial('Change pass flow', () => {
     await navigation.goToProfile(user);
     await navigation.openAccordion(user, 'security-panel-button');
 
-    for (const [form, value] of Object.entries(passFields)) {
-      await formInteractions.fillForm(user, form, value);
+    for (const [formFieldName, value] of Object.entries(passFields)) {
+      await formInteractions.fillForm(user, formFieldName, value);
     }
 
     await formInteractions.clickButton(user, 'submit-new-password');
   };
 
-  const checkSuccessDiv = async (user: Page) => {
-    const successDiv = user.getByTestId('password-change-success');
+  const checkSuccessDiv = async (userPage: Page) => {
+    const successDiv = userPage.getByTestId('password-change-success');
     await successDiv.waitFor({ state: 'visible', timeout: TIMEOUTS.THREE_SECONDS });
 
     const closeButton = successDiv.locator('button[aria-label="Close"]');

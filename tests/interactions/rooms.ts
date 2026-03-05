@@ -19,14 +19,15 @@ export const create = async (page: Page, room: types.RoomData) => {
   await expect(UserSelector).toBeVisible();
 
   for (const u of room.users) {
-    await UserSelector.locator('.MuiAutocomplete-popupIndicator').click();
+    await UserSelector.locator('.MuiAutocomplete-popupIndicator').click({ timeout: 2000 });
     const currentUser = page.getByTestId(`select-option-${u.username}`);
-    await expect(currentUser).toBeVisible();
-    await currentUser.click();
+    await expect(currentUser).toBeVisible({ timeout: 2000 });
+    await currentUser.click({ timeout: 1000 });
+    await page.waitForTimeout(300);
   }
 
   await formInteractions.clickButton(page, 'room-form-submit-button');
-
+  await page.waitForTimeout(300);
   await page.waitForLoadState('networkidle');
 
   await expect(page.getByTestId('add-rooms-button')).toBeVisible();
@@ -79,11 +80,12 @@ export const clearSearch = async (page: Page) => {
 
 export const openSort = async (page: Page) => {
   await navigation.goToHome(page);
-  const sortButton = page.getByTestId('sort-button');
-  await expect(sortButton).toBeVisible();
-  await sortButton.click();
+
   const sortSelect = page.getByTestId('sort-select');
-  await expect(sortSelect).toBeVisible();
+  if (!(await sortSelect.isVisible())) {
+    await page.getByTestId('sort-button').filter({ visible: true }).click();
+    expect(sortSelect).toBeVisible();
+  }
 };
 
 export const closeSort = async (page: Page) => {

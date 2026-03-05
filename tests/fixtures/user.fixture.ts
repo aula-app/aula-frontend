@@ -59,6 +59,7 @@ export const test = browserTest.extend<UserFixtures>({
         await apiUsers.saveAuthenticationState(userPage, token, storageStatePath);
         console.log(`✅ User "${name}" (${userData.username}) registered and authenticated via API`);
 
+        // @TODO: nikola - try without closing these
         await userPage.close();
         await userContext.close();
       } catch (error) {

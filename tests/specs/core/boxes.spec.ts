@@ -18,8 +18,11 @@ test.describe.serial('Box Management - Creation, phase changes and Permissions',
   let roomContext: roomsFixture.RoomContext;
   let box: BoxData;
 
+  // @TODO: nikola - should be in beforeAll?
   const boxIdea = entities.createIdea('box-idea');
 
+  // @TODO: nikola - if we add user to a Room in this test, it can get recreated for "User can access the new box" so it
+  //   won't be in the Room at that point
   test('Admin can create a box inside a room', async ({ adminPage, userConfig, studentConfig }) => {
     await test.step('Setup room context', async () => {
       // Setup shared room context on first test

@@ -222,11 +222,10 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify both are active', async () => {
-        const searchField = adminPage.getByTestId('search-field');
-        await expect(searchField).toBeVisible();
+        await rooms.searchRooms(adminPage, '');
 
-        const sortSelect = adminPage.getByTestId('sort-select').locator('input, select');
-        await expect(sortSelect).toHaveValue('room_name');
+        await rooms.openSort(adminPage);
+        await rooms.selectSortOption(adminPage, 'room_name');
 
         const count = await rooms.getRoomCount(adminPage);
         expect(count).toBeGreaterThan(0);

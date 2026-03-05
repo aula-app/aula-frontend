@@ -8,14 +8,13 @@ export const clickOnPageItem = async (page: Page, text: string) => {
   const item = page.getByText(text);
   await expect(item).toBeVisible();
   await item.click({ timeout: TIMEOUTS.ONE_SECOND });
+  await page.waitForTimeout(10);
   await page.waitForLoadState('networkidle');
 };
 
 export const clickOnLink = async (page: Page, path: string) => {
-  const button = page.locator(`a[href="${path}"]`);
-  await expect(button).toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
-  await button.click({ timeout: TIMEOUTS.ONE_SECOND });
-  await page.waitForURL((url) => url.pathname.includes(path), { timeout: TIMEOUTS.ONE_SECOND });
+  await page.locator(`a[href="${path}"]`).filter({ visible: true }).click();
+  await page.waitForURL((url) => url.pathname.includes(path));
   await page.waitForLoadState('networkidle');
 };
 
@@ -56,9 +55,7 @@ export const goToHome = async (page: Page) => {
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
 
-  const roomCard = page.getByTestId('room-card').filter({ hasText: roomName });
-  await expect(roomCard).toBeVisible();
-  await roomCard.click();
+  await page.getByTestId('room-card').filter({ hasText: roomName, visible: true }).click();
   await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'));
   await page.waitForLoadState('networkidle');
 };

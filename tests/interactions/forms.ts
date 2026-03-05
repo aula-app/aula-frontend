@@ -45,6 +45,8 @@ const openSelectDropdown = async (page: Page, testId: string) => {
     await dropdownIcon.click({ force: true });
   }
 
+  // await page.waitForTimeout(100);
+
   const dropdown = page.getByTestId(`${testId}-list`);
   await expect(dropdown).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
 };
@@ -91,6 +93,7 @@ export const selectOptionByValue = async (page: Page, testId: string, value: str
 
   // Now select the option
   await option.click({ timeout: TIMEOUTS.ONE_SECOND });
+  // await page.waitForTimeout(100);
 
   // Verify the selection by checking if the field now contains the option text
   const displayedValue = page.getByTestId(testId);
@@ -105,4 +108,5 @@ export const selectMultiAutocompleteOption = async (page: Page, testId: string, 
   const option = page.getByTestId(`select-option-${optionId}`);
   await expect(option).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
   await option.click({ timeout: TIMEOUTS.ONE_SECOND });
+  // await page.waitForTimeout(100);
 };

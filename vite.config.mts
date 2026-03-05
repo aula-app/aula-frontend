@@ -25,7 +25,7 @@ export default defineConfig({
   server: {
     open: true,
     port: 3000,
-    watch: { ignored: ['**/tests/**'] },
+    watch: { ignored: ['**/tests/**', '**/auth_states/**', '**/ios/**', '**/android/**'] },
   },
   build: {
     outDir: 'build',
