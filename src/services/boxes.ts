@@ -50,6 +50,7 @@ export async function getBoxesByPhase(phase_id: number, room_id?: string): Promi
     arguments: {
       phase_id,
       room_id,
+      status: 1,
     },
   });
 
