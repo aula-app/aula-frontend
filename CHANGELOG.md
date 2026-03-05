@@ -1,3 +1,8 @@
+## 1.8.3
+
+- **Bug fixes**
+  - Hide inactive rooms
+
 ## 1.8.2
 
 - **Technical improvements**
