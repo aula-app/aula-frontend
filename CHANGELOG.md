@@ -1,6 +1,8 @@
 ## 1.8.3
 
 - **Bug fixes**
+  - Private layout header, sidebar, and main content now respect iOS safe areas so nothing hides under the notch or home indicator
+  - Accessible dialogs apply safe-area padding/margins in fullscreen and centered modes to keep controls visible on notched devices
   - Hide inactive rooms
 
 ## 1.8.2
@@ -17,7 +19,7 @@
 ## 1.8.0
 
 - **Bug fixes**
-  - some buttons from sidebar where not clickable on mobile
+  - Some buttons from sidebar where not clickable on mobile
   - Fix Versions of aula-Software shown in the About page
   - Max password length on login page should be the same like in set/change password forms
 - **Technical improvements**
