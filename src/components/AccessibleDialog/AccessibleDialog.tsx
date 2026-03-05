@@ -112,30 +112,14 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
     const { t } = useTranslation();
     const dialogRef = useRef<HTMLDivElement>(null);
     const fullScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-    const { PaperProps, ...restDialogProps } = dialogProps;
+    const { ...restDialogProps } = dialogProps;
 
     // Ensure dialogs observe platform safe areas so content never overlaps system chrome
-    const safeAreaPaperSx = fullScreen
-      ? {
-          paddingTop: 'var(--safe-area-inset-top, 0px)',
-          paddingBottom: 'var(--safe-area-inset-bottom, 0px)',
-          paddingLeft: 'var(--safe-area-inset-left, 0px)',
-          paddingRight: 'var(--safe-area-inset-right, 0px)',
-        }
-      : {
-          marginTop: 'var(--safe-area-inset-top, 0px)',
-          marginBottom: 'var(--safe-area-inset-bottom, 0px)',
-          marginLeft: 'var(--safe-area-inset-left, 0px)',
-          marginRight: 'var(--safe-area-inset-right, 0px)',
-        };
-
-    const existingPaperSx = PaperProps?.sx;
-    const mergedPaperProps = {
-      ...(PaperProps ?? {}),
-      sx: [
-        safeAreaPaperSx,
-        ...(Array.isArray(existingPaperSx) ? existingPaperSx : existingPaperSx ? [existingPaperSx] : []),
-      ],
+    const safeAreaPaperSx = {
+      paddingTop: 'var(--safe-area-inset-top, 0px)',
+      paddingBottom: 'var(--safe-area-inset-bottom, 0px)',
+      paddingLeft: 'var(--safe-area-inset-left, 0px)',
+      paddingRight: 'var(--safe-area-inset-right, 0px)',
     };
 
     // Implement handle for external control
@@ -186,7 +170,7 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
         fullScreen={fullScreen}
         data-testid={testId}
         {...ariaProps}
-        slotProps={{ paper: mergedPaperProps }}
+        slotProps={{ paper: { sx: safeAreaPaperSx } }}
         {...restDialogProps}
       >
         <DialogTitle
