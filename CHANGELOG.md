@@ -3,6 +3,7 @@
 - **Bug fixes**
   - Private layout header, sidebar, and main content now respect iOS safe areas so nothing hides under the notch or home indicator
   - Accessible dialogs apply safe-area padding/margins in fullscreen and centered modes to keep controls visible on notched devices
+  - Hide inactive rooms
 
 ## 1.8.2
 
