@@ -54,7 +54,7 @@ export async function getIdeasByRoom(room_id: string): Promise<GetIdeasResponse>
   const response = await databaseRequest({
     model: 'Idea',
     method: 'getIdeasByRoom',
-    arguments: { room_id },
+    arguments: { room_id, status: 1 },
   });
 
   return response as GetIdeasResponse;
@@ -81,7 +81,7 @@ export async function getIdeasByBox(args: BoxIdeasListRequest): Promise<GetIdeas
   const response = await databaseRequest({
     model: 'Idea',
     method: 'getIdeasByTopic',
-    arguments: { orderby: ORDER_BY_CREATION_DATE, ...args },
+    arguments: { orderby: ORDER_BY_CREATION_DATE, ...args, status: 1 },
   });
 
   return response as GetIdeasResponse;
@@ -105,7 +105,7 @@ export async function getUserIdeasByPhase(phase_id: number): Promise<GetIdeasRes
     {
       model: 'Idea',
       method: 'getUserIdeasByPhase',
-      arguments: { phase_id },
+      arguments: { phase_id, status: 1 },
     },
     ['user_id']
   );
