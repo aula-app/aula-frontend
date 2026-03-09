@@ -2,6 +2,7 @@
 
 - **Bug fixes**
   - Hide inactive rooms
+  - Fix oversized icon on announcements
 
 ## 1.8.2
 
