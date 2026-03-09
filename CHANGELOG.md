@@ -2,6 +2,7 @@
 
 - **Bug fixes**
   - Hide inactive rooms
+  - Retrieve about page link on sidebar
 
 ## 1.8.2
 
