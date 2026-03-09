@@ -83,7 +83,7 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
 
   return (
     <ul
-      className="flex flex-col flex-1 overflow-auto px-1 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+      className="flex flex-col flex-1 h-full overflow-auto px-1 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
       aria-label={t('ui.navigation.mainMenu')}
       role="menu"
       ref={navRef}
