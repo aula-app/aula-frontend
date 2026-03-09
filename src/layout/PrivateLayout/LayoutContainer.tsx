@@ -70,7 +70,7 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
             ref={sidebarRef}
             aria-label="Main navigation"
             className={
-              'flex w-64 h-full border-r absolute bg-paper border-gray-200 no-print overflow-y-auto transition-all z-1100 ' +
+              'flex w-64 h-full border-r absolute bg-paper border-gray-200 no-print overflow-y-auto transition-all z-20 ' +
               (mobileMenuOpen ? 'left-0' : '-left-64') +
               ' sm:relative sm:left-0'
             }
@@ -80,7 +80,7 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
         )}
         <div
           className={
-            'fixed inset-0 bg-black/50 z-1050 transition-opacity ' +
+            'fixed inset-0 bg-black/50 transition-opacity z-10 ' +
             (mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none')
           }
           onClick={toggleMobileMenu}
@@ -88,7 +88,7 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
         />
         <main
           id="main-content"
-          className="flex-1 overflow-y-auto relative"
+          className="flex-1 overflow-y-auto relative z-0"
           style={{ paddingBottom: 'var(--safe-area-inset-bottom, 0px)' }}
           tabIndex={-1}
         >
