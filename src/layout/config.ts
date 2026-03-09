@@ -99,4 +99,10 @@ export const SIDEBAR_ITEMS: Array<PageLink> = [
     icon: 'settings',
     permission: () => checkPermissions('system', 'edit'),
   },
+  {
+    title: 'about',
+    path: '/about',
+    icon: 'about',
+    permission: () => true,
+  },
 ];

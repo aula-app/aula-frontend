@@ -3,6 +3,7 @@
 - **Bug fixes**
   - Hide inactive rooms
   - Fix oversized icon on announcements
+  - Retrieve about page link on sidebar
 
 ## 1.8.2
 

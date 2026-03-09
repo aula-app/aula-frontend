@@ -13,6 +13,7 @@ import {
   HiOutlineFlag,
   HiOutlineHeart,
   HiOutlineHome,
+  HiOutlineInformationCircle,
   HiOutlineLightBulb,
   HiOutlineMegaphone,
   HiOutlineMoon,
@@ -29,6 +30,7 @@ import { IoBugOutline } from 'react-icons/io5';
  * Only includes icons that are currently in use
  */
 export const ICONS = {
+  about: HiOutlineInformationCircle,
   announcement: HiOutlineMegaphone,
   announcements: HiOutlineMegaphone,
   back: HiOutlineChevronLeft,
