@@ -66,10 +66,18 @@ const ResetMultiplePasswordsButton = forwardRef<HTMLButtonElement, Props>(
       setConfirm(true);
     };
 
-    const closeDialog = (event?: SyntheticEvent) => {
-      event?.stopPropagation();
+    const requestClose = () => {
       if (isProcessing) return;
       setConfirm(false);
+    };
+
+    const closeDialog = (event?: SyntheticEvent) => {
+      event?.stopPropagation();
+      requestClose();
+    };
+
+    const handleDialogClose = (_event: object, _reason: 'backdropClick' | 'escapeKeyDown') => {
+      requestClose();
     };
 
     const handleResetAll = async (event: SyntheticEvent) => {
@@ -155,7 +163,7 @@ const ResetMultiplePasswordsButton = forwardRef<HTMLButtonElement, Props>(
         </Button>
         <Dialog
           open={confirm}
-          onClose={closeDialog}
+          onClose={handleDialogClose}
           aria-labelledby="reset-multiple-passwords-title"
           aria-describedby="reset-multiple-passwords-description"
           aria-modal="true"
