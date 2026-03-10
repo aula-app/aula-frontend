@@ -55,6 +55,9 @@
       "button": "Reset password",
       "link": "Forgot password?",
       "message": "Are you sure you want to request a new password for this user?",
+      "messageEmail": "Each selected user will receive reset instructions via email.",
+      "messageNoEmail": "Some users do not have registered their emails. Remember to share the new password manually.",
+      "messageMultiple": "Are you sure you want to request new passwords for {{count}} {{target}}? {{var}}",
       "recover": "Recover password",
       "recovery": "Password Recovery",
       "success": "The password was reset. Registered users will receive a reset link in their email."
