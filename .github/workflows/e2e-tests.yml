@@ -11,6 +11,7 @@ on:
 env:
   AULA_HOST: "host.docker.internal"
   AULA_PORT: "8000"
+  PLAYWRIGHT_VERSION: "1.58.2"
 
 jobs:
   run-aula:
@@ -126,7 +127,8 @@ jobs:
             -p ${{ env.PLAYWRIGHT_PORT }}:3000 \
             --add-host host.docker.internal=host-gateway \
             --detach \
-            mcr.microsoft.com/playwright:v1.58.2-jammy /bin/sh -c "npx -y playwright@1.58.2 run-server --port 3000 --host 0.0.0.0"
+            mcr.microsoft.com/playwright:v${{ env.PLAYWRIGHT_VERSION }} \
+            /bin/sh -c "npx -y playwright@${{ env.PLAYWRIGHT_VERSION }} run-server --port 3000 --host 0.0.0.0"
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -134,7 +136,7 @@ jobs:
           node-version: 22
 
       - name: Install yarn
-        run: npm install --global yarn
+        run: corepack install --global yarn
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -145,6 +147,8 @@ jobs:
           APP_FRONTEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
           APP_BACKEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
           REMOTE_BROWSER: 1
+          ADMIN_USERNAME: "admin"
+          ADMIN_PASSWORD: "abc123"
         run: yarn test
 
       - name: Stop playwright service
