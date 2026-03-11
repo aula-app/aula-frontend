@@ -35,7 +35,7 @@ jobs:
           path: ./roles/ansible-role-aula
 
       - name: Setup docker builder
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Build ansible container image
         run: |
