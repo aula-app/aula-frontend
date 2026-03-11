@@ -1,15 +1,11 @@
 name: E2E Tests
 
 on:
-  # schedule:
-  #   - cron: "15 5 * * *"
+  schedule:
+    - cron: "15 5 * * *" # Every day at 5:15 am
   workflow_dispatch:
-  # WARN: Remove when ready `pull_request_target` is bad juju
-  pull_request_target:
-    types: [opened, synchronize]
 
 env:
-  AULA_HOST: "host.docker.internal"
   AULA_PORT: "8000"
   PLAYWRIGHT_VERSION: "1.58.2"
 
@@ -34,6 +30,7 @@ jobs:
           ssh-key: "${{ secrets.ANSIBLE_DEPLOY_KEY }}"
           path: ./roles/ansible-role-aula
 
+      # TODO: Build in ansible-role-aula repo
       - name: Setup docker builder
         uses: docker/setup-buildx-action@v4
 
@@ -65,14 +62,14 @@ jobs:
                 apache2_user: www
                 network:
                   ssl_enabled: false
-                  base_domain: "${{ env.AULA_HOST }}"
+                  base_domain: "host.docker.internal"
                   httpPort: "${{ env. AULA_PORT }}"
                 email:
                   backend: log
                 aula:
                   compose_name: ${{ env.COMPOSE_NAME }}
                   environment: dev
-                  base_url: "http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}"
+                  base_url: "http://host.docker.internal:${{ env. AULA_PORT }}"
                   superkey: "hunter2"
                   is_pr_deployment_enabled: false
                   multi_instance_enabled: false
@@ -96,8 +93,8 @@ jobs:
                   client_id: "AUTH0-CLIENT-ID"
                   client_secret: auth0-secret
                   cookie_secret: hunter2
-                  redirect_uri: "http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}/api/controllers/auth0.php"
-                  frontend_redirect: "http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}/oauth-login/"
+                  redirect_uri: "http://host.docker.internal:${{ env. AULA_PORT }}/api/controllers/auth0.php"
+                  frontend_redirect: "http://host.docker.internal:${{ env. AULA_PORT }}/oauth-login/"
           EOF
 
       - name: Run ansible
@@ -120,6 +117,9 @@ jobs:
         run: |
           echo "PLAYWRIGHT_PORT=$(shuf -i 3000-5000 -n 1)" >> $GITHUB_ENV
 
+      # Playwright can't be started using the 'service' feature of actions as the
+      # server needs to be run manually in the container and actions doesn't support
+      # this for 'service's.
       - name: Start playwright image
         run: |
           docker run --rm \
@@ -144,12 +144,12 @@ jobs:
       - name: Run E2E tests
         env:
           PW_TEST_CONNECT_WS_ENDPOINT: ws://127.0.0.1:${{ env.PLAYWRIGHT_PORT }}/
-          APP_FRONTEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
-          APP_BACKEND_HOST: http://${{ env.AULA_HOST }}:${{ env. AULA_PORT }}
-          REMOTE_BROWSER: 1
+          APP_FRONTEND_HOST: http://host.docker.internal:${{ env. AULA_PORT }}
+          APP_BACKEND_HOST: http://host.docker.internal:${{ env. AULA_PORT }}
+          REMOTE_BROWSER: 1 # Enable the use of playwright server in the js
           ADMIN_USERNAME: "admin"
           ADMIN_PASSWORD: "abc123"
-        run: yarn test
+        run: yarn playwright test --reporter=github
 
       - name: Stop playwright service
         if: ${{ always() }}

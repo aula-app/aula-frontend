@@ -33,9 +33,6 @@ export default async function globalSetup() {
     context = await browser.newContext();
     page = await context.newPage();
 
-    page.on('request', request => console.log('>>', request.method(), request.url()));
-    page.on('response', response => console.log('<<', response.status(), response.url()));
-
     // Log in admin
     await userInteractions.login(page, admin);
 
