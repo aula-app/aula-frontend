@@ -64,9 +64,7 @@ export const goToRoom = async (page: Page, roomName: string) => {
 export const goToWildIdea = async (page: Page, roomName: string, ideaName: string) => {
   await goToRoom(page, roomName);
 
-  const ideaCard = page.getByTestId(`idea-${ideaName}`);
-  await expect(ideaCard).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
-  await ideaCard.click();
+  await page.getByTestId(`idea-${ideaName}`).filter({ visible: true }).click();
   await page.waitForURL((url) => url.pathname.includes('/idea'), { timeout: TIMEOUTS.THREE_SECONDS });
   await page.waitForLoadState('networkidle');
 };
@@ -74,9 +72,7 @@ export const goToWildIdea = async (page: Page, roomName: string, ideaName: strin
 export const goToPhase = async (page: Page, roomName: string, phaseNumber: number) => {
   await goToRoom(page, roomName);
 
-  const phaseTab = page.getByTestId(`link-to-phase-${phaseNumber}`);
-  await expect(phaseTab).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
-  await phaseTab.click();
+  await page.getByTestId(`link-to-phase-${phaseNumber}`).filter({ visible: true }).click();
   await page.waitForLoadState('networkidle');
 };
 

@@ -198,9 +198,7 @@ export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass:
   await page.fill('input[name="password"]', tempPass);
   await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
 
-  const oldPasswordInput = page.locator('input[name="oldPassword"]');
-  await expect(oldPasswordInput).toBeVisible();
-  await oldPasswordInput.fill(tempPass);
+  await page.locator('input[name="oldPassword"]').filter({ visible: true }).fill(tempPass);
 
   await page.fill('input[name="newPassword"]', data.password);
   await page.fill('input[name="confirmPassword"]', data.password);

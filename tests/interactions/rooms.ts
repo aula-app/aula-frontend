@@ -43,17 +43,13 @@ export const remove = async (page: Page, room: types.RoomData) => {
 
 export const openSearch = async (page: Page) => {
   await navigation.goToHome(page);
-  const searchButton = page.getByTestId('search-button');
-  await expect(searchButton).toBeVisible();
-  await searchButton.click();
+  await page.getByTestId('search-button').filter({ visible: true }).click();
   const searchField = page.getByTestId('search-field').locator('input');
   await expect(searchField).toBeVisible();
 };
 
 export const closeSearch = async (page: Page) => {
-  const searchButton = page.getByTestId('search-button');
-  await expect(searchButton).toBeVisible();
-  await searchButton.click();
+  await page.getByTestId('search-button').filter({ visible: true }).click();
   const searchField = page.getByTestId('search-field').locator('input');
   await expect(searchField).not.toBeVisible();
 };
@@ -87,28 +83,18 @@ export const openSort = async (page: Page) => {
 };
 
 export const closeSort = async (page: Page) => {
-  const sortButton = page.getByTestId('sort-button');
-  await expect(sortButton).toBeVisible();
-  await sortButton.click();
+  await page.getByTestId('sort-button').filter({ visible: true }).click();
   const sortSelect = page.getByTestId('sort-select');
   await expect(sortSelect).not.toBeVisible();
 };
 
 export const selectSortOption = async (page: Page, sortValue: string) => {
-  const sortSelect = page.getByTestId('sort-select');
-  await expect(sortSelect).toBeVisible();
-  await sortSelect.click();
-
-  const sortOption = page.getByTestId(`sort-option-${sortValue}`);
-  await expect(sortOption).toBeVisible();
-  await sortOption.click();
+  await page.getByTestId('sort-select').filter({ visible: true }).click();
+  await page.getByTestId(`sort-option-${sortValue}`).filter({ visible: true }).click();
 };
 
-export const toggleSortDirection = async (page: Page) => {
-  const sortDirectionButton = page.getByTestId('sort-direction-button');
-  await expect(sortDirectionButton).toBeVisible();
-  await sortDirectionButton.click();
-};
+export const toggleSortDirection = async (page: Page) =>
+  await page.getByTestId('sort-direction-button').filter({ visible: true }).click();
 
 export const getRoomCount = async (page: Page): Promise<number> => {
   await navigation.goToHome(page);
@@ -123,7 +109,7 @@ export const getRoomCount = async (page: Page): Promise<number> => {
 
 export const getFirstRoomName = async (page: Page): Promise<string | null> => {
   await navigation.goToHome(page);
-  const firstRoom = page.getByTestId('room-card').locator(page.locator('h3')).first();
+  const firstRoom = page.getByTestId('room-card').locator(page.locator('h3'));
   const isVisible = await firstRoom.isVisible().catch(() => false);
   if (!isVisible) return null;
 
