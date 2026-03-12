@@ -73,8 +73,13 @@ const AskConsent = () => {
         },
       }}
     >
-      <Stack direction="row" height={52} alignItems="center" justifyContent="center">
-        <img src={`${getRuntimeConfig().BASENAME}img/Aula_Icon.svg`} alt={t('app.name.logo')} role="img" height="100%" />
+      <Stack direction="row" height={52} alignItems="center" justifyContent="center" position="relative">
+        <img
+          src={`${getRuntimeConfig().BASENAME}img/Aula_Icon.svg`}
+          alt={t('app.name.logo')}
+          role="img"
+          style={{ maxHeight: '100%', padding: 8 }}
+        />
         <Stack flexGrow={1} alignItems="center" justifyContent="center" mr={2}>
           <Typography fontWeight={700} textTransform="uppercase" color="secondary">
             Acknowledgement

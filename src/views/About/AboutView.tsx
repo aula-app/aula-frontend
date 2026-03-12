@@ -25,7 +25,7 @@ const AboutView = () => {
   }, []);
 
   return (
-    <Stack sx={{ padding: '20px 20px', overflow: 'auto' }}>
+    <div className="p-8 overflow-auto">
       <h2>aula-Software</h2>
       <code>
         aula-frontend: &nbsp;{import.meta.env?.VITE_APP_VERSION ?? 'unknown'}
@@ -35,22 +35,18 @@ const AboutView = () => {
         aula-backend.v2: &nbsp;{versions?.['aula-backend.v2']?.['aula-backend']?.running ?? 'unknown'}
       </code>
       <br />
-      <hr />
+      <hr className="my-4" />
       <h2>Herausgeber</h2>
-      aula gGmbH
-      <br />
-      Alte Schönhauser Straße 23/24
-      <br />
-      10119 Berlin
-      <br />
-      Fon: 030-28040850
-      <br />
-      E-Mail: info@aula.de
+      <h4>aula gGmbH</h4>
+      <p>Alte Schönhauser Straße 23/24</p>
+      <p>10119 Berlin</p>
+      <p>Fon: 030-28040850</p>
+      <p>E-Mail: info@aula.de</p>
       <p>
         Die aula gGmbH ist beim Amtsregister Charlottenburg unter der Nummer 244593 B registriert. Vertreten durch:
         Alexa Schaegner (Geschäftsführung), Steffen Wenzel (Geschäftsführung)
       </p>
-    </Stack>
+    </div>
   );
 };
 

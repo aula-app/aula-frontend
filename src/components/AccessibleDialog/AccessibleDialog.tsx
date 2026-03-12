@@ -112,6 +112,15 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
     const { t } = useTranslation();
     const dialogRef = useRef<HTMLDivElement>(null);
     const fullScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+    const { ...restDialogProps } = dialogProps;
+
+    // Ensure dialogs observe platform safe areas so content never overlaps system chrome
+    const safeAreaPaperSx = {
+      paddingTop: 'var(--safe-area-inset-top, 0px)',
+      paddingBottom: 'var(--safe-area-inset-bottom, 0px)',
+      paddingLeft: 'var(--safe-area-inset-left, 0px)',
+      paddingRight: 'var(--safe-area-inset-right, 0px)',
+    };
 
     // Implement handle for external control
     useImperativeHandle(ref, () => ({
@@ -161,7 +170,8 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
         fullScreen={fullScreen}
         data-testid={testId}
         {...ariaProps}
-        {...dialogProps}
+        slotProps={{ paper: { sx: safeAreaPaperSx } }}
+        {...restDialogProps}
       >
         <DialogTitle
           id={dialogTitleId}

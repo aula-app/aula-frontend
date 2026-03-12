@@ -1,30 +1,23 @@
 name: E2E Tests
 
 on:
-  # schedule:
-  #   - cron: "15 5 * * *"
+  schedule:
+    - cron: "15 5 * * *" # Every day at 5:15 am
   workflow_dispatch:
-  # WARN: Remove when ready `pull_request_target` is bad juju
-  pull_request_target:
-    types: [opened, synchronize]
+
+env:
+  AULA_PORT: "8000"
+  PLAYWRIGHT_VERSION: "1.58.2"
 
 jobs:
-  e2e-tests:
+  run-aula:
     runs-on: [self-hosted, cicd]
+    env:
+      COMPOSE_NAME: aula-e2e-${{ github.sha }}
+      AULA_IMAGE: aula-ansible:${{ github.sha }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-
-      - name: Install Ansible
-        run: |
-          uv tool install --with-executables-from ansible-core,ansible-lint ansible
-          uv tool update-shell
 
       - name: Create roles folder
         run: |
@@ -37,36 +30,46 @@ jobs:
           ssh-key: "${{ secrets.ANSIBLE_DEPLOY_KEY }}"
           path: ./roles/ansible-role-aula
 
-      - name: Create Ansible configuration
+      # TODO: Build in ansible-role-aula repo
+      - name: Setup docker builder
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build ansible container image
         run: |
-          cat << 'EOF' > ansible.cfg
-          [defaults]
-          roles_path = ./roles
-          retry_files_enabled = False
-          EOF
+          docker build -f ./roles/ansible-role-aula/.docker/Dockerfile -t ${{ env.AULA_IMAGE }} ./roles/ansible-role-aula/
 
       - name: Create Ansible playbook
         run: |
-          cat << 'EOF' > playbook.yml
-          ---
+          cat <<- 'EOF' > playbook.yml
           - name: Install aula backend locally for E2E testing
             hosts: localhost
-            connection: local
-            gather_facts: true
-            become: false
-            vars:
-              ansible_python_interpreter: /usr/bin/python3
+            become_method: su
+            become_user: root
             roles:
-              - role: ansible-role-aula
+              - aula
+          EOF
+
+      - name: Create inventory file
+        run: |
+          cat <<- 'EOF' > inventory.yml
+          ---
+          all:
+            hosts:
+              localhost:
+                ansible_connection: local
+                ansible_python_interpreter: /usr/local/bin/python3
+                ansible_user: ansible
+                apache2_user: www
                 network:
-                  floating_ip: "127.0.0.1"
-                  base_domain: "127.0.0.1"
+                  ssl_enabled: false
+                  base_domain: "host.docker.internal"
+                  httpPort: "${{ env.AULA_PORT }}"
                 email:
                   backend: log
                 aula:
-                  compose_name: aula-e2e-${{ github.sha }}
+                  compose_name: ${{ env.COMPOSE_NAME }}
                   environment: dev
-                  base_url: "http://127.0.0.1"
+                  base_url: "http://host.docker.internal:${{ env. AULA_PORT }}"
                   superkey: "hunter2"
                   is_pr_deployment_enabled: false
                   multi_instance_enabled: false
@@ -80,6 +83,7 @@ jobs:
                     support: support@aula.local
                   manager:
                     db:
+                      name: "aula_manager"
                       user: "aula_manager_user"
                       pass: "hunter2"
                   backup:
@@ -89,37 +93,77 @@ jobs:
                   client_id: "AUTH0-CLIENT-ID"
                   client_secret: auth0-secret
                   cookie_secret: hunter2
-                  redirect_uri: "http://127.0.0.1/api/controllers/auth0.php"
-                  frontend_redirect: "http://127.0.0.1/oauth-login/"
+                  redirect_uri: "http://host.docker.internal:${{ env. AULA_PORT }}/api/controllers/auth0.php"
+                  frontend_redirect: "http://host.docker.internal:${{ env. AULA_PORT }}/oauth-login/"
           EOF
 
-      - name: Validate Ansible playbook
+      - name: Run ansible
         run: |
-          ansible-playbook playbook.yml --syntax-check
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v /opt/aula:/opt/aula \
+            -v "$(pwd)/playbook.yml":/usr/local/share/aula/ansible/playbook.yml \
+            -v "$(pwd)/inventory.yml":/usr/local/share/aula/ansible/inventory.yml \
+            ${{ env.AULA_IMAGE }} ansible-playbook playbook.yml -i inventory.yml
 
-      - name: Run Ansible playbook locally
+  e2e-tests:
+    runs-on: [self-hosted, cicd]
+    continue-on-error: true # allow failing e2e tests while testing
+    needs: run-aula
+    env:
+      PLAYWRIGHT_SERVICE_NAME: playwright-svc-${{ github.sha }}
+    steps:
+      # Playwright can't be started using the 'service' feature of actions as the
+      # server needs to be run manually in the container and actions doesn't support
+      # this for 'service's.
+      - name: Start playwright image
         run: |
-          ansible-playbook playbook.yml --connection=local -vv
+          docker run --rm \
+            --name ${{ env.PLAYWRIGHT_SERVICE_NAME }} \
+            -p 3000:3000 \
+            --add-host host.docker.internal=host-gateway \
+            --detach \
+            mcr.microsoft.com/playwright:v${{ env.PLAYWRIGHT_VERSION }} \
+            /bin/sh -c "npx -y playwright@${{ env.PLAYWRIGHT_VERSION }} run-server --port 3000 --host 0.0.0.0"
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 24
-          cache: 'yarn'
+          node-version: 22
+
+      - name: Install yarn
+        run: corepack install --global yarn
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
       - name: Run E2E tests
         env:
-          APP_FRONTEND_HOST: http://aula.local
-          APP_BACKEND_HOST: http://aula.local
-        run: yarn test
+          PW_TEST_CONNECT_WS_ENDPOINT: ws://127.0.0.1:3000/
+          APP_FRONTEND_HOST: http://host.docker.internal:${{ env. AULA_PORT }}
+          APP_BACKEND_HOST: http://host.docker.internal:${{ env. AULA_PORT }}
+          REMOTE_BROWSER: 1 # Enable the use of playwright server in the js
+          ADMIN_USERNAME: "admin"
+          ADMIN_PASSWORD: "abc123"
+        run: yarn playwright test --reporter=github
 
-      - name: Cleanup services
-        if: always()
+      - name: Stop playwright service
+        if: ${{ always() }}
         run: |
-          docker compose down --volumes 2>/dev/null || true
+          docker rm -f ${{ env.PLAYWRIGHT_SERVICE_NAME }}
+
+  cleanup:
+    runs-on: [self-hosted, cicd]
+    needs: [run-aula, e2e-tests]
+    # Run cleanup job regardless of previous jobs state
+    if: ${{ always() }}
+    steps:
+      - name: Cleanup running services and files
+        run: |
+          for name in $(docker ps --format '{{ .Names }}'); do
+            if [[ "$name" == ${{ env.COMPOSE_NAME }}* ]]; then
+              echo "Removing: $name"
+              docker rm -f "$name"
+            fi
+          done
           docker ps -a
-          rm -f ansible.cfg playbook.yml
-          rm -rf ./roles/

@@ -63,14 +63,14 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
     <div className="flex flex-col h-dvh w-full overflow-hidden">
       <SkipNavigation mainContentId="main-content" />
       <TopBar mobileMenuOpen={mobileMenuOpen} onToggleMobileMenu={toggleMobileMenu} menuButtonRef={menuButtonRef} />
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 overflow-hidden relative">
         {!checkPermissions('system', 'hide') && (
           <nav
             id="mobile-sidebar-menu"
             ref={sidebarRef}
             aria-label="Main navigation"
             className={
-              'flex w-64 h-full max-h-[calc(100vh-3.5rem)] border-r absolute bg-paper border-gray-200 no-print overflow-y-auto transition-all z-1100 ' +
+              'flex w-64 h-full border-r absolute bg-paper border-gray-200 no-print overflow-y-auto transition-all z-20 ' +
               (mobileMenuOpen ? 'left-0' : '-left-64') +
               ' sm:relative sm:left-0'
             }
@@ -80,13 +80,18 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
         )}
         <div
           className={
-            'fixed inset-0 bg-black/50 z-1050 transition-opacity ' +
+            'fixed inset-0 bg-black/50 transition-opacity z-10 ' +
             (mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none')
           }
           onClick={toggleMobileMenu}
           aria-hidden="true"
         />
-        <main id="main-content" className="flex-1 overflow-y-auto" tabIndex={-1}>
+        <main
+          id="main-content"
+          className="flex-1 overflow-y-auto relative z-0"
+          style={{ paddingBottom: 'var(--safe-area-inset-bottom, 0px)' }}
+          tabIndex={-1}
+        >
           {children}
         </main>
         <AskConsent />

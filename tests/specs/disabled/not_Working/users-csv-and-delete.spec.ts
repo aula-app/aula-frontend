@@ -198,7 +198,13 @@ ${userData.realName};${userData.displayName};${userData.username};;${userData.ab
       expect(sharedContext!.isUserUploaded, 'User should have been uploaded in previous test').toBe(true);
 
       // Create new browser context for the user
-      const userBrowserContext = await (await chromium.launch()).newContext();
+      let browser: Browser | null = null;
+      if (process.env.REMOTE_BROWSER === "1") {
+        browser = await chromium.connect(process.env.PW_TEST_CONNECT_WS_ENDPOINT);
+      } else {
+        browser = await chromium.launch();
+      }
+      const userBrowserContext = await browser.newContext();
       const userPage = await browsers.newPage(userBrowserContext);
 
       sharedContext!.userBrowserContext = userBrowserContext;
