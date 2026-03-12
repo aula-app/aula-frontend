@@ -63,7 +63,7 @@ jobs:
                 network:
                   ssl_enabled: false
                   base_domain: "host.docker.internal"
-                  httpPort: "${{ env. AULA_PORT }}"
+                  httpPort: "${{ env.AULA_PORT }}"
                 email:
                   backend: log
                 aula:
@@ -113,10 +113,6 @@ jobs:
     env:
       PLAYWRIGHT_SERVICE_NAME: playwright-svc-${{ github.sha }}
     steps:
-      - name: Random playwright service host port
-        run: |
-          echo "PLAYWRIGHT_PORT=$(shuf -i 3000-5000 -n 1)" >> $GITHUB_ENV
-
       # Playwright can't be started using the 'service' feature of actions as the
       # server needs to be run manually in the container and actions doesn't support
       # this for 'service's.
@@ -124,7 +120,7 @@ jobs:
         run: |
           docker run --rm \
             --name ${{ env.PLAYWRIGHT_SERVICE_NAME }} \
-            -p ${{ env.PLAYWRIGHT_PORT }}:3000 \
+            -p 3000:3000 \
             --add-host host.docker.internal=host-gateway \
             --detach \
             mcr.microsoft.com/playwright:v${{ env.PLAYWRIGHT_VERSION }} \
@@ -143,7 +139,7 @@ jobs:
 
       - name: Run E2E tests
         env:
-          PW_TEST_CONNECT_WS_ENDPOINT: ws://127.0.0.1:${{ env.PLAYWRIGHT_PORT }}/
+          PW_TEST_CONNECT_WS_ENDPOINT: ws://127.0.0.1:3000/
           APP_FRONTEND_HOST: http://host.docker.internal:${{ env. AULA_PORT }}
           APP_BACKEND_HOST: http://host.docker.internal:${{ env. AULA_PORT }}
           REMOTE_BROWSER: 1 # Enable the use of playwright server in the js
