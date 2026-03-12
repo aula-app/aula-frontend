@@ -8,6 +8,8 @@ export const TIMEOUTS = {
   ONE_SECOND: 1000,
   THREE_SECONDS: 3000,
   FIVE_SECONDS: 5000,
+  ONE_HUNDRED_MILLIS: 100,
+  FIVE_HUNDRED_MILLIS: 500,
 } as const;
 
 export const SELECTORS = {

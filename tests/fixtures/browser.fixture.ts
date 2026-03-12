@@ -81,8 +81,7 @@ export const test = base.extend<BrowserTestFixtures, BrowserWorkerFixtures>({
     const createdPages: { page: Page; username: string; context: BrowserContext }[] = [];
 
     const userPageFactory = async (username: string): Promise<Page> => {
-      console.log(`📖 Loading storage state for ${username}...`);
-
+      console.log(`📖 ${!hasStorageState(username) ? 'Creating' : 'Loading'} storage state for ${username}...`);
       const context = await browser.newContext({
         storageState: hasStorageState(username) ? getStorageStatePath(username) : undefined,
       });

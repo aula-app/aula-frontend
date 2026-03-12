@@ -3,11 +3,6 @@
  * Contains all constants and settings used across tests
  */
 export const TestConstants = {
-  // Timeouts
-  DEFAULT_TIMEOUT: 60000,
-  LOGIN_TIMEOUT: 10000,
-  NAVIGATION_TIMEOUT: 5000,
-
   // Test data
   DEFAULT_PASSWORD: 'aulapassword123',
   TEST_DESCRIPTION: 'created during automated testing',
@@ -38,25 +33,3 @@ export const TestConstants = {
     SUCCESS: '[data-testid="success"]',
   },
 };
-
-/**
- * Test environment configuration
- */
-export class TestEnvironment {
-  static getHost(): string {
-    return process.env.APP_FRONTEND_HOST || 'http://localhost:3000';
-  }
-
-  static isCI(): boolean {
-    return !!process.env.CI;
-  }
-
-  static getTimeout(operation: keyof typeof TestConstants): number {
-    switch (operation) {
-      case 'DEFAULT_TIMEOUT':
-        return TestConstants.DEFAULT_TIMEOUT;
-      default:
-        return TestConstants.DEFAULT_TIMEOUT;
-    }
-  }
-}
