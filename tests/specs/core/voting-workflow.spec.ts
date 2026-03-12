@@ -55,7 +55,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
     });
   });
 
-  test('Admin creates voting box', async ({ adminPage }) => {
+  test('New Box with Ideas to Approval Phase', async ({ adminPage, userPage }) => {
     await test.step('Create voting box without ideas', async () => {
       box = entities.createBox('voting-box', roomContext.room);
       box.discussionDays = 6;
@@ -71,9 +71,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const boxTitle = adminPage.getByTestId('box-card').getByText(box.name);
       await expect(boxTitle).toBeVisible();
     });
-  });
 
-  test('Admin adds ideas to voting box', async ({ adminPage }) => {
     await test.step('Navigate to box and open edit', async () => {
       await navigation.goToRoom(adminPage, roomContext.room.name);
       await navigation.goToPhase(adminPage, roomContext.room.name, PHASES.DISCUSSION);
@@ -86,7 +84,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await boxCard.getByTestId('edit-button').click();
     });
 
-    await test.step('Add both ideas to box using autocomplete', async () => {
+    await test.step("Add both user's ideas to box using autocomplete", async () => {
       // Click the autocomplete field to open dropdown
       const autocompleteField = adminPage.getByTestId('ideas-autocomplete-field');
       await autocompleteField.click();
@@ -122,9 +120,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(adminPage.getByText(idea1.name)).toBeVisible();
       await expect(adminPage.getByText(idea2.name)).toBeVisible();
     });
-  });
 
-  test('Move box to approval phase', async ({ adminPage, userPage }) => {
     await test.step('Change box phase to approval', async () => {
       box.phase = PHASES.APPROVAL;
       await boxes.edit(adminPage, box);
