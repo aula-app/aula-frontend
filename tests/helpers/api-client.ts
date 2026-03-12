@@ -353,6 +353,7 @@ export class ApiClient {
         throw new Error('Failed to add room: No data returned');
       }
 
+      // console.log('📥 Response details:', { response });
       return response.data;
     } catch (exception) {
       console.error('❌ Parsing response exception:', exception);
