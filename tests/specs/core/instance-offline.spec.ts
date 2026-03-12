@@ -36,13 +36,14 @@ test.describe.serial('Instance Offline', () => {
     instanceOnline = online;
   };
 
-  test('Admin can turn instance offline', async ({ adminPage }) => {
-    await test.step('Change instance status to offline', async () => {
+  test('', async ({ adminPage, userPage, userConfig }) => {
+    await test.step('Admin: Change instance status to offline', async () => {
       await changeInstanceStatus(adminPage, false);
     });
-  });
 
-  test('User cannot login with Offline instance', async ({ userPage, userConfig }) => {
+    // @FIXME: nikola - this test is often failing because it relies on user being registered as part of
+    //   user.fixture.ts base test (using api-users.ts#registerUserViaAPI)
+    //   so it only succeeds if the user is already created and in the auth-states (ie. userData) cache
     await test.step('Verify offline view is displayed on attempt to login', async () => {
       try {
         await users.loginAttempt(userPage, userConfig);
@@ -50,16 +51,12 @@ test.describe.serial('Instance Offline', () => {
       const offlineDiv = userPage.getByTestId('school-offline-view');
       await expect(offlineDiv).toBeVisible({ timeout: 5000 });
     });
-  });
 
-  test('Admin can turn instance back online', async ({ adminPage }) => {
-    await test.step('Change instance status to online', async () => {
+    await test.step('Admin: Change instance status to online', async () => {
       await changeInstanceStatus(adminPage, true);
     });
-  });
 
-  test('User can login with Online instance', async ({ userPage, userConfig }) => {
-    await test.step('Login successfully with online instance', async () => {
+    await test.step('User: Login successfully with online instance', async () => {
       await users.login(userPage, userConfig);
     });
   });
