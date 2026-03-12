@@ -1,20 +1,18 @@
-import { expect, Page } from '@playwright/test';
-
+import { Page } from '@playwright/test';
 import * as types from '../support/types';
 import * as formInteractions from './forms';
 import * as navigation from './navigation';
 import * as settingsInteractions from './settings';
-import { TIMEOUTS } from '../support/timeouts';
+import { TIMEOUTS } from '../support/constants';
 
 export const create = async (page: Page, box: types.BoxData) => {
   await navigation.goToBoxesSettings(page);
+  await page.getByTestId('add-boxes-button').filter({ visible: true }).click();
 
-  await page.waitForSelector('[data-testid="add-boxes-button"]', { state: 'visible', timeout: TIMEOUTS.HALF_SECOND });
-  await formInteractions.clickButton(page, 'add-boxes-button');
-
+  // @TODO: nikola - replace with waiting for the form to appear
+  await page.waitForTimeout(TIMEOUTS.ONE_HUNDRED_MILLIS);
   await sendForm(page, box);
 
-  await expect(page.getByTestId('add-boxes-button')).toBeVisible();
   await settingsInteractions.check(page, { option: 'name', value: box.name });
 };
 

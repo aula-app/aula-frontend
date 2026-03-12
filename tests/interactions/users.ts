@@ -205,6 +205,8 @@ export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass:
   await page.fill('input[name="newPassword"]', data.password);
   await page.fill('input[name="confirmPassword"]', data.password);
   await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
+  await page.waitForTimeout(TIMEOUTS.ONE_HUNDRED_MILLIS);
+  await page.waitForLoadState('networkidle');
 
   await login(page, data);
 };
