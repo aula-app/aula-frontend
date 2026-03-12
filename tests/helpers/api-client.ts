@@ -26,7 +26,7 @@ export class ApiClient {
 
     // Set up localStorage for services to work (mock if not available in Node.js)
     if (typeof localStorage !== 'undefined' && localStorage.setItem) {
-      console.log(`🎛️ Setting config to localStorage: ${JSON.stringify(config)}`);
+      console.log(`🎛️ Writing config to localStorage: ${JSON.stringify(config)}`);
       localStorage.setItem('api_url', config.apiUrl);
       localStorage.setItem('code', config.instanceCode);
       localStorage.setItem('token', config.jwtToken || '');
@@ -48,7 +48,7 @@ export class ApiClient {
         key: (_index: number) => null,
       };
       (global as any).localStorage = mockStorage;
-      console.log(`🎛️ Setting config to mockStorage: ${JSON.stringify(config)}`);
+      console.log(`🎛️ Writing config to mockStorage: ${JSON.stringify(config)}`);
       mockStorage.setItem('api_url', config.apiUrl);
       mockStorage.setItem('code', config.instanceCode);
       mockStorage.setItem('token', config.jwtToken || '');
@@ -353,6 +353,7 @@ export class ApiClient {
         throw new Error('Failed to add room: No data returned');
       }
 
+      // console.log('📥 Response details:', { response });
       return response.data;
     } catch (exception) {
       console.error('❌ Parsing response exception:', exception);

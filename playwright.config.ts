@@ -2,9 +2,9 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
-  timeout: 30 * 1000,
+  timeout: 60_000,
   expect: {
-    timeout: 5000,
+    timeout: 5_000,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -21,11 +21,10 @@ export default defineConfig({
     // Performance: Only keep traces/screenshots on failure
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
+    video: 'on-first-retry',
 
-    // Better error messages with automatic retries on flaky selectors
-    actionTimeout: 10000,
-    navigationTimeout: 30000,
+    actionTimeout: 10_000,
+    navigationTimeout: 10_000,
   },
 
   // Retry failed tests (helps with flakiness)

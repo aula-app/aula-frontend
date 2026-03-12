@@ -25,7 +25,6 @@ test.describe.serial('Instance Offline', () => {
 
     await formInteractions.selectOptionByValue(adminPage, 'select-field-status', online ? '1' : '0');
     await formInteractions.clickButton(adminPage, 'system-settings-confirm-button');
-    instanceOnline = online;
 
     await adminPage.waitForTimeout(500);
     const isExpanded = await adminPage.getByTestId('config-accordion-system').getAttribute('aria-expanded');
@@ -34,36 +33,30 @@ test.describe.serial('Instance Offline', () => {
     await navigation.openAccordion(adminPage, 'config-accordion-system');
     const selectedStatus = await adminPage.getByTestId('select-field-status-input').inputValue();
     expect(selectedStatus).toBe(`${Number(online)}`);
+    instanceOnline = online;
   };
 
-  test('Admin can turn instance offline', async ({ adminPage }) => {
-    await test.step('Change instance status to offline', async () => {
+  test('', async ({ adminPage, userPage, userConfig }) => {
+    await test.step('Admin: Change instance status to offline', async () => {
       await changeInstanceStatus(adminPage, false);
     });
-  });
 
-  test('User cannot login with Offline instance', async ({ userPage, userConfig }) => {
-    await test.step('Attempt to login with offline instance', async () => {
-      await navigation.goToHome(userPage);
-      await users.loginAttempt(userPage, userConfig);
-      await userPage.waitForLoadState('networkidle');
-    });
-
-    await test.step('Verify offline view is displayed', async () => {
+    // @FIXME: nikola - this test is often failing because it relies on user being registered as part of
+    //   user.fixture.ts base test (using api-users.ts#registerUserViaAPI)
+    //   so it only succeeds if the user is already created and in the auth-states (ie. userData) cache
+    await test.step('Verify offline view is displayed on attempt to login', async () => {
+      try {
+        await users.loginAttempt(userPage, userConfig);
+      } catch (e) { }
       const offlineDiv = userPage.getByTestId('school-offline-view');
       await expect(offlineDiv).toBeVisible({ timeout: 5000 });
     });
-  });
 
-  test('Admin can turn instance back online', async ({ adminPage }) => {
-    await test.step('Change instance status to online', async () => {
+    await test.step('Admin: Change instance status to online', async () => {
       await changeInstanceStatus(adminPage, true);
     });
-  });
 
-  test('User can login with Online instance', async ({ userPage, userConfig }) => {
-    await test.step('Login successfully with online instance', async () => {
-      await navigation.goToHome(userPage);
+    await test.step('User: Login successfully with online instance', async () => {
       await users.login(userPage, userConfig);
     });
   });

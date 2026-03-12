@@ -1,8 +1,9 @@
 import * as types from '../support/types';
 import * as shared from '../support/utils';
 import { TestConstants } from '../support/config';
+import { UserData } from '../support/types';
 
-export function createRoom(suffix = '', users = []) {
+export function createRoom(suffix = '', users: UserData[] = []) {
   const hash = shared.gensym();
   return {
     name: 'test-room-' + hash + (suffix ? `-${suffix}` : ''),

@@ -55,7 +55,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
     });
   });
 
-  test('Admin creates voting box', async ({ adminPage }) => {
+  test('New Box with Ideas to Approval Phase', async ({ adminPage, userPage }) => {
     await test.step('Create voting box without ideas', async () => {
       box = entities.createBox('voting-box', roomContext.room);
       box.discussionDays = 6;
@@ -71,9 +71,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const boxTitle = adminPage.getByTestId('box-card').getByText(box.name);
       await expect(boxTitle).toBeVisible();
     });
-  });
 
-  test('Admin adds ideas to voting box', async ({ adminPage }) => {
     await test.step('Navigate to box and open edit', async () => {
       await navigation.goToRoom(adminPage, roomContext.room.name);
       await navigation.goToPhase(adminPage, roomContext.room.name, PHASES.DISCUSSION);
@@ -82,36 +80,36 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const boxCard = adminPage.getByTestId('box-card');
       await expect(boxCard.getByText(box.name)).toBeVisible();
       await boxCard.getByTestId('more-options-button').click();
-      await adminPage.waitForTimeout(500);
+      await adminPage.waitForTimeout(100);
       await boxCard.getByTestId('edit-button').click();
     });
 
-    await test.step('Add both ideas to box using autocomplete', async () => {
+    await test.step("Add both user's ideas to box using autocomplete", async () => {
       // Click the autocomplete field to open dropdown
       const autocompleteField = adminPage.getByTestId('ideas-autocomplete-field');
       await autocompleteField.click();
-      await adminPage.waitForTimeout(300);
+      await adminPage.waitForTimeout(100);
 
       // Select first idea
       const idea1Option = adminPage.getByRole('option', { name: idea1.name });
       await expect(idea1Option).toBeVisible();
       await idea1Option.click();
-      await adminPage.waitForTimeout(300);
+      await adminPage.waitForTimeout(100);
 
       // Click field again to add second idea
       await autocompleteField.click();
-      await adminPage.waitForTimeout(300);
+      await adminPage.waitForTimeout(100);
 
       // Select second idea
       const idea2Option = adminPage.getByRole('option', { name: idea2.name });
       await expect(idea2Option).toBeVisible();
       await idea2Option.click();
-      await adminPage.waitForTimeout(300);
+      await adminPage.waitForTimeout(100);
 
       // Submit the form
       await adminPage.getByTestId('box-form-submit-button').click();
       await adminPage.waitForLoadState('networkidle');
-      await adminPage.waitForTimeout(1000);
+      await adminPage.waitForTimeout(100);
     });
 
     await test.step('Verify both ideas are in box', async () => {
@@ -122,9 +120,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(adminPage.getByText(idea1.name)).toBeVisible();
       await expect(adminPage.getByText(idea2.name)).toBeVisible();
     });
-  });
 
-  test('Move box to approval phase', async ({ adminPage, userPage }) => {
     await test.step('Change box phase to approval', async () => {
       box.phase = PHASES.APPROVAL;
       await boxes.edit(adminPage, box);
@@ -157,13 +153,13 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const approveButton = adminPage.getByTestId('approve-button');
       await expect(approveButton).toBeVisible();
       await approveButton.click();
-      await adminPage.waitForTimeout(500);
+      await adminPage.waitForTimeout(100);
 
       // Confirm approval
       const confirmButton = adminPage.getByTestId('confirm-button');
       await expect(confirmButton).toBeVisible();
       await confirmButton.click();
-      await adminPage.waitForTimeout(1000);
+      await adminPage.waitForTimeout(100);
     });
 
     await test.step('Navigate back to box and reject second idea', async () => {
@@ -182,17 +178,17 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const rejectButton = adminPage.getByTestId('reject-button');
       await expect(rejectButton).toBeVisible();
       await rejectButton.click();
-      await adminPage.waitForTimeout(500);
+      await adminPage.waitForTimeout(100);
 
       // Fill rejection justification
       await forms.fillMarkdownForm(adminPage, 'approval_comment', 'This idea does not meet the requirements.');
-      await adminPage.waitForTimeout(300);
+      await adminPage.waitForTimeout(100);
 
       // Confirm rejection
       const confirmButton = adminPage.getByTestId('confirm-button');
       await expect(confirmButton).toBeVisible();
       await confirmButton.click();
-      await adminPage.waitForTimeout(1000);
+      await adminPage.waitForTimeout(100);
     });
   });
 
@@ -227,7 +223,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const forButton = userPage.getByTestId('for');
       await expect(forButton).toBeVisible();
       await forButton.click();
-      await userPage.waitForTimeout(1000);
+      await userPage.waitForTimeout(100);
     });
 
     await test.step('Student votes against approved idea', async () => {
@@ -246,7 +242,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const againstButton = studentPage.getByTestId('against');
       await expect(againstButton).toBeVisible();
       await againstButton.click();
-      await studentPage.waitForTimeout(1000);
+      await studentPage.waitForTimeout(100);
     });
   });
 

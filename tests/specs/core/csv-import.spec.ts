@@ -69,6 +69,7 @@ test.describe.serial('CSV Import', () => {
       await test.step('Verify users in room settings', async () => {
         await navigation.goToRoomsSettings(adminPage);
         await settingsInteractions.openEdit({ page: adminPage, filters: { option: 'room_name', value: room.name } });
+        await adminPage.waitForTimeout(100);
 
         const UserSelector = adminPage.getByTestId('users-field');
         await expect(UserSelector).toBeVisible();
@@ -173,6 +174,7 @@ test.describe.serial('CSV Import', () => {
       await test.step('Verify users in room2 settings', async () => {
         await navigation.goToRoomsSettings(adminPage);
         await settingsInteractions.openEdit({ page: adminPage, filters: { option: 'room_name', value: room2.name } });
+        await adminPage.waitForTimeout(100);
 
         const UserSelector = adminPage.getByTestId('users-field');
         await expect(UserSelector).toBeVisible();

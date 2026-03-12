@@ -27,9 +27,7 @@ export interface RoomWithIdeasContext extends RoomContext {
  * Returns the room and a cleanup function
  */
 export async function setupRoomContext(admin: any, users: UserData[], suffix = 'shared'): Promise<RoomContext> {
-  const room = entities.createRoom(suffix);
-  room.users = users;
-
+  const room = entities.createRoom(suffix, users);
   await rooms.create(admin, room);
 
   return {
