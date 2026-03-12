@@ -104,14 +104,10 @@ test.describe.serial('Message Management - User Messages', () => {
   });
 
   test('Message is no longer available to User', async ({ userPage }) => {
-    await test.step('Navigate to messages', async () => {
-      await navigation.goToMessages(userPage);
-      await userPage.waitForLoadState('networkidle');
-    });
-
     await test.step('Verify message is no longer visible', async () => {
+      await navigation.goToMessages(userPage);
       const messageCard = userPage.getByText(messageData.headline);
-      await expect(messageCard).toHaveCount(0, { timeout: 5000 });
+      await expect(messageCard).toHaveCount(0);
     });
   });
 });
