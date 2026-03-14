@@ -55,6 +55,9 @@
       "button": "Passwort zurücksetzen",
       "link": "Passwort vergessen?",
       "message": "Möchtest du wirklich ein neues Passwort für diesen Benutzer anfordern?",
+      "messageEmail": "Alle ausgewählten Personen erhalten Anweisungen zum Zurücksetzen per E-Mail.",
+      "messageNoEmail": "Es ist keine E-Mail hinterlegt. Bitte gib das neue Passwort manuell weiter.",
+      "messageMultiple": "Möchtest du wirklich neue Passwörter für {{count}} {{target}} anfordern? {{var}}",
       "recover": "Passwort wiederherstellen",
       "recovery": "Passwort-Wiederherstellung",
       "success": "Das Passwort für das Konto wurde zurückgesetzt. Registrierte Benutzer erhalten einen Link zum Zurücksetzen in ihrer E-Mail."

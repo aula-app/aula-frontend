@@ -1,3 +1,8 @@
+## 1.9.0
+
+- **New features**
+  - Reset multiple users' passord button on User Settings
+
 ## 1.8.3
 
 - **Bug fixes**
