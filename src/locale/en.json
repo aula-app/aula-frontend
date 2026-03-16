@@ -60,7 +60,10 @@
       "messageMultiple": "Are you sure you want to request new passwords for {{count}} {{target}}? {{var}}",
       "recover": "Recover password",
       "recovery": "Password Recovery",
-      "success": "The password was reset. Registered users will receive a reset link in their email."
+      "success": "The password was reset. Registered users will receive a reset link in their email.",
+      "successfulUser": "Password reset requested for {{user}}. {{var}}",
+      "successfulEmail": "They will receive reset instructions via email.",
+      "successfulNoEmail": "No email is registered. Share the new password manually."
     },
     "login": {
       "button": "Login",
