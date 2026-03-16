@@ -56,7 +56,7 @@
       "link": "Passwort vergessen?",
       "message": "Möchtest du wirklich ein neues Passwort für diesen Benutzer anfordern?",
       "messageEmail": "Alle ausgewählten Personen erhalten Anweisungen zum Zurücksetzen per E-Mail.",
-      "messageNoEmail": "Es ist keine E-Mail hinterlegt. Bitte gib das neue Passwort manuell weiter.",
+      "messageNoEmail": "Einige der Nutzer haben keine E-Mail-Adresse hinterlegt. Bitte teile das so generierte temporäre Passwort dann mit den betroffenen Nutzern.",
       "messageMultiple": "Möchtest du wirklich neue Passwörter für {{count}} {{target}} anfordern? {{var}}",
       "recover": "Passwort wiederherstellen",
       "recovery": "Passwort-Wiederherstellung",
