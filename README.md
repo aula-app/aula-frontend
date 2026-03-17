@@ -30,13 +30,18 @@ Check if your NodeJS version matches ours from `.nvmrc` file.
 
 ```sh
 # Run the aula-frontend in development mode locally
-npm run dev
+yarn dev --host
 
 # In another terminal, run the tests against the local aula-frontend
-npx playwright test --headed
+yarn test # or yarn test:ui
+
+# In case you're using a multi-instance setup, supply instance to test as envvar
+INSTANCE_CODE=abcde yarn test
 ```
 
 ### Running and testing locally with docker
+
+Run [aula-backend](https://github.com/aula-app/aula-backend/) following its README instructions, and then:
 
 ```sh
 # Run the aula-frontend in docker container locally

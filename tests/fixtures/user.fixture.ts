@@ -5,6 +5,7 @@ import { test as browserTest } from './browser.fixture';
 import { RoleTypes } from '../../src/types/SettingsTypes';
 import * as shared from '../support/utils';
 import { ensureInstanceEntered } from '../interactions/users';
+import { FILTER_EXCLUDED_RESOURCES } from '../fixtures/browser.fixture';
 
 interface UserFixtures {
   ensureUser: (name: string, role?: RoleTypes) => Promise<UserData>;
@@ -27,41 +28,41 @@ export const test = browserTest.extend<UserFixtures>({
       storageState: 'tests/auth-states/admin-context.json',
     });
     const adminPage = await adminContext.newPage();
-    await adminPage.goto(shared.getHost());
-    await adminPage.waitForLoadState('networkidle');
+    await adminPage.route('**/*', FILTER_EXCLUDED_RESOURCES);
+    await adminPage.goto(shared.getHost(), { waitUntil: 'networkidle' });
     await ensureInstanceEntered(adminPage);
 
     const factory = async (name: string, role: RoleTypes = 20): Promise<UserData> => {
       if (userCache[name]) {
-        console.log(`✓ User ${name} already exists (cached)`);
+        console.log(`✓ User "${name}" already exists (cached)`);
         return userCache[name];
       }
 
-      console.log(`📝 Creating user: ${name} with role ${role}`);
+      console.log(`📝 Creating user: "${name}" with role ${role}`);
       const userData = createUserData(name, role);
 
       try {
-        const tempPassword = await apiUsers.createUserViaAPI(adminPage, userData);
-        userData.tempPass = tempPassword;
-        console.log(`✅ User ${name} created via API`);
+        userData.tempPass = await apiUsers.createUserViaAPI(adminPage, userData);
+        console.log(`✅ User "${name}" created via API`);
 
-        console.log(`🔐 Registering ${name} and changing password via API`);
         const userContext = await browser.newContext();
         const userPage = await userContext.newPage();
+        await userPage.route('**/*', FILTER_EXCLUDED_RESOURCES);
 
-        await userPage.goto(shared.getHost());
-        await userPage.waitForLoadState('networkidle');
+        console.log(`↔️ Accessing tested instance in user's browser using instance code.`);
+        await userPage.goto(shared.getHost(), { waitUntil: 'networkidle' });
         await ensureInstanceEntered(userPage);
 
-        const token = await apiUsers.registerUserViaAPI(userPage, userData, tempPassword);
+        console.log(`🔐 Registering "${name}" and changing password via API (through user's browser page)`);
+        const token = await apiUsers.registerUserViaAPI(userPage, userData);
         const storageStatePath = `tests/auth-states/${userData.username}-context.json`;
         await apiUsers.saveAuthenticationState(userPage, token, storageStatePath);
-        console.log(`✅ User ${name} (${userData.username}) registered and authenticated via API`);
+        console.log(`✅ User "${name}" (${userData.username}) registered and authenticated via API`);
 
         await userPage.close();
         await userContext.close();
       } catch (error) {
-        console.error(`❌ Failed to create user ${name}:`, error);
+        console.error(`❌ Failed to create user "${name}":`, error);
         throw error;
       }
 
