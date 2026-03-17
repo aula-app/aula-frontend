@@ -109,9 +109,6 @@ export const getRoomCount = async (page: Page): Promise<number> => {
 
 export const getFirstRoomName = async (page: Page): Promise<string | null> => {
   await navigation.goToHome(page);
-  const firstRoom = page.getByTestId('room-card').locator(page.locator('h3'));
-  const isVisible = await firstRoom.isVisible().catch(() => false);
-  if (!isVisible) return null;
-
-  return await firstRoom.textContent();
+  const namesOfRooms = page.getByTestId('room-card').filter({ visible: true }).locator(page.locator('h3'));
+  return await namesOfRooms.first().textContent();
 };

@@ -31,13 +31,14 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
     });
 
     test('should filter rooms based on search query', async ({ adminPage }) => {
-      await test.step('Get initial room count', async () => {
+      await test.step('verify there are existing rooms', async () => {
         const initialCount = await rooms.getRoomCount(adminPage);
         expect(initialCount).toBeGreaterThan(0);
       });
 
       await test.step('Get first room name and search for it', async () => {
         const firstRoomName = await rooms.getFirstRoomName(adminPage);
+        expect(firstRoomName).not.toBeNull();
 
         const searchTerm = firstRoomName!
           .trim()
