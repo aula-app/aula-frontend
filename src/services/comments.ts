@@ -1,4 +1,4 @@
-import { databaseRequest, GenericResponse } from '@/services/requests';
+import { databaseRequest, DefaultResponse, GenericResponse } from '@/services/requests';
 import { StatusTypes } from '@/types/Generics';
 import { CommentType } from '@/types/Scopes';
 
@@ -125,8 +125,8 @@ export async function getCommentLike(comment_id: number): Promise<boolean> {
  * @returns Promise resolving to the updated idea list
  */
 
-export async function addCommentLike(comment_id: number): Promise<void> {
-  await databaseRequest(
+export async function addCommentLike(comment_id: number): Promise<GenericResponse> {
+  const response = await databaseRequest(
     {
       model: 'Comment',
       method: 'CommentAddLike',
@@ -134,6 +134,8 @@ export async function addCommentLike(comment_id: number): Promise<void> {
     },
     ['user_id']
   );
+
+  return response;
 }
 
 /**
@@ -142,8 +144,8 @@ export async function addCommentLike(comment_id: number): Promise<void> {
  * @returns Promise resolving to the updated idea list
  */
 
-export async function removeCommentLike(comment_id: number): Promise<void> {
-  await databaseRequest(
+export async function removeCommentLike(comment_id: number): Promise<GenericResponse> {
+  const response = await databaseRequest(
     {
       model: 'Comment',
       method: 'CommentRemoveLike',
@@ -151,4 +153,6 @@ export async function removeCommentLike(comment_id: number): Promise<void> {
     },
     ['user_id']
   );
+
+  return response;
 }
