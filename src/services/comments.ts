@@ -1,4 +1,4 @@
-import { databaseRequest, DefaultResponse, GenericResponse } from '@/services/requests';
+import { databaseRequest, GenericResponse } from '@/services/requests';
 import { StatusTypes } from '@/types/Generics';
 import { CommentType } from '@/types/Scopes';
 
