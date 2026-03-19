@@ -1,3 +1,8 @@
+## Next
+
+- **Bug fixes**
+  - Update quorum progress bar on hitting like button
+
 ## 1.8.3
 
 - **Bug fixes**
