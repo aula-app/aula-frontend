@@ -1,7 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-const PublicOutdatedView = () => {
+const OutdatedView = () => {
   const { t } = useTranslation();
 
   return (
@@ -12,4 +12,4 @@ const PublicOutdatedView = () => {
   );
 };
 
-export default PublicOutdatedView;
+export default OutdatedView;
