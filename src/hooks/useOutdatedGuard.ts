@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { versionsRequest } from '@/services/requests-v2';
 import { localStorageGet } from '@/utils';
 import { isVersionBelowRecommended, isVersionOutdated } from '@/utils/version';
+import { useAppStore } from '@/store';
+import { useTranslation } from 'react-i18next';
 
 interface OutdatedState {
   isCheckingOutdated: boolean;
@@ -18,6 +20,8 @@ const INITIAL_STATE: OutdatedState = {
 export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
   const [state, setState] = useState<OutdatedState>(INITIAL_STATE);
   const lastCheckedRef = useRef<string | null>(null);
+  const [, dispatch] = useAppStore();
+  const { t } = useTranslation();
 
   useEffect(() => {
     let isMounted = true;
@@ -44,18 +48,31 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
 
         const versions = await versionsRequest();
 
+        let outdated = false;
+
         const minimumVersion = versions?.['aula-backend.v1']?.['aula-frontend']?.minimum;
         const recommendedVersion = versions?.['aula-backend.v1']?.['aula-frontend']?.recommended;
 
-        if (recommendedVersion && recommendedVersion !== 'unknown') {
-          setState((prev) => ({
-            ...prev,
-            isBelowRecommended: isVersionBelowRecommended(currentVersion, recommendedVersion),
-          }));
+        if (minimumVersion && minimumVersion !== 'unknown') {
+          outdated = isVersionOutdated(currentVersion, minimumVersion);
+          setState((prev) => ({ ...prev, isOutdated: outdated }));
         }
 
-        if (minimumVersion && minimumVersion !== 'unknown') {
-          setState((prev) => ({ ...prev, isOutdated: isVersionOutdated(currentVersion, minimumVersion) }));
+        if (recommendedVersion && recommendedVersion !== 'unknown') {
+          const belowRecommended = isVersionBelowRecommended(currentVersion, recommendedVersion);
+          setState((prev) => ({ ...prev, isBelowRecommended: belowRecommended }));
+          if (belowRecommended && !outdated) {
+            dispatch({
+              action: 'ADD_POPUP',
+              message: {
+                type: 'info',
+                message: t('errors.appBelowRecommended', {
+                  currentVersion,
+                  recommendedVersion,
+                }),
+              },
+            });
+          }
         }
 
         lastCheckedRef.current = cacheKey;

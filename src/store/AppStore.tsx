@@ -17,7 +17,7 @@ import AppReducer from './AppReducer';
 
 export interface PopupType {
   message: string;
-  type: 'error' | 'success';
+  type: 'error' | 'success' | 'info';
 }
 
 export interface AppStoreState {
@@ -37,7 +37,7 @@ const INITIAL_APP_STATE: AppStoreState = {
   messages: [],
   breadcrumb: [],
   lastScroll: 0,
-  lastIdeaList: ''
+  lastIdeaList: '',
 };
 
 /**

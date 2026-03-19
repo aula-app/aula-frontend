@@ -63,6 +63,19 @@ const PopupMessages = () => {
     </Alert>
   ));
 
+  const AlertSnackbar = forwardRef((props: SnackbarProps, ref: ForwardedRef<HTMLDivElement>) => (
+    <Alert
+      ref={ref}
+      severity="warning"
+      variant="filled"
+      sx={{ width: '100%' }}
+      role="alert"
+      data-testid="warning-alert"
+    >
+      {props.message}
+    </Alert>
+  ));
+
   const addError = (e: CustomEvent<any>) => {
     dispatch({ type: 'ADD_POPUP', message: { message: t(e.detail), type: 'error' } });
   };
@@ -98,6 +111,7 @@ const PopupMessages = () => {
         Components={{
           error: ErrorSnackbar,
           success: SuccessSnackbar,
+          info: AlertSnackbar,
         }}
       />
     </>
