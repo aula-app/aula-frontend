@@ -50,8 +50,8 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
 
         let outdated = false;
 
-        const minimumVersion = versions?.['aula-backend.v1']?.['aula-frontend']?.minimum;
-        const recommendedVersion = versions?.['aula-backend.v1']?.['aula-frontend']?.recommended;
+        const minimumVersion = versions?.['aula-backend.v2']?.['aula-frontend']?.minimum;
+        const recommendedVersion = versions?.['aula-backend.v2']?.['aula-frontend']?.recommended;
 
         if (minimumVersion && minimumVersion !== 'unknown') {
           outdated = isVersionOutdated(currentVersion, minimumVersion);
