@@ -1,12 +1,17 @@
 import { useAppStore } from '@/store';
 import { PopupType } from '@/store/AppStore';
 import { Alert, Box } from '@mui/material';
-import { SnackbarProvider, enqueueSnackbar } from 'notistack';
-import { ForwardedRef, forwardRef, useEffect } from 'react';
+import { SnackbarProvider, closeSnackbar, enqueueSnackbar, SnackbarKey } from 'notistack';
+import { ForwardedRef, forwardRef, useEffect, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import Icon from '../new/Icon';
+import IconButton from '../new/IconButton';
 
 interface SnackbarProps {
   message: string;
+  action?: ReactNode;
+  id: SnackbarKey;
+  variant: PopupType['type'];
 }
 
 /**
@@ -16,28 +21,58 @@ interface SnackbarProps {
  * url: /
  */
 
+const alertBaseStyles = {
+  width: '100%',
+  alignItems: 'center',
+  '& .MuiAlert-icon': {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  '& .MuiAlert-action': {
+    display: 'flex',
+    alignItems: 'center',
+    margin: 0,
+  },
+};
+
 const PopupMessages = () => {
   const { t } = useTranslation();
   const [state, dispatch] = useAppStore();
   let currentStack = [] as PopupType[];
 
   const handleClose = (index: number) => {
-    currentStack.filter((e, i) => i !== index);
+    if (index < 0) return;
+    currentStack = currentStack.filter((_, i) => i !== index);
     dispatch({ type: 'REMOVE_POPUP', index });
   };
 
+  const renderPersistentDismissAction = (snackbarId: SnackbarKey) => (
+    <IconButton
+      type="button"
+      aria-label={t('ui.common.dismiss')}
+      onClick={() => closeSnackbar(snackbarId)}
+      className="ml-2"
+    >
+      <Icon type="close" />
+    </IconButton>
+  );
+
   useEffect(() => {
     const newMessages = [...new Set(state.messages.filter((x) => !currentStack.includes(x)))];
-    newMessages.map((message, i) => {
+    newMessages.map((message) => {
+      const messageIndex = state.messages.indexOf(message);
       // Also announce messages to screen readers via the live region
       const liveRegion = document.getElementById('a11y-live-announcer');
       if (liveRegion) {
         liveRegion.textContent = message.message;
       }
 
+      const isPersistentAlert = message.type === 'info';
+
       return enqueueSnackbar(message.message, {
         variant: message.type,
-        onClose: () => handleClose(i),
+        onClose: () => handleClose(messageIndex),
+        persist: isPersistentAlert,
       });
     });
     currentStack = [...currentStack, ...newMessages];
@@ -45,7 +80,15 @@ const PopupMessages = () => {
 
   // Create components for different alert types
   const ErrorSnackbar = forwardRef((props: SnackbarProps, ref: ForwardedRef<HTMLDivElement>) => (
-    <Alert ref={ref} severity="error" variant="filled" sx={{ width: '100%' }} role="alert" data-testid="error-alert">
+    <Alert
+      ref={ref}
+      severity="error"
+      variant="filled"
+      sx={alertBaseStyles}
+      role="alert"
+      data-testid="error-alert"
+      action={props.action}
+    >
       {props.message}
     </Alert>
   ));
@@ -55,9 +98,10 @@ const PopupMessages = () => {
       ref={ref}
       severity="success"
       variant="filled"
-      sx={{ width: '100%' }}
+      sx={alertBaseStyles}
       role="alert"
       data-testid="success-alert"
+      action={props.action}
     >
       {props.message}
     </Alert>
@@ -68,9 +112,10 @@ const PopupMessages = () => {
       ref={ref}
       severity="warning"
       variant="filled"
-      sx={{ width: '100%' }}
+      sx={alertBaseStyles}
       role="alert"
       data-testid="warning-alert"
+      action={props.variant === 'info' ? renderPersistentDismissAction(props.id) : props.action}
     >
       {props.message}
     </Alert>
