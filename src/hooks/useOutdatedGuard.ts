@@ -74,6 +74,5 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
     };
   }, [refreshKey]);
 
-  console.log(state);
   return state;
 };
