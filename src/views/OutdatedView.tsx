@@ -4,7 +4,7 @@ const OutdatedView = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="flex flex-col items-center gap-4 p-4 text-center">
+    <section className="h-full flex flex-col items-center justify-center gap-4 p-4 text-center">
       <img
         src="/img/Paula_zwinkernd.svg"
         alt={t('errors.appOutdatedImage')}
