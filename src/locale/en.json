@@ -333,6 +333,7 @@
       "marked_not_winner": "This idea is not selected as a winner.",
       "marked_winner": "This idea is selected as a winner.",
       "name": "Idea",
+      "noQuorum": "No quorum set.",
       "not_marked_yet": "This idea is still not marked as a winner.",
       "placeholder": "Search ideas...",
       "plural": "Ideas",

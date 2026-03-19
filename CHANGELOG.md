@@ -1,7 +1,7 @@
 ## Next
 
 - **Bug fixes**
-  - Update quorum progress bar on hitting like button
+  - Update quorum progress bar on hitting like button or voting
 
 ## 1.8.3
 

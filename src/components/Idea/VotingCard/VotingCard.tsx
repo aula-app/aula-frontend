@@ -9,20 +9,21 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 interface Props {
-  onReload: () => void;
+  onChange: (delta: number) => void;
 }
 
 /**
  * Renders "VotingCards" component
  * url: /
  */
-const VotingCard = ({ onReload }: Props) => {
+const VotingCard = ({ onChange }: Props) => {
   const { t } = useTranslation();
   const { idea_id, box_id } = useParams();
 
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [vote, setVote] = useState<Vote>();
+  const [hasVoted, setHasVoted] = useState(false);
   const [hasDelegate, setHasDelegate] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [pendingVote, setPendingVote] = useState<Vote | null>(null);
@@ -32,6 +33,7 @@ const VotingCard = ({ onReload }: Props) => {
 
     setLoading(true);
     const response = await getVote(idea_id);
+    setHasVoted(typeof response.data === 'number');
     setLoading(false);
 
     if (response.error) {
@@ -61,7 +63,7 @@ const VotingCard = ({ onReload }: Props) => {
     if (!idea_id) return;
     addVote(idea_id, vote).then(() => {
       fetchVote();
-      onReload();
+      onChange(hasVoted ? 0 : 1);
       setDialogOpen(false);
       setPendingVote(null);
     });

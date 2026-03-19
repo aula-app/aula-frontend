@@ -1,17 +1,17 @@
 import { IdeaForms } from '@/components/DataForms';
-import { ApprovalCard, IdeaBubble, VotingCard, VotingResults } from '@/components/Idea';
+import { ApprovalCard, IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { deleteIdea, getIdea, getIdeaBoxes } from '@/services/ideas';
 import { getRoom } from '@/services/rooms';
 import { getQuorum } from '@/services/vote';
 import { useAppStore } from '@/store/AppStore';
 import { IdeaType } from '@/types/Scopes';
+import { RoomPhases } from '@/types/SettingsTypes';
 import { Drawer, Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import CommentView from '../Comment';
-import { RoomPhases } from '@/types/SettingsTypes';
 
 /**
  * Renders "Idea" view
@@ -112,14 +112,13 @@ const IdeaView = () => {
 
   return !isLoading && idea ? (
     <Stack width="100%" height="100%" overflow="auto" gap={2}>
-      {phase === '30' && idea.approved > 0 && <VotingCard onReload={fetchIdea} />}
-      {phase === '40' && <VotingResults idea={idea} onReload={fetchIdea} quorum={quorum} />}
       <IdeaBubble
         idea={idea}
         quorum={quorum}
         phase={Number(phase) as RoomPhases}
         onEdit={() => setEdit(idea)}
         onDelete={() => ideaDelete(idea.hash_id)}
+        onReload={onClose}
         disabled={Number(phase) >= 20}
       ></IdeaBubble>
       {Number(phase) >= 20 && <ApprovalCard idea={idea} onReload={fetchIdea} />}

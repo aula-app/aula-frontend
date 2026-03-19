@@ -15,14 +15,17 @@ import CategoryList from '../CategoryList';
 import UserBar from '../UserBar';
 import VotingQuorum from '../VotingQuorum';
 import { RoomPhases } from '@/types/SettingsTypes';
+import VotingResults from '../VotingResults';
+import VotingCard from '../VotingCard';
 
 interface Props extends Omit<StackProps, 'children'> {
   idea: IdeaType;
   quorum?: number;
-  phase?: RoomPhases;
+  phase: RoomPhases;
   to?: string;
   onDelete: () => void;
   onEdit: () => void;
+  onReload?: () => void;
   disabled?: boolean;
   children?: ReactNode;
 }
@@ -36,6 +39,7 @@ const IdeaBubble: React.FC<Props> = ({
   disabled = false,
   onDelete,
   onEdit,
+  onReload = () => {},
   ...restOfProps
 }) => {
   const { idea_id } = useParams();
@@ -49,6 +53,8 @@ const IdeaBubble: React.FC<Props> = ({
 
   return (
     <Stack data-testid={`idea-${idea.title}`} width="100%" sx={{ scrollSnapAlign: 'center' }} {...restOfProps}>
+      {phase === 30 && idea.approved > 0 && <VotingCard onChange={updateLikes} />}
+      {phase === 40 && <VotingResults idea={idea} onReload={onReload} quorum={quorum} />}
       <ChatBubble disabled={disabled} comment={idea.approved < 0}>
         <AppLink to={to} disabled={!to || disabled}>
           <Stack
