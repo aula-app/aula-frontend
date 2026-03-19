@@ -12,7 +12,7 @@ const OutdatedView = () => {
         loading="lazy"
         className="w-40 max-w-full"
       />
-      <p className="mt-6 text-base text-gray-900">{t('errors.appOutdated')}</p>
+      <p className="mt-16 text-base text-gray-900">{t('errors.appOutdated')}</p>
     </section>
   );
 };
