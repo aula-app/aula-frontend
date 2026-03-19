@@ -1,9 +1,16 @@
+const sanitizeVersion = (version: string | null | undefined): string => {
+  if (!version) return '';
+  return version.replace(/[^0-9.]/g, '');
+};
+
 const parseVersion = (version: string | null | undefined): [number, number, number] => {
-  if (!version || version === 'unknown') {
+  const cleanVersion = sanitizeVersion(version);
+
+  if (!cleanVersion || cleanVersion === 'unknown') {
     return [0, 0, 0];
   }
 
-  const parts = version.split('.').map((part) => {
+  const parts = cleanVersion.split('.').map((part) => {
     const num = parseInt(part, 10);
     return isNaN(num) ? 0 : num;
   });

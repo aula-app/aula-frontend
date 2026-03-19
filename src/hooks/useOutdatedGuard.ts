@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { versionsRequest } from '@/services/requests-v2';
 import { localStorageGet } from '@/utils';
-import { isVersionOutdated } from '@/utils/version';
+import { isVersionBelowRecommended, isVersionOutdated } from '@/utils/version';
 
 interface OutdatedState {
   isCheckingOutdated: boolean;
-  isRecommended: boolean;
+  isBelowRecommended: boolean;
   isOutdated: boolean;
 }
 
 const INITIAL_STATE: OutdatedState = {
   isCheckingOutdated: true,
-  isRecommended: false,
+  isBelowRecommended: false,
   isOutdated: false,
 };
 
@@ -28,7 +28,7 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
 
       if (!apiUrl || currentVersion === 'unknown') {
         if (isMounted) {
-          setState({ isCheckingOutdated: false, isRecommended: false, isOutdated: false });
+          setState({ isCheckingOutdated: false, isBelowRecommended: false, isOutdated: false });
         }
         return;
       }
@@ -43,12 +43,17 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
         if (!isMounted) return;
 
         const versions = await versionsRequest();
+        console.log('Current version:', currentVersion);
+        console.log('Received versions from backend:', versions);
 
-        const minimumVersion = versions?.['aula-backend.v2']?.['aula-frontend']?.minimum;
-        const recommendedVersion = versions?.['aula-backend.v2']?.['aula-frontend']?.recommended;
+        const minimumVersion = versions?.['aula-backend.v1']?.['aula-frontend']?.minimum;
+        const recommendedVersion = versions?.['aula-backend.v1']?.['aula-frontend']?.recommended;
 
         if (recommendedVersion && recommendedVersion !== 'unknown') {
-          setState((prev) => ({ ...prev, isRecommended: isVersionOutdated(currentVersion, recommendedVersion) }));
+          setState((prev) => ({
+            ...prev,
+            isBelowRecommended: isVersionBelowRecommended(currentVersion, recommendedVersion),
+          }));
         }
 
         if (minimumVersion && minimumVersion !== 'unknown') {
@@ -61,7 +66,7 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
       } catch (error) {
         if (!isMounted) return;
         console.error('Failed to verify frontend version against backend requirements.', error);
-        setState({ isCheckingOutdated: false, isRecommended: false, isOutdated: false });
+        setState({ isCheckingOutdated: false, isBelowRecommended: false, isOutdated: false });
       }
     };
 
@@ -72,5 +77,6 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
     };
   }, [refreshKey]);
 
+  console.log(state);
   return state;
 };
