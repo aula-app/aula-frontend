@@ -1,4 +1,5 @@
 import AddRoomButton from '@/components/Buttons/AddRooms/AddRoomsButton';
+import ResetMultiplePasswordsButton from '@/components/Buttons/ResetMultiplePasswordsButton/ResetMultiplePasswordsButton';
 import { UserForms } from '@/components/DataForms';
 import PrintUsers from '@/components/PrintUsers/PrintUsers';
 import SelectRoom from '@/components/SelectRoom';
@@ -64,12 +65,23 @@ const UsersView: React.FC = () => {
     dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.users'), '']] });
   }, [dispatch, t]);
 
-  const extraTools = ({ items }: { items: Array<string> }) => (
-    <>
-      <PrintUsers />
-      <AddRoomButton users={items} disabled={items.length === 0} />
-    </>
-  );
+  const extraTools = ({ items }: { items: Array<string> }) => {
+    const selectedUsers = items
+      .map((hashId) => dataTableState.items.find((user) => user.hash_id === hashId))
+      .filter((user): user is UserType => Boolean(user));
+
+    return (
+      <>
+        <PrintUsers />
+        <AddRoomButton users={items} disabled={items.length === 0} />
+        <ResetMultiplePasswordsButton
+          users={selectedUsers}
+          disabled={selectedUsers.length === 0}
+          onSuccess={dataTableState.fetchData}
+        />
+      </>
+    );
+  };
 
   const extraFilters = (
     <>

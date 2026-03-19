@@ -55,9 +55,15 @@
       "button": "Passwort zurücksetzen",
       "link": "Passwort vergessen?",
       "message": "Möchtest du wirklich ein neues Passwort für diesen Benutzer anfordern?",
+      "messageEmail": "Alle ausgewählten Personen erhalten eine Anleitung zum Zurücksetzen ihrer Passwörter per E-Mail.",
+      "messageNoEmail": "Einige der Nutzer haben keine E-Mail-Adresse hinterlegt. Bitte teile das generierte temporäre Passwort mit den betroffenen Nutzern.",
+      "messageMultiple": "Möchtest du wirklich neue Passwörter für {{count}} {{target}} anfordern? {{var}}",
       "recover": "Passwort wiederherstellen",
       "recovery": "Passwort-Wiederherstellung",
-      "success": "Das Passwort für das Konto wurde zurückgesetzt. Registrierte Benutzer erhalten einen Link zum Zurücksetzen in ihrer E-Mail."
+      "success": "Das Passwort für das Konto wurde zurückgesetzt. Registrierte Benutzer erhalten einen Link zum Zurücksetzen in ihrer E-Mail.",
+      "successfulUser": "Passwort-Reset für {{user}} angefordert. {{var}}",
+      "successfulEmail": "Sie erhalten Anweisungen zum Zurücksetzen per E-Mail.",
+      "successfulNoEmail": "Es ist keine E-Mail hinterlegt. Bitte gib das neue Passwort manuell weiter."
     },
     "login": {
       "button": "Login",
