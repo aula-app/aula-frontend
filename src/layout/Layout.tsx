@@ -1,5 +1,5 @@
 import PopupMessages from '@/components/PopupMessages';
-import { useConsentSync, useIsAuthenticated } from '@/hooks/auth';
+import { useIsAuthenticated } from '@/hooks/auth';
 import { useOutdatedGuard } from '@/hooks/useOutdatedGuard';
 import OutdatedView from '@/views/OutdatedView';
 import { FunctionComponent, PropsWithChildren } from 'react';
@@ -16,11 +16,10 @@ const Layout: FunctionComponent<PropsWithChildren> = (props) => {
   const isAuthenticated = useIsAuthenticated(); // Variant 2
   const { isOutdated } = useOutdatedGuard(location.pathname);
 
-  useConsentSync(isAuthenticated, location.pathname);
-
   if (isOutdated) {
     return <OutdatedView />;
   }
+
   return (
     <>
       {isAuthenticated ? <PrivateLayout {...props} /> : <PublicLayout {...props} />}
