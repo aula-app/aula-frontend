@@ -43,8 +43,6 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
         if (!isMounted) return;
 
         const versions = await versionsRequest();
-        console.log('Current version:', currentVersion);
-        console.log('Received versions from backend:', versions);
 
         const minimumVersion = versions?.['aula-backend.v1']?.['aula-frontend']?.minimum;
         const recommendedVersion = versions?.['aula-backend.v1']?.['aula-frontend']?.recommended;
@@ -58,7 +56,6 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
 
         if (minimumVersion && minimumVersion !== 'unknown') {
           setState((prev) => ({ ...prev, isOutdated: isVersionOutdated(currentVersion, minimumVersion) }));
-          return;
         }
 
         lastCheckedRef.current = cacheKey;
