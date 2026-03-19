@@ -138,6 +138,8 @@
     "accountInactive": "Your account is inactive",
     "accountSuspendDate": " until {{var}}",
     "accountSuspended": "Your account has been suspended{{var}}. Please contact your administrator",
+    "appOutdated": "Your app is outdated. Please update Aula to continue using it",
+    "appOutdatedImage": "Winking character illustration reminding you to update the app",
     "databaseError": "Failed to fetch data",
     "default": "Something went wrong",
     "existingUser": "Username and/or email already in use",

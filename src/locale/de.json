@@ -138,6 +138,8 @@
     "accountInactive": "Dein Account ist inaktiv",
     "accountSuspendDate": " bis zum {{var}}",
     "accountSuspended": "Dein Account wurde{{var}} gesperrt. Bitte kontaktiere deinen Administrator",
+    "appOutdated": "Deine App ist veraltet. Bitte aktualisiere Aula, um sie weiter zu nutzen",
+    "appOutdatedImage": "Zwinkernde Charakterillustration als Erinnerung, die App zu aktualisieren",
     "databaseError": "Daten konnten nicht abgerufen werden",
     "default": "Etwas ist schief gelaufen",
     "existingUser": "Benutzername und/oder E-Mail sind bereits vergeben",
