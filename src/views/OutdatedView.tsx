@@ -1,14 +1,19 @@
-import { Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 const OutdatedView = () => {
   const { t } = useTranslation();
 
   return (
-    <Stack spacing={2} alignItems="center" sx={{ p: 2 }}>
-      <img src="/img/Paula_zwinkernd.svg" alt={t('errors.appOutdatedImage')} role="img" loading="lazy" width={150} />
-      <Typography mt={6}>{t('errors.appOutdated')}</Typography>
-    </Stack>
+    <section className="flex flex-col items-center gap-4 p-4 text-center">
+      <img
+        src="/img/Paula_zwinkernd.svg"
+        alt={t('errors.appOutdatedImage')}
+        role="img"
+        loading="lazy"
+        className="w-40 max-w-full"
+      />
+      <p className="mt-6 text-base text-gray-900">{t('errors.appOutdated')}</p>
+    </section>
   );
 };
 
