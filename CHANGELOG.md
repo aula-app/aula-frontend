@@ -2,6 +2,7 @@
 
 - **New features**
   - Reset multiple users' password button on User Settings
+  - Version management alerts for outdated app version
 
 ## 1.8.3
 
