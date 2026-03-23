@@ -139,7 +139,7 @@
     "accountSuspendDate": " until {{var}}",
     "accountSuspended": "Your account has been suspended{{var}}. Please contact your administrator",
     "appOutdated": "Your app is outdated. Please update Aula to continue using it.",
-    "appBelowRecommended": "You are running Aula {{currentVersion}}, but we recommend updating to {{recommendedVersion}} to avoid issues.",
+    "appBelowRecommended": "You are running an outdated aula version {{currentVersion}}. Please update as soon as possible.",
     "appOutdatedImage": "Winking character illustration reminding you to update the app",
     "databaseError": "Failed to fetch data",
     "default": "Something went wrong",
