@@ -11,6 +11,8 @@ interface OutdatedState {
   isOutdated: boolean;
 }
 
+const LAST_CHECK_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
 const INITIAL_STATE: OutdatedState = {
   isCheckingOutdated: true,
   isBelowRecommended: false,
@@ -19,7 +21,7 @@ const INITIAL_STATE: OutdatedState = {
 
 export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
   const [state, setState] = useState<OutdatedState>(INITIAL_STATE);
-  const lastCheckedRef = useRef<string | null>(null);
+  const lastCheckedRef = useRef<{ key: string; timestamp: number } | null>(null);
   const [, dispatch] = useAppStore();
   const { t } = useTranslation();
 
@@ -38,7 +40,8 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
       }
 
       const cacheKey = `${apiUrl}:${currentVersion}`;
-      if (lastCheckedRef.current === cacheKey) {
+      const now = Date.now();
+      if (lastCheckedRef.current?.key === cacheKey && now - lastCheckedRef.current.timestamp < LAST_CHECK_TTL_MS) {
         setState((prev) => ({ ...prev, isCheckingOutdated: false }));
         return;
       }
@@ -75,7 +78,7 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
           }
         }
 
-        lastCheckedRef.current = cacheKey;
+        lastCheckedRef.current = { key: cacheKey, timestamp: now };
         setState((prev) => ({ ...prev, isCheckingOutdated: false }));
       } catch (error) {
         if (!isMounted) return;
