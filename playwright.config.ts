@@ -25,6 +25,16 @@ export default defineConfig({
 
     actionTimeout: 10_000,
     navigationTimeout: 10_000,
+
+    launchOptions: {
+      args: [
+        '--disable-gl-drawing-for-tests',
+        '--disable-dev-shm-usage',
+        '--disable-extensions',
+        '--disable-background-networking',
+        '--mute-audio',
+      ],
+    },
   },
 
   // Retry failed tests (helps with flakiness)
