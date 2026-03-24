@@ -9,7 +9,6 @@ import { TIMEOUTS } from '../support/constants';
 export const create = async (page: Page, room: types.RoomData) => {
   await navigation.goToRoomsSettings(page);
 
-  await page.waitForSelector('[data-testid="add-rooms-button"]', { state: 'visible', timeout: TIMEOUTS.HALF_SECOND });
   await formInteractions.clickButton(page, 'add-rooms-button');
   await page.waitForSelector('input[name="room_name"]', { state: 'visible', timeout: TIMEOUTS.HALF_SECOND });
   await formInteractions.fillForm(page, 'room-name', room.name);
@@ -21,11 +20,12 @@ export const create = async (page: Page, room: types.RoomData) => {
   for (const u of room.users) {
     await UserSelector.locator('.MuiAutocomplete-popupIndicator').click();
     await page.getByTestId(`select-option-${u.username}`).filter({ visible: true }).click();
-    await page.waitForTimeout(TIMEOUTS.FIVE_HUNDRED_MILLIS);
+    await page.getByTestId(`select-option-${u.username}`).waitFor({ state: 'hidden' });
   }
 
   await formInteractions.clickButton(page, 'room-form-submit-button');
-  await page.waitForTimeout(TIMEOUTS.FIVE_HUNDRED_MILLIS);
+  // Wait for form close AND server confirmation (form closes optimistically before API responds)
+  await page.waitForSelector('input[name="room_name"]', { state: 'hidden' });
   await page.waitForLoadState('networkidle');
 
   await expect(page.getByTestId('add-rooms-button')).toBeVisible();
@@ -69,6 +69,7 @@ export const searchRooms = async (page: Page, query: string) => {
 export const clearSearch = async (page: Page) => {
   const searchField = page.getByTestId('search-field').locator('input');
   await searchField.clear();
+  // Wait for the rooms list to re-fetch after clearing the search filter.
   await page.waitForLoadState('networkidle');
 };
 
@@ -99,12 +100,16 @@ export const toggleSortDirection = async (page: Page) =>
 export const getRoomCount = async (page: Page): Promise<number> => {
   await navigation.goToHome(page);
 
-  // Wait for the rooms container to finish loading
-  // This ensures the page has fully rendered before counting
-  await page.waitForLoadState('networkidle');
-
   const roomCards = page.getByTestId('room-card');
-  return await roomCards.count();
+  // Rooms load asynchronously after the heading appears — poll until the count stabilizes.
+  let lastCount = -1;
+  for (let i = 0; i < 10; i++) {
+    const count = await roomCards.count();
+    if (count === lastCount) break;
+    lastCount = count;
+    await page.waitForTimeout(150);
+  }
+  return lastCount < 0 ? 0 : lastCount;
 };
 
 export const getFirstRoomName = async (page: Page): Promise<string | null> => {

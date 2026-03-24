@@ -21,14 +21,14 @@ export const check = async (page: Page, filters: { option: string; value: string
 export const filter = async (page: Page, filter: { option: string; value: string }) => {
   const filterButton = page.getByTestId('filter-toggle-button');
   const filterInput = page.getByTestId('filter-input');
-  await expect(filterButton).toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
+  await expect(filterButton).toBeVisible();
 
   if (
     !(await filterInput.isVisible()) ||
     (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')
   ) {
     // open the filter menu if it's not already open
-    await filterButton.click({ timeout: TIMEOUTS.ONE_SECOND });
+    await filterButton.click();
   }
   await expect(filterInput).toBeVisible();
   await expect(page.locator('#filter-value-input')).toBeVisible();
@@ -38,8 +38,6 @@ export const filter = async (page: Page, filter: { option: string; value: string
   await page.locator(`li[data-value="${filter.option}"]`).click();
   // filter by our filter
   await page.fill('#filter-value-input', filter.value);
-
-  await page.waitForLoadState('networkidle');
 
   // check if value was filtered correctly
   const row = page.locator('table tr').filter({ hasText: filter.value }).first();
@@ -54,14 +52,14 @@ export const filter = async (page: Page, filter: { option: string; value: string
 export const applyFilter = async (page: Page, filter: { option: string; value: string }) => {
   const filterButton = page.getByTestId('filter-toggle-button');
   const filterInput = page.getByTestId('filter-input');
-  await expect(filterButton).toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
+  await expect(filterButton).toBeVisible();
 
   if (
     !(await filterInput.isVisible()) ||
     (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')
   ) {
     // open the filter menu if it's not already open
-    await filterButton.click({ timeout: TIMEOUTS.ONE_SECOND });
+    await filterButton.click();
   }
   await expect(filterInput).toBeVisible();
   await expect(page.locator('#filter-value-input')).toBeVisible();
@@ -71,8 +69,6 @@ export const applyFilter = async (page: Page, filter: { option: string; value: s
   await page.locator(`li[data-value="${filter.option}"]`).click();
   // filter by our filter
   await page.fill('#filter-value-input', filter.value);
-
-  await page.waitForLoadState('networkidle');
 };
 
 export const clearFilter = async (page: Page) => {
@@ -88,7 +84,7 @@ export const clearFilter = async (page: Page) => {
   await expect(clearFilterButton).toBeVisible();
   if (!(await clearFilterButton.isDisabled())) {
     await clearFilterButton.click();
-    await page.waitForLoadState('networkidle');
+    await expect(page.locator('#filter-value-input')).toHaveValue('');
   }
 
   await filterButton.click();
@@ -106,7 +102,6 @@ export const openEdit = async ({ page, filters }: { page: Page; filters: { optio
   }
 
   await row.click();
-  await page.waitForLoadState('networkidle');
 };
 
 export const remove = async ({
@@ -141,7 +136,6 @@ export const remove = async ({
   await expect(Dialog).toBeVisible();
 
   formInteractions.clickButton(page, `confirm-delete-${scope}-button`);
-  await page.waitForLoadState('networkidle');
 
   // check if the row is gone
   await expect(row).toHaveCount(0);

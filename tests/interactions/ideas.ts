@@ -39,8 +39,7 @@ export const create = async (
 
   // submit the idea form
   await formInteractions.clickButton(page, 'submit-idea-form');
-  await page.waitForLoadState('networkidle');
-  await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'hidden', timeout: TIMEOUTS.ONE_SECOND });
+  await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'hidden', timeout: TIMEOUTS.THREE_SECONDS });
 
   const IdeaTitle = page.getByText(idea.name, { exact: true });
   await expect(IdeaTitle).toBeVisible();
