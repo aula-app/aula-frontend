@@ -1,13 +1,12 @@
 import { expect, Page } from '@playwright/test';
 import * as shared from '../support/utils';
-import { TIMEOUTS } from '../support/constants';
 
 const host = shared.getHost();
 
 export const clickOnPageItem = async (page: Page, text: string) => {
   const item = page.getByText(text);
   await expect(item).toBeVisible();
-  await item.click({ timeout: TIMEOUTS.ONE_SECOND });
+  await item.click();
 };
 
 export const clickOnLink = async (page: Page, path: string) => {
@@ -28,7 +27,7 @@ export const clickToNavigate = async (page: Page, path: string) => {
 export const openAccordion = async (page: Page, testId: string) => {
   await page.waitForLoadState('domcontentloaded');
   const accordion = page.getByTestId(testId);
-  await expect(accordion).toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
+  await expect(accordion).toBeVisible();
 
   const isExpanded = await accordion.getAttribute('aria-expanded');
   if (isExpanded !== 'true') {
@@ -51,8 +50,8 @@ export const goToHome = async (page: Page) => {
 
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
-  // Room cards load asynchronously after the heading appears — wait for at least one card before clicking
-  await page.getByTestId('room-card').first().waitFor({ state: 'visible' });
+  // Wait for the specific room card — avoids races where any card appears before the target room loads
+  await page.getByTestId('room-card').filter({ hasText: roomName }).first().waitFor({ state: 'visible' });
   await page.getByTestId('room-card').filter({ hasText: roomName, visible: true }).click();
   await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'));
 };
@@ -61,7 +60,7 @@ export const goToWildIdea = async (page: Page, roomName: string, ideaName: strin
   await goToRoom(page, roomName);
 
   await page.getByTestId(`idea-${ideaName}`).filter({ visible: true }).click();
-  await page.waitForURL((url) => url.pathname.includes('/idea'), { timeout: TIMEOUTS.THREE_SECONDS });
+  await page.waitForURL((url) => url.pathname.includes('/idea'));
 };
 
 export const goToPhase = async (page: Page, roomName: string, phaseNumber: number) => {

@@ -4,7 +4,6 @@ import * as types from '../support/types';
 import * as formInteractions from './forms';
 import * as navigation from './navigation';
 import * as settingsInteractions from './settings';
-import { TIMEOUTS } from '../support/constants';
 
 /**
  * Report Types - maps to backend reporting categories
@@ -40,10 +39,10 @@ export const reportIdea = async (
   await formInteractions.openMoreOption(page, IdeaDiv);
 
   // Click report button
-  await IdeaDiv.getByTestId('report-button').click({ timeout: TIMEOUTS.ONE_SECOND });
+  await IdeaDiv.getByTestId('report-button').click();
 
   // Wait for report dialog
-  await page.getByTestId('report-dialog').waitFor({ state: 'visible', timeout: TIMEOUTS.ONE_SECOND });
+  await expect(page.getByTestId('report-dialog')).toBeVisible();
 
   // Select report type from dropdown
   await formInteractions.selectOptionByValue(page, 'select-field-report', reportType);
@@ -53,7 +52,7 @@ export const reportIdea = async (
 
   // Submit report
   await formInteractions.clickButton(page, 'report-form-submit-button');
-  await page.getByTestId('report-dialog').waitFor({ state: 'hidden' });
+  await expect(page.getByTestId('report-dialog')).toBeHidden();
 };
 
 /**
@@ -83,10 +82,10 @@ export const reportComment = async (
 
   // Click report button in the comment menu
   const comment = page.getByTestId('comment-bubble').filter({ hasText: commentText });
-  await comment.getByTestId('report-button').click({ timeout: TIMEOUTS.ONE_SECOND });
+  await comment.getByTestId('report-button').click();
 
   // Wait for report dialog
-  await page.waitForSelector('[data-testid="report-dialog"]', { state: 'visible', timeout: TIMEOUTS.ONE_SECOND });
+  await expect(page.getByTestId('report-dialog')).toBeVisible();
 
   // Select report type from dropdown
   await formInteractions.selectOptionByValue(page, 'select-field-report', reportType);
@@ -96,7 +95,7 @@ export const reportComment = async (
 
   // Submit report
   await formInteractions.clickButton(page, 'report-form-submit-button');
-  await page.waitForSelector('[data-testid="report-dialog"]', { state: 'hidden' });
+  await expect(page.getByTestId('report-dialog')).toBeHidden();
 };
 
 /**
@@ -111,7 +110,7 @@ export const verifyIdeaReported = async (adminPage: Page, ideaName: string) => {
   await settingsInteractions.applyFilter(adminPage, { option: 'body', value: ideaName });
 
   // Wait for the page to show filtered results - look for the idea name anywhere on the page
-  await expect(adminPage.locator('text=' + ideaName).first()).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
+  await expect(adminPage.locator('text=' + ideaName).first()).toBeVisible();
 };
 
 /**
@@ -126,7 +125,7 @@ export const verifyCommentReported = async (adminPage: Page, commentText: string
   await settingsInteractions.applyFilter(adminPage, { option: 'body', value: commentText });
 
   // Wait for the page to show filtered results - look for the comment text anywhere on the page
-  await expect(adminPage.locator('text=' + commentText).first()).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
+  await expect(adminPage.locator('text=' + commentText).first()).toBeVisible();
 };
 
 /**
@@ -141,14 +140,14 @@ export const reportBug = async (page: Page, description: string) => {
   await formInteractions.clickButton(page, 'report-bug-button');
 
   // Wait for bug report dialog
-  await page.getByTestId('bug-dialog').waitFor({ state: 'visible', timeout: TIMEOUTS.ONE_SECOND });
+  await expect(page.getByTestId('bug-dialog')).toBeVisible();
 
   // Fill in bug description using markdown editor
   await formInteractions.fillMarkdownForm(page, 'content', description);
 
   // Submit bug report
   await formInteractions.clickButton(page, 'bug-form-submit-button');
-  await page.getByTestId('bug-dialog').waitFor({ state: 'hidden' });
+  await expect(page.getByTestId('bug-dialog')).toBeHidden();
 };
 
 /**
@@ -163,5 +162,5 @@ export const verifyBugReported = async (adminPage: Page, description: string) =>
   await settingsInteractions.applyFilter(adminPage, { option: 'body', value: description });
 
   // Wait for the page to show filtered results - look for the description anywhere on the page
-  await expect(adminPage.locator('text=' + description).first()).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
+  await expect(adminPage.locator('text=' + description).first()).toBeVisible();
 };

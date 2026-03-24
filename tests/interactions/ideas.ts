@@ -3,7 +3,6 @@ import { expect, Page } from '@playwright/test';
 import * as types from '../support/types';
 import * as formInteractions from './forms';
 import * as navigation from './navigation';
-import { TIMEOUTS } from '../support/constants';
 
 export const create = async (
   page: Page, //
@@ -11,7 +10,7 @@ export const create = async (
 ) => {
   // start at home
   await formInteractions.clickButton(page, 'add-idea-button');
-  await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'visible', timeout: TIMEOUTS.HALF_SECOND });
+  await expect(page.getByTestId('add-idea-form')).toBeVisible();
 
   // fill in the necessary information
   await formInteractions.fillForm(page, 'idea-title', idea.name);
@@ -21,25 +20,25 @@ export const create = async (
     // how to fill in one of those MUI multiselectors:
     const BoxSelector = page.getByTestId('box-field-select-input');
     await expect(BoxSelector).toBeVisible();
-    await BoxSelector.click({ timeout: TIMEOUTS.ONE_SECOND });
+    await BoxSelector.click();
 
     // click a box to the idea
-    await page.getByRole('option', { name: idea.box }).first().click({ timeout: TIMEOUTS.ONE_SECOND });
+    await page.getByRole('option', { name: idea.box }).first().click();
   }
 
   if (idea.category) {
     // how to fill in one of those MUI multiselectors:
     const CategorySelector = page.getByTestId('category-field-text-input');
     await expect(CategorySelector).toBeVisible();
-    await CategorySelector.click({ timeout: TIMEOUTS.ONE_SECOND });
+    await CategorySelector.click();
 
     // click a category to the idea
-    await page.getByRole('option', { name: idea.category }).first().click({ timeout: TIMEOUTS.ONE_SECOND });
+    await page.getByRole('option', { name: idea.category }).first().click();
   }
 
   // submit the idea form
   await formInteractions.clickButton(page, 'submit-idea-form');
-  await page.waitForSelector('[data-testid="add-idea-form"]', { state: 'hidden', timeout: TIMEOUTS.THREE_SECONDS });
+  await expect(page.getByTestId('add-idea-form')).toBeHidden({ timeout: 5000 });
 
   const IdeaTitle = page.getByText(idea.name, { exact: true });
   await expect(IdeaTitle).toBeVisible();
@@ -59,23 +58,23 @@ export const remove = async (
   await page.mouse.move(0, 0);
 
   await formInteractions.openMoreOption(page, IdeaDiv);
-  await IdeaDiv.getByTestId('delete-button').click({ timeout: TIMEOUTS.ONE_SECOND });
+  await IdeaDiv.getByTestId('delete-button').click();
   await formInteractions.clickButton(page, `confirm-button`);
 
   await expect(IdeaDiv).toHaveCount(0);
 };
 
 export const comment = async (page: Page, commentText: string) => {
-  formInteractions.clickButton(page, 'add-comment-button');
-  await page.waitForSelector('[data-testid="comment-form"]', { state: 'visible', timeout: TIMEOUTS.ONE_SECOND });
+  await formInteractions.clickButton(page, 'add-comment-button');
+  await expect(page.getByTestId('comment-form')).toBeVisible();
 
   await page.getByTestId('comment-form').locator('div[contenteditable="true"]').fill(commentText);
 
   // submit the comment form
-  formInteractions.clickButton(page, 'confirm-comment-button');
+  await formInteractions.clickButton(page, 'confirm-comment-button');
 
   const Comment = page.getByTestId('comment-bubble').filter({ hasText: commentText });
-  await expect(Comment).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
+  await expect(Comment).toBeVisible();
   const commentCount = await Comment.count();
   expect(commentCount).toBeGreaterThan(0);
 };

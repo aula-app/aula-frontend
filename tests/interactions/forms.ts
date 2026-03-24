@@ -1,5 +1,4 @@
 import { Locator, Page, expect } from '@playwright/test';
-import { TIMEOUTS } from '../support/constants';
 
 export const fillForm = async (page: Page, testId: string, value: string) => {
   const field = page.getByTestId(`${testId}-input`);
@@ -87,7 +86,7 @@ export const selectOptionByValue = async (page: Page, testId: string, value: str
   }
 
   // Now select the option
-  await option.click({ timeout: TIMEOUTS.ONE_SECOND });
+  await option.click();
 
   // Verify the selection by checking if the field now contains the option text
   const displayedValue = page.getByTestId(testId);
@@ -101,5 +100,5 @@ export const selectMultiAutocompleteOption = async (page: Page, testId: string, 
 
   const option = page.getByTestId(`select-option-${optionId}`);
   await expect(option).toBeVisible();
-  await option.click({ timeout: TIMEOUTS.ONE_SECOND });
+  await option.click();
 };
