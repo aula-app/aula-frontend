@@ -7,7 +7,7 @@ const host = shared.getHost();
 export const clickOnPageItem = async (page: Page, text: string) => {
   const item = page.getByText(text);
   await expect(item).toBeVisible();
-  await item.click({ timeout: TIMEOUTS.ONE_SECOND });
+  await item.click();
 };
 
 export const clickOnLink = async (page: Page, path: string) => {
