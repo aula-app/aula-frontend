@@ -5,9 +5,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { chromium, Browser, BrowserContext, Page } from '@playwright/test';
 import * as userInteractions from '../interactions/users';
-import * as apiUsers from '../helpers/api-users';
-import * as entities from '../helpers/entities';
-import * as shared from '../support/utils';
 import { admin } from '../fixtures/user.fixture';
 import { FILTER_EXCLUDED_RESOURCES } from '../fixtures/browser.fixture';
 
@@ -66,10 +63,6 @@ export default async function globalSetup() {
     const adminStatePath = path.join(authStatesDir, 'admin-context.json');
     await context.storageState({ path: adminStatePath });
     console.log(`✅ Admin state saved to ${adminStatePath}`);
-
-    // Pre-create shared test users so parallel workers all read from disk cache
-    // instead of racing to create the same users with different hashes.
-    await preCreateSharedUsers(browser, page, authStatesDir);
 
     console.log('✅ Global setup complete');
   } catch (error) {
@@ -169,50 +162,5 @@ async function ensureInstanceOnline(page: Page): Promise<void> {
   } catch (error) {
     console.error('❌ Failed to ensure instance is online:', error);
     throw error;
-  }
-}
-
-/**
- * Pre-create shared test users ('user', 'student') before any workers start.
- * Without this, parallel workers all race to create the same users simultaneously,
- * each producing a different username hash — breaking cross-test userConfig assumptions.
- */
-async function preCreateSharedUsers(browser: Browser, adminPage: Page, authStatesDir: string): Promise<void> {
-  const usersToCreate = [
-    { name: 'user', role: 20 },
-    { name: 'student', role: 20 },
-  ];
-
-  for (const { name, role } of usersToCreate) {
-    const metaPath = path.join(authStatesDir, `user-meta-${name}.json`);
-
-    if (fs.existsSync(metaPath)) {
-      console.log(`✓ Test user "${name}" already exists (cached), skipping`);
-      continue;
-    }
-
-    console.log(`📝 Pre-creating test user "${name}" (role ${role})...`);
-    const userData = entities.createUserData(name, role);
-
-    userData.tempPass = await apiUsers.createUserViaAPI(adminPage, userData);
-
-    const userContext = await browser.newContext();
-    const userPage = await userContext.newPage();
-    await userPage.route('**/*', FILTER_EXCLUDED_RESOURCES);
-
-    try {
-      await userPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
-      await userInteractions.ensureInstanceEntered(userPage);
-
-      const token = await apiUsers.registerUserViaAPI(userPage, userData);
-      const storageStatePath = path.join(authStatesDir, `${userData.username}-context.json`);
-      await apiUsers.saveAuthenticationState(userPage, token, storageStatePath);
-
-      fs.writeFileSync(metaPath, JSON.stringify(userData), 'utf-8');
-      console.log(`✅ Test user "${name}" (${userData.username}) pre-created`);
-    } finally {
-      await userPage.close();
-      await userContext.close();
-    }
   }
 }

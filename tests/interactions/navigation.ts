@@ -7,7 +7,7 @@ const host = shared.getHost();
 export const clickOnPageItem = async (page: Page, text: string) => {
   const item = page.getByText(text);
   await expect(item).toBeVisible();
-  await item.click();
+  await item.click({ timeout: TIMEOUTS.ONE_SECOND });
 };
 
 export const clickOnLink = async (page: Page, path: string) => {
@@ -51,8 +51,8 @@ export const goToHome = async (page: Page) => {
 
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
-  // Wait for the specific room card — avoids races where any card appears before the target room loads
-  await page.getByTestId('room-card').filter({ hasText: roomName }).first().waitFor({ state: 'visible' });
+  // Room cards load asynchronously after the heading appears — wait for at least one card before clicking
+  await page.getByTestId('room-card').first().waitFor({ state: 'visible' });
   await page.getByTestId('room-card').filter({ hasText: roomName, visible: true }).click();
   await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'));
 };

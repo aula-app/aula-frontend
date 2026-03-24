@@ -1,26 +1,15 @@
 import { test, expect } from '../../fixtures/test-fixtures';
 import * as rooms from '../../interactions/rooms';
 import * as navigation from '../../interactions/navigation';
-import * as entities from '../../helpers/entities';
 
 /**
  * Room Search and Sort Tests
  * Tests search and sort functionality on the Rooms View (Home Page)
+ * Uses pure Playwright fixtures for setup/teardown
  *
- * Runs after the core project (depends: ['core']) so the room list is stable.
- * Seeds one dedicated room in beforeAll so search-count assertions are
- * deterministic regardless of what other test runs left behind.
- * Cleanup is handled by globalTeardown (test-room-* prefix).
+ * NOTE: These tests run serially to ensure consistent state
  */
 test.describe.serial('Rooms View - Search and Sort Functionality', () => {
-  // Seeded before the suite — gives us a known room name to search for exactly.
-  const seededRoom = entities.createRoom('search-sort');
-
-  test.beforeAll(async ({ adminPage, userConfig }) => {
-    seededRoom.users = [userConfig];
-    await rooms.create(adminPage, seededRoom);
-  });
-
   test.beforeEach(async ({ adminPage }) => {
     await navigation.goToHome(adminPage);
   });
@@ -46,11 +35,19 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
         expect(initialCount).toBeGreaterThan(0);
       });
 
-      await test.step('Search for seeded room by exact name', async () => {
-        await rooms.searchRooms(adminPage, seededRoom.name);
+      await test.step('Get first room name and search for it', async () => {
+        const firstRoomName = await rooms.getFirstRoomName(adminPage);
+        expect(firstRoomName).not.toBeNull();
+
+        const searchTerm = firstRoomName!
+          .trim()
+          .substring(0, firstRoomName!.length - 3)
+          .toLowerCase();
+        console.log(`Search term: ${searchTerm}`);
+        await rooms.searchRooms(adminPage, searchTerm);
       });
 
-      await test.step('Verify exactly one room matches', async () => {
+      await test.step('Verify filtered results contain exactly searched room', async () => {
         const filteredCount = await rooms.getRoomCount(adminPage);
         expect(filteredCount).toEqual(1);
       });
