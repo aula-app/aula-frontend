@@ -51,7 +51,6 @@ test.describe.serial('Message Management - User Messages', () => {
 
     await test.step('Submit message', async () => {
       await forms.clickButton(adminPage, 'submit-message-form');
-      await adminPage.waitForLoadState('networkidle');
     });
 
     await test.step('Verify message was created in admin panel', async () => {
@@ -63,7 +62,6 @@ test.describe.serial('Message Management - User Messages', () => {
   test('User receives the message', async ({ userPage }) => {
     await test.step('Navigate to messages', async () => {
       await navigation.goToMessages(userPage);
-      await userPage.waitForLoadState('networkidle');
     });
 
     await test.step('Verify message is visible', async () => {
@@ -94,7 +92,6 @@ test.describe.serial('Message Management - User Messages', () => {
     await test.step('Delete the message', async () => {
       await forms.clickButton(adminPage, 'remove-messages-button');
       await forms.clickButton(adminPage, 'confirm-delete-messages-button');
-      await adminPage.waitForLoadState('networkidle');
     });
 
     await test.step('Verify message is no longer in the list', async () => {

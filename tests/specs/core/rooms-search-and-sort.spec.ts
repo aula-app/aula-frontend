@@ -1,7 +1,6 @@
 import { test, expect } from '../../fixtures/test-fixtures';
 import * as rooms from '../../interactions/rooms';
 import * as navigation from '../../interactions/navigation';
-import { TIMEOUTS } from '../../support/constants';
 
 /**
  * Room Search and Sort Tests
@@ -132,7 +131,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
         await rooms.toggleSortDirection(adminPage);
 
         // Wait for the debounce (150ms in ScopeHeader) to complete
-        await adminPage.waitForTimeout(TIMEOUTS.HALF_SECOND);
+        await adminPage.waitForTimeout(200);
 
         const newIcon = await sortDirectionButton.getAttribute('aria-label');
         expect(newIcon).not.toBe(initialIcon);

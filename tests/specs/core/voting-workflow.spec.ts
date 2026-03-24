@@ -80,7 +80,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const boxCard = adminPage.getByTestId('box-card');
       await expect(boxCard.getByText(box.name)).toBeVisible();
       await boxCard.getByTestId('more-options-button').click();
-      await adminPage.waitForTimeout(100);
+      await expect(boxCard.getByTestId('edit-button')).toBeVisible();
       await boxCard.getByTestId('edit-button').click();
     });
 
@@ -88,28 +88,25 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       // Click the autocomplete field to open dropdown
       const autocompleteField = adminPage.getByTestId('ideas-autocomplete-field');
       await autocompleteField.click();
-      await adminPage.waitForTimeout(100);
 
       // Select first idea
       const idea1Option = adminPage.getByRole('option', { name: idea1.name });
       await expect(idea1Option).toBeVisible();
       await idea1Option.click();
-      await adminPage.waitForTimeout(100);
+      await idea1Option.waitFor({ state: 'hidden' });
 
       // Click field again to add second idea
       await autocompleteField.click();
-      await adminPage.waitForTimeout(100);
 
       // Select second idea
       const idea2Option = adminPage.getByRole('option', { name: idea2.name });
       await expect(idea2Option).toBeVisible();
       await idea2Option.click();
-      await adminPage.waitForTimeout(100);
+      await idea2Option.waitFor({ state: 'hidden' });
 
       // Submit the form
       await adminPage.getByTestId('box-form-submit-button').click();
-      await adminPage.waitForLoadState('networkidle');
-      await adminPage.waitForTimeout(100);
+      await adminPage.waitForSelector('[data-testid="box-name-input"]', { state: 'hidden' });
     });
 
     await test.step('Verify both ideas are in box', async () => {
@@ -147,19 +144,16 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(idea1Card).toBeVisible();
       await idea1Card.click();
       await adminPage.waitForURL((url) => url.pathname.includes('/idea'));
-      await adminPage.waitForLoadState('networkidle');
 
       // Click approve button
       const approveButton = adminPage.getByTestId('approve-button');
       await expect(approveButton).toBeVisible();
       await approveButton.click();
-      await adminPage.waitForTimeout(100);
 
       // Confirm approval
       const confirmButton = adminPage.getByTestId('confirm-button');
       await expect(confirmButton).toBeVisible();
       await confirmButton.click();
-      await adminPage.waitForTimeout(100);
     });
 
     await test.step('Navigate back to box and reject second idea', async () => {
@@ -172,23 +166,19 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(idea2Card).toBeVisible();
       await idea2Card.click();
       await adminPage.waitForURL((url) => url.pathname.includes('/idea'));
-      await adminPage.waitForLoadState('networkidle');
 
       // Click reject button
       const rejectButton = adminPage.getByTestId('reject-button');
       await expect(rejectButton).toBeVisible();
       await rejectButton.click();
-      await adminPage.waitForTimeout(100);
 
       // Fill rejection justification
       await forms.fillMarkdownForm(adminPage, 'approval_comment', 'This idea does not meet the requirements.');
-      await adminPage.waitForTimeout(100);
 
       // Confirm rejection
       const confirmButton = adminPage.getByTestId('confirm-button');
       await expect(confirmButton).toBeVisible();
       await confirmButton.click();
-      await adminPage.waitForTimeout(100);
     });
   });
 
@@ -217,13 +207,11 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(idea1Card).toBeVisible();
       await idea1Card.click();
       await userPage.waitForURL((url) => url.pathname.includes('/idea'));
-      await userPage.waitForLoadState('networkidle');
 
       // Click the "for" vote button
       const forButton = userPage.getByTestId('for');
       await expect(forButton).toBeVisible();
       await forButton.click();
-      await userPage.waitForTimeout(100);
     });
 
     await test.step('Student votes against approved idea', async () => {
@@ -236,13 +224,11 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(idea1Card).toBeVisible();
       await idea1Card.click();
       await studentPage.waitForURL((url) => url.pathname.includes('/idea'));
-      await studentPage.waitForLoadState('networkidle');
 
       // Click the "against" vote button
       const againstButton = studentPage.getByTestId('against');
       await expect(againstButton).toBeVisible();
       await againstButton.click();
-      await studentPage.waitForTimeout(100);
     });
   });
 
@@ -271,7 +257,6 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(idea1Card).toBeVisible();
       await idea1Card.click();
       await userPage.waitForURL((url) => url.pathname.includes('/idea'));
-      await userPage.waitForLoadState('networkidle');
     });
 
     await test.step('Verify results section is displayed', async () => {

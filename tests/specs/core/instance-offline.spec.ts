@@ -26,8 +26,9 @@ test.describe.serial('Instance Offline', () => {
     await formInteractions.selectOptionByValue(adminPage, 'select-field-status', online ? '1' : '0');
     await formInteractions.clickButton(adminPage, 'system-settings-confirm-button');
 
-    await adminPage.waitForTimeout(500);
-    const isExpanded = await adminPage.getByTestId('config-accordion-system').getAttribute('aria-expanded');
+    const accordion = adminPage.getByTestId('config-accordion-system');
+    await expect(accordion).toHaveAttribute('aria-expanded', 'false');
+    const isExpanded = await accordion.getAttribute('aria-expanded');
     expect(isExpanded).toBe('false');
 
     await navigation.openAccordion(adminPage, 'config-accordion-system');
