@@ -7,6 +7,10 @@ name: aula-e2e
 #   yarn test
 #   docker compose -f docker-compose.e2e.yml down -v
 #
+# Override the backend path if your repo is not at ${BACKEND_DIR:-../backend-aula}:
+#   BACKEND_DIR=/path/to/backend docker compose -f docker-compose.e2e.yml up --build -d
+# Or set BACKEND_DIR in a .env file next to this compose file.
+#
 # What happens on startup:
 #   1. mariadb-e2e  — fresh MariaDB instance
 #   2. backend-setup — Laravel v2: runs migrations (central DB) then creates
@@ -25,7 +29,7 @@ services:
       MARIADB_USER: aula_user
       MARIADB_PASSWORD: e2e_pass
     volumes:
-      - ../backend-aula/docker/mariadb/:/docker-entrypoint-initdb.d:ro
+      - ${BACKEND_DIR:-../backend-aula}/docker/mariadb/:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       start_period: 10s
@@ -37,7 +41,7 @@ services:
 
   backend-setup:
     build:
-      context: ../backend-aula
+      context: ${BACKEND_DIR:-../backend-aula}
     # Override entrypoint so this container exits cleanly instead of starting supervisord.
     entrypoint: ["sh", "-c"]
     command:
@@ -77,7 +81,7 @@ services:
 
   backend-legacy-e2e:
     build:
-      context: ../backend-aula/legacy
+      context: ${BACKEND_DIR:-../backend-aula}/legacy
     environment:
       APP_ENV: testing
       APACHE_SERVER_NAME: localhost
