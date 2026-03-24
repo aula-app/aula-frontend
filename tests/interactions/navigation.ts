@@ -8,24 +8,19 @@ export const clickOnPageItem = async (page: Page, text: string) => {
   const item = page.getByText(text);
   await expect(item).toBeVisible();
   await item.click({ timeout: TIMEOUTS.ONE_SECOND });
-  await page.waitForTimeout(10);
-  await page.waitForLoadState('networkidle');
 };
 
 export const clickOnLink = async (page: Page, path: string) => {
   await page.locator(`a[href="${path}"]`).filter({ visible: true }).click();
   await page.waitForURL((url) => url.pathname.includes(path));
-  await page.waitForLoadState('networkidle');
 };
 
 export const clickToNavigate = async (page: Page, path: string) => {
   const currentUrl = page.url();
-  if (currentUrl === path) {
+  if (currentUrl.includes(path)) {
     return;
   }
-
-  await goToHome(page);
-  await clickOnLink(page, path);
+  await page.goto(`${host}${path}`, { waitUntil: 'domcontentloaded' });
 };
 
 // Ui elements navigation
@@ -50,15 +45,16 @@ export const goToHome = async (page: Page) => {
     return;
   }
 
-  await page.goto(host, { waitUntil: 'networkidle' });
+  await page.goto(host, { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#rooms-heading')).toBeVisible();
 };
 
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
-
+  // Room cards load asynchronously after the heading appears — wait for at least one card before clicking
+  await page.getByTestId('room-card').first().waitFor({ state: 'visible' });
   await page.getByTestId('room-card').filter({ hasText: roomName, visible: true }).click();
   await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'));
-  await page.waitForLoadState('networkidle');
 };
 
 export const goToWildIdea = async (page: Page, roomName: string, ideaName: string) => {
@@ -66,19 +62,17 @@ export const goToWildIdea = async (page: Page, roomName: string, ideaName: strin
 
   await page.getByTestId(`idea-${ideaName}`).filter({ visible: true }).click();
   await page.waitForURL((url) => url.pathname.includes('/idea'), { timeout: TIMEOUTS.THREE_SECONDS });
-  await page.waitForLoadState('networkidle');
 };
 
 export const goToPhase = async (page: Page, roomName: string, phaseNumber: number) => {
   await goToRoom(page, roomName);
 
   await page.getByTestId(`link-to-phase-${phaseNumber}`).filter({ visible: true }).click();
-  await page.waitForLoadState('networkidle');
+  await page.waitForURL((url) => url.pathname.includes(`phase`));
 };
 
 export const goToMessages = async (page: Page) => {
-  await goToHome(page);
-  await clickOnLink(page, '/messages');
+  await page.goto(`${host}/messages`, { waitUntil: 'domcontentloaded' });
 };
 
 // Settings navigation

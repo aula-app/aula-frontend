@@ -34,8 +34,6 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
     await formsInteractions.selectOptionByValue(page, 'select-field-userlevel', `${data.role}`);
 
     await formsInteractions.clickButton(page, 'submit-user-form');
-    await page.waitForLoadState('networkidle');
-
     await existsByUsername(page, data);
 
     const pass = await getTemporaryPass(page, data);
@@ -50,8 +48,6 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
 export const getTemporaryPass = async (page: Page, data: types.UserData) => {
   // navigate to the users settings page:
   await navigation.goToUsersSettings(page);
-  await page.waitForLoadState('networkidle');
-
   const row = await existsByUsername(page, data);
   const viewPassButton = row.locator('button');
   await viewPassButton.click({ timeout: TIMEOUTS.ONE_SECOND });
@@ -118,19 +114,19 @@ export const ensureInstanceEntered = async (page: Page, username?: string) => {
     console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: "${username}"`);
     await instanceCodeInputDiv.locator(page.locator('input[name="instance-code"]')).fill(instance);
     await page.getByTestId('submit-instance-code').click();
-    await page.waitForURL((url) => url.pathname === '/', { timeout: TIMEOUTS.ONE_SECOND, waitUntil: 'networkidle' });
+    await page.waitForURL((url) => url.pathname === '/', { timeout: TIMEOUTS.ONE_SECOND, waitUntil: 'domcontentloaded' });
     return true;
   }
 };
 
 export const loginAttempt = async (page: Page, data: types.UserData) => {
-  await page.goto(host, { waitUntil: 'networkidle' });
+  await page.goto(host, { waitUntil: 'domcontentloaded' });
   await ensureInstanceEntered(page, data.username);
   await page.waitForSelector('input[name="username"]', { timeout: TIMEOUTS.ONE_SECOND });
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
   await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
 };
 
 // Helper function to log in a user
@@ -143,7 +139,7 @@ export const login = async (page: Page, data: types.UserData) => {
 export const logout = async (page: Page) => {
   await navigation.goToHome(page);
   await formsInteractions.clickButton(page, 'logout-button');
-  await page.waitForLoadState('networkidle');
+  await expect(page.locator('input[name="username"]')).toBeVisible();
 };
 
 export const register = async (page: Page, data: types.UserData, tempPass: string) => {
@@ -163,21 +159,16 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
     await page.fill('input[name="confirmPassword"]', data.password);
     await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
 
-    // Wait for navigation and check if we're logged in
-    await page.waitForLoadState('networkidle');
-
     // Check if we're on the home page (logged in) or need to login again
     const isLoggedIn = await page.locator('#rooms-heading').isVisible();
 
     if (!isLoggedIn) {
       console.log('⚠️ User not automatically logged in after password change, attempting manual login');
       // If not automatically logged in, do a manual login
-      await page.goto(host);
-      await page.waitForLoadState('networkidle');
+      await page.goto(host, { waitUntil: 'domcontentloaded' });
       await page.fill('input[name="username"]', data.username);
       await page.fill('input[name="password"]', data.password);
       await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
-      await page.waitForLoadState('networkidle');
       await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
     }
 
@@ -191,7 +182,7 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
 };
 
 export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {
-  await page.goto(host, { waitUntil: 'networkidle' });
+  await page.goto(host, { waitUntil: 'domcontentloaded' });
   await ensureInstanceEntered(page, data.username);
 
   await page.fill('input[name="username"]', data.username);
@@ -203,8 +194,5 @@ export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass:
   await page.fill('input[name="newPassword"]', data.password);
   await page.fill('input[name="confirmPassword"]', data.password);
   await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
-  await page.waitForTimeout(TIMEOUTS.ONE_HUNDRED_MILLIS);
-  await page.waitForLoadState('networkidle');
-
   await login(page, data);
 };
