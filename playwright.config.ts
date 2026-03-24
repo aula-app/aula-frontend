@@ -60,7 +60,7 @@ export default defineConfig({
       testDir: './tests/specs/core',
       testIgnore: ['**/disabled/**', '**/instance-offline.spec.ts', '**/rooms-search-and-sort.spec.ts'],
       use: { ...devices['Desktop Chrome'] },
-      workers: process.env.CI ? 2 : 4,
+      workers: 2,
       dependencies: ['offline'],
     },
 
