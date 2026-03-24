@@ -9,7 +9,7 @@ import * as navigation from '../../interactions/navigation';
  * Tests that users who are members of a room can see ideas when they enter the room
  * Uses pure Playwright fixtures for setup/teardown
  */
-test.describe('Room Member - Ideas Visibility', () => {
+test.describe.serial('Room Member - Ideas Visibility', () => {
   let roomContext: roomsFixture.RoomContext;
 
   const adminIdea = entities.createIdea('admin-visible');
