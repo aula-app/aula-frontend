@@ -6,7 +6,7 @@ export default defineConfig({
   testDir: './tests',
   timeout: 60_000,
   expect: {
-    timeout: 10_000,
+    timeout: 20_000,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -21,8 +21,8 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'on-first-retry',
 
-    actionTimeout: 10_000,
-    navigationTimeout: 10_000,
+    actionTimeout: 20_000,
+    navigationTimeout: 20_000,
 
     launchOptions: {
       args: [

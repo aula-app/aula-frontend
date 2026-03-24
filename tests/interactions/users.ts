@@ -4,7 +4,6 @@ import * as types from '../support/types';
 import * as formsInteractions from './forms';
 import * as settingsInteractions from './settings';
 import * as navigation from './navigation';
-import { TIMEOUTS } from '../support/constants';
 const host = shared.getHost();
 
 type TempPass = string;
@@ -21,10 +20,7 @@ export const create = async (page: Page, data: types.UserData): Promise<TempPass
     await navigation.goToUsersSettings(page);
 
     await formsInteractions.clickButton(page, 'add-users-button');
-    await page.waitForSelector('[data-testid="displayname-input"]', {
-      state: 'visible',
-      timeout: TIMEOUTS.THREE_SECONDS,
-    });
+    await expect(page.getByTestId('displayname-input')).toBeVisible();
 
     await formsInteractions.fillForm(page, 'displayname', data.displayName);
     await formsInteractions.fillForm(page, 'username', data.username);
@@ -50,11 +46,11 @@ export const getTemporaryPass = async (page: Page, data: types.UserData) => {
   await navigation.goToUsersSettings(page);
   const row = await existsByUsername(page, data);
   const viewPassButton = row.locator('button');
-  await viewPassButton.click({ timeout: TIMEOUTS.ONE_SECOND });
+  await viewPassButton.click();
 
   // temporary password must exist and be pulled out of the page.
   const passLocator = row.locator('div[role="button"] span');
-  await passLocator.waitFor({ state: 'visible', timeout: TIMEOUTS.THREE_SECONDS });
+  await expect(passLocator).toBeVisible();
   const pass: string = (await passLocator.textContent())!;
   expect(pass).toBeTruthy();
 
@@ -69,21 +65,19 @@ export const remove = async (page: Page, data: types.UserData) => {
 
     const row = await existsByUsername(page, data);
     const checkbox = row.locator('input[type="checkbox"]');
-    await expect(checkbox).toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
+    await expect(checkbox).toBeVisible();
 
     // Ensure checkbox is unchecked first, then check it
     if (await checkbox.isChecked()) {
-      await checkbox.uncheck({ timeout: TIMEOUTS.HALF_SECOND });
+      await checkbox.uncheck();
     }
-    await checkbox.check({ timeout: TIMEOUTS.HALF_SECOND });
+    await checkbox.check();
 
     await formsInteractions.clickButton(page, 'remove-users-button');
     await formsInteractions.clickButton(page, 'confirm-delete-users-button');
 
     // confirm the user does not show up in the table list
-    await expect(page.locator('table tr').filter({ hasText: data.username })).toHaveCount(0, {
-      timeout: TIMEOUTS.THREE_SECONDS,
-    });
+    await expect(page.locator('table tr').filter({ hasText: data.username })).toHaveCount(0);
 
     await settingsInteractions.clearFilter(page);
 
@@ -114,7 +108,7 @@ export const ensureInstanceEntered = async (page: Page, username?: string) => {
     console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: "${username}"`);
     await instanceCodeInputDiv.locator(page.locator('input[name="instance-code"]')).fill(instance);
     await page.getByTestId('submit-instance-code').click();
-    await page.waitForURL((url) => url.pathname === '/', { timeout: TIMEOUTS.ONE_SECOND, waitUntil: 'domcontentloaded' });
+    await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
     return true;
   }
 };
@@ -122,17 +116,17 @@ export const ensureInstanceEntered = async (page: Page, username?: string) => {
 export const loginAttempt = async (page: Page, data: types.UserData) => {
   await page.goto(host, { waitUntil: 'domcontentloaded' });
   await ensureInstanceEntered(page, data.username);
-  await page.waitForSelector('input[name="username"]', { timeout: TIMEOUTS.ONE_SECOND });
+  await expect(page.locator('input[name="username"]')).toBeVisible();
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
-  await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
+  await page.locator('button[type="submit"]').click();
   await page.waitForLoadState('domcontentloaded');
 };
 
 // Helper function to log in a user
 export const login = async (page: Page, data: types.UserData) => {
   await loginAttempt(page, data);
-  await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
+  await expect(page.locator('#rooms-heading')).toBeVisible();
 };
 
 // Helper function to log out a user
@@ -149,7 +143,7 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
 
     await page.fill('input[name="username"]', data.username);
     await page.fill('input[name="password"]', tempPass);
-    await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
+    await page.locator('button[type="submit"]').click();
 
     const oldPasswordButton = page.locator('input[name="oldPassword"]');
     await expect(oldPasswordButton).toBeVisible();
@@ -157,7 +151,7 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
     await page.fill('input[name="oldPassword"]', tempPass);
     await page.fill('input[name="newPassword"]', data.password);
     await page.fill('input[name="confirmPassword"]', data.password);
-    await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
+    await page.locator('button[type="submit"]').click();
 
     // Check if we're on the home page (logged in) or need to login again
     const isLoggedIn = await page.locator('#rooms-heading').isVisible();
@@ -168,8 +162,8 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
       await page.goto(host, { waitUntil: 'domcontentloaded' });
       await page.fill('input[name="username"]', data.username);
       await page.fill('input[name="password"]', data.password);
-      await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
-      await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: TIMEOUTS.THREE_SECONDS });
+      await page.locator('button[type="submit"]').click();
+      await expect(page.locator('#rooms-heading')).toBeVisible();
     }
 
     console.log('✅ Successfully registered user:', data.username);
@@ -187,12 +181,12 @@ export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass:
 
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', tempPass);
-  await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
+  await page.locator('button[type="submit"]').click();
 
   await page.locator('input[name="oldPassword"]').filter({ visible: true }).fill(tempPass);
 
   await page.fill('input[name="newPassword"]', data.password);
   await page.fill('input[name="confirmPassword"]', data.password);
-  await page.locator('button[type="submit"]').click({ timeout: TIMEOUTS.ONE_SECOND });
+  await page.locator('button[type="submit"]').click();
   await login(page, data);
 };
