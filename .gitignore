@@ -33,11 +33,8 @@ package-lock.json
 
 # misc
 .DS_Store
-.env.local
+.env*.local
 .env.development
-.env.development.local
-.env.test.local
-.env.production.local
 
 vite.config.local.mts
 

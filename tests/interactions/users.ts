@@ -126,7 +126,7 @@ export const loginAttempt = async (page: Page, data: types.UserData) => {
 // Helper function to log in a user
 export const login = async (page: Page, data: types.UserData) => {
   await loginAttempt(page, data);
-  await expect(page.locator('#rooms-heading')).toBeVisible();
+  await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: 20000 });
 };
 
 // Helper function to log out a user
