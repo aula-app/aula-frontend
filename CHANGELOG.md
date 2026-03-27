@@ -2,6 +2,8 @@
 
 - **New features**
   - Reset multiple users' password button on User Settings
+- **Bug fixes**
+  - Fix quorum tooltip floating over edit menu
 
 ## 1.8.3
 
