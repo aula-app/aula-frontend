@@ -2,6 +2,8 @@
 
 - **New features**
   - Reset multiple users' password button on User Settings
+- **Bug fixes**
+  - Default phase durations from room was not affecting new boxes
 
 ## 1.8.3
 
