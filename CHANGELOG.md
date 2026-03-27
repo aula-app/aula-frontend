@@ -2,6 +2,7 @@
 
 - **New features**
   - Reset multiple users' password button on User Settings
+  - Prevent users from editing ideas after voting phase
 
 ## 1.8.3
 
