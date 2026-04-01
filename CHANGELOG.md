@@ -2,6 +2,7 @@
 
 - **New features**
   - Reset multiple users' password button on User Settings
+  - Prevent users from editing ideas after voting phase
 
 - **Bug fixes**
   - Default phase durations from room was not affecting new boxes
