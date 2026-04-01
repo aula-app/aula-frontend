@@ -64,17 +64,16 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
               role="menuitem"
               data-testid={`report-button`}
             />
-            {phase && (
-              <>
-                {checkPermissions(scope, 'edit', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
+            {phase &&
+              checkPermissions(scope, 'edit', 'user_hash_id' in item ? item.user_hash_id : undefined) &&
+              Number(phase) < 30 && (
+                <>
                   <EditButton
                     color={color || 'secondary'}
                     onEdit={onEdit}
                     role="menuitem"
                     data-testid={`edit-button`}
                   />
-                )}
-                {checkPermissions(scope, 'delete', 'user_hash_id' in item ? item.user_hash_id : undefined) && (
                   <DeleteButton
                     color={color || 'error'}
                     scope={scope}
@@ -82,9 +81,8 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
                     role="menuitem"
                     data-testid={`delete-button`}
                   />
-                )}
-              </>
-            )}
+                </>
+              )}
           </Stack>
         </Collapse>
         <AppIconButton
