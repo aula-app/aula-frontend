@@ -55,9 +55,15 @@
       "button": "Reset password",
       "link": "Forgot password?",
       "message": "Are you sure you want to request a new password for this user?",
+      "messageEmail": "Each selected user will receive reset instructions via email.",
+      "messageNoEmail": "Some users didn't register their emails. Remember to share the new password manually with them.",
+      "messageMultiple": "Are you sure you want to request new passwords for {{count}} {{target}}? {{var}}",
       "recover": "Recover password",
       "recovery": "Password Recovery",
-      "success": "The password was reset. Registered users will receive a reset link in their email."
+      "success": "The password was reset. Registered users will receive a reset link in their email.",
+      "successfulUser": "Password reset requested for {{user}}. {{var}}",
+      "successfulEmail": "They will receive reset instructions via email.",
+      "successfulNoEmail": "No email is registered. Share the new password manually."
     },
     "login": {
       "button": "Login",
@@ -132,6 +138,9 @@
     "accountInactive": "Your account is inactive",
     "accountSuspendDate": " until {{var}}",
     "accountSuspended": "Your account has been suspended{{var}}. Please contact your administrator",
+    "appOutdated": "Your app is outdated. Please update aula to continue using it.",
+    "appBelowRecommended": "You are running an outdated aula version {{currentVersion}}. Please update as soon as possible.",
+    "appOutdatedImage": "Winking character illustration reminding you to update the app",
     "databaseError": "Failed to fetch data",
     "default": "Something went wrong",
     "existingUser": "Username and/or email already in use",
