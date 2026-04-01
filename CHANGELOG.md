@@ -2,6 +2,8 @@
 
 - **New features**
   - Reset multiple users' password button on User Settings
+- **Bug Fixes**
+  - Fix long names clipped on password list print view
 
 ## 1.8.3
 
