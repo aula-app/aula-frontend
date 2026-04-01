@@ -3,6 +3,11 @@
 - **New features**
   - Reset multiple users' password button on User Settings
   - Version management alerts for outdated app version
+  - Prevent users from editing ideas after voting phase
+
+- **Bug fixes**
+  - Default phase durations from room was not affecting new boxes
+  - Fix long names clipped on password list print view
 
 ## 1.8.3
 
