@@ -22,6 +22,7 @@ const INITIAL_STATE: OutdatedState = {
 export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
   const [state, setState] = useState<OutdatedState>(INITIAL_STATE);
   const lastCheckedRef = useRef<{ key: string; timestamp: number } | null>(null);
+  const popupShownRef = useRef<boolean>(false);
   const [, dispatch] = useAppStore();
   const { t } = useTranslation();
 
@@ -64,7 +65,7 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
         if (recommendedVersion && recommendedVersion !== 'unknown') {
           const belowRecommended = isVersionBelowRecommended(currentVersion, recommendedVersion);
           setState((prev) => ({ ...prev, isBelowRecommended: belowRecommended }));
-          if (belowRecommended && !outdated) {
+          if (belowRecommended && !outdated && !popupShownRef.current) {
             dispatch({
               action: 'ADD_POPUP',
               message: {
@@ -75,6 +76,7 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
                 }),
               },
             });
+            popupShownRef.current = true;
           }
         }
 
