@@ -52,6 +52,8 @@ export const reportIdea = async (
 
   // Submit report
   await formInteractions.clickButton(page, 'report-form-submit-button');
+  // The dialog closes only after the API call resolves — waiting for it to hide
+  // is equivalent to waiting for the network request to complete.
   await expect(page.getByTestId('report-dialog')).toBeHidden();
 };
 

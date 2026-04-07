@@ -29,6 +29,8 @@ services:
       MARIADB_USER: aula_user
       MARIADB_PASSWORD: e2e_pass
     volumes:
+      # NOTE: this path is coupled to the backend repo structure (docker/mariadb/).
+      # If that folder moves in backend-aula, this volume mapping must be updated here too.
       - ${BACKEND_DIR:-../backend-aula}/docker/mariadb/:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]

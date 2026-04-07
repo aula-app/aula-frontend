@@ -28,8 +28,6 @@ test.describe.serial('Instance Offline', () => {
 
     const accordion = adminPage.getByTestId('config-accordion-system');
     await expect(accordion).toHaveAttribute('aria-expanded', 'false');
-    const isExpanded = await accordion.getAttribute('aria-expanded');
-    expect(isExpanded).toBe('false');
 
     await navigation.openAccordion(adminPage, 'config-accordion-system');
     const selectedStatus = await adminPage.getByTestId('select-field-status-input').inputValue();

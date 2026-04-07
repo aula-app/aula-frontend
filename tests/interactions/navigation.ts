@@ -16,7 +16,7 @@ export const clickOnLink = async (page: Page, path: string) => {
 
 export const clickToNavigate = async (page: Page, path: string) => {
   const currentUrl = page.url();
-  if (currentUrl.includes(path)) {
+  if (currentUrl === `${host}${path}`) {
     return;
   }
   await page.goto(`${host}${path}`, { waitUntil: 'domcontentloaded' });
