@@ -23,11 +23,19 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
   const [state, setState] = useState<OutdatedState>(INITIAL_STATE);
   const lastCheckedRef = useRef<{ key: string; timestamp: number } | null>(null);
   const popupShownRef = useRef<boolean>(false);
-  const [, dispatch] = useAppStore();
+  const [appState, dispatch] = useAppStore();
   const { t } = useTranslation();
+  const isAuthenticatedRef = useRef<boolean>(appState.isAuthenticated);
 
   useEffect(() => {
     let isMounted = true;
+
+    // Reset cache and popup tracking when user logs in
+    if (appState.isAuthenticated && !isAuthenticatedRef.current) {
+      lastCheckedRef.current = null;
+      popupShownRef.current = false;
+    }
+    isAuthenticatedRef.current = appState.isAuthenticated;
 
     const checkIsOutdated = async () => {
       const apiUrl = localStorageGet('api_url');
@@ -94,7 +102,7 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
     return () => {
       isMounted = false;
     };
-  }, [refreshKey]);
+  }, [refreshKey, appState.isAuthenticated, dispatch, t]);
 
   return state;
 };
