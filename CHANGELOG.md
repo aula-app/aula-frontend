@@ -5,6 +5,7 @@
   - Version management alerts for outdated app version
 
 - **Bug fixes**
+  - Fix wrong 404 message on /messages page showing "no users" instead of "no messages" in German
   - Fix quorum tooltip floating over edit menu
   - Prevent users from editing ideas after voting phase
   - Default phase durations from room was not affecting new boxes
