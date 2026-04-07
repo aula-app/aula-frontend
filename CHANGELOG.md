@@ -3,9 +3,10 @@
 - **New features**
   - Reset multiple users' password button on User Settings
   - Version management alerts for outdated app version
-  - Prevent users from editing ideas after voting phase
 
 - **Bug fixes**
+  - Fix quorum tooltip floating over edit menu
+  - Prevent users from editing ideas after voting phase
   - Default phase durations from room was not affecting new boxes
   - Fix long names clipped on password list print view
 

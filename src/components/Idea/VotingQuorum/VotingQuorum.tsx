@@ -22,7 +22,13 @@ const VotingQuorum: React.FC<Props> = ({ phase, users, votes, quorum }) => {
     <Stack pt={2}>
       <Stack sx={{ position: 'relative' }}>
         {quorum > 0 && (
-          <Tooltip title={`${Math.round(quorum)}%`} open={true} placement="bottom" arrow={true}>
+          <Tooltip
+            title={`${Math.round(quorum)}%`}
+            open={true}
+            placement="bottom"
+            arrow={true}
+            slotProps={{ popper: { style: { zIndex: 10 } } }}
+          >
             <Box sx={{ position: 'absolute', left: `${Math.round(quorum)}%` }} />
           </Tooltip>
         )}
