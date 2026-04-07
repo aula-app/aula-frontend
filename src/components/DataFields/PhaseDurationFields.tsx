@@ -41,11 +41,14 @@ const PhaseDurationFields: React.FC<Props> = ({
     { name: 'phase_duration_3', phase: 30 },
   ] as Array<{ name: 'phase_duration_1' | 'phase_duration_3'; phase: RoomPhases }>;
 
-  const getDurations = () => {
-    fields.forEach((field) => {
-      if (control._defaultValues[field.name]) return; // Skip if already set
-      setValue(field.name, getDefaultDuration(field.name));
-    });
+  const getDurations = async () => {
+    await Promise.all(
+      fields.map(async (field) => {
+        if (control._defaultValues[field.name]) return; // Skip if already set
+        const duration = await getDefaultDuration(field.name);
+        setValue(field.name, duration);
+      })
+    );
   };
 
   const getDefaultDuration = async (phase: 'phase_duration_1' | 'phase_duration_3') => {
@@ -63,7 +66,7 @@ const PhaseDurationFields: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    getDurations();
+    void getDurations();
   }, [room, room_id]);
 
   return (
