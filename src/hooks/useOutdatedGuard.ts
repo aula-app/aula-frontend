@@ -12,6 +12,7 @@ interface OutdatedState {
 }
 
 const LAST_CHECK_TTL_MS = 10 * 60 * 1000; // 10 minutes
+const POPUP_SHOWN_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours
 
 const INITIAL_STATE: OutdatedState = {
   isCheckingOutdated: true,
@@ -22,11 +23,20 @@ const INITIAL_STATE: OutdatedState = {
 export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
   const [state, setState] = useState<OutdatedState>(INITIAL_STATE);
   const lastCheckedRef = useRef<{ key: string; timestamp: number } | null>(null);
-  const [, dispatch] = useAppStore();
+  const popupShownRef = useRef<{ shown: boolean; timestamp: number } | null>(null);
+  const [appState, dispatch] = useAppStore();
   const { t } = useTranslation();
+  const isAuthenticatedRef = useRef<boolean>(appState.isAuthenticated);
 
   useEffect(() => {
     let isMounted = true;
+
+    // Reset cache and popup tracking when user logs in
+    if (appState.isAuthenticated && !isAuthenticatedRef.current) {
+      lastCheckedRef.current = null;
+      popupShownRef.current = null;
+    }
+    isAuthenticatedRef.current = appState.isAuthenticated;
 
     const checkIsOutdated = async () => {
       const apiUrl = localStorageGet('api_url');
@@ -64,7 +74,13 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
         if (recommendedVersion && recommendedVersion !== 'unknown') {
           const belowRecommended = isVersionBelowRecommended(currentVersion, recommendedVersion);
           setState((prev) => ({ ...prev, isBelowRecommended: belowRecommended }));
-          if (belowRecommended && !outdated) {
+
+          // Check if popup should be shown: either never shown, or shown more than 12h ago
+          const shouldShowPopup =
+            !popupShownRef.current ||
+            (now - popupShownRef.current.timestamp > POPUP_SHOWN_TTL_MS);
+
+          if (belowRecommended && !outdated && shouldShowPopup) {
             dispatch({
               action: 'ADD_POPUP',
               message: {
@@ -75,6 +91,7 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
                 }),
               },
             });
+            popupShownRef.current = { shown: true, timestamp: now };
           }
         }
 
@@ -92,7 +109,7 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
     return () => {
       isMounted = false;
     };
-  }, [refreshKey]);
+  }, [refreshKey, appState.isAuthenticated, dispatch, t]);
 
   return state;
 };
