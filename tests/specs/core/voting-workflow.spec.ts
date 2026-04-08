@@ -1,4 +1,5 @@
 import { test, expect } from '../../fixtures/test-fixtures';
+import { TEST_IDS } from '../../../src/test-ids';
 import * as roomsFixture from '../../helpers/contexts/room-contexts';
 import * as entities from '../../helpers/entities';
 import * as boxes from '../../interactions/boxes';
@@ -68,7 +69,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
     await test.step('Verify box is visible', async () => {
       await navigation.goToRoom(adminPage, roomContext.room.name);
       await navigation.goToPhase(adminPage, roomContext.room.name, PHASES.DISCUSSION);
-      const boxTitle = adminPage.getByTestId('box-card').getByText(box.name);
+      const boxTitle = adminPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
       await expect(boxTitle).toBeVisible();
     });
 
@@ -77,7 +78,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await navigation.goToPhase(adminPage, roomContext.room.name, PHASES.DISCUSSION);
       await navigation.clickOnPageItem(adminPage, box.name);
 
-      const boxCard = adminPage.getByTestId('box-card');
+      const boxCard = adminPage.getByTestId(TEST_IDS.BOX_CARD);
       await expect(boxCard.getByText(box.name)).toBeVisible();
       await boxCard.getByTestId('more-options-button').click();
       await expect(boxCard.getByTestId('edit-button')).toBeVisible();
@@ -126,7 +127,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
     await test.step('Verify box is in approval phase', async () => {
       await navigation.goToRoom(userPage, roomContext.room.name);
       await navigation.goToPhase(userPage, roomContext.room.name, PHASES.APPROVAL);
-      const boxTitle = userPage.getByTestId('box-card').getByText(box.name);
+      const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
       await expect(boxTitle).toBeVisible();
     });
   });
@@ -151,7 +152,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await approveButton.click();
 
       // Confirm approval
-      const confirmButton = adminPage.getByTestId('confirm-button');
+      const confirmButton = adminPage.getByTestId(TEST_IDS.CONFIRM_BUTTON);
       await expect(confirmButton).toBeVisible();
       await confirmButton.click();
     });
@@ -176,7 +177,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await forms.fillMarkdownForm(adminPage, 'approval_comment', 'This idea does not meet the requirements.');
 
       // Confirm rejection
-      const confirmButton = adminPage.getByTestId('confirm-button');
+      const confirmButton = adminPage.getByTestId(TEST_IDS.CONFIRM_BUTTON);
       await expect(confirmButton).toBeVisible();
       await confirmButton.click();
     });
@@ -191,7 +192,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
     await test.step('Verify box is in voting phase', async () => {
       await navigation.goToRoom(userPage, roomContext.room.name);
       await navigation.goToPhase(userPage, roomContext.room.name, PHASES.VOTING);
-      const boxTitle = userPage.getByTestId('box-card').getByText(box.name);
+      const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
       await expect(boxTitle).toBeVisible();
     });
   });
@@ -241,7 +242,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
     await test.step('Verify box is in results phase', async () => {
       await navigation.goToRoom(userPage, roomContext.room.name);
       await navigation.goToPhase(userPage, roomContext.room.name, PHASES.RESULTS);
-      const boxTitle = userPage.getByTestId('box-card').getByText(box.name);
+      const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
       await expect(boxTitle).toBeVisible();
     });
   });

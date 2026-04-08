@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test';
+import { TEST_IDS } from '../../src/test-ids';
 
 import * as types from '../support/types';
 import * as formInteractions from './forms';
@@ -58,8 +59,8 @@ export const remove = async (
   await page.mouse.move(0, 0);
 
   await formInteractions.openMoreOption(page, IdeaDiv);
-  await IdeaDiv.getByTestId('delete-button').click();
-  await formInteractions.clickButton(page, `confirm-button`);
+  await IdeaDiv.getByTestId(TEST_IDS.DELETE_BUTTON).click();
+  await formInteractions.clickButton(page, TEST_IDS.CONFIRM_BUTTON);
 
   await expect(IdeaDiv).toHaveCount(0);
 };
@@ -87,8 +88,8 @@ export const removeComment = async (
   await expect(Comment).toBeVisible();
 
   await formInteractions.clickButton(page, `comment-more-options`);
-  await formInteractions.clickButton(page, `delete-button`);
-  await formInteractions.clickButton(page, `confirm-button`);
+  await formInteractions.clickButton(page, TEST_IDS.DELETE_BUTTON);
+  await formInteractions.clickButton(page, TEST_IDS.CONFIRM_BUTTON);
 
   await expect(Comment).toHaveCount(0);
 };

@@ -1,3 +1,4 @@
+import { TEST_IDS } from '@/test-ids';
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
@@ -83,7 +84,7 @@ const FilterBar: FC<FilterBarProps> = ({ children, fields, scope, onStatusChange
                 icon="filter"
                 onClick={toggleFilters}
                 id="filter-toggle-button"
-                data-testid="filter-toggle-button"
+                data-testid={TEST_IDS.FILTER_TOGGLE_BUTTON}
                 aria-expanded={isOpen}
                 aria-controls="filter-panel"
                 aria-label={isOpen ? t('actions.hideFilters') : t('actions.showFilters')}

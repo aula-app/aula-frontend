@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test';
+import { TEST_IDS } from '../../src/test-ids';
 import * as shared from '../support/utils';
 
 const host = shared.getHost();
@@ -51,8 +52,8 @@ export const goToHome = async (page: Page) => {
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
   // Explicit waitFor gives a clearer timeout error when the target room never appears.
-  await page.getByTestId('room-card').filter({ hasText: roomName }).first().waitFor({ state: 'visible' });
-  await page.getByTestId('room-card').filter({ hasText: roomName, visible: true }).click();
+  await page.getByTestId(TEST_IDS.ROOM_CARD).filter({ hasText: roomName }).first().waitFor({ state: 'visible' });
+  await page.getByTestId(TEST_IDS.ROOM_CARD).filter({ hasText: roomName, visible: true }).click();
   await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'));
 };
 

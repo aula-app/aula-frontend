@@ -1,4 +1,5 @@
 import { Locator, Page, expect } from '@playwright/test';
+import { TEST_IDS } from '../../src/test-ids';
 import * as formInteractions from './forms';
 import { ScopeKeyType } from '../../src/types/Scopes';
 import { TIMEOUTS } from '../support/constants';
@@ -19,7 +20,7 @@ export const check = async (page: Page, filters: { option: string; value: string
 };
 
 export const filter = async (page: Page, filter: { option: string; value: string }) => {
-  const filterButton = page.getByTestId('filter-toggle-button');
+  const filterButton = page.getByTestId(TEST_IDS.FILTER_TOGGLE_BUTTON);
   const filterInput = page.getByTestId('filter-input');
   await expect(filterButton).toBeVisible();
 
@@ -50,7 +51,7 @@ export const filter = async (page: Page, filter: { option: string; value: string
  * @param filter - Filter configuration with option (field name) and value
  */
 export const applyFilter = async (page: Page, filter: { option: string; value: string }) => {
-  const filterButton = page.getByTestId('filter-toggle-button');
+  const filterButton = page.getByTestId(TEST_IDS.FILTER_TOGGLE_BUTTON);
   const filterInput = page.getByTestId('filter-input');
   await expect(filterButton).toBeVisible();
 
@@ -72,7 +73,7 @@ export const applyFilter = async (page: Page, filter: { option: string; value: s
 };
 
 export const clearFilter = async (page: Page) => {
-  const filterButton = page.getByTestId('filter-toggle-button');
+  const filterButton = page.getByTestId(TEST_IDS.FILTER_TOGGLE_BUTTON);
   const clearFilterButton = page.getByTestId('clear-filter-button');
   await expect(filterButton).toBeVisible();
 

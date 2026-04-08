@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test';
+import { TEST_IDS } from '../../../src/test-ids';
 import { test } from '../../fixtures/test-fixtures';
 import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
@@ -47,7 +48,7 @@ test.describe.serial('Instance Offline', () => {
       // logout() (clears the token) and the router falls back to the public /offline
       // route where <PublicOfflineView data-testid="school-offline-view"> is rendered.
       await userPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
-      const offlineDiv = userPage.getByTestId('school-offline-view');
+      const offlineDiv = userPage.getByTestId(TEST_IDS.SCHOOL_OFFLINE_VIEW);
       await expect(offlineDiv).toBeVisible({ timeout: 20000 });
     });
 

@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test';
+import { TEST_IDS } from '../../src/test-ids';
 
 import * as types from '../support/types';
 import * as formInteractions from './forms';
@@ -43,19 +44,19 @@ export const remove = async (page: Page, room: types.RoomData) => {
 
 export const openSearch = async (page: Page) => {
   await navigation.goToHome(page);
-  await page.getByTestId('search-button').filter({ visible: true }).click();
-  const searchField = page.getByTestId('search-field').locator('input');
+  await page.getByTestId(TEST_IDS.SEARCH_BUTTON).filter({ visible: true }).click();
+  const searchField = page.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
   await expect(searchField).toBeVisible();
 };
 
 export const closeSearch = async (page: Page) => {
-  await page.getByTestId('search-button').filter({ visible: true }).click();
-  const searchField = page.getByTestId('search-field').locator('input');
+  await page.getByTestId(TEST_IDS.SEARCH_BUTTON).filter({ visible: true }).click();
+  const searchField = page.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
   await expect(searchField).not.toBeVisible();
 };
 
 export const searchRooms = async (page: Page, query: string) => {
-  const searchField = page.getByTestId('search-field').locator('input');
+  const searchField = page.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
 
   // Open search if not already open
   const isVisible = await searchField.isVisible().catch(() => false);
@@ -67,7 +68,7 @@ export const searchRooms = async (page: Page, query: string) => {
 };
 
 export const clearSearch = async (page: Page) => {
-  const searchField = page.getByTestId('search-field').locator('input');
+  const searchField = page.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
   await searchField.clear();
   // Wait for the rooms list to re-fetch after clearing the search filter.
   await page.waitForLoadState('networkidle');
@@ -76,31 +77,31 @@ export const clearSearch = async (page: Page) => {
 export const openSort = async (page: Page) => {
   await navigation.goToHome(page);
 
-  const sortSelect = page.getByTestId('sort-select');
+  const sortSelect = page.getByTestId(TEST_IDS.SORT_SELECT);
   if (!(await sortSelect.isVisible())) {
-    await page.getByTestId('sort-button').filter({ visible: true }).click();
+    await page.getByTestId(TEST_IDS.SORT_BUTTON).filter({ visible: true }).click();
     expect(sortSelect).toBeVisible();
   }
 };
 
 export const closeSort = async (page: Page) => {
-  await page.getByTestId('sort-button').filter({ visible: true }).click();
-  const sortSelect = page.getByTestId('sort-select');
+  await page.getByTestId(TEST_IDS.SORT_BUTTON).filter({ visible: true }).click();
+  const sortSelect = page.getByTestId(TEST_IDS.SORT_SELECT);
   await expect(sortSelect).not.toBeVisible();
 };
 
 export const selectSortOption = async (page: Page, sortValue: string) => {
-  await page.getByTestId('sort-select').filter({ visible: true }).click();
+  await page.getByTestId(TEST_IDS.SORT_SELECT).filter({ visible: true }).click();
   await page.getByTestId(`sort-option-${sortValue}`).filter({ visible: true }).click();
 };
 
 export const toggleSortDirection = async (page: Page) =>
-  await page.getByTestId('sort-direction-button').filter({ visible: true }).click();
+  await page.getByTestId(TEST_IDS.SORT_DIRECTION_BUTTON).filter({ visible: true }).click();
 
 export const getRoomCount = async (page: Page): Promise<number> => {
   await navigation.goToHome(page);
 
-  const roomCards = page.getByTestId('room-card');
+  const roomCards = page.getByTestId(TEST_IDS.ROOM_CARD);
   // Rooms load asynchronously after the heading appears — poll until the count stabilizes.
   let lastCount = -1;
   for (let i = 0; i < 10; i++) {
@@ -114,6 +115,6 @@ export const getRoomCount = async (page: Page): Promise<number> => {
 
 export const getFirstRoomName = async (page: Page): Promise<string | null> => {
   await navigation.goToHome(page);
-  const namesOfRooms = page.getByTestId('room-card').filter({ visible: true }).locator(page.locator('h3'));
+  const namesOfRooms = page.getByTestId(TEST_IDS.ROOM_CARD).filter({ visible: true }).locator(page.locator('h3'));
   return await namesOfRooms.first().textContent();
 };

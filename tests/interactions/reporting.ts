@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test';
+import { TEST_IDS } from '../../src/test-ids';
 
 import * as types from '../support/types';
 import * as formInteractions from './forms';
@@ -42,7 +43,7 @@ export const reportIdea = async (
   await IdeaDiv.getByTestId('report-button').click();
 
   // Wait for report dialog
-  await expect(page.getByTestId('report-dialog')).toBeVisible();
+  await expect(page.getByTestId(TEST_IDS.REPORT_DIALOG)).toBeVisible();
 
   // Select report type from dropdown
   await formInteractions.selectOptionByValue(page, 'select-field-report', reportType);
@@ -54,7 +55,7 @@ export const reportIdea = async (
   await formInteractions.clickButton(page, 'report-form-submit-button');
   // The dialog closes only after the API call resolves — waiting for it to hide
   // is equivalent to waiting for the network request to complete.
-  await expect(page.getByTestId('report-dialog')).toBeHidden();
+  await expect(page.getByTestId(TEST_IDS.REPORT_DIALOG)).toBeHidden();
 };
 
 /**
@@ -87,7 +88,7 @@ export const reportComment = async (
   await comment.getByTestId('report-button').click();
 
   // Wait for report dialog
-  await expect(page.getByTestId('report-dialog')).toBeVisible();
+  await expect(page.getByTestId(TEST_IDS.REPORT_DIALOG)).toBeVisible();
 
   // Select report type from dropdown
   await formInteractions.selectOptionByValue(page, 'select-field-report', reportType);
@@ -97,7 +98,7 @@ export const reportComment = async (
 
   // Submit report
   await formInteractions.clickButton(page, 'report-form-submit-button');
-  await expect(page.getByTestId('report-dialog')).toBeHidden();
+  await expect(page.getByTestId(TEST_IDS.REPORT_DIALOG)).toBeHidden();
 };
 
 /**
@@ -139,17 +140,17 @@ export const reportBug = async (page: Page, description: string) => {
   await navigation.goToHome(page);
 
   // Click report bug option
-  await formInteractions.clickButton(page, 'report-bug-button');
+  await formInteractions.clickButton(page, TEST_IDS.REPORT_BUG_BUTTON);
 
   // Wait for bug report dialog
-  await expect(page.getByTestId('bug-dialog')).toBeVisible();
+  await expect(page.getByTestId(TEST_IDS.BUG_DIALOG)).toBeVisible();
 
   // Fill in bug description using markdown editor
   await formInteractions.fillMarkdownForm(page, 'content', description);
 
   // Submit bug report
-  await formInteractions.clickButton(page, 'bug-form-submit-button');
-  await expect(page.getByTestId('bug-dialog')).toBeHidden();
+  await formInteractions.clickButton(page, TEST_IDS.BUG_FORM_SUBMIT);
+  await expect(page.getByTestId(TEST_IDS.BUG_DIALOG)).toBeHidden();
 };
 
 /**

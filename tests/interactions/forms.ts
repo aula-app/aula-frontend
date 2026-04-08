@@ -20,7 +20,7 @@ export const clickButton = async (page: Page, testId: string) => {
   await button.click();
 };
 
-export const openMoreOption = async (page: Page, parent: Locator) => {
+export const openMoreOption = async (_page: Page, parent: Locator) => {
   const moreButton = parent.getByTestId('idea-more-menu');
   await expect(moreButton).toBeVisible();
   await moreButton.click();
@@ -30,22 +30,8 @@ export const openMoreOption = async (page: Page, parent: Locator) => {
 const openSelectDropdown = async (page: Page, testId: string) => {
   const field = page.getByTestId(testId);
   await expect(field).toBeVisible();
-
-  const dropdownIcon = field.getByTestId('ArrowDropDownIcon');
-
-  // Check if the icon has a parent button and click the button instead
-  const parentButton = dropdownIcon.locator('xpath=ancestor::button[1]');
-  const buttonCount = await parentButton.count();
-
-  if (buttonCount > 0) {
-    await parentButton.click();
-  } else {
-    // Fallback: click the icon directly if no button parent
-    await dropdownIcon.click({ force: true });
-  }
-
-  const dropdown = page.getByTestId(`${testId}-list`);
-  await expect(dropdown).toBeVisible();
+  await field.click();
+  await expect(page.getByTestId(`${testId}-list`)).toBeVisible();
 };
 
 export const selectOption = async (page: Page, testId: string, optionLabel: string) => {

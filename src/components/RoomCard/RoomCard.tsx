@@ -1,4 +1,5 @@
 import PhaseBar from '@/components/PhaseBar';
+import { TEST_IDS } from '@/test-ids';
 import { RoomType } from '@/types/Scopes';
 import { Card, Stack, Typography } from '@mui/material';
 import { FC } from 'react';
@@ -34,7 +35,7 @@ const RoomCard: FC<RoomCardProps> = ({ room }) => {
   const { imageNumber, imageShift } = parseDescription(room.description_internal);
 
   return (
-    <Card sx={{ borderRadius: '25px', width: '100%' }} variant="outlined" data-testid="room-card">
+    <Card sx={{ borderRadius: '25px', width: '100%' }} variant="outlined" data-testid={TEST_IDS.ROOM_CARD}>
       <AppLink to={`/room/${room.hash_id}/phase/0`}>
         <Stack
           sx={{
