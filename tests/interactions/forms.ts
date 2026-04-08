@@ -27,10 +27,23 @@ export const openMoreOption = async (_page: Page, parent: Locator) => {
   await expect(parent.getByTestId('report-button')).toBeVisible();
 };
 
+// MUI Autocomplete exposes a real, interactive testId-input; clicking it opens the popup.
+// MUI Select also renders testId-input but marks it aria-hidden="true" (native form input
+// covered by the Select div) — clicking the container opens the dropdown for that case.
 const openSelectDropdown = async (page: Page, testId: string) => {
   const field = page.getByTestId(testId);
   await expect(field).toBeVisible();
-  await field.click();
+
+  const namedInput = page.getByTestId(`${testId}-input`);
+  const isRealInput =
+    (await namedInput.count()) > 0 && (await namedInput.getAttribute('aria-hidden')) !== 'true';
+
+  if (isRealInput) {
+    await namedInput.click();
+  } else {
+    await field.click();
+  }
+
   await expect(page.getByTestId(`${testId}-list`)).toBeVisible();
 };
 
