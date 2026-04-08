@@ -41,16 +41,12 @@ test.describe.serial('Instance Offline', () => {
       await changeInstanceStatus(adminPage, false);
     });
 
-    await test.step('Verify offline view is displayed on attempt to login', async () => {
-      // Clear stored auth so we always start from the unauthenticated login flow.
-      // Without this, a fresh valid token bypasses the login page and the offline view
-      // is never shown (the app goes to the authenticated offline state instead).
-      // Navigate to the host origin first so localStorage.clear() targets the right domain.
+    await test.step('Verify offline view is displayed for authenticated user', async () => {
+      // Navigate as an authenticated user. PrivateLayout calls useIsOnline() on each
+      // navigation; when the instance is offline it renders <OfflineView />, which calls
+      // logout() (clears the token) and the router falls back to the public /offline
+      // route where <PublicOfflineView data-testid="school-offline-view"> is rendered.
       await userPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
-      await userPage.evaluate(() => localStorage.clear());
-      try {
-        await users.loginAttempt(userPage, userConfig);
-      } catch (e) { }
       const offlineDiv = userPage.getByTestId('school-offline-view');
       await expect(offlineDiv).toBeVisible({ timeout: 20000 });
     });
