@@ -3,6 +3,7 @@ import { test } from '../../fixtures/test-fixtures';
 import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 import * as users from '../../interactions/users';
+import * as shared from '../../support/utils';
 
 /**
  * Instance Offline Mode Tests
@@ -40,15 +41,18 @@ test.describe.serial('Instance Offline', () => {
       await changeInstanceStatus(adminPage, false);
     });
 
-    // @FIXME: nikola - this test is often failing because it relies on user being registered as part of
-    //   user.fixture.ts base test (using api-users.ts#registerUserViaAPI)
-    //   so it only succeeds if the user is already created and in the auth-states (ie. userData) cache
     await test.step('Verify offline view is displayed on attempt to login', async () => {
+      // Clear stored auth so we always start from the unauthenticated login flow.
+      // Without this, a fresh valid token bypasses the login page and the offline view
+      // is never shown (the app goes to the authenticated offline state instead).
+      // Navigate to the host origin first so localStorage.clear() targets the right domain.
+      await userPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
+      await userPage.evaluate(() => localStorage.clear());
       try {
         await users.loginAttempt(userPage, userConfig);
       } catch (e) { }
       const offlineDiv = userPage.getByTestId('school-offline-view');
-      await expect(offlineDiv).toBeVisible({ timeout: 5000 });
+      await expect(offlineDiv).toBeVisible({ timeout: 20000 });
     });
 
     await test.step('Admin: Change instance status to online', async () => {

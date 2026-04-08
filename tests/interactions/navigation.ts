@@ -50,7 +50,7 @@ export const goToHome = async (page: Page) => {
 
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
-  // Wait for the specific room card — avoids races where any card appears before the target room loads
+  // Explicit waitFor gives a clearer timeout error when the target room never appears.
   await page.getByTestId('room-card').filter({ hasText: roomName }).first().waitFor({ state: 'visible' });
   await page.getByTestId('room-card').filter({ hasText: roomName, visible: true }).click();
   await page.waitForURL((url) => url.pathname.includes('/room') || url.pathname.includes('/rooms'));
