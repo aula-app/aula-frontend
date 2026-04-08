@@ -28,7 +28,8 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
 
   const fetchUsers = useCallback(async (roomId: string) => {
     setLoading(true);
-    const response = await getUsers(roomId ? { room_id: roomId } : {});
+    const query = roomId && roomId !== 'all' ? { room_id: roomId } : {};
+    const response = await getUsers(query);
 
     if (response.error) {
       setError(response.error);
@@ -100,6 +101,9 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
                 text-align: left;
                 max-width: 50%;
                 width: 50%;
+                word-break: break-word;
+                overflow-wrap: anywhere;
+                white-space: normal;
               }
               th {
                 background-color: #f2f2f2;
