@@ -195,6 +195,7 @@ const LoginView = () => {
                 "aria-labelledby": "login-password-label",
                 "aria-invalid": !!errors.password,
                 "aria-errormessage": errors.password ? "password-error-message" : undefined,
+                autoCapitalize: "none",
                 endAdornment: (
                   <InputAdornment position="end">
                     <AppIconButton
