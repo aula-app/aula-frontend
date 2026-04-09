@@ -4,6 +4,9 @@
   - Reset multiple users' password button on User Settings
   - Version management alerts for outdated app version
 
+- **Accessibility**
+  - Fix WCAG 1.4.3 contrast failures in dark mode — semantic colors (primary, error, secondary, info, warning) now meet 4.5:1 against dark backgrounds
+
 - **Bug fixes**
   - Fix wrong 404 message on /messages page showing "no users" instead of "no messages" in German
   - Fix quorum tooltip floating over edit menu
