@@ -39,7 +39,7 @@ export const create = async (
 
   // submit the idea form
   await formInteractions.clickButton(page, 'submit-idea-form');
-  await expect(page.getByTestId('add-idea-form')).toBeHidden({ timeout: 5000 });
+  await expect(page.getByTestId('add-idea-form')).toBeHidden();
 
   const IdeaTitle = page.getByText(idea.name, { exact: true });
   await expect(IdeaTitle).toBeVisible();

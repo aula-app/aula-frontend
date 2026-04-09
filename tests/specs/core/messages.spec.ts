@@ -66,7 +66,7 @@ test.describe.serial('Message Management - User Messages', () => {
 
     await test.step('Verify message is visible', async () => {
       const messageCard = userPage.getByText(messageData.headline);
-      await expect(messageCard).toBeVisible({ timeout: 10000 });
+      await expect(messageCard).toBeVisible();
     });
   });
 
@@ -80,13 +80,13 @@ test.describe.serial('Message Management - User Messages', () => {
       await expect(messageRow).toBeVisible();
 
       const checkbox = messageRow.locator('input[type="checkbox"]');
-      await expect(checkbox).toBeVisible({ timeout: 2000 });
+      await expect(checkbox).toBeVisible();
 
       // Ensure checkbox is unchecked first, then check it
       if (await checkbox.isChecked()) {
-        await checkbox.uncheck({ timeout: 300 });
+        await checkbox.uncheck();
       }
-      await checkbox.check({ timeout: 300 });
+      await checkbox.check();
     });
 
     await test.step('Delete the message', async () => {
@@ -96,7 +96,7 @@ test.describe.serial('Message Management - User Messages', () => {
 
     await test.step('Verify message is no longer in the list', async () => {
       const messageRow = adminPage.locator('table tr').filter({ hasText: messageData.headline });
-      await expect(messageRow).toHaveCount(0, { timeout: 5000 });
+      await expect(messageRow).toHaveCount(0);
     });
   });
 

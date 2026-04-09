@@ -110,13 +110,13 @@ test.describe.serial('Group Management - Creation and User Assignment', () => {
     await test.step('Verify user received the message', async () => {
       await navigation.goToMessages(userPage);
       const messageCard = userPage.getByText(groupData.messageData.headline);
-      await expect(messageCard).toBeVisible({ timeout: 10000 });
+      await expect(messageCard).toBeVisible();
     });
 
     await test.step('Verify student received the message', async () => {
       await navigation.goToMessages(studentPage);
       const messageCard = studentPage.getByText(groupData.messageData.headline);
-      await expect(messageCard).toBeVisible({ timeout: 10000 });
+      await expect(messageCard).toBeVisible();
     });
   });
 });

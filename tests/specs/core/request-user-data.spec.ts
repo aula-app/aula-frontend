@@ -37,15 +37,15 @@ test.describe.serial('Request User Data - Export Request and Download Flow', () 
 
       // Find the request for the specific user
       const requestRow = adminPage.getByTestId(`data-export-request-${userConfig.username}`);
-      await expect(requestRow).toBeVisible({ timeout: 5000 });
+      await expect(requestRow).toBeVisible();
 
       // Click approve button
       const approveButton = requestRow.getByTestId('confirm-request');
-      await expect(approveButton).toBeVisible({ timeout: 5000 });
+      await expect(approveButton).toBeVisible();
       await approveButton.click();
 
       // Wait for confirmation dialog
-      await adminPage.getByTestId('confirm-request-dialog').waitFor({ state: 'visible', timeout: 5000 });
+      await adminPage.getByTestId('confirm-request-dialog').waitFor({ state: 'visible' });
 
       // Click confirm button in the dialog
       await formInteractions.clickButton(adminPage, 'confirm-request-action');
@@ -57,16 +57,16 @@ test.describe.serial('Request User Data - Export Request and Download Flow', () 
     await test.step('Download user data', async () => {
       await navigation.goToMessages(userPage);
       const messagesView = userPage.getByTestId('user-messages-view');
-      await expect(messagesView).toBeVisible({ timeout: 5000 });
+      await expect(messagesView).toBeVisible();
 
       // Click on the data export message (find by headline text)
       const exportMessage = messagesView.getByText(userConfig.displayName).first();
-      await expect(exportMessage).toBeVisible({ timeout: 5000 });
+      await expect(exportMessage).toBeVisible();
       await exportMessage.click();
 
       // // Verify download button is available
       const downloadButton = userPage.getByTestId('download-data-button');
-      await expect(downloadButton).toBeVisible({ timeout: 5000 });
+      await expect(downloadButton).toBeVisible();
       await expect(downloadButton).toBeEnabled();
 
       // Setup download listener

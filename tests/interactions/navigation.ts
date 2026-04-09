@@ -39,18 +39,49 @@ export const openAccordion = async (page: Page, testId: string) => {
 
 // Page navigation
 
-export const goToHome = async (page: Page) => {
-  const currentUrl = page.url();
-  if (currentUrl === host || currentUrl === `${host}/`) {
-    return;
-  }
+/**
+ * Refreshes the JWT in the page's localStorage by calling the backend refresh endpoint.
+ * Necessary when the stored JWT pre-dates room membership changes made in a test's beforeAll,
+ * because the server uses JWT room roles to authorise getIdeasByRoom but doesn't trigger
+ * an automatic refresh for that endpoint when the JWT is valid-but-stale.
+ */
+const refreshJWT = async (page: Page): Promise<void> => {
+  await page.evaluate(async () => {
+    const apiUrl = localStorage.getItem('api_url');
+    const code = localStorage.getItem('code');
+    const token = localStorage.getItem('token');
+    if (!apiUrl || !code || !token) return;
+    try {
+      const response = await fetch(`${apiUrl}/api/controllers/refresh_token.php`, {
+        method: 'GET',
+        headers: {
+          'aula-instance-code': code,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data && data.JWT) {
+        localStorage.setItem('token', data.JWT);
+      }
+    } catch {
+      // Ignore errors — stale JWT is better than a crash
+    }
+  });
+};
 
+export const goToHome = async (page: Page) => {
+  // Always navigate (no early-return for "already at host") so the SPA fetches
+  // a fresh room list. Without this, a stale home page loaded before another
+  // worker created a room never shows that room's card.
   await page.goto(host, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('#rooms-heading')).toBeVisible();
 };
 
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
+  // Refresh the JWT so room memberships added after the stored token was issued
+  // are visible to the server when fetchIdeas() is called on the room page.
+  await refreshJWT(page);
   // Explicit waitFor gives a clearer timeout error when the target room never appears.
   await page.getByTestId(TEST_IDS.ROOM_CARD).filter({ hasText: roomName }).first().waitFor({ state: 'visible' });
   await page.getByTestId(TEST_IDS.ROOM_CARD).filter({ hasText: roomName, visible: true }).click();
@@ -60,14 +91,21 @@ export const goToRoom = async (page: Page, roomName: string) => {
 export const goToWildIdea = async (page: Page, roomName: string, ideaName: string) => {
   await goToRoom(page, roomName);
 
-  await page.getByTestId(`idea-${ideaName}`).filter({ visible: true }).click();
+  // Explicitly wait for the idea to be visible: fetchIdeas() completes asynchronously after
+  // goToRoom resolves, so the idea card may not exist yet when we arrive on the room page.
+  const idea = page.getByTestId(`idea-${ideaName}`);
+  await idea.waitFor({ state: 'visible' });
+  await idea.click();
   await page.waitForURL((url) => url.pathname.includes('/idea'));
 };
 
 export const goToPhase = async (page: Page, roomName: string, phaseNumber: number) => {
   await goToRoom(page, roomName);
 
-  await page.getByTestId(`link-to-phase-${phaseNumber}`).filter({ visible: true }).click();
+  // Wait for the phase link to be visible (room page renders after fetchIdeas completes)
+  const phaseLink = page.getByTestId(`link-to-phase-${phaseNumber}`);
+  await phaseLink.waitFor({ state: 'visible' });
+  await phaseLink.click();
   await page.waitForURL((url) => url.pathname.includes(`phase`));
 };
 

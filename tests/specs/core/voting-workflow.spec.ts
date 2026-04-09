@@ -263,7 +263,7 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
     await test.step('Verify results section is displayed', async () => {
       // Just verify that results are visible - exact counts may vary
       const resultsSection = userPage.getByText(/votes|stimmen|result/i).first();
-      await expect(resultsSection).toBeVisible({ timeout: 5000 });
+      await expect(resultsSection).toBeVisible();
     });
   });
 

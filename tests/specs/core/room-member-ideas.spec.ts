@@ -40,12 +40,12 @@ test.describe.serial('Room Member - Ideas Visibility', () => {
 
     await test.step('User can see admin idea', async () => {
       const adminIdeaElement = userPage.getByTestId(`idea-${adminIdea.name}`);
-      await expect(adminIdeaElement).toBeVisible({ timeout: 10000 });
+      await expect(adminIdeaElement).toBeVisible();
     });
 
     await test.step('User can see second idea', async () => {
       const userIdeaElement = userPage.getByTestId(`idea-${userIdea.name}`);
-      await expect(userIdeaElement).toBeVisible({ timeout: 10000 });
+      await expect(userIdeaElement).toBeVisible();
     });
 
     await test.step('Verify room title is displayed', async () => {
@@ -60,12 +60,12 @@ test.describe.serial('Room Member - Ideas Visibility', () => {
 
     await test.step('Student can see admin idea', async () => {
       const adminIdeaElement = studentPage.getByTestId(`idea-${adminIdea.name}`);
-      await expect(adminIdeaElement).toBeVisible({ timeout: 10000 });
+      await expect(adminIdeaElement).toBeVisible();
     });
 
     await test.step('Student can see second idea', async () => {
       const userIdeaElement = studentPage.getByTestId(`idea-${userIdea.name}`);
-      await expect(userIdeaElement).toBeVisible({ timeout: 10000 });
+      await expect(userIdeaElement).toBeVisible();
     });
   });
 
