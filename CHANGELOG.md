@@ -4,6 +4,13 @@
   - Reset multiple users' password button on User Settings
   - Version management alerts for outdated app version
 
+- **Accessibility improvements**
+  - Added `autocomplete` attributes to all form inputs to satisfy WCAG 2.1 AA criterion 1.3.5 (Identify Input Purpose)
+  - Login form identifies username and current password fields for browser autofill and assistive technologies
+  - Set password and change password forms identify new/current password fields for password managers
+  - Profile editor fields mapped to standard tokens (nickname, username, name, email)
+  - Admin user management form opts out of autofill to prevent credential injection when editing other users' data
+
 - **Bug fixes**
   - Fix quorum tooltip floating over edit menu
   - Prevent users from editing ideas after voting phase
