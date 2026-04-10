@@ -4,6 +4,9 @@
   - Reset multiple users' password button on User Settings
   - Version management alerts for outdated app version
 
+- **Accessibility**
+  - Icon sizes, voting results, delegate vote dialog, and table rows now scale correctly at 200% browser font size (AA resize text compliance)
+
 - **Bug fixes**
   - Fix wrong 404 message on /messages page showing "no users" instead of "no messages" in German
   - Fix quorum tooltip floating over edit menu
