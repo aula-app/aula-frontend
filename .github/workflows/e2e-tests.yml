@@ -64,6 +64,11 @@ jobs:
                   httpPort: "${{ env.AULA_PORT }}"
                 email:
                   backend: log
+                  relay:
+                    smtp: ""
+                    port: ""
+                    username: ""
+                    password: ""
                 aula:
                   compose_name: ${{ env.COMPOSE_NAME }}
                   environment: dev
