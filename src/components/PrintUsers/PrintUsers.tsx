@@ -1,5 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import SelectRoom from '@/components/SelectRoom';
+import { localStorageGet } from '@/utils';
+import { getRuntimeConfig } from '@/config';
 import { getUsers } from '@/services/users';
 import { UserType } from '@/types/Scopes';
 import {
@@ -53,7 +55,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
 
     // Optionally filter users when only showing temporary passwords
     const filteredUsers = onlyTempPass ? users.filter((u) => Boolean(u.temp_pw)) : users;
-
+    const instanceCode = localStorageGet('code');
     const rows = chunkArray(filteredUsers, columns);
 
     let usersPasswords = rows
@@ -67,6 +69,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
                       <b>${user.realname}</b><p/>
                       <b>${t('settings.columns.username')}:</b> <mark>${user.username}</mark><br/>
                       ${passwordText}
+                      <b>${t('instance.label')}:</b> <mark>${instanceCode}</mark><br/>
                     </td>`.trim();
           })
           .join('');
@@ -115,6 +118,9 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
               td mark {
                 background-color: rgba(0, 0, 0, 0.06);
               }
+              .print-aula-logo img {
+                height: 60px;
+              }
               .print-header {
                 display: flex;
                 justify-content: space-between;
@@ -146,6 +152,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
           </head>
           <body>
             <div class="print-header">
+              <div class="print-aula-logo"><img  src="${getRuntimeConfig().BASENAME + 'img/Aula_Icon.svg'}"/> aula</div>
               <div class="print-title">${t('settings.users.printTitle')}</div>
               <div class="print-date">Generated on: ${new Date().toLocaleDateString()}</div>
             </div>

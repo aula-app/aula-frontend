@@ -4,8 +4,13 @@
   - Reset multiple users' password button on User Settings
   - Version management alerts for outdated app version
 
-- **Accessibility**
+- **Accessibility improvements**
   - Fix WCAG 1.4.3 contrast failures in dark mode — semantic colors (primary, error, secondary, info, warning) now meet 4.5:1 against dark backgrounds
+  - Added `autocomplete` attributes to all form inputs to satisfy WCAG 2.1 AA criterion 1.3.5 (Identify Input Purpose)
+  - Login form identifies username and current password fields for browser autofill and assistive technologies
+  - Set password and change password forms identify new/current password fields for password managers
+  - Profile editor fields mapped to standard tokens (nickname, username, name, email)
+  - Admin user management form opts out of autofill to prevent credential injection when editing other users' data
 
 - **Bug fixes**
   - Fix wrong 404 message on /messages page showing "no users" instead of "no messages" in German

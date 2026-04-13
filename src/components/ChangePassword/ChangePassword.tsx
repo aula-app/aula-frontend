@@ -135,6 +135,12 @@ const ChangePassword: React.FC<Props> = ({
   // Use shared password requirements function
   const { renderPasswordRequirements } = usePasswordRequirements(watchedNewPassword || '', passwordComplexity, t);
 
+  const autocompleteTokens: Record<keyof typeof fields, string> = {
+    oldPassword: 'current-password',
+    newPassword: 'new-password',
+    confirmPassword: 'new-password',
+  };
+
   const onSubmit = async (data: SchemaType) => {
     const result = await changePassword(data.oldPassword, data.newPassword, tmp_token);
 
@@ -230,6 +236,7 @@ const ChangePassword: React.FC<Props> = ({
                     id: `change-password-${field}-label`,
                     htmlFor: `change-password-${field}`,
                     'data-testid': `${field}-input`,
+                    autoComplete: autocompleteTokens[field],
                   },
                   input: {
                     endAdornment: (

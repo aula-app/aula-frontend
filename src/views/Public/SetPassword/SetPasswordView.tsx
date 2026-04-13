@@ -101,6 +101,11 @@ const SetPasswordView = () => {
     t
   );
 
+  const autocompleteTokens: Record<keyof typeof fields, string> = {
+    newPassword: 'new-password',
+    confirmPassword: 'new-password',
+  };
+
   const validateKey = async () => {
     if (!key) {
       setValid(false);
@@ -191,6 +196,9 @@ const SetPasswordView = () => {
                   error={!!errors[field]}
                   helperText={<span id={`${field}-error-message`}>{typeof errors[field]?.message === 'string' ? errors[field]?.message : ''}</span>}
                   slotProps={{
+                    htmlInput: {
+                      autoComplete: autocompleteTokens[field],
+                    },
                     input: {
                       'aria-labelledby': `set-password-${field}-label`,
                       'aria-invalid': !!errors[field],
