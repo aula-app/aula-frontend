@@ -5,6 +5,7 @@
   - Version management alerts for outdated app version
 
 - **Accessibility improvements**
+  - Fix WCAG 1.4.3 contrast failures in dark mode — semantic colors (primary, error, secondary, info, warning) now meet 4.5:1 against dark backgrounds
   - Added `autocomplete` attributes to all form inputs to satisfy WCAG 2.1 AA criterion 1.3.5 (Identify Input Purpose)
   - Login form identifies username and current password fields for browser autofill and assistive technologies
   - Set password and change password forms identify new/current password fields for password managers
