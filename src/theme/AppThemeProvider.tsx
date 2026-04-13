@@ -95,6 +95,23 @@ const AppThemeProvider: FunctionComponent<Props> = ({ children, emotionCache = C
           },
         },
       },
+      // Fix WCAG 1.4.11: MUI default border-color rgba(0,0,0,0.23) = 1.74:1 on white — fails 3:1
+      MuiOutlinedInput: {
+        styleOverrides: {
+          notchedOutline: {
+            borderColor: state.darkMode ? 'rgba(255, 255, 255, 0.50)' : 'rgba(0, 0, 0, 0.45)',
+          },
+        },
+      },
+      MuiInput: {
+        styleOverrides: {
+          root: {
+            '&:before': {
+              borderBottomColor: state.darkMode ? 'rgba(255, 255, 255, 0.50)' : 'rgba(0, 0, 0, 0.45)',
+            },
+          },
+        },
+      },
     },
   });
 
