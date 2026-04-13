@@ -12,6 +12,8 @@
   - Set password and change password forms identify new/current password fields for password managers
   - Profile editor fields mapped to standard tokens (nickname, username, name, email)
   - Admin user management form opts out of autofill to prevent credential injection when editing other users' data
+  - WCAG 1.4.12: Set minimum text spacing globally — line-height ≥ 1.5×, letter-spacing ≥ 0.12em, word-spacing ≥ 0.16em, paragraph spacing ≥ 2em
+  - WCAG 1.4.12: MuiChip converted from fixed height to `minHeight` so chip labels expand instead of clipping under increased text spacing
 
 - **Bug fixes**
   - Fix wrong 404 message on /messages page showing "no users" instead of "no messages" in German
