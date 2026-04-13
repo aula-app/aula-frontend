@@ -1,3 +1,15 @@
+## 1.9.1
+
+- **Accessibility improvements**
+  - Fix WCAG 1.4.11 Non-text Contrast: input borders raised from 1.7:1 to 3.4:1 (light) and 4.4:1 (dark)
+  - Fix WCAG 1.4.11: focus ring on IconButton and RippleLink now uses `--color-text-primary` (≥9:1), replacing invisible same-color outline
+  - Fix WCAG 1.4.11: MUI OutlinedInput and standard Input borders overridden to meet 3:1 minimum
+  - Room cards now show a visible focus ring via `focus-within` on the card, preventing `overflow:hidden` from clipping the inner link outline
+  - Breadcrumb dropdown menu is now fully keyboard accessible: Enter opens it, Arrow keys navigate items, Escape closes and returns focus to the trigger button
+  - Sidebar roving tabIndex now defaults to first item when no current page matches, fixing menus that were entirely unreachable by Tab
+  - Removed phantom `tabIndex={0}` from the Rooms region container that was creating a spurious Tab stop after phase buttons
+  - IconButton converted to `forwardRef` to support programmatic focus management
+
 ## 1.9.0
 
 - **New features**
