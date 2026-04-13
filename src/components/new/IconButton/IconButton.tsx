@@ -34,7 +34,9 @@ const IconButton: React.FC<IconButtonProps> = ({
     text-current cursor-pointer select-none
     transition-[background-color] duration-200 ease-in-out
     hover:bg-shadow
-    focus:outline-none focus-visible:bg-black/[0.12] dark:focus-visible:bg-white/[0.12]
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1
+    focus-visible:ring-[hsl(236,42%,22%)] dark:focus-visible:ring-white
+    focus-visible:ring-offset-transparent
     active:bg-black/[0.12] dark:active:bg-white/[0.12]
     ${className}
   `;

@@ -99,7 +99,7 @@
   --color-text-primary: hsl(236.17, 42%, 22%);
   --color-background: #FFFFFF;
   --color-paper: #FFFFFF;
-  --color-input-border: rgba(0, 0, 0, 0.23);
+  --color-input-border: rgba(0, 0, 0, 0.45); /* 3.35:1 on white ✅ WCAG 1.4.11 */
   --color-input-border-hover: rgba(0, 0, 0, 0.87);
 }
 
