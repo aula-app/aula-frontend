@@ -28,7 +28,7 @@ const TechTopBar: React.FC<TopBarProps> = () => {
         <div className="flex-1 flex items-center justify-center h-full overflow-hidden">
           {t('ui.navigation.adminPanel')}
         </div>
-        <IconButton onClick={onLogout} aria-label={t('auth.logout')}>
+        <IconButton onClick={onLogout} aria-label={t('auth.logout')} title={t('auth.logout')}>
           <Icon type="logout" size="1.5rem" aria-hidden="true" />
         </IconButton>
       </div>
