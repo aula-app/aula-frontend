@@ -1,5 +1,7 @@
 import Icon from '@/components/new/Icon';
 import IconButton from '@/components/new/IconButton';
+import LocaleSwitch from '@/components/LocaleSwitch';
+import ThemeToggleButton from '@/components/ThemeToggleButton';
 import { getRuntimeConfig } from '@/config';
 import { useEventLogout } from '@/hooks';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +30,8 @@ const TechTopBar: React.FC<TopBarProps> = () => {
         <div className="flex-1 flex items-center justify-center h-full overflow-hidden">
           {t('ui.navigation.adminPanel')}
         </div>
+        <LocaleSwitch />
+        <ThemeToggleButton />
         <IconButton onClick={onLogout} aria-label={t('auth.logout')} title={t('auth.logout')}>
           <Icon type="logout" size="1.5rem" aria-hidden="true" />
         </IconButton>
