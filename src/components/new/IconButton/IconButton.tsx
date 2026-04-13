@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ReactNode, ButtonHTMLAttributes } from 'react';
+import { ReactNode, ButtonHTMLAttributes, forwardRef } from 'react';
 import { useRipple } from '@/hooks/useRipple';
 
 interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
@@ -16,7 +16,7 @@ interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
  * Styled like MUI's IconButton with ripple effect
  * @component IconButton
  */
-const IconButton: React.FC<IconButtonProps> = ({
+const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
   children,
   title,
   className = '',
@@ -25,7 +25,7 @@ const IconButton: React.FC<IconButtonProps> = ({
   to,
   onClick,
   ...restOfProps
-}) => {
+}, ref) => {
   const { createRipple, RipplesContainer } = useRipple();
 
   const baseClassName = `
@@ -88,6 +88,7 @@ const IconButton: React.FC<IconButtonProps> = ({
   // Render as button otherwise
   return (
     <button
+      ref={ref}
       className={baseClassName}
       title={title}
       aria-label={title}
@@ -100,6 +101,8 @@ const IconButton: React.FC<IconButtonProps> = ({
       <RipplesContainer />
     </button>
   );
-};
+});
+
+IconButton.displayName = 'IconButton';
 
 export default IconButton;
