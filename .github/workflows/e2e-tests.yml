@@ -79,6 +79,10 @@ jobs:
                   email:
                     from: admin@aula.local
                     support: support@aula.local
+                  report:
+                      statistics:
+                        recipients: ""
+                        schedule: "0 2 1 * *"
                   manager:
                     db:
                       name: "aula_manager"
