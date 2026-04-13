@@ -14,8 +14,7 @@ const focusVisibleStyles = {
 // Different focus styles for light and dark modes
 const lightModeFocusStyles = {
   ...focusVisibleStyles,
-  // Dark ring (L≈0.021) on any light background including bg-primary (L≈0.626): ~9.5:1 ✅
-  outlineColor: 'hsl(236, 42%, 22%)',
+  outlineColor: 'var(--color-text-primary)',
   boxShadow: '0 0 0 4px rgba(0, 0, 0, 0.15)',
 };
 
@@ -30,21 +29,5 @@ const darkModeFocusStyles = {
 const getFocusStyles = (isDarkMode: boolean) => 
   isDarkMode ? darkModeFocusStyles : lightModeFocusStyles;
 
-// Component-specific overrides
-const buttonFocusStyles = {
-  ...focusVisibleStyles,
-  outline: '3px solid',
-  outlineOffset: 3,
-};
-
-const tableCellFocusStyles = {
-  ...focusVisibleStyles,
-  outlineOffset: 0,
-};
-
-const linkFocusStyles = {
-  ...focusVisibleStyles,
-  textDecoration: 'underline',
-};
 
 export default getFocusStyles;

@@ -95,7 +95,7 @@ const Breadcrumb: React.FC = () => {
     >
       <IconButton
         onClick={backNavigation}
-        className="relative overflow-hidden flex items-center gap-1 font-medium hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 rounded px-2 py-1"
+        className="relative overflow-hidden flex items-center gap-1 font-medium hover:opacity-80 transition-opacity rounded px-2 py-1"
         aria-expanded={isOpen}
         aria-haspopup="menu"
         aria-label={t('ui.accessibility.breadcrumbMenu', { page: currentPage })}
