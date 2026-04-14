@@ -1,7 +1,8 @@
 import { AppIcon, AppLink } from '@/components';
 import { phases } from '@/utils';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { Stack, Tooltip, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+import AccessibleTooltip from '../AccessibleTooltip/AccessibleTooltip';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router-dom';
@@ -51,7 +52,7 @@ const PhaseBar: React.FC<PhaseBarProps> = ({ room }) => {
             position: 'relative',
           }}
         >
-          <Tooltip arrow title={t(`tooltips.${phases[displayPhase as `${RoomPhases}`]}`)}>
+          <AccessibleTooltip arrow title={t(`tooltips.${phases[displayPhase as `${RoomPhases}`]}`)}>
             <Stack
               direction="row"
               alignItems="center"
@@ -71,7 +72,7 @@ const PhaseBar: React.FC<PhaseBarProps> = ({ room }) => {
                 {currentPhase === `${displayPhase}` ? t(`phases.${phases[displayPhase as `${RoomPhases}`]}`) : ''}
               </Typography>
             </Stack>
-          </Tooltip>
+          </AccessibleTooltip>
         </AppLink>
       ))}
     </Stack>
