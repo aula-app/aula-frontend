@@ -5,6 +5,11 @@
   - Version management alerts for outdated app version
 
 - **Accessibility improvements**
+  - Content reflows correctly at 320px viewport width with no horizontal scrolling (WCAG 1.4.10 Reflow AA)
+  - Removed `maximum-scale` and `user-scalable=0` from viewport meta tag so users can zoom to 400%
+  - Fixed-position FAB buttons anchored to right edge with safe-area-aware bottom offset to stay within viewport at narrow widths
+  - DelegateVote dialog no longer clips content at narrow viewports — height adapts at xs
+  - ScopeHeader search input expands to full width at xs instead of overflowing
   - Icon sizes, voting results, delegate vote dialog, and table rows now scale correctly at 200% browser font size (AA resize text compliance)
   - Fix WCAG 1.4.3 contrast failures in dark mode — semantic colors (primary, error, secondary, info, warning) now meet 4.5:1 against dark backgrounds
   - Added `autocomplete` attributes to all form inputs to satisfy WCAG 2.1 AA criterion 1.3.5 (Identify Input Purpose)
