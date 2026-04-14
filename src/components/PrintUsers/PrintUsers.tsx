@@ -156,7 +156,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
               <div class="print-title">${t('settings.users.printTitle')}</div>
               <div class="print-date">Generated on: ${new Date().toLocaleDateString()}</div>
             </div>
-            <button class="print-button" onclick="window.print()">Print</button>
+            <button class="print-button" onclick="window.print()">${t('actions.print')}</button>
             <table>
               <tbody>
                ${usersPasswords}

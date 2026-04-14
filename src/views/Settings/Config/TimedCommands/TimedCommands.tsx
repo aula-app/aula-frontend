@@ -75,7 +75,7 @@ const TimedCommands = () => {
         <Stack>
           <Typography variant="h3">{t('settings.time.actions')}</Typography>
           <TableContainer>
-            <Table aria-label="simple table">
+            <Table aria-label={t('ui.accessibility.scheduledActionsTable')}>
               <TableBody>
                 {commands.map((command, i) => {
                   const scope = command.cmd_id > 9 ? Math.floor(command.cmd_id / 10) : 0;

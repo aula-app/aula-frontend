@@ -172,7 +172,7 @@ const WildIdeas = () => {
       )}
       {checkPermissions('ideas', 'create') && room_id && (
         <Fab
-          aria-label="add idea"
+          aria-label={t('ui.accessibility.addIdea')}
           color="primary"
           sx={{
             position: 'fixed',

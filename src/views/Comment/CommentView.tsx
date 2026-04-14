@@ -119,7 +119,7 @@ const Comments = () => {
       )}
       {checkPermissions('comments', 'create') && idea_id && Number(phase) < 20 && (
         <Fab
-          aria-label="add comment"
+          aria-label={t('ui.accessibility.addComment')}
           color="primary"
           sx={{
             position: 'fixed',
