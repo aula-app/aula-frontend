@@ -14,6 +14,7 @@
   - Fix WCAG 1.4.3 contrast failures in dark mode — semantic colors (primary, error, secondary, info, warning) now meet 4.5:1 against dark backgrounds
   - WCAG 1.4.13 (Content on Hover or Focus): all tooltips are now dismissible via Escape key without moving focus or the pointer — applies to icon buttons, filter bar, filter clear button, phase bar, and dialog/modal close buttons
   - Escape key on a tooltip no longer propagates to parent dialogs or modals; only the tooltip closes
+  - WCAG 2.5.8 (Target Size Minimum): all interactive targets now meet the 24×24 CSS pixel minimum
 
 - **Bug fixes**
   - Fix wrong 404 message on /messages page showing "no users" instead of "no messages" in German
