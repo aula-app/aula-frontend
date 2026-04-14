@@ -64,6 +64,9 @@ const AppThemeProvider: FunctionComponent<Props> = ({ children, emotionCache = C
       MuiIconButton: {
         styleOverrides: {
           root: {
+            // WCAG 2.5.8 – Target Size (Minimum): 24×24px
+            minWidth: 24,
+            minHeight: 24,
             '&.Mui-focusVisible': getFocusStyles(state.darkMode),
           },
         },
