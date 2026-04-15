@@ -465,6 +465,7 @@ const AppIcon: React.FC<Props> = ({ icon, size = 'medium', decorative = true, sx
   const allSizes = {
     xs: '1rem',
     small: '1.125rem',
+    medium: '1.5rem',
     large: '2rem',
     xl: '2.5rem',
     xxl: '5rem',
