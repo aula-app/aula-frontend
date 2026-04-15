@@ -462,18 +462,16 @@ interface Props extends StackProps {
  * @component AppIcon
  */
 const AppIcon: React.FC<Props> = ({ icon, size = 'medium', decorative = true, sx, ...restOfProps }) => {
-  const currentSize =
-    size === 'xs'
-      ? '1rem'
-      : size === 'small'
-        ? '1.125rem'
-        : size === 'large'
-          ? '2rem'
-          : size === 'xl'
-            ? '2.5rem'
-            : size === 'xxl'
-              ? '5rem'
-              : '1.5rem'; // medium
+  const allSizes = {
+    xs: '1rem',
+    small: '1.125rem',
+    large: '2rem',
+    xl: '2.5rem',
+    xxl: '5rem',
+  };
+
+  const currentSize = size in allSizes ? allSizes[size] : '1.5rem';
+
   // Determine if this icon should get role="img" attribute
   const shouldHaveImgRole = !decorative && icon in ALL_ICONS;
 
