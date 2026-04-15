@@ -83,6 +83,10 @@
       "arialabel": "OAuth-Authentifizierung",
       "button": "OAuth-Authentifizierung"
     },
+    "sso": {
+      "arialabel": "Single Sign-On",
+      "button": "Mit SSO anmelden"
+    },
     "password": {
       "change": "Passwort ändern",
       "confirmPassword": "Passwort bestätigen",
