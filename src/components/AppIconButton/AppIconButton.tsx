@@ -1,8 +1,9 @@
-import { alpha, IconButton, IconButtonProps, Tooltip, Typography } from '@mui/material';
+import { alpha, IconButton, IconButtonProps, Typography } from '@mui/material';
 import { ElementType, forwardRef, useMemo } from 'react';
 import AppIcon from '../AppIcon';
 import { AllIconsType } from '../AppIcon/AppIcon';
 import AppLink from '../AppLink';
+import AccessibleTooltip from '../AccessibleTooltip/AccessibleTooltip';
 
 const MUI_ICON_BUTTON_COLORS = ['inherit', 'default', 'primary', 'secondary', 'success', 'error', 'info', 'warning'];
 
@@ -60,9 +61,9 @@ const AppIconButton = forwardRef<HTMLButtonElement, Props>(
     // When title is set, wrap the IconButton with Tooltip.
     // Note: when IconButton is disabled the Tooltip is not working, so we don't need it
     return title && !disabled ? (
-      <Tooltip title={title} arrow>
+      <AccessibleTooltip title={title} arrow>
         {IconButtonToRender}
-      </Tooltip>
+      </AccessibleTooltip>
     ) : (
       IconButtonToRender
     );
