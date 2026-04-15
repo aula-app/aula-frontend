@@ -2,6 +2,7 @@
 
 - **New features**
   - Reset multiple users' password button on User Settings
+  - Adds SSO login using a Keycloak server
 
 ## 1.8.3
 
