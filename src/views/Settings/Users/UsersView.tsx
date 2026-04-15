@@ -22,6 +22,7 @@ const COLUMNS = [
   { name: 'username', orderId: 7 },
   { name: 'email', orderId: 8 },
   { name: 'userlevel', orderId: 9 },
+  { name: 'sso_provider', orderId: 0 },
   { name: 'temp_pw', orderId: 11 },
   { name: 'status', orderId: 2 },
   { name: 'created', orderId: 4 },

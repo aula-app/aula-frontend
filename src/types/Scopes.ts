@@ -179,6 +179,8 @@ export interface UserType {
   consents_given: number;
   consents_needed: number;
   roles?: string;
+  sso_sub?: string | null;
+  sso_provider?: string | null;
 }
 
 export interface CategoryType {
