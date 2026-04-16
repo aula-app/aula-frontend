@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  AULA_PORT: "8000"
+  AULA_PORT: "80"
   PLAYWRIGHT_VERSION: "1.58.2"
 
 jobs:
@@ -61,7 +61,7 @@ jobs:
                 network:
                   ssl_enabled: false
                   base_domain: "nginx"
-                  httpPort: "${{ env.AULA_PORT }}"
+                  httpPort: "127.0.0.1:${{ env.AULA_PORT }}"
                 email:
                   backend: log
                   relay:
@@ -132,7 +132,7 @@ jobs:
           docker run --rm \
             --name ${{ env.PLAYWRIGHT_SERVICE_NAME }} \
             --network aula_aula_external \
-            -p 3000:3000 \
+            -p 127.0.0.1:3000:3000 \
             --detach \
             mcr.microsoft.com/playwright:v${{ env.PLAYWRIGHT_VERSION }} \
             /bin/sh -c "npx -y playwright@${{ env.PLAYWRIGHT_VERSION }} run-server --port 3000 --host 0.0.0.0"
