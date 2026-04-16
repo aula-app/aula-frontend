@@ -71,6 +71,10 @@ jobs:
                     password: ""
                 aula:
                   compose_name: ${{ env.COMPOSE_NAME }}
+                  debug: true
+                  log:
+                    level: INFO
+                    stack: single
                   environment: dev
                   base_url: "http://host.docker.internal:${{ env. AULA_PORT }}"
                   superkey: "hunter2"
