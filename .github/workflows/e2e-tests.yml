@@ -61,7 +61,8 @@ jobs:
                 network:
                   ssl_enabled: false
                   base_domain: "nginx"
-                  httpPort: "127.0.0.1:${{ env.AULA_PORT }}"
+                  bindInterface: "127.0.0.1"
+                  httpPort: "${{ env.AULA_PORT }}"
                 email:
                   backend: log
                   relay:
