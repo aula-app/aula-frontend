@@ -1,6 +1,6 @@
 import { PossibleFields } from '@/types/Scopes';
 import { announceToScreenReader } from '@/utils';
-import { FilledInput, FormHelperText, InputLabel, MenuItem, Stack, TextField, Tooltip } from '@mui/material';
+import { FilledInput, FormHelperText, MenuItem, Stack, TextField } from '@mui/material';
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
@@ -128,16 +128,15 @@ const FilterSelect: React.FC<Props> = ({ fields, onChange }) => {
           id="filter-value-input"
           aria-describedby="filter-input-helper"
           endAdornment={
-            <Tooltip title={t('ui.accessibility.clearFilter')}>
-              <AppIconButton
-                icon="close"
-                onClick={handleClearFilter}
-                disabled={key === ''}
-                ref={clearButtonRef}
-                aria-label={t('ui.accessibility.clearFilter')}
-                data-testid="clear-filter-button"
-              />
-            </Tooltip>
+            <AppIconButton
+              icon="close"
+              onClick={handleClearFilter}
+              disabled={key === ''}
+              ref={clearButtonRef}
+              aria-label={t('ui.accessibility.clearFilter')}
+              title={t('ui.accessibility.clearFilter')}
+              data-testid="clear-filter-button"
+            />
           }
         />
         <FormHelperText

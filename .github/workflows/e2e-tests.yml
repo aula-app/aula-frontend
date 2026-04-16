@@ -64,8 +64,17 @@ jobs:
                   httpPort: "${{ env.AULA_PORT }}"
                 email:
                   backend: log
+                  relay:
+                    smtp: ""
+                    port: ""
+                    username: ""
+                    password: ""
                 aula:
                   compose_name: ${{ env.COMPOSE_NAME }}
+                  debug: true
+                  log:
+                    level: INFO
+                    stack: single
                   environment: dev
                   base_url: "http://host.docker.internal:${{ env. AULA_PORT }}"
                   superkey: "hunter2"
@@ -79,6 +88,10 @@ jobs:
                   email:
                     from: admin@aula.local
                     support: support@aula.local
+                  report:
+                      statistics:
+                        recipients: ""
+                        schedule: "0 2 1 * *"
                   manager:
                     db:
                       name: "aula_manager"

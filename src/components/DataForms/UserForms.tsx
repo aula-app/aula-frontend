@@ -229,6 +229,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 slotProps={{
                   htmlInput: {
                     'data-testid': 'displayname-input',
+                    autoComplete: 'off',
                   },
                   input: {
                     'aria-labelledby': 'displayname-label',
@@ -258,6 +259,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 slotProps={{
                   htmlInput: {
                     'data-testid': 'username-input',
+                    autoComplete: 'off',
                   },
                   input: {
                     'aria-labelledby': 'username-label',
@@ -287,6 +289,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 slotProps={{
                   htmlInput: {
                     'data-testid': 'realname-input',
+                    autoComplete: 'off',
                   },
                   input: {
                     'aria-labelledby': 'realname-label',
@@ -315,6 +318,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                 slotProps={{
                   htmlInput: {
                     'data-testid': 'email-input',
+                    autoComplete: 'off',
                   },
                   input: {
                     'aria-labelledby': 'email-label',
