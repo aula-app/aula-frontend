@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import { useDraftStorage } from '@/hooks';
 import { MarkdownEditor } from '../DataFields';
 import { BugArguments } from '@/services/messages';
+import { TEST_IDS } from '@/test-ids';
 
 /**
  * BugForms component is used to create or edit an idea.
@@ -63,7 +64,7 @@ const BugForms: React.FC<BugFormsProps> = ({ onClose, onSubmit }) => {
               type="submit"
               variant="contained"
               aria-label={t('actions.confirm')}
-              data-testid="bug-form-submit-button"
+              data-testid={TEST_IDS.BUG_FORM_SUBMIT}
             >
               {t('actions.confirm')}
             </Button>

@@ -69,8 +69,6 @@ test.describe.serial('CSV Import', () => {
       await test.step('Verify users in room settings', async () => {
         await navigation.goToRoomsSettings(adminPage);
         await settingsInteractions.openEdit({ page: adminPage, filters: { option: 'room_name', value: room.name } });
-        await adminPage.waitForTimeout(100);
-
         const UserSelector = adminPage.getByTestId('users-field');
         await expect(UserSelector).toBeVisible();
         const usersNames = await UserSelector.locator('div div :not(legend) > span').allTextContents();
@@ -162,9 +160,9 @@ test.describe.serial('CSV Import', () => {
         await formInteractions.clickButton(adminPage, 'upload-users-csv-button');
         await adminPage.locator('input[type="file"]').setInputFiles(csvFilePath);
         await formInteractions.selectOption(adminPage, 'user-room-autocomplete', room.name);
-        await adminPage.waitForTimeout(500); // Wait for UI to update after first selection
+        await adminPage.getByRole('option', { name: room.name }).waitFor({ state: 'hidden' });
         await formInteractions.selectOption(adminPage, 'user-room-autocomplete', room2.name);
-        await adminPage.waitForTimeout(500); // Wait for UI to update after second selection
+        await adminPage.getByRole('option', { name: room2.name }).waitFor({ state: 'hidden' });
         await formInteractions.selectOptionByValue(adminPage, 'select-field-role', '30');
         await formInteractions.clickButton(adminPage, 'confirm_upload');
       });
@@ -174,8 +172,6 @@ test.describe.serial('CSV Import', () => {
       await test.step('Verify users in room2 settings', async () => {
         await navigation.goToRoomsSettings(adminPage);
         await settingsInteractions.openEdit({ page: adminPage, filters: { option: 'room_name', value: room2.name } });
-        await adminPage.waitForTimeout(100);
-
         const UserSelector = adminPage.getByTestId('users-field');
         await expect(UserSelector).toBeVisible();
         const usersNames = await UserSelector.locator('div div :not(legend) > span').allTextContents();

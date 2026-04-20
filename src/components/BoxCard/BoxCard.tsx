@@ -1,6 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import AppLink from '@/components/AppLink';
 import MoreOptions from '@/components/MoreOptions';
+import { TEST_IDS } from '@/test-ids';
 import { BoxType } from '@/types/Scopes';
 import { phases } from '@/utils';
 import { Box, Card, CardContent, CardProps, Stack, Typography } from '@mui/material';
@@ -40,7 +41,7 @@ const BoxCard: FC<BoxCardProps> = ({ box, disabled = false, onDelete, onEdit, ..
     <Card
       sx={{ borderRadius: '25px', scrollSnapAlign: 'center' }}
       variant="outlined"
-      data-testid="box-card"
+      data-testid={TEST_IDS.BOX_CARD}
       {...restOfProps}
     >
       <Stack
