@@ -3,6 +3,7 @@
 - **New features**
   - Reset multiple users' password button on User Settings
   - Version management alerts for outdated app version
+  - Breadcrumb dropdown menu is now fully keyboard accessible: Enter opens it, Arrow keys navigate items, Escape closes and returns focus to the trigger button
 
 - **Accessibility improvements**
   - Content reflows correctly at 320px viewport width with no horizontal scrolling (WCAG 1.4.10 Reflow AA)
@@ -16,6 +17,10 @@
   - Set password and change password forms identify new/current password fields for password managers
   - Profile editor fields mapped to standard tokens (nickname, username, name, email)
   - Admin user management form opts out of autofill to prevent credential injection when editing other users' data
+  -  Fix WCAG 1.4.11: input borders raised from 1.7:1 to 3.4:1 (light) and 4.4:1 (dark)
+  - Fix WCAG 1.4.11: focus ring on IconButton and RippleLink now uses `--color-text-primary` (≥9:1), replacing invisible same-color outline
+  - Fix WCAG 1.4.11: MUI OutlinedInput and standard Input borders overridden to meet 3:1 minimum
+  - Room cards now show a visible focus ring via `focus-within` on the card, preventing `overflow:hidden` from clipping the inner link outline
   - WCAG 1.4.12: Set minimum text spacing globally — line-height ≥ 1.5×, letter-spacing ≥ 0.12em, word-spacing ≥ 0.16em, paragraph spacing ≥ 2em
   - WCAG 1.4.12: MuiChip converted from fixed height to `minHeight` so chip labels expand instead of clipping under increased text spacing
   - Fix WCAG 1.4.3 contrast failures in dark mode — semantic colors (primary, error, secondary, info, warning) now meet 4.5:1 against dark backgrounds

@@ -45,7 +45,7 @@ const TopBar: React.FC<TopBarProps> = ({ mobileMenuOpen, onToggleMobileMenu, men
                 e.stopPropagation();
                 onToggleMobileMenu();
               }}
-              className="relative overflow-hidden flex items-center justify-center h-full aspect-square p-2 rounded-full hover:bg-black/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+              className="relative overflow-hidden flex items-center justify-center h-full aspect-square p-2 rounded-full hover:bg-black/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-sidebar-menu"
               aria-label={mobileMenuOpen ? t('ui.navigation.closeMenu') : t('ui.navigation.openMenu')}

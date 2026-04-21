@@ -35,7 +35,21 @@ const RoomCard: FC<RoomCardProps> = ({ room }) => {
   const { imageNumber, imageShift } = parseDescription(room.description_internal);
 
   return (
-    <Card sx={{ borderRadius: '25px', width: '100%' }} variant="outlined" data-testid={TEST_IDS.ROOM_CARD}>
+    <Card
+      sx={{
+        borderRadius: '25px',
+        width: '100%',
+        // Focus ring on the card when the inner link is keyboard-focused,
+        // preventing overflow:hidden from clipping the link's own outline
+        '&:focus-within': {
+          outline: '2px solid var(--color-text-primary)',
+          outlineOffset: '2px',
+        },
+        '& a:focus-visible': { outline: 'none' },
+      }}
+      variant="outlined"
+      data-testid={TEST_IDS.ROOM_CARD}
+    >
       <AppLink to={`/room/${room.hash_id}/phase/0`}>
         <Stack
           sx={{

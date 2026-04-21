@@ -16,7 +16,7 @@ interface RippleLinkProps extends Omit<LinkProps, 'className' | 'to'> {
 const RippleLink = forwardRef<HTMLAnchorElement | HTMLButtonElement, RippleLinkProps>(
   ({ children, className = '', to, ...props }, ref) => {
     const { createRipple, RipplesContainer } = useRipple();
-    const baseClassName = `relative overflow-hidden transition-colors ${className}`;
+    const baseClassName = `relative overflow-hidden transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-text-primary ${className}`;
 
     if (to) {
       return (
