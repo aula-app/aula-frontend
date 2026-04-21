@@ -17,6 +17,7 @@ const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled, onCha
   const [, dispatch] = useAppStore();
   const [liked, setLiked] = useState(false);
   const [likeStatus, setLikeStatus] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   const isIdea = 'room_id' in item;
 
@@ -35,20 +36,17 @@ const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled, onCha
 
   const toggleLike = async () => {
     updateLikeStatus(!likeStatus);
-    if (likeStatus) {
-      await (isIdea ? removeIdeaLike(item.hash_id) : removeCommentLike(item.id)).then((response) => {
-        if (response.error) {
-          updateLikeStatus(!likeStatus); // Revert like status if API call fails
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
-        }
-      });
-    } else {
-      await (isIdea ? addIdeaLike(item.hash_id) : addCommentLike(item.id)).then((response) => {
-        if (response.error) {
-          updateLikeStatus(!likeStatus); // Revert like status if API call fails
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
-        }
-      });
+    setIsPending(true);
+    try {
+      const response = await (likeStatus
+        ? isIdea ? removeIdeaLike(item.hash_id) : removeCommentLike(item.id)
+        : isIdea ? addIdeaLike(item.hash_id) : addCommentLike(item.id));
+      if (response.error) {
+        updateLikeStatus(!likeStatus); // Revert like status if API call fails
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+      }
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -62,7 +60,7 @@ const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled, onCha
       icon={likeStatus ? 'heartFull' : 'heart'}
       title={t(`tooltips.${likeStatus ? 'heartFull' : 'heart'}`)}
       onClick={toggleLike}
-      disabled={disabled}
+      disabled={disabled || isPending}
       aria-label={likeStatus ? t('actions.unlike') : t('actions.like')}
       aria-pressed={likeStatus}
     >
