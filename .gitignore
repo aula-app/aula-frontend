@@ -36,6 +36,7 @@ package-lock.json
 /*.development
 /*.local
 
+
 vite.config.local.mts
 
 npm-debug.log*

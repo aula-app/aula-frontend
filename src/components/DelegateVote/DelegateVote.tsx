@@ -147,7 +147,7 @@ const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
       testId="delegate-vote-dialog"
       finalFocusRef={triggerRef}
     >
-      <Stack height={350} position="relative" overflow="hidden">
+      <Stack height="21.875rem" position="relative" overflow="hidden">
         <Slide direction="right" in={!selected && !delegate} mountOnEnter unmountOnExit>
           <Stack position="absolute" height="100%" width="100%">
             <FilledInput

@@ -1,8 +1,9 @@
 import { announceToScreenReader, useEscapeKey, useFocusTrap, useModalAnnouncement } from '@/utils';
 import { Close } from '@mui/icons-material';
-import { Backdrop, Box, Fade, IconButton, Modal, ModalProps, Tooltip, Typography } from '@mui/material';
+import { Backdrop, Box, Fade, IconButton, Modal, ModalProps, Typography } from '@mui/material';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import AccessibleTooltip from '../AccessibleTooltip/AccessibleTooltip';
 
 interface AccessibleModalProps extends Omit<ModalProps, 'children'> {
   /**
@@ -198,11 +199,11 @@ const AccessibleModal = forwardRef<AccessibleModalHandle, AccessibleModalProps>(
               </Typography>
 
               {showCloseButton && (
-                <Tooltip title={t('actions.close')}>
+                <AccessibleTooltip title={t('actions.close')}>
                   <IconButton edge="end" color="inherit" onClick={onClose} aria-label={t('actions.close')} size="small">
                     <Close />
                   </IconButton>
-                </Tooltip>
+                </AccessibleTooltip>
               )}
             </Box>
 

@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test';
+import { TEST_IDS } from '../../src/test-ids';
 
 import * as shared from '../support/utils';
-import { TIMEOUTS } from '../support/constants';
 
 export const reportBug = async (
   page: Page, //
@@ -9,13 +9,14 @@ export const reportBug = async (
 ) => {
   await page.goto(shared.getHost());
 
-  const ReportButton = page.locator('[aria-label="Fehler melden"]');
-  await expect(ReportButton).toBeVisible();
-  await ReportButton.click({ timeout: TIMEOUTS.ONE_SECOND });
+  await expect(page.getByTestId(TEST_IDS.REPORT_BUG_BUTTON)).toBeVisible();
+  await page.getByTestId(TEST_IDS.REPORT_BUG_BUTTON).click();
 
-  await page.locator('div[contenteditable="true"]').fill(reason);
-  // submit the report form
-  await page.locator('button').filter({ hasText: 'Bestätigen' }).click({ timeout: TIMEOUTS.ONE_SECOND });
+  // The bug form uses a MarkdownEditor with name="content", so the container
+  // testId is markdown-editor-content. The contenteditable is third-party (MDXEditor).
+  await page.getByTestId('markdown-editor-content').locator('[contenteditable="true"]').fill(reason);
+
+  await page.getByTestId(TEST_IDS.BUG_FORM_SUBMIT).click();
 };
 
 export const checkReport = async (

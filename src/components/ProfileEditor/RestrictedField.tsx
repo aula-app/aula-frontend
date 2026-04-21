@@ -16,6 +16,13 @@ interface Props {
 /** * Renders "requests" view
  * url: /settings/requests
  */
+const autocompleteTokens: Partial<Record<keyof PossibleFields, string>> = {
+  displayname: 'nickname',
+  username: 'username',
+  realname: 'name',
+  email: 'email',
+};
+
 const RestrictedField = ({ name, control, ...restOfProps }: Props) => {
   const { t } = useTranslation();
 
@@ -34,6 +41,9 @@ const RestrictedField = ({ name, control, ...restOfProps }: Props) => {
           {...field}
           disabled={disabled}
           slotProps={{
+            htmlInput: {
+              autoComplete: autocompleteTokens[name],
+            },
             input: {
               'aria-labelledby': `profile-${name}-label`,
               endAdornment: (
