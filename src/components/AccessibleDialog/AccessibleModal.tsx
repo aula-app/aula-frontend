@@ -200,7 +200,7 @@ const AccessibleModal = forwardRef<AccessibleModalHandle, AccessibleModalProps>(
 
               {showCloseButton && (
                 <AccessibleTooltip title={t('actions.close')}>
-                  <IconButton edge="end" color="inherit" onClick={onClose} aria-label={t('actions.close')} size="small">
+                  <IconButton edge="end" color="inherit" onClick={onClose} aria-label={t('actions.close')}>
                     <Close />
                   </IconButton>
                 </AccessibleTooltip>
