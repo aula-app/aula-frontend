@@ -1,4 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
+import i18n from 'i18next';
 
 interface Props {
   children: ReactNode;
@@ -58,13 +59,13 @@ class ErrorBoundary extends Component<Props, State> {
             border: '1px solid #ffcdd2',
           }}
         >
-          <h2 style={{ color: '#d32f2f', margin: '0 0 16px 0' }}>{this.props.name} - Something went wrong</h2>
+          <h2 style={{ color: '#d32f2f', margin: '0 0 16px 0' }}>{this.props.name} - {i18n.t('errors.boundary')}</h2>
           <p style={{ color: '#555', margin: '0 0 16px 0' }}>
-            We apologize for the inconvenience. Please try refreshing the page.
+            {i18n.t('errors.boundaryMessage')}
           </p>
           {import.meta.env.DEV && (
             <details style={{ whiteSpace: 'pre-wrap' }}>
-              <summary style={{ cursor: 'pointer', color: '#666' }}>Error Details</summary>
+              <summary style={{ cursor: 'pointer', color: '#666' }}>{i18n.t('errors.boundaryDetails')}</summary>
               <div style={{ marginTop: '8px', padding: '8px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
                 {this.state?.error?.toString()}
                 <br />

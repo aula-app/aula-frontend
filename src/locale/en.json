@@ -135,6 +135,9 @@
     "headline": "Delete selected {{var}}"
   },
   "errors": {
+    "boundary": "Something went wrong",
+    "boundaryDetails": "Error Details",
+    "boundaryMessage": "We apologize for the inconvenience. Please try refreshing the page.",
     "accountInactive": "Your account is inactive",
     "accountSuspendDate": " until {{var}}",
     "accountSuspended": "Your account has been suspended{{var}}. Please contact your administrator",
@@ -299,8 +302,10 @@
   },
   "room": {
     "image": {
+      "changeColor": "Change color",
       "color": "Color option {{number}}",
-      "pattern": "Image pattern {{number}}"
+      "pattern": "Image pattern {{number}}",
+      "selectImage": "Select image"
     }
   },
   "scopes": {
@@ -658,6 +663,11 @@
       "sortColumn": "Sort by {{column}}, currently {{direction}}",
       "tableCell": "table cell",
       "tableData": "table data",
+      "add": "Add",
+      "addComment": "Add comment",
+      "addIdea": "Add idea",
+      "scheduledActionsTable": "Scheduled actions",
+      "togglePasswordVisibility": "Toggle password visibility",
       "updatingContent": "Updating content"
     },
     "common": {
@@ -758,7 +768,9 @@
       "dashboard": "My Ideas",
       "home": "Home",
       "ideas": "Ideas",
+      "closeMenu": "Close main menu",
       "mainMenu": "Main navigation",
+      "openMenu": "Open main menu",
       "messages": "Messages",
       "privacy": "Privacy",
       "profile": "Profile",

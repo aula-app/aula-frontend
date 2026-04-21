@@ -1,12 +1,14 @@
 import SkipNavigation from '@/components/SkipNavigation';
 import AskConsent from '@/views/AskConsent';
 import { FunctionComponent, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import TopBar from './TopBar';
 import TechTopBar from './TopBar/TechTopBar';
 import { checkPermissions } from '@/utils';
 import SideBar from './SideBar';
 
 const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => {
+  const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLElement>(null);
@@ -73,7 +75,7 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
           <nav
             id="mobile-sidebar-menu"
             ref={sidebarRef}
-            aria-label="Main navigation"
+            aria-label={t('ui.navigation.mainMenu')}
             className={
               'flex w-64 h-full border-r absolute bg-paper border-gray-200 no-print overflow-y-auto transition-all z-20 ' +
               (mobileMenuOpen ? 'left-0' : '-left-64') +
@@ -94,7 +96,10 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
         <main
           id="main-content"
           className="flex-1 overflow-y-auto relative z-0"
-          style={{ paddingBottom: 'var(--safe-area-inset-bottom, 0px)' }}
+          style={{
+            paddingBottom: 'var(--safe-area-inset-bottom, 0px)',
+            scrollPaddingBottom: '6rem',
+          }}
           tabIndex={-1}
         >
           {children}

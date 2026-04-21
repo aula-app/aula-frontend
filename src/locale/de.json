@@ -135,6 +135,9 @@
     "headline": "Ausgewählte {{var}} löschen"
   },
   "errors": {
+    "boundary": "Etwas ist schiefgelaufen",
+    "boundaryDetails": "Fehlerdetails",
+    "boundaryMessage": "Wir entschuldigen uns für die Unannehmlichkeiten. Bitte versuche die Seite zu aktualisieren.",
     "accountInactive": "Dein Account ist inaktiv",
     "accountSuspendDate": " bis zum {{var}}",
     "accountSuspended": "Dein Account wurde{{var}} gesperrt. Bitte kontaktiere deinen Administrator",
@@ -299,8 +302,10 @@
   },
   "room": {
     "image": {
+      "changeColor": "Farbe ändern",
       "color": "Farboption {{number}}",
-      "pattern": "Bildmuster {{number}}"
+      "pattern": "Bildmuster {{number}}",
+      "selectImage": "Bild auswählen"
     }
   },
   "scopes": {
@@ -658,6 +663,11 @@
       "sortColumn": "Sortieren nach {{column}}, aktuell {{direction}}",
       "tableCell": "Tabellenzelle",
       "tableData": "Tabellendaten",
+      "add": "Hinzufügen",
+      "addComment": "Kommentar hinzufügen",
+      "addIdea": "Idee hinzufügen",
+      "scheduledActionsTable": "Geplante Aktionen",
+      "togglePasswordVisibility": "Passwortsichtbarkeit umschalten",
       "updatingContent": "Inhalt wird aktualisiert"
     },
     "common": {
@@ -758,7 +768,9 @@
       "dashboard": "Meine Ideen",
       "home": "Startseite",
       "ideas": "Ideen",
+      "closeMenu": "Hauptmenü schließen",
       "mainMenu": "Hauptnavigation",
+      "openMenu": "Hauptmenü öffnen",
       "messages": "Nachrichten",
       "privacy": "Datenschutz",
       "profile": "Profil",

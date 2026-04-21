@@ -6,19 +6,28 @@
   - Breadcrumb dropdown menu is now fully keyboard accessible: Enter opens it, Arrow keys navigate items, Escape closes and returns focus to the trigger button
 
 - **Accessibility improvements**
+  - Content reflows correctly at 320px viewport width with no horizontal scrolling (WCAG 1.4.10 Reflow AA)
+  - Removed `maximum-scale` and `user-scalable=0` from viewport meta tag so users can zoom to 400%
+  - Fixed-position FAB buttons anchored to right edge with safe-area-aware bottom offset to stay within viewport at narrow widths
+  - DelegateVote dialog no longer clips content at narrow viewports — height adapts at xs
+  - ScopeHeader search input expands to full width at xs instead of overflowing
   - Icon sizes, voting results, delegate vote dialog, and table rows now scale correctly at 200% browser font size (AA resize text compliance)
   - Added `autocomplete` attributes to all form inputs to satisfy WCAG 2.1 AA criterion 1.3.5 (Identify Input Purpose)
   - Login form identifies username and current password fields for browser autofill and assistive technologies
   - Set password and change password forms identify new/current password fields for password managers
   - Profile editor fields mapped to standard tokens (nickname, username, name, email)
   - Admin user management form opts out of autofill to prevent credential injection when editing other users' data
--  Fix WCAG 1.4.11: input borders raised from 1.7:1 to 3.4:1 (light) and 4.4:1 (dark)
+  -  Fix WCAG 1.4.11: input borders raised from 1.7:1 to 3.4:1 (light) and 4.4:1 (dark)
   - Fix WCAG 1.4.11: focus ring on IconButton and RippleLink now uses `--color-text-primary` (≥9:1), replacing invisible same-color outline
   - Fix WCAG 1.4.11: MUI OutlinedInput and standard Input borders overridden to meet 3:1 minimum
   - Room cards now show a visible focus ring via `focus-within` on the card, preventing `overflow:hidden` from clipping the inner link outline
+  - WCAG 1.4.12: Set minimum text spacing globally — line-height ≥ 1.5×, letter-spacing ≥ 0.12em, word-spacing ≥ 0.16em, paragraph spacing ≥ 2em
+  - WCAG 1.4.12: MuiChip converted from fixed height to `minHeight` so chip labels expand instead of clipping under increased text spacing
   - Fix WCAG 1.4.3 contrast failures in dark mode — semantic colors (primary, error, secondary, info, warning) now meet 4.5:1 against dark backgrounds
   - WCAG 1.4.13 (Content on Hover or Focus): all tooltips are now dismissible via Escape key without moving focus or the pointer — applies to icon buttons, filter bar, filter clear button, phase bar, and dialog/modal close buttons
   - Escape key on a tooltip no longer propagates to parent dialogs or modals; only the tooltip closes
+  - WCAG 2.5.8 (Target Size Minimum): all interactive targets now meet the 24×24 CSS pixel minimum
+  - WCAG 2.4.11 (Focus Not Obscured – Minimum): keyboard-focused elements are no longer entirely hidden by author-created content — DataTable sticky header and columns no longer obscure focused rows/cells; fixed floating action buttons no longer obscure focused elements near the bottom of the viewport
 
 - **Bug fixes**
   - Fix wrong 404 message on /messages page showing "no users" instead of "no messages" in German
@@ -26,6 +35,7 @@
   - Prevent users from editing ideas after voting phase
   - Default phase durations from room was not affecting new boxes
   - Fix long names clipped on password list print view
+  - Hide inactive ideas
   - Fix Tech Admin navigation
 
 ## 1.8.3

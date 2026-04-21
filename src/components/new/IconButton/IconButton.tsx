@@ -31,6 +31,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
   const baseClassName = `
     relative overflow-hidden aspect-square p-2
     inline-flex items-center justify-center rounded-full
+    min-w-6 min-h-6
     text-current cursor-pointer select-none
     transition-[background-color] duration-200 ease-in-out
     hover:bg-shadow
@@ -42,6 +43,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
 
   const disabledClassName = `
     inline-flex items-center justify-center rounded-full p-2
+    min-w-6 min-h-6
     text-gray-400 cursor-not-allowed opacity-40
     ${className}
   `;
