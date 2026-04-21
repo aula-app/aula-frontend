@@ -47,6 +47,9 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
   const currentPageIndex = allMenuItems.findIndex(
     (item) => item.path && (location.pathname === item.path || location.pathname.startsWith(`${item.path}/`))
   );
+  // When no page matches (e.g. a sub-route not listed), default to the first item
+  // so there is always exactly one menuitem with tabIndex=0 (roving tabIndex pattern)
+  const focusIndex = currentPageIndex === -1 ? 0 : currentPageIndex;
 
   const { handleKeyDown, setItemRef } = useMenuKeyboardNavigation({
     items: allMenuItems,
@@ -83,7 +86,7 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
 
   return (
     <ul
-      className="flex flex-col flex-1 h-full overflow-auto px-1 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+      className="flex flex-col flex-1 h-full overflow-auto px-1 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary"
       aria-label={t('ui.navigation.mainMenu')}
       role="menu"
       ref={navRef}
@@ -96,10 +99,10 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
           to="/settings/profile"
           role="menuitem"
           aria-label={t('ui.navigation.profile')}
-          tabIndex={0 === currentPageIndex ? 0 : -1}
+          tabIndex={0 === focusIndex ? 0 : -1}
           onKeyDown={(e) => handleKeyDown(e as any, 0)}
-          ref={setItemRef(0, currentPageIndex)}
-          className="block mt-1 py-1 rounded-lg transition-colors hover:bg-theme-grey focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          ref={setItemRef(0, focusIndex)}
+          className="block mt-1 py-1 rounded-lg transition-colors hover:bg-theme-grey"
         >
           {isAuthenticated && <UserInfo />}
         </RippleLink>
@@ -116,14 +119,14 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
               to={path as string}
               className={`my-1 p-3 flex items-center gap-3 rounded-lg transition-colors w-full text-left ${
                 location.pathname === path ? 'bg-theme-grey font-semibold' : 'hover:bg-shadow'
-              } focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500`}
+              }`}
               role="menuitem"
-              tabIndex={menuItemIndex === currentPageIndex ? 0 : -1}
+              tabIndex={menuItemIndex === focusIndex ? 0 : -1}
               aria-label={t(`ui.navigation.${title}`)}
               aria-current={location.pathname === path ? 'page' : undefined}
               data-testid={`navigation-${title}`}
               onKeyDown={(e) => handleKeyDown(e as any, menuItemIndex)}
-              ref={setItemRef(menuItemIndex, currentPageIndex)}
+              ref={setItemRef(menuItemIndex, focusIndex)}
             >
               {icon && <Icon type={icon} aria-hidden="true" size="1.5rem" />}
               <span className="font-light flex-1">{t(`ui.navigation.${title}`)}</span>
@@ -152,14 +155,14 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
 
       <li className="pb-1">
         <RippleLink
-          className="w-full p-3 flex items-center gap-3 rounded-lg transition-colors hover:bg-shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="w-full p-3 flex items-center gap-3 rounded-lg transition-colors hover:bg-shadow"
           role="menuitem"
           aria-label={t('auth.logout')}
           data-testid="logout-button"
-          tabIndex={allMenuItems.length - 1 === currentPageIndex ? 0 : -1}
+          tabIndex={allMenuItems.length - 1 === focusIndex ? 0 : -1}
           onClick={onLogout}
           onKeyDown={(e) => handleKeyDown(e as any, allMenuItems.length - 1)}
-          ref={setItemRef(allMenuItems.length - 1, currentPageIndex)}
+          ref={setItemRef(allMenuItems.length - 1, focusIndex)}
         >
           <Icon type="logout" aria-hidden="true" size="1.5rem" />
           <span className="font-light">{t('auth.logout')}</span>

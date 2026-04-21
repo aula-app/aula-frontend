@@ -4,44 +4,30 @@
  */
 
 const focusVisibleStyles = {
-  // Outline on focus that works across different background colors
-  // Uses a double outline for better visibility - a white/dark inner line and a colored outer line
+  // Double-ring pattern ensures 3:1 contrast regardless of background color
+  // Transparent offset creates a gap, making the ring visible on any background
   outline: '2px solid',
   outlineOffset: 2,
-  boxShadow: '0 0 0 4px rgba(134, 200, 157, 0.3)',
-  transition: 'outline-color 0.2s, box-shadow 0.2s',
+  transition: 'outline-color 0.2s',
 };
 
 // Different focus styles for light and dark modes
 const lightModeFocusStyles = {
   ...focusVisibleStyles,
-  outlineColor: 'hsl(134, 72%, 67%)', // primary.main from light theme
+  outlineColor: 'var(--color-text-primary)',
+  boxShadow: '0 0 0 4px rgba(0, 0, 0, 0.15)',
 };
 
 const darkModeFocusStyles = {
   ...focusVisibleStyles,
-  outlineColor: 'hsl(134, 20%, 40%)', // primary.main from dark theme
+  // White ring (L=1.0) on dark bg (L≈0.035): ~18:1 ✅
+  outlineColor: 'hsl(0, 0%, 100%)',
+  boxShadow: '0 0 0 4px rgba(255, 255, 255, 0.2)',
 };
 
 // Helper function to get the correct focus styles based on theme mode
 const getFocusStyles = (isDarkMode: boolean) => 
   isDarkMode ? darkModeFocusStyles : lightModeFocusStyles;
 
-// Component-specific overrides
-const buttonFocusStyles = {
-  ...focusVisibleStyles,
-  outline: '3px solid',
-  outlineOffset: 3,
-};
-
-const tableCellFocusStyles = {
-  ...focusVisibleStyles,
-  outlineOffset: 0,
-};
-
-const linkFocusStyles = {
-  ...focusVisibleStyles,
-  textDecoration: 'underline',
-};
 
 export default getFocusStyles;

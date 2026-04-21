@@ -95,7 +95,7 @@ const PHASE_COLORS = {
 
 const OTHER_COLORS = {
   input: {
-    border: 'rgba(255, 255, 255, 0.23)',
+    border: 'rgba(255, 255, 255, 0.50)', // 4.36:1 on dark bg ✅ WCAG 1.4.11 (was 0.23 = ~1.7:1 ❌)
     borderHover: 'rgba(255, 255, 255, 0.87)',
   },
   against: {
