@@ -85,7 +85,7 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
             <Typography variant="h3">
               {idea.is_winner === 1
                 ? t(`scopes.ideas.winner`)
-                : !quorum
+                : quorum !== undefined
                   ? t(`scopes.ideas.noQuorum`)
                   : quorumPassed()
                     ? t(`scopes.ideas.approved`)
