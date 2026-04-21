@@ -64,6 +64,9 @@ const AppThemeProvider: FunctionComponent<Props> = ({ children, emotionCache = C
       MuiIconButton: {
         styleOverrides: {
           root: {
+            // WCAG 2.5.8 – Target Size (Minimum): 24×24px
+            minWidth: 24,
+            minHeight: 24,
             '&.Mui-focusVisible': getFocusStyles(state.darkMode),
           },
         },
@@ -92,6 +95,48 @@ const AppThemeProvider: FunctionComponent<Props> = ({ children, emotionCache = C
               ...getFocusStyles(state.darkMode),
               textDecoration: 'underline',
             },
+          },
+        },
+      },
+      // WCAG 1.4.12: MuiChip uses a fixed `height` (32px / 24px) which clips text
+      // when letter-spacing or line-height are overridden. Switch to minHeight so
+      // the chip expands rather than truncating its label.
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            height: 'auto',
+            minHeight: 32,
+          },
+          sizeSmall: {
+            minHeight: 24,
+          },
+          label: {
+            // Allow label to wrap if word-spacing/letter-spacing pushes it wider
+            whiteSpace: 'normal',
+            paddingTop: 4,
+            paddingBottom: 4,
+          },
+          labelSmall: {
+            paddingTop: 2,
+            paddingBottom: 2,
+          },
+        },
+      },
+      // WCAG 1.4.12: MUI hardcodes lineHeight: 1.4375em on FormLabel — override to meet minimum
+      MuiFormLabel: {
+        styleOverrides: {
+          root: {
+            lineHeight: 1.5,
+          },
+        },
+      },
+      // WCAG 1.4.12: MUI hardcodes lineHeight: 1.4375em on InputBase input; browsers also reset
+      // word-spacing on form elements so it must be explicitly set here
+      MuiInputBase: {
+        styleOverrides: {
+          input: {
+            lineHeight: 1.5,
+            wordSpacing: '0.16em',
           },
         },
       },

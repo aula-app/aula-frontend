@@ -1,6 +1,7 @@
 import AppIconButton from '@/components/AppIconButton';
 import { ReportForms } from '@/components/DataForms';
 import { addReport, ReportArguments } from '@/services/messages';
+import { TEST_IDS } from '@/test-ids';
 import { IconButtonProps, Drawer } from '@mui/material';
 import { forwardRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -47,7 +48,7 @@ ${data.content || ''}
         {...restOfProps}
         onClick={() => setOpen(true)}
       />
-      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} data-testid="report-dialog">
+      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} data-testid={TEST_IDS.REPORT_DIALOG}>
         <ReportForms onClose={onClose} onSubmit={onSubmit} />
       </Drawer>
     </>

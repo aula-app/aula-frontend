@@ -1,4 +1,5 @@
 import { AppIcon, AppIconButton } from '@/components';
+import { TEST_IDS } from '@/test-ids';
 import { ScopeKeyType } from '@/types/Scopes';
 import { Collapse, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
@@ -258,10 +259,10 @@ export function ScopeHeader({
                 size="small"
                 variant="outlined"
                 inputRef={searchInputRef}
-                data-testid="search-field"
+                data-testid={TEST_IDS.SEARCH_FIELD}
                 sx={{
-                  width: { xs: 180, sm: 200 },
-                  minWidth: { xs: 120, sm: 150 },
+                  width: { xs: '100%', sm: 200 },
+                  minWidth: { xs: 'unset', sm: 150 },
                   ml: 2,
                   '& .MuiOutlinedInput-root': {
                     transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
@@ -278,7 +279,7 @@ export function ScopeHeader({
             </Collapse>
             <AppIconButton
               id="search-button"
-              data-testid="search-button"
+              data-testid={TEST_IDS.SEARCH_BUTTON}
               data-state={isSearchOpen ? 'open' : 'closed'}
               icon={isSearchOpen ? 'close' : 'search'}
               onClick={handleSearchToggle}
@@ -324,7 +325,7 @@ export function ScopeHeader({
                     label={t('ui.sort.by')}
                     labelId={`sort-label-${scopeKey}`}
                     id={`sort-select-${scopeKey}`}
-                    data-testid="sort-select"
+                    data-testid={TEST_IDS.SORT_SELECT}
                     aria-describedby={`sort-description-${scopeKey}`}
                     inputRef={sortSelectRef}
                     inputProps={{
@@ -344,7 +345,7 @@ export function ScopeHeader({
                   </Select>
                 </FormControl>
                 <AppIconButton
-                  data-testid="sort-direction-button"
+                  data-testid={TEST_IDS.SORT_DIRECTION_BUTTON}
                   data-sort-direction={sortDirection}
                   icon={sortDirection === 'asc' ? 'sortUp' : 'sortDown'}
                   onClick={handleSortDirectionToggle}
@@ -355,7 +356,7 @@ export function ScopeHeader({
             </Collapse>
             <AppIconButton
               id="sort-button"
-              data-testid="sort-button"
+              data-testid={TEST_IDS.SORT_BUTTON}
               data-state={isSortOpen ? 'open' : 'closed'}
               data-sort-direction={sortDirection}
               icon={isSortOpen ? 'close' : sortDirection === 'asc' ? 'sortUp' : 'sortDown'}

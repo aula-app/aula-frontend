@@ -1,5 +1,4 @@
 import { Locator, Page, expect } from '@playwright/test';
-import { TIMEOUTS } from '../support/constants';
 
 export const fillForm = async (page: Page, testId: string, value: string) => {
   const field = page.getByTestId(`${testId}-input`);
@@ -18,35 +17,35 @@ export const fillMarkdownForm = async (page: Page, testId: string, value: string
 export const clickButton = async (page: Page, testId: string) => {
   const button = page.getByTestId(testId);
   await expect(button).toBeVisible();
+  await button.scrollIntoViewIfNeeded();
   await button.click();
 };
 
-export const openMoreOption = async (page: Page, parent: Locator) => {
+export const openMoreOption = async (_page: Page, parent: Locator) => {
   const moreButton = parent.getByTestId('idea-more-menu');
   await expect(moreButton).toBeVisible();
   await moreButton.click();
   await expect(parent.getByTestId('report-button')).toBeVisible();
 };
 
+// MUI Autocomplete exposes a real, interactive testId-input; clicking it opens the popup.
+// MUI Select also renders testId-input but marks it aria-hidden="true" (native form input
+// covered by the Select div) — clicking the container opens the dropdown for that case.
 const openSelectDropdown = async (page: Page, testId: string) => {
   const field = page.getByTestId(testId);
   await expect(field).toBeVisible();
 
-  const dropdownIcon = field.getByTestId('ArrowDropDownIcon');
+  const namedInput = page.getByTestId(`${testId}-input`);
+  const isRealInput =
+    (await namedInput.count()) > 0 && (await namedInput.getAttribute('aria-hidden')) !== 'true';
 
-  // Check if the icon has a parent button and click the button instead
-  const parentButton = dropdownIcon.locator('xpath=ancestor::button[1]');
-  const buttonCount = await parentButton.count();
-
-  if (buttonCount > 0) {
-    await parentButton.click();
+  if (isRealInput) {
+    await namedInput.click();
   } else {
-    // Fallback: click the icon directly if no button parent
-    await dropdownIcon.click({ force: true });
+    await field.click();
   }
 
-  const dropdown = page.getByTestId(`${testId}-list`);
-  await expect(dropdown).toBeVisible();
+  await expect(page.getByTestId(`${testId}-list`)).toBeVisible();
 };
 
 export const selectOption = async (page: Page, testId: string, optionLabel: string) => {
@@ -87,7 +86,7 @@ export const selectOptionByValue = async (page: Page, testId: string, value: str
   }
 
   // Now select the option
-  await option.click({ timeout: TIMEOUTS.ONE_SECOND });
+  await option.click();
 
   // Verify the selection by checking if the field now contains the option text
   const displayedValue = page.getByTestId(testId);
@@ -101,5 +100,5 @@ export const selectMultiAutocompleteOption = async (page: Page, testId: string, 
 
   const option = page.getByTestId(`select-option-${optionId}`);
   await expect(option).toBeVisible();
-  await option.click({ timeout: TIMEOUTS.ONE_SECOND });
+  await option.click();
 };

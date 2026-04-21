@@ -1,5 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import SelectRoom from '@/components/SelectRoom';
+import { localStorageGet } from '@/utils';
+import { getRuntimeConfig } from '@/config';
 import { getUsers } from '@/services/users';
 import { UserType } from '@/types/Scopes';
 import {
@@ -28,7 +30,8 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
 
   const fetchUsers = useCallback(async (roomId: string) => {
     setLoading(true);
-    const response = await getUsers(roomId ? { room_id: roomId } : {});
+    const query = roomId && roomId !== 'all' ? { room_id: roomId } : {};
+    const response = await getUsers(query);
 
     if (response.error) {
       setError(response.error);
@@ -52,7 +55,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
 
     // Optionally filter users when only showing temporary passwords
     const filteredUsers = onlyTempPass ? users.filter((u) => Boolean(u.temp_pw)) : users;
-
+    const instanceCode = localStorageGet('code');
     const rows = chunkArray(filteredUsers, columns);
 
     let usersPasswords = rows
@@ -66,6 +69,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
                       <b>${user.realname}</b><p/>
                       <b>${t('settings.columns.username')}:</b> <mark>${user.username}</mark><br/>
                       ${passwordText}
+                      <b>${t('instance.label')}:</b> <mark>${instanceCode}</mark><br/>
                     </td>`.trim();
           })
           .join('');
@@ -100,6 +104,9 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
                 text-align: left;
                 max-width: 50%;
                 width: 50%;
+                word-break: break-word;
+                overflow-wrap: anywhere;
+                white-space: normal;
               }
               th {
                 background-color: #f2f2f2;
@@ -110,6 +117,9 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
               }
               td mark {
                 background-color: rgba(0, 0, 0, 0.06);
+              }
+              .print-aula-logo img {
+                height: 60px;
               }
               .print-header {
                 display: flex;
@@ -142,10 +152,11 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
           </head>
           <body>
             <div class="print-header">
+              <div class="print-aula-logo"><img  src="${getRuntimeConfig().BASENAME + 'img/Aula_Icon.svg'}"/> aula</div>
               <div class="print-title">${t('settings.users.printTitle')}</div>
               <div class="print-date">Generated on: ${new Date().toLocaleDateString()}</div>
             </div>
-            <button class="print-button" onclick="window.print()">Print</button>
+            <button class="print-button" onclick="window.print()">${t('actions.print')}</button>
             <table>
               <tbody>
                ${usersPasswords}

@@ -3,8 +3,11 @@ import { useAppStore } from '@/store';
 import { InstanceResponse } from '@/types/Generics';
 import { checkPermissions, localStorageDelete, localStorageGet } from '@/utils';
 import { parseJwt } from '@/utils/jwt';
-import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCallback, useEffect } from 'react';
+import { getUserConsent } from '@/services/consent';
+
+const CONSENT_REQUEST_TIMEOUT_MS = 10000;
 
 /**
  * Hook to detect is current user authenticated or not
@@ -60,3 +63,38 @@ export function useEventLogout() {
     navigate('/');
   }, [dispatch, navigate]);
 }
+
+/**
+ * Keeps the user's consent state in sync with the backend.
+ */
+export const useConsentSync = (isAuthenticated: boolean, locationKey: string) => {
+  const [, dispatch] = useAppStore();
+  const apiUrl = localStorageGet('api_url');
+  const jwtToken = localStorageGet('token');
+
+  const fetchConsent = useCallback(async () => {
+    if (!jwtToken || !apiUrl) return;
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), CONSENT_REQUEST_TIMEOUT_MS);
+
+      const result = await getUserConsent(jwtToken, controller.signal);
+      window.clearTimeout(timeoutId);
+
+      dispatch({
+        action: 'HAS_CONSENT',
+        payload: result.data !== 0,
+      });
+    } catch (error) {
+      dispatch({
+        action: 'HAS_CONSENT',
+        payload: false,
+      });
+    }
+  }, [apiUrl, jwtToken, dispatch]);
+
+  useEffect(() => {
+    fetchConsent();
+  }, [fetchConsent, isAuthenticated, locationKey]);
+};

@@ -1,16 +1,27 @@
 import { test, expect } from '../../fixtures/test-fixtures';
+import { TEST_IDS } from '../../../src/test-ids';
 import * as rooms from '../../interactions/rooms';
 import * as navigation from '../../interactions/navigation';
-import { TIMEOUTS } from '../../support/constants';
+import * as entities from '../../helpers/entities';
 
 /**
  * Room Search and Sort Tests
  * Tests search and sort functionality on the Rooms View (Home Page)
- * Uses pure Playwright fixtures for setup/teardown
  *
- * NOTE: These tests run serially to ensure consistent state
+ * Runs after the core project (depends: ['core']) so the room list is stable.
+ * Seeds one dedicated room in beforeAll so search-count assertions are
+ * deterministic regardless of what other test runs left behind.
+ * Cleanup is handled by globalTeardown (test-room-* prefix).
  */
 test.describe.serial('Rooms View - Search and Sort Functionality', () => {
+  // Seeded before the suite — gives us a known room name to search for exactly.
+  const seededRoom = entities.createRoom('search-sort');
+
+  test.beforeAll(async ({ adminPage, userConfig }) => {
+    seededRoom.users = [userConfig];
+    await rooms.create(adminPage, seededRoom);
+  });
+
   test.beforeEach(async ({ adminPage }) => {
     await navigation.goToHome(adminPage);
   });
@@ -19,13 +30,13 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
     test('should open and close search field', async ({ adminPage }) => {
       await test.step('Open search field', async () => {
         await rooms.openSearch(adminPage);
-        const searchField = adminPage.getByTestId('search-field');
+        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD);
         await expect(searchField).toBeVisible();
       });
 
       await test.step('Close search field', async () => {
         await rooms.closeSearch(adminPage);
-        const searchField = adminPage.getByTestId('search-field');
+        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD);
         await expect(searchField).not.toBeVisible();
       });
     });
@@ -36,19 +47,11 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
         expect(initialCount).toBeGreaterThan(0);
       });
 
-      await test.step('Get first room name and search for it', async () => {
-        const firstRoomName = await rooms.getFirstRoomName(adminPage);
-        expect(firstRoomName).not.toBeNull();
-
-        const searchTerm = firstRoomName!
-          .trim()
-          .substring(0, firstRoomName!.length - 3)
-          .toLowerCase();
-        console.log(`Search term: ${searchTerm}`);
-        await rooms.searchRooms(adminPage, searchTerm);
+      await test.step('Search for seeded room by exact name', async () => {
+        await rooms.searchRooms(adminPage, seededRoom.name);
       });
 
-      await test.step('Verify filtered results contain exactly searched room', async () => {
+      await test.step('Verify exactly one room matches', async () => {
         const filteredCount = await rooms.getRoomCount(adminPage);
         expect(filteredCount).toEqual(1);
       });
@@ -73,7 +76,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
     test('should focus search field when opened', async ({ adminPage }) => {
       await test.step('Open search and verify focus', async () => {
         await rooms.openSearch(adminPage);
-        const searchField = adminPage.getByTestId('search-field').locator('input');
+        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
         await expect(searchField).toBeFocused();
       });
     });
@@ -94,13 +97,13 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
     test('should open and close sort panel', async ({ adminPage }) => {
       await test.step('Open sort panel', async () => {
         await rooms.openSort(adminPage);
-        const sortSelect = adminPage.getByTestId('sort-select');
+        const sortSelect = adminPage.getByTestId(TEST_IDS.SORT_SELECT);
         await expect(sortSelect).toBeVisible();
       });
 
       await test.step('Close sort panel', async () => {
         await rooms.closeSort(adminPage);
-        const sortSelect = adminPage.getByTestId('sort-select');
+        const sortSelect = adminPage.getByTestId(TEST_IDS.SORT_SELECT);
         await expect(sortSelect).not.toBeVisible();
       });
     });
@@ -115,7 +118,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify sort was applied', async () => {
-        const sortSelect = adminPage.getByTestId('sort-select').locator('input, select');
+        const sortSelect = adminPage.getByTestId(TEST_IDS.SORT_SELECT).locator('input, select');
         await expect(sortSelect).toHaveValue('room_name');
       });
     });
@@ -132,7 +135,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
         await rooms.toggleSortDirection(adminPage);
 
         // Wait for the debounce (150ms in ScopeHeader) to complete
-        await adminPage.waitForTimeout(TIMEOUTS.HALF_SECOND);
+        await adminPage.waitForTimeout(200);
 
         const newIcon = await sortDirectionButton.getAttribute('aria-label');
         expect(newIcon).not.toBe(initialIcon);
@@ -145,7 +148,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Click sort select to show options', async () => {
-        const sortSelect = adminPage.getByTestId('sort-select');
+        const sortSelect = adminPage.getByTestId(TEST_IDS.SORT_SELECT);
         await sortSelect.click();
       });
 
@@ -171,7 +174,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify search is still active', async () => {
-        const searchField = adminPage.getByTestId('search-field').locator('input');
+        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
         await expect(searchField).toHaveValue(searchTerm);
       });
     });
@@ -186,7 +189,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify search is closed', async () => {
-        const searchField = adminPage.getByTestId('search-field');
+        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD);
         await expect(searchField).not.toBeVisible();
       });
     });
@@ -203,9 +206,9 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify search remains open', async () => {
-        const searchField = adminPage.getByTestId('search-field');
+        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD);
         await expect(searchField).toBeVisible();
-        const searchInput = adminPage.getByTestId('search-field').locator('input');
+        const searchInput = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
         await expect(searchInput).toHaveValue(searchTerm);
       });
     });
@@ -257,7 +260,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify final sort option', async () => {
-        const sortSelect = adminPage.getByTestId('sort-select').locator('input, select');
+        const sortSelect = adminPage.getByTestId(TEST_IDS.SORT_SELECT).locator('input, select');
         await expect(sortSelect).toHaveValue('last_update');
       });
     });
@@ -277,7 +280,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify search persists', async () => {
-        const searchField = adminPage.getByTestId('search-field').locator('input');
+        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
         await expect(searchField).toHaveValue(searchTerm);
       });
     });
