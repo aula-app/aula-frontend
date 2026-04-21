@@ -143,6 +143,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       custom_field1: data.custom_field1,
       custom_field2: data.custom_field2,
       topic_id: box,
+      status: data.status,
     });
     if (response.error) {
       setError('root', {
@@ -175,6 +176,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       custom_field2: data.custom_field2,
       idea_id: defaultValues.hash_id,
       approved: defaultValues.approved,
+      status: data.status,
     });
     if (response.error) {
       setError('root', {

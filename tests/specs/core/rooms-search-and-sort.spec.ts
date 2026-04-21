@@ -52,8 +52,8 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify exactly one room matches', async () => {
-        // getRoomCount navigates to home which clears the search filter — count directly instead.
-        await expect(adminPage.getByTestId(TEST_IDS.ROOM_CARD)).toHaveCount(1);
+        const filteredCount = await rooms.getRoomCount(adminPage);
+        expect(filteredCount).toEqual(1);
       });
     });
 

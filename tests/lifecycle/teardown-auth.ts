@@ -67,3 +67,69 @@ async function cleanupAuthStates(): Promise<void> {
     console.error('❌ Error cleaning up auth-states:', error);
   }
 }
+
+async function cleanupTestItems(page: Page, config: CleanupConfig): Promise<void> {
+  const items = await fetchItems(page, config.service, config.method, config.args);
+
+  const prefixes = Array.isArray(config.filterPrefix) ? config.filterPrefix : [config.filterPrefix];
+  const testItems =
+    items?.filter((item: any) => {
+      const fieldValue = item[config.filterField];
+      return fieldValue && prefixes.some((prefix) => fieldValue.startsWith(prefix));
+    }) || [];
+
+  console.info(`🧹 Found ${testItems.length} test ${config.service} to clean up`);
+
+  await deleteItems(page, testItems, config.service, config.deleteMethod, config.idField, config.nameField);
+}
+
+/**
+ * Generic function to fetch items from the database
+ */
+async function fetchItems(page: Page, serviceName: string, methodName: string, args: any): Promise<any[]> {
+  const result = await page.evaluate(
+    async ({ service, method, arguments: args }) => {
+      const module = await import(`../../src/services/${service}`);
+      const response = await module[method](args);
+      return {
+        data: response.data,
+        error: response.error,
+        count: response.count,
+      };
+    },
+    { service: serviceName, method: methodName, arguments: args }
+  );
+
+  return result.data || [];
+}
+
+/**
+ * Generic function to delete items from the database
+ */
+async function deleteItems(
+  page: Page,
+  items: any[],
+  serviceName: string,
+  methodName: string,
+  idField: string,
+  nameField: string
+): Promise<void> {
+  if (items.length === 0) return;
+
+  await Promise.all(
+    items.map(async (item) => {
+      try {
+        await page.evaluate(
+          async ({ service, method, id }) => {
+            const module = await import(`../../src/services/${service}`);
+            await module[method](id);
+          },
+          { service: serviceName, method: methodName, id: item[idField] }
+        );
+        console.info(`  ✅ Deleted: ${item[nameField]}`);
+      } catch (error) {
+        console.warn(`  ⚠️ Failed to delete: ${item[nameField]}`, error);
+      }
+    })
+  );
+}

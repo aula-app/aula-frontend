@@ -199,7 +199,7 @@ const LoginView = () => {
                 endAdornment: (
                   <InputAdornment position="end">
                     <AppIconButton
-                      aria-label="toggle password visibility"
+                      aria-label={t("ui.accessibility.togglePasswordVisibility")}
                       icon={showPassword ? "visibilityOn" : "visibilityOff"}
                       title={showPassword ? t("actions.hide") : t("actions.show")}
                       onClick={handleShowPasswordClick}

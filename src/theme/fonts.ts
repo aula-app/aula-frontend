@@ -7,6 +7,10 @@ const THEME_FONTS: ThemeOptions = {
   typography: {
     allVariants: {
       fontFamily: 'Vision',
+      // WCAG 1.4.12: Text Spacing — minimum values so containers never clip text
+      lineHeight: 1.5,       // ≥ 1.5× font size
+      letterSpacing: '0.12em', // ≥ 0.12× font size
+      wordSpacing: '0.16em',   // ≥ 0.16× font size
     },
     body1: {
       fontFamily: 'Vision',

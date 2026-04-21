@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ReactNode, ButtonHTMLAttributes } from 'react';
+import { ReactNode, ButtonHTMLAttributes, forwardRef } from 'react';
 import { useRipple } from '@/hooks/useRipple';
 
 interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
@@ -16,7 +16,7 @@ interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
  * Styled like MUI's IconButton with ripple effect
  * @component IconButton
  */
-const IconButton: React.FC<IconButtonProps> = ({
+const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
   children,
   title,
   className = '',
@@ -25,22 +25,25 @@ const IconButton: React.FC<IconButtonProps> = ({
   to,
   onClick,
   ...restOfProps
-}) => {
+}, ref) => {
   const { createRipple, RipplesContainer } = useRipple();
 
   const baseClassName = `
     relative overflow-hidden aspect-square p-2
     inline-flex items-center justify-center rounded-full
+    min-w-6 min-h-6
     text-current cursor-pointer select-none
     transition-[background-color] duration-200 ease-in-out
     hover:bg-shadow
-    focus:outline-none focus-visible:bg-black/[0.12] dark:focus-visible:bg-white/[0.12]
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1
+    focus-visible:ring-text-primary
     active:bg-black/[0.12] dark:active:bg-white/[0.12]
     ${className}
   `;
 
   const disabledClassName = `
     inline-flex items-center justify-center rounded-full p-2
+    min-w-6 min-h-6
     text-gray-400 cursor-not-allowed opacity-40
     ${className}
   `;
@@ -87,6 +90,7 @@ const IconButton: React.FC<IconButtonProps> = ({
   // Render as button otherwise
   return (
     <button
+      ref={ref}
       className={baseClassName}
       title={title}
       aria-label={title}
@@ -99,6 +103,8 @@ const IconButton: React.FC<IconButtonProps> = ({
       <RipplesContainer />
     </button>
   );
-};
+});
+
+IconButton.displayName = 'IconButton';
 
 export default IconButton;

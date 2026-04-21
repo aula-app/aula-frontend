@@ -99,7 +99,7 @@
   --color-text-primary: hsl(236.17, 42%, 22%);
   --color-background: #FFFFFF;
   --color-paper: #FFFFFF;
-  --color-input-border: rgba(0, 0, 0, 0.23);
+  --color-input-border: rgba(0, 0, 0, 0.45); /* 3.35:1 on white ✅ WCAG 1.4.11 */
   --color-input-border-hover: rgba(0, 0, 0, 0.87);
 }
 
@@ -194,7 +194,7 @@
   --color-text-primary: hsl(0, 0%, 100%);
   --color-background: hsl(200, 19%, 20%);
   --color-paper: hsl(200, 19%, 25%);
-  --color-input-border: rgba(255, 255, 255, 0.23);
+  --color-input-border: rgba(255, 255, 255, 0.50); /* 4.36:1 on dark bg ✅ WCAG 1.4.11 */
   --color-input-border-hover: rgba(255, 255, 255, 0.87);
 }
 
