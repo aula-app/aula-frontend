@@ -75,8 +75,6 @@ export const clearSearch = async (page: Page) => {
 };
 
 export const openSort = async (page: Page) => {
-  await navigation.goToHome(page);
-
   const sortSelect = page.getByTestId(TEST_IDS.SORT_SELECT);
   if (!(await sortSelect.isVisible())) {
     await page.getByTestId(TEST_IDS.SORT_BUTTON).filter({ visible: true }).click();

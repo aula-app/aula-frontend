@@ -10,18 +10,27 @@ import * as entities from '../helpers/entities';
 import * as shared from '../support/utils';
 import { admin } from '../fixtures/user.fixture';
 import { FILTER_EXCLUDED_RESOURCES } from '../fixtures/browser.fixture';
+import { cleanupAllTestData } from './cleanup';
 
 export default async function globalSetup() {
   console.log('🚀 Starting global setup...');
 
-  // Create a new run-id for this test run
-  createNewRunId();
-
-  // Create auth-states directory if it doesn't exist
+  // Purge any auth-states left over from a previously crashed run.
+  // Without this, stale user-meta-*.json files cause the fixture's in-memory
+  // userCache to load users whose backend state (e.g. changed passwords) no
+  // longer matches what the cache records — making serial tests flaky.
   const authStatesDir = path.join(process.cwd(), 'tests/auth-states');
-  if (!fs.existsSync(authStatesDir)) {
+  if (fs.existsSync(authStatesDir)) {
+    for (const file of fs.readdirSync(authStatesDir)) {
+      fs.unlinkSync(path.join(authStatesDir, file));
+    }
+    console.log('🧹 Cleared stale auth-states from previous run');
+  } else {
     fs.mkdirSync(authStatesDir, { recursive: true });
   }
+
+  // Create a new run-id for this test run
+  createNewRunId();
 
   // Launch browser and authenticate admin
   let browser: Browser | null = null;
@@ -58,6 +67,12 @@ export default async function globalSetup() {
     }
 
     console.log('✅ Admin logged in with token');
+
+    // Scrub any test data left in the DB from a previously crashed run.
+    // globalTeardown only runs when the process exits cleanly; if it was killed
+    // mid-run, orphaned test-* entities accumulate and cause flaky failures.
+    console.log('🧹 Scrubbing leftover test data from previous run...');
+    await cleanupAllTestData(page);
 
     // Ensure instance is online
     await ensureInstanceOnline(page);
