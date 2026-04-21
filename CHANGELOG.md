@@ -30,6 +30,7 @@
   - Prevent users from editing ideas after voting phase
   - Default phase durations from room was not affecting new boxes
   - Fix long names clipped on password list print view
+  - Hide inactive ideas
   - Fix Tech Admin navigation
 
 ## 1.8.3
