@@ -6,17 +6,29 @@ on:
   workflow_dispatch:
 
 env:
-  AULA_PORT: "8000"
+  AULA_PORT: "80"
   PLAYWRIGHT_VERSION: "1.58.2"
 
 jobs:
+  sanitize_project_name:
+    runs-on: [self-hosted, cicd]
+    steps:
+      - id: sanitize
+        name: Substitute illegal branch characters
+        run: |
+          echo "${{ github.ref_name }}" | \
+            sed 's/[^a-zA-Z0-9_.-]/_/g' | \
+            (echo -n "DOCKER_COMPOSE_PROJECT_NAME=aula-e2e-" && cat) \
+          >> $GITHUB_OUTPUT
+    outputs:
+      DOCKER_COMPOSE_PROJECT_NAME: ${{ steps.sanitize.outputs.DOCKER_COMPOSE_PROJECT_NAME }}
   run-aula:
+    needs: sanitize_project_name
     runs-on: [self-hosted, cicd]
     permissions:
       contents: read
       packages: read
     env:
-      COMPOSE_NAME: aula-e2e-${{ github.ref_name }}
       AULA_IMAGE: ghcr.io/aula-app/ansible-role-aula:latest
     steps:
       - name: Checkout code
@@ -60,7 +72,8 @@ jobs:
                 apache2_user: www
                 network:
                   ssl_enabled: false
-                  base_domain: "host.docker.internal"
+                  base_domain: "nginx"
+                  bindInterface: "127.0.0.1"
                   httpPort: "${{ env.AULA_PORT }}"
                 email:
                   backend: log
@@ -70,9 +83,13 @@ jobs:
                     username: ""
                     password: ""
                 aula:
-                  compose_name: ${{ env.COMPOSE_NAME }}
+                  compose_name: ${{ needs.sanitize_project_name.outputs.DOCKER_COMPOSE_PROJECT_NAME }}
+                  debug: true
+                  log:
+                    level: INFO
+                    stack: single
                   environment: dev
-                  base_url: "http://host.docker.internal:${{ env. AULA_PORT }}"
+                  base_url: "http://nginx:${{ env. AULA_PORT }}"
                   superkey: "hunter2"
                   is_pr_deployment_enabled: false
                   multi_instance_enabled: false
@@ -100,8 +117,8 @@ jobs:
                   client_id: "AUTH0-CLIENT-ID"
                   client_secret: auth0-secret
                   cookie_secret: hunter2
-                  redirect_uri: "http://host.docker.internal:${{ env. AULA_PORT }}/api/controllers/auth0.php"
-                  frontend_redirect: "http://host.docker.internal:${{ env. AULA_PORT }}/oauth-login/"
+                  redirect_uri: "http://nginx:${{ env. AULA_PORT }}/api/controllers/auth0.php"
+                  frontend_redirect: "http://nginx:${{ env. AULA_PORT }}/oauth-login/"
           EOF
 
       - name: Run ansible
@@ -116,7 +133,7 @@ jobs:
   e2e-tests:
     runs-on: [self-hosted, cicd]
     continue-on-error: true # allow failing e2e tests while testing
-    needs: run-aula
+    needs: [run-aula, sanitize_project_name]
     env:
       PLAYWRIGHT_SERVICE_NAME: playwright-svc-${{ github.sha }}
     steps:
@@ -127,8 +144,8 @@ jobs:
         run: |
           docker run --rm \
             --name ${{ env.PLAYWRIGHT_SERVICE_NAME }} \
-            -p 3000:3000 \
-            --add-host host.docker.internal=host-gateway \
+            --network ${{ needs.sanitize_project_name.outputs.DOCKER_COMPOSE_PROJECT_NAME }}_aula_external \
+            -p 127.0.0.1:3000:3000 \
             --detach \
             mcr.microsoft.com/playwright:v${{ env.PLAYWRIGHT_VERSION }} \
             /bin/sh -c "npx -y playwright@${{ env.PLAYWRIGHT_VERSION }} run-server --port 3000 --host 0.0.0.0"
@@ -147,8 +164,8 @@ jobs:
       - name: Run E2E tests
         env:
           PW_TEST_CONNECT_WS_ENDPOINT: ws://127.0.0.1:3000/
-          APP_FRONTEND_HOST: http://host.docker.internal:${{ env. AULA_PORT }}
-          APP_BACKEND_HOST: http://host.docker.internal:${{ env. AULA_PORT }}
+          APP_FRONTEND_HOST: http://nginx:${{ env. AULA_PORT }}
+          APP_BACKEND_HOST: http://nginx:${{ env. AULA_PORT }}
           REMOTE_BROWSER: 1 # Enable the use of playwright server in the js
           ADMIN_USERNAME: "admin"
           ADMIN_PASSWORD: "abc123"
@@ -168,7 +185,7 @@ jobs:
       - name: Cleanup running services and files
         run: |
           for name in $(docker ps --format '{{ .Names }}'); do
-            if [[ "$name" == ${{ env.COMPOSE_NAME }}* ]]; then
+            if [[ "$name" == ${{ env.DOCKER_COMPOSE_PROJECT_NAME }}* ]]; then
               echo "Removing: $name"
               docker rm -f "$name"
             fi

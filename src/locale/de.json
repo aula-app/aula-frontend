@@ -750,6 +750,7 @@
     },
     "navigation": {
       "about": "Über",
+      "adminPanel": "Admin-Bereich",
       "announcements": "Ankündigungen",
       "boxes": "Boxen",
       "bugs": "Fehler",

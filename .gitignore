@@ -33,8 +33,9 @@ package-lock.json
 
 # misc
 .DS_Store
-*.development
-*.local
+/*.development
+/*.local
+
 
 vite.config.local.mts
 

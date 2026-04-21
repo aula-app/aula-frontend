@@ -1,3 +1,4 @@
+import { TEST_IDS } from '@/test-ids';
 import { Box, Button, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -119,7 +120,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             onClick={onCancel}
             color="inherit"
             disabled={isLoading}
-            data-testid="cancel-button"
+            data-testid={TEST_IDS.CANCEL_BUTTON}
             aria-label={cancelButtonText}
           >
             {cancelButtonText}
@@ -130,7 +131,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             color={confirmColor}
             variant="contained"
             disabled={isLoading}
-            data-testid="confirm-button"
+            data-testid={TEST_IDS.CONFIRM_BUTTON}
             aria-label={isLoading ? t('actions.processing') : confirmButtonText}
           >
             {isLoading ? t('actions.processing') : confirmButtonText}
