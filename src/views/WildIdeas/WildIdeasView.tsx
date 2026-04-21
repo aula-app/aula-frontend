@@ -176,7 +176,8 @@ const WildIdeas = () => {
           color="primary"
           sx={{
             position: 'fixed',
-            bottom: 40,
+            bottom: 'max(40px, calc(40px + var(--safe-area-inset-bottom, 0px)))',
+            right: 16,
             zIndex: 1000,
           }}
           data-testid="add-idea-button"

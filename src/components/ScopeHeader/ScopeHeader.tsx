@@ -261,8 +261,8 @@ export function ScopeHeader({
                 inputRef={searchInputRef}
                 data-testid={TEST_IDS.SEARCH_FIELD}
                 sx={{
-                  width: { xs: 180, sm: 200 },
-                  minWidth: { xs: 120, sm: 150 },
+                  width: { xs: '100%', sm: 200 },
+                  minWidth: { xs: 'unset', sm: 150 },
                   ml: 2,
                   '& .MuiOutlinedInput-root': {
                     transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
