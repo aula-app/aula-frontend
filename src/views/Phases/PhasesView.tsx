@@ -14,6 +14,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import DashBoard from '../Welcome/Dashboard';
+import { RoomPhases } from '@/types/SettingsTypes';
 
 /**
  * Unified PhaseView component that handles all phase types consistently
@@ -163,6 +164,7 @@ const PhasesView = () => {
               <Grid key={item.hash_id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
                 <IdeaBubble
                   idea={item}
+                  phase={Number(phase) as RoomPhases}
                   onEdit={() => onEdit(item)}
                   onDelete={() => onDelete(item.hash_id)}
                   to={`/room/${item.room_hash_id}/phase/${phase}/idea/${item.hash_id}`}
@@ -170,7 +172,6 @@ const PhasesView = () => {
               </Grid>
             ))}
         </Grid>
-
       </Stack>
     </Stack>
   );

@@ -347,6 +347,7 @@
       "marked_not_winner": "Diese Idee wird nicht als Gewinner ausgewählt.",
       "marked_winner": "Diese Idee wird als Gewinner ausgewählt.",
       "name": "Idee",
+      "noQuorum": "Kein Quorum festgelegt.",
       "not_marked_yet": "Noch nicht als Gewinner markiert.",
       "placeholder": "Ideen durchsuchen...",
       "plural": "Ideen",

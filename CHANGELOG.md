@@ -1,3 +1,4 @@
+
 ## 1.9.0
 
 - **New features**
@@ -37,6 +38,7 @@
   - Fix long names clipped on password list print view
   - Hide inactive ideas
   - Fix Tech Admin navigation
+  - Update quorum progress bar on hitting like button or voting
 
 ## 1.8.3
 

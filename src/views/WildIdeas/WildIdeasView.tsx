@@ -12,6 +12,7 @@ import { Drawer, Fab, Stack } from '@mui/material';
 import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { RoomPhases } from '@/types/SettingsTypes';
 
 interface RouteParams extends Record<string, string | undefined> {
   room_id: string;
@@ -161,6 +162,7 @@ const WildIdeas = () => {
                   <IdeaBubble
                     key={idea.id}
                     idea={idea}
+                    phase={Number(phase) as RoomPhases}
                     to={`idea/${idea.hash_id}`}
                     onEdit={() => onEdit(idea)}
                     onDelete={() => onDelete(idea.hash_id)}

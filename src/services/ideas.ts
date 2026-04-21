@@ -240,8 +240,8 @@ export async function getIdeaLike(idea_id: string): Promise<boolean> {
  * Adds a like to an idea
  */
 
-export async function addIdeaLike(idea_id: string): Promise<void> {
-  await databaseRequest(
+export async function addIdeaLike(idea_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
     {
       model: 'Idea',
       method: 'IdeaAddLike',
@@ -249,14 +249,16 @@ export async function addIdeaLike(idea_id: string): Promise<void> {
     },
     ['user_id']
   );
+
+  return response;
 }
 
 /**
  * Removes a like to an idea
  */
 
-export async function removeIdeaLike(idea_id: string): Promise<void> {
-  await databaseRequest(
+export async function removeIdeaLike(idea_id: string): Promise<GenericResponse> {
+  const response = await databaseRequest(
     {
       model: 'Idea',
       method: 'IdeaRemoveLike',
@@ -264,6 +266,8 @@ export async function removeIdeaLike(idea_id: string): Promise<void> {
     },
     ['user_id']
   );
+
+  return response;
 }
 
 /**
