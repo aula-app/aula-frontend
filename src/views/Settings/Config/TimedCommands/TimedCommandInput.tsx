@@ -5,7 +5,7 @@ import { getUsers } from '@/services/users';
 import { SelectOptionsType } from '@/types/SettingsTypes';
 import { LanguageTypes } from '@/types/Translation';
 import { Commands } from '@/utils/commands';
-import { DATE_FORMATS, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
+import { DATE_FORMATS, DEFAULT_FORMAT_DATE_ONLY, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -36,6 +36,9 @@ const TimeCommandInput = ({ onReload }: Props) => {
     users: [],
     groups: [],
   });
+
+  // must not set commands in the past; use (client's) now / today
+  const minDate = dayjs()
 
   async function addField() {
     if (typeof action === 'undefined' || typeof scope === 'undefined' || typeof startTime === 'undefined') return;
@@ -186,6 +189,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
             value={dayjs(startTime)}
             disabled={typeof action !== 'number'}
             format={DATE_FORMATS[i18next.language as LanguageTypes].dateOnly}
+            minDate={minDate}
             onChange={(date) => {
               if (date) setStartTime(dayjs(date).format(DEFAULT_FORMAT_DATE_TIME));
             }}
