@@ -36,7 +36,7 @@ const Row: React.FC<Props> = ({ children, item, selected = false, status, toggle
         background: getBackground(),
         cursor: 'pointer',
         textDecorationLine: status !== 1 ? 'line-through' : 'none',
-        height: '55px',
+        minHeight: '3.4375rem',
         ...sx,
       }}
       role="row"

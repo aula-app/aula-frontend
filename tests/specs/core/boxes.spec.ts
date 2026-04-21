@@ -75,7 +75,7 @@ test.describe.serial('Box Management - Creation, phase changes and Permissions',
       const boxCard = adminPage.getByTestId('box-card');
       await expect(boxCard.getByText(box.name)).toBeVisible();
       await boxCard.getByTestId('more-options-button').click();
-      await adminPage.waitForTimeout(500);
+      await expect(boxCard.getByTestId('edit-button')).toBeVisible();
       await boxCard.getByTestId('edit-button').click();
       await boxes.fill(adminPage, boxNewPhaseObject);
     });

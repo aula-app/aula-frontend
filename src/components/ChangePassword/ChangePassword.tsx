@@ -79,15 +79,15 @@ const ChangePassword: React.FC<Props> = ({
     );
 
     if (passwordComplexity.requireUppercase) {
-      validation = validation.matches(/[A-Z]/, 'Password must contain at least one uppercase letter');
+      validation = validation.matches(/[A-Z]/, t('forms.validation.passwordRequireUppercase'));
     }
 
     if (passwordComplexity.requireNumber) {
-      validation = validation.matches(/[0-9]/, 'Password must contain at least one number');
+      validation = validation.matches(/[0-9]/, t('forms.validation.passwordRequireNumber'));
     }
 
     if (passwordComplexity.requireSymbol) {
-      validation = validation.matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character');
+      validation = validation.matches(/[^A-Za-z0-9]/, t('forms.validation.passwordRequireSymbol'));
     }
 
     return validation.max(64, t('forms.validation.maxLength', { var: 64 }));
@@ -134,6 +134,12 @@ const ChangePassword: React.FC<Props> = ({
 
   // Use shared password requirements function
   const { renderPasswordRequirements } = usePasswordRequirements(watchedNewPassword || '', passwordComplexity, t);
+
+  const autocompleteTokens: Record<keyof typeof fields, string> = {
+    oldPassword: 'current-password',
+    newPassword: 'new-password',
+    confirmPassword: 'new-password',
+  };
 
   const onSubmit = async (data: SchemaType) => {
     const result = await changePassword(data.oldPassword, data.newPassword, tmp_token);
@@ -230,12 +236,13 @@ const ChangePassword: React.FC<Props> = ({
                     id: `change-password-${field}-label`,
                     htmlFor: `change-password-${field}`,
                     'data-testid': `${field}-input`,
+                    autoComplete: autocompleteTokens[field],
                   },
                   input: {
                     endAdornment: (
                       <InputAdornment position="end">
                         <AppIconButton
-                          aria-label="toggle password visibility"
+                          aria-label={t('ui.accessibility.togglePasswordVisibility')}
                           icon={showPassword[field] ? 'visibilityOn' : 'visibilityOff'}
                           title={showPassword[field] ? t('actions.hide') : t('actions.show')}
                           onClick={() => setShowPassword({ ...showPassword, [field]: !showPassword[field] })}

@@ -1,7 +1,16 @@
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields, SettingType } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { Box, Checkbox, Table as MuiTable, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  Table as MuiTable,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+} from '@mui/material';
 import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import EmptyState from '../EmptyState';
@@ -58,6 +67,8 @@ const Table: React.FC<Props> = ({
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
+        scrollPaddingTop: '55px',
+        scrollPaddingLeft: '41px',
       }}
     >
       {isLoading ? (

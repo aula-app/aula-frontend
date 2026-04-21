@@ -70,10 +70,10 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
       >
         <Stack direction="row" alignItems="center">
           <Stack
-            height="75px"
+            minHeight="4.5rem"
             alignItems="center"
             justifyContent="center"
-            fontSize={40}
+            fontSize="2.5rem"
             sx={{
               aspectRatio: 1,
             }}

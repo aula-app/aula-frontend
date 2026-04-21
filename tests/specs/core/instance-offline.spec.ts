@@ -1,8 +1,10 @@
 import { expect, Page } from '@playwright/test';
+import { TEST_IDS } from '../../../src/test-ids';
 import { test } from '../../fixtures/test-fixtures';
 import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 import * as users from '../../interactions/users';
+import * as shared from '../../support/utils';
 
 /**
  * Instance Offline Mode Tests
@@ -26,9 +28,8 @@ test.describe.serial('Instance Offline', () => {
     await formInteractions.selectOptionByValue(adminPage, 'select-field-status', online ? '1' : '0');
     await formInteractions.clickButton(adminPage, 'system-settings-confirm-button');
 
-    await adminPage.waitForTimeout(500);
-    const isExpanded = await adminPage.getByTestId('config-accordion-system').getAttribute('aria-expanded');
-    expect(isExpanded).toBe('false');
+    const accordion = adminPage.getByTestId('config-accordion-system');
+    await expect(accordion).toHaveAttribute('aria-expanded', 'false');
 
     await navigation.openAccordion(adminPage, 'config-accordion-system');
     const selectedStatus = await adminPage.getByTestId('select-field-status-input').inputValue();
@@ -41,15 +42,14 @@ test.describe.serial('Instance Offline', () => {
       await changeInstanceStatus(adminPage, false);
     });
 
-    // @FIXME: nikola - this test is often failing because it relies on user being registered as part of
-    //   user.fixture.ts base test (using api-users.ts#registerUserViaAPI)
-    //   so it only succeeds if the user is already created and in the auth-states (ie. userData) cache
-    await test.step('Verify offline view is displayed on attempt to login', async () => {
-      try {
-        await users.loginAttempt(userPage, userConfig);
-      } catch (e) { }
-      const offlineDiv = userPage.getByTestId('school-offline-view');
-      await expect(offlineDiv).toBeVisible({ timeout: 5000 });
+    await test.step('Verify offline view is displayed for authenticated user', async () => {
+      // Navigate as an authenticated user. PrivateLayout calls useIsOnline() on each
+      // navigation; when the instance is offline it renders <OfflineView />, which calls
+      // logout() (clears the token) and the router falls back to the public /offline
+      // route where <PublicOfflineView data-testid="school-offline-view"> is rendered.
+      await userPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
+      const offlineDiv = userPage.getByTestId(TEST_IDS.SCHOOL_OFFLINE_VIEW);
+      await expect(offlineDiv).toBeVisible({ timeout: 20000 });
     });
 
     await test.step('Admin: Change instance status to online', async () => {

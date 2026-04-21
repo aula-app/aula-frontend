@@ -65,7 +65,7 @@ const RoomImageSelector: FC<RoomImageSelectorProps> = ({ image, onClose, onSubmi
       </Button>
       <Dialog open={editImage} onClose={() => setEditImage(false)} fullWidth>
         <Stack p={2}>
-          <Typography variant="h3">Change color</Typography>
+          <Typography variant="h3">{t('room.image.changeColor')}</Typography>
           <Stack direction="row" width="100%" justifyContent="space-between" py={2}>
             {[...Array(8)].map((_, key) => (
               <Button
@@ -85,7 +85,7 @@ const RoomImageSelector: FC<RoomImageSelectorProps> = ({ image, onClose, onSubmi
               </Button>
             ))}
           </Stack>
-          <Typography variant="h3">Select image</Typography>
+          <Typography variant="h3">{t('room.image.selectImage')}</Typography>
           <Grid container spacing={2}>
             {[...Array(8)].map((_, key) => (
               <Grid size={{ xs: 6, sm: 3 }} key={`img_${key}`}>

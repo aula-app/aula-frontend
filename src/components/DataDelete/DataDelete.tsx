@@ -8,6 +8,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { TEST_IDS } from '@/test-ids';
 import { useTranslation } from 'react-i18next';
 import AppIcon from '../AppIcon';
 import { useState } from 'react';
@@ -86,7 +87,7 @@ ${t('requests.deleteAccount.body', { var: user.displayname })}`,
             onClick={() => setOpenDelete(false)}
             color="secondary"
             autoFocus
-            data-testid="cancel-button"
+            data-testid={TEST_IDS.CANCEL_BUTTON}
             aria-label={t('actions.cancel')}
           >
             {t('actions.cancel')}
@@ -95,7 +96,7 @@ ${t('requests.deleteAccount.body', { var: user.displayname })}`,
             onClick={requestDelete}
             color="error"
             variant="contained"
-            data-testid="delete-button"
+            data-testid={TEST_IDS.DELETE_BUTTON}
             aria-label={t('actions.delete')}
           >
             {t('actions.delete')}
