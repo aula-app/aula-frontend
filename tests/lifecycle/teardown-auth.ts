@@ -107,8 +107,7 @@ export default async function globalTeardown() {
     // Navigate to app if needed
     const currentUrl = adminPage.url();
     if (!currentUrl || currentUrl === 'about:blank') {
-      await adminPage.goto(shared.getHost());
-      await adminPage.waitForLoadState('networkidle');
+      await adminPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
     }
 
     // Verify admin is authenticated
@@ -207,18 +206,20 @@ async function deleteItems(
 ): Promise<void> {
   if (items.length === 0) return;
 
-  for (const item of items) {
-    try {
-      await page.evaluate(
-        async ({ service, method, id }) => {
-          const module = await import(`../../src/services/${service}`);
-          await module[method](id);
-        },
-        { service: serviceName, method: methodName, id: item[idField] }
-      );
-      console.info(`  ✅ Deleted: ${item[nameField]}`);
-    } catch (error) {
-      console.warn(`  ⚠️ Failed to delete: ${item[nameField]}`, error);
-    }
-  }
+  await Promise.all(
+    items.map(async (item) => {
+      try {
+        await page.evaluate(
+          async ({ service, method, id }) => {
+            const module = await import(`../../src/services/${service}`);
+            await module[method](id);
+          },
+          { service: serviceName, method: methodName, id: item[idField] }
+        );
+        console.info(`  ✅ Deleted: ${item[nameField]}`);
+      } catch (error) {
+        console.warn(`  ⚠️ Failed to delete: ${item[nameField]}`, error);
+      }
+    })
+  );
 }

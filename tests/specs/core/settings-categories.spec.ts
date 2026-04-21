@@ -34,8 +34,6 @@ test.describe.serial('Category management', () => {
     await DeleteButton.click();
 
     await formInteractions.clickButton(adminPage, 'delete-cat-button');
-    await adminPage.waitForTimeout(2000); // wait for the form to process
-
     await expect(CategoryChip).not.toBeVisible();
   };
 
@@ -57,7 +55,6 @@ test.describe.serial('Category management', () => {
       await expect(firstIconButton).toBeVisible();
       await firstIconButton.click();
       await formInteractions.clickButton(adminPage, 'category-form-submit-button');
-      await adminPage.waitForTimeout(2000); // wait for the form to process
     });
 
     await test.step('Verify category was created', async () => {
@@ -92,10 +89,8 @@ test.describe.serial('Category management', () => {
 
     await test.step('Clear category from idea', async () => {
       await formInteractions.clickButton(adminPage, 'category-field-clear-button');
-      await adminPage.waitForTimeout(1000); // wait for the form to process
-
       await formInteractions.clickButton(adminPage, 'submit-idea-form');
-      await adminPage.waitForTimeout(1000); // wait for the form to process
+      await adminPage.waitForSelector('[data-testid="add-idea-form"]', { state: 'hidden' });
     });
 
     await test.step('Verify category is removed', async () => {

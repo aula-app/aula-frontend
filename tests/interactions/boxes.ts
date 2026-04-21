@@ -8,9 +8,6 @@ import { TIMEOUTS } from '../support/constants';
 export const create = async (page: Page, box: types.BoxData) => {
   await navigation.goToBoxesSettings(page);
   await page.getByTestId('add-boxes-button').filter({ visible: true }).click();
-
-  // @TODO: nikola - replace with waiting for the form to appear
-  await page.waitForTimeout(TIMEOUTS.ONE_HUNDRED_MILLIS);
   await sendForm(page, box);
 
   await settingsInteractions.check(page, { option: 'name', value: box.name });
@@ -57,5 +54,6 @@ const sendForm = async (page: Page, box: types.BoxData) => {
   }
 
   await formInteractions.clickButton(page, 'box-form-submit-button');
+  await page.waitForSelector('[data-testid="box-name-input"]', { state: 'hidden', timeout: TIMEOUTS.THREE_SECONDS });
   await page.waitForLoadState('networkidle');
 };

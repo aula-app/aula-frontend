@@ -1,4 +1,5 @@
 import { AppLink } from '@/components';
+import { TEST_IDS } from '@/test-ids';
 import { Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -9,7 +10,7 @@ const PublicOfflineView: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <Stack flex={1} alignItems="center" justifyContent="center" data-testid="school-offline-view">
+    <Stack flex={1} alignItems="center" justifyContent="center" data-testid={TEST_IDS.SCHOOL_OFFLINE_VIEW}>
       <img 
         src="/img/Paula_schlafend.svg" 
         alt={t('errors.schoolClosedImage')} 

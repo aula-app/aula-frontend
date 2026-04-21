@@ -3,7 +3,14 @@ import path from 'path';
 import dotenv from 'dotenv';
 
 // configure the environment to get the running dev server
+// Load .env.playwright first (default/committed config)
 dotenv.config({ path: '.env.playwright' });
+
+// Then load .env.playwright.local if it exists (overrides defaults, not committed)
+if (fs.existsSync('.env.playwright.local')) {
+  console.info('[info] loading local config from .env.playwright.local');
+  dotenv.config({ path: '.env.playwright.local', override: true });
+}
 
 // we want to make sure we are only running tests on non-prod frontends
 if (!process.env.APP_FRONTEND_HOST || process.env.APP_FRONTEND_HOST.toString().match(/(?:prod|neu)\.aula\.de/)) {
