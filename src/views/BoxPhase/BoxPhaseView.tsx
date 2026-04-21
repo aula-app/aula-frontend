@@ -158,7 +158,7 @@ const BoxPhaseView = () => {
         }}
       >
         {checkPermissions('boxes', 'create') && Number(phase) === 10 && (
-          <Fab aria-label="add idea" color="primary" onClick={() => setEdit(true)} data-testid="add-idea-button">
+          <Fab aria-label={t('ui.accessibility.addIdea')} color="primary" onClick={() => setEdit(true)} data-testid="add-idea-button">
             <AppIcon icon="box" />
           </Fab>
         )}
@@ -167,7 +167,7 @@ const BoxPhaseView = () => {
         </Drawer>
         {checkPermissions('surveys', 'create') && Number(phase) === 30 && (
           <>
-            <Fab aria-label="add" color="primary" onClick={() => setAddSurvey(true)}>
+            <Fab aria-label={t('ui.accessibility.add')} color="primary" onClick={() => setAddSurvey(true)}>
               <AppIcon icon="survey" />
             </Fab>
             <Drawer anchor="bottom" open={!!addSurvey} onClose={onClose} sx={{ overflowY: 'auto' }}>

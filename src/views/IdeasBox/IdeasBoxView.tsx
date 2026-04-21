@@ -309,7 +309,7 @@ const IdeasBoxView = () => {
       {checkPermissions('ideas', 'create') && Number(phase) < 20 && (
         <>
           <Fab
-            aria-label="add idea"
+            aria-label={t('ui.accessibility.addIdea')}
             color="primary"
             sx={{
               position: 'fixed',
