@@ -48,7 +48,7 @@ const RoomCard: FC<RoomCardProps> = ({ room }) => {
         '& a:focus-visible': { outline: 'none' },
       }}
       variant="outlined"
-      data-testid={TEST_IDS.ROOM_CARD}>
+      data-testid={TEST_IDS.ROOM_CARD}
     >
       <AppLink to={`/room/${room.hash_id}/phase/0`}>
         <Stack
