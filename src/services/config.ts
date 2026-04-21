@@ -21,7 +21,7 @@ interface DefaultConfigResponse extends GenericResponse {
   data: ConfigResponse;
 }
 
-async function getGlobalConfigs(): Promise<DefaultConfigResponse> {
+export async function getGlobalConfigs(): Promise<DefaultConfigResponse> {
   const response = await databaseRequest({
     model: 'Settings',
     method: 'getGlobalConfig',
