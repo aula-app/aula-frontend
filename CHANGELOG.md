@@ -21,6 +21,7 @@
   - Fix WCAG 1.4.3 contrast failures in dark mode — semantic colors (primary, error, secondary, info, warning) now meet 4.5:1 against dark backgrounds
   - WCAG 1.4.13 (Content on Hover or Focus): all tooltips are now dismissible via Escape key without moving focus or the pointer — applies to icon buttons, filter bar, filter clear button, phase bar, and dialog/modal close buttons
   - Escape key on a tooltip no longer propagates to parent dialogs or modals; only the tooltip closes
+  - WCAG 2.4.11 (Focus Not Obscured – Minimum): keyboard-focused elements are no longer entirely hidden by author-created content — DataTable sticky header and columns no longer obscure focused rows/cells; fixed floating action buttons no longer obscure focused elements near the bottom of the viewport
 
 - **Bug fixes**
   - Fix wrong 404 message on /messages page showing "no users" instead of "no messages" in German

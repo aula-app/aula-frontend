@@ -94,7 +94,10 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
         <main
           id="main-content"
           className="flex-1 overflow-y-auto relative z-0"
-          style={{ paddingBottom: 'var(--safe-area-inset-bottom, 0px)' }}
+          style={{
+            paddingBottom: 'var(--safe-area-inset-bottom, 0px)',
+            scrollPaddingBottom: '6rem',
+          }}
           tabIndex={-1}
         >
           {children}
