@@ -3,80 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { FILTER_EXCLUDED_RESOURCES } from '../fixtures/browser.fixture';
 import * as shared from '../support/utils';
-
-interface CleanupConfig {
-  service: string;
-  method: string;
-  deleteMethod: string;
-  filterField: string;
-  filterPrefix: string | string[];
-  idField: string;
-  nameField: string;
-  args?: any;
-}
-
-const CLEANUP_CONFIGS: CleanupConfig[] = [
-  {
-    service: 'ideas',
-    method: 'getIdeas',
-    deleteMethod: 'deleteIdea',
-    filterField: 'title',
-    filterPrefix: 'test-idea-',
-    idField: 'hash_id',
-    nameField: 'title',
-    args: undefined,
-  },
-  {
-    service: 'boxes',
-    method: 'getBoxes',
-    deleteMethod: 'deleteBox',
-    filterField: 'name',
-    filterPrefix: 'test-box-',
-    idField: 'hash_id',
-    nameField: 'name',
-    args: undefined,
-  },
-  {
-    service: 'rooms',
-    method: 'getRooms',
-    deleteMethod: 'deleteRoom',
-    filterField: 'room_name',
-    filterPrefix: 'test-room-',
-    idField: 'hash_id',
-    nameField: 'room_name',
-    args: { offset: 0, limit: 1000, orderby: 0, asc: 0, type: 0 },
-  },
-  {
-    service: 'groups',
-    method: 'getGroups',
-    deleteMethod: 'deleteGroup',
-    filterField: 'group_name',
-    filterPrefix: 'test-group-',
-    idField: 'id',
-    nameField: 'group_name',
-    args: undefined,
-  },
-  {
-    service: 'messages',
-    method: 'getAllMessages',
-    deleteMethod: 'deleteMessage',
-    filterField: 'headline',
-    filterPrefix: ['test-message-', 'Test Message', 'Test bug', 'Test comment'],
-    idField: 'hash_id',
-    nameField: 'headline',
-    args: {},
-  },
-  {
-    service: 'users',
-    method: 'getUsers',
-    deleteMethod: 'deleteUser',
-    filterField: 'username',
-    filterPrefix: 'test-',
-    idField: 'hash_id',
-    nameField: 'username',
-    args: undefined,
-  },
-];
+import { cleanupAllTestData } from './cleanup';
 
 export default async function globalTeardown() {
   console.log('🧹 Starting global teardown...');
@@ -104,53 +31,36 @@ export default async function globalTeardown() {
     adminPage = await context.newPage();
     await adminPage.route('**/*', FILTER_EXCLUDED_RESOURCES);
 
-    // Navigate to app if needed
     const currentUrl = adminPage.url();
     if (!currentUrl || currentUrl === 'about:blank') {
       await adminPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
     }
 
-    // Verify admin is authenticated
     const token = await adminPage.evaluate(() => localStorage.getItem('token'));
     if (!token) {
       throw new Error('Admin not authenticated');
     }
 
     console.info('✅ Admin browser initialized');
-
-    // Clean up all test items
-    for (const config of CLEANUP_CONFIGS) {
-      await cleanupTestItems(adminPage, config);
-    }
+    await cleanupAllTestData(adminPage);
   } catch (error) {
     console.error('❌ Error during cleanup:', error);
   } finally {
-    // Clean up browser resources
     if (adminPage) await adminPage.close();
     if (context) await context.close();
     if (browser) await browser.close();
-
-    // Clean up auth states
     await cleanupAuthStates();
   }
 }
 
-/**
- * Clean up auth-states directory (run-id and test user context files)
- */
 async function cleanupAuthStates(): Promise<void> {
   const authStatesDir = path.join(process.cwd(), 'tests/auth-states');
-
   try {
     if (fs.existsSync(authStatesDir)) {
-      const files = fs.readdirSync(authStatesDir);
-
-      for (const file of files) {
-        const filePath = path.join(authStatesDir, file);
-        fs.unlinkSync(filePath);
+      for (const file of fs.readdirSync(authStatesDir)) {
+        fs.unlinkSync(path.join(authStatesDir, file));
         console.info(`  ✅ Deleted: ${file}`);
       }
-
       console.info('🧹 Cleaned up auth-states directory');
     }
   } catch (error) {

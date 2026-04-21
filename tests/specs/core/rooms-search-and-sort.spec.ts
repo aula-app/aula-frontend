@@ -87,8 +87,8 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify no rooms are shown', async () => {
-        const count = await rooms.getRoomCount(adminPage);
-        expect(count).toBe(0);
+        // getRoomCount navigates to home which clears the search filter — count directly instead.
+        await expect(adminPage.getByTestId(TEST_IDS.ROOM_CARD)).toHaveCount(0);
       });
     });
   });
@@ -231,8 +231,8 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
         await rooms.openSort(adminPage);
         await rooms.selectSortOption(adminPage, 'room_name');
 
-        const count = await rooms.getRoomCount(adminPage);
-        expect(count).toBeGreaterThan(0);
+        // Count directly — getRoomCount navigates home which clears state.
+        await expect(adminPage.getByTestId(TEST_IDS.ROOM_CARD)).not.toHaveCount(0);
       });
     });
   });
@@ -244,8 +244,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       for (const char of specialChars) {
         await test.step(`Search with ${char}`, async () => {
           await rooms.searchRooms(adminPage, char);
-          // Should not crash
-          await rooms.getRoomCount(adminPage);
+          // Should not crash — clearSearch succeeding is the assertion
           await rooms.clearSearch(adminPage);
         });
       }

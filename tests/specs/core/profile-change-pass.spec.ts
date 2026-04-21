@@ -4,7 +4,6 @@ import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 import { TestConstants } from '../../support/config';
 import { login, logout } from '../../interactions/users';
-import { TIMEOUTS } from '../../support/constants';
 
 type PasswordChangeContext = {
   oldPassword: string;
@@ -15,17 +14,20 @@ type PasswordChangeContext = {
 /**
  * Password Change Tests
  * Tests password change functionality including validation and error handling
- * Uses pure Playwright fixtures for setup/teardown
  *
- * NOTE: Tests run serially because they sequentially change the same user's password:
- * Change password → Test with wrong password → Test validation → Change 6 times
+ * NOTE: Tests run serially — they share one user whose password is mutated
+ * across tests. currentPassword tracks the real backend state so each test
+ * uses the correct old password regardless of order or prior failures.
+ *
+ * Retries are disabled: a retry would send the wrong "old password" since
+ * the backend state was already mutated on the first attempt.
  */
+test.describe.configure({ retries: 0 });
 test.describe.serial('Change pass flow', () => {
-  const defaultFields = {
-    oldPassword: TestConstants.DEFAULT_PASSWORD,
-    newPassword: 'newPass#veryLongIndeed, one must login with 60 char long pass',
-    confirmPassword: 'newPass#veryLongIndeed, one must login with 60 char long pass',
-  };
+  // Tracks the user's actual current password across serial tests.
+  let currentPassword = TestConstants.DEFAULT_PASSWORD;
+
+  const changedPassword = 'newPass#veryLongIndeed, one must login with 60 char long pass';
 
   const changePassword = async (user: Page, passFields: PasswordChangeContext) => {
     await navigation.goToProfile(user);
@@ -39,13 +41,22 @@ test.describe.serial('Change pass flow', () => {
   };
 
   const checkSuccessDiv = async (userPage: Page) => {
-    const successDiv = userPage.getByTestId('password-change-success');
-    await successDiv.waitFor({ state: 'visible', timeout: TIMEOUTS.THREE_SECONDS });
+    // Wait for either outcome — the same Collapse renders success or error depending on API result.
+    const messageDiv = userPage.locator('[data-testid="password-change-success"], [data-testid="password-change-error"]');
+    await messageDiv.waitFor({ state: 'visible' });
 
+    // If the error variant appeared, surface the backend message immediately instead of timing out.
+    const errorDiv = userPage.getByTestId('password-change-error');
+    if (await errorDiv.isVisible()) {
+      const errorText = await errorDiv.textContent();
+      throw new Error(`Password change failed — backend returned: "${errorText?.trim()}"`);
+    }
+
+    const successDiv = userPage.getByTestId('password-change-success');
     const closeButton = successDiv.locator('button[aria-label="Close"]');
     await expect(closeButton).toBeVisible();
     await closeButton.click();
-    await successDiv.waitFor({ state: 'hidden', timeout: TIMEOUTS.THREE_SECONDS });
+    await successDiv.waitFor({ state: 'hidden' });
   };
 
   test('User can successfully change password with valid inputs', async ({ ensureUser, createUserPage }) => {
@@ -57,13 +68,18 @@ test.describe.serial('Change pass flow', () => {
     const user = await createUserPage(passwordUser.username);
 
     await test.step('Change password with valid inputs', async () => {
-      await changePassword(user, defaultFields);
+      await changePassword(user, {
+        oldPassword: currentPassword,
+        newPassword: changedPassword,
+        confirmPassword: changedPassword,
+      });
       await checkSuccessDiv(user);
+      currentPassword = changedPassword;
     });
 
     await test.step('Verify user can login with new password', async () => {
       await logout(user);
-      await login(user, { ...passwordUser, password: defaultFields.newPassword });
+      await login(user, { ...passwordUser, password: currentPassword });
     });
   });
 
@@ -72,12 +88,16 @@ test.describe.serial('Change pass flow', () => {
     const user = await createUserPage(passwordUser.username);
 
     await test.step('Attempt password change with incorrect current password', async () => {
-      await changePassword(user, defaultFields);
+      await changePassword(user, {
+        oldPassword: TestConstants.DEFAULT_PASSWORD, // intentionally wrong — password was already changed
+        newPassword: changedPassword,
+        confirmPassword: changedPassword,
+      });
     });
 
     await test.step('Verify error is displayed', async () => {
       const errorDiv = user.getByTestId('password-change-error');
-      await errorDiv.waitFor({ state: 'visible', timeout: TIMEOUTS.THREE_SECONDS });
+      await errorDiv.waitFor({ state: 'visible' });
       await expect(errorDiv).toBeVisible();
     });
   });
@@ -125,15 +145,22 @@ test.describe.serial('Change pass flow', () => {
     const passwordUser = await ensureUser('password');
     const user = await createUserPage(passwordUser.username);
 
-    await test.step('Change password 6 times in sequence', async () => {
-      for (let i = 0; i < 3; i++) {
-        const fields = {
-          oldPassword: i == 0 ? defaultFields.newPassword : `newPassword${i}`,
-          newPassword: `newPassword${i + 1}`,
-          confirmPassword: `newPassword${i + 1}`,
-        };
-        await changePassword(user, fields);
+    await test.step('Change password multiple times, resetting to original at the end', async () => {
+      const sequence = [
+        { newPassword: 'newPassword1' },
+        { newPassword: 'newPassword2' },
+        // Final iteration resets back to DEFAULT_PASSWORD so the user ends in a known state.
+        { newPassword: TestConstants.DEFAULT_PASSWORD },
+      ];
+
+      for (const { newPassword } of sequence) {
+        await changePassword(user, {
+          oldPassword: currentPassword,
+          newPassword,
+          confirmPassword: newPassword,
+        });
         await checkSuccessDiv(user);
+        currentPassword = newPassword;
       }
     });
   });

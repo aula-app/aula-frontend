@@ -95,8 +95,10 @@ export const goToWildIdea = async (page: Page, roomName: string, ideaName: strin
   // goToRoom resolves, so the idea card may not exist yet when we arrive on the room page.
   const idea = page.getByTestId(`idea-${ideaName}`);
   await idea.waitFor({ state: 'visible' });
-  await idea.click();
-  await page.waitForURL((url) => url.pathname.includes('/idea'));
+  // Click the anchor tag directly: the data-testid is on the outer Stack which also contains
+  // action buttons — clicking the container risks hitting them instead of the navigation link.
+  await idea.locator('a').first().click();
+  await page.waitForURL((url) => url.pathname.includes('/idea'), { waitUntil: 'commit' });
 };
 
 export const goToPhase = async (page: Page, roomName: string, phaseNumber: number) => {
