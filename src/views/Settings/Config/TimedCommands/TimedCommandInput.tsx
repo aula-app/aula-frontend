@@ -25,22 +25,21 @@ const TimeCommandInput = ({ onReload }: Props) => {
   const { t } = useTranslation();
   const { formatDateTime } = useDateFormatters();
 
+  // must not set commands in the past; use (client's) now / today
+  // since actions run on midnight, today's actions would never run, so minDate must be tomorrow
+  const minDate = dayjs().add(1, 'day')
+
   const [scope, setScope] = useState<number>(0);
   const [target, setTarget] = useState<string | undefined>();
   const [action, setAction] = useState<number>(0);
   const [value, setValue] = useState<number>(1);
   // DatePicker's onChange will set YMD, but leave Hms.
   // We could set them all to 0, but they do not matter in "serialization" in addField
-  const [startTime, setStartTime] = useState<dayjs.Dayjs>(
-    dayjs()
-  );
+  const [startTime, setStartTime] = useState<dayjs.Dayjs>(minDate);
   const [options, setOptions] = useState<{ users: SelectOptionsType; groups: SelectOptionsType }>({
     users: [],
     groups: [],
   });
-
-  // must not set commands in the past; use (client's) now / today
-  const minDate = dayjs()
 
   async function addField() {
     if (typeof action === 'undefined' || typeof scope === 'undefined' || typeof startTime === 'undefined') return;
