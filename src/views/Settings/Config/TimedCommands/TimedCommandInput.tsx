@@ -29,8 +29,10 @@ const TimeCommandInput = ({ onReload }: Props) => {
   const [target, setTarget] = useState<string | undefined>();
   const [action, setAction] = useState<number>(0);
   const [value, setValue] = useState<number>(1);
-  const [startTime, setStartTime] = useState<dayjs.ConfigType>(
-    formatDateTime(dayjs().utc().format(DEFAULT_FORMAT_DATE_TIME))
+  // DatePicker's onChange will set YMD, but leave Hms.
+  // We could set them all to 0, but they do not matter in "serialization" in addField
+  const [startTime, setStartTime] = useState<dayjs.Dayjs>(
+    dayjs()
   );
   const [options, setOptions] = useState<{ users: SelectOptionsType; groups: SelectOptionsType }>({
     users: [],
@@ -47,7 +49,10 @@ const TimeCommandInput = ({ onReload }: Props) => {
       command: '',
       target_id: target,
       parameters: value,
-      date_start: dayjs(startTime).utc().format(DEFAULT_FORMAT_DATE_TIME),
+      // this will correctly, timezone-awarely get YMD, even for near-midnight values, ex.:
+      // good: dayjs('2025-04-22T00:01:00').format(DEFAULT_FORMAT_DATE_ONLY) == "2025-04-22"
+      // bad:  dayjs('2025-04-22T00:01:00').utc().format(DEFAULT_FORMAT_DATE_ONLY) == "2025-04-21"
+      date_start: startTime.format(DEFAULT_FORMAT_DATE_ONLY),
     });
     if (!response.error) onReload();
   }
@@ -186,12 +191,12 @@ const TimeCommandInput = ({ onReload }: Props) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label={t(`settings.time.startDate`)}
-            value={dayjs(startTime)}
+            value={startTime}
             disabled={typeof action !== 'number'}
             format={DATE_FORMATS[i18next.language as LanguageTypes].dateOnly}
             minDate={minDate}
             onChange={(date) => {
-              if (date) setStartTime(dayjs(date).format(DEFAULT_FORMAT_DATE_TIME));
+              if (date) setStartTime(date)
             }}
             slotProps={{ textField: { size: 'small' } }}
           />
