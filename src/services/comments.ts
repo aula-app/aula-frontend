@@ -80,9 +80,9 @@ export async function editComment(args: EditCommentArguments): Promise<GenericRe
 /**
  * Removes a comment from the database
  * @param id - The Comment id
- * @returns Promise resolving to false if the response.error is Truthy, or true if the response.error is Falsy
+ * @returns Promise resolving to the response of the deletion request
  */
-export async function deleteComment(id: number): Promise<boolean> {
+export async function deleteComment(id: number): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
       model: 'Comment',
@@ -94,7 +94,7 @@ export async function deleteComment(id: number): Promise<boolean> {
     ['updater_id']
   );
 
-  return !response.error;
+  return response as GenericResponse;
 }
 
 /**
