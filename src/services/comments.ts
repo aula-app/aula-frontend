@@ -119,8 +119,8 @@ export async function getCommentLike(comment_id: number): Promise<boolean> {
  * Adds a like to a Comment
  * @param comment_id - The ID of the comment to like
  */
-export async function addCommentLike(comment_id: number): Promise<void> {
-  await databaseRequest(
+export async function addCommentLike(comment_id: number): Promise<GenericResponse> {
+  const response = await databaseRequest(
     {
       model: 'Comment',
       method: 'CommentAddLike',
@@ -129,15 +129,15 @@ export async function addCommentLike(comment_id: number): Promise<void> {
     ['user_id']
   );
 
-  return response;
+  return response as GenericResponse;
 }
 
 /**
  * Removes a like from a Comment
  * @param comment_id - The ID of the comment to un-like
  */
-export async function removeCommentLike(comment_id: number): Promise<void> {
-  await databaseRequest(
+export async function removeCommentLike(comment_id: number): Promise<GenericResponse> {
+  const response = await databaseRequest(
     {
       model: 'Comment',
       method: 'CommentRemoveLike',
@@ -146,5 +146,5 @@ export async function removeCommentLike(comment_id: number): Promise<void> {
     ['user_id']
   );
 
-  return response;
+  return response as GenericResponse;
 }
