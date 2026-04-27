@@ -26,8 +26,9 @@ const TimeCommandInput = ({ onReload }: Props) => {
   const { formatDateTime } = useDateFormatters();
 
   // must not set commands in the past; use (client's) now / today
-  // since actions run on midnight, today's actions would never run, so minDate must be tomorrow
-  const minDate = dayjs().add(1, 'day')
+  // (actions are scheduled midnight; an action scheduled for "today's midnight",
+  // which is technically in the past, will run immediately)
+  const minDate = dayjs()
 
   const [scope, setScope] = useState<number>(0);
   const [target, setTarget] = useState<string | undefined>();
