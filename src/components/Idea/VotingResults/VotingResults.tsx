@@ -1,5 +1,5 @@
 import AppIcon from '@/components/AppIcon';
-import { getQuorum, getVote, getVoteResults, ResultResponse, setToLosing, setToWinning } from '@/services/vote';
+import { getVote, getVoteResults, ResultResponse, setToLosing, setToWinning } from '@/services/vote';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions, Vote, votingOptions } from '@/utils';
 import { Card, FormControlLabel, Stack, Switch, Typography } from '@mui/material';
@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 interface Props {
   idea: IdeaType;
-  quorum: number;
+  quorum?: number;
   onReload: () => void;
 }
 
@@ -50,6 +50,7 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
   };
 
   const quorumPassed = () =>
+    quorum !== undefined &&
     quorum / 100 <= (numVotes.votes_positive + numVotes.votes_negative + numVotes.votes_neutral) / numVotes.total_votes;
 
   useEffect(() => {
@@ -70,10 +71,10 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
       >
         <Stack direction="row" alignItems="center">
           <Stack
-            height="75px"
+            minHeight="4.5rem"
             alignItems="center"
             justifyContent="center"
-            fontSize={40}
+            fontSize="2.5rem"
             sx={{
               aspectRatio: 1,
             }}
@@ -84,9 +85,11 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
             <Typography variant="h3">
               {idea.is_winner === 1
                 ? t(`scopes.ideas.winner`)
-                : quorumPassed()
-                  ? t(`scopes.ideas.approved`)
-                  : t(`scopes.ideas.rejected`)}
+                : quorum !== undefined
+                  ? t(`scopes.ideas.noQuorum`)
+                  : quorumPassed()
+                    ? t(`scopes.ideas.approved`)
+                    : t(`scopes.ideas.rejected`)}
             </Typography>
             {checkPermissions('ideas', 'vote') && !!vote && (
               <Typography variant="caption">

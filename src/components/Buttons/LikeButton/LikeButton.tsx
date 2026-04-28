@@ -1,20 +1,23 @@
 import AppIconButton from '@/components/AppIconButton';
 import { addCommentLike, getCommentLike, removeCommentLike } from '@/services/comments';
 import { addIdeaLike, getIdeaLike, removeIdeaLike } from '@/services/ideas';
+import { useAppStore } from '@/store';
 import { CommentType, IdeaType } from '@/types/Scopes';
-import { checkPermissions } from '@/utils';
 import { forwardRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
   item: IdeaType | CommentType;
   disabled?: boolean;
+  onChange?: (delta: number) => void; // Optional callback to update likes count in parent component
 }
 
-const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled }, ref) => {
+const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled, onChange }, ref) => {
   const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
   const [liked, setLiked] = useState(false);
   const [likeStatus, setLikeStatus] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   const isIdea = 'room_id' in item;
 
@@ -24,13 +27,31 @@ const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled }, ref
     setLikeStatus(likeState);
   };
 
-  const toggleLike = async () => {
-    if (likeStatus) {
-      await (isIdea ? removeIdeaLike(item.hash_id) : removeCommentLike(item.id));
-    } else {
-      await (isIdea ? addIdeaLike(item.hash_id) : addCommentLike(item.id));
+  const updateLikeStatus = (newStatus: boolean) => {
+    setLikeStatus(newStatus);
+    if (onChange) {
+      onChange(Number(newStatus) - Number(liked));
     }
-    setLikeStatus(!likeStatus);
+  };
+
+  const toggleLike = async () => {
+    updateLikeStatus(!likeStatus);
+    setIsPending(true);
+    try {
+      const response = await (likeStatus
+        ? isIdea
+          ? removeIdeaLike(item.hash_id)
+          : removeCommentLike(item.id)
+        : isIdea
+          ? addIdeaLike(item.hash_id)
+          : addCommentLike(item.id));
+      if (response.error) {
+        updateLikeStatus(!likeStatus); // Revert like status if API call fails
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+      }
+    } finally {
+      setIsPending(false);
+    }
   };
 
   useEffect(() => {
@@ -43,7 +64,7 @@ const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled }, ref
       icon={likeStatus ? 'heartFull' : 'heart'}
       title={t(`tooltips.${likeStatus ? 'heartFull' : 'heart'}`)}
       onClick={toggleLike}
-      disabled={disabled}
+      disabled={disabled || isPending}
       aria-label={likeStatus ? t('actions.unlike') : t('actions.like')}
       aria-pressed={likeStatus}
     >

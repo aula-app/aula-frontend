@@ -39,7 +39,6 @@ const RoomsView = () => {
       }}
       role="region"
       aria-label={t('scopes.rooms.plural')}
-      tabIndex={0}
     >
       <ScopeHeader title={t('scopes.rooms.plural')} scopeKey="rooms" totalCount={totalCount} {...scopeHeaderProps} />
 

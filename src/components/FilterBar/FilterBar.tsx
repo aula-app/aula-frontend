@@ -1,8 +1,9 @@
+import { TEST_IDS } from '@/test-ids';
 import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { announceToScreenReader, STATUS } from '@/utils';
-import { Collapse, Stack, Typography, Tooltip, StackProps } from '@mui/material';
+import { Collapse, Stack, Typography, StackProps } from '@mui/material';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppIconButton from '../AppIconButton';
@@ -78,17 +79,16 @@ const FilterBar: FC<FilterBarProps> = ({ children, fields, scope, onStatusChange
         <Typography variant="h1">{t(`scopes.${scope}.plural`)}</Typography>
         {fields && (
           <Stack direction="row" px={2}>
-            <Tooltip title={isOpen ? t('actions.hideFilters') : t('actions.showFilters')}>
-              <AppIconButton
-                icon="filter"
-                onClick={toggleFilters}
-                id="filter-toggle-button"
-                data-testid="filter-toggle-button"
-                aria-expanded={isOpen}
-                aria-controls="filter-panel"
-                aria-label={isOpen ? t('actions.hideFilters') : t('actions.showFilters')}
-              />
-            </Tooltip>
+            <AppIconButton
+              icon="filter"
+              onClick={toggleFilters}
+              id="filter-toggle-button"
+              data-testid="filter-toggle-button"
+              aria-expanded={isOpen}
+              aria-controls="filter-panel"
+              aria-label={isOpen ? t('actions.hideFilters') : t('actions.showFilters')}
+              title={isOpen ? t('actions.hideFilters') : t('actions.showFilters')}
+            />
           </Stack>
         )}
       </Stack>

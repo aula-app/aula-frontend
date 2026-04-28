@@ -1,6 +1,7 @@
 import { Breadcrumb } from '@/components';
 import Icon from '@/components/new/Icon';
 import { useAppStore } from '@/store/AppStore';
+import { useTranslation } from 'react-i18next';
 
 interface TopBarProps {
   mobileMenuOpen: boolean;
@@ -13,6 +14,7 @@ interface TopBarProps {
  * @component TopBar
  */
 const TopBar: React.FC<TopBarProps> = ({ mobileMenuOpen, onToggleMobileMenu, menuButtonRef }) => {
+  const { t } = useTranslation();
   const [appState] = useAppStore();
 
   // Get the current context name: room name from breadcrumb if available, or "aula"
@@ -43,10 +45,10 @@ const TopBar: React.FC<TopBarProps> = ({ mobileMenuOpen, onToggleMobileMenu, men
                 e.stopPropagation();
                 onToggleMobileMenu();
               }}
-              className="relative overflow-hidden flex items-center justify-center h-full aspect-square p-2 rounded-full hover:bg-black/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+              className="relative overflow-hidden flex items-center justify-center h-full aspect-square p-2 rounded-full hover:bg-black/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text-primary"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-sidebar-menu"
-              aria-label={mobileMenuOpen ? 'Close main menu' : 'Open main menu'}
+              aria-label={mobileMenuOpen ? t('ui.navigation.closeMenu') : t('ui.navigation.openMenu')}
             >
               <Icon type={mobileMenuOpen ? 'close' : 'menu'} size="1.5rem" aria-hidden="true" />
             </button>

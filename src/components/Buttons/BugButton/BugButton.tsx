@@ -2,6 +2,7 @@ import { BugForms } from '@/components/DataForms';
 import Icon from '@/components/new/Icon';
 import IconButton from '@/components/new/IconButton';
 import { addBug, BugArguments } from '@/services/messages';
+import { TEST_IDS } from '@/test-ids';
 import { Drawer, IconButtonProps } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -37,7 +38,7 @@ ${data.content || ''}
     <>
       <IconButton
         disabled={disabled}
-        data-testid="report-bug-button"
+        data-testid={TEST_IDS.REPORT_BUG_BUTTON}
         aria-label={t('actions.bugReport')}
         aria-expanded={isOpen}
         {...restOfProps}
@@ -46,7 +47,7 @@ ${data.content || ''}
       >
         <Icon type="bug" size="1.5rem" />
       </IconButton>
-      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} data-testid="bug-dialog">
+      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} data-testid={TEST_IDS.BUG_DIALOG}>
         <BugForms onClose={onClose} onSubmit={onSubmit} />
       </Drawer>
     </>

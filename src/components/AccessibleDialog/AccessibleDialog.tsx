@@ -8,9 +8,9 @@ import {
   DialogTitle,
   IconButton,
   Theme,
-  Tooltip,
   useMediaQuery,
 } from '@mui/material';
+import AccessibleTooltip from '../AccessibleTooltip/AccessibleTooltip';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -183,7 +183,7 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
         >
           {title}
           {showCloseButton && (
-            <Tooltip title={t('actions.close')}>
+            <AccessibleTooltip title={t('actions.close')}>
               <IconButton
                 edge="end"
                 color="inherit"
@@ -194,7 +194,7 @@ const AccessibleDialog = forwardRef<AccessibleDialogHandle, AccessibleDialogProp
               >
                 <Close />
               </IconButton>
-            </Tooltip>
+            </AccessibleTooltip>
           )}
         </DialogTitle>
 

@@ -185,6 +185,9 @@ const LoginView = () => {
                 "aria-errormessage": errors.username ? "username-error-message" : undefined,
                 autoCapitalize: "none"
               },
+              htmlInput: {
+                autoComplete: "username"
+              },
               inputLabel: {
                 id: "login-username-label",
                 htmlFor: "login-username"
@@ -210,14 +213,18 @@ const LoginView = () => {
             helperText={<span id="password-error-message">{errors.password?.message || ''}</span>}
             sx={{ mt: 0 }}
             slotProps={{
+              htmlInput: {
+                autoComplete: "current-password"
+              },
               input: {
                 "aria-labelledby": "login-password-label",
                 "aria-invalid": !!errors.password,
                 "aria-errormessage": errors.password ? "password-error-message" : undefined,
+                autoCapitalize: "none",
                 endAdornment: (
                   <InputAdornment position="end">
                     <AppIconButton
-                      aria-label="toggle password visibility"
+                      aria-label={t("ui.accessibility.togglePasswordVisibility")}
                       icon={showPassword ? "visibilityOn" : "visibilityOff"}
                       title={showPassword ? t("actions.hide") : t("actions.show")}
                       onClick={handleShowPasswordClick}

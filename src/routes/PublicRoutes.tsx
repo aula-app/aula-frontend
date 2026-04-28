@@ -1,39 +1,14 @@
-import { localStorageGet, localStorageSet } from '@/utils';
+import { useInstanceGuard } from '@/hooks/useInstanceGuard';
 import { InstanceCodeView, Login, OAuthLogin, PublicNotFoundView, Recovery, SetPassword } from '@/views/Public';
 import PublicOfflineView from '@/views/Public/PublicOfflineView';
 import UpdatePasswordView from '@/views/Public/UpdatePassword';
-import { useEffect } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { getRuntimeConfig } from '../config';
+import { Route, Routes } from 'react-router-dom';
 
 /**
  * List of routes available only for anonymous users
  */
 const PublicRoutes = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const useInstanceCheck = async () => {
-    const instanceCode = localStorageGet('code', false);
-    const isMultiInstance = getRuntimeConfig().IS_MULTI;
-
-    if (isMultiInstance) {
-      // aula-frontend should have its own instanceCode so its aula-backend would
-      //   know which database to use
-      if (!instanceCode && location.pathname !== '/code') {
-        navigate('/code');
-      }
-    } else {
-      localStorageSet('code', 'SINGLE');
-      // SINGLE instance aula-frontend that is not connected to the aula network
-      //   will only use its own aula-backend
-      await localStorageSet('api_url', getRuntimeConfig().CENTRAL_API_URL);
-    }
-  };
-
-  useEffect(() => {
-    useInstanceCheck();
-  }, [location.pathname, navigate]);
+  useInstanceGuard();
 
   return (
     <Routes>

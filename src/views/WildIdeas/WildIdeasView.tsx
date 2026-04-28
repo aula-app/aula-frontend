@@ -12,6 +12,7 @@ import { Drawer, Fab, Stack } from '@mui/material';
 import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { RoomPhases } from '@/types/SettingsTypes';
 
 interface RouteParams extends Record<string, string | undefined> {
   room_id: string;
@@ -161,6 +162,7 @@ const WildIdeas = () => {
                   <IdeaBubble
                     key={idea.id}
                     idea={idea}
+                    phase={Number(phase) as RoomPhases}
                     to={`idea/${idea.hash_id}`}
                     onEdit={() => onEdit(idea)}
                     onDelete={() => onDelete(idea.hash_id)}
@@ -172,11 +174,12 @@ const WildIdeas = () => {
       )}
       {checkPermissions('ideas', 'create') && room_id && (
         <Fab
-          aria-label="add idea"
+          aria-label={t('ui.accessibility.addIdea')}
           color="primary"
           sx={{
             position: 'fixed',
-            bottom: 40,
+            bottom: 'max(40px, calc(40px + var(--safe-area-inset-bottom, 0px)))',
+            right: 16,
             zIndex: 1000,
           }}
           data-testid="add-idea-button"

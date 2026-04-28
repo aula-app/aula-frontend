@@ -50,15 +50,15 @@ const SetPasswordView = () => {
       t('forms.validation.minLength', { var: passwordComplexity.minLength }));
     
     if (passwordComplexity.requireUppercase) {
-      validation = validation.matches(/[A-Z]/, 'Password must contain at least one uppercase letter');
+      validation = validation.matches(/[A-Z]/, t('forms.validation.passwordRequireUppercase'));
     }
-    
+
     if (passwordComplexity.requireNumber) {
-      validation = validation.matches(/[0-9]/, 'Password must contain at least one number');
+      validation = validation.matches(/[0-9]/, t('forms.validation.passwordRequireNumber'));
     }
-    
+
     if (passwordComplexity.requireSymbol) {
-      validation = validation.matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character');
+      validation = validation.matches(/[^A-Za-z0-9]/, t('forms.validation.passwordRequireSymbol'));
     }
     
     return validation.max(64, t('forms.validation.maxLength', { var: 64 }));
@@ -100,6 +100,11 @@ const SetPasswordView = () => {
     passwordComplexity,
     t
   );
+
+  const autocompleteTokens: Record<keyof typeof fields, string> = {
+    newPassword: 'new-password',
+    confirmPassword: 'new-password',
+  };
 
   const validateKey = async () => {
     if (!key) {
@@ -191,6 +196,9 @@ const SetPasswordView = () => {
                   error={!!errors[field]}
                   helperText={<span id={`${field}-error-message`}>{typeof errors[field]?.message === 'string' ? errors[field]?.message : ''}</span>}
                   slotProps={{
+                    htmlInput: {
+                      autoComplete: autocompleteTokens[field],
+                    },
                     input: {
                       'aria-labelledby': `set-password-${field}-label`,
                       'aria-invalid': !!errors[field],
@@ -198,7 +206,7 @@ const SetPasswordView = () => {
                       endAdornment: (
                         <InputAdornment position="end">
                           <AppIconButton
-                            aria-label="toggle password visibility"
+                            aria-label={t('ui.accessibility.togglePasswordVisibility')}
                             icon={showPassword[field] ? 'visibilityOn' : 'visibilityOff'}
                             title={showPassword[field] ? t('actions.hide') : t('actions.show')}
                             onClick={() => setShowPassword({ ...showPassword, [field]: !showPassword[field] })}

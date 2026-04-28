@@ -1,0 +1,101 @@
+name: aula-e2e
+
+# Spins up a fully isolated backend for Playwright e2e tests.
+#
+# Usage:
+#   docker compose -f docker-compose.e2e.yml up --build -d
+#   yarn test
+#   docker compose -f docker-compose.e2e.yml down -v
+#
+# Override the backend path if your repo is not at ${BACKEND_DIR:-../backend-aula}:
+#   BACKEND_DIR=/path/to/backend docker compose -f docker-compose.e2e.yml up --build -d
+# Or set BACKEND_DIR in a .env file next to this compose file.
+#
+# What happens on startup:
+#   1. mariadb-e2e  — fresh MariaDB instance
+#   2. backend-setup — Laravel v2: runs migrations (central DB) then creates
+#                      the SINGLE tenant (instance DB + admin users)
+#   3. backend-legacy-e2e — PHP legacy API, starts only after setup succeeds
+
+services:
+
+  # ─── Database ────────────────────────────────────────────────────────────────
+
+  mariadb-e2e:
+    image: mariadb:11.7
+    environment:
+      MARIADB_DATABASE: aula_database
+      MARIADB_ROOT_PASSWORD: e2e_root
+      MARIADB_USER: aula_user
+      MARIADB_PASSWORD: e2e_pass
+    volumes:
+      # NOTE: this path is coupled to the backend repo structure (docker/mariadb/).
+      # If that folder moves in backend-aula, this volume mapping must be updated here too.
+      - ${BACKEND_DIR:-../backend-aula}/docker/mariadb/:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 5s
+      timeout: 5s
+      retries: 24
+
+  # ─── One-shot setup (Laravel v2) ─────────────────────────────────────────────
+
+  backend-setup:
+    build:
+      context: ${BACKEND_DIR:-../backend-aula}
+    # Override entrypoint so this container exits cleanly instead of starting supervisord.
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        php artisan key:generate --force
+        php artisan migrate --force
+        php artisan tenant:create \
+          --name="E2E Test Instance" \
+          --code=SINGLE \
+          --admin-username=admin \
+          --admin-name="Admin User" \
+          --admin-email=admin@aula.de \
+          --admin2-username=tech_admin \
+          --admin2-name="Tech Admin" \
+          --admin2-email=tech@aula.de \
+          --admin-password=aula
+    environment:
+      APP_ENV: testing
+      # APP_URL becomes api_base_url in the tenants table — must be reachable
+      # from the browser (the test runner host), not from inside Docker.
+      APP_URL: http://localhost:8080
+      APP_KEY: base64:mnist+vwPMvTZu++OKwA6965qJhAvYAUxo1IvoGVBmw=
+      BCRYPT_ROUNDS: 4
+      DB_CONNECTION: mariadb
+      DB_HOST: mariadb-e2e
+      DB_PORT: "3306"
+      DB_DATABASE: aula_database
+      DB_USERNAME: aula_user
+      DB_PASSWORD: e2e_pass
+      LOG_CHANNEL: stderr
+    depends_on:
+      mariadb-e2e:
+        condition: service_healthy
+    restart: "no"
+
+  # ─── Legacy PHP API ───────────────────────────────────────────────────────────
+
+  backend-legacy-e2e:
+    build:
+      context: ${BACKEND_DIR:-../backend-aula}/legacy
+    environment:
+      APP_ENV: testing
+      APACHE_SERVER_NAME: localhost
+      CENTRAL_DB_HOST: mariadb-e2e
+      CENTRAL_DB_PORT: "3306"
+      CENTRAL_DB_NAME: aula_database
+      CENTRAL_DB_USER: aula_user
+      CENTRAL_DB_PASS: e2e_pass
+    ports:
+      - "8080:80"
+    depends_on:
+      mariadb-e2e:
+        condition: service_healthy
+      backend-setup:
+        condition: service_completed_successfully

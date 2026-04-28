@@ -34,6 +34,7 @@
 
 html, body, #root {
   height: 100%;
+  color: var(--text-primary);
 }
 
 body {
@@ -41,6 +42,32 @@ body {
   font-family: 'Vision', 'Tahoma', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* WCAG 1.4.12: Text Spacing — baseline for non-MUI elements */
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
+}
+
+/* WCAG 1.4.12: Set spacing directly on p so unlayered CSS beats Tailwind's text-* utilities
+   (which live in @layer utilities and set line-height directly on the element) */
+p {
+  margin-bottom: 2em;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
+}
+
+/* WCAG 1.4.12: Ensure containers expand with content — no fixed heights on text wrappers */
+/* Buttons, nav items, and form fields use min-height so text can grow with spacing overrides */
+button, [role="button"], a, label, [role="menuitem"], [role="option"] {
+  min-height: unset;
+}
+
+/* WCAG 1.4.12: Browsers reset spacing on form elements (UA stylesheet) — restore explicitly */
+button, input, textarea, select {
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
 }
 
 code {
@@ -63,6 +90,14 @@ h3 {
 }
 h4 {
   @apply text-xl;
+}
+
+/* WCAG 1.4.12: Must come after individual text-* @apply rules — Tailwind utilities inline
+   their line-height at that point, so we re-assert spacing after all heading size rules */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
 }
 
 .app-code {

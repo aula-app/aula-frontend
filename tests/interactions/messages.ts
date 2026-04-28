@@ -17,8 +17,6 @@ export const create = async (page: Page, data: types.MessageData) => {
     await formsInteractions.fillMarkdownForm(page, 'body', data.content);
 
     await formsInteractions.clickButton(page, 'submit-message-form');
-    await page.waitForLoadState('networkidle');
-
     await expect(page.getByTestId('submit-message-form')).not.toBeVisible();
 
     const row = page.locator('table tr').filter({ hasText: data.title });

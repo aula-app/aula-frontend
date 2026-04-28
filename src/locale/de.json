@@ -139,9 +139,15 @@
     "headline": "Ausgewählte {{var}} löschen"
   },
   "errors": {
+    "boundary": "Etwas ist schiefgelaufen",
+    "boundaryDetails": "Fehlerdetails",
+    "boundaryMessage": "Wir entschuldigen uns für die Unannehmlichkeiten. Bitte versuche die Seite zu aktualisieren.",
     "accountInactive": "Dein Account ist inaktiv",
     "accountSuspendDate": " bis zum {{var}}",
     "accountSuspended": "Dein Account wurde{{var}} gesperrt. Bitte kontaktiere deinen Administrator",
+    "appOutdated": "Deine App ist veraltet. Bitte aktualisiere Aula, um sie weiter zu nutzen.",
+    "appBelowRecommended": "Du nutzt Aula {{currentVersion}}, aber wir empfehlen ein Update auf {{recommendedVersion}}, um Probleme zu vermeiden.",
+    "appOutdatedImage": "Zwinkernde Charakterillustration als Erinnerung, die App zu aktualisieren",
     "databaseError": "Daten konnten nicht abgerufen werden",
     "default": "Etwas ist schief gelaufen",
     "existingUser": "Benutzername und/oder E-Mail sind bereits vergeben",
@@ -300,8 +306,10 @@
   },
   "room": {
     "image": {
+      "changeColor": "Farbe ändern",
       "color": "Farboption {{number}}",
-      "pattern": "Bildmuster {{number}}"
+      "pattern": "Bildmuster {{number}}",
+      "selectImage": "Bild auswählen"
     }
   },
   "scopes": {
@@ -343,6 +351,7 @@
       "marked_not_winner": "Diese Idee wird nicht als Gewinner ausgewählt.",
       "marked_winner": "Diese Idee wird als Gewinner ausgewählt.",
       "name": "Idee",
+      "noQuorum": "Kein Quorum festgelegt.",
       "not_marked_yet": "Noch nicht als Gewinner markiert.",
       "placeholder": "Ideen durchsuchen...",
       "plural": "Ideen",
@@ -660,6 +669,11 @@
       "sortColumn": "Sortieren nach {{column}}, aktuell {{direction}}",
       "tableCell": "Tabellenzelle",
       "tableData": "Tabellendaten",
+      "add": "Hinzufügen",
+      "addComment": "Kommentar hinzufügen",
+      "addIdea": "Idee hinzufügen",
+      "scheduledActionsTable": "Geplante Aktionen",
+      "togglePasswordVisibility": "Passwortsichtbarkeit umschalten",
       "updatingContent": "Inhalt wird aktualisiert"
     },
     "common": {
@@ -752,6 +766,7 @@
     },
     "navigation": {
       "about": "Über",
+      "adminPanel": "Admin-Bereich",
       "announcements": "Ankündigungen",
       "boxes": "Boxen",
       "bugs": "Fehler",
@@ -759,7 +774,9 @@
       "dashboard": "Meine Ideen",
       "home": "Startseite",
       "ideas": "Ideen",
+      "closeMenu": "Hauptmenü schließen",
       "mainMenu": "Hauptnavigation",
+      "openMenu": "Hauptmenü öffnen",
       "messages": "Nachrichten",
       "privacy": "Datenschutz",
       "profile": "Profil",

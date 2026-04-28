@@ -8,7 +8,7 @@ interface Props {
   idea: IdeaType;
 }
 
-const LikeButton: React.FC<Props> = ({ idea }) => {
+const CategoryList: React.FC<Props> = ({ idea }) => {
   const [category, setCategory] = useState<CategoryType>();
 
   const getCategory = async () => {
@@ -31,4 +31,4 @@ const LikeButton: React.FC<Props> = ({ idea }) => {
   ) : null;
 };
 
-export default LikeButton;
+export default CategoryList;
