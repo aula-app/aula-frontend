@@ -73,8 +73,8 @@ export function useEventLogout() {
           const body = await res.json();
           ssoLogoutUrl = body.logout_url ?? null;
         }
-      } catch {
-        // proceed with local logout if request fails
+      } catch (err) {
+        console.error('SSO logout request failed, proceeding with local logout', err);
       }
     }
 

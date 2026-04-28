@@ -1,10 +1,6 @@
 import { localStorageGet } from '@/utils';
 
-/**
- * Calls the SSO initiation endpoint and navigates the browser to Keycloak.
- * The aula-instance-code header is required for tenant identification.
- */
-export const initiateSso = async (apiUrl: string): Promise<void> => {
+export const initiateSso = async (apiUrl: string): Promise<string> => {
   const instanceCode = localStorageGet('code');
   const forceLogin = localStorage.getItem('sso_force_login') === 'true';
   // Keep the flag set until login succeeds (cleared in OAuthLogin).
@@ -30,5 +26,5 @@ export const initiateSso = async (apiUrl: string): Promise<void> => {
     throw new Error('sso_no_redirect_url');
   }
 
-  window.location.href = url;
+  return url;
 };

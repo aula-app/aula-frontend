@@ -129,7 +129,7 @@ const LoginView = () => {
     }
     try {
       setSsoLoading(true);
-      await initiateSso(instanceApiUrl);
+      window.location.href = await initiateSso(instanceApiUrl);
     } catch {
       setSsoLoading(false);
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
