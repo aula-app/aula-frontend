@@ -45,7 +45,7 @@ body {
 }
 
 p {
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 /* WCAG 1.4.12: Ensure containers expand with content — no fixed heights on text wrappers */
