@@ -83,6 +83,10 @@
       "arialabel": "OAuth-Authentifizierung",
       "button": "OAuth-Authentifizierung"
     },
+    "sso": {
+      "arialabel": "Single Sign-On",
+      "button": "Mit SSO anmelden"
+    },
     "password": {
       "change": "Passwort ändern",
       "confirmPassword": "Passwort bestätigen",
@@ -503,6 +507,7 @@
       "sum_votes": "Gesamtanzahl der Stimmen",
       "target_group": "Zielgruppe",
       "target_id": "Zielbenutzer",
+      "sso_provider": "Typ",
       "temp_pw": "Passwort",
       "title": "Titel",
       "trustee_id": "Treuhänder",

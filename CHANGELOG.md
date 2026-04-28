@@ -3,6 +3,7 @@
 
 - **New features**
   - Reset multiple users' password button on User Settings
+  - Adds SSO login using a Keycloak server
   - Version management alerts for outdated app version
   - Breadcrumb dropdown menu is now fully keyboard accessible: Enter opens it, Arrow keys navigate items, Escape closes and returns focus to the trigger button
 
