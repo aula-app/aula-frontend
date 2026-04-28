@@ -102,7 +102,7 @@ const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
           tabIndex={0 === focusIndex ? 0 : -1}
           onKeyDown={(e) => handleKeyDown(e as any, 0)}
           ref={setItemRef(0, focusIndex)}
-          className="block mt-1 py-1 rounded-lg transition-colors hover:bg-theme-grey"
+          className="block rounded-lg transition-colors hover:bg-theme-grey"
         >
           {isAuthenticated && <UserInfo />}
         </RippleLink>

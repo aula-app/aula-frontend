@@ -19,7 +19,7 @@ const UserInfo = () => {
     getUserInfo();
   }, []);
   return (
-    <div className="m-2">
+    <div className="mx-2">
       {user && (
         <div className="flex flex-row items-center min-h-fit gap-2">
           <UserAvatar id={user.hash_id} size={52} />

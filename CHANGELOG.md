@@ -1,4 +1,8 @@
+## 1.9.1
 
+  - **Bug fixes**
+    - Fix letter spacing
+  
 ## 1.9.0
 
 - **New features**

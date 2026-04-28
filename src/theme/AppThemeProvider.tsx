@@ -115,9 +115,7 @@ const AppThemeProvider: FunctionComponent<Props> = ({ children, emotionCache = C
           },
         },
       },
-      // WCAG 1.4.12: MuiChip uses a fixed `height` (32px / 24px) which clips text
-      // when letter-spacing or line-height are overridden. Switch to minHeight so
-      // the chip expands rather than truncating its label.
+
       MuiChip: {
         styleOverrides: {
           root: {
@@ -128,7 +126,6 @@ const AppThemeProvider: FunctionComponent<Props> = ({ children, emotionCache = C
             minHeight: 24,
           },
           label: {
-            // Allow label to wrap if word-spacing/letter-spacing pushes it wider
             whiteSpace: 'normal',
             paddingTop: 4,
             paddingBottom: 4,
@@ -136,24 +133,6 @@ const AppThemeProvider: FunctionComponent<Props> = ({ children, emotionCache = C
           labelSmall: {
             paddingTop: 2,
             paddingBottom: 2,
-          },
-        },
-      },
-      // WCAG 1.4.12: MUI hardcodes lineHeight: 1.4375em on FormLabel — override to meet minimum
-      MuiFormLabel: {
-        styleOverrides: {
-          root: {
-            lineHeight: 1.5,
-          },
-        },
-      },
-      // WCAG 1.4.12: MUI hardcodes lineHeight: 1.4375em on InputBase input; browsers also reset
-      // word-spacing on form elements so it must be explicitly set here
-      MuiInputBase: {
-        styleOverrides: {
-          input: {
-            lineHeight: 1.5,
-            wordSpacing: '0.16em',
           },
         },
       },
