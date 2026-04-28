@@ -2,6 +2,7 @@
 
   - **Bug fixes**
     - Fix letter spacing
+    - Fix boxes prevented to be edited after phase 20 bug
   
 ## 1.9.0
 
