@@ -7,6 +7,7 @@ export interface RuntimeConfig {
   CENTRAL_API_URL: string;
   IS_MULTI: boolean;
   IS_OAUTH_ENABLED: boolean;
+  IS_SSO_ENABLED: boolean;
   BASENAME: string;
 }
 
@@ -14,6 +15,7 @@ export const defaultConfig: RuntimeConfig = {
   CENTRAL_API_URL: 'https://neu.aula.de/',
   IS_MULTI: true,
   IS_OAUTH_ENABLED: false,
+  IS_SSO_ENABLED: false,
   BASENAME: '/',
 };
 
@@ -25,6 +27,7 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
       CENTRAL_API_URL: import.meta.env.VITE_APP_API_URL,
       IS_MULTI: import.meta.env.VITE_APP_MULTI !== 'false' && import.meta.env.VITE_APP_MULTI !== false,
       IS_OAUTH_ENABLED: import.meta.env.VITE_APP_OAUTH !== 'false' && import.meta.env.VITE_APP_OAUTH !== false,
+      IS_SSO_ENABLED: import.meta.env.VITE_APP_SSO !== 'false' && import.meta.env.VITE_APP_SSO !== false,
       BASENAME: import.meta.env.VITE_APP_BASENAME || '/',
     };
   } else {

@@ -1,6 +1,7 @@
 import { AppIconButton, AppLink } from "@/components";
 import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
 import { loginUser } from "@/services/login";
+import { initiateSso } from "@/services/sso";
 import { useAppStore } from "@/store";
 import { LoginFormValues } from "@/types/LoginTypes";
 import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
@@ -19,7 +20,7 @@ import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import * as yup from "yup";
 
 /**
@@ -31,10 +32,12 @@ const LoginView = () => {
   const { t } = useTranslation();
   const [config, setConfig] = useState<RuntimeConfig>(defaultConfig);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [, dispatch] = useAppStore();
   const [loginError, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [isSsoLoading, setSsoLoading] = useState(false);
 
   const schema = yup
     .object({
@@ -117,6 +120,28 @@ const LoginView = () => {
       }
     }
   };
+
+  const handleSsoLogin = async () => {
+    const instanceApiUrl = localStorageGet('api_url');
+    if (!instanceApiUrl) {
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
+      return;
+    }
+    try {
+      setSsoLoading(true);
+      window.location.href = await initiateSso(instanceApiUrl);
+    } catch {
+      setSsoLoading(false);
+      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+    }
+  };
+
+  useEffect(() => {
+    const ssoError = searchParams.get('sso_error');
+    if (ssoError) {
+      setError(t(`errors.sso.${ssoError}`, { defaultValue: t('errors.default') }));
+    }
+  }, [searchParams, t]);
 
   useEffect(() => {
     (async () => {
@@ -235,21 +260,32 @@ const LoginView = () => {
           </Button>
         </Grid>
 
-        {config.IS_OAUTH_ENABLED && (
+        {(config.IS_OAUTH_ENABLED || config.IS_SSO_ENABLED) && (
           <>
             <Stack direction='row' mb={2} alignItems='center'>
               <Divider sx={{ flex: 1 }} />
               <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
               <Divider sx={{ flex: 1 }} />
             </Stack>
-            <Stack direction='column' mb={2} alignItems='center'>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() => window.location.href = "/api/controllers/login_oauth.php"}
-                disabled={isLoading}
-                aria-label={t('auth.oauth.arialabel')}
-              >{t('auth.oauth.button')}</Button>
+            <Stack direction='column' gap={1} mb={2} alignItems='center'>
+              {config.IS_OAUTH_ENABLED && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => window.location.href = "/api/controllers/login_oauth.php"}
+                  disabled={isLoading || isSsoLoading}
+                  aria-label={t('auth.oauth.arialabel')}
+                >{t('auth.oauth.button')}</Button>
+              )}
+              {config.IS_SSO_ENABLED && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={handleSsoLogin}
+                  disabled={isLoading || isSsoLoading}
+                  aria-label={t('auth.sso.arialabel')}
+                >{t('auth.sso.button')}</Button>
+              )}
             </Stack>
           </>
         )}

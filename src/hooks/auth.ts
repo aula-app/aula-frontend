@@ -56,11 +56,43 @@ export function useEventLogout() {
   const [, dispatch] = useAppStore();
   const navigate = useNavigate();
 
-  return useCallback(() => {
-    localStorageDelete('token');
+  return useCallback(async () => {
+    const apiUrl = localStorageGet('api_url');
+    const instanceCode = localStorageGet('code');
+    const token = localStorageGet('token');
 
+    let ssoLogoutUrl: string | null = null;
+
+    if (apiUrl && instanceCode && token) {
+      try {
+        const res = await fetch(`${apiUrl}/api/v2/auth/sso/logout`, {
+          method: 'POST',
+          headers: {
+            'aula-instance-code': instanceCode,
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.ok) {
+          const body = await res.json();
+          ssoLogoutUrl = body.logout_url ?? null;
+        }
+      } catch (err) {
+        console.error('SSO logout request failed, proceeding with local logout', err);
+      }
+    }
+
+    if (ssoLogoutUrl !== undefined) {
+      localStorage.setItem('sso_force_login', 'true');
+    }
+
+    localStorageDelete('token');
     dispatch({ type: 'LOG_OUT' });
-    navigate('/');
+
+    if (ssoLogoutUrl) {
+      window.location.href = ssoLogoutUrl;
+    } else {
+      navigate('/');
+    }
   }, [dispatch, navigate]);
 }
 
