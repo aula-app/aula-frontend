@@ -36,7 +36,9 @@
     "test": "NODE_OPTIONS=--max-old-space-size=15000 playwright test",
     "test:ui": "NODE_OPTIONS=--max-old-space-size=15000 playwright test --ui",
     "type": "tsc",
-    "knip": "knip"
+    "knip": "knip",
+    "trivy-fs": "trivy fs .",
+    "trivy-image": "docker build -t aula-frontend:latest-trivy . && trivy image aula-frontend:latest-trivy && docker image rm aula-frontend:latest-trivy"
   },
   "dependencies": {
     "@capacitor/android": "^8.2.0",
