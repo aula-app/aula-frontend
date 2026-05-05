@@ -75,8 +75,6 @@ export const clearSearch = async (page: Page) => {
 };
 
 export const openSort = async (page: Page) => {
-  await navigation.goToHome(page);
-
   const sortSelect = page.getByTestId(TEST_IDS.SORT_SELECT);
   if (!(await sortSelect.isVisible())) {
     await page.getByTestId(TEST_IDS.SORT_BUTTON).filter({ visible: true }).click();
@@ -99,8 +97,6 @@ export const toggleSortDirection = async (page: Page) =>
   await page.getByTestId(TEST_IDS.SORT_DIRECTION_BUTTON).filter({ visible: true }).click();
 
 export const getRoomCount = async (page: Page): Promise<number> => {
-  await navigation.goToHome(page);
-
   const roomCards = page.getByTestId(TEST_IDS.ROOM_CARD);
   // Rooms load asynchronously after the heading appears — poll until the count stabilizes.
   let lastCount = -1;
