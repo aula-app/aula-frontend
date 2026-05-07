@@ -7,6 +7,4 @@ import Computer from './Computer';
 import Door from './Door';
 import Globe from './Globe';
 
-export default [Airplane, Beaker, Cat, Chair, Clothing, Computer, Door, Globe] as React.FC<
-  { colors: Record<string, string> } & React.SVGProps<SVGSVGElement>
->[];
+export default [Airplane, Beaker, Cat, Chair, Clothing, Computer, Door, Globe] as React.FC<React.SVGProps<SVGSVGElement>>[];

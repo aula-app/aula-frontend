@@ -60,9 +60,7 @@ const RoomCard: FC<RoomCardProps> = ({ room }) => {
           <Typography variant="h3" noWrap title={room.room_name}>
             {room.room_name || 'AULA'}
           </Typography>
-          <Stack>
-            <DefaultImage image={imageNumber || 0} shift={imageShift || 0} />
-          </Stack>
+          <DefaultImage image={imageNumber || 0} shift={imageShift || 0} />
         </Stack>
       </AppLink>
       <PhaseBar room={room.hash_id} />
