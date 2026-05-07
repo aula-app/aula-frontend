@@ -669,7 +669,18 @@
       "addIdea": "Add idea",
       "scheduledActionsTable": "Scheduled actions",
       "togglePasswordVisibility": "Toggle password visibility",
-      "updatingContent": "Updating content"
+      "updatingContent": "Updating content",
+      "defaultImage": {
+        "label": "Illustration of {{subject}}",
+        "airplane": "an airplane",
+        "beaker": "a beaker",
+        "cat": "a cat",
+        "chair": "a chair",
+        "clothing": "clothing items",
+        "computer": "a computer",
+        "door": "a door",
+        "globe": "a globe"
+      }
     },
     "common": {
       "all": "All",

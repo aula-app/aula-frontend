@@ -669,7 +669,18 @@
       "addIdea": "Idee hinzufügen",
       "scheduledActionsTable": "Geplante Aktionen",
       "togglePasswordVisibility": "Passwortsichtbarkeit umschalten",
-      "updatingContent": "Inhalt wird aktualisiert"
+      "updatingContent": "Inhalt wird aktualisiert",
+      "defaultImage": {
+        "label": "Illustration {{subject}}",
+        "airplane": "eines Flugzeugs",
+        "beaker": "eines Laborkolbens",
+        "cat": "einer Katze",
+        "chair": "eines Stuhls",
+        "clothing": "von Kleidungsstücken",
+        "computer": "eines Computers",
+        "door": "einer Tür",
+        "globe": "eines Globus"
+      }
     },
     "common": {
       "all": "Alle",

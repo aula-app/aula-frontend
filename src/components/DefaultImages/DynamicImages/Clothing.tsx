@@ -15,6 +15,7 @@ export default ({ colors, ...restOfProps }: DIProps) => {
       x="0px"
       y="0px"
       viewBox="0 0 1024 768"
+      role="img"
       {...restOfProps}
     >
       <path
