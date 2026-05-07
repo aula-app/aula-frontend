@@ -1,0 +1,24 @@
+FROM docker:24.0-dind
+
+# Install Node.js (LTS) and build tools via apk (Alpine)
+# Adjust NODE_VERSION if you want a specific Node major version
+ARG NODE_VERSION=22.22
+RUN apk add --no-cache curl bash build-base python3 \
+ && curl -fsSL https://unofficial-builds.nodejs.org/download/release/v${NODE_VERSION}.0/node-v${NODE_VERSION}.0-linux-x64-musl.tar.xz -o /tmp/node.tar.xz \
+ && tar -xJf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
+ && rm /tmp/node.tar.xz \
+ && npm --version
+
+# Create a working dir and set PATH for node (already in /usr/local/bin)
+WORKDIR /workspace
+
+# Optional: copy package.json and install dependencies at build time
+# COPY package*.json ./
+# RUN npm ci --only=production
+
+# Expose Docker socket alternative (not used by dind)
+EXPOSE 2375 2376
+
+# Entrypoint: start dockerd in background then run a shell (or allow override)
+CMD ["sh", "-c", "dockerd-entrypoint.sh & sleep 1 && tail -f /dev/null"]
+

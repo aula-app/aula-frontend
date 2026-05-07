@@ -7,7 +7,7 @@ ENV VITE_APP_VERSION=$DOCKER_TAG
 
 # Copy package.json and package-lock.json/yarn.lock to install dependencies
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 
 COPY public ./public
 COPY index.html vite.*.mts tsconfig.json ./
