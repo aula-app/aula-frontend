@@ -65,7 +65,7 @@ const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled, onCha
       title={t(`tooltips.${likeStatus ? 'heartFull' : 'heart'}`)}
       onClick={toggleLike}
       disabled={disabled || isPending}
-      aria-label={likeStatus ? t('actions.unlike') : t('actions.like')}
+      aria-label={likeStatus ? t('tooltips.heartFull') : t('tooltips.heart')}
       aria-pressed={likeStatus}
     >
       {`${item.sum_likes + Number(likeStatus) - Number(liked)}`}
