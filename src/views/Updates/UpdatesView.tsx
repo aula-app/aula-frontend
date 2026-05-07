@@ -40,7 +40,7 @@ const UpdatesView = () => {
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="h1">{t('scopes.updates.plural')}</Typography>
         <IconButton>
-          <AppIcon icon="filter" />
+          <AppIcon icon="filter" aria-label={t('actions.filter')} />
         </IconButton>
       </Stack>
       {!isLoading && updates.votes.length === 0 && updates.comments.length === 0 && (
