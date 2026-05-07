@@ -104,6 +104,7 @@ const CategoryField: React.FC<Props> = ({ defaultValue, onChange, disabled = fal
                     <AppIconButton
                       icon="close"
                       size="small"
+                      aria-label={t('actions.clear.filters')}
                       onClick={() => handleChange(null)}
                       data-testid="category-field-clear-button"
                     />
