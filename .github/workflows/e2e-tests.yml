@@ -2,12 +2,12 @@ name: E2E Tests
 
 on:
   schedule:
-    - cron: "15 5 * * *" # Every day at 5:15 am
+    - cron: '15 5 * * *' # Every day at 5:15 am
   workflow_dispatch:
 
 env:
-  AULA_PORT: "80"
-  PLAYWRIGHT_VERSION: "1.58.2"
+  AULA_PORT: '80'
+  PLAYWRIGHT_VERSION: '1.58.2'
 
 jobs:
   sanitize_project_name:
@@ -18,6 +18,7 @@ jobs:
         run: |
           echo "${{ github.ref_name }}" | \
             sed 's/[^a-zA-Z0-9_.-]/_/g' | \
+            sed 's/[.]//g' | \
             (echo -n "DOCKER_COMPOSE_PROJECT_NAME=aula-e2e-" && cat) \
           >> $GITHUB_OUTPUT
     outputs:
@@ -29,10 +30,17 @@ jobs:
       contents: read
       packages: read
     env:
-      AULA_IMAGE: ghcr.io/aula-app/ansible-role-aula:latest
+      AULA_IMAGE: ghcr.io/aula-app/ansible-role-aula:test-nikola-e2e
+      PLAYWRIGHT_SERVICE_NAME: playwright-svc-${{ github.sha }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+
+      - name: optionally start DinD for act (local testing)
+        if: env.ACT
+        run: |
+          dockerd -H unix:///var/run/dind.sock & sleep 5;
+          echo "DOCKER_HOST=unix:///var/run/dind.sock" >>${GITHUB_ENV}
 
       - name: Setup docker
         uses: docker/setup-buildx-action@v4
@@ -47,10 +55,11 @@ jobs:
       - name: Pull Ansible image
         run: |
           docker pull ${{ env.AULA_IMAGE }}
+          mkdir -p "$(pwd)"
 
       - name: Create Ansible playbook
         run: |
-          cat <<- 'EOF' > playbook.yml
+          cat <<- 'EOF' > "$(pwd)/playbook.yml"
           - name: Install aula backend locally for E2E testing
             hosts: localhost
             become_method: su
@@ -61,7 +70,7 @@ jobs:
 
       - name: Create inventory file
         run: |
-          cat <<- 'EOF' > inventory.yml
+          cat <<- 'EOF' > "$(pwd)/inventory.yml"
           ---
           all:
             hosts:
@@ -92,6 +101,7 @@ jobs:
                   base_url: "http://nginx:${{ env. AULA_PORT }}"
                   superkey: "hunter2"
                   is_pr_deployment_enabled: false
+                  is_sso_enabled: false
                   multi_instance_enabled: false
                   db:
                     name: "aula_dbname"
@@ -121,28 +131,30 @@ jobs:
                   frontend_redirect: "http://nginx:${{ env. AULA_PORT }}/oauth-login/"
           EOF
 
+      - name: show workflow pwd
+        run: echo $(pwd)
+      - name: show workflow ls
+        run: ls -alh $(pwd)
+      - name: show workflow /home
+        run: ls -alh /home
+      - name: show workflow /home/nikola/Workspace/
+        run: ls -alh /home/nikola/Workspace/
       - name: Run ansible
         run: |
           docker run --rm \
-            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v /var/run/dind.sock:/var/run/docker.sock \
             -v /opt/aula:/opt/aula \
             -v "$(pwd)/playbook.yml":/usr/local/share/aula/ansible/playbook.yml \
             -v "$(pwd)/inventory.yml":/usr/local/share/aula/ansible/inventory.yml \
             ${{ env.AULA_IMAGE }} ansible-playbook playbook.yml -i inventory.yml
 
-  e2e-tests:
-    runs-on: [self-hosted, cicd]
-    continue-on-error: true # allow failing e2e tests while testing
-    needs: [run-aula, sanitize_project_name]
-    env:
-      PLAYWRIGHT_SERVICE_NAME: playwright-svc-${{ github.sha }}
-    steps:
       # Playwright can't be started using the 'service' feature of actions as the
       # server needs to be run manually in the container and actions doesn't support
       # this for 'service's.
       - name: Start playwright image
         run: |
-          docker run --rm \
+          docker -H unix:///var/run/dind.sock \
+            run --rm \
             --name ${{ env.PLAYWRIGHT_SERVICE_NAME }} \
             --network ${{ needs.sanitize_project_name.outputs.DOCKER_COMPOSE_PROJECT_NAME }}_aula_external \
             -p 127.0.0.1:3000:3000 \
@@ -156,10 +168,12 @@ jobs:
           node-version: 22
 
       - name: Install yarn
-        run: corepack install --global yarn
+        run: |
+          corepack enable
+          corepack install --global yarn
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Run E2E tests
         env:
@@ -167,8 +181,8 @@ jobs:
           APP_FRONTEND_HOST: http://nginx:${{ env. AULA_PORT }}
           APP_BACKEND_HOST: http://nginx:${{ env. AULA_PORT }}
           REMOTE_BROWSER: 1 # Enable the use of playwright server in the js
-          ADMIN_USERNAME: "admin"
-          ADMIN_PASSWORD: "abc123"
+          ADMIN_USERNAME: 'admin'
+          ADMIN_PASSWORD: 'abc123'
         run: yarn playwright test --reporter=github
 
       - name: Stop playwright service
@@ -176,12 +190,6 @@ jobs:
         run: |
           docker rm -f ${{ env.PLAYWRIGHT_SERVICE_NAME }}
 
-  cleanup:
-    runs-on: [self-hosted, cicd]
-    needs: [run-aula, e2e-tests]
-    # Run cleanup job regardless of previous jobs state
-    if: ${{ always() }}
-    steps:
       - name: Cleanup running services and files
         run: |
           for name in $(docker ps --format '{{ .Names }}'); do
