@@ -15,7 +15,7 @@ const EditButton = forwardRef<HTMLButtonElement, Props>(({ disabled = false, onE
       icon="edit"
       title={t('tooltips.edit')}
       disabled={disabled}
-      aria-label={t('actions.edit')}
+      aria-label={t('tooltips.edit')}
       {...restOfProps}
       onClick={onEdit}
     />
