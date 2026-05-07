@@ -1,9 +1,13 @@
+## 1.9.2
+
+  - **Bug fixes**
+    - Remove Survey creation form
+
 ## 1.9.1
 
   - **Bug fixes**
     - Fix letter spacing
     - Fix boxes prevented to be edited after phase 20 bug
-    - Remove Survey creation form
   
 ## 1.9.0
 
