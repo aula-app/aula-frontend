@@ -60,7 +60,7 @@ const RoomImageSelector: FC<RoomImageSelectorProps> = ({ image, onClose, onSubmi
 
   return (
     <>
-      <Button sx={{ minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }} onClick={() => setEditImage(true)}>
+      <Button sx={{ minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }} onClick={() => setEditImage(true)} aria-label={t('room.image.selectImage')}>
         <DefaultImage image={selected} shift={shift} />
       </Button>
       <Dialog open={editImage} onClose={() => setEditImage(false)} fullWidth>
