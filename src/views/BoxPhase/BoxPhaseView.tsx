@@ -2,7 +2,6 @@ import { AppIcon, EmptyState, ScopeHeader } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import { BoxForms } from '@/components/DataForms';
-import SurveyForms from '@/components/DataForms/SurveyForms';
 import { deleteBox, getBoxesByPhase } from '@/services/boxes';
 import { getRoom } from '@/services/rooms';
 import { useAppStore } from '@/store/AppStore';
@@ -74,8 +73,6 @@ const BoxPhaseView = () => {
     });
   };
 
-  const [addSurvey, setAddSurvey] = useState(false);
-
   const fetchBoxes = useCallback(async () => {
     if (!room_id || !phase) return;
     setLoading(true);
@@ -106,7 +103,6 @@ const BoxPhaseView = () => {
 
   const onClose = () => {
     setEdit(undefined);
-    setAddSurvey(false);
     fetchBoxes();
   };
 
@@ -165,16 +161,6 @@ const BoxPhaseView = () => {
         <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
           <BoxForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
         </Drawer>
-        {checkPermissions('surveys', 'create') && Number(phase) === 30 && (
-          <>
-            <Fab aria-label={t('ui.accessibility.add')} color="primary" onClick={() => setAddSurvey(true)}>
-              <AppIcon icon="survey" />
-            </Fab>
-            <Drawer anchor="bottom" open={!!addSurvey} onClose={onClose} sx={{ overflowY: 'auto' }}>
-              <SurveyForms onClose={onClose} />
-            </Drawer>
-          </>
-        )}
       </Stack>
     </Stack>
   );
