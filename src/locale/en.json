@@ -303,7 +303,17 @@
   "room": {
     "image": {
       "changeColor": "Change color",
-      "color": "Color option {{number}}",
+      "color": "Select {{color}} color",
+      "colors": {
+        "blue": "blue",
+        "green": "green",
+        "orange": "orange",
+        "pink": "pink",
+        "purple": "purple",
+        "red": "red",
+        "teal": "teal",
+        "yellow": "yellow"
+      },
       "pattern": "Image pattern {{number}}",
       "selectImage": "Select image"
     }

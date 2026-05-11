@@ -26,6 +26,8 @@ const parseDescription = (description: string) => {
   };
 };
 
+const roomImageColorKeys = ['green', 'yellow', 'orange', 'red', 'pink', 'purple', 'blue', 'teal'] as const;
+
 const RoomImageSelector: FC<RoomImageSelectorProps> = ({ image, onClose, onSubmit }) => {
   const { t } = useTranslation();
 
@@ -60,30 +62,38 @@ const RoomImageSelector: FC<RoomImageSelectorProps> = ({ image, onClose, onSubmi
 
   return (
     <>
-      <Button sx={{ minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }} onClick={() => setEditImage(true)} aria-label={t('room.image.selectImage')}>
+      <Button
+        sx={{ minWidth: `min(300px, 100%)`, maxWidth: 500, mx: 'auto' }}
+        onClick={() => setEditImage(true)}
+        aria-label={t('room.image.selectImage')}
+      >
         <DefaultImage image={selected} shift={shift} />
       </Button>
       <Dialog open={editImage} onClose={() => setEditImage(false)} fullWidth>
         <Stack p={2}>
           <Typography variant="h3">{t('room.image.changeColor')}</Typography>
           <Stack direction="row" width="100%" justifyContent="space-between" py={2}>
-            {[...Array(8)].map((_, key) => (
-              <Button
-                key={key}
-                sx={{
-                  width: 50,
-                  aspectRatio: 1,
-                  minWidth: 'auto',
-                  maxWidth: '10%',
-                  borderRadius: 999,
-                  bgcolor: `hsl(${122 + key * 45}, 50%, 75%)`,
-                }}
-                onClick={() => setShift(key * 45)}
-                aria-label={t('room.image.color', { number: key + 1 })}
-              >
-                <span aria-hidden="true"></span>
-              </Button>
-            ))}
+            {[...Array(8)].map((_, key) => {
+              const colorKey = roomImageColorKeys[key];
+
+              return (
+                <Button
+                  key={key}
+                  sx={{
+                    width: 50,
+                    aspectRatio: 1,
+                    minWidth: 'auto',
+                    maxWidth: '10%',
+                    borderRadius: 999,
+                    bgcolor: `hsl(${122 + key * 45}, 50%, 75%)`,
+                  }}
+                  onClick={() => setShift(key * 45)}
+                  aria-label={t('room.image.color', { color: t(`room.image.colors.${colorKey}`) })}
+                >
+                  <span aria-hidden="true"></span>
+                </Button>
+              );
+            })}
           </Stack>
           <Typography variant="h3">{t('room.image.selectImage')}</Typography>
           <Grid container spacing={2}>

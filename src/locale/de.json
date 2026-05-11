@@ -303,7 +303,17 @@
   "room": {
     "image": {
       "changeColor": "Farbe ändern",
-      "color": "Farboption {{number}}",
+      "color": "Farbe {{color}} auswählen",
+      "colors": {
+        "blue": "Blau",
+        "green": "Grün",
+        "orange": "Orange",
+        "pink": "Pink",
+        "purple": "Lila",
+        "red": "Rot",
+        "teal": "Türkis",
+        "yellow": "Gelb"
+      },
       "pattern": "Bildmuster {{number}}",
       "selectImage": "Bild auswählen"
     }
