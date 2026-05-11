@@ -149,12 +149,16 @@ const BoxPhaseView = () => {
         sx={{
           position: 'fixed',
           bottom: 'max(40px, calc(40px + var(--safe-area-inset-bottom, 0px)))',
-          right: 16,
           zIndex: 1000,
         }}
       >
         {checkPermissions('boxes', 'create') && Number(phase) === 10 && (
-          <Fab aria-label={t('ui.accessibility.addIdea')} color="primary" onClick={() => setEdit(true)} data-testid="add-idea-button">
+          <Fab
+            aria-label={t('ui.accessibility.addIdea')}
+            color="primary"
+            onClick={() => setEdit(true)}
+            data-testid="add-idea-button"
+          >
             <AppIcon icon="box" />
           </Fab>
         )}
