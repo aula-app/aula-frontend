@@ -105,9 +105,6 @@ const permissions = {
     viewAll: { role: 40 },
     status: { role: 50 },
   },
-  surveys: {
-    create: { role: 30 },
-  },
   system: {
     profile: { role: 20 },
     access: { role: 50 },

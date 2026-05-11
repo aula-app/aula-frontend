@@ -1,3 +1,8 @@
+## 1.9.2
+
+  - **Bug fixes**
+    - Remove Survey creation form
+
 ## 1.9.1
 
   - **Bug fixes**
