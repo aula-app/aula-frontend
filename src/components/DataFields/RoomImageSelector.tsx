@@ -27,6 +27,7 @@ const parseDescription = (description: string) => {
 };
 
 const roomImageColorKeys = ['green', 'yellow', 'orange', 'red', 'pink', 'purple', 'blue', 'teal'] as const;
+const roomImageSubjectKeys = ['airplane', 'beaker', 'cat', 'chair', 'clothing', 'computer', 'door', 'globe'] as const;
 
 const RoomImageSelector: FC<RoomImageSelectorProps> = ({ image, onClose, onSubmit }) => {
   const { t } = useTranslation();
@@ -97,24 +98,30 @@ const RoomImageSelector: FC<RoomImageSelectorProps> = ({ image, onClose, onSubmi
           </Stack>
           <Typography variant="h3">{t('room.image.selectImage')}</Typography>
           <Grid container spacing={2}>
-            {[...Array(8)].map((_, key) => (
-              <Grid size={{ xs: 6, sm: 3 }} key={`img_${key}`}>
-                <Button
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    height: '100%',
-                    border: selected === key ? 2 : 0,
-                    borderRadius: 6,
-                    mx: 'auto',
-                  }}
-                  onClick={() => setSelected(key)}
-                  aria-label={t('room.image.pattern', { number: key + 1 })}
-                >
-                  <DefaultImage image={key} shift={shift} />
-                </Button>
-              </Grid>
-            ))}
+            {[...Array(8)].map((_, key) => {
+              const subjectKey = roomImageSubjectKeys[key];
+
+              return (
+                <Grid size={{ xs: 6, sm: 3 }} key={`img_${key}`}>
+                  <Button
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      height: '100%',
+                      border: selected === key ? 2 : 0,
+                      borderRadius: 6,
+                      mx: 'auto',
+                    }}
+                    onClick={() => setSelected(key)}
+                    aria-label={t('room.image.patternSubject', {
+                      subject: t(`ui.accessibility.defaultImage.${subjectKey}`),
+                    })}
+                  >
+                    <DefaultImage image={key} shift={shift} />
+                  </Button>
+                </Grid>
+              );
+            })}
           </Grid>
           <Stack direction="row" width="100%" justifyContent="end" py={2}>
             <Button color="error" sx={{ mr: 2 }} onClick={handleClose}>

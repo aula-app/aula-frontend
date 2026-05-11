@@ -315,6 +315,7 @@
         "yellow": "yellow"
       },
       "pattern": "Image pattern {{number}}",
+      "patternSubject": "Select image with {{subject}}",
       "selectImage": "Select image"
     }
   },

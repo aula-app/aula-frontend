@@ -315,6 +315,7 @@
         "yellow": "Gelb"
       },
       "pattern": "Bildmuster {{number}}",
+      "patternSubject": "Bild mit {{subject}} auswählen",
       "selectImage": "Bild auswählen"
     }
   },
