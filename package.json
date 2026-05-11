@@ -55,7 +55,6 @@
     "@mui/x-date-pickers": "^7.15.0",
     "@tailwindcss/vite": "^4.1.18",
     "@types/semver": "^7.7.1",
-    "axios": "1.14.1",
     "dayjs": "^1.11.13",
     "eslint": "^10.0.3",
     "i18next": "^23.11.5",
