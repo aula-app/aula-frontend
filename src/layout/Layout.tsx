@@ -21,7 +21,11 @@ const Layout: FunctionComponent<PropsWithChildren> = (props) => {
   }
 
   if (location.pathname.startsWith('/v2')) {
-    return <>{props.children}</>;
+    return (
+      <>
+        {props.children} <PopupMessages />
+      </>
+    );
   }
 
   return (

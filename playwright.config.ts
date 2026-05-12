@@ -86,5 +86,14 @@ export default defineConfig({
       workers: 1,
       dependencies: ['core'],
     },
+
+    // ── 5. v2 ─────────────────────────────────────────────────────────────────
+    // V2 UI specs — no auth required for public routes (login page, etc.)
+    {
+      name: 'v2',
+      testDir: './tests/specs/v2',
+      use: { ...devices['Desktop Chrome'] },
+      workers: 1,
+    },
   ],
 });
