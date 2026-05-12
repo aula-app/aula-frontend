@@ -17,7 +17,6 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     const generatedId = useId();
     const inputId = id || generatedId;
     const errorId = error ? `${inputId}-error` : undefined;
-    // helperId is only active when there is no error — mirrors render logic so aria-describedby never references a missing element
     const helperId = !error && helperText ? `${inputId}-helper` : undefined;
 
     const isPassword = type === 'password';
@@ -39,7 +38,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     );
 
     return (
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full mb-3">
         <div className="relative">
           <input
             ref={ref}

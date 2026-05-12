@@ -16,7 +16,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
       <header className="flex-2 flex flex-col">
         <nav className="flex items-center">
           <div className="flex-1">
-            {location.pathname !== '/v2/' && (
+            {!['/v2', '/v2/'].includes(location.pathname) && (
               <Link to="/v2" className="text-sm text-text-secondary">
                 &lt; {t('auth.login.button')}
               </Link>
@@ -33,7 +33,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
           <img src={`${getRuntimeConfig().BASENAME}img/Aula_Hero.svg`} alt={t('app.name.logo')} role="img" />
         </div>
       </header>
-      <main className="flex-2">
+      <main className="flex-2 flex">
         <PublicRoutes />
       </main>
       <footer className="flex-1"></footer>

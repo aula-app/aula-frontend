@@ -12,7 +12,7 @@
 :root {
   --color-primary: hsl(134, 72%, 67%);
   --color-secondary: hsl(0, 0%, 93%);
-  --color-error: hsl(0, 84%, 76%);
+  --color-error: hsl(0, 84%, 50%);
   --color-warning: hsl(45, 100%, 79%);
   --color-info: hsl(204, 82%, 86%);
   --color-success: hsl(134, 72%, 67%);
@@ -96,7 +96,7 @@
   --color-neutral: hsl(45, 100%, 79%);
   --color-requests: hsl(0, 0%, 90%);
 
-  --color-text-primary: hsl(236.17, 42%, 22%);
+  --color-text-primary: hsl(236.17, 42%, 15%);
   --color-text-secondary: hsl(0, 0%, 36%);
   --color-background: #FFFFFF;
   --color-paper: #FFFFFF;
