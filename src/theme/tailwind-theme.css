@@ -97,6 +97,7 @@
   --color-requests: hsl(0, 0%, 90%);
 
   --color-text-primary: hsl(236.17, 42%, 22%);
+  --color-text-secondary: hsl(0, 0%, 36%);
   --color-background: #FFFFFF;
   --color-paper: #FFFFFF;
   --color-input-border: rgba(0, 0, 0, 0.45); /* 3.35:1 on white ✅ WCAG 1.4.11 */
@@ -192,6 +193,7 @@
   --color-requests: hsl(0, 0%, 36%);
 
   --color-text-primary: hsl(0, 0%, 100%);
+  --color-text-secondary: hsl(0, 0%, 65%);
   --color-background: hsl(200, 19%, 20%);
   --color-paper: hsl(200, 19%, 25%);
   --color-input-border: rgba(255, 255, 255, 0.50); /* 4.36:1 on dark bg ✅ WCAG 1.4.11 */
@@ -287,6 +289,7 @@
   --color-requests: var(--color-requests);
 
   --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
   --color-background: var(--color-background);
   --color-paper: var(--color-paper);
   --color-input-border: var(--color-input-border);

@@ -48,8 +48,6 @@ p {
   margin-bottom: 1em;
 }
 
-/* WCAG 1.4.12: Ensure containers expand with content — no fixed heights on text wrappers */
-/* Buttons, nav items, and form fields use min-height so text can grow with spacing overrides */
 button, [role="button"], a, label, [role="menuitem"], [role="option"] {
   min-height: unset;
 }

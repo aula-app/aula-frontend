@@ -20,6 +20,10 @@ const Layout: FunctionComponent<PropsWithChildren> = (props) => {
     return <OutdatedView />;
   }
 
+  if (location.pathname.startsWith('/v2')) {
+    return <>{props.children}</>;
+  }
+
   return (
     <>
       {isAuthenticated ? <PrivateLayout {...props} /> : <PublicLayout {...props} />}
