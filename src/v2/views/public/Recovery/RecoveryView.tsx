@@ -23,7 +23,7 @@ const RecoveryPasswordView = () => {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex-1 flex flex-col justify-center gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex-1 flex flex-col gap-4">
       <h1>{t('auth.forgotPassword.recovery')}</h1>
       <fieldset className="rounded-box flex flex-col">
         <TextInput
@@ -35,7 +35,12 @@ const RecoveryPasswordView = () => {
           error={errors.email?.message}
           {...register('email')}
         />
-        <Button type="submit" disabled={isLoading} aria-label={t('auth.forgotPassword.recover')} className="bg-secondary">
+        <Button
+          type="submit"
+          disabled={isLoading}
+          aria-label={t('auth.forgotPassword.recover')}
+          className="bg-secondary"
+        >
           {t('auth.forgotPassword.recover')}
         </Button>
       </fieldset>

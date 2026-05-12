@@ -37,7 +37,7 @@ const LoginView: React.FC = () => {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex-1 flex flex-col justify-center gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex-1 flex flex-col gap-4">
       <h1>{t('auth.messages.welcome')}</h1>
 
       <fieldset className="rounded-box flex flex-col">
@@ -63,7 +63,7 @@ const LoginView: React.FC = () => {
         </Button>
         <Link
           to="/v2/recovery"
-          className="ml-auto px-2 text-sm text-text-secondary"
+          className="ml-auto px-2 text-sm text-text-secondary mt-4"
           aria-label={t('auth.forgotPassword.link')}
         >
           {t('auth.forgotPassword.link')}

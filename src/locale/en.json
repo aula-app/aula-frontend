@@ -60,7 +60,7 @@
       "messageNoEmail": "Some users didn't register their emails. Remember to share the new password manually with them.",
       "messageMultiple": "Are you sure you want to request new passwords for {{count}} {{target}}? {{var}}",
       "recover": "Recover password",
-      "recovery": "Password Recovery",
+      "recovery": "Password recovery",
       "success": "The password was reset. Registered users will receive a reset link in their email.",
       "successfulUser": "Password reset requested for {{user}}. {{var}}",
       "successfulEmail": "They will receive reset instructions via email.",
