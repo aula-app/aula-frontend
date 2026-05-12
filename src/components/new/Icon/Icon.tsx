@@ -5,7 +5,9 @@ import {
   HiOutlineArchiveBox,
   HiOutlineArrowRightEndOnRectangle,
   HiOutlineBars3,
+  HiOutlineChevronDown,
   HiOutlineChevronLeft,
+  HiOutlineClipboard,
   HiOutlineCog6Tooth,
   HiOutlineEnvelope,
   HiOutlineEnvelopeOpen,
@@ -24,6 +26,7 @@ import {
   HiOutlineXMark,
   HiOutlineEye,
   HiOutlineEyeSlash,
+  HiOutlineLanguage,
 } from 'react-icons/hi2';
 import { IoBugOutline } from 'react-icons/io5';
 
@@ -37,6 +40,8 @@ export const ICONS = {
   announcement: HiOutlineMegaphone,
   announcements: HiOutlineMegaphone,
   back: HiOutlineChevronLeft,
+  chevronDown: HiOutlineChevronDown,
+  copy: HiOutlineClipboard,
   box: HiOutlineArchiveBox,
   boxes: HiOutlineArchiveBox,
   bug: IoBugOutline,
@@ -47,6 +52,7 @@ export const ICONS = {
   home: HiOutlineHome,
   idea: HiOutlineLightBulb,
   ideas: HiOutlineLightBulb,
+  language: HiOutlineLanguage,
   logout: HiOutlineArrowRightEndOnRectangle,
   menu: HiOutlineBars3,
   message: HiOutlineEnvelope,

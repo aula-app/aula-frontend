@@ -40,6 +40,7 @@
     "set": "Set {{var}}",
     "show": "Show",
     "showFilters": "Show filters",
+    "switchLanguage": "Switch to {{var}}",
     "submitting": "Submitting",
     "unarchive": "Unarchive",
     "updating": "Updating"
@@ -67,7 +68,7 @@
     },
     "login": {
       "button": "Login",
-      "instanceCode": "Instance code: {{var}}",
+      "instanceCode": "Instance code: {{var}} — click to change",
       "label": "Username",
       "noAccount": "Need an account?",
       "reset_code": "New code",

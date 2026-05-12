@@ -40,6 +40,7 @@
     "set": "{{var}} setzen",
     "show": "Anzeigen",
     "showFilters": "Filter anzeigen",
+    "switchLanguage": "Zu {{var}} wechseln",
     "submitting": "Wird übermittelt",
     "unarchive": "Aus Archiv holen",
     "updating": "Aktualisierung"
@@ -67,7 +68,7 @@
     },
     "login": {
       "button": "Login",
-      "instanceCode": "Instanzcode: {{var}}",
+      "instanceCode": "Instanzcode: {{var}} — zum Ändern klicken",
       "label": "Nutzername",
       "noAccount": "Du hast noch kein Konto?",
       "reset_code": "neuer Code",

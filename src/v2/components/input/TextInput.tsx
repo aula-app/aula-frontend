@@ -29,7 +29,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         type="button"
         tabIndex={-1}
         title={showPassword ? 'Hide password' : 'Show password'}
-        className="text-secondary"
+        className="text-text-secondary"
         onClick={() => setShowPassword((v) => !v)}
       >
         <Icon type={showPassword ? 'eyeOff' : 'eye'} size="1.25em" />
