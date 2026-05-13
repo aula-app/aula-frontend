@@ -12,7 +12,7 @@ const CodeButton = () => {
 
   if (!code) {
     return (
-      <Chip role="status" aria-label={t('auth.login.reset_code')} data-testid="current-instance-code">
+      <Chip role="status" aria-label={t('auth.login.reset_code')} data-testid="no-instance-code">
         {t('auth.login.reset_code')}
       </Chip>
     );
