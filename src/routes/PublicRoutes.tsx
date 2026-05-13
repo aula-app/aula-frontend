@@ -1,6 +1,9 @@
 import { useInstanceGuard } from '@/hooks/useInstanceGuard';
-import PublicRoutesV2 from '@/v2/views/public';
-import { InstanceCodeView, Login, OAuthLogin, PublicNotFoundView, Recovery, SetPassword } from '@/views/Public';
+import InstanceCodeView from '@/v2/views/public/Code';
+import Login from '@/v2/views/public/Login';
+import NotFound from '@/v2/views/public/NotFound';
+import Recovery from '@/v2/views/public/Recovery/RecoveryView';
+import { OAuthLogin, SetPassword } from '@/views/Public';
 import PublicOfflineView from '@/views/Public/PublicOfflineView';
 import UpdatePasswordView from '@/views/Public/UpdatePassword';
 import { Route, Routes } from 'react-router-dom';
@@ -14,7 +17,6 @@ const PublicRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="v2/*" element={<PublicRoutesV2 />} />
       <Route path="/code" element={<InstanceCodeView />} />
       <Route path="login/*" element={<Login />} />
       <Route path="offline" element={<PublicOfflineView />} />
@@ -22,7 +24,7 @@ const PublicRoutes = () => {
       <Route path="password/" element={<UpdatePasswordView />} />
       <Route path="password/:key" element={<SetPassword />} />
       <Route path="recovery/*" element={<Recovery />} />
-      <Route path="*" element={<PublicNotFoundView />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
