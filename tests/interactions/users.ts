@@ -95,8 +95,8 @@ export const ensureInstanceEntered = async (page: Page, username?: string) => {
   }
 
   const instance = process.env.INSTANCE_CODE || 'SINGLE';
-  const instanceCodeInputDiv = page.getByTestId('input-instance-code');
-  if ((await instanceCodeInputDiv.count()) === 0) {
+  const instanceCodeInput = page.locator('input[name="instanceCode"]');
+  if ((await instanceCodeInput.count()) === 0) {
     console.log(`${instance === 'SINGLE' ? '✅' : '⚠️'} No instance selector input found. User: "${username}"`);
     if (instance !== 'SINGLE') {
       throw new Error('Instance selector input not found on the page, but we are testing a multi-instance FE.');
@@ -106,8 +106,8 @@ export const ensureInstanceEntered = async (page: Page, username?: string) => {
     return true;
   } else {
     console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: "${username}"`);
-    await instanceCodeInputDiv.locator(page.locator('input[name="instance-code"]')).fill(instance);
-    await page.getByTestId('submit-instance-code').click();
+    await instanceCodeInput.fill(instance);
+    await page.locator('button[type="submit"]').click();
     await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
     return true;
   }
