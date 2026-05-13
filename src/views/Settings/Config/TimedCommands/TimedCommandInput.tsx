@@ -2,6 +2,7 @@ import { useDateFormatters } from '@/hooks';
 import { addCommand } from '@/services/config';
 import { getGroups } from '@/services/groups';
 import { getUsers } from '@/services/users';
+import { TEST_IDS } from '@/test-ids';
 import { SelectOptionsType } from '@/types/SettingsTypes';
 import { LanguageTypes } from '@/types/Translation';
 import { Commands } from '@/utils/commands';
@@ -189,12 +190,14 @@ const TimeCommandInput = ({ onReload }: Props) => {
           </TextField>
         )}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {/* DatePicker does not support data-testid */}
           <DatePicker
             label={t(`settings.time.startDate`)}
             value={startTime}
             disabled={typeof action !== 'number'}
             format={DATE_FORMATS[i18next.language as LanguageTypes].dateOnly}
             minDate={minDate}
+            name={TEST_IDS.TIMEDCOMMAND_STARTDATE_INPUT}
             onChange={(date) => {
               if (date) setStartTime(date)
             }}
@@ -206,6 +209,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
           onClick={addField}
           sx={{ py: 0.9, alignSelf: 'start' }}
           aria-label={t('actions.confirm')}
+          data-testid={TEST_IDS.TIMEDCOMMAND_CONFIRM_BUTTON}
         >
           {t('actions.confirm')}
         </Button>
