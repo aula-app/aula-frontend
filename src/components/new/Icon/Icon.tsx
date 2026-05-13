@@ -26,7 +26,7 @@ import {
   HiOutlineUserGroup,
   HiOutlineUsers,
   HiOutlineXMark,
-  HiOutlineLanguage,
+  HiLanguage,
 } from 'react-icons/hi2';
 import { IoBugOutline } from 'react-icons/io5';
 
@@ -45,7 +45,6 @@ export const ICONS = {
   box: HiOutlineArchiveBox,
   boxes: HiOutlineArchiveBox,
   bug: IoBugOutline,
-  chevronDown: HiOutlineChevronDown,
   close: HiOutlineXMark,
   day: HiOutlineSun,
   eye: HiOutlineEye,
@@ -70,8 +69,6 @@ export const ICONS = {
   rooms: HiOutlineAcademicCap,
   settings: HiOutlineCog6Tooth,
   users: HiOutlineUserGroup,
-  eye: HiOutlineEye,
-  eyeOff: HiOutlineEyeSlash,
 };
 
 export type ICON_TYPE = keyof typeof ICONS;
