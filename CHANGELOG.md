@@ -1,3 +1,10 @@
+## 2.0.0
+
+- **Internal**
+  - Completed v2 component migration for public routes (Login, Recovery, Code, NotFound)
+  - v2 private layout components (PrivateLayout, TopBar, SideBar) now fully migrated
+
+
 ## 1.9.2
 
   - **Bug fixes**
