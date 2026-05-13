@@ -11,7 +11,7 @@ import { useMenuKeyboardNavigation } from '@/hooks/useMenuKeyboardNavigation';
 import { memo, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { SIDEBAR_ITEMS } from '../../config';
+import { SIDEBAR_ITEMS } from '../config';
 
 interface SideBarProps {
   onClose?: () => void;
