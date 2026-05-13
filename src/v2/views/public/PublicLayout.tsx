@@ -4,7 +4,7 @@ import LanguageButton from '@/v2/components/button/Language';
 import { FunctionComponent, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
-import PublicRoutes from './PublicRoutes';
+import PublicRoutes from '@/routes/PublicRoutes';
 import Link from '@/v2/components/navigation/Link';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = () => {

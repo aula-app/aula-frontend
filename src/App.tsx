@@ -5,7 +5,7 @@ import { useAndroidBackButton } from './hooks';
 import Layout from './layout';
 import Routes from './routes';
 import { AppStore } from './store';
-import { AppThemeProvider } from './theme';
+import { AppThemeProvider } from './v2/views/private/PrivateLayout/theme';
 
 /**
  * Inner component that uses router hooks
@@ -15,11 +15,7 @@ const AppContent: React.FC = () => {
   // Handle Android back button navigation
   useAndroidBackButton();
 
-  return (
-    <Layout>
-      <Routes />
-    </Layout>
-  );
+  return <Routes />;
 };
 
 /**
