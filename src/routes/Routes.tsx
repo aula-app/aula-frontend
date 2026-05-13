@@ -1,3 +1,4 @@
+import PopupMessages from '@/components/PopupMessages';
 import { useConsentSync, useIsAuthenticated } from '@/hooks/auth';
 import Private from '@/v2/views/private';
 import Public from '@/v2/views/public';
@@ -12,6 +13,13 @@ const Routes = () => {
 
   useConsentSync(isAuthenticated, location.pathname);
 
-  return isAuthenticated ? <Private /> : <Public />;
+  const autentication = () => (isAuthenticated ? <Private /> : <Public />);
+
+  return (
+    <>
+      {autentication()}
+      <PopupMessages />
+    </>
+  );
 };
 export default Routes;
