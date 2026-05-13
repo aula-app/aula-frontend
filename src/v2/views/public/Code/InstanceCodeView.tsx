@@ -19,8 +19,8 @@ const InstanceCodeView = () => {
         instanceCode: yup
           .string()
           .required(t('forms.validation.required'))
-          .min(MIN_CODE_LENGTH, t('forms.validation.min', { min: MIN_CODE_LENGTH }))
-          .max(MAX_CODE_LENGTH, t('forms.validation.max', { max: MAX_CODE_LENGTH })),
+          .min(MIN_CODE_LENGTH, t('forms.validation.minLength', { var: MIN_CODE_LENGTH }))
+          .max(MAX_CODE_LENGTH, t('forms.validation.maxLength', { var: MAX_CODE_LENGTH })),
       }),
     [t]
   );
