@@ -157,6 +157,23 @@ const Tooltip = ({
     return () => document.removeEventListener('keydown', handleKeyDown, { capture: true });
   }, [mounted]);
 
+  // Dismiss tooltip on outside tap for touch devices
+  useEffect(() => {
+    if (!mounted || !isTouchRef.current) return;
+    const handleOutsideTap = (e: TouchEvent) => {
+      const trigger = triggerRef.current;
+      const tooltip = tooltipRef.current;
+      if (
+        trigger && !trigger.contains(e.target as Node) &&
+        tooltip && !tooltip.contains(e.target as Node)
+      ) {
+        doHideRef.current();
+      }
+    };
+    document.addEventListener('touchstart', handleOutsideTap, { passive: true });
+    return () => document.removeEventListener('touchstart', handleOutsideTap);
+  }, [mounted]);
+
   const handleMouseEnter = () => {
     isTouchRef.current = false;
     showTimerRef.current = setTimeout(doShow, showDelay);
@@ -177,6 +194,12 @@ const Tooltip = ({
 
   const handleBlur = () => {
     doHide();
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    e.preventDefault(); // prevent ghost click
+    isTouchRef.current = true;
+    doShow();
   };
 
   // Cleanup timers on unmount
