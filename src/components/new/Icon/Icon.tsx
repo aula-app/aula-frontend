@@ -54,6 +54,7 @@ export const ICONS = {
   home: HiOutlineHome,
   idea: HiOutlineLightBulb,
   ideas: HiOutlineLightBulb,
+  info: HiOutlineInformationCircle,
   language: HiLanguage,
   logout: HiOutlineArrowRightEndOnRectangle,
   menu: HiOutlineBars3,

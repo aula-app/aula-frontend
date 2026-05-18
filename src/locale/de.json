@@ -90,13 +90,12 @@
       "copied": "Passwort in die Zwischenablage kopiert",
       "current": "Aktuelles Passwort",
       "guidelines": {
-        "title": "Passwort-Richtlinien:",
-        "minLength": "Mindestens 12 Zeichen, maximal 64 Zeichen",
+        "minLength": "Mindestens {{var}} Zeichen",
         "hint": "Überleg dir einen Satz, der nichts aussagen muss, den du dir aber leicht merken kannst. Füge die Wörter zusammen, und schon hast du ein starkes Passwort."
       },
       "label": "Passwort",
       "newPassword": "Neues Passwort",
-      "oldPassword": "Aktuelles Passwort",
+      "oldPassword": "Temporäres Passwort",
       "set": "Passwort festlegen",
       "success": "Passwort erfolgreich geändert"
     },

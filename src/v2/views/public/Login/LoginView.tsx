@@ -25,7 +25,7 @@ const LoginView: React.FC = () => {
           .min(MIN_PASSWORD_LENGTH, t('forms.validation.minLength', { var: MIN_PASSWORD_LENGTH }))
           .max(MAX_PASSWORD_LENGTH, t('forms.validation.maxLength', { var: MAX_PASSWORD_LENGTH })),
       }),
-    [t]
+    []
   );
 
   const {

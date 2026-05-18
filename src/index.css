@@ -44,10 +44,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-p {
-  margin-bottom: 1em;
-}
-
 button, [role="button"], a, label, [role="menuitem"], [role="option"] {
   min-height: unset;
 }

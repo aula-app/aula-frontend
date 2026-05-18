@@ -5,7 +5,7 @@ import { InputHTMLAttributes, ReactNode, forwardRef, useId, useState } from 'rea
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
-  helperText?: string;
+  helperText?: string | ReactNode;
   endAdornment?: ReactNode;
 }
 
@@ -104,7 +104,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                 {error}
               </span>
             ) : (
-              <span id={helperId} className="block pt-1 px-1 text-xs text-secondary">
+              <span id={helperId} className="block pt-1 px-1 text-xs text-text-secondary">
                 {helperText}
               </span>
             )}

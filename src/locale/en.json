@@ -90,13 +90,12 @@
       "copied": "Password copied to the clipboard",
       "current": "Current password",
       "guidelines": {
-        "title": "Password Guidelines:",
-        "minLength": "Minimum 12 characters, maximum 64 characters",
+        "minLength": "At least {{var}} characters",
         "hint": "Come up with a sentence that doesn't really mean anything, but you can still remember it easily."
       },
       "label": "Password",
       "newPassword": "New password",
-      "oldPassword": "Password",
+      "oldPassword": "Temporary password",
       "set": "Set your password",
       "success": "Password changed successfully"
     },
