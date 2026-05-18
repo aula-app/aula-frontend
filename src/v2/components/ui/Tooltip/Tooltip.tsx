@@ -53,17 +53,28 @@ const computePosition = (trigger: DOMRect, tooltip: DOMRect, placement: Placemen
   };
 };
 
-const Tooltip = ({ content, children, placement = 'top', className }: TooltipProps) => {
+const Tooltip = ({
+  content,
+  children,
+  placement = 'top',
+  showDelay = 300,
+  hideDelay = 0,
+  className,
+}: TooltipProps) => {
   const id = useId();
   const triggerRef = useRef<HTMLSpanElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const showTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [mounted, setMounted] = useState(false);
+  const [shown, setShown] = useState(false);
   const [pos, setPos] = useState({ top: -9999, left: -9999 });
   const [ready, setReady] = useState(false);
 
   // Measure and position after the portal renders — before paint
   useLayoutEffect(() => {
-    if (!visible || !triggerRef.current || !tooltipRef.current) return;
+    if (!mounted || !triggerRef.current || !tooltipRef.current) return;
     const position = computePosition(
       triggerRef.current.getBoundingClientRect(),
       tooltipRef.current.getBoundingClientRect(),
@@ -71,44 +82,93 @@ const Tooltip = ({ content, children, placement = 'top', className }: TooltipPro
     );
     setPos(position);
     setReady(true);
-  }, [visible, placement]);
+  }, [mounted, placement]);
+
+  const isTouchRef = useRef(false);
+
+  const doShow = () => {
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
+    setReady(false);
+    setPos({ top: -9999, left: -9999 });
+    setMounted(true);
+    requestAnimationFrame(() => setShown(true));
+  };
+
+  const doHide = () => {
+    if (showTimerRef.current) {
+      clearTimeout(showTimerRef.current);
+      showTimerRef.current = null;
+    }
+    setShown(false);
+    hideTimerRef.current = setTimeout(() => {
+      setMounted(false);
+      setReady(false);
+      isTouchRef.current = false;
+      hideTimerRef.current = null;
+    }, EXIT_DURATION + hideDelay);
+  };
 
   // Hide on scroll or resize to avoid stale position
   useEffect(() => {
-    if (!visible) return;
-    const hide = () => setVisible(false);
+    if (!mounted) return;
+    const hide = () => {
+      if (isTouchRef.current) return; // touch tooltips dismissed by outside tap, not scroll
+      doHide();
+    };
     window.addEventListener('scroll', hide, { capture: true, passive: true });
     window.addEventListener('resize', hide, { passive: true });
     return () => {
       window.removeEventListener('scroll', hide, { capture: true });
       window.removeEventListener('resize', hide);
     };
-  }, [visible]);
+  }, [mounted]);
 
-  const show = () => {
-    setReady(false);
-    setPos({ top: -9999, left: -9999 });
-    setVisible(true);
+  const handleMouseEnter = () => {
+    isTouchRef.current = false;
+    showTimerRef.current = setTimeout(doShow, showDelay);
   };
 
-  const hide = () => {
-    setVisible(false);
-    setReady(false);
+  const handleMouseLeave = () => {
+    if (showTimerRef.current) {
+      clearTimeout(showTimerRef.current);
+      showTimerRef.current = null;
+    }
+    doHide();
   };
+
+  const handleFocus = () => {
+    isTouchRef.current = false;
+    doShow(); // no delay on keyboard focus
+  };
+
+  const handleBlur = () => {
+    doHide();
+  };
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      if (showTimerRef.current) clearTimeout(showTimerRef.current);
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    };
+  }, []);
 
   return (
     <div
       className="inline-flex items-center justify-center relative"
-      onMouseEnter={show}
-      onMouseLeave={hide}
-      onFocus={show}
-      onBlur={hide}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
     >
       <span ref={triggerRef} aria-describedby={id}>
         {children}
       </span>
 
-      {visible &&
+      {mounted &&
         createPortal(
           <div
             ref={tooltipRef}
