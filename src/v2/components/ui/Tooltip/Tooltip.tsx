@@ -138,6 +138,19 @@ const Tooltip = ({
     };
   }, [mounted]);
 
+  // Hide on Escape key press for WCAG 1.4.13 compliance
+  useEffect(() => {
+    if (!mounted) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopImmediatePropagation(); // prevent parent dialogs from closing
+        doHide();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown, { capture: true });
+    return () => document.removeEventListener('keydown', handleKeyDown, { capture: true });
+  }, [mounted]);
+
   const handleMouseEnter = () => {
     isTouchRef.current = false;
     showTimerRef.current = setTimeout(doShow, showDelay);
