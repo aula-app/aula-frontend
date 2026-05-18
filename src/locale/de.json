@@ -90,7 +90,8 @@
       "copied": "Passwort in die Zwischenablage kopiert",
       "current": "Aktuelles Passwort",
       "guidelines": {
-        "minLength": "Mindestens {{var}} Zeichen",
+        "tempPassword": "Gib das temporäre Passwort ein, das von deiner Schule bereitgestellt wurde.",
+        "minLength": "Das Passwort muss mindestens {{var}} Zeichen lang sein.",
         "hint": "Überleg dir einen Satz, der nichts aussagen muss, den du dir aber leicht merken kannst. Füge die Wörter zusammen, und schon hast du ein starkes Passwort."
       },
       "label": "Passwort",

@@ -90,7 +90,8 @@
       "copied": "Password copied to the clipboard",
       "current": "Current password",
       "guidelines": {
-        "minLength": "At least {{var}} characters",
+        "tempPassword": "Enter the temporary password provided by your school.",
+        "minLength": "The password must have at least {{var}} characters.",
         "hint": "Come up with a sentence that doesn't really mean anything, but you can still remember it easily."
       },
       "label": "Password",
