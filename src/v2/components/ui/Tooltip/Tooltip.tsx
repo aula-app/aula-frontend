@@ -8,11 +8,14 @@ interface TooltipProps {
   content: ReactNode;
   children: ReactNode;
   placement?: Placement;
+  showDelay?: number;
+  hideDelay?: number;
   className?: string;
 }
 
 const GAP = 18;
 const MARGIN = 24;
+const EXIT_DURATION = 150; // ms — must match Tailwind duration-150
 
 const computePosition = (trigger: DOMRect, tooltip: DOMRect, placement: Placement): { top: number; left: number } => {
   const vw = window.innerWidth;
