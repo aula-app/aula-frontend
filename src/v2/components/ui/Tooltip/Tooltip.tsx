@@ -70,6 +70,7 @@ const Tooltip = ({
   const isTouchRef = useRef(false);
   const hideDelayRef = useRef(hideDelay);
 
+  // Sync on every render so doHide always reads the current prop value, not a stale closure
   useEffect(() => {
     hideDelayRef.current = hideDelay;
   });
@@ -103,14 +104,15 @@ const Tooltip = ({
   };
 
   const doHide = () => {
-    if (!mounted && !shown) return; // nothing to hide
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
+    // Always cancel a pending show timer, regardless of current visibility state
     if (showTimerRef.current) {
       clearTimeout(showTimerRef.current);
       showTimerRef.current = null;
+    }
+    if (!mounted && !shown) return; // nothing visible to animate out
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
     }
     setShown(false);
     hideTimerRef.current = setTimeout(() => {
