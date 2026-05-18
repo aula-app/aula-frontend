@@ -123,12 +123,18 @@ const Tooltip = ({
     }, EXIT_DURATION + hideDelayRef.current);
   };
 
+  const doHideRef = useRef<() => void>(doHide);
+  // Sync on every render so effects always call the latest doHide
+  useEffect(() => {
+    doHideRef.current = doHide;
+  });
+
   // Hide on scroll or resize to avoid stale position
   useEffect(() => {
     if (!mounted) return;
     const hide = () => {
       if (isTouchRef.current) return; // touch tooltips dismissed by outside tap, not scroll
-      doHide();
+      doHideRef.current();
     };
     window.addEventListener('scroll', hide, { capture: true, passive: true });
     window.addEventListener('resize', hide, { passive: true });
@@ -144,7 +150,7 @@ const Tooltip = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.stopImmediatePropagation(); // prevent parent dialogs from closing
-        doHide();
+        doHideRef.current();
       }
     };
     document.addEventListener('keydown', handleKeyDown, { capture: true });
