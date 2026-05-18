@@ -66,6 +66,13 @@ const Tooltip = ({
   const tooltipRef = useRef<HTMLDivElement>(null);
   const showTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const isTouchRef = useRef(false);
+  const hideDelayRef = useRef(hideDelay);
+
+  useEffect(() => {
+    hideDelayRef.current = hideDelay;
+  });
 
   const [mounted, setMounted] = useState(false);
   const [shown, setShown] = useState(false);
@@ -84,8 +91,6 @@ const Tooltip = ({
     setReady(true);
   }, [mounted, placement]);
 
-  const isTouchRef = useRef(false);
-
   const doShow = () => {
     if (hideTimerRef.current) {
       clearTimeout(hideTimerRef.current);
@@ -94,10 +99,15 @@ const Tooltip = ({
     setReady(false);
     setPos({ top: -9999, left: -9999 });
     setMounted(true);
-    requestAnimationFrame(() => setShown(true));
+    rafRef.current = requestAnimationFrame(() => setShown(true));
   };
 
   const doHide = () => {
+    if (!mounted && !shown) return; // nothing to hide
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
     if (showTimerRef.current) {
       clearTimeout(showTimerRef.current);
       showTimerRef.current = null;
@@ -108,7 +118,7 @@ const Tooltip = ({
       setReady(false);
       isTouchRef.current = false;
       hideTimerRef.current = null;
-    }, EXIT_DURATION + hideDelay);
+    }, EXIT_DURATION + hideDelayRef.current);
   };
 
   // Hide on scroll or resize to avoid stale position
@@ -153,6 +163,7 @@ const Tooltip = ({
     return () => {
       if (showTimerRef.current) clearTimeout(showTimerRef.current);
       if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
