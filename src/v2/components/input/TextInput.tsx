@@ -1,6 +1,7 @@
 import Icon from '@/components/new/Icon';
 import IconButton from '@/v2/components/button/IconButton';
 import { InputHTMLAttributes, ReactNode, forwardRef, useId, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -51,8 +52,8 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             aria-describedby={[errorId, helperId].filter(Boolean).join(' ') || undefined}
             aria-invalid={!!error}
             placeholder=" "
-            className={[
-              'peer block w-full rounded-lg border border-input-border bg-transparent px-3 pt-4 pb-2 shadow-inner',
+            className={twMerge(
+              'peer block w-full rounded-lg border border-secondary bg-transparent px-3 pt-4 pb-2 shadow-inner',
               'text-sm text-text-primary transition-all duration-200',
               'focus:outline-1 focus:outline-offset-1',
               'hover:border-input-border-hover',
@@ -61,10 +62,8 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                 ? 'border-error focus:outline-error focus:border-error'
                 : 'focus:outline-primary focus:border-primary',
               disabled ? 'cursor-not-allowed opacity-50' : '',
-              className,
-            ]
-              .filter(Boolean)
-              .join(' ')}
+              className
+            )}
             {...props}
           />
           {label && (

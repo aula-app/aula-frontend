@@ -11,7 +11,7 @@
 /* ========== LIGHT MODE (default) ========== */
 :root {
   --color-primary: hsl(134, 72%, 67%);
-  --color-secondary: hsl(0, 0%, 93%);
+  --color-secondary: hsl(0, 0%, 75%);
   --color-error: hsl(0, 84%, 50%);
   --color-warning: hsl(45, 100%, 79%);
   --color-info: hsl(204, 82%, 86%);
@@ -97,11 +97,9 @@
   --color-requests: hsl(0, 0%, 90%);
 
   --color-text-primary: hsl(236.17, 42%, 15%);
-  --color-text-secondary: hsl(0, 0%, 36%);
+  --color-text-secondary: hsl(0, 0%, 25%);
   --color-background: #FFFFFF;
   --color-paper: #FFFFFF;
-  --color-input-border: rgba(0, 0, 0, 0.45); /* 3.35:1 on white ✅ WCAG 1.4.11 */
-  --color-input-border-hover: rgba(0, 0, 0, 0.87);
 }
 
 /* ========== DARK MODE (activated by .dark class on html) ========== */
@@ -196,8 +194,6 @@
   --color-text-secondary: hsl(0, 0%, 65%);
   --color-background: hsl(200, 19%, 20%);
   --color-paper: hsl(200, 19%, 25%);
-  --color-input-border: rgba(255, 255, 255, 0.50); /* 4.36:1 on dark bg ✅ WCAG 1.4.11 */
-  --color-input-border-hover: rgba(255, 255, 255, 0.87);
 }
 
 /* ========== TAILWIND THEME (references the CSS variables above) ========== */
