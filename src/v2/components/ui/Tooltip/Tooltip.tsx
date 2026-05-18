@@ -218,6 +218,7 @@ const Tooltip = ({
       onMouseLeave={handleMouseLeave}
       onFocus={handleFocus}
       onBlur={handleBlur}
+      onTouchEnd={handleTouchEnd}
     >
       <span ref={triggerRef} aria-describedby={id}>
         {children}
