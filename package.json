@@ -76,6 +76,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^8.2.0",
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.55.1",
     "@types/jest": "^29.5.3",
     "@types/node": "^22.7.5",

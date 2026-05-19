@@ -1,16 +1,15 @@
+import Icon from '@/v2/components/ui/Icon';
 import Button from '@/v2/components/button/Button';
+import IconButton from '@/v2/components/button/IconButton';
 import TextInput from '@/v2/components/input/TextInput';
+import Link from '@/v2/components/navigation/Link';
+import Hint from '@/v2/components/ui/Hint';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { HiOutlineCheck, HiOutlineXMark } from 'react-icons/hi2';
 import * as yup from 'yup';
 import { useSetPasswordSubmit } from './useSetPasswordSubmit';
-import Hint from '@/v2/components/ui/Hint';
-import Link from '@/v2/components/navigation/Link';
-import IconButton from '@/v2/components/button/IconButton';
-import Icon from '@/components/new/Icon';
 
 const MIN_PASSWORD_LENGTH = 12;
 const MAX_PASSWORD_LENGTH = 64;
@@ -54,7 +53,13 @@ const SetPasswordView = () => {
         >
           <Hint content={t('v2.page.passwordSet.hint')} />
           <span className="flex-1">{t('v2.page.passwordSet.error')}</span>
-          <IconButton aria-label={t('v2.ui.button.close')} hint={t('v2.ui.button.close')} onClick={() => setValid(true)} className="text-error" dense>
+          <IconButton
+            aria-label={t('v2.ui.button.close')}
+            hint={t('v2.ui.button.close')}
+            onClick={() => setValid(true)}
+            className="text-error"
+            dense
+          >
             <Icon type="close" />
           </IconButton>
         </div>
@@ -89,7 +94,7 @@ const SetPasswordView = () => {
 
       <div className="flex items-center justify-end gap-2">
         <Link to="/" className="text-sm text-error mr-auto">
-          {t('actions.cancel')}
+          {t('v2.ui.button.cancel')}
         </Link>
         <Button type="button" outlined onClick={() => reset()} color="secondary">
           {t('v2.ui.button.clear')}

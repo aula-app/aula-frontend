@@ -86,7 +86,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                   <span aria-hidden="true" className="ml-0.5">
                     *
                   </span>
-                  <span className="sr-only">{t('v2.form.required')}</span>
+                  <span className="sr-only">{t('v2.form.validation.required')}</span>
                 </>
               )}
             </label>

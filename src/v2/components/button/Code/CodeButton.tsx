@@ -11,16 +11,12 @@ const CodeButton = () => {
   if (!getRuntimeConfig().IS_MULTI) return null;
 
   if (!code) {
-    return (
-      <Chip aria-label={t('auth.login.reset_code')} data-testid="no-instance-code">
-        {t('auth.login.reset_code')}
-      </Chip>
-    );
+    return <Chip data-testid="no-instance-code">{t('v2.page.code.label')}</Chip>;
   }
 
   return (
     <Chip data-testid="current-instance-code" endIcon={<Icon type="close" size="1em" />} onClick={resetCode}>
-      {`${t('v2.page.code.button', { var: code })}`}
+      {`${t('v2.page.code.chip', { var: code })}`}
     </Chip>
   );
 };

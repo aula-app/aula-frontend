@@ -50,7 +50,8 @@
         "title": "About Aula"
       },
       "code": {
-        "button": "Instance code: {{var}}",
+        "chip": "Instance code: {{var}}",
+        "label": "Set an instance code",
         "title": "Enter instance code",
         "hint": "Please enter the instance code provided by your school to access the platform."
       },

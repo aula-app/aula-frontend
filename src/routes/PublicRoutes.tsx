@@ -1,4 +1,5 @@
 import { useInstanceGuard } from '@/hooks/useInstanceGuard';
+import AboutView from '@/v2/views/public/About/AboutView';
 import InstanceCodeView from '@/v2/views/public/Code';
 import Login from '@/v2/views/public/Login';
 import NotFound from '@/v2/views/public/NotFound';
@@ -19,6 +20,7 @@ const PublicRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+      <Route path="/about" element={<AboutView />} />
       <Route path="/code" element={<InstanceCodeView />} />
       <Route path="login/*" element={<Login />} />
       <Route path="offline" element={<OfflineView />} />
