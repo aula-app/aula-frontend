@@ -24,7 +24,10 @@
         "hide": "Hide password"
       }
     },
-    "pages:": {
+    "pages": {
+      "about": {
+        "title": "About Aula"
+      },
       "code": {
         "button": "Instance code: {{var}}"
       },
@@ -36,6 +39,18 @@
         "button": "Send recovery email",
         "link": "Forgot your password?",
         "title": "Password recovery"
+      }
+    },
+    "ui": {
+      "toggle": "Toggle {{var}}",
+      "lightMode": {
+        "label": "Light mode"
+      },
+      "darkMode": {
+        "label": "Dark mode"
+      },
+      "language": {
+        "label": "Toggle language"
       }
     }
   },

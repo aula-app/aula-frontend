@@ -6,17 +6,18 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import PublicRoutes from '@/routes/PublicRoutes';
 import Link from '@/v2/components/navigation/Link';
-import SkipLink from '@/v2/components/navigation/SkipLink';
 import DarkModeButton from '@/v2/components/button/DarkMode';
+import IconButton from '@/v2/components/button/IconButton';
+import Icon from '@/v2/components/ui/Icon';
+import AboutButton from '@/v2/components/button/About';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
   const { t } = useTranslation();
   const location = useLocation();
 
   return (
-    <div className="w-full h-full max-w-sm mx-auto px-8 py-6 flex flex-col gap-6">
-      <SkipLink />
-      <header className="flex-2 flex flex-col gap-4">
+    <div className="w-full h-full overflow-hidden overflow-y-auto max-w-sm mx-auto px-8 py-6 flex flex-col gap-6">
+      <header className="flex-1 flex flex-col gap-4">
         <nav className="flex items-center" aria-label={t('ui.navigation.mainMenu')}>
           <div className="flex-1">
             {location.pathname !== '/' && (
@@ -25,20 +26,21 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
               </Link>
             )}
           </div>
-          <div className="flex-2 flex justify-center">
+          <div>
             <CodeButton />
           </div>
         </nav>
-        <div className="flex-1 flex justify-center">
+        <div className="flex-2 flex justify-center">
           <AulaHero aria-label={t('app.name.logo')} role="img" className="text-text-primary" />
         </div>
       </header>
       <main id="main-content" className="flex-2 flex">
         <PublicRoutes />
       </main>
-      <footer className="flex-1 flex items-end justify-between">
+      <footer className="flex items-end justify-between">
         <DarkModeButton />
         <LanguageButton />
+        <AboutButton />
       </footer>
     </div>
   );
