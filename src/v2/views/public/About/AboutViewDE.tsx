@@ -24,7 +24,7 @@ const AboutView = () => {
   }, []);
 
   return (
-    <div className="w-full h-full overflow-hidden overflow-y-auto">
+    <div className="flex-1 min-h-0 overflow-y-auto w-full p-4">
       <h2>aula-Software</h2>
       <code>
         aula-frontend: &nbsp;{import.meta.env?.VITE_APP_VERSION ?? 'unknown'}

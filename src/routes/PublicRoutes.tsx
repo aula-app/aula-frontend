@@ -1,5 +1,5 @@
 import { useInstanceGuard } from '@/hooks/useInstanceGuard';
-import AboutView from '@/v2/views/public/About/AboutView';
+import AboutView from '@/v2/views/public/About';
 import InstanceCodeView from '@/v2/views/public/Code';
 import Login from '@/v2/views/public/Login';
 import NotFound from '@/v2/views/public/NotFound';
