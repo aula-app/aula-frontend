@@ -17,7 +17,7 @@ const RecoveryPasswordView = () => {
       yup.object({
         email: yup.string().email(t('forms.validation.email')).required(t('forms.validation.required')),
       }),
-    []
+    [t]
   );
 
   const {
