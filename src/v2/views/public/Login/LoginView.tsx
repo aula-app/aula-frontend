@@ -40,7 +40,7 @@ const LoginView: React.FC = () => {
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex-1 flex flex-col gap-4">
       <h1>{t('auth.messages.welcome')}</h1>
 
-      <fieldset className="rounded-box flex flex-col">
+      <div className="rounded-box flex flex-col">
         <TextInput
           label={t('auth.login.label')}
           required
@@ -68,7 +68,7 @@ const LoginView: React.FC = () => {
         >
           {t('auth.forgotPassword.link')}
         </Link>
-      </fieldset>
+      </div>
     </form>
   );
 };
