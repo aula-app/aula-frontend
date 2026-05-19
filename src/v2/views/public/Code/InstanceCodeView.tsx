@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import Button from '@/v2/components/button/Button';
+import Link from '@/v2/components/navigation/Link';
 
 const MIN_CODE_LENGTH = 3;
 const MAX_CODE_LENGTH = 8;
@@ -18,9 +19,9 @@ const InstanceCodeView = () => {
       yup.object({
         instanceCode: yup
           .string()
-          .required(t('forms.validation.required'))
-          .min(MIN_CODE_LENGTH, t('forms.validation.minLength', { var: MIN_CODE_LENGTH }))
-          .max(MAX_CODE_LENGTH, t('forms.validation.maxLength', { var: MAX_CODE_LENGTH })),
+          .required(t('v2.form.validation.required'))
+          .min(MIN_CODE_LENGTH, t('v2.form.validation.minLength', { var: MIN_CODE_LENGTH }))
+          .max(MAX_CODE_LENGTH, t('v2.form.validation.maxLength', { var: MAX_CODE_LENGTH })),
       }),
     [t]
   );
@@ -38,22 +39,27 @@ const InstanceCodeView = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex-1 flex flex-col gap-4">
-      <h1>{t('auth.messages.welcome')}</h1>
+      <h1>{t('v2.page.code.title')}</h1>
 
       <div className="flex flex-col">
         <TextInput
-          label={t('instance.label')}
+          label={t('v2.form.code.label')}
           required
           autoComplete="username"
           autoCapitalize="none"
           error={errors.instanceCode?.message}
-          helperText={t('instance.headline')}
+          helperText={t('v2.page.code.hint')}
           {...register('instanceCode')}
           disabled={isLoading}
         />
-        <Button type="submit" disabled={isLoading} aria-label={t('auth.login.button')}>
-          {t('auth.login.button')}
-        </Button>
+        <div className="flex items-center justify-between">
+          <Link to="/" className="text-sm text-text-secondary mx-2">
+            {t('v2.ui.button.cancel')}
+          </Link>
+          <Button type="submit" disabled={isLoading} aria-label={t('v2.ui.button.submit')}>
+            {t('v2.ui.button.submit')}
+          </Button>
+        </div>
       </div>
     </form>
   );

@@ -1,4 +1,106 @@
 {
+  "v2": {
+    "a11y": {
+      "label": {
+        "navigation": "Navigationsmenü",
+        "skipToContent": "Zum Hauptinhalt springen"
+      }
+    },
+    "alt": {
+      "logo": "Aula: Bildungsplattform-Logo",
+      "sleeping": "Schlafende Eulen-Illustration"
+    },
+    "form": {
+      "code": {
+        "label": "Instanzcode"
+      },
+      "email": {
+        "label": "E-Mail"
+      },
+      "login": {
+        "label": "Benutzername"
+      },
+      "password": {
+        "label": "Passwort",
+        "show": "Passwort anzeigen",
+        "hide": "Passwort verbergen"
+      },
+      "passwordConfirm": {
+        "label": "Passwort bestätigen"
+      },
+      "passwordNew": {
+        "label": "Neues Passwort",
+        "helper": "Ihr Passwort muss mindestens {{var}} Zeichen lang sein.",
+        "hint": "Eine gute Idee ist es, einen Satz zu erfinden, der eigentlich nichts bedeutet, den Sie sich aber trotzdem leicht merken können."
+      },
+      "passwordTemporary": {
+        "label": "Temporäres Passwort",
+        "helper": "Geben Sie das von Ihrer Schule bereitgestellte temporäre Passwort ein."
+      },
+      "validation": {
+        "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+        "minLength": "Muss mindestens {{var}} Zeichen lang sein",
+        "maxLength": "Darf höchstens {{var}} Zeichen lang sein",
+        "required": "Dieses Feld ist erforderlich",
+        "passwordMatch": "Passwörter müssen übereinstimmen"
+      }
+    },
+    "page": {
+      "about": {
+        "title": "Über Aula"
+      },
+      "code": {
+        "button": "Instanzcode: {{var}}",
+        "title": "Instanzcode eingeben",
+        "hint": "Bitte geben Sie den von Ihrer Schule bereitgestellten Instanzcode ein, um auf die Plattform zuzugreifen."
+      },
+      "login": {
+        "button": "Anmelden",
+        "title": "Willkommen bei {{var}}"
+      },
+      "notFound": {
+        "title": "Seite nicht gefunden",
+        "hint": "Die von Ihnen gesuchte Seite existiert nicht oder wurde verschoben. Bitte überprüfen Sie die URL oder kehren Sie zur Startseite zurück."
+      },
+      "offline": {
+        "title": "Die Schule ist derzeit geschlossen",
+        "hint": "Die Schule ist derzeit geschlossen. Bitte versuchen Sie es später erneut oder wenden Sie sich an Ihren Administrator für weitere Informationen."
+      },
+      "recovery": {
+        "button": "Wiederherstellungs-E-Mail senden",
+        "link": "Passwort vergessen?",
+        "title": "Passwort wiederherstellen"
+      },
+      "passwordReset": {
+        "title": "Passwort zurücksetzen"
+      },
+      "passwordSet": {
+        "error": "Ungültiger oder abgelaufener Link",
+        "title": "Passwort festlegen",
+        "hint": "Dieser Link ist ungültig. Bitte stellen Sie sicher, dass Sie den gesamten Link aus Ihrer E-Mail kopiert haben, und versuchen Sie es erneut."
+      }
+    },
+    "ui": {
+      "button": {
+        "cancel": "Abbrechen",
+        "clear": "Löschen",
+        "close": "Schließen",
+        "confirm": "Bestätigen",
+        "submit": "Übermitteln"
+      },
+      "darkMode": {
+        "label": "Dunkelmodus"
+      },
+      "language": {
+        "label": "Sprache",
+        "button": "Zu {{var}} wechseln"
+      },
+      "lightMode": {
+        "label": "Hellmodus"
+      },
+      "toggle": "{{var}} umschalten"
+    }
+  },
   "actions": {
     "activate": "{{var}} aktivieren",
     "add": "Neue {{var}}",

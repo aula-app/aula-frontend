@@ -16,11 +16,11 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
   return (
     <div className="w-full h-full overflow-hidden overflow-y-auto max-w-sm mx-auto px-8 py-6 flex flex-col gap-6">
       <header className="flex-1 flex flex-col gap-4">
-        <nav className="flex items-center" aria-label={t('ui.navigation.mainMenu')}>
+        <nav className="flex items-center" aria-label={t('v2.a11y.label.navigation')}>
           <div className="flex-1">
             {location.pathname !== '/' && (
               <Link to="/" className="text-sm text-text-secondary">
-                <span aria-hidden="true">&lt; </span> {t('auth.login.button')}
+                <span aria-hidden="true">&lt; </span> {t('v2.page.login.button')}
               </Link>
             )}
           </div>
@@ -29,7 +29,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
           </div>
         </nav>
         <div className="flex-2 flex justify-center">
-          <AulaHero aria-label={t('app.name.logo')} role="img" className="text-text-primary" />
+          <AulaHero aria-label={t('v2.alt.logo')} role="img" className="text-text-primary" />
         </div>
       </header>
       <main id="main-content" className="flex-2 flex">

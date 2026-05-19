@@ -18,12 +18,12 @@ const LoginView: React.FC = () => {
   const schema = useMemo(
     () =>
       yup.object({
-        username: yup.string().required(t('forms.validation.required')),
+        username: yup.string().required(t('v2.form.validation.required')),
         password: yup
           .string()
-          .required(t('forms.validation.required'))
-          .min(MIN_PASSWORD_LENGTH, t('forms.validation.minLength', { var: MIN_PASSWORD_LENGTH }))
-          .max(MAX_PASSWORD_LENGTH, t('forms.validation.maxLength', { var: MAX_PASSWORD_LENGTH })),
+          .required(t('v2.form.validation.required'))
+          .min(MIN_PASSWORD_LENGTH, t('v2.form.validation.minLength', { var: MIN_PASSWORD_LENGTH }))
+          .max(MAX_PASSWORD_LENGTH, t('v2.form.validation.maxLength', { var: MAX_PASSWORD_LENGTH })),
       }),
     [t]
   );
@@ -38,11 +38,11 @@ const LoginView: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex-1 flex flex-col gap-4">
-      <h1>{t('auth.messages.welcome')}</h1>
+      <h1>{t('v2.page.login.title', { var: 'Aula' })}</h1>
 
       <div className="rounded-box flex flex-col">
         <TextInput
-          label={t('auth.login.label')}
+          label={t('v2.form.login.label')}
           required
           autoComplete="username"
           autoCapitalize="none"
@@ -50,7 +50,7 @@ const LoginView: React.FC = () => {
           {...register('username')}
         />
         <TextInput
-          label={t('auth.password.label')}
+          label={t('v2.form.password.label')}
           type="password"
           required
           autoComplete="current-password"
@@ -59,10 +59,10 @@ const LoginView: React.FC = () => {
           {...register('password')}
         />
         <Button type="submit" disabled={isLoading}>
-          {t('auth.login.button')}
+          {t('v2.page.login.button')}
         </Button>
         <Link to="/recovery" className="ml-auto px-2 text-sm text-text-secondary mt-4">
-          {t('auth.forgotPassword.link')}
+          {t('v2.page.recovery.link')}
         </Link>
       </div>
     </form>

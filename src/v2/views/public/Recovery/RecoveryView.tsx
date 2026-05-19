@@ -15,7 +15,7 @@ const RecoveryPasswordView = () => {
   const schema = useMemo(
     () =>
       yup.object({
-        email: yup.string().email(t('forms.validation.email')).required(t('forms.validation.required')),
+        email: yup.string().email(t('v2.form.validation.email')).required(t('v2.form.validation.required')),
       }),
     [t]
   );
@@ -30,12 +30,12 @@ const RecoveryPasswordView = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex-1 flex flex-col gap-4">
-      <h1>{t('auth.forgotPassword.recovery')}</h1>
+      <h1>{t('v2.page.recovery.title')}</h1>
       <div className="rounded-box flex flex-col">
         <TextInput
           required
           disabled={isLoading}
-          label={t('settings.columns.email')}
+          label={t('v2.form.email.label')}
           type="email"
           autoComplete="email"
           error={errors.email?.message}
@@ -43,10 +43,10 @@ const RecoveryPasswordView = () => {
         />
         <div className="flex items-center justify-between">
           <Link to="/" className="text-sm text-text-secondary mx-2">
-            {t('actions.cancel')}
+            {t('v2.ui.button.cancel')}
           </Link>
           <Button type="submit" disabled={isLoading}>
-            {t('auth.forgotPassword.recover')}
+            {t('v2.ui.button.confirm')}
           </Button>
         </div>
       </div>

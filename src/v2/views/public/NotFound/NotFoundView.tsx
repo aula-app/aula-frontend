@@ -7,21 +7,14 @@ const PublicNotFoundView = () => {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-around">
-      <img
-        src="/img/Paula_schlafend.svg"
-        alt={t('errors.schoolClosedImage')}
-        role="img"
-        loading="lazy"
-        className="w-32"
-      />
+      <img src="/img/Paula_schlafend.svg" alt={t('v2.alt.sleeping')} role="img" loading="lazy" className="w-32" />
       <Tooltip
-        position="bottom"
-        content={t('errors.unauthorized')}
-        label={t('errors.unauthorized')}
+        content={t('v2.hints.unauthorized')}
+        label={t('v2.hints.unauthorized')}
         wrapperClassName="flex items-center gap-3 text-error"
       >
         <Icon type="alert" size="24" />
-        {t('errors.404')}
+        {t('v2.page.notFound.title')}
       </Tooltip>
     </div>
   );

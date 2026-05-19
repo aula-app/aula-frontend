@@ -24,13 +24,13 @@ const SetPasswordView = () => {
       yup.object({
         newPassword: yup
           .string()
-          .required(t('forms.validation.required'))
-          .min(MIN_PASSWORD_LENGTH, t('forms.validation.minLength', { var: MIN_PASSWORD_LENGTH }))
-          .max(MAX_PASSWORD_LENGTH, t('forms.validation.maxLength', { var: MAX_PASSWORD_LENGTH })),
+          .required(t('v2.form.validation.required'))
+          .min(MIN_PASSWORD_LENGTH, t('v2.form.validation.minLength', { var: MIN_PASSWORD_LENGTH }))
+          .max(MAX_PASSWORD_LENGTH, t('v2.form.validation.maxLength', { var: MAX_PASSWORD_LENGTH })),
         confirmPassword: yup
           .string()
-          .required(t('forms.validation.required'))
-          .oneOf([yup.ref('newPassword')], t('forms.validation.passwordMatch')),
+          .required(t('v2.form.validation.required'))
+          .oneOf([yup.ref('newPassword')], t('v2.form.validation.passwordMatch')),
       }),
     [t]
   );
@@ -43,28 +43,18 @@ const SetPasswordView = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const watchedNewPassword = useWatch({ control, name: 'newPassword', defaultValue: '' });
-
-  const requirements = [
-    {
-      key: 'length',
-      text: t('forms.validation.passwordMinLength', { count: MIN_PASSWORD_LENGTH }),
-      met: (watchedNewPassword || '').length >= MIN_PASSWORD_LENGTH,
-    },
-  ];
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate method="POST" className="flex flex-col gap-4 w-full">
-      <h2 className="text-2xl font-semibold">{t('auth.password.set')}</h2>
+      <h2 className="text-2xl font-semibold">{t('v2.page.passwordSet.title')}</h2>
 
       {!isValid && (
         <div
           role="alert"
           className="flex items-center gap-2 rounded-lg border border-error px-3 py-2 text-sm text-error"
         >
-          <Hint content={t('auth.password.guidelines.wrongLink')} />
-          <span className="flex-1">{t('errors.invalidCode')}</span>
-          <IconButton title={t('actions.close')} onClick={() => setValid(true)} className="text-error" dense>
+          <Hint content={t('v2.page.passwordSet.hint')} />
+          <span className="flex-1">{t('v2.page.passwordSet.error')}</span>
+          <IconButton title={t('v2.ui.button.close')} onClick={() => setValid(true)} className="text-error" dense>
             <Icon type="close" />
           </IconButton>
         </div>
@@ -73,14 +63,14 @@ const SetPasswordView = () => {
       <div className="flex flex-col">
         <TextInput
           type="password"
-          label={t('auth.password.newPassword')}
+          label={t('v2.form.passwordNew.label')}
           required
           autoComplete="new-password"
           error={errors.newPassword?.message}
           helperText={
             <span className="flex gap-1">
-              <Hint content={t('auth.password.guidelines.hint')} />
-              {t('auth.password.guidelines.minLength', { var: MIN_PASSWORD_LENGTH })}
+              <Hint content={t('v2.form.passwordNew.hint')} />
+              {t('v2.form.passwordNew.helper', { var: MIN_PASSWORD_LENGTH })}
             </span>
           }
           data-testid="newPassword-input"
@@ -89,7 +79,7 @@ const SetPasswordView = () => {
 
         <TextInput
           type="password"
-          label={t('auth.password.confirmPassword')}
+          label={t('v2.form.passwordConfirm.label')}
           required
           autoComplete="new-password"
           error={errors.confirmPassword?.message}
@@ -101,12 +91,10 @@ const SetPasswordView = () => {
         <Link to="/" className="text-sm text-error mr-auto">
           {t('actions.cancel')}
         </Link>
-        <Button type="button" outlined onClick={() => reset()} aria-label={t('actions.cancel')} color="secondary">
-          {t('actions.clear.generic')}
+        <Button type="button" outlined onClick={() => reset()} color="secondary">
+          {t('v2.ui.button.clear')}
         </Button>
-        <Button type="submit" aria-label={t('actions.save')}>
-          {t('actions.save')}
-        </Button>
+        <Button type="submit">{t('v2.ui.button.confirm')}</Button>
       </div>
     </form>
   );

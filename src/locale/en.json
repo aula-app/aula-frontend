@@ -11,7 +11,9 @@
       "sleeping": "Sleeping owl illustration"
     },
     "form": {
-      "required": "This field is required",
+      "code": {
+        "label": "Instance code"
+      },
       "email": {
         "label": "Email"
       },
@@ -22,36 +24,81 @@
         "label": "Password",
         "show": "Show password",
         "hide": "Hide password"
+      },
+      "passwordConfirm": {
+        "label": "Confirm password"
+      },
+      "passwordNew": {
+        "label": "New password",
+        "helper": "Your password must be at least {{var}} characters long.",
+        "hint": "A good idea is to come up with a sentence that doesn't really mean anything, but you can still remember it easily."
+      },
+      "passwordTemporary": {
+        "label": "Temporary password",
+        "helper": "Enter the temporary password provided by your school."
+      },
+      "validation": {
+        "email": "Please enter a valid email address",
+        "minLength": "Must be at least {{var}} characters",
+        "maxLength": "Must be less than {{var}} characters",
+        "required": "This field is required",
+        "passwordMatch": "Passwords must match"
       }
     },
-    "pages": {
+    "page": {
       "about": {
         "title": "About Aula"
       },
       "code": {
-        "button": "Instance code: {{var}}"
+        "button": "Instance code: {{var}}",
+        "title": "Enter instance code",
+        "hint": "Please enter the instance code provided by your school to access the platform."
       },
       "login": {
         "button": "Sign in",
         "title": "Welcome to {{var}}"
       },
+      "notFound": {
+        "title": "Page not found",
+        "hint": "The page you are looking for doesn't exist or has been moved. Please check the URL or return to the homepage."
+      },
+      "offline": {
+        "title": "School is currently closed",
+        "hint": "The school is currently closed. Please check back later or contact your administrator for more information."
+      },
       "recovery": {
         "button": "Send recovery email",
         "link": "Forgot your password?",
         "title": "Password recovery"
+      },
+      "passwordReset": {
+        "title": "Reset your password"
+      },
+      "passwordSet": {
+        "error": "Invalid or expired link",
+        "title": "Set your password",
+        "hint": "This link is invalid. Please make sure you copied the entire link from your email and try again."
       }
     },
     "ui": {
-      "toggle": "Toggle {{var}}",
-      "lightMode": {
-        "label": "Light mode"
+      "button": {
+        "cancel": "Cancel",
+        "clear": "Clear",
+        "close": "Close",
+        "confirm": "Confirm",
+        "submit": "Submit"
       },
       "darkMode": {
         "label": "Dark mode"
       },
       "language": {
-        "label": "Toggle language"
-      }
+        "label": "Language",
+        "button": "Switch to {{var}}"
+      },
+      "lightMode": {
+        "label": "Light mode"
+      },
+      "toggle": "Toggle {{var}}"
     }
   },
   "actions": {

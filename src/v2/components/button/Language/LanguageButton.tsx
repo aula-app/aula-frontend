@@ -19,7 +19,9 @@ const LanguageButton = () => {
       className="bg-paper text-text-primary"
       startIcon={<Icon type="language" />}
       onClick={cycleLanguage}
-      aria-label={t('actions.switchLanguage', { var: new Intl.DisplayNames([i18n.language], { type: 'language' }).of(nextLanguage) })}
+      hint={t('v2.ui.language.button', {
+        var: new Intl.DisplayNames([i18n.language], { type: 'language' }).of(nextLanguage),
+      })}
     >
       {nextLanguage.toUpperCase()}
     </Chip>

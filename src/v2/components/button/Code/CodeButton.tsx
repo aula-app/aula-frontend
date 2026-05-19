@@ -19,13 +19,8 @@ const CodeButton = () => {
   }
 
   return (
-    <Chip
-      data-testid="current-instance-code"
-      aria-label={t('auth.login.instanceCode', { var: code })}
-      endIcon={<Icon type="close" size="1em" />}
-      onClick={resetCode}
-    >
-      {`${t('instance.chip')}: ${code}`}
+    <Chip data-testid="current-instance-code" endIcon={<Icon type="close" size="1em" />} onClick={resetCode}>
+      {`${t('v2.page.code.button', { var: code })}`}
     </Chip>
   );
 };

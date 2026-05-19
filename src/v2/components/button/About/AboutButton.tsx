@@ -6,7 +6,7 @@ const DarkModeButton = () => {
   const { t } = useTranslation();
 
   return (
-    <IconButton to="/about" hint={t('v2.pages.about.title')}>
+    <IconButton to="/about" hint={t('v2.page.about.title')}>
       <Icon type="info" />
     </IconButton>
   );
