@@ -13,7 +13,7 @@ interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
-  ({ dense = false, disabled = false, hint, to, children, ...restOfProps }, ref) => {
+  ({ dense = false, disabled = false, hint, to, children, className, ...restOfProps }, ref) => {
     const { createRipple, RipplesContainer } = useRipple();
 
     const classes = twMerge(
@@ -22,7 +22,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       'hover:bg-shadow focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-text-secondary active:bg-black/[0.12] dark:active:bg-white/[0.12]',
       'disabled:cursor-not-allowed disabled:opacity-40 disabled:text-gray-400',
       dense ? 'p-0' : 'p-2',
-      restOfProps.className
+      className
     );
 
     const component = to ? (

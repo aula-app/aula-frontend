@@ -1,15 +1,13 @@
+import PublicRoutes from '@/routes/PublicRoutes';
+import AboutButton from '@/v2/components/button/About';
 import CodeButton from '@/v2/components/button/Code';
+import DarkModeButton from '@/v2/components/button/DarkMode';
 import LanguageButton from '@/v2/components/button/Language';
+import Link from '@/v2/components/navigation/Link';
 import AulaHero from '@/v2/components/svg/Aula_Hero.svg?react';
 import { FunctionComponent, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
-import PublicRoutes from '@/routes/PublicRoutes';
-import Link from '@/v2/components/navigation/Link';
-import DarkModeButton from '@/v2/components/button/DarkMode';
-import IconButton from '@/v2/components/button/IconButton';
-import Icon from '@/v2/components/ui/Icon';
-import AboutButton from '@/v2/components/button/About';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
   const { t } = useTranslation();
