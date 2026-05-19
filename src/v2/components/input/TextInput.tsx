@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
+  label: string;
   error?: string;
   helperText?: string | ReactNode;
   endAdornment?: ReactNode;
@@ -30,6 +30,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       <IconButton
         type="button"
         aria-label={showPassword ? t('v2.form.password.hide') : t('v2.form.password.show')}
+        aria-pressed={showPassword}
         className="text-text-secondary"
         onClick={() => setShowPassword((v) => !v)}
       >

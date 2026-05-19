@@ -2,13 +2,13 @@ import Icon from '@/components/new/Icon';
 import Tooltip from '@/v2/components/ui/Tooltip';
 import { ReactNode } from 'react';
 
-interface HintProps {
-  content: ReactNode;
-}
+type HintProps =
+  | { content: string; label?: string }
+  | { content: ReactNode; label: string };
 
-const Hint = ({ content }: HintProps) => (
+const Hint = ({ content, label }: HintProps) => (
   <Tooltip content={content}>
-    <Icon type="about" size="1.25em" aria-label={typeof content === 'string' ? content : undefined} />
+    <Icon type="about" size="1.25em" aria-label={label ?? (content as string)} />
   </Tooltip>
 );
 

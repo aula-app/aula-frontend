@@ -56,7 +56,7 @@ const InstanceCodeView = () => {
           <Link to="/" className="text-sm text-text-secondary mx-2">
             {t('v2.ui.button.cancel')}
           </Link>
-          <Button type="submit" disabled={isLoading} aria-label={t('v2.ui.button.submit')}>
+          <Button type="submit" disabled={isLoading}>
             {t('v2.ui.button.submit')}
           </Button>
         </div>

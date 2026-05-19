@@ -33,6 +33,7 @@ const Tooltip: React.FC<TooltipProps> = ({
       onPointerEnter={show}
       onPointerLeave={(e) => e.pointerType !== 'touch' && hide()}
       onKeyDown={(e) => e.key === 'Escape' && hide()}
+      aria-describedby={tooltipId}
     >
       <div
         id={tooltipId}

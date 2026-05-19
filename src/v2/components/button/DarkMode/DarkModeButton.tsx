@@ -9,13 +9,12 @@ const DarkModeButton = () => {
   const [state] = useAppStore();
   const onSwitchDarkMode = useEventSwitchDarkMode();
 
+  const label = t(`v2.ui.toggle`, {
+    var: state.darkMode ? t('v2.ui.lightMode.label').toLowerCase() : t('v2.ui.darkMode.label').toLowerCase(),
+  });
+
   return (
-    <IconButton
-      onClick={onSwitchDarkMode}
-      hint={t(`v2.ui.toggle`, {
-        var: state.darkMode ? t('v2.ui.lightMode.label').toLowerCase() : t('v2.ui.darkMode.label').toLowerCase(),
-      })}
-    >
+    <IconButton onClick={onSwitchDarkMode} aria-label={label} hint={label}>
       <Icon type={state.darkMode ? 'day' : 'night'} />
     </IconButton>
   );

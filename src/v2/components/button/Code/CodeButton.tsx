@@ -12,18 +12,14 @@ const CodeButton = () => {
 
   if (!code) {
     return (
-      <Chip role="status" aria-label={t('auth.login.reset_code')} data-testid="no-instance-code">
+      <Chip aria-label={t('auth.login.reset_code')} data-testid="no-instance-code">
         {t('auth.login.reset_code')}
       </Chip>
     );
   }
 
   return (
-    <Chip
-      data-testid="current-instance-code"
-      endIcon={<Icon type="close" size="1em" aria-hidden="true" />}
-      onClick={resetCode}
-    >
+    <Chip data-testid="current-instance-code" endIcon={<Icon type="close" size="1em" />} onClick={resetCode}>
       {`${t('v2.page.code.button', { var: code })}`}
     </Chip>
   );

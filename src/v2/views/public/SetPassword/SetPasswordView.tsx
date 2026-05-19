@@ -54,7 +54,7 @@ const SetPasswordView = () => {
         >
           <Hint content={t('v2.page.passwordSet.hint')} />
           <span className="flex-1">{t('v2.page.passwordSet.error')}</span>
-          <IconButton hint={t('v2.ui.button.close')} onClick={() => setValid(true)} className="text-error" dense>
+          <IconButton aria-label={t('v2.ui.button.close')} hint={t('v2.ui.button.close')} onClick={() => setValid(true)} className="text-error" dense>
             <Icon type="close" />
           </IconButton>
         </div>

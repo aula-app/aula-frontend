@@ -77,8 +77,7 @@ export type ICON_TYPE = keyof typeof ICONS;
 interface Props extends React.SVGAttributes<SVGElement> {
   type: ICON_TYPE;
   size?: string | number;
-  isDecorative?: boolean;
-  'aria-label'?: string;
+  // Provide aria-label to make the icon semantic; omit to treat it as decorative
 }
 
 /**
@@ -87,18 +86,18 @@ interface Props extends React.SVGAttributes<SVGElement> {
  * @component Icon
  */
 const Icon: React.FC<Props> = React.forwardRef<SVGSVGElement, Props>(
-  ({ type, size = '1em', className, isDecorative = true, 'aria-label': ariaLabel, ...restOfProps }, ref) => {
+  ({ type, size = '1em', className, 'aria-label': ariaLabel, ...restOfProps }, ref) => {
     if (!(type in ICONS)) return null;
 
-    const isAccessibleIcon = !isDecorative && !restOfProps['aria-hidden'];
+    const semantic = !!ariaLabel;
 
     return React.createElement(ICONS[type], {
       ref,
       size,
       className: `app-icon ${className ?? ''}`,
-      role: isAccessibleIcon ? 'img' : undefined,
-      'aria-hidden': isDecorative ? 'true' : undefined,
-      'aria-label': isAccessibleIcon ? (ariaLabel ?? `${type} icon`) : undefined,
+      role: semantic ? 'img' : undefined,
+      'aria-hidden': semantic ? undefined : 'true',
+      'aria-label': ariaLabel,
       ...restOfProps,
     } as IconBaseProps);
   }
