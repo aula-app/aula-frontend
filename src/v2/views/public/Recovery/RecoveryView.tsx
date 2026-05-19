@@ -6,14 +6,19 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { useRecoverySubmit } from './useRecoverySubmit';
 import Link from '@/v2/components/navigation/Link';
+import { useMemo } from 'react';
 
 const RecoveryPasswordView = () => {
   const { t } = useTranslation();
   const { onSubmit, isLoading } = useRecoverySubmit();
 
-  const schema = yup.object({
-    email: yup.string().email(t('forms.validation.email')).required(t('forms.validation.required')),
-  });
+  const schema = useMemo(
+    () =>
+      yup.object({
+        email: yup.string().email(t('forms.validation.email')).required(t('forms.validation.required')),
+      }),
+    []
+  );
 
   const {
     register,
@@ -26,25 +31,25 @@ const RecoveryPasswordView = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex-1 flex flex-col gap-4">
       <h1>{t('auth.forgotPassword.recovery')}</h1>
-      <fieldset className="rounded-box flex flex-col">
+      <div className="rounded-box flex flex-col">
         <TextInput
           required
           disabled={isLoading}
-          label="Email"
+          label={t('settings.columns.email')}
           type="email"
           autoComplete="email"
           error={errors.email?.message}
           {...register('email')}
         />
         <div className="flex items-center justify-between">
-          <Link to="/" className="text-sm text-error">
+          <Link to="/" className="text-sm text-text-secondary mx-2">
             {t('actions.cancel')}
           </Link>
-          <Button type="submit" disabled={isLoading} aria-label={t('auth.forgotPassword.recover')}>
+          <Button type="submit" disabled={isLoading}>
             {t('auth.forgotPassword.recover')}
           </Button>
         </div>
-      </fieldset>
+      </div>
     </form>
   );
 };

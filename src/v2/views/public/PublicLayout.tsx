@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import PublicRoutes from '@/routes/PublicRoutes';
 import Link from '@/v2/components/navigation/Link';
+import SkipLink from '@/v2/components/navigation/SkipLink';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
   const { t } = useTranslation();
@@ -13,12 +14,13 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
 
   return (
     <div className="w-full h-full max-w-sm mx-auto px-8 py-6 flex flex-col gap-6">
+      <SkipLink />
       <header className="flex-2 flex flex-col gap-4">
-        <nav className="flex items-center">
+        <nav className="flex items-center" aria-label={t('ui.navigation.mainMenu')}>
           <div className="flex-1">
             {location.pathname !== '/' && (
               <Link to="/" className="text-sm text-text-secondary">
-                &lt; {t('auth.login.button')}
+                <span aria-hidden="true">&lt; </span> {t('auth.login.button')}
               </Link>
             )}
           </div>
@@ -33,7 +35,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
           <AulaHero aria-label={t('app.name.logo')} role="img" className="text-text-primary" />
         </div>
       </header>
-      <main className="flex-2 flex">
+      <main id="main-content" className="flex-2 flex">
         <PublicRoutes />
       </main>
       <footer className="flex-1"></footer>
