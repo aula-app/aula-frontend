@@ -6,7 +6,7 @@ interface TooltipProps {
   content: ReactNode;
   className?: string;
   label?: string;
-  position?: 'top' | 'bottom' | 'left' | 'right'; // Future enhancement for positioning
+  position?: 'top' | 'bottom' | 'left' | 'right';
   wrapperClassName?: string;
 }
 

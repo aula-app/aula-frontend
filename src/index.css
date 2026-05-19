@@ -92,6 +92,15 @@ h1, h2, h3, h4, h5, h6 {
   clip-path: polygon(20% 0%, 0% 100%, 100% 0%)
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 .printOnly { display: none; }
 
 .editor-toolbar {
