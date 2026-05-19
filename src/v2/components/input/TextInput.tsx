@@ -27,7 +27,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     const trailingContent = isPassword ? (
       <IconButton
         type="button"
-        tabIndex={-1}
+        aria-label={showPassword ? 'Hide password' : 'Show password'}
         title={showPassword ? 'Hide password' : 'Show password'}
         className="text-text-secondary"
         onClick={() => setShowPassword((v) => !v)}
