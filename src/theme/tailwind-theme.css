@@ -104,8 +104,8 @@
 
 /* ========== DARK MODE (activated by .dark class on html) ========== */
 .dark {
-  --color-primary: hsl(134, 72%, 31%);
-  --color-secondary: hsl(0, 0%, 36%);
+  --color-primary: hsl(134, 72%, 40%);
+  --color-secondary: hsl(0, 0%, 95%);
   --color-error: hsl(0, 84%, 50%);
   --color-warning: hsl(45, 100%, 29%);
   --color-info: hsl(204, 82%, 41%);
@@ -190,10 +190,10 @@
   --color-neutral: hsl(45, 100%, 29%);
   --color-requests: hsl(0, 0%, 36%);
 
-  --color-text-primary: hsl(0, 0%, 100%);
-  --color-text-secondary: hsl(0, 0%, 65%);
-  --color-background: hsl(200, 19%, 20%);
-  --color-paper: hsl(200, 19%, 25%);
+  --color-text-primary: hsl(206, 100%, 90%);
+  --color-text-secondary: hsl(0, 0%, 95%);
+  --color-background: hsl(206, 25%, 20%);
+  --color-paper: hsl(206, 25%, 20%);
 }
 
 /* ========== TAILWIND THEME (references the CSS variables above) ========== */

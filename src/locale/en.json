@@ -78,7 +78,7 @@
     "messages": {
       "agree": "I agree to the Terms of Use and Privacy Policy",
       "email": "Check your email for further instructions",
-      "welcome": "Welcome!"
+      "welcome": "Welcome to Aula!"
     },
     "oauth": {
       "arialabel": "OAuth authentication",
@@ -92,7 +92,7 @@
       "guidelines": {
         "tempPassword": "Enter the temporary password provided by your school.",
         "minLength": "The password must have at least {{var}} characters.",
-        "hint": "Come up with a sentence that doesn't really mean anything, but you can still remember it easily."
+        "hint": "A good idea is to come up with a sentence that doesn't really mean anything, but you can still remember it easily."
       },
       "label": "Password",
       "newPassword": "New password",

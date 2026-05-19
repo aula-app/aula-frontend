@@ -1,5 +1,4 @@
 import { localStorageGet } from '@/utils';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   ComponentType,
   createContext,
@@ -56,9 +55,8 @@ const AppContext = createContext<AppContextReturningType>([INITIAL_APP_STATE, ()
  * </AppStoreProvider>
  */
 const AppStoreProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const previousDarkMode = Boolean(localStorageGet('darkMode'));
-  const darkMode = previousDarkMode !== undefined ? previousDarkMode : prefersDarkMode;
+  const savedDarkMode = localStorage.getItem('darkMode');
+  const darkMode = savedDarkMode !== null ? savedDarkMode === 'true' : window.matchMedia('(prefers-color-scheme: dark)').matches;
   const token = localStorageGet('token');
   const tokenExists = Boolean(token !== undefined);
 

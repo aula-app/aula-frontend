@@ -92,7 +92,7 @@
       "guidelines": {
         "tempPassword": "Gib das temporäre Passwort ein, das von deiner Schule bereitgestellt wurde.",
         "minLength": "Das Passwort muss mindestens {{var}} Zeichen lang sein.",
-        "hint": "Überleg dir einen Satz, der nichts aussagen muss, den du dir aber leicht merken kannst. Füge die Wörter zusammen, und schon hast du ein starkes Passwort."
+        "hint": "Eine gute Idee ist es, sich einen Satz auszudenken, der nichts aussagen muss, den du dir aber leicht merken kannst. Füge die Wörter zusammen, und schon hast du ein starkes Passwort."
       },
       "label": "Passwort",
       "newPassword": "Neues Passwort",

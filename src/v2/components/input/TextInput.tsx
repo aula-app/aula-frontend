@@ -96,7 +96,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             error || helperText ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
           }`}
         >
-          <div className="overflow-hidden">
+          <div>
             {error ? (
               <span id={errorId} role="alert" className="block pt-1 px-1 text-xs text-error">
                 <Icon type="alert" className="inline-block mr-1 mb-0.5" />

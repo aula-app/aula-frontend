@@ -1,6 +1,6 @@
-import { getRuntimeConfig } from '@/config';
 import CodeButton from '@/v2/components/button/Code';
 import LanguageButton from '@/v2/components/button/Language';
+import AulaHero from '@/v2/components/svg/Aula_Hero.svg?react';
 import { FunctionComponent, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
@@ -12,8 +12,8 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
   const location = useLocation();
 
   return (
-    <div className="w-full h-full max-w-sm mx-auto px-8 py-6 flex flex-col">
-      <header className="flex-2 flex flex-col">
+    <div className="w-full h-full max-w-sm mx-auto px-8 py-6 flex flex-col gap-6">
+      <header className="flex-2 flex flex-col gap-4">
         <nav className="flex items-center">
           <div className="flex-1">
             {location.pathname !== '/' && (
@@ -30,7 +30,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
           </div>
         </nav>
         <div className="flex-1 flex justify-center">
-          <img src={`${getRuntimeConfig().BASENAME}img/Aula_Hero.svg`} alt={t('app.name.logo')} role="img" />
+          <AulaHero aria-label={t('app.name.logo')} role="img" className="text-text-primary" />
         </div>
       </header>
       <main className="flex-2 flex">

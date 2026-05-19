@@ -21,7 +21,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           'disabled:cursor-not-allowed disabled:opacity-50',
           outlined
             ? `border border-${color} text-${color} hover:bg-${color}/10 active:bg-${color}/20`
-            : `bg-${color} text-paper font-bold hover:brightness-90 active:brightness-75 focus-visible:outline-${color}`,
+            : `bg-${color} text-text-secondary font-bold hover:brightness-90 active:brightness-75 focus-visible:outline-${color}`,
           className
         )}
         onMouseDown={(e) => {
