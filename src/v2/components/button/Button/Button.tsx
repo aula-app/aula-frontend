@@ -1,11 +1,15 @@
-import { ButtonHTMLAttributes, forwardRef } from 'react';
+import { ButtonHTMLAttributes, ReactNode, forwardRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useRipple } from '@/hooks/useRipple';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type BaseButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
   outlined?: boolean;
   color?: 'primary' | 'secondary' | 'error';
-}
+};
+
+// Require aria-label when no children are provided (e.g. icon-only buttons)
+type ButtonProps = BaseButtonProps &
+  ({ children: ReactNode; 'aria-label'?: string } | { children?: never; 'aria-label': string });
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, children, outlined = false, color = 'primary', onMouseDown, ...props }, ref) => {

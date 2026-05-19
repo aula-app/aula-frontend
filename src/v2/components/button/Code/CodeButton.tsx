@@ -19,7 +19,11 @@ const CodeButton = () => {
   }
 
   return (
-    <Chip data-testid="current-instance-code" endIcon={<Icon type="close" size="1em" />} onClick={resetCode}>
+    <Chip
+      data-testid="current-instance-code"
+      endIcon={<Icon type="close" size="1em" aria-hidden="true" />}
+      onClick={resetCode}
+    >
       {`${t('v2.page.code.button', { var: code })}`}
     </Chip>
   );

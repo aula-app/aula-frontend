@@ -2,33 +2,32 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useTooltipPlacement } from './useTooltipPlacement';
 
-type TooltipProps = {
+type TooltipProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'content'> & {
   content: React.ReactNode;
   children: React.ReactNode;
-  className?: string;
   wrapperClassName?: string;
-  label?: string;
 };
 
-const Tooltip: React.FC<TooltipProps> = ({ children, content, className = '', wrapperClassName = '', label }) => {
-  const wrapper = React.useRef<HTMLButtonElement>(null);
-  const tooltipId = React.useId();
+const Tooltip: React.FC<TooltipProps> = ({
+  children,
+  content,
+  wrapperClassName = '',
+  className,
+  id,
+  ...restOfProps
+}) => {
+  const wrapper = React.useRef<HTMLDivElement>(null);
+  const generatedId = React.useId();
+  const tooltipId = id ?? generatedId;
   const { placementClass } = useTooltipPlacement(wrapper);
   const [visible, setVisible] = React.useState(false);
   const show = () => setVisible(true);
   const hide = () => setVisible(false);
 
   return (
-    <button
+    <div
       ref={wrapper}
-      type="button"
-      className={twMerge(
-        'relative rounded-3xl focus-visible:outline-1 flex items-center justify-center focus-visible:outline-primary',
-        wrapperClassName
-      )}
-      aria-label={label}
-      aria-expanded={visible}
-      aria-describedby={visible ? tooltipId : undefined}
+      className={twMerge('relative flex items-center justify-center', wrapperClassName)}
       onFocus={show}
       onBlur={hide}
       onPointerEnter={show}
@@ -45,11 +44,12 @@ const Tooltip: React.FC<TooltipProps> = ({ children, content, className = '', wr
           ${visible ? 'opacity-100 translate-0' : 'opacity-0 pointer-events-none'}`,
           className
         )}
+        {...restOfProps}
       >
         {content}
       </div>
       {children}
-    </button>
+    </div>
   );
 };
 

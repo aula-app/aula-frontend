@@ -4,13 +4,14 @@ import { useRipple } from '@/hooks/useRipple';
 import { twMerge } from 'tailwind-merge';
 import Tooltip from '@/v2/components/ui/Tooltip';
 
-interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type IconButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'aria-label'> & {
   children: ReactNode;
-  hint?: string;
+  'aria-label': string; // accessible name — always required
+  hint?: string; // tooltip description only, not used as accessible name
   disabled?: boolean;
   to?: string;
   dense?: boolean;
-}
+};
 
 const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ dense = false, disabled = false, hint, to, children, className, ...restOfProps }, ref) => {
@@ -26,7 +27,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     );
 
     const component = to ? (
-      <Link to={to} className={classes} aria-label={hint} onMouseDown={createRipple} {...(restOfProps as any)}>
+      <Link to={to} className={classes} onMouseDown={createRipple} {...(restOfProps as any)}>
         {children}
         <RipplesContainer />
       </Link>
@@ -34,7 +35,6 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       <button
         ref={ref}
         className={classes}
-        aria-label={hint}
         aria-disabled={disabled}
         disabled={disabled}
         onMouseDown={createRipple}

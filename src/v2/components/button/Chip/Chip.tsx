@@ -3,13 +3,16 @@ import { twMerge } from 'tailwind-merge';
 import { useRipple } from '@/hooks/useRipple';
 import Tooltip from '@/v2/components/ui/Tooltip';
 
-interface ChipProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
+type BaseChipProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
   condensed?: boolean;
   startIcon?: ReactNode;
   hint?: string;
   endIcon?: ReactNode;
-}
+};
+
+// Require aria-label when no children are provided (e.g. icon-only chips)
+type ChipProps = BaseChipProps &
+  ({ children: ReactNode; 'aria-label'?: string } | { children?: never; 'aria-label': string });
 
 const Chip = ({
   children,

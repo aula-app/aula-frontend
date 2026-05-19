@@ -33,7 +33,7 @@ const cornerClass: Record<YZone, Record<XZone, string>> = {
   middle: { left: '', right: '', center: '' },
 };
 
-export function useTooltipPlacement(ref: React.RefObject<HTMLButtonElement>) {
+export function useTooltipPlacement(ref: React.RefObject<HTMLElement>) {
   const position = getZones(ref.current?.getBoundingClientRect() ?? new DOMRect());
 
   const horizontal = position.x;
