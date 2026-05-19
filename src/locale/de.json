@@ -163,6 +163,7 @@
     "offline": "Der Zugang zu dieser Schule ist gesperrt. Bitte versuchen Sie es später wieder",
     "schoolClosed": "Die Schule ist derzeit geschlossen. Bitte versuchen Sie es später wieder.",
     "schoolClosedImage": "Schlafende Charakterillustration für Seite 'Schule geschlossen'",
+    "schoolClosedHint": "Bitte versuchen Sie es später erneut oder kontaktieren Sie Ihren Administrator für weitere Informationen.",
     "timeout": "Zeitüberschreitung der Anfrage",
     "unauthorized": "Diese Seite erfordert eine Authentifizierung"
   },

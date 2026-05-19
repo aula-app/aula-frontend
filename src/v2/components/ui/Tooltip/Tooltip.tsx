@@ -6,16 +6,35 @@ interface TooltipProps {
   content: ReactNode;
   className?: string;
   label?: string;
+  position?: 'top' | 'bottom' | 'left' | 'right'; // Future enhancement for positioning
+  wrapperClassName?: string;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ children, content, className = '', label }) => {
+const Tooltip: React.FC<TooltipProps> = ({
+  children,
+  content,
+  className = '',
+  wrapperClassName = '',
+  label,
+  position = 'right',
+}) => {
   const [visible, setVisible] = React.useState(false);
   const tooltipId = React.useId();
+
+  const positionClasses = {
+    top: 'bottom-[calc(100%+0.25rem)] left-0 translate-y-3',
+    bottom: 'top-[calc(100%+0.25rem)] left-0 -translate-y-3',
+    left: 'right-[calc(100%+0.25rem)] top-0 -translate-x-3',
+    right: 'left-[calc(100%+0.25rem)] top-0 translate-x-3',
+  };
 
   return (
     <button
       type="button"
-      className="relative rounded-3xl focus-visible:outline-1 focus-visible:outline-primary"
+      className={twMerge(
+        'relative rounded-3xl focus-visible:outline-1 focus-visible:outline-primary',
+        wrapperClassName
+      )}
       aria-label={label}
       aria-expanded={visible}
       aria-describedby={visible ? tooltipId : undefined}
@@ -30,7 +49,9 @@ const Tooltip: React.FC<TooltipProps> = ({ children, content, className = '', la
         role="tooltip"
         aria-hidden={!visible}
         className={twMerge(
-          `absolute z-10 px-4 pt-1.5 pb-2 rounded-3xl rounded-tl-none left-[calc(100%+0.25rem)] w-max max-w-[min(75vw,18rem)] bg-background text-left transition-all duration-200 ${visible ? 'opacity-100' : 'opacity-0 transform translate-x-3 pointer-events-none'}`,
+          `absolute z-10 px-4 pt-1.5 pb-2 rounded-3xl rounded-tl-none w-max max-w-[min(75vw,18rem)] bg-background text-left transition-all duration-200 transform 
+          ${positionClasses[position]}
+          ${visible ? 'opacity-100 translate-0' : 'opacity-0 pointer-events-none'}`,
           className
         )}
       >

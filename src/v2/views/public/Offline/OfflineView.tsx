@@ -2,7 +2,7 @@ import Icon from '@/components/new/Icon';
 import Tooltip from '@/v2/components/ui/Tooltip';
 import { useTranslation } from 'react-i18next';
 
-const PublicNotFoundView = () => {
+const OfflineView = () => {
   const { t } = useTranslation();
 
   return (
@@ -16,15 +16,15 @@ const PublicNotFoundView = () => {
       />
       <Tooltip
         position="bottom"
-        content={t('errors.unauthorized')}
-        label={t('errors.unauthorized')}
+        content={t('errors.schoolClosedHint')}
+        label={t('errors.schoolClosedHint')}
         wrapperClassName="flex items-center gap-3 text-error"
       >
         <Icon type="alert" size="24" />
-        {t('errors.404')}
+        {t('errors.schoolClosed')}
       </Tooltip>
     </div>
   );
 };
 
-export default PublicNotFoundView;
+export default OfflineView;

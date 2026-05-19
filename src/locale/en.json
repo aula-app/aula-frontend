@@ -138,6 +138,7 @@
     "headline": "Delete selected {{var}}"
   },
   "errors": {
+    "404": "Page not found",
     "boundary": "Something went wrong",
     "boundaryDetails": "Error Details",
     "boundaryMessage": "We apologize for the inconvenience. Please try refreshing the page.",
@@ -161,10 +162,11 @@
     "notFound": "There are no news here",
     "notFoundImage": "Sleeping character illustration for not found page",
     "offline": "The access to this school is suspended. Please try again later",
-    "schoolClosed": "The school is currently closed. Please try again later.",
+    "schoolClosed": "The school is currently closed.",
     "schoolClosedImage": "Sleeping character illustration for school closed page",
+    "schoolClosedHint": "Please check back later or contact your administrator for more information.",
     "timeout": "The request timed out",
-    "unauthorized": "This page requires authentication"
+    "unauthorized": "This page may require authentication"
   },
   "forms": {
     "csv": {

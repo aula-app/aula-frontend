@@ -2,11 +2,12 @@ import { useInstanceGuard } from '@/hooks/useInstanceGuard';
 import InstanceCodeView from '@/v2/views/public/Code';
 import Login from '@/v2/views/public/Login';
 import NotFound from '@/v2/views/public/NotFound';
+import OfflineView from '@/v2/views/public/Offline';
 import Recovery from '@/v2/views/public/Recovery/RecoveryView';
 import ResetPasswordView from '@/v2/views/public/ResetPassword';
 import SetPasswordView from '@/v2/views/public/SetPassword';
 import { OAuthLogin } from '@/views/Public';
-import PublicOfflineView from '@/views/Public/PublicOfflineView';
+
 import { Route, Routes } from 'react-router-dom';
 
 /**
@@ -20,7 +21,7 @@ const PublicRoutes = () => {
       <Route path="/" element={<Login />} />
       <Route path="/code" element={<InstanceCodeView />} />
       <Route path="login/*" element={<Login />} />
-      <Route path="offline" element={<PublicOfflineView />} />
+      <Route path="offline" element={<OfflineView />} />
       <Route path="oauth-login/:jwt_token" element={<OAuthLogin />} />
       <Route path="password/" element={<ResetPasswordView />} />
       <Route path="password/:key" element={<SetPasswordView />} />
