@@ -58,7 +58,7 @@ const ResetPasswordView = () => {
   ];
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate method="POST" className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate method="POST" className="flex flex-col gap-4 w-full">
       <h1 className="text-2xl font-semibold">{t('auth.password.change')}</h1>
 
       {error && (
