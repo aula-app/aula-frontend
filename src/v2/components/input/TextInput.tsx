@@ -1,6 +1,7 @@
 import Icon from '@/components/new/Icon';
 import IconButton from '@/v2/components/button/IconButton';
 import { InputHTMLAttributes, ReactNode, forwardRef, useId, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -15,6 +16,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     { id, label, error, helperText, disabled = false, required = false, className, type, endAdornment, ...props },
     ref
   ) => {
+    const { t } = useTranslation();
     const generatedId = useId();
     const inputId = id || generatedId;
     const errorId = error ? `${inputId}-error` : undefined;
@@ -27,7 +29,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     const trailingContent = isPassword ? (
       <IconButton
         type="button"
-        aria-label={showPassword ? 'Hide password' : 'Show password'}
+        aria-label={showPassword ? t('v2.form.password.hide') : t('v2.form.password.show')}
         className="text-text-secondary"
         onClick={() => setShowPassword((v) => !v)}
       >
@@ -83,7 +85,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                   <span aria-hidden="true" className="ml-0.5">
                     *
                   </span>
-                  <span className="sr-only">(required)</span>
+                  <span className="sr-only">{t('v2.form.required')}</span>
                 </>
               )}
             </label>

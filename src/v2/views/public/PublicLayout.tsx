@@ -7,6 +7,7 @@ import { useLocation } from 'react-router';
 import PublicRoutes from '@/routes/PublicRoutes';
 import Link from '@/v2/components/navigation/Link';
 import SkipLink from '@/v2/components/navigation/SkipLink';
+import DarkModeButton from '@/v2/components/button/DarkMode';
 
 const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
   const { t } = useTranslation();
@@ -27,9 +28,6 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
           <div className="flex-2 flex justify-center">
             <CodeButton />
           </div>
-          <div className="flex-1 flex justify-end">
-            <LanguageButton />
-          </div>
         </nav>
         <div className="flex-1 flex justify-center">
           <AulaHero aria-label={t('app.name.logo')} role="img" className="text-text-primary" />
@@ -38,7 +36,10 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
       <main id="main-content" className="flex-2 flex">
         <PublicRoutes />
       </main>
-      <footer className="flex-1"></footer>
+      <footer className="flex-1 flex items-end justify-between">
+        <DarkModeButton />
+        <LanguageButton />
+      </footer>
     </div>
   );
 };

@@ -1,4 +1,44 @@
 {
+  "v2": {
+    "a11y": {
+      "label": {
+        "navigation": "Navigation menu",
+        "skipToContent": "Skip to main content"
+      }
+    },
+    "alt": {
+      "logo": "Aula: Education Platform Logo",
+      "sleeping": "Sleeping owl illustration"
+    },
+    "form": {
+      "required": "This field is required",
+      "email": {
+        "label": "Email"
+      },
+      "login": {
+        "label": "Username"
+      },
+      "password": {
+        "label": "Password",
+        "show": "Show password",
+        "hide": "Hide password"
+      }
+    },
+    "pages:": {
+      "code": {
+        "button": "Instance code: {{var}}"
+      },
+      "login": {
+        "button": "Sign in",
+        "title": "Welcome to {{var}}"
+      },
+      "recovery": {
+        "button": "Send recovery email",
+        "link": "Forgot your password?",
+        "title": "Password recovery"
+      }
+    }
+  },
   "actions": {
     "activate": "Activate {{var}}",
     "add": "New {{var}}",

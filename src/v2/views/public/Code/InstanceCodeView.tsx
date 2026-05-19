@@ -40,7 +40,7 @@ const InstanceCodeView = () => {
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex-1 flex flex-col gap-4">
       <h1>{t('auth.messages.welcome')}</h1>
 
-      <fieldset className="flex flex-col">
+      <div className="flex flex-col">
         <TextInput
           label={t('instance.label')}
           required
@@ -54,7 +54,7 @@ const InstanceCodeView = () => {
         <Button type="submit" disabled={isLoading} aria-label={t('auth.login.button')}>
           {t('auth.login.button')}
         </Button>
-      </fieldset>
+      </div>
     </form>
   );
 };
