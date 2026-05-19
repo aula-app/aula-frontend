@@ -52,7 +52,9 @@
       "code": {
         "button": "Instanzcode: {{var}}",
         "title": "Instanzcode eingeben",
-        "hint": "Bitte geben Sie den von Ihrer Schule bereitgestellten Instanzcode ein, um auf die Plattform zuzugreifen."
+        "hint": "Bitte geben Sie den von Ihrer Schule bereitgestellten Instanzcode ein, um auf die Plattform zuzugreifen.",
+        "chip": "Instanzcode: {{var}}",
+        "label": "Instanzcode festlegen"
       },
       "login": {
         "button": "Anmelden",
