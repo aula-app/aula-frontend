@@ -73,49 +73,43 @@ const ResetPasswordView = () => {
         </div>
       )}
 
-      <div className="flex flex-wrap">
-        <div className="flex-1 min-w-[min(100%,200px)]">
-          <TextInput
-            type="password"
-            label={t('auth.password.oldPassword')}
-            required
-            autoComplete="current-password"
-            error={errors.oldPassword?.message}
-            helperText={t('auth.password.guidelines.tempPassword')}
-            data-testid="oldPassword-input"
-            {...register('oldPassword')}
-          />
-        </div>
+      <div className="flex flex-col">
+        <TextInput
+          type="password"
+          label={t('auth.password.oldPassword')}
+          required
+          autoComplete="current-password"
+          error={errors.oldPassword?.message}
+          helperText={t('auth.password.guidelines.tempPassword')}
+          data-testid="oldPassword-input"
+          {...register('oldPassword')}
+        />
 
-        <div className="flex-1 min-w-[min(100%,200px)]">
-          <TextInput
-            type="password"
-            label={t('auth.password.newPassword')}
-            required
-            autoComplete="new-password"
-            error={errors.newPassword?.message}
-            helperText={
-              <span className="flex gap-1">
-                <Hint content={t('auth.password.guidelines.hint')} />
-                {t('auth.password.guidelines.minLength', { var: MIN_PASSWORD_LENGTH })}
-              </span>
-            }
-            data-testid="newPassword-input"
-            {...register('newPassword')}
-          />
-        </div>
+        <TextInput
+          type="password"
+          label={t('auth.password.newPassword')}
+          required
+          autoComplete="new-password"
+          error={errors.newPassword?.message}
+          helperText={
+            <span className="flex gap-1">
+              <Hint content={t('auth.password.guidelines.hint')} />
+              {t('auth.password.guidelines.minLength', { var: MIN_PASSWORD_LENGTH })}
+            </span>
+          }
+          data-testid="newPassword-input"
+          {...register('newPassword')}
+        />
 
-        <div className="flex-1 min-w-[min(100%,200px)]">
-          <TextInput
-            type="password"
-            label={t('auth.password.confirmPassword')}
-            required
-            autoComplete="new-password"
-            error={errors.confirmPassword?.message}
-            data-testid="confirmPassword-input"
-            {...register('confirmPassword')}
-          />
-        </div>
+        <TextInput
+          type="password"
+          label={t('auth.password.confirmPassword')}
+          required
+          autoComplete="new-password"
+          error={errors.confirmPassword?.message}
+          data-testid="confirmPassword-input"
+          {...register('confirmPassword')}
+        />
       </div>
 
       <div className="flex items-center justify-end gap-2">
@@ -125,7 +119,7 @@ const ResetPasswordView = () => {
         <Button type="button" outlined onClick={() => reset()} aria-label={t('actions.cancel')} color="secondary">
           {t('actions.clear.generic')}
         </Button>
-        <Button type="submit" data-testid="submit-new-password" aria-label={t('actions.save')}>
+        <Button type="submit" aria-label={t('actions.save')}>
           {t('actions.save')}
         </Button>
       </div>

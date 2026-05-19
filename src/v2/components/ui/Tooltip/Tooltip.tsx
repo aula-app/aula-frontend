@@ -30,7 +30,7 @@ const Tooltip: React.FC<TooltipProps> = ({ children, content, className = '', la
         role="tooltip"
         aria-hidden={!visible}
         className={twMerge(
-          `absolute z-10 px-3 py-1 rounded-3xl rounded-tl-none left-[calc(100%+0.25rem)] w-screen max-w-[75vw] bg-theme-grey-light text-left transition-all duration-200 ${visible ? 'opacity-100' : 'opacity-0 transform translate-x-3 pointer-events-none'}`,
+          `absolute z-10 px-4 pt-1.5 pb-2 rounded-3xl rounded-tl-none left-[calc(100%+0.25rem)] w-max max-w-[min(75vw,18rem)] bg-background text-left transition-all duration-200 ${visible ? 'opacity-100' : 'opacity-0 transform translate-x-3 pointer-events-none'}`,
           className
         )}
       >
