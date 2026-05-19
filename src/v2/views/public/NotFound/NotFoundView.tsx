@@ -8,7 +8,7 @@ const PublicNotFoundView = () => {
   return (
     <div className="flex-1 flex flex-col items-center justify-around">
       <img src="/img/Paula_schlafend.svg" alt={t('v2.alt.sleeping')} loading="lazy" className="w-32" />
-      <Tooltip content={t('v2.page.notFound.hint')} wrapperClassName="flex items-center gap-3 text-error">
+      <Tooltip content={t('v2.page.notFound.hint')} wrapperClassName="flex items-center gap-3 text-error" tapToShow>
         <Icon type="alert" size="24" />
         {t('v2.page.notFound.title')}
       </Tooltip>
