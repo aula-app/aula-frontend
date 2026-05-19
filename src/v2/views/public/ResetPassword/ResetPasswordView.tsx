@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { useResetPasswordSubmit } from './useResetPasswordSubmit';
 import Hint from '@/v2/components/ui/Hint';
+import Link from '@/v2/components/navigation/Link';
 
 const MIN_PASSWORD_LENGTH = 12;
 const MAX_PASSWORD_LENGTH = 64;
@@ -117,9 +118,12 @@ const ResetPasswordView = () => {
         </div>
       </div>
 
-      <div className="flex justify-end gap-2">
-        <Button type="button" outlined onClick={() => reset()} aria-label={t('actions.cancel')} color="secondary">
+      <div className="flex items-center justify-end gap-2">
+        <Link to="/" className="text-sm text-error mr-auto">
           {t('actions.cancel')}
+        </Link>
+        <Button type="button" outlined onClick={() => reset()} aria-label={t('actions.cancel')} color="secondary">
+          {t('actions.clear.generic')}
         </Button>
         <Button type="submit" data-testid="submit-new-password" aria-label={t('actions.save')}>
           {t('actions.save')}

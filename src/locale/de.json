@@ -9,6 +9,7 @@
     "cancel": "Abbrechen",
     "change": "{{var}} ändern",
     "clear": {
+      "generic": "Löschen",
       "filters": "Filter löschen"
     },
     "close": "Schließen",

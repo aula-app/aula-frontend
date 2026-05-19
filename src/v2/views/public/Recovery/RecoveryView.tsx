@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { useRecoverySubmit } from './useRecoverySubmit';
+import Link from '@/v2/components/navigation/Link';
 
 const RecoveryPasswordView = () => {
   const { t } = useTranslation();
@@ -35,14 +36,14 @@ const RecoveryPasswordView = () => {
           error={errors.email?.message}
           {...register('email')}
         />
-        <Button
-          type="submit"
-          disabled={isLoading}
-          aria-label={t('auth.forgotPassword.recover')}
-          className="bg-secondary"
-        >
-          {t('auth.forgotPassword.recover')}
-        </Button>
+        <div className="flex items-center justify-between">
+          <Link to="/" className="text-sm text-error">
+            {t('actions.cancel')}
+          </Link>
+          <Button type="submit" disabled={isLoading} aria-label={t('auth.forgotPassword.recover')}>
+            {t('auth.forgotPassword.recover')}
+          </Button>
+        </div>
       </fieldset>
     </form>
   );

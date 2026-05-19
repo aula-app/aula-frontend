@@ -62,7 +62,7 @@ const LoginView: React.FC = () => {
           {t('auth.login.button')}
         </Button>
         <Link
-          to="/v2/recovery"
+          to="/recovery"
           className="ml-auto px-2 text-sm text-text-secondary mt-4"
           aria-label={t('auth.forgotPassword.link')}
         >
