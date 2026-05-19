@@ -17,7 +17,7 @@ const Chip = ({ children, className, condensed = false, startIcon, endIcon, onMo
         'relative overflow-hidden inline-flex items-center justify-center whitespace-nowrap',
         condensed ? 'p-1 px-2' : 'p-1 px-3',
         'text-sm rounded-full font-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary',
-        className ?? 'bg-theme-grey-light text-text-secondary',
+        className ?? 'bg-background text-text-secondary',
       ]
         .filter(Boolean)
         .join(' ')}

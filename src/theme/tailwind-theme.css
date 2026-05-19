@@ -98,8 +98,8 @@
 
   --color-text-primary: hsl(236.17, 42%, 15%);
   --color-text-secondary: hsl(0, 0%, 25%);
-  --color-background: #FFFFFF;
-  --color-paper: #FFFFFF;
+  --color-background: hsl(0, 0%, 90%);
+  --color-paper: hsl(0, 0%, 100%);
 }
 
 /* ========== DARK MODE (activated by .dark class on html) ========== */
@@ -190,9 +190,9 @@
   --color-neutral: hsl(45, 100%, 29%);
   --color-requests: hsl(0, 0%, 36%);
 
-  --color-text-primary: hsl(206, 100%, 90%);
-  --color-text-secondary: hsl(0, 0%, 95%);
-  --color-background: hsl(206, 25%, 20%);
+  --color-text-primary: hsl(206, 0%, 95%);
+  --color-text-secondary: hsl(206, 50%, 90%);
+  --color-background: hsl(206, 25%, 30%);
   --color-paper: hsl(206, 25%, 20%);
 }
 
