@@ -58,14 +58,10 @@ const LoginView: React.FC = () => {
           error={errors.password?.message}
           {...register('password')}
         />
-        <Button type="submit" disabled={isLoading} aria-label={t('auth.login.button')}>
+        <Button type="submit" disabled={isLoading}>
           {t('auth.login.button')}
         </Button>
-        <Link
-          to="/recovery"
-          className="ml-auto px-2 text-sm text-text-secondary mt-4"
-          aria-label={t('auth.forgotPassword.link')}
-        >
+        <Link to="/recovery" className="ml-auto px-2 text-sm text-text-secondary mt-4">
           {t('auth.forgotPassword.link')}
         </Link>
       </div>

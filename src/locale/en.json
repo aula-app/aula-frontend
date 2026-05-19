@@ -68,7 +68,7 @@
       "successfulNoEmail": "No email is registered. Share the new password manually."
     },
     "login": {
-      "button": "Login",
+      "button": "Sign in",
       "instanceCode": "Instance code: {{var}} — click to change",
       "label": "Username",
       "noAccount": "Need an account?",

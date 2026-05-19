@@ -28,7 +28,6 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       <IconButton
         type="button"
         aria-label={showPassword ? 'Hide password' : 'Show password'}
-        title={showPassword ? 'Hide password' : 'Show password'}
         className="text-text-secondary"
         onClick={() => setShowPassword((v) => !v)}
       >
@@ -98,7 +97,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         >
           <div>
             {error ? (
-              <span id={errorId} role="alert" className="block pt-1 px-1 text-xs text-error">
+              <span id={errorId} className="block pt-1 px-1 text-xs text-error">
                 <Icon type="alert" className="inline-block mr-1 mb-0.5" />
                 {error}
               </span>
