@@ -68,14 +68,14 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           {label && (
             <label
               htmlFor={inputId}
-              className={[
+              className={twMerge(
                 'pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 origin-left text-sm transition-all duration-200',
                 'bg-paper px-0.5',
                 'peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100',
                 'peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75',
                 'peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-75',
-                error ? 'text-error peer-focus:text-error' : 'text-text-secondary peer-focus:text-primary',
-              ].join(' ')}
+                error ? 'text-error peer-focus:text-error' : 'text-text-secondary peer-focus:text-primary'
+              )}
             >
               {label}
               {required && (
