@@ -28,11 +28,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={twMerge(
           'relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 shadow-xs',
           'text-sm font-medium transition-all duration-200',
-          `focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-current`,
           'disabled:cursor-not-allowed disabled:opacity-50',
+          dark ? 'text-paper' : 'text-text-secondary',
           outlined
             ? `border border-${color} text-${color} hover:bg-${color}/10 active:bg-${color}/20`
-            : `bg-${color} ${dark ? 'text-paper' : 'text-text-secondary'}  font-bold hover:brightness-90 active:brightness-75 focus-visible:outline-${color}`,
+            : `bg-${color} font-bold hover:brightness-90 active:brightness-75`,
+          `focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-${color}`,
           className
         )}
         onMouseDown={(e) => {
