@@ -11,8 +11,8 @@
 /* ========== LIGHT MODE (default) ========== */
 :root {
   --color-primary: hsl(134, 72%, 67%);
-  --color-secondary: hsl(0, 0%, 75%);
-  --color-error: hsl(0, 84%, 50%);
+  --color-secondary: hsl(215, 8%, 72%);       /* was hsl(0,0%,75%) — added cool tint */
+  --color-error: hsl(0, 84%, 58%);
   --color-warning: hsl(45, 100%, 79%);
   --color-info: hsl(204, 82%, 86%);
   --color-success: hsl(134, 72%, 67%);
@@ -22,178 +22,198 @@
   --color-theme-blue-light: hsl(210, 100%, 94%);
   --color-theme-blue: hsl(210, 100%, 86%);
   --color-theme-blue-dark: hsl(210, 88%, 67%);
-  --color-theme-blue-darker: hsl(210, 61%, 63%);
+  --color-theme-blue-darker: hsl(210, 72%, 42%);   /* was (61%, 63%) — darker L, consistent sat */
 
   --color-theme-purple-light: hsl(270, 50%, 94%);
   --color-theme-purple: hsl(270, 50%, 82%);
   --color-theme-purple-dark: hsl(270, 50%, 70%);
-  --color-theme-purple-darker: hsl(270, 25%, 47%);
+  --color-theme-purple-darker: hsl(270, 45%, 40%); /* was (25%, 47%) — fixed sat drop */
 
   --color-theme-red-light: hsl(0, 100%, 94%);
   --color-theme-red: hsl(0, 84%, 76%);
   --color-theme-red-dark: hsl(0, 84%, 58%);
-  --color-theme-red-darker: hsl(0, 56%, 39%);
+  --color-theme-red-darker: hsl(0, 65%, 38%);      /* was (56%, 39%) — minor sat bump */
 
   --color-theme-yellow-light: hsl(45, 100%, 90%);
   --color-theme-yellow: hsl(45, 100%, 79%);
   --color-theme-yellow-dark: hsl(45, 100%, 68%);
-  --color-theme-yellow-darker: hsl(45, 100%, 56%);
+  --color-theme-yellow-darker: hsl(45, 90%, 48%);  /* was (100%, 56%) — darker L, slight sat drop */
 
   --color-theme-green-light: hsl(134, 72%, 94%);
   --color-theme-green: hsl(134, 72%, 83%);
   --color-theme-green-dark: hsl(134, 72%, 67%);
-  --color-theme-green-darker: hsl(134, 28%, 49%);
+  --color-theme-green-darker: hsl(134, 58%, 38%);  /* was (28%, 49%) — fixed sat drop */
 
   --color-theme-pink-light: hsl(320, 84%, 94%);
   --color-theme-pink: hsl(320, 84%, 82%);
   --color-theme-pink-dark: hsl(320, 80%, 65%);
-  --color-theme-pink-darker: hsl(320, 50%, 45%);
+  --color-theme-pink-darker: hsl(320, 60%, 40%);   /* was (50%, 45%) — consistent */
 
   --color-theme-emerald-light: hsl(160, 72%, 94%);
   --color-theme-emerald: hsl(160, 72%, 82%);
   --color-theme-emerald-dark: hsl(160, 72%, 65%);
-  --color-theme-emerald-darker: hsl(160, 30%, 45%);
+  --color-theme-emerald-darker: hsl(160, 58%, 38%); /* was (30%, 45%) — fixed sat drop */
 
-  --color-theme-grey-light: hsl(0, 0%, 95%);
-  --color-theme-grey: hsl(0, 0%, 88%);
-  --color-theme-grey-dark: hsl(0, 0%, 75%);
-  --color-theme-grey-darker: hsl(0, 0%, 59%);
+  --color-theme-grey-light: hsl(215, 8%, 95%);     /* was hsl(0,0%) — added cool tint */
+  --color-theme-grey: hsl(215, 8%, 88%);
+  --color-theme-grey-dark: hsl(215, 8%, 75%);
+  --color-theme-grey-darker: hsl(215, 6%, 58%);
 
   --color-wild-light: hsl(210, 100%, 94%);
   --color-wild: hsl(210, 100%, 86%);
   --color-wild-dark: hsl(210, 88%, 67%);
-  --color-wild-darker: hsl(210, 61%, 63%);
+  --color-wild-darker: hsl(210, 72%, 42%);          /* aligned with blue-darker */
 
   --color-discussion-light: hsl(270, 50%, 94%);
   --color-discussion: hsl(270, 50%, 82%);
   --color-discussion-dark: hsl(270, 50%, 70%);
-  --color-discussion-darker: hsl(270, 25%, 47%);
+  --color-discussion-darker: hsl(270, 45%, 40%);    /* aligned with purple-darker */
 
   --color-approval-light: hsl(25, 100%, 94%);
   --color-approval: hsl(25, 84%, 76%);
   --color-approval-dark: hsl(25, 84%, 58%);
-  --color-approval-darker: hsl(25, 56%, 39%);
+  --color-approval-darker: hsl(25, 68%, 38%);       /* was (56%, 39%) — consistent */
 
   --color-voting-light: hsl(45, 100%, 90%);
   --color-voting: hsl(45, 100%, 79%);
   --color-voting-dark: hsl(45, 100%, 68%);
-  --color-voting-darker: hsl(45, 100%, 56%);
+  --color-voting-darker: hsl(45, 90%, 48%);         /* aligned with yellow-darker */
 
   --color-results-light: hsl(134, 72%, 94%);
   --color-results: hsl(134, 72%, 88%);
   --color-results-dark: hsl(134, 72%, 67%);
-  --color-results-darker: hsl(134, 28%, 49%);
+  --color-results-darker: hsl(134, 58%, 38%);       /* aligned with green-darker */
 
   --color-against: hsl(0, 84%, 76%);
   --color-alert: hsl(0, 84%, 76%);
   --color-announcements: hsl(270, 50%, 82%);
-  --color-bugs: hsl(0, 0%, 90%);
-  --color-comments: hsl(0, 0%, 90%);
-  --color-disabled: hsl(0, 0%, 90%);
+  --color-bugs: hsl(215, 8%, 90%);                  /* was hsl(0,0%) — cool tint */
+  --color-comments: hsl(215, 8%, 90%);
+  --color-disabled: hsl(215, 8%, 90%);
   --color-for: hsl(134, 72%, 88%);
   --color-reports: hsl(45, 100%, 79%);
   --color-messages: hsl(210, 100%, 86%);
   --color-neutral: hsl(45, 100%, 79%);
-  --color-requests: hsl(0, 0%, 90%);
+  --color-requests: hsl(215, 8%, 90%);
 
-  --color-text-primary: hsl(236.17, 42%, 15%);
-  --color-text-secondary: hsl(0, 0%, 25%);
-  --color-background: hsl(0, 0%, 90%);
+  --color-text-primary: hsl(236, 42%, 15%);
+  --color-text-secondary: hsl(215, 18%, 42%);       /* was hsl(0,0%,25%) — aligned hue with text-primary */
+  --color-background: hsl(210, 15%, 92%);            /* was hsl(0,0%,90%) — subtle cool tint */
   --color-paper: hsl(0, 0%, 100%);
 }
 
 /* ========== DARK MODE (activated by .dark class on html) ========== */
+/*
+ * Scale logic is inverted vs light mode:
+ *   -light   = subtle tinted background (low lightness)
+ *   base     = slightly more visible surface
+ *   -dark    = readable foreground / icon color
+ *   -darker  = bright accent / emphasis
+ */
 .dark {
-  --color-primary: hsl(134, 72%, 40%);
-  --color-secondary: hsl(0, 0%, 35%);
-  --color-error: hsl(0, 100%, 70%);
-  --color-warning: hsl(45, 100%, 29%);
-  --color-info: hsl(204, 82%, 41%);
-  --color-success: hsl(134, 72%, 31%);
+  --color-primary: hsl(134, 55%, 55%);
+  --color-secondary: hsl(215, 12%, 55%);
+  --color-error: hsl(0, 75%, 62%);
+  --color-warning: hsl(45, 90%, 62%);
+  --color-info: hsl(204, 70%, 62%);
+  --color-success: hsl(134, 55%, 55%);
 
-  --color-shadow: rgba(255, 255, 255, 0.05);
+  --color-shadow: rgba(0, 0, 0, 0.4);
 
-  --color-theme-blue-light: hsl(210, 100%, 45%);
-  --color-theme-blue: hsl(210, 100%, 35%);
-  --color-theme-blue-dark: hsl(210, 100%, 25%);
-  --color-theme-blue-darker: hsl(210, 100%, 15%);
+  /* Blue — hsl(210) */
+  --color-theme-blue-light: hsl(210, 35%, 20%);
+  --color-theme-blue: hsl(210, 45%, 28%);
+  --color-theme-blue-dark: hsl(210, 75%, 55%);
+  --color-theme-blue-darker: hsl(210, 88%, 72%);
 
-  --color-theme-purple-light: hsl(270, 50%, 57%);
-  --color-theme-purple: hsl(270, 50%, 45%);
-  --color-theme-purple-dark: hsl(270, 50%, 32%);
-  --color-theme-purple-darker: hsl(270, 50%, 20%);
+  /* Purple — hsl(270) */
+  --color-theme-purple-light: hsl(270, 25%, 20%);
+  --color-theme-purple: hsl(270, 32%, 30%);
+  --color-theme-purple-dark: hsl(270, 55%, 58%);
+  --color-theme-purple-darker: hsl(270, 65%, 74%);
 
-  --color-theme-red-light: hsl(0, 84%, 50%);
-  --color-theme-red: hsl(0, 84%, 40%);
-  --color-theme-red-dark: hsl(0, 84%, 28%);
-  --color-theme-red-darker: hsl(0, 84%, 16%);
+  /* Red — hsl(0) */
+  --color-theme-red-light: hsl(0, 30%, 20%);
+  --color-theme-red: hsl(0, 45%, 30%);
+  --color-theme-red-dark: hsl(0, 72%, 57%);
+  --color-theme-red-darker: hsl(0, 80%, 72%);
 
-  --color-theme-yellow-light: hsl(45, 100%, 29%);
-  --color-theme-yellow: hsl(45, 100%, 23%);
-  --color-theme-yellow-dark: hsl(45, 100%, 17%);
-  --color-theme-yellow-darker: hsl(45, 100%, 11%);
+  /* Yellow — hsl(45) */
+  --color-theme-yellow-light: hsl(45, 30%, 20%);
+  --color-theme-yellow: hsl(45, 50%, 28%);
+  --color-theme-yellow-dark: hsl(45, 90%, 55%);
+  --color-theme-yellow-darker: hsl(45, 95%, 70%);
 
-  --color-theme-green-light: hsl(134, 72%, 31%);
-  --color-theme-green: hsl(134, 72%, 24%);
-  --color-theme-green-dark: hsl(134, 72%, 17%);
-  --color-theme-green-darker: hsl(134, 72%, 11%);
+  /* Green — hsl(134) */
+  --color-theme-green-light: hsl(134, 25%, 18%);
+  --color-theme-green: hsl(134, 32%, 26%);
+  --color-theme-green-dark: hsl(134, 55%, 50%);
+  --color-theme-green-darker: hsl(134, 62%, 68%);
 
-  --color-theme-pink-light: hsl(320, 84%, 47%);
-  --color-theme-pink: hsl(320, 84%, 37%);
-  --color-theme-pink-dark: hsl(320, 84%, 26%);
-  --color-theme-pink-darker: hsl(320, 84%, 16%);
+  /* Pink — hsl(320) */
+  --color-theme-pink-light: hsl(320, 28%, 20%);
+  --color-theme-pink: hsl(320, 38%, 30%);
+  --color-theme-pink-dark: hsl(320, 65%, 58%);
+  --color-theme-pink-darker: hsl(320, 72%, 74%);
 
-  --color-theme-emerald-light: hsl(160, 72%, 30%);
-  --color-theme-emerald: hsl(160, 72%, 24%);
-  --color-theme-emerald-dark: hsl(160, 72%, 17%);
-  --color-theme-emerald-darker: hsl(160, 72%, 11%);
+  /* Emerald — hsl(160) */
+  --color-theme-emerald-light: hsl(160, 28%, 18%);
+  --color-theme-emerald: hsl(160, 38%, 26%);
+  --color-theme-emerald-dark: hsl(160, 60%, 50%);
+  --color-theme-emerald-darker: hsl(160, 65%, 66%);
 
-  --color-theme-grey-light: hsl(0, 0%, 46%);
-  --color-theme-grey: hsl(0, 0%, 36%);
-  --color-theme-grey-dark: hsl(0, 0%, 25%);
-  --color-theme-grey-darker: hsl(0, 0%, 14%);
+  /* Grey — tinted with paper hue (215) */
+  --color-theme-grey-light: hsl(215, 15%, 22%);
+  --color-theme-grey: hsl(215, 12%, 32%);
+  --color-theme-grey-dark: hsl(215, 10%, 48%);
+  --color-theme-grey-darker: hsl(215, 8%, 65%);
 
-  --color-wild-light: hsl(210, 100%, 45%);
-  --color-wild: hsl(210, 100%, 35%);
-  --color-wild-dark: hsl(210, 100%, 25%);
-  --color-wild-darker: hsl(210, 100%, 15%);
+  /* Wild (blue alias) */
+  --color-wild-light: hsl(210, 35%, 20%);
+  --color-wild: hsl(210, 45%, 28%);
+  --color-wild-dark: hsl(210, 75%, 55%);
+  --color-wild-darker: hsl(210, 88%, 72%);
 
-  --color-discussion-light: hsl(270, 50%, 57%);
-  --color-discussion: hsl(270, 50%, 45%);
-  --color-discussion-dark: hsl(270, 50%, 32%);
-  --color-discussion-darker: hsl(270, 50%, 20%);
+  /* Discussion (purple alias) */
+  --color-discussion-light: hsl(270, 25%, 20%);
+  --color-discussion: hsl(270, 32%, 30%);
+  --color-discussion-dark: hsl(270, 55%, 58%);
+  --color-discussion-darker: hsl(270, 65%, 74%);
 
-  --color-approval-light: hsl(25, 84%, 40%);
-  --color-approval: hsl(25, 84%, 32%);
-  --color-approval-dark: hsl(25, 84%, 22%);
-  --color-approval-darker: hsl(25, 84%, 14%);
+  /* Approval (orange — hsl(25)) */
+  --color-approval-light: hsl(25, 30%, 20%);
+  --color-approval: hsl(25, 48%, 30%);
+  --color-approval-dark: hsl(25, 80%, 55%);
+  --color-approval-darker: hsl(25, 85%, 70%);
 
-  --color-voting-light: hsl(45, 100%, 29%);
-  --color-voting: hsl(45, 100%, 23%);
-  --color-voting-dark: hsl(45, 100%, 17%);
-  --color-voting-darker: hsl(45, 100%, 11%);
+  /* Voting (yellow alias) */
+  --color-voting-light: hsl(45, 30%, 20%);
+  --color-voting: hsl(45, 50%, 28%);
+  --color-voting-dark: hsl(45, 90%, 55%);
+  --color-voting-darker: hsl(45, 95%, 70%);
 
-  --color-results-light: hsl(134, 72%, 31%);
-  --color-results: hsl(134, 72%, 24%);
-  --color-results-dark: hsl(134, 72%, 17%);
-  --color-results-darker: hsl(134, 72%, 11%);
+  /* Results (green alias) */
+  --color-results-light: hsl(134, 25%, 18%);
+  --color-results: hsl(134, 32%, 26%);
+  --color-results-dark: hsl(134, 55%, 50%);
+  --color-results-darker: hsl(134, 62%, 68%);
 
-  --color-against: hsl(0, 84%, 50%);
-  --color-alert: hsl(0, 84%, 50%);
-  --color-announcements: hsl(270, 50%, 45%);
-  --color-bugs: hsl(0, 0%, 36%);
-  --color-comments: hsl(0, 0%, 36%);
-  --color-disabled: hsl(0, 0%, 36%);
-  --color-for: hsl(134, 72%, 31%);
-  --color-reports: hsl(45, 100%, 29%);
-  --color-messages: hsl(175, 30%, 38%);
-  --color-neutral: hsl(45, 100%, 29%);
-  --color-requests: hsl(0, 0%, 36%);
+  --color-against: hsl(0, 72%, 62%);
+  --color-alert: hsl(0, 72%, 62%);
+  --color-announcements: hsl(270, 55%, 65%);
+  --color-bugs: hsl(215, 15%, 30%);
+  --color-comments: hsl(215, 15%, 30%);
+  --color-disabled: hsl(215, 12%, 28%);
+  --color-for: hsl(134, 50%, 48%);
+  --color-reports: hsl(45, 88%, 58%);
+  --color-messages: hsl(210, 60%, 58%);
+  --color-neutral: hsl(45, 85%, 58%);
+  --color-requests: hsl(215, 15%, 30%);
 
-  --color-text-primary: hsl(206, 0%, 95%);
-  --color-text-secondary: hsl(206, 50%, 90%);
-  --color-background: hsl(206, 25%, 25%);
-  --color-paper: hsl(206, 25%, 15%);
+  --color-text-primary: hsl(215, 20%, 92%);
+  --color-text-secondary: hsl(215, 15%, 62%);
+  --color-background: hsl(215, 25%, 20%);
+  --color-paper: hsl(215, 25%, 15%);
 }
 
 /* ========== TAILWIND THEME (references the CSS variables above) ========== */

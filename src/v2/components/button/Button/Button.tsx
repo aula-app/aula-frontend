@@ -1,6 +1,8 @@
 import { ButtonHTMLAttributes, ReactNode, forwardRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useRipple } from '@/hooks/useRipple';
+import { useMediaQuery } from '@mui/system';
+import { Theme } from '@mui/material';
 
 type BaseButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
   outlined?: boolean;
@@ -14,6 +16,10 @@ type ButtonProps = BaseButtonProps &
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, children, outlined = false, color = 'primary', onMouseDown, ...props }, ref) => {
     const { createRipple, RipplesContainer } = useRipple();
+    const dark = localStorage.getItem('darkMode')
+      ? localStorage.getItem('darkMode') === 'true'
+      : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    console.log('Dark mode:', dark);
 
     return (
       <button
@@ -26,7 +32,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           'disabled:cursor-not-allowed disabled:opacity-50',
           outlined
             ? `border border-${color} text-${color} hover:bg-${color}/10 active:bg-${color}/20`
-            : `bg-${color} text-text-secondary font-bold hover:brightness-90 active:brightness-75 focus-visible:outline-${color}`,
+            : `bg-${color} ${dark ? 'text-paper' : 'text-text-secondary'}  font-bold hover:brightness-90 active:brightness-75 focus-visible:outline-${color}`,
           className
         )}
         onMouseDown={(e) => {
