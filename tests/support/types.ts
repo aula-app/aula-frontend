@@ -20,7 +20,7 @@ export type IdeaData = {
 export type RoomData = {
   name: string;
   description: string;
-  users: UserData[];
+  users: { username: string }[];
 };
 
 export type UserData = {

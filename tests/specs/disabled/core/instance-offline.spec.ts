@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test';
 import { TEST_IDS } from '../../../src/test-ids';
-import { test } from '../../fixtures/test-fixtures';
+import { test } from '../../fixtures/adapter';
 import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 import * as users from '../../interactions/users';

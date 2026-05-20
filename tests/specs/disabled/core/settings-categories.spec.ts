@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test';
-import { test } from '../../fixtures/test-fixtures';
+import { test } from '../../fixtures/003-test-fixtures';
 import * as entities from '../../helpers/entities';
 import * as formInteractions from '../../interactions/forms';
 import * as ideas from '../../interactions/ideas';

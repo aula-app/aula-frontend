@@ -82,7 +82,7 @@ async function postUserAddUser(apiUrl: string, code: string, token: string, user
   return data.data.temp_pw;
 }
 
-async function postLogin(apiUrl: string, code: string, userData: UserData) {
+export async function postLogin(apiUrl: string, code: string, userData: UserData) {
   const response = await fetch(`${apiUrl}/api/controllers/login.php`, {
     method: 'POST',
     headers: {

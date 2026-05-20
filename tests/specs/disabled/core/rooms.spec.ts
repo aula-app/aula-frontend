@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures/test-fixtures';
+import { test, expect } from '../../fixtures/003-test-fixtures';
 import * as entities from '../../helpers/entities';
 import * as rooms from '../../interactions/rooms';
 import * as navigation from '../../interactions/navigation';

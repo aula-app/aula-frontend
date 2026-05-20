@@ -12,7 +12,6 @@ interface BrowserWorkerFixtures {
 
 interface BrowserTestFixtures {
   adminPage: Page;
-  createUserContext: (username: string) => Promise<BrowserContext>;
   createUserPage: (username: string) => Promise<Page>;
 }
 
@@ -26,7 +25,7 @@ function hasStorageState(username: string): boolean {
   return fs.existsSync(getStorageStatePath(username));
 }
 
-export const test = base.extend<BrowserTestFixtures, BrowserWorkerFixtures>({
+export const browserTestFixture = base.extend<BrowserTestFixtures, BrowserWorkerFixtures>({
   adminContext: [
     async ({ browser }, use) => {
       const storageStatePath = getStorageStatePath('admin');
@@ -50,31 +49,6 @@ export const test = base.extend<BrowserTestFixtures, BrowserWorkerFixtures>({
     const page = await adminContext.newPage();
     await page.route('**/*', FILTER_EXCLUDED_RESOURCES);
     await use(page);
-  },
-
-  createUserContext: async ({ browser }, use) => {
-    const createdContexts: { context: BrowserContext; username: string }[] = [];
-
-    const factory = async (username: string): Promise<BrowserContext> => {
-      const storageStatePath = getStorageStatePath(username);
-      const context = await browser.newContext({
-        storageState: hasStorageState(username) ? storageStatePath : undefined,
-      });
-      createdContexts.push({ context, username });
-      return context;
-    };
-
-    await use(factory);
-
-    for (const { context, username } of createdContexts) {
-      try {
-        await context.storageState({ path: getStorageStatePath(username) });
-        await context.close();
-        console.info(`⚠️ Saved&Closed context for ${username}`);
-      } catch (error) {
-        console.warn(`⚠️ Could not save/close context for ${username}:`, error);
-      }
-    }
   },
 
   createUserPage: async ({ browser }, use) => {

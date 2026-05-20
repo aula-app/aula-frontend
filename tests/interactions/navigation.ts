@@ -50,6 +50,7 @@ const refreshJWT = async (page: Page): Promise<void> => {
     const apiUrl = localStorage.getItem('api_url');
     const code = localStorage.getItem('code');
     const token = localStorage.getItem('token');
+    console.log(`refreshJWT: ${apiUrl} ${code} ${token}`);
     if (!apiUrl || !code || !token) return;
     try {
       const response = await fetch(`${apiUrl}/api/controllers/refresh_token.php`, {
