@@ -24,8 +24,9 @@ BEGIN;
 
 LOCK TABLES `au_rooms` WRITE;
 /*!40000 ALTER TABLE `au_rooms` DISABLE KEYS */;
-INSERT INTO `au_rooms` (room_name, description_internal, hash_id, status, type) VALUES
-('Schule',NULL,'78b58d10a5bd01ca09dfd7478bb6ba07',1,1);
+INSERT INTO `au_rooms` (id, room_name, description_internal, hash_id, status, type) VALUES
+(1, 'Schule',NULL,'78b58d10a5bd01ca09dfd7478bb6ba07',1,1),
+(2, 'e2e.class_1A','e2e test room of class 1A','1a',1,0);
 /*!40000 ALTER TABLE `au_rooms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -48,7 +49,36 @@ LOCK TABLES `au_users_basedata` WRITE;
 INSERT IGNORE INTO `au_users_basedata` VALUES
 (1,'Admin User','Admin User','admin','admin@aula.de',NULL,NULL,NULL,NULL,NULL,'$2y$12$JbYwIAhr/QfHha84BkKp4OZ34cfFO6rB6DlFbMraUXa9ezHAvP9IC',NULL,'h9g2wNyPqRE5tCly3HgITV1Cgbnmmrjz',NULL,2,1,'2026-05-19 09:39:54','2026-05-19 09:39:54',NULL,NULL,NULL,NULL,50,NULL,NULL,1,NULL,0,NULL,NULL,NULL,NULL,0,0,NULL,1,0,'[]'),
 (2,'Tech Admin','Tech Admin','tech_admin','tech@aula.de',NULL,NULL,NULL,NULL,NULL,'$2y$12$AflBkOIId5p89zmVn236Se4DmsTVcltx0/9S1jAHIpX3o5Z1bfske',NULL,'OD92Sikl2B0h8298jx8sqztyu69Z653S',NULL,2,1,'2026-05-19 09:39:54','2026-05-19 09:39:54',NULL,NULL,NULL,NULL,50,NULL,NULL,1,NULL,0,NULL,NULL,NULL,NULL,0,0,NULL,1,0,'[]');
+
+INSERT INTO `au_users_basedata`
+(
+  id, displayname, realname, username, email, pw, hash_id, 
+  userlevel, about_me, registration_status, status, created, last_update, presence, pw_changed, roles
+)
+VALUES 
+(
+  3, 'e2e.user', 'user useric', 'user', 'dev+user@aula.de', 
+  '$2a$04$nacjQt60gWeND/lAhkUQW./9JkP3cxDSswXHOnzDI3wCsxe3NQzum',
+  'aaa20', 20, 'e2e test user',
+  2, 1, NOW(), NOW(), 1, 1, '[{"room": "1a", "role": 20}]'
+),
+(
+  4, 'e2e.student', 'student studentic', 'student', 'dev+student@aula.de', 
+  '$2a$04$nacjQt60gWeND/lAhkUQW./9JkP3cxDSswXHOnzDI3wCsxe3NQzum',
+  'bbb20', 20, 'e2e test student',
+  2, 1, NOW(), NOW(), 1, 1, '[{"room": "1a", "role": 20}]'
+);
 /*!40000 ALTER TABLE `au_users_basedata` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `au_rel_rooms_users` WRITE;
+/*!40000 ALTER TABLE `au_rel_rooms_users` DISABLE KEYS */;
+INSERT INTO `au_rel_rooms_users`
+(user_id, room_id, status, created, last_update, updater_id)
+VALUES
+(3, 2, 1, NOW(), NOW(), 1),
+(4, 2, 1, NOW(), NOW(), 1);
+/*!40000 ALTER TABLE `au_rel_rooms_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
 COMMIT;

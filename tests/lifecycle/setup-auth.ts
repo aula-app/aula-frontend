@@ -1,14 +1,16 @@
+// Global setup for Playwright tests
+// Called once before all tests run
+
+import { Browser, BrowserContext, chromium, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-import { chromium, Browser, BrowserContext, Page } from '@playwright/test';
-import * as userInteractions from '../interactions/users';
+import { FILTER_EXCLUDED_RESOURCES } from '../fixtures/ui-browser/001-browser.old.fixture';
 import * as apiUsers from '../helpers/api-users';
 import * as entities from '../helpers/entities';
+import * as userInteractions from '../interactions/users';
 import * as shared from '../support/utils';
-import { admin } from '../fixtures/user.fixture';
-import { FILTER_EXCLUDED_RESOURCES } from '../fixtures/browser.fixture';
-import { cleanupAllTestData, cleanupAuthStates } from './cleanup';
-
+import { cleanupAllTestData } from './ui-browser/cleanup';
+import { admin } from '../fixtures/shared/000-admin.worker-fixture';
 
 export default async function globalSetup() {
   console.log('🚀 Starting global setup...');
@@ -17,9 +19,15 @@ export default async function globalSetup() {
   // Without this, stale user-meta-*.json files cause the fixture's in-memory
   // userCache to load users whose backend state (e.g. changed passwords) no
   // longer matches what the cache records — making serial tests flaky.
-  await cleanupAuthStates();
   const authStatesDir = path.join(process.cwd(), 'tests/auth-states');
-  fs.mkdirSync(authStatesDir, { recursive: true });
+  if (fs.existsSync(authStatesDir)) {
+    for (const file of fs.readdirSync(authStatesDir)) {
+      fs.unlinkSync(path.join(authStatesDir, file));
+    }
+    console.log('🧹 Cleared stale auth-states from previous run');
+  } else {
+    fs.mkdirSync(authStatesDir, { recursive: true });
+  }
 
   // Create a new run-id for this test run
   createNewRunId();
@@ -30,13 +38,6 @@ export default async function globalSetup() {
   let page: Page | null = null;
 
   try {
-
-    // Scrub any test data left in the DB from a previously crashed run.
-    // globalTeardown only runs when the process exits cleanly; if it was killed
-    // mid-run, orphaned test-* entities accumulate and cause flaky failures.
-    console.log('🧹 Scrubbing leftover test data from previous run...');
-    await cleanupAllTestData();
-
     if (process.env.REMOTE_BROWSER === '1') {
       browser = await chromium.connect(process.env.PW_TEST_CONNECT_WS_ENDPOINT);
     } else {
@@ -59,15 +60,22 @@ export default async function globalSetup() {
     // Log in admin
     await userInteractions.login(page, admin);
 
-    // Verify if admin's token exists in localStorage before saving admin auth state
+    // Verify token exists before saving
     const token = await page.evaluate(() => localStorage.getItem('token'));
     if (!token) {
       throw new Error('❌ Setup failed: Admin login did not save token to localStorage');
     }
+
     console.log('✅ Admin logged in with token');
 
+    // Scrub any test data left in the DB from a previously crashed run.
+    // globalTeardown only runs when the process exits cleanly; if it was killed
+    // mid-run, orphaned test-* entities accumulate and cause flaky failures.
+    console.log('🧹 Scrubbing leftover test data from previous run...');
+    await cleanupAllTestData(page);
+
+    // Ensure instance is online
     await ensureInstanceOnline(page);
-    console.log('✅ Instance is online');
 
     // Save admin authentication state
     const adminStatePath = path.join(authStatesDir, 'admin-context.json');

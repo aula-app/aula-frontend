@@ -1,9 +1,9 @@
 import { expect } from '@playwright/test';
-import { test } from '../../fixtures/test-fixtures';
+import { test } from '../../fixtures/adapter';
 import fs from 'fs';
 import path from 'path';
 import { RoomData, UserData } from '../../support/types';
-import { admin } from '../../fixtures/user.fixture';
+import { admin } from '../../fixtures/ui-browser/002-user.fixture';
 import { createTestApiClient } from '../../helpers/api-client';
 import * as entities from '../../helpers/entities';
 import * as formInteractions from '../../interactions/forms';
@@ -26,7 +26,8 @@ test.describe.serial('CSV Import', () => {
   let csvUsers: Array<UserData>;
   let csvFilePath: string;
 
-  test.beforeAll(async () => {
+  test.beforeAll(async ({ dbReset }) => {
+    await dbReset();
     // prepare data locally
     room = entities.createRoom('csv-import-destination');
     csvUsers = Array.from({ length: 3 }, (_, i) => entities.createUserData(`csv-import-${i}`));

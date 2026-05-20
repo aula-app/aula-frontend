@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures/test-fixtures';
+import { test, expect } from '../../fixtures/adapter';
 import { TEST_IDS } from '../../../src/test-ids';
 import * as roomsFixture from '../../helpers/contexts/room-contexts';
 import * as entities from '../../helpers/entities';
@@ -31,7 +31,15 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
     RESULTS: 40,
   } as const;
 
-  test('Admin creates room with users', async ({ adminPage, userConfig, studentConfig }) => {
+  // test.beforeAll(async ({ init, newPage }) => {
+  //   ({ userConfig, studentConfig } = await init(['userConfig', 'studentConfig'] as const));
+  //   userPage = await newPage('user', 20);
+  //   studentPage = await newPage('student', 20);
+  // });
+
+  test('Admin creates room with users', async ({ initAndAllPages }) => {
+    const { userConfig, studentConfig, userPage, studentPage, adminPage } = await initAndAllPages();
+
     await test.step('Setup room context', async () => {
       roomContext = await roomsFixture.setupRoomContext(adminPage, [userConfig, studentConfig], 'voting-workflow');
     });
@@ -40,9 +48,10 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await navigation.goToRoom(adminPage, roomContext.room.name);
       await expect(adminPage.getByText(roomContext.room.name)).toBeVisible();
     });
-  });
+    // });
+    //
+    // test('Users create ideas in the room', async () => {
 
-  test('Users create ideas in the room', async ({ userPage, studentPage }) => {
     await test.step('User creates first idea', async () => {
       idea1 = entities.createIdea('idea-1');
       await navigation.goToRoom(userPage, roomContext.room.name);
@@ -54,9 +63,9 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await navigation.goToRoom(studentPage, roomContext.room.name);
       await ideas.create(studentPage, idea2);
     });
-  });
-
-  test('New Box with Ideas to Approval Phase', async ({ adminPage, userPage }) => {
+    // });
+    //
+    // test('New Box with Ideas to Approval Phase', async ({ adminPage }) => {
     await test.step('Create voting box without ideas', async () => {
       box = entities.createBox('voting-box', roomContext.room);
       box.discussionDays = 6;
@@ -130,9 +139,9 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
       await expect(boxTitle).toBeVisible();
     });
-  });
-
-  test('Moderator can approve and reject ideas in approval phase', async ({ adminPage }) => {
+    // });
+    //
+    // test('Moderator can approve and reject ideas in approval phase', async ({ adminPage }) => {
     await test.step('Navigate to box in approval phase', async () => {
       await navigation.goToRoom(adminPage, roomContext.room.name);
       await navigation.goToPhase(adminPage, roomContext.room.name, PHASES.APPROVAL);
@@ -181,9 +190,9 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(confirmButton).toBeVisible();
       await confirmButton.click();
     });
-  });
-
-  test('Move box to voting phase', async ({ adminPage, userPage }) => {
+    // });
+    //
+    // test('Move box to voting phase', async ({ adminPage, initAndUserPage: userPage }) => {
     await test.step('Change box phase to voting', async () => {
       box.phase = PHASES.VOTING;
       await boxes.edit(adminPage, box);
@@ -195,9 +204,12 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
       await expect(boxTitle).toBeVisible();
     });
-  });
+    // });
+    //
+    // test('Users can vote on approved idea', async ({ newPage }) => {
+    // const userPage = await newPage('user', 20);
+    // const studentPage = await newPage('student', 20);
 
-  test('Users can vote on approved idea', async ({ userPage, studentPage }) => {
     await test.step('User votes for approved idea', async () => {
       // Navigate to box and click on idea
       await navigation.goToRoom(userPage, roomContext.room.name);
@@ -231,9 +243,9 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       await expect(againstButton).toBeVisible();
       await againstButton.click();
     });
-  });
-
-  test('Admin moves box to results phase', async ({ adminPage, userPage }) => {
+    // });
+    //
+    // test('Admin moves box to results phase', async ({ adminPage }) => {
     await test.step('Change box phase to results', async () => {
       box.phase = PHASES.RESULTS;
       await boxes.edit(adminPage, box);
@@ -245,9 +257,9 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
       await expect(boxTitle).toBeVisible();
     });
-  });
-
-  test('Voting results are visible', async ({ userPage }) => {
+    // });
+    //
+    // test('Voting results are visible', async () => {
     await test.step('Navigate to first idea in results phase', async () => {
       // Navigate to box and click on idea
       await navigation.goToRoom(userPage, roomContext.room.name);
@@ -265,12 +277,5 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
       const resultsSection = userPage.getByText(/votes|stimmen|result/i).first();
       await expect(resultsSection).toBeVisible();
     });
-  });
-
-  test.afterAll(async ({ adminPage }) => {
-    // Cleanup test data
-    if (roomContext?.cleanup) {
-      await roomContext.cleanup();
-    }
   });
 });

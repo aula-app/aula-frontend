@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../fixtures/test-fixtures';
+import { test } from '../../fixtures/003-test-fixtures';
 import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 

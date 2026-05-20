@@ -1,22 +1,18 @@
+import type { BrowserContext, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-import type { BrowserContext, Page } from '@playwright/test';
-import { UserData } from '../support/types';
-import { createUserData } from '../helpers/entities';
-import * as apiUsers from '../helpers/api-users';
-import { test as browserTest } from './browser.fixture';
-import { RoleTypes } from '../../src/types/SettingsTypes';
-import * as shared from '../support/utils';
-import { ensureInstanceEntered } from '../interactions/users';
-import { FILTER_EXCLUDED_RESOURCES } from '../fixtures/browser.fixture';
+import { RoleTypes } from '../../../src/types/SettingsTypes';
+import * as apiUsers from '../../helpers/api-users';
+import { createUserData } from '../../helpers/entities';
+import { ensureInstanceEntered } from '../../interactions/users';
+import { UserData } from '../../support/types';
+import * as shared from '../../support/utils';
+import { browserViaUiFixture } from './001-browser.fixture';
+import { AUTH_STATES_DIR } from '../shared/utils';
+import { FILTER_EXCLUDED_RESOURCES } from '../shared/browser-consts';
+import { UserFixtures } from '../shared/aula-fixtures.interface';
 
-interface UserFixtures {
-  ensureUser: (name: string, role?: RoleTypes) => Promise<UserData>;
-}
-
-const AUTH_STATES_DIR = path.join(process.cwd(), 'tests/auth-states');
 const META_PREFIX = 'user-meta-';
-
 function metaPath(name: string): string {
   return path.join(AUTH_STATES_DIR, `${META_PREFIX}${name}.json`);
 }
@@ -35,7 +31,7 @@ const userCache: Record<string, UserData> = (() => {
       const name = file.slice(META_PREFIX.length, -'.json'.length);
       try {
         cache[name] = JSON.parse(fs.readFileSync(path.join(AUTH_STATES_DIR, file), 'utf-8'));
-      } catch {}
+      } catch { }
     }
   }
   return cache;
@@ -50,7 +46,7 @@ export const admin: UserData = {
   about: '',
 };
 
-export const test = browserTest.extend<UserFixtures>({
+export const userViaUiFixture = browserViaUiFixture.extend<UserFixtures>({
   ensureUser: async ({ browser }, use) => {
     // Lazily initialized — only created if a user actually needs to be created
     let adminContext: BrowserContext | null = null;
@@ -59,7 +55,7 @@ export const test = browserTest.extend<UserFixtures>({
     const getAdminPage = async (): Promise<Page> => {
       if (!adminPage) {
         adminContext = await browser.newContext({
-          storageState: 'tests/auth-states/admin-context.json',
+          storageState: AUTH_STATES_DIR + '/admin-context.json',
         });
         adminPage = await adminContext.newPage();
         await adminPage.route('**/*', FILTER_EXCLUDED_RESOURCES);

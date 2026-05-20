@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures/test-fixtures';
+import { test, expect } from '../../fixtures/003-test-fixtures';
 import * as navigation from '../../interactions/navigation';
 import * as forms from '../../interactions/forms';
 import * as shared from '../../support/utils';

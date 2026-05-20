@@ -3,6 +3,7 @@ import * as rooms from '../../interactions/rooms';
 import * as boxes from '../../interactions/boxes';
 import * as ideas from '../../interactions/ideas';
 import { RoomData, BoxData, IdeaData, UserData } from '../../support/types';
+import { Page } from '@playwright/test';
 
 /**
  * Shared test contexts to avoid duplicating setup across test files
@@ -26,14 +27,14 @@ export interface RoomWithIdeasContext extends RoomContext {
  * Sets up a room with specified users
  * Returns the room and a cleanup function
  */
-export async function setupRoomContext(admin: any, users: UserData[], suffix = 'shared'): Promise<RoomContext> {
+export async function setupRoomContext(adminPage: Page, users: UserData[], suffix = 'shared'): Promise<RoomContext> {
   const room = entities.createRoom(suffix, users);
-  await rooms.create(admin, room);
+  await rooms.create(adminPage, room);
 
   return {
     room,
     cleanup: async () => {
-      await rooms.remove(admin, room);
+      await rooms.remove(adminPage, room);
     },
   };
 }

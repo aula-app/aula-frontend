@@ -33,8 +33,10 @@
     "format:all": "prettier . --write",
     "lint": "eslint ./src",
     "check": "tsc",
-    "test": "NODE_OPTIONS=--max-old-space-size=15000 playwright test",
-    "test:ui": "NODE_OPTIONS=--max-old-space-size=15000 playwright test --ui",
+    "test": "NODE_OPTIONS=--max-old-space-size=15000 playwright test -c playwright.config.ts",
+    "test:db-backchannel": "NODE_OPTIONS=--max-old-space-size=15000 playwright test -c playwright.config.db-backchannel.ts",
+    "test:ui": "NODE_OPTIONS=--max-old-space-size=15000 playwright test -c playwright.config.ts --ui",
+    "test:ui:db-backchannel": "NODE_OPTIONS=--max-old-space-size=15000 playwright test -c playwright.config.db-backchannel.ts --ui",
     "type": "tsc",
     "knip": "knip"
   },
