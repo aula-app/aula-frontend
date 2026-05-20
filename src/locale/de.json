@@ -165,7 +165,12 @@
     "schoolClosed": "Die Schule ist derzeit geschlossen. Bitte versuchen Sie es später wieder.",
     "schoolClosedImage": "Schlafende Charakterillustration für Seite 'Schule geschlossen'",
     "timeout": "Zeitüberschreitung der Anfrage",
-    "unauthorized": "Diese Seite erfordert eine Authentifizierung"
+    "unauthorized": "Diese Seite erfordert eine Authentifizierung",
+    "sso": {
+      "invalid_state": "Deine Anmeldesitzung ist abgelaufen oder ungültig. Bitte versuche es erneut.",
+      "unknown_tenant": "Diese Schule ist nicht für Single Sign-On konfiguriert.",
+      "account_inactive": "Dein Account ist inaktiv."
+    }
   },
   "forms": {
     "csv": {

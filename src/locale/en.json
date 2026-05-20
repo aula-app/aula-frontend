@@ -165,7 +165,12 @@
     "schoolClosed": "The school is currently closed. Please try again later.",
     "schoolClosedImage": "Sleeping character illustration for school closed page",
     "timeout": "The request timed out",
-    "unauthorized": "This page requires authentication"
+    "unauthorized": "This page requires authentication",
+    "sso": {
+      "invalid_state": "Your login session expired or is invalid. Please try again.",
+      "unknown_tenant": "This school is not configured for Single Sign-On.",
+      "account_inactive": "Your account is inactive."
+    }
   },
   "forms": {
     "csv": {
