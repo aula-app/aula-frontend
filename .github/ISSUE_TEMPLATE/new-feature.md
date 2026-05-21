@@ -4,7 +4,7 @@ about: Request a new feature or enhancement
 title: ''
 labels: ''
 assignees: ''
-
+projects: ["aula-app/1"]
 ---
 
 ## Task Description
