@@ -103,7 +103,7 @@ const ResetPasswordView = () => {
       </div>
 
       <div className="flex items-center justify-end gap-2">
-        <Link to="/" className="text-sm text-error mr-auto">
+        <Link to="/" className="text-sm text-secondary mr-auto">
           {t('v2.ui.button.cancel')}
         </Link>
         <Button type="button" outlined onClick={() => reset()} color="secondary">
