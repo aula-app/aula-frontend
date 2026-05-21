@@ -1,7 +1,7 @@
 ---
 name: New feature
 about: Request a new feature or enhancement
-title: ''
+title: "✨ "
 labels: ''
 assignees: ''
 projects: ["aula-app/1"]
