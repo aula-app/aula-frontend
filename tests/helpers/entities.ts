@@ -45,3 +45,11 @@ export function createUserData(username: string, role = 20) {
     about: 'generated in e2e tests',
   } as types.UserData;
 }
+
+export function createGroupData(users: { username: string }[] = []) {
+  return {
+    group_name: shared.gensym(`test-group-`),
+    description_public: `test group created in e2e tests`,
+    users,
+  } as types.GroupData;
+}
