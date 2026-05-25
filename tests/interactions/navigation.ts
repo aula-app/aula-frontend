@@ -102,7 +102,7 @@ export const goToWildIdea = async (page: Page, roomName: string, ideaName: strin
   await page.waitForURL((url) => url.pathname.includes('/idea'), { waitUntil: 'commit' });
 };
 
-export const goToPhase = async (page: Page, roomName: string, phaseNumber: number) => {
+export const goToRoomPhase = async (page: Page, roomName: string, phaseNumber: number) => {
   await goToRoom(page, roomName);
 
   // Wait for the phase link to be visible (room page renders after fetchIdeas completes)

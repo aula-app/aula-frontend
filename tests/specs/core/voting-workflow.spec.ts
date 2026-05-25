@@ -1,26 +1,17 @@
-import { test, expect } from '../../fixtures/adapter';
 import { TEST_IDS } from '../../../src/test-ids';
-import * as roomsFixture from '../../helpers/contexts/room-contexts';
+import { expect, test } from '../../fixtures/db-backchannel/new-fixture';
 import * as entities from '../../helpers/entities';
 import * as boxes from '../../interactions/boxes';
+import * as forms from '../../interactions/forms';
 import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
-import * as forms from '../../interactions/forms';
-import { BoxData, IdeaData } from '../../support/types';
+import { BoxData } from '../../support/types';
 
 /**
  * Voting Workflow Tests
  * Tests complete voting workflow from creation to results (without delegation)
- * Uses pure Playwright fixtures for setup/teardown
- *
- * NOTE: Tests run serially because they form a sequential workflow:
- * 1. Setup room and box → 2. Move through phases → 3. Vote → 4. Results
  */
-test.describe.serial('Voting Workflow - Complete Process from Creation to Results', () => {
-  let roomContext: roomsFixture.RoomContext;
-  let box: BoxData;
-  let idea1: IdeaData;
-  let idea2: IdeaData;
+test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
 
   // Phase constants matching the application
   const PHASES = {
@@ -31,251 +22,209 @@ test.describe.serial('Voting Workflow - Complete Process from Creation to Result
     RESULTS: 40,
   } as const;
 
-  // test.beforeAll(async ({ init, newPage }) => {
-  //   ({ userConfig, studentConfig } = await init(['userConfig', 'studentConfig'] as const));
-  //   userPage = await newPage('user', 20);
-  //   studentPage = await newPage('student', 20);
-  // });
+  const adminPage = await newPageFor('admin');
+  const userPage = await newPageFor('user');
+  const studentPage = await newPageFor('student');
 
-  test('Admin creates room with users', async ({ initAndAllPages }) => {
-    const { userConfig, studentConfig, userPage, studentPage, adminPage } = await initAndAllPages();
+  const idea1 = entities.createIdea('idea-1');
+  const idea2 = entities.createIdea('idea-2');
+  const box: BoxData = entities.createBox('voting-box', seededRoom);
+  box.discussionDays = 6;
+  box.votingDays = 10;
+  box.phase = PHASES.DISCUSSION;
 
-    await test.step('Setup room context', async () => {
-      roomContext = await roomsFixture.setupRoomContext(adminPage, [userConfig, studentConfig], 'voting-workflow');
-    });
+  await test.step('User creates Idea-1 in existing Room', async () => {
+    await navigation.goToRoom(userPage, seededRoom.name);
+    await ideas.create(userPage, idea1);
+  });
 
-    await test.step('Verify room was created', async () => {
-      await navigation.goToRoom(adminPage, roomContext.room.name);
-      await expect(adminPage.getByText(roomContext.room.name)).toBeVisible();
-    });
-    // });
-    //
-    // test('Users create ideas in the room', async () => {
+  await test.step('Student creates Idea-2 in existing Room', async () => {
+    await navigation.goToRoom(studentPage, seededRoom.name);
+    await ideas.create(studentPage, idea2);
+  });
 
-    await test.step('User creates first idea', async () => {
-      idea1 = entities.createIdea('idea-1');
-      await navigation.goToRoom(userPage, roomContext.room.name);
-      await ideas.create(userPage, idea1);
-    });
+  await test.step('Admin creates voting Box without Ideas', async () => {
+    // Create a Box from admin Box Settings page
+    await boxes.create(adminPage, box);
+  });
 
-    await test.step('Student creates second idea', async () => {
-      idea2 = entities.createIdea('idea-2');
-      await navigation.goToRoom(studentPage, roomContext.room.name);
-      await ideas.create(studentPage, idea2);
-    });
-    // });
-    //
-    // test('New Box with Ideas to Approval Phase', async ({ adminPage }) => {
-    await test.step('Create voting box without ideas', async () => {
-      box = entities.createBox('voting-box', roomContext.room);
-      box.discussionDays = 6;
-      box.votingDays = 10;
-      box.phase = PHASES.DISCUSSION;
+  await test.step('Admin can see the Box inside the Room', async () => {
+    await navigation.goToRoomPhase(adminPage, seededRoom.name, PHASES.DISCUSSION);
+    const boxTitle = adminPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
+    await expect(boxTitle).toBeVisible();
+  });
 
-      await boxes.create(adminPage, box);
-    });
+  await test.step('Admin can edit the Box', async () => {
+    await navigation.clickOnPageItem(adminPage, box.name);
 
-    await test.step('Verify box is visible', async () => {
-      await navigation.goToRoom(adminPage, roomContext.room.name);
-      await navigation.goToPhase(adminPage, roomContext.room.name, PHASES.DISCUSSION);
-      const boxTitle = adminPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
-      await expect(boxTitle).toBeVisible();
-    });
+    const boxCard = adminPage.getByTestId(TEST_IDS.BOX_CARD);
+    await expect(boxCard.getByText(box.name)).toBeVisible();
+    await boxCard.getByTestId('more-options-button').click();
+    await expect(boxCard.getByTestId('edit-button')).toBeVisible();
+    await boxCard.getByTestId('edit-button').click();
+  });
 
-    await test.step('Navigate to box and open edit', async () => {
-      await navigation.goToRoom(adminPage, roomContext.room.name);
-      await navigation.goToPhase(adminPage, roomContext.room.name, PHASES.DISCUSSION);
-      await navigation.clickOnPageItem(adminPage, box.name);
+  await test.step("Admin adds both user's Ideas to Box using autocomplete", async () => {
+    // Click the autocomplete field to open dropdown
+    const autocompleteField = adminPage.getByTestId('ideas-autocomplete-field');
+    await autocompleteField.click();
 
-      const boxCard = adminPage.getByTestId(TEST_IDS.BOX_CARD);
-      await expect(boxCard.getByText(box.name)).toBeVisible();
-      await boxCard.getByTestId('more-options-button').click();
-      await expect(boxCard.getByTestId('edit-button')).toBeVisible();
-      await boxCard.getByTestId('edit-button').click();
-    });
+    // Select first idea
+    const idea1Option = adminPage.getByRole('option', { name: idea1.name });
+    await expect(idea1Option).toBeVisible();
+    await idea1Option.click();
+    await idea1Option.waitFor({ state: 'hidden' });
 
-    await test.step("Add both user's ideas to box using autocomplete", async () => {
-      // Click the autocomplete field to open dropdown
-      const autocompleteField = adminPage.getByTestId('ideas-autocomplete-field');
-      await autocompleteField.click();
+    // Click field again to add second idea
+    await autocompleteField.click();
 
-      // Select first idea
-      const idea1Option = adminPage.getByRole('option', { name: idea1.name });
-      await expect(idea1Option).toBeVisible();
-      await idea1Option.click();
-      await idea1Option.waitFor({ state: 'hidden' });
+    // Select second idea
+    const idea2Option = adminPage.getByRole('option', { name: idea2.name });
+    await expect(idea2Option).toBeVisible();
+    await idea2Option.click();
+    await idea2Option.waitFor({ state: 'hidden' });
 
-      // Click field again to add second idea
-      await autocompleteField.click();
+    // Submit the form
+    await adminPage.getByTestId('box-form-submit-button').click();
+    await adminPage.waitForSelector('[data-testid="box-name-input"]', { state: 'hidden' });
+  });
 
-      // Select second idea
-      const idea2Option = adminPage.getByRole('option', { name: idea2.name });
-      await expect(idea2Option).toBeVisible();
-      await idea2Option.click();
-      await idea2Option.waitFor({ state: 'hidden' });
+  await test.step('Admin verify both Ideas are in Box', async () => {
+    await navigation.goToRoomPhase(adminPage, seededRoom.name, PHASES.DISCUSSION);
+    await navigation.clickOnPageItem(adminPage, box.name);
 
-      // Submit the form
-      await adminPage.getByTestId('box-form-submit-button').click();
-      await adminPage.waitForSelector('[data-testid="box-name-input"]', { state: 'hidden' });
-    });
+    await expect(adminPage.getByText(idea1.name)).toBeVisible();
+    await expect(adminPage.getByText(idea2.name)).toBeVisible();
+  });
 
-    await test.step('Verify both ideas are in box', async () => {
-      await navigation.goToRoom(adminPage, roomContext.room.name);
-      await navigation.goToPhase(adminPage, roomContext.room.name, PHASES.DISCUSSION);
-      await navigation.clickOnPageItem(adminPage, box.name);
+  await test.step('Change box phase to approval', async () => {
+    box.phase = PHASES.APPROVAL;
+    await boxes.edit(adminPage, box);
+  });
 
-      await expect(adminPage.getByText(idea1.name)).toBeVisible();
-      await expect(adminPage.getByText(idea2.name)).toBeVisible();
-    });
+  await test.step('Verify box is in approval phase', async () => {
+    await navigation.goToRoomPhase(userPage, seededRoom.name, PHASES.APPROVAL);
+    const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
+    await expect(boxTitle).toBeVisible();
+  });
 
-    await test.step('Change box phase to approval', async () => {
-      box.phase = PHASES.APPROVAL;
-      await boxes.edit(adminPage, box);
-    });
+  // @TODO: implement auditor
+  await test.step('Auditor navigates to Box in approval phase', async () => {
+    await navigation.goToRoomPhase(adminPage, seededRoom.name, PHASES.APPROVAL);
+    await navigation.clickOnPageItem(adminPage, box.name);
+  });
 
-    await test.step('Verify box is in approval phase', async () => {
-      await navigation.goToRoom(userPage, roomContext.room.name);
-      await navigation.goToPhase(userPage, roomContext.room.name, PHASES.APPROVAL);
-      const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
-      await expect(boxTitle).toBeVisible();
-    });
-    // });
-    //
-    // test('Moderator can approve and reject ideas in approval phase', async ({ adminPage }) => {
-    await test.step('Navigate to box in approval phase', async () => {
-      await navigation.goToRoom(adminPage, roomContext.room.name);
-      await navigation.goToPhase(adminPage, roomContext.room.name, PHASES.APPROVAL);
-      await navigation.clickOnPageItem(adminPage, box.name);
-    });
+  await test.step('Navigate to first idea and approve', async () => {
+    // Click on the idea within the box
+    const idea1Card = adminPage.getByTestId(`idea-${idea1.name}`);
+    await expect(idea1Card).toBeVisible();
+    await idea1Card.click();
+    await adminPage.waitForURL((url) => url.pathname.includes('/idea'));
 
-    await test.step('Navigate to first idea and approve', async () => {
-      // Click on the idea within the box
-      const idea1Card = adminPage.getByTestId(`idea-${idea1.name}`);
-      await expect(idea1Card).toBeVisible();
-      await idea1Card.click();
-      await adminPage.waitForURL((url) => url.pathname.includes('/idea'));
+    // Click approve button
+    const approveButton = adminPage.getByTestId('approve-button');
+    await expect(approveButton).toBeVisible();
+    await approveButton.click();
 
-      // Click approve button
-      const approveButton = adminPage.getByTestId('approve-button');
-      await expect(approveButton).toBeVisible();
-      await approveButton.click();
+    // Confirm approval
+    const confirmButton = adminPage.getByTestId(TEST_IDS.CONFIRM_BUTTON);
+    await expect(confirmButton).toBeVisible();
+    await confirmButton.click();
+  });
 
-      // Confirm approval
-      const confirmButton = adminPage.getByTestId(TEST_IDS.CONFIRM_BUTTON);
-      await expect(confirmButton).toBeVisible();
-      await confirmButton.click();
-    });
+  await test.step('Navigate back to box and reject second idea', async () => {
+    await navigation.goToRoomPhase(adminPage, seededRoom.name, PHASES.APPROVAL);
+    await navigation.clickOnPageItem(adminPage, box.name);
 
-    await test.step('Navigate back to box and reject second idea', async () => {
-      await navigation.goToRoom(adminPage, roomContext.room.name);
-      await navigation.goToPhase(adminPage, roomContext.room.name, PHASES.APPROVAL);
-      await navigation.clickOnPageItem(adminPage, box.name);
+    // Click on the second idea within the box
+    const idea2Card = adminPage.getByTestId(`idea-${idea2.name}`);
+    await expect(idea2Card).toBeVisible();
+    await idea2Card.click();
+    await adminPage.waitForURL((url) => url.pathname.includes('/idea'));
 
-      // Click on the second idea within the box
-      const idea2Card = adminPage.getByTestId(`idea-${idea2.name}`);
-      await expect(idea2Card).toBeVisible();
-      await idea2Card.click();
-      await adminPage.waitForURL((url) => url.pathname.includes('/idea'));
+    // Click reject button
+    const rejectButton = adminPage.getByTestId('reject-button');
+    await expect(rejectButton).toBeVisible();
+    await rejectButton.click();
 
-      // Click reject button
-      const rejectButton = adminPage.getByTestId('reject-button');
-      await expect(rejectButton).toBeVisible();
-      await rejectButton.click();
+    // Fill rejection justification
+    await forms.fillMarkdownForm(adminPage, 'approval_comment', 'This idea does not meet the requirements.');
 
-      // Fill rejection justification
-      await forms.fillMarkdownForm(adminPage, 'approval_comment', 'This idea does not meet the requirements.');
+    // Confirm rejection
+    const confirmButton = adminPage.getByTestId(TEST_IDS.CONFIRM_BUTTON);
+    await expect(confirmButton).toBeVisible();
+    await confirmButton.click();
+  });
 
-      // Confirm rejection
-      const confirmButton = adminPage.getByTestId(TEST_IDS.CONFIRM_BUTTON);
-      await expect(confirmButton).toBeVisible();
-      await confirmButton.click();
-    });
-    // });
-    //
-    // test('Move box to voting phase', async ({ adminPage, initAndUserPage: userPage }) => {
-    await test.step('Change box phase to voting', async () => {
-      box.phase = PHASES.VOTING;
-      await boxes.edit(adminPage, box);
-    });
+  await test.step('Admin change Box phase to voting', async () => {
+    box.phase = PHASES.VOTING;
+    await boxes.edit(adminPage, box);
+  });
 
-    await test.step('Verify box is in voting phase', async () => {
-      await navigation.goToRoom(userPage, roomContext.room.name);
-      await navigation.goToPhase(userPage, roomContext.room.name, PHASES.VOTING);
-      const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
-      await expect(boxTitle).toBeVisible();
-    });
-    // });
-    //
-    // test('Users can vote on approved idea', async ({ newPage }) => {
-    // const userPage = await newPage('user', 20);
-    // const studentPage = await newPage('student', 20);
+  await test.step('Verify box is in voting phase', async () => {
+    await navigation.goToRoomPhase(userPage, seededRoom.name, PHASES.VOTING);
+    const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
+    await expect(boxTitle).toBeVisible();
+  });
 
-    await test.step('User votes for approved idea', async () => {
-      // Navigate to box and click on idea
-      await navigation.goToRoom(userPage, roomContext.room.name);
-      await navigation.goToPhase(userPage, roomContext.room.name, PHASES.VOTING);
-      await navigation.clickOnPageItem(userPage, box.name);
+  await test.step('User votes for approved idea', async () => {
+    // Navigate to box and click on idea
+    await navigation.goToRoomPhase(userPage, seededRoom.name, PHASES.VOTING);
+    await navigation.clickOnPageItem(userPage, box.name);
 
-      const idea1Card = userPage.getByTestId(`idea-${idea1.name}`);
-      await expect(idea1Card).toBeVisible();
-      await idea1Card.click();
-      await userPage.waitForURL((url) => url.pathname.includes('/idea'));
+    const idea1Card = userPage.getByTestId(`idea-${idea1.name}`);
+    await expect(idea1Card).toBeVisible();
+    await idea1Card.click();
+    await userPage.waitForURL((url) => url.pathname.includes('/idea'));
 
-      // Click the "for" vote button
-      const forButton = userPage.getByTestId('for');
-      await expect(forButton).toBeVisible();
-      await forButton.click();
-    });
+    // Click the "for" vote button
+    const forButton = userPage.getByTestId('for');
+    await expect(forButton).toBeVisible();
+    await forButton.click();
+  });
 
-    await test.step('Student votes against approved idea', async () => {
-      // Navigate to box and click on idea
-      await navigation.goToRoom(studentPage, roomContext.room.name);
-      await navigation.goToPhase(studentPage, roomContext.room.name, PHASES.VOTING);
-      await navigation.clickOnPageItem(studentPage, box.name);
+  await test.step('Student votes against approved idea', async () => {
+    // Navigate to box and click on idea
+    await navigation.goToRoomPhase(studentPage, seededRoom.name, PHASES.VOTING);
+    await navigation.clickOnPageItem(studentPage, box.name);
 
-      const idea1Card = studentPage.getByTestId(`idea-${idea1.name}`);
-      await expect(idea1Card).toBeVisible();
-      await idea1Card.click();
-      await studentPage.waitForURL((url) => url.pathname.includes('/idea'));
+    const idea1Card = studentPage.getByTestId(`idea-${idea1.name}`);
+    await expect(idea1Card).toBeVisible();
+    await idea1Card.click();
+    await studentPage.waitForURL((url) => url.pathname.includes('/idea'));
 
-      // Click the "against" vote button
-      const againstButton = studentPage.getByTestId('against');
-      await expect(againstButton).toBeVisible();
-      await againstButton.click();
-    });
-    // });
-    //
-    // test('Admin moves box to results phase', async ({ adminPage }) => {
-    await test.step('Change box phase to results', async () => {
-      box.phase = PHASES.RESULTS;
-      await boxes.edit(adminPage, box);
-    });
+    // Click the "against" vote button
+    const againstButton = studentPage.getByTestId('against');
+    await expect(againstButton).toBeVisible();
+    await againstButton.click();
+  });
 
-    await test.step('Verify box is in results phase', async () => {
-      await navigation.goToRoom(userPage, roomContext.room.name);
-      await navigation.goToPhase(userPage, roomContext.room.name, PHASES.RESULTS);
-      const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
-      await expect(boxTitle).toBeVisible();
-    });
-    // });
-    //
-    // test('Voting results are visible', async () => {
-    await test.step('Navigate to first idea in results phase', async () => {
-      // Navigate to box and click on idea
-      await navigation.goToRoom(userPage, roomContext.room.name);
-      await navigation.goToPhase(userPage, roomContext.room.name, PHASES.RESULTS);
-      await navigation.clickOnPageItem(userPage, box.name);
+  await test.step('Admin change box phase to results', async () => {
+    box.phase = PHASES.RESULTS;
+    await boxes.edit(adminPage, box);
+  });
 
-      const idea1Card = userPage.getByTestId(`idea-${idea1.name}`);
-      await expect(idea1Card).toBeVisible();
-      await idea1Card.click();
-      await userPage.waitForURL((url) => url.pathname.includes('/idea'));
-    });
+  await test.step('Verify box is in results phase', async () => {
+    await navigation.goToRoomPhase(userPage, seededRoom.name, PHASES.RESULTS);
+    const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
+    await expect(boxTitle).toBeVisible();
+  });
 
-    await test.step('Verify results section is displayed', async () => {
-      // Just verify that results are visible - exact counts may vary
-      const resultsSection = userPage.getByText(/votes|stimmen|result/i).first();
-      await expect(resultsSection).toBeVisible();
-    });
+  await test.step('Navigate to first idea in results phase', async () => {
+    // Navigate to box and click on idea
+    await navigation.goToRoom(userPage, seededRoom.name);
+    await navigation.goToRoomPhase(userPage, seededRoom.name, PHASES.RESULTS);
+    await navigation.clickOnPageItem(userPage, box.name);
+
+    const idea1Card = userPage.getByTestId(`idea-${idea1.name}`);
+    await expect(idea1Card).toBeVisible();
+    await idea1Card.click();
+    await userPage.waitForURL((url) => url.pathname.includes('/idea'));
+  });
+
+  await test.step('Verify results section is displayed', async () => {
+    // Just verify that results are visible - exact counts may vary
+    const resultsSection = userPage.getByText(/votes|stimmen|result/i).first();
+    await expect(resultsSection).toBeVisible();
   });
 });
