@@ -52,8 +52,7 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify exactly one room matches', async () => {
-        const filteredCount = await rooms.getRoomCount(adminPage);
-        expect(filteredCount).toEqual(1);
+        await expect(adminPage.getByTestId(TEST_IDS.ROOM_CARD)).toHaveCount(1);
       });
     });
 
@@ -87,7 +86,6 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify no rooms are shown', async () => {
-        // getRoomCount navigates to home which clears the search filter — count directly instead.
         await expect(adminPage.getByTestId(TEST_IDS.ROOM_CARD)).toHaveCount(0);
       });
     });
@@ -134,7 +132,6 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
 
         await rooms.toggleSortDirection(adminPage);
 
-        // Wait for the debounce (150ms in ScopeHeader) to complete
         await adminPage.waitForTimeout(200);
 
         const newIcon = await sortDirectionButton.getAttribute('aria-label');
@@ -153,7 +150,6 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       });
 
       await test.step('Verify sort options are visible', async () => {
-        // Check for common sort options
         const createdOption = adminPage.getByTestId('sort-option-created');
         await expect(createdOption).toBeVisible();
       });
@@ -231,7 +227,6 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
         await rooms.openSort(adminPage);
         await rooms.selectSortOption(adminPage, 'room_name');
 
-        // Count directly — getRoomCount navigates home which clears state.
         await expect(adminPage.getByTestId(TEST_IDS.ROOM_CARD)).not.toHaveCount(0);
       });
     });
@@ -244,7 +239,6 @@ test.describe.serial('Rooms View - Search and Sort Functionality', () => {
       for (const char of specialChars) {
         await test.step(`Search with ${char}`, async () => {
           await rooms.searchRooms(adminPage, char);
-          // Should not crash — clearSearch succeeding is the assertion
           await rooms.clearSearch(adminPage);
         });
       }
