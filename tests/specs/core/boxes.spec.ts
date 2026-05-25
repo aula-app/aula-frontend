@@ -9,9 +9,6 @@ import { BoxData } from '../../support/types';
  * Box Management Tests
  * Tests box creation, phase changes, permissions, and idea movement
  * Uses pure Playwright fixtures for setup/teardown
- *
- * NOTE: Tests run serially because they form a sequential workflow:
- * Create box → Move ideas to box → Change box phase → Delete box
  */
 test.describe('Box Management - Creation, phase changes and Permissions', () => {
 
@@ -31,14 +28,14 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
     const userPage = await newPageFor('user');
 
     const box = entities.createBox('box-in-room', seededRoom);
-    const boxIdea = entities.createIdea('box-idea');
+    const boxIdea = entities.createIdea('idea-created-straght-in-a-box');
 
     await test.step('Admin can create a Box in existing Room via UI', async () => {
       await boxes.create(adminPage, box);
     });
 
     await test.step('User can navigate to created Box, in phase 10', async () => {
-      await navigation.goToPhase(userPage, seededRoom.name, 10);
+      await navigation.goToRoomPhase(userPage, seededRoom.name, 10);
       await navigation.clickOnPageItem(userPage, box.name);
     });
 
@@ -56,8 +53,8 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
     const userPage = await newPageFor('user');
     const adminPage = await newPageFor('admin');
 
-    const box = entities.createBox('box-in-room', seededRoom);
-    const idea = entities.createIdea('box-idea');
+    const box = entities.createBox('box-2-in-room', seededRoom);
+    const idea = entities.createIdea('idea-goes-to-box-later');
 
     await test.step('User creates an Idea in Room', async () => {
       await navigation.goToRoom(userPage, seededRoom.name);
@@ -71,7 +68,7 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
     await test.step('Admin assigns Idea to a Box', async () => {
       const boxNewPhaseObject = { ...box, ideas: [idea] } as BoxData;
 
-      await navigation.goToPhase(adminPage, seededRoom.name, 10);
+      await navigation.goToRoomPhase(adminPage, seededRoom.name, 10);
       await navigation.clickOnPageItem(adminPage, box.name);
       const boxCard = adminPage.getByTestId('box-card');
       await expect(boxCard.getByText(box.name)).toBeVisible();
@@ -92,7 +89,7 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
     });
 
     await test.step('User verify Box is in new phase', async () => {
-      await navigation.goToPhase(userPage, seededRoom.name, 20);
+      await navigation.goToRoomPhase(userPage, seededRoom.name, 20);
       const boxTitle = userPage.getByTestId('box-card').getByText(box.name);
       await expect(boxTitle).toBeVisible();
     });
@@ -102,7 +99,7 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
     });
 
     await test.step('User verify Box is no longer visible', async () => {
-      await navigation.goToPhase(userPage, seededRoom.name, 10);
+      await navigation.goToRoomPhase(userPage, seededRoom.name, 10);
       await expect(userPage.getByText(box.name)).toBeHidden();
     });
   });
