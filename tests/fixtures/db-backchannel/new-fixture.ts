@@ -129,7 +129,11 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
 
   seededRoom: [async ({ dbName, baselineLoaded }, use) => {
     // return minimal descriptor from baseline; no DB mutation
-    await use({ name: 'e2e.class_1A', description: 'e2e test room of class 1A', users: [{ username: 'e2e.student.class_1A' }] });
+    await use({
+      name: 'e2e.class_1A',
+      description: 'e2e test room of class 1A',
+      users: [{ username: 'e2e.student.class_1A' }, { username: 'e2e.user.class_1A' }]
+    });
   }, { scope: 'worker' }],
 
   // factory to create a new authenticated context (test-scoped)
