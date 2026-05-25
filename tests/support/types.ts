@@ -40,3 +40,9 @@ export type MessageData = {
   title: string;
   content: string;
 };
+
+export type GroupData = {
+  group_name: string;
+  description_public: string;
+  users: { username: string }[];
+}
