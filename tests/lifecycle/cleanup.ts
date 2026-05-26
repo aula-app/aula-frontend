@@ -78,6 +78,18 @@ export const CLEANUP_CONFIGS: CleanupConfig[] = [
     nameField: 'username',
     args: undefined,
   },
+  {
+    service: 'config',
+    method: 'getCommands',
+    deleteMethod: 'deleteCommand',
+    // TODO, this will delete *all* of them, we can't reasonably prefix anything...
+    filterField: 'date_start',
+    filterPrefix: '',
+    idField: 'id',
+    // not ideal
+    nameField: 'date_start',
+    args: undefined,
+  },
 ];
 
 export async function cleanupAllTestData(page: Page): Promise<void> {

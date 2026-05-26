@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { TEST_IDS } from '@/test-ids';
 import TimedCommandInput from './TimedCommandInput';
 
 const LIST_LIMIT = 10;
@@ -75,7 +76,10 @@ const TimedCommands = () => {
         <Stack>
           <Typography variant="h3">{t('settings.time.actions')}</Typography>
           <TableContainer>
-            <Table aria-label={t('ui.accessibility.scheduledActionsTable')}>
+            <Table
+              aria-label={t('ui.accessibility.scheduledActionsTable')}
+              data-testid={TEST_IDS.TIMEDCOMMAND_TABLE}
+            >
               <TableBody>
                 {commands.map((command, i) => {
                   const scope = command.cmd_id > 9 ? Math.floor(command.cmd_id / 10) : 0;
