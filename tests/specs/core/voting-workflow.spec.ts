@@ -1,5 +1,5 @@
 import { TEST_IDS } from '../../../src/test-ids';
-import { expect, test } from '../../fixtures/db-backchannel/new-fixture';
+import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as entities from '../../helpers/entities';
 import * as boxes from '../../interactions/boxes';
 import * as forms from '../../interactions/forms';

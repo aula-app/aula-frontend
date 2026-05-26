@@ -2,12 +2,6 @@
  * Test API client that uses frontend services
  * Sets up localStorage to work with existing service layer
  */
-
-import { RoleTypes } from '../../src/types/SettingsTypes';
-import * as userService from '../../src/services/users';
-import * as roomService from '../../src/services/rooms';
-import * as ideaService from '../../src/services/ideas';
-import * as boxService from '../../src/services/boxes';
 import { changePassword as changePasswordService } from '../../src/services/auth';
 import type { Page, APIRequestContext } from '@playwright/test';
 
@@ -152,97 +146,6 @@ export class ApiClient {
     }
   }
 
-  // Users
-  async addUser(args: {
-    username: string;
-    realname: string;
-    displayname: string;
-    userlevel: RoleTypes;
-    email?: string;
-    about_me?: string;
-  }): Promise<{ insert_id: string; hash_id: string; temp_pw: string }> {
-    // Execute in browser context if available (has localStorage and authenticated session)
-    if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
-      const page = this.config.requestContext as Page;
-      const result = await page.evaluate(async (userArgs) => {
-        // @ts-ignore - accessing window services in browser context
-        const { addUser } = await import('../../src/services/users');
-        const response = await addUser(userArgs);
-        return response;
-      }, args);
-
-      if (!result.data) {
-        throw new Error(`Failed to add user: ${(result as any).error || 'No data returned'}`);
-      }
-
-      return result.data;
-    }
-
-    // Fallback to direct service call (won't work in Node.js but kept for compatibility)
-    const response = await userService.addUser(args);
-
-    if (!response.data) {
-      throw new Error('Failed to add user: No data returned');
-    }
-
-    return response.data;
-  }
-
-  async deleteUser(userId: string): Promise<void> {
-    return this.request('User', 'deleteUser', { user_id: userId });
-  }
-
-  async setUserPassword(userId: string, _password: string): Promise<void> {
-    if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
-      const page = this.config.requestContext as Page;
-      await page.evaluate(async (id) => {
-        const { resetUserPassword } = await import('../../src/services/users');
-        await resetUserPassword(id);
-      }, userId);
-      return;
-    }
-    // Note: resetUserPassword generates a new temp password, doesn't set a specific one
-    await userService.resetUserPassword(userId);
-  }
-
-  async getUsers(args?: { offset?: number; limit?: number; room_id?: string }): Promise<unknown[]> {
-    if (this.config.requestContext && 'evaluate' in this.config.requestContext) {
-      const page = this.config.requestContext as Page;
-      const result = await page.evaluate(async (userArgs) => {
-        const { getUsers } = await import('../../src/services/users');
-        const response = await getUsers(userArgs);
-        return response;
-      }, args);
-
-      if (!result.data) {
-        throw new Error('Failed to get users: No data returned');
-      }
-
-      return result.data;
-    }
-
-    const response = await userService.getUsers(args);
-
-    if (!response.data) {
-      throw new Error('Failed to get users: No data returned');
-    }
-
-    return response.data;
-  }
-
-  async getUsersByUsername(username: string): Promise<{ username: string; hash_id: string }[]> {
-    return this.request('User', 'getUsers', {
-      asc: 1,
-      limit: 500,
-      offset: 0,
-      orderby: 5,
-      status: 1,
-      room_id: '',
-      search_field: 'username',
-      search_text: username,
-    });
-  }
-
   // Rooms
   async addRoom(args: {
     room_name: string;
@@ -256,67 +159,6 @@ export class ApiClient {
     status?: number;
   }): Promise<{ insert_id: number; hash_id: string }> {
     return this.request('Room', 'addRoom', args);
-  }
-
-  async deleteRoom(roomId: string): Promise<void> {
-    await roomService.deleteRoom(roomId);
-  }
-
-  async addUserToRoom(userId: string, roomId: string): Promise<void> {
-    await userService.addUserRoom(userId, roomId);
-  }
-
-  // Boxes
-  async addBox(args: {
-    name: string;
-    room_id: string;
-    phase_id: number;
-    description_internal?: string;
-    description_public?: string;
-    phase_duration_1?: number;
-    phase_duration_2?: number;
-    phase_duration_3?: number;
-    phase_duration_4?: number;
-  }): Promise<{ insert_id: number; hash_id: string }> {
-    const response = await boxService.addBox(args);
-
-    if (!response.data) {
-      throw new Error('Failed to add box: No data returned');
-    }
-
-    return response.data;
-  }
-
-  async deleteBox(boxId: string): Promise<void> {
-    await boxService.deleteBox(boxId);
-  }
-
-  // Ideas
-  async addIdea(
-    args: {
-      title: string;
-      content: string;
-      room_id: string;
-      topic_id?: string;
-    },
-    _userId: string
-  ): Promise<{ hash_id: string }> {
-    // Note: user_id is automatically injected by databaseRequest from JWT token
-    const response = await ideaService.addIdea(args);
-
-    if (!response.data) {
-      throw new Error('Failed to add idea: No data returned');
-    }
-
-    return response.data;
-  }
-
-  async deleteIdea(ideaId: string): Promise<void> {
-    await ideaService.deleteIdea(ideaId);
-  }
-
-  async addIdeaToBox(ideaId: string, boxId: string): Promise<void> {
-    await ideaService.addIdeaBox(ideaId, boxId);
   }
 
   private async request(model: string, method: string, args: any): Promise<any> {

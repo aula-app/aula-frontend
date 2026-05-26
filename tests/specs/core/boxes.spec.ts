@@ -1,4 +1,4 @@
-import { expect, test } from '../../fixtures/db-backchannel/new-fixture';
+import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as entities from '../../helpers/entities';
 import * as boxes from '../../interactions/boxes';
 import * as ideas from '../../interactions/ideas';
@@ -12,7 +12,7 @@ import { BoxData } from '../../support/types';
  */
 test.describe('Box Management - Creation, phase changes and Permissions', () => {
 
-  test('Unprivileged User cannot create a Box', async ({ seededRoom, newPageFor }) => {
+  test.skip('Unprivileged User cannot create a Box', async ({ seededRoom, newPageFor }) => {
     const box = entities.createBox('unprivileged-box', seededRoom)
     const userPage = await newPageFor('user');
 

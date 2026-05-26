@@ -46,27 +46,33 @@ UNLOCK TABLES;
 
 LOCK TABLES `au_users_basedata` WRITE;
 /*!40000 ALTER TABLE `au_users_basedata` DISABLE KEYS */;
-INSERT IGNORE INTO `au_users_basedata` VALUES
-(1,'Admin User','Admin User','admin','admin@aula.de',NULL,NULL,NULL,NULL,NULL,'$2y$12$JbYwIAhr/QfHha84BkKp4OZ34cfFO6rB6DlFbMraUXa9ezHAvP9IC',NULL,'h9g2wNyPqRE5tCly3HgITV1Cgbnmmrjz',NULL,2,1,'2026-05-19 09:39:54','2026-05-19 09:39:54',NULL,NULL,NULL,NULL,50,NULL,NULL,1,NULL,0,NULL,NULL,NULL,NULL,0,0,NULL,1,0,'[]'),
-(2,'Tech Admin','Tech Admin','tech_admin','tech@aula.de',NULL,NULL,NULL,NULL,NULL,'$2y$12$AflBkOIId5p89zmVn236Se4DmsTVcltx0/9S1jAHIpX3o5Z1bfske',NULL,'OD92Sikl2B0h8298jx8sqztyu69Z653S',NULL,2,1,'2026-05-19 09:39:54','2026-05-19 09:39:54',NULL,NULL,NULL,NULL,50,NULL,NULL,1,NULL,0,NULL,NULL,NULL,NULL,0,0,NULL,1,0,'[]');
-
-INSERT INTO `au_users_basedata`
+-- "IGNORE" - It could be that our e2e infra setup will already create Admin and TechAdmin for the first pass
+INSERT IGNORE INTO `au_users_basedata`
 (
-  id, displayname, realname, username, email, pw, hash_id, 
+  id, displayname, realname, username, email,
+  pw, hash_id,
   userlevel, about_me, registration_status, status, created, last_update, presence, pw_changed, roles
 )
 VALUES 
 (
-  3, 'e2e.user', 'user useric', 'user', 'dev+user@aula.de', 
-  '$2a$04$nacjQt60gWeND/lAhkUQW./9JkP3cxDSswXHOnzDI3wCsxe3NQzum',
-  'aaa20', 20, 'e2e test user',
-  2, 1, NOW(), NOW(), 1, 1, '[{"room": "1a", "role": 20}]'
+  1, 'e2e.admin', 'Admin Adminović','admin','dev+e2e-admin@aula.de',
+  '$2a$04$nacjQt60gWeND/lAhkUQW./9JkP3cxDSswXHOnzDI3wCsxe3NQzum','e2e.admin.50',
+  50, 'e2e admin user', 2, 1, NOW(), NOW(), 1, 1, '[]'
 ),
 (
-  4, 'e2e.student', 'student studentic', 'student', 'dev+student@aula.de', 
-  '$2a$04$nacjQt60gWeND/lAhkUQW./9JkP3cxDSswXHOnzDI3wCsxe3NQzum',
-  'bbb20', 20, 'e2e test student',
-  2, 1, NOW(), NOW(), 1, 1, '[{"room": "1a", "role": 20}]'
+  2, 'e2e.tech-admin', 'Tech Adminović','tech_admin','dev+e2e-tech_admin@aula.de',
+  '$2a$04$nacjQt60gWeND/lAhkUQW./9JkP3cxDSswXHOnzDI3wCsxe3NQzum','e2e.tech_admin.60',
+  50, 'e2e admin user', 2, 1, NOW(), NOW(), 1, 1, '[]'
+),
+(
+  3, 'e2e.user', 'User Userić', 'user', 'dev+e2e-user@aula.de',
+  '$2a$04$nacjQt60gWeND/lAhkUQW./9JkP3cxDSswXHOnzDI3wCsxe3NQzum', 'e2e.user.20.user', 
+  20, 'e2e test user', 2, 1, NOW(), NOW(), 1, 1, '[{"room": "1a", "role": 20}]'
+),
+(
+  4, 'e2e.student', 'Student Studentić', 'student', 'dev+e2e-student@aula.de',
+  '$2a$04$nacjQt60gWeND/lAhkUQW./9JkP3cxDSswXHOnzDI3wCsxe3NQzum', 'e2e.user.20.student', 
+  20, 'e2e test student', 2, 1, NOW(), NOW(), 1, 1, '[{"room": "1a", "role": 20}]'
 );
 /*!40000 ALTER TABLE `au_users_basedata` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -74,10 +80,10 @@ UNLOCK TABLES;
 LOCK TABLES `au_rel_rooms_users` WRITE;
 /*!40000 ALTER TABLE `au_rel_rooms_users` DISABLE KEYS */;
 INSERT INTO `au_rel_rooms_users`
-(user_id, room_id, status, created, last_update, updater_id)
+(room_id, user_id, status, created, last_update, updater_id)
 VALUES
-(3, 2, 1, NOW(), NOW(), 1),
-(4, 2, 1, NOW(), NOW(), 1);
+(2, 3, 1, NOW(), NOW(), 1),
+(2, 4, 1, NOW(), NOW(), 1);
 /*!40000 ALTER TABLE `au_rel_rooms_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
