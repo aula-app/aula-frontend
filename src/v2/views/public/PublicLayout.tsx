@@ -24,7 +24,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
               </Link>
             )}
           </div>
-          <div>
+          <div className="text-sm">
             <CodeButton />
           </div>
         </nav>
@@ -35,7 +35,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
       <main id="main-content" className="flex-2 flex">
         <PublicRoutes />
       </main>
-      <footer className="flex items-end justify-between">
+      <footer className="flex items-center justify-between">
         <DarkModeButton />
         <LanguageButton />
         <AboutButton />
