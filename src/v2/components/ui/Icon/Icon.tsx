@@ -1,14 +1,15 @@
 import React, { memo } from 'react';
 import { IconBaseProps } from 'react-icons';
 import {
+  HiLanguage,
   HiOutlineAcademicCap,
   HiOutlineArchiveBox,
   HiOutlineArrowRightEndOnRectangle,
   HiOutlineBars3,
   HiOutlineChevronDown,
   HiOutlineChevronLeft,
-  HiOutlineClipboard,
   HiOutlineCog6Tooth,
+  HiOutlineDocumentDuplicate,
   HiOutlineEnvelope,
   HiOutlineEnvelopeOpen,
   HiOutlineExclamationTriangle,
@@ -26,7 +27,6 @@ import {
   HiOutlineUserGroup,
   HiOutlineUsers,
   HiOutlineXMark,
-  HiLanguage,
 } from 'react-icons/hi2';
 import { IoBugOutline } from 'react-icons/io5';
 
@@ -41,7 +41,7 @@ export const ICONS = {
   announcements: HiOutlineMegaphone,
   back: HiOutlineChevronLeft,
   chevronDown: HiOutlineChevronDown,
-  copy: HiOutlineClipboard,
+  copy: HiOutlineDocumentDuplicate,
   box: HiOutlineArchiveBox,
   boxes: HiOutlineArchiveBox,
   bug: IoBugOutline,

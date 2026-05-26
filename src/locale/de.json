@@ -61,7 +61,7 @@
         "title": "Willkommen bei {{var}}"
       },
       "notFound": {
-        "title": "Seite nicht gefunden",
+        "title": "Hier gibt es keine Neuigkeiten",
         "hint": "Die von Ihnen gesuchte Seite existiert nicht oder wurde verschoben. Bitte überprüfen Sie die URL oder kehren Sie zur Startseite zurück."
       },
       "offline": {
@@ -89,6 +89,12 @@
         "close": "Schließen",
         "confirm": "Bestätigen",
         "submit": "Übermitteln"
+      },
+      "code": {
+        "button": "Code: {{var}}",
+        "copy": "Instanzcode in die Zwischenablage kopieren",
+        "error": "Fehler beim Kopieren des Instanzcodes in die Zwischenablage",
+        "success": "Instanzcode in die Zwischenablage kopiert"
       },
       "darkMode": {
         "label": "Dunkelmodus"

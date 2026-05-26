@@ -1,20 +1,20 @@
+import { useRipple } from '@/hooks/useRipple';
 import { ButtonHTMLAttributes, ReactNode, forwardRef } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { useRipple } from '@/hooks/useRipple';
-import { useMediaQuery } from '@mui/system';
-import { Theme } from '@mui/material';
 
 type BaseButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
-  outlined?: boolean;
   color?: 'primary' | 'secondary' | 'error';
 };
 
+type ButtonVariantProps = { outlined?: false; text?: boolean } | { outlined: true; text?: never };
+
 // Require aria-label when no children are provided (e.g. icon-only buttons)
 type ButtonProps = BaseButtonProps &
+  ButtonVariantProps &
   ({ children: ReactNode; 'aria-label'?: string } | { children?: never; 'aria-label': string });
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, children, outlined = false, color = 'primary', onMouseDown, ...props }, ref) => {
+  ({ className, children, outlined = false, text = false, color = 'primary', onMouseDown, ...props }, ref) => {
     const { createRipple, RipplesContainer } = useRipple();
     const dark = localStorage.getItem('darkMode')
       ? localStorage.getItem('darkMode') === 'true'
@@ -32,7 +32,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           dark ? 'text-paper' : 'text-text-secondary',
           outlined
             ? `border border-${color} text-${color} hover:bg-${color}/10 active:bg-${color}/20`
-            : `bg-${color} font-bold hover:brightness-90 active:brightness-75`,
+            : text
+              ? `text-${color} hover:bg-${color}/10 active:bg-${color}/20 shadow-none`
+              : `bg-${color} font-bold hover:brightness-90 active:brightness-75`,
           `focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-${color}`,
           className
         )}

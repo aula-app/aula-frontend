@@ -60,7 +60,7 @@
         "title": "Welcome to {{var}}"
       },
       "notFound": {
-        "title": "Page not found",
+        "title": "No news here",
         "hint": "The page you are looking for doesn't exist or has been moved. Please check the URL or return to the homepage."
       },
       "offline": {
@@ -88,6 +88,12 @@
         "close": "Close",
         "confirm": "Confirm",
         "submit": "Submit"
+      },
+      "code": {
+        "button": "Code: {{var}}",
+        "copy": "Copy instance code to clipboard",
+        "error": "Failed to copy instance code to clipboard",
+        "success": "Instance code copied to clipboard"
       },
       "darkMode": {
         "label": "Dark mode"

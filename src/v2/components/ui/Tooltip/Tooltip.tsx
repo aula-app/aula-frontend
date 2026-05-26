@@ -4,7 +4,7 @@ import { useTooltipPlacement } from './useTooltipPlacement';
 
 type TooltipProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'content'> & {
   content: React.ReactNode;
-  children: React.ReactNode;
+  children: React.ReactElement;
   wrapperClassName?: string;
   tapToShow?: boolean;
 };
@@ -88,7 +88,6 @@ const Tooltip: React.FC<TooltipProps> = ({
       onTouchMove={handleTouchMove}
       onTouchCancel={handleTouchMove}
       onClickCapture={handleClickCapture}
-      aria-describedby={tooltipId}
     >
       <div
         id={tooltipId}
@@ -104,7 +103,9 @@ const Tooltip: React.FC<TooltipProps> = ({
       >
         {content}
       </div>
-      {children}
+      {React.isValidElement(children)
+        ? React.cloneElement(children, { 'aria-describedby': tooltipId } as any)
+        : children}
     </div>
   );
 };

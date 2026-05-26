@@ -1,7 +1,7 @@
 import { clearAuth } from '@/services/auth';
 import { useAppStore } from '@/store';
 import { checkPermissions } from '@/utils';
-import { NotFoundView } from '@/views';
+import NotFoundView from '@/v2/views/private/NotFound';
 import AboutView from '@/views/About';
 import IdeaView from '@/views/Idea';
 import IdeasBoxView from '@/views/IdeasBox';

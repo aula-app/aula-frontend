@@ -1,13 +1,29 @@
-import SkipNavigation from '@/components/SkipNavigation';
-import AskConsent from '@/views/AskConsent';
-import { FunctionComponent, PropsWithChildren, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import TopBar from './TopBar';
-import TechTopBar from './TopBar/TechTopBar';
-import { checkPermissions } from '@/utils';
-import SideBar from './SideBar';
+import Button from '@/v2/components/button/Button';
+import CodeCopy from '@/v2/components/button/CodeCopy';
+import Logout from '@/v2/components/button/Logout';
 
-const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => {
+const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
+  return (
+    <div className="flex-1 flex flex-col relative h-dvh w-full">
+      <header className="relative bg-primary px-2 py-1 shadow-sm pt-[calc(var(--safe-area-inset-top,0px))] z-30">
+        header
+      </header>
+      <div className="flex-1 flex flex-row-reverse">
+        <main className="flex-1 flex">{children}</main>
+        <nav className="flex flex-col border-secondary border-r">
+          <CodeCopy />
+          <hr className="border-t border-secondary" />
+          Profile
+          <hr className="border-t border-secondary" />
+          <div className="flex-1 flex flex-col"></div>
+          <hr className="border-t border-secondary" />
+          <hr className="border-t border-secondary" />
+          <Logout />
+        </nav>
+      </div>
+    </div>
+  );
+
   const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -66,7 +82,11 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
     <div className="flex flex-col h-dvh w-full overflow-hidden">
       <SkipNavigation mainContentId="main-content" />
       {checkPermissions('system', 'hide') ? (
-        <TechTopBar mobileMenuOpen={mobileMenuOpen} onToggleMobileMenu={toggleMobileMenu} menuButtonRef={menuButtonRef} />
+        <TechTopBar
+          mobileMenuOpen={mobileMenuOpen}
+          onToggleMobileMenu={toggleMobileMenu}
+          menuButtonRef={menuButtonRef}
+        />
       ) : (
         <TopBar mobileMenuOpen={mobileMenuOpen} onToggleMobileMenu={toggleMobileMenu} menuButtonRef={menuButtonRef} />
       )}
@@ -95,7 +115,7 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
         />
         <main
           id="main-content"
-          className="flex-1 overflow-y-auto relative z-0"
+          className="flex-1 flex relative z-0"
           style={{
             paddingBottom: 'var(--safe-area-inset-bottom, 0px)',
             scrollPaddingBottom: '6rem',
@@ -104,10 +124,9 @@ const LayoutContainer: FunctionComponent<PropsWithChildren> = ({ children }) => 
         >
           {children}
         </main>
-        <AskConsent />
       </div>
     </div>
   );
 };
 
-export default LayoutContainer;
+export default Layout;
