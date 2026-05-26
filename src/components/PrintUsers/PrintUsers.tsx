@@ -85,7 +85,6 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
             <title>${t('settings.users.printTitle')}</title>
             <style>
               body {
-                font-family: 'vision', 'Tahoma', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
                 font-size: 32px;
                 margin: 20px;
                 justify: center;
@@ -113,7 +112,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
                 font-weight: bold;
               }
               td b {
-                font-family: 'vision', 'Tahoma', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+                font-family: 'Tahoma', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
               }
               td mark {
                 background-color: rgba(0, 0, 0, 0.06);
