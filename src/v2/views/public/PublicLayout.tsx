@@ -24,7 +24,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
               </Link>
             )}
           </div>
-          <div>
+          <div className="text-sm">
             <CodeButton />
           </div>
         </nav>
