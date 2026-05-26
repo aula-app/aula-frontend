@@ -1,4 +1,4 @@
-import { expect, test } from '../../fixtures/db-backchannel/new-fixture';
+import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as settingsInteractions from '../../interactions/settings';
 import * as entities from '../../helpers/entities';
 import * as ideas from '../../interactions/ideas';

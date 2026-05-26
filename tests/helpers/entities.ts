@@ -11,12 +11,11 @@ export function createRoom(suffix = '', users: { username: string }[] = []) {
   } as types.RoomData;
 }
 
-export function createIdea(suffix = '', setup?: { box?: string; category?: string; comments?: string[] }) {
+export function createIdea(suffix = '', setup?: { category?: string }) {
   const hash = shared.gensym();
   return {
     name: 'test-idea-' + hash + (suffix ? `-${suffix}` : ''),
     description: 'generated during testing data',
-    box: setup?.box,
     category: setup?.category,
   } as types.IdeaData;
 }
@@ -34,13 +33,12 @@ export function createBox(suffix = '', room: types.RoomData, ideas = []) {
 }
 
 export function createUserData(username: string, role = 20) {
-  const runId = shared.getRunId();
   const hash = shared.gensym();
   return {
     username: `test-${username}-${hash}`,
     password: TestConstants.DEFAULT_PASSWORD,
     displayName: `${username} ${hash}`,
-    realName: `${username} ${runId} Test User`,
+    realName: `${username} Test User`,
     role: role,
     about: 'generated in e2e tests',
   } as types.UserData;
