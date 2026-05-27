@@ -100,6 +100,7 @@
   --color-text-secondary: hsl(215, 18%, 42%);
   --color-background: hsl(210, 15%, 92%);
   --color-paper: hsl(0, 0%, 100%);
+  --color-shade: hsl(210, 15%, 12%);
 }
 
 /* ========== DARK MODE (activated by .dark class on html) ========== */
@@ -194,6 +195,7 @@
   --color-text-secondary: hsl(215, 15%, 62%);
   --color-background: hsl(215, 25%, 20%);
   --color-paper: hsl(215, 25%, 15%);
+  --color-shade: hsl(210, 15%, 80%);
 }
 
 /* ========== TAILWIND THEME (references the CSS variables above) ========== */
@@ -290,4 +292,5 @@
   --color-paper: var(--color-paper);
   --color-input-border: var(--color-input-border);
   --color-input-border-hover: var(--color-input-border-hover);
+  --color-shade: var(--color-shade);
 }
