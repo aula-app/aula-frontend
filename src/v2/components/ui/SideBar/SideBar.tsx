@@ -5,6 +5,7 @@ import LanguageButton from '@/v2/components/button/Language';
 import Logout from '@/v2/components/button/Logout';
 import PrintButton from '@/v2/components/button/Print';
 import Icon from '@/v2/components/ui/Icon';
+import useIsDrawerMode from '@/v2/hooks/useIsDrawerMode';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -22,6 +23,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
   const { t } = useTranslation();
   const items = useSidebarItems();
   const { pathname } = useLocation();
+  const isDrawerMode = useIsDrawerMode();
 
   const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
@@ -30,8 +32,10 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
       <nav
         id="sidebar-menu"
         aria-label={t('v2.ui.navigation')}
-        className={`flex flex-col border-secondary border-r overflow-x-clip overflow-y-auto print:hidden absolute left-0 z-20 h-full bg-paper transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}
-        inert={menuOpen ? undefined : ''}
+        aria-modal={menuOpen && isDrawerMode ? true : undefined}
+        className={`flex flex-col border-secondary border-r overflow-y-auto print:hidden absolute left-0 z-20 h-full bg-paper transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}
+        inert={!menuOpen && isDrawerMode ? '' : undefined}
+        tabIndex={-1}
       >
         <CodeCopy />
         <hr className="my-1 border-secondary" />
