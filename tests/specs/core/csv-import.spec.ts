@@ -27,12 +27,6 @@ test('CSV Import', async ({ dbInstanceCode, ensureStatePathFor, newPageFor }) =>
   const room2: RoomData = entities.createRoom('csv-import-destination-2');
 
   let csvFilePath: string;
-  // test.afterAll(async () => {
-  //   // Clean up temporary CSV file only (teardown handles rooms/users/ideas)
-  //   if (csvFilePath && fs.existsSync(csvFilePath)) {
-  //     fs.unlinkSync(csvFilePath);
-  //   }
-  // });
 
   await test.step('Admin imports 1st CSV', async () => {
 
