@@ -63,7 +63,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
               >
                 <Icon type={item.icon} aria-hidden="true" size="1.5rem" />
                 <span className="font-light flex-1 text-left">{t(`ui.navigation.${item.title}`)}</span>
-                {item.chip && <item.chip />}
+                {item.chip && <span aria-hidden="true"><item.chip /></span>}
               </Button>
             </li>
           ))}

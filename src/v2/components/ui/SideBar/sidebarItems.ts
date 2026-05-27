@@ -7,7 +7,7 @@ export type NavItem = {
   icon: ICON_TYPE;
   title: string; // i18n key suffix — used as ui.navigation.${title}
   permission: () => boolean;
-  chip?: ComponentType; // reserved for future v2 chip badge components
+  chip?: ComponentType; // display-only badge — must not render interactive elements (no buttons or links)
 };
 
 export const SIDEBAR_ITEMS: NavItem[] = [
