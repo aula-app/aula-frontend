@@ -1,6 +1,5 @@
-import { expect } from '@playwright/test';
-import { test } from '../../fixtures/test-fixtures';
-import * as roomsFixture from '../../helpers/contexts/room-contexts';
+import { expect, test } from '../../fixtures/aula-tests-fixture';
+import * as settingsInteractions from '../../interactions/settings';
 import * as entities from '../../helpers/entities';
 import * as ideas from '../../interactions/ideas';
 import * as reporting from '../../interactions/reporting';
@@ -15,80 +14,63 @@ import * as shared from '../../support/utils';
  * NOTE: Tests run serially because they form a sequential workflow:
  * Create room → Create idea → Report idea → Add comment → Report comment → Report bug
  */
-test.describe.serial('Reporting - Content Reports and Bug Reports', () => {
-  let roomContext: roomsFixture.RoomContext;
+test('Content Reports', async ({ seededRoom, newPageFor }) => {
+  const adminPage = await newPageFor('admin');
+  const userPage = await newPageFor('user');
 
-  const adminIdea = entities.createIdea('admin');
-  const bobComment = 'Test comment from bob ' + shared.gensym();
+  const adminIdeaMisinformation = entities.createIdea('admin-misinformation');
+  const userCommentSpam = 'Mallicious test comment from user ' + shared.gensym();
+
+  await test.step('Admin creates an idea', async () => {
+    await navigation.goToRoom(adminPage, seededRoom.name);
+    await ideas.create(adminPage, adminIdeaMisinformation);
+  });
+
+  await test.step('User reports Admin\'s Idea', async () => {
+    await reporting.reportIdea(userPage, seededRoom, adminIdeaMisinformation.name, reporting.REPORT_TYPES.MISINFORMATION);
+  });
+
+  await test.step('Admin verifies report exists', async () => {
+    await reporting.verifyIdeaReported(adminPage, adminIdeaMisinformation.name);
+  });
+
+  await test.step("User comments on Admin's idea", async () => {
+    await navigation.goToWildIdea(userPage, seededRoom.name, adminIdeaMisinformation.name);
+    await ideas.comment(userPage, userCommentSpam);
+  });
+
+  await test.step("Admin reports User's comment", async () => {
+    await reporting.reportComment(
+      adminPage,
+      seededRoom,
+      adminIdeaMisinformation.name,
+      userCommentSpam,
+      reporting.REPORT_TYPES.SPAM
+    );
+    await reporting.verifyCommentReported(adminPage, userCommentSpam);
+  });
+});
+
+test('Bug Reports', async ({ newPageFor }) => {
+  const adminPage = await newPageFor('admin');
+  const userPage = await newPageFor('user');
   const bugReport = 'Test bug report ' + shared.gensym();
 
-  test('Admin can create a room with users', async ({ adminPage, userConfig, studentConfig }) => {
-    await test.step('Setup room context', async () => {
-      roomContext = await roomsFixture.setupRoomContext(adminPage, [userConfig, studentConfig], 'reporting-tests');
-    });
-
-    await test.step('Navigate to room', async () => {
-      await navigation.goToRoom(adminPage, roomContext.room.name);
-    });
-
-    await test.step('Verify room is accessible', async () => {
-      await expect(adminPage.getByText(roomContext.room.name)).toBeVisible();
-    });
+  await test.step('User submits bug report', async () => {
+    await reporting.reportBug(userPage, bugReport);
   });
 
-  test('Admin creates an idea', async ({ adminPage }) => {
-    await test.step('Navigate to room', async () => {
-      await navigation.goToRoom(adminPage, roomContext.room.name);
-    });
-
-    await test.step('Create idea', async () => {
-      await ideas.create(adminPage, adminIdea);
-    });
+  await test.step('Admin verifies bug report exists', async () => {
+    await reporting.verifyBugReported(adminPage, bugReport);
   });
 
-  test("User reports Admin's idea", async ({ userPage, adminPage }) => {
-    await test.step('User reports the idea', async () => {
-      await reporting.reportIdea(userPage, roomContext.room, adminIdea.name, reporting.REPORT_TYPES.MISINFORMATION);
-    });
-
-    await test.step('Admin verifies report exists', async () => {
-      await reporting.verifyIdeaReported(adminPage, adminIdea.name);
-    });
+  await test.step('Admin archives the bug report', async () => {
+    await adminPage.getByRole('button', { name: 'archiv', exact: false }).click();
   });
 
-  test("User comments on Admin's idea", async ({ userPage }) => {
-    await test.step('Navigate to idea', async () => {
-      await navigation.goToWildIdea(userPage, roomContext.room.name, adminIdea.name);
-    });
-
-    await test.step('Add comment', async () => {
-      await ideas.comment(userPage, bobComment);
-    });
-  });
-
-  test("Admin reports User's comment", async ({ adminPage }) => {
-    await test.step('Admin reports the comment', async () => {
-      await reporting.reportComment(
-        adminPage,
-        roomContext.room,
-        adminIdea.name,
-        bobComment,
-        reporting.REPORT_TYPES.SPAM
-      );
-    });
-
-    await test.step('Admin verifies comment report exists', async () => {
-      await reporting.verifyCommentReported(adminPage, bobComment);
-    });
-  });
-
-  test('User reports a bug', async ({ userPage, adminPage }) => {
-    await test.step('User submits bug report', async () => {
-      await reporting.reportBug(userPage, bugReport);
-    });
-
-    await test.step('Admin verifies bug report exists', async () => {
-      await reporting.verifyBugReported(adminPage, bugReport);
-    });
+  await test.step('Admin verifies bug report is gone', async () => {
+    await navigation.goToBugsSettings(adminPage, true);
+    await settingsInteractions.applyFilter(adminPage, { option: 'body', value: bugReport });
+    await expect(adminPage.locator('text=' + bugReport).first()).not.toBeVisible();
   });
 });

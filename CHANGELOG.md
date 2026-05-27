@@ -1,3 +1,8 @@
+## 1.9.3
+
+- **Technical improvements**
+  - Refactored e2e tests to work faster (parallel) and more stable (isolated)
+
 ## 1.9.2
 
   - **Bug fixes**
