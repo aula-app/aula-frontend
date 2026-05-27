@@ -28,16 +28,13 @@ const TopBar: React.FC<TopBarProps> = ({ onToggleMenu, menuOpen = false }) => {
     <header
       id="top-bar"
       className="relative bg-primary px-2 py-1 shadow-sm pt-[calc(var(--safe-area-inset-top,0px))] z-30 print:hidden flex items-center"
-      aria-label={getCurrentContextName()}
     >
       <div className="mr-3 flex h-full items-center justify-start">
         <Breadcrumb />
       </div>
 
       <div className="flex-1 flex items-center justify-center h-full overflow-hidden">
-        <div className="font-bold truncate" aria-hidden="true">
-          {getCurrentContextName()}
-        </div>
+        <div className="font-bold truncate">{getCurrentContextName()}</div>
       </div>
 
       <div className="ml-3 flex h-full items-center justify-end">
