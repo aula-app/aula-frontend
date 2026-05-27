@@ -7,7 +7,7 @@ name: aula-e2e
 #   yarn test
 #   docker compose -f docker-compose.e2e.yml down -v
 #
-# Override the backend path if your repo is not at ${BACKEND_DIR:-../backend-aula}:
+# Override the backend path if your repo is not at ${BACKEND_DIR:-../aula-backend}:
 #   BACKEND_DIR=/path/to/backend docker compose -f docker-compose.e2e.yml up --build -d
 # Or set BACKEND_DIR in a .env file next to this compose file.
 #
@@ -32,7 +32,7 @@ services:
       - "3307:3306"
     volumes:
       # NOTE: this path is coupled to the backend repo structure (docker/mariadb/).
-      # If that folder moves in backend-aula, this volume mapping must be updated here too.
+      # If that folder moves in aula-backend, this volume mapping must be updated here too.
       - ${BACKEND_DIR:-../aula-backend}/docker/mariadb/:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
