@@ -12,9 +12,7 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       </header>
       <div className="flex-1 flex flex-row-reverse">
         <main className="flex-1 flex">{children}</main>
-        <nav aria-label={t('v2.ui.navigation')} className="flex flex-col border-secondary border-r">
-          <SideBar />
-        </nav>
+        <SideBar />
       </div>
     </div>
   );

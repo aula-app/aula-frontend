@@ -21,57 +21,61 @@ const SideBar: FC = () => {
   const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
   return (
-    <ul className="flex flex-col flex-1 h-full overflow-auto list-none m-0 px-1 py-2">
-      {/* Profile */}
-      <li>
-        <Link
-          to="/settings/profile"
-          aria-current={isActive('/settings/profile') ? 'page' : undefined}
-          className={`${navItemClass} ${isActive('/settings/profile') ? activeNavItemClass : ''}`}
-        >
-          <Icon type="user" aria-hidden="true" size="1.5rem" />
-          <span className="font-light flex-1">{t('ui.navigation.profile')}</span>
-        </Link>
-      </li>
+    <nav aria-label={t('v2.ui.navigation')} className="flex flex-col border-secondary border-r">
+      <ul className="flex flex-col h-full list-none m-0 py-2">
+        <li className="border-secondary">
+          <CodeCopy />
+        </li>
 
-      <hr className="my-1 border-secondary" />
+        <hr className="my-1 border-secondary" />
 
-      {/* Nav items */}
-      {items.map((item) => (
-        <li key={item.path}>
+        {/* Profile */}
+        <li>
           <Link
-            to={item.path}
-            aria-current={isActive(item.path) ? 'page' : undefined}
-            className={`${navItemClass} ${isActive(item.path) ? activeNavItemClass : ''}`}
+            to="/settings/profile"
+            aria-current={isActive('/settings/profile') ? 'page' : undefined}
+            className={`${navItemClass} ${isActive('/settings/profile') ? activeNavItemClass : ''}`}
           >
-            <Icon type={item.icon} aria-hidden="true" size="1.5rem" />
-            <span className="font-light flex-1">{t(`ui.navigation.${item.title}`)}</span>
-            {item.chip && <item.chip />}
+            <Icon type="user" aria-hidden="true" size="1.5rem" />
+            <span className="font-light flex-1">{t('ui.navigation.profile')}</span>
           </Link>
         </li>
-      ))}
 
-      <hr className="my-1 border-secondary" />
+        <hr className="my-1 border-secondary" />
 
-      {/* Utility actions */}
-      <li className="flex items-center justify-around px-2 py-1">
-        <DarkModeButton />
-        <LanguageButton />
-      </li>
+        {/* Nav items */}
+        {items.map((item) => (
+          <li key={item.path} className="mx-2 my-1">
+            <Link
+              to={item.path}
+              aria-current={isActive(item.path) ? 'page' : undefined}
+              className={`${navItemClass} ${isActive(item.path) ? activeNavItemClass : ''}`}
+            >
+              <Icon type={item.icon} aria-hidden="true" size="1.5rem" />
+              <span className="font-light flex-1">{t(`ui.navigation.${item.title}`)}</span>
+              {item.chip && <item.chip />}
+            </Link>
+          </li>
+        ))}
 
-      <hr className="my-1 border-secondary" />
+        {/* Spacer */}
+        <li className="flex-1" aria-hidden="true" />
 
-      {/* Spacer */}
-      <li className="flex-1" aria-hidden="true" />
+        <hr className="my-1 border-secondary" />
 
-      {/* Footer */}
-      <li>
-        <CodeCopy />
-      </li>
-      <li>
-        <Logout />
-      </li>
-    </ul>
+        {/* Utility actions */}
+        <li className="flex items-center justify-around px-2 py-1">
+          <DarkModeButton />
+          <LanguageButton />
+        </li>
+
+        {/* Footer */}
+        <hr className="my-1 border-secondary" />
+        <li>
+          <Logout />
+        </li>
+      </ul>
+    </nav>
   );
 };
 
