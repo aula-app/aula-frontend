@@ -1,11 +1,5 @@
 {
   "v2": {
-    "a11y": {
-      "label": {
-        "navigation": "Navigation menu",
-        "skipToContent": "Skip to main content"
-      }
-    },
     "alt": {
       "logo": "Aula: Education Platform Logo",
       "sleeping": "Sleeping owl illustration"
@@ -82,6 +76,15 @@
       }
     },
     "ui": {
+      "a11y": {
+        "navigation": "Navigation menu",
+        "skipToContent": "Skip to main content",
+        "breadcrumb": {
+          "label": "Breadcrumb navigation",
+          "description": "Navigate from {{var}} to previous pages",
+          "nav": "Parent pages navigation"
+        }
+      },
       "actions": {
         "print": "Print this page",
         "report": "Report a bug"
@@ -112,6 +115,10 @@
       "logout": {
         "button": "Sign out",
         "label": "Sign out of your account"
+      },
+      "menu": {
+        "open": "Open navigation menu",
+        "close": "Close navigation menu"
       },
       "navigation": "Navigation menu",
       "toggle": "Toggle {{var}}"

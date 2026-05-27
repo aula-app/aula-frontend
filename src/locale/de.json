@@ -1,11 +1,5 @@
 {
   "v2": {
-    "a11y": {
-      "label": {
-        "navigation": "Navigationsmenü",
-        "skipToContent": "Zum Hauptinhalt springen"
-      }
-    },
     "alt": {
       "logo": "Aula: Bildungsplattform-Logo",
       "sleeping": "Schlafende Eulen-Illustration"
@@ -83,6 +77,15 @@
       }
     },
     "ui": {
+      "a11y": {
+        "navigation": "Navigationsmenü",
+        "skipToContent": "Zum Hauptinhalt springen",
+        "breadcrumb": {
+          "label": "Breadcrumb-Navigation",
+          "description": "Navigieren von {{var}} zu vorherigen Seiten",
+          "nav": "Navigation der übergeordneten Seiten"
+        }
+      },
       "actions": {
         "print": "Diese Seite drucken",
         "report": "Einen Fehler melden"
@@ -113,6 +116,10 @@
       "logout": {
         "button": "Abmelden",
         "label": "Von Ihrem Konto abmelden"
+      },
+      "menu": {
+        "open": "Hauptmenü öffnen",
+        "close": "Hauptmenü schließen"
       },
       "navigation": "Navigationsmenü",
       "toggle": "{{var}} umschalten"

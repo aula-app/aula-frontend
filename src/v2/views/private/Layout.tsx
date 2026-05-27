@@ -1,16 +1,18 @@
 import SideBar from '@/v2/components/ui/SideBar';
-import { FunctionComponent, PropsWithChildren } from 'react';
-import { useTranslation } from 'react-i18next';
+import TopBar from '@/v2/components/ui/TopBar';
+import { FunctionComponent, PropsWithChildren, useState } from 'react';
 
 const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
-  const { t } = useTranslation();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const onToggleMenu = () => {
+    setMenuOpen((prev) => !prev);
+  };
 
   return (
     <div className="flex-1 flex flex-col relative h-dvh w-full">
-      <header className="relative bg-primary px-2 py-1 shadow-sm pt-[calc(var(--safe-area-inset-top,0px))] z-30">
-        header
-      </header>
-      <div className="flex-1 flex flex-row-reverse">
+      <TopBar onToggleMenu={onToggleMenu} menuOpen={menuOpen} />
+      <div className="flex-1 flex flex-row-reverse relative">
         <main className="flex-1 flex">{children}</main>
         <SideBar />
       </div>

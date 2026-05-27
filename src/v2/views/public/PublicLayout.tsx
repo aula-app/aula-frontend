@@ -16,7 +16,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
   return (
     <div className="h-full max-w-sm mx-auto px-8 py-6 flex flex-col gap-6">
       <header className="flex-1 flex flex-col gap-4">
-        <nav className="flex items-center" aria-label={t('v2.a11y.label.navigation')}>
+        <nav className="flex items-center" aria-label={t('v2.ui.a11y.navigation')}>
           <div className="flex-1">
             {location.pathname !== '/' && (
               <Link to="/" className="text-sm text-text-secondary">

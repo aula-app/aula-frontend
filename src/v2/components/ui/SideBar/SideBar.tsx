@@ -13,7 +13,11 @@ import BugButton from '../../button/Bug';
 
 const activeClass = 'bg-shadow font-semibold';
 
-const SideBar: FC = () => {
+interface SideBarProps {
+  menuOpen?: boolean;
+}
+
+const SideBar: FC<SideBarProps> = ({ menuOpen = false }) => {
   const { t } = useTranslation();
   const items = useSidebarItems();
   const { pathname } = useLocation();
@@ -21,7 +25,11 @@ const SideBar: FC = () => {
   const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
   return (
-    <nav aria-label={t('v2.ui.navigation')} className="flex flex-col border-secondary border-r print:hidden">
+    <nav
+      id="sidebar-menu"
+      aria-label={t('v2.ui.navigation')}
+      className="flex flex-col border-secondary border-r print:hidden"
+    >
       <ul className="flex flex-col h-full list-none m-0 py-2">
         <li>
           <CodeCopy />
