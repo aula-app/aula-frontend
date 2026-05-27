@@ -3,11 +3,13 @@ import CodeCopy from '@/v2/components/button/CodeCopy';
 import DarkModeButton from '@/v2/components/button/DarkMode';
 import LanguageButton from '@/v2/components/button/Language';
 import Logout from '@/v2/components/button/Logout';
+import PrintButton from '@/v2/components/button/Print';
 import Icon from '@/v2/components/ui/Icon';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useSidebarItems } from './useSidebarItems';
+import BugButton from '../../button/Bug';
 
 const activeClass = 'bg-shadow font-semibold';
 
@@ -19,13 +21,15 @@ const SideBar: FC = () => {
   const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
   return (
-    <nav aria-label={t('v2.ui.navigation')} className="flex flex-col border-secondary border-r">
+    <nav aria-label={t('v2.ui.navigation')} className="flex flex-col border-secondary border-r print:hidden">
       <ul className="flex flex-col h-full list-none m-0 py-2">
         <li>
           <CodeCopy />
         </li>
 
-        <hr className="my-1 border-secondary" />
+        <li>
+          <hr className="my-1 border-secondary" />
+        </li>
 
         {/* Profile */}
         <li>
@@ -41,7 +45,9 @@ const SideBar: FC = () => {
           </Button>
         </li>
 
-        <hr className="my-1 border-secondary" />
+        <li>
+          <hr className="my-1 border-secondary" />
+        </li>
 
         {/* Nav items */}
         {items.map((item) => (
@@ -63,16 +69,24 @@ const SideBar: FC = () => {
         {/* Spacer */}
         <li className="flex-1" aria-hidden="true" />
 
-        <hr className="my-1 border-secondary" />
+        {/* Footer */}
+
+        <li>
+          <hr className="my-1 border-secondary" />
+        </li>
 
         {/* Utility actions */}
         <li className="flex items-center justify-around px-2 py-1">
           <DarkModeButton />
-          <LanguageButton />
+          <PrintButton />
+          <BugButton />
+          <LanguageButton icon />
         </li>
 
-        {/* Footer */}
-        <hr className="my-1 border-secondary" />
+        <li>
+          <hr className="my-1 border-secondary" />
+        </li>
+
         <li>
           <Logout />
         </li>

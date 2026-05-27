@@ -82,6 +82,10 @@
       }
     },
     "ui": {
+      "actions": {
+        "print": "Print this page",
+        "report": "Report a bug"
+      },
       "button": {
         "cancel": "Cancel",
         "clear": "Clear",

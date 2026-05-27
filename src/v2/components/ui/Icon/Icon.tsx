@@ -6,6 +6,7 @@ import {
   HiOutlineArchiveBox,
   HiOutlineArrowRightEndOnRectangle,
   HiOutlineBars3,
+  HiOutlineBugAnt,
   HiOutlineChevronDown,
   HiOutlineChevronLeft,
   HiOutlineCog6Tooth,
@@ -29,7 +30,6 @@ import {
   HiOutlineUsers,
   HiOutlineXMark,
 } from 'react-icons/hi2';
-import { IoBugOutline } from 'react-icons/io5';
 
 /**
  * Icon component for the application
@@ -45,7 +45,7 @@ export const ICONS = {
   copy: HiOutlineDocumentDuplicate,
   box: HiOutlineArchiveBox,
   boxes: HiOutlineArchiveBox,
-  bug: IoBugOutline,
+  bug: HiOutlineBugAnt,
   close: HiOutlineXMark,
   day: HiOutlineSun,
   eye: HiOutlineEye,

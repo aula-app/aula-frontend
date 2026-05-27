@@ -83,6 +83,10 @@
       }
     },
     "ui": {
+      "actions": {
+        "print": "Diese Seite drucken",
+        "report": "Einen Fehler melden"
+      },
       "button": {
         "cancel": "Abbrechen",
         "clear": "Löschen",

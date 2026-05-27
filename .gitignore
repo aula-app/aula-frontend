@@ -31,6 +31,9 @@ package-lock.json
 # production
 /build
 
+#llm
+.claude/
+
 # misc
 .DS_Store
 /*.development
