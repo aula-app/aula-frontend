@@ -92,11 +92,10 @@ const Tooltip: React.FC<TooltipProps> = ({
       <div
         id={tooltipId}
         role="tooltip"
-        aria-hidden={!visible}
         className={twMerge(
           `absolute z-10 px-4 pt-1.5 pb-2 rounded-3xl w-max max-w-[min(75vw,18rem)] bg-background text-left transition-all duration-200 transform
           ${placementClass}
-          ${visible ? 'opacity-100 translate-0' : 'opacity-0 pointer-events-none'}`,
+          ${visible ? 'opacity-100 translate-0' : 'opacity-0 pointer-events-none invisible'}`,
           className
         )}
         {...restOfProps}

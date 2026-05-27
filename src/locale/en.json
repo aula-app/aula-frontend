@@ -105,6 +105,11 @@
       "lightMode": {
         "label": "Light mode"
       },
+      "logout": {
+        "button": "Sign out",
+        "label": "Sign out of your account"
+      },
+      "navigation": "Navigation menu",
       "toggle": "Toggle {{var}}"
     }
   },

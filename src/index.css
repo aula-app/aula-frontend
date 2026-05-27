@@ -4,6 +4,11 @@
 @import "tailwindcss";
 @import "./theme/tailwind-theme.css";
 
+/* Force-include dynamic Button color classes that Tailwind can't detect statically */
+@source inline("{bg,text,border}-{primary,secondary,error}");
+@source inline("{hover,active}:bg-{primary,secondary,error}/{10,20}");
+@source inline("focus-visible:outline-{primary,secondary,error}");
+
 
 /* MUI-like ripple animation */
 @keyframes ripple {

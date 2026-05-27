@@ -24,6 +24,7 @@ import {
   HiOutlineMoon,
   HiOutlinePrinter,
   HiOutlineSun,
+  HiOutlineUser,
   HiOutlineUserGroup,
   HiOutlineUsers,
   HiOutlineXMark,
@@ -69,6 +70,7 @@ export const ICONS = {
   room: HiOutlineAcademicCap,
   rooms: HiOutlineAcademicCap,
   settings: HiOutlineCog6Tooth,
+  user: HiOutlineUser,
   users: HiOutlineUserGroup,
 };
 

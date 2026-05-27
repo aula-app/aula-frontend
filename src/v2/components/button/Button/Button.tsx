@@ -19,15 +19,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const dark = localStorage.getItem('darkMode')
       ? localStorage.getItem('darkMode') === 'true'
       : window.matchMedia('(prefers-color-scheme: dark)').matches;
-    console.log('Dark mode:', dark);
 
     return (
       <button
         ref={ref}
-        aria-disabled={props.disabled}
         className={twMerge(
           'relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 shadow-xs',
-          'text-sm font-medium transition-all duration-200',
+          'text-sm font-medium transition-all duration-200 min-h-11 min-w-11',
           'disabled:cursor-not-allowed disabled:opacity-50',
           dark ? 'text-paper' : 'text-text-secondary',
           outlined

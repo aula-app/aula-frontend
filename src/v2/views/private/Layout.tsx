@@ -1,8 +1,11 @@
-import Button from '@/v2/components/button/Button';
 import CodeCopy from '@/v2/components/button/CodeCopy';
 import Logout from '@/v2/components/button/Logout';
+import { FunctionComponent, PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex-1 flex flex-col relative h-dvh w-full">
       <header className="relative bg-primary px-2 py-1 shadow-sm pt-[calc(var(--safe-area-inset-top,0px))] z-30">
@@ -10,7 +13,7 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
       </header>
       <div className="flex-1 flex flex-row-reverse">
         <main className="flex-1 flex">{children}</main>
-        <nav className="flex flex-col border-secondary border-r">
+        <nav aria-label={t('v2.ui.navigation')} className="flex flex-col border-secondary border-r">
           <CodeCopy />
           <hr className="border-t border-secondary" />
           Profile
@@ -24,7 +27,7 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     </div>
   );
 
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLElement>(null);

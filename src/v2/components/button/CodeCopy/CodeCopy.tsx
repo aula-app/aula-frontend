@@ -37,7 +37,6 @@ const CodeCopy: FC = (restOfProps) => {
         type="button"
         onClick={handleCopy}
         className="text-text-secondary"
-        aria-label={t('v2.ui.code.copy', { var: code })}
         {...restOfProps}
       >
         {`${t('v2.ui.code.button', { var: code })}`}
