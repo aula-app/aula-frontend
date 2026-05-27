@@ -26,7 +26,8 @@ export default defineConfig({
 
     launchOptions: {
       args: [
-        '--disable-gl-drawing-for-tests',
+        // TODO: provide an env flag for this?
+        // '--disable-gl-drawing-for-tests',
         '--disable-dev-shm-usage',
         '--disable-extensions',
         '--disable-background-networking',
