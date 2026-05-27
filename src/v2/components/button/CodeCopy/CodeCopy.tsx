@@ -31,14 +31,7 @@ const CodeCopy: FC = (restOfProps) => {
 
   return (
     <Tooltip content={t('v2.ui.code.copy')}>
-      <Button
-        text
-        id="instance-code"
-        type="button"
-        onClick={handleCopy}
-        className="text-text-secondary"
-        {...restOfProps}
-      >
+      <Button text color="secondary" id="instance-code" type="button" onClick={handleCopy} {...restOfProps}>
         {`${t('v2.ui.code.button', { var: code })}`}
         <Icon type="copy" />
       </Button>
