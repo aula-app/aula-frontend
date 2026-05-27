@@ -4,6 +4,7 @@ import * as types from '../support/types';
 import * as formsInteractions from './forms';
 import * as settingsInteractions from './settings';
 import * as navigation from './navigation';
+import { TIMEOUTS } from '../support/constants';
 const host = shared.getHost();
 
 type TempPass = string;
@@ -49,7 +50,7 @@ export const getTemporaryPass = async (page: Page, data: types.UserData) => {
   await viewPassButton.click();
 
   // temporary password must exist and be pulled out of the page.
-  const passLocator = row.locator('div[role="button"] span');
+  const passLocator = row.locator('div[role="button"] span').filter({ hasText: /^.{8}$/ });
   await expect(passLocator).toBeVisible();
   const pass: string = (await passLocator.textContent())!;
   expect(pass).toBeTruthy();
@@ -146,7 +147,9 @@ export const loginAttempt = async (page: Page, data: { username: string, passwor
 // Helper function to log in a user
 export const login = async (page: Page, data: { username: string, password: string }) => {
   await loginAttempt(page, data);
-  await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: 20000 });
+  await page.waitForLoadState('networkidle');
+  await expect(page.getByRole('alert')).not.toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
+  await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: TIMEOUTS.FIVE_SECONDS });
 };
 
 // Helper function to log out a user
@@ -196,9 +199,6 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
 };
 
 export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {
-  await page.goto(host, { waitUntil: 'domcontentloaded' });
-  await ensureInstanceEntered(page, data.username);
-
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', tempPass);
   await page.locator('button[type="submit"]').click();
