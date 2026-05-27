@@ -5,6 +5,7 @@ import { RoomData, UserData } from '../support/types';
 import * as shared from '../support/utils';
 import { FILTER_EXCLUDED_RESOURCES, getStorageStatePath } from './utils';
 import { DbBackchannel } from './db-backchannel';
+import { TestConstants } from '../support/config';
 
 type WorkerFixtures = {
   // Fixture to determine the DB instance_code based on worker's parallelIndex
@@ -14,7 +15,7 @@ type WorkerFixtures = {
   baselineLoaded: void;
 
   // Fixture that ensures browser context is bootstrapped, returning local file path of the context
-  ensureStatePathFor: (username: 'student' | 'user' | 'admin') => Promise<string>;
+  ensureStatePathFor: (username: string) => Promise<string | null>;
 
   // Convenience fixtures to return value objects representing data seeded to the DB
   seededRoom: RoomData;
@@ -23,8 +24,8 @@ type WorkerFixtures = {
 };
 
 type BrowserFixtures = {
-  newContextFor: (role: 'student' | 'user' | 'admin') => Promise<BrowserContext>;
-  newPageFor: (role: 'student' | 'user' | 'admin') => Promise<Page>;
+  newContextFor: (username: string) => Promise<BrowserContext>;
+  newPageFor: (username: string) => Promise<Page>;
 };
 
 export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
@@ -46,11 +47,13 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
   }, { scope: 'worker' }],
 
   ensureStatePathFor: [async ({ baselineLoaded, dbInstanceCode, browser }, use) => {
-    const factory = async (username: 'student' | 'user' | 'admin') => {
+    const hasLoggedInState: Record<string, boolean> = {};
+
+    const factory = async (username: string) => {
       const storageStatePath = getStorageStatePath(`${dbInstanceCode}_${username}`);
 
-      // use browser to create state if missing
-      if (!fs.existsSync(storageStatePath)) {
+      // use browser to create state (if state is missing) or (if log-in wasn't successful last time)
+      if (!fs.existsSync(storageStatePath) || !hasLoggedInState[username]) {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
         await page.route('**/*', FILTER_EXCLUDED_RESOURCES);
@@ -58,11 +61,22 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
         console.log(`↔️ Accessing tested instance ${dbInstanceCode} as ${username}`);
         await page.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
         await userInteractions.ensureSpecificInstanceEntered(page, dbInstanceCode);
-        await userInteractions.login(page, { username: username, password: 'aula' });
-        await page.waitForFunction(() => localStorage.getItem('token'));
 
-        await ctx.storageState({ path: storageStatePath });
-        await ctx.close();
+        try {
+          await userInteractions.login(page, { username: username, password: TestConstants.DEFAULT_PASSWORD });
+          await page.waitForFunction(() => localStorage.getItem('token'));
+          await ctx.storageState({ path: storageStatePath });
+          await ctx.close();
+          hasLoggedInState[username] = true;
+        } catch (e) {
+          // ignored because this might be fine, for example newly created users have to 
+          // go through the process of setting their password the first time using tempPass (see CSV import test)
+          console.log(`⚠️ Can't login to tested instance ${dbInstanceCode} as ${username}`);
+          hasLoggedInState[username] = false;
+          // but, still we should return 'null' so that the 
+          // context would be set later after first-time registration is complete
+          return null;
+        }
       }
       return storageStatePath;
     }
@@ -81,7 +95,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
       hashId: 'e2e.user.20.student',
       role: 20,
       about: 'e2e test student',
-      password: 'aula',
+      password: TestConstants.DEFAULT_PASSWORD,
       email: 'dev+e2e-student@aula.de'
     });
   }, { scope: 'worker' }],
@@ -95,7 +109,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
       hashId: 'e2e.user.20.user',
       role: 20,
       about: 'e2e test user',
-      password: 'aula',
+      password: TestConstants.DEFAULT_PASSWORD,
       email: 'dev+e2e-user@aula.de'
     });
   }, { scope: 'worker' }],
@@ -116,25 +130,28 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
       ensureStatePathFor('user'),
       ensureStatePathFor('admin'),
     ]);
-    const mapping: Record<string, string> = { student, user, admin };
+    const precreatedStorageStates: Record<string, string> = { student: student!, user: user!, admin: admin! };
     // track created contexts for cleanup
-    const created: BrowserContext[] = [];
-    const factory = async (username: 'student' | 'user' | 'admin') => {
-      const state = mapping[username];
-      const ctx = await browser.newContext({ storageState: state });
-      created.push(ctx);
+    const createdBrowserContexts: BrowserContext[] = [];
+    const factory = async (username: string) => {
+      const ctx = precreatedStorageStates[username]
+        ? await browser.newContext({ storageState: precreatedStorageStates[username] })
+        : (await ensureStatePathFor(username)
+          ? await browser.newContext({ storageState: (await ensureStatePathFor(username))! })
+          : await browser.newContext());
+      createdBrowserContexts.push(ctx);
       return ctx;
     };
     await use(factory);
     // cleanup after test
-    await Promise.all(created.map(c => c.close().catch(() => { })));
+    await Promise.all(createdBrowserContexts.map(c => c.close().catch(() => { })));
   }, { scope: 'test' }],
 
   // factory to create a fresh page for a role
   newPageFor: [async ({ newContextFor }, use) => {
     const createdPages: Page[] = [];
-    const factory = async (role: 'student' | 'user' | 'admin') => {
-      const ctx = await newContextFor(role);
+    const factory = async (username: string) => {
+      const ctx = await newContextFor(username);
       const page = await ctx.newPage();
       createdPages.push(page);
       return page;
