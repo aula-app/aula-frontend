@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test';
-import { test } from '../../fixtures/test-fixtures';
+import { test } from '../../fixtures/adapter';
 import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 import { TestConstants } from '../../support/config';

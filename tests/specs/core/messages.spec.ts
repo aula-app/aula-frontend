@@ -1,6 +1,6 @@
-import { test, expect } from '../../fixtures/test-fixtures';
-import * as navigation from '../../interactions/navigation';
+import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as forms from '../../interactions/forms';
+import * as navigation from '../../interactions/navigation';
 import * as shared from '../../support/utils';
 
 /**
@@ -11,100 +11,68 @@ import * as shared from '../../support/utils';
  * NOTE: Tests run serially because they form a sequential workflow:
  * 1. Create message → 2. Send message to user → 3. Verify user receives message
  */
-test.describe.serial('Message Management - User Messages', () => {
-  let messageData: {
+test('Message Management - User Messages', async ({ seededUser, newPageFor }) => {
+  const adminPage = await newPageFor('admin');
+  const userPage = await newPageFor('user');
+  const messageData: {
     headline: string;
     body: string;
-    recipient: string;
+  } = {
+    headline: shared.gensym(`test-message-`),
+    body: `Test message sent to individual user`,
   };
 
-  test.beforeAll(async ({ userConfig }) => {
-    messageData = {
-      headline: shared.gensym(`test-message-`),
-      body: `Test message sent to individual user`,
-      recipient: userConfig.username,
-    };
+  await test.step('Admin can send a message to a user', async () => {
+    await navigation.goToMessagesSettings(adminPage);
+    //Click add message button
+    await forms.clickButton(adminPage, 'add-messages-button');
+    await adminPage.getByTestId('user-field-autocomplete-input').waitFor({ state: 'visible' });
+
+    // Select the user from the autocomplete
+    await forms.selectMultiAutocompleteOption(adminPage, 'user-field-autocomplete-input', seededUser.username);
+
+    // Fill & Submit Message form
+    await forms.fillForm(adminPage, 'message-headline', messageData.headline);
+    await forms.fillMarkdownForm(adminPage, 'body', messageData.body);
+    await forms.clickButton(adminPage, 'submit-message-form');
+
+    // Verify message was created in admin panel
+    const messageRow = adminPage.locator('table tr').filter({ hasText: messageData.headline });
+    await expect(messageRow).toBeVisible();
   });
 
-  test('Admin can send a message to a user', async ({ adminPage }) => {
-    await test.step('Navigate to messages settings', async () => {
-      await navigation.goToMessagesSettings(adminPage);
-    });
+  await test.step('User receives the message', async () => {
+    await navigation.goToMessages(userPage);
 
-    await test.step('Click add message button', async () => {
-      await forms.clickButton(adminPage, 'add-messages-button');
-      await adminPage.getByTestId('user-field-autocomplete-input').waitFor({ state: 'visible' });
-    });
-
-    await test.step('Select user as message target', async () => {
-      // Select the user from the autocomplete
-      await forms.selectMultiAutocompleteOption(adminPage, 'user-field-autocomplete-input', messageData.recipient);
-    });
-
-    await test.step('Fill message form', async () => {
-      await forms.fillForm(adminPage, 'message-headline', messageData.headline);
-
-      // Scope the markdown editor to the form
-      const form = adminPage.locator('form').first();
-      await forms.fillMarkdownForm(adminPage, 'body', messageData.body, form);
-    });
-
-    await test.step('Submit message', async () => {
-      await forms.clickButton(adminPage, 'submit-message-form');
-    });
-
-    await test.step('Verify message was created in admin panel', async () => {
-      const messageRow = adminPage.locator('table tr').filter({ hasText: messageData.headline });
-      await expect(messageRow).toBeVisible();
-    });
+    // Verify message is visible
+    const messageCard = userPage.getByText(messageData.headline);
+    await expect(messageCard).toBeVisible();
   });
 
-  test('User receives the message', async ({ userPage }) => {
-    await test.step('Navigate to messages', async () => {
-      await navigation.goToMessages(userPage);
-    });
+  await test.step('Admin can delete a message', async () => {
+    // Verify message is visible
+    await navigation.goToMessagesSettings(adminPage);
+    await expect(adminPage.locator('table tr').filter({ hasText: messageData.headline })).toBeVisible();
 
-    await test.step('Verify message is visible', async () => {
-      const messageCard = userPage.getByText(messageData.headline);
-      await expect(messageCard).toBeVisible();
-    });
+    // Ensure checkbox is unchecked first, then check it
+    const checkbox = (adminPage.locator('table tr').filter({ hasText: messageData.headline })).locator('input');
+    await expect(checkbox).toBeVisible();
+    if (await checkbox.isChecked()) {
+      await checkbox.uncheck();
+    }
+    await checkbox.check();
+
+    // Delete the message
+    await forms.clickButton(adminPage, 'remove-messages-button');
+    await forms.clickButton(adminPage, 'confirm-delete-messages-button');
+
+    //Verify message is no longer in the list
+    await expect(adminPage.locator('table tr').filter({ hasText: messageData.headline })).toHaveCount(0);
   });
 
-  test('Admin can delete a message', async ({ adminPage }) => {
-    await test.step('Navigate to messages settings', async () => {
-      await navigation.goToMessagesSettings(adminPage);
-    });
-
-    await test.step('Find and select the message to delete', async () => {
-      const messageRow = adminPage.locator('table tr').filter({ hasText: messageData.headline });
-      await expect(messageRow).toBeVisible();
-
-      const checkbox = messageRow.locator('input[type="checkbox"]');
-      await expect(checkbox).toBeVisible();
-
-      // Ensure checkbox is unchecked first, then check it
-      if (await checkbox.isChecked()) {
-        await checkbox.uncheck();
-      }
-      await checkbox.check();
-    });
-
-    await test.step('Delete the message', async () => {
-      await forms.clickButton(adminPage, 'remove-messages-button');
-      await forms.clickButton(adminPage, 'confirm-delete-messages-button');
-    });
-
-    await test.step('Verify message is no longer in the list', async () => {
-      const messageRow = adminPage.locator('table tr').filter({ hasText: messageData.headline });
-      await expect(messageRow).toHaveCount(0);
-    });
-  });
-
-  test('Message is no longer available to User', async ({ userPage }) => {
-    await test.step('Verify message is no longer visible', async () => {
-      await navigation.goToMessages(userPage);
-      const messageCard = userPage.getByText(messageData.headline);
-      await expect(messageCard).toHaveCount(0);
-    });
+  await test.step('User verifies message is no longer visible', async () => {
+    await navigation.goToMessages(userPage);
+    const messageCard = userPage.getByText(messageData.headline);
+    await expect(messageCard).toHaveCount(0);
   });
 });

@@ -1,6 +1,5 @@
-import { expect } from '@playwright/test';
-import { test } from '../../fixtures/test-fixtures';
 import * as formInteractions from '../../interactions/forms';
+import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as navigation from '../../interactions/navigation';
 
 /**
@@ -11,74 +10,62 @@ import * as navigation from '../../interactions/navigation';
  * NOTE: Tests run serially because they form a sequential workflow:
  * 1. User requests data export → 2. Admin approves request → 3. User downloads data
  */
-test.describe.serial('Request User Data - Export Request and Download Flow', () => {
-  test('User can request user data export', async ({ userPage }) => {
-    await test.step('Submit data export request', async () => {
-      await navigation.goToProfile(userPage);
+test('Request User Data - Export Request and Download Flow', async ({ seededUser, newPageFor }) => {
+  const adminPage = await newPageFor('admin');
+  const userPage = await newPageFor('user');
 
-      // Open the danger panel accordion
-      await navigation.openAccordion(userPage, 'privacy-panel-button');
+  await test.step('User can request user data export', async () => {
+    await navigation.goToProfile(userPage);
 
-      // Click the request data export button
-      await formInteractions.clickButton(userPage, 'request-data-export-button');
-      await expect(userPage.getByTestId('success-alert')).toBeVisible();
-    });
+    // Open the danger panel accordion
+    await navigation.openAccordion(userPage, 'privacy-panel-button');
+
+    // Click the request data export button
+    await formInteractions.clickButton(userPage, 'request-data-export-button');
+    await expect(userPage.getByTestId('success-alert')).toBeVisible();
   });
 
-  test('Admin can approve the data export request', async ({ adminPage, userConfig }) => {
-    await test.step('Navigate to requests settings', async () => {
-      await navigation.goToRequestsSettings(adminPage);
-      const requestRow = adminPage.getByTestId(`data-export-request-${userConfig.username}`);
-      await expect(requestRow).toBeVisible();
-    });
+  await test.step('Admin can approve the data export request', async () => {
+    // Find the request for the specific user
+    await navigation.goToRequestsSettings(adminPage);
+    const requestRow = adminPage.getByTestId(`data-export-request-${seededUser.username}`);
+    await expect(requestRow).toBeVisible();
 
-    await test.step('Approve the export request', async () => {
-      await navigation.goToRequestsSettings(adminPage);
+    // Click approve button
+    const approveButton = requestRow.getByTestId('confirm-request');
+    await expect(approveButton).toBeVisible();
+    await approveButton.click();
 
-      // Find the request for the specific user
-      const requestRow = adminPage.getByTestId(`data-export-request-${userConfig.username}`);
-      await expect(requestRow).toBeVisible();
+    // Wait for confirmation dialog
+    await adminPage.getByTestId('confirm-request-dialog').waitFor({ state: 'visible' });
 
-      // Click approve button
-      const approveButton = requestRow.getByTestId('confirm-request');
-      await expect(approveButton).toBeVisible();
-      await approveButton.click();
-
-      // Wait for confirmation dialog
-      await adminPage.getByTestId('confirm-request-dialog').waitFor({ state: 'visible' });
-
-      // Click confirm button in the dialog
-      await formInteractions.clickButton(adminPage, 'confirm-request-action');
-      await adminPage.getByTestId('confirm-request-dialog').waitFor({ state: 'hidden' });
-    });
+    // Click confirm button in the dialog
+    await formInteractions.clickButton(adminPage, 'confirm-request-action');
+    await adminPage.getByTestId('confirm-request-dialog').waitFor({ state: 'hidden' });
   });
 
-  test('User can see the approval and download their data', async ({ userPage, userConfig }) => {
-    await test.step('Download user data', async () => {
-      await navigation.goToMessages(userPage);
-      const messagesView = userPage.getByTestId('user-messages-view');
-      await expect(messagesView).toBeVisible();
+  await test.step('User can see the approval and download their data', async () => {
+    await navigation.goToMessages(userPage);
+    const messagesView = userPage.getByTestId('user-messages-view');
+    await expect(messagesView).toBeVisible();
 
-      // Click on the data export message (find by headline text)
-      const exportMessage = messagesView.getByText(userConfig.displayName).first();
-      await expect(exportMessage).toBeVisible();
-      await exportMessage.click();
+    // Click on the data export message (find by headline text)
+    const exportMessage = messagesView.getByText(seededUser.displayName).first();
+    await expect(exportMessage).toBeVisible();
+    await exportMessage.click();
 
-      // // Verify download button is available
-      const downloadButton = userPage.getByTestId('download-data-button');
-      await expect(downloadButton).toBeVisible();
-      await expect(downloadButton).toBeEnabled();
+    // Click on the Download button
+    const downloadButton = userPage.getByTestId('download-data-button');
+    await expect(downloadButton).toBeVisible();
+    await downloadButton.click();
 
-      // Setup download listener
-      const downloadPromise = userPage.waitForEvent('download', { timeout: 30000 });
-      await downloadButton.click();
+    // Wait for download to complete
+    const download = await userPage.waitForEvent('download');
+    const filename = download.suggestedFilename();
 
-      // Wait for download to complete
-      const download = await downloadPromise;
-      const filename = download.suggestedFilename();
+    expect(filename).toBeDefined();
+    expect(filename).toContain('data_export');
 
-      expect(filename).toBeDefined();
-      expect(filename).toContain('data_export');
-    });
+    // @TODO: Verify the content of the downloaded data export
   });
 });

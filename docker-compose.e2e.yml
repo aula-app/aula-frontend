@@ -7,7 +7,7 @@ name: aula-e2e
 #   yarn test
 #   docker compose -f docker-compose.e2e.yml down -v
 #
-# Override the backend path if your repo is not at ${BACKEND_DIR:-../backend-aula}:
+# Override the backend path if your repo is not at ${BACKEND_DIR:-../aula-backend}:
 #   BACKEND_DIR=/path/to/backend docker compose -f docker-compose.e2e.yml up --build -d
 # Or set BACKEND_DIR in a .env file next to this compose file.
 #
@@ -28,10 +28,12 @@ services:
       MARIADB_ROOT_PASSWORD: e2e_root
       MARIADB_USER: aula_user
       MARIADB_PASSWORD: e2e_pass
+    ports:
+      - "3307:3306"
     volumes:
       # NOTE: this path is coupled to the backend repo structure (docker/mariadb/).
-      # If that folder moves in backend-aula, this volume mapping must be updated here too.
-      - ${BACKEND_DIR:-../backend-aula}/docker/mariadb/:/docker-entrypoint-initdb.d:ro
+      # If that folder moves in aula-backend, this volume mapping must be updated here too.
+      - ${BACKEND_DIR:-../aula-backend}/docker/mariadb/:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       start_period: 10s
@@ -43,7 +45,7 @@ services:
 
   backend-setup:
     build:
-      context: ${BACKEND_DIR:-../backend-aula}
+      context: ${BACKEND_DIR:-../aula-backend}
     # Override entrypoint so this container exits cleanly instead of starting supervisord.
     entrypoint: ["sh", "-c"]
     command:
@@ -51,8 +53,28 @@ services:
         php artisan key:generate --force
         php artisan migrate --force
         php artisan tenant:create \
-          --name="E2E Test Instance" \
-          --code=SINGLE \
+          --name="E2E.0" \
+          --code=db000 \
+          --admin-username=admin \
+          --admin-name="Admin User" \
+          --admin-email=admin@aula.de \
+          --admin2-username=tech_admin \
+          --admin2-name="Tech Admin" \
+          --admin2-email=tech@aula.de \
+          --admin-password=aula
+        php artisan tenant:create \
+          --name="E2E.1" \
+          --code=db001 \
+          --admin-username=admin \
+          --admin-name="Admin User" \
+          --admin-email=admin@aula.de \
+          --admin2-username=tech_admin \
+          --admin2-name="Tech Admin" \
+          --admin2-email=tech@aula.de \
+          --admin-password=aula
+        php artisan tenant:create \
+          --name="E2E.2" \
+          --code=db002 \
           --admin-username=admin \
           --admin-name="Admin User" \
           --admin-email=admin@aula.de \
@@ -83,7 +105,7 @@ services:
 
   backend-legacy-e2e:
     build:
-      context: ${BACKEND_DIR:-../backend-aula}/legacy
+      context: ${BACKEND_DIR:-../aula-backend}/legacy
     environment:
       APP_ENV: testing
       APACHE_SERVER_NAME: localhost
