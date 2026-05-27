@@ -26,6 +26,9 @@ type WorkerFixtures = {
 type BrowserFixtures = {
   newContextFor: (username: string) => Promise<BrowserContext>;
   newPageFor: (username: string) => Promise<Page>;
+
+  // Fixture to ensure singleton DbBackchannel is loaded and DB is re-seeded
+  baselineReload: () => Promise<void>;
 };
 
 export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
@@ -43,6 +46,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
     const dbBackchannel = await DbBackchannel.getByInstanceCode(dbInstanceCode);
     await dbBackchannel.truncateAll();
     await dbBackchannel.seed();
+    console.log(`󰳿 baselineLoaded for ${dbInstanceCode}`);
     await use(undefined);
   }, { scope: 'worker' }],
 
@@ -123,8 +127,19 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
     });
   }, { scope: 'worker' }],
 
+  // Reseed the worker's database (needs to be invoked after the test execution, used in newContextFor teardown)
+  baselineReload: [async ({ dbInstanceCode }, use) => {
+    const reload = async () => {
+      const dbBackchannel = await DbBackchannel.getByInstanceCode(dbInstanceCode);
+      await dbBackchannel.truncateAll();
+      await dbBackchannel.seed();
+      console.log(`󰳿 baselineReloaded for ${dbInstanceCode}`);
+    }
+    await use(reload);
+  }, { scope: 'test' }],
+
   // factory to create a new authenticated context (test-scoped)
-  newContextFor: [async ({ browser, ensureStatePathFor }, use) => {
+  newContextFor: [async ({ browser, ensureStatePathFor, baselineReload }, use) => {
     const [student, user, admin] = await Promise.all([
       ensureStatePathFor('student'),
       ensureStatePathFor('user'),
@@ -145,6 +160,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
     await use(factory);
     // cleanup after test
     await Promise.all(createdBrowserContexts.map(c => c.close().catch(() => { })));
+    // await baselineReload();
   }, { scope: 'test' }],
 
   // factory to create a fresh page for a role
