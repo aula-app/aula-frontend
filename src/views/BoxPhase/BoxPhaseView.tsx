@@ -2,7 +2,6 @@ import { AppIcon, EmptyState, ScopeHeader } from '@/components';
 import BoxCard from '@/components/BoxCard';
 import BoxCardSkeleton from '@/components/BoxCard/BoxCardSkeleton';
 import { BoxForms } from '@/components/DataForms';
-import SurveyForms from '@/components/DataForms/SurveyForms';
 import { deleteBox, getBoxesByPhase } from '@/services/boxes';
 import { getRoom } from '@/services/rooms';
 import { useAppStore } from '@/store/AppStore';
@@ -74,8 +73,6 @@ const BoxPhaseView = () => {
     });
   };
 
-  const [addSurvey, setAddSurvey] = useState(false);
-
   const fetchBoxes = useCallback(async () => {
     if (!room_id || !phase) return;
     setLoading(true);
@@ -106,7 +103,6 @@ const BoxPhaseView = () => {
 
   const onClose = () => {
     setEdit(undefined);
-    setAddSurvey(false);
     fetchBoxes();
   };
 
@@ -153,28 +149,22 @@ const BoxPhaseView = () => {
         sx={{
           position: 'fixed',
           bottom: 'max(40px, calc(40px + var(--safe-area-inset-bottom, 0px)))',
-          right: 16,
           zIndex: 1000,
         }}
       >
         {checkPermissions('boxes', 'create') && Number(phase) === 10 && (
-          <Fab aria-label={t('ui.accessibility.addIdea')} color="primary" onClick={() => setEdit(true)} data-testid="add-idea-button">
+          <Fab
+            aria-label={t('ui.accessibility.addIdea')}
+            color="primary"
+            onClick={() => setEdit(true)}
+            data-testid="add-idea-button"
+          >
             <AppIcon icon="box" />
           </Fab>
         )}
         <Drawer anchor="bottom" open={!!edit} onClose={onClose} sx={{ overflowY: 'auto' }}>
           <BoxForms onClose={onClose} defaultValues={typeof edit === 'object' ? edit : undefined} />
         </Drawer>
-        {checkPermissions('surveys', 'create') && Number(phase) === 30 && (
-          <>
-            <Fab aria-label={t('ui.accessibility.add')} color="primary" onClick={() => setAddSurvey(true)}>
-              <AppIcon icon="survey" />
-            </Fab>
-            <Drawer anchor="bottom" open={!!addSurvey} onClose={onClose} sx={{ overflowY: 'auto' }}>
-              <SurveyForms onClose={onClose} />
-            </Drawer>
-          </>
-        )}
       </Stack>
     </Stack>
   );
