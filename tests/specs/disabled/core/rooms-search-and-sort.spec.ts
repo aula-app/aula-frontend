@@ -1,8 +1,9 @@
-import { test, expect } from '../../fixtures/test-fixtures';
+import { test, expect } from '../../fixtures/adapter';
 import { TEST_IDS } from '../../../src/test-ids';
 import * as rooms from '../../interactions/rooms';
 import * as navigation from '../../interactions/navigation';
 import * as entities from '../../helpers/entities';
+import { RoomData } from '../../support/types';
 
 /**
  * Room Search and Sort Tests
@@ -14,11 +15,12 @@ import * as entities from '../../helpers/entities';
  * Cleanup is handled by globalTeardown (test-room-* prefix).
  */
 test.describe.serial('Rooms View - Search and Sort Functionality', () => {
-  // Seeded before the suite — gives us a known room name to search for exactly.
-  const seededRoom = entities.createRoom('search-sort');
+  let seededRoom: RoomData;
 
-  test.beforeAll(async ({ adminPage, userConfig }) => {
-    seededRoom.users = [userConfig];
+  test.beforeAll(async ({ dbReset, adminPage, ensureUser }) => {
+    await dbReset();
+    seededRoom = entities.createRoom('search-sort');
+    seededRoom.users = [await ensureUser('user', 20)];
     await rooms.create(adminPage, seededRoom);
   });
 

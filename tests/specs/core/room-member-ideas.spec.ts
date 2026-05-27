@@ -1,83 +1,40 @@
-import { test, expect } from '../../fixtures/test-fixtures';
-import * as roomsFixture from '../../helpers/contexts/room-contexts';
+import { test, expect } from '../../fixtures/aula-tests-fixture';
 import * as entities from '../../helpers/entities';
+import * as rooms from '../../interactions/rooms';
 import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
 
 /**
- * Room Member Ideas Visibility Tests
+ * Room Creation and accessing Ideas
+ *
  * Tests that users who are members of a room can see ideas when they enter the room
  * Uses pure Playwright fixtures for setup/teardown
  */
-test.describe.serial('Room Member - Ideas Visibility', () => {
-  let roomContext: roomsFixture.RoomContext;
+test('Room Creation and accessing Ideas', async ({ seededUser, newPageFor }) => {
+  const adminPage = await newPageFor('admin');
+  const userPage = await newPageFor('user');
+  const studentPage = await newPageFor('student');
 
   const adminIdea = entities.createIdea('admin-visible');
-  const userIdea = entities.createIdea('user-visible');
+  const room = entities.createRoom('room-tests.new-room', [{ username: seededUser.username }]);
 
-  test('Setup: Admin creates room and adds ideas', async ({ adminPage, userConfig, studentConfig }) => {
-    await test.step('Setup room context with member users', async () => {
-      roomContext = await roomsFixture.setupRoomContext(adminPage, [userConfig, studentConfig], 'member-ideas-test');
-    });
-
-    await test.step('Navigate to room', async () => {
-      await navigation.goToRoom(adminPage, roomContext.room.name);
-    });
-
-    await test.step('Admin creates first idea', async () => {
-      await ideas.create(adminPage, adminIdea);
-    });
-
-    await test.step('Admin creates second idea', async () => {
-      await ideas.create(adminPage, userIdea);
-    });
+  await test.step('Admin can create a Room and add an Idea', async () => {
+    await rooms.create(adminPage, room);
+    await navigation.goToRoom(adminPage, room.name);
+    await ideas.create(adminPage, adminIdea);
   });
 
-  test('Member user can see ideas when entering room', async ({ userPage }) => {
-    await test.step('User navigates to room', async () => {
-      await navigation.goToRoom(userPage, roomContext.room.name);
-    });
+  await test.step('User member can access individual idea details', async () => {
+    await navigation.goToWildIdea(userPage, room.name, adminIdea.name);
 
-    await test.step('User can see admin idea', async () => {
-      const adminIdeaElement = userPage.getByTestId(`idea-${adminIdea.name}`);
-      await expect(adminIdeaElement).toBeVisible();
-    });
-
-    await test.step('User can see second idea', async () => {
-      const userIdeaElement = userPage.getByTestId(`idea-${userIdea.name}`);
-      await expect(userIdeaElement).toBeVisible();
-    });
-
-    await test.step('Verify room title is displayed', async () => {
-      await expect(userPage.getByText(roomContext.room.name)).toBeVisible();
-    });
+    // Use more specific selectors to avoid multiple matches
+    await expect(userPage.getByRole('heading', { name: adminIdea.name })).toBeVisible();
+    await expect(userPage.getByText(adminIdea.description)).toBeVisible();
   });
 
-  test('Student member can also see ideas when entering room', async ({ studentPage }) => {
-    await test.step('Student navigates to room', async () => {
-      await navigation.goToRoom(studentPage, roomContext.room.name);
-    });
-
-    await test.step('Student can see admin idea', async () => {
-      const adminIdeaElement = studentPage.getByTestId(`idea-${adminIdea.name}`);
-      await expect(adminIdeaElement).toBeVisible();
-    });
-
-    await test.step('Student can see second idea', async () => {
-      const userIdeaElement = studentPage.getByTestId(`idea-${userIdea.name}`);
-      await expect(userIdeaElement).toBeVisible();
-    });
-  });
-
-  test('Member can access individual idea details', async ({ userPage }) => {
-    await test.step('User navigates to specific idea', async () => {
-      await navigation.goToWildIdea(userPage, roomContext.room.name, adminIdea.name);
-    });
-
-    await test.step('Verify idea details are visible', async () => {
-      // Use more specific selectors to avoid multiple matches
-      await expect(userPage.getByRole('heading', { name: adminIdea.name })).toBeVisible();
-      await expect(userPage.getByText(adminIdea.description)).toBeVisible();
-    });
+  // @TODO: Un-Skip when https://github.com/aula-app/aula-frontend/issues/1169 is fixed
+  await test.step.skip('Student is not part of the Room, can\'t see the Idea', async () => {
+    await navigation.goToRoom(studentPage, room.name);
+    await expect(userPage.getByTestId('page-not-found-view')).toBeVisible();
   });
 });

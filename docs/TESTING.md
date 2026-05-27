@@ -6,61 +6,50 @@ Comprehensive end-to-end testing using Playwright following industry best practi
 
 ```
 tests/
-├── fixtures/               # Test fixtures and data
-│   ├── test-fixtures.ts   # Playwright native fixtures (Page objects, contexts)
-│   └── data/              # Test data management
-│       └── users.ts       # User fixture management
+├── fixtures/                 # Test fixtures and data
+│   ├── aula-test-fixtures.ts # Playwright fixtures (logged-in contexts, browser pages)
+│   └── sql/                  # DB SQL scripts for SetUp/TearDown
+│       └── *.sql             # Truncate & ReSeed DB scripts
 │
-├── support/               # Core utilities and configuration
-│   ├── types.ts          # TypeScript type definitions
-│   ├── config.ts         # Test configuration constants
-│   ├── utils.ts          # Utility functions (gensym, host, etc.)
-│   ├── constants.ts      # Timeouts, selectors, test IDs
-│   └── test-helpers.ts   # Reusable test helper functions
+├── support/                  # Core utilities and configuration
+│   ├── types.ts              # TypeScript type definitions
+│   ├── config.ts             # Test configuration constants
+│   ├── utils.ts              # Utility functions (gensym, host, etc.)
+│   ├── constants.ts          # Timeouts, selectors, test IDs
 │
-├── helpers/              # Test helpers and factories
-│   ├── entities.ts       # Entity factory functions (rooms, ideas, users)
-│   ├── api-client.ts     # API client for setup/teardown
-│   └── contexts/         # Test context builders
-│       └── room-contexts.ts  # Room setup helpers
+├── helpers/                  # Test helpers and factories
+│   └── entities.ts           # Entity factory functions (rooms, ideas, users)
 │
-├── interactions/         # Page interaction functions
-│   ├── browsers.ts       # Browser management
-│   ├── navigation.ts     # Navigation helpers
-│   ├── forms.ts          # Form interaction helpers
-│   ├── users.ts          # User-specific interactions
-│   ├── rooms.ts          # Room interactions
-│   ├── ideas.ts          # Idea interactions
-│   ├── boxes.ts          # Box interactions
-│   ├── messages.ts       # Message interactions
-│   ├── settings.ts       # Settings interactions
-│   └── interface.ts      # Common UI interactions
+├── interactions/             # Page interaction functions
+│   ├── browsers.ts           # Browser management
+│   ├── navigation.ts         # Navigation helpers
+│   ├── forms.ts              # Form interaction helpers
+│   ├── users.ts              # User-specific interactions
+│   ├── rooms.ts              # Room interactions
+│   ├── ideas.ts              # Idea interactions
+│   ├── boxes.ts              # Box interactions
+│   ├── messages.ts           # Message interactions
+│   ├── settings.ts           # Settings interactions
+│   └── interface.ts          # Common UI interactions
 │
-├── lifecycle/            # Test lifecycle hooks
-│   ├── setup-auth.ts     # Global setup (authentication)
-│   ├── teardown-auth.ts  # Global teardown (cleanup)
-│   ├── base-test.ts      # Base test configuration
-│   └── auth-helpers.ts   # Authentication utilities
+├── lifecycle/                # Test lifecycle hooks
+│   ├── setup-auth.ts         # Global setup (authentication cleanup and mkdir)
+│   ├── teardown-auth.ts      # Global teardown (cleanup)
+│   └── cleanup.ts            # Cleans up authentication data
 │
-├── specs/                # Test specifications
-│   ├── core/            # Core functionality tests
+├── specs/                    # Test specifications
+│   ├── core/                 # Core functionality tests
 │   │   ├── rooms.spec.ts
 │   │   ├── ideas.spec.ts
-│   │   ├── boxes.spec.ts
-│   │   ├── messages.spec.ts
-│   │   ├── csv-import.spec.ts
-│   │   ├── instance-offline.spec.ts
-│   │   ├── settings-categories.spec.ts
-│   │   └── profile-change-pass.spec.ts
+│   │   ├── ...
+│   │   ├── ...
+│   │   └── *.spec.ts
 │   │
-│   ├── admin/           # Admin-specific tests
-│   │   └── announcements.spec.ts
-│   │
-│   └── disabled/        # Disabled/WIP tests
-│       └── not_Working/
+│   └── disabled/             # Disabled/WIP tests
 │
 ├── auth-states/         # Saved authentication states (gitignored)
-└── reports/            # Test reports and artifacts (gitignored)
+├── generated-test-data/ # Generated data such as CSV files for import test (gitignored)
+└── reports/             # Test reports and artifacts (gitignored)
 ```
 
 ## 🚀 Quick Start
@@ -98,11 +87,10 @@ yarn playwright test --retries=2
 Tests use Playwright's native fixture system for dependency injection:
 
 ```typescript
-import { test, expect } from '../../fixtures/test-fixtures';
+import { test, expect } from '../../fixtures/aula-test-fixtures';
 
-test('My test', async ({ adminPage, userPage, userConfig }) => {
-  // adminPage, userPage are automatically initialized
-  // userConfig contains user data
+test('My test', async ({ newPageFor }) => {
+  const adminPage = await newPageFor('admin');
 
   await test.step('First step', async () => {
     // Your test logic
@@ -111,24 +99,21 @@ test('My test', async ({ adminPage, userPage, userConfig }) => {
 ```
 
 ### Available Fixtures
-
-- `adminPage` - Admin browser page (pre-authenticated)
-- `userPage` - User browser page (pre-authenticated)
-- `studentPage` - Student browser page (pre-authenticated)
-- `userConfig` - User data object
-- `studentConfig` - Student data object
+- `newPageFor(username: string)` - Open a page (existing or new) for the specified user
+- `seededUser` - User data that is seeded in the DB
+- `seededStudent` - Student data that is seeded in the DB
+- `seededRoom` - Room data that is seeded in the DB
 
 ### Using Test Steps
 
 Always wrap logical test sections in `test.step()` for better reporting:
 
 ```typescript
-test('User can create room', async ({ userPage }) => {
-  await test.step('Navigate to rooms', async () => {
-    await navigation.goToRooms(userPage);
-  });
+test('User can create room', async ({ newPageFor }) => {
+  const userPage = await newPageFor('user');
 
-  await test.step('Fill room form', async () => {
+  await test.step('Create a Room', async () => {
+    await navigation.goToRooms(userPage);
     await rooms.create(userPage, roomData);
   });
 
@@ -136,17 +121,6 @@ test('User can create room', async ({ userPage }) => {
     await expect(userPage.getByText(roomData.name)).toBeVisible();
   });
 });
-```
-
-### Using Test Helpers
-
-Import from `support/test-helpers.ts` for common operations:
-
-```typescript
-import { waitForNetworkIdle, expectVisible } from '../../support/test-helpers';
-
-await waitForNetworkIdle(page);
-await expectVisible(page.getByTestId('my-element'));
 ```
 
 ### Using Constants
@@ -224,38 +198,6 @@ await page.waitForTimeout(TIMEOUTS.HALF_SECOND);
 await page.waitForTimeout(5000);
 ```
 
-### 5. Proper Assertions
-
-```typescript
-// ✅ Good: Explicit assertions
-await expect(page.getByRole('button')).toBeVisible();
-await expect(page.getByRole('button')).toBeEnabled();
-
-// ❌ Bad: No assertion
-await page.getByRole('button').click();
-```
-
-## 🔧 Configuration
-
-### Playwright Config
-
-Key settings in `playwright.config.ts`:
-
-- **Trace**: `retain-on-failure` - Only saves traces when tests fail
-- **Screenshots**: `only-on-failure` - Captures screenshots on failure
-- **Video**: `retain-on-failure` - Records video on failure
-- **Retries**: 1 locally, 2 in CI - Helps with flaky tests
-- **Timeout**: 30s for tests, 10s for actions
-
-### Test Timeouts
-
-Defined in `support/constants.ts`:
-
-- `TIMEOUTS.HALF_SECOND` - 5s for fast operations
-- `TIMEOUTS.ONE_SECOND` - 10s for standard operations
-- `TIMEOUTS.THREE_SECONDS` - 30s for complex operations
-- `TIMEOUTS.FIVE_SECONDS` - 15s for network operations
-
 ## 🐛 Debugging
 
 ### Debug Mode
@@ -274,10 +216,6 @@ yarn playwright test tests/specs/core/rooms.spec.ts --debug
 # Show report with traces
 yarn playwright show-report tests/reports/playwright-report
 ```
-
-### Screenshots & Videos
-
-Automatically saved to `tests/results/` on failure.
 
 ## 📊 Reports
 
@@ -302,18 +240,14 @@ Includes:
 
 Runs once before all tests:
 
-1. Creates new run-id
-2. Initializes admin browser
-3. Logs in admin user
-4. Saves authentication state
+1. Cleans up any possibly leftover auth state files
+1. Initializes browser
 
 ### Teardown (`lifecycle/teardown-auth.ts`)
 
 Runs once after all tests:
 
-1. Cleans up test data (rooms, ideas, users, boxes)
-2. Closes all browsers
-3. Cleans up auth states
+1. Cleans up all leftover state data on filesystem
 
 ## 📚 Additional Resources
 
@@ -327,28 +261,15 @@ Runs once after all tests:
 When adding new tests:
 
 1. Use the fixture system (`test.extend`)
-2. Add `test.step()` for better reporting
+2. Add `test.step()` for readability
 3. Use constants for timeouts/selectors
 4. Follow naming conventions (descriptive test names)
 5. Add proper assertions
-6. Clean up test data (handled by global teardown)
 
 ## ⚠️ Common Issues
-
-### Tests failing with "storageState not found"
-
-Run setup first:
-
-```bash
-yarn playwright test --project=core
-```
 
 ### Flaky tests
 
 - Increase timeout if needed
 - Use proper waits (`waitForLoadState`, `waitForSelector`)
-- Add retries in CI
-
-### Browser not closing
-
-Check that fixtures properly clean up (they should automatically).
+- Temporarily increase retries until debugged

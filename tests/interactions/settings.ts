@@ -21,9 +21,9 @@ export const check = async (page: Page, filters: { option: string; value: string
 
 export const filter = async (page: Page, filter: { option: string; value: string }) => {
   const filterButton = page.getByTestId(TEST_IDS.FILTER_TOGGLE_BUTTON);
-  const filterInput = page.getByTestId('filter-input');
   await expect(filterButton).toBeVisible();
 
+  const filterInput = page.getByTestId('filter-input');
   if (
     !(await filterInput.isVisible()) ||
     (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')
@@ -52,9 +52,9 @@ export const filter = async (page: Page, filter: { option: string; value: string
  */
 export const applyFilter = async (page: Page, filter: { option: string; value: string }) => {
   const filterButton = page.getByTestId(TEST_IDS.FILTER_TOGGLE_BUTTON);
-  const filterInput = page.getByTestId('filter-input');
   await expect(filterButton).toBeVisible();
 
+  const filterInput = page.getByTestId('filter-input');
   if (
     !(await filterInput.isVisible()) ||
     (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')
@@ -74,10 +74,11 @@ export const applyFilter = async (page: Page, filter: { option: string; value: s
 
 export const clearFilter = async (page: Page) => {
   const filterButton = page.getByTestId(TEST_IDS.FILTER_TOGGLE_BUTTON);
-  const clearFilterButton = page.getByTestId('clear-filter-button');
   await expect(filterButton).toBeVisible();
 
-  if (!(await clearFilterButton.isVisible())) {
+  const clearFilterButton = page.getByTestId('clear-filter-button');
+  if (!(await clearFilterButton.isVisible())
+    || (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('height: 0px')) {
     // open the filter menu if it's not already open
     await filterButton.click();
   }

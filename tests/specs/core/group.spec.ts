@@ -1,7 +1,9 @@
-import { test, expect } from '../../fixtures/test-fixtures';
-import * as navigation from '../../interactions/navigation';
+import { expect, test } from '../../fixtures/aula-tests-fixture';
+import * as entities from '../../helpers/entities';
 import * as forms from '../../interactions/forms';
+import * as navigation from '../../interactions/navigation';
 import * as shared from '../../support/utils';
+import * as types from '../../support/types';
 
 /**
  * Group Management Tests
@@ -11,112 +13,82 @@ import * as shared from '../../support/utils';
  * NOTE: Tests run serially because they form a sequential workflow:
  * 1. Create group → 2. Send message to group → 3. Verify users receive the message
  */
-test.describe.serial('Group Management - Creation and User Assignment', () => {
-  let groupData: {
-    group_name: string;
-    description_public: string;
-    users: string[];
-    messageData: {
-      headline: string;
-      body: string;
-    };
+test('Group Management - Creation and User Assignment', async ({ seededStudent, seededUser, newPageFor }) => {
+  const adminPage = await newPageFor('admin');
+
+  const groupData: types.GroupData = entities.createGroupData([seededUser, seededStudent]);
+  const messageData = {
+    headline: shared.gensym(`test-message-`),
+    body: `Test message sent to the group`,
   };
 
-  test.beforeAll(async ({ userConfig, studentConfig }) => {
-    groupData = {
-      group_name: shared.gensym(`test-group-`),
-      description_public: `test group created in e2e tests`,
-      users: [userConfig.username, studentConfig.username],
-      messageData: {
-        headline: shared.gensym(`test-message-`),
-        body: `Test message sent to the group`,
-      },
-    };
+  await test.step('Admin - Navigate to settings and open group accordion', async () => {
+    await navigation.goToSettings(adminPage);
+    await navigation.openAccordion(adminPage, 'config-accordion-group');
   });
 
-  test('Admin can create a group', async ({ adminPage }) => {
-    await test.step('Navigate to settings and open group accordion', async () => {
-      await navigation.goToSettings(adminPage);
-      await navigation.openAccordion(adminPage, 'config-accordion-group');
-    });
-
-    await test.step('Click add group button', async () => {
-      await forms.clickButton(adminPage, 'add-group-chip');
-      await expect(adminPage.getByTestId('group-name-field-input')).toBeVisible();
-    });
-
-    await test.step('Fill group form with name and description', async () => {
-      await forms.fillForm(adminPage, 'group-name-field', groupData.group_name);
-
-      // Scope the markdown editor to the form to avoid conflicts with other markdown editors on the page
-      const form = adminPage.locator('form').first();
-      await forms.fillMarkdownForm(adminPage, 'description_public', groupData.description_public, form);
-    });
-
-    await test.step('Add users to group', async () => {
-      for (const username of groupData.users) {
-        await forms.selectMultiAutocompleteOption(adminPage, 'users-field', username);
-      }
-    });
-
-    await test.step('Save group', async () => {
-      await forms.clickButton(adminPage, 'save-group-button');
-    });
-
-    await test.step('Verify that the new group appears in the list', async () => {
-      const groupChip = adminPage.getByTestId('groups-chips-stack').getByText(groupData.group_name).first();
-      await expect(groupChip).toBeVisible();
-    });
+  await test.step('Admin - Click add Group button', async () => {
+    await forms.clickButton(adminPage, 'add-group-chip');
+    await expect(adminPage.getByTestId('group-name-field-input')).toBeVisible();
   });
 
-  test('Admin can send a message to the group', async ({ adminPage }) => {
-    await test.step('Navigate to messages settings', async () => {
-      await navigation.goToMessagesSettings(adminPage);
-    });
-
-    await test.step('Click add message button', async () => {
-      await forms.clickButton(adminPage, 'add-messages-button');
-      await expect(adminPage.getByTestId('submit-message-form')).toBeVisible();
-    });
-
-    await test.step('Select group as message target', async () => {
-      // Change message type from user to group
-      await forms.selectOptionByValue(adminPage, 'message-type-select', 'target_group');
-    });
-
-    await test.step('Select the group', async () => {
-      await forms.selectMultiAutocompleteOption(adminPage, 'group-field-autocomplete-input', groupData.group_name);
-    });
-
-    await test.step('Fill message form', async () => {
-      await forms.fillForm(adminPage, 'message-headline', groupData.messageData.headline);
-
-      // Scope the markdown editor to the form
-      const form = adminPage.locator('form').first();
-      await forms.fillMarkdownForm(adminPage, 'body', groupData.messageData.body, form);
-    });
-
-    await test.step('Submit message', async () => {
-      await forms.clickButton(adminPage, 'submit-message-form');
-    });
-
-    await test.step('Verify message was created in admin panel', async () => {
-      const messageRow = adminPage.locator('table tr').filter({ hasText: groupData.messageData.headline });
-      await expect(messageRow).toBeVisible();
-    });
+  await test.step('Admin - Fill & Submit Group form', async () => {
+    await forms.fillForm(adminPage, 'group-name-field', groupData.group_name);
+    await forms.fillMarkdownForm(adminPage, 'description_public', groupData.description_public);
+    for (const { username } of groupData.users) {
+      await forms.selectMultiAutocompleteOption(adminPage, 'users-field', username);
+    }
+    await forms.clickButton(adminPage, 'save-group-button');
   });
 
-  test('Users in group receive the message', async ({ userPage, studentPage }) => {
-    await test.step('Verify user received the message', async () => {
-      await navigation.goToMessages(userPage);
-      const messageCard = userPage.getByText(groupData.messageData.headline);
-      await expect(messageCard).toBeVisible();
-    });
+  await test.step('Admin - Verify that the Group form is closed and new Group appears in the list', async () => {
+    await expect(adminPage.getByTestId('group-name-field-input')).not.toBeVisible();
+    await adminPage.waitForLoadState("networkidle");
 
-    await test.step('Verify student received the message', async () => {
-      await navigation.goToMessages(studentPage);
-      const messageCard = studentPage.getByText(groupData.messageData.headline);
-      await expect(messageCard).toBeVisible();
-    });
+    // Group is visible in the list
+    const groupChip = adminPage.getByTestId('groups-chips-stack').getByText(groupData.group_name).first();
+    await expect(groupChip).toBeVisible();
+
+    // Verifying the content of the Group edit form
+    await groupChip.click();
+    await expect(adminPage.getByTestId('group-name-field-input')).toHaveValue(groupData.group_name);
+    // @FIXME: this still doesn't pinpoint the Group Description (it could be Standard Room Description)
+    await expect(adminPage.getByTestId('markdown-editor-description_public')
+      .filter({ hasText: groupData.description_public }))
+      .toBeVisible();
+  });
+
+  await test.step('Admin - Send message to Group', async () => {
+    await navigation.goToMessagesSettings(adminPage);
+    await forms.clickButton(adminPage, 'add-messages-button');
+    await expect(adminPage.getByTestId('submit-message-form')).toBeVisible();
+
+    // Change message type from user to group, fill in group and message data
+    await forms.selectOptionByValue(adminPage, 'message-type-select', 'target_group');
+    await forms.selectMultiAutocompleteOption(adminPage, 'group-field-autocomplete-input', groupData.group_name);
+    await forms.fillForm(adminPage, 'message-headline', messageData.headline);
+    await forms.fillMarkdownForm(adminPage, 'body', messageData.body);
+
+    // Submit Message form
+    await forms.clickButton(adminPage, 'submit-message-form');
+  });
+
+  await test.step('Admin - Verify message was created in admin panel', async () => {
+    const messageRow = adminPage.locator('table tr').filter({ hasText: messageData.headline });
+    await expect(messageRow).toBeVisible();
+  });
+
+  await test.step('User - Verify received the message', async () => {
+    const userPage = await newPageFor('user');
+    await navigation.goToMessages(userPage);
+    const messageCard = userPage.getByText(messageData.headline);
+    await expect(messageCard).toBeVisible();
+  });
+
+  await test.step('Student - Verify received the message', async () => {
+    const studentPage = await newPageFor('student');
+    await navigation.goToMessages(studentPage);
+    const messageCard = studentPage.getByText(messageData.headline);
+    await expect(messageCard).toBeVisible();
   });
 });
