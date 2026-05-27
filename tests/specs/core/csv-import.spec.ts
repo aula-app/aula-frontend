@@ -269,13 +269,9 @@ test('CSV Import', async ({ dbInstanceCode, ensureStatePathFor, newPageFor }) =>
 });
 
 const createTempCsvFile = (csvContent: string): string => {
-  const filePath = path.join(__dirname, '../../../auth-states', `csv-import-users-${shared.gensym()}.csv`);
-
-  // Ensure temp directory exists
-  const tempDir = path.dirname(filePath);
-  if (!fs.existsSync(tempDir)) {
-    fs.mkdirSync(tempDir, { recursive: true });
-  }
+  const generatedTestDataDir = path.join(process.cwd(), 'tests/generated-test-data');
+  fs.mkdirSync(generatedTestDataDir, { recursive: true });
+  const filePath = path.join(generatedTestDataDir, `csv-import-users-${shared.gensym()}.csv`);
 
   fs.writeFileSync(filePath, csvContent);
   return filePath;
