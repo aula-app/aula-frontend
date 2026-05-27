@@ -1,10 +1,8 @@
-import { Page } from '@playwright/test';
 import { test, expect } from '../../fixtures/aula-tests-fixture';
 import * as entities from '../../helpers/entities';
 import * as formInteractions from '../../interactions/forms';
 import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
-import * as rooms from '../../interactions/rooms';
 import * as settingsInteractions from '../../interactions/settings';
 import * as shared from '../../support/utils';
 
