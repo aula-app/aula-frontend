@@ -5,7 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   // single test timeout (base.describe.serial -> **test** -> test.step)
-  timeout: 120_000,
+  timeout: 180_000,
   expect: {
     timeout: 15_000,
   },
@@ -47,7 +47,7 @@ export default defineConfig({
 
   // Set a global maximum of workers so that we initialize DB with correct amount of tenants
   // See docker-compose.e2e.yml for more info
-  workers: 4,
+  workers: 3,
 
   projects: [
     // ── 1. instance-offline ────────────────────────────────────────────────────

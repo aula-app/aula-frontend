@@ -12,6 +12,7 @@ run-id.txt
 
 # Test directories
 /tests/auth-states/
+/tests/generated-test-data/
 /tests/reports/
 /tests/results/
 /test-results/
