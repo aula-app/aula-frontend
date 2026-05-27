@@ -1,7 +1,7 @@
 import { Browser, chromium } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-import { cleanupAuthStates } from './cleanup';
+import { cleanupTestData } from './cleanup';
 
 export default async function globalSetup() {
   console.log('🚀 Starting global setup...');
@@ -10,7 +10,7 @@ export default async function globalSetup() {
   // Without this, stale user-meta-*.json files cause the fixture's in-memory
   // userCache to load users whose backend state (e.g. changed passwords) no
   // longer matches what the cache records — making serial tests flaky.
-  await cleanupAuthStates();
+  await cleanupTestData();
   const authStatesDir = path.join(process.cwd(), 'tests/auth-states');
   fs.mkdirSync(authStatesDir, { recursive: true });
 
