@@ -100,7 +100,6 @@ export const ensureSpecificInstanceEntered = async (page: Page, instanceCode: st
     console.log(`No instance selector input found.`);
     throw new Error('Instance selector input not found on the page, but we are testing a multi-instance FE.');
   } else {
-    console.log(`ℹ️ Testing multi instance FE, attempting to use "${instanceCode}"...`);
     await instanceCodeInputDiv.locator(page.locator('input[name="instance-code"]')).fill(instanceCode);
     await page.getByTestId('submit-instance-code').click();
     await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
