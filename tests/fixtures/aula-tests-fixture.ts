@@ -161,7 +161,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
     await use(factory);
     // cleanup after test
     await Promise.all(createdBrowserContexts.map(c => c.close().catch(() => { })));
-    // await baselineReload();
+    await baselineReload();
   }, { scope: 'test' }],
 
   // factory to create a fresh page for a role
