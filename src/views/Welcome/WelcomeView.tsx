@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import Dashboard from './Dashboard';
-import RoomsView from './Rooms';
+import RoomsView from './RoomsView';
 
 const WelcomeView = () => {
   const { t } = useTranslation();

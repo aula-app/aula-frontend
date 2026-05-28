@@ -127,7 +127,7 @@ const AskConsent = () => {
                     </Button>
                   )}
                   {text.user_needs_to_consent > 0 && (
-                    <Button variant="contained" onClick={() => consent(text.id)}>
+                    <Button variant="contained" onClick={() => consent(text.id)} data-testid="button-consent-agree">
                       {text.consent_text || t('actions.agree')}
                     </Button>
                   )}

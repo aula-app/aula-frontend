@@ -38,6 +38,7 @@ TRUNCATE TABLE `au_likes`;
 TRUNCATE TABLE `au_ideas`;
 TRUNCATE TABLE `au_groups`;
 TRUNCATE TABLE `au_delegation`;
+TRUNCATE TABLE `au_consent`;
 TRUNCATE TABLE `au_comments`;
 TRUNCATE TABLE `au_commands`;
 TRUNCATE TABLE `au_change_password`;

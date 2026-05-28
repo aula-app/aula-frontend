@@ -19,7 +19,7 @@ export default defineConfig({
   use: {
     // Performance: Only keep traces/screenshots on failure
     trace: 'on', //'retain-on-failure',
-    screenshot: 'on', // 'only-on-failure',
+    screenshot: 'only-on-failure',
     video: 'on-first-retry',
 
     actionTimeout: 15_000,
@@ -66,9 +66,9 @@ export default defineConfig({
     {
       name: 'core',
       testDir: './tests/specs/core',
-      testIgnore: ['**/disabled/**', '**/rooms-search-and-sort.spec.ts'],
+      testIgnore: ['**/disabled/**'],
       use: { ...devices['Desktop Chrome'] },
-      workers: 2,
+      workers: 3,
     },
 
     // ── 4. admin ──────────────────────────────────────────────────────────────

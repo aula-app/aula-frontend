@@ -5,8 +5,9 @@ import * as entities from '../../helpers/entities';
 import * as formInteractions from '../../interactions/forms';
 import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
-import * as rooms from '../../interactions/rooms';
+import * as roomsSettings from '../../interactions/admin-settings/rooms';
 import * as settingsInteractions from '../../interactions/settings';
+import * as usersSettings from '../../interactions/admin-settings/users';
 import * as users from '../../interactions/users';
 import { RoomData, UserData } from '../../support/types';
 import * as shared from '../../support/utils';
@@ -37,7 +38,7 @@ test('CSV Import', async ({ dbInstanceCode, ensureStatePathFor, newPageFor }) =>
     });
 
     await test.step('Admin - Create room via UI', async () => {
-      await rooms.create(adminPage, room1);
+      await roomsSettings.create(adminPage, room1);
     });
 
     await test.step('Admin should be able to upload CSV file', async () => {
@@ -68,7 +69,7 @@ test('CSV Import', async ({ dbInstanceCode, ensureStatePathFor, newPageFor }) =>
 
     await test.step('Admin should capture temp password of the imported users', async () => {
       for (const u of csvUsers) {
-        u.tempPass = await users.getTemporaryPass(adminPage, u);
+        u.tempPass = await usersSettings.getTemporaryPass(adminPage, u);
       }
     });
 
@@ -122,7 +123,7 @@ test('CSV Import', async ({ dbInstanceCode, ensureStatePathFor, newPageFor }) =>
   await test.step('Admin imports 2nd CSV', async () => {
 
     await test.step('Admin - Create new room2 via UI', async () => {
-      await rooms.create(adminPage, room2);
+      await roomsSettings.create(adminPage, room2);
     });
 
     await test.step('Admin - prepare new CSV file', async () => {
@@ -166,7 +167,7 @@ test('CSV Import', async ({ dbInstanceCode, ensureStatePathFor, newPageFor }) =>
       for (const u of csvUsers) {
         // this will also inherently verify that no duplicate users were created because it checks
         // locator('...').textContent()! which will fail if there's multiple DOMs matched by the locator
-        const currentPass = await users.getTemporaryPass(adminPage, u);
+        const currentPass = await usersSettings.getTemporaryPass(adminPage, u);
 
         if (!u.username.startsWith('test-csv-import-NEW-4')) {
           // For existing users, verify password hasn't changed
