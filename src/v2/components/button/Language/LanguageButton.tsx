@@ -14,14 +14,18 @@ const LanguageButton = () => {
     i18n.changeLanguage(nextLanguage);
   };
 
+  const label = t('v2.ui.language.button', {
+    var: new Intl.DisplayNames([i18n.language], { type: 'language' }).of(nextLanguage),
+  });
+
   return (
     <Chip
       className="bg-paper text-text-primary"
       startIcon={<Icon type="language" />}
       onClick={cycleLanguage}
-      hint={t('v2.ui.language.button', {
-        var: new Intl.DisplayNames([i18n.language], { type: 'language' }).of(nextLanguage),
-      })}
+      aria-label={label}
+      hint={label}
+      data-testid="language-switch"
     >
       {nextLanguage.toUpperCase()}
     </Chip>

@@ -10,7 +10,11 @@ const views: Record<string, React.ComponentType> = {
 const AboutView = () => {
   const lang = i18n.language?.split('-')[0] ?? 'de';
   const View = views[lang] ?? AboutViewDE;
-  return <View />;
+  return (
+    <div className="flex-1 min-h-0 overflow-y-auto w-full p-4" data-testid="about-view">
+      <View />
+    </div>
+  );
 };
 
 export default AboutView;

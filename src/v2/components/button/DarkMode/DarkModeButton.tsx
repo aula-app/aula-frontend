@@ -14,7 +14,7 @@ const DarkModeButton = () => {
   });
 
   return (
-    <IconButton onClick={onSwitchDarkMode} aria-label={label} hint={label}>
+    <IconButton onClick={onSwitchDarkMode} aria-label={label} hint={label} data-testid="dark-mode-toggle">
       <Icon type={state.darkMode ? 'day' : 'night'} />
     </IconButton>
   );

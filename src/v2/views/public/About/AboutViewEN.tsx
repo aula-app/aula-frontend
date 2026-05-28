@@ -24,7 +24,7 @@ const AboutViewEN = () => {
   }, []);
 
   return (
-    <div className="flex-1 min-h-0 overflow-y-auto w-full p-4">
+    <>
       <h2>aula Software</h2>
       <code>
         aula-frontend: &nbsp;{import.meta.env?.VITE_APP_VERSION ?? 'unknown'}
@@ -43,11 +43,11 @@ const AboutViewEN = () => {
         <p>Phone: 030-28040850</p>
         <p>E-Mail: info@aula.de</p>
         <p>
-          aula gGmbH is registered at the Charlottenburg district court under number 244593 B. Represented by:
-          Alexa Schaegner (Managing Director), Steffen Wenzel (Managing Director)
+          aula gGmbH is registered at the Charlottenburg district court under number 244593 B. Represented by: Alexa
+          Schaegner (Managing Director), Steffen Wenzel (Managing Director)
         </p>
       </div>
-    </div>
+    </>
   );
 };
 
