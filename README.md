@@ -29,30 +29,14 @@ For more information about the project, visit [aula.de](https://www.aula.de).
 Check if your NodeJS version matches ours from `.nvmrc` file.
 
 ```sh
+# Run the DB & API (it also seeds the db with test tenants)
+docker compose -f docker-compose.e2e.yml up --build -d
+
 # Run the aula-frontend in development mode locally
 yarn dev --host
 
 # In another terminal, run the tests against the local aula-frontend
 yarn test # or yarn test:ui
-
-# In case you're using a multi-instance setup, supply instance to test as envvar
-INSTANCE_CODE=abcde yarn test
-```
-
-### Running and testing locally with docker
-
-Run [aula-backend](https://github.com/aula-app/aula-backend/) following its README instructions, and then:
-
-```sh
-# Run the aula-frontend in docker container locally
-docker build --build-arg DOCKER_TAG=local-test -t aulaapp/aula-frontend:local-test . \
-  && docker run --env-file .env.docker -p 3000:80 aulaapp/aula-frontend:local-test
-
-# In another terminal, run the tests against the local aula-frontend
-docker run -p 4000:4000 --network host --rm --init \
-  --add-host=hostmachine:host-gateway -v $(pwd):/home/pwuser \
-  -it mcr.microsoft.com/playwright:v1.58.2-jammy \
-  /bin/sh -c "cd /home/pwuser && npx playwright install && npx playwright test"
 ```
 
 ## License
@@ -62,3 +46,4 @@ See `LICENSE.txt`. Licensed under the EUPL-1.2 or later. You may obtain a copy o
 ## Contributing
 
 Please read our [Contributing Guidelines](docs/INDEX.md) for details on our code of conduct and the process for submitting pull requests.
+

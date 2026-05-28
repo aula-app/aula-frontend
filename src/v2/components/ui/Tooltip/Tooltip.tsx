@@ -78,6 +78,7 @@ const Tooltip: React.FC<TooltipProps> = ({
     <div
       ref={wrapper}
       className={twMerge('relative flex items-center justify-center', wrapperClassName)}
+      tabIndex={0}
       onFocus={show}
       onBlur={hide}
       onPointerEnter={(e) => !isTouchActive.current && e.pointerType !== 'touch' && show()}

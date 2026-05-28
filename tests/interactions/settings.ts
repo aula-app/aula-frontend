@@ -21,9 +21,9 @@ export const check = async (page: Page, filters: { option: string; value: string
 
 export const filter = async (page: Page, filter: { option: string; value: string }) => {
   const filterButton = page.getByTestId(TEST_IDS.FILTER_TOGGLE_BUTTON);
-  const filterInput = page.getByTestId('filter-input');
   await expect(filterButton).toBeVisible();
 
+  const filterInput = page.getByTestId('filter-input');
   if (
     !(await filterInput.isVisible()) ||
     (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')
@@ -52,9 +52,9 @@ export const filter = async (page: Page, filter: { option: string; value: string
  */
 export const applyFilter = async (page: Page, filter: { option: string; value: string }) => {
   const filterButton = page.getByTestId(TEST_IDS.FILTER_TOGGLE_BUTTON);
-  const filterInput = page.getByTestId('filter-input');
   await expect(filterButton).toBeVisible();
 
+  const filterInput = page.getByTestId('filter-input');
   if (
     !(await filterInput.isVisible()) ||
     (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')
@@ -73,22 +73,23 @@ export const applyFilter = async (page: Page, filter: { option: string; value: s
 };
 
 export const clearFilter = async (page: Page) => {
-  const filterButton = page.getByTestId(TEST_IDS.FILTER_TOGGLE_BUTTON);
-  const clearFilterButton = page.getByTestId('clear-filter-button');
-  await expect(filterButton).toBeVisible();
+  const filterPanelToggleButton = page.getByTestId(TEST_IDS.FILTER_TOGGLE_BUTTON);
+  await expect(filterPanelToggleButton).toBeVisible();
 
-  if (!(await clearFilterButton.isVisible())) {
+  const clearFilterTextButton = page.getByTestId('clear-filter-button');
+  if (!(await clearFilterTextButton.isVisible())
+    || (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')) {
     // open the filter menu if it's not already open
-    await filterButton.click();
+    await filterPanelToggleButton.click();
   }
 
-  await expect(clearFilterButton).toBeVisible();
-  if (!(await clearFilterButton.isDisabled())) {
-    await clearFilterButton.click();
+  await expect(clearFilterTextButton).toBeVisible();
+  if (!(await clearFilterTextButton.isDisabled())) {
+    await clearFilterTextButton.click();
     await expect(page.locator('#filter-value-input')).toHaveValue('');
   }
 
-  await filterButton.click();
+  await filterPanelToggleButton.click();
 };
 
 export const openEdit = async ({ page, filters }: { page: Page; filters: { option: string; value: string } }) => {

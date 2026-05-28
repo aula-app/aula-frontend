@@ -4,6 +4,10 @@
   - Completed v2 component migration for public routes (Login, Recovery, Code, NotFound)
   - v2 private layout components (PrivateLayout, TopBar, SideBar) now fully migrated
 
+## 1.9.3
+
+- **Technical improvements**
+  - Refactored e2e tests to work faster (parallel) and more stable (isolated)
 
 ## 1.9.2
 
