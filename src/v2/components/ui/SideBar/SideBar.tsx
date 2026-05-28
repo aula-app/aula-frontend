@@ -33,7 +33,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         id="sidebar-menu"
         aria-label={t('v2.ui.navigation')}
         aria-modal={menuOpen && isDrawerMode ? true : undefined}
-        className={`flex flex-col border-secondary border-r overflow-y-auto print:hidden absolute left-0 z-20 h-full bg-paper transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}
+        className={`flex flex-col z-20 h-full border-secondary border-r overflow-y-auto overflow-x-clip print:hidden absolute left-0 bg-paper transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}
         inert={!menuOpen && isDrawerMode ? '' : undefined}
         tabIndex={-1}
       >
@@ -63,7 +63,11 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
               >
                 <Icon type={item.icon} aria-hidden="true" size="1.5rem" />
                 <span className="font-light flex-1 text-left">{t(`ui.navigation.${item.title}`)}</span>
-                {item.chip && <span aria-hidden="true"><item.chip /></span>}
+                {item.chip && (
+                  <span aria-hidden="true">
+                    <item.chip />
+                  </span>
+                )}
               </Button>
             </li>
           ))}
