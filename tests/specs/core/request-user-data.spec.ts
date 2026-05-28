@@ -60,7 +60,7 @@ test('Request User Data - Export Request and Download Flow', async ({ seededUser
     await downloadButton.click();
 
     // Wait for download to complete
-    const download = await userPage.waitForEvent('download');
+    const download = await userPage.waitForEvent('download', { timeout: 30_000 });
     const filename = download.suggestedFilename();
 
     expect(filename).toBeDefined();

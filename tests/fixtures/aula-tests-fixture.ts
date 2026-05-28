@@ -46,7 +46,8 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
     const dbBackchannel = await DbBackchannel.getByInstanceCode(dbInstanceCode);
     await dbBackchannel.truncateAll();
     await dbBackchannel.seed();
-    console.log(`󰳿 baselineLoaded for ${dbInstanceCode}`);
+    console.log(`󰳿 [PW.worker] DB baseline loaded. instance: "${dbInstanceCode}"`);
+
     await use(undefined);
   }, { scope: 'worker' }],
 
@@ -62,7 +63,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
         const page = await ctx.newPage();
         await page.route('**/*', FILTER_EXCLUDED_RESOURCES);
 
-        console.log(`↔️ Accessing tested instance ${dbInstanceCode} as ${username}`);
+        console.log(`󱐎 [PW.worker] Using instance: "${dbInstanceCode}", username: "${username}"`);
         await page.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
         await userInteractions.ensureSpecificInstanceEntered(page, dbInstanceCode);
 
@@ -75,7 +76,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
         } catch (e) {
           // ignored because this might be fine, for example newly created users have to 
           // go through the process of setting their password the first time using tempPass (see CSV import test)
-          console.log(`⚠️ Can't login to tested instance ${dbInstanceCode} as ${username}`);
+          console.log(`󱞭 [PW.worker] Login failed. Should retry. instance: "${dbInstanceCode}", username: "${username}"`);
           hasLoggedInState[username] = false;
           // but, still we should return 'null' so that the 
           // context would be set later after first-time registration is complete
@@ -160,7 +161,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
     await use(factory);
     // cleanup after test
     await Promise.all(createdBrowserContexts.map(c => c.close().catch(() => { })));
-    // await baselineReload();
+    await baselineReload();
   }, { scope: 'test' }],
 
   // factory to create a fresh page for a role
