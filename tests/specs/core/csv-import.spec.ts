@@ -21,7 +21,7 @@ import * as shared from '../../support/utils';
  * Upload CSV → Verify import → Re-import (test duplicates) → Test imported users
  */
 test('CSV Import', async ({ dbInstanceCode, ensureStatePathFor, newPageFor }) => {
-  test.setTimeout(360_000);
+  test.setTimeout(360_000); // 6 minutes - CSV import and user verification can be time-consuming, especially with multiple users and rooms
 
   const adminPage = await newPageFor('admin');
 
