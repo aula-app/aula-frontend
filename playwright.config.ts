@@ -19,7 +19,7 @@ export default defineConfig({
   use: {
     // Performance: Only keep traces/screenshots on failure
     trace: 'on', //'retain-on-failure',
-    screenshot: 'on', // 'only-on-failure',
+    screenshot: 'only-on-failure',
     video: 'on-first-retry',
 
     actionTimeout: 15_000,
