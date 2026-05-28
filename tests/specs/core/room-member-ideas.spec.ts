@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures/aula-tests-fixture';
 import * as entities from '../../helpers/entities';
-import * as rooms from '../../interactions/rooms';
+import * as rooms from '../../interactions/admin-settings/rooms';
 import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
 

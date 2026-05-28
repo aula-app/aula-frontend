@@ -25,7 +25,7 @@ BEGIN;
 LOCK TABLES `au_rooms` WRITE;
 /*!40000 ALTER TABLE `au_rooms` DISABLE KEYS */;
 INSERT INTO `au_rooms` (id, room_name, description_internal, hash_id, status, type) VALUES
-(1, 'Schule',NULL,'78b58d10a5bd01ca09dfd7478bb6ba07',1,1),
+(1, 'Schule',NULL,'std',1,1),
 (2, 'e2e.class_1A','e2e test room of class 1A','1a',1,0);
 /*!40000 ALTER TABLE `au_rooms` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -67,12 +67,12 @@ VALUES
 (
   3, 'e2e.user', 'User Userić', 'user', 'dev+e2e-user@aula.de',
   '$2a$04$AgQajDMd4MKQcMSW3nNphuO9jRxU.udCk5DYzecof7u/Tl1Ax.atC', 'e2e.user.20.user', 
-  20, 'e2e test user', 2, 1, NOW(), NOW(), 1, 1, '[{"room": "1a", "role": 20}]'
+  20, 'e2e test user', 2, 1, NOW(), NOW(), 1, 1, '[{"room": "1a", "role": 20}, {"room": "std", "role": 20}]'
 ),
 (
   4, 'e2e.student', 'Student Studentić', 'student', 'dev+e2e-student@aula.de',
   '$2a$04$AgQajDMd4MKQcMSW3nNphuO9jRxU.udCk5DYzecof7u/Tl1Ax.atC', 'e2e.user.20.student', 
-  20, 'e2e test student', 2, 1, NOW(), NOW(), 1, 1, '[{"room": "1a", "role": 20}]'
+  20, 'e2e test student', 2, 1, NOW(), NOW(), 1, 1, '[{"room": "std", "role": 20}, {"room": "1a", "role": 20}]'
 );
 /*!40000 ALTER TABLE `au_users_basedata` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -82,6 +82,8 @@ LOCK TABLES `au_rel_rooms_users` WRITE;
 INSERT INTO `au_rel_rooms_users`
 (room_id, user_id, status, created, last_update, updater_id)
 VALUES
+(1, 3, 1, NOW(), NOW(), 1),
+(1, 4, 1, NOW(), NOW(), 1),
 (2, 3, 1, NOW(), NOW(), 1),
 (2, 4, 1, NOW(), NOW(), 1);
 /*!40000 ALTER TABLE `au_rel_rooms_users` ENABLE KEYS */;
