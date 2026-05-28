@@ -58,7 +58,7 @@ const LoginView: React.FC = () => {
           error={errors.password?.message}
           {...register('password')}
         />
-        <Button type="submit" disabled={isLoading}>
+        <Button type="submit" disabled={isLoading} data-testid="submit-login">
           {t('v2.page.login.button')}
         </Button>
         <Link to="/recovery" className="ml-auto px-2 text-sm text-text-secondary mt-4">

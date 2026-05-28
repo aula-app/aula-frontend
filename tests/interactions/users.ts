@@ -91,23 +91,22 @@ export const remove = async (page: Page, data: types.UserData) => {
 
 export const ensureSpecificInstanceEntered = async (page: Page, instanceCode: string) => {
   const instanceCodeAlreadySet = await page.getByTestId('current-instance-code').isVisible();
-  if (instanceCodeAlreadySet && await page.getByTestId('current-instance-code').innerText() === instanceCode) {
+  if (instanceCodeAlreadySet && (await page.getByTestId('current-instance-code').innerText()) === instanceCode) {
     return true;
   }
 
-  const instanceCodeInputDiv = page.getByTestId('input-instance-code');
-  if ((await instanceCodeInputDiv.count()) === 0) {
+  const instanceCodeInput = page.locator('input[name="instanceCode"]');
+  if ((await instanceCodeInput.count()) === 0) {
     console.log(`No instance selector input found.`);
     throw new Error('Instance selector input not found on the page, but we are testing a multi-instance FE.');
   } else {
     console.log(`ℹ️ Testing multi instance FE, attempting to use "${instanceCode}"...`);
-    await instanceCodeInputDiv.locator(page.locator('input[name="instance-code"]')).fill(instanceCode);
+    await instanceCodeInput.fill(instanceCode);
     await page.getByTestId('submit-instance-code').click();
     await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
     return true;
   }
 };
-
 
 export const ensureInstanceEntered = async (page: Page, username?: string) => {
   const instanceCodeAlreadySet = await page.getByTestId('current-instance-code').isVisible();
@@ -128,13 +127,13 @@ export const ensureInstanceEntered = async (page: Page, username?: string) => {
   } else {
     console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: "${username}"`);
     await instanceCodeInput.fill(instance);
-    await page.locator('button[type="submit"]').click();
+    await page.getByTestId('submit-instance-code').click();
     await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
     return true;
   }
 };
 
-export const loginAttempt = async (page: Page, data: { username: string, password: string }) => {
+export const loginAttempt = async (page: Page, data: { username: string; password: string }) => {
   await page.goto(host, { waitUntil: 'domcontentloaded' });
   await ensureInstanceEntered(page, data.username);
   await expect(page.locator('input[name="username"]')).toBeVisible();
@@ -145,7 +144,7 @@ export const loginAttempt = async (page: Page, data: { username: string, passwor
 };
 
 // Helper function to log in a user
-export const login = async (page: Page, data: { username: string, password: string }) => {
+export const login = async (page: Page, data: { username: string; password: string }) => {
   await loginAttempt(page, data);
   await page.waitForLoadState('networkidle');
   await expect(page.getByRole('alert')).not.toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
