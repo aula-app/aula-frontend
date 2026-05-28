@@ -9,8 +9,9 @@ import useIsDrawerMode from '@/v2/hooks/useIsDrawerMode';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { useSidebarItems } from './useSidebarItems';
 import BugButton from '../../button/Bug';
+import { useSidebarItems } from './useSidebarItems';
+import SidebarProfile from './SidebarProfile';
 
 const activeClass = 'bg-shadow font-semibold';
 
@@ -33,22 +34,13 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         id="sidebar-menu"
         aria-label={t('v2.ui.navigation')}
         aria-modal={menuOpen && isDrawerMode ? true : undefined}
-        className={`flex flex-col z-20 h-full border-secondary border-r overflow-y-auto overflow-x-clip print:hidden absolute left-0 bg-paper transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}
+        className={`flex flex-col z-20 h-full w-56 shrink-0 border-secondary border-r overflow-y-auto overflow-x-hidden print:hidden absolute left-0 bg-paper transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}
         inert={!menuOpen && isDrawerMode ? '' : undefined}
         tabIndex={-1}
       >
         <CodeCopy />
         <hr className="my-1 border-secondary" />
-        <Button
-          text
-          color="secondary"
-          to="/settings/profile"
-          aria-current={isActive('/settings/profile') ? 'page' : undefined}
-          className={`w-full justify-start ${isActive('/settings/profile') ? activeClass : ''}`}
-        >
-          <Icon type="user" aria-hidden="true" size="1.5rem" />
-          <span className="font-light flex-1 text-left">{t('ui.navigation.profile')}</span>
-        </Button>
+        <SidebarProfile />
         <hr className="mt-1 border-secondary" />
         <ul className="flex flex-col h-full list-none m-0 my-2">
           {/* Nav items */}
@@ -88,7 +80,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         <Logout />
       </nav>
       <div
-        className={`fixed z-10 top-0 left-0 w-full h-full bg-shade ${menuOpen ? 'opacity-50' : 'opacity-0 pointer-events-none'} transition-opacity duration-150 ease-in-out md:hidden`}
+        className={`fixed z-10 top-0 left-0 w-full h-full bg-shade ${menuOpen ? 'opacity-50 dark:opacity-75' : 'opacity-0 pointer-events-none'} transition-opacity duration-150 ease-in-out md:hidden`}
         aria-hidden="true"
         onClick={onClose}
       />

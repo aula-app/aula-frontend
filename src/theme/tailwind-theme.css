@@ -191,12 +191,16 @@
   --color-neutral: hsl(45, 85%, 58%);
   --color-requests: hsl(215, 15%, 30%);
 
-  --color-text-primary: hsl(215, 20%, 92%);
-  --color-text-secondary: hsl(215, 15%, 62%);
-  --color-background: hsl(215, 25%, 20%);
+  --color-text-primary: hsl(215, 20%, 90%);
+  --color-text-secondary: hsl(215, 15%, 75%);
+  --color-background: hsl(236, 42%, 15%);
   --color-paper: hsl(215, 25%, 15%);
-  --color-shade: hsl(210, 15%, 80%);
+  --color-shade: hsl(215, 25%, 8%);
+  
 }
+
+/* ========== DARK MODE VARIANT (class-based, matches AppThemeProvider) ========== */
+@variant dark (&:where(.dark, .dark *));
 
 /* ========== TAILWIND THEME (references the CSS variables above) ========== */
 @theme inline {

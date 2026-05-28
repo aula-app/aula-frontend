@@ -24,7 +24,7 @@ const Tooltip: React.FC<TooltipProps> = ({
   const isTouchActive = React.useRef(false);
   const generatedId = React.useId();
   const tooltipId = id ?? generatedId;
-  const { placementClass } = useTooltipPlacement(wrapper);
+  const { placementClass, containerWidth } = useTooltipPlacement(wrapper);
   const [visible, setVisible] = React.useState(false);
   const show = () => setVisible(true);
   const hide = () => setVisible(false);
@@ -78,7 +78,7 @@ const Tooltip: React.FC<TooltipProps> = ({
     <div
       ref={wrapper}
       className={twMerge('relative flex items-center justify-center', wrapperClassName)}
-      tabIndex={0}
+      style={{ '--tooltip-container-w': `${containerWidth}px` } as React.CSSProperties}
       onFocus={show}
       onBlur={hide}
       onPointerEnter={(e) => !isTouchActive.current && e.pointerType !== 'touch' && show()}
@@ -94,9 +94,9 @@ const Tooltip: React.FC<TooltipProps> = ({
         id={tooltipId}
         role="tooltip"
         className={twMerge(
-          `absolute z-10 px-4 pt-1.5 pb-2 rounded-3xl w-max max-w-[min(75vw,18rem)] bg-background text-left transition-all duration-200 transform
+          `absolute z-10 px-4 pt-1.5 pb-2 rounded-3xl w-max max-w-[min(calc(var(--tooltip-container-w)*0.75),18rem)] bg-theme-grey-light text-left transition-all duration-200 transform
           ${placementClass}
-          ${visible ? 'opacity-100 translate-0' : 'opacity-0 pointer-events-none invisible'}`,
+          ${visible ? 'opacity-100 translate-0' : 'opacity-0 pointer-events-none invisible'} `,
           className
         )}
         {...restOfProps}

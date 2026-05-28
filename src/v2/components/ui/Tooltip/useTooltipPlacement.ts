@@ -1,19 +1,41 @@
-import { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type XZone = 'left' | 'center' | 'right';
 type YZone = 'top' | 'middle' | 'bottom';
 type Side = XZone | YZone;
 
-// Divide viewport into thirds to classify where the element sits
-function getZones(rect: DOMRect): { x: XZone; y: YZone } {
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
+// Walk up the DOM to find the nearest ancestor that clips overflow.
+// Falls back to the viewport if none is found.
+function getClippingRect(el: HTMLElement): DOMRect {
+  let parent = el.parentElement;
+  while (parent && parent !== document.documentElement) {
+    const { overflow, overflowX, overflowY } = getComputedStyle(parent);
+    if (/auto|scroll|hidden|clip/.test(overflow + overflowX + overflowY)) {
+      return parent.getBoundingClientRect();
+    }
+    parent = parent.parentElement;
+  }
+  return new DOMRect(0, 0, window.innerWidth, window.innerHeight);
+}
+
+// Divide the clipping container into thirds to classify where the trigger sits
+function getZones(el: HTMLElement, rect: DOMRect): { x: XZone; y: YZone } {
+  const container = getClippingRect(el);
   const cx = (rect.left + rect.right) / 2;
   const cy = (rect.top + rect.bottom) / 2;
 
-  const x: XZone = cx < vw / 3 ? 'left' : cx > 2 * (vw / 3) ? 'right' : 'center';
-  const y: YZone = cy < vh / 3 ? 'top' : cy > 2 * (vh / 3) ? 'bottom' : 'middle';
+  const x: XZone =
+    cx < container.left + container.width / 3
+      ? 'left'
+      : cx > container.left + (2 * container.width) / 3
+        ? 'right'
+        : 'center';
+  const y: YZone =
+    cy < container.top + container.height / 3
+      ? 'top'
+      : cy > container.top + (2 * container.height) / 3
+        ? 'bottom'
+        : 'middle';
 
   return { x, y };
 }
@@ -34,12 +56,16 @@ const cornerClass: Record<YZone, Record<XZone, string>> = {
 };
 
 export function useTooltipPlacement(ref: React.RefObject<HTMLElement>) {
-  const position = getZones(ref.current?.getBoundingClientRect() ?? new DOMRect());
+  const el = ref.current;
+  const rect = el?.getBoundingClientRect() ?? new DOMRect();
+  const container = getClippingRect(el ?? document.body);
+  const position = getZones(el ?? document.body, rect);
 
   const horizontal = position.x;
   const vertical = position.x === 'center' && position.y === 'middle' ? 'bottom' : position.y;
 
   return {
     placementClass: twMerge(positionClass[vertical], positionClass[horizontal], cornerClass[vertical][horizontal]),
+    containerWidth: container.width,
   };
 }

@@ -27,7 +27,7 @@ const TopBar: React.FC<TopBarProps> = ({ onToggleMenu, menuOpen = false }) => {
   return (
     <header
       id="top-bar"
-      className="relative bg-primary px-2 py-1 shadow-sm pt-[calc(var(--safe-area-inset-top,0px))] z-30 print:hidden flex items-center"
+      className="relative min-h-14 bg-primary px-2 py-1 shadow-sm pt-[calc(var(--safe-area-inset-top,0px))] z-30 print:hidden flex items-center dark:text-background"
     >
       <div className="mr-3 flex h-full items-center justify-start">
         <Breadcrumb />
@@ -38,7 +38,7 @@ const TopBar: React.FC<TopBarProps> = ({ onToggleMenu, menuOpen = false }) => {
       </div>
 
       <div className="ml-3 flex h-full items-center justify-end">
-        <div className="sm:hidden">
+        <div className="md:hidden">
           <IconButton
             onClick={onToggleMenu}
             aria-expanded={menuOpen}
