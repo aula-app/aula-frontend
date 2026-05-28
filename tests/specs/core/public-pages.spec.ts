@@ -38,7 +38,7 @@ test('About page', async ({ page, dbInstanceCode }) => {
   await page.goto(host, { waitUntil: 'domcontentloaded' });
   await ensureInstanceCode(page, dbInstanceCode);
 
-  await page.getByRole('link', { name: /about aula/i }).click();
+  await page.getByTestId('about-button').click();
 
   await expect(page.getByTestId('about-view')).toBeVisible();
 });
