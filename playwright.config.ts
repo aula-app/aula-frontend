@@ -66,9 +66,9 @@ export default defineConfig({
     {
       name: 'core',
       testDir: './tests/specs/core',
-      testIgnore: ['**/disabled/**', '**/rooms-search-and-sort.spec.ts'],
+      testIgnore: ['**/disabled/**'],
       use: { ...devices['Desktop Chrome'] },
-      workers: 2,
+      workers: 3,
     },
 
     // ── 4. admin ──────────────────────────────────────────────────────────────
