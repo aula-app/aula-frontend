@@ -24,7 +24,8 @@ test('Tooltip - shows on hover and hides on mouse leave', async ({ page, dbInsta
 
   await expect(page.getByTestId('not-found-view')).toBeVisible();
 
-  const tooltip = page.getByRole('tooltip');
+  const notFoundView = page.getByTestId('not-found-view');
+  const tooltip = notFoundView.locator('[role="tooltip"]');
 
   // Tooltip is initially hidden
   await expect(tooltip).toHaveAttribute('aria-hidden', 'true');
@@ -45,15 +46,17 @@ test('Tooltip - shows on focus and hides on blur', async ({ page, dbInstanceCode
 
   await expect(page.getByTestId('not-found-view')).toBeVisible();
 
-  const tooltipWrapper = page.getByRole('tooltip').locator('..');
+  const notFoundView = page.getByTestId('not-found-view');
+  const tooltip = notFoundView.locator('[role="tooltip"]');
+  const tooltipWrapper = tooltip.locator('..');
 
   // Focus the wrapper — tooltip shows
   await tooltipWrapper.focus();
-  await expect(page.getByRole('tooltip')).toHaveAttribute('aria-hidden', 'false');
+  await expect(tooltip).toHaveAttribute('aria-hidden', 'false');
 
   // Blur — tooltip hides
   await tooltipWrapper.blur();
-  await expect(page.getByRole('tooltip')).toHaveAttribute('aria-hidden', 'true');
+  await expect(tooltip).toHaveAttribute('aria-hidden', 'true');
 });
 
 test('Tooltip - hides on Escape key', async ({ page, dbInstanceCode }) => {
@@ -63,13 +66,15 @@ test('Tooltip - hides on Escape key', async ({ page, dbInstanceCode }) => {
 
   await expect(page.getByTestId('not-found-view')).toBeVisible();
 
-  const tooltipWrapper = page.getByRole('tooltip').locator('..');
+  const notFoundView = page.getByTestId('not-found-view');
+  const tooltip = notFoundView.locator('[role="tooltip"]');
+  const tooltipWrapper = tooltip.locator('..');
 
   // Focus to show
   await tooltipWrapper.focus();
-  await expect(page.getByRole('tooltip')).toHaveAttribute('aria-hidden', 'false');
+  await expect(tooltip).toHaveAttribute('aria-hidden', 'false');
 
   // Escape hides it
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('tooltip')).toHaveAttribute('aria-hidden', 'true');
+  await expect(tooltip).toHaveAttribute('aria-hidden', 'true');
 });

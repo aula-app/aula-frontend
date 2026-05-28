@@ -99,7 +99,7 @@ const SetPasswordView = () => {
         <Button type="button" outlined onClick={() => reset()} color="secondary">
           {t('v2.ui.button.clear')}
         </Button>
-        <Button type="submit">{t('v2.ui.button.confirm')}</Button>
+        <Button type="submit" data-testid="submit-set-password">{t('v2.ui.button.confirm')}</Button>
       </div>
     </form>
   );

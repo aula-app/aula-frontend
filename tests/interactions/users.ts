@@ -139,7 +139,7 @@ export const loginAttempt = async (page: Page, data: { username: string; passwor
   await expect(page.locator('input[name="username"]')).toBeVisible();
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
-  await page.locator('button[type="submit"]').click();
+  await page.getByTestId('submit-login').click();
   await page.waitForLoadState('domcontentloaded');
 };
 
@@ -147,7 +147,7 @@ export const loginAttempt = async (page: Page, data: { username: string; passwor
 export const login = async (page: Page, data: { username: string; password: string }) => {
   await loginAttempt(page, data);
   await page.waitForLoadState('networkidle');
-  await expect(page.getByRole('alert')).not.toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
+  await expect(page.getByTestId('error-alert')).not.toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
   await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: TIMEOUTS.FIVE_SECONDS });
 };
 
@@ -165,15 +165,13 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
 
     await page.fill('input[name="username"]', data.username);
     await page.fill('input[name="password"]', tempPass);
-    await page.locator('button[type="submit"]').click();
+    await page.getByTestId('submit-login').click();
 
-    const oldPasswordButton = page.locator('input[name="oldPassword"]');
-    await expect(oldPasswordButton).toBeVisible();
-
+    await expect(page.getByTestId('oldPassword-input')).toBeVisible();
     await page.fill('input[name="oldPassword"]', tempPass);
     await page.fill('input[name="newPassword"]', data.password);
     await page.fill('input[name="confirmPassword"]', data.password);
-    await page.locator('button[type="submit"]').click();
+    await page.getByTestId('submit-set-password').click();
 
     // Check if we're on the home page (logged in) or need to login again
     const isLoggedIn = await page.locator('#rooms-heading').isVisible();
@@ -184,7 +182,7 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
       await page.goto(host, { waitUntil: 'domcontentloaded' });
       await page.fill('input[name="username"]', data.username);
       await page.fill('input[name="password"]', data.password);
-      await page.locator('button[type="submit"]').click();
+      await page.getByTestId('submit-login').click();
       await expect(page.locator('#rooms-heading')).toBeVisible();
     }
 
@@ -200,12 +198,12 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
 export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', tempPass);
-  await page.locator('button[type="submit"]').click();
+  await page.getByTestId('submit-login').click();
 
-  await page.locator('input[name="oldPassword"]').filter({ visible: true }).fill(tempPass);
-
+  await expect(page.getByTestId('oldPassword-input')).toBeVisible();
+  await page.fill('input[name="oldPassword"]', tempPass);
   await page.fill('input[name="newPassword"]', data.password);
   await page.fill('input[name="confirmPassword"]', data.password);
-  await page.locator('button[type="submit"]').click();
+  await page.getByTestId('submit-set-password').click();
   await login(page, data);
 };
