@@ -1,6 +1,7 @@
 import { useAppStore } from '@/store/AppStore';
 import Breadcrumb from '@/v2/components/ui/Breadcrumb';
 import Icon from '@/v2/components/ui/Icon';
+import { TEST_IDS } from '@/test-ids';
 import { useTranslation } from 'react-i18next';
 import IconButton from '../../button/IconButton';
 
@@ -40,6 +41,7 @@ const TopBar: React.FC<TopBarProps> = ({ onToggleMenu, menuOpen = false }) => {
       <div className="ml-3 flex h-full items-center justify-end">
         <div className="md:hidden">
           <IconButton
+            data-testid={TEST_IDS.TOPBAR_MENU_BUTTON}
             onClick={onToggleMenu}
             aria-expanded={menuOpen}
             aria-controls="sidebar-menu"

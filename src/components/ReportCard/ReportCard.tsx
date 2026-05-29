@@ -199,6 +199,7 @@ ${message}`,
         title={report.headline}
         action={
           <AppIconButton
+            data-testid="archive-report-button"
             icon={report.status === 1 ? 'archive' : 'unarchive'}
             title={t(`tooltips.${report.status === 1 ? 'archive' : 'unarchive'}`)}
             onClick={toggleArchive}

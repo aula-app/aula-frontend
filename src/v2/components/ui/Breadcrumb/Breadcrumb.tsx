@@ -1,6 +1,7 @@
 import IconButton from '@/v2/components/button/IconButton';
 import Icon from '@/v2/components/ui/Icon';
 import { getRuntimeConfig } from '@/config';
+import { TEST_IDS } from '@/test-ids';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useBreadcrumb } from './useBreadcrumb';
@@ -39,11 +40,13 @@ const Breadcrumb: React.FC = () => {
 
   return (
     <nav
+      data-testid={TEST_IDS.BREADCRUMB_NAV}
       aria-label={t('v2.ui.a11y.breadcrumb.label')}
       className="relative flex items-center justify-center h-full"
       ref={dropdownRef}
     >
       <IconButton
+        data-testid={TEST_IDS.BREADCRUMB_TOGGLE}
         ref={toggleButtonRef}
         onClick={handleToggle}
         className="relative overflow-hidden flex items-center gap-1 font-medium hover:opacity-80 transition-opacity rounded px-2 py-1"
@@ -56,6 +59,7 @@ const Breadcrumb: React.FC = () => {
       </IconButton>
 
       <div
+        data-testid={TEST_IDS.BREADCRUMB_MENU}
         ref={menuRef}
         id="breadcrumb-menu"
         className={`absolute flex flex-col-reverse top-full left-0 bg-paper font-light rounded-lg max-w-sm shadow-sm p-1 z-50 transition-all duration-300 ease-out ${
