@@ -17,13 +17,11 @@ const Modal = ({ open, onClose, title, children, 'data-testid': testId }: ModalP
   const { t } = useTranslation();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isVisible, setVisible] = useState(false);
-  const [isMounted, setMounted] = useState(false);
 
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
     if (open) {
-      setMounted(true);
       dialog.removeAttribute('data-closing');
       dialog.showModal();
       requestAnimationFrame(() => setVisible(true));
@@ -33,7 +31,6 @@ const Modal = ({ open, onClose, title, children, 'data-testid': testId }: ModalP
       const timer = setTimeout(() => {
         dialog.removeAttribute('data-closing');
         dialog.close();
-        setMounted(false);
       }, TRANSITION_MS);
       return () => clearTimeout(timer);
     }
@@ -73,7 +70,7 @@ const Modal = ({ open, onClose, title, children, 'data-testid': testId }: ModalP
               <Icon type="close" aria-hidden="true" />
             </IconButton>
           </div>
-          {isMounted && children}
+          {children}
         </div>
       </div>
     </dialog>

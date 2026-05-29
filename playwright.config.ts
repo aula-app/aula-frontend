@@ -51,18 +51,7 @@ export default defineConfig({
   workers: 3,
 
   projects: [
-    // ── 1. instance-offline ────────────────────────────────────────────────────
-    // Flips a global instance flag that breaks every other test while active.
-    // Must finish before anything else starts.
-    // @TODO: i think this can also run in parallel now with full DB isolation
-    {
-      name: 'offline',
-      testDir: './tests/specs/offline',
-      use: { ...devices['Desktop Chrome'] },
-      workers: 1,
-    },
-
-    // ── 2. core (parallel) ────────────────────────────────────────────────────
+    // ── 1. core (parallel) ────────────────────────────────────────────────────
     // All remaining core specs. Each worker has its own DB, and reseeds it for each test case.
     {
       name: 'core',
@@ -70,19 +59,29 @@ export default defineConfig({
       testIgnore: ['**/disabled/**'],
       use: { ...devices['Desktop Chrome'] },
       workers: 3,
-      dependencies: ['offline'],
     },
 
-    // ── 4. admin ──────────────────────────────────────────────────────────────
-    // Admin-only specs that modify global configuration — run after core.
-    // @TODO: i think this can also run in parallel now with full DB isolation
+    // ── 2. instance-offline ────────────────────────────────────────────────────
+    // Flips a global instance flag that breaks every other test while active.
+    // Runs after core so it doesn't block the main suite; uses db000 exclusively.
+    {
+      name: 'offline',
+      testDir: './tests/specs/offline',
+      use: { ...devices['Desktop Chrome'] },
+      workers: 1,
+      dependencies: ['core'],
+    },
+
+    // ── 3. admin ──────────────────────────────────────────────────────────────
+    // Admin-only specs that modify global configuration.
+    // Depends on both core and offline to avoid db000 conflicts.
     {
       name: 'admin',
       testDir: './tests/specs/admin',
       testIgnore: '**/disabled/**',
       use: { ...devices['Desktop Chrome'] },
       workers: 1,
-      dependencies: ['core'],
+      dependencies: ['core', 'offline'],
     },
 
     // ── 5. v2 ─────────────────────────────────────────────────────────────────

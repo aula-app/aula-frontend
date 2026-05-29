@@ -5,7 +5,6 @@ import { FunctionComponent, PropsWithChildren } from 'react';
 import { useLocation } from 'react-router';
 import PrivateLayout from './private';
 import PublicLayout from './public';
-import Toast from '@/v2/components/ui/Toast';
 
 /**
  * Returns the current Layout component depending on different circumstances.
@@ -20,12 +19,7 @@ const Layout: FunctionComponent<PropsWithChildren> = (props) => {
     return <OutdatedView />;
   }
 
-  return (
-    <>
-      {isAuthenticated ? <PrivateLayout {...props} /> : <PublicLayout {...props} />}
-      <Toast />
-    </>
-  );
+  return isAuthenticated ? <PrivateLayout {...props} /> : <PublicLayout {...props} />;
 };
 
 export default Layout;

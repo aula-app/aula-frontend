@@ -1,6 +1,7 @@
 import AskConsent from '@/views/AskConsent';
 import SideBar from '@/v2/components/ui/SideBar';
 import TopBar from '@/v2/components/ui/TopBar';
+import { ModalRoot } from '@/v2/components/ui/Modal';
 import useIsDrawerMode from '@/v2/hooks/useIsDrawerMode';
 import { checkPermissions } from '@/utils';
 import { FunctionComponent, PropsWithChildren, useEffect, useRef, useState } from 'react';
@@ -38,6 +39,7 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         {!isRestricted && <SideBar menuOpen={menuOpen} onClose={onCloseMenu} />}
       </div>
       {!isRestricted && <AskConsent />}
+      <ModalRoot />
     </div>
   );
 };
