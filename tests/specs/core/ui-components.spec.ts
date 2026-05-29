@@ -16,6 +16,58 @@ async function ensureInstanceCode(page: import('@playwright/test').Page, dbInsta
   }
 }
 
+// ── Toast ─────────────────────────────────────────────────────────────────────
+
+async function gotoNotFound(page: import('@playwright/test').Page, dbInstanceCode: string) {
+  await page.goto(host, { waitUntil: 'domcontentloaded' });
+  await ensureInstanceCode(page, dbInstanceCode);
+  await page.goto(`${host}/this-route-does-not-exist`, { waitUntil: 'domcontentloaded' });
+  await expect(page.getByTestId('not-found-view')).toBeVisible();
+}
+
+test('Toast - success appears and can be dismissed', async ({ page, dbInstanceCode }) => {
+  await gotoNotFound(page, dbInstanceCode);
+
+  await page.getByTestId('test-toast-success').click({ force: true });
+
+  const toast = page.locator('[role="region"][aria-label="Notifications"] [role="status"]');
+  await expect(toast).toBeVisible();
+  await expect(toast).toContainText('Success toast');
+
+  await toast.getByRole('button').click();
+  await expect(toast).not.toBeVisible();
+});
+
+test('Toast - error appears and can be dismissed with Escape', async ({ page, dbInstanceCode }) => {
+  await gotoNotFound(page, dbInstanceCode);
+
+  await page.getByTestId('test-toast-error').click({ force: true });
+
+  const toast = page.locator('[role="region"][aria-label="Notifications"] [role="alert"]').first();
+  await expect(toast).toBeVisible();
+  await expect(toast).toContainText('Error toast');
+
+  await toast.getByRole('button').focus();
+  await page.keyboard.press('Escape');
+  await expect(toast).not.toBeVisible();
+});
+
+test('Toast - multiple toasts stack and dismiss individually', async ({ page, dbInstanceCode }) => {
+  await gotoNotFound(page, dbInstanceCode);
+
+  await page.getByTestId('test-toast-success').click({ force: true });
+  await page.getByTestId('test-toast-info').click({ force: true });
+
+  const region = page.locator('[role="region"][aria-label="Notifications"]');
+  await expect(region.locator('[role="status"]')).toHaveCount(2);
+
+  // Dismiss the first one
+  await region.locator('[role="status"]').first().getByRole('button').click();
+  await expect(region.locator('[role="status"]')).toHaveCount(1);
+});
+
+// ── Tooltip ───────────────────────────────────────────────────────────────────
+
 test('Tooltip - shows on hover and hides on mouse leave', async ({ page, dbInstanceCode }) => {
   // The NotFoundView has a Tooltip wrapping the error message — use it as test subject
   await page.goto(host, { waitUntil: 'domcontentloaded' });

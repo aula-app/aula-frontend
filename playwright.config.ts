@@ -22,6 +22,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'on-first-retry',
 
+    reducedMotion: 'reduce',
     actionTimeout: 15_000,
     navigationTimeout: 15_000,
 

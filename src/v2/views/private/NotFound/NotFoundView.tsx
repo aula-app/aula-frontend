@@ -18,12 +18,12 @@ const PublicNotFoundView = () => {
         </Button>
       </Tooltip>
 
-      {/* Toast test buttons — remove before merging */}
-      <div className="flex flex-wrap gap-2 justify-center">
-        <button onClick={() => toast.success('Success toast works!')} className="px-3 py-1 rounded bg-success text-success-text text-sm">Success</button>
-        <button onClick={() => toast.error('Error toast works!')} className="px-3 py-1 rounded bg-error text-error-text text-sm">Error</button>
-        <button onClick={() => toast.warning('Warning toast works!')} className="px-3 py-1 rounded bg-warning text-warning-text text-sm">Warning</button>
-        <button onClick={() => toast.info('Info toast works!')} className="px-3 py-1 rounded bg-info text-info-text text-sm">Info</button>
+      {/* Hidden toast triggers for Playwright tests */}
+      <div className="sr-only" aria-hidden="true">
+        <button data-testid="test-toast-success" tabIndex={-1} onClick={() => toast.success('Success toast')}>success</button>
+        <button data-testid="test-toast-error" tabIndex={-1} onClick={() => toast.error('Error toast')}>error</button>
+        <button data-testid="test-toast-warning" tabIndex={-1} onClick={() => toast.warning('Warning toast')}>warning</button>
+        <button data-testid="test-toast-info" tabIndex={-1} onClick={() => toast.info('Info toast')}>info</button>
       </div>
     </div>
   );
