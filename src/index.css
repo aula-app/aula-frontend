@@ -16,6 +16,35 @@
 
 
 
+/* Toast slide animations */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(110%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(110%); }
+}
+
+@keyframes toast-collapse {
+  from { max-height: 120px; padding-bottom: 0.5rem; }
+  to { max-height: 0; padding-bottom: 0; }
+}
+
+@utility animate-toast-in {
+  animation: toast-in 250ms ease-out;
+}
+
+@utility animate-toast-out {
+  animation: toast-out 200ms ease-in forwards;
+}
+
+@utility animate-toast-collapse {
+  overflow: hidden;
+  animation: toast-collapse 200ms ease-in forwards;
+}
+
 /* MUI-like ripple animation */
 @keyframes ripple {
   0% {
