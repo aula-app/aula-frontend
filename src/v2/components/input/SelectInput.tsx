@@ -141,7 +141,7 @@ const SelectInput = ({
                 ? 'top-0 -translate-y-1/2 scale-75'
                 : 'top-1/2 -translate-y-1/2 scale-100',
               error
-                ? 'text-error'
+                ? 'text-error-text'
                 : open
                   ? 'text-primary'
                   : 'text-text-secondary',
@@ -198,7 +198,7 @@ const SelectInput = ({
       >
         <div className="overflow-hidden">
           {error ? (
-            <span id={errorId} role="alert" className="block pt-1 px-1 text-xs text-error">
+            <span id={errorId} role="alert" className="block pt-1 px-1 text-xs text-error-text">
               <Icon type="alert" className="inline-block mr-1 mb-0.5" />
               {error}
             </span>

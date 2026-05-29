@@ -49,7 +49,7 @@ const SetPasswordView = () => {
       {!isValid && (
         <div
           role="alert"
-          className="flex items-center gap-2 rounded-lg border border-error px-3 py-2 text-sm text-error"
+          className="flex items-center gap-2 rounded-lg border border-error-text px-3 py-2 text-sm text-error-text"
         >
           <Hint content={t('v2.page.passwordSet.hint')} />
           <span className="flex-1">{t('v2.page.passwordSet.error')}</span>
@@ -57,7 +57,7 @@ const SetPasswordView = () => {
             aria-label={t('v2.ui.button.close')}
             hint={t('v2.ui.button.close')}
             onClick={() => setValid(true)}
-            className="text-error"
+            className="text-error-text"
             dense
           >
             <Icon type="close" />

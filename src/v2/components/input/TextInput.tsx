@@ -77,7 +77,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                 'peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100',
                 'peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75',
                 'peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-75',
-                error ? 'text-error peer-focus:text-error' : 'text-text-secondary peer-focus:text-primary'
+                error ? 'text-error-text peer-focus:text-error-text' : 'text-text-secondary peer-focus:text-primary'
               )}
             >
               {label}
@@ -100,7 +100,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         >
           <div>
             {error ? (
-              <span id={errorId} className="block pt-1 px-1 text-xs text-error">
+              <span id={errorId} className="block pt-1 px-1 text-xs text-error-text">
                 <Icon type="alert" className="inline-block mr-1 mb-0.5" />
                 {error}
               </span>

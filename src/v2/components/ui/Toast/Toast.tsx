@@ -2,12 +2,13 @@ import { useAppStore } from '@/store';
 import { ToastMessage } from '@/store/AppStore';
 import { useTranslation } from 'react-i18next';
 import Icon, { ICON_TYPE } from '../Icon';
+import IconButton from '../../button/IconButton';
 
 const TOAST_STYLES: Record<ToastMessage['type'], string> = {
-  error: 'bg-red-600 text-white',
-  success: 'bg-green-600 text-white',
-  warning: 'bg-yellow-500 text-white',
-  info: 'bg-blue-600 text-white',
+  error: 'bg-error text-error-text',
+  success: 'bg-success text-success-text',
+  warning: 'bg-warning text-warning-text',
+  info: 'bg-info text-info-text',
 };
 
 const TOAST_ICONS: Record<ToastMessage['type'], ICON_TYPE> = {
@@ -37,18 +38,13 @@ const ToastItem = ({ toast, onDismiss }: ToastItemProps) => {
       role={TOAST_ROLES[toast.type]}
       aria-live={toast.type === 'error' || toast.type === 'warning' ? 'assertive' : 'polite'}
       aria-atomic="true"
-      className={`flex items-center gap-3 rounded-lg px-4 py-3 shadow-lg min-w-72 max-w-sm ${TOAST_STYLES[toast.type]}`}
+      className={`flex items-center gap-3 rounded-2xl rounded-tr-none pl-6 pr-4 py-2 shadow-lg min-w-72 max-w-sm ${TOAST_STYLES[toast.type]}`}
     >
       <Icon type={TOAST_ICONS[toast.type]} aria-hidden="true" />
       <span className="flex-1 text-sm font-medium">{toast.message}</span>
-      <button
-        type="button"
-        aria-label={t('ui.common.dismiss')}
-        onClick={() => onDismiss(toast.id)}
-        className="ml-1 rounded p-1 opacity-80 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-      >
+      <IconButton type="button" aria-label={t('ui.common.dismiss')} onClick={() => onDismiss(toast.id)}>
         <Icon type="close" aria-hidden="true" />
-      </button>
+      </IconButton>
     </div>
   );
 };
@@ -61,10 +57,7 @@ const Toast = () => {
   };
 
   return (
-    <div
-      aria-label="Notifications"
-      className="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"
-    >
+    <div aria-label="Notifications" className="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
       {state.toasts.map((toast) => (
         <div key={toast.id} className="pointer-events-auto">
           <ToastItem toast={toast} onDismiss={handleDismiss} />

@@ -9,6 +9,12 @@
 @source inline("{hover,active}:bg-{primary,secondary,error}/{10,20}");
 @source inline("focus-visible:outline-{primary,secondary,error}");
 
+/* Semantic status colors + text variants */
+@source inline("{bg,text,border}-{error,warning,info,success}");
+@source inline("{bg,text,border}-{error,warning,info,success}-text");
+@source inline("border-l-4");
+
+
 
 /* MUI-like ripple animation */
 @keyframes ripple {

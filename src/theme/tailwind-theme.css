@@ -12,10 +12,14 @@
 :root {
   --color-primary: hsl(134, 72%, 67%);
   --color-secondary: hsl(215, 8%, 72%);
-  --color-error: hsl(0, 84%, 58%);
-  --color-warning: hsl(45, 100%, 79%);
-  --color-info: hsl(204, 82%, 86%);
-  --color-success: hsl(134, 72%, 67%);
+  --color-error: hsl(0, 100%, 94%);
+  --color-error-text: hsl(0, 72%, 35%);
+  --color-warning: hsl(45, 100%, 90%);
+  --color-warning-text: hsl(35, 85%, 30%);
+  --color-info: hsl(204, 82%, 90%);
+  --color-info-text: hsl(204, 70%, 30%);
+  --color-success: hsl(134, 72%, 88%);
+  --color-success-text: hsl(134, 55%, 28%);
 
   --color-shadow: rgba(0, 0, 0, 0.05);
 
@@ -107,10 +111,14 @@
 .dark {
   --color-primary: hsl(134, 55%, 55%);
   --color-secondary: hsl(215, 12%, 55%);
-  --color-error: hsl(0, 75%, 62%);
-  --color-warning: hsl(45, 90%, 62%);
-  --color-info: hsl(204, 70%, 62%);
-  --color-success: hsl(134, 55%, 55%);
+  --color-error: hsl(0, 40%, 22%);
+  --color-error-text: hsl(0, 80%, 75%);
+  --color-warning: hsl(45, 40%, 20%);
+  --color-warning-text: hsl(35, 85%, 70%);
+  --color-info: hsl(204, 40%, 22%);
+  --color-info-text: hsl(204, 75%, 72%);
+  --color-success: hsl(134, 30%, 20%);
+  --color-success-text: hsl(134, 60%, 65%);
 
   --color-shadow: rgba(0, 0, 0, 0.4);
 
@@ -207,9 +215,13 @@
   --color-primary: var(--color-primary);
   --color-secondary: var(--color-secondary);
   --color-error: var(--color-error);
+  --color-error-text: var(--color-error-text);
   --color-warning: var(--color-warning);
+  --color-warning-text: var(--color-warning-text);
   --color-info: var(--color-info);
+  --color-info-text: var(--color-info-text);
   --color-success: var(--color-success);
+  --color-success-text: var(--color-success-text);
 
   --color-shadow: var(--color-shadow);
 
