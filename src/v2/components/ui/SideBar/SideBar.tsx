@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import BugButton from '../../button/Bug';
 import { useSidebarItems } from './useSidebarItems';
-import SidebarProfile from './SidebarProfile';
+import Profile from './Profile';
 
 const activeClass = 'bg-shadow font-semibold';
 
@@ -40,7 +40,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
       >
         <CodeCopy />
         <hr className="my-1 border-secondary" />
-        <SidebarProfile />
+        <Profile />
         <hr className="mt-1 border-secondary" />
         <ul className="flex flex-col h-full list-none m-0 my-2">
           {/* Nav items */}
