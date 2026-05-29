@@ -1,3 +1,4 @@
+import AskConsent from '@/views/AskConsent';
 import SideBar from '@/v2/components/ui/SideBar';
 import TopBar from '@/v2/components/ui/TopBar';
 import useIsDrawerMode from '@/v2/hooks/useIsDrawerMode';
@@ -36,6 +37,7 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         </main>
         {!isRestricted && <SideBar menuOpen={menuOpen} onClose={onCloseMenu} />}
       </div>
+      {!isRestricted && <AskConsent />}
     </div>
   );
 };

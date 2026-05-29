@@ -47,6 +47,7 @@ const ToastItem = ({ toast, isExiting, onDismiss }: ToastItemProps) => {
   return (
     <div
       data-toast
+      data-testid={`toast-${toast.type}`}
       // role + aria-live kept for visual context; announcements go through the hidden live regions
       role={toast.type === 'error' || toast.type === 'warning' ? 'alert' : 'status'}
       aria-atomic="true"

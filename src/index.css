@@ -141,6 +141,38 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Modal slide animations */
+@keyframes modal-in {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes modal-out {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+
+@utility animate-modal-in {
+  animation: modal-in 300ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@utility animate-modal-out {
+  animation: modal-out 250ms ease-in forwards;
+}
+
+/* Backdrop */
+dialog::backdrop {
+  background: var(--color-shade);
+  opacity: 0.5;
+  transition: opacity 300ms ease;
+}
+
+@starting-style {
+  dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
 .printOnly { display: none; }
 
 .editor-toolbar {

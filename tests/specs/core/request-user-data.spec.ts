@@ -1,5 +1,6 @@
 import * as formInteractions from '../../interactions/forms';
 import { expect, test } from '../../fixtures/aula-tests-fixture';
+import { TEST_IDS } from '../../../src/test-ids';
 import * as navigation from '../../interactions/navigation';
 
 /**
@@ -22,7 +23,7 @@ test('Request User Data - Export Request and Download Flow', async ({ seededUser
 
     // Click the request data export button
     await formInteractions.clickButton(userPage, 'request-data-export-button');
-    await expect(userPage.getByTestId('success-alert')).toBeVisible();
+    await expect(userPage.getByTestId(TEST_IDS.TOAST_SUCCESS)).toBeVisible();
   });
 
   await test.step('Admin can approve the data export request', async () => {

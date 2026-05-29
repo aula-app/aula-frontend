@@ -39,6 +39,12 @@ export const TEST_IDS = {
   // Reports (ReportCard)
   ARCHIVE_REPORT_BUTTON: 'archive-report-button',
 
+  // Toast notifications (Toast)
+  TOAST_ERROR: 'toast-error',
+  TOAST_SUCCESS: 'toast-success',
+  TOAST_WARNING: 'toast-warning',
+  TOAST_INFO: 'toast-info',
+
   // Navigation layout (TopBar, SideBar, Breadcrumb, PrintButton)
   TOPBAR_MENU_BUTTON: 'topbar-menu-button',
   BREADCRUMB_NAV: 'breadcrumb-nav',

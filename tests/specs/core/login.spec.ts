@@ -1,4 +1,5 @@
 import { expect, test } from '../../fixtures/aula-tests-fixture';
+import { TEST_IDS } from '../../../src/test-ids';
 import { TestConstants } from '../../support/config';
 import * as shared from '../../support/utils';
 
@@ -28,7 +29,7 @@ test('Instance code entry', async ({ browser, dbInstanceCode, baselineLoaded: _ 
     await page.fill('input[name="instanceCode"]', 'WRONG');
     await page.getByTestId('submit-instance-code').click();
 
-    await expect(page.getByTestId('error-alert')).toBeVisible();
+    await expect(page.getByTestId(TEST_IDS.TOAST_ERROR)).toBeVisible();
   });
 
   await test.step('Submitting the correct instance code proceeds to the login form', async () => {
@@ -80,7 +81,7 @@ test('Login form', async ({ browser, dbInstanceCode, baselineLoaded: _ }) => {
     await page.fill('input[name="password"]', 'wrong_password');
     await page.getByTestId('submit-login').click();
 
-    await expect(page.getByTestId('error-alert')).toBeVisible();
+    await expect(page.getByTestId(TEST_IDS.TOAST_ERROR)).toBeVisible();
   });
 
   await test.step('Submitting correct credentials logs the user in', async () => {

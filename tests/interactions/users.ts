@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test';
+import { TEST_IDS } from '../../src/test-ids';
 import * as shared from '../support/utils';
 import * as types from '../support/types';
 import * as formsInteractions from './forms';
@@ -65,7 +66,7 @@ export const loginAttempt = async (page: Page, data: { username: string; passwor
 export const login = async (page: Page, data: { username: string; password: string }) => {
   await loginAttempt(page, data);
   await page.waitForLoadState('networkidle');
-  await expect(page.getByTestId('error-alert')).not.toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
+  await expect(page.getByTestId(TEST_IDS.TOAST_ERROR)).not.toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
   await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: TIMEOUTS.FIVE_SECONDS });
 };
 
