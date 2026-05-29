@@ -17,18 +17,26 @@ async function ensureInstanceCode(page: import('@playwright/test').Page, dbInsta
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
+// Toast trigger buttons are sr-only in the public NotFound view.
+// Use evaluate() to dispatch click directly — bypasses sr-only clip/size constraints.
 
-async function gotoNotFound(page: import('@playwright/test').Page, dbInstanceCode: string) {
+async function triggerToast(page: import('@playwright/test').Page, type: 'success' | 'error' | 'warning' | 'info') {
+  await page.evaluate((t) => {
+    (document.querySelector(`[data-testid="test-toast-${t}"]`) as HTMLButtonElement)?.click();
+  }, type);
+}
+
+async function gotoPublicNotFound(page: import('@playwright/test').Page, dbInstanceCode: string) {
   await page.goto(host, { waitUntil: 'domcontentloaded' });
   await ensureInstanceCode(page, dbInstanceCode);
+  // Navigate while unauthenticated to land on the public NotFound (which has the toast triggers)
   await page.goto(`${host}/this-route-does-not-exist`, { waitUntil: 'domcontentloaded' });
   await expect(page.getByTestId('not-found-view')).toBeVisible();
 }
 
 test('Toast - success appears and can be dismissed', async ({ page, dbInstanceCode }) => {
-  await gotoNotFound(page, dbInstanceCode);
-
-  await page.getByTestId('test-toast-success').click({ force: true });
+  await gotoPublicNotFound(page, dbInstanceCode);
+  await triggerToast(page, 'success');
 
   const toast = page.locator('[role="region"][aria-label="Notifications"] [role="status"]');
   await expect(toast).toBeVisible();
@@ -39,9 +47,8 @@ test('Toast - success appears and can be dismissed', async ({ page, dbInstanceCo
 });
 
 test('Toast - error appears and can be dismissed with Escape', async ({ page, dbInstanceCode }) => {
-  await gotoNotFound(page, dbInstanceCode);
-
-  await page.getByTestId('test-toast-error').click({ force: true });
+  await gotoPublicNotFound(page, dbInstanceCode);
+  await triggerToast(page, 'error');
 
   const toast = page.locator('[role="region"][aria-label="Notifications"] [role="alert"]').first();
   await expect(toast).toBeVisible();
@@ -53,80 +60,65 @@ test('Toast - error appears and can be dismissed with Escape', async ({ page, db
 });
 
 test('Toast - multiple toasts stack and dismiss individually', async ({ page, dbInstanceCode }) => {
-  await gotoNotFound(page, dbInstanceCode);
-
-  await page.getByTestId('test-toast-success').click({ force: true });
-  await page.getByTestId('test-toast-info').click({ force: true });
+  await gotoPublicNotFound(page, dbInstanceCode);
+  await triggerToast(page, 'success');
+  await triggerToast(page, 'info');
 
   const region = page.locator('[role="region"][aria-label="Notifications"]');
   await expect(region.locator('[role="status"]')).toHaveCount(2);
 
-  // Dismiss the first one
   await region.locator('[role="status"]').first().getByRole('button').click();
   await expect(region.locator('[role="status"]')).toHaveCount(1);
 });
 
 // ── Tooltip ───────────────────────────────────────────────────────────────────
 
-test('Tooltip - shows on hover and hides on mouse leave', async ({ page, dbInstanceCode }) => {
-  // The NotFoundView has a Tooltip wrapping the error message — use it as test subject
+async function gotoTooltipPage(page: import('@playwright/test').Page, dbInstanceCode: string) {
   await page.goto(host, { waitUntil: 'domcontentloaded' });
   await ensureInstanceCode(page, dbInstanceCode);
   await page.goto(`${host}/this-route-does-not-exist`, { waitUntil: 'domcontentloaded' });
-
   await expect(page.getByTestId('not-found-view')).toBeVisible();
+}
 
-  const notFoundView = page.getByTestId('not-found-view');
-  const tooltip = notFoundView.locator('[role="tooltip"]');
+test('Tooltip - shows on hover and hides on mouse leave', async ({ page, dbInstanceCode }) => {
+  await gotoTooltipPage(page, dbInstanceCode);
 
-  // Tooltip is initially hidden
-  await expect(tooltip).toHaveAttribute('aria-hidden', 'true');
+  const tooltip = page.getByTestId('not-found-view').locator('[role="tooltip"]');
+  await expect(tooltip).toBeHidden();
 
-  // Hover over the tooltip trigger to show it
   await tooltip.locator('..').hover();
-  await expect(tooltip).toHaveAttribute('aria-hidden', 'false');
+  await expect(tooltip).toBeVisible();
 
-  // Move mouse away — tooltip hides
   await page.mouse.move(0, 0);
-  await expect(tooltip).toHaveAttribute('aria-hidden', 'true');
+  await expect(tooltip).toBeHidden();
 });
 
 test('Tooltip - shows on focus and hides on blur', async ({ page, dbInstanceCode }) => {
-  await page.goto(host, { waitUntil: 'domcontentloaded' });
-  await ensureInstanceCode(page, dbInstanceCode);
-  await page.goto(`${host}/this-route-does-not-exist`, { waitUntil: 'domcontentloaded' });
-
-  await expect(page.getByTestId('not-found-view')).toBeVisible();
+  await gotoTooltipPage(page, dbInstanceCode);
 
   const notFoundView = page.getByTestId('not-found-view');
   const tooltip = notFoundView.locator('[role="tooltip"]');
-  const tooltipWrapper = tooltip.locator('..');
+  // The Tooltip component adds aria-describedby to the trigger element
+  const triggerButton = notFoundView.locator('button[aria-describedby]');
+  await expect(tooltip).toBeHidden();
 
-  // Focus the wrapper — tooltip shows
-  await tooltipWrapper.focus();
-  await expect(tooltip).toHaveAttribute('aria-hidden', 'false');
+  await triggerButton.focus();
+  await expect(tooltip).toBeVisible();
 
-  // Blur — tooltip hides
-  await tooltipWrapper.blur();
-  await expect(tooltip).toHaveAttribute('aria-hidden', 'true');
+  await triggerButton.blur();
+  await expect(tooltip).toBeHidden();
 });
 
 test('Tooltip - hides on Escape key', async ({ page, dbInstanceCode }) => {
-  await page.goto(host, { waitUntil: 'domcontentloaded' });
-  await ensureInstanceCode(page, dbInstanceCode);
-  await page.goto(`${host}/this-route-does-not-exist`, { waitUntil: 'domcontentloaded' });
-
-  await expect(page.getByTestId('not-found-view')).toBeVisible();
+  await gotoTooltipPage(page, dbInstanceCode);
 
   const notFoundView = page.getByTestId('not-found-view');
   const tooltip = notFoundView.locator('[role="tooltip"]');
-  const tooltipWrapper = tooltip.locator('..');
+  const triggerButton = notFoundView.locator('button[aria-describedby]');
 
-  // Focus to show
-  await tooltipWrapper.focus();
-  await expect(tooltip).toHaveAttribute('aria-hidden', 'false');
+  await triggerButton.focus();
+  await expect(tooltip).toBeVisible();
 
-  // Escape hides it
   await page.keyboard.press('Escape');
-  await expect(tooltip).toHaveAttribute('aria-hidden', 'true');
+  await expect(tooltip).toBeHidden();
 });
