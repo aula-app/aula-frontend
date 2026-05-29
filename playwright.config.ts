@@ -69,6 +69,7 @@ export default defineConfig({
       testIgnore: ['**/disabled/**'],
       use: { ...devices['Desktop Chrome'] },
       workers: 3,
+      dependencies: ['offline'],
     },
 
     // ── 4. admin ──────────────────────────────────────────────────────────────
