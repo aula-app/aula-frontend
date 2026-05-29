@@ -8,13 +8,14 @@ import IconButton from '../../button/IconButton';
 interface TopBarProps {
   onToggleMenu: () => void;
   menuOpen?: boolean;
+  showMenu?: boolean;
 }
 
 /**
  * TopBar component that provides navigation, breadcrumbs, and user controls
  * @component TopBar
  */
-const TopBar: React.FC<TopBarProps> = ({ onToggleMenu, menuOpen = false }) => {
+const TopBar: React.FC<TopBarProps> = ({ onToggleMenu, menuOpen = false, showMenu = true }) => {
   const { t } = useTranslation();
   const [appState] = useAppStore();
 
@@ -39,17 +40,19 @@ const TopBar: React.FC<TopBarProps> = ({ onToggleMenu, menuOpen = false }) => {
       </div>
 
       <div className="ml-3 flex h-full items-center justify-end">
-        <div className="md:hidden">
-          <IconButton
-            data-testid={TEST_IDS.TOPBAR_MENU_BUTTON}
-            onClick={onToggleMenu}
-            aria-expanded={menuOpen}
-            aria-controls="sidebar-menu"
-            aria-label={menuOpen ? t('v2.ui.menu.close') : t('v2.ui.menu.open')}
-          >
-            <Icon type={menuOpen ? 'close' : 'menu'} size="1.5rem" aria-hidden="true" />
-          </IconButton>
-        </div>
+        {showMenu && (
+          <div className="md:hidden">
+            <IconButton
+              data-testid={TEST_IDS.TOPBAR_MENU_BUTTON}
+              onClick={onToggleMenu}
+              aria-expanded={menuOpen}
+              aria-controls="sidebar-menu"
+              aria-label={menuOpen ? t('v2.ui.menu.close') : t('v2.ui.menu.open')}
+            >
+              <Icon type={menuOpen ? 'close' : 'menu'} size="1.5rem" aria-hidden="true" />
+            </IconButton>
+          </div>
+        )}
       </div>
     </header>
   );

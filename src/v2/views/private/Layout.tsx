@@ -1,11 +1,13 @@
 import SideBar from '@/v2/components/ui/SideBar';
 import TopBar from '@/v2/components/ui/TopBar';
 import useIsDrawerMode from '@/v2/hooks/useIsDrawerMode';
+import { checkPermissions } from '@/utils';
 import { FunctionComponent, PropsWithChildren, useEffect, useRef, useState } from 'react';
 
 const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const isDrawerMode = useIsDrawerMode();
+  const isRestricted = checkPermissions('system', 'hide');
   const prevMenuOpen = useRef(menuOpen);
 
   const onToggleMenu = () => setMenuOpen((prev) => !prev);
@@ -27,12 +29,12 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
   return (
     <div className="flex-1 flex flex-col relative h-dvh w-full" onKeyDown={onKeyDown}>
-      <TopBar onToggleMenu={onToggleMenu} menuOpen={menuOpen} />
+      <TopBar onToggleMenu={onToggleMenu} menuOpen={menuOpen} showMenu={!isRestricted} />
       <div className="flex-1 flex flex-row-reverse relative">
         <main id="main-content" className="flex-1 flex" inert={menuOpen && isDrawerMode ? '' : undefined} tabIndex={-1}>
           {children}
         </main>
-        <SideBar menuOpen={menuOpen} onClose={onCloseMenu} />
+        {!isRestricted && <SideBar menuOpen={menuOpen} onClose={onCloseMenu} />}
       </div>
     </div>
   );
