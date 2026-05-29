@@ -1,33 +1,18 @@
 import { Dispatch } from 'react';
-import { PopupType } from '@/store/AppStore';
+import { ToastMessage } from '@/store/AppStore';
 
-/**
- * Dispatches a success alert to the AppStore
- * @param message The message to display in the alert
- * @param dispatch The dispatch function from useAppStore
- */
 export const successAlert = (message: string, dispatch: Dispatch<any>) => {
-  dispatch({
-    type: 'ADD_POPUP',
-    message: {
-      message,
-      type: 'success',
-    } as PopupType,
-  });
+  dispatch({ type: 'ADD_TOAST', message: { message, type: 'success' } as Omit<ToastMessage, 'id'> });
 };
 
-/**
- * Dispatches an error alert to the AppStore
- * @param message The error message to display
- * @param dispatch The dispatch function from useAppStore
- */
 export const errorAlert = (message: string, dispatch: Dispatch<any>) => {
-  dispatch({
-    type: 'ADD_POPUP',
-    message: {
-      message,
-      type: 'error',
-    } as PopupType,
-  });
+  dispatch({ type: 'ADD_TOAST', message: { message, type: 'error' } as Omit<ToastMessage, 'id'> });
 };
 
+export const warningAlert = (message: string, dispatch: Dispatch<any>) => {
+  dispatch({ type: 'ADD_TOAST', message: { message, type: 'warning' } as Omit<ToastMessage, 'id'> });
+};
+
+export const infoAlert = (message: string, dispatch: Dispatch<any>) => {
+  dispatch({ type: 'ADD_TOAST', message: { message, type: 'info' } as Omit<ToastMessage, 'id'> });
+};

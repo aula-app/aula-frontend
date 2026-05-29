@@ -1,6 +1,6 @@
 import { getRuntimeConfig } from '@/config';
-import { useAppStore } from '@/store';
-import { announceToScreenReader, localStorageGet } from '@/utils';
+import { localStorageGet } from '@/utils';
+import { useToast } from '@/v2/hooks';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from '../../ui/Icon';
@@ -9,7 +9,7 @@ import Tooltip from '../../ui/Tooltip';
 
 const CodeCopy: FC = (restOfProps) => {
   const { t } = useTranslation();
-  const [, dispatch] = useAppStore();
+  const { toast } = useToast();
   const code = localStorageGet('code');
 
   if (!getRuntimeConfig().IS_MULTI || !code) {
@@ -19,14 +19,8 @@ const CodeCopy: FC = (restOfProps) => {
   const handleCopy = () => {
     navigator.clipboard
       .writeText(code)
-      .then(() => {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('v2.ui.code.success'), type: 'success' } });
-        announceToScreenReader(t('v2.ui.code.success'), 'polite');
-      })
-      .catch(() => {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('v2.ui.code.error'), type: 'error' } });
-        announceToScreenReader(t('v2.ui.code.error'), 'assertive');
-      });
+      .then(() => toast.success(t('v2.ui.code.success')))
+      .catch(() => toast.error(t('v2.ui.code.error')));
   };
 
   return (

@@ -17,7 +17,7 @@ const OfflineView: React.FC<OfflineViewProps> = () => {
 
   useEffect(() => {
     logout();
-    dispatch({ type: 'ADD_POPUP', message: { message: t('errors.offline'), type: 'error' } });
+    dispatch({ type: 'ADD_TOAST', message: { message: t('errors.offline'), type: 'error' } });
   }, []);
 
   return <></>;

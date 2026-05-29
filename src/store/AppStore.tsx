@@ -14,9 +14,10 @@ import AppReducer from './AppReducer';
  * AppState structure and initial values
  */
 
-export interface PopupType {
+export interface ToastMessage {
+  id: string;
   message: string;
-  type: 'error' | 'success' | 'info';
+  type: 'error' | 'success' | 'warning' | 'info';
 }
 
 export interface AppStoreState {
@@ -24,7 +25,7 @@ export interface AppStoreState {
   isAuthenticated: boolean;
   hasConsent: boolean;
   currentUser?: object | undefined;
-  messages: PopupType[];
+  toasts: ToastMessage[];
   breadcrumb: [string, string][];
   lastScroll: number;
   lastIdeaList: string;
@@ -33,7 +34,7 @@ const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
   isAuthenticated: false, // Overridden in AppStore by checking auth token
   hasConsent: false,
-  messages: [],
+  toasts: [],
   breadcrumb: [],
   lastScroll: 0,
   lastIdeaList: '',

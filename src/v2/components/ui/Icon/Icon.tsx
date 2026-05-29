@@ -29,6 +29,8 @@ import {
   HiOutlineUserGroup,
   HiOutlineUsers,
   HiOutlineXMark,
+  HiOutlineCheckCircle,
+  HiOutlineXCircle,
 } from 'react-icons/hi2';
 
 /**
@@ -38,6 +40,8 @@ import {
 export const ICONS = {
   about: HiOutlineInformationCircle,
   alert: HiOutlineExclamationTriangle,
+  check: HiOutlineCheckCircle,
+  error: HiOutlineXCircle,
   announcement: HiOutlineMegaphone,
   announcements: HiOutlineMegaphone,
   back: HiOutlineChevronLeft,

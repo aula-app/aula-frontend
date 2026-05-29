@@ -161,7 +161,7 @@ const ChangePassword: React.FC<Props> = ({
     }
 
     if (tmp_token && !result.error) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.success'), type: 'success' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('auth.password.success'), type: 'success' } });
       navigate('/', { replace: true });
     }
   };

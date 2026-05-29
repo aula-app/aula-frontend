@@ -1,6 +1,7 @@
 import { loginUser } from '@/services/login';
 import { useAppStore } from '@/store';
 import { localStorageGet, localStorageSet, parseJwt } from '@/utils';
+import { useToast } from '@/v2/hooks';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -14,13 +15,14 @@ export const useLoginSubmit = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
+  const { toast } = useToast();
   const [isLoading, setLoading] = useState(false);
 
   const onSubmit = async (formData: LoginFormValues) => {
     const instanceApiUrl = await localStorageGet('api_url');
 
     if (!instanceApiUrl) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
+      toast.error(t('errors.noServer'));
       return;
     }
 
@@ -41,20 +43,15 @@ export const useLoginSubmit = () => {
       }
 
       if (response.data || !('JWT' in response)) {
-        dispatch({
-          type: 'ADD_POPUP',
-          message: {
-            message:
-              'user_status' in response && response.user_status !== null
-                ? response.user_status === 0
-                  ? t('errors.accountInactive')
-                  : t('errors.accountSuspended', {
-                      var: response.data ? t('errors.accountSuspendDate', { var: response.data }) : '',
-                    })
-                : t('errors.invalidCredentials'),
-            type: 'error',
-          },
-        });
+        const message =
+          'user_status' in response && response.user_status !== null
+            ? response.user_status === 0
+              ? t('errors.accountInactive')
+              : t('errors.accountSuspended', {
+                  var: response.data ? t('errors.accountSuspendDate', { var: response.data }) : '',
+                })
+            : t('errors.invalidCredentials');
+        toast.error(message);
         return;
       }
 
@@ -72,11 +69,11 @@ export const useLoginSubmit = () => {
       setLoading(false);
       if (e instanceof Error) {
         if (e.name === 'AbortError') {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.timeout'), type: 'error' } });
+          toast.error(t('errors.timeout'));
         } else if (e.name === 'NetworkError') {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.network'), type: 'error' } });
+          toast.error(t('errors.network'));
         } else {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+          toast.error(t('errors.default'));
         }
       }
     }

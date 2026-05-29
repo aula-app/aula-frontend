@@ -1,6 +1,6 @@
 import { recoverPassword } from '@/services/login';
-import { useAppStore } from '@/store';
 import { localStorageGet, localStorageSet } from '@/utils';
+import { useToast } from '@/v2/hooks';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -8,7 +8,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 export const useRecoverySubmit = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [, dispatch] = useAppStore();
+  const { toast } = useToast();
   const [isLoading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
 
@@ -29,19 +29,13 @@ export const useRecoverySubmit = () => {
       );
 
       if (response.success) {
-        dispatch({
-          type: 'ADD_POPUP',
-          message: {
-            message: t('auth.forgotPassword.success', { var: t('auth.forgotPassword.successfulEmail') }),
-            type: 'success',
-          },
-        });
+        toast.success(t('auth.forgotPassword.success', { var: t('auth.forgotPassword.successfulEmail') }));
         navigate('/', { replace: true });
       } else {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+        toast.error(t('errors.default'));
       }
     } catch {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      toast.error(t('errors.default'));
     } finally {
       setLoading(false);
     }

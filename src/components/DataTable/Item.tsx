@@ -85,7 +85,7 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
     e.stopPropagation();
     navigator.clipboard
       .writeText(String(value))
-      .then(() => dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.copied'), type: 'success' } }));
+      .then(() => dispatch({ type: 'ADD_TOAST', message: { message: t('auth.password.copied'), type: 'success' } }));
   };
 
   // Main switch statement organized by data type

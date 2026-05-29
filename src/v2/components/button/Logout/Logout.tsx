@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLogout } from '@/v2/hooks/useLogout/useLogout';
+import { useLogout } from '@/v2/hooks/useLogout';
 import Icon from '../../ui/Icon';
 import Tooltip from '../../ui/Tooltip';
 import Button from '../Button';

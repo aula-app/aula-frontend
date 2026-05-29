@@ -1,5 +1,5 @@
 import { validateAndSaveInstanceCode } from '@/services/instance';
-import { useAppStore } from '@/store';
+import { useToast } from '@/v2/hooks';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ export type LoginFormValues = {
 export const useCodeSubmit = (setFormError: (field: keyof LoginFormValues, error: { type: string; message: string }) => void) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [, dispatch] = useAppStore();
+  const { toast } = useToast();
   const [isLoading, setLoading] = useState(false);
 
   const onSubmit = async (data: { instanceCode: string }) => {
@@ -22,11 +22,11 @@ export const useCodeSubmit = (setFormError: (field: keyof LoginFormValues, error
         navigate('/');
       } else {
         setFormError('instanceCode', { type: 'manual', message: t('errors.default') });
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+        toast.error(t('errors.default'));
       }
-    } catch (err) {
+    } catch {
       setFormError('instanceCode', { type: 'manual', message: t('instance.error') });
-      dispatch({ type: 'ADD_POPUP', message: { message: t('instance.error'), type: 'error' } });
+      toast.error(t('instance.error'));
     } finally {
       setLoading(false);
     }

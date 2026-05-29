@@ -54,7 +54,7 @@ const LoginView = () => {
     const instanceApiUrl = await localStorageGet('api_url');
 
     if (!instanceApiUrl) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.noServer'), type: 'error' } });
       return;
     }
 
@@ -101,11 +101,11 @@ const LoginView = () => {
       setLoading(false);
       if (e instanceof Error) {
         if (e.name === 'AbortError') {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.timeout'), type: 'error' } });
+          dispatch({ type: 'ADD_TOAST', message: { message: t('errors.timeout'), type: 'error' } });
         } else if (e.name === 'NetworkError') {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.network'), type: 'error' } });
+          dispatch({ type: 'ADD_TOAST', message: { message: t('errors.network'), type: 'error' } });
         } else {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+          dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
         }
       }
     }

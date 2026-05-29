@@ -5,7 +5,7 @@ import { FunctionComponent, PropsWithChildren } from 'react';
 import { useLocation } from 'react-router';
 import PrivateLayout from './private';
 import PublicLayout from './public';
-import PopupMessages from '@/components/PopupMessages';
+import Toast from '@/v2/components/ui/Toast';
 
 /**
  * Returns the current Layout component depending on different circumstances.
@@ -23,7 +23,7 @@ const Layout: FunctionComponent<PropsWithChildren> = (props) => {
   return (
     <>
       {isAuthenticated ? <PrivateLayout {...props} /> : <PublicLayout {...props} />}
-      <PopupMessages />
+      <Toast />
     </>
   );
 };

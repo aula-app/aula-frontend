@@ -1,5 +1,5 @@
 import { changePassword } from '@/services/auth';
-import { useAppStore } from '@/store';
+import { useToast } from '@/v2/hooks';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -14,7 +14,7 @@ export const useResetPasswordSubmit = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
-  const [, dispatch] = useAppStore();
+  const { toast } = useToast();
   const [error, setError] = useState<string>('');
 
   const tmpToken: string | undefined = location.state?.tmp_jwt;
@@ -33,7 +33,7 @@ export const useResetPasswordSubmit = () => {
       return;
     }
 
-    dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.success'), type: 'success' } });
+    toast.success(t('auth.password.success'));
     navigate('/', { replace: true });
   };
 

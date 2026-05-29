@@ -1,4 +1,4 @@
-import PopupMessages from '@/components/PopupMessages';
+import Toast from '@/v2/components/ui/Toast';
 import { useConsentSync, useIsAuthenticated } from '@/hooks/auth';
 import Private from '@/v2/views/private';
 import Public from '@/v2/views/public';
@@ -18,7 +18,7 @@ const Routes = () => {
   return (
     <>
       {autentication()}
-      <PopupMessages />
+      <Toast />
     </>
   );
 };

@@ -29,11 +29,11 @@ const InstanceCodeView = () => {
         navigate('/');
       } else {
         setError(t('errors.default'));
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+        dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
       }
     } catch (err) {
       setError(t('instance.error'));
-      dispatch({ type: 'ADD_POPUP', message: { message: t('instance.error'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('instance.error'), type: 'error' } });
     } finally {
       setLoading(false);
     }

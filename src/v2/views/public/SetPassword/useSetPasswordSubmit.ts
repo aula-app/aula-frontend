@@ -1,8 +1,8 @@
 import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from '@/config';
 import { validateAndSaveInstanceCode } from '@/services/instance';
 import { checkPasswordKey, setPassword } from '@/services/login';
-import { useAppStore } from '@/store';
 import { localStorageGet, localStorageSet } from '@/utils';
+import { useToast } from '@/v2/hooks';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -16,7 +16,7 @@ export const useSetPasswordSubmit = () => {
   const { t } = useTranslation();
   const { key } = useParams();
   const navigate = useNavigate();
-  const [, dispatch] = useAppStore();
+  const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const [isValid, setValid] = useState(true);
   const [error, setError] = useState<string>('');
@@ -51,8 +51,8 @@ export const useSetPasswordSubmit = () => {
       if (response.error) {
         setValid(false);
       }
-    } catch (error) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+    } catch {
+      toast.error(t('errors.default'));
       setValid(false);
     }
   };
@@ -73,7 +73,7 @@ export const useSetPasswordSubmit = () => {
       return;
     }
 
-    dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.success'), type: 'success' } });
+    toast.success(t('auth.password.success'));
     navigate('/', { replace: true });
   };
 
