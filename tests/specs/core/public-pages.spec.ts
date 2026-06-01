@@ -71,7 +71,14 @@ test('Language switch', async ({ page, dbInstanceCode }) => {
   await expect(langButton).toBeVisible();
 
   const initialLang = await page.evaluate(() => localStorage.getItem('lang') ?? document.documentElement.lang);
+
+  // Open the dropdown
   await langButton.click();
+
+  // Select the non-active language option
+  const otherOption = page.locator('[role="option"][aria-selected="false"]').first();
+  await expect(otherOption).toBeVisible();
+  await otherOption.click();
 
   const newLang = await page.evaluate(() => localStorage.getItem('lang'));
   expect(newLang).not.toBe(initialLang);
