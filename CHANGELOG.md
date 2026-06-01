@@ -4,6 +4,7 @@
   - New toast notification system with animations, replacing the previous snackbar library
   - Modal is now a global component, available across all private views
   - Profile view added to the v2 private layout
+  - Bilingual about page
 
 - **Accessibility improvements**
   - Breadcrumbs reviewed and updated for screen reader compatibility in private routes
