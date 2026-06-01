@@ -141,11 +141,9 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
 
   // factory to create a new authenticated context (test-scoped)
   newContextFor: [async ({ browser, ensureStatePathFor, baselineReload }, use) => {
-    const [student, user, admin] = await Promise.all([
-      ensureStatePathFor('student'),
-      ensureStatePathFor('user'),
-      ensureStatePathFor('admin'),
-    ]);
+    const student = await ensureStatePathFor('student');
+    const user    = await ensureStatePathFor('user');
+    const admin   = await ensureStatePathFor('admin');
     const precreatedStorageStates: Record<string, string> = { student: student!, user: user!, admin: admin! };
     // track created contexts for cleanup
     const createdBrowserContexts: BrowserContext[] = [];
