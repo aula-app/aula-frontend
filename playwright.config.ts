@@ -69,7 +69,6 @@ export default defineConfig({
       testDir: './tests/specs/offline',
       use: { ...devices['Desktop Chrome'] },
       workers: 1,
-      dependencies: ['core'],
     },
 
     // ── 3. admin ──────────────────────────────────────────────────────────────
