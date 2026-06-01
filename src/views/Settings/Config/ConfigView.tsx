@@ -28,7 +28,6 @@ const ConfigView = () => {
     const response = await getInstanceSettings();
     if (!response.data) return;
     setSettings(response.data);
-    setExpanded(undefined);
   };
 
   const loadData = () => {

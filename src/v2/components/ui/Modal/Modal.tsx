@@ -10,10 +10,9 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: ReactNode;
-  'data-testid'?: string;
 }
 
-const Modal = ({ open, onClose, title, children, 'data-testid': testId }: ModalProps) => {
+const Modal = ({ open, onClose, title, children }: ModalProps) => {
   const { t } = useTranslation();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isVisible, setVisible] = useState(false);
@@ -54,7 +53,7 @@ const Modal = ({ open, onClose, title, children, 'data-testid': testId }: ModalP
   return (
     <dialog
       ref={dialogRef}
-      data-testid={testId}
+      data-testid="modal"
       aria-label={title}
       onClick={handleBackdropClick}
       className="fixed inset-x-0 bottom-0 top-auto m-0 w-full max-w-full bg-transparent p-0 max-h-none overflow-visible"
