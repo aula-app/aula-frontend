@@ -1,35 +1,40 @@
-import Icon from '@/components/new/Icon';
-import Chip from '@/v2/components/button/Chip';
+import Icon from '@/v2/components/ui/Icon';
+import Dropdown from '@/v2/components/ui/Dropdown';
 import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
+import IconButton from '../IconButton';
 
-const LanguageButton = ({ icon = false }) => {
+const LanguageButton = () => {
   const { t } = useTranslation();
+  const label = t('v2.ui.language.label');
   const languages = Object.keys(i18n.services.resourceStore.data);
-  const currentIndex = languages.indexOf(i18n.language);
-  const nextLanguage = languages[(currentIndex + 1) % languages.length];
+  const currentLang = i18n.language;
+  const displayNames = new Intl.DisplayNames([currentLang], { type: 'language' });
 
-  const cycleLanguage = () => {
-    localStorage.setItem('lang', nextLanguage);
-    i18n.changeLanguage(nextLanguage);
+  const selectLanguage = (lang: string) => {
+    localStorage.setItem('lang', lang);
+    i18n.changeLanguage(lang);
   };
 
-  const label = t('v2.ui.language.button', {
-    var: new Intl.DisplayNames([i18n.language], { type: 'language' }).of(nextLanguage),
-  });
-
   return (
-    <Chip
-      condensed
-      className="bg-paper text-text-primary"
-      startIcon={<Icon type="language" />}
-      onClick={cycleLanguage}
+    <Dropdown
       aria-label={label}
-      hint={label}
-      data-testid="language-switch"
+      content={languages.map((lang) => (
+        <button
+          key={lang}
+          role="option"
+          aria-selected={lang === currentLang}
+          onClick={() => selectLanguage(lang)}
+          className={`flex w-full items-center justify-between px-4 py-2 first:rounded-t-2xl last:rounded-b-2xl hover:bg-shadow cursor-pointer focus-visible:outline-2 focus-visible:outline-secondary ${lang === currentLang ? 'bg-shadow' : ''}`}
+        >
+          <span>{displayNames.of(lang)}</span>
+        </button>
+      ))}
     >
-      {!icon && nextLanguage.toUpperCase()}
-    </Chip>
+      <IconButton aria-label={label} data-testid="language-switch" hint={t('v2.ui.language.hint')}>
+        <Icon type="language" />
+      </IconButton>
+    </Dropdown>
   );
 };
 
