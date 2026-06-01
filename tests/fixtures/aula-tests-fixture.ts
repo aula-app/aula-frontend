@@ -150,9 +150,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
     const factory = async (username: string) => {
       const ctx = precreatedStorageStates[username]
         ? await browser.newContext({ storageState: precreatedStorageStates[username] })
-        : (await ensureStatePathFor(username)
-          ? await browser.newContext({ storageState: (await ensureStatePathFor(username))! })
-          : await browser.newContext());
+        : await browser.newContext();
       createdBrowserContexts.push(ctx);
       return ctx;
     };
