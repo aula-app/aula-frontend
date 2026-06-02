@@ -108,6 +108,8 @@ const Announcement = () => {
         <div className="flex items-center justify-end gap-2 px-4 py-3">
           {showDismiss && (
             <Button
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus={!showAgree}
               text
               color="secondary"
               disabled={isSubmitting}
@@ -121,6 +123,8 @@ const Announcement = () => {
           )}
           {showAgree && (
             <Button
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
               disabled={isSubmitting}
               aria-busy={isSubmitting}
               onClick={() => handleAction(displayed.id, 1)}
