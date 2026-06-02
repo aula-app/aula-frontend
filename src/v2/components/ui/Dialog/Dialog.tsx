@@ -59,7 +59,8 @@ const Dialog = ({ open, onClose, title, children, role = 'dialog', describedBy }
       aria-describedby={describedBy}
       aria-modal="true"
       onClick={handleBackdropClick}
-      className="fixed inset-0 m-auto bg-transparent p-0 w-full max-w-sm backdrop:bg-background"
+      data-visible={isVisible || undefined}
+      className="fixed inset-0 m-auto bg-transparent p-0 w-full max-w-sm backdrop:transform-gpu backdrop:bg-background backdrop:transition-opacity backdrop:duration-300 backdrop:opacity-0 data-visible:backdrop:opacity-100"
     >
       <h2 id={titleId} className="sr-only">
         {title}

@@ -3,11 +3,13 @@ import { getConsents, giveConsent, MessageConsentType } from '@/services/consent
 import Button from '@/v2/components/button/Button';
 import Dialog from '@/v2/components/ui/Dialog';
 import { useToast } from '@/v2/hooks/useToast';
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import IconButton from '../../button/IconButton';
 import Icon from '../Icon';
+
+const TRANSITION_MS = 300;
 
 const Announcement = () => {
   const { t } = useTranslation();
@@ -16,6 +18,9 @@ const Announcement = () => {
   const [announcements, setAnnouncements] = useState<MessageConsentType[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
+  const [displayed, setDisplayed] = useState<MessageConsentType | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bodyId = useId();
 
   const getData = useCallback(async () => {
@@ -27,6 +32,21 @@ const Announcement = () => {
   useEffect(() => {
     getData();
   }, [location, getData]);
+
+  useEffect(() => {
+    const first = announcements[0] ?? null;
+    if (first) {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+      setDisplayed(first);
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+      closeTimer.current = setTimeout(() => setDisplayed(null), TRANSITION_MS);
+    }
+    return () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    };
+  }, [announcements]);
 
   const handleAction = async (text_id: number, consent_value: 1 | -1) => {
     setIsSubmitting(true);
@@ -48,11 +68,10 @@ const Announcement = () => {
     }
   };
 
-  const current = announcements[0];
+  if (!displayed) return null;
 
-  if (!current) return null;
-  const showDismiss = current.user_needs_to_consent !== 2;
-  const showAgree = current.user_needs_to_consent !== 0;
+  const showDismiss = displayed.user_needs_to_consent !== 2;
+  const showAgree = displayed.user_needs_to_consent !== 0;
 
   return (
     <>
@@ -60,8 +79,8 @@ const Announcement = () => {
         {statusMessage}
       </div>
       <Dialog
-        key={current.id}
-        open
+        key={displayed.id}
+        open={isOpen}
         title={t('ui.announcement.title')}
         describedBy={bodyId}
         role={showDismiss ? 'dialog' : 'alertdialog'}
@@ -74,7 +93,7 @@ const Announcement = () => {
           />
           {showDismiss ? (
             <IconButton
-              onClick={() => handleAction(current.id, -1)}
+              onClick={() => handleAction(displayed.id, -1)}
               disabled={isSubmitting}
               aria-label={t('ui.announcement.close')}
             >
@@ -83,8 +102,8 @@ const Announcement = () => {
           ) : null}
         </div>
         <div className="flex flex-col gap-4 px-6 py-4">
-          <h3>{current.headline}</h3>
-          <p id={bodyId} className="text-sm">{current.body}</p>
+          <h3>{displayed.headline}</h3>
+          <p id={bodyId} className="text-sm">{displayed.body}</p>
         </div>
         <div className="flex items-center justify-end gap-2 px-4 py-3">
           {showDismiss && (
@@ -93,7 +112,7 @@ const Announcement = () => {
               color="secondary"
               disabled={isSubmitting}
               aria-busy={isSubmitting}
-              onClick={() => handleAction(current.id, -1)}
+              onClick={() => handleAction(displayed.id, -1)}
               className="mr-auto"
               data-testid="button-consent-dismiss"
             >
@@ -104,10 +123,10 @@ const Announcement = () => {
             <Button
               disabled={isSubmitting}
               aria-busy={isSubmitting}
-              onClick={() => handleAction(current.id, 1)}
+              onClick={() => handleAction(displayed.id, 1)}
               data-testid="button-consent-agree"
             >
-              {current.consent_text || t('actions.agree')}
+              {displayed.consent_text || t('actions.agree')}
             </Button>
           )}
         </div>
