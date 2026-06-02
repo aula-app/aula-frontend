@@ -41,7 +41,12 @@
     },
     "page": {
       "about": {
-        "title": "Über Aula"
+        "button": "Über Aula",
+        "email": "E-Mail",
+        "legal": "Die aula gGmbH ist im Handelsregister Charlottenburg unter der Nummer 244593 B eingetragen. Vertreten durch: Alexa Schaegner (Geschäftsführerin), Steffen Wenzel (Geschäftsführer)",
+        "publisher": "Anbieter",
+        "phone": "Telefon",
+        "title": "aula App"
       },
       "code": {
         "button": "Instanzcode: {{var}}",
