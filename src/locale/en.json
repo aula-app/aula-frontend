@@ -2,6 +2,7 @@
   "v2": {
     "alt": {
       "logo": "Aula: Education Platform Logo",
+      "microphone": "An illustration of an owl with a microphone, representing the announcement feature",
       "sleeping": "Sleeping owl illustration"
     },
     "form": {
@@ -93,6 +94,9 @@
       "actions": {
         "print": "Print this page",
         "report": "Report a bug"
+      },
+      "announcement": {
+        "title": "Announcement"
       },
       "button": {
         "cancel": "Cancel",
