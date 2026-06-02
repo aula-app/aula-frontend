@@ -107,7 +107,7 @@
       },
       "language": {
         "label": "Language",
-        "button": "Switch to {{var}}"
+        "hint": "Switch language"
       },
       "lightMode": {
         "label": "Light mode"

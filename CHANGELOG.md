@@ -1,5 +1,18 @@
 ## 2.0.0
 
+- **New features**
+  - New toast notification system with animations, replacing the previous snackbar library
+  - Modal is now a global component, available across all private views
+  - Profile view added to the v2 private layout
+
+- **Accessibility improvements**
+  - Breadcrumbs reviewed and updated for screen reader compatibility in private routes
+
+- **Bug fixes**
+  - Fixed routing logic to prevent Tech Admins from accessing unauthorized routes
+  - Fixed offline view layout and behavior
+  - Fixed navigation horizontal overflow
+
 - **Internal**
   - Completed v2 component migration for public routes (Login, Recovery, Code, NotFound)
   - v2 private layout components (PrivateLayout, TopBar, SideBar) now fully migrated

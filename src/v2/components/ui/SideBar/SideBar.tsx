@@ -74,7 +74,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
           <DarkModeButton />
           <PrintButton />
           <BugButton />
-          <LanguageButton icon />
+          <LanguageButton />
         </div>
         <hr className="my-1 border-secondary" />
         <Logout />

@@ -1,12 +1,24 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
-import { useTooltipPlacement } from './useTooltipPlacement';
+import { usePlacement, XZone, YZone } from '@/v2/utils/placement';
 
 type TooltipProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'content'> & {
   content: React.ReactNode;
   children: React.ReactElement;
   wrapperClassName?: string;
   tapToShow?: boolean;
+};
+
+// Slide-in offsets for the hidden state — tooltip-specific animation detail.
+const slideY: Record<YZone, string> = {
+  top: '-translate-y-3',
+  middle: '',
+  bottom: 'translate-y-3',
+};
+const slideX: Record<XZone, string> = {
+  left: '-translate-x-3',
+  center: '',
+  right: 'translate-x-3',
 };
 
 const Tooltip: React.FC<TooltipProps> = ({
@@ -24,10 +36,16 @@ const Tooltip: React.FC<TooltipProps> = ({
   const isTouchActive = React.useRef(false);
   const generatedId = React.useId();
   const tooltipId = id ?? generatedId;
-  const { placementClass, containerWidth } = useTooltipPlacement(wrapper);
+
+  const { zones, verticalClass, horizontalClass, cornerClass, containerWidth } = usePlacement(wrapper);
+  const vertical = zones.x === 'center' && zones.y === 'middle' ? 'top' : zones.y;
+  const placementClass = twMerge(verticalClass, slideY[vertical], horizontalClass, slideX[zones.x], cornerClass);
+
   const [visible, setVisible] = React.useState(false);
   const show = () => setVisible(true);
   const hide = () => setVisible(false);
+  // Don't show tooltip when the trigger controls an open popup (e.g. dropdown).
+  const isExpanded = () => !!wrapper.current?.querySelector('[aria-expanded="true"]');
 
   const handleTouchStart = () => {
     isTouchActive.current = true;
@@ -79,9 +97,9 @@ const Tooltip: React.FC<TooltipProps> = ({
       ref={wrapper}
       className={twMerge('relative flex items-center justify-center', wrapperClassName)}
       style={{ '--tooltip-container-w': `${containerWidth}px` } as React.CSSProperties}
-      onFocus={show}
+      onFocus={() => !isExpanded() && show()}
       onBlur={hide}
-      onPointerEnter={(e) => !isTouchActive.current && e.pointerType !== 'touch' && show()}
+      onPointerEnter={(e) => !isTouchActive.current && e.pointerType !== 'touch' && !isExpanded() && show()}
       onPointerLeave={(e) => !isTouchActive.current && e.pointerType !== 'touch' && hide()}
       onKeyDown={(e) => e.key === 'Escape' && hide()}
       onTouchStart={handleTouchStart}

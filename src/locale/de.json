@@ -108,7 +108,7 @@
       },
       "language": {
         "label": "Sprache",
-        "button": "Zu {{var}} wechseln"
+        "hint": "Sprache wechseln"
       },
       "lightMode": {
         "label": "Hellmodus"
