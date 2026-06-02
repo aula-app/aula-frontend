@@ -53,7 +53,7 @@ const ConfigView = () => {
     // { name: 'time', component: <TimeSettings config={config} onReload={getConfig} /> },
     // { name: 'login', component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },
     { name: 'action', component: <TimedCommands /> },
-    { name: 'system', component: <SystemSettings settings={settings} onReload={getSettings} /> },
+    { name: 'system', component: <SystemSettings settings={settings} onReload={() => { closePanels(); getSettings(); }} /> },
     { name: 'danger', component: <SchoolDelete /> },
   ];
 
