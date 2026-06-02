@@ -58,10 +58,11 @@ test('Request User Data - Export Request and Download Flow', async ({ seededUser
     // Click on the Download button
     const downloadButton = userPage.getByTestId('download-data-button');
     await expect(downloadButton).toBeVisible();
-    await downloadButton.click();
 
-    // Wait for download to complete
-    const download = await userPage.waitForEvent('download', { timeout: 30_000 });
+    // Set up listener BEFORE click to avoid missing the event
+    const downloadPromise = userPage.waitForEvent('download', { timeout: 30_000 });
+    await downloadButton.click();
+    const download = await downloadPromise;
     const filename = download.suggestedFilename();
 
     expect(filename).toBeDefined();

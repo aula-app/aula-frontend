@@ -24,8 +24,9 @@ const AboutViewEN = () => {
   }, []);
 
   return (
-    <>
-      <h2>{t('v2.page.about.title')}</h2>
+    <div className="flex flex-col gap-4" data-testid="about-view">
+      <h1>{t('v2.page.about.title')}</h1>
+      <h2>{t('v2.page.about.version')}</h2>
       <code>
         aula-frontend: &nbsp;{import.meta.env?.VITE_APP_VERSION ?? 'unknown'}
         <br />
@@ -33,18 +34,15 @@ const AboutViewEN = () => {
         <br />
         aula-backend.v2: &nbsp;{versions?.['aula-backend.v2']?.['aula-backend']?.running ?? 'unknown'}
       </code>
-      <br />
-      <hr className="my-4" />
-      <div lang="en">
-        <h2>{t('v2.page.about.publisher')}</h2>
-        <h4>aula gGmbH</h4>
-        <p>Alte Schönhauser Straße 23/24</p>
-        <p>10119 Berlin</p>
-        <p>{t('v2.page.about.phone')}: 030-28040850</p>
-        <p>{t('v2.page.about.email')}: info@aula.de</p>
-        <p>{t('v2.page.about.legal')}</p>
-      </div>
-    </>
+      <hr />
+      <h2>{t('v2.page.about.publisher')}</h2>
+      <h4>aula gGmbH</h4>
+      <p>Alte Schönhauser Straße 23/24</p>
+      <p>10119 Berlin</p>
+      <p>{t('v2.page.about.phone')}: 030-28040850</p>
+      <p>{t('v2.page.about.email')}: info@aula.de</p>
+      <p>{t('v2.page.about.legal')}</p>
+    </div>
   );
 };
 

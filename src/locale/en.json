@@ -47,7 +47,8 @@
         "legal": "aula gGmbH is registered at the Charlottenburg district court under number 244593 B. Represented by: Alexa Schaegner (Managing Director), Steffen Wenzel (Managing Director)",
         "publisher": "Publisher",
         "phone": "Phone",
-        "title": "aula app"
+        "title": "aula app",
+        "version": "Version"
       },
       "code": {
         "chip": "Instance code: {{var}}",

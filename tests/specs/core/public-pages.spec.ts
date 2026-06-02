@@ -3,85 +3,67 @@ import * as shared from '../../support/utils';
 
 const host = shared.getHost();
 
-/**
- * Ensures the instance code is submitted so api_url is set in localStorage,
- * which is required before any public route renders correctly.
- */
-async function ensureInstanceCode(page: import('@playwright/test').Page, dbInstanceCode: string) {
+test('Public pages', async ({ page, dbInstanceCode }) => {
+  await page.goto(host, { waitUntil: 'domcontentloaded' });
+
   const instanceCodeInput = page.locator('input[name="instanceCode"]');
   if (await instanceCodeInput.isVisible()) {
     await instanceCodeInput.fill(dbInstanceCode);
     await page.getByTestId('submit-instance-code').click();
     await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
   }
-}
 
-test('404 page', async ({ page, dbInstanceCode }) => {
-  await page.goto(host, { waitUntil: 'domcontentloaded' });
-  await ensureInstanceCode(page, dbInstanceCode);
+  await test.step('404 page', async () => {
+    await page.goto(`${host}/this-route-does-not-exist`, { waitUntil: 'domcontentloaded' });
+    await expect(page.getByTestId('not-found-view')).toBeVisible();
+  });
 
-  await page.goto(`${host}/this-route-does-not-exist`, { waitUntil: 'domcontentloaded' });
+  await test.step('Offline page', async () => {
+    await page.goto(`${host}/offline`, { waitUntil: 'domcontentloaded' });
+    await expect(page.getByTestId('school-offline-view')).toBeVisible();
+  });
 
-  await expect(page.getByTestId('not-found-view')).toBeVisible();
-});
+  await test.step('About page', async () => {
+    await page.goto(host, { waitUntil: 'domcontentloaded' });
+    await page.getByTestId('about-button').click();
+    await expect(page.getByTestId('about-view')).toBeVisible();
+  });
 
-test('Offline page', async ({ page, dbInstanceCode }) => {
-  await page.goto(host, { waitUntil: 'domcontentloaded' });
-  await ensureInstanceCode(page, dbInstanceCode);
+  await test.step('Dark mode toggle', async () => {
+    await page.goto(host, { waitUntil: 'domcontentloaded' });
 
-  await page.goto(`${host}/offline`, { waitUntil: 'domcontentloaded' });
+    const html = page.locator('html');
+    const initialDarkMode = await html.evaluate((el) => el.classList.contains('dark'));
 
-  await expect(page.getByTestId('school-offline-view')).toBeVisible();
-});
+    const toggleButton = page.getByTestId('dark-mode-toggle');
+    await expect(toggleButton).toBeVisible();
+    await toggleButton.click();
 
-test('About page', async ({ page, dbInstanceCode }) => {
-  await page.goto(host, { waitUntil: 'domcontentloaded' });
-  await ensureInstanceCode(page, dbInstanceCode);
+    const newDarkMode = await html.evaluate((el) => el.classList.contains('dark'));
+    expect(newDarkMode).toBe(!initialDarkMode);
 
-  await page.getByTestId('about-button').click();
+    await toggleButton.click();
+    const restoredDarkMode = await html.evaluate((el) => el.classList.contains('dark'));
+    expect(restoredDarkMode).toBe(initialDarkMode);
+  });
 
-  await expect(page.getByTestId('about-view')).toBeVisible();
-});
+  await test.step('Language switch', async () => {
+    await page.goto(host, { waitUntil: 'domcontentloaded' });
 
-test('Dark mode toggle', async ({ page, dbInstanceCode }) => {
-  await page.goto(host, { waitUntil: 'domcontentloaded' });
-  await ensureInstanceCode(page, dbInstanceCode);
+    const langButton = page.getByTestId('language-switch');
+    await expect(langButton).toBeVisible();
 
-  const html = page.locator('html');
-  const initialDarkMode = await html.evaluate((el) => el.classList.contains('dark'));
+    const initialLang = await page.evaluate(() => localStorage.getItem('lang') ?? document.documentElement.lang);
 
-  const toggleButton = page.getByTestId('dark-mode-toggle');
-  await expect(toggleButton).toBeVisible();
-  await toggleButton.click();
+    await langButton.click();
 
-  const newDarkMode = await html.evaluate((el) => el.classList.contains('dark'));
-  expect(newDarkMode).toBe(!initialDarkMode);
+    const otherOption = page.locator('[role="option"][aria-selected="false"]').first();
+    await expect(otherOption).toBeVisible();
+    await otherOption.click();
 
-  // Clicking again restores original state
-  await toggleButton.click();
-  const restoredDarkMode = await html.evaluate((el) => el.classList.contains('dark'));
-  expect(restoredDarkMode).toBe(initialDarkMode);
-});
+    const newLang = await page.evaluate(() => localStorage.getItem('lang'));
+    expect(newLang).not.toBe(initialLang);
 
-test('Language switch', async ({ page, dbInstanceCode }) => {
-  await page.goto(host, { waitUntil: 'domcontentloaded' });
-  await ensureInstanceCode(page, dbInstanceCode);
-
-  const langButton = page.getByTestId('language-switch');
-  await expect(langButton).toBeVisible();
-
-  const initialLang = await page.evaluate(() => localStorage.getItem('lang') ?? document.documentElement.lang);
-
-  // Open the dropdown
-  await langButton.click();
-
-  // Select the non-active language option
-  const otherOption = page.locator('[role="option"][aria-selected="false"]').first();
-  await expect(otherOption).toBeVisible();
-  await otherOption.click();
-
-  const newLang = await page.evaluate(() => localStorage.getItem('lang'));
-  expect(newLang).not.toBe(initialLang);
-
-  await expect(langButton).toBeVisible();
+    await expect(langButton).toBeVisible();
+  });
 });
