@@ -8,9 +8,10 @@ interface DialogProps {
   title: string;
   children: ReactNode;
   role?: 'dialog' | 'alertdialog';
+  describedBy?: string;
 }
 
-const Dialog = ({ open, onClose, title, children, role = 'dialog' }: DialogProps) => {
+const Dialog = ({ open, onClose, title, children, role = 'dialog', describedBy }: DialogProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isVisible, setVisible] = useState(false);
   const titleId = useId();
@@ -55,6 +56,7 @@ const Dialog = ({ open, onClose, title, children, role = 'dialog' }: DialogProps
       ref={dialogRef}
       role={role}
       aria-labelledby={titleId}
+      aria-describedby={describedBy}
       aria-modal="true"
       onClick={handleBackdropClick}
       className="fixed inset-0 m-auto bg-transparent p-0 w-full max-w-sm backdrop:bg-background"

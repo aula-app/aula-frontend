@@ -808,6 +808,11 @@
       "togglePasswordVisibility": "Passwortsichtbarkeit umschalten",
       "updatingContent": "Inhalt wird aktualisiert"
     },
+    "announcement": {
+      "close": "Ankündigung schließen",
+      "submitting": "Antwort wird übermittelt",
+      "title": "Ankündigung"
+    },
     "common": {
       "all": "Alle",
       "and": "und",

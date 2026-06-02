@@ -811,6 +811,11 @@
       "togglePasswordVisibility": "Toggle password visibility",
       "updatingContent": "Updating content"
     },
+    "announcement": {
+      "close": "Close announcement",
+      "submitting": "Submitting your response",
+      "title": "Announcement"
+    },
     "common": {
       "all": "All",
       "and": "and",
