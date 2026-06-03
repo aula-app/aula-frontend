@@ -5,6 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   // single test timeout (base.describe.serial -> **test** -> test.step)
+  // quite large due to some tests having many steps
   timeout: 180_000,
   expect: {
     timeout: 15_000,
@@ -18,7 +19,7 @@ export default defineConfig({
 
   use: {
     // Performance: Only keep traces/screenshots on failure
-    trace: 'on', //'retain-on-failure',
+    trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'on-first-retry',
 
@@ -46,41 +47,16 @@ export default defineConfig({
   globalTeardown: './tests/lifecycle/teardown-auth.ts',
 
   // Set a global maximum of workers so that we initialize DB with correct amount of tenants
-  // See docker-compose.e2e.yml for more info
+  // See docker-compose.e2e.yml (backend-setup) for more info
   workers: 3,
 
   projects: [
-    // ── 1. instance-offline ────────────────────────────────────────────────────
-    // Flips a global instance flag that breaks every other test while active.
-    // Must finish before anything else starts.
-    // @TODO: i think this can also run in parallel now with full DB isolation
     {
-      name: 'offline',
-      testDir: './tests/specs/offline',
-      use: { ...devices['Desktop Chrome'] },
-      workers: 1,
-    },
-
-    // ── 2. core (parallel) ────────────────────────────────────────────────────
-    // All remaining core specs. Each worker has its own DB, and reseeds it for each test case.
-    {
-      name: 'core',
-      testDir: './tests/specs/core',
+      name: 'all',
+      testDir: './tests/specs',
       testIgnore: ['**/disabled/**'],
       use: { ...devices['Desktop Chrome'] },
       workers: 3,
-    },
-
-    // ── 4. admin ──────────────────────────────────────────────────────────────
-    // Admin-only specs that modify global configuration — run after core.
-    // @TODO: i think this can also run in parallel now with full DB isolation
-    {
-      name: 'admin',
-      testDir: './tests/specs/admin',
-      testIgnore: '**/disabled/**',
-      use: { ...devices['Desktop Chrome'] },
-      workers: 1,
-      dependencies: ['core'],
     },
   ],
 });
