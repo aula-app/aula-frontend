@@ -94,6 +94,7 @@
         }
       },
       "actions": {
+        "agree": "Zustimmen",
         "print": "Diese Seite drucken",
         "report": "Einen Fehler melden"
       },

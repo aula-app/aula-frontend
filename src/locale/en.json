@@ -93,6 +93,7 @@
         }
       },
       "actions": {
+        "agree": "Agree",
         "print": "Print this page",
         "report": "Report a bug"
       },

@@ -1,5 +1,6 @@
 import { getRuntimeConfig } from '@/config';
 import Button from '@/v2/components/button/Button';
+import Checkbox from '@/v2/components/input/Checkbox';
 import Dialog from '@/v2/components/ui/Dialog';
 import { useTranslation } from 'react-i18next';
 import { useAnnouncement } from './useAnnouncement';
@@ -27,33 +28,33 @@ const Announcement = () => {
         className="w-16 absolute top-0 left-0 -translate-x-1/3 -translate-y-1/2"
       />
       <div className="flex flex-col gap-4 px-6 pt-2 pb-4">
-        <h3>{displayed.headline}</h3>
+        <h2>{displayed.headline}</h2>
         <p id={bodyId} className="text-sm">
           {displayed.body}
         </p>
       </div>
       {consentLevel > 0 && (
-        <div className="flex items-center gap-2 px-6 py-3">
-          <input
-            type="checkbox"
-            id={`dismiss-${displayed.id}`}
-            disabled={isSubmitting}
-            aria-busy={isSubmitting}
+        <div className="px-6 py-3">
+          <Checkbox
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
+            id={`consent-box-${displayed.id}`}
+            label={displayed.consent_text || t('v2.ui.actions.agree')}
             checked={isChecked}
+            required={consentLevel === 2}
+            disabled={isSubmitting}
+            data-testid="checkbox-consent"
             onChange={(e) => {
               setIsChecked(e.target.checked);
               if (consentLevel !== 2) handleAction(displayed.id, -1);
             }}
-            data-testid="checkbox-consent-dismiss"
           />
-          <label htmlFor={`dismiss-${displayed.id}`} className="text-sm">
-            {displayed.consent_text || t('actions.dismiss')}
-          </label>
         </div>
       )}
       <div className="flex items-center justify-end gap-2 px-4 py-3">
         <Button
-          autoFocus
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus={consentLevel === 0}
           type="button"
           disabled={isSubmitting || (consentLevel === 2 && !isChecked)}
           aria-busy={isSubmitting}
