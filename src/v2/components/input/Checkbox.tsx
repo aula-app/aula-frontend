@@ -1,18 +1,20 @@
-import { InputHTMLAttributes, forwardRef, useId } from 'react';
+import Icon from '@/v2/components/ui/Icon';
+import { InputHTMLAttributes, ReactNode, forwardRef, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
 interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label: string;
   error?: string;
+  helperText?: string | ReactNode;
 }
 
 const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ id, label, error, disabled = false, required = false, className, ...props }, ref) => {
+  ({ id, label, error, helperText, disabled = false, required = false, className, ...props }, ref) => {
     const { t } = useTranslation();
-    const generatedId = useId();
-    const inputId = id || generatedId;
-    const errorId = error ? `${inputId}-error` : undefined;
+    const inputId = id || useId();
+    const hintText = error ?? helperText ?? (required ? t('v2.form.validation.required') : undefined);
+    const hintId = hintText ? `${inputId}-hint` : undefined;
 
     return (
       <div className="flex flex-col gap-1">
@@ -24,8 +26,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             disabled={disabled}
             required={required}
             aria-required={required || undefined}
-            aria-disabled={disabled || undefined}
-            aria-describedby={errorId}
+            aria-describedby={hintId}
             aria-invalid={!!error || undefined}
             className={twMerge(
               'h-4 w-4 rounded border border-secondary accent-primary cursor-pointer',
@@ -35,21 +36,21 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             )}
             {...props}
           />
-          <label htmlFor={inputId} className={twMerge('text-sm select-none', disabled ? 'opacity-50' : '')}>
-            {label}
-            {required && (
-              <>
-                <span aria-hidden="true" className="ml-0.5 text-error-text">
-                  *
-                </span>
-                <span className="sr-only">{t('v2.form.validation.required')}</span>
-              </>
+          <label
+            htmlFor={inputId}
+            className={twMerge(
+              'text-sm select-none',
+              disabled ? 'opacity-50' : '',
+              required ? 'after:content-["*"] after:ml-0.5 font-bold' : ''
             )}
+          >
+            {label}
           </label>
         </div>
-        {error && (
-          <span id={errorId} className="text-xs text-error-text px-1">
-            {error}
+        {hintText && (
+          <span id={hintId} role={error ? 'alert' : undefined} className={twMerge('px-1 text-xs', error ? 'text-error-text' : 'text-secondary')}>
+            {error && <Icon type="alert" className="inline-block mr-1 mb-0.5" />}
+            {hintText}
           </span>
         )}
       </div>

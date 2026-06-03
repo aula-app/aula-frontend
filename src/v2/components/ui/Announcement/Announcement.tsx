@@ -42,6 +42,7 @@ const Announcement = () => {
             label={displayed.consent_text || t('v2.ui.actions.agree')}
             checked={isChecked}
             required={consentLevel === 2}
+            helperText={consentLevel === 2 ? t('v2.ui.announcement.required_hint') : undefined}
             disabled={isSubmitting}
             data-testid="checkbox-consent"
             onChange={(e) => {
