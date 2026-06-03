@@ -38,7 +38,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         inert={!menuOpen && isDrawerMode ? '' : undefined}
         tabIndex={-1}
       >
-        <CodeCopy className="my-[0.03rem]" />
+        <CodeCopy className="my-[0.1rem]" />
         <hr className="mb-1 border-secondary" />
         <Profile />
         <hr className="mt-1 border-secondary" />
