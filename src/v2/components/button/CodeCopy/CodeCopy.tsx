@@ -7,7 +7,7 @@ import Icon from '../../ui/Icon';
 import Button from '../Button';
 import Tooltip from '../../ui/Tooltip';
 
-const CodeCopy: FC = (restOfProps) => {
+const CodeCopy: FC<Omit<React.ComponentProps<typeof Button>, 'outlined' | 'text'>> = (restOfProps) => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const code = localStorageGet('code');

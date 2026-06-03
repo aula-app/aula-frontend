@@ -38,11 +38,11 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         inert={!menuOpen && isDrawerMode ? '' : undefined}
         tabIndex={-1}
       >
-        <CodeCopy />
-        <hr className="my-1 border-secondary" />
+        <CodeCopy className="my-[0.03rem]" />
+        <hr className="mb-1 border-secondary" />
         <Profile />
         <hr className="mt-1 border-secondary" />
-        <ul className="flex flex-col h-full list-none m-0 my-2">
+        <ul className="flex flex-col flex-1 list-none m-0 my-2">
           {/* Nav items */}
           {items.map((item) => (
             <li key={item.path} className="mx-2 my-1">
@@ -70,7 +70,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         {/* Footer */}
         <hr className="my-1 border-secondary" />
         {/* Utility actions */}
-        <div className="flex items-center justify-around px-2 py-1">
+        <div className="flex shrink-0 items-center justify-around px-2 py-1">
           <DarkModeButton />
           <PrintButton />
           <BugButton />

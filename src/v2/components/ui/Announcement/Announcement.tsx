@@ -77,23 +77,12 @@ const Announcement = () => {
       describedBy={bodyId}
       role={showDismiss ? 'dialog' : 'alertdialog'}
     >
-      <div className="flex items-center justify-between px-2">
-        <img
-          src={`${getRuntimeConfig().BASENAME}img/Paula_Moderation.svg`}
-          alt={t('v2.alt.microphone')}
-          className="w-8 pt-4 ml-4"
-        />
-        {showDismiss ? (
-          <IconButton
-            onClick={() => handleAction(displayed.id, -1)}
-            disabled={isSubmitting}
-            aria-label={t('ui.announcement.close')}
-          >
-            <Icon type="close" />
-          </IconButton>
-        ) : null}
-      </div>
-      <div className="flex flex-col gap-4 px-6 py-4">
+      <img
+        src={`${getRuntimeConfig().BASENAME}img/Paula_Moderation.svg`}
+        alt={t('v2.alt.microphone')}
+        className="w-8 pt-4 ml-4 absolute top-0 right-4"
+      />
+      <div className="flex flex-col gap-4 px-6 pt-2 pb-4">
         <h3>{displayed.headline}</h3>
         <p id={bodyId} className="text-sm">
           {displayed.body}
@@ -104,7 +93,7 @@ const Announcement = () => {
           <Button
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus={!showAgree}
-            text
+            outlined
             color="secondary"
             disabled={isSubmitting}
             aria-busy={isSubmitting}

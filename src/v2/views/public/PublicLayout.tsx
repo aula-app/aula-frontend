@@ -32,7 +32,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
           <AulaHero aria-label={t('v2.alt.logo')} role="img" className="text-text-primary w-full" />
         </div>
       </header>
-      <main id="main-content" className="flex-2 flex">
+      <main id="main-content" className="flex-1">
         <PublicRoutes />
       </main>
       <footer className="flex items-center justify-between">
