@@ -1,8 +1,8 @@
-import { ReactNode, useEffect, useId, useRef, useState } from 'react';
+import { FC, ReactNode, useEffect, useId, useRef, useState } from 'react';
 
 const TRANSITION_MS = 300;
 
-interface DialogProps {
+interface DialogProps extends React.ComponentProps<'dialog'> {
   open: boolean;
   onClose?: () => void;
   title: string;
@@ -11,7 +11,16 @@ interface DialogProps {
   describedBy?: string;
 }
 
-const Dialog = ({ open, onClose, title, children, role = 'dialog', describedBy }: DialogProps) => {
+const Dialog: FC<DialogProps> = ({
+  open,
+  onClose,
+  title,
+  children,
+  role = 'dialog',
+  describedBy,
+  className,
+  ...restOfProps
+}: DialogProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isVisible, setVisible] = useState(false);
   const titleId = useId();
@@ -60,7 +69,8 @@ const Dialog = ({ open, onClose, title, children, role = 'dialog', describedBy }
       aria-modal="true"
       onClick={handleBackdropClick}
       data-visible={isVisible || undefined}
-      className="fixed inset-0 m-auto bg-transparent p-0 w-full max-w-sm backdrop:transform-gpu backdrop:bg-background backdrop:transition-opacity backdrop:duration-300 backdrop:opacity-0 data-visible:backdrop:opacity-100"
+      className={`fixed inset-0 m-auto bg-transparent p-0 w-5/6 max-w-sm backdrop:transform-gpu backdrop:bg-background backdrop:transition-opacity backdrop:duration-300 backdrop:opacity-0 data-visible:backdrop:opacity-100${className ? ` ${className}` : ''}`}
+      {...restOfProps}
     >
       <h2 id={titleId} className="sr-only">
         {title}

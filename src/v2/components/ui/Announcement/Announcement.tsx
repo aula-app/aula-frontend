@@ -76,11 +76,12 @@ const Announcement = () => {
       title={t('ui.announcement.title')}
       describedBy={bodyId}
       role={showDismiss ? 'dialog' : 'alertdialog'}
+      className="overflow-visible"
     >
       <img
         src={`${getRuntimeConfig().BASENAME}img/Paula_Moderation.svg`}
         alt={t('v2.alt.microphone')}
-        className="w-8 pt-4 ml-4 absolute top-0 right-4"
+        className="w-16 absolute top-0 left-0 -translate-x-1/3 -translate-y-1/2"
       />
       <div className="flex flex-col gap-4 px-6 pt-2 pb-4">
         <h3>{displayed.headline}</h3>
