@@ -33,7 +33,7 @@ const Announcement = () => {
         </p>
       </div>
       {consentLevel > 0 && (
-        <fieldset className="flex items-center gap-2 px-6 py-3">
+        <div className="flex items-center gap-2 px-6 py-3">
           <input
             type="checkbox"
             id={`dismiss-${displayed.id}`}
@@ -49,12 +49,12 @@ const Announcement = () => {
           <label htmlFor={`dismiss-${displayed.id}`} className="text-sm">
             {displayed.consent_text || t('actions.dismiss')}
           </label>
-        </fieldset>
+        </div>
       )}
       <div className="flex items-center justify-end gap-2 px-4 py-3">
         <Button
-          // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
+          type="button"
           disabled={isSubmitting || (consentLevel === 2 && !isChecked)}
           aria-busy={isSubmitting}
           onClick={() => handleAction(displayed.id, 1)}
