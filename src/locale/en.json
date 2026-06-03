@@ -97,7 +97,8 @@
         "report": "Report a bug"
       },
       "announcement": {
-        "title": "Announcement"
+        "title": "Announcement",
+        "button": "Got it"
       },
       "button": {
         "cancel": "Cancel",
