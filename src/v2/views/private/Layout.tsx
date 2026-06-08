@@ -1,4 +1,4 @@
-import AskConsent from '@/views/AskConsent';
+import Announcement from '@/v2/components/ui/Announcement';
 import SideBar from '@/v2/components/ui/SideBar';
 import TopBar from '@/v2/components/ui/TopBar';
 import { ModalRoot } from '@/v2/components/ui/Modal';
@@ -38,7 +38,7 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
         </main>
         {!isRestricted && <SideBar menuOpen={menuOpen} onClose={onCloseMenu} />}
       </div>
-      {!isRestricted && <AskConsent />}
+      {!isRestricted && <Announcement />}
       <ModalRoot />
     </div>
   );

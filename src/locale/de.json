@@ -2,6 +2,7 @@
   "v2": {
     "alt": {
       "logo": "Aula: Bildungsplattform-Logo",
+      "microphone": "Eine Illustration einer Eule mit einem Mikrofon, die die Ankündigungsfunktion repräsentiert",
       "sleeping": "Schlafende Eulen-Illustration"
     },
     "form": {
@@ -93,8 +94,13 @@
         }
       },
       "actions": {
+        "agree": "Zustimmen",
         "print": "Diese Seite drucken",
         "report": "Einen Fehler melden"
+      },
+      "announcement": {
+        "title": "Ankündigung",
+        "button": "Verstanden"
       },
       "button": {
         "cancel": "Abbrechen",
@@ -806,6 +812,10 @@
       "scheduledActionsTable": "Geplante Aktionen",
       "togglePasswordVisibility": "Passwortsichtbarkeit umschalten",
       "updatingContent": "Inhalt wird aktualisiert"
+    },
+    "announcement": {
+      "close": "Ankündigung schließen",
+      "title": "Ankündigung"
     },
     "common": {
       "all": "Alle",
