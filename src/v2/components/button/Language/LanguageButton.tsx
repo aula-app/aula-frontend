@@ -9,12 +9,13 @@ const LanguageButton = () => {
   const label = t('v2.ui.language.label');
   const languages = Object.keys(i18n.services.resourceStore.data);
   const currentLang = i18n.language;
-  const displayNames = new Intl.DisplayNames([currentLang], { type: 'language' });
-
   const selectLanguage = (lang: string) => {
     localStorage.setItem('lang', lang);
     i18n.changeLanguage(lang);
   };
+
+  const getNativeName = (lang: string) =>
+    new Intl.DisplayNames([lang], { type: 'language' }).of(lang);
 
   return (
     <Dropdown
@@ -27,7 +28,7 @@ const LanguageButton = () => {
           onClick={() => selectLanguage(lang)}
           className={`flex w-full items-center justify-between px-4 py-2 first:rounded-t-2xl last:rounded-b-2xl hover:bg-shadow cursor-pointer focus-visible:outline-2 focus-visible:outline-secondary ${lang === currentLang ? 'bg-shadow' : ''}`}
         >
-          <span>{displayNames.of(lang)}</span>
+          <span lang={lang}>{getNativeName(lang)}</span>
         </button>
       ))}
     >
