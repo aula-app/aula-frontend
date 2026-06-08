@@ -1,5 +1,5 @@
 import Button from '@/v2/components/button/Button';
-import CodeCopy from '@/v2/components/button/CodeCopy';
+import Code from '@/v2/components/button/Code';
 import DarkModeButton from '@/v2/components/button/DarkMode';
 import LanguageButton from '@/v2/components/button/Language';
 import Logout from '@/v2/components/button/Logout';
@@ -38,7 +38,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         inert={!menuOpen && isDrawerMode ? '' : undefined}
         tabIndex={-1}
       >
-        <CodeCopy className="my-[0.1rem]" />
+        <Code className="my-[0.1rem]" />
         <hr className="mb-1 border-secondary" />
         <Profile />
         <hr className="mt-1 border-secondary" />

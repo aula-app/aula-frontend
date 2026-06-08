@@ -4,8 +4,8 @@ import IconButton from '@/v2/components/button/IconButton/IconButton';
 import TextInput from '@/v2/components/input/TextInput';
 import Link from '@/v2/components/navigation/Link';
 import Hint from '@/v2/components/ui/Hint';
-import InstanceCodeField from '@/v2/views/public/Code/InstanceCodeField';
-import { useInstanceCode } from '@/v2/views/public/Code/useInstanceCode';
+import InstanceCodeField from '@/v2/components/input/InstanceCodeField/InstanceCodeField';
+import { useInstanceCode } from '@/v2/components/input/InstanceCodeField/useInstanceCode';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -19,7 +19,16 @@ const MAX_PASSWORD_LENGTH = 64;
 const ResetPasswordView = () => {
   const { t } = useTranslation();
   const { onSubmit, error, setError } = useResetPasswordSubmit();
-  const { instanceCode, setInstanceCode, isEditing, startEditing, error: codeError, isLoading: codeLoading, validateCode, showField } = useInstanceCode();
+  const {
+    instanceCode,
+    setInstanceCode,
+    isEditing,
+    startEditing,
+    error: codeError,
+    isLoading: codeLoading,
+    validateCode,
+    showField,
+  } = useInstanceCode();
 
   const schema = useMemo(
     () =>
@@ -67,6 +76,7 @@ const ResetPasswordView = () => {
           error={codeError}
           isEditing={isEditing}
           onEditClick={startEditing}
+          onConfirmClick={() => { validateCode(); }}
           disabled={codeLoading}
         />
       )}

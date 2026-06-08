@@ -1,8 +1,8 @@
 import Button from '@/v2/components/button/Button';
 import TextInput from '@/v2/components/input/TextInput';
 import Link from '@/v2/components/navigation/Link';
-import InstanceCodeField from '@/v2/views/public/Code/InstanceCodeField';
-import { useInstanceCode } from '@/v2/views/public/Code/useInstanceCode';
+import InstanceCodeField from '@/v2/components/input/InstanceCodeField';
+import { useInstanceCode } from '@/v2/components/input/InstanceCodeField/useInstanceCode';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,7 +16,16 @@ const MAX_PASSWORD_LENGTH = 64;
 const LoginView: React.FC = () => {
   const { t } = useTranslation();
   const { onSubmit, isLoading } = useLoginSubmit();
-  const { instanceCode, setInstanceCode, isEditing, startEditing, error: codeError, isLoading: codeLoading, validateCode, showField } = useInstanceCode();
+  const {
+    instanceCode,
+    setInstanceCode,
+    isEditing,
+    startEditing,
+    error: codeError,
+    isLoading: codeLoading,
+    validateCode,
+    showField,
+  } = useInstanceCode();
 
   const schema = useMemo(
     () =>
@@ -57,6 +66,7 @@ const LoginView: React.FC = () => {
             error={codeError}
             isEditing={isEditing}
             onEditClick={startEditing}
+            onConfirmClick={() => { validateCode(); }}
             disabled={isLoading || codeLoading}
           />
         )}

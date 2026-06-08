@@ -59,6 +59,7 @@
       },
       "login": {
         "button": "Anmelden",
+        "link": "Zurück zur Anmeldung",
         "title": "Willkommen bei {{var}}"
       },
       "notFound": {

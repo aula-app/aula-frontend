@@ -21,7 +21,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
             {location.pathname !== '/' && (
               <Link to="/" className="inline-flex items-center gap-1 text-sm text-text-secondary">
                 <Icon type="back" size="1em" />
-                {t('v2.page.login.button')}
+                {t('v2.page.login.link')}
               </Link>
             )}
           </div>
