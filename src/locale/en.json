@@ -101,7 +101,8 @@
         "clear": "Clear",
         "close": "Close",
         "confirm": "Confirm",
-        "submit": "Submit"
+        "submit": "Submit",
+        "edit": "Edit"
       },
       "code": {
         "button": "Code: {{var}}",
