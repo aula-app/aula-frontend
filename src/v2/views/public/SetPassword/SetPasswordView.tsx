@@ -4,12 +4,14 @@ import IconButton from '@/v2/components/button/IconButton';
 import TextInput from '@/v2/components/input/TextInput';
 import Link from '@/v2/components/navigation/Link';
 import Hint from '@/v2/components/ui/Hint';
+import InstanceCodeField from '@/v2/views/public/Code/InstanceCodeField';
+import { useInstanceCode } from '@/v2/views/public/Code/useInstanceCode';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { useSetPasswordSubmit } from './useSetPasswordSubmit';
+import { useSetPasswordSubmit, SetPasswordFormValues } from './useSetPasswordSubmit';
 
 const MIN_PASSWORD_LENGTH = 12;
 const MAX_PASSWORD_LENGTH = 64;
@@ -17,6 +19,7 @@ const MAX_PASSWORD_LENGTH = 64;
 const SetPasswordView = () => {
   const { t } = useTranslation();
   const { isValid, setValid, error, onSubmit } = useSetPasswordSubmit();
+  const { instanceCode, setInstanceCode, isEditing, startEditing, error: codeError, isLoading: codeLoading, validateCode, showField } = useInstanceCode();
 
   const schema = useMemo(
     () =>
@@ -42,9 +45,26 @@ const SetPasswordView = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
+  const wrappedSubmit = async (data: SetPasswordFormValues) => {
+    const codeOk = await validateCode();
+    if (!codeOk) return;
+    onSubmit(data);
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate method="POST" className="flex flex-col gap-4 w-full">
+    <form onSubmit={handleSubmit(wrappedSubmit)} noValidate method="POST" className="flex flex-col gap-4 w-full">
       <h2 className="text-2xl font-semibold">{t('v2.page.passwordSet.title')}</h2>
+
+      {showField && (
+        <InstanceCodeField
+          value={instanceCode}
+          onChange={setInstanceCode}
+          error={codeError}
+          isEditing={isEditing}
+          onEditClick={startEditing}
+          disabled={codeLoading}
+        />
+      )}
 
       {!isValid && (
         <div
@@ -96,7 +116,7 @@ const SetPasswordView = () => {
         <Button type="button" outlined onClick={() => reset()} color="secondary">
           {t('v2.ui.button.clear')}
         </Button>
-        <Button type="submit" data-testid="submit-set-password">
+        <Button type="submit" disabled={codeLoading} data-testid="submit-set-password">
           {t('v2.ui.button.confirm')}
         </Button>
       </div>
