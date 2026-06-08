@@ -29,11 +29,11 @@ const InstanceCodeField = ({ value, onChange, error, isEditing, onEditClick, onC
       data-testid="instance-code"
       endAdornment={
         isEditing ? (
-          <IconButton type="button" onClick={onConfirmClick} aria-label={t('v2.ui.button.confirm')} disabled={disabled}>
+          <IconButton type="button" onClick={onConfirmClick} aria-label={t('v2.ui.button.confirm')} disabled={disabled} data-testid="instance-code-confirm">
             <Icon type="confirm" />
           </IconButton>
         ) : (
-          <IconButton type="button" onClick={onEditClick} aria-label={t('v2.ui.button.edit')} disabled={disabled}>
+          <IconButton type="button" onClick={onEditClick} aria-label={t('v2.ui.button.edit')} disabled={disabled} data-testid="instance-code-edit">
             <Icon type="edit" />
           </IconButton>
         )

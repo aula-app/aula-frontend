@@ -8,11 +8,11 @@ const host = shared.getHost();
  * which is required before any public route renders correctly.
  */
 async function ensureInstanceCode(page: import('@playwright/test').Page, dbInstanceCode: string) {
-  const instanceCodeInput = page.locator('input[name="instanceCode"]');
-  if (await instanceCodeInput.isVisible()) {
+  const instanceCodeInput = page.getByTestId('instance-code');
+  if (await instanceCodeInput.isVisible() && await instanceCodeInput.isEnabled()) {
     await instanceCodeInput.fill(dbInstanceCode);
-    await page.getByTestId('submit-instance-code').click();
-    await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
+    await page.getByTestId('instance-code-confirm').click();
+    await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });
   }
 }
 
