@@ -169,17 +169,17 @@
     "sso": {
       "invalid_state": "Deine Anmeldesitzung ist abgelaufen oder ungültig. Bitte versuche es erneut.",
       "unknown_tenant": "Diese Schule ist nicht für Single Sign-On konfiguriert.",
-      "account_inactive": "Dein Account ist inaktiv.",
-      "email_not_verified": "Dein Identitätsanbieter hat deine E-Mail-Adresse nicht verifiziert. Bitte verifiziere sie und versuche es erneut.",
-      "id_token_invalid": "Dein Identitätsanbieter hat ein Token zurückgegeben, das wir nicht verifizieren konnten. Bitte versuche es erneut oder wende dich an die Administration.",
-      "sub_collision": "Ein Konto mit dieser E-Mail ist bereits mit einer anderen Identität verknüpft. Bitte wende dich an die Administration.",
-      "account_link_required": "Wir haben ein bestehendes Konto für die von deinem SSO-Anbieter gemeldete E-Mail gefunden. Melde dich einmal mit deinem aula-Passwort an, um die Konten zu verknüpfen; künftige SSO-Anmeldungen gehen dann direkt durch.",
-      "use_sso": "Dieses Konto ist für Single Sign-On eingerichtet. Bitte verwende den SSO-Anmeldebutton unten.",
-      "tenant_requires_sso": "Diese Schule erlaubt nur Single Sign-On. Bitte verwende den SSO-Anmeldebutton unten.",
-      "link_failed": "Die Verknüpfung deiner SSO-Identität konnte nicht abgeschlossen werden. Bitte starte die Anmeldung neu.",
-      "link_intent_not_found": "Deine SSO-Verknüpfungsanfrage ist abgelaufen. Bitte starte die Anmeldung neu.",
-      "user_mismatch": "Das angemeldete aula-Konto stimmt nicht mit der SSO-Identität überein. Bitte starte die Anmeldung neu.",
-      "already_linked": "Dieses Konto ist bereits mit einer anderen SSO-Identität verknüpft. Bitte wende dich an die Administration."
+      "account_inactive": "Dein Konto ist inaktiv. Bitte wende dich an deinen Administrator.",
+      "email_not_verified": "Deine Schule hat deine E-Mail-Adresse noch nicht verifiziert. Bitte verifiziere deine E-Mail-Adresse bei der Schule und versuche dann erneut, dich bei aula anzumelden.",
+      "id_token_invalid": "Wir haben ein ungültiges Token von deiner Schule erhalten. Bitte versuche es erneut oder wende dich an deinen Administrator.",
+      "sub_collision": "Es scheint, dass wir ein doppeltes aula-Konto haben. Bitte wende dich an deinen Administrator.",
+      "account_link_required": "Wir haben ein bestehendes aula-Konto gefunden. Du musst dein aula-Passwort bestätigen, damit wir das Schulkonto sicher mit dem aula-Konto verknüpfen können. Zukünftige SSO-Anmeldungen erfolgen ohne solche zusätzliche Überprüfung.",
+      "use_sso": "Dieses Konto ist für Single Sign-On eingerichtet. Bitte verwende die SSO-Anmeldeschaltfläche unten.",
+      "tenant_requires_sso": "Diese Schule erlaubt nur Single Sign-On. Bitte benutze die SSO-Anmeldeschaltfläche unten.",
+      "link_failed": "Wir konnten die Verknüpfung deiner SSO-Identität nicht abschließen. Bitte versuche erneut, dich anzumelden.",
+      "link_intent_not_found": "Deine SSO-Verknüpfung ist abgelaufen. Bitte versuche dich erneut anzumelden.",
+      "user_mismatch": "Das aula-Konto, mit dem du dich angemeldet hast, stimmt nicht mit der SSO-Identität überein. Bitte versuche dich erneut anzumelden.",
+      "already_linked": "Dieses aula-Konto ist bereits mit einer anderen SSO-Identität verknüpft. Bitte wende dich an deinen Administrator."
     }
   },
   "forms": {
