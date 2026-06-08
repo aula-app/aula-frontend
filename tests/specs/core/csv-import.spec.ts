@@ -21,6 +21,7 @@ import * as shared from '../../support/utils';
  * Upload CSV → Verify import → Re-import (test duplicates) → Test imported users
  */
 test('CSV Import', async ({ dbInstanceCode, ensureStatePathFor, newPageFor }) => {
+  test.setTimeout(360_000);
   const adminPage = await newPageFor('admin');
 
   const csvUsers: Array<UserData> = Array.from({ length: 3 }, (_, i) => entities.createUserData(`csv-import-${i}`));

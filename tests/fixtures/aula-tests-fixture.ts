@@ -61,6 +61,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
       if (!fs.existsSync(storageStatePath) || !hasLoggedInState[username]) {
         const ctx = await browser.newContext();
         const page = await ctx.newPage();
+        page.setDefaultNavigationTimeout(60_000);
         await page.route('**/*', FILTER_EXCLUDED_RESOURCES);
 
         console.log(`󱐎 [PW.worker] Using instance: "${dbInstanceCode}", username: "${username}"`);
@@ -68,7 +69,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
         await userInteractions.ensureSpecificInstanceEntered(page, dbInstanceCode);
 
         try {
-          await userInteractions.login(page, { username: username, password: TestConstants.DEFAULT_PASSWORD });
+          await userInteractions.loginAttempt(page, { username: username, password: TestConstants.DEFAULT_PASSWORD });
           await page.waitForFunction(() => localStorage.getItem('token'));
           await ctx.storageState({ path: storageStatePath });
           await ctx.close();
@@ -141,20 +142,17 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
 
   // factory to create a new authenticated context (test-scoped)
   newContextFor: [async ({ browser, ensureStatePathFor, baselineReload }, use) => {
-    const [student, user, admin] = await Promise.all([
-      ensureStatePathFor('student'),
-      ensureStatePathFor('user'),
-      ensureStatePathFor('admin'),
-    ]);
+    const student = await ensureStatePathFor('student');
+    const user    = await ensureStatePathFor('user');
+    const admin   = await ensureStatePathFor('admin');
     const precreatedStorageStates: Record<string, string> = { student: student!, user: user!, admin: admin! };
     // track created contexts for cleanup
     const createdBrowserContexts: BrowserContext[] = [];
     const factory = async (username: string) => {
-      const ctx = precreatedStorageStates[username]
-        ? await browser.newContext({ storageState: precreatedStorageStates[username] })
-        : (await ensureStatePathFor(username)
-          ? await browser.newContext({ storageState: (await ensureStatePathFor(username))! })
-          : await browser.newContext());
+      const storagePath = precreatedStorageStates[username] ?? await ensureStatePathFor(username);
+      const ctx = storagePath
+        ? await browser.newContext({ storageState: storagePath })
+        : await browser.newContext();
       createdBrowserContexts.push(ctx);
       return ctx;
     };

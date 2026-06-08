@@ -11,6 +11,7 @@ const OAuthLogin = () => {
   useEffect(() => {
     try {
       handleOAuthLogin(jwt_token);
+      localStorage.removeItem('sso_force_login');
       dispatch({ type: 'LOG_IN' });
       navigate('/', { replace: true });
     } catch (error) {
