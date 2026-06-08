@@ -8,7 +8,7 @@ const PublicNotFoundView = () => {
   const { toast } = useToast();
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center gap-16" data-testid="page-not-found-view">
+    <div className="flex-1 flex flex-col items-center justify-center gap-16" data-testid="not-found-view">
       <img src="/img/Paula_zwinkernd.svg" alt={t('v2.alt.winking')} loading="lazy" className="w-32" />
       <div className="flex flex-col items-center gap-4">
         <span className="flex items-center gap-3 text-error-text font-bold text-xl">

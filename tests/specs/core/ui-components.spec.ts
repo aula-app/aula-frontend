@@ -72,21 +72,22 @@ test('Toast - multiple toasts stack and dismiss individually', async ({ page, db
 });
 
 // ── Tooltip ───────────────────────────────────────────────────────────────────
+// Tooltip tests use the public layout footer buttons (e.g. dark-mode-toggle),
+// which are IconButtons with a `hint` prop that renders a Tooltip.
 
 async function gotoTooltipPage(page: import('@playwright/test').Page, dbInstanceCode: string) {
   await page.goto(host, { waitUntil: 'domcontentloaded' });
   await ensureInstanceCode(page, dbInstanceCode);
-  await page.goto(`${host}/this-route-does-not-exist`, { waitUntil: 'domcontentloaded' });
-  await expect(page.getByTestId('not-found-view')).toBeVisible();
 }
 
 test('Tooltip - shows on hover and hides on mouse leave', async ({ page, dbInstanceCode }) => {
   await gotoTooltipPage(page, dbInstanceCode);
 
-  const tooltip = page.getByTestId('not-found-view').locator('[role="tooltip"]');
-  await expect(tooltip).toBeHidden();
+  const triggerButton = page.getByTestId('dark-mode-toggle');
+  const tooltip = triggerButton.locator('xpath=..').locator('[role="tooltip"]');
 
-  await tooltip.locator('..').hover();
+  await expect(tooltip).toBeHidden();
+  await triggerButton.hover();
   await expect(tooltip).toBeVisible();
 
   await page.mouse.move(0, 0);
@@ -96,12 +97,10 @@ test('Tooltip - shows on hover and hides on mouse leave', async ({ page, dbInsta
 test('Tooltip - shows on focus and hides on blur', async ({ page, dbInstanceCode }) => {
   await gotoTooltipPage(page, dbInstanceCode);
 
-  const notFoundView = page.getByTestId('not-found-view');
-  const tooltip = notFoundView.locator('[role="tooltip"]');
-  // The Tooltip component adds aria-describedby to the trigger element
-  const triggerButton = notFoundView.locator('button[aria-describedby]');
-  await expect(tooltip).toBeHidden();
+  const triggerButton = page.getByTestId('dark-mode-toggle');
+  const tooltip = triggerButton.locator('xpath=..').locator('[role="tooltip"]');
 
+  await expect(tooltip).toBeHidden();
   await triggerButton.focus();
   await expect(tooltip).toBeVisible();
 
@@ -112,9 +111,8 @@ test('Tooltip - shows on focus and hides on blur', async ({ page, dbInstanceCode
 test('Tooltip - hides on Escape key', async ({ page, dbInstanceCode }) => {
   await gotoTooltipPage(page, dbInstanceCode);
 
-  const notFoundView = page.getByTestId('not-found-view');
-  const tooltip = notFoundView.locator('[role="tooltip"]');
-  const triggerButton = notFoundView.locator('button[aria-describedby]');
+  const triggerButton = page.getByTestId('dark-mode-toggle');
+  const tooltip = triggerButton.locator('xpath=..').locator('[role="tooltip"]');
 
   await triggerButton.focus();
   await expect(tooltip).toBeVisible();
