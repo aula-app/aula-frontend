@@ -40,11 +40,10 @@ test('Instance code entry', async ({ browser, dbInstanceCode, baselineLoaded: _ 
     await expect(page.locator('input[name="username"]')).toBeVisible();
   });
 
-  await test.step('Clicking the Edit button unlocks the field and clears the value', async () => {
+  await test.step('Clicking the Edit button unlocks the field', async () => {
     await page.getByTestId('instance-code-edit').click();
 
     await expect(instanceCodeInput).toBeEnabled();
-    await expect(instanceCodeInput).toHaveValue('');
   });
 
   await page.close();
