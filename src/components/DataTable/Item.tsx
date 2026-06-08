@@ -159,6 +159,15 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
         </Stack>
       ) : null;
 
+    // SSO provider column — shows "aula" for normal users, "sso: <provider>" for SSO users
+    case 'sso_provider': {
+      const user = row as UserType;
+      if (user.sso_sub) {
+        return <Typography>{`sso: ${user.sso_provider ?? 'unknown'}`}</Typography>;
+      }
+      return <Typography>aula</Typography>;
+    }
+
     // Default case for all other fields
     default:
       return <Typography>{value}</Typography>;
