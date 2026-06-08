@@ -2,7 +2,8 @@
   "v2": {
     "alt": {
       "logo": "Aula: Bildungsplattform-Logo",
-      "sleeping": "Schlafende Eulen-Illustration"
+      "sleeping": "Schlafende Eulen-Illustration",
+      "winking": "Zwinkernde Eulen-Illustration"
     },
     "form": {
       "code": {
@@ -66,7 +67,7 @@
       },
       "offline": {
         "title": "Die Schule ist derzeit geschlossen",
-        "hint": "Die Schule ist derzeit geschlossen. Bitte versuchen Sie es später erneut oder wenden Sie sich an Ihren Administrator für weitere Informationen."
+        "hint": "Bitte versuchen Sie es später erneut oder wenden Sie sich an Ihren Administrator für weitere Informationen."
       },
       "recovery": {
         "button": "Wiederherstellungs-E-Mail senden",

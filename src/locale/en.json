@@ -2,7 +2,8 @@
   "v2": {
     "alt": {
       "logo": "Aula: Education Platform Logo",
-      "sleeping": "Sleeping owl illustration"
+      "sleeping": "Sleeping owl illustration",
+      "winking": "Winking owl illustration"
     },
     "form": {
       "code": {
@@ -65,7 +66,7 @@
       },
       "offline": {
         "title": "School is currently closed",
-        "hint": "The school is currently closed. Please check back later or contact your administrator for more information."
+        "hint": "Please check back later or contact your administrator for more information."
       },
       "recovery": {
         "button": "Send recovery email",

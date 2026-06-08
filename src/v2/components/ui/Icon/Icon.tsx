@@ -83,14 +83,8 @@ export type ICON_TYPE = keyof typeof ICONS;
 interface Props extends React.SVGAttributes<SVGElement> {
   type: ICON_TYPE;
   size?: string | number;
-  // Provide aria-label to make the icon semantic; omit to treat it as decorative
 }
 
-/**
- * Renders SVG icon by given icon name
- * Optimized for SVG rendering with proper accessibility support
- * @component Icon
- */
 const Icon: React.FC<Props> = React.forwardRef<SVGSVGElement, Props>(
   ({ type, size = '1em', className, 'aria-label': ariaLabel, ...restOfProps }, ref) => {
     if (!(type in ICONS)) return null;
