@@ -15,11 +15,11 @@ export const clickOnLink = async (page: Page, path: string) => {
   await page.waitForURL((url) => url.pathname.includes(path));
 };
 
-export const clickToNavigate = async (page: Page, path: string) => {
-  const currentUrl = page.url();
-  if (currentUrl === `${host}${path}`) {
+export const ensureUrl = async (page: Page, path: string, forceRefresh: boolean = false) => {
+  if (!forceRefresh && (page.url() === `${host}${path}`)) {
     return;
   }
+
   await page.goto(`${host}${path}`, { waitUntil: 'domcontentloaded' });
 };
 
@@ -50,6 +50,7 @@ const refreshJWT = async (page: Page): Promise<void> => {
     const apiUrl = localStorage.getItem('api_url');
     const code = localStorage.getItem('code');
     const token = localStorage.getItem('token');
+    console.log(`refreshJWT: ${apiUrl} ${code} ${token}`);
     if (!apiUrl || !code || !token) return;
     try {
       const response = await fetch(`${apiUrl}/api/controllers/refresh_token.php`, {
@@ -101,7 +102,7 @@ export const goToWildIdea = async (page: Page, roomName: string, ideaName: strin
   await page.waitForURL((url) => url.pathname.includes('/idea'), { waitUntil: 'commit' });
 };
 
-export const goToPhase = async (page: Page, roomName: string, phaseNumber: number) => {
+export const goToRoomPhase = async (page: Page, roomName: string, phaseNumber: number) => {
   await goToRoom(page, roomName);
 
   // Wait for the phase link to be visible (room page renders after fetchIdeas completes)
@@ -117,46 +118,46 @@ export const goToMessages = async (page: Page) => {
 
 // Settings navigation
 
-export const goToProfile = async (page: Page) => {
-  await clickToNavigate(page, '/settings/profile');
+export const goToProfile = async (page: Page, forceRefresh: boolean = false) => {
+  await ensureUrl(page, '/settings/profile', forceRefresh);
 };
 
-export const goToSettings = async (page: Page) => {
-  await clickToNavigate(page, '/settings/configuration');
+export const goToSettings = async (page: Page, forceRefresh: boolean = false) => {
+  await ensureUrl(page, '/settings/configuration', forceRefresh);
 };
 
-export const goToUsersSettings = async (page: Page) => {
-  await clickToNavigate(page, '/settings/users');
+export const goToUsersSettings = async (page: Page, forceRefresh: boolean = false) => {
+  await ensureUrl(page, '/settings/users', forceRefresh);
 };
 
-export const goToRoomsSettings = async (page: Page) => {
-  await clickToNavigate(page, '/settings/rooms');
+export const goToRoomsSettings = async (page: Page, forceRefresh: boolean = false) => {
+  await ensureUrl(page, '/settings/rooms', forceRefresh);
 };
 
-export const goToBoxesSettings = async (page: Page) => {
-  await clickToNavigate(page, '/settings/boxes');
+export const goToBoxesSettings = async (page: Page, forceRefresh: boolean = false) => {
+  await ensureUrl(page, '/settings/boxes', forceRefresh);
 };
 
-export const goToIdeasSettings = async (page: Page) => {
-  await clickToNavigate(page, '/settings/ideas');
+export const goToIdeasSettings = async (page: Page, forceRefresh: boolean = false) => {
+  await ensureUrl(page, '/settings/ideas', forceRefresh);
 };
 
-export const goToMessagesSettings = async (page: Page) => {
-  await clickToNavigate(page, '/settings/messages');
+export const goToMessagesSettings = async (page: Page, forceRefresh: boolean = false) => {
+  await ensureUrl(page, '/settings/messages', forceRefresh);
 };
 
-export const goToAnnouncementsSettings = async (page: Page) => {
-  await clickToNavigate(page, '/settings/announcements');
+export const goToAnnouncementsSettings = async (page: Page, forceRefresh: boolean = false) => {
+  await ensureUrl(page, '/settings/announcements', forceRefresh);
 };
 
-export const goToReportsSettings = async (page: Page) => {
-  await clickToNavigate(page, '/settings/reports');
+export const goToReportsSettings = async (page: Page, forceRefresh: boolean = false) => {
+  await ensureUrl(page, '/settings/reports', forceRefresh);
 };
 
-export const goToBugsSettings = async (page: Page) => {
-  await clickToNavigate(page, '/settings/bugs');
+export const goToBugsSettings = async (page: Page, forceRefresh: boolean = false) => {
+  await ensureUrl(page, '/settings/bugs', forceRefresh);
 };
 
-export const goToRequestsSettings = async (page: Page) => {
-  await clickToNavigate(page, '/settings/requests');
+export const goToRequestsSettings = async (page: Page, forceRefresh: boolean = false) => {
+  await ensureUrl(page, '/settings/requests', forceRefresh);
 };

@@ -66,7 +66,7 @@ const MoreOptions: React.FC<Props> = ({ item, scope, children, onDelete, onEdit,
             />
             {phase &&
               checkPermissions(scope, 'edit', 'user_hash_id' in item ? item.user_hash_id : undefined) &&
-              Number(phase) < 30 && (
+              (Number(phase) <= 20 || checkPermissions('boxes', 'edit')) && (
                 <>
                   <EditButton
                     color={color || 'secondary'}

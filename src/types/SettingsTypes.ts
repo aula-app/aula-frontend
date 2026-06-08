@@ -26,7 +26,6 @@ export type SettingNamesType =
   | 'reports'
   | 'requests'
   | 'rooms'
-  | 'surveys'
   | 'users'
   | 'categories';
 

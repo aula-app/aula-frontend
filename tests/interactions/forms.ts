@@ -7,9 +7,11 @@ export const fillForm = async (page: Page, testId: string, value: string) => {
   await field.fill(value);
 };
 
-export const fillMarkdownForm = async (page: Page, testId: string, value: string, parent?: Locator) => {
-  const container = parent || page;
-  const field = container.getByTestId(`markdown-editor-${testId}`).locator('[contenteditable="true"]');
+export const fillMarkdownForm = async (page: Page, testId: string, value: string) => {
+  const field = page
+    .locator('form').first()
+    .getByTestId(`markdown-editor-${testId}`)
+    .locator('[contenteditable="true"]');
   await expect(field).toBeVisible();
   await field.fill(value);
 };

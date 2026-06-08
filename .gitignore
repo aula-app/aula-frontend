@@ -12,6 +12,7 @@ run-id.txt
 
 # Test directories
 /tests/auth-states/
+/tests/generated-test-data/
 /tests/reports/
 /tests/results/
 /test-results/
@@ -36,16 +37,16 @@ package-lock.json
 /*.development
 /*.local
 
-
+# package management
 vite.config.local.mts
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
 *.bak
 
+# vscode and ai related
 .vscode
+.claude
 
 # Playwright
 node_modules/

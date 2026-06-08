@@ -1,4 +1,19 @@
+## 1.9.3
 
+- **Technical improvements**
+  - Refactored e2e tests to work faster (parallel) and more stable (isolated)
+
+## 1.9.2
+
+  - **Bug fixes**
+    - Remove Survey creation form
+
+## 1.9.1
+
+  - **Bug fixes**
+    - Fix letter spacing
+    - Fix boxes prevented to be edited after phase 20 bug
+  
 ## 1.9.0
 
 - **New features**
