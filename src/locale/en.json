@@ -169,17 +169,17 @@
     "sso": {
       "invalid_state": "Your login session expired or is invalid. Please try again.",
       "unknown_tenant": "This school is not configured for Single Sign-On.",
-      "account_inactive": "Your account is inactive.",
-      "email_not_verified": "Your identity provider has not verified your email address. Please verify it and try again.",
-      "id_token_invalid": "Your identity provider returned a token we couldn't verify. Please try again or contact your administrator.",
-      "sub_collision": "An account with this email is already linked to a different identity. Please contact your administrator.",
-      "account_link_required": "We found an existing account for the email returned by your SSO provider. Log in once with your aula password to link the accounts; future SSO logins will go through directly.",
+      "account_inactive": "Your account is inactive. Please contact your administrator.",
+      "email_not_verified": "Your school has not verified your email address. Please verify it with the school, and then try again to login to aula.",
+      "id_token_invalid": "We received an invalid token from your school. Please try again or contact your administrator.",
+      "sub_collision": "It seems we have a duplicate aula account. Please contact your administrator.",
+      "account_link_required": "We found an existing aula account. We need you to confirm your aula password so we can securely link the school account with the aula account. Future SSO logins will happen without additional verification.",
       "use_sso": "This account is set up for Single Sign-On. Please use the SSO login button below.",
       "tenant_requires_sso": "This school only allows Single Sign-On. Please use the SSO login button below.",
-      "link_failed": "We couldn't finish linking your SSO identity. Please restart the login.",
-      "link_intent_not_found": "Your SSO link request expired. Please restart the login.",
-      "user_mismatch": "The aula account you signed into doesn't match the SSO identity. Please restart the login.",
-      "already_linked": "This account is already linked to a different SSO identity. Please contact your administrator."
+      "link_failed": "We couldn't finish linking your SSO identity. Please try logging in again.",
+      "link_intent_not_found": "Your SSO link expired. Please try logging in again.",
+      "user_mismatch": "The aula account you signed into doesn't match the SSO identity. Please try logging in again.",
+      "already_linked": "This aula account is already linked to a different SSO identity. Please contact your administrator."
     }
   },
   "forms": {
