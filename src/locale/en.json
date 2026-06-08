@@ -217,6 +217,10 @@
       "arialabel": "OAuth authentication",
       "button": "OAuth authentication"
     },
+    "sso": {
+      "arialabel": "Single Sign-On",
+      "button": "Sign in with SSO"
+    },
     "password": {
       "change": "Change password",
       "confirmPassword": "Confirm new password",
@@ -298,7 +302,22 @@
     "schoolClosedImage": "Sleeping character illustration for school closed page",
     "schoolClosedHint": "Please check back later or contact your administrator for more information.",
     "timeout": "The request timed out",
-    "unauthorized": "This page may require authentication"
+    "unauthorized": "This page requires authentication",
+    "sso": {
+      "invalid_state": "Your login session expired or is invalid. Please try again.",
+      "unknown_tenant": "This school is not configured for Single Sign-On.",
+      "account_inactive": "Your account is inactive. Please contact your administrator.",
+      "email_not_verified": "Your school has not verified your email address. Please verify it with the school, and then try again to login to aula.",
+      "id_token_invalid": "We received an invalid token from your school. Please try again or contact your administrator.",
+      "sub_collision": "It seems we have a duplicate aula account. Please contact your administrator.",
+      "account_link_required": "We found an existing aula account. We need you to confirm your aula password so we can securely link the school account with the aula account. Future SSO logins will happen without additional verification.",
+      "use_sso": "This account is set up for Single Sign-On. Please use the SSO login button below.",
+      "tenant_requires_sso": "This school only allows Single Sign-On. Please use the SSO login button below.",
+      "link_failed": "We couldn't finish linking your SSO identity. Please try logging in again.",
+      "link_intent_not_found": "Your SSO link expired. Please try logging in again.",
+      "user_mismatch": "The aula account you signed into doesn't match the SSO identity. Please try logging in again.",
+      "already_linked": "This aula account is already linked to a different SSO identity. Please contact your administrator."
+    }
   },
   "forms": {
     "csv": {
@@ -640,6 +659,7 @@
       "sum_votes": "Total Votes",
       "target_group": "Target Group",
       "target_id": "Target User",
+      "sso_provider": "Type",
       "temp_pw": "Password",
       "title": "Title",
       "trustee_id": "Trustee",

@@ -218,6 +218,10 @@
       "arialabel": "OAuth-Authentifizierung",
       "button": "OAuth-Authentifizierung"
     },
+    "sso": {
+      "arialabel": "Single Sign-On",
+      "button": "Mit SSO anmelden"
+    },
     "password": {
       "change": "Passwort ändern",
       "confirmPassword": "Passwort bestätigen",
@@ -298,7 +302,22 @@
     "schoolClosedImage": "Schlafende Charakterillustration für Seite 'Schule geschlossen'",
     "schoolClosedHint": "Bitte versuchen Sie es später erneut oder kontaktieren Sie Ihren Administrator für weitere Informationen.",
     "timeout": "Zeitüberschreitung der Anfrage",
-    "unauthorized": "Diese Seite erfordert eine Authentifizierung"
+    "unauthorized": "Diese Seite erfordert eine Authentifizierung",
+    "sso": {
+      "invalid_state": "Deine Anmeldesitzung ist abgelaufen oder ungültig. Bitte versuche es erneut.",
+      "unknown_tenant": "Diese Schule ist nicht für Single Sign-On konfiguriert.",
+      "account_inactive": "Dein Konto ist inaktiv. Bitte wende dich an deinen Administrator.",
+      "email_not_verified": "Deine Schule hat deine E-Mail-Adresse noch nicht verifiziert. Bitte verifiziere deine E-Mail-Adresse bei der Schule und versuche dann erneut, dich bei aula anzumelden.",
+      "id_token_invalid": "Wir haben ein ungültiges Token von deiner Schule erhalten. Bitte versuche es erneut oder wende dich an deinen Administrator.",
+      "sub_collision": "Es scheint, dass wir ein doppeltes aula-Konto haben. Bitte wende dich an deinen Administrator.",
+      "account_link_required": "Wir haben ein bestehendes aula-Konto gefunden. Du musst dein aula-Passwort bestätigen, damit wir das Schulkonto sicher mit dem aula-Konto verknüpfen können. Zukünftige SSO-Anmeldungen erfolgen ohne solche zusätzliche Überprüfung.",
+      "use_sso": "Dieses Konto ist für Single Sign-On eingerichtet. Bitte verwende die SSO-Anmeldeschaltfläche unten.",
+      "tenant_requires_sso": "Diese Schule erlaubt nur Single Sign-On. Bitte benutze die SSO-Anmeldeschaltfläche unten.",
+      "link_failed": "Wir konnten die Verknüpfung deiner SSO-Identität nicht abschließen. Bitte versuche erneut, dich anzumelden.",
+      "link_intent_not_found": "Deine SSO-Verknüpfung ist abgelaufen. Bitte versuche dich erneut anzumelden.",
+      "user_mismatch": "Das aula-Konto, mit dem du dich angemeldet hast, stimmt nicht mit der SSO-Identität überein. Bitte versuche dich erneut anzumelden.",
+      "already_linked": "Dieses aula-Konto ist bereits mit einer anderen SSO-Identität verknüpft. Bitte wende dich an deinen Administrator."
+    }
   },
   "forms": {
     "csv": {
@@ -640,6 +659,7 @@
       "sum_votes": "Gesamtanzahl der Stimmen",
       "target_group": "Zielgruppe",
       "target_id": "Zielbenutzer",
+      "sso_provider": "Typ",
       "temp_pw": "Passwort",
       "title": "Titel",
       "trustee_id": "Treuhänder",
