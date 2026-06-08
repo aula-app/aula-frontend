@@ -27,7 +27,8 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
       CENTRAL_API_URL: import.meta.env.VITE_APP_API_URL,
       IS_MULTI: import.meta.env.VITE_APP_MULTI !== 'false' && import.meta.env.VITE_APP_MULTI !== false,
       IS_OAUTH_ENABLED: import.meta.env.VITE_APP_OAUTH !== 'false' && import.meta.env.VITE_APP_OAUTH !== false,
-      IS_SSO_ENABLED: import.meta.env.VITE_APP_SSO !== 'false' && import.meta.env.VITE_APP_SSO !== false,
+      IS_SSO_ENABLED:
+        import.meta.env.VITE_APP_IS_SSO_ENABLED !== 'false' && import.meta.env.VITE_APP_IS_SSO_ENABLED !== false,
       BASENAME: import.meta.env.VITE_APP_BASENAME || '/',
     };
   } else {
