@@ -3,6 +3,7 @@ import AboutButton from '@/v2/components/button/About';
 import CodeButton from '@/v2/components/button/Code';
 import DarkModeButton from '@/v2/components/button/DarkMode';
 import LanguageButton from '@/v2/components/button/Language';
+import Icon from '@/v2/components/ui/Icon';
 import Link from '@/v2/components/navigation/Link';
 import AulaHero from '@/v2/components/svg/Aula_Hero.svg?react';
 import { FunctionComponent, PropsWithChildren } from 'react';
@@ -19,8 +20,9 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
         <nav className="flex items-center" aria-label={t('v2.ui.a11y.navigation')}>
           <div className="flex-1">
             {location.pathname !== '/' && (
-              <Link to="/" className="text-sm text-text-secondary">
-                <span aria-hidden="true">&lt; </span> {t('v2.page.login.button')}
+              <Link to="/" className="inline-flex items-center gap-1 text-sm text-text-secondary">
+                <Icon type="back" size="1em" />
+                {t('v2.page.login.button')}
               </Link>
             )}
           </div>

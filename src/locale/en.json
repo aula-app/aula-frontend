@@ -56,7 +56,7 @@
         "hint": "Please enter the instance code provided by your school to access the platform."
       },
       "login": {
-        "button": "Sign in",
+        "button": "Back to sign in",
         "title": "Welcome to {{var}}"
       },
       "notFound": {
