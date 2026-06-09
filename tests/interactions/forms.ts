@@ -18,8 +18,8 @@ export const fillMarkdownForm = async (page: Page, testId: string, value: string
 
 export const clickButton = async (page: Page, testId: string) => {
   const button = page.getByTestId(testId);
-  await expect(button).toBeVisible();
-  await button.scrollIntoViewIfNeeded();
+  // hover will also scrollIntoViewIfNeeded and handle the mouse movements
+  await button.hover();
   await button.click();
 };
 
