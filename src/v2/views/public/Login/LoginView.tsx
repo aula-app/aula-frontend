@@ -61,7 +61,7 @@ const LoginView: React.FC = () => {
         <Button type="submit" disabled={isLoading} data-testid="submit-login">
           {t('v2.page.login.button')}
         </Button>
-        <Link to="/recovery" className="ml-auto px-2 text-sm text-text-secondary mt-4">
+        <Link to="/recovery" className="ml-auto px-2 text-sm text-muted mt-4">
           {t('v2.page.recovery.link')}
         </Link>
       </div>

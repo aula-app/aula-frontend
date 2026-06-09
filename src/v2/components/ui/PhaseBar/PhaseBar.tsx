@@ -57,7 +57,7 @@ function PhaseBar({ room }: PhaseBarProps) {
               disabled={isActive}
               aria-current={isActive ? 'page' : undefined}
               data-testid={`link-to-phase-${displayPhase}`}
-              className={`flex items-center justify-center gap-1.5 h-10 w-full px-6 text-text-primary no-underline bg-${phaseType} hover:brightness-90 active:brightness-75 focus-visible:outline-2 focus-visible:outline-offset-0 transition-[filter] duration-150`}
+              className={`flex items-center justify-center gap-1.5 h-10 w-full px-6 text-foreground no-underline bg-${phaseType} hover:bg-${phaseType}-active active:bg-${phaseType}-active focus-visible:outline-2 focus-visible:-outline-offset-5 transition-[filter] duration-150`}
               style={{ clipPath: getClipPath(index, displayPhases.length) }}
               onMouseEnter={() => setHoveredPhase(displayPhase)}
               onFocus={() => setHoveredPhase(displayPhase)}

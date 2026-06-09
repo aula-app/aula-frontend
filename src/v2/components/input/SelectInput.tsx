@@ -113,7 +113,7 @@ const SelectInput = ({
           onKeyDown={handleKeyDown}
           className={[
             'peer block w-full rounded-lg border border-input-border bg-transparent px-3 pt-4 pb-2 pr-10 shadow-inner',
-            'text-sm text-left text-text-primary transition-all duration-200',
+            'text-sm text-left text-foreground transition-all duration-200',
             'focus:outline-1 focus:outline-offset-1',
             'hover:border-input-border-hover',
             'disabled:cursor-not-allowed disabled:opacity-50',
@@ -127,7 +127,7 @@ const SelectInput = ({
             .filter(Boolean)
             .join(' ')}
         >
-          <span className={hasValue ? 'text-text-primary' : 'invisible select-none'}>
+          <span className={hasValue ? 'text-foreground' : 'invisible select-none'}>
             {selectedOption?.label ?? '\u00A0'}
           </span>
         </button>
@@ -136,15 +136,15 @@ const SelectInput = ({
           <label
             htmlFor={inputId}
             className={[
-              'pointer-events-none absolute left-3 origin-left text-sm transition-all duration-200 bg-paper px-0.5',
+              'pointer-events-none absolute left-3 origin-left text-sm transition-all duration-200 bg-background px-0.5',
               hasValue || open
                 ? 'top-0 -translate-y-1/2 scale-75'
                 : 'top-1/2 -translate-y-1/2 scale-100',
               error
-                ? 'text-error-text'
+                ? 'text-error-fg'
                 : open
                   ? 'text-primary'
-                  : 'text-text-secondary',
+                  : 'text-muted',
             ].join(' ')}
           >
             {label}
@@ -161,7 +161,7 @@ const SelectInput = ({
           aria-hidden="true"
           className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         >
-          <Icon type="chevronDown" size="1.25em" className="text-text-secondary" />
+          <Icon type="chevronDown" size="1.25em" className="text-muted" />
         </span>
 
         {open && (
@@ -169,7 +169,7 @@ const SelectInput = ({
             id={listboxId}
             role="listbox"
             aria-label={label}
-            className="absolute z-50 mt-1 w-full rounded-lg border border-input-border bg-paper shadow-md overflow-auto max-h-60 py-1"
+            className="absolute z-50 mt-1 w-full rounded-lg border border-input-border bg-background shadow-md overflow-auto max-h-60 py-1"
           >
             {options.map((option, i) => (
               <li
@@ -180,7 +180,7 @@ const SelectInput = ({
                 onMouseEnter={() => setFocusedIndex(i)}
                 className={[
                   'px-3 py-2 text-sm cursor-pointer transition-colors duration-100',
-                  option.value === value ? 'text-primary font-medium' : 'text-text-primary',
+                  option.value === value ? 'text-primary font-medium' : 'text-foreground',
                   focusedIndex === i ? 'bg-primary/10' : 'hover:bg-primary/5',
                 ].join(' ')}
               >
@@ -198,7 +198,7 @@ const SelectInput = ({
       >
         <div className="overflow-hidden">
           {error ? (
-            <span id={errorId} role="alert" className="block pt-1 px-1 text-xs text-error-text">
+            <span id={errorId} role="alert" className="block pt-1 px-1 text-xs text-error-fg">
               <Icon type="alert" className="inline-block mr-1 mb-0.5" />
               {error}
             </span>

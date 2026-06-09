@@ -5,14 +5,21 @@
 @import "./theme/tailwind-theme.css";
 @import "./theme/image-colors.css";
 
-/* Force-include dynamic Button color classes that Tailwind can't detect statically */
+/* Force-include dynamic classes that Tailwind can't detect statically */
+
+/* Button colors */
 @source inline("{bg,text,border}-{primary,secondary,error}");
 @source inline("{hover,active}:bg-{primary,secondary,error}/{10,20}");
 @source inline("focus-visible:outline-{primary,secondary,error}");
 
-/* Semantic status colors + text variants */
+/* Semantic state colors */
 @source inline("{bg,text,border}-{error,warning,info,success}");
-@source inline("{bg,text,border}-{error,warning,info,success}-text");
+@source inline("{bg,text,border}-{error,warning,info,success}-fg");
+
+/* Phase colors — base, hover, and active states */
+@source inline("{bg,text}-{wild,discussion,approval,voting,results}");
+@source inline("{bg,text}-{wild,discussion,approval,voting,results}-active");
+@source inline("{hover,active}:bg-{wild,discussion,approval,voting,results}-active");
 @source inline("border-l-4");
 
 
@@ -74,8 +81,8 @@
 
 html, body, #root {
   height: 100vh;
-  color: var(--color-text-primary);
-  background-color: var(--color-paper);
+  color: var(--color-foreground);
+  background-color: var(--color-background);
   margin: 0;
   padding: 0;
 }

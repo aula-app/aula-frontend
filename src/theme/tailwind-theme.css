@@ -1,28 +1,46 @@
-/* Tailwind Theme Configuration - synced with MUI theme */
-/* 
+/* Tailwind Theme Configuration
+ *
  * How this works:
  * 1. Light mode values defined in :root
  * 2. Dark mode values override in .dark (class added by AppThemeProvider)
  * 3. @theme tells Tailwind to use these CSS variables for utility classes
- * 
- * Usage: bg-primary, text-primary, etc. will automatically switch colors
+ *
+ * Naming → Tailwind utility:
+ *   --color-surface     → bg-surface     (page canvas)
+ *   --color-background  → bg-background  (cards, panels)
+ *   --color-foreground  → text-foreground (primary text)
+ *   --color-muted       → text-muted      (secondary text)
  */
 
 /* ========== LIGHT MODE (default) ========== */
 :root {
+  /* --- Layout --- */
+  --color-background: hsl(0, 0%, 100%);
+  --color-surface: hsl(210, 15%, 88%);
+  --color-shade: hsl(210, 15%, 12%);
+
+  /* --- Content / Text --- */
+  --color-foreground: hsl(236, 42%, 15%);
+  --color-muted: hsl(215, 18%, 42%);
+
+  /* --- Brand --- */
   --color-primary: hsl(134, 72%, 67%);
   --color-secondary: hsl(215, 8%, 72%);
+
+  /* --- Semantic states --- */
   --color-error: hsl(0, 100%, 94%);
-  --color-error-text: hsl(0, 72%, 35%);
+  --color-error-fg: hsl(0, 72%, 35%);
+
   --color-warning: hsl(45, 100%, 90%);
-  --color-warning-text: hsl(35, 85%, 30%);
+  --color-warning-fg: hsl(35, 85%, 30%);
+
   --color-info: hsl(204, 82%, 90%);
-  --color-info-text: hsl(204, 70%, 30%);
+  --color-info-fg: hsl(204, 70%, 30%);
+
   --color-success: hsl(134, 72%, 88%);
-  --color-success-text: hsl(134, 55%, 28%);
+  --color-success-fg: hsl(134, 55%, 28%);
 
-  --color-shadow: rgba(0, 0, 0, 0.05);
-
+  /* --- Phases --- */
   --color-wild: hsl(210, 100%, 86%);
   --color-wild-active: hsl(210, 88%, 67%);
 
@@ -38,40 +56,41 @@
   --color-results: hsl(134, 72%, 88%);
   --color-results-active: hsl(134, 72%, 67%);
 
-  --color-against: hsl(0, 84%, 76%);
-  --color-alert: hsl(0, 84%, 76%);
-  --color-announcements: hsl(270, 50%, 82%);
-  --color-bugs: hsl(215, 8%, 90%);
-  --color-comments: hsl(215, 8%, 90%);
-  --color-disabled: hsl(215, 8%, 90%);
-  --color-for: hsl(134, 72%, 88%);
-  --color-reports: hsl(45, 100%, 79%);
-  --color-messages: hsl(210, 100%, 86%);
-  --color-neutral: hsl(45, 100%, 79%);
-  --color-requests: hsl(215, 8%, 90%);
-
-  --color-text-primary: hsl(236, 42%, 15%);
-  --color-text-secondary: hsl(215, 18%, 42%);
-  --color-background: hsl(210, 15%, 92%);
-  --color-paper: hsl(0, 0%, 100%);
-  --color-shade: hsl(210, 15%, 12%);
+  /* --- Utility --- */
+  --color-shadow: rgba(0, 0, 0, 0.05);
+  --color-input-border: hsl(215, 15%, 72%);
+  --color-input-border-hover: hsl(215, 20%, 50%);
 }
 
 /* ========== DARK MODE (activated by .dark class on html) ========== */
 .dark {
+  /* --- Layout --- */
+  --color-surface: hsl(236, 42%, 15%);
+  --color-background: hsl(215, 25%, 15%);
+  --color-shade: hsl(215, 25%, 8%);
+
+  /* --- Content / Text --- */
+  --color-foreground: hsl(215, 20%, 90%);
+  --color-muted: hsl(215, 15%, 75%);
+
+  /* --- Brand --- */
   --color-primary: hsl(134, 55%, 55%);
   --color-secondary: hsl(215, 12%, 55%);
+
+  /* --- Semantic states --- */
   --color-error: hsl(0, 40%, 22%);
-  --color-error-text: hsl(0, 80%, 75%);
+  --color-error-fg: hsl(0, 80%, 75%);
+
   --color-warning: hsl(45, 40%, 20%);
-  --color-warning-text: hsl(35, 85%, 70%);
+  --color-warning-fg: hsl(35, 85%, 70%);
+
   --color-info: hsl(204, 40%, 22%);
-  --color-info-text: hsl(204, 75%, 72%);
+  --color-info-fg: hsl(204, 75%, 72%);
+
   --color-success: hsl(134, 30%, 20%);
-  --color-success-text: hsl(134, 60%, 65%);
+  --color-success-fg: hsl(134, 60%, 65%);
 
-  --color-shadow: rgba(0, 0, 0, 0.4);
-
+  /* --- Phases --- */
   --color-wild: hsl(210, 45%, 28%);
   --color-wild-active: hsl(210, 75%, 55%);
 
@@ -87,24 +106,10 @@
   --color-results: hsl(134, 32%, 26%);
   --color-results-active: hsl(134, 55%, 50%);
 
-  --color-against: hsl(0, 72%, 62%);
-  --color-alert: hsl(0, 72%, 62%);
-  --color-announcements: hsl(270, 55%, 65%);
-  --color-bugs: hsl(215, 15%, 30%);
-  --color-comments: hsl(215, 15%, 30%);
-  --color-disabled: hsl(215, 12%, 28%);
-  --color-for: hsl(134, 50%, 48%);
-  --color-reports: hsl(45, 88%, 58%);
-  --color-messages: hsl(210, 60%, 58%);
-  --color-neutral: hsl(45, 85%, 58%);
-  --color-requests: hsl(215, 15%, 30%);
-
-  --color-text-primary: hsl(215, 20%, 90%);
-  --color-text-secondary: hsl(215, 15%, 75%);
-  --color-background: hsl(236, 42%, 15%);
-  --color-paper: hsl(215, 25%, 15%);
-  --color-shade: hsl(215, 25%, 8%);
-  
+  /* --- Utility --- */
+  --color-shadow: rgba(0, 0, 0, 0.4);
+  --color-input-border: hsl(215, 15%, 35%);
+  --color-input-border-hover: hsl(215, 20%, 55%);
 }
 
 /* ========== DARK MODE VARIANT (class-based, matches AppThemeProvider) ========== */
@@ -112,19 +117,33 @@
 
 /* ========== TAILWIND THEME (references the CSS variables above) ========== */
 @theme inline {
+  /* --- Layout --- */
+  --color-surface: var(--color-surface);
+  --color-background: var(--color-background);
+  --color-shade: var(--color-shade);
+
+  /* --- Content / Text --- */
+  --color-foreground: var(--color-foreground);
+  --color-muted: var(--color-muted);
+
+  /* --- Brand --- */
   --color-primary: var(--color-primary);
   --color-secondary: var(--color-secondary);
+
+  /* --- Semantic states --- */
   --color-error: var(--color-error);
-  --color-error-text: var(--color-error-text);
+  --color-error-fg: var(--color-error-fg);
+
   --color-warning: var(--color-warning);
-  --color-warning-text: var(--color-warning-text);
+  --color-warning-fg: var(--color-warning-fg);
+
   --color-info: var(--color-info);
-  --color-info-text: var(--color-info-text);
+  --color-info-fg: var(--color-info-fg);
+
   --color-success: var(--color-success);
-  --color-success-text: var(--color-success-text);
+  --color-success-fg: var(--color-success-fg);
 
-  --color-shadow: var(--color-shadow);
-
+  /* --- Phases --- */
   --color-wild: var(--color-wild);
   --color-wild-active: var(--color-wild-active);
 
@@ -140,23 +159,8 @@
   --color-results: var(--color-results);
   --color-results-active: var(--color-results-active);
 
-  --color-against: var(--color-against);
-  --color-alert: var(--color-alert);
-  --color-announcements: var(--color-announcements);
-  --color-bugs: var(--color-bugs);
-  --color-comments: var(--color-comments);
-  --color-disabled: var(--color-disabled);
-  --color-for: var(--color-for);
-  --color-reports: var(--color-reports);
-  --color-messages: var(--color-messages);
-  --color-neutral: var(--color-neutral);
-  --color-requests: var(--color-requests);
-
-  --color-text-primary: var(--color-text-primary);
-  --color-text-secondary: var(--color-text-secondary);
-  --color-background: var(--color-background);
-  --color-paper: var(--color-paper);
+  /* --- Utility --- */
+  --color-shadow: var(--color-shadow);
   --color-input-border: var(--color-input-border);
   --color-input-border-hover: var(--color-input-border-hover);
-  --color-shade: var(--color-shade);
 }

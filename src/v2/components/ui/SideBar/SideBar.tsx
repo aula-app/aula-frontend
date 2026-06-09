@@ -34,7 +34,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         id="sidebar-menu"
         aria-label={t('v2.ui.navigation')}
         aria-modal={menuOpen && isDrawerMode ? true : undefined}
-        className={`flex flex-col z-20 h-full w-56 shrink-0 border-secondary border-r overflow-y-auto overflow-x-hidden print:hidden absolute left-0 bg-paper transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}
+        className={`flex flex-col z-20 h-full w-56 shrink-0 border-secondary border-r overflow-y-auto overflow-x-hidden print:hidden absolute left-0 bg-background transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}
         inert={!menuOpen && isDrawerMode ? '' : undefined}
         tabIndex={-1}
       >

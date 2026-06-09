@@ -1,15 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 export default {
-  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  safelist: [
-    'bg-wild', 'bg-wild-active',
-    'bg-discussion', 'bg-discussion-active',
-    'bg-approval', 'bg-approval-active',
-    'bg-voting', 'bg-voting-active',
-    'bg-results', 'bg-results-active',
-  ],
   theme: {
     extend: {
       spacing: {

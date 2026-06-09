@@ -86,7 +86,7 @@ const Breadcrumb: React.FC = () => {
       <div
         data-testid={TEST_IDS.BREADCRUMB_MENU}
         id="breadcrumb-menu"
-        className={`absolute flex flex-col-reverse top-full bg-paper font-light rounded-2xl rounded-tl-none max-w-sm shadow-sm p-1 z-50 transition-all duration-300 ease-out left-1/2 ${
+        className={`absolute flex flex-col-reverse top-full bg-background font-light rounded-2xl rounded-tl-none max-w-sm shadow-sm p-1 z-50 transition-all duration-300 ease-out left-1/2 ${
           isOpen ? 'opacity-100 mt-0' : 'opacity-0 -mt-2 pointer-events-none'
         }`}
         aria-label={t('v2.ui.a11y.breadcrumb.nav')}
