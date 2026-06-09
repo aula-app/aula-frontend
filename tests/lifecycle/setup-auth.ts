@@ -22,14 +22,16 @@ export default async function globalSetup() {
     } else {
       browser = await chromium.launch({
         args: [
+          // linux needs GL drawing
+          // '--disable-gl-drawing-for-tests',
           '--disable-dev-shm-usage',
           '--disable-extensions',
           '--disable-plugins',
+          '--disable-background-networking',
           '--disable-accelerated-2d-canvas',
           '--disable-renderer-backgrounding',
-          '--disable-background-networking',
-          '--mute-audio',
           '--memory-pressure-off',
+          '--mute-audio',
           // '--max-old-space-size=12000',
         ],
       });
