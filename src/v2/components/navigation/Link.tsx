@@ -9,14 +9,27 @@ type BaseAnchorProps = { href: string; to?: never; className?: string } & Omit<
 >;
 
 // Require aria-label when no children are provided (e.g. icon-only links)
-type LinkProps = (BaseRouterLinkProps | BaseAnchorProps) &
-  ({ children: ReactNode; 'aria-label'?: string } | { children?: never; 'aria-label': string });
+type LinkProps = (BaseRouterLinkProps | BaseAnchorProps) & { disabled?: boolean } & (
+    | { children: ReactNode; 'aria-label'?: string }
+    | { children?: never; 'aria-label': string }
+  );
 
 const linkClass =
   'text-text-primary rounded-lg underline-offset-2 hover:underline focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-text-primary';
 
 const Link = forwardRef<HTMLAnchorElement, LinkProps>(({ className, ...props }, ref) => {
   const classes = twMerge(linkClass, className);
+
+  if (props.disabled) {
+    const { disabled, to, href, ...rest } = props as LinkProps & { to?: string; href?: string };
+    return (
+      <div
+        ref={ref as React.Ref<HTMLDivElement>}
+        className={classes}
+        {...(rest as React.HTMLAttributes<HTMLDivElement>)}
+      />
+    );
+  }
 
   if ('href' in props && props.href) {
     const { href, ...rest } = props;

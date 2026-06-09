@@ -129,6 +129,7 @@
         "close": "Hauptmenü schließen"
       },
       "navigation": "Navigationsmenü",
+      "phases": "Phasennavigation",
       "toggle": "{{var}} umschalten"
     }
   },

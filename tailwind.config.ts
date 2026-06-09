@@ -3,6 +3,7 @@ import type { Config } from 'tailwindcss';
 export default {
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  safelist: ['bg-wild', 'bg-discussion', 'bg-approval', 'bg-voting', 'bg-results'],
   theme: {
     extend: {
       spacing: {

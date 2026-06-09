@@ -1,4 +1,4 @@
-import PhaseBar from '@/components/PhaseBar';
+import PhaseBar from '@/v2/components/ui/PhaseBar';
 import { Navigate, Outlet, useParams } from 'react-router-dom';
 
 const RoomLayout = () => {
@@ -9,7 +9,7 @@ const RoomLayout = () => {
   }
 
   return (
-    <div className="w-fill h-full overflow-hidden">
+    <div className="w-full h-full overflow-hidden">
       <PhaseBar room={room_id} />
       <div className="p-1 flex-1 overflow-auto">
         <Outlet />
