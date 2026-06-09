@@ -33,7 +33,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
 
   const confirmStatusChange = async () => {
     if (pendingStatus === null) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
       return;
     }
 
@@ -45,7 +45,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
         onReload();
       }
     } catch (error) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.failed'), type: 'error' } });
       cancelStatusChange();
     } finally {
       setIsLoading(false);

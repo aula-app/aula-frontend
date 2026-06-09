@@ -1,6 +1,8 @@
+import Toast from '@/v2/components/ui/Toast';
 import { useConsentSync, useIsAuthenticated } from '@/hooks/auth';
-import PrivateRoutes from './PrivateRoutes';
-import PublicRoutes from './PublicRoutes';
+import { ModalProvider } from '@/v2/hooks/useModal';
+import Private from '@/v2/views/private';
+import Public from '@/v2/views/public';
 import { useLocation } from 'react-router';
 
 /**
@@ -12,6 +14,13 @@ const Routes = () => {
 
   useConsentSync(isAuthenticated, location.pathname);
 
-  return isAuthenticated ? <PrivateRoutes /> : <PublicRoutes />;
+  const autentication = () => (isAuthenticated ? <Private /> : <Public />);
+
+  return (
+    <ModalProvider>
+      {autentication()}
+      <Toast />
+    </ModalProvider>
+  );
 };
 export default Routes;

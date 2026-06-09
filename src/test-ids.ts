@@ -35,6 +35,22 @@ export const TEST_IDS = {
 
   // Offline state (PublicOfflineView)
   SCHOOL_OFFLINE_VIEW: 'school-offline-view',
+
+  // Reports (ReportCard)
+  ARCHIVE_REPORT_BUTTON: 'archive-report-button',
+
+  // Toast notifications (Toast)
+  TOAST_ERROR: 'toast-error',
+  TOAST_SUCCESS: 'toast-success',
+  TOAST_WARNING: 'toast-warning',
+  TOAST_INFO: 'toast-info',
+
+  // Navigation layout (TopBar, SideBar, Breadcrumb, PrintButton)
+  TOPBAR_MENU_BUTTON: 'topbar-menu-button',
+  BREADCRUMB_NAV: 'breadcrumb-nav',
+  BREADCRUMB_TOGGLE: 'breadcrumb-toggle',
+  BREADCRUMB_MENU: 'breadcrumb-menu',
+  PRINT_BUTTON: 'print-button',
 } as const;
 
 export type TestId = (typeof TEST_IDS)[keyof typeof TEST_IDS];

@@ -138,7 +138,7 @@ const SetPasswordView = () => {
         setValid(false);
       }
     } catch (error) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
       setValid(false);
     }
   };
@@ -156,7 +156,7 @@ const SetPasswordView = () => {
       return;
     }
 
-    dispatch({ type: 'ADD_POPUP', message: { message: t('auth.password.success'), type: 'success' } });
+    dispatch({ type: 'ADD_TOAST', message: { message: t('auth.password.success'), type: 'success' } });
     navigate("/", { replace: true });
   };
 

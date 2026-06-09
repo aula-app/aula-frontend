@@ -14,7 +14,7 @@ test('Announcements', async ({ newPageFor }) => {
     await NewButton.click();
 
     await adminPage.locator('input[name="headline"]').fill('Testing content');
-    await adminPage.locator('div[contenteditable="true"]').fill('some data');
+    await adminPage.getByTestId('markdown-editor-body').locator('div[contenteditable="true"]').fill('some data');
 
     // Make it obligatory to consent to the announcement
     await forms.selectOptionByValue(adminPage, "select-field-user_needs_to_consent", "2")
