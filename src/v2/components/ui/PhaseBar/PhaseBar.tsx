@@ -50,14 +50,15 @@ function PhaseBar({ room }: PhaseBarProps) {
         return (
           <div
             key={displayPhase}
-            className={`-mr-4 last:mr-0 transition-[flex] duration-300 ease-in-out ${isExpanded ? 'flex-3 z-10' : 'flex-1 z-0'}`}
+            className={`-mr-4 last:mr-0 transition-[flex] duration-300 ease-in-out ${isExpanded ? 'flex-3 z-10' : `${index === displayPhases.length - 1 ? 'flex-[0.75]' : 'flex-1'} z-0`}`}
           >
             <Link
               to={`/room/${room}/phase/${displayPhase}`}
               disabled={isActive}
+              aria-label={t('v2.ui.moveToPhase', { phase: t(`phases.${phaseType}`) })}
               aria-current={isActive ? 'page' : undefined}
               data-testid={`link-to-phase-${displayPhase}`}
-              className={`flex items-center justify-center gap-1.5 h-10 w-full px-6 text-foreground no-underline bg-${phaseType} hover:bg-${phaseType}-active active:bg-${phaseType}-active focus-visible:outline-2 focus-visible:-outline-offset-5 transition-[filter] duration-150`}
+              className={`flex items-center justify-center rounded-none gap-1.5 h-10 w-full px-6 text-foreground no-underline bg-${phaseType} hover:bg-${phaseType}-active active:bg-${phaseType}-active focus-visible:outline-1 focus-visible:-outline-offset-8   transition-[filter] duration-150`}
               style={{ clipPath: getClipPath(index, displayPhases.length) }}
               onMouseEnter={() => setHoveredPhase(displayPhase)}
               onFocus={() => setHoveredPhase(displayPhase)}

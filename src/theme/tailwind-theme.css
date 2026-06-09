@@ -45,16 +45,16 @@
   --color-wild-active: hsl(210, 88%, 67%);
 
   --color-discussion: hsl(270, 50%, 82%);
-  --color-discussion-active: hsl(270, 50%, 62%);
+  --color-discussion-active: hsl(270, 50%, 72%);
 
   --color-approval: hsl(25, 84%, 76%);
-  --color-approval-active: hsl(25, 84%, 58%);
+  --color-approval-active: hsl(25, 84%, 68%);
 
   --color-voting: hsl(45, 100%, 79%);
-  --color-voting-active: hsl(45, 100%, 60%);
+  --color-voting-active: hsl(45, 100%, 70%);
 
   --color-results: hsl(134, 72%, 88%);
-  --color-results-active: hsl(134, 72%, 67%);
+  --color-results-active: hsl(134, 72%, 77%);
 
   /* --- Utility --- */
   --color-shadow: rgba(0, 0, 0, 0.05);
