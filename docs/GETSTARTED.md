@@ -54,6 +54,7 @@ Reach out to `dev [at] aula.de` for more information. <!-- @TODO: we should add 
 ### Environment Configuration
 
 5. Create a `.env` file based on the `.env.local` file:
+   (TODO: out of date)
 
    ```
    cp .env.local .env
