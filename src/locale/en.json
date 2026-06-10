@@ -99,7 +99,8 @@
       },
       "announcement": {
         "title": "Announcement",
-        "button": "Got it"
+        "button": "Got it",
+        "helper": "This announcement requires your consent. Please check the box to proceed."
       },
       "button": {
         "cancel": "Cancel",

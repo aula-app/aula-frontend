@@ -100,7 +100,8 @@
       },
       "announcement": {
         "title": "Ankündigung",
-        "button": "Verstanden"
+        "button": "Verstanden",
+        "helper": "Diese Ankündigung erfordert Ihre Zustimmung. Bitte aktivieren Sie das Kontrollkästchen, um fortzufahren."
       },
       "button": {
         "cancel": "Abbrechen",
