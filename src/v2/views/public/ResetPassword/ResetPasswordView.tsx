@@ -54,10 +54,10 @@ const ResetPasswordView = () => {
       {error && (
         <div
           role="alert"
-          className="flex items-center gap-2 rounded-lg border border-error-text px-3 py-2 text-sm text-error-text"
+          className="flex items-center gap-2 rounded-lg border border-error-fg px-3 py-2 text-sm text-error-fg"
         >
           <span className="flex-1">{error}</span>
-          <IconButton onClick={() => setError('')} aria-label={t('v2.ui.button.close')} className="text-error-text">
+          <IconButton onClick={() => setError('')} aria-label={t('v2.ui.button.close')} className="text-error-fg">
             <Icon type="close" size="1.25em" />
           </IconButton>
         </div>

@@ -129,6 +129,8 @@
         "close": "Hauptmenü schließen"
       },
       "navigation": "Navigationsmenü",
+      "moveToPhase": "Zu {{phase}} wechseln",
+      "phases": "Phasennavigation",
       "toggle": "{{var}} umschalten"
     }
   },
