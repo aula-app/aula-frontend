@@ -1,73 +1,17 @@
 import { getRuntimeConfig } from '@/config';
-import { getConsents, giveConsent, MessageConsentType } from '@/services/consent';
 import Button from '@/v2/components/button/Button';
+import Checkbox from '@/v2/components/input/Checkbox';
 import Dialog from '@/v2/components/ui/Dialog';
-import { useToast } from '@/v2/hooks/useToast';
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
-import IconButton from '../../button/IconButton';
-import Icon from '../Icon';
-
-const TRANSITION_MS = 300;
+import { useAnnouncement } from './useAnnouncement';
 
 const Announcement = () => {
   const { t } = useTranslation();
-  const location = useLocation();
-  const { toast } = useToast();
-  const [announcements, setAnnouncements] = useState<MessageConsentType[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [displayed, setDisplayed] = useState<MessageConsentType | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const bodyId = useId();
-
-  const getData = useCallback(async () => {
-    const response = await getConsents();
-    if (response.error) return;
-    setAnnouncements(response.data ?? []);
-  }, []);
-
-  useEffect(() => {
-    getData();
-  }, [location, getData]);
-
-  useEffect(() => {
-    const first = announcements[0] ?? null;
-    if (first) {
-      if (closeTimer.current) clearTimeout(closeTimer.current);
-      setDisplayed(first);
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
-      closeTimer.current = setTimeout(() => setDisplayed(null), TRANSITION_MS);
-    }
-    return () => {
-      if (closeTimer.current) clearTimeout(closeTimer.current);
-    };
-  }, [announcements]);
-
-  const handleAction = async (text_id: number, consent_value: 1 | -1) => {
-    setIsSubmitting(true);
-    try {
-      const response = await giveConsent(text_id, consent_value);
-      if (response.error) {
-        toast.error(response.error);
-        return;
-      }
-      await getData();
-    } catch {
-      toast.error(t('errors.default'));
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { displayed, isOpen, isChecked, setIsChecked, isSubmitting, handleAction, bodyId } = useAnnouncement();
 
   if (!displayed) return null;
 
-  const showDismiss = displayed.user_needs_to_consent !== 2;
-  const showAgree = displayed.user_needs_to_consent !== 0;
+  const consentLevel = displayed.user_needs_to_consent;
 
   return (
     <Dialog
@@ -75,47 +19,51 @@ const Announcement = () => {
       open={isOpen}
       title={t('ui.announcement.title')}
       describedBy={bodyId}
-      role={showDismiss ? 'dialog' : 'alertdialog'}
+      role={consentLevel !== 2 ? 'dialog' : 'alertdialog'}
+      className="overflow-visible"
     >
       <img
         src={`${getRuntimeConfig().BASENAME}img/Paula_Moderation.svg`}
         alt={t('v2.alt.microphone')}
-        className="w-8 pt-4 ml-4 absolute top-0 right-4"
+        className="w-16 absolute top-0 left-0 -translate-x-1/3 -translate-y-1/2"
       />
       <div className="flex flex-col gap-4 px-6 pt-2 pb-4">
-        <h3>{displayed.headline}</h3>
+        <h2>{displayed.headline}</h2>
         <p id={bodyId} className="text-sm">
           {displayed.body}
         </p>
       </div>
-      <div className="flex items-center justify-end gap-2 px-4 py-3">
-        {showDismiss && (
-          <Button
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus={!showAgree}
-            outlined
-            color="secondary"
-            disabled={isSubmitting}
-            aria-busy={isSubmitting}
-            onClick={() => handleAction(displayed.id, -1)}
-            className="mr-auto"
-            data-testid="button-consent-dismiss"
-          >
-            {t('ui.common.dismiss')}
-          </Button>
-        )}
-        {showAgree && (
-          <Button
+      {consentLevel > 0 && (
+        <div className="px-6 py-3">
+          <Checkbox
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
+            id={`consent-box-${displayed.id}`}
+            label={displayed.consent_text || t('v2.ui.actions.agree')}
+            checked={isChecked}
+            required={consentLevel === 2}
+            helperText={consentLevel === 2 ? t('v2.ui.announcement.required_hint') : undefined}
             disabled={isSubmitting}
-            aria-busy={isSubmitting}
-            onClick={() => handleAction(displayed.id, 1)}
-            data-testid="button-consent-agree"
-          >
-            {displayed.consent_text || t('actions.agree')}
-          </Button>
-        )}
+            data-testid="checkbox-consent"
+            onChange={(e) => {
+              setIsChecked(e.target.checked);
+              if (consentLevel !== 2) handleAction(displayed.id, -1);
+            }}
+          />
+        </div>
+      )}
+      <div className="flex items-center justify-end gap-2 px-4 py-3">
+        <Button
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus={consentLevel === 0}
+          type="button"
+          disabled={isSubmitting || (consentLevel === 2 && !isChecked)}
+          aria-busy={isSubmitting}
+          onClick={() => handleAction(displayed.id, 1)}
+          data-testid="button-consent-agree"
+        >
+          {t('v2.ui.announcement.button')}
+        </Button>
       </div>
     </Dialog>
   );

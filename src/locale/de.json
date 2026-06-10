@@ -94,8 +94,13 @@
         }
       },
       "actions": {
+        "agree": "Zustimmen",
         "print": "Diese Seite drucken",
         "report": "Einen Fehler melden"
+      },
+      "announcement": {
+        "title": "Ankündigung",
+        "button": "Verstanden"
       },
       "button": {
         "cancel": "Abbrechen",

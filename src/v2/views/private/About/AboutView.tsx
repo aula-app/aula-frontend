@@ -24,7 +24,7 @@ const AboutViewEN = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4" data-testid="about-view">
+    <div className="flex flex-col gap-4 p-8" data-testid="about-view">
       <h1>{t('v2.page.about.title')}</h1>
       <h2>{t('v2.page.about.version')}</h2>
       <code>
