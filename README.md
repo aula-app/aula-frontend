@@ -19,6 +19,7 @@ Aula Frontend is a modern web application built with a robust tech stack:
 - **React Router**: For seamless client-side routing
 - **React Hook Form**: Efficient form handling with validation
 - **React Markdown**: For rich editing of markdown content
+- **OpenTelemetry**: Observability framework to send data to Victoria Traces in infra
 
 For detailed setup instructions, see our [Getting Started Guide](docs/GETSTARTED.md).
 
