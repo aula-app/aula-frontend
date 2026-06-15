@@ -7,7 +7,7 @@ import { useAnnouncement } from './useAnnouncement';
 
 const Announcement = () => {
   const { t } = useTranslation();
-  const { displayed, isOpen, isChecked, setIsChecked, isSubmitting, handleAction, bodyId } = useAnnouncement();
+  const { displayed, isOpen, isChecked, setIsChecked, isSubmitting, handleAction, bodyId, onExited } = useAnnouncement();
 
   if (!displayed) return null;
 
@@ -17,6 +17,7 @@ const Announcement = () => {
     <Dialog
       key={displayed.id}
       open={isOpen}
+      onExited={onExited}
       title={t('ui.announcement.title')}
       describedBy={bodyId}
       role={consentLevel !== 2 ? 'dialog' : 'alertdialog'}

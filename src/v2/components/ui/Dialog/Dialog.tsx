@@ -5,6 +5,7 @@ const TRANSITION_MS = 300;
 interface DialogProps extends React.ComponentProps<'dialog'> {
   open: boolean;
   onClose?: () => void;
+  onExited?: () => void;
   title: string;
   children: ReactNode;
   role?: 'dialog' | 'alertdialog';
@@ -14,6 +15,7 @@ interface DialogProps extends React.ComponentProps<'dialog'> {
 const Dialog: FC<DialogProps> = ({
   open,
   onClose,
+  onExited,
   title,
   children,
   role = 'dialog',
@@ -34,12 +36,18 @@ const Dialog: FC<DialogProps> = ({
       requestAnimationFrame(() => setVisible(true));
     } else {
       setVisible(false);
-      dialog.setAttribute('data-closing', '');
-      const timer = setTimeout(() => {
-        dialog.removeAttribute('data-closing');
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         dialog.close();
-      }, TRANSITION_MS);
-      return () => clearTimeout(timer);
+        onExited?.();
+      } else {
+        dialog.setAttribute('data-closing', '');
+        const timer = setTimeout(() => {
+          dialog.removeAttribute('data-closing');
+          dialog.close();
+          onExited?.();
+        }, TRANSITION_MS);
+        return () => clearTimeout(timer);
+      }
     }
   }, [open]);
 

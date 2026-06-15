@@ -32,9 +32,10 @@ export const useAnnouncement = () => {
       setIsOpen(true);
     } else {
       setIsOpen(false);
-      setDisplayed(null);
     }
   }, [announcements]);
+
+  const onExited = useCallback(() => setDisplayed(null), []);
 
   const handleAction = async (text_id: number, consent_value: 1 | -1) => {
     setIsSubmitting(true);
@@ -52,5 +53,5 @@ export const useAnnouncement = () => {
     }
   };
 
-  return { displayed, isOpen, isChecked, setIsChecked, isSubmitting, handleAction, bodyId };
+  return { displayed, isOpen, isChecked, setIsChecked, isSubmitting, handleAction, bodyId, onExited };
 };
