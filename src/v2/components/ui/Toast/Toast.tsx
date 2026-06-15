@@ -125,7 +125,7 @@ const Toast = () => {
       <div
         role="region"
         aria-label="Notifications"
-        className="fixed top-4 right-4 z-50 flex flex-col pointer-events-none"
+        className="fixed top-[calc(1rem+env(safe-area-inset-top))] right-[calc(1rem+env(safe-area-inset-right))] z-50 flex flex-col pointer-events-none"
       >
         {state.toasts.map((toast) => {
           const isExiting = exitingIds.has(toast.id);
