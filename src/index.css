@@ -94,6 +94,14 @@ input, select, textarea {
   font-size: max(16px, 1em);
 }
 
+/* Older iOS WebKit bug: placeholder renders at a different line-height than typed text, causing overlap */
+input::placeholder,
+textarea::placeholder,
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  line-height: normal;
+}
+
 code {
   font-family: 'Inconsolata', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

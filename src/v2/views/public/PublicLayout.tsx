@@ -15,7 +15,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
   const location = useLocation();
 
   return (
-    <div className="h-full max-w-sm mx-auto px-8 py-6 flex flex-col gap-6">
+    <div className="h-full max-w-sm mx-auto pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))] pl-[calc(2rem+env(safe-area-inset-left))] pr-[calc(2rem+env(safe-area-inset-right))] flex flex-col gap-6">
       <header className="flex-1 flex flex-col gap-4">
         <nav className="flex items-center" aria-label={t('v2.ui.a11y.navigation')}>
           <div className="flex-1">
