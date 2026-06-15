@@ -51,7 +51,7 @@ const SidebarProfile: FC = () => {
         {avatarSrc ? (
           <img src={avatarSrc} alt="" className="size-full object-cover" />
         ) : (
-          <span className="text-lg font-bold text-text-secondary select-none">
+          <span className="text-lg font-bold text-muted select-none">
             {user?.username?.[0]?.toUpperCase() ?? '?'}
           </span>
         )}
@@ -59,7 +59,7 @@ const SidebarProfile: FC = () => {
       {user ? (
         <span className="flex flex-col items-start min-w-0 overflow-hidden">
           <span className="text-xl font-semibold truncate w-full">{user.username}</span>
-          <span className="text-sm font-light text-text-secondary truncate w-full">{user.displayname}</span>
+          <span className="text-sm font-light text-muted truncate w-full">{user.displayname}</span>
         </span>
       ) : (
         <span className="flex flex-col gap-1 flex-1">

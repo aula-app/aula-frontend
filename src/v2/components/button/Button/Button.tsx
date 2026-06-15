@@ -22,15 +22,17 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ? localStorage.getItem('darkMode') === 'true'
       : window.matchMedia('(prefers-color-scheme: dark)').matches;
 
+    const fgColor = color === 'error' ? 'error-fg' : color;
+
     const classes = twMerge(
       'relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 shadow-xs',
       'text-sm font-medium transition-all duration-200 min-h-11 min-w-11 cursor-pointer',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      dark ? 'text-paper' : 'text-current',
+      dark ? 'text-background' : 'text-current',
       outlined
-        ? `border border-text-${color} text-text-${color} hover:bg-${color}/10 active:bg-${color}/20`
+        ? `border border-${fgColor} text-${fgColor} hover:bg-${color}/10 active:bg-${color}/20`
         : text
-          ? `text-text-${color} hover:bg-${color}/10 active:bg-${color}/20 shadow-none`
+          ? `text-${fgColor} hover:bg-${color}/10 active:bg-${color}/20 shadow-none`
           : `bg-${color} font-bold hover:brightness-90 active:brightness-75`,
       `focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-${color}`,
       className

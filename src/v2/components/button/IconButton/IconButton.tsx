@@ -20,7 +20,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     const classes = twMerge(
       'relative overflow-hidden aspect-square inline-flex items-center justify-center rounded-full',
       'text-current cursor-pointer select-none transition-[background-color] duration-200 ease-in-out',
-      'hover:bg-shadow focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-text-secondary active:bg-black/[0.12] dark:active:bg-white/[0.12]',
+      'hover:bg-shadow focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-muted active:bg-black/[0.12] dark:active:bg-white/[0.12]',
       'disabled:cursor-not-allowed disabled:opacity-40 disabled:text-gray-400',
       dense ? 'p-0' : 'p-2',
       className

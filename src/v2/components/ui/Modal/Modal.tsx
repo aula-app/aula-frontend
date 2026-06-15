@@ -59,7 +59,7 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
       className="fixed inset-x-0 bottom-0 top-auto m-0 w-full max-w-full bg-transparent p-0 max-h-none overflow-visible"
     >
       <div
-        className={`w-full max-h-[90vh] rounded-t-2xl bg-paper text-text-primary shadow-2xl border-t border-secondary
+        className={`w-full max-h-[90vh] rounded-t-2xl bg-background text-foreground shadow-2xl border-t border-secondary
           pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]
           transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] transform-gpu
           ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}

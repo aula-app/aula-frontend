@@ -6,6 +6,7 @@
 
 /* Force-include dynamic Button color classes that Tailwind can't detect statically */
 @source inline("{bg,text,border}-{primary,secondary,error}");
+@source inline("{text,border}-error-fg");
 @source inline("{hover,active}:bg-{primary,secondary,error}/{10,20}");
 @source inline("focus-visible:outline-{primary,secondary,error}");
 
@@ -72,9 +73,9 @@
 }
 
 html, body, #root {
-  height: 100vh;
-  color: var(--color-text-primary);
-  background-color: var(--color-paper);
+  height: 100dvh;
+  color: var(--color-foreground);
+  background-color: var(--color-background);
   margin: 0;
   padding: 0;
 }

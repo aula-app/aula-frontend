@@ -42,12 +42,12 @@ const LoginView: React.FC = () => {
       <h1>{t('v2.page.login.title', { var: 'Aula' })}</h1>
 
       {linkBanner && (
-        <div className="flex items-start gap-2 rounded-lg border border-info/40 bg-info/10 px-3 py-2 text-sm text-text-primary">
+        <div className="flex items-start gap-2 rounded-lg border border-info/40 bg-info/10 px-3 py-2 text-sm text-foreground">
           <span className="flex-1">{linkBanner}</span>
           <button
             type="button"
             onClick={() => setLinkBanner('')}
-            className="text-text-secondary hover:text-text-primary"
+            className="text-muted hover:text-foreground"
             aria-label={t('actions.close')}
           >
             ×
@@ -56,12 +56,12 @@ const LoginView: React.FC = () => {
       )}
 
       {loginError && (
-        <div className="flex items-start gap-2 rounded-lg border border-error/40 bg-error/10 px-3 py-2 text-sm text-text-primary">
+        <div className="flex items-start gap-2 rounded-lg border border-error/40 bg-error/10 px-3 py-2 text-sm text-foreground">
           <span className="flex-1">{loginError}</span>
           <button
             type="button"
             onClick={() => setError('')}
-            className="text-text-secondary hover:text-text-primary"
+            className="text-muted hover:text-foreground"
             aria-label={t('actions.close')}
           >
             ×
@@ -90,14 +90,14 @@ const LoginView: React.FC = () => {
         <Button type="submit" disabled={isLoading || isSsoLoading} data-testid="submit-login">
           {t('v2.page.login.button')}
         </Button>
-        <Link to="/recovery" className="ml-auto px-2 text-sm text-text-secondary mt-4">
+        <Link to="/recovery" className="ml-auto px-2 text-sm text-muted mt-4">
           {t('v2.page.recovery.link')}
         </Link>
       </div>
 
       {(config.IS_OAUTH_ENABLED || config.IS_SSO_ENABLED) && (
         <>
-          <div className="flex items-center gap-2 text-text-secondary">
+          <div className="flex items-center gap-2 text-muted">
             <div className="flex-1 border-t border-current" />
             <span className="text-sm">{t('ui.common.or')}</span>
             <div className="flex-1 border-t border-current" />

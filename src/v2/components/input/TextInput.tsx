@@ -31,7 +31,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         type="button"
         aria-label={showPassword ? t('v2.form.password.hide') : t('v2.form.password.show')}
         aria-pressed={showPassword}
-        className="text-text-secondary"
+        className="text-muted"
         onClick={() => setShowPassword((v) => !v)}
       >
         <Icon type={showPassword ? 'eyeOff' : 'eye'} size="1.25em" />
@@ -55,8 +55,8 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             aria-invalid={!!error}
             placeholder=" "
             className={twMerge(
-              'peer block w-full rounded-lg border border-secondary bg-transparent px-3 pt-4 pb-2 shadow-inner',
-              'text-sm text-text-primary transition-all duration-200',
+              'peer block w-full rounded-lg border border-input-border bg-transparent px-3 pt-4 pb-2 shadow-inner',
+              'text-sm text-foreground transition-all duration-200',
               'focus:outline-1 focus:outline-offset-1',
               'hover:border-input-border-hover outline-current',
               trailingContent ? 'pr-10' : '',
@@ -71,11 +71,11 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
               htmlFor={inputId}
               className={twMerge(
                 'pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 origin-left text-sm transition-all duration-200',
-                'bg-paper px-0.5',
+                'bg-background px-0.5',
                 'peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100',
                 'peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75',
                 'peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-75',
-                error ? 'text-error-text peer-focus:text-error-text' : 'text-text-secondary peer-focus:text-current'
+                error ? 'text-error-fg peer-focus:text-error-fg' : 'text-muted peer-focus:text-current'
               )}
             >
               {label}
@@ -98,12 +98,12 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         >
           <div>
             {error ? (
-              <span id={errorId} className="block pt-1 px-1 text-xs text-error-text">
+              <span id={errorId} className="block pt-1 px-1 text-xs text-error-fg">
                 <Icon type="alert" className="inline-block mr-1 mb-0.5" />
                 {error}
               </span>
             ) : (
-              <span id={helperId} className="block pt-1 px-1 text-xs text-text-secondary">
+              <span id={helperId} className="block pt-1 px-1 text-xs text-muted">
                 {helperText}
               </span>
             )}
