@@ -115,7 +115,7 @@
 @variant dark (&:where(.dark, .dark *));
 
 /* Force-include dynamic color utilities used by Button (dynamic template literals aren't scanned) */
-@source inline("bg-primary bg-secondary bg-error text-primary-fg text-secondary-fg text-error-fg border-primary border-secondary border-error focus-visible:outline-primary focus-visible:outline-secondary focus-visible:outline-error");
+@source inline("bg-primary bg-secondary bg-error text-primary-fg text-secondary-fg text-error-fg border-primary border-secondary border-error outline-primary outline-secondary outline-error");
 
 /* ========== TAILWIND THEME (references the CSS variables above) ========== */
 @theme inline {
