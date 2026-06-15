@@ -35,6 +35,11 @@ const Dropdown = ({ children, content, 'aria-label': ariaLabel }: DropdownProps)
         role="listbox"
         aria-label={ariaLabel}
         inert={!isOpen ? '' : undefined}
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => {
+          close();
+          focusTrigger();
+        }}
         onBlur={(e) => {
           // Panel lost focus to somewhere outside the whole component → close and return focus to trigger
           if (!wrapperRef.current?.contains(e.relatedTarget as Node)) {
@@ -42,7 +47,7 @@ const Dropdown = ({ children, content, 'aria-label': ariaLabel }: DropdownProps)
             focusTrigger();
           }
         }}
-        className={`absolute z-50 min-w-max rounded-2xl overflow-clip bg-paper text-text-primary shadow-md p-0.5
+        className={`absolute z-50 min-w-max rounded-2xl overflow-clip bg-background text-text-primary shadow-md p-0.5
           transition-[opacity,transform] duration-150 transform-gpu
           ${verticalClass} ${horizontalClass} ${cornerClass} ${originClass}
           ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}

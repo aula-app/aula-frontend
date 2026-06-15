@@ -89,6 +89,11 @@ button, [role="button"], a, label, [role="menuitem"], [role="option"] {
   min-height: unset;
 }
 
+/* Prevent iOS auto-zoom on input focus (triggered when font-size < 16px) */
+input, select, textarea {
+  font-size: max(16px, 1em);
+}
+
 code {
   font-family: 'Inconsolata', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
