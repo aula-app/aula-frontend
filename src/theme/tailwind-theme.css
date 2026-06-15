@@ -21,7 +21,7 @@
 
   /* --- Content / Text --- */
   --color-foreground: hsl(236, 42%, 15%);
-  --color-muted: hsl(215, 18%, 22%);
+  --color-muted: hsl(215, 15%, 35%);
 
   /* --- Brand --- */
   --color-primary: hsl(134, 72%, 67%);
@@ -65,7 +65,7 @@
 /* ========== DARK MODE (activated by .dark class on html) ========== */
 .dark {
   /* --- Layout --- */
-  --color-surface: hsl(236, 42%, 15%);
+  --color-surface: hsl(215, 25%, 10%);
   --color-background: hsl(215, 25%, 15%);
   --color-shade: hsl(215, 25%, 8%);
 
@@ -73,11 +73,10 @@
   --color-foreground: hsl(215, 20%, 90%);
   --color-muted: hsl(215, 15%, 75%);
 
-  /* --- Brand --- */
+  /* --- Semantic states --- */
   --color-primary: hsl(134, 55%, 55%);
   --color-secondary: hsl(215, 12%, 55%);
 
-  /* --- Semantic states --- */
   --color-error: hsl(0, 40%, 22%);
   --color-error-fg: hsl(0, 80%, 75%);
 
@@ -128,7 +127,9 @@
 
   /* --- Brand --- */
   --color-primary: var(--color-primary);
+  --color-primary-fg: var(--color-foreground);
   --color-secondary: var(--color-secondary);
+  --color-secondary-fg: var(--color-muted);
 
   /* --- Semantic states --- */
   --color-error: var(--color-error);

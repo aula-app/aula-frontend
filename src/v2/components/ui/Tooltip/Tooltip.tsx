@@ -112,7 +112,7 @@ const Tooltip: React.FC<TooltipProps> = ({
         id={tooltipId}
         role="tooltip"
         className={twMerge(
-          `absolute z-10 px-4 pt-1.5 pb-2 rounded-3xl w-max max-w-[min(calc(var(--tooltip-container-w)*0.75),18rem)] bg-theme-grey-light text-left transition-all duration-200 transform
+          `absolute z-10 px-4 pt-1.5 pb-2 rounded-3xl w-max max-w-[min(calc(var(--tooltip-container-w)*0.75),18rem)] bg-surface text-left transition-all duration-200 transform
           ${placementClass}
           ${visible ? 'opacity-100 translate-0' : 'opacity-0 pointer-events-none invisible'} `,
           className
