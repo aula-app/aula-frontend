@@ -39,14 +39,15 @@ test('Announcements - obligatory consent', async ({ newPageFor }) => {
     await navigation.goToHome(adminPage);
     const modal = adminPage.getByRole('dialog');
     await expect(modal).toBeVisible();
+    await modal.getByTestId('checkbox-consent').click();
     const agreeButton = modal.getByTestId('button-consent-agree').first();
-    await expect(agreeButton).toBeVisible();
+    await expect(agreeButton).toBeEnabled();
     await agreeButton.click();
     await adminPage.waitForLoadState('networkidle');
     await expect(modal).not.toBeVisible();
   });
 
-  await test.step('User sees dialog with agree button only — no dismiss for obligatory', async () => {
+  await test.step('User sees dialog with checkbox and disabled agree — checking enables agree', async () => {
     const userPage = await newPageFor('user');
     await navigation.goToHome(userPage);
 
@@ -55,7 +56,12 @@ test('Announcements - obligatory consent', async ({ newPageFor }) => {
 
     const agreeButton = modal.getByTestId('button-consent-agree').first();
     await expect(agreeButton).toBeVisible();
-    await expect(modal.getByTestId('button-consent-dismiss')).not.toBeVisible();
+    await expect(agreeButton).toBeDisabled();
+
+    const checkbox = modal.getByTestId('checkbox-consent');
+    await expect(checkbox).toBeVisible();
+    await checkbox.click();
+    await expect(agreeButton).toBeEnabled();
 
     await agreeButton.click();
     await userPage.waitForLoadState('networkidle');
@@ -71,8 +77,8 @@ test('Announcements - obligatory consent', async ({ newPageFor }) => {
 
 /**
  * Optional consent (user_needs_to_consent = 1 / "announcement"):
- * - Both agree and dismiss buttons are shown
- * - User can dismiss without formally consenting
+ * - Agree button is shown and enabled immediately (no checkbox required)
+ * - User agrees to close the dialog
  */
 test('Announcements - optional consent', async ({ newPageFor }) => {
   const adminPage = await newPageFor('admin');
@@ -85,18 +91,18 @@ test('Announcements - optional consent', async ({ newPageFor }) => {
     });
   });
 
-  await test.step('User sees dialog with both agree and dismiss buttons', async () => {
+  await test.step('User sees dialog with agree button enabled — no checkbox required', async () => {
     const userPage = await newPageFor('user');
     await navigation.goToHome(userPage);
 
     const modal = userPage.getByRole('dialog');
     await expect(modal).toBeVisible();
 
-    await expect(modal.getByTestId('button-consent-agree').first()).toBeVisible();
-    const dismissButton = modal.getByTestId('button-consent-dismiss').first();
-    await expect(dismissButton).toBeVisible();
+    const agreeButton = modal.getByTestId('button-consent-agree').first();
+    await expect(agreeButton).toBeVisible();
+    await expect(agreeButton).toBeEnabled();
 
-    await dismissButton.click();
+    await agreeButton.click();
     await userPage.waitForLoadState('networkidle');
     await expect(modal).not.toBeVisible();
   });
@@ -124,6 +130,7 @@ test('Announcements - admin delete flow', async ({ newPageFor }) => {
     await navigation.goToHome(adminPage);
     const announcementModal = adminPage.getByRole('dialog');
     await expect(announcementModal).toBeVisible();
+    await announcementModal.getByTestId('checkbox-consent').click();
     await announcementModal.getByTestId('button-consent-agree').first().click();
     await adminPage.waitForLoadState('networkidle');
     await expect(announcementModal).not.toBeVisible();
