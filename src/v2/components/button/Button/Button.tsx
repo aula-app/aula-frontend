@@ -26,9 +26,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       'relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 shadow-xs',
       'text-sm font-medium transition-all duration-200 min-h-11 min-w-11 cursor-pointer',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      dark ? 'text-paper' : 'text-text-secondary',
+      dark ? 'text-paper' : 'text-current',
       outlined
-        ? `border border-${color} text-${color} hover:bg-${color}/10 active:bg-${color}/20`
+        ? `border border-text-${color} text-text-${color} hover:bg-${color}/10 active:bg-${color}/20`
         : text
           ? `text-text-${color} hover:bg-${color}/10 active:bg-${color}/20 shadow-none`
           : `bg-${color} font-bold hover:brightness-90 active:brightness-75`,
