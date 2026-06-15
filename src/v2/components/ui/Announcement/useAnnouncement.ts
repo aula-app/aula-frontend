@@ -29,8 +29,8 @@ export const useAnnouncement = () => {
   }, [location, getData]);
 
   useEffect(() => {
-    const first = announcements[0] ?? null;
-    if (first) {
+    if (announcements.length > 0) {
+      const first = announcements[0];
       if (closeTimer.current) clearTimeout(closeTimer.current);
       setDisplayed(first);
       setIsChecked(false);
