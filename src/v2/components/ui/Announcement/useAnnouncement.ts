@@ -1,10 +1,8 @@
 import { getConsents, giveConsent, MessageConsentType } from '@/services/consent';
 import { useToast } from '@/v2/hooks/useToast';
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-
-const TRANSITION_MS = 300;
 
 export const useAnnouncement = () => {
   const { t } = useTranslation();
@@ -15,7 +13,6 @@ export const useAnnouncement = () => {
   const [displayed, setDisplayed] = useState<MessageConsentType | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bodyId = useId();
 
   const getData = useCallback(async () => {
@@ -30,18 +27,13 @@ export const useAnnouncement = () => {
 
   useEffect(() => {
     if (announcements.length > 0) {
-      const first = announcements[0];
-      if (closeTimer.current) clearTimeout(closeTimer.current);
-      setDisplayed(first);
+      setDisplayed(announcements[0]);
       setIsChecked(false);
       setIsOpen(true);
     } else {
       setIsOpen(false);
-      closeTimer.current = setTimeout(() => setDisplayed(null), TRANSITION_MS);
+      setDisplayed(null);
     }
-    return () => {
-      if (closeTimer.current) clearTimeout(closeTimer.current);
-    };
   }, [announcements]);
 
   const handleAction = async (text_id: number, consent_value: 1 | -1) => {
