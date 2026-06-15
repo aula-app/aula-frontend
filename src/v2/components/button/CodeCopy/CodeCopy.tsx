@@ -25,7 +25,7 @@ const CodeCopy: FC<Omit<React.ComponentProps<typeof Button>, 'outlined' | 'text'
 
   return (
     <Tooltip content={t('v2.ui.code.copy')}>
-      <Button text color="secondary" id="instance-code" type="button" onClick={handleCopy} {...restOfProps}>
+      <Button text id="instance-code" type="button" onClick={handleCopy} {...restOfProps}>
         {`${t('v2.ui.code.button', { var: code })}`}
         <Icon type="copy" />
       </Button>

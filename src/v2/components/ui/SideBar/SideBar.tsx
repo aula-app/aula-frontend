@@ -26,29 +26,28 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         id="sidebar-menu"
         aria-label={t('v2.ui.navigation')}
         aria-modal={menuOpen && isDrawerMode ? true : undefined}
-        className={`flex flex-col z-20 h-full w-56 shrink-0  border-muted border-r overflow-y-auto overflow-x-hidden print:hidden absolute left-0 bg-background transition-transform duration-150 ease-in-out transform-gpu pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}
+        className={`text-muted flex flex-col z-20 h-full w-56 shrink-0  border-muted border-r overflow-y-auto overflow-x-hidden print:hidden absolute left-0 bg-background transition-transform duration-150 ease-in-out transform-gpu pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}
         inert={!menuOpen && isDrawerMode ? '' : undefined}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
       >
         <div data-nav-section="top">
           <CodeCopy className="my-[0.1rem]" />
-          <hr className="mb-1 border-muted" />
+          <hr className="mb-1" />
           <Profile />
         </div>
-        <hr className="mt-1 border-secondary" />
+        <hr className="mt-1" />
         <ul data-nav-section="links" className="flex flex-col flex-1 list-none m-0 my-2">
           {items.map((item) => (
             <li key={item.path} className="mx-2 my-1">
               <Button
                 text
-                color="secondary"
                 to={item.path}
                 aria-current={isActive(item.path) ? 'page' : undefined}
                 className={`w-full justify-start ${isActive(item.path) ? activeClass : ''}`}
               >
                 <Icon type={item.icon} aria-hidden="true" size="1.5rem" />
-                <span className="font-light flex-1 text-left">{t(`ui.navigation.${item.title}`)}</span>
+                <span className="flex-1 text-left">{t(`ui.navigation.${item.title}`)}</span>
                 {item.chip && (
                   <span aria-hidden="true">
                     <item.chip />
@@ -59,14 +58,14 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
           ))}
           <li className="flex-1" aria-hidden="true" />
         </ul>
-        <hr className="my-1 border-secondary" />
+        <hr className="my-1" />
         <div data-nav-section="tools" className="flex shrink-0 items-center justify-around px-2 py-1">
           <DarkModeButton />
           <PrintButton />
           <BugButton />
           <LanguageButton />
         </div>
-        <hr className="my-1 border-secondary" />
+        <hr className="my-1" />
         <div data-nav-section="logout">
           <Logout />
         </div>

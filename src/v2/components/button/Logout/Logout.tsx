@@ -11,7 +11,7 @@ const Logout: FC = (restOfProps) => {
 
   return (
     <Tooltip content={t('v2.ui.logout.label')}>
-      <Button text color="secondary" id="logout-button" type="button" onClick={logout} className="w-full shrink-0" {...restOfProps}>
+      <Button text id="logout-button" type="button" onClick={logout} className="w-full shrink-0" {...restOfProps}>
         {`${t('v2.ui.logout.button')}`}
         <Icon type="logout" />
       </Button>

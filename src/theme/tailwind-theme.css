@@ -21,7 +21,7 @@
 
   /* --- Content / Text --- */
   --color-foreground: hsl(236, 42%, 15%);
-  --color-muted: hsl(215, 15%, 35%);
+  --color-muted: hsl(215, 10%, 30%);
 
   /* --- Brand --- */
   --color-primary: hsl(134, 72%, 67%);
@@ -71,7 +71,7 @@
 
   /* --- Content / Text --- */
   --color-foreground: hsl(215, 20%, 90%);
-  --color-muted: hsl(215, 15%, 75%);
+  --color-muted: hsl(215, 15%, 45%);
 
   /* --- Semantic states --- */
   --color-primary: hsl(134, 55%, 55%);
@@ -113,6 +113,9 @@
 
 /* ========== DARK MODE VARIANT (class-based, matches AppThemeProvider) ========== */
 @variant dark (&:where(.dark, .dark *));
+
+/* Force-include dynamic color utilities used by Button (dynamic template literals aren't scanned) */
+@source inline("bg-primary bg-secondary bg-error text-primary-fg text-secondary-fg text-error-fg border-primary border-secondary border-error focus-visible:outline-primary focus-visible:outline-secondary focus-visible:outline-error");
 
 /* ========== TAILWIND THEME (references the CSS variables above) ========== */
 @theme inline {
