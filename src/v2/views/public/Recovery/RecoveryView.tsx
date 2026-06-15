@@ -41,10 +41,7 @@ const RecoveryPasswordView = () => {
           error={errors.email?.message}
           {...register('email')}
         />
-        <div className="flex items-center justify-between">
-          <Link to="/" className="text-sm text-text-secondary mx-2">
-            {t('v2.ui.button.cancel')}
-          </Link>
+        <div className="flex items-center justify-end">
           <Button type="submit" disabled={isLoading}>
             {t('v2.ui.button.confirm')}
           </Button>

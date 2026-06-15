@@ -11,7 +11,6 @@ import * as navigation from '../../interactions/navigation';
  * 1. Create room → 2. Access room → 3. Delete room → 4. Verify deletion
  */
 test.describe.serial('Room Management - Creation and Permissions', () => {
-
   test('Admin can create/delete a room with user', async ({ seededUser, newPageFor }) => {
     const adminPage = await newPageFor('admin');
     const userPage = await newPageFor('user');
@@ -42,6 +41,6 @@ test.describe.serial('Room Management - Creation and Permissions', () => {
     await navigation.goToRoomsSettings(userPage);
 
     await expect(userPage.getByTestId('add-rooms-button')).not.toBeVisible();
-    await expect(userPage.getByTestId('page-not-found-view')).toBeVisible();
+    await expect(userPage.getByTestId('not-found-view')).toBeVisible();
   });
 });

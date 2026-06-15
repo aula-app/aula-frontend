@@ -58,11 +58,9 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
               'peer block w-full rounded-lg border border-secondary bg-transparent px-3 pt-4 pb-2 shadow-inner',
               'text-sm text-text-primary transition-all duration-200',
               'focus:outline-1 focus:outline-offset-1',
-              'hover:border-input-border-hover',
+              'hover:border-input-border-hover outline-current',
               trailingContent ? 'pr-10' : '',
-              error
-                ? 'border-error focus:outline-error focus:border-error'
-                : 'focus:outline-primary focus:border-primary',
+              error && 'border-error focus:outline-error focus:border-error',
               disabled ? 'cursor-not-allowed opacity-50' : '',
               className
             )}
@@ -77,7 +75,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                 'peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100',
                 'peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75',
                 'peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-75',
-                error ? 'text-error-text peer-focus:text-error-text' : 'text-text-secondary peer-focus:text-primary'
+                error ? 'text-error-text peer-focus:text-error-text' : 'text-text-secondary peer-focus:text-current'
               )}
             >
               {label}

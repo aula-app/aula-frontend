@@ -73,7 +73,9 @@ export const login = async (page: Page, data: { username: string; password: stri
 // Helper function to log out a user
 export const logout = async (page: Page) => {
   await navigation.goToHome(page);
-  await formsInteractions.clickButton(page, 'logout-button');
+  const button = page.locator('#logout-button');
+  await button.hover();
+  await button.click();
   await expect(page.locator('input[name="username"]')).toBeVisible();
 };
 

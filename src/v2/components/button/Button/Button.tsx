@@ -23,10 +23,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       : window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     const classes = twMerge(
-      'relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 shadow-xs border border-transparent',
-      'text-sm font-medium transition-all duration-200 min-h-11 min-w-11',
+      'relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 shadow-xs',
+      'text-sm font-medium transition-all duration-200 min-h-11 min-w-11 cursor-pointer',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      dark ? 'text-paper' : 'text-text-secondary',
+      dark ? 'text-paper' : 'text-current',
       outlined
         ? `border-text-${color} text-text-${color} hover:bg-${color} active:bg-${color}`
         : text
