@@ -37,7 +37,7 @@ test('Announcements - obligatory consent', async ({ newPageFor }) => {
 
   await test.step('Admin also sees own announcement and agrees to it', async () => {
     await navigation.goToHome(adminPage);
-    const modal = adminPage.getByRole('dialog');
+    const modal = adminPage.getByRole('alertdialog');
     await expect(modal).toBeVisible();
     await modal.getByTestId('checkbox-consent').click();
     const agreeButton = modal.getByTestId('button-consent-agree').first();
@@ -51,7 +51,7 @@ test('Announcements - obligatory consent', async ({ newPageFor }) => {
     const userPage = await newPageFor('user');
     await navigation.goToHome(userPage);
 
-    const modal = userPage.getByRole('dialog');
+    const modal = userPage.getByRole('alertdialog');
     await expect(modal).toBeVisible();
 
     const agreeButton = modal.getByTestId('button-consent-agree').first();
@@ -71,7 +71,7 @@ test('Announcements - obligatory consent', async ({ newPageFor }) => {
   await test.step('Student still sees the announcement (per-user consent)', async () => {
     const studentPage = await newPageFor('student');
     await navigation.goToHome(studentPage);
-    await expect(studentPage.getByRole('dialog')).toBeVisible();
+    await expect(studentPage.getByRole('alertdialog')).toBeVisible();
   });
 });
 
@@ -128,7 +128,7 @@ test('Announcements - admin delete flow', async ({ newPageFor }) => {
     // goToHome always navigates, triggering the Announcement component to refetch.
     // goToAnnouncementsSettings would short-circuit (already on that URL) and the dialog would never appear.
     await navigation.goToHome(adminPage);
-    const announcementModal = adminPage.getByRole('dialog');
+    const announcementModal = adminPage.getByRole('alertdialog');
     await expect(announcementModal).toBeVisible();
     await announcementModal.getByTestId('checkbox-consent').click();
     await announcementModal.getByTestId('button-consent-agree').first().click();
@@ -154,6 +154,6 @@ test('Announcements - admin delete flow', async ({ newPageFor }) => {
   await test.step('Student does not see the announcement after deletion', async () => {
     const studentPage = await newPageFor('student');
     await navigation.goToProfile(studentPage);
-    await expect(studentPage.getByRole('dialog')).not.toBeVisible();
+    await expect(studentPage.getByRole('alertdialog')).not.toBeVisible();
   });
 });
