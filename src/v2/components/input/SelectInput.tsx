@@ -80,7 +80,10 @@ const SelectInput = ({
         break;
       case 'ArrowDown':
         e.preventDefault();
-        if (!open) { openDropdown(); break; }
+        if (!open) {
+          openDropdown();
+          break;
+        }
         setFocusedIndex((i) => Math.min(i + 1, options.length - 1));
         break;
       case 'ArrowUp':
@@ -113,15 +116,10 @@ const SelectInput = ({
           onKeyDown={handleKeyDown}
           className={[
             'peer block w-full rounded-lg border border-input-border bg-transparent px-3 pt-4 pb-2 pr-10 shadow-inner',
-            'text-sm text-left text-foreground transition-all duration-200',
-            'focus:outline-1 focus:outline-offset-1',
+            'text-sm text-left text-foreground transition-colors duration-200',
             'hover:border-input-border-hover',
             'disabled:cursor-not-allowed disabled:opacity-50',
-            error
-              ? 'border-error focus:outline-error focus:border-error'
-              : 'focus:outline-primary focus:border-primary',
-            open && !error ? 'border-primary outline-1 outline-offset-1 outline-primary' : '',
-            open && error ? 'border-error outline-1 outline-offset-1 outline-error' : '',
+            'border-current outline-2 outline-current',
             className,
           ]
             .filter(Boolean)
@@ -137,20 +135,16 @@ const SelectInput = ({
             htmlFor={inputId}
             className={[
               'pointer-events-none absolute left-3 origin-left text-sm transition-all duration-200 bg-background px-0.5',
-              hasValue || open
-                ? 'top-0 -translate-y-1/2 scale-75'
-                : 'top-1/2 -translate-y-1/2 scale-100',
-              error
-                ? 'text-error-fg'
-                : open
-                  ? 'text-primary'
-                  : 'text-muted',
+              hasValue || open ? 'top-0 -translate-y-1/2 scale-75' : 'top-1/2 -translate-y-1/2 scale-100',
+              error ? 'text-error-fg' : open ? 'text-primary' : 'text-muted',
             ].join(' ')}
           >
             {label}
             {required && (
               <>
-                <span aria-hidden="true" className="ml-0.5">*</span>
+                <span aria-hidden="true" className="ml-0.5">
+                  *
+                </span>
                 <span className="sr-only">(required)</span>
               </>
             )}
@@ -176,7 +170,10 @@ const SelectInput = ({
                 key={option.value}
                 role="option"
                 aria-selected={option.value === value}
-                onMouseDown={(e) => { e.preventDefault(); select(option.value); }}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  select(option.value);
+                }}
                 onMouseEnter={() => setFocusedIndex(i)}
                 className={[
                   'px-3 py-2 text-sm cursor-pointer transition-colors duration-100',
@@ -203,7 +200,7 @@ const SelectInput = ({
               {error}
             </span>
           ) : (
-            <span id={helperId} className="block pt-1 px-1 text-xs text-secondary">
+            <span id={helperId} className="block pt-1 px-1 text-xs text-muted">
               {helperText}
             </span>
           )}

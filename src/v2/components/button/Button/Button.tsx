@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, ReactNode, forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-type BaseButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
+type BaseButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement | HTMLAnchorElement>, 'children'> & {
   color?: 'primary' | 'secondary' | 'error';
   to?: string;
 };
@@ -16,29 +16,31 @@ type ButtonProps = BaseButtonProps &
   ({ children: ReactNode; 'aria-label'?: string } | { children?: never; 'aria-label': string });
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, children, outlined = false, text = false, color = 'primary', onMouseDown, to, ...props }, ref) => {
+  ({ className, children, outlined = false, text = false, color, onMouseDown, to, ...props }, ref) => {
     const { createRipple, RipplesContainer } = useRipple();
-    const dark = localStorage.getItem('darkMode')
-      ? localStorage.getItem('darkMode') === 'true'
-      : window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     const classes = twMerge(
       'relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 shadow-xs',
-      'text-sm font-medium transition-all duration-200 min-h-11 min-w-11',
+      'text-sm font-medium transition-colors duration-200 min-h-11 min-w-11 cursor-pointer hover:bg-shadow active:bg-shadow',
+      `outline-${color || 'current'}`,
       'disabled:cursor-not-allowed disabled:opacity-50',
-      dark ? 'text-background' : 'text-muted',
       outlined
-        ? `border border-${color} text-${color} hover:bg-${color}/10 active:bg-${color}/20`
+        ? color
+          ? `border border-${color} text-${color}-fg`
+          : 'border border-current text-current'
         : text
-          ? `text-text-${color} hover:bg-${color}/10 active:bg-${color}/20 shadow-none`
-          : `bg-${color} font-bold hover:brightness-90 active:brightness-75`,
-      `focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-${color}`,
+          ? color
+            ? `text-${color}-fg shadow-none`
+            : 'text-current shadow-none'
+          : color
+            ? `bg-${color} text-${color}-fg font-bold`
+            : 'bg-primary text-primary-fg font-bold',
       className
     );
 
     if (to) {
       return (
-        <Link to={to} className={classes} onMouseDown={createRipple}>
+        <Link to={to} className={classes} onMouseDown={createRipple} {...props}>
           {children}
           <RipplesContainer />
         </Link>

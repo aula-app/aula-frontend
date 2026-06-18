@@ -35,14 +35,15 @@ const SidebarProfile: FC = () => {
     });
   }, [user?.hash_id]);
 
+  if (!user) return null;
+
   return (
     <Button
       text
-      color="secondary"
       to={PROFILE_PATH}
       aria-current={isActive ? 'page' : undefined}
       aria-label={t('ui.navigation.profile')}
-      className={twMerge('w-full shrink-0 justify-start gap-3 px-3', isActive && 'bg-shadow font-semibold')}
+      className={twMerge('shrink-0 justify-start gap-3 mx-2 my-2 p-0', isActive && 'bg-shadow font-semibold')}
     >
       <span
         className="shrink-0 size-10 rounded-full bg-secondary/30 overflow-hidden flex items-center justify-center"
@@ -51,22 +52,13 @@ const SidebarProfile: FC = () => {
         {avatarSrc ? (
           <img src={avatarSrc} alt="" className="size-full object-cover" />
         ) : (
-          <span className="text-lg font-bold text-muted select-none">
-            {user?.username?.[0]?.toUpperCase() ?? '?'}
-          </span>
+          <span className="text-lg font-bold text-muted select-none">{user?.username?.[0]?.toUpperCase() ?? '?'}</span>
         )}
       </span>
-      {user ? (
-        <span className="flex flex-col items-start min-w-0 overflow-hidden">
-          <span className="text-xl font-semibold truncate w-full">{user.username}</span>
-          <span className="text-sm font-light text-text-secondary truncate w-full">{user.displayname}</span>
-        </span>
-      ) : (
-        <span className="flex flex-col gap-1 flex-1">
-          <span className="h-3 w-24 rounded bg-secondary/30 animate-pulse" aria-hidden="true" />
-          <span className="h-2 w-16 rounded bg-secondary/20 animate-pulse" aria-hidden="true" />
-        </span>
-      )}
+      <span className="flex flex-col items-start min-w-0 overflow-hidden">
+        <span className="text-xl font-semibold truncate w-full">{user.displayname}</span>
+        <span className="text-sm text-muted truncate w-full">{user.username}</span>
+      </span>
     </Button>
   );
 };

@@ -14,8 +14,7 @@ type LinkProps = (BaseRouterLinkProps | BaseAnchorProps) & { disabled?: boolean 
     | { children?: never; 'aria-label': string }
   );
 
-const linkClass =
-  'text-foreground rounded-lg underline-offset-2 hover:underline focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-foreground';
+const linkClass = 'text-foreground rounded-lg underline-offset-2 hover:underline';
 
 const Link = forwardRef<HTMLAnchorElement, LinkProps>(({ className, ...props }, ref) => {
   const classes = twMerge(linkClass, className);

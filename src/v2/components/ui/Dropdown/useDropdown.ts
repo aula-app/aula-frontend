@@ -34,7 +34,22 @@ export const useDropdown = () => {
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { close(); focusTrigger(); }
+      if (e.key === 'Escape') { close(); focusTrigger(); return; }
+
+      if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
+      e.preventDefault();
+
+      const panel = wrapperRef.current?.querySelector<HTMLElement>('[role="listbox"]');
+      const items = Array.from(
+        panel?.querySelectorAll<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])') ?? []
+      );
+      if (!items.length) return;
+
+      const idx = items.indexOf(document.activeElement as HTMLElement);
+      if (e.key === 'ArrowDown') items[(idx + 1) % items.length]?.focus();
+      else if (e.key === 'ArrowUp') items[(idx - 1 + items.length) % items.length]?.focus();
+      else if (e.key === 'Home') items[0]?.focus();
+      else if (e.key === 'End') items[items.length - 1]?.focus();
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
