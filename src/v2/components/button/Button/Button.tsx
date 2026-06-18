@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, ReactNode, forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
-type BaseButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
+type BaseButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement | HTMLAnchorElement>, 'children'> & {
   color?: 'primary' | 'secondary' | 'error';
   to?: string;
 };
@@ -21,8 +21,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const classes = twMerge(
       'relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 shadow-xs',
-      'text-sm font-medium transition-all duration-200 min-h-11 min-w-11 cursor-pointer hover:bg-shadow active:bg-shadow',
-      `outline-${color || 'current'} focus-visible:outline-2 focus-visible:outline-offset-1`,
+      'text-sm font-medium transition-colors duration-200 min-h-11 min-w-11 cursor-pointer hover:bg-shadow active:bg-shadow',
+      `outline-${color || 'current'} focus-visible:outline-2`,
       'disabled:cursor-not-allowed disabled:opacity-50',
       outlined
         ? color

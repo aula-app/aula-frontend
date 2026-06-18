@@ -56,11 +56,11 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             placeholder=" "
             className={twMerge(
               'peer block w-full rounded-lg border border-input-border bg-transparent px-3 pt-4 pb-2 shadow-inner',
-              'text-sm text-foreground transition-all duration-200',
-              'focus:outline-1 focus:outline-offset-1',
-              'hover:border-input-border-hover outline-current',
+              'text-sm text-foreground transition-colors duration-200',
+              'focus:outline',
+              'hover:border-input-border-hover',
               trailingContent ? 'pr-10' : '',
-              error && 'border-error focus:outline-error focus:border-error',
+              error ? 'border-error outline-error focus:border-error' : 'outline-current focus:border-current',
               disabled ? 'cursor-not-allowed opacity-50' : '',
               className
             )}
