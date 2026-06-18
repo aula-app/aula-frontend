@@ -31,11 +31,9 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         tabIndex={-1}
         onKeyDown={handleKeyDown}
       >
-        <div data-nav-section="top">
-          <CodeCopy className="my-[0.1rem]" />
-          <hr className="mb-1" />
-          <Profile />
-        </div>
+        <CodeCopy />
+        <hr className="mb-1" />
+        <Profile />
         <hr className="mt-1" />
         <ul data-nav-section="links" className="flex flex-col flex-1 list-none m-0 my-2">
           {items.map((item) => (
@@ -66,7 +64,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
           <LanguageButton />
         </div>
         <hr className="my-1" />
-        <div data-nav-section="logout">
+        <div data-nav-section="logout" className="px-2 py-1">
           <Logout />
         </div>
       </nav>

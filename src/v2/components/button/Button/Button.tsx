@@ -22,7 +22,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const classes = twMerge(
       'relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 shadow-xs',
       'text-sm font-medium transition-all duration-200 min-h-11 min-w-11 cursor-pointer hover:bg-shadow active:bg-shadow',
-      `outline-${color || 'primary'} focus-visible:outline-2 focus-visible:outline-offset-1`,
+      `outline-${color || 'current'} focus-visible:outline-2 focus-visible:outline-offset-1`,
       'disabled:cursor-not-allowed disabled:opacity-50',
       outlined
         ? color
@@ -40,7 +40,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     if (to) {
       return (
-        <Link to={to} className={classes} onMouseDown={createRipple}>
+        <Link to={to} className={classes} onMouseDown={createRipple} {...props}>
           {children}
           <RipplesContainer />
         </Link>

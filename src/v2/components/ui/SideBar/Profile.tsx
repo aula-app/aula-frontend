@@ -43,7 +43,7 @@ const SidebarProfile: FC = () => {
       to={PROFILE_PATH}
       aria-current={isActive ? 'page' : undefined}
       aria-label={t('ui.navigation.profile')}
-      className={twMerge('w-full shrink-0 justify-start gap-3 px-3', isActive && 'bg-shadow font-semibold')}
+      className={twMerge('shrink-0 justify-start gap-3 mx-2 my-2 p-0', isActive && 'bg-shadow font-semibold')}
     >
       <span
         className="shrink-0 size-10 rounded-full bg-secondary/30 overflow-hidden flex items-center justify-center"
