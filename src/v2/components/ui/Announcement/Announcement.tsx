@@ -46,10 +46,7 @@ const Announcement = () => {
             helperText={consentLevel === 2 ? t('v2.ui.announcement.helper') : undefined}
             disabled={isSubmitting}
             data-testid="checkbox-consent"
-            onChange={(e) => {
-              setIsChecked(e.target.checked);
-              if (consentLevel !== 2) handleAction(displayed.id, -1);
-            }}
+            onChange={(e) => setIsChecked(e.target.checked)}
           />
         </div>
       )}
@@ -60,7 +57,7 @@ const Announcement = () => {
           type="button"
           disabled={isSubmitting || (consentLevel === 2 && !isChecked)}
           aria-busy={isSubmitting}
-          onClick={() => handleAction(displayed.id, 1)}
+          onClick={() => handleAction(displayed.id, consentLevel > 0 && !isChecked ? -1 : 1)}
           data-testid="button-consent-agree"
         >
           {t('v2.ui.announcement.button')}
