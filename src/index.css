@@ -5,10 +5,9 @@
 @import "./theme/tailwind-theme.css";
 
 /* Force-include dynamic Button color classes that Tailwind can't detect statically */
-@source inline("{bg,text,border}-{primary,secondary,error}");
+@source inline("{bg,text,border,outline}-{primary,secondary,error}");
 @source inline("{text,border}-error-fg");
 @source inline("{hover,active}:bg-{primary,secondary,error}/{10,20}");
-@source inline("focus-visible:outline-{primary,secondary,error}");
 
 /* Semantic status colors + text variants */
 @source inline("{bg,text,border}-{error,warning,info,success}");
@@ -70,6 +69,12 @@
   --safe-area-inset-right: env(safe-area-inset-right);
   --safe-area-inset-bottom: env(safe-area-inset-bottom);
   --safe-area-inset-left: env(safe-area-inset-left);
+}
+
+@layer base {
+  :focus-visible {
+    @apply outline-2 outline-current;
+  }
 }
 
 html, body, #root {

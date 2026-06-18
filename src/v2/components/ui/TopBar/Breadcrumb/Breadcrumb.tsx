@@ -99,7 +99,7 @@ const Breadcrumb: React.FC = () => {
               key={index}
               to={item[1]}
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-shadow truncate transition-colors rounded-lg focus-visible:outline-2 focus-visible:outline-secondary"
+              className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-shadow truncate transition-colors rounded-lg"
               role="menuitem"
               tabIndex={isOpen ? 0 : -1}
             >

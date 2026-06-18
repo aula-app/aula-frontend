@@ -117,7 +117,6 @@ const SelectInput = ({
           className={[
             'peer block w-full rounded-lg border border-input-border bg-transparent px-3 pt-4 pb-2 pr-10 shadow-inner',
             'text-sm text-left text-foreground transition-colors duration-200',
-            'focus:outline',
             'hover:border-input-border-hover',
             'disabled:cursor-not-allowed disabled:opacity-50',
             'border-current outline-2 outline-current',
