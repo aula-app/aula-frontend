@@ -1,3 +1,5 @@
+import { useLayoutEffect, useState } from 'react';
+
 export type XZone = 'left' | 'center' | 'right';
 export type YZone = 'top' | 'middle' | 'bottom';
 
@@ -59,6 +61,13 @@ const horizontalClasses: Record<XZone, string> = {
 
 /** Shared placement hook: returns zones and all position classes. */
 export function usePlacement(ref: { current: HTMLElement | null }) {
+  // `ref.current` is null on the first render (the ref attaches after the DOM mounts), so the
+  // measurement below would fall back to a zeroed DOMRect and misplace the panel below the trigger.
+  // Force one re-measure in a layout effect — after the ref is attached but before paint — so the
+  // placement is correct on first paint instead of only after a later re-render.
+  const [, remeasure] = useState(0);
+  useLayoutEffect(() => remeasure((n) => n + 1), []);
+
   const el = ref.current;
   const rect = el?.getBoundingClientRect() ?? new DOMRect();
   const container = getClippingRect(el ?? document.body);

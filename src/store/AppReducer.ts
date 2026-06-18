@@ -1,6 +1,11 @@
 import { localStorageSet } from '@/utils';
 import { AppStoreState, ToastMessage } from './AppStore';
 
+// Session-unique id for local UI state (e.g. toasts). Avoids crypto.randomUUID(),
+// which is unavailable in non-secure contexts (e.g. testing over the local network).
+let toastSeq = 0;
+const nextToastId = () => `toast-${Date.now().toString(36)}-${(toastSeq++).toString(36)}`;
+
 /**
  * Reducer for global AppStore using "Redux styled" actions
  * @param {object} state - current/default state
@@ -64,7 +69,7 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
       };
     }
     case 'ADD_TOAST': {
-      const incoming: ToastMessage = { ...action?.message, id: crypto.randomUUID() };
+      const incoming: ToastMessage = { ...action?.message, id: nextToastId() };
       // Prevent duplicate messages (same text + type)
       if (state.toasts.find((m) => m.message === incoming.message && m.type === incoming.type)) {
         return state;

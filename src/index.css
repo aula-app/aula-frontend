@@ -5,9 +5,9 @@
 @import "./theme/tailwind-theme.css";
 
 /* Force-include dynamic Button color classes that Tailwind can't detect statically */
-@source inline("{bg,text,border}-{primary,secondary,error}");
+@source inline("{bg,text,border,outline}-{primary,secondary,error}");
+@source inline("{text,border}-error-fg");
 @source inline("{hover,active}:bg-{primary,secondary,error}/{10,20}");
-@source inline("focus-visible:outline-{primary,secondary,error}");
 
 /* Semantic status colors + text variants */
 @source inline("{bg,text,border}-{error,warning,info,success}");
@@ -71,10 +71,16 @@
   --safe-area-inset-left: env(safe-area-inset-left);
 }
 
+@layer base {
+  :focus-visible {
+    @apply outline-2 outline-current;
+  }
+}
+
 html, body, #root {
-  height: 100vh;
-  color: var(--color-text-primary);
-  background-color: var(--color-paper);
+  height: 100dvh;
+  color: var(--color-foreground);
+  background-color: var(--color-background);
   margin: 0;
   padding: 0;
 }
@@ -89,13 +95,26 @@ button, [role="button"], a, label, [role="menuitem"], [role="option"] {
   min-height: unset;
 }
 
+/* Prevent iOS auto-zoom on input focus (triggered when font-size < 16px) */
+input, select, textarea {
+  font-size: max(16px, 1em);
+}
+
+/* Older iOS WebKit bug: placeholder renders at a different line-height than typed text, causing overlap */
+input::placeholder,
+textarea::placeholder,
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  line-height: normal;
+}
+
 code {
   font-family: 'Inconsolata', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Nunito Sans';
-  @apply font-black my-2;
+  @apply font-black;
 }
 
 h1 {
