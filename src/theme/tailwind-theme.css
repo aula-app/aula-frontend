@@ -71,11 +71,11 @@
 
   /* --- Content / Text --- */
   --color-foreground: hsl(215, 20%, 90%);
-  --color-muted: hsl(215, 15%, 45%);
+  --color-muted: hsl(215, 15%, 75%);
 
   /* --- Semantic states --- */
   --color-primary: hsl(134, 55%, 55%);
-  --color-secondary: hsl(215, 12%, 55%);
+  --color-secondary: hsl(215, 12%, 65%);
 
   --color-error: hsl(0, 40%, 22%);
   --color-error-fg: hsl(0, 80%, 75%);
