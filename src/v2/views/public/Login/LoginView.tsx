@@ -66,7 +66,9 @@ const LoginView: React.FC = () => {
             error={codeError}
             isEditing={isEditing}
             onEditClick={startEditing}
-            onConfirmClick={() => { validateCode(); }}
+            onConfirmClick={() => {
+              validateCode();
+            }}
             disabled={isLoading || codeLoading}
           />
         )}

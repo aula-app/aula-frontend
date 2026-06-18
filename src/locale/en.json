@@ -58,7 +58,7 @@
       },
       "login": {
         "button": "Sign in",
-        "link": "Back to Sign in",
+        "link": "Back to sign in",
         "title": "Welcome to {{var}}"
       },
       "notFound": {

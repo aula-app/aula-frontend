@@ -6,10 +6,10 @@ import Icon, { ICON_TYPE } from '../Icon';
 import IconButton from '../../button/IconButton';
 
 const TOAST_STYLES: Record<ToastMessage['type'], string> = {
-  error: 'bg-error text-error-text',
-  success: 'bg-success text-success-text',
-  warning: 'bg-warning text-warning-text',
-  info: 'bg-info text-info-text',
+  error: 'bg-error text-error-fg',
+  success: 'bg-success text-success-fg',
+  warning: 'bg-warning text-warning-fg',
+  info: 'bg-info text-info-fg',
 };
 
 const TOAST_ICONS: Record<ToastMessage['type'], ICON_TYPE> = {
@@ -125,7 +125,7 @@ const Toast = () => {
       <div
         role="region"
         aria-label="Notifications"
-        className="fixed top-4 right-4 z-50 flex flex-col pointer-events-none"
+        className="fixed top-[calc(1rem+env(safe-area-inset-top))] right-[calc(1rem+env(safe-area-inset-right))] z-50 flex flex-col pointer-events-none"
       >
         {state.toasts.map((toast) => {
           const isExiting = exitingIds.has(toast.id);

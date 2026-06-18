@@ -5,6 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   // single test timeout (base.describe.serial -> **test** -> test.step)
+  // quite large due to some tests having many steps
   timeout: 180_000,
   expect: {
     timeout: 15_000,
@@ -18,7 +19,7 @@ export default defineConfig({
 
   use: {
     // Performance: Only keep traces/screenshots on failure
-    trace: 'on', //'retain-on-failure',
+    trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'on-first-retry',
 
@@ -47,49 +48,16 @@ export default defineConfig({
   globalTeardown: './tests/lifecycle/teardown-auth.ts',
 
   // Set a global maximum of workers so that we initialize DB with correct amount of tenants
-  // See docker-compose.e2e.yml for more info
+  // See docker-compose.e2e.yml (backend-setup) for more info
   workers: 3,
 
   projects: [
-    // ── 1. core (parallel) ────────────────────────────────────────────────────
-    // All remaining core specs. Each worker has its own DB, and reseeds it for each test case.
     {
-      name: 'core',
-      testDir: './tests/specs/core',
+      name: 'all',
+      testDir: './tests/specs',
       testIgnore: ['**/disabled/**'],
       use: { ...devices['Desktop Chrome'] },
       workers: 3,
-    },
-
-    // ── 2. instance-offline ────────────────────────────────────────────────────
-    // Flips a global instance flag that breaks every other test while active.
-    // Runs after core so it doesn't block the main suite; uses db000 exclusively.
-    {
-      name: 'offline',
-      testDir: './tests/specs/offline',
-      use: { ...devices['Desktop Chrome'] },
-      workers: 1,
-    },
-
-    // ── 3. admin ──────────────────────────────────────────────────────────────
-    // Admin-only specs that modify global configuration.
-    // Depends on both core and offline to avoid db000 conflicts.
-    {
-      name: 'admin',
-      testDir: './tests/specs/admin',
-      testIgnore: '**/disabled/**',
-      use: { ...devices['Desktop Chrome'] },
-      workers: 1,
-      dependencies: ['core', 'offline'],
-    },
-
-    // ── 5. v2 ─────────────────────────────────────────────────────────────────
-    // V2 UI specs — no auth required for public routes (login page, etc.)
-    {
-      name: 'v2',
-      testDir: './tests/specs/v2',
-      use: { ...devices['Desktop Chrome'] },
-      workers: 1,
     },
   ],
 });

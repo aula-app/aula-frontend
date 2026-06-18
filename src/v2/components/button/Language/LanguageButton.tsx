@@ -14,8 +14,7 @@ const LanguageButton = () => {
     i18n.changeLanguage(lang);
   };
 
-  const getNativeName = (lang: string) =>
-    new Intl.DisplayNames([lang], { type: 'language' }).of(lang);
+  const getNativeName = (lang: string) => new Intl.DisplayNames([lang], { type: 'language' }).of(lang);
 
   return (
     <Dropdown
@@ -26,7 +25,7 @@ const LanguageButton = () => {
           role="option"
           aria-selected={lang === currentLang}
           onClick={() => selectLanguage(lang)}
-          className={`flex w-full items-center justify-between px-4 py-2 first:rounded-t-2xl last:rounded-b-2xl hover:bg-shadow cursor-pointer focus-visible:outline-2 focus-visible:outline-secondary ${lang === currentLang ? 'bg-shadow' : ''}`}
+          className={`flex w-full items-center justify-between px-4 py-2 first:rounded-t-2xl last:rounded-b-2xl hover:bg-shadow cursor-pointer ${lang === currentLang ? 'bg-shadow' : ''}`}
         >
           <span lang={lang}>{getNativeName(lang)}</span>
         </button>
