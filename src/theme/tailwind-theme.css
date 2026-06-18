@@ -77,32 +77,32 @@
   --color-primary: hsl(134, 55%, 55%);
   --color-secondary: hsl(215, 12%, 65%);
 
-  --color-error: hsl(0, 40%, 22%);
+  --color-error: hsl(0, 40%, 52%);
   --color-error-fg: hsl(0, 80%, 75%);
 
-  --color-warning: hsl(45, 40%, 20%);
+  --color-warning: hsl(45, 40%, 50%);
   --color-warning-fg: hsl(35, 85%, 70%);
 
-  --color-info: hsl(204, 40%, 22%);
+  --color-info: hsl(204, 40%, 52%);
   --color-info-fg: hsl(204, 75%, 72%);
 
-  --color-success: hsl(134, 30%, 20%);
+  --color-success: hsl(134, 30%, 50%);
   --color-success-fg: hsl(134, 60%, 65%);
 
   /* --- Phases --- */
-  --color-wild: hsl(210, 45%, 28%);
+  --color-wild: hsl(210, 45%, 58%);
   --color-wild-active: hsl(210, 75%, 55%);
 
-  --color-discussion: hsl(270, 32%, 30%);
+  --color-discussion: hsl(270, 32%, 50%);
   --color-discussion-active: hsl(270, 55%, 58%);
 
-  --color-approval: hsl(25, 48%, 30%);
+  --color-approval: hsl(25, 48%, 50%);
   --color-approval-active: hsl(25, 80%, 55%);
 
-  --color-voting: hsl(45, 50%, 28%);
+  --color-voting: hsl(45, 50%, 50%);
   --color-voting-active: hsl(45, 90%, 55%);
 
-  --color-results: hsl(134, 32%, 26%);
+  --color-results: hsl(134, 32%, 50%);
   --color-results-active: hsl(134, 55%, 50%);
 
   /* --- Utility --- */

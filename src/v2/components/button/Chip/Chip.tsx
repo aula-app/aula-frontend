@@ -32,7 +32,7 @@ const Chip = ({
         'relative overflow-hidden inline-flex items-center justify-center whitespace-nowrap transition-[background-color] duration-200 ease-in-out cursor-pointer',
         condensed ? 'p-1 px-2' : 'p-1 px-3',
         'rounded-full hover:bg-shadow focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-muted',
-        className ?? 'bg-background text-muted'
+        className ?? 'bg-surface text-muted'
       )}
       onMouseDown={(e) => {
         createRipple(e);

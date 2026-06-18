@@ -20,7 +20,7 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
         <nav className="flex items-center" aria-label={t('v2.ui.a11y.navigation')}>
           <div className="flex-1">
             {location.pathname !== '/' && (
-              <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted">
+              <Link to="/" className="inline-flex items-center gap-1 py-1 text-sm text-muted">
                 <Icon type="back" size="1em" />
                 {t('v2.page.login.link')}
               </Link>
