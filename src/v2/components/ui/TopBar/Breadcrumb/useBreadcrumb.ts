@@ -1,6 +1,8 @@
 import { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
 import { useAppStore } from '@/store/AppStore';
+import { FocusEvent, KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export type BreadcrumbNavItem = [string, string];
 
@@ -8,6 +10,11 @@ export const useBreadcrumb = () => {
   const { t } = useTranslation();
   const [appState] = useAppStore();
   const { breadcrumb } = appState;
+  const goto = useNavigate();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const isPhaseUrl = (url: string) => /\/phase\/\d+$/.test(url);
   const filteredBreadcrumbs = breadcrumb.filter((item, index) => index === 0 || !isPhaseUrl(item[1]));
@@ -35,5 +42,66 @@ export const useBreadcrumb = () => {
     ...filteredBreadcrumbs.slice(0, -1),
   ];
 
-  return { isEmpty, currentPage, navItems, getIconForBreadcrumb };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
+
+  const handleToggle = () => {
+    if (navItems.length <= 1) {
+      goto('/');
+      return;
+    }
+    setIsOpen((prev) => !prev);
+  };
+
+  const handleMenuKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
+    const items = itemRefs.current.filter(Boolean) as HTMLAnchorElement[];
+    const currentIndex = items.indexOf(document.activeElement as HTMLAnchorElement);
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      setIsOpen(false);
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      items[currentIndex < items.length - 1 ? currentIndex + 1 : 0]?.focus();
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      items[currentIndex > 0 ? currentIndex - 1 : items.length - 1]?.focus();
+    } else if (event.key === 'Home') {
+      event.preventDefault();
+      items[0]?.focus();
+    } else if (event.key === 'End') {
+      event.preventDefault();
+      items[items.length - 1]?.focus();
+    }
+  }, []);
+
+  const handleFocusOut = (event: FocusEvent<HTMLElement>) => {
+    if (!dropdownRef.current?.contains(event.relatedTarget as Node)) {
+      setIsOpen(false);
+    }
+  };
+
+  const closeMenu = () => setIsOpen(false);
+
+  return {
+    isEmpty,
+    currentPage,
+    navItems,
+    getIconForBreadcrumb,
+    isOpen,
+    dropdownRef,
+    itemRefs,
+    handleToggle,
+    handleMenuKeyDown,
+    handleFocusOut,
+    closeMenu,
+  };
 };
