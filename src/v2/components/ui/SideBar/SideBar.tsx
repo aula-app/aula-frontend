@@ -29,7 +29,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         id="sidebar-menu"
         aria-label={t('v2.ui.navigation')}
         aria-modal={menuOpen && isDrawerMode ? true : undefined}
-        className={`flex flex-col w-full max-w-56 shrink-0 border-muted border-r bg-background transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+        className={`flex flex-col w-full min-h-full max-w-56 shrink-0 border-muted border-r bg-background transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
         inert={!menuOpen && isDrawerMode ? '' : undefined}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
