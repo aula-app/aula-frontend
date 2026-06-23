@@ -95,7 +95,7 @@ const LoginView: React.FC = () => {
         </Link>
       </div>
 
-      {(config.IS_OAUTH_ENABLED || config.IS_SSO_ENABLED) && (
+      {config.IS_SSO_ENABLED && (
         <>
           <div className="flex items-center gap-2 text-muted">
             <div className="flex-1 border-t border-current" />
@@ -103,28 +103,15 @@ const LoginView: React.FC = () => {
             <div className="flex-1 border-t border-current" />
           </div>
           <div className="flex flex-col gap-2 items-center">
-            {config.IS_OAUTH_ENABLED && (
-              <Button
-                outlined
-                color="secondary"
-                onClick={() => (window.location.href = '/api/controllers/login_oauth.php')}
-                disabled={isLoading || isSsoLoading}
-                aria-label={t('auth.oauth.arialabel')}
-              >
-                {t('auth.oauth.button')}
-              </Button>
-            )}
-            {config.IS_SSO_ENABLED && (
-              <Button
-                outlined
-                color="secondary"
-                onClick={handleSsoLogin}
-                disabled={isLoading || isSsoLoading}
-                aria-label={t('auth.sso.arialabel')}
-              >
-                {t('auth.sso.button')}
-              </Button>
-            )}
+            <Button
+              outlined
+              color="secondary"
+              onClick={handleSsoLogin}
+              disabled={isLoading || isSsoLoading}
+              aria-label={t('auth.sso.arialabel')}
+            >
+              {t('auth.sso.button')}
+            </Button>{' '}
           </div>
         </>
       )}

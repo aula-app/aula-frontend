@@ -20,7 +20,8 @@ const CodeCopy: FC<Omit<React.ComponentProps<typeof Button>, 'outlined' | 'text'
     return null;
   }
 
-  const handleCopy = () => {
+  const handleCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     navigator.clipboard
       .writeText(code)
       .then(() => toast.success(t('v2.ui.code.success')))

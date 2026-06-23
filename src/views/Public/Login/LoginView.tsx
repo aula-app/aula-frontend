@@ -120,9 +120,9 @@ const LoginView = () => {
         setSsoLinkToken(null);
       }
 
-      localStorageSet("token", response.JWT);
-      dispatch({ type: "LOG_IN" });
-      navigate("/", { replace: true });
+      localStorageSet('token', response.JWT);
+      dispatch({ type: 'LOG_IN' });
+      navigate('/', { replace: true });
     } catch (e) {
       setLoading(false);
       if (e instanceof Error) {
@@ -154,13 +154,16 @@ const LoginView = () => {
 
   useEffect(() => {
     const ssoError = searchParams.get('sso_error');
-    const ssoLink  = searchParams.get('sso_link');
+    const ssoLink = searchParams.get('sso_link');
 
     if (ssoError === 'account_link_required' && ssoLink) {
       setSsoLinkToken(ssoLink);
-      setLinkBanner(t('errors.sso.account_link_required', {
-        defaultValue: 'We found an existing account for the email returned by your SSO provider. Log in once with your aula password to link the accounts; future SSO logins will go through directly.',
-      }));
+      setLinkBanner(
+        t('errors.sso.account_link_required', {
+          defaultValue:
+            'We found an existing account for the email returned by your SSO provider. Log in once with your aula password to link the accounts; future SSO logins will go through directly.',
+        })
+      );
       return;
     }
 
@@ -280,7 +283,7 @@ const LoginView = () => {
           </Button>
         </Grid>
 
-        {(config.IS_OAUTH_ENABLED || config.IS_SSO_ENABLED) && (
+        {config.IS_SSO_ENABLED && (
           <>
             <Stack direction="row" mb={2} alignItems="center">
               <Divider sx={{ flex: 1 }} />
@@ -290,28 +293,15 @@ const LoginView = () => {
               <Divider sx={{ flex: 1 }} />
             </Stack>
             <Stack direction="column" gap={1} mb={2} alignItems="center">
-              {config.IS_OAUTH_ENABLED && (
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => (window.location.href = '/api/controllers/login_oauth.php')}
-                  disabled={isLoading || isSsoLoading}
-                  aria-label={t('auth.oauth.arialabel')}
-                >
-                  {t('auth.oauth.button')}
-                </Button>
-              )}
-              {config.IS_SSO_ENABLED && (
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={handleSsoLogin}
-                  disabled={isLoading || isSsoLoading}
-                  aria-label={t('auth.sso.arialabel')}
-                >
-                  {t('auth.sso.button')}
-                </Button>
-              )}
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleSsoLogin}
+                disabled={isLoading || isSsoLoading}
+                aria-label={t('auth.sso.arialabel')}
+              >
+                {t('auth.sso.button')}
+              </Button>
             </Stack>
           </>
         )}
