@@ -58,6 +58,7 @@ const IdeasBoxView = () => {
       { value: 'displayname', labelKey: 'settings.columns.displayname' },
       { value: 'title', labelKey: 'scopes.ideas.fields.title' },
     ],
+    storageKey: 'ideas-sort',
   });
 
   // Create filter function for ideas (searches in title, content, and displayname)
