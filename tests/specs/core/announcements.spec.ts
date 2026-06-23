@@ -1,7 +1,6 @@
 import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as forms from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
-import * as shared from '../../support/utils';
 
 test('Announcements', async ({ newPageFor }) => {
   const adminPage = await newPageFor('admin');
@@ -20,13 +19,13 @@ test('Announcements', async ({ newPageFor }) => {
     // Make it obligatory to consent to the announcement
     await forms.selectOptionByValue(adminPage, "select-field-user_needs_to_consent", "2")
 
-    // submit the idea form
+    // submit the form
     await adminPage.locator('button[type="submit"]').click();
     await adminPage.waitForTimeout(10); // 10ms just for the request to go out
     await adminPage.waitForLoadState("networkidle");
   });
 
-  await test.step.skip('Admin sees own announcement', async () => {
+  await test.step('Admin sees own announcement', async () => {
     // refresh page at home
     await navigation.goToHome(adminPage);
 
