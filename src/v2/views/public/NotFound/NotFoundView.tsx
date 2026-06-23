@@ -1,11 +1,14 @@
 import Icon from '@/components/new/Icon';
 import Button from '@/v2/components/button/Button/Button';
 import { useToast } from '@/v2/hooks';
+import { useHidePublicHero } from '@/v2/views/public/PublicLayoutContext';
 import { useTranslation } from 'react-i18next';
 
 const PublicNotFoundView = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
+
+  useHidePublicHero();
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center gap-16" data-testid="not-found-view">

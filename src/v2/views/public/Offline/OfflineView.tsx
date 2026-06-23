@@ -1,9 +1,12 @@
 import Icon from '@/components/new/Icon';
 import Button from '@/v2/components/button/Button/Button';
+import { useHidePublicHero } from '@/v2/views/public/PublicLayoutContext';
 import { useTranslation } from 'react-i18next';
 
 const OfflineView = () => {
   const { t } = useTranslation();
+
+  useHidePublicHero();
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center gap-16" data-testid="school-offline-view">
