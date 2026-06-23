@@ -12,7 +12,7 @@ const config: CapacitorConfig = {
     preferredContentMode: 'mobile',
     backgroundColor: '#000000',
     allowsLinkPreview: true,
-    scheme: 'aula',
+    scheme: 'aulaapp',
     limitsNavigationsToAppBoundDomains: true,
   },
   plugins: {

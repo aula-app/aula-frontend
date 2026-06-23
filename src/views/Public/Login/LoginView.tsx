@@ -2,6 +2,8 @@ import { AppIconButton, AppLink } from "@/components";
 import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
 import { loginUser } from "@/services/login";
 import { completeSsoLink, initiateSso } from "@/services/sso";
+import { Browser } from "@capacitor/browser";
+import { Capacitor } from "@capacitor/core";
 import { useAppStore } from "@/store";
 import { LoginFormValues } from "@/types/LoginTypes";
 import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
@@ -152,7 +154,19 @@ const LoginView = () => {
     }
     try {
       setSsoLoading(true);
-      window.location.href = await initiateSso(instanceApiUrl);
+      const isNative = Capacitor.isNativePlatform();
+      const url = await initiateSso(
+        instanceApiUrl,
+        isNative ? { mobileRedirect: 'aula://oauth-login' } : undefined,
+      );
+      if (isNative) {
+        // Open the IdP in an in-app browser tab; the aula:// deep link brings
+        // the callback back into the app (see useDeepLinks).
+        await Browser.open({ url });
+        setSsoLoading(false);
+      } else {
+        window.location.href = url;
+      }
     } catch {
       setSsoLoading(false);
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });

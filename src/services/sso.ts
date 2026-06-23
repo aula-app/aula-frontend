@@ -36,13 +36,20 @@ export const completeSsoLink = async (
   return { success: true };
 };
 
-export const initiateSso = async (apiUrl: string): Promise<string> => {
+export const initiateSso = async (
+  apiUrl: string,
+  options?: { mobileRedirect?: string },
+): Promise<string> => {
   const instanceCode = localStorageGet('code');
   const forceLogin = localStorage.getItem('sso_force_login') === 'true';
   // Keep the flag set until login succeeds (cleared in OAuthLogin).
 
   const initiateUrl = new URL(`${apiUrl}/api/v2/auth/sso/initiate`);
   if (forceLogin) initiateUrl.searchParams.set('force_login', 'true');
+  // On native, tell the backend to finish at the app's custom-scheme deep link
+  // (e.g. aula://oauth-login/<jwt>) instead of the web frontend URL, so the
+  // callback returns to the app rather than the system browser.
+  if (options?.mobileRedirect) initiateUrl.searchParams.set('mobile_redirect', options.mobileRedirect);
 
   const response = await fetch(initiateUrl.toString(), {
     method: 'GET',
