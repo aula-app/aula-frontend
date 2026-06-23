@@ -84,7 +84,7 @@ const Dialog: FC<DialogProps> = ({
         {title}
       </h2>
       <div
-        className={`bg-paper text-text-primary rounded-2xl shadow-2xl border border-secondary/20
+        className={`bg-paper text-text-primary bg-background rounded-2xl shadow-2xl border border-secondary/20
           transition-all duration-300 ease-out transform-gpu
           ${isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
       >
