@@ -1,7 +1,7 @@
 VITE_APP_VERSION = $npm_package_version
 VITE_APP_API_URL = https://neu.aula.de
 VITE_APP_MULTI = true
-VITE_APP_OAUTH = false
+VITE_APP_IS_SSO_ENABLED = false
 VITE_APP_BASENAME = /
 
 # vim: set ft=sh:

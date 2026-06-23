@@ -1,7 +1,16 @@
 ## Unreleased
-
 - **Bug fixes**
   - Sort preference in Ideas Box and Wild Ideas views is now persisted across navigation — going back no longer resets the selected sort order
+  
+## 1.9.3
+
+- **Technical improvements**
+  - Refactored e2e tests to work faster (parallel) and more stable (isolated)
+
+## 1.9.2
+
+  - **Bug fixes**
+    - Remove Survey creation form
 
 ## 1.9.1
 
@@ -13,6 +22,7 @@
 
 - **New features**
   - Reset multiple users' password button on User Settings
+  - Adds SSO login using a Keycloak server
   - Version management alerts for outdated app version
   - Breadcrumb dropdown menu is now fully keyboard accessible: Enter opens it, Arrow keys navigate items, Escape closes and returns focus to the trigger button
 

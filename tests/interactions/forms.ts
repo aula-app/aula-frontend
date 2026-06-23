@@ -7,17 +7,19 @@ export const fillForm = async (page: Page, testId: string, value: string) => {
   await field.fill(value);
 };
 
-export const fillMarkdownForm = async (page: Page, testId: string, value: string, parent?: Locator) => {
-  const container = parent || page;
-  const field = container.getByTestId(`markdown-editor-${testId}`).locator('[contenteditable="true"]');
+export const fillMarkdownForm = async (page: Page, testId: string, value: string) => {
+  const field = page
+    .locator('form').first()
+    .getByTestId(`markdown-editor-${testId}`)
+    .locator('[contenteditable="true"]');
   await expect(field).toBeVisible();
   await field.fill(value);
 };
 
 export const clickButton = async (page: Page, testId: string) => {
   const button = page.getByTestId(testId);
-  await expect(button).toBeVisible();
-  await button.scrollIntoViewIfNeeded();
+  // hover will also scrollIntoViewIfNeeded and handle the mouse movements
+  await button.hover();
   await button.click();
 };
 

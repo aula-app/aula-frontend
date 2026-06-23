@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 const NotFoundView = (): JSX.Element => {
   const { t } = useTranslation();
   return (
-    <Stack flex={1} alignItems="center" justifyContent="center">
+    <Stack flex={1} alignItems="center" justifyContent="center" data-testid="page-not-found-view">
       <img src="/img/Paula_schlafend.svg" alt={t('errors.notFoundImage')} role="img" loading="lazy" width={150} />
       <Typography variant="h3" mt={2}>
         {t('errors.notFound')}
