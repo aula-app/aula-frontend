@@ -48,13 +48,8 @@ test('Rooms Search (Dashboard/Home page)', async ({ seededUser, newPageFor }) =>
       await test.step('Search for seeded room by exact name', async () => {
         await dashboardRooms.searchRooms(userPage, room.name);
 
-<<<<<<< HEAD
-      await test.step('Verify exactly one room matches', async () => {
-        await expect(adminPage.getByTestId(TEST_IDS.ROOM_CARD)).toHaveCount(1);
-=======
         const filteredCount = await dashboardRooms.getCountOfRoomsDisplayed(userPage);
         expect(filteredCount).toBe(1);
->>>>>>> main
       });
     });
 
@@ -77,13 +72,7 @@ test('Rooms Search (Dashboard/Home page)', async ({ seededUser, newPageFor }) =>
     await test.step('should handle search with no results', async () => {
       await dashboardRooms.searchRooms(userPage, 'xyznonexistentroom123456789');
 
-<<<<<<< HEAD
-      await test.step('Verify no rooms are shown', async () => {
-        await expect(adminPage.getByTestId(TEST_IDS.ROOM_CARD)).toHaveCount(0);
-      });
-=======
       await expect(userPage.getByTestId(TEST_IDS.ROOM_CARD)).toHaveCount(0);
->>>>>>> main
     });
   });
 
@@ -118,12 +107,8 @@ test('Rooms Search (Dashboard/Home page)', async ({ seededUser, newPageFor }) =>
 
       await dashboardRooms.toggleSortDirection(userPage);
 
-<<<<<<< HEAD
-        await adminPage.waitForTimeout(200);
-=======
       // Wait for the debounce (150ms in ScopeHeader) to complete
       await userPage.waitForTimeout(200);
->>>>>>> main
 
       const newIcon = await sortDirectionButton.getAttribute('aria-label');
       expect(newIcon).not.toBe(initialIcon);
@@ -134,21 +119,9 @@ test('Rooms Search (Dashboard/Home page)', async ({ seededUser, newPageFor }) =>
       const sortSelect = userPage.getByTestId(TEST_IDS.SORT_SELECT);
       await sortSelect.click();
 
-<<<<<<< HEAD
-      await test.step('Click sort select to show options', async () => {
-        const sortSelect = adminPage.getByTestId(TEST_IDS.SORT_SELECT);
-        await sortSelect.click();
-      });
-
-      await test.step('Verify sort options are visible', async () => {
-        const createdOption = adminPage.getByTestId('sort-option-created');
-        await expect(createdOption).toBeVisible();
-      });
-=======
       // @TODO: Check for common sort options
       const createdOption = userPage.getByTestId('sort-option-created');
       await expect(createdOption).toBeVisible();
->>>>>>> main
     });
   });
 
@@ -163,73 +136,9 @@ test('Rooms Search (Dashboard/Home page)', async ({ seededUser, newPageFor }) =>
     await dashboardRooms.openSortMenu(userPage);
     await dashboardRooms.selectSortOption(userPage, 'room_name');
 
-<<<<<<< HEAD
-      await test.step('Verify search is still active', async () => {
-        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
-        await expect(searchField).toHaveValue(searchTerm);
-      });
-    });
-
-    test('should close empty search when sort is opened', async ({ adminPage }) => {
-      await test.step('Open empty search field', async () => {
-        await rooms.openSearch(adminPage);
-      });
-
-      await test.step('Open sort panel', async () => {
-        await rooms.openSort(adminPage);
-      });
-
-      await test.step('Verify search is closed', async () => {
-        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD);
-        await expect(searchField).not.toBeVisible();
-      });
-    });
-
-    test('should keep search open when it has value and sort is opened', async ({ adminPage }) => {
-      const searchTerm = 'test';
-
-      await test.step('Search with value', async () => {
-        await rooms.searchRooms(adminPage, searchTerm);
-      });
-
-      await test.step('Open sort panel', async () => {
-        await rooms.openSort(adminPage);
-      });
-
-      await test.step('Verify search remains open', async () => {
-        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD);
-        await expect(searchField).toBeVisible();
-        const searchInput = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
-        await expect(searchInput).toHaveValue(searchTerm);
-      });
-    });
-
-    test('should apply both search and sort together', async ({ adminPage }) => {
-      await test.step('Apply search and sort', async () => {
-        const firstRoomName = await rooms.getFirstRoomName(adminPage);
-        if (!firstRoomName) return; // Skip if no rooms
-
-        const searchTerm = firstRoomName.trim().substring(0, 3).toLowerCase();
-        await rooms.searchRooms(adminPage, searchTerm);
-
-        await rooms.openSort(adminPage);
-        await rooms.selectSortOption(adminPage, 'room_name');
-      });
-
-      await test.step('Verify both are active', async () => {
-        await rooms.searchRooms(adminPage, '');
-
-        await rooms.openSort(adminPage);
-        await rooms.selectSortOption(adminPage, 'room_name');
-
-        await expect(adminPage.getByTestId(TEST_IDS.ROOM_CARD)).not.toHaveCount(0);
-      });
-    });
-=======
     // Verify search is still active
     const searchField = userPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
     await expect(searchField).toHaveValue(searchTerm);
->>>>>>> main
   });
 
   await test.step('should close empty search when sort is opened', async () => {
@@ -284,21 +193,15 @@ test('Rooms Search (Dashboard/Home page)', async ({ seededUser, newPageFor }) =>
 
   await test.step('Edge Cases', async () => {
     await test.step('should handle special characters in search', async () => {
-
       // Refresh the page so the sort menu is closed and search field reset
       await navigation.goToHome(userPage);
 
       const specialChars = ['@', '#', '$', '%'];
       for (const char of specialChars) {
         await test.step(`Search with ${char}`, async () => {
-<<<<<<< HEAD
-          await rooms.searchRooms(adminPage, char);
-          await rooms.clearSearch(adminPage);
-=======
           await dashboardRooms.searchRooms(userPage, char);
           // Should not crash — clearSearch succeeding is the assertion
           await dashboardRooms.clearSearch(userPage);
->>>>>>> main
         });
       }
     });
