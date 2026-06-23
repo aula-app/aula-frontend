@@ -67,12 +67,37 @@ export interface UseSearchAndSortOptions {
   defaultSortKey?: string; // If not provided, uses first sort option
   defaultSortDirection?: 'asc' | 'desc';
   sortOptions?: SortOption[];
+  storageKey?: string;
 }
 
 export interface SearchAndSortState {
   searchQuery: string;
   sortKey: string;
   sortDirection: 'asc' | 'desc';
+}
+
+function readSortFromStorage(
+  storageKey: string,
+  sortOptions: SortOption[],
+  defaultSortKey: string,
+  defaultSortDirection: 'asc' | 'desc'
+): { sortKey: string; sortDirection: 'asc' | 'desc' } {
+  try {
+    const raw = localStorage.getItem(storageKey);
+    if (!raw) return { sortKey: defaultSortKey, sortDirection: defaultSortDirection };
+    const parsed = JSON.parse(raw) as { sortKey?: unknown; sortDirection?: unknown };
+    const sortKey =
+      typeof parsed.sortKey === 'string' && sortOptions.some((o) => o.value === parsed.sortKey)
+        ? parsed.sortKey
+        : defaultSortKey;
+    const sortDirection =
+      parsed.sortDirection === 'asc' || parsed.sortDirection === 'desc'
+        ? parsed.sortDirection
+        : defaultSortDirection;
+    return { sortKey, sortDirection };
+  } catch {
+    return { sortKey: defaultSortKey, sortDirection: defaultSortDirection };
+  }
 }
 
 /**
@@ -86,17 +111,32 @@ export function useSearchAndSort(options: UseSearchAndSortOptions = {}) {
       { value: 'created', labelKey: 'ui.sort.created' },
       { value: 'last_update', labelKey: 'ui.sort.updated' },
     ],
+    storageKey,
   } = options;
 
   // Use the first sort option as default if no defaultSortKey is provided
   const defaultSortKey = options.defaultSortKey ?? sortOptions[0]?.value ?? '';
 
+  const initialSort = storageKey
+    ? readSortFromStorage(storageKey, sortOptions, defaultSortKey, defaultSortDirection)
+    : { sortKey: defaultSortKey, sortDirection: defaultSortDirection };
+
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortKey, setSortKey] = useState(defaultSortKey);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(defaultSortDirection);
+  const [sortKey, setSortKey] = useState(initialSort.sortKey);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(initialSort.sortDirection);
 
   const handleSortKeyChange = (value: string) => {
     setSortKey(value);
+    if (storageKey) {
+      localStorage.setItem(storageKey, JSON.stringify({ sortKey: value, sortDirection }));
+    }
+  };
+
+  const handleSortDirectionChange = (value: 'asc' | 'desc') => {
+    setSortDirection(value);
+    if (storageKey) {
+      localStorage.setItem(storageKey, JSON.stringify({ sortKey, sortDirection: value }));
+    }
   };
 
   const resetFilters = () => {
@@ -126,7 +166,7 @@ export function useSearchAndSort(options: UseSearchAndSortOptions = {}) {
       sortKey,
       onSortKeyChange: handleSortKeyChange,
       sortDirection,
-      onSortDirectionChange: setSortDirection,
+      onSortDirectionChange: handleSortDirectionChange,
       sortOptions,
     },
   };

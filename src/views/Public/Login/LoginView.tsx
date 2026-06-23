@@ -302,7 +302,7 @@ const LoginView = () => {
           </Button>
         </Grid>
 
-        {(config.IS_OAUTH_ENABLED || config.IS_SSO_ENABLED) && (
+        {(config.IS_SSO_ENABLED) && (
           <>
             <Stack direction='row' mb={2} alignItems='center'>
               <Divider sx={{ flex: 1 }} />
@@ -310,24 +310,12 @@ const LoginView = () => {
               <Divider sx={{ flex: 1 }} />
             </Stack>
             <Stack direction='column' gap={1} mb={2} alignItems='center'>
-              {config.IS_OAUTH_ENABLED && (
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => window.location.href = "/api/controllers/login_oauth.php"}
-                  disabled={isLoading || isSsoLoading}
-                  aria-label={t('auth.oauth.arialabel')}
-                >{t('auth.oauth.button')}</Button>
-              )}
-              {config.IS_SSO_ENABLED && (
                 <Button
                   variant="outlined"
                   color="secondary"
                   onClick={handleSsoLogin}
-                  disabled={isLoading || isSsoLoading}
                   aria-label={t('auth.sso.arialabel')}
                 >{t('auth.sso.button')}</Button>
-              )}
             </Stack>
           </>
         )}
