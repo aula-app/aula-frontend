@@ -22,7 +22,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
 
   return (
     <div
-      className={`absolute z-20 left-0 top-0 h-full w-full overflow-y-auto md:w-auto md:relative print:hidden transition-colors duration-150 ease-in-out ${menuOpen ? 'bg-shade/50' : 'bg-transparen pointer-events-none'}`}
+      className={`absolute z-20 left-0 top-0 h-full w-full overflow-y-auto md:w-auto md:relative print:hidden transition-colors duration-150 ease-in-out ${menuOpen && isDrawerMode ? 'bg-shade/50' : 'bg-transparent'}`}
       onClick={onClose}
     >
       <nav
