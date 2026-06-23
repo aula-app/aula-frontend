@@ -15,7 +15,7 @@ const MAX_PASSWORD_LENGTH = 64;
 
 const LoginView: React.FC = () => {
   const { t } = useTranslation();
-  const { onSubmit, isLoading } = useLoginSubmit();
+  const { onSubmit, isLoading, isSsoLoading, config, handleSsoLogin } = useLoginSubmit();
   const {
     instanceCode,
     setInstanceCode,
@@ -96,6 +96,27 @@ const LoginView: React.FC = () => {
           {t('v2.page.recovery.link')}
         </Link>
       </div>
+
+      {config.IS_SSO_ENABLED && (
+        <>
+          <div className="flex items-center gap-2 text-muted">
+            <div className="flex-1 border-t border-current" />
+            <span className="text-sm">{t('ui.common.or')}</span>
+            <div className="flex-1 border-t border-current" />
+          </div>
+          <div className="flex flex-col gap-2 items-center">
+            <Button
+              outlined
+              color="secondary"
+              onClick={handleSsoLogin}
+              disabled={isLoading || isSsoLoading}
+              aria-label={t('auth.sso.arialabel')}
+            >
+              {t('auth.sso.button')}
+            </Button>{' '}
+          </div>
+        </>
+      )}
     </form>
   );
 };

@@ -19,7 +19,7 @@ const PublicRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/about" element={<AboutView />} />
+      <Route path="about" element={<AboutView />} />
       <Route path="login/*" element={<Login />} />
       <Route path="offline" element={<OfflineView />} />
       <Route path="oauth-login/:jwt_token" element={<OAuthLogin />} />
