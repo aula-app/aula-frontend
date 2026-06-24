@@ -28,6 +28,7 @@ import {
   HiOutlineMoon,
   HiOutlinePencilSquare,
   HiOutlinePrinter,
+  HiOutlineQuestionMarkCircle,
   HiOutlineSun,
   HiOutlineUser,
   HiOutlineUserGroup,
@@ -52,6 +53,7 @@ const VotingIcon: IconType = ({ size = '1em', color = 'currentColor', style, ...
 export const ICONS = {
   about: HiOutlineInformationCircle,
   alert: HiOutlineExclamationTriangle,
+  approval: HiOutlineQuestionMarkCircle,
   check: HiOutlineCheck,
   edit: HiOutlinePencilSquare,
   error: HiOutlineXCircle,
