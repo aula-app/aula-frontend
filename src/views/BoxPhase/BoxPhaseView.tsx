@@ -107,15 +107,15 @@ const BoxPhaseView = () => {
   };
 
   return (
-    <Stack alignItems="center" flex={1}>
+    <Stack alignItems="center" height="100%">
       {isLoading ? (
-        <Grid container spacing={2} p={1} width="100%">
+        <Grid container spacing={2} p={1} width="100%" flex={1}>
           <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 3 }} sx={{ scrollSnapAlign: 'center' }}>
             <BoxCardSkeleton />
           </Grid>
         </Grid>
       ) : (
-        <Stack width="100%" flex={1}>
+        <Stack width="100%" height="100%" flex={1} spacing={2}>
           <ScopeHeader
             title={t(`phases.box-${phase}`, {
               var: boxes.length === 1 ? t('scopes.boxes.name') : t('scopes.boxes.plural'),
@@ -124,7 +124,7 @@ const BoxPhaseView = () => {
             totalCount={boxes.length}
             {...scopeHeaderProps}
           />
-          <Grid container spacing={2} p={2} pt={0} flex={1}>
+          <Grid container spacing={2} p={2} pt={0} height="100%" flex={1}>
             {sortedBoxes.length === 0 ? (
               <EmptyState title={t('ui.empty.boxes.title')} description={t('ui.empty.boxes.description')} />
             ) : (
