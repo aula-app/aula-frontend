@@ -1,7 +1,7 @@
 import { ConfirmDialog } from '@/components';
 import AppIconButton from '@/components/AppIconButton';
 import { SettingNamesType } from '@/types/SettingsTypes';
-import { WarningAmber } from '@mui/icons-material';
+import WarningAmber from '@mui/icons-material/WarningAmber';
 import { IconButtonProps, Stack, Typography } from '@mui/material';
 import { forwardRef, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
