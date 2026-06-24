@@ -2,7 +2,7 @@ import { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
 import { useAppStore } from '@/store/AppStore';
 import { FocusEvent, KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export type BreadcrumbNavItem = [string, string];
 
@@ -11,6 +11,8 @@ export const useBreadcrumb = () => {
   const [appState] = useAppStore();
   const { breadcrumb } = appState;
   const goto = useNavigate();
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -93,6 +95,7 @@ export const useBreadcrumb = () => {
 
   return {
     isEmpty,
+    isHome,
     currentPage,
     navItems,
     getIconForBreadcrumb,
