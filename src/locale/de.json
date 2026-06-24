@@ -2,8 +2,8 @@
   "v2": {
     "alt": {
       "logo": "Aula: Bildungsplattform-Logo",
-      "sleeping": "Schlafende Eulen-Illustration",
-      "winking": "Zwinkernde Eulen-Illustration"
+      "microphone": "Eine Illustration einer Eule mit einem Mikrofon, die die Ankündigungsfunktion repräsentiert",
+      "sleeping": "Schlafende Eulen-Illustration"
     },
     "form": {
       "code": {
@@ -94,8 +94,14 @@
         }
       },
       "actions": {
+        "agree": "Zustimmen",
         "print": "Diese Seite drucken",
         "report": "Einen Fehler melden"
+      },
+      "announcement": {
+        "title": "Ankündigung",
+        "button": "Verstanden",
+        "helper": "Diese Ankündigung erfordert Ihre Zustimmung. Bitte aktivieren Sie das Kontrollkästchen, um fortzufahren."
       },
       "button": {
         "cancel": "Abbrechen",
@@ -828,6 +834,10 @@
       "scheduledActionsTable": "Geplante Aktionen",
       "togglePasswordVisibility": "Passwortsichtbarkeit umschalten",
       "updatingContent": "Inhalt wird aktualisiert"
+    },
+    "announcement": {
+      "close": "Ankündigung schließen",
+      "title": "Ankündigung"
     },
     "common": {
       "all": "Alle",

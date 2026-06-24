@@ -17,6 +17,8 @@
 - **Internal**
   - Completed v2 component migration for public routes (Login, Recovery, Code, NotFound)
   - v2 private layout components (PrivateLayout, TopBar, SideBar) now fully migrated
+  - Announcement component now uses the new generic Dialog component
+  - E2E tests for announcements expanded: covers obligatory and optional consent flows, dismiss button, per-user consent isolation, and admin delete flow
 
 ## 1.9.3
 

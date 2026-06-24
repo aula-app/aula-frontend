@@ -2,8 +2,8 @@
   "v2": {
     "alt": {
       "logo": "Aula: Education Platform Logo",
-      "sleeping": "Sleeping owl illustration",
-      "winking": "Winking owl illustration"
+      "microphone": "An illustration of an owl with a microphone, representing the announcement feature",
+      "sleeping": "Sleeping owl illustration"
     },
     "form": {
       "code": {
@@ -94,8 +94,14 @@
         }
       },
       "actions": {
+        "agree": "Agree",
         "print": "Print this page",
         "report": "Report a bug"
+      },
+      "announcement": {
+        "title": "Announcement",
+        "button": "Got it",
+        "helper": "This announcement requires your consent. Please check the box to proceed."
       },
       "button": {
         "cancel": "Cancel",
@@ -829,6 +835,10 @@
       "scheduledActionsTable": "Scheduled actions",
       "togglePasswordVisibility": "Toggle password visibility",
       "updatingContent": "Updating content"
+    },
+    "announcement": {
+      "close": "Close announcement",
+      "title": "Announcement"
     },
     "common": {
       "all": "All",

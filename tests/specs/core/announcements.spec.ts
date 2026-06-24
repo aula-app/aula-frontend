@@ -1,93 +1,159 @@
 import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as forms from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
+import * as shared from '../../support/utils';
 
-test('Announcements', async ({ newPageFor }) => {
+type AnnouncementOptions = { headline: string; body: string; consentValue: string };
+
+const createAnnouncement = async (
+  adminPage: import('@playwright/test').Page,
+  { headline, body, consentValue }: AnnouncementOptions
+) => {
+  await navigation.goToAnnouncementsSettings(adminPage);
+  await forms.clickButton(adminPage, 'add-announcements-button');
+  await adminPage.locator('input[name="headline"]').fill(headline);
+  await adminPage.getByTestId('markdown-editor-body').locator('div[contenteditable="true"]').fill(body);
+  await forms.selectOptionByValue(adminPage, 'select-field-user_needs_to_consent', consentValue);
+  await adminPage.locator('button[type="submit"]').click();
+  await adminPage.waitForTimeout(10);
+  await adminPage.waitForLoadState('networkidle');
+};
+
+/**
+ * Obligatory consent (user_needs_to_consent = 2 / "alert"):
+ * - Only the agree button is shown (no dismiss)
+ * - User must agree to close the dialog
+ */
+test('Announcements - obligatory consent', async ({ newPageFor }) => {
   const adminPage = await newPageFor('admin');
 
-  await test.step('Admin can make an announcement', async () => {
-    await navigation.goToAnnouncementsSettings(adminPage);
-
-    // Add announcement
-    const NewButton = adminPage.locator('[data-testid="add-announcements-button"]');
-    await expect(NewButton).toBeVisible();
-    await NewButton.click();
-
-    await adminPage.locator('input[name="headline"]').fill('Testing content');
-    await adminPage.getByTestId('markdown-editor-body').locator('div[contenteditable="true"]').fill('some data');
-
-    // Make it obligatory to consent to the announcement
-    await forms.selectOptionByValue(adminPage, "select-field-user_needs_to_consent", "2")
-
-    // submit the form
-    await adminPage.locator('button[type="submit"]').click();
-    await adminPage.waitForTimeout(10); // 10ms just for the request to go out
-    await adminPage.waitForLoadState("networkidle");
+  await test.step('Admin creates an obligatory announcement', async () => {
+    await createAnnouncement(adminPage, {
+      headline: shared.gensym('announcement-'),
+      body: 'obligatory announcement body',
+      consentValue: '2',
+    });
   });
 
-  await test.step('Admin sees own announcement', async () => {
-    // refresh page at home
+  await test.step('Admin also sees own announcement and agrees to it', async () => {
     await navigation.goToHome(adminPage);
-
-    // assert that the dialog pops up
-    const ModalDiv = adminPage.getByRole('dialog');
-    await expect(ModalDiv).toBeVisible();
-
-    // agree to consent
-    const ApproveButton = ModalDiv.getByTestId('button-consent-agree').first();
-    await expect(ApproveButton).toBeVisible();
-    await ApproveButton.click();
-
-    // assert that the dialog disappears
-    await adminPage.waitForLoadState("networkidle");
-    await expect(ModalDiv).not.toBeVisible();
-    await expect(ApproveButton).not.toBeVisible();
+    const modal = adminPage.getByRole('alertdialog');
+    await expect(modal).toBeVisible();
+    await modal.getByTestId('checkbox-consent').click();
+    const agreeButton = modal.getByTestId('button-consent-agree').first();
+    await expect(agreeButton).toBeEnabled();
+    await agreeButton.click();
+    await adminPage.waitForLoadState('networkidle');
+    await expect(modal).not.toBeVisible();
   });
 
-  await test.step('User sees the announcement, can consent to dismiss it', async () => {
+  await test.step('User sees dialog with checkbox and disabled agree — checking enables agree', async () => {
     const userPage = await newPageFor('user');
     await navigation.goToHome(userPage);
 
-    // announcement is there
-    const ModalDiv = userPage.getByRole('dialog');
-    await expect(ModalDiv).toBeVisible();
+    const modal = userPage.getByRole('alertdialog');
+    await expect(modal).toBeVisible();
 
-    // User can consent to dismiss the announcement
-    const ApproveButton = ModalDiv.getByTestId('button-consent-agree').first();
-    await expect(ApproveButton).toBeVisible();
-    await ApproveButton.click();
+    const agreeButton = modal.getByTestId('button-consent-agree').first();
+    await expect(agreeButton).toBeVisible();
+    await expect(agreeButton).toBeDisabled();
 
-    // assert that the dialog disappears
-    await userPage.waitForLoadState("networkidle");
-    await expect(ModalDiv).not.toBeVisible();
-    await expect(ApproveButton).not.toBeVisible();
+    const checkbox = modal.getByTestId('checkbox-consent');
+    await expect(checkbox).toBeVisible();
+    await checkbox.click();
+    await expect(agreeButton).toBeEnabled();
+
+    await agreeButton.click();
+    await userPage.waitForLoadState('networkidle');
+    await expect(modal).not.toBeVisible();
+  });
+
+  await test.step('Student still sees the announcement (per-user consent)', async () => {
+    const studentPage = await newPageFor('student');
+    await navigation.goToHome(studentPage);
+    await expect(studentPage.getByRole('alertdialog')).toBeVisible();
+  });
+});
+
+/**
+ * Optional consent (user_needs_to_consent = 1 / "announcement"):
+ * - Agree button is shown and enabled immediately (no checkbox required)
+ * - User agrees to close the dialog
+ */
+test('Announcements - optional consent', async ({ newPageFor }) => {
+  const adminPage = await newPageFor('admin');
+
+  await test.step('Admin creates an optional announcement', async () => {
+    await createAnnouncement(adminPage, {
+      headline: shared.gensym('announcement-'),
+      body: 'optional announcement body',
+      consentValue: '1',
+    });
+  });
+
+  await test.step('User sees dialog with agree button enabled — no checkbox required', async () => {
+    const userPage = await newPageFor('user');
+    await navigation.goToHome(userPage);
+
+    const modal = userPage.getByRole('dialog');
+    await expect(modal).toBeVisible();
+
+    const agreeButton = modal.getByTestId('button-consent-agree').first();
+    await expect(agreeButton).toBeVisible();
+    await expect(agreeButton).toBeEnabled();
+
+    await agreeButton.click();
+    await userPage.waitForLoadState('networkidle');
+    await expect(modal).not.toBeVisible();
+  });
+});
+
+/**
+ * Admin management flow:
+ * - Admin can delete announcements
+ * - Users no longer see the announcement after deletion
+ */
+test('Announcements - admin delete flow', async ({ newPageFor }) => {
+  const adminPage = await newPageFor('admin');
+
+  await test.step('Admin creates an announcement', async () => {
+    await createAnnouncement(adminPage, {
+      headline: shared.gensym('announcement-'),
+      body: 'some data',
+      consentValue: '2',
+    });
+  });
+
+  await test.step('Admin agrees to own announcement before managing settings', async () => {
+    // goToHome always navigates, triggering the Announcement component to refetch.
+    // goToAnnouncementsSettings would short-circuit (already on that URL) and the dialog would never appear.
+    await navigation.goToHome(adminPage);
+    const announcementModal = adminPage.getByRole('alertdialog');
+    await expect(announcementModal).toBeVisible();
+    await announcementModal.getByTestId('checkbox-consent').click();
+    await announcementModal.getByTestId('button-consent-agree').first().click();
+    await adminPage.waitForLoadState('networkidle');
+    await expect(announcementModal).not.toBeVisible();
   });
 
   await test.step('Admin deletes all announcements', async () => {
     await navigation.goToAnnouncementsSettings(adminPage);
-
-    // click on selectAll checkbox
     await adminPage.locator('input[type="checkbox"]').first().click();
 
-    // click on remove selected announcements
-    const DeleteButton = adminPage.getByTestId("remove-announcements-button");
-    await expect(DeleteButton).toBeVisible();
-    await DeleteButton.click();
+    await forms.clickButton(adminPage, 'remove-announcements-button');
 
-    // confirm deletion
-    const Dialog = adminPage.getByRole('dialog');
-    await expect(Dialog).toBeVisible();
-    const ConfirmButton = Dialog.getByTestId('confirm-delete-announcements-button');
-    await expect(ConfirmButton).toBeVisible();
-    await ConfirmButton.click();
-    await expect(Dialog).not.toBeVisible();
+    // Scope to the delete confirmation dialog to avoid collision with the announcement dialog
+    const deleteDialog = adminPage
+      .getByRole('dialog')
+      .filter({ has: adminPage.getByTestId('confirm-delete-announcements-button') });
+    await expect(deleteDialog).toBeVisible();
+    await deleteDialog.getByTestId('confirm-delete-announcements-button').click();
+    await expect(deleteDialog).not.toBeVisible();
   });
 
-  await test.step("Student (another user) now doesn't see the announcement", async () => {
+  await test.step('Student does not see the announcement after deletion', async () => {
     const studentPage = await newPageFor('student');
     await navigation.goToProfile(studentPage);
-
-    const ModalDiv = studentPage.getByRole('dialog');
-    await expect(ModalDiv).not.toBeVisible();
+    await expect(studentPage.getByRole('alertdialog')).not.toBeVisible();
   });
 });
