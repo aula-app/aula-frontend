@@ -29,7 +29,7 @@ const TopBar: React.FC<TopBarProps> = ({ onToggleMenu, menuOpen = false, showMen
   return (
     <header
       id="top-bar"
-      className="relative min-h-14 bg-primary px-2 py-1 shadow-sm pt-[calc(var(--safe-area-inset-top,0px))] z-30 print:hidden flex items-center dark:text-background"
+      className="relative min-h-14 bg-primary px-2 py-1 shadow-sm pt-[calc(var(--safe-area-inset-top,0px))] z-30 print:hidden flex items-center dark:text-surface"
     >
       <div className="mr-3 flex h-full items-center justify-start">
         <Breadcrumb />

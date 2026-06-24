@@ -136,6 +136,8 @@
         "close": "Close navigation menu"
       },
       "navigation": "Navigation menu",
+      "moveToPhase": "Move to {{phase}}",
+      "phases": "Phase navigation",
       "toggle": "Toggle {{var}}"
     }
   },

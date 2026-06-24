@@ -1,8 +1,9 @@
 import { clearAuth } from '@/services/auth';
 import { useAppStore } from '@/store';
 import { checkPermissions } from '@/utils';
-import NotFoundView from '@/v2/views/private/NotFound';
 import AboutView from '@/v2/views/private/About';
+import NotFoundView from '@/v2/views/private/NotFound';
+import RoomLayout from '@/v2/views/private/Room';
 import IdeaView from '@/views/Idea';
 import IdeasBoxView from '@/views/IdeasBox';
 import UserMessagesView from '@/views/Messages';
@@ -11,7 +12,6 @@ import MessageView from '@/views/Messages/Message';
 import ReportView from '@/views/Messages/Report';
 import OfflineView from '@/views/OfflineView';
 import PhasesView from '@/views/Phases';
-import RoomView from '@/views/Room';
 import RoomPhaseView from '@/views/Room/RoomPhaseView';
 import AnnouncementsView from '@/views/Settings/Announcements';
 import BoxesView from '@/views/Settings/Boxes';
@@ -57,7 +57,7 @@ const PrivateRoutes = () => {
       <Route path="bugs/:report_id" element={<ReportView />} />
       <Route path="requests/:report_id" element={<ReportView />} />
       <Route path="phase/:phase" element={<PhasesView />} />
-      <Route path="room/:room_id/phase/:phase" element={<RoomView />}>
+      <Route path="room/:room_id/phase/:phase" element={<RoomLayout />}>
         <Route path="" element={<RoomPhaseView />} />
         <Route path="idea/:idea_id" element={<IdeaView />} />
         <Route path="idea-box/:box_id" element={<IdeasBoxView />} />

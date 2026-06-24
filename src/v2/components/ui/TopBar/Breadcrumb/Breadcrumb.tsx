@@ -70,7 +70,9 @@ const Breadcrumb: React.FC = () => {
             <Link
               key={index}
               to={item[1]}
-              ref={(el) => { itemRefs.current[index] = el; }}
+              ref={(el) => {
+                itemRefs.current[index] = el;
+              }}
               onClick={closeMenu}
               className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-shadow truncate transition-colors rounded-lg"
               role="menuitem"

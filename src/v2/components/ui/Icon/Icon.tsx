@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { IconBaseProps } from 'react-icons';
+import { IconBaseProps, IconType } from 'react-icons';
 import {
   HiLanguage,
   HiOutlineAcademicCap,
@@ -7,6 +7,8 @@ import {
   HiOutlineArrowRightEndOnRectangle,
   HiOutlineBars3,
   HiOutlineBugAnt,
+  HiOutlineChartBar,
+  HiOutlineChatBubbleLeftRight,
   HiOutlineCheck,
   HiOutlineChevronDown,
   HiOutlineChevronLeft,
@@ -26,6 +28,7 @@ import {
   HiOutlineMoon,
   HiOutlinePencilSquare,
   HiOutlinePrinter,
+  HiOutlineQuestionMarkCircle,
   HiOutlineSun,
   HiOutlineUser,
   HiOutlineUserGroup,
@@ -33,6 +36,15 @@ import {
   HiOutlineXCircle,
   HiOutlineXMark,
 } from 'react-icons/hi2';
+import voting from './voting.svg?react';
+
+const VotingIcon: IconType = ({ size = '1em', color = 'currentColor', style, ...props }) =>
+  React.createElement(voting, {
+    width: size,
+    height: size,
+    style: { color, ...style },
+    ...props,
+  });
 
 /**
  * Icon component for the application
@@ -41,6 +53,7 @@ import {
 export const ICONS = {
   about: HiOutlineInformationCircle,
   alert: HiOutlineExclamationTriangle,
+  approval: HiOutlineQuestionMarkCircle,
   check: HiOutlineCheck,
   edit: HiOutlinePencilSquare,
   error: HiOutlineXCircle,
@@ -55,6 +68,7 @@ export const ICONS = {
   bug: HiOutlineBugAnt,
   close: HiOutlineXMark,
   day: HiOutlineSun,
+  discussion: HiOutlineChatBubbleLeftRight,
   eye: HiOutlineEye,
   eyeOff: HiOutlineEyeSlash,
   group: HiOutlineUsers,
@@ -74,11 +88,14 @@ export const ICONS = {
   reports: HiOutlineFlag,
   request: HiOutlineExclamationTriangle,
   requests: HiOutlineExclamationTriangle,
+  results: HiOutlineChartBar,
   room: HiOutlineAcademicCap,
   rooms: HiOutlineAcademicCap,
   settings: HiOutlineCog6Tooth,
   user: HiOutlineUser,
   users: HiOutlineUserGroup,
+  voting: VotingIcon,
+  wild: HiOutlineLightBulb,
 };
 
 export type ICON_TYPE = keyof typeof ICONS;
