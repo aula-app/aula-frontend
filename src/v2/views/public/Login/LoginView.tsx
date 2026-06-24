@@ -1,6 +1,8 @@
 import Button from '@/v2/components/button/Button';
 import TextInput from '@/v2/components/input/TextInput';
 import Link from '@/v2/components/navigation/Link';
+import InstanceCodeField from '@/v2/components/input/InstanceCodeField';
+import { useInstanceCode } from '@/v2/components/input/InstanceCodeField/useInstanceCode';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -13,8 +15,17 @@ const MAX_PASSWORD_LENGTH = 64;
 
 const LoginView: React.FC = () => {
   const { t } = useTranslation();
-  const { onSubmit, isLoading, isSsoLoading, loginError, setError, linkBanner, setLinkBanner, config, handleSsoLogin } =
-    useLoginSubmit();
+  const { onSubmit, isLoading, isSsoLoading, config, handleSsoLogin } = useLoginSubmit();
+  const {
+    instanceCode,
+    setInstanceCode,
+    isEditing,
+    startEditing,
+    error: codeError,
+    isLoading: codeLoading,
+    validateCode,
+    showField,
+  } = useInstanceCode();
 
   const schema = useMemo(
     () =>
@@ -37,39 +48,30 @@ const LoginView: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
+  const wrappedSubmit = async (data: { username: string; password: string }) => {
+    const codeOk = await validateCode();
+    if (!codeOk) return;
+    onSubmit(data);
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex-1 flex flex-col gap-4">
+    <form onSubmit={handleSubmit(wrappedSubmit)} noValidate className="flex-1 flex flex-col gap-4">
       <h1>{t('v2.page.login.title', { var: 'Aula' })}</h1>
 
-      {linkBanner && (
-        <div className="flex items-start gap-2 rounded-lg border border-info/40 bg-info/10 px-3 py-2 text-sm text-foreground">
-          <span className="flex-1">{linkBanner}</span>
-          <button
-            type="button"
-            onClick={() => setLinkBanner('')}
-            className="text-muted hover:text-foreground"
-            aria-label={t('actions.close')}
-          >
-            ×
-          </button>
-        </div>
-      )}
-
-      {loginError && (
-        <div className="flex items-start gap-2 rounded-lg border border-error/40 bg-error/10 px-3 py-2 text-sm text-foreground">
-          <span className="flex-1">{loginError}</span>
-          <button
-            type="button"
-            onClick={() => setError('')}
-            className="text-muted hover:text-foreground"
-            aria-label={t('actions.close')}
-          >
-            ×
-          </button>
-        </div>
-      )}
-
       <div className="rounded-box flex flex-col">
+        {showField && (
+          <InstanceCodeField
+            value={instanceCode}
+            onChange={setInstanceCode}
+            error={codeError}
+            isEditing={isEditing}
+            onEditClick={startEditing}
+            onConfirmClick={() => {
+              validateCode();
+            }}
+            disabled={isLoading || codeLoading}
+          />
+        )}
         <TextInput
           label={t('v2.form.login.label')}
           required
@@ -87,10 +89,10 @@ const LoginView: React.FC = () => {
           error={errors.password?.message}
           {...register('password')}
         />
-        <Button type="submit" disabled={isLoading || isSsoLoading} data-testid="submit-login">
+        <Button type="submit" disabled={isLoading || codeLoading} data-testid="submit-login">
           {t('v2.page.login.button')}
         </Button>
-        <Link to="/recovery" className="ml-auto px-2 text-sm text-muted mt-4">
+        <Link to="/recovery" className="ml-auto px-2 text-sm text-text-secondary mt-4">
           {t('v2.page.recovery.link')}
         </Link>
       </div>

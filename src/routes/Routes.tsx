@@ -14,11 +14,11 @@ const Routes = () => {
 
   useConsentSync(isAuthenticated, location.pathname);
 
-  const autentication = () => (isAuthenticated ? <Private /> : <Public />);
+  const authentication = () => (isAuthenticated ? <Private /> : <Public />);
 
   return (
     <ModalProvider>
-      {autentication()}
+      {authentication()}
       <Toast />
     </ModalProvider>
   );

@@ -6,11 +6,11 @@ const host = shared.getHost();
 test('Public pages', async ({ page, dbInstanceCode }) => {
   await page.goto(host, { waitUntil: 'domcontentloaded' });
 
-  const instanceCodeInput = page.locator('input[name="instanceCode"]');
-  if (await instanceCodeInput.isVisible()) {
+  const instanceCodeInput = page.getByTestId('instance-code');
+  if (await instanceCodeInput.isVisible() && await instanceCodeInput.isEnabled()) {
     await instanceCodeInput.fill(dbInstanceCode);
-    await page.getByTestId('submit-instance-code').click();
-    await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
+    await page.getByTestId('instance-code-confirm').click();
+    await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });
   }
 
   await test.step('404 page', async () => {

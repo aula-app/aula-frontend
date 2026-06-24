@@ -58,7 +58,7 @@
       },
       "login": {
         "button": "Anmelden",
-        "link": "Passwort vergessen?",
+        "link": "Zurück zur Anmeldung",
         "title": "Willkommen bei {{var}}"
       },
       "notFound": {
@@ -102,7 +102,8 @@
         "clear": "Löschen",
         "close": "Schließen",
         "confirm": "Bestätigen",
-        "submit": "Übermitteln"
+        "submit": "Übermitteln",
+        "edit": "Bearbeiten"
       },
       "code": {
         "button": "Code: {{var}}",
