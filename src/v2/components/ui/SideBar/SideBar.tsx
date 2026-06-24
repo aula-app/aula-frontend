@@ -22,14 +22,14 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
 
   return (
     <div
-      className={`absolute z-20 left-0 top-0 h-full w-full overflow-y-auto md:w-auto md:relative print:hidden transition-colors duration-150 ease-in-out ${menuOpen ? 'bg-shade/50' : 'bg-transparen pointer-events-none'}`}
+      className={`absolute z-20 left-0 top-0 h-full w-full overflow-y-auto md:w-auto md:relative print:hidden transition-colors duration-150 ease-in-out ${menuOpen && isDrawerMode ? 'bg-shade/50' : 'bg-transparent'}`}
       onClick={onClose}
     >
       <nav
         id="sidebar-menu"
         aria-label={t('v2.ui.navigation')}
         aria-modal={menuOpen && isDrawerMode ? true : undefined}
-        className={`text-muted flex flex-col w-full max-w-56 shrink-0 border-muted border-r bg-background transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+        className={`flex flex-col w-full min-h-full max-w-56 shrink-0 border-muted border-r bg-background transition-transform duration-150 ease-in-out transform-gpu ${menuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
         inert={!menuOpen && isDrawerMode ? '' : undefined}
         tabIndex={-1}
         onKeyDown={handleKeyDown}

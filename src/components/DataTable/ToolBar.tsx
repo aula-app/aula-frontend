@@ -3,7 +3,7 @@ import { StatusTypes } from '@/types/Generics';
 import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { announceToScreenReader, checkPermissions } from '@/utils';
-import { WarningAmber } from '@mui/icons-material';
+import WarningAmber from '@mui/icons-material/WarningAmber';
 import {
   Button,
   Dialog,

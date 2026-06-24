@@ -9,7 +9,7 @@ import { useBreadcrumb } from './useBreadcrumb';
 const Breadcrumb: React.FC = () => {
   const { t } = useTranslation();
   const {
-    isEmpty,
+    isHome,
     currentPage,
     navItems,
     getIconForBreadcrumb,
@@ -22,7 +22,7 @@ const Breadcrumb: React.FC = () => {
     closeMenu,
   } = useBreadcrumb();
 
-  if (isEmpty) {
+  if (isHome) {
     return (
       <div className="p-2">
         <img
