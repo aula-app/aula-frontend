@@ -9,47 +9,50 @@ import { TIMEOUTS } from '../support/constants';
 const host = shared.getHost();
 
 export const ensureSpecificInstanceEntered = async (page: Page, instanceCode: string) => {
-  const instanceCodeAlreadySet = await page.getByTestId('current-instance-code').isVisible();
-  if (instanceCodeAlreadySet && (await page.getByTestId('current-instance-code').innerText()) === instanceCode) {
+  const instanceCodeInput = page.getByTestId('instance-code');
+
+  // Not visible → single-instance, nothing to do
+  if (!(await instanceCodeInput.isVisible())) {
     return true;
   }
 
-  const instanceCodeInput = page.locator('input[name="instanceCode"]');
-  if ((await instanceCodeInput.count()) === 0) {
-    console.log(`No instance selector input found.`);
-    throw new Error('Instance selector input not found on the page, but we are testing a multi-instance FE.');
-  } else {
-    console.log(`ℹ️ Testing multi instance FE, attempting to use "${instanceCode}"...`);
-    await instanceCodeInput.fill(instanceCode);
-    await page.getByTestId('submit-instance-code').click();
-    await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
+  // Locked (disabled) → code already stored, nothing to do
+  if (!(await instanceCodeInput.isEnabled())) {
     return true;
   }
+
+  // Editable → fill and confirm
+  console.log(`ℹ️ Testing multi instance FE, attempting to use "${instanceCode}"...`);
+  await instanceCodeInput.fill(instanceCode);
+  await page.getByTestId('instance-code-confirm').click();
+  await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });
+  return true;
 };
 
 export const ensureInstanceEntered = async (page: Page, username?: string) => {
-  const instanceCodeAlreadySet = await page.getByTestId('current-instance-code').isVisible();
-  if (instanceCodeAlreadySet) {
-    return true;
-  }
-
   const instance = process.env.INSTANCE_CODE || 'SINGLE';
-  const instanceCodeInput = page.locator('input[name="instanceCode"]');
-  if ((await instanceCodeInput.count()) === 0) {
+  const instanceCodeInput = page.getByTestId('instance-code');
+
+  // Not visible → single-instance, nothing to do
+  if (!(await instanceCodeInput.isVisible())) {
     console.log(`${instance === 'SINGLE' ? '✅' : '⚠️'} No instance selector input found. User: "${username}"`);
     if (instance !== 'SINGLE') {
       throw new Error('Instance selector input not found on the page, but we are testing a multi-instance FE.');
     }
-
-    // if there's no instance code input, then we must be on single-instance FE, right? 😏
-    return true;
-  } else {
-    console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: "${username}"`);
-    await instanceCodeInput.fill(instance);
-    await page.getByTestId('submit-instance-code').click();
-    await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
     return true;
   }
+
+  // Locked (disabled) → code already stored
+  if (!(await instanceCodeInput.isEnabled())) {
+    return true;
+  }
+
+  // Editable → fill and confirm
+  console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: "${username}"`);
+  await instanceCodeInput.fill(instance);
+  await page.getByTestId('instance-code-confirm').click();
+  await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });
+  return true;
 };
 
 export const loginAttempt = async (page: Page, data: { username: string; password: string }) => {

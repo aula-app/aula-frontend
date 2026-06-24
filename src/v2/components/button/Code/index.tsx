@@ -1,3 +1,3 @@
-import CodeButton from './CodeButton';
+import Code from './Code';
 
-export default CodeButton;
+export { Code as default };

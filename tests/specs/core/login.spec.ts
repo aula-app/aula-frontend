@@ -16,44 +16,34 @@ const ADMIN_PASSWORD = TestConstants.DEFAULT_PASSWORD;
 
 test('Instance code entry', async ({ browser, dbInstanceCode, baselineLoaded: _ }) => {
   const page = await browser.newPage();
-  await page.goto(`${host}/code`, { waitUntil: 'domcontentloaded' });
+  await page.goto(host, { waitUntil: 'domcontentloaded' });
 
-  // Skip if the app doesn't show an instance code input — single-instance setup
-  const instanceCodeInput = page.locator('input[name="instanceCode"]');
-  if (!await instanceCodeInput.isVisible()) {
-    test.skip(true, 'Single-instance setup — skipping instance code tests');
+  // Skip if the app doesn't show an editable instance code input — single-instance or already stored
+  const instanceCodeInput = page.getByTestId('instance-code');
+  if (!await instanceCodeInput.isVisible() || !await instanceCodeInput.isEnabled()) {
+    test.skip(true, 'Single-instance setup or code already stored — skipping instance code tests');
     return;
   }
 
-  await test.step('Submitting a wrong instance code shows an error message', async () => {
-    await page.fill('input[name="instanceCode"]', 'WRONG');
-    await page.getByTestId('submit-instance-code').click();
+  await test.step('Submitting a wrong instance code shows a field error', async () => {
+    await instanceCodeInput.fill('WRONG');
+    await page.getByTestId('instance-code-confirm').click();
 
-    await expect(page.getByTestId(TEST_IDS.TOAST_ERROR)).toBeVisible();
+    await expect(instanceCodeInput).toHaveAttribute('aria-invalid', 'true');
   });
 
-  await test.step('Submitting the correct instance code proceeds to the login form', async () => {
-    await page.goto(`${host}/code`, { waitUntil: 'domcontentloaded' });
+  await test.step('Submitting the correct instance code locks the field', async () => {
+    await instanceCodeInput.fill(dbInstanceCode);
+    await page.getByTestId('instance-code-confirm').click();
 
-    await page.fill('input[name="instanceCode"]', dbInstanceCode);
-    await page.getByTestId('submit-instance-code').click();
-
-    await expect(page.locator('input[name="username"]')).toBeVisible({ timeout: 10000 });
+    await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });
+    await expect(page.locator('input[name="username"]')).toBeVisible();
   });
 
-  await test.step('Clicking the instance code chip clears the code and returns to /code', async () => {
-    await page.goto(`${host}/code`, { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('input[name="instanceCode"]')).toBeVisible();
-    await page.fill('input[name="instanceCode"]', dbInstanceCode);
-    await page.getByTestId('submit-instance-code').click();
-    await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
+  await test.step('Clicking the Edit button unlocks the field', async () => {
+    await page.getByTestId('instance-code-edit').click();
 
-    const chip = page.getByTestId('current-instance-code');
-    await expect(chip).toBeVisible();
-    await chip.click();
-
-    await expect(page).toHaveURL(/\/code/);
-    await expect(page.locator('input[name="instanceCode"]')).toBeVisible();
+    await expect(instanceCodeInput).toBeEnabled();
   });
 
   await page.close();
@@ -64,14 +54,13 @@ test('Login form', async ({ browser, dbInstanceCode, baselineLoaded: _ }) => {
 
   await page.goto(host, { waitUntil: 'domcontentloaded' });
 
-  // If the app redirected to /code (multi-instance with no stored code), submit the instance code first.
-  // validateAndSaveInstanceCode must run via the form — setting localStorage directly is insufficient
-  // because the login flow also requires api_url to be set.
-  const instanceCodeInput = page.locator('input[name="instanceCode"]');
-  if (await instanceCodeInput.isVisible()) {
+  // If the instance code field is visible and editable (multi-instance, no stored code),
+  // validate it first so api_url is set in localStorage before the login form runs.
+  const instanceCodeInput = page.getByTestId('instance-code');
+  if (await instanceCodeInput.isVisible() && await instanceCodeInput.isEnabled()) {
     await instanceCodeInput.fill(dbInstanceCode);
-    await page.getByTestId('submit-instance-code').click();
-    await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
+    await page.getByTestId('instance-code-confirm').click();
+    await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });
   }
 
   await expect(page.locator('input[name="username"]')).toBeVisible();

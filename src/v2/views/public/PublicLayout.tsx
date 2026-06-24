@@ -1,11 +1,10 @@
 import PublicRoutes from '@/routes/PublicRoutes';
 import AboutButton from '@/v2/components/button/About';
-import CodeButton from '@/v2/components/button/Code';
 import DarkModeButton from '@/v2/components/button/DarkMode';
 import LanguageButton from '@/v2/components/button/Language';
-import Icon from '@/v2/components/ui/Icon';
 import Link from '@/v2/components/navigation/Link';
 import AulaHero from '@/v2/components/svg/Aula_Hero.svg?react';
+import Icon from '@/v2/components/ui/Icon';
 import { FunctionComponent, PropsWithChildren, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
@@ -29,9 +28,6 @@ const PublicLayout: FunctionComponent<PropsWithChildren> = () => {
                   {t('v2.page.login.link')}
                 </Link>
               )}
-            </div>
-            <div className="text-sm">
-              <CodeButton />
             </div>
           </nav>
           {!heroHidden && (

@@ -1,5 +1,5 @@
 import Button from '@/v2/components/button/Button';
-import CodeCopy from '@/v2/components/button/CodeCopy';
+import Code from '@/v2/components/button/Code';
 import DarkModeButton from '@/v2/components/button/DarkMode';
 import LanguageButton from '@/v2/components/button/Language';
 import Logout from '@/v2/components/button/Logout';
@@ -34,7 +34,7 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
         tabIndex={-1}
         onKeyDown={handleKeyDown}
       >
-        <CodeCopy />
+        <Code />
         <hr className="mb-1" />
         <Profile />
         <hr className="mt-1" />
