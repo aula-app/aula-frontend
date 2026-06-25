@@ -5,7 +5,7 @@ import AboutView from '@/v2/views/private/About';
 import NotFoundView from '@/v2/views/private/NotFound';
 import RoomLayout from '@/v2/views/private/Room';
 import IdeaView from '@/views/Idea';
-import IdeasView from '@/v2/views/Private/Room/Ideas';
+import IdeasView from '@/v2/views/private/Room/Ideas';
 import IdeasBoxView from '@/views/IdeasBox';
 import UserMessagesView from '@/views/Messages';
 import AnnouncementView from '@/views/Messages/Announcement';
