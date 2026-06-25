@@ -43,10 +43,9 @@ interface EditCommentArguments extends CommentArguments {
 
 /**
  * Adds a new comment to the database
- * @param arguments - The idea data to add
- * @returns Promise resolving to the new idea
+ * @param arguments - The comment data to add
+ * @returns Promise resolving to the new Comment
  */
-
 export async function addComment(args: AddCommentArguments): Promise<GetCommentsResponse> {
   const response = await databaseRequest(
     {
@@ -62,10 +61,9 @@ export async function addComment(args: AddCommentArguments): Promise<GetComments
 
 /**
  * Edit a comment on the database
- * @param arguments - The idea data to add
- * @returns Promise resolving to the new idea
+ * @param arguments - The comment data to add
+ * @returns Promise resolving to the updated Comment response
  */
-
 export async function editComment(args: EditCommentArguments): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
@@ -81,10 +79,9 @@ export async function editComment(args: EditCommentArguments): Promise<GenericRe
 
 /**
  * Removes a comment from the database
- * @param id - The idea id
- * @returns Promise resolving to the new idea
+ * @param id - The Comment id
+ * @returns Promise resolving to the response of the deletion request
  */
-
 export async function deleteComment(id: number): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
@@ -101,11 +98,10 @@ export async function deleteComment(id: number): Promise<GenericResponse> {
 }
 
 /**
- * Fetches the like status of an idea
- * @param comment_id - The ID of the idea to like
- * @returns Promise resolving to the updated idea list
+ * Fetches the like status of an Comment
+ * @param comment_id - The ID of the comment to like
+ * @returns Promise resolving to true if response contains non-empty data
  */
-
 export async function getCommentLike(comment_id: number): Promise<boolean> {
   const response = await databaseRequest(
     {
@@ -120,11 +116,9 @@ export async function getCommentLike(comment_id: number): Promise<boolean> {
 }
 
 /**
- * Adds a like to an idea
- * @param comment_id - The ID of the idea to like
- * @returns Promise resolving to the updated idea list
+ * Adds a like to a Comment
+ * @param comment_id - The ID of the comment to like
  */
-
 export async function addCommentLike(comment_id: number): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
@@ -135,15 +129,13 @@ export async function addCommentLike(comment_id: number): Promise<GenericRespons
     ['user_id']
   );
 
-  return response;
+  return response as GenericResponse;
 }
 
 /**
- * Removes a like to an idea
- * @param comment_id - The ID of the idea to like
- * @returns Promise resolving to the updated idea list
+ * Removes a like from a Comment
+ * @param comment_id - The ID of the comment to un-like
  */
-
 export async function removeCommentLike(comment_id: number): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
@@ -154,5 +146,5 @@ export async function removeCommentLike(comment_id: number): Promise<GenericResp
     ['user_id']
   );
 
-  return response;
+  return response as GenericResponse;
 }

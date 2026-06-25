@@ -1,8 +1,10 @@
-import { test, expect } from '../../fixtures/test-fixtures';
 import { TEST_IDS } from '../../../src/test-ids';
-import * as rooms from '../../interactions/rooms';
-import * as navigation from '../../interactions/navigation';
+import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as entities from '../../helpers/entities';
+import * as roomsSettings from '../../interactions/admin-settings/rooms';
+import * as dashboardRooms from '../../interactions/dashboard-rooms';
+import * as navigation from '../../interactions/navigation';
+import { RoomData } from '../../support/types';
 
 /**
  * Room Search and Sort Tests
@@ -13,275 +15,229 @@ import * as entities from '../../helpers/entities';
  * deterministic regardless of what other test runs left behind.
  * Cleanup is handled by globalTeardown (test-room-* prefix).
  */
-test.describe.serial('Rooms View - Search and Sort Functionality', () => {
-  // Seeded before the suite — gives us a known room name to search for exactly.
-  const seededRoom = entities.createRoom('search-sort');
+test('Rooms Search (Dashboard/Home page)', async ({ seededUser, newPageFor }) => {
+  const adminPage = await newPageFor('admin');
+  const userPage = await newPageFor('user');
 
-  test.beforeAll(async ({ adminPage, userConfig }) => {
-    seededRoom.users = [userConfig];
-    await rooms.create(adminPage, seededRoom);
-  });
+  let room: RoomData = entities.createRoom('search-sort');
+  room.users = [seededUser];
+  await roomsSettings.create(adminPage, room);
 
-  test.beforeEach(async ({ adminPage }) => {
-    await navigation.goToHome(adminPage);
-  });
+  await test.step('Search', async () => {
+    await test.step('Open search field', async () => {
+      navigation.goToHome(userPage);
+      await dashboardRooms.openSearch(userPage);
 
-  test.describe('Search Functionality', () => {
-    test('should open and close search field', async ({ adminPage }) => {
-      await test.step('Open search field', async () => {
-        await rooms.openSearch(adminPage);
-        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD);
-        await expect(searchField).toBeVisible();
-      });
-
-      await test.step('Close search field', async () => {
-        await rooms.closeSearch(adminPage);
-        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD);
-        await expect(searchField).not.toBeVisible();
-      });
+      const searchField = userPage.getByTestId(TEST_IDS.SEARCH_FIELD);
+      await expect(searchField).toBeVisible();
     });
 
-    test('should filter rooms based on search query', async ({ adminPage }) => {
+    await test.step('Close search field', async () => {
+      await dashboardRooms.closeSearch(userPage);
+      const searchField = userPage.getByTestId(TEST_IDS.SEARCH_FIELD);
+      await expect(searchField).not.toBeVisible();
+    });
+
+    await test.step('should filter rooms based on search query', async () => {
       await test.step('verify there are existing rooms', async () => {
-        const initialCount = await rooms.getRoomCount(adminPage);
-        expect(initialCount).toBeGreaterThan(0);
+        const initialCount = await dashboardRooms.getCountOfRoomsDisplayed(userPage);
+        // Schule (standard room), e2e.class_1A (seeded), search-sort (room created for this test)
+        expect(initialCount).toBe(3);
       });
 
       await test.step('Search for seeded room by exact name', async () => {
-        await rooms.searchRooms(adminPage, seededRoom.name);
-      });
+        await dashboardRooms.searchRooms(userPage, room.name);
 
-      await test.step('Verify exactly one room matches', async () => {
-        const filteredCount = await rooms.getRoomCount(adminPage);
-        expect(filteredCount).toEqual(1);
+        const filteredCount = await dashboardRooms.getCountOfRoomsDisplayed(userPage);
+        expect(filteredCount).toBe(1);
       });
     });
 
-    test('should clear search and restore all rooms', async ({ adminPage }) => {
-      await test.step('Apply search filter', async () => {
-        await rooms.searchRooms(adminPage, 'test');
-      });
+    await test.step('should show all rooms when search filter is cleared', async () => {
+      await dashboardRooms.searchRooms(userPage, 'test');
+      await dashboardRooms.clearSearch(userPage);
 
-      await test.step('Clear search', async () => {
-        await rooms.clearSearch(adminPage);
-      });
-
-      // @FIXME: nikola - if we want to verify "all" rooms are visible, we can't use greaterThan(0)
-      await test.step('Verify all rooms are visible again', async () => {
-        const allCount = await rooms.getRoomCount(adminPage);
-        expect(allCount).toBeGreaterThan(0);
-      });
+      const allCount = await dashboardRooms.getCountOfRoomsDisplayed(userPage);
+      expect(allCount).toBe(3);
     });
 
-    test('should focus search field when opened', async ({ adminPage }) => {
-      await test.step('Open search and verify focus', async () => {
-        await rooms.openSearch(adminPage);
-        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
-        await expect(searchField).toBeFocused();
-      });
+    await test.step('should focus search field when opened', async () => {
+      await navigation.goToHome(userPage);
+      await userPage.getByTestId(TEST_IDS.SEARCH_BUTTON).filter({ visible: true }).click();
+
+      const searchField = userPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
+      await expect(searchField).toBeFocused();
     });
 
-    test('should handle search with no results', async ({ adminPage }) => {
-      await test.step('Search for non-existent room', async () => {
-        await rooms.searchRooms(adminPage, 'xyznonexistentroom123456789');
-      });
+    await test.step('should handle search with no results', async () => {
+      await dashboardRooms.searchRooms(userPage, 'xyznonexistentroom123456789');
 
-      await test.step('Verify no rooms are shown', async () => {
-        // getRoomCount navigates to home which clears the search filter — count directly instead.
-        await expect(adminPage.getByTestId(TEST_IDS.ROOM_CARD)).toHaveCount(0);
-      });
+      await expect(userPage.getByTestId(TEST_IDS.ROOM_CARD)).toHaveCount(0);
     });
   });
 
-  test.describe('Sort Functionality', () => {
-    test('should open and close sort panel', async ({ adminPage }) => {
+  await test.step('Sort Functionality', async () => {
+    await test.step('should open and close sort panel', async () => {
       await test.step('Open sort panel', async () => {
-        await rooms.openSort(adminPage);
-        const sortSelect = adminPage.getByTestId(TEST_IDS.SORT_SELECT);
+        await dashboardRooms.openSortMenu(userPage);
+        const sortSelect = userPage.getByTestId(TEST_IDS.SORT_SELECT);
         await expect(sortSelect).toBeVisible();
       });
 
       await test.step('Close sort panel', async () => {
-        await rooms.closeSort(adminPage);
-        const sortSelect = adminPage.getByTestId(TEST_IDS.SORT_SELECT);
+        await dashboardRooms.closeSortMenu(userPage);
+        const sortSelect = userPage.getByTestId(TEST_IDS.SORT_SELECT);
         await expect(sortSelect).not.toBeVisible();
       });
     });
 
-    test('should change sort option', async ({ adminPage }) => {
-      await test.step('Open sort panel', async () => {
-        await rooms.openSort(adminPage);
-      });
+    await test.step('Select different sort option', async () => {
+      await dashboardRooms.openSortMenu(userPage);
+      await dashboardRooms.selectSortOption(userPage, 'room_name');
 
-      await test.step('Select different sort option', async () => {
-        await rooms.selectSortOption(adminPage, 'room_name');
-      });
-
-      await test.step('Verify sort was applied', async () => {
-        const sortSelect = adminPage.getByTestId(TEST_IDS.SORT_SELECT).locator('input, select');
-        await expect(sortSelect).toHaveValue('room_name');
-      });
+      const sortSelect = userPage.getByTestId(TEST_IDS.SORT_SELECT).locator('input, select');
+      await expect(sortSelect).toHaveValue('room_name');
     });
 
-    test('should toggle sort direction', async ({ adminPage }) => {
-      await test.step('Open sort panel', async () => {
-        await rooms.openSort(adminPage);
-      });
+    await test.step('should toggle sort direction', async () => {
+      await dashboardRooms.openSortMenu(userPage);
 
-      await test.step('Toggle sort direction', async () => {
-        const sortDirectionButton = adminPage.getByTestId('sort-direction-button');
-        const initialIcon = await sortDirectionButton.getAttribute('aria-label');
+      const sortDirectionButton = userPage.getByTestId('sort-direction-button');
+      const initialIcon = await sortDirectionButton.getAttribute('aria-label');
 
-        await rooms.toggleSortDirection(adminPage);
+      await dashboardRooms.toggleSortDirection(userPage);
 
-        // Wait for the debounce (150ms in ScopeHeader) to complete
-        await adminPage.waitForTimeout(200);
+      // Wait for the debounce (150ms in ScopeHeader) to complete
+      await userPage.waitForTimeout(200);
 
-        const newIcon = await sortDirectionButton.getAttribute('aria-label');
-        expect(newIcon).not.toBe(initialIcon);
-      });
+      const newIcon = await sortDirectionButton.getAttribute('aria-label');
+      expect(newIcon).not.toBe(initialIcon);
     });
 
-    test('should show all sort options', async ({ adminPage }) => {
-      await test.step('Open sort panel', async () => {
-        await rooms.openSort(adminPage);
-      });
+    await test.step('should show all sort options', async () => {
+      await dashboardRooms.openSortMenu(userPage);
+      const sortSelect = userPage.getByTestId(TEST_IDS.SORT_SELECT);
+      await sortSelect.click();
 
-      await test.step('Click sort select to show options', async () => {
-        const sortSelect = adminPage.getByTestId(TEST_IDS.SORT_SELECT);
-        await sortSelect.click();
-      });
-
-      await test.step('Verify sort options are visible', async () => {
-        // Check for common sort options
-        const createdOption = adminPage.getByTestId('sort-option-created');
-        await expect(createdOption).toBeVisible();
-      });
+      // @TODO: Check for common sort options
+      const createdOption = userPage.getByTestId('sort-option-created');
+      await expect(createdOption).toBeVisible();
     });
   });
 
-  test.describe('Combined Search and Sort', () => {
-    test('should maintain search query when changing sort', async ({ adminPage }) => {
-      const searchTerm = 'test';
+  await test.step('should maintain search query when changing sort', async () => {
+    // Refresh the page so the sort menu is closed and search field reset
+    await navigation.goToHome(userPage);
 
-      await test.step('Apply search filter', async () => {
-        await rooms.searchRooms(adminPage, searchTerm);
-      });
+    const searchTerm = 'test';
+    await dashboardRooms.searchRooms(userPage, searchTerm);
 
-      await test.step('Change sort option', async () => {
-        await rooms.openSort(adminPage);
-        await rooms.selectSortOption(adminPage, 'room_name');
-      });
+    // Change sort option
+    await dashboardRooms.openSortMenu(userPage);
+    await dashboardRooms.selectSortOption(userPage, 'room_name');
 
-      await test.step('Verify search is still active', async () => {
-        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
-        await expect(searchField).toHaveValue(searchTerm);
-      });
-    });
-
-    test('should close empty search when sort is opened', async ({ adminPage }) => {
-      await test.step('Open empty search field', async () => {
-        await rooms.openSearch(adminPage);
-      });
-
-      await test.step('Open sort panel', async () => {
-        await rooms.openSort(adminPage);
-      });
-
-      await test.step('Verify search is closed', async () => {
-        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD);
-        await expect(searchField).not.toBeVisible();
-      });
-    });
-
-    test('should keep search open when it has value and sort is opened', async ({ adminPage }) => {
-      const searchTerm = 'test';
-
-      await test.step('Search with value', async () => {
-        await rooms.searchRooms(adminPage, searchTerm);
-      });
-
-      await test.step('Open sort panel', async () => {
-        await rooms.openSort(adminPage);
-      });
-
-      await test.step('Verify search remains open', async () => {
-        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD);
-        await expect(searchField).toBeVisible();
-        const searchInput = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
-        await expect(searchInput).toHaveValue(searchTerm);
-      });
-    });
-
-    test('should apply both search and sort together', async ({ adminPage }) => {
-      await test.step('Apply search and sort', async () => {
-        const firstRoomName = await rooms.getFirstRoomName(adminPage);
-        if (!firstRoomName) return; // Skip if no rooms
-
-        const searchTerm = firstRoomName.trim().substring(0, 3).toLowerCase();
-        await rooms.searchRooms(adminPage, searchTerm);
-
-        await rooms.openSort(adminPage);
-        await rooms.selectSortOption(adminPage, 'room_name');
-      });
-
-      await test.step('Verify both are active', async () => {
-        await rooms.searchRooms(adminPage, '');
-
-        await rooms.openSort(adminPage);
-        await rooms.selectSortOption(adminPage, 'room_name');
-
-        // Count directly — getRoomCount navigates home which clears state.
-        await expect(adminPage.getByTestId(TEST_IDS.ROOM_CARD)).not.toHaveCount(0);
-      });
-    });
+    // Verify search is still active
+    const searchField = userPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
+    await expect(searchField).toHaveValue(searchTerm);
   });
 
-  test.describe('Edge Cases', () => {
-    test('should handle special characters in search', async ({ adminPage }) => {
+  await test.step('should close empty search when sort is opened', async () => {
+    // Refresh the page so the sort menu is closed and search field reset
+    await navigation.goToHome(userPage);
+
+    await dashboardRooms.openSearch(userPage);
+    await dashboardRooms.openSortMenu(userPage);
+
+    // Verify search is closed
+    const searchField = userPage.getByTestId(TEST_IDS.SEARCH_FIELD);
+    await expect(searchField).not.toBeVisible();
+  });
+
+  await test.step('should keep search open when it has value and sort is opened', async () => {
+    // Refresh the page so the sort menu is closed and search field reset
+    await navigation.goToHome(userPage);
+    const searchTerm = 'test';
+
+    // Search with value
+    await dashboardRooms.searchRooms(userPage, searchTerm);
+
+    await dashboardRooms.openSortMenu(userPage);
+
+    // Verify search remains open
+    const searchField = userPage.getByTestId(TEST_IDS.SEARCH_FIELD);
+    await expect(searchField).toBeVisible();
+    const searchInput = userPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
+    await expect(searchInput).toHaveValue(searchTerm);
+  });
+
+  // @TODO: write more complex test with two rooms matching the filter and verify sort is working in both directions
+  await test.step('should apply both search and sort together', async () => {
+    // Refresh the page so the sort menu is closed and search field reset
+    await navigation.goToHome(userPage);
+
+    const firstRoomName = await dashboardRooms.getFirstRoomName(userPage);
+    expect(firstRoomName).not.toBeNull();
+
+    // search by the starting letters of the room name
+    const searchTerm = firstRoomName!.trim().substring(0, 3).toLowerCase();
+    expect(searchTerm).toHaveLength(3);
+    await dashboardRooms.searchRooms(userPage, searchTerm);
+
+    // open sort, and select sort by room name
+    await dashboardRooms.openSortMenu(userPage);
+    await dashboardRooms.selectSortOption(userPage, 'room_name');
+
+    // assert we found the first room
+    expect(await dashboardRooms.getCountOfRoomsDisplayed(userPage)).toBe(1);
+  });
+
+  await test.step('Edge Cases', async () => {
+    await test.step('should handle special characters in search', async () => {
+      // Refresh the page so the sort menu is closed and search field reset
+      await navigation.goToHome(userPage);
+
       const specialChars = ['@', '#', '$', '%'];
-
       for (const char of specialChars) {
         await test.step(`Search with ${char}`, async () => {
-          await rooms.searchRooms(adminPage, char);
+          await dashboardRooms.searchRooms(userPage, char);
           // Should not crash — clearSearch succeeding is the assertion
-          await rooms.clearSearch(adminPage);
+          await dashboardRooms.clearSearch(userPage);
         });
       }
     });
 
-    test('should handle rapid sort option changes', async ({ adminPage }) => {
+    await test.step('should handle rapid sort option changes', async () => {
       await test.step('Rapidly change sort options', async () => {
-        await rooms.openSort(adminPage);
-        await rooms.selectSortOption(adminPage, 'room_name');
-        await rooms.selectSortOption(adminPage, 'created');
-        await rooms.selectSortOption(adminPage, 'last_update');
+        // Refresh the page so the sort menu is closed and search field reset
+        await navigation.goToHome(userPage);
+        await dashboardRooms.openSortMenu(userPage);
+        await dashboardRooms.selectSortOption(userPage, 'room_name');
+        await dashboardRooms.selectSortOption(userPage, 'created');
+        await dashboardRooms.selectSortOption(userPage, 'last_update');
       });
 
       await test.step('Verify final sort option', async () => {
-        const sortSelect = adminPage.getByTestId(TEST_IDS.SORT_SELECT).locator('input, select');
+        const sortSelect = userPage.getByTestId(TEST_IDS.SORT_SELECT).locator('input, select');
         await expect(sortSelect).toHaveValue('last_update');
       });
     });
 
-    test('should preserve search when toggling sort panel', async ({ adminPage }) => {
+    await test.step('should preserve search when toggling sort panel', async () => {
+      // Refresh the page so the sort menu is closed and search field reset
+      await navigation.goToHome(userPage);
+
       const searchTerm = 'persistent';
+      await dashboardRooms.searchRooms(userPage, searchTerm);
 
-      await test.step('Apply search', async () => {
-        await rooms.searchRooms(adminPage, searchTerm);
-      });
+      // Toggle sort panel multiple times
+      await dashboardRooms.openSortMenu(userPage);
+      await dashboardRooms.closeSortMenu(userPage);
+      await dashboardRooms.openSortMenu(userPage);
+      await dashboardRooms.closeSortMenu(userPage);
 
-      await test.step('Toggle sort panel multiple times', async () => {
-        await rooms.openSort(adminPage);
-        await rooms.closeSort(adminPage);
-        await rooms.openSort(adminPage);
-        await rooms.closeSort(adminPage);
-      });
-
-      await test.step('Verify search persists', async () => {
-        const searchField = adminPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
-        await expect(searchField).toHaveValue(searchTerm);
-      });
+      // Verify search persists
+      const searchField = userPage.getByTestId(TEST_IDS.SEARCH_FIELD).locator('input');
+      await expect(searchField).toHaveValue(searchTerm);
     });
   });
 });

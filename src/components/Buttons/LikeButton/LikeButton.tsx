@@ -39,8 +39,12 @@ const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled, onCha
     setIsPending(true);
     try {
       const response = await (likeStatus
-        ? isIdea ? removeIdeaLike(item.hash_id) : removeCommentLike(item.id)
-        : isIdea ? addIdeaLike(item.hash_id) : addCommentLike(item.id));
+        ? isIdea
+          ? removeIdeaLike(item.hash_id)
+          : removeCommentLike(item.id)
+        : isIdea
+          ? addIdeaLike(item.hash_id)
+          : addCommentLike(item.id));
       if (response.error) {
         updateLikeStatus(!likeStatus); // Revert like status if API call fails
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });

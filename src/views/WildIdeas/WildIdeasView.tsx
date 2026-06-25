@@ -44,6 +44,7 @@ const WildIdeas = () => {
   // Use the search and sort hook
   const { searchQuery, sortKey, sortDirection, scopeHeaderProps } = useSearchAndSort({
     sortOptions: IDEAS_SORT_OPTIONS,
+    storageKey: 'ideas-sort',
   });
 
   // Create text filter for ideas
@@ -179,7 +180,6 @@ const WildIdeas = () => {
           sx={{
             position: 'fixed',
             bottom: 'max(40px, calc(40px + var(--safe-area-inset-bottom, 0px)))',
-            right: 16,
             zIndex: 1000,
           }}
           data-testid="add-idea-button"

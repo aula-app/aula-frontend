@@ -4,9 +4,11 @@ import { defineConfig, devices } from '@playwright/test';
 // Project-level `use: { ...devices['Desktop Chrome'] }` merges on top (adds viewport/UA).
 export default defineConfig({
   testDir: './tests',
-  timeout: 60_000,
+  // single test timeout (base.describe.serial -> **test** -> test.step)
+  // quite large due to some tests having many steps
+  timeout: 180_000,
   expect: {
-    timeout: 20_000,
+    timeout: 15_000,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -21,15 +23,20 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'on-first-retry',
 
-    actionTimeout: 20_000,
-    navigationTimeout: 20_000,
+    actionTimeout: 15_000,
+    navigationTimeout: 15_000,
 
     launchOptions: {
       args: [
-        '--disable-gl-drawing-for-tests',
+        // linux needs GL drawing
+        // '--disable-gl-drawing-for-tests',
         '--disable-dev-shm-usage',
         '--disable-extensions',
+        '--disable-plugins',
         '--disable-background-networking',
+        '--disable-accelerated-2d-canvas',
+        '--disable-renderer-backgrounding',
+        '--memory-pressure-off',
         '--mute-audio',
       ],
     },
@@ -39,52 +46,17 @@ export default defineConfig({
   globalSetup: './tests/lifecycle/setup-auth.ts',
   globalTeardown: './tests/lifecycle/teardown-auth.ts',
 
+  // Set a global maximum of workers so that we initialize DB with correct amount of tenants
+  // See docker-compose.e2e.yml (backend-setup) for more info
+  workers: 3,
+
   projects: [
-    // ── 1. instance-offline ────────────────────────────────────────────────────
-    // Flips a global instance flag that breaks every other test while active.
-    // Must finish before anything else starts.
     {
-      name: 'offline',
-      testDir: './tests/specs/core',
-      testMatch: '**/instance-offline.spec.ts',
+      name: 'all',
+      testDir: './tests/specs',
+      testIgnore: ['**/disabled/**'],
       use: { ...devices['Desktop Chrome'] },
-      workers: 1,
-    },
-
-    // ── 2. core (parallel) ────────────────────────────────────────────────────
-    // All remaining core specs. Each file uses uniquely-hashed entity names so
-    // workers don't clash in the database.
-    // CI uses fewer workers to avoid overwhelming the backend.
-    {
-      name: 'core',
-      testDir: './tests/specs/core',
-      testIgnore: ['**/disabled/**', '**/instance-offline.spec.ts', '**/rooms-search-and-sort.spec.ts'],
-      use: { ...devices['Desktop Chrome'] },
-      workers: 2,
-      dependencies: ['offline'],
-    },
-
-    // ── 3. search-sort ────────────────────────────────────────────────────────
-    // Runs after core so it operates on a stable room list.
-    // Seeds its own room in beforeAll for deterministic assertions.
-    {
-      name: 'search-sort',
-      testDir: './tests/specs/core',
-      testMatch: '**/rooms-search-and-sort.spec.ts',
-      use: { ...devices['Desktop Chrome'] },
-      workers: 1,
-      dependencies: ['core'],
-    },
-
-    // ── 4. admin ──────────────────────────────────────────────────────────────
-    // Admin-only specs that modify global configuration — run after core.
-    {
-      name: 'admin',
-      testDir: './tests/specs/admin',
-      testIgnore: '**/disabled/**',
-      use: { ...devices['Desktop Chrome'] },
-      workers: 1,
-      dependencies: ['core'],
+      workers: 3,
     },
   ],
 });

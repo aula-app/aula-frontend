@@ -1,3 +1,3 @@
 import CategoryList from './CategoryList';
 
-export { CategoryList as default,  };
+export { CategoryList as default };

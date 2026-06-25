@@ -8,7 +8,6 @@ import IdeaForms from './IdeaForms';
 import MessageForms from './MessageForms';
 import ReportForms from './ReportForms';
 import RoomForms from './RoomForms';
-import SurveyForms from './SurveyForms';
 import UserForms from './UserForms';
 
 export {

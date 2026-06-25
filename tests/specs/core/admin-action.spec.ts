@@ -1,15 +1,18 @@
-import { expect } from '@playwright/test';
-import { test } from '../../fixtures/test-fixtures';
+import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 import { TEST_IDS } from '../../../src/test-ids';
 
-test.describe.serial('Admin configuration', () => {
-  test('Admin configures actions', async ({ adminPage }) => {
+test('Admin configuration', async ({ newPageFor }) => {
+  const adminPage = await newPageFor('admin');
+
+  await test.step('Admin configures actions', async () => {
+
     await test.step('Navigate to action settings', async () => {
       await navigation.goToSettings(adminPage);
       await navigation.openAccordion(adminPage, 'config-accordion-action');
     });
+
     // MUI DatePicker does not support data-testid
     const startDateInput = adminPage.locator(`[name="${TEST_IDS.TIMEDCOMMAND_STARTDATE_INPUT}"]`)
     const pastDate = '01.01.2000';
@@ -19,6 +22,7 @@ test.describe.serial('Admin configuration', () => {
       await startDateInput.fill(pastDate);
       await expect(startDateInput).toHaveAttribute('aria-invalid', 'true');
     });
+
     // We could test with the default preset date = today, but an action scheduled for today
     // at 00:00 is in effectively in the past and might execute immediately, or within seconds,
     // and already not present when we GET the list in a subsequent fetch.

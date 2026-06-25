@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test';
-import { test } from '../../fixtures/test-fixtures';
+import { test } from '../../fixtures/aula-tests-fixture';
 import * as formInteractions from '../../interactions/forms';
 import * as navigation from '../../interactions/navigation';
 import { TestConstants } from '../../support/config';
@@ -14,20 +14,9 @@ type PasswordChangeContext = {
 /**
  * Password Change Tests
  * Tests password change functionality including validation and error handling
- *
- * NOTE: Tests run serially — they share one user whose password is mutated
- * across tests. currentPassword tracks the real backend state so each test
- * uses the correct old password regardless of order or prior failures.
- *
- * Retries are disabled: a retry would send the wrong "old password" since
- * the backend state was already mutated on the first attempt.
  */
-test.describe.configure({ retries: 0 });
-test.describe.serial('Change pass flow', () => {
-  // Tracks the user's actual current password across serial tests.
-  let currentPassword = TestConstants.DEFAULT_PASSWORD;
-
-  const changedPassword = 'newPass#veryLongIndeed, one must login with 60 char long pass';
+test.describe('Change pass flow', () => {
+  const newPassword = 'newPass#veryLongIndeed, one must login with 60 char long pass';
 
   const changePassword = async (user: Page, passFields: PasswordChangeContext) => {
     await navigation.goToProfile(user);
@@ -59,109 +48,102 @@ test.describe.serial('Change pass flow', () => {
     await successDiv.waitFor({ state: 'hidden' });
   };
 
-  test('User can successfully change password with valid inputs', async ({ ensureUser, createUserPage }) => {
-    await test.step('Create password test user', async () => {
-      await ensureUser('password', 20);
-    });
-
-    const passwordUser = await ensureUser('password');
-    const user = await createUserPage(passwordUser.username);
+  test('User can successfully change password with valid inputs', async ({ newPageFor }) => {
+    const userPage = await newPageFor('user');
+    const studentPage = await newPageFor('student');
 
     await test.step('Change password with valid inputs', async () => {
-      await changePassword(user, {
-        oldPassword: currentPassword,
-        newPassword: changedPassword,
-        confirmPassword: changedPassword,
+      await changePassword(userPage, {
+        oldPassword: TestConstants.DEFAULT_PASSWORD,
+        newPassword: newPassword,
+        confirmPassword: newPassword,
       });
-      await checkSuccessDiv(user);
-      currentPassword = changedPassword;
+      await checkSuccessDiv(userPage);
     });
 
     await test.step('Verify user can login with new password', async () => {
-      await logout(user);
-      await login(user, { ...passwordUser, password: currentPassword });
+      await logout(userPage);
+      await login(userPage, { username: 'user', password: newPassword });
     });
-  });
 
-  test('User cannot change password with incorrect current password', async ({ ensureUser, createUserPage }) => {
-    const passwordUser = await ensureUser('password');
-    const user = await createUserPage(passwordUser.username);
-
-    await test.step('Attempt password change with incorrect current password', async () => {
-      await changePassword(user, {
+    await test.step('Verify error on password change with old password', async () => {
+      await changePassword(userPage, {
         oldPassword: TestConstants.DEFAULT_PASSWORD, // intentionally wrong — password was already changed
-        newPassword: changedPassword,
-        confirmPassword: changedPassword,
+        newPassword: 'newPass123456',
+        confirmPassword: 'newPass123456',
       });
-    });
 
-    await test.step('Verify error is displayed', async () => {
-      const errorDiv = user.getByTestId('password-change-error');
+      const errorDiv = userPage.getByTestId('password-change-error');
       await errorDiv.waitFor({ state: 'visible' });
       await expect(errorDiv).toBeVisible();
     });
+
+    await test.step('Verify user cannot login with old password', async () => {
+      await logout(userPage);
+      await expect(login(userPage, { username: 'user', password: TestConstants.DEFAULT_PASSWORD })).rejects.toThrow();
+    });
+
+    await test.step('Verify some other user still has unchanged password', async () => {
+      await logout(studentPage);
+      await login(studentPage, { username: 'student', password: TestConstants.DEFAULT_PASSWORD });
+    });
   });
 
-  test('User cannot change password when new password and confirmation do not match', async ({
-    ensureUser,
-    createUserPage,
-  }) => {
-    const passwordUser = await ensureUser('password');
-    const user = await createUserPage(passwordUser.username);
+  test('User cannot change password when new password and confirmation do not match', async ({ newPageFor }) => {
+    const user = await newPageFor('user');
 
-    await test.step('Attempt password change with mismatched confirmation', async () => {
+    await test.step('Verify validation error when use unmatched confirmation password', async () => {
       await changePassword(user, {
-        oldPassword: 'newPassword0',
+        oldPassword: TestConstants.DEFAULT_PASSWORD,
         newPassword: 'newPassword1',
         confirmPassword: 'differentPassword',
       });
-    });
 
-    await test.step('Verify validation error', async () => {
       const errorLabel = user.locator('#confirmPassword-error-message');
       expect(await errorLabel.textContent()).not.toHaveLength(0);
     });
   });
 
-  test('User cannot submit form with empty password fields', async ({ ensureUser, createUserPage }) => {
-    const passwordUser = await ensureUser('password');
-    const user = await createUserPage(passwordUser.username);
+  test('User cannot submit form with empty password fields', async ({ newPageFor }) => {
+    const user = await newPageFor('user');
 
-    await test.step('Attempt password change with empty confirmation', async () => {
+    await test.step('Verify validation error when empty confirmation of password', async () => {
       await changePassword(user, {
         oldPassword: 'newPassword0',
         newPassword: 'newPassword1',
         confirmPassword: '',
       });
-    });
 
-    await test.step('Verify validation error', async () => {
       const errorLabel = user.locator('#confirmPassword-error-message');
       expect(await errorLabel.textContent()).not.toHaveLength(0);
     });
   });
 
-  test('User can change password multiple times in sequence', async ({ ensureUser, createUserPage }) => {
-    const passwordUser = await ensureUser('password');
-    const user = await createUserPage(passwordUser.username);
+  test('User can change password multiple times in sequence', async ({ newPageFor }) => {
+    const userPage = await newPageFor('user');
+    let currentPassword = TestConstants.DEFAULT_PASSWORD;
 
-    await test.step('Change password multiple times, resetting to original at the end', async () => {
+    await test.step('Change password multiple times', async () => {
       const sequence = [
+        { newPassword: TestConstants.DEFAULT_PASSWORD },
         { newPassword: 'newPassword1' },
         { newPassword: 'newPassword2' },
-        // Final iteration resets back to DEFAULT_PASSWORD so the user ends in a known state.
-        { newPassword: TestConstants.DEFAULT_PASSWORD },
       ];
 
       for (const { newPassword } of sequence) {
-        await changePassword(user, {
+        await changePassword(userPage, {
           oldPassword: currentPassword,
           newPassword,
           confirmPassword: newPassword,
         });
-        await checkSuccessDiv(user);
+        await checkSuccessDiv(userPage);
         currentPassword = newPassword;
       }
+    });
+
+    await test.step('Verify user can login with new password', async () => {
+      await logout(userPage);
+      await login(userPage, { username: 'user', password: currentPassword });
     });
   });
 });

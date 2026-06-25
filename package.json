@@ -1,6 +1,6 @@
 {
   "name": "aula",
-  "version": "1.9.0",
+  "version": "1.9.2",
   "description": "aula: gemeinsam gestalten",
   "author": {
     "name": "Aula App",
@@ -36,7 +36,9 @@
     "test": "NODE_OPTIONS=--max-old-space-size=15000 playwright test",
     "test:ui": "NODE_OPTIONS=--max-old-space-size=15000 playwright test --ui",
     "type": "tsc",
-    "knip": "knip"
+    "knip": "knip",
+    "trivy-fs": "trivy fs .",
+    "trivy-image": "docker build -t aula-frontend:latest-trivy . && trivy image aula-frontend:latest-trivy && docker image rm aula-frontend:latest-trivy"
   },
   "dependencies": {
     "@capacitor/android": "^8.2.0",
@@ -85,6 +87,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "knip": "^5.33.2",
+    "mariadb": "^3.5.3",
     "prettier": "^3.0.0",
     "typescript": "^5.6.3",
     "vite": "^5.4.20",

@@ -1,9 +1,8 @@
 import * as types from '../support/types';
 import * as shared from '../support/utils';
 import { TestConstants } from '../support/config';
-import { UserData } from '../support/types';
 
-export function createRoom(suffix = '', users: UserData[] = []) {
+export function createRoom(suffix = '', users: { username: string }[] = []) {
   const hash = shared.gensym();
   return {
     name: 'test-room-' + hash + (suffix ? `-${suffix}` : ''),
@@ -12,12 +11,11 @@ export function createRoom(suffix = '', users: UserData[] = []) {
   } as types.RoomData;
 }
 
-export function createIdea(suffix = '', setup?: { box?: string; category?: string; comments?: string[] }) {
+export function createIdea(suffix = '', setup?: { category?: string }) {
   const hash = shared.gensym();
   return {
     name: 'test-idea-' + hash + (suffix ? `-${suffix}` : ''),
     description: 'generated during testing data',
-    box: setup?.box,
     category: setup?.category,
   } as types.IdeaData;
 }
@@ -35,14 +33,20 @@ export function createBox(suffix = '', room: types.RoomData, ideas = []) {
 }
 
 export function createUserData(username: string, role = 20) {
-  const runId = shared.getRunId();
-  const hash = shared.gensym();
   return {
-    username: `test-${username}-${hash}`,
+    username: `test-${username}`,
     password: TestConstants.DEFAULT_PASSWORD,
-    displayName: `${username} ${hash}`,
-    realName: `${username} ${runId} Test User`,
+    displayName: `display: ${username}`,
+    realName: `${username} Test User`,
     role: role,
     about: 'generated in e2e tests',
   } as types.UserData;
+}
+
+export function createGroupData(users: { username: string }[] = []) {
+  return {
+    group_name: shared.gensym(`test-group-`),
+    description_public: `test group created in e2e tests`,
+    users,
+  } as types.GroupData;
 }
