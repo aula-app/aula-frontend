@@ -1,3 +1,25 @@
+## 2.0.0
+
+- **New features**
+  - New toast notification system with animations, replacing the previous snackbar library
+  - Modal is now a global component, available across all private views
+  - Profile view added to the v2 private layout
+  - Bilingual about page
+
+- **Accessibility improvements**
+  - Breadcrumbs reviewed and updated for screen reader compatibility in private routes
+
+- **Bug fixes**
+  - Fixed routing logic to prevent Tech Admins from accessing unauthorized routes
+  - Fixed offline view layout and behavior
+  - Fixed navigation horizontal overflow
+
+- **Internal**
+  - Completed v2 component migration for public routes (Login, Recovery, Code, NotFound)
+  - v2 private layout components (PrivateLayout, TopBar, SideBar) now fully migrated
+  - Announcement component now uses the new generic Dialog component
+  - E2E tests for announcements expanded: covers obligatory and optional consent flows, dismiss button, per-user consent isolation, and admin delete flow
+
 ## Unreleased
 - **Bug fixes**
   - Sort preference in Ideas Box and Wild Ideas views is now persisted across navigation — going back no longer resets the selected sort order

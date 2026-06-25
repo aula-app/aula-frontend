@@ -1,27 +1,18 @@
-import { AppIconButton, AppLink } from "@/components";
-import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
-import { loginUser } from "@/services/login";
-import { completeSsoLink, initiateSso } from "@/services/sso";
-import { useAppStore } from "@/store";
-import { LoginFormValues } from "@/types/LoginTypes";
-import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
-import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Alert,
-  Button,
-  Collapse,
-  Divider,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { AppIconButton, AppLink } from '@/components';
+import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from '@/config';
+import { loginUser } from '@/services/login';
+import { completeSsoLink, initiateSso } from '@/services/sso';
+import { useAppStore } from '@/store';
+import { LoginFormValues } from '@/types/LoginTypes';
+import { localStorageGet, localStorageSet, parseJwt } from '@/utils';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Alert, Button, Collapse, Divider, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import * as yup from "yup";
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import * as yup from 'yup';
 
 /**
  * Renders "Login" view for Login flow
@@ -43,12 +34,12 @@ const LoginView = () => {
 
   const schema = yup
     .object({
-      username: yup.string().required(t("forms.validation.required")),
+      username: yup.string().required(t('forms.validation.required')),
       password: yup
         .string()
-        .required(t("forms.validation.required"))
-        .min(4, t("forms.validation.minLength", { var: 4 }))
-        .max(64, t("forms.validation.maxLength", { var: 64 }))
+        .required(t('forms.validation.required'))
+        .min(4, t('forms.validation.minLength', { var: 4 }))
+        .max(64, t('forms.validation.maxLength', { var: 64 })),
     })
     .required(t('forms.validation.required'));
 
@@ -65,17 +56,17 @@ const LoginView = () => {
   };
 
   const onSubmit = async (formData: LoginFormValues) => {
-    const instanceApiUrl = await localStorageGet("api_url");
+    const instanceApiUrl = await localStorageGet('api_url');
 
     if (!instanceApiUrl) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.noServer'), type: 'error' } });
       return;
     }
 
     try {
       setLoading(true);
 
-      const jwt_token = localStorageGet("token");
+      const jwt_token = localStorageGet('token');
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -84,7 +75,7 @@ const LoginView = () => {
       setLoading(false);
 
       if (response.online_mode !== undefined && response.online_mode !== 1) {
-        navigate("/offline", { replace: true });
+        navigate('/offline', { replace: true });
         return;
       }
 
@@ -101,7 +92,9 @@ const LoginView = () => {
           'user_status' in response && response.user_status !== null
             ? response.user_status === 0
               ? t('errors.accountInactive')
-              : t('errors.accountSuspended', { var: response.data ? t('errors.accountSuspendDate', { var: response.data }) : '' })
+              : t('errors.accountSuspended', {
+                  var: response.data ? t('errors.accountSuspendDate', { var: response.data }) : '',
+                })
             : t('errors.invalidCredentials')
         );
         return;
@@ -127,18 +120,18 @@ const LoginView = () => {
         setSsoLinkToken(null);
       }
 
-      localStorageSet("token", response.JWT);
-      dispatch({ type: "LOG_IN" });
-      navigate("/", { replace: true });
+      localStorageSet('token', response.JWT);
+      dispatch({ type: 'LOG_IN' });
+      navigate('/', { replace: true });
     } catch (e) {
       setLoading(false);
       if (e instanceof Error) {
         if (e.name === 'AbortError') {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.timeout'), type: 'error' } });
+          dispatch({ type: 'ADD_TOAST', message: { message: t('errors.timeout'), type: 'error' } });
         } else if (e.name === 'NetworkError') {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.network'), type: 'error' } });
+          dispatch({ type: 'ADD_TOAST', message: { message: t('errors.network'), type: 'error' } });
         } else {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+          dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
         }
       }
     }
@@ -161,13 +154,16 @@ const LoginView = () => {
 
   useEffect(() => {
     const ssoError = searchParams.get('sso_error');
-    const ssoLink  = searchParams.get('sso_link');
+    const ssoLink = searchParams.get('sso_link');
 
     if (ssoError === 'account_link_required' && ssoLink) {
       setSsoLinkToken(ssoLink);
-      setLinkBanner(t('errors.sso.account_link_required', {
-        defaultValue: 'We found an existing account for the email returned by your SSO provider. Log in once with your aula password to link the accounts; future SSO logins will go through directly.',
-      }));
+      setLinkBanner(
+        t('errors.sso.account_link_required', {
+          defaultValue:
+            'We found an existing account for the email returned by your SSO provider. Log in once with your aula password to link the accounts; future SSO logins will go through directly.',
+        })
+      );
       return;
     }
 
@@ -187,30 +183,20 @@ const LoginView = () => {
         runtimeConfig = await loadRuntimeConfig();
       }
       setConfig(runtimeConfig);
-    })()
+    })();
   }, []);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Stack gap={2}>
-        <Typography variant="h2">
-          {t("auth.messages.welcome")}
-        </Typography>
+        <Typography variant="h2">{t('auth.messages.welcome')}</Typography>
         <Collapse in={linkBanner !== ''}>
-          <Alert
-            variant="outlined"
-            severity="info"
-            onClose={() => setLinkBanner('')}
-          >
+          <Alert variant="outlined" severity="info" onClose={() => setLinkBanner('')}>
             {linkBanner}
           </Alert>
         </Collapse>
         <Collapse in={loginError !== ''}>
-          <Alert
-            variant="outlined"
-            severity="error"
-            onClose={() => setError('')}
-          >
+          <Alert variant="outlined" severity="error" onClose={() => setError('')}>
             {loginError}
           </Alert>
         </Collapse>
@@ -218,25 +204,25 @@ const LoginView = () => {
           <TextField
             required
             disabled={isLoading}
-            label={t("auth.login.label")}
+            label={t('auth.login.label')}
             id="login-username"
             slotProps={{
               input: {
-                "aria-labelledby": "login-username-label",
-                "aria-invalid": !!errors.username,
-                "aria-errormessage": errors.username ? "username-error-message" : undefined,
-                autoCapitalize: "none"
+                'aria-labelledby': 'login-username-label',
+                'aria-invalid': !!errors.username,
+                'aria-errormessage': errors.username ? 'username-error-message' : undefined,
+                autoCapitalize: 'none',
               },
               htmlInput: {
-                autoComplete: "username"
+                autoComplete: 'username',
               },
               inputLabel: {
-                id: "login-username-label",
-                htmlFor: "login-username"
-              }
+                id: 'login-username-label',
+                htmlFor: 'login-username',
+              },
             }}
-            {...register("username", {
-              shouldUnregister: false
+            {...register('username', {
+              shouldUnregister: false,
             })}
             error={!!errors.username}
             helperText={<span id="username-error-message">{errors.username?.message || ''}</span>}
@@ -245,30 +231,30 @@ const LoginView = () => {
           <TextField
             required
             disabled={isLoading}
-            type={showPassword ? "text" : "password"}
-            label={t("auth.password.label")}
+            type={showPassword ? 'text' : 'password'}
+            label={t('auth.password.label')}
             id="login-password"
-            {...register("password", {
-              shouldUnregister: false
+            {...register('password', {
+              shouldUnregister: false,
             })}
             error={!!errors.password}
             helperText={<span id="password-error-message">{errors.password?.message || ''}</span>}
             sx={{ mt: 0 }}
             slotProps={{
               htmlInput: {
-                autoComplete: "current-password"
+                autoComplete: 'current-password',
               },
               input: {
-                "aria-labelledby": "login-password-label",
-                "aria-invalid": !!errors.password,
-                "aria-errormessage": errors.password ? "password-error-message" : undefined,
-                autoCapitalize: "none",
+                'aria-labelledby': 'login-password-label',
+                'aria-invalid': !!errors.password,
+                'aria-errormessage': errors.password ? 'password-error-message' : undefined,
+                autoCapitalize: 'none',
                 endAdornment: (
                   <InputAdornment position="end">
                     <AppIconButton
-                      aria-label={t("ui.accessibility.togglePasswordVisibility")}
-                      icon={showPassword ? "visibilityOn" : "visibilityOff"}
-                      title={showPassword ? t("actions.hide") : t("actions.show")}
+                      aria-label={t('ui.accessibility.togglePasswordVisibility')}
+                      icon={showPassword ? 'visibilityOn' : 'visibilityOff'}
+                      title={showPassword ? t('actions.hide') : t('actions.show')}
                       onClick={handleShowPasswordClick}
                       onMouseDown={(e) => e.preventDefault()}
                     />
@@ -276,19 +262,14 @@ const LoginView = () => {
                 ),
               },
               inputLabel: {
-                id: "login-password-label",
-                htmlFor: "login-password"
-              }
+                id: 'login-password-label',
+                htmlFor: 'login-password',
+              },
             }}
           />
         </Stack>
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={isLoading}
-          aria-label={t("auth.login.button")}
-        >
-          {t("auth.login.button")}
+        <Button type="submit" variant="contained" disabled={isLoading} aria-label={t('auth.login.button')}>
+          {t('auth.login.button')}
         </Button>
         <Grid container justifyContent="end" alignItems="center">
           <Button
@@ -302,20 +283,24 @@ const LoginView = () => {
           </Button>
         </Grid>
 
-        {(config.IS_SSO_ENABLED) && (
+        {config.IS_SSO_ENABLED && (
           <>
-            <Stack direction='row' mb={2} alignItems='center'>
+            <Stack direction="row" mb={2} alignItems="center">
               <Divider sx={{ flex: 1 }} />
-              <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
+              <Typography px={2} color="secondary">
+                {t('ui.common.or')}
+              </Typography>
               <Divider sx={{ flex: 1 }} />
             </Stack>
-            <Stack direction='column' gap={1} mb={2} alignItems='center'>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={handleSsoLogin}
-                  aria-label={t('auth.sso.arialabel')}
-                >{t('auth.sso.button')}</Button>
+            <Stack direction="column" gap={1} mb={2} alignItems="center">
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleSsoLogin}
+                aria-label={t('auth.sso.arialabel')}
+              >
+                {t('auth.sso.button')}
+              </Button>
             </Stack>
           </>
         )}

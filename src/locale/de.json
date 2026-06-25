@@ -1,4 +1,146 @@
 {
+  "v2": {
+    "alt": {
+      "logo": "Aula: Bildungsplattform-Logo",
+      "microphone": "Eine Illustration einer Eule mit einem Mikrofon, die die Ankündigungsfunktion repräsentiert",
+      "sleeping": "Schlafende Eulen-Illustration"
+    },
+    "form": {
+      "code": {
+        "label": "Instanzcode"
+      },
+      "email": {
+        "label": "E-Mail"
+      },
+      "login": {
+        "label": "Benutzername"
+      },
+      "password": {
+        "label": "Passwort",
+        "show": "Passwort anzeigen",
+        "hide": "Passwort verbergen"
+      },
+      "passwordConfirm": {
+        "label": "Passwort bestätigen"
+      },
+      "passwordNew": {
+        "label": "Neues Passwort",
+        "helper": "Ihr Passwort muss mindestens {{var}} Zeichen lang sein.",
+        "hint": "Eine gute Idee ist es, einen Satz zu erfinden, der eigentlich nichts bedeutet, den Sie sich aber trotzdem leicht merken können."
+      },
+      "passwordTemporary": {
+        "label": "Temporäres Passwort",
+        "helper": "Geben Sie das von Ihrer Schule bereitgestellte temporäre Passwort ein."
+      },
+      "validation": {
+        "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+        "minLength": "Muss mindestens {{var}} Zeichen lang sein",
+        "maxLength": "Darf höchstens {{var}} Zeichen lang sein",
+        "required": "Dieses Feld ist erforderlich",
+        "passwordMatch": "Passwörter müssen übereinstimmen"
+      }
+    },
+    "page": {
+      "about": {
+        "button": "Über Aula",
+        "email": "E-Mail",
+        "legal": "Die aula gGmbH ist im Handelsregister Charlottenburg unter der Nummer 244593 B eingetragen. Vertreten durch: Alexa Schaegner (Geschäftsführerin), Steffen Wenzel (Geschäftsführer)",
+        "publisher": "Anbieter",
+        "phone": "Telefon",
+        "title": "aula App",
+        "version": "Version"
+      },
+      "code": {
+        "chip": "Instanzcode: {{var}}",
+        "label": "Instanzcode festlegen",
+        "title": "Instanzcode eingeben",
+        "hint": "Bitte geben Sie den von Ihrer Schule bereitgestellten Instanzcode ein, um auf die Plattform zuzugreifen."
+      },
+      "login": {
+        "button": "Anmelden",
+        "link": "Zurück zur Anmeldung",
+        "title": "Willkommen bei {{var}}"
+      },
+      "notFound": {
+        "title": "Hier gibt es keine Neuigkeiten",
+        "hint": "Die von Ihnen gesuchte Seite existiert nicht oder wurde verschoben. Bitte überprüfen Sie die URL oder kehren Sie zur Startseite zurück."
+      },
+      "offline": {
+        "title": "Die Schule ist derzeit geschlossen",
+        "hint": "Bitte versuchen Sie es später erneut oder wenden Sie sich an Ihren Administrator für weitere Informationen."
+      },
+      "recovery": {
+        "button": "Wiederherstellungs-E-Mail senden",
+        "link": "Passwort vergessen?",
+        "title": "Passwort wiederherstellen"
+      },
+      "passwordReset": {
+        "title": "Passwort zurücksetzen"
+      },
+      "passwordSet": {
+        "error": "Ungültiger oder abgelaufener Link",
+        "title": "Passwort festlegen",
+        "hint": "Dieser Link ist ungültig. Bitte stellen Sie sicher, dass Sie den gesamten Link aus Ihrer E-Mail kopiert haben, und versuchen Sie es erneut."
+      }
+    },
+    "ui": {
+      "a11y": {
+        "navigation": "Navigationsmenü",
+        "skipToContent": "Zum Hauptinhalt springen",
+        "breadcrumb": {
+          "label": "Breadcrumb-Navigation",
+          "description": "Navigieren von {{var}} zu vorherigen Seiten",
+          "nav": "Navigation der übergeordneten Seiten"
+        }
+      },
+      "actions": {
+        "agree": "Zustimmen",
+        "print": "Diese Seite drucken",
+        "report": "Einen Fehler melden"
+      },
+      "announcement": {
+        "title": "Ankündigung",
+        "button": "Verstanden",
+        "helper": "Diese Ankündigung erfordert Ihre Zustimmung. Bitte aktivieren Sie das Kontrollkästchen, um fortzufahren."
+      },
+      "button": {
+        "cancel": "Abbrechen",
+        "clear": "Löschen",
+        "close": "Schließen",
+        "confirm": "Bestätigen",
+        "submit": "Übermitteln",
+        "edit": "Bearbeiten"
+      },
+      "code": {
+        "button": "Code: {{var}}",
+        "copy": "Instanzcode in die Zwischenablage kopieren",
+        "error": "Fehler beim Kopieren des Instanzcodes in die Zwischenablage",
+        "success": "Instanzcode in die Zwischenablage kopiert"
+      },
+      "darkMode": {
+        "label": "Dunkelmodus"
+      },
+      "language": {
+        "label": "Sprache",
+        "hint": "Sprache wechseln"
+      },
+      "lightMode": {
+        "label": "Hellmodus"
+      },
+      "logout": {
+        "button": "Abmelden",
+        "label": "Von Ihrem Konto abmelden"
+      },
+      "menu": {
+        "open": "Hauptmenü öffnen",
+        "close": "Hauptmenü schließen"
+      },
+      "navigation": "Navigationsmenü",
+      "moveToPhase": "Zu {{phase}} wechseln",
+      "phases": "Phasennavigation",
+      "toggle": "{{var}} umschalten"
+    }
+  },
   "actions": {
     "activate": "{{var}} aktivieren",
     "add": "Neue {{var}}",
@@ -9,6 +151,7 @@
     "cancel": "Abbrechen",
     "change": "{{var}} ändern",
     "clear": {
+      "generic": "Löschen",
       "filters": "Filter löschen"
     },
     "close": "Schließen",
@@ -40,6 +183,7 @@
     "set": "{{var}} setzen",
     "show": "Anzeigen",
     "showFilters": "Filter anzeigen",
+    "switchLanguage": "Zu {{var}} wechseln",
     "submitting": "Wird übermittelt",
     "unarchive": "Aus Archiv holen",
     "updating": "Aktualisierung"
@@ -67,7 +211,7 @@
     },
     "login": {
       "button": "Login",
-      "instanceCode": "Instanzcode: {{var}}",
+      "instanceCode": "Instanzcode: {{var}} — zum Ändern klicken",
       "label": "Nutzername",
       "noAccount": "Du hast noch kein Konto?",
       "reset_code": "neuer Code",
@@ -93,13 +237,14 @@
       "copied": "Passwort in die Zwischenablage kopiert",
       "current": "Aktuelles Passwort",
       "guidelines": {
-        "title": "Passwort-Richtlinien:",
-        "minLength": "Mindestens 12 Zeichen, maximal 64 Zeichen",
-        "hint": "Überleg dir einen Satz, der nichts aussagen muss, den du dir aber leicht merken kannst. Füge die Wörter zusammen, und schon hast du ein starkes Passwort."
+        "tempPassword": "Gib das temporäre Passwort ein, das von deiner Schule bereitgestellt wurde.",
+        "minLength": "Das Passwort muss mindestens {{var}} Zeichen lang sein.",
+        "hint": "Eine gute Idee ist es, sich einen Satz auszudenken, der nichts aussagen muss, den du dir aber leicht merken kannst. Füge die Wörter zusammen, und schon hast du ein starkes Passwort.",
+        "wrongLink": "Dieser Link ist ungültig. Bitte stelle sicher, dass du den gesamten Link aus deiner E-Mail kopiert hast, und versuche es erneut."
       },
       "label": "Passwort",
       "newPassword": "Neues Passwort",
-      "oldPassword": "Aktuelles Passwort",
+      "oldPassword": "Temporäres Passwort",
       "set": "Passwort festlegen",
       "success": "Passwort erfolgreich geändert"
     },
@@ -164,6 +309,7 @@
     "offline": "Der Zugang zu dieser Schule ist gesperrt. Bitte versuchen Sie es später wieder",
     "schoolClosed": "Die Schule ist derzeit geschlossen. Bitte versuchen Sie es später wieder.",
     "schoolClosedImage": "Schlafende Charakterillustration für Seite 'Schule geschlossen'",
+    "schoolClosedHint": "Bitte versuchen Sie es später erneut oder kontaktieren Sie Ihren Administrator für weitere Informationen.",
     "timeout": "Zeitüberschreitung der Anfrage",
     "unauthorized": "Diese Seite erfordert eine Authentifizierung",
     "sso": {
@@ -690,6 +836,10 @@
       "scheduledActionsTable": "Geplante Aktionen",
       "togglePasswordVisibility": "Passwortsichtbarkeit umschalten",
       "updatingContent": "Inhalt wird aktualisiert"
+    },
+    "announcement": {
+      "close": "Ankündigung schließen",
+      "title": "Ankündigung"
     },
     "common": {
       "all": "Alle",

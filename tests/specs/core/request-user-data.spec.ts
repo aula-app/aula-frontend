@@ -1,5 +1,6 @@
 import * as formInteractions from '../../interactions/forms';
 import { expect, test } from '../../fixtures/aula-tests-fixture';
+import { TEST_IDS } from '../../../src/test-ids';
 import * as navigation from '../../interactions/navigation';
 
 /**
@@ -22,7 +23,7 @@ test('Request User Data - Export Request and Download Flow', async ({ seededUser
 
     // Click the request data export button
     await formInteractions.clickButton(userPage, 'request-data-export-button');
-    await expect(userPage.getByTestId('success-alert')).toBeVisible();
+    await expect(userPage.getByTestId(TEST_IDS.TOAST_SUCCESS)).toBeVisible();
   });
 
   await test.step('Admin can approve the data export request', async () => {
@@ -57,10 +58,11 @@ test('Request User Data - Export Request and Download Flow', async ({ seededUser
     // Click on the Download button
     const downloadButton = userPage.getByTestId('download-data-button');
     await expect(downloadButton).toBeVisible();
-    await downloadButton.click();
 
-    // Wait for download to complete
-    const download = await userPage.waitForEvent('download', { timeout: 30_000 });
+    // Set up listener BEFORE click to avoid missing the event
+    const downloadPromise = userPage.waitForEvent('download', { timeout: 30_000 });
+    await downloadButton.click();
+    const download = await downloadPromise;
     const filename = download.suggestedFilename();
 
     expect(filename).toBeDefined();

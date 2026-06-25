@@ -32,6 +32,9 @@ package-lock.json
 # production
 /build
 
+#llm
+.claude/
+
 # misc
 .DS_Store
 /*.development
@@ -54,3 +57,7 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Claude Code
+.claude/settings.local.json
+.claude/hooks/node_modules/
