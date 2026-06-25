@@ -297,7 +297,6 @@ const LoginView = () => {
                 variant="outlined"
                 color="secondary"
                 onClick={handleSsoLogin}
-                disabled={isLoading || isSsoLoading}
                 aria-label={t('auth.sso.arialabel')}
               >
                 {t('auth.sso.button')}

@@ -20,6 +20,10 @@
   - Announcement component now uses the new generic Dialog component
   - E2E tests for announcements expanded: covers obligatory and optional consent flows, dismiss button, per-user consent isolation, and admin delete flow
 
+## Unreleased
+- **Bug fixes**
+  - Sort preference in Ideas Box and Wild Ideas views is now persisted across navigation — going back no longer resets the selected sort order
+  
 ## 1.9.3
 
 - **Technical improvements**

@@ -1,6 +1,5 @@
 import { expect, Page } from '@playwright/test';
 import { TEST_IDS } from '../../src/test-ids';
-import * as navigation from './navigation';
 
 // Search and Sort interactions for Rooms View (Home Page / Dashboard)
 

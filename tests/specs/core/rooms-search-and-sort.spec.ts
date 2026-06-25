@@ -193,7 +193,6 @@ test('Rooms Search (Dashboard/Home page)', async ({ seededUser, newPageFor }) =>
 
   await test.step('Edge Cases', async () => {
     await test.step('should handle special characters in search', async () => {
-
       // Refresh the page so the sort menu is closed and search field reset
       await navigation.goToHome(userPage);
 
