@@ -35,6 +35,11 @@ export const TEST_IDS = {
 
   // Offline state (PublicOfflineView)
   SCHOOL_OFFLINE_VIEW: 'school-offline-view',
+
+  // Settings / timed actions (TimedCommands)
+  TIMEDCOMMAND_CONFIRM_BUTTON: 'timedcommand-confirm-button',
+  TIMEDCOMMAND_STARTDATE_INPUT: 'timedcommand-startdate-input',
+  TIMEDCOMMAND_TABLE: 'timedcommand-table',
 } as const;
 
 export type TestId = (typeof TEST_IDS)[keyof typeof TEST_IDS];
