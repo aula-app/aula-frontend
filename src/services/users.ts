@@ -34,11 +34,11 @@ export async function getUsers(args?: UserListRequest): Promise<GetUsersResponse
  * Fetches user
  */
 
-export async function getUser(user_id: string): Promise<GetUserResponse> {
+export async function getUser(user_hash: string): Promise<GetUserResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'getUserBaseData',
-    arguments: { user_id },
+    arguments: { user_hash },
   });
 
   return response as GetUserResponse;
@@ -62,7 +62,7 @@ interface AddUserArguments extends UserArguments {
 }
 
 interface EditUserArguments extends UserArguments {
-  user_id?: string;
+  user_hash?: string;
   userlevel?: RoleTypes;
 }
 
@@ -108,11 +108,11 @@ export async function editUser(args: EditUserArguments): Promise<GenericResponse
  * Delete user
  */
 
-export async function deleteUser(user_id: string): Promise<GetUserResponse> {
+export async function deleteUser(user_hash: string): Promise<GetUserResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'deleteUser',
-    arguments: { user_id },
+    arguments: { user_hash },
   });
 
   return response as GetUserResponse;
@@ -129,7 +129,7 @@ export async function getSelf(): Promise<GetUserResponse> {
       method: 'getUserBaseData',
       arguments: {},
     },
-    ['user_id']
+    ['user_hash']
   );
 
   return response as GetUserResponse;
@@ -150,7 +150,7 @@ export async function editSelf(args: UserArguments): Promise<GenericResponse> {
           about_me: args.about_me,
         },
       },
-      ['user_id', 'updater_id']
+      ['user_hash', 'updater_id']
     ).then((response) => {
       if (!response.error) count++;
     });
@@ -165,7 +165,7 @@ export async function editSelf(args: UserArguments): Promise<GenericResponse> {
           displayname: args.displayname,
         },
       },
-      ['user_id', 'updater_id']
+      ['user_hash', 'updater_id']
     ).then((response) => {
       if (!response.error) count++;
     });
@@ -198,7 +198,7 @@ export async function editSelfRestricted(args: RestrictedUpdateArgs) {
       model: 'User',
       method: method[args.field],
       arguments: {
-        user_id: args.id,
+        user_hash: args.id,
         [args.field]: args.value,
       },
     },
@@ -218,7 +218,7 @@ export async function exportSelfData(): Promise<GetUserResponse> {
       method: 'getUserGDPRData',
       arguments: {},
     },
-    ['user_id']
+    ['user_hash']
   );
 
   return response as GetUserResponse;
@@ -232,11 +232,11 @@ interface GetUserRoomsResponse extends GenericResponse {
   data: { hash_id: string }[] | null;
 }
 
-export async function getUserRooms(user_id: string): Promise<GetUserRoomsResponse> {
+export async function getUserRooms(user_hash: string): Promise<GetUserRoomsResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'getUserRooms',
-    arguments: { user_id },
+    arguments: { user_hash },
   });
 
   return response as GetUserRoomsResponse;
@@ -246,12 +246,12 @@ export async function getUserRooms(user_id: string): Promise<GetUserRoomsRespons
  * Add user room
  */
 
-export async function addUserRoom(user_id: string, room_id: string): Promise<GenericResponse> {
+export async function addUserRoom(user_hash: string, room_id: string): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
       model: 'User',
       method: 'addUserToRoom',
-      arguments: { user_id, room_id },
+      arguments: { user_hash, room_id },
     },
     ['updater_id']
   );
@@ -263,60 +263,11 @@ export async function addUserRoom(user_id: string, room_id: string): Promise<Gen
  * Remove user room
  */
 
-export async function removeUserRoom(user_id: string, room_id: string): Promise<GenericResponse> {
+export async function removeUserRoom(user_hash: string, room_id: string): Promise<GenericResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'removeUserFromRoom',
-    arguments: { user_id, room_id },
-  });
-
-  return response as GenericResponse;
-}
-
-/**
- * Get user rooms
- */
-
-interface GetUserGroupsResponse extends GenericResponse {
-  data: { hash_id: string }[] | null;
-}
-
-async function getUserGroups(user_id: string): Promise<GetUserGroupsResponse> {
-  const response = await databaseRequest({
-    model: 'User',
-    method: 'getUserGroups',
-    arguments: { user_id },
-  });
-
-  return response as GetUserGroupsResponse;
-}
-
-/**
- * Add user group
- */
-
-async function addUserGroup(user_id: string, group_id: string): Promise<GenericResponse> {
-  const response = await databaseRequest(
-    {
-      model: 'User',
-      method: 'addUserToGroup',
-      arguments: { user_id, group_id },
-    },
-    ['updater_id']
-  );
-
-  return response as GenericResponse;
-}
-
-/**
- * Remove user group
- */
-
-async function removeUserGroup(user_id: string, group_id: string): Promise<GenericResponse> {
-  const response = await databaseRequest({
-    model: 'User',
-    method: 'removeUserFromGroup',
-    arguments: { user_id, group_id },
+    arguments: { user_hash, room_id },
   });
 
   return response as GenericResponse;
@@ -350,7 +301,7 @@ export async function getPossibleDelegations(args: PossibleDelegationsRequest): 
       method: 'getPossibleDelegations',
       arguments: args,
     },
-    ['user_id']
+    ['user_hash']
   );
 
   return response as PossibleDelegateResponse;
@@ -373,7 +324,7 @@ export const getDelegations = async (box_id: string): Promise<GetDelegationRespo
         topic_id: box_id,
       },
     },
-    ['user_id']
+    ['user_hash']
   );
 
   return response as GetDelegationResponse;
@@ -396,7 +347,7 @@ export const getReceivedDelegations = async (box_id: string): Promise<GetReceive
         topic_id: box_id,
       },
     },
-    ['user_id']
+    ['user_hash']
   );
 
   return response as GetReceivedDelegationsResponse;
@@ -412,11 +363,11 @@ export async function delegateVote(target_id: string, topic_id: string): Promise
       model: 'User',
       method: 'delegateVoteRight',
       arguments: {
-        user_id_target: target_id,
+        user_hash_target: target_id,
         topic_id,
       },
     },
-    ['user_id', 'updater_id']
+    ['user_hash', 'updater_id']
   );
 
   return response as GenericResponse;
@@ -435,7 +386,7 @@ export async function revokeDelegation(topic_id: string): Promise<GenericRespons
         topic_id,
       },
     },
-    ['user_id']
+    ['user_hash']
   );
 
   return response as GenericResponse;
@@ -445,12 +396,12 @@ export async function revokeDelegation(topic_id: string): Promise<GenericRespons
  * Set special roles
  */
 
-export async function addSpecialRoles(user_id: string, role: RoleTypes, room_id: string): Promise<GenericResponse> {
+export async function addSpecialRoles(user_hash: string, role: RoleTypes, room_id: string): Promise<GenericResponse> {
   const response = await databaseRequest({
     model: 'User',
     method: 'addUserRole',
     arguments: {
-      user_id,
+      user_hash,
       role,
       room_id,
     },
@@ -463,12 +414,12 @@ export async function addSpecialRoles(user_id: string, role: RoleTypes, room_id:
  * Reset user password
  */
 
-export async function resetUserPassword(user_id: string): Promise<GenericResponse> {
+export async function resetUserPassword(user_hash_id: string): Promise<GenericResponse> {
   const response = await databaseRequest(
     {
       model: 'User',
       method: 'resetPasswordForUser',
-      arguments: { user_id },
+      arguments: { user_hash: user_hash_id },
     },
     ['updater_id']
   );
