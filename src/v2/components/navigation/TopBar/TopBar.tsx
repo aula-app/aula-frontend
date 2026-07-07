@@ -1,5 +1,5 @@
 import { useAppStore } from '@/store/AppStore';
-import Breadcrumb from '@/v2/components/ui/TopBar/Breadcrumb';
+import Breadcrumb from './Breadcrumb';
 import Icon from '@/v2/components/ui/Icon';
 import { TEST_IDS } from '@/test-ids';
 import { useTranslation } from 'react-i18next';
