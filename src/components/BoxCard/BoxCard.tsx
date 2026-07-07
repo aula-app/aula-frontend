@@ -20,18 +20,22 @@ const BoxCard: FC<BoxCardProps> = ({ box, disabled = false, onDelete, onEdit, ..
   const { t } = useTranslation();
 
   const daysRemaining = (): number => {
-    let remaining = 0;
-    for (let i = 0; i < Number(box.phase_id) / 10 && i < 3; i++) {
-      const phase = `phase_duration_${i + 1}` as
-        | 'phase_duration_1'
-        | 'phase_duration_2'
-        | 'phase_duration_3'
-        | 'phase_duration_4';
-      remaining += Number(box[phase]);
-    }
+    // The current phase's countdown runs from when that phase started, not from
+    // the box creation date. Summing earlier phases' durations made the timer
+    // accumulate across phases (see issue #543). `phase_start` is reset by the
+    // backend whenever the phase changes; fall back to `created` for boxes
+    // created before that field existed.
+    const phaseIndex = Number(box.phase_id) / 10;
+    const phaseKey = `phase_duration_${phaseIndex}` as
+      | 'phase_duration_1'
+      | 'phase_duration_2'
+      | 'phase_duration_3'
+      | 'phase_duration_4';
+    const phaseDuration = Number(box[phaseKey]) || 0;
+
     const currentDate = new Date();
-    const endDate = new Date(box.created);
-    endDate.setDate(endDate.getDate() + remaining);
+    const endDate = new Date(box.phase_start ?? box.created);
+    endDate.setDate(endDate.getDate() + phaseDuration);
     return Math.round((Number(endDate) - Number(currentDate)) / 86400000);
   };
 

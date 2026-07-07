@@ -54,6 +54,7 @@ Reach out to `dev [at] aula.de` for more information. <!-- @TODO: we should add 
 ### Environment Configuration
 
 5. Create a `.env` file based on the `.env.local` file:
+   (TODO: out of date)
 
    ```
    cp .env.local .env
@@ -65,7 +66,6 @@ Reach out to `dev [at] aula.de` for more information. <!-- @TODO: we should add 
    VITE_APP_VERSION = $npm_package_version
    VITE_APP_CENTRAL_API_URL = http://localhost:8080
    VITE_APP_MULTI = false
-   VITE_APP_OAUTH = false
    ```
 
 7. Start the development server:
@@ -86,6 +86,45 @@ The application includes Capacitor integration for building mobile apps. To star
 yarn build-app && npx cap sync && \
    npx cap open android
 ```
+
+## Development on the local network
+
+Access your local backend server and frontend dev server from a mobile device on your local network.
+
+This workflow assumes that
+
+- the backend server is reachable under IP `192.…`
+- backend listens on 0.0.0.0:8080 (which should be the case with the Docker setup, but ymmv)
+- your Tenant has UUID `12ab…` (see `php artisan tenant:list)
+
+The Backend + On device steps are necessary to properly set `api_url` in localStorage.
+
+**Frontend**
+
+- edit .env, set `VITE_APP_API_URL=http://192.…:8080`
+- and *maybe* (TODO)  
+    `APP_FRONTEND_URL = http://192.…:3000`  
+    `APP_FRONTEND_HOST = http://192.…`
+- run frontend with `yarn --host` (or specify IP explicitly)
+
+**Backend**
+
+set Tenant's `api_base_url`:
+
+```
+php artisan tinker
+$t = App\Models\Tenant::find('12ab…');
+$t->api_base_url = 'http://192.…:8080';
+$t->save();
+```
+
+Check with `php artisan tenant:list`.
+
+**On the device**
+
+- log out
+- "forget"/reset instance code
+- log in
 
 ## Deployment
 
