@@ -4,6 +4,9 @@ import { Emoji } from '@tiptap/extension-emoji';
 import IconButton from '../button/IconButton';
 import Icon from '../ui/Icon';
 import Dropdown from '../ui/Dropdown/Dropdown';
+import { ReactNode, useId, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
+import { useTranslation } from 'react-i18next';
 
 interface RichEditorProps {
   value: string;
@@ -11,6 +14,10 @@ interface RichEditorProps {
   disabled?: boolean;
   maxLength?: number;
   placeholder?: string;
+  label?: string;
+  required?: boolean;
+  error?: string;
+  helperText?: string | ReactNode;
 }
 
 const RichEditor: React.FC<RichEditorProps> = ({
@@ -19,7 +26,17 @@ const RichEditor: React.FC<RichEditorProps> = ({
   disabled = false,
   maxLength = 1000,
   placeholder = 'Enter content...',
+  label,
+  required = false,
+  error,
+  helperText,
 }) => {
+  const { t } = useTranslation();
+  const generatedId = useId();
+  const errorId = error ? `${generatedId}-error` : undefined;
+  const helperId = !error && helperText ? `${generatedId}-helper` : undefined;
+  const [isFocused, setIsFocused] = useState(false);
+
   const emojiList = [
     { emoji: '😀', label: 'Smiling face' },
     { emoji: '😂', label: 'Laughing face' },
@@ -70,71 +87,157 @@ const RichEditor: React.FC<RichEditorProps> = ({
     editor.commands.insertContent(emoji);
   };
 
-  const toggleBold = () => editor.commands.toggleBold();
-  const toggleItalic = () => editor.commands.toggleItalic();
-  const toggleBulletList = () => editor.commands.toggleBulletList();
-  const toggleOrderedList = () => editor.commands.toggleOrderedList();
-
   const charCount = editor.getText().length;
+  const hasContent = charCount > 0;
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center gap-1 rounded-t-lg border border-muted border-b-0">
-        <IconButton type="button" onClick={toggleBold} disabled={disabled} aria-label="Bold">
-          <Icon type="bold" size="1.25rem" />
-        </IconButton>
-
-        <IconButton type="button" onClick={toggleItalic} disabled={disabled} aria-label="Italic">
-          <Icon type="italic" size="1.25rem" />
-        </IconButton>
-
-        <div className="h-6 w-px bg-muted"></div>
-
-        <IconButton type="button" onClick={toggleBulletList} disabled={disabled} aria-label="Bullet list">
-          <Icon type="list" size="1.25rem" />
-        </IconButton>
-
-        <IconButton type="button" onClick={toggleOrderedList} disabled={disabled} aria-label="Ordered list">
-          <Icon type="numbered" size="1.25rem" />
-        </IconButton>
-
-        <div className="h-6 w-px bg-muted"></div>
-
-        <Dropdown
-          aria-label="Add emoji"
-          content={
-            <div className="grid grid-cols-5 gap-1 p-2">
-              {emojiList.map(({ emoji, label }) => (
-                <IconButton
-                  key={emoji}
-                  type="button"
-                  onClick={() => insertEmoji(emoji)}
-                  aria-label={label}
-                >
-                  {emoji}
-                </IconButton>
-              ))}
-            </div>
-          }
+    <div className="flex flex-col w-full mb-3">
+      <div className="relative">
+        <div
+          className={twMerge(
+            'flex flex-col rounded-lg border border-input-border bg-transparent shadow-inner',
+            'transition-colors duration-200',
+            'hover:border-input-border-hover',
+            error
+              ? 'border-error focus-within:border-error'
+              : 'focus-within:border-current focus-within:ring-2 focus-within:ring-current',
+            disabled ? 'cursor-not-allowed opacity-50' : ''
+          )}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
         >
-          <IconButton type="button" disabled={disabled} aria-label="Add emoji">
-            😀
-          </IconButton>
-        </Dropdown>
+          <div className="flex items-center gap-1 px-2 py-1 border-b border-input-border">
+            <IconButton
+              type="button"
+              onClick={() => editor.commands.toggleBold()}
+              disabled={disabled}
+              aria-label="Bold"
+            >
+              <Icon type="bold" size="1.25rem" />
+            </IconButton>
+
+            <IconButton
+              type="button"
+              onClick={() => editor.commands.toggleItalic()}
+              disabled={disabled}
+              aria-label="Italic"
+            >
+              <Icon type="italic" size="1.25rem" />
+            </IconButton>
+
+            <IconButton
+              type="button"
+              onClick={() => editor.commands.toggleStrike()}
+              disabled={disabled}
+              aria-label="Strikethrough"
+            >
+              <Icon type="strikethrough" size="1.25rem" />
+            </IconButton>
+
+            <div className="h-5 w-px bg-input-border"></div>
+
+            <IconButton
+              type="button"
+              onClick={() => editor.commands.toggleBulletList()}
+              disabled={disabled}
+              aria-label="Bullet list"
+            >
+              <Icon type="list" size="1.25rem" />
+            </IconButton>
+
+            <IconButton
+              type="button"
+              onClick={() => editor.commands.toggleOrderedList()}
+              disabled={disabled}
+              aria-label="Ordered list"
+            >
+              <Icon type="numbered" size="1.25rem" />
+            </IconButton>
+
+            <div className="h-5 w-px bg-input-border"></div>
+
+            <Dropdown
+              aria-label="Add emoji"
+              content={
+                <div className="grid grid-cols-5 gap-1 p-2">
+                  {emojiList.map(({ emoji, label: emojiLabel }) => (
+                    <IconButton key={emoji} type="button" onClick={() => insertEmoji(emoji)} aria-label={emojiLabel}>
+                      {emoji}
+                    </IconButton>
+                  ))}
+                </div>
+              }
+            >
+              <IconButton type="button" disabled={disabled} aria-label="Add emoji">
+                😀
+              </IconButton>
+            </Dropdown>
+
+            <div className="h-5 w-px bg-input-border mr-auto"></div>
+
+            <IconButton
+              type="button"
+              onClick={() => editor.commands.undo()}
+              disabled={disabled || !editor.can().undo()}
+              aria-label="Undo"
+            >
+              <Icon type="undo" size="1.25rem" />
+            </IconButton>
+
+            <IconButton
+              type="button"
+              onClick={() => editor.commands.redo()}
+              disabled={disabled || !editor.can().redo()}
+              aria-label="Redo"
+            >
+              <Icon type="redo" size="1.25rem" />
+            </IconButton>
+          </div>
+
+          <EditorContent
+            editor={editor}
+            className={`max-w-none p-2 pb-0 [&_div[contenteditable]]:outline-none ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'}`}
+            aria-describedby={[errorId, helperId].filter(Boolean).join(' ') || undefined}
+          />
+        </div>
+
+        {label && (
+          <label
+            htmlFor={generatedId}
+            className={twMerge(
+              'pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 origin-left text-sm transition-all duration-200',
+              'bg-background px-0.5',
+              hasContent || isFocused ? 'top-0 -translate-y-1/2 scale-75' : 'top-1/2 translate-y-1/2 scale-100',
+              error ? 'text-error-fg' : 'text-muted'
+            )}
+          >
+            {label}
+            {required && (
+              <>
+                <span aria-hidden="true" className="ml-0.5">
+                  *
+                </span>
+                <span className="sr-only">{t('v2.form.validation.required')}</span>
+              </>
+            )}
+          </label>
+        )}
       </div>
 
-      <EditorContent
-        editor={editor}
-        className={`prose prose-sm max-w-none rounded-b-lg border border-muted p-3 focus-within:ring-2 focus-within:ring-primary focus-within:border-primary disabled:opacity-50 disabled:cursor-not-allowed ${
-          disabled ? 'opacity-50 cursor-not-allowed bg-muted/20' : 'bg-white'
-        }`}
-      />
-
-      <div className="flex justify-between text-xs text-muted">
-        <span></span>
-        <span>
-          {charCount} / {maxLength}
-        </span>
+      <div className="pt-1 px-1">
+        {error ? (
+          <span id={errorId} className="flex text-xs text-error-fg">
+            <Icon type="alert" className="inline-block mr-1 mb-0.5" size="1em" />
+            {error}
+          </span>
+        ) : (
+          <span id={helperId} className="flex text-xs text-muted justify-between">
+            <span>{helperText}</span>
+            <span>
+              {charCount} / {maxLength}
+            </span>
+          </span>
+        )}
       </div>
     </div>
   );

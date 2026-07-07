@@ -100,25 +100,22 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
         />
 
         {/* Content */}
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium">
-            {t('settings.columns.content')} <span className="text-red-600">*</span>
-          </label>
-          <Controller
-            name="content"
-            control={control}
-            render={({ field }) => (
-              <RichEditor
-                value={field.value}
-                onChange={field.onChange}
-                disabled={isLoading}
-                maxLength={MAX_CHAR_COUNT}
-                data-testid="idea-form-content"
-              />
-            )}
-          />
-          {errors.content && <span className="text-sm text-red-600">{errors.content.message as string}</span>}
-        </div>
+        <Controller
+          name="content"
+          control={control}
+          render={({ field }) => (
+            <RichEditor
+              label={t('settings.columns.content')}
+              required
+              value={field.value}
+              onChange={field.onChange}
+              disabled={isLoading}
+              maxLength={MAX_CHAR_COUNT}
+              error={errors.content ? (errors.content.message as string) : undefined}
+              data-testid="idea-form-content"
+            />
+          )}
+        />
 
         {/* Box and Category */}
         <div className="flex gap-4">

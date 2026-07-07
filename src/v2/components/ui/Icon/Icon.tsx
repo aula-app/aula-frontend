@@ -40,6 +40,10 @@ import {
   HiItalic,
   HiListBullet,
   HiNumberedList,
+  HiArrowUturnLeft,
+  HiArrowUturnRight,
+  HiStrikethrough,
+  HiLink,
 } from 'react-icons/hi2';
 import voting from './voting.svg?react';
 
@@ -106,6 +110,10 @@ export const ICONS = {
   users: HiOutlineUserGroup,
   voting: VotingIcon,
   wild: HiOutlineLightBulb,
+  undo: HiArrowUturnLeft,
+  redo: HiArrowUturnRight,
+  strikethrough: HiStrikethrough,
+  link: HiLink,
 };
 
 export type ICON_TYPE = keyof typeof ICONS;
