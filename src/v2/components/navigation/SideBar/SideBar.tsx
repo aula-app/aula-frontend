@@ -20,9 +20,12 @@ interface SideBarProps {
 const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
   const { t, items, isActive, isDrawerMode, handleKeyDown } = useSideBar({ onClose });
 
+  const overlayBg = isDrawerMode && menuOpen ? 'bg-shade/50' : 'bg-transparent';
+  const pointerEvents = !menuOpen && isDrawerMode ? 'pointer-events-none' : '';
+
   return (
     <div
-      className={`absolute z-20 left-0 top-0 h-full w-full overflow-y-auto md:w-auto md:relative print:hidden transition-colors duration-150 ease-in-out ${menuOpen && isDrawerMode ? 'bg-shade/50' : 'bg-transparent pointer-events-none'}`}
+      className={`absolute z-20 left-0 top-0 h-full w-full overflow-y-auto md:w-auto md:relative print:hidden transition-colors duration-150 ease-in-out ${overlayBg} ${pointerEvents}`}
       onClick={onClose}
     >
       <nav
