@@ -25,7 +25,6 @@ const RichEditor: React.FC<RichEditorProps> = ({
   onChange,
   disabled = false,
   maxLength = 1000,
-  placeholder = 'Enter content...',
   label,
   required = false,
   error,
@@ -232,7 +231,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
           </span>
         ) : (
           <span id={helperId} className="flex text-xs text-muted justify-between">
-            <span>{helperText}</span>
+            {helperText && <span>{helperText}</span>}
             <span>
               {charCount} / {maxLength}
             </span>

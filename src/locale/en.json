@@ -3,7 +3,9 @@
     "alt": {
       "logo": "Aula: Education Platform Logo",
       "microphone": "An illustration of an owl with a microphone, representing the announcement feature",
-      "sleeping": "Sleeping owl illustration"
+      "sad": "An illustration of a sad owl, representing the error page",
+      "sleeping": "Sleeping owl illustration",
+      "winking": "An illustration of a winking owl, representing the error page"
     },
     "form": {
       "code": {
@@ -126,6 +128,24 @@
       },
       "darkMode": {
         "label": "Dark mode"
+      },
+      "error": {
+        "empty": {
+          "title": "No data available",
+          "description": "There is no data available at the moment."
+        },
+        "fetch": {
+          "title": "Failed to fetch data",
+          "description": "An error occurred while trying to fetch data. Please try again later."
+        },
+        "generic": {
+          "title": "Something went wrong",
+          "description": "An unexpected error occurred. Please try again later."
+        },
+        "network": {
+          "title": "Network error",
+          "description": "A network error occurred. Please check your internet connection and try again."
+        }
       },
       "language": {
         "label": "Language",

@@ -37,21 +37,23 @@ const Ideas: React.FC = () => {
           onClick={() =>
             openModal(
               addIdeaLabel,
-              <IdeaForm
-                contextRoomId={room_id}
-                contextBoxId=""
-                onSubmit={handleAddIdea}
-                onCancel={closeModal}
-              />
+              <IdeaForm contextRoomId={room_id} contextBoxId="" onSubmit={handleAddIdea} onCancel={closeModal} />
             )
           }
           className="fixed bottom-4 self-center"
         />
       )}
 
-      {isLoading && <p>{t('ui.common.loading')}</p>}
-      {error && <p className="text-error">{error}</p>}
-      {!isLoading && ideas.length === 0 && <p className="text-muted">{t('ui.common.noResults')}</p>}
+      {isLoading && <p>...</p>}
+      {error && (
+        <div className="flex-1 flex flex-col items-center justify-center gap-16">
+          <img src="/img/Paula_unzufrieden.svg" alt={t('v2.alt.sad')} loading="lazy" className="w-32" />
+          <div className="flex flex-col items-center">
+            <h3 className="text-lg font-semibold">{t(`v2.ui.error.${error}.title`)}</h3>
+            <p>{t(`v2.ui.error.${error}.description`)}</p>
+          </div>
+        </div>
+      )}
 
       {!isLoading && ideas.length > 0 && (
         <ul className="flex flex-col gap-2 flex-1 overflow-y-auto">

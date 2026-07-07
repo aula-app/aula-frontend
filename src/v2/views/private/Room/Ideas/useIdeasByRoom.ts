@@ -12,7 +12,7 @@ interface UseIdeasByRoomState {
 export const useIdeasByRoom = (room_id: string | undefined): UseIdeasByRoomState => {
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<'empty' | 'fetch' | 'generic' | null>(null);
 
   const fetch = async () => {
     if (!room_id) {
@@ -23,13 +23,13 @@ export const useIdeasByRoom = (room_id: string | undefined): UseIdeasByRoomState
       setIsLoading(true);
       setError(null);
       const response = await getIdeasByRoom(room_id);
-      if (response.error) {
-        setError(response.error);
+      if (response.error_code) {
+        response.error_code === 2 ? setError('empty') : setError('generic');
       } else {
         setIdeas(response.data || []);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch ideas');
+      setError('fetch');
     } finally {
       setIsLoading(false);
     }

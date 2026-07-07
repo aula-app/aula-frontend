@@ -3,7 +3,9 @@
     "alt": {
       "logo": "Aula: Bildungsplattform-Logo",
       "microphone": "Eine Illustration einer Eule mit einem Mikrofon, die die Ankündigungsfunktion repräsentiert",
-      "sleeping": "Schlafende Eulen-Illustration"
+      "sad": "Eine Illustration einer traurigen Eule, die die Fehlerseite repräsentiert",
+      "sleeping": "Schlafende Eulen-Illustration",
+      "winking": "Eine Illustration einer zwinkernden Eule, die die Fehlerseite repräsentiert"
     },
     "form": {
       "code": {
@@ -126,6 +128,24 @@
       },
       "darkMode": {
         "label": "Dunkelmodus"
+      },
+      "error": {
+        "empty": {
+          "title": "Hier gibt es keine Neuigkeiten",
+          "description": "Die von Ihnen gesuchte Seite existiert nicht oder wurde verschoben. Bitte überprüfen Sie die URL oder kehren Sie zur Startseite zurück."
+        },
+        "fetch": {
+          "title": "Fehler beim Laden der Daten",
+          "description": "Es gab ein Problem beim Abrufen der Daten. Bitte versuchen Sie es erneut oder wenden Sie sich an Ihren Administrator, wenn das Problem weiterhin besteht."
+        },
+        "generic": {
+          "title": "Etwas ist schief gelaufen",
+          "description": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+        },
+        "network": {
+          "title": "Netzwerkfehler",
+          "description": "Ein Netzwerkfehler ist aufgetreten. Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
+        }
       },
       "language": {
         "label": "Sprache",
