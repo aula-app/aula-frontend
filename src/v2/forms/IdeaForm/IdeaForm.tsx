@@ -1,0 +1,173 @@
+import TextInput from '@/v2/components/input/TextInput';
+import Button from '@/v2/components/button/Button';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { IdeaType } from '@/types/Scopes';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import BoxField from '../fields/BoxField';
+import CategoryField from '../fields/CategoryField';
+import RoomField from '../fields/RoomField';
+import RichEditor from '@/v2/components/input/RichEditor';
+
+const MAX_CHAR_COUNT = 1000;
+const MAX_TITLE_LENGTH = 200;
+
+interface IdeaFormProps {
+  defaultValues?: IdeaType;
+  onSubmit: (data: any) => Promise<void>;
+  onCancel: () => void;
+  isLoading?: boolean;
+  contextRoomId?: string;
+  contextBoxId?: string;
+}
+
+const IdeaForm: React.FC<IdeaFormProps> = ({
+  defaultValues,
+  onSubmit,
+  onCancel,
+  isLoading = false,
+  contextRoomId,
+  contextBoxId,
+}) => {
+  const { t } = useTranslation();
+
+  const hasRoomContext = contextRoomId !== undefined;
+  const hasBoxContext = contextBoxId !== undefined;
+
+  const schema = yup.object().shape({
+    ...(hasRoomContext ? {} : { room: yup.string().required(t('forms.validation.required')) }),
+    title: yup
+      .string()
+      .max(MAX_TITLE_LENGTH, t('forms.validation.titleTooLong', { max: MAX_TITLE_LENGTH }))
+      .required(t('forms.validation.required')),
+    content: yup
+      .string()
+      .max(MAX_CHAR_COUNT, t('forms.validation.contentTooLong', { max: MAX_CHAR_COUNT }))
+      .required(t('forms.validation.required')),
+    ...(hasBoxContext ? {} : { box: yup.string().optional() }),
+    category: yup.string().optional(),
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema) as any,
+    defaultValues: {
+      room: contextRoomId || defaultValues?.room_hash_id || '',
+      title: defaultValues?.title || '',
+      content: defaultValues?.content || '',
+      box: contextBoxId || '',
+      category: '',
+    },
+  });
+
+  const roomValue = useWatch({ control, name: 'room' });
+
+  const handleFormSubmit = async (data: any) => {
+    await onSubmit(data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4">
+      <h3>{t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') })}</h3>
+      <div className="flex flex-col">
+        {/* Room - only show if no context */}
+        {!hasRoomContext && (
+          <Controller
+            name="room"
+            control={control}
+            render={({ field }) => <RoomField value={field.value} onChange={field.onChange} disabled={isLoading} />}
+          />
+        )}
+
+        {/* Title */}
+        <Controller
+          name="title"
+          control={control}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              label={t('settings.columns.title')}
+              required
+              disabled={isLoading}
+              error={errors.title ? (errors.title.message as string) : undefined}
+              data-testid="idea-form-title"
+            />
+          )}
+        />
+
+        {/* Content */}
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium">
+            {t('settings.columns.content')} <span className="text-red-600">*</span>
+          </label>
+          <Controller
+            name="content"
+            control={control}
+            render={({ field }) => (
+              <RichEditor
+                value={field.value}
+                onChange={field.onChange}
+                disabled={isLoading}
+                maxLength={MAX_CHAR_COUNT}
+                data-testid="idea-form-content"
+              />
+            )}
+          />
+          {errors.content && <span className="text-sm text-red-600">{errors.content.message as string}</span>}
+        </div>
+
+        {/* Box and Category */}
+        <div className="flex gap-4">
+          {!hasBoxContext && (
+            <Controller
+              name="box"
+              control={control}
+              render={({ field }) => (
+                <div className="flex-1">
+                  <BoxField
+                    roomId={roomValue}
+                    value={field.value || ''}
+                    onChange={field.onChange}
+                    disabled={isLoading}
+                  />
+                </div>
+              )}
+            />
+          )}
+          <Controller
+            name="category"
+            control={control}
+            render={({ field }) => (
+              <div className={hasBoxContext ? 'w-full' : 'flex-1'}>
+                <CategoryField value={field.value || ''} onChange={field.onChange} disabled={isLoading} />
+              </div>
+            )}
+          />
+        </div>
+
+        {/* Error Summary */}
+        {(errors.root as any)?.message && (
+          <div className="text-sm text-red-600 p-3 bg-red-50 rounded-lg" role="alert">
+            {(errors.root as any).message}
+          </div>
+        )}
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex gap-3 justify-end mt-4">
+        <Button text color="error" onClick={onCancel} disabled={isLoading} data-testid="idea-form-cancel">
+          {t('actions.cancel')}
+        </Button>
+        <Button type="submit" disabled={isLoading} data-testid="idea-form-submit">
+          {isLoading ? t('actions.submitting') : t('actions.confirm')}
+        </Button>
+      </div>
+    </form>
+  );
+};
+
+export default IdeaForm;

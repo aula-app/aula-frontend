@@ -2,10 +2,10 @@ import Fab from '@/v2/components/button/Fab/Fab';
 import Icon from '@/v2/components/ui/Icon/Icon';
 import { useModal } from '@/v2/hooks/useModal';
 import { useIdeasByRoom } from './useIdeasByRoom';
-import { IdeaForms } from '@/components/DataForms';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { IdeaForm } from '@/v2/forms';
 
 const Ideas: React.FC = () => {
   const { t } = useTranslation();
@@ -15,22 +15,33 @@ const Ideas: React.FC = () => {
 
   const addIdeaLabel = t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') });
 
+  const handleAddIdea = async (data: any) => {
+    try {
+      // TODO: Call API to add idea with data
+      console.log('Adding idea:', data);
+      closeModal();
+      refetch();
+    } catch (error) {
+      console.error('Error adding idea:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full">
       <h1>{t('v2.scopes.ideas.plural')}</h1>
 
-      {!isLoading && !error && (
+      {!isLoading && (
         <Fab
           icon={<Icon type="add" />}
           aria-label={addIdeaLabel}
           onClick={() =>
             openModal(
               addIdeaLabel,
-              <IdeaForms
-                onClose={() => {
-                  closeModal();
-                  refetch();
-                }}
+              <IdeaForm
+                contextRoomId={room_id}
+                contextBoxId=""
+                onSubmit={handleAddIdea}
+                onCancel={closeModal}
               />
             )
           }
