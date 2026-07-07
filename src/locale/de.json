@@ -83,6 +83,12 @@
         "hint": "Dieser Link ist ungültig. Bitte stellen Sie sicher, dass Sie den gesamten Link aus Ihrer E-Mail kopiert haben, und versuchen Sie es erneut."
       }
     },
+    "scopes": {
+      "ideas": {
+        "singular": "Idee",
+        "plural": "Ideen"
+      }
+    },
     "ui": {
       "a11y": {
         "navigation": "Navigationsmenü",
@@ -94,6 +100,7 @@
         }
       },
       "actions": {
+        "add": "Neue {{var}}",
         "agree": "Zustimmen",
         "print": "Diese Seite drucken",
         "report": "Einen Fehler melden"

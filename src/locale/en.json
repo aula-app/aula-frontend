@@ -83,6 +83,12 @@
         "hint": "This link is invalid. Please make sure you copied the entire link from your email and try again."
       }
     },
+    "scopes": {
+      "ideas": {
+        "singular": "idea",
+        "plural": "ideas"
+      }
+    },
     "ui": {
       "a11y": {
         "navigation": "Navigation menu",
@@ -94,6 +100,7 @@
         }
       },
       "actions": {
+        "add": "Add {{var}}",
         "agree": "Agree",
         "print": "Print this page",
         "report": "Report a bug"

@@ -131,6 +131,7 @@
   /* --- Brand --- */
   --color-primary: var(--color-primary);
   --color-primary-fg: var(--color-foreground);
+  
   --color-secondary: var(--color-secondary);
   --color-secondary-fg: var(--color-muted);
 
