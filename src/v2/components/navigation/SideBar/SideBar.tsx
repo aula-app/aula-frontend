@@ -20,7 +20,7 @@ interface SideBarProps {
 const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
   const { t, items, isActive, isDrawerMode, handleKeyDown } = useSideBar({ onClose });
 
-  const overlayBg = isDrawerMode && menuOpen ? 'bg-shade/50' : 'bg-transparent';
+  const overlayBg = menuOpen && isDrawerMode ? 'bg-shade/50' : 'bg-transparent';
   const pointerEvents = !menuOpen && isDrawerMode ? 'pointer-events-none' : '';
 
   return (
