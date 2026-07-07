@@ -131,20 +131,20 @@
       },
       "error": {
         "empty": {
-          "title": "No data available",
-          "description": "There is no data available at the moment."
+          "title": "Nothing here yet!",
+          "description": "Check back soon or create something new to get started."
         },
         "fetch": {
-          "title": "Failed to fetch data",
-          "description": "An error occurred while trying to fetch data. Please try again later."
+          "title": "We had trouble loading that",
+          "description": "Please try again. If it keeps happening, let your teacher know."
         },
         "generic": {
-          "title": "Something went wrong",
-          "description": "An unexpected error occurred. Please try again later."
+          "title": "Oops! Something went wrong",
+          "description": "That wasn't supposed to happen. Please try again."
         },
         "network": {
-          "title": "Network error",
-          "description": "A network error occurred. Please check your internet connection and try again."
+          "title": "No internet connection",
+          "description": "Please check your connection and try again."
         }
       },
       "language": {

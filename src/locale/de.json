@@ -131,20 +131,20 @@
       },
       "error": {
         "empty": {
-          "title": "Hier gibt es keine Neuigkeiten",
-          "description": "Die von Ihnen gesuchte Seite existiert nicht oder wurde verschoben. Bitte überprüfen Sie die URL oder kehren Sie zur Startseite zurück."
+          "title": "Hier gibt es noch nichts!",
+          "description": "Schau bald wieder vorbei oder erstelle etwas Neues, um anzufangen."
         },
         "fetch": {
-          "title": "Fehler beim Laden der Daten",
-          "description": "Es gab ein Problem beim Abrufen der Daten. Bitte versuchen Sie es erneut oder wenden Sie sich an Ihren Administrator, wenn das Problem weiterhin besteht."
+          "title": "Wir konnten das nicht laden",
+          "description": "Bitte versuche es noch mal. Wenn es immer wieder passiert, sag deinem Lehrer Bescheid."
         },
         "generic": {
-          "title": "Etwas ist schief gelaufen",
-          "description": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+          "title": "Hoppla! Etwas ist schief gelaufen",
+          "description": "Das sollte nicht passieren. Bitte versuche es noch mal."
         },
         "network": {
-          "title": "Netzwerkfehler",
-          "description": "Ein Netzwerkfehler ist aufgetreten. Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
+          "title": "Keine Internetverbindung",
+          "description": "Bitte überprüfe deine Verbindung und versuche es noch mal."
         }
       },
       "language": {

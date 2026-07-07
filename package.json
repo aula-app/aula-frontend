@@ -55,6 +55,7 @@
     "@mui/x-date-pickers": "^7.15.0",
     "@tailwindcss/vite": "^4.1.18",
     "@tiptap/extension-emoji": "^3.27.3",
+    "@tiptap/markdown": "^3.27.3",
     "@tiptap/react": "^3.27.3",
     "@tiptap/starter-kit": "^3.27.3",
     "@tiptap/suggestion": "^3.27.3",

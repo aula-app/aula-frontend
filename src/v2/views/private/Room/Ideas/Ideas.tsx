@@ -2,7 +2,8 @@ import Fab from '@/v2/components/button/Fab/Fab';
 import Icon from '@/v2/components/ui/Icon/Icon';
 import { useModal } from '@/v2/hooks/useModal';
 import { useIdeasByRoom } from './useIdeasByRoom';
-import React from 'react';
+import { addIdea } from '@/services/ideas';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { IdeaForm } from '@/v2/forms';
@@ -12,16 +13,30 @@ const Ideas: React.FC = () => {
   const { room_id } = useParams<{ room_id: string }>();
   const { openModal, closeModal } = useModal();
   const { ideas, isLoading, error, refetch } = useIdeasByRoom(room_id);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const addIdeaLabel = t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') });
 
   const handleAddIdea = async (data: any) => {
     try {
-      // TODO: Call API to add idea with data
-      console.log('Adding idea:', data);
+      setFormError(null);
+      const response = await addIdea({
+        room_id: data.room || room_id,
+        title: data.title,
+        content: data.content,
+        topic_id: data.box,
+      });
+
+      if (response.error) {
+        setFormError(response.error);
+        return;
+      }
+
       closeModal();
       refetch();
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : t('errors.default');
+      setFormError(errorMessage);
       console.error('Error adding idea:', error);
     }
   };
@@ -37,7 +52,14 @@ const Ideas: React.FC = () => {
           onClick={() =>
             openModal(
               addIdeaLabel,
-              <IdeaForm contextRoomId={room_id} contextBoxId="" onSubmit={handleAddIdea} onCancel={closeModal} />
+              <IdeaForm
+                contextRoomId={room_id}
+                contextBoxId=""
+                onSubmit={handleAddIdea}
+                onCancel={closeModal}
+                error={formError}
+                onErrorClose={() => setFormError(null)}
+              />
             )
           }
           className="fixed bottom-4 self-center"

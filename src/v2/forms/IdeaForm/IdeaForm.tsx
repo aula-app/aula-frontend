@@ -20,6 +20,8 @@ interface IdeaFormProps {
   isLoading?: boolean;
   contextRoomId?: string;
   contextBoxId?: string;
+  error?: string | null;
+  onErrorClose?: () => void;
 }
 
 const IdeaForm: React.FC<IdeaFormProps> = ({
@@ -29,6 +31,8 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
   isLoading = false,
   contextRoomId,
   contextBoxId,
+  error,
+  onErrorClose,
 }) => {
   const { t } = useTranslation();
 
@@ -147,15 +151,24 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
         </div>
 
         {/* Error Summary */}
-        {(errors.root as any)?.message && (
-          <div className="text-sm text-red-600 p-3 bg-red-50 rounded-lg" role="alert">
-            {(errors.root as any).message}
+        {((errors.root as any)?.message || error) && (
+          <div className="flex items-center justify-between text-sm text-red-600 p-3 bg-red-50 rounded-lg" role="alert">
+            <span>{(errors.root as any)?.message || error}</span>
+            {onErrorClose && (
+              <button
+                onClick={onErrorClose}
+                className="text-red-600 hover:text-red-700 font-semibold"
+                aria-label="Close error"
+              >
+                ✕
+              </button>
+            )}
           </div>
         )}
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3 justify-end mt-4">
+      <div className="flex gap-3 justify-end">
         <Button text color="error" onClick={onCancel} disabled={isLoading} data-testid="idea-form-cancel">
           {t('actions.cancel')}
         </Button>
