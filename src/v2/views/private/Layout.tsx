@@ -1,6 +1,6 @@
 import Announcement from '@/v2/components/ui/Announcement';
-import SideBar from '@/v2/components/ui/SideBar';
-import TopBar from '@/v2/components/ui/TopBar';
+import SideBar from '@/v2/components/navigation/SideBar';
+import TopBar from '@/v2/components/navigation/TopBar';
 import { ModalRoot } from '@/v2/components/ui/Modal';
 import useIsDrawerMode from '@/v2/hooks/useIsDrawerMode';
 import { checkPermissions } from '@/utils';
@@ -33,7 +33,12 @@ const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     <div className="flex-1 flex flex-col relative h-dvh w-full" onKeyDown={onKeyDown}>
       <TopBar onToggleMenu={onToggleMenu} menuOpen={menuOpen} showMenu={!isRestricted} />
       <div className="flex-1 min-h-0 flex flex-row-reverse relative">
-        <main id="main-content" className="flex-1 flex overflow-hidden isolate pb-[env(safe-area-inset-bottom)] pr-[env(safe-area-inset-right)]" inert={menuOpen && isDrawerMode ? '' : undefined} tabIndex={-1}>
+        <main
+          id="main-content"
+          className="flex-1 flex overflow-hidden isolate pb-[env(safe-area-inset-bottom)] pr-[env(safe-area-inset-right)]"
+          inert={menuOpen && isDrawerMode ? '' : undefined}
+          tabIndex={-1}
+        >
           {children}
         </main>
         {!isRestricted && <SideBar menuOpen={menuOpen} onClose={onCloseMenu} />}
