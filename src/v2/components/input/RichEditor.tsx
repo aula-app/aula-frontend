@@ -1,11 +1,11 @@
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Emoji } from '@tiptap/extension-emoji';
 import { Markdown } from '@tiptap/markdown';
 import IconButton from '../button/IconButton';
 import Icon from '../ui/Icon';
 import Dropdown from '../ui/Dropdown/Dropdown';
-import { ReactNode, useId, useState } from 'react';
+import { ReactNode, useEffect, useId, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useTranslation } from 'react-i18next';
 
@@ -36,6 +36,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
   const errorId = error ? `${generatedId}-error` : undefined;
   const helperId = !error && helperText ? `${generatedId}-helper` : undefined;
   const [isFocused, setIsFocused] = useState(false);
+  const lastEmitted = useRef<string | null>(null);
 
   const emojiList = [
     { emoji: '😀', label: 'Smiling face' },
@@ -75,9 +76,27 @@ const RichEditor: React.FC<RichEditorProps> = ({
     content: value,
     onUpdate: ({ editor }) => {
       const markdown = editor.storage.markdown.manager.serialize(editor.getJSON());
+      lastEmitted.current = markdown;
       onChange(markdown);
     },
     editable: !disabled,
+  });
+
+  useEffect(() => {
+    if (!editor) return;
+    if (value === lastEmitted.current) return;
+    const current = editor.storage.markdown.manager.serialize(editor.getJSON());
+    if (value !== current) {
+      editor.commands.setContent(value || '');
+    }
+  }, [editor, value]);
+
+  // Read the length reactively — v3 doesn't re-render on transactions by
+  // default, so this keeps the counter and floating label in sync when content
+  // changes programmatically (draft restore, edit mode, emoji insert).
+  const charCount = useEditorState({
+    editor,
+    selector: ({ editor }) => editor?.getText().length ?? 0,
   });
 
   if (!editor) {
@@ -88,7 +107,6 @@ const RichEditor: React.FC<RichEditorProps> = ({
     editor.commands.insertContent(emoji);
   };
 
-  const charCount = editor.getText().length;
   const hasContent = charCount > 0;
   const editorLabelId = label ? `${generatedId}-label` : undefined;
 

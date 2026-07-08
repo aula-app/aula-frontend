@@ -9,13 +9,15 @@ import BoxField from '../fields/BoxField';
 import CategoryField from '../fields/CategoryField';
 import RoomField from '../fields/RoomField';
 import RichEditor from '@/v2/components/input/RichEditor';
+import { useDraftStorage } from '@/v2/hooks';
 
 const MAX_CHAR_COUNT = 1000;
 const MAX_TITLE_LENGTH = 200;
 
 interface IdeaFormProps {
   defaultValues?: IdeaType;
-  onSubmit: (data: any) => Promise<void>;
+  /** Returns `true` when the idea was persisted, so the form can clear its draft. */
+  onSubmit: (data: any) => Promise<boolean>;
   onCancel: () => void;
   isLoading?: boolean;
   contextRoomId?: string;
@@ -53,11 +55,7 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
     category: yup.string().optional(),
   });
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const form = useForm({
     resolver: yupResolver(schema) as any,
     defaultValues: {
       room: contextRoomId || defaultValues?.room_hash_id || '',
@@ -68,10 +66,27 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
     },
   });
 
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+
+  const { clearDraft } = useDraftStorage(form, {
+    storageKey: `v2-ideaform-draft-${contextRoomId ?? 'unknown'}`,
+    enabled: !defaultValues,
+  });
+
   const roomValue = useWatch({ control, name: 'room' });
 
   const handleFormSubmit = async (data: any) => {
-    await onSubmit(data);
+    const success = await onSubmit(data);
+    if (success) clearDraft();
+  };
+
+  const handleCancel = () => {
+    clearDraft();
+    onCancel();
   };
 
   return (
@@ -169,7 +184,7 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
 
       {/* Action Buttons */}
       <div className="flex gap-3 justify-end">
-        <Button text color="error" onClick={onCancel} disabled={isLoading} data-testid="idea-form-cancel">
+        <Button text color="error" onClick={handleCancel} disabled={isLoading} data-testid="idea-form-cancel">
           {t('actions.cancel')}
         </Button>
         <Button type="submit" disabled={isLoading} data-testid="idea-form-submit">

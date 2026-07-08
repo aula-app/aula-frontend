@@ -18,7 +18,7 @@ const Ideas: React.FC = () => {
 
   const addIdeaLabel = t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') });
 
-  const handleAddIdea = async (data: any) => {
+  const handleAddIdea = async (data: any): Promise<boolean> => {
     try {
       setFormError(null);
       const response = await addIdea({
@@ -30,15 +30,17 @@ const Ideas: React.FC = () => {
 
       if (response.error) {
         setFormError(response.error);
-        return;
+        return false;
       }
 
       closeModal();
       refetch();
+      return true;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : t('errors.default');
       setFormError(errorMessage);
       console.error('Error adding idea:', error);
+      return false;
     }
   };
 
