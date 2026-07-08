@@ -254,6 +254,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
             aria-label={label || 'Rich text editor'}
             aria-labelledby={editorLabelId}
             aria-required={required}
+            aria-keyshortcuts="Control+B Control+I Control+Shift+S Control+Shift+7 Control+Shift+8 Control+Z Control+Shift+Z"
             aria-describedby={[errorId, helperId].filter(Boolean).join(' ') || undefined}
           />
         </div>

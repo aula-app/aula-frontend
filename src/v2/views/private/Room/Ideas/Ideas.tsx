@@ -1,5 +1,6 @@
 import Fab from '@/v2/components/button/Fab/Fab';
 import Icon from '@/v2/components/ui/Icon/Icon';
+import Idea from '@/v2/components/idea/Idea';
 import { useModal } from '@/v2/hooks/useModal';
 import { useIdeasByRoom } from './useIdeasByRoom';
 import { addIdea } from '@/services/ideas';
@@ -42,7 +43,7 @@ const Ideas: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full gap-4">
       <h1>{t('v2.scopes.ideas.plural')}</h1>
 
       {!isLoading && (
@@ -78,11 +79,10 @@ const Ideas: React.FC = () => {
       )}
 
       {!isLoading && ideas.length > 0 && (
-        <ul className="flex flex-col gap-2 flex-1 overflow-y-auto">
+        <ul className="flex flex-col gap-4 flex-1 overflow-y-auto">
           {ideas.map((idea) => (
-            <li key={idea.hash_id} className="p-4 bg-background rounded-lg border border-secondary">
-              <h3 className="font-semibold text-foreground">{idea.title}</h3>
-              {idea.content && <p className="text-muted text-sm mt-2">{idea.content}</p>}
+            <li key={idea.hash_id}>
+              <Idea idea={idea} />
             </li>
           ))}
         </ul>

@@ -88,7 +88,15 @@
     "scopes": {
       "ideas": {
         "singular": "Idee",
-        "plural": "Ideen"
+        "plural": "Ideen",
+        "stats": {
+          "likes_one": "{{count}} Like",
+          "likes_other": "{{count}} Likes",
+          "votes_one": "{{count}} Stimme",
+          "votes_other": "{{count}} Stimmen",
+          "comments_one": "{{count}} Kommentar",
+          "comments_other": "{{count}} Kommentare"
+        }
       }
     },
     "ui": {
