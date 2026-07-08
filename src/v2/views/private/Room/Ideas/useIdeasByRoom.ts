@@ -12,7 +12,7 @@ interface UseIdeasByRoomState {
 export const useIdeasByRoom = (room_id: string | undefined): UseIdeasByRoomState => {
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<'empty' | 'fetch' | 'generic' | null>(null);
+  const [error, setError] = useState<'fetch' | 'generic' | null>(null);
 
   const fetch = async () => {
     if (!room_id) {
@@ -23,8 +23,9 @@ export const useIdeasByRoom = (room_id: string | undefined): UseIdeasByRoomState
       setIsLoading(true);
       setError(null);
       const response = await getIdeasByRoom(room_id);
-      if (response.error_code) {
-        response.error_code === 2 ? setError('empty') : setError('generic');
+      // error_code 2 means "no ideas" — a normal empty result, not an error.
+      if (response.error_code && response.error_code !== 2) {
+        setError('generic');
       } else {
         setIdeas(response.data || []);
       }

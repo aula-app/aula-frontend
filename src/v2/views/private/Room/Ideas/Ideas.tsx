@@ -83,6 +83,16 @@ const Ideas: React.FC = () => {
         </div>
       )}
 
+      {!isLoading && !error && ideas.length === 0 && (
+        <div className="flex-1 flex flex-col items-center justify-center gap-16">
+          <img src="/img/Paula_schlafend.svg" alt={t('v2.alt.sleeping')} loading="lazy" className="w-32" />
+          <div className="flex flex-col items-center text-center">
+            <h3 className="text-lg font-semibold">{t('v2.ui.error.empty.title')}</h3>
+            <p>{t('v2.ui.error.empty.description')}</p>
+          </div>
+        </div>
+      )}
+
       {!isLoading && ideas.length > 0 && (
         <ul ref={listRef} className="flex flex-col gap-4 flex-1">
           {ideas.map((idea) => (
