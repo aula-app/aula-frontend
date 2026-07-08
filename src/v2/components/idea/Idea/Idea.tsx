@@ -4,6 +4,7 @@ import CategoryList, { Category } from '@/v2/components/idea/CategoryList';
 import LikeStat from '@/v2/components/idea/LikeStat';
 import Stat from '@/v2/components/idea/Stat';
 import UserBar from '@/v2/components/idea/UserBar';
+import Markdown from '@/v2/components/ui/Markdown';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -46,7 +47,9 @@ const Idea = ({ idea, categories = [], className }: IdeaProps) => {
         <h3 id={titleId} className="font-semibold text-foreground">
           {idea.title}
         </h3>
-        {idea.content && <p className="text-sm text-muted">{idea.content}</p>}
+        {idea.content && (
+          <Markdown className="prose-sm text-muted line-clamp-3">{idea.content}</Markdown>
+        )}
       </Link>
 
       <div className="flex justify-between items-center gap-6 mr-1">
