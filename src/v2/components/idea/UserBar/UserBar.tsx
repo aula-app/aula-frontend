@@ -27,7 +27,7 @@ const UserBar = ({ name, date, className }: UserBarProps) => {
     <div className={twMerge('flex items-center gap-2', className)}>
       <Avatar name={name} />
       <div className="flex flex-col leading-tight">
-        <span className="text-sm font-medium text-foreground">{name}</span>
+        <span className="text-sm text-foreground font-bold">{name}</span>
         {date && formatted && (
           <time dateTime={date} className="text-xs text-muted">
             {formatted}
