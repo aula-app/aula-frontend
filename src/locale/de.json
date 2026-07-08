@@ -90,12 +90,12 @@
         "singular": "Idee",
         "plural": "Ideen",
         "stats": {
-          "likes_one": "{{count}} Like",
-          "likes_other": "{{count}} Likes",
-          "votes_one": "{{count}} Stimme",
-          "votes_other": "{{count}} Stimmen",
-          "comments_one": "{{count}} Kommentar",
-          "comments_other": "{{count}} Kommentare"
+          "like": "{{count}} Like",
+          "likes": "{{count}} Likes",
+          "vote": "{{count}} Stimme",
+          "votes": "{{count}} Stimmen",
+          "comment": "{{count}} Kommentar",
+          "comments": "{{count}} Kommentare"
         }
       }
     },
