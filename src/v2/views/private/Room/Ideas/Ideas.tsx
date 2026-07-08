@@ -5,6 +5,7 @@ import { useModal } from '@/v2/hooks/useModal';
 import { useScrollRestoration } from '@/v2/hooks';
 import { useIdeasByRoom } from './useIdeasByRoom';
 import { addIdea } from '@/services/ideas';
+import { checkPermissions } from '@/utils';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -50,7 +51,7 @@ const Ideas: React.FC = () => {
     <div className="flex flex-col h-full gap-4">
       <h1>{t('v2.scopes.ideas.plural')}</h1>
 
-      {!isLoading && (
+      {!isLoading && checkPermissions('ideas', 'create') && (
         <Fab
           icon={<Icon type="add" />}
           aria-label={addIdeaLabel}

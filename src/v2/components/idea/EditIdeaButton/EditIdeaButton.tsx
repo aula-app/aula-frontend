@@ -1,5 +1,6 @@
 import { editIdea } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
+import { checkPermissions } from '@/utils';
 import Icon from '@/v2/components/ui/Icon';
 import IconButton from '@/v2/components/button/IconButton';
 import { IdeaForm } from '@/v2/forms';
@@ -57,6 +58,9 @@ const EditIdeaButton = ({ idea, onChanged, onOpen }: EditIdeaButtonProps) => {
       />
     );
   };
+
+  // Owner (self) or role >= 30 may edit; hide the action otherwise.
+  if (!checkPermissions('ideas', 'edit', idea.user_hash_id)) return null;
 
   return (
     <IconButton dense aria-label={t('v2.ui.button.edit')} onClick={handleClick}>

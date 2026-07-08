@@ -1,5 +1,6 @@
 import { deleteIdea } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
+import { checkPermissions } from '@/utils';
 import Button from '@/v2/components/button/Button';
 import IconButton from '@/v2/components/button/IconButton';
 import Dialog from '@/v2/components/ui/Dialog';
@@ -40,6 +41,9 @@ const DeleteIdeaButton = ({ idea, onChanged, onOpen }: DeleteIdeaButtonProps) =>
     onOpen?.();
     setOpen(true);
   };
+
+  // Owner (self) or role >= 30 may delete; hide the action otherwise.
+  if (!checkPermissions('ideas', 'delete', idea.user_hash_id)) return null;
 
   return (
     <>
