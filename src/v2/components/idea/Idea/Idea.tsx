@@ -6,8 +6,10 @@ import Stat from '@/v2/components/idea/Stat';
 import UserBar from '@/v2/components/idea/UserBar';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import Link from '../../navigation/Link';
+import { RoomPhases } from '@/types/SettingsTypes';
 
 interface IdeaProps {
   idea: IdeaType;
@@ -22,9 +24,12 @@ interface IdeaProps {
  */
 const Idea = ({ idea, categories = [], className }: IdeaProps) => {
   const { t } = useTranslation();
+  const { phase } = useParams<{ phase: `${RoomPhases}` }>();
+
   const titleId = useId();
-  const phaseColor = phases[idea.phase_id] ?? 'wild';
-  const ideaPath = `/room/${idea.room_hash_id}/phase/${idea.phase_id}/idea/${idea.hash_id}`;
+  const phase_id = phase || '0';
+  const phaseColor = phases[phase_id] ?? 'wild';
+  const ideaPath = `/room/${idea.room_hash_id}/phase/${phase_id}/idea/${idea.hash_id}`;
 
   return (
     <article aria-labelledby={titleId} className={twMerge('flex flex-col gap-1', className)}>
