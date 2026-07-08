@@ -2,6 +2,7 @@ import Fab from '@/v2/components/button/Fab/Fab';
 import Icon from '@/v2/components/ui/Icon/Icon';
 import Idea from '@/v2/components/idea/Idea';
 import { useModal } from '@/v2/hooks/useModal';
+import { useScrollRestoration } from '@/v2/hooks';
 import { useIdeasByRoom } from './useIdeasByRoom';
 import { addIdea } from '@/services/ideas';
 import React, { useState } from 'react';
@@ -15,6 +16,7 @@ const Ideas: React.FC = () => {
   const { openModal, closeModal } = useModal();
   const { ideas, isLoading, error, refetch } = useIdeasByRoom(room_id);
   const [formError, setFormError] = useState<string | null>(null);
+  const listRef = useScrollRestoration<HTMLUListElement>(`ideas-${room_id}`, !isLoading && ideas.length > 0);
 
   const addIdeaLabel = t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') });
 
@@ -81,10 +83,10 @@ const Ideas: React.FC = () => {
       )}
 
       {!isLoading && ideas.length > 0 && (
-        <ul className="flex flex-col gap-4 flex-1 overflow-y-auto">
+        <ul ref={listRef} className="flex flex-col gap-4 flex-1">
           {ideas.map((idea) => (
             <li key={idea.hash_id}>
-              <Idea idea={idea} />
+              <Idea idea={idea} onChanged={refetch} />
             </li>
           ))}
         </ul>

@@ -23,7 +23,7 @@ const LikeStat = ({ idea, ...props }: LikeStatProps) => {
       active={liked}
       onClick={toggle}
       disabled={pending}
-      hint={t(`tooltips.${liked ? 'heartFull' : 'heart'}`)}
+      aria-label={t(`tooltips.${liked ? 'heartFull' : 'heart'}`)}
       label={t(count === 1 ? 'v2.scopes.ideas.stats.like' : 'v2.scopes.ideas.stats.likes', { count })}
       {...props}
     />
