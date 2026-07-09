@@ -85,7 +85,8 @@
     },
     "sso": {
       "arialabel": "Single Sign-On",
-      "button": "Mit SSO anmelden"
+      "button": "Mit SSO anmelden",
+      "bouncing": "Wir leiten dich gerade über Eduplaces an …"
     },
     "password": {
       "change": "Passwort ändern",

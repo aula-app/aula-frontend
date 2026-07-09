@@ -17,7 +17,10 @@ export const useInstanceGuard = () => {
 
       if (IS_MULTI) {
         if (!instanceCode && location.pathname !== '/code') {
-          navigate('/code');
+          // Preserve query string (e.g. ?via=eduplaces&login_hint=…) so
+          // InstanceCodeView can resume the IdP-initiated hand-off after
+          // the user enters their instance code.
+          navigate(`/code${location.search}`);
         }
         return;
       }
