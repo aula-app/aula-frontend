@@ -80,9 +80,9 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
             )}
             to={ideaPath}
           >
-            <h3 id={titleId} className="font-semibold text-foreground">
+            <h2 id={titleId} className="font-semibold text-foreground">
               {idea.title}
-            </h3>
+            </h2>
             {idea.content && <Markdown className="prose-sm text-muted line-clamp-3">{idea.content}</Markdown>}
           </Link>
           <div

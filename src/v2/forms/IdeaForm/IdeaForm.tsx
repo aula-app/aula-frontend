@@ -91,7 +91,6 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4">
-      <h3>{t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') })}</h3>
       <div className="flex flex-col">
         {/* Room - only show if no context */}
         {!hasRoomContext && (

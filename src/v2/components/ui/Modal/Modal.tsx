@@ -1,6 +1,6 @@
 import Icon from '@/v2/components/ui/Icon';
 import IconButton from '@/v2/components/button/IconButton';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const TRANSITION_MS = 300;
@@ -14,6 +14,7 @@ interface ModalProps {
 
 const Modal = ({ open, onClose, title, children }: ModalProps) => {
   const { t } = useTranslation();
+  const titleId = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isVisible, setVisible] = useState(false);
 
@@ -54,7 +55,7 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
     <dialog
       ref={dialogRef}
       data-testid="modal"
-      aria-label={title}
+      aria-labelledby={titleId}
       onClick={handleBackdropClick}
       className="fixed inset-x-0 bottom-0 top-auto m-0 w-full max-w-full bg-transparent p-0 max-h-none overflow-visible"
     >
@@ -70,6 +71,9 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
               <Icon type="close" aria-hidden="true" />
             </IconButton>
           </div>
+          <h2 id={titleId} className="mb-4 pr-8 text-lg font-semibold text-foreground">
+            {title}
+          </h2>
           {children}
         </div>
       </div>
