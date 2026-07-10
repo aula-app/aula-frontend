@@ -53,6 +53,15 @@
     "@mui/material": "^6.0.2",
     "@mui/system": "^6.0.2",
     "@mui/x-date-pickers": "^7.15.0",
+    "@opentelemetry/context-zone": "^2.7.1",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.218.0",
+    "@opentelemetry/instrumentation": "^0.218.0",
+    "@opentelemetry/instrumentation-fetch": "^0.218.0",
+    "@opentelemetry/instrumentation-xml-http-request": "^0.218.0",
+    "@opentelemetry/resources": "^2.7.1",
+    "@opentelemetry/sdk-trace-base": "^2.7.1",
+    "@opentelemetry/sdk-trace-web": "^2.7.1",
+    "@opentelemetry/semantic-conventions": "^1.41.1",
     "@tailwindcss/vite": "^4.1.18",
     "@types/semver": "^7.7.1",
     "dayjs": "^1.11.13",
@@ -92,6 +101,9 @@
     "typescript": "^5.6.3",
     "vite": "^5.4.20",
     "vite-plugin-svgr": "^4.2.0"
+  },
+  "resolutions": {
+    "@opentelemetry/core": "^2.8.0"
   },
   "browserslist": {
     "production": [
