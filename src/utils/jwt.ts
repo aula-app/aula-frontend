@@ -13,7 +13,6 @@ import { RoleTypes } from '@/types/SettingsTypes';
  */
 export function parseJwt(token: String): {
   exp: number;
-  user_id: number;
   user_hash: string;
   user_level: RoleTypes;
   roles: { role: RoleTypes; room: string }[];

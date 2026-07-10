@@ -10,11 +10,11 @@ interface GetAvatarResponse extends GenericResponse {
   data: { filename: string }[] | null;
 }
 
-export async function getAvatar(user_id: string): Promise<GetAvatarResponse> {
+export async function getAvatar(user_hash_id: string): Promise<GetAvatarResponse> {
   const response = await databaseRequest({
     model: 'Media',
     method: 'userAvatar',
-    arguments: { user_id },
+    arguments: { user_hash: user_hash_id },
   });
 
   return response as GetAvatarResponse;

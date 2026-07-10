@@ -209,7 +209,7 @@ export const databaseRequest = async <T = unknown>(
     const jwt_token = localStorageGet('token');
     const jwt_payload = parseJwt(jwt_token);
     argumentsWithUserIdValue.forEach((argumentName) => {
-      data.arguments[argumentName] = jwt_payload?.user_id;
+      data.arguments[argumentName] = jwt_payload?.user_hash;
     });
   }
 

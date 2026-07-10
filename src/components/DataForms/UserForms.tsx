@@ -148,7 +148,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       status: data.status,
       userlevel: data.userlevel || defaultValues.userlevel,
       username: data.username,
-      user_id: defaultValues.hash_id,
+      user_hash: defaultValues.hash_id,
     });
     if (response.error) {
       setError('root', {
