@@ -33,6 +33,14 @@ export const TEST_IDS = {
   CANCEL_BUTTON: 'cancel-button',
   DELETE_BUTTON: 'delete-button',
 
+  // Idea card actions (v2 Idea, Edit/Delete/ReportIdeaButton)
+  ADD_IDEA_BUTTON: 'add-idea-button',
+  IDEA_MORE_MENU: 'idea-more-menu',
+  EDIT_BUTTON: 'edit-button',
+  REPORT_BUTTON: 'report-button',
+  DELETE_IDEA_CONFIRM: 'delete-idea-confirm',
+  DELETE_IDEA_CANCEL: 'delete-idea-cancel',
+
   // Offline state (PublicOfflineView)
   SCHOOL_OFFLINE_VIEW: 'school-offline-view',
 

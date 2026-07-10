@@ -1,8 +1,11 @@
 import Fab from '@/v2/components/button/Fab/Fab';
 import Icon from '@/v2/components/ui/Icon/Icon';
 import Idea from '@/v2/components/idea/Idea';
+import FeedbackState from '@/v2/components/ui/FeedbackState';
+import ScopeTitle from '@/v2/components/ui/ScopeTitle';
+import ScrollList from '@/v2/components/ui/ScrollList';
+import ListPageLayout from '@/v2/components/layout/ListPageLayout';
 import { useModal } from '@/v2/hooks/useModal';
-import { useScrollRestoration } from '@/v2/hooks';
 import { useIdeasByRoom } from './useIdeasByRoom';
 import { addIdea } from '@/services/ideas';
 import { checkPermissions } from '@/utils';
@@ -10,7 +13,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { IdeaForm } from '@/v2/forms';
-import { twMerge } from 'tailwind-merge';
 
 const Ideas: React.FC = () => {
   const { t } = useTranslation();
@@ -18,7 +20,6 @@ const Ideas: React.FC = () => {
   const { openModal, closeModal } = useModal();
   const { ideas, isLoading, error, refetch } = useIdeasByRoom(room_id);
   const [formError, setFormError] = useState<string | null>(null);
-  const listRef = useScrollRestoration<HTMLUListElement>(`ideas-${room_id}`, !isLoading && ideas.length > 0);
 
   const addIdeaLabel = t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') });
 
@@ -49,65 +50,68 @@ const Ideas: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <h1 className="flex items-center gap-2 capitalize p-2 pb-0 sm:p-4 sm:pb-0">
-        <Icon type="idea" className="mb-3" />
-        <span>{ideas.length}</span>
-        <span>{t(`v2.scopes.ideas.${ideas.length === 1 ? 'singular' : 'plural'}`)}</span>
-      </h1>
+    <ListPageLayout
+      header={
+        <ScopeTitle
+          icon={<Icon type="idea" className="mb-3" />}
+          count={ideas.length}
+          label={t(`v2.scopes.ideas.${ideas.length === 1 ? 'singular' : 'plural'}`)}
+        />
+      }
+      action={
+        !isLoading &&
+        checkPermissions('ideas', 'create') && (
+          <Fab
+            icon={<Icon type="add" />}
+            aria-label={addIdeaLabel}
+            onClick={() =>
+              openModal(
+                addIdeaLabel,
+                <IdeaForm
+                  contextRoomId={room_id}
+                  contextBoxId=""
+                  onSubmit={handleAddIdea}
+                  onCancel={closeModal}
+                  error={formError}
+                  onErrorClose={() => setFormError(null)}
+                />
+              )
+            }
+            className="fixed bottom-4 self-center z-10"
+          />
+        )
+      }
+    >
+      {isLoading && <p>...</p>}
 
-      {!isLoading && checkPermissions('ideas', 'create') && (
-        <Fab
-          icon={<Icon type="add" />}
-          aria-label={addIdeaLabel}
-          onClick={() =>
-            openModal(
-              addIdeaLabel,
-              <IdeaForm
-                contextRoomId={room_id}
-                contextBoxId=""
-                onSubmit={handleAddIdea}
-                onCancel={closeModal}
-                error={formError}
-                onErrorClose={() => setFormError(null)}
-              />
-            )
-          }
-          className="fixed bottom-4 self-center z-10"
+      {error && (
+        <FeedbackState
+          image="/img/Paula_unzufrieden.svg"
+          alt={t('v2.alt.sad')}
+          title={t(`v2.ui.error.${error}.title`)}
+          description={t(`v2.ui.error.${error}.description`)}
         />
       )}
 
-      {isLoading && <p>...</p>}
-      {error && (
-        <div className="flex-1 flex flex-col items-center justify-center gap-16">
-          <img src="/img/Paula_unzufrieden.svg" alt={t('v2.alt.sad')} loading="lazy" className="w-32" />
-          <div className="flex flex-col items-center">
-            <h3 className="text-lg font-semibold">{t(`v2.ui.error.${error}.title`)}</h3>
-            <p>{t(`v2.ui.error.${error}.description`)}</p>
-          </div>
-        </div>
-      )}
-
       {!isLoading && !error && ideas.length === 0 && (
-        <div className="flex-1 flex flex-col items-center justify-center gap-16">
-          <img src="/img/Paula_schlafend.svg" alt={t('v2.alt.sleeping')} loading="lazy" className="w-32" />
-          <div className="flex flex-col items-center text-center">
-            <h3 className="text-lg font-semibold">{t('v2.ui.error.empty.title')}</h3>
-            <p>{t('v2.ui.error.empty.description')}</p>
-          </div>
-        </div>
+        <FeedbackState
+          image="/img/Paula_schlafend.svg"
+          alt={t('v2.alt.sleeping')}
+          title={t('v2.ui.error.empty.title')}
+          description={t('v2.ui.error.empty.description')}
+        />
       )}
 
       {!isLoading && ideas.length > 0 && (
-        <ul ref={listRef} className={twMerge('flex-1 flex flex-col gap-4 p-2 sm:p-4 overflow-y-auto')}>
+        <ScrollList storageKey={`ideas-${room_id}`}>
           {ideas.map((idea) => (
             <li key={idea.hash_id}>
               <Idea idea={idea} onChanged={refetch} />
             </li>
           ))}
-        </ul>
+        </ScrollList>
       )}
-    </div>
+    </ListPageLayout>
   );
 };
 
