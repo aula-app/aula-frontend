@@ -48,8 +48,12 @@ const Ideas: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full gap-4">
-      <h1>{t('v2.scopes.ideas.plural')}</h1>
+    <div className="flex flex-col h-full gap-1 sm:gap-4">
+      <h1 className="flex items-center gap-2 capitalize">
+        <Icon type="idea" className="mb-3" />
+        <span>{ideas.length}</span>
+        <span>{t(`v2.scopes.ideas.${ideas.length === 1 ? 'singular' : 'plural'}`)}</span>
+      </h1>
 
       {!isLoading && checkPermissions('ideas', 'create') && (
         <Fab
