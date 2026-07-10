@@ -73,7 +73,7 @@ const Ideas: React.FC = () => {
               />
             )
           }
-          className="fixed bottom-4 self-center"
+          className="fixed bottom-4 self-center z-10"
         />
       )}
 
