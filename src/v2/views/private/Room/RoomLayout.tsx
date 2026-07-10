@@ -11,7 +11,7 @@ const RoomLayout = () => {
   return (
     <div className="w-full h-full min-h-0 flex flex-col">
       <PhaseBar room={room_id} />
-      <div className="flex-1 min-h-0 overflow-y-auto p-2 px-3 sm:p-4 sm:px-6">
+      <div className="flex-1 min-h-0">
         <Outlet />
       </div>
     </div>

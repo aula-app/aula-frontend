@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { IdeaForm } from '@/v2/forms';
+import { twMerge } from 'tailwind-merge';
 
 const Ideas: React.FC = () => {
   const { t } = useTranslation();
@@ -48,8 +49,8 @@ const Ideas: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full gap-1 sm:gap-4">
-      <h1 className="flex items-center gap-2 capitalize">
+    <div className="flex flex-col h-full">
+      <h1 className="flex items-center gap-2 capitalize p-2 sm:p-4">
         <Icon type="idea" className="mb-3" />
         <span>{ideas.length}</span>
         <span>{t(`v2.scopes.ideas.${ideas.length === 1 ? 'singular' : 'plural'}`)}</span>
@@ -98,7 +99,7 @@ const Ideas: React.FC = () => {
       )}
 
       {!isLoading && ideas.length > 0 && (
-        <ul ref={listRef} className="flex flex-col gap-4 flex-1">
+        <ul ref={listRef} className={twMerge('flex-1 flex flex-col gap-4 p-2 pt-0 sm:p-4 sm:pt-0 overflow-y-auto')}>
           {ideas.map((idea) => (
             <li key={idea.hash_id}>
               <Idea idea={idea} onChanged={refetch} />
