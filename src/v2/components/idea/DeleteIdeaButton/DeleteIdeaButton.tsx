@@ -6,6 +6,7 @@ import IconButton from '@/v2/components/button/IconButton';
 import Dialog from '@/v2/components/ui/Dialog';
 import Icon from '@/v2/components/ui/Icon';
 import { useToast } from '@/v2/hooks';
+import { TEST_IDS } from '@/test-ids';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -47,7 +48,13 @@ const DeleteIdeaButton = ({ idea, onChanged, onOpen }: DeleteIdeaButtonProps) =>
 
   return (
     <>
-      <IconButton dense aria-label={t('v2.ui.button.delete')} aria-haspopup="dialog" onClick={handleClick}>
+      <IconButton
+        dense
+        aria-label={t('v2.ui.button.delete')}
+        aria-haspopup="dialog"
+        data-testid={TEST_IDS.DELETE_BUTTON}
+        onClick={handleClick}
+      >
         <Icon type="delete" size="1.2em" />
       </IconButton>
       <Dialog
@@ -62,10 +69,10 @@ const DeleteIdeaButton = ({ idea, onChanged, onOpen }: DeleteIdeaButtonProps) =>
           </h3>
           <p className="whitespace-pre-line">{t('v2.ui.dialog.delete.description', { var: t('scopes.ideas.name') })}</p>
           <div className="flex justify-end gap-2">
-            <Button text onClick={() => setOpen(false)} disabled={pending} data-testid="delete-idea-cancel">
+            <Button text onClick={() => setOpen(false)} disabled={pending} data-testid={TEST_IDS.DELETE_IDEA_CANCEL}>
               {t('actions.cancel')}
             </Button>
-            <Button color="error" onClick={handleDelete} disabled={pending} data-testid="delete-idea-confirm">
+            <Button color="error" onClick={handleDelete} disabled={pending} data-testid={TEST_IDS.DELETE_IDEA_CONFIRM}>
               {t('actions.delete')}
             </Button>
           </div>

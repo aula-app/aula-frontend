@@ -5,6 +5,7 @@ import Icon from '@/v2/components/ui/Icon';
 import IconButton from '@/v2/components/button/IconButton';
 import { IdeaForm } from '@/v2/forms';
 import { useModal, useToast } from '@/v2/hooks';
+import { TEST_IDS } from '@/test-ids';
 import { useTranslation } from 'react-i18next';
 
 interface EditIdeaButtonProps {
@@ -63,7 +64,7 @@ const EditIdeaButton = ({ idea, onChanged, onOpen }: EditIdeaButtonProps) => {
   if (!checkPermissions('ideas', 'edit', idea.user_hash_id)) return null;
 
   return (
-    <IconButton dense aria-label={t('v2.ui.button.edit')} onClick={handleClick}>
+    <IconButton dense aria-label={t('v2.ui.button.edit')} data-testid={TEST_IDS.EDIT_BUTTON} onClick={handleClick}>
       <Icon type="edit" size="1.2em" />
     </IconButton>
   );

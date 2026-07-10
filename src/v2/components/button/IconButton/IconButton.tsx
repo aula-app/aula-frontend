@@ -27,7 +27,14 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     );
 
     const component = to ? (
-      <Link to={to} className={classes} onMouseDown={createRipple} {...(restOfProps as any)}>
+      <Link
+        to={to}
+        className={twMerge(classes, disabled && 'pointer-events-none opacity-40')}
+        aria-disabled={disabled || undefined}
+        tabIndex={disabled ? -1 : undefined}
+        onMouseDown={createRipple}
+        {...(restOfProps as any)}
+      >
         {children}
         <RipplesContainer />
       </Link>

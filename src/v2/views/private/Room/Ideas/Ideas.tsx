@@ -9,6 +9,7 @@ import { useModal } from '@/v2/hooks/useModal';
 import { useIdeasByRoom } from './useIdeasByRoom';
 import { addIdea } from '@/services/ideas';
 import { checkPermissions } from '@/utils';
+import { TEST_IDS } from '@/test-ids';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -64,6 +65,7 @@ const Ideas: React.FC = () => {
           <Fab
             icon={<Icon type="add" />}
             aria-label={addIdeaLabel}
+            data-testid={TEST_IDS.ADD_IDEA_BUTTON}
             onClick={() =>
               openModal(
                 addIdeaLabel,
@@ -82,7 +84,12 @@ const Ideas: React.FC = () => {
         )
       }
     >
-      {isLoading && <p>...</p>}
+      {isLoading && (
+        <p role="status">
+          <span aria-hidden="true">...</span>
+          <span className="sr-only">{t('status.loading')}</span>
+        </p>
+      )}
 
       {error && (
         <FeedbackState

@@ -7,6 +7,7 @@ interface CategoryFieldProps {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  'data-testid'?: string;
 }
 
 interface CategoryOption {
@@ -14,7 +15,12 @@ interface CategoryOption {
   label: string;
 }
 
-const CategoryField: React.FC<CategoryFieldProps> = ({ value, onChange, disabled = false }) => {
+const CategoryField: React.FC<CategoryFieldProps> = ({
+  value,
+  onChange,
+  disabled = false,
+  'data-testid': dataTestId,
+}) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<CategoryOption[]>([]);
@@ -47,6 +53,7 @@ const CategoryField: React.FC<CategoryFieldProps> = ({ value, onChange, disabled
       value={value}
       onChange={onChange}
       disabled={disabled || loading}
+      data-testid={dataTestId}
     />
   );
 };

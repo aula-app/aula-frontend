@@ -146,6 +146,30 @@
           "description": "Bist du sicher, dass du diese {{var}} löschen möchtest?\nDiese Aktion kann nicht rückgängig gemacht werden."
         }
       },
+      "editor": {
+        "label": "Texteditor",
+        "toolbar": "Textformatierung",
+        "bold": "Fett",
+        "italic": "Kursiv",
+        "strikethrough": "Durchgestrichen",
+        "bulletList": "Aufzählung",
+        "orderedList": "Nummerierte Liste",
+        "emoji": "Emoji einfügen",
+        "undo": "Rückgängig",
+        "redo": "Wiederholen",
+        "emojis": {
+          "smile": "Lächelndes Gesicht",
+          "laugh": "Lachendes Gesicht",
+          "heart": "Rotes Herz",
+          "thumbsUp": "Daumen hoch",
+          "party": "Partytröte",
+          "sparkles": "Funkeln",
+          "rocket": "Rakete",
+          "bulb": "Glühbirne",
+          "memo": "Notiz",
+          "check": "Häkchen"
+        }
+      },
       "error": {
         "empty": {
           "title": "Hier gibt es noch nichts!",

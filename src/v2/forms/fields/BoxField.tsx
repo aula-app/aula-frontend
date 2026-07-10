@@ -9,9 +9,16 @@ interface BoxFieldProps {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  'data-testid'?: string;
 }
 
-const BoxField: React.FC<BoxFieldProps> = ({ roomId, value, onChange, disabled = false }) => {
+const BoxField: React.FC<BoxFieldProps> = ({
+  roomId,
+  value,
+  onChange,
+  disabled = false,
+  'data-testid': dataTestId,
+}) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
@@ -41,6 +48,7 @@ const BoxField: React.FC<BoxFieldProps> = ({ roomId, value, onChange, disabled =
       value={value}
       onChange={onChange}
       disabled={disabled || loading}
+      data-testid={dataTestId}
     />
   );
 };

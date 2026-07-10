@@ -1,5 +1,6 @@
 import Icon from '@/components/new/Icon';
 import { KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface SelectOption {
   value: string;
@@ -17,6 +18,7 @@ interface SelectInputProps {
   disabled?: boolean;
   required?: boolean;
   className?: string;
+  'data-testid'?: string;
 }
 
 const SelectInput = ({
@@ -30,7 +32,9 @@ const SelectInput = ({
   disabled = false,
   required = false,
   className,
+  'data-testid': dataTestId,
 }: SelectInputProps) => {
+  const { t } = useTranslation();
   const generatedId = useId();
   const inputId = id || generatedId;
   const listboxId = `${inputId}-listbox`;
@@ -88,7 +92,23 @@ const SelectInput = ({
         break;
       case 'ArrowUp':
         e.preventDefault();
+        if (!open) {
+          openDropdown();
+          break;
+        }
         setFocusedIndex((i) => Math.max(i - 1, 0));
+        break;
+      case 'Home':
+        if (open) {
+          e.preventDefault();
+          setFocusedIndex(0);
+        }
+        break;
+      case 'End':
+        if (open) {
+          e.preventDefault();
+          setFocusedIndex(options.length - 1);
+        }
         break;
       case 'Escape':
         setOpen(false);
@@ -111,7 +131,9 @@ const SelectInput = ({
           aria-disabled={disabled || undefined}
           aria-describedby={[errorId, helperId].filter(Boolean).join(' ') || undefined}
           aria-invalid={!!error || undefined}
+          aria-activedescendant={open && focusedIndex >= 0 ? `${listboxId}-option-${focusedIndex}` : undefined}
           disabled={disabled}
+          data-testid={dataTestId}
           onClick={() => (open ? setOpen(false) : openDropdown())}
           onKeyDown={handleKeyDown}
           className={[
@@ -145,7 +167,7 @@ const SelectInput = ({
                 <span aria-hidden="true" className="ml-0.5">
                   *
                 </span>
-                <span className="sr-only">(required)</span>
+                <span className="sr-only">{t('v2.form.validation.required')}</span>
               </>
             )}
           </label>
@@ -163,11 +185,13 @@ const SelectInput = ({
             id={listboxId}
             role="listbox"
             aria-label={label}
+            data-testid={dataTestId ? `${dataTestId}-list` : undefined}
             className="absolute z-50 mt-1 w-full rounded-lg border border-input-border bg-background shadow-md overflow-auto max-h-60 py-1"
           >
             {options.map((option, i) => (
               <li
                 key={option.value}
+                id={`${listboxId}-option-${i}`}
                 role="option"
                 aria-selected={option.value === value}
                 onMouseDown={(e) => {

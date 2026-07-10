@@ -19,6 +19,7 @@ interface RichEditorProps {
   required?: boolean;
   error?: string;
   helperText?: string | ReactNode;
+  'data-testid'?: string;
 }
 
 const RichEditor: React.FC<RichEditorProps> = ({
@@ -30,25 +31,28 @@ const RichEditor: React.FC<RichEditorProps> = ({
   required = false,
   error,
   helperText,
+  'data-testid': dataTestId,
 }) => {
   const { t } = useTranslation();
   const generatedId = useId();
   const errorId = error ? `${generatedId}-error` : undefined;
   const helperId = !error && helperText ? `${generatedId}-helper` : undefined;
+  const editorLabelId = label ? `${generatedId}-label` : undefined;
   const [isFocused, setIsFocused] = useState(false);
   const lastEmitted = useRef<string | null>(null);
+  const toolbarRef = useRef<HTMLDivElement>(null);
 
   const emojiList = [
-    { emoji: '😀', label: 'Smiling face' },
-    { emoji: '😂', label: 'Laughing face' },
-    { emoji: '❤️', label: 'Red heart' },
-    { emoji: '👍', label: 'Thumbs up' },
-    { emoji: '🎉', label: 'Party popper' },
-    { emoji: '✨', label: 'Sparkles' },
-    { emoji: '🚀', label: 'Rocket' },
-    { emoji: '💡', label: 'Light bulb' },
-    { emoji: '📝', label: 'Memo' },
-    { emoji: '✅', label: 'Check mark' },
+    { emoji: '😀', labelKey: 'smile' },
+    { emoji: '😂', labelKey: 'laugh' },
+    { emoji: '❤️', labelKey: 'heart' },
+    { emoji: '👍', labelKey: 'thumbsUp' },
+    { emoji: '🎉', labelKey: 'party' },
+    { emoji: '✨', labelKey: 'sparkles' },
+    { emoji: '🚀', labelKey: 'rocket' },
+    { emoji: '💡', labelKey: 'bulb' },
+    { emoji: '📝', labelKey: 'memo' },
+    { emoji: '✅', labelKey: 'check' },
   ];
 
   const editor = useEditor({
@@ -91,13 +95,39 @@ const RichEditor: React.FC<RichEditorProps> = ({
     }
   }, [editor, value]);
 
-  // Read the length reactively — v3 doesn't re-render on transactions by
-  // default, so this keeps the counter and floating label in sync when content
-  // changes programmatically (draft restore, edit mode, emoji insert).
-  const charCount = useEditorState({
+  useEffect(() => {
+    if (!editor) return;
+    editor.setOptions({
+      editorProps: {
+        attributes: {
+          role: 'textbox',
+          'aria-multiline': 'true',
+          ...(editorLabelId ? { 'aria-labelledby': editorLabelId } : { 'aria-label': t('v2.ui.editor.label') }),
+          ...(required ? { 'aria-required': 'true' } : {}),
+          ...(error ? { 'aria-invalid': 'true' } : {}),
+          ...(errorId || helperId ? { 'aria-describedby': [errorId, helperId].filter(Boolean).join(' ') } : {}),
+          'aria-keyshortcuts':
+            'Control+B Control+I Control+Shift+S Control+Shift+7 Control+Shift+8 Control+Z Control+Shift+Z',
+        },
+      },
+    });
+  }, [editor, editorLabelId, required, error, errorId, helperId, t]);
+
+  // Read the state reactively — v3 doesn't re-render on transactions by default.
+  const editorState = useEditorState({
     editor,
-    selector: ({ editor }) => editor?.getText().length ?? 0,
+    selector: ({ editor }) => ({
+      charCount: editor?.getText().length ?? 0,
+      bold: editor?.isActive('bold') ?? false,
+      italic: editor?.isActive('italic') ?? false,
+      strike: editor?.isActive('strike') ?? false,
+      bulletList: editor?.isActive('bulletList') ?? false,
+      orderedList: editor?.isActive('orderedList') ?? false,
+      canUndo: editor?.can().undo() ?? false,
+      canRedo: editor?.can().redo() ?? false,
+    }),
   });
+  const charCount = editorState?.charCount ?? 0;
 
   if (!editor) {
     return null;
@@ -107,8 +137,26 @@ const RichEditor: React.FC<RichEditorProps> = ({
     editor.commands.insertContent(emoji);
   };
 
+  const handleToolbarKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    const buttons = Array.from(
+      toolbarRef.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)') ?? []
+    ).filter((button) => !button.closest('[data-dropdown-panel]'));
+    const current = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    if (current === -1) return;
+    event.preventDefault();
+    const next =
+      event.key === 'Home'
+        ? 0
+        : event.key === 'End'
+          ? buttons.length - 1
+          : event.key === 'ArrowRight'
+            ? (current + 1) % buttons.length
+            : (current - 1 + buttons.length) % buttons.length;
+    buttons[next]?.focus();
+  };
+
   const hasContent = charCount > 0;
-  const editorLabelId = label ? `${generatedId}-label` : undefined;
 
   return (
     <div className="flex flex-col w-full mb-3">
@@ -127,9 +175,11 @@ const RichEditor: React.FC<RichEditorProps> = ({
           onBlur={() => setIsFocused(false)}
         >
           <div
+            ref={toolbarRef}
             className="relative flex items-center gap-1 px-2 py-1 border-b border-input-border"
             role="toolbar"
-            aria-label="Text formatting"
+            aria-label={t('v2.ui.editor.toolbar')}
+            onKeyDown={handleToolbarKeyDown}
           >
             {label && (
               <label
@@ -157,8 +207,9 @@ const RichEditor: React.FC<RichEditorProps> = ({
               type="button"
               onClick={() => editor.commands.toggleBold()}
               disabled={disabled}
-              aria-label="Bold"
-              tabIndex={-1}
+              aria-label={t('v2.ui.editor.bold')}
+              aria-pressed={editorState?.bold ?? false}
+              tabIndex={0}
               className="min-h-11 min-w-11"
             >
               <Icon type="bold" size="1.25rem" />
@@ -168,7 +219,8 @@ const RichEditor: React.FC<RichEditorProps> = ({
               type="button"
               onClick={() => editor.commands.toggleItalic()}
               disabled={disabled}
-              aria-label="Italic"
+              aria-label={t('v2.ui.editor.italic')}
+              aria-pressed={editorState?.italic ?? false}
               tabIndex={-1}
               className="min-h-11 min-w-11"
             >
@@ -179,7 +231,8 @@ const RichEditor: React.FC<RichEditorProps> = ({
               type="button"
               onClick={() => editor.commands.toggleStrike()}
               disabled={disabled}
-              aria-label="Strikethrough"
+              aria-label={t('v2.ui.editor.strikethrough')}
+              aria-pressed={editorState?.strike ?? false}
               tabIndex={-1}
               className="min-h-11 min-w-11"
             >
@@ -192,7 +245,8 @@ const RichEditor: React.FC<RichEditorProps> = ({
               type="button"
               onClick={() => editor.commands.toggleBulletList()}
               disabled={disabled}
-              aria-label="Bullet list"
+              aria-label={t('v2.ui.editor.bulletList')}
+              aria-pressed={editorState?.bulletList ?? false}
               tabIndex={-1}
               className="min-h-11 min-w-11"
             >
@@ -203,7 +257,8 @@ const RichEditor: React.FC<RichEditorProps> = ({
               type="button"
               onClick={() => editor.commands.toggleOrderedList()}
               disabled={disabled}
-              aria-label="Ordered list"
+              aria-label={t('v2.ui.editor.orderedList')}
+              aria-pressed={editorState?.orderedList ?? false}
               tabIndex={-1}
               className="min-h-11 min-w-11"
             >
@@ -213,15 +268,16 @@ const RichEditor: React.FC<RichEditorProps> = ({
             <div className="h-5 w-px bg-input-border" aria-hidden="true"></div>
 
             <Dropdown
-              aria-label="Add emoji"
+              role="dialog"
+              aria-label={t('v2.ui.editor.emoji')}
               content={
                 <div className="grid grid-cols-5 gap-1 p-2">
-                  {emojiList.map(({ emoji, label: emojiLabel }) => (
+                  {emojiList.map(({ emoji, labelKey }) => (
                     <IconButton
                       key={emoji}
                       type="button"
                       onClick={() => insertEmoji(emoji)}
-                      aria-label={emojiLabel}
+                      aria-label={t(`v2.ui.editor.emojis.${labelKey}`)}
                       className="min-h-11 min-w-11"
                     >
                       {emoji}
@@ -233,7 +289,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
               <IconButton
                 type="button"
                 disabled={disabled}
-                aria-label="Add emoji"
+                aria-label={t('v2.ui.editor.emoji')}
                 tabIndex={-1}
                 className="min-h-11 min-w-11"
               >
@@ -246,8 +302,8 @@ const RichEditor: React.FC<RichEditorProps> = ({
             <IconButton
               type="button"
               onClick={() => editor.commands.undo()}
-              disabled={disabled || !editor.can().undo()}
-              aria-label="Undo"
+              disabled={disabled || !(editorState?.canUndo ?? false)}
+              aria-label={t('v2.ui.editor.undo')}
               tabIndex={-1}
               className="min-h-11 min-w-11"
             >
@@ -257,8 +313,8 @@ const RichEditor: React.FC<RichEditorProps> = ({
             <IconButton
               type="button"
               onClick={() => editor.commands.redo()}
-              disabled={disabled || !editor.can().redo()}
-              aria-label="Redo"
+              disabled={disabled || !(editorState?.canRedo ?? false)}
+              aria-label={t('v2.ui.editor.redo')}
               tabIndex={-1}
               className="min-h-11 min-w-11"
             >
@@ -268,12 +324,8 @@ const RichEditor: React.FC<RichEditorProps> = ({
 
           <EditorContent
             editor={editor}
+            data-testid={dataTestId}
             className={`max-w-none p-3 pb-0 [&_div[contenteditable]:focus]:outline-none shadow-inner ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'}`}
-            aria-label={label || 'Rich text editor'}
-            aria-labelledby={editorLabelId}
-            aria-required={required}
-            aria-keyshortcuts="Control+B Control+I Control+Shift+S Control+Shift+7 Control+Shift+8 Control+Z Control+Shift+Z"
-            aria-describedby={[errorId, helperId].filter(Boolean).join(' ') || undefined}
           />
         </div>
       </div>

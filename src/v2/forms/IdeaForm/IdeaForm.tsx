@@ -90,7 +90,7 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4" data-testid="idea-form">
       <div className="flex flex-col">
         {/* Room - only show if no context */}
         {!hasRoomContext && (
@@ -148,6 +148,7 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
                     value={field.value || ''}
                     onChange={field.onChange}
                     disabled={isLoading}
+                    data-testid="idea-form-box"
                   />
                 </div>
               )}
@@ -158,7 +159,12 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
             control={control}
             render={({ field }) => (
               <div className={hasBoxContext ? 'w-full' : 'flex-1'}>
-                <CategoryField value={field.value || ''} onChange={field.onChange} disabled={isLoading} />
+                <CategoryField
+                  value={field.value || ''}
+                  onChange={field.onChange}
+                  disabled={isLoading}
+                  data-testid="idea-form-category"
+                />
               </div>
             )}
           />
@@ -170,9 +176,10 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
             <span>{(errors.root as any)?.message || error}</span>
             {onErrorClose && (
               <button
+                type="button"
                 onClick={onErrorClose}
                 className="text-red-600 hover:text-red-700 font-semibold"
-                aria-label="Close error"
+                aria-label={t('ui.common.dismiss')}
               >
                 ✕
               </button>

@@ -146,6 +146,30 @@
           "description": "Are you sure you want to delete this {{var}}?\nThis action cannot be undone."
         }
       },
+      "editor": {
+        "label": "Text editor",
+        "toolbar": "Text formatting",
+        "bold": "Bold",
+        "italic": "Italic",
+        "strikethrough": "Strikethrough",
+        "bulletList": "Bullet list",
+        "orderedList": "Numbered list",
+        "emoji": "Add emoji",
+        "undo": "Undo",
+        "redo": "Redo",
+        "emojis": {
+          "smile": "Smiling face",
+          "laugh": "Laughing face",
+          "heart": "Red heart",
+          "thumbsUp": "Thumbs up",
+          "party": "Party popper",
+          "sparkles": "Sparkles",
+          "rocket": "Rocket",
+          "bulb": "Light bulb",
+          "memo": "Memo",
+          "check": "Check mark"
+        }
+      },
       "error": {
         "empty": {
           "title": "Nothing here yet!",
