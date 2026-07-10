@@ -25,16 +25,16 @@ export const useScrollRestoration = <T extends HTMLElement>(key: string, ready: 
     if (!el || !ready) return;
 
     const saved = scrollPositions.get(key);
-    if (saved) el.scrollTop = saved;
+    if (saved !== undefined) el.scrollTop = saved;
 
     const handleScroll = () => scrollPositions.set(key, el.scrollTop);
     el.addEventListener('scroll', handleScroll, { passive: true });
 
-    return () => {
-      // Capture the final position before the element goes away.
-      scrollPositions.set(key, el.scrollTop);
-      el.removeEventListener('scroll', handleScroll);
-    };
+    // No position capture here: on unmount this cleanup runs after React has
+    // detached the element, where scrollTop always reads 0 and would clobber
+    // the value the scroll listener saved. The listener alone keeps the map
+    // current.
+    return () => el.removeEventListener('scroll', handleScroll);
   }, [key, ready]);
 
   return ref;
