@@ -133,6 +133,58 @@ test('Idea more-options panel behavior', async ({ seededRoom, newPageFor }) => {
 });
 
 /**
+ * Like Flow Tests
+ * The like stat on each idea card toggles optimistically, persists on the
+ * server, and is reflected (without the pressed state) for other users.
+ */
+test('Idea like flow', async ({ seededRoom, newPageFor }) => {
+  const userPage = await newPageFor('user');
+  const studentPage = await newPageFor('student');
+  const idea = entities.createIdea('like-flow');
+
+  const StudentLike = studentPage.getByTestId(`idea-${idea.name}`).getByTestId(TEST_IDS.LIKE_BUTTON);
+
+  await test.step('User - Create an Idea to like', async () => {
+    await navigation.goToRoom(userPage, seededRoom.name);
+    await ideas.create(userPage, idea);
+  });
+
+  await test.step("Student - Likes the User's Idea", async () => {
+    await navigation.goToRoom(studentPage, seededRoom.name);
+
+    await expect(StudentLike).toHaveAttribute('aria-pressed', 'false');
+    await expect(StudentLike).toContainText('0');
+
+    await StudentLike.click();
+
+    await expect(StudentLike).toHaveAttribute('aria-pressed', 'true');
+    await expect(StudentLike).toContainText('1');
+  });
+
+  await test.step('Student - Like persists after a reload', async () => {
+    await studentPage.reload();
+
+    await expect(StudentLike).toHaveAttribute('aria-pressed', 'true');
+    await expect(StudentLike).toContainText('1');
+  });
+
+  await test.step("User - Sees the count but not the Student's pressed state", async () => {
+    await navigation.goToRoom(userPage, seededRoom.name);
+
+    const UserLike = userPage.getByTestId(`idea-${idea.name}`).getByTestId(TEST_IDS.LIKE_BUTTON);
+    await expect(UserLike).toContainText('1');
+    await expect(UserLike).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  await test.step('Student - Unlike reverts the count', async () => {
+    await StudentLike.click();
+
+    await expect(StudentLike).toHaveAttribute('aria-pressed', 'false');
+    await expect(StudentLike).toContainText('0');
+  });
+});
+
+/**
  * Idea Draft Persistence Tests
  * The idea form keeps an in-progress draft in sessionStorage, so dismissing the
  * modal or reloading does not lose typed content; cancel is an explicit discard.

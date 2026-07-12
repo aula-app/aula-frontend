@@ -136,7 +136,7 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
             })}
             to={ideaPath}
           />
-          <LikeStat idea={idea} />
+          <LikeStat idea={idea} data-testid={TEST_IDS.LIKE_BUTTON} />
         </div>
       </div>
     </article>
