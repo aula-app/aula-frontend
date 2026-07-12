@@ -97,6 +97,7 @@ const Ideas: React.FC = () => {
           alt={t('v2.alt.sad')}
           title={t(`v2.ui.error.${error}.title`)}
           description={t(`v2.ui.error.${error}.description`)}
+          data-testid="ideas-error-state"
         />
       )}
 
@@ -106,6 +107,7 @@ const Ideas: React.FC = () => {
           alt={t('v2.alt.sleeping')}
           title={t('v2.ui.error.empty.title')}
           description={t('v2.ui.error.empty.description')}
+          data-testid="ideas-empty-state"
         />
       )}
 

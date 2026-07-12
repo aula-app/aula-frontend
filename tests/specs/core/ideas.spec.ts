@@ -133,6 +133,50 @@ test('Idea more-options panel behavior', async ({ seededRoom, newPageFor }) => {
 });
 
 /**
+ * Page States Tests
+ * The Ideas page shows an empty state until the first idea exists, counts the
+ * ideas in the heading (with singular/plural label), and offers the add FAB to
+ * users who may create ideas.
+ * NOTE: the FAB-hidden case (guest, role 10) is not coverable — all seeded
+ * test users have role 20.
+ */
+test('Ideas page states', async ({ seededRoom, newPageFor }) => {
+  const userPage = await newPageFor('user');
+  const idea1 = entities.createIdea('states.1');
+  const idea2 = entities.createIdea('states.2');
+
+  const Heading = userPage.locator('h1');
+  const EmptyState = userPage.getByTestId('ideas-empty-state');
+
+  let singularHeading = '';
+
+  await test.step('User - Empty room shows the empty state, a zero count and the add FAB', async () => {
+    await navigation.goToRoom(userPage, seededRoom.name);
+
+    await expect(EmptyState).toBeVisible();
+    await expect(Heading).toContainText('0');
+    await expect(userPage.getByTestId(TEST_IDS.ADD_IDEA_BUTTON)).toBeVisible();
+  });
+
+  await test.step('User - First Idea replaces the empty state and counts in singular', async () => {
+    await ideas.create(userPage, idea1);
+
+    await expect(EmptyState).toBeHidden();
+    await expect(Heading).toContainText('1');
+    singularHeading = (await Heading.textContent()) ?? '';
+  });
+
+  await test.step('User - Second Idea switches the heading to plural', async () => {
+    await ideas.create(userPage, idea2);
+
+    await expect(Heading).toContainText('2');
+    const pluralHeading = (await Heading.textContent()) ?? '';
+    // The label must change between one and many, whatever the locale
+    expect(pluralHeading.replace(/\d+/, '#')).not.toEqual(singularHeading.replace(/\d+/, '#'));
+  });
+});
+
+/**
  * Edit Flow Tests
  * The edit action opens the idea form pre-filled; owners and admins can change
  * title and content, and the card reflects the update after saving.
