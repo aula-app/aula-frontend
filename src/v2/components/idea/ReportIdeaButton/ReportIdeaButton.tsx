@@ -53,7 +53,7 @@ ${data.content || ''}
     openModal(
       t('actions.contentReport'),
       <div data-testid={TEST_IDS.REPORT_DIALOG}>
-        <ReportForms onClose={closeModal} onSubmit={handleSubmit} />
+        <ReportForms onClose={closeModal} onSubmit={handleSubmit} disableMenuPortal />
       </div>
     );
   };

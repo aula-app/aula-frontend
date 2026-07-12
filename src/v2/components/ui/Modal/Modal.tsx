@@ -62,8 +62,8 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
       <div
         className={`w-full max-h-[90vh] rounded-t-3xl bg-background text-foreground shadow-2xl border-t border-secondary
           pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]
-          transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] transform-gpu
-          ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
+          transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]
+          ${isVisible ? '' : 'translate-y-full'}`}
       >
         <div className="relative overflow-y-auto max-h-[90vh] p-6">
           <div className="absolute top-2 right-2">

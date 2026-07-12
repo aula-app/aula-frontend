@@ -18,6 +18,8 @@ import { SelectOptionsType } from '@/types/SettingsTypes';
 interface ReportFormsProps {
   onClose: () => void;
   onSubmit: (data: ReportArguments) => Promise<void>;
+  /** Set when rendering inside the v2 native-dialog Modal (see SelectField.disableMenuPortal). */
+  disableMenuPortal?: boolean;
 }
 
 const ReportOptions = [
@@ -33,7 +35,7 @@ const ReportOptions = [
   { value: 'other', label: 'forms.report.other' },
 ] as SelectOptionsType;
 
-const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
+const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit, disableMenuPortal = false }) => {
   const { t } = useTranslation();
 
   const schema = yup.object({
@@ -67,7 +69,7 @@ const ReportForms: React.FC<ReportFormsProps> = ({ onClose, onSubmit }) => {
       <Typography variant="h1">{t(`actions.add`, { var: t(`scopes.reports.name`) })}</Typography>
       <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
         <Stack gap={2}>
-          <SelectField name="report" options={ReportOptions} control={control} />
+          <SelectField name="report" options={ReportOptions} control={control} disableMenuPortal={disableMenuPortal} />
           {/* content */}
           <MarkdownEditor name="content" control={control} />
           <Stack direction="row" justifyContent="end" gap={2}>
