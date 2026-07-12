@@ -36,6 +36,7 @@ export const TEST_IDS = {
   // Idea card actions (v2 Idea, Edit/Delete/ReportIdeaButton)
   ADD_IDEA_BUTTON: 'add-idea-button',
   IDEA_MORE_MENU: 'idea-more-menu',
+  IDEA_MORE_OPTIONS_PANEL: 'idea-more-options-panel',
   EDIT_BUTTON: 'edit-button',
   REPORT_BUTTON: 'report-button',
   DELETE_IDEA_CONFIRM: 'delete-idea-confirm',

@@ -92,6 +92,7 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
               moreOptionsOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
             )}
             inert={moreOptionsOpen ? undefined : ''}
+            data-testid={TEST_IDS.IDEA_MORE_OPTIONS_PANEL}
           >
             <div
               className={twMerge(

@@ -70,6 +70,69 @@ test('Idea Management', async ({ seededRoom, newPageFor }) => {
 });
 
 /**
+ * More-Options Panel Tests
+ * The panel on each idea card holds the edit/delete/report actions: it manages
+ * focus, closes on Escape and outside clicks, and only shows actions the
+ * current user is allowed to perform.
+ */
+test('Idea more-options panel behavior', async ({ seededRoom, newPageFor }) => {
+  const userPage = await newPageFor('user');
+  const studentPage = await newPageFor('student');
+  const idea = entities.createIdea('more-options');
+
+  const IdeaDiv = userPage.getByTestId(`idea-${idea.name}`);
+  const MoreToggle = IdeaDiv.getByTestId(TEST_IDS.IDEA_MORE_MENU);
+  // The closed panel hides by collapsing + inert (content is clipped, not display:none),
+  // so closed-state assertions check the inert attribute rather than visibility.
+  const MorePanel = IdeaDiv.getByTestId(TEST_IDS.IDEA_MORE_OPTIONS_PANEL);
+
+  await test.step('User - Create an Idea to inspect', async () => {
+    await navigation.goToRoom(userPage, seededRoom.name);
+    await ideas.create(userPage, idea);
+  });
+
+  await test.step('User - Toggle opens the panel and moves focus into it', async () => {
+    await MoreToggle.click();
+
+    await expect(MoreToggle).toHaveAttribute('aria-expanded', 'true');
+    await expect(MorePanel).not.toHaveAttribute('inert');
+    await expect(IdeaDiv.getByTestId(TEST_IDS.EDIT_BUTTON)).toBeVisible();
+    await expect(IdeaDiv.getByTestId(TEST_IDS.DELETE_BUTTON)).toBeVisible();
+    await expect(IdeaDiv.getByTestId(TEST_IDS.REPORT_BUTTON)).toBeVisible();
+    await expect(IdeaDiv.getByTestId(TEST_IDS.EDIT_BUTTON)).toBeFocused();
+  });
+
+  await test.step('User - Escape closes the panel and returns focus to the toggle', async () => {
+    await userPage.keyboard.press('Escape');
+
+    await expect(MoreToggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(MorePanel).toHaveAttribute('inert', '');
+    await expect(MoreToggle).toBeFocused();
+  });
+
+  await test.step('User - Clicking outside closes the panel', async () => {
+    await MoreToggle.click();
+    await expect(MoreToggle).toHaveAttribute('aria-expanded', 'true');
+
+    await userPage.locator('h1').click();
+
+    await expect(MoreToggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(MorePanel).toHaveAttribute('inert', '');
+  });
+
+  await test.step("Student - Only sees report on another User's Idea", async () => {
+    await navigation.goToRoom(studentPage, seededRoom.name);
+
+    const StudentIdeaDiv = studentPage.getByTestId(`idea-${idea.name}`);
+    await StudentIdeaDiv.getByTestId(TEST_IDS.IDEA_MORE_MENU).click();
+
+    await expect(StudentIdeaDiv.getByTestId(TEST_IDS.REPORT_BUTTON)).toBeVisible();
+    await expect(StudentIdeaDiv.getByTestId(TEST_IDS.EDIT_BUTTON)).toHaveCount(0);
+    await expect(StudentIdeaDiv.getByTestId(TEST_IDS.DELETE_BUTTON)).toHaveCount(0);
+  });
+});
+
+/**
  * Idea Draft Persistence Tests
  * The idea form keeps an in-progress draft in sessionStorage, so dismissing the
  * modal or reloading does not lose typed content; cancel is an explicit discard.
