@@ -8,8 +8,7 @@ const RoomLayout = () => {
   const { room_id } = useParams<{ room_id: string }>();
   const [, dispatch] = useAppStore();
 
-  // The breadcrumb (and its accessible label) is the only place the room name
-  // surfaces on room pages — mirror the SET_BREADCRUMB dispatch of the v1 views.
+  // The breadcrumb is the only place the room name surfaces on room pages
   useEffect(() => {
     if (!room_id) return;
     getRoom(room_id).then((response) => {

@@ -40,8 +40,7 @@ test('Category management', async ({ seededRoom, newPageFor }) => {
     await expect(categoryChip).toBeVisible();
   });
 
-  // NOTE: v2 intentionally does not persist the category selected in the create
-  // form (product decision) — categories are assigned via the ideas settings below.
+  // v2 does not persist the category on create — it is assigned via the ideas settings below
   await test.step('User can create Idea with a Category', async () => {
     await navigation.goToRoom(userPage, seededRoom.name);
     await ideas.create(userPage, idea);
@@ -64,8 +63,7 @@ test('Category management', async ({ seededRoom, newPageFor }) => {
     await adminPage.waitForSelector('[data-testid="add-idea-form"]', { state: 'hidden' });
   });
 
-  // @TODO: Un-Skip when the v2 Idea card renders category chips (Idea.tsx never
-  // receives `categories` from the room Ideas page yet)
+  // @TODO: Un-Skip when the v2 Idea card renders category chips
   await test.step.skip('Student can see the Idea with the Category', async () => {
     await navigation.goToRoom(studentPage, seededRoom.name);
 

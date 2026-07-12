@@ -12,8 +12,7 @@ interface Props extends React.ComponentProps<typeof TextField> {
   required?: boolean;
   defaultValue?: string | number;
   onChange?: (...event: any[]) => void;
-  /** Render the options menu in place instead of a body-level portal — required
-   * inside a native `<dialog>` (v2 Modal), whose top layer makes portaled menus unclickable. */
+  /** Render the menu in place — portaled menus are unclickable inside a native `<dialog>` (v2 Modal). */
   disableMenuPortal?: boolean;
 }
 

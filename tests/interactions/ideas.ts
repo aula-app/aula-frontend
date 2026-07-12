@@ -12,9 +12,7 @@ export const create = async (
   // start at home
   await formInteractions.clickButton(page, TEST_IDS.ADD_IDEA_BUTTON);
 
-  // The room page (phase 0) renders the v2 IdeaForm inside the shared modal,
-  // while the box page still renders the legacy v1 MUI dialog. Wait for either
-  // form, then branch on which one appeared.
+  // the room page renders the v2 IdeaForm; the box page still uses the v1 MUI dialog
   const v2Form = page.getByTestId('idea-form');
   const v1Form = page.getByTestId('add-idea-form');
   await expect(v2Form.or(v1Form)).toBeVisible();
@@ -29,7 +27,6 @@ export const create = async (
   await expect(IdeaTitle).toBeVisible();
 };
 
-// v2 IdeaForm (src/v2/forms/IdeaForm) — used on the room Ideas page
 const createV2 = async (page: Page, idea: types.IdeaData) => {
   const titleField = page.getByTestId('idea-form-title');
   await expect(titleField).toBeVisible();
@@ -40,14 +37,11 @@ const createV2 = async (page: Page, idea: types.IdeaData) => {
   await contentField.fill(idea.description);
 
   if (idea.box) {
-    // The v2 room form is opened with a room context and no box selector;
-    // ideas are created inside a box from the (still v1) box page instead.
     throw new Error('The v2 room idea form has no box selector — create the idea from the box page instead.');
   }
 
   if (idea.category) {
-    // NOTE: v2 intentionally does not persist the category on create; this only
-    // exercises the form field. Assign categories via the ideas settings.
+    // exercises the field only — v2 does not persist the category on create
     await formInteractions.selectOption(page, 'idea-form-category', idea.category);
   }
 
@@ -55,7 +49,6 @@ const createV2 = async (page: Page, idea: types.IdeaData) => {
   await expect(page.getByTestId('idea-form')).toBeHidden();
 };
 
-// legacy v1 MUI IdeaForms — still used on the box page
 const createV1 = async (page: Page, idea: types.IdeaData) => {
   await formInteractions.fillForm(page, 'idea-title', idea.name);
   await formInteractions.fillMarkdownForm(page, 'content', idea.description);
@@ -100,8 +93,7 @@ export const remove = async (
 
   await formInteractions.openMoreOption(page, IdeaDiv);
   await IdeaDiv.getByTestId(TEST_IDS.DELETE_BUTTON).click();
-  // Every idea card portals its own (closed) confirmation dialog to document.body,
-  // so scope through the role tree — only the open dialog is exposed there.
+  // every card portals a closed confirmation dialog; only the open one is in the role tree
   await page.getByRole('alertdialog').getByTestId(TEST_IDS.DELETE_IDEA_CONFIRM).click();
 
   await expect(IdeaDiv).toHaveCount(0);

@@ -71,9 +71,8 @@ test('Idea Management', async ({ seededRoom, newPageFor }) => {
 
 /**
  * More-Options Panel Tests
- * The panel on each idea card holds the edit/delete/report actions: it manages
- * focus, closes on Escape and outside clicks, and only shows actions the
- * current user is allowed to perform.
+ * Focus management, Escape/outside-click closing, and permission gating of the
+ * edit/delete/report actions.
  */
 test('Idea more-options panel behavior', async ({ seededRoom, newPageFor }) => {
   const userPage = await newPageFor('user');
@@ -82,8 +81,7 @@ test('Idea more-options panel behavior', async ({ seededRoom, newPageFor }) => {
 
   const IdeaDiv = userPage.getByTestId(`idea-${idea.name}`);
   const MoreToggle = IdeaDiv.getByTestId(TEST_IDS.IDEA_MORE_MENU);
-  // The closed panel hides by collapsing + inert (content is clipped, not display:none),
-  // so closed-state assertions check the inert attribute rather than visibility.
+  // the closed panel is clipped + inert, not hidden — assert inert instead of visibility
   const MorePanel = IdeaDiv.getByTestId(TEST_IDS.IDEA_MORE_OPTIONS_PANEL);
 
   await test.step('User - Create an Idea to inspect', async () => {
@@ -134,11 +132,8 @@ test('Idea more-options panel behavior', async ({ seededRoom, newPageFor }) => {
 
 /**
  * Page States Tests
- * The Ideas page shows an empty state until the first idea exists, counts the
- * ideas in the heading (with singular/plural label), and offers the add FAB to
- * users who may create ideas.
- * NOTE: the FAB-hidden case (guest, role 10) is not coverable — all seeded
- * test users have role 20.
+ * Empty state, heading count with singular/plural label, and the add FAB.
+ * The FAB-hidden case (guest, role 10) is not coverable — all seeded users have role 20.
  */
 test('Ideas page states', async ({ seededRoom, newPageFor }) => {
   const userPage = await newPageFor('user');
@@ -171,15 +166,14 @@ test('Ideas page states', async ({ seededRoom, newPageFor }) => {
 
     await expect(Heading).toContainText('2');
     const pluralHeading = (await Heading.textContent()) ?? '';
-    // The label must change between one and many, whatever the locale
+    // the label must change between one and many, whatever the locale
     expect(pluralHeading.replace(/\d+/, '#')).not.toEqual(singularHeading.replace(/\d+/, '#'));
   });
 });
 
 /**
  * Edit Flow Tests
- * The edit action opens the idea form pre-filled; owners and admins can change
- * title and content, and the card reflects the update after saving.
+ * Pre-filled edit form; owners and admins can change title and content.
  */
 test('Idea edit flow', async ({ seededRoom, newPageFor }) => {
   const userPage = await newPageFor('user');
@@ -236,8 +230,7 @@ test('Idea edit flow', async ({ seededRoom, newPageFor }) => {
 
 /**
  * Like Flow Tests
- * The like stat on each idea card toggles optimistically, persists on the
- * server, and is reflected (without the pressed state) for other users.
+ * Like/unlike toggling, server persistence, and other users' view of the count.
  */
 test('Idea like flow', async ({ seededRoom, newPageFor }) => {
   const userPage = await newPageFor('user');
@@ -287,9 +280,9 @@ test('Idea like flow', async ({ seededRoom, newPageFor }) => {
 });
 
 /**
- * Idea Draft Persistence Tests
- * The idea form keeps an in-progress draft in sessionStorage, so dismissing the
- * modal or reloading does not lose typed content; cancel is an explicit discard.
+ * Draft Persistence Tests
+ * The idea form drafts to sessionStorage; dismissal and reloads keep the
+ * content, cancel discards it.
  */
 test('Idea draft persistence', async ({ seededRoom, newPageFor }) => {
   const userPage = await newPageFor('user');
@@ -300,8 +293,7 @@ test('Idea draft persistence', async ({ seededRoom, newPageFor }) => {
     await expect(userPage.getByTestId('idea-form')).toBeVisible();
   };
 
-  // Clicking the backdrop dismisses the modal without going through the form's
-  // cancel button — the accidental dismissal the draft exists to survive.
+  // backdrop click dismisses without the cancel button's explicit discard
   const dismissIdeaForm = async () => {
     await userPage.mouse.click(10, 10);
     await expect(userPage.getByTestId('idea-form')).toBeHidden();
