@@ -133,6 +133,64 @@ test('Idea more-options panel behavior', async ({ seededRoom, newPageFor }) => {
 });
 
 /**
+ * Edit Flow Tests
+ * The edit action opens the idea form pre-filled; owners and admins can change
+ * title and content, and the card reflects the update after saving.
+ */
+test('Idea edit flow', async ({ seededRoom, newPageFor }) => {
+  const userPage = await newPageFor('user');
+  const adminPage = await newPageFor('admin');
+  const idea = entities.createIdea('edit-flow');
+  const titleEditedByUser = `${idea.name}.edited`;
+  const contentEditedByUser = 'updated by owner during testing';
+  const titleEditedByAdmin = `${idea.name}.admin-edited`;
+
+  const openEditForm = async (page: import('@playwright/test').Page, ideaName: string) => {
+    const IdeaDiv = page.getByTestId(`idea-${ideaName}`);
+    await expect(IdeaDiv).toBeVisible();
+    // so that any triggered tooltips dissappear
+    await page.mouse.move(0, 0);
+    await formInteractions.openMoreOption(page, IdeaDiv);
+    await IdeaDiv.getByTestId(TEST_IDS.EDIT_BUTTON).click();
+    await expect(page.getByTestId('idea-form')).toBeVisible();
+  };
+
+  await test.step('User - Create an Idea to edit', async () => {
+    await navigation.goToRoom(userPage, seededRoom.name);
+    await ideas.create(userPage, idea);
+  });
+
+  await test.step('User - Edit form opens pre-filled with the idea values', async () => {
+    await openEditForm(userPage, idea.name);
+
+    await expect(userPage.getByTestId('idea-form-title')).toHaveValue(idea.name);
+    await expect(userPage.getByTestId('idea-form-content')).toContainText(idea.description);
+  });
+
+  await test.step('User - Can change title and content of own Idea', async () => {
+    await userPage.getByTestId('idea-form-title').fill(titleEditedByUser);
+    await userPage.getByTestId('idea-form-content').locator('[contenteditable="true"]').fill(contentEditedByUser);
+    await formInteractions.clickButton(userPage, 'idea-form-submit');
+    await expect(userPage.getByTestId('idea-form')).toBeHidden();
+
+    const IdeaDiv = userPage.getByTestId(`idea-${titleEditedByUser}`);
+    await expect(IdeaDiv).toBeVisible();
+    await expect(IdeaDiv).toContainText(contentEditedByUser);
+  });
+
+  await test.step("Admin - Can edit the User's Idea", async () => {
+    await navigation.goToRoom(adminPage, seededRoom.name);
+    await openEditForm(adminPage, titleEditedByUser);
+
+    await adminPage.getByTestId('idea-form-title').fill(titleEditedByAdmin);
+    await formInteractions.clickButton(adminPage, 'idea-form-submit');
+    await expect(adminPage.getByTestId('idea-form')).toBeHidden();
+
+    await expect(adminPage.getByTestId(`idea-${titleEditedByAdmin}`)).toBeVisible();
+  });
+});
+
+/**
  * Like Flow Tests
  * The like stat on each idea card toggles optimistically, persists on the
  * server, and is reflected (without the pressed state) for other users.
