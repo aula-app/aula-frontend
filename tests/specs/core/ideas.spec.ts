@@ -1,5 +1,7 @@
+import { TEST_IDS } from '../../../src/test-ids';
 import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as entities from '../../helpers/entities';
+import * as formInteractions from '../../interactions/forms';
 import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
 
@@ -64,5 +66,64 @@ test('Idea Management', async ({ seededRoom, newPageFor }) => {
 
   await test.step('User can delete own Idea', async () => {
     await ideas.remove(userPage, seededRoom, userIdea2);
+  });
+});
+
+/**
+ * Idea Draft Persistence Tests
+ * The idea form keeps an in-progress draft in sessionStorage, so dismissing the
+ * modal or reloading does not lose typed content; cancel is an explicit discard.
+ */
+test('Idea draft persistence', async ({ seededRoom, newPageFor }) => {
+  const userPage = await newPageFor('user');
+  const draft = entities.createIdea('draft');
+
+  const openIdeaForm = async () => {
+    await formInteractions.clickButton(userPage, TEST_IDS.ADD_IDEA_BUTTON);
+    await expect(userPage.getByTestId('idea-form')).toBeVisible();
+  };
+
+  // Clicking the backdrop dismisses the modal without going through the form's
+  // cancel button — the accidental dismissal the draft exists to survive.
+  const dismissIdeaForm = async () => {
+    await userPage.mouse.click(10, 10);
+    await expect(userPage.getByTestId('idea-form')).toBeHidden();
+  };
+
+  await test.step('User - Type an idea and dismiss the modal without cancelling', async () => {
+    await navigation.goToRoom(userPage, seededRoom.name);
+    await openIdeaForm();
+
+    await userPage.getByTestId('idea-form-title').fill(draft.name);
+    await userPage.getByTestId('idea-form-content').locator('[contenteditable="true"]').fill(draft.description);
+
+    await dismissIdeaForm();
+  });
+
+  await test.step('User - Draft is restored when the form reopens', async () => {
+    await openIdeaForm();
+
+    await expect(userPage.getByTestId('idea-form-title')).toHaveValue(draft.name);
+    await expect(userPage.getByTestId('idea-form-content')).toContainText(draft.description);
+
+    await dismissIdeaForm();
+  });
+
+  await test.step('User - Draft survives a page reload', async () => {
+    await userPage.reload();
+    await openIdeaForm();
+
+    await expect(userPage.getByTestId('idea-form-title')).toHaveValue(draft.name);
+    await expect(userPage.getByTestId('idea-form-content')).toContainText(draft.description);
+  });
+
+  await test.step('User - Cancel discards the draft', async () => {
+    await formInteractions.clickButton(userPage, 'idea-form-cancel');
+    await expect(userPage.getByTestId('idea-form')).toBeHidden();
+
+    await openIdeaForm();
+
+    await expect(userPage.getByTestId('idea-form-title')).toHaveValue('');
+    await expect(userPage.getByTestId('idea-form-content')).not.toContainText(draft.description);
   });
 });
