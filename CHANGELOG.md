@@ -1,3 +1,7 @@
+## Unreleased
+- **Bug fixes**
+  - Sort preference in Ideas Box and Wild Ideas views is now persisted across navigation — going back no longer resets the selected sort order
+  
 ## 1.9.3
 
 - **Technical improvements**

@@ -36,13 +36,26 @@ export const completeSsoLink = async (
   return { success: true };
 };
 
-export const initiateSso = async (apiUrl: string): Promise<string> => {
+export interface InitiateSsoOptions {
+  /**
+   * Opaque blob from an OIDC third-party initiated login launcher (e.g.
+   * Eduplaces marketplace). Forwarded to Keycloak/Eduplaces so the user
+   * is pre-selected and the second hop is silent.
+   */
+  loginHint?: string;
+}
+
+export const initiateSso = async (
+  apiUrl: string,
+  options: InitiateSsoOptions = {},
+): Promise<string> => {
   const instanceCode = localStorageGet('code');
   const forceLogin = localStorage.getItem('sso_force_login') === 'true';
   // Keep the flag set until login succeeds (cleared in OAuthLogin).
 
   const initiateUrl = new URL(`${apiUrl}/api/v2/auth/sso/initiate`);
   if (forceLogin) initiateUrl.searchParams.set('force_login', 'true');
+  if (options.loginHint) initiateUrl.searchParams.set('login_hint', options.loginHint);
 
   const response = await fetch(initiateUrl.toString(), {
     method: 'GET',
