@@ -40,7 +40,7 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
         <CategoryList categories={categories} />
         <div
           className={twMerge(
-            'relative flex flex-col ml-4 gap-1 py-3 px-4 rounded-2xl rounded-bl-none',
+            'relative flex flex-col ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
             `bg-${phaseColor}`,
             categories.length > 0 ? 'rounded-tl-none' : ''
           )}

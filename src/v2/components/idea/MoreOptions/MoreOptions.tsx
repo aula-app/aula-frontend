@@ -81,8 +81,8 @@ const MoreOptions = ({ idea, onChanged }: MoreOptionsProps) => {
         >
           <EditIdeaButton idea={idea} onChanged={onChanged} onOpen={() => setOpen(false)} />
           <DeleteIdeaButton idea={idea} onChanged={onChanged} onOpen={() => setOpen(false)} />
-          <ShareIdeaButton idea={idea} onOpen={() => setOpen(false)} />
           <ReportIdeaButton idea={idea} onOpen={() => setOpen(false)} />
+          <ShareIdeaButton idea={idea} onOpen={() => setOpen(false)} />
         </div>
       </div>
     </div>

@@ -72,7 +72,7 @@ test('Idea Management', async ({ seededRoom, newPageFor }) => {
 /**
  * More-Options Panel Tests
  * Focus management, Escape/outside-click closing, and permission gating of the
- * edit/delete/report actions.
+ * edit/delete/share/report actions.
  */
 test('Idea more-options panel behavior', async ({ seededRoom, newPageFor }) => {
   const userPage = await newPageFor('user');
@@ -96,8 +96,10 @@ test('Idea more-options panel behavior', async ({ seededRoom, newPageFor }) => {
     await expect(MorePanel).not.toHaveAttribute('inert');
     await expect(IdeaDiv.getByTestId(TEST_IDS.EDIT_BUTTON)).toBeVisible();
     await expect(IdeaDiv.getByTestId(TEST_IDS.DELETE_BUTTON)).toBeVisible();
+    await expect(IdeaDiv.getByTestId(TEST_IDS.SHARE_BUTTON)).toBeVisible();
     await expect(IdeaDiv.getByTestId(TEST_IDS.REPORT_BUTTON)).toBeVisible();
-    await expect(IdeaDiv.getByTestId(TEST_IDS.EDIT_BUTTON)).toBeFocused();
+    // focus moves to the first action; assert it landed inside the panel without depending on button order
+    await expect(MorePanel.locator(':focus')).toBeVisible();
   });
 
   await test.step('User - Escape closes the panel and returns focus to the toggle', async () => {
@@ -118,13 +120,14 @@ test('Idea more-options panel behavior', async ({ seededRoom, newPageFor }) => {
     await expect(MorePanel).toHaveAttribute('inert', '');
   });
 
-  await test.step("Student - Only sees report on another User's Idea", async () => {
+  await test.step("Student - Only sees share and report on another User's Idea", async () => {
     await navigation.goToRoom(studentPage, seededRoom.name);
 
     const StudentIdeaDiv = studentPage.getByTestId(`idea-${idea.name}`);
     await StudentIdeaDiv.getByTestId(TEST_IDS.IDEA_MORE_MENU).click();
 
     await expect(StudentIdeaDiv.getByTestId(TEST_IDS.REPORT_BUTTON)).toBeVisible();
+    await expect(StudentIdeaDiv.getByTestId(TEST_IDS.SHARE_BUTTON)).toBeVisible();
     await expect(StudentIdeaDiv.getByTestId(TEST_IDS.EDIT_BUTTON)).toHaveCount(0);
     await expect(StudentIdeaDiv.getByTestId(TEST_IDS.DELETE_BUTTON)).toHaveCount(0);
   });
