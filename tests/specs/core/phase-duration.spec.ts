@@ -3,6 +3,7 @@ import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as entities from '../../helpers/entities';
 import * as boxes from '../../interactions/boxes';
 import * as navigation from '../../interactions/navigation';
+import * as settings from '../../interactions/settings';
 import { BoxData } from '../../support/types';
 
 /**
@@ -61,5 +62,44 @@ test('Phase countdown resets on phase change and does not accumulate (#543)', as
     expect(days).toBeLessThan(14);
     expect(days).toBeGreaterThanOrEqual(8);
     expect(days).toBeLessThanOrEqual(10);
+  });
+});
+
+/**
+ * Box Editing View phase duration persistence (issue #1221)
+ *
+ * Reopening the Box editing view for an existing box must show the durations
+ * that were saved, not fall back to the room/system default. The bug: BoxForms
+ * seeded the form with a hardcoded 0, so the falsy guard in PhaseDurationFields
+ * did not skip and overwrote the saved value with the room default (e.g. 14).
+ *
+ * Uses distinctive, non-default values (9 / 22) so a regression that reverts to
+ * the room default would produce a different number and fail the assertion.
+ */
+test('Box editing view keeps saved phase durations on reopen (#1221)', async ({ seededRoom, newPageFor }) => {
+  const DISCUSSION_DAYS = 9;
+  const VOTING_DAYS = 22;
+
+  const adminPage = await newPageFor('admin');
+
+  const box: BoxData = entities.createBox('phase-duration-persist-box', seededRoom);
+  box.discussionDays = DISCUSSION_DAYS;
+  box.votingDays = VOTING_DAYS;
+  box.phase = 10;
+
+  await test.step('Admin creates a Box with custom phase durations', async () => {
+    await boxes.create(adminPage, box);
+  });
+
+  await test.step('Reopening the edit view shows the saved durations, not the default', async () => {
+    await navigation.goToBoxesSettings(adminPage);
+    await settings.openEdit({ page: adminPage, filters: { option: 'name', value: box.name } });
+
+    const discussionInput = adminPage.getByTestId('phase_duration_1-input');
+    const votingInput = adminPage.getByTestId('phase_duration_3-input');
+    await expect(discussionInput).toBeVisible();
+
+    expect(await discussionInput.inputValue()).toBe(String(DISCUSSION_DAYS));
+    expect(await votingInput.inputValue()).toBe(String(VOTING_DAYS));
   });
 });

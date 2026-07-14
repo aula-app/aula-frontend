@@ -47,7 +47,7 @@ const permissions = {
     status: { role: 40 },
   },
   comments: {
-    create: { role: USER_ROLES },
+    create: { role: USERS_ADMIN },
     edit: { role: 30, self: true },
     delete: { role: 30, self: true },
     like: { role: VOTING_ROLES, self: false },
