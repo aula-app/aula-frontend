@@ -64,12 +64,12 @@ const MoreOptions = ({ idea, onChanged }: MoreOptionsProps) => {
         onClick={() => setOpen((prev) => !prev)}
         className="absolute top-1 right-1 z-10"
       >
-        <Icon type={open ? 'close' : 'more'} />
+        <Icon type={open ? 'close' : 'more'} size="1.2em" />
       </IconButton>
       <div
         className={twMerge(
           'grid transition-all duration-150 ease-in-out',
-          open ? 'grid-rows-[1fr] -my-2' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+          open ? 'grid-rows-[1fr] -my-1' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
         )}
         inert={open ? undefined : ''}
         data-testid={TEST_IDS.IDEA_MORE_OPTIONS_PANEL}
