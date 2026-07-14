@@ -120,6 +120,24 @@ test('Idea more-options panel behavior', async ({ seededRoom, newPageFor }) => {
     await expect(MorePanel).toHaveAttribute('inert', '');
   });
 
+  await test.step('User - Share copies the idea link to the clipboard', async () => {
+    // clipboard access needs explicit permissions (Chromium-only, which matches the configured project)
+    await userPage.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+
+    await MoreToggle.click();
+    await IdeaDiv.getByTestId(TEST_IDS.SHARE_BUTTON).click();
+
+    await expect(userPage.getByTestId(TEST_IDS.TOAST_SUCCESS)).toBeVisible();
+    await expect(MoreToggle).toHaveAttribute('aria-expanded', 'false');
+
+    const copiedUrl = await userPage.evaluate(() => navigator.clipboard.readText());
+    expect(copiedUrl).toMatch(/\/room\/.+\/phase\/\d+\/idea\/.+/);
+
+    // the copied link must resolve to the idea's detail page (catches basename regressions)
+    await userPage.goto(copiedUrl);
+    await expect(userPage.getByTestId(`idea-${idea.name}`)).toBeVisible();
+  });
+
   await test.step("Student - Only sees share and report on another User's Idea", async () => {
     await navigation.goToRoom(studentPage, seededRoom.name);
 

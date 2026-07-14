@@ -40,18 +40,18 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
         <CategoryList categories={categories} />
         <div
           className={twMerge(
-            'relative flex flex-col ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
+            'relative flex flex-col-reverse ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
             `bg-${phaseColor}`,
             categories.length > 0 ? 'rounded-tl-none' : ''
           )}
         >
-          <MoreOptions idea={idea} onChanged={onChanged} />
           <Link to={ideaPath}>
             <h2 id={titleId} className="font-semibold text-foreground">
               {idea.title}
             </h2>
             {idea.content && <Markdown className="prose-sm text-muted line-clamp-3">{idea.content}</Markdown>}
           </Link>
+          <MoreOptions idea={idea} onChanged={onChanged} />
         </div>
       </div>
 
