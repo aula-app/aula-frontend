@@ -40,6 +40,7 @@ export const TEST_IDS = {
   LIKE_BUTTON: 'like-button',
   EDIT_BUTTON: 'edit-button',
   REPORT_BUTTON: 'report-button',
+  SHARE_BUTTON: 'share-button',
   DELETE_IDEA_CONFIRM: 'delete-idea-confirm',
   DELETE_IDEA_CANCEL: 'delete-idea-cancel',
 

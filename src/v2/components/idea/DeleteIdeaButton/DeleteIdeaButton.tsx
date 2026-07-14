@@ -49,7 +49,6 @@ const DeleteIdeaButton = ({ idea, onChanged, onOpen }: DeleteIdeaButtonProps) =>
   return (
     <>
       <IconButton
-        dense
         aria-label={t('v2.ui.button.delete')}
         aria-haspopup="dialog"
         data-testid={TEST_IDS.DELETE_BUTTON}

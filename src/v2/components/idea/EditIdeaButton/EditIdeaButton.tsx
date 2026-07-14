@@ -64,7 +64,7 @@ const EditIdeaButton = ({ idea, onChanged, onOpen }: EditIdeaButtonProps) => {
   if (!checkPermissions('ideas', 'edit', idea.user_hash_id)) return null;
 
   return (
-    <IconButton dense aria-label={t('v2.ui.button.edit')} data-testid={TEST_IDS.EDIT_BUTTON} onClick={handleClick}>
+    <IconButton aria-label={t('v2.ui.button.edit')} data-testid={TEST_IDS.EDIT_BUTTON} onClick={handleClick}>
       <Icon type="edit" size="1.2em" />
     </IconButton>
   );
