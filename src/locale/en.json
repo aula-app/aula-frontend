@@ -113,7 +113,8 @@
         "add": "Add {{var}}",
         "agree": "Agree",
         "print": "Print this page",
-        "report": "Report a bug"
+        "report": "Report a bug",
+        "search": "Search"
       },
       "announcement": {
         "title": "Announcement",

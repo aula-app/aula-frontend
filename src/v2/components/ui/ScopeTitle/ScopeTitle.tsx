@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type ScopeTitleProps = {
@@ -10,7 +10,7 @@ type ScopeTitleProps = {
 };
 
 const ScopeTitle = ({ icon, count, label, as: Heading = 'h1', className }: ScopeTitleProps) => (
-  <Heading className={twMerge('flex items-center gap-2 capitalize p-2 pb-0 sm:p-4 sm:pb-0', className)}>
+  <Heading className={twMerge('flex items-center gap-2 capitalize', className)}>
     {icon}
     {count !== undefined && <span>{count}</span>}
     <span>{label}</span>

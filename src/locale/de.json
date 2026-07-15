@@ -113,7 +113,8 @@
         "add": "Neue {{var}}",
         "agree": "Zustimmen",
         "print": "Diese Seite drucken",
-        "report": "Einen Fehler melden"
+        "report": "Einen Fehler melden",
+        "search": "Suchen"
       },
       "announcement": {
         "title": "Ankündigung",

@@ -4,9 +4,10 @@ import { twMerge } from 'tailwind-merge';
 interface CollapseProps extends HTMLAttributes<HTMLDivElement> {
   /** Whether the content is expanded. When closed, content is inert and non-interactive. */
   open: boolean;
+  innerClass?: string;
 }
 
-const Collapse = ({ open, className, children, ...props }: CollapseProps) => (
+const Collapse = ({ open, className, innerClass, children, ...props }: CollapseProps) => (
   <div
     className={twMerge(
       'grid transition-all duration-150 ease-in-out',
@@ -16,7 +17,7 @@ const Collapse = ({ open, className, children, ...props }: CollapseProps) => (
     inert={open ? undefined : ''}
     {...props}
   >
-    <div className="overflow-hidden min-h-0">{children}</div>
+    <div className={twMerge('overflow-hidden min-h-0', innerClass)}>{children}</div>
   </div>
 );
 

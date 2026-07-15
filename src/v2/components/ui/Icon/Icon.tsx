@@ -48,6 +48,7 @@ import {
   HiLink,
   HiEllipsisHorizontal,
   HiTrash,
+  HiOutlineMagnifyingGlass,
 } from 'react-icons/hi2';
 import voting from './voting.svg?react';
 
@@ -115,6 +116,7 @@ export const ICONS = {
   room: HiOutlineAcademicCap,
   rooms: HiOutlineAcademicCap,
   settings: HiOutlineCog6Tooth,
+  search: HiOutlineMagnifyingGlass,
   share: HiOutlineShare,
   strikethrough: HiStrikethrough,
   undo: HiArrowUturnLeft,
