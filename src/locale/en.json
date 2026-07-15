@@ -214,11 +214,12 @@
       "phases": "Phase navigation",
       "sort": {
         "label": "Sort by",
-        "default": "Default order",
+        "asc": "Sort ascending",
+        "desc": "Sort descending",
         "created": "Creation date",
+        "title": "Title",
         "updated": "Last update",
-        "user": "User",
-        "title": "Title"
+        "user": "User"
       },
       "toggle": "Toggle {{var}}"
     }

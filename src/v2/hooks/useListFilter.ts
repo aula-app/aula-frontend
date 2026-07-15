@@ -27,7 +27,7 @@ const orderConfig: Record<OrderKey, { labelKey: string; compare: (a: SortableFie
 export interface ListFilterConfig<T> {
   /** Item fields matched against the search query. */
   searchFields: (keyof T)[];
-  /** Fields offered in the sort dropdown, in order. */
+  /** Fields offered in the sort dropdown. The first one is the initial sort. */
   orderKeys?: OrderKey[];
 }
 
@@ -41,12 +41,10 @@ export const useListFilter = <T extends SortableFields>(
 ) => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
-  const [orderBy, setOrderBy] = useState('');
+  const [orderBy, setOrderBy] = useState<string>(orderKeys[0] ?? '');
+  const [reversed, setReversed] = useState(false);
 
-  const orderOptions = [
-    { value: '', label: t('v2.ui.sort.default') },
-    ...orderKeys.map((key) => ({ value: key, label: t(orderConfig[key].labelKey) })),
-  ];
+  const orderOptions = orderKeys.map((key) => ({ value: key, label: t(orderConfig[key].labelKey) }));
 
   const visibleItems = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -60,8 +58,9 @@ export const useListFilter = <T extends SortableFields>(
         )
       : items;
     const compare = orderConfig[orderBy as OrderKey]?.compare;
-    return compare ? [...filtered].sort(compare) : filtered;
-  }, [items, searchQuery, orderBy, searchFields]);
+    const ordered = compare ? [...filtered].sort(compare) : filtered;
+    return reversed ? [...ordered].reverse() : ordered;
+  }, [items, searchQuery, orderBy, reversed, searchFields]);
 
-  return { visibleItems, searchQuery, setSearchQuery, orderBy, setOrderBy, orderOptions };
+  return { visibleItems, searchQuery, setSearchQuery, orderBy, setOrderBy, orderOptions, reversed, setReversed };
 };

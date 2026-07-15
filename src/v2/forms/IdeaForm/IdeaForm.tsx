@@ -90,8 +90,8 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4" data-testid="idea-form">
-      <div className="flex flex-col">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col" data-testid="idea-form">
+      <div className="flex flex-col gap-2">
         {/* Room - only show if no context */}
         {!hasRoomContext && (
           <Controller

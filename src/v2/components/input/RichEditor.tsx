@@ -159,175 +159,173 @@ const RichEditor: React.FC<RichEditorProps> = ({
   const hasContent = charCount > 0;
 
   return (
-    <div className="flex flex-col w-full mb-3">
-      <div className="relative">
+    <div className="relative flex flex-col w-full">
+      <div
+        className={twMerge(
+          'flex flex-col rounded-lg border border-input-border bg-transparent shadow-inner',
+          'transition-colors duration-200',
+          'hover:border-input-border-hover',
+          error
+            ? 'border-error focus-within:border-error'
+            : 'focus-within:border-current focus-within:ring-2 focus-within:ring-current',
+          disabled ? 'cursor-not-allowed opacity-50' : ''
+        )}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+      >
         <div
-          className={twMerge(
-            'flex flex-col rounded-lg border border-input-border bg-transparent shadow-inner',
-            'transition-colors duration-200',
-            'hover:border-input-border-hover',
-            error
-              ? 'border-error focus-within:border-error'
-              : 'focus-within:border-current focus-within:ring-2 focus-within:ring-current',
-            disabled ? 'cursor-not-allowed opacity-50' : ''
-          )}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          ref={toolbarRef}
+          className="relative flex items-center gap-1 px-2 py-1 border-b border-input-border"
+          role="toolbar"
+          aria-label={t('v2.ui.editor.toolbar')}
+          onKeyDown={handleToolbarKeyDown}
         >
-          <div
-            ref={toolbarRef}
-            className="relative flex items-center gap-1 px-2 py-1 border-b border-input-border"
-            role="toolbar"
-            aria-label={t('v2.ui.editor.toolbar')}
-            onKeyDown={handleToolbarKeyDown}
+          {label && (
+            <label
+              id={editorLabelId}
+              className={twMerge(
+                'pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 origin-left text-sm transition-all duration-200',
+                'bg-background px-0.5',
+                hasContent || isFocused ? 'top-0 -translate-y-1/2 scale-75' : 'top-full translate-y-2/3 scale-100',
+                error ? 'text-error-fg' : 'text-muted'
+              )}
+            >
+              {label}
+              {required && (
+                <>
+                  <span aria-hidden="true" className="ml-0.5">
+                    *
+                  </span>
+                  <span className="sr-only">{t('v2.form.validation.required')}</span>
+                </>
+              )}
+            </label>
+          )}
+
+          <IconButton
+            type="button"
+            onClick={() => editor.commands.toggleBold()}
+            disabled={disabled}
+            aria-label={t('v2.ui.editor.bold')}
+            aria-pressed={editorState?.bold ?? false}
+            tabIndex={0}
+            className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
           >
-            {label && (
-              <label
-                id={editorLabelId}
-                className={twMerge(
-                  'pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 origin-left text-sm transition-all duration-200',
-                  'bg-background px-0.5',
-                  hasContent || isFocused ? 'top-0 -translate-y-1/2 scale-75' : 'top-full translate-y-2/3 scale-100',
-                  error ? 'text-error-fg' : 'text-muted'
-                )}
-              >
-                {label}
-                {required && (
-                  <>
-                    <span aria-hidden="true" className="ml-0.5">
-                      *
-                    </span>
-                    <span className="sr-only">{t('v2.form.validation.required')}</span>
-                  </>
-                )}
-              </label>
-            )}
+            <Icon type="bold" size="1.25rem" />
+          </IconButton>
 
+          <IconButton
+            type="button"
+            onClick={() => editor.commands.toggleItalic()}
+            disabled={disabled}
+            aria-label={t('v2.ui.editor.italic')}
+            aria-pressed={editorState?.italic ?? false}
+            tabIndex={-1}
+            className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
+          >
+            <Icon type="italic" size="1.25rem" />
+          </IconButton>
+
+          <IconButton
+            type="button"
+            onClick={() => editor.commands.toggleStrike()}
+            disabled={disabled}
+            aria-label={t('v2.ui.editor.strikethrough')}
+            aria-pressed={editorState?.strike ?? false}
+            tabIndex={-1}
+            className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
+          >
+            <Icon type="strikethrough" size="1.25rem" />
+          </IconButton>
+
+          <div className="h-5 w-px bg-input-border" aria-hidden="true"></div>
+
+          <IconButton
+            type="button"
+            onClick={() => editor.commands.toggleBulletList()}
+            disabled={disabled}
+            aria-label={t('v2.ui.editor.bulletList')}
+            aria-pressed={editorState?.bulletList ?? false}
+            tabIndex={-1}
+            className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
+          >
+            <Icon type="list" size="1.25rem" />
+          </IconButton>
+
+          <IconButton
+            type="button"
+            onClick={() => editor.commands.toggleOrderedList()}
+            disabled={disabled}
+            aria-label={t('v2.ui.editor.orderedList')}
+            aria-pressed={editorState?.orderedList ?? false}
+            tabIndex={-1}
+            className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
+          >
+            <Icon type="numbered" size="1.25rem" />
+          </IconButton>
+
+          <div className="h-5 w-px bg-input-border" aria-hidden="true"></div>
+
+          <Dropdown
+            role="dialog"
+            aria-label={t('v2.ui.editor.emoji')}
+            content={
+              <div className="grid grid-cols-5 gap-1 p-2">
+                {emojiList.map(({ emoji, labelKey }) => (
+                  <IconButton
+                    key={emoji}
+                    type="button"
+                    onClick={() => insertEmoji(emoji)}
+                    aria-label={t(`v2.ui.editor.emojis.${labelKey}`)}
+                    className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
+                  >
+                    {emoji}
+                  </IconButton>
+                ))}
+              </div>
+            }
+          >
             <IconButton
               type="button"
-              onClick={() => editor.commands.toggleBold()}
               disabled={disabled}
-              aria-label={t('v2.ui.editor.bold')}
-              aria-pressed={editorState?.bold ?? false}
-              tabIndex={0}
-              className="min-h-11 min-w-11"
-            >
-              <Icon type="bold" size="1.25rem" />
-            </IconButton>
-
-            <IconButton
-              type="button"
-              onClick={() => editor.commands.toggleItalic()}
-              disabled={disabled}
-              aria-label={t('v2.ui.editor.italic')}
-              aria-pressed={editorState?.italic ?? false}
-              tabIndex={-1}
-              className="min-h-11 min-w-11"
-            >
-              <Icon type="italic" size="1.25rem" />
-            </IconButton>
-
-            <IconButton
-              type="button"
-              onClick={() => editor.commands.toggleStrike()}
-              disabled={disabled}
-              aria-label={t('v2.ui.editor.strikethrough')}
-              aria-pressed={editorState?.strike ?? false}
-              tabIndex={-1}
-              className="min-h-11 min-w-11"
-            >
-              <Icon type="strikethrough" size="1.25rem" />
-            </IconButton>
-
-            <div className="h-5 w-px bg-input-border" aria-hidden="true"></div>
-
-            <IconButton
-              type="button"
-              onClick={() => editor.commands.toggleBulletList()}
-              disabled={disabled}
-              aria-label={t('v2.ui.editor.bulletList')}
-              aria-pressed={editorState?.bulletList ?? false}
-              tabIndex={-1}
-              className="min-h-11 min-w-11"
-            >
-              <Icon type="list" size="1.25rem" />
-            </IconButton>
-
-            <IconButton
-              type="button"
-              onClick={() => editor.commands.toggleOrderedList()}
-              disabled={disabled}
-              aria-label={t('v2.ui.editor.orderedList')}
-              aria-pressed={editorState?.orderedList ?? false}
-              tabIndex={-1}
-              className="min-h-11 min-w-11"
-            >
-              <Icon type="numbered" size="1.25rem" />
-            </IconButton>
-
-            <div className="h-5 w-px bg-input-border" aria-hidden="true"></div>
-
-            <Dropdown
-              role="dialog"
               aria-label={t('v2.ui.editor.emoji')}
-              content={
-                <div className="grid grid-cols-5 gap-1 p-2">
-                  {emojiList.map(({ emoji, labelKey }) => (
-                    <IconButton
-                      key={emoji}
-                      type="button"
-                      onClick={() => insertEmoji(emoji)}
-                      aria-label={t(`v2.ui.editor.emojis.${labelKey}`)}
-                      className="min-h-11 min-w-11"
-                    >
-                      {emoji}
-                    </IconButton>
-                  ))}
-                </div>
-              }
-            >
-              <IconButton
-                type="button"
-                disabled={disabled}
-                aria-label={t('v2.ui.editor.emoji')}
-                tabIndex={-1}
-                className="min-h-11 min-w-11"
-              >
-                😀
-              </IconButton>
-            </Dropdown>
-
-            <div className="h-5 w-px bg-input-border mr-auto" aria-hidden="true"></div>
-
-            <IconButton
-              type="button"
-              onClick={() => editor.commands.undo()}
-              disabled={disabled || !(editorState?.canUndo ?? false)}
-              aria-label={t('v2.ui.editor.undo')}
               tabIndex={-1}
-              className="min-h-11 min-w-11"
+              className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
             >
-              <Icon type="undo" size="1.25rem" />
+              😀
             </IconButton>
+          </Dropdown>
 
-            <IconButton
-              type="button"
-              onClick={() => editor.commands.redo()}
-              disabled={disabled || !(editorState?.canRedo ?? false)}
-              aria-label={t('v2.ui.editor.redo')}
-              tabIndex={-1}
-              className="min-h-11 min-w-11"
-            >
-              <Icon type="redo" size="1.25rem" />
-            </IconButton>
-          </div>
+          <div className="h-5 w-px bg-input-border mr-auto" aria-hidden="true"></div>
 
-          <EditorContent
-            editor={editor}
-            data-testid={dataTestId}
-            className={`max-w-none p-3 pb-0 [&_div[contenteditable]:focus]:outline-none shadow-inner ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'}`}
-          />
+          <IconButton
+            type="button"
+            onClick={() => editor.commands.undo()}
+            disabled={disabled || !(editorState?.canUndo ?? false)}
+            aria-label={t('v2.ui.editor.undo')}
+            tabIndex={-1}
+            className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
+          >
+            <Icon type="undo" size="1.25rem" />
+          </IconButton>
+
+          <IconButton
+            type="button"
+            onClick={() => editor.commands.redo()}
+            disabled={disabled || !(editorState?.canRedo ?? false)}
+            aria-label={t('v2.ui.editor.redo')}
+            tabIndex={-1}
+            className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
+          >
+            <Icon type="redo" size="1.25rem" />
+          </IconButton>
         </div>
+
+        <EditorContent
+          editor={editor}
+          data-testid={dataTestId}
+          className={`max-w-none p-3 pb-0 [&_div[contenteditable]:focus]:outline-none shadow-inner ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'}`}
+        />
       </div>
 
       <div className="pt-1 px-1">

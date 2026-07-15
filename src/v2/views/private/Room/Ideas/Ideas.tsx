@@ -18,7 +18,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useIdeasByRoom } from './useIdeasByRoom';
-import { IconButton } from '@mui/material';
+import IconButton from '@/v2/components/button/IconButton';
 
 const ideasFilterConfig: ListFilterConfig<IdeaType> = {
   searchFields: ['title', 'content', 'displayname'],
@@ -38,6 +38,8 @@ const Ideas: React.FC = () => {
     orderBy,
     setOrderBy,
     orderOptions,
+    reversed,
+    setReversed,
   } = useListFilter(ideas, ideasFilterConfig);
 
   const addIdeaLabel = t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') });
@@ -88,8 +90,14 @@ const Ideas: React.FC = () => {
             value={orderBy}
             onChange={setOrderBy}
           />
-          <IconButton>
-            <Icon type="sortUp" />
+          <IconButton
+            dense
+            aria-label={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
+            hint={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
+            aria-pressed={reversed}
+            onClick={() => setReversed(!reversed)}
+          >
+            <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="1.5em" />
           </IconButton>
         </ScopeTitle>
       }
