@@ -206,7 +206,7 @@ const SelectInput = ({
                 onMouseEnter={() => setFocusedIndex(i)}
                 className={[
                   'px-3 py-2 text-sm cursor-pointer transition-colors duration-100 text-nowrap',
-                  option.value === value ? 'text-primary font-medium' : 'text-foreground',
+                  option.value === value ? 'text-current font-medium' : 'text-muted',
                   focusedIndex === i ? 'bg-primary/10' : 'hover:bg-primary/5',
                 ].join(' ')}
               >

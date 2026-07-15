@@ -93,11 +93,10 @@ const Ideas: React.FC = () => {
           <IconButton
             dense
             aria-label={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
-            hint={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
             aria-pressed={reversed}
             onClick={() => setReversed(!reversed)}
           >
-            <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="1.5em" />
+            <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="2.5em" />
           </IconButton>
         </ScopeTitle>
       }
