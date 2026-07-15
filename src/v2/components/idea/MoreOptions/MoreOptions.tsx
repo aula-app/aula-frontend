@@ -1,8 +1,8 @@
 import { IdeaType } from '@/types/Scopes';
-import DeleteIdeaButton from '@/v2/components/idea/DeleteIdeaButton';
-import EditIdeaButton from '@/v2/components/idea/EditIdeaButton';
-import ReportIdeaButton from '@/v2/components/idea/ReportIdeaButton';
-import ShareIdeaButton from '@/v2/components/idea/ShareIdeaButton';
+import DeleteIdeaButton from '@/v2/components/idea/MoreOptions/DeleteIdeaButton';
+import EditIdeaButton from '@/v2/components/idea/MoreOptions/EditIdeaButton';
+import ReportIdeaButton from '@/v2/components/idea/MoreOptions/ReportIdeaButton';
+import ShareIdeaButton from '@/v2/components/idea/MoreOptions/ShareIdeaButton';
 import IconButton from '@/v2/components/button/IconButton';
 import Icon from '@/v2/components/ui/Icon';
 import { TEST_IDS } from '@/test-ids';
