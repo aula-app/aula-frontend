@@ -1,4 +1,5 @@
 import Icon from '@/components/new/Icon';
+import Collapse from '@/v2/components/ui/Collapse';
 import { KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -212,24 +213,18 @@ const SelectInput = ({
         )}
       </div>
 
-      <div
-        className={`grid transition-all duration-200 ease-in-out ${
-          error || helperText ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-        }`}
-      >
-        <div className="overflow-hidden">
-          {error ? (
-            <span id={errorId} role="alert" className="block pt-1 px-1 text-xs text-error-fg">
-              <Icon type="alert" className="inline-block mr-1 mb-0.5" />
-              {error}
-            </span>
-          ) : (
-            <span id={helperId} className="block pt-1 px-1 text-xs text-muted">
-              {helperText}
-            </span>
-          )}
-        </div>
-      </div>
+      <Collapse open={!!(error || helperText)}>
+        {error ? (
+          <span id={errorId} role="alert" className="block pt-1 px-1 text-xs text-error-fg">
+            <Icon type="alert" className="inline-block mr-1 mb-0.5" />
+            {error}
+          </span>
+        ) : (
+          <span id={helperId} className="block pt-1 px-1 text-xs text-muted">
+            {helperText}
+          </span>
+        )}
+      </Collapse>
     </div>
   );
 };
