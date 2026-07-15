@@ -5,12 +5,12 @@ import { checkPermissions } from '@/utils';
 import Fab from '@/v2/components/button/Fab/Fab';
 import Idea from '@/v2/components/idea/Idea';
 import SelectInput from '@/v2/components/input/SelectInput';
+import TextInput from '@/v2/components/input/TextInput';
 import ListPageLayout from '@/v2/components/layout/ListPageLayout';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
 import Icon from '@/v2/components/ui/Icon/Icon';
 import ScopeTitle from '@/v2/components/ui/ScopeTitle';
 import ScrollList from '@/v2/components/ui/ScrollList';
-import SearchBar from '@/v2/components/ui/SearchBar';
 import { IdeaForm } from '@/v2/forms';
 import { ListFilterConfig, useListFilter } from '@/v2/hooks/useListFilter';
 import { useModal } from '@/v2/hooks/useModal';
@@ -71,8 +71,21 @@ const Ideas: React.FC = () => {
     <ListPageLayout
       header={
         <ScopeTitle scope="ideas" count={visibleIdeas.length} onToggle={(open) => !open && setSearchQuery('')}>
-          <SearchBar value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-          <SelectInput label={t('v2.ui.sort.label')} options={orderOptions} value={orderBy} onChange={setOrderBy} />
+          <TextInput
+            dense
+            type="search"
+            label={t('v2.ui.actions.search')}
+            startAdornment={<Icon type="search" />}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <SelectInput
+            dense
+            label={t('v2.ui.sort.label')}
+            options={orderOptions}
+            value={orderBy}
+            onChange={setOrderBy}
+          />
         </ScopeTitle>
       }
       action={

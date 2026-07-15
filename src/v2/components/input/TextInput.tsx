@@ -9,6 +9,7 @@ interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
   helperText?: string | ReactNode;
+  dense?: boolean;
   /** Decorative content at the start of the input, e.g. an icon. Not interactive. */
   startAdornment?: ReactNode;
   endAdornment?: ReactNode;
@@ -23,6 +24,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       helperText,
       disabled = false,
       required = false,
+      dense = false,
       className,
       type,
       startAdornment,
@@ -56,7 +58,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     );
 
     return (
-      <div className="flex flex-col w-full mb-3">
+      <div className={twMerge('flex flex-col w-full', dense ? 'mb-2' : 'mb-3')}>
         <div className="relative">
           <input
             ref={ref}
@@ -70,7 +72,8 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             aria-invalid={!!error}
             placeholder=" "
             className={twMerge(
-              'peer block w-full rounded-lg border border-input-border bg-transparent px-3 pt-4 pb-2 shadow-inner',
+              'peer block w-full rounded-lg border border-input-border bg-transparent shadow-inner',
+              dense ? 'px-3 py-2' : 'px-3 pt-4 pb-2',
               'text-sm text-foreground transition-colors duration-200',
               'hover:border-input-border-hover',
               startAdornment ? 'pl-10' : '',

@@ -18,6 +18,7 @@ interface SelectInputProps {
   helperText?: string;
   disabled?: boolean;
   required?: boolean;
+  dense?: boolean;
   className?: string;
   'data-testid'?: string;
 }
@@ -32,6 +33,7 @@ const SelectInput = ({
   helperText,
   disabled = false,
   required = false,
+  dense = false,
   className,
   'data-testid': dataTestId,
 }: SelectInputProps) => {
@@ -138,11 +140,12 @@ const SelectInput = ({
           onClick={() => (open ? setOpen(false) : openDropdown())}
           onKeyDown={handleKeyDown}
           className={[
-            'peer block w-full rounded-lg border border-input-border bg-transparent px-3 pt-4 pb-2 pr-10 shadow-inner',
+            'peer block w-full rounded-lg border border-input-border bg-transparent shadow-inner',
+            dense ? 'px-3 pt-3 pb-1.5 pr-10' : 'p-3 pt-3.5 pr-10',
             'text-sm text-left text-foreground transition-colors duration-200',
             'hover:border-input-border-hover',
             'disabled:cursor-not-allowed disabled:opacity-50',
-            'border-current outline-2 outline-current',
+            'border-current focus-within:outline-2 outline-current',
             className,
           ]
             .filter(Boolean)
@@ -159,7 +162,7 @@ const SelectInput = ({
             className={[
               'pointer-events-none absolute left-3 origin-left text-sm transition-all duration-200 bg-background px-0.5',
               hasValue || open ? 'top-0 -translate-y-1/2 scale-75' : 'top-1/2 -translate-y-1/2 scale-100',
-              error ? 'text-error-fg' : open ? 'text-primary' : 'text-muted',
+              error ? 'text-error-fg' : 'text-current',
             ].join(' ')}
           >
             {label}

@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, TransitionEvent, useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface CollapseProps extends HTMLAttributes<HTMLDivElement> {
@@ -7,18 +7,45 @@ interface CollapseProps extends HTMLAttributes<HTMLDivElement> {
   innerClass?: string;
 }
 
-const Collapse = ({ open, className, innerClass, children, ...props }: CollapseProps) => (
-  <div
-    className={twMerge(
-      'grid transition-all duration-150 ease-in-out',
-      open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr] opacity-0 pointer-events-none',
-      className
-    )}
-    inert={open ? undefined : ''}
-    {...props}
-  >
-    <div className={twMerge('overflow-hidden min-h-0', innerClass)}>{children}</div>
-  </div>
-);
+const Collapse = ({ open, className, innerClass, children, onTransitionEnd, ...props }: CollapseProps) => {
+  const [isAnimating, setIsAnimating] = useState(false);
+  const hasMounted = useRef(false);
+
+  useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
+
+    setIsAnimating(true);
+  }, [open]);
+
+  const handleTransitionEnd = (event: TransitionEvent<HTMLDivElement>) => {
+    onTransitionEnd?.(event);
+
+    if (event.target !== event.currentTarget || event.propertyName !== 'grid-template-rows') {
+      return;
+    }
+
+    setIsAnimating(false);
+  };
+
+  return (
+    <div
+      className={twMerge(
+        'grid transition-all duration-150 ease-in-out',
+        open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr] opacity-0 pointer-events-none',
+        className
+      )}
+      inert={open ? undefined : ''}
+      onTransitionEnd={handleTransitionEnd}
+      {...props}
+    >
+      <div className={twMerge(open && !isAnimating ? 'overflow-visible' : 'overflow-hidden', 'min-h-0', innerClass)}>
+        {children}
+      </div>
+    </div>
+  );
+};
 
 export default Collapse;
