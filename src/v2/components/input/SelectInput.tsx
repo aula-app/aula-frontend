@@ -141,7 +141,7 @@ const SelectInput = ({
           onKeyDown={handleKeyDown}
           className={[
             'peer block w-full rounded-lg border border-input-border bg-transparent shadow-inner',
-            dense ? 'px-3 pt-3 pb-1.5 pr-10' : 'p-3 pt-3.5 pr-10',
+            dense ? 'p-2 pt-[0.325rem] pb-1.5' : 'p-3 pt-[0.6rem] pb-2.5',
             'text-sm text-left text-foreground transition-colors duration-200',
             'hover:border-input-border-hover',
             'disabled:cursor-not-allowed disabled:opacity-50',
@@ -184,13 +184,13 @@ const SelectInput = ({
           <Icon type="chevronDown" size="1.25em" className="text-muted" />
         </span>
 
-        {open && (
+        <Collapse open={open} className="absolute z-50 mt-1 w-full">
           <ul
             id={listboxId}
             role="listbox"
             aria-label={label}
             data-testid={dataTestId ? `${dataTestId}-list` : undefined}
-            className="absolute z-50 mt-1 w-full rounded-lg border border-input-border bg-background shadow-md overflow-auto max-h-60 py-1"
+            className="rounded-lg border border-input-border bg-background shadow-md overflow-auto max-h-60 py-1"
           >
             {options.map((option, i) => (
               <li
@@ -213,7 +213,7 @@ const SelectInput = ({
               </li>
             ))}
           </ul>
-        )}
+        </Collapse>
       </div>
 
       <Collapse open={!!(error || helperText)}>

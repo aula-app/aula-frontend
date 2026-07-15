@@ -73,7 +73,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             placeholder=" "
             className={twMerge(
               'peer block w-full rounded-lg border border-input-border bg-transparent shadow-inner',
-              dense ? 'px-3 py-2' : 'px-3 pt-4 pb-2',
+              dense ? 'px-2 py-1' : 'px-3 py-2',
               'text-sm text-foreground transition-colors duration-200',
               'hover:border-input-border-hover',
               startAdornment ? 'pl-10' : '',

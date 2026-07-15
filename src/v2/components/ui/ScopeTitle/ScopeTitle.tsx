@@ -50,8 +50,8 @@ const ScopeTitle = ({ scope, count, as: Heading = 'h1', className, children, onT
         )}
       </div>
       {hasControls && (
-        <Collapse open={isOpen} innerClass="px-1 pt-2">
-          <div ref={panelRef} className="flex gap-2">
+        <Collapse open={isOpen}>
+          <div ref={panelRef} className="flex gap-2 px-1 pt-2">
             {children}
           </div>
         </Collapse>
