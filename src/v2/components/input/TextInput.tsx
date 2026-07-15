@@ -58,7 +58,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     );
 
     return (
-      <div className={twMerge('flex flex-col w-full', dense ? 'mb-2' : 'mb-3')}>
+      <div className={twMerge('flex flex-col w-full')}>
         <div className="relative">
           <input
             ref={ref}
@@ -73,11 +73,11 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             placeholder=" "
             className={twMerge(
               'peer block w-full rounded-lg border border-input-border bg-transparent shadow-inner',
-              dense ? 'px-2 py-1' : 'px-3 py-2',
+              dense ? 'h-7 px-2' : 'h-9 px-3',
               'text-sm text-foreground transition-colors duration-200',
               'hover:border-input-border-hover',
-              startAdornment ? 'pl-10' : '',
-              trailingContent ? 'pr-10' : '',
+              startAdornment ? (dense ? 'pl-7' : 'pl-10') : '',
+              trailingContent ? (dense ? 'pr-7' : 'pr-10') : '',
               error ? 'border-error outline-error focus:border-error' : 'outline-current focus:border-current',
               disabled ? 'cursor-not-allowed opacity-50' : '',
               className
@@ -85,7 +85,12 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             {...props}
           />
           {startAdornment && (
-            <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">
+            <div
+              className={twMerge(
+                'pointer-events-none absolute top-1/2 -translate-y-1/2 text-muted',
+                dense ? 'left-2' : 'left-3'
+              )}
+            >
               {startAdornment}
             </div>
           )}
@@ -98,7 +103,9 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                 'peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100',
                 'peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75',
                 'peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-75',
-                startAdornment ? 'left-10 peer-focus:left-3 peer-not-placeholder-shown:left-3' : '',
+                startAdornment
+                  ? twMerge(dense ? 'left-7' : 'left-10', 'peer-focus:left-3 peer-not-placeholder-shown:left-3')
+                  : '',
                 error ? 'text-error-fg peer-focus:text-error-fg' : 'text-muted peer-focus:text-current'
               )}
             >

@@ -2,6 +2,7 @@ import Icon from '@/components/new/Icon';
 import Collapse from '@/v2/components/ui/Collapse';
 import { KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { twMerge } from 'tailwind-merge';
 
 export interface SelectOption {
   value: string;
@@ -120,8 +121,8 @@ const SelectInput = ({
   };
 
   return (
-    <div ref={containerRef} className="flex flex-col w-full">
-      <div className="relative">
+    <div ref={containerRef} className="flex flex-col w-fit">
+      <div className="relative w-fit">
         <button
           ref={triggerRef}
           id={inputId}
@@ -140,8 +141,8 @@ const SelectInput = ({
           onClick={() => (open ? setOpen(false) : openDropdown())}
           onKeyDown={handleKeyDown}
           className={[
-            'peer block w-full rounded-lg border border-input-border bg-transparent shadow-inner',
-            dense ? 'p-2 pt-[0.325rem] pb-1.5' : 'p-3 pt-[0.6rem] pb-2.5',
+            'peer flex items-center rounded-lg border border-input-border bg-transparent shadow-inner',
+            dense ? 'h-7 px-2' : 'h-9 px-3',
             'text-sm text-left text-foreground transition-colors duration-200',
             'hover:border-input-border-hover',
             'disabled:cursor-not-allowed disabled:opacity-50',
@@ -151,7 +152,7 @@ const SelectInput = ({
             .filter(Boolean)
             .join(' ')}
         >
-          <span className={hasValue ? 'text-foreground' : 'invisible select-none'}>
+          <span className={twMerge(hasValue ? 'text-foreground' : 'invisible select-none', 'text-nowrap pr-6')}>
             {selectedOption?.label ?? '\u00A0'}
           </span>
         </button>
@@ -181,7 +182,7 @@ const SelectInput = ({
           aria-hidden="true"
           className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         >
-          <Icon type="chevronDown" size="1.25em" className="text-muted" />
+          <Icon type="chevronDown" size="0.75em" className="text-muted mt-0.5" />
         </span>
 
         <Collapse open={open} className="absolute z-50 mt-1 w-full">
@@ -204,7 +205,7 @@ const SelectInput = ({
                 }}
                 onMouseEnter={() => setFocusedIndex(i)}
                 className={[
-                  'px-3 py-2 text-sm cursor-pointer transition-colors duration-100',
+                  'px-3 py-2 text-sm cursor-pointer transition-colors duration-100 text-nowrap',
                   option.value === value ? 'text-primary font-medium' : 'text-foreground',
                   focusedIndex === i ? 'bg-primary/10' : 'hover:bg-primary/5',
                 ].join(' ')}

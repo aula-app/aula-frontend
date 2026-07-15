@@ -18,6 +18,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useIdeasByRoom } from './useIdeasByRoom';
+import { IconButton } from '@mui/material';
 
 const ideasFilterConfig: ListFilterConfig<IdeaType> = {
   searchFields: ['title', 'content', 'displayname'],
@@ -78,6 +79,7 @@ const Ideas: React.FC = () => {
             startAdornment={<Icon type="search" />}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            className="flex-1"
           />
           <SelectInput
             dense
@@ -86,6 +88,9 @@ const Ideas: React.FC = () => {
             value={orderBy}
             onChange={setOrderBy}
           />
+          <IconButton>
+            <Icon type="sortUp" />
+          </IconButton>
         </ScopeTitle>
       }
       action={

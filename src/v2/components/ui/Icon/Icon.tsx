@@ -51,6 +51,7 @@ import {
   HiOutlineMagnifyingGlass,
 } from 'react-icons/hi2';
 import voting from './voting.svg?react';
+import { BiSortAZ, BiSortZA } from 'react-icons/bi';
 
 const VotingIcon: IconType = ({ size = '1em', color = 'currentColor', style, ...props }) =>
   React.createElement(voting, {
@@ -118,6 +119,8 @@ export const ICONS = {
   settings: HiOutlineCog6Tooth,
   search: HiOutlineMagnifyingGlass,
   share: HiOutlineShare,
+  sortUp: BiSortAZ,
+  sortDown: BiSortZA,
   strikethrough: HiStrikethrough,
   undo: HiArrowUturnLeft,
   user: HiOutlineUser,
