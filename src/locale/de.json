@@ -188,6 +188,10 @@
         "network": {
           "title": "Keine Internetverbindung",
           "description": "Bitte überprüfe deine Verbindung und versuche es noch mal."
+        },
+        "search": {
+          "title": "Keine Ergebnisse gefunden",
+          "description": "Versuche es mit einem anderen Suchbegriff."
         }
       },
       "language": {

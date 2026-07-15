@@ -12,7 +12,7 @@ describe('ScopeHeader', () => {
   });
 
   it('toggles the search field open and closed', () => {
-    const { getByRole, getByLabelText } = render(<ScopeHeader title={<h1>Ideas</h1>} searchable />);
+    const { getByRole, getByLabelText } = render(<ScopeHeader title={<h1>Ideas</h1>} onSearchChange={vi.fn()} />);
 
     const toggle = getByRole('button', { name: 'v2.ui.actions.search' });
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
@@ -25,5 +25,19 @@ describe('ScopeHeader', () => {
     fireEvent.click(toggle);
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
     expect(getByRole('button', { name: 'v2.ui.actions.search' })).toBe(toggle);
+  });
+
+  it('reports typed queries and clears them when the search is closed', () => {
+    const onSearchChange = vi.fn();
+    const { getByRole, getByLabelText } = render(
+      <ScopeHeader title={<h1>Ideas</h1>} searchValue="" onSearchChange={onSearchChange} />
+    );
+
+    fireEvent.click(getByRole('button', { name: 'v2.ui.actions.search' }));
+    fireEvent.change(getByLabelText('v2.ui.actions.search'), { target: { value: 'owl' } });
+    expect(onSearchChange).toHaveBeenCalledWith('owl');
+
+    fireEvent.click(getByRole('button', { name: 'v2.ui.actions.close' }));
+    expect(onSearchChange).toHaveBeenCalledWith('');
   });
 });

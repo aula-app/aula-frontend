@@ -11,7 +11,7 @@ import ScopeTitle from '@/v2/components/ui/ScopeTitle';
 import ScrollList from '@/v2/components/ui/ScrollList';
 import { IdeaForm } from '@/v2/forms';
 import { useModal } from '@/v2/hooks/useModal';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useIdeasByRoom } from './useIdeasByRoom';
@@ -22,6 +22,15 @@ const Ideas: React.FC = () => {
   const { openModal, closeModal } = useModal();
   const { ideas, isLoading, error, refetch } = useIdeasByRoom(room_id);
   const [formError, setFormError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredIdeas = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return ideas;
+    return ideas.filter((idea) =>
+      [idea.title, idea.content, idea.displayname].some((field) => field?.toLowerCase().includes(query))
+    );
+  }, [ideas, searchQuery]);
 
   const addIdeaLabel = t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') });
 
@@ -55,12 +64,13 @@ const Ideas: React.FC = () => {
     <ListPageLayout
       header={
         <ScopeHeader
-          searchable
+          searchValue={searchQuery}
+          onSearchChange={setSearchQuery}
           title={
             <ScopeTitle
               icon={<Icon type="idea" className="mb-3" />}
-              count={ideas.length}
-              label={t(`v2.scopes.ideas.${ideas.length === 1 ? 'singular' : 'plural'}`)}
+              count={filteredIdeas.length}
+              label={t(`v2.scopes.ideas.${filteredIdeas.length === 1 ? 'singular' : 'plural'}`)}
             />
           }
         />
@@ -117,9 +127,19 @@ const Ideas: React.FC = () => {
         />
       )}
 
-      {!isLoading && ideas.length > 0 && (
+      {!isLoading && !error && ideas.length > 0 && filteredIdeas.length === 0 && (
+        <FeedbackState
+          image="/img/Paula_zwinkernd.svg"
+          alt={t('v2.alt.winking')}
+          title={t('v2.ui.error.search.title')}
+          description={t('v2.ui.error.search.description')}
+          data-testid="ideas-no-results-state"
+        />
+      )}
+
+      {!isLoading && filteredIdeas.length > 0 && (
         <ScrollList storageKey={`ideas-${room_id}`}>
-          {ideas.map((idea) => (
+          {filteredIdeas.map((idea) => (
             <li key={idea.hash_id}>
               <Idea idea={idea} onChanged={refetch} />
             </li>

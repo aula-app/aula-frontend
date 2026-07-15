@@ -188,6 +188,10 @@
         "network": {
           "title": "No internet connection",
           "description": "Please check your connection and try again."
+        },
+        "search": {
+          "title": "No results found",
+          "description": "Try a different search term."
         }
       },
       "language": {
