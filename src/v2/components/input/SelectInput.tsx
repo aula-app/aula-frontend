@@ -199,6 +199,7 @@ const SelectInput = ({
                 id={`${listboxId}-option-${i}`}
                 role="option"
                 aria-selected={option.value === value}
+                data-testid={dataTestId ? `${dataTestId}-option-${option.value}` : undefined}
                 onMouseDown={(e) => {
                   e.preventDefault();
                   select(option.value);

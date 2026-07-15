@@ -14,12 +14,13 @@ export const TEST_IDS = {
   // Content reporting (ReportButton)
   REPORT_DIALOG: 'report-dialog',
 
-  // Search & sort (ScopeHeader)
+  // Search & sort (ScopeHeader, v2 ScopeTitle)
   SEARCH_FIELD: 'search-field',
   SEARCH_BUTTON: 'search-button',
   SORT_SELECT: 'sort-select',
   SORT_BUTTON: 'sort-button',
   SORT_DIRECTION_BUTTON: 'sort-direction-button',
+  SCOPE_CONTROLS: 'scope-controls',
 
   // Filtering (FilterBar)
   FILTER_TOGGLE_BUTTON: 'filter-toggle-button',

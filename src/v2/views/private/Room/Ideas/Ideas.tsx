@@ -82,6 +82,7 @@ const Ideas: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1"
+            data-testid={TEST_IDS.SEARCH_FIELD}
           />
           <SelectInput
             dense
@@ -89,11 +90,13 @@ const Ideas: React.FC = () => {
             options={orderOptions}
             value={orderBy}
             onChange={setOrderBy}
+            data-testid={TEST_IDS.SORT_SELECT}
           />
           <IconButton
             dense
             aria-label={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
             aria-pressed={reversed}
+            data-testid={TEST_IDS.SORT_DIRECTION_BUTTON}
             onClick={() => setReversed(!reversed)}
           >
             <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="2.5em" />

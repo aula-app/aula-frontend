@@ -27,6 +27,7 @@ describe('ScopeTitle', () => {
 
     const toggle = getByRole('button', { name: 'v2.ui.actions.search' });
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(toggle.getAttribute('aria-controls')).toBe(getByRole('search').id);
 
     fireEvent.click(toggle);
     expect(toggle.getAttribute('aria-expanded')).toBe('true');

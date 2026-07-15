@@ -1,4 +1,5 @@
-import { Children, ReactNode, useEffect, useRef, useState } from 'react';
+import { TEST_IDS } from '@/test-ids';
+import { Children, ReactNode, useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 import IconButton from '../../button/IconButton';
@@ -21,6 +22,7 @@ const ScopeTitle = ({ scope, count, as: Heading = 'h1', className, children, onT
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const panelId = useId();
 
   const hasControls = Children.toArray(children).length > 0;
   const toggleLabel = t(isOpen ? 'v2.ui.actions.close' : 'v2.ui.actions.search');
@@ -44,13 +46,26 @@ const ScopeTitle = ({ scope, count, as: Heading = 'h1', className, children, onT
           <span>{t(`v2.scopes.${scope}.${count === 1 ? 'singular' : 'plural'}`)}</span>
         </Heading>
         {hasControls && (
-          <IconButton aria-label={toggleLabel} hint={toggleLabel} aria-expanded={isOpen} onClick={toggle}>
+          <IconButton
+            aria-label={toggleLabel}
+            hint={toggleLabel}
+            aria-expanded={isOpen}
+            aria-controls={panelId}
+            data-testid={TEST_IDS.SEARCH_BUTTON}
+            onClick={toggle}
+          >
             <Icon type={isOpen ? 'close' : 'search'} size="1.5em" />
           </IconButton>
         )}
       </div>
       {hasControls && (
-        <Collapse open={isOpen}>
+        <Collapse
+          open={isOpen}
+          id={panelId}
+          role="search"
+          aria-label={t('v2.ui.actions.search')}
+          data-testid={TEST_IDS.SCOPE_CONTROLS}
+        >
           <div ref={panelRef} className="flex items-center gap-2">
             {children}
           </div>
