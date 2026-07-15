@@ -1,20 +1,28 @@
 import { addIdea } from '@/services/ideas';
 import { TEST_IDS } from '@/test-ids';
+import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import Fab from '@/v2/components/button/Fab/Fab';
 import Idea from '@/v2/components/idea/Idea';
+import SelectInput from '@/v2/components/input/SelectInput';
 import ListPageLayout from '@/v2/components/layout/ListPageLayout';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
 import Icon from '@/v2/components/ui/Icon/Icon';
-import ScopeHeader from '@/v2/components/ui/ScopeHeader';
 import ScopeTitle from '@/v2/components/ui/ScopeTitle';
 import ScrollList from '@/v2/components/ui/ScrollList';
+import SearchBar from '@/v2/components/ui/SearchBar';
 import { IdeaForm } from '@/v2/forms';
+import { ListFilterConfig, useListFilter } from '@/v2/hooks/useListFilter';
 import { useModal } from '@/v2/hooks/useModal';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useIdeasByRoom } from './useIdeasByRoom';
+
+const ideasFilterConfig: ListFilterConfig<IdeaType> = {
+  searchFields: ['title', 'content', 'displayname'],
+  orderKeys: ['created', 'last_updated', 'displayname', 'title'],
+};
 
 const Ideas: React.FC = () => {
   const { t } = useTranslation();
@@ -22,15 +30,14 @@ const Ideas: React.FC = () => {
   const { openModal, closeModal } = useModal();
   const { ideas, isLoading, error, refetch } = useIdeasByRoom(room_id);
   const [formError, setFormError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const filteredIdeas = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) return ideas;
-    return ideas.filter((idea) =>
-      [idea.title, idea.content, idea.displayname].some((field) => field?.toLowerCase().includes(query))
-    );
-  }, [ideas, searchQuery]);
+  const {
+    visibleItems: visibleIdeas,
+    searchQuery,
+    setSearchQuery,
+    orderBy,
+    setOrderBy,
+    orderOptions,
+  } = useListFilter(ideas, ideasFilterConfig);
 
   const addIdeaLabel = t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') });
 
@@ -63,17 +70,10 @@ const Ideas: React.FC = () => {
   return (
     <ListPageLayout
       header={
-        <ScopeHeader
-          searchValue={searchQuery}
-          onSearchChange={setSearchQuery}
-          title={
-            <ScopeTitle
-              icon={<Icon type="idea" className="mb-3" />}
-              count={filteredIdeas.length}
-              label={t(`v2.scopes.ideas.${filteredIdeas.length === 1 ? 'singular' : 'plural'}`)}
-            />
-          }
-        />
+        <ScopeTitle scope="ideas" count={visibleIdeas.length} onToggle={(open) => !open && setSearchQuery('')}>
+          <SearchBar value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+          <SelectInput label={t('v2.ui.sort.label')} options={orderOptions} value={orderBy} onChange={setOrderBy} />
+        </ScopeTitle>
       }
       action={
         !isLoading &&
@@ -127,7 +127,7 @@ const Ideas: React.FC = () => {
         />
       )}
 
-      {!isLoading && !error && ideas.length > 0 && filteredIdeas.length === 0 && (
+      {!isLoading && !error && ideas.length > 0 && visibleIdeas.length === 0 && (
         <FeedbackState
           image="/img/Paula_zwinkernd.svg"
           alt={t('v2.alt.winking')}
@@ -137,9 +137,9 @@ const Ideas: React.FC = () => {
         />
       )}
 
-      {!isLoading && filteredIdeas.length > 0 && (
+      {!isLoading && visibleIdeas.length > 0 && (
         <ScrollList storageKey={`ideas-${room_id}`}>
-          {filteredIdeas.map((idea) => (
+          {visibleIdeas.map((idea) => (
             <li key={idea.hash_id}>
               <Idea idea={idea} onChanged={refetch} />
             </li>

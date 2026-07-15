@@ -9,12 +9,26 @@ interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
   helperText?: string | ReactNode;
+  /** Decorative content at the start of the input, e.g. an icon. Not interactive. */
+  startAdornment?: ReactNode;
   endAdornment?: ReactNode;
 }
 
 const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   (
-    { id, label, error, helperText, disabled = false, required = false, className, type, endAdornment, ...props },
+    {
+      id,
+      label,
+      error,
+      helperText,
+      disabled = false,
+      required = false,
+      className,
+      type,
+      startAdornment,
+      endAdornment,
+      ...props
+    },
     ref
   ) => {
     const { t } = useTranslation();
@@ -59,6 +73,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
               'peer block w-full rounded-lg border border-input-border bg-transparent px-3 pt-4 pb-2 shadow-inner',
               'text-sm text-foreground transition-colors duration-200',
               'hover:border-input-border-hover',
+              startAdornment ? 'pl-10' : '',
               trailingContent ? 'pr-10' : '',
               error ? 'border-error outline-error focus:border-error' : 'outline-current focus:border-current',
               disabled ? 'cursor-not-allowed opacity-50' : '',
@@ -66,6 +81,11 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             )}
             {...props}
           />
+          {startAdornment && (
+            <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">
+              {startAdornment}
+            </div>
+          )}
           {label && (
             <label
               htmlFor={inputId}
@@ -75,6 +95,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                 'peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100',
                 'peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75',
                 'peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-75',
+                startAdornment ? 'left-10 peer-focus:left-3 peer-not-placeholder-shown:left-3' : '',
                 error ? 'text-error-fg peer-focus:text-error-fg' : 'text-muted peer-focus:text-current'
               )}
             >

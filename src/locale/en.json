@@ -212,6 +212,14 @@
       "navigation": "Navigation menu",
       "moveToPhase": "Move to {{phase}}",
       "phases": "Phase navigation",
+      "sort": {
+        "label": "Sort by",
+        "default": "Default order",
+        "created": "Creation date",
+        "updated": "Last update",
+        "user": "User",
+        "title": "Title"
+      },
       "toggle": "Toggle {{var}}"
     }
   },
