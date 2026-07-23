@@ -16,7 +16,7 @@
 :root {
   /* --- Layout --- */
   --color-background: hsl(0, 0%, 100%);
-  --color-surface: hsl(210, 15%, 93%);
+  --color-surface: hsl(215, 10%, 95%);
   --color-shade: hsl(210, 15%, 12%);
 
   /* --- Content / Text --- */
