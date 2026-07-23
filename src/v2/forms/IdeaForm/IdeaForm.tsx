@@ -91,104 +91,102 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-3" data-testid="idea-form">
-      <div className="flex flex-col gap-2">
-        {/* Room - only show if no context */}
-        {!hasRoomContext && (
-          <Controller
-            name="room"
-            control={control}
-            render={({ field }) => <RoomField value={field.value} onChange={field.onChange} disabled={isLoading} />}
-          />
-        )}
-
+      {/* Room - only show if no context */}
+      {!hasRoomContext && (
         <Controller
-          name="category"
+          name="room"
           control={control}
-          render={({ field }) => (
-            <div className="flex-1">
-              <CategoryField
-                value={field.value || ''}
-                onChange={field.onChange}
-                disabled={isLoading}
-                data-testid="idea-form-category"
-                className="w-full"
-              />
-            </div>
-          )}
+          render={({ field }) => <RoomField value={field.value} onChange={field.onChange} disabled={isLoading} />}
         />
+      )}
 
-        {/* Title */}
-        <Controller
-          name="title"
-          control={control}
-          render={({ field }) => (
-            <TextInput
-              {...field}
-              label={t('settings.columns.title')}
-              required
-              disabled={isLoading}
-              error={errors.title ? (errors.title.message as string) : undefined}
-              data-testid="idea-form-title"
-            />
-          )}
-        />
-
-        {/* Content */}
-        <Controller
-          name="content"
-          control={control}
-          render={({ field }) => (
-            <RichEditor
-              label={t('settings.columns.content')}
-              required
-              value={field.value}
+      <Controller
+        name="category"
+        control={control}
+        render={({ field }) => (
+          <div className="flex-1">
+            <CategoryField
+              value={field.value || ''}
               onChange={field.onChange}
               disabled={isLoading}
-              maxLength={MAX_CHAR_COUNT}
-              error={errors.content ? (errors.content.message as string) : undefined}
-              data-testid="idea-form-content"
+              data-testid="idea-form-category"
+              className="w-full"
             />
-          )}
-        />
-
-        {/* Box and Category */}
-        <div className="flex gap-4">
-          {!hasBoxContext && (
-            <Controller
-              name="box"
-              control={control}
-              render={({ field }) => (
-                <div className="flex-1">
-                  <BoxField
-                    roomId={roomValue}
-                    value={field.value || ''}
-                    onChange={field.onChange}
-                    disabled={isLoading}
-                    data-testid="idea-form-box"
-                  />
-                </div>
-              )}
-            />
-          )}
-        </div>
-
-        {/* Error Summary */}
-        {((errors.root as any)?.message || error) && (
-          <div className="flex items-center justify-between text-sm text-red-600 p-3 bg-red-50 rounded-lg" role="alert">
-            <span>{(errors.root as any)?.message || error}</span>
-            {onErrorClose && (
-              <button
-                type="button"
-                onClick={onErrorClose}
-                className="text-red-600 hover:text-red-700 font-semibold"
-                aria-label={t('ui.common.dismiss')}
-              >
-                ✕
-              </button>
-            )}
           </div>
         )}
+      />
+
+      {/* Title */}
+      <Controller
+        name="title"
+        control={control}
+        render={({ field }) => (
+          <TextInput
+            {...field}
+            label={t('settings.columns.title')}
+            required
+            disabled={isLoading}
+            error={errors.title ? (errors.title.message as string) : undefined}
+            data-testid="idea-form-title"
+          />
+        )}
+      />
+
+      {/* Content */}
+      <Controller
+        name="content"
+        control={control}
+        render={({ field }) => (
+          <RichEditor
+            label={t('settings.columns.content')}
+            required
+            value={field.value}
+            onChange={field.onChange}
+            disabled={isLoading}
+            maxLength={MAX_CHAR_COUNT}
+            error={errors.content ? (errors.content.message as string) : undefined}
+            data-testid="idea-form-content"
+          />
+        )}
+      />
+
+      {/* Box and Category */}
+      <div className="flex gap-4">
+        {!hasBoxContext && (
+          <Controller
+            name="box"
+            control={control}
+            render={({ field }) => (
+              <div className="flex-1">
+                <BoxField
+                  roomId={roomValue}
+                  value={field.value || ''}
+                  onChange={field.onChange}
+                  disabled={isLoading}
+                  data-testid="idea-form-box"
+                />
+              </div>
+            )}
+          />
+        )}
       </div>
+
+      {/* Error Summary */}
+      {((errors.root as any)?.message || error) && (
+        <div className="flex items-center justify-between text-sm text-red-600 p-3 bg-red-50 rounded-lg" role="alert">
+          <span>{(errors.root as any)?.message || error}</span>
+          {onErrorClose && (
+            <button
+              type="button"
+              onClick={onErrorClose}
+              className="text-red-600 hover:text-red-700 font-semibold"
+              aria-label={t('ui.common.dismiss')}
+            >
+              ✕
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex gap-3 justify-end">

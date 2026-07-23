@@ -1,7 +1,7 @@
 import { useEditor, EditorContent, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { Emoji } from '@tiptap/extension-emoji';
 import { Markdown } from '@tiptap/markdown';
+import EmojiExtension, { shortcodesToUnicode } from './emojiExtension';
 import IconButton from '../button/IconButton';
 import Icon from '../ui/Icon';
 import Dropdown from '../ui/Dropdown/Dropdown';
@@ -74,10 +74,10 @@ const RichEditor: React.FC<RichEditorProps> = ({
           },
         },
       }),
-      Emoji,
+      EmojiExtension,
       Markdown,
     ],
-    content: value,
+    content: shortcodesToUnicode(value),
     onUpdate: ({ editor }) => {
       const markdown = editor.storage.markdown.manager.serialize(editor.getJSON());
       lastEmitted.current = markdown;
@@ -88,10 +88,11 @@ const RichEditor: React.FC<RichEditorProps> = ({
 
   useEffect(() => {
     if (!editor) return;
-    if (value === lastEmitted.current) return;
+    const normalized = shortcodesToUnicode(value || '');
+    if (normalized === lastEmitted.current) return;
     const current = editor.storage.markdown.manager.serialize(editor.getJSON());
-    if (value !== current) {
-      editor.commands.setContent(value || '');
+    if (normalized !== current) {
+      editor.commands.setContent(normalized);
     }
   }, [editor, value]);
 
