@@ -325,7 +325,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
         <EditorContent
           editor={editor}
           data-testid={dataTestId}
-          className={`max-w-none p-3 pb-0 [&_li>p]:mb-0 [&_div[contenteditable]:focus]:outline-none shadow-inner ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'}`}
+          className={`max-w-none max-h-28 overflow-y-auto p-3 pb-0 [&_li>p]:mb-0 [&_div[contenteditable]:focus]:outline-none shadow-inner ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'}`}
         />
       </div>
 
