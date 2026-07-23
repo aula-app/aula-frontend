@@ -100,13 +100,14 @@ const Ideas: React.FC = () => {
           />
           <IconButton
             dense
+            hint={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
             aria-label={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
             aria-pressed={reversed}
             data-testid={TEST_IDS.SORT_DIRECTION_BUTTON}
             onClick={() => setReversed(!reversed)}
             className="min-w-6"
           >
-            <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="2.5em" />
+            <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="1.5em" />
           </IconButton>
         </ScopeTitle>
       }
