@@ -4,7 +4,7 @@ import { Markdown } from '@tiptap/markdown';
 import EmojiExtension, { shortcodesToUnicode } from './emojiExtension';
 import IconButton from '../button/IconButton';
 import Icon from '../ui/Icon';
-import Dropdown from '../ui/Dropdown/Dropdown';
+import EmojiPicker from './EmojiPicker/EmojiPicker';
 import { ReactNode, useEffect, useId, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useTranslation } from 'react-i18next';
@@ -41,19 +41,6 @@ const RichEditor: React.FC<RichEditorProps> = ({
   const [isFocused, setIsFocused] = useState(false);
   const lastEmitted = useRef<string | null>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
-
-  const emojiList = [
-    { emoji: '😀', labelKey: 'smile' },
-    { emoji: '😂', labelKey: 'laugh' },
-    { emoji: '❤️', labelKey: 'heart' },
-    { emoji: '👍', labelKey: 'thumbsUp' },
-    { emoji: '🎉', labelKey: 'party' },
-    { emoji: '✨', labelKey: 'sparkles' },
-    { emoji: '🚀', labelKey: 'rocket' },
-    { emoji: '💡', labelKey: 'bulb' },
-    { emoji: '📝', labelKey: 'memo' },
-    { emoji: '✅', labelKey: 'check' },
-  ];
 
   const editor = useEditor({
     extensions: [
@@ -267,35 +254,12 @@ const RichEditor: React.FC<RichEditorProps> = ({
 
           <div className="h-5 w-px bg-input-border" aria-hidden="true"></div>
 
-          <Dropdown
-            role="dialog"
-            aria-label={t('v2.ui.editor.emoji')}
-            content={
-              <div className="grid grid-cols-5 gap-1 p-2">
-                {emojiList.map(({ emoji, labelKey }) => (
-                  <IconButton
-                    key={emoji}
-                    type="button"
-                    onClick={() => insertEmoji(emoji)}
-                    aria-label={t(`v2.ui.editor.emojis.${labelKey}`)}
-                    className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
-                  >
-                    {emoji}
-                  </IconButton>
-                ))}
-              </div>
-            }
-          >
-            <IconButton
-              type="button"
-              disabled={disabled}
-              aria-label={t('v2.ui.editor.emoji')}
-              tabIndex={-1}
-              className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
-            >
-              😀
-            </IconButton>
-          </Dropdown>
+          <EmojiPicker
+            onSelect={insertEmoji}
+            disabled={disabled}
+            tabIndex={-1}
+            className="min-h-8 min-w-8 p-1.5 sm:min-h-11 sm:min-w-11 sm:p-2"
+          />
 
           <div className="h-5 w-px bg-input-border mr-auto" aria-hidden="true"></div>
 
@@ -331,8 +295,8 @@ const RichEditor: React.FC<RichEditorProps> = ({
 
       <div className="pt-1 px-1">
         {error ? (
-          <span id={errorId} className="flex text-xs text-error-fg">
-            <Icon type="alert" className="inline-block mr-1 mb-0.5" size="1em" />
+          <span id={errorId} className="flex text-xs text-error-fg items-center">
+            <Icon type="alert" className="inline-block mr-1" size="1em" />
             {error}
           </span>
         ) : (

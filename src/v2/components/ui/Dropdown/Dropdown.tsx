@@ -3,9 +3,14 @@ import React, { ReactNode, useId } from 'react';
 import Collapse from '../Collapse';
 import { useDropdown } from './useDropdown';
 
+export interface DropdownContentApi {
+  close: () => void;
+  focusTrigger: () => void;
+}
+
 interface DropdownProps {
   children: React.ReactElement;
-  content: ReactNode;
+  content: ReactNode | ((api: DropdownContentApi) => ReactNode);
   role?: 'listbox' | 'menu' | 'dialog';
   'aria-label'?: string;
 }
@@ -58,7 +63,7 @@ const Dropdown = ({ children, content, role = 'listbox', 'aria-label': ariaLabel
           ${isOpen ? 'opacity-100' : 'opacity-0'}`}
         innerClass="p-0.5"
       >
-        {content}
+        {typeof content === 'function' ? content({ close, focusTrigger }) : content}
       </Collapse>
     </div>
   );
