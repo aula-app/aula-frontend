@@ -45,11 +45,11 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
     ...(hasRoomContext ? {} : { room: yup.string().required(t('forms.validation.required')) }),
     title: yup
       .string()
-      .max(MAX_TITLE_LENGTH, t('forms.validation.titleTooLong', { max: MAX_TITLE_LENGTH }))
+      .max(MAX_TITLE_LENGTH, t('forms.validation.titleTooLong', { scope: t('scopes.ideas.name'), max: MAX_TITLE_LENGTH }))
       .required(t('forms.validation.required')),
     content: yup
       .string()
-      .max(MAX_CHAR_COUNT, t('forms.validation.contentTooLong', { max: MAX_CHAR_COUNT }))
+      .max(MAX_CHAR_COUNT, t('forms.validation.contentTooLong', { scope: t('scopes.ideas.name'), max: MAX_CHAR_COUNT }))
       .required(t('forms.validation.required')),
     ...(hasBoxContext ? {} : { box: yup.string().optional() }),
     category: yup.string().optional(),
