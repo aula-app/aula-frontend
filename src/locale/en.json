@@ -145,7 +145,7 @@
       "dialog": {
         "delete": {
           "title": "Caution!",
-          "description": "Are you sure you want to delete this {{var}}?\nThis action cannot be undone."
+          "description": "Are you sure you want to continue?\nThis action cannot be undone."
         }
       },
       "editor": {
@@ -226,7 +226,7 @@
   },
   "actions": {
     "activate": "Activate {{var}}",
-    "add": "New {{var}}",
+    "add": "Add {{var}}",
     "addToParent": "Add to {{var}}",
     "agree": "Agree",
     "archive": "Archive",
@@ -363,8 +363,8 @@
     }
   },
   "deletion": {
-    "confirm": "Are you sure you want to delete the selected {{var}}? This action cannot be undone",
-    "headline": "Delete selected {{var}}"
+    "confirm": "Delete {{var}}? This action cannot be undone",
+    "headline": "Delete {{var}}"
   },
   "errors": {
     "404": "Page not found",
@@ -375,7 +375,7 @@
     "accountSuspendDate": " until {{var}}",
     "accountSuspended": "Your account has been suspended{{var}}. Please contact your administrator",
     "appOutdated": "Your app is outdated. Please update aula to continue using it.",
-    "appBelowRecommended": "You are running an outdated aula version {{currentVersion}}. Please update as soon as possible.",
+    "appBelowRecommended": "You are running aula {{currentVersion}}, but we recommend updating to {{recommendedVersion}} to avoid issues.",
     "appOutdatedImage": "Winking character illustration reminding you to update the app",
     "databaseError": "Failed to fetch data",
     "default": "Something went wrong",
