@@ -65,12 +65,12 @@ const RichEditor: React.FC<RichEditorProps> = ({
         },
         bulletList: {
           HTMLAttributes: {
-            class: 'list-disc list-inside mb-2',
+            class: 'list-disc list-outside pl-5 mb-2',
           },
         },
         orderedList: {
           HTMLAttributes: {
-            class: 'list-decimal list-inside mb-2',
+            class: 'list-decimal list-outside pl-5 mb-2',
           },
         },
       }),
@@ -325,7 +325,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
         <EditorContent
           editor={editor}
           data-testid={dataTestId}
-          className={`max-w-none p-3 pb-0 [&_div[contenteditable]:focus]:outline-none shadow-inner ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'}`}
+          className={`max-w-none p-3 pb-0 [&_li>p]:mb-0 [&_div[contenteditable]:focus]:outline-none shadow-inner ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'}`}
         />
       </div>
 
