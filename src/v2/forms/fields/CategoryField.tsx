@@ -1,13 +1,11 @@
 import { getCategories } from '@/services/categories';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import SelectInput from '@/v2/components/input/SelectInput';
+import SelectInput, { SelectInputProps } from '@/v2/components/input/SelectInput';
 
-interface CategoryFieldProps {
+interface CategoryFieldProps extends Omit<SelectInputProps, 'options' | 'label' | 'value' | 'onChange'> {
   value: string;
   onChange: (value: string) => void;
-  disabled?: boolean;
-  'data-testid'?: string;
 }
 
 interface CategoryOption {
@@ -15,12 +13,7 @@ interface CategoryOption {
   label: string;
 }
 
-const CategoryField: React.FC<CategoryFieldProps> = ({
-  value,
-  onChange,
-  disabled = false,
-  'data-testid': dataTestId,
-}) => {
+const CategoryField: React.FC<CategoryFieldProps> = ({ value, onChange, disabled = false, ...props }) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<CategoryOption[]>([]);
@@ -53,7 +46,7 @@ const CategoryField: React.FC<CategoryFieldProps> = ({
       value={value}
       onChange={onChange}
       disabled={disabled || loading}
-      data-testid={dataTestId}
+      {...props}
     />
   );
 };

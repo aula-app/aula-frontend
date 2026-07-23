@@ -2,23 +2,15 @@ import { getBoxes } from '@/services/boxes';
 import { BoxType } from '@/types/Scopes';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import SelectInput from '@/v2/components/input/SelectInput';
+import SelectInput, { SelectInputProps } from '@/v2/components/input/SelectInput';
 
-interface BoxFieldProps {
+interface BoxFieldProps extends Omit<SelectInputProps, 'options' | 'label' | 'value' | 'onChange'> {
   roomId: string;
   value: string;
   onChange: (value: string) => void;
-  disabled?: boolean;
-  'data-testid'?: string;
 }
 
-const BoxField: React.FC<BoxFieldProps> = ({
-  roomId,
-  value,
-  onChange,
-  disabled = false,
-  'data-testid': dataTestId,
-}) => {
+const BoxField: React.FC<BoxFieldProps> = ({ roomId, value, onChange, disabled = false, ...props }) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
@@ -48,7 +40,7 @@ const BoxField: React.FC<BoxFieldProps> = ({
       value={value}
       onChange={onChange}
       disabled={disabled || loading}
-      data-testid={dataTestId}
+      {...props}
     />
   );
 };

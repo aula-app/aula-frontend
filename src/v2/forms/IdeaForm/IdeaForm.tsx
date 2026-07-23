@@ -90,7 +90,7 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col" data-testid="idea-form">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-3" data-testid="idea-form">
       <div className="flex flex-col gap-2">
         {/* Room - only show if no context */}
         {!hasRoomContext && (
@@ -100,6 +100,22 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
             render={({ field }) => <RoomField value={field.value} onChange={field.onChange} disabled={isLoading} />}
           />
         )}
+
+        <Controller
+          name="category"
+          control={control}
+          render={({ field }) => (
+            <div className="flex-1">
+              <CategoryField
+                value={field.value || ''}
+                onChange={field.onChange}
+                disabled={isLoading}
+                data-testid="idea-form-category"
+                className="w-full"
+              />
+            </div>
+          )}
+        />
 
         {/* Title */}
         <Controller
@@ -154,20 +170,6 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
               )}
             />
           )}
-          <Controller
-            name="category"
-            control={control}
-            render={({ field }) => (
-              <div className={hasBoxContext ? 'w-full' : 'flex-1'}>
-                <CategoryField
-                  value={field.value || ''}
-                  onChange={field.onChange}
-                  disabled={isLoading}
-                  data-testid="idea-form-category"
-                />
-              </div>
-            )}
-          />
         </div>
 
         {/* Error Summary */}

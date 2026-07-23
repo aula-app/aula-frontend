@@ -9,7 +9,7 @@ export interface SelectOption {
   label: string;
 }
 
-interface SelectInputProps {
+export interface SelectInputProps {
   id?: string;
   label?: string;
   options: SelectOption[];
@@ -121,8 +121,8 @@ const SelectInput = ({
   };
 
   return (
-    <div ref={containerRef} className="flex flex-col w-fit">
-      <div className="relative w-fit">
+    <div ref={containerRef} className={twMerge('flex flex-col w-fit', className)}>
+      <div className="relative w-full">
         <button
           ref={triggerRef}
           id={inputId}
@@ -141,16 +141,13 @@ const SelectInput = ({
           onClick={() => (open ? setOpen(false) : openDropdown())}
           onKeyDown={handleKeyDown}
           className={[
-            'peer flex items-center rounded-lg border border-input-border bg-transparent shadow-inner',
+            'peer flex w-full items-center rounded-lg border border-input-border bg-transparent shadow-inner',
             dense ? 'h-7 px-2' : 'h-9 px-3',
             'text-sm text-left text-foreground transition-colors duration-200',
             'hover:border-input-border-hover',
             'disabled:cursor-not-allowed disabled:opacity-50',
             'border-current focus-within:outline-2 outline-current',
-            className,
-          ]
-            .filter(Boolean)
-            .join(' ')}
+          ].join(' ')}
         >
           <span className={twMerge(hasValue ? 'text-foreground' : 'invisible select-none', 'text-nowrap pr-6')}>
             {selectedOption?.label ?? '\u00A0'}

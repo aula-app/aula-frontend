@@ -2,15 +2,14 @@ import { getRooms } from '@/services/rooms';
 import { RoomType } from '@/types/Scopes';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import SelectInput from '@/v2/components/input/SelectInput';
+import SelectInput, { SelectInputProps } from '@/v2/components/input/SelectInput';
 
-interface RoomFieldProps {
+interface RoomFieldProps extends Omit<SelectInputProps, 'options' | 'label' | 'value' | 'onChange'> {
   value: string;
   onChange: (value: string) => void;
-  disabled?: boolean;
 }
 
-const RoomField: React.FC<RoomFieldProps> = ({ value, onChange, disabled = false }) => {
+const RoomField: React.FC<RoomFieldProps> = ({ value, onChange, disabled = false, ...props }) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
@@ -40,6 +39,7 @@ const RoomField: React.FC<RoomFieldProps> = ({ value, onChange, disabled = false
       onChange={onChange}
       disabled={disabled || loading}
       required
+      {...props}
     />
   );
 };

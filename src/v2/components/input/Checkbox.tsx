@@ -48,7 +48,11 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           </label>
         </div>
         {hintText && (
-          <span id={hintId} role={error ? 'alert' : undefined} className={twMerge('px-1 text-xs', error ? 'text-error-text' : 'text-secondary')}>
+          <span
+            id={hintId}
+            role={error ? 'alert' : undefined}
+            className={twMerge('px-1 text-xs', error ? 'text-error-text' : 'text-secondary')}
+          >
             {error && <Icon type="alert" className="inline-block mr-1 mb-0.5" />}
             {hintText}
           </span>
