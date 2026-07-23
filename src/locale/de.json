@@ -69,7 +69,7 @@
       },
       "offline": {
         "title": "Die Schule ist derzeit geschlossen",
-        "hint": "Bitte versuchen Sie es später erneut oder wenden Sie sich an Ihren Administrator für weitere Informationen."
+        "hint": "Bitte versuchen Sie es später erneut oder wenden Sie sich an Ihre*n Administrator*in für weitere Informationen."
       },
       "recovery": {
         "button": "Wiederherstellungs-E-Mail senden",
@@ -110,7 +110,7 @@
         }
       },
       "actions": {
-        "add": "Neue {{var}}",
+        "add": "{{var}} hinzufügen",
         "agree": "Zustimmen",
         "print": "Diese Seite drucken",
         "report": "Einen Fehler melden",
@@ -145,7 +145,7 @@
       "dialog": {
         "delete": {
           "title": "Vorsicht!",
-          "description": "Bist du sicher, dass du diese {{var}} löschen möchtest?\nDiese Aktion kann nicht rückgängig gemacht werden."
+          "description": "Möchtest du wirklich fortfahren?\nDiese Aktion kann nicht rückgängig gemacht werden."
         }
       },
       "editor": {
@@ -179,7 +179,7 @@
         },
         "fetch": {
           "title": "Wir konnten das nicht laden",
-          "description": "Bitte versuche es noch mal. Wenn es immer wieder passiert, sag deinem Lehrer Bescheid."
+          "description": "Bitte versuche es noch mal. Wenn es immer wieder passiert, sag deine*r Lehrer*in Bescheid."
         },
         "generic": {
           "title": "Hoppla! Etwas ist schief gelaufen",
@@ -229,7 +229,7 @@
   },
   "actions": {
     "activate": "{{var}} aktivieren",
-    "add": "Neue {{var}}",
+    "add": "{{var}} hinzufügen",
     "addToParent": "Zu {{var}} hinzufügen",
     "agree": "Zustimmen",
     "archive": "Archivieren",
@@ -366,10 +366,11 @@
     }
   },
   "deletion": {
-    "confirm": "Bist du sicher, dass du die ausgewählte {{var}} löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden",
-    "headline": "Ausgewählte {{var}} löschen"
+    "confirm": "{{var}} löschen? Diese Aktion kann nicht rückgängig gemacht werden",
+    "headline": "{{var}} löschen"
   },
   "errors": {
+    "404": "Seite nicht gefunden",
     "boundary": "Etwas ist schiefgelaufen",
     "boundaryDetails": "Fehlerdetails",
     "boundaryMessage": "Wir entschuldigen uns für die Unannehmlichkeiten. Bitte versuche die Seite zu aktualisieren.",
