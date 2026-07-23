@@ -113,7 +113,8 @@
         "add": "Neue {{var}}",
         "agree": "Zustimmen",
         "print": "Diese Seite drucken",
-        "report": "Einen Fehler melden"
+        "report": "Einen Fehler melden",
+        "search": "Suchen"
       },
       "announcement": {
         "title": "Ankündigung",
@@ -187,6 +188,10 @@
         "network": {
           "title": "Keine Internetverbindung",
           "description": "Bitte überprüfe deine Verbindung und versuche es noch mal."
+        },
+        "search": {
+          "title": "Keine Ergebnisse gefunden",
+          "description": "Versuche es mit einem anderen Suchbegriff."
         }
       },
       "language": {
@@ -207,6 +212,15 @@
       "navigation": "Navigationsmenü",
       "moveToPhase": "Zu {{phase}} wechseln",
       "phases": "Phasennavigation",
+      "sort": {
+        "label": "Sortieren nach",
+        "asc": "Aufsteigend sortieren",
+        "desc": "Absteigend sortieren",
+        "created": "Erstelldatum",
+        "title": "Titel",
+        "updated": "Letzte Aktualisierung",
+        "user": "Nutzer*in"
+      },
       "toggle": "{{var}} umschalten"
     }
   },
