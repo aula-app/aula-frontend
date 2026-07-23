@@ -1,7 +1,16 @@
 import React, { memo } from 'react';
 import { IconBaseProps, IconType } from 'react-icons';
 import {
+  HiArrowUturnLeft,
+  HiArrowUturnRight,
+  HiBold,
+  HiEllipsisHorizontal,
+  HiHeart,
+  HiItalic,
   HiLanguage,
+  HiLink,
+  HiListBullet,
+  HiNumberedList,
   HiOutlineAcademicCap,
   HiOutlineArchiveBox,
   HiOutlineArrowRightEndOnRectangle,
@@ -24,11 +33,12 @@ import {
   HiOutlineHome,
   HiOutlineInformationCircle,
   HiOutlineLightBulb,
+  HiOutlineMagnifyingGlass,
   HiOutlineMegaphone,
   HiOutlineMoon,
   HiOutlinePencilSquare,
-  HiOutlinePrinter,
   HiOutlinePlus,
+  HiOutlinePrinter,
   HiOutlineQuestionMarkCircle,
   HiOutlineShare,
   HiOutlineSun,
@@ -37,21 +47,11 @@ import {
   HiOutlineUsers,
   HiOutlineXCircle,
   HiOutlineXMark,
-  HiBold,
-  HiHeart,
-  HiItalic,
-  HiListBullet,
-  HiNumberedList,
-  HiArrowUturnLeft,
-  HiArrowUturnRight,
   HiStrikethrough,
-  HiLink,
-  HiEllipsisHorizontal,
   HiTrash,
-  HiOutlineMagnifyingGlass,
 } from 'react-icons/hi2';
+import { LiaSortNumericDownSolid, LiaSortNumericUpSolid } from 'react-icons/lia';
 import voting from './voting.svg?react';
-import { BiSortAZ, BiSortZA } from 'react-icons/bi';
 
 const VotingIcon: IconType = ({ size = '1em', color = 'currentColor', style, ...props }) =>
   React.createElement(voting, {
@@ -119,8 +119,8 @@ export const ICONS = {
   settings: HiOutlineCog6Tooth,
   search: HiOutlineMagnifyingGlass,
   share: HiOutlineShare,
-  sortAsc: BiSortAZ,
-  sortDesc: BiSortZA,
+  sortAsc: LiaSortNumericDownSolid,
+  sortDesc: LiaSortNumericUpSolid,
   strikethrough: HiStrikethrough,
   undo: HiArrowUturnLeft,
   user: HiOutlineUser,

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type SortableFields = {
@@ -31,18 +31,37 @@ export interface ListFilterConfig<T> {
   orderKeys?: OrderKey[];
 }
 
+type FilterState = { searchQuery: string; orderBy: string; reversed: boolean };
+
+/**
+ * In-memory search/sort selections keyed per list. Module-level so a selection
+ * survives navigating away and back (e.g. into an idea's detail and back to the
+ * list), mirroring `useScrollRestoration`. Resets on a full page reload.
+ */
+const filterStates = new Map<string, FilterState>();
+
 /**
  * Client-side search and sort for scope lists.
  * Pass a module-level config object so the memo dependencies stay stable.
+ *
+ * @param storageKey Optional unique per list (e.g. `ideas-${room_id}`). When
+ *                   provided, the search query, sort field and direction
+ *                   persist across navigation.
  */
 export const useListFilter = <T extends SortableFields>(
   items: T[],
-  { searchFields, orderKeys = [] }: ListFilterConfig<T>
+  { searchFields, orderKeys = [] }: ListFilterConfig<T>,
+  storageKey?: string
 ) => {
   const { t } = useTranslation();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [orderBy, setOrderBy] = useState<string>(orderKeys[0] ?? '');
-  const [reversed, setReversed] = useState(false);
+  const stored = storageKey ? filterStates.get(storageKey) : undefined;
+  const [searchQuery, setSearchQuery] = useState(stored?.searchQuery ?? '');
+  const [orderBy, setOrderBy] = useState<string>(stored?.orderBy ?? orderKeys[0] ?? '');
+  const [reversed, setReversed] = useState(stored?.reversed ?? false);
+
+  useEffect(() => {
+    if (storageKey) filterStates.set(storageKey, { searchQuery, orderBy, reversed });
+  }, [storageKey, searchQuery, orderBy, reversed]);
 
   const orderOptions = orderKeys.map((key) => ({ value: key, label: t(orderConfig[key].labelKey) }));
 

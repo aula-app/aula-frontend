@@ -65,4 +65,28 @@ describe('useListFilter', () => {
       { value: 'title', label: 'v2.ui.sort.title' },
     ]);
   });
+
+  it('restores the search query, sort field and direction for a storage key', () => {
+    const first = renderHook(() => useListFilter(items, config, 'list-key'));
+    act(() => {
+      first.result.current.setSearchQuery('fruit');
+      first.result.current.setOrderBy('title');
+      first.result.current.setReversed(true);
+    });
+    first.unmount();
+
+    const second = renderHook(() => useListFilter(items, config, 'list-key'));
+    expect(second.result.current.searchQuery).toBe('fruit');
+    expect(second.result.current.orderBy).toBe('title');
+    expect(second.result.current.reversed).toBe(true);
+  });
+
+  it('keeps selections independent per storage key', () => {
+    const a = renderHook(() => useListFilter(items, config, 'key-a'));
+    act(() => a.result.current.setSearchQuery('apple'));
+    a.unmount();
+
+    const b = renderHook(() => useListFilter(items, config, 'key-b'));
+    expect(b.result.current.searchQuery).toBe('');
+  });
 });

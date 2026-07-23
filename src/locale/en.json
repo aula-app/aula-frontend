@@ -221,7 +221,10 @@
         "updated": "Last update",
         "user": "User"
       },
-      "toggle": "Toggle {{var}}"
+      "toggle": "Toggle {{var}}",
+      "count": {
+        "ofTotal": "{{count}} of {{total}}"
+      }
     }
   },
   "actions": {
