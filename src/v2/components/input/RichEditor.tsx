@@ -165,10 +165,10 @@ const RichEditor: React.FC<RichEditorProps> = ({
         className={twMerge(
           'flex flex-col rounded-lg border border-input-border bg-transparent shadow-inner',
           'transition-colors duration-200',
-          'hover:border-input-border-hover',
+          'hover:border-input-border-hover focus-within:outline-1',
           error
-            ? 'border-error focus-within:border-error'
-            : 'focus-within:border-current focus-within:ring-2 focus-within:ring-current',
+            ? 'border-error-fg focus-within:outline-error-fg'
+            : 'focus-within:border-current focus-within:ring-current',
           disabled ? 'cursor-not-allowed opacity-50' : ''
         )}
         onFocus={() => setIsFocused(true)}

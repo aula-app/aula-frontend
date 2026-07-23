@@ -72,13 +72,13 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             aria-invalid={!!error}
             placeholder=" "
             className={twMerge(
-              'peer block w-full rounded-lg border border-input-border bg-transparent shadow-inner',
+              'peer block w-full rounded-lg border border-input-border bg-transparent shadow-inner focus-within:outline-1',
               dense ? 'h-9 px-3' : 'h-12 px-4',
               'text-sm text-foreground transition-colors duration-200',
               'hover:border-input-border-hover',
               startAdornment ? (dense ? 'pl-8' : 'pl-10') : '',
               trailingContent ? (dense ? 'pr-8' : 'pr-10') : '',
-              error ? 'border-error outline-error focus:border-error' : 'outline-current focus:border-current',
+              error ? 'border-error-fg outline-error-fg' : 'outline-current focus:border-current',
               disabled ? 'cursor-not-allowed opacity-50' : '',
               className
             )}

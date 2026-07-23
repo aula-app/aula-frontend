@@ -25,11 +25,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       outlined || text
         ? 'hover:bg-shadow active:bg-shadow'
         : 'hover:brightness-95 active:brightness-90 dark:hover:brightness-110 dark:active:brightness-125',
-      `outline-${color || 'current'}`,
+      `outline-${color ? `${color}-fg` : 'current'}`,
       'disabled:cursor-not-allowed disabled:opacity-50',
       outlined
         ? color
-          ? `border border-${color} text-${color}-fg`
+          ? `border border-${color}-fg text-${color}-fg`
           : 'border border-current text-current'
         : text
           ? color

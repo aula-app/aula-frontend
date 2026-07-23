@@ -141,12 +141,12 @@ const SelectInput = ({
           onClick={() => (open ? setOpen(false) : openDropdown())}
           onKeyDown={handleKeyDown}
           className={[
-            'peer flex w-full items-center rounded-lg border border-input-border bg-transparent shadow-inner',
+            'peer flex w-full items-center rounded-lg border border-input-border bg-transparent shadow-inner focus-within:outline-1',
             dense ? 'h-9 px-3' : 'h-12 px-4',
             'text-sm text-left text-foreground transition-colors duration-200',
             'hover:border-input-border-hover',
             'disabled:cursor-not-allowed disabled:opacity-50',
-            'border-current focus-within:outline-2 outline-current',
+            error ? 'border-error outline-error-fg focus:border-error-fg' : 'outline-current focus:border-current',
           ].join(' ')}
         >
           <span className={twMerge(hasValue ? 'text-foreground' : 'invisible select-none', 'text-nowrap pr-6')}>
