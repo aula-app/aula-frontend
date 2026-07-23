@@ -142,7 +142,7 @@ const SelectInput = ({
           onKeyDown={handleKeyDown}
           className={[
             'peer flex w-full items-center rounded-lg border border-input-border bg-transparent shadow-inner',
-            dense ? 'h-7 px-2' : 'h-9 px-3',
+            dense ? 'h-9 px-3' : 'h-12 px-4',
             'text-sm text-left text-foreground transition-colors duration-200',
             'hover:border-input-border-hover',
             'disabled:cursor-not-allowed disabled:opacity-50',

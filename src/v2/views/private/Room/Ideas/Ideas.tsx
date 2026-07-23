@@ -40,7 +40,7 @@ const Ideas: React.FC = () => {
     orderOptions,
     reversed,
     setReversed,
-  } = useListFilter(ideas, ideasFilterConfig);
+  } = useListFilter(ideas, ideasFilterConfig, `ideas-${room_id}`);
 
   const addIdeaLabel = t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') });
 
@@ -73,7 +73,13 @@ const Ideas: React.FC = () => {
   return (
     <ListPageLayout
       header={
-        <ScopeTitle scope="ideas" count={visibleIdeas.length} onToggle={(open) => !open && setSearchQuery('')}>
+        <ScopeTitle
+          scope="ideas"
+          count={visibleIdeas.length}
+          total={ideas.length}
+          defaultOpen={!!searchQuery}
+          onToggle={(open) => !open && setSearchQuery('')}
+        >
           <TextInput
             dense
             type="search"
@@ -81,7 +87,7 @@ const Ideas: React.FC = () => {
             startAdornment={<Icon type="search" />}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1"
+            className="flex-1 min-w-20"
             data-testid={TEST_IDS.SEARCH_FIELD}
           />
           <SelectInput
@@ -98,6 +104,7 @@ const Ideas: React.FC = () => {
             aria-pressed={reversed}
             data-testid={TEST_IDS.SORT_DIRECTION_BUTTON}
             onClick={() => setReversed(!reversed)}
+            className="min-w-6"
           >
             <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="2.5em" />
           </IconButton>

@@ -221,7 +221,10 @@
         "updated": "Letzte Aktualisierung",
         "user": "Nutzer*in"
       },
-      "toggle": "{{var}} umschalten"
+      "toggle": "{{var}} umschalten",
+      "count": {
+        "ofTotal": "{{count}} von {{total}}"
+      }
     }
   },
   "actions": {
