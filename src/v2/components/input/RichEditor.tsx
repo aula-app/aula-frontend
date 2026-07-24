@@ -150,6 +150,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
   };
 
   const hasContent = charCount > 0;
+  const overLimit = charCount > maxLength;
 
   return (
     <div className="relative flex flex-col w-full">
@@ -158,7 +159,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
           'flex flex-col rounded-lg border border-input-border bg-transparent shadow-inner',
           'transition-colors duration-200',
           'hover:border-input-border-hover focus-within:outline-1',
-          error
+          error || overLimit
             ? 'border-error-fg focus-within:outline-error-fg'
             : 'focus-within:border-current focus-within:ring-current',
           disabled ? 'cursor-not-allowed opacity-50' : ''
@@ -311,7 +312,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
             {error}
           </span>
         ) : (
-          <span id={helperId} className="flex text-xs text-muted justify-between" aria-live="polite" aria-atomic="true">
+          <span id={helperId} className={twMerge('flex text-xs justify-between', overLimit ? 'text-error-fg' : 'text-muted')} aria-live="polite" aria-atomic="true">
             <span>
               {charCount} / {maxLength}
             </span>
