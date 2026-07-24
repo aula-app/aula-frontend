@@ -45,7 +45,10 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
     ...(hasRoomContext ? {} : { room: yup.string().required(t('forms.validation.required')) }),
     title: yup
       .string()
-      .max(MAX_TITLE_LENGTH, t('forms.validation.titleTooLong', { scope: t('scopes.ideas.name'), max: MAX_TITLE_LENGTH }))
+      .max(
+        MAX_TITLE_LENGTH,
+        t('forms.validation.titleTooLong', { scope: t('scopes.ideas.name'), max: MAX_TITLE_LENGTH })
+      )
       .required(t('forms.validation.required')),
     content: yup
       .string()

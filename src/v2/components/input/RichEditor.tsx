@@ -60,11 +60,15 @@ const RichEditor: React.FC<RichEditorProps> = ({
             class: 'list-decimal list-outside pl-5 mb-2',
           },
         },
+        trailingNode: {
+          notAfter: ['bulletList', 'orderedList'],
+        },
       }),
       EmojiExtension,
       Markdown,
     ],
     content: shortcodesToUnicode(value),
+    contentType: 'markdown',
     onUpdate: ({ editor }) => {
       const markdown = editor.storage.markdown.manager.serialize(editor.getJSON());
       lastEmitted.current = markdown;
@@ -79,7 +83,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
     if (normalized === lastEmitted.current) return;
     const current = editor.storage.markdown.manager.serialize(editor.getJSON());
     if (normalized !== current) {
-      editor.commands.setContent(normalized);
+      editor.commands.setContent(normalized, { contentType: 'markdown' });
     }
   }, [editor, value]);
 
@@ -123,6 +127,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
 
   const insertEmoji = (emoji: string) => {
     editor.commands.insertContent(emoji);
+    editor.commands.focus();
   };
 
   const handleToolbarKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -166,6 +171,12 @@ const RichEditor: React.FC<RichEditorProps> = ({
           className="relative flex items-center gap-1 px-2 py-1 border-b border-input-border"
           role="toolbar"
           aria-label={t('v2.ui.editor.toolbar')}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            const target = e.target as HTMLElement;
+            const isDropdown = target.closest('[aria-haspopup]') || target.closest('[data-dropdown-panel]');
+            if (!editor.isFocused && !isDropdown) editor.commands.focus();
+          }}
           onKeyDown={handleToolbarKeyDown}
         >
           {label && (
@@ -289,7 +300,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
         <EditorContent
           editor={editor}
           data-testid={dataTestId}
-          className={`max-w-none max-h-28 overflow-y-auto p-3 pb-0 [&_li>p]:mb-0 [&_div[contenteditable]:focus]:outline-none shadow-inner ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'}`}
+          className={`max-w-none max-h-28 overflow-y-auto p-3 pb-0 [&_li>p]:mb-0 [&_li>p]:inline [&_div[contenteditable]:focus]:outline-none shadow-inner ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'}`}
         />
       </div>
 
