@@ -21,7 +21,7 @@ export const useDropdown = () => {
     );
 
     // Move focus to the selected item, falling back to first focusable item.
-    const panel = wrapperRef.current?.querySelector<HTMLElement>('[role="listbox"]');
+    const panel = wrapperRef.current?.querySelector<HTMLElement>('[data-dropdown-panel]');
     const frame = requestAnimationFrame(() => {
       const target =
         panel?.querySelector<HTMLElement>('[aria-selected="true"]') ??
@@ -39,7 +39,7 @@ export const useDropdown = () => {
       if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
       e.preventDefault();
 
-      const panel = wrapperRef.current?.querySelector<HTMLElement>('[role="listbox"]');
+      const panel = wrapperRef.current?.querySelector<HTMLElement>('[data-dropdown-panel]');
       const items = Array.from(
         panel?.querySelectorAll<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])') ?? []
       );

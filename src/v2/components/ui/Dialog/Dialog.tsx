@@ -1,4 +1,5 @@
 import { FC, ReactNode, useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 const TRANSITION_MS = 300;
 
@@ -68,7 +69,7 @@ const Dialog: FC<DialogProps> = ({
       }
     : undefined;
 
-  return (
+  return createPortal(
     <dialog
       ref={dialogRef}
       role={role}
@@ -90,7 +91,8 @@ const Dialog: FC<DialogProps> = ({
       >
         {children}
       </div>
-    </dialog>
+    </dialog>,
+    document.body
   );
 };
 

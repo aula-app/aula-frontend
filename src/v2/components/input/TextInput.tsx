@@ -1,5 +1,6 @@
 import Icon from '@/components/new/Icon';
 import IconButton from '@/v2/components/button/IconButton';
+import Collapse from '@/v2/components/ui/Collapse';
 import { InputHTMLAttributes, ReactNode, forwardRef, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
@@ -8,12 +9,28 @@ interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
   helperText?: string | ReactNode;
+  dense?: boolean;
+  /** Decorative content at the start of the input, e.g. an icon. Not interactive. */
+  startAdornment?: ReactNode;
   endAdornment?: ReactNode;
 }
 
 const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   (
-    { id, label, error, helperText, disabled = false, required = false, className, type, endAdornment, ...props },
+    {
+      id,
+      label,
+      error,
+      helperText,
+      disabled = false,
+      required = false,
+      dense = false,
+      className,
+      type,
+      startAdornment,
+      endAdornment,
+      ...props
+    },
     ref
   ) => {
     const { t } = useTranslation();
@@ -41,7 +58,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     );
 
     return (
-      <div className="flex flex-col w-full mb-3">
+      <div className={twMerge('flex flex-col w-full')}>
         <div className="relative">
           <input
             ref={ref}
@@ -55,16 +72,28 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             aria-invalid={!!error}
             placeholder=" "
             className={twMerge(
-              'peer block w-full rounded-lg border border-input-border bg-transparent px-3 pt-4 pb-2 shadow-inner',
+              'peer block w-full rounded-lg border border-input-border bg-transparent shadow-inner focus-within:outline-1',
+              dense ? 'h-9 px-3' : 'h-12 px-4',
               'text-sm text-foreground transition-colors duration-200',
               'hover:border-input-border-hover',
-              trailingContent ? 'pr-10' : '',
-              error ? 'border-error outline-error focus:border-error' : 'outline-current focus:border-current',
+              startAdornment ? (dense ? 'pl-8' : 'pl-10') : '',
+              trailingContent ? (dense ? 'pr-8' : 'pr-10') : '',
+              error ? 'border-error-fg outline-error-fg' : 'outline-current focus:border-current',
               disabled ? 'cursor-not-allowed opacity-50' : '',
               className
             )}
             {...props}
           />
+          {startAdornment && (
+            <div
+              className={twMerge(
+                'pointer-events-none absolute top-1/2 -translate-y-1/2 text-muted',
+                dense ? 'left-3' : 'left-4'
+              )}
+            >
+              {startAdornment}
+            </div>
+          )}
           {label && (
             <label
               htmlFor={inputId}
@@ -74,6 +103,9 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                 'peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100',
                 'peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75',
                 'peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-75',
+                startAdornment
+                  ? twMerge(dense ? 'left-8' : 'left-10', 'peer-focus:left-3 peer-not-placeholder-shown:left-3')
+                  : '',
                 error ? 'text-error-fg peer-focus:text-error-fg' : 'text-muted peer-focus:text-current'
               )}
             >
@@ -90,24 +122,18 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           )}
           {trailingContent && <div className="absolute right-1 top-1/2 -translate-y-1/2">{trailingContent}</div>}
         </div>
-        <div
-          className={`grid transition-all duration-200 ease-in-out ${
-            error || helperText ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-          }`}
-        >
-          <div>
-            {error ? (
-              <span id={errorId} className="block pt-1 px-1 text-xs text-error-fg">
-                <Icon type="alert" className="inline-block mr-1 mb-0.5" />
-                {error}
-              </span>
-            ) : (
-              <span id={helperId} className="block pt-1 px-1 text-xs text-muted">
-                {helperText}
-              </span>
-            )}
-          </div>
-        </div>
+        <Collapse open={!!(error || helperText)}>
+          {error ? (
+            <span id={errorId} className="block pt-1 px-1 text-xs text-error-fg">
+              <Icon type="alert" className="inline-block mr-1 mb-0.5" />
+              {error}
+            </span>
+          ) : (
+            <span id={helperId} className="block pt-1 px-1 text-xs text-muted">
+              {helperText}
+            </span>
+          )}
+        </Collapse>
       </div>
     );
   }

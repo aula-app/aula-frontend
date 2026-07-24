@@ -3,7 +3,9 @@
     "alt": {
       "logo": "Aula: Bildungsplattform-Logo",
       "microphone": "Eine Illustration einer Eule mit einem Mikrofon, die die Ankündigungsfunktion repräsentiert",
-      "sleeping": "Schlafende Eulen-Illustration"
+      "sad": "Eine Illustration einer traurigen Eule, die die Fehlerseite repräsentiert",
+      "sleeping": "Schlafende Eulen-Illustration",
+      "winking": "Eine Illustration einer zwinkernden Eule, die die Fehlerseite repräsentiert"
     },
     "form": {
       "code": {
@@ -67,7 +69,7 @@
       },
       "offline": {
         "title": "Die Schule ist derzeit geschlossen",
-        "hint": "Bitte versuchen Sie es später erneut oder wenden Sie sich an Ihren Administrator für weitere Informationen."
+        "hint": "Bitte versuchen Sie es später erneut oder wenden Sie sich an Ihre*n Administrator*in für weitere Informationen."
       },
       "recovery": {
         "button": "Wiederherstellungs-E-Mail senden",
@@ -83,6 +85,20 @@
         "hint": "Dieser Link ist ungültig. Bitte stellen Sie sicher, dass Sie den gesamten Link aus Ihrer E-Mail kopiert haben, und versuchen Sie es erneut."
       }
     },
+    "scopes": {
+      "ideas": {
+        "singular": "Idee",
+        "plural": "Ideen",
+        "stats": {
+          "like": "{{count}} Like",
+          "likes": "{{count}} Likes",
+          "vote": "{{count}} Stimme",
+          "votes": "{{count}} Stimmen",
+          "comment": "{{count}} Kommentar",
+          "comments": "{{count}} Kommentare"
+        }
+      }
+    },
     "ui": {
       "a11y": {
         "navigation": "Navigationsmenü",
@@ -94,9 +110,11 @@
         }
       },
       "actions": {
+        "add": "{{var}} hinzufügen",
         "agree": "Zustimmen",
         "print": "Diese Seite drucken",
-        "report": "Einen Fehler melden"
+        "report": "Einen Fehler melden",
+        "search": "Suchen"
       },
       "announcement": {
         "title": "Ankündigung",
@@ -108,8 +126,12 @@
         "clear": "Löschen",
         "close": "Schließen",
         "confirm": "Bestätigen",
-        "submit": "Übermitteln",
-        "edit": "Bearbeiten"
+        "delete": "Löschen",
+        "edit": "Bearbeiten",
+        "more": "Mehr Optionen",
+        "report": "Inhalt melden",
+        "share": "Ideen-Link kopieren",
+        "submit": "Übermitteln"
       },
       "code": {
         "button": "Code: {{var}}",
@@ -119,6 +141,58 @@
       },
       "darkMode": {
         "label": "Dunkelmodus"
+      },
+      "dialog": {
+        "delete": {
+          "title": "Vorsicht!",
+          "description": "Möchtest du wirklich fortfahren?\nDiese Aktion kann nicht rückgängig gemacht werden."
+        }
+      },
+      "editor": {
+        "label": "Texteditor",
+        "toolbar": "Textformatierung",
+        "bold": "Fett",
+        "italic": "Kursiv",
+        "strikethrough": "Durchgestrichen",
+        "bulletList": "Aufzählung",
+        "orderedList": "Nummerierte Liste",
+        "emoji": "Emoji einfügen",
+        "undo": "Rückgängig",
+        "redo": "Wiederholen",
+        "emojis": {
+          "smile": "Lächelndes Gesicht",
+          "laugh": "Lachendes Gesicht",
+          "heart": "Rotes Herz",
+          "thumbsUp": "Daumen hoch",
+          "party": "Partytröte",
+          "sparkles": "Funkeln",
+          "rocket": "Rakete",
+          "bulb": "Glühbirne",
+          "memo": "Notiz",
+          "check": "Häkchen"
+        }
+      },
+      "error": {
+        "empty": {
+          "title": "Hier gibt es noch nichts!",
+          "description": "Schau bald wieder vorbei oder erstelle etwas Neues, um anzufangen."
+        },
+        "fetch": {
+          "title": "Wir konnten das nicht laden",
+          "description": "Bitte versuche es noch mal. Wenn es immer wieder passiert, sag deine*r Lehrer*in Bescheid."
+        },
+        "generic": {
+          "title": "Hoppla! Etwas ist schief gelaufen",
+          "description": "Das sollte nicht passieren. Bitte versuche es noch mal."
+        },
+        "network": {
+          "title": "Keine Internetverbindung",
+          "description": "Bitte überprüfe deine Verbindung und versuche es noch mal."
+        },
+        "search": {
+          "title": "Keine Ergebnisse gefunden",
+          "description": "Versuche es mit einem anderen Suchbegriff."
+        }
       },
       "language": {
         "label": "Sprache",
@@ -138,12 +212,24 @@
       "navigation": "Navigationsmenü",
       "moveToPhase": "Zu {{phase}} wechseln",
       "phases": "Phasennavigation",
-      "toggle": "{{var}} umschalten"
+      "sort": {
+        "label": "Sortieren nach",
+        "asc": "Aufsteigend sortieren",
+        "desc": "Absteigend sortieren",
+        "created": "Erstelldatum",
+        "title": "Titel",
+        "updated": "Letzte Aktualisierung",
+        "user": "Nutzer*in"
+      },
+      "toggle": "{{var}} umschalten",
+      "count": {
+        "ofTotal": "{{count}} von {{total}}"
+      }
     }
   },
   "actions": {
     "activate": "{{var}} aktivieren",
-    "add": "Neue {{var}}",
+    "add": "{{var}} hinzufügen",
     "addToParent": "Zu {{var}} hinzufügen",
     "agree": "Zustimmen",
     "archive": "Archivieren",
@@ -280,10 +366,11 @@
     }
   },
   "deletion": {
-    "confirm": "Bist du sicher, dass du die ausgewählte {{var}} löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden",
-    "headline": "Ausgewählte {{var}} löschen"
+    "confirm": "{{var}} löschen? Diese Aktion kann nicht rückgängig gemacht werden",
+    "headline": "{{var}} löschen"
   },
   "errors": {
+    "404": "Seite nicht gefunden",
     "boundary": "Etwas ist schiefgelaufen",
     "boundaryDetails": "Fehlerdetails",
     "boundaryMessage": "Wir entschuldigen uns für die Unannehmlichkeiten. Bitte versuche die Seite zu aktualisieren.",

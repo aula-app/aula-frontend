@@ -2,6 +2,7 @@
 @import url('/font/inconsolata/inconsolata.css');
 
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @import "./theme/tailwind-theme.css";
 @import "./theme/image-colors.css";
 
@@ -126,17 +127,17 @@ h1 {
   @apply text-4xl;
 }
 h2 {
-  @apply text-3xl;
-}
-h3 {
   @apply text-2xl;
 }
-h4 {
+h3 {
   @apply text-xl;
+}
+h4 {
+  @apply text-lg;
 }
 
 h5 {
-  @apply text-lg;
+  @apply text-lg font-extrabold;
 }
 
 h1, h2, h3, h4, h5, h6 {

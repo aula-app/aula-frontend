@@ -12,6 +12,8 @@ interface Props extends React.ComponentProps<typeof TextField> {
   required?: boolean;
   defaultValue?: string | number;
   onChange?: (...event: any[]) => void;
+  /** Render the menu in place — portaled menus are unclickable inside a native `<dialog>` (v2 Modal). */
+  disableMenuPortal?: boolean;
 }
 
 /**
@@ -25,6 +27,7 @@ const SelectField: React.FC<Props> = ({
   defaultValue,
   disabled = false,
   required = false,
+  disableMenuPortal = false,
   sx,
   ...restOfProps
 }) => {
@@ -51,6 +54,7 @@ const SelectField: React.FC<Props> = ({
             slotProps={{
               select: {
                 MenuProps: {
+                  disablePortal: disableMenuPortal,
                   PaperProps: {
                     'data-testid': `select-field-${name}-list`,
                   } as any,

@@ -1,12 +1,15 @@
 import Icon from '@/components/new/Icon';
+import Collapse from '@/v2/components/ui/Collapse';
 import { KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { twMerge } from 'tailwind-merge';
 
 export interface SelectOption {
   value: string;
   label: string;
 }
 
-interface SelectInputProps {
+export interface SelectInputProps {
   id?: string;
   label?: string;
   options: SelectOption[];
@@ -16,7 +19,9 @@ interface SelectInputProps {
   helperText?: string;
   disabled?: boolean;
   required?: boolean;
+  dense?: boolean;
   className?: string;
+  'data-testid'?: string;
 }
 
 const SelectInput = ({
@@ -29,8 +34,11 @@ const SelectInput = ({
   helperText,
   disabled = false,
   required = false,
+  dense = false,
   className,
+  'data-testid': dataTestId,
 }: SelectInputProps) => {
+  const { t } = useTranslation();
   const generatedId = useId();
   const inputId = id || generatedId;
   const listboxId = `${inputId}-listbox`;
@@ -88,7 +96,23 @@ const SelectInput = ({
         break;
       case 'ArrowUp':
         e.preventDefault();
+        if (!open) {
+          openDropdown();
+          break;
+        }
         setFocusedIndex((i) => Math.max(i - 1, 0));
+        break;
+      case 'Home':
+        if (open) {
+          e.preventDefault();
+          setFocusedIndex(0);
+        }
+        break;
+      case 'End':
+        if (open) {
+          e.preventDefault();
+          setFocusedIndex(options.length - 1);
+        }
         break;
       case 'Escape':
         setOpen(false);
@@ -97,8 +121,8 @@ const SelectInput = ({
   };
 
   return (
-    <div ref={containerRef} className="flex flex-col w-full">
-      <div className="relative">
+    <div ref={containerRef} className={twMerge('flex flex-col w-fit', className)}>
+      <div className="relative w-full">
         <button
           ref={triggerRef}
           id={inputId}
@@ -111,21 +135,21 @@ const SelectInput = ({
           aria-disabled={disabled || undefined}
           aria-describedby={[errorId, helperId].filter(Boolean).join(' ') || undefined}
           aria-invalid={!!error || undefined}
+          aria-activedescendant={open && focusedIndex >= 0 ? `${listboxId}-option-${focusedIndex}` : undefined}
           disabled={disabled}
+          data-testid={dataTestId}
           onClick={() => (open ? setOpen(false) : openDropdown())}
           onKeyDown={handleKeyDown}
           className={[
-            'peer block w-full rounded-lg border border-input-border bg-transparent px-3 pt-4 pb-2 pr-10 shadow-inner',
+            'peer flex w-full items-center rounded-lg border border-input-border bg-transparent shadow-inner focus-within:outline-1',
+            dense ? 'h-9 px-3' : 'h-12 px-4',
             'text-sm text-left text-foreground transition-colors duration-200',
             'hover:border-input-border-hover',
             'disabled:cursor-not-allowed disabled:opacity-50',
-            'border-current outline-2 outline-current',
-            className,
-          ]
-            .filter(Boolean)
-            .join(' ')}
+            error ? 'border-error outline-error-fg focus:border-error-fg' : 'outline-current focus:border-current',
+          ].join(' ')}
         >
-          <span className={hasValue ? 'text-foreground' : 'invisible select-none'}>
+          <span className={twMerge(hasValue ? 'text-foreground' : 'invisible select-none', 'text-nowrap pr-6')}>
             {selectedOption?.label ?? '\u00A0'}
           </span>
         </button>
@@ -136,7 +160,7 @@ const SelectInput = ({
             className={[
               'pointer-events-none absolute left-3 origin-left text-sm transition-all duration-200 bg-background px-0.5',
               hasValue || open ? 'top-0 -translate-y-1/2 scale-75' : 'top-1/2 -translate-y-1/2 scale-100',
-              error ? 'text-error-fg' : open ? 'text-primary' : 'text-muted',
+              error ? 'text-error-fg' : 'text-current',
             ].join(' ')}
           >
             {label}
@@ -145,7 +169,7 @@ const SelectInput = ({
                 <span aria-hidden="true" className="ml-0.5">
                   *
                 </span>
-                <span className="sr-only">(required)</span>
+                <span className="sr-only">{t('v2.form.validation.required')}</span>
               </>
             )}
           </label>
@@ -155,29 +179,32 @@ const SelectInput = ({
           aria-hidden="true"
           className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         >
-          <Icon type="chevronDown" size="1.25em" className="text-muted" />
+          <Icon type="chevronDown" size="0.75em" className="text-muted mt-0.5" />
         </span>
 
-        {open && (
+        <Collapse open={open} className="absolute z-50 mt-1 w-full">
           <ul
             id={listboxId}
             role="listbox"
             aria-label={label}
-            className="absolute z-50 mt-1 w-full rounded-lg border border-input-border bg-background shadow-md overflow-auto max-h-60 py-1"
+            data-testid={dataTestId ? `${dataTestId}-list` : undefined}
+            className="rounded-lg border border-input-border bg-background shadow-md overflow-auto max-h-60 py-1"
           >
             {options.map((option, i) => (
               <li
                 key={option.value}
+                id={`${listboxId}-option-${i}`}
                 role="option"
                 aria-selected={option.value === value}
+                data-testid={dataTestId ? `${dataTestId}-option-${option.value}` : undefined}
                 onMouseDown={(e) => {
                   e.preventDefault();
                   select(option.value);
                 }}
                 onMouseEnter={() => setFocusedIndex(i)}
                 className={[
-                  'px-3 py-2 text-sm cursor-pointer transition-colors duration-100',
-                  option.value === value ? 'text-primary font-medium' : 'text-foreground',
+                  'px-3 py-2 text-sm cursor-pointer transition-colors duration-100 text-nowrap',
+                  option.value === value ? 'text-current font-medium' : 'text-muted',
                   focusedIndex === i ? 'bg-primary/10' : 'hover:bg-primary/5',
                 ].join(' ')}
               >
@@ -185,27 +212,21 @@ const SelectInput = ({
               </li>
             ))}
           </ul>
-        )}
+        </Collapse>
       </div>
 
-      <div
-        className={`grid transition-all duration-200 ease-in-out ${
-          error || helperText ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-        }`}
-      >
-        <div className="overflow-hidden">
-          {error ? (
-            <span id={errorId} role="alert" className="block pt-1 px-1 text-xs text-error-fg">
-              <Icon type="alert" className="inline-block mr-1 mb-0.5" />
-              {error}
-            </span>
-          ) : (
-            <span id={helperId} className="block pt-1 px-1 text-xs text-muted">
-              {helperText}
-            </span>
-          )}
-        </div>
-      </div>
+      <Collapse open={!!(error || helperText)}>
+        {error ? (
+          <span id={errorId} role="alert" className="block pt-1 px-1 text-xs text-error-fg">
+            <Icon type="alert" className="inline-block mr-1 mb-0.5" />
+            {error}
+          </span>
+        ) : (
+          <span id={helperId} className="block pt-1 px-1 text-xs text-muted">
+            {helperText}
+          </span>
+        )}
+      </Collapse>
     </div>
   );
 };

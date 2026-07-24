@@ -1,18 +1,26 @@
 import { usePlacement } from '@/v2/utils/placement';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useId } from 'react';
+import Collapse from '../Collapse';
 import { useDropdown } from './useDropdown';
+
+export interface DropdownContentApi {
+  close: () => void;
+  focusTrigger: () => void;
+}
 
 interface DropdownProps {
   children: React.ReactElement;
-  content: ReactNode;
+  content: ReactNode | ((api: DropdownContentApi) => ReactNode);
+  role?: 'listbox' | 'menu' | 'dialog';
   'aria-label'?: string;
 }
 
-const Dropdown = ({ children, content, 'aria-label': ariaLabel }: DropdownProps) => {
+const Dropdown = ({ children, content, role = 'listbox', 'aria-label': ariaLabel }: DropdownProps) => {
   const { isOpen, toggle, close, focusTrigger, wrapperRef } = useDropdown();
-  const { verticalClass, horizontalClass, cornerClass, originClass } = usePlacement(wrapperRef);
+  const { verticalClass, horizontalClass, cornerClass } = usePlacement(wrapperRef);
+  const panelId = useId();
 
-  const panel = wrapperRef.current?.querySelector('[role="listbox"]');
+  const panel = wrapperRef.current?.querySelector('[data-dropdown-panel]');
 
   const trigger = React.cloneElement(children, {
     onClick: (e: React.MouseEvent) => {
@@ -25,16 +33,19 @@ const Dropdown = ({ children, content, 'aria-label': ariaLabel }: DropdownProps)
       if (!panel?.contains(e.relatedTarget as Node)) close();
     },
     'aria-expanded': isOpen,
-    'aria-haspopup': 'listbox',
+    'aria-haspopup': role,
+    'aria-controls': panelId,
   });
 
   return (
     <div ref={wrapperRef} className="relative inline-flex items-center justify-center">
       {trigger}
-      <div
-        role="listbox"
+      <Collapse
+        open={isOpen}
+        id={panelId}
+        data-dropdown-panel
+        role={role}
         aria-label={ariaLabel}
-        inert={!isOpen ? '' : undefined}
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => {
           close();
@@ -47,13 +58,13 @@ const Dropdown = ({ children, content, 'aria-label': ariaLabel }: DropdownProps)
             focusTrigger();
           }
         }}
-        className={`absolute z-50 min-w-max rounded-2xl overflow-clip bg-surface text-foreground shadow-md p-0.5
-          transition-[opacity,transform] duration-150 transform-gpu
-          ${verticalClass} ${horizontalClass} ${cornerClass} ${originClass}
-          ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}
+        className={`absolute z-50 min-w-max rounded-2xl overflow-clip bg-surface text-foreground shadow-md
+          ${verticalClass} ${horizontalClass} ${cornerClass}
+          ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+        innerClass="p-0.5"
       >
-        {content}
-      </div>
+        {typeof content === 'function' ? content({ close, focusTrigger }) : content}
+      </Collapse>
     </div>
   );
 };

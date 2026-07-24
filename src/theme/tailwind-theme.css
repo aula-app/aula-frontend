@@ -16,7 +16,7 @@
 :root {
   /* --- Layout --- */
   --color-background: hsl(0, 0%, 100%);
-  --color-surface: hsl(210, 15%, 88%);
+  --color-surface: hsl(215, 10%, 95%);
   --color-shade: hsl(210, 15%, 12%);
 
   /* --- Content / Text --- */
@@ -131,6 +131,7 @@
   /* --- Brand --- */
   --color-primary: var(--color-primary);
   --color-primary-fg: var(--color-foreground);
+  
   --color-secondary: var(--color-secondary);
   --color-secondary-fg: var(--color-muted);
 

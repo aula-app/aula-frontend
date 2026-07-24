@@ -4,10 +4,6 @@ import { useAppStore } from '@/store/AppStore';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-/**
- * Renders "About" view (English)
- * url: /about
- */
 const AboutViewEN = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();

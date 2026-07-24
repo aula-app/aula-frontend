@@ -14,12 +14,13 @@ export const TEST_IDS = {
   // Content reporting (ReportButton)
   REPORT_DIALOG: 'report-dialog',
 
-  // Search & sort (ScopeHeader)
+  // Search & sort (ScopeHeader, v2 ScopeTitle)
   SEARCH_FIELD: 'search-field',
   SEARCH_BUTTON: 'search-button',
   SORT_SELECT: 'sort-select',
   SORT_BUTTON: 'sort-button',
   SORT_DIRECTION_BUTTON: 'sort-direction-button',
+  SCOPE_CONTROLS: 'scope-controls',
 
   // Filtering (FilterBar)
   FILTER_TOGGLE_BUTTON: 'filter-toggle-button',
@@ -32,6 +33,17 @@ export const TEST_IDS = {
   CONFIRM_BUTTON: 'confirm-button',
   CANCEL_BUTTON: 'cancel-button',
   DELETE_BUTTON: 'delete-button',
+
+  // Idea card actions (v2 Idea, Edit/Delete/ReportIdeaButton)
+  ADD_IDEA_BUTTON: 'add-idea-button',
+  IDEA_MORE_MENU: 'idea-more-menu',
+  IDEA_MORE_OPTIONS_PANEL: 'idea-more-options-panel',
+  LIKE_BUTTON: 'like-button',
+  EDIT_BUTTON: 'edit-button',
+  REPORT_BUTTON: 'report-button',
+  SHARE_BUTTON: 'share-button',
+  DELETE_IDEA_CONFIRM: 'delete-idea-confirm',
+  DELETE_IDEA_CANCEL: 'delete-idea-cancel',
 
   // Offline state (PublicOfflineView)
   SCHOOL_OFFLINE_VIEW: 'school-offline-view',

@@ -5,6 +5,7 @@ import AboutView from '@/v2/views/private/About';
 import NotFoundView from '@/v2/views/private/NotFound';
 import RoomLayout from '@/v2/views/private/Room';
 import IdeaView from '@/views/Idea';
+import IdeasView from '@/v2/views/private/Room/Ideas';
 import IdeasBoxView from '@/views/IdeasBox';
 import UserMessagesView from '@/views/Messages';
 import AnnouncementView from '@/views/Messages/Announcement';
@@ -17,7 +18,7 @@ import AnnouncementsView from '@/views/Settings/Announcements';
 import BoxesView from '@/views/Settings/Boxes';
 import BugsView from '@/views/Settings/Bugs';
 import ConfigView from '@/views/Settings/Config';
-import IdeasView from '@/views/Settings/Ideas';
+import IdeasSettingsView from '@/views/Settings/Ideas';
 import MessagesView from '@/views/Settings/Messages';
 import { UserProfileView } from '@/views/Settings/Profile';
 import ReportsView from '@/views/Settings/Reports';
@@ -57,11 +58,12 @@ const PrivateRoutes = () => {
       <Route path="bugs/:report_id" element={<ReportView />} />
       <Route path="requests/:report_id" element={<ReportView />} />
       <Route path="phase/:phase" element={<PhasesView />} />
-      <Route path="room/:room_id/phase/:phase" element={<RoomLayout />}>
-        <Route path="" element={<RoomPhaseView />} />
-        <Route path="idea/:idea_id" element={<IdeaView />} />
-        <Route path="idea-box/:box_id" element={<IdeasBoxView />} />
-        <Route path="idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
+      <Route path="room/:room_id/" element={<RoomLayout />}>
+        <Route path="phase/0" element={<IdeasView />} />
+        <Route path="phase/:phase" element={<RoomPhaseView />} />
+        <Route path="phase/:phase/idea/:idea_id" element={<IdeaView />} />
+        <Route path="phase/:phase/idea-box/:box_id" element={<IdeasBoxView />} />
+        <Route path="phase/:phase/idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
       </Route>
       <Route path="settings/profile" element={<UserProfileView />} />
       {checkPermissions('announcements', 'viewAll') && (
@@ -69,7 +71,7 @@ const PrivateRoutes = () => {
       )}
       {checkPermissions('boxes', 'viewAll') && <Route path="settings/boxes" element={<BoxesView />} />}
       {checkPermissions('configs', 'viewAll') && <Route path="settings/configuration" element={<ConfigView />} />}
-      {checkPermissions('ideas', 'viewAll') && <Route path="settings/ideas" element={<IdeasView />} />}
+      {checkPermissions('ideas', 'viewAll') && <Route path="settings/ideas" element={<IdeasSettingsView />} />}
       {checkPermissions('messages', 'viewAll') && <Route path="settings/messages" element={<MessagesView />} />}
       {checkPermissions('reports', 'viewAll') && <Route path="settings/reports" element={<ReportsView />} />}
       {checkPermissions('reports', 'viewAll') && <Route path="settings/bugs" element={<BugsView />} />}
