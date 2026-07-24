@@ -5,11 +5,6 @@ import Layout from './Layout';
 import { useIsOnline } from '@/hooks/auth';
 import PrivateRoutes from '@/routes/PrivateRoutes';
 
-/**
- * Renders "Private Layout" composition
- * @component PrivateLayout
- */
-
 const PrivateLayout: FunctionComponent<{ children?: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const [online, setOnline] = useState(true);

@@ -34,7 +34,6 @@ const CategoryField: React.FC<CategoryFieldProps> = ({ value, onChange, disabled
     fetchCategories();
   }, []);
 
-  // Don't render if no categories available
   if (!loading && options.length === 0) {
     return null;
   }

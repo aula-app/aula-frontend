@@ -82,11 +82,6 @@ const SideBar: FC<SideBarProps> = ({ menuOpen = false, onClose }) => {
           <Logout />
         </div>
       </nav>
-      {/* <div
-        className={`fixed z-10 top-0 left-0 w-full h-full bg-shade ${menuOpen ? 'opacity-50 dark:opacity-75' : 'opacity-0 pointer-events-none'} transition-opacity duration-150 ease-in-out md:hidden`}
-        aria-hidden="true"
-        onClick={onClose}
-      /> */}
     </div>
   );
 };

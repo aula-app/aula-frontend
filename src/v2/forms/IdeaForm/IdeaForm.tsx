@@ -94,7 +94,6 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-3" data-testid="idea-form">
-      {/* Room - only show if no context */}
       {!hasRoomContext && (
         <Controller
           name="room"
@@ -119,7 +118,6 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
         )}
       />
 
-      {/* Title */}
       <Controller
         name="title"
         control={control}
@@ -135,7 +133,6 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
         )}
       />
 
-      {/* Content */}
       <Controller
         name="content"
         control={control}
@@ -153,7 +150,6 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
         )}
       />
 
-      {/* Box and Category */}
       <div className="flex gap-4">
         {!hasBoxContext && (
           <Controller
@@ -174,7 +170,6 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
         )}
       </div>
 
-      {/* Error Summary */}
       {((errors.root as any)?.message || error) && (
         <div className="flex items-center justify-between text-sm text-red-600 p-3 bg-red-50 rounded-lg" role="alert">
           <span>{(errors.root as any)?.message || error}</span>
@@ -191,7 +186,6 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
         </div>
       )}
 
-      {/* Action Buttons */}
       <div className="flex gap-3 justify-end">
         <Button text color="error" onClick={handleCancel} disabled={isLoading} data-testid="idea-form-cancel">
           {t('actions.cancel')}

@@ -61,10 +61,6 @@ const VotingIcon: IconType = ({ size = '1em', color = 'currentColor', style, ...
     ...props,
   });
 
-/**
- * Icon component for the application
- * Only includes icons that are currently in use
- */
 export const ICONS = {
   about: HiOutlineInformationCircle,
   add: HiOutlinePlus,

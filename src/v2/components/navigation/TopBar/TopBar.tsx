@@ -11,10 +11,6 @@ interface TopBarProps {
   showMenu?: boolean;
 }
 
-/**
- * TopBar component that provides navigation, breadcrumbs, and user controls
- * @component TopBar
- */
 const TopBar: React.FC<TopBarProps> = ({ onToggleMenu, menuOpen = false, showMenu = true }) => {
   const { t } = useTranslation();
   const [appState] = useAppStore();
