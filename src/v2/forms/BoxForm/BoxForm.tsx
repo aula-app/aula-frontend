@@ -114,7 +114,7 @@ const BoxForm: React.FC<BoxFormProps> = ({
         control={control}
         render={({ field }) => (
           <RichEditor
-            label={t('settings.columns.content')}
+            label={t('settings.columns.description_public')}
             value={field.value}
             onChange={field.onChange}
             disabled={isLoading}
