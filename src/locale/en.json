@@ -223,7 +223,9 @@
         "created": "Creation date",
         "title": "Title",
         "updated": "Last update",
-        "user": "User"
+        "user": "User",
+        "name": "Name",
+        "ideas": "Number of ideas"
       },
       "toggle": "Toggle {{var}}",
       "count": {

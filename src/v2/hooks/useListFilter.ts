@@ -4,8 +4,11 @@ import { useTranslation } from 'react-i18next';
 type SortableFields = {
   created?: string;
   last_updated?: string;
+  last_update?: string;
   displayname?: string;
   title?: string;
+  name?: string;
+  ideas_num?: number;
 };
 
 export type OrderKey = keyof SortableFields;
@@ -17,11 +20,17 @@ const orderConfig: Record<OrderKey, { labelKey: string; compare: (a: SortableFie
     labelKey: 'v2.ui.sort.updated',
     compare: (a, b) => (b.last_updated ?? '').localeCompare(a.last_updated ?? ''),
   },
+  last_update: {
+    labelKey: 'v2.ui.sort.updated',
+    compare: (a, b) => (b.last_update ?? '').localeCompare(a.last_update ?? ''),
+  },
   displayname: {
     labelKey: 'v2.ui.sort.user',
     compare: (a, b) => (a.displayname ?? '').localeCompare(b.displayname ?? ''),
   },
   title: { labelKey: 'v2.ui.sort.title', compare: (a, b) => (a.title ?? '').localeCompare(b.title ?? '') },
+  name: { labelKey: 'v2.ui.sort.name', compare: (a, b) => (a.name ?? '').localeCompare(b.name ?? '') },
+  ideas_num: { labelKey: 'v2.ui.sort.ideas', compare: (a, b) => (b.ideas_num ?? 0) - (a.ideas_num ?? 0) },
 };
 
 export interface ListFilterConfig<T> {

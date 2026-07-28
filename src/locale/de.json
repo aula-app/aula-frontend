@@ -223,7 +223,9 @@
         "created": "Erstelldatum",
         "title": "Titel",
         "updated": "Letzte Aktualisierung",
-        "user": "Nutzer*in"
+        "user": "Nutzer*in",
+        "name": "Name",
+        "ideas": "Anzahl Ideen"
       },
       "toggle": "{{var}} umschalten",
       "count": {
