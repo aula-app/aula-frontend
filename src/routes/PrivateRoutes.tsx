@@ -4,8 +4,9 @@ import { checkPermissions } from '@/utils';
 import AboutView from '@/v2/views/private/About';
 import NotFoundView from '@/v2/views/private/NotFound';
 import RoomLayout from '@/v2/views/private/Room';
+import Ideas from '@/v2/views/private/Room/Ideas';
+import Boxes from '@/v2/views/private/Room/Boxes';
 import IdeaView from '@/views/Idea';
-import IdeasView from '@/v2/views/private/Room/Ideas';
 import IdeasBoxView from '@/views/IdeasBox';
 import UserMessagesView from '@/views/Messages';
 import AnnouncementView from '@/views/Messages/Announcement';
@@ -13,7 +14,6 @@ import MessageView from '@/views/Messages/Message';
 import ReportView from '@/views/Messages/Report';
 import OfflineView from '@/views/OfflineView';
 import PhasesView from '@/views/Phases';
-import RoomPhaseView from '@/views/Room/RoomPhaseView';
 import AnnouncementsView from '@/views/Settings/Announcements';
 import BoxesView from '@/views/Settings/Boxes';
 import BugsView from '@/views/Settings/Bugs';
@@ -59,8 +59,8 @@ const PrivateRoutes = () => {
       <Route path="requests/:report_id" element={<ReportView />} />
       <Route path="phase/:phase" element={<PhasesView />} />
       <Route path="room/:room_id/" element={<RoomLayout />}>
-        <Route path="phase/0" element={<IdeasView />} />
-        <Route path="phase/:phase" element={<RoomPhaseView />} />
+        <Route path="phase/0" element={<Ideas />} />
+        <Route path="phase/:phase" element={<Boxes />} />
         <Route path="phase/:phase/idea/:idea_id" element={<IdeaView />} />
         <Route path="phase/:phase/idea-box/:box_id" element={<IdeasBoxView />} />
         <Route path="phase/:phase/idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />

@@ -86,6 +86,10 @@
       }
     },
     "scopes": {
+      "boxes": {
+        "singular": "Box",
+        "plural": "Boxen"
+      },
       "ideas": {
         "singular": "Idee",
         "plural": "Ideen",

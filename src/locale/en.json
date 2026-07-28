@@ -86,6 +86,10 @@
       }
     },
     "scopes": {
+      "boxes": {
+        "singular": "box",
+        "plural": "boxes"
+      },
       "ideas": {
         "singular": "idea",
         "plural": "ideas",
