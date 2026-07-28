@@ -1,3 +1,4 @@
+import BoxForm from './BoxForm/BoxForm';
 import IdeaForm from './IdeaForm';
 
-export { IdeaForm };
+export { BoxForm, IdeaForm };

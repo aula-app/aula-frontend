@@ -1,6 +1,9 @@
+import { addBox } from '@/services/boxes';
 import { TEST_IDS } from '@/test-ids';
 import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
+import { checkPermissions } from '@/utils';
+import Fab from '@/v2/components/button/Fab/Fab';
 import IconButton from '@/v2/components/button/IconButton';
 import SelectInput from '@/v2/components/input/SelectInput';
 import TextInput from '@/v2/components/input/TextInput';
@@ -9,8 +12,10 @@ import FeedbackState from '@/v2/components/ui/FeedbackState';
 import Icon from '@/v2/components/ui/Icon/Icon';
 import ScopeTitle from '@/v2/components/ui/ScopeTitle';
 import ScrollList from '@/v2/components/ui/ScrollList';
+import { BoxForm } from '@/v2/forms';
 import { ListFilterConfig, useListFilter } from '@/v2/hooks/useListFilter';
-import React from 'react';
+import { useModal } from '@/v2/hooks/useModal';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import BoxCard from './BoxCard';
@@ -25,7 +30,9 @@ const Boxes: React.FC = () => {
   const { t } = useTranslation();
   const { room_id, phase } = useParams<{ room_id: string; phase: `${RoomPhases}` }>();
   const currentPhase = phase ?? '0';
-  const { boxes, isLoading, error } = useBoxesByRoom(room_id, currentPhase);
+  const { openModal, closeModal } = useModal();
+  const { boxes, isLoading, error, refetch } = useBoxesByRoom(room_id, currentPhase);
+  const [formError, setFormError] = useState<string | null>(null);
   const {
     visibleItems: visibleBoxes,
     searchQuery,
@@ -36,6 +43,34 @@ const Boxes: React.FC = () => {
     reversed,
     setReversed,
   } = useListFilter(boxes, boxesFilterConfig, `boxes-${room_id}-${currentPhase}`);
+
+  const addBoxLabel = t('v2.ui.actions.add', { var: t('v2.scopes.boxes.singular') });
+
+  const handleAddBox = async (data: any): Promise<boolean> => {
+    try {
+      setFormError(null);
+      const response = await addBox({
+        room_id: data.room || room_id,
+        phase_id: Number(currentPhase) as RoomPhases,
+        name: data.name,
+        description_public: data.description_public,
+      });
+
+      if (response.error) {
+        setFormError(response.error);
+        return false;
+      }
+
+      closeModal();
+      refetch();
+      return true;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : t('errors.default');
+      setFormError(errorMessage);
+      console.error('Error adding box:', error);
+      return false;
+    }
+  };
 
   return (
     <ListPageLayout
@@ -77,6 +112,29 @@ const Boxes: React.FC = () => {
             <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="1.5em" />
           </IconButton>
         </ScopeTitle>
+      }
+      action={
+        !isLoading &&
+        checkPermissions('boxes', 'create') && (
+          <Fab
+            icon={<Icon type="add" />}
+            aria-label={addBoxLabel}
+            data-testid={TEST_IDS.ADD_BOX_BUTTON}
+            onClick={() =>
+              openModal(
+                addBoxLabel,
+                <BoxForm
+                  contextRoomId={room_id}
+                  onSubmit={handleAddBox}
+                  onCancel={closeModal}
+                  error={formError}
+                  onErrorClose={() => setFormError(null)}
+                />
+              )
+            }
+            className="fixed bottom-4 self-center z-10"
+          />
+        )
       }
     >
       {isLoading && (

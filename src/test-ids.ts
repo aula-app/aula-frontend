@@ -34,6 +34,9 @@ export const TEST_IDS = {
   CANCEL_BUTTON: 'cancel-button',
   DELETE_BUTTON: 'delete-button',
 
+  // Box actions (v2 Boxes)
+  ADD_BOX_BUTTON: 'add-box-button',
+
   // Idea card actions (v2 Idea, Edit/Delete/ReportIdeaButton)
   ADD_IDEA_BUTTON: 'add-idea-button',
   IDEA_MORE_MENU: 'idea-more-menu',
