@@ -1,6 +1,6 @@
 import Icon from '@/v2/components/ui/Icon';
 import IconButton from '@/v2/components/button/IconButton';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const TRANSITION_MS = 300;
@@ -14,6 +14,7 @@ interface ModalProps {
 
 const Modal = ({ open, onClose, title, children }: ModalProps) => {
   const { t } = useTranslation();
+  const titleId = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isVisible, setVisible] = useState(false);
 
@@ -54,22 +55,25 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
     <dialog
       ref={dialogRef}
       data-testid="modal"
-      aria-label={title}
+      aria-labelledby={titleId}
       onClick={handleBackdropClick}
       className="fixed inset-x-0 bottom-0 top-auto m-0 w-full max-w-full bg-transparent p-0 max-h-none overflow-visible"
     >
       <div
-        className={`w-full max-h-[90vh] rounded-t-2xl bg-background text-foreground shadow-2xl border-t border-secondary
+        className={`w-full max-h-[90vh] rounded-t-3xl bg-background text-foreground shadow-2xl border-t border-secondary
           pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]
-          transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] transform-gpu
-          ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
+          transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]
+          ${isVisible ? '' : 'translate-y-full'}`}
       >
-        <div className="relative overflow-y-auto max-h-[90vh]">
+        <div className="relative overflow-y-auto max-h-[90vh] p-6">
           <div className="absolute top-2 right-2">
             <IconButton aria-label={t('ui.common.dismiss')} onClick={onClose}>
               <Icon type="close" aria-hidden="true" />
             </IconButton>
           </div>
+          <h2 id={titleId} className="mb-4 pr-8 text-lg font-semibold text-foreground">
+            {title}
+          </h2>
           {children}
         </div>
       </div>

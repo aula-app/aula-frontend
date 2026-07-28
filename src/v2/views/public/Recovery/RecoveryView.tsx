@@ -49,7 +49,7 @@ const RecoveryPasswordView = () => {
   return (
     <form onSubmit={handleSubmit(wrappedSubmit)} noValidate className="flex-1 flex flex-col gap-4">
       <h1>{t('v2.page.recovery.title')}</h1>
-      <div className="rounded-box flex flex-col">
+      <div className="rounded-box flex flex-col gap-2">
         {showField && (
           <InstanceCodeField
             value={instanceCode}

@@ -1,3 +1,4 @@
+import { TEST_IDS } from '../../../src/test-ids';
 import { test, expect } from '../../fixtures/aula-tests-fixture';
 import * as entities from '../../helpers/entities';
 import * as rooms from '../../interactions/admin-settings/rooms';
@@ -22,7 +23,8 @@ test.describe.serial('Room Management - Creation and Permissions', () => {
 
     await test.step('User - Navigate to created room', async () => {
       await navigation.goToRoom(userPage, room.name);
-      await expect(userPage.getByText(room.name)).toBeVisible();
+      // the room name only surfaces in the breadcrumb toggle's accessible name
+      await expect(userPage.getByTestId(TEST_IDS.BREADCRUMB_TOGGLE)).toHaveAccessibleName(new RegExp(room.name));
     });
 
     await test.step('Admin - Delete room via settings', async () => {

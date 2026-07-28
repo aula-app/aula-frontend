@@ -21,12 +21,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const classes = twMerge(
       'relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 shadow-xs',
-      'text-sm font-medium transition-colors duration-200 min-h-11 min-w-11 cursor-pointer hover:bg-shadow active:bg-shadow',
-      `outline-${color || 'current'}`,
+      'text-sm font-medium transition duration-200 min-h-11 min-w-11 cursor-pointer',
+      outlined || text
+        ? 'hover:bg-shadow active:bg-shadow'
+        : 'hover:brightness-95 active:brightness-90 dark:hover:brightness-110 dark:active:brightness-125',
+      `outline-${color ? `${color}-fg` : 'current'}`,
       'disabled:cursor-not-allowed disabled:opacity-50',
       outlined
         ? color
-          ? `border border-${color} text-${color}-fg`
+          ? `border border-${color}-fg text-${color}-fg`
           : 'border border-current text-current'
         : text
           ? color

@@ -3,7 +3,9 @@
     "alt": {
       "logo": "Aula: Education Platform Logo",
       "microphone": "An illustration of an owl with a microphone, representing the announcement feature",
-      "sleeping": "Sleeping owl illustration"
+      "sad": "An illustration of a sad owl, representing the error page",
+      "sleeping": "Sleeping owl illustration",
+      "winking": "An illustration of a winking owl, representing the error page"
     },
     "form": {
       "code": {
@@ -83,6 +85,20 @@
         "hint": "This link is invalid. Please make sure you copied the entire link from your email and try again."
       }
     },
+    "scopes": {
+      "ideas": {
+        "singular": "idea",
+        "plural": "ideas",
+        "stats": {
+          "like": "{{count}} like",
+          "likes": "{{count}} likes",
+          "vote": "{{count}} vote",
+          "votes": "{{count}} votes",
+          "comment": "{{count}} comment",
+          "comments": "{{count}} comments"
+        }
+      }
+    },
     "ui": {
       "a11y": {
         "navigation": "Navigation menu",
@@ -94,9 +110,11 @@
         }
       },
       "actions": {
+        "add": "Add {{var}}",
         "agree": "Agree",
         "print": "Print this page",
-        "report": "Report a bug"
+        "report": "Report a bug",
+        "search": "Search"
       },
       "announcement": {
         "title": "Announcement",
@@ -108,8 +126,12 @@
         "clear": "Clear",
         "close": "Close",
         "confirm": "Confirm",
-        "submit": "Submit",
-        "edit": "Edit"
+        "delete": "Delete",
+        "edit": "Edit",
+        "more": "More options",
+        "report": "Report content",
+        "share": "Copy idea link",
+        "submit": "Submit"
       },
       "code": {
         "button": "Code: {{var}}",
@@ -119,6 +141,58 @@
       },
       "darkMode": {
         "label": "Dark mode"
+      },
+      "dialog": {
+        "delete": {
+          "title": "Caution!",
+          "description": "Are you sure you want to continue?\nThis action cannot be undone."
+        }
+      },
+      "editor": {
+        "label": "Text editor",
+        "toolbar": "Text formatting",
+        "bold": "Bold",
+        "italic": "Italic",
+        "strikethrough": "Strikethrough",
+        "bulletList": "Bullet list",
+        "orderedList": "Numbered list",
+        "emoji": "Add emoji",
+        "undo": "Undo",
+        "redo": "Redo",
+        "emojis": {
+          "smile": "Smiling face",
+          "laugh": "Laughing face",
+          "heart": "Red heart",
+          "thumbsUp": "Thumbs up",
+          "party": "Party popper",
+          "sparkles": "Sparkles",
+          "rocket": "Rocket",
+          "bulb": "Light bulb",
+          "memo": "Memo",
+          "check": "Check mark"
+        }
+      },
+      "error": {
+        "empty": {
+          "title": "Nothing here yet!",
+          "description": "Check back soon or create something new to get started."
+        },
+        "fetch": {
+          "title": "We had trouble loading that",
+          "description": "Please try again. If it keeps happening, let your teacher know."
+        },
+        "generic": {
+          "title": "Oops! Something went wrong",
+          "description": "That wasn't supposed to happen. Please try again."
+        },
+        "network": {
+          "title": "No internet connection",
+          "description": "Please check your connection and try again."
+        },
+        "search": {
+          "title": "No results found",
+          "description": "Try a different search term."
+        }
       },
       "language": {
         "label": "Language",
@@ -138,12 +212,24 @@
       "navigation": "Navigation menu",
       "moveToPhase": "Move to {{phase}}",
       "phases": "Phase navigation",
-      "toggle": "Toggle {{var}}"
+      "sort": {
+        "label": "Sort by",
+        "asc": "Sort ascending",
+        "desc": "Sort descending",
+        "created": "Creation date",
+        "title": "Title",
+        "updated": "Last update",
+        "user": "User"
+      },
+      "toggle": "Toggle {{var}}",
+      "count": {
+        "ofTotal": "{{count}} of {{total}}"
+      }
     }
   },
   "actions": {
     "activate": "Activate {{var}}",
-    "add": "New {{var}}",
+    "add": "Add {{var}}",
     "addToParent": "Add to {{var}}",
     "agree": "Agree",
     "archive": "Archive",
@@ -280,8 +366,8 @@
     }
   },
   "deletion": {
-    "confirm": "Are you sure you want to delete the selected {{var}}? This action cannot be undone",
-    "headline": "Delete selected {{var}}"
+    "confirm": "Delete {{var}}? This action cannot be undone",
+    "headline": "Delete {{var}}"
   },
   "errors": {
     "404": "Page not found",
@@ -292,7 +378,7 @@
     "accountSuspendDate": " until {{var}}",
     "accountSuspended": "Your account has been suspended{{var}}. Please contact your administrator",
     "appOutdated": "Your app is outdated. Please update aula to continue using it.",
-    "appBelowRecommended": "You are running an outdated aula version {{currentVersion}}. Please update as soon as possible.",
+    "appBelowRecommended": "You are running aula {{currentVersion}}, but we recommend updating to {{recommendedVersion}} to avoid issues.",
     "appOutdatedImage": "Winking character illustration reminding you to update the app",
     "databaseError": "Failed to fetch data",
     "default": "Something went wrong",

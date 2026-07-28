@@ -1,6 +1,4 @@
 import Icon from '@/components/new/Icon';
-import Button from '@/v2/components/button/Button/Button';
-import Tooltip from '@/v2/components/ui/Tooltip';
 import { useTranslation } from 'react-i18next';
 
 const PublicNotFoundView = () => {

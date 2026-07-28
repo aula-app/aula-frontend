@@ -71,7 +71,9 @@ const SetPasswordView = () => {
           error={codeError}
           isEditing={isEditing}
           onEditClick={startEditing}
-          onConfirmClick={() => { validateCode(); }}
+          onConfirmClick={() => {
+            validateCode();
+          }}
           disabled={codeLoading}
         />
       )}
@@ -95,7 +97,7 @@ const SetPasswordView = () => {
         </div>
       )}
 
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-2">
         <TextInput
           type="password"
           label={t('v2.form.passwordNew.label')}
