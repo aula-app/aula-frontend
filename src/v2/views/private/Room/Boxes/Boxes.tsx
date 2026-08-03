@@ -51,7 +51,7 @@ const Boxes: React.FC = () => {
       setFormError(null);
       const response = await addBox({
         room_id: data.room || room_id,
-        phase_id: Number(currentPhase) as RoomPhases,
+        phase_id: Number(data.phase_id) as RoomPhases,
         name: data.name,
         description_public: data.description_public,
       });
@@ -125,6 +125,7 @@ const Boxes: React.FC = () => {
                 addBoxLabel,
                 <BoxForm
                   contextRoomId={room_id}
+                  contextPhaseId={currentPhase}
                   onSubmit={handleAddBox}
                   onCancel={closeModal}
                   error={formError}
@@ -178,7 +179,7 @@ const Boxes: React.FC = () => {
         <ScrollList storageKey={`boxes-${room_id}-${currentPhase}`}>
           {visibleBoxes.map((box) => (
             <li key={box.hash_id}>
-              <BoxCard box={box} />
+              <BoxCard box={box} onChanged={refetch} />
             </li>
           ))}
         </ScrollList>

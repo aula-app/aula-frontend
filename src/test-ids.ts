@@ -34,10 +34,14 @@ export const TEST_IDS = {
   CANCEL_BUTTON: 'cancel-button',
   DELETE_BUTTON: 'delete-button',
 
-  // Box actions (v2 Boxes)
+  // Box actions (v2 Boxes / BoxCard MoreOptions)
   ADD_BOX_BUTTON: 'add-box-button',
+  BOX_MORE_MENU: 'box-more-menu',
+  BOX_MORE_OPTIONS_PANEL: 'box-more-options-panel',
+  DELETE_BOX_CONFIRM: 'delete-box-confirm',
+  DELETE_BOX_CANCEL: 'delete-box-cancel',
 
-  // Idea card actions (v2 Idea, Edit/Delete/ReportIdeaButton)
+  // Idea card actions (v2 Idea, Edit/Delete/ReportButton)
   ADD_IDEA_BUTTON: 'add-idea-button',
   IDEA_MORE_MENU: 'idea-more-menu',
   IDEA_MORE_OPTIONS_PANEL: 'idea-more-options-panel',

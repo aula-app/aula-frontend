@@ -6,6 +6,7 @@ import { BoxType } from '@/types/Scopes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import RoomField from '../fields/RoomField';
+import PhaseField from '../fields/PhaseField';
 import RichEditor from '@/v2/components/input/RichEditor';
 import { useDraftStorage } from '@/v2/hooks';
 
@@ -19,6 +20,8 @@ interface BoxFormProps {
   onCancel: () => void;
   isLoading?: boolean;
   contextRoomId?: string;
+  /** Phase to preselect when creating a box, e.g. the room's current phase. */
+  contextPhaseId?: string;
   error?: string | null;
   onErrorClose?: () => void;
 }
@@ -29,6 +32,7 @@ const BoxForm: React.FC<BoxFormProps> = ({
   onCancel,
   isLoading = false,
   contextRoomId,
+  contextPhaseId,
   error,
   onErrorClose,
 }) => {
@@ -40,18 +44,13 @@ const BoxForm: React.FC<BoxFormProps> = ({
     ...(hasRoomContext ? {} : { room: yup.string().required(t('forms.validation.required')) }),
     name: yup
       .string()
-      .max(
-        MAX_NAME_LENGTH,
-        t('forms.validation.titleTooLong', { scope: t('scopes.boxes.name'), max: MAX_NAME_LENGTH })
-      )
+      .max(MAX_NAME_LENGTH, t('forms.validation.titleTooLong', { scope: t('scopes.boxes.name'), max: MAX_NAME_LENGTH }))
       .required(t('forms.validation.required')),
     description_public: yup
       .string()
-      .max(
-        MAX_CHAR_COUNT,
-        t('forms.validation.contentTooLong', { scope: t('scopes.boxes.name'), max: MAX_CHAR_COUNT })
-      )
+      .max(MAX_CHAR_COUNT, t('forms.validation.contentTooLong', { scope: t('scopes.boxes.name'), max: MAX_CHAR_COUNT }))
       .optional(),
+    phase_id: yup.string().required(t('forms.validation.required')),
   });
 
   const form = useForm({
@@ -60,6 +59,7 @@ const BoxForm: React.FC<BoxFormProps> = ({
       room: contextRoomId || defaultValues?.room_hash_id || '',
       name: defaultValues?.name || '',
       description_public: defaultValues?.description_public || '',
+      phase_id: defaultValues?.phase_id || contextPhaseId || '10',
     },
   });
 
@@ -93,6 +93,20 @@ const BoxForm: React.FC<BoxFormProps> = ({
           render={({ field }) => <RoomField value={field.value} onChange={field.onChange} disabled={isLoading} />}
         />
       )}
+
+      <Controller
+        name="phase_id"
+        control={control}
+        render={({ field }) => (
+          <PhaseField
+            value={field.value}
+            onChange={field.onChange}
+            disabled={isLoading}
+            error={errors.phase_id ? (errors.phase_id.message as string) : undefined}
+            data-testid="box-form-phase"
+          />
+        )}
+      />
 
       <Controller
         name="name"
