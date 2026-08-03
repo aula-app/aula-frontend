@@ -34,6 +34,7 @@ export interface BoxType {
   room_id: number;
   room_hash_id: string;
   phase_id: `${RoomPhases}`;
+  phase_start: string | null;
   phase_duration_0: number;
   phase_duration_1: number;
   phase_duration_2: number;
