@@ -12,7 +12,6 @@ export async function cleanupTestData(opts: { keepAdminContext: boolean } = { ke
             console.info(`  ⚠️ Skipped: ${file}`);
             continue;
           }
-
           fs.unlinkSync(path.join(dir, file));
           console.info(`  ✅ Deleted: ${file}`);
         }

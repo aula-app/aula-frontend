@@ -1,12 +1,22 @@
-import { AppIconButton, AppLink } from '@/components';
-import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from '@/config';
-import { loginUser } from '@/services/login';
-import { completeSsoLink, initiateSso } from '@/services/sso';
-import { useAppStore } from '@/store';
-import { LoginFormValues } from '@/types/LoginTypes';
-import { localStorageGet, localStorageSet, parseJwt } from '@/utils';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Alert, Button, Collapse, Divider, InputAdornment, Stack, TextField, Typography } from '@mui/material';
+import { AppIconButton, AppLink } from "@/components";
+import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
+import { loginUser } from "@/services/login";
+import { completeSsoLink, initiateSso } from "@/services/sso";
+import { useAppStore } from "@/store";
+import { LoginFormValues } from "@/types/LoginTypes";
+import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Collapse,
+  Divider,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -137,7 +147,7 @@ const LoginView = () => {
     }
   };
 
-  const handleSsoLogin = async () => {
+  const handleSsoLogin = async (options: { loginHint?: string } = {}) => {
     const instanceApiUrl = localStorageGet('api_url');
     if (!instanceApiUrl) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
@@ -145,7 +155,7 @@ const LoginView = () => {
     }
     try {
       setSsoLoading(true);
-      window.location.href = await initiateSso(instanceApiUrl);
+      window.location.href = await initiateSso(instanceApiUrl, options);
     } catch {
       setSsoLoading(false);
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
@@ -172,6 +182,19 @@ const LoginView = () => {
     }
   }, [searchParams, t]);
 
+  // IdP-initiated entry (e.g. Eduplaces marketplace launch) lands here with
+  // ?via=eduplaces. The instance code is already in localStorage by the time
+  // we get here (the guard + InstanceCodeView ensure that). Trigger the SSO
+  // flow automatically, preserving the upstream login_hint so the user is
+  // not asked to identify themselves again at Eduplaces.
+  useEffect(() => {
+    if (searchParams.get('via') !== 'eduplaces') return;
+    if (!config.IS_SSO_ENABLED) return;
+    const loginHint = searchParams.get('login_hint') ?? undefined;
+    handleSsoLogin({ loginHint });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, config.IS_SSO_ENABLED]);
+
   useEffect(() => {
     (async () => {
       let runtimeConfig: RuntimeConfig;
@@ -185,6 +208,21 @@ const LoginView = () => {
       setConfig(runtimeConfig);
     })();
   }, []);
+
+  // When the user arrives from an IdP-initiated launch (e.g. Eduplaces
+  // marketplace) and SSO is enabled, the auto-trigger effect is already
+  // redirecting them to Keycloak. Show a status panel instead of the
+  // password form so they don't see a confusing flash.
+  if (searchParams.get('via') === 'eduplaces' && config.IS_SSO_ENABLED && loginError === '') {
+    return (
+      <Stack spacing={2} alignItems="center" sx={{ p: 4 }}>
+        <CircularProgress />
+        <Typography>
+          {t('auth.sso.bouncing', { defaultValue: 'Signing you in via Eduplaces…' })}
+        </Typography>
+      </Stack>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -292,15 +330,14 @@ const LoginView = () => {
               </Typography>
               <Divider sx={{ flex: 1 }} />
             </Stack>
-            <Stack direction="column" gap={1} mb={2} alignItems="center">
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleSsoLogin}
-                aria-label={t('auth.sso.arialabel')}
-              >
-                {t('auth.sso.button')}
-              </Button>
+            <Stack direction='column' gap={1} mb={2} alignItems='center'>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  disabled={isSsoLoading}
+                  onClick={() => handleSsoLogin()}
+                  aria-label={t('auth.sso.arialabel')}
+                >{t('auth.sso.button')}</Button>
             </Stack>
           </>
         )}

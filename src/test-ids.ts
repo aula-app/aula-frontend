@@ -70,6 +70,11 @@ export const TEST_IDS = {
   BREADCRUMB_TOGGLE: 'breadcrumb-toggle',
   BREADCRUMB_MENU: 'breadcrumb-menu',
   PRINT_BUTTON: 'print-button',
+  
+  // Settings / timed actions (TimedCommands)
+  TIMEDCOMMAND_CONFIRM_BUTTON: 'timedcommand-confirm-button',
+  TIMEDCOMMAND_STARTDATE_INPUT: 'timedcommand-startdate-input',
+  TIMEDCOMMAND_TABLE: 'timedcommand-table',
 } as const;
 
 export type TestId = (typeof TEST_IDS)[keyof typeof TEST_IDS];

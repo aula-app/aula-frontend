@@ -108,8 +108,8 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     resolver: yupResolver(schema),
     defaultValues: {
       name: defaultValues ? ' ' : '',
-      phase_duration_1: 0,
-      phase_duration_3: 0,
+      phase_duration_1: defaultValues?.phase_duration_1 || 0,
+      phase_duration_3: defaultValues?.phase_duration_3 || 0,
     },
   });
 
