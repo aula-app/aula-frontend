@@ -3,7 +3,7 @@ import { Button, CircularProgress, Stack } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { KeyboardEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { validateAndSaveInstanceCode } from '@/services/instance';
 
 const InstanceCodeView = () => {
@@ -13,6 +13,7 @@ const InstanceCodeView = () => {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const handleSubmit = async () => {
     if (!code.trim()) {
@@ -26,6 +27,15 @@ const InstanceCodeView = () => {
     try {
       const isValid = await validateAndSaveInstanceCode(code.trim());
       if (isValid) {
+        // Resume an IdP-initiated SSO hand-off (e.g. Eduplaces marketplace)
+        // if the guard redirect carried `via=eduplaces` into the URL.
+        if (searchParams.get('via') === 'eduplaces') {
+          const resume = new URLSearchParams({ via: 'eduplaces' });
+          const hint = searchParams.get('login_hint');
+          if (hint) resume.set('login_hint', hint);
+          navigate(`/login?${resume.toString()}`);
+          return;
+        }
         navigate('/');
       } else {
         setError(t('errors.default'));
