@@ -879,5 +879,14 @@
     "thursday": "Thursday",
     "tuesday": "Tuesday",
     "wednesday": "Wednesday"
+  },
+  "idp": {
+    "setup": {
+      "title": "Setting up your school",
+      "body": "Your classes and classmates are being loaded. This only takes a moment.",
+      "progress": "{{rooms}} rooms and {{users}} people imported",
+      "failedTitle": "Setup failed",
+      "failedBody": "Please contact your administrator. Setup will be retried automatically."
+    }
   }
 }

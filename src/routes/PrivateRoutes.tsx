@@ -26,7 +26,10 @@ import RoomsView from '@/views/Settings/Rooms';
 import UsersView from '@/views/Settings/Users';
 import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';
-import { useEffect } from 'react';
+import { getIdpImportStatus, IdpImportStatus } from '@/services/sso';
+import SchoolSetupView from '@/views/Public/SchoolSetupView';
+import { localStorageGet } from '@/utils';
+import { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
 /**
@@ -38,9 +41,39 @@ const PrivateRoutes = () => {
   const [, dispatch] = useAppStore();
   const location = useLocation();
 
+  const [setupPending, setSetupPending] = useState<IdpImportStatus | null>(null);
+
   useEffect(() => {
     if (location.pathname.includes('password')) clearAuth(dispatch);
   }, [location.pathname, dispatch]);
+
+  // A reload during the school's first import would otherwise land straight in
+  // an aula with no rooms and no classmates: OAuthLogin's gate only runs on the
+  // login hop. Checked once on mount, so it costs one request per session.
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      const apiUrl = localStorageGet('api_url');
+      const token = localStorageGet('token');
+
+      if (!apiUrl || !token) return;
+
+      const status = await getIdpImportStatus(apiUrl, token);
+
+      // Null means the backend could not answer — never a reason to lock
+      // someone out of a school that may well be fine.
+      if (!cancelled && status && !status.ready && status.status !== 'failed') {
+        setSetupPending(status);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (setupPending) return <SchoolSetupView status={setupPending} />;
 
   return checkPermissions('system', 'hide') ? (
     <Routes>

@@ -879,5 +879,14 @@
     "thursday": "Donnerstag",
     "tuesday": "Dienstag",
     "wednesday": "Mittwoch"
+  },
+  "idp": {
+    "setup": {
+      "title": "Wir richten deine Schule ein",
+      "body": "Deine Klassen und Mitschüler:innen werden gerade geladen. Das dauert nur einen Moment.",
+      "progress": "{{rooms}} Räume und {{users}} Personen übertragen",
+      "failedTitle": "Die Einrichtung ist fehlgeschlagen",
+      "failedBody": "Bitte wende dich an deine Administration. Die Einrichtung wird automatisch erneut versucht."
+    }
   }
 }
