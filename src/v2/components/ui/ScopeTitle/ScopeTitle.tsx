@@ -63,7 +63,7 @@ const ScopeTitle = ({
     <div className="flex flex-col p-2 pb-0 sm:p-4 sm:pb-0">
       <div className="flex justify-between items-center">
         <Heading className={twMerge('flex items-center gap-2', className)}>
-          <Icon type={scope} className="mb-3" />
+          <Icon type={scope} size=".9em" />
           {count !== undefined && <span>{isFiltered ? t('v2.ui.count.ofTotal', { count, total }) : count}</span>}
           <span className="capitalize">{t(`v2.scopes.${scope}.${nounCount === 1 ? 'singular' : 'plural'}`)}</span>
         </Heading>
