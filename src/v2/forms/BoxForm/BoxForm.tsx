@@ -95,20 +95,6 @@ const BoxForm: React.FC<BoxFormProps> = ({
       )}
 
       <Controller
-        name="phase_id"
-        control={control}
-        render={({ field }) => (
-          <PhaseField
-            value={field.value}
-            onChange={field.onChange}
-            disabled={isLoading}
-            error={errors.phase_id ? (errors.phase_id.message as string) : undefined}
-            data-testid="box-form-phase"
-          />
-        )}
-      />
-
-      <Controller
         name="name"
         control={control}
         render={({ field }) => (
@@ -154,6 +140,20 @@ const BoxForm: React.FC<BoxFormProps> = ({
           )}
         </div>
       )}
+
+      <Controller
+        name="phase_id"
+        control={control}
+        render={({ field }) => (
+          <PhaseField
+            value={field.value}
+            onChange={field.onChange}
+            disabled={isLoading}
+            error={errors.phase_id ? (errors.phase_id.message as string) : undefined}
+            data-testid="box-form-phase"
+          />
+        )}
+      />
 
       <div className="flex gap-3 justify-end">
         <Button text color="error" onClick={handleCancel} disabled={isLoading} data-testid="box-form-cancel">

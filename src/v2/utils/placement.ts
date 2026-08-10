@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 
 export type XZone = 'left' | 'center' | 'right';
 export type YZone = 'top' | 'middle' | 'bottom';
@@ -40,23 +40,23 @@ export function getZones(el: HTMLElement, rect: DOMRect): { x: XZone; y: YZone }
 }
 
 const cornerClasses: Record<YZone, Record<XZone, string>> = {
-  top:    { right: 'rounded-tr-none', left: 'rounded-tl-none', center: '' },
+  top: { right: 'rounded-tr-none', left: 'rounded-tl-none', center: '' },
   bottom: { right: 'rounded-br-none', left: 'rounded-bl-none', center: '' },
-  middle: { right: '',                left: '',                 center: '' },
+  middle: { right: '', left: '', center: '' },
 };
 
 const originClasses: Record<YZone, Record<XZone, string>> = {
-  top:    { right: 'origin-top-right',    left: 'origin-top-left',    center: 'origin-top' },
+  top: { right: 'origin-top-right', left: 'origin-top-left', center: 'origin-top' },
   bottom: { right: 'origin-bottom-right', left: 'origin-bottom-left', center: 'origin-bottom' },
-  middle: { right: 'origin-right',        left: 'origin-left',        center: 'origin-center' },
+  middle: { right: 'origin-right', left: 'origin-left', center: 'origin-center' },
 };
 
 // Horizontal position without animation — shared standard.
 // Consumers may add slide-in translates on top (e.g. Tooltip).
 const horizontalClasses: Record<XZone, string> = {
-  left:   'left-1/2',   // near left  → panel starts at wrapper center, extends right
+  left: 'left-1/2', // near left  → panel starts at wrapper center, extends right
   center: '',
-  right:  'right-1/2',  // near right → panel ends at wrapper center, extends left
+  right: 'right-1/2', // near right → panel ends at wrapper center, extends left
 };
 
 /** Shared placement hook: returns zones and all position classes. */
@@ -65,8 +65,19 @@ export function usePlacement(ref: { current: HTMLElement | null }) {
   // measurement below would fall back to a zeroed DOMRect and misplace the panel below the trigger.
   // Force one re-measure in a layout effect — after the ref is attached but before paint — so the
   // placement is correct on first paint instead of only after a later re-render.
-  const [, remeasure] = useState(0);
-  useLayoutEffect(() => remeasure((n) => n + 1), []);
+  const [, setTick] = useState(0);
+  const remeasure = useCallback(() => setTick((n) => n + 1), []);
+  useLayoutEffect(() => {
+    remeasure();
+    // The trigger can move/resize after mount (e.g. it lives in a Collapse that expands, so its
+    // box animates 0→full height). Re-measure on every resize so placement tracks the final
+    // geometry instead of the collapsed geometry captured at mount.
+    const node = ref.current;
+    if (!node || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(remeasure);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [ref, remeasure]);
 
   const el = ref.current;
   const rect = el?.getBoundingClientRect() ?? new DOMRect();
@@ -74,8 +85,12 @@ export function usePlacement(ref: { current: HTMLElement | null }) {
   const zones = getZones(el ?? document.body, rect);
   const { x, y } = zones;
 
-  const verticalClass =
-    y === 'bottom' ? 'bottom-[calc(100%+0.25rem)]' : 'top-[calc(100%+0.25rem)]';
+  const verticalClass = y === 'bottom' ? 'bottom-[calc(100%+0.25rem)]' : 'top-[calc(100%+0.25rem)]';
+  const GAP = 8;
+  const availableHeight = Math.max(
+    0,
+    (y === 'bottom' ? rect.top - container.top : container.bottom - rect.bottom) - GAP
+  );
 
   return {
     zones,
@@ -84,5 +99,6 @@ export function usePlacement(ref: { current: HTMLElement | null }) {
     cornerClass: cornerClasses[y][x],
     originClass: originClasses[y][x],
     containerWidth: container.width,
+    availableHeight,
   };
 }

@@ -29,7 +29,12 @@ const ShareButton = ({ path, onOpen }: ShareButtonProps) => {
   };
 
   return (
-    <IconButton aria-label={t('v2.ui.button.share')} data-testid={TEST_IDS.SHARE_BUTTON} onClick={handleClick}>
+    <IconButton
+      aria-label={t('v2.ui.button.share')}
+      hint={t('v2.ui.button.share')}
+      data-testid={TEST_IDS.SHARE_BUTTON}
+      onClick={handleClick}
+    >
       <Icon type="share" />
     </IconButton>
   );

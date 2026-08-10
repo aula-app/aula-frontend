@@ -1,5 +1,6 @@
 import Icon from '@/components/new/Icon';
 import Collapse from '@/v2/components/ui/Collapse';
+import { usePlacement } from '@/v2/utils/placement';
 import { KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
@@ -49,6 +50,10 @@ const SelectInput = ({
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const { verticalClass, zones, availableHeight } = usePlacement(triggerRef);
+  // Grow to content, but anchor to whichever edge keeps the list on-screen: right edge when the
+  // trigger sits near the right of its clipping container, left edge otherwise.
+  const horizontalClass = zones.x === 'right' ? 'right-0' : 'left-0';
 
   const selectedOption = options.find((o) => o.value === value);
   const hasValue = !!selectedOption;
@@ -154,11 +159,21 @@ const SelectInput = ({
           </span>
         </button>
 
+        {/* Zero-height sizer: reserves the widest option's width so the trigger never renders
+            narrower than its own dropdown. Mirrors the button's text metrics and padding. */}
+        <div aria-hidden="true" className="h-0 overflow-hidden invisible">
+          {options.map((option) => (
+            <div key={option.value} className={twMerge('text-sm font-medium text-nowrap pr-6', dense ? 'px-3' : 'px-4')}>
+              {option.label}
+            </div>
+          ))}
+        </div>
+
         {label && (
           <label
             htmlFor={inputId}
             className={[
-              'pointer-events-none absolute left-3 origin-left text-sm transition-all duration-200 bg-background px-0.5',
+              'pointer-events-none absolute left-3 origin-left text-sm transition-all duration-200 bg-background px-0.5 text-nowrap text-ellipsis max-w-full overflow-hidden',
               hasValue || open ? 'top-0 -translate-y-1/2 scale-75' : 'top-1/2 -translate-y-1/2 scale-100',
               error ? 'text-error-fg' : 'text-current',
             ].join(' ')}
@@ -182,13 +197,14 @@ const SelectInput = ({
           <Icon type="chevronDown" size="0.75em" className="text-muted mt-0.5" />
         </span>
 
-        <Collapse open={open} className="absolute z-50 mt-1 w-full">
+        <Collapse open={open} className={twMerge('absolute z-50 min-w-full w-max', verticalClass, horizontalClass)}>
           <ul
             id={listboxId}
             role="listbox"
             aria-label={label}
             data-testid={dataTestId ? `${dataTestId}-list` : undefined}
-            className="rounded-lg border border-input-border bg-background shadow-md overflow-auto max-h-60 py-1"
+            style={{ maxHeight: Math.min(availableHeight, 240) }}
+            className="rounded-lg border border-input-border bg-background shadow-md overflow-auto py-1"
           >
             {options.map((option, i) => (
               <li

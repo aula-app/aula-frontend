@@ -63,6 +63,7 @@ const DeleteButton = ({
     <>
       <IconButton
         aria-label={t('v2.ui.button.delete')}
+        hint={t('v2.ui.button.delete')}
         aria-haspopup="dialog"
         data-testid={TEST_IDS.DELETE_BUTTON}
         onClick={handleClick}

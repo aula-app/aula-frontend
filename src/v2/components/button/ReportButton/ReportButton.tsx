@@ -62,7 +62,12 @@ ${data.content || ''}
   };
 
   return (
-    <IconButton aria-label={t('v2.ui.button.report')} data-testid={TEST_IDS.REPORT_BUTTON} onClick={handleClick}>
+    <IconButton
+      aria-label={t('v2.ui.button.report')}
+      hint={t('v2.ui.button.report')}
+      data-testid={TEST_IDS.REPORT_BUTTON}
+      onClick={handleClick}
+    >
       <Icon type="report" />
     </IconButton>
   );

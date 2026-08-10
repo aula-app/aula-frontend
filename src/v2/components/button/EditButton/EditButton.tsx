@@ -58,7 +58,12 @@ const EditButton = ({ scopeLabel, onSave, renderForm, onChanged, onOpen, hidden 
   if (hidden) return null;
 
   return (
-    <IconButton aria-label={t('v2.ui.button.edit')} data-testid={TEST_IDS.EDIT_BUTTON} onClick={handleClick}>
+    <IconButton
+      aria-label={t('v2.ui.button.edit')}
+      hint={t('v2.ui.button.edit')}
+      data-testid={TEST_IDS.EDIT_BUTTON}
+      onClick={handleClick}
+    >
       <Icon type="edit" />
     </IconButton>
   );
