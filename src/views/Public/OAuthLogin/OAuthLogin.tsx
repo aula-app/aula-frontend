@@ -1,35 +1,20 @@
-import { getIdpImportStatus, IdpImportStatus } from '@/services/sso';
-import { useAppStore } from '@/store';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useIdpImportGate } from '@/hooks/useIdpImportGate';
 import { handleOAuthLogin } from '@/services/auth';
 import { validateAndSaveInstanceCode } from '@/services/instance';
+import { useAppStore } from '@/store';
 import { localStorageGet } from '@/utils';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import SchoolSetupView from '../SchoolSetupView';
-
-/** How often to ask the backend whether the school import has finished. */
-const POLL_INTERVAL_MS = 2000;
-
-/**
- * Give up waiting after this long and let the user in anyway.
- *
- * A stuck import must not lock a school out of aula permanently; the rooms and
- * users appear as the queue catches up.
- */
-const POLL_TIMEOUT_MS = 5 * 60 * 1000;
 
 const OAuthLogin = () => {
   const { jwt_token } = useParams<{ jwt_token?: string }>();
   const [searchParams] = useSearchParams();
   const [, dispatch] = useAppStore();
   const navigate = useNavigate();
-  const [importStatus, setImportStatus] = useState<IdpImportStatus | null>(null);
-  const [waiting, setWaiting] = useState(false);
-  const cancelled = useRef(false);
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    cancelled.current = false;
-
     (async () => {
       try {
         // IdP-initiated launches (e.g. Eduplaces marketplace) start without
@@ -44,65 +29,34 @@ const OAuthLogin = () => {
 
         handleOAuthLogin(jwt_token);
         localStorage.removeItem('sso_force_login');
-
-        await waitForSchool();
-
-        if (cancelled.current) return;
-
-        dispatch({ type: 'LOG_IN' });
-        navigate('/', { replace: true });
+        setAuthenticated(true);
       } catch (error) {
         navigate('/login', { replace: true });
       }
     })();
+  }, [jwt_token, searchParams, navigate]);
 
-    return () => {
-      cancelled.current = true;
-    };
+  return authenticated ? <ImportGate onEnter={() => { dispatch({ type: 'LOG_IN' }); navigate('/', { replace: true }); }} /> : null;
+};
+
+/**
+ * Sits between a completed login and aula itself.
+ *
+ * Only mounted once the token is stored, because the status endpoint is
+ * authenticated. Schools with nothing to import pass through without ever
+ * rendering anything.
+ */
+const ImportGate: React.FC<{ onEnter: () => void }> = ({ onEnter }) => {
+  const { phase, status, dismiss } = useIdpImportGate();
+
+  useEffect(() => {
+    if (phase === 'clear') onEnter();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jwt_token, searchParams, dispatch, navigate]);
+  }, [phase]);
 
-  /**
-   * Hold here until the school's directory import has finished.
-   *
-   * The very first login at a school queues an import of all its rooms and
-   * users. Everyone after that finds their account already there, so this only
-   * ever waits once per school. Schools that sync from no directory report
-   * ready immediately and fall straight through.
-   */
-  async function waitForSchool(): Promise<void> {
-    const apiUrl = localStorageGet('api_url');
-    const token = localStorageGet('token');
+  if (phase === 'checking' || phase === 'clear') return null;
 
-    if (!apiUrl || !token) return;
-
-    const deadline = Date.now() + POLL_TIMEOUT_MS;
-
-    // A first read before showing anything, so a school that is already set up
-    // never flashes the waiting screen.
-    let status = await getIdpImportStatus(apiUrl, token);
-
-    if (!status || status.ready) return;
-
-    setImportStatus(status);
-    setWaiting(true);
-
-    while (!cancelled.current && Date.now() < deadline) {
-      if (status?.status === 'failed') return;
-
-      await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
-
-      if (cancelled.current) return;
-
-      status = await getIdpImportStatus(apiUrl, token);
-      setImportStatus(status);
-
-      // A backend that stops answering should not trap the user here.
-      if (!status || status.ready) return;
-    }
-  }
-
-  return waiting ? <SchoolSetupView status={importStatus} /> : null;
+  return <SchoolSetupView phase={phase} status={status} onDismiss={dismiss} />;
 };
 
 export default OAuthLogin;

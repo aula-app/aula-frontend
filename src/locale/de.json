@@ -884,9 +884,12 @@
     "setup": {
       "title": "Wir richten deine Schule ein",
       "body": "Deine Klassen und Mitschüler:innen werden gerade geladen. Das dauert nur einen Moment.",
-      "progress": "{{rooms}} Räume und {{users}} Personen übertragen",
+      "doneTitle": "Schuldaten importiert",
+      "doneBody": "{{rooms}} Räume und {{users}} Personen stehen jetzt bereit.",
+      "start": "Los geht's mit aula!",
       "failedTitle": "Die Einrichtung ist fehlgeschlagen",
-      "failedBody": "Bitte wende dich an deine Administration. Die Einrichtung wird automatisch erneut versucht."
+      "failedBody": "Bitte wende dich an deine Administration. Die Einrichtung wird automatisch erneut versucht.",
+      "continue": "Trotzdem fortfahren"
     }
   }
 }
