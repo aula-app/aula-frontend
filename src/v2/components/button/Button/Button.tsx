@@ -37,7 +37,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             : 'text-current shadow-none'
           : color
             ? `bg-${color} text-${color}-fg font-bold`
-            : 'bg-primary text-primary-fg font-bold',
+            : 'bg-primary text-shade font-bold',
       className
     );
 
