@@ -67,7 +67,7 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
               <>
                 <EditButton
                   scopeLabel={t('scopes.ideas.name')}
-                  // Owner (self) or role >= 30 may edit; hide the action otherwise.
+                  subject={idea.title}
                   hidden={!checkPermissions('ideas', 'edit', idea.user_hash_id)}
                   onSave={(data) =>
                     editIdea({
@@ -91,7 +91,7 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
                 />
                 <DeleteButton
                   scopeLabel={t('scopes.ideas.name')}
-                  // Owner (self) or role >= 30 may delete; hide the action otherwise.
+                  subject={idea.title}
                   hidden={!checkPermissions('ideas', 'delete', idea.user_hash_id)}
                   onConfirm={() => deleteIdea(idea.hash_id)}
                   onDeleted={onChanged}

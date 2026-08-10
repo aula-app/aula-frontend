@@ -44,6 +44,7 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
             <>
               <EditButton
                 scopeLabel={t('scopes.boxes.name')}
+                subject={box.name}
                 hidden={!checkPermissions('boxes', 'edit')}
                 onSave={(data) =>
                   editBox({
@@ -62,6 +63,7 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
               />
               <DeleteButton
                 scopeLabel={t('scopes.boxes.name')}
+                subject={box.name}
                 hidden={!checkPermissions('boxes', 'delete')}
                 onConfirm={() => deleteBox(box.hash_id)}
                 onDeleted={onChanged}

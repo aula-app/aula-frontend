@@ -149,7 +149,8 @@
       "dialog": {
         "delete": {
           "title": "Vorsicht!",
-          "description": "Möchtest du wirklich fortfahren?\nDiese Aktion kann nicht rückgängig gemacht werden."
+          "description": "Möchtest du wirklich fortfahren?\nDiese Aktion kann nicht rückgängig gemacht werden.",
+          "descriptionNamed": "Du bist dabei, '{{var}}' zu löschen.\nDiese Aktion kann nicht rückgängig gemacht werden."
         }
       },
       "editor": {
@@ -249,11 +250,13 @@
     "close": "Schließen",
     "confirm": "Bestätigen",
     "contentReport": "Inhalt melden",
+    "contentReportNamed": "'{{var}}' melden",
     "deactivate": "{{var}} deaktivieren",
     "delete": "Löschen",
     "discard": "Verwerfen",
     "download": "Herunterladen",
     "edit": "{{var}} bearbeiten",
+    "editNamed": "'{{var}}' bearbeiten",
     "filter": "Filtern",
     "hide": "Ausblenden",
     "hideFilters": "Filter ausblenden",

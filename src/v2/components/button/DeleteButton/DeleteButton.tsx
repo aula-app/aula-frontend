@@ -10,6 +10,8 @@ import { useTranslation } from 'react-i18next';
 interface DeleteButtonProps {
   /** Localized scope name interpolated into the dialog copy, e.g. `t('scopes.boxes.name')`. */
   scopeLabel: string;
+  /** Title of the item being deleted, surfaced in the dialog body. */
+  subject?: string;
   /** Performs the deletion. Resolve with a response carrying `error` to surface a toast. */
   onConfirm: () => Promise<{ error?: string | null }>;
   /** Called after a successful deletion (e.g. to refetch the list). */
@@ -24,6 +26,7 @@ interface DeleteButtonProps {
 
 const DeleteButton = ({
   scopeLabel,
+  subject,
   onConfirm,
   onDeleted,
   onOpen,
@@ -80,7 +83,11 @@ const DeleteButton = ({
           <h3 className="flex items-center gap-2 text-lg font-semibold text-error-fg">
             <Icon type="alert" size="1.2em" /> {t('v2.ui.dialog.delete.title', { var: scopeLabel })}
           </h3>
-          <p className="whitespace-pre-line">{t('v2.ui.dialog.delete.description', { var: scopeLabel })}</p>
+          <p className="whitespace-pre-line">
+            {subject
+              ? t('v2.ui.dialog.delete.descriptionNamed', { var: subject })
+              : t('v2.ui.dialog.delete.description', { var: scopeLabel })}
+          </p>
           <div className="flex justify-end gap-2">
             <Button text onClick={() => setOpen(false)} disabled={pending} data-testid={cancelTestId}>
               {t('actions.cancel')}

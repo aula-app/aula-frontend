@@ -149,7 +149,8 @@
       "dialog": {
         "delete": {
           "title": "Caution!",
-          "description": "Are you sure you want to continue?\nThis action cannot be undone."
+          "description": "Are you sure you want to continue?\nThis action cannot be undone.",
+          "descriptionNamed": "You are about to delete '{{var}}'.\nThis action cannot be undone."
         }
       },
       "editor": {
@@ -249,11 +250,13 @@
     "close": "Close",
     "confirm": "Confirm",
     "contentReport": "Report content",
+    "contentReportNamed": "Report '{{var}}'",
     "deactivate": "Deactivate {{var}}",
     "delete": "Delete",
     "discard": "Discard",
     "download": "Download",
     "edit": "Edit {{var}}",
+    "editNamed": "Edit '{{var}}'",
     "filter": "Filter",
     "hide": "Hide",
     "hideFilters": "Hide filters",

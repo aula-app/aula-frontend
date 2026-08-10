@@ -14,6 +14,8 @@ interface EditFormProps {
 interface EditButtonProps {
   /** Localized scope name for the modal title and success toast, e.g. `t('scopes.boxes.name')`. */
   scopeLabel: string;
+  /** Title of the item being edited, surfaced in the modal title. */
+  subject?: string;
   /** Performs the save. Resolve with a response carrying `error` to surface a toast. */
   onSave: (data: any) => Promise<{ error?: string | null }>;
   /** Renders the modal form; wire its submit/cancel to the provided handlers. */
@@ -31,7 +33,7 @@ interface EditButtonProps {
  * a toast and the form stays open so the user can retry; a successful save shows
  * an "updated" toast, closes the modal and notifies `onChanged`.
  */
-const EditButton = ({ scopeLabel, onSave, renderForm, onChanged, onOpen, hidden = false }: EditButtonProps) => {
+const EditButton = ({ scopeLabel, subject, onSave, renderForm, onChanged, onOpen, hidden = false }: EditButtonProps) => {
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
   const { toast } = useToast();
@@ -52,7 +54,10 @@ const EditButton = ({ scopeLabel, onSave, renderForm, onChanged, onOpen, hidden 
 
   const handleClick = () => {
     onOpen?.();
-    openModal(t('actions.edit', { var: scopeLabel }), renderForm({ onSubmit: handleSubmit, onCancel: closeModal }));
+    openModal(
+      subject ? t('actions.editNamed', { var: subject }) : t('actions.edit', { var: scopeLabel }),
+      renderForm({ onSubmit: handleSubmit, onCancel: closeModal })
+    );
   };
 
   if (hidden) return null;

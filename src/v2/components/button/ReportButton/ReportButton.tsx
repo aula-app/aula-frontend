@@ -54,7 +54,7 @@ ${data.content || ''}
   const handleClick = () => {
     onOpen?.();
     openModal(
-      t('actions.contentReport'),
+      subject ? t('actions.contentReportNamed', { var: subject }) : t('actions.contentReport'),
       <div data-testid={TEST_IDS.REPORT_DIALOG}>
         <ReportForm onSubmit={handleSubmit} onCancel={closeModal} />
       </div>
