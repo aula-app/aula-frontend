@@ -55,7 +55,7 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
             <h2 id={titleId} className="font-semibold text-foreground">
               {idea.title}
             </h2>
-            {idea.content && <Markdown className="prose-sm text-muted line-clamp-3">{idea.content}</Markdown>}
+            {idea.content && <Markdown className="prose text-foreground line-clamp-3">{idea.content}</Markdown>}
           </Link>
           <MoreOptions
             className="absolute top-1 right-1 z-10"
