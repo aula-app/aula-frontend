@@ -77,16 +77,17 @@
   --color-primary: hsl(134, 55%, 55%);
   --color-secondary: hsl(215, 12%, 65%);
 
-  --color-error: hsl(0, 40%, 52%);
+  /* -bg deepened so the light -fg text meets WCAG AA (~5:1) as a filled pair */
+  --color-error: hsl(0, 45%, 26%);
   --color-error-fg: hsl(0, 80%, 75%);
 
-  --color-warning: hsl(45, 40%, 50%);
+  --color-warning: hsl(40, 55%, 24%);
   --color-warning-fg: hsl(35, 85%, 70%);
 
-  --color-info: hsl(204, 40%, 52%);
+  --color-info: hsl(204, 45%, 26%);
   --color-info-fg: hsl(204, 75%, 72%);
 
-  --color-success: hsl(134, 30%, 50%);
+  --color-success: hsl(134, 32%, 24%);
   --color-success-fg: hsl(134, 60%, 65%);
 
   /* --- Phases --- */
@@ -131,7 +132,7 @@
 
   /* --- Brand --- */
   --color-primary: var(--color-primary);
-  --color-primary-fg: var(--color-foreground);
+  --color-primary-fg: var(--color-shade);
   
   --color-secondary: var(--color-secondary);
   --color-secondary-fg: var(--color-muted);
