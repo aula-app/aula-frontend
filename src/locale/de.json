@@ -916,12 +916,16 @@
         "prepare": "Abgleich vorbereiten",
         "apply": "Zuordnungen übernehmen und importieren",
         "rebuild": "Neu berechnen",
-        "refresh": "Aktualisieren"
+        "refresh": "Aktualisieren",
+        "open": "Mit dem Identity Provider synchronisieren"
       },
       "errors": {
         "connect": "Die Anmeldung beim Anbieter konnte nicht gestartet werden.",
         "prepare": "Der Abgleich konnte nicht vorbereitet werden.",
         "apply": "{{count}} Zuordnungen sind nicht gültig. Bitte prüfe die markierten Zeilen."
+      },
+      "entry": {
+        "body": "Diese Schule wird auf ihren Identity Provider umgestellt. Ordnen Sie die vorhandenen Klassen und Personen vor dem Import zu."
       }
     },
     "claim": {

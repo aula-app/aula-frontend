@@ -916,12 +916,16 @@
         "prepare": "Prepare the sync",
         "apply": "Apply matches and import",
         "rebuild": "Rebuild",
-        "refresh": "Refresh"
+        "refresh": "Refresh",
+        "open": "Sync with the identity provider"
       },
       "errors": {
         "connect": "Could not start the provider sign-in.",
         "prepare": "Could not prepare the sync.",
         "apply": "{{count}} matches are not valid. Please check the flagged rows."
+      },
+      "entry": {
+        "body": "This school is moving onto its identity provider. Match the existing classes and people to the provider before the import runs."
       }
     },
     "claim": {
