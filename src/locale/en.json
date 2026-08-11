@@ -879,5 +879,55 @@
     "thursday": "Thursday",
     "tuesday": "Tuesday",
     "wednesday": "Wednesday"
+  },
+  "idp": {
+    "sync": {
+      "title": "Sync with the identity provider",
+      "notEnabled": "No sync is enabled for this school. An operator can turn it on in aula-manager.",
+      "connectReturned": "Signed in at the provider. Confirm your aula password below to link the accounts.",
+      "reviewWarning": "Please check these matches. A wrong merge gives one person another's account, including everything they have written.",
+      "rooms": "Classes and rooms",
+      "users": "People",
+      "search": "Search",
+      "willBeCreated": "will be created",
+      "staysInAula": "stays as it is",
+      "progressTitle": "Progress",
+      "progressBody": "{{linked}} accounts linked, {{remaining}} still to go.",
+      "progressHint": "Password login can only be switched off once nobody is left.",
+      "step": {
+        "connect": "Sign in at the provider first. That links your aula account and identifies the school.",
+        "prepare": "The provider's classes and people can now be matched against your existing aula data.",
+        "importing": "Importing …"
+      },
+      "state": {
+        "confident": "confident",
+        "ambiguous": "ambiguous",
+        "none": "no match",
+        "pseudonym": "pseudonym only"
+      },
+      "columns": {
+        "aula": "In aula",
+        "provider": "At the provider",
+        "state": "Match",
+        "merge": "Merge?"
+      },
+      "actions": {
+        "connect": "Link my account",
+        "prepare": "Prepare the sync",
+        "apply": "Apply matches and import",
+        "rebuild": "Rebuild",
+        "refresh": "Refresh"
+      },
+      "errors": {
+        "connect": "Could not start the provider sign-in.",
+        "prepare": "Could not prepare the sync.",
+        "apply": "{{count}} matches are not valid. Please check the flagged rows."
+      }
+    },
+    "claim": {
+      "banner": "Do you already have an aula account? Sign in once with your aula password so your contributions are kept.",
+      "noAccount": "I don't have an aula account yet",
+      "declineFailed": "That did not work. Please sign in again."
+    }
   }
 }

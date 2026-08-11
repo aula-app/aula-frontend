@@ -879,5 +879,55 @@
     "thursday": "Donnerstag",
     "tuesday": "Dienstag",
     "wednesday": "Mittwoch"
+  },
+  "idp": {
+    "sync": {
+      "title": "Mit dem Identitätsanbieter abgleichen",
+      "notEnabled": "Für diese Schule ist kein Abgleich aktiviert. Die Verwaltung kann ihn im aula-manager einschalten.",
+      "connectReturned": "Anmeldung beim Anbieter abgeschlossen. Bestätige unten dein aula-Passwort, um die Konten zu verknüpfen.",
+      "reviewWarning": "Bitte prüfe die Zuordnungen. Eine falsche Zusammenführung gibt einer Person das Konto einer anderen — inklusive aller Beiträge.",
+      "rooms": "Klassen und Räume",
+      "users": "Personen",
+      "search": "Suchen",
+      "willBeCreated": "wird neu angelegt",
+      "staysInAula": "bleibt unverändert",
+      "progressTitle": "Fortschritt",
+      "progressBody": "{{linked}} Konten verknüpft, {{remaining}} noch offen.",
+      "progressHint": "Erst wenn niemand mehr offen ist, kann die Anmeldung per Passwort abgeschaltet werden.",
+      "step": {
+        "connect": "Melde dich zuerst beim Anbieter an. Damit wird dein aula-Konto verknüpft und die Schule erkannt.",
+        "prepare": "Jetzt können Klassen und Personen des Anbieters mit den vorhandenen aula-Daten abgeglichen werden.",
+        "importing": "Die Daten werden übertragen …"
+      },
+      "state": {
+        "confident": "eindeutig",
+        "ambiguous": "mehrdeutig",
+        "none": "kein Treffer",
+        "pseudonym": "nur Pseudonym"
+      },
+      "columns": {
+        "aula": "In aula",
+        "provider": "Beim Anbieter",
+        "state": "Zuordnung",
+        "merge": "Zusammenführen?"
+      },
+      "actions": {
+        "connect": "Mein Konto verknüpfen",
+        "prepare": "Abgleich vorbereiten",
+        "apply": "Zuordnungen übernehmen und importieren",
+        "rebuild": "Neu berechnen",
+        "refresh": "Aktualisieren"
+      },
+      "errors": {
+        "connect": "Die Anmeldung beim Anbieter konnte nicht gestartet werden.",
+        "prepare": "Der Abgleich konnte nicht vorbereitet werden.",
+        "apply": "{{count}} Zuordnungen sind nicht gültig. Bitte prüfe die markierten Zeilen."
+      }
+    },
+    "claim": {
+      "banner": "Hast du schon ein aula-Konto? Melde dich einmal mit deinem aula-Passwort an, damit deine Beiträge erhalten bleiben.",
+      "noAccount": "Ich habe noch kein aula-Konto",
+      "declineFailed": "Das hat nicht geklappt. Bitte melde dich erneut an."
+    }
   }
 }
