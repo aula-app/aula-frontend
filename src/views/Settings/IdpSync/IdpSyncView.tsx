@@ -79,19 +79,26 @@ const IdpSyncView: React.FC = () => {
     const apiUrl = localStorageGet('api_url') ?? '';
     const jwt = localStorageGet('token') ?? '';
 
-    completeSsoLink(apiUrl, linkToken, jwt).then((result) => {
-      if (!result.success) {
+    completeSsoLink(apiUrl, linkToken, jwt).then(async (result) => {
+      // Drop the one-shot token either way: it is spent, and leaving it in the
+      // URL turns every later reload into a failed retry.
+      setSearchParams({}, { replace: true });
+
+      const current = await getMigrationProgress();
+      setProgress(current);
+
+      // Reloading a page whose token was already redeemed reports the token as
+      // missing, which is true and useless: the connection it stood for
+      // succeeded, and the tenant's own state is the honest answer.
+      if (!result.success && current?.migration_status === 'flagged') {
         setError(t(`errors.sso.${result.error}`, t('idp.sync.errors.connect')));
 
         return;
       }
 
       setNotice(t('idp.sync.connectReturned'));
-      // Drop the one-shot token so a reload does not retry a spent link.
-      setSearchParams({}, { replace: true });
-      refreshProgress();
     });
-  }, [searchParams, setSearchParams, t, refreshProgress]);
+  }, [searchParams, setSearchParams, t]);
 
   const connect = async () => {
     setBusy(true);
