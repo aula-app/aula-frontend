@@ -9,6 +9,8 @@ import {
   saveDecisions,
   startIdpConnect,
 } from '@/services/idpMigration';
+import { completeSsoLink } from '@/services/sso';
+import { localStorageGet } from '@/utils';
 import { Alert, Button, CircularProgress, Divider, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,7 +28,7 @@ const PER_PAGE = 50;
  */
 const IdpSyncView: React.FC = () => {
   const { t } = useTranslation();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [progress, setProgress] = useState<MigrationProgress | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,14 +67,31 @@ const IdpSyncView: React.FC = () => {
   }, [progress?.migration_status, loadKind]);
 
   // Coming back from the provider, the connect flow leaves a one-shot token in
-  // the URL; the shared link banner on the login page completes it, so here we
-  // only need to notice that it happened.
+  // the URL. The admin is already signed in here, so the token is redeemed
+  // against their session: asking them for the aula password they just used
+  // would prove nothing. A password belongs to the other flow, where someone
+  // arrives from the provider with no aula session at all.
   useEffect(() => {
-    if (searchParams.get('sso_link')) {
+    const linkToken = searchParams.get('sso_link');
+
+    if (!linkToken) return;
+
+    const apiUrl = localStorageGet('api_url') ?? '';
+    const jwt = localStorageGet('token') ?? '';
+
+    completeSsoLink(apiUrl, linkToken, jwt).then((result) => {
+      if (!result.success) {
+        setError(t(`errors.sso.${result.error}`, t('idp.sync.errors.connect')));
+
+        return;
+      }
+
       setNotice(t('idp.sync.connectReturned'));
+      // Drop the one-shot token so a reload does not retry a spent link.
+      setSearchParams({}, { replace: true });
       refreshProgress();
-    }
-  }, [searchParams, t, refreshProgress]);
+    });
+  }, [searchParams, setSearchParams, t, refreshProgress]);
 
   const connect = async () => {
     setBusy(true);

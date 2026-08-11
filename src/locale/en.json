@@ -891,7 +891,7 @@
     "sync": {
       "title": "Sync with the identity provider",
       "notEnabled": "No sync is enabled for this school. An operator can turn it on in aula-manager.",
-      "connectReturned": "Signed in at the provider. Confirm your aula password below to link the accounts.",
+      "connectReturned": "Signed in at the provider. Your aula account is now linked and the school is identified.",
       "reviewWarning": "Please check these matches. A wrong merge gives one person another's account, including everything they have written.",
       "rooms": "Classes and rooms",
       "users": "People",

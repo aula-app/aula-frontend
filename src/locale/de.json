@@ -891,7 +891,7 @@
     "sync": {
       "title": "Mit dem Identitätsanbieter abgleichen",
       "notEnabled": "Für diese Schule ist kein Abgleich aktiviert. Die Verwaltung kann ihn im aula-manager einschalten.",
-      "connectReturned": "Anmeldung beim Anbieter abgeschlossen. Bestätige unten dein aula-Passwort, um die Konten zu verknüpfen.",
+      "connectReturned": "Beim Anbieter angemeldet. Dein aula-Konto ist jetzt verknüpft und die Schule erkannt.",
       "reviewWarning": "Bitte prüfe die Zuordnungen. Eine falsche Zusammenführung gibt einer Person das Konto einer anderen — inklusive aller Beiträge.",
       "rooms": "Klassen und Räume",
       "users": "Personen",
