@@ -180,7 +180,14 @@
       "link_failed": "We couldn't finish linking your SSO identity. Please try logging in again.",
       "link_intent_not_found": "Your SSO link expired. Please try logging in again.",
       "user_mismatch": "The aula account you signed into doesn't match the SSO identity. Please try logging in again.",
-      "already_linked": "This aula account is already linked to a different SSO identity. Please contact your administrator."
+      "already_linked": "This aula account is already linked to a different SSO identity. Please contact your administrator.",
+      "idp_school_missing": "Your school did not tell us which school you belong to. Please contact your administrator.",
+      "idp_school_taken": "This school is already connected to a different aula instance. Please check the instance code, or contact your administrator.",
+      "idp_user_missing": "Your school did not tell us who you are. Please contact your administrator.",
+      "idp_identity_taken": "This school account is already linked to a different aula account. Please contact your administrator.",
+      "link_user_not_found": "We could not find your aula account. Please try logging in again.",
+      "school_not_provisioned": "This school is not set up yet. Please contact your administrator.",
+      "sso_disabled": "Single Sign-On is not enabled for this school."
     }
   },
   "forms": {

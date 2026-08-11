@@ -180,7 +180,14 @@
       "link_failed": "Wir konnten die Verknüpfung deiner SSO-Identität nicht abschließen. Bitte versuche erneut, dich anzumelden.",
       "link_intent_not_found": "Deine SSO-Verknüpfung ist abgelaufen. Bitte versuche dich erneut anzumelden.",
       "user_mismatch": "Das aula-Konto, mit dem du dich angemeldet hast, stimmt nicht mit der SSO-Identität überein. Bitte versuche dich erneut anzumelden.",
-      "already_linked": "Dieses aula-Konto ist bereits mit einer anderen SSO-Identität verknüpft. Bitte wende dich an deinen Administrator."
+      "already_linked": "Dieses aula-Konto ist bereits mit einer anderen SSO-Identität verknüpft. Bitte wende dich an deinen Administrator.",
+      "idp_school_missing": "Deine Schule hat uns nicht mitgeteilt, zu welcher Schule du gehörst. Bitte wende dich an deinen Administrator.",
+      "idp_school_taken": "Diese Schule ist bereits mit einer anderen aula-Instanz verbunden. Bitte überprüfe den Instanzcode oder wende dich an deinen Administrator.",
+      "idp_user_missing": "Deine Schule hat uns nicht mitgeteilt, wer du bist. Bitte wende dich an deinen Administrator.",
+      "idp_identity_taken": "Dieses Schulkonto ist bereits mit einem anderen aula-Konto verknüpft. Bitte wende dich an deinen Administrator.",
+      "link_user_not_found": "Wir konnten dein aula-Konto nicht finden. Bitte versuche erneut, dich anzumelden.",
+      "school_not_provisioned": "Diese Schule ist noch nicht eingerichtet. Bitte wende dich an deinen Administrator.",
+      "sso_disabled": "Single Sign-On ist für diese Schule nicht aktiviert."
     }
   },
   "forms": {
