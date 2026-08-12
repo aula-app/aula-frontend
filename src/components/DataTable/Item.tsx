@@ -44,7 +44,7 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
   // The provider is a property of the school, not of a person, and the legacy
   // user payload has no way to reach it.
   useEffect(() => {
-    if (column !== 'sso_provider') return;
+    if (column !== 'idp_user_id') return;
 
     getIdpProvider().then(setIdpProvider);
   }, [column]);
@@ -171,7 +171,7 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
 
     // Where the account comes from: "aula" for one made here, "sso: <provider>"
     // for one the directory owns.
-    case 'sso_provider': {
+    case 'idp_user_id': {
       const user = row as UserType;
 
       // idp_user_id, not sso_sub: the import gives an account its provider

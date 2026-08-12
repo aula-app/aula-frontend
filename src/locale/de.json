@@ -541,7 +541,8 @@
       "user_needs_to_consent": "Zustimmung erforderlich",
       "userlevel": "Benutzer-Rolle",
       "username": "Benutzername",
-      "vote_bias": "Stimmverzerrung"
+      "vote_bias": "Stimmverzerrung",
+      "idp_user_id": "Typ"
     },
     "customFields": {
       "form": "Benutzerdefiniertes Feld {{var}}",
