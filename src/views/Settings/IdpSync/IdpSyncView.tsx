@@ -19,6 +19,8 @@ import ReviewTable from './ReviewTable';
 
 const PER_PAGE = 50;
 
+const IMPORT_POLL_MS = 3000;
+
 /**
  * Moving a school that already uses aula onto its identity provider.
  *
@@ -65,6 +67,17 @@ const IdpSyncView: React.FC = () => {
       loadKind('user');
     }
   }, [progress?.migration_status, loadKind]);
+
+  // The import runs on a queue, so nothing tells this page when it lands.
+  // Without polling the spinner is permanent: the admin is looking at a screen
+  // that has already stopped being true.
+  useEffect(() => {
+    if (progress?.migration_status !== 'importing') return;
+
+    const timer = setInterval(refreshProgress, IMPORT_POLL_MS);
+
+    return () => clearInterval(timer);
+  }, [progress?.migration_status, refreshProgress]);
 
   // Coming back from the provider, the connect flow leaves a one-shot token in
   // the URL. The admin is already signed in here, so the token is redeemed
