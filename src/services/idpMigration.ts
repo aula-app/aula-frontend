@@ -146,6 +146,23 @@ export const getMigrationProgress = async (): Promise<MigrationProgress | null> 
   request<MigrationProgress>('/api/v2/auth/idp/migration-progress');
 
 /**
+ * Which identity provider this school syncs from, if any.
+ *
+ * Held for the life of the page: it is a property of the school and cannot
+ * change under a signed-in session, and the users table would otherwise ask
+ * once per rendered row.
+ */
+let providerPromise: Promise<string | null> | null = null;
+
+export const getIdpProvider = (): Promise<string | null> => {
+  providerPromise ??= request<{ provider: string | null }>('/api/v2/auth/idp/import-status').then(
+    (response) => response?.provider ?? null
+  );
+
+  return providerPromise;
+};
+
+/**
  * Finish an SSO login as somebody who has no aula account yet.
  *
  * Carries no bearer token on purpose — the point is that this person has no
