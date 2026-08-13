@@ -35,7 +35,7 @@ const ShareButton = ({ path, onOpen }: ShareButtonProps) => {
       data-testid={TEST_IDS.SHARE_BUTTON}
       onClick={handleClick}
     >
-      <Icon type="share" />
+      <Icon type="share" size="1.2em" />
     </IconButton>
   );
 };

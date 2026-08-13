@@ -59,7 +59,7 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
           </Link>
           <MoreOptions
             className="absolute top-1 right-1 z-10"
-            panelClassName="ml-auto mr-6"
+            panelClassName="ml-auto mr-1"
             menuTestId={TEST_IDS.IDEA_MORE_MENU}
             panelTestId={TEST_IDS.IDEA_MORE_OPTIONS_PANEL}
           >

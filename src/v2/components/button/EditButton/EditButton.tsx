@@ -69,7 +69,7 @@ const EditButton = ({ scopeLabel, subject, onSave, renderForm, onChanged, onOpen
       data-testid={TEST_IDS.EDIT_BUTTON}
       onClick={handleClick}
     >
-      <Icon type="edit" />
+      <Icon type="edit" size="1.2em" />
     </IconButton>
   );
 };

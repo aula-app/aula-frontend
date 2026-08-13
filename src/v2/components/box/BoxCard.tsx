@@ -19,6 +19,22 @@ interface BoxCardProps {
   onChanged?: () => void;
 }
 
+const phaseProgress = (box: BoxType): { days: number; remaining: number } => {
+  // The current phase's countdown runs from when that phase started, not from
+  // the box creation date. `phase_start` is reset by the backend whenever the
+  // phase changes; fall back to `created` for boxes created before that field
+  // existed.
+  const phaseIndex = Number(box.phase_id) / 10;
+  const phaseKey = `phase_duration_${phaseIndex}` as `phase_duration_${0 | 1 | 2 | 3 | 4}`;
+  const days = Number(box[phaseKey]) || 0;
+
+  const endDate = new Date(box.phase_start ?? box.created);
+  endDate.setDate(endDate.getDate() + days);
+  const remaining = Math.round((Number(endDate) - Date.now()) / 86400000);
+
+  return { days, remaining };
+};
+
 const BoxCard = ({ box, onChanged }: BoxCardProps) => {
   const { t } = useTranslation();
   const phaseColor = phases[box.phase_id] ?? 'wild';
@@ -26,6 +42,10 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
 
   const ideasCount = `${box.ideas_num} ${t(box.ideas_num === 1 ? 'v2.scopes.ideas.singular' : 'v2.scopes.ideas.plural')}`;
   const ideasInPhase = t(`phases.id-${box.phase_id}`, { var: ideasCount, defaultValue: ideasCount });
+
+  const showCountdown = [10, 30].includes(Number(box.phase_id));
+  const { days, remaining } = phaseProgress(box);
+  const fillPercent = days > 0 ? Math.min(100, Math.max(0, (remaining / days) * 100)) : 0;
 
   return (
     <div className="relative flex flex-col rounded-2xl border border-muted text-foreground">
@@ -87,6 +107,19 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
             <Markdown className="prose-sm text-muted line-clamp-3">{box.description_public}</Markdown>
           )}
         </div>
+                    {showCountdown && (
+        <footer className={`relative flex items-center gap-1 overflow-hidden rounded-b-2xl bg-${phaseColor} px-2 py-1 text-sm font-medium`}>
+              <div
+                className={`absolute inset-y-0 left-0 bg-${phaseColor}-active`}
+                style={{ width: `${fillPercent}%` }}
+                aria-hidden="true"
+              />
+              <Icon type="clock" size="1rem" aria-hidden="true" className="relative" />
+              <span className="relative">
+                {remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
+              </span>
+            </footer>
+          )}
       </Link>
     </div>
   );

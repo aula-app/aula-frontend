@@ -71,7 +71,7 @@ const DeleteButton = ({
         data-testid={TEST_IDS.DELETE_BUTTON}
         onClick={handleClick}
       >
-        <Icon type="delete" />
+        <Icon type="delete" size="1.2em" />
       </IconButton>
       <Dialog
         open={open}
