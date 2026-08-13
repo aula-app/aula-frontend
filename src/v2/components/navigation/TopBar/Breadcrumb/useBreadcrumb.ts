@@ -20,9 +20,6 @@ export const useBreadcrumb = () => {
 
   const isPhaseUrl = (url: string) => /\/phase\/\d+$/.test(url);
 
-  // The phase level is collapsed out of the trail (it lives in the PhaseBar), but we
-  // carry its URL onto the room crumb so navigating back lands on the phase the user
-  // was in rather than phase 0.
   const phaseUrl = breadcrumb.find((item, index) => index !== 0 && isPhaseUrl(item[1]))?.[1];
   const filteredBreadcrumbs = breadcrumb
     .filter((item, index) => index === 0 || !isPhaseUrl(item[1]))
