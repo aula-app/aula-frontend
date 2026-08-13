@@ -40,7 +40,6 @@ const LoginView = () => {
   const [ssoLinkToken, setSsoLinkToken] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [isSsoLoading, setSsoLoading] = useState(false);
 
   const schema = yup
     .object({
@@ -152,10 +151,8 @@ const LoginView = () => {
       return;
     }
     try {
-      setSsoLoading(true);
       window.location.href = await initiateSso(instanceApiUrl, options);
     } catch {
-      setSsoLoading(false);
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
     }
   };
@@ -342,7 +339,6 @@ const LoginView = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  disabled={isSsoLoading}
                   onClick={() => handleSsoLogin()}
                   aria-label={t('auth.sso.arialabel')}
                 >{t('auth.sso.button')}</Button>
