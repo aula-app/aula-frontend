@@ -77,3 +77,47 @@ export const initiateSso = async (
 
   return url;
 };
+
+export interface IdpImportStatus {
+  /** False while the school is still being pulled in from the provider. */
+  ready: boolean;
+  provider: string | null;
+  status: 'pending' | 'running' | 'completed' | 'failed' | null;
+  rooms: number;
+  users: number;
+  error: string | null;
+}
+
+/**
+ * How far the initial directory import has got.
+ *
+ * The first person to sign in at a school triggers an import of its rooms and
+ * users, which runs on the backend queue. Until it finishes the school is only
+ * half there, so callers hold the user on a waiting screen while `ready` is
+ * false.
+ *
+ * Tenants that sync from no directory report ready immediately, so this is safe
+ * to call on every login.
+ */
+export const getIdpImportStatus = async (apiUrl: string, legacyJwt: string): Promise<IdpImportStatus | null> => {
+  const instanceCode = localStorageGet('code');
+
+  try {
+    const response = await fetch(`${apiUrl}/api/v2/auth/idp/import-status`, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${legacyJwt}`,
+        'aula-instance-code': instanceCode ?? '',
+        'aula-frontend-version': import.meta.env.VITE_APP_VERSION ?? 'unknown',
+      },
+    });
+
+    if (!response.ok) return null;
+
+    return (await response.json()) as IdpImportStatus;
+  } catch {
+    // A backend that cannot answer must not strand the user on the waiting
+    // screen; the caller treats null as "carry on".
+    return null;
+  }
+};

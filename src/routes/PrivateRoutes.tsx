@@ -27,6 +27,8 @@ import RoomsView from '@/views/Settings/Rooms';
 import UsersView from '@/views/Settings/Users';
 import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';
+import { useIdpImportGate } from '@/hooks/useIdpImportGate';
+import SchoolSetupView from '@/views/Public/SchoolSetupView';
 import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 
@@ -39,9 +41,19 @@ const PrivateRoutes = () => {
   const [, dispatch] = useAppStore();
   const location = useLocation();
 
+  // A reload during the school's first import would otherwise land straight in
+  // an aula with no rooms and no classmates: OAuthLogin's gate only runs on the
+  // login hop. The hook polls, so a reload mid-import still sees it finish
+  // rather than sticking on whatever the first read happened to catch.
+  const { phase: importPhase, status: importStatus, dismiss: dismissImport } = useIdpImportGate();
+
   useEffect(() => {
     if (location.pathname.includes('password')) clearAuth(dispatch);
   }, [location.pathname, dispatch]);
+
+  if (importPhase !== 'checking' && importPhase !== 'clear') {
+    return <SchoolSetupView phase={importPhase} status={importStatus} onDismiss={dismissImport} />;
+  }
 
   return checkPermissions('system', 'hide') ? (
     <Routes>

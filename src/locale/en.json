@@ -942,6 +942,16 @@
       "banner": "Do you already have an aula account? Sign in once with your aula password so your contributions are kept.",
       "noAccount": "I don't have an aula account yet",
       "declineFailed": "That did not work. Please sign in again."
+    },
+    "setup": {
+      "title": "Setting up your school",
+      "body": "Your classes and classmates are being loaded. This only takes a moment.",
+      "doneTitle": "School data imported",
+      "doneBody": "{{rooms}} rooms and {{users}} people are ready.",
+      "start": "Start using aula!",
+      "failedTitle": "Setup failed",
+      "failedBody": "Please contact your administrator. Setup will be retried automatically.",
+      "continue": "Continue anyway"
     }
   }
 }
