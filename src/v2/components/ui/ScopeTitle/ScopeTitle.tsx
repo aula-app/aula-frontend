@@ -20,6 +20,8 @@ type ScopeTitleProps = {
   onToggle?: (open: boolean) => void;
   /** Whether the controls start expanded, e.g. to reveal a restored search. */
   defaultOpen?: boolean;
+  /** Phase id, e.g. '10'. When set, the title reads inside the phase sentence, e.g. "3 ideas in voting". */
+  phase?: string;
 };
 
 const ScopeTitle = ({
@@ -31,6 +33,7 @@ const ScopeTitle = ({
   children,
   onToggle,
   defaultOpen = false,
+  phase,
 }: ScopeTitleProps) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -42,6 +45,9 @@ const ScopeTitle = ({
   const nounCount = isFiltered ? total : count;
   const hasControls = Children.toArray(children).length > 0;
   const toggleLabel = t(isOpen ? 'v2.ui.actions.close' : 'v2.ui.actions.search');
+
+  const nounLabel = t(`v2.scopes.${scope}.${nounCount === 1 ? 'singular' : 'plural'}`);
+  const countLabel = count === undefined ? undefined : isFiltered ? t('v2.ui.count.ofTotal', { count, total }) : count;
 
   useEffect(() => {
     // Skip the first run so a restored-open panel doesn't steal focus (and
@@ -64,8 +70,19 @@ const ScopeTitle = ({
       <div className="flex justify-between items-center">
         <Heading className={twMerge('flex items-center gap-2', className)}>
           <Icon type={scope} size=".9em" />
-          {count !== undefined && <span>{isFiltered ? t('v2.ui.count.ofTotal', { count, total }) : count}</span>}
-          <span className="capitalize">{t(`v2.scopes.${scope}.${nounCount === 1 ? 'singular' : 'plural'}`)}</span>
+          {phase ? (
+            <span className="first-letter:capitalize">
+              {t(`phases.id-${phase}`, {
+                var: [countLabel, nounLabel].filter((part) => part !== undefined && part !== '').join(' '),
+                defaultValue: [countLabel, nounLabel].filter((part) => part !== undefined && part !== '').join(' '),
+              })}
+            </span>
+          ) : (
+            <>
+              {countLabel !== undefined && <span>{countLabel}</span>}
+              <span className="capitalize">{nounLabel}</span>
+            </>
+          )}
         </Heading>
         {hasControls && (
           <IconButton

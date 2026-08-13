@@ -6,8 +6,8 @@ import NotFoundView from '@/v2/views/private/NotFound';
 import RoomLayout from '@/v2/views/private/Room';
 import Ideas from '@/v2/views/private/Ideas';
 import Boxes from '@/v2/views/private/Boxes';
+import Box from '@/v2/views/private/Box';
 import IdeaView from '@/views/Idea';
-import IdeasBoxView from '@/views/IdeasBox';
 import UserMessagesView from '@/views/Messages';
 import AnnouncementView from '@/views/Messages/Announcement';
 import MessageView from '@/views/Messages/Message';
@@ -62,7 +62,7 @@ const PrivateRoutes = () => {
         <Route path="phase/0" element={<Ideas />} />
         <Route path="phase/:phase" element={<Boxes />} />
         <Route path="phase/:phase/idea/:idea_id" element={<IdeaView />} />
-        <Route path="phase/:phase/idea-box/:box_id" element={<IdeasBoxView />} />
+        <Route path="phase/:phase/idea-box/:box_id" element={<Box />} />
         <Route path="phase/:phase/idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
       </Route>
       <Route path="settings/profile" element={<UserProfileView />} />
