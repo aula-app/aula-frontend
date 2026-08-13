@@ -187,7 +187,9 @@
       "idp_identity_taken": "Dieses Schulkonto ist bereits mit einem anderen aula-Konto verknüpft. Bitte wende dich an deinen Administrator.",
       "link_user_not_found": "Wir konnten dein aula-Konto nicht finden. Bitte versuche erneut, dich anzumelden.",
       "school_not_provisioned": "Diese Schule ist noch nicht eingerichtet. Bitte wende dich an deinen Administrator.",
-      "sso_disabled": "Single Sign-On ist für diese Schule nicht aktiviert."
+      "sso_disabled": "Single Sign-On ist für diese Schule nicht aktiviert.",
+      "login_cancelled": "Die Anmeldung wurde abgebrochen. Du kannst es erneut versuchen oder dich mit deinem aula-Passwort anmelden.",
+      "sso_provider_error": "Beim Anmeldedienst deiner Schule ist ein Problem aufgetreten. Bitte versuche es erneut oder wende dich an deinen Administrator."
     }
   },
   "forms": {

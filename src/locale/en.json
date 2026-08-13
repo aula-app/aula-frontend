@@ -187,7 +187,9 @@
       "idp_identity_taken": "This school account is already linked to a different aula account. Please contact your administrator.",
       "link_user_not_found": "We could not find your aula account. Please try logging in again.",
       "school_not_provisioned": "This school is not set up yet. Please contact your administrator.",
-      "sso_disabled": "Single Sign-On is not enabled for this school."
+      "sso_disabled": "Single Sign-On is not enabled for this school.",
+      "login_cancelled": "Sign-in was cancelled. You can try again, or sign in with your aula password.",
+      "sso_provider_error": "Your school's login service reported a problem. Please try again, or contact your administrator."
     }
   },
   "forms": {
