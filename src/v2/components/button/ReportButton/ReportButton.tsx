@@ -68,7 +68,7 @@ ${data.content || ''}
       data-testid={TEST_IDS.REPORT_BUTTON}
       onClick={handleClick}
     >
-      <Icon type="report" />
+      <Icon type="report" size="1.2em" />
     </IconButton>
   );
 };

@@ -10,7 +10,7 @@ interface MoreOptionsProps {
   /** Renders the action buttons; receives `close` to dismiss the menu after an action fires. */
   children: (close: () => void) => React.ReactNode;
   /** Classes for the wrapper. Defaults to `contents` so the toggle/panel join the parent layout. */
-  wrapperClassName?: string;
+  buttonClassName?: string;
   /** Classes for the toggle button (e.g. positioning). */
   className?: string;
   /** Classes for the collapsible panel wrapper. */
@@ -23,7 +23,7 @@ interface MoreOptionsProps {
 
 const MoreOptions = ({
   children,
-  wrapperClassName = 'contents',
+  buttonClassName,
   className,
   collapseClassName,
   panelClassName,
@@ -42,20 +42,22 @@ const MoreOptions = ({
   };
 
   return (
-    <div ref={wrapperRef} className={wrapperClassName} onBlur={handleBlur}>
+    <div ref={wrapperRef} className={twMerge('flex flex-row-reverse', className)} onBlur={handleBlur}>
       <IconButton
         aria-label={t('v2.ui.button.more')}
         aria-expanded={isOpen}
         aria-controls={panelId}
         data-testid={menuTestId}
         onClick={toggle}
-        className={className}
+        className={buttonClassName}
+        hint={t('v2.ui.button.more')}
       >
         <Icon type={isOpen ? 'close' : 'more'} size="1.2em" />
       </IconButton>
       <Collapse
         open={isOpen}
-        className={twMerge('justify-end', isOpen ? '-my-1' : undefined, collapseClassName)}
+        orientation="horizontal"
+        className={twMerge('justify-end', collapseClassName)}
         data-testid={panelTestId}
       >
         <div
