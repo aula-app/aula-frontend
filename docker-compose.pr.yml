@@ -10,9 +10,8 @@ services:
       - DOCKER_AULA_BASENAME="/${PR_NUMBER}/"
       - VITE_APP_BASENAME="/${PR_NUMBER}/"
     networks:
-      - aula_aula_external
+      - shared_internal
 
 networks:
-  aula_aula_external:
-    driver: bridge
+  shared_internal:
     external: true

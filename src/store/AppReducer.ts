@@ -1,5 +1,10 @@
 import { localStorageSet } from '@/utils';
-import { AppStoreState } from './AppStore';
+import { AppStoreState, ToastMessage } from './AppStore';
+
+// Session-unique id for local UI state (e.g. toasts). Avoids crypto.randomUUID(),
+// which is unavailable in non-secure contexts (e.g. testing over the local network).
+let toastSeq = 0;
+const nextToastId = () => `toast-${Date.now().toString(36)}-${(toastSeq++).toString(36)}`;
 
 /**
  * Reducer for global AppStore using "Redux styled" actions
@@ -63,16 +68,32 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
         darkMode,
       };
     }
-    case 'ADD_POPUP': {
-      return state.messages.find((messages) => messages.message === action?.message.message) // prevent duplicates
-        ? state
-        : { ...state, messages: [...state.messages, action?.message] };
+    case 'ADD_TOAST': {
+      const incoming: ToastMessage = { ...action?.message, id: nextToastId() };
+      // Prevent duplicate messages (same text + type)
+      if (state.toasts.find((m) => m.message === incoming.message && m.type === incoming.type)) {
+        return state;
+      }
+      const MAX_TOASTS = 3;
+      if (state.toasts.length < MAX_TOASTS) {
+        return { ...state, toasts: [...state.toasts, incoming] };
+      }
+      // Cap reached: drop oldest non-error to make room; if all are errors, drop the new one
+      const oldestNonErrorIndex = state.toasts.findIndex((m) => m.type !== 'error');
+      if (oldestNonErrorIndex === -1) {
+        // All visible toasts are errors — only allow new errors to displace oldest error
+        if (incoming.type !== 'error') return state;
+        const [, ...rest] = state.toasts;
+        return { ...state, toasts: [...rest, incoming] };
+      }
+      const trimmed = state.toasts.filter((_, i) => i !== oldestNonErrorIndex);
+      return { ...state, toasts: [...trimmed, incoming] };
     }
-    case 'REMOVE_POPUP': {
-      return { ...state, messages: [...state.messages.filter((e, i) => i !== action?.index)] };
+    case 'REMOVE_TOAST': {
+      return { ...state, toasts: state.toasts.filter((m) => m.id !== action?.id) };
     }
-    case 'REMOVE_ALL_POPUP': {
-      return { ...state, messages: [] };
+    case 'REMOVE_ALL_TOASTS': {
+      return { ...state, toasts: [] };
     }
     default:
       return state;

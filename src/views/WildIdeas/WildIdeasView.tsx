@@ -130,7 +130,7 @@ const WildIdeas = () => {
       style={{ overflowY: 'scroll' }}
       onScroll={saveScroll}
       alignItems="center"
-      flex={1}
+      height="100%"
       spacing={2}
     >
       {isLoading ? (

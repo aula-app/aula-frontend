@@ -107,7 +107,13 @@ const DataTable: React.FC<Props> = ({
 
   return (
     <Stack flex={1} sx={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
-      <ToolBar scope={scope} selected={selected} setEdit={handleEdit} setDelete={handleDelete} extraTools={extraTools} />
+      <ToolBar
+        scope={scope}
+        selected={selected}
+        setEdit={handleEdit}
+        setDelete={handleDelete}
+        extraTools={extraTools}
+      />
       <Table
         scope={scope}
         columns={columns}

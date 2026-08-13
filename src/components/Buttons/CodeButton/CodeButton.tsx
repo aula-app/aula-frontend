@@ -19,7 +19,7 @@ const CodeButton: FC<ButtonProps> = ({ ...restOfProps }) => {
           onClick={() => {
             navigator.clipboard.writeText(code).then(() =>
               dispatch({
-                type: 'ADD_POPUP',
+                type: 'ADD_TOAST',
                 message: { message: t('ui.accessibility.codeCopied'), type: 'success' },
               })
             );

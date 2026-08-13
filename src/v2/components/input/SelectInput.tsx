@@ -1,0 +1,252 @@
+import Icon from '@/components/new/Icon';
+import Collapse from '@/v2/components/ui/Collapse';
+import { usePlacement } from '@/v2/utils/placement';
+import { KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { twMerge } from 'tailwind-merge';
+
+export interface SelectOption {
+  value: string;
+  label: string;
+}
+
+export interface SelectInputProps {
+  id?: string;
+  label?: string;
+  options: SelectOption[];
+  value?: string;
+  onChange?: (value: string) => void;
+  error?: string;
+  helperText?: string;
+  disabled?: boolean;
+  required?: boolean;
+  dense?: boolean;
+  className?: string;
+  'data-testid'?: string;
+}
+
+const SelectInput = ({
+  id,
+  label,
+  options,
+  value,
+  onChange,
+  error,
+  helperText,
+  disabled = false,
+  required = false,
+  dense = false,
+  className,
+  'data-testid': dataTestId,
+}: SelectInputProps) => {
+  const { t } = useTranslation();
+  const generatedId = useId();
+  const inputId = id || generatedId;
+  const listboxId = `${inputId}-listbox`;
+  const errorId = error ? `${inputId}-error` : undefined;
+  const helperId = !error && helperText ? `${inputId}-helper` : undefined;
+
+  const [open, setOpen] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const { verticalClass, zones, availableHeight } = usePlacement(triggerRef);
+  // Grow to content, but anchor to whichever edge keeps the list on-screen: right edge when the
+  // trigger sits near the right of its clipping container, left edge otherwise.
+  const horizontalClass = zones.x === 'right' ? 'right-0' : 'left-0';
+
+  const selectedOption = options.find((o) => o.value === value);
+  const hasValue = !!selectedOption;
+
+  useEffect(() => {
+    if (!open) return;
+    const onOutsideClick = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onOutsideClick);
+    return () => document.removeEventListener('mousedown', onOutsideClick);
+  }, [open]);
+
+  const openDropdown = () => {
+    setOpen(true);
+    setFocusedIndex(options.findIndex((o) => o.value === value));
+  };
+
+  const select = (optionValue: string) => {
+    onChange?.(optionValue);
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+    switch (e.key) {
+      case 'Enter':
+      case ' ':
+        e.preventDefault();
+        if (open && focusedIndex >= 0) {
+          select(options[focusedIndex].value);
+        } else {
+          openDropdown();
+        }
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        if (!open) {
+          openDropdown();
+          break;
+        }
+        setFocusedIndex((i) => Math.min(i + 1, options.length - 1));
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        if (!open) {
+          openDropdown();
+          break;
+        }
+        setFocusedIndex((i) => Math.max(i - 1, 0));
+        break;
+      case 'Home':
+        if (open) {
+          e.preventDefault();
+          setFocusedIndex(0);
+        }
+        break;
+      case 'End':
+        if (open) {
+          e.preventDefault();
+          setFocusedIndex(options.length - 1);
+        }
+        break;
+      case 'Escape':
+        setOpen(false);
+        break;
+    }
+  };
+
+  return (
+    <div ref={containerRef} className={twMerge('flex flex-col w-fit', className)}>
+      <div className="relative w-full">
+        <button
+          ref={triggerRef}
+          id={inputId}
+          type="button"
+          role="combobox"
+          aria-expanded={open}
+          aria-haspopup="listbox"
+          aria-controls={listboxId}
+          aria-required={required || undefined}
+          aria-disabled={disabled || undefined}
+          aria-describedby={[errorId, helperId].filter(Boolean).join(' ') || undefined}
+          aria-invalid={!!error || undefined}
+          aria-activedescendant={open && focusedIndex >= 0 ? `${listboxId}-option-${focusedIndex}` : undefined}
+          disabled={disabled}
+          data-testid={dataTestId}
+          onClick={() => (open ? setOpen(false) : openDropdown())}
+          onKeyDown={handleKeyDown}
+          className={[
+            'peer flex w-full items-center rounded-lg border border-input-border bg-transparent shadow-inner focus-within:outline-1',
+            dense ? 'h-9 px-3' : 'h-12 px-4',
+            'text-sm text-left text-foreground transition-colors duration-200',
+            'hover:border-input-border-hover',
+            'disabled:cursor-not-allowed disabled:opacity-50',
+            error ? 'border-error outline-error-fg focus:border-error-fg' : 'outline-current focus:border-current',
+          ].join(' ')}
+        >
+          <span className={twMerge(hasValue ? 'text-foreground' : 'invisible select-none', 'text-nowrap pr-6')}>
+            {selectedOption?.label ?? '\u00A0'}
+          </span>
+        </button>
+
+        {/* Zero-height sizer: reserves the widest option's width so the trigger never renders
+            narrower than its own dropdown. Mirrors the button's text metrics and padding. */}
+        <div aria-hidden="true" className="h-0 overflow-hidden invisible">
+          {options.map((option) => (
+            <div key={option.value} className={twMerge('text-sm font-medium text-nowrap pr-6', dense ? 'px-3' : 'px-4')}>
+              {option.label}
+            </div>
+          ))}
+        </div>
+
+        {label && (
+          <label
+            htmlFor={inputId}
+            className={[
+              'pointer-events-none absolute left-3 origin-left text-sm transition-all duration-200 bg-background px-0.5 text-nowrap text-ellipsis max-w-full overflow-hidden',
+              hasValue || open ? 'top-0 -translate-y-1/2 scale-75' : 'top-1/2 -translate-y-1/2 scale-100',
+              error ? 'text-error-fg' : 'text-current',
+            ].join(' ')}
+          >
+            {label}
+            {required && (
+              <>
+                <span aria-hidden="true" className="ml-0.5">
+                  *
+                </span>
+                <span className="sr-only">{t('v2.form.validation.required')}</span>
+              </>
+            )}
+          </label>
+        )}
+
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+        >
+          <Icon type="chevronDown" size="0.75em" className="text-muted mt-0.5" />
+        </span>
+
+        <Collapse open={open} className={twMerge('absolute z-50 min-w-full w-max', verticalClass, horizontalClass)}>
+          <ul
+            id={listboxId}
+            role="listbox"
+            aria-label={label}
+            data-testid={dataTestId ? `${dataTestId}-list` : undefined}
+            style={{ maxHeight: Math.min(availableHeight, 240) }}
+            className="rounded-lg border border-input-border bg-background shadow-md overflow-auto py-1"
+          >
+            {options.map((option, i) => (
+              <li
+                key={option.value}
+                id={`${listboxId}-option-${i}`}
+                role="option"
+                aria-selected={option.value === value}
+                data-testid={dataTestId ? `${dataTestId}-option-${option.value}` : undefined}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  select(option.value);
+                }}
+                onMouseEnter={() => setFocusedIndex(i)}
+                className={[
+                  'px-3 py-2 text-sm cursor-pointer transition-colors duration-100 text-nowrap',
+                  option.value === value ? 'text-current font-medium' : 'text-muted',
+                  focusedIndex === i ? 'bg-primary/10' : 'hover:bg-primary/5',
+                ].join(' ')}
+              >
+                {option.label}
+              </li>
+            ))}
+          </ul>
+        </Collapse>
+      </div>
+
+      <Collapse open={!!(error || helperText)}>
+        {error ? (
+          <span id={errorId} role="alert" className="block pt-1 px-1 text-xs text-error-fg">
+            <Icon type="alert" className="inline-block mr-1 mb-0.5" />
+            {error}
+          </span>
+        ) : (
+          <span id={helperId} className="block pt-1 px-1 text-xs text-muted">
+            {helperText}
+          </span>
+        )}
+      </Collapse>
+    </div>
+  );
+};
+
+SelectInput.displayName = 'SelectInput';
+
+export default SelectInput;

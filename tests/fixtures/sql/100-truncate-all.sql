@@ -1,7 +1,7 @@
 -- WARNING: TRUNCATE permanently removes all rows and resets AUTO_INCREMENT. Backup first if needed.
 
 -- Disable foreign key checks so truncates succeed even with FK constraints
--- SET FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS = 0;
 
 TRUNCATE TABLE `au_systemlog`;
 TRUNCATE TABLE `au_system_global_config`;
@@ -46,4 +46,4 @@ TRUNCATE TABLE `au_categories`;
 TRUNCATE TABLE `au_activitylog`;
 
 -- Re-enable foreign key checks
--- SET FOREIGN_KEY_CHECKS = 1;
+SET FOREIGN_KEY_CHECKS = 1;

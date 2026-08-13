@@ -1,5 +1,5 @@
 import { announceToScreenReader, useEscapeKey, useFocusTrap, useModalAnnouncement } from '@/utils';
-import { Close } from '@mui/icons-material';
+import Close from '@mui/icons-material/Close';
 import {
   Dialog,
   DialogActions,

@@ -111,7 +111,7 @@ const ResetMultiplePasswordsButton = forwardRef<HTMLButtonElement, Props>(
           if (error) {
             hasError = true;
             dispatch({
-              type: 'ADD_POPUP',
+              type: 'ADD_TOAST',
               message: {
                 message: `${t('errors.failed')} (${user.realname || user.displayname})`,
                 type: 'error',
@@ -123,7 +123,7 @@ const ResetMultiplePasswordsButton = forwardRef<HTMLButtonElement, Props>(
           hasSuccess = true;
           const userHasEmail = Boolean(user.email);
           dispatch({
-            type: 'ADD_POPUP',
+            type: 'ADD_TOAST',
             message: {
               message: t('auth.forgotPassword.successfulUser', {
                 user: user.realname || user.displayname,
@@ -135,7 +135,7 @@ const ResetMultiplePasswordsButton = forwardRef<HTMLButtonElement, Props>(
         });
 
         if (!hasSuccess && hasError) {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+          dispatch({ type: 'ADD_TOAST', message: { message: t('errors.failed'), type: 'error' } });
         }
 
         setConfirm(false);

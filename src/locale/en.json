@@ -1,7 +1,242 @@
 {
+  "v2": {
+    "alt": {
+      "logo": "Aula: Education Platform Logo",
+      "microphone": "An illustration of an owl with a microphone, representing the announcement feature",
+      "sad": "An illustration of a sad owl, representing the error page",
+      "sleeping": "Sleeping owl illustration",
+      "winking": "An illustration of a winking owl, representing the error page"
+    },
+    "form": {
+      "code": {
+        "label": "Instance code"
+      },
+      "email": {
+        "label": "Email"
+      },
+      "login": {
+        "label": "Username"
+      },
+      "password": {
+        "label": "Password",
+        "show": "Show password",
+        "hide": "Hide password"
+      },
+      "passwordConfirm": {
+        "label": "Confirm password"
+      },
+      "passwordNew": {
+        "label": "New password",
+        "helper": "Your password must be at least {{var}} characters long.",
+        "hint": "A good idea is to come up with a sentence that doesn't really mean anything, but you can still remember it easily."
+      },
+      "passwordTemporary": {
+        "label": "Temporary password",
+        "helper": "Enter the temporary password provided by your school."
+      },
+      "validation": {
+        "email": "Please enter a valid email address",
+        "minLength": "Must be at least {{var}} characters",
+        "maxLength": "Must be less than {{var}} characters",
+        "required": "This field is required",
+        "passwordMatch": "Passwords must match"
+      }
+    },
+    "page": {
+      "about": {
+        "button": "About Aula",
+        "email": "Email",
+        "legal": "aula gGmbH is registered at the Charlottenburg district court under number 244593 B. Represented by: Alexa Schaegner (Managing Director), Steffen Wenzel (Managing Director)",
+        "publisher": "Publisher",
+        "phone": "Phone",
+        "title": "aula app",
+        "version": "Version"
+      },
+      "code": {
+        "chip": "Instance code: {{var}}",
+        "label": "Set an instance code",
+        "title": "Enter instance code",
+        "hint": "Please enter the instance code provided by your school to access the platform."
+      },
+      "login": {
+        "button": "Sign in",
+        "link": "Back to sign in",
+        "title": "Welcome to {{var}}"
+      },
+      "notFound": {
+        "title": "No news here",
+        "hint": "The page you are looking for doesn't exist or has been moved. Please check the URL or return to the homepage."
+      },
+      "offline": {
+        "title": "School is currently closed",
+        "hint": "Please check back later or contact your administrator for more information."
+      },
+      "recovery": {
+        "button": "Send recovery email",
+        "link": "Forgot your password?",
+        "title": "Password recovery"
+      },
+      "passwordReset": {
+        "title": "Reset your password"
+      },
+      "passwordSet": {
+        "error": "Invalid or expired link",
+        "title": "Set your password",
+        "hint": "This link is invalid. Please make sure you copied the entire link from your email and try again."
+      }
+    },
+    "scopes": {
+      "boxes": {
+        "singular": "box",
+        "plural": "boxes"
+      },
+      "ideas": {
+        "singular": "idea",
+        "plural": "ideas",
+        "stats": {
+          "like": "{{count}} like",
+          "likes": "{{count}} likes",
+          "vote": "{{count}} vote",
+          "votes": "{{count}} votes",
+          "comment": "{{count}} comment",
+          "comments": "{{count}} comments"
+        }
+      }
+    },
+    "ui": {
+      "a11y": {
+        "navigation": "Navigation menu",
+        "skipToContent": "Skip to main content",
+        "breadcrumb": {
+          "label": "Breadcrumb navigation",
+          "description": "Navigate from {{var}} to previous pages",
+          "nav": "Parent pages navigation"
+        }
+      },
+      "actions": {
+        "add": "Add {{var}}",
+        "agree": "Agree",
+        "print": "Print this page",
+        "report": "Report a bug",
+        "search": "Search"
+      },
+      "announcement": {
+        "title": "Announcement",
+        "button": "Got it",
+        "helper": "This announcement requires your consent. Please check the box to proceed."
+      },
+      "button": {
+        "cancel": "Cancel",
+        "clear": "Clear",
+        "close": "Close",
+        "confirm": "Confirm",
+        "delete": "Delete",
+        "edit": "Edit",
+        "more": "More options",
+        "report": "Report content",
+        "share": "Copy idea link",
+        "submit": "Submit"
+      },
+      "code": {
+        "button": "Code: {{var}}",
+        "copy": "Copy instance code to clipboard",
+        "error": "Failed to copy instance code to clipboard",
+        "success": "Instance code copied to clipboard"
+      },
+      "darkMode": {
+        "label": "Dark mode"
+      },
+      "dialog": {
+        "delete": {
+          "title": "Caution!",
+          "description": "Are you sure you want to continue?\nThis action cannot be undone.",
+          "descriptionNamed": "You are about to delete '{{var}}'.\nThis action cannot be undone."
+        }
+      },
+      "editor": {
+        "label": "Text editor",
+        "toolbar": "Text formatting",
+        "bold": "Bold",
+        "italic": "Italic",
+        "strikethrough": "Strikethrough",
+        "bulletList": "Bullet list",
+        "orderedList": "Numbered list",
+        "emoji": "Add emoji",
+        "undo": "Undo",
+        "redo": "Redo",
+        "emojis": {
+          "smile": "Smiling face",
+          "laugh": "Laughing face",
+          "heart": "Red heart",
+          "thumbsUp": "Thumbs up",
+          "party": "Party popper",
+          "sparkles": "Sparkles",
+          "rocket": "Rocket",
+          "bulb": "Light bulb",
+          "memo": "Memo",
+          "check": "Check mark"
+        }
+      },
+      "error": {
+        "empty": {
+          "title": "Nothing here yet!",
+          "description": "Check back soon or create something new to get started."
+        },
+        "fetch": {
+          "title": "We had trouble loading that",
+          "description": "Please try again. If it keeps happening, let your teacher know."
+        },
+        "generic": {
+          "title": "Oops! Something went wrong",
+          "description": "That wasn't supposed to happen. Please try again."
+        },
+        "network": {
+          "title": "No internet connection",
+          "description": "Please check your connection and try again."
+        },
+        "search": {
+          "title": "No results found",
+          "description": "Try a different search term."
+        }
+      },
+      "language": {
+        "label": "Language",
+        "hint": "Switch language"
+      },
+      "lightMode": {
+        "label": "Light mode"
+      },
+      "logout": {
+        "button": "Sign out",
+        "label": "Sign out of your account"
+      },
+      "menu": {
+        "open": "Open navigation menu",
+        "close": "Close navigation menu"
+      },
+      "navigation": "Navigation menu",
+      "moveToPhase": "Move to {{phase}}",
+      "phases": "Phase navigation",
+      "sort": {
+        "label": "Sort by",
+        "asc": "Sort ascending",
+        "desc": "Sort descending",
+        "created": "Creation date",
+        "title": "Title",
+        "updated": "Last update",
+        "user": "User",
+        "name": "Name",
+        "ideas": "Number of ideas"
+      },
+      "toggle": "Toggle {{var}}",
+      "count": {
+        "ofTotal": "{{count}} of {{total}}"
+      }
+    }
+  },
   "actions": {
     "activate": "Activate {{var}}",
-    "add": "New {{var}}",
+    "add": "Add {{var}}",
     "addToParent": "Add to {{var}}",
     "agree": "Agree",
     "archive": "Archive",
@@ -9,16 +244,19 @@
     "cancel": "Cancel",
     "change": "Change {{var}}",
     "clear": {
+      "generic": "Clear",
       "filters": "Clear filters"
     },
     "close": "Close",
     "confirm": "Confirm",
     "contentReport": "Report content",
+    "contentReportNamed": "Report '{{var}}'",
     "deactivate": "Deactivate {{var}}",
     "delete": "Delete",
     "discard": "Discard",
     "download": "Download",
     "edit": "Edit {{var}}",
+    "editNamed": "Edit '{{var}}'",
     "filter": "Filter",
     "hide": "Hide",
     "hideFilters": "Hide filters",
@@ -40,6 +278,7 @@
     "set": "Set {{var}}",
     "show": "Show",
     "showFilters": "Show filters",
+    "switchLanguage": "Switch to {{var}}",
     "submitting": "Submitting",
     "unarchive": "Unarchive",
     "updating": "Updating"
@@ -59,15 +298,15 @@
       "messageNoEmail": "Some users didn't register their emails. Remember to share the new password manually with them.",
       "messageMultiple": "Are you sure you want to request new passwords for {{count}} {{target}}? {{var}}",
       "recover": "Recover password",
-      "recovery": "Password Recovery",
+      "recovery": "Password recovery",
       "success": "The password was reset. Registered users will receive a reset link in their email.",
       "successfulUser": "Password reset requested for {{user}}. {{var}}",
       "successfulEmail": "They will receive reset instructions via email.",
       "successfulNoEmail": "No email is registered. Share the new password manually."
     },
     "login": {
-      "button": "Login",
-      "instanceCode": "Instance code: {{var}}",
+      "button": "Sign in",
+      "instanceCode": "Instance code: {{var}} — click to change",
       "label": "Username",
       "noAccount": "Need an account?",
       "reset_code": "New code",
@@ -77,7 +316,7 @@
     "messages": {
       "agree": "I agree to the Terms of Use and Privacy Policy",
       "email": "Check your email for further instructions",
-      "welcome": "Welcome!"
+      "welcome": "Welcome to Aula!"
     },
     "oauth": {
       "arialabel": "OAuth authentication",
@@ -94,13 +333,14 @@
       "copied": "Password copied to the clipboard",
       "current": "Current password",
       "guidelines": {
-        "title": "Password Guidelines:",
-        "minLength": "Minimum 12 characters, maximum 64 characters",
-        "hint": "Come up with a sentence that doesn't really mean anything, but you can still remember it easily."
+        "tempPassword": "Enter the temporary password provided by your school.",
+        "minLength": "The password must have at least {{var}} characters.",
+        "hint": "A good idea is to come up with a sentence that doesn't really mean anything, but you can still remember it easily.",
+        "wrongLink": "This link is invalid. Please make sure you copied the entire link from your email and try again."
       },
       "label": "Password",
       "newPassword": "New password",
-      "oldPassword": "Password",
+      "oldPassword": "Temporary password",
       "set": "Set your password",
       "success": "Password changed successfully"
     },
@@ -136,10 +376,11 @@
     }
   },
   "deletion": {
-    "confirm": "Are you sure you want to delete the selected {{var}}? This action cannot be undone",
-    "headline": "Delete selected {{var}}"
+    "confirm": "Delete {{var}}? This action cannot be undone",
+    "headline": "Delete {{var}}"
   },
   "errors": {
+    "404": "Page not found",
     "boundary": "Something went wrong",
     "boundaryDetails": "Error Details",
     "boundaryMessage": "We apologize for the inconvenience. Please try refreshing the page.",
@@ -147,7 +388,7 @@
     "accountSuspendDate": " until {{var}}",
     "accountSuspended": "Your account has been suspended{{var}}. Please contact your administrator",
     "appOutdated": "Your app is outdated. Please update aula to continue using it.",
-    "appBelowRecommended": "You are running an outdated aula version {{currentVersion}}. Please update as soon as possible.",
+    "appBelowRecommended": "You are running aula {{currentVersion}}, but we recommend updating to {{recommendedVersion}} to avoid issues.",
     "appOutdatedImage": "Winking character illustration reminding you to update the app",
     "databaseError": "Failed to fetch data",
     "default": "Something went wrong",
@@ -163,8 +404,9 @@
     "notFound": "There are no news here",
     "notFoundImage": "Sleeping character illustration for not found page",
     "offline": "The access to this school is suspended. Please try again later",
-    "schoolClosed": "The school is currently closed. Please try again later.",
+    "schoolClosed": "The school is currently closed.",
     "schoolClosedImage": "Sleeping character illustration for school closed page",
+    "schoolClosedHint": "Please check back later or contact your administrator for more information.",
     "timeout": "The request timed out",
     "unauthorized": "This page requires authentication",
     "sso": {
@@ -691,6 +933,10 @@
       "scheduledActionsTable": "Scheduled actions",
       "togglePasswordVisibility": "Toggle password visibility",
       "updatingContent": "Updating content"
+    },
+    "announcement": {
+      "close": "Close announcement",
+      "title": "Announcement"
     },
     "common": {
       "all": "All",

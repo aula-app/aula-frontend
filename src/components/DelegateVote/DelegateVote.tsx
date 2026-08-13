@@ -64,10 +64,10 @@ const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
     const response = await delegateVote(selected.hash_id, box_id);
 
     if (response.error) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.failed'), type: 'error' } });
     }
 
-    dispatch({ type: 'ADD_POPUP', message: { message: t('delegation.status.success'), type: 'success' } });
+    dispatch({ type: 'ADD_TOAST', message: { message: t('delegation.status.success'), type: 'success' } });
     handleClose();
   };
 
@@ -76,10 +76,10 @@ const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
     const response = await revokeDelegation(box_id);
 
     if (response.error) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.failed'), type: 'error' } });
     }
 
-    dispatch({ type: 'ADD_POPUP', message: { message: t('delegation.status.revoked'), type: 'success' } });
+    dispatch({ type: 'ADD_TOAST', message: { message: t('delegation.status.revoked'), type: 'success' } });
     handleClose();
   };
 

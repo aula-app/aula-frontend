@@ -25,7 +25,7 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
       CENTRAL_API_URL: import.meta.env.VITE_APP_API_URL,
       IS_MULTI: import.meta.env.VITE_APP_MULTI !== 'false' && import.meta.env.VITE_APP_MULTI !== false,
       IS_SSO_ENABLED:
-        import.meta.env.VITE_APP_IS_SSO_ENABLED !== 'false' && import.meta.env.VITE_APP_IS_SSO_ENABLED !== false,
+        import.meta.env.VITE_APP_IS_SSO_ENABLED === 'true' || import.meta.env.VITE_APP_IS_SSO_ENABLED === true,
       BASENAME: import.meta.env.VITE_APP_BASENAME || '/',
     };
   } else {
@@ -41,7 +41,7 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
   return config;
 }
 
-export class RuntimeConfigNotFoundError extends Error { }
+export class RuntimeConfigNotFoundError extends Error {}
 
 export function getRuntimeConfig(): RuntimeConfig {
   const config = localStorage.getItem('config');
