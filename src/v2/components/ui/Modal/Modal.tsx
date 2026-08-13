@@ -65,7 +65,7 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
           transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]
           ${isVisible ? '' : 'translate-y-full'}`}
       >
-        <div className="relative overflow-y-auto max-h-[90vh] p-6">
+        <div className="relative overflow-y-auto max-h-[90vh] p-4">
           <div className="absolute top-2 right-2">
             <IconButton aria-label={t('ui.common.dismiss')} onClick={onClose}>
               <Icon type="close" aria-hidden="true" />

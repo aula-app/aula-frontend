@@ -25,7 +25,7 @@ const Avatar = ({ name, size = 32, className }: AvatarProps) => (
     aria-hidden="true"
     style={{ width: size, height: size, fontSize: Math.round(size * 0.4) }}
     className={twMerge(
-      'inline-flex shrink-0 items-center justify-center rounded-full bg-secondary font-medium text-foreground select-none',
+      'inline-flex shrink-0 items-center justify-center rounded-full bg-secondary font-medium text-shade select-none',
       className
     )}
   >

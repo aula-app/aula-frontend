@@ -29,6 +29,24 @@ describe('EmojiExtension markdown serialization', () => {
     expect(markdown).not.toContain(':smile:');
   });
 
+  it('serializes a text-default emoji with the U+FE0F variation selector for color presentation', () => {
+    editor = makeEditor();
+    editor.commands.setEmoji('red_heart');
+
+    const markdown = serialize(editor);
+    expect(markdown).toContain('❤️');
+    expect(markdown).not.toMatch(/❤(?!️)/); // never a bare U+2764
+  });
+
+  it('renders a text-default emoji in the editor DOM with the variation selector', () => {
+    editor = makeEditor();
+    editor.commands.setEmoji('red_heart');
+
+    const html = editor.view.dom.innerHTML;
+    expect(html).toContain('❤️');
+    expect(html).not.toMatch(/❤(?!️)/); // never a bare U+2764 in the rendered node
+  });
+
   it('round-trips: serialized emoji reloads as the emoji character, not a literal shortcode', () => {
     editor = makeEditor();
     editor.commands.setEmoji('rocket');
@@ -50,6 +68,12 @@ describe('shortcodesToUnicode', () => {
 
   it('leaves non-emoji token sequences untouched', () => {
     expect(shortcodesToUnicode('nginx :not_an_emoji: config')).toContain(':not_an_emoji:');
+  });
+
+  it('qualifies text-default emoji with the variation selector', () => {
+    const result = shortcodesToUnicode('love :heart: this');
+    expect(result).toContain('❤️');
+    expect(result).not.toMatch(/❤(?!️)/);
   });
 
   it('loads legacy shortcode content into the editor as emoji, not literal text', () => {

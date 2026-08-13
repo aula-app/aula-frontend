@@ -1,24 +1,22 @@
-import { IdeaType } from '@/types/Scopes';
-import { RoomPhases } from '@/types/SettingsTypes';
 import IconButton from '@/v2/components/button/IconButton';
 import Icon from '@/v2/components/ui/Icon';
 import { useToast } from '@/v2/hooks';
 import { TEST_IDS } from '@/test-ids';
 import { useTranslation } from 'react-i18next';
-import { useHref, useParams } from 'react-router-dom';
+import { useHref } from 'react-router-dom';
 
-interface ShareIdeaButtonProps {
-  idea: IdeaType;
+interface ShareButtonProps {
+  /** App path to copy; resolved against the router basename via `useHref`. */
+  path: string;
   /** Notify the parent that the action fired (e.g. to close a menu). */
   onOpen?: () => void;
 }
 
-const ShareIdeaButton = ({ idea, onOpen }: ShareIdeaButtonProps) => {
+const ShareButton = ({ path, onOpen }: ShareButtonProps) => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { phase } = useParams<{ phase: `${RoomPhases}` }>();
   // useHref resolves the router basename, which window.location-based paths would drop.
-  const href = useHref(`/room/${idea.room_hash_id}/phase/${phase || '0'}/idea/${idea.hash_id}`);
+  const href = useHref(path);
 
   const handleClick = async () => {
     onOpen?.();
@@ -31,10 +29,15 @@ const ShareIdeaButton = ({ idea, onOpen }: ShareIdeaButtonProps) => {
   };
 
   return (
-    <IconButton aria-label={t('v2.ui.button.share')} data-testid={TEST_IDS.SHARE_BUTTON} onClick={handleClick}>
+    <IconButton
+      aria-label={t('v2.ui.button.share')}
+      hint={t('v2.ui.button.share')}
+      data-testid={TEST_IDS.SHARE_BUTTON}
+      onClick={handleClick}
+    >
       <Icon type="share" />
     </IconButton>
   );
 };
 
-export default ShareIdeaButton;
+export default ShareButton;

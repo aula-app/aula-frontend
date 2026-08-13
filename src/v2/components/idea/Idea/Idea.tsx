@@ -1,12 +1,18 @@
+import { deleteIdea, editIdea } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { phases } from '@/utils';
+import { checkPermissions, phases } from '@/utils';
+import DeleteButton from '@/v2/components/button/DeleteButton';
+import EditButton from '@/v2/components/button/EditButton';
+import ReportButton from '@/v2/components/button/ReportButton';
+import ShareButton from '@/v2/components/button/ShareButton';
 import CategoryList, { Category } from '@/v2/components/idea/CategoryList';
 import LikeStat from '@/v2/components/idea/LikeStat';
-import MoreOptions from '@/v2/components/idea/MoreOptions';
+import { IdeaForm } from '@/v2/forms';
 import Stat from '@/v2/components/idea/Stat';
 import UserBar from '@/v2/components/idea/UserBar';
 import Markdown from '@/v2/components/ui/Markdown';
+import MoreOptions from '@/v2/components/ui/MoreOptions';
 import { TEST_IDS } from '@/test-ids';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -49,9 +55,55 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
             <h2 id={titleId} className="font-semibold text-foreground">
               {idea.title}
             </h2>
-            {idea.content && <Markdown className="prose-sm text-muted line-clamp-3">{idea.content}</Markdown>}
+            {idea.content && <Markdown className="prose text-foreground line-clamp-3">{idea.content}</Markdown>}
           </Link>
-          <MoreOptions idea={idea} onChanged={onChanged} />
+          <MoreOptions
+            className="absolute top-1 right-1 z-10"
+            panelClassName="ml-auto mr-6"
+            menuTestId={TEST_IDS.IDEA_MORE_MENU}
+            panelTestId={TEST_IDS.IDEA_MORE_OPTIONS_PANEL}
+          >
+            {(close) => (
+              <>
+                <EditButton
+                  scopeLabel={t('scopes.ideas.name')}
+                  subject={idea.title}
+                  hidden={!checkPermissions('ideas', 'edit', idea.user_hash_id)}
+                  onSave={(data) =>
+                    editIdea({
+                      idea_id: idea.hash_id,
+                      room_id: data.room || idea.room_hash_id,
+                      title: data.title,
+                      content: data.content,
+                    })
+                  }
+                  renderForm={({ onSubmit, onCancel }) => (
+                    <IdeaForm
+                      defaultValues={idea}
+                      contextRoomId={idea.room_hash_id}
+                      contextBoxId=""
+                      onSubmit={onSubmit}
+                      onCancel={onCancel}
+                    />
+                  )}
+                  onChanged={onChanged}
+                  onOpen={close}
+                />
+                <DeleteButton
+                  scopeLabel={t('scopes.ideas.name')}
+                  subject={idea.title}
+                  hidden={!checkPermissions('ideas', 'delete', idea.user_hash_id)}
+                  onConfirm={() => deleteIdea(idea.hash_id)}
+                  onDeleted={onChanged}
+                  onOpen={close}
+                  confirmTestId={TEST_IDS.DELETE_IDEA_CONFIRM}
+                  cancelTestId={TEST_IDS.DELETE_IDEA_CANCEL}
+                />
+                <ReportButton scopeLabel={t('scopes.ideas.name')} subject={idea.title} onOpen={close} />
+                <ShareButton path={ideaPath} onOpen={close} />
+              </>
+            )}
+          </MoreOptions>
         </div>
       </div>
 

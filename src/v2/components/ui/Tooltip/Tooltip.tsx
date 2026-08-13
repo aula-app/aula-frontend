@@ -97,7 +97,12 @@ const Tooltip: React.FC<TooltipProps> = ({
       ref={wrapper}
       className={twMerge('relative flex items-center justify-center', wrapperClassName)}
       style={{ '--tooltip-container-w': `${containerWidth}px` } as React.CSSProperties}
-      onFocus={() => !isExpanded() && show()}
+      onFocus={(e) => {
+        // Only surface on keyboard focus. Programmatic focus after a mouse action (e.g. a dropdown
+        // moving focus to its first item on open) doesn't match :focus-visible, so it won't pop the tooltip.
+        const target = e.target as HTMLElement;
+        if (!isExpanded() && target.matches?.(':focus-visible')) show();
+      }}
       onBlur={hide}
       onPointerEnter={(e) => !isTouchActive.current && e.pointerType !== 'touch' && !isExpanded() && show()}
       onPointerLeave={(e) => !isTouchActive.current && e.pointerType !== 'touch' && hide()}

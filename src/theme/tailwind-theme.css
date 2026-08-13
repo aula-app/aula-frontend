@@ -70,40 +70,42 @@
   --color-shade: hsl(215, 25%, 8%);
 
   /* --- Content / Text --- */
-  --color-foreground: hsl(215, 20%, 90%);
+  --color-foreground: hsl(215, 20%, 95%);
   --color-muted: hsl(215, 15%, 75%);
 
   /* --- Semantic states --- */
   --color-primary: hsl(134, 55%, 55%);
   --color-secondary: hsl(215, 12%, 65%);
 
-  --color-error: hsl(0, 40%, 52%);
+  /* -bg deepened so the light -fg text meets WCAG AA (~5:1) as a filled pair */
+  --color-error: hsl(0, 45%, 26%);
   --color-error-fg: hsl(0, 80%, 75%);
 
-  --color-warning: hsl(45, 40%, 50%);
+  --color-warning: hsl(40, 55%, 24%);
   --color-warning-fg: hsl(35, 85%, 70%);
 
-  --color-info: hsl(204, 40%, 52%);
+  --color-info: hsl(204, 45%, 26%);
   --color-info-fg: hsl(204, 75%, 72%);
 
-  --color-success: hsl(134, 30%, 50%);
+  --color-success: hsl(134, 32%, 24%);
   --color-success-fg: hsl(134, 60%, 65%);
 
   /* --- Phases --- */
-  --color-wild: hsl(210, 45%, 58%);
-  --color-wild-active: hsl(210, 75%, 55%);
+  /* Deep tones so near-white foreground text meets WCAG AAA (~7:1) */
+  --color-wild: hsl(210, 60%, 32%);
+  --color-wild-active: hsl(210, 70%, 28%);
 
-  --color-discussion: hsl(270, 32%, 50%);
-  --color-discussion-active: hsl(270, 55%, 58%);
+  --color-discussion: hsl(270, 42%, 38%);
+  --color-discussion-active: hsl(270, 52%, 33%);
 
-  --color-approval: hsl(25, 48%, 50%);
-  --color-approval-active: hsl(25, 80%, 55%);
+  --color-approval: hsl(25, 58%, 30%);
+  --color-approval-active: hsl(25, 68%, 26%);
 
-  --color-voting: hsl(45, 50%, 50%);
-  --color-voting-active: hsl(45, 90%, 55%);
+  --color-voting: hsl(45, 75%, 22%);
+  --color-voting-active: hsl(45, 85%, 19%);
 
-  --color-results: hsl(134, 32%, 50%);
-  --color-results-active: hsl(134, 55%, 50%);
+  --color-results: hsl(134, 48%, 24%);
+  --color-results-active: hsl(134, 58%, 20%);
 
   /* --- Utility --- */
   --color-shadow: hsla(0, 0%, 100%, 10%);
@@ -112,7 +114,7 @@
 }
 
 /* ========== DARK MODE VARIANT (class-based, matches AppThemeProvider) ========== */
-@variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Force-include dynamic color utilities used by Button (dynamic template literals aren't scanned) */
 @source inline("bg-primary bg-secondary bg-error text-primary-fg text-secondary-fg text-error-fg border-primary border-secondary border-error outline-primary outline-secondary outline-error");
@@ -130,7 +132,7 @@
 
   /* --- Brand --- */
   --color-primary: var(--color-primary);
-  --color-primary-fg: var(--color-foreground);
+  --color-primary-fg: var(--color-shade);
   
   --color-secondary: var(--color-secondary);
   --color-secondary-fg: var(--color-muted);

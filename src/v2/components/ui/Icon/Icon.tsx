@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { IconBaseProps, IconType } from 'react-icons';
+import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai';
 import {
   HiArrowUturnLeft,
   HiArrowUturnRight,
@@ -50,7 +51,6 @@ import {
   HiStrikethrough,
   HiTrash,
 } from 'react-icons/hi2';
-import { LiaSortNumericDownSolid, LiaSortNumericUpSolid } from 'react-icons/lia';
 import voting from './voting.svg?react';
 
 const VotingIcon: IconType = ({ size = '1em', color = 'currentColor', style, ...props }) =>
@@ -115,8 +115,8 @@ export const ICONS = {
   settings: HiOutlineCog6Tooth,
   search: HiOutlineMagnifyingGlass,
   share: HiOutlineShare,
-  sortAsc: LiaSortNumericDownSolid,
-  sortDesc: LiaSortNumericUpSolid,
+  sortAsc: AiOutlineSortAscending,
+  sortDesc: AiOutlineSortDescending,
   strikethrough: HiStrikethrough,
   undo: HiArrowUturnLeft,
   user: HiOutlineUser,
