@@ -18,7 +18,7 @@ import { useModal } from '@/v2/hooks/useModal';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import BoxCard from './BoxCard';
+import BoxCard from '@/v2/components/box/BoxCard';
 import { useBoxesByRoom } from './useBoxesByRoom';
 
 const boxesFilterConfig: ListFilterConfig<BoxType> = {
