@@ -180,7 +180,13 @@ export interface UserType {
   consents_given: number;
   consents_needed: number;
   roles?: string;
+  /** Set once the person has actually signed in through the IdP. */
   sso_sub?: string | null;
+  /**
+   * The identity the provider knows them by, set the moment the directory
+   * import creates the account and long before they first sign in.
+   */
+  idp_user_id?: string | null;
   sso_provider?: string | null;
 }
 

@@ -180,7 +180,16 @@
       "link_failed": "Wir konnten die Verknüpfung deiner SSO-Identität nicht abschließen. Bitte versuche erneut, dich anzumelden.",
       "link_intent_not_found": "Deine SSO-Verknüpfung ist abgelaufen. Bitte versuche dich erneut anzumelden.",
       "user_mismatch": "Das aula-Konto, mit dem du dich angemeldet hast, stimmt nicht mit der SSO-Identität überein. Bitte versuche dich erneut anzumelden.",
-      "already_linked": "Dieses aula-Konto ist bereits mit einer anderen SSO-Identität verknüpft. Bitte wende dich an deinen Administrator."
+      "already_linked": "Dieses aula-Konto ist bereits mit einer anderen SSO-Identität verknüpft. Bitte wende dich an deinen Administrator.",
+      "idp_school_missing": "Deine Schule hat uns nicht mitgeteilt, zu welcher Schule du gehörst. Bitte wende dich an deinen Administrator.",
+      "idp_school_taken": "Diese Schule ist bereits mit einer anderen aula-Instanz verbunden. Bitte überprüfe den Instanzcode oder wende dich an deinen Administrator.",
+      "idp_user_missing": "Deine Schule hat uns nicht mitgeteilt, wer du bist. Bitte wende dich an deinen Administrator.",
+      "idp_identity_taken": "Dieses Schulkonto ist bereits mit einem anderen aula-Konto verknüpft. Bitte wende dich an deinen Administrator.",
+      "link_user_not_found": "Wir konnten dein aula-Konto nicht finden. Bitte versuche erneut, dich anzumelden.",
+      "school_not_provisioned": "Diese Schule ist noch nicht eingerichtet. Bitte wende dich an deinen Administrator.",
+      "sso_disabled": "Single Sign-On ist für diese Schule nicht aktiviert.",
+      "login_cancelled": "Die Anmeldung wurde abgebrochen. Du kannst es erneut versuchen oder dich mit deinem aula-Passwort anmelden.",
+      "sso_provider_error": "Beim Anmeldedienst deiner Schule ist ein Problem aufgetreten. Bitte versuche es erneut oder wende dich an deinen Administrator."
     }
   },
   "forms": {
@@ -534,7 +543,8 @@
       "user_needs_to_consent": "Zustimmung erforderlich",
       "userlevel": "Benutzer-Rolle",
       "username": "Benutzername",
-      "vote_bias": "Stimmverzerrung"
+      "vote_bias": "Stimmverzerrung",
+      "idp_user_id": "Typ"
     },
     "customFields": {
       "form": "Benutzerdefiniertes Feld {{var}}",
@@ -879,5 +889,69 @@
     "thursday": "Donnerstag",
     "tuesday": "Dienstag",
     "wednesday": "Mittwoch"
+  },
+  "idp": {
+    "sync": {
+      "title": "Mit dem Identitätsanbieter abgleichen",
+      "notEnabled": "Für diese Schule ist kein Abgleich aktiviert. Die Verwaltung kann ihn im aula-manager einschalten.",
+      "connectReturned": "Beim Anbieter angemeldet. Dein aula-Konto ist jetzt verknüpft und die Schule erkannt.",
+      "reviewWarning": "Bitte prüfe die Zuordnungen. Eine falsche Zusammenführung gibt einer Person das Konto einer anderen — inklusive aller Beiträge.",
+      "rooms": "Klassen und Räume",
+      "users": "Personen",
+      "search": "Suchen",
+      "willBeCreated": "wird neu angelegt",
+      "staysInAula": "bleibt unverändert",
+      "progressTitle": "Fortschritt",
+      "progressBody": "{{linked}} Konten verknüpft, {{remaining}} noch offen.",
+      "progressHint": "Erst wenn niemand mehr offen ist, kann die Anmeldung per Passwort abgeschaltet werden.",
+      "step": {
+        "connect": "Melde dich zuerst beim Anbieter an. Damit wird dein aula-Konto verknüpft und die Schule erkannt.",
+        "prepare": "Jetzt können Klassen und Personen des Anbieters mit den vorhandenen aula-Daten abgeglichen werden.",
+        "importing": "Die Daten werden übertragen …"
+      },
+      "state": {
+        "confident": "eindeutig",
+        "ambiguous": "mehrdeutig",
+        "none": "kein Treffer",
+        "pseudonym": "nur Pseudonym"
+      },
+      "columns": {
+        "aula": "In aula",
+        "provider": "Beim Anbieter",
+        "state": "Zuordnung",
+        "merge": "Zusammenführen?"
+      },
+      "actions": {
+        "connect": "Mein Konto verknüpfen",
+        "prepare": "Abgleich vorbereiten",
+        "apply": "Zuordnungen übernehmen und importieren",
+        "rebuild": "Neu berechnen",
+        "refresh": "Aktualisieren",
+        "open": "Mit dem Identity Provider synchronisieren"
+      },
+      "errors": {
+        "connect": "Die Anmeldung beim Anbieter konnte nicht gestartet werden.",
+        "prepare": "Der Abgleich konnte nicht vorbereitet werden.",
+        "apply": "{{count}} Zuordnungen sind nicht gültig. Bitte prüfe die markierten Zeilen."
+      },
+      "entry": {
+        "body": "Diese Schule wird auf ihren Identity Provider umgestellt. Ordnen Sie die vorhandenen Klassen und Personen vor dem Import zu."
+      }
+    },
+    "claim": {
+      "banner": "Hast du schon ein aula-Konto? Melde dich einmal mit deinem aula-Passwort an, damit deine Beiträge erhalten bleiben.",
+      "noAccount": "Ich habe noch kein aula-Konto",
+      "declineFailed": "Das hat nicht geklappt. Bitte melde dich erneut an."
+    },
+    "setup": {
+      "title": "Wir richten deine Schule ein",
+      "body": "Deine Klassen und Mitschüler:innen werden gerade geladen. Das dauert nur einen Moment.",
+      "doneTitle": "Schuldaten importiert",
+      "doneBody": "{{rooms}} Räume und {{users}} Personen stehen jetzt bereit.",
+      "start": "Los geht's mit aula!",
+      "failedTitle": "Die Einrichtung ist fehlgeschlagen",
+      "failedBody": "Bitte wende dich an deine Administration. Die Einrichtung wird automatisch erneut versucht.",
+      "continue": "Trotzdem fortfahren"
+    }
   }
 }
