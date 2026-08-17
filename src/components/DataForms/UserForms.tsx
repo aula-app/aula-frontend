@@ -2,7 +2,7 @@ import { useDraftStorage } from '@/hooks';
 import { addSpecialRoles, addUser, addUserRoom, editUser, getUserRooms, removeUserRoom } from '@/services/users';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
-import { checkPermissions, roles } from '@/utils';
+import { checkPermissions, isSsoUser, roles } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -25,6 +25,10 @@ interface UserFormsProps {
 
 const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
+
+  // Provider-managed accounts own their identity: the admin cannot edit the
+  // username, email or realname the directory supplies.
+  const ssoManaged = isSsoUser(defaultValues);
 
   const [rooms, setRooms] = useState<string[]>([]);
   const [updateRooms, setUpdateRooms] = useState<UpdateType>({ add: [], remove: [] });
@@ -245,7 +249,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               <TextField
                 fullWidth
                 required
-                disabled={isLoading}
+                disabled={isLoading || ssoManaged}
                 label={t(`settings.columns.username`)}
                 id="username"
                 size="small"
@@ -275,7 +279,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               <TextField
                 fullWidth
                 required
-                disabled={isLoading}
+                disabled={isLoading || ssoManaged}
                 label={t(`settings.columns.realname`)}
                 id="realname"
                 size="small"
@@ -304,7 +308,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               />
               <TextField
                 fullWidth
-                disabled={isLoading}
+                disabled={isLoading || ssoManaged}
                 label={t(`settings.columns.email`)}
                 id="email"
                 size="small"
