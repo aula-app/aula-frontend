@@ -61,10 +61,10 @@ const PrivateRoutes = () => {
       <Route path="room/:room_id/" element={<RoomLayout />}>
         <Route path="phase/0" element={<Ideas />} />
         <Route path="phase/:phase" element={<Boxes />} />
-        <Route path="phase/:phase/idea/:idea_id" element={<IdeaView />} />
-        <Route path="phase/:phase/idea-box/:box_id" element={<Box />} />
-        <Route path="phase/:phase/idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
       </Route>
+      <Route path="room/:room_id/phase/:phase/idea/:idea_id" element={<IdeaView />} />
+      <Route path="room/:room_id/phase/:phase/idea-box/:box_id" element={<Box />} />
+      <Route path="room/:room_id/phase/:phase/idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
       <Route path="settings/profile" element={<UserProfileView />} />
       {checkPermissions('announcements', 'viewAll') && (
         <Route path="settings/announcements" element={<AnnouncementsView />} />

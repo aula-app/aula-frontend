@@ -100,144 +100,146 @@ const Box: React.FC = () => {
   };
 
   return (
-    <ListPageLayout
-      header={
-        <>
-          {!isLoading && !error && box && (
-            <div className="p-2">
-              <BoxCard box={box} onChanged={handleBoxChanged} />
-            </div>
-          )}
-          {!isLoading && !error && box && (
-            <ScopeTitle
-              scope="ideas"
-              count={visibleIdeas.length}
-              total={ideas.length}
-              phase={String(box.phase_id)}
-              defaultOpen={!!searchQuery}
-              onToggle={(open) => !open && setSearchQuery('')}
-            >
-              <TextInput
-                dense
-                type="search"
-                label={t('v2.ui.actions.search')}
-                startAdornment={<Icon type="search" />}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 min-w-20"
-                data-testid={TEST_IDS.SEARCH_FIELD}
-              />
-              <SelectInput
-                dense
-                label={t('v2.ui.sort.label')}
-                options={orderOptions}
-                value={orderBy}
-                onChange={setOrderBy}
-                data-testid={TEST_IDS.SORT_SELECT}
-              />
-              <IconButton
-                dense
-                hint={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
-                aria-label={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
-                aria-pressed={reversed}
-                data-testid={TEST_IDS.SORT_DIRECTION_BUTTON}
-                onClick={() => setReversed(!reversed)}
-                className="min-w-6"
+    <div className="w-full h-full min-h-0 flex flex-col">
+      <ListPageLayout
+        header={
+          <>
+            {!isLoading && !error && box && (
+              <div className="p-2">
+                <BoxCard box={box} onChanged={handleBoxChanged} />
+              </div>
+            )}
+            {!isLoading && !error && box && (
+              <ScopeTitle
+                scope="ideas"
+                count={visibleIdeas.length}
+                total={ideas.length}
+                phase={String(box.phase_id)}
+                defaultOpen={!!searchQuery}
+                onToggle={(open) => !open && setSearchQuery('')}
               >
-                <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="1.5em" />
-              </IconButton>
-            </ScopeTitle>
-          )}
-        </>
-      }
-      action={
-        !isLoading &&
-        !error &&
-        box &&
-        canAddIdeas && (
-          <Fab
-            icon={<Icon type="add" />}
-            aria-label={addIdeaLabel}
-            data-testid={TEST_IDS.ADD_IDEA_BUTTON}
-            onClick={() =>
-              openModal(
-                addIdeaLabel,
-                <IdeaForm
-                  contextRoomId={room_id}
-                  contextBoxId={box_id ?? ''}
-                  onSubmit={handleAddIdea}
-                  onCancel={closeModal}
-                  error={formError}
-                  onErrorClose={() => setFormError(null)}
+                <TextInput
+                  dense
+                  type="search"
+                  label={t('v2.ui.actions.search')}
+                  startAdornment={<Icon type="search" />}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 min-w-20"
+                  data-testid={TEST_IDS.SEARCH_FIELD}
                 />
-              )
-            }
-            className="fixed bottom-4 self-center z-10"
+                <SelectInput
+                  dense
+                  label={t('v2.ui.sort.label')}
+                  options={orderOptions}
+                  value={orderBy}
+                  onChange={setOrderBy}
+                  data-testid={TEST_IDS.SORT_SELECT}
+                />
+                <IconButton
+                  dense
+                  hint={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
+                  aria-label={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
+                  aria-pressed={reversed}
+                  data-testid={TEST_IDS.SORT_DIRECTION_BUTTON}
+                  onClick={() => setReversed(!reversed)}
+                  className="min-w-6"
+                >
+                  <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="1.5em" />
+                </IconButton>
+              </ScopeTitle>
+            )}
+          </>
+        }
+        action={
+          !isLoading &&
+          !error &&
+          box &&
+          canAddIdeas && (
+            <Fab
+              icon={<Icon type="add" />}
+              aria-label={addIdeaLabel}
+              data-testid={TEST_IDS.ADD_IDEA_BUTTON}
+              onClick={() =>
+                openModal(
+                  addIdeaLabel,
+                  <IdeaForm
+                    contextRoomId={room_id}
+                    contextBoxId={box_id ?? ''}
+                    onSubmit={handleAddIdea}
+                    onCancel={closeModal}
+                    error={formError}
+                    onErrorClose={() => setFormError(null)}
+                  />
+                )
+              }
+              className="fixed bottom-4 self-center z-10"
+            />
+          )
+        }
+      >
+        {(isLoading || isIdeasLoading) && (
+          <p role="status">
+            <span aria-hidden="true">...</span>
+            <span className="sr-only">{t('status.loading')}</span>
+          </p>
+        )}
+
+        {error && (
+          <FeedbackState
+            image="/img/Paula_unzufrieden.svg"
+            alt={t('v2.alt.sad')}
+            title={t(`v2.ui.error.${error}.title`)}
+            description={t(`v2.ui.error.${error}.description`)}
+            data-testid="box-error-state"
           />
-        )
-      }
-    >
-      {(isLoading || isIdeasLoading) && (
-        <p role="status">
-          <span aria-hidden="true">...</span>
-          <span className="sr-only">{t('status.loading')}</span>
-        </p>
-      )}
+        )}
 
-      {error && (
-        <FeedbackState
-          image="/img/Paula_unzufrieden.svg"
-          alt={t('v2.alt.sad')}
-          title={t(`v2.ui.error.${error}.title`)}
-          description={t(`v2.ui.error.${error}.description`)}
-          data-testid="box-error-state"
-        />
-      )}
+        {!isLoading && !error && box && (
+          <>
+            {ideasError && (
+              <FeedbackState
+                image="/img/Paula_unzufrieden.svg"
+                alt={t('v2.alt.sad')}
+                title={t(`v2.ui.error.${ideasError}.title`)}
+                description={t(`v2.ui.error.${ideasError}.description`)}
+                data-testid="box-ideas-error-state"
+              />
+            )}
 
-      {!isLoading && !error && box && (
-        <>
-          {ideasError && (
-            <FeedbackState
-              image="/img/Paula_unzufrieden.svg"
-              alt={t('v2.alt.sad')}
-              title={t(`v2.ui.error.${ideasError}.title`)}
-              description={t(`v2.ui.error.${ideasError}.description`)}
-              data-testid="box-ideas-error-state"
-            />
-          )}
+            {!isIdeasLoading && !ideasError && ideas.length === 0 && (
+              <FeedbackState
+                image="/img/Paula_schlafend.svg"
+                alt={t('v2.alt.sleeping')}
+                title={t('v2.ui.error.empty.title')}
+                description={t('v2.ui.error.empty.description')}
+                data-testid="box-ideas-empty-state"
+              />
+            )}
 
-          {!isIdeasLoading && !ideasError && ideas.length === 0 && (
-            <FeedbackState
-              image="/img/Paula_schlafend.svg"
-              alt={t('v2.alt.sleeping')}
-              title={t('v2.ui.error.empty.title')}
-              description={t('v2.ui.error.empty.description')}
-              data-testid="box-ideas-empty-state"
-            />
-          )}
+            {!isIdeasLoading && !ideasError && ideas.length > 0 && visibleIdeas.length === 0 && (
+              <FeedbackState
+                image="/img/Paula_zwinkernd.svg"
+                alt={t('v2.alt.winking')}
+                title={t('v2.ui.error.search.title')}
+                description={t('v2.ui.error.search.description')}
+                data-testid="box-ideas-no-results-state"
+              />
+            )}
 
-          {!isIdeasLoading && !ideasError && ideas.length > 0 && visibleIdeas.length === 0 && (
-            <FeedbackState
-              image="/img/Paula_zwinkernd.svg"
-              alt={t('v2.alt.winking')}
-              title={t('v2.ui.error.search.title')}
-              description={t('v2.ui.error.search.description')}
-              data-testid="box-ideas-no-results-state"
-            />
-          )}
-
-          {!isIdeasLoading && !ideasError && visibleIdeas.length > 0 && (
-            <ScrollList storageKey={`box-ideas-${box_id}`}>
-              {visibleIdeas.map((idea) => (
-                <li key={idea.hash_id}>
-                  <Idea idea={idea} onChanged={refetchIdeas} />
-                </li>
-              ))}
-            </ScrollList>
-          )}
-        </>
-      )}
-    </ListPageLayout>
+            {!isIdeasLoading && !ideasError && visibleIdeas.length > 0 && (
+              <ScrollList storageKey={`box-ideas-${box_id}`}>
+                {visibleIdeas.map((idea) => (
+                  <li key={idea.hash_id}>
+                    <Idea idea={idea} onChanged={refetchIdeas} />
+                  </li>
+                ))}
+              </ScrollList>
+            )}
+          </>
+        )}
+      </ListPageLayout>
+    </div>
   );
 };
 

@@ -6,6 +6,7 @@ import DeleteButton from '@/v2/components/button/DeleteButton';
 import EditButton from '@/v2/components/button/EditButton';
 import ReportButton from '@/v2/components/button/ReportButton';
 import ShareButton from '@/v2/components/button/ShareButton';
+import ApprovalStatus from '@/v2/components/idea/ApprovalStatus';
 import CategoryList, { Category } from '@/v2/components/idea/CategoryList';
 import LikeStat from '@/v2/components/idea/LikeStat';
 import { IdeaForm } from '@/v2/forms';
@@ -36,6 +37,13 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
   const phaseColor = phases[phase_id] ?? 'wild';
   const ideaPath = `/room/${idea.room_hash_id}/phase/${phase_id}/idea/${idea.hash_id}`;
 
+  // In the approval phase the card recolours by status (green approved, red
+  // rejected, grey undecided) and gains a status badge on top.
+  const isApprovalPhase = phase_id === '20';
+  const approvalColor = idea.approved === 1 ? 'bg-success' : idea.approved === -1 ? 'bg-error' : 'bg-muted';
+  const bubbleColor = isApprovalPhase ? approvalColor : `bg-${phaseColor}`;
+  const hasTopTab = isApprovalPhase || categories.length > 0;
+
   return (
     <article
       aria-labelledby={titleId}
@@ -43,12 +51,17 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
       className={twMerge('flex flex-col gap-1', className)}
     >
       <div className="relative flex flex-col-reverse gap-1 flex-1">
-        <CategoryList categories={categories} />
+        {hasTopTab && (
+          <div className="flex flex-wrap items-center gap-1">
+            {isApprovalPhase && <ApprovalStatus approved={idea.approved} />}
+            <CategoryList categories={categories} />
+          </div>
+        )}
         <div
           className={twMerge(
             'relative flex flex-col-reverse ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
-            `bg-${phaseColor}`,
-            categories.length > 0 ? 'rounded-tl-none' : ''
+            bubbleColor,
+            hasTopTab ? 'rounded-tl-none' : ''
           )}
         >
           <Link to={ideaPath}>

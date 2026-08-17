@@ -100,6 +100,11 @@
           "votes": "{{count}} Stimmen",
           "comment": "{{count}} Kommentar",
           "comments": "{{count}} Kommentare"
+        },
+        "status": {
+          "approved": "Genehmigt",
+          "waiting": "Warten",
+          "rejected": "Nicht genehmigt"
         }
       }
     },
