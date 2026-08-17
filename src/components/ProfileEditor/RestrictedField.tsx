@@ -11,6 +11,8 @@ interface Props {
   className?: string;
   placeholder?: string;
   tabIndex?: number;
+  /** When true the field is permanently read-only: no unlock toggle. */
+  locked?: boolean;
 }
 
 /** * Renders "requests" view
@@ -23,7 +25,7 @@ const autocompleteTokens: Partial<Record<keyof PossibleFields, string>> = {
   email: 'email',
 };
 
-const RestrictedField = ({ name, control, ...restOfProps }: Props) => {
+const RestrictedField = ({ name, control, locked = false, ...restOfProps }: Props) => {
   const { t } = useTranslation();
 
   const [disabled, setDisabled] = useState(true);
@@ -39,14 +41,14 @@ const RestrictedField = ({ name, control, ...restOfProps }: Props) => {
           id={`profile-${name}`}
           size="small"
           {...field}
-          disabled={disabled}
+          disabled={locked || disabled}
           slotProps={{
             htmlInput: {
               autoComplete: autocompleteTokens[name],
             },
             input: {
               'aria-labelledby': `profile-${name}-label`,
-              endAdornment: (
+              endAdornment: locked ? undefined : (
                 <InputAdornment position="end">
                   <AppIconButton
                     size="small"

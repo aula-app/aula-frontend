@@ -3,6 +3,7 @@ import { MarkdownEditor } from '@/components/DataFields';
 import UserAvatar from '@/components/UserAvatar';
 import { addMessage } from '@/services/messages';
 import { editSelf } from '@/services/users';
+import { useSsoManaged } from '@/hooks';
 import { useAppStore } from '@/store';
 import { UserType } from '@/types/Scopes';
 import { errorAlert, successAlert } from '@/utils';
@@ -35,6 +36,7 @@ interface Props {
 const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
+  const isSsoManaged = useSsoManaged();
 
   const [updateRequests, setUpdateRequests] = useState<Array<fieldOptions>>([]);
   const [editImage, setEditImage] = useState(false);
@@ -178,7 +180,13 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
         {user && <ImageEditor isOpen={editImage} onClose={onClose} id={user.hash_id} />}
         <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
           {userFields.slice(0, -1).map((name, i) => (
-            <RestrictedField key={i} name={name} control={control} tabIndex={i + 1} />
+            <RestrictedField
+              key={i}
+              name={name}
+              control={control}
+              tabIndex={i + 1}
+              locked={isSsoManaged && name !== 'displayname'}
+            />
           ))}
         </Stack>
         <MarkdownEditor name="about_me" control={control} sx={{ flex: 2, minWidth: `min(300px, 100%)` }} />

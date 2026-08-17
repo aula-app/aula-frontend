@@ -4,6 +4,7 @@ import { handleOAuthLogin } from "@/services/auth";
 import { declineAccountClaim } from "@/services/idpMigration";
 import { loginUser } from "@/services/login";
 import { completeSsoLink, initiateSso } from "@/services/sso";
+import { useSsoManaged } from "@/hooks";
 import { useAppStore } from "@/store";
 import { LoginFormValues } from "@/types/LoginTypes";
 import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
@@ -33,6 +34,7 @@ import * as yup from "yup";
 
 const LoginView = () => {
   const { t } = useTranslation();
+  const isSsoManaged = useSsoManaged();
   const [config, setConfig] = useState<RuntimeConfig>(defaultConfig);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -350,17 +352,19 @@ const LoginView = () => {
         >
           {t("auth.login.button")}
         </Button>
-        <Grid container justifyContent="end" alignItems="center">
-          <Button
-            variant="text"
-            color="secondary"
-            component={AppLink}
-            to="/recovery/password"
-            aria-label={t('auth.forgotPassword.link')}
-          >
-            {t('auth.forgotPassword.link')}
-          </Button>
-        </Grid>
+        {!isSsoManaged && (
+          <Grid container justifyContent="end" alignItems="center">
+            <Button
+              variant="text"
+              color="secondary"
+              component={AppLink}
+              to="/recovery/password"
+              aria-label={t('auth.forgotPassword.link')}
+            >
+              {t('auth.forgotPassword.link')}
+            </Button>
+          </Grid>
+        )}
 
         {(config.IS_SSO_ENABLED) && (
           <>
