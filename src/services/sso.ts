@@ -1,3 +1,5 @@
+import { Capacitor } from '@capacitor/core';
+
 import { localStorageGet } from '@/utils';
 
 /**
@@ -56,6 +58,10 @@ export const initiateSso = async (
   const initiateUrl = new URL(`${apiUrl}/api/v2/auth/sso/initiate`);
   if (forceLogin) initiateUrl.searchParams.set('force_login', 'true');
   if (options.loginHint) initiateUrl.searchParams.set('login_hint', options.loginHint);
+  // Ask the backend to finish on our deep-link scheme instead of on the
+  // website. It travels inside the signed state, so it survives the round trip
+  // through Keycloak and is still there when the callback picks a destination.
+  if (Capacitor.isNativePlatform()) initiateUrl.searchParams.set('client', 'app');
 
   const response = await fetch(initiateUrl.toString(), {
     method: 'GET',
