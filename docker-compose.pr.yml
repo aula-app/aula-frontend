@@ -2,6 +2,7 @@ name: ${PR_NUMBER}
 
 networks:
   shared_public:
+    driver: bridge
     external: true
 
 services:
@@ -15,8 +16,3 @@ services:
       - VITE_APP_BASENAME="/${PR_NUMBER}/"
     networks:
       - shared_public
-
-networks:
-  aula_aula_external:
-    driver: bridge
-    external: true
