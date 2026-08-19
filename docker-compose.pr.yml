@@ -1,5 +1,10 @@
 name: ${PR_NUMBER}
 
+networks:
+  shared_public:
+    driver: bridge
+    external: true
+
 services:
   frontend:
     image: aulaapp/aula-frontend:pr-${PR_NUMBER}
@@ -10,9 +15,4 @@ services:
       - DOCKER_AULA_BASENAME="/${PR_NUMBER}/"
       - VITE_APP_BASENAME="/${PR_NUMBER}/"
     networks:
-      - aula_aula_external
-
-networks:
-  aula_aula_external:
-    driver: bridge
-    external: true
+      - shared_public
