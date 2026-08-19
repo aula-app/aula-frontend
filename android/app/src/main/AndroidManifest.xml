@@ -18,6 +18,17 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- App Links: open any aula instance subdomain in the app. Verified
+                 per-subdomain via /.well-known/assetlinks.json on that host, so the
+                 canonical site (aula.de / www.aula.de) stays in the browser simply
+                 by not serving that file. "*.aula.de" does not match the apex. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="*.aula.de" />
+            </intent-filter>
         </activity>
 
         <provider
