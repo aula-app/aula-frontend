@@ -8,6 +8,8 @@ import { useAppStore } from "@/store";
 import { LoginFormValues } from "@/types/LoginTypes";
 import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Browser } from "@capacitor/browser";
+import { Capacitor } from "@capacitor/core";
 import {
   Alert,
   Button,
@@ -155,7 +157,19 @@ const LoginView = () => {
       return;
     }
     try {
-      window.location.href = await initiateSso(instanceApiUrl, options);
+      const url = await initiateSso(instanceApiUrl, options);
+
+      if (Capacitor.isNativePlatform()) {
+        // Assigning window.location here would send the WebView off-origin,
+        // which Capacitor answers by handing the URL to the system browser, so
+        // the user leaves the app and cannot get back. A Custom Tab keeps the
+        // login layered over the app, and the deep link the backend finishes
+        // on (handled by useDeepLinks) closes it again.
+        await Browser.open({ url });
+        return;
+      }
+
+      window.location.href = url;
     } catch {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
     }

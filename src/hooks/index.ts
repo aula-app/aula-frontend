@@ -4,6 +4,7 @@ export * from './draftStorage';
 export * from './event';
 export * from './layout';
 export * from './useAndroidBackButton';
+export * from './useDeepLinks';
 export * from './useFilter';
 export * from './useFilters';
 export * from './useMenuKeyboardNavigation';
