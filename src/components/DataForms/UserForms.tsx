@@ -28,7 +28,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
 
   // Provider-managed accounts own their identity: the admin cannot edit the
   // username, email or realname the directory supplies.
-  const ssoManaged = isSsoUser(defaultValues);
+  const isSsoManaged = isSsoUser(defaultValues);
 
   const [rooms, setRooms] = useState<string[]>([]);
   const [updateRooms, setUpdateRooms] = useState<UpdateType>({ add: [], remove: [] });
@@ -249,7 +249,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               <TextField
                 fullWidth
                 required
-                disabled={isLoading || ssoManaged}
+                disabled={isLoading || isSsoManaged}
                 label={t(`settings.columns.username`)}
                 id="username"
                 size="small"
@@ -279,7 +279,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               <TextField
                 fullWidth
                 required
-                disabled={isLoading || ssoManaged}
+                disabled={isLoading || isSsoManaged}
                 label={t(`settings.columns.realname`)}
                 id="realname"
                 size="small"
@@ -308,7 +308,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               />
               <TextField
                 fullWidth
-                disabled={isLoading || ssoManaged}
+                disabled={isLoading || isSsoManaged}
                 label={t(`settings.columns.email`)}
                 id="email"
                 size="small"
