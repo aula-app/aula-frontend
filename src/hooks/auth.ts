@@ -1,3 +1,6 @@
+import { Browser } from '@capacitor/browser';
+import { Capacitor } from '@capacitor/core';
+
 import { databaseRequest } from '@/services/requests';
 import { useAppStore } from '@/store';
 import { InstanceResponse } from '@/types/Generics';
@@ -65,7 +68,12 @@ export function useEventLogout() {
 
     if (apiUrl && instanceCode && token) {
       try {
-        const res = await fetch(`${apiUrl}/api/v2/auth/sso/logout`, {
+        // Ask for a logout that comes back to the app rather than to the
+        // website, for the same reason the login does.
+        const logoutUrl = new URL(`${apiUrl}/api/v2/auth/sso/logout`);
+        if (Capacitor.isNativePlatform()) logoutUrl.searchParams.set('client', 'app');
+
+        const res = await fetch(logoutUrl.toString(), {
           method: 'POST',
           headers: {
             'aula-instance-code': instanceCode,
@@ -88,11 +96,23 @@ export function useEventLogout() {
     localStorageDelete('token');
     dispatch({ type: 'LOG_OUT' });
 
-    if (ssoLogoutUrl) {
-      window.location.href = ssoLogoutUrl;
-    } else {
+    if (!ssoLogoutUrl) {
       navigate('/');
+
+      return;
     }
+
+    if (Capacitor.isNativePlatform()) {
+      // Keycloak needs a front-channel visit to propagate the logout upstream,
+      // and assigning window.location would hand that to the system browser.
+      // A Custom Tab keeps it over the app; the deep link Keycloak returns to
+      // is picked up by useDeepLinks, which closes the tab behind it.
+      await Browser.open({ url: ssoLogoutUrl });
+
+      return;
+    }
+
+    window.location.href = ssoLogoutUrl;
   }, [dispatch, navigate]);
 }
 
