@@ -1,19 +1,29 @@
-/**
- * Whether the current user is managed by an external identity provider (SSO).
- *
- * Dark launch: there is no backend flag yet, so this is inert (`false`) for
- * everyone. A QA/dev override lets us preview the managed UX before the flag
- * exists: `localStorage.setItem('sso_managed_override', 'true')`.
- *
- * When the backend flag ships, replace the body below with the real read
- * (JWT claim / user field / runtime config) and keep returning a boolean.
- * NOTE: the login/recovery call sites run pre-authentication, so if the
- * backend exposes a separate instance-level signal, wire that one in here for
- * those guards. The login flow is expected to change; do not pre-build for it.
- */
+import { getSsoStatus } from '@/services/sso';
+import { localStorageGet } from '@/utils';
+import { useEffect, useState } from 'react';
+
 export function useSsoManaged(): boolean {
-  if (typeof window !== 'undefined' && localStorage.getItem('sso_managed_override') === 'true') {
-    return true;
-  }
-  return false;
+  const [managed, setManaged] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && localStorage.getItem('sso_managed_override') === 'true') {
+      setManaged(true);
+      return;
+    }
+
+    const apiUrl = localStorageGet('api_url');
+    if (!apiUrl) return;
+
+    let cancelled = false;
+
+    getSsoStatus(apiUrl).then((status) => {
+      if (!cancelled) setManaged(status?.enabled === true && status.provider !== null);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return managed;
 }

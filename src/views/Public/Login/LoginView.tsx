@@ -58,8 +58,9 @@ const LoginView = () => {
    */
   const [instanceSso, setInstanceSso] = useState<boolean | null | undefined>(undefined);
 
-  // Both switches have to be on: the deployment's, and the school's.
   const ssoAvailable = config.IS_SSO_ENABLED && instanceSso !== false;
+  const ssoEnforced = ssoAvailable && instanceSso === true;
+  const showPasswordLogin = !ssoEnforced || ssoLinkToken !== null;
 
   const schema = yup
     .object({
@@ -247,7 +248,7 @@ const LoginView = () => {
       const instanceApiUrl = localStorageGet('api_url');
       if (!instanceApiUrl) return;
 
-      setInstanceSso(await getSsoStatus(instanceApiUrl));
+      setInstanceSso((await getSsoStatus(instanceApiUrl))?.enabled ?? null);
     })();
   }, []);
 
@@ -267,8 +268,8 @@ const LoginView = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <Stack gap={2}>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className={ssoAvailable && !showPasswordLogin ? 'mb-auto mt-12' : ''}>
+      <Stack gap={2} alignItems="center">
         <Typography variant="h2">
           {t("auth.messages.welcome")}
         </Typography>
@@ -314,6 +315,8 @@ const LoginView = () => {
             {loginError}
           </Alert>
         </Collapse>
+        {showPasswordLogin && (
+        <>
         <Stack gap={1}>
           <TextField
             required
@@ -403,14 +406,18 @@ const LoginView = () => {
             </Button>
           </Grid>
         )}
+        </>
+        )}
 
         {ssoAvailable && (
           <>
-            <Stack direction='row' mb={2} alignItems='center'>
-              <Divider sx={{ flex: 1 }} />
-              <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
-              <Divider sx={{ flex: 1 }} />
-            </Stack>
+            {showPasswordLogin && (
+              <Stack direction='row' mb={2} alignItems='center'>
+                <Divider sx={{ flex: 1 }} />
+                <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
+                <Divider sx={{ flex: 1 }} />
+              </Stack>
+            )}
             <Stack direction='column' gap={1} mb={2} alignItems='center'>
                 <Button
                   variant="outlined"
