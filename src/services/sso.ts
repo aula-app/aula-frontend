@@ -1,3 +1,5 @@
+import { Capacitor } from '@capacitor/core';
+
 import { localStorageGet } from '@/utils';
 
 /**
@@ -36,6 +38,40 @@ export const completeSsoLink = async (
   return { success: true };
 };
 
+/**
+ * Whether the school behind the current instance code offers SSO.
+ *
+ * Deployment config only says whether this aula has an identity provider at
+ * all; the toggle an operator sets per school lives on the backend. Both have
+ * to be true before a login page offers the button, or schools that do not use
+ * SSO get one that can only ever refuse them.
+ *
+ * Returns null when the question cannot be answered, which callers treat as
+ * "leave it as the deployment config says" rather than hiding a button a school
+ * may well be entitled to.
+ */
+export const getSsoStatus = async (apiUrl: string): Promise<boolean | null> => {
+  const instanceCode = localStorageGet('code');
+
+  try {
+    const response = await fetch(`${apiUrl}/api/v2/auth/sso/status`, {
+      headers: {
+        Accept: 'application/json',
+        'aula-instance-code': instanceCode ?? '',
+        'aula-frontend-version': import.meta.env.VITE_APP_VERSION ?? 'unknown',
+      },
+    });
+
+    if (!response.ok) return null;
+
+    const body = await response.json();
+
+    return typeof body?.enabled === 'boolean' ? body.enabled : null;
+  } catch {
+    return null;
+  }
+};
+
 export interface InitiateSsoOptions {
   /**
    * Opaque blob from an OIDC third-party initiated login launcher (e.g.
@@ -56,6 +92,10 @@ export const initiateSso = async (
   const initiateUrl = new URL(`${apiUrl}/api/v2/auth/sso/initiate`);
   if (forceLogin) initiateUrl.searchParams.set('force_login', 'true');
   if (options.loginHint) initiateUrl.searchParams.set('login_hint', options.loginHint);
+  // Ask the backend to finish on our deep-link scheme instead of on the
+  // website. It travels inside the signed state, so it survives the round trip
+  // through Keycloak and is still there when the callback picks a destination.
+  if (Capacitor.isNativePlatform()) initiateUrl.searchParams.set('client', 'app');
 
   const response = await fetch(initiateUrl.toString(), {
     method: 'GET',

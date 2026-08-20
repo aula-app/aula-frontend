@@ -1,13 +1,15 @@
 import { AppIconButton, AppLink } from "@/components";
 import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
+import { useSsoManaged } from "@/hooks";
 import { handleOAuthLogin } from "@/services/auth";
 import { declineAccountClaim } from "@/services/idpMigration";
 import { loginUser } from "@/services/login";
-import { completeSsoLink, initiateSso } from "@/services/sso";
-import { useSsoManaged } from "@/hooks";
+import { completeSsoLink, getSsoStatus, initiateSso } from "@/services/sso";
 import { useAppStore } from "@/store";
 import { LoginFormValues } from "@/types/LoginTypes";
 import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
+import { Browser } from "@capacitor/browser";
+import { Capacitor } from "@capacitor/core";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Alert,
@@ -46,6 +48,18 @@ const LoginView = () => {
   const [ssoLinkToken, setSsoLinkToken] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  /**
+   * Whether this particular school offers SSO, as opposed to whether this
+   * deployment has an identity provider at all.
+   *
+   * `undefined` until the backend has been asked, `null` when it could not
+   * answer. Only an explicit `false` hides the button: a school that does use
+   * SSO must not lose its only way in because one request failed.
+   */
+  const [instanceSso, setInstanceSso] = useState<boolean | null | undefined>(undefined);
+
+  // Both switches have to be on: the deployment's, and the school's.
+  const ssoAvailable = config.IS_SSO_ENABLED && instanceSso !== false;
 
   const schema = yup
     .object({
@@ -157,7 +171,19 @@ const LoginView = () => {
       return;
     }
     try {
-      window.location.href = await initiateSso(instanceApiUrl, options);
+      const url = await initiateSso(instanceApiUrl, options);
+
+      if (Capacitor.isNativePlatform()) {
+        // Assigning window.location here would send the WebView off-origin,
+        // which Capacitor answers by handing the URL to the system browser, so
+        // the user leaves the app and cannot get back. A Custom Tab keeps the
+        // login layered over the app, and the deep link the backend finishes
+        // on (handled by useDeepLinks) closes it again.
+        await Browser.open({ url });
+        return;
+      }
+
+      window.location.href = url;
     } catch {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
     }
@@ -193,11 +219,14 @@ const LoginView = () => {
   // not asked to identify themselves again at Eduplaces.
   useEffect(() => {
     if (searchParams.get('via') !== 'eduplaces') return;
-    if (!config.IS_SSO_ENABLED) return;
+    // Wait for the school's own answer before bouncing anyone to Keycloak,
+    // which would only be refused if the school has SSO switched off.
+    if (instanceSso === undefined) return;
+    if (!ssoAvailable) return;
     const loginHint = searchParams.get('login_hint') ?? undefined;
     handleSsoLogin({ loginHint });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, config.IS_SSO_ENABLED]);
+  }, [searchParams, ssoAvailable, instanceSso]);
 
   useEffect(() => {
     (async () => {
@@ -213,11 +242,20 @@ const LoginView = () => {
     })()
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const instanceApiUrl = localStorageGet('api_url');
+      if (!instanceApiUrl) return;
+
+      setInstanceSso(await getSsoStatus(instanceApiUrl));
+    })();
+  }, []);
+
   // When the user arrives from an IdP-initiated launch (e.g. Eduplaces
   // marketplace) and SSO is enabled, the auto-trigger effect is already
   // redirecting them to Keycloak. Show a status panel instead of the
   // password form so they don't see a confusing flash.
-  if (searchParams.get('via') === 'eduplaces' && config.IS_SSO_ENABLED && loginError === '') {
+  if (searchParams.get('via') === 'eduplaces' && ssoAvailable && loginError === '') {
     return (
       <Stack spacing={2} alignItems="center" sx={{ p: 4 }}>
         <CircularProgress />
@@ -366,7 +404,7 @@ const LoginView = () => {
           </Grid>
         )}
 
-        {(config.IS_SSO_ENABLED) && (
+        {ssoAvailable && (
           <>
             <Stack direction='row' mb={2} alignItems='center'>
               <Divider sx={{ flex: 1 }} />
