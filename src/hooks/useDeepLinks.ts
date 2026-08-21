@@ -4,6 +4,8 @@ import { Capacitor } from '@capacitor/core';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { localStorageDelete } from '@/utils';
+
 /**
  * Routes a deep link into the app the same way a URL routes the website.
  *
@@ -31,6 +33,12 @@ export const useDeepLinks = () => {
       // navigated to. Failing to close is not worth blocking the login over:
       // on some platforms there is no tab to close.
       await Browser.close().catch(() => undefined);
+
+      // `oauth-login` is registered in PublicRoutes only. A token left over
+      // from an earlier session makes useIsAuthenticated() true, PrivateRoutes
+      // renders instead, and the route 404s. The incoming JWT supersedes the
+      // stored one anyway.
+      if (route.startsWith('/oauth-login/')) await localStorageDelete('token');
 
       navigate(route, { replace: true });
     });
