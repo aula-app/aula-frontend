@@ -28,9 +28,11 @@ type Props = {
   selected: Array<string>;
   setEdit: (value: boolean) => void;
   setDelete: (ideas: Array<string>) => void;
+  /** Hides the "add" action, e.g. when the scope's records are owned externally. */
+  hideAdd?: boolean;
 };
 
-const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDelete }) => {
+const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDelete, hideAdd }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const [isOpen, setOpen] = useState(false);
@@ -137,7 +139,7 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
       }}
     >
       <Stack direction="row" gap={1} alignItems="center" width="100%" flexWrap="wrap">
-        {scope !== 'ideas' && (
+        {scope !== 'ideas' && !hideAdd && (
           <Button
             variant="outlined"
             onClick={handleEdit}

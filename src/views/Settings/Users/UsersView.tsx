@@ -124,6 +124,7 @@ const UsersView: React.FC = () => {
       FormComponent={UserForms as React.ComponentType<{ onClose: () => void; defaultValues?: unknown }>}
       extraTools={extraTools}
       extraFilters={extraFilters}
+      hideAdd={isSsoManaged}
     />
   );
 };
