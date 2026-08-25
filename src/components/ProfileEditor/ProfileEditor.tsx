@@ -43,20 +43,20 @@ const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
 
   const schema = yup.object({
     realname: isSsoManaged
-      ? yup.string()
+      ? yup.string().transform((value) => value ?? undefined)
       : yup
           .string()
           .max(30, t('forms.validation.maxLength', { var: 30 }))
           .min(3, t('forms.validation.minLength', { var: 3 }))
           .required(),
     username: isSsoManaged
-      ? yup.string()
+      ? yup.string().transform((value) => value ?? undefined)
       : yup
           .string()
           .max(30, t('forms.validation.maxLength', { var: 30 }))
           .min(3, t('forms.validation.minLength', { var: 3 }))
           .required(),
-    email: yup.string().email(),
+    email: yup.string().email().transform((value) => value ?? undefined),
     about_me: yup.string(),
     displayname: yup
       .string()
