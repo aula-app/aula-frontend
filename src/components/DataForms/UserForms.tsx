@@ -147,12 +147,17 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     const response = await editUser({
       about_me: data.about_me,
       displayname: data.displayname,
-      email: data.email,
-      realname: data.realname,
       status: data.status,
       userlevel: data.userlevel || defaultValues.userlevel,
-      username: data.username,
       user_id: defaultValues.hash_id,
+      // Provider owns username/email/realname; never write them back.
+      ...(isSsoManaged
+        ? {}
+        : {
+            email: data.email,
+            realname: data.realname,
+            username: data.username,
+          }),
     });
     if (response.error) {
       setError('root', {

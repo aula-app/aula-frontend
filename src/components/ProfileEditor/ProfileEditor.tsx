@@ -56,7 +56,10 @@ const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
           .max(30, t('forms.validation.maxLength', { var: 30 }))
           .min(3, t('forms.validation.minLength', { var: 3 }))
           .required(),
-    email: yup.string().email().transform((value) => value ?? undefined),
+    email: yup
+      .string()
+      .email()
+      .transform((value) => value ?? undefined),
     about_me: yup.string(),
     displayname: yup
       .string()
@@ -74,6 +77,9 @@ const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
   });
 
   const userFields = ['displayname', 'username', 'realname', 'email', 'about_me'] as Array<keyof SchemaType>;
+
+  // Identity fields the provider owns: never validated or sent for change approval.
+  const isLockedField = (field: keyof SchemaType) => isSsoManaged && field !== 'displayname';
 
   const approveUpdates = async () => {
     try {
@@ -114,7 +120,7 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
     const updates: fieldOptions[] = [];
 
     // Check fields that require approval (excluding about_me which can be updated directly)
-    const fieldsRequiringApproval = userFields.slice(0, -1); // All fields except about_me
+    const fieldsRequiringApproval = userFields.slice(0, -1).filter((field) => !isLockedField(field));
 
     fieldsRequiringApproval.forEach((field) => {
       if (data[field] !== user[field]) {
@@ -184,13 +190,7 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
         {user && <ImageEditor isOpen={editImage} onClose={onClose} id={user.hash_id} />}
         <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
           {userFields.slice(0, -1).map((name, i) => (
-            <RestrictedField
-              key={i}
-              name={name}
-              control={control}
-              tabIndex={i + 1}
-              locked={isSsoManaged && name !== 'displayname'}
-            />
+            <RestrictedField key={i} name={name} control={control} tabIndex={i + 1} locked={isLockedField(name)} />
           ))}
         </Stack>
         <MarkdownEditor name="about_me" control={control} sx={{ flex: 2, minWidth: `min(300px, 100%)` }} />
