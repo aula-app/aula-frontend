@@ -13,6 +13,8 @@ interface Props {
   tabIndex?: number;
   /** When true the field is permanently read-only: no unlock toggle. */
   locked?: boolean;
+  /** Shows the required asterisk; validation itself lives in the parent schema. */
+  required?: boolean;
 }
 
 /** * Renders "requests" view
@@ -25,7 +27,7 @@ const autocompleteTokens: Partial<Record<keyof PossibleFields, string>> = {
   email: 'email',
 };
 
-const RestrictedField = ({ name, control, locked = false, ...restOfProps }: Props) => {
+const RestrictedField = ({ name, control, locked = false, required = false, ...restOfProps }: Props) => {
   const { t } = useTranslation();
 
   const [disabled, setDisabled] = useState(true);
@@ -34,20 +36,25 @@ const RestrictedField = ({ name, control, locked = false, ...restOfProps }: Prop
     <Controller
       name={name}
       control={control}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <TextField
           fullWidth
+          required={required}
           label={t(`settings.columns.${name}`)}
           id={`profile-${name}`}
           size="small"
           {...field}
+          value={field.value ?? ''}
           disabled={locked || disabled}
+          error={!!fieldState.error}
+          helperText={typeof fieldState.error?.message === 'string' ? fieldState.error.message : undefined}
           slotProps={{
             htmlInput: {
               autoComplete: autocompleteTokens[name],
             },
             input: {
               'aria-labelledby': `profile-${name}-label`,
+              'aria-invalid': !!fieldState.error,
               endAdornment: locked ? undefined : (
                 <InputAdornment position="end">
                   <AppIconButton

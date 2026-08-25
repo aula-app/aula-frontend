@@ -150,7 +150,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       status: data.status,
       userlevel: data.userlevel || defaultValues.userlevel,
       user_id: defaultValues.hash_id,
-      // Provider owns username/email/realname; never write them back.
       ...(isSsoManaged
         ? {}
         : {
