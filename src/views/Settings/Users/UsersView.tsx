@@ -22,7 +22,10 @@ const COLUMNS = [
   { name: 'username', orderId: 7 },
   { name: 'email', orderId: 8 },
   { name: 'userlevel', orderId: 9 },
-  { name: 'sso_provider', orderId: 0 },
+  // Named for a field every user row actually carries. The table renders a cell
+  // only when `column.name in row`, and no user payload has ever held an
+  // `sso_provider` key, so that column sat permanently blank.
+  { name: 'idp_user_id', orderId: 0 },
   { name: 'temp_pw', orderId: 11 },
   { name: 'status', orderId: 2 },
   { name: 'created', orderId: 4 },

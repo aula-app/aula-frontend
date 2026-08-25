@@ -59,6 +59,12 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>aula</string>
+          <!--
+            Deep-link scheme the SSO callback ends on. Kept identical to the
+            Android `custom_url_scheme` so the backend redirects to one scheme
+            rather than one per platform.
+          -->
+          <string>de.aula.neu</string>
         </array>
       </dict>
     </array>

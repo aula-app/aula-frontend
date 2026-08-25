@@ -18,6 +18,21 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!--
+                Deep links. An SSO login runs in a browser tab outside the
+                WebView, so the only way back into the app is for the backend to
+                end the flow on this scheme and for Android to route it here.
+                BROWSABLE is what lets a redirect, rather than another app,
+                trigger it; singleTask above delivers it to the running activity
+                instead of starting a second copy of the app.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/custom_url_scheme" />
+            </intent-filter>
         </activity>
 
         <provider
