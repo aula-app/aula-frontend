@@ -42,16 +42,20 @@ const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
   const [editImage, setEditImage] = useState(false);
 
   const schema = yup.object({
-    realname: yup
-      .string()
-      .max(30, t('forms.validation.maxLength', { var: 30 }))
-      .min(3, t('forms.validation.minLength', { var: 3 }))
-      .required(),
-    username: yup
-      .string()
-      .max(30, t('forms.validation.maxLength', { var: 30 }))
-      .min(3, t('forms.validation.minLength', { var: 3 }))
-      .required(),
+    realname: isSsoManaged
+      ? yup.string()
+      : yup
+          .string()
+          .max(30, t('forms.validation.maxLength', { var: 30 }))
+          .min(3, t('forms.validation.minLength', { var: 3 }))
+          .required(),
+    username: isSsoManaged
+      ? yup.string()
+      : yup
+          .string()
+          .max(30, t('forms.validation.maxLength', { var: 30 }))
+          .min(3, t('forms.validation.minLength', { var: 3 }))
+          .required(),
     email: yup.string().email(),
     about_me: yup.string(),
     displayname: yup

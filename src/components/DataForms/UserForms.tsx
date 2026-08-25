@@ -39,10 +39,10 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     about_me: yup.string().nullable(),
     displayname: yup.string().required(t('forms.validation.required')),
     email: yup.string().nullable(),
-    realname: yup.string().required(t('forms.validation.required')),
+    realname: isSsoManaged ? yup.string().nullable() : yup.string().required(t('forms.validation.required')),
     status: yup.number(),
     userlevel: yup.number(),
-    username: yup.string().required(t('forms.validation.required')),
+    username: isSsoManaged ? yup.string().nullable() : yup.string().required(t('forms.validation.required')),
   } as Record<keyof UserType, any>);
 
   const form = useForm({
@@ -248,7 +248,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               />
               <TextField
                 fullWidth
-                required
+                required={!isSsoManaged}
                 disabled={isLoading || isSsoManaged}
                 label={t(`settings.columns.username`)}
                 id="username"
@@ -278,7 +278,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               />
               <TextField
                 fullWidth
-                required
+                required={!isSsoManaged}
                 disabled={isLoading || isSsoManaged}
                 label={t(`settings.columns.realname`)}
                 id="realname"
