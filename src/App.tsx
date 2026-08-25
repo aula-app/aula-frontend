@@ -7,14 +7,8 @@ import Routes from './routes';
 import { AppStore } from './store';
 import { AppThemeProvider } from './theme';
 
-/**
- * Inner component that uses router hooks
- * Must be inside BrowserRouter context
- */
 const AppContent: React.FC = () => {
-  // Handle Android back button navigation
   useAndroidBackButton();
-  // Bring SSO logins back out of the browser and into the app
   useDeepLinks();
 
   return (
@@ -24,10 +18,6 @@ const AppContent: React.FC = () => {
   );
 };
 
-/**
- * Root Application Component
- * Provides core application providers and routing setup
- */
 const App: React.FC = () => {
   return (
     <ErrorBoundary name="App">

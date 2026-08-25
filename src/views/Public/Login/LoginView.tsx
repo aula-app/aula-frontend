@@ -1,5 +1,6 @@
 import { AppIconButton, AppLink } from "@/components";
 import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
+import { useSsoManaged } from "@/hooks";
 import { handleOAuthLogin } from "@/services/auth";
 import { declineAccountClaim } from "@/services/idpMigration";
 import { loginUser } from "@/services/login";
@@ -7,9 +8,9 @@ import { completeSsoLink, getSsoStatus, initiateSso } from "@/services/sso";
 import { useAppStore } from "@/store";
 import { LoginFormValues } from "@/types/LoginTypes";
 import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Alert,
   Button,
@@ -35,6 +36,7 @@ import * as yup from "yup";
 
 const LoginView = () => {
   const { t } = useTranslation();
+  const isSsoManaged = useSsoManaged();
   const [config, setConfig] = useState<RuntimeConfig>(defaultConfig);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -56,8 +58,9 @@ const LoginView = () => {
    */
   const [instanceSso, setInstanceSso] = useState<boolean | null | undefined>(undefined);
 
-  // Both switches have to be on: the deployment's, and the school's.
   const ssoAvailable = config.IS_SSO_ENABLED && instanceSso !== false;
+  const ssoEnforced = ssoAvailable && instanceSso === true;
+  const showPasswordLogin = !ssoEnforced || ssoLinkToken !== null;
 
   const schema = yup
     .object({
@@ -245,7 +248,7 @@ const LoginView = () => {
       const instanceApiUrl = localStorageGet('api_url');
       if (!instanceApiUrl) return;
 
-      setInstanceSso(await getSsoStatus(instanceApiUrl));
+      setInstanceSso((await getSsoStatus(instanceApiUrl))?.enabled ?? null);
     })();
   }, []);
 
@@ -265,8 +268,8 @@ const LoginView = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <Stack gap={2}>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className={ssoAvailable && !showPasswordLogin ? 'mb-auto mt-12' : ''}>
+      <Stack gap={2} alignItems="center">
         <Typography variant="h2">
           {t("auth.messages.welcome")}
         </Typography>
@@ -312,6 +315,8 @@ const LoginView = () => {
             {loginError}
           </Alert>
         </Collapse>
+        {showPasswordLogin && (
+        <>
         <Stack gap={1}>
           <TextField
             required
@@ -388,25 +393,31 @@ const LoginView = () => {
         >
           {t("auth.login.button")}
         </Button>
-        <Grid container justifyContent="end" alignItems="center">
-          <Button
-            variant="text"
-            color="secondary"
-            component={AppLink}
-            to="/recovery/password"
-            aria-label={t('auth.forgotPassword.link')}
-          >
-            {t('auth.forgotPassword.link')}
-          </Button>
-        </Grid>
+        {!isSsoManaged && (
+          <Grid container justifyContent="end" alignItems="center">
+            <Button
+              variant="text"
+              color="secondary"
+              component={AppLink}
+              to="/recovery/password"
+              aria-label={t('auth.forgotPassword.link')}
+            >
+              {t('auth.forgotPassword.link')}
+            </Button>
+          </Grid>
+        )}
+        </>
+        )}
 
         {ssoAvailable && (
           <>
-            <Stack direction='row' mb={2} alignItems='center'>
-              <Divider sx={{ flex: 1 }} />
-              <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
-              <Divider sx={{ flex: 1 }} />
-            </Stack>
+            {showPasswordLogin && (
+              <Stack direction='row' mb={2} alignItems='center'>
+                <Divider sx={{ flex: 1 }} />
+                <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
+                <Divider sx={{ flex: 1 }} />
+              </Stack>
+            )}
             <Stack direction='column' gap={1} mb={2} alignItems='center'>
                 <Button
                   variant="outlined"

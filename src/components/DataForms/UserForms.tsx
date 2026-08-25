@@ -2,7 +2,7 @@ import { useDraftStorage } from '@/hooks';
 import { addSpecialRoles, addUser, addUserRoom, editUser, getUserRooms, removeUserRoom } from '@/services/users';
 import { UserType } from '@/types/Scopes';
 import { RoleTypes, UpdateType } from '@/types/SettingsTypes';
-import { checkPermissions, roles } from '@/utils';
+import { checkPermissions, isSsoUser, roles } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -26,6 +26,10 @@ interface UserFormsProps {
 const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
 
+  // Provider-managed accounts own their identity: the admin cannot edit the
+  // username, email or realname the directory supplies.
+  const isSsoManaged = isSsoUser(defaultValues);
+
   const [rooms, setRooms] = useState<string[]>([]);
   const [updateRooms, setUpdateRooms] = useState<UpdateType>({ add: [], remove: [] });
   const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes }[]>();
@@ -35,10 +39,10 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     about_me: yup.string().nullable(),
     displayname: yup.string().required(t('forms.validation.required')),
     email: yup.string().nullable(),
-    realname: yup.string().required(t('forms.validation.required')),
+    realname: isSsoManaged ? yup.string().nullable() : yup.string().required(t('forms.validation.required')),
     status: yup.number(),
     userlevel: yup.number(),
-    username: yup.string().required(t('forms.validation.required')),
+    username: isSsoManaged ? yup.string().nullable() : yup.string().required(t('forms.validation.required')),
   } as Record<keyof UserType, any>);
 
   const form = useForm({
@@ -143,12 +147,16 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     const response = await editUser({
       about_me: data.about_me,
       displayname: data.displayname,
-      email: data.email,
-      realname: data.realname,
       status: data.status,
       userlevel: data.userlevel || defaultValues.userlevel,
-      username: data.username,
       user_id: defaultValues.hash_id,
+      ...(isSsoManaged
+        ? {}
+        : {
+            email: data.email,
+            realname: data.realname,
+            username: data.username,
+          }),
     });
     if (response.error) {
       setError('root', {
@@ -244,8 +252,8 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               />
               <TextField
                 fullWidth
-                required
-                disabled={isLoading}
+                required={!isSsoManaged}
+                disabled={isLoading || isSsoManaged}
                 label={t(`settings.columns.username`)}
                 id="username"
                 size="small"
@@ -274,8 +282,8 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               />
               <TextField
                 fullWidth
-                required
-                disabled={isLoading}
+                required={!isSsoManaged}
+                disabled={isLoading || isSsoManaged}
                 label={t(`settings.columns.realname`)}
                 id="realname"
                 size="small"
@@ -304,7 +312,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
               />
               <TextField
                 fullWidth
-                disabled={isLoading}
+                disabled={isLoading || isSsoManaged}
                 label={t(`settings.columns.email`)}
                 id="email"
                 size="small"
