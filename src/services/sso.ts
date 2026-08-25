@@ -38,6 +38,11 @@ export const completeSsoLink = async (
   return { success: true };
 };
 
+export interface SsoStatus {
+  enabled: boolean;
+  provider: string | null;
+}
+
 /**
  * Whether the school behind the current instance code offers SSO.
  *
@@ -50,7 +55,7 @@ export const completeSsoLink = async (
  * "leave it as the deployment config says" rather than hiding a button a school
  * may well be entitled to.
  */
-export const getSsoStatus = async (apiUrl: string): Promise<boolean | null> => {
+export const getSsoStatus = async (apiUrl: string): Promise<SsoStatus | null> => {
   const instanceCode = localStorageGet('code');
 
   try {
@@ -66,7 +71,12 @@ export const getSsoStatus = async (apiUrl: string): Promise<boolean | null> => {
 
     const body = await response.json();
 
-    return typeof body?.enabled === 'boolean' ? body.enabled : null;
+    if (typeof body?.enabled !== 'boolean') return null;
+
+    return {
+      enabled: body.enabled,
+      provider: typeof body?.provider === 'string' ? body.provider : null,
+    };
   } catch {
     return null;
   }

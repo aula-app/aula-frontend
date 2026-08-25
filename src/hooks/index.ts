@@ -12,3 +12,4 @@ export * from './useRipple';
 export * from './useSort';
 export * from './useDataTableState';
 export * from './useIdpImportGate';
+export * from './useSsoManaged';

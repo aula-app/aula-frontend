@@ -6,7 +6,7 @@ import { getRoom } from '@/services/rooms';
 import { getUser } from '@/services/users';
 import { useAppStore } from '@/store';
 import { PossibleFields, SettingType, UserType } from '@/types/Scopes';
-import { phases, STATUS } from '@/utils';
+import { isSsoUser, phases, STATUS } from '@/utils';
 import { Chip, Stack, Typography } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -143,6 +143,10 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
         setHidden(!hidden);
       };
       const user = 'username' in row ? (row as UserType) : null;
+
+      // A provider-managed account has no aula password: neither the temp
+      // password nor the reset control belong on the row.
+      if (isSsoUser(user)) return null;
 
       return value ? (
         <Stack direction="row" alignItems="center">
