@@ -86,7 +86,8 @@
     "sso": {
       "arialabel": "Single Sign-On",
       "button": "Sign in with SSO",
-      "bouncing": "Signing you in via Eduplaces…"
+      "bouncing": "Signing you in via Eduplaces…",
+      "unsupportedBrowser": "Please note: SSO sign-in requires Safari {{version}} or newer. Please update your device or use a different browser."
     },
     "password": {
       "change": "Change password",

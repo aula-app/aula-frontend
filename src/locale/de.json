@@ -86,7 +86,8 @@
     "sso": {
       "arialabel": "Single Sign-On",
       "button": "Mit SSO anmelden",
-      "bouncing": "Wir leiten dich gerade über Eduplaces an …"
+      "bouncing": "Wir leiten dich gerade über Eduplaces an …",
+      "unsupportedBrowser": "Achtung: Für die SSO-Anmeldung wird Safari {{version}} oder neuer benötigt. Bitte aktualisiere dein Gerät oder verwende einen anderen Browser."
     },
     "password": {
       "change": "Passwort ändern",
