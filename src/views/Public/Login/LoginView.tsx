@@ -61,7 +61,7 @@ const LoginView = () => {
   const ssoAvailable = instanceSso !== false;
   const ssoEnforced = ssoAvailable && instanceSso === true;
   const showPasswordLogin = !ssoEnforced || ssoLinkToken !== null;
-  const ssoBrowserSupported = useMemo(() => isSsoBrowserSupported(), []);
+  const ssoBrowserSupported = useMemo(() => config.IS_SSO_ENABLED && isSsoBrowserSupported(), []);
 
   const schema = yup
     .object({
