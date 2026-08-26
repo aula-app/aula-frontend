@@ -1,7 +1,7 @@
 ext {
-    minSdkVersion = 23
-    compileSdkVersion = 35
-    targetSdkVersion = 35
+    minSdkVersion = 27
+    compileSdkVersion = 36
+    targetSdkVersion = 36
     androidxActivityVersion = '1.9.2'
     androidxAppCompatVersion = '1.7.0'
     androidxCoordinatorLayoutVersion = '1.2.0'
@@ -9,11 +9,7 @@ ext {
     androidxFragmentVersion = '1.8.4'
     coreSplashScreenVersion = '1.0.1'
     androidxWebkitVersion = '1.12.1'
-    // Custom Tabs, which run the SSO login without leaving the app.
-    // @capacitor/browser defaults to 1.9.0, which refuses to build against
-    // anything below compileSdk 36; 1.8.0 is the newest release that still
-    // builds at 35. Drop this pin when the SDK level moves up.
-    androidxBrowserVersion = '1.8.0'
+    androidxBrowserVersion = '1.9.0'
     junitVersion = '4.13.2'
     androidxJunitVersion = '1.2.1'
     androidxEspressoCoreVersion = '3.6.1'
