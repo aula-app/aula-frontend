@@ -17,6 +17,7 @@ import AnnouncementsView from '@/views/Settings/Announcements';
 import BoxesView from '@/views/Settings/Boxes';
 import BugsView from '@/views/Settings/Bugs';
 import ConfigView from '@/views/Settings/Config';
+import IdpSyncView from '@/views/Settings/IdpSync';
 import IdeasView from '@/views/Settings/Ideas';
 import MessagesView from '@/views/Settings/Messages';
 import { UserProfileView } from '@/views/Settings/Profile';
@@ -26,8 +27,10 @@ import RoomsView from '@/views/Settings/Rooms';
 import UsersView from '@/views/Settings/Users';
 import UpdatesView from '@/views/Updates';
 import WelcomeView from '@/views/Welcome';
+import { useIdpImportGate } from '@/hooks/useIdpImportGate';
+import SchoolSetupView from '@/views/Public/SchoolSetupView';
 import { useEffect } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 /**
  * List of routes available only for authenticated users
@@ -38,18 +41,29 @@ const PrivateRoutes = () => {
   const [, dispatch] = useAppStore();
   const location = useLocation();
 
+  // Runs on every authenticated render, so it covers both the login hop
+  // (OAuthLogin navigates straight here) and a reload mid-import. The hook
+  // polls, so neither sticks on whatever getIdpImportStatus first returned.
+  const { phase: importPhase, status: importStatus, dismiss: dismissImport } = useIdpImportGate();
+
   useEffect(() => {
     if (location.pathname.includes('password')) clearAuth(dispatch);
   }, [location.pathname, dispatch]);
 
+  if (importPhase !== 'checking' && importPhase !== 'clear') {
+    return <SchoolSetupView phase={importPhase} status={importStatus} onDismiss={dismissImport} />;
+  }
+
   return checkPermissions('system', 'hide') ? (
     <Routes>
       <Route path="/" element={<ConfigView />} />
+      <Route path="oauth-login/*" element={<SsoCallbackLanded />} />
       <Route path="*" element={<NotFoundView />} />
     </Routes>
   ) : (
     <Routes>
       <Route path="/" element={<WelcomeView />} />
+      <Route path="oauth-login/*" element={<SsoCallbackLanded />} />
       <Route path="about" element={<AboutView />} />
       <Route path="announcements" element={<UserMessagesView />} />
       <Route path="announcements/:announcement_id" element={<AnnouncementView />} />
@@ -71,6 +85,10 @@ const PrivateRoutes = () => {
       )}
       {checkPermissions('boxes', 'viewAll') && <Route path="settings/boxes" element={<BoxesView />} />}
       {checkPermissions('configs', 'viewAll') && <Route path="settings/configuration" element={<ConfigView />} />}
+      {/* Migrating the school onto an identity provider decides who ends up
+          owning which account, so it sits behind the same gate as the rest of
+          the system configuration. */}
+      {checkPermissions('configs', 'viewAll') && <Route path="settings/idp-sync" element={<IdpSyncView />} />}
       {checkPermissions('ideas', 'viewAll') && <Route path="settings/ideas" element={<IdeasView />} />}
       {checkPermissions('messages', 'viewAll') && <Route path="settings/messages" element={<MessagesView />} />}
       {checkPermissions('reports', 'viewAll') && <Route path="settings/reports" element={<ReportsView />} />}
@@ -84,5 +102,12 @@ const PrivateRoutes = () => {
     </Routes>
   );
 };
+
+/**
+ * /oauth-login/:jwt_token is declared in PublicRoutes, but the token that
+ * mounts PrivateRoutes is written while it is still the url. Reaching this
+ * means handleOAuthLogin succeeded, so redirect rather than hit NotFoundView.
+ */
+const SsoCallbackLanded = () => <Navigate to="/" replace />;
 
 export default PrivateRoutes;

@@ -1,10 +1,15 @@
 import { AppIconButton, AppLink } from "@/components";
 import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
+import { useSsoManaged } from "@/hooks";
+import { handleOAuthLogin } from "@/services/auth";
+import { declineAccountClaim } from "@/services/idpMigration";
 import { loginUser } from "@/services/login";
-import { completeSsoLink, initiateSso } from "@/services/sso";
+import { completeSsoLink, getSsoStatus, initiateSso } from "@/services/sso";
 import { useAppStore } from "@/store";
 import { LoginFormValues } from "@/types/LoginTypes";
 import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
+import { Browser } from "@capacitor/browser";
+import { Capacitor } from "@capacitor/core";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Alert,
@@ -31,16 +36,31 @@ import * as yup from "yup";
 
 const LoginView = () => {
   const { t } = useTranslation();
+  const isSsoManaged = useSsoManaged();
   const [config, setConfig] = useState<RuntimeConfig>(defaultConfig);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [, dispatch] = useAppStore();
   const [loginError, setError] = useState<string>('');
   const [linkBanner, setLinkBanner] = useState<string>('');
+  /** True when nobody knows yet whether this person has an aula account. */
+  const [claimable, setClaimable] = useState(false);
   const [ssoLinkToken, setSsoLinkToken] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [isSsoLoading, setSsoLoading] = useState(false);
+  /**
+   * Whether this particular school offers SSO, as opposed to whether this
+   * deployment has an identity provider at all.
+   *
+   * `undefined` until the backend has been asked, `null` when it could not
+   * answer. Only an explicit `false` hides the button: a school that does use
+   * SSO must not lose its only way in because one request failed.
+   */
+  const [instanceSso, setInstanceSso] = useState<boolean | null | undefined>(undefined);
+
+  const ssoAvailable = config.IS_SSO_ENABLED && instanceSso !== false;
+  const ssoEnforced = ssoAvailable && instanceSso === true;
+  const showPasswordLogin = !ssoEnforced || ssoLinkToken !== null;
 
   const schema = yup
     .object({
@@ -152,10 +172,20 @@ const LoginView = () => {
       return;
     }
     try {
-      setSsoLoading(true);
-      window.location.href = await initiateSso(instanceApiUrl, options);
+      const url = await initiateSso(instanceApiUrl, options);
+
+      if (Capacitor.isNativePlatform()) {
+        // Assigning window.location here would send the WebView off-origin,
+        // which Capacitor answers by handing the URL to the system browser, so
+        // the user leaves the app and cannot get back. A Custom Tab keeps the
+        // login layered over the app, and the deep link the backend finishes
+        // on (handled by useDeepLinks) closes it again.
+        await Browser.open({ url });
+        return;
+      }
+
+      window.location.href = url;
     } catch {
-      setSsoLoading(false);
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
     }
   };
@@ -166,7 +196,13 @@ const LoginView = () => {
 
     if (ssoError === 'account_link_required' && ssoLink) {
       setSsoLinkToken(ssoLink);
-      setLinkBanner(t('errors.sso.account_link_required', {
+      // A claimable link comes from a school mid-migration: nobody knows yet
+      // whether this person already has an aula account, so they have to be
+      // able to say they do not.
+      setClaimable(searchParams.get('claimable') === '1');
+      setLinkBanner(t(searchParams.get('claimable') === '1'
+        ? 'idp.claim.banner'
+        : 'errors.sso.account_link_required', {
         defaultValue: 'We found an existing account for the email returned by your SSO provider. Log in once with your aula password to link the accounts; future SSO logins will go through directly.',
       }));
       return;
@@ -184,11 +220,14 @@ const LoginView = () => {
   // not asked to identify themselves again at Eduplaces.
   useEffect(() => {
     if (searchParams.get('via') !== 'eduplaces') return;
-    if (!config.IS_SSO_ENABLED) return;
+    // Wait for the school's own answer before bouncing anyone to Keycloak,
+    // which would only be refused if the school has SSO switched off.
+    if (instanceSso === undefined) return;
+    if (!ssoAvailable) return;
     const loginHint = searchParams.get('login_hint') ?? undefined;
     handleSsoLogin({ loginHint });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, config.IS_SSO_ENABLED]);
+  }, [searchParams, ssoAvailable, instanceSso]);
 
   useEffect(() => {
     (async () => {
@@ -204,11 +243,20 @@ const LoginView = () => {
     })()
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const instanceApiUrl = localStorageGet('api_url');
+      if (!instanceApiUrl) return;
+
+      setInstanceSso((await getSsoStatus(instanceApiUrl))?.enabled ?? null);
+    })();
+  }, []);
+
   // When the user arrives from an IdP-initiated launch (e.g. Eduplaces
   // marketplace) and SSO is enabled, the auto-trigger effect is already
   // redirecting them to Keycloak. Show a status panel instead of the
   // password form so they don't see a confusing flash.
-  if (searchParams.get('via') === 'eduplaces' && config.IS_SSO_ENABLED && loginError === '') {
+  if (searchParams.get('via') === 'eduplaces' && ssoAvailable && loginError === '') {
     return (
       <Stack spacing={2} alignItems="center" sx={{ p: 4 }}>
         <CircularProgress />
@@ -220,8 +268,8 @@ const LoginView = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <Stack gap={2}>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className={ssoAvailable && !showPasswordLogin ? 'mb-auto mt-12' : ''}>
+      <Stack gap={2} alignItems="center">
         <Typography variant="h2">
           {t("auth.messages.welcome")}
         </Typography>
@@ -232,6 +280,30 @@ const LoginView = () => {
             onClose={() => setLinkBanner('')}
           >
             {linkBanner}
+            {claimable && ssoLinkToken && (
+              // Without this a genuinely new pupil has nothing to do but the
+              // one thing they cannot: produce an aula password.
+              <Button
+                size="small"
+                sx={{ mt: 1 }}
+                onClick={async () => {
+                  const jwt = await declineAccountClaim(ssoLinkToken);
+
+                  if (!jwt) {
+                    setError(t('idp.claim.declineFailed'));
+
+                    return;
+                  }
+
+                  handleOAuthLogin(jwt);
+                  dispatch({ type: 'LOG_IN' });
+                  navigate('/', { replace: true });
+                }}
+                data-testid="idp-claim-decline"
+              >
+                {t('idp.claim.noAccount')}
+              </Button>
+            )}
           </Alert>
         </Collapse>
         <Collapse in={loginError !== ''}>
@@ -243,6 +315,8 @@ const LoginView = () => {
             {loginError}
           </Alert>
         </Collapse>
+        {showPasswordLogin && (
+        <>
         <Stack gap={1}>
           <TextField
             required
@@ -319,30 +393,35 @@ const LoginView = () => {
         >
           {t("auth.login.button")}
         </Button>
-        <Grid container justifyContent="end" alignItems="center">
-          <Button
-            variant="text"
-            color="secondary"
-            component={AppLink}
-            to="/recovery/password"
-            aria-label={t('auth.forgotPassword.link')}
-          >
-            {t('auth.forgotPassword.link')}
-          </Button>
-        </Grid>
+        {!isSsoManaged && (
+          <Grid container justifyContent="end" alignItems="center">
+            <Button
+              variant="text"
+              color="secondary"
+              component={AppLink}
+              to="/recovery/password"
+              aria-label={t('auth.forgotPassword.link')}
+            >
+              {t('auth.forgotPassword.link')}
+            </Button>
+          </Grid>
+        )}
+        </>
+        )}
 
-        {(config.IS_SSO_ENABLED) && (
+        {ssoAvailable && (
           <>
-            <Stack direction='row' mb={2} alignItems='center'>
-              <Divider sx={{ flex: 1 }} />
-              <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
-              <Divider sx={{ flex: 1 }} />
-            </Stack>
+            {showPasswordLogin && (
+              <Stack direction='row' mb={2} alignItems='center'>
+                <Divider sx={{ flex: 1 }} />
+                <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
+                <Divider sx={{ flex: 1 }} />
+              </Stack>
+            )}
             <Stack direction='column' gap={1} mb={2} alignItems='center'>
                 <Button
                   variant="outlined"
                   color="secondary"
-                  disabled={isSsoLoading}
                   onClick={() => handleSsoLogin()}
                   aria-label={t('auth.sso.arialabel')}
                 >{t('auth.sso.button')}</Button>

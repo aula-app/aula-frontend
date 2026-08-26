@@ -1,7 +1,10 @@
 ## Unreleased
+- **New features**
+  - SSO-managed schools (EDUPLACES): profile fields owned by the identity provider (name, username, email, password) are now read-only or hidden, and password-reset controls are removed, since those are managed upstream
+  - Login screen shows only the SSO sign-in when a school uses SSO, and only the password form when it does not
 - **Bug fixes**
   - Sort preference in Ideas Box and Wild Ideas views is now persisted across navigation — going back no longer resets the selected sort order
-  
+
 ## 1.9.3
 
 - **Technical improvements**

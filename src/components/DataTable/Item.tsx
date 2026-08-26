@@ -1,11 +1,12 @@
 import { AppIcon, AppIconButton } from '@/components';
 import { useDateFormatters } from '@/hooks';
 import { getGroup } from '@/services/groups';
+import { getIdpProvider } from '@/services/idpMigration';
 import { getRoom } from '@/services/rooms';
 import { getUser } from '@/services/users';
 import { useAppStore } from '@/store';
 import { PossibleFields, SettingType, UserType } from '@/types/Scopes';
-import { phases, STATUS } from '@/utils';
+import { isSsoUser, phases, STATUS } from '@/utils';
 import { Chip, Stack, Typography } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -36,8 +37,17 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
   const { formatDateTime } = useDateFormatters();
   const [responseName, setName] = useState<string>('');
   const [hidden, setHidden] = useState(true);
+  const [idpProvider, setIdpProvider] = useState<string | null>(null);
 
   const value = row[column as keyof SettingType];
+
+  // The provider is a property of the school, not of a person, and the legacy
+  // user payload has no way to reach it.
+  useEffect(() => {
+    if (column !== 'idp_user_id') return;
+
+    getIdpProvider().then(setIdpProvider);
+  }, [column]);
 
   const getUserName = (id: string) => {
     getUser(id).then((response) => {
@@ -134,6 +144,10 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
       };
       const user = 'username' in row ? (row as UserType) : null;
 
+      // A provider-managed account has no aula password: neither the temp
+      // password nor the reset control belong on the row.
+      if (isSsoUser(user)) return null;
+
       return value ? (
         <Stack direction="row" alignItems="center">
           <Chip
@@ -159,13 +173,18 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
         </Stack>
       ) : null;
 
-    // SSO provider column — shows "aula" for normal users, "sso: <provider>" for SSO users
-    case 'sso_provider': {
+    // Where the account comes from: "aula" for one made here, "sso: <provider>"
+    // for one the directory owns.
+    case 'idp_user_id': {
       const user = row as UserType;
-      if (user.sso_sub) {
-        return <Typography>{`sso: ${user.sso_provider ?? 'unknown'}`}</Typography>;
-      }
-      return <Typography>aula</Typography>;
+
+      // idp_user_id, not sso_sub: the import gives an account its provider
+      // identity, while sso_sub only appears once that person has signed in.
+      // Keying off sso_sub alone labelled every imported account "aula" until
+      // its owner first logged in, which is exactly backwards.
+      if (!user.idp_user_id && !user.sso_sub) return <Typography>aula</Typography>;
+
+      return <Typography>{`sso: ${user.sso_provider ?? idpProvider ?? 'unknown'}`}</Typography>;
     }
 
     // Default case for all other fields
