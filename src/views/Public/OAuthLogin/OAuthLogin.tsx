@@ -1,12 +1,10 @@
-import { useIdpImportGate } from '@/hooks/useIdpImportGate';
 import { handleOAuthLogin } from '@/services/auth';
 import { validateAndSaveInstanceCode } from '@/services/instance';
 import { useAppStore } from '@/store';
 import { localStorageGet } from '@/utils';
 import { Capacitor } from '@capacitor/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import SchoolSetupView from '../SchoolSetupView';
 
 // Webview origins of the Capacitor app builds (capacitor.config.ts: ios.scheme /
 // server.androidScheme, hostname defaults to localhost).
@@ -30,15 +28,35 @@ const bounceToNativeOrigin = (): boolean => {
   return true;
 };
 
+/**
+ * Browser leg of the sso callback; native builds land in useDeepLinks instead.
+ *
+ * useIsAuthenticated reads localStorage per render, so handleOAuthLogin alone
+ * flips Routes from PublicRoutes to PrivateRoutes, which has no
+ * /oauth-login/:jwt_token and falls through to NotFoundView. Any re-render
+ * between the token write and navigate() hits that, usually useOutdatedGuard
+ * in Layout resolving versionsRequest().
+ *
+ * Hence handleOAuthLogin -> navigate -> dispatch in one tick, no await between.
+ * useIdpImportGate is not run here: PrivateRoutes runs it for every
+ * authenticated render, and awaiting getIdpImportStatus reopens the gap.
+ */
 const OAuthLogin = () => {
   const { jwt_token } = useParams<{ jwt_token?: string }>();
   const [searchParams] = useSearchParams();
   const [, dispatch] = useAppStore();
   const navigate = useNavigate();
-  const [authenticated, setAuthenticated] = useState(false);
+
+  // useNavigate/useSearchParams change identity on the navigate() below, so the
+  // effect would re-run handleOAuthLogin on a route already left.
+  const started = useRef(false);
 
   useEffect(() => {
+    if (started.current) return;
+    started.current = true;
+
     if (bounceToNativeOrigin()) return;
+
     (async () => {
       try {
         // IdP-initiated launches (e.g. Eduplaces marketplace) start without
@@ -51,36 +69,18 @@ const OAuthLogin = () => {
           await validateAndSaveInstanceCode(codeFromUrl);
         }
 
+        // No await from here to the navigate below.
         handleOAuthLogin(jwt_token);
         localStorage.removeItem('sso_force_login');
-        setAuthenticated(true);
+        navigate('/', { replace: true });
+        dispatch({ type: 'LOG_IN' });
       } catch (error) {
         navigate('/login', { replace: true });
       }
     })();
-  }, [jwt_token, searchParams, navigate]);
+  }, [jwt_token, searchParams, navigate, dispatch]);
 
-  return authenticated ? <ImportGate onEnter={() => { dispatch({ type: 'LOG_IN' }); navigate('/', { replace: true }); }} /> : null;
-};
-
-/**
- * Sits between a completed login and aula itself.
- *
- * Only mounted once the token is stored, because the status endpoint is
- * authenticated. Schools with nothing to import pass through without ever
- * rendering anything.
- */
-const ImportGate: React.FC<{ onEnter: () => void }> = ({ onEnter }) => {
-  const { phase, status, dismiss } = useIdpImportGate();
-
-  useEffect(() => {
-    if (phase === 'clear') onEnter();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase]);
-
-  if (phase === 'checking' || phase === 'clear') return null;
-
-  return <SchoolSetupView phase={phase} status={status} onDismiss={dismiss} />;
+  return null;
 };
 
 export default OAuthLogin;
