@@ -58,10 +58,12 @@ const LoginView = () => {
    */
   const [instanceSso, setInstanceSso] = useState<boolean | null | undefined>(undefined);
 
-  const ssoAvailable = instanceSso !== false;
-  const ssoEnforced = ssoAvailable && instanceSso === true;
-  const showPasswordLogin = !ssoEnforced || ssoLinkToken !== null;
-  const ssoBrowserSupported = useMemo(() => config.IS_SSO_ENABLED && isSsoBrowserSupported(), []);
+  const ssoAvailable = config.IS_SSO_ENABLED && instanceSso === true;
+  const showPasswordLogin = !ssoAvailable || ssoLinkToken !== null;
+  const ssoBrowserSupported = useMemo(() => isSsoBrowserSupported(), []);
+
+  const ssoStatusPending =
+    config.IS_SSO_ENABLED && instanceSso === undefined && ssoLinkToken === null && loginError === '';
 
   const schema = yup
     .object({
@@ -248,7 +250,10 @@ const LoginView = () => {
   useEffect(() => {
     (async () => {
       const instanceApiUrl = localStorageGet('api_url');
-      if (!instanceApiUrl) return;
+      if (!instanceApiUrl) {
+        setInstanceSso(null);
+        return;
+      }
 
       setInstanceSso((await getSsoStatus(instanceApiUrl))?.enabled ?? null);
     })();
@@ -265,6 +270,14 @@ const LoginView = () => {
         <Typography>
           {t('auth.sso.bouncing', { defaultValue: 'Signing you in via Eduplaces…' })}
         </Typography>
+      </Stack>
+    );
+  }
+
+  if (ssoStatusPending) {
+    return (
+      <Stack spacing={2} alignItems="center" sx={{ p: 4 }}>
+        <CircularProgress />
       </Stack>
     );
   }
