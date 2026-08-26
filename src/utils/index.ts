@@ -1,6 +1,7 @@
 export * from './a11yModal';
 export * from './accessibility';
 export * from './alerts';
+export * from './browserSupport';
 export * from './commands';
 export * from './jwt';
 export * from './localStorage';
