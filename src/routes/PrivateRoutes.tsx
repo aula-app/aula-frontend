@@ -30,7 +30,7 @@ import WelcomeView from '@/views/Welcome';
 import { useIdpImportGate } from '@/hooks/useIdpImportGate';
 import SchoolSetupView from '@/views/Public/SchoolSetupView';
 import { useEffect } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 /**
  * List of routes available only for authenticated users
@@ -41,10 +41,9 @@ const PrivateRoutes = () => {
   const [, dispatch] = useAppStore();
   const location = useLocation();
 
-  // A reload during the school's first import would otherwise land straight in
-  // an aula with no rooms and no classmates: OAuthLogin's gate only runs on the
-  // login hop. The hook polls, so a reload mid-import still sees it finish
-  // rather than sticking on whatever the first read happened to catch.
+  // Runs on every authenticated render, so it covers both the login hop
+  // (OAuthLogin navigates straight here) and a reload mid-import. The hook
+  // polls, so neither sticks on whatever getIdpImportStatus first returned.
   const { phase: importPhase, status: importStatus, dismiss: dismissImport } = useIdpImportGate();
 
   useEffect(() => {
@@ -58,11 +57,13 @@ const PrivateRoutes = () => {
   return checkPermissions('system', 'hide') ? (
     <Routes>
       <Route path="/" element={<ConfigView />} />
+      <Route path="oauth-login/*" element={<SsoCallbackLanded />} />
       <Route path="*" element={<NotFoundView />} />
     </Routes>
   ) : (
     <Routes>
       <Route path="/" element={<WelcomeView />} />
+      <Route path="oauth-login/*" element={<SsoCallbackLanded />} />
       <Route path="about" element={<AboutView />} />
       <Route path="announcements" element={<UserMessagesView />} />
       <Route path="announcements/:announcement_id" element={<AnnouncementView />} />
@@ -101,5 +102,12 @@ const PrivateRoutes = () => {
     </Routes>
   );
 };
+
+/**
+ * /oauth-login/:jwt_token is declared in PublicRoutes, but the token that
+ * mounts PrivateRoutes is written while it is still the url. Reaching this
+ * means handleOAuthLogin succeeded, so redirect rather than hit NotFoundView.
+ */
+const SsoCallbackLanded = () => <Navigate to="/" replace />;
 
 export default PrivateRoutes;
