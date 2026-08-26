@@ -7,7 +7,7 @@ import { loginUser } from "@/services/login";
 import { completeSsoLink, getSsoStatus, initiateSso } from "@/services/sso";
 import { useAppStore } from "@/store";
 import { LoginFormValues } from "@/types/LoginTypes";
-import { localStorageGet, localStorageSet, parseJwt } from "@/utils";
+import { isSsoBrowserSupported, localStorageGet, localStorageSet, MIN_SSO_SAFARI_VERSION, parseJwt } from "@/utils";
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -23,7 +23,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -58,9 +58,10 @@ const LoginView = () => {
    */
   const [instanceSso, setInstanceSso] = useState<boolean | null | undefined>(undefined);
 
-  const ssoAvailable = config.IS_SSO_ENABLED && instanceSso !== false;
+  const ssoAvailable = instanceSso !== false;
   const ssoEnforced = ssoAvailable && instanceSso === true;
   const showPasswordLogin = !ssoEnforced || ssoLinkToken !== null;
+  const ssoBrowserSupported = useMemo(() => isSsoBrowserSupported(), []);
 
   const schema = yup
     .object({
@@ -224,6 +225,7 @@ const LoginView = () => {
     // which would only be refused if the school has SSO switched off.
     if (instanceSso === undefined) return;
     if (!ssoAvailable) return;
+    if (!ssoBrowserSupported) return;
     const loginHint = searchParams.get('login_hint') ?? undefined;
     handleSsoLogin({ loginHint });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -256,7 +258,7 @@ const LoginView = () => {
   // marketplace) and SSO is enabled, the auto-trigger effect is already
   // redirecting them to Keycloak. Show a status panel instead of the
   // password form so they don't see a confusing flash.
-  if (searchParams.get('via') === 'eduplaces' && ssoAvailable && loginError === '') {
+  if (searchParams.get('via') === 'eduplaces' && ssoAvailable && ssoBrowserSupported && loginError === '') {
     return (
       <Stack spacing={2} alignItems="center" sx={{ p: 4 }}>
         <CircularProgress />
@@ -419,10 +421,16 @@ const LoginView = () => {
               </Stack>
             )}
             <Stack direction='column' gap={1} mb={2} alignItems='center'>
+                {!ssoBrowserSupported && (
+                  <Alert variant="outlined" severity="error" sx={{ mb: 5 }}>
+                    {t('auth.sso.unsupportedBrowser', { version: MIN_SSO_SAFARI_VERSION })}
+                  </Alert>
+                )}
                 <Button
                   variant="outlined"
                   color="secondary"
                   onClick={() => handleSsoLogin()}
+                  disabled={!ssoBrowserSupported}
                   aria-label={t('auth.sso.arialabel')}
                 >{t('auth.sso.button')}</Button>
             </Stack>
