@@ -19,7 +19,11 @@ export const useBreadcrumb = () => {
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const isPhaseUrl = (url: string) => /\/phase\/\d+$/.test(url);
-  const filteredBreadcrumbs = breadcrumb.filter((item, index) => index === 0 || !isPhaseUrl(item[1]));
+
+  const phaseUrl = breadcrumb.find((item, index) => index !== 0 && isPhaseUrl(item[1]))?.[1];
+  const filteredBreadcrumbs = breadcrumb
+    .filter((item, index) => index === 0 || !isPhaseUrl(item[1]))
+    .map<BreadcrumbNavItem>((item, index) => (index === 0 && phaseUrl ? [item[0], phaseUrl] : item));
 
   const getIconForBreadcrumb = (label: string, url: string): ICON_TYPE | null => {
     const lowerLabel = label.toLowerCase();
