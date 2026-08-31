@@ -424,7 +424,7 @@ const LoginView = () => {
         </>
         )}
 
-        {ssoAvailable && (
+        {ssoAvailable && ssoLinkToken === null && (
           <>
             {showPasswordLogin && (
               <Stack direction='row' mb={2} alignItems='center'>
