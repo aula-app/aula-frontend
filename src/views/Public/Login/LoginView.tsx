@@ -63,7 +63,7 @@ const LoginView = () => {
   const ssoBrowserSupported = useMemo(() => isSsoBrowserSupported(), []);
 
   const ssoStatusPending =
-    config.IS_SSO_ENABLED && instanceSso === undefined && ssoLinkToken === null && loginError === '';
+    getRuntimeConfig().IS_SSO_ENABLED && instanceSso === undefined && ssoLinkToken === null && loginError === '';
 
   const schema = yup
     .object({
