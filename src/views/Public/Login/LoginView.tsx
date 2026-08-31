@@ -58,7 +58,7 @@ const LoginView = () => {
    */
   const [instanceSso, setInstanceSso] = useState<boolean | null | undefined>(undefined);
 
-  const ssoAvailable = config.IS_SSO_ENABLED && instanceSso === true;
+  const ssoAvailable = getRuntimeConfig().IS_SSO_ENABLED && instanceSso === true;
   const showPasswordLogin = !ssoAvailable || ssoLinkToken !== null;
   const ssoBrowserSupported = useMemo(() => isSsoBrowserSupported(), []);
 
