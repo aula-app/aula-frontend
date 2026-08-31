@@ -4,7 +4,7 @@ import { isVersionOutdated } from './version';
  * Lowest Safari/WebKit version the SSO providers (Eduplaces, iServ) work with.
  * Below this the login redirect breaks, so the SSO button is disabled.
  */
-export const MIN_SSO_SAFARI_VERSION = '16.4';
+export const MIN_SSO_SAFARI_VERSION = '17.6';
 
 interface SafariInfo {
   isSafari: boolean;
