@@ -443,7 +443,6 @@ const LoginView = () => {
                   variant="outlined"
                   color="secondary"
                   onClick={() => handleSsoLogin()}
-                  disabled={!ssoBrowserSupported}
                   aria-label={t('auth.sso.arialabel')}
                 >{t('auth.sso.button')}</Button>
             </Stack>
