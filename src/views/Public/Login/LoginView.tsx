@@ -1,5 +1,5 @@
 import { AppIconButton, AppLink } from "@/components";
-import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
+import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
 import { useSsoManaged } from "@/hooks";
 import { handleOAuthLogin } from "@/services/auth";
 import { declineAccountClaim } from "@/services/idpMigration";
