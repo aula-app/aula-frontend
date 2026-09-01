@@ -1,5 +1,8 @@
 ## Unreleased
 
+- **Bug fixes**
+  - Sort preference in Ideas Box and Wild Ideas are now defaulted to newer first
+
 ## 1.10.0
 
 - **New features**
@@ -16,15 +19,15 @@
 
 ## 1.9.2
 
-  - **Bug fixes**
-    - Remove Survey creation form
+- **Bug fixes**
+  - Remove Survey creation form
 
 ## 1.9.1
 
-  - **Bug fixes**
-    - Fix letter spacing
-    - Fix boxes prevented to be edited after phase 20 bug
-  
+- **Bug fixes**
+  - Fix letter spacing
+  - Fix boxes prevented to be edited after phase 20 bug
+
 ## 1.9.0
 
 - **New features**
@@ -45,7 +48,7 @@
   - Set password and change password forms identify new/current password fields for password managers
   - Profile editor fields mapped to standard tokens (nickname, username, name, email)
   - Admin user management form opts out of autofill to prevent credential injection when editing other users' data
-  -  Fix WCAG 1.4.11: input borders raised from 1.7:1 to 3.4:1 (light) and 4.4:1 (dark)
+  - Fix WCAG 1.4.11: input borders raised from 1.7:1 to 3.4:1 (light) and 4.4:1 (dark)
   - Fix WCAG 1.4.11: focus ring on IconButton and RippleLink now uses `--color-text-primary` (≥9:1), replacing invisible same-color outline
   - Fix WCAG 1.4.11: MUI OutlinedInput and standard Input borders overridden to meet 3:1 minimum
   - Room cards now show a visible focus ring via `focus-within` on the card, preventing `overflow:hidden` from clipping the inner link outline
