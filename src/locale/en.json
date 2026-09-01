@@ -84,10 +84,10 @@
       "button": "OAuth authentication"
     },
     "sso": {
-      "arialabel": "Single Sign-On",
-      "button": "Sign in with SSO",
+      "button": "Sign in with Eduplaces",
       "bouncing": "Signing you in via Eduplaces…",
-      "unsupportedBrowser": "Please note: SSO sign-in requires Safari {{version}} or newer. Please update your device or use a different browser."
+      "hint": "You will be briefly redirected to Eduplaces and iServ",
+      "unsupportedBrowser": "Please note: Single Sign-On (via Eduplaces/IServ, etc.) requires Safari {{version}} or newer. Please update your device or use a different browser."
     },
     "password": {
       "change": "Change password",
@@ -189,7 +189,7 @@
       "link_user_not_found": "We could not find your aula account. Please try logging in again.",
       "school_not_provisioned": "This school is not set up yet. Please contact your administrator.",
       "sso_disabled": "Single Sign-On is not enabled for this school.",
-      "login_cancelled": "Sign-in was cancelled. You can try again, or sign in with your aula password.",
+      "login_cancelled": "Single Sign-On was cancelled. You can try again.",
       "sso_provider_error": "Your school's login service reported a problem. Please try again, or contact your administrator."
     }
   },

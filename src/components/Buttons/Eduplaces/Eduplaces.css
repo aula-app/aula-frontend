@@ -1,0 +1,137 @@
+/* Brand font, loaded locally so it never touches the global theme. */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/font/montserrat/Montserrat-Bold.woff2') format('woff2');
+}
+
+/* Eduplaces brand palette — scoped to the button, not :root, to avoid leaking globals. */
+.edu-login-btn {
+  --space-dust: #404261;
+  --infra-purple: #4a00b8;
+  --redshift: #7d285a;
+  --moon: #fafafa;
+  --gradient: linear-gradient(150deg, var(--infra-purple), var(--redshift));
+  --font-family: 'Montserrat', system-ui, sans-serif;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 46px;
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 0 15px;
+  border: 1px solid;
+  border-radius: 8px;
+  transition: all 0.1s ease-in-out;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.edu-login-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* SVG icon on the button */
+.edu-login-btn .bi {
+  height: 20px;
+  width: 30px;
+  fill: currentcolor;
+  flex-shrink: 0;
+}
+
+/* 1. Purple Outline */
+.edu-login-purple-outline {
+  color: var(--infra-purple);
+  background-color: var(--moon);
+  border-color: var(--infra-purple);
+}
+.bg-dark .edu-login-purple-outline {
+  border-color: transparent;
+}
+.edu-login-purple-outline:not(:disabled):hover {
+  border-color: transparent;
+  background: var(--gradient);
+  color: var(--moon);
+}
+.bg-dark .edu-login-purple-outline:not(:disabled):hover {
+  border-color: var(--moon);
+}
+
+/* 2. Purple */
+.edu-login-purple {
+  border-color: transparent;
+  background-color: var(--infra-purple);
+  color: var(--moon);
+}
+.bg-dark .edu-login-purple {
+  border-color: var(--moon);
+}
+.edu-login-purple:not(:disabled):hover {
+  color: var(--infra-purple);
+  background-color: var(--moon);
+  border-color: var(--infra-purple);
+}
+.bg-dark .edu-login-purple:not(:disabled):hover {
+  border-color: transparent;
+}
+
+/* 3. Space */
+.edu-login-space {
+  border-color: transparent;
+  background: var(--gradient);
+  color: var(--moon);
+}
+.bg-dark .edu-login-space {
+  border-color: var(--moon);
+}
+.edu-login-space:not(:disabled):hover {
+  color: var(--infra-purple);
+  background: var(--moon);
+  border-color: var(--infra-purple);
+}
+.bg-dark .edu-login-space:not(:disabled):hover {
+  border-color: transparent;
+}
+
+/* 4. Mono Outline */
+.edu-login-mono-outline {
+  color: var(--space-dust);
+  background-color: var(--moon);
+  border-color: var(--space-dust);
+}
+.bg-dark .edu-login-mono-outline {
+  border-color: transparent;
+}
+.edu-login-mono-outline:not(:disabled):hover {
+  border-color: transparent;
+  background-color: var(--space-dust);
+  color: var(--moon);
+}
+.bg-dark .edu-login-mono-outline:not(:disabled):hover {
+  border-color: var(--moon);
+}
+
+/* 5. Mono */
+.edu-login-mono {
+  border-color: transparent;
+  background-color: var(--space-dust);
+  color: var(--moon);
+}
+.bg-dark .edu-login-mono {
+  border-color: var(--moon);
+}
+.edu-login-mono:not(:disabled):hover {
+  color: var(--space-dust);
+  background-color: var(--moon);
+  border: 1px solid;
+  border-color: var(--space-dust);
+}
+.bg-dark .edu-login-mono:not(:disabled):hover {
+  border-color: transparent;
+}
