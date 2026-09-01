@@ -4,7 +4,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('/font/montserrat/static/Montserrat-Bold.ttf') format('truetype');
+  src: url('/font/montserrat/Montserrat-Bold.ttf') format('truetype');
 }
 
 /* Eduplaces brand palette — scoped to the button, not :root, to avoid leaking globals. */
