@@ -85,8 +85,9 @@
     },
     "sso": {
       "arialabel": "Single Sign-On",
-      "button": "Sign in with SSO",
+      "button": "Sign in with Eduplaces",
       "bouncing": "Signing you in via Eduplaces…",
+      "hint": "You will be briefly redirected to Eduplaces and iServ",
       "unsupportedBrowser": "Please note: SSO sign-in requires Safari {{version}} or newer. Please update your device or use a different browser."
     },
     "password": {
