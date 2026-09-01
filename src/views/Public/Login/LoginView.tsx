@@ -1,6 +1,6 @@
 import { AppIconButton, AppLink } from "@/components";
 import Eduplaces from "@/components/Buttons/Eduplaces/Eduplaces";
-import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
+import { getRuntimeConfig } from "@/config";
 import { useSsoManaged } from "@/hooks";
 import { handleOAuthLogin } from "@/services/auth";
 import { declineAccountClaim } from "@/services/idpMigration";
@@ -31,10 +31,9 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import * as yup from "yup";
 
 /**
-* Renders "Login" view for Login flow
-* url: /login
-*/
-
+ * Renders "Login" view for Login flow
+ * url: /login
+ */
 const LoginView = () => {
   const { t } = useTranslation();
   const isSsoManaged = useSsoManaged();
@@ -48,14 +47,15 @@ const LoginView = () => {
   const [ssoLinkToken, setSsoLinkToken] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
+
   /**
-  * Whether this particular school offers SSO, as opposed to whether this
-  * deployment has an identity provider at all.
-  *
-  * `undefined` until the backend has been asked, `null` when it could not
-  * answer. Only an explicit `false` hides the button: a school that does use
-  * SSO must not lose its only way in because one request failed.
-  */
+   * Whether this particular school offers SSO, as opposed to whether this
+   * deployment has an identity provider at all.
+   *
+   * `undefined` until the backend has been asked, `null` when it could not
+   * answer. Only an explicit `false` hides the button: a school that does use
+   * SSO must not lose its only way in because one request failed.
+   */
   const [instanceSso, setInstanceSso] = useState<boolean | null | undefined>(undefined);
 
   const ssoAvailable = getRuntimeConfig().IS_SSO_ENABLED && instanceSso === true;
