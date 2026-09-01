@@ -1,4 +1,5 @@
 import { AppIconButton, AppLink } from "@/components";
+import Eduplaces from "@/components/Buttons/Eduplaces/Eduplaces";
 import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
 import { useSsoManaged } from "@/hooks";
 import { handleOAuthLogin } from "@/services/auth";
@@ -406,12 +407,13 @@ const LoginView = () => {
                         {t('auth.sso.unsupportedBrowser', { version: MIN_SSO_SAFARI_VERSION })}
                       </Alert>
                     )}
-                    <Button
-                      variant="outlined"
-                      color="secondary"
+                    <Eduplaces
+                      label={t('auth.sso.button')}
                       onClick={() => handleSsoLogin()}
-                      aria-label={t('auth.sso.arialabel')}
-                    >{t('auth.sso.button')}</Button>
+                    />
+                    <Typography variant="caption" color="secondary" textAlign="center">
+                      {t('auth.sso.hint')}
+                    </Typography>
                   </Stack>
                 </>
               )}
