@@ -409,7 +409,6 @@ const LoginView = () => {
                     )}
                     <Eduplaces
                       label={t('auth.sso.button')}
-                      aria-label={t('auth.sso.arialabel')}
                       onClick={() => handleSsoLogin()}
                     />
                     <Typography variant="caption" color="secondary" textAlign="center">

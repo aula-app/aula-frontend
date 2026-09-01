@@ -84,7 +84,6 @@
       "button": "OAuth-Authentifizierung"
     },
     "sso": {
-      "arialabel": "Mit Eduplaces anmelden",
       "button": "Mit Eduplaces anmelden",
       "bouncing": "Wir leiten dich gerade über Eduplaces an …",
       "hint": "du wirst kurz zu Eduplaces und iServ weitergeleitet",

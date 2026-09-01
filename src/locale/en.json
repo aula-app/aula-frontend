@@ -84,7 +84,6 @@
       "button": "OAuth authentication"
     },
     "sso": {
-      "arialabel": "Single Sign-On",
       "button": "Sign in with Eduplaces",
       "bouncing": "Signing you in via Eduplaces…",
       "hint": "You will be briefly redirected to Eduplaces and iServ",
