@@ -1,5 +1,11 @@
 /* Brand font, loaded locally so it never touches the global theme. */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/font/montserrat/static/Montserrat-Bold.ttf') format('truetype');
+}
 
 /* Eduplaces brand palette — scoped to the button, not :root, to avoid leaking globals. */
 .edu-login-btn {
