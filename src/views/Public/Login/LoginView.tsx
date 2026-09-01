@@ -427,7 +427,6 @@ const LoginView = () => {
                     {t('auth.sso.unsupportedBrowser', { version: MIN_SSO_SAFARI_VERSION })}
                   </Alert>
                 )}
-                <KnowMore title={t('auth.sso.arialabel')}>
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -435,7 +434,6 @@ const LoginView = () => {
                     disabled={!ssoBrowserSupported}
                     aria-label={t('auth.sso.arialabel')}
                   >{t('auth.sso.button')}</Button>
-                </KnowMore>
             </Stack>
           </>
         )}
