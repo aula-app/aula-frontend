@@ -1,7 +1,6 @@
 import { AppIconButton, AppLink } from "@/components";
 import Eduplaces from "@/components/Buttons/Eduplaces/Eduplaces";
 import { getRuntimeConfig } from "@/config";
-import { useSsoManaged } from "@/hooks";
 import { handleOAuthLogin } from "@/services/auth";
 import { declineAccountClaim } from "@/services/idpMigration";
 import { loginUser } from "@/services/login";
@@ -36,7 +35,6 @@ import * as yup from "yup";
  */
 const LoginView = () => {
   const { t } = useTranslation();
-  const isSsoManaged = useSsoManaged();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [, dispatch] = useAppStore();
@@ -380,19 +378,17 @@ const LoginView = () => {
                   >
                     {t("auth.login.button")}
                   </Button>
-                  {!isSsoManaged && (
-                    <Grid container justifyContent="end" alignItems="center">
-                      <Button
-                        variant="text"
-                        color="secondary"
-                        component={AppLink}
-                        to="/recovery/password"
-                        aria-label={t('auth.forgotPassword.link')}
-                      >
-                        {t('auth.forgotPassword.link')}
-                      </Button>
-                    </Grid>
-                  )}
+                  <Grid container justifyContent="end" alignItems="center">
+                    <Button
+                      variant="text"
+                      color="secondary"
+                      component={AppLink}
+                      to="/recovery/password"
+                      aria-label={t('auth.forgotPassword.link')}
+                    >
+                      {t('auth.forgotPassword.link')}
+                    </Button>
+                  </Grid>
                 </>
               )}
 
