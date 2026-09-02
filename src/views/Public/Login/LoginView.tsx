@@ -57,9 +57,11 @@ const LoginView = () => {
    * SSO must not lose its only way in because one request failed.
    */
   const [instanceSso, setInstanceSso] = useState<boolean | null | undefined>(undefined);
+  const [ssoRequired, setSsoRequired] = useState<boolean>(false);
 
   const ssoAvailable = getRuntimeConfig().IS_SSO_ENABLED && instanceSso === true;
-  const showPasswordLogin = !ssoAvailable || ssoLinkToken !== null;
+  const ssoEnforced = ssoAvailable && ssoRequired;
+  const showPasswordLogin = !ssoEnforced || ssoLinkToken !== null;
   const ssoBrowserSupported = useMemo(() => isSsoBrowserSupported(), []);
 
   const ssoStatusPending =
@@ -241,7 +243,9 @@ const LoginView = () => {
         return;
       }
 
-      setInstanceSso((await getSsoStatus(instanceApiUrl))?.enabled ?? null);
+      const status = await getSsoStatus(instanceApiUrl);
+      setInstanceSso(status?.enabled ?? null);
+      setSsoRequired(status?.required ?? false);
     })();
   }, []);
 
