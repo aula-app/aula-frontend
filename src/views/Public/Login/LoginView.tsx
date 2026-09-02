@@ -1,5 +1,6 @@
 import { AppIconButton, AppLink } from "@/components";
-import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from "@/config";
+import Eduplaces from "@/components/Buttons/Eduplaces/Eduplaces";
+import { getRuntimeConfig } from "@/config";
 import { useSsoManaged } from "@/hooks";
 import { handleOAuthLogin } from "@/services/auth";
 import { declineAccountClaim } from "@/services/idpMigration";
@@ -33,11 +34,9 @@ import * as yup from "yup";
  * Renders "Login" view for Login flow
  * url: /login
  */
-
 const LoginView = () => {
   const { t } = useTranslation();
   const isSsoManaged = useSsoManaged();
-  const [config, setConfig] = useState<RuntimeConfig>(defaultConfig);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [, dispatch] = useAppStore();
@@ -48,6 +47,7 @@ const LoginView = () => {
   const [ssoLinkToken, setSsoLinkToken] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
+
   /**
    * Whether this particular school offers SSO, as opposed to whether this
    * deployment has an identity provider at all.
@@ -58,10 +58,12 @@ const LoginView = () => {
    */
   const [instanceSso, setInstanceSso] = useState<boolean | null | undefined>(undefined);
 
-  const ssoAvailable = instanceSso !== false;
-  const ssoEnforced = ssoAvailable && instanceSso === true;
-  const showPasswordLogin = !ssoEnforced || ssoLinkToken !== null;
-  const ssoBrowserSupported = useMemo(() => config.IS_SSO_ENABLED && isSsoBrowserSupported(), []);
+  const ssoAvailable = getRuntimeConfig().IS_SSO_ENABLED && instanceSso === true;
+  const showPasswordLogin = !ssoAvailable || ssoLinkToken !== null;
+  const ssoBrowserSupported = useMemo(() => isSsoBrowserSupported(), []);
+
+  const ssoStatusPending =
+    getRuntimeConfig().IS_SSO_ENABLED && instanceSso === undefined && ssoLinkToken === null;
 
   const schema = yup
     .object({
@@ -193,7 +195,7 @@ const LoginView = () => {
 
   useEffect(() => {
     const ssoError = searchParams.get('sso_error');
-    const ssoLink  = searchParams.get('sso_link');
+    const ssoLink = searchParams.get('sso_link');
 
     if (ssoError === 'account_link_required' && ssoLink) {
       setSsoLinkToken(ssoLink);
@@ -233,44 +235,18 @@ const LoginView = () => {
 
   useEffect(() => {
     (async () => {
-      let runtimeConfig: RuntimeConfig;
-      try {
-        // load config from localStorage (cache)
-        runtimeConfig = getRuntimeConfig();
-      } catch (err) {
-        // load config from envvars or from //public-config.json
-        runtimeConfig = await loadRuntimeConfig();
-      }
-      setConfig(runtimeConfig);
-    })()
-  }, []);
-
-  useEffect(() => {
-    (async () => {
       const instanceApiUrl = localStorageGet('api_url');
-      if (!instanceApiUrl) return;
+      if (!instanceApiUrl) {
+        setInstanceSso(null);
+        return;
+      }
 
       setInstanceSso((await getSsoStatus(instanceApiUrl))?.enabled ?? null);
     })();
   }, []);
 
-  // When the user arrives from an IdP-initiated launch (e.g. Eduplaces
-  // marketplace) and SSO is enabled, the auto-trigger effect is already
-  // redirecting them to Keycloak. Show a status panel instead of the
-  // password form so they don't see a confusing flash.
-  if (searchParams.get('via') === 'eduplaces' && ssoAvailable && ssoBrowserSupported && loginError === '') {
-    return (
-      <Stack spacing={2} alignItems="center" sx={{ p: 4 }}>
-        <CircularProgress />
-        <Typography>
-          {t('auth.sso.bouncing', { defaultValue: 'Signing you in via Eduplaces…' })}
-        </Typography>
-      </Stack>
-    );
-  }
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className={ssoAvailable && !showPasswordLogin ? 'mb-auto mt-12' : ''}>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="mb-auto mt-12">
       <Stack gap={2} alignItems="center">
         <Typography variant="h2">
           {t("auth.messages.welcome")}
@@ -283,8 +259,8 @@ const LoginView = () => {
           >
             {linkBanner}
             {claimable && ssoLinkToken && (
-              // Without this a genuinely new pupil has nothing to do but the
-              // one thing they cannot: produce an aula password.
+              // A user that comes with SSO link needs to be able to decline
+              // linking themselves to an existing aula-User
               <Button
                 size="small"
                 sx={{ mt: 1 }}
@@ -317,125 +293,132 @@ const LoginView = () => {
             {loginError}
           </Alert>
         </Collapse>
-        {showPasswordLogin && (
-        <>
-        <Stack gap={1}>
-          <TextField
-            required
-            disabled={isLoading}
-            label={t("auth.login.label")}
-            id="login-username"
-            slotProps={{
-              input: {
-                "aria-labelledby": "login-username-label",
-                "aria-invalid": !!errors.username,
-                "aria-errormessage": errors.username ? "username-error-message" : undefined,
-                autoCapitalize: "none"
-              },
-              htmlInput: {
-                autoComplete: "username"
-              },
-              inputLabel: {
-                id: "login-username-label",
-                htmlFor: "login-username"
-              }
-            }}
-            {...register("username", {
-              shouldUnregister: false
-            })}
-            error={!!errors.username}
-            helperText={<span id="username-error-message">{errors.username?.message || ''}</span>}
-            sx={{ mt: 0 }}
-          />
-          <TextField
-            required
-            disabled={isLoading}
-            type={showPassword ? "text" : "password"}
-            label={t("auth.password.label")}
-            id="login-password"
-            {...register("password", {
-              shouldUnregister: false
-            })}
-            error={!!errors.password}
-            helperText={<span id="password-error-message">{errors.password?.message || ''}</span>}
-            sx={{ mt: 0 }}
-            slotProps={{
-              htmlInput: {
-                autoComplete: "current-password"
-              },
-              input: {
-                "aria-labelledby": "login-password-label",
-                "aria-invalid": !!errors.password,
-                "aria-errormessage": errors.password ? "password-error-message" : undefined,
-                autoCapitalize: "none",
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <AppIconButton
-                      aria-label={t("ui.accessibility.togglePasswordVisibility")}
-                      icon={showPassword ? "visibilityOn" : "visibilityOff"}
-                      title={showPassword ? t("actions.hide") : t("actions.show")}
-                      onClick={handleShowPasswordClick}
-                      onMouseDown={(e) => e.preventDefault()}
-                    />
-                  </InputAdornment>
-                ),
-              },
-              inputLabel: {
-                id: "login-password-label",
-                htmlFor: "login-password"
-              }
-            }}
-          />
-        </Stack>
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={isLoading}
-          aria-label={t("auth.login.button")}
-        >
-          {t("auth.login.button")}
-        </Button>
-        {!isSsoManaged && (
-          <Grid container justifyContent="end" alignItems="center">
-            <Button
-              variant="text"
-              color="secondary"
-              component={AppLink}
-              to="/recovery/password"
-              aria-label={t('auth.forgotPassword.link')}
-            >
-              {t('auth.forgotPassword.link')}
-            </Button>
-          </Grid>
-        )}
-        </>
-        )}
 
-        {ssoAvailable && (
-          <>
-            {showPasswordLogin && (
-              <Stack direction='row' mb={2} alignItems='center'>
-                <Divider sx={{ flex: 1 }} />
-                <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
-                <Divider sx={{ flex: 1 }} />
-              </Stack>
-            )}
-            <Stack direction='column' gap={1} mb={2} alignItems='center'>
-                {!ssoBrowserSupported && (
-                  <Alert variant="outlined" severity="error" sx={{ mb: 5 }}>
-                    {t('auth.sso.unsupportedBrowser', { version: MIN_SSO_SAFARI_VERSION })}
-                  </Alert>
-                )}
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => handleSsoLogin()}
-                  disabled={!ssoBrowserSupported}
-                  aria-label={t('auth.sso.arialabel')}
-                >{t('auth.sso.button')}</Button>
-            </Stack>
-          </>
-        )}
+        {ssoStatusPending ?
+          <CircularProgress />
+          : (
+            <>
+              {showPasswordLogin && (
+                <>
+                  <Stack gap={1}>
+                    <TextField
+                      required
+                      disabled={isLoading}
+                      label={t("auth.login.label")}
+                      id="login-username"
+                      slotProps={{
+                        input: {
+                          "aria-labelledby": "login-username-label",
+                          "aria-invalid": !!errors.username,
+                          "aria-errormessage": errors.username ? "username-error-message" : undefined,
+                          autoCapitalize: "none"
+                        },
+                        htmlInput: {
+                          autoComplete: "username"
+                        },
+                        inputLabel: {
+                          id: "login-username-label",
+                          htmlFor: "login-username"
+                        }
+                      }}
+                      {...register("username", {
+                        shouldUnregister: false
+                      })}
+                      error={!!errors.username}
+                      helperText={<span id="username-error-message">{errors.username?.message || ''}</span>}
+                      sx={{ mt: 0 }}
+                    />
+                    <TextField
+                      required
+                      disabled={isLoading}
+                      type={showPassword ? "text" : "password"}
+                      label={t("auth.password.label")}
+                      id="login-password"
+                      {...register("password", {
+                        shouldUnregister: false
+                      })}
+                      error={!!errors.password}
+                      helperText={<span id="password-error-message">{errors.password?.message || ''}</span>}
+                      sx={{ mt: 0 }}
+                      slotProps={{
+                        htmlInput: {
+                          autoComplete: "current-password"
+                        },
+                        input: {
+                          "aria-labelledby": "login-password-label",
+                          "aria-invalid": !!errors.password,
+                          "aria-errormessage": errors.password ? "password-error-message" : undefined,
+                          autoCapitalize: "none",
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <AppIconButton
+                                aria-label={t("ui.accessibility.togglePasswordVisibility")}
+                                icon={showPassword ? "visibilityOn" : "visibilityOff"}
+                                title={showPassword ? t("actions.hide") : t("actions.show")}
+                                onClick={handleShowPasswordClick}
+                                onMouseDown={(e) => e.preventDefault()}
+                              />
+                            </InputAdornment>
+                          ),
+                        },
+                        inputLabel: {
+                          id: "login-password-label",
+                          htmlFor: "login-password"
+                        }
+                      }}
+                    />
+                  </Stack>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={isLoading}
+                    aria-label={t("auth.login.button")}
+                  >
+                    {t("auth.login.button")}
+                  </Button>
+                  {!isSsoManaged && (
+                    <Grid container justifyContent="end" alignItems="center">
+                      <Button
+                        variant="text"
+                        color="secondary"
+                        component={AppLink}
+                        to="/recovery/password"
+                        aria-label={t('auth.forgotPassword.link')}
+                      >
+                        {t('auth.forgotPassword.link')}
+                      </Button>
+                    </Grid>
+                  )}
+                </>
+              )}
+
+              {ssoAvailable && ssoLinkToken === null && (
+                <>
+                  {showPasswordLogin && (
+                    <Stack direction='row' mb={2} alignItems='center'>
+                      <Divider sx={{ flex: 1 }} />
+                      <Typography px={2} color="secondary">{t('ui.common.or')}</Typography>
+                      <Divider sx={{ flex: 1 }} />
+                    </Stack>
+                  )}
+                  <Stack direction='column' gap={1} mb={2} alignItems='center'>
+                    {!ssoBrowserSupported && (
+                      <Alert variant="outlined" severity="error" sx={{ mb: 5 }}>
+                        {t('auth.sso.unsupportedBrowser', { version: MIN_SSO_SAFARI_VERSION })}
+                      </Alert>
+                    )}
+                    <Eduplaces
+                      label={t('auth.sso.button')}
+                      onClick={() => handleSsoLogin()}
+                    />
+                    <Typography variant="caption" color="secondary" textAlign="center">
+                      {t('auth.sso.hint')}
+                    </Typography>
+                  </Stack>
+                </>
+              )}
+            </>
+          )}
       </Stack>
     </form>
   );
