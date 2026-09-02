@@ -14,7 +14,7 @@ import { localStorageGet } from '@/utils';
 export const completeSsoLink = async (
   apiUrl: string,
   ssoLinkToken: string,
-  legacyJwt: string,
+  legacyJwt: string
 ): Promise<{ success: boolean; error?: string }> => {
   const instanceCode = localStorageGet('code');
 
@@ -40,6 +40,7 @@ export const completeSsoLink = async (
 
 export interface SsoStatus {
   enabled: boolean;
+  required: boolean;
   provider: string | null;
 }
 
@@ -75,6 +76,7 @@ export const getSsoStatus = async (apiUrl: string): Promise<SsoStatus | null> =>
 
     return {
       enabled: body.enabled,
+      required: body?.required === true,
       provider: typeof body?.provider === 'string' ? body.provider : null,
     };
   } catch {
@@ -91,10 +93,7 @@ export interface InitiateSsoOptions {
   loginHint?: string;
 }
 
-export const initiateSso = async (
-  apiUrl: string,
-  options: InitiateSsoOptions = {},
-): Promise<string> => {
+export const initiateSso = async (apiUrl: string, options: InitiateSsoOptions = {}): Promise<string> => {
   const instanceCode = localStorageGet('code');
   const forceLogin = localStorage.getItem('sso_force_login') === 'true';
   // Keep the flag set until login succeeds (cleared in OAuthLogin).
