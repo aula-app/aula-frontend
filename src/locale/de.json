@@ -84,10 +84,10 @@
       "button": "OAuth-Authentifizierung"
     },
     "sso": {
-      "arialabel": "Single Sign-On",
-      "button": "Mit SSO anmelden",
+      "button": "Mit Eduplaces anmelden",
       "bouncing": "Wir leiten dich gerade über Eduplaces an …",
-      "unsupportedBrowser": "Achtung: Für die SSO-Anmeldung wird Safari {{version}} oder neuer benötigt. Bitte aktualisiere dein Gerät oder verwende einen anderen Browser."
+      "hint": "Du wirst kurz zu Eduplaces und iServ weitergeleitet",
+      "unsupportedBrowser": "Achtung: Für die SSO-Anmeldung (Eduplaces/IServ o.ä.) wird Safari {{version}} oder neuer benötigt. Bitte aktualisiere dein Gerät oder verwende einen anderen Browser."
     },
     "password": {
       "change": "Passwort ändern",
@@ -189,7 +189,7 @@
       "link_user_not_found": "Wir konnten dein aula-Konto nicht finden. Bitte versuche erneut, dich anzumelden.",
       "school_not_provisioned": "Diese Schule ist noch nicht eingerichtet. Bitte wende dich an deinen Administrator.",
       "sso_disabled": "Single Sign-On ist für diese Schule nicht aktiviert.",
-      "login_cancelled": "Die Anmeldung wurde abgebrochen. Du kannst es erneut versuchen oder dich mit deinem aula-Passwort anmelden.",
+      "login_cancelled": "Die Anmeldung wurde abgebrochen. Du kannst es erneut versuchen.",
       "sso_provider_error": "Beim Anmeldedienst deiner Schule ist ein Problem aufgetreten. Bitte versuche es erneut oder wende dich an deinen Administrator."
     }
   },

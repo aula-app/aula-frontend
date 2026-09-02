@@ -1,12 +1,3 @@
-## Unreleased
-
-- **Bug fixes**
-  - Sort preference in Ideas Box and Wild Ideas are now defaulted to newer first
-
-## 1.10.0
-
-- **New features**
-
 ## 1.10.0
 
 - **New features**
@@ -16,6 +7,7 @@
   - Minimum required app for SSO desplayed with a warning.
 - **Bug fixes**
   - Sort preference in Ideas Box and Wild Ideas views is now persisted across navigation — going back no longer resets the selected sort order
+  - KnowMore tooltip now shows on mobile
 
 ## 1.9.3
 
