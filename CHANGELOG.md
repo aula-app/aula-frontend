@@ -1,3 +1,15 @@
+## 1.10.2
+
+- **Bug fixes**
+  - Reenable 'forgot password' route when SSO is not mandatory
+
+## 1.10.1
+
+- **Bug fixes**
+  - fix "?" tooltips (aka. KnowMore) for interations on mobile
+  - SSO-managed schools (EDUPLACES): review guards for SSO login available and/or mandatory
+  - Manage SSO requirements for login, and display a versioning alert message when required
+
 ## 1.10.0
 
 - **New features**
