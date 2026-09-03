@@ -17,7 +17,7 @@ jobs:
       security-events: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: "Run Trivy vuln scanner, fs mode"
         uses: aquasecurity/trivy-action@v0.36.0
@@ -35,7 +35,7 @@ jobs:
           category: trivy-v2-fs
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Add IMAGE_TAG_SHORT_SHA env property with commit short sha
         run: echo "IMAGE_TAG_SHORT_SHA=aulaapp/${{ github.event.repository.name }}:$(git rev-parse --short HEAD)" >> $GITHUB_ENV
