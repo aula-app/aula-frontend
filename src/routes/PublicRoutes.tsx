@@ -3,12 +3,12 @@ import { InstanceCodeView, Login, OAuthLogin, PublicNotFoundView, Recovery, SetP
 import PublicOfflineView from '@/views/Public/PublicOfflineView';
 import UpdatePasswordView from '@/views/Public/UpdatePassword';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { useSsoManaged } from '@/hooks';
+import { useSsoRequired } from '@/hooks';
 
-/** Recovery is unavailable to SSO-managed users; send them back to login. */
+/** Recovery is unavailable only where SSO is enforced; send those users back to login. */
 const RecoveryGuard = () => {
-  const isSsoManaged = useSsoManaged();
-  return isSsoManaged ? <Navigate to="/login" replace /> : <Recovery />;
+  const isSsoRequired = useSsoRequired();
+  return isSsoRequired ? <Navigate to="/login" replace /> : <Recovery />;
 };
 
 /**
