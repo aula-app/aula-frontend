@@ -41,7 +41,7 @@ const InstanceCodeView = () => {
         setError(t('errors.default'));
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
       }
-    } catch (err) {
+    } catch {
       setError(t('instance.error'));
       dispatch({ type: 'ADD_POPUP', message: { message: t('instance.error'), type: 'error' } });
     } finally {
