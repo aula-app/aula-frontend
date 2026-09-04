@@ -16,7 +16,7 @@ import ReportCard from '@/components/ReportCard';
  */
 const BugsView = () => {
   const { t } = useTranslation();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [bugs, setBugs] = useState<MessageType[]>([]);

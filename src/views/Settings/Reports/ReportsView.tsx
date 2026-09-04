@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
  */
 const ReportsView = () => {
   const { t } = useTranslation();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reports, setReports] = useState<MessageType[]>([]);
