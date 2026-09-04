@@ -15,7 +15,7 @@ type Props = {
  * Renders "SelectInput" component
  */
 
-const IconField: React.FC<Props> = ({ name, control, disabled = false, ...restOfProps }) => {
+const IconField: React.FC<Props> = ({ name, control, ...restOfProps }) => {
   const { t } = useTranslation();
   const icons = Object.keys(CAT_ICONS) as Array<keyof typeof CAT_ICONS>;
   return (

@@ -11,7 +11,7 @@ interface Props extends Omit<IconButtonProps, 'onSelect'> {
   onReorder: (asc: boolean) => void;
 }
 
-const SortButton: React.FC<Props> = ({ options, onSelect, onReorder, disabled = false, ...restOfProps }) => {
+const SortButton: React.FC<Props> = ({ options, onSelect, onReorder, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

@@ -81,7 +81,7 @@ const TimedCommands = () => {
               data-testid={TEST_IDS.TIMEDCOMMAND_TABLE}
             >
               <TableBody>
-                {commands.map((command, i) => {
+                {commands.map((command) => {
                   const scope = command.cmd_id > 9 ? Math.floor(command.cmd_id / 10) : 0;
                   if (!Commands[scope] || Commands[scope].actions.length === 0) return null;
                   const action = Commands[scope].actions.find(
