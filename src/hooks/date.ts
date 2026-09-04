@@ -28,7 +28,7 @@ export function getDateFormat(type: 'dateTime' | 'dateOnly' = 'dateTime'): strin
     if (language in DATE_FORMATS) {
       return DATE_FORMATS[language][type];
     }
-  } catch (error) {
+  } catch {
     // Fallback for non-React contexts
   }
 
