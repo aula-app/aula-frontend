@@ -6,7 +6,6 @@ import { getRequests } from '@/services/messages';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType, PossibleFields } from '@/types/Scopes';
 import { useAppStore } from '@/store/AppStore';
-import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

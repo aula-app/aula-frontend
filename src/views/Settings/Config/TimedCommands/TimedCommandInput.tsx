@@ -6,7 +6,7 @@ import { TEST_IDS } from '@/test-ids';
 import { SelectOptionsType } from '@/types/SettingsTypes';
 import { LanguageTypes } from '@/types/Translation';
 import { Commands } from '@/utils/commands';
-import { DATE_FORMATS, DEFAULT_FORMAT_DATE_ONLY, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
+import { DATE_FORMATS, DEFAULT_FORMAT_DATE_ONLY } from '@/utils/units';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';

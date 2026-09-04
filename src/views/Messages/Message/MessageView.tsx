@@ -3,7 +3,6 @@ import { getMessage, setMessageStatus } from '@/services/messages';
 import { MessageType } from '@/types/Scopes';
 import { Card, CardActions, CardContent, CardHeader, Divider, Skeleton, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import {t} from "i18next";
 
