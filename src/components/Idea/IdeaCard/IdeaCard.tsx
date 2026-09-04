@@ -77,6 +77,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, disabled = false, ...restOfProps }:
         if (vote === 1) return 'for';
         if (vote === -1) return 'against';
         if (!vote) return '';
+        return phases[phase];
       default:
         return phases[phase];
     }
