@@ -70,7 +70,7 @@ export function useRoomFilters({
         setAllRooms(response.data);
         setError(null);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to load rooms');
       setAllRooms([]);
     } finally {

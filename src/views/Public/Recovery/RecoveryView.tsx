@@ -54,7 +54,7 @@ const RecoveryPasswordView = () => {
       } else {
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
       }
-    } catch (error) {
+    } catch {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
     } finally {
       setLoading(false);

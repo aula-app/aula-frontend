@@ -157,7 +157,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     try {
       await setIdeaCategory(response.data.hash_id);
       return true;
-    } catch (error) {
+    } catch {
       setError('root', {
         type: 'manual',
         message: t('errors.default'),
@@ -191,7 +191,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
       await setIdeaBox(defaultValues?.hash_id);
       await setIdeaCategory(defaultValues?.hash_id);
       return true;
-    } catch (error) {
+    } catch {
       setError('root', {
         type: 'manual',
         message: t('errors.default'),
