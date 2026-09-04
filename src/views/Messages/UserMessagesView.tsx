@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 const UserMessagesView = () => {
   const { t } = useTranslation();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   usePageTitle('pageTitles.messages');
 
   const [isLoading, setLoading] = useState(true);

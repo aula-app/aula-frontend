@@ -21,7 +21,7 @@ const VotingCard = ({ onChange }: Props) => {
   const { idea_id, box_id } = useParams();
 
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [vote, setVote] = useState<Vote>();
   const [hasVoted, setHasVoted] = useState(false);
   const [hasDelegate, setHasDelegate] = useState(false);
