@@ -1,6 +1,6 @@
 import { PossibleFields } from '@/types/Scopes';
 import { SelectOptionsType } from '@/types/SettingsTypes';
-import { FormControl, MenuItem, Paper, TextField } from '@mui/material';
+import { FormControl, MenuItem, TextField } from '@mui/material';
 import { Control, Controller } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 

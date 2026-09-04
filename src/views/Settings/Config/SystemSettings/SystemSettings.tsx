@@ -1,7 +1,7 @@
 import { InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { InstanceStatusOptions } from '@/utils';
-import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { Button, Stack } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 

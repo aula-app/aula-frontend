@@ -1,7 +1,6 @@
 import { useAppStore } from '@/store/AppStore';
 import { useTranslation } from 'react-i18next';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { Stack } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { versionsRequest, VersionsResponse } from '@/services/requests-v2';
 
