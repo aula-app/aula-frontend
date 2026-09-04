@@ -1,5 +1,4 @@
 import AppIcon from '@/components/AppIcon';
-import DelegateButton from '@/components/Buttons/DelegateButton';
 import { getDelegations } from '@/services/users';
 import { addVote, getVote } from '@/services/vote';
 import { checkPermissions, Vote, votingOptions } from '@/utils';
