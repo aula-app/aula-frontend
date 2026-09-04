@@ -107,6 +107,7 @@
       "a11y": {
         "navigation": "Navigation menu",
         "skipToContent": "Skip to main content",
+        "loading": "Loading",
         "breadcrumb": {
           "label": "Breadcrumb navigation",
           "description": "Navigate from {{var}} to previous pages",
