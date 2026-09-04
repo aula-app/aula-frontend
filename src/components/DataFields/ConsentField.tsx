@@ -15,7 +15,7 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
   const { t } = useTranslation();
 
   const CONSENT_OPTIONS = [
-    // { label: t('consent.message'), value: 0 },
+    { label: t('consent.message'), value: 0 },
     { label: t('consent.announcement'), value: 1 },
     { label: t('consent.alert'), value: 2 },
   ];
@@ -24,44 +24,51 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
     <Controller
       name="user_needs_to_consent"
       control={control}
-      render={({ field }) => (
-        <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)', ...sx }}>
-          <Stack direction="row" gap={2}>
-            <SelectField
-              control={control}
-              options={CONSENT_OPTIONS}
-              defaultValue={1}
-              required
-              sx={{ minWidth: 200, flex: 0 }}
-              {...field}
-            />
-            <Controller
-              name="consent_text"
-              control={control}
-              render={({ field, fieldState }) => (
-                <TextField
-                  label={t('settings.columns.consent_text')}
-                  id="consent-text-field"
-                  error={!!fieldState.error}
-                  helperText={<span id="consent-text-error-message">{fieldState.error?.message || ''}</span>}
-                  required
-                  sx={{ flex: 1 }}
-                  inputProps={{
-                    'aria-labelledby': 'consent-text-field-label',
-                    'aria-invalid': !!fieldState.error,
-                    'aria-errormessage': fieldState.error ? 'consent-text-error-message' : undefined
-                  }}
-                  InputLabelProps={{
-                    id: 'consent-text-field-label',
-                    htmlFor: 'consent-text-field'
-                  }}
-                  {...field}
+      render={({ field }) => {
+        const needsConsent = field.value !== 0;
+        return (
+          <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)', ...sx }}>
+            <Stack direction="row" gap={2}>
+              <SelectField
+                control={control}
+                options={CONSENT_OPTIONS}
+                defaultValue={1}
+                required
+                sx={{ minWidth: 200, flex: 0 }}
+                {...field}
+              />
+              {needsConsent && (
+                <Controller
+                  name="consent_text"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <TextField
+                      label={t('settings.columns.consent_text')}
+                      id="consent-text-field"
+                      error={!!fieldState.error}
+                      helperText={<span id="consent-text-error-message">{fieldState.error?.message || ''}</span>}
+                      required
+                      sx={{ flex: 1 }}
+                      slotProps={{
+                        input: {
+                          'aria-labelledby': 'consent-text-field-label',
+                          'aria-invalid': !!fieldState.error,
+                          'aria-errormessage': fieldState.error ? 'consent-text-error-message' : undefined
+                        },
+                        inputLabel: {
+                          id: 'consent-text-field-label',
+                          htmlFor: 'consent-text-field'
+                        }
+                      }}
+                      {...field}
+                    />
+                  )}
                 />
               )}
-            />
-          </Stack>
-        </FormControl>
-      )}
+            </Stack>
+          </FormControl>
+        );
+      }}
     />
   );
 };

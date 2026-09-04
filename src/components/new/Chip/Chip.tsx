@@ -7,7 +7,7 @@ interface ChipProps {
 
 const Chip = ({ children, className = 'bg-blue-500' }: ChipProps) => (
   <div
-    className={`inline-flex items-center justify-center px-2 rounded-full text-sm font-light border-2 border-paper ${className}`}
+    className={`inline-flex items-center justify-center px-2 rounded-full text-sm border-2 border-paper ${className}`}
   >
     {children}
   </div>

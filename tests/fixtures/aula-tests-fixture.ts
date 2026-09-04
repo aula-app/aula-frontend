@@ -75,11 +75,12 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
           await ctx.close();
           hasLoggedInState[username] = true;
         } catch (e) {
-          // ignored because this might be fine, for example newly created users have to 
+          // ignored because this might be fine, for example newly created users have to
           // go through the process of setting their password the first time using tempPass (see CSV import test)
           console.log(`󱞭 [PW.worker] Login failed. Should retry. instance: "${dbInstanceCode}", username: "${username}"`);
           hasLoggedInState[username] = false;
-          // but, still we should return 'null' so that the 
+          await ctx.close();
+          // but, still we should return 'null' so that the
           // context would be set later after first-time registration is complete
           return null;
         }

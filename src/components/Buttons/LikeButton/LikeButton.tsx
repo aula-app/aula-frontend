@@ -47,7 +47,7 @@ const LikeButton = forwardRef<HTMLButtonElement, Props>(({ item, disabled, onCha
           : addCommentLike(item.id));
       if (response.error) {
         updateLikeStatus(!likeStatus); // Revert like status if API call fails
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+        dispatch({ type: 'ADD_TOAST', message: { message: t('errors.failed'), type: 'error' } });
       }
     } finally {
       setIsPending(false);

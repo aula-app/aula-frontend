@@ -140,8 +140,8 @@ const DARK_THEME: ThemeOptions = {
   palette: {
     mode: 'dark',
     background: {
-      paper: 'hsl(200, 19%, 25%)',
-      default: 'hsl(200, 19%, 20%)',
+      paper: 'hsl(206, 25%, 15%)',
+      default: 'hsl(206, 25%, 15%)',
     },
     text: {
       primary: 'hsl(0, 0%, 100%)',

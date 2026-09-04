@@ -38,11 +38,11 @@ const QuorumSettings: React.FC<Props> = ({ onReload, ...restOfProps }) => {
   async function addQuorum(data: { quorum_wild_ideas: number; quorum_votes: number }) {
     const response = await setQuorum(data.quorum_wild_ideas, data.quorum_votes);
     if (!response.data) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
       return;
     }
     dispatch({
-      type: 'ADD_POPUP',
+      type: 'ADD_TOAST',
       message: { message: t('settings.messages.updated', { var: t('settings.labels.quorum') }), type: 'success' },
     });
     onReload();
