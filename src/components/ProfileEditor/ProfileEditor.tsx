@@ -2,10 +2,11 @@ import { AppIcon } from '@/components';
 import { MarkdownEditor } from '@/components/DataFields';
 import UserAvatar from '@/components/UserAvatar';
 import { addMessage } from '@/services/messages';
-import { editSelf } from '@/services/users';
+import { editSelfAbout, editSelfRestricted } from '@/services/users';
+import { useSsoManaged } from '@/hooks';
 import { useAppStore } from '@/store';
 import { UserType } from '@/types/Scopes';
-import { errorAlert, successAlert } from '@/utils';
+import { checkPermissions, errorAlert, successAlert } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
@@ -35,39 +36,51 @@ interface Props {
 const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
+  const isSsoManaged = useSsoManaged();
 
   const [updateRequests, setUpdateRequests] = useState<Array<fieldOptions>>([]);
   const [editImage, setEditImage] = useState(false);
 
   const schema = yup.object({
-    realname: yup
-      .string()
-      .max(30, t('forms.validation.maxLength', { var: 30 }))
-      .min(3, t('forms.validation.minLength', { var: 3 }))
-      .required(),
-    username: yup
-      .string()
-      .max(30, t('forms.validation.maxLength', { var: 30 }))
-      .min(3, t('forms.validation.minLength', { var: 3 }))
-      .required(),
-    email: yup.string().email(),
+    realname: isSsoManaged
+      ? yup.string().nullable()
+      : yup
+          .string()
+          .max(30, t('forms.validation.maxLength', { var: 30 }))
+          .min(3, t('forms.validation.minLength', { var: 3 }))
+          .required(t('forms.validation.required')),
+    username: isSsoManaged
+      ? yup.string().nullable()
+      : yup
+          .string()
+          .max(30, t('forms.validation.maxLength', { var: 30 }))
+          .min(3, t('forms.validation.minLength', { var: 3 }))
+          .required(t('forms.validation.required')),
+    email: yup.string().email(t('forms.validation.email')).nullable(),
     about_me: yup.string(),
     displayname: yup
       .string()
       .max(30, t('forms.validation.maxLength', { var: 30 }))
-      .required(),
+      .required(t('forms.validation.required')),
   });
 
   // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
-  type fieldOptions = { field: keyof SchemaType; value: string | undefined };
+  type fieldOptions = { field: keyof SchemaType; value: string | null | undefined };
 
-  const { control, handleSubmit, setValue } = useForm({
+  const { control, handleSubmit, setValue, getValues } = useForm({
     defaultValues: user,
     resolver: yupResolver(schema),
   });
 
   const userFields = ['displayname', 'username', 'realname', 'email', 'about_me'] as Array<keyof SchemaType>;
+
+  const isLockedField = (field: keyof SchemaType) => isSsoManaged && field !== 'displayname' && field !== 'about_me';
+
+  const isAdmin = checkPermissions('users', 'edit');
+
+  const requiredFields: Array<keyof SchemaType> = ['displayname', 'username', 'realname'];
+  const isRequiredField = (field: keyof SchemaType) => requiredFields.includes(field) && !isLockedField(field);
 
   const approveUpdates = async () => {
     try {
@@ -105,32 +118,38 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
   const onSubmit = (data: SchemaType) => {
     if (!user) return;
 
-    const updates: fieldOptions[] = [];
+    const changedFields = userFields.filter((field) => !isLockedField(field) && data[field] !== user[field]);
+    const identityChanges = changedFields.filter((field) => field !== 'about_me');
 
-    // Check fields that require approval (excluding about_me which can be updated directly)
-    const fieldsRequiringApproval = userFields.slice(0, -1); // All fields except about_me
-
-    fieldsRequiringApproval.forEach((field) => {
-      if (data[field] !== user[field]) {
-        updates.push({ field: field, value: data[field] });
-      }
-    });
-
-    if (updates.length > 0) {
-      setUpdateRequests(updates);
+    if (identityChanges.length > 0 && !isAdmin) {
+      setUpdateRequests(identityChanges.map((field) => ({ field, value: data[field] })));
+      if (changedFields.includes('about_me')) updateProfile(['about_me'], data);
       return;
     }
 
-    // If no approval needed, update profile directly
-    updateProfile(data);
+    updateProfile(changedFields, data);
   };
 
-  const updateProfile = async (data: SchemaType) => {
-    await editSelf(data).then((response) => {
-      !response.error
-        ? successAlert(t('settings.messages.updated', { var: t('ui.navigation.profile') }), dispatch)
-        : errorAlert(t('settings.messages.notUpdated', { var: t('ui.navigation.profile') }), dispatch);
-    });
+  const onInvalid = () => {
+    if (!user) return;
+    const data = getValues() as SchemaType;
+    if (data.about_me !== user.about_me) updateProfile(['about_me'], data);
+  };
+
+  const updateProfile = async (fields: Array<keyof SchemaType>, data: SchemaType) => {
+    if (fields.length === 0) return;
+
+    const results = await Promise.all(
+      fields.map((field) =>
+        field === 'about_me'
+          ? editSelfAbout(data.about_me ?? '')
+          : editSelfRestricted({ field, id: user.hash_id, value: data[field] ?? '' })
+      )
+    );
+
+    results.some((response) => response.error)
+      ? errorAlert(t('settings.messages.notUpdated', { var: t('ui.navigation.profile') }), dispatch)
+      : successAlert(t('settings.messages.updated', { var: t('ui.navigation.profile') }), dispatch);
   };
 
   const resetFields = () => {
@@ -149,7 +168,7 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
   }, [user]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
       <Stack direction="row" flexWrap="wrap" py={2} gap={2}>
         <Button
           color="secondary"
@@ -178,7 +197,14 @@ ${t('requests.changeName.body', { var: user.realname, old: user[field.field], ne
         {user && <ImageEditor isOpen={editImage} onClose={onClose} id={user.hash_id} />}
         <Stack gap={1} sx={{ flex: 1, minWidth: `min(300px, 100%)` }}>
           {userFields.slice(0, -1).map((name, i) => (
-            <RestrictedField key={i} name={name} control={control} tabIndex={i + 1} />
+            <RestrictedField
+              key={i}
+              name={name}
+              control={control}
+              tabIndex={i + 1}
+              locked={isLockedField(name)}
+              required={isRequiredField(name)}
+            />
           ))}
         </Stack>
         <MarkdownEditor name="about_me" control={control} sx={{ flex: 2, minWidth: `min(300px, 100%)` }} />

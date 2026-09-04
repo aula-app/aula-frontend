@@ -323,9 +323,10 @@
       "button": "OAuth authentication"
     },
     "sso": {
-      "arialabel": "Single Sign-On",
-      "button": "Sign in with SSO",
-      "bouncing": "Signing you in via Eduplaces…"
+      "button": "Sign in with Eduplaces",
+      "bouncing": "Signing you in via Eduplaces…",
+      "hint": "You will be briefly redirected to Eduplaces and iServ",
+      "unsupportedBrowser": "Please note: Single Sign-On (via Eduplaces/IServ, etc.) requires Safari {{version}} or newer. Please update your device or use a different browser."
     },
     "password": {
       "change": "Change password",
@@ -422,7 +423,16 @@
       "link_failed": "We couldn't finish linking your SSO identity. Please try logging in again.",
       "link_intent_not_found": "Your SSO link expired. Please try logging in again.",
       "user_mismatch": "The aula account you signed into doesn't match the SSO identity. Please try logging in again.",
-      "already_linked": "This aula account is already linked to a different SSO identity. Please contact your administrator."
+      "already_linked": "This aula account is already linked to a different SSO identity. Please contact your administrator.",
+      "idp_school_missing": "Your school did not tell us which school you belong to. Please contact your administrator.",
+      "idp_school_taken": "This school is already connected to a different aula instance. Please check the instance code, or contact your administrator.",
+      "idp_user_missing": "Your school did not tell us who you are. Please contact your administrator.",
+      "idp_identity_taken": "This school account is already linked to a different aula account. Please contact your administrator.",
+      "link_user_not_found": "We could not find your aula account. Please try logging in again.",
+      "school_not_provisioned": "This school is not set up yet. Please contact your administrator.",
+      "sso_disabled": "Single Sign-On is not enabled for this school.",
+      "login_cancelled": "Single Sign-On was cancelled. You can try again.",
+      "sso_provider_error": "Your school's login service reported a problem. Please try again, or contact your administrator."
     }
   },
   "forms": {
@@ -776,7 +786,8 @@
       "user_needs_to_consent": "Consent Required",
       "userlevel": "User level",
       "username": "User name",
-      "vote_bias": "Vote Bias"
+      "vote_bias": "Vote Bias",
+      "idp_user_id": "Type"
     },
     "customFields": {
       "form": "Custom field {{var}}",
@@ -1125,5 +1136,69 @@
     "thursday": "Thursday",
     "tuesday": "Tuesday",
     "wednesday": "Wednesday"
+  },
+  "idp": {
+    "sync": {
+      "title": "Sync with the identity provider",
+      "notEnabled": "No sync is enabled for this school. An operator can turn it on in aula-manager.",
+      "connectReturned": "Signed in at the provider. Your aula account is now linked and the school is identified.",
+      "reviewWarning": "Please check these matches. A wrong merge gives one person another's account, including everything they have written.",
+      "rooms": "Classes and rooms",
+      "users": "People",
+      "search": "Search",
+      "willBeCreated": "will be created",
+      "staysInAula": "stays as it is",
+      "progressTitle": "Progress",
+      "progressBody": "{{linked}} accounts linked, {{remaining}} still to go.",
+      "progressHint": "Password login can only be switched off once nobody is left.",
+      "step": {
+        "connect": "Sign in at the provider first. That links your aula account and identifies the school.",
+        "prepare": "The provider's classes and people can now be matched against your existing aula data.",
+        "importing": "Importing …"
+      },
+      "state": {
+        "confident": "confident",
+        "ambiguous": "ambiguous",
+        "none": "no match",
+        "pseudonym": "pseudonym only"
+      },
+      "columns": {
+        "aula": "In aula",
+        "provider": "At the provider",
+        "state": "Match",
+        "merge": "Merge?"
+      },
+      "actions": {
+        "connect": "Link my account",
+        "prepare": "Prepare the sync",
+        "apply": "Apply matches and import",
+        "rebuild": "Rebuild",
+        "refresh": "Refresh",
+        "open": "Sync with the identity provider"
+      },
+      "errors": {
+        "connect": "Could not start the provider sign-in.",
+        "prepare": "Could not prepare the sync.",
+        "apply": "{{count}} matches are not valid. Please check the flagged rows."
+      },
+      "entry": {
+        "body": "This school is moving onto its identity provider. Match the existing classes and people to the provider before the import runs."
+      }
+    },
+    "claim": {
+      "banner": "Do you already have an aula account? Sign in once with your aula password so your contributions are kept.",
+      "noAccount": "I don't have an aula account yet",
+      "declineFailed": "That did not work. Please sign in again."
+    },
+    "setup": {
+      "title": "Setting up your school",
+      "body": "Your classes and classmates are being loaded. This only takes a moment.",
+      "doneTitle": "School data imported",
+      "doneBody": "{{rooms}} rooms and {{users}} people are ready.",
+      "start": "Start using aula!",
+      "failedTitle": "Setup failed",
+      "failedBody": "Please contact your administrator. Setup will be retried automatically.",
+      "continue": "Continue anyway"
+    }
   }
 }

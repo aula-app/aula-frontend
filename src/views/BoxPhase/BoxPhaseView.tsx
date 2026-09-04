@@ -30,6 +30,7 @@ const BoxPhaseView = () => {
       { value: 'name', labelKey: 'settings.columns.title' },
       { value: 'ideas_num', labelKey: 'settings.columns.ideas_num' },
     ],
+    defaultSortDirection: 'desc',
   });
 
   // Create filter function for boxes (searches in name and description)

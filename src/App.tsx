@@ -1,26 +1,18 @@
+import { AppThemeProvider } from '@/theme';
 import { BrowserRouter } from 'react-router-dom';
 import { ErrorBoundary } from './components';
 import { getRuntimeConfig } from './config';
-import { useAndroidBackButton } from './hooks';
+import { useAndroidBackButton, useDeepLinks } from './hooks';
 import Routes from './routes';
 import { AppStore } from './store';
-import { AppThemeProvider } from '@/theme';
 
-/**
- * Inner component that uses router hooks
- * Must be inside BrowserRouter context
- */
 const AppContent: React.FC = () => {
-  // Handle Android back button navigation
   useAndroidBackButton();
+  useDeepLinks();
 
   return <Routes />;
 };
 
-/**
- * Root Application Component
- * Provides core application providers and routing setup
- */
 const App: React.FC = () => {
   return (
     <ErrorBoundary name="App">

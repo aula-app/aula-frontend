@@ -135,51 +135,6 @@ export async function getSelf(): Promise<GetUserResponse> {
   return response as GetUserResponse;
 }
 
-/**
- * Edit the user on the database
- */
-
-export async function editSelf(args: UserArguments): Promise<GenericResponse> {
-  let count = 0;
-  if (args.about_me) {
-    await databaseRequest(
-      {
-        model: 'User',
-        method: 'setUserAbout',
-        arguments: {
-          about_me: args.about_me,
-        },
-      },
-      ['user_id', 'updater_id']
-    ).then((response) => {
-      if (!response.error) count++;
-    });
-  }
-
-  if (args.displayname) {
-    await databaseRequest(
-      {
-        model: 'User',
-        method: 'setUserDisplayname',
-        arguments: {
-          displayname: args.displayname,
-        },
-      },
-      ['user_id', 'updater_id']
-    ).then((response) => {
-      if (!response.error) count++;
-    });
-  }
-
-  const response = {
-    data: count > 0,
-    count: count,
-    error: count < 2 ? 'errors.default' : null,
-  };
-
-  return response as GenericResponse;
-}
-
 interface RestrictedUpdateArgs {
   field: 'displayname' | 'realname' | 'username' | 'email';
   id: string;
@@ -205,6 +160,17 @@ export async function editSelfRestricted(args: RestrictedUpdateArgs) {
     ['updater_id']
   );
   return request;
+}
+
+export async function editSelfAbout(about_me: string): Promise<GenericResponse> {
+  return databaseRequest(
+    {
+      model: 'User',
+      method: 'setUserAbout',
+      arguments: { about_me },
+    },
+    ['user_id', 'updater_id']
+  );
 }
 
 /**

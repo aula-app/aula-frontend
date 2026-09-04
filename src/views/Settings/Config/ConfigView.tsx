@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Groups from './Groups';
 import IdeaSettings from './IdeaSettings';
+import IdpSyncEntry from './IdpSyncEntry';
 import QuorumSettings from './IdeaSettings/QuorumSettings';
 import SchoolDelete from './SchoolDelete';
 import SchoolInfo from './SchoolInfo';
@@ -63,6 +64,7 @@ const ConfigView = () => {
         {t('settings.labels.configuration')}
       </Typography>
       <SchoolInfo />
+      {checkPermissions('configs', 'viewAll') && <IdpSyncEntry />}
       <div role="tablist" aria-label={t('settings.labels.configuration')}>
         {panels.map(
           (panel, i) =>
