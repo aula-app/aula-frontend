@@ -60,32 +60,6 @@ export async function setInstanceOnlineMode(status: OnlineOptions): Promise<Defa
   return response as DefaultSettingsResponse;
 }
 
-async function setOauthStatus(status: boolean): Promise<DefaultSettingsResponse> {
-  const response = await databaseRequest(
-    {
-      model: 'Settings',
-      method: 'setOauthStatus',
-      arguments: { status: status ? 1 : 0 },
-    },
-    ['updater_id']
-  );
-
-  return response as DefaultSettingsResponse;
-}
-
-async function setAllowRegistration(status: boolean): Promise<DefaultSettingsResponse> {
-  const response = await databaseRequest(
-    {
-      model: 'Settings',
-      method: 'setAllowRegistration',
-      arguments: { status: status ? 1 : 0 },
-    },
-    ['updater_id']
-  );
-
-  return response as DefaultSettingsResponse;
-}
-
 export async function addAllCSV(
   csv: string,
   room_ids: Array<string>,

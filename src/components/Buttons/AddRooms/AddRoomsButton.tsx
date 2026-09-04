@@ -16,7 +16,6 @@ import {
   ListItemButton,
   ListItemText,
   Skeleton,
-  Typography,
 } from '@mui/material';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -36,7 +35,7 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [rooms, setRooms] = useState<RoomType[]>([]);
   const [selectedRooms, setSelectedRooms] = useState<string[]>([]);
   const [indeterminateRooms, setIndeterminateRooms] = useState<string[]>([]);

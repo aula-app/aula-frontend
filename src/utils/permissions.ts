@@ -186,7 +186,7 @@ export function checkPermissions(model: keyof typeof permissions, action: string
       typeof permissionRole === 'number' ? user.user_level >= permissionRole : permissionRole.includes(user.user_level);
 
     return checkSelfPermission(hasGlobalRolePermission);
-  } catch (error) {
+  } catch {
     return false;
   }
 }

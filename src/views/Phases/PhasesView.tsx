@@ -1,5 +1,4 @@
-import { AppIcon, EmptyState, ScopeHeader } from '@/components';
-import { IdeaForms } from '@/components/DataForms';
+import { EmptyState, ScopeHeader } from '@/components';
 import { IdeaBubble } from '@/components/Idea';
 import IdeaBubbleSkeleton from '@/components/Idea/IdeaBubble/IdeaBubbleSkeleton';
 import { useSearchAndSort, createTextFilter, useFilter } from '@/hooks';
@@ -7,8 +6,8 @@ import { getWildIdeasByUser } from '@/services/dashboard';
 import { deleteIdea, getUserIdeasByPhase } from '@/services/ideas';
 import { useAppStore } from '@/store/AppStore';
 import { IdeaType } from '@/types/Scopes';
-import { checkPermissions, phases } from '@/utils';
-import { Drawer, Fab, Stack } from '@mui/material';
+import { phases } from '@/utils';
+import { Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +28,7 @@ const PhasesView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<IdeaType[]>([]);
-  const [edit, setEdit] = useState<IdeaType | boolean>();
+  const [, setEdit] = useState<IdeaType | boolean>();
 
   // Get phase-specific data source and title
   const phaseData = useMemo(() => {

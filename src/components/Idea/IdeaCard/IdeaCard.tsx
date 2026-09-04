@@ -26,8 +26,8 @@ const IdeaCard = ({ idea, phase, sx, quorum, disabled = false, ...restOfProps }:
   const { t } = useTranslation();
   const theme = useTheme();
 
-  const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setLoading] = useState(true);
+  const [, setError] = useState<string | null>(null);
   const [vote, setVote] = useState<number | null>();
 
   const [icon, setIcon] = useState<CategoryIconType>();

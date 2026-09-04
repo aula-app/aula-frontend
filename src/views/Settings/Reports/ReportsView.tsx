@@ -6,7 +6,6 @@ import { getReports } from '@/services/messages';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType, PossibleFields } from '@/types/Scopes';
 import { useAppStore } from '@/store/AppStore';
-import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +15,7 @@ import { useTranslation } from 'react-i18next';
  */
 const ReportsView = () => {
   const { t } = useTranslation();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reports, setReports] = useState<MessageType[]>([]);

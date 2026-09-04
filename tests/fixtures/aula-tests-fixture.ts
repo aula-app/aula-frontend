@@ -74,7 +74,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
           await ctx.storageState({ path: storageStatePath });
           await ctx.close();
           hasLoggedInState[username] = true;
-        } catch (e) {
+        } catch {
           // ignored because this might be fine, for example newly created users have to 
           // go through the process of setting their password the first time using tempPass (see CSV import test)
           console.log(`󱞭 [PW.worker] Login failed. Should retry. instance: "${dbInstanceCode}", username: "${username}"`);

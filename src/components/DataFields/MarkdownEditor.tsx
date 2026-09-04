@@ -295,7 +295,7 @@ const MarkdownEditor: React.FC<Props> = ({
     if (mdxEditorRef.current) {
       try {
         mdxEditorRef.current.focus();
-      } catch (error) {
+      } catch {
         // Fallback: try to find and focus the content area directly
         const contentArea = containerRef.current?.querySelector(
           '.cm-content, .mdxeditor-root-contenteditable, [contenteditable="true"]'
