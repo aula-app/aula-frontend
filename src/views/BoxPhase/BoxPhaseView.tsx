@@ -82,7 +82,7 @@ const BoxPhaseView = () => {
     setBoxes(response.data || []);
     setLoading(false);
 
-    let roomName = await getRoomName(room_id);
+    const roomName = await getRoomName(room_id);
 
     dispatch({
       action: 'SET_BREADCRUMB',

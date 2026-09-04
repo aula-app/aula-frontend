@@ -37,7 +37,7 @@ const IdeaView = () => {
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
       if (response.error || !response.data) return;
-      let roomName = response.data.room_name;
+      const roomName = response.data.room_name;
       return roomName;
     });
   };
@@ -49,7 +49,7 @@ const IdeaView = () => {
 
     let roomName = 'aula';
     if (room_id) {
-      let nameResponse = await getRoomName(room_id);
+      const nameResponse = await getRoomName(room_id);
       if (nameResponse) roomName = nameResponse;
     }
 
@@ -64,7 +64,7 @@ const IdeaView = () => {
     }
 
     if (response.data && response.data.title) {
-      let breadCrumbs = [
+      const breadCrumbs = [
         [roomName, `/room/${room_id}/phase/0`],
         [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
       ];

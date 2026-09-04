@@ -18,7 +18,7 @@ if (!process.env.APP_FRONTEND_HOST || process.env.APP_FRONTEND_HOST.toString().m
 
 console.info('[info] using frontend:', process.env.APP_FRONTEND_HOST);
 
-export const getHost = () => process.env.APP_FRONTEND_HOST!!;
+export const getHost = () => process.env.APP_FRONTEND_HOST!;
 
 export function gensym(prefix = 'GG') {
   // tests will fail on collision.. very rare

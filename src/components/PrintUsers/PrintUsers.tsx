@@ -58,7 +58,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }) => {
     const instanceCode = localStorageGet('code');
     const rows = chunkArray(filteredUsers, columns);
 
-    let usersPasswords = rows
+    const usersPasswords = rows
       .map((row) => {
         const cells = row
           .map((user) => {
