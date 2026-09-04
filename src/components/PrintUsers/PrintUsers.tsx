@@ -19,7 +19,7 @@ import {
 import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
+const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);

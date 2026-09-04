@@ -57,8 +57,6 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
     register,
     reset,
     setError,
-    watch,
-    getValues,
   } = form;
 
   // Draft storage for form persistence
