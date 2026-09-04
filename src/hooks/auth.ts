@@ -17,26 +17,19 @@ const CONSENT_REQUEST_TIMEOUT_MS = 10000;
  * @returns {boolean} true if user is authenticated, false otherwise
  */
 export function useIsAuthenticated() {
-  const [state] = useAppStore();
-  let result = state.isAuthenticated;
+  // Subscribe to the store so auth changes (login/logout) re-run this check.
+  useAppStore();
 
-  // Verify token exists and is valid
   const token = localStorageGet('token');
-  if (token) {
-    const payload = parseJwt(token);
+  if (!token) return false;
 
-    // Check if token is valid and not expired
-    if (payload && typeof payload.exp === 'number') {
-      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-      result = payload.exp === 0 || payload.exp > currentTime;
-    } else {
-      result = false;
-    }
-  } else {
-    result = false;
+  const payload = parseJwt(token);
+  if (payload && typeof payload.exp === 'number') {
+    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+    return payload.exp === 0 || payload.exp > currentTime;
   }
 
-  return result;
+  return false;
 }
 
 export async function useIsOnline(): Promise<boolean> {

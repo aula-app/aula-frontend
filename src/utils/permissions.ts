@@ -139,7 +139,7 @@ export function checkPermissions(model: keyof typeof permissions, action: string
 
     // Get room ID
     const location = window.location.pathname;
-    const roomMatch = location.match(/\/room\/([^\/]+)/);
+    const roomMatch = location.match(/\/room\/([^/]+)/);
     const room_id = roomMatch ? roomMatch[1] : '';
 
     const permissionRule = permissions[model][action];
