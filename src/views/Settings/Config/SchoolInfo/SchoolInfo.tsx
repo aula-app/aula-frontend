@@ -12,7 +12,7 @@ const SchoolInfo: React.FC = () => {
   const [, dispatch] = useAppStore();
 
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [room, setRoom] = useState<RoomType>();
 
   const fetchRoom = async () => {

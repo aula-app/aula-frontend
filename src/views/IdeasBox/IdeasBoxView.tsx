@@ -44,7 +44,7 @@ const IdeasBoxView = () => {
    */
 
   const [isBoxLoading, setBoxLoading] = useState(true);
-  const [boxError, setBoxError] = useState<string | null>(null);
+  const [, setBoxError] = useState<string | null>(null);
   const [box, setBox] = useState<BoxType>();
   const [edit, setEdit] = useState<BoxType>(); // undefined = closed;
   const [boxPhase, setBoxPhase] = useState<string | null>(phase ? phase : '');
@@ -138,7 +138,7 @@ const IdeasBoxView = () => {
    */
 
   const [isIdeasLoading, setIdeasLoading] = useState(true);
-  const [ideasError, setIdeasError] = useState<string | null>(null);
+  const [, setIdeasError] = useState<string | null>(null);
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
 
   // Separate approved and rejected ideas (avoid repeating filter logic in multiple places)

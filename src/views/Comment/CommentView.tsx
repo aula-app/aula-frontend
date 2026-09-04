@@ -36,7 +36,7 @@ const Comments = () => {
   });
 
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [edit, setEdit] = useState<CommentType | boolean>(false);
 

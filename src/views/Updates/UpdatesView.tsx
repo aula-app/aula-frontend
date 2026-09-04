@@ -13,10 +13,10 @@ import UpdateCard from './UpdateCard';
 
 const UpdatesView = () => {
   const { t } = useTranslation();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
 
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [updates, setUpdates] = useState<UpdateResponse>({
     votes: [],
     comments: [],
