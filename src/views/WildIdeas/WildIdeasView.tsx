@@ -61,7 +61,7 @@ const WildIdeas = () => {
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
       if (response.error || !response.data) return;
-      let roomName = response.data.room_name;
+      const roomName = response.data.room_name;
       return roomName;
     });
   };
@@ -112,7 +112,7 @@ const WildIdeas = () => {
   };
 
   useEffect(() => {
-    let ideasList = document.getElementById('wild-ideas-list');
+    const ideasList = document.getElementById('wild-ideas-list');
     if (ideasList) {
       if (appState.lastIdeaList == 'wild-ideas') {
         ideasList.scrollTop = appState.lastScroll;

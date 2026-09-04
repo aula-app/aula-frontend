@@ -145,7 +145,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
 
   const validatePhaseTransition = () => {
     let ideasWithApprovalStatus = 0;
-    for (let idea of ideas) {
+    for (const idea of ideas) {
       if (idea.approved) ideasWithApprovalStatus += 1;
     }
 

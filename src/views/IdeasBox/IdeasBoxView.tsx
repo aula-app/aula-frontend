@@ -68,7 +68,7 @@ const IdeasBoxView = () => {
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
       if (response.error || !response.data) return '';
-      let roomName = response.data.room_name;
+      const roomName = response.data.room_name;
       return roomName;
     });
   };
@@ -214,7 +214,7 @@ const IdeasBoxView = () => {
   };
 
   useEffect(() => {
-    let ideasList = document.getElementById('box-ideas');
+    const ideasList = document.getElementById('box-ideas');
     if (ideasList) {
       if (appState.lastIdeaList == 'box-ideas-' + phase) {
         ideasList.scrollTop = appState.lastScroll;
