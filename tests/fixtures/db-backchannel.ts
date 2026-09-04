@@ -17,7 +17,7 @@ export class DbBackchannel {
       let result;
       try {
         result = await centralConnection.query<any>(`SELECT data FROM tenants WHERE instance_code = ?`, [instanceCode]);
-        let { data } = result[0];
+        const { data } = result[0];
 
         const self = new DbBackchannel();
         // Create pool so that we can reuse connections
