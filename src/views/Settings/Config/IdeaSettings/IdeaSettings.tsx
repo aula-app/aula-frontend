@@ -1,4 +1,5 @@
 import { Stack } from '@mui/material';
+import { FC } from 'react';
 import Categories from '../Categories';
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 /** * Renders "IdeaSettings" component
  */
 
-const IdeaSettings = ({ onReload }: Props) => {
+const IdeaSettings: FC<Props> = () => {
   return (
     <Stack gap={2}>
       <Categories />

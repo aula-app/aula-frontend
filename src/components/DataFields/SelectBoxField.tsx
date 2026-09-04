@@ -16,7 +16,7 @@ interface Props {
  * Renders "SelectInput" component
  */
 
-const SelectBoxField: React.FC<Props> = ({ defaultValue, room_id, onChange, disabled = false, ...restOfProps }) => {
+const SelectBoxField: React.FC<Props> = ({ defaultValue, room_id, onChange, disabled = false }) => {
   const { t } = useTranslation();
   const { box_id } = useParams();
   const [loading, setLoading] = useState(false);
