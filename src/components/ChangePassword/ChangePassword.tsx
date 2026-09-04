@@ -38,10 +38,6 @@ interface Props {
   passwordComplexity?: PasswordComplexity;
 }
 
-interface ChangePasswordMethods {
-  displayMessage: (isSuccess: boolean) => void;
-}
-
 /**
  * Renders User info with Avatar
  * @component ChangePassword
@@ -68,29 +64,6 @@ const ChangePassword: React.FC<Props> = ({
     confirmPassword: false,
     newPassword: false,
   });
-
-  const createPasswordValidation = () => {
-    let validation = yup.string().required(t('forms.validation.required'));
-
-    validation = validation.min(
-      passwordComplexity.minLength,
-      t('forms.validation.minLength', { var: passwordComplexity.minLength })
-    );
-
-    if (passwordComplexity.requireUppercase) {
-      validation = validation.matches(/[A-Z]/, t('forms.validation.passwordRequireUppercase'));
-    }
-
-    if (passwordComplexity.requireNumber) {
-      validation = validation.matches(/[0-9]/, t('forms.validation.passwordRequireNumber'));
-    }
-
-    if (passwordComplexity.requireSymbol) {
-      validation = validation.matches(/[^A-Za-z0-9]/, t('forms.validation.passwordRequireSymbol'));
-    }
-
-    return validation.max(64, t('forms.validation.maxLength', { var: 64 }));
-  };
 
   const schema = yup
     .object({
