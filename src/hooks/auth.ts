@@ -5,7 +5,7 @@ import { databaseRequest } from '@/services/requests';
 import { useAppStore } from '@/store';
 import { InstanceResponse } from '@/types/Generics';
 import { checkPermissions, localStorageDelete, localStorageGet } from '@/utils';
-import { parseJwt } from '@/utils/jwt';
+import { isTokenValid } from '@/utils/jwt';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect } from 'react';
 import { getUserConsent } from '@/services/consent';
@@ -20,16 +20,7 @@ export function useIsAuthenticated() {
   // Subscribe to the store so auth changes (login/logout) re-run this check.
   useAppStore();
 
-  const token = localStorageGet('token');
-  if (!token) return false;
-
-  const payload = parseJwt(token);
-  if (payload && typeof payload.exp === 'number') {
-    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-    return payload.exp === 0 || payload.exp > currentTime;
-  }
-
-  return false;
+  return isTokenValid(localStorageGet('token'));
 }
 
 export async function useIsOnline(): Promise<boolean> {
