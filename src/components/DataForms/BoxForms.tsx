@@ -30,7 +30,6 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
   const { room_id } = useParams();
 
   const [ideas, setIdeas] = useState<IdeaType[]>([]);
-  const [room, setRoom] = useState<string>(defaultValues?.room_hash_id || '');
   const [updateIdeas, setUpdateIdeas] = useState<UpdateType>({ add: [], remove: [] });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -236,9 +235,7 @@ const BoxForms: React.FC<BoxFormsProps> = ({ defaultValues, onClose }) => {
     validatePhaseTransition();
   }, [ideas]);
 
-  useEffect(() => {
-    setRoom(watch('room_hash_id'));
-  }, [watch('room_hash_id')]);
+  const room = watch('room_hash_id');
 
   // Memoize the key properties of defaultValues to avoid unnecessary re-renders
   const defaultValuesKey = useMemo(() => {

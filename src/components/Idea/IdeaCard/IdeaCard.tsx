@@ -31,7 +31,6 @@ const IdeaCard = ({ idea, phase, sx, quorum, disabled = false, ...restOfProps }:
   const [vote, setVote] = useState<number | null>();
 
   const [icon, setIcon] = useState<CategoryIconType>();
-  const [bgColor, setBgColor] = useState<string>();
   const [numVotes, setNumVotes] = useState<ResultResponse>({
     total_votes: 0,
     votes_negative: 0,
@@ -83,9 +82,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, disabled = false, ...restOfProps }:
     }
   };
 
-  useEffect(() => {
-    setBgColor(getBgColor());
-  }, [vote, phase]);
+  const bgColor = getBgColor();
 
   useEffect(() => {
     getIcon();

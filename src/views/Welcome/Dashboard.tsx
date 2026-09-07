@@ -39,10 +39,6 @@ const Dashboard = ({ show = true }: DashboardProps) => {
   }, []);
 
   useEffect(() => {
-    setShowing(show);
-  }, [show]);
-
-  useEffect(() => {
     fetchDashboard();
   }, [fetchDashboard]);
 
