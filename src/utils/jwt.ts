@@ -46,11 +46,6 @@ export function parseJwt(token: string): {
   }
 }
 
-/**
- * Checks whether a JWT is present and not expired.
- * @param {String | null} token - The JWT token string, or null when absent
- * @returns {boolean} true if the token parses and is unexpired (exp === 0 means no expiry)
- */
 export function isTokenValid(token: string | null): boolean {
   if (!token) return false;
 
