@@ -85,23 +85,25 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
     onCancel: onClose,
   });
 
+  const hashId = defaultValues?.hash_id;
+
   const fetchIdeaBox = useCallback(async () => {
-    if (!defaultValues?.hash_id) return;
-    const response = await getIdeaBoxes(defaultValues.hash_id);
+    if (!hashId) return;
+    const response = await getIdeaBoxes(hashId);
     if (!response.data) return;
     const responseBox = response.data.map((box) => box.hash_id)[0];
     setBox(responseBox);
     setStartingBox(responseBox);
-  }, [defaultValues?.hash_id]);
+  }, [hashId]);
 
   const fetchIdeaCategories = useCallback(async () => {
-    if (!defaultValues?.hash_id) return;
-    const response = await getCategories(defaultValues.hash_id);
+    if (!hashId) return;
+    const response = await getCategories(hashId);
     if (!response.data) return;
     const responseCategory = response.data.map((category) => category.id)[0];
     setCategory(responseCategory);
     setStartingCategory(responseCategory);
-  }, [defaultValues?.hash_id]);
+  }, [hashId]);
 
   const onSubmit = async (data: SchemaType) => {
     try {
