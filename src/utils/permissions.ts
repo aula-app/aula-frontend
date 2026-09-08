@@ -102,7 +102,7 @@ const permissions = {
     create: { role: 50 },
     edit: { role: 40 },
     delete: { role: 50 },
-    viewAll: { role: 40 },
+    viewAll: { role: [40, ...ADMIN] },
     status: { role: 50 },
   },
   system: {
