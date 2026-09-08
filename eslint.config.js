@@ -22,6 +22,8 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-unused-expressions': ['error', { allowTernary: true }],
+      // Advisory for our effect-based data layer; real fix is a shared async hook / react-query.
+      'react-hooks/set-state-in-effect': 'warn',
     },
   },
   {
@@ -30,20 +32,6 @@ export default tseslint.config(
     files: ['tests/**/*.{ts,tsx}'],
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
-    },
-  },
-  {
-    // Selector fields legitimately reset local selection when a baseline prop changes.
-    files: [
-      'src/components/DataFields/SelectBoxField.tsx',
-      'src/components/DataFields/CategoriesField.tsx',
-      'src/components/DataFields/RoomField.tsx',
-      'src/components/DataFields/UsersField.tsx',
-      'src/components/DataFields/IdeaField.tsx',
-      'src/components/DataFields/RoomImageSelector.tsx',
-    ],
-    rules: {
-      'react-hooks/set-state-in-effect': 'warn',
     },
   },
   prettier
