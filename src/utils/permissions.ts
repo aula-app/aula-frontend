@@ -15,7 +15,7 @@ import { localStorageGet } from './localStorage';
  * 60 => "tech_admin"
  */
 
-export const roles = [10, 20, 30, 31, 40, 41, 44, 45, 50, 60] as Array<RoleTypes>;
+export const roles = [10, 20, 30, 31, 40, 41, 44, 45, 50] as Array<RoleTypes>;
 
 const USER_ROLES = [20, 30, 31, 40, 41, 44, 45];
 const VOTING_ROLES = [20, 31, 41, 45];
@@ -109,7 +109,6 @@ const permissions = {
     profile: { role: 20 },
     access: { role: 50 },
     edit: { role: 40 },
-    hide: { role: 60 },
   },
   users: {
     addRole: { role: 50 },

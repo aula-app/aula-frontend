@@ -13,7 +13,7 @@ export type PhaseType = 'wild' | 'discussion' | 'approval' | 'voting' | 'results
  * 50 => "admin",
  * 60 => "tech_admin"
  */
-export type RoleTypes = 10 | 20 | 30 | 31 | 40 | 41 | 44 | 45 | 50 | 60;
+export type RoleTypes = 10 | 20 | 30 | 31 | 40 | 41 | 44 | 45 | 50;
 
 export type SettingNamesType =
   | 'announcements'
