@@ -24,6 +24,7 @@ const RequestsView = () => {
   const [filter, setFilter] = useState<[keyof PossibleFields, string]>(['', '']);
 
   const filterOptions = ['headline', 'body'] as Array<keyof MessageType>;
+  const filterKey = JSON.stringify(filter);
 
   const fetchRequests = useCallback(async () => {
     setLoading(true);
@@ -31,12 +32,12 @@ const RequestsView = () => {
     if (response.error) setError(response.error);
     setRequests(response.data || []);
     setLoading(false);
-  }, [JSON.stringify(filter), status]);
+  }, [filterKey, status]);
 
   useEffect(() => {
     dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.requests'), '']] });
     fetchRequests();
-  }, [JSON.stringify(filter), status]);
+  }, [filterKey, status]);
 
   return (
     <Stack width="100%" height="100%" p={2} gap={2}>

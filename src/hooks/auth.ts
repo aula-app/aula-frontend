@@ -23,7 +23,7 @@ export function useIsAuthenticated() {
   return isTokenValid(localStorageGet('token'));
 }
 
-export async function useIsOnline(): Promise<boolean> {
+export async function fetchIsOnline(): Promise<boolean> {
   const response = await databaseRequest<InstanceResponse>({
     model: 'Settings',
     method: 'getInstanceSettings',

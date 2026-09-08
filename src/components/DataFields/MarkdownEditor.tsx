@@ -22,7 +22,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 interface Props extends FormControlProps {
@@ -332,104 +332,98 @@ const MarkdownEditor: React.FC<Props> = ({
     }
   }, [handleKeyDown, handleContainerFocus]);
 
+  const { field, fieldState } = useController({ name, control });
+
+  useEffect(() => {
+    const initialValue = field.value || control._defaultValues[name] || '';
+    if (initialValue) {
+      mdxEditorRef.current?.setMarkdown(initialValue);
+    }
+    // Update character count when field value changes
+    setCharacterCount(initialValue?.length || 0);
+  }, [control._defaultValues[name], field.value]);
+
+  // Handle field changes to update character count
+  const handleFieldChange = useCallback(
+    (value: string) => {
+      field.onChange(value);
+      setCharacterCount(value?.length || 0);
+    },
+    [field]
+  );
+
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field, fieldState }) => {
-        useEffect(() => {
-          const initialValue = field.value || control._defaultValues[name] || '';
-          if (initialValue) {
-            mdxEditorRef.current?.setMarkdown(initialValue);
+    <FormControl fullWidth {...restOfProps}>
+      <div
+        ref={containerRef}
+        className="markdown-editor-container"
+        data-testid={`markdown-editor-${name}`}
+        onClick={handleContainerFocus}
+        onKeyDown={(e) => {
+          // Handle Enter and Space to focus the editor
+          if (e.key === 'Enter' || e.key === ' ') {
+            //e.preventDefault();
+            // handleContainerFocus();
           }
-          // Update character count when field value changes
-          setCharacterCount(initialValue?.length || 0);
-        }, [control._defaultValues[name], field.value]);
-
-        // Handle field changes to update character count
-        const handleFieldChange = useCallback(
-          (value: string) => {
-            field.onChange(value);
-            setCharacterCount(value?.length || 0);
-          },
-          [field]
-        );
-
-        return (
-          <FormControl fullWidth {...restOfProps}>
-            <div
-              ref={containerRef}
-              className="markdown-editor-container"
-              data-testid={`markdown-editor-${name}`}
-              onClick={handleContainerFocus}
-              onKeyDown={(e) => {
-                // Handle Enter and Space to focus the editor
-                if (e.key === 'Enter' || e.key === ' ') {
-                  //e.preventDefault();
-                  // handleContainerFocus();
-                }
-              }}
-              tabIndex={0}
-              role="textbox"
-              aria-label={t(`settings.columns.${name}`)}
-            >
-              <StyledFormLabel id={`editor-${name}-label`} className={fieldState.error ? 'error' : getCharCountClass()}>
-                {t(`settings.columns.${name}`)}
-                {required ? '*' : ''}
-              </StyledFormLabel>
-              <Editor
-                className={`md-editor ${fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''} ${maxLength ? 'has-char-count' : ''} ${getCharCountClass()}`}
-                markdown={''}
-                toMarkdownOptions={{}}
-                sx={{ height: '100%' }}
-                plugins={[
-                  headingsPlugin(),
-                  listsPlugin(),
-                  codeMirrorPlugin({
-                    codeBlockLanguages: {
-                      js: 'JavaScript',
-                      ts: 'TypeScript',
-                      jsx: 'React JSX',
-                      tsx: 'React TSX',
-                    },
-                    codeMirrorExtensions: [disableTabKeymap],
-                  }),
-                  toolbarPlugin({
-                    toolbarClassName: 'editor-toolbar',
-                    toolbarContents: () => (
-                      <Stack direction="row" justifyContent="space-between" width="100%">
-                        <Stack direction="row">
-                          <BoldItalicUnderlineToggles />
-                          <Separator />
-                          <ListsToggle />
-                        </Stack>
-                        <UndoRedo />
-                      </Stack>
-                    ),
-                  }),
-                ]}
-                {...field}
-                onChange={handleFieldChange}
-                ref={mdxEditorRef}
-                aria-invalid={!!fieldState.error}
-                aria-errormessage={fieldState.error ? `${name}-error-message` : undefined}
-                aria-labelledby={`editor-${name}-label`}
-              />
-              {maxLength && (
-                <CharacterCount className={getCharCountClass()} variant="caption">
-                  {characterCount}/{maxLength}
-                </CharacterCount>
-              )}
-            </div>
-            {!!fieldState.error && (
-              <FormHelperText id={`${name}-error-message`} error={!!fieldState.error}>
-                {t(`${fieldState.error?.message || ''}`)}
-              </FormHelperText>
-            )}
-          </FormControl>
-        );
-      }}
-    />
+        }}
+        tabIndex={0}
+        role="textbox"
+        aria-label={t(`settings.columns.${name}`)}
+      >
+        <StyledFormLabel id={`editor-${name}-label`} className={fieldState.error ? 'error' : getCharCountClass()}>
+          {t(`settings.columns.${name}`)}
+          {required ? '*' : ''}
+        </StyledFormLabel>
+        <Editor
+          className={`md-editor ${fieldState.error ? 'error' : ''} ${disabled ? 'disabled' : ''} ${maxLength ? 'has-char-count' : ''} ${getCharCountClass()}`}
+          markdown={''}
+          toMarkdownOptions={{}}
+          sx={{ height: '100%' }}
+          plugins={[
+            headingsPlugin(),
+            listsPlugin(),
+            codeMirrorPlugin({
+              codeBlockLanguages: {
+                js: 'JavaScript',
+                ts: 'TypeScript',
+                jsx: 'React JSX',
+                tsx: 'React TSX',
+              },
+              codeMirrorExtensions: [disableTabKeymap],
+            }),
+            toolbarPlugin({
+              toolbarClassName: 'editor-toolbar',
+              toolbarContents: () => (
+                <Stack direction="row" justifyContent="space-between" width="100%">
+                  <Stack direction="row">
+                    <BoldItalicUnderlineToggles />
+                    <Separator />
+                    <ListsToggle />
+                  </Stack>
+                  <UndoRedo />
+                </Stack>
+              ),
+            }),
+          ]}
+          {...field}
+          onChange={handleFieldChange}
+          ref={mdxEditorRef}
+          aria-invalid={!!fieldState.error}
+          aria-errormessage={fieldState.error ? `${name}-error-message` : undefined}
+          aria-labelledby={`editor-${name}-label`}
+        />
+        {maxLength && (
+          <CharacterCount className={getCharCountClass()} variant="caption">
+            {characterCount}/{maxLength}
+          </CharacterCount>
+        )}
+      </div>
+      {!!fieldState.error && (
+        <FormHelperText id={`${name}-error-message`} error={!!fieldState.error}>
+          {t(`${fieldState.error?.message || ''}`)}
+        </FormHelperText>
+      )}
+    </FormControl>
   );
 };
 
