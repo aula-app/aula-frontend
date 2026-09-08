@@ -31,7 +31,7 @@ const UpdatesView = () => {
   }, []);
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.units.updates'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.units.updates'), '']] });
     fetchUpdates();
   }, []);
 

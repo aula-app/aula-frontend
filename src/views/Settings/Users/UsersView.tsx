@@ -69,7 +69,7 @@ const UsersView: React.FC = () => {
   });
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.users'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.users'), '']] });
   }, [dispatch, t]);
 
   const extraTools = ({ items }: { items: Array<string> }) => {

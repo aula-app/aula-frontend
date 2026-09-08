@@ -85,9 +85,9 @@ const BoxPhaseView = () => {
     const roomName = await getRoomName(room_id);
 
     dispatch({
-      action: 'SET_BREADCRUMB',
+      type: 'SET_BREADCRUMB',
       breadcrumb: [
-        [roomName, `/room/${room_id}/phase/0`],
+        [roomName ?? 'Room', `/room/${room_id}/phase/0`],
         [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
       ],
     });

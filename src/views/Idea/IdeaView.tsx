@@ -64,7 +64,7 @@ const IdeaView = () => {
     }
 
     if (response.data && response.data.title) {
-      const breadCrumbs = [
+      const breadCrumbs: [string, string][] = [
         [roomName, `/room/${room_id}/phase/0`],
         [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
       ];
@@ -77,7 +77,7 @@ const IdeaView = () => {
       // Add Idea Title to breadcrumb
       breadCrumbs.push([response.data.title, '']);
       dispatch({
-        action: 'SET_BREADCRUMB',
+        type: 'SET_BREADCRUMB',
         breadcrumb: breadCrumbs,
       });
     }
