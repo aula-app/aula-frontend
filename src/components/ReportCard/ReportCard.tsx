@@ -42,8 +42,8 @@ interface Report {
 }
 
 interface DataRequest {
-  type?: 'deleteAccount' | 'requestData';
-  responseTo?: 'deleteAccount' | 'requestData';
+  type?: 'deleteAccount'
+  responseTo?: 'deleteAccount'
   id: string;
   realname: string;
   username: string;
@@ -167,11 +167,7 @@ ${message}`,
       data-testid={
         metadata?.type === 'deleteAccount'
           ? `user-deletion-request-${metadata.username}`
-          : metadata?.type === 'requestData'
-            ? `data-export-request-${metadata.username}`
-            : metadata?.responseTo === 'requestData'
-              ? `data-export-request-details-${metadata.username}`
-              : `request-${report.hash_id}`
+          : `request-${report.hash_id}`
       }
       {...restOfProps}
     >
