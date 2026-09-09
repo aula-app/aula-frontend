@@ -57,7 +57,7 @@ const DataExport: React.FC<Props> = ({ user, onReload }) => {
         color="info"
         onClick={downloadUserGDPRData}
         fullWidth
-        data-testid="request-data-export-button"
+        data-testid="download-user-gdpr-data-button"
       >
         {t('requests.exportData.button')}
       </Button>
