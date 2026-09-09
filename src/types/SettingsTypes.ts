@@ -11,7 +11,6 @@ export type PhaseType = 'wild' | 'discussion' | 'approval' | 'voting' | 'results
  * 44 => "principal",
  * 45 => "principal_v",
  * 50 => "admin",
- * 60 => "tech_admin"
  */
 export type RoleTypes = 10 | 20 | 30 | 31 | 40 | 41 | 44 | 45 | 50;
 

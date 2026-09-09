@@ -12,7 +12,6 @@ import { localStorageGet } from './localStorage';
  * 44 => "principal",
  * 45 => "principal_v",
  * 50 => "admin",
- * 60 => "tech_admin"
  */
 
 export const roles = [10, 20, 30, 31, 40, 41, 44, 45, 50] as Array<RoleTypes>;
