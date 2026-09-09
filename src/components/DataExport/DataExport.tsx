@@ -4,7 +4,9 @@ import { UserType } from '@/types/Scopes';
 import { errorAlert, successAlert } from '@/utils';
 import { Button, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { getUserGDPRData } from '@/services/users';
 import KnowMore from '../KnowMore';
+import dayjs from 'dayjs';
 
 interface Props {
   user: UserType;
@@ -19,29 +21,30 @@ const DataExport: React.FC<Props> = ({ user, onReload }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
 
-  const requestDataExport = async () => {
-    await addMessage({
-      msg_type: 6,
-      headline: `${t('requests.exportData.title', { var: user.displayname })}`,
-      body: `
----
-type: requestData
-id: ${user.hash_id}
-realname: ${user.realname}
-username: ${user.username}
-displayname: ${user.displayname}
-email: ${user.email}
----
-${t('requests.exportData.body', { var: user.displayname })}`,
-    }).then((response) => {
-      if (response.error) {
-        errorAlert(t(response.error), dispatch);
-        return;
-      }
-      successAlert(t('requests.changeName.request'), dispatch);
-      onReload();
-    });
-  };
+  // if we could pass tenant code by querystring, we could below just do
+  //   const userGDPRDataUrl = getUserGDPRDataUrl(user.hash_id)
+  //   <Button download="foo.json.txt" href={userGDPRDataUrl}> */}
+  const downloadUserGDPRData = () => {
+    getUserGDPRData(user.hash_id)
+      .then((response) => {
+        if (response.ok) {
+          return response.blob();
+        }
+        throw new Error(`${response.status || ''} ${response.statusText || ''}`);
+      })
+      .then((blob) => {
+        const file = document.createElement('a');
+        file.href = URL.createObjectURL(blob);
+        file.download = `data_export_${dayjs().format('YYYY-MM-DD_HH:mm')}.json.txt`;
+        file.style.display = 'none';
+        document.body.appendChild(file);
+        file.click();
+        document.body.removeChild(file);
+      })
+      .catch((e) => {
+        errorAlert(`${t('errors.default')} (${e.message})`, dispatch)
+      });
+  }
 
   return (
     <Stack gap={2}>
@@ -52,7 +55,7 @@ ${t('requests.exportData.body', { var: user.displayname })}`,
       <Button
         variant="contained"
         color="info"
-        onClick={requestDataExport}
+        onClick={downloadUserGDPRData}
         fullWidth
         data-testid="request-data-export-button"
       >

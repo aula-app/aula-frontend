@@ -118,26 +118,6 @@ const ReportCard = ({ report, onReload, ...restOfProps }: Props) => {
     successAlert(t(`requests.confirm`), dispatch);
   };
 
-  const downloadData = async () => {
-    const request = await exportSelfData();
-
-    if (request.error) {
-      errorAlert(t(request.error), dispatch);
-      return;
-    }
-
-    const file = document.createElement('a');
-    file.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(request.data)));
-    file.setAttribute('download', `data_export_${dayjs().format('YYYY-MM-DD_HH:mm')}.txt`);
-
-    file.style.display = 'none';
-    document.body.appendChild(file);
-
-    file.click();
-
-    document.body.removeChild(file);
-  };
-
   const confirmRequest = async () => {
     switch (metadata.type) {
       case 'changeName':
@@ -256,15 +236,6 @@ ${message}`,
               </DialogActions>
             </Dialog>
           </>
-        )}
-        {metadata && metadata.responseTo === 'requestData' && (
-          <CardActions>
-            <Stack direction="row" mt={0.5} flex={1} gap={1} justifyContent="end">
-              <Button variant="contained" color="info" onClick={downloadData} data-testid="download-data-button">
-                {t('actions.download')}
-              </Button>
-            </Stack>
-          </CardActions>
         )}
       </CardContent>
     </Card>
