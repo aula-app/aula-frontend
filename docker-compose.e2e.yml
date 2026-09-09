@@ -13,8 +13,9 @@ name: aula-e2e
 #
 # What happens on startup:
 #   1. mariadb-e2e  — fresh MariaDB instance
-#   2. backend-setup — Laravel v2: runs migrations (central DB) then creates
-#                      the SINGLE tenant (instance DB + admin users)
+#   2. backend-v2-e2e — Laravel v2: runs migrations (central DB) then creates
+#                     the SINGLE tenant (instance DB + admin users)
+#                     then starts at regular entrypoint
 #   3. backend-legacy-e2e — PHP legacy API, starts only after setup succeeds
 
 services:
@@ -41,12 +42,13 @@ services:
       timeout: 5s
       retries: 24
 
-  # ─── One-shot setup (Laravel v2) ─────────────────────────────────────────────
+  # ─── Laravel v2 API + setup ─────────────────────────────────────────────
 
-  backend-setup:
+  backend-v2-e2e:
     build:
       context: ${BACKEND_DIR:-../aula-backend}
-    # Override entrypoint so this container exits cleanly instead of starting supervisord.
+    ports:
+      - "8000:80"
     entrypoint: ["sh", "-c"]
     command:
       - |
@@ -82,6 +84,7 @@ services:
           --admin2-name="Tech Admin" \
           --admin2-email=tech@aula.de \
           --admin-password=aula
+        /root/entrypoint.sh
     environment:
       APP_ENV: testing
       # APP_URL becomes api_base_url in the tenants table — must be reachable
@@ -101,6 +104,14 @@ services:
         condition: service_healthy
     restart: "no"
 
+  nginx:
+    image: nginx:stable-alpine-slim
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx-reverse-proxy.conf:/etc/nginx/nginx.conf
+
   # ─── Legacy PHP API ───────────────────────────────────────────────────────────
 
   backend-legacy-e2e:
@@ -114,10 +125,8 @@ services:
       CENTRAL_DB_NAME: aula_database
       CENTRAL_DB_USER: aula_user
       CENTRAL_DB_PASS: e2e_pass
-    ports:
-      - "8080:80"
     depends_on:
       mariadb-e2e:
         condition: service_healthy
-      backend-setup:
-        condition: service_completed_successfully
+      backend-v2-e2e:
+        condition: service_healthy
