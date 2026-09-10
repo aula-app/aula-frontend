@@ -1,6 +1,7 @@
+import { MigrationStatus } from '@/services/idpMigration';
 import Alert, { AlertSeverity } from '@/v2/components/ui/Alert';
 import Stepper from '@/v2/components/ui/Stepper';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useIdpSyncEntry } from './useIdpSyncEntry';
@@ -18,9 +19,19 @@ const STEP_INDEX: Record<string, number> = {
   completed: STEPS.length,
 };
 
+/** Every status each step can stand for, so a dev can reach all six from four buttons. */
+const STEP_STATUSES: MigrationStatus[][] = [
+  ['flagged'],
+  ['connected'],
+  ['reviewing'],
+  ['importing', 'linking', 'completed'],
+];
+
+// inline-flex, not the default: an <a> is display:inline, where vertical padding
+// does not grow the box, so the Link would sit tighter than the <button>s.
 const ACTION_CLASS =
-  'rounded-full px-4 py-1.5 text-sm font-bold bg-primary text-text-primary ' +
-  'disabled:opacity-50 disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center rounded-full px-4 py-1.5 text-sm font-bold ' +
+  'bg-primary text-text-primary disabled:opacity-50 disabled:cursor-not-allowed';
 
 /**
  * The migration, on the page an admin already goes to.
@@ -32,9 +43,19 @@ const ACTION_CLASS =
  */
 const IdpSyncEntry: React.FC = () => {
   const { t } = useTranslation();
-  const { status, progress, busy, failed, connect, prepare, refresh } = useIdpSyncEntry();
+  const { status: liveStatus, progress, busy, failed, connect, prepare, refresh } = useIdpSyncEntry();
+  // Lets a step be picked to preview its copy. Changes nothing on the backend, so
+  // it is kept out of production builds rather than shipped as a real control.
+  const [preview, setPreview] = useState<MigrationStatus>(null);
+  const status = preview ?? liveStatus;
 
   if (!status) return null;
+
+  const selectStep = (index: number) => {
+    const group = STEP_STATUSES[index];
+
+    setPreview(group[(group.indexOf(status) + 1) % group.length]);
+  };
 
   const button = (label: string, onClick: () => void, testId: string) => (
     <button type="button" className={ACTION_CLASS} disabled={busy} onClick={onClick} data-testid={testId}>
@@ -53,15 +74,22 @@ const IdpSyncEntry: React.FC = () => {
     },
     reviewing: {
       severity: 'warning' as const,
-      action: (
+      // The merge screen is not ready to ship: a deployed build shows the step
+      // and its copy, but cannot be navigated into.
+      action: import.meta.env.DEV ? (
         <Link to="/settings/idp-sync" className={ACTION_CLASS} data-testid="config-idp-sync-open">
           {t('v2.ui.idpSync.actions.open')}
         </Link>
+      ) : (
+        <button type="button" className={ACTION_CLASS} disabled data-testid="config-idp-sync-open">
+          {t('v2.ui.idpSync.actions.open')}
+        </button>
       ),
     },
-    importing: { severity: 'info' as const },
+    // The import and everything after it: the risky decisions are already behind.
+    importing: { severity: 'success' as const },
     linking: {
-      severity: 'info' as const,
+      severity: 'success' as const,
       action: button(t('v2.ui.idpSync.actions.refresh'), refresh, 'idp-sync-refresh'),
     },
     completed: { severity: 'success' as const },

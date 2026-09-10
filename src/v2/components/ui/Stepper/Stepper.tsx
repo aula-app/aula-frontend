@@ -37,11 +37,12 @@ interface Props {
   steps: string[];
   current: number;
   label: string;
+  onSelect?: (index: number) => void;
   className?: string;
   'data-testid'?: string;
 }
 
-const Stepper = ({ steps, current, label, className = '', 'data-testid': dataTestId }: Props) => (
+const Stepper = ({ steps, current, label, onSelect, className = '', 'data-testid': dataTestId }: Props) => (
   <ol
     className={`flex w-full overflow-hidden min-h-6 print:hidden ${className}`}
     aria-label={label}
@@ -60,15 +61,35 @@ const Stepper = ({ steps, current, label, className = '', 'data-testid': dataTes
           }`}
           style={{ clipPath: getClipPath(index, steps.length) }}
         >
-          <span
-            className={`flex h-full w-full items-center justify-center gap-1 ${!isCurrent ? 'bg-current/15' : ''} px-3`}
-            style={{ clipPath: getRingClipPath(index, steps.length) }}
-          >
-            {isDone && <Icon type="check" size="1em" className="shrink-0" />}
-            <span className={`overflow-hidden text-ellipsis whitespace-nowrap ${isCurrent ? 'font-bold' : ''}`}>
-              {step}
-            </span>
-          </span>
+          {(() => {
+            const inner = `flex h-full w-full items-center justify-center gap-1 ${!isCurrent ? 'bg-current/15' : ''} px-3`;
+            const shape = { clipPath: getRingClipPath(index, steps.length) };
+            const content = (
+              <>
+                <span className={`shrink-0 ${isCurrent ? 'font-bold' : ''}`}>{index + 1}</span>
+                <span className={`overflow-hidden text-ellipsis whitespace-nowrap ${isCurrent ? 'font-bold' : ''}`}>
+                  {step}
+                </span>
+                {isDone && <Icon type="check" size="1em" className="shrink-0" />}
+              </>
+            );
+
+            return onSelect ? (
+              <button
+                type="button"
+                className={`${inner} cursor-pointer`}
+                style={shape}
+                onClick={() => onSelect(index)}
+                data-testid={`stepper-step-${index}`}
+              >
+                {content}
+              </button>
+            ) : (
+              <span className={inner} style={shape}>
+                {content}
+              </span>
+            );
+          })()}
         </li>
       );
     })}
