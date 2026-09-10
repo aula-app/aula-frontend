@@ -70,6 +70,13 @@
             "title": "Sync complete",
             "body": "Everyone is linked to the provider. Password login can now be switched off."
           }
+        },
+        "stepper": {
+          "label": "Sync progress",
+          "connect": "Connect",
+          "prepare": "Prepare",
+          "review": "Review",
+          "import": "Import"
         }
       }
     }

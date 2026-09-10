@@ -223,6 +223,9 @@
 
 /* ========== TAILWIND THEME (references the CSS variables above) ========== */
 @theme inline {
+  /* Smaller than Tailwind's text-xs, for dense chrome like the stepper. */
+  --text-2xs: 0.6875rem;
+
   --color-primary: var(--color-primary);
   --color-secondary: var(--color-secondary);
   --color-error: var(--color-error);

@@ -70,6 +70,13 @@
             "title": "Abgleich abgeschlossen",
             "body": "Alle sind mit dem Identitätsanbieter verknüpft. Die Passwort-Anmeldung kann jetzt deaktiviert werden."
           }
+        },
+        "stepper": {
+          "label": "Fortschritt des Abgleichs",
+          "connect": "Verbinden",
+          "prepare": "Vorbereiten",
+          "review": "Prüfen",
+          "import": "Importieren"
         }
       }
     }

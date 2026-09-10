@@ -1,8 +1,22 @@
 import Alert, { AlertSeverity } from '@/v2/components/ui/Alert';
+import Stepper from '@/v2/components/ui/Stepper';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useIdpSyncEntry } from './useIdpSyncEntry';
+
+const STEPS = ['connect', 'prepare', 'review', 'import'] as const;
+
+/** The last three statuses are all the import running its course. */
+const STEP_INDEX: Record<string, number> = {
+  flagged: 0,
+  connected: 1,
+  reviewing: 2,
+  importing: 3,
+  linking: 3,
+  // Past the last step: nothing is in hand any more, so every step reads as done.
+  completed: STEPS.length,
+};
 
 const ACTION_CLASS =
   'rounded-full px-4 py-1.5 text-sm font-bold bg-primary text-text-primary ' +
@@ -63,6 +77,14 @@ const IdpSyncEntry: React.FC = () => {
       title={t(`v2.ui.idpSync.states.${status}.title`)}
       action={step.action}
       className="mb-2"
+      header={
+        <Stepper
+          steps={STEPS.map((step) => t(`v2.ui.idpSync.stepper.${step}`))}
+          current={STEP_INDEX[status]}
+          label={t('v2.ui.idpSync.stepper.label')}
+          data-testid="idp-sync-stepper"
+        />
+      }
       data-testid="config-idp-sync-entry"
     >
       <span data-testid="config-idp-sync-status">

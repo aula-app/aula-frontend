@@ -31,6 +31,8 @@ interface Props {
   children: ReactNode;
   /** Rendered below the body: the action this alert is asking for. */
   action?: ReactNode;
+  /** Full-bleed strip across the top, clipped to the top rounded corners. */
+  header?: ReactNode;
   /** Adds a dismiss control. Omit for a standing message that must not be cleared. */
   onDismiss?: () => void;
   className?: string;
@@ -49,6 +51,7 @@ const Alert = ({
   title,
   children,
   action,
+  header,
   onDismiss,
   className = '',
   'data-testid': dataTestId,
@@ -59,26 +62,29 @@ const Alert = ({
     <div
       role={severity === 'error' || severity === 'warning' ? 'alert' : 'status'}
       data-testid={dataTestId}
-      className={`flex flex-1 flex-col items-start gap-1 min-w-0 rounded-2xl p-4 ${SEVERITY_STYLES[severity]} ${className}`}
+      className={`flex flex-1 flex-col min-w-0 rounded-2xl ${SEVERITY_STYLES[severity]} ${className}`}
     >
-      <p className="font-bold text-lg flex items-center gap-1">
-        <Icon type={SEVERITY_ICONS[severity]} size="1.25em" className="shrink-0" />
-        {!!eyebrow && <span>{eyebrow}</span>}
-        {!!title && <span>{title}</span>}
-      </p>
-      <p className="text-sm">{children}</p>
-      {!!action && <div className="mt-2">{action}</div>}
-      {!!onDismiss && (
-        <IconButton
-          className="shrink-0 -mt-1 -mr-1"
-          title={t('ui.common.dismiss')}
-          aria-label={t('ui.common.dismiss')}
-          onClick={onDismiss}
-          testId="alert-dismiss"
-        >
-          <Icon type="close" size="1.25em" />
-        </IconButton>
-      )}
+      {!!header && <div className="overflow-hidden rounded-t-2xl">{header}</div>}
+      <div className="flex flex-col items-start gap-1 p-4">
+        <p className="font-bold text-lg flex items-center gap-1">
+          <Icon type={SEVERITY_ICONS[severity]} size="1.25em" className="shrink-0" />
+          {!!eyebrow && <span>{eyebrow}</span>}
+          {!!title && <span>{title}</span>}
+        </p>
+        <p className="text-sm">{children}</p>
+        {!!action && <div className="mt-2">{action}</div>}
+        {!!onDismiss && (
+          <IconButton
+            className="shrink-0 -mt-1 -mr-1"
+            title={t('ui.common.dismiss')}
+            aria-label={t('ui.common.dismiss')}
+            onClick={onDismiss}
+            testId="alert-dismiss"
+          >
+            <Icon type="close" size="1.25em" />
+          </IconButton>
+        )}
+      </div>
     </div>
   );
 };
