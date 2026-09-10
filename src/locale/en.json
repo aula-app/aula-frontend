@@ -32,12 +32,12 @@
           "merge": "Merge?"
         },
         "actions": {
-          "connect": "Link my account",
-          "prepare": "Prepare the sync",
+          "connect": "Connect",
+          "prepare": "Prepare",
           "apply": "Apply matches and import",
           "rebuild": "Rebuild",
           "refresh": "Refresh",
-          "open": "Open the review"
+          "open": "Review"
         },
         "errors": {
           "connect": "Could not start the provider sign-in.",

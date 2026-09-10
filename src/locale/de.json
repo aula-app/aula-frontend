@@ -32,12 +32,12 @@
           "merge": "Zusammenführen?"
         },
         "actions": {
-          "connect": "Mein Konto verknüpfen",
-          "prepare": "Abgleich vorbereiten",
+          "connect": "Verbinden",
+          "prepare": "Vorbereiten",
           "apply": "Zuordnungen übernehmen und importieren",
           "rebuild": "Neu berechnen",
           "refresh": "Aktualisieren",
-          "open": "Prüfung öffnen"
+          "open": "Prüfen"
         },
         "errors": {
           "connect": "Die Anmeldung beim Anbieter konnte nicht gestartet werden.",

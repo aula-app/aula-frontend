@@ -59,15 +59,15 @@ const Alert = ({
     <div
       role={severity === 'error' || severity === 'warning' ? 'alert' : 'status'}
       data-testid={dataTestId}
-      className={`flex items-start gap-3 rounded-xl p-4 ${SEVERITY_STYLES[severity]} ${className}`}
+      className={`flex flex-1 flex-col items-start gap-1 min-w-0 rounded-2xl p-4 ${SEVERITY_STYLES[severity]} ${className}`}
     >
-      <Icon type={SEVERITY_ICONS[severity]} size="1.25em" className="shrink-0 mt-0.5" />
-      <div className="flex flex-1 flex-col items-start gap-1 min-w-0">
-        {!!eyebrow && <p className="text-xs font-bold">{eyebrow}</p>}
-        {!!title && <p className="font-bold">{title}</p>}
-        <div className="text-sm">{children}</div>
-        {!!action && <div className="mt-2">{action}</div>}
-      </div>
+      <p className="font-bold text-lg flex items-center gap-1">
+        <Icon type={SEVERITY_ICONS[severity]} size="1.25em" className="shrink-0" />
+        {!!eyebrow && <span>{eyebrow}</span>}
+        {!!title && <span>{title}</span>}
+      </p>
+      <p className="text-sm">{children}</p>
+      {!!action && <div className="mt-2">{action}</div>}
       {!!onDismiss && (
         <IconButton
           className="shrink-0 -mt-1 -mr-1"
