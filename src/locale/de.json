@@ -30,6 +30,8 @@
           "confident": "eindeutig",
           "ambiguous": "mehrdeutig",
           "none": "kein Treffer",
+          "notLinked": "wird nicht verknüpft",
+          "orphaned": "Niemand kann sich mehr in diesem Konto anmelden.",
           "pseudonym": "nur Pseudonym"
         },
         "columns": {

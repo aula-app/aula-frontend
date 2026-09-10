@@ -30,6 +30,8 @@
           "confident": "confident",
           "ambiguous": "ambiguous",
           "none": "no match",
+          "notLinked": "will not be linked",
+          "orphaned": "Nobody will be able to sign in to this account.",
           "pseudonym": "pseudonym only"
         },
         "columns": {

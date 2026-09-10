@@ -8,9 +8,14 @@ import { Matching } from './useMatching';
 
 type Side = 'aula' | 'provider';
 
-const EMPTY: Record<Side, { icon: ICON_TYPE; label: string }> = {
+const EMPTY: Record<Side, { icon: ICON_TYPE; label: string; roomLabel?: string; hint?: string }> = {
   aula: { icon: 'about', label: 'v2.ui.idpSync.willBeCreated' },
-  provider: { icon: 'request', label: 'v2.ui.idpSync.state.none' },
+  provider: {
+    icon: 'request',
+    label: 'v2.ui.idpSync.state.none',
+    roomLabel: 'v2.ui.idpSync.state.notLinked',
+    hint: 'v2.ui.idpSync.state.orphaned',
+  },
 };
 
 const Connector = ({ icon }: { icon: 'plus' | 'equals' }) => (
@@ -52,6 +57,9 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector }: Props) =>
   // Both cells of a row share its id; only the half holding the record is picked.
   const picked = isPicked(row) && source;
 
+  const empty = EMPTY[side];
+  const label = (!isPerson && empty.roomLabel) || empty.label;
+
   const party =
     side === 'aula'
       ? {
@@ -69,9 +77,12 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector }: Props) =>
       <Party name={name} {...party} />
     </>
   ) : (
-    <span className="flex items-center gap-2 font-bold">
-      <Icon type={droppable ? 'check' : EMPTY[side].icon} size="1em" className="shrink-0" />
-      {droppable ? t('v2.ui.idpSync.actions.place') : t(EMPTY[side].label)}
+    <span className="flex min-w-0 flex-col gap-0.5">
+      <span className="flex items-center gap-2 font-bold">
+        <Icon type={droppable ? 'check' : empty.icon} size="1em" className="shrink-0" />
+        {droppable ? t('v2.ui.idpSync.actions.place') : t(label)}
+      </span>
+      {!droppable && isPerson && !!empty.hint && <span className="text-xs opacity-80">{t(empty.hint)}</span>}
     </span>
   );
 

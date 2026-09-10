@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { arrange, isPair, resultOf, rowKind } from './candidates';
 import MatchCell from './MatchCell';
 import Party from './Party';
-import { CARD, CHIP, CONTENT, PLAIN, TONE } from './styles';
+import { CARD, CHIP, CONTENT, PLAIN, toneFor } from './styles';
 import { useMatching } from './useMatching';
 
 type Props = {
@@ -69,7 +69,7 @@ const ReviewTable: React.FC<Props> = ({ kind, rows, total, page, perPage, search
           </thead>
           <tbody>
             {ordered.map((row) => {
-              const tone = TONE[rowKind(row)];
+              const tone = toneFor(rowKind(row), isPerson);
 
               return (
                 <tr key={row.id} data-testid={`idp-review-row-${row.id}`}>
