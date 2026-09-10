@@ -44,7 +44,7 @@ const ReviewTable: React.FC<Props> = ({ kind, rows, total, page, perPage, search
     <Stack gap={2}>
       <TextField
         size="small"
-        label={t('idp.sync.search')}
+        label={t('v2.ui.idpSync.search')}
         value={search}
         onChange={(event) => onSearch(event.target.value)}
         // A school of any size makes scrolling useless; searching is the
@@ -55,10 +55,10 @@ const ReviewTable: React.FC<Props> = ({ kind, rows, total, page, perPage, search
       <Table size="small" data-testid={`idp-review-table-${kind}`}>
         <TableHead>
           <TableRow>
-            <TableCell>{t('idp.sync.columns.aula')}</TableCell>
-            <TableCell>{t('idp.sync.columns.provider')}</TableCell>
-            <TableCell>{t('idp.sync.columns.state')}</TableCell>
-            <TableCell align="center">{t('idp.sync.columns.merge')}</TableCell>
+            <TableCell>{t('v2.ui.idpSync.columns.aula')}</TableCell>
+            <TableCell>{t('v2.ui.idpSync.columns.provider')}</TableCell>
+            <TableCell>{t('v2.ui.idpSync.columns.state')}</TableCell>
+            <TableCell align="center">{t('v2.ui.idpSync.columns.merge')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -73,14 +73,14 @@ const ReviewTable: React.FC<Props> = ({ kind, rows, total, page, perPage, search
                   {row.idp_name_kind === 'pseudonym' ? (
                     // Says why this one can never match: the provider gave a
                     // stand-in name, not the person's own.
-                    <Chip size="small" color="warning" label={t('idp.sync.state.pseudonym')} />
+                    <Chip size="small" color="warning" label={t('v2.ui.idpSync.state.pseudonym')} />
                   ) : (
                     <Chip
                       size="small"
                       color={
                         row.outcome === 'confident' ? 'success' : row.outcome === 'ambiguous' ? 'warning' : 'default'
                       }
-                      label={t(`idp.sync.state.${row.outcome}`)}
+                      label={t(`v2.ui.idpSync.state.${row.outcome}`)}
                     />
                   )}
                 </TableCell>
@@ -89,12 +89,12 @@ const ReviewTable: React.FC<Props> = ({ kind, rows, total, page, perPage, search
                     <Checkbox
                       checked={row.decision === 'merge'}
                       onChange={(event) => onToggle(row, event.target.checked)}
-                      inputProps={{ 'aria-label': t('idp.sync.columns.merge') }}
+                      inputProps={{ 'aria-label': t('v2.ui.idpSync.columns.merge') }}
                       data-testid={`idp-review-merge-${row.id}`}
                     />
                   ) : (
                     <Typography variant="body2" color="text.secondary">
-                      {row.idp_id ? t('idp.sync.willBeCreated') : t('idp.sync.staysInAula')}
+                      {row.idp_id ? t('v2.ui.idpSync.willBeCreated') : t('v2.ui.idpSync.staysInAula')}
                     </Typography>
                   )}
                 </TableCell>

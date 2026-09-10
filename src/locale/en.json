@@ -1,4 +1,79 @@
 {
+  "v2": {
+    "ui": {
+      "idpSync": {
+        "title": "Sync with the identity provider",
+        "notEnabled": "No sync is enabled for this school. An operator can turn it on in aula-manager.",
+        "connectReturned": "Signed in at the provider. Your aula account is now linked and the school is identified.",
+        "reviewWarning": "Please check these matches. A wrong merge gives one person another's account, including everything they have written.",
+        "rooms": "Classes and rooms",
+        "users": "People",
+        "search": "Search",
+        "willBeCreated": "will be created",
+        "staysInAula": "stays as it is",
+        "progressTitle": "Progress",
+        "progressBody": "{{linked}} accounts linked, {{remaining}} still to go.",
+        "progressHint": "Password login can only be switched off once nobody is left.",
+        "step": {
+          "connect": "Sign in at the provider first. That links your aula account and identifies the school.",
+          "prepare": "The provider's classes and people can now be matched against your existing aula data.",
+          "importing": "Importing …"
+        },
+        "state": {
+          "confident": "confident",
+          "ambiguous": "ambiguous",
+          "none": "no match",
+          "pseudonym": "pseudonym only"
+        },
+        "columns": {
+          "aula": "In aula",
+          "provider": "At the provider",
+          "state": "Match",
+          "merge": "Merge?"
+        },
+        "actions": {
+          "connect": "Link my account",
+          "prepare": "Prepare the sync",
+          "apply": "Apply matches and import",
+          "rebuild": "Rebuild",
+          "refresh": "Refresh",
+          "open": "Open the review"
+        },
+        "errors": {
+          "connect": "Could not start the provider sign-in.",
+          "prepare": "Could not prepare the sync.",
+          "apply": "{{count}} matches are not valid. Please check the flagged rows."
+        },
+        "actionNeeded": "Action needed:",
+        "states": {
+          "flagged": {
+            "title": "This school isn't connected yet",
+            "body": "Sign in at the identity provider to link your aula account and identify this school. Nothing changes for anyone else yet."
+          },
+          "connected": {
+            "title": "Ready to match your data",
+            "body": "aula can compare the provider's classes and people against the ones this school already has. Nothing is imported until you approve the matches."
+          },
+          "reviewing": {
+            "title": "Matches are waiting for review",
+            "body": "Each match decides who ends up owning which account, and it cannot be undone once the import runs."
+          },
+          "importing": {
+            "title": "Importing your school",
+            "body": "The provider's classes and people are being created. This notice updates itself."
+          },
+          "linking": {
+            "title": "Waiting for people to sign in",
+            "body": "{{linked}} accounts linked, {{remaining}} still to go. Each person is linked the first time they sign in through the provider."
+          },
+          "completed": {
+            "title": "Sync complete",
+            "body": "Everyone is linked to the provider. Password login can now be switched off."
+          }
+        }
+      }
+    }
+  },
   "actions": {
     "activate": "Activate {{var}}",
     "add": "New {{var}}",
@@ -892,53 +967,6 @@
     "wednesday": "Wednesday"
   },
   "idp": {
-    "sync": {
-      "title": "Sync with the identity provider",
-      "notEnabled": "No sync is enabled for this school. An operator can turn it on in aula-manager.",
-      "connectReturned": "Signed in at the provider. Your aula account is now linked and the school is identified.",
-      "reviewWarning": "Please check these matches. A wrong merge gives one person another's account, including everything they have written.",
-      "rooms": "Classes and rooms",
-      "users": "People",
-      "search": "Search",
-      "willBeCreated": "will be created",
-      "staysInAula": "stays as it is",
-      "progressTitle": "Progress",
-      "progressBody": "{{linked}} accounts linked, {{remaining}} still to go.",
-      "progressHint": "Password login can only be switched off once nobody is left.",
-      "step": {
-        "connect": "Sign in at the provider first. That links your aula account and identifies the school.",
-        "prepare": "The provider's classes and people can now be matched against your existing aula data.",
-        "importing": "Importing …"
-      },
-      "state": {
-        "confident": "confident",
-        "ambiguous": "ambiguous",
-        "none": "no match",
-        "pseudonym": "pseudonym only"
-      },
-      "columns": {
-        "aula": "In aula",
-        "provider": "At the provider",
-        "state": "Match",
-        "merge": "Merge?"
-      },
-      "actions": {
-        "connect": "Link my account",
-        "prepare": "Prepare the sync",
-        "apply": "Apply matches and import",
-        "rebuild": "Rebuild",
-        "refresh": "Refresh",
-        "open": "Sync with the identity provider"
-      },
-      "errors": {
-        "connect": "Could not start the provider sign-in.",
-        "prepare": "Could not prepare the sync.",
-        "apply": "{{count}} matches are not valid. Please check the flagged rows."
-      },
-      "entry": {
-        "body": "This school is moving onto its identity provider. Match the existing classes and people to the provider before the import runs."
-      }
-    },
     "claim": {
       "banner": "Do you already have an aula account? Sign in once with your aula password so your contributions are kept.",
       "noAccount": "I don't have an aula account yet",

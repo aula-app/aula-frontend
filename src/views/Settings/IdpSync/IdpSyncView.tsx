@@ -104,12 +104,12 @@ const IdpSyncView: React.FC = () => {
       // missing, which is true and useless: the connection it stood for
       // succeeded, and the tenant's own state is the honest answer.
       if (!result.success && current?.migration_status === 'flagged') {
-        setError(t(`errors.sso.${result.error}`, t('idp.sync.errors.connect')));
+        setError(t(`errors.sso.${result.error}`, t('v2.ui.idpSync.errors.connect')));
 
         return;
       }
 
-      setNotice(t('idp.sync.connectReturned'));
+      setNotice(t('v2.ui.idpSync.connectReturned'));
     });
   }, [searchParams, setSearchParams, t]);
 
@@ -119,7 +119,7 @@ const IdpSyncView: React.FC = () => {
     setBusy(false);
 
     if (!url) {
-      setError(t('idp.sync.errors.connect'));
+      setError(t('v2.ui.idpSync.errors.connect'));
 
       return;
     }
@@ -134,7 +134,7 @@ const IdpSyncView: React.FC = () => {
     setBusy(false);
 
     if (!counts) {
-      setError(t('idp.sync.errors.prepare'));
+      setError(t('v2.ui.idpSync.errors.prepare'));
 
       return;
     }
@@ -162,7 +162,7 @@ const IdpSyncView: React.FC = () => {
     if (!result.ok) {
       // The backend refuses a proposal that would fold two people into one
       // account, and refuses it whole rather than applying part of it.
-      setError(t('idp.sync.errors.apply', { count: Object.keys(result.problems).length }));
+      setError(t('v2.ui.idpSync.errors.apply', { count: Object.keys(result.problems).length }));
 
       return;
     }
@@ -174,37 +174,37 @@ const IdpSyncView: React.FC = () => {
 
   return (
     <Stack gap={3} p={3} data-testid="idp-sync-view">
-      <Typography variant="h5">{t('idp.sync.title')}</Typography>
+      <Typography variant="h5">{t('v2.ui.idpSync.title')}</Typography>
 
       {!!error && <Alert severity="error">{error}</Alert>}
       {!!notice && <Alert severity="info">{notice}</Alert>}
 
-      {status === null && <Alert severity="info">{t('idp.sync.notEnabled')}</Alert>}
+      {status === null && <Alert severity="info">{t('v2.ui.idpSync.notEnabled')}</Alert>}
 
       {status === 'flagged' && (
         <Stack gap={2} alignItems="flex-start">
-          <Typography>{t('idp.sync.step.connect')}</Typography>
+          <Typography>{t('v2.ui.idpSync.step.connect')}</Typography>
           <Button variant="contained" disabled={busy} onClick={connect} data-testid="idp-sync-connect">
-            {t('idp.sync.actions.connect')}
+            {t('v2.ui.idpSync.actions.connect')}
           </Button>
         </Stack>
       )}
 
       {status === 'connected' && (
         <Stack gap={2} alignItems="flex-start">
-          <Typography>{t('idp.sync.step.prepare')}</Typography>
+          <Typography>{t('v2.ui.idpSync.step.prepare')}</Typography>
           <Button variant="contained" disabled={busy} onClick={prepare} data-testid="idp-sync-prepare">
-            {t('idp.sync.actions.prepare')}
+            {t('v2.ui.idpSync.actions.prepare')}
           </Button>
         </Stack>
       )}
 
       {status === 'reviewing' && (
         <Stack gap={4}>
-          <Alert severity="warning">{t('idp.sync.reviewWarning')}</Alert>
+          <Alert severity="warning">{t('v2.ui.idpSync.reviewWarning')}</Alert>
 
           <Stack gap={1}>
-            <Typography variant="h6">{t('idp.sync.rooms')}</Typography>
+            <Typography variant="h6">{t('v2.ui.idpSync.rooms')}</Typography>
             <ReviewTable
               kind="room"
               rows={rows.room}
@@ -221,7 +221,7 @@ const IdpSyncView: React.FC = () => {
           <Divider />
 
           <Stack gap={1}>
-            <Typography variant="h6">{t('idp.sync.users')}</Typography>
+            <Typography variant="h6">{t('v2.ui.idpSync.users')}</Typography>
             <ReviewTable
               kind="user"
               rows={rows.user}
@@ -237,10 +237,10 @@ const IdpSyncView: React.FC = () => {
 
           <Stack direction="row" gap={2}>
             <Button variant="contained" color="success" disabled={busy} onClick={apply} data-testid="idp-sync-apply">
-              {t('idp.sync.actions.apply')}
+              {t('v2.ui.idpSync.actions.apply')}
             </Button>
             <Button disabled={busy} onClick={prepare} data-testid="idp-sync-rebuild">
-              {t('idp.sync.actions.rebuild')}
+              {t('v2.ui.idpSync.actions.rebuild')}
             </Button>
           </Stack>
         </Stack>
@@ -251,13 +251,13 @@ const IdpSyncView: React.FC = () => {
           {status === 'importing' && (
             <Stack direction="row" gap={2} alignItems="center">
               <CircularProgress size={20} />
-              <Typography>{t('idp.sync.step.importing')}</Typography>
+              <Typography>{t('v2.ui.idpSync.step.importing')}</Typography>
             </Stack>
           )}
 
-          <Typography variant="h6">{t('idp.sync.progressTitle')}</Typography>
+          <Typography variant="h6">{t('v2.ui.idpSync.progressTitle')}</Typography>
           <Typography data-testid="idp-sync-progress">
-            {t('idp.sync.progressBody', {
+            {t('v2.ui.idpSync.progressBody', {
               linked: progress?.linked ?? 0,
               remaining: progress?.not_yet_linked ?? 0,
             })}
@@ -265,10 +265,10 @@ const IdpSyncView: React.FC = () => {
           {/* The remaining count is what says whether the migration is done,
               and therefore whether password login can safely be switched off. */}
           <Typography variant="body2" color="text.secondary">
-            {t('idp.sync.progressHint')}
+            {t('v2.ui.idpSync.progressHint')}
           </Typography>
           <Button onClick={refreshProgress} data-testid="idp-sync-refresh">
-            {t('idp.sync.actions.refresh')}
+            {t('v2.ui.idpSync.actions.refresh')}
           </Button>
         </Stack>
       )}
