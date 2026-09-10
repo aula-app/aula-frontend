@@ -10,14 +10,19 @@ import {
   HiOutlineCog6Tooth,
   HiOutlineEnvelope,
   HiOutlineEnvelopeOpen,
+  HiOutlineEquals,
   HiOutlineExclamationTriangle,
   HiOutlineFlag,
   HiOutlineHeart,
   HiOutlineHome,
   HiOutlineInformationCircle,
   HiOutlineLightBulb,
+  HiOutlineLinkSlash,
+  HiOutlineMagnifyingGlass,
   HiOutlineMegaphone,
   HiOutlineMoon,
+  HiOutlinePlus,
+  HiOutlinePlusCircle,
   HiOutlinePrinter,
   HiOutlineSun,
   HiOutlineUserGroup,
@@ -26,6 +31,7 @@ import {
   HiOutlineXMark,
 } from 'react-icons/hi2';
 import { IoBugOutline } from 'react-icons/io5';
+import { MdDragIndicator } from 'react-icons/md';
 
 /**
  * Icon component for the application
@@ -33,6 +39,7 @@ import { IoBugOutline } from 'react-icons/io5';
  */
 export const ICONS = {
   about: HiOutlineInformationCircle,
+  add: HiOutlinePlusCircle,
   announcement: HiOutlineMegaphone,
   announcements: HiOutlineMegaphone,
   back: HiOutlineChevronLeft,
@@ -42,6 +49,8 @@ export const ICONS = {
   check: HiOutlineCheckCircle,
   close: HiOutlineXMark,
   day: HiOutlineSun,
+  drag: MdDragIndicator,
+  equals: HiOutlineEquals,
   error: HiOutlineXCircle,
   group: HiOutlineUsers,
   heart: HiOutlineHeart,
@@ -54,13 +63,16 @@ export const ICONS = {
   messages: HiOutlineEnvelopeOpen,
   night: HiOutlineMoon,
   print: HiOutlinePrinter,
+  plus: HiOutlinePlus,
   report: HiOutlineFlag,
   reports: HiOutlineFlag,
   request: HiOutlineExclamationTriangle,
   requests: HiOutlineExclamationTriangle,
   room: HiOutlineAcademicCap,
+  search: HiOutlineMagnifyingGlass,
   rooms: HiOutlineAcademicCap,
   settings: HiOutlineCog6Tooth,
+  unlink: HiOutlineLinkSlash,
   users: HiOutlineUserGroup,
 };
 

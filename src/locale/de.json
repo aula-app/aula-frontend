@@ -1,5 +1,12 @@
 {
   "v2": {
+    "alt": {
+      "logo": "Aula: Bildungsplattform-Logo",
+      "microphone": "Eine Illustration einer Eule mit einem Mikrofon, die die Ankündigungsfunktion repräsentiert",
+      "sad": "Eine Illustration einer traurigen Eule, die die Fehlerseite repräsentiert",
+      "sleeping": "Schlafende Eulen-Illustration",
+      "winking": "Eine Illustration einer zwinkernden Eule, die die Fehlerseite repräsentiert"
+    },
     "ui": {
       "idpSync": {
         "title": "Mit dem Identitätsanbieter abgleichen",
@@ -29,15 +36,18 @@
           "aula": "In aula",
           "provider": "Beim Anbieter",
           "state": "Zuordnung",
-          "merge": "Zusammenführen?"
+          "merged": "Zusammengeführt"
         },
         "actions": {
           "connect": "Verbinden",
           "prepare": "Vorbereiten",
           "apply": "Zuordnungen übernehmen und importieren",
-          "rebuild": "Neu berechnen",
+          "reset": "Zurücksetzen",
           "refresh": "Aktualisieren",
-          "open": "Prüfen"
+          "open": "Prüfen",
+          "pick": "Auswählen",
+          "place": "Hier zuordnen",
+          "unlink": "Trennen"
         },
         "errors": {
           "connect": "Die Anmeldung beim Anbieter konnte nicht gestartet werden.",
@@ -77,7 +87,9 @@
           "prepare": "Vorbereiten",
           "review": "Prüfen",
           "import": "Importieren"
-        }
+        },
+        "guide": "Jede Zeile zeigt einen aula-Datensatz, seine Entsprechung beim Anbieter und das Konto, das übrig bleibt. Ziehen Sie eine Karte auf einen freien Platz – oder wählen Sie sie aus und bestimmen Sie das Ziel –, um von Hand zuzuordnen. Eine Zeile mit beiden Seiten wird zusammengeführt; lösen Sie die Verbindung, um die Konten getrennt zu lassen.",
+        "resetWarning": "Beim Zurücksetzen gehen alle von Ihnen vorgenommenen Zuordnungen verloren. Die Tabelle wird aus den Daten des Anbieters neu aufgebaut, genau wie zu Beginn."
       }
     }
   },

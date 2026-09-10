@@ -11,8 +11,12 @@ import {
 } from '@/services/idpMigration';
 import { completeSsoLink } from '@/services/sso';
 import { localStorageGet } from '@/utils';
-import { Alert, Button, CircularProgress, Divider, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import Icon from '@/components/new/Icon/Icon';
+import Button from '@/v2/components/button/Button';
+import Alert from '@/v2/components/ui/Alert';
+import Dialog from '@/v2/components/ui/Dialog';
+import FeedbackState from '@/v2/components/ui/FeedbackState';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import ReviewTable from './ReviewTable';
@@ -21,13 +25,6 @@ const PER_PAGE = 50;
 
 const IMPORT_POLL_MS = 3000;
 
-/**
- * Moving a school that already uses aula onto its identity provider.
- *
- * The screen follows the tenant's own state rather than keeping its own: an
- * admin can leave halfway through, come back days later, and pick up where the
- * school actually is.
- */
 const IdpSyncView: React.FC = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,6 +32,15 @@ const IdpSyncView: React.FC = () => {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  // Outlives `asking` so the dialog keeps its text while it animates out.
+  const [confirming, setConfirming] = useState<'apply' | 'reset' | null>(null);
+  const [asking, setAsking] = useState(false);
+  const confirmBodyId = useId();
+
+  const ask = (kind: 'apply' | 'reset') => {
+    setConfirming(kind);
+    setAsking(true);
+  };
 
   const [rows, setRows] = useState<Record<CandidateKind, MergeCandidate[]>>({ room: [], user: [] });
   const [totals, setTotals] = useState<Record<CandidateKind, number>>({ room: 0, user: 0 });
@@ -68,9 +74,6 @@ const IdpSyncView: React.FC = () => {
     }
   }, [progress?.migration_status, loadKind]);
 
-  // The import runs on a queue, so nothing tells this page when it lands.
-  // Without polling the spinner is permanent: the admin is looking at a screen
-  // that has already stopped being true.
   useEffect(() => {
     if (progress?.migration_status !== 'importing') return;
 
@@ -79,11 +82,6 @@ const IdpSyncView: React.FC = () => {
     return () => clearInterval(timer);
   }, [progress?.migration_status, refreshProgress]);
 
-  // Coming back from the provider, the connect flow leaves a one-shot token in
-  // the URL. The admin is already signed in here, so the token is redeemed
-  // against their session: asking them for the aula password they just used
-  // would prove nothing. A password belongs to the other flow, where someone
-  // arrives from the provider with no aula session at all.
   useEffect(() => {
     const linkToken = searchParams.get('sso_link');
 
@@ -93,16 +91,13 @@ const IdpSyncView: React.FC = () => {
     const jwt = localStorageGet('token') ?? '';
 
     completeSsoLink(apiUrl, linkToken, jwt).then(async (result) => {
-      // Drop the one-shot token either way: it is spent, and leaving it in the
-      // URL turns every later reload into a failed retry.
+      // Spent either way; left in the URL it turns every reload into a failed retry.
       setSearchParams({}, { replace: true });
 
       const current = await getMigrationProgress();
       setProgress(current);
 
-      // Reloading a page whose token was already redeemed reports the token as
-      // missing, which is true and useless: the connection it stood for
-      // succeeded, and the tenant's own state is the honest answer.
+      // A redeemed token reads as missing on reload, so trust the tenant's state.
       if (!result.success && current?.migration_status === 'flagged') {
         setError(t(`errors.sso.${result.error}`, t('v2.ui.idpSync.errors.connect')));
 
@@ -130,6 +125,7 @@ const IdpSyncView: React.FC = () => {
   const prepare = async () => {
     setBusy(true);
     setError(null);
+    setAsking(false);
     const counts = await buildProposal();
     setBusy(false);
 
@@ -142,26 +138,21 @@ const IdpSyncView: React.FC = () => {
     await refreshProgress();
   };
 
-  const toggle = async (row: MergeCandidate, merge: boolean) => {
-    const decision = merge ? 'merge' : null;
-
-    setRows((current) => ({
-      ...current,
-      [row.kind]: current[row.kind].map((item) => (item.id === row.id ? { ...item, decision } : item)),
-    }));
-
-    await saveDecisions([{ id: row.id, decision }]);
+  // The save reports only success, so reload rather than guess what became of
+  // the row the record came from.
+  const assign = async (row: MergeCandidate, localId: number | null) => {
+    await saveDecisions([{ id: row.id, decision: localId === null ? null : 'merge', local_id: localId }]);
+    await loadKind(row.kind);
   };
 
   const apply = async () => {
     setBusy(true);
     setError(null);
+    setAsking(false);
     const result = await applyProposal();
     setBusy(false);
 
     if (!result.ok) {
-      // The backend refuses a proposal that would fold two people into one
-      // account, and refuses it whole rather than applying part of it.
       setError(t('v2.ui.idpSync.errors.apply', { count: Object.keys(result.problems).length }));
 
       return;
@@ -172,107 +163,149 @@ const IdpSyncView: React.FC = () => {
 
   const status = progress?.migration_status ?? null;
 
+  const table = (kind: CandidateKind) => (
+    <ReviewTable
+      kind={kind}
+      rows={rows[kind]}
+      total={totals[kind]}
+      page={pages[kind]}
+      perPage={PER_PAGE}
+      search={search[kind]}
+      onSearch={(value) => setSearch((current) => ({ ...current, [kind]: value }))}
+      onPage={(page) => setPages((current) => ({ ...current, [kind]: page }))}
+      onAssign={assign}
+    />
+  );
+
   return (
-    <Stack gap={3} p={3} data-testid="idp-sync-view">
-      <Typography variant="h5">{t('v2.ui.idpSync.title')}</Typography>
+    <div className="flex flex-col h-full overflow-y-auto p-2 sm:p-4 gap-4" data-testid="idp-sync-view">
+      <h1 className="flex items-center gap-2">
+        <Icon type="settings" size=".9em" />
+        {t('v2.ui.idpSync.title')}
+      </h1>
 
       {!!error && <Alert severity="error">{error}</Alert>}
       {!!notice && <Alert severity="info">{notice}</Alert>}
 
-      {status === null && <Alert severity="info">{t('v2.ui.idpSync.notEnabled')}</Alert>}
+      {status === null && (
+        <FeedbackState
+          image="/img/Paula_schlafend.svg"
+          alt={t('v2.alt.sleeping')}
+          title={t('v2.ui.idpSync.title')}
+          description={t('v2.ui.idpSync.notEnabled')}
+          data-testid="idp-sync-not-enabled"
+        />
+      )}
 
       {status === 'flagged' && (
-        <Stack gap={2} alignItems="flex-start">
-          <Typography>{t('v2.ui.idpSync.step.connect')}</Typography>
-          <Button variant="contained" disabled={busy} onClick={connect} data-testid="idp-sync-connect">
+        <section className="flex flex-col items-start gap-3">
+          <p>{t('v2.ui.idpSync.step.connect')}</p>
+          <Button disabled={busy} onClick={connect} data-testid="idp-sync-connect">
             {t('v2.ui.idpSync.actions.connect')}
           </Button>
-        </Stack>
+        </section>
       )}
 
       {status === 'connected' && (
-        <Stack gap={2} alignItems="flex-start">
-          <Typography>{t('v2.ui.idpSync.step.prepare')}</Typography>
-          <Button variant="contained" disabled={busy} onClick={prepare} data-testid="idp-sync-prepare">
+        <section className="flex flex-col items-start gap-3">
+          <p>{t('v2.ui.idpSync.step.prepare')}</p>
+          <Button disabled={busy} onClick={prepare} data-testid="idp-sync-prepare">
             {t('v2.ui.idpSync.actions.prepare')}
           </Button>
-        </Stack>
+        </section>
       )}
 
       {status === 'reviewing' && (
-        <Stack gap={4}>
-          <Alert severity="warning">{t('v2.ui.idpSync.reviewWarning')}</Alert>
+        <div className="flex flex-col gap-6">
+          <p className="text-sm opacity-70">{t('v2.ui.idpSync.guide')}</p>
 
-          <Stack gap={1}>
-            <Typography variant="h6">{t('v2.ui.idpSync.rooms')}</Typography>
-            <ReviewTable
-              kind="room"
-              rows={rows.room}
-              total={totals.room}
-              page={pages.room}
-              perPage={PER_PAGE}
-              search={search.room}
-              onSearch={(value) => setSearch((c) => ({ ...c, room: value }))}
-              onPage={(page) => setPages((c) => ({ ...c, room: page }))}
-              onToggle={toggle}
-            />
-          </Stack>
+          <section className="flex flex-col gap-2">
+            <h2 className="text-xl">{t('v2.ui.idpSync.rooms')}</h2>
+            {table('room')}
+          </section>
 
-          <Divider />
+          <section className="flex flex-col gap-2">
+            <h2 className="text-xl">{t('v2.ui.idpSync.users')}</h2>
+            {table('user')}
+          </section>
 
-          <Stack gap={1}>
-            <Typography variant="h6">{t('v2.ui.idpSync.users')}</Typography>
-            <ReviewTable
-              kind="user"
-              rows={rows.user}
-              total={totals.user}
-              page={pages.user}
-              perPage={PER_PAGE}
-              search={search.user}
-              onSearch={(value) => setSearch((c) => ({ ...c, user: value }))}
-              onPage={(page) => setPages((c) => ({ ...c, user: page }))}
-              onToggle={toggle}
-            />
-          </Stack>
-
-          <Stack direction="row" gap={2}>
-            <Button variant="contained" color="success" disabled={busy} onClick={apply} data-testid="idp-sync-apply">
+          <div className="flex flex-wrap items-center gap-2">
+            <Button disabled={busy} onClick={() => ask('apply')} data-testid="idp-sync-apply">
               {t('v2.ui.idpSync.actions.apply')}
             </Button>
-            <Button disabled={busy} onClick={prepare} data-testid="idp-sync-rebuild">
-              {t('v2.ui.idpSync.actions.rebuild')}
+            <Button
+              text
+              color="error"
+              className="ml-auto"
+              disabled={busy}
+              onClick={() => ask('reset')}
+              data-testid="idp-sync-reset"
+            >
+              {t('v2.ui.idpSync.actions.reset')}
             </Button>
-          </Stack>
-        </Stack>
+          </div>
+
+          <Dialog
+            open={asking}
+            onClose={() => setAsking(false)}
+            onExited={() => setConfirming(null)}
+            role="alertdialog"
+            describedBy={confirmBodyId}
+            title={t(`v2.ui.idpSync.actions.${confirming ?? 'apply'}`)}
+          >
+            <div className="flex flex-col gap-4 p-6" data-testid={`idp-sync-confirm-${confirming}`}>
+              <h2 className="text-xl">{t(`v2.ui.idpSync.actions.${confirming ?? 'apply'}`)}</h2>
+              <p id={confirmBodyId} className="text-sm">
+                {t(confirming === 'reset' ? 'v2.ui.idpSync.resetWarning' : 'v2.ui.idpSync.reviewWarning')}
+              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  text
+                  color="error"
+                  className="mr-auto"
+                  disabled={busy}
+                  onClick={() => setAsking(false)}
+                  data-testid="idp-sync-confirm-cancel"
+                >
+                  {t('actions.cancel')}
+                </Button>
+                <Button
+                  color={confirming === 'reset' ? 'error' : undefined}
+                  disabled={busy}
+                  onClick={confirming === 'reset' ? prepare : apply}
+                  data-testid={`idp-sync-${confirming}-confirm`}
+                >
+                  {t(`v2.ui.idpSync.actions.${confirming ?? 'apply'}`)}
+                </Button>
+              </div>
+            </div>
+          </Dialog>
+        </div>
       )}
 
       {(status === 'importing' || status === 'linking' || status === 'completed') && (
-        <Stack gap={2}>
+        <section className="flex flex-col items-start gap-3">
           {status === 'importing' && (
-            <Stack direction="row" gap={2} alignItems="center">
-              <CircularProgress size={20} />
-              <Typography>{t('v2.ui.idpSync.step.importing')}</Typography>
-            </Stack>
+            <p role="status" className="flex items-center gap-2">
+              <span aria-hidden="true">…</span>
+              {t('v2.ui.idpSync.step.importing')}
+            </p>
           )}
 
-          <Typography variant="h6">{t('v2.ui.idpSync.progressTitle')}</Typography>
-          <Typography data-testid="idp-sync-progress">
+          <h2 className="text-xl">{t('v2.ui.idpSync.progressTitle')}</h2>
+          <p data-testid="idp-sync-progress">
             {t('v2.ui.idpSync.progressBody', {
               linked: progress?.linked ?? 0,
               remaining: progress?.not_yet_linked ?? 0,
             })}
-          </Typography>
-          {/* The remaining count is what says whether the migration is done,
-              and therefore whether password login can safely be switched off. */}
-          <Typography variant="body2" color="text.secondary">
-            {t('v2.ui.idpSync.progressHint')}
-          </Typography>
-          <Button onClick={refreshProgress} data-testid="idp-sync-refresh">
+          </p>
+          <p className="text-sm opacity-70">{t('v2.ui.idpSync.progressHint')}</p>
+          <Button outlined onClick={refreshProgress} data-testid="idp-sync-refresh">
             {t('v2.ui.idpSync.actions.refresh')}
           </Button>
-        </Stack>
+        </section>
       )}
-    </Stack>
+    </div>
   );
 };
 

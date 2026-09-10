@@ -1,5 +1,12 @@
 {
   "v2": {
+    "alt": {
+      "logo": "Aula: Education Platform Logo",
+      "microphone": "An illustration of an owl with a microphone, representing the announcement feature",
+      "sad": "An illustration of a sad owl, representing the error page",
+      "sleeping": "Sleeping owl illustration",
+      "winking": "An illustration of a winking owl, representing the error page"
+    },
     "ui": {
       "idpSync": {
         "title": "Sync with the identity provider",
@@ -29,15 +36,18 @@
           "aula": "In aula",
           "provider": "At the provider",
           "state": "Match",
-          "merge": "Merge?"
+          "merged": "Merged"
         },
         "actions": {
           "connect": "Connect",
           "prepare": "Prepare",
           "apply": "Apply matches and import",
-          "rebuild": "Rebuild",
+          "reset": "Reset",
           "refresh": "Refresh",
-          "open": "Review"
+          "open": "Review",
+          "pick": "Pick",
+          "place": "Match here",
+          "unlink": "Unlink"
         },
         "errors": {
           "connect": "Could not start the provider sign-in.",
@@ -77,7 +87,9 @@
           "prepare": "Prepare",
           "review": "Review",
           "import": "Import"
-        }
+        },
+        "guide": "Each row is an aula record, its match at the provider, and the account you end up with. Drag a card onto an empty slot, or select it and pick where it goes, to match them by hand. A row holding both sides will be merged; unlink it to keep the two accounts apart.",
+        "resetWarning": "Resetting discards every match you have made and rebuilds the table from the provider’s data, exactly as it was at the start."
       }
     }
   },
