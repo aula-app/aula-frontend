@@ -8,6 +8,14 @@
       "winking": "Eine Illustration einer zwinkernden Eule, die die Fehlerseite repräsentiert"
     },
     "ui": {
+      "sort": {
+        "label": "Sortieren nach",
+        "asc": "Aufsteigend sortieren",
+        "desc": "Absteigend sortieren",
+        "name": "Name",
+        "status": "Status",
+        "confidence": "Treffergenauigkeit"
+      },
       "idpSync": {
         "title": "Mit dem Identitätsanbieter abgleichen",
         "notEnabled": "Für diese Schule ist kein Abgleich aktiviert. Die Verwaltung kann ihn im aula-manager einschalten.",
@@ -32,6 +40,7 @@
           "none": "kein Treffer",
           "notLinked": "wird nicht verknüpft",
           "orphaned": "Niemand kann sich mehr in diesem Konto anmelden.",
+          "emptyUser": "Es wird ein leeres Konto angelegt.",
           "pseudonym": "nur Pseudonym"
         },
         "columns": {

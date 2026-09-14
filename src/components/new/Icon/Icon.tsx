@@ -4,6 +4,8 @@ import {
   HiOutlineAcademicCap,
   HiOutlineArchiveBox,
   HiOutlineArrowRightEndOnRectangle,
+  HiOutlineBarsArrowDown,
+  HiOutlineBarsArrowUp,
   HiOutlineBars3,
   HiOutlineCheckCircle,
   HiOutlineChevronLeft,
@@ -73,6 +75,8 @@ export const ICONS = {
   search: HiOutlineMagnifyingGlass,
   rooms: HiOutlineAcademicCap,
   settings: HiOutlineCog6Tooth,
+  sortAsc: HiOutlineBarsArrowUp,
+  sortDesc: HiOutlineBarsArrowDown,
   unlink: HiOutlineLinkSlash,
   users: HiOutlineUserGroup,
 };

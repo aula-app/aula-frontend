@@ -8,6 +8,14 @@
       "winking": "An illustration of a winking owl, representing the error page"
     },
     "ui": {
+      "sort": {
+        "label": "Sort by",
+        "asc": "Sort ascending",
+        "desc": "Sort descending",
+        "name": "Name",
+        "status": "Status",
+        "confidence": "Match confidence"
+      },
       "idpSync": {
         "title": "Sync with the identity provider",
         "notEnabled": "No sync is enabled for this school. An operator can turn it on in aula-manager.",
@@ -32,6 +40,7 @@
           "none": "no match",
           "notLinked": "will not be linked",
           "orphaned": "Nobody will be able to sign in to this account.",
+          "emptyUser": "An empty account will be created.",
           "pseudonym": "pseudonym only"
         },
         "columns": {

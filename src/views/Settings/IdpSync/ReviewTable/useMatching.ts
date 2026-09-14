@@ -58,7 +58,7 @@ export const useMatching = (onAssign: (row: MergeCandidate, localId: number | nu
     setPicked(null);
   };
 
-  return { over, setOver, isPicked, isTarget, select, pick, place };
+  return { picked, over, setOver, isPicked, isTarget, select, pick, place };
 };
 
 export type Matching = ReturnType<typeof useMatching>;

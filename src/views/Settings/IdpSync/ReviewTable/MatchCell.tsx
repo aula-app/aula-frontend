@@ -8,13 +8,17 @@ import { Matching } from './useMatching';
 
 type Side = 'aula' | 'provider';
 
-const EMPTY: Record<Side, { icon: ICON_TYPE; label: string; roomLabel?: string; hint?: string }> = {
-  aula: { icon: 'about', label: 'v2.ui.idpSync.willBeCreated' },
+type EmptyState = { icon: ICON_TYPE; label: string; hint?: string };
+
+/** What an absent half means, which is not the same thing for a person and a room. */
+const EMPTY: Record<Side, Record<'person' | 'room', EmptyState>> = {
+  aula: {
+    person: { icon: 'request', label: 'v2.ui.idpSync.state.none', hint: 'v2.ui.idpSync.state.emptyUser' },
+    room: { icon: 'about', label: 'v2.ui.idpSync.willBeCreated' },
+  },
   provider: {
-    icon: 'request',
-    label: 'v2.ui.idpSync.state.none',
-    roomLabel: 'v2.ui.idpSync.state.notLinked',
-    hint: 'v2.ui.idpSync.state.orphaned',
+    person: { icon: 'request', label: 'v2.ui.idpSync.state.none', hint: 'v2.ui.idpSync.state.orphaned' },
+    room: { icon: 'request', label: 'v2.ui.idpSync.state.notLinked' },
   },
 };
 
@@ -57,8 +61,7 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector }: Props) =>
   // Both cells of a row share its id; only the half holding the record is picked.
   const picked = isPicked(row) && source;
 
-  const empty = EMPTY[side];
-  const label = (!isPerson && empty.roomLabel) || empty.label;
+  const empty = EMPTY[side][isPerson ? 'person' : 'room'];
 
   const party =
     side === 'aula'
@@ -80,9 +83,9 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector }: Props) =>
     <span className="flex min-w-0 flex-col gap-0.5">
       <span className="flex items-center gap-2 font-bold">
         <Icon type={droppable ? 'check' : empty.icon} size="1em" className="shrink-0" />
-        {droppable ? t('v2.ui.idpSync.actions.place') : t(label)}
+        {droppable ? t('v2.ui.idpSync.actions.place') : t(empty.label)}
       </span>
-      {!droppable && isPerson && !!empty.hint && <span className="text-xs opacity-80">{t(empty.hint)}</span>}
+      {!droppable && !!empty.hint && <span className="text-xs opacity-80">{t(empty.hint)}</span>}
     </span>
   );
 

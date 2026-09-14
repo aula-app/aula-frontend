@@ -1,7 +1,5 @@
 import { MergeCandidate } from '@/services/idpMigration';
-
-/** Ambiguous rows need a decision, so they come first. */
-const ORDER: Record<MergeCandidate['outcome'], number> = { ambiguous: 0, none: 1, confident: 2 };
+import { Comparators } from '@/v2/hooks/useListSort';
 
 export const isPair = (row: MergeCandidate) => !!row.local_id && !!row.idp_id;
 export const isAulaOnly = (row: MergeCandidate) => !!row.local_id && !row.idp_id;
@@ -13,7 +11,7 @@ export type RowKind = 'merge' | 'create' | 'keep';
 export const rowKind = (row: MergeCandidate): RowKind => (isPair(row) ? 'merge' : row.idp_id ? 'create' : 'keep');
 
 /**
- * One line per record, ambiguous first.
+ * One line per record.
  *
  * Matching leaves the half it came from standing, so the leftover is dropped
  * rather than showing the record twice.
@@ -23,12 +21,27 @@ export const arrange = (rows: MergeCandidate[]): MergeCandidate[] => {
   const takenLocal = new Set(paired.map((row) => row.local_id));
   const takenIdp = new Set(paired.map((row) => row.idp_id));
 
-  return rows
-    .filter(
-      (row) =>
-        isPair(row) || !((row.local_id && takenLocal.has(row.local_id)) || (row.idp_id && takenIdp.has(row.idp_id)))
-    )
-    .sort((a, b) => ORDER[a.outcome] - ORDER[b.outcome]);
+  return rows.filter(
+    (row) =>
+      isPair(row) || !((row.local_id && takenLocal.has(row.local_id)) || (row.idp_id && takenIdp.has(row.idp_id)))
+  );
+};
+
+/** The name the merged column ends up showing, so an order survives a match changing. */
+const resultName = (row: MergeCandidate) => row.idp_name ?? row.local_name ?? '';
+
+const byName = (a: MergeCandidate, b: MergeCandidate) => resultName(a).localeCompare(resultName(b));
+
+/** Unmatched aula records first; settled merges last. */
+const STATUS: Record<RowKind, number> = { keep: 0, create: 1, merge: 2 };
+
+/** Ambiguous first: those are the rows the name comparison guessed at. */
+const CONFIDENCE: Record<MergeCandidate['outcome'], number> = { ambiguous: 0, none: 1, confident: 2 };
+
+export const SORTS: Comparators<MergeCandidate> = {
+  name: byName,
+  status: (a, b) => STATUS[rowKind(a)] - STATUS[rowKind(b)] || byName(a, b),
+  confidence: (a, b) => CONFIDENCE[a.outcome] - CONFIDENCE[b.outcome] || byName(a, b),
 };
 
 /**

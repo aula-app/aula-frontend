@@ -1,7 +1,9 @@
 import Icon from '@/components/new/Icon/Icon';
 import { CandidateKind, MergeCandidate } from '@/services/idpMigration';
 import { useTranslation } from 'react-i18next';
-import { arrange, isPair, resultOf, rowKind } from './candidates';
+import SortSelect from '@/v2/components/input/SortSelect';
+import { useListSort } from '@/v2/hooks/useListSort';
+import { arrange, isPair, resultOf, rowKind, SORTS } from './candidates';
 import MatchCell from './MatchCell';
 import Party from './Party';
 import { CARD, CHIP, CONTENT, PLAIN, toneFor } from './styles';
@@ -26,25 +28,39 @@ const ReviewTable: React.FC<Props> = ({ kind, rows, total, page, perPage, search
 
   const pages = Math.max(1, Math.ceil(total / perPage));
   const isPerson = kind === 'user';
-  const ordered = arrange(rows);
+  const { sorted, orderBy, setOrderBy, reversed, setReversed } = useListSort(arrange(rows), SORTS, 'status');
+  // While a record is held, everything it cannot join is taken off screen, so the
+  // remaining cards are exactly the places it can go.
+  const visible = matching.picked ? sorted.filter((row) => matching.isPicked(row) || matching.isTarget(row)) : sorted;
 
   return (
     <div className="flex flex-col gap-3">
-      <label
-        // The ring is on the label because the input drops its own outline.
-        className={`flex items-center gap-2 self-start ${CARD} ${PLAIN} ${CONTENT} focus-within:ring-2 focus-within:ring-current/40`}
-      >
-        <Icon type="search" size="1.1em" className="shrink-0 opacity-70" />
-        <span className="sr-only">{t('v2.ui.idpSync.search')}</span>
-        <input
-          type="search"
-          value={search}
-          onChange={(event) => onSearch(event.target.value)}
-          placeholder={t('v2.ui.idpSync.search')}
-          className="bg-transparent text-sm outline-none placeholder:opacity-70"
-          data-testid={`idp-review-search-${kind}`}
+      <div className="flex flex-wrap items-center gap-2">
+        <label
+          // The ring is on the label because the input drops its own outline.
+          className={`flex items-center gap-2 self-start ${CARD} ${PLAIN} ${CONTENT} focus-within:ring-2 focus-within:ring-current/40`}
+        >
+          <Icon type="search" size="1.1em" className="shrink-0 opacity-70" />
+          <span className="sr-only">{t('v2.ui.idpSync.search')}</span>
+          <input
+            type="search"
+            value={search}
+            onChange={(event) => onSearch(event.target.value)}
+            placeholder={t('v2.ui.idpSync.search')}
+            className="bg-transparent text-sm outline-none placeholder:opacity-70"
+            data-testid={`idp-review-search-${kind}`}
+          />
+        </label>
+
+        <SortSelect
+          options={Object.keys(SORTS).map((key) => ({ value: key, label: t(`v2.ui.sort.${key}`) }))}
+          value={orderBy}
+          onChange={setOrderBy}
+          reversed={reversed}
+          onReverse={() => setReversed(!reversed)}
+          data-testid={`idp-review-sort-${kind}`}
         />
-      </label>
+      </div>
 
       {/* border-spacing insets the outer edge too; the negative margin takes it back. */}
       <div className="-mx-1 sm:-mx-2">
@@ -68,7 +84,7 @@ const ReviewTable: React.FC<Props> = ({ kind, rows, total, page, perPage, search
             </tr>
           </thead>
           <tbody>
-            {ordered.map((row) => {
+            {visible.map((row) => {
               const tone = toneFor(rowKind(row), isPerson);
 
               return (
