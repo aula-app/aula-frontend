@@ -1,3 +1,8 @@
+## 1.10.3
+
+- **Bug fixes**
+  - SSO-managed schools (EDUPLACES): add, delete and CSV import are now blocked only when SSO is mandatory, and remain available when SSO is merely offered
+
 ## 1.10.2
 
 - **Bug fixes**
