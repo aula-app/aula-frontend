@@ -2,8 +2,8 @@ import { MergeCandidate } from '@/services/idpMigration';
 import { useEffect, useState } from 'react';
 import { isAulaOnly, isProviderOnly } from './candidates';
 
-/** Marks the cards that take part in matching. Pairs with the attribute in MatchCell. */
-const MATCH_AREA = '[data-match-area]';
+/** Clicking inside anything carrying this attribute does not drop the pick. */
+const KEEPS_PICK = '[data-keeps-pick]';
 
 /**
  * Picking a record up and dropping it on the opposite side's free half.
@@ -19,7 +19,7 @@ export const useMatching = (onAssign: (row: MergeCandidate, localId: number | nu
     if (!picked) return;
 
     const onPointerDown = (event: PointerEvent) => {
-      if (!(event.target as HTMLElement).closest(MATCH_AREA)) setPicked(null);
+      if (!(event.target as HTMLElement).closest(KEEPS_PICK)) setPicked(null);
     };
 
     const onKeyDown = (event: KeyboardEvent) => {

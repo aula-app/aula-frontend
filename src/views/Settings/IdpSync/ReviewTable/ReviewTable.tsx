@@ -30,12 +30,16 @@ const ReviewTable: React.FC<Props> = ({ kind, rows, total, page, perPage, search
   const isPerson = kind === 'user';
   const { sorted, orderBy, setOrderBy, reversed, setReversed } = useListSort(arrange(rows), SORTS, 'status');
   // While a record is held, everything it cannot join is taken off screen, so the
-  // remaining cards are exactly the places it can go.
-  const visible = matching.picked ? sorted.filter((row) => matching.isPicked(row) || matching.isTarget(row)) : sorted;
+  // remaining cards are exactly the places it can go. The held record is drawn
+  // from the pick itself rather than from `rows`, so searching and sorting can
+  // narrow the targets beneath it without it leaving the screen.
+  const visible = matching.picked
+    ? [matching.picked, ...sorted.filter((row) => !matching.isPicked(row) && matching.isTarget(row))]
+    : sorted;
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2" data-keeps-pick>
         <label
           // The ring is on the label because the input drops its own outline.
           className={`flex items-center gap-2 self-start ${CARD} ${PLAIN} ${CONTENT} focus-within:ring-2 focus-within:ring-current/40`}

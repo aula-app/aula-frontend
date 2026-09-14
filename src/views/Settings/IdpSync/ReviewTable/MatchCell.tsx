@@ -141,7 +141,7 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector }: Props) =>
           }}
           onDragEnd={() => setOver(null)}
           onClick={() => (droppable ? place(row) : pick(row))}
-          data-match-area
+          data-keeps-pick
           data-testid={`idp-review-${droppable ? 'place' : 'pick'}-${row.id}`}
         >
           {source && <Icon type="drag" size="1.1em" className="shrink-0 opacity-40" />}
