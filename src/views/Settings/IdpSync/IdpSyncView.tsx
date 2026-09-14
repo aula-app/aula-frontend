@@ -180,7 +180,7 @@ const IdpSyncView: React.FC = () => {
   return (
     <div className="flex flex-col h-full overflow-y-auto p-2 sm:p-4 gap-4" data-testid="idp-sync-view">
       <h1 className="flex items-center gap-2">
-        <Icon type="settings" size=".9em" />
+        <Icon type="cloudSync" />
         {t('v2.ui.idpSync.title')}
       </h1>
 

@@ -31,7 +31,7 @@ import {
   HiOutlineXMark,
 } from 'react-icons/hi2';
 import { IoBugOutline } from 'react-icons/io5';
-import { MdDragIndicator } from 'react-icons/md';
+import { MdCloudSync, MdDragIndicator } from 'react-icons/md';
 
 /**
  * Icon component for the application
@@ -48,6 +48,7 @@ export const ICONS = {
   bug: IoBugOutline,
   check: HiOutlineCheckCircle,
   close: HiOutlineXMark,
+  cloudSync: MdCloudSync,
   day: HiOutlineSun,
   drag: MdDragIndicator,
   equals: HiOutlineEquals,

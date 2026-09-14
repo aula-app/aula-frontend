@@ -1,3 +1,4 @@
+import Icon from '@/components/new/Icon/Icon';
 import { MigrationStatus } from '@/services/idpMigration';
 import Alert, { AlertSeverity } from '@/v2/components/ui/Alert';
 import Stepper from '@/v2/components/ui/Stepper';
@@ -99,30 +100,35 @@ const IdpSyncEntry: React.FC = () => {
   const needsAction = status === 'flagged' || status === 'connected' || status === 'reviewing';
 
   return (
-    <Alert
-      severity={step.severity}
-      eyebrow={needsAction ? t('v2.ui.idpSync.actionNeeded') : undefined}
-      title={t(`v2.ui.idpSync.states.${status}.title`)}
-      action={step.action}
-      className="mb-2"
-      header={
-        <Stepper
-          steps={STEPS.map((step) => t(`v2.ui.idpSync.stepper.${step}`))}
-          current={STEP_INDEX[status]}
-          label={t('v2.ui.idpSync.stepper.label')}
-          data-testid="idp-sync-stepper"
-        />
-      }
-      data-testid="config-idp-sync-entry"
-    >
-      <span data-testid="config-idp-sync-status">
-        {t(`v2.ui.idpSync.states.${status}.body`, {
-          linked: progress?.linked ?? 0,
-          remaining: progress?.not_yet_linked ?? 0,
-        })}
-      </span>
-      {!!failed && <p className="mt-2 font-bold">{t(`v2.ui.idpSync.errors.${failed}`)}</p>}
-    </Alert>
+    <section className="mb-4 gap-2 flex flex-col">
+      <h2 className="flex items-center gap-2 text-2xl!">
+        <Icon type="cloudSync" />
+        {t('v2.ui.idpSync.title')}
+      </h2>
+      <Alert
+        severity={step.severity}
+        eyebrow={needsAction ? t('v2.ui.idpSync.actionNeeded') : undefined}
+        title={t(`v2.ui.idpSync.states.${status}.title`)}
+        action={step.action}
+        header={
+          <Stepper
+            steps={STEPS.map((step) => t(`v2.ui.idpSync.stepper.${step}`))}
+            current={STEP_INDEX[status]}
+            label={t('v2.ui.idpSync.stepper.label')}
+            data-testid="idp-sync-stepper"
+          />
+        }
+        data-testid="config-idp-sync-entry"
+      >
+        <span data-testid="config-idp-sync-status">
+          {t(`v2.ui.idpSync.states.${status}.body`, {
+            linked: progress?.linked ?? 0,
+            remaining: progress?.not_yet_linked ?? 0,
+          })}
+        </span>
+        {!!failed && <p className="mt-2 font-bold">{t(`v2.ui.idpSync.errors.${failed}`)}</p>}
+      </Alert>
+    </section>
   );
 };
 
