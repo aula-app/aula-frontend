@@ -24,6 +24,8 @@ export interface MergeCandidate {
   /** Null for someone who exists on the provider alone. */
   local_id: number | null;
   local_name: string | null;
+  /** Users only, and aula only: a room has one name, and the provider has no display name for anybody. */
+  local_displayname?: string | null;
   outcome: CandidateOutcome;
   decision: 'merge' | 'create' | null;
 }

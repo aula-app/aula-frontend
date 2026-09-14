@@ -11,11 +11,21 @@
 /* ========== LIGHT MODE (default) ========== */
 :root {
   --color-primary: hsl(134, 72%, 67%);
-  --color-secondary: hsl(0, 0%, 59%);
-  --color-error: hsl(0, 84%, 76%);
-  --color-warning: hsl(45, 100%, 79%);
-  --color-info: hsl(204, 82%, 86%);
-  --color-success: hsl(134, 72%, 67%);
+  --color-secondary: hsl(215, 8%, 72%);
+  --color-shade: hsl(210, 15%, 12%);
+  --color-primary-fg: hsl(210, 15%, 12%);
+  /* Semantic states are a filled pair: -color is the surface, -fg the text on it. */
+  --color-error: hsl(0, 100%, 94%);
+  --color-error-fg: hsl(0, 72%, 35%);
+
+  --color-warning: hsl(45, 100%, 90%);
+  --color-warning-fg: hsl(35, 85%, 30%);
+
+  --color-info: hsl(204, 82%, 90%);
+  --color-info-fg: hsl(204, 70%, 30%);
+
+  --color-success: hsl(134, 72%, 88%);
+  --color-success-fg: hsl(134, 55%, 28%);
 
   --color-shadow: rgba(0, 0, 0, 0.05);
 
@@ -96,9 +106,13 @@
   --color-neutral: hsl(45, 100%, 79%);
   --color-requests: hsl(0, 0%, 90%);
 
+  /* Neutral surface + secondary text, from the v2 palette. */
+  --color-surface: hsl(215, 10%, 95%);
+  --color-muted: hsl(215, 10%, 30%);
+
   --color-text-primary: hsl(236.17, 42%, 22%);
-  --color-background: #FFFFFF;
-  --color-paper: #FFFFFF;
+  --color-background: #ffffff;
+  --color-paper: #ffffff;
   --color-input-border: rgba(0, 0, 0, 0.45); /* 3.35:1 on white ✅ WCAG 1.4.11 */
   --color-input-border-hover: rgba(0, 0, 0, 0.87);
 }
@@ -106,11 +120,21 @@
 /* ========== DARK MODE (activated by .dark class on html) ========== */
 .dark {
   --color-primary: hsl(134, 72%, 31%);
-  --color-secondary: hsl(0, 0%, 36%);
-  --color-error: hsl(0, 84%, 50%);
-  --color-warning: hsl(45, 100%, 29%);
-  --color-info: hsl(204, 82%, 41%);
-  --color-success: hsl(134, 72%, 31%);
+  --color-secondary: hsl(215, 12%, 65%);
+  --color-shade: hsl(215, 25%, 8%);
+  --color-primary-fg: hsl(0, 0%, 100%);
+  /* Surfaces deepened so the light -fg text meets WCAG AA (~5:1) as a filled pair */
+  --color-error: hsl(0, 45%, 26%);
+  --color-error-fg: hsl(0, 80%, 75%);
+
+  --color-warning: hsl(40, 55%, 24%);
+  --color-warning-fg: hsl(35, 85%, 70%);
+
+  --color-info: hsl(204, 45%, 26%);
+  --color-info-fg: hsl(204, 75%, 72%);
+
+  --color-success: hsl(134, 32%, 24%);
+  --color-success-fg: hsl(134, 60%, 65%);
 
   --color-shadow: rgba(255, 255, 255, 0.05);
 
@@ -191,21 +215,36 @@
   --color-neutral: hsl(45, 100%, 29%);
   --color-requests: hsl(0, 0%, 36%);
 
+  --color-surface: hsl(215, 25%, 10%);
+  --color-muted: hsl(215, 15%, 75%);
+
   --color-text-primary: hsl(0, 0%, 100%);
   --color-background: hsl(200, 19%, 20%);
   --color-paper: hsl(200, 19%, 25%);
-  --color-input-border: rgba(255, 255, 255, 0.50); /* 4.36:1 on dark bg ✅ WCAG 1.4.11 */
+  --color-input-border: rgba(255, 255, 255, 0.5); /* 4.36:1 on dark bg ✅ WCAG 1.4.11 */
   --color-input-border-hover: rgba(255, 255, 255, 0.87);
 }
 
 /* ========== TAILWIND THEME (references the CSS variables above) ========== */
+/* Button composes its colour classes at runtime, so they are named here too. */
+@source inline("bg-primary text-primary-fg border-primary-fg outline-primary-fg bg-error text-error-fg border-error-fg outline-error-fg outline-current");
+
 @theme inline {
+  /* Smaller than Tailwind's text-xs, for dense chrome like the stepper. */
+  --text-2xs: 0.6875rem;
+
   --color-primary: var(--color-primary);
   --color-secondary: var(--color-secondary);
+  --color-shade: var(--color-shade);
+  --color-primary-fg: var(--color-primary-fg);
   --color-error: var(--color-error);
+  --color-error-fg: var(--color-error-fg);
   --color-warning: var(--color-warning);
+  --color-warning-fg: var(--color-warning-fg);
   --color-info: var(--color-info);
+  --color-info-fg: var(--color-info-fg);
   --color-success: var(--color-success);
+  --color-success-fg: var(--color-success-fg);
 
   --color-shadow: var(--color-shadow);
 
@@ -285,6 +324,9 @@
   --color-messages: var(--color-messages);
   --color-neutral: var(--color-neutral);
   --color-requests: var(--color-requests);
+
+  --color-surface: var(--color-surface);
+  --color-muted: var(--color-muted);
 
   --color-text-primary: var(--color-text-primary);
   --color-background: var(--color-background);
