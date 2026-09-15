@@ -31,7 +31,7 @@ export const loginUser = async (
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error('Unknown error occurred');
+    throw new Error('Unknown error occurred', { cause: error });
   }
 };
 
@@ -59,7 +59,7 @@ export const checkPasswordKey = async (secret: string) => {
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error('Unknown error occurred');
+    throw new Error('Unknown error occurred', { cause: error });
   }
 };
 
@@ -91,7 +91,7 @@ export const setPassword = async (password: string, secret: string) => {
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error('Unknown error occurred');
+    throw new Error('Unknown error occurred', { cause: error });
   }
 };
 
@@ -125,6 +125,6 @@ export const recoverPassword = async (
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error('Unknown error occurred');
+    throw new Error('Unknown error occurred', { cause: error });
   }
 };
