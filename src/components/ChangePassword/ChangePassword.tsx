@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -248,27 +248,12 @@ export const usePasswordRequirements = (
   passwordComplexity: PasswordComplexity,
   t: (key: string, options?: any) => string
 ) => {
-  const [passwordRequirements, setPasswordRequirements] = useState({
-    length: false,
-    uppercase: false,
-    number: false,
-    symbol: false,
-  });
-
-  useEffect(() => {
-    setPasswordRequirements({
-      length: password.length >= passwordComplexity.minLength,
-      uppercase: passwordComplexity.requireUppercase ? /[A-Z]/.test(password) : true,
-      number: passwordComplexity.requireNumber ? /[0-9]/.test(password) : true,
-      symbol: passwordComplexity.requireSymbol ? /[^A-Za-z0-9]/.test(password) : true,
-    });
-  }, [
-    password,
-    passwordComplexity.minLength,
-    passwordComplexity.requireUppercase,
-    passwordComplexity.requireNumber,
-    passwordComplexity.requireSymbol,
-  ]);
+  const passwordRequirements = {
+    length: password.length >= passwordComplexity.minLength,
+    uppercase: passwordComplexity.requireUppercase ? /[A-Z]/.test(password) : true,
+    number: passwordComplexity.requireNumber ? /[0-9]/.test(password) : true,
+    symbol: passwordComplexity.requireSymbol ? /[^A-Za-z0-9]/.test(password) : true,
+  };
 
   const renderPasswordRequirements = () => {
     const requirements = [
