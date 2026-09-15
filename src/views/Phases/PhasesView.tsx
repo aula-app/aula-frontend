@@ -107,8 +107,8 @@ const PhasesView = () => {
   // Effect to fetch data and set breadcrumb
   useEffect(() => {
     dispatch({
-      action: 'SET_BREADCRUMB',
-      breadcrumb: [[t('ui.navigation.dashboard')]],
+      type: 'SET_BREADCRUMB',
+      breadcrumb: [[t('ui.navigation.dashboard'), '']],
     });
     fetchData();
   }, [phase, dispatch, fetchData, t]);

@@ -32,7 +32,7 @@ const UserMessagesView = () => {
 
   useEffect(() => {
     fetchMessages();
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.messages'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.messages'), '']] });
   }, []);
 
   return (

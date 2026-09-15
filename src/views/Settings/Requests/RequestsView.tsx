@@ -34,7 +34,7 @@ const RequestsView = () => {
   }, [JSON.stringify(filter), status]);
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.requests'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.requests'), '']] });
     fetchRequests();
   }, [JSON.stringify(filter), status]);
 

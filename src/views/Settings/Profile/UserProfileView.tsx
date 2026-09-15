@@ -36,7 +36,7 @@ const UserView = () => {
   }, []);
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.profile'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.profile'), '']] });
     fetchUser();
   }, []);
 
