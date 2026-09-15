@@ -13,7 +13,6 @@ import {
   ListItemButton,
   ListItemText,
   Skeleton,
-  Typography,
 } from '@mui/material';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';

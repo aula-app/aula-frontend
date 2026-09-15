@@ -21,7 +21,6 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import AppIconButton from '../AppIconButton';
-import AppIcon from '../AppIcon';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store';
 

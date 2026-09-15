@@ -12,9 +12,8 @@ import {
   ListItemButton,
   ListItemText,
   Skeleton,
-  Typography,
 } from '@mui/material';
-import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
