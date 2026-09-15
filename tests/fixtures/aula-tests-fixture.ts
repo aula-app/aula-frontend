@@ -36,7 +36,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
    * Prefer `parallelIndex` over `workerIndex` because it's always in the stable range of
    * 0..${workers - 1}, while `workerIndex` is always incremented, beyond max workers count
    */
-  dbInstanceCode: [async ({ }, use, { parallelIndex }) => {
+  dbInstanceCode: [async (_deps, use, { parallelIndex }) => {
     const idx = parallelIndex ?? '0';
     const name = `db00${idx}`;
     await use(name);
