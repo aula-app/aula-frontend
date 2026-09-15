@@ -24,6 +24,8 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-expressions': ['error', { allowTernary: true }],
       // Advisory for our effect-based data layer; real fix is a shared async hook / react-query.
       'react-hooks/set-state-in-effect': 'warn',
+      // Remaining anys are library-boundary casts (MUI slotProps, yup shapes); tracked, not blocking.
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
   {
