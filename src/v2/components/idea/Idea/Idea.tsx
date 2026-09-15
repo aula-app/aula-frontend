@@ -40,7 +40,7 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
   // In the approval phase the card recolours by status (green approved, red
   // rejected, grey undecided) and gains a status badge on top.
   const isApprovalPhase = phase_id === '20';
-  const approvalColor = idea.approved === 1 ? 'bg-success' : idea.approved === -1 ? 'bg-error' : 'bg-muted';
+  const approvalColor = idea.approved === 1 ? 'bg-success' : idea.approved === -1 ? 'bg-error' : `bg-${phaseColor}`;
   const bubbleColor = isApprovalPhase ? approvalColor : `bg-${phaseColor}`;
   const hasTopTab = isApprovalPhase || categories.length > 0;
 
@@ -50,10 +50,15 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
       data-testid={`idea-${idea.title}`}
       className={twMerge('flex flex-col gap-1', className)}
     >
-      <div className="relative flex flex-col-reverse gap-1 flex-1">
+      <div className="relative flex flex-col gap-1 flex-1">
         {hasTopTab && (
-          <div className="flex flex-wrap items-center gap-1">
-            {isApprovalPhase && <ApprovalStatus approved={idea.approved} />}
+          <div className="flex flex-wrap items-center justify-end gap-1">
+            {isApprovalPhase && (
+              <ApprovalStatus
+                approved={idea.approved}
+                className={twMerge(categories.length > 0 && 'rounded-tl-none', bubbleColor)}
+              />
+            )}
             <CategoryList categories={categories} />
           </div>
         )}
@@ -61,7 +66,7 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
           className={twMerge(
             'relative flex flex-col-reverse ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
             bubbleColor,
-            hasTopTab ? 'rounded-tl-none' : ''
+            hasTopTab ? 'rounded-tr-none' : ''
           )}
         >
           <Link to={ideaPath}>

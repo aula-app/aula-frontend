@@ -21,10 +21,15 @@ const ApprovalStatus = ({ approved, className }: ApprovalStatusProps) => {
 
   return (
     <Chip
-      condensed
       aria-label={t(label)}
-      className={twMerge('gap-1 font-medium', statusClassName, className)}
-      startIcon={<Icon type={icon} className="text-lg" aria-hidden="true" />}
+      className={twMerge('gap-1 font-medium rounded-b-none', statusClassName, className)}
+      startIcon={
+        <Icon
+          type={icon}
+          className="text-3xl absolute top-0 left-0 transform -translate-x-1/3 -translate-y-1/3"
+          aria-hidden="true"
+        />
+      }
     >
       {t(label)}
     </Chip>
