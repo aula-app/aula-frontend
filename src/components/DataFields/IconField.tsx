@@ -20,10 +20,8 @@ const IconField: React.FC<Props> = ({ name, control, ...restOfProps }) => {
   const icons = Object.keys(CAT_ICONS) as Array<keyof typeof CAT_ICONS>;
   return (
     <Controller
-      // @ts-ignore
       name={name}
       control={control}
-      // @ts-ignore
       defaultValue={control._defaultValues[name]}
       render={({ field, fieldState }) => (
         <FormControl fullWidth data-testid="icon-field-container">
