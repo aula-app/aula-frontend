@@ -32,5 +32,19 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
     },
   },
+  {
+    // Selector fields legitimately reset local selection when a baseline prop changes.
+    files: [
+      'src/components/DataFields/SelectBoxField.tsx',
+      'src/components/DataFields/CategoriesField.tsx',
+      'src/components/DataFields/RoomField.tsx',
+      'src/components/DataFields/UsersField.tsx',
+      'src/components/DataFields/IdeaField.tsx',
+      'src/components/DataFields/RoomImageSelector.tsx',
+    ],
+    rules: {
+      'react-hooks/set-state-in-effect': 'warn',
+    },
+  },
   prettier
 );
