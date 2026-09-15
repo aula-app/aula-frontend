@@ -33,7 +33,7 @@ interface Props extends ButtonProps {
   onUpdate: (updates: { room: string; role: RoleTypes | 0 }[]) => void;
 }
 
-const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled = false, onUpdate, ...restOfProps }) => {
+const RoomRolesField: React.FC<Props> = ({ user, disabled = false, onUpdate, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
