@@ -1,4 +1,3 @@
-import { useDateFormatters } from '@/hooks';
 import { addCommand } from '@/services/config';
 import { getGroups } from '@/services/groups';
 import { getUsers } from '@/services/users';
@@ -24,7 +23,6 @@ interface Props {
 
 const TimeCommandInput = ({ onReload }: Props) => {
   const { t } = useTranslation();
-  const { formatDateTime } = useDateFormatters();
 
   // must not set commands in the past; use (client's) now / today
   // (actions are scheduled midnight; an action scheduled for "today's midnight",
