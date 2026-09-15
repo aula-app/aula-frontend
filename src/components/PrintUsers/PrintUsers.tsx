@@ -23,7 +23,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [users, setUsers] = useState<UserType[]>([]);
   const [onlyTempPass, setOnlyTempPass] = useState<boolean>(true);
   const [roomId, setRoomId] = useState<string>('all');

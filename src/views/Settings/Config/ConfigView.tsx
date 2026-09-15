@@ -21,7 +21,7 @@ import SystemSettings from './SystemSettings';
  */
 const ConfigView = () => {
   const { t } = useTranslation();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const [settings, setSettings] = useState<InstanceResponse>();
   const [expanded, setExpanded] = useState<string>();
 
