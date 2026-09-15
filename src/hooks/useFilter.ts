@@ -234,7 +234,7 @@ export function createTextFilter<T>(searchFields: (keyof T)[]): FilterFunction<T
 /**
  * Creates a status-based filter for items with status field
  */
-export function createStatusFilter<T extends { status: any }>(): FilterFunction<T> {
+export function createStatusFilter<T extends { status: string | number }>(): FilterFunction<T> {
   return (items: T[], statusValue: string) => {
     if (!statusValue) return items;
     return items.filter((item) => item.status.toString() === statusValue);

@@ -121,7 +121,7 @@ const PopupMessages = () => {
     </Alert>
   ));
 
-  const addError = (e: CustomEvent<any>) => {
+  const addError = (e: CustomEvent<string>) => {
     dispatch({ type: 'ADD_POPUP', message: { message: t(e.detail), type: 'error' } });
   };
 
