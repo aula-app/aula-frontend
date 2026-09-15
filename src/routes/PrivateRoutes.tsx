@@ -32,6 +32,7 @@ import WelcomeView from '@/views/Welcome';
 import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import RestrictedRoutes from './RestrictedRoutes';
+import Box from '@/v2/views/private/Box';
 
 const PrivateRoutes = () => {
   const [, dispatch] = useAppStore();
