@@ -8,6 +8,7 @@ import ReportButton from '@/v2/components/button/ReportButton';
 import ShareButton from '@/v2/components/button/ShareButton';
 import Icon from '@/v2/components/ui/Icon/Icon';
 import Markdown from '@/v2/components/ui/Markdown';
+import ProgressBar from '@/v2/components/ui/ProgressBar';
 import MoreOptions from '@/v2/components/ui/MoreOptions';
 import Link from '@/v2/components/navigation/Link';
 import { BoxForm } from '@/v2/forms';
@@ -76,7 +77,12 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
                   })
                 }
                 renderForm={({ onSubmit, onCancel }) => (
-                  <BoxForm defaultValues={box} contextRoomId={box.room_hash_id} onSubmit={onSubmit} onCancel={onCancel} />
+                  <BoxForm
+                    defaultValues={box}
+                    contextRoomId={box.room_hash_id}
+                    onSubmit={onSubmit}
+                    onCancel={onCancel}
+                  />
                 )}
                 onChanged={onChanged}
                 onOpen={close}
@@ -107,19 +113,17 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
             <Markdown className="prose-sm text-muted line-clamp-3">{box.description_public}</Markdown>
           )}
         </div>
-                    {showCountdown && (
-        <footer className={`relative flex items-center gap-1 overflow-hidden rounded-b-2xl bg-${phaseColor} px-2 py-1 text-sm font-medium`}>
-              <div
-                className={`absolute inset-y-0 left-0 bg-${phaseColor}-active`}
-                style={{ width: `${fillPercent}%` }}
-                aria-hidden="true"
-              />
-              <Icon type="clock" size="1rem" aria-hidden="true" className="relative" />
-              <span className="relative">
-                {remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
-              </span>
-            </footer>
-          )}
+        {showCountdown && (
+          <ProgressBar
+            value={fillPercent}
+            color={phaseColor}
+            label={remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
+            className="rounded-b-2xl"
+          >
+            <Icon type="clock" size="1rem" />
+            {remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
+          </ProgressBar>
+        )}
       </Link>
     </div>
   );

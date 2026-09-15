@@ -6,7 +6,8 @@ import DeleteButton from '@/v2/components/button/DeleteButton';
 import EditButton from '@/v2/components/button/EditButton';
 import ReportButton from '@/v2/components/button/ReportButton';
 import ShareButton from '@/v2/components/button/ShareButton';
-import PhaseStatus, { getPhaseColors, getPhaseStatus } from '@/v2/components/idea/PhaseStatus';
+import PhaseStatus, { getPhaseColor, getPhaseColors, getPhaseStatus } from '@/v2/components/idea/PhaseStatus';
+import QuorumBar from '@/v2/components/idea/QuorumBar';
 import CategoryList, { Category } from '@/v2/components/idea/CategoryList';
 import LikeStat from '@/v2/components/idea/LikeStat';
 import { IdeaForm } from '@/v2/forms';
@@ -24,9 +25,7 @@ import Link from '../../navigation/Link';
 interface IdeaProps {
   idea: IdeaType;
   categories?: Category[];
-  /** The current user's vote in the voting phase. Absent reads as waiting. */
   vote?: Vote | null;
-  /** Percentage of eligible users that must vote, used by the results status. */
   quorum?: number;
   className?: string;
   onChanged?: () => void;
@@ -40,7 +39,12 @@ const Idea = ({ idea, categories = [], vote, quorum, className, onChanged }: Ide
   const phase_id = phase || '0';
   const ideaPath = `/room/${idea.room_hash_id}/phase/${phase_id}/idea/${idea.hash_id}`;
 
-  // From the approval phase on the card recolours by its status and gains a badge on top.
+  const phaseNumber = Number(phase_id);
+  const isVoting = phaseNumber >= 30;
+  const canLike = phaseNumber < 20;
+  // A rejected idea never entered the vote, so it has no turnout to draw.
+  const hasQuorumBar = isVoting && idea.approved !== -1;
+
   const status = getPhaseStatus({ idea, phase: phase_id, vote, quorum });
   const bubbleColor = status?.colors ?? getPhaseColors(phase_id);
   const hasTopTab = !!status || categories.length > 0;
@@ -62,6 +66,7 @@ const Idea = ({ idea, categories = [], vote, quorum, className, onChanged }: Ide
           className={twMerge(
             'relative flex flex-col-reverse ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
             bubbleColor,
+            hasQuorumBar ? 'rounded-br-none' : '',
             hasTopTab ? 'rounded-tr-none' : ''
           )}
         >
@@ -121,6 +126,16 @@ const Idea = ({ idea, categories = [], vote, quorum, className, onChanged }: Ide
         </div>
       </div>
 
+      {hasQuorumBar && (
+        <QuorumBar
+          votes={idea.number_of_votes}
+          users={idea.number_of_users}
+          quorum={quorum}
+          color={getPhaseColor(phase_id)}
+          className="ml-4 rounded-br-2xl"
+        />
+      )}
+
       <div className="flex justify-between items-center gap-6 mr-1">
         <UserBar name={idea.displayname} date={idea.created} />
 
@@ -133,7 +148,7 @@ const Idea = ({ idea, categories = [], vote, quorum, className, onChanged }: Ide
             })}
             to={ideaPath}
           />
-          <LikeStat idea={idea} data-testid={TEST_IDS.LIKE_BUTTON} />
+          {!isVoting && <LikeStat idea={idea} readOnly={!canLike} data-testid={TEST_IDS.LIKE_BUTTON} />}
         </div>
       </div>
     </article>

@@ -99,7 +99,9 @@
           "vote": "{{count}} Stimme",
           "votes": "{{count}} Stimmen",
           "comment": "{{count}} Kommentar",
-          "comments": "{{count}} Kommentare"
+          "comments": "{{count}} Kommentare",
+          "quorum": "Quorum bei {{percent}} %",
+          "turnout": "{{votes}} von {{total}} Personen haben abgestimmt"
         },
         "status": {
           "approved": "Genehmigt",
