@@ -10,6 +10,7 @@ import PhaseStatus, { getPhaseColor, getPhaseColors, getPhaseStatus } from '@/v2
 import QuorumBar from '@/v2/components/idea/QuorumBar';
 import CategoryList, { Category } from '@/v2/components/idea/CategoryList';
 import LikeStat from '@/v2/components/idea/LikeStat';
+import { useIdeaLike } from '@/v2/components/idea/LikeStat/useIdeaLike';
 import { IdeaForm } from '@/v2/forms';
 import Stat from '@/v2/components/idea/Stat';
 import UserBar from '@/v2/components/idea/UserBar';
@@ -27,11 +28,13 @@ interface IdeaProps {
   categories?: Category[];
   vote?: Vote | null;
   quorum?: number;
+  /** Room members, the quorum denominator. Falls back to the idea's own count where the endpoint sends one. */
+  users?: number;
   className?: string;
   onChanged?: () => void;
 }
 
-const Idea = ({ idea, categories = [], vote, quorum, className, onChanged }: IdeaProps) => {
+const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onChanged }: IdeaProps) => {
   const { t } = useTranslation();
   const { phase } = useParams<{ phase: `${RoomPhases}` }>();
 
@@ -42,10 +45,12 @@ const Idea = ({ idea, categories = [], vote, quorum, className, onChanged }: Ide
   const phaseNumber = Number(phase_id);
   const isVoting = phaseNumber >= 30;
   const canLike = phaseNumber < 20;
-  // A rejected idea never entered the vote, so it has no turnout to draw.
-  const hasQuorumBar = isVoting && idea.approved !== -1;
+  const hasQuorumBar = idea.approved !== -1 && (isVoting || quorum > 0);
 
-  const status = getPhaseStatus({ idea, phase: phase_id, vote, quorum });
+  const participants = Number(users) || Number(idea.number_of_users) || 0;
+
+  const like = useIdeaLike(idea);
+  const status = getPhaseStatus({ idea, phase: phase_id, vote, quorum, users: participants });
   const bubbleColor = status?.colors ?? getPhaseColors(phase_id);
   const hasTopTab = !!status || categories.length > 0;
 
@@ -128,8 +133,9 @@ const Idea = ({ idea, categories = [], vote, quorum, className, onChanged }: Ide
 
       {hasQuorumBar && (
         <QuorumBar
-          votes={idea.number_of_votes}
-          users={idea.number_of_users}
+          metric={isVoting ? 'votes' : 'likes'}
+          count={isVoting ? idea.number_of_votes : like.count}
+          users={participants}
           quorum={quorum}
           color={getPhaseColor(phase_id)}
           className="ml-4 rounded-br-2xl"
@@ -148,7 +154,7 @@ const Idea = ({ idea, categories = [], vote, quorum, className, onChanged }: Ide
             })}
             to={ideaPath}
           />
-          {!isVoting && <LikeStat idea={idea} readOnly={!canLike} data-testid={TEST_IDS.LIKE_BUTTON} />}
+          {!isVoting && <LikeStat like={like} readOnly={!canLike} data-testid={TEST_IDS.LIKE_BUTTON} />}
         </div>
       </div>
     </article>

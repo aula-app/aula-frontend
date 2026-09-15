@@ -20,6 +20,7 @@ import { useIdeaVotes } from '@/v2/hooks/useIdeaVotes';
 import { ListFilterConfig, useListFilter } from '@/v2/hooks/useListFilter';
 import { useModal } from '@/v2/hooks/useModal';
 import { useQuorum } from '@/v2/hooks/useQuorum';
+import { useRoomUsers } from '@/v2/hooks/useRoomUsers';
 import React, { useEffect, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -51,8 +52,6 @@ const Box: React.FC = () => {
     setReversed,
   } = useListFilter(ideas, ideasFilterConfig, `box-ideas-${box_id}`);
 
-  // Once voting starts, ideas rejected during approval drop out of the running and are archived
-  // in a section of their own at the end of the list.
   const boxPhase = String(box?.phase_id ?? phase ?? '0');
   const isDecided = Number(boxPhase) >= 30;
   const running = isDecided ? ideas.filter((idea) => idea.approved !== -1) : ideas;
@@ -60,10 +59,9 @@ const Box: React.FC = () => {
   const archivedIdeas = isDecided ? visibleIdeas.filter((idea) => idea.approved === -1) : [];
   const archiveId = useId();
 
-  // Each idea's badge reports the viewer's own vote, and results weigh turnout against the quorum.
-  // Both are fetched once per list rather than once per bubble.
   const votes = useIdeaVotes(running, boxPhase === '30');
   const quorum = useQuorum(boxPhase);
+  const users = useRoomUsers(room_id);
 
   // `:phase` only mirrors the box and goes stale when the box is moved. Everything downstream reads
   // the param (idea styling, the approval badge, the nested idea route), so realign it on the box.
@@ -255,7 +253,13 @@ const Box: React.FC = () => {
               <ScrollList storageKey={`box-ideas-${box_id}`}>
                 {listedIdeas.map((idea) => (
                   <li key={idea.hash_id}>
-                    <Idea idea={idea} vote={votes[idea.hash_id]} quorum={quorum} onChanged={refetchIdeas} />
+                    <Idea
+                      idea={idea}
+                      vote={votes[idea.hash_id]}
+                      quorum={quorum}
+                      users={users}
+                      onChanged={refetchIdeas}
+                    />
                   </li>
                 ))}
 
@@ -268,7 +272,7 @@ const Box: React.FC = () => {
                       <ul className="flex flex-col gap-4">
                         {archivedIdeas.map((idea) => (
                           <li key={idea.hash_id}>
-                            <Idea idea={idea} quorum={quorum} onChanged={refetchIdeas} />
+                            <Idea idea={idea} quorum={quorum} users={users} onChanged={refetchIdeas} />
                           </li>
                         ))}
                       </ul>

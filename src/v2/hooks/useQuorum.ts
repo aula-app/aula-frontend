@@ -1,10 +1,7 @@
 import { getQuorum } from '@/services/vote';
 import { useEffect, useState } from 'react';
 
-/**
- * Configured quorum as a percentage of eligible users, or 0 when none is set.
- * Phases from voting on use the vote quorum, earlier phases the wild-idea one.
- */
+/** Configured quorum as a percentage of eligible users, or 0 when none is set. */
 export const useQuorum = (phase: string | undefined): number => {
   const [quorum, setQuorum] = useState(0);
 

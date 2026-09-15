@@ -1,5 +1,6 @@
 import { IdeaType } from '@/types/Scopes';
 import { render } from '@testing-library/react';
+import { ComponentProps } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 import Idea from './Idea';
@@ -13,7 +14,7 @@ vi.mock('@/utils', async (importOriginal) => ({
 }));
 vi.mock('@/v2/components/ui/MoreOptions', () => ({ default: () => null }));
 vi.mock('@/v2/components/ui/Markdown', () => ({ default: () => null }));
-vi.mock('./../LikeStat/useIdeaLike', () => ({
+vi.mock('@/v2/components/idea/LikeStat/useIdeaLike', () => ({
   useIdeaLike: () => ({ liked: false, count: 7, toggle: () => {}, pending: false }),
 }));
 
@@ -33,14 +34,16 @@ const idea = {
   number_of_users: 10,
 } as IdeaType;
 
-const renderAt = (phase: string) =>
+const renderAt = (phase: string, props: Partial<ComponentProps<typeof Idea>> = {}) =>
   render(
     <MemoryRouter initialEntries={[`/room/r1/phase/${phase}`]}>
       <Routes>
-        <Route path="/room/:room_id/phase/:phase" element={<Idea idea={idea} />} />
+        <Route path="/room/:room_id/phase/:phase" element={<Idea idea={idea} {...props} />} />
       </Routes>
     </MemoryRouter>
   );
+
+const barOf = (container: HTMLElement) => container.querySelector('[role="progressbar"]');
 
 const likeButton = (container: HTMLElement) =>
   Array.from(container.querySelectorAll('button')).find((b) =>
@@ -68,25 +71,38 @@ describe('Idea metrics by phase', () => {
   it('draws turnout as a quorum bar in voting and results', () => {
     for (const phase of ['30', '40']) {
       const { container } = renderAt(phase);
-      const bar = container.querySelector('[role="progressbar"]');
-      expect(bar).toBeTruthy();
-      // 4 of 10 eligible voters
-      expect(bar?.getAttribute('aria-valuenow')).toBe('40');
+      expect(barOf(container)?.getAttribute('aria-valuenow')).toBe('40');
     }
   });
 
-  it('has no quorum bar before voting', () => {
-    expect(renderAt('20').container.querySelector('[role="progressbar"]')).toBeNull();
+  it('takes the quorum denominator from the room when the endpoint omits it', () => {
+    const { container } = renderAt('0', {
+      idea: { ...idea, number_of_users: undefined as unknown as number },
+      quorum: 40,
+      users: 10,
+    });
+    expect(barOf(container)?.getAttribute('aria-valuenow')).toBe('70');
+  });
+
+  it('measures likes against the quorum before voting opens', () => {
+    for (const phase of ['0', '10', '20']) {
+      const { container } = renderAt(phase, { quorum: 40 });
+      expect(barOf(container)?.getAttribute('aria-valuenow')).toBe('70');
+    }
+  });
+
+  it('leaves the early phases barless when no quorum is set', () => {
+    for (const phase of ['0', '10', '20']) {
+      expect(barOf(renderAt(phase).container)).toBeNull();
+    }
+  });
+
+  it('still draws voting turnout with no quorum configured', () => {
+    expect(barOf(renderAt('30').container)).toBeTruthy();
   });
 
   it('has no quorum bar on an idea that was not approved', () => {
-    const { container } = render(
-      <MemoryRouter initialEntries={['/room/r1/phase/30']}>
-        <Routes>
-          <Route path="/room/:room_id/phase/:phase" element={<Idea idea={{ ...idea, approved: -1 }} />} />
-        </Routes>
-      </MemoryRouter>
-    );
-    expect(container.querySelector('[role="progressbar"]')).toBeNull();
+    const { container } = renderAt('30', { idea: { ...idea, approved: -1 } });
+    expect(barOf(container)).toBeNull();
   });
 });

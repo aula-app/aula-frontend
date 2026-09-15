@@ -100,8 +100,8 @@
           "votes": "{{count}} Stimmen",
           "comment": "{{count}} Kommentar",
           "comments": "{{count}} Kommentare",
-          "quorum": "Quorum bei {{percent}} %",
-          "turnout": "{{votes}} von {{total}} Personen haben abgestimmt"
+          "voteTurnout": "{{num}} von {{total}} Personen haben abgestimmt",
+          "likeTurnout": "{{num}} von {{total}} Personen gefällt diese Idee"
         },
         "status": {
           "approved": "Genehmigt",

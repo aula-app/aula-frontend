@@ -14,10 +14,8 @@ const POSITIVE = 'bg-success text-success-fg';
 const NEGATIVE = 'bg-error text-error-fg';
 const NEUTRAL = 'bg-neutral text-neutral-fg';
 
-/** Palette name of a phase, defaulting to the wild-ideas one for unknown phases. */
 export const getPhaseColor = (phase: `${RoomPhases}`) => phases[phase] ?? 'wild';
 
-/** Filled pair of the phase itself — the "nothing decided yet" look. */
 export const getPhaseColors = (phase: `${RoomPhases}`) => {
   const color = getPhaseColor(phase);
   return `bg-${color}-light text-${color}-fg`;
@@ -30,10 +28,14 @@ interface PhaseStatusInput {
   vote?: Vote | null;
   /** Percentage of eligible users that must vote. 0 or undefined means no quorum is configured. */
   quorum?: number;
+  /** Room members. Falls back to the idea's own count. */
+  users?: number;
 }
 
-const reachedQuorum = ({ idea, quorum }: PhaseStatusInput) =>
-  !!quorum && idea.number_of_users > 0 && (idea.number_of_votes / idea.number_of_users) * 100 >= quorum;
+const reachedQuorum = ({ idea, quorum, users }: PhaseStatusInput) => {
+  const total = Number(users) || Number(idea.number_of_users) || 0;
+  return !!quorum && total > 0 && (Number(idea.number_of_votes) / total) * 100 >= quorum;
+};
 
 const REJECTED_LABEL = 'v2.scopes.ideas.status.rejected';
 
@@ -49,10 +51,7 @@ const VOTED: Record<Vote, PhaseStatus> = {
   [-1]: { icon: 'against', label: 'v2.scopes.ideas.status.votedAgainst', colors: NEGATIVE },
 };
 
-/**
- * Status badge an idea carries in the current phase, or null when the phase has none.
- * Approval reports the moderation decision, voting the current user's own vote, results the outcome.
- */
+/** Status badge for the current phase, or null when the phase has none. */
 export const getPhaseStatus = (input: PhaseStatusInput): PhaseStatus | null => {
   const { idea, phase, vote } = input;
   const pending = getPhaseColors(phase);
@@ -63,11 +62,9 @@ export const getPhaseStatus = (input: PhaseStatusInput): PhaseStatus | null => {
     return WAITING(pending);
   }
 
-  // Past approval a rejected idea is archived rather than judged again, so it reads muted.
   const isArchived = (phase === '30' || phase === '40') && idea.approved === -1;
   if (isArchived) return { icon: 'close', label: REJECTED_LABEL, colors: NEUTRAL };
 
-  // An idea nobody has voted on yet reads the same as one awaiting approval: undecided, in phase colour.
   if (phase === '30') return vote == null ? WAITING(pending) : VOTED[vote];
 
   if (phase === '40') {

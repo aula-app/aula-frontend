@@ -1,38 +1,53 @@
 import { PhaseType } from '@/types/SettingsTypes';
-import Icon from '@/v2/components/ui/Icon/Icon';
+import Icon, { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
 import ProgressBar from '@/v2/components/ui/ProgressBar';
 import { useTranslation } from 'react-i18next';
 
+type Metric = 'likes' | 'votes';
+
+const METRICS: Record<Metric, { icon: ICON_TYPE; label: string }> = {
+  likes: { icon: 'heart', label: 'v2.scopes.ideas.stats.likeTurnout' },
+  votes: { icon: 'voting', label: 'v2.scopes.ideas.stats.voteTurnout' },
+};
+
 interface QuorumBarProps {
-  /** Votes cast on this idea. */
-  votes: number;
-  /** Eligible voters. Renders nothing when zero — there is no share to draw. */
+  /** Participation the bar measures: likes before voting opens, votes after. */
+  metric: Metric;
+  /** Likes or votes the idea has drawn. */
+  count: number;
+  /** Eligible participants. Renders nothing when zero — there is no share to draw. */
   users: number;
-  /** Share of eligible voters required, as a percentage. 0 hides the marker. */
+  /** Share of participants required, as a percentage. 0 hides the marker. */
   quorum?: number;
   /** Phase palette the bar is drawn in. */
   color: PhaseType;
   className?: string;
 }
 
-/** Turnout on an idea drawn against the quorum it has to clear. */
-const QuorumBar = ({ votes, users, quorum = 0, color, className }: QuorumBarProps) => {
+/** Participation on an idea drawn against the quorum it has to clear. */
+const QuorumBar = ({ metric, count, users, quorum = 0, color, className }: QuorumBarProps) => {
   const { t } = useTranslation();
 
-  if (users <= 0) return null;
+  // The API sends these as strings, and omits them entirely on some idea endpoints.
+  const total = Number(users) || 0;
+  const reached = Number(count) || 0;
+
+  if (total <= 0) return null;
+
+  const { icon, label } = METRICS[metric];
 
   return (
     <ProgressBar
-      value={(votes / users) * 100}
+      value={(reached / total) * 100}
       color={color}
-      label={t('v2.scopes.ideas.stats.turnout', { votes, total: users })}
+      label={t(label, { num: reached, total })}
       marker={quorum > 0 ? quorum : undefined}
-      markerLabel={quorum > 0 ? Math.ceil((quorum / 100) * users) : undefined}
-      valueLabel={<span className="pl-5">{votes}</span>}
-      endLabel={users}
+      markerLabel={quorum > 0 ? Math.ceil((quorum / 100) * total) : undefined}
+      valueLabel={reached}
+      endLabel={total}
       className={className}
     >
-      <Icon type="voting" size="1rem" />
+      <Icon type={icon} size="1rem" />
     </ProgressBar>
   );
 };
