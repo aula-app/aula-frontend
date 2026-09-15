@@ -1,13 +1,12 @@
 import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
 import AppIconButton from '@/components/AppIconButton';
-import { PossibleFields } from '@/types/Scopes';
 import { FormControl, FormHelperText, Stack, TextField, Typography } from '@mui/material';
-import { Control, Controller } from 'react-hook-form-mui';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
-type Props = {
-  name: keyof PossibleFields;
-  control: Control<any, any>;
+type Props<T extends FieldValues = FieldValues> = {
+  name: Path<T>;
+  control: Control<T>;
   disabled?: boolean;
 };
 
@@ -15,14 +14,14 @@ type Props = {
  * Renders "SelectInput" component
  */
 
-const IconField: React.FC<Props> = ({ name, control, ...restOfProps }) => {
+const IconField = <T extends FieldValues = FieldValues>({ name, control, ...restOfProps }: Props<T>) => {
   const { t } = useTranslation();
   const icons = Object.keys(CAT_ICONS) as Array<keyof typeof CAT_ICONS>;
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={control._defaultValues[name]}
+      defaultValue={(control._defaultValues as FieldValues)[name]}
       render={({ field, fieldState }) => (
         <FormControl fullWidth data-testid="icon-field-container">
           <Typography variant="caption" pl={2} data-testid="icon-field-label">

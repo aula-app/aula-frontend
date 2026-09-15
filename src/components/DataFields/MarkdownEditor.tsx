@@ -22,12 +22,12 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Control, useController } from 'react-hook-form';
+import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-interface Props extends FormControlProps {
-  name: string;
-  control: Control<any, any>;
+interface Props<T extends FieldValues = FieldValues> extends FormControlProps {
+  name: Path<T>;
+  control: Control<T>;
   required?: boolean;
   disabled?: boolean;
   maxLength?: number;
@@ -202,14 +202,14 @@ const Editor = styled(MDXEditor)(({ theme }) => ({
   },
 }));
 
-const MarkdownEditor: React.FC<Props> = ({
+const MarkdownEditor = <T extends FieldValues = FieldValues>({
   name,
   control,
   required = false,
   disabled = false,
   maxLength,
   ...restOfProps
-}) => {
+}: Props<T>) => {
   const { t } = useTranslation();
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -335,13 +335,13 @@ const MarkdownEditor: React.FC<Props> = ({
   const { field, fieldState } = useController({ name, control });
 
   useEffect(() => {
-    const initialValue = field.value || control._defaultValues[name] || '';
+    const initialValue = field.value || (control._defaultValues as FieldValues)[name] || '';
     if (initialValue) {
       mdxEditorRef.current?.setMarkdown(initialValue);
     }
     // Update character count when field value changes
     setCharacterCount(initialValue?.length || 0);
-  }, [control._defaultValues[name], field.value]);
+  }, [(control._defaultValues as FieldValues)[name], field.value]);
 
   // Handle field changes to update character count
   const handleFieldChange = useCallback(
