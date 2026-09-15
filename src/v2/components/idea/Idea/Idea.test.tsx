@@ -101,8 +101,14 @@ describe('Idea metrics by phase', () => {
     expect(barOf(renderAt('30').container)).toBeTruthy();
   });
 
-  it('has no quorum bar on an idea that was not approved', () => {
-    const { container } = renderAt('30', { idea: { ...idea, approved: -1 } });
-    expect(barOf(container)).toBeNull();
+  it('drops the quorum bar on a rejected idea once voting starts', () => {
+    for (const phase of ['30', '40']) {
+      expect(barOf(renderAt(phase, { idea: { ...idea, approved: -1 } }).container)).toBeNull();
+    }
+  });
+
+  it('still shows a rejected idea its likes quorum during approval', () => {
+    const { container } = renderAt('20', { idea: { ...idea, approved: -1 }, quorum: 40 });
+    expect(barOf(container)?.getAttribute('aria-valuenow')).toBe('70');
   });
 });

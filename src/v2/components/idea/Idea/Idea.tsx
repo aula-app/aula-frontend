@@ -45,7 +45,8 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onCha
   const phaseNumber = Number(phase_id);
   const isVoting = phaseNumber >= 30;
   const canLike = phaseNumber < 20;
-  const hasQuorumBar = idea.approved !== -1 && (isVoting || quorum > 0);
+  const isArchived = isVoting && idea.approved === -1;
+  const hasQuorumBar = !isArchived && (isVoting || quorum > 0);
 
   const participants = Number(users) || Number(idea.number_of_users) || 0;
 
