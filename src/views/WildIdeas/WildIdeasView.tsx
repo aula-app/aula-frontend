@@ -61,7 +61,7 @@ const WildIdeas = () => {
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
       if (response.error || !response.data) return;
-      let roomName = response.data.room_name;
+      const roomName = response.data.room_name;
       return roomName;
     });
   };
@@ -77,7 +77,7 @@ const WildIdeas = () => {
     let roomName = await getRoomName(room_id);
     roomName = roomName ? roomName : 'aula';
     dispatch({
-      action: 'SET_BREADCRUMB',
+      type: 'SET_BREADCRUMB',
       breadcrumb: [
         [roomName, `/room/${room_id}/phase/0`],
         [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
@@ -105,20 +105,20 @@ const WildIdeas = () => {
 
   const saveScroll = (evt: SyntheticEvent) => {
     dispatch({
-      action: 'SAVE_SCROLL',
+      type: 'SAVE_SCROLL',
       lastScroll: (evt.target as HTMLElement).scrollTop,
       lastIdeaList: 'wild-ideas',
     });
   };
 
   useEffect(() => {
-    let ideasList = document.getElementById('wild-ideas-list');
+    const ideasList = document.getElementById('wild-ideas-list');
     if (ideasList) {
       if (appState.lastIdeaList == 'wild-ideas') {
         ideasList.scrollTop = appState.lastScroll;
       } else
         dispatch({
-          action: 'SAVE_SCROLL',
+          type: 'SAVE_SCROLL',
           lastScroll: 0,
           lastIdeaList: 'wild-ideas',
         });

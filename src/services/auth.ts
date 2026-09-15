@@ -1,8 +1,9 @@
 import { localStorageDelete, localStorageSet } from '@/utils';
 import { Dispatch } from 'react';
 import { baseRequest } from './requests';
+import { AppAction } from '@/store/AppStore';
 
-export const clearAuth = (dispatch: Dispatch<{ type: string }>) => {
+export const clearAuth = (dispatch: Dispatch<AppAction>) => {
   localStorageDelete('token');
   dispatch({ type: 'LOG_OUT' });
 };

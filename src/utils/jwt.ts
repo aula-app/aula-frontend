@@ -11,7 +11,7 @@ import { RoleTypes } from '@/types/SettingsTypes';
  *   - user_level: User's permission level
  *   - temp_pw: Optional flag indicating temporary password status
  */
-export function parseJwt(token: String): {
+export function parseJwt(token: string): {
   exp: number;
   user_id: number;
   user_hash: string;
@@ -21,13 +21,13 @@ export function parseJwt(token: String): {
 } | null {
   try {
     // Extract the payload (second) part of the JWT
-    var base64Url = token.split('.')[1];
+    const base64Url = token.split('.')[1];
 
     // Convert base64url to regular base64 by replacing characters
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
 
     // Decode base64 and convert to UTF-8 string using percent encoding
-    var jsonPayload = decodeURIComponent(
+    const jsonPayload = decodeURIComponent(
       window
         .atob(base64)
         .split('')
@@ -44,4 +44,16 @@ export function parseJwt(token: String): {
     // Return null if token is invalid or parsing fails
     return null;
   }
+}
+
+export function isTokenValid(token: string | null): boolean {
+  if (!token) return false;
+
+  const payload = parseJwt(token);
+  if (payload && typeof payload.exp === 'number') {
+    const currentTime = Math.floor(Date.now() / 1000);
+    return payload.exp === 0 || payload.exp > currentTime;
+  }
+
+  return false;
 }

@@ -235,7 +235,7 @@ test('CSV Import', async ({ dbInstanceCode, ensureStatePathFor, newPageFor }) =>
         const page = await newPageFor(user.username);
         await page.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
         await users.ensureSpecificInstanceEntered(page, dbInstanceCode);
-        await users.firstLoginFlow(page, user, user.tempPass!!);
+        await users.firstLoginFlow(page, user, user.tempPass!);
         await ensureStatePathFor(user.username);
       }
     });

@@ -58,7 +58,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }) => {
     const instanceCode = localStorageGet('code');
     const rows = chunkArray(filteredUsers, columns);
 
-    let usersPasswords = rows
+    const usersPasswords = rows
       .map((row) => {
         const cells = row
           .map((user) => {
@@ -168,11 +168,8 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }) => {
 
     // Write the HTML content to the new window
     if (printWindow && printWindow.document) {
-      // @ts-ignore
       printWindow.document.open();
-      // @ts-ignore
       printWindow.document.write(htmlContent);
-      // @ts-ignore
       printWindow.document.close();
     }
     //setOpen(false);
