@@ -44,7 +44,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
         setStatus(pendingStatus);
         onReload();
       }
-    } catch (error) {
+    } catch {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
       cancelStatusChange();
     } finally {
