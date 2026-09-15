@@ -104,7 +104,14 @@
         "status": {
           "approved": "Genehmigt",
           "waiting": "Warten",
-          "rejected": "Nicht genehmigt"
+          "rejected": "Nicht genehmigt",
+          "votedFor": "Sie haben dafür abgestimmt",
+          "votedNeutral": "Sie haben neutral abgestimmt",
+          "votedAgainst": "Sie haben dagegen abgestimmt",
+          "winner": "Gewinner",
+          "quorumReached": "Quorum erreicht",
+          "quorumMissed": "Quorum nicht erreicht",
+          "notSelected": "Nicht ausgewählt"
         }
       }
     },

@@ -16,9 +16,11 @@ import Icon from '@/v2/components/ui/Icon/Icon';
 import ScopeTitle from '@/v2/components/ui/ScopeTitle';
 import ScrollList from '@/v2/components/ui/ScrollList';
 import { IdeaForm } from '@/v2/forms';
+import { useIdeaVotes } from '@/v2/hooks/useIdeaVotes';
 import { ListFilterConfig, useListFilter } from '@/v2/hooks/useListFilter';
 import { useModal } from '@/v2/hooks/useModal';
-import React, { useEffect, useState } from 'react';
+import { useQuorum } from '@/v2/hooks/useQuorum';
+import React, { useEffect, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useBox } from './useBox';
@@ -49,6 +51,28 @@ const Box: React.FC = () => {
     setReversed,
   } = useListFilter(ideas, ideasFilterConfig, `box-ideas-${box_id}`);
 
+  // Once voting starts, ideas rejected during approval drop out of the running and are archived
+  // in a section of their own at the end of the list.
+  const boxPhase = String(box?.phase_id ?? phase ?? '0');
+  const isDecided = Number(boxPhase) >= 30;
+  const running = isDecided ? ideas.filter((idea) => idea.approved !== -1) : ideas;
+  const listedIdeas = isDecided ? visibleIdeas.filter((idea) => idea.approved !== -1) : visibleIdeas;
+  const archivedIdeas = isDecided ? visibleIdeas.filter((idea) => idea.approved === -1) : [];
+  const archiveId = useId();
+
+  // Each idea's badge reports the viewer's own vote, and results weigh turnout against the quorum.
+  // Both are fetched once per list rather than once per bubble.
+  const votes = useIdeaVotes(running, boxPhase === '30');
+  const quorum = useQuorum(boxPhase);
+
+  // `:phase` only mirrors the box and goes stale when the box is moved. Everything downstream reads
+  // the param (idea styling, the approval badge, the nested idea route), so realign it on the box.
+  useEffect(() => {
+    if (!box || !room_id) return;
+    if (String(box.phase_id) === phase) return;
+    navigate(`/room/${room_id}/phase/${box.phase_id}/idea-box/${box_id}`, { replace: true });
+  }, [box, room_id, box_id, phase, navigate]);
+
   useEffect(() => {
     if (!box || !room_id) return;
     getRoom(room_id).then((response) => {
@@ -70,7 +94,7 @@ const Box: React.FC = () => {
     if (!updated) navigate(`/room/${room_id}/phase/${phase}`);
   };
 
-  const canAddIdeas = checkPermissions('ideas', 'create') && Number(phase) < 20;
+  const canAddIdeas = checkPermissions('ideas', 'create') && Number(box?.phase_id) < 20;
   const addIdeaLabel = t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') });
 
   const handleAddIdea = async (data: any): Promise<boolean> => {
@@ -112,8 +136,8 @@ const Box: React.FC = () => {
             {!isLoading && !error && box && (
               <ScopeTitle
                 scope="ideas"
-                count={visibleIdeas.length}
-                total={ideas.length}
+                count={listedIdeas.length}
+                total={running.length}
                 phase={String(box.phase_id)}
                 defaultOpen={!!searchQuery}
                 onToggle={(open) => !open && setSearchQuery('')}
@@ -229,11 +253,28 @@ const Box: React.FC = () => {
 
             {!isIdeasLoading && !ideasError && visibleIdeas.length > 0 && (
               <ScrollList storageKey={`box-ideas-${box_id}`}>
-                {visibleIdeas.map((idea) => (
+                {listedIdeas.map((idea) => (
                   <li key={idea.hash_id}>
-                    <Idea idea={idea} onChanged={refetchIdeas} />
+                    <Idea idea={idea} vote={votes[idea.hash_id]} quorum={quorum} onChanged={refetchIdeas} />
                   </li>
                 ))}
+
+                {archivedIdeas.length > 0 && (
+                  <li>
+                    <section aria-labelledby={archiveId} className="flex flex-col gap-4 pt-4 border-t border-neutral">
+                      <h2 id={archiveId} className="text-sm font-semibold text-muted">
+                        {t('phases.rejected', { var: archivedIdeas.length })}
+                      </h2>
+                      <ul className="flex flex-col gap-4">
+                        {archivedIdeas.map((idea) => (
+                          <li key={idea.hash_id}>
+                            <Idea idea={idea} quorum={quorum} onChanged={refetchIdeas} />
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  </li>
+                )}
               </ScrollList>
             )}
           </>

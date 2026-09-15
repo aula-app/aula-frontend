@@ -11,8 +11,8 @@
 @source inline("{hover,active}:bg-{primary,secondary,error}/{10,20}");
 
 /* Semantic state colors */
-@source inline("{bg,text,border}-{error,warning,info,success}");
-@source inline("{bg,text,border}-{error,warning,info,success}-fg");
+@source inline("{bg,text,border}-{error,warning,info,success,neutral}");
+@source inline("{bg,text,border}-{error,warning,info,success,neutral}-fg");
 
 /* Phase colors — base, hover, and active states */
 @source inline("{bg,text}-{wild,discussion,approval,voting,results}");

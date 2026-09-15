@@ -40,6 +40,9 @@
   --color-success: hsl(134, 72%, 88%);
   --color-success-fg: hsl(134, 55%, 28%);
 
+  --color-neutral: hsl(215, 15%, 88%);
+  --color-neutral-fg: hsl(215, 20%, 28%);
+
   /* --- Phases --- */
   /* -light/-fg are the filled pair (idea bubbles); base/-active are the solid chrome */
   --color-wild: hsl(210, 100%, 86%);
@@ -100,6 +103,9 @@
 
   --color-success: hsl(134, 32%, 24%);
   --color-success-fg: hsl(134, 60%, 65%);
+
+  --color-neutral: hsl(215, 18%, 28%);
+  --color-neutral-fg: hsl(215, 20%, 82%);
 
   /* --- Phases --- */
   /* Deep tones so near-white foreground text meets WCAG AAA (~7:1) */
@@ -170,6 +176,9 @@
 
   --color-success: var(--color-success);
   --color-success-fg: var(--color-success-fg);
+
+  --color-neutral: var(--color-neutral);
+  --color-neutral-fg: var(--color-neutral-fg);
 
   /* --- Phases --- */
   --color-wild: var(--color-wild);

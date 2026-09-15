@@ -1,12 +1,12 @@
 import { deleteIdea, editIdea } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { checkPermissions, phases } from '@/utils';
+import { checkPermissions, Vote } from '@/utils';
 import DeleteButton from '@/v2/components/button/DeleteButton';
 import EditButton from '@/v2/components/button/EditButton';
 import ReportButton from '@/v2/components/button/ReportButton';
 import ShareButton from '@/v2/components/button/ShareButton';
-import ApprovalStatus from '@/v2/components/idea/ApprovalStatus';
+import PhaseStatus, { getPhaseColors, getPhaseStatus } from '@/v2/components/idea/PhaseStatus';
 import CategoryList, { Category } from '@/v2/components/idea/CategoryList';
 import LikeStat from '@/v2/components/idea/LikeStat';
 import { IdeaForm } from '@/v2/forms';
@@ -24,27 +24,26 @@ import Link from '../../navigation/Link';
 interface IdeaProps {
   idea: IdeaType;
   categories?: Category[];
+  /** The current user's vote in the voting phase. Absent reads as waiting. */
+  vote?: Vote | null;
+  /** Percentage of eligible users that must vote, used by the results status. */
+  quorum?: number;
   className?: string;
   onChanged?: () => void;
 }
 
-const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
+const Idea = ({ idea, categories = [], vote, quorum, className, onChanged }: IdeaProps) => {
   const { t } = useTranslation();
   const { phase } = useParams<{ phase: `${RoomPhases}` }>();
 
   const titleId = useId();
   const phase_id = phase || '0';
-  const phaseColor = phases[phase_id] ?? 'wild';
   const ideaPath = `/room/${idea.room_hash_id}/phase/${phase_id}/idea/${idea.hash_id}`;
 
-  // In the approval phase the card recolours by status (green approved, red
-  // rejected, grey undecided) and gains a status badge on top.
-  const isApprovalPhase = phase_id === '20';
-  const phasePair = `bg-${phaseColor}-light text-${phaseColor}-fg`;
-  const approvalPair =
-    idea.approved === 1 ? 'bg-success text-success-fg' : idea.approved === -1 ? 'bg-error text-error-fg' : phasePair;
-  const bubbleColor = isApprovalPhase ? approvalPair : phasePair;
-  const hasTopTab = isApprovalPhase || categories.length > 0;
+  // From the approval phase on the card recolours by its status and gains a badge on top.
+  const status = getPhaseStatus({ idea, phase: phase_id, vote, quorum });
+  const bubbleColor = status?.colors ?? getPhaseColors(phase_id);
+  const hasTopTab = !!status || categories.length > 0;
 
   return (
     <article
@@ -55,12 +54,7 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
       <div className="relative flex flex-col gap-1 flex-1">
         {hasTopTab && (
           <div className="flex flex-wrap items-center justify-end gap-1">
-            {isApprovalPhase && (
-              <ApprovalStatus
-                approved={idea.approved}
-                className={twMerge(categories.length > 0 && 'rounded-tl-none', bubbleColor)}
-              />
-            )}
+            {status && <PhaseStatus status={status} className={twMerge(categories.length > 0 && 'rounded-tl-none')} />}
             <CategoryList categories={categories} />
           </div>
         )}
