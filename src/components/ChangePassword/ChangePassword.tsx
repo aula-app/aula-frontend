@@ -246,7 +246,7 @@ const ChangePassword: React.FC<Props> = ({
 export const usePasswordRequirements = (
   password: string,
   passwordComplexity: PasswordComplexity,
-  t: (key: string, options?: any) => string
+  t: (key: string, options?: Record<string, unknown>) => string
 ) => {
   const passwordRequirements = {
     length: password.length >= passwordComplexity.minLength,

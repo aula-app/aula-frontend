@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
 
 export interface UseDraftStorageOptions {
   storageKey: string;
   isNewRecord: boolean;
-  selections?: Record<string, any>;
+  selections?: Record<string, unknown>;
   onSubmit?: () => void;
   onCancel?: () => void;
 }
 
-export const useDraftStorage = <T extends Record<string, any>>(
+export const useDraftStorage = <T extends FieldValues>(
   form: UseFormReturn<T>,
   options: UseDraftStorageOptions
 ) => {
