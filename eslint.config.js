@@ -30,10 +30,12 @@ export default tseslint.config(
   },
   {
     // Playwright resolves fixtures by exact destructured name, so dependency
-    // fixtures must be declared even when their value is unused.
+    // fixtures must be declared even when their value is unused, and a
+    // dependency-less fixture must still take an empty `{}` destructuring pattern.
     files: ['tests/**/*.{ts,tsx}'],
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
+      'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }],
     },
   },
   prettier
