@@ -34,7 +34,7 @@ const BugsView = () => {
   }, [JSON.stringify(filter), status]);
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.bugs'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.bugs'), '']] });
     fetchBugs();
   }, [JSON.stringify(filter), status]);
 

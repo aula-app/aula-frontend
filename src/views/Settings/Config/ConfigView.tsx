@@ -43,7 +43,7 @@ const ConfigView = () => {
   const closePanels = () => setExpanded(undefined);
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.configuration'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.configuration'), '']] });
     loadData();
   }, []);
 

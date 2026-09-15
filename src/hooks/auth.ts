@@ -119,12 +119,12 @@ export const useConsentSync = (isAuthenticated: boolean, locationKey: string) =>
       window.clearTimeout(timeoutId);
 
       dispatch({
-        action: 'HAS_CONSENT',
+        type: 'HAS_CONSENT',
         payload: result.data !== 0,
       });
     } catch {
       dispatch({
-        action: 'HAS_CONSENT',
+        type: 'HAS_CONSENT',
         payload: false,
       });
     }

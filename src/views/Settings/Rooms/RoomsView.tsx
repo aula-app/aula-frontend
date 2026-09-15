@@ -35,7 +35,7 @@ const RoomsView: React.FC = () => {
   });
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.rooms'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.rooms'), '']] });
   }, [dispatch, t]);
 
   return (

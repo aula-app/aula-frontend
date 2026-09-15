@@ -34,7 +34,7 @@ const ReportsView = () => {
   }, [status, filter[0], filter[1]]);
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.reports'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.reports'), '']] });
   }, []);
 
   useEffect(() => {
