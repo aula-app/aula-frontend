@@ -44,6 +44,7 @@ const WildIdeas = () => {
   // Use the search and sort hook
   const { searchQuery, sortKey, sortDirection, scopeHeaderProps } = useSearchAndSort({
     sortOptions: IDEAS_SORT_OPTIONS,
+    defaultSortDirection: 'desc',
     storageKey: 'ideas-sort',
   });
 

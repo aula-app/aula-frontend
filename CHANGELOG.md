@@ -20,10 +20,29 @@
   - Announcement component now uses the new generic Dialog component
   - E2E tests for announcements expanded: covers obligatory and optional consent flows, dismiss button, per-user consent isolation, and admin delete flow
 
-## Unreleased
+## 1.10.2
+
+- **Bug fixes**
+  - Reenable 'forgot password' route when SSO is not mandatory
+
+## 1.10.1
+
+- **Bug fixes**
+  - fix "?" tooltips (aka. KnowMore) for interations on mobile
+  - SSO-managed schools (EDUPLACES): review guards for SSO login available and/or mandatory
+  - Manage SSO requirements for login, and display a versioning alert message when required
+
+## 1.10.0
+
+- **New features**
+  - Sort preference in Ideas Box and Wild Ideas are now defaulted to newer first
+  - SSO-managed schools (EDUPLACES): profile fields owned by the identity provider (name, username, email, password) are now read-only or hidden, and password-reset controls are removed, since those are managed upstream
+  - Login screen shows only the SSO sign-in when a school uses SSO, and only the password form when it does not
+  - Minimum required app for SSO desplayed with a warning.
 - **Bug fixes**
   - Sort preference in Ideas Box and Wild Ideas views is now persisted across navigation — going back no longer resets the selected sort order
-  
+  - KnowMore tooltip now shows on mobile
+
 ## 1.9.3
 
 - **Technical improvements**
@@ -31,15 +50,15 @@
 
 ## 1.9.2
 
-  - **Bug fixes**
-    - Remove Survey creation form
+- **Bug fixes**
+  - Remove Survey creation form
 
 ## 1.9.1
 
-  - **Bug fixes**
-    - Fix letter spacing
-    - Fix boxes prevented to be edited after phase 20 bug
-  
+- **Bug fixes**
+  - Fix letter spacing
+  - Fix boxes prevented to be edited after phase 20 bug
+
 ## 1.9.0
 
 - **New features**
@@ -60,7 +79,7 @@
   - Set password and change password forms identify new/current password fields for password managers
   - Profile editor fields mapped to standard tokens (nickname, username, name, email)
   - Admin user management form opts out of autofill to prevent credential injection when editing other users' data
-  -  Fix WCAG 1.4.11: input borders raised from 1.7:1 to 3.4:1 (light) and 4.4:1 (dark)
+  - Fix WCAG 1.4.11: input borders raised from 1.7:1 to 3.4:1 (light) and 4.4:1 (dark)
   - Fix WCAG 1.4.11: focus ring on IconButton and RippleLink now uses `--color-text-primary` (≥9:1), replacing invisible same-color outline
   - Fix WCAG 1.4.11: MUI OutlinedInput and standard Input borders overridden to meet 3:1 minimum
   - Room cards now show a visible focus ring via `focus-within` on the card, preventing `overflow:hidden` from clipping the inner link outline

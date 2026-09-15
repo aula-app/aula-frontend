@@ -57,6 +57,7 @@ const PhasesView = () => {
       { value: 'sum_likes', labelKey: 'settings.columns.sum_likes' },
       { value: 'sum_comments', labelKey: 'settings.columns.sum_comments' },
     ],
+    defaultSortDirection: 'desc',
   });
 
   // Create filter function

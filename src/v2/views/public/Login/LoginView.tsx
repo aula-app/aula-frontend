@@ -97,7 +97,7 @@ const LoginView: React.FC = () => {
         </Link>
       </div>
 
-      {config.IS_SSO_ENABLED && (
+      {config?.IS_SSO_ENABLED && (
         <>
           <div className="flex items-center gap-2 text-muted">
             <div className="flex-1 border-t border-current" />

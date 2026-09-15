@@ -6,6 +6,9 @@ const config: CapacitorConfig = {
   webDir: 'build',
   server: {
     androidScheme: 'https',
+    // Hosts the webview may navigate to directly (SSO IdP + aula instances).
+    // Anything not listed here is handed off to the external browser.
+    allowNavigation: ['aula.de', '*.aula.de', 'eduplaces.de', '*.eduplaces.de'],
   },
   ios: {
     contentInset: 'never',
@@ -13,7 +16,9 @@ const config: CapacitorConfig = {
     backgroundColor: '#000000',
     allowsLinkPreview: true,
     scheme: 'aula',
-    limitsNavigationsToAppBoundDomains: true,
+    // Must stay false: true restricts the webview to Info.plist WKAppBoundDomains
+    // (not set), which would block the in-webview SSO redirect to the IdP.
+    limitsNavigationsToAppBoundDomains: false,
   },
   plugins: {
     Keyboard: {

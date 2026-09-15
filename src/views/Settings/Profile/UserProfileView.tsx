@@ -5,6 +5,7 @@ import DataExport from '@/components/DataExport';
 import ProfileEditor from '@/components/ProfileEditor';
 import ProfileEditorSkeleton from '@/components/ProfileEditor/ProfileEditorSkeleton';
 import { getSelf } from '@/services/users';
+import { useSsoManaged } from '@/hooks';
 import { useAppStore } from '@/store/AppStore';
 import { UserType } from '@/types/Scopes';
 import { usePageTitle } from '@/hooks/usePageTitle';
@@ -19,6 +20,7 @@ import { useTranslation } from 'react-i18next';
  */
 const UserView = () => {
   const { t } = useTranslation();
+  const isSsoManaged = useSsoManaged();
   usePageTitle('pageTitles.settings.profile');
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,19 +47,21 @@ const UserView = () => {
         <Stack width="100%" height="100%" sx={{ overflowY: 'auto', overscrollBehavior: 'contain' }} p={2}>
           <Typography variant="h1">{t('ui.navigation.profile')}</Typography>
           <ProfileEditor user={user} onReload={fetchUser} />
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<AppIcon icon="arrowdown" />}
-              aria-controls="panel2-content-security"
-              id="panel2-header-security"
-              data-testid="security-panel-button"
-            >
-              <Typography variant="h2">{t('ui.navigation.security')}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ChangePassword />
-            </AccordionDetails>
-          </Accordion>
+          {!isSsoManaged && (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<AppIcon icon="arrowdown" />}
+                aria-controls="panel2-content-security"
+                id="panel2-header-security"
+                data-testid="security-panel-button"
+              >
+                <Typography variant="h2">{t('ui.navigation.security')}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <ChangePassword />
+              </AccordionDetails>
+            </Accordion>
+          )}
           <Accordion>
             <AccordionSummary
               expandIcon={<AppIcon icon="arrowdown" />}

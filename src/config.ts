@@ -10,7 +10,7 @@ export interface RuntimeConfig {
   BASENAME: string;
 }
 
-export const defaultConfig: RuntimeConfig = {
+const defaultConfig: RuntimeConfig = {
   CENTRAL_API_URL: 'https://neu.aula.de/',
   IS_MULTI: true,
   IS_SSO_ENABLED: false,

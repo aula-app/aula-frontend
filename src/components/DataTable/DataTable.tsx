@@ -20,6 +20,7 @@ type Props = {
   offset?: number;
   isLoading?: boolean;
   extraTools?: ({ items }: { items: Array<string> }) => JSX.Element;
+  hideAdd?: boolean;
   onReload?: () => void;
   setAsc: Dispatch<SetStateAction<boolean>>;
   setLimit: Dispatch<SetStateAction<number>>;
@@ -44,6 +45,7 @@ const DataTable: React.FC<Props> = ({
   offset,
   isLoading,
   extraTools,
+  hideAdd,
   onReload,
   setAsc,
   setLimit,
@@ -113,6 +115,7 @@ const DataTable: React.FC<Props> = ({
         setEdit={handleEdit}
         setDelete={handleDelete}
         extraTools={extraTools}
+        hideAdd={hideAdd}
       />
       <Table
         scope={scope}

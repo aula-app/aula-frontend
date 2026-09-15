@@ -3,7 +3,6 @@
 ## Build & Development Commands
 - Start dev server: `yarn dev` or `yarn start`
 - Check types: `yarn check-type` or `yarn type`
-- Lint code: `yarn lint`
 - Format code: `yarn format` (src only) or `yarn format:all` (all files)
 - Build: `yarn build` (production), `yarn build-devel`, `yarn build-staging`, `yarn build-test`
 

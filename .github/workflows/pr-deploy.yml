@@ -14,10 +14,10 @@ jobs:
     runs-on: [self-hosted, cicd]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Build Docker image
         run: docker build --build-arg DOCKER_TAG=$IMAGE_TAG --build-arg "VITE_APP_BASENAME=/$PR_NUMBER/" -t $IMAGE_TAG .
@@ -42,7 +42,7 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           sparse-checkout: |
             docker-compose.pr.yml
@@ -71,7 +71,7 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           sparse-checkout: |
             docker-compose.pr.yml

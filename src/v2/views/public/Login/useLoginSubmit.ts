@@ -1,4 +1,4 @@
-import { defaultConfig, getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from '@/config';
+import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from '@/config';
 import { loginUser } from '@/services/login';
 import { completeSsoLink, initiateSso } from '@/services/sso';
 import { useAppStore } from '@/store';
@@ -24,7 +24,7 @@ export const useLoginSubmit = () => {
   const [loginError, setError] = useState<string>('');
   const [linkBanner, setLinkBanner] = useState<string>('');
   const [ssoLinkToken, setSsoLinkToken] = useState<string | null>(null);
-  const [config, setConfig] = useState<RuntimeConfig>(defaultConfig);
+  const [config, setConfig] = useState<RuntimeConfig | null>(null);
 
   useEffect(() => {
     const ssoError = searchParams.get('sso_error');

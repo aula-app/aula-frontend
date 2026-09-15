@@ -15,6 +15,7 @@ type Props<T extends SettingType> = {
   FormComponent: React.ComponentType<{ onClose: () => void; defaultValues?: unknown }>;
   extraTools?: ({ items }: { items: Array<string> }) => JSX.Element;
   extraFilters?: ReactNode;
+  hideAdd?: boolean;
   onFilterChange?: (filters: Partial<DataTableFilters>) => void;
 };
 
@@ -31,6 +32,7 @@ const SettingsView = <T extends SettingType>({
   FormComponent,
   extraTools,
   extraFilters,
+  hideAdd,
   onFilterChange,
 }: Props<T>) => {
   const {
@@ -95,6 +97,7 @@ const SettingsView = <T extends SettingType>({
           setEdit={(item) => setEdit(item as T | boolean)}
           setDelete={deleteItems}
           extraTools={extraTools}
+          hideAdd={hideAdd}
           isLoading={isLoading}
           onReload={fetchData}
         />

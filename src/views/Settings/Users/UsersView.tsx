@@ -4,7 +4,7 @@ import { UserForms } from '@/components/DataForms';
 import PrintUsers from '@/components/PrintUsers/PrintUsers';
 import SelectRoom from '@/components/SelectRoom';
 import SettingsView from '@/components/SettingsView';
-import { useDataTableState } from '@/hooks';
+import { useDataTableState, useSsoManaged } from '@/hooks';
 import { deleteUser, getUsers } from '@/services/users';
 import { useAppStore } from '@/store/AppStore';
 import { UserType } from '@/types/Scopes';
@@ -22,7 +22,10 @@ const COLUMNS = [
   { name: 'username', orderId: 7 },
   { name: 'email', orderId: 8 },
   { name: 'userlevel', orderId: 9 },
-  { name: 'sso_provider', orderId: 0 },
+  // Named for a field every user row actually carries. The table renders a cell
+  // only when `column.name in row`, and no user payload has ever held an
+  // `sso_provider` key, so that column sat permanently blank.
+  { name: 'idp_user_id', orderId: 0 },
   { name: 'temp_pw', orderId: 11 },
   { name: 'status', orderId: 2 },
   { name: 'created', orderId: 4 },
@@ -32,8 +35,11 @@ const COLUMNS = [
 const UsersView: React.FC = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
+  const isSsoManaged = useSsoManaged();
   const [room_id, setRoom] = useState<string>('');
   const [userlevel, setRole] = useState<RoleTypes | 0>(0);
+
+  const columns = isSsoManaged ? COLUMNS.filter((column) => column.name !== 'temp_pw') : COLUMNS;
 
   // Create role options including "All" option
   const roleOptions = [
@@ -75,11 +81,13 @@ const UsersView: React.FC = () => {
       <>
         <PrintUsers />
         <AddRoomButton users={items} disabled={items.length === 0} />
-        <ResetMultiplePasswordsButton
-          users={selectedUsers}
-          disabled={selectedUsers.length === 0}
-          onSuccess={dataTableState.fetchData}
-        />
+        {!isSsoManaged && (
+          <ResetMultiplePasswordsButton
+            users={selectedUsers}
+            disabled={selectedUsers.length === 0}
+            onSuccess={dataTableState.fetchData}
+          />
+        )}
       </>
     );
   };
@@ -110,12 +118,13 @@ const UsersView: React.FC = () => {
   return (
     <SettingsView
       scope="users"
-      columns={COLUMNS}
+      columns={columns}
       filterFields={FILTER}
       dataTableState={dataTableState}
       FormComponent={UserForms as React.ComponentType<{ onClose: () => void; defaultValues?: unknown }>}
       extraTools={extraTools}
       extraFilters={extraFilters}
+      hideAdd={isSsoManaged}
     />
   );
 };

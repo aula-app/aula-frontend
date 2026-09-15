@@ -58,6 +58,7 @@ const IdeasBoxView = () => {
       { value: 'displayname', labelKey: 'settings.columns.displayname' },
       { value: 'title', labelKey: 'scopes.ideas.fields.title' },
     ],
+    defaultSortDirection: 'desc',
     storageKey: 'ideas-sort',
   });
 

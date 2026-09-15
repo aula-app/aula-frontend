@@ -1,3 +1,4 @@
+import { useSsoRequired } from '@/hooks';
 import { useInstanceGuard } from '@/hooks/useInstanceGuard';
 import AboutView from '@/v2/views/public/About';
 import Login from '@/v2/views/public/Login';
@@ -15,6 +16,7 @@ import { Route, Routes } from 'react-router-dom';
  */
 const PublicRoutes = () => {
   useInstanceGuard();
+  const isSsoRequired = useSsoRequired();
 
   return (
     <Routes>
@@ -23,9 +25,13 @@ const PublicRoutes = () => {
       <Route path="login/*" element={<Login />} />
       <Route path="offline" element={<OfflineView />} />
       <Route path="oauth-login/:jwt_token" element={<OAuthLogin />} />
-      <Route path="password/" element={<ResetPasswordView />} />
-      <Route path="password/:key" element={<SetPasswordView />} />
-      <Route path="recovery/*" element={<Recovery />} />
+      {isSsoRequired === false && (
+        <>
+          <Route path="password/" element={<ResetPasswordView />} />
+          <Route path="password/:key" element={<SetPasswordView />} />
+          <Route path="recovery/*" element={<Recovery />} />
+        </>
+      )}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
