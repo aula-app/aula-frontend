@@ -40,8 +40,10 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
   // In the approval phase the card recolours by status (green approved, red
   // rejected, grey undecided) and gains a status badge on top.
   const isApprovalPhase = phase_id === '20';
-  const approvalColor = idea.approved === 1 ? 'bg-success' : idea.approved === -1 ? 'bg-error' : `bg-${phaseColor}`;
-  const bubbleColor = isApprovalPhase ? approvalColor : `bg-${phaseColor}`;
+  const phasePair = `bg-${phaseColor}-light text-${phaseColor}-fg`;
+  const approvalPair =
+    idea.approved === 1 ? 'bg-success text-success-fg' : idea.approved === -1 ? 'bg-error text-error-fg' : phasePair;
+  const bubbleColor = isApprovalPhase ? approvalPair : phasePair;
   const hasTopTab = isApprovalPhase || categories.length > 0;
 
   return (
@@ -70,10 +72,10 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
           )}
         >
           <Link to={ideaPath}>
-            <h2 id={titleId} className="font-semibold text-foreground">
+            <h2 id={titleId} className="font-semibold text-inherit">
               {idea.title}
             </h2>
-            {idea.content && <Markdown className="prose text-foreground line-clamp-3">{idea.content}</Markdown>}
+            {idea.content && <Markdown className="prose text-inherit line-clamp-3">{idea.content}</Markdown>}
           </Link>
           <MoreOptions
             className="absolute top-1 right-1 z-10"

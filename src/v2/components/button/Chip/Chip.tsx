@@ -15,7 +15,7 @@ const Chip = ({ children, className, condensed = false, hint, startIcon, endIcon
     <Button
       text
       className={twMerge(
-        'overflow-auto relative min-h-0 min-w-0 gap-0 whitespace-nowrap rounded-2xl',
+        'relative min-h-0 min-w-0 gap-0 whitespace-nowrap rounded-2xl',
         condensed ? 'p-1 px-1.5' : 'p-1 px-3',
         className
       )}
