@@ -163,7 +163,10 @@ const SelectInput = ({
             narrower than its own dropdown. Mirrors the button's text metrics and padding. */}
         <div aria-hidden="true" className="h-0 overflow-hidden invisible">
           {options.map((option) => (
-            <div key={option.value} className={twMerge('text-sm font-medium text-nowrap pr-6', dense ? 'px-3' : 'px-4')}>
+            <div
+              key={option.value}
+              className={twMerge('text-sm font-medium text-nowrap pr-6', dense ? 'px-3' : 'px-4')}
+            >
               {option.label}
             </div>
           ))}

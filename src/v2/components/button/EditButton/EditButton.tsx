@@ -33,7 +33,15 @@ interface EditButtonProps {
  * a toast and the form stays open so the user can retry; a successful save shows
  * an "updated" toast, closes the modal and notifies `onChanged`.
  */
-const EditButton = ({ scopeLabel, subject, onSave, renderForm, onChanged, onOpen, hidden = false }: EditButtonProps) => {
+const EditButton = ({
+  scopeLabel,
+  subject,
+  onSave,
+  renderForm,
+  onChanged,
+  onOpen,
+  hidden = false,
+}: EditButtonProps) => {
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
   const { toast } = useToast();

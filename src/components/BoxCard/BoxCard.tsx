@@ -27,10 +27,7 @@ const BoxCard: FC<BoxCardProps> = ({ box, disabled = false, onDelete, onEdit, ..
     // created before that field existed.
     const phaseIndex = Number(box.phase_id) / 10;
     const phaseKey = `phase_duration_${phaseIndex}` as
-      | 'phase_duration_1'
-      | 'phase_duration_2'
-      | 'phase_duration_3'
-      | 'phase_duration_4';
+      'phase_duration_1' | 'phase_duration_2' | 'phase_duration_3' | 'phase_duration_4';
     const phaseDuration = Number(box[phaseKey]) || 0;
 
     const currentDate = new Date();

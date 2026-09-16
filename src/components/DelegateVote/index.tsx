@@ -1,3 +1,3 @@
 import DelegateVote from './DelegateVote';
 
-export { DelegateVote as default,  };
+export { DelegateVote as default };

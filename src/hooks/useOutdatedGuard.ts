@@ -76,9 +76,7 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
           setState((prev) => ({ ...prev, isBelowRecommended: belowRecommended }));
 
           // Check if popup should be shown: either never shown, or shown more than 12h ago
-          const shouldShowPopup =
-            !popupShownRef.current ||
-            (now - popupShownRef.current.timestamp > POPUP_SHOWN_TTL_MS);
+          const shouldShowPopup = !popupShownRef.current || now - popupShownRef.current.timestamp > POPUP_SHOWN_TTL_MS;
 
           if (belowRecommended && !outdated && shouldShowPopup) {
             dispatch({

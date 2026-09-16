@@ -76,10 +76,7 @@ const TimedCommands = () => {
         <Stack>
           <Typography variant="h3">{t('settings.time.actions')}</Typography>
           <TableContainer>
-            <Table
-              aria-label={t('ui.accessibility.scheduledActionsTable')}
-              data-testid={TEST_IDS.TIMEDCOMMAND_TABLE}
-            >
+            <Table aria-label={t('ui.accessibility.scheduledActionsTable')} data-testid={TEST_IDS.TIMEDCOMMAND_TABLE}>
               <TableBody>
                 {commands.map((command, i) => {
                   const scope = command.cmd_id > 9 ? Math.floor(command.cmd_id / 10) : 0;

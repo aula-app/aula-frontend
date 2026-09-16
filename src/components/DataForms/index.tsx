@@ -14,13 +14,10 @@ export {
   AnnouncementForms,
   BoxForms,
   BugForms,
-  
   CommentForms,
-  
   IdeaForms,
   MessageForms,
   ReportForms,
   RoomForms,
-  
   UserForms,
 };

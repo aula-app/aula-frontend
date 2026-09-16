@@ -1,3 +1,3 @@
 import ReportsView from './ReportsView';
 
-export { ReportsView as default,  };
+export { ReportsView as default };

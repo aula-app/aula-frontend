@@ -4,7 +4,10 @@ import EmojiPicker from './EmojiPicker';
 
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }));
 
-const open = async (getByRole: ReturnType<typeof render>['getByRole'], getByLabelText: ReturnType<typeof render>['getByLabelText']) => {
+const open = async (
+  getByRole: ReturnType<typeof render>['getByRole'],
+  getByLabelText: ReturnType<typeof render>['getByLabelText']
+) => {
   const trigger = getByRole('button', { name: 'v2.ui.editor.emoji' });
   fireEvent.click(trigger);
   // useDropdown focuses the first item on the next animation frame.

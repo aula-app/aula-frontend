@@ -9,9 +9,9 @@ import { validateAndSaveInstanceCode } from '@/services/instance';
 const InstanceCodeView = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -62,8 +62,8 @@ const InstanceCodeView = () => {
         helperText={error || t('instance.headline')}
         slotProps={{
           input: {
-            autoCapitalize: "none"
-          }
+            autoCapitalize: 'none',
+          },
         }}
         onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
           if (event.key === 'Enter') handleSubmit();
