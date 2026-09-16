@@ -185,7 +185,8 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
 
   const RoleOptionTypes = [
     ...roles
-      .filter((role) => role < 30 || (role >= 40 && role < 60))
+      // (Non-Special) Moderators (30, 31) can only be room-roles, not user-roles
+      .filter((role) => ! ([30, 31].includes(role))
       .map((r) => ({ value: r, label: t(`roles.${r}`) })),
   ];
 
@@ -339,27 +340,24 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                   },
                 }}
               />
-              {defaultValues?.userlevel !== 60 && (
-                <>
-                  {checkPermissions('users', 'addRole') && (
-                    <SelectField
-                      size="small"
-                      control={control}
-                      options={RoleOptionTypes}
-                      name="userlevel"
-                      sx={{ minWidth: 200 }}
-                    />
-                  )}
-                  {checkPermissions('rooms', 'addUser') && watch('userlevel') < 40 && (
-                    <RoomRolesField
-                      rooms={rooms}
-                      user={defaultValues}
-                      defaultLevel={watch('userlevel')}
-                      onUpdate={(data) => onUpdate(data)}
-                      disabled={isLoading}
-                    />
-                  )}
-                </>
+              {/* TODO do we need to guard Admins against de-Admining themselves? */}
+              {checkPermissions('users', 'addRole') && (
+                <SelectField
+                  size="small"
+                  control={control}
+                  options={RoleOptionTypes}
+                  name="userlevel"
+                  sx={{ minWidth: 200 }}
+                />
+              )}
+              {checkPermissions('rooms', 'addUser') && watch('userlevel') < 40 && (
+                <RoomRolesField
+                  rooms={rooms}
+                  user={defaultValues}
+                  defaultLevel={watch('userlevel')}
+                  onUpdate={(data) => onUpdate(data)}
+                  disabled={isLoading}
+                />
               )}
             </Stack>
             <MarkdownEditor

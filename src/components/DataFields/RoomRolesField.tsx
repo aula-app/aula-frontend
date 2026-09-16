@@ -44,21 +44,13 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
   const [userRoles, setUserRoles] = useState<{ room: string; role: RoleTypes }[]>(JSON.parse(user?.roles || '[]'));
   const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes | 0 }[]>([]);
 
-  // Create role options based on room type and user level
+  // Create role options based on user level
   const getRoleOptions = (room: RoomType) => {
-    const isStandardRoom = room.type === 1;
-    const isAdmin = (user?.userlevel ?? 0) >= 50;
-
     const options = [
       { value: 0, label: t('roles.empty') },
       ...roles
-        .filter((role) => {
-          // Filter based on room type and admin status
-          if (isAdmin && isStandardRoom) {
-            return role < 60; // Admins can see all roles except super admin for standard rooms
-          }
-          return role < 40; // Non-admins see only basic roles
-        })
+        // only users that aren't admins or supermoderators can have room-specific roles
+        .filter((role) => role < 40)
         .map((r) => ({ value: r, label: t(`roles.${r}`) })),
     ];
 
