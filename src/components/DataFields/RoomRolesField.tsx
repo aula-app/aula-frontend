@@ -49,7 +49,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
     const options = [
       { value: 0, label: t('roles.empty') },
       ...roles
-        // only non-admins can have specific room-roles
+        // only users that aren't admins or supermoderators can have room-specific roles
         .filter((role) => role < 40)
         .map((r) => ({ value: r, label: t(`roles.${r}`) })),
     ];
