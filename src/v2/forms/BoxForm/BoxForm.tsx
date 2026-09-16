@@ -20,8 +20,6 @@ interface BoxFormProps {
   isLoading?: boolean;
   contextRoomId?: string;
   contextPhaseId?: string;
-  error?: string | null;
-  onErrorClose?: () => void;
 }
 
 const BoxForm: React.FC<BoxFormProps> = ({
@@ -31,8 +29,6 @@ const BoxForm: React.FC<BoxFormProps> = ({
   isLoading = false,
   contextRoomId,
   contextPhaseId,
-  error,
-  onErrorClose,
 }) => {
   const { t } = useTranslation();
 
@@ -123,19 +119,9 @@ const BoxForm: React.FC<BoxFormProps> = ({
         )}
       />
 
-      {((errors.root as any)?.message || error) && (
+      {(errors.root as any)?.message && (
         <div className="flex items-center justify-between text-sm text-red-600 p-3 bg-red-50 rounded-lg" role="alert">
-          <span>{(errors.root as any)?.message || error}</span>
-          {onErrorClose && (
-            <button
-              type="button"
-              onClick={onErrorClose}
-              className="text-red-600 hover:text-red-700 font-semibold"
-              aria-label={t('ui.common.dismiss')}
-            >
-              ✕
-            </button>
-          )}
+          <span>{(errors.root as any).message}</span>
         </div>
       )}
 

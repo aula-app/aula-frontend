@@ -127,7 +127,7 @@ const Box: React.FC = () => {
         header={
           <>
             {!isLoading && !error && box && (
-              <div className="p-2">
+              <div className="p-2 pb-0">
                 <BoxCard box={box} onChanged={handleBoxChanged} />
               </div>
             )}

@@ -13,6 +13,7 @@ import MoreOptions from '@/v2/components/ui/MoreOptions';
 import Link from '@/v2/components/navigation/Link';
 import { BoxForm } from '@/v2/forms';
 import { useTranslation } from 'react-i18next';
+import { twMerge } from 'tailwind-merge';
 
 interface BoxCardProps {
   box: BoxType;
@@ -41,20 +42,18 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
   const phaseColor = phases[box.phase_id] ?? 'wild';
   const to = `/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`;
 
-  const ideasCount = `${box.ideas_num} ${t(box.ideas_num === 1 ? 'v2.scopes.ideas.singular' : 'v2.scopes.ideas.plural')}`;
-  const ideasInPhase = t(`phases.id-${box.phase_id}`, { var: ideasCount, defaultValue: ideasCount });
-
   const showCountdown = [10, 30].includes(Number(box.phase_id));
   const { days, remaining } = phaseProgress(box);
   const fillPercent = days > 0 ? Math.min(100, Math.max(0, (remaining / days) * 100)) : 0;
 
   return (
-    <div className="relative flex flex-col rounded-2xl border border-muted text-foreground">
-      <header className={`flex justify-between bg-${phaseColor} rounded-t-2xl p-2 pr-10`}>
-        <div className="flex items-center gap-2">
-          <Icon type={phaseColor} size="1.5rem" aria-hidden="true" />
-          <span className="text-sm font-medium truncate">{ideasInPhase}</span>
-        </div>
+    <>
+      <div
+        className={twMerge(
+          `relative flex flex-col rounded-t-2xl text-foreground bg-${phaseColor} flex flex-col gap-2 px-4 pt-2 pb-3 rounded-t-2xl mb-1`,
+          box.ideas_num > 0 && 'rounded-bl-2xl'
+        )}
+      >
         <MoreOptions
           className="absolute top-0.5 right-1.5"
           panelClassName="mr-1"
@@ -105,27 +104,33 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
             </>
           )}
         </MoreOptions>
-      </header>
-      <Link to={to} data-testid={`box-${box.name}`} className=" flex flex-col no-underline text-foreground">
-        <div className="flex flex-col gap-2 p-4">
+        <Link to={to} data-testid={`box-${box.name}`} className="flex flex-col no-underline text-foreground">
           {box.name && <h2 className="font-bold">{box.name}</h2>}
           {box.description_public && (
             <Markdown className="prose-sm text-muted line-clamp-3">{box.description_public}</Markdown>
           )}
-        </div>
+        </Link>
+      </div>
+      <div className="flex gap-2">
+        {box.ideas_num > 0 && (
+          <div className="flex items-center gap-1 ml-2">
+            <Icon type={phaseColor} aria-hidden="true" />
+            <span className="text-sm font-medium truncate">{box.ideas_num}</span>
+          </div>
+        )}
         {showCountdown && (
           <ProgressBar
             value={fillPercent}
             color={phaseColor}
             label={remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
-            className="rounded-b-2xl"
+            className="rounded-b-2xl flex-1"
           >
             <Icon type="clock" size="1rem" />
             {remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
           </ProgressBar>
         )}
-      </Link>
-    </div>
+      </div>
+    </>
   );
 };
 
