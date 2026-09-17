@@ -47,7 +47,7 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
   const fillPercent = days > 0 ? Math.min(100, Math.max(0, (remaining / days) * 100)) : 0;
 
   return (
-    <>
+    <div data-testid={TEST_IDS.BOX_CARD}>
       <div
         className={twMerge(
           `relative flex flex-col rounded-t-2xl text-foreground bg-${phaseColor} flex flex-col gap-2 px-4 pt-2 pb-3 rounded-t-2xl mb-1`,
@@ -130,7 +130,7 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
           </ProgressBar>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
