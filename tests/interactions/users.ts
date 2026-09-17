@@ -11,8 +11,9 @@ const host = shared.getHost();
 export const ensureSpecificInstanceEntered = async (page: Page, instanceCode: string) => {
   const instanceCodeInput = page.getByTestId('instance-code');
 
-  // Not visible → single-instance, nothing to do
+  // Not visible → single-instance, or a broken page. The login form tells us which.
   if (!(await instanceCodeInput.isVisible())) {
+    await expect(page.locator('input[name="username"]')).toBeVisible();
     return true;
   }
 
@@ -33,12 +34,13 @@ export const ensureInstanceEntered = async (page: Page, username?: string) => {
   const instance = process.env.INSTANCE_CODE || 'SINGLE';
   const instanceCodeInput = page.getByTestId('instance-code');
 
-  // Not visible → single-instance, nothing to do
+  // Not visible → single-instance, or a broken page. The login form tells us which.
   if (!(await instanceCodeInput.isVisible())) {
     console.log(`${instance === 'SINGLE' ? '✅' : '⚠️'} No instance selector input found. User: "${username}"`);
     if (instance !== 'SINGLE') {
       throw new Error('Instance selector input not found on the page, but we are testing a multi-instance FE.');
     }
+    await expect(page.locator('input[name="username"]')).toBeVisible();
     return true;
   }
 
