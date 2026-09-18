@@ -59,6 +59,9 @@ const Box: React.FC = () => {
   const archivedIdeas = isDecided ? visibleIdeas.filter((idea) => idea.approved === -1) : [];
   const archiveId = useId();
 
+  // Approval has no countdown, so the box reports how far the review has got instead.
+  const reviewed = ideas.filter((idea) => idea.approved !== 0).length;
+
   const votes = useIdeaVotes(running, boxPhase === '30');
   const quorum = useQuorum(boxPhase);
   const users = useRoomUsers(room_id);
@@ -128,7 +131,7 @@ const Box: React.FC = () => {
           <>
             {!isLoading && !error && box && (
               <div className="p-2 pb-0">
-                <BoxCard box={box} onChanged={handleBoxChanged} />
+                <BoxCard box={box} approval={{ reviewed, total: ideas.length }} onChanged={handleBoxChanged} />
               </div>
             )}
             {!isLoading && !error && box && (

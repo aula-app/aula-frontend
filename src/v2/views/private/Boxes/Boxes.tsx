@@ -20,6 +20,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import BoxCard from '@/v2/components/box/BoxCard';
+import { useBoxApprovals } from '@/v2/hooks/useBoxApprovals';
 import { useBoxesByRoom } from './useBoxesByRoom';
 
 const boxesFilterConfig: ListFilterConfig<BoxType> = {
@@ -44,6 +45,10 @@ const Boxes: React.FC = () => {
     reversed,
     setReversed,
   } = useListFilter(boxes, boxesFilterConfig, `boxes-${room_id}-${currentPhase}`);
+
+  // Approval has no countdown, so each box reports how far its review has got instead. Keyed on the
+  // full list, not the filtered one, so typing in the search box does not refetch every box.
+  const approvals = useBoxApprovals(boxes, currentPhase === '20');
 
   const addBoxLabel = t('v2.ui.actions.add', { var: t('v2.scopes.boxes.singular') });
 
@@ -177,7 +182,7 @@ const Boxes: React.FC = () => {
         <ScrollList storageKey={`boxes-${room_id}-${currentPhase}`}>
           {visibleBoxes.map((box) => (
             <li key={box.hash_id}>
-              <BoxCard box={box} onChanged={refetch} />
+              <BoxCard box={box} approval={approvals[box.hash_id]} onChanged={refetch} />
             </li>
           ))}
         </ScrollList>

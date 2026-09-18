@@ -17,9 +17,16 @@ import { twMerge } from 'tailwind-merge';
 
 interface BoxCardProps {
   box: BoxType;
+  /**
+   * Review progress for the approval phase, which has no countdown of its own. Only callers that
+   * already hold the box's ideas can count it; omit it and the approval bar is simply not drawn.
+   */
+  approval?: { reviewed: number; total: number };
   /** Refetch the surrounding list after an edit or delete. */
   onChanged?: () => void;
 }
+
+const APPROVAL_PHASE = 20;
 
 const phaseProgress = (box: BoxType): { days: number; remaining: number } => {
   // The current phase's countdown runs from when that phase started, not from
@@ -37,7 +44,7 @@ const phaseProgress = (box: BoxType): { days: number; remaining: number } => {
   return { days, remaining };
 };
 
-const BoxCard = ({ box, onChanged }: BoxCardProps) => {
+const BoxCard = ({ box, approval, onChanged }: BoxCardProps) => {
   const { t } = useTranslation();
   const phaseColor = phases[box.phase_id] ?? 'wild';
   const to = `/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`;
@@ -45,6 +52,10 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
   const showCountdown = [10, 30].includes(Number(box.phase_id));
   const { days, remaining } = phaseProgress(box);
   const fillPercent = days > 0 ? Math.min(100, Math.max(0, (remaining / days) * 100)) : 0;
+
+  const showApproval = Number(box.phase_id) === APPROVAL_PHASE && !!approval && approval.total > 0;
+  const reviewedPercent = showApproval ? (approval.reviewed / approval.total) * 100 : 0;
+  const reviewedLabel = t('v2.scopes.boxes.reviewed', { count: approval?.reviewed ?? 0, total: approval?.total ?? 0 });
 
   return (
     <div data-testid={TEST_IDS.BOX_CARD}>
@@ -127,6 +138,17 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
           >
             <Icon type="clock" size="1rem" />
             {remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
+          </ProgressBar>
+        )}
+        {showApproval && (
+          <ProgressBar
+            value={reviewedPercent}
+            color={phaseColor}
+            label={reviewedLabel}
+            className="rounded-b-2xl flex-1"
+          >
+            <Icon type="approval" size="1rem" />
+            {reviewedLabel}
           </ProgressBar>
         )}
       </div>

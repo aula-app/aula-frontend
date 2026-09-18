@@ -30,11 +30,13 @@ interface IdeaProps {
   quorum?: number;
   /** Room members, the quorum denominator. Falls back to the idea's own count where the endpoint sends one. */
   users?: number;
+  /** Renders the idea as its own page: full content, and no links back to the page we are already on. */
+  detail?: boolean;
   className?: string;
   onChanged?: () => void;
 }
 
-const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onChanged }: IdeaProps) => {
+const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, className, onChanged }: IdeaProps) => {
   const { t } = useTranslation();
   const { phase } = useParams<{ phase: `${RoomPhases}` }>();
 
@@ -54,6 +56,20 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onCha
   const status = getPhaseStatus({ idea, phase: phase_id, vote, quorum, users: participants });
   const bubbleColor = status?.colors ?? getPhaseColors(phase_id);
   const hasTopTab = !!status || categories.length > 0;
+
+  // On its own page the idea is the subject, so it takes the h1 and the comments below sit under it.
+  const Title = detail ? 'h1' : 'h2';
+
+  const body = (
+    <>
+      <Title id={titleId} className="font-semibold text-inherit">
+        {idea.title}
+      </Title>
+      {idea.content && (
+        <Markdown className={twMerge('prose text-inherit', !detail && 'line-clamp-3')}>{idea.content}</Markdown>
+      )}
+    </>
+  );
 
   return (
     <article
@@ -76,12 +92,7 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onCha
             hasTopTab ? 'rounded-tr-none' : ''
           )}
         >
-          <Link to={ideaPath}>
-            <h2 id={titleId} className="font-semibold text-inherit">
-              {idea.title}
-            </h2>
-            {idea.content && <Markdown className="prose text-inherit line-clamp-3">{idea.content}</Markdown>}
-          </Link>
+          {detail ? <div>{body}</div> : <Link to={ideaPath}>{body}</Link>}
           <MoreOptions
             className="absolute top-1 right-1 z-10"
             panelClassName="ml-auto mr-1"
@@ -153,6 +164,7 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onCha
             label={t(idea.sum_comments === 1 ? 'v2.scopes.ideas.stats.comment' : 'v2.scopes.ideas.stats.comments', {
               count: idea.sum_comments,
             })}
+            readOnly={detail}
             to={ideaPath}
           />
           {!isVoting && <LikeStat like={like} readOnly={!canLike} data-testid={TEST_IDS.LIKE_BUTTON} />}

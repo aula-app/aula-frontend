@@ -52,6 +52,14 @@ export const TEST_IDS = {
   DELETE_IDEA_CONFIRM: 'delete-idea-confirm',
   DELETE_IDEA_CANCEL: 'delete-idea-cancel',
 
+  // Comment actions (v2 Comment, Comments section)
+  ADD_COMMENT_BUTTON: 'add-comment-button',
+  COMMENT_FORM: 'comment-form',
+  COMMENT_FORM_SUBMIT: 'confirm-comment-button',
+  COMMENT_FORM_CANCEL: 'cancel-comment-button',
+  COMMENT_MORE_MENU: 'comment-more-options',
+  COMMENT_MORE_OPTIONS_PANEL: 'comment-more-options-panel',
+
   // Offline state (PublicOfflineView)
   SCHOOL_OFFLINE_VIEW: 'school-offline-view',
 

@@ -88,7 +88,13 @@
     "scopes": {
       "boxes": {
         "singular": "box",
-        "plural": "boxes"
+        "plural": "boxes",
+        "reviewed": "{{count}} of {{total}} reviewed"
+      },
+      "comments": {
+        "singular": "comment",
+        "plural": "comments",
+        "by": "Comment by {{name}}"
       },
       "ideas": {
         "singular": "idea",
@@ -240,7 +246,8 @@
         "updated": "Last update",
         "user": "User",
         "name": "Name",
-        "ideas": "Number of ideas"
+        "ideas": "Number of ideas",
+        "likes": "Number of likes"
       },
       "toggle": "Toggle {{var}}",
       "count": {

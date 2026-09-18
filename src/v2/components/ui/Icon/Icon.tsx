@@ -83,6 +83,8 @@ export const ICONS = {
   chevronDown: HiOutlineChevronDown,
   clock: HiOutlineClock,
   close: HiOutlineXMark,
+  comment: HiOutlineChatBubbleLeftRight,
+  comments: HiOutlineChatBubbleLeftRight,
   confirm: HiOutlineCheck,
   copy: HiOutlineDocumentDuplicate,
   day: HiOutlineSun,
