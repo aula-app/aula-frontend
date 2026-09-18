@@ -69,10 +69,6 @@ const BoxCard = ({ box, ideas, approval, categories, quorum, users, onChanged }:
   const reviewedPercent = showApproval ? (reviewed.reviewed / reviewed.total) * 100 : 0;
   const reviewedLabel = t('v2.scopes.boxes.reviewed', { count: reviewed?.reviewed ?? 0, total: reviewed?.total ?? 0 });
 
-  const showApproval = Number(box.phase_id) === APPROVAL_PHASE && !!approval && approval.total > 0;
-  const reviewedPercent = showApproval ? (approval.reviewed / approval.total) * 100 : 0;
-  const reviewedLabel = t('v2.scopes.boxes.reviewed', { count: approval?.reviewed ?? 0, total: approval?.total ?? 0 });
-
   return (
     <div data-testid={TEST_IDS.BOX_CARD} className="flex flex-col gap-0.5">
       <div

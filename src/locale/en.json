@@ -89,17 +89,13 @@
       "boxes": {
         "singular": "box",
         "plural": "boxes",
-<<<<<<< HEAD
-        "reviewed": "{{count}} of {{total}} reviewed"
+        "reviewed": "{{count}} of {{total}} reviewed",
+        "moreIdeas": "+{{count}} more"
       },
       "comments": {
         "singular": "comment",
         "plural": "comments",
         "by": "Comment by {{name}}"
-=======
-        "reviewed": "{{count}} of {{total}} reviewed",
-        "moreIdeas": "+{{count}} more"
->>>>>>> private/box
       },
       "ideas": {
         "singular": "idea",

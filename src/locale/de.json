@@ -89,17 +89,13 @@
       "boxes": {
         "singular": "Box",
         "plural": "Boxen",
-<<<<<<< HEAD
-        "reviewed": "{{count}} von {{total}} geprüft"
+        "reviewed": "{{count}} von {{total}} geprüft",
+        "moreIdeas": "+{{count}} weitere"
       },
       "comments": {
         "singular": "Verbesserungsvorschlag",
         "plural": "Verbesserungsvorschläge",
         "by": "Verbesserungsvorschlag von {{name}}"
-=======
-        "reviewed": "{{count}} von {{total}} geprüft",
-        "moreIdeas": "+{{count}} weitere"
->>>>>>> private/box
       },
       "ideas": {
         "singular": "Idee",
