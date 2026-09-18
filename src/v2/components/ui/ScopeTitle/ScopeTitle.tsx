@@ -54,6 +54,7 @@ const ScopeTitle = ({
 
   const nounLabel = t(`v2.scopes.${scope}.${nounCount === 1 ? 'singular' : 'plural'}`);
   const countLabel = count === undefined ? undefined : isFiltered ? t('v2.ui.count.ofTotal', { count, total }) : count;
+  const phaseVar = [countLabel, nounLabel].filter((part) => part !== undefined && part !== '').join(' ');
 
   useEffect(() => {
     // Skip the first run so a restored-open panel doesn't steal focus (and
@@ -74,19 +75,16 @@ const ScopeTitle = ({
   return (
     <div className="flex flex-col p-2 pb-0 sm:p-4 sm:pb-0">
       <div className="flex justify-between items-center">
-        <Heading className={twMerge('flex items-center gap-2', className)}>
-          <Icon type={iconType} size=".9em" />
+        <Heading className={twMerge('flex min-w-0 items-center gap-2', className)}>
+          <Icon type={iconType} size=".9em" className="shrink-0" />
           {phase ? (
-            <span className="first-letter:capitalize">
-              {t(`phases.id-${phase}`, {
-                var: [countLabel, nounLabel].filter((part) => part !== undefined && part !== '').join(' '),
-                defaultValue: [countLabel, nounLabel].filter((part) => part !== undefined && part !== '').join(' '),
-              })}
+            <span className="truncate first-letter:capitalize">
+              {t(`phases.id-${phase}`, { var: phaseVar, defaultValue: phaseVar })}
             </span>
           ) : (
             <>
-              {countLabel !== undefined && <span>{countLabel}</span>}
-              <span className="capitalize">{nounLabel}</span>
+              {countLabel !== undefined && <span className="shrink-0">{countLabel}</span>}
+              <span className="truncate capitalize">{nounLabel}</span>
             </>
           )}
         </Heading>
@@ -98,6 +96,7 @@ const ScopeTitle = ({
             aria-controls={panelId}
             data-testid={TEST_IDS.SEARCH_BUTTON}
             onClick={toggle}
+            className="shrink-0"
           >
             <Icon type={isOpen ? 'close' : 'search'} size="1.5em" />
           </IconButton>
