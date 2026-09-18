@@ -169,11 +169,11 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
         <VoteResults
           results={results}
           users={participants}
-          className={twMerge('ml-4', !hasWinnerBar && 'rounded-b-2xl')}
+          className={twMerge('ml-4', !hasWinnerBar && 'rounded-br-2xl')}
         />
       )}
 
-      {hasWinnerBar && <WinnerBar winner={winner} className="ml-4 rounded-b-2xl" />}
+      {hasWinnerBar && <WinnerBar winner={winner} className="ml-4 rounded-br-2xl" />}
 
       {hasQuorumBar && (
         <QuorumBar
