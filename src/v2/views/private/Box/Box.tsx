@@ -59,7 +59,6 @@ const Box: React.FC = () => {
   const archivedIdeas = isDecided ? visibleIdeas.filter((idea) => idea.approved === -1) : [];
   const archiveId = useId();
 
-  // Approval has no countdown, so the box reports how far the review has got instead.
   const reviewed = ideas.filter((idea) => idea.approved !== 0).length;
 
   const votes = useIdeaVotes(running, boxPhase === '30');

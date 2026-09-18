@@ -23,7 +23,7 @@ describe('getPhaseStatus', () => {
     expect(getPhaseStatus({ idea: idea(), phase: '20' })?.label).toContain('waiting');
   });
 
-  it('keeps the undecided approval badge in the phase colour', () => {
+  it('keeps the undecided approval badge in the phase color', () => {
     expect(getPhaseStatus({ idea: idea(), phase: '20' })?.colors).toBe('bg-approval-light text-approval-fg');
   });
 

@@ -9,8 +9,6 @@ export const useQuorum = (phase: string | undefined): number => {
   const [quorum, setQuorum] = useState(0);
 
   useEffect(() => {
-    // Approval is decided by the review team, not by a threshold: likes are frozen there and the
-    // wild-idea quorum was already cleared on the way into the box.
     if (Number(phase) === APPROVAL) {
       setQuorum(0);
       return;

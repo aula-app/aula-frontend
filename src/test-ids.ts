@@ -36,6 +36,7 @@ export const TEST_IDS = {
 
   // Box actions (v2 Boxes / BoxCard MoreOptions)
   ADD_BOX_BUTTON: 'add-box-button',
+  BOX_IDEA_LIST: 'box-idea-list',
   BOX_MORE_MENU: 'box-more-menu',
   BOX_MORE_OPTIONS_PANEL: 'box-more-options-panel',
   DELETE_BOX_CONFIRM: 'delete-box-confirm',
