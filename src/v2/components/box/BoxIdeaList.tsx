@@ -27,7 +27,7 @@ const DISCUSSION_PHASE = '10';
 
 // Three 32px rows and their 2px gaps, plus half a row, so a fourth idea is cut
 // in half and gives the list a visible edge to scroll.
-const PREVIEW_HEIGHT = 'max-h-[118px]';
+const PREVIEW_HEIGHT = 'max-h-[135px]';
 
 const Metric = ({ icon, count, label }: { icon: ICON_TYPE; count: number; label: string }) => (
   <span className="flex items-center gap-1">
@@ -55,10 +55,7 @@ const BoxIdeaList = ({
   const band = `bg-${color}-light text-foreground`;
 
   return (
-    <ul
-      className={twMerge('flex flex-col gap-0.5 overflow-y-auto', PREVIEW_HEIGHT, className)}
-      data-testid={dataTestId}
-    >
+    <ul className={twMerge('flex flex-col gap-1 overflow-y-auto', PREVIEW_HEIGHT, className)} data-testid={dataTestId}>
       {ideas.map((idea) => {
         const status = getPhaseStatus({ idea, phase, vote: votes?.[idea.hash_id] });
         const category = categories?.[idea.hash_id];
@@ -79,28 +76,28 @@ const BoxIdeaList = ({
               to={`${boxPath}/idea/${idea.hash_id}`}
               className={twMerge('flex min-w-0 flex-1 items-center rounded-none px-3 py-1.5 no-underline', rowColors)}
             >
-              <span className="truncate">{idea.title}</span>
+              <span className="truncate flex-1">{idea.title}</span>
+              {status && <Icon type={status.icon} size="1.1rem" aria-hidden="true" />}
+              {!status && phase === DISCUSSION_PHASE && (
+                <span className={twMerge('flex shrink-0 items-center gap-2 px-2 text-xs font-medium', rowColors)}>
+                  <Metric
+                    icon="discussion"
+                    count={idea.sum_comments}
+                    label={t(
+                      idea.sum_comments === 1 ? 'v2.scopes.ideas.stats.comment' : 'v2.scopes.ideas.stats.comments',
+                      { count: idea.sum_comments }
+                    )}
+                  />
+                  <Metric
+                    icon="heart"
+                    count={idea.sum_likes}
+                    label={t(idea.sum_likes === 1 ? 'v2.scopes.ideas.stats.like' : 'v2.scopes.ideas.stats.likes', {
+                      count: idea.sum_likes,
+                    })}
+                  />
+                </span>
+              )}
             </Link>
-            {status && <PhaseStatus status={status} iconOnly className="shrink-0 rounded-none px-2 text-lg" />}
-            {!status && phase === DISCUSSION_PHASE && (
-              <span className={twMerge('flex shrink-0 items-center gap-2 px-2 text-xs font-medium', rowColors)}>
-                <Metric
-                  icon="discussion"
-                  count={idea.sum_comments}
-                  label={t(
-                    idea.sum_comments === 1 ? 'v2.scopes.ideas.stats.comment' : 'v2.scopes.ideas.stats.comments',
-                    { count: idea.sum_comments }
-                  )}
-                />
-                <Metric
-                  icon="heart"
-                  count={idea.sum_likes}
-                  label={t(idea.sum_likes === 1 ? 'v2.scopes.ideas.stats.like' : 'v2.scopes.ideas.stats.likes', {
-                    count: idea.sum_likes,
-                  })}
-                />
-              </span>
-            )}
           </li>
         );
       })}

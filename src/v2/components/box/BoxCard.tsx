@@ -74,11 +74,11 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
   });
 
   return (
-    <div data-testid={TEST_IDS.BOX_CARD} className="flex flex-col gap-0.5">
+    <div data-testid={TEST_IDS.BOX_CARD} className="flex flex-col gap-1">
       <div
         className={twMerge(
           `relative flex flex-col gap-2 rounded-t-2xl px-4 pt-2 pb-3 text-foreground bg-${phaseColor}`,
-          !hasRows && 'rounded-b-2xl'
+          !hasRows && !showCountdown && !showProgress && 'rounded-b-2xl'
         )}
       >
         <MoreOptions
