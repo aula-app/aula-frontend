@@ -1,0 +1,75 @@
+import { StatusTone } from '@/v2/components/idea/PhaseStatus/getPhaseStatus';
+import Icon, { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
+import { useTranslation } from 'react-i18next';
+import { twMerge } from 'tailwind-merge';
+import { VoteResultsState } from './useVoteResults';
+
+interface Segment {
+  key: string;
+  tone: StatusTone | 'warning';
+  icon: ICON_TYPE;
+  count: number;
+  name: string;
+}
+
+interface VoteResultsProps {
+  /** Distribution from `useVoteResults`. */
+  results: VoteResultsState;
+  /** Eligible voters, used when the stats endpoint sends none — an idea with no votes at all. */
+  users?: number;
+  /** Corner radius is the caller's, since the bar sits between other bands. */
+  className?: string;
+}
+
+/** How an idea polled, as one track split between the options and the voters who never turned up. */
+const VoteResults = ({ results, users = 0, className }: VoteResultsProps) => {
+  const { t } = useTranslation();
+  const { counts, total, voters, loading } = results;
+
+  if (loading) return null;
+
+  // Votes carry a weight, so their sum can outrun the head count. Widening the scale keeps the
+  // segments inside the track and the non-voter share at zero rather than negative.
+  const eligible = Math.max(voters || Number(users) || 0, total);
+  if (eligible <= 0) return null;
+
+  const segments: Segment[] = [
+    { key: 'for', tone: 'success', icon: 'for', count: counts.for, name: t('votes.for') },
+    { key: 'neutral', tone: 'warning', icon: 'neutral', count: counts.neutral, name: t('votes.neutral') },
+    { key: 'against', tone: 'error', icon: 'against', count: counts.against, name: t('votes.against') },
+    {
+      key: 'notVoted',
+      tone: 'neutral',
+      icon: 'clock',
+      count: eligible - total,
+      name: t('v2.scopes.ideas.stats.notVoted'),
+    },
+  ];
+
+  return (
+    <div
+      role="group"
+      aria-label={t('v2.scopes.ideas.stats.voteTurnout', { num: total, total: eligible })}
+      className={twMerge('flex overflow-hidden', className)}
+    >
+      {segments
+        .filter(({ count }) => count > 0)
+        .map(({ key, tone, icon, count, name }) => (
+          <span
+            key={key}
+            style={{ width: `${(count / eligible) * 100}%` }}
+            className={twMerge(
+              'flex items-center justify-center gap-1 overflow-hidden whitespace-nowrap px-1 py-1.5 text-xs font-semibold',
+              `bg-${tone} text-${tone}-fg`
+            )}
+          >
+            <Icon type={icon} size="1rem" aria-hidden="true" />
+            <span aria-hidden="true">{count}</span>
+            <span className="sr-only">{`${name}: ${count}`}</span>
+          </span>
+        ))}
+    </div>
+  );
+};
+
+export default VoteResults;
