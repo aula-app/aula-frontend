@@ -2,7 +2,7 @@ import { deleteBox, editBox } from '@/services/boxes';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { TEST_IDS } from '@/test-ids';
-import { checkPermissions, phases } from '@/utils';
+import { checkPermissions, phases, Vote } from '@/utils';
 import DeleteButton from '@/v2/components/button/DeleteButton';
 import EditButton from '@/v2/components/button/EditButton';
 import ReportButton from '@/v2/components/button/ReportButton';
@@ -14,6 +14,7 @@ import MoreOptions from '@/v2/components/ui/MoreOptions';
 import Link from '@/v2/components/navigation/Link';
 import { Category } from '@/v2/components/idea/CategoryList';
 import BoxIdeaList from './BoxIdeaList';
+import { countSettled } from './countSettled';
 import { BoxForm } from '@/v2/forms';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
@@ -22,19 +23,18 @@ interface BoxCardProps {
   box: BoxType;
   /** The box's ideas, shown as a short preview list. Omit where they are already on screen. */
   ideas?: IdeaType[];
-  /** Review progress for the approval phase. Derived from `ideas` when those are given. */
-  approval?: { reviewed: number; total: number };
+  /** Decision progress for the phases that have one. Derived from `ideas` when those are given. */
+  progress?: { settled: number; total: number };
   /** Category per idea, keyed by idea hash_id, for the preview list's chips. */
   categories?: Record<string, Category>;
-  /** Percentage of users needed, for the result-phase status. */
-  quorum?: number;
-  /** Room members, the quorum denominator. */
-  users?: number;
+  /** The viewer's own vote per idea, keyed by idea hash_id, for the preview list's chips. */
+  votes?: Record<string, Vote | null>;
   /** Refetch the surrounding list after an edit or delete. */
   onChanged?: () => void;
 }
 
 const APPROVAL_PHASE = 20;
+const RESULTS_PHASE = 40;
 
 const phaseProgress = (box: BoxType): { days: number; remaining: number } => {
   // The current phase's countdown runs from when that phase started, not from
@@ -52,7 +52,7 @@ const phaseProgress = (box: BoxType): { days: number; remaining: number } => {
   return { days, remaining };
 };
 
-const BoxCard = ({ box, ideas, approval, categories, quorum, users, onChanged }: BoxCardProps) => {
+const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCardProps) => {
   const { t } = useTranslation();
   const phaseColor = phases[box.phase_id] ?? 'wild';
   const to = `/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`;
@@ -63,17 +63,22 @@ const BoxCard = ({ box, ideas, approval, categories, quorum, users, onChanged }:
   const elapsed = days - remaining;
   const fillPercent = days > 0 ? Math.min(100, Math.max(0, (elapsed / days) * 100)) : 0;
 
-  const reviewed =
-    approval ?? (ideas && { reviewed: ideas.filter((idea) => idea.approved !== 0).length, total: ideas.length });
-  const showApproval = Number(box.phase_id) === APPROVAL_PHASE && !!reviewed && reviewed.total > 0;
-  const reviewedPercent = showApproval ? (reviewed.reviewed / reviewed.total) * 100 : 0;
-  const reviewedLabel = t('v2.scopes.boxes.reviewed', { count: reviewed?.reviewed ?? 0, total: reviewed?.total ?? 0 });
+  const phaseNumber = Number(box.phase_id);
+  const isResults = phaseNumber === RESULTS_PHASE;
+  const settled = progress ?? (ideas && { settled: countSettled(ideas, phaseNumber), total: ideas.length });
+  const showProgress = (phaseNumber === APPROVAL_PHASE || isResults) && !!settled && settled.total > 0;
+  const settledPercent = showProgress ? (settled.settled / settled.total) * 100 : 0;
+  const settledLabel = t(isResults ? 'v2.scopes.boxes.decided' : 'v2.scopes.boxes.reviewed', {
+    count: settled?.settled ?? 0,
+    total: settled?.total ?? 0,
+  });
 
   return (
     <div data-testid={TEST_IDS.BOX_CARD} className="flex flex-col gap-0.5">
       <div
         className={twMerge(
-          `relative flex flex-col gap-2 rounded-t-2xl px-4 pt-2 pb-3 text-foreground bg-${phaseColor}`
+          `relative flex flex-col gap-2 rounded-t-2xl px-4 pt-2 pb-3 text-foreground bg-${phaseColor}`,
+          !hasRows && 'rounded-b-2xl'
         )}
       >
         <MoreOptions
@@ -137,13 +142,11 @@ const BoxCard = ({ box, ideas, approval, categories, quorum, users, onChanged }:
       {hasRows && (
         <BoxIdeaList
           ideas={ideas}
-          // The API sends phase_id as a number despite the type; the status lookup compares strings.
           phase={String(box.phase_id) as `${RoomPhases}`}
           color={phaseColor}
           boxPath={to}
           categories={categories}
-          quorum={quorum}
-          users={users}
+          votes={votes}
           data-testid={TEST_IDS.BOX_IDEA_LIST}
         />
       )}
@@ -160,15 +163,10 @@ const BoxCard = ({ box, ideas, approval, categories, quorum, users, onChanged }:
             {remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
           </ProgressBar>
         )}
-        {showApproval && (
-          <ProgressBar
-            value={reviewedPercent}
-            color={phaseColor}
-            label={reviewedLabel}
-            className="rounded-b-2xl flex-1"
-          >
-            <Icon type="approval" size="1rem" />
-            {reviewedLabel}
+        {showProgress && (
+          <ProgressBar value={settledPercent} color={phaseColor} label={settledLabel} className="rounded-b-2xl flex-1">
+            <Icon type={isResults ? 'results' : 'approval'} size="1rem" />
+            {settledLabel}
           </ProgressBar>
         )}
       </div>

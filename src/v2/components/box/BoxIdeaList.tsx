@@ -1,4 +1,5 @@
 import { IdeaType } from '@/types/Scopes';
+import { Vote } from '@/utils';
 import { PhaseType, RoomPhases } from '@/types/SettingsTypes';
 import { Category } from '@/v2/components/idea/CategoryList';
 import PhaseStatus, { getPhaseStatus } from '@/v2/components/idea/PhaseStatus';
@@ -16,16 +17,13 @@ interface BoxIdeaListProps {
   boxPath: string;
   /** Category per idea, keyed by idea hash_id. Rows without one omit the chip. */
   categories?: Record<string, Category>;
-  /** Percentage of users needed, for the result phase's status. */
-  quorum?: number;
-  /** Room members, the quorum denominator. */
-  users?: number;
+  /** The viewer's own vote per idea, keyed by idea hash_id. Without one a row reads as not yet voted. */
+  votes?: Record<string, Vote | null>;
   className?: string;
   'data-testid'?: string;
 }
 
 const DISCUSSION_PHASE = '10';
-const VOTING_PHASE = '30';
 
 // Three 32px rows and their 2px gaps, plus half a row, so a fourth idea is cut
 // in half and gives the list a visible edge to scroll.
@@ -38,8 +36,7 @@ const BoxIdeaList = ({
   color,
   boxPath,
   categories,
-  quorum,
-  users,
+  votes,
   className,
   'data-testid': dataTestId,
 }: BoxIdeaListProps) => {
@@ -55,8 +52,7 @@ const BoxIdeaList = ({
       data-testid={dataTestId}
     >
       {ideas.map((idea) => {
-        // A voting status is about the viewer's own vote, which this list does not have.
-        const status = phase === VOTING_PHASE ? null : getPhaseStatus({ idea, phase, quorum, users });
+        const status = getPhaseStatus({ idea, phase, vote: votes?.[idea.hash_id] });
         const category = categories?.[idea.hash_id];
 
         const rowColors = status?.colors ?? band;
@@ -80,7 +76,7 @@ const BoxIdeaList = ({
             >
               <span className="truncate">{idea.title}</span>
             </Link>
-            {status && <PhaseStatus status={status} iconOnly className="shrink-0 rounded-none px-2" />}
+            {status && <PhaseStatus status={status} iconOnly className="shrink-0 rounded-none px-2 text-lg" />}
             {!status && phase === DISCUSSION_PHASE && (
               <span className={twMerge('flex shrink-0 items-center gap-1 px-2 text-xs font-medium', rowColors)}>
                 <Icon type="heart" size="1rem" aria-hidden="true" />
