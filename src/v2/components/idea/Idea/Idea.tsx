@@ -6,6 +6,7 @@ import DeleteButton from '@/v2/components/button/DeleteButton';
 import EditButton from '@/v2/components/button/EditButton';
 import ReportButton from '@/v2/components/button/ReportButton';
 import ShareButton from '@/v2/components/button/ShareButton';
+import ApprovalNote from '@/v2/components/idea/ApprovalNote';
 import PhaseStatus, { getPhaseColor, getPhaseColors, getPhaseStatus } from '@/v2/components/idea/PhaseStatus';
 import QuorumBar from '@/v2/components/idea/QuorumBar';
 import CategoryList, { Category } from '@/v2/components/idea/CategoryList';
@@ -56,6 +57,8 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
   const status = getPhaseStatus({ idea, phase: phase_id, vote, quorum, users: participants });
   const bubbleColor = status?.colors ?? getPhaseColors(phase_id);
   const hasTopTab = !!status || categories.length > 0;
+  // Only the idea's own page has room for the argument; cards in a list keep just the chip.
+  const rejectionNote = detail && idea.approved === -1 ? idea.approval_comment : null;
 
   // On its own page the idea is the subject, so it takes the h1 and the comments below sit under it.
   const Title = detail ? 'h1' : 'h2';
@@ -84,12 +87,13 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
             <CategoryList categories={categories} />
           </div>
         )}
+        {rejectionNote && <ApprovalNote comment={rejectionNote} colors={bubbleColor} />}
         <div
           className={twMerge(
             'relative flex flex-col-reverse ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
             bubbleColor,
             hasQuorumBar ? 'rounded-br-none' : '',
-            hasTopTab ? 'rounded-tr-none' : ''
+            rejectionNote ? 'rounded-t-none' : hasTopTab ? 'rounded-tr-none' : ''
           )}
         >
           {detail ? <div>{body}</div> : <Link to={ideaPath}>{body}</Link>}

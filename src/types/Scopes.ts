@@ -96,7 +96,7 @@ export interface IdeaType {
   is_winner: number;
   winner_comment: string;
   approved: -1 | 0 | 1;
-  approval_comment: null;
+  approval_comment: string | null;
   custom_field1: string | null;
   custom_field2: string | null;
   number_of_votes: number;

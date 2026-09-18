@@ -7,8 +7,10 @@ import DeleteButton from '@/v2/components/button/DeleteButton';
 import EditButton from '@/v2/components/button/EditButton';
 import ReportButton from '@/v2/components/button/ReportButton';
 import ShareButton from '@/v2/components/button/ShareButton';
+import Avatar from '@/v2/components/idea/Avatar';
 import LikeStat from '@/v2/components/idea/LikeStat';
-import UserBar from '@/v2/components/idea/UserBar';
+import UserMeta from '@/v2/components/idea/UserMeta';
+import DateText from '@/v2/components/ui/DateText';
 import Markdown from '@/v2/components/ui/Markdown';
 import MoreOptions from '@/v2/components/ui/MoreOptions';
 import { CommentForm } from '@/v2/forms';
@@ -38,13 +40,15 @@ const Comment = ({ comment, className, onChanged }: CommentProps) => {
     <article
       aria-label={t('v2.scopes.comments.by', { name: comment.displayname })}
       data-testid="comment-bubble"
-      className={twMerge('flex flex-col gap-1', className)}
+      className={twMerge('grid grid-cols-[auto_1fr] items-center gap-x-2', className)}
     >
-      <div className="relative flex flex-col-reverse ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none bg-neutral text-neutral-fg">
-        <Markdown className="prose text-inherit">{comment.content}</Markdown>
+      <Avatar name={comment.displayname} />
+
+      <div className="flex items-start justify-between gap-2 min-w-0 mr-1">
+        <UserMeta name={comment.displayname} />
         <MoreOptions
-          className="absolute top-1 right-1 z-10"
-          panelClassName="ml-auto mr-1"
+          className="-mt-2"
+          panelClassName="ml-auto"
           menuTestId={TEST_IDS.COMMENT_MORE_MENU}
           panelTestId={TEST_IDS.COMMENT_MORE_OPTIONS_PANEL}
         >
@@ -78,8 +82,12 @@ const Comment = ({ comment, className, onChanged }: CommentProps) => {
         </MoreOptions>
       </div>
 
-      <div className="flex justify-between items-center gap-6 mr-1">
-        <UserBar name={comment.displayname} date={comment.created} />
+      <div className="-mt-2 col-start-2 min-w-0 py-2 px-4 rounded-2xl rounded-tl-none bg-neutral text-neutral-fg">
+        <Markdown className="prose text-inherit">{comment.content}</Markdown>
+      </div>
+
+      <div className="col-start-2 flex justify-between items-center gap-6 mx-1">
+        <DateText date={comment.created} className="pb-3" />
         <LikeStat like={like} readOnly={!canLike} data-testid={TEST_IDS.LIKE_BUTTON} />
       </div>
     </article>

@@ -3,6 +3,7 @@ import { useAppStore } from '@/store/AppStore';
 import { IdeaType } from '@/types/Scopes';
 import IdeaCard from '@/v2/components/idea/Idea';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
+import { useScrollRestoration } from '@/v2/hooks';
 import { useIdeaVotes } from '@/v2/hooks/useIdeaVotes';
 import { useQuorum } from '@/v2/hooks/useQuorum';
 import { useRoomUsers } from '@/v2/hooks/useRoomUsers';
@@ -27,6 +28,8 @@ const Idea: React.FC = () => {
   const listPath = box
     ? `/room/${room_id}/phase/${ideaPhase}/idea-box/${box.hash_id}`
     : `/room/${room_id}/phase/${ideaPhase}`;
+
+  const scrollRef = useScrollRestoration<HTMLDivElement>(`idea-${idea_id}`, !!idea);
 
   const quorum = useQuorum(ideaPhase);
   const users = useRoomUsers(room_id);
@@ -74,7 +77,7 @@ const Idea: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full min-h-0 flex flex-col">
+    <div ref={scrollRef} className="w-full h-full overflow-y-auto flex flex-col">
       {isLoading && (
         <p role="status" className="p-2">
           <span aria-hidden="true">...</span>
@@ -105,9 +108,7 @@ const Idea: React.FC = () => {
             />
           </div>
 
-          <div className="flex-1 min-h-0">
-            <Comments idea_id={resolved.hash_id} phase={ideaPhase} />
-          </div>
+          <Comments idea_id={resolved.hash_id} phase={ideaPhase} />
         </>
       )}
     </div>

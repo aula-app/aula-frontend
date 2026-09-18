@@ -10,7 +10,6 @@ import TextInput from '@/v2/components/input/TextInput';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
 import Icon from '@/v2/components/ui/Icon/Icon';
 import ScopeTitle from '@/v2/components/ui/ScopeTitle';
-import ScrollList from '@/v2/components/ui/ScrollList';
 import { CommentForm } from '@/v2/forms';
 import { ListFilterConfig, useListFilter } from '@/v2/hooks/useListFilter';
 import { useModal } from '@/v2/hooks/useModal';
@@ -68,7 +67,7 @@ const Comments: React.FC<CommentsProps> = ({ idea_id, phase }) => {
   };
 
   return (
-    <section className="flex flex-col h-full min-h-0">
+    <section className="flex flex-col">
       <ScopeTitle
         as="h2"
         scope="comments"
@@ -166,13 +165,13 @@ const Comments: React.FC<CommentsProps> = ({ idea_id, phase }) => {
       )}
 
       {!isLoading && !error && visibleComments.length > 0 && (
-        <ScrollList storageKey={`idea-comments-${idea_id}`}>
+        <ul className="flex flex-col gap-1 p-2 sm:p-4">
           {visibleComments.map((comment) => (
             <li key={comment.id}>
               <Comment comment={comment} onChanged={refetch} />
             </li>
           ))}
-        </ScrollList>
+        </ul>
       )}
     </section>
   );

@@ -137,7 +137,6 @@ const BoxCard = ({ box, ideas, approval, categories, quorum, users, onChanged }:
       {hasRows && (
         <BoxIdeaList
           ideas={ideas}
-          // The API sends phase_id as a number despite the type; the status lookup compares strings.
           phase={String(box.phase_id) as `${RoomPhases}`}
           color={phaseColor}
           boxPath={to}
