@@ -1,12 +1,12 @@
-import { PhaseType } from '@/types/SettingsTypes';
+import { StatusTone } from '@/v2/components/idea/PhaseStatus/getPhaseStatus';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ProgressBarProps {
   /** Filled share of the track, 0–100. Clamped. */
   value: number;
-  /** Palette: the track is `bg-{color}`, the fill `bg-{color}-active`. */
-  color: PhaseType;
+  /** Palette: the track is `bg-{color}-light`, the fill `bg-{color}-active`. */
+  color: StatusTone;
   /** Accessible name — the bar's own content is treated as decorative. */
   label: string;
   /** Threshold to mark on the track, 0–100, e.g. a quorum. */

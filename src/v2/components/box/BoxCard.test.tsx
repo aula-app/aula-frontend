@@ -39,12 +39,13 @@ const renderCard = (phase_id: number, props: Partial<ComponentProps<typeof BoxCa
 const bar = (container: HTMLElement) => container.querySelector('[role="progressbar"]');
 const rows = (container: HTMLElement) => Array.from(container.querySelectorAll('[data-testid="box-idea-list"] li'));
 
-const ideaList = (approvals: number[], likes: number[] = []) =>
+const ideaList = (approvals: number[], likes: number[] = [], winners: number[] = []) =>
   approvals.map((approved, i) => ({
     hash_id: `i${i}`,
     title: `Idea ${i}`,
     approved,
     sum_likes: likes[i] ?? 0,
+    is_winner: winners[i] ?? 0,
   })) as IdeaType[];
 
 describe('BoxCard idea preview', () => {
@@ -145,11 +146,26 @@ describe('BoxCard idea preview', () => {
     expect(badge?.textContent).not.toContain('9');
   });
 
-  it('leaves out the viewer-specific status during voting', () => {
-    const { container } = renderCard(30, { ideas: ideaList([1, 1]) });
+  it("shows the viewer's own vote on each row during voting", () => {
+    const { container } = renderCard(30, {
+      ideas: ideaList([1, 1, 1]),
+      votes: { i0: 1, i1: -1, i2: 0 },
+    });
 
-    expect(rows(container)).toHaveLength(2);
-    expect(container.querySelector('[data-testid="box-idea-list"]')?.textContent).not.toContain('status.waiting');
+    const labels = rows(container).map((li) => li.querySelector('[aria-label]')?.getAttribute('aria-label'));
+    expect(labels).toEqual([
+      'v2.scopes.ideas.status.votedFor',
+      'v2.scopes.ideas.status.votedAgainst',
+      'v2.scopes.ideas.status.votedNeutral',
+    ]);
+  });
+
+  it('reads an idea the viewer has not voted on as waiting', () => {
+    const { container } = renderCard(30, { ideas: ideaList([1]), votes: {} });
+
+    expect(rows(container)[0].querySelector('[aria-label]')?.getAttribute('aria-label')).toBe(
+      'v2.scopes.ideas.status.waiting'
+    );
   });
 });
 
@@ -161,14 +177,14 @@ describe('BoxCard approval progress', () => {
   });
 
   it('reports how far the review has got during approval', () => {
-    const { container } = renderCard(20, { approval: { reviewed: 3, total: 5 } });
+    const { container } = renderCard(20, { progress: { settled: 3, total: 5 } });
 
     expect(bar(container)?.getAttribute('aria-valuenow')).toBe('60');
     expect(bar(container)?.getAttribute('aria-label')).toContain('v2.scopes.boxes.reviewed');
   });
 
   it('draws a full bar once every idea has been decided', () => {
-    const { container } = renderCard(20, { approval: { reviewed: 5, total: 5 } });
+    const { container } = renderCard(20, { progress: { settled: 5, total: 5 } });
 
     expect(bar(container)?.getAttribute('aria-valuenow')).toBe('100');
   });
@@ -180,13 +196,20 @@ describe('BoxCard approval progress', () => {
   });
 
   it('draws nothing for an empty box, which has no review to report', () => {
-    const { container } = renderCard(20, { approval: { reviewed: 0, total: 0 } });
+    const { container } = renderCard(20, { progress: { settled: 0, total: 0 } });
 
     expect(bar(container)).toBeNull();
   });
 
+  it('counts decided ideas in the results phase, where the winner flag records the answer', () => {
+    const { container } = renderCard(40, { ideas: ideaList([0, 0, 0, 0, 0], [], [1, -1, 0, 0, 0]) });
+
+    expect(bar(container)?.getAttribute('aria-valuenow')).toBe('40');
+    expect(bar(container)?.getAttribute('aria-label')).toContain('v2.scopes.boxes.decided');
+  });
+
   it('leaves the countdown alone in phases that have one', () => {
-    const { container } = renderCard(10, { approval: { reviewed: 3, total: 5 } });
+    const { container } = renderCard(10, { progress: { settled: 3, total: 5 } });
 
     expect(bar(container)?.getAttribute('aria-label')).toContain('phases.');
   });

@@ -89,7 +89,8 @@
       "boxes": {
         "singular": "Box",
         "plural": "Boxen",
-        "reviewed": "{{count}} von {{total}} geprüft"
+        "reviewed": "{{count}} von {{total}} geprüft",
+        "decided": "{{count}} von {{total}} entschieden"
       },
       "comments": {
         "singular": "Verbesserungsvorschlag",
@@ -117,8 +118,6 @@
           "votedNeutral": "Sie haben neutral abgestimmt",
           "votedAgainst": "Sie haben dagegen abgestimmt",
           "winner": "Gewinner",
-          "quorumReached": "Quorum erreicht",
-          "quorumMissed": "Quorum nicht erreicht",
           "notSelected": "Nicht ausgewählt"
         }
       }

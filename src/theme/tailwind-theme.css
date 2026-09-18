@@ -29,6 +29,8 @@
 
   /* --- Semantic states --- */
   --color-error: hsl(0, 100%, 94%);
+  --color-error-active: hsl(0, 90%, 88%);
+  --color-error-light: hsl(0, 100%, 97%);
   --color-error-fg: hsl(0, 72%, 35%);
 
   --color-warning: hsl(45, 100%, 90%);
@@ -38,9 +40,13 @@
   --color-info-fg: hsl(204, 70%, 30%);
 
   --color-success: hsl(134, 72%, 88%);
+  --color-success-active: hsl(134, 72%, 80%);
+  --color-success-light: hsl(134, 72%, 94%);
   --color-success-fg: hsl(134, 55%, 28%);
 
   --color-neutral: hsl(215, 15%, 88%);
+  --color-neutral-active: hsl(215, 15%, 80%);
+  --color-neutral-light: hsl(215, 15%, 94%);
   --color-neutral-fg: hsl(215, 20%, 28%);
 
   /* --- Phases --- */
@@ -93,6 +99,8 @@
 
   /* -bg deepened so the light -fg text meets WCAG AA (~5:1) as a filled pair */
   --color-error: hsl(0, 45%, 26%);
+  --color-error-active: hsl(0, 55%, 22%);
+  --color-error-light: hsl(0, 35%, 20%);
   --color-error-fg: hsl(0, 80%, 75%);
 
   --color-warning: hsl(40, 55%, 24%);
@@ -102,9 +110,13 @@
   --color-info-fg: hsl(204, 75%, 72%);
 
   --color-success: hsl(134, 32%, 24%);
+  --color-success-active: hsl(134, 42%, 20%);
+  --color-success-light: hsl(134, 26%, 18%);
   --color-success-fg: hsl(134, 60%, 65%);
 
   --color-neutral: hsl(215, 18%, 28%);
+  --color-neutral-active: hsl(215, 20%, 23%);
+  --color-neutral-light: hsl(215, 16%, 22%);
   --color-neutral-fg: hsl(215, 20%, 82%);
 
   /* --- Phases --- */
@@ -166,6 +178,8 @@
 
   /* --- Semantic states --- */
   --color-error: var(--color-error);
+  --color-error-active: var(--color-error-active);
+  --color-error-light: var(--color-error-light);
   --color-error-fg: var(--color-error-fg);
 
   --color-warning: var(--color-warning);
@@ -175,9 +189,13 @@
   --color-info-fg: var(--color-info-fg);
 
   --color-success: var(--color-success);
+  --color-success-active: var(--color-success-active);
+  --color-success-light: var(--color-success-light);
   --color-success-fg: var(--color-success-fg);
 
   --color-neutral: var(--color-neutral);
+  --color-neutral-active: var(--color-neutral-active);
+  --color-neutral-light: var(--color-neutral-light);
   --color-neutral-fg: var(--color-neutral-fg);
 
   /* --- Phases --- */

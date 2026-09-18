@@ -14,6 +14,8 @@ import LikeStat from '@/v2/components/idea/LikeStat';
 import { useIdeaLike } from '@/v2/components/idea/LikeStat/useIdeaLike';
 import { IdeaForm } from '@/v2/forms';
 import Stat from '@/v2/components/idea/Stat';
+import VoteBar, { useIdeaVote } from '@/v2/components/idea/VoteBar';
+import WinnerBar, { useIdeaWinner } from '@/v2/components/idea/WinnerBar';
 import UserBar from '@/v2/components/idea/UserBar';
 import Markdown from '@/v2/components/ui/Markdown';
 import MoreOptions from '@/v2/components/ui/MoreOptions';
@@ -50,11 +52,21 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
   const canLike = phaseNumber < 20;
   const isArchived = isVoting && idea.approved === -1;
   const hasQuorumBar = !isArchived && (isVoting || quorum > 0);
+  const hasVoteBar = detail && phase_id === '30' && !isArchived;
+  // The verdict is the admin's alone, so unlike the vote bar it is not shown to others at all.
+  const hasWinnerBar = detail && phase_id === '40' && !isArchived && checkPermissions('ideas', 'setWinner');
 
   const participants = Number(users) || Number(idea.number_of_users) || 0;
 
   const like = useIdeaLike(idea);
-  const status = getPhaseStatus({ idea, phase: phase_id, vote, quorum, users: participants });
+  const voting = useIdeaVote(idea.hash_id, vote);
+  const winner = useIdeaWinner(idea.hash_id, idea.is_winner);
+  // Casting a vote has to move the status chip with it, so both read the same state.
+  const status = getPhaseStatus({
+    idea: { ...idea, is_winner: winner.winner ?? 0 },
+    phase: phase_id,
+    vote: voting.vote,
+  });
   const bubbleColor = status?.colors ?? getPhaseColors(phase_id);
   const hasTopTab = !!status || categories.length > 0;
   // Only the idea's own page has room for the argument; cards in a list keep just the chip.
@@ -147,13 +159,17 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
         </div>
       </div>
 
+      {hasVoteBar && <VoteBar vote={voting} disabled={!checkPermissions('ideas', 'vote')} className="ml-4" />}
+
+      {hasWinnerBar && <WinnerBar winner={winner} className="ml-4" />}
+
       {hasQuorumBar && (
         <QuorumBar
           metric={isVoting ? 'votes' : 'likes'}
           count={isVoting ? idea.number_of_votes : like.count}
           users={participants}
           quorum={quorum}
-          color={getPhaseColor(phase_id)}
+          color={status?.tone ?? getPhaseColor(phase_id)}
           className="ml-4 rounded-br-2xl"
         />
       )}

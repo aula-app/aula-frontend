@@ -5,7 +5,7 @@ import { getVote, getVoteResults, ResultResponse } from '@/services/vote';
 import { ObjectPropByName } from '@/types/Generics';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { checkPermissions, phases, votingOptions } from '@/utils';
+import { checkPermissions, isWinner, phases, votingOptions } from '@/utils';
 import { Card, Stack, Typography, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useCallback, useEffect, useState } from 'react';
@@ -66,7 +66,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, disabled = false, ...restOfProps }:
   const getBgColor = () => {
     switch (phase) {
       case 40:
-        return idea.is_winner ? 'for' : 'disabled';
+        return isWinner(idea.is_winner) ? 'for' : 'disabled';
       case 20:
         if (idea.approved === 1) return 'for';
         if (idea.approved === -1) return 'against';
@@ -104,7 +104,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, disabled = false, ...restOfProps }:
         scrollSnapAlign: 'center',
         order:
           phase === 40
-            ? idea.is_winner
+            ? isWinner(idea.is_winner)
               ? idea.sum_votes / idea.number_of_users
               : -(idea.sum_votes / numVotes.total_votes)
             : 0,
@@ -127,7 +127,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, disabled = false, ...restOfProps }:
           <Stack direction="row" height={68} alignItems="center" color={disabled ? 'secondary.main' : ''}>
             <Stack pl={2}>
               {phase >= 40 ? (
-                <AppIcon icon={Number(idea.is_winner) > 0 ? 'winner' : passedQuorum() ? 'for' : 'against'} size="xl" />
+                <AppIcon icon={isWinner(idea.is_winner) ? 'winner' : passedQuorum() ? 'for' : 'against'} size="xl" />
               ) : icon ? (
                 <AppIcon icon={icon} />
               ) : (

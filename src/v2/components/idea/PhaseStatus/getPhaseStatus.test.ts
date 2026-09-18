@@ -45,9 +45,7 @@ describe('getPhaseStatus', () => {
     expect(archived?.label).toContain('rejected');
     expect(archived?.colors).toBe('bg-neutral text-neutral-fg');
 
-    expect(getPhaseStatus({ idea: idea({ approved: -1 }), phase: '40', quorum: 50 })?.colors).toBe(
-      'bg-neutral text-neutral-fg'
-    );
+    expect(getPhaseStatus({ idea: idea({ approved: -1 }), phase: '40' })?.colors).toBe('bg-neutral text-neutral-fg');
   });
 
   it('keeps the approval-phase rejection loud', () => {
@@ -59,22 +57,18 @@ describe('getPhaseStatus', () => {
   });
 
   it('marks winners in the results phase', () => {
-    expect(getPhaseStatus({ idea: idea({ is_winner: 1 }), phase: '40', quorum: 50 })?.label).toContain('winner');
+    expect(getPhaseStatus({ idea: idea({ is_winner: 1 }), phase: '40' })?.label).toContain('winner');
   });
 
-  it('weighs turnout against the quorum for non-winners', () => {
-    const turnout = idea({ number_of_votes: 6, number_of_users: 10 });
-    expect(getPhaseStatus({ idea: turnout, phase: '40', quorum: 50 })?.label).toContain('quorumReached');
-    expect(getPhaseStatus({ idea: turnout, phase: '40', quorum: 80 })?.label).toContain('quorumMissed');
+  it('marks an idea the admin turned down, whatever turnout it drew', () => {
+    const turned_down = idea({ is_winner: -1, number_of_votes: 9, number_of_users: 10 });
+    const status = getPhaseStatus({ idea: turned_down, phase: '40' });
+    expect(status?.label).toContain('notSelected');
+    expect(status?.colors).toBe('bg-error text-error-fg');
   });
 
-  it('does not claim a missed quorum when none is configured', () => {
-    expect(getPhaseStatus({ idea: idea({ number_of_votes: 6, number_of_users: 10 }), phase: '40' })?.label).toContain(
-      'notSelected'
-    );
-  });
-
-  it('does not divide by zero when a box has no eligible users', () => {
-    expect(getPhaseStatus({ idea: idea(), phase: '40', quorum: 50 })?.label).toContain('quorumMissed');
+  it('leaves an idea nobody has ruled on waiting, however it polled', () => {
+    const polled = idea({ number_of_votes: 9, number_of_users: 10 });
+    expect(getPhaseStatus({ idea: polled, phase: '40' })?.label).toContain('waiting');
   });
 });

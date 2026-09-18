@@ -16,13 +16,12 @@ import { BoxForm } from '@/v2/forms';
 import { ListFilterConfig, useListFilter } from '@/v2/hooks/useListFilter';
 import { useModal } from '@/v2/hooks/useModal';
 import { useToast } from '@/v2/hooks/useToast';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import BoxCard from '@/v2/components/box/BoxCard';
 import { useBoxIdeas } from '@/v2/hooks/useBoxIdeas';
-import { useQuorum } from '@/v2/hooks/useQuorum';
-import { useRoomUsers } from '@/v2/hooks/useRoomUsers';
+import { useIdeaVotes } from '@/v2/hooks/useIdeaVotes';
 import { useBoxesByRoom } from './useBoxesByRoom';
 
 const boxesFilterConfig: ListFilterConfig<BoxType> = {
@@ -50,8 +49,10 @@ const Boxes: React.FC = () => {
 
   // Keyed on the full list, not the filtered one, so searching does not refetch.
   const boxIdeas = useBoxIdeas(boxes);
-  const quorum = useQuorum(currentPhase);
-  const users = useRoomUsers(room_id);
+
+  // Votes are per idea and the rows span every box, so they are fetched for the lot at once.
+  const allIdeas = useMemo(() => Object.values(boxIdeas).flat(), [boxIdeas]);
+  const votes = useIdeaVotes(allIdeas, currentPhase === '30');
 
   const addBoxLabel = t('v2.ui.actions.add', { var: t('v2.scopes.boxes.singular') });
 
@@ -185,7 +186,7 @@ const Boxes: React.FC = () => {
         <ScrollList storageKey={`boxes-${room_id}-${currentPhase}`}>
           {visibleBoxes.map((box) => (
             <li key={box.hash_id}>
-              <BoxCard box={box} ideas={boxIdeas[box.hash_id]} quorum={quorum} users={users} onChanged={refetch} />
+              <BoxCard box={box} ideas={boxIdeas[box.hash_id]} votes={votes} onChanged={refetch} />
             </li>
           ))}
         </ScrollList>
