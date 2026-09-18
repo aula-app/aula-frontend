@@ -4,7 +4,7 @@ import { PhaseType, RoomPhases } from '@/types/SettingsTypes';
 import { Category } from '@/v2/components/idea/CategoryList';
 import PhaseStatus, { getPhaseStatus } from '@/v2/components/idea/PhaseStatus';
 import Link from '@/v2/components/navigation/Link';
-import Icon from '@/v2/components/ui/Icon/Icon';
+import Icon, { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
@@ -28,6 +28,14 @@ const DISCUSSION_PHASE = '10';
 // Three 32px rows and their 2px gaps, plus half a row, so a fourth idea is cut
 // in half and gives the list a visible edge to scroll.
 const PREVIEW_HEIGHT = 'max-h-[118px]';
+
+const Metric = ({ icon, count, label }: { icon: ICON_TYPE; count: number; label: string }) => (
+  <span className="flex items-center gap-1">
+    <Icon type={icon} size="1rem" aria-hidden="true" />
+    <span aria-hidden="true">{count}</span>
+    <span className="sr-only">{label}</span>
+  </span>
+);
 
 /** What a box holds, as full-width rows: category, title and status. */
 const BoxIdeaList = ({
@@ -69,23 +77,28 @@ const BoxIdeaList = ({
             </span>
             <Link
               to={`${boxPath}/idea/${idea.hash_id}`}
-              className={twMerge(
-                'flex min-w-0 flex-1 items-center rounded-none px-3 py-1.5 text-sm no-underline',
-                rowColors
-              )}
+              className={twMerge('flex min-w-0 flex-1 items-center rounded-none px-3 py-1.5 no-underline', rowColors)}
             >
               <span className="truncate">{idea.title}</span>
             </Link>
             {status && <PhaseStatus status={status} iconOnly className="shrink-0 rounded-none px-2 text-lg" />}
             {!status && phase === DISCUSSION_PHASE && (
-              <span className={twMerge('flex shrink-0 items-center gap-1 px-2 text-xs font-medium', rowColors)}>
-                <Icon type="heart" size="1rem" aria-hidden="true" />
-                <span aria-hidden="true">{idea.sum_likes}</span>
-                <span className="sr-only">
-                  {t(idea.sum_likes === 1 ? 'v2.scopes.ideas.stats.like' : 'v2.scopes.ideas.stats.likes', {
+              <span className={twMerge('flex shrink-0 items-center gap-2 px-2 text-xs font-medium', rowColors)}>
+                <Metric
+                  icon="discussion"
+                  count={idea.sum_comments}
+                  label={t(
+                    idea.sum_comments === 1 ? 'v2.scopes.ideas.stats.comment' : 'v2.scopes.ideas.stats.comments',
+                    { count: idea.sum_comments }
+                  )}
+                />
+                <Metric
+                  icon="heart"
+                  count={idea.sum_likes}
+                  label={t(idea.sum_likes === 1 ? 'v2.scopes.ideas.stats.like' : 'v2.scopes.ideas.stats.likes', {
                     count: idea.sum_likes,
                   })}
-                </span>
+                />
               </span>
             )}
           </li>

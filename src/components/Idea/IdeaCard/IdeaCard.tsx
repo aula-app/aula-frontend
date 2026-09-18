@@ -37,6 +37,7 @@ const IdeaCard = ({ idea, phase, sx, quorum, disabled = false, ...restOfProps }:
     votes_negative: 0,
     votes_neutral: 0,
     votes_positive: 0,
+    voters_count: 0,
   });
 
   const fetchResults = useCallback(async () => {

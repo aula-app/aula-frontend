@@ -35,6 +35,7 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
     votes_negative: 0,
     votes_neutral: 0,
     votes_positive: 0,
+    voters_count: 0,
   });
 
   const getResults = () => {

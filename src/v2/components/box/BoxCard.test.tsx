@@ -39,12 +39,13 @@ const renderCard = (phase_id: number, props: Partial<ComponentProps<typeof BoxCa
 const bar = (container: HTMLElement) => container.querySelector('[role="progressbar"]');
 const rows = (container: HTMLElement) => Array.from(container.querySelectorAll('[data-testid="box-idea-list"] li'));
 
-const ideaList = (approvals: number[], likes: number[] = [], winners: number[] = []) =>
+const ideaList = (approvals: number[], likes: number[] = [], winners: number[] = [], comments: number[] = []) =>
   approvals.map((approved, i) => ({
     hash_id: `i${i}`,
     title: `Idea ${i}`,
     approved,
     sum_likes: likes[i] ?? 0,
+    sum_comments: comments[i] ?? 0,
     is_winner: winners[i] ?? 0,
   })) as IdeaType[];
 
@@ -129,13 +130,17 @@ describe('BoxCard idea preview', () => {
     expect(rows(withIcon.container)[0].firstElementChild?.className).toContain('bg-success');
   });
 
-  it('shows the like count in discussion, where there is no status to report', () => {
-    const { container } = renderCard(10, { ideas: ideaList([0, 0], [12, 1]) });
+  it('shows the comment and like counts in discussion, where there is no status to report', () => {
+    const { container } = renderCard(10, { ideas: ideaList([0, 0], [12, 1], [], [5, 1]) });
 
     const badge = (i: number) => rows(container)[i].lastElementChild;
+    const labels = (i: number) =>
+      Array.from(badge(i)?.querySelectorAll('.sr-only') ?? []).map((node) => node.textContent);
+
+    expect(badge(0)?.textContent).toContain('5');
     expect(badge(0)?.textContent).toContain('12');
-    expect(badge(0)?.querySelector('.sr-only')?.textContent).toContain('stats.likes');
-    expect(badge(1)?.querySelector('.sr-only')?.textContent).toContain('stats.like:');
+    expect(labels(0)).toEqual([expect.stringContaining('stats.comments'), expect.stringContaining('stats.likes')]);
+    expect(labels(1)).toEqual([expect.stringContaining('stats.comment:'), expect.stringContaining('stats.like:')]);
   });
 
   it('keeps the status badge in approval rather than the like count', () => {

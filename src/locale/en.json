@@ -108,7 +108,8 @@
           "comment": "{{count}} comment",
           "comments": "{{count}} comments",
           "voteTurnout": "{{num}} of {{total}} people voted",
-          "likeTurnout": "{{num}} of {{total}} people liked this"
+          "likeTurnout": "{{num}} of {{total}} people liked this",
+          "notVoted": "Not voted"
         },
         "status": {
           "approved": "Approved",

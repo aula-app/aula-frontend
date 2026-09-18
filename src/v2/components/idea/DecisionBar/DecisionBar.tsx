@@ -34,7 +34,7 @@ const OFF_CHOSEN = 'bg-neutral text-neutral-fg hover:bg-neutral';
 
 /** One decision as a band of mutually exclusive options: a vote, a verdict, a pick. */
 const DecisionBar = <T,>({ label, options, value, onChange, disabled = false, className }: DecisionBarProps<T>) => (
-  <div role="group" aria-label={label} className={twMerge('flex gap-0.5 overflow-hidden', className)}>
+  <div role="group" aria-label={label} className={twMerge('flex gap-1 overflow-hidden', className)}>
     {options.map((option) => {
       const chosen = value === option.value;
 

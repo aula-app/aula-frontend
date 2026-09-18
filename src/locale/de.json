@@ -108,7 +108,8 @@
           "comment": "{{count}} Kommentar",
           "comments": "{{count}} Kommentare",
           "voteTurnout": "{{num}} von {{total}} Personen haben abgestimmt",
-          "likeTurnout": "{{num}} von {{total}} Personen gefällt diese Idee"
+          "likeTurnout": "{{num}} von {{total}} Personen gefällt diese Idee",
+          "notVoted": "Nicht abgestimmt"
         },
         "status": {
           "approved": "Genehmigt",

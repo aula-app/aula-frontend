@@ -15,6 +15,7 @@ import { useIdeaLike } from '@/v2/components/idea/LikeStat/useIdeaLike';
 import { IdeaForm } from '@/v2/forms';
 import Stat from '@/v2/components/idea/Stat';
 import VoteBar, { useIdeaVote } from '@/v2/components/idea/VoteBar';
+import VoteResults, { useVoteResults } from '@/v2/components/idea/VoteResults';
 import WinnerBar, { useIdeaWinner } from '@/v2/components/idea/WinnerBar';
 import UserBar from '@/v2/components/idea/UserBar';
 import Markdown from '@/v2/components/ui/Markdown';
@@ -51,15 +52,18 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
   const isVoting = phaseNumber >= 30;
   const canLike = phaseNumber < 20;
   const isArchived = isVoting && idea.approved === -1;
-  const hasQuorumBar = !isArchived && (isVoting || quorum > 0);
   const hasVoteBar = detail && phase_id === '30' && !isArchived;
+  // On its own page the results phase answers turnout with the distribution instead.
+  const hasVoteResults = detail && phase_id === '40' && !isArchived;
+  const hasQuorumBar = !isArchived && !hasVoteResults && (isVoting || quorum > 0);
   // The verdict is the admin's alone, so unlike the vote bar it is not shown to others at all.
-  const hasWinnerBar = detail && phase_id === '40' && !isArchived && checkPermissions('ideas', 'setWinner');
+  const hasWinnerBar = hasVoteResults && checkPermissions('ideas', 'setWinner');
 
   const participants = Number(users) || Number(idea.number_of_users) || 0;
 
   const like = useIdeaLike(idea);
   const voting = useIdeaVote(idea.hash_id, vote);
+  const results = useVoteResults(idea.hash_id, hasVoteResults);
   const winner = useIdeaWinner(idea.hash_id, idea.is_winner);
   // Casting a vote has to move the status chip with it, so both read the same state.
   const status = getPhaseStatus({
@@ -92,7 +96,7 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
       data-testid={`idea-${idea.title}`}
       className={twMerge('flex flex-col gap-1', className)}
     >
-      <div className="relative flex flex-col gap-0.5 flex-1">
+      <div className="relative flex flex-col gap-1 flex-1">
         {hasTopTab && (
           <div className="flex flex-wrap items-center justify-end gap-1">
             {status && <PhaseStatus status={status} className={twMerge(categories.length > 0 && 'rounded-tl-none')} />}
@@ -104,7 +108,7 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
           className={twMerge(
             'relative flex flex-col-reverse ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
             bubbleColor,
-            hasQuorumBar ? 'rounded-br-none' : '',
+            hasQuorumBar || hasVoteResults ? 'rounded-br-none' : '',
             rejectionNote ? 'rounded-t-none' : hasTopTab ? 'rounded-tr-none' : ''
           )}
         >
@@ -161,7 +165,15 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
 
       {hasVoteBar && <VoteBar vote={voting} disabled={!checkPermissions('ideas', 'vote')} className="ml-4" />}
 
-      {hasWinnerBar && <WinnerBar winner={winner} className="ml-4" />}
+      {hasVoteResults && (
+        <VoteResults
+          results={results}
+          users={participants}
+          className={twMerge('ml-4', !hasWinnerBar && 'rounded-b-2xl')}
+        />
+      )}
+
+      {hasWinnerBar && <WinnerBar winner={winner} className="ml-4 rounded-b-2xl" />}
 
       {hasQuorumBar && (
         <QuorumBar
