@@ -56,14 +56,14 @@ describe('getPhaseStatus', () => {
     expect(getPhaseStatus({ idea: idea({ approved: -1 }), phase: '10' })).toBeNull();
   });
 
-  it('marks winners in the results phase', () => {
-    expect(getPhaseStatus({ idea: idea({ is_winner: 1 }), phase: '40' })?.label).toContain('winner');
+  it('marks an idea the admin is taking forward', () => {
+    expect(getPhaseStatus({ idea: idea({ is_winner: 1 }), phase: '40' })?.label).toContain('takenForward');
   });
 
   it('marks an idea the admin turned down, whatever turnout it drew', () => {
     const turned_down = idea({ is_winner: -1, number_of_votes: 9, number_of_users: 10 });
     const status = getPhaseStatus({ idea: turned_down, phase: '40' });
-    expect(status?.label).toContain('notSelected');
+    expect(status?.label).toContain('notTakenForward');
     expect(status?.colors).toBe('bg-error text-error-fg');
   });
 

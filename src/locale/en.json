@@ -117,8 +117,9 @@
           "votedFor": "You voted for",
           "votedNeutral": "You voted neutral",
           "votedAgainst": "You voted against",
-          "winner": "Winner",
-          "notSelected": "Not selected"
+          "takenForward": "Taken forward",
+          "notTakenForward": "Not taken forward",
+          "outcome": "Outcome"
         }
       }
     },

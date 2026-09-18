@@ -117,8 +117,9 @@
           "votedFor": "Sie haben dafür abgestimmt",
           "votedNeutral": "Sie haben neutral abgestimmt",
           "votedAgainst": "Sie haben dagegen abgestimmt",
-          "winner": "Gewinner",
-          "notSelected": "Nicht ausgewählt"
+          "takenForward": "Wird umgesetzt",
+          "notTakenForward": "Wird nicht umgesetzt",
+          "outcome": "Ergebnis"
         }
       }
     },

@@ -76,7 +76,7 @@ const BoxIdeaList = ({
             >
               <span className="truncate">{idea.title}</span>
             </Link>
-            {status && <PhaseStatus status={status} iconOnly className="shrink-0 rounded-none px-2" />}
+            {status && <PhaseStatus status={status} iconOnly className="shrink-0 rounded-none px-2 text-lg" />}
             {!status && phase === DISCUSSION_PHASE && (
               <span className={twMerge('flex shrink-0 items-center gap-1 px-2 text-xs font-medium', rowColors)}>
                 <Icon type="heart" size="1rem" aria-hidden="true" />

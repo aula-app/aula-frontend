@@ -35,7 +35,8 @@ interface PhaseStatusInput {
 
 const WAITING_LABEL = 'v2.scopes.ideas.status.waiting';
 const REJECTED_LABEL = 'v2.scopes.ideas.status.rejected';
-const NOT_SELECTED_LABEL = 'v2.scopes.ideas.status.notSelected';
+const TAKEN_FORWARD_LABEL = 'v2.scopes.ideas.status.takenForward';
+const NOT_TAKEN_FORWARD_LABEL = 'v2.scopes.ideas.status.notTakenForward';
 
 const WAITING = (phase: `${RoomPhases}`): PhaseStatus => ({
   icon: 'clock',
@@ -53,13 +54,13 @@ const VOTED: Record<Vote, PhaseStatus> = {
 /** Status badge for the current phase, or null when the phase has none. */
 export const getPhaseStatus = ({ idea, phase, vote }: PhaseStatusInput): PhaseStatus | null => {
   if (phase === '20') {
-    if (idea.approved === 1) return { icon: 'check', label: 'v2.scopes.ideas.status.approved', ...POSITIVE };
-    if (idea.approved === -1) return { icon: 'close', label: REJECTED_LABEL, ...NEGATIVE };
+    if (idea.approved === 1) return { icon: 'star', label: 'v2.scopes.ideas.status.approved', ...POSITIVE };
+    if (idea.approved === -1) return { icon: 'noSymbol', label: REJECTED_LABEL, ...NEGATIVE };
     return WAITING(phase);
   }
 
   const isArchived = (phase === '30' || phase === '40') && idea.approved === -1;
-  if (isArchived) return { icon: 'close', label: REJECTED_LABEL, ...NEUTRAL };
+  if (isArchived) return { icon: 'noSymbol', label: REJECTED_LABEL, ...NEUTRAL };
 
   if (phase === '30') return vote == null ? WAITING(phase) : VOTED[vote];
 
@@ -67,8 +68,8 @@ export const getPhaseStatus = ({ idea, phase, vote }: PhaseStatusInput): PhaseSt
   // question, and the quorum bar under the idea answers it.
   if (phase === '40') {
     const verdict = toVerdict(idea.is_winner);
-    if (verdict === 1) return { icon: 'check', label: 'v2.scopes.ideas.status.winner', ...POSITIVE };
-    if (verdict === -1) return { icon: 'close', label: NOT_SELECTED_LABEL, ...NEGATIVE };
+    if (verdict === 1) return { icon: 'check', label: TAKEN_FORWARD_LABEL, ...POSITIVE };
+    if (verdict === -1) return { icon: 'close', label: NOT_TAKEN_FORWARD_LABEL, ...NEGATIVE };
     // Not the phase palette here: results is green, which is the winner's colour.
     return { icon: 'clock', label: WAITING_LABEL, ...NEUTRAL };
   }

@@ -13,18 +13,18 @@ interface WinnerBarProps {
   className?: string;
 }
 
-/** The results-phase verdict as one band: winner, or not selected. No middle ground. */
+/** The results-phase outcome as one band: taken forward, or not. No middle ground. */
 const WinnerBar = ({ winner: { winner, decide }, className }: WinnerBarProps) => {
   const { t } = useTranslation();
 
   const options: { value: Verdict; icon: 'check' | 'close'; label: string; colors: string }[] = [
-    { value: 1, icon: 'check', label: t('v2.scopes.ideas.status.winner'), colors: CHOSEN_FOR },
-    { value: -1, icon: 'close', label: t('v2.scopes.ideas.status.notSelected'), colors: CHOSEN_AGAINST },
+    { value: 1, icon: 'check', label: t('v2.scopes.ideas.status.takenForward'), colors: CHOSEN_FOR },
+    { value: -1, icon: 'close', label: t('v2.scopes.ideas.status.notTakenForward'), colors: CHOSEN_AGAINST },
   ];
 
   return (
     <DecisionBar
-      label={t('settings.columns.is_winner')}
+      label={t('v2.scopes.ideas.status.outcome')}
       options={options}
       value={winner}
       onChange={decide}
