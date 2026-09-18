@@ -58,11 +58,11 @@ describe('BoxCard idea preview', () => {
     ]);
   });
 
-  it('collapses the rest into a count once past three', () => {
+  it('keeps every idea past the third, for the list to scroll to', () => {
     const { container } = renderCard(20, { ideas: ideaList([1, -1, 0, 0, 0]) });
 
-    expect(rows(container)).toHaveLength(4);
-    expect(rows(container)[3].textContent).toContain('v2.scopes.boxes.moreIdeas');
+    expect(rows(container)).toHaveLength(5);
+    expect(rows(container)[4].textContent).toContain('Idea 4');
   });
 
   it('draws nothing for a caller that does not pass ideas, such as the box view', () => {
