@@ -20,15 +20,16 @@ interface BoxIdeaListProps {
   quorum?: number;
   /** Room members, the quorum denominator. */
   users?: number;
-  /** Titles to show before the rest collapse into a count. */
-  max?: number;
   className?: string;
   'data-testid'?: string;
 }
 
 const DISCUSSION_PHASE = '10';
 const VOTING_PHASE = '30';
-const DEFAULT_MAX = 3;
+
+// Three 32px rows and their 2px gaps, plus half a row, so a fourth idea is cut
+// in half and gives the list a visible edge to scroll.
+const PREVIEW_HEIGHT = 'max-h-[118px]';
 
 /** What a box holds, as full-width rows: category, title and status. */
 const BoxIdeaList = ({
@@ -39,7 +40,6 @@ const BoxIdeaList = ({
   categories,
   quorum,
   users,
-  max = DEFAULT_MAX,
   className,
   'data-testid': dataTestId,
 }: BoxIdeaListProps) => {
@@ -47,13 +47,14 @@ const BoxIdeaList = ({
 
   if (ideas.length === 0) return null;
 
-  const shown = ideas.slice(0, max);
-  const hidden = ideas.length - shown.length;
   const band = `bg-${color}-light text-foreground`;
 
   return (
-    <ul className={twMerge('flex flex-col gap-0.5', className)} data-testid={dataTestId}>
-      {shown.map((idea) => {
+    <ul
+      className={twMerge('flex flex-col gap-0.5 overflow-y-auto', PREVIEW_HEIGHT, className)}
+      data-testid={dataTestId}
+    >
+      {ideas.map((idea) => {
         // A voting status is about the viewer's own vote, which this list does not have.
         const status = phase === VOTING_PHASE ? null : getPhaseStatus({ idea, phase, quorum, users });
         const category = categories?.[idea.hash_id];
@@ -94,10 +95,6 @@ const BoxIdeaList = ({
           </li>
         );
       })}
-
-      {hidden > 0 && (
-        <li className={twMerge('px-3 py-1 text-xs', band)}>{t('v2.scopes.boxes.moreIdeas', { count: hidden })}</li>
-      )}
     </ul>
   );
 };

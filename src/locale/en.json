@@ -89,8 +89,7 @@
       "boxes": {
         "singular": "box",
         "plural": "boxes",
-        "reviewed": "{{count}} of {{total}} reviewed",
-        "moreIdeas": "+{{count}} more"
+        "reviewed": "{{count}} of {{total}} reviewed"
       },
       "comments": {
         "singular": "comment",
