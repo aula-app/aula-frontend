@@ -26,11 +26,11 @@ describe('useQuorum', () => {
     await waitFor(() => expect(result.current).toBe(50));
   });
 
-  it('uses the wild-ideas quorum in the approval phase', async () => {
+  it('reports no quorum in the approval phase, which is decided by review', async () => {
     const { result } = renderHook(() => useQuorum('20'));
 
-    await waitFor(() => expect(getQuorum).toHaveBeenCalled());
-    expect(result.current).toBe(10);
+    expect(result.current).toBe(0);
+    expect(getQuorum).not.toHaveBeenCalled();
   });
 
   it('uses the wild-ideas quorum in the wild phase', async () => {
@@ -67,7 +67,7 @@ describe('useQuorum', () => {
 
   it('refetches when the phase changes', async () => {
     const { result, rerender } = renderHook(({ phase }) => useQuorum(phase), {
-      initialProps: { phase: '20' as string | undefined },
+      initialProps: { phase: '0' as string | undefined },
     });
     await waitFor(() => expect(result.current).toBe(10));
 

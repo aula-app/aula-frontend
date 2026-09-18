@@ -20,6 +20,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import BoxCard from '@/v2/components/box/BoxCard';
+import { useBoxIdeas } from '@/v2/hooks/useBoxIdeas';
+import { useQuorum } from '@/v2/hooks/useQuorum';
+import { useRoomUsers } from '@/v2/hooks/useRoomUsers';
 import { useBoxesByRoom } from './useBoxesByRoom';
 
 const boxesFilterConfig: ListFilterConfig<BoxType> = {
@@ -44,6 +47,11 @@ const Boxes: React.FC = () => {
     reversed,
     setReversed,
   } = useListFilter(boxes, boxesFilterConfig, `boxes-${room_id}-${currentPhase}`);
+
+  // Keyed on the full list, not the filtered one, so searching does not refetch.
+  const boxIdeas = useBoxIdeas(boxes);
+  const quorum = useQuorum(currentPhase);
+  const users = useRoomUsers(room_id);
 
   const addBoxLabel = t('v2.ui.actions.add', { var: t('v2.scopes.boxes.singular') });
 
@@ -177,7 +185,7 @@ const Boxes: React.FC = () => {
         <ScrollList storageKey={`boxes-${room_id}-${currentPhase}`}>
           {visibleBoxes.map((box) => (
             <li key={box.hash_id}>
-              <BoxCard box={box} onChanged={refetch} />
+              <BoxCard box={box} ideas={boxIdeas[box.hash_id]} quorum={quorum} users={users} onChanged={refetch} />
             </li>
           ))}
         </ScrollList>

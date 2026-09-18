@@ -88,7 +88,9 @@
     "scopes": {
       "boxes": {
         "singular": "Box",
-        "plural": "Boxen"
+        "plural": "Boxen",
+        "reviewed": "{{count}} von {{total}} geprüft",
+        "moreIdeas": "+{{count}} weitere"
       },
       "ideas": {
         "singular": "Idee",

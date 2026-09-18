@@ -61,7 +61,7 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onCha
       data-testid={`idea-${idea.title}`}
       className={twMerge('flex flex-col gap-1', className)}
     >
-      <div className="relative flex flex-col gap-1 flex-1">
+      <div className="relative flex flex-col gap-0.5 flex-1">
         {hasTopTab && (
           <div className="flex flex-wrap items-center justify-end gap-1">
             {status && <PhaseStatus status={status} className={twMerge(categories.length > 0 && 'rounded-tl-none')} />}
