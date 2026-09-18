@@ -15,10 +15,13 @@ import ScrollList from '@/v2/components/ui/ScrollList';
 import { BoxForm } from '@/v2/forms';
 import { ListFilterConfig, useListFilter } from '@/v2/hooks/useListFilter';
 import { useModal } from '@/v2/hooks/useModal';
-import React, { useState } from 'react';
+import { useToast } from '@/v2/hooks/useToast';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import BoxCard from '@/v2/components/box/BoxCard';
+import { useBoxIdeas } from '@/v2/hooks/useBoxIdeas';
+import { useIdeaVotes } from '@/v2/hooks/useIdeaVotes';
 import { useBoxesByRoom } from './useBoxesByRoom';
 
 const boxesFilterConfig: ListFilterConfig<BoxType> = {
@@ -31,8 +34,8 @@ const Boxes: React.FC = () => {
   const { room_id, phase } = useParams<{ room_id: string; phase: `${RoomPhases}` }>();
   const currentPhase = phase ?? '0';
   const { openModal, closeModal } = useModal();
+  const { toast } = useToast();
   const { boxes, isLoading, error, refetch } = useBoxesByRoom(room_id, currentPhase);
-  const [formError, setFormError] = useState<string | null>(null);
   const {
     visibleItems: visibleBoxes,
     searchQuery,
@@ -44,11 +47,17 @@ const Boxes: React.FC = () => {
     setReversed,
   } = useListFilter(boxes, boxesFilterConfig, `boxes-${room_id}-${currentPhase}`);
 
+  // Keyed on the full list, not the filtered one, so searching does not refetch.
+  const boxIdeas = useBoxIdeas(boxes);
+
+  // Votes are per idea and the rows span every box, so they are fetched for the lot at once.
+  const allIdeas = useMemo(() => Object.values(boxIdeas).flat(), [boxIdeas]);
+  const votes = useIdeaVotes(allIdeas, currentPhase === '30');
+
   const addBoxLabel = t('v2.ui.actions.add', { var: t('v2.scopes.boxes.singular') });
 
   const handleAddBox = async (data: any): Promise<boolean> => {
     try {
-      setFormError(null);
       const response = await addBox({
         room_id: data.room || room_id,
         phase_id: Number(data.phase_id) as RoomPhases,
@@ -57,7 +66,7 @@ const Boxes: React.FC = () => {
       });
 
       if (response.error) {
-        setFormError(response.error);
+        toast.error(response.error || t('errors.failed'));
         return false;
       }
 
@@ -66,7 +75,7 @@ const Boxes: React.FC = () => {
       return true;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : t('errors.default');
-      setFormError(errorMessage);
+      toast.error(errorMessage);
       console.error('Error adding box:', error);
       return false;
     }
@@ -128,8 +137,6 @@ const Boxes: React.FC = () => {
                   contextPhaseId={currentPhase}
                   onSubmit={handleAddBox}
                   onCancel={closeModal}
-                  error={formError}
-                  onErrorClose={() => setFormError(null)}
                 />
               )
             }
@@ -179,7 +186,7 @@ const Boxes: React.FC = () => {
         <ScrollList storageKey={`boxes-${room_id}-${currentPhase}`}>
           {visibleBoxes.map((box) => (
             <li key={box.hash_id}>
-              <BoxCard box={box} onChanged={refetch} />
+              <BoxCard box={box} ideas={boxIdeas[box.hash_id]} votes={votes} onChanged={refetch} />
             </li>
           ))}
         </ScrollList>

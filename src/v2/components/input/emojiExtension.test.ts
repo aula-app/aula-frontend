@@ -1,8 +1,14 @@
 import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import { Markdown } from '@tiptap/markdown';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import EmojiExtension, { shortcodesToUnicode } from './emojiExtension';
+
+// Tiptap asks `is-emoji-supported` whether the font can draw each emoji, and that answer
+// decides between rendering the character and falling back to a CDN image. The check
+// measures a glyph on a canvas, which jsdom does not implement, so without this it always
+// answers "no" and the DOM never contains an emoji character to assert on.
+vi.mock('is-emoji-supported', () => ({ isEmojiSupported: () => true }));
 
 const makeEditor = (content = '') =>
   new Editor({

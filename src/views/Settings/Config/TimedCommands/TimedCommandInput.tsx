@@ -29,7 +29,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
   // must not set commands in the past; use (client's) now / today
   // (actions are scheduled midnight; an action scheduled for "today's midnight",
   // which is technically in the past, will run immediately)
-  const minDate = dayjs()
+  const minDate = dayjs();
 
   const [scope, setScope] = useState<number>(0);
   const [target, setTarget] = useState<string | undefined>();
@@ -199,7 +199,7 @@ const TimeCommandInput = ({ onReload }: Props) => {
             minDate={minDate}
             name={TEST_IDS.TIMEDCOMMAND_STARTDATE_INPUT}
             onChange={(date) => {
-              if (date) setStartTime(date)
+              if (date) setStartTime(date);
             }}
             slotProps={{ textField: { size: 'small' } }}
           />

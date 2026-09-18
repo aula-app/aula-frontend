@@ -1,41 +1,58 @@
 @import url('/font/nunito/nunito-sans.css');
 @import url('/font/inconsolata/inconsolata.css');
 
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@tailwindcss/typography";
-@import "./theme/tailwind-theme.css";
-@import "./theme/image-colors.css";
+@import './theme/tailwind-theme.css';
+@import './theme/image-colors.css';
 
 /* Button colors */
 @source inline("{bg,text,border}-{primary,secondary,error}");
 @source inline("{hover,active}:bg-{primary,secondary,error}/{10,20}");
 
 /* Semantic state colors */
-@source inline("{bg,text,border}-{error,warning,info,success}");
-@source inline("{bg,text,border}-{error,warning,info,success}-fg");
+@source inline("{bg,text,border}-{error,warning,info,success,neutral}");
+@source inline("{bg,text,border}-{error,warning,info,success,neutral}-fg");
 
 /* Phase colors — base, hover, and active states */
 @source inline("{bg,text}-{wild,discussion,approval,voting,results}");
 @source inline("{bg,text}-{wild,discussion,approval,voting,results}-active");
 @source inline("{hover,active}:bg-{wild,discussion,approval,voting,results}-active");
+@source inline("{bg,text}-{wild,discussion,approval,voting,results}-{light,fg}");
 @source inline("border-l-4");
-
-
 
 /* Toast slide animations */
 @keyframes toast-in {
-  from { opacity: 0; transform: translateX(110%); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes toast-out {
-  from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(110%); }
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(110%);
+  }
 }
 
 @keyframes toast-collapse {
-  from { max-height: 120px; padding-bottom: 0.5rem; }
-  to { max-height: 0; padding-bottom: 0; }
+  from {
+    max-height: 120px;
+    padding-bottom: 0.5rem;
+  }
+  to {
+    max-height: 0;
+    padding-bottom: 0;
+  }
 }
 
 @utility animate-toast-in {
@@ -83,7 +100,9 @@
   }
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100dvh;
   color: var(--color-foreground);
   background-color: var(--color-background);
@@ -92,17 +111,30 @@ html, body, #root {
 }
 
 body {
-  font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  font-family:
+    'Nunito Sans',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Helvetica Neue',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-button, [role="button"], a, label, [role="menuitem"], [role="option"] {
+button,
+[role='button'],
+a,
+label,
+[role='menuitem'],
+[role='option'] {
   min-height: unset;
 }
 
 /* Prevent iOS auto-zoom on input focus (triggered when font-size < 16px) */
-input, select, textarea {
+input,
+select,
+textarea {
   font-size: max(16px, 1em);
 }
 
@@ -118,7 +150,12 @@ code {
   font-family: 'Inconsolata', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Nunito Sans';
   @apply font-black;
 }
@@ -140,7 +177,12 @@ h5 {
   @apply text-lg font-extrabold;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: 1.5;
 }
 
@@ -154,11 +196,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .point {
-  clip-path: polygon(20% 0%, 0% 100%, 100% 0%)
+  clip-path: polygon(20% 0%, 0% 100%, 100% 0%);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0ms !important;
@@ -182,7 +226,9 @@ dialog[data-closing]::backdrop {
   opacity: 0;
 }
 
-.printOnly { display: none; }
+.printOnly {
+  display: none;
+}
 
 .editor-toolbar {
   background-color: transparent !important;
@@ -190,7 +236,7 @@ dialog[data-closing]::backdrop {
 }
 
 /* Fix for MDXEditor toolbar groups when CSS modules hash changes */
-[class*="toolbarGroupOfGroups"] {
+[class*='toolbarGroupOfGroups'] {
   display: flex !important;
   margin: 0 var(--spacing-1);
 }
@@ -203,7 +249,8 @@ dialog[data-closing]::backdrop {
 }
 
 /* Alternative approach: ensure popup containers don't interfere with page scrolling */
-.mdxeditor-popup-container > div, .mdxeditor-popup-container > span {
+.mdxeditor-popup-container > div,
+.mdxeditor-popup-container > span {
   overflow: visible !important;
 }
 

@@ -1,3 +1,3 @@
 import SystemSettings from './SystemSettings';
 
-export { SystemSettings as default,  };
+export { SystemSettings as default };

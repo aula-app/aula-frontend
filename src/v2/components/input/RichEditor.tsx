@@ -312,7 +312,12 @@ const RichEditor: React.FC<RichEditorProps> = ({
             {error}
           </span>
         ) : (
-          <span id={helperId} className={twMerge('flex text-xs justify-between', overLimit ? 'text-error-fg' : 'text-muted')} aria-live="polite" aria-atomic="true">
+          <span
+            id={helperId}
+            className={twMerge('flex text-xs justify-between', overLimit ? 'text-error-fg' : 'text-muted')}
+            aria-live="polite"
+            aria-atomic="true"
+          >
             <span>
               {charCount} / {maxLength}
             </span>

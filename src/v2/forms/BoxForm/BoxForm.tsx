@@ -15,15 +15,11 @@ const MAX_NAME_LENGTH = 200;
 
 interface BoxFormProps {
   defaultValues?: BoxType;
-  /** Returns `true` when the box was persisted, so the form can clear its draft. */
   onSubmit: (data: any) => Promise<boolean>;
   onCancel: () => void;
   isLoading?: boolean;
   contextRoomId?: string;
-  /** Phase to preselect when creating a box, e.g. the room's current phase. */
   contextPhaseId?: string;
-  error?: string | null;
-  onErrorClose?: () => void;
 }
 
 const BoxForm: React.FC<BoxFormProps> = ({
@@ -33,8 +29,6 @@ const BoxForm: React.FC<BoxFormProps> = ({
   isLoading = false,
   contextRoomId,
   contextPhaseId,
-  error,
-  onErrorClose,
 }) => {
   const { t } = useTranslation();
 
@@ -59,7 +53,7 @@ const BoxForm: React.FC<BoxFormProps> = ({
       room: contextRoomId || defaultValues?.room_hash_id || '',
       name: defaultValues?.name || '',
       description_public: defaultValues?.description_public || '',
-      phase_id: defaultValues?.phase_id || contextPhaseId || '10',
+      phase_id: String(defaultValues?.phase_id || contextPhaseId || '10'),
     },
   });
 
@@ -125,19 +119,9 @@ const BoxForm: React.FC<BoxFormProps> = ({
         )}
       />
 
-      {((errors.root as any)?.message || error) && (
+      {(errors.root as any)?.message && (
         <div className="flex items-center justify-between text-sm text-red-600 p-3 bg-red-50 rounded-lg" role="alert">
-          <span>{(errors.root as any)?.message || error}</span>
-          {onErrorClose && (
-            <button
-              type="button"
-              onClick={onErrorClose}
-              className="text-red-600 hover:text-red-700 font-semibold"
-              aria-label={t('ui.common.dismiss')}
-            >
-              ✕
-            </button>
-          )}
+          <span>{(errors.root as any).message}</span>
         </div>
       )}
 

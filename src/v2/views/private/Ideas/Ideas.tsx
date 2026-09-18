@@ -14,6 +14,8 @@ import ScrollList from '@/v2/components/ui/ScrollList';
 import { IdeaForm } from '@/v2/forms';
 import { ListFilterConfig, useListFilter } from '@/v2/hooks/useListFilter';
 import { useModal } from '@/v2/hooks/useModal';
+import { useQuorum } from '@/v2/hooks/useQuorum';
+import { useRoomUsers } from '@/v2/hooks/useRoomUsers';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -29,6 +31,8 @@ const Ideas: React.FC = () => {
   const { t } = useTranslation();
   const { room_id } = useParams<{ room_id: string }>();
   const { openModal, closeModal } = useModal();
+  const quorum = useQuorum('0');
+  const users = useRoomUsers(room_id);
   const { ideas, isLoading, error, refetch } = useIdeasByRoom(room_id);
   const [formError, setFormError] = useState<string | null>(null);
   const {
@@ -177,7 +181,7 @@ const Ideas: React.FC = () => {
         <ScrollList storageKey={`ideas-${room_id}`}>
           {visibleIdeas.map((idea) => (
             <li key={idea.hash_id}>
-              <Idea idea={idea} onChanged={refetch} />
+              <Idea idea={idea} quorum={quorum} users={users} onChanged={refetch} />
             </li>
           ))}
         </ScrollList>

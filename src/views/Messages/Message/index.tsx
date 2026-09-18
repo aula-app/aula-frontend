@@ -1,3 +1,3 @@
 import MessageView from './MessageView';
 
-export { MessageView as default,  };
+export { MessageView as default };

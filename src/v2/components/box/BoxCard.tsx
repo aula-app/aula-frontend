@@ -1,23 +1,40 @@
 import { deleteBox, editBox } from '@/services/boxes';
-import { BoxType } from '@/types/Scopes';
+import { BoxType, IdeaType } from '@/types/Scopes';
+import { RoomPhases } from '@/types/SettingsTypes';
 import { TEST_IDS } from '@/test-ids';
-import { checkPermissions, phases } from '@/utils';
+import { checkPermissions, phases, Vote } from '@/utils';
 import DeleteButton from '@/v2/components/button/DeleteButton';
 import EditButton from '@/v2/components/button/EditButton';
 import ReportButton from '@/v2/components/button/ReportButton';
 import ShareButton from '@/v2/components/button/ShareButton';
 import Icon from '@/v2/components/ui/Icon/Icon';
 import Markdown from '@/v2/components/ui/Markdown';
+import ProgressBar from '@/v2/components/ui/ProgressBar';
 import MoreOptions from '@/v2/components/ui/MoreOptions';
 import Link from '@/v2/components/navigation/Link';
+import { Category } from '@/v2/components/idea/CategoryList';
+import BoxIdeaList from './BoxIdeaList';
+import { countSettled } from './countSettled';
 import { BoxForm } from '@/v2/forms';
 import { useTranslation } from 'react-i18next';
+import { twMerge } from 'tailwind-merge';
 
 interface BoxCardProps {
   box: BoxType;
+  /** The box's ideas, shown as a short preview list. Omit where they are already on screen. */
+  ideas?: IdeaType[];
+  /** Decision progress for the phases that have one. Derived from `ideas` when those are given. */
+  progress?: { settled: number; total: number };
+  /** Category per idea, keyed by idea hash_id, for the preview list's chips. */
+  categories?: Record<string, Category>;
+  /** The viewer's own vote per idea, keyed by idea hash_id, for the preview list's chips. */
+  votes?: Record<string, Vote | null>;
   /** Refetch the surrounding list after an edit or delete. */
   onChanged?: () => void;
 }
+
+const APPROVAL_PHASE = 20;
+const RESULTS_PHASE = 40;
 
 const phaseProgress = (box: BoxType): { days: number; remaining: number } => {
   // The current phase's countdown runs from when that phase started, not from
@@ -35,25 +52,35 @@ const phaseProgress = (box: BoxType): { days: number; remaining: number } => {
   return { days, remaining };
 };
 
-const BoxCard = ({ box, onChanged }: BoxCardProps) => {
+const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCardProps) => {
   const { t } = useTranslation();
   const phaseColor = phases[box.phase_id] ?? 'wild';
   const to = `/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`;
 
-  const ideasCount = `${box.ideas_num} ${t(box.ideas_num === 1 ? 'v2.scopes.ideas.singular' : 'v2.scopes.ideas.plural')}`;
-  const ideasInPhase = t(`phases.id-${box.phase_id}`, { var: ideasCount, defaultValue: ideasCount });
-
+  const hasRows = !!ideas && ideas.length > 0;
   const showCountdown = [10, 30].includes(Number(box.phase_id));
   const { days, remaining } = phaseProgress(box);
-  const fillPercent = days > 0 ? Math.min(100, Math.max(0, (remaining / days) * 100)) : 0;
+  const elapsed = days - remaining;
+  const fillPercent = days > 0 ? Math.min(100, Math.max(0, (elapsed / days) * 100)) : 0;
+
+  const phaseNumber = Number(box.phase_id);
+  const isResults = phaseNumber === RESULTS_PHASE;
+  const settled = progress ?? (ideas && { settled: countSettled(ideas, phaseNumber), total: ideas.length });
+  const showProgress = (phaseNumber === APPROVAL_PHASE || isResults) && !!settled && settled.total > 0;
+  const settledPercent = showProgress ? (settled.settled / settled.total) * 100 : 0;
+  const settledLabel = t(isResults ? 'v2.scopes.boxes.decided' : 'v2.scopes.boxes.reviewed', {
+    count: settled?.settled ?? 0,
+    total: settled?.total ?? 0,
+  });
 
   return (
-    <div className="relative flex flex-col rounded-2xl border border-muted text-foreground">
-      <header className={`flex justify-between bg-${phaseColor} rounded-t-2xl p-2 pr-10`}>
-        <div className="flex items-center gap-2">
-          <Icon type={phaseColor} size="1.5rem" aria-hidden="true" />
-          <span className="text-sm font-medium truncate">{ideasInPhase}</span>
-        </div>
+    <div data-testid={TEST_IDS.BOX_CARD} className="flex flex-col gap-0.5">
+      <div
+        className={twMerge(
+          `relative flex flex-col gap-2 rounded-t-2xl px-4 pt-2 pb-3 text-foreground bg-${phaseColor}`,
+          !hasRows && 'rounded-b-2xl'
+        )}
+      >
         <MoreOptions
           className="absolute top-0.5 right-1.5"
           panelClassName="mr-1"
@@ -76,7 +103,12 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
                   })
                 }
                 renderForm={({ onSubmit, onCancel }) => (
-                  <BoxForm defaultValues={box} contextRoomId={box.room_hash_id} onSubmit={onSubmit} onCancel={onCancel} />
+                  <BoxForm
+                    defaultValues={box}
+                    contextRoomId={box.room_hash_id}
+                    onSubmit={onSubmit}
+                    onCancel={onCancel}
+                  />
                 )}
                 onChanged={onChanged}
                 onOpen={close}
@@ -99,28 +131,45 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
             </>
           )}
         </MoreOptions>
-      </header>
-      <Link to={to} data-testid={`box-${box.name}`} className=" flex flex-col no-underline text-foreground">
-        <div className="flex flex-col gap-2 p-4">
+        <Link to={to} data-testid={`box-${box.name}`} className="flex flex-col no-underline text-foreground">
           {box.name && <h2 className="font-bold">{box.name}</h2>}
           {box.description_public && (
             <Markdown className="prose-sm text-muted line-clamp-3">{box.description_public}</Markdown>
           )}
-        </div>
-                    {showCountdown && (
-        <footer className={`relative flex items-center gap-1 overflow-hidden rounded-b-2xl bg-${phaseColor} px-2 py-1 text-sm font-medium`}>
-              <div
-                className={`absolute inset-y-0 left-0 bg-${phaseColor}-active`}
-                style={{ width: `${fillPercent}%` }}
-                aria-hidden="true"
-              />
-              <Icon type="clock" size="1rem" aria-hidden="true" className="relative" />
-              <span className="relative">
-                {remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
-              </span>
-            </footer>
-          )}
-      </Link>
+        </Link>
+      </div>
+
+      {hasRows && (
+        <BoxIdeaList
+          ideas={ideas}
+          phase={String(box.phase_id) as `${RoomPhases}`}
+          color={phaseColor}
+          boxPath={to}
+          categories={categories}
+          votes={votes}
+          data-testid={TEST_IDS.BOX_IDEA_LIST}
+        />
+      )}
+
+      <div className="flex gap-2">
+        {showCountdown && (
+          <ProgressBar
+            value={fillPercent}
+            color={phaseColor}
+            label={remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
+            className="rounded-b-2xl flex-1"
+          >
+            <Icon type="clock" size="1rem" />
+            {remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
+          </ProgressBar>
+        )}
+        {showProgress && (
+          <ProgressBar value={settledPercent} color={phaseColor} label={settledLabel} className="rounded-b-2xl flex-1">
+            <Icon type={isResults ? 'results' : 'approval'} size="1rem" />
+            {settledLabel}
+          </ProgressBar>
+        )}
+      </div>
     </div>
   );
 };

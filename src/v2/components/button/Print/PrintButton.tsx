@@ -7,7 +7,12 @@ const PrintButton = () => {
   const { t } = useTranslation();
 
   return (
-    <IconButton data-testid={TEST_IDS.PRINT_BUTTON} aria-label={t('v2.ui.actions.print')} hint={t('v2.ui.actions.print')} onClick={() => window.print()}>
+    <IconButton
+      data-testid={TEST_IDS.PRINT_BUTTON}
+      aria-label={t('v2.ui.actions.print')}
+      hint={t('v2.ui.actions.print')}
+      onClick={() => window.print()}
+    >
       <Icon type="print" />
     </IconButton>
   );

@@ -1,3 +1,3 @@
 import BoxesView from './BoxesView';
 
-export { BoxesView as default,  };
+export { BoxesView as default };

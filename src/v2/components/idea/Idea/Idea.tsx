@@ -1,13 +1,16 @@
 import { deleteIdea, editIdea } from '@/services/ideas';
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { checkPermissions, phases } from '@/utils';
+import { checkPermissions, Vote } from '@/utils';
 import DeleteButton from '@/v2/components/button/DeleteButton';
 import EditButton from '@/v2/components/button/EditButton';
 import ReportButton from '@/v2/components/button/ReportButton';
 import ShareButton from '@/v2/components/button/ShareButton';
+import PhaseStatus, { getPhaseColor, getPhaseColors, getPhaseStatus } from '@/v2/components/idea/PhaseStatus';
+import QuorumBar from '@/v2/components/idea/QuorumBar';
 import CategoryList, { Category } from '@/v2/components/idea/CategoryList';
 import LikeStat from '@/v2/components/idea/LikeStat';
+import { useIdeaLike } from '@/v2/components/idea/LikeStat/useIdeaLike';
 import { IdeaForm } from '@/v2/forms';
 import Stat from '@/v2/components/idea/Stat';
 import UserBar from '@/v2/components/idea/UserBar';
@@ -23,18 +26,34 @@ import Link from '../../navigation/Link';
 interface IdeaProps {
   idea: IdeaType;
   categories?: Category[];
+  vote?: Vote | null;
+  quorum?: number;
+  /** Room members, the quorum denominator. Falls back to the idea's own count where the endpoint sends one. */
+  users?: number;
   className?: string;
   onChanged?: () => void;
 }
 
-const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
+const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onChanged }: IdeaProps) => {
   const { t } = useTranslation();
   const { phase } = useParams<{ phase: `${RoomPhases}` }>();
 
   const titleId = useId();
   const phase_id = phase || '0';
-  const phaseColor = phases[phase_id] ?? 'wild';
   const ideaPath = `/room/${idea.room_hash_id}/phase/${phase_id}/idea/${idea.hash_id}`;
+
+  const phaseNumber = Number(phase_id);
+  const isVoting = phaseNumber >= 30;
+  const canLike = phaseNumber < 20;
+  const isArchived = isVoting && idea.approved === -1;
+  const hasQuorumBar = !isArchived && (isVoting || quorum > 0);
+
+  const participants = Number(users) || Number(idea.number_of_users) || 0;
+
+  const like = useIdeaLike(idea);
+  const status = getPhaseStatus({ idea, phase: phase_id, vote, quorum, users: participants });
+  const bubbleColor = status?.colors ?? getPhaseColors(phase_id);
+  const hasTopTab = !!status || categories.length > 0;
 
   return (
     <article
@@ -42,20 +61,26 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
       data-testid={`idea-${idea.title}`}
       className={twMerge('flex flex-col gap-1', className)}
     >
-      <div className="relative flex flex-col-reverse gap-1 flex-1">
-        <CategoryList categories={categories} />
+      <div className="relative flex flex-col gap-0.5 flex-1">
+        {hasTopTab && (
+          <div className="flex flex-wrap items-center justify-end gap-1">
+            {status && <PhaseStatus status={status} className={twMerge(categories.length > 0 && 'rounded-tl-none')} />}
+            <CategoryList categories={categories} />
+          </div>
+        )}
         <div
           className={twMerge(
             'relative flex flex-col-reverse ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
-            `bg-${phaseColor}`,
-            categories.length > 0 ? 'rounded-tl-none' : ''
+            bubbleColor,
+            hasQuorumBar ? 'rounded-br-none' : '',
+            hasTopTab ? 'rounded-tr-none' : ''
           )}
         >
           <Link to={ideaPath}>
-            <h2 id={titleId} className="font-semibold text-foreground">
+            <h2 id={titleId} className="font-semibold text-inherit">
               {idea.title}
             </h2>
-            {idea.content && <Markdown className="prose text-foreground line-clamp-3">{idea.content}</Markdown>}
+            {idea.content && <Markdown className="prose text-inherit line-clamp-3">{idea.content}</Markdown>}
           </Link>
           <MoreOptions
             className="absolute top-1 right-1 z-10"
@@ -107,6 +132,17 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
         </div>
       </div>
 
+      {hasQuorumBar && (
+        <QuorumBar
+          metric={isVoting ? 'votes' : 'likes'}
+          count={isVoting ? idea.number_of_votes : like.count}
+          users={participants}
+          quorum={quorum}
+          color={getPhaseColor(phase_id)}
+          className="ml-4 rounded-br-2xl"
+        />
+      )}
+
       <div className="flex justify-between items-center gap-6 mr-1">
         <UserBar name={idea.displayname} date={idea.created} />
 
@@ -119,7 +155,7 @@ const Idea = ({ idea, categories = [], className, onChanged }: IdeaProps) => {
             })}
             to={ideaPath}
           />
-          <LikeStat idea={idea} data-testid={TEST_IDS.LIKE_BUTTON} />
+          {!isVoting && <LikeStat like={like} readOnly={!canLike} data-testid={TEST_IDS.LIKE_BUTTON} />}
         </div>
       </div>
     </article>

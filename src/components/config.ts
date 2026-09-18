@@ -18,4 +18,3 @@ export const APP_LINK_UNDERLINE = 'hover'; // 'always
  * AppSection component
  */
 const APP_SECTION_VARIANT = 'subtitle2'; // 'subtitle1' | 'body1' | 'h6'
-

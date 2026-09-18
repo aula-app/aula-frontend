@@ -88,7 +88,9 @@
     "scopes": {
       "boxes": {
         "singular": "Box",
-        "plural": "Boxen"
+        "plural": "Boxen",
+        "reviewed": "{{count}} von {{total}} geprüft",
+        "decided": "{{count}} von {{total}} entschieden"
       },
       "ideas": {
         "singular": "Idee",
@@ -99,7 +101,21 @@
           "vote": "{{count}} Stimme",
           "votes": "{{count}} Stimmen",
           "comment": "{{count}} Kommentar",
-          "comments": "{{count}} Kommentare"
+          "comments": "{{count}} Kommentare",
+          "voteTurnout": "{{num}} von {{total}} Personen haben abgestimmt",
+          "likeTurnout": "{{num}} von {{total}} Personen gefällt diese Idee"
+        },
+        "status": {
+          "approved": "Genehmigt",
+          "waiting": "Warten",
+          "rejected": "Nicht genehmigt",
+          "votedFor": "Sie haben dafür abgestimmt",
+          "votedNeutral": "Sie haben neutral abgestimmt",
+          "votedAgainst": "Sie haben dagegen abgestimmt",
+          "winner": "Gewinner",
+          "quorumReached": "Quorum erreicht",
+          "quorumMissed": "Quorum nicht erreicht",
+          "notSelected": "Nicht ausgewählt"
         }
       }
     },

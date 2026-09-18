@@ -65,21 +65,19 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
       await boxes.create(adminPage, box);
     });
 
+    // Assigning an existing Idea to a Box lives in Settings; the box card's edit
+    // dialog only covers room/name/description/phase.
     await test.step('Admin assigns Idea to a Box', async () => {
       const boxNewPhaseObject = { ...box, ideas: [idea] } as BoxData;
 
-      await navigation.goToRoomPhase(adminPage, seededRoom.name, 10);
-      await navigation.clickOnPageItem(adminPage, box.name);
-      const boxCard = adminPage.getByTestId('box-card');
-      await expect(boxCard.getByText(box.name)).toBeVisible();
-      await boxCard.getByTestId('more-options-button').click();
-      await expect(boxCard.getByTestId('edit-button')).toBeVisible();
-      await boxCard.getByTestId('edit-button').click();
-      await boxes.fill(adminPage, boxNewPhaseObject);
+      await boxes.edit(adminPage, boxNewPhaseObject);
     });
 
     await test.step('Admin verify Idea is in Box', async () => {
-      const boxTitle = adminPage.getByText(idea.name);
+      await navigation.goToRoomPhase(adminPage, seededRoom.name, 10);
+      await navigation.clickOnPageItem(adminPage, box.name);
+
+      const boxTitle = adminPage.getByText(idea.name).filter({ visible: true });
       await expect(boxTitle).toBeVisible();
     });
 

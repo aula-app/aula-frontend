@@ -25,7 +25,7 @@ const RecoveryPasswordView = () => {
   });
 
   if (searchParams.has('code')) {
-    localStorageSet('code', searchParams.get('code'))
+    localStorageSet('code', searchParams.get('code'));
   }
 
   const {
@@ -49,7 +49,13 @@ const RecoveryPasswordView = () => {
       );
 
       if (response.success) {
-        dispatch({ type: 'ADD_TOAST', message: { message: t('auth.forgotPassword.success', { var: t('auth.forgotPassword.successfulEmail') }), type: 'success' } });
+        dispatch({
+          type: 'ADD_TOAST',
+          message: {
+            message: t('auth.forgotPassword.success', { var: t('auth.forgotPassword.successfulEmail') }),
+            type: 'success',
+          },
+        });
         navigate('/', { replace: true });
       } else {
         dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
@@ -72,24 +78,22 @@ const RecoveryPasswordView = () => {
           disabled={isLoading}
           label="Email"
           id="recovery-email"
-          slotProps={{ input: {
-            "aria-labelledby": "recovery-email-label",
-            "aria-invalid": !!errors.email,
-            "aria-errormessage": errors.email ? "email-error-message" : undefined
-          }, inputLabel: {
-            id: "recovery-email-label",
-            htmlFor: "recovery-email"
-          }}}
+          slotProps={{
+            input: {
+              'aria-labelledby': 'recovery-email-label',
+              'aria-invalid': !!errors.email,
+              'aria-errormessage': errors.email ? 'email-error-message' : undefined,
+            },
+            inputLabel: {
+              id: 'recovery-email-label',
+              htmlFor: 'recovery-email',
+            },
+          }}
           {...register('email')}
           error={!!errors.email}
           helperText={<span id="email-error-message">{errors.email?.message || ''}</span>}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={isLoading}
-          aria-label={t('auth.forgotPassword.recover')}
-        >
+        <Button type="submit" variant="contained" disabled={isLoading} aria-label={t('auth.forgotPassword.recover')}>
           {t('auth.forgotPassword.recover')}
         </Button>
       </Stack>

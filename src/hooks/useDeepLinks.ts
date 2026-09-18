@@ -101,9 +101,7 @@ const routeFromDeepLink = (url: string): string | null => {
   }
 
   // https app links already carry the full path.
-  const path = parsed.protocol.startsWith('http')
-    ? parsed.pathname
-    : `/${parsed.host}${parsed.pathname}`;
+  const path = parsed.protocol.startsWith('http') ? parsed.pathname : `/${parsed.host}${parsed.pathname}`;
 
   const route = `${path}${parsed.search}`;
 

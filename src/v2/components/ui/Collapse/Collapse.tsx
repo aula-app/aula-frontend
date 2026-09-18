@@ -7,7 +7,15 @@ interface CollapseProps extends HTMLAttributes<HTMLDivElement> {
   innerClass?: string;
 }
 
-const Collapse = ({ open, className, innerClass, children, orientation = 'vertical', onTransitionEnd, ...props }: CollapseProps) => {
+const Collapse = ({
+  open,
+  className,
+  innerClass,
+  children,
+  orientation = 'vertical',
+  onTransitionEnd,
+  ...props
+}: CollapseProps) => {
   const [prevOpen, setPrevOpen] = useState(open);
   const [isAnimating, setIsAnimating] = useState(false);
 
