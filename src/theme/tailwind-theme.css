@@ -29,52 +29,56 @@
 
   /* --- Semantic states --- */
   --color-error: hsl(0, 100%, 94%);
-  --color-error-active: hsl(0, 90%, 88%);
   --color-error-light: hsl(0, 100%, 97%);
+  --color-error-active: hsl(0, 90%, 88%);
   --color-error-fg: hsl(0, 72%, 35%);
 
   --color-warning: hsl(45, 100%, 90%);
+  --color-warning-light: hsl(45, 100%, 96%);
+  --color-warning-active: hsl(45, 100%, 82%);
   --color-warning-fg: hsl(35, 85%, 30%);
 
   --color-info: hsl(204, 82%, 90%);
+  --color-info-light: hsl(204, 82%, 96%);
+  --color-info-active: hsl(204, 82%, 82%);
   --color-info-fg: hsl(204, 70%, 30%);
 
   --color-success: hsl(134, 72%, 88%);
-  --color-success-active: hsl(134, 72%, 80%);
   --color-success-light: hsl(134, 72%, 94%);
+  --color-success-active: hsl(134, 72%, 82%);
   --color-success-fg: hsl(134, 55%, 28%);
 
   --color-neutral: hsl(215, 15%, 88%);
-  --color-neutral-active: hsl(215, 15%, 80%);
   --color-neutral-light: hsl(215, 15%, 94%);
+  --color-neutral-active: hsl(215, 15%, 80%);
   --color-neutral-fg: hsl(215, 20%, 28%);
 
   /* --- Phases --- */
   /* -light/-fg are the filled pair (idea bubbles); base/-active are the solid chrome */
   --color-wild: hsl(210, 100%, 86%);
-  --color-wild-active: hsl(210, 88%, 67%);
+  --color-wild-active: hsl(210, 88%, 76%);
   --color-wild-light: hsl(210, 100%, 92%);
-  --color-wild-fg: hsl(210, 70%, 30%);
+  --color-wild-fg: hsl(210, 70%, 29%);
 
   --color-discussion: hsl(270, 50%, 82%);
-  --color-discussion-active: hsl(270, 50%, 72%);
+  --color-discussion-active: hsl(270, 50%, 77%);
   --color-discussion-light: hsl(270, 60%, 93%);
-  --color-discussion-fg: hsl(270, 50%, 35%);
+  --color-discussion-fg: hsl(270, 50%, 34%);
 
   --color-approval: hsl(25, 84%, 76%);
-  --color-approval-active: hsl(25, 84%, 68%);
+  --color-approval-active: hsl(25, 84%, 78%);
   --color-approval-light: hsl(25, 90%, 91%);
-  --color-approval-fg: hsl(25, 70%, 30%);
+  --color-approval-fg: hsl(25, 70%, 28%);
 
   --color-voting: hsl(45, 100%, 79%);
-  --color-voting-active: hsl(45, 100%, 70%);
+  --color-voting-active: hsl(45, 100%, 74%);
   --color-voting-light: hsl(45, 100%, 90%);
-  --color-voting-fg: hsl(35, 85%, 30%);
+  --color-voting-fg: hsl(35, 85%, 29%);
 
   --color-results: hsl(134, 72%, 88%);
-  --color-results-active: hsl(134, 72%, 77%);
+  --color-results-active: hsl(134, 72%, 78%);
   --color-results-light: hsl(134, 72%, 91%);
-  --color-results-fg: hsl(134, 55%, 28%);
+  --color-results-fg: hsl(134, 55%, 27%);
 
   /* --- Utility --- */
   --color-shadow: rgba(0, 0, 0, 0.05);
@@ -91,7 +95,8 @@
 
   /* --- Content / Text --- */
   --color-foreground: hsl(215, 20%, 95%);
-  --color-muted: hsl(215, 15%, 75%);
+  /* Light enough to clear AA as secondary text on the phase fills, not just on the page */
+  --color-muted: hsl(215, 15%, 80%);
 
   /* --- Semantic states --- */
   --color-primary: hsl(134, 55%, 55%);
@@ -99,24 +104,28 @@
 
   /* -bg deepened so the light -fg text meets WCAG AA (~5:1) as a filled pair */
   --color-error: hsl(0, 45%, 26%);
-  --color-error-active: hsl(0, 55%, 22%);
   --color-error-light: hsl(0, 35%, 20%);
+  --color-error-active: hsl(0, 55%, 22%);
   --color-error-fg: hsl(0, 80%, 75%);
 
   --color-warning: hsl(40, 55%, 24%);
+  --color-warning-light: hsl(40, 55%, 18%);
+  --color-warning-active: hsl(40, 55%, 20%);
   --color-warning-fg: hsl(35, 85%, 70%);
 
   --color-info: hsl(204, 45%, 26%);
+  --color-info-light: hsl(204, 45%, 20%);
+  --color-info-active: hsl(204, 45%, 22%);
   --color-info-fg: hsl(204, 75%, 72%);
 
   --color-success: hsl(134, 32%, 24%);
-  --color-success-active: hsl(134, 42%, 20%);
   --color-success-light: hsl(134, 26%, 18%);
+  --color-success-active: hsl(134, 42%, 20%);
   --color-success-fg: hsl(134, 60%, 65%);
 
   --color-neutral: hsl(215, 18%, 28%);
-  --color-neutral-active: hsl(215, 20%, 23%);
   --color-neutral-light: hsl(215, 16%, 22%);
+  --color-neutral-active: hsl(215, 20%, 23%);
   --color-neutral-fg: hsl(215, 20%, 82%);
 
   /* --- Phases --- */
@@ -124,17 +133,17 @@
   --color-wild: hsl(210, 60%, 32%);
   --color-wild-active: hsl(210, 70%, 28%);
   --color-wild-light: hsl(210, 40%, 24%);
-  --color-wild-fg: hsl(210, 75%, 75%);
+  --color-wild-fg: hsl(210, 75%, 80%);
 
   --color-discussion: hsl(270, 42%, 38%);
   --color-discussion-active: hsl(270, 52%, 33%);
   --color-discussion-light: hsl(270, 35%, 27%);
-  --color-discussion-fg: hsl(270, 65%, 80%);
+  --color-discussion-fg: hsl(270, 65%, 83%);
 
   --color-approval: hsl(25, 58%, 30%);
   --color-approval-active: hsl(25, 68%, 26%);
   --color-approval-light: hsl(25, 40%, 24%);
-  --color-approval-fg: hsl(25, 80%, 72%);
+  --color-approval-fg: hsl(25, 80%, 78%);
 
   --color-voting: hsl(45, 75%, 22%);
   --color-voting-active: hsl(45, 85%, 19%);
@@ -144,7 +153,7 @@
   --color-results: hsl(134, 48%, 24%);
   --color-results-active: hsl(134, 58%, 20%);
   --color-results-light: hsl(134, 32%, 24%);
-  --color-results-fg: hsl(134, 60%, 65%);
+  --color-results-fg: hsl(134, 60%, 66%);
 
   /* --- Utility --- */
   --color-shadow: hsla(0, 0%, 100%, 10%);
@@ -174,28 +183,32 @@
   --color-primary-fg: var(--color-shade);
 
   --color-secondary: var(--color-secondary);
-  --color-secondary-fg: var(--color-muted);
+  --color-secondary-fg: var(--color-shade);
 
   /* --- Semantic states --- */
   --color-error: var(--color-error);
-  --color-error-active: var(--color-error-active);
   --color-error-light: var(--color-error-light);
+  --color-error-active: var(--color-error-active);
   --color-error-fg: var(--color-error-fg);
 
   --color-warning: var(--color-warning);
+  --color-warning-light: var(--color-warning-light);
+  --color-warning-active: var(--color-warning-active);
   --color-warning-fg: var(--color-warning-fg);
 
   --color-info: var(--color-info);
+  --color-info-light: var(--color-info-light);
+  --color-info-active: var(--color-info-active);
   --color-info-fg: var(--color-info-fg);
 
   --color-success: var(--color-success);
-  --color-success-active: var(--color-success-active);
   --color-success-light: var(--color-success-light);
+  --color-success-active: var(--color-success-active);
   --color-success-fg: var(--color-success-fg);
 
   --color-neutral: var(--color-neutral);
-  --color-neutral-active: var(--color-neutral-active);
   --color-neutral-light: var(--color-neutral-light);
+  --color-neutral-active: var(--color-neutral-active);
   --color-neutral-fg: var(--color-neutral-fg);
 
   /* --- Phases --- */
