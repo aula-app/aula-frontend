@@ -50,7 +50,6 @@ const Boxes: React.FC = () => {
   // Keyed on the full list, not the filtered one, so searching does not refetch.
   const boxIdeas = useBoxIdeas(boxes);
 
-  // Votes are per idea and the rows span every box, so they are fetched for the lot at once.
   const allIdeas = useMemo(() => Object.values(boxIdeas).flat(), [boxIdeas]);
   const votes = useIdeaVotes(allIdeas, currentPhase === '30');
 

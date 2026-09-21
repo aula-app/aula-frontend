@@ -55,7 +55,6 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
   const hasVoteBar = detail && phase_id === '30' && !isArchived;
   const hasVoteResults = detail && phase_id === '40' && !isArchived;
   const hasQuorumBar = !isArchived && !hasVoteResults && (isVoting || quorum > 0);
-  // The verdict is the admin's alone, so unlike the vote bar it is not shown to others at all.
   const hasWinnerBar = hasVoteResults && checkPermissions('ideas', 'setWinner');
 
   const participants = Number(users) || Number(idea.number_of_users) || 0;
@@ -64,7 +63,6 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
   const voting = useIdeaVote(idea.hash_id, vote);
   const results = useVoteResults(idea.hash_id, hasVoteResults);
   const winner = useIdeaWinner(idea.hash_id, idea.is_winner);
-  // Casting a vote has to move the status chip with it, so both read the same state.
   const status = getPhaseStatus({
     idea: { ...idea, is_winner: winner.winner ?? 0 },
     phase: phase_id,
@@ -72,10 +70,8 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
   });
   const bubbleColor = status?.colors ?? getPhaseColors(phase_id);
   const hasTopTab = !!status || categories.length > 0;
-  // Only the idea's own page has room for the argument; cards in a list keep just the chip.
   const rejectionNote = detail && idea.approved === -1 ? idea.approval_comment : null;
 
-  // On its own page the idea is the subject, so it takes the h1 and the comments below sit under it.
   const Title = detail ? 'h1' : 'h2';
 
   const body = (

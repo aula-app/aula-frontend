@@ -64,8 +64,6 @@ export const getPhaseStatus = ({ idea, phase, vote }: PhaseStatusInput): PhaseSt
 
   if (phase === '30') return vote == null ? WAITING(phase) : VOTED[vote];
 
-  // Results turns on the admin's verdict alone. Turnout against the quorum is a separate
-  // question, and the quorum bar under the idea answers it.
   if (phase === '40') {
     const verdict = toVerdict(idea.is_winner);
     if (verdict === 1) return { icon: 'check', label: TAKEN_FORWARD_LABEL, ...POSITIVE };

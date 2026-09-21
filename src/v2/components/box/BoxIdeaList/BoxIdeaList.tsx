@@ -30,7 +30,7 @@ const DISCUSSION_PHASE = '10';
 const PREVIEW_HEIGHT = 'max-h-[135px]';
 
 /** One trailing readout on a row: an icon, an optional count, and the text behind both. */
-const Metric = ({ icon, count, label }: { icon: ICON_TYPE; count?: number; label: string }) => (
+const Detail = ({ icon, count, label }: { icon: ICON_TYPE; count?: number; label: string }) => (
   <span className="flex items-center gap-1">
     <Icon type={icon} size="1rem" aria-hidden="true" />
     {count !== undefined && <span aria-hidden="true">{count}</span>}
@@ -64,17 +64,17 @@ const BoxIdeaList = ({
         const rowColors = status?.colors ?? band;
 
         const trailer = status ? (
-          <Metric icon={status.icon} label={t(status.label)} />
+          <Detail icon={status.icon} label={t(status.label)} />
         ) : phase === DISCUSSION_PHASE ? (
           <>
-            <Metric
+            <Detail
               icon="discussion"
               count={idea.sum_comments}
               label={t(idea.sum_comments === 1 ? 'v2.scopes.ideas.stats.comment' : 'v2.scopes.ideas.stats.comments', {
                 count: idea.sum_comments,
               })}
             />
-            <Metric
+            <Detail
               icon="heart"
               count={idea.sum_likes}
               label={t(idea.sum_likes === 1 ? 'v2.scopes.ideas.stats.like' : 'v2.scopes.ideas.stats.likes', {

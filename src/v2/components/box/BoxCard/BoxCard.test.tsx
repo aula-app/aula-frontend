@@ -108,7 +108,6 @@ describe('BoxCard idea preview', () => {
 
     const badge = rows(container)[0].querySelector('a')?.lastElementChild;
     expect(badge?.querySelector('svg')).toBeTruthy();
-    // Only the screen-reader label: no visible text and no count beside the icon.
     expect(badge?.textContent).toBe('v2.scopes.ideas.status.approved');
   });
 
