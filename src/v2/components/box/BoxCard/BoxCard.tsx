@@ -16,6 +16,7 @@ import { Category } from '@/v2/components/idea/CategoryList';
 import BoxIdeaList from '../BoxIdeaList';
 import { countSettled } from '../countSettled';
 import { BoxForm } from '@/v2/forms';
+import { syncBoxIdeas } from '@/v2/forms/BoxForm/syncBoxIdeas';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
@@ -93,15 +94,19 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
                 scopeLabel={t('scopes.boxes.name')}
                 subject={box.name}
                 hidden={!checkPermissions('boxes', 'edit')}
-                onSave={(data) =>
-                  editBox({
+                onSave={async (data) => {
+                  const response = await editBox({
                     topic_id: box.hash_id,
                     room_id: data.room || box.room_hash_id,
                     phase_id: Number(data.phase_id),
                     name: data.name,
                     description_public: data.description_public,
-                  })
-                }
+                  });
+                  if (response.error) return response;
+
+                  const ideaError = await syncBoxIdeas(box.hash_id, data.ideas);
+                  return ideaError ? { error: ideaError } : response;
+                }}
                 renderForm={({ onSubmit, onCancel }) => (
                   <BoxForm
                     defaultValues={box}

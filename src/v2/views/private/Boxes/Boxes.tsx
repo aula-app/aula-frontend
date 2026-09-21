@@ -13,6 +13,7 @@ import Icon from '@/v2/components/ui/Icon/Icon';
 import ScopeTitle from '@/v2/components/ui/ScopeTitle';
 import ScrollList from '@/v2/components/ui/ScrollList';
 import { BoxForm } from '@/v2/forms';
+import { syncBoxIdeas } from '@/v2/forms/BoxForm/syncBoxIdeas';
 import { ListFilterConfig, useListFilter } from '@/v2/hooks/useListFilter';
 import { useModal } from '@/v2/hooks/useModal';
 import { useToast } from '@/v2/hooks/useToast';
@@ -48,7 +49,12 @@ const Boxes: React.FC = () => {
   } = useListFilter(boxes, boxesFilterConfig, `boxes-${room_id}-${currentPhase}`);
 
   // Keyed on the full list, not the filtered one, so searching does not refetch.
-  const boxIdeas = useBoxIdeas(boxes);
+  const { ideas: boxIdeas, refetch: refetchBoxIdeas } = useBoxIdeas(boxes);
+
+  const handleBoxChanged = () => {
+    refetch();
+    refetchBoxIdeas();
+  };
 
   const allIdeas = useMemo(() => Object.values(boxIdeas).flat(), [boxIdeas]);
   const votes = useIdeaVotes(allIdeas, currentPhase === '30');
@@ -67,6 +73,11 @@ const Boxes: React.FC = () => {
       if (response.error) {
         toast.error(response.error || t('errors.failed'));
         return false;
+      }
+
+      if (response.data) {
+        const ideaError = await syncBoxIdeas(response.data.hash_id, data.ideas);
+        if (ideaError) toast.error(ideaError);
       }
 
       closeModal();
@@ -185,7 +196,7 @@ const Boxes: React.FC = () => {
         <ScrollList storageKey={`boxes-${room_id}-${currentPhase}`}>
           {visibleBoxes.map((box) => (
             <li key={box.hash_id}>
-              <BoxCard box={box} ideas={boxIdeas[box.hash_id]} votes={votes} onChanged={refetch} />
+              <BoxCard box={box} ideas={boxIdeas[box.hash_id]} votes={votes} onChanged={handleBoxChanged} />
             </li>
           ))}
         </ScrollList>

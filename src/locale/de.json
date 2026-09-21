@@ -8,6 +8,11 @@
       "winking": "Eine Illustration einer zwinkernden Eule, die die Fehlerseite repräsentiert"
     },
     "form": {
+      "autocomplete": {
+        "noOptions": "Keine Treffer",
+        "results_one": "{{count}} Ergebnis",
+        "results_other": "{{count}} Ergebnisse"
+      },
       "code": {
         "label": "Instanzcode"
       },
@@ -87,10 +92,12 @@
     },
     "scopes": {
       "boxes": {
-        "singular": "Box",
+        "decided": "{{count}} von {{total}} entschieden",
+        "ideasInBox": "Ideen in dieser Box",
+        "noIdeas": "Noch keine Ideen in dieser Box",
         "plural": "Boxen",
         "reviewed": "{{count}} von {{total}} geprüft",
-        "decided": "{{count}} von {{total}} entschieden"
+        "singular": "Box"
       },
       "comments": {
         "singular": "Verbesserungsvorschlag",
@@ -138,6 +145,7 @@
         "add": "{{var}} hinzufügen",
         "agree": "Zustimmen",
         "print": "Diese Seite drucken",
+        "remove": "{{var}} entfernen",
         "report": "Einen Fehler melden",
         "search": "Suchen"
       },
