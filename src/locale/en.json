@@ -8,6 +8,11 @@
       "winking": "An illustration of a winking owl, representing the error page"
     },
     "form": {
+      "autocomplete": {
+        "noOptions": "No matches",
+        "results_one": "{{count}} result",
+        "results_other": "{{count}} results"
+      },
       "code": {
         "label": "Instance code"
       },
@@ -87,10 +92,12 @@
     },
     "scopes": {
       "boxes": {
-        "singular": "box",
+        "decided": "{{count}} of {{total}} decided",
+        "ideasInBox": "Ideas in this box",
+        "noIdeas": "No ideas in this box yet",
         "plural": "boxes",
         "reviewed": "{{count}} of {{total}} reviewed",
-        "decided": "{{count}} of {{total}} decided"
+        "singular": "box"
       },
       "ideas": {
         "singular": "idea",
@@ -133,6 +140,7 @@
         "add": "Add {{var}}",
         "agree": "Agree",
         "print": "Print this page",
+        "remove": "Remove {{var}}",
         "report": "Report a bug",
         "search": "Search"
       },

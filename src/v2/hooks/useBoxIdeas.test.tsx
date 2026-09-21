@@ -1,6 +1,6 @@
 import { getIdeasByBox } from '@/services/ideas';
 import { BoxType, IdeaType } from '@/types/Scopes';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useBoxIdeas } from './useBoxIdeas';
 
@@ -18,8 +18,8 @@ describe('useBoxIdeas', () => {
   it('returns the ideas of each box, keyed by box', async () => {
     const { result } = renderHook(() => useBoxIdeas(boxes));
 
-    await waitFor(() => expect(result.current.b1).toEqual(ideas));
-    expect(result.current.b2).toEqual(ideas);
+    await waitFor(() => expect(result.current.ideas.b1).toEqual(ideas));
+    expect(result.current.ideas.b2).toEqual(ideas);
   });
 
   it('fetches once per box', async () => {
@@ -34,14 +34,23 @@ describe('useBoxIdeas', () => {
 
     const { result } = renderHook(() => useBoxIdeas(boxes));
 
-    await waitFor(() => expect(result.current.b1).toEqual([]));
+    await waitFor(() => expect(result.current.ideas.b1).toEqual([]));
   });
 
   it('stays quiet when disabled', async () => {
     const { result } = renderHook(() => useBoxIdeas(boxes, false));
 
-    expect(result.current).toEqual({});
+    expect(result.current.ideas).toEqual({});
     expect(getIdeasByBox).not.toHaveBeenCalled();
+  });
+
+  it('reloads every box on refetch, even when the box list is unchanged', async () => {
+    const { result } = renderHook(() => useBoxIdeas(boxes));
+    await waitFor(() => expect(getIdeasByBox).toHaveBeenCalledTimes(2));
+
+    await act(() => result.current.refetch());
+
+    expect(getIdeasByBox).toHaveBeenCalledTimes(4);
   });
 
   it('does not refetch when the box list is unchanged', async () => {
