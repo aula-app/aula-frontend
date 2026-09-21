@@ -67,6 +67,15 @@ describe('getPhaseStatus', () => {
     expect(status?.colors).toBe('bg-error text-error-fg');
   });
 
+  it('reads a verdict sent as a string, as the API sends it', () => {
+    expect(
+      getPhaseStatus({ idea: idea({ is_winner: '1' as unknown as IdeaType['is_winner'] }), phase: '40' })?.label
+    ).toContain('takenForward');
+    expect(
+      getPhaseStatus({ idea: idea({ is_winner: '-1' as unknown as IdeaType['is_winner'] }), phase: '40' })?.label
+    ).toContain('notTakenForward');
+  });
+
   it('leaves an idea nobody has ruled on waiting, however it polled', () => {
     const polled = idea({ number_of_votes: 9, number_of_users: 10 });
     expect(getPhaseStatus({ idea: polled, phase: '40' })?.label).toContain('waiting');

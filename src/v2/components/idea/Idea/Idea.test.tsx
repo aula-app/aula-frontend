@@ -86,7 +86,7 @@ describe('Idea metrics by phase', () => {
 
   it('measures likes against the quorum before voting opens', () => {
     for (const phase of ['0', '10', '20']) {
-      const { container } = renderAt(phase, { quorum: 40 });
+      const { container } = renderAt(phase, { idea: { ...idea, approved: 0 }, quorum: 40 });
       expect(barOf(container)?.getAttribute('aria-valuenow')).toBe('70');
     }
   });
@@ -101,14 +101,50 @@ describe('Idea metrics by phase', () => {
     expect(barOf(renderAt('30').container)).toBeTruthy();
   });
 
+  it('keeps the bubble corner round when there is nobody to measure', () => {
+    const nobody = { ...idea, number_of_users: 0 };
+    const { container } = renderAt('40', { idea: nobody, users: 0 });
+
+    // QuorumBar draws nothing without participants, so the bubble must not cut its corner for it.
+    expect(barOf(container)).toBeNull();
+    expect(container.querySelector('.rounded-br-none')).toBeNull();
+  });
+
+  it('cuts the bubble corner only when the bar is really there', () => {
+    const { container } = renderAt('40');
+
+    expect(barOf(container)).toBeTruthy();
+    expect(container.querySelector('.rounded-br-none')).toBeTruthy();
+  });
+
   it('drops the quorum bar on a rejected idea once voting starts', () => {
     for (const phase of ['30', '40']) {
       expect(barOf(renderAt(phase, { idea: { ...idea, approved: -1 } }).container)).toBeNull();
     }
   });
 
-  it('still shows a rejected idea its likes quorum during approval', () => {
-    const { container } = renderAt('20', { idea: { ...idea, approved: -1 }, quorum: 40 });
+  it('drops the likes quorum once the idea has been judged, either way', () => {
+    for (const approved of [1, -1]) {
+      const { container } = renderAt('20', { idea: { ...idea, approved } as IdeaType, quorum: 40 });
+      expect(barOf(container)).toBeNull();
+    }
+  });
+
+  it('keeps the likes quorum on an idea still awaiting its verdict', () => {
+    const { container } = renderAt('20', { idea: { ...idea, approved: 0 }, quorum: 40 });
+    expect(barOf(container)?.getAttribute('aria-valuenow')).toBe('70');
+  });
+
+  it('ignores a stray approval flag before the approval phase can have set one', () => {
+    for (const phase of ['0', '10']) {
+      const { container } = renderAt(phase, { idea: { ...idea, approved: 1 }, quorum: 40 });
+      expect(barOf(container)?.getAttribute('aria-valuenow')).toBe('70');
+    }
+  });
+
+  it('treats a missing verdict as unjudged, as the column defaults to null', () => {
+    const unset = { ...idea, approved: null as unknown as IdeaType['approved'] };
+    const { container } = renderAt('20', { idea: unset, quorum: 40 });
     expect(barOf(container)?.getAttribute('aria-valuenow')).toBe('70');
   });
 });

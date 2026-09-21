@@ -33,7 +33,6 @@ interface IdeaProps {
   categories?: Category[];
   vote?: Vote | null;
   quorum?: number;
-  /** Room members, the quorum denominator. Falls back to the idea's own count where the endpoint sends one. */
   users?: number;
   /** Renders the idea as its own page: full content, and no links back to the page we are already on. */
   detail?: boolean;
@@ -59,13 +58,16 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
   const canLike = phaseNumber < 20;
   const approved = approval.approved ?? 0;
   const isArchived = isVoting && approved === -1;
+  const isJudged = phaseNumber >= 20 && !!approved;
+  const participants = Number(users) || Number(idea.number_of_users) || 0;
+
   const hasApprovalBar = detail && phase_id === '20' && checkPermissions('ideas', 'approve');
   const hasVoteBar = detail && phase_id === '30' && !isArchived;
   const hasVoteResults = detail && phase_id === '40' && !isArchived;
-  const hasQuorumBar = !isArchived && !hasVoteResults && (isVoting || quorum > 0);
   const hasWinnerBar = hasVoteResults && checkPermissions('ideas', 'setWinner');
-
-  const participants = Number(users) || Number(idea.number_of_users) || 0;
+  // Must agree with what QuorumBar will actually draw: the bubble squares its bottom corner to
+  // seat the bar, so promising one that never arrives leaves a cut corner over nothing.
+  const hasQuorumBar = participants > 0 && !isArchived && !hasVoteResults && (isVoting || (quorum > 0 && !isJudged));
 
   const results = useVoteResults(idea.hash_id, hasVoteResults);
   const status = getPhaseStatus({
