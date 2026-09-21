@@ -28,7 +28,6 @@ interface IdeaProps {
   categories?: Category[];
   vote?: Vote | null;
   quorum?: number;
-  /** Room members, the quorum denominator. Falls back to the idea's own count where the endpoint sends one. */
   users?: number;
   className?: string;
   onChanged?: () => void;
@@ -45,10 +44,15 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onCha
   const phaseNumber = Number(phase_id);
   const isVoting = phaseNumber >= 30;
   const canLike = phaseNumber < 20;
-  const isArchived = isVoting && idea.approved === -1;
-  const hasQuorumBar = !isArchived && (isVoting || quorum > 0);
-
   const participants = Number(users) || Number(idea.number_of_users) || 0;
+
+  // The bar poses a different question either side of voting, and only while it is still open:
+  // before, whether the idea has drawn enough likes to advance — settled the moment it is judged;
+  // after, whether enough people turned out — which a rejected idea never gets to ask.
+  // It must also agree with what QuorumBar will actually draw: the bubble squares its bottom
+  // corner to seat the bar, so promising one that never arrives leaves a cut corner over nothing.
+  const isJudged = phaseNumber >= 20 && !!idea.approved;
+  const hasQuorumBar = participants > 0 && (isVoting ? idea.approved !== -1 : quorum > 0 && !isJudged);
 
   const like = useIdeaLike(idea);
   const status = getPhaseStatus({ idea, phase: phase_id, vote, quorum, users: participants });

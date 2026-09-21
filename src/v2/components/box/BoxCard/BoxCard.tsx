@@ -14,7 +14,7 @@ import MoreOptions from '@/v2/components/ui/MoreOptions';
 import Link from '@/v2/components/navigation/Link';
 import { Category } from '@/v2/components/idea/CategoryList';
 import BoxIdeaList from '../BoxIdeaList';
-import { countSettled } from '../countSettled';
+import { countSettled, inTheRunning } from '../countSettled';
 import { BoxForm } from '@/v2/forms';
 import { syncBoxIdeas } from '@/v2/forms/BoxForm/syncBoxIdeas';
 import { useTranslation } from 'react-i18next';
@@ -38,10 +38,6 @@ const APPROVAL_PHASE = 20;
 const RESULTS_PHASE = 40;
 
 const phaseProgress = (box: BoxType): { days: number; remaining: number } => {
-  // The current phase's countdown runs from when that phase started, not from
-  // the box creation date. `phase_start` is reset by the backend whenever the
-  // phase changes; fall back to `created` for boxes created before that field
-  // existed.
   const phaseIndex = Number(box.phase_id) / 10;
   const phaseKey = `phase_duration_${phaseIndex}` as `phase_duration_${0 | 1 | 2 | 3 | 4}`;
   const days = Number(box[phaseKey]) || 0;
@@ -58,15 +54,16 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
   const phaseColor = phases[box.phase_id] ?? 'wild';
   const to = `/room/${box.room_hash_id}/phase/${box.phase_id}/idea-box/${box.hash_id}`;
 
-  const hasRows = !!ideas && ideas.length > 0;
-  const showCountdown = [10, 30].includes(Number(box.phase_id));
+  const phaseNumber = Number(box.phase_id);
+  const running = ideas && inTheRunning(ideas, phaseNumber);
+  const hasRows = !!running && running.length > 0;
+  const showCountdown = [10, 30].includes(phaseNumber);
   const { days, remaining } = phaseProgress(box);
   const elapsed = days - remaining;
   const fillPercent = days > 0 ? Math.min(100, Math.max(0, (elapsed / days) * 100)) : 0;
 
-  const phaseNumber = Number(box.phase_id);
   const isResults = phaseNumber === RESULTS_PHASE;
-  const settled = progress ?? (ideas && { settled: countSettled(ideas, phaseNumber), total: ideas.length });
+  const settled = progress ?? (running && { settled: countSettled(running, phaseNumber), total: running.length });
   const showProgress = (phaseNumber === APPROVAL_PHASE || isResults) && !!settled && settled.total > 0;
   const settledPercent = showProgress ? (settled.settled / settled.total) * 100 : 0;
   const settledLabel = t(isResults ? 'v2.scopes.boxes.decided' : 'v2.scopes.boxes.reviewed', {
@@ -79,7 +76,7 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
       <div
         className={twMerge(
           `relative flex flex-col gap-2 rounded-t-2xl px-4 pt-2 pb-3 text-foreground bg-${phaseColor}`,
-          !hasRows && 'rounded-b-2xl'
+          !hasRows && !showCountdown && !showProgress && 'rounded-b-2xl'
         )}
       >
         <MoreOptions
@@ -146,7 +143,7 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
 
       {hasRows && (
         <BoxIdeaList
-          ideas={ideas}
+          ideas={running}
           phase={String(box.phase_id) as `${RoomPhases}`}
           color={phaseColor}
           boxPath={to}

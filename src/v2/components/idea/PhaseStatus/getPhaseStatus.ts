@@ -1,6 +1,6 @@
 import { IdeaType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
-import { phases, Vote } from '@/utils';
+import { isWinner, phases, Vote } from '@/utils';
 import { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
 
 export interface PhaseStatus {
@@ -13,6 +13,9 @@ export interface PhaseStatus {
 const POSITIVE = 'bg-success text-success-fg';
 const NEGATIVE = 'bg-error text-error-fg';
 const NEUTRAL = 'bg-neutral text-neutral-fg';
+// Rejected ideas share the results phase with four other NEUTRAL states, so they get a
+// paler band of their own rather than reading as just another undecided outcome.
+const ARCHIVED = 'bg-neutral-light text-muted';
 
 export const getPhaseColor = (phase: `${RoomPhases}`) => phases[phase] ?? 'wild';
 
@@ -63,12 +66,12 @@ export const getPhaseStatus = (input: PhaseStatusInput): PhaseStatus | null => {
   }
 
   const isArchived = (phase === '30' || phase === '40') && idea.approved === -1;
-  if (isArchived) return { icon: 'close', label: REJECTED_LABEL, colors: NEUTRAL };
+  if (isArchived) return { icon: 'close', label: REJECTED_LABEL, colors: ARCHIVED };
 
   if (phase === '30') return vote == null ? WAITING(pending) : VOTED[vote];
 
   if (phase === '40') {
-    if (idea.is_winner) return { icon: 'winner', label: 'v2.scopes.ideas.status.winner', colors: POSITIVE };
+    if (isWinner(idea.is_winner)) return { icon: 'winner', label: 'v2.scopes.ideas.status.winner', colors: POSITIVE };
     if (!input.quorum) return { icon: 'results', label: 'v2.scopes.ideas.status.notSelected', colors: NEUTRAL };
     return reachedQuorum(input)
       ? { icon: 'for', label: 'v2.scopes.ideas.status.quorumReached', colors: NEUTRAL }

@@ -43,11 +43,22 @@ describe('getPhaseStatus', () => {
   it('archives a rejected idea in a muted badge once voting starts', () => {
     const archived = getPhaseStatus({ idea: idea({ approved: -1 }), phase: '30', vote: 1 });
     expect(archived?.label).toContain('rejected');
-    expect(archived?.colors).toBe('bg-neutral text-neutral-fg');
+    expect(archived?.colors).toBe('bg-neutral-light text-muted');
 
     expect(getPhaseStatus({ idea: idea({ approved: -1 }), phase: '40', quorum: 50 })?.colors).toBe(
-      'bg-neutral text-neutral-fg'
+      'bg-neutral-light text-muted'
     );
+  });
+
+  it('keeps a rejection apart from the other muted results-phase outcomes', () => {
+    const rejected = getPhaseStatus({ idea: idea({ approved: -1 }), phase: '40', quorum: 50 })?.colors;
+    const notSelected = getPhaseStatus({ idea: idea(), phase: '40' })?.colors;
+    const quorumMissed = getPhaseStatus({ idea: idea(), phase: '40', quorum: 50 })?.colors;
+    const votedNeutral = getPhaseStatus({ idea: idea(), phase: '30', vote: 0 })?.colors;
+
+    expect(rejected).not.toBe(notSelected);
+    expect(rejected).not.toBe(quorumMissed);
+    expect(rejected).not.toBe(votedNeutral);
   });
 
   it('keeps the approval-phase rejection loud', () => {
@@ -60,6 +71,18 @@ describe('getPhaseStatus', () => {
 
   it('marks winners in the results phase', () => {
     expect(getPhaseStatus({ idea: idea({ is_winner: 1 }), phase: '40', quorum: 50 })?.label).toContain('winner');
+  });
+
+  it('never calls a losing idea a winner, whatever shape the flag arrives in', () => {
+    for (const lost of [-1, '-1', 0, '0']) {
+      const status = getPhaseStatus({ idea: idea({ is_winner: lost as unknown as number }), phase: '40' });
+      expect(status?.label).not.toContain('winner');
+    }
+  });
+
+  it('still reads a winner sent as a string, as the API sends it', () => {
+    const status = getPhaseStatus({ idea: idea({ is_winner: '1' as unknown as number }), phase: '40' });
+    expect(status?.label).toContain('winner');
   });
 
   it('weighs turnout against the quorum for non-winners', () => {

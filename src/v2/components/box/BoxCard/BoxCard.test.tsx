@@ -66,6 +66,21 @@ describe('BoxCard idea preview', () => {
     expect(rows(container)[4].textContent).toContain('Idea 4');
   });
 
+  it('drops rejected ideas from the preview once voting starts', () => {
+    const { container } = renderCard(30, { ideas: ideaList([1, -1, 1]) });
+
+    expect(rows(container).map((li) => li.textContent)).toEqual([
+      expect.stringContaining('Idea 0'),
+      expect.stringContaining('Idea 2'),
+    ]);
+  });
+
+  it('still previews rejected ideas in approval, where the rejection is the news', () => {
+    const { container } = renderCard(20, { ideas: ideaList([1, -1, 1]) });
+
+    expect(rows(container)).toHaveLength(3);
+  });
+
   it('draws nothing for a caller that does not pass ideas, such as the box view', () => {
     const { container } = renderCard(20);
 
@@ -206,6 +221,13 @@ describe('BoxCard approval progress', () => {
 
     expect(bar(container)?.getAttribute('aria-valuenow')).toBe('40');
     expect(bar(container)?.getAttribute('aria-label')).toContain('v2.scopes.boxes.decided');
+  });
+
+  it('leaves a rejected idea out of the results count, which it could never reach', () => {
+    const { container } = renderCard(40, { ideas: ideaList([-1, 1, 1], [], [0, 1, -1]) });
+
+    // The two that ran are both decided: a rejected idea must not hold the bar below full.
+    expect(bar(container)?.getAttribute('aria-valuenow')).toBe('100');
   });
 
   it('leaves the countdown alone in phases that have one', () => {

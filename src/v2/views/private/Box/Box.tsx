@@ -5,7 +5,7 @@ import { TEST_IDS } from '@/test-ids';
 import { IdeaType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import BoxCard from '@/v2/components/box/BoxCard';
-import { countSettled } from '@/v2/components/box/countSettled';
+import { countSettled, inTheRunning } from '@/v2/components/box/countSettled';
 import Fab from '@/v2/components/button/Fab/Fab';
 import IconButton from '@/v2/components/button/IconButton';
 import Idea from '@/v2/components/idea/Idea';
@@ -55,12 +55,12 @@ const Box: React.FC = () => {
 
   const boxPhase = String(box?.phase_id ?? phase ?? '0');
   const isDecided = Number(boxPhase) >= 30;
-  const running = isDecided ? ideas.filter((idea) => idea.approved !== -1) : ideas;
-  const listedIdeas = isDecided ? visibleIdeas.filter((idea) => idea.approved !== -1) : visibleIdeas;
+  const running = inTheRunning(ideas, Number(boxPhase));
+  const listedIdeas = inTheRunning(visibleIdeas, Number(boxPhase));
   const archivedIdeas = isDecided ? visibleIdeas.filter((idea) => idea.approved === -1) : [];
   const archiveId = useId();
 
-  const settled = countSettled(ideas, Number(boxPhase));
+  const settled = countSettled(running, Number(boxPhase));
 
   const votes = useIdeaVotes(running, boxPhase === '30');
   const quorum = useQuorum(boxPhase);
@@ -131,7 +131,7 @@ const Box: React.FC = () => {
           <>
             {!isLoading && !error && box && (
               <div className="p-2 pb-0">
-                <BoxCard box={box} progress={{ settled, total: ideas.length }} onChanged={handleBoxChanged} />
+                <BoxCard box={box} progress={{ settled, total: running.length }} onChanged={handleBoxChanged} />
               </div>
             )}
             {!isLoading && !error && box && (
