@@ -57,7 +57,8 @@ const AppContext = createContext<AppContextReturningType>([INITIAL_APP_STATE, ()
  */
 const AppStoreProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const savedDarkMode = localStorage.getItem('darkMode');
-  const darkMode = savedDarkMode !== null ? savedDarkMode === 'true' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const darkMode =
+    savedDarkMode !== null ? savedDarkMode === 'true' : window.matchMedia('(prefers-color-scheme: dark)').matches;
   const token = localStorageGet('token');
   const tokenExists = Boolean(token !== undefined);
 

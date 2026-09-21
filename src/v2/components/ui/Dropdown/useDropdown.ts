@@ -34,7 +34,11 @@ export const useDropdown = () => {
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { close(); focusTrigger(); return; }
+      if (e.key === 'Escape') {
+        close();
+        focusTrigger();
+        return;
+      }
 
       if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
       e.preventDefault();

@@ -59,42 +59,26 @@ test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
 
     const boxCard = adminPage.getByTestId(TEST_IDS.BOX_CARD);
     await expect(boxCard.getByText(box.name)).toBeVisible();
-    await boxCard.getByTestId('more-options-button').click();
+    await boxCard.getByTestId(TEST_IDS.BOX_MORE_MENU).click();
     await expect(boxCard.getByTestId('edit-button')).toBeVisible();
     await boxCard.getByTestId('edit-button').click();
+
+    await expect(adminPage.getByTestId('box-form')).toBeVisible();
+    await adminPage.getByTestId('box-form-cancel').click();
   });
 
-  await test.step("Admin adds both user's Ideas to Box using autocomplete", async () => {
-    // Click the autocomplete field to open dropdown
-    const autocompleteField = adminPage.getByTestId('ideas-autocomplete-field');
-    await autocompleteField.click();
-
-    // Select first idea
-    const idea1Option = adminPage.getByRole('option', { name: idea1.name });
-    await expect(idea1Option).toBeVisible();
-    await idea1Option.click();
-    await idea1Option.waitFor({ state: 'hidden' });
-
-    // Click field again to add second idea
-    await autocompleteField.click();
-
-    // Select second idea
-    const idea2Option = adminPage.getByRole('option', { name: idea2.name });
-    await expect(idea2Option).toBeVisible();
-    await idea2Option.click();
-    await idea2Option.waitFor({ state: 'hidden' });
-
-    // Submit the form
-    await adminPage.getByTestId('box-form-submit-button').click();
-    await adminPage.waitForSelector('[data-testid="box-name-input"]', { state: 'hidden' });
+  // Assigning existing Ideas to a Box lives in Settings; the box card's edit dialog
+  // only covers room/name/description/phase.
+  await test.step("Admin adds both user's Ideas to Box", async () => {
+    await boxes.edit(adminPage, { ...box, ideas: [idea1, idea2] } as BoxData);
   });
 
   await test.step('Admin verify both Ideas are in Box', async () => {
     await navigation.goToRoomPhase(adminPage, seededRoom.name, PHASES.DISCUSSION);
     await navigation.clickOnPageItem(adminPage, box.name);
 
-    await expect(adminPage.getByText(idea1.name)).toBeVisible();
-    await expect(adminPage.getByText(idea2.name)).toBeVisible();
+    await expect(adminPage.getByText(idea1.name).filter({ visible: true })).toBeVisible();
+    await expect(adminPage.getByText(idea2.name).filter({ visible: true })).toBeVisible();
   });
 
   await test.step('Change box phase to approval', async () => {

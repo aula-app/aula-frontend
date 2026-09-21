@@ -10,11 +10,11 @@
 export const announceToScreenReader = (message: string, type: 'polite' | 'assertive' = 'polite'): void => {
   const liveRegionId = type === 'assertive' ? 'a11y-status-announcer' : 'a11y-live-announcer';
   const liveRegion = document.getElementById(liveRegionId);
-  
+
   if (liveRegion) {
     // Clear previous content and add new message
     liveRegion.textContent = '';
-    
+
     // Use setTimeout to ensure screen readers register the change
     setTimeout(() => {
       if (liveRegion) {
@@ -37,6 +37,6 @@ export const announceLoadingState = (isLoading: boolean, resourceName?: string):
     : resourceName
       ? `${resourceName} loaded successfully`
       : 'Content loaded successfully';
-      
+
   announceToScreenReader(message, 'assertive');
 };

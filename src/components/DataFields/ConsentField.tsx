@@ -53,12 +53,12 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
                         input: {
                           'aria-labelledby': 'consent-text-field-label',
                           'aria-invalid': !!fieldState.error,
-                          'aria-errormessage': fieldState.error ? 'consent-text-error-message' : undefined
+                          'aria-errormessage': fieldState.error ? 'consent-text-error-message' : undefined,
                         },
                         inputLabel: {
                           id: 'consent-text-field-label',
-                          htmlFor: 'consent-text-field'
-                        }
+                          htmlFor: 'consent-text-field',
+                        },
                       }}
                       {...field}
                     />

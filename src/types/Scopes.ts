@@ -136,6 +136,7 @@ export interface RoomType {
   id: number;
   internal_info: string;
   last_update: string;
+  number_of_users: number;
   order_importance: number;
   restrict_to_roomusers_only: number;
   phase_duration_0: number;

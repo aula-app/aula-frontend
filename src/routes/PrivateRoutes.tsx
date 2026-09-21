@@ -8,7 +8,6 @@ import Ideas from '@/v2/views/private/Ideas';
 import NotFoundView from '@/v2/views/private/NotFound';
 import RoomLayout from '@/v2/views/private/Room';
 import IdeaView from '@/views/Idea';
-import IdeasBoxView from '@/views/IdeasBox';
 import UserMessagesView from '@/views/Messages';
 import AnnouncementView from '@/views/Messages/Announcement';
 import MessageView from '@/views/Messages/Message';
@@ -33,6 +32,7 @@ import WelcomeView from '@/views/Welcome';
 import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import RestrictedRoutes from './RestrictedRoutes';
+import Box from '@/v2/views/private/Box';
 
 const PrivateRoutes = () => {
   const [, dispatch] = useAppStore();
@@ -69,10 +69,10 @@ const PrivateRoutes = () => {
       <Route path="room/:room_id/" element={<RoomLayout />}>
         <Route path="phase/0" element={<Ideas />} />
         <Route path="phase/:phase" element={<Boxes />} />
-        <Route path="phase/:phase/idea/:idea_id" element={<IdeaView />} />
-        <Route path="phase/:phase/idea-box/:box_id" element={<IdeasBoxView />} />
-        <Route path="phase/:phase/idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
       </Route>
+      <Route path="room/:room_id/phase/:phase/idea/:idea_id" element={<IdeaView />} />
+      <Route path="room/:room_id/phase/:phase/idea-box/:box_id" element={<Box />} />
+      <Route path="room/:room_id/phase/:phase/idea-box/:box_id/idea/:idea_id" element={<IdeaView />} />
       <Route path="settings/profile" element={<UserProfileView />} />
       {checkPermissions('announcements', 'viewAll') && (
         <Route path="settings/announcements" element={<AnnouncementsView />} />

@@ -36,6 +36,7 @@ export const TEST_IDS = {
 
   // Box actions (v2 Boxes / BoxCard MoreOptions)
   ADD_BOX_BUTTON: 'add-box-button',
+  BOX_IDEA_LIST: 'box-idea-list',
   BOX_MORE_MENU: 'box-more-menu',
   BOX_MORE_OPTIONS_PANEL: 'box-more-options-panel',
   DELETE_BOX_CONFIRM: 'delete-box-confirm',
@@ -70,7 +71,7 @@ export const TEST_IDS = {
   BREADCRUMB_TOGGLE: 'breadcrumb-toggle',
   BREADCRUMB_MENU: 'breadcrumb-menu',
   PRINT_BUTTON: 'print-button',
-  
+
   // Settings / timed actions (TimedCommands)
   TIMEDCOMMAND_CONFIRM_BUTTON: 'timedcommand-confirm-button',
   TIMEDCOMMAND_STARTDATE_INPUT: 'timedcommand-startdate-input',

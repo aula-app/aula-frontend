@@ -10,7 +10,7 @@ dayjs.extend(timezone);
 
 /**
  * Main Data and Time conversion utility to keep formats the same across entire Application
- * 
+ *
  * @param {string|object} dateOrString - UTC date string or Date object from backend
  * @param {string} [dateFormat] - time conversion template in 'dayjs' format, `FORMAT_DATE_TIME` by default
  * @param {string} [fallbackValue] - optional fallback value if data conversion is not possible

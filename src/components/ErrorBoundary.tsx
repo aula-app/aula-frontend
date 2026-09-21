@@ -59,10 +59,10 @@ class ErrorBoundary extends Component<Props, State> {
             border: '1px solid #ffcdd2',
           }}
         >
-          <h2 style={{ color: '#d32f2f', margin: '0 0 16px 0' }}>{this.props.name} - {i18n.t('errors.boundary')}</h2>
-          <p style={{ color: '#555', margin: '0 0 16px 0' }}>
-            {i18n.t('errors.boundaryMessage')}
-          </p>
+          <h2 style={{ color: '#d32f2f', margin: '0 0 16px 0' }}>
+            {this.props.name} - {i18n.t('errors.boundary')}
+          </h2>
+          <p style={{ color: '#555', margin: '0 0 16px 0' }}>{i18n.t('errors.boundaryMessage')}</p>
           {import.meta.env.DEV && (
             <details style={{ whiteSpace: 'pre-wrap' }}>
               <summary style={{ cursor: 'pointer', color: '#666' }}>{i18n.t('errors.boundaryDetails')}</summary>

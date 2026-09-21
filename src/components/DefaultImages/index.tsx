@@ -1,3 +1,3 @@
 import DefaultImage from './DefaultImage';
 
-export { DefaultImage as default,  };
+export { DefaultImage as default };

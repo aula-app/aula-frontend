@@ -144,4 +144,3 @@ export async function deleteBox(box_id: string): Promise<GenericResponse> {
 
   return response as GenericResponse;
 }
-
