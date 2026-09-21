@@ -14,6 +14,7 @@ import MoreOptions from '@/v2/components/ui/MoreOptions';
 import Link from '@/v2/components/navigation/Link';
 import { Category } from '@/v2/components/idea/CategoryList';
 import BoxIdeaList from '../BoxIdeaList';
+import PhaseAdvance from '../PhaseAdvance';
 import { countSettled } from '../countSettled';
 import { BoxForm } from '@/v2/forms';
 import { syncBoxIdeas } from '@/v2/forms/BoxForm/syncBoxIdeas';
@@ -69,6 +70,12 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
   const settled = progress ?? (ideas && { settled: countSettled(ideas, phaseNumber), total: ideas.length });
   const showProgress = (phaseNumber === APPROVAL_PHASE || isResults) && !!settled && settled.total > 0;
   const settledPercent = showProgress ? (settled.settled / settled.total) * 100 : 0;
+
+  // A phase is spent once its own bar is full: the clock ran out, or every idea has been ruled on.
+  // A box with no configured duration has no clock to run out, so time never settles it.
+  const spent = showCountdown ? days > 0 && remaining <= 0 : showProgress && settled!.settled === settled!.total;
+  const canAdvance = spent && !isResults && checkPermissions('boxes', 'changePhase');
+  const barRadius = canAdvance ? 'flex-1' : 'rounded-b-2xl flex-1';
   const settledLabel = t(isResults ? 'v2.scopes.boxes.decided' : 'v2.scopes.boxes.reviewed', {
     count: settled?.settled ?? 0,
     total: settled?.total ?? 0,
@@ -162,19 +169,21 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
             value={fillPercent}
             color={phaseColor}
             label={remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
-            className="rounded-b-2xl flex-1"
+            className={barRadius}
           >
             <Icon type="clock" size="1rem" />
             {remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
           </ProgressBar>
         )}
         {showProgress && (
-          <ProgressBar value={settledPercent} color={phaseColor} label={settledLabel} className="rounded-b-2xl flex-1">
+          <ProgressBar value={settledPercent} color={phaseColor} label={settledLabel} className={barRadius}>
             <Icon type={isResults ? 'results' : 'approval'} size="1rem" />
             {settledLabel}
           </ProgressBar>
         )}
       </div>
+
+      {canAdvance && <PhaseAdvance box={box} onAdvanced={onChanged} className="rounded-b-2xl" />}
     </div>
   );
 };

@@ -7,6 +7,9 @@ name: aula-e2e
 #   yarn test
 #   docker compose -f docker-compose.e2e.yml down -v
 #
+# Set E2E_API_PORT / E2E_DB_PORT (e.g. in a .env next to this file) to move this
+# stack off the aula-v2 dev ports and run both at the same time.
+#
 # Override the backend path if your repo is not at ${BACKEND_DIR:-../aula-backend}:
 #   BACKEND_DIR=/path/to/backend docker compose -f docker-compose.e2e.yml up --build -d
 # Or set BACKEND_DIR in a .env file next to this compose file.
@@ -29,7 +32,7 @@ services:
       MARIADB_USER: aula_user
       MARIADB_PASSWORD: e2e_pass
     ports:
-      - "127.0.0.1:3307:3306"
+      - "127.0.0.1:${E2E_DB_PORT:-3307}:3306"
     volumes:
       # NOTE: this path is coupled to the backend repo structure (docker/mariadb/).
       # If that folder moves in aula-backend, this volume mapping must be updated here too.
@@ -86,7 +89,7 @@ services:
       APP_ENV: testing
       # APP_URL becomes api_base_url in the tenants table — must be reachable
       # from the browser (the test runner host), not from inside Docker.
-      APP_URL: http://localhost:8080
+      APP_URL: http://localhost:${E2E_API_PORT:-8080}
       APP_KEY: base64:mnist+vwPMvTZu++OKwA6965qJhAvYAUxo1IvoGVBmw=
       BCRYPT_ROUNDS: 4
       DB_CONNECTION: mariadb
@@ -115,7 +118,7 @@ services:
       CENTRAL_DB_USER: aula_user
       CENTRAL_DB_PASS: e2e_pass
     ports:
-      - "8080:80"
+      - "${E2E_API_PORT:-8080}:80"
     depends_on:
       mariadb-e2e:
         condition: service_healthy

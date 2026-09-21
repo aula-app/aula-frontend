@@ -1,3 +1,4 @@
+import { TEST_IDS } from '@/test-ids';
 import { Verdict } from '@/utils';
 import DecisionBar from '@/v2/components/idea/DecisionBar';
 import { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
@@ -21,9 +22,21 @@ const ApprovalBar = ({ approval: { approved, comment, decide, pending }, classNa
   const { t } = useTranslation();
   const { openModal, closeModal } = useModal();
 
-  const options: { value: Verdict; icon: ICON_TYPE; label: string; colors: string }[] = [
-    { value: 1, icon: 'star', label: t('v2.scopes.ideas.status.approved'), colors: CHOSEN_APPROVED },
-    { value: -1, icon: 'noSymbol', label: t('v2.scopes.ideas.status.rejected'), colors: CHOSEN_REJECTED },
+  const options: { value: Verdict; icon: ICON_TYPE; label: string; colors: string; testId: string }[] = [
+    {
+      value: 1,
+      icon: 'star',
+      label: t('v2.scopes.ideas.status.approved'),
+      colors: CHOSEN_APPROVED,
+      testId: TEST_IDS.APPROVE_BUTTON,
+    },
+    {
+      value: -1,
+      icon: 'noSymbol',
+      label: t('v2.scopes.ideas.status.rejected'),
+      colors: CHOSEN_REJECTED,
+      testId: TEST_IDS.REJECT_BUTTON,
+    },
   ];
 
   // A rejection always goes through the dialog, re-picked or not: the argument is what the

@@ -1,3 +1,4 @@
+import { TEST_IDS } from '@/test-ids';
 import Icon, { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
@@ -37,6 +38,7 @@ const VoteResults = ({ results, users = 0, className }: VoteResultsProps) => {
     <div
       role="group"
       aria-label={t('v2.scopes.ideas.stats.voteTurnout', { num: total, total: eligible })}
+      data-testid={TEST_IDS.VOTE_RESULTS}
       className={twMerge('flex overflow-hidden', className)}
     >
       {segments

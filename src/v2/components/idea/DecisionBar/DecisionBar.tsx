@@ -9,6 +9,7 @@ export interface DecisionOption<T> {
   label: string;
   /** Fill once this option is the one in force. */
   colors: string;
+  testId?: string;
 }
 
 interface DecisionBarProps<T> {
@@ -42,6 +43,7 @@ const DecisionBar = <T,>({ label, options, value, onChange, disabled = false, cl
         <Button
           key={String(option.value)}
           text
+          data-testid={option.testId}
           aria-pressed={chosen}
           disabled={disabled}
           onClick={() => onChange(option.value)}

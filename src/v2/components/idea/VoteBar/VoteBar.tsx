@@ -31,6 +31,7 @@ const VoteBar = ({ vote: { vote, cast }, disabled = false, className }: VoteBarP
         icon: option,
         label: t(`votes.${option}`),
         colors: CHOSEN[option],
+        testId: option,
       }))}
       value={vote}
       onChange={cast}

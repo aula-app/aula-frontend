@@ -31,6 +31,12 @@ export const TEST_IDS = {
 
   // Dialogs / confirmations (ConfirmDialog, DataDelete)
   CONFIRM_BUTTON: 'confirm-button',
+  APPROVE_BUTTON: 'approve-button',
+  REJECT_BUTTON: 'reject-button',
+  ADVANCE_PHASE_BUTTON: 'advance-phase-button',
+  ADVANCE_PHASE_CONFIRM: 'advance-phase-confirm',
+  ADVANCE_PHASE_CANCEL: 'advance-phase-cancel',
+  VOTE_RESULTS: 'vote-results',
   CANCEL_BUTTON: 'cancel-button',
   DELETE_BUTTON: 'delete-button',
 

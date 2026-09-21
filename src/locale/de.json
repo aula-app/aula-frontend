@@ -97,7 +97,9 @@
         "noIdeas": "Noch keine Ideen in dieser Box",
         "plural": "Boxen",
         "reviewed": "{{count}} von {{total}} geprüft",
-        "singular": "Box"
+        "singular": "Box",
+        "phaseReady": "Bereit für {{var}}",
+        "advance": "Weiter"
       },
       "comments": {
         "singular": "Verbesserungsvorschlag",
@@ -184,6 +186,10 @@
           "title": "Vorsicht!",
           "description": "Möchtest du wirklich fortfahren?\nDiese Aktion kann nicht rückgängig gemacht werden.",
           "descriptionNamed": "Du bist dabei, '{{var}}' zu löschen.\nDiese Aktion kann nicht rückgängig gemacht werden."
+        },
+        "phase": {
+          "title": "In die nächste Phase wechseln?",
+          "description": "„{{box}}“ wechselt zu {{phase}}.\nAlle im Raum sehen die neue Phase sofort."
         }
       },
       "editor": {

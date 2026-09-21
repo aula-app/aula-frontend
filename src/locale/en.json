@@ -97,7 +97,9 @@
         "noIdeas": "No ideas in this box yet",
         "plural": "boxes",
         "reviewed": "{{count}} of {{total}} reviewed",
-        "singular": "box"
+        "singular": "box",
+        "phaseReady": "Ready for {{var}}",
+        "advance": "Move on"
       },
       "comments": {
         "singular": "comment",
@@ -184,6 +186,10 @@
           "title": "Caution!",
           "description": "Are you sure you want to continue?\nThis action cannot be undone.",
           "descriptionNamed": "You are about to delete '{{var}}'.\nThis action cannot be undone."
+        },
+        "phase": {
+          "title": "Move to the next phase?",
+          "description": "'{{box}}' moves to {{phase}}.\nEveryone in the room sees the new phase right away."
         }
       },
       "editor": {
