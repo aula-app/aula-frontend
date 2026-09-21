@@ -53,6 +53,7 @@ yarn-error.log*
 .claude
 
 # Playwright
+.playwright*
 node_modules/
 /test-results/
 /playwright-report/
