@@ -6,6 +6,7 @@ import DeleteButton from '@/v2/components/button/DeleteButton';
 import EditButton from '@/v2/components/button/EditButton';
 import ReportButton from '@/v2/components/button/ReportButton';
 import ShareButton from '@/v2/components/button/ShareButton';
+import ApprovalBar, { useIdeaApproval } from '@/v2/components/idea/ApprovalBar';
 import ApprovalNote from '@/v2/components/idea/ApprovalNote';
 import PhaseStatus, { getPhaseColor, getPhaseColors, getPhaseStatus } from '@/v2/components/idea/PhaseStatus';
 import QuorumBar from '@/v2/components/idea/QuorumBar';
@@ -48,10 +49,17 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
   const phase_id = phase || '0';
   const ideaPath = `/room/${idea.room_hash_id}/phase/${phase_id}/idea/${idea.hash_id}`;
 
+  const like = useIdeaLike(idea);
+  const voting = useIdeaVote(idea.hash_id, vote);
+  const winner = useIdeaWinner(idea.hash_id, idea.is_winner);
+  const approval = useIdeaApproval(idea.hash_id, idea.approved, idea.approval_comment);
+
   const phaseNumber = Number(phase_id);
   const isVoting = phaseNumber >= 30;
   const canLike = phaseNumber < 20;
-  const isArchived = isVoting && idea.approved === -1;
+  const approved = approval.approved ?? 0;
+  const isArchived = isVoting && approved === -1;
+  const hasApprovalBar = detail && phase_id === '20' && checkPermissions('ideas', 'approve');
   const hasVoteBar = detail && phase_id === '30' && !isArchived;
   const hasVoteResults = detail && phase_id === '40' && !isArchived;
   const hasQuorumBar = !isArchived && !hasVoteResults && (isVoting || quorum > 0);
@@ -59,18 +67,15 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
 
   const participants = Number(users) || Number(idea.number_of_users) || 0;
 
-  const like = useIdeaLike(idea);
-  const voting = useIdeaVote(idea.hash_id, vote);
   const results = useVoteResults(idea.hash_id, hasVoteResults);
-  const winner = useIdeaWinner(idea.hash_id, idea.is_winner);
   const status = getPhaseStatus({
-    idea: { ...idea, is_winner: winner.winner ?? 0 },
+    idea: { ...idea, approved, is_winner: winner.winner ?? 0 },
     phase: phase_id,
     vote: voting.vote,
   });
   const bubbleColor = status?.colors ?? getPhaseColors(phase_id);
   const hasTopTab = !!status || categories.length > 0;
-  const rejectionNote = detail && idea.approved === -1 ? idea.approval_comment : null;
+  const rejectionNote = detail && approved === -1 ? approval.comment : null;
 
   const Title = detail ? 'h1' : 'h2';
 
@@ -103,7 +108,7 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
           className={twMerge(
             'relative flex flex-col-reverse ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
             bubbleColor,
-            hasQuorumBar || hasVoteResults ? 'rounded-br-none' : '',
+            hasQuorumBar || hasVoteResults || hasApprovalBar ? 'rounded-br-none' : '',
             rejectionNote ? 'rounded-t-none' : hasTopTab ? 'rounded-tr-none' : ''
           )}
         >
@@ -157,6 +162,8 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
           </MoreOptions>
         </div>
       </div>
+
+      {hasApprovalBar && <ApprovalBar approval={approval} className="ml-4 rounded-br-2xl" />}
 
       {hasVoteBar && <VoteBar vote={voting} disabled={!checkPermissions('ideas', 'vote')} className="ml-4" />}
 
