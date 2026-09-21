@@ -1,10 +1,10 @@
 import { useEditor, EditorContent, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Markdown } from '@tiptap/markdown';
-import EmojiExtension, { shortcodesToUnicode } from './emojiExtension';
-import IconButton from '../button/IconButton';
-import Icon from '../ui/Icon';
-import EmojiPicker from './EmojiPicker/EmojiPicker';
+import EmojiExtension, { shortcodesToUnicode } from '../emojiExtension';
+import IconButton from '../../button/IconButton';
+import Icon from '../../ui/Icon';
+import EmojiPicker from '../EmojiPicker';
 import { ReactNode, useEffect, useId, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useTranslation } from 'react-i18next';
