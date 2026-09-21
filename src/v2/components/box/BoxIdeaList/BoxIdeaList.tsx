@@ -85,7 +85,7 @@ const BoxIdeaList = ({
         ) : null;
 
         return (
-          <li key={idea.hash_id} className="flex items-stretch gap-0.5">
+          <li key={idea.hash_id} className="flex items-stretch gap-1">
             <span
               className={twMerge(
                 'flex shrink-0 items-center px-2 text-xs font-semibold uppercase',

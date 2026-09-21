@@ -1,5 +1,4 @@
 import { getIdeasByRoom } from '@/services/ideas';
-import { PhaseType } from '@/types/SettingsTypes';
 import IconButton from '@/v2/components/button/IconButton';
 import AutocompleteInput from '@/v2/components/input/AutocompleteInput';
 import { SelectOption } from '@/v2/components/input/SelectInput';
@@ -14,8 +13,6 @@ interface IdeaFieldProps {
   /** Ideas currently assigned, as `{ value: hash_id, label: title }`. */
   value: SelectOption[];
   onChange: (ideas: SelectOption[]) => void;
-  /** Palette the rows are drawn in — normally the box's own phase color. */
-  color?: PhaseType;
   /** The assigned ideas are still being fetched. */
   loadingValue?: boolean;
   disabled?: boolean;
@@ -27,7 +24,6 @@ const IdeaField = ({
   roomId,
   value,
   onChange,
-  color = 'wild',
   loadingValue = false,
   disabled = false,
   'data-testid': dataTestId = 'idea-field',
