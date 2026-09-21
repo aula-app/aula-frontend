@@ -31,6 +31,12 @@ export const TEST_IDS = {
 
   // Dialogs / confirmations (ConfirmDialog, DataDelete)
   CONFIRM_BUTTON: 'confirm-button',
+  APPROVE_BUTTON: 'approve-button',
+  REJECT_BUTTON: 'reject-button',
+  ADVANCE_PHASE_BUTTON: 'advance-phase-button',
+  ADVANCE_PHASE_CONFIRM: 'advance-phase-confirm',
+  ADVANCE_PHASE_CANCEL: 'advance-phase-cancel',
+  VOTE_RESULTS: 'vote-results',
   CANCEL_BUTTON: 'cancel-button',
   DELETE_BUTTON: 'delete-button',
 
@@ -52,6 +58,14 @@ export const TEST_IDS = {
   SHARE_BUTTON: 'share-button',
   DELETE_IDEA_CONFIRM: 'delete-idea-confirm',
   DELETE_IDEA_CANCEL: 'delete-idea-cancel',
+
+  // Comment actions (v2 Comment, Comments section)
+  ADD_COMMENT_BUTTON: 'add-comment-button',
+  COMMENT_FORM: 'comment-form',
+  COMMENT_FORM_SUBMIT: 'confirm-comment-button',
+  COMMENT_FORM_CANCEL: 'cancel-comment-button',
+  COMMENT_MORE_MENU: 'comment-more-options',
+  COMMENT_MORE_OPTIONS_PANEL: 'comment-more-options-panel',
 
   // Offline state (PublicOfflineView)
   SCHOOL_OFFLINE_VIEW: 'school-offline-view',

@@ -89,7 +89,6 @@ const Box: React.FC = () => {
     });
   }, [box, room_id, t, dispatch]);
 
-  // Deleting the box we are viewing leaves nothing to show — return to the phase.
   const handleBoxChanged = async () => {
     const updated = await refetch();
     if (!updated) navigate(`/room/${room_id}/phase/${phase}`);

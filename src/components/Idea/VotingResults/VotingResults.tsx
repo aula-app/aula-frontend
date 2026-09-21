@@ -1,7 +1,7 @@
 import AppIcon from '@/components/AppIcon';
 import { getVote, getVoteResults, ResultResponse, setToLosing, setToWinning } from '@/services/vote';
 import { IdeaType } from '@/types/Scopes';
-import { checkPermissions, Vote, votingOptions } from '@/utils';
+import { checkPermissions, isWinner, Vote, votingOptions } from '@/utils';
 import { Card, FormControlLabel, Stack, Switch, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -35,6 +35,7 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
     votes_negative: 0,
     votes_neutral: 0,
     votes_positive: 0,
+    voters_count: 0,
   });
 
   const getResults = () => {
@@ -65,7 +66,7 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
           borderRadius: '25px',
           overflow: 'hidden',
           scrollSnapAlign: 'center',
-          bgcolor: idea.is_winner ? 'for.main' : 'disabled.main',
+          bgcolor: isWinner(idea.is_winner) ? 'for.main' : 'disabled.main',
         }}
         variant="outlined"
       >
@@ -79,11 +80,11 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
               aspectRatio: 1,
             }}
           >
-            <AppIcon icon={idea.is_winner ? 'winner' : quorumPassed() ? 'for' : 'against'} size="xl" />
+            <AppIcon icon={isWinner(idea.is_winner) ? 'winner' : quorumPassed() ? 'for' : 'against'} size="xl" />
           </Stack>
           <Stack flexGrow={1} pr={2}>
             <Typography variant="h3">
-              {idea.is_winner === 1
+              {isWinner(idea.is_winner)
                 ? t(`scopes.ideas.winner`)
                 : quorum !== undefined
                   ? t(`scopes.ideas.noQuorum`)
@@ -117,7 +118,7 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
       </Card>
       {checkPermissions('ideas', 'setWinner') && (
         <FormControlLabel
-          control={<Switch onChange={handleSetWinner} checked={Boolean(idea.is_winner)} sx={{ ml: 3 }} />}
+          control={<Switch onChange={handleSetWinner} checked={isWinner(idea.is_winner)} sx={{ ml: 3 }} />}
           label={t('settings.columns.is_winner')}
           sx={{ mt: 2 }}
         />

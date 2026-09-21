@@ -91,14 +91,15 @@ export const reportComment = async (
   // Wait for report dialog
   await expect(page.getByTestId(TEST_IDS.REPORT_DIALOG)).toBeVisible();
 
-  // Select report type from dropdown (v1 report form — comments still use the legacy dialog)
-  await formInteractions.selectOptionByValue(page, 'select-field-report', reportType);
+  // Select report type from dropdown (v2 SelectInput)
+  await page.getByTestId('report-form-reason').click();
+  await page.getByTestId(`report-form-reason-option-${reportType}`).click();
 
-  // Fill in report content
-  await formInteractions.fillMarkdownForm(page, 'content', reportContent);
+  // Fill in report content (v2 RichEditor)
+  await page.getByTestId('report-form-content').locator('[contenteditable="true"]').fill(reportContent);
 
   // Submit report
-  await formInteractions.clickButton(page, 'report-form-submit-button');
+  await formInteractions.clickButton(page, 'report-form-submit');
   await expect(page.getByTestId(TEST_IDS.REPORT_DIALOG)).toBeHidden();
 };
 

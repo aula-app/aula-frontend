@@ -1,21 +1,23 @@
 import { IdeaType } from '@/types/Scopes';
-import { RoomPhases } from '@/types/SettingsTypes';
-import { isWinner, phases, Vote } from '@/utils';
+import { PhaseType, RoomPhases } from '@/types/SettingsTypes';
+import { phases, toVerdict, Vote } from '@/utils';
 import { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
+
+/** Palette a status paints in, for the bars that follow it. */
+export type StatusTone = PhaseType | 'success' | 'error' | 'neutral';
 
 export interface PhaseStatus {
   icon: ICON_TYPE;
   label: string;
   /** bg/text pair shared by the badge and the idea bubble, so both always agree. */
   colors: string;
+  /** The same palette as a single name, for components that build their own classes. */
+  tone: StatusTone;
 }
 
-const POSITIVE = 'bg-success text-success-fg';
-const NEGATIVE = 'bg-error text-error-fg';
-const NEUTRAL = 'bg-neutral text-neutral-fg';
-// Rejected ideas share the results phase with four other NEUTRAL states, so they get a
-// paler band of their own rather than reading as just another undecided outcome.
-const ARCHIVED = 'bg-neutral-light text-muted';
+const POSITIVE = { colors: 'bg-success text-success-fg', tone: 'success' } as const;
+const NEGATIVE = { colors: 'bg-error text-error-fg', tone: 'error' } as const;
+const NEUTRAL = { colors: 'bg-neutral text-neutral-fg', tone: 'neutral' } as const;
 
 export const getPhaseColor = (phase: `${RoomPhases}`) => phases[phase] ?? 'wild';
 
@@ -29,53 +31,45 @@ interface PhaseStatusInput {
   phase: `${RoomPhases}`;
   /** The current user's vote. Null or undefined — not voted, still loading, or not allowed to vote — all read as waiting. */
   vote?: Vote | null;
-  /** Percentage of eligible users that must vote. 0 or undefined means no quorum is configured. */
-  quorum?: number;
-  /** Room members. Falls back to the idea's own count. */
-  users?: number;
 }
 
-const reachedQuorum = ({ idea, quorum, users }: PhaseStatusInput) => {
-  const total = Number(users) || Number(idea.number_of_users) || 0;
-  return !!quorum && total > 0 && (Number(idea.number_of_votes) / total) * 100 >= quorum;
-};
-
+const WAITING_LABEL = 'v2.scopes.ideas.status.waiting';
 const REJECTED_LABEL = 'v2.scopes.ideas.status.rejected';
+const TAKEN_FORWARD_LABEL = 'v2.scopes.ideas.status.takenForward';
+const NOT_TAKEN_FORWARD_LABEL = 'v2.scopes.ideas.status.notTakenForward';
 
-const WAITING = (colors: string): PhaseStatus => ({
+const WAITING = (phase: `${RoomPhases}`): PhaseStatus => ({
   icon: 'clock',
-  label: 'v2.scopes.ideas.status.waiting',
-  colors,
+  label: WAITING_LABEL,
+  colors: getPhaseColors(phase),
+  tone: getPhaseColor(phase),
 });
 
 const VOTED: Record<Vote, PhaseStatus> = {
-  1: { icon: 'for', label: 'v2.scopes.ideas.status.votedFor', colors: POSITIVE },
-  0: { icon: 'neutral', label: 'v2.scopes.ideas.status.votedNeutral', colors: NEUTRAL },
-  [-1]: { icon: 'against', label: 'v2.scopes.ideas.status.votedAgainst', colors: NEGATIVE },
+  1: { icon: 'for', label: 'v2.scopes.ideas.status.votedFor', ...POSITIVE },
+  0: { icon: 'neutral', label: 'v2.scopes.ideas.status.votedNeutral', ...NEUTRAL },
+  [-1]: { icon: 'against', label: 'v2.scopes.ideas.status.votedAgainst', ...NEGATIVE },
 };
 
 /** Status badge for the current phase, or null when the phase has none. */
-export const getPhaseStatus = (input: PhaseStatusInput): PhaseStatus | null => {
-  const { idea, phase, vote } = input;
-  const pending = getPhaseColors(phase);
-
+export const getPhaseStatus = ({ idea, phase, vote }: PhaseStatusInput): PhaseStatus | null => {
   if (phase === '20') {
-    if (idea.approved === 1) return { icon: 'check', label: 'v2.scopes.ideas.status.approved', colors: POSITIVE };
-    if (idea.approved === -1) return { icon: 'close', label: REJECTED_LABEL, colors: NEGATIVE };
-    return WAITING(pending);
+    if (idea.approved === 1) return { icon: 'star', label: 'v2.scopes.ideas.status.approved', ...POSITIVE };
+    if (idea.approved === -1) return { icon: 'noSymbol', label: REJECTED_LABEL, ...NEGATIVE };
+    return WAITING(phase);
   }
 
   const isArchived = (phase === '30' || phase === '40') && idea.approved === -1;
-  if (isArchived) return { icon: 'close', label: REJECTED_LABEL, colors: ARCHIVED };
+  if (isArchived) return { icon: 'noSymbol', label: REJECTED_LABEL, ...NEUTRAL };
 
-  if (phase === '30') return vote == null ? WAITING(pending) : VOTED[vote];
+  if (phase === '30') return vote == null ? WAITING(phase) : VOTED[vote];
 
   if (phase === '40') {
-    if (isWinner(idea.is_winner)) return { icon: 'winner', label: 'v2.scopes.ideas.status.winner', colors: POSITIVE };
-    if (!input.quorum) return { icon: 'results', label: 'v2.scopes.ideas.status.notSelected', colors: NEUTRAL };
-    return reachedQuorum(input)
-      ? { icon: 'for', label: 'v2.scopes.ideas.status.quorumReached', colors: NEUTRAL }
-      : { icon: 'against', label: 'v2.scopes.ideas.status.quorumMissed', colors: NEUTRAL };
+    const verdict = toVerdict(idea.is_winner);
+    if (verdict === 1) return { icon: 'check', label: TAKEN_FORWARD_LABEL, ...POSITIVE };
+    if (verdict === -1) return { icon: 'close', label: NOT_TAKEN_FORWARD_LABEL, ...NEGATIVE };
+    // Not the phase palette here: results is green, which is the winner's colour.
+    return { icon: 'clock', label: WAITING_LABEL, ...NEUTRAL };
   }
 
   return null;

@@ -97,7 +97,14 @@
         "noIdeas": "No ideas in this box yet",
         "plural": "boxes",
         "reviewed": "{{count}} of {{total}} reviewed",
-        "singular": "box"
+        "singular": "box",
+        "phaseReady": "Ready for {{var}}",
+        "advance": "Move on"
+      },
+      "comments": {
+        "singular": "comment",
+        "plural": "comments",
+        "by": "Comment by {{name}}"
       },
       "ideas": {
         "singular": "idea",
@@ -110,7 +117,8 @@
           "comment": "{{count}} comment",
           "comments": "{{count}} comments",
           "voteTurnout": "{{num}} of {{total}} people voted",
-          "likeTurnout": "{{num}} of {{total}} people liked this"
+          "likeTurnout": "{{num}} of {{total}} people liked this",
+          "notVoted": "Not voted"
         },
         "status": {
           "approved": "Approved",
@@ -119,10 +127,13 @@
           "votedFor": "You voted for",
           "votedNeutral": "You voted neutral",
           "votedAgainst": "You voted against",
-          "winner": "Winner",
-          "quorumReached": "Quorum reached",
-          "quorumMissed": "Quorum missed",
-          "notSelected": "Not selected"
+          "takenForward": "Taken forward",
+          "notTakenForward": "Not taken forward",
+          "outcome": "Outcome"
+        },
+        "approval": {
+          "decision": "Approval",
+          "reason": "Reason for rejection"
         }
       }
     },
@@ -175,6 +186,10 @@
           "title": "Caution!",
           "description": "Are you sure you want to continue?\nThis action cannot be undone.",
           "descriptionNamed": "You are about to delete '{{var}}'.\nThis action cannot be undone."
+        },
+        "phase": {
+          "title": "Move to the next phase?",
+          "description": "'{{box}}' moves to {{phase}}.\nEveryone in the room sees the new phase right away."
         }
       },
       "editor": {
@@ -250,7 +265,8 @@
         "updated": "Last update",
         "user": "User",
         "name": "Name",
-        "ideas": "Number of ideas"
+        "ideas": "Number of ideas",
+        "likes": "Number of likes"
       },
       "toggle": "Toggle {{var}}",
       "count": {

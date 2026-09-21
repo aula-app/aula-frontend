@@ -1,4 +1,4 @@
-import { PhaseType } from '@/types/SettingsTypes';
+import { StatusTone } from '@/v2/components/idea/PhaseStatus/getPhaseStatus';
 import Icon, { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
 import ProgressBar from '@/v2/components/ui/ProgressBar';
 import { useTranslation } from 'react-i18next';
@@ -19,8 +19,8 @@ interface QuorumBarProps {
   users: number;
   /** Share of participants required, as a percentage. 0 hides the marker. */
   quorum?: number;
-  /** Phase palette the bar is drawn in. */
-  color: PhaseType;
+  /** Palette the bar is drawn in — the idea's status tone, so bar and badge agree. */
+  color: StatusTone;
   className?: string;
 }
 
