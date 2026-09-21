@@ -53,7 +53,6 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
   const canLike = phaseNumber < 20;
   const isArchived = isVoting && idea.approved === -1;
   const hasVoteBar = detail && phase_id === '30' && !isArchived;
-  // On its own page the results phase answers turnout with the distribution instead.
   const hasVoteResults = detail && phase_id === '40' && !isArchived;
   const hasQuorumBar = !isArchived && !hasVoteResults && (isVoting || quorum > 0);
   // The verdict is the admin's alone, so unlike the vote bar it is not shown to others at all.

@@ -9,7 +9,6 @@ const results = (overrides: Partial<VoteResultsState> = {}): VoteResultsState =>
   counts: { against: 1, neutral: 2, for: 3 },
   total: 6,
   voters: 12,
-  loading: false,
   ...overrides,
 });
 
@@ -63,7 +62,7 @@ describe('VoteResults', () => {
   });
 
   it('draws nothing until the counts are in', () => {
-    const { container } = render(<VoteResults results={results({ loading: true })} />);
+    const { container } = render(<VoteResults results={null} />);
     expect(container.firstChild).toBeNull();
   });
 
