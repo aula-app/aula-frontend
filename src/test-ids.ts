@@ -37,6 +37,8 @@ export const TEST_IDS = {
   ADVANCE_PHASE_CONFIRM: 'advance-phase-confirm',
   ADVANCE_PHASE_CANCEL: 'advance-phase-cancel',
   VOTE_RESULTS: 'vote-results',
+  WINNER_BUTTON: 'winner-button',
+  NOT_WINNER_BUTTON: 'not-winner-button',
   CANCEL_BUTTON: 'cancel-button',
   DELETE_BUTTON: 'delete-button',
 

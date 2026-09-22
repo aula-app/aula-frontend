@@ -1,4 +1,5 @@
 import { Locator, Page, expect } from '@playwright/test';
+import { TIMEOUTS } from '../support/constants';
 
 export const fillForm = async (page: Page, testId: string, value: string) => {
   const field = page.getByTestId(`${testId}-input`);
@@ -41,13 +42,18 @@ const openSelectDropdown = async (page: Page, testId: string) => {
   const isRealInput =
     (await namedInput.count()) > 0 && (await namedInput.getAttribute('aria-hidden')) !== 'true';
 
-  if (isRealInput) {
-    await namedInput.click();
-  } else {
-    await field.click();
+  const trigger = isRealInput ? namedInput : field;
+  const list = page.getByTestId(`${testId}-list`);
+
+  // Guarded retry: a second click on an already-open popup would close it.
+  await trigger.click();
+  try {
+    await list.waitFor({ state: 'visible', timeout: TIMEOUTS.THREE_SECONDS });
+  } catch {
+    await trigger.click();
   }
 
-  await expect(page.getByTestId(`${testId}-list`)).toBeVisible();
+  await expect(list).toBeVisible();
 };
 
 export const selectOption = async (page: Page, testId: string, optionLabel: string) => {
@@ -74,6 +80,17 @@ export const selectAutocompleteOption = async (page: Page, testId: string, optio
   const displayedValue = page.getByTestId(`${testId}-input`);
   await expect(displayedValue).toBeVisible();
   await expect(displayedValue).toHaveValue(optionLabel);
+};
+
+/** Picks an option in a v2 AutocompleteInput, where the testId is on the field itself. */
+export const pickAutocompleteOption = async (page: Page, testId: string, optionLabel: string) => {
+  const field = page.getByTestId(testId);
+  await expect(field).toBeVisible();
+  await field.fill(optionLabel);
+
+  const option = page.getByRole('option', { name: optionLabel }).filter({ visible: true });
+  await expect(option).toBeVisible();
+  await option.click();
 };
 
 export const selectOptionByValue = async (page: Page, testId: string, value: string) => {

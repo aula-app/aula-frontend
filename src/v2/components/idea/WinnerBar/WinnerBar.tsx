@@ -1,3 +1,4 @@
+import { TEST_IDS } from '@/test-ids';
 import DecisionBar from '@/v2/components/idea/DecisionBar';
 import { useTranslation } from 'react-i18next';
 import { Verdict } from '@/utils';
@@ -17,9 +18,21 @@ interface WinnerBarProps {
 const WinnerBar = ({ winner: { winner, decide }, className }: WinnerBarProps) => {
   const { t } = useTranslation();
 
-  const options: { value: Verdict; icon: 'check' | 'close'; label: string; colors: string }[] = [
-    { value: 1, icon: 'check', label: t('v2.scopes.ideas.status.takenForward'), colors: CHOSEN_FOR },
-    { value: -1, icon: 'close', label: t('v2.scopes.ideas.status.notTakenForward'), colors: CHOSEN_AGAINST },
+  const options: { value: Verdict; icon: 'check' | 'close'; label: string; colors: string; testId: string }[] = [
+    {
+      value: 1,
+      icon: 'check',
+      label: t('v2.scopes.ideas.status.takenForward'),
+      colors: CHOSEN_FOR,
+      testId: TEST_IDS.WINNER_BUTTON,
+    },
+    {
+      value: -1,
+      icon: 'close',
+      label: t('v2.scopes.ideas.status.notTakenForward'),
+      colors: CHOSEN_AGAINST,
+      testId: TEST_IDS.NOT_WINNER_BUTTON,
+    },
   ];
 
   return (
